@@ -437,28 +437,33 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         return true;
     }
 
-    @SuppressWarnings("unused")//see android:onClick properties in view_menu.xml
     public void sortFiles(MenuItem item){
-        switch ( item.getItemId() ) {
+        switch (item.getItemId()) {
             case R.id.menu_sort_az:
-                if( sortMode == FileUtilities.SORT_AZ ){
+                if (sortMode == FileUtilities.SORT_AZ){
                     sortMode = FileUtilities.SORT_ZA;
-                }else{
+                    item.setTitle(R.string.sort_az);
+                } else {
                     sortMode = FileUtilities.SORT_AZ;
+                    item.setTitle(R.string.sort_za);
                 }
                 break;
             case R.id.menu_sort_modified:
-                if( sortMode == FileUtilities.SORT_NEWEST ){
+                if (sortMode == FileUtilities.SORT_NEWEST){
                     sortMode = FileUtilities.SORT_OLDEST;
-                }else{
+                    item.setTitle(R.string.sort_newest);
+                } else {
                     sortMode = FileUtilities.SORT_NEWEST;
+                    item.setTitle(R.string.sort_oldest);
                 }
                 break;
             case R.id.menu_sort_size:
-                if( sortMode == FileUtilities.SORT_LARGEST ){
+                if (sortMode == FileUtilities.SORT_LARGEST){
                     sortMode = FileUtilities.SORT_SMALLEST;
-                }else{
+                    item.setTitle(R.string.sort_largest);
+                } else {
                     sortMode = FileUtilities.SORT_LARGEST;
+                    item.setTitle(R.string.sort_smallest);
                 }
                 break;
             default:
