@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a710552_6ddad57a",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-04-23T21:17:54Z",
+      "side": 1,
+      "message": "Tiny little nitpicking - it is a convention to name those variables like this: m_p$type$name. Here, the type is CheckBox (Cb) so m_pCbDiagonal it would be :)",
+      "revId": "68a107bdd21b536872341761ae44166c8e4260c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a710552_0de79141",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-04-23T21:17:54Z",
+      "side": 1,
+      "message": "Pls stick to some sane indent conventions, align \u0027{\u0027 with \u0027if\u0027",
+      "revId": "68a107bdd21b536872341761ae44166c8e4260c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a710552_2de4cd39",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-04-23T21:17:54Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "68a107bdd21b536872341761ae44166c8e4260c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a710552_cdcf49b2",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-04-23T21:17:54Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "68a107bdd21b536872341761ae44166c8e4260c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a710552_edd48548",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-04-23T21:17:54Z",
+      "side": 1,
+      "message": "everywhere :)",
+      "revId": "68a107bdd21b536872341761ae44166c8e4260c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a710552_8dc941af",
+        "filename": "cui/uiconfig/ui/gradientpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-04-23T21:17:54Z",
+      "side": 1,
+      "message": "Looks slightly superfluous to me ...",
+      "revId": "68a107bdd21b536872341761ae44166c8e4260c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
