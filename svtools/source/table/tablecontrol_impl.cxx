@@ -264,6 +264,7 @@ namespace svt { namespace table
         m_pVScroll.disposeAndClear();
         m_pHScroll.disposeAndClear();
         m_pScrollCorner.disposeAndClear();
+        m_pDataWindow.disposeAndClear();
         DELETEZ( m_pTableFunctionSet );
         DELETEZ( m_pSelEngine );
     }

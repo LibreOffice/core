@@ -65,7 +65,7 @@ SfxPrinter* DocumentDeviceManager::getPrinter(/*[in]*/ bool bCreate ) const
 
 void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged )
 {
-    assert ( !!pP && !pP->isDisposed() );
+    assert ( !pP || !pP->isDisposed() );
     if ( pP != mpPrt )
     {
         if ( bDeleteOld )
