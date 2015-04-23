@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "7a740942_ee3b1f9b",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 9
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-23T11:47:53Z",
+      "side": 1,
+      "message": "I keep forgetting that the code in formulabase.cxx is not used for \u0027standard\u0027 import/export.\nI added some lines to ScCompiler::IsOpCode(), similar to the lines for mxSymbols-\u003eisODFF(), but now for isOOXML().\n\nHowever, on running I now get an error from formulabase.cxx, OpCodeproviderImpl::InitFuncOpCode \u0027no opcode mapping for function ODF CEILING.MATH \u003c-\u003e OOXML CEILING.MATH\u0027. It will take some debugging time to find the cause of that.",
+      "parentUuid": "ba8a016a_d6b914ee",
+      "revId": "2a4cfa8d1efaf0a17866177bec3b442398dec08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_36ee60ed",
         "filename": "sc/inc/helpids.h",
         "patchSetId": 9
@@ -47,6 +65,30 @@
       "writtenOn": "2015-04-21T13:21:14Z",
       "side": 1,
       "message": "Shouldn\u0027t that be SC_HID_FUNC_CEILING_MATH instead?",
+      "range": {
+        "startLine": 630,
+        "startChar": 65,
+        "endLine": 630,
+        "endChar": 84
+      },
+      "revId": "2a4cfa8d1efaf0a17866177bec3b442398dec08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_ae72f7ab",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-23T11:47:53Z",
+      "side": 1,
+      "message": "Well, SC_HID_FUNC_CEIL_MATH looks more consistent.\nBut you\u0027re right, of course.",
+      "parentUuid": "ba8a016a_36ee60ed",
       "range": {
         "startLine": 630,
         "startChar": 65,
@@ -82,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "7a740942_8e6dbbce",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-23T11:47:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba8a016a_f61698a6",
+      "range": {
+        "startLine": 281,
+        "startChar": 57,
+        "endLine": 281,
+        "endChar": 58
+      },
+      "revId": "2a4cfa8d1efaf0a17866177bec3b442398dec08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_d604b4c7",
         "filename": "sc/source/ui/src/scfuncs.src",
         "patchSetId": 9
@@ -93,6 +159,24 @@
       "writtenOn": "2015-04-21T13:21:14Z",
       "side": 1,
       "message": "This is not correct, the number of non-/optional specifiers must match the number of parameters. Probably a leftover from playing around with FLOOR ;-)\n\nActually in a dbgutil build running from terminal and opening the formula wizard you\u0027ll see\n\n warn:legacy.osl:19008:1:tools/source/rc/resmgr.cxx:700: file:///build/libo/core/instdir/program/../program/resource/scen-US.res\n Class: 272, Id: 203. Classpointer not at the end!\n Resource Stack\n Class: 272, Id: 25043",
+      "revId": "2a4cfa8d1efaf0a17866177bec3b442398dec08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_6e3e4fba",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 9
+      },
+      "lineNbr": 4650,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-23T11:47:53Z",
+      "side": 1,
+      "message": "A leftover indeed. Corrected.",
+      "parentUuid": "ba8a016a_d604b4c7",
       "revId": "2a4cfa8d1efaf0a17866177bec3b442398dec08f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
