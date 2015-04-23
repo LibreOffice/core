@@ -525,6 +525,7 @@ TokenIndex
 TopBorder
 TopBorderDistance
 TopMargin
+TotalsRow
 Transformation
 TransitionDirection
 TransitionFadeColor
