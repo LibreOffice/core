@@ -38,7 +38,6 @@ protected:
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) SAL_OVERRIDE;
 public:
     Chart2ExportTest() : ChartTest() {}
-    void test();
     void testErrorBarXLSX();
     void testTrendline();
     void testTrendlineOOXML();
@@ -93,7 +92,6 @@ public:
     void testNoMarkerXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
-    CPPUNIT_TEST(test);
     CPPUNIT_TEST(testErrorBarXLSX);
     CPPUNIT_TEST(testTrendline);
     CPPUNIT_TEST(testTrendlineOOXML);
@@ -158,12 +156,6 @@ protected:
     xmlDocPtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 
 };
-
-void Chart2ExportTest::test()
-{
-    load("/chart2/qa/extras/data/ods/", "simple_export_chart.ods");
-    reload("Calc Office Open XML");
-}
 
 namespace {
 
