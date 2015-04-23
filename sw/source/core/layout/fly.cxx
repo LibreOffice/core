@@ -2014,7 +2014,6 @@ bool SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
 
 void SwFlyFrm::Cut()
 {
-    // TODO: Implement SwFlyFrm::Cut()
 }
 
 void SwFrm::AppendFly( SwFlyFrm *pNew )
