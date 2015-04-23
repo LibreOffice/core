@@ -42,7 +42,7 @@ public class FileUtilities {
     /** Smallest Files First */
     static final int SORT_SMALLEST = 5;
 
-    private static final Map<String,Integer> mExtnMap = new HashMap<String,Integer>();
+    private static final Map<String, Integer> mExtnMap = new HashMap<String, Integer>();
     private static final Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
     static {
         // Please keep this in sync with AndroidManifest.xml
@@ -117,8 +117,7 @@ public class FileUtilities {
         extensionToMimeTypeMap.put("oth", "application/vnd.oasis.opendocument.text-web");
     }
 
-    private static final String getExtension(String filename)
-    {
+    private static final String getExtension(String filename) {
         if (filename == null)
             return "";
         int nExt = filename.lastIndexOf('.');
@@ -127,26 +126,23 @@ public class FileUtilities {
         return filename.substring(nExt);
     }
 
-    private static final int lookupExtension(String filename)
-    {
-        String extn = getExtension (filename);
+    private static final int lookupExtension(String filename) {
+        String extn = getExtension(filename);
         if (!mExtnMap.containsKey(extn))
             return UNKNOWN;
-        return mExtnMap.get (extn);
+        return mExtnMap.get(extn);
     }
 
-    static int getType(String filename)
-    {
+    static int getType(String filename) {
         int type = lookupExtension (filename);
-        android.util.Log.d("debug", "extn : " + filename + " -> " + type);
+        Log.d("debug", "extn : " + filename + " -> " + type);
         return type;
     }
 
-    static String getMimeType(String filename)
-    {
+    static String getMimeType(String filename) {
         String extension = MimeTypeMap.getFileExtensionFromUrl(filename);
         String mime = extensionToMimeTypeMap.get(extension);
-        if(mime == null) {
+        if (mime == null) {
             //fallback to Android's MimeTypeMap
             mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                     extension);
@@ -155,100 +151,96 @@ public class FileUtilities {
     }
 
     // Filter by mode, and/or in future by filename/wildcard
-    static private boolean doAccept(String filename, int byMode, String byFilename)
-    {
-    android.util.Log.d("debug", "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
-    if (filename == null)
-        return false;
-
-    if (byMode == ALL && byFilename == "") {
-        if( filename.startsWith(".")) {//ignore hidden files
+    static private boolean doAccept(String filename, int byMode, String byFilename) {
+        Log.d("debug", "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
+        if (filename == null)
             return false;
+
+        if (byMode == ALL && byFilename == "") {
+            if (filename.startsWith(".")) {//ignore hidden files
+                return false;
+            }
+            return true;
+        }
+        // check extension
+        if (byMode != ALL) {
+            if (mExtnMap.get (getExtension (filename)) != byMode)
+                return false;
+        }
+        if (byFilename != "") {
+            // FIXME return false on a non-match
         }
         return true;
     }
-    // check extension
-    if (byMode != ALL) {
-        if (mExtnMap.get (getExtension (filename)) != byMode)
-            return false;
-    }
-    if (byFilename != "") {
-        // FIXME return false on a non-match
-    }
-    return true;
+
+    static FileFilter getFileFilter(final int mode) {
+        return new FileFilter() {
+            public boolean accept(File pathname) {
+                if (pathname.isDirectory())
+                    return true;
+                if (lookupExtension(pathname.getName()) == UNKNOWN)
+                    return false;
+                return doAccept(pathname.getName(), mode, "");
+            }
+        };
     }
 
-    static FileFilter getFileFilter(final int mode)
-    {
-    return new FileFilter() {
-        public boolean accept(File pathname) {
-        if (pathname.isDirectory())
-            return true;
-        if( lookupExtension(pathname.getName()) == UNKNOWN)
-            return false;
-        return doAccept(pathname.getName(), mode, "");
-        }
-    };
-    }
-
-    static FilenameFilter getFilenameFilter(final int mode)
-    {
+    static FilenameFilter getFilenameFilter(final int mode) {
         return new FilenameFilter() {
             public boolean accept(File dir, String filename) {
-                if( new File( dir , filename ).isDirectory() )
+                if (new File(dir , filename).isDirectory())
                     return true;
                 return doAccept(filename, mode, "");
             }
         };
     }
 
-    static void sortFiles(File[] files , int sortMode)
-    {
+    static void sortFiles(File[] files, int sortMode) {
         // Should really change all this to a switch statement...
-        if( sortMode == SORT_AZ ){
-            Arrays.sort( files , new Comparator<File>() {
+        if (sortMode == SORT_AZ) {
+            Arrays.sort(files , new Comparator<File>() {
                 public int compare(File lhs, File rhs) {
-                    return lhs.getName().compareTo( rhs.getName() );
+                    return lhs.getName().compareTo(rhs.getName());
                 }
             });
             return;
         }
-        if( sortMode == SORT_ZA ){
-            Arrays.sort( files , new Comparator<File>() {
+        if (sortMode == SORT_ZA) {
+            Arrays.sort(files , new Comparator<File>() {
                 public int compare(File lhs, File rhs) {
-                    return rhs.getName().compareTo( lhs.getName() );
+                    return rhs.getName().compareTo(lhs.getName());
                 }
             });
             return;
         }
-        if( sortMode == SORT_OLDEST ){
-            Arrays.sort( files , new Comparator<File>() {
+        if (sortMode == SORT_OLDEST) {
+            Arrays.sort(files , new Comparator<File>() {
                 public int compare(File lhs, File rhs) {
-                    return Long.valueOf( lhs.lastModified() ).compareTo( rhs.lastModified() );
+                    return Long.valueOf(lhs.lastModified()).compareTo(rhs.lastModified());
                 }
             });
             return;
         }
-        if( sortMode == SORT_NEWEST ){
-            Arrays.sort( files , new Comparator<File>() {
+        if (sortMode == SORT_NEWEST) {
+            Arrays.sort(files , new Comparator<File>() {
                 public int compare(File lhs, File rhs) {
-                    return Long.valueOf( rhs.lastModified() ).compareTo( lhs.lastModified() );
+                    return Long.valueOf(rhs.lastModified()).compareTo(lhs.lastModified());
                 }
             });
             return;
         }
-        if( sortMode == SORT_LARGEST ){
-            Arrays.sort( files , new Comparator<File>() {
+        if (sortMode == SORT_LARGEST) {
+            Arrays.sort(files , new Comparator<File>() {
                 public int compare(File lhs, File rhs) {
-                    return Long.valueOf( rhs.length() ).compareTo( lhs.length() );
+                    return Long.valueOf(rhs.length()).compareTo(lhs.length());
                 }
             });
             return;
         }
-        if( sortMode == SORT_SMALLEST ){
-            Arrays.sort( files , new Comparator<File>() {
+        if (sortMode == SORT_SMALLEST) {
+            Arrays.sort(files , new Comparator<File>() {
                 public int compare(File lhs, File rhs) {
-                    return Long.valueOf( lhs.length() ).compareTo( rhs.length() );
+                    return Long.valueOf(lhs.length()).compareTo(rhs.length());
                 }
             });
             return;
@@ -256,33 +248,31 @@ public class FileUtilities {
         return;
     }
 
-    static boolean isHidden( File file ){
-        if( file.getName().startsWith(".") )
+    static boolean isHidden(File file) {
+        if (file.getName().startsWith("."))
             return true;
         return false;
     }
 
-    static boolean isThumbnail( File file ){
-        if( isHidden(file) && file.getName().endsWith(".png") )
+    static boolean isThumbnail(File file) {
+        if (isHidden(file) && file.getName().endsWith(".png"))
             return true;
         return false;
     }
 
-    static boolean hasThumbnail(File file)
-    {
+    static boolean hasThumbnail(File file) {
         String filename = file.getName();
-        if( lookupExtension( filename ) == DOC ) // only do this for docs for now
+        if (lookupExtension(filename) == DOC) // only do this for docs for now
         {
             // Will need another method to check if Thumb is up-to-date - or extend this one?
-            if( new File( file.getParent() , getThumbnailName( file ) ).isFile() )
+            if (new File(file.getParent() , getThumbnailName(file)).isFile())
                 return true;
             return false; // If it's a document with no thumb
         }
         return true;
     }
 
-    static String getThumbnailName( File file )
-    {
+    static String getThumbnailName(File file) {
         return "." + file.getName().split("[.]")[0] + ".png" ;
     }
 }
