@@ -486,6 +486,7 @@ void DockingWindow::dispose()
     mpFloatWin.clear();
     mpOldBorderWin.clear();
     mpDialogParent.clear();
+    disposeBuilder();
     Window::dispose();
 }
 
