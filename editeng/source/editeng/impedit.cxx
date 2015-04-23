@@ -143,6 +143,10 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
     // set state before notification
     aEditSelection = rEditSelection;
 
+    if (isTiledRendering())
+        // Tiled rendering: selections are only painted when we are in selection mode.
+        pEditEngine->SetInSelectionMode(aEditSelection.HasRange());
+
     if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
     {
         const EditDoc& rDoc = pEditEngine->GetEditDoc();
