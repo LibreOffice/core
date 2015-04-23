@@ -68,12 +68,12 @@ void GetDfActionByUNORole(XAccessibleContext* pRContext, BSTR* pRet)
     switch(Role)
     {
     case PUSH_BUTTON:
-        *pRet = ::SysAllocString(PRESS);
+        *pRet = ::SysAllocString(PRESS_STR);
         break;
     case RADIO_BUTTON:
     case MENU_ITEM:
     case LIST_ITEM:
-        *pRet = ::SysAllocString(SELECT);
+        *pRet = ::SysAllocString(SELECT_STR);
         break;
     case CHECK_BOX:
         {
@@ -85,13 +85,13 @@ void GetDfActionByUNORole(XAccessibleContext* pRContext, BSTR* pRet)
 
             Sequence<short> pStates = pRState->getStates();
             int count = pStates.getLength();
-            *pRet = ::SysAllocString(CHECK);
+            *pRet = ::SysAllocString(CHECK_STR);
             for( int iIndex = 0;iIndex < count;iIndex++ )
             {
                 if( pStates[iIndex] == AccessibleStateType::CHECKED )
                 {
                     SAFE_SYSFREESTRING(*pRet);
-                    *pRet = ::SysAllocString(UNCHECK);
+                    *pRet = ::SysAllocString(UNCHECK_STR);
                     break;
                 }
             }
