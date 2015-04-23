@@ -812,7 +812,6 @@ bool WW8_WrMagicTable::Write( WW8Export& rWrt )
 
 void WW8_WrMagicTable::Append( WW8_CP nCp, sal_uLong nData)
 {
-    SVBT32 nLittle;
     /*
     Tell the undocumented table hack that everything between here and the last
     table position is nontable text, don't do it if the previous position is
@@ -820,6 +819,7 @@ void WW8_WrMagicTable::Append( WW8_CP nCp, sal_uLong nData)
     */
     if ((!Count()) || (Prev() != nCp))
     {
+        SVBT32 nLittle;
         UInt32ToSVBT32(nData,nLittle);
         WW8_WrPlc1::Append(nCp, nLittle);
     }
