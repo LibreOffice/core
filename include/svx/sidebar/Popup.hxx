@@ -23,6 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
+#include <svx/sidebar/PopupContainer.hxx>
+#include <svx/sidebar/PopupControl.hxx>
 
 #include <boost/function.hpp>
 
@@ -30,9 +32,6 @@ namespace vcl { class Window; }
 class ToolBox;
 
 namespace svx { namespace sidebar {
-
-class PopupContainer;
-class PopupControl;
 
 /** A wrapper around a PopupContainer and a PopupControl object.
     Usually used as drop down for a toolbox.  Use Show() to start
