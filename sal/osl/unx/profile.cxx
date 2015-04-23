@@ -1817,11 +1817,8 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
 
                 if (memcmp(&Stamp, &(pProfile->m_Stamp), sizeof(osl_TStamp)))
                 {
-                    bool bRet = false;
-
                     pProfile->m_Stamp = Stamp;
-
-                    bRet=loadProfile(pProfile->m_pFile, pProfile);
+                    bool bRet = loadProfile(pProfile->m_pFile, pProfile);
                     SAL_WARN_IF(!bRet, "sal.osl", "loadProfile(pProfile->m_pFile, pProfile) ==> false");
                     (void)bRet;
                 }
