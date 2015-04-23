@@ -49,6 +49,11 @@ extern "C"
                       );
     }
 
+    char *_dlerror(void)
+    {
+        return dlerror();
+    }
+
     void *_dlsym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
@@ -75,6 +80,13 @@ extern "C"
     void *_dlopen(const char *pFN)
     {
         return (void *) LoadLibrary(pFN);
+    }
+
+    char *_dlerror(void)
+    {
+        LPSTR buf = NULL;
+        FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, reinterpret_cast<LPSTR>(&buf), 0, NULL);
+        return buf;
     }
 
     void *_dlsym(void *Hnd, const char *pName)
@@ -165,8 +177,8 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
         dlhandle = _dlopen(imp_lib);
         if (!dlhandle)
         {
-            fprintf(stderr, "failed to open library '%s' or '%s' in '%s/'\n",
-                    TARGET_LIB, TARGET_MERGED_LIB, install_path);
+            fprintf(stderr, "failed to open library '%s' or '%s' in '%s/': %s\n",
+                    TARGET_LIB, TARGET_MERGED_LIB, install_path, _dlerror());
             free(imp_lib);
             return NULL;
         }
