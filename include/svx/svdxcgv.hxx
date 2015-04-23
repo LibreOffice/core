@@ -32,7 +32,7 @@ class SVX_DLLPUBLIC SdrExchangeView: public SdrObjEditView
 protected:
 
     void                ImpGetPasteObjList(Point& rPos, SdrObjList*& rpLst);
-    void                ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, sal_uInt32 nOptions);
+    void                ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, SdrInsertFlags nOptions);
     bool                ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
 
     // liefert True, wenn rPt geaendert wurde
@@ -104,11 +104,11 @@ public:
     // Gueltige Werte fuer nOptions sind SDRINSERT_DONTMARK und
     // SDRINSERT_ADDMARK (siehe svdedtv.hxx).
     virtual bool Paste(
-        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
         const OUString& rSrcShellID, const OUString& rDestShellID );
 
-    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
-    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=NULL, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
+    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
 
     static bool     Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 

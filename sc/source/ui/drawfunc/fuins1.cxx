@@ -164,7 +164,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     pObj->SetName(aName);
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
-    sal_uLong nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
+    SdrInsertFlags nInsOptions = bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
     pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
 
     // SetGraphicLink has to be used after inserting the object,
@@ -216,7 +216,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 
     pObj->SetModel(rData.GetDocument()->GetDrawLayer()); // set before setURL
     pObj->setURL( realURL, ""/*TODO?*/ );
-    pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
+    pView->InsertObjectAtView( pObj, *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }
 
 /*************************************************************************

@@ -99,7 +99,7 @@ public:
     // On Paste: We need to insert the objects of the Scene, but not the Scene itself
     using SdrView::Paste;
     virtual bool Paste(
-        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
         const OUString& rSrcShellID, const OUString& rDestShellID ) SAL_OVERRIDE;
 
     // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)

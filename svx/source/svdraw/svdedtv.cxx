@@ -948,9 +948,9 @@ void SdrEditView::CopyMarkedObj()
 
 
 
-bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uIntPtr nOptions)
+bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions)
 {
-    if ((nOptions & SDRINSERT_SETDEFLAYER)!=0) {
+    if (nOptions & SdrInsertFlags::SETDEFLAYER) {
         SdrLayerID nLayer=rPV.GetPage()->GetLayerAdmin().GetLayerID(aAktLayer,true);
         if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
         if (rPV.GetLockedLayers().IsSet(nLayer) || !rPV.GetVisibleLayers().IsSet(nLayer)) {
@@ -959,13 +959,13 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uInt
         }
         pObj->NbcSetLayer(nLayer);
     }
-    if ((nOptions & SDRINSERT_SETDEFATTR)!=0) {
+    if (nOptions & SdrInsertFlags::SETDEFATTR) {
         if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, false);
         pObj->SetMergedItemSet(aDefaultAttr);
     }
     if (!pObj->IsInserted()) {
         SdrInsertReason aReason(SDRREASON_VIEWCALL);
-        if ((nOptions & SDRINSERT_NOBROADCAST)!=0) {
+        if (nOptions & SdrInsertFlags::NOBROADCAST) {
             rPV.GetObjList()->NbcInsertObject(pObj, SAL_MAX_SIZE, &aReason);
         } else {
             rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE, &aReason);
@@ -974,8 +974,8 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uInt
     if( IsUndoEnabled() )
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
 
-    if ((nOptions & SDRINSERT_DONTMARK)==0) {
-        if ((nOptions & SDRINSERT_ADDMARK)==0) UnmarkAllObj();
+    if (!(nOptions & SdrInsertFlags::DONTMARK)) {
+        if (!(nOptions & SdrInsertFlags::ADDMARK)) UnmarkAllObj();
         MarkObj(pObj,&rPV);
     }
     return true;

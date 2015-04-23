@@ -98,7 +98,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
                        (long) (pPhiEnd->GetValue () * 10.0));
         SdrPageView *pPV = mpView->GetSdrPageView();
 
-        mpView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER);
+        mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER);
     }
 }
 

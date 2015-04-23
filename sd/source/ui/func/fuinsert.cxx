@@ -375,7 +375,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             if( pPickObj )
                 mpView->ReplaceObjectAtView(pPickObj, *pPV, pOleObj, true );
             else
-                bRet = mpView->InsertObjectAtView(pOleObj, *pPV, SDRINSERT_SETDEFLAYER);
+                bRet = mpView->InsertObjectAtView(pOleObj, *pPV, SdrInsertFlags::SETDEFLAYER);
 
             if( bRet )
             {
@@ -623,7 +623,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
 
-                    if( mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
+                    if( mpView->InsertObjectAtView(pObj, *pPV, SdrInsertFlags::SETDEFLAYER) )
                     {
                         //  Math objects change their object size during InsertObject.
                         //  New size must be set in SdrObject, or a wrong scale will be set at

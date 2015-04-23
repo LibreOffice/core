@@ -269,7 +269,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     bool bReturn = false;
     bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
     bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
-    sal_uLong                   nPasteOptions = SDRINSERT_SETDEFLAYER;
+    SdrInsertFlags          nPasteOptions = SdrInsertFlags::SETDEFLAYER;
 
     if (mpViewSh != NULL)
     {
@@ -277,7 +277,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         SfxInPlaceClient* pIpClient = mpViewSh->GetViewShell()->GetIPClient();
         if( mpViewSh->ISA(::sd::slidesorter::SlideSorterViewShell)
             || (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive()))
-        nPasteOptions |= SDRINSERT_DONTMARK;
+        nPasteOptions |= SdrInsertFlags::DONTMARK;
     }
 
     if( bDrag )
@@ -829,7 +829,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 aRect.SetPos( maDropPos );
                 pObj->SetLogicRect( aRect );
-                InsertObjectAtView( pObj, *GetSdrPageView(), SDRINSERT_SETDEFLAYER );
+                InsertObjectAtView( pObj, *GetSdrPageView(), SdrInsertFlags::SETDEFLAYER );
                 bReturn = true;
             }
         }
@@ -977,7 +977,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
                     SdrPageView*    pPV = GetSdrPageView();
-                    sal_uLong           nOptions = SDRINSERT_SETDEFLAYER;
+                    SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
 
                     if (mpViewSh!=NULL)
                     {
@@ -985,7 +985,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         SfxInPlaceClient* pIpClient
                             = mpViewSh->GetViewShell()->GetIPClient();
                         if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
-                            nOptions |= SDRINSERT_DONTMARK;
+                            nOptions |= SdrInsertFlags::DONTMARK;
                     }
 
                     InsertObjectAtView( pObj, *pPV, nOptions );
@@ -1147,7 +1147,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
                     SdrPageView*    pPV = GetSdrPageView();
-                    sal_uLong           nOptions = SDRINSERT_SETDEFLAYER;
+                    SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
 
                     if (mpViewSh!=NULL)
                     {
@@ -1155,7 +1155,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         SfxInPlaceClient* pIpClient
                             = mpViewSh->GetViewShell()->GetIPClient();
                         if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
-                            nOptions |= SDRINSERT_DONTMARK;
+                            nOptions |= SdrInsertFlags::DONTMARK;
                     }
 
                     InsertObjectAtView( pObj, *pPV, nOptions );
@@ -1500,7 +1500,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     return bReturn;
 }
 
-bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions )
+bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
 {
     boost::scoped_ptr<SdDrawDocument> pModel(new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh ));
     pModel->NewOrLoadCompleted(NEW_DOC);

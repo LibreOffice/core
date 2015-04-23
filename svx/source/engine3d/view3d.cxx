@@ -441,7 +441,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
 // not the scene itself
 
 bool E3dView::Paste(
-    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
     const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     bool bRetval = false;
@@ -1604,7 +1604,7 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
         SdrAttrObj* pNewObj = pObj->GetBreakObj();
         if(pNewObj)
         {
-            InsertObjectAtView(pNewObj, *GetSdrPageView(), SDRINSERT_DONTMARK);
+            InsertObjectAtView(pNewObj, *GetSdrPageView(), SdrInsertFlags::DONTMARK);
             pNewObj->SetChanged();
             pNewObj->BroadcastObjectChange();
         }

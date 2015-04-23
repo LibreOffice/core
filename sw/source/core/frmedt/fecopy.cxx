@@ -1517,7 +1517,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
         // #i50824#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
         lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel );
-        pView->Paste(*pModel, aPos, NULL, 0, OUString(), OUString());
+        pView->Paste(*pModel, aPos, NULL, SdrInsertFlags::NONE, OUString(), OUString());
 
         const size_t nCnt = pView->GetMarkedObjectList().GetMarkCount();
         if( nCnt )

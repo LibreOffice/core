@@ -986,7 +986,7 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
         }
     }
     if ( !bOverlapping && _bInsert ) // now insert objects
-        rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(),SDRINSERT_ADDMARK);
+        rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(), SdrInsertFlags::ADDMARK);
 }
 
 void setZoomFactor(const Fraction& _aZoom, vcl::Window& _rWindow)

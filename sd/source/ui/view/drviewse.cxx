@@ -1702,13 +1702,13 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         aPos.Y() -= aSize.Height() / 2;
         pUnoCtrl->SetLogicRect(Rectangle(aPos, aSize));
 
-        sal_uLong nOptions = SDRINSERT_SETDEFLAYER;
+        SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
 
         OSL_ASSERT (GetViewShell()!=NULL);
         SfxInPlaceClient* pIpClient = GetViewShell()->GetIPClient();
         if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
         {
-            nOptions |= SDRINSERT_DONTMARK;
+            nOptions |= SdrInsertFlags::DONTMARK;
         }
 
         mpDrawView->InsertObjectAtView(pUnoCtrl, *mpDrawView->GetSdrPageView(), nOptions);

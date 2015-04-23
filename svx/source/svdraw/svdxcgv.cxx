@@ -125,7 +125,7 @@ bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& r
     return bRet;
 }
 
-bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
 {
     if (rStr.isEmpty())
         return false;
@@ -136,7 +136,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     if (pLst==NULL) return false;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
-    bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    bool bUnmark = (nOptions & (SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
@@ -165,7 +165,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     return true;
 }
 
-bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
@@ -173,7 +173,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     if (pLst==NULL) return false;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
-    bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    bool bUnmark=(nOptions&(SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
@@ -224,7 +224,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
 }
 
 bool SdrExchangeView::Paste(
-    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
     const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     const SdrModel* pSrcMod=&rMod;
@@ -258,7 +258,7 @@ bool SdrExchangeView::Paste(
     if (pLst==NULL)
         return false;
 
-    bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    bool bUnmark=(nOptions&(SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark)
         UnmarkAllObj();
 
@@ -290,7 +290,7 @@ bool SdrExchangeView::Paste(
         Size  aSiz(aDist.X(),aDist.Y());
         size_t nCloneErrCnt = 0;
         const size_t nObjCount = pSrcPg->GetObjCount();
-        bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
+        bool bMark = pMarkPV!=NULL && !IsTextEdit() && (nOptions&SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE;
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
@@ -396,7 +396,7 @@ bool SdrExchangeView::Paste(
     return true;
 }
 
-void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, sal_uInt32 nOptions)
+void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, SdrInsertFlags nOptions)
 {
     BigInt nSizX(rSiz.Width());
     BigInt nSizY(rSiz.Height());
@@ -436,7 +436,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
             pMarkPV=pPV;
     }
 
-    bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
+    bool bMark = pMarkPV!=NULL && !IsTextEdit() && (nOptions&SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE;
     if (bMark)
     { // select object the first PageView we found
         MarkObj(pObj,pMarkPV);

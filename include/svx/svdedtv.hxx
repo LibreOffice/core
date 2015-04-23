@@ -24,6 +24,7 @@
 #include <svx/xpoly.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 class SfxUndoAction;
 class SdrUndoAction;
@@ -52,12 +53,20 @@ enum SdrMergeMode {
     SDR_MERGE_INTERSECT
 };
 
-// Optionen fuer InsertObject()
-#define SDRINSERT_DONTMARK    0x0001 /* object will not be marked (the actual marking remains) */
-#define SDRINSERT_ADDMARK     0x0002 /* object will be added an existing selection  */
-#define SDRINSERT_SETDEFATTR  0x0004 /* actual attributes (+StyleSheet) are assigned to the object */
-#define SDRINSERT_SETDEFLAYER 0x0008 /* actual layer is assigned to the object */
-#define SDRINSERT_NOBROADCAST 0x0010 /* insert with NbcInsertObject() for SolidDragging */
+// Options for InsertObject()
+enum class SdrInsertFlags
+{
+    NONE        = 0x0000,
+    DONTMARK    = 0x0001, /* object will not be marked (the actual marking remains) */
+    ADDMARK     = 0x0002, /* object will be added an existing selection  */
+    SETDEFATTR  = 0x0004, /* actual attributes (+StyleSheet) are assigned to the object */
+    SETDEFLAYER = 0x0008, /* actual layer is assigned to the object */
+    NOBROADCAST = 0x0010, /* insert with NbcInsertObject() for SolidDragging */
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SdrInsertFlags> : is_typed_flags<SdrInsertFlags, 0x1f> {};
+}
 
 class SVX_DLLPUBLIC SdrEditView: public SdrMarkView
 {
@@ -274,7 +283,7 @@ public:
     // the target layer is locked or not visible. In this case
     // the method returns FALSE.
     // Amongst others the method does not create an undo-action.
-    bool InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uIntPtr nOptions=0);
+    bool InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
 
     // Replace one drawing object by another.
     // *pNewObj belongs to me, *pOldObj is changed into Undo.

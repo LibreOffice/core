@@ -204,10 +204,10 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         // don't change marking if OLE object is active
         // (at Drop from OLE object it would be deactivated in the middle of ExecuteDrag!)
 
-        sal_uLong nOptions = 0;
+        SdrInsertFlags nOptions = SdrInsertFlags::NONE;
         SfxInPlaceClient* pClient = GetViewData().GetViewShell()->GetIPClient();
         if ( pClient && pClient->IsObjectInPlaceActive() )
-            nOptions |= SDRINSERT_DONTMARK;
+            nOptions |= SdrInsertFlags::DONTMARK;
 
         ::std::vector< OUString > aExcludedChartNames;
         SCTAB nTab = GetViewData().GetTabNo();

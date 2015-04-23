@@ -778,7 +778,7 @@ bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
     return  bisMarked;
 }
 
-bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions)
+bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions)
 {
     //  Markierung nicht aendern, wenn Ole-Objekt aktiv
     //  (bei Drop aus Ole-Objekt wuerde sonst mitten im ExecuteDrag deaktiviert!)
@@ -787,7 +787,7 @@ bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong n
     {
         SfxInPlaceClient* pClient = pViewData->GetViewShell()->GetIPClient();
         if ( pClient && pClient->IsObjectInPlaceActive() )
-            nOptions |= SDRINSERT_DONTMARK;
+            nOptions |= SdrInsertFlags::DONTMARK;
     }
 
     return InsertObjectAtView( pObj, rPV, nOptions );

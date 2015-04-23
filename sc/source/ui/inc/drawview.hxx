@@ -115,7 +115,7 @@ public:
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
-    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions=0);
+    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */

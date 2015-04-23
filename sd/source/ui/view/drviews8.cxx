@@ -129,7 +129,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     {
                         pGrafObj = new SdrGrafObj( Graphic( aScanBmp ), aRect );
                         SdrPageView* pPV = GetView()->GetSdrPageView();
-                        GetView()->InsertObjectAtView( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER );
+                        GetView()->InsertObjectAtView( pGrafObj, *pPV, SdrInsertFlags::SETDEFLAYER );
                     }
                 }
             }

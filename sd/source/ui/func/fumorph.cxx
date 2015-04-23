@@ -439,7 +439,7 @@ void FuMorph::ImpInsertPolygons(
             pObjList->InsertObject( pObj1->Clone(), 0 );
             pObjList->InsertObject( pObj2->Clone() );
             mpView->DeleteMarked();
-            mpView->InsertObjectAtView( pObjGroup, *pPageView, SDRINSERT_SETDEFLAYER );
+            mpView->InsertObjectAtView( pObjGroup, *pPageView, SdrInsertFlags:: SETDEFLAYER );
         }
     }
 }

@@ -199,7 +199,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
         pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), true );
 
-        sal_uLong   nOptions = SDRINSERT_SETDEFLAYER;
+        SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
         bool    bIsPresTarget = false;
 
         if ((mpViewSh
@@ -207,7 +207,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 && mpViewSh->GetViewShell()->GetIPClient()
                 && mpViewSh->GetViewShell()->GetIPClient()->IsObjectInPlaceActive())
             || this->ISA(::sd::slidesorter::view::SlideSorterView))
-            nOptions |= SDRINSERT_DONTMARK;
+            nOptions |= SdrInsertFlags::DONTMARK;
 
         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
         {
@@ -373,7 +373,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
         if( pPickObj )
             ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
         else
-            InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER );
+            InsertObjectAtView( pNewMediaObj, *pPV, SdrInsertFlags::SETDEFLAYER );
 
         OUString referer;
         DrawDocShell * sh = GetDocSh();
@@ -552,7 +552,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                             aRect = Rectangle( maDropPos, aSize );
 
                             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
-                            sal_uLong       nOptions = SDRINSERT_SETDEFLAYER;
+                            SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
 
                             if (mpViewSh != NULL)
                             {
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                                 SfxInPlaceClient* pIpClient =
                                     mpViewSh->GetViewShell()->GetIPClient();
                                 if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
-                                    nOptions |= SDRINSERT_DONTMARK;
+                                    nOptions |= SdrInsertFlags::DONTMARK;
                             }
 
                             InsertObjectAtView( pOleObj, *GetSdrPageView(), nOptions );

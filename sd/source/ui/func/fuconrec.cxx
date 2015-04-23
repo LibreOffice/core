@@ -113,7 +113,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                 SdrCircObj  *pNewCircle = new SdrCircObj (OBJ_CIRC, aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
-                mpView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
+                mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER | SdrInsertFlags::SETDEFATTR);
             }
             break;
 
@@ -131,7 +131,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                 SdrRectObj  *pNewRect = new SdrRectObj (aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
-                mpView->InsertObjectAtView(pNewRect, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
+                mpView->InsertObjectAtView(pNewRect, *pPV, SdrInsertFlags::SETDEFLAYER | SdrInsertFlags::SETDEFATTR);
             }
             break;
         }

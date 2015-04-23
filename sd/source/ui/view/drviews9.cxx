@@ -170,7 +170,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         {
             pGrafObj = new SdrGrafObj(aGraphic, aRect);
             SdrPageView* pPV = mpDrawView->GetSdrPageView();
-            mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
+            mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SdrInsertFlags::SETDEFLAYER);
         }
     }
     // insert sound

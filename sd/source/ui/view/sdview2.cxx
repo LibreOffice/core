@@ -951,7 +951,7 @@ SdrModel* View::GetMarkedObjModel() const
 }
 
 bool View::Paste(
-    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
     const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     return FmFormView::Paste(rMod, rPos, pLst, nOptions, rSrcShellID, rDestShellID);

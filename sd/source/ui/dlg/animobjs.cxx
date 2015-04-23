@@ -1029,7 +1029,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         const Point aOrg( aWindowCenter.X() - ( aMaxSizeLog.Width() >> 1 ), aWindowCenter.Y() - ( aMaxSizeLog.Height() >> 1 ) );
 
         pGrafObj->SetLogicRect( Rectangle( aOrg, aMaxSizeLog ) );
-        rView.InsertObjectAtView( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
+        rView.InsertObjectAtView( pGrafObj, *pPV, SdrInsertFlags::SETDEFLAYER);
     }
     else
     {

@@ -171,7 +171,7 @@ public:
     SdrMediaObj*            InsertMediaObj( const OUString& rURL, const OUString& rMimeType, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize );
 
-    bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions );
+    bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );
 
     bool                    IsPresObjSelected(bool bOnPage = true, bool bOnMasterPage = true, bool bCheckPresObjListOnly = false, bool bCheckLayoutOnly = false) const;
 
@@ -197,7 +197,7 @@ public:
 
     virtual SdrModel*   GetMarkedObjModel() const SAL_OVERRIDE;
     virtual bool Paste(
-        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
         const OUString& rSrcShellID, const OUString& rDestShellID ) SAL_OVERRIDE;
 
     using SdrExchangeView::Paste;
