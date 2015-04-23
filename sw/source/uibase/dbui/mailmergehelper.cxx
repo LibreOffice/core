@@ -197,7 +197,7 @@ SwAddressPreview::SwAddressPreview(vcl::Window* pParent, WinBits nStyle)
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAddressPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
-    WinBits nWinStyle = WB_DIALOGCONTROL;
+    WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
@@ -378,28 +378,33 @@ void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 {
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
-    if(pImpl->nRows || pImpl->nColumns)
+    bool bHandled = false;
+    if (pImpl->nRows && pImpl->nColumns)
     {
-        sal_uInt32 nSelectedRow =    (pImpl->nSelectedAddress + 1)/ pImpl->nColumns;
-        sal_uInt32 nSelectedColumn = pImpl->nSelectedAddress % nSelectedRow;
+        sal_uInt32 nSelectedRow = pImpl->nSelectedAddress / pImpl->nColumns;
+        sal_uInt32 nSelectedColumn = pImpl->nSelectedAddress - (nSelectedRow * pImpl->nColumns);
         switch(nKey)
         {
             case KEY_UP:
                 if(nSelectedRow)
                     --nSelectedRow;
+                bHandled = true;
             break;
             case KEY_DOWN:
                 if(pImpl->aAddresses.size() > sal_uInt32(pImpl->nSelectedAddress + pImpl->nColumns))
                     ++nSelectedRow;
+                bHandled = true;
             break;
             case KEY_LEFT:
                 if(nSelectedColumn)
                     --nSelectedColumn;
+                bHandled = true;
             break;
             case KEY_RIGHT:
                 if(nSelectedColumn < sal_uInt32(pImpl->nColumns - 1) &&
                        pImpl->aAddresses.size() - 1 > pImpl->nSelectedAddress )
                     ++nSelectedColumn;
+                bHandled = true;
             break;
         }
         sal_uInt32 nSelect = nSelectedRow * pImpl->nColumns + nSelectedColumn;
@@ -411,7 +416,7 @@ void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
             Invalidate();
         }
     }
-    else
+    if (!bHandled)
         Window::KeyInput(rKEvt);
 }
 
