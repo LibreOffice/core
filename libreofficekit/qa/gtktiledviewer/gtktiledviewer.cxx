@@ -124,7 +124,17 @@ void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
         gtk_widget_hide(pFindbar);
     }
     else
+    {
         gtk_widget_show_all(pFindbar);
+        gtk_widget_grab_focus(pFindbarEntry);
+    }
+}
+
+/// Handles the key-press-event of the window.
+static void signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData)
+{
+    if (!gtk_widget_get_visible(pFindbar))
+        lok_docview_post_key(pWidget, pEvent, pData);
 }
 
 /// Searches for the next or previous text of pFindbarEntry.
@@ -415,8 +425,8 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
 
     // Input handling.
-    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(lok_docview_post_key), pDocView);
-    g_signal_connect(pWindow, "key-release-event", G_CALLBACK(lok_docview_post_key), pDocView);
+    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);
+    g_signal_connect(pWindow, "key-release-event", G_CALLBACK(signalKey), pDocView);
 
     gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
 
