@@ -26,6 +26,7 @@
 #include <xmloff/xmltoken.hxx>
 
 #include <node.hxx>
+#include <memory>
 
 class SfxMedium;
 namespace com { namespace sun { namespace star {
@@ -71,16 +72,16 @@ public:
 
 class SmXMLImport : public SvXMLImport
 {
-        SvXMLTokenMap *pPresLayoutElemTokenMap;
-        SvXMLTokenMap *pPresLayoutAttrTokenMap;
-        SvXMLTokenMap *pFencedAttrTokenMap;
-        SvXMLTokenMap *pOperatorAttrTokenMap;
-        SvXMLTokenMap *pAnnotationAttrTokenMap;
-        SvXMLTokenMap *pPresElemTokenMap;
-        SvXMLTokenMap *pPresScriptEmptyElemTokenMap;
-        SvXMLTokenMap *pPresTableElemTokenMap;
-        SvXMLTokenMap *pColorTokenMap;
-        SvXMLTokenMap *pActionAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pPresLayoutElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pPresLayoutAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pFencedAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pOperatorAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pAnnotationAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pPresElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pPresScriptEmptyElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pPresTableElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pColorTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pActionAttrTokenMap;
 
         SmNodeStack aNodeStack;
         bool bSuccess;
