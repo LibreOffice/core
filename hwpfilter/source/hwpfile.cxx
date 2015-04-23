@@ -284,7 +284,7 @@ void HWPFile::TagsRead()
         uint tag;
         if (!Read4b(tag))
             return;
-        uint size;
+        int size;
         if (!Read4b(size))
             return;
         if (size <= 0 && tag > 0){
@@ -318,7 +318,7 @@ void HWPFile::TagsRead()
                     SkipBlock( size );
                 else
                 {
-                    for( uint i = 0 ; i < size/617 ; i++)
+                    for( int i = 0 ; i < size/617 ; i++)
                     {
                         HyperText *hypert = new HyperText;
                         hypert->Read(*this);
