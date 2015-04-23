@@ -51,7 +51,7 @@ class NSOpenGLView;
 #include <GL/glxext.h>
 #endif
 
-#include <vcl/vclopengl_dllapi.hxx>
+#include <vcl/dllapi.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
@@ -164,7 +164,7 @@ struct GLWindow
     ~GLWindow();
 };
 
-class VCLOPENGL_DLLPUBLIC OpenGLContext
+class VCL_DLLPUBLIC OpenGLContext
 {
 public:
     OpenGLContext();

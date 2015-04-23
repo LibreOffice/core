@@ -11,13 +11,13 @@
 #define INCLUDED_VCL_GLM_GLMHELPER_HXX
 
 #include "glm/glm.hpp"
-#include <vcl/vclopengl_dllapi.hxx>
+#include <vcl/dllapi.h>
 
 #include <ostream>
 
-VCLOPENGL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix);
-VCLOPENGL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos);
-VCLOPENGL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec3& rPos);
+VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix);
+VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos);
+VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec3& rPos);
 
 #endif
 

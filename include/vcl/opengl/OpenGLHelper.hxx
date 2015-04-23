@@ -11,7 +11,7 @@
 #define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
 #include <GL/glew.h>
-#include <vcl/vclopengl_dllapi.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 
 #include <rtl/ustring.hxx>
@@ -22,7 +22,7 @@
 #  include <postx.h>
 #endif
 
-class VCLOPENGL_DLLPUBLIC OpenGLHelper
+class VCL_DLLPUBLIC OpenGLHelper
 {
 public:
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OString& preamble = "" );

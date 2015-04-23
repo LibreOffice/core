@@ -12,12 +12,12 @@
 
 #include <vcl/event.hxx>
 #include <vcl/syschild.hxx>
-#include <vcl/vclopengl_dllapi.hxx>
+#include <vcl/dllapi.h>
 
 class OpenGLContext;
 class OpenGLWindowImpl;
 
-class VCLOPENGL_DLLPUBLIC IRenderer
+class VCL_DLLPUBLIC IRenderer
 {
 public:
     virtual ~IRenderer() {}
@@ -30,7 +30,7 @@ public:
 };
 
 // pImpl Pattern to avoid linking against OpenGL libs when using the class without the context
-class VCLOPENGL_DLLPUBLIC OpenGLWindow : public vcl::Window
+class VCL_DLLPUBLIC OpenGLWindow : public vcl::Window
 {
 public:
     OpenGLWindow(vcl::Window* pParent);
