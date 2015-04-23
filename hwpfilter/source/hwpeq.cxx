@@ -461,7 +461,7 @@ static eq_stack *stk = 0;
 void push_token(MzString &white, MzString &token, istream *strm)
 {
   // one time stack
-  assert(stk->state(strm) == false);
+  assert(stk->token.length() == 0);
 
   stk->white = white;
   stk->token = token;
