@@ -165,6 +165,8 @@ void Chart2ExportTest::test()
     reload("Calc Office Open XML");
 }
 
+namespace {
+
 struct CheckForChartName
 {
 private:
@@ -194,6 +196,8 @@ OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAcc
     CPPUNIT_ASSERT(pElement);
     CPPUNIT_ASSERT(pElement != rNames.end());
     return *pElement;
+}
+
 }
 
 xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rFilterFormat)
