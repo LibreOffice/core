@@ -123,10 +123,10 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
 
     const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
     const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
-    rMetric.mnAscent       = fAscent;
-    rMetric.mnDescent      = CTFontGetDescent( aCTFontRef );
-    rMetric.mnExtLeading   = CTFontGetLeading( aCTFontRef );
-    rMetric.mnIntLeading   = fAscent - fCapHeight;
+    rMetric.mnAscent       = lrint( fAscent );
+    rMetric.mnDescent      = lrint( CTFontGetDescent( aCTFontRef ));
+    rMetric.mnExtLeading   = lrint( CTFontGetLeading( aCTFontRef ));
+    rMetric.mnIntLeading   = lrint( fAscent - fCapHeight );
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
