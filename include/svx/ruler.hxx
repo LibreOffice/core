@@ -23,6 +23,7 @@
 #include <svtools/ruler.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <boost/scoped_array.hpp>
 #include <memory>
@@ -40,6 +41,23 @@ class SfxRectangleItem;
 class SvxObjectItem;
 class SfxBoolItem;
 struct SvxRuler_Impl;
+
+enum class SvxRulerDragFlags
+{
+    NONE                       = 0x00,
+    OBJECT                     = 0x01,
+    // reduce size of the last column, shift
+    OBJECT_SIZE_LINEAR         = 0x02,
+    OBJECT_SIZE_PROPORTIONAL   = 0x04, // proportional, Ctrl
+    // only current line (table; Shift-Ctrl)
+    OBJECT_ACTLINE_ONLY        = 0x08,
+    // currently same key assignment
+    OBJECT_LEFT_INDENT_ONLY    = OBJECT_SIZE_PROPORTIONAL,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvxRulerDragFlags> : is_typed_flags<SvxRulerDragFlags, 0x0f> {};
+}
 
 class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 {
@@ -68,20 +86,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     long            lMinFrame;            // minimal frame width in pixels
     long            lInitialDragPos;
     sal_uInt16      nFlags;
-
-    enum
-    {
-        NONE                            = 0x0000,
-        DRAG_OBJECT                     = 0x0001,
-        // reduce size of the last column, shift
-        DRAG_OBJECT_SIZE_LINEAR         = 0x0002,
-        DRAG_OBJECT_SIZE_PROPORTIONAL   = 0x0004, // proportional, Ctrl
-        // only current line (table; Shift-Ctrl)
-        DRAG_OBJECT_ACTLINE_ONLY        = 0x0008,
-        // currently same key assignment
-        DRAG_OBJECT_LEFT_INDENT_ONLY    = DRAG_OBJECT_SIZE_PROPORTIONAL
-    } nDragType;
-
+    SvxRulerDragFlags nDragType;
     sal_uInt16      nDefTabType;
     sal_uInt16      nTabCount;
     sal_uInt16      nTabBufSize;
