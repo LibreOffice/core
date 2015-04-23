@@ -326,10 +326,10 @@ void SdrModel::SetReadOnly(bool bYes)
 
 
 
-void SdrModel::SetMaxUndoActionCount(sal_uIntPtr nAnz)
+void SdrModel::SetMaxUndoActionCount(sal_uIntPtr nCount)
 {
-    if (nAnz<1) nAnz=1;
-    nMaxUndoCount=nAnz;
+    if (nCount<1) nCount=1;
+    nMaxUndoCount=nCount;
     if (pUndoStack!=NULL) {
         while (pUndoStack->size()>nMaxUndoCount) {
             delete pUndoStack->back();
@@ -671,8 +671,8 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
 
     sal_Int32 i;
     // delete all drawing pages
-    sal_Int32 nAnz=GetPageCount();
-    for (i=nAnz-1; i>=0; i--)
+    sal_Int32 nCount=GetPageCount();
+    for (i=nCount-1; i>=0; i--)
     {
         DeletePage( (sal_uInt16)i );
     }
@@ -680,8 +680,8 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
     PageListChanged();
 
     // delete all Masterpages
-    nAnz=GetMasterPageCount();
-    for(i=nAnz-1; i>=0; i--)
+    nCount=GetMasterPageCount();
+    for(i=nCount-1; i>=0; i--)
     {
         DeleteMasterPage( (sal_uInt16)i );
     }
@@ -835,13 +835,13 @@ void SdrModel::ImpReformatAllTextObjects()
     if( isLocked() )
         return;
 
-    sal_uInt16 nAnz=GetMasterPageCount();
+    sal_uInt16 nCount=GetMasterPageCount();
     sal_uInt16 nNum;
-    for (nNum=0; nNum<nAnz; nNum++) {
+    for (nNum=0; nNum<nCount; nNum++) {
         GetMasterPage(nNum)->ReformatAllTextObjects();
     }
-    nAnz=GetPageCount();
-    for (nNum=0; nNum<nAnz; nNum++) {
+    nCount=GetPageCount();
+    for (nNum=0; nNum<nCount; nNum++) {
         GetPage(nNum)->ReformatAllTextObjects();
     }
 }
@@ -855,14 +855,14 @@ void SdrModel::ImpReformatAllEdgeObjects()
     if( isLocked() )
         return;
 
-    sal_uInt16 nAnz=GetMasterPageCount();
+    sal_uInt16 nCount=GetMasterPageCount();
     sal_uInt16 nNum;
-    for (nNum=0; nNum<nAnz; nNum++)
+    for (nNum=0; nNum<nCount; nNum++)
     {
         GetMasterPage(nNum)->ReformatAllEdgeObjects();
     }
-    nAnz=GetPageCount();
-    for (nNum=0; nNum<nAnz; nNum++)
+    nCount=GetPageCount();
+    for (nNum=0; nNum<nCount; nNum++)
     {
         GetPage(nNum)->ReformatAllEdgeObjects();
     }
@@ -910,13 +910,13 @@ SdrModel::GetDocumentStream( OUString const& rURL,
 // convert template attributes from the string into "hard" attributes
 void SdrModel::BurnInStyleSheetAttributes()
 {
-    sal_uInt16 nAnz=GetMasterPageCount();
+    sal_uInt16 nCount=GetMasterPageCount();
     sal_uInt16 nNum;
-    for (nNum=0; nNum<nAnz; nNum++) {
+    for (nNum=0; nNum<nCount; nNum++) {
         GetMasterPage(nNum)->BurnInStyleSheetAttributes();
     }
-    nAnz=GetPageCount();
-    for (nNum=0; nNum<nAnz; nNum++) {
+    nCount=GetPageCount();
+    for (nNum=0; nNum<nCount; nNum++) {
         GetPage(nNum)->BurnInStyleSheetAttributes();
     }
 }
@@ -1252,9 +1252,9 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     if(nKomma < 0)
     {
         // negative nKomma (decimal point) means: add zeros
-        sal_Int32 nAnz(-nKomma);
+        sal_Int32 nCount(-nKomma);
 
-        for(sal_Int32 i=0; i<nAnz; i++)
+        for(sal_Int32 i=0; i<nCount; i++)
             aBuf.append('0');
 
         nKomma = 0;
@@ -1265,12 +1265,12 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     if (nKomma > 0 && aBuf.getLength() <= nKomma)
     {
         // if necessary, add zeros before the decimal point
-        sal_Int32 nAnz = nKomma - aBuf.getLength();
+        sal_Int32 nCount = nKomma - aBuf.getLength();
 
-        if(nAnz >= 0 && LocaleDataWrapper::isNumLeadingZero())
-            nAnz++;
+        if(nCount >= 0 && LocaleDataWrapper::isNumLeadingZero())
+            nCount++;
 
-        for(sal_Int32 i=0; i<nAnz; i++)
+        for(sal_Int32 i=0; i<nCount; i++)
             aBuf.insert(0, '0');
     }
 
@@ -1336,12 +1336,12 @@ void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar) const
 
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
-    sal_Int32 nAnz = 2;
+    sal_Int32 nCount = 2;
 
     if(LocaleDataWrapper::isNumLeadingZero())
-        nAnz++;
+        nCount++;
 
-    while(aBuf.getLength() < nAnz)
+    while(aBuf.getLength() < nCount)
         aBuf.insert(0, '0');
 
     aBuf.insert(aBuf.getLength()-2, rLoc.getNumDecimalSep()[0]);
@@ -1392,9 +1392,9 @@ void SdrModel::RecalcPageNums(bool bMaster)
 {
     if(bMaster)
     {
-        sal_uInt16 nAnz=sal_uInt16(maMaPag.size());
+        sal_uInt16 nCount=sal_uInt16(maMaPag.size());
         sal_uInt16 i;
-        for (i=0; i<nAnz; i++) {
+        for (i=0; i<nCount; i++) {
             SdrPage* pPg=maMaPag[i];
             pPg->SetPageNum(i);
         }
@@ -1402,9 +1402,9 @@ void SdrModel::RecalcPageNums(bool bMaster)
     }
     else
     {
-        sal_uInt16 nAnz=sal_uInt16(maPages.size());
+        sal_uInt16 nCount=sal_uInt16(maPages.size());
         sal_uInt16 i;
-        for (i=0; i<nAnz; i++) {
+        for (i=0; i<nCount; i++) {
             SdrPage* pPg=maPages[i];
             pPg->SetPageNum(i);
         }
@@ -1414,14 +1414,14 @@ void SdrModel::RecalcPageNums(bool bMaster)
 
 void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
-    sal_uInt16 nAnz=GetPageCount();
-    if (nPos>nAnz) nPos=nAnz;
+    sal_uInt16 nCount=GetPageCount();
+    if (nPos>nCount) nPos=nCount;
     maPages.insert(maPages.begin()+nPos,pPage);
     PageListChanged();
     pPage->SetInserted(true);
     pPage->SetPageNum(nPos);
     pPage->SetModel(this);
-    if (nPos<nAnz) bPagNumsDirty=true;
+    if (nPos<nCount) bPagNumsDirty=true;
     SetChanged();
     SdrHint aHint(HINT_PAGEORDERCHG);
     aHint.SetPage(pPage);
@@ -1465,14 +1465,14 @@ void SdrModel::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 
 void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 {
-    sal_uInt16 nAnz=GetMasterPageCount();
-    if (nPos>nAnz) nPos=nAnz;
+    sal_uInt16 nCount=GetMasterPageCount();
+    if (nPos>nCount) nPos=nCount;
     maMaPag.insert(maMaPag.begin()+nPos,pPage);
     MasterPageListChanged();
     pPage->SetInserted(true);
     pPage->SetPageNum(nPos);
     pPage->SetModel(this);
-    if (nPos<nAnz) {
+    if (nPos<nCount) {
         bMPgNumsDirty=true;
     }
     SetChanged();
