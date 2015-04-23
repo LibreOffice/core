@@ -627,8 +627,6 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
             {
                 sal_uInt32 OriginalGlobalColors[ 64 ];
                 sal_uInt32 NewGlobalColors[ 64 ];
-                sal_uInt32 OriginalFillColors[ 64 ];
-                sal_uInt32 NewFillColors[ 64 ];
 
                 sal_uInt32 i, j, nGlobalColorsChanged, nFillColorsChanged;
                 nGlobalColorsChanged = nFillColorsChanged = 0;
@@ -678,8 +676,6 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                         }
                         rSt.Seek( nPos + 44 );
                     }
-                    pCurrentOriginal = OriginalFillColors;
-                    pCurrentNew = NewFillColors;
                     pCount = &nFillColorsChanged;
                     i = nFillColorsCount;
                 }
