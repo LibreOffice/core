@@ -1084,7 +1084,7 @@ void OS2METReader::ReadArc(bool bGivenPos)
 void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aCenter;
-    long nP,nQ,nR,nS;
+    long nP,nQ;
     Rectangle aRect;
     sal_uInt32 nMul; sal_uInt16 nMulS;
 
@@ -1094,18 +1094,14 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
     }
     else aCenter=aAttr.aCurPos;
 
-    nP=aAttr.nArcP; nQ=aAttr.nArcQ; nR=aAttr.nArcR; nS=aAttr.nArcS;
+    nP=aAttr.nArcP; nQ=aAttr.nArcQ;
     if (nP<0) nP=-nP;
     if (nQ<0) nQ=-nQ;
-    if (nR<0) nR=-nR;
-    if (nS<0) nS=-nS;
     if (nOrderSize>=4) pOS2MET->ReadUInt32( nMul );
     else { pOS2MET->ReadUInt16( nMulS ); nMul=((sal_uLong)nMulS)<<8; }
     if (nMul!=0x00010000) {
         nP=(nP*nMul)>>16;
         nQ=(nQ*nMul)>>16;
-        nR=(nR*nMul)>>16;
-        nS=(nS*nMul)>>16;
     }
 
     aRect=Rectangle(aCenter.X()-nP,aCenter.Y()-nQ,
@@ -1132,7 +1128,7 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
 void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aP0, aCenter,aPStart,aPEnd;
-    sal_Int32 nP,nQ,nR,nS,nStart, nSweep;
+    sal_Int32 nP,nQ,nStart, nSweep;
     Rectangle aRect;
     sal_uInt32 nMul; sal_uInt16 nMulS;
     double fStart, fEnd;
@@ -1144,18 +1140,14 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
     else aP0=aAttr.aCurPos;
     aCenter=ReadPoint();
 
-    nP=aAttr.nArcP; nQ=aAttr.nArcQ; nR=aAttr.nArcR; nS=aAttr.nArcS;
+    nP=aAttr.nArcP; nQ=aAttr.nArcQ;
     if (nP<0) nP=-nP;
     if (nQ<0) nQ=-nQ;
-    if (nR<0) nR=-nR;
-    if (nS<0) nS=-nS;
     if (nOrderSize>=12) pOS2MET->ReadUInt32( nMul );
     else { pOS2MET->ReadUInt16( nMulS ); nMul=((sal_uLong)nMulS)<<8; }
     if (nMul!=0x00010000) {
         nP=(nP*nMul)>>16;
         nQ=(nQ*nMul)>>16;
-        nR=(nR*nMul)>>16;
-        nS=(nS*nMul)>>16;
     }
 
     pOS2MET->ReadInt32( nStart ).ReadInt32( nSweep );
