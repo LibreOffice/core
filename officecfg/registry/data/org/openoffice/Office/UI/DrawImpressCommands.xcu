@@ -730,10 +730,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Vertically</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:MirrorHorz" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Horizontally</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeBezier" oor:op="replace">
