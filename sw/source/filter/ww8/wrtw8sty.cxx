@@ -2208,14 +2208,12 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                         }
                     }
                 }
-                else if( i < aSpareFmts.size() )
+                else if (i < aSpareFmts.size() && aSpareFmts[i])
                 {
-                    if( const SwFrmFmt* pFmt = (const SwFrmFmt*)aSpareFmts[ i ] )
-                    {
-                        const SwNodeIndex* pNdIdx = pFmt->GetCntnt().GetCntntIdx();
-                        rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
-                                   pNdIdx->GetNode().EndOfSectionIndex(), nTTyp );
-                    }
+                    const SwFrmFmt& rFmt = *aSpareFmts[i];
+                    const SwNodeIndex* pNdIdx = rFmt.GetCntnt().GetCntntIdx();
+                    rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
+                               pNdIdx->GetNode().EndOfSectionIndex(), nTTyp );
                 }
 
                 // CR at end of one textbox text ( otherwise WW gpft :-( )
@@ -2458,9 +2456,9 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     }
                     if( NULL == pObj )
                     {
-                        if( i < aSpareFmts.size() && aSpareFmts[ i ] )
+                        if (i < aSpareFmts.size() && aSpareFmts[i])
                         {
-                            const SwFrmFmt& rFmt = *(const SwFrmFmt*)aSpareFmts[ i ];
+                            const SwFrmFmt& rFmt = *aSpareFmts[i];
 
                             const SwFmtChain* pChn = &rFmt.GetChain();
                             while( pChn->GetNext() )
