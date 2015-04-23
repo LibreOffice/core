@@ -31,9 +31,7 @@
 #include <vcl/apptypes.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/inputctx.hxx>
-#include <vcl/vclevent.hxx>
-// Only for compatibility - because many people outside haven't included event.hxx
-#include <vcl/event.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <rtl/ustring.hxx>
@@ -63,6 +61,7 @@ class CommandEvent;
 class TrackingEvent;
 class HelpEvent;
 class DataChangedEvent;
+class VclSimpleEvent;
 class NotifyEvent;
 class SystemWindow;
 class SalFrame;
@@ -1453,6 +1452,11 @@ public:
 };
 
 }
+
+// Only for compatibility - because many people outside haven't included event.hxx
+// These require Window to be defined for VclPtr<Window>
+#include <vcl/vclevent.hxx>
+#include <vcl/event.hxx>
 
 #endif // INCLUDED_VCL_WINDOW_HXX
 

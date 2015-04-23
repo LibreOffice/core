@@ -25,13 +25,13 @@
 #include <vcl/dllapi.h>
 #include <vcl/impdel.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <list>
 #include <vector>
 
-namespace vcl { class Window; }
 class Menu;
 
 namespace com { namespace sun { namespace star {

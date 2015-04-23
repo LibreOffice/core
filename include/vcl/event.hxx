@@ -28,9 +28,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
 
 class AllSettings;
-namespace vcl { class Window; }
 struct IDataObject;
 
 namespace com { namespace sun { namespace star { namespace awt {
