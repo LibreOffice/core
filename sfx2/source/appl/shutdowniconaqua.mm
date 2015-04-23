@@ -472,9 +472,9 @@ void aqua_init_systray()
                     // menu => also let not appear it in the quickstarter
                     continue;
                 
-                rtl::OUString aKeyEquiv( getShortCut( pShutdownIcon->GetUrlDescription( sURL ) ) );
+                rtl::OUString aKeyEquiv( getShortCut( ShutdownIcon::GetUrlDescription( sURL ) ) );
         
-                appendMenuItem( pMenu, pDockMenu, pShutdownIcon->GetUrlDescription( sURL ), aMenuItems[i].nMenuTag, aKeyEquiv );
+                appendMenuItem( pMenu, pDockMenu, ShutdownIcon::GetUrlDescription( sURL ), aMenuItems[i].nMenuTag, aKeyEquiv );
             }
 
             // insert the remaining menu entries
