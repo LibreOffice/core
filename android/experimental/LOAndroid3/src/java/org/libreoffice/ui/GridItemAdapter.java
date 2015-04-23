@@ -37,28 +37,14 @@ public class GridItemAdapter extends BaseAdapter {
     Context mContext;
     List<IFile> filePaths;
     IFile currentDirectory;
-    String TAG = "GridItemAdapter";
-
-    public GridItemAdapter(Context mContext, List<IFile> filePaths) {
-        this.mContext = mContext;
-        this.filePaths = filePaths;
-        for (IFile fn : filePaths) {
-            Log.d(TAG, fn.getName());
-        }
-    }
-
-    public GridItemAdapter(Context mContext, IFile currentDirectory) {
-        this.mContext = mContext;
-        this.currentDirectory = currentDirectory;
-        filePaths = currentDirectory.listFiles();
-    }
+    String LOGTAG = "GridItemAdapter";
 
     public GridItemAdapter(Context mContext, IFile currentDirectory,
-            List<IFile> filteredFiles)
-    {
+            List<IFile> filteredFiles) {
         this.mContext = mContext;
         this.currentDirectory = currentDirectory;
         filePaths = filteredFiles;
+        Log.d(LOGTAG, "currentDirectory.getName(): " + currentDirectory.getName());
     }
 
     public int getCount() {
@@ -66,7 +52,7 @@ public class GridItemAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return null;//filePaths[ position ];
+        return null; //filePaths[ position ];
     }
 
     public long getItemId(int position) {
@@ -74,8 +60,7 @@ public class GridItemAdapter extends BaseAdapter {
         return 0;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
 
@@ -97,13 +82,10 @@ public class GridItemAdapter extends BaseAdapter {
         // set image based on selected text
         ImageView imageView = (ImageView) gridView
             .findViewById(R.id.grid_item_image);
-        if (filePaths.get(position).isDirectory()) // Is a folder
-        {
+        if (filePaths.get(position).isDirectory()) { // Is a folder
             // Default view is a generic folder icon.
             imageView.setImageResource(R.drawable.folder);
-        }
-        else
-        {
+        } else {
             /*
             File thumbnailFile = new File( filePaths[position].getParent() , "."
                     + filePaths[position].getName().split("[.]")[0] + ".png");
@@ -141,7 +123,7 @@ public class GridItemAdapter extends BaseAdapter {
         return gridView;
     }
 
-    public void update(){
+    public void update() {
         this.notifyDataSetChanged();
     }
 }

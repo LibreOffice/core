@@ -27,7 +27,7 @@ import java.io.File;
 import java.util.Stack;
 
 public class FolderIconView extends View{
-    private String TAG = "FolderIconView";
+    private String LOGTAG = "FolderIconView";
 
     private Paint mPaintBlack;
     private Paint mPaintGray;
@@ -69,7 +69,7 @@ public class FolderIconView extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d(TAG, "onDraw");
+        Log.d(LOGTAG, "onDraw");
         //float width = (float)canvas.getWidth();
         //float height = (float)canvas.getHeight();
         float width = (float) this.getWidth();
@@ -83,7 +83,7 @@ public class FolderIconView extends View{
         float DZx = 0.2f*outerRadius;
         float DZy = 0.2f*outerRadius;
         //Bitmap blankPage = BitmapFactory.decodeResource(getResources(), R.drawable.page);
-        Log.i(TAG, Float.toString(width) + "x" + Float.toString(height));
+        Log.i(LOGTAG, Float.toString(width) + "x" + Float.toString(height));
         canvas.drawCircle(centerX, centerY, outerRadius, mPaintGray);
         canvas.drawCircle(centerX, centerY, innerRadius, mPaintBlack);
         //Either get thumbs from directory or use generic page images
@@ -107,7 +107,7 @@ public class FolderIconView extends View{
         /*while(thumbs.size() < 4) {// padd out with blanks?
             thumbs.push(blankPage);
         }*/
-        Log.i(TAG, Integer.toString(thumbs.size()));
+        Log.i(LOGTAG, Integer.toString(thumbs.size()));
         //should handle empty folders better
         //  options:
         //      don't show?
