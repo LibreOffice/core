@@ -74,7 +74,7 @@ void VclOutdevTest::testVirtualDevice()
 
 #if 0
     VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );
-    CPPUNIT_ASSERT( pWin != NULL );
+    CPPUNIT_ASSERT( pWin );
     OutputDevice *pOutDev = static_cast< OutputDevice * >( pWin );
 #endif
 }
