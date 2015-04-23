@@ -357,7 +357,15 @@ void PieChart::createTextLabelShape(
     aPieLabelInfo.bMovementAllowed = bMovementAllowed;
     aPieLabelInfo.bMoved= false;
     aPieLabelInfo.xTextTarget = xTextTarget;
+
+    if (bMovementAllowed)
+    {
+        performLabelBestFit(rParam, aPieLabelInfo);
+    }
+
+
     m_aLabelInfoList.push_back(aPieLabelInfo);
+
 }
 
 void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, sal_Int32 /* xSlot */, sal_Int32 /* ySlot */ )
@@ -721,6 +729,28 @@ bool lcl_isInsidePage( const awt::Point& rPos, const awt::Size& rSize, const awt
     if( (rPos.Y + rSize.Height) > rPageSize.Height )
         return false;
     return true;
+}
+
+inline
+double lcl_radToDeg(double fAngleRad)
+{
+    return (fAngleRad / M_PI) * 180.0;
+}
+
+inline
+double lcl_degToRad(double fAngleDeg)
+{
+    return (fAngleDeg / 180) * M_PI;
+}
+
+inline
+double lcl_getDegAngleInStandardRange(double fAngle)
+{
+    while( fAngle < 0.0 )
+        fAngle += 360.0;
+    while( fAngle >= 360.0 )
+        fAngle -= 360.0;
+    return fAngle;
 }
 
 }//end anonymous namespace
@@ -1151,6 +1181,414 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
             }
             m_pShapeFactory->createLine2D( rInfo.xTextTarget, aPoints, &aVLineProperties );
         }
+    }
+}
+
+
+/** Handle the placement of the label in the best fit case:
+ *  the routine try to place the label inside the related pie slice,
+ *  in case of success it returns true else returns false.
+ *
+ *  Notation:
+ *  C: the pie center
+ *  s: the bisector ray of the current pie slice
+ *  alpha: the angle between the horizontal axis and the bisector ray s
+ *  N: the vertex of the label b.b. which is nearest to C
+ *  F: the vertex of the label b.b. not adjacent to N; F lies on the pie border
+ *  P, Q: the intersection points between the label b.b. and the bisector ray s;
+ *        P is the one at minimum distance respect with C
+ *  e: the edge of the label b.b. where P lies (the nearest edge to C)
+ *  M: the vertex of e that is not N
+ *  G: the vertex of the label b.b. which is adjacent to N and that is not M
+ *  beta: the angle MPF
+ *  theta: the angle CPF
+ *
+ *
+ *     |
+ *     |                                /s
+ *     |                               /
+ *     |                              /
+ *     |  G _________________________/____________________________ F
+ *     |   |                        /Q                          ..|
+ *     |   |                       /                         . .  |
+ *     |   |                      /                       .  .    |
+ *     |   |                     /                     .   .      |
+ *     |   |                    /                   .    .        |
+ *     |   |                   /                 .     .          |
+ *     |   |                  /              d.      .            |
+ *     |   |                 /             .       .              |
+ *     |   |                /           .        .                |
+ *     |   |               /         .         .                  |
+ *     |   |              /       .          .                    |
+ *     |   |             /     .           .                      |
+ *     |   |            /   .            .                        |
+ *     |   |           / .  \ beta     .                          |
+ *     |   |__________/._\___|_______.____________________________|
+ *     |  N          /P  /         .                               M
+ *     |            /___/theta   .
+ *     |           /           .
+ *     |          /          . r
+ *     |         /         .
+ *     |        /        .
+ *     |       /       .
+ *     |      /      .
+ *     |     /     .
+ *     |    /    .
+ *     |   /   .
+ *     |  /  .
+ *     | /\. alpha
+ *   __|/__|_____________________________________________________________
+ *     |C
+ *     |
+ *
+ *
+ *  When alpha = 45k (k integer) s crosses the label b.b. at N exactly.
+ *  In such a case the nearest edge e is defined as the edge having N as the
+ *  start vertex and that is covered in the counterclockwise direction when
+ *  we move from N to the adjacent vertex.
+ *
+ *  The nearest vertex N is:
+ *   1. the bottom left vertex when 0 < alpha < 90
+ *   2. the bottom right vertex when 90 < alpha < 180
+ *   3. the top right vertex when 180 < alpha < 270
+ *   4. the top left vertex when 270 < alpha < 360.
+ *
+ *  The nearest edge e is:
+ *   1. the left edge when −45 < alpha < 45
+ *   2. the bottom edge when 45 < alpha <135
+ *   3. the right edge when 135 < alpha < 225
+ *   4. the top edge when 225 < alpha < 315.
+ *
+ **/
+bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo)
+{
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "** PieChart::performLabelBestFitInnerPlacement invoked **" );
+
+    // get pie slice properties
+    double fStartAngleDeg = lcl_getDegAngleInStandardRange(rShapeParam.mfUnitCircleStartAngleDegree);
+    double fWidthAngleDeg = rShapeParam.mfUnitCircleWidthAngleDegree;
+    double fHalfWidthAngleDeg = fWidthAngleDeg / 2.0;
+    double fBisectingRayAngleDeg = lcl_getDegAngleInStandardRange(fStartAngleDeg + fHalfWidthAngleDeg);
+
+    // get the middle point of the arc representing the pie slice border
+    double fLogicZ = rShapeParam.mfLogicZ + 1.0;
+    awt::Point aMiddleArcPoint = PlottingPositionHelper::transformSceneToScreenPosition(
+            m_pPosHelper->transformUnitCircleToScene(
+                    fBisectingRayAngleDeg,
+                    rShapeParam.mfUnitCircleOuterRadius,
+                    fLogicZ ),
+            m_xLogicTarget, m_pShapeFactory, m_nDimension );
+
+    // compute the pie radius
+    basegfx::B2IVector aPieCenter = rPieLabelInfo.aOrigin;
+    basegfx::B2IVector aRadiusVector(
+            aMiddleArcPoint.X - aPieCenter.getX(),
+            aMiddleArcPoint.Y - aPieCenter.getY() );
+    double fSquaredPieRadius = aRadiusVector.scalar(aRadiusVector);
+    double fPieRadius = sqrt( fSquaredPieRadius );
+
+    // the bb is moved as much as possible near to the border of the pie,
+    // anyway a small offset from the border is present (0.025 * pie radius)
+    const double fPieBorderOffset = 0.025;
+    fPieRadius = fPieRadius - fPieRadius * fPieBorderOffset;
+
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "    pie sector:" );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      start angle = " << fStartAngleDeg );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      angle width = " << fWidthAngleDeg );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      bisecting ray angle = " << fBisectingRayAngleDeg );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      pie radius = " << fPieRadius );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      pie center = " << rPieLabelInfo.aOrigin );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      middle arc point = (" << aMiddleArcPoint.X << ","
+                                           << aMiddleArcPoint.Y << ")" );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "    label bounding box:" );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      old anchor point = " << rPieLabelInfo.aFirstPosition );
+
+
+    if( ::rtl::math::approxEqual( fPieRadius, 0.0 ) )
+        return false;
+
+    // get label b.b. width and height
+    ::basegfx::B2IRectangle aBb( lcl_getRect( rPieLabelInfo.xLabelGroupShape ) );
+    double fLabelWidth = aBb.getWidth();
+    double fLabelHeight = aBb.getHeight();
+
+    // -45 <= fAlphaDeg < 315
+    double fAlphaDeg = lcl_getDegAngleInStandardRange(fBisectingRayAngleDeg + 45) - 45;
+    double fAlphaRad = lcl_degToRad(fAlphaDeg);
+
+    // compute nearest edge index
+    // 0 left
+    // 1 bottom
+    // 2 right
+    // 3 top
+    int nSectorIndex = floor( (fAlphaDeg + 45) / 45.0 );
+    int nNearestEdgeIndex = nSectorIndex / 2;
+
+    // compute lengths of the nearest edge and of the orthogonal edges
+    double fNearestEdgeLength = fLabelWidth;
+    double fOrthogonalEdgeLength = fLabelHeight;
+    int nAxisIndex = 0;
+    int nOrthogonalAxisIndex = 1;
+    if( nNearestEdgeIndex % 2 == 0 ) // nearest edge is vertical
+    {
+        fNearestEdgeLength = fLabelHeight;
+        fOrthogonalEdgeLength = fLabelWidth;
+        nAxisIndex = 1;
+        nOrthogonalAxisIndex = 0;
+    }
+
+    // compute the distance between N and P
+    // such a distance is piece wise linear respect with alpha:
+    // given 45k <= alpha < 45(k+1) we have
+    // when k is even: d(N,P) = (length(e) / 2) * (1 - (alpha - 45k)/45)
+    // when k is odd: d(N,P) = (length(e) / 2) * (1 - (45(k+1) - alpha)/45)
+    int nIndex = nSectorIndex -1;  // nIndex = -1...6
+    double fIndexMod2 = (nIndex + 8) % 2; // fIndexMod2 must be non negative
+    double fSgn = 2.0 * (fIndexMod2 - 0.5); // 0 -> -1, 1 -> 1
+    double fDistanceNP = (fNearestEdgeLength / 2.0) * (1 + fSgn * ((fAlphaDeg - 45 * (nIndex + fIndexMod2)) / 45.0));
+    double fDistancePM = fNearestEdgeLength - fDistanceNP;
+
+    // compute the length of the diagonal vector d,
+    // that is the distance between P and F
+    double fSquaredDistancePF = fDistancePM * fDistancePM + fOrthogonalEdgeLength * fOrthogonalEdgeLength;
+    double fDistancePF = sqrt( fSquaredDistancePF );
+
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      width = " << fLabelWidth );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      height = " <<  fLabelHeight );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      nearest edge index = " << nNearestEdgeIndex );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      alpha = " << fAlphaDeg );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      distance(N,P) = " << fDistanceNP );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "        nIndex = " << nIndex );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "        fIndexMod2 = " << fIndexMod2 );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "        fSgn = " << fSgn );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      distance(P,F) = " << fDistancePF );
+
+
+    // we check that the condition length(d) <= pie radius holds
+    if (fDistancePF > fPieRadius)
+    {
+        return false;
+    }
+
+    // compute beta: the angle of the diagonal vector d,
+    // that is, the angle in P respect with the triangle PMF;
+    // since both arguments are non negative the returned value is in [0, PI/2]
+    double fBetaRad = atan2( fOrthogonalEdgeLength, fDistancePM );
+
+    // compute the theta angle, that is the angle in P
+    // respect with the triangle CFP;
+    // when the second intersection edge is opposite to the nearest edge,
+    // theta depends on alpha and beta according to the following relation:
+    // theta = f(alpha, beta) = s * alpha + 90 * (1 - s * i) + beta
+    // where i is the nearest edge index and s is the sign of (alpha' - 45),
+    // with alpha' = (alpha + 45) mod 90;
+    // when the second intersection edge is adjacent to the nearest edge,
+    // we have theta = 360 - f(alpha, beta);
+    // note that in the former case 0 <= f(alpha, beta) <= 180,
+    // whilst in the latter case 180 <= f(alpha, beta) <= 360;
+    double fAlphaMod90 = fmod( fAlphaDeg + 45, 90.0 ) - 45;
+    double fSign = ::rtl::math::approxEqual( fAlphaMod90, 0.0 )
+                       ? 0.0
+                       : ( fAlphaMod90 < 0 ) ? -1.0 : 1.0;
+    double fThetaRad = fSign * fAlphaRad + M_PI_2 * (1 - fSign * nNearestEdgeIndex) + fBetaRad;
+    if( fThetaRad > M_PI )
+    {
+        fThetaRad = 2 * M_PI - fThetaRad;
+    }
+
+    // compute the length of the positional vector,
+    // that is the distance between C and P
+    double fDistanceCP;
+    // when the bisector ray intersects the b.b. in F we have theta mod 180 == 0
+    if( ::rtl::math::approxEqual( fmod(fThetaRad, M_PI), 0.0 ))
+    {
+        fDistanceCP = fPieRadius - fDistancePF;
+    }
+    else // general case
+    {
+        // we can compute d(C,P) by applying some trigonometric formula to
+        // the triangle CFP : we know length(d) and length(r) = r and we have
+        // computed the angle in P (theta); so named delta the angle in C and
+        // gamma the angle in F, by the relation:
+        //
+        //                r         d(P,F)     d(C,P)
+        //            --------- = --------- = ---------
+        //            sin theta   sin delta   sin gamma
+        //
+        // we get the wanted distance
+        double fSinTheta = sin( fThetaRad );
+        double fSinDelta = fDistancePF * fSinTheta / fPieRadius;
+        double fDeltaRad = asin( fSinDelta );
+        double fGammaRad = M_PI - (fThetaRad + fDeltaRad);
+        double fSinGamma = sin( fGammaRad );
+        fDistanceCP = fPieRadius * fSinGamma / fSinTheta;
+    }
+
+    // define the positional vector
+    basegfx::B2DVector aPositionalVector( cos(fAlphaRad), sin(fAlphaRad) );
+    aPositionalVector.setLength(fDistanceCP);
+
+    // we define a direction vector in order to know
+    // in which quadrant we are working
+    basegfx::B2DVector aDirection(1.0, 1.0);
+    if( 90 <= fBisectingRayAngleDeg && fBisectingRayAngleDeg < 270 )
+    {
+        aDirection.setX(-1.0);
+    }
+    if( fBisectingRayAngleDeg >= 180 )
+    {
+        aDirection.setY(-1.0);
+    }
+
+    // compute vertices N, M and G respect with pie center C
+    basegfx::B2DVector aNearestVertex(aPositionalVector);
+    aNearestVertex[nAxisIndex] += -aDirection[nAxisIndex] * fDistanceNP;
+    basegfx::B2DVector aVertexM(aNearestVertex);
+    aVertexM[nAxisIndex] += aDirection[nAxisIndex] * fNearestEdgeLength;
+    basegfx::B2DVector aVertexG(aNearestVertex);
+    aVertexG[nOrthogonalAxisIndex] += aDirection[nOrthogonalAxisIndex] * fOrthogonalEdgeLength;
+
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      beta = " << lcl_radToDeg(fBetaRad) );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      theta = " << lcl_radToDeg(fThetaRad) );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "        fAlphaMod90 = " << fAlphaMod90 );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "        fSign = " << fSign );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      distance(C,P) = " << fDistanceCP );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      direction vector = " << aDirection );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      N = " << aNearestVertex );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      M = " << aVertexM );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      G = " << aVertexG );
+
+    // in order to be able to place the label inside the pie slice we need
+    // to check that each angle between s and the ray starting from C and
+    // passing through a b.b. vertex is less than half width of the pie slice;
+    // when the nearest edge e crosses a Cartesian axis it is sufficient
+    // to test only the vertices belonging to e, else we need to test
+    // the 2 vertices that aren’t either N or F . Note that if a b.b. edge
+    // crosses a Cartesian axis then it is the nearest edge to C
+
+    // check the angle between CP and CM
+    double fAngleRad = aPositionalVector.angle(aVertexM);
+    double fAngleDeg = lcl_getDegAngleInStandardRange( lcl_radToDeg(fAngleRad) );
+    if( fAngleDeg > 180 )  // in case the wrong angle has been computed
+        fAngleDeg = 360 - fAngleDeg;
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      angle between CP and CM: " << fAngleDeg );
+    if( fAngleDeg > fHalfWidthAngleDeg )
+    {
+        return false;
+    }
+
+    if( ( aNearestVertex[nAxisIndex] >= 0 && aVertexM[nAxisIndex] <= 0 )
+            || ( aNearestVertex[nAxisIndex] <= 0 && aVertexM[nAxisIndex] >= 0 ) )
+    {
+        // check the angle between CP and CN
+        fAngleRad = aPositionalVector.angle(aNearestVertex);
+        fAngleDeg = lcl_getDegAngleInStandardRange( lcl_radToDeg(fAngleRad) );
+        if( fAngleDeg > 180 )  // in case the wrong angle has been computed
+            fAngleDeg = 360 - fAngleDeg;
+        SAL_INFO( "chart2.pie.label.bestfit.inside",
+                  "      angle between CP and CN: " << fAngleDeg );
+        if( fAngleDeg > fHalfWidthAngleDeg )
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // check the angle between CP and CG
+        fAngleRad = aPositionalVector.angle(aVertexG);
+        fAngleDeg = lcl_getDegAngleInStandardRange( lcl_radToDeg(fAngleRad) );
+        if( fAngleDeg > 180 )  // in case the wrong angle has been computed
+            fAngleDeg = 360 - fAngleDeg;
+        SAL_INFO( "chart2.pie.label.bestfit.inside",
+                  "      angle between CP and CG: " << fAngleDeg );
+        if( fAngleDeg > fHalfWidthAngleDeg )
+        {
+            return false;
+        }
+    }
+
+    // compute the b.b. center respect with the pie center
+    basegfx::B2DVector aBBCenter(aNearestVertex);
+    aBBCenter[nAxisIndex] += aDirection[nAxisIndex] * fNearestEdgeLength / 2;
+    aBBCenter[nOrthogonalAxisIndex] += aDirection[nOrthogonalAxisIndex] * fOrthogonalEdgeLength / 2;
+
+    // compute the b.b. anchor point
+    basegfx::B2IVector aNewAnchorPoint = aPieCenter;
+    aNewAnchorPoint[0] += floor(aBBCenter[0]);
+    aNewAnchorPoint[1] -= floor(aBBCenter[1]); // the Y axis on the screen points downward
+
+    // compute the translation vector for moving the label from the current
+    // screen position to the new one
+    basegfx::B2IVector aTranslationVector = aNewAnchorPoint - rPieLabelInfo.aFirstPosition;
+
+    // compute the new screen position and move the label
+    awt::Point aNewPos( rPieLabelInfo.xLabelGroupShape->getPosition() );
+    aNewPos.X += aTranslationVector.getX();
+    aNewPos.Y += aTranslationVector.getY();
+    rPieLabelInfo.xLabelGroupShape->setPosition(aNewPos);
+
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      center = " <<  aBBCenter );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      new anchor point = " << aNewAnchorPoint );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      translation vector = " <<  aTranslationVector );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      new position = (" << aNewPos.X << "," << aNewPos.Y << ")" );
+
+    return true;
+}
+
+/** Handle the outer placement of the labels in the best fit case.
+ *
+ */
+bool PieChart::performLabelBestFitOuterPlacement(ShapeParam& /*rShapeParam*/, PieLabelInfo& /*rPieLabelInfo*/)
+{
+    SAL_WARN( "chart2.pie.label.bestfit", "to be implemented" );
+    return false;
+}
+
+/** Handle the placement of the label in the best fit case.
+ *  First off the routine try to place the label inside the related pie slice,
+ *  if this is not possible the label is placed outside.
+ */
+void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo)
+{
+    if( m_bUseRings )
+        return;
+
+    if( !performLabelBestFitInnerPlacement(rShapeParam, rPieLabelInfo) )
+    {
+        performLabelBestFitOuterPlacement(rShapeParam, rPieLabelInfo);
     }
 }
 
