@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a740942_8e085b2a",
+        "filename": "sc/uiconfig/scalc/ui/managenamesdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-04-23T02:02:37Z",
+      "side": 1,
+      "message": "What’s this?",
+      "revId": "a10ea5a79583e2ac443e2901cbbac6530f8d1a68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_ae0d1739",
+        "filename": "sc/uiconfig/scalc/ui/managenamesdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-04-23T02:02:37Z",
+      "side": 1,
+      "message": "This hardcoded margin seems excessive to me.",
+      "revId": "a10ea5a79583e2ac443e2901cbbac6530f8d1a68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a740942_4e13535d",
+        "filename": "sc/uiconfig/scalc/ui/managenamesdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-04-23T02:02:37Z",
+      "side": 1,
+      "message": "This looks like a placeholder string. If it is, it shouldn’t be translatable.",
+      "revId": "a10ea5a79583e2ac443e2901cbbac6530f8d1a68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
