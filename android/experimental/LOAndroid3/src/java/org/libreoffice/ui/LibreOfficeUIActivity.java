@@ -131,7 +131,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
 
         LinearLayout content = (LinearLayout) findViewById(R.id.browser_main_content);
 
-        if( viewMode == GRID_VIEW){
+        if (viewMode == GRID_VIEW) {
             // code to make a grid view
             getLayoutInflater().inflate(R.layout.file_grid, content);
             gv = (GridView)findViewById(R.id.file_explorer_grid_view);
@@ -141,13 +141,13 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
                     open(position);
                 }
             });
-            actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
+            actionBar.setSelectedNavigationItem(filterMode + 1);//This triggers the listener which modifies the view.
             registerForContextMenu(gv);
-        }else{
+        } else {
             getLayoutInflater().inflate(R.layout.file_list, content);
-            lv = (ListView)findViewById( R.id.file_explorer_list_view);
+            lv = (ListView)findViewById(R.id.file_explorer_list_view);
             lv.setClickable(true);
-            actionBar.setSelectedNavigationItem( filterMode + 1 );
+            actionBar.setSelectedNavigationItem(filterMode + 1);
             registerForContextMenu(lv);
         }
 
@@ -168,7 +168,6 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
                         .getProvider(position));
             }
         });
-
     }
 
     private void refreshView() {
@@ -393,33 +392,54 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         inflater.inflate(R.menu.view_menu, menu);
 
         MenuItem item = (MenuItem)menu.findItem(R.id.menu_view_toggle);
-        if( viewMode == GRID_VIEW){
+        if (viewMode == GRID_VIEW) {
             item.setTitle(R.string.list_view);
-            item.setIcon( R.drawable.light_view_as_list );
-        }else{
+            item.setIcon(R.drawable.light_view_as_list);
+        } else {
             item.setTitle(R.string.grid_view);
-            item.setIcon( R.drawable.light_view_as_grid );
+            item.setIcon(R.drawable.light_view_as_grid);
         }
+
+        item = (MenuItem)menu.findItem(R.id.menu_sort_size);
+        if (sortMode == FileUtilities.SORT_LARGEST) {
+            item.setTitle(R.string.sort_smallest);
+        } else {
+            item.setTitle(R.string.sort_largest);
+        }
+
+        item = (MenuItem)menu.findItem(R.id.menu_sort_az);
+        if (sortMode == FileUtilities.SORT_AZ) {
+            item.setTitle(R.string.sort_za);
+        } else {
+            item.setTitle(R.string.sort_az);
+        }
+
+        item = (MenuItem)menu.findItem(R.id.menu_sort_modified);
+        if (sortMode == FileUtilities.SORT_NEWEST) {
+            item.setTitle(R.string.sort_oldest);
+        } else {
+            item.setTitle(R.string.sort_newest);
+        }
+
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if( !currentDirectory.equals( homeDirectory ) ){
+                if (!currentDirectory.equals(homeDirectory)){
                     openParentDirectory();
                 }
                 break;
             case R.id.menu_view_toggle:
-                if( viewMode == GRID_VIEW){
+                if (viewMode == GRID_VIEW){
                     viewMode = LIST_VIEW;
-                    item.setTitle(R.string.grid_view);//Button points to next view.
-                    item.setIcon( R.drawable.light_view_as_grid );
-
-                }else{
+                    item.setTitle(R.string.grid_view); // Button points to next view.
+                    item.setIcon(R.drawable.light_view_as_grid);
+                } else {
                     viewMode = GRID_VIEW;
-                    item.setTitle(R.string.list_view);//Button points to next view.
-                    item.setIcon( R.drawable.light_view_as_list );
+                    item.setTitle(R.string.list_view); // Button points to next view.
+                    item.setIcon(R.drawable.light_view_as_list);
                 }
                 createUI();
                 break;
@@ -486,10 +506,10 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
         outState.putString(CURRENT_DIRECTORY_KEY, currentDirectory.getUri().toString());
-        outState.putInt( FILTER_MODE_KEY , filterMode );
-        outState.putInt( EXPLORER_VIEW_TYPE_KEY , viewMode );
+        outState.putInt(FILTER_MODE_KEY , filterMode);
+        outState.putInt(EXPLORER_VIEW_TYPE_KEY , viewMode);
 
-        Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
+        Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
         //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
         Log.d(LOGTAG, "savedInstanceSate");
     }
@@ -498,7 +518,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onRestoreInstanceState(savedInstanceState);
-        if( savedInstanceState.isEmpty() ){
+        if (savedInstanceState.isEmpty()){
             return;
         }
         try {
@@ -507,11 +527,11 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         } catch (URISyntaxException e) {
             currentDirectory = documentProvider.getRootDirectory();
         }
-        filterMode = savedInstanceState.getInt( FILTER_MODE_KEY , FileUtilities.ALL ) ;
-        viewMode = savedInstanceState.getInt( EXPLORER_VIEW_TYPE_KEY , GRID_VIEW );
-        //openDirectory( currentDirectory );
+        filterMode = savedInstanceState.getInt(FILTER_MODE_KEY , FileUtilities.ALL) ;
+        viewMode = savedInstanceState.getInt(EXPLORER_VIEW_TYPE_KEY , GRID_VIEW);
+        //openDirectory(currentDirectory);
         Log.d(LOGTAG, "onRestoreInstanceState");
-        Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
+        Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
     }
 
     @Override
@@ -567,11 +587,11 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
 
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         filterMode = itemPosition -1; //bit of a hack, I know. -1 is ALL 0 Docs etc
-        openDirectory( currentDirectory );// Uses filter mode
+        openDirectory(currentDirectory);// Uses filter mode
         return true;
     }
 
-    private int dpToPx( int dp ){
+    private int dpToPx(int dp){
         final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
@@ -645,23 +665,23 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
             //TODO Give size in KB , MB as appropriate.
             String size = "0B";
             long length = filePaths.get(position).getSize();
-            if( length < KB ){
-                size = Long.toString( length ) + "B";
+            if (length < KB){
+                size = Long.toString(length) + "B";
             }
-            if( length >= KB && length < MB){
-                size = Long.toString( length/KB ) + "KB";
+            if (length >= KB && length < MB){
+                size = Long.toString(length/KB) + "KB";
             }
-            if( length >= MB){
-                size = Long.toString( length/MB ) + "MB";
+            if (length >= MB){
+                size = Long.toString(length/MB) + "MB";
             }
-            fileSize.setText( size );
+            fileSize.setText(size);
             //fileSize.setClickable(true);
 
             TextView fileDate = (TextView) listItem.findViewById(R.id.file_list_item_date);
             SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy hh:ss");
             Date date = filePaths.get(position).getLastModified();
             //TODO format date
-            fileDate.setText( df.format( date ) );
+            fileDate.setText(df.format(date));
 
             // set image based on selected text
             ImageView imageView = (ImageView) listItem.findViewById(R.id.file_list_item_icon);
