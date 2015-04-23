@@ -108,6 +108,10 @@ struct PieLabelInfo;
                                 , PieLabelInfo* pCenter, bool bSingleCenter, bool& rbAlternativeMoveDirection
                                 , const ::com::sun::star::awt::Size& rPageSize );
 
+    bool                performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
+    bool                performLabelBestFitOuterPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
+    void                performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
+
 private: //member
     PiePositionHelper*    m_pPosHelper;
     bool                  m_bUseRings;
