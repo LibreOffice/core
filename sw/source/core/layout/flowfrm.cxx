@@ -2087,7 +2087,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
                     // section and on page 1 is normal content. Method <FindPrev(..)>
                     // will find the last content of page 1, but <GetLeaf(..)>
                     // returns new upper on page 2.
-                    if ( pNewUpper->Lower() )
+                    if (pNewUpper && pNewUpper->Lower())
                     {
                         SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, true );
                         if ( pNewNextUpper &&
