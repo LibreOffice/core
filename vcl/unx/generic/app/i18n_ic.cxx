@@ -442,7 +442,7 @@ SalI18N_InputContext::ExtendEventMask( ::Window aFocusWindow )
 // tune the styles provided by the input method with the supported one
 
 unsigned int
-SalI18N_InputContext::GetWeightingOfIMStyle( XIMStyle nStyle ) const
+SalI18N_InputContext::GetWeightingOfIMStyle( XIMStyle nStyle )
 {
     struct StyleWeightingT {
         const XIMStyle      nStyle;

@@ -272,7 +272,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
                                    bool bSendRelease
                                    );
 
-    GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
+    static GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
 
     static int m_nFloats;
 
@@ -304,8 +304,8 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     void createNewWindow( ::Window aParent, bool bXEmbed, SalX11Screen nXScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
 
-    void AllocateFrame();
-    void TriggerPaintEvent();
+    static void AllocateFrame();
+    static void TriggerPaintEvent();
 
     void updateWMClass();
     void SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize = NULL );
@@ -331,8 +331,8 @@ public:
     void grabPointer(bool bGrab, bool bOwnerEvents = false);
     void grabKeyboard(bool bGrab);
 
-    GtkSalDisplay*  getDisplay();
-    GdkDisplay*     getGdkDisplay();
+    static GtkSalDisplay*  getDisplay();
+    static GdkDisplay*     getGdkDisplay();
     GtkWidget*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
     GdkWindow*  getForeignParent() const { return m_pForeignParent; }

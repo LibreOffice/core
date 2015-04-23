@@ -167,10 +167,10 @@ public:
 
     static std::vector<Rectangle> partition(const RenderContext &rCtx, int nX, int nY)
     {
-        return rCtx.mpDemoRenderer->partition(rCtx.maSize, nX, nY);
+        return DemoRenderer::partition(rCtx.maSize, nX, nY);
     }
 
-    std::vector<Rectangle> partition(Size aSize, int nX, int nY)
+    static std::vector<Rectangle> partition(Size aSize, int nX, int nY)
     {
         Rectangle r;
         std::vector<Rectangle> aRegions;
@@ -210,7 +210,7 @@ public:
         }
     }
 
-    void drawBackground(OutputDevice &rDev, const Rectangle& r)
+    static void drawBackground(OutputDevice &rDev, const Rectangle& r)
     {
         rDev.Erase();
         Gradient aGradient;
@@ -353,7 +353,7 @@ public:
             }
         }
 
-        void drawText (OutputDevice &rDev, Rectangle r, bool bClip, bool bArabicText, bool bRotate)
+        static void drawText (OutputDevice &rDev, Rectangle r, bool bClip, bool bArabicText, bool bRotate)
         {
             rDev.SetClipRegion( vcl::Region(r) );
 
@@ -638,7 +638,7 @@ public:
 
         // Simulate Page Borders rendering - which ultimately should
         // be done with a shader / gradient
-        void SimulateBorderStretch(OutputDevice &rDev, const Rectangle& r)
+        static void SimulateBorderStretch(OutputDevice &rDev, const Rectangle& r)
         {
             static BitmapEx aPageShadowMask("sw/res/page-shadow-mask.png");
 
@@ -771,7 +771,7 @@ public:
             RENDER_AS_ALPHA_OUTDEV
         };
 
-        void SizeAndRender(OutputDevice &rDev, const Rectangle& r, RenderType eType,
+        static void SizeAndRender(OutputDevice &rDev, const Rectangle& r, RenderType eType,
                            const RenderContext &rCtx)
         {
             VirtualDevice *pNested;
@@ -942,7 +942,7 @@ public:
             }
         }
 
-        BitmapEx AlphaRecovery(OutputDevice &rDev, Point aPt, BitmapEx &aSrc)
+        static BitmapEx AlphaRecovery(OutputDevice &rDev, Point aPt, BitmapEx &aSrc)
         {
             // Compositing onto 2x colors beyond our control
             VirtualDevice aWhite, aBlack;
@@ -1553,7 +1553,7 @@ class DemoPopup : public FloatingWindow
 
 class DemoApp : public Application
 {
-    int showHelp(DemoRenderer &rRenderer)
+    static int showHelp(DemoRenderer &rRenderer)
     {
         fprintf(stderr,"vcldemo - a VCL test app\n");
         fprintf(stderr,"  --help             - print this text\n");

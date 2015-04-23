@@ -612,7 +612,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
                         idle = false;
                 }
                 // notify
-                GetX11SalData()->Timeout( idle );
+                X11SalData::Timeout( idle );
             }
         }
     }

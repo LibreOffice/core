@@ -70,7 +70,7 @@ class DemoMtfApp : public Application
     DemoMtfWin *mpWin;
     OUString maFileName;
 
-    void showHelp()
+    static void showHelp()
     {
         fprintf(stderr, "Usage: mtfdemo --help | FILE\n");
         fprintf(stderr, "A VCL test app that displays Windows metafiles\n");

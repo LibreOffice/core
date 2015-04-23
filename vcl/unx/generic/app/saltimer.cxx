@@ -29,7 +29,7 @@
 #include <unx/saltimer.h>
 #include <unx/salinst.h>
 
-void X11SalData::Timeout( bool idle ) const
+void X11SalData::Timeout( bool idle )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->mpSalTimer )

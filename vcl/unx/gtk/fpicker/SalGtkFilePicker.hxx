@@ -255,7 +255,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         void HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction,
             const ::com::sun::star::uno::Any& rValue);
-        ::com::sun::star::uno::Any HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction) const;
+        static ::com::sun::star::uno::Any HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction);
 
         static void expander_changed_cb( GtkExpander *expander, SalGtkFilePicker *pobjFP );
         static void preview_toggled_cb( GObject *cb, SalGtkFilePicker *pobjFP );

@@ -110,7 +110,7 @@ public:
     virtual bool Close() SAL_OVERRIDE;
 
     void parseList( const OString& rList );
-    OString processCommand( const OString& rCommand );
+    static OString processCommand( const OString& rCommand );
 
     DECL_LINK( ListHdl, Button* );
     DECL_LINK( SelectHdl, ListBox* );

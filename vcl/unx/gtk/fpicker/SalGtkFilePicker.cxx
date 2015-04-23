@@ -1181,7 +1181,7 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
     gtk_widget_set_sensitive(GTK_WIDGET(pWidget), nItems > 1);
 }
 
-uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction) const
+uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction)
 {
     uno::Any aAny;
     switch (nControlAction)
