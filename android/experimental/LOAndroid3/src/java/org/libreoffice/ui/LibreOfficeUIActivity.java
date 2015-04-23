@@ -107,6 +107,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         DocumentProviderFactory.initialize(this);
         documentProviderFactory = DocumentProviderFactory.getInstance();
 
+        readPreferences();
         // init UI and populate with contents from the provider
         createUI();
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
@@ -496,11 +497,10 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
 
     public void readPreferences(){
         prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
-        viewMode = prefs.getInt( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
-        sortMode = prefs.getInt( SORT_MODE_KEY, FileUtilities.SORT_AZ );
-        SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences( getBaseContext() );
-        filterMode = Integer.valueOf( defaultPrefs.getString( FILTER_MODE_KEY , "-1") );
-        sortMode = Integer.valueOf( defaultPrefs.getString( SORT_MODE_KEY , "-1") );
+        viewMode = prefs.getInt(EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+        sortMode = prefs.getInt(SORT_MODE_KEY, FileUtilities.SORT_AZ);
+        SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        filterMode = Integer.valueOf(defaultPrefs.getString(FILTER_MODE_KEY , "-1"));
     }
 
     @Override
@@ -547,25 +547,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
     protected void onResume() {
         super.onResume();
         Log.d(LOGTAG, "onResume");
-        readPreferences();// intent values take precedence over prefs?
-        Intent i = this.getIntent();
-        if( i.hasExtra( CURRENT_DIRECTORY_KEY ) ){
-            try {
-                currentDirectory = documentProvider.createFromUri(new URI(
-                        i.getStringExtra(CURRENT_DIRECTORY_KEY)));
-            } catch (URISyntaxException e) {
-                currentDirectory = documentProvider.getRootDirectory();
-            }
-            Log.d(LOGTAG, CURRENT_DIRECTORY_KEY);
-        }
-        if( i.hasExtra( FILTER_MODE_KEY ) ){
-            filterMode = i.getIntExtra( FILTER_MODE_KEY, FileUtilities.ALL);
-            Log.d(LOGTAG, FILTER_MODE_KEY);
-        }
-        if( i.hasExtra( EXPLORER_VIEW_TYPE_KEY ) ){
-            viewMode = i.getIntExtra( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
-            Log.d(LOGTAG, EXPLORER_VIEW_TYPE_KEY);
-        }
+        Log.d(LOGTAG, "sortMode="+ sortMode + " filterMode=" + filterMode);
         createUI();
     }
 
