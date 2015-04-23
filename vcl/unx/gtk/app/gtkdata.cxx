@@ -231,8 +231,7 @@ bool GtkSalDisplay::Dispatch( XEvent* pEvent )
              it != m_aFrames.end(); ++it )
         {
             if( (GdkNativeWindow)(*it)->GetSystemData()->aWindow == pEvent->xany.window )
-                return static_cast<GtkSalFrame*>(*it)->Dispatch( pEvent )
-                    ? GDK_FILTER_TRANSLATE : GDK_FILTER_CONTINUE; //TODO
+                return static_cast<GtkSalFrame*>(*it)->Dispatch( pEvent );
         }
     }
 
