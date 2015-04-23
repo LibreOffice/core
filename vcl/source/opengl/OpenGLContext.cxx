@@ -13,6 +13,7 @@
 #include <vcl/sysdata.hxx>
 
 #include <boost/scoped_array.hpp>
+#include <boost/make_shared.hpp>
 #include <vcl/pngwrite.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
@@ -1587,20 +1588,17 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
 {
     ProgramKey aKey( rVertexShader, rFragmentShader, preamble );
 
-    boost::ptr_map<ProgramKey, OpenGLProgram>::iterator
+    std::map< ProgramKey, boost::shared_ptr<OpenGLProgram> >::iterator
         it = maPrograms.find( aKey );
     if( it != maPrograms.end() )
-        return it->second;
+        return it->second.get();
 
-    OpenGLProgram* pProgram = new OpenGLProgram;
+    boost::shared_ptr<OpenGLProgram> pProgram = boost::make_shared<OpenGLProgram>();
     if( !pProgram->Load( rVertexShader, rFragmentShader, preamble ) )
-    {
-        delete pProgram;
         return NULL;
-    }
 
-    maPrograms.insert(aKey, pProgram);
-    return pProgram;
+    maPrograms.insert(std::pair<ProgramKey, boost::shared_ptr<OpenGLProgram> >(aKey, pProgram));
+    return pProgram.get();
 }
 
 OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
