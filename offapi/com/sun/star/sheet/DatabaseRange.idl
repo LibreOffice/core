@@ -111,6 +111,13 @@ published service DatabaseRange
         @since OOo 3.0
      */
     [optional, readonly, property] long TokenIndex;
+
+
+    /** specifies whether this range includes a bottom row of totals.
+
+        @since LibreOffice 5.0
+     */
+    [optional, property] boolean TotalsRow;
 };
 
 

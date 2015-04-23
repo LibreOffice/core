@@ -309,6 +309,7 @@
 #define SC_UNONAME_CONRES           "ConnectionResource"
 #define SC_UNONAME_TOKENINDEX       "TokenIndex"
 #define SC_UNONAME_ISSHAREDFMLA     "IsSharedFormula"
+#define SC_UNONAME_TOTALSROW        "TotalsRow"
 
 //  text fields
 #define SC_UNONAME_ANCTYPE          "AnchorType"

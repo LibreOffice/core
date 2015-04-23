@@ -122,6 +122,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
         {OUString(SC_UNONAME_STRIPDAT), 0,  cppu::UnoType<bool>::get(),                      0, 0},
         {OUString(SC_UNONAME_TOKENINDEX),0, cppu::UnoType<sal_Int32>::get(),     beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_USEFLTCRT),0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {OUString(SC_UNONAME_TOTALSROW),0,  cppu::UnoType<bool>::get(),                      0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDBRangePropertyMap_Impl;
@@ -2082,6 +2083,8 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
         else if (aString == SC_UNONAME_CONRES )
         {
         }
+        else if ( aString == SC_UNONAME_TOTALSROW )
+            aNewData.SetTotals( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else
             bDo = false;
 
@@ -2160,6 +2163,12 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
         {
             // get index for use in formula tokens (read-only)
             aRet <<= static_cast<sal_Int32>(GetDBData_Impl()->GetIndex());
+        }
+        else if (aString == SC_UNONAME_TOTALSROW )
+        {
+            bool bTotals(GetDBData_Impl()->HasTotals());
+
+            ScUnoHelpFunctions::SetBoolInAny( aRet, bTotals );
         }
     }
     return aRet;
