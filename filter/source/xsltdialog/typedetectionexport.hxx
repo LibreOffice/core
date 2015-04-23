@@ -33,8 +33,8 @@ public:
     void doExport(com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xOS,  const XMLFilterVector& rFilters );
 
 private:
-    void addProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XWriter > xWriter, const OUString& rName, const OUString& rValue );
-    void addLocaleProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XWriter > xWriter, const OUString& rName, const OUString& rValue );
+    static void addProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XWriter > xWriter, const OUString& rName, const OUString& rValue );
+    static void addLocaleProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XWriter > xWriter, const OUString& rName, const OUString& rValue );
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
 };

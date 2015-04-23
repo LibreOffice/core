@@ -101,7 +101,7 @@ private:
 
     void destroy( bool bDeletePhysical ) throw( com::sun::star::uno::Exception );
 
-    void copyData( com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xIn,
+    static void copyData( com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xIn,
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOut );
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Any >

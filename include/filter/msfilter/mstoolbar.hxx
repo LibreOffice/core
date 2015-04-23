@@ -47,7 +47,7 @@ class MSFILTER_DLLPUBLIC CustomToolBarImportHelper
     css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > m_xCfgSupp;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
     SfxObjectShell& mrDocSh;
-    void ScaleImage( css::uno::Reference< css::graphic::XGraphic >& xGraphic, long nNewSize );
+    static void ScaleImage( css::uno::Reference< css::graphic::XGraphic >& xGraphic, long nNewSize );
 public:
     CustomToolBarImportHelper( SfxObjectShell& rDocSh, const css::uno::Reference< css::ui::XUIConfigurationManager >& rxAppCfgMgr );
 
@@ -56,7 +56,7 @@ public:
     css::uno::Reference< css::ui::XUIConfigurationManager > getAppCfgManager() { return m_xAppCfgMgr;}
 
 
-    css::uno::Any createCommandFromMacro( const OUString& sCmd );
+    static css::uno::Any createCommandFromMacro( const OUString& sCmd );
 
     void addIcon( const css::uno::Reference< css::graphic::XGraphic >& xImage, const OUString& sString );
     void applyIcons();
@@ -71,7 +71,7 @@ class MSFILTER_DLLPUBLIC TBBase
 friend class Indent;
     static int nIndent; // num spaces to indent before printing
 protected:
-    void indent_printf(FILE* fp, const char* format, ... );
+    static void indent_printf(FILE* fp, const char* format, ... );
     sal_uInt32 nOffSet; // usually for debug we can store the offset in the stream to this record
 public:
     TBBase() : nOffSet( 0 ) {}
@@ -95,7 +95,7 @@ public:
             TBBase::nIndent = TBBase::nIndent + 2;
     }
     ~Indent() { TBBase::nIndent = TBBase::nIndent - 2; }
-    void init() { TBBase::nIndent = 0; }
+    static void init() { TBBase::nIndent = 0; }
 };
 
 

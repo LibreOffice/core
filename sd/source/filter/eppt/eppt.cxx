@@ -1221,7 +1221,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
         {
             if ( ImplGetPropertyValue( rXPropSet, OUString( "FillColor" ) ) )
             {
-                nFillColor = mpPptEscherEx->GetColor( *static_cast<sal_uInt32 const *>(mAny.getValue()) );
+                nFillColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(mAny.getValue()) );
                 nFillBackColor = nFillColor ^ 0xffffff;
             }
         }   // PASSTHROUGH INTENDED

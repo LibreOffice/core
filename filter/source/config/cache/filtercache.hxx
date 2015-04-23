@@ -836,7 +836,7 @@ class FilterCache : public BaseLock
 
 
         /** TODO */
-        void impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xSet  ,
+        static void impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xSet  ,
                                  EItemType                                            eType ,
                            const CacheItem&                                           aValue)
             throw(css::uno::Exception);
@@ -852,7 +852,7 @@ class FilterCache : public BaseLock
 
 
         /** TODO */
-        void impl_flushByList(const css::uno::Reference< css::container::XNameAccess >& xSet  ,
+        static void impl_flushByList(const css::uno::Reference< css::container::XNameAccess >& xSet  ,
                                     EItemType                                           eType ,
                               const CacheItemList&                                      rCache,
                               const OUStringList&                                       lItems)
@@ -917,14 +917,14 @@ class FilterCache : public BaseLock
 
 
         /** TODO */
-        void impl_interpretDataVal4Type(const OUString& sValue,
+        static void impl_interpretDataVal4Type(const OUString& sValue,
                                               sal_Int32        nProp ,
                                               CacheItem&       rItem );
 
 
 
         /** TODO */
-        void impl_interpretDataVal4Filter(const OUString& sValue,
+        static void impl_interpretDataVal4Filter(const OUString& sValue,
                                                 sal_Int32        nProp ,
                                                 CacheItem&       rItem );
 

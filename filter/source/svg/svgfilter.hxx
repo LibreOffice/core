@@ -250,13 +250,13 @@ private:
     bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
-    Reference< XWriter >                implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
+    static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
     bool                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
     bool                            implGenerateMetaData();
-    void                                implExportTextShapeIndex();
-    void                                implEmbedBulletGlyphs();
-    void                                implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData );
+    void                            implExportTextShapeIndex();
+    void                            implEmbedBulletGlyphs();
+    void                            implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData );
     bool                            implExportTextEmbeddedBitmaps();
     bool                            implGenerateScript();
 
@@ -282,18 +282,18 @@ private:
     bool                            implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape );
     bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
-    OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
-    void                                implRegisterInterface( const Reference< XInterface >& rxIf );
-    const OUString &             implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
-    OUString                     implGetInterfaceName( const Reference< XInterface >& rxIf );
+    static OUString                 implGetClassFromShape( const Reference< XShape >& rxShape );
+    void                            implRegisterInterface( const Reference< XInterface >& rxIf );
+    const OUString &                implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+    static OUString                 implGetInterfaceName( const Reference< XInterface >& rxIf );
     bool                            implLookForFirstVisiblePage();
-    Any                                 implSafeGetPagePropSet( const OUString & sPropertyName,
+    static Any                      implSafeGetPagePropSet( const OUString & sPropertyName,
                                                                 const Reference< XPropertySet > & rxPropSet,
                                                                 const Reference< XPropertySetInfo > & rxPropSetInfo );
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );
 
-    bool isStreamGZip(css::uno::Reference<css::io::XInputStream> xInput);
-    bool isStreamSvg(css::uno::Reference<css::io::XInputStream> xInput);
+    static bool isStreamGZip(css::uno::Reference<css::io::XInputStream> xInput);
+    static bool isStreamSvg(css::uno::Reference<css::io::XInputStream> xInput);
 
 protected:
 

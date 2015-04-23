@@ -148,7 +148,7 @@ void CGM::ImplDoClass2()
             aTempLineBundle.eLineType = (LineType)ImplGetI( pElement->nIndexPrecision );
             aTempLineBundle.nLineWidth = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempLineBundle.SetColor( ImplGetBitmapColor() );
-            pElement->InsertBundle( pElement->aLineList, aTempLineBundle );
+            CGMElements::InsertBundle( pElement->aLineList, aTempLineBundle );
         }
         break;
         case 0x0c : /*Marker Representation*/
@@ -158,7 +158,7 @@ void CGM::ImplDoClass2()
             aTempMarkerBundle.eMarkerType = (MarkerType)ImplGetI( pElement->nIndexPrecision );
             aTempMarkerBundle.nMarkerSize = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempMarkerBundle.SetColor( ImplGetBitmapColor() );
-            pElement->InsertBundle( pElement->aMarkerList, aTempMarkerBundle );
+            CGMElements::InsertBundle( pElement->aMarkerList, aTempMarkerBundle );
         }
         break;
         case 0x0d : /*Text Representation*/
@@ -170,7 +170,7 @@ void CGM::ImplDoClass2()
             aTempTextBundle.nCharacterSpacing = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempTextBundle.nCharacterExpansion = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempTextBundle.SetColor( ImplGetBitmapColor() );
-            pElement->InsertBundle( pElement->aTextList, aTempTextBundle );
+            CGMElements::InsertBundle( pElement->aTextList, aTempTextBundle );
         }
         break;
         case 0x0e : /*Fill Representation*/
@@ -181,7 +181,7 @@ void CGM::ImplDoClass2()
             aTempFillBundle.SetColor( ImplGetBitmapColor() );
             aTempFillBundle.nFillPatternIndex = ImplGetI( pElement->nIndexPrecision );
             aTempFillBundle.nFillHatchIndex = ImplGetI( pElement->nIndexPrecision );
-            pElement->InsertBundle( pElement->aFillList, aTempFillBundle );
+            CGMElements::InsertBundle( pElement->aFillList, aTempFillBundle );
         }
         break;
         case 0x0f : /*Edge Representation*/
@@ -191,7 +191,7 @@ void CGM::ImplDoClass2()
             aTempEdgeBundle.eEdgeType = (EdgeType)ImplGetI( pElement->nIndexPrecision );
             aTempEdgeBundle.nEdgeWidth = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempEdgeBundle.SetColor( ImplGetBitmapColor() );
-            pElement->InsertBundle( pElement->aEdgeList, aTempEdgeBundle );
+            CGMElements::InsertBundle( pElement->aEdgeList, aTempEdgeBundle );
         }
         break;
         case 0x10 : /*Interior Style Specification Mode */break;    // NS

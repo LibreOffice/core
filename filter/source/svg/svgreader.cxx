@@ -302,7 +302,7 @@ struct AnnotatingVisitor
         }
     }
 
-    OUString getStyleName( const char* sPrefix, sal_Int32 nId )
+    static OUString getStyleName( const char* sPrefix, sal_Int32 nId )
     {
         return OUString::createFromAscii(sPrefix)+OUString::number(nId);
     }
@@ -391,14 +391,14 @@ struct AnnotatingVisitor
         rGradient.maStops.erase(rGradient.maStops.begin()+2,rGradient.maStops.end());
     }
 
-    sal_Int8 toByteColor( double val )
+    static sal_Int8 toByteColor( double val )
     {
         // TODO(Q3): duplicated from vcl::unotools
         return sal::static_int_cast<sal_Int8>(
             basegfx::fround(val*255.0));
     }
 
-    OUString getOdfColor( const ARGBColor& rColor )
+    static OUString getOdfColor( const ARGBColor& rColor )
     {
         // TODO(Q3): duplicated from pdfimport
         OUStringBuffer aBuf( 7 );
@@ -422,7 +422,7 @@ struct AnnotatingVisitor
         return aBuf.makeStringAndClear();
     }
 
-    OUString getOdfAlign( TextAlign eAlign )
+    static OUString getOdfAlign( TextAlign eAlign )
     {
         static const char aStart[] = "start";
         static const char aEnd[] = "end";
@@ -1070,7 +1070,7 @@ struct AnnotatingVisitor
         while( nIndex != -1 );
     }
 
-    void parseFontStyle( State&               io_rInitialState,
+    static void parseFontStyle( State&               io_rInitialState,
                          const OUString& rValue,
                          const char*          sValue )
     {
@@ -1078,7 +1078,7 @@ struct AnnotatingVisitor
             io_rInitialState.maFontStyle = rValue;
     }
 
-    void parseFontVariant( State&               io_rInitialState,
+    static void parseFontVariant( State&               io_rInitialState,
                            const OUString& rValue,
                            const char*          sValue )
     {
@@ -1086,7 +1086,7 @@ struct AnnotatingVisitor
             io_rInitialState.maFontVariant = rValue;
     }
 
-    void parseTextAlign( State&      io_rInitialState,
+    static void parseTextAlign( State&      io_rInitialState,
                          const char* sValue )
     {
         if( strcmp(sValue,"start") == 0 )
@@ -1570,10 +1570,10 @@ struct ShapeWritingVisitor
         }
     }
 
-    void push()
+    static void push()
     {}
 
-    void pop()
+    static void pop()
     {}
 
     void writeBinaryData( rtl::Reference<SvXMLAttributeList>&           xAttrs,
@@ -1823,8 +1823,8 @@ struct OfficeStylesWritingVisitor
         return;
     }
 
-    void push() {}
-    void pop()  {}
+    static void push() {}
+    static void pop()  {}
 
     State                                      maCurrState;
     StateMap&                                  mrStateMap;

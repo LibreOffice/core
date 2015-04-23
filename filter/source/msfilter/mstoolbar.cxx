@@ -483,7 +483,7 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
             aProp.Name = "CommandURL";
             ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
             if ( aMacroInf.mbFound )
-                aProp.Value = helper.createCommandFromMacro( aMacroInf.msResolvedMacro );
+                aProp.Value = CustomToolBarImportHelper::createCommandFromMacro( aMacroInf.msResolvedMacro );
             else
                 aProp.Value <<= OUString( "UnResolvedMacro[" ).concat( extraInfo.getOnAction() ).concat( OUString( "]" ) );
             sControlData.push_back( aProp );

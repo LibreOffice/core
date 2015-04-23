@@ -578,7 +578,7 @@ struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
                                             maPointB    ( rPB ),
                                             mXConnectToB( rSB ) {}
 
-    sal_uInt32      GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
+    static sal_uInt32 GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
 };
 
 struct MSFILTER_DLLPUBLIC EscherExContainer
@@ -782,7 +782,7 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
     bool                    bHasComplexData;
 
 
-    sal_uInt32  ImplGetColor( const sal_uInt32 rColor, bool bSwap = true );
+    static sal_uInt32 ImplGetColor( const sal_uInt32 rColor, bool bSwap = true );
     void        ImplCreateGraphicAttributes(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                     sal_uInt32 nBlibId,
@@ -1272,8 +1272,8 @@ public:
 
     virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect);
 
-    sal_uInt32  GetColor( const sal_uInt32 nColor, bool bSwap = true );
-    sal_uInt32  GetColor( const Color& rColor, bool bSwap = true );
+    static sal_uInt32  GetColor( const sal_uInt32 nColor, bool bSwap = true );
+    static sal_uInt32  GetColor( const Color& rColor, bool bSwap = true );
 
                 // ...Sdr... implemented in eschesdo.cxx
 

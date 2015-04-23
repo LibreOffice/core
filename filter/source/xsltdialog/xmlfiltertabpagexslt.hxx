@@ -58,7 +58,7 @@ public:
 
 private:
     void SetURL( SvtURLBox *rURLBox, const OUString& rURL );
-    OUString GetURL( SvtURLBox* rURLBox );
+    static OUString GetURL( SvtURLBox* rURLBox );
 
     OUString sInstPath;
 };

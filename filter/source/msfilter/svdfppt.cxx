@@ -241,7 +241,7 @@ SvStream& ReadPptExOleObjAtom( SvStream& rIn, PptExOleObjAtom& rAtom )
     return rIn;
 }
 
-Size PptDocumentAtom::GetPageSize(const Size& rSiz) const
+Size PptDocumentAtom::GetPageSize(const Size& rSiz)
 {
     return rSiz;
 }
@@ -2178,7 +2178,7 @@ PptSlidePersistList* SdrPowerPointImport::GetPageList(PptPageKind ePageKind) con
     return NULL;
 }
 
-SdrOutliner* SdrPowerPointImport::GetDrawOutliner( SdrTextObj* pSdrText ) const
+SdrOutliner* SdrPowerPointImport::GetDrawOutliner( SdrTextObj* pSdrText )
 {
     if ( !pSdrText )
         return NULL;
@@ -3169,7 +3169,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
     const DffRecordHeader* pListHd = rMan.aDocRecManager.GetRecordHeader( PPT_PST_List, SEEK_FROM_BEGINNING );
     if( pListHd )
         pListHd->SeekToContent( rSt );
-    if ( pListHd && rMan.SeekToContentOfProgTag( 9, rSt, *pListHd, aContentDataHd ) )
+    if ( pListHd && SdrPowerPointImport::SeekToContentOfProgTag( 9, rSt, *pListHd, aContentDataHd ) )
     {
         while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
         {
@@ -3187,7 +3187,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                         {
                             rSt.ReadUInt16( nType );
                             Graphic aGraphic;
-                            if ( rMan.GetBLIPDirect( rSt, aGraphic, NULL ) )
+                            if ( SvxMSDffManager::GetBLIPDirect( rSt, aGraphic, NULL ) )
                             {
                                 sal_uInt32 nInstance = aBuGraAtomHd.nRecInstance;
                                 PPTBuGraEntry* pBuGra = new PPTBuGraEntry( aGraphic, nInstance );
@@ -3247,7 +3247,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
         }
     }
 
-    if ( pHd && rMan.SeekToContentOfProgTag( 9, rSt, *pHd, aContentDataHd ) )
+    if ( pHd && SdrPowerPointImport::SeekToContentOfProgTag( 9, rSt, *pHd, aContentDataHd ) )
     {   // get the extended paragraph styles on mainmaster ( graphical bullets, num ruling ... )
         while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
         {
@@ -4486,7 +4486,7 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( PPTTextRulerInterpreter& rRule
     mpImplRuler->nRefCount++;
 }
 
-PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerPointImport& rMan, DffRecordHeader& rHeader, SvStream& rIn ) :
+PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecordHeader& rHeader, SvStream& rIn ) :
     mpImplRuler ( new PPTRuler() )
 {
     if ( nFileOfs != 0xffffffff )
@@ -4501,7 +4501,7 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
         else
         {
             rHeader.SeekToContent( rIn );
-            if ( rMan.SeekToRec( rIn, PPT_PST_TextRulerAtom, rHeader.GetRecEndFilePos(), &rHd ) )
+            if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextRulerAtom, rHeader.GetRecEndFilePos(), &rHd ) )
                 nFileOfs++;
         }
         if ( nFileOfs )
@@ -4820,13 +4820,13 @@ void StyleTextProp9::Read( SvStream& rIn )
         rIn.ReadUInt16( mfBidi );
 }
 
-PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
+PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, const DffRecordHeader& rTextHeader,
                                                         PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, sal_uInt32 nInstance )
 {
-    Init(rIn, rMan, rTextHeader, rRuler, rExtParaHd, nInstance);
+    Init(rIn, rTextHeader, rRuler, rExtParaHd, nInstance);
 }
 
-void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
+void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader& rTextHeader,
                                             const OUString& aString, PPTTextRulerInterpreter& rRuler,
                                             sal_uInt32& nCharCount, bool& bTextPropAtom )
 {
@@ -4838,7 +4838,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
 
     DffRecordHeader aTextHd2;
     rTextHeader.SeekToContent( rIn );
-    if ( rMan.SeekToRec( rIn, PPT_PST_StyleTextPropAtom, rTextHeader.GetRecEndFilePos(), &aTextHd2 ) )
+    if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_StyleTextPropAtom, rTextHeader.GetRecEndFilePos(), &aTextHd2 ) )
         bTextPropAtom = true;
     while ( nCharAnzRead <= nStringLen )
     {
@@ -5072,7 +5072,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     }
 }
 
-void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
+void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHeader,
                                    PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, sal_uInt32 nInstance )
 {
     sal_uInt32 nMerk = rIn.Tell();
@@ -5163,7 +5163,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         // no chars, but potentially char/para props?
         sal_uInt32  nCharCount;
         bool        bTextPropAtom = false;
-        ReadParaProps( rIn, rMan, rTextHeader, aString, rRuler, nCharCount, bTextPropAtom );
+        ReadParaProps( rIn, rTextHeader, aString, rRuler, nCharCount, bTextPropAtom );
 
         if ( bTextPropAtom )
         {
@@ -5188,7 +5188,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         sal_uInt32  nCharCount;
         bool        bTextPropAtom = false;
 
-        ReadParaProps( rIn, rMan, rTextHeader, aString, rRuler, nCharCount, bTextPropAtom );
+        ReadParaProps( rIn, rTextHeader, aString, rRuler, nCharCount, bTextPropAtom );
 
         bool bEmptyParaPossible = true;
         sal_uInt32 nCharAnzRead = 0;
@@ -6371,14 +6371,14 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
             sal_uInt32 nOldPos = rIn.Tell();
             DffRecordHeader& aClientDataContainerHd = *rSdrPowerPointImport.maShapeRecords.Current();
             DffRecordHeader aPlaceHolderAtomHd;
-            if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_OEPlaceholderAtom, aClientDataContainerHd.GetRecEndFilePos(), &aPlaceHolderAtomHd ) )
+            if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_OEPlaceholderAtom, aClientDataContainerHd.GetRecEndFilePos(), &aPlaceHolderAtomHd ) )
             {
                 mpImplTextObj->mpPlaceHolderAtom = new PptOEPlaceholderAtom;
                 ReadPptOEPlaceholderAtom( rIn, *( mpImplTextObj->mpPlaceHolderAtom ) );
             }
             rIn.Seek( nOldPos );
             DffRecordHeader aProgTagHd;
-            if ( rSdrPowerPointImport.SeekToContentOfProgTag( 9, rIn, aClientDataContainerHd, aProgTagHd ) )
+            if ( SdrPowerPointImport::SeekToContentOfProgTag( 9, rIn, aClientDataContainerHd, aProgTagHd ) )
             {
                 ReadDffRecordHeader( rIn, aExtParaHd );
             }
@@ -6400,12 +6400,12 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
             // the ClientTextBoxHd for a
             // equivalent one
             DffRecordHeader aTextHd;
-            if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_OutlineTextRefAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
+            if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_OutlineTextRefAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
             {
                 sal_uInt32 nRefNum;
                 rIn.ReadUInt32( nRefNum );
 
-                if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_TextRulerAtom, aClientTextBoxHd.GetRecEndFilePos() ) )
+                if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextRulerAtom, aClientTextBoxHd.GetRecEndFilePos() ) )
                     nTextRulerAtomOfs = rIn.Tell();
                 else
                     nTextRulerAtomOfs = 0xffffffff;
@@ -6518,7 +6518,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
             if ( bStatus )
             {
-                if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_TextHeaderAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
+                if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextHeaderAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
                 {
                     // TextHeaderAtom is always the first Atom
                     sal_uInt16 nInstance;
@@ -6532,14 +6532,13 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                     if ( rSdrPowerPointImport.SeekToRec2( PPT_PST_TextBytesAtom,
                                                           PPT_PST_TextCharsAtom,
                                                           aClientTextBoxHd.GetRecEndFilePos() )
-                         || rSdrPowerPointImport.SeekToRec( rIn,
+                         || SvxMSDffManager::SeekToRec( rIn,
                                                             PPT_PST_StyleTextPropAtom,
                                                             aClientTextBoxHd.GetRecEndFilePos() ) )
                     {
-                        PPTTextRulerInterpreter aTextRulerInterpreter( nTextRulerAtomOfs, rSdrPowerPointImport,
-                                                                        aClientTextBoxHd, rIn );
+                        PPTTextRulerInterpreter aTextRulerInterpreter( nTextRulerAtomOfs, aClientTextBoxHd, rIn );
 
-                        PPTStyleTextPropReader aStyleTextPropReader( rIn, rSdrPowerPointImport, aClientTextBoxHd,
+                        PPTStyleTextPropReader aStyleTextPropReader( rIn, aClientTextBoxHd,
                                                                         aTextRulerInterpreter, aExtParaHd, nInstance );
                         sal_uInt32 nParagraphs = mpImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.size();
                         if ( nParagraphs )
@@ -6547,7 +6546,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             // the language settings will be merged into the list of PPTCharPropSet
                             DffRecordHeader aTextSpecInfoHd;
                             PPTTextSpecInfoAtomInterpreter aTextSpecInfoAtomInterpreter;
-                            if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_TextSpecInfoAtom,
+                            if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextSpecInfoAtom,
                                                         aClientTextBoxHd.GetRecEndFilePos(), &aTextSpecInfoHd ) )
                             {
                                 if ( aTextSpecInfoAtomInterpreter.Read( rIn, aTextSpecInfoHd, PPT_PST_TextSpecInfoAtom,
@@ -6732,7 +6731,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     case PPT_PST_InteractiveInfo :
                                     {
                                         DffRecordHeader aHdInteractiveInfoAtom;
-                                        if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_InteractiveInfoAtom, aTextHd.GetRecEndFilePos(), &aHdInteractiveInfoAtom ) )
+                                        if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_InteractiveInfoAtom, aTextHd.GetRecEndFilePos(), &aHdInteractiveInfoAtom ) )
                                         {
                                             PptInteractiveInfoAtom aInteractiveInfoAtom;
                                             ReadPptInteractiveInfoAtom( rIn, aInteractiveInfoAtom );

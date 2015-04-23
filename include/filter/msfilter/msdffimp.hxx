@@ -88,7 +88,7 @@ public:
 
     explicit DffPropertyReader( const SvxMSDffManager& rManager );
     ~DffPropertyReader();
-    sal_Int32 Fix16ToAngle( sal_Int32 nAngle ) const;
+    static sal_Int32 Fix16ToAngle( sal_Int32 nAngle );
 
 #ifdef DBG_CUSTOMSHAPE
     void ReadPropSet( SvStream& rIn, void* pClientData, sal_uInt32 nShapeType = 0 ) const;
@@ -482,17 +482,17 @@ protected :
                 const Rectangle& rVisArea );
 
 // the following methods need to be overridden for Excel imports
-    bool ProcessClientAnchor( SvStream& rStData,
+    static bool ProcessClientAnchor( SvStream& rStData,
                                           sal_uInt32 nDatLen,
                                           char*& rpBuff,
-                                          sal_uInt32& rBuffLen ) const;
+                                          sal_uInt32& rBuffLen );
     virtual void ProcessClientAnchor2( SvStream& rStData,
                                        DffRecordHeader& rHd,
                                        void* pData, DffObjData& );
-    bool ProcessClientData( SvStream& rStData,
+    static bool ProcessClientData( SvStream& rStData,
                                         sal_uInt32 nDatLen,
                                         char*& rpBuff,
-                                        sal_uInt32& rBuffLen ) const;
+                                        sal_uInt32& rBuffLen );
     virtual SdrObject* ProcessObj( SvStream& rSt,
                                    DffObjData& rData,
                                    void* pData,
@@ -534,11 +534,11 @@ public:
     virtual bool SeekToShape( SvStream& rSt,
                                   void* pClientData,
                                   sal_uInt32 nId ) const;
-    bool SeekToRec( SvStream& rSt,
+    static bool SeekToRec( SvStream& rSt,
                     sal_uInt16 nRecId,
                     sal_uLong nMaxFilePos,
                     DffRecordHeader* pRecHd = NULL,
-                    sal_uLong nSkipCount = 0 ) const;
+                    sal_uLong nSkipCount = 0 );
     bool SeekToRec2( sal_uInt16 nRecId1,
                      sal_uInt16 nRecId2,
                      sal_uLong nMaxFilePos,
@@ -639,7 +639,7 @@ public:
 
         @return true if successful, false otherwise
     */
-    bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = NULL ) const;
+    static bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = NULL );
 
     bool GetShape(sal_uLong nId, SdrObject*& rpData, SvxMSDffImportData& rData);
 
@@ -721,7 +721,7 @@ public:
         @param rSolver contains necessary data that is collected during the
                        import of each shape
     */
-    void SolveSolver( const SvxMSDffSolverContainer& rSolver );
+    static void SolveSolver( const SvxMSDffSolverContainer& rSolver );
 
     static bool SetPropValue(
         const ::com::sun::star::uno::Any& rAny,

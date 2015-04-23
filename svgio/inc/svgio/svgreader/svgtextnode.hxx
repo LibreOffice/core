@@ -43,10 +43,10 @@ namespace svgio
                 const SvgNode& rCandidate,
                 drawinglayer::primitive2d::Primitive2DSequence& rTarget,
                 SvgTextPosition& rSvgTextPosition) const;
-            void addTextPrimitives(
+            static void addTextPrimitives(
                 const SvgNode& rCandidate,
                 drawinglayer::primitive2d::Primitive2DSequence& rTarget,
-                drawinglayer::primitive2d::Primitive2DSequence& rSource) const;
+                drawinglayer::primitive2d::Primitive2DSequence& rSource);
 
         public:
             SvgTextNode(
