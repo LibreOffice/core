@@ -3255,13 +3255,13 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         {
             // close popups if user clicks outside our application
             gint x, y;
-            bClosePopups = (gdk_display_get_window_at_pointer( pThis->getGdkDisplay(), &x, &y ) == NULL);
+            bClosePopups = (gdk_display_get_window_at_pointer( GtkSalFrame::getGdkDisplay(), &x, &y ) == NULL);
         }
         /*  #i30306# release implicit pointer grab if no popups are open; else
          *  Drag cannot grab the pointer and will fail.
          */
         if( m_nFloats < 1 || bClosePopups )
-            gdk_display_pointer_ungrab( pThis->getGdkDisplay(), GDK_CURRENT_TIME );
+            gdk_display_pointer_ungrab( GtkSalFrame::getGdkDisplay(), GDK_CURRENT_TIME );
     }
 
     if( pThis->m_bWindowIsGtkPlug &&
@@ -3641,10 +3641,10 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
     if( bSetFocus )
     {
         GetGenericData()->ErrorTrapPush();
-        XSetInputFocus( pThis->getDisplay()->GetDisplay(),
+        XSetInputFocus( GtkSalFrame::getDisplay()->GetDisplay(),
                         widget_get_xid(pWidget),
                         RevertToParent, CurrentTime );
-        XSync( pThis->getDisplay()->GetDisplay(), False );
+        XSync( GtkSalFrame::getDisplay()->GetDisplay(), False );
         GetGenericData()->ErrorTrapPop();
     }
 #else
@@ -3653,7 +3653,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 #endif
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
-    pThis->TriggerPaintEvent();
+    TriggerPaintEvent();
 
     return false;
 }
@@ -3681,7 +3681,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      *  this event. So let's swallow it.
      */
     if( (pThis->m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) &&
-        pThis->getDisplay()->GetCaptureFrame() == pThis )
+        GtkSalFrame::getDisplay()->GetCaptureFrame() == pThis )
         return false;
 
     /* #i31785# claims we cannot trust the x,y members of the event;
@@ -3739,7 +3739,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
 
     pThis->updateScreenNumber();
     if( bSized )
-        pThis->AllocateFrame();
+        AllocateFrame();
 
     if( bMoved && bSized )
         pThis->CallCallback( SALEVENT_MOVERESIZE, NULL );
@@ -3749,7 +3749,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
         pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
     if (bSized)
-        pThis->TriggerPaintEvent();
+        TriggerPaintEvent();
     return false;
 }
 
@@ -3891,8 +3891,8 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
         // signalStyleSet does NOT usually have the gdk lock
         // so post user event to safely dispatch the SALEVENT_SETTINGSCHANGED
         // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
-        pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_SETTINGSCHANGED );
-        pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_FONTCHANGED );
+        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_SETTINGSCHANGED );
+        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_FONTCHANGED );
     }
 
 #if !GTK_CHECK_VERSION(3,0,0)
@@ -3906,7 +3906,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     {
         ::Window aWin = GDK_WINDOW_XWINDOW(pWin);
         if( aWin != None )
-            XSetWindowBackgroundPixmap( pThis->getDisplay()->GetDisplay(),
+            XSetWindowBackgroundPixmap( GtkSalFrame::getDisplay()->GetDisplay(),
                                         aWin,
                                         pThis->m_hBackgroundPixmap );
     }
@@ -3924,8 +3924,8 @@ gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if( (pThis->m_nState & GDK_WINDOW_STATE_ICONIFIED) != (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_ICONIFIED ) )
     {
-        pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_RESIZE );
-        pThis->TriggerPaintEvent();
+        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_RESIZE );
+        TriggerPaintEvent();
     }
 
     if(   (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_MAXIMIZED) &&
@@ -3982,7 +3982,7 @@ GtkSalFrame::IMHandler::IMHandler( GtkSalFrame* pFrame )
 GtkSalFrame::IMHandler::~IMHandler()
 {
     // cancel an eventual event posted to begin preedit again
-    m_pFrame->getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+    GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
     deleteIMContext();
 }
 
@@ -4078,7 +4078,7 @@ void GtkSalFrame::IMHandler::endExtTextInput( sal_uInt16 /*nFlags*/ )
             if( m_bFocused )
             {
                 // begin preedit again
-                m_pFrame->getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+                GtkSalFrame::getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
             }
         }
     }
@@ -4096,7 +4096,7 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
         {
             sendEmptyCommit();
             // begin preedit again
-            m_pFrame->getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+            GtkSalFrame::getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
         }
     }
     else
@@ -4105,7 +4105,7 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
         gtk_im_context_focus_out( m_pIMContext );
         GetGenericData()->ErrorTrapPop();
         // cancel an eventual event posted to begin preedit again
-        m_pFrame->getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+        GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
     }
 }
 

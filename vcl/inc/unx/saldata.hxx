@@ -77,7 +77,7 @@ public:
 
     void                    StartTimer( sal_uLong nMS );
     inline  void            StopTimer();
-    void                    Timeout( bool idle ) const;
+    static void             Timeout( bool idle );
 
     // X errors
     virtual void            ErrorTrapPush() SAL_OVERRIDE;

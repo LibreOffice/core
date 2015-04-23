@@ -50,8 +50,8 @@ private:
     XVaNestedList mpPreeditAttributes;
 
     bool         SupportInputMethodStyle( XIMStyles *pIMStyles );
-    unsigned int GetWeightingOfIMStyle(   XIMStyle n_style ) const ;
-    Bool         IsSupportedIMStyle(      XIMStyle n_style ) const ;
+    static unsigned int GetWeightingOfIMStyle(   XIMStyle n_style );
+    Bool         IsSupportedIMStyle(      XIMStyle n_style ) const;
 
 public:
 

@@ -108,8 +108,8 @@ public:
     void Init();
     virtual void Dispose() SAL_OVERRIDE;
 
-    void initNWF();
-    void deInitNWF();
+    static void initNWF();
+    static void deInitNWF();
 
     static gboolean userEventFn( gpointer data );
 

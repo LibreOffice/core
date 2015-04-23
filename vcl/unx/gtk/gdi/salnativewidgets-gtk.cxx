@@ -620,14 +620,14 @@ void GtkSalGraphics::copyBits( const SalTwoRect& rPosAry,
         {
             aWin = GDK_WINDOW_XWINDOW(pWin);
             if( aWin != None )
-                XSetWindowBackgroundPixmap( pFrame->getDisplay()->GetDisplay(),
+                XSetWindowBackgroundPixmap( GtkSalFrame::getDisplay()->GetDisplay(),
                                             aWin,
                                             None );
         }
     }
     X11SalGraphics::copyBits( rPosAry, pSrcGraphics );
     if( pFrame && pFrame->getBackgroundPixmap() != None )
-        XSetWindowBackgroundPixmap( pFrame->getDisplay()->GetDisplay(),
+        XSetWindowBackgroundPixmap( GtkSalFrame::getDisplay()->GetDisplay(),
                                     aWin,
                                     pFrame->getBackgroundPixmap() );
 }

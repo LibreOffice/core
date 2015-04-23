@@ -64,7 +64,7 @@ public:
     void        FreeGlyphSet( GlyphSet ) const;
     void        AddGlyph( GlyphSet, XRenderGlyph nXRGlyph, const XGlyphInfo&,
                     const char* pBuffer, int nBufSize ) const;
-    void        FreeGlyph( GlyphSet, XRenderGlyph nXRGlyphId ) const;
+    static void FreeGlyph( GlyphSet, XRenderGlyph nXRGlyphId );
     void        CompositeString32( Picture aSrc, Picture aDst, GlyphSet,
                     int nDstX, int nDstY, const unsigned* pText, int nTextLen ) const;
     void        FillRectangle( int nOp, Picture aDst, const XRenderColor*,
@@ -148,7 +148,7 @@ inline void XRenderPeer::AddGlyph( GlyphSet aGS, XRenderGlyph nXRGlyph,
                       pBuffer, nBufSize );
 }
 
-inline void XRenderPeer::FreeGlyph( GlyphSet aGS, XRenderGlyph nXRGlyph ) const
+inline void XRenderPeer::FreeGlyph( GlyphSet aGS, XRenderGlyph nXRGlyph )
 {
     (void)aGS; (void)nXRGlyph;
 

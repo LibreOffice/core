@@ -177,7 +177,7 @@ void GtkInstance::EnsureInit()
     // initialize SalData
     GtkData *pSalData = GetGtkSalData();
     pSalData->Init();
-    pSalData->initNWF();
+    GtkData::initNWF();
 
     InitAtkBridge();
 
