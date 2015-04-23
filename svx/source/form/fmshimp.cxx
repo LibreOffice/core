@@ -743,21 +743,6 @@ bool FmXFormShell::IsReadonlyDoc() const
     return true;
 }
 
-
-Any SAL_CALL FmXFormShell::queryInterface( const Type& type) throw ( RuntimeException, std::exception )
-{
-    return FmXFormShell_BASE::queryInterface(type);
-}
-
-Sequence< Type > SAL_CALL FmXFormShell::getTypes(  ) throw(RuntimeException, std::exception)
-{
-    return FmXFormShell_BASE::getTypes();
-}
-
-Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeException, std::exception)
-{
-    return css::uno::Sequence<sal_Int8>();
-}
 //  EventListener
 
 void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e) throw( RuntimeException, std::exception )

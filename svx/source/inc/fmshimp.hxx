@@ -255,16 +255,8 @@ public:
 public:
     SAL_DLLPRIVATE FmXFormShell(FmFormShell& _rShell, SfxViewFrame* _pViewFrame);
 
-    // UNO Anbindung
-    DECLARE_UNO3_DEFAULTS(FmXFormShell, FmXFormShell_BASE)
-    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
 protected:
     SAL_DLLPRIVATE virtual ~FmXFormShell();
-
-// XTypeProvider
-    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // EventListener
     SAL_DLLPRIVATE virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
