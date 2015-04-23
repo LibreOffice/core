@@ -45,13 +45,14 @@ class SwPamRanges : private _SwPamRanges
 {
 public:
     SwPamRanges( const SwPaM& rRing );
+    using _SwPamRanges::size_type;
 
     void Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 );
-    SwPaM& SetPam( sal_uInt16 nArrPos, SwPaM& rPam );
+    SwPaM& SetPam( size_type nArrPos, SwPaM& rPam );
 
-    sal_uInt16 Count() const
+    size_type Count() const
                 {   return _SwPamRanges::size(); }
-    SwPamRange operator[]( sal_uInt16 nPos ) const
+    SwPamRange operator[]( size_type nPos ) const
                 { return _SwPamRanges::operator[](nPos); }
 };
 
