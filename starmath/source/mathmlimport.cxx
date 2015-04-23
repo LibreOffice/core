@@ -399,16 +399,6 @@ SmXMLImport::SmXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport(rContext, implementationName, nImportFlags),
-    pPresLayoutElemTokenMap(0),
-    pPresLayoutAttrTokenMap(0),
-    pFencedAttrTokenMap(0),
-    pOperatorAttrTokenMap(0),
-    pAnnotationAttrTokenMap(0),
-    pPresElemTokenMap(0),
-    pPresScriptEmptyElemTokenMap(0),
-    pPresTableElemTokenMap(0),
-    pColorTokenMap(0),
-    pActionAttrTokenMap(0),
     bSuccess(false)
 {
 }
@@ -1966,14 +1956,14 @@ static const SvXMLTokenMapEntry aActionAttrTokenMap[] =
 const SvXMLTokenMap& SmXMLImport::GetPresLayoutElemTokenMap()
 {
     if (!pPresLayoutElemTokenMap)
-        pPresLayoutElemTokenMap = new SvXMLTokenMap(aPresLayoutElemTokenMap);
+        pPresLayoutElemTokenMap.reset(new SvXMLTokenMap(aPresLayoutElemTokenMap));
     return *pPresLayoutElemTokenMap;
 }
 
 const SvXMLTokenMap& SmXMLImport::GetPresLayoutAttrTokenMap()
 {
     if (!pPresLayoutAttrTokenMap)
-        pPresLayoutAttrTokenMap = new SvXMLTokenMap(aPresLayoutAttrTokenMap);
+        pPresLayoutAttrTokenMap.reset(new SvXMLTokenMap(aPresLayoutAttrTokenMap));
     return *pPresLayoutAttrTokenMap;
 }
 
@@ -1981,57 +1971,57 @@ const SvXMLTokenMap& SmXMLImport::GetPresLayoutAttrTokenMap()
 const SvXMLTokenMap& SmXMLImport::GetFencedAttrTokenMap()
 {
     if (!pFencedAttrTokenMap)
-        pFencedAttrTokenMap = new SvXMLTokenMap(aFencedAttrTokenMap);
+        pFencedAttrTokenMap.reset(new SvXMLTokenMap(aFencedAttrTokenMap));
     return *pFencedAttrTokenMap;
 }
 
 const SvXMLTokenMap& SmXMLImport::GetOperatorAttrTokenMap()
 {
     if (!pOperatorAttrTokenMap)
-        pOperatorAttrTokenMap = new SvXMLTokenMap(aOperatorAttrTokenMap);
+        pOperatorAttrTokenMap.reset(new SvXMLTokenMap(aOperatorAttrTokenMap));
     return *pOperatorAttrTokenMap;
 }
 
 const SvXMLTokenMap& SmXMLImport::GetAnnotationAttrTokenMap()
 {
     if (!pAnnotationAttrTokenMap)
-        pAnnotationAttrTokenMap = new SvXMLTokenMap(aAnnotationAttrTokenMap);
+        pAnnotationAttrTokenMap.reset(new SvXMLTokenMap(aAnnotationAttrTokenMap));
     return *pAnnotationAttrTokenMap;
 }
 
 const SvXMLTokenMap& SmXMLImport::GetPresElemTokenMap()
 {
     if (!pPresElemTokenMap)
-        pPresElemTokenMap = new SvXMLTokenMap(aPresElemTokenMap);
+        pPresElemTokenMap.reset(new SvXMLTokenMap(aPresElemTokenMap));
     return *pPresElemTokenMap;
 }
 
 const SvXMLTokenMap& SmXMLImport::GetPresScriptEmptyElemTokenMap()
 {
     if (!pPresScriptEmptyElemTokenMap)
-        pPresScriptEmptyElemTokenMap = new
-            SvXMLTokenMap(aPresScriptEmptyElemTokenMap);
+        pPresScriptEmptyElemTokenMap.reset(new
+            SvXMLTokenMap(aPresScriptEmptyElemTokenMap));
     return *pPresScriptEmptyElemTokenMap;
 }
 
 const SvXMLTokenMap& SmXMLImport::GetPresTableElemTokenMap()
 {
     if (!pPresTableElemTokenMap)
-        pPresTableElemTokenMap = new SvXMLTokenMap(aPresTableElemTokenMap);
+        pPresTableElemTokenMap.reset(new SvXMLTokenMap(aPresTableElemTokenMap));
     return *pPresTableElemTokenMap;
 }
 
 const SvXMLTokenMap& SmXMLImport::GetColorTokenMap()
 {
     if (!pColorTokenMap)
-        pColorTokenMap = new SvXMLTokenMap(aColorTokenMap);
+        pColorTokenMap.reset(new SvXMLTokenMap(aColorTokenMap));
     return *pColorTokenMap;
 }
 
 const SvXMLTokenMap& SmXMLImport::GetActionAttrTokenMap()
 {
     if (!pActionAttrTokenMap)
-        pActionAttrTokenMap = new SvXMLTokenMap(aActionAttrTokenMap);
+        pActionAttrTokenMap.reset(new SvXMLTokenMap(aActionAttrTokenMap));
     return *pActionAttrTokenMap;
 }
 
@@ -2901,16 +2891,6 @@ SvXMLImportContext *SmXMLImport::CreateActionContext(sal_uInt16 nPrefix,
 
 SmXMLImport::~SmXMLImport() throw ()
 {
-    delete pPresLayoutElemTokenMap;
-    delete pPresElemTokenMap;
-    delete pPresScriptEmptyElemTokenMap;
-    delete pPresTableElemTokenMap;
-    delete pPresLayoutAttrTokenMap;
-    delete pFencedAttrTokenMap;
-    delete pColorTokenMap;
-    delete pOperatorAttrTokenMap;
-    delete pAnnotationAttrTokenMap;
-    delete pActionAttrTokenMap;
 }
 
 void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
