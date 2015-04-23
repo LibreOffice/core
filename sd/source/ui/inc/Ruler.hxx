@@ -37,7 +37,7 @@ public:
         DrawViewShell& rViewSh,
         ::vcl::Window* pParent,
         ::sd::Window* pWin,
-        sal_uInt16 nRulerFlags,
+        SvxRulerSupportFlags nRulerFlags,
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~Ruler();

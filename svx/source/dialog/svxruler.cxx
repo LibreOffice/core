@@ -218,10 +218,10 @@ void SvxRuler_Impl::SetPercSize(sal_uInt16 nSize)
 SvxRuler::SvxRuler(
             vcl::Window* pParent,        // StarView Parent
             vcl::Window* pWin,           // Output window: is used for conversion
-                                    // logical units <-> pixels
-            sal_uInt16 flags,       // Display flags, see ruler.hxx
-            SfxBindings &rBindings, // associated Bindings
-            WinBits nWinStyle) :    // StarView WinBits
+                                         // logical units <-> pixels
+            SvxRulerSupportFlags flags,  // Display flags, see ruler.hxx
+            SfxBindings &rBindings,      // associated Bindings
+            WinBits nWinStyle) :         // StarView WinBits
     Ruler(pParent, nWinStyle),
     pCtrlItem(new SvxRulerItem* [CTRL_ITEM_COUNT]),
     pEditWin(pWin),
@@ -275,14 +275,14 @@ SvxRuler::SvxRuler(
     // Page Position
     pCtrlItem[i++] = new SvxRulerItem(SID_RULER_PAGE_POS, *this, rBindings);
 
-    if((nFlags & SVXRULER_SUPPORT_TABS) == SVXRULER_SUPPORT_TABS)
+    if(nFlags & SvxRulerSupportFlags::TABS)
     {
         sal_uInt16 nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
         pCtrlItem[i++] = new SvxRulerItem(nTabStopId, *this, rBindings);
         SetExtraType(RULER_EXTRA_TAB, nDefTabType);
     }
 
-    if(0 != (nFlags & (SVXRULER_SUPPORT_PARAGRAPH_MARGINS |SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL)))
+    if(nFlags & (SvxRulerSupportFlags::PARAGRAPH_MARGINS |SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL))
     {
         if(bHorz)
             pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_PARA_LRSPACE, *this, rBindings);
@@ -304,7 +304,7 @@ SvxRuler::SvxRuler(
         mpIndents[INDENT_RIGHT_MARGIN].nStyle = RULER_INDENT_BOTTOM;
     }
 
-    if( (nFlags & SVXRULER_SUPPORT_BORDERS) ==  SVXRULER_SUPPORT_BORDERS )
+    if( (nFlags & SvxRulerSupportFlags::BORDERS) ==  SvxRulerSupportFlags::BORDERS )
     {
         pCtrlItem[i++] = new SvxRulerItem(bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL, *this, rBindings);
         pCtrlItem[i++] = new SvxRulerItem(bHorz ? SID_RULER_ROWS : SID_RULER_ROWS_VERTICAL, *this, rBindings);
@@ -312,7 +312,7 @@ SvxRuler::SvxRuler(
 
     pCtrlItem[i++] = new SvxRulerItem(SID_RULER_TEXT_RIGHT_TO_LEFT, *this, rBindings);
 
-    if( (nFlags & SVXRULER_SUPPORT_OBJECT) == SVXRULER_SUPPORT_OBJECT )
+    if( (nFlags & SvxRulerSupportFlags::OBJECT) == SvxRulerSupportFlags::OBJECT )
     {
         pCtrlItem[i++] = new SvxRulerItem(SID_RULER_OBJECT, *this, rBindings );
         mpObjectBorders.resize(OBJECT_BORDER_COUNT);
@@ -328,7 +328,7 @@ SvxRuler::SvxRuler(
     pCtrlItem[i++] = new SvxRulerItem(SID_RULER_BORDER_DISTANCE, *this, rBindings);
     mxRulerImpl->nControlerItems=i;
 
-    if( (nFlags & SVXRULER_SUPPORT_SET_NULLOFFSET) == SVXRULER_SUPPORT_SET_NULLOFFSET )
+    if( (nFlags & SvxRulerSupportFlags::SET_NULLOFFSET) == SvxRulerSupportFlags::SET_NULLOFFSET )
         SetExtraType(RULER_EXTRA_NULLOFFSET, 0);
 
     rBindings.LeaveRegistrations();
@@ -1264,15 +1264,15 @@ void SvxRuler::Update()
 
     UpdatePage();
     UpdateFrame();
-    if((nFlags & SVXRULER_SUPPORT_OBJECT) == SVXRULER_SUPPORT_OBJECT)
+    if(nFlags & SvxRulerSupportFlags::OBJECT)
         UpdateObject();
     else
         UpdateColumns();
 
-    if(0 != (nFlags & (SVXRULER_SUPPORT_PARAGRAPH_MARGINS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL)))
+    if(nFlags & (SvxRulerSupportFlags::PARAGRAPH_MARGINS | SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL))
       UpdatePara();
 
-    if(0 != (nFlags & SVXRULER_SUPPORT_TABS))
+    if(nFlags & SvxRulerSupportFlags::TABS)
       UpdateTabs();
 }
 
@@ -1406,8 +1406,8 @@ long SvxRuler::GetRightFrameMargin() const
     return lResult;
 }
 
-#define NEG_FLAG ( (nFlags & SVXRULER_SUPPORT_NEGATIVE_MARGINS) == \
-                   SVXRULER_SUPPORT_NEGATIVE_MARGINS )
+#define NEG_FLAG ( (nFlags & SvxRulerSupportFlags::NEGATIVE_MARGINS) == \
+                   SvxRulerSupportFlags::NEGATIVE_MARGINS )
 #define TAB_FLAG ( mxColumnItem.get() && mxColumnItem->IsTable() )
 
 long SvxRuler::GetCorrectedDragPos( bool bLeft, bool bRight )
@@ -2606,7 +2606,7 @@ void SvxRuler::Click()
     }
     bool bRTL = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();
     if(mxTabStopItem.get() &&
-       (nFlags & SVXRULER_SUPPORT_TABS) == SVXRULER_SUPPORT_TABS)
+       (nFlags & SvxRulerSupportFlags::TABS) == SvxRulerSupportFlags::TABS)
     {
         bool bContentProtected = mxRulerImpl->aProtectItem.IsCntntProtected();
         if( bContentProtected ) return;
@@ -3395,7 +3395,7 @@ void SvxRuler::ExtraDown()
 
     // Switch Tab Type
     if(mxTabStopItem.get() &&
-        (nFlags & SVXRULER_SUPPORT_TABS) == SVXRULER_SUPPORT_TABS)
+        (nFlags & SvxRulerSupportFlags::TABS) == SvxRulerSupportFlags::TABS)
     {
         ++nDefTabType;
         if(RULER_TAB_DEFAULT == nDefTabType)
@@ -3492,7 +3492,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             FieldUnit eUnit = GetUnit();
             const sal_uInt16 nCount = aMenu.GetItemCount();
 
-            bool bReduceMetric = 0 != (nFlags & SVXRULER_SUPPORT_REDUCED_METRIC);
+            bool bReduceMetric = bool(nFlags & SvxRulerSupportFlags::REDUCED_METRIC);
             for ( sal_uInt16 i = nCount; i; --i )
             {
                 const sal_uInt16 nId = aMenu.GetItemId(i - 1);

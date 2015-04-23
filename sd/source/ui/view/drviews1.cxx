@@ -482,14 +482,14 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, bool bIsFirst)
 {
     Ruler* pRuler;
     WinBits  aWBits;
-    sal_uInt16   nFlags = SVXRULER_SUPPORT_OBJECT;
+    SvxRulerSupportFlags nFlags = SvxRulerSupportFlags::OBJECT;
 
     if ( bIsFirst )
     {
         aWBits  = WB_HSCROLL | WB_3DLOOK | WB_BORDER | WB_EXTRAFIELD;
-        nFlags |= ( SVXRULER_SUPPORT_SET_NULLOFFSET |
-                    SVXRULER_SUPPORT_TABS |
-                    SVXRULER_SUPPORT_PARAGRAPH_MARGINS ); // Neu
+        nFlags |= ( SvxRulerSupportFlags::SET_NULLOFFSET |
+                    SvxRulerSupportFlags::TABS |
+                    SvxRulerSupportFlags::PARAGRAPH_MARGINS ); // Neu
     }
     else
         aWBits = WB_HSCROLL | WB_3DLOOK | WB_BORDER;
@@ -524,7 +524,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
 {
     Ruler* pRuler;
     WinBits  aWBits = WB_VSCROLL | WB_3DLOOK | WB_BORDER;
-    sal_uInt16   nFlags = SVXRULER_SUPPORT_OBJECT;
+    SvxRulerSupportFlags nFlags = SvxRulerSupportFlags::OBJECT;
 
     pRuler = VclPtr<Ruler>::Create(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);

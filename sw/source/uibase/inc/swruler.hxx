@@ -30,7 +30,7 @@ public:
         SwViewShell* pViewSh,
         vcl::Window* pParent,
         SwEditWin* pWin,
-        sal_uInt16 nRulerFlags,
+        SvxRulerSupportFlags nRulerFlags,
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~SwCommentRuler ();

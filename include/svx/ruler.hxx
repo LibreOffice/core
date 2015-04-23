@@ -59,6 +59,22 @@ namespace o3tl
     template<> struct typed_flags<SvxRulerDragFlags> : is_typed_flags<SvxRulerDragFlags, 0x0f> {};
 }
 
+enum class SvxRulerSupportFlags
+{
+    TABS                       = 0x0001,
+    PARAGRAPH_MARGINS          = 0x0002,
+    BORDERS                    = 0x0004,
+    OBJECT                     = 0x0008,
+    SET_NULLOFFSET             = 0x0010,
+    NEGATIVE_MARGINS           = 0x0020,
+    PARAGRAPH_MARGINS_VERTICAL = 0x0040,
+    REDUCED_METRIC             = 0x0080, //shorten the context menu to select metric
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvxRulerSupportFlags> : is_typed_flags<SvxRulerSupportFlags, 0x00ff> {};
+}
+
 class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 {
     friend class SvxRulerItem;
@@ -85,8 +101,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     long            lAppNullOffset;       // in logic coordinates
     long            lMinFrame;            // minimal frame width in pixels
     long            lInitialDragPos;
-    sal_uInt16      nFlags;
-    SvxRulerDragFlags nDragType;
+    SvxRulerSupportFlags nFlags;
+    SvxRulerDragFlags    nDragType;
     sal_uInt16      nDefTabType;
     sal_uInt16      nTabCount;
     sal_uInt16      nTabBufSize;
@@ -247,16 +263,7 @@ protected:
 
 public:
 
-#define     SVXRULER_SUPPORT_TABS                       0x0001
-#define     SVXRULER_SUPPORT_PARAGRAPH_MARGINS          0x0002
-#define     SVXRULER_SUPPORT_BORDERS                    0x0004
-#define     SVXRULER_SUPPORT_OBJECT                     0x0008
-#define     SVXRULER_SUPPORT_SET_NULLOFFSET             0x0010
-#define     SVXRULER_SUPPORT_NEGATIVE_MARGINS           0x0020
-#define     SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL 0x0040
-#define     SVXRULER_SUPPORT_REDUCED_METRIC             0x0080 //shorten the context menu to select metric
-
-    SvxRuler(vcl::Window* pParent, vcl::Window *pEditWin, sal_uInt16 nRulerFlags,
+    SvxRuler(vcl::Window* pParent, vcl::Window *pEditWin, SvxRulerSupportFlags nRulerFlags,
              SfxBindings &rBindings, WinBits nWinStyle = WB_STDRULER);
     virtual ~SvxRuler();
     virtual void dispose() SAL_OVERRIDE;
@@ -264,7 +271,7 @@ public:
     void SetMinFrameSize(long lSize);
     long GetMinFrameSize() const ;
 
-    sal_uInt16 GetRulerFlags() const
+    SvxRulerSupportFlags GetRulerFlags() const
     {
         return nFlags;
     }

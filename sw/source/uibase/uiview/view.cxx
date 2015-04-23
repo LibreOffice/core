@@ -700,8 +700,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pVScrollbar(0),
     m_pScrollFill(VclPtr<ScrollBarBox>::Create( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     m_pVRuler(VclPtr<SvxRuler>::Create(&GetViewFrame()->GetWindow(), m_pEditWin,
-                            SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL|
-                                SVXRULER_SUPPORT_BORDERS | SVXRULER_SUPPORT_REDUCED_METRIC,
+                            SvxRulerSupportFlags::TABS | SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL|
+                                SvxRulerSupportFlags::BORDERS | SvxRulerSupportFlags::REDUCED_METRIC,
                             GetViewFrame()->GetBindings(),
                             WB_VSCROLL |  WB_EXTRAFIELD | WB_BORDER )),
     m_pTogglePageBtn(0),
@@ -847,11 +847,11 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
     SAL_INFO( "sw.ui", "after create WrtShell" );
     m_pHRuler = VclPtr<SwCommentRuler>::Create(m_pWrtShell, &GetViewFrame()->GetWindow(), m_pEditWin,
-                SVXRULER_SUPPORT_TABS |
-                SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
-                SVXRULER_SUPPORT_BORDERS |
-                SVXRULER_SUPPORT_NEGATIVE_MARGINS|
-                SVXRULER_SUPPORT_REDUCED_METRIC,
+                SvxRulerSupportFlags::TABS |
+                SvxRulerSupportFlags::PARAGRAPH_MARGINS |
+                SvxRulerSupportFlags::BORDERS |
+                SvxRulerSupportFlags::NEGATIVE_MARGINS|
+                SvxRulerSupportFlags::REDUCED_METRIC,
                 GetViewFrame()->GetBindings(),
                 WB_STDRULER | WB_EXTRAFIELD | WB_BORDER);
 
