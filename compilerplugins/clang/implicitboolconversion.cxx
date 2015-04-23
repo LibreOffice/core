@@ -278,6 +278,11 @@ public:
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
 private:
+    bool isExternCFunctionCall(
+        CallExpr const * expr, FunctionProtoType const ** functionType);
+
+    bool isExternCFunctionCallReturningInt(Expr const * expr);
+
     void checkCXXConstructExpr(CXXConstructExpr const * expr);
 
     void reportWarning(ImplicitCastExpr const * expr);
@@ -291,32 +296,8 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
     calls.push(expr);
     bool ret = RecursiveASTVisitor::TraverseCallExpr(expr);
-    Decl const * d = expr->getCalleeDecl();
-    bool ext = false;
-    FunctionProtoType const * t = nullptr;
-    if (d != nullptr) {
-        FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
-        if (fd != nullptr && fd->isExternC()) {
-            ext = true;
-            PointerType const * pt = fd->getType()->getAs<PointerType>();
-            QualType t2(pt == nullptr ? fd->getType() : pt->getPointeeType());
-            t = t2->getAs<FunctionProtoType>();
-            assert(
-                t != nullptr || !compiler.getLangOpts().CPlusPlus
-                || (fd->getBuiltinID() != Builtin::NotBuiltin
-                    && isa<FunctionNoProtoType>(t2)));
-                // __builtin_*s have no proto type?
-        } else {
-            VarDecl const * vd = dyn_cast<VarDecl>(d);
-            if (vd != nullptr && vd->isExternC())
-            {
-                ext = true;
-                PointerType const * pt = vd->getType()->getAs<PointerType>();
-                t = (pt == nullptr ? vd->getType() : pt->getPointeeType())
-                    ->castAs<FunctionProtoType>();
-            }
-        }
-    }
+    FunctionProtoType const * t;
+    bool ext = isExternCFunctionCall(expr, &t);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         auto j = std::find_if(
@@ -512,9 +493,12 @@ bool ImplicitBoolConversion::TraverseConditionalOperator(
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getTrueExpr()->IgnoreParens()
-               && isBoolExpr(expr->getFalseExpr()->IgnoreParenImpCasts()))
+               && (isBoolExpr(expr->getFalseExpr()->IgnoreParenImpCasts())
+                   || isExternCFunctionCallReturningInt(expr->getFalseExpr())))
               || (i == expr->getFalseExpr()->IgnoreParens()
-                  && isBoolExpr(expr->getTrueExpr()->IgnoreParenImpCasts()))))
+                  && (isBoolExpr(expr->getTrueExpr()->IgnoreParenImpCasts())
+                      || isExternCFunctionCallReturningInt(
+                          expr->getTrueExpr())))))
         {
             reportWarning(i);
         }
@@ -834,6 +818,47 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         }
     }
     return true;
+}
+
+bool ImplicitBoolConversion::isExternCFunctionCall(
+    CallExpr const * expr, FunctionProtoType const ** functionType)
+{
+    assert(functionType != nullptr);
+    *functionType = nullptr;
+    Decl const * d = expr->getCalleeDecl();
+    if (d != nullptr) {
+        FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
+        if (fd != nullptr && fd->isExternC()) {
+            PointerType const * pt = fd->getType()->getAs<PointerType>();
+            QualType t2(pt == nullptr ? fd->getType() : pt->getPointeeType());
+            *functionType = t2->getAs<FunctionProtoType>();
+            assert(
+                *functionType != nullptr || !compiler.getLangOpts().CPlusPlus
+                || (fd->getBuiltinID() != Builtin::NotBuiltin
+                    && isa<FunctionNoProtoType>(t2)));
+                // __builtin_*s have no proto type?
+            return true;
+        }
+        VarDecl const * vd = dyn_cast<VarDecl>(d);
+        if (vd != nullptr && vd->isExternC())
+        {
+            PointerType const * pt = vd->getType()->getAs<PointerType>();
+            *functionType
+                = ((pt == nullptr ? vd->getType() : pt->getPointeeType())
+                   ->castAs<FunctionProtoType>());
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ImplicitBoolConversion::isExternCFunctionCallReturningInt(
+    Expr const * expr)
+{
+    CallExpr const * e = dyn_cast<CallExpr>(expr->IgnoreParenImpCasts());
+    FunctionProtoType const * t;
+    return e != nullptr && e->getType()->isSpecificBuiltinType(BuiltinType::Int)
+        && isExternCFunctionCall(e, &t);
 }
 
 void ImplicitBoolConversion::checkCXXConstructExpr(
