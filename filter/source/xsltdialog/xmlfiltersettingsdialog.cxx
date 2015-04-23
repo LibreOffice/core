@@ -1519,7 +1519,7 @@ void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
 
 
 
-OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
+OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo )
 {
     OUString aEntryStr( pInfo->maFilterName + "\t");
     if ( !pInfo->maExportService.isEmpty() )

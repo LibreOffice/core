@@ -155,7 +155,7 @@ protected:
                                     EscherSolverContainer& rSolver,
                                     ImplEESdrPageType ePageType, const bool bOOxmlExport = false );  // returns ShapeID
 
-            void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
+            static void         ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
             bool                ImplGetText( ImplEESdrObject& rObj );
             void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,

@@ -53,7 +53,7 @@ private:
 
     com::sun::star::uno::Reference< com::sun::star::lang::XComponent > getFrontMostDocument( const OUString& rServiceName );
     void import( const OUString& rURL );
-    void displayXMLFile( const OUString& rURL );
+    static void displayXMLFile( const OUString& rURL );
     void doExport( com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp );
 
 private:

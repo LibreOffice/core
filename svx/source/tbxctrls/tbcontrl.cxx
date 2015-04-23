@@ -160,9 +160,9 @@ private:
 
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
-    void            UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
+    static void     UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
     void            SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice *pDevice, const OUString &rStyleName, bool bIsNotSelected);
-    bool            AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
+    static bool     AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
     DECL_LINK( MenuSelectHdl, Menu * );
 };
 

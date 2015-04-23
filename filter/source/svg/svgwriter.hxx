@@ -103,7 +103,7 @@ private:
 
                             SVGAttributeWriter();
 
-    double                  ImplRound( double fVal, sal_Int32 nDecs = 3 );
+    static double            ImplRound( double fVal, sal_Int32 nDecs = 3 );
 
 public:
 
@@ -349,8 +349,8 @@ private:
     void                    ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags);
     void                    ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
-    Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
-    Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
+    static Color            ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
+    static Color            ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, bool bApplyMapping = true );
     void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor, bool bApplyMapping );

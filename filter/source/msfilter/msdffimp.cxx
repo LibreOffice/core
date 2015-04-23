@@ -218,7 +218,7 @@ void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDg
     ReadDffRecordHeader( rStCtrl, aRecHd );
     if ( aRecHd.nRecType == DFF_msofbtDggContainer )
     {
-        if ( rManager.SeekToRec( rStCtrl, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
+        if ( SvxMSDffManager::SeekToRec( rStCtrl, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
         {
             const_cast<DffPropertyReader*>(this)->pDefaultPropSet = new DffPropSet;
             ReadDffPropSet( rStCtrl, *pDefaultPropSet );
@@ -242,7 +242,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
         {
             DffRecordHeader aRecHd;
             ReadDffRecordHeader( rIn, aRecHd );
-            if ( rManager.SeekToRec( rIn, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
+            if ( SvxMSDffManager::SeekToRec( rIn, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
             {
                 rIn |= (DffPropertyReader&)*this;
             }
@@ -350,7 +350,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 }
 
 
-sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent ) const
+sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
 {
     sal_Int32 nAngle = 0;
     if ( nContent )
@@ -1321,7 +1321,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                 bool bOK = const_cast<SvxMSDffManager&>(rManager).GetBLIP( GetPropertyValue( DFF_Prop_fillBlip ), aGraf, NULL );
                 // then try directly from stream (i.e. Excel chart hatches/bitmaps)
                 if ( !bOK )
-                    bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && rManager.GetBLIPDirect( rIn, aGraf, NULL );
+                    bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && SvxMSDffManager::GetBLIPDirect( rIn, aGraf, NULL );
                 if ( bOK )
                 {
                     if ( eMSO_FillType == mso_fillPattern )
@@ -3232,7 +3232,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, sal_u
     return bRet;
 }
 
-bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
+bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount )
 {
     bool bRet = false;
     sal_uLong nFPosMerk = rSt.Tell(); // store FilePos to restore it later if necessary
@@ -6285,7 +6285,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisA
 /*      access to a BLIP at runtime (with correctly positioned stream)
     ---------------------------------
 ******************************************************************************/
-bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea ) const
+bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea )
 {
     sal_uLong nOldPos = rBLIPStream.Tell();
 
@@ -6471,7 +6471,7 @@ bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
 }
 
 bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
-                                          char*& rpBuff, sal_uInt32& rBuffLen ) const
+                                          char*& rpBuff, sal_uInt32& rBuffLen )
 {
     if( nDatLen )
     {
@@ -6483,7 +6483,7 @@ bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
 }
 
 bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
-                                        char*& rpBuff, sal_uInt32& rBuffLen ) const
+                                        char*& rpBuff, sal_uInt32& rBuffLen )
 {
     if( nDatLen )
     {

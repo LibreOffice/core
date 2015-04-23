@@ -187,9 +187,9 @@ struct MSFILTER_DLLPUBLIC PptDocumentAtom
 
 public:
 
-    Size    GetPageSize( const Size& rSiz ) const;
-    Size    GetSlidesPageSize() const { return GetPageSize( aSlidesPageSize ); }
-    Size    GetNotesPageSize() const { return GetPageSize( aNotesPageSize ); }
+    static Size GetPageSize( const Size& rSiz );
+    Size        GetSlidesPageSize() const { return GetPageSize( aSlidesPageSize ); }
+    Size        GetNotesPageSize() const { return GetPageSize( aNotesPageSize ); }
 
     friend SvStream& ReadPptDocumentAtom( SvStream& rIn, PptDocumentAtom& rAtom );
 };
@@ -496,7 +496,7 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
     OUString            pPlaceholder[ 4 ];
     sal_uInt32          nAtom;
 
-    sal_uInt32          GetMaskForInstance( sal_uInt32 nInstance );
+    static sal_uInt32   GetMaskForInstance( sal_uInt32 nInstance );
     sal_uInt32          IsToDisplay( sal_uInt32 nInstance );
     sal_uInt32          NeedToImportInstance(
                             const sal_uInt32 nInstance,
@@ -560,7 +560,7 @@ protected:
 
     bool                    SeekToAktPage(DffRecordHeader* pRecHd=NULL) const;
     bool                    SeekToDocument(DffRecordHeader* pRecHd=NULL) const;
-    bool                    SeekToContentOfProgTag(
+    static bool             SeekToContentOfProgTag(
                                 sal_Int32 nVersion,
                                 SvStream& rSt,
                                 const DffRecordHeader& rProgTagBinaryDataHd,
@@ -593,7 +593,7 @@ protected:
     sal_uInt32              GetAktPageId();
     sal_uInt32              GetMasterPageId(sal_uInt16 nPageNum, PptPageKind ePageKind) const;
     sal_uInt32              GetNotesPageId(sal_uInt16 nPageNum ) const;
-    SdrOutliner*            GetDrawOutliner( SdrTextObj* pSdrText ) const;
+    static SdrOutliner*     GetDrawOutliner( SdrTextObj* pSdrText );
     void                    SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOptions );
 
     void                    ApplyTextAnchorAttributes( PPTTextObj& rTextObj, SfxItemSet& rSet ) const;
@@ -1014,7 +1014,6 @@ struct PPTTextRulerInterpreter
                     PPTTextRulerInterpreter( PPTTextRulerInterpreter& rRuler );
                     PPTTextRulerInterpreter(
                         sal_uInt32 nFileOfs,
-                        SdrPowerPointImport&,
                         DffRecordHeader& rHd,
                         SvStream& rIn
                     );
@@ -1077,7 +1076,6 @@ struct PPTStyleTextPropReader
 
             PPTStyleTextPropReader(
                 SvStream& rIn,
-                SdrPowerPointImport&,
                 const DffRecordHeader& rClientTextBoxHd,
                 PPTTextRulerInterpreter& rInterpreter,
                 const DffRecordHeader& rExtParaHd,
@@ -1087,7 +1085,6 @@ struct PPTStyleTextPropReader
 
     void    Init(
                 SvStream& rIn,
-                SdrPowerPointImport&,
                 const DffRecordHeader& rClientTextBoxHd,
                 PPTTextRulerInterpreter& rInterpreter,
                 const DffRecordHeader& rExtParaHd,
@@ -1095,14 +1092,13 @@ struct PPTStyleTextPropReader
             );
     void    ReadParaProps(
                 SvStream& rIn,
-                SdrPowerPointImport& rMan,
                 const DffRecordHeader& rTextHeader,
                 const OUString& aString,
                 PPTTextRulerInterpreter& rRuler,
                 sal_uInt32& nCharCount,
                 bool& bTextPropAtom
             );
-    void    ReadCharProps(
+    static void ReadCharProps(
                 SvStream& rIn,
                 PPTCharPropSet& aCharPropSet,
                 const OUString& aString,

@@ -844,7 +844,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     case ::com::sun::star::drawing::FillStyle_SOLID :
                     {
                         if ( PropValue::GetPropertyValue( aAny, mXPropSet, OUString( "FillColor" ) ) )
-                            nBackgroundColor = mpPptEscherEx->GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
+                            nBackgroundColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
                     }
                     break;
                     case ::com::sun::star::drawing::FillStyle_NONE :
@@ -867,7 +867,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             case ::com::sun::star::drawing::FillStyle_SOLID :
                             {
                                 if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, OUString( "FillColor" ) ) )
-                                    nBackgroundColor = mpPptEscherEx->GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
+                                    nBackgroundColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
                             }
                             break;
                             default:
@@ -902,7 +902,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                                 if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
                                                     OUString( "FillColor" ), true ) )
                                 {
-                                    if ( nCharColor == mpPptEscherEx->GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) ) )
+                                    if ( nCharColor == EscherEx::GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) ) )
                                     {
                                         nCharAttr |= 0x200;
                                     }
@@ -1891,7 +1891,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     if ( bDimHide )
         nAfterEffect |= 2;
     if ( ImplGetPropertyValue( OUString( "DimColor" ) ) )
-        nDimColor = mpPptEscherEx->GetColor( *static_cast<sal_uInt32 const *>(mAny.getValue()) ) | 0xfe000000;
+        nDimColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(mAny.getValue()) ) | 0xfe000000;
 
     rSt.WriteUInt32( nDimColor ).WriteUInt32( nFlags ).WriteUInt32( nSoundRef ).WriteUInt32( nDelayTime )
        .WriteUInt16( nOrder )                                   // order of build ( 1.. )

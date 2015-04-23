@@ -159,7 +159,8 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         || fqn == "connectivity::mozab::ProfileAccess::isProfileLocked"
         || startsWith(fqn, "SbxDecimal::")
         || fqn == "SbiDllMgr::Call" || fqn == "SbiDllMgr::FreeDll"
-        || fqn == "SfxApplication::InitializeDde" || fqn == "SfxApplication::RemoveDdeTopic") {
+        || fqn == "SfxApplication::InitializeDde" || fqn == "SfxApplication::RemoveDdeTopic"
+        || fqn == "ScannerManager::ReleaseData") {
         return true;
     }
     // debugging stuff
@@ -185,7 +186,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false);
+loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false  );
 
 }
 
