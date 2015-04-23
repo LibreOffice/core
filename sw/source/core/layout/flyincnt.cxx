@@ -48,10 +48,6 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
         SwRect aTmp( GetObjRectWithSpaces() );
         SwFlyInCntFrm::NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_LEAVE );
     }
-
-    // Hack to make sure code called from base ~SwFlyFrm does not interpret this
-    // as a SwFlyFrm (which it no longer is by then):
-    mnFrmType = FRM_UNUSED;
 }
 
 // #i28701#
