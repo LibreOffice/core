@@ -559,7 +559,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
 
         defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WZB_FINISH : WZB_NEXT );
         enableButtons( WZB_FINISH, _nState == PAGE_DBSETUPWIZARD_FINAL );
-        enableButtons( WZB_NEXT, _nState == PAGE_DBSETUPWIZARD_FINAL ? sal_False : sal_True);
+        enableButtons( WZB_NEXT, _nState == PAGE_DBSETUPWIZARD_FINAL ? false : true);
         pPage->Show();
     }
     return pPage;

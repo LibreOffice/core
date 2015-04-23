@@ -197,7 +197,7 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
     SvxPageItem aPageItem( SID_ATTR_PAGE );
     aPageItem.SetDescName( mpPage->GetName() );
     aPageItem.SetPageUsage( (SvxPageUsage) SVX_PAGE_ALL );
-    aPageItem.SetLandscape( mpPage->GetOrientation() == ORIENTATION_LANDSCAPE ? sal_True: sal_False );
+    aPageItem.SetLandscape( mpPage->GetOrientation() == ORIENTATION_LANDSCAPE ? true: false );
     aPageItem.SetNumType( mpDoc->GetPageNumType() );
     aNewAttr.Put( aPageItem );
 
@@ -222,7 +222,7 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
 
     // Applikation
     bool bScale = mpDoc->GetDocumentType() != DOCUMENT_TYPE_DRAW;
-    aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ? sal_True : sal_False ) );
+    aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ? true : false ) );
 
     bool bFullSize = mpPage->IsMasterPage() ?
         mpPage->IsBackgroundFullSize() : static_cast<SdPage&>(mpPage->TRG_GetMasterPage()).IsBackgroundFullSize();

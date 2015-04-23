@@ -234,7 +234,7 @@ namespace utl
             _rConfigLocation,
             _nLevels,
             ( _nAccessFlags & CVC_UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
-            ( _nAccessFlags & CVC_IMMEDIATE_UPDATE ) ? sal_False : sal_True
+            ( _nAccessFlags & CVC_IMMEDIATE_UPDATE ) ? false : true
         );
         SAL_WARN_IF(!m_pImpl->aConfigRoot.isValid(), "unotools.config",
             "Could not access the configuration node located at " << _rConfigLocation);

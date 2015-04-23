@@ -385,7 +385,7 @@ bool DoesDependOnOthers( sal_uInt16 nPropertyId )
 {
     const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
     DBG_ASSERT( pImplPropertyInfo, "Invalid PropertyId!" );
-    return pImplPropertyInfo ? pImplPropertyInfo->bDependsOnOthers : sal_False;
+    return pImplPropertyInfo ? pImplPropertyInfo->bDependsOnOthers : false;
 }
 
 bool CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 )

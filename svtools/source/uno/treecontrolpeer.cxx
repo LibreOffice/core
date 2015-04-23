@@ -506,7 +506,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
         while( nCount-- )
         {
             UnoTreeListEntry* pEntry = getEntry( *pNodes++ );
-            rTree.Select( pEntry, bSelect ? sal_True : sal_False );
+            rTree.Select( pEntry, bSelect ? true : false );
         }
     }
 }
@@ -1329,7 +1329,7 @@ void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aVal
         {
             bool bEnabled = false;
             if( aValue >>= bEnabled )
-                rTree.EnableInplaceEditing( bEnabled ? sal_True : sal_False );
+                rTree.EnableInplaceEditing( bEnabled ? true : false );
             break;
         }
         case BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING:

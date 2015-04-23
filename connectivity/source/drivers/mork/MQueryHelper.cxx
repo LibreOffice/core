@@ -298,22 +298,22 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                 OUString searchedValue = evStr->getValue();
                 if (evStr->getCond() == MQueryOp::Is) {
                     SAL_INFO("connectivity.mork", "MQueryOp::Is; done");
-                    resultVector.push_back((currentValue == searchedValue) ? sal_True : sal_False);
+                    resultVector.push_back((currentValue == searchedValue) ? true : false);
                 } else if (evStr->getCond() == MQueryOp::IsNot) {
                     SAL_INFO("connectivity.mork", "MQueryOp::IsNot; done");
-                    resultVector.push_back((currentValue == searchedValue) ? sal_False : sal_True);
+                    resultVector.push_back((currentValue == searchedValue) ? false : true);
                 } else if (evStr->getCond() == MQueryOp::EndsWith) {
                     SAL_INFO("connectivity.mork", "MQueryOp::EndsWith; done");
-                    resultVector.push_back((currentValue.endsWith(searchedValue)) ? sal_True : sal_False);
+                    resultVector.push_back((currentValue.endsWith(searchedValue)) ? true : false);
                 } else if (evStr->getCond() == MQueryOp::BeginsWith) {
                     SAL_INFO("connectivity.mork", "MQueryOp::BeginsWith; done");
-                    resultVector.push_back((currentValue.startsWith(searchedValue)) ? sal_True : sal_False);
+                    resultVector.push_back((currentValue.startsWith(searchedValue)) ? true : false);
                 } else if (evStr->getCond() == MQueryOp::Contains) {
                     SAL_INFO("connectivity.mork", "MQueryOp::Contains; done");
-                    resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? sal_False : sal_True);
+                    resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? false : true);
                 } else if (evStr->getCond() == MQueryOp::DoesNotContain) {
                     SAL_INFO("connectivity.mork", "MQueryOp::DoesNotContain; done");
-                    resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? sal_True : sal_False);
+                    resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? true : false);
                 } else if (evStr->getCond() == MQueryOp::RegExp) {
                     SAL_INFO("connectivity.mork", "MQueryOp::RegExp; done");
                     utl::SearchParam param(
@@ -326,10 +326,10 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                 }
             } else if (evStr->getCond() == MQueryOp::Exists) {
                 SAL_INFO("connectivity.mork", "MQueryOp::Exists; done");
-                resultVector.push_back((currentValue.isEmpty()) ? sal_False : sal_True);
+                resultVector.push_back((currentValue.isEmpty()) ? false : true);
             } else if (evStr->getCond() == MQueryOp::DoesNotExist) {
                 SAL_INFO("connectivity.mork", "MQueryOp::DoesNotExist; done");
-                resultVector.push_back((currentValue.isEmpty()) ? sal_True : sal_False);
+                resultVector.push_back((currentValue.isEmpty()) ? true : false);
             }
         }
         else if ( (*evIter)->isExpr() ) {

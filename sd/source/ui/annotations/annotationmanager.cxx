@@ -251,7 +251,7 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
 
         SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
         if( pOptions )
-            pOptions->SetShowComments( mbShowAnnotations ? sal_True : sal_False );
+            pOptions->SetShowComments( mbShowAnnotations ? true : false );
 
         UpdateTags();
     }
@@ -929,7 +929,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     aStr = aStr.replaceFirst("%1", aReplace);
     pMenu->SetItemText( SID_DELETEALLBYAUTHOR_POSTIT, aStr );
     pMenu->EnableItem( SID_REPLYTO_POSTIT, (sAuthor != sCurrentAuthor) && !bReadOnly );
-    pMenu->EnableItem( SID_DELETE_POSTIT, (xAnnotation.is() && !bReadOnly) ? sal_True : sal_False );
+    pMenu->EnableItem( SID_DELETE_POSTIT, (xAnnotation.is() && !bReadOnly) ? true : false );
     pMenu->EnableItem( SID_DELETEALLBYAUTHOR_POSTIT, !bReadOnly );
     pMenu->EnableItem( SID_DELETEALL_POSTIT, !bReadOnly );
 

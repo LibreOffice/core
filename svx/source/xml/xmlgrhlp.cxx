@@ -739,7 +739,7 @@ void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLSto
 {
     mxRootStorage = rXMLStorage;
     meCreateMode = eCreateMode;
-    mbDirect = ( ( GRAPHICHELPER_MODE_READ == meCreateMode ) ? bDirect : sal_True );
+    mbDirect = ( ( GRAPHICHELPER_MODE_READ == meCreateMode ) ? bDirect : true );
 }
 
 SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,

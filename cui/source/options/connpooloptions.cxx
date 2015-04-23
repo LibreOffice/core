@@ -338,7 +338,7 @@ namespace offapp
         // the enabled flag
         SFX_ITEMSET_GET( _rSet, pEnabled, SfxBoolItem, SID_SB_POOLING_ENABLED, true );
         OSL_ENSURE(pEnabled, "ConnectionPoolOptionsPage::implInitControls: missing the Enabled item!");
-        m_pEnablePooling->Check(pEnabled ? pEnabled->GetValue() : sal_True);
+        m_pEnablePooling->Check(pEnabled ? pEnabled->GetValue() : true);
 
         m_pEnablePooling->SaveValue();
 

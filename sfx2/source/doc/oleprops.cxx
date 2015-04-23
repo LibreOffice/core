@@ -931,7 +931,7 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
     else if( GetDoubleValue( fDouble, nPropId ) )
         aValue <<= fDouble;
     else if( GetBoolValue( bBool, nPropId ) )
-        ::comphelper::setBOOL( aValue, bBool ? sal_True : sal_False );
+        ::comphelper::setBOOL( aValue, bBool ? true : false );
     else if( GetStringValue( aString, nPropId ) )
         aValue <<= aString;
     else if( GetFileTimeValue( aApiDateTime, nPropId ) )

@@ -744,7 +744,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
         else
             rSet->Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
-                m_pPositionCB->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
+                m_pPositionCB->GetState() == TRISTATE_TRUE ? true : false ) );
         bModified = true;
     }
 
@@ -755,7 +755,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
         else
             rSet->Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
-                m_pSizeCB->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
+                m_pSizeCB->GetState() == TRISTATE_TRUE ? true : false ) );
         bModified = true;
     }
 

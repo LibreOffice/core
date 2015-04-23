@@ -852,8 +852,8 @@ Reference< XRow > FTPContent::getPropertyValues(
                 xRow->appendBoolean(seqProp[i],
                                     aDirEntry.m_nMode
                                     & INETCOREFTP_FILEMODE_WRITE
-                                    ? 0
-                                    : 1 );
+                                    ? false
+                                    : true );
             else if(Name == "IsDocument")
                 xRow->appendBoolean(seqProp[i],
                                     (aDirEntry.m_nMode &

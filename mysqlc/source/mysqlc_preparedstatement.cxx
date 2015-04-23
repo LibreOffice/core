@@ -179,7 +179,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 
     bool success = false;
     try {
-        success = static_cast<sql::PreparedStatement *>(cppStatement)->execute()? sal_True:sal_False;
+        success = static_cast<sql::PreparedStatement *>(cppStatement)->execute()? true:false;
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }

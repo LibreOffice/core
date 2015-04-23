@@ -299,7 +299,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
         else
         {
             // set the auto focus to the first control (if indicated by the model to do so)
-            bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
+            bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : false;
             if (bForceControlFocus)
                 pImpl->AutoFocus();
         }

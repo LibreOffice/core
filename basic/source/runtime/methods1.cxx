@@ -1084,7 +1084,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     {
         pStrm->Seek( nFPos + nBlockLen );
     }
-    return pStrm->GetErrorCode() ? sal_False : sal_True;
+    return pStrm->GetErrorCode() ? false : true;
 }
 
 static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
@@ -1195,7 +1195,7 @@ static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     {
         pStrm->Seek( nFPos + nBlockLen );
     }
-    return pStrm->GetErrorCode() ? sal_False : sal_True;
+    return pStrm->GetErrorCode() ? false : true;
 }
 
 

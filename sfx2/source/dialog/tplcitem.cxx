@@ -163,7 +163,7 @@ IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
     {
         case 0 :
         case 1 :
-            pState = new SfxBoolItem(SID_STYLE_WATERCAN, pThis->nWaterCanState ? sal_True : sal_False);
+            pState = new SfxBoolItem(SID_STYLE_WATERCAN, pThis->nWaterCanState ? true : false);
         break;
     }
     pThis->rTemplateDlg.SetWaterCanState(pState);

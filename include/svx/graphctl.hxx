@@ -104,7 +104,7 @@ public:
     SdrModel*           GetSdrModel() const { return pModel; }
     SdrView*            GetSdrView() const { return pView; }
     SdrObject*          GetSelectedSdrObject() const;
-    bool                IsChanged() const { return bSdrMode ? pModel->IsChanged() : sal_False; }
+    bool                IsChanged() const { return bSdrMode ? pModel->IsChanged() : false; }
 
     void                SetMousePosLink( const Link& rLink ) { aMousePosLink = rLink; }
     const Link&         GetMousePosLink() const { return aMousePosLink; }

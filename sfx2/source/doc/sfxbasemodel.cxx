@@ -1853,7 +1853,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     }
 
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
-    bool bSalvage = pSalvageItem ? sal_True : sal_False;
+    bool bSalvage = pSalvageItem ? true : false;
 
     // load document
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )

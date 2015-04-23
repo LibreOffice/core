@@ -91,7 +91,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          GetDispatch() const;
     void                    Dispatch( const SfxItemSet* pSet, bool bForceSynchron = false );
     bool                    IsControllerDirty() const
-                            { return bCtrlDirty ? sal_True : sal_False; }
+                            { return bCtrlDirty ? true : false; }
     SfxPoolItem*            GetItem() const { return pLastItem; }
     void                    ClearCache();
 

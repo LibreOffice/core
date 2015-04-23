@@ -2416,7 +2416,7 @@ void ScPosWnd::DoEnter()
                     SfxViewFrame* pViewFrm = pViewSh->GetViewFrame();
                     SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                    SC_MOD()->SetRefDialog( nId, pWnd ? false : sal_True );
+                    SC_MOD()->SetRefDialog( nId, pWnd ? false : true );
                 }
                 else
                 {

@@ -2024,7 +2024,7 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     else if( pControl == mpCBAutoPreview )
     {
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-        pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() ? sal_True : sal_False );
+        pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() ? true : false );
     }
 
     updateControls();

@@ -246,7 +246,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     if ( pThisFrame->KnowsChildWindow( nId ) )
                     {
                         SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
-                        rSet.Put( SfxBoolItem( nWhich, pWnd ? sal_True : false ) );
+                        rSet.Put( SfxBoolItem( nWhich, pWnd ? true : false ) );
                     }
                     else
                         rSet.DisableItem( nWhich );

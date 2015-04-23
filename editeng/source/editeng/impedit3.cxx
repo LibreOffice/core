@@ -1818,7 +1818,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 nBreakPos++;
         }
 
-        bHangingPunctuation = ( nBreakPos > nMaxBreakPos ) ? sal_True : sal_False;
+        bHangingPunctuation = ( nBreakPos > nMaxBreakPos ) ? true : false;
         pLine->SetHangingPunctuation( bHangingPunctuation );
 
         // Whether a separator or not, push the word after the separator through
@@ -2526,7 +2526,7 @@ void ImpEditEngine::SetVertical( bool bVertical )
     if ( IsVertical() != bVertical )
     {
         GetEditDoc().SetVertical( bVertical );
-        bool bUseCharAttribs = ( aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS ) ? sal_True : sal_False;
+        bool bUseCharAttribs = ( aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS ) ? true : false;
         GetEditDoc().CreateDefFont( bUseCharAttribs );
         if ( IsFormatted() )
         {
@@ -4327,7 +4327,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
         short nScriptType = GetI18NScriptType( EditPaM( pNode, nIndex+1 ) );
         bCTL = nScriptType == i18n::ScriptType::COMPLEX;
         // this change was discussed in issue 37190
-        bR2L = (GetRightToLeft( nPara, nIndex + 1) % 2) ? sal_True : sal_False;
+        bR2L = (GetRightToLeft( nPara, nIndex + 1) % 2) ? true : false;
         // it also works for issue 55927
     }
 

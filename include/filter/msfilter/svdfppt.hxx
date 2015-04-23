@@ -588,7 +588,7 @@ protected:
     SdrPage*                MakeBlancPage(bool bMaster) const;
     bool                    ReadFontCollection();
     bool                    ForceFontCollection() const
-                            { return pFonts!=NULL?sal_True:const_cast<SdrPowerPointImport*>(this)->ReadFontCollection(); }
+                            { return pFonts!=NULL?true:const_cast<SdrPowerPointImport*>(this)->ReadFontCollection(); }
     PptSlidePersistList*    GetPageList(PptPageKind ePageKind) const;
     sal_uInt32              GetAktPageId();
     sal_uInt32              GetMasterPageId(sal_uInt16 nPageNum, PptPageKind ePageKind) const;

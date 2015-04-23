@@ -176,7 +176,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     else
     {
         bSystemMenuIcons = false;
-        bMenuIcons = m_eMenuIcons ? sal_True : sal_False;
+        bMenuIcons = m_eMenuIcons ? true : false;
     }
 
     // Copy values from list in right order to our internal member.
@@ -249,7 +249,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     else
     {
         bSystemMenuIcons = false;
-        bMenuIcons = m_eMenuIcons ? sal_True : sal_False;
+        bMenuIcons = m_eMenuIcons ? true : false;
     }
 
     // Step over list of property names and get right value from coreesponding value list to set it on internal members!

@@ -1044,7 +1044,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked)
 IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked)
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-    pOptions->SetPreviewTransitions( mpCB_AUTO_PREVIEW->IsChecked() ? sal_True : sal_False );
+    pOptions->SetPreviewTransitions( mpCB_AUTO_PREVIEW->IsChecked() ? true : false );
     return 0;
 }
 

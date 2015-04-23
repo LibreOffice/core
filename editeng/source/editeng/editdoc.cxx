@@ -3085,7 +3085,7 @@ SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
 
     long nVersion = rStream.GetVersion();
     bool b31Format = ( nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 ) )
-                        ? sal_True : sal_False;
+                        ? true : false;
 
     EditEngineItemPool* pThis = const_cast<EditEngineItemPool*>(this);
     if ( b31Format )

@@ -1351,7 +1351,7 @@ bool SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aU
 
     aNewUINames.realloc( nNewLen );
 
-    return bChanged ? WriteUINamesForTemplateDir_Impl( aUserPath, aNewUINames ) : sal_True;
+    return bChanged ? WriteUINamesForTemplateDir_Impl( aUserPath, aNewUINames ) : true;
 }
 
 

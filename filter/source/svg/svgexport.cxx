@@ -341,8 +341,8 @@ SVGExport::SVGExport(
         const char* pSVGDisableFontEmbedding = getenv( "SVG_DISABLE_FONT_EMBEDDING" );
         OUString aEmbedFontEnv("${SVG_DISABLE_FONT_EMBEDDING}");
         rtl::Bootstrap::expandMacros(aEmbedFontEnv);
-        mbIsEmbedFonts=pSVGDisableFontEmbedding ? sal_False : (
-            aEmbedFontEnv.getLength() ? sal_False : sal_True);
+        mbIsEmbedFonts=pSVGDisableFontEmbedding ? false : (
+            aEmbedFontEnv.getLength() ? false : true);
     }
     else
     {
@@ -351,7 +351,7 @@ SVGExport::SVGExport(
     }
 
     // Native Decoration
-    mbIsUseNativeTextDecoration = mbIsUseTinyProfile ? sal_False : aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, false);
+    mbIsUseNativeTextDecoration = mbIsUseTinyProfile ? false : aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, false);
 
     // Tiny Opacity (supported from SVG Tiny 1.2)
     mbIsUseOpacity = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, true);

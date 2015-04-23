@@ -461,7 +461,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
         SdrObject* pObj = mpShape->GetSdrObject();
         if( pObj )
         {
-            SdAnimationInfo* pInfo = GetAnimationInfo((pEntry->nWID <= WID_THAT_NEED_ANIMINFO)?sal_True:sal_False);
+            SdAnimationInfo* pInfo = GetAnimationInfo((pEntry->nWID <= WID_THAT_NEED_ANIMINFO)?true:false);
 
             switch(pEntry->nWID)
             {
@@ -972,7 +972,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
         if(!bEmpty)
         {
             OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
-            const bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
+            const bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : false;
 
             // really delete SdrOutlinerObj at pObj
             pObj->NbcSetOutlinerParaObject(0L);
@@ -1409,7 +1409,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                     pInfo->SetBookmark( aStrSoundURL );
                     if( eClickAction != presentation::ClickAction_SOUND )
                         pInfo->mbSecondSoundOn = !aStrSoundURL.isEmpty();
-                    pInfo->mbSecondPlayFull = nFound & FOUND_PLAYFULL ? bPlayFull : sal_False;
+                    pInfo->mbSecondPlayFull = nFound & FOUND_PLAYFULL ? bPlayFull : false;
 
                     bOk = true;
                 }

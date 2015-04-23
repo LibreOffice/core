@@ -2348,7 +2348,7 @@ void SvxRuler::ApplyBorders()
 #endif // DEBUGLIN
 
     SfxBoolItem aFlag(SID_RULER_ACT_LINE_ONLY,
-                      nDragType & DRAG_OBJECT_ACTLINE_ONLY ? sal_True : sal_False);
+                      nDragType & DRAG_OBJECT_ACTLINE_ONLY ? true : false);
 
     sal_uInt16 nColId = mxRulerImpl->bIsTableRows ? (bHorz ? SID_RULER_ROWS : SID_RULER_ROWS_VERTICAL) :
                             (bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL);
@@ -3021,7 +3021,7 @@ void SvxRuler::CalcMinMax()
                 {
                     if(mxObjectItem->HasLimits())
                     {
-                        if(CalcLimits(nMaxLeft, nMaxRight, nIdx & 1? sal_False : sal_True))
+                        if(CalcLimits(nMaxLeft, nMaxRight, nIdx & 1? false : true))
                         {
                             nMaxLeft = ConvertPosPixel(nMaxLeft);
                             nMaxRight = ConvertPosPixel(nMaxRight);

@@ -788,7 +788,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
             {
                 rOutAttrs->Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
-                    m_pTsbPosProtect->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
+                    m_pTsbPosProtect->GetState() == TRISTATE_TRUE ? true : false ) );
             }
 
             bModified = true;
@@ -827,7 +827,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         else
             rOutAttrs->Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
-                m_pTsbSizeProtect->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
+                m_pTsbSizeProtect->GetState() == TRISTATE_TRUE ? true : false ) );
         bModified = true;
     }
 
@@ -840,7 +840,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
             else
                 rOutAttrs->Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOWIDTH ),
-                    m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
+                    m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE ? true : false ) );
         }
         bModified = true;
     }
@@ -854,7 +854,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
             else
                 rOutAttrs->Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOHEIGHT ),
-                    m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
+                    m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE ? true : false ) );
         }
         bModified = true;
     }

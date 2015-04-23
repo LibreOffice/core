@@ -91,7 +91,7 @@ void SvtSearchOptions_Impl::Notify( const Sequence< OUString >&  )
 bool SvtSearchOptions_Impl::GetFlag( sal_uInt16 nOffset ) const
 {
     DBG_ASSERT( nOffset <= MAX_FLAGS_OFFSET, "offset out of range");
-    return ((nFlags >> nOffset) & 0x01) ? sal_True : sal_False;
+    return ((nFlags >> nOffset) & 0x01) ? true : false;
 }
 
 void SvtSearchOptions_Impl::SetFlag( sal_uInt16 nOffset, bool bVal )

@@ -1071,7 +1071,7 @@ bool SAL_CALL
 LocaleDataImpl::isPhonetic( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
-    return (indexArray && indexArray[4][0]) ? sal_True : sal_False;
+    return (indexArray && indexArray[4][0]) ? true : false;
 }
 
 OUString SAL_CALL

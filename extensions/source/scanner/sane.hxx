@@ -112,9 +112,9 @@ public:
     ~Sane();
 
     static bool         IsSane()
-        { return pSaneLib ? sal_True : sal_False; }
+        { return pSaneLib ? true : false; }
     bool            IsOpen()
-        { return maHandle ? sal_True : sal_False; }
+        { return maHandle ? true : false; }
     static int              CountDevices()
         { return nDevices; }
     static OUString         GetName( int n )

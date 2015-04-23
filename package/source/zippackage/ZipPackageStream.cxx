@@ -525,7 +525,7 @@ bool ZipPackageStream::saveChild(
     pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
 
     const bool bToBeEncrypted = m_bToBeEncrypted && (rEncryptionKey.getLength() || m_bHaveOwnKey);
-    const bool bToBeCompressed = bToBeEncrypted ? sal_True : m_bToBeCompressed;
+    const bool bToBeCompressed = bToBeEncrypted ? true : m_bToBeCompressed;
 
     aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
     aPropSet[PKG_MNFST_MEDIATYPE].Value <<= GetMediaType( );

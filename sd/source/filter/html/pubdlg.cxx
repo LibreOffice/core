@@ -1412,7 +1412,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aEMail = pPage4_Email->GetText();
     pDesign->m_aWWW = pPage4_WWW->GetText();
     pDesign->m_aMisc = pPage4_Misc->GetText();
-    pDesign->m_bDownload = m_bImpress?pPage4_Download->IsChecked():sal_False;
+    pDesign->m_bDownload = m_bImpress?pPage4_Download->IsChecked():false;
 
     if(pPage5_TextOnly->IsChecked())
         pDesign->m_nButtonThema = -1;

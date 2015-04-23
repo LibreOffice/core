@@ -46,8 +46,8 @@ namespace
     {
         if( pDialog )
         {
-            pDialog->Show( bEnable ? sal_False : sal_True );
-            pDialog->SetModalInputMode( bEnable ? sal_False : sal_True );
+            pDialog->Show( bEnable ? false : true );
+            pDialog->SetModalInputMode( bEnable ? false : true );
         }
     }
 

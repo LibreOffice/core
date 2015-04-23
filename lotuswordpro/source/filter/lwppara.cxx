@@ -174,8 +174,8 @@ void LwpPara::Read()
         const int DISK_SIMPLE = 1;
         const int DISK_NOTIFY = 2;
 
-        Simple = (Flag & DISK_SIMPLE) ? sal_True : sal_False;
-        Notify = (Flag & DISK_NOTIFY) ? sal_True : sal_False;
+        Simple = (Flag & DISK_SIMPLE) ? true : false;
+        Notify = (Flag & DISK_NOTIFY) ? true : false;
     }
 
     if(!Simple)
@@ -613,7 +613,7 @@ void LwpPara::RegisterStyle()
                                 * higher than our current level.
                                 */
                             // restart based on Outline level?
-                            if (pNumbering && bLesser && (bHeading ? pNumbering->IsHeading() : sal_True))
+                            if (pNumbering && bLesser && (bHeading ? pNumbering->IsHeading() : true))
                             {
                                 if (nFoundLevel != 0xffff)
                                 {

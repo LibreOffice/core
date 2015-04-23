@@ -921,7 +921,7 @@ void SvxTextEditSourceImpl::unlock()
 
 bool SvxTextEditSourceImpl::IsValid() const
 {
-    return mpView && mpWindow ? sal_True : sal_False;
+    return mpView && mpWindow ? true : false;
 }
 
 Rectangle SvxTextEditSourceImpl::GetVisArea()

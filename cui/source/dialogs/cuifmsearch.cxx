@@ -437,9 +437,9 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
         }
 
         // pass on to the engine
-        m_pSearchEngine->SetWildcard(m_pcbWildCard->IsEnabled() ? m_pcbWildCard->IsChecked() : sal_False);
-        m_pSearchEngine->SetRegular(m_pcbRegular->IsEnabled() ? m_pcbRegular->IsChecked() : sal_False);
-        m_pSearchEngine->SetLevenshtein(m_pcbApprox->IsEnabled() ? m_pcbApprox->IsChecked() : sal_False);
+        m_pSearchEngine->SetWildcard(m_pcbWildCard->IsEnabled() ? m_pcbWildCard->IsChecked() : false);
+        m_pSearchEngine->SetRegular(m_pcbRegular->IsEnabled() ? m_pcbRegular->IsChecked() : false);
+        m_pSearchEngine->SetLevenshtein(m_pcbApprox->IsEnabled() ? m_pcbApprox->IsChecked() : false);
             // (disabled boxes have to be passed to the engine as sal_False)
 
         // adjust the Position-Listbox (which is not allowed during Wildcard-search)

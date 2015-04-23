@@ -100,7 +100,7 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
                 && nPropLineSpace == rLineSpace.nPropLineSpace)
             || (eInterLineSpace == SVX_INTER_LINE_SPACE_FIX
                 && (nInterLineSpace == rLineSpace.nInterLineSpace)))) ?
-                1 : 0;
+                true : false;
 }
 
 /* Who does still know why the LineSpacingItem is so complicated?

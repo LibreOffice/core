@@ -885,7 +885,7 @@ void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     else if( mpRbPgLyContinueFacing->IsChecked() )
         paParent->mnPageLayout = 3;
 
-    paParent->mbFirstPageLeft = ( mbUseCTLFont ) ? mpCbPgLyFirstOnLeft->IsChecked() : sal_False;
+    paParent->mbFirstPageLeft = ( mbUseCTLFont ) ? mpCbPgLyFirstOnLeft->IsChecked() : false;
 }
 
 

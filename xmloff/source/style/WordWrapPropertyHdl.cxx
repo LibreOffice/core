@@ -64,10 +64,10 @@ bool XMLWordWrapPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValu
             if( nUPD == 300 )
             {
                 if( ( nBuildId > 0 ) && (nBuildId < 9316 ) )
-                    bValue = bValue ? sal_False : sal_True;     // treat OOo 3.0 beta1 as OOo 2.x
+                    bValue = bValue ? false : true;     // treat OOo 3.0 beta1 as OOo 2.x
             }
             else if( ( nUPD == 680 ) || ( nUPD >= 640 && nUPD <= 645 ) )
-                bValue = bValue ? sal_False : sal_True;
+                bValue = bValue ? false : true;
         }
         rValue <<= bValue;
     }

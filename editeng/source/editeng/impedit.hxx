@@ -525,7 +525,7 @@ private:
 
     void                InsertUndo( EditUndo* pUndo, bool bTryMerge = false );
     void                ResetUndoManager();
-    bool            HasUndoManager() const  { return pUndoManager ? sal_True : sal_False; }
+    bool            HasUndoManager() const  { return pUndoManager ? true : false; }
 
     EditUndoSetAttribs* CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet );
 

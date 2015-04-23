@@ -776,7 +776,7 @@ void ToolboxController::enable( bool bEnable )
     sal_uInt16 nItemId = 0;
     if( getToolboxId( nItemId, &pToolBox ) )
     {
-        pToolBox->EnableItem( nItemId, bEnable ? sal_True : sal_False );
+        pToolBox->EnableItem( nItemId, bEnable ? true : false );
     }
 }
 

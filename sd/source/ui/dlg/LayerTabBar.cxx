@@ -185,7 +185,7 @@ bool LayerTabBar::StartRenaming()
         }
     }
 
-    return bOK ? 1 : 0;
+    return bOK ? true : false;
 }
 
 TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()

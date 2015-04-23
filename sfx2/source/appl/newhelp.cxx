@@ -633,7 +633,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),"reference list and title list of different length" );
 
-                    const bool insert = ( ( ndx = aKeywordPair.indexOf( ';' ) ) == -1 ? sal_False : sal_True );
+                    const bool insert = ( ( ndx = aKeywordPair.indexOf( ';' ) ) == -1 ? false : true );
 
                     if ( insert )
                     {
@@ -927,9 +927,9 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
         if ( aUserItem >>= aUserData )
         {
-            bool bChecked = ( 1 == aUserData.getToken(0, ';').toInt32() ) ? sal_True : sal_False;
+            bool bChecked = ( 1 == aUserData.getToken(0, ';').toInt32() ) ? true : false;
             m_pFullWordsCB->Check( bChecked );
-            bChecked = ( 1 == aUserData.getToken(1, ';').toInt32() ) ? sal_True : sal_False;
+            bChecked = ( 1 == aUserData.getToken(1, ';').toInt32() ) ? true : false;
             m_pScopeCB->Check( bChecked );
 
             for ( sal_uInt16 i = 2; i < comphelper::string::getTokenCount(aUserData, ';'); ++i )

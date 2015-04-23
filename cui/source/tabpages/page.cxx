@@ -568,12 +568,12 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             // horizontal alignment
             pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT1 );
             m_pHorzBox->Check( pItem ? static_cast<const SfxBoolItem*>(pItem)->GetValue()
-                                  : sal_False );
+                                  : false );
 
             // vertical alignment
             pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT2 );
             m_pVertBox->Check( pItem ? static_cast<const SfxBoolItem*>(pItem)->GetValue()
-                                  : sal_False );
+                                  : false );
 
             // set example window on the table
             m_pBspWin->SetTable( true );
@@ -589,7 +589,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             m_pAdaptBox->Show();
             pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT1 );
             m_pAdaptBox->Check( pItem ?
-                static_cast<const SfxBoolItem*>(pItem)->GetValue() : sal_False );
+                static_cast<const SfxBoolItem*>(pItem)->GetValue() : false );
 
             //!!! hidden, because not implemented by StarDraw
             m_pLayoutBox->Hide();

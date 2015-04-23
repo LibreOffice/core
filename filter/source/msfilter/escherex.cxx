@@ -967,14 +967,14 @@ void EscherPropertyContainer::CreateLineProperties(
                 bSwapLineEnds = true;
         }
     }
-    if ( GetLineArrow( bSwapLineEnds ? sal_False : sal_True, rXPropSet, eLineEnd, nArrowLength, nArrowWidth ) )
+    if ( GetLineArrow( bSwapLineEnds ? false : true, rXPropSet, eLineEnd, nArrowLength, nArrowWidth ) )
     {
         AddOpt( ESCHER_Prop_lineStartArrowLength, nArrowLength );
         AddOpt( ESCHER_Prop_lineStartArrowWidth, nArrowWidth );
         AddOpt( ESCHER_Prop_lineStartArrowhead, eLineEnd );
         nLineFlags |= 0x100010;
     }
-    if ( GetLineArrow( bSwapLineEnds ? sal_True : sal_False, rXPropSet, eLineEnd, nArrowLength, nArrowWidth ) )
+    if ( GetLineArrow( bSwapLineEnds ? true : false, rXPropSet, eLineEnd, nArrowLength, nArrowWidth ) )
     {
         AddOpt( ESCHER_Prop_lineEndArrowLength, nArrowLength );
         AddOpt( ESCHER_Prop_lineEndArrowWidth, nArrowWidth );

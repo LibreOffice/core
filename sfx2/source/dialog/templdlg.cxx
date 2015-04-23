@@ -1262,7 +1262,7 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 
     if(!bWaterDisabled)
         //make sure the watercan is only activated when there is (only) one selection
-        bWaterDisabled = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? sal_False : sal_True;
+        bWaterDisabled = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? false : true;
 
     if(pItem && !bWaterDisabled)
     {
@@ -1805,7 +1805,7 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
     nFilter = aFactoryProps.getUnpackedValueOrDefault( "ooSetupFactoryStyleFilter", nDefault );
 
     m_bWantHierarchical =
-        (nFilter & SFXSTYLEBIT_HIERARCHY) ? sal_True : sal_False;
+        (nFilter & SFXSTYLEBIT_HIERARCHY) ? true : false;
     nFilter &= ~SFXSTYLEBIT_HIERARCHY; // clear it
 
     return nFilter;
@@ -2155,10 +2155,10 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnab
 {
     if( nId == SID_STYLE_NEW_BY_EXAMPLE )
     {
-        bNewByExampleDisabled = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? !bEnable : sal_True;
+        bNewByExampleDisabled = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? !bEnable : true;
     }
     else if( nId == SID_STYLE_UPDATE_BY_EXAMPLE )
-        bUpdateByExampleDisabled = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? !bEnable : sal_True;
+        bUpdateByExampleDisabled = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? !bEnable : true;
 
     EnableItem(nId, bEnable);
 }
@@ -2542,7 +2542,7 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
     }
 
     bWaterDisabled = false;
-    bCanNew = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? sal_True : sal_False;
+    bCanNew = (pTreeBox || aFmtLb.GetSelectionCount() <= 1) ? true : false;
     bTreeDrag = true;
     bUpdateByExampleDisabled = false;
 

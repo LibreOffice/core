@@ -490,7 +490,7 @@ void SaneDlg::InitFields()
         OUString aOption=mrSane.GetOptionName( i );
         bool bInsertAdvanced =
             mrSane.GetOptionCap( i ) & SANE_CAP_ADVANCED &&
-            ! mpAdvancedBox->IsChecked() ? sal_False : sal_True;
+            ! mpAdvancedBox->IsChecked() ? false : true;
         if( mrSane.GetOptionType( i ) == SANE_TYPE_GROUP )
         {
             if( bInsertAdvanced )

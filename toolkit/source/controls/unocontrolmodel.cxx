@@ -150,7 +150,7 @@ bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
         nPropId = BASEPROPERTY_FONTDESCRIPTOR;
 
-    return maData.find( nPropId ) != maData.end() ? sal_True : sal_False;
+    return maData.find( nPropId ) != maData.end() ? true : false;
 }
 
 ::com::sun::star::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const

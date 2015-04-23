@@ -526,7 +526,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
         {
             // draw:polygon or draw:polyline inside group context
             pContext = new SdXMLPolygonShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes,
-                rTokenMap.Get(p_nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? sal_True : sal_False, bTemporaryShape );
+                rTokenMap.Get(p_nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? true : false, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_PATH:

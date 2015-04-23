@@ -3671,7 +3671,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
             break;
         }
     }
-    return ( nHardCount ) ? sal_True : sal_False;
+    return ( nHardCount ) ? true : false;
 }
 
 void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, sal_uInt32 /*nLevel*/)

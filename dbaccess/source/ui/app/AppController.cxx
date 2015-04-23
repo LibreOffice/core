@@ -589,7 +589,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case ID_BROWSER_CUT:
                 aReturn.bEnabled = !isDataSourceReadOnly() && getContainer()->getSelectionCount() >= 1;
-                aReturn.bEnabled = aReturn.bEnabled && ( (ID_BROWSER_CUT == _nId && getContainer()->getElementType() == E_TABLE) ? getContainer()->isCutAllowed() : sal_True);
+                aReturn.bEnabled = aReturn.bEnabled && ( (ID_BROWSER_CUT == _nId && getContainer()->getElementType() == E_TABLE) ? getContainer()->isCutAllowed() : true);
                 break;
             case ID_BROWSER_PASTE:
                 switch( getContainer()->getElementType() )

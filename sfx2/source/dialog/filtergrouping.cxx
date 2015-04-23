@@ -537,7 +537,7 @@ namespace sfx2
 
         bool operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
         {
-            return _rMapEntry.first == aLookingFor ? sal_True : sal_False;
+            return _rMapEntry.first == aLookingFor ? true : false;
         }
     };
 

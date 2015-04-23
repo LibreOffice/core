@@ -161,7 +161,7 @@ void FileControl::Resize()
         ( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN
         ? ( maEdit.GetTextWidth( maEdit.GetText() )
             <= aOutSz.Width() - nButtonTextWidth - ButtonBorder )
-        : sal_True ) )
+        : true ) )
        )
     {
         maButton.SetText( maButtonText );

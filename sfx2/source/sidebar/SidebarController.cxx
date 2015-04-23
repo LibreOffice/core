@@ -866,8 +866,8 @@ void SidebarController::ShowPopupMenu (
     {
         const sal_Int32 nMenuIndex (nIndex+MID_FIRST_PANEL);
         pMenu->InsertItem(nMenuIndex, iItem->msDisplayName, MenuItemBits::RADIOCHECK);
-        pMenu->CheckItem(nMenuIndex, iItem->mbIsCurrentDeck ? sal_True : sal_False);
-        pMenu->EnableItem(nMenuIndex, (iItem->mbIsEnabled&&iItem->mbIsActive) ? sal_True : sal_False);
+        pMenu->CheckItem(nMenuIndex, iItem->mbIsCurrentDeck ? true : false);
+        pMenu->EnableItem(nMenuIndex, (iItem->mbIsEnabled&&iItem->mbIsActive) ? true : false);
 
         const sal_Int32 nSubMenuIndex (nIndex+MID_FIRST_HIDE);
         if (iItem->mbIsCurrentDeck)
@@ -879,7 +879,7 @@ void SidebarController::ShowPopupMenu (
         else
         {
             pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MenuItemBits::CHECKABLE);
-            pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsActive ? sal_True : sal_False);
+            pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsActive ? true : false);
         }
     }
 

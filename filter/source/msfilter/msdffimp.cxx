@@ -1508,7 +1508,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( makeSdrTextUpperDistItem( nTextTop ) );
     rSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
 
-    rSet.Put( makeSdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_True : sal_False ) );
+    rSet.Put( makeSdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? true : false ) );
     rSet.Put( makeSdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
 }
 
@@ -5992,7 +5992,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 
     // Can the shape be replaced with a frame?
     // (provided that it is a TextBox and the text is not rotated)
-    bool bCanBeReplaced = (ULONG_MAX > nPosGroup) ? sal_False : sal_True;
+    bool bCanBeReplaced = (ULONG_MAX > nPosGroup) ? false : true;
 
     // we don't know yet whether it's a TextBox
     MSO_SPT         eShapeType      = mso_sptNil;

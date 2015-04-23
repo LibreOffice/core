@@ -306,7 +306,7 @@ bool SvxSuperContourDlg::Close()
             bRet = false;
     }
 
-    return( bRet ? SfxFloatingWindow::Close() : sal_False );
+    return( bRet ? SfxFloatingWindow::Close() : false );
 }
 
 // Enabled or disabled all Controls

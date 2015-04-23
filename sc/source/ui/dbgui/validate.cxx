@@ -812,7 +812,7 @@ bool ScValidationDlg::EnterRefStatus()
 
     if ( pWnd && pWnd->GetWindow()!= this ) pWnd = NULL;
 
-    SC_MOD()->SetRefDialog( nId, pWnd ? false : sal_True );
+    SC_MOD()->SetRefDialog( nId, pWnd ? false : true );
 
     return true;
 }

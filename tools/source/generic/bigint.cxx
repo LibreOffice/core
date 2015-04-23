@@ -507,7 +507,7 @@ BigInt::BigInt( const OUString& rString )
         p++;
     }
     if ( bIsBig )
-        bIsNeg = bNeg ? sal_True : sal_False;
+        bIsNeg = bNeg ? true : false;
     else if( bNeg )
         nVal = -nVal;
 }

@@ -845,7 +845,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         /* In order t ensure unique page names, we test the ones we want to
            insert. If necessary. we put them into and replacement list (bNameOK
            == sal_False -> User canceled).  */
-        bool    bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? sal_True : sal_False );
+        bool    bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? true : false );
         bool    bNameOK = GetExchangeList( aExchangeList, aBookmarkList, 2 );
         bool    bReplace = false;
 

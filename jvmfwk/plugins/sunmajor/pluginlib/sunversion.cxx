@@ -94,7 +94,7 @@ bool SunVersion::init(const char *szVersion)
                 (nPart < 2 && *pCur == '.') )
             && (
                 //prevent 1.4.0. 1.4.0-
-                pCur + 1 == pEnd ? isdigit(*(pCur)) : 1) )
+                pCur + 1 == pEnd ? isdigit(*(pCur)) : true) )
         {
             int len = pCur - pLast;
             if (len >= 127)

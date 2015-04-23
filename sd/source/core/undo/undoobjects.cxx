@@ -198,7 +198,7 @@ void UndoObjectSetText::Redo()
         if( mpUndoAnimation )
             mpUndoAnimation->Redo();
         SdrUndoObjSetText::Redo();
-        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? sal_True : sal_False );
+        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? true : false );
     }
 }
 
@@ -330,7 +330,7 @@ void UndoGeoObject::Redo()
 }
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
-: SdrUndoAttrObj( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False )
+: SdrUndoAttrObj( rObject, bStyleSheet1 ? true : false, bSaveText ? true : false )
 , mxPage( rObject.GetPage() )
 , mxSdrObject( &rObject )
 {

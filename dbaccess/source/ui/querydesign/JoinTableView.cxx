@@ -1183,7 +1183,7 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
 
     if ((!pLhs || pLhs->ExistsAConn()) && (!pRhs || pRhs->ExistsAConn()))
     {
-        bool bFoundStart = _rpFirstAfter ? sal_False : sal_True;
+        bool bFoundStart = _rpFirstAfter ? false : true;
 
         ::std::vector<OTableConnection*>::const_iterator aIter = m_vTableConnection.begin();
         ::std::vector<OTableConnection*>::const_iterator aEnd = m_vTableConnection.end();
