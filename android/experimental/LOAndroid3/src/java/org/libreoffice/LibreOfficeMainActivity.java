@@ -127,11 +127,13 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
                     mInputFile = mTempFile.getPath();
+                    Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
                 } else {
                     // TODO: can't open the file
                 }
             } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
                 mInputFile = getIntent().getData().getPath();
+                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
             }
         } else {
             mInputFile = DEFAULT_DOC_PATH;
