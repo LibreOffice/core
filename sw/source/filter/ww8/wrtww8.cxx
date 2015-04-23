@@ -1992,11 +1992,10 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
             {
                 SfxItemSet aCoreSet(rDoc.GetAttrPool(), RES_CHRATR_ROTATE, RES_CHRATR_ROTATE);
                 static_cast<const SwTxtNode*>(pCNd)->GetAttr( aCoreSet, 0, static_cast<const SwTxtNode*>(pCNd)->GetTxt().getLength());
-                const SvxCharRotateItem * pRotate = NULL;
                 const SfxPoolItem * pRotItem;
                 if ( SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, true, &pRotItem))
                 {
-                    pRotate = static_cast<const SvxCharRotateItem*>(pRotItem);
+                    const SvxCharRotateItem * pRotate = static_cast<const SvxCharRotateItem*>(pRotItem);
                     if(pRotate && pRotate->GetValue() == 900)
                     {
                         nFlags = nFlags | 0x0004 | 0x0008;
@@ -2941,43 +2940,45 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
 
 void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
 {
-    const SwFmtINetFmt* pINetFmt;
-    const SwTxtINetFmt* pTxtAttr;
-    const SwTxtNode* pTxtNd;
-
-    sal_uInt32 n, nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
-    for( n = 0; n < nMaxItems; ++n )
+    sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2(RES_TXTATR_INETFMT);
+    for (sal_uInt32 n = 0; n < nMaxItems; ++n)
     {
-        if( 0 != (pINetFmt = static_cast<const SwFmtINetFmt*>(rDoc.GetAttrPool().GetItem2(
-            RES_TXTATR_INETFMT, n ) ) ) &&
-            0 != ( pTxtAttr = pINetFmt->GetTxtINetFmt()) &&
-            0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
-            pTxtNd->GetNodes().IsDocNodes() )
-        {
-            AddLinkTarget( pINetFmt->GetValue() );
-        }
+        const SwFmtINetFmt* pINetFmt = static_cast<const SwFmtINetFmt*>(rDoc.GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n));
+        if (!pINetFmt)
+            continue;
+
+        const SwTxtINetFmt* pTxtAttr = pINetFmt->GetTxtINetFmt();
+        if (!pTxtAttr)
+            continue;
+
+        const SwTxtNode* pTxtNd = pTxtAttr->GetpTxtNode();
+        if (!pTxtNd)
+            continue;
+
+        if (!pTxtNd->GetNodes().IsDocNodes())
+            continue;
+
+        AddLinkTarget( pINetFmt->GetValue() );
     }
 
-    const SwFmtURL *pURL;
     nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_URL );
-    for( n = 0; n < nMaxItems; ++n )
+    for (sal_uInt32 n = 0; n < nMaxItems; ++n)
     {
-        if( 0 != (pURL = static_cast<const SwFmtURL*>(rDoc.GetAttrPool().GetItem2(
-            RES_URL, n ) ) ) )
+        const SwFmtURL *pURL = static_cast<const SwFmtURL*>(rDoc.GetAttrPool().GetItem2(RES_URL, n));
+        if (!pURL)
+            continue;
+
+        AddLinkTarget(pURL->GetURL());
+        const ImageMap *pIMap = pURL->GetMap();
+        if (!pIMap)
+            continue;
+
+        for (sal_uInt16 i=0; i < pIMap->GetIMapObjectCount(); ++i)
         {
-            AddLinkTarget( pURL->GetURL() );
-            const ImageMap *pIMap = pURL->GetMap();
-            if( pIMap )
-            {
-                for( sal_uInt16 i=0; i<pIMap->GetIMapObjectCount(); i++ )
-                {
-                    const IMapObject* pObj = pIMap->GetIMapObject( i );
-                    if( pObj )
-                    {
-                        AddLinkTarget( pObj->GetURL() );
-                    }
-                }
-            }
+            const IMapObject* pObj = pIMap->GetIMapObject(i);
+            if (!pObj)
+                continue;
+            AddLinkTarget( pObj->GetURL() );
         }
     }
 }
