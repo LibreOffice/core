@@ -53,10 +53,10 @@ enum DM_NIR {
 };
 
 
-#define SELECT       L"Select"
-#define PRESS        L"Press"
-#define UNCHECK      L"UnCheck"
-#define CHECK        L"Check"
+#define SELECT_STR       L"Select"
+#define PRESS_STR        L"Press"
+#define UNCHECK_STR      L"UnCheck"
+#define CHECK_STR        L"Check"
 //End
 
 static DWORD GetMSAAStateFromUNO(short xState);
