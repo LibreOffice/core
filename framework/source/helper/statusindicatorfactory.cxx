@@ -93,8 +93,8 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
 
             m_xFrame             = lArgs.getUnpackedValueOrDefault("Frame"            , css::uno::Reference< css::frame::XFrame >());
             m_xPluggWindow       = lArgs.getUnpackedValueOrDefault("Window"           , css::uno::Reference< css::awt::XWindow >() );
-            m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault("AllowParentShow"  , sal_False                        );
-            m_bDisableReschedule = lArgs.getUnpackedValueOrDefault("DisableReschedule", sal_False                        );
+            m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault("AllowParentShow"  , false );
+            m_bDisableReschedule = lArgs.getUnpackedValueOrDefault("DisableReschedule", false );
        }
     }
 
@@ -358,7 +358,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
             utl::MediaDescriptor lDocArgs(xModel->getArgs());
             bHiddenDoc = lDocArgs.getUnpackedValueOrDefault(
                 utl::MediaDescriptor::PROP_HIDDEN(),
-                sal_False);
+                false);
         }
     }
 

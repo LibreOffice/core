@@ -140,13 +140,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 
     css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_PARENTFRAME)                  , css::uno::Reference< css::frame::XFrame >());
     OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_FRAMENAME)                    , OUString()                          );
-    bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_MAKEVISIBLE)                  , sal_False                                  );
-    bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CREATETOPWINDOW)              , sal_True                                   );
+    bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_MAKEVISIBLE)                  , false );
+    bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CREATETOPWINDOW)              , true );
     // only possize=[0,0,0,0] triggers default handling of vcl !
     css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_POSSIZE)                      , css::awt::Rectangle(0, 0, 0, 0)            );
     css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CONTAINERWINDOW)              , css::uno::Reference< css::awt::XWindow >() );
-    bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , sal_False                                  );
-    bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , sal_True                                   );
+    bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , false );
+    bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , true );
 
     // We use FrameName property to set it as API name of the new created frame later.
     // But those frame names must be different from the set of special target names as e.g. _blank, _self etcpp !

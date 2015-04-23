@@ -1533,7 +1533,7 @@ sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
 void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception, std::exception)
 {
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    if ( aArgs.getUnpackedValueOrDefault( "CreateDefaultData" ,sal_False) )
+    if ( aArgs.getUnpackedValueOrDefault( "CreateDefaultData", false ) )
         createDefaultData();
 }
 // ____ XCloneable ____

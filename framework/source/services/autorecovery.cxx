@@ -1357,7 +1357,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     // independent from the configuration entry.
     if ((eNewJob & AutoRecovery::E_SET_AUTOSAVE_STATE) == AutoRecovery::E_SET_AUTOSAVE_STATE)
     {
-        bool bOn = lArgs.getUnpackedValueOrDefault(PROP_AUTOSAVE_STATE, sal_True);
+        bool bOn = lArgs.getUnpackedValueOrDefault(PROP_AUTOSAVE_STATE, true);
         if (bOn)
         {
             // dont enable AutoSave hardly !
@@ -1379,7 +1379,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
 
     m_eJob |= eNewJob;
 
-    bAsync = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, sal_False);
+    bAsync = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, false);
     aParams = DispatchParams(lArgs, static_cast< css::frame::XDispatch* >(this));
 
     // Hold this instance alive till the asynchronous operation will be finished.
@@ -2471,7 +2471,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     // check if this document must be ignored for recovery !
     // Some use cases dont wish support for AutoSave/Recovery ... as e.g. OLE-Server / ActiveX Control etcpp.
-    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), sal_False);
+    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), false);
     if (bNoAutoSave)
         return;
 
@@ -2889,7 +2889,7 @@ bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo& rInfo)
         return true;
 
     utl::MediaDescriptor lDescriptor(rInfo.Document->getArgs());
-    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), sal_False);
+    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), false);
 
     return bNoAutoSave;
 }

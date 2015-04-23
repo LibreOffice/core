@@ -3287,13 +3287,13 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     uno::Reference< report::XSection> xSection = aMap.getUnpackedValueOrDefault(PROPERTY_SECTION,uno::Reference< report::XSection>());
     OUString sFunction;
 
-    bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE,sal_False);
+    bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE, false);
     if ( bDate )
     {
         sFunction = "TODAY()";
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
-    bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
+    bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE, false);
     if ( bTime )
     {
         sFunction = "TIMEVALUE(NOW())";
@@ -3316,7 +3316,7 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     }
 
     SequenceAsHashMap aMap(_aArgs);
-    bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE,sal_False);
+    bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE, false);
 
     OUString sFunction( ModuleRes(STR_RPT_PN_PAGE).toString() );
     sFunction = sFunction.replaceFirst("#PAGENUMBER#", "PageNumber()");
@@ -3327,7 +3327,7 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
         sFunction = sFunction.replaceFirst("#PAGECOUNT#", "PageCount()");
     }
 
-    bool bInPageHeader = aMap.getUnpackedValueOrDefault(PROPERTY_PAGEHEADERON,sal_True);
+    bool bInPageHeader = aMap.getUnpackedValueOrDefault(PROPERTY_PAGEHEADERON, true);
     createControl(_aArgs,bInPageHeader ? m_xReportDefinition->getPageHeader() : m_xReportDefinition->getPageFooter(),sFunction);
 }
 
@@ -3939,7 +3939,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
     if ( m_xReportDefinition.is() )
     {
         const SequenceAsHashMap aMap(_aArgs);
-        const bool bSwitchOn = aMap.getUnpackedValueOrDefault(_bHeader ? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON), sal_False);
+        const bool bSwitchOn = aMap.getUnpackedValueOrDefault(_bHeader ? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON), false);
         uno::Reference< report::XGroup> xGroup = aMap.getUnpackedValueOrDefault(PROPERTY_GROUP,uno::Reference< report::XGroup>());
         if ( xGroup.is() )
         {

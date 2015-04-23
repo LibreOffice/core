@@ -282,8 +282,8 @@ void LoadEnv::initializeLoading(const OUString&                                 
     // UI mode
     const bool bUIMode =
         ( ( m_eFeature & E_WORK_WITH_UI )                                                                          == E_WORK_WITH_UI ) &&
-        ( m_lMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN() , sal_False ) == sal_False      ) &&
-        ( m_lMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW(), sal_False ) == sal_False      );
+        ( m_lMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN(), false ) == false ) &&
+        ( m_lMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW(), false ) == false );
 
     initializeUIDefaults(
         m_xContext,
@@ -1078,9 +1078,9 @@ bool LoadEnv::impl_loadContent()
     // So we prevent our code against wrong using. Why?
     // It could be, that using of this progress could make trouble. e.g. He make window visible ...
     // but shouldn't do that. But if no indicator is available ... nobody has a chance to do that!
-    bool                                           bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()         , sal_False                                           );
-    bool                                           bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED()      , sal_False                                           );
-    bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW()        , sal_False                                           );
+    bool                                           bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()         , false );
+    bool                                           bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED()      , false );
+    bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW()        , false );
     css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
     if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
@@ -1241,9 +1241,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // or better its not allowed for some requests in general :-)
     if (
         ( ! TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                               ) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
-//      (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()     , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , false) == true) ||
+//      (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()     , false) == sal_True) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), false) == true)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
@@ -1330,7 +1330,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // Hidden frames are special.
             // They will be used as "last chance" if there is no visible frame pointing to the same model.
             // Safe the result but continue with current loop might be looking for other visible frames.
-            bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
+            bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
             if (
                 (   bIsHidden       ) &&
                 ( ! xHiddenTask.is())
@@ -1396,7 +1396,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // It doesn't matter if somewhere wants to create a new view
     // or open a new untitled document ...
     // The only exception form that - hidden frames!
-    if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False) == sal_True)
+    if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false) == true)
         return css::uno::Reference< css::frame::XFrame >();
 
     css::uno::Reference< css::frame::XFramesSupplier > xSupplier( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY);
@@ -1413,8 +1413,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
 
     // These states indicates a wish for creation of a new view in general.
     if (
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , false) == true) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), false) == true)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
@@ -1531,8 +1531,8 @@ void LoadEnv::impl_reactForLoadingState()
         // Note: We show new created frames here only.
         // We dont hide already visible frames here ...
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
-        bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
-        bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), sal_False);
+        bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
+        bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
 
         if (bMinimized)
         {
@@ -1649,7 +1649,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     if ( pWindow )
     {
         bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
-                utl::MediaDescriptor::PROP_PREVIEW(), sal_False) );
+                utl::MediaDescriptor::PROP_PREVIEW(), false) );
 
         bool bForceFrontAndFocus(false);
         if ( !preview )

@@ -1644,8 +1644,8 @@ bool ToolBarManager::IsPluginMode() const
         {
             Sequence< PropertyValue > aSeq = xModel->getArgs();
             utl::MediaDescriptor aMediaDescriptor( aSeq );
-            bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault< sal_Bool >(
-                            utl::MediaDescriptor::PROP_VIEWONLY(), sal_False );
+            bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault(
+                            utl::MediaDescriptor::PROP_VIEWONLY(), false );
         }
     }
 

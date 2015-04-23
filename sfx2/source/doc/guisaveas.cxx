@@ -1253,8 +1253,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
     OUString aRecommendedDir;
 
     if ( ( !aSuggestedDir.isEmpty() || GetStorable()->hasLocation() )
-      && !GetMediaDescr().getUnpackedValueOrDefault("RepairPackage",
-                                                                      sal_False ) )
+      && !GetMediaDescr().getUnpackedValueOrDefault("RepairPackage", false ) )
     {
         INetURLObject aLocation;
         if ( !aSuggestedDir.isEmpty() )

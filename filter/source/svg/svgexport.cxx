@@ -332,7 +332,7 @@ SVGExport::SVGExport(
     comphelper::SequenceAsHashMap aFilterDataHashMap = rFilterData;
 
     // TinyProfile
-    mbIsUseTinyProfile = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_TINYPROFILE, sal_True);
+    mbIsUseTinyProfile = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_TINYPROFILE, true);
 
     // Font Embedding
     comphelper::SequenceAsHashMap::const_iterator iter = aFilterDataHashMap.find(SVG_PROP_EMBEDFONTS);
@@ -351,13 +351,13 @@ SVGExport::SVGExport(
     }
 
     // Native Decoration
-    mbIsUseNativeTextDecoration = mbIsUseTinyProfile ? sal_False : aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, sal_False);
+    mbIsUseNativeTextDecoration = mbIsUseTinyProfile ? sal_False : aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, false);
 
     // Tiny Opacity (supported from SVG Tiny 1.2)
-    mbIsUseOpacity = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, sal_True);
+    mbIsUseOpacity = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, true);
 
     // Positioned Characters    (Seems to be experimental, as it was always initialized with false)
-    mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_POSITIONED_CHARACTERS, sal_False);
+    mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_POSITIONED_CHARACTERS, false);
 
 }
 
