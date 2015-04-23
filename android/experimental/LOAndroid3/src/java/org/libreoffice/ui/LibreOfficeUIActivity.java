@@ -501,6 +501,27 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         sortMode = prefs.getInt(SORT_MODE_KEY, FileUtilities.SORT_AZ);
         SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         filterMode = Integer.valueOf(defaultPrefs.getString(FILTER_MODE_KEY , "-1"));
+
+        Intent i = this.getIntent();
+        if (i.hasExtra(CURRENT_DIRECTORY_KEY)) {
+            try {
+                currentDirectory = documentProvider.createFromUri(new URI(
+                        i.getStringExtra(CURRENT_DIRECTORY_KEY)));
+            } catch (URISyntaxException e) {
+                currentDirectory = documentProvider.getRootDirectory();
+            }
+            Log.d(LOGTAG, CURRENT_DIRECTORY_KEY);
+        }
+
+        if (i.hasExtra(FILTER_MODE_KEY)) {
+            filterMode = i.getIntExtra( FILTER_MODE_KEY, FileUtilities.ALL);
+            Log.d(LOGTAG, FILTER_MODE_KEY);
+        }
+
+        if (i.hasExtra(EXPLORER_VIEW_TYPE_KEY)) {
+            viewMode = i.getIntExtra( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+            Log.d(LOGTAG, EXPLORER_VIEW_TYPE_KEY);
+        }
     }
 
     @Override
