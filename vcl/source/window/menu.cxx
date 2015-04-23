@@ -133,9 +133,6 @@ Menu::Menu()
 
 Menu::~Menu()
 {
-
-    vcl::LazyDeletor<Menu>::Undelete( this );
-
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING, ITEMPOS_INVALID );
 
     // at the window free the reference to the accessible component
