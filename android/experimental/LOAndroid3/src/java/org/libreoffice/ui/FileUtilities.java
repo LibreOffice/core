@@ -22,7 +22,7 @@ import android.webkit.MimeTypeMap;
 
 public class FileUtilities {
 
-    private String LOGTAG = FileUtilities.class.getSimpleName();
+    private static String LOGTAG = FileUtilities.class.getSimpleName();
 
     static final int ALL = -1;
 
