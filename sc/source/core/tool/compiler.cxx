@@ -4556,7 +4556,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
                               GetSetupTabNames(), aRef, true);
         }
     }
-    else if ((p = pArr->PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
+    else if (pArr && (p = pArr->PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
     {
         ScAddress aAbs = rRef.toAbs(aPos);
         OUString aStr = pDoc->GetString(aAbs);
