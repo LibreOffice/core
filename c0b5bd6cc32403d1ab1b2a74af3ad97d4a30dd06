@@ -39,6 +39,30 @@
       "revId": "c0b5bd6cc32403d1ab1b2a74af3ad97d4a30dd06",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a710552_adf75df4",
+        "filename": "xmloff/source/style/GradientStyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-04-23T21:00:22Z",
+      "side": 1,
+      "message": "What Regina says :) Please read this: https://wiki.documentfoundation.org/Development/ODF_Implementer_Notes and until the change is approved by ODF-TC, export into loext namespace",
+      "parentUuid": "da85f559_31e4303a",
+      "range": {
+        "startLine": 291,
+        "startChar": 38,
+        "endLine": 291,
+        "endChar": 79
+      },
+      "revId": "c0b5bd6cc32403d1ab1b2a74af3ad97d4a30dd06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
