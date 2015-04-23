@@ -119,6 +119,7 @@ void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 /// Toggle the visibility of the findbar.
 void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
+#if GTK_CHECK_VERSION(2,18,0) // we need gtk_widget_get_visible()
     if (gtk_widget_get_visible(pFindbar))
     {
         gtk_widget_hide(pFindbar);
@@ -128,13 +129,16 @@ void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
         gtk_widget_show_all(pFindbar);
         gtk_widget_grab_focus(pFindbarEntry);
     }
+#endif
 }
 
 /// Handles the key-press-event of the window.
 static void signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData)
 {
+#if GTK_CHECK_VERSION(2,18,0) // we need gtk_widget_get_visible()
     if (!gtk_widget_get_visible(pFindbar))
         lok_docview_post_key(pWidget, pEvent, pData);
+#endif
 }
 
 /// Searches for the next or previous text of pFindbarEntry.
