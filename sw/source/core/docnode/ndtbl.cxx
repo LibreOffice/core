@@ -2424,7 +2424,7 @@ void SwTableNode::DelFrms()
                     }
                 }
                 pFrm->Cut();
-                delete pFrm;
+                SwFrm::DestroyFrm(pFrm);
                 bAgain = true;
             }
         }

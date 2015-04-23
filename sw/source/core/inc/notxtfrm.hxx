@@ -37,12 +37,15 @@ class SwNoTxtFrm: public SwCntntFrm
     void Format ( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     void PaintCntnt  ( OutputDevice*, const SwRect&, const SwRect& ) const;
     void PaintPicture( OutputDevice*, const SwRect& ) const;
+
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwNoTxtFrm();
+
 protected:
     virtual void MakeAll() SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 public:
     SwNoTxtFrm( SwNoTxtNode * const, SwFrm* );
-    virtual ~SwNoTxtFrm();
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;

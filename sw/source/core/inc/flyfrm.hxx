@@ -136,6 +136,9 @@ protected:
 
     SwFlyFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwFlyFrm();
+
     /** method to assure that anchored object is registered at the correct
         page frame
 
@@ -157,7 +160,6 @@ public:
     // #i26791#
     TYPEINFO_OVERRIDE();
 
-    virtual ~SwFlyFrm();
     // get client information
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
     virtual void Paint( SwRect const&,

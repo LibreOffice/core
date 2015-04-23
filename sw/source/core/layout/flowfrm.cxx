@@ -397,7 +397,7 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
              !static_cast<SwFtnFrm*>(pLay)->IsBackMoveLocked() )
         {
             pLay->Cut();
-            delete pLay;
+            SwFrm::DestroyFrm(pLay);
         }
         else
         {
@@ -2311,7 +2311,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
             if( pNewUpper->IsFtnContFrm() )
             {
                 pNewUpper->Cut();
-                delete pNewUpper;
+                SwFrm::DestroyFrm(pNewUpper);
             }
             else
             {
@@ -2322,7 +2322,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
                      !pSectFrm->ContainsCntnt() && !pSectFrm->ContainsAny( true ) )
                 {
                     pSectFrm->DelEmpty( true );
-                    delete pSectFrm;
+                    SwFrm::DestroyFrm(pSectFrm);
                     m_rThis.mbValidPos = true;
                 }
             }

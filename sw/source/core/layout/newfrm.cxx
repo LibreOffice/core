@@ -573,7 +573,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         mbNeedGrammarCheck = pViewSh->GetViewOptions()->IsOnlineSpell();
 }
 
-SwRootFrm::~SwRootFrm()
+void SwRootFrm::DestroyImpl()
 {
     mbTurboAllowed = false;
     mpTurbo = 0;
@@ -614,6 +614,12 @@ SwRootFrm::~SwRootFrm()
     // that accesses members of this
     SwLayoutFrm::Destroy();
     SwFrm::Destroy();
+
+    SwLayoutFrm::DestroyImpl();
+}
+
+SwRootFrm::~SwRootFrm()
+{
 }
 
 void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )

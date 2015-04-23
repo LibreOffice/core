@@ -234,7 +234,7 @@ void SwFlyFrm::InsertColumns()
     }
 }
 
-SwFlyFrm::~SwFlyFrm()
+void SwFlyFrm::DestroyImpl()
 {
     // Accessible objects for fly frames will be destroyed in this destructor.
     // For frames bound as char or frames that don't have an anchor we have
@@ -272,6 +272,12 @@ SwFlyFrm::~SwFlyFrm()
     // Hack to make sure code called from base ~SwLayoutFrm does not interpret
     // this as a SwFlyFrm (which it no longer is by then):
     mnFrmType = FRM_UNUSED;
+
+    SwLayoutFrm::DestroyImpl();
+}
+
+SwFlyFrm::~SwFlyFrm()
+{
 }
 
 const IDocumentDrawModelAccess* SwFlyFrm::getIDocumentDrawModelAccess()
@@ -302,7 +308,9 @@ void SwFlyFrm::DeleteCnt()
         {
             SwAnchoredObject *pAnchoredObj = (*pFrm->GetDrawObjs())[0];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
-                delete pAnchoredObj;
+            {
+                SwFrm::DestroyFrm(static_cast<SwFlyFrm*>(pAnchoredObj));
+            }
             else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
             {
                 // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
@@ -326,7 +334,7 @@ void SwFlyFrm::DeleteCnt()
         }
 
         pFrm->RemoveFromLayout();
-        delete pFrm;
+        SwFrm::DestroyFrm(pFrm);
         pFrm = m_pLower;
     }
 
@@ -511,7 +519,7 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
         SwFrm *pFrm = pFollow->ContainsCntnt();
         OSL_ENSURE( !pFrm->IsTabFrm() && !pFrm->FindNext(), "follow in chain contains content" );
         pFrm->Cut();
-        delete pFrm;
+        SwFrm::DestroyFrm(pFrm);
     }
 
     // invalidate accessible relation set (accessibility wrapper)

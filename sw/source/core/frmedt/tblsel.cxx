@@ -2246,7 +2246,7 @@ void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
                                     pSctFrm->ColUnlock();
                                 }
                             }
-                            delete pUp;
+                            SwFrm::DestroyFrm(pUp);
                             bDel = false; // Row goes to /dev/null.
                         }
                     }
@@ -2267,7 +2267,7 @@ void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
                         pFrm->Cut();
                         //Set acc table dispose state to default value.
                         pFrm->SetAccTableDispose( true );
-                        delete pFrm;
+                        SwFrm::DestroyFrm(pFrm);
                     }
                 }
         }
@@ -2291,7 +2291,7 @@ static void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
     while ( 0 != ( pLower = static_cast<SwRowFrm*>(rTabFrm.Lower()) ) && pLower->IsRepeatedHeadline() )
     {
         pLower->Cut();
-        delete pLower;
+        SwFrm::DestroyFrm(pLower);
     }
 
     // Insert fresh set of headlines:

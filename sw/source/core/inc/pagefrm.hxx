@@ -101,6 +101,9 @@ class SwPageFrm: public SwFtnBossFrm
                                      bool bPaintRightShadow,
                                      bool bRightSidebar );
 
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwPageFrm();
+
 protected:
     virtual void MakeAll() SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
@@ -110,7 +113,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
 
     SwPageFrm( SwFrmFmt*, SwFrm*, SwPageDesc* );
-    virtual ~SwPageFrm();
 
     /// Make this public, so that the SwViewShell can access it when switching from browse mode
     /// Add/remove header/footer

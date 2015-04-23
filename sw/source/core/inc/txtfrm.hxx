@@ -204,6 +204,10 @@ class SwTxtFrm: public SwCntntFrm
                                  sal_Int32 nInsertPos, sal_Int32 nActPos,
                                  sal_Int32 &nChgStart, sal_Int32 &nChgEnd,
                                  sal_Int32 &nInvStart, sal_Int32 &nInvEnd);
+
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwTxtFrm();
+
 protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
@@ -333,7 +337,6 @@ public:
         { return static_cast< const SwTxtNode* >( SwCntntFrm::GetNode()); }
 
     SwTxtFrm(SwTxtNode * const, SwFrm* );
-    virtual ~SwTxtFrm();
 
     /**
      * SwCntntFrm: the shortcut for the Frames

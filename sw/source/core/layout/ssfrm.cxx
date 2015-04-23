@@ -350,7 +350,9 @@ void SwFrm::Destroy()
         {
             SwAnchoredObject* pAnchoredObj = (*mpDrawObjs)[--i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
-                delete pAnchoredObj;
+            {
+                SwFrm::DestroyFrm(static_cast<SwFlyFrm*>(pAnchoredObj));
+            }
             else
             {
                 SdrObject* pSdrObj = pAnchoredObj->DrawObj();
@@ -369,17 +371,32 @@ void SwFrm::Destroy()
     }
 }
 
-SwFrm::~SwFrm()
+void SwFrm::DestroyImpl()
 {
     if (!IsRootFrm()) // ~SwRootFrm already calls Destroy!
     {
         Destroy();
     }
+}
 
+SwFrm::~SwFrm()
+{
+    assert(m_isInDestroy); // check that only DestroySwFrm does "delete"
 #if OSL_DEBUG_LEVEL > 0
     // JP 15.10.2001: for detection of access to deleted frames
     mpDrawObjs = reinterpret_cast<SwSortedObjs*>(0x33333333);
 #endif
+}
+
+void SwFrm::DestroyFrm(SwFrm *const pFrm)
+{
+    if (pFrm)
+    {
+        pFrm->m_isInDestroy = true;
+        pFrm->DestroyImpl();
+        assert(pFrm->mbInDtor); // check that nobody forgot to call base class
+        delete pFrm;
+    }
 }
 
 const SwFrmFmt * SwLayoutFrm::GetFmt() const
@@ -409,7 +426,7 @@ SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt, SwFrm* pSib ) :
 {
 }
 
-SwCntntFrm::~SwCntntFrm()
+void SwCntntFrm::DestroyImpl()
 {
     const SwCntntNode* pCNd;
     if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
@@ -423,6 +440,12 @@ SwCntntFrm::~SwCntntFrm()
             pRoot->ResetTurbo();
         }
     }
+
+    SwFrm::DestroyImpl();
+}
+
+SwCntntFrm::~SwCntntFrm()
+{
 }
 
 void SwCntntFrm::RegisterToNode( SwCntntNode& rNode )
@@ -458,7 +481,7 @@ void SwLayoutFrm::Destroy()
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    delete pAnchoredObj;
+                    SwFrm::DestroyFrm(static_cast<SwFlyFrm*>(pAnchoredObj));
                     assert(!pFrm->GetDrawObjs() || nCnt > pFrm->GetDrawObjs()->size());
                 }
                 else
@@ -481,7 +504,7 @@ void SwLayoutFrm::Destroy()
                 }
             }
             pFrm->RemoveFromLayout();
-            delete pFrm;
+            SwFrm::DestroyFrm(pFrm);
             pFrm = m_pLower;
         }
         //Delete the Flys, the last one also deletes the array.
@@ -493,7 +516,7 @@ void SwLayoutFrm::Destroy()
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
-                delete pAnchoredObj;
+                SwFrm::DestroyFrm(static_cast<SwFlyFrm*>(pAnchoredObj));
                 assert(!GetDrawObjs() || nCnt > GetDrawObjs()->size());
             }
             else
@@ -520,18 +543,24 @@ void SwLayoutFrm::Destroy()
         while( pFrm )
         {
             SwFrm *pNxt = pFrm->GetNext();
-            delete pFrm;
+            SwFrm::DestroyFrm(pFrm);
             pFrm = pNxt;
         }
     }
 }
 
-SwLayoutFrm::~SwLayoutFrm()
+void SwLayoutFrm::DestroyImpl()
 {
     if (!IsRootFrm()) // ~SwRootFrm already calls Destroy!
     {
         Destroy();
     }
+
+    SwFrm::DestroyImpl();
+}
+
+SwLayoutFrm::~SwLayoutFrm()
+{
 }
 
 /**

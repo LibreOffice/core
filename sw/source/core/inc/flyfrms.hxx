@@ -64,11 +64,12 @@ protected:
                                    const SwRect& rRect, PrepareHint eHint) SAL_OVERRIDE;
     SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwFlyFreeFrm();
+
 public:
     // #i28701#
     TYPEINFO_OVERRIDE();
-
-    virtual ~SwFlyFreeFrm();
 
     virtual void MakeAll() SAL_OVERRIDE;
 
@@ -179,6 +180,9 @@ class SwFlyInCntFrm : public SwFlyFrm
     bool bInvalidLayout :1;
     bool bInvalidCntnt  :1;
 
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwFlyInCntFrm();
+
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint) SAL_OVERRIDE;
@@ -191,7 +195,6 @@ public:
 
     SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
-    virtual ~SwFlyInCntFrm();
     virtual void  Format(  const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,

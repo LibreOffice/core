@@ -520,7 +520,7 @@ void SwFtnFrm::Cut()
             }
             SwSectionFrm* pSect = pUp->FindSctFrm();
             pUp->Cut();
-            delete pUp;
+            SwFrm::DestroyFrm(pUp);
             // If the last footnote container was removed from a column
             // section without a Follow, then this section can be shrunk.
             if( pSect && !pSect->ToMaximize( false ) && !pSect->IsColLocked() )
@@ -567,7 +567,7 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
             MoveSubTree( this, GetLower() );
         SwFrm *pDel = GetPrev();
         pDel->Cut();
-        delete pDel;
+        SwFrm::DestroyFrm(pDel);
     }
     if ( GetNext() && GetNext() == GetFollow() )
     { OSL_ENSURE( SwFlowFrm::CastFlowFrm( GetNext()->GetLower() ),
@@ -575,7 +575,7 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
         (SwFlowFrm::CastFlowFrm( GetNext()->GetLower()))->MoveSubTree( this );
         SwFrm *pDel = GetNext();
         pDel->Cut();
-        delete pDel;
+        SwFrm::DestroyFrm(pDel);
     }
 #if OSL_DEBUG_LEVEL > 0
     SwDoc *pDoc = GetFmt()->GetDoc();
@@ -850,7 +850,7 @@ void sw_RemoveFtns( SwFtnBossFrm* pBoss, bool bPageOnly, bool bEndNotes )
                     if ( bPageOnly && !pNxt )
                         pNxt = pFtn->GetFollow();
                     pFtn->Cut();
-                    delete pFtn;
+                    SwFrm::DestroyFrm(pFtn);
                 }
                 pFtn = pNxt;
 
@@ -904,7 +904,7 @@ void SwRootFrm::RemoveFtns( SwPageFrm *pPage, bool bPageOnly, bool bEndNotes )
                 SwFrm *pDel = pPage;
                 pPage = static_cast<SwPageFrm*>(pPage->GetNext());
                 pDel->Cut();
-                delete pDel;
+                SwFrm::DestroyFrm(pDel);
             }
             else
                 pPage = static_cast<SwPageFrm*>(pPage->GetNext());
@@ -1133,7 +1133,7 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
                 {
                     SwFtnFrm *pNxt = pFtn->GetFollow();
                     pFtn->Cut();
-                    delete pFtn;
+                    SwFrm::DestroyFrm(pFtn);
                     pFtn = pNxt;
                 }
             }
@@ -1602,13 +1602,13 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
                  !pNew->IsColLocked() && !pNew->IsBackMoveLocked() )
             {
                 pNew->Cut();
-                delete pNew;
+                SwFrm::DestroyFrm(pNew);
             }
         }
         pMyPage->UpdateFtnNum();
     }
     else
-        delete pNew;
+        SwFrm::DestroyFrm(pNew);
 }
 
 SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
@@ -1661,7 +1661,7 @@ void SwFtnBossFrm::RemoveFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr,
         {
             SwFtnFrm *pFoll = pFtn->GetFollow();
             pFtn->Cut();
-            delete pFtn;
+            SwFrm::DestroyFrm(pFtn);
             pFtn = pFoll;
         } while ( pFtn );
         if( bPrep && pRef->IsFollow() )
@@ -1868,7 +1868,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
                 {
                     OSL_ENSURE( !pNxt, "footnote without content?" );
                     pNxt->Cut();
-                    delete pNxt;
+                    SwFrm::DestroyFrm(pNxt);
                 }
                 pNxt = _pFtn->GetFollow();
             }
@@ -1992,7 +1992,7 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, bool bCalc )
                     if( !pFtn->ContainsAny() && !pFtn->IsColLocked() )
                     {
                         pFtn->Cut();
-                        delete pFtn;
+                        SwFrm::DestroyFrm(pFtn);
                         // #i21478#
                         pFtn = 0L;
                     }
@@ -2010,7 +2010,7 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, bool bCalc )
         else
         { OSL_ENSURE( !pFtn->GetMaster() && !pFtn->GetFollow(),
                     "DelFtn and Master/Follow?" );
-            delete pFtn;
+            SwFrm::DestroyFrm(pFtn);
             // #i21478#
             pFtn = 0L;
         }
@@ -2187,7 +2187,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const bool bLock,
                              !pLastFtnFrm->IsBackMoveLocked() )
                         {
                             pLastFtnFrm->Cut();
-                            delete pLastFtnFrm;
+                            SwFrm::DestroyFrm(pLastFtnFrm);
                             pLastFtnFrm = 0L;
                         }
                     }
@@ -2239,7 +2239,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const bool bLock,
                                     "<SwFtnBossFrm::RearrangeFtns(..)> - <pLastFtnFrm> != <pFtnFrm>" );
                             pLastFtnFrm = 0L;
                             pFtnFrm->Cut();
-                            delete pFtnFrm;
+                            SwFrm::DestroyFrm(pFtnFrm);
                         }
                     }
                 }
@@ -2294,7 +2294,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const bool bLock,
                 pDel->Cut();
                 if (bUnlockLastFtnFrmGuard)
                     pLastFtnFrm->ColUnlock();
-                delete pDel;
+                SwFrm::DestroyFrm(pDel);
             }
             if ( bMore )
             {
@@ -2322,7 +2322,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const bool bLock,
                  !pLastFtnFrm->IsBackMoveLocked() )
             {
                 pLastFtnFrm->Cut();
-                delete pLastFtnFrm;
+                SwFrm::DestroyFrm(pLastFtnFrm);
             }
         }
     }

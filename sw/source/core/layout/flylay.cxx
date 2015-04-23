@@ -54,7 +54,7 @@ SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 {
 }
 
-SwFlyFreeFrm::~SwFlyFreeFrm()
+void SwFlyFreeFrm::DestroyImpl()
 {
     // #i28701# - use new method <GetPageFrm()>
     if( GetPageFrm() )
@@ -78,6 +78,12 @@ SwFlyFreeFrm::~SwFlyFreeFrm()
             SwFlyFreeFrm::NotifyBackground( GetPageFrm(), aTmp, PREP_FLY_LEAVE );
         }
     }
+
+    SwFlyFrm::DestroyImpl();
+}
+
+SwFlyFreeFrm::~SwFlyFreeFrm()
+{
 }
 
 // #i28701#

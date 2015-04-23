@@ -666,7 +666,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     }
     pFoll->Cut();
     SetFollow(pNxt);
-    delete pFoll;
+    SwFrm::DestroyFrm(pFoll);
     return pNxt;
 }
 

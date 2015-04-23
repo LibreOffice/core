@@ -47,8 +47,12 @@ class SwLayoutFrm: public SwFrm
 #endif
 
     void CopySubtree( const SwLayoutFrm *pDest );
+
 protected:
     void Destroy(); // for ~SwRootFrm
+
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwLayoutFrm();
 
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void MakeAll() SAL_OVERRIDE;
@@ -100,7 +104,6 @@ public:
                                    const bool bDefaultExpand = true ) const;
 
     SwLayoutFrm( SwFrmFmt*, SwFrm* );
-    virtual ~SwLayoutFrm();
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;

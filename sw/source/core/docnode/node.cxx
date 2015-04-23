@@ -1372,7 +1372,7 @@ void SwCntntNode::DelFrms( bool bIsDisposeAccTable )
         pFrm->Cut();
         //Set acc table dispose state to default value
         pFrm->SetAccTableDispose( true );
-        delete pFrm;
+        SwFrm::DestroyFrm(pFrm);
     }
 
     if( bIsDisposeAccTable && IsTxtNode() )

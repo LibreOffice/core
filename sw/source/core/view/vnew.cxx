@@ -126,7 +126,8 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         if( !mpLayout )
         {
             // switched to two step construction because creating the layout in SwRootFrm needs a valid pLayout set
-            mpLayout = SwRootFrmPtr(new SwRootFrm( mpDoc->GetDfltFrmFmt(), this ));
+            mpLayout = SwRootFrmPtr(new SwRootFrm(mpDoc->GetDfltFrmFmt(), this),
+                                    &SwFrm::DestroyFrm);
             mpLayout->Init( mpDoc->GetDfltFrmFmt() );
         }
     }

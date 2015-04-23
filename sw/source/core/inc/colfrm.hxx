@@ -25,9 +25,12 @@
 
 class SwColumnFrm: public SwFtnBossFrm
 {
+private:
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwColumnFrm();
+
 public:
     SwColumnFrm( SwFrmFmt*, SwFrm* );
-    virtual ~SwColumnFrm();
 
     virtual void PaintBreak() const SAL_OVERRIDE;
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;

@@ -217,7 +217,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
     }
 }
 
-SwPageFrm::~SwPageFrm()
+void SwPageFrm::DestroyImpl()
 {
     // Cleanup the header-footer controls in the SwEditWin
     SwViewShell* pSh = getRootFrm()->GetCurrShell();
@@ -267,6 +267,12 @@ SwPageFrm::~SwPageFrm()
     // Hack to make sure code called from base ~SwFtnBossFrm does not interpret
     // this as a SwPageFrm (which it no longer is by then):
     mnFrmType = FRM_UNUSED;
+
+    SwFtnBossFrm::DestroyImpl();
+}
+
+SwPageFrm::~SwPageFrm()
+{
 }
 
 void SwPageFrm::CheckGrid( bool bInvalidate )
@@ -1025,7 +1031,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields, SwPageFrm** p
                 bool bUpdatePrev = false;
                 if (ppPrev && *ppPrev == pPage)
                     bUpdatePrev = true;
-                delete pPage;
+                SwFrm::DestroyFrm(pPage);
                 if ( pStart == pPage )
                     pStart = pTmp;
                 pPage = pTmp;
@@ -1101,7 +1107,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields, SwPageFrm** p
                 bool bUpdatePrev = false;
                 if (ppPrev && *ppPrev == pPage)
                     bUpdatePrev = true;
-                delete pPage;
+                SwFrm::DestroyFrm(pPage);
                 if ( pStart == pPage )
                     pStart = pTmp;
                 pPage = pTmp;
@@ -1196,7 +1202,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFtn )
             if ( !pDoc->GetFtnIdxs().empty() )
                 pRoot->RemoveFtns( pDel, true );
             pDel->Cut();
-            delete pDel;
+            SwFrm::DestroyFrm(pDel);
         }
         else
             bCheckPages = true;
@@ -1217,7 +1223,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFtn )
         if ( !pDoc->GetFtnIdxs().empty() )
             pRoot->RemoveFtns( pDel, true );
         pDel->Cut();
-        delete pDel;
+        SwFrm::DestroyFrm(pDel);
     }
     else
         bCheckPages = true;
@@ -1365,7 +1371,7 @@ void SwRootFrm::RemoveSuperfluous()
             if ( !GetFmt()->GetDoc()->GetFtnIdxs().empty() )
                 RemoveFtns( pEmpty, true );
             pEmpty->Cut();
-            delete pEmpty;
+            SwFrm::DestroyFrm(pEmpty);
             nDocPos = pPage ? pPage->Frm().Top() : 0;
         }
     } while ( pPage );

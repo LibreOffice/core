@@ -41,7 +41,7 @@ SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SetMaxFtnHeight( LONG_MAX );
 }
 
-SwColumnFrm::~SwColumnFrm()
+void SwColumnFrm::DestroyImpl()
 {
     SwFrmFmt *pFmt = GetFmt();
     SwDoc *pDoc;
@@ -52,6 +52,12 @@ SwColumnFrm::~SwColumnFrm()
         pDoc->GetDfltFrmFmt()->Add( this );
         pDoc->DelFrmFmt( pFmt );
     }
+
+    SwFtnBossFrm::DestroyImpl();
+}
+
+SwColumnFrm::~SwColumnFrm()
+{
 }
 
 static void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
@@ -71,7 +77,7 @@ static void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
     {
         SwColumnFrm *pTmp = static_cast<SwColumnFrm*>(pColumn->GetPrev());
         pColumn->Cut();
-        delete pColumn; //format is going to be destroyed in the DTor if needed.
+        SwFrm::DestroyFrm(pColumn); //format is going to be destroyed in the DTor if needed.
         pColumn = pTmp;
     }
 }

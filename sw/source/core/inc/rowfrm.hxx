@@ -45,13 +45,15 @@ class SwRowFrm: public SwLayoutFrm
     bool m_bIsRepeatedHeadline;
     bool m_bIsRowSpanLine;
 
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwRowFrm();
+
 protected:
     virtual void MakeAll() SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
     SwRowFrm( const SwTableLine &, SwFrm*, bool bInsertContent = true );
-    virtual ~SwRowFrm();
 
     virtual void Cut() SAL_OVERRIDE;
 

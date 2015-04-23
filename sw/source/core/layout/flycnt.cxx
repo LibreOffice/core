@@ -732,7 +732,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                     {
                         SwFrm *pDel = const_cast<SwFrm*>(pLay);
                         pDel->Cut();
-                        delete pDel;
+                        SwFrm::DestroyFrm(pDel);
                         return pPre;
                     }
                     return 0;
@@ -841,7 +841,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                 {
                     SwFrm *pDel = const_cast<SwFrm*>(pLay);
                     pDel->Cut();
-                    delete pDel;
+                    SwFrm::DestroyFrm(pDel);
                     return 0;
                 }
                 return pLay;

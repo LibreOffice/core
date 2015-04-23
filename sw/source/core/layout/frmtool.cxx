@@ -1507,7 +1507,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     pLay = pTmpFrm->GetUpper();
                     pPrv = pTmpFrm->GetPrev();
                     pTmpFrm->RemoveFromLayout();
-                    delete pTmpFrm;
+                    SwFrm::DestroyFrm(pTmpFrm);
                 }
                 else
                 {
@@ -1540,7 +1540,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     ! pOuterSectionFrm->ContainsCntnt() )
                 {
                     pOuterSectionFrm->DelEmpty( true );
-                    delete pOuterSectionFrm;
+                    SwFrm::DestroyFrm(pOuterSectionFrm);
                 }
                 pActualSection->SetSectionFrm( static_cast<SwSectionFrm*>(pFrm) );
 
@@ -1585,7 +1585,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         if ( !(pLay = pActualSection->GetSectionFrm())->ContainsCntnt() )
         {
             pLay->RemoveFromLayout();
-            delete pLay;
+            SwFrm::DestroyFrm(pLay);
         }
         delete pActualSection;
     }
@@ -1809,7 +1809,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 {
                     pSct->DelEmpty( true );
                     pUpper->getRootFrm()->RemoveFromList( pSct );
-                    delete pSct;
+                    SwFrm::DestroyFrm(pSct);
                 }
             }
         }

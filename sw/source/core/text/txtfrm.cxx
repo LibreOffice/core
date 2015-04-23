@@ -376,7 +376,7 @@ SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     mnFrmType = FRM_TXT;
 }
 
-SwTxtFrm::~SwTxtFrm()
+void SwTxtFrm::DestroyImpl()
 {
     // Remove associated SwParaPortion from pTxtCache
     ClearPara();
@@ -406,6 +406,12 @@ SwTxtFrm::~SwTxtFrm()
             ++nPos;
         }
     }
+
+    SwCntntFrm::DestroyImpl();
+}
+
+SwTxtFrm::~SwTxtFrm()
+{
 }
 
 const OUString& SwTxtFrm::GetTxt() const

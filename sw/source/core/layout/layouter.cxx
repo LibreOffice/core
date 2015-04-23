@@ -94,7 +94,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
             { OSL_ENSURE( pNxt->Lower() && pNxt->Lower()->IsSctFrm(),
                         "Endnote without content?" );
                 pNxt->Cut();
-                delete pNxt;
+                SwFrm::DestroyFrm(pNxt);
             }
             pNxt = pFtn->GetFollow();
         }
@@ -109,7 +109,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
             SwFtnFrm *pEndFtn = (*pEndArr)[i];
             if( pEndFtn->GetAttr() == pFtn->GetAttr() )
             {
-                delete pFtn;
+                SwFrm::DestroyFrm(pFtn);
                 return;
             }
         }

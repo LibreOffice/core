@@ -41,13 +41,19 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SetCurrRelPos( aRelPos );
 }
 
-SwFlyInCntFrm::~SwFlyInCntFrm()
+void SwFlyInCntFrm::DestroyImpl()
 {
     if ( !GetFmt()->GetDoc()->IsInDtor() && GetAnchorFrm() )
     {
         SwRect aTmp( GetObjRectWithSpaces() );
         SwFlyInCntFrm::NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_LEAVE );
     }
+
+    SwFlyFrm::DestroyImpl();
+}
+
+SwFlyInCntFrm::~SwFlyInCntFrm()
+{
 }
 
 // #i28701#

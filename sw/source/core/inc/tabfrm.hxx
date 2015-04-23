@@ -102,6 +102,9 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 
     virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) SAL_OVERRIDE;
 
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwTabFrm();
+
 protected:
     virtual void MakeAll() SAL_OVERRIDE;
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
@@ -112,7 +115,6 @@ protected:
 public:
     SwTabFrm( SwTable &, SwFrm* );  // calling Regist Flys always after creation _and_pasting!
     SwTabFrm( SwTabFrm & ); // _only_ for the creation of follows
-    virtual ~SwTabFrm();
 
     void JoinAndDelFollows();   // for DelFrms of the TableNodes!
 

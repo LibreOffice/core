@@ -69,6 +69,7 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     mbInfFly ( false ),
     mbInfFtn ( false ),
     mbInfSct ( false )
+    , m_isInDestroy(false)
 {
     OSL_ENSURE( pMod, "No frame format given." );
     mbInvalidR2L = mbInvalidVert = true;
@@ -654,7 +655,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         else
         {
             OSL_ENSURE( pSct->IsSctFrm(), "InsertGroup: For SectionFrms only" );
-            delete static_cast<SwSectionFrm*>(pSct);
+            SwFrm::DestroyFrm(static_cast<SwSectionFrm*>(pSct));
         }
     }
     else
@@ -958,7 +959,7 @@ void SwCntntFrm::Cut()
                             pTmp->_InvalidatePrt();
                     }
                     pUp->Cut();
-                    delete pUp;
+                    SwFrm::DestroyFrm(pUp);
                 }
                 else
                 {
@@ -975,7 +976,7 @@ void SwCntntFrm::Cut()
                     else
                     {
                         pSct->DelEmpty( true );
-                        delete pSct;
+                        SwFrm::DestroyFrm(pSct);
                     }
                 }
             }

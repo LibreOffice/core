@@ -482,7 +482,7 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
                 {
                     SwFtnFrm *pFoll = pFtn->GetFollow();
                     pFtn->Cut();
-                    delete pFtn;
+                    SwFrm::DestroyFrm(pFtn);
                     pFtn = pFoll;
                 }
 

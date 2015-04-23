@@ -53,6 +53,10 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
     void CalcEndAtEndFlag();
     const SwSectionFmt* _GetEndSectFmt() const;
     bool IsEndnoteAtMyEnd() const;
+
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwSectionFrm();
+
 protected:
     virtual void MakeAll() SAL_OVERRIDE;
     virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) SAL_OVERRIDE;
@@ -63,7 +67,6 @@ protected:
 public:
     SwSectionFrm( SwSection &, SwFrm* ); // Content is not created!
     SwSectionFrm( SwSectionFrm &, bool bMaster ); // _ONLY_ for creating Master/Follows!
-    virtual ~SwSectionFrm();
 
     void Init();
     virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;

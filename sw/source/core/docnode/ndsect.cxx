@@ -1020,7 +1020,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
                     pFrm = pTmp;
                 if( pTmp )
                     pTmp->mpPrev = pSectFrm->GetPrev();
-                delete pSectFrm;
+                SwFrm::DestroyFrm(pSectFrm);
             }
         }
         else

@@ -654,7 +654,7 @@ void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
             SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
             if ( pFrm->IsAnLower( pFlyFrm ) )
             {
-                delete pFlyFrm;
+                SwFrm::DestroyFrm(pFlyFrm);
                 // Do not increment index, in this case
                 continue;
             }
@@ -687,7 +687,7 @@ void SwPageFrm::PrepareHeader()
             pLay = static_cast<SwLayoutFrm*>(pLay->GetNext());
             ::DelFlys( pDel, this );
             pDel->Cut();
-            delete pDel;
+            SwFrm::DestroyFrm(pDel);
         }
         OSL_ENSURE( pLay, "Where to with the Header?" );
         SwHeaderFrm *pH = new SwHeaderFrm( const_cast<SwFrmFmt*>(rH.GetHeaderFmt()), this );
@@ -699,7 +699,7 @@ void SwPageFrm::PrepareHeader()
     {   // Remove header if present.
         ::DelFlys( pLay, this );
         pLay->Cut();
-        delete pLay;
+        SwFrm::DestroyFrm(pLay);
     }
 }
 
@@ -725,9 +725,10 @@ void SwPageFrm::PrepareFooter()
             return;  // Footer is already the correct one.
 
         if ( pLay->IsFooterFrm() )
-        {   ::DelFlys( pLay, this );
+        {
+            ::DelFlys( pLay, this );
             pLay->Cut();
-            delete pLay;
+            SwFrm::DestroyFrm(pLay);
         }
         SwFooterFrm *pF = new SwFooterFrm( const_cast<SwFrmFmt*>(rF.GetFooterFmt()), this );
         pF->Paste( this );
@@ -742,7 +743,7 @@ void SwPageFrm::PrepareFooter()
              pShell->VisArea().HasArea() )
             pShell->InvalidateWindows( pShell->VisArea() );
         pLay->Cut();
-        delete pLay;
+        SwFrm::DestroyFrm(pLay);
     }
 }
 

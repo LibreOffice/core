@@ -145,6 +145,9 @@ class SwRootFrm: public SwLayoutFrm
     void _DeleteEmptySct(); // Destroys the registered SectionFrms
     void _RemoveFromList( SwSectionFrm* pSct ); // Removes SectionFrms from the Delete List
 
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwRootFrm();
+
 protected:
 
     virtual void MakeAll() SAL_OVERRIDE;
@@ -167,7 +170,6 @@ public:
     static bool HasSameRect( const SwRect& rRect );
 
     SwRootFrm( SwFrmFmt*, SwViewShell* );
-    virtual ~SwRootFrm();
     void Init(SwFrmFmt*);
 
     SwViewShell *GetCurrShell() const { return mpCurrShell; }

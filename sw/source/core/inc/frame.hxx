@@ -357,11 +357,15 @@ protected:
     bool mbInfSct        : 1;  // Frm is in a section
     bool mbColLocked     : 1;  // lock Grow/Shrink for column-wise section
                                   // or fly frames, will be set in Format
+    bool m_isInDestroy : 1;
 
     void ColLock()      { mbColLocked = true; }
     void ColUnlock()    { mbColLocked = false; }
 
     void Destroy(); // for ~SwRootFrm
+
+    virtual void DestroyImpl();
+    virtual ~SwFrm();
 
     // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
     void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
@@ -807,7 +811,8 @@ public:
 
     bool IsColLocked()  const { return mbColLocked; }
 
-    virtual ~SwFrm();
+    /// this is the only way to delete a SwFrm instance
+    static void DestroyFrm(SwFrm *const pFrm);
 
     bool IsInDtor() const { return mbInDtor; }
 

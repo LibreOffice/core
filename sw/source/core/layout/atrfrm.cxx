@@ -2645,7 +2645,7 @@ void SwFrmFmt::DelFrms()
     if( pLast )
         do {
                 pLast->Cut();
-                delete pLast;
+                SwFrm::DestroyFrm(pLast);
         } while( 0 != ( pLast = aIter.Next() ));
 }
 
@@ -2852,8 +2852,9 @@ SwFlyFrmFmt::~SwFlyFrmFmt()
     SwIterator<SwFlyFrm,SwFmt> aIter( *this );
     SwFlyFrm * pLast = aIter.First();
     if( pLast )
-        do {
-                delete pLast;
+        do
+        {
+            SwFrm::DestroyFrm(pLast);
         } while( 0 != ( pLast = aIter.Next() ));
 
     SwIterator<SwFlyDrawContact,SwFmt> a2ndIter( *this );
@@ -3269,7 +3270,7 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrmFmt& _rFlyFrmFmt,
                         if ( pFrm != _pKeepThisFlyFrm )
                         {
                             pFrm->Cut();
-                            delete pFrm;
+                            SwFrm::DestroyFrm(pFrm);
                         }
                     } while( 0 != ( pFrm = aIter.Next() ));
                 }

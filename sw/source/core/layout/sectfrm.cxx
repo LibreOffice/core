@@ -117,7 +117,7 @@ void SwSectionFrm::Init()
     }
 }
 
-SwSectionFrm::~SwSectionFrm()
+void SwSectionFrm::DestroyImpl()
 {
     if( GetFmt() && !GetFmt()->GetDoc()->IsInDtor() )
     {
@@ -144,6 +144,12 @@ SwSectionFrm::~SwSectionFrm()
             PROTOCOL( this, PROT_SECTION, ACT_DEL_MASTER, GetFollow() )
         }
     }
+
+    SwLayoutFrm::DestroyImpl();
+}
+
+SwSectionFrm::~SwSectionFrm()
+{
 }
 
 void SwSectionFrm::DelEmpty( bool bRemove )
@@ -262,7 +268,7 @@ void SwSectionFrm::_Cut( bool bRemove )
             pUp->GetUpper() )
         {
             pUp->Cut();
-            delete pUp;
+            SwFrm::DestroyFrm(pUp);
             pUp = NULL;
         }
     }
@@ -443,7 +449,7 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
         SetFollow( pNxt->GetFollow() );
         pNxt->SetFollow( NULL );
         pNxt->Cut();
-        delete pNxt;
+        SwFrm::DestroyFrm(pNxt);
         InvalidateSize();
     }
 }
@@ -618,7 +624,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, bool bSave )
         static_cast<SwFtnFrm*>(pUp)->ColLock();
     }
     pDel->DelEmpty( true );
-    delete pDel;
+    SwFrm::DestroyFrm(pDel);
     if( pParent )
     {   // Search for the appropriate insert position
         if( pNxtSct && pNxtSct->GetFmt() == pParent )
@@ -2557,7 +2563,7 @@ void SwRootFrm::_DeleteEmptySct()
         {
             SwLayoutFrm* pUp = pSect->GetUpper();
             pSect->RemoveFromLayout();
-            delete pSect;
+            SwFrm::DestroyFrm(pSect);
             if( pUp && !pUp->Lower() )
             {
                 if( pUp->IsPageBodyFrm() )
@@ -2566,7 +2572,7 @@ void SwRootFrm::_DeleteEmptySct()
                     pUp->GetUpper() )
                 {
                     pUp->Cut();
-                    delete pUp;
+                    SwFrm::DestroyFrm(pUp);
                 }
             }
         }

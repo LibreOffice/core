@@ -63,8 +63,10 @@ protected:
 
     SwCntntFrm( SwCntntNode * const, SwFrm* );
 
-public:
+    virtual void DestroyImpl() SAL_OVERRIDE;
     virtual ~SwCntntFrm();
+
+public:
     TYPEINFO_OVERRIDE(); // already in base class
 
     virtual void Cut() SAL_OVERRIDE;

@@ -334,7 +334,7 @@ bool SwLayAction::RemoveEmptyBrowserPages()
                 SwPageFrm *pDel = pPage;
                 pPage = static_cast<SwPageFrm*>(pPage->GetNext());
                 pDel->Cut();
-                delete pDel;
+                SwFrm::DestroyFrm(pDel);
             }
         } while ( pPage );
     }

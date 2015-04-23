@@ -32,13 +32,15 @@ class SwCellFrm: public SwLayoutFrm
 {
     const SwTableBox* m_pTabBox;
 
+    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual ~SwCellFrm();
+
 protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
     SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
-    virtual ~SwCellFrm();
 
     virtual bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
     virtual void Paint( SwRect const&,

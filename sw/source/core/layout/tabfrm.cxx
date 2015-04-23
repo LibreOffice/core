@@ -91,7 +91,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib )
             pTmpPrev = pNew;
         }
         else
-            delete pNew;
+            SwFrm::DestroyFrm(pNew);
     }
     OSL_ENSURE( Lower() && Lower()->IsRowFrm(), "SwTabFrm::SwTabFrm: No rows." );
 }
@@ -142,7 +142,7 @@ SwTabFrm* SwTabFrm::GetFollowFlowLineFor()
     return NULL;
 }
 
-SwTabFrm::~SwTabFrm()
+void SwTabFrm::DestroyImpl()
 {
     //rhbz#907933, we are a follow flow line for something and have been
     //deleted, remove ourself as a follow flowline
@@ -163,6 +163,12 @@ SwTabFrm::~SwTabFrm()
         pRowCacheLastTabFrm = NULL;
         pRowCacheLastCellFrm= NULL;
     }
+
+    SwLayoutFrm::DestroyImpl();
+}
+
+SwTabFrm::~SwTabFrm()
+{
 }
 
 void SwTabFrm::JoinAndDelFollows()
@@ -172,7 +178,7 @@ void SwTabFrm::JoinAndDelFollows()
         pFoll->JoinAndDelFollows();
     pFoll->Cut();
     SetFollow( pFoll->GetFollow() );
-    delete pFoll;
+    SwFrm::DestroyFrm(pFoll);
 }
 
 void SwTabFrm::RegistFlys()
@@ -414,7 +420,7 @@ static void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
                     lcl_MoveRowContent( *pTmpSourceRow, *pTmpDestRow );
                     pTmpDestRow->SetFollowRow( pTmpSourceRow->GetFollowRow() );
                     pTmpSourceRow->RemoveFromLayout();
-                    delete pTmpSourceRow;
+                    SwFrm::DestroyFrm(pTmpSourceRow);
                 }
                 else
                 {
@@ -586,7 +592,7 @@ static void lcl_PostprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine )
                 pRowFrm->SetFollowRow( pFollowRow->GetFollowRow() );
                 lcl_MoveRowContent( *pFollowRow, *pRowFrm );
                 pFollowRow->Cut();
-                delete pFollowRow;
+                SwFrm::DestroyFrm(pFollowRow);
                 ::SwInvalidateAll( pCurrMasterCell, LONG_MAX );
             }
         }
@@ -855,7 +861,7 @@ bool SwTabFrm::RemoveFollowFlowLine()
 
     bool bJoin = !pFollowFlowLine->GetNext();
     pFollowFlowLine->Cut();
-    delete pFollowFlowLine;
+    SwFrm::DestroyFrm(pFollowFlowLine);
 
     return bJoin;
 }
@@ -1251,7 +1257,7 @@ bool SwTabFrm::Join()
 
         SetFollow( pFoll->GetFollow() );
         SetFollowFlowLine( pFoll->HasFollowFlowLine() );
-        delete pFoll;
+        SwFrm::DestroyFrm(pFoll);
 
         Grow( nHeight );
     }
@@ -3066,7 +3072,7 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 while ( 0 != ( pLowerRow = static_cast<SwRowFrm*>(Lower()) ) && pLowerRow->IsRepeatedHeadline() )
                 {
                     pLowerRow->Cut();
-                    delete pLowerRow;
+                    SwFrm::DestroyFrm(pLowerRow);
                 }
 
                 // insert new headlines
@@ -3517,7 +3523,7 @@ SwRowFrm::SwRowFrm(const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent)
     }
 }
 
-SwRowFrm::~SwRowFrm()
+void SwRowFrm::DestroyImpl()
 {
     SwModify* pMod = GetFmt();
     if( pMod )
@@ -3526,6 +3532,12 @@ SwRowFrm::~SwRowFrm()
         if( !pMod->HasWriterListeners() )
             delete pMod;                // and delete
     }
+
+    SwLayoutFrm::DestroyImpl();
+}
+
+SwRowFrm::~SwRowFrm()
+{
 }
 
 void SwRowFrm::RegistFlys( SwPageFrm *pPage )
@@ -4407,7 +4419,7 @@ SwCellFrm::SwCellFrm(const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent)
     }
 }
 
-SwCellFrm::~SwCellFrm()
+void SwCellFrm::DestroyImpl()
 {
     SwModify* pMod = GetFmt();
     if( pMod )
@@ -4425,6 +4437,12 @@ SwCellFrm::~SwCellFrm()
         if( !pMod->HasWriterListeners() )
             delete pMod;                // and delete
     }
+
+    SwLayoutFrm::DestroyImpl();
+}
+
+SwCellFrm::~SwCellFrm()
+{
 }
 
 static bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, bool bInva )

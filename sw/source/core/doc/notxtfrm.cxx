@@ -160,9 +160,15 @@ SwCntntFrm *SwNoTxtNode::MakeFrm( SwFrm* pSib )
     return new SwNoTxtFrm(this, pSib);
 }
 
-SwNoTxtFrm::~SwNoTxtFrm()
+void SwNoTxtFrm::DestroyImpl()
 {
     StopAnimation();
+
+    SwCntntFrm::DestroyImpl();
+}
+
+SwNoTxtFrm::~SwNoTxtFrm()
+{
 }
 
 void SetOutDev( SwViewShell *pSh, OutputDevice *pOut )
