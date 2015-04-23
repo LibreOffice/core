@@ -5103,7 +5103,7 @@ bool ScCompiler::HandleTableRef()
                             eState = ((eState == sClose) ? sSep : sStop);
                             break;
                         case ocPush:
-                            if (eState == sOpen && (p->GetType() == svSingleRef || p->GetType() == svDoubleRef))
+                            if (eState == sOpen && p->GetType() == svSingleRef)
                             {
                                 bColumnRange = true;
                                 eState = sLast;
@@ -5153,11 +5153,6 @@ bool ScCompiler::HandleTableRef()
                                     aColRange.Justify();
                                 }
                             }
-                        }
-                        break;
-                    case svDoubleRef:
-                        {
-                            aColRange = mpToken->GetDoubleRef()->toAbs( aPos);
                         }
                         break;
                     default:
