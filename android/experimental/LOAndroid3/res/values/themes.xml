@@ -9,4 +9,10 @@
 
     <style name="BrowserTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
+
+    <style name="ListItemText">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
 </resources>
