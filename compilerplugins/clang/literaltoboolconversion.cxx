@@ -29,6 +29,9 @@ public:
 
 private:
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
+
+    void handleImplicitCastSubExpr(
+        ImplicitCastExpr const * castExpr, Expr const * subExpr);
 };
 
 bool LiteralToBoolConversion::VisitImplicitCastExpr(
@@ -40,25 +43,53 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
     if (!expr->getType()->isBooleanType()) {
         return true;
     }
-    Expr const * sub = expr->getSubExpr()->IgnoreParenCasts();
-    Expr const * expr2 = expr;
+    handleImplicitCastSubExpr(expr, expr->getSubExpr());
+    return true;
+}
+
+bool LiteralToBoolConversion::isFromCIncludeFile(
+    SourceLocation spellingLocation) const
+{
+    return !compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+        && (StringRef(
+                compiler.getSourceManager().getPresumedLoc(spellingLocation)
+                .getFilename())
+            .endswith(".h"));
+}
+
+void LiteralToBoolConversion::handleImplicitCastSubExpr(
+    ImplicitCastExpr const * castExpr, Expr const * subExpr)
+{
+    Expr const * expr2 = subExpr;
+        // track sub-expr with potential parens, to e.g. rewrite all of expanded
+        //
+        // #define sal_False ((sal_Bool)0)
+        //
+        // including the parens
+    subExpr = expr2->IgnoreParenCasts();
     for (;;) {
-        BinaryOperator const * op = dyn_cast<BinaryOperator>(sub);
+        BinaryOperator const * op = dyn_cast<BinaryOperator>(subExpr);
         if (op == nullptr || op->getOpcode() != BO_Comma) {
             break;
         }
-        expr2 = op->getRHS()->IgnoreParenCasts();
-        sub = expr2;
+        expr2 = op->getRHS();
+        subExpr = expr2->IgnoreParenCasts();
     }
-    if (sub->getType()->isBooleanType()) {
-        return true;
+    if (subExpr->getType()->isBooleanType()) {
+        return;
+    }
+    ConditionalOperator const * op = dyn_cast<ConditionalOperator>(subExpr);
+    if (op != nullptr) {
+        handleImplicitCastSubExpr(castExpr, op->getTrueExpr());
+        handleImplicitCastSubExpr(castExpr, op->getFalseExpr());
+        return;
     }
     APSInt res;
-    if (!sub->isValueDependent()
-        && sub->isIntegerConstantExpr(res, compiler.getASTContext())
+    if (!subExpr->isValueDependent()
+        && subExpr->isIntegerConstantExpr(res, compiler.getASTContext())
         && res.getLimitedValue() <= 1)
     {
-        SourceLocation loc { sub->getLocStart() };
+        SourceLocation loc { subExpr->getLocStart() };
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
@@ -72,46 +103,46 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             if (isFromCIncludeFile(
                     compiler.getSourceManager().getSpellingLoc(loc)))
             {
-                return true;
+                return;
             }
         }
     }
-    if (isa<StringLiteral>(sub)) {
-        SourceLocation loc { sub->getLocStart() };
+    if (isa<StringLiteral>(subExpr)) {
+        SourceLocation loc { subExpr->getLocStart() };
         if (compiler.getSourceManager().isMacroArgExpansion(loc)
             && (Lexer::getImmediateMacroName(
                     loc, compiler.getSourceManager(), compiler.getLangOpts())
                 == "assert"))
         {
-            return true;
+            return;
         }
     }
-    if (isa<IntegerLiteral>(sub) || isa<CharacterLiteral>(sub)
-        || isa<FloatingLiteral>(sub) || isa<ImaginaryLiteral>(sub)
-        || isa<StringLiteral>(sub))
+    if (isa<IntegerLiteral>(subExpr) || isa<CharacterLiteral>(subExpr)
+        || isa<FloatingLiteral>(subExpr) || isa<ImaginaryLiteral>(subExpr)
+        || isa<StringLiteral>(subExpr))
     {
         bool rewritten = false;
         if (rewriter != nullptr) {
             SourceLocation loc { compiler.getSourceManager().getExpansionLoc(
-                    expr->getLocStart()) };
-            if (compiler.getSourceManager().getExpansionLoc(expr->getLocEnd())
+                    expr2->getLocStart()) };
+            if (compiler.getSourceManager().getExpansionLoc(expr2->getLocEnd())
                 == loc)
             {
                 char const * s = compiler.getSourceManager().getCharacterData(
                     loc);
                 unsigned n = Lexer::MeasureTokenLength(
-                    expr->getLocEnd(), compiler.getSourceManager(),
+                    expr2->getLocEnd(), compiler.getSourceManager(),
                     compiler.getLangOpts());
                 std::string tok { s, n };
                 if (tok == "sal_False" || tok == "0") {
                     rewritten = replaceText(
                         compiler.getSourceManager().getExpansionLoc(
-                            expr->getLocStart()),
+                            expr2->getLocStart()),
                         n, "false");
                 } else if (tok == "sal_True" || tok == "1") {
                     rewritten = replaceText(
                         compiler.getSourceManager().getExpansionLoc(
-                            expr->getLocStart()),
+                            expr2->getLocStart()),
                         n, "true");
                 }
             }
@@ -121,10 +152,10 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
                 DiagnosticsEngine::Warning,
                 "implicit conversion (%0) of literal of type %1 to %2",
                 expr2->getLocStart())
-                << expr->getCastKindName() << expr->getSubExpr()->getType()
-                << expr->getType() << expr2->getSourceRange();
+                << castExpr->getCastKindName() << subExpr->getType()
+                << castExpr->getType() << expr2->getSourceRange();
         }
-    } else if (sub->isNullPointerConstant(
+    } else if (subExpr->isNullPointerConstant(
                    compiler.getASTContext(), Expr::NPC_ValueDependentIsNull)
                > Expr::NPCK_ZeroExpression)
     {
@@ -138,30 +169,20 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             ("implicit conversion (%0) of null pointer constant of type %1 to"
              " %2"),
             expr2->getLocStart())
-            << expr->getCastKindName() << expr->getSubExpr()->getType()
-            << expr->getType() << expr2->getSourceRange();
-    } else if (!sub->isValueDependent()
-               && sub->isIntegerConstantExpr(res, compiler.getASTContext()))
+            << castExpr->getCastKindName() << subExpr->getType()
+            << castExpr->getType() << expr2->getSourceRange();
+    } else if (!subExpr->isValueDependent()
+               && subExpr->isIntegerConstantExpr(res, compiler.getASTContext()))
     {
         report(
             DiagnosticsEngine::Warning,
             ("implicit conversion (%0) of integer constant expression of type"
              " %1 with value %2 to %3"),
             expr2->getLocStart())
-            << expr->getCastKindName() << expr->getSubExpr()->getType()
-            << res.toString(10) << expr->getType() << expr2->getSourceRange();
+            << castExpr->getCastKindName() << subExpr->getType()
+            << res.toString(10) << castExpr->getType()
+            << expr2->getSourceRange();
     }
-    return true;
-}
-
-bool LiteralToBoolConversion::isFromCIncludeFile(
-    SourceLocation spellingLocation) const
-{
-    return !compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
-        && (StringRef(
-                compiler.getSourceManager().getPresumedLoc(spellingLocation)
-                .getFilename())
-            .endswith(".h"));
 }
 
 loplugin::Plugin::Registration<LiteralToBoolConversion> X(
