@@ -48,7 +48,7 @@ protected:
     void*                                   mpData;
 
     static void                             AcquireData();
-    static void                             ReleaseData();
+    void                                    ReleaseData();
 
 public:
 
