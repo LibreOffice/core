@@ -1774,7 +1774,6 @@ static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_
     {
         memcpy(cursor, pszExtension, BufferMaxLen - 1);
         cursor += BufferMaxLen - 1;
-        BufferMaxLen = 1;
     }
     *cursor = 0;
 
