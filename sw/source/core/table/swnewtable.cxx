@@ -377,7 +377,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     long nRightSpan = 0;
     long nLeftSpanCnt = 0;
     long nRightSpanCnt = 0;
-    for( size_t nRow = nTop; nRow <= nBottom && bOkay; ++nRow )
+    for( size_t nRow = nTop; nRow <= nBottom && bOkay && nRow < nLines; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
         OSL_ENSURE( pLine, "Missing table line" );
