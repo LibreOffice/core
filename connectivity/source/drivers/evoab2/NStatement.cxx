@@ -421,14 +421,14 @@ OUString OCommonStatement::getTableName()
         const OSQLParseNode *pSelectStmnt = m_aSQLIterator.getParseTree();
         const OSQLParseNode *pAllTableNames = pSelectStmnt->getChild( 3 )->getChild( 0 )->getChild( 1 );
 
-        if( m_aSQLIterator.isTableNode( pAllTableNames->getChild( 0 ) ) )
+        if( OSQLParseTreeIterator::isTableNode( pAllTableNames->getChild( 0 ) ) )
             OSQLParseNode::getTableComponents( pAllTableNames->getChild( 0 ),
                                                aCatalog,aSchema, aTableName,NULL );
 
         else if( SQL_ISRULE( pAllTableNames->getChild( 0 ), table_ref ) )
         {
             OSQLParseNode *pNodeForTableName = pAllTableNames->getChild( 0 )->getChild( 0 );
-            if( m_aSQLIterator.isTableNode( pNodeForTableName ) )
+            if( OSQLParseTreeIterator::isTableNode( pNodeForTableName ) )
             {
                 aTableName = OSQLParseNode::getTableRange(pAllTableNames->getChild( 0 ));
                 if( !aTableName.getLength() )
