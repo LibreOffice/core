@@ -828,7 +828,11 @@ bool ImplicitBoolConversion::isExternCFunctionCall(
     Decl const * d = expr->getCalleeDecl();
     if (d != nullptr) {
         FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
-        if (fd != nullptr && fd->isExternC()) {
+        if (fd != nullptr
+            && (fd->isExternC()
+                || compiler.getSourceManager().isInExternCSystemHeader(
+                    fd->getLocation())))
+        {
             PointerType const * pt = fd->getType()->getAs<PointerType>();
             QualType t2(pt == nullptr ? fd->getType() : pt->getPointeeType());
             *functionType = t2->getAs<FunctionProtoType>();
