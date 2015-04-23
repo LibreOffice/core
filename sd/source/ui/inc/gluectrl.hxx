@@ -23,6 +23,8 @@
 #include <vcl/lstbox.hxx>
 #include <sfx2/tbxctrl.hxx>
 
+enum class SdrEscapeDirection;
+
 /**
  * GluePointEscDirLB
  */
@@ -46,7 +48,7 @@ public:
 class SdTbxCtlGlueEscDir: public SfxToolBoxControl
 {
 private:
-    sal_uInt16  GetEscDirPos( sal_uInt16 nEscDir );
+    sal_uInt16  GetEscDirPos( SdrEscapeDirection nEscDir );
 
 public:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,

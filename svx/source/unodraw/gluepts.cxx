@@ -114,25 +114,25 @@ static void convert( const SdrGluePoint& rSdrGlue, drawing::GluePoint2& rUnoGlue
 
     switch( rSdrGlue.GetEscDir() )
     {
-    case SDRESC_LEFT:
+    case SdrEscapeDirection::LEFT:
         rUnoGlue.Escape = drawing::EscapeDirection_LEFT;
         break;
-    case SDRESC_RIGHT:
+    case SdrEscapeDirection::RIGHT:
         rUnoGlue.Escape = drawing::EscapeDirection_RIGHT;
         break;
-    case SDRESC_TOP:
+    case SdrEscapeDirection::TOP:
         rUnoGlue.Escape = drawing::EscapeDirection_UP;
         break;
-    case SDRESC_BOTTOM:
+    case SdrEscapeDirection::BOTTOM:
         rUnoGlue.Escape = drawing::EscapeDirection_DOWN;
         break;
-    case SDRESC_HORZ:
+    case SdrEscapeDirection::HORZ:
         rUnoGlue.Escape = drawing::EscapeDirection_HORIZONTAL;
         break;
-    case SDRESC_VERT:
+    case SdrEscapeDirection::VERT:
         rUnoGlue.Escape = drawing::EscapeDirection_VERTICAL;
         break;
-//          case SDRESC_SMART:
+//          case SdrEscapeDirection::SMART:
     default:
         rUnoGlue.Escape = drawing::EscapeDirection_SMART;
         break;
@@ -178,26 +178,26 @@ static void convert( const drawing::GluePoint2& rUnoGlue, SdrGluePoint& rSdrGlue
     switch( rUnoGlue.Escape )
     {
     case drawing::EscapeDirection_LEFT:
-        rSdrGlue.SetEscDir(SDRESC_LEFT);
+        rSdrGlue.SetEscDir(SdrEscapeDirection::LEFT);
         break;
     case drawing::EscapeDirection_RIGHT:
-        rSdrGlue.SetEscDir(SDRESC_RIGHT);
+        rSdrGlue.SetEscDir(SdrEscapeDirection::RIGHT);
         break;
     case drawing::EscapeDirection_UP:
-        rSdrGlue.SetEscDir(SDRESC_TOP);
+        rSdrGlue.SetEscDir(SdrEscapeDirection::TOP);
         break;
     case drawing::EscapeDirection_DOWN:
-        rSdrGlue.SetEscDir(SDRESC_BOTTOM);
+        rSdrGlue.SetEscDir(SdrEscapeDirection::BOTTOM);
         break;
     case drawing::EscapeDirection_HORIZONTAL:
-        rSdrGlue.SetEscDir(SDRESC_HORZ);
+        rSdrGlue.SetEscDir(SdrEscapeDirection::HORZ);
         break;
     case drawing::EscapeDirection_VERTICAL:
-        rSdrGlue.SetEscDir(SDRESC_VERT);
+        rSdrGlue.SetEscDir(SdrEscapeDirection::VERT);
         break;
 //  case drawing::EscapeDirection_SMART:
     default:
-        rSdrGlue.SetEscDir(SDRESC_SMART);
+        rSdrGlue.SetEscDir(SdrEscapeDirection::SMART);
         break;
     }
 }

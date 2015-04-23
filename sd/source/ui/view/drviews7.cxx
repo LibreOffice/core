@@ -497,25 +497,25 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         // Escape direction
         // left
-        eState = mpDrawView->IsMarkedGluePointsEscDir( SDRESC_LEFT );
+        eState = mpDrawView->IsMarkedGluePointsEscDir( SdrEscapeDirection::LEFT );
         if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_LEFT );
         else
             rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_LEFT, eState == TRISTATE_TRUE ) );
         // right
-        eState = mpDrawView->IsMarkedGluePointsEscDir( SDRESC_RIGHT );
+        eState = mpDrawView->IsMarkedGluePointsEscDir( SdrEscapeDirection::RIGHT );
         if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_RIGHT );
         else
             rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_RIGHT, eState == TRISTATE_TRUE ) );
         // top
-        eState = mpDrawView->IsMarkedGluePointsEscDir( SDRESC_TOP );
+        eState = mpDrawView->IsMarkedGluePointsEscDir( SdrEscapeDirection::TOP );
         if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_TOP );
         else
             rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_TOP, eState == TRISTATE_TRUE ) );
         // bottom
-        eState = mpDrawView->IsMarkedGluePointsEscDir( SDRESC_BOTTOM );
+        eState = mpDrawView->IsMarkedGluePointsEscDir( SdrEscapeDirection::BOTTOM );
         if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_BOTTOM );
         else

@@ -90,8 +90,8 @@ static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const voi
 {
     sal_uInt16& nRet=*const_cast<sal_uInt16 *>(static_cast<sal_uInt16 const *>(pnRet));
     if (nRet!=FUZZY) {
-        sal_uInt16 nEsc = rGP.GetEscDir();
-        bool bOn = (nEsc & *static_cast<sal_uInt16 const *>(pnThisEsc)) != 0;
+        SdrEscapeDirection nEsc = rGP.GetEscDir();
+        bool bOn = bool(nEsc & *static_cast<SdrEscapeDirection const *>(pnThisEsc));
         bool& bFirst=*const_cast<bool *>(static_cast<bool const *>(pbFirst));
         if (bFirst) {
             nRet = bOn ? 1 : 0;
@@ -101,7 +101,7 @@ static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const voi
     }
 }
 
-SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const
+SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc) const
 {
     ForceUndirtyMrkPnt();
     bool bFirst=true;
@@ -112,13 +112,15 @@ SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) cons
 
 static void ImpSetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pnThisEsc, const void* pbOn, const void*, const void*, const void*)
 {
-    sal_uInt16 nEsc=rGP.GetEscDir();
-    if (*static_cast<bool const *>(pbOn)) nEsc|=*static_cast<sal_uInt16 const *>(pnThisEsc);
-    else nEsc&=~*static_cast<sal_uInt16 const *>(pnThisEsc);
+    SdrEscapeDirection nEsc=rGP.GetEscDir();
+    if (*static_cast<bool const *>(pbOn))
+        nEsc |= *static_cast<SdrEscapeDirection const *>(pnThisEsc);
+    else
+        nEsc &= ~*static_cast<SdrEscapeDirection const *>(pnThisEsc);
     rGP.SetEscDir(nEsc);
 }
 
-void SdrGlueEditView::SetMarkedGluePointsEscDir(sal_uInt16 nThisEsc, bool bOn)
+void SdrGlueEditView::SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, bool bOn)
 {
     ForceUndirtyMrkPnt();
     BegUndo(ImpGetResStr(STR_EditSetGlueEscDir),GetDescriptionOfMarkedGluePoints());

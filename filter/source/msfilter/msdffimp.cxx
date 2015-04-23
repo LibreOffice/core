@@ -552,7 +552,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                                 aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
                                                                 aGluePoint.SetPercent( true );
                                                                 aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
-                                                                aGluePoint.SetEscDir( SDRESC_SMART );
+                                                                aGluePoint.SetEscDir( SdrEscapeDirection::SMART );
                                                                 nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
                                                                 bNotFound = false;
                                                             }

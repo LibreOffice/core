@@ -395,29 +395,29 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 
         case SID_GLUE_ESCDIR_LEFT:
         {
-            mpView->SetMarkedGluePointsEscDir( SDRESC_LEFT,
-                    !mpView->IsMarkedGluePointsEscDir( SDRESC_LEFT ) );
+            mpView->SetMarkedGluePointsEscDir( SdrEscapeDirection::LEFT,
+                    !mpView->IsMarkedGluePointsEscDir( SdrEscapeDirection::LEFT ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_RIGHT:
         {
-            mpView->SetMarkedGluePointsEscDir( SDRESC_RIGHT,
-                    !mpView->IsMarkedGluePointsEscDir( SDRESC_RIGHT ) );
+            mpView->SetMarkedGluePointsEscDir( SdrEscapeDirection::RIGHT,
+                    !mpView->IsMarkedGluePointsEscDir( SdrEscapeDirection::RIGHT ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_TOP:
         {
-            mpView->SetMarkedGluePointsEscDir( SDRESC_TOP,
-                    !mpView->IsMarkedGluePointsEscDir( SDRESC_TOP ) );
+            mpView->SetMarkedGluePointsEscDir( SdrEscapeDirection::TOP,
+                    !mpView->IsMarkedGluePointsEscDir( SdrEscapeDirection::TOP ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_BOTTOM:
         {
-            mpView->SetMarkedGluePointsEscDir( SDRESC_BOTTOM,
-                    !mpView->IsMarkedGluePointsEscDir( SDRESC_BOTTOM ) );
+            mpView->SetMarkedGluePointsEscDir( SdrEscapeDirection::BOTTOM,
+                    !mpView->IsMarkedGluePointsEscDir( SdrEscapeDirection::BOTTOM ) );
         }
         break;
 

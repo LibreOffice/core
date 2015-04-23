@@ -47,9 +47,9 @@ public:
     // the parameter nThisEsc is used to hand over the direction,
     // which one wished to check,set or delete
     // possible values for nThisEsc are:
-    // SDRESC_LEFT, SDRESC_RIGHT, SDRESC_TOP and SDRESC_BOTTOM
-    SDR_TRISTATE IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const;
-    void SetMarkedGluePointsEscDir(sal_uInt16 nThisEsc, bool bOn);
+    // SdrEscapeDirection::LEFT, SdrEscapeDirection::RIGHT, SdrEscapeDirection::TOP and SdrEscapeDirection::BOTTOM
+    SDR_TRISTATE IsMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc) const;
+    void SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, bool bOn);
     bool IsSetMarkedGluePointsEscDirPossible() const { return !IsReadOnly() && HasMarkedGluePoints(); }
 
     // check/set, if the GluePoints are relativ to the

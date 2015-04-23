@@ -599,9 +599,9 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     }
 }
 
-sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt)
+SdrEscapeDirection SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt)
 {
-    if (pObj==NULL) return SDRESC_ALL;
+    if (pObj==NULL) return SdrEscapeDirection::ALL;
     Rectangle aR(pObj->GetSnapRect());
     long dxl=rPt.X()-aR.Left();
     long dyo=rPt.Y()-aR.Top();
@@ -612,28 +612,28 @@ sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt)
     long dx=std::min(dxl,dxr);
     long dy=std::min(dyo,dyu);
     bool bDiag=std::abs(dx-dy)<2;
-    if (bxMitt && byMitt) return SDRESC_ALL; // in the center
+    if (bxMitt && byMitt) return SdrEscapeDirection::ALL; // in the center
     if (bDiag) {  // diagonally
-        sal_uInt16 nRet=0;
-        if (byMitt) nRet|=SDRESC_VERT;
-        if (bxMitt) nRet|=SDRESC_HORZ;
+        SdrEscapeDirection nRet=SdrEscapeDirection::SMART;
+        if (byMitt) nRet|=SdrEscapeDirection::VERT;
+        if (bxMitt) nRet|=SdrEscapeDirection::HORZ;
         if (dxl<dxr) { // left
-            if (dyo<dyu) nRet|=SDRESC_LEFT | SDRESC_TOP;
-            else nRet|=SDRESC_LEFT | SDRESC_BOTTOM;
+            if (dyo<dyu) nRet|=SdrEscapeDirection::LEFT | SdrEscapeDirection::TOP;
+            else nRet|=SdrEscapeDirection::LEFT | SdrEscapeDirection::BOTTOM;
         } else {       // right
-            if (dyo<dyu) nRet|=SDRESC_RIGHT | SDRESC_TOP;
-            else nRet|=SDRESC_RIGHT | SDRESC_BOTTOM;
+            if (dyo<dyu) nRet|=SdrEscapeDirection::RIGHT | SdrEscapeDirection::TOP;
+            else nRet|=SdrEscapeDirection::RIGHT | SdrEscapeDirection::BOTTOM;
         }
         return nRet;
     }
     if (dx<dy) { // horizontal
-        if (bxMitt) return SDRESC_HORZ;
-        if (dxl<dxr) return SDRESC_LEFT;
-        else return SDRESC_RIGHT;
+        if (bxMitt) return SdrEscapeDirection::HORZ;
+        if (dxl<dxr) return SdrEscapeDirection::LEFT;
+        else return SdrEscapeDirection::RIGHT;
     } else {     // vertical
-        if (byMitt) return SDRESC_VERT;
-        if (dyo<dyu) return SDRESC_TOP;
-        else return SDRESC_BOTTOM;
+        if (byMitt) return SdrEscapeDirection::VERT;
+        if (dyo<dyu) return SdrEscapeDirection::TOP;
+        else return SdrEscapeDirection::BOTTOM;
     }
 }
 
@@ -700,7 +700,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
 {
     Point aPt1,aPt2;
     SdrGluePoint aGP1,aGP2;
-    sal_uInt16 nEsc1=SDRESC_ALL,nEsc2=SDRESC_ALL;
+    SdrEscapeDirection nEsc1=SdrEscapeDirection::ALL,nEsc2=SdrEscapeDirection::ALL;
     Rectangle aBoundRect1;
     Rectangle aBoundRect2;
     Rectangle aBewareRect1;
@@ -788,20 +788,20 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         if (bCon1 && rCon1.TakeGluePoint(aGP1,true)) {
             aPt1=aGP1.GetPos();
             nEsc1=aGP1.GetEscDir();
-            if (nEsc1==SDRESC_SMART) nEsc1=ImpCalcEscAngle(rCon1.pObj,aPt1-rCon1.aObjOfs);
+            if (nEsc1==SdrEscapeDirection::SMART) nEsc1=ImpCalcEscAngle(rCon1.pObj,aPt1-rCon1.aObjOfs);
         }
         for (sal_uInt16 nNum2=0; nNum2<nCount2; nNum2++) {
             if (bAuto2) rCon2.nConId=nNum2;
             if (bCon2 && rCon2.TakeGluePoint(aGP2,true)) {
                 aPt2=aGP2.GetPos();
                 nEsc2=aGP2.GetEscDir();
-                if (nEsc2==SDRESC_SMART) nEsc2=ImpCalcEscAngle(rCon2.pObj,aPt2-rCon2.aObjOfs);
+                if (nEsc2==SdrEscapeDirection::SMART) nEsc2=ImpCalcEscAngle(rCon2.pObj,aPt2-rCon2.aObjOfs);
             }
             for (long nA1=0; nA1<36000; nA1+=9000) {
-                sal_uInt16 nE1=nA1==0 ? SDRESC_RIGHT : nA1==9000 ? SDRESC_TOP : nA1==18000 ? SDRESC_LEFT : nA1==27000 ? SDRESC_BOTTOM : 0;
+                SdrEscapeDirection nE1 = nA1==0 ? SdrEscapeDirection::RIGHT : nA1==9000 ? SdrEscapeDirection::TOP : nA1==18000 ? SdrEscapeDirection::LEFT : nA1==27000 ? SdrEscapeDirection::BOTTOM : SdrEscapeDirection::SMART;
                 for (long nA2=0; nA2<36000; nA2+=9000) {
-                    sal_uInt16 nE2=nA2==0 ? SDRESC_RIGHT : nA2==9000 ? SDRESC_TOP : nA2==18000 ? SDRESC_LEFT : nA2==27000 ? SDRESC_BOTTOM : 0;
-                    if ((nEsc1&nE1)!=0 && (nEsc2&nE2)!=0) {
+                    SdrEscapeDirection nE2 = nA2==0 ? SdrEscapeDirection::RIGHT : nA2==9000 ? SdrEscapeDirection::TOP : nA2==18000 ? SdrEscapeDirection::LEFT : nA2==27000 ? SdrEscapeDirection::BOTTOM : SdrEscapeDirection::SMART;
+                    if ((nEsc1&nE1) && (nEsc2&nE2)) {
                         sal_uIntPtr nQual=0;
                         SdrEdgeInfoRec aInfo;
                         if (pInfo!=NULL) aInfo=*pInfo;

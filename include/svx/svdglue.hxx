@@ -28,21 +28,24 @@ class SdrObject;
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
 #include <vector>
+#include <o3tl/typed_flags_set.hxx>
 
 
-
-#define SDRESC_SMART  0x0000
-#define SDRESC_LEFT   0x0001
-#define SDRESC_RIGHT  0x0002
-#define SDRESC_TOP    0x0004
-#define SDRESC_BOTTOM 0x0008
-#define SDRESC_LO    0x0010 /* ni */
-#define SDRESC_LU    0x0020 /* ni */
-#define SDRESC_RO    0x0040 /* ni */
-#define SDRESC_RU    0x0080 /* ni */
-#define SDRESC_HORZ  (SDRESC_LEFT|SDRESC_RIGHT)
-#define SDRESC_VERT  (SDRESC_TOP|SDRESC_BOTTOM)
-#define SDRESC_ALL   0x00FF
+enum class SdrEscapeDirection
+{
+    SMART  = 0x0000,
+    LEFT   = 0x0001,
+    RIGHT  = 0x0002,
+    TOP    = 0x0004,
+    BOTTOM = 0x0008,
+    HORZ   = LEFT | RIGHT,
+    VERT   = TOP | BOTTOM,
+    ALL    = 0x00ff,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SdrEscapeDirection> : is_typed_flags<SdrEscapeDirection, 0x00ff> {};
+}
 
 #define SDRHORZALIGN_CENTER   0x0000
 #define SDRHORZALIGN_LEFT     0x0001
@@ -58,21 +61,21 @@ class SVX_DLLPUBLIC SdrGluePoint {
     // bNoPercent=false: position is -5000..5000 (1/100)% or 0..10000 (depending on align)
     // bNoPercent=true : position is in log unit, relativ to the reference point
     Point    aPos;
-    sal_uInt16   nEscDir;
+    SdrEscapeDirection nEscDir;
     sal_uInt16   nId;
     sal_uInt16   nAlign;
     bool bNoPercent:1;
     bool bReallyAbsolute:1; // temp for transformations on the reference object
     bool bUserDefined:1; // #i38892#
 public:
-    SdrGluePoint(): nEscDir(SDRESC_SMART),nId(0),nAlign(0),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
-    SdrGluePoint(const Point& rNewPos, bool bNewPercent=true, sal_uInt16 nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign),bNoPercent(!bNewPercent),bReallyAbsolute(false),bUserDefined(true) {}
+    SdrGluePoint(): nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(0),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
+    SdrGluePoint(const Point& rNewPos, bool bNewPercent=true, sal_uInt16 nNewAlign=0): aPos(rNewPos),nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(nNewAlign),bNoPercent(!bNewPercent),bReallyAbsolute(false),bUserDefined(true) {}
     bool operator==(const SdrGluePoint& rCmpGP) const   { return aPos==rCmpGP.aPos && nEscDir==rCmpGP.nEscDir && nId==rCmpGP.nId && nAlign==rCmpGP.nAlign && bNoPercent==rCmpGP.bNoPercent && bReallyAbsolute==rCmpGP.bReallyAbsolute && bUserDefined==rCmpGP.bUserDefined; }
     bool operator!=(const SdrGluePoint& rCmpGP) const   { return !operator==(rCmpGP); }
     const Point& GetPos() const                             { return aPos; }
     void         SetPos(const Point& rNewPos)               { aPos=rNewPos; }
-    sal_uInt16       GetEscDir() const                          { return nEscDir; }
-    void         SetEscDir(sal_uInt16 nNewEsc)                  { nEscDir=nNewEsc; }
+    SdrEscapeDirection GetEscDir() const                          { return nEscDir; }
+    void         SetEscDir(SdrEscapeDirection nNewEsc)                  { nEscDir=nNewEsc; }
     sal_uInt16       GetId() const                              { return nId; }
     void         SetId(sal_uInt16 nNewId)                       { nId=nNewId; }
     bool         IsPercent() const                          { return !bNoPercent; }
@@ -97,8 +100,8 @@ public:
     void         SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
     long         GetAlignAngle() const;
     void         SetAlignAngle(long nAngle);
-    static long  EscDirToAngle(sal_uInt16 nEsc);
-    static sal_uInt16 EscAngleToDir(long nAngle);
+    static long  EscDirToAngle(SdrEscapeDirection nEsc);
+    static SdrEscapeDirection EscAngleToDir(long nAngle);
     void         Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj);
     void         Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj);
     void         Shear (const Point& rRef, long nAngle, double tn, bool bVShear, const SdrObject* pObj);
@@ -116,10 +119,10 @@ public:
     ~SdrGluePointList()                                                     { Clear(); }
     void                Clear();
     void                operator=(const SdrGluePointList& rSrcList);
-    sal_uInt16              GetCount() const                                    { return sal_uInt16(aList.size()); }
+    sal_uInt16          GetCount() const                                    { return sal_uInt16(aList.size()); }
     // At insert, the object (GluePoint) automatically gets an ID assigned.
     // Return value is the index of the new GluePoint in the list.
-    sal_uInt16              Insert(const SdrGluePoint& rGP);
+    sal_uInt16          Insert(const SdrGluePoint& rGP);
     void                Delete(sal_uInt16 nPos)
     {
         SdrGluePoint* p = aList[nPos];

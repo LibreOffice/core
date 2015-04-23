@@ -38,20 +38,13 @@ using namespace ::com::sun::star::frame;
 
 // at the moment, Joe only supports the methods specified below
 #define ESCDIR_COUNT 5
-static const sal_uInt16 aEscDirArray[] =
+static const SdrEscapeDirection aEscDirArray[] =
 {
-    SDRESC_SMART,
-    SDRESC_LEFT,
-    SDRESC_RIGHT,
-    SDRESC_TOP,
-    SDRESC_BOTTOM,
-//  SDRESC_LO,
-//  SDRESC_LU,
-//  SDRESC_RO,
-//  SDRESC_RU,
-//  SDRESC_HORZ,
-//  SDRESC_VERT,
-//  SDRESC_ALL
+    SdrEscapeDirection::SMART,
+    SdrEscapeDirection::LEFT,
+    SdrEscapeDirection::RIGHT,
+    SdrEscapeDirection::TOP,
+    SdrEscapeDirection::BOTTOM
 };
 
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlGlueEscDir, SfxUInt16Item )
@@ -79,7 +72,7 @@ GlueEscDirLB::~GlueEscDirLB()
 void GlueEscDirLB::Select()
 {
     sal_Int32 nPos = GetSelectEntryPos();
-    SfxUInt16Item aItem( SID_GLUE_ESCDIR, aEscDirArray[ nPos ] );
+    SfxUInt16Item aItem( SID_GLUE_ESCDIR, static_cast<sal_uInt16>(aEscDirArray[ nPos ]) );
 
     if ( m_xFrame.is() )
     {
@@ -145,7 +138,7 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
                 }
                 else
                 {
-                    sal_uInt16 nEscDir = static_cast<const SfxUInt16Item*>( pState )->GetValue();
+                    SdrEscapeDirection nEscDir = static_cast<SdrEscapeDirection>(static_cast<const SfxUInt16Item*>( pState )->GetValue());
                     pGlueEscDirLB->SelectEntryPos( GetEscDirPos( nEscDir ) );
                 }
             }
@@ -171,7 +164,7 @@ VclPtr<vcl::Window> SdTbxCtlGlueEscDir::CreateItemWindow( vcl::Window *pParent )
 /**
  * Returns position in the array for EscDir (Mapping for Listbox)
  */
-sal_uInt16 SdTbxCtlGlueEscDir::GetEscDirPos( sal_uInt16 nEscDir )
+sal_uInt16 SdTbxCtlGlueEscDir::GetEscDirPos( SdrEscapeDirection nEscDir )
 {
     for( sal_uInt16 i = 0; i < ESCDIR_COUNT; i++ )
     {

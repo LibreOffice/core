@@ -149,28 +149,29 @@ void SdrGluePoint::SetAlignAngle(long nAngle)
     else if (nAngle<33750) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_BOTTOM;
 }
 
-long SdrGluePoint::EscDirToAngle(sal_uInt16 nEsc)
+long SdrGluePoint::EscDirToAngle(SdrEscapeDirection nEsc)
 {
     switch (nEsc) {
-        case SDRESC_RIGHT : return 0;
-        case SDRESC_TOP   : return 9000;
-        case SDRESC_LEFT  : return 18000;
-        case SDRESC_BOTTOM: return 27000;
+        case SdrEscapeDirection::RIGHT : return 0;
+        case SdrEscapeDirection::TOP   : return 9000;
+        case SdrEscapeDirection::LEFT  : return 18000;
+        case SdrEscapeDirection::BOTTOM: return 27000;
+        default: break;
     } // switch
     return 0;
 }
 
-sal_uInt16 SdrGluePoint::EscAngleToDir(long nAngle)
+SdrEscapeDirection SdrGluePoint::EscAngleToDir(long nAngle)
 {
     nAngle=NormAngle360(nAngle);
     if (nAngle>=31500 || nAngle<4500)
-        return SDRESC_RIGHT;
+        return SdrEscapeDirection::RIGHT;
     if (nAngle<13500)
-        return SDRESC_TOP;
+        return SdrEscapeDirection::TOP;
     if (nAngle<22500)
-        return SDRESC_LEFT;
+        return SdrEscapeDirection::LEFT;
     /* (nAngle<31500)*/
-    return SDRESC_BOTTOM;
+    return SdrEscapeDirection::BOTTOM;
 }
 
 void SdrGluePoint::Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj)
@@ -183,12 +184,12 @@ void SdrGluePoint::Rotate(const Point& rRef, long nAngle, double sn, double cs, 
         SetAlignAngle(GetAlignAngle()+nAngle);
     }
     // rotate exit directions
-    sal_uInt16 nEscDir0=nEscDir;
-    sal_uInt16 nEscDir1=0;
-    if ((nEscDir0&SDRESC_LEFT  )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_LEFT  )+nAngle);
-    if ((nEscDir0&SDRESC_TOP   )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_TOP   )+nAngle);
-    if ((nEscDir0&SDRESC_RIGHT )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_RIGHT )+nAngle);
-    if ((nEscDir0&SDRESC_BOTTOM)!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_BOTTOM)+nAngle);
+    SdrEscapeDirection nEscDir0=nEscDir;
+    SdrEscapeDirection nEscDir1=SdrEscapeDirection::SMART;
+    if (nEscDir0&SdrEscapeDirection::LEFT  ) nEscDir1 |= EscAngleToDir(EscDirToAngle(SdrEscapeDirection::LEFT  )+nAngle);
+    if (nEscDir0&SdrEscapeDirection::TOP   ) nEscDir1 |= EscAngleToDir(EscDirToAngle(SdrEscapeDirection::TOP   )+nAngle);
+    if (nEscDir0&SdrEscapeDirection::RIGHT ) nEscDir1 |= EscAngleToDir(EscDirToAngle(SdrEscapeDirection::RIGHT )+nAngle);
+    if (nEscDir0&SdrEscapeDirection::BOTTOM) nEscDir1 |= EscAngleToDir(EscDirToAngle(SdrEscapeDirection::BOTTOM)+nAngle);
     nEscDir=nEscDir1;
     if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
@@ -205,25 +206,25 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, c
         SetAlignAngle(nAW);
     }
     // mirror exit directions
-    sal_uInt16 nEscDir0=nEscDir;
-    sal_uInt16 nEscDir1=0;
-    if ((nEscDir0&SDRESC_LEFT)!=0) {
-        long nEW=EscDirToAngle(SDRESC_LEFT);
+    SdrEscapeDirection nEscDir0=nEscDir;
+    SdrEscapeDirection nEscDir1=SdrEscapeDirection::SMART;
+    if (nEscDir0&SdrEscapeDirection::LEFT) {
+        long nEW=EscDirToAngle(SdrEscapeDirection::LEFT);
         nEW+=2*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
-    if ((nEscDir0&SDRESC_TOP)!=0) {
-        long nEW=EscDirToAngle(SDRESC_TOP);
+    if (nEscDir0&SdrEscapeDirection::TOP) {
+        long nEW=EscDirToAngle(SdrEscapeDirection::TOP);
         nEW+=2*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
-    if ((nEscDir0&SDRESC_RIGHT)!=0) {
-        long nEW=EscDirToAngle(SDRESC_RIGHT);
+    if (nEscDir0&SdrEscapeDirection::RIGHT) {
+        long nEW=EscDirToAngle(SdrEscapeDirection::RIGHT);
         nEW+=2*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
-    if ((nEscDir0&SDRESC_BOTTOM)!=0) {
-        long nEW=EscDirToAngle(SDRESC_BOTTOM);
+    if (nEscDir0&SdrEscapeDirection::BOTTOM) {
+        long nEW=EscDirToAngle(SdrEscapeDirection::BOTTOM);
         nEW+=2*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
