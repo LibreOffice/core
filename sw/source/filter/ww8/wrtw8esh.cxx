@@ -1169,9 +1169,30 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
 
 void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
 {
-    OutParaAttr(true);
+    //Collect the which ids belong to the run that we will export after
+    //outputting the underlying paragraph attributes. We will exclude
+    //writing these from the underlying paragraph attributes to avoid
+    //duplicate attributes in docx export. Doesn't matter in doc
+    //export as later props just override earlier ones.
+    std::set<sal_uInt16> aUsedRunWhichs;
+    if (!aTxtAtrArr.empty())
+    {
+        for(std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
+        {
+            if (nSwPos >= i->nStart && nSwPos < i->nEnd)
+            {
+                sal_uInt16 nWhich = i->pAttr->Which();
+                aUsedRunWhichs.insert(nWhich);
+            }
 
-    if(!aTxtAtrArr.empty())
+            if( nSwPos < i->nStart )
+                break;
+        }
+    }
+
+    OutParaAttr(true, &aUsedRunWhichs);
+
+    if (!aTxtAtrArr.empty())
     {
         const SwModify* pOldMod = m_rExport.pOutFmtNode;
         m_rExport.pOutFmtNode = 0;
@@ -1281,7 +1302,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
     return *pRet;
 }
 
-void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr)
+void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>* pWhichsToIgnore)
 {
     SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
     if( aSet.Count() )
@@ -1295,9 +1316,14 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr)
         const SfxItemPool* pSrcPool = pEditPool,
                          * pDstPool = &m_rExport.pDoc->GetAttrPool();
 
-        do {
-            sal_uInt16 nWhich = pItem->Which(),
-                   nSlotId = pSrcPool->GetSlotId( nWhich );
+        do
+        {
+            sal_uInt16 nWhich = pItem->Which();
+
+            if (pWhichsToIgnore && pWhichsToIgnore->find(nWhich) != pWhichsToIgnore->end())
+                continue;
+
+            sal_uInt16 nSlotId = pSrcPool->GetSlotId(nWhich);
 
             if ( nSlotId && nWhich != nSlotId &&
                  0 != ( nWhich = pDstPool->GetWhich( nSlotId ) ) &&
