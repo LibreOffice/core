@@ -75,6 +75,7 @@ extern "C"
 #else
 
     #include <io.h>
+    #define F_OK 00
 
     #include <windows.h>
     #define TARGET_LIB        "sofficeapp" ".dll"
