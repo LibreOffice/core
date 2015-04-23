@@ -91,8 +91,16 @@ void Table::finalizeImport()
             createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW);
         maDestRange = xDatabaseRange->getDataArea();
 
-        // get formula token index of the database range
         PropertySet aPropSet( xDatabaseRange );
+
+        if (maModel.mnTotalsRows > 0)
+        {
+            SAL_WARN_IF( maModel.mnTotalsRows > 1, "sc.filter",
+                    "Table TotalsRows > 1 not supported: " << maModel.mnTotalsRows);
+            aPropSet.setProperty( PROP_TotalsRow, true);
+        }
+
+        // get formula token index of the database range
         if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
     }
