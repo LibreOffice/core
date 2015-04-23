@@ -23,10 +23,11 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 
-#include <unistd.h>
-
 #ifndef _WIN32
+
+    #include <unistd.h>
     #include "dlfcn.h"
+
     #ifdef  _AIX
     #  include <sys/ldr.h>
     #endif
