@@ -83,6 +83,9 @@
     <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
       <FormatCode>0.00E+00</FormatCode>
     </FormatElement>
+    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="78">
+      <FormatCode>##0.00E+00</FormatCode>
+    </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="medium" usage="PERCENT_NUMBER" formatindex="8">
       <FormatCode>0%</FormatCode>
     </FormatElement>

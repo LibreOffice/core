@@ -234,6 +234,9 @@
     <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="7">
       <FormatCode>0,00E+00</FormatCode>
     </FormatElement>
+    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="78">
+      <FormatCode>##0,00E+00</FormatCode>
+    </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>

@@ -219,6 +219,9 @@
     <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="58">
       <FormatCode>[NatNum1]0.00E+00</FormatCode>
     </FormatElement>
+    <FormatElement msgid="ScientificFormatskey4" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="78">
+      <FormatCode>##0.00E+00</FormatCode>
+    </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
     <Collator unoid="charset" default="true"/>
