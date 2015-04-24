@@ -66,7 +66,7 @@ bool VCLXFont::ImplAssertValidFontMetric()
             pOutDev->SetFont( aOldFont );
         }
     }
-    return mpFontMetric ? true : false;
+    return mpFontMetric != nullptr;
 }
 
 

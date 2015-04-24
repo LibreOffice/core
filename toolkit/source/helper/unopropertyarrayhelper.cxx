@@ -46,7 +46,7 @@ bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
         nPropId = BASEPROPERTY_FONTDESCRIPTOR;
 
-    return maIDs.find( nPropId ) != maIDs.end() ? true : false;
+    return maIDs.find( nPropId ) != maIDs.end();
 }
 
 // ::cppu::IPropertyArrayHelper

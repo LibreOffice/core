@@ -1140,7 +1140,7 @@ void VCLXRadioButton::setProperty( const OUString& PropertyName, const ::com::su
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                 {
-                    bool b = n ? true : false;
+                    bool b = n != 0;
                     if ( pButton->IsRadioCheckEnabled() )
                         pButton->Check( b );
                     else
@@ -1807,7 +1807,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
             if( pListBox )
             {
-                bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? true : false;
+                bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) != 0;
                 if ( bDropDown && !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
                 {
                     // Call ActionListener on DropDown event
@@ -4690,7 +4690,7 @@ void VCLXFormattedSpinField::setStrictFormat( bool bStrict )
 bool VCLXFormattedSpinField::isStrictFormat()
 {
     FormatterBase* pFormatter = GetFormatter();
-    return pFormatter ? pFormatter->IsStrictFormat() : false;
+    return pFormatter && pFormatter->IsStrictFormat();
 }
 
 

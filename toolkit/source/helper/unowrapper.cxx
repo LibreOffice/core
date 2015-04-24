@@ -212,7 +212,7 @@ static bool lcl_ImplIsParent( vcl::Window* pParentWindow, vcl::Window* pPossible
     while ( pWindow && ( pWindow != pParentWindow ) )
         pWindow = pWindow->GetParent();
 
-    return pWindow ? true : false;
+    return pWindow != nullptr;
 }
 
 void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
