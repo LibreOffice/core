@@ -10,7 +10,9 @@
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
@@ -45,6 +47,7 @@ public:
     void testSetTextSelection();
     void testSetGraphicSelection();
     void testResetSelection();
+    void testSearch();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -55,6 +58,7 @@ public:
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
+    CPPUNIT_TEST(testSearch);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -68,6 +72,7 @@ private:
     uno::Reference<lang::XComponent> mxComponent;
 #if !defined(WNT) && !defined(MACOSX)
     Rectangle m_aInvalidation;
+    std::vector<Rectangle> m_aSelection;
 #endif
 };
 
@@ -103,6 +108,33 @@ void SdTiledRenderingTest::callback(int nType, const char* pPayload, void* pData
     static_cast<SdTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
 }
 
+static std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_Unicode nSeparator)
+{
+    std::vector<OUString> aRet;
+
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString aToken = rString.getToken(0, nSeparator, nIndex);
+        aToken = aToken.trim();
+        if (!aToken.isEmpty())
+            aRet.push_back(aToken);
+    }
+    while (nIndex >= 0);
+
+    return aRet;
+}
+
+static void lcl_convertRectangle(const OUString& rString, Rectangle& rRectangle)
+{
+    uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+    rRectangle.setX(aSeq[0].toInt32());
+    rRectangle.setY(aSeq[1].toInt32());
+    rRectangle.setWidth(aSeq[2].toInt32());
+    rRectangle.setHeight(aSeq[3].toInt32());
+}
+
 void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
     switch (nType)
@@ -111,13 +143,18 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     {
         OUString aPayload = OUString::createFromAscii(pPayload);
         if (aPayload != "EMPTY" && m_aInvalidation.IsEmpty())
+            lcl_convertRectangle(aPayload, m_aInvalidation);
+    }
+    break;
+    case LOK_CALLBACK_TEXT_SELECTION:
+    {
+        OUString aPayload = OUString::createFromAscii(pPayload);
+        m_aSelection.clear();
+        for (const OUString& rString : lcl_convertSeparated(aPayload, static_cast<sal_Unicode>(';')))
         {
-            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(aPayload);
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-            m_aInvalidation.setX(aSeq[0].toInt32());
-            m_aInvalidation.setY(aSeq[1].toInt32());
-            m_aInvalidation.setWidth(aSeq[2].toInt32());
-            m_aInvalidation.setHeight(aSeq[3].toInt32());
+            Rectangle aRectangle;
+            lcl_convertRectangle(rString, aRectangle);
+            m_aSelection.push_back(aRectangle);
         }
     }
     break;
@@ -267,6 +304,31 @@ void SdTiledRenderingTest::testResetSelection()
     // Now use resetSelection() to reset the selection.
     pXImpressDocument->resetSelection();
     CPPUNIT_ASSERT(!pView->GetTextEditObject());
+}
+
+void SdTiledRenderingTest::testSearch()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+    uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xShape->setString("Aaa bbb.");
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("bbb"))},
+        {"SearchItem.Backward", uno::makeAny(false)}
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    // Did we indeed manage to select the second word?
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), rEditView.GetSelected());
+
+    // Did the selection callback fire?
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), m_aSelection.size());
 }
 
 #endif
