@@ -1508,7 +1508,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( makeSdrTextUpperDistItem( nTextTop ) );
     rSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
 
-    rSet.Put( makeSdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? true : false ) );
+    rSet.Put( makeSdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) );
     rSet.Put( makeSdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
 }
 
@@ -5396,8 +5396,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         pImpRec->nCropFromRight = GetPropertyValue(
                                     DFF_Prop_cropFromRight, 0 );
 
-        pImpRec->bVFlip = (rObjData.nSpFlags & SP_FFLIPV) ? true : false;
-        pImpRec->bHFlip = (rObjData.nSpFlags & SP_FFLIPH) ? true : false;
+        pImpRec->bVFlip = (rObjData.nSpFlags & SP_FFLIPV) != 0;
+        pImpRec->bHFlip = (rObjData.nSpFlags & SP_FFLIPH) != 0;
 
         sal_uInt32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
         pImpRec->eLineStyle = (nLineFlags & 8)
@@ -5992,7 +5992,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 
     // Can the shape be replaced with a frame?
     // (provided that it is a TextBox and the text is not rotated)
-    bool bCanBeReplaced = (ULONG_MAX > nPosGroup) ? false : true;
+    bool bCanBeReplaced = nPosGroup >= ULONG_MAX;
 
     // we don't know yet whether it's a TextBox
     MSO_SPT         eShapeType      = mso_sptNil;
