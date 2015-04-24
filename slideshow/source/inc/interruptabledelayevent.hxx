@@ -62,7 +62,7 @@ namespace slideshow
                 // pass on to wrappee - this ensures that we return
                 // false on isCharged(), even if the other event has
                 // been fired outside our own fire() method
-                return !mpEvent ? false : mpEvent->isCharged();
+                return mpEvent && mpEvent->isCharged();
             }
 
             virtual double getActivationTime( double nCurrentTime ) const SAL_OVERRIDE

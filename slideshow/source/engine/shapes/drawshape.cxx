@@ -731,8 +731,7 @@ namespace slideshow
 
         bool DrawShape::isContentChanged() const
         {
-            return mbForceUpdate ?
-                true :
+            return mbForceUpdate ||
                 getUpdateFlags() != ViewShape::NONE;
         }
 
