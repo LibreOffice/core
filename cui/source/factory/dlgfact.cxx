@@ -1816,12 +1816,12 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog( vc
 
 SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
 {
-    return VclPtr<SvxSplitTableDlg>::Create( pParent, bIsTableVertical, nMaxVertical, nMaxHorizontal );
+    return new SvxSplitTableDlg( pParent, bIsTableVertical, nMaxVertical, nMaxHorizontal );
 }
 
 SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog( vcl::Window* pParent )
 {
-    return VclPtr<SvxNewTableDialog>::Create( pParent );
+    return new SvxNewTableDialog( pParent );
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
@@ -1832,7 +1832,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
 
 SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId )
 {
-    return VclPtr<SvxInsRowColDlg>::Create( pParent, bCol, sHelpId );
+    return new SvxInsRowColDlg( pParent, bCol, sHelpId );
 }
 
 AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog(

@@ -24,16 +24,27 @@
 #include "splitcelldlg.hxx"
 #include "cuires.hrc"
 
+namespace {
+    class NoApplyDialog : public SvxStandardDialog
+    {
+    public:
+        NoApplyDialog(vcl::Window *pParent, const OUString &rId, const OUString &rXML) :
+            SvxStandardDialog(pParent, rId, rXML) { }
+    protected:
+        virtual void Apply() SAL_OVERRIDE {}
+    };
+}
+
 SvxSplitTableDlg::SvxSplitTableDlg( vcl::Window *pParent, bool bIsTableVertical,
     long nMaxVertical, long nMaxHorizontal )
-    : SvxStandardDialog(pParent, "SplitCellsDialog", "cui/ui/splitcellsdialog.ui")
+    : m_pDialog(VclPtr<NoApplyDialog>::Create(pParent, "SplitCellsDialog", "cui/ui/splitcellsdialog.ui"))
     , mnMaxVertical(nMaxVertical)
     , mnMaxHorizontal(nMaxHorizontal)
 {
-    get(m_pCountEdit, "countnf");
-    get(m_pHorzBox, "hori");
-    get(m_pVertBox, "vert");
-    get(m_pPropCB, "prop");
+    m_pDialog->get(m_pCountEdit, "countnf");
+    m_pDialog->get(m_pHorzBox, "hori");
+    m_pDialog->get(m_pVertBox, "vert");
+    m_pDialog->get(m_pPropCB, "prop");
     m_pHorzBox->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
     m_pPropCB->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
     m_pVertBox->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
@@ -55,16 +66,11 @@ SvxSplitTableDlg::SvxSplitTableDlg( vcl::Window *pParent, bool bIsTableVertical,
 
 SvxSplitTableDlg::~SvxSplitTableDlg()
 {
-    disposeOnce();
-}
-
-void SvxSplitTableDlg::dispose()
-{
     m_pCountEdit.clear();
     m_pHorzBox.clear();
     m_pVertBox.clear();
     m_pPropCB.clear();
-    SvxStandardDialog::dispose();
+    m_pDialog.disposeAndClear();
 }
 
 IMPL_LINK( SvxSplitTableDlg, ClickHdl, Button *, pButton )
@@ -93,11 +99,7 @@ long SvxSplitTableDlg::GetCount() const
 
 short SvxSplitTableDlg::Execute()
 {
-    return SvxStandardDialog::Execute();
-}
-
-void SvxSplitTableDlg::Apply()
-{
+    return m_pDialog->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

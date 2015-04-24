@@ -26,8 +26,9 @@
 #include <svx/stddlg.hxx>
 #include <svx/svxdlg.hxx>
 
-class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public SvxStandardDialog
+class SvxSplitTableDlg : public SvxAbstractSplittTableDialog
 {
+    VclPtr<SvxStandardDialog> m_pDialog;
     VclPtr<NumericField> m_pCountEdit;
     VclPtr<RadioButton>  m_pHorzBox;
     VclPtr<RadioButton>  m_pVertBox;
@@ -35,13 +36,10 @@ class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public SvxStandard
 
     long                mnMaxVertical;
     long                mnMaxHorizontal;
-protected:
-    virtual void Apply() SAL_OVERRIDE;
 
 public:
     SvxSplitTableDlg(vcl::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
     virtual ~SvxSplitTableDlg();
-    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK( ClickHdl, Button * );
 

@@ -29,8 +29,9 @@
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
 
-class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
+class SvxInsRowColDlg : public SvxAbstractInsRowColDlg
 {
+    VclPtr<ModalDialog>    m_pDialog;
     VclPtr<NumericField>   m_pCountEdit;
 
     VclPtr<RadioButton>    m_pBeforeBtn;
@@ -39,12 +40,11 @@ class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
     OUString   aRow;
     OUString   aCol;
 
-    bool            bColumn;
+    bool bColumn;
 
 public:
     SvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId );
     virtual ~SvxInsRowColDlg();
-    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute(void) SAL_OVERRIDE;
 
