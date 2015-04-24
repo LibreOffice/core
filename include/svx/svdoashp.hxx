@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 
 //   Initial Declarations
@@ -57,18 +58,26 @@ class SdrAShapeObjGeoData : public SdrTextObjGeoData
                 aAdjustmentSeq;
 };
 
-#define CUSTOMSHAPE_HANDLE_RESIZE_FIXED         1
-#define CUSTOMSHAPE_HANDLE_CREATE_FIXED         2
-#define CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X    4
-#define CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y    8
-#define CUSTOMSHAPE_HANDLE_MOVE_SHAPE           16
-#define CUSTOMSHAPE_HANDLE_ORTHO4               32
+enum class CustomShapeHandleModes
+{
+    NONE                 = 0,
+    RESIZE_FIXED         = 1,
+    CREATE_FIXED         = 2,
+    RESIZE_ABSOLUTE_X    = 4,
+    RESIZE_ABSOLUTE_Y    = 8,
+    MOVE_SHAPE           = 16,
+    ORTHO4               = 32,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<CustomShapeHandleModes> : is_typed_flags<CustomShapeHandleModes, 63> {};
+}
 
 struct SdrCustomShapeInteraction
 {
     com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle >   xInteraction;
     com::sun::star::awt::Point                                                      aPosition;
-    sal_Int32                                                                       nMode;
+    CustomShapeHandleModes                                                          nMode;
 };
 
 

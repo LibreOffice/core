@@ -619,15 +619,15 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
                     aSdrCustomShapeInteraction.xInteraction = xInteractionHandles[ i ];
                     aSdrCustomShapeInteraction.aPosition = xInteractionHandles[ i ]->getPosition();
 
-                    sal_Int32 nMode = 0;
+                    CustomShapeHandleModes nMode = CustomShapeHandleModes::NONE;
                     switch( ImpGetCustomShapeType( *this ) )
                     {
                         case mso_sptAccentBorderCallout90 :     // 2 ortho
                         {
                             if (i == 0)
-                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
+                                nMode |= CustomShapeHandleModes::RESIZE_FIXED | CustomShapeHandleModes::CREATE_FIXED;
                             else if (i == 1)
-                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE | CUSTOMSHAPE_HANDLE_ORTHO4;
+                                nMode |= CustomShapeHandleModes::RESIZE_ABSOLUTE_X | CustomShapeHandleModes::RESIZE_ABSOLUTE_Y | CustomShapeHandleModes::MOVE_SHAPE | CustomShapeHandleModes::ORTHO4;
                         }
                         break;
 
@@ -637,24 +637,24 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
                         case mso_sptWedgeEllipseCallout :
                         {
                             if (i == 0)
-                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED;
+                                nMode |= CustomShapeHandleModes::RESIZE_FIXED;
                         }
                         break;
 
                         case mso_sptBorderCallout1 :            // 2 diag
                         {
                             if (i == 0)
-                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
+                                nMode |= CustomShapeHandleModes::RESIZE_FIXED | CustomShapeHandleModes::CREATE_FIXED;
                             else if (i == 1)
-                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE;
+                                nMode |= CustomShapeHandleModes::RESIZE_ABSOLUTE_X | CustomShapeHandleModes::RESIZE_ABSOLUTE_Y | CustomShapeHandleModes::MOVE_SHAPE;
                         }
                         break;
                         case mso_sptBorderCallout2 :            // 3
                         {
                             if (i == 0)
-                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
+                                nMode |= CustomShapeHandleModes::RESIZE_FIXED | CustomShapeHandleModes::CREATE_FIXED;
                             else if (i == 2)
-                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE;
+                                nMode |= CustomShapeHandleModes::RESIZE_ABSOLUTE_X | CustomShapeHandleModes::RESIZE_ABSOLUTE_Y | CustomShapeHandleModes::MOVE_SHAPE;
                         }
                         break;
                         case mso_sptCallout90 :
@@ -672,7 +672,7 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
                         case mso_sptAccentBorderCallout3 :
                         {
                             if (i == 0)
-                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
+                                nMode |= CustomShapeHandleModes::RESIZE_FIXED | CustomShapeHandleModes::CREATE_FIXED;
                         }
                         break;
                         default: break;
@@ -1603,14 +1603,14 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
     {
         try
         {
-            if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_FIXED )
+            if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
                 aIter->xInteraction->setControllerPosition( aIter->aPosition );
-            if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X )
+            if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X )
             {
                 sal_Int32 nX = ( aIter->aPosition.X - aOld.Left() ) + maRect.Left();
                 aIter->xInteraction->setControllerPosition( com::sun::star::awt::Point( nX, aIter->xInteraction->getPosition().Y ) );
             }
-            if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y )
+            if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
             {
                 sal_Int32 nY = ( aIter->aPosition.Y - aOld.Top() ) + maRect.Top();
                 aIter->xInteraction->setControllerPosition( com::sun::star::awt::Point( aIter->xInteraction->getPosition().X, nY ) );
@@ -2022,9 +2022,9 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect )
         {
             try
             {
-                if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_FIXED )
+                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
                     aIter->xInteraction->setControllerPosition( aIter->aPosition );
-                if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X )
+                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X )
                 {
                     sal_Int32 nX;
                     if ( bOldMirroredX )
@@ -2045,7 +2045,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect )
                     }
                     aIter->xInteraction->setControllerPosition( com::sun::star::awt::Point( nX, aIter->xInteraction->getPosition().Y ) );
                 }
-                if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y )
+                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
                 {
                     sal_Int32 nY;
                     if ( bOldMirroredY )
@@ -2086,7 +2086,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
             try
             {
                 com::sun::star::awt::Point aPt( rDestination.X(), rDestination.Y() );
-                if ( aInteractionHandle.nMode & CUSTOMSHAPE_HANDLE_MOVE_SHAPE && bMoveCalloutRectangle )
+                if ( aInteractionHandle.nMode & CustomShapeHandleModes::MOVE_SHAPE && bMoveCalloutRectangle )
                 {
                     sal_Int32 nXDiff = aPt.X - aInteractionHandle.aPosition.X;
                     sal_Int32 nYDiff = aPt.Y - aInteractionHandle.aPosition.Y;
@@ -2100,7 +2100,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
                     for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() ) ;
                       aIter != aEnd; ++aIter)
                     {
-                        if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_FIXED )
+                        if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
                         {
                             if ( aIter->xInteraction.is() )
                                 aIter->xInteraction->setControllerPosition( aIter->aPosition );
@@ -2190,7 +2190,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     {
         try
         {
-            if ( aIter->nMode & CUSTOMSHAPE_HANDLE_CREATE_FIXED )
+            if ( aIter->nMode & CustomShapeHandleModes::CREATE_FIXED )
                 aIter->xInteraction->setControllerPosition( awt::Point( rStat.GetStart().X(), rStat.GetStart().Y() ) );
         }
         catch ( const uno::RuntimeException& )
@@ -2526,7 +2526,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         {
             try
             {
-                if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_FIXED )
+                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
                     aIter->xInteraction->setControllerPosition( aIter->aPosition );
             }
             catch ( const uno::RuntimeException& )
@@ -2558,7 +2558,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         {
             try
             {
-                if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_FIXED )
+                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
                     aIter->xInteraction->setControllerPosition( aIter->aPosition );
             }
             catch ( const uno::RuntimeException& )
