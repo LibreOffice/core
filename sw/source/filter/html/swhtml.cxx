@@ -2415,29 +2415,20 @@ void SwHTMLParser::AddParSpace()
         }
         else
         {
-            if (!pTxtNode->HasHints())
-            {
-                pTxtNode->SetAttr(
-                    SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE, RES_UL_SPACE )  );
-                return;
-            }
             //What I do here, is that I examine the attributes, and if
             //I find out, that it's CJK/CTL, then I set the paragraph space
             //to the value set in HTML_CJK_PARSPACE/HTML_CTL_PARSPACE.
 
             bool bIsCJK = false;
             bool bIsCTL = false;
-            SwpHints& rHints = pTxtNode->GetSwpHints();
-            sal_uInt16 nWhich;
-            SwTxtAttr *pHt;
 
             const size_t nCntAttr = (pTxtNode  && pTxtNode->GetpSwpHints())
                             ? pTxtNode->GetSwpHints().Count() : 0;
 
             for(size_t i = 0; i < nCntAttr; ++i)
             {
-                pHt = rHints.GetTextHint(i);
-                nWhich = pHt->Which();
+                SwTxtAttr *const pHt = pTxtNode->GetSwpHints().GetTextHint(i);
+                sal_uInt16 const nWhich = pHt->Which();
                 if (RES_CHRATR_CJK_FONT == nWhich ||
                     RES_CHRATR_CJK_FONTSIZE == nWhich ||
                     RES_CHRATR_CJK_LANGUAGE == nWhich ||
