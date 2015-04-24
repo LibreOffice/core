@@ -1167,12 +1167,9 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
         FireVisibleDataEvent();
     }
 
-    if( !bIsNewShowingState &&
-        SwAccessibleChild( GetParent() ).IsVisibleChildrenOnly() )
-    {
-        return;
-    }
-
+    // note: InvalidatePosOrSize must call _InvalidateContent so that
+    // SwAccessibleParagraph updates its portions, or dispose it
+    // (see accmap.cxx: INVALID_CONTENT is contained in POS_CHANGED)
     _InvalidateContent( true );
 }
 
