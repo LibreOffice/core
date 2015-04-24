@@ -799,34 +799,34 @@ bool AstExpression::operator==(AstExpression *pExpr)
     switch (m_exprValue->et)
     {
         case ET_short:
-            bRet = (m_exprValue->u.sval == pExpr->getExprValue()->u.sval) ? true : false;
+            bRet = m_exprValue->u.sval == pExpr->getExprValue()->u.sval;
             break;
         case ET_ushort:
-            bRet = (m_exprValue->u.usval == pExpr->getExprValue()->u.usval) ? true : false;
+            bRet = m_exprValue->u.usval == pExpr->getExprValue()->u.usval;
             break;
         case ET_long:
-            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? true : false;
+            bRet = m_exprValue->u.lval == pExpr->getExprValue()->u.lval;
             break;
         case ET_ulong:
-            bRet = (m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval) ? true : false;
+            bRet = m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval;
             break;
         case ET_hyper:
-            bRet = (m_exprValue->u.hval == pExpr->getExprValue()->u.hval) ? true : false;
+            bRet = m_exprValue->u.hval == pExpr->getExprValue()->u.hval;
             break;
         case ET_uhyper:
-            bRet = (m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval) ? true : false;
+            bRet = m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval;
             break;
         case ET_float:
-            bRet = (m_exprValue->u.fval == pExpr->getExprValue()->u.fval) ? true : false;
+            bRet = m_exprValue->u.fval == pExpr->getExprValue()->u.fval;
             break;
         case ET_double:
-            bRet = (m_exprValue->u.dval == pExpr->getExprValue()->u.dval) ? true : false;
+            bRet = m_exprValue->u.dval == pExpr->getExprValue()->u.dval;
             break;
         case ET_byte:
-            bRet = (m_exprValue->u.byval == pExpr->getExprValue()->u.byval) ? true : false;
+            bRet = m_exprValue->u.byval == pExpr->getExprValue()->u.byval;
             break;
         case ET_boolean:
-            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? true : false;
+            bRet = m_exprValue->u.lval == pExpr->getExprValue()->u.lval;
             break;
         default:
             OSL_ASSERT(false);
@@ -851,34 +851,34 @@ bool AstExpression::compare(AstExpression *pExpr)
     switch (m_exprValue->et)
     {
         case ET_short:
-            bRet = (m_exprValue->u.sval == pExpr->getExprValue()->u.sval) ? true : false;
+            bRet = m_exprValue->u.sval == pExpr->getExprValue()->u.sval;
             break;
         case ET_ushort:
-            bRet = (m_exprValue->u.usval == pExpr->getExprValue()->u.usval) ? true : false;
+            bRet = m_exprValue->u.usval == pExpr->getExprValue()->u.usval;
             break;
         case ET_long:
-            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? true : false;
+            bRet = m_exprValue->u.lval == pExpr->getExprValue()->u.lval;
             break;
         case ET_ulong:
-            bRet = (m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval) ? true : false;
+            bRet = m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval;
             break;
         case ET_hyper:
-            bRet = (m_exprValue->u.hval == pExpr->getExprValue()->u.hval) ? true : false;
+            bRet = m_exprValue->u.hval == pExpr->getExprValue()->u.hval;
             break;
         case ET_uhyper:
-            bRet = (m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval) ? true : false;
+            bRet = m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval;
             break;
         case ET_float:
-            bRet = (m_exprValue->u.fval == pExpr->getExprValue()->u.fval) ? true : false;
+            bRet = m_exprValue->u.fval == pExpr->getExprValue()->u.fval;
             break;
         case ET_double:
-            bRet = (m_exprValue->u.dval == pExpr->getExprValue()->u.dval) ? true : false;
+            bRet = m_exprValue->u.dval == pExpr->getExprValue()->u.dval;
             break;
         case ET_byte:
-            bRet = (m_exprValue->u.byval == pExpr->getExprValue()->u.byval) ? true : false;
+            bRet = m_exprValue->u.byval == pExpr->getExprValue()->u.byval;
             break;
         case ET_boolean:
-            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? true : false;
+            bRet = m_exprValue->u.lval == pExpr->getExprValue()->u.lval;
             break;
         default:
             OSL_ASSERT(false);
