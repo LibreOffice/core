@@ -1362,6 +1362,15 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         WriteSolidFill( color );
     }
 
+    if( GETAD( CharUnderlineColor ) )
+    {
+        sal_uInt32 color = *static_cast<sal_uInt32 const *>(mAny.getValue());
+
+        mpFS->startElementNS( XML_a, XML_uFill,FSEND);
+        WriteSolidFill( color );
+        mpFS->endElementNS( XML_a, XML_uFill );
+    }
+
     if( GETA( CharFontName ) )
     {
         const char* pitch = NULL;
