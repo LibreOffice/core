@@ -68,12 +68,12 @@ SdrUndoAction* OReportUndoFactory::CreateUndoGeoObject( SdrObject& rObject )
 
 SdrUndoAction* OReportUndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 {
-    return m_pUndoFactory->CreateUndoAttrObject( rObject, bStyleSheet1 ? true : false, bSaveText ? true : false );
+    return m_pUndoFactory->CreateUndoAttrObject( rObject, bStyleSheet1, bSaveText );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoRemoveObject( rObject, bOrdNumDirect ? true : false );
+    return m_pUndoFactory->CreateUndoRemoveObject( rObject, bOrdNumDirect );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
@@ -93,7 +93,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool
 
 SdrUndoAction* OReportUndoFactory::CreateUndoCopyObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoCopyObject( rObject, bOrdNumDirect ? true : false );
+    return m_pUndoFactory->CreateUndoCopyObject( rObject, bOrdNumDirect );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
@@ -103,7 +103,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, s
 
 SdrUndoAction* OReportUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect ? true : false );
+    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )

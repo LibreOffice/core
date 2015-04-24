@@ -610,7 +610,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
 
 
                     SdrObject* pObjOverlapped = isOver(aNewRect,*m_pParent->getPage(),m_rView,false,pObjIter, ISOVER_IGNORE_CUSTOMSHAPES);
-                    bIsSetPoint = pObjOverlapped ? true : false;
+                    bIsSetPoint = pObjOverlapped != nullptr;
                     if (pObjOverlapped && !m_bSelectionMode)
                     {
                         colorizeOverlappedObject(pObjOverlapped);

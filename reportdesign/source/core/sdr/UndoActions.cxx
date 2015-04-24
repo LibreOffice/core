@@ -135,7 +135,7 @@ OUndoContainerAction::~OUndoContainerAction()
 #if OSL_DEBUG_LEVEL > 0
             SvxShape* pShape = SvxShape::getImplementation( xChild );
             SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
-            OSL_ENSURE( pObject ? pShape->HasSdrObjectOwnership() && !pObject->IsInserted() : true ,
+            OSL_ENSURE( pObject == nullptr || (pShape->HasSdrObjectOwnership() && !pObject->IsInserted()),
                 "OUndoContainerAction::~OUndoContainerAction: inconsistency in the shape/object ownership!" );
 #endif
             // -> dispose it
