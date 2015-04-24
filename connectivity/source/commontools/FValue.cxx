@@ -963,7 +963,7 @@ Any ORowSetValue::makeAny() const
                     rValue <<= m_aValue.m_uInt64;
                 break;
             default:
-                SAL_WARN( "connectivity.commontools","ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
+                SAL_WARN( "connectivity.commontools","ORowSetValue::makeAny(): UNSUPPORTED TYPE!");
                 rValue = makeAny();
                 break;
         }
