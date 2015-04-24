@@ -41,6 +41,21 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
+              <object class="GtkButton" id="help">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="create_btn">
                 <property name="label" translatable="yes">Insert Slides</property>
                 <property name="visible">True</property>
@@ -52,26 +67,12 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="cancel_btn">
                 <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="help">
-                <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -343,8 +344,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="asr_check">
-                        <property name="label" translatable="yes">Keep aspect ratio</property>
+                      <object class="GtkCheckButton" id="cap_check">
+                        <property name="label" translatable="yes">Add caption to each slide</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -359,8 +360,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="cap_check">
-                        <property name="label" translatable="yes">Add caption to each slide</property>
+                      <object class="GtkCheckButton" id="asr_check">
+                        <property name="label" translatable="yes">Keep aspect ratio</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
