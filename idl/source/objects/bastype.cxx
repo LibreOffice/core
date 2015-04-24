@@ -69,8 +69,8 @@ SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
 {
     sal_uInt8 n;
     rStm.ReadUChar( n );
-    rb.nVal = (n & 0x01) ? true : false;
-    rb.bSet = (n & 0x02) ? true : false;
+    rb.nVal = (n & 0x01) != 0;
+    rb.bSet = (n & 0x02) != 0;
     if( n & ~0x03 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
