@@ -57,8 +57,8 @@ class StringEmitContext : public EmitContext
     }
     virtual unsigned int getCurPos() throw() SAL_OVERRIDE { return m_aBuf.getLength(); }
     virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw() SAL_OVERRIDE
-    { return (nOrigOffset+nLen < static_cast<unsigned int>(m_aBuf.getLength()) ) ?
-             write( m_aBuf.getStr() + nOrigOffset, nLen ) : false; }
+    { return (nOrigOffset+nLen < static_cast<unsigned int>(m_aBuf.getLength()) ) &&
+             write( m_aBuf.getStr() + nOrigOffset, nLen ); }
     virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw() SAL_OVERRIDE
     {
         if( nOrigOffset+nLen < static_cast<unsigned int>(m_aBuf.getLength()) )

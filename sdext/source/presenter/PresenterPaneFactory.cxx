@@ -288,7 +288,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     aArguments[4] <<= Reference<drawing::framework::XPaneBorderPainter>(
         static_cast<XWeak*>(mpPresenterController->GetPaneBorderPainter().get()),
         UNO_QUERY);
-    aArguments[5] <<= bIsSpritePane ? false : true;
+    aArguments[5] <<= !bIsSpritePane;
     xPane->initialize(aArguments);
 
     // Store pane and canvases and windows in container.
