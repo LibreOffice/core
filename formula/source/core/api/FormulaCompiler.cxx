@@ -1868,7 +1868,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
 
             case svIndex:
                 CreateStringFromIndex( rBuffer, t );
-                if (t->GetOpCode() == ocTableRef && bAllowArrAdvance && mxSymbols->getSymbol( ocTableRefOpen).isEmpty())
+                if (t->GetOpCode() == ocTableRef && bAllowArrAdvance && NeedsTableRefTransformation())
                 {
                     // Suppress all TableRef related tokens, the resulting
                     // range was written by CreateStringFromIndex().
@@ -1987,6 +1987,18 @@ void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rS
         rBuffer.append(aStr);
     }
     rBuffer.append( '"');
+}
+
+bool FormulaCompiler::NeedsTableRefTransformation() const
+{
+    /* TODO: currently only UI representations use Table structured
+     * references. Not defined in ODFF, and not implemented yet for OOXML
+     * export. Change this once OOXML export is implemented, until then write
+     * A1 style references also for OOXML to not lose functionality. */
+    // Unnecessary to explicitly check for ODFF grammar as the ocTableRefOpen
+    // symbol is not defined there.
+    return mxSymbols->getSymbol( ocTableRefOpen).isEmpty() || FormulaGrammar::isPODF( meGrammar)
+        || FormulaGrammar::isOOXML( meGrammar);
 }
 
 void FormulaCompiler::UpdateSeparatorsNative(

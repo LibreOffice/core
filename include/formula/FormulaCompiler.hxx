@@ -255,6 +255,12 @@ public:
         including an address reference convention. */
     inline  FormulaGrammar::Grammar   GetGrammar() const { return meGrammar; }
 
+    /** Whether current symbol set and grammar need transformation of Table
+        structured references to A1 style references when writing / exporting
+        (creating strings).
+     */
+    bool NeedsTableRefTransformation() const;
+
     static void UpdateSeparatorsNative( const OUString& rSep, const OUString& rArrayColSep, const OUString& rArrayRowSep );
     static void ResetNativeSymbols();
     static void SetNativeSymbols( const OpCodeMapPtr& xMap );

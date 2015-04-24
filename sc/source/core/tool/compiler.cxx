@@ -4597,7 +4597,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
         break;
         case ocTableRef:
         {
-            if (mxSymbols->getSymbol( ocTableRefOpen).isEmpty())
+            if (NeedsTableRefTransformation())
             {
                 // Write the resulting reference if TableRef is not supported.
                 const ScTableRefToken* pTR = dynamic_cast<const ScTableRefToken*>(_pTokenP);
