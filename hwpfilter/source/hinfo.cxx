@@ -32,7 +32,7 @@ static bool HWPReadInfoBlock(void *ptr, int len, HWPFile & hwpf)
     if (0 == len)
         return true;
     else
-        return hwpf.ReadBlock(ptr, len) ? true : false;
+        return hwpf.ReadBlock(ptr, len) != 0;
 }
 
 
@@ -170,8 +170,8 @@ bool HWPInfo::Read(HWPFile & hwpf)
     }
 
 /* hwpf의 값을 재설정 한다. */
-    hwpf.compressed = compressed ? true : false;
-    hwpf.encrypted = encrypted ? true : false;
+    hwpf.compressed = compressed != 0;
+    hwpf.encrypted = encrypted != 0;
     hwpf.info_block_len = info_block_len;
     hwpf.SetCompressed(hwpf.compressed);
 

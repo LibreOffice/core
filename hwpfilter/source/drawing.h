@@ -167,8 +167,8 @@ static int ReadSizeField(int size)
 
 static bool SkipUnusedField(void)
 {
-    return (SizeExpected < SizeRead) ?
-        hmem->skipBlock(SizeRead - SizeExpected) != 0 : true;
+    return (SizeExpected >= SizeRead) &&
+        hmem->skipBlock(SizeRead - SizeExpected) != 0;
 }
 
 

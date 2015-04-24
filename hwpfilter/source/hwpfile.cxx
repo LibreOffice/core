@@ -140,7 +140,7 @@ int HWPFile::SetState(int errcode)
 
 bool HWPFile::Read1b(unsigned char &out)
 {
-    return hiodev ? hiodev->read1b(out) : false;
+    return hiodev && hiodev->read1b(out);
 }
 
 bool HWPFile::Read1b(char &out)
@@ -154,12 +154,12 @@ bool HWPFile::Read1b(char &out)
 
 bool HWPFile::Read2b(unsigned short &out)
 {
-    return hiodev ? hiodev->read2b(out) : false;
+    return hiodev && hiodev->read2b(out);
 }
 
 bool HWPFile::Read4b(unsigned int &out)
 {
-    return hiodev ? hiodev->read4b(out) : false;
+    return hiodev && hiodev->read4b(out);
 }
 
 bool HWPFile::Read4b(int &out)
@@ -202,7 +202,7 @@ size_t HWPFile::SkipBlock(size_t size)
 
 bool HWPFile::SetCompressed(bool flag)
 {
-    return hiodev ? hiodev->setCompressed(flag) : false;
+    return hiodev && hiodev->setCompressed(flag);
 }
 
 
