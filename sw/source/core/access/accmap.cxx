@@ -371,8 +371,8 @@ public:
           mnStates( AccessibleStates::NONE ),
           mpParentFrm( nullptr )
     {
-        OSL_ENSURE( SwAccessibleEvent_Impl::DISPOSE == meType,
-                "wrong event constructor, DISPOSE only" );
+        assert(SwAccessibleEvent_Impl::DISPOSE == meType &&
+                "wrong event constructor, DISPOSE only");
     }
 
     SwAccessibleEvent_Impl( EventType eT )
@@ -380,7 +380,7 @@ public:
           mnStates( AccessibleStates::NONE ),
           mpParentFrm( nullptr )
     {
-        OSL_ENSURE( SwAccessibleEvent_Impl::SHAPE_SELECTION == meType,
+        assert(SwAccessibleEvent_Impl::SHAPE_SELECTION == meType &&
                 "wrong event constructor, SHAPE_SELECTION only" );
     }
 
@@ -395,8 +395,8 @@ public:
           mnStates( AccessibleStates::NONE ),
           mpParentFrm( nullptr )
     {
-        OSL_ENSURE( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
-                SwAccessibleEvent_Impl::POS_CHANGED == meType,
+        assert((SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
+                SwAccessibleEvent_Impl::POS_CHANGED == meType) &&
                 "wrong event constructor, (CHILD_)POS_CHANGED only" );
     }
 
@@ -410,7 +410,7 @@ public:
           mnStates( _nStates ),
           mpParentFrm( nullptr )
     {
-        OSL_ENSURE( SwAccessibleEvent_Impl::CARET_OR_STATES == meType,
+        assert( SwAccessibleEvent_Impl::CARET_OR_STATES == meType &&
                 "wrong event constructor, CARET_OR_STATES only" );
     }
 
@@ -422,7 +422,7 @@ public:
         mnStates( AccessibleStates::NONE ),
         mpParentFrm( pParentFrm )
     {
-        OSL_ENSURE( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType,
+        assert( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType &&
             "wrong event constructor, CHILD_POS_CHANGED only" );
     }
 
