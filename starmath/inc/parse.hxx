@@ -128,7 +128,7 @@ public:
 
 inline bool SmParser::TokenInGroup( sal_uLong nGroup)
 {
-    return (m_aCurToken.nGroup & nGroup) ? true : false;
+    return (m_aCurToken.nGroup & nGroup) != 0;
 }
 
 

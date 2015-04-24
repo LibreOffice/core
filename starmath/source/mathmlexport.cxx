@@ -302,7 +302,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     SmXMLExport *pFilter = reinterpret_cast< SmXMLExport * >(
                 sal::static_int_cast< sal_uIntPtr >(
                 xFilterTunnel->getSomething( SmXMLExport::getUnoTunnelId() )));
-    return pFilter ? pFilter->GetSuccess() : true;
+    return pFilter == nullptr || pFilter->GetSuccess();
 }
 
 
