@@ -69,9 +69,9 @@ protected:
     void resolveFastSubStream(Stream & rStream,
                                       OOXMLStream::StreamType_t nType);
 
-    void resolveFastSubStreamWithId(Stream & rStream,
-                                      writerfilter::Reference<Stream>::Pointer_t pStream,
-                      sal_uInt32 nId);
+    static void resolveFastSubStreamWithId(Stream & rStream,
+                                           writerfilter::Reference<Stream>::Pointer_t pStream,
+                                           sal_uInt32 nId);
 
     css::uno::Reference<css::xml::dom::XDocument> importSubStream(OOXMLStream::StreamType_t nType);
 

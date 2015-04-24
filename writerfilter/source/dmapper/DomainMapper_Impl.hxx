@@ -475,7 +475,7 @@ public:
     }
     void SetDocumentSettingsProperty( const OUString& rPropName, const css::uno::Any& rValue );
 
-    void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, RedlineParamsPtr pRedline);
+    static void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, RedlineParamsPtr pRedline);
 
     void CheckParaMarkerRedline(css::uno::Reference<css::text::XTextRange> const& xRange);
 
@@ -629,7 +629,7 @@ public:
         PropertyNameSupplier& rPropNameSupplier,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
-    void handleAuthor
+    static void handleAuthor
         (OUString const& rFirstParam,
         PropertyNameSupplier& rPropNameSupplier,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,

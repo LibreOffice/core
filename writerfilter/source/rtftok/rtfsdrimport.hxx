@@ -35,13 +35,13 @@ public:
     /// Append property on the current parent.
     void appendGroupProperty(const OUString& aKey, const OUString& aValue);
     void resolveDhgt(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, sal_Int32 nZOrder, bool bOldStyle);
-    void resolveFLine(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, sal_Int32 nFLine);
+    static void resolveFLine(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, sal_Int32 nFLine);
     /**
      * These are the default in Word, but not in Writer.
      *
      * @param bNew if the frame is new-style or old-style.
      */
-    std::vector<css::beans::PropertyValue> getTextFrameDefaults(bool bNew);
+    static std::vector<css::beans::PropertyValue> getTextFrameDefaults(bool bNew);
     /// Push a new group shape to the parent stack.
     void pushParent(css::uno::Reference<css::drawing::XShapes> const& xParent);
     /// Pop the current group shape from the parent stack.
