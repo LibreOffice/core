@@ -158,12 +158,12 @@ public:
     bool isConnectionUrlRequired(const OUString& _sURL) const;
 
     /// checks if the given data source type embeds its data into the database document
-    bool isEmbeddedDatabase( const OUString& _sURL ) const;
+    static bool isEmbeddedDatabase( const OUString& _sURL );
 
     OUString getEmbeddedDatabase() const;
 
     // returns true when the properties dialog can be shown, otherwise false.
-    bool isShowPropertiesEnabled( const OUString& _sURL ) const;
+    static bool isShowPropertiesEnabled( const OUString& _sURL );
 
     /** returns default settings for newly created databases of the given type.
     */

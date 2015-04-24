@@ -84,7 +84,7 @@ namespace dbaui
                 impl_handle_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_Request );
 
         /// handle SQLExceptions (and derived classes)
-        void    implHandle(
+        static void implHandle(
                     const ::dbtools::SQLExceptionInfo& _rSqlInfo,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
 
@@ -116,7 +116,7 @@ namespace dbaui
             @return     the index within <arg>_rContinuations</arg> of the first occurrence of a continuation
                         of the requested type, -1 of no such continuation exists
         */
-        sal_Int32 getContinuation(
+        static sal_Int32 getContinuation(
             Continuation _eCont,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
     };

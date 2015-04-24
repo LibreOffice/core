@@ -148,7 +148,7 @@ namespace dbaui
             @param  _xContainer The container where the element type has to be found
             @return the element type corresponding to the given container
         */
-        ElementType getElementType(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) const;
+        static ElementType getElementType(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer);
 
         /** opens a new frame with either the table or the query or report or form or view
             @param  _sName
@@ -287,7 +287,7 @@ namespace dbaui
             @param  _rFormatIds
                 The vector to be filled up.
         */
-        void getSupportedFormats(ElementType _eType,::std::vector<SotClipboardFormatId>& _rFormatIds) const;
+        static void getSupportedFormats(ElementType _eType,::std::vector<SotClipboardFormatId>& _rFormatIds);
 
         /** adds a listener to the current name access.
             @param  _xCollection

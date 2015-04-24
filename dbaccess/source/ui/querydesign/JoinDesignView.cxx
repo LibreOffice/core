@@ -101,7 +101,7 @@ void OJoinDesignView::setReadOnly(bool /*_bReadOnly*/)
 
 void OJoinDesignView::SaveTabWinUIConfig(OTableWindow* pWin)
 {
-    getController().SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar().GetThumbPos(), m_pScrollWindow->GetVScrollBar().GetThumbPos());
+    OJoinController::SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar().GetThumbPos(), m_pScrollWindow->GetVScrollBar().GetThumbPos());
 }
 
 void OJoinDesignView::KeyInput( const KeyEvent& rEvt )

@@ -154,7 +154,7 @@ namespace dbaui
                           const SharedConnection& _xConnection);
 
         /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
-        bool isTableFormat(const TransferableDataHelper& _rClipboard) const;
+        static bool isTableFormat(const TransferableDataHelper& _rClipboard);
 
         inline void                     SetTableNameForAppend( const OUString& _rDefaultTableName ) { m_sTableNameForAppend = _rDefaultTableName; }
         inline void                     ResetTableNameForAppend() { SetTableNameForAppend( OUString() ); }

@@ -806,7 +806,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = getContainer()->getSelectionCount() > 0 && getContainer()->isALeafSelected();
                 break;
             case SID_DB_APP_DSUSERADMIN:
-                aReturn.bEnabled = !m_aTypeCollection.isEmbeddedDatabase(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                aReturn.bEnabled = !dbaccess::ODsnTypeCollection::isEmbeddedDatabase(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                 break;
             case SID_DB_APP_DSRELDESIGN:
                 aReturn.bEnabled = true;
@@ -818,10 +818,10 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = getContainer()->getElementType() == E_TABLE && isConnected();
                 break;
             case SID_DB_APP_DSPROPS:
-                aReturn.bEnabled = m_xDataSource.is() && m_aTypeCollection.isShowPropertiesEnabled(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                aReturn.bEnabled = m_xDataSource.is() && dbaccess::ODsnTypeCollection::isShowPropertiesEnabled(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
-                aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is() && !m_aTypeCollection.isEmbeddedDatabase(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is() && !dbaccess::ODsnTypeCollection::isEmbeddedDatabase(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
                 aReturn.bEnabled = m_xDataSource.is() && AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( m_aTypeCollection.getType(::comphelper::getString( m_xDataSource->getPropertyValue( PROPERTY_URL ) )) );
@@ -877,7 +877,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     OUString sURL;
                     m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sURL;
                     OUString sDSTypeName;
-                    if ( m_aTypeCollection.isEmbeddedDatabase( sURL ) )
+                    if ( dbaccess::ODsnTypeCollection::isEmbeddedDatabase( sURL ) )
                     {
                         sDSTypeName = OUString( ModuleRes( RID_STR_EMBEDDED_DATABASE ) );
                     }

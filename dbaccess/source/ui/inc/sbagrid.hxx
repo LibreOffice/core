@@ -156,7 +156,7 @@ namespace dbaui
 
             dtUnknown
         };
-        DispatchType classifyDispatchURL( const ::com::sun::star::util::URL& _rURL );
+        static DispatchType classifyDispatchURL( const ::com::sun::star::util::URL& _rURL );
 
         typedef std::map<DispatchType, sal_Bool> MapDispatchToBool;
         MapDispatchToBool   m_aDispatchStates;

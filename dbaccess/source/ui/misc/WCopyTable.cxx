@@ -1109,7 +1109,7 @@ void OCopyTableWizard::clearDestColumns()
     m_mNameMapping.clear();
 }
 
-void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, bool _bKeyColumns) const
+void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, bool _bKeyColumns)
 {
     // now append the columns
     OSL_ENSURE(_rxColSup.is(),"No columns supplier");
@@ -1159,7 +1159,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
     }
 }
 
-void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatabaseExport::TColumnVector* _pVec) const
+void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatabaseExport::TColumnVector* _pVec)
 {
     if(!_rxSup.is())
         return; // the database doesn't support keys

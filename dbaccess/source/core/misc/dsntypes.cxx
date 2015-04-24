@@ -190,7 +190,7 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(const OUString& _s
     return sURL;
 }
 
-bool ODsnTypeCollection::isShowPropertiesEnabled( const OUString& _sURL ) const
+bool ODsnTypeCollection::isShowPropertiesEnabled( const OUString& _sURL )
 {
     return !(   _sURL.startsWithIgnoreAsciiCase("sdbc:embedded:hsqldb")
             ||  _sURL.startsWithIgnoreAsciiCase("sdbc:embedded:firebird")
@@ -291,7 +291,7 @@ Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const OUString
     return aProperties.getPropertyValues();
 }
 
-bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL ) const
+bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL )
 {
     return _sURL.startsWith( "sdbc:embedded:" );
 }

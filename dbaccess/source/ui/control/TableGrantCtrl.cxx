@@ -317,7 +317,7 @@ void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
     }
 }
 
-bool OTableGrantControl::isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivilege) const
+bool OTableGrantControl::isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivilege)
 {
     bool bAllowed = false;
     switch (_nColumnId)

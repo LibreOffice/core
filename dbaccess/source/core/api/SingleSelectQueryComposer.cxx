@@ -1084,7 +1084,7 @@ bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     return true;
 }
 
-sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredicate) const
+sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredicate)
 {
     sal_Int32 nPredicate = SQLFilterOperator::EQUAL;
     switch (_pPredicate->getNodeType())
@@ -1236,7 +1236,7 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
 }
 
 // Functions for analysing SQL
-OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNode* pColumnRef, OSQLParseTreeIterator& _rIterator ) const
+OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNode* pColumnRef, OSQLParseTreeIterator& _rIterator )
 {
     OUString aTableRange, aColumnName;
     _rIterator.getColumnRange(pColumnRef,aColumnName,aTableRange);
@@ -1807,7 +1807,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
     return aFilterSeq;
 }
 
-OUString OSingleSelectQueryComposer::getKeyword( SQLPart _ePart ) const
+OUString OSingleSelectQueryComposer::getKeyword( SQLPart _ePart )
 {
     OUString sKeyword;
     switch(_ePart)

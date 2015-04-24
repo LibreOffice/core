@@ -91,7 +91,7 @@ private:
         @param  _rMap
             The map to fill.
     */
-    void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
+    static void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
 
     SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );

@@ -151,7 +151,7 @@ class ODBExport : public SvXMLExport
     void                    exportColumns(const Reference<XColumnsSupplier>& _xColSup);
     void                    collectComponentStyles();
 
-    OUString         implConvertAny(const Any& _rValue);
+    static OUString         implConvertAny(const Any& _rValue);
 
     rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
 

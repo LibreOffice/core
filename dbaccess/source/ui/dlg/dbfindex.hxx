@@ -102,7 +102,7 @@ protected:
     bool    GetTable(const OUString& rName, TableInfoList::iterator& _rPosition);
 
     OTableIndex implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, bool _bMustExist);
-    void        implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
+    static void implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
 
     OTableIndex RemoveFreeIndex( const OUString& _rName, bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, *m_pLB_FreeIndexes, _bMustExist); }
     void        InsertFreeIndex( const OTableIndex& _rIndex ) { implInsertIndex(_rIndex, m_aFreeIndexList, *m_pLB_FreeIndexes); }

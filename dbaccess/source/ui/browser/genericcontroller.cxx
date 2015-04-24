@@ -91,7 +91,7 @@ class UserDefinedFeatures
 public:
     UserDefinedFeatures( const Reference< XController >& _rxController );
 
-    FeatureState    getState( const URL& _rFeatureURL );
+    static FeatureState getState( const URL& _rFeatureURL );
     void            execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs );
 
 private:
@@ -886,7 +886,7 @@ FeatureState OGenericUnoController::GetState( sal_uInt16 _nId ) const
             aReturn.bEnabled = true;
             break;
         default:
-            aReturn = m_pData->m_aUserDefinedFeatures.getState( getURLForId( _nId ) );
+            aReturn = UserDefinedFeatures::getState( getURLForId( _nId ) );
             break;
     }
 
@@ -923,7 +923,7 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
     return aReturn;
 }
 
-bool OGenericUnoController::isUserDefinedFeature( const sal_uInt16 _nFeatureId ) const
+bool OGenericUnoController::isUserDefinedFeature( const sal_uInt16 _nFeatureId )
 {
     return ( _nFeatureId >= FIRST_USER_DEFINED_FEATURE ) && ( _nFeatureId < LAST_USER_DEFINED_FEATURE );
 }
@@ -997,7 +997,7 @@ void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
     ::dbaui::showError(_rInfo,getView(),getORB());
 }
 
-Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame) const
+Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame)
 {
     Reference< XPropertySet > xPropSet( _xFrame, UNO_QUERY );
     Reference< XLayoutManager > xLayoutManager;

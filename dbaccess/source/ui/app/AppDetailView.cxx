@@ -354,8 +354,7 @@ OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetai
     m_aDescription->SetHelpId(HID_APP_DESCRIPTION_TEXT);
     m_aDescription->SetText(ModuleRes(STR_DESCRIPTION));
 
-    ImageProvider aImageProvider;
-    Image aFolderImage = aImageProvider.getFolderImage( css::sdb::application::DatabaseObject::FORM );
+    Image aFolderImage = ImageProvider::getFolderImage( css::sdb::application::DatabaseObject::FORM );
     m_aCreation->SetDefaultCollapsedEntryBmp( aFolderImage );
     m_aCreation->SetDefaultExpandedEntryBmp( aFolderImage );
 
@@ -758,9 +757,9 @@ OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) co
     return m_pControlHelper->getQualifiedName( _pEntry );
 }
 
-bool OApplicationDetailView::isLeaf(SvTreeListEntry* _pEntry) const
+bool OApplicationDetailView::isLeaf(SvTreeListEntry* _pEntry)
 {
-    return m_pControlHelper->isLeaf(_pEntry);
+    return OAppDetailPageHelper::isLeaf(_pEntry);
 }
 
 bool OApplicationDetailView::isALeafSelected() const

@@ -167,7 +167,7 @@ namespace dbaui
                     {
                         OUString sDisplayName = aTypeLoop.getDisplayName();
                         if ( m_pEmbeddedDBType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
-                            && m_pCollection->isEmbeddedDatabase( sURLPrefix ) )
+                            && dbaccess::ODsnTypeCollection::isEmbeddedDatabase( sURLPrefix ) )
                         {
                             aDisplayedTypes.push_back( DisplayedTypes::value_type( sURLPrefix, sDisplayName ) );
                         }
@@ -270,7 +270,7 @@ namespace dbaui
         }
 
         // select the correct datasource type
-        if  (  m_pCollection->isEmbeddedDatabase( m_eCurrentSelection )
+        if  (  dbaccess::ODsnTypeCollection::isEmbeddedDatabase( m_eCurrentSelection )
             &&  ( LISTBOX_ENTRY_NOTFOUND == m_pEmbeddedDBType->GetEntryPos( sDisplayName ) )
             )
         {   // this indicates it's really a type which is known in general, but not supported on the current platform

@@ -45,8 +45,8 @@ namespace dbaui
         DECL_LINK( ButtonClickHdl, Button * );
         DECL_LINK( ListDoubleClickHdl, ListBox * );
 
-        void clearListBox(ListBox& _rListBox);
-        void fillColumns(       ListBox* pRight,
+        static void clearListBox(ListBox& _rListBox);
+        static void fillColumns( ListBox* pRight,
                                 ::std::vector< OUString> &_rRightColumns);
 
         void createNewColumn(   ListBox* _pListbox,

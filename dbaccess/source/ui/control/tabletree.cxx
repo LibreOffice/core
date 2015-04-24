@@ -86,11 +86,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOTableTreeListBox(vcl:
 void OTableTreeListBox::implSetDefaultImages()
 {
     ImageProvider aImageProvider;
-    SetDefaultExpandedEntryBmp(  aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
-    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
+    SetDefaultExpandedEntryBmp(  ImageProvider::getFolderImage( DatabaseObject::TABLE ) );
+    SetDefaultCollapsedEntryBmp( ImageProvider::getFolderImage( DatabaseObject::TABLE ) );
 }
 
-bool  OTableTreeListBox::isFolderEntry( const SvTreeListEntry* _pEntry ) const
+bool  OTableTreeListBox::isFolderEntry( const SvTreeListEntry* _pEntry )
 {
     sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
     if  (   ( nEntryType == DatabaseObjectContainer::TABLES )
@@ -119,7 +119,7 @@ void OTableTreeListBox::notifyHiContrastChanged()
                 Image aImage;
                 if ( isFolderEntry( pEntryLoop ) )
                 {
-                    aImage = m_xImageProvider->getFolderImage( DatabaseObject::TABLE );
+                    aImage = ImageProvider::getFolderImage( DatabaseObject::TABLE );
                 }
                 else
                 {
@@ -328,7 +328,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
 }
 
-bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry) const
+bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry)
 {
     if (_pEntry)
     {

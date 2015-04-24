@@ -745,7 +745,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     }
 }
 
-ElementType OApplicationController::getElementType(const Reference< XContainer >& _xContainer) const
+ElementType OApplicationController::getElementType(const Reference< XContainer >& _xContainer)
 {
     ElementType eRet = E_NONE;
     Reference<XServiceInfo> xServiceInfo(_xContainer,UNO_QUERY);

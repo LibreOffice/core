@@ -126,7 +126,7 @@ void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, bool _bSelect)
     }
 }
 
-bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry) const
+bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry)
 {
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
     if (pTextItem)
@@ -211,14 +211,14 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             // the images for this entry
             Image aImage;
             if ( pData->eType == etDatasource )
-                aImage = pImageProvider->getDatabaseImage();
+                aImage = ImageProvider::getDatabaseImage();
             else
             {
                 bool bIsFolder = !isObject( pData->eType );
                 if ( bIsFolder )
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    aImage = pImageProvider->getFolderImage( nObjectType );
+                    aImage = ImageProvider::getFolderImage( nObjectType );
                 }
                 else
                 {

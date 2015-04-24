@@ -454,7 +454,7 @@ OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet&
     return pCollection->getType(pConnectURL->GetValue());
 }
 
-bool ODbDataSourceAdministrationHelper::hasAuthentication(const SfxItemSet& _rSet) const
+bool ODbDataSourceAdministrationHelper::hasAuthentication(const SfxItemSet& _rSet)
 {
     return DataSourceMetaData::getAuthentication( getDatasourceType( _rSet ) ) != AuthNone;
 }

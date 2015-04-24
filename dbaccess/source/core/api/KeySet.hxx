@@ -123,7 +123,7 @@ namespace dbaccess
         bool fetchRow();
         void invalidateRow();
 
-        void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
+        static void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
         void initColumns();
         void findTableColumnsMatching_throw( const ::com::sun::star::uno::Any& i_aTable,
                                              const OUString& i_rUpdateTableName,
@@ -132,11 +132,11 @@ namespace dbaccess
                                              ::std::unique_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
         void ensureStatement( );
         virtual void makeNewStatement( );
-        void setOneKeyColumnParameter( sal_Int32 &nPos,
+        static void setOneKeyColumnParameter( sal_Int32 &nPos,
                                        const ::com::sun::star::uno::Reference<  ::com::sun::star::sdbc::XParameters > &_xParameter,
                                        const connectivity::ORowSetValue &_rValue,
                                        sal_Int32 _nType,
-                                       sal_Int32 _nScale ) const;
+                                       sal_Int32 _nScale );
         OUStringBuffer createKeyFilter( );
         bool doTryRefetch_throw() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);;
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);

@@ -703,7 +703,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             aArgs.put( "InteractionHandler", xHandler );
             aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
 
-            OUString sPath = m_pImpl->getDocumentUrl( *m_pOutSet );
+            OUString sPath = ODbDataSourceAdministrationHelper::getDocumentUrl( *m_pOutSet );
             xStore->storeAsURL( sPath, aArgs.getPropertyValues() );
 
             if ( !m_pFinalPage || m_pFinalPage->IsDatabaseDocumentToBeRegistered() )
@@ -761,7 +761,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     {
         OUString sUrl;
         OUString eType = m_pGeneralPage->GetSelectedType();
-        if ( m_pCollection->isEmbeddedDatabase(eType) )
+        if ( dbaccess::ODsnTypeCollection::isEmbeddedDatabase(eType) )
         {
             sUrl = eType;
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();

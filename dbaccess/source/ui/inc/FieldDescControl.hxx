@@ -128,7 +128,7 @@ namespace dbaui
 
         void                SetPosSize( VclPtr<Control>& rControl, long nRow, sal_uInt16 nCol );
 
-        void                ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY);
+        static void         ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY);
         void                ScrollAllAggregates();
 
         bool                isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
