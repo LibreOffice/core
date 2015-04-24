@@ -169,7 +169,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxHeaderBar::isAccessibleRowSelected( sal_Int
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidRow( nRow );
-    return isRowBar() ? implIsRowSelected( nRow ) : false;
+    return isRowBar() && implIsRowSelected( nRow );
 }
 
 sal_Bool SAL_CALL AccessibleBrowseBoxHeaderBar::isAccessibleColumnSelected( sal_Int32 nColumn )
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxHeaderBar::isAccessibleColumnSelected( sal_
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidColumn( nColumn );
-    return isColumnBar() ? implIsColumnSelected( nColumn ) : false;
+    return isColumnBar() && implIsColumnSelected( nColumn );
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleCellAt(
