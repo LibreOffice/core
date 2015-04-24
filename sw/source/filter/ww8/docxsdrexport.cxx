@@ -1309,21 +1309,21 @@ void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
 {
     const editeng::SvxBorderLine* pBorderLine = 0;
 
-    if( rBox.GetTop() )
+    if (rBox.GetTop())
     {
-       pBorderLine = rBox.GetTop();
+        pBorderLine = rBox.GetTop();
     }
-    else if( rBox.GetLeft() )
+    else if (rBox.GetLeft())
     {
-       pBorderLine = rBox.GetLeft();
+        pBorderLine = rBox.GetLeft();
     }
-    else if( rBox.GetBottom() )
+    else if (rBox.GetBottom())
     {
-       pBorderLine = rBox.GetBottom();
+        pBorderLine = rBox.GetBottom();
     }
-    else if( rBox.GetRight() )
+    else if (rBox.GetRight())
     {
-       pBorderLine = rBox.GetRight();
+        pBorderLine = rBox.GetRight();
     }
 
     if (!pBorderLine)
