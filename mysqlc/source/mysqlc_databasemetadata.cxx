@@ -182,7 +182,7 @@ bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     bool boolMetaData(false);
     try {
-        boolMetaData = (meta->*_Method)() ? true : false;
+        boolMetaData = (meta->*_Method)();
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
     } catch (const sql::InvalidArgumentException &) {
@@ -198,7 +198,7 @@ bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     bool boolMetaData(false);
     try {
-        boolMetaData = (meta->*_Method)( _arg ) ? true : false;
+        boolMetaData = (meta->*_Method)( _arg );
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
     } catch (const sql::InvalidArgumentException &) {

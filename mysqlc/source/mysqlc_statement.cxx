@@ -158,7 +158,7 @@ sal_Bool SAL_CALL OCommonStatement::execute(const rtl::OUString& sql)
 
     bool success = false;
     try {
-        success = cppStatement->execute(rtl::OUStringToOString(sSqlStatement, m_pConnection->getConnectionSettings().encoding).getStr())? true:false;
+        success = cppStatement->execute(rtl::OUStringToOString(sSqlStatement, m_pConnection->getConnectionSettings().encoding).getStr());
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
