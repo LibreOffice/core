@@ -124,7 +124,7 @@ namespace dbaui
         if ( m_bHasMaxRowScan )
         {
             get(m_pMaxRowScanLabel, "rowsft");
--            get(m_pMaxRowScan, "rows");
+            get(m_pMaxRowScan, "rows");
             m_pMaxRowScan->SetModifyHdl(getControlModifiedLink());
             m_pMaxRowScan->SetUseThousandSep(false);
             m_pMaxRowScanLabel->Show();
