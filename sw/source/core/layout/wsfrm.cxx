@@ -655,7 +655,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         else
         {
             OSL_ENSURE( pSct->IsSctFrm(), "InsertGroup: For SectionFrms only" );
-            SwFrm::DestroyFrm(static_cast<SwSectionFrm*>(pSct));
+            SwFrm::DestroyFrm(pSct);
         }
     }
     else
