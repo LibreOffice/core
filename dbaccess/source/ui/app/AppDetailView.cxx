@@ -639,9 +639,8 @@ void OApplicationDetailView::impl_createPage( ElementType _eType, const Referenc
 
     // enable the pane as a whole, depending on the availability of the first command
     OSL_ENSURE( !rData.aTasks.empty(), "OApplicationDetailView::impl_createPage: no tasks at all!?" );
-    bool bEnabled = rData.aTasks.empty()
-                ?   false
-                :   getBorderWin().getView()->getCommandController().isCommandEnabled( rData.aTasks[0].sUNOCommand );
+    bool bEnabled = !rData.aTasks.empty()
+                && getBorderWin().getView()->getCommandController().isCommandEnabled( rData.aTasks[0].sUNOCommand );
     getTasksWindow().Enable( bEnabled );
     m_aContainer.setTitle( rData.nTitleId );
 

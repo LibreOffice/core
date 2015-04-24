@@ -150,7 +150,7 @@ IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
 
 bool OCopyTable::LeavePage()
 {
-    m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_pCB_PrimaryColumn->IsEnabled()) ? m_pCB_PrimaryColumn->IsChecked() : false;
+    m_pParent->m_bCreatePrimaryKeyColumn    = m_bPKeyAllowed && m_pCB_PrimaryColumn->IsEnabled() && m_pCB_PrimaryColumn->IsChecked();
     m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_pEdKeyName->GetText() : OUString();
     m_pParent->setUseHeaderLine( m_pCB_UseHeaderLine->IsChecked() );
 

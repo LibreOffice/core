@@ -232,7 +232,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     ||  ( eResult == svtools::QUERYDELETE_YES );
 
             if  (   bUserConfirmedDelete
-                &&  (   ( _eType == E_QUERY ) ? m_pSubComponentManager->closeSubFrames( *aThisRound, _eType ) : true )
+                &&  (   _eType != E_QUERY || m_pSubComponentManager->closeSubFrames( *aThisRound, _eType ) )
                 )
             {
                 try

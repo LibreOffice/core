@@ -288,7 +288,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
         static_cast<OGenericAdministrationPage*>(pPage)->SetAdminDialog(this,this);
         pPage->SetText(ModuleRes(nStringId));
         defaultButton( _nState == START_PAGE ? WZB_NEXT : WZB_FINISH );
-        enableButtons( WZB_FINISH, _nState == START_PAGE ? false : true);
+        enableButtons( WZB_FINISH, _nState != START_PAGE);
         pPage->Show();
     }
     return pPage;

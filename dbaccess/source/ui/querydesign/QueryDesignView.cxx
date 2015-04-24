@@ -1291,7 +1291,7 @@ namespace
                     eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pChild,nLevel,bHaving,bAddOrOnOneLine);
                 else
                 {
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, nLevel,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, nLevel,bHaving, i != 0 && bAddOrOnOneLine);
                     if ( !bAddOrOnOneLine)
                         nLevel++;
                 }

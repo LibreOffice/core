@@ -73,7 +73,7 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
                 m_sName = m_sName.replace( '/', '_' );
                 break;
             case XML_TOK_AS_TEMPLATE:
-                m_bAsTemplate = (sValue == s_sTRUE ? true : false);
+                m_bAsTemplate = sValue == s_sTRUE;
                 break;
         }
     }
