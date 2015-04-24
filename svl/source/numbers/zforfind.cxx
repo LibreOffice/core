@@ -3209,8 +3209,8 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         bool bDidMatch = (nMatchedAllStrings != 0);
         if ( nMatchedAllStrings )
         {
-            bool bMatch = (pFormat ? pFormat->IsNumForStringElementCountEqual(
-                               nStringScanNumFor, nAnzStrings, nAnzNums ) : false);
+            bool bMatch = pFormat && pFormat->IsNumForStringElementCountEqual(
+                               nStringScanNumFor, nAnzStrings, nAnzNums );
             if ( !bMatch )
             {
                 nMatchedAllStrings = 0;
@@ -3237,8 +3237,8 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         bool bWasReturn = ((nMatchedAllStrings & nMatchedUsedAsReturn) != 0);
         if ( nMatchedAllStrings )
         {
-            bool bMatch = (pFormat ? pFormat->IsNumForStringElementCountEqual(
-                               nStringScanNumFor, nAnzStrings, nAnzNums ) : false);
+            bool bMatch = pFormat && pFormat->IsNumForStringElementCountEqual(
+                               nStringScanNumFor, nAnzStrings, nAnzNums );
             if ( !bMatch )
             {
                 nMatchedAllStrings = 0;
