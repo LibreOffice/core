@@ -52,12 +52,14 @@ Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const
 
     Point aOfs(aSnap.Center());
     switch (GetHorzAlign()) {
-        case SDRHORZALIGN_LEFT  : aOfs.X()=aSnap.Left(); break;
-        case SDRHORZALIGN_RIGHT : aOfs.X()=aSnap.Right(); break;
+        case SdrAlign::HORZ_LEFT  : aOfs.X()=aSnap.Left(); break;
+        case SdrAlign::HORZ_RIGHT : aOfs.X()=aSnap.Right(); break;
+        default: break;
     }
     switch (GetVertAlign()) {
-        case SDRVERTALIGN_TOP   : aOfs.Y()=aSnap.Top(); break;
-        case SDRVERTALIGN_BOTTOM: aOfs.Y()=aSnap.Bottom(); break;
+        case SdrAlign::VERT_TOP   : aOfs.Y()=aSnap.Top(); break;
+        case SdrAlign::VERT_BOTTOM: aOfs.Y()=aSnap.Bottom(); break;
+        default: break;
     }
     if (!bNoPercent) {
         long nXMul=aSnap.Right()-aSnap.Left();
@@ -93,12 +95,14 @@ void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
 
     Point aOfs(aSnap.Center());
     switch (GetHorzAlign()) {
-        case SDRHORZALIGN_LEFT  : aOfs.X()=aSnap.Left(); break;
-        case SDRHORZALIGN_RIGHT : aOfs.X()=aSnap.Right(); break;
+        case SdrAlign::HORZ_LEFT  : aOfs.X()=aSnap.Left(); break;
+        case SdrAlign::HORZ_RIGHT : aOfs.X()=aSnap.Right(); break;
+        default: break;
     }
     switch (GetVertAlign()) {
-        case SDRVERTALIGN_TOP   : aOfs.Y()=aSnap.Top(); break;
-        case SDRVERTALIGN_BOTTOM: aOfs.Y()=aSnap.Bottom(); break;
+        case SdrAlign::VERT_TOP   : aOfs.Y()=aSnap.Top(); break;
+        case SdrAlign::VERT_BOTTOM: aOfs.Y()=aSnap.Bottom(); break;
+        default: break;
     }
     aPt-=aOfs;
     if (!bNoPercent) {
@@ -122,31 +126,38 @@ void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
 
 long SdrGluePoint::GetAlignAngle() const
 {
-    switch (nAlign) {
-        case SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER: return 0; // Invalid!
-        case SDRHORZALIGN_RIGHT |SDRVERTALIGN_CENTER: return 0;
-        case SDRHORZALIGN_RIGHT |SDRVERTALIGN_TOP   : return 4500;
-        case SDRHORZALIGN_CENTER|SDRVERTALIGN_TOP   : return 9000;
-        case SDRHORZALIGN_LEFT  |SDRVERTALIGN_TOP   : return 13500;
-        case SDRHORZALIGN_LEFT  |SDRVERTALIGN_CENTER: return 18000;
-        case SDRHORZALIGN_LEFT  |SDRVERTALIGN_BOTTOM: return 22500;
-        case SDRHORZALIGN_CENTER|SDRVERTALIGN_BOTTOM: return 27000;
-        case SDRHORZALIGN_RIGHT |SDRVERTALIGN_BOTTOM: return 31500;
-    } // switch
+    if (nAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
+        return 0; // Invalid!
+    else if (nAlign == (SdrAlign::HORZ_RIGHT |SdrAlign::VERT_CENTER))
+        return 0;
+    else if (nAlign == (SdrAlign::HORZ_RIGHT |SdrAlign::VERT_TOP))
+        return 4500;
+    else if (nAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_TOP))
+        return 9000;
+    else if (nAlign == (SdrAlign::HORZ_LEFT  |SdrAlign::VERT_TOP))
+        return 13500;
+    else if (nAlign == (SdrAlign::HORZ_LEFT  |SdrAlign::VERT_CENTER))
+        return 18000;
+    else if (nAlign == (SdrAlign::HORZ_LEFT  |SdrAlign::VERT_BOTTOM))
+        return 22500;
+    else if (nAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_BOTTOM))
+        return 27000;
+    else if (nAlign == (SdrAlign::HORZ_RIGHT |SdrAlign::VERT_BOTTOM))
+        return 31500;
     return 0;
 }
 
 void SdrGluePoint::SetAlignAngle(long nAngle)
 {
     nAngle=NormAngle360(nAngle);
-    if (nAngle>=33750 || nAngle<2250) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_CENTER;
-    else if (nAngle< 6750) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_TOP   ;
-    else if (nAngle<11250) nAlign=SDRHORZALIGN_CENTER|SDRVERTALIGN_TOP   ;
-    else if (nAngle<15750) nAlign=SDRHORZALIGN_LEFT  |SDRVERTALIGN_TOP   ;
-    else if (nAngle<20250) nAlign=SDRHORZALIGN_LEFT  |SDRVERTALIGN_CENTER;
-    else if (nAngle<24750) nAlign=SDRHORZALIGN_LEFT  |SDRVERTALIGN_BOTTOM;
-    else if (nAngle<29250) nAlign=SDRHORZALIGN_CENTER|SDRVERTALIGN_BOTTOM;
-    else if (nAngle<33750) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_BOTTOM;
+    if (nAngle>=33750 || nAngle<2250) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_CENTER;
+    else if (nAngle< 6750) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_TOP   ;
+    else if (nAngle<11250) nAlign=SdrAlign::HORZ_CENTER|SdrAlign::VERT_TOP   ;
+    else if (nAngle<15750) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_TOP   ;
+    else if (nAngle<20250) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_CENTER;
+    else if (nAngle<24750) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_BOTTOM;
+    else if (nAngle<29250) nAlign=SdrAlign::HORZ_CENTER|SdrAlign::VERT_BOTTOM;
+    else if (nAngle<33750) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_BOTTOM;
 }
 
 long SdrGluePoint::EscDirToAngle(SdrEscapeDirection nEsc)
@@ -179,7 +190,7 @@ void SdrGluePoint::Rotate(const Point& rRef, long nAngle, double sn, double cs, 
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     RotatePoint(aPt,rRef,sn,cs);
     // rotate reference edge
-    if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER))
+    if(nAlign != (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
     {
         SetAlignAngle(GetAlignAngle()+nAngle);
     }
@@ -199,7 +210,7 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, c
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     MirrorPoint(aPt,rRef1,rRef2);
     // mirror reference edge
-    if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER))
+    if(nAlign != (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
     {
         long nAW=GetAlignAngle();
         nAW+=2*(nAngle-nAW);

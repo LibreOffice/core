@@ -479,16 +479,16 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 switch( nC )
                                 {
                                     case 0 :
-                                        nId = 0;    // SDRVERTALIGN_TOP;
+                                        nId = 0;    // SdrAlign::VERT_TOP;
                                     break;
                                     case 1 :
-                                        nId = 3;    // SDRHORZALIGN_RIGHT;
+                                        nId = 3;    // SdrAlign::HORZ_RIGHT;
                                     break;
                                     case 2 :
-                                        nId = 2;    // SDRVERTALIGN_BOTTOM;
+                                        nId = 2;    // SdrAlign::VERT_BOTTOM;
                                     break;
                                     case 3 :
-                                        nId = 1; // SDRHORZALIGN_LEFT;
+                                        nId = 1; // SdrAlign::HORZ_LEFT;
                                     break;
                                 }
                                 if ( nId <= 3 )
@@ -551,7 +551,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                                 fYRel *= 10000;
                                                                 aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
                                                                 aGluePoint.SetPercent( true );
-                                                                aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
+                                                                aGluePoint.SetAlign( SdrAlign::VERT_TOP | SdrAlign::HORZ_LEFT );
                                                                 aGluePoint.SetEscDir( SdrEscapeDirection::SMART );
                                                                 nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
                                                                 bNotFound = false;
@@ -614,16 +614,16 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     switch( nC )
                                     {
                                         case 0 :
-                                            nId = 0;    // SDRVERTALIGN_TOP;
+                                            nId = 0;    // SdrAlign::VERT_TOP;
                                         break;
                                         case 1 :
-                                            nId = 3;    // SDRHORZALIGN_RIGHT;
+                                            nId = 3;    // SdrAlign::HORZ_RIGHT;
                                         break;
                                         case 2 :
-                                            nId = 2;    // SDRVERTALIGN_BOTTOM;
+                                            nId = 2;    // SdrAlign::VERT_BOTTOM;
                                         break;
                                         case 3 :
-                                            nId = 1; // SDRHORZALIGN_LEFT;
+                                            nId = 1; // SdrAlign::HORZ_LEFT;
                                         break;
                                     }
                                     if ( nId <= 3 )

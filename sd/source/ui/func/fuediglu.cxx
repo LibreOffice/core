@@ -432,37 +432,37 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 
         case SID_GLUE_HORZALIGN_CENTER:
         {
-            mpView->SetMarkedGluePointsAlign(false, SDRHORZALIGN_CENTER);
+            mpView->SetMarkedGluePointsAlign(false, SdrAlign::HORZ_CENTER);
         }
         break;
 
         case SID_GLUE_HORZALIGN_LEFT:
         {
-            mpView->SetMarkedGluePointsAlign(false, SDRHORZALIGN_LEFT);
+            mpView->SetMarkedGluePointsAlign(false, SdrAlign::HORZ_LEFT);
         }
         break;
 
         case SID_GLUE_HORZALIGN_RIGHT:
         {
-            mpView->SetMarkedGluePointsAlign(false, SDRHORZALIGN_RIGHT);
+            mpView->SetMarkedGluePointsAlign(false, SdrAlign::HORZ_RIGHT);
         }
         break;
 
         case SID_GLUE_VERTALIGN_CENTER:
         {
-            mpView->SetMarkedGluePointsAlign(true, SDRVERTALIGN_CENTER);
+            mpView->SetMarkedGluePointsAlign(true, SdrAlign::VERT_CENTER);
         }
         break;
 
         case SID_GLUE_VERTALIGN_TOP:
         {
-            mpView->SetMarkedGluePointsAlign(true, SDRVERTALIGN_TOP);
+            mpView->SetMarkedGluePointsAlign(true, SdrAlign::VERT_TOP);
         }
         break;
 
         case SID_GLUE_VERTALIGN_BOTTOM:
         {
-            mpView->SetMarkedGluePointsAlign(true, SDRVERTALIGN_BOTTOM);
+            mpView->SetMarkedGluePointsAlign(true, SdrAlign::VERT_BOTTOM);
         }
         break;
     }

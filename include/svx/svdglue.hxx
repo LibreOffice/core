@@ -47,14 +47,22 @@ namespace o3tl
     template<> struct typed_flags<SdrEscapeDirection> : is_typed_flags<SdrEscapeDirection, 0x00ff> {};
 }
 
-#define SDRHORZALIGN_CENTER   0x0000
-#define SDRHORZALIGN_LEFT     0x0001
-#define SDRHORZALIGN_RIGHT    0x0002
-#define SDRHORZALIGN_DONTCARE 0x0010
-#define SDRVERTALIGN_CENTER   0x0000
-#define SDRVERTALIGN_TOP      0x0100
-#define SDRVERTALIGN_BOTTOM   0x0200
-#define SDRVERTALIGN_DONTCARE 0x1000
+enum class SdrAlign
+{
+    NONE          = 0x0000,
+    HORZ_CENTER   = 0x0000,
+    HORZ_LEFT     = 0x0001,
+    HORZ_RIGHT    = 0x0002,
+    HORZ_DONTCARE = 0x0010,
+    VERT_CENTER   = 0x0000,
+    VERT_TOP      = 0x0100,
+    VERT_BOTTOM   = 0x0200,
+    VERT_DONTCARE = 0x1000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SdrAlign> : is_typed_flags<SdrAlign, 0x1313> {};
+}
 
 class SVX_DLLPUBLIC SdrGluePoint {
     // Reference Point is SdrObject::GetSnapRect().Center()
@@ -63,20 +71,20 @@ class SVX_DLLPUBLIC SdrGluePoint {
     Point    aPos;
     SdrEscapeDirection nEscDir;
     sal_uInt16   nId;
-    sal_uInt16   nAlign;
+    SdrAlign     nAlign;
     bool bNoPercent:1;
     bool bReallyAbsolute:1; // temp for transformations on the reference object
     bool bUserDefined:1; // #i38892#
 public:
-    SdrGluePoint(): nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(0),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
-    SdrGluePoint(const Point& rNewPos, bool bNewPercent=true, sal_uInt16 nNewAlign=0): aPos(rNewPos),nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(nNewAlign),bNoPercent(!bNewPercent),bReallyAbsolute(false),bUserDefined(true) {}
+    SdrGluePoint(): nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(SdrAlign::NONE),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
+    SdrGluePoint(const Point& rNewPos, bool bNewPercent=true, SdrAlign nNewAlign = SdrAlign::HORZ_CENTER): aPos(rNewPos),nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(nNewAlign),bNoPercent(!bNewPercent),bReallyAbsolute(false),bUserDefined(true) {}
     bool operator==(const SdrGluePoint& rCmpGP) const   { return aPos==rCmpGP.aPos && nEscDir==rCmpGP.nEscDir && nId==rCmpGP.nId && nAlign==rCmpGP.nAlign && bNoPercent==rCmpGP.bNoPercent && bReallyAbsolute==rCmpGP.bReallyAbsolute && bUserDefined==rCmpGP.bUserDefined; }
     bool operator!=(const SdrGluePoint& rCmpGP) const   { return !operator==(rCmpGP); }
     const Point& GetPos() const                             { return aPos; }
     void         SetPos(const Point& rNewPos)               { aPos=rNewPos; }
     SdrEscapeDirection GetEscDir() const                          { return nEscDir; }
     void         SetEscDir(SdrEscapeDirection nNewEsc)                  { nEscDir=nNewEsc; }
-    sal_uInt16       GetId() const                              { return nId; }
+    sal_uInt16   GetId() const                              { return nId; }
     void         SetId(sal_uInt16 nNewId)                       { nId=nNewId; }
     bool         IsPercent() const                          { return !bNoPercent; }
     void         SetPercent(bool bOn)                   { bNoPercent  = !bOn; }
@@ -88,12 +96,12 @@ public:
     bool         IsUserDefined() const                      { return bUserDefined; }
     void         SetUserDefined(bool bNew)              { bUserDefined = bNew; }
 
-    sal_uInt16       GetAlign() const                           { return nAlign; }
-    void         SetAlign(sal_uInt16 nAlg)                      { nAlign=nAlg; }
-    sal_uInt16       GetHorzAlign() const                       { return nAlign&0x00FF; }
-    void         SetHorzAlign(sal_uInt16 nAlg)                  { nAlign=(nAlign&0xFF00)|(nAlg&0x00FF); }
-    sal_uInt16       GetVertAlign() const                       { return nAlign&0xFF00; }
-    void         SetVertAlign(sal_uInt16 nAlg)                  { nAlign=(nAlign&0x00FF)|(nAlg&0xFF00); }
+    SdrAlign     GetAlign() const                           { return nAlign; }
+    void         SetAlign(SdrAlign nAlg)                    { nAlign=nAlg; }
+    SdrAlign     GetHorzAlign() const                       { return nAlign & static_cast<SdrAlign>(0x00FF); }
+    void         SetHorzAlign(SdrAlign nAlg)                { assert((nAlg & static_cast<SdrAlign>(0xff)) == SdrAlign::NONE); nAlign = SdrAlign(nAlign & static_cast<SdrAlign>(0xFF00)) | (nAlg & static_cast<SdrAlign>(0x00FF)); }
+    SdrAlign     GetVertAlign() const                       { return nAlign & static_cast<SdrAlign>(0xFF00); }
+    void         SetVertAlign(SdrAlign nAlg)                { assert((nAlg & static_cast<SdrAlign>(0xff00)) == SdrAlign::NONE); nAlign = SdrAlign(nAlign & static_cast<SdrAlign>(0x00FF)) | (nAlg & static_cast<SdrAlign>(0xFF00)); }
     bool         IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
     void         Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     Point        GetAbsolutePos(const SdrObject& rObj) const;

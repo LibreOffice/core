@@ -481,15 +481,15 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         else
         {
             // horizontal alignment
-            sal_uInt16 nHorz = mpDrawView->GetMarkedGluePointsAlign( false );
-            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_CENTER, nHorz == SDRHORZALIGN_CENTER ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_LEFT,   nHorz == SDRHORZALIGN_LEFT ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_RIGHT,  nHorz == SDRHORZALIGN_RIGHT ) );
+            SdrAlign nHorz = mpDrawView->GetMarkedGluePointsAlign( false );
+            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_CENTER, nHorz == SdrAlign::HORZ_CENTER ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_LEFT,   nHorz == SdrAlign::HORZ_LEFT ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_RIGHT,  nHorz == SdrAlign::HORZ_RIGHT ) );
             // vertical alignment
-            sal_uInt16 nVert = mpDrawView->GetMarkedGluePointsAlign( true );
-            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_CENTER, nVert == SDRVERTALIGN_CENTER ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_TOP,    nVert == SDRVERTALIGN_TOP ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_BOTTOM, nVert == SDRVERTALIGN_BOTTOM ) );
+            SdrAlign nVert = mpDrawView->GetMarkedGluePointsAlign( true );
+            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_CENTER, nVert == SdrAlign::VERT_CENTER ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_TOP,    nVert == SdrAlign::VERT_TOP ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_BOTTOM, nVert == SdrAlign::VERT_BOTTOM ) );
         }
 
         // insert point

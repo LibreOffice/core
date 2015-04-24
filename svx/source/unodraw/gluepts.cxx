@@ -80,36 +80,25 @@ static void convert( const SdrGluePoint& rSdrGlue, drawing::GluePoint2& rUnoGlue
     rUnoGlue.Position.Y = rSdrGlue.GetPos().Y();
     rUnoGlue.IsRelative = rSdrGlue.IsPercent();
 
-    switch( rSdrGlue.GetAlign() )
-    {
-    case SDRVERTALIGN_TOP|SDRHORZALIGN_LEFT:
+    SdrAlign eAlign = rSdrGlue.GetAlign();
+    if (eAlign == (SdrAlign::VERT_TOP|SdrAlign::HORZ_LEFT))
         rUnoGlue.PositionAlignment = drawing::Alignment_TOP_LEFT;
-        break;
-    case SDRHORZALIGN_CENTER|SDRVERTALIGN_TOP:
+    else if (eAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_TOP))
         rUnoGlue.PositionAlignment = drawing::Alignment_TOP;
-        break;
-    case SDRVERTALIGN_TOP|SDRHORZALIGN_RIGHT:
+    else if (eAlign == (SdrAlign::VERT_TOP|SdrAlign::HORZ_RIGHT))
         rUnoGlue.PositionAlignment = drawing::Alignment_TOP_RIGHT;
-        break;
-    case SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER:
+    else if (eAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
         rUnoGlue.PositionAlignment = drawing::Alignment_CENTER;
-        break;
-    case SDRHORZALIGN_RIGHT|SDRVERTALIGN_CENTER:
+    else if (eAlign == (SdrAlign::HORZ_RIGHT|SdrAlign::VERT_CENTER))
         rUnoGlue.PositionAlignment = drawing::Alignment_RIGHT;
-        break;
-    case SDRHORZALIGN_LEFT|SDRVERTALIGN_BOTTOM:
+    else if (eAlign == (SdrAlign::HORZ_LEFT|SdrAlign::VERT_BOTTOM))
         rUnoGlue.PositionAlignment = drawing::Alignment_BOTTOM_LEFT;
-        break;
-    case SDRHORZALIGN_CENTER|SDRVERTALIGN_BOTTOM:
+    else if (eAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_BOTTOM))
         rUnoGlue.PositionAlignment = drawing::Alignment_BOTTOM;
-        break;
-    case SDRHORZALIGN_RIGHT|SDRVERTALIGN_BOTTOM:
+    else if (eAlign == (SdrAlign::HORZ_RIGHT|SdrAlign::VERT_BOTTOM))
         rUnoGlue.PositionAlignment = drawing::Alignment_BOTTOM_RIGHT;
-        break;
-//  case SDRHORZALIGN_LEFT:
-    default:
+    else {
         rUnoGlue.PositionAlignment = drawing::Alignment_LEFT;
-        break;
     }
 
     switch( rSdrGlue.GetEscDir() )
@@ -147,32 +136,32 @@ static void convert( const drawing::GluePoint2& rUnoGlue, SdrGluePoint& rSdrGlue
     switch( rUnoGlue.PositionAlignment )
     {
     case drawing::Alignment_TOP_LEFT:
-        rSdrGlue.SetAlign( SDRVERTALIGN_TOP|SDRHORZALIGN_LEFT );
+        rSdrGlue.SetAlign( SdrAlign::VERT_TOP|SdrAlign::HORZ_LEFT );
         break;
     case drawing::Alignment_TOP:
-        rSdrGlue.SetAlign( SDRHORZALIGN_CENTER|SDRVERTALIGN_TOP );
+        rSdrGlue.SetAlign( SdrAlign::HORZ_CENTER|SdrAlign::VERT_TOP );
         break;
     case drawing::Alignment_TOP_RIGHT:
-        rSdrGlue.SetAlign( SDRVERTALIGN_TOP|SDRHORZALIGN_RIGHT );
+        rSdrGlue.SetAlign( SdrAlign::VERT_TOP|SdrAlign::HORZ_RIGHT );
         break;
     case drawing::Alignment_CENTER:
-        rSdrGlue.SetAlign( SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER );
+        rSdrGlue.SetAlign( SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER );
         break;
     case drawing::Alignment_RIGHT:
-        rSdrGlue.SetAlign( SDRHORZALIGN_RIGHT|SDRVERTALIGN_CENTER );
+        rSdrGlue.SetAlign( SdrAlign::HORZ_RIGHT|SdrAlign::VERT_CENTER );
         break;
     case drawing::Alignment_BOTTOM_LEFT:
-        rSdrGlue.SetAlign( SDRHORZALIGN_LEFT|SDRVERTALIGN_BOTTOM );
+        rSdrGlue.SetAlign( SdrAlign::HORZ_LEFT|SdrAlign::VERT_BOTTOM );
         break;
     case drawing::Alignment_BOTTOM:
-        rSdrGlue.SetAlign( SDRHORZALIGN_CENTER|SDRVERTALIGN_BOTTOM );
+        rSdrGlue.SetAlign( SdrAlign::HORZ_CENTER|SdrAlign::VERT_BOTTOM );
         break;
     case drawing::Alignment_BOTTOM_RIGHT:
-        rSdrGlue.SetAlign( SDRHORZALIGN_RIGHT|SDRVERTALIGN_BOTTOM );
+        rSdrGlue.SetAlign( SdrAlign::HORZ_RIGHT|SdrAlign::VERT_BOTTOM );
         break;
-//  case SDRHORZALIGN_LEFT:
+//  case SdrAlign::HORZ_LEFT:
     default:
-        rSdrGlue.SetAlign( SDRHORZALIGN_LEFT );
+        rSdrGlue.SetAlign( SdrAlign::HORZ_LEFT );
         break;
     }
     switch( rUnoGlue.Escape )

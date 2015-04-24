@@ -59,17 +59,17 @@ public:
     bool IsSetMarkedGluePointsPercentPossible() const { return !IsReadOnly() && HasMarkedGluePoints(); }
 
     // bVert=FALSE: check/set hotizontal alignment
-    //      SDRHORZALIGN_CENTER
-    //      SDRHORZALIGN_LEFT
-    //      SDRHORZALIGN_RIGHT
-    //      SDRHORZALIGN_DONTCARE (only at Get())
+    //      SdrAlign::HORZ_CENTER
+    //      SdrAlign::HORZ_LEFT
+    //      SdrAlign::HORZ_RIGHT
+    //      SdrAlign::HORZ_DONTCARE (only at Get())
     // bVert=TRUE: check/set vertical alignment
-    //      SDRVERTALIGN_CENTER
-    //      SDRVERTALIGN_TOP
-    //      SDRVERTALIGN_BOTTOM
-    //      SDRVERTALIGN_DONTCARE (only at Get())
-    sal_uInt16 GetMarkedGluePointsAlign(bool bVert) const;
-    void SetMarkedGluePointsAlign(bool bVert, sal_uInt16 nAlign);
+    //      SdrAlign::VERT_CENTER
+    //      SdrAlign::VERT_TOP
+    //      SdrAlign::VERT_BOTTOM
+    //      SdrAlign::VERT_DONTCARE (only at Get())
+    SdrAlign GetMarkedGluePointsAlign(bool bVert) const;
+    void SetMarkedGluePointsAlign(bool bVert, SdrAlign nAlign);
     bool IsSetMarkedGluePointsAlignPossible() const { return !IsReadOnly() && HasMarkedGluePoints(); }
 
     // delete all marked GluePoints
