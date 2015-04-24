@@ -41,7 +41,7 @@ ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
     if( rContext.isRootElement() ) switch( nElement )
     {
         case C_TOKEN( delete ):
-            orModel.mbDeleted = rAttribs.getBool( XML_val, bMSO2007 ? false : true );
+            orModel.mbDeleted = rAttribs.getBool( XML_val, !bMSO2007 );
             return 0;
         case C_TOKEN( dLblPos ):
             orModel.monLabelPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );

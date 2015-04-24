@@ -859,7 +859,7 @@ namespace oox { namespace ppt {
                 if( !sFilter.isEmpty() )
                 {
                     SlideTransition aFilter( sFilter );
-                    aFilter.setMode( nDir == XML_out ? false : true );
+                    aFilter.setMode( nDir != XML_out );
                     pNode->setTransitionFilter( aFilter );
                 }
             }

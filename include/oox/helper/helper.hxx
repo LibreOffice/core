@@ -204,7 +204,7 @@ public:
 
     OptValue&    operator=( const Type& rValue ) { set( rValue ); return *this; }
     bool         operator==( const OptValue& rValue ) const {
-                             return ( ( mbHasValue == false && rValue.mbHasValue == false ) ||
+                             return ( ( !mbHasValue && rValue.mbHasValue == false ) ||
                                  ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
                  }
     void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) set( rValue.maValue ); }
