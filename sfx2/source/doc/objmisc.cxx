@@ -1343,7 +1343,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
             if( ok )
             {
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
-                bool bSalvage = pSalvageItem ? true : false;
+                bool bSalvage = pSalvageItem != nullptr;
 
                 if ( !bSalvage )
                 {

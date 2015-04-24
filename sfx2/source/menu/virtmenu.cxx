@@ -900,7 +900,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
     {
         // Find the VirtualMenu for the SubMenu and if possible, bind a
         // VirtualMenu
-        bool bRet = pMenu ? Bind_Impl(pMenu) : false;
+        bool bRet = pMenu && Bind_Impl(pMenu);
 #ifdef DBG_UTIL
         if ( !bRet)
             DBG_WARNING( "W1: Virtual menu could not be created!" );

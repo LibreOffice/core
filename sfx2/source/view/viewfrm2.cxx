@@ -164,7 +164,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
         case SID_SHOWPOPUPS :
         {
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, false);
-            bool bShow = pShowItem ? pShowItem->GetValue() : true;
+            bool bShow = pShowItem == nullptr || pShowItem->GetValue();
             SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, false);
             sal_uInt16 nId = pIdItem ? pIdItem->GetValue() : 0;
 

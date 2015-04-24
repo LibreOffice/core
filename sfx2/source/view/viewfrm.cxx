@@ -1996,7 +1996,7 @@ SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const Sf
         i_rDoc,
         pFrameItem ? pFrameItem->GetFrame() : NULL,
         i_nViewId,
-        pHiddenItem ? pHiddenItem->GetValue() : false
+        pHiddenItem && pHiddenItem->GetValue()
     );
 }
 
