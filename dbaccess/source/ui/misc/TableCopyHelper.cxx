@@ -253,7 +253,7 @@ bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, bo
     return pImport->Read();
 }
 
-bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)  const
+bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)
 {
     bool bTableFormat   =   _rClipboard.HasFormat(SotClipboardFormatId::DBACCESS_TABLE)
                 ||  _rClipboard.HasFormat(SotClipboardFormatId::DBACCESS_QUERY)

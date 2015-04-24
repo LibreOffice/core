@@ -89,7 +89,7 @@ namespace dbaui
             @return
                 the image to be used for the object type.
         */
-        Image getDefaultImage(
+        static Image getDefaultImage(
             sal_Int32 _nDatabaseObjectType
         );
 
@@ -106,7 +106,7 @@ namespace dbaui
                 the resource ID image to be used for the object type. Must be fed into a
                 ModuleRes instance to actually load the image.
         */
-        sal_uInt16 getDefaultImageResourceID(
+        static sal_uInt16 getDefaultImageResourceID(
             sal_Int32 _nDatabaseObjectType
         );
 
@@ -119,7 +119,7 @@ namespace dbaui
             @return
                 the image to be used for folders of the given type
         */
-        Image getFolderImage(
+        static Image getFolderImage(
             sal_Int32 _nDatabaseObjectType
         );
 
@@ -127,7 +127,7 @@ namespace dbaui
             @return
                 the image to be used for folders of this type
         */
-        Image getDatabaseImage();
+        static Image getDatabaseImage();
     };
 
 } // namespace dbaui

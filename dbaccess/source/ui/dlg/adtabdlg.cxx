@@ -273,7 +273,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     try
     {
         ImageProvider aImageProvider( m_xConnection );
-        Image aQueryImage( aImageProvider.getDefaultImage( css::sdb::application::DatabaseObject::QUERY ) );
+        Image aQueryImage( ImageProvider::getDefaultImage( css::sdb::application::DatabaseObject::QUERY ) );
 
         m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage );
         m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage );

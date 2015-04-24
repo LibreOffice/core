@@ -61,11 +61,11 @@ public:
 
     /** determines whether the given entry denotes a tables folder
     */
-    bool    isFolderEntry( const SvTreeListEntry* _pEntry ) const;
+    static bool isFolderEntry( const SvTreeListEntry* _pEntry );
 
     /** determines whether the given entry denotes a table or view
     */
-    bool    isTableOrViewEntry( const SvTreeListEntry* _pEntry ) const
+    static bool isTableOrViewEntry( const SvTreeListEntry* _pEntry )
     {
         return !isFolderEntry( _pEntry );
     }
@@ -126,7 +126,7 @@ public:
     /** determine if the given entry is 'wildcard checked'
         @see checkWildcard
     */
-    bool        isWildcardChecked(SvTreeListEntry* _pEntry) const;
+    static bool     isWildcardChecked(SvTreeListEntry* _pEntry);
 
 protected:
     virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind) SAL_OVERRIDE;

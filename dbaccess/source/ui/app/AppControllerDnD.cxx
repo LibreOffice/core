@@ -773,7 +773,7 @@ Reference<XNameContainer> OApplicationController::getQueryDefinitions() const
     return xNames;
 }
 
-void OApplicationController::getSupportedFormats(ElementType _eType,::std::vector<SotClipboardFormatId>& _rFormatIds) const
+void OApplicationController::getSupportedFormats(ElementType _eType,::std::vector<SotClipboardFormatId>& _rFormatIds)
 {
     switch( _eType )
     {
@@ -792,7 +792,7 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
 
 bool OApplicationController::isTableFormat()  const
 {
-    return m_aTableCopyHelper.isTableFormat(getViewClipboard());
+    return OTableCopyHelper::isTableFormat(getViewClipboard());
 }
 
 IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )

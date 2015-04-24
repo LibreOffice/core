@@ -276,7 +276,7 @@ private:
         @param o_rEmbeddedObjectDescriptor
             the EmbeddedObjectDescriptor to be passed when initializing the embedded object
     */
-    void separateOpenCommandArguments(
+    static void separateOpenCommandArguments(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    i_rOpenCommandArguments,
             ::comphelper::NamedValueCollection&                                                 o_rDocumentLoadArgs,
             ::comphelper::NamedValueCollection&                                                 o_rEmbeddedObjectDescriptor

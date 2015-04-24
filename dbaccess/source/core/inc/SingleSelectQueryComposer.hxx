@@ -66,7 +66,7 @@ namespace dbaccess
 
             SQLPartCount
         };
-        inline void incSQLPart( SQLPart& e ) { e = (SQLPart)(1 + (size_t)e); }
+        static inline void incSQLPart( SQLPart& e ) { e = (SQLPart)(1 + (size_t)e); }
         enum EColumnType
         {
             SelectColumns       = 0,
@@ -116,9 +116,9 @@ namespace dbaccess
         bool setComparsionPredicate(::connectivity::OSQLParseNode* pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
             ::std::vector < ::com::sun::star::beans::PropertyValue > & rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
 
-        OUString getColumnName(::connectivity::OSQLParseNode* pColumnRef,::connectivity::OSQLParseTreeIterator& _rIterator) const;
+        static OUString getColumnName(::connectivity::OSQLParseNode* pColumnRef,::connectivity::OSQLParseTreeIterator& _rIterator);
         OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
-        sal_Int32 getPredicateType(::connectivity::OSQLParseNode * _pPredicate) const;
+        static sal_Int32 getPredicateType(::connectivity::OSQLParseNode * _pPredicate);
         // clears all Columns,Parameters and tables and insert it to their vectors
         void clearCurrentCollections();
         // clears the columns collection given by EColumnType
@@ -168,7 +168,7 @@ namespace dbaccess
 
         /** retrieves the keyword for the given SQLPart
         */
-        OUString getKeyword( SQLPart _ePart ) const;
+        static OUString getKeyword( SQLPart _ePart );
 
         /** sets a single "additive" clause, means a filter/groupby/having/order clause
         */

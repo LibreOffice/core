@@ -254,7 +254,7 @@ namespace dbaui
 
         // methods for handling the 'selection' (paintin them bold) of SvLBoxEntries
         // returns <TRUE/> if the entry is selected (which means it's part of the selected path)
-        bool        isSelected(SvTreeListEntry* _pEntry) const;
+        static bool isSelected(SvTreeListEntry* _pEntry);
         // select the entry (and only the entry, not the whole path)
         void        select(SvTreeListEntry* _pEntry, bool _bSelect = true);
         // select the path of the entry (which must be an entry without children)
@@ -336,8 +336,8 @@ namespace dbaui
 
         EntryType getEntryType( const SvTreeListEntry* _pEntry ) const;
         EntryType   getChildType( SvTreeListEntry* _pEntry ) const;
-        bool    isObject( EntryType _eType ) const { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
-        bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
+        static bool    isObject( EntryType _eType ) { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
+        static bool    isContainer( EntryType _eType ) { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
         bool isContainer( const SvTreeListEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data
@@ -424,7 +424,7 @@ namespace dbaui
         /// checks if m_aDocumentDataSource describes a known object
         void checkDocumentDataSource();
 
-        void extractDescriptorProps(const ::svx::ODataAccessDescriptor& _rDescriptor,
+        static void extractDescriptorProps(const ::svx::ODataAccessDescriptor& _rDescriptor,
             OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, bool& _rEscapeProcessing);
 
         void transferChangedControlProperty(const OUString& _rProperty, const ::com::sun::star::uno::Any& _rNewValue);
@@ -452,7 +452,7 @@ namespace dbaui
         void copyEntry(SvTreeListEntry* _pEntry);
 
         // remove all grid columns and dispose them
-        void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
+        static void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
 
         /** checks if the currently displayed entry changed
             @param  _sName

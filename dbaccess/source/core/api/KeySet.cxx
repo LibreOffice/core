@@ -238,7 +238,7 @@ namespace
     }
 }
 
-void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParameters > &_xParameter, const connectivity::ORowSetValue &_rValue, sal_Int32 _nType, sal_Int32 _nScale ) const
+void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParameters > &_xParameter, const connectivity::ORowSetValue &_rValue, sal_Int32 _nType, sal_Int32 _nScale )
 {
     if ( _rValue.isNull() )
     {

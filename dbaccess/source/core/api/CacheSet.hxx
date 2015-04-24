@@ -58,12 +58,12 @@ namespace dbaccess
         OCacheSet(sal_Int32 i_nMaxRows);
         virtual ~OCacheSet();
 
-        void setParameter(sal_Int32 nPos
+        static void setParameter(sal_Int32 nPos
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters >& _xParameter
                             ,const connectivity::ORowSetValue& _rValue
                             ,sal_Int32 _nType
                             ,sal_Int32 _nScale
-                            ) const;
+                            );
         void fillParameters( const ORowSetRow& _rRow
                             ,const connectivity::OSQLTable& _xTable
                             ,OUStringBuffer& _sCondition

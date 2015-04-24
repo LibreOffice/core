@@ -228,7 +228,7 @@ namespace dbaui
         void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow, bool& _bListAction);
         void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow);
         OTableFields&   getFields() const;
-        void            enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
+        static void     enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
         void            setTextCellContext(const OTableFieldDescRef& _rEntry,const OUString& _sText,const OString& _sHelpId);
         void            invalidateUndoRedo();
         OTableFieldDescRef getEntry(OTableFields::size_type _nPos);

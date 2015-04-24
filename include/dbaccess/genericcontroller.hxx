@@ -341,7 +341,7 @@ namespace dbaui
 
             @see IController::registerCommandURL
         */
-        bool    isUserDefinedFeature( const sal_uInt16 nFeatureId ) const;
+        static bool isUserDefinedFeature( const sal_uInt16 nFeatureId );
 
         /** determines whether the given feature URL denotes a user-defined feature
 
@@ -431,7 +431,7 @@ namespace dbaui
             @return
                 The layout manager of the frame, can be <NULL/> if the frame isn't initialized.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame) const;
+        static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
 
         // IController
         virtual void executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;

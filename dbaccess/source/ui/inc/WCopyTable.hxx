@@ -288,8 +288,8 @@ namespace dbaui
                        ODatabaseExport::TColumnVector& _rColVector );
         void construct();
         // need for table creation
-        void appendColumns( ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, bool _bKeyColumns = false ) const;
-        void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec) const;
+        static void appendColumns( ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, bool _bKeyColumns = false );
+        static void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec);
         // checks if the type is supported in the destination database
         bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
 

@@ -35,7 +35,7 @@ namespace dbaxml
         bool m_bIsList;
 
         ODBFilter& GetOwnImport();
-        ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
+        static ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
     public:
 
         OXMLDataSourceSetting( ODBFilter& rImport, sal_uInt16 nPrfx,

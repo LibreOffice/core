@@ -2050,12 +2050,12 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
 
     ImageProvider aImageProvider;
     if (!_rQueryImage)
-        _rQueryImage = aImageProvider.getFolderImage( DatabaseObject::QUERY );
+        _rQueryImage = ImageProvider::getFolderImage( DatabaseObject::QUERY );
     if (!_rTableImage)
-        _rTableImage = aImageProvider.getFolderImage( DatabaseObject::TABLE );
+        _rTableImage = ImageProvider::getFolderImage( DatabaseObject::TABLE );
 
     if (!_rDbImage)
-        _rDbImage = aImageProvider.getDatabaseImage();
+        _rDbImage = ImageProvider::getDatabaseImage();
 
     // add the entry for the data source
     // special handling for data sources denoted by URLs - we do not want to display this ugly URL, do we?

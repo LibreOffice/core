@@ -344,7 +344,7 @@ OUString OApplicationView::getQualifiedName( SvTreeListEntry* _pEntry ) const
 bool OApplicationView::isLeaf(SvTreeListEntry* _pEntry) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    return getDetailView()->isLeaf(_pEntry);
+    return OApplicationDetailView::isLeaf(_pEntry);
 }
 
 bool OApplicationView::isALeafSelected() const

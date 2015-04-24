@@ -376,7 +376,7 @@ void OCacheSet::setParameter(sal_Int32 nPos
                              ,const Reference< XParameters >& _xParameter
                              ,const ORowSetValue& _rValue
                              ,sal_Int32 _nType
-                             ,sal_Int32 _nScale) const
+                             ,sal_Int32 _nScale)
 {
     sal_Int32 nType = ( _nType != DataType::OTHER ) ? _nType : _rValue.getTypeKind();
     ::dbtools::setObjectWithInfo(_xParameter,nPos,_rValue,nType,_nScale);

@@ -50,7 +50,7 @@ namespace dbaui
         void clearLineData();
 
     protected:
-        OConnectionLine* CreateConnLine( const OConnectionLine& rConnLine );
+        static OConnectionLine* CreateConnLine( const OConnectionLine& rConnLine );
 
     public:
         OTableConnection( OJoinTableView* pContainer, const TTableConnectionData::value_type& pTabConnData );

@@ -39,9 +39,9 @@ protected:
     ~XDataPilotDescriptor() {}
 
 private:
-    void testGetDataPilotFields_Impl( css::uno::Reference< css::sheet::XDataPilotDescriptor > xDescr );
+    static void testGetDataPilotFields_Impl( css::uno::Reference< css::sheet::XDataPilotDescriptor > xDescr );
 
-    void checkName( css::uno::Reference< css::container::XIndexAccess > xIndex, sal_Int32 nIndex );
+    static void checkName( css::uno::Reference< css::container::XIndexAccess > xIndex, sal_Int32 nIndex );
     static std::vector<OUString> maFieldNames;
 };
 

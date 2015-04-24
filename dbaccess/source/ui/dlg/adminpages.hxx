@@ -171,7 +171,7 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue);
 
         /// analyze the invalid and the readonly flag which may be present in the set
-        void getFlags(const SfxItemSet& _rSet, bool& _rValid, bool& _rReadonly);
+        static void getFlags(const SfxItemSet& _rSet, bool& _rValid, bool& _rReadonly);
 
         /** will be called inside <method>implInitControls</method> to save the value if necessary
             @param  _rControlList

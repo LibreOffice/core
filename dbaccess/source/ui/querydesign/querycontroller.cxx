@@ -255,7 +255,7 @@ namespace
 {
     void ensureToolbars( OQueryController& _rController, bool _bDesign )
     {
-        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = _rController.getLayoutManager( _rController.getFrame() );
+        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = OGenericUnoController::getLayoutManager( _rController.getFrame() );
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
@@ -284,7 +284,7 @@ namespace
     void grabFocusFromLimitBox( OQueryController& _rController )
     {
         static const char sResourceURL[] = "private:resource/toolbar/designobjectbar";
-        Reference< XLayoutManager > xLayoutManager = _rController.getLayoutManager( _rController.getFrame() );
+        Reference< XLayoutManager > xLayoutManager = OGenericUnoController::getLayoutManager( _rController.getFrame() );
         Reference< XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
         if (xUIElement.is())
         {

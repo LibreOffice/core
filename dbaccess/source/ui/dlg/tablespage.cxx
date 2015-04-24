@@ -477,7 +477,7 @@ namespace dbaui
 
                             if (pCatalog)
                             {   // it's a real catalog entry, not the "all objects" root
-                                bCatalogWildcard = m_pTablesList->isWildcardChecked(pCatalog);
+                                bCatalogWildcard = OTableTreeListBox::isWildcardChecked(pCatalog);
                                 if (m_bCatalogAtStart)
                                 {
                                     sComposedName += m_pTablesList->GetEntryText( pCatalog );
@@ -496,7 +496,7 @@ namespace dbaui
                                 }
                             }
                         }
-                        bSchemaWildcard = m_pTablesList->isWildcardChecked(pSchema);
+                        bSchemaWildcard = OTableTreeListBox::isWildcardChecked(pSchema);
                         sComposedName += m_pTablesList->GetEntryText( pSchema );
                         sComposedName += sDot;
                     }
@@ -556,7 +556,7 @@ namespace dbaui
         if ( m_xCurrentConnection.is() )
         {   // collect the table filter data only if we have a connection - else no tables are displayed at all
             Sequence< OUString > aTableFilter;
-            if (m_pTablesList->isWildcardChecked(m_pTablesList->getAllObjectsEntry()))
+            if (dbaui::OTableTreeListBox::isWildcardChecked(m_pTablesList->getAllObjectsEntry()))
             {
                 aTableFilter.realloc(1);
                 aTableFilter[0] = "%";

@@ -106,7 +106,7 @@ namespace dbaui
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
         // returns the Url of a database document
-        OUString            getDocumentUrl(SfxItemSet& _rDest);
+        static OUString        getDocumentUrl(SfxItemSet& _rDest);
 
         void setDataSourceOrName( const ::com::sun::star::uno::Any& _rDataSourceOrName );
 
@@ -122,7 +122,7 @@ namespace dbaui
         OUString getConnectionURL() const;
 
         /// fill the necessary information from the url line
-        void convertUrl(SfxItemSet& _rDest);
+        static void convertUrl(SfxItemSet& _rDest);
 
         const MapInt2String& getIndirectProperties() const { return m_aIndirectPropTranslator; }
 
@@ -156,15 +156,15 @@ namespace dbaui
         void        implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const ::com::sun::star::uno::Any& _rValue);
 
         /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>
-        ::com::sun::star::uno::Any implTranslateProperty(const SfxPoolItem* _pItem);
+        static ::com::sun::star::uno::Any implTranslateProperty(const SfxPoolItem* _pItem);
 
         /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>, set it (under the given name) on the given property set
-        void        implTranslateProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem);
+        static void implTranslateProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem);
 
         /** check if the data source described by the given set needs authentication<p/>
             The return value depends on the data source type only.
         */
-        bool            hasAuthentication(const SfxItemSet& _rSet) const;
+        static bool hasAuthentication(const SfxItemSet& _rSet);
 
 #if OSL_DEBUG_LEVEL > 0
         OString translatePropertyId( sal_Int32 _nId );

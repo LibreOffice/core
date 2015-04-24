@@ -512,7 +512,7 @@ sal_Int32 OAppDetailPageHelper::getElementCount()
     return nCount;
 }
 
-bool OAppDetailPageHelper::isLeaf(SvTreeListEntry* _pEntry) const
+bool OAppDetailPageHelper::isLeaf(SvTreeListEntry* _pEntry)
 {
     if ( !_pEntry )
         return false;
@@ -567,7 +567,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
         ImageProvider aImageProvider( _xConnection );
         createTree( pTreeView,
-            aImageProvider.getDefaultImage( DatabaseObject::TABLE )
+            ImageProvider::getDefaultImage( DatabaseObject::TABLE )
         );
 
         pTreeView->notifyHiContrastChanged();
@@ -601,7 +601,7 @@ void OAppDetailPageHelper::getElementIcons( ElementType _eType, sal_uInt16& _rIm
             OSL_FAIL( "OAppDetailPageHelper::GetElementIcons: invalid element type!" );
             return;
     }
-    _rImageId = aImageProvider.getDefaultImageResourceID( nDatabaseObjectType );
+    _rImageId = ImageProvider::getDefaultImageResourceID( nDatabaseObjectType );
 }
 
 void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameAccess >& _xContainer)
@@ -616,15 +616,15 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     {
         case E_FORM:
             sHelpId = HID_APP_FORM_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM );
+            aFolderImage = ImageProvider::getFolderImage( DatabaseObject::FORM );
             break;
         case E_REPORT:
             sHelpId = HID_APP_REPORT_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::REPORT );
+            aFolderImage = ImageProvider::getFolderImage( DatabaseObject::REPORT );
             break;
         case E_QUERY:
             sHelpId = HID_APP_QUERY_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::QUERY );
+            aFolderImage = ImageProvider::getFolderImage( DatabaseObject::QUERY );
             break;
         default:
             OSL_FAIL("Illegal call!");
