@@ -288,13 +288,13 @@ int cow_wrapper_client::queryUnmodified() const
     template<class T, class P> inline bool operator==( const cow_wrapper<T,P>& a,
                                                        const cow_wrapper<T,P>& b )
     {
-        return a.same_object(b) ? true : *a == *b;
+        return a.same_object(b) || *a == *b;
     }
 
     template<class T, class P> inline bool operator!=( const cow_wrapper<T,P>& a,
                                                        const cow_wrapper<T,P>& b )
     {
-        return a.same_object(b) ? false : *a != *b;
+        return !a.same_object(b) && *a != *b;
     }
 
     template<class A, class B, class P> inline bool operator<( const cow_wrapper<A,P>& a,
