@@ -3066,6 +3066,7 @@ void ScFiltersTest::testRefStringXLSX()
     xDocSh->DoClose();
 }
 
+
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
 {
