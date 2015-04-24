@@ -1489,7 +1489,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
             if ( reg.IsAmbiguous )
                 bRegistered = false;
             else
-                bRegistered = reg.Value ? true : false;
+                bRegistered = reg.Value;
         }
         else
             bRegistered = false;

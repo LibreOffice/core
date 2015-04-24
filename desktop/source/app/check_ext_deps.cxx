@@ -288,7 +288,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                         if ( reg.IsAmbiguous )
                             bRegistered = false;
                         else
-                            bRegistered = reg.Value ? true : false;
+                            bRegistered = reg.Value;
                     }
                     else
                         bRegistered = false;
