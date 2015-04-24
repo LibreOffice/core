@@ -1472,7 +1472,11 @@ void GtkSalGraphics::WidgetQueueDraw() const
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
 
-void GtkData::initNWF() {}
+void GtkData::initNWF()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maNWFData.mbCheckBoxNeedsErase = true;
+}
 
 void GtkData::deInitNWF()
 {

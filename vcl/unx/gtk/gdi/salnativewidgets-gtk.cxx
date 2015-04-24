@@ -538,6 +538,8 @@ void GtkData::initNWF()
     pSVData->maNWFData.mnMenuFormatBorderX = xthickness + horizontal_padding;
     pSVData->maNWFData.mnMenuFormatBorderY = ythickness + vertical_padding;
 
+    pSVData->maNWFData.mbCheckBoxNeedsErase = true;
+
     if( SalGetDesktopEnvironment() == "KDE" )
     {
         // #i97196# ensure a widget exists and the style engine was loaded
