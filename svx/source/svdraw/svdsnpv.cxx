@@ -282,14 +282,14 @@ Point SdrSnapView::GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const
 }
 
 #define NOT_SNAPPED 0x7FFFFFFF
-sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
+SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 {
-    if (!bSnapEnab) return SDRSNAP_NOTSNAPPED;
+    if (!bSnapEnab) return SdrSnap::NOTSNAPPED;
     long x=rPnt.X();
     long y=rPnt.Y();
     if (pPV==NULL) {
         pPV=GetSdrPageView();
-        if (pPV==NULL) return SDRSNAP_NOTSNAPPED;
+        if (pPV==NULL) return SdrSnap::NOTSNAPPED;
     }
 
     long dx=NOT_SNAPPED;
@@ -424,9 +424,9 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             dy = 0;
         }
     }
-    sal_uInt16 bRet=SDRSNAP_NOTSNAPPED;
-    if (dx==NOT_SNAPPED) dx=0; else bRet|=SDRSNAP_XSNAPPED;
-    if (dy==NOT_SNAPPED) dy=0; else bRet|=SDRSNAP_YSNAPPED;
+    SdrSnap bRet=SdrSnap::NOTSNAPPED;
+    if (dx==NOT_SNAPPED) dx=0; else bRet|=SdrSnap::XSNAPPED;
+    if (dy==NOT_SNAPPED) dy=0; else bRet|=SdrSnap::YSNAPPED;
     rPnt.X()=x+dx;
     rPnt.Y()=y+dy;
     return bRet;
@@ -435,9 +435,9 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const
 {
     Point aPt(rPt);
-    sal_uInt16 nRet=SnapPos(aPt,pPV);
+    SdrSnap nRet=SnapPos(aPt,pPV);
     aPt-=rPt;
-    if ((nRet & SDRSNAP_XSNAPPED) !=0) {
+    if (nRet & SdrSnap::XSNAPPED) {
         if (bXSnapped) {
             if (std::abs(aPt.X())<std::abs(nBestXSnap)) {
                 nBestXSnap=aPt.X();
@@ -447,7 +447,7 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
             bXSnapped=true;
         }
     }
-    if ((nRet & SDRSNAP_YSNAPPED) !=0) {
+    if (nRet & SdrSnap::YSNAPPED) {
         if (bYSnapped) {
             if (std::abs(aPt.Y())<std::abs(nBestYSnap)) {
                 nBestYSnap=aPt.Y();

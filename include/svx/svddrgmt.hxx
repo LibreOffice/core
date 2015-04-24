@@ -169,7 +169,7 @@ protected:
     const Rectangle&   GetDragLimitRect()              { return getSdrDragView().aDragLimit; }
     const SdrMarkList& GetMarkedObjectList()                   { return getSdrDragView().GetMarkedObjectList(); }
     Point              GetSnapPos(const Point& rPt) const { return getSdrDragView().GetSnapPos(rPt,getSdrDragView().pMarkedPV); }
-    sal_uInt16         SnapPos(Point& rPt) const       { return getSdrDragView().SnapPos(rPt,getSdrDragView().pMarkedPV); }
+    SdrSnap            SnapPos(Point& rPt) const       { return getSdrDragView().SnapPos(rPt,getSdrDragView().pMarkedPV); }
     inline const Rectangle& GetMarkedRect() const;
     SdrPageView*       GetDragPV() const;
     SdrObject*         GetDragObj() const;

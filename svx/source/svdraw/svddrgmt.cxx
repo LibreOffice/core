@@ -1557,10 +1557,10 @@ basegfx::B2DHomMatrix SdrDragMove::getCurrentTransformation()
 void SdrDragMove::ImpCheckSnap(const Point& rPt)
 {
     Point aPt(rPt);
-    sal_uInt16 nRet=SnapPos(aPt);
+    SdrSnap nRet=SnapPos(aPt);
     aPt-=rPt;
 
-    if ((nRet & SDRSNAP_XSNAPPED) !=0)
+    if (nRet & SdrSnap::XSNAPPED)
     {
         if (bXSnapped)
         {
@@ -1576,7 +1576,7 @@ void SdrDragMove::ImpCheckSnap(const Point& rPt)
         }
     }
 
-    if ((nRet & SDRSNAP_YSNAPPED) !=0)
+    if (nRet & SdrSnap::YSNAPPED)
     {
         if (bYSnapped)
         {

@@ -23,12 +23,21 @@
 #include <svx/svdpntv.hxx>
 #include <svx/svdhlpln.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 
-#define SDRSNAP_NOTSNAPPED  0x0000
-#define SDRSNAP_XSNAPPED    0x0001
-#define SDRSNAP_YSNAPPED    0x0002
-#define SDRSNAP_XYSNAPPED   0x0003
+/** return value for SnapPos() method */
+enum class SdrSnap
+{
+    NOTSNAPPED = 0x00,
+    XSNAPPED   = 0x01,
+    YSNAPPED   = 0x02,
+    XYSNAPPED  = XSNAPPED | YSNAPPED,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SdrSnap> : is_typed_flags<SdrSnap, 3> {};
+}
 
 // SDRCROOK_STRETCH is not implemented yet!
 enum SdrCrookMode {
@@ -112,9 +121,9 @@ public:
     void SetActualWin(const OutputDevice* pWin) { SdrPaintView::SetActualWin(pWin); if (pWin!=NULL) RecalcLogicSnapMagnetic(*pWin); }
 
     // Coordinates referred to the view!
-    // Returnvalues are SDRSNAP_NOTSNAPPED,SDRSNAP_XSNAPPED,
-    // SDRSNAP_YSNAPPED or SDRSNAP_XYSNAPPED
-    sal_uInt16 SnapPos(Point& rPnt, const SdrPageView* pPV) const;
+    // Returnvalues are SdrSnap::NOTSNAPPED,SdrSnap::XSNAPPED,
+    // SdrSnap::YSNAPPED or SdrSnap::XYSNAPPED
+    SdrSnap SnapPos(Point& rPnt, const SdrPageView* pPV) const;
     Point GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const;
     void CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
 
