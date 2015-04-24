@@ -1011,6 +1011,26 @@ void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocume
     pFS->endElement( FSNS( XML_c, XML_legend ) );
 }
 
+namespace {
+
+/**
+ * nRotation is a 100th of a degree and the return value is
+ * in a 60,000th of a degree
+ *
+ * Also rotation is in opposite directions so multiply with -1
+ */
+OString calcRotationValue(sal_Int32 nRotation)
+{
+    if (nRotation > 18000) // 180 degree
+    {
+        nRotation -= 36000;
+    }
+    nRotation *= -600;
+    return OString::number(nRotation);
+}
+
+}
+
 void ChartExport::exportTitle( Reference< XShape > xShape )
 {
     OUString sText;
@@ -1038,8 +1058,12 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
     if( bVertical )
         sWritingMode = "wordArtVert";
 
+    sal_Int32 nRotation;
+    xPropSet->getPropertyValue("TextRotation") >>= nRotation;
+
     pFS->singleElement( FSNS( XML_a, XML_bodyPr ),
             XML_vert, sWritingMode,
+            XML_rot, nRotation == 0 ? NULL : calcRotationValue(nRotation).getStr(),
             FSEND );
     // TODO: lstStyle
     pFS->singleElement( FSNS( XML_a, XML_lstStyle ),
