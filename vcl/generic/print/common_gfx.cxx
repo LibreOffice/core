@@ -76,7 +76,7 @@ PrinterGfx::Init (const JobData& rData)
     mpPageBody      = NULL;
     mnDepth         = rData.m_nColorDepth;
     mnPSLevel       = rData.m_nPSLevel ? rData.m_nPSLevel : (rData.m_pParser ? rData.m_pParser->getLanguageLevel() : 2 );
-    mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice != -1 ) : ( rData.m_pParser ? rData.m_pParser->isColorDevice() : true );
+    mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice != -1 ) : ( rData.m_pParser == nullptr || rData.m_pParser->isColorDevice() );
     int nRes = rData.m_aContext.getRenderResolution();
     mnDpi           = nRes;
     mfScaleX        = (double)72.0 / (double)mnDpi;

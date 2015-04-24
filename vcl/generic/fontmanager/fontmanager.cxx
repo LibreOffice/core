@@ -1571,7 +1571,7 @@ bool PrintFontManager::getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const
         rInfo.m_nID = nFontID;
         fillPrintFontInfo( pFont, rInfo );
     }
-    return pFont ? true : false;
+    return pFont != nullptr;
 }
 
 bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo ) const
@@ -1582,7 +1582,7 @@ bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo
         rInfo.m_nID = nFontID;
         fillPrintFontInfo( pFont, rInfo );
     }
-    return pFont ? true : false;
+    return pFont != nullptr;
 }
 
 bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin, int& xMax, int& yMax )

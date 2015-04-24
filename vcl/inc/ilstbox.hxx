@@ -128,7 +128,7 @@ public:
     long            GetEntryHeight( sal_Int32  nPos ) const;
 
     sal_Int32       GetEntryCount() const { return (sal_Int32 )maEntries.size(); }
-    bool            HasImages() const { return mnImages ? true : false; }
+    bool            HasImages() const { return mnImages != 0; }
 
     OUString        GetEntryText( sal_Int32  nPos ) const;
 

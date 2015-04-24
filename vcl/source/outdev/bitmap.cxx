@@ -1263,7 +1263,7 @@ void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, sal_uInt16
 void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                               const Image& rImage, sal_uInt16 nStyle )
 {
-    bool bIsSizeValid = (rSize.getWidth() == 0 || rSize.getHeight() == 0) ? false : true;
+    bool bIsSizeValid = rSize.getWidth() != 0 && rSize.getHeight() != 0;
 
     if( rImage.mpImplData && !ImplIsRecordLayout() )
     {

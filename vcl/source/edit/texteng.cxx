@@ -2520,7 +2520,7 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
     SetUpdateMode( bUpdate );
     FormatAndUpdate( GetActiveView() );
 
-    return rInput.GetError() ? false : true;
+    return rInput.GetError() == 0;
 }
 
 bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML )
@@ -2608,7 +2608,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
         rOutput.WriteLine( "</HTML>" );
     }
 
-    return rOutput.GetError() ? false : true;
+    return rOutput.GetError() == 0;
 }
 
 void TextEngine::RemoveAttribs( sal_uLong nPara, bool bIdleFormatAndUpdate )

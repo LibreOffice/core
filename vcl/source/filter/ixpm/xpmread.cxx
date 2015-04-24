@@ -398,7 +398,7 @@ bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
             }
         }
     }
-    return ( mnParaSize ) ? true : false;
+    return mnParaSize != 0;
 }
 
 // ImplGetRGBHex translates the ASCII-Hexadecimalvalue belonging to mpPara

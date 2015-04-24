@@ -1752,8 +1752,8 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                 Maximize();
             else
             {
-                bool bHorz = (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED_HORZ) ? true : false;
-                bool bVert = (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED_VERT) ? true : false;
+                bool bHorz = (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED_HORZ) != 0;
+                bool bVert = (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED_VERT) != 0;
                 GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
             }
             maRestorePosSize.Left() = pState->mnX;

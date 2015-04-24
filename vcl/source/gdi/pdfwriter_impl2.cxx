@@ -1968,8 +1968,8 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
     {
         const Scanline pCurLine = i_pBitmap->GetScanline( nY );
         long nLineIndex = 0;
-        bool bRunSet = (*pCurLine & 0x80) ? true : false;
-        bool bRefSet = (*pRefLine & 0x80) ? true : false;
+        bool bRunSet = (*pCurLine & 0x80) != 0;
+        bool bRefSet = (*pRefLine & 0x80) != 0;
         long nRunIndex1 = bRunSet ? 0 : findBitRun( pCurLine, 0, nW, bRunSet );
         long nRefIndex1 = bRefSet ? 0 : findBitRun( pRefLine, 0, nW, bRefSet );
         for( ; nLineIndex < nW; )

@@ -89,7 +89,7 @@ bool VirtualDevice::AcquireGraphics() const
         mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
     }
 
-    return mpGraphics ? true : false;
+    return mpGraphics != nullptr;
 }
 
 void VirtualDevice::ReleaseGraphics( bool bRelease )

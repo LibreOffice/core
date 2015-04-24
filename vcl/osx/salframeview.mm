@@ -1497,7 +1497,7 @@ private:
         nRet = mpFrame->CallCallback( SALEVENT_KEYINPUT, &aEvent );
         std::map< NSEvent*, bool >::iterator it = GetSalData()->maKeyEventAnswer.find( mpLastEvent );
         if( it != GetSalData()->maKeyEventAnswer.end() )
-            it->second = nRet ? true : false;
+            it->second = nRet != 0;
         if( AquaSalFrame::isAlive( mpFrame ) )
             mpFrame->CallCallback( SALEVENT_KEYUP, &aEvent );
     }

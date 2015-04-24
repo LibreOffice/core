@@ -407,7 +407,7 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
         else if ( maDropDownRect.IsInside( rMEvt.GetPosPixel() ) )
         {
             // put DropDownButton to the right
-            mbInDropDown = ShowDropDown( mbInDropDown ? false : true );
+            mbInDropDown = ShowDropDown( !mbInDropDown );
             Paint( Rectangle( Point(), GetOutputSizePixel() ) );
         }
 

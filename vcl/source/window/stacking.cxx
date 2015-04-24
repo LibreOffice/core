@@ -647,7 +647,7 @@ bool Window::IsTopWindow() const
         uno::Reference< XTopWindow > xTopWindow( pThisWin->GetComponentInterface(), UNO_QUERY );
         pThisWin->mpWindowImpl->mpWinData->mnIsTopWindow = xTopWindow.is() ? 1 : 0;
     }
-    return mpWindowImpl->mpWinData->mnIsTopWindow == 1 ? true : false;
+    return mpWindowImpl->mpWinData->mnIsTopWindow == 1;
 }
 
 vcl::Window* Window::FindWindow( const Point& rPos ) const

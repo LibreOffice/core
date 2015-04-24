@@ -1102,7 +1102,7 @@ unsigned int Application::GetScreenCount()
 bool Application::IsUnifiedDisplay()
 {
     SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->IsUnifiedDisplay() : true;
+    return pSys == nullptr || pSys->IsUnifiedDisplay();
 }
 
 unsigned int Application::GetDisplayBuiltInScreen()

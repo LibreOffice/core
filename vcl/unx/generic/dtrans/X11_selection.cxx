@@ -1347,7 +1347,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         }
         if( (pFlavors - rTypes.getArray()) < rTypes.getLength() )
             rTypes.realloc(pFlavors - rTypes.getArray());
-        bSuccess = rTypes.getLength() ? true : false;
+        bSuccess = rTypes.hasElements();
         if( bHaveText && ! bHaveUTF16 )
         {
                int i = 0;
@@ -2562,7 +2562,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSource             = static_cast< XDragSource* >( this );
             dsde.UserAction = getUserDragAction();
             dsde.DropAction = DNDConstants::ACTION_NONE;
-            m_bDropSuccess = rMessage.xclient.data.l[1] & 1 ? true : false;
+            m_bDropSuccess = (rMessage.xclient.data.l[1] & 1) != 0;
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "status drop action: accept = %s, %s\n",
                      m_bDropSuccess ? "true" : "false",

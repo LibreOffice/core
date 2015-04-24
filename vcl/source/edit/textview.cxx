@@ -1841,7 +1841,7 @@ bool TextView::SetCursorAtPoint( const Point& rPosPixel )
         ShowSelection( aTmpNewSel );
     }
 
-    bool bForceCursor =  mpImpl->mpDDInfo ? false : true; // && !mbInSelection
+    bool bForceCursor =  mpImpl->mpDDInfo == nullptr; // && !mbInSelection
     ImpShowCursor( mpImpl->mbAutoScroll, bForceCursor, false );
     return true;
 }

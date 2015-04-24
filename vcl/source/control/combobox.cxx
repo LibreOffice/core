@@ -122,7 +122,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     ImplInitStyle( nStyle );
 
-    bool bNoBorder = ( nStyle & WB_NOBORDER ) ? true : false;
+    bool bNoBorder = ( nStyle & WB_NOBORDER ) != 0;
     if ( !(nStyle & WB_DROPDOWN) )
     {
         nStyle &= ~WB_BORDER;
@@ -647,7 +647,7 @@ void ComboBox::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::STYLE )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
-        mpImplLB->GetMainWindow().EnableSort( ( GetStyle() & WB_SORT ) ? true : false );
+        mpImplLB->GetMainWindow().EnableSort( ( GetStyle() & WB_SORT ) != 0 );
     }
     else if( nType == StateChangedType::MIRRORING )
     {

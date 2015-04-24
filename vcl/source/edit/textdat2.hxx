@@ -154,7 +154,7 @@ public:
     void            SetInvalid()                    { mbInvalid = true; }
     void            SetValid()                      { mbInvalid = false; }
 
-    bool            IsEmpty() const                 { return (mnEnd > mnStart) ? false : true; }
+    bool            IsEmpty() const                 { return mnEnd <= mnStart; }
 
     short           GetStartX() const               { return mnStartX; }
     void            SetStartX( short n )            { mnStartX = n; }

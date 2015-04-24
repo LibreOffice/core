@@ -72,7 +72,7 @@ protected:
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
-    bool               IsDropDownBox() const { return mpFloatWin ? true : false; }
+    bool               IsDropDownBox() const { return mpFloatWin != nullptr; }
 
 protected:
     explicit            ListBox( WindowType nType );

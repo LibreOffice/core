@@ -792,7 +792,7 @@ void GtkSalMenu::Display( bool bVisible )
 
     bMenuVisibility = bVisible;
 
-    bool bVCLMenuVisible = ( bVisible ) ? false : true;
+    bool bVCLMenuVisible = !bVisible;
 
     MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
     pMenuBar->SetDisplayable( bVCLMenuVisible );

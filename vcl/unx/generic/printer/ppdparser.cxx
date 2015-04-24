@@ -356,7 +356,7 @@ bool PPDDecompressStream::IsOpen() const
 
 bool PPDDecompressStream::IsEof() const
 {
-    return ( mpMemStream ? mpMemStream->IsEof() : ( mpFileStream ? mpFileStream->IsEof() : true ) );
+    return ( mpMemStream ? mpMemStream->IsEof() : ( mpFileStream == nullptr || mpFileStream->IsEof() ) );
 }
 
 OString PPDDecompressStream::ReadLine()

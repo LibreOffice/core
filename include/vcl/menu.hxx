@@ -332,7 +332,7 @@ public:
     void                SetSelectHdl( const Link& rLink )       { aSelectHdl = rLink; }
     const Link&         GetSelectHdl() const                    { return aSelectHdl; }
 
-    bool                HasLogo() const { return pLogo ? true : false; }
+    bool                HasLogo() const { return pLogo != nullptr; }
 
     void                AddEventListener( const Link& rEventListener );
     void                RemoveEventListener( const Link& rEventListener );

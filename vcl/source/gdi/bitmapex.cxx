@@ -157,7 +157,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         aMask           ( rAlphaMask.ImplGetBitmap() ),
         aBitmapSize     ( aBitmap.GetSizePixel() ),
         eTransparent    ( !rAlphaMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
-        bAlpha          ( !rAlphaMask ? false : true )
+        bAlpha          ( !rAlphaMask.IsEmpty() )
 {
     if(!!aBitmap && !!aMask && aBitmap.GetSizePixel() != aMask.GetSizePixel())
     {

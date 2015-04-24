@@ -539,7 +539,7 @@ GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted 
         }
 
         glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_Y_INVERTED_EXT, &nValue );
-        bInverted = (nValue == True) ? true : false;
+        bInverted = nValue == True;
 
         break;
     }

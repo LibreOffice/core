@@ -239,7 +239,7 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     OUString        aText( GetText() );
     bool            bDrawImage = HasImage() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOIMAGE );
     bool            bDrawText  = !aText.isEmpty() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOTEXT );
-    bool            bHasSymbol = pSymbolRect ? true : false;
+    bool            bHasSymbol = pSymbolRect != nullptr;
 
     // No text and no image => nothing to do => return
     if ( !bDrawImage && !bDrawText && !bHasSymbol )
@@ -684,9 +684,8 @@ void PushButton::ImplInitSettings( bool bFont,
             EnableChildTransparentMode( true );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
             SetPaintTransparent( true );
-            mpWindowImpl->mbUseNativeFocus = (GetStyle() & WB_FLATBUTTON)
-                ? false
-                : ImplGetSVData()->maNWFData.mbNoFocusRects;
+            mpWindowImpl->mbUseNativeFocus = (GetStyle() & WB_FLATBUTTON) == 0
+                && ImplGetSVData()->maNWFData.mbNoFocusRects;
         }
         else
         {

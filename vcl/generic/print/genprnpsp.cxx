@@ -251,7 +251,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
     OString aCmdLine(OUStringToOString(rCommandLine, aEncoding));
     OString aFilename(OUStringToOString(rFilename, aEncoding));
 
-    bool bPipe = aCmdLine.indexOf( "(TMP)" ) != -1 ? false : true;
+    bool bPipe = aCmdLine.indexOf( "(TMP)" ) == -1;
 
     // setup command line for exec
     if( ! bPipe )
@@ -277,7 +277,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
     int pid, fd[2];
 
     if( bPipe )
-        bHavePipes = pipe( fd ) ? false : true;
+        bHavePipes = pipe( fd ) == 0;
     if( ( pid = fork() ) > 0 )
     {
         if( bPipe && bHavePipes )
@@ -919,7 +919,7 @@ bool PspSalPrinter::StartJob(
 #endif
     m_aPrinterGfx.Init( m_aJobData );
 
-    return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? true : false;
+    return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect );
 }
 
 bool PspSalPrinter::EndJob()
@@ -944,7 +944,7 @@ bool PspSalPrinter::EndJob()
 
 bool PspSalPrinter::AbortJob()
 {
-    bool bAbort = m_aPrintJob.AbortJob() ? true : false;
+    bool bAbort = m_aPrintJob.AbortJob();
     GetSalData()->m_pInstance->jobEndedPrinterUpdate();
     return bAbort;
 }

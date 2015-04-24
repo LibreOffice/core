@@ -270,7 +270,7 @@ public:
     void                SetRightToLeft( bool bR2L );
     bool                IsRightToLeft() const { return mbRightToLeft; }
 
-    bool                HasUndoManager() const { return mpUndoManager ? true : false; }
+    bool                HasUndoManager() const { return mpUndoManager != nullptr; }
     ::svl::IUndoManager&
                         GetUndoManager();
     void                UndoActionStart( sal_uInt16 nId = 0 );

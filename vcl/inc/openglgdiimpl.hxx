@@ -115,7 +115,7 @@ public:
     GLfloat GetHeight() const { return mpProvider ? mpProvider->GetHeight() : 1; }
 
     // check whether this instance is used for offscreen rendering
-    bool IsOffscreen() const { return mpProvider ? mpProvider->IsOffScreen() : true; }
+    bool IsOffscreen() const { return mpProvider == nullptr || mpProvider->IsOffScreen(); }
 
     // operations to do before painting
     void PreDraw();

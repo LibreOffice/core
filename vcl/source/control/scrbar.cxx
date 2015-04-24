@@ -456,7 +456,7 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
     if( !bNativeOK )
         return false;
 
-    bool bHorz = (GetStyle() & WB_HORZ) ? true : false;
+    bool bHorz = (GetStyle() & WB_HORZ) != 0;
 
     // Draw the entire background if the control supports it
     if( IsNativeControlSupported(CTRL_SCROLLBAR, bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT) )
@@ -786,7 +786,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 {
     sal_uInt16  nOldStateFlags = mnStateFlags;
     bool    bAction = false;
-    bool        bHorizontal = ( GetStyle() & WB_HORZ ) ? true: false;
+    bool        bHorizontal = ( GetStyle() & WB_HORZ ) != 0;
     bool        bIsInside = false;
 
     Point aPoint( 0, 0 );
@@ -896,7 +896,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const Point&        rMousePos = rMEvt.GetPosPixel();
         sal_uInt16          nTrackFlags = 0;
-        bool                bHorizontal = ( GetStyle() & WB_HORZ ) ? true: false;
+        bool                bHorizontal = ( GetStyle() & WB_HORZ ) != 0;
         bool                bIsInside = false;
         bool                bDragToMouse = false;
 
@@ -972,9 +972,9 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     ImplDraw( mnDragDraw, this );
                 }
             }
-            else if(bPage && (HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
-                                           aControlRegion, rMousePos, bIsInside ) ?
-                bIsInside : true) )
+            else if(bPage && (!HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
+                                           aControlRegion, rMousePos, bIsInside ) ||
+                bIsInside) )
             {
                 nTrackFlags = STARTTRACK_BUTTONREPEAT;
 
@@ -1231,7 +1231,7 @@ void ScrollBar::DataChanged( const DataChangedEvent& rDCEvt )
 
 Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
 {
-    bool    bHorizontal = ( GetStyle() & WB_HORZ ) ? true: false;
+    bool    bHorizontal = ( GetStyle() & WB_HORZ ) != 0;
     bool    bIsInside = false;
 
     Point aPoint( 0, 0 );

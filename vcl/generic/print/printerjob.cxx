@@ -720,8 +720,8 @@ static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* 
     }
     aFeature.append( "\n} stopped cleartomark\n" );
     sal_uInt64 nWritten = 0;
-    return pFile->write( aFeature.getStr(), aFeature.getLength(), nWritten )
-        || nWritten != (sal_uInt64)aFeature.getLength() ? false : true;
+    return !(pFile->write( aFeature.getStr(), aFeature.getLength(), nWritten )
+        || nWritten != (sal_uInt64)aFeature.getLength());
 }
 
 bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool bDocumentSetup )
@@ -1014,9 +1014,8 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
         aLine.append(static_cast<sal_Int32>(rJob.m_nCopies));
         aLine.append(" def\n");
         sal_uInt64 nWritten = 0;
-        bSuccess = pFile->write(aLine.getStr(), aLine.getLength(), nWritten)
-            || nWritten != static_cast<sal_uInt64>(aLine.getLength()) ?
-             false : true;
+        bSuccess = !(pFile->write(aLine.getStr(), aLine.getLength(), nWritten)
+            || nWritten != static_cast<sal_uInt64>(aLine.getLength()));
 
         if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
             WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );

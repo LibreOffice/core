@@ -459,7 +459,7 @@ bool ImplEntryList::IsEntryPosSelected( sal_Int32 nIndex ) const
 bool ImplEntryList::IsEntrySelectable( sal_Int32 nPos ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nPos );
-    return pImplEntry ? ((pImplEntry->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0) : true;
+    return pImplEntry == nullptr || ((pImplEntry->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0);
 }
 
 sal_Int32 ImplEntryList::FindFirstSelectable( sal_Int32 nPos, bool bForward /* = true */ )
@@ -2538,7 +2538,7 @@ bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
 
 void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
 {
-    bool bChanges = GetEntryList()->GetMRUCount() ? true : false;
+    bool bChanges = GetEntryList()->GetMRUCount() != 0;
 
     // Remove old MRU entries
     for ( sal_Int32 n = GetEntryList()->GetMRUCount();n; )

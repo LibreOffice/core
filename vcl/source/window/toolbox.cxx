@@ -894,7 +894,7 @@ void ToolBox::ImplSetMinMaxFloatSize( ToolBox *pThis )
     {
         pWrapper->SetMinOutputSizePixel( aMinSize );
         pWrapper->SetMaxOutputSizePixel( aMaxSize );
-        pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) ? true : false );
+        pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) != 0 );
     }
     else
     {
@@ -4476,7 +4476,7 @@ void ToolBox::SetStyle(WinBits nNewStyle)
     if (!ImplIsFloatingMode())
     {
         bool bOldScroll = mbScroll;
-        mbScroll = (mnWinStyle & WB_SCROLL) ? true : false;
+        mbScroll = (mnWinStyle & WB_SCROLL) != 0;
         if (mbScroll != bOldScroll)
         {
             mbFormat = true;
@@ -4505,7 +4505,7 @@ void ToolBox::ToggleFloatingMode()
     }
     else
     {
-        mbScroll = (mnWinStyle & WB_SCROLL) ? true : false;
+        mbScroll = (mnWinStyle & WB_SCROLL) != 0;
         if ( (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM) )
             mbHorz = true;
         else

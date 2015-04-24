@@ -796,7 +796,7 @@ bool Window::AcquireGraphics() const
         mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
     }
 
-    return mpGraphics ? true : false;
+    return mpGraphics != nullptr;
 }
 
 void Window::ReleaseGraphics( bool bRelease )
@@ -1259,7 +1259,7 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnTrackFlags     = 0;
         mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = false;
-        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? false : true; // true: try to draw this control with native theme API
+        mpWindowImpl->mpWinData->mbEnableNativeWidget = !(pNoNWF && *pNoNWF); // true: try to draw this control with native theme API
     }
 
     return mpWindowImpl->mpWinData;
@@ -2423,7 +2423,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             mpWindowImpl->mbPaintFrame = true;
             if (!Application::GetSettings().GetMiscSettings().GetPseudoHeadless())
             {
-                bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? true : false;
+                bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) != 0;
                 mpWindowImpl->mpFrame->Show( true, bNoActivate );
             }
             if( aDogTag.IsDead() )
@@ -2564,7 +2564,7 @@ void Window::Enable( bool bEnable, bool bChild )
 
 void Window::SetCallHandlersOnInputDisabled( bool bCall )
 {
-    mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall ? true : false;
+    mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall;
 
     vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
@@ -3752,7 +3752,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
     else
         aArg[ 2 ] = makeAny( css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
 
-    aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop ? true : false );
+    aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop );
     aArg[ 4 ] = makeAny( Reference< css::awt::XWindow >(
                              const_cast<vcl::Window*>(this)->GetComponentInterface(),
                              UNO_QUERY ));

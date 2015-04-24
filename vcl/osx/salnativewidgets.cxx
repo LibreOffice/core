@@ -333,7 +333,7 @@ bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
 */
 UInt32 AquaSalGraphics::getState( ControlState nState )
 {
-    const bool bDrawActive = mpFrame ? ([mpFrame->getNSWindow() isKeyWindow] ? true : false) : true;
+    const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow];
     if( !(nState & ControlState::ENABLED) || ! bDrawActive )
     {
         if( ! (nState & ControlState::HIDDEN) )
@@ -353,7 +353,7 @@ UInt32 AquaSalGraphics::getState( ControlState nState )
 
 UInt32 AquaSalGraphics::getTrackState( ControlState nState )
 {
-    const bool bDrawActive = mpFrame ? ([mpFrame->getNSWindow() isKeyWindow] ? true : false) : true;
+    const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow];
     if( ! (nState & ControlState::ENABLED) || ! bDrawActive )
             return kThemeTrackInactive;
 
@@ -419,7 +419,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 #else
             if (rControlRegion.Top() == 0 && nPart == PART_DRAW_BACKGROUND_HORZ)
             {
-                const bool bDrawActive = mpFrame ? ([mpFrame->getNSWindow() isKeyWindow] ? true : false) : true;
+                const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow];
                 CGFloat unifiedHeight = rControlRegion.GetHeight();
                 CGRect drawRect = CGRectMake(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
                 CUIDraw([NSWindow coreUIRenderer], drawRect, mrContext,

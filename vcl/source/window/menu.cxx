@@ -2551,7 +2551,7 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     if (pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && !pWin->IsInModalMode())
     {
         IMenuBarWindow* pMenuWin = getMenuBarWindow();
-        bDone = pMenuWin ? pMenuWin->HandleKeyEvent(rKEvent, bFromMenu) : false;
+        bDone = pMenuWin && pMenuWin->HandleKeyEvent(rKEvent, bFromMenu);
     }
     return bDone;
 }
@@ -2682,7 +2682,7 @@ void MenuBar::RemoveMenuBarButton( sal_uInt16 nId )
 bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId )
 {
     IMenuBarWindow* pMenuWin = getMenuBarWindow();
-    return pMenuWin ? pMenuWin->HandleMenuButtonEvent(i_nButtonId) : false;
+    return pMenuWin && pMenuWin->HandleMenuButtonEvent(i_nButtonId);
 }
 
 // bool PopupMenu::bAnyPopupInExecute = false;
@@ -2754,7 +2754,7 @@ void PopupMenu::ClosePopup(Menu* pMenu)
 
 bool PopupMenu::IsInExecute()
 {
-    return GetActivePopupMenu() ? true : false;
+    return GetActivePopupMenu() != nullptr;
 }
 
 PopupMenu* PopupMenu::GetActivePopupMenu()
