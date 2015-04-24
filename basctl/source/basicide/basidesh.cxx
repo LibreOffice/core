@@ -615,7 +615,7 @@ void Shell::CheckWindows()
 
 void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy )
 {
-    bool bChangeCurWindow = pCurWin ? false : true;
+    bool bChangeCurWindow = pCurWin == nullptr;
     std::vector<BaseWindow*> aDeleteVec;
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
@@ -640,7 +640,7 @@ void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLib
 void Shell::UpdateWindows()
 {
     // remove all windows that may not be displayed
-    bool bChangeCurWindow = pCurWin ? false : true;
+    bool bChangeCurWindow = pCurWin == nullptr;
     if ( !m_aCurLibName.isEmpty() )
     {
         std::vector<BaseWindow*> aDeleteVec;

@@ -76,7 +76,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
                 aMacroName = aStdMacroText;
                 aMacroName += OUString::number( nMacro );
                 // test whether existing...
-                bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? false : true;
+                bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) == nullptr;
                 nMacro++;
             }
         }

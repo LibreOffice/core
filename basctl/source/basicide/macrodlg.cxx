@@ -403,7 +403,7 @@ void MacroChooser::CheckButtons()
     if (nMode != Recording)
     {
         // Run...
-        bool bEnable = pMethod ? true : false;
+        bool bEnable = pMethod != nullptr;
         if (nMode != ChooseOnly && StarBASIC::IsRunning())
             bEnable = false;
         EnableButton(*m_pRunButton, bEnable);
@@ -412,10 +412,10 @@ void MacroChooser::CheckButtons()
     // organising still possible?
 
     // Assign...
-    EnableButton(*m_pAssignButton, pMethod ? true : false);
+    EnableButton(*m_pAssignButton, pMethod != nullptr);
 
     // Edit...
-    EnableButton(*m_pEditButton, pMacroEntry ? true : false);
+    EnableButton(*m_pEditButton, pMacroEntry != nullptr);
 
     // Organizer...
     EnableButton(*m_pOrganizeButton, !StarBASIC::IsRunning() && nMode == All);
@@ -425,7 +425,7 @@ void MacroChooser::CheckButtons()
     bool bShare = ( aDesc.GetLocation() == LIBRARY_LOCATION_SHARE );
     EnableButton(*m_pDelButton, !StarBASIC::IsRunning() && nMode == All && !bProtected && !bReadOnly && !bShare);
     bool bPrev = bNewDelIsDel;
-    bNewDelIsDel = pMethod ? true : false;
+    bNewDelIsDel = pMethod != nullptr;
     if (bPrev != bNewDelIsDel && nMode == All)
     {
         OUString aBtnText( bNewDelIsDel ? IDEResId(RID_STR_BTNDEL).toString() : IDEResId(RID_STR_BTNNEW).toString() );
