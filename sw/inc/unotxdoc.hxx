@@ -67,6 +67,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <com/sun/star/tiledrendering/XTiledRenderable.hpp>
 
 #include <unobaseclass.hxx>
 #include <viewopt.hxx>
@@ -128,7 +129,8 @@ SwXTextDocumentBaseClass;
 class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel,
-    public ::vcl::ITiledRenderable
+    public ::vcl::ITiledRenderable,
+    public ::com::sun::star::tiledrendering::XTiledRenderable
 {
 private:
     class Impl;
@@ -419,6 +421,9 @@ public:
     virtual void setGraphicSelection(int nType, int nX, int nY) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::resetSelection().
     virtual void resetSelection() SAL_OVERRIDE;
+
+    // ::com::sun::star::tiledrendering::XTiledRenderable
+    virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
