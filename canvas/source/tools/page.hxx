@@ -121,7 +121,7 @@ namespace canvas
                 return false;
 
             // call refresh() if requested, otherwise we're up to date...
-            return bRefresh ? refresh() : true;
+            return !bRefresh || refresh();
         }
 
         bool refresh()

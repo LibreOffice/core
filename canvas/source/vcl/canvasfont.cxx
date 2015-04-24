@@ -51,7 +51,7 @@ namespace vclcanvas
     {
         maFont->SetAlign( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? true : false );
+        maFont->SetVertical( rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES );
 
         // TODO(F2): improve panose->vclenum conversion
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );

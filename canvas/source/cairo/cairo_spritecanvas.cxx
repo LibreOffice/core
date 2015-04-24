@@ -135,7 +135,7 @@ namespace cairocanvas
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
         // been updated (caller should try again later)
-        return !mbIsVisible ? false : maCanvasHelper.updateScreen(
+        return mbIsVisible && maCanvasHelper.updateScreen(
             ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds),
             bUpdateAll,
             mbSurfaceDirty);
