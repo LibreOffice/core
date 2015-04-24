@@ -1470,7 +1470,12 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     return false;
 }
 
-void GtkData::initNWF() {}
+void GtkData::initNWF()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maNWFData.mbCheckBoxNeedsErase = true;
+}
+
 void GtkData::deInitNWF() {}
 
 void GtkSalGraphics::getStyleContext(GtkStyleContext** style, GtkWidget* widget)
