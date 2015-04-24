@@ -6540,6 +6540,106 @@ void Test::testCopyPasteMatrixFormula()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testUndoDataAnchor()
+{
+    m_pDoc->InsertTab(0, "Tab1");
+    CPPUNIT_ASSERT_MESSAGE("There should be only 1 sheets to begin with", m_pDoc->GetTableCount() == 1);
+
+    m_pDoc->InitDrawLayer();
+    ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No page instance for the 1st sheet.", pPage);
+
+    // Insert an object.
+    Rectangle aObjRect(2,1000,100,1100);
+    SdrObject* pObj = new SdrRectObj(aObjRect);
+    pPage->InsertObject(pObj);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+
+    // Get anchor data
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+
+    ScAddress aOldStart = pData->maStart;
+    ScAddress aOldEnd   = pData->maEnd;
+
+    // Get non rotated anchor data
+    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+
+    ScAddress aNOldStart = pNData->maStart;
+    ScAddress aNOldEnd   = pNData->maEnd;
+    CPPUNIT_ASSERT_EQUAL(aOldStart, aNOldStart);
+    CPPUNIT_ASSERT_EQUAL(aOldEnd, aNOldEnd);
+
+    //pDrawLayer->BeginCalcUndo(false);
+    // Insert a new row at row 3.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, MAXCOL, aOldStart.Row(), 0 ), &aMark, INS_INSROWS, true, true, false);
+
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+
+    ScAddress aNewStart = pData->maStart;
+    ScAddress aNewEnd   = pData->maEnd;
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+
+    ScAddress aNNewStart = pNData->maStart;
+    ScAddress aNNewEnd   = pNData->maEnd;
+    CPPUNIT_ASSERT_EQUAL(aNewStart, aNNewStart);
+    CPPUNIT_ASSERT_EQUAL(aNewEnd, aNNewEnd);
+    CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aNewStart  != aOldStart  && aNewEnd  != aOldEnd &&
+                                                         aNNewStart != aNOldStart && aNNewEnd != aNOldEnd );
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    // Check state
+    ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObj);
+    CPPUNIT_ASSERT_MESSAGE( "Failed to check state SCA_CELL.", oldType == SCA_CELL );
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+
+    // Check if data has moved to new rows
+    CPPUNIT_ASSERT_EQUAL(pData->maStart, aOldStart);
+    CPPUNIT_ASSERT_EQUAL(pData->maEnd, aOldEnd);
+
+    CPPUNIT_ASSERT_EQUAL(pNData->maStart, aNOldStart);
+    CPPUNIT_ASSERT_EQUAL(pNData->maEnd, aNOldEnd);
+
+    pUndoMgr->Redo();
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+
+    // Check if data has moved to new rows
+    CPPUNIT_ASSERT_EQUAL(pData->maStart, aNewStart);
+    CPPUNIT_ASSERT_EQUAL(pData->maEnd, aNewEnd);
+
+    CPPUNIT_ASSERT_EQUAL(pNData->maStart, aNNewStart);
+    CPPUNIT_ASSERT_EQUAL(pNData->maEnd, aNNewEnd);
+
+    m_pDoc->DeleteTab(0);
+}
+
 ScDocShell* Test::findLoadedDocShellByName(const OUString& rName)
 {
     TypeId aType(TYPE(ScDocShell));

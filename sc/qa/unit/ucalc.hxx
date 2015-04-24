@@ -434,6 +434,7 @@ public:
 
     // tdf#80137
     void testCopyPasteMatrixFormula();
+    void testUndoDataAnchor();
 
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
@@ -643,6 +644,7 @@ public:
     CPPUNIT_TEST(testColumnFindEditCells);
     CPPUNIT_TEST(testSetStringAndNote);
     CPPUNIT_TEST(testCopyPasteMatrixFormula);
+    CPPUNIT_TEST(testUndoDataAnchor);
     CPPUNIT_TEST_SUITE_END();
 
 private:

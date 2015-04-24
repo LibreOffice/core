@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -116,12 +117,28 @@ void ScUndoObjData::Undo()
         pData->maStart = aOldStt;
         pData->maEnd = aOldEnd;
     }
+
+    // Undo also an untransformed anchor
+    pData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    if (pData)
+    {
+        pData->maStart = aOldStt;
+        pData->maEnd = aOldEnd;
+    }
 }
 
 void ScUndoObjData::Redo()
 {
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
     OSL_ENSURE(pData,"ScUndoObjData: Data missing");
+    if (pData)
+    {
+        pData->maStart = aNewStt;
+        pData->maEnd = aNewEnd;
+    }
+
+    // Redo also an untransformed anchor
+    pData = ScDrawLayer::GetNonRotatedObjData( pObj );
     if (pData)
     {
         pData->maStart = aNewStt;
@@ -537,6 +554,15 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
             {
                 if ( pObj->ISA( SdrRectObj ) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
+
+                // Update also an untransformed anchor thats what we stored ( and still do ) to xml
+                ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj, false );
+                if ( pNoRotatedAnchor )
+                {
+                    pNoRotatedAnchor->maStart = pData->maStart;
+                    pNoRotatedAnchor->maEnd = pData->maEnd;
+                }
+
                 AddCalcUndo( new ScUndoObjData( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
                 RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
             }
@@ -801,6 +827,39 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         ScDrawObjData& rNoRotatedAnchor = *GetNonRotatedObjData( pObj, true );
         if (rData.maLastRect.IsEmpty())
         {
+            // Every shape it is saved with an negative offset relative to cell
+            if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
+            {
+                double fRotate(0.0);
+                double fShearX(0.0);
+
+                Point aPoint;
+                Rectangle aRect;
+
+                basegfx::B2DTuple aScale;
+                basegfx::B2DTuple aTranslate;
+                basegfx::B2DPolyPolygon aPolyPolygon;
+                basegfx::B2DHomMatrix aOriginalMatrix;
+
+                aRect = pDoc->GetMMRect(nCol1, nRow1, nCol1 , nRow1, nTab1);
+
+                if (bNegativePage)
+                    aPoint.X() = aRect.Right();
+                else
+                    aPoint.X() = aRect.Left();
+                aPoint.Y() = aRect.Top();
+
+                pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
+                aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+                aTranslate += ::basegfx::B2DTuple(aPoint.X(), aPoint.Y());
+                aOriginalMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aScale,
+                    fShearX,
+                    fRotate,
+                    aTranslate);
+                pObj->TRSetBaseGeometry(aOriginalMatrix, aPolyPolygon);
+            }
+
             // It's confusing ( but blame that we persist the anchor in terms of unrotated shape )
             // that the initial anchor we get here is in terms of an unrotated shape ( if the shape is rotated )
             // we need to save the old anchor ( for persisting ) and also track any resize or repositions that happen.
