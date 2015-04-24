@@ -65,10 +65,10 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mpNewBitmapList      ( pModel->GetBitmapList() ),
     mrOutAttrs           ( *pAttr ),
 
-    mnColorListState ( CT_NONE ),
-    mnBitmapListState ( CT_NONE ),
-    mnGradientListState ( CT_NONE ),
-    mnHatchingListState ( CT_NONE ),
+    mnColorListState ( ChangeType::NONE ),
+    mnBitmapListState ( ChangeType::NONE ),
+    mnGradientListState ( ChangeType::NONE ),
+    mnHatchingListState ( ChangeType::NONE ),
     mnPageType( PT_AREA ),
     mnPos( 0 ),
     mbAreaTP( false )
@@ -144,7 +144,7 @@ void SvxAreaTabDialog::SavePalettes()
 
     const OUString aPath( SvtPathOptions().GetPalettePath() );
 
-    if( mnHatchingListState & CT_MODIFIED )
+    if( mnHatchingListState & ChangeType::MODIFIED )
     {
         mpHatchingList->SetPath( aPath );
         mpHatchingList->Save();
@@ -157,7 +157,7 @@ void SvxAreaTabDialog::SavePalettes()
             mpDrawModel->GetItemPool().Put(aItem);
     }
 
-    if( mnBitmapListState & CT_MODIFIED )
+    if( mnBitmapListState & ChangeType::MODIFIED )
     {
         mpBitmapList->SetPath( aPath );
         mpBitmapList->Save();
@@ -172,7 +172,7 @@ void SvxAreaTabDialog::SavePalettes()
         }
     }
 
-    if( mnGradientListState & CT_MODIFIED )
+    if( mnGradientListState & ChangeType::MODIFIED )
     {
         mpGradientList->SetPath( aPath );
         mpGradientList->Save();
@@ -187,7 +187,7 @@ void SvxAreaTabDialog::SavePalettes()
         }
     }
 
-    if (mnColorListState & CT_MODIFIED && mpColorList.is())
+    if (mnColorListState & ChangeType::MODIFIED && mpColorList.is())
     {
         mpColorList->SetPath( aPath );
         mpColorList->Save();

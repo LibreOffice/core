@@ -771,14 +771,14 @@ public:
 
     bool IsModified()
     {
-        return *pnColorListState & CT_MODIFIED;
+        return bool(*pnColorListState & ChangeType::MODIFIED);
     }
     void SetModified(bool bIsModified)
     {
         if (bIsModified)
-            *pnColorListState |= CT_MODIFIED;
+            *pnColorListState |= ChangeType::MODIFIED;
         else
-            *pnColorListState &= ~CT_MODIFIED;
+            *pnColorListState &= ~ChangeType::MODIFIED;
     }
     void AddState(ChangeType nState)
     {

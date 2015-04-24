@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
                 bLoaded = true;
                 UpdateTableName();
 
-                AddState( CT_CHANGED );
+                AddState( ChangeType::CHANGED );
                 SetModified( false );
                 SetEmbed( true );
             }
@@ -237,7 +237,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
         if( pList->Save() )
         {
             UpdateTableName();
-            AddState( CT_SAVED );
+            AddState( ChangeType::SAVED );
             SetModified( false );
         }
         else
@@ -288,12 +288,12 @@ struct SvxColorTabPageShadow
     sal_uInt16 nUnknownType;
     sal_Int32  nUnknownPos;
     bool   bIsAreaTP;
-    sal_uInt16 nChangeType;
+    ChangeType nChangeType;
     SvxColorTabPageShadow()
         : nUnknownType( COLORPAGE_UNKNOWN )
         , nUnknownPos( LISTBOX_ENTRY_NOTFOUND )
         , bIsAreaTP( false )
-        , nChangeType( 0 )
+        , nChangeType( ChangeType::NONE )
     {
     }
 };
@@ -745,7 +745,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
         m_pLbColor->SelectEntryPos( m_pLbColor->GetEntryCount() - 1 );
 
-        *pnColorListState |= CT_MODIFIED;
+        *pnColorListState |= ChangeType::MODIFIED;
 
         SelectColorLBHdl_Impl( this );
     }
@@ -817,7 +817,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 
             m_pCtlPreviewOld->Invalidate();
 
-            *pnColorListState |= CT_MODIFIED;
+            *pnColorListState |= ChangeType::MODIFIED;
         }
     }
     return 0;
@@ -893,7 +893,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 
             m_pCtlPreviewOld->Invalidate();
 
-            *pnColorListState |= CT_MODIFIED;
+            *pnColorListState |= ChangeType::MODIFIED;
         }
     }
     UpdateModified();
@@ -1160,7 +1160,7 @@ void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
     SetDlgType( COLORPAGE_UNKNOWN );
     SetPos( &pShadow->nUnknownPos );
     SetAreaTP( &pShadow->bIsAreaTP );
-    SetColorChgd( (ChangeType*)&pShadow->nChangeType );
+    SetColorChgd( &pShadow->nChangeType );
     Construct();
 }
 

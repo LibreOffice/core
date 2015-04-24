@@ -574,13 +574,13 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         sal_Int32 nCount;
 
         // Dash list
-        if( ( *pnDashListState & CT_MODIFIED ) ||
-            ( *pnDashListState & CT_CHANGED ) )
+        if( ( *pnDashListState & ChangeType::MODIFIED ) ||
+            ( *pnDashListState & ChangeType::CHANGED ) )
         {
-            if( *pnDashListState & CT_CHANGED )
+            if( *pnDashListState & ChangeType::CHANGED )
                 pDashList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewDashList();
 
-            *pnDashListState = CT_NONE;
+            *pnDashListState = ChangeType::NONE;
 
             // Style list
             nPos = m_pLbLineStyle->GetSelectEntryPos();
@@ -605,12 +605,12 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         aDashURL.Append( pDashList->GetName() );
         DBG_ASSERT( aDashURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         // LineEnd list
-        if( ( *pnLineEndListState & CT_MODIFIED ) || ( *pnLineEndListState & CT_CHANGED ) )
+        if( ( *pnLineEndListState & ChangeType::MODIFIED ) || ( *pnLineEndListState & ChangeType::CHANGED ) )
         {
-            if( *pnLineEndListState & CT_CHANGED )
+            if( *pnLineEndListState & ChangeType::CHANGED )
                 pLineEndList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewLineEndList();
 
-            *pnLineEndListState = CT_NONE;
+            *pnLineEndListState = ChangeType::NONE;
 
             nPos = m_pLbLineStyle->GetSelectEntryPos();
             OUString sNone( SVX_RES( RID_SVXSTR_NONE ) );
@@ -660,9 +660,9 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         }
 
             // ColorList
-            if( *pnColorListState )
+            if( *pnColorListState != ChangeType::NONE )
             {
-                if( *pnColorListState & CT_CHANGED )
+                if( *pnColorListState & ChangeType::CHANGED )
                     pColorList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewColorList();
                 // aLbColor
                 sal_Int32 nColorPos = m_pLbColor->GetSelectEntryPos();

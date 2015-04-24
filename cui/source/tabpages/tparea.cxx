@@ -614,7 +614,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     pBitmapList( NULL ),
 
     // local fixed not o be changed values for local pointers
-    maFixed_ChangeType(CT_NONE),
+    maFixed_ChangeType(ChangeType::NONE),
     maFixed_sal_Bool(false),
 
     // init with pointers to fixed ChangeType
@@ -874,9 +874,9 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             // switching TabPages in dialogs using this TabPage
             sal_Int32 _nPos(nPos);
 
-            if( *pnBitmapListState )
+            if( *pnBitmapListState != ChangeType::NONE )
             {
-                if( *pnBitmapListState & CT_CHANGED )
+                if( *pnBitmapListState & ChangeType::CHANGED )
                     pBitmapList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewBitmapList();
 
                 _nPos = m_pLbBitmap->GetSelectEntryPos();
@@ -893,9 +893,9 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 ModifyBitmapHdl_Impl( this );
             }
 
-            if( *pnHatchingListState )
+            if( *pnHatchingListState != ChangeType::NONE )
             {
-                if( *pnHatchingListState & CT_CHANGED )
+                if( *pnHatchingListState & ChangeType::CHANGED )
                     pHatchingList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewHatchingList();
 
                 _nPos = m_pLbHatching->GetSelectEntryPos();
@@ -914,9 +914,9 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 ModifyHatchBckgrdColorHdl_Impl( this );
             }
 
-            if( *pnGradientListState )
+            if( *pnGradientListState != ChangeType::NONE )
             {
-                if( *pnGradientListState & CT_CHANGED )
+                if( *pnGradientListState & ChangeType::CHANGED )
                     pGradientList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewGradientList();
 
                 _nPos = m_pLbGradient->GetSelectEntryPos();
@@ -933,9 +933,9 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 ModifyGradientHdl_Impl( this );
             }
 
-            if( *pnColorListState )
+            if( *pnColorListState != ChangeType::NONE )
             {
-                if( *pnColorListState & CT_CHANGED )
+                if( *pnColorListState & ChangeType::CHANGED )
                     pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
                 // aLbColor
                 _nPos = m_pLbColor->GetSelectEntryPos();
@@ -1017,7 +1017,7 @@ SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
                         nPageType = PT_GRADIENT;
                         nPos = m_pLbGradient->GetSelectEntryPos();
                         if( nPosOrig != nPos )
-                            *pnGradientListState |= CT_MODIFIED;
+                            *pnGradientListState |= ChangeType::MODIFIED;
             }
             break;
             case drawing::FillStyle_HATCH:
@@ -1025,7 +1025,7 @@ SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
                 nPageType = PT_HATCH;
                 nPos = m_pLbHatching->GetSelectEntryPos();
                 if( nPosOrig != nPos )
-                    *pnHatchingListState |= CT_MODIFIED;
+                    *pnHatchingListState |= ChangeType::MODIFIED;
             }
             break;
             case drawing::FillStyle_BITMAP:
@@ -1033,7 +1033,7 @@ SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
                 nPageType = PT_BITMAP;
                 nPos = m_pLbBitmap->GetSelectEntryPos();
                 if( nPosOrig != nPos )
-                    *pnBitmapListState |= CT_MODIFIED;
+                    *pnBitmapListState |= ChangeType::MODIFIED;
             }
             break;
             case drawing::FillStyle_SOLID:
@@ -1041,7 +1041,7 @@ SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
                 nPageType = PT_COLOR;
                 nPos = m_pLbColor->GetSelectEntryPos();
                 if( nPosOrig != nPos )
-                    *pnColorListState |= CT_MODIFIED;
+                    *pnColorListState |= ChangeType::MODIFIED;
             }
             break;
             default: ;//prevent warning

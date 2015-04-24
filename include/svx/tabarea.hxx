@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_TABAREA_HXX
 #define INCLUDED_SVX_TABAREA_HXX
 
-// enum ------------------------------------------------------------------
+#include <o3tl/typed_flags_set.hxx>
 
 enum ColorModel
 {
@@ -38,14 +38,17 @@ enum PageType
     PT_TRANSPARENCE
 };
 
-// define ----------------------------------------------------------------
-
-typedef sal_uInt16 ChangeType; // also in tab_line.hxx (care for it !!!)
-
-#define CT_NONE                 ( (ChangeType) 0x0000 )
-#define CT_MODIFIED             ( (ChangeType) 0x0001 )
-#define CT_CHANGED              ( (ChangeType) 0x0002 )
-#define CT_SAVED                ( (ChangeType) 0x0004 )
+enum class ChangeType
+{
+    NONE                 = 0x00,
+    MODIFIED             = 0x01,
+    CHANGED              = 0x02,
+    SAVED                = 0x04,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ChangeType> : is_typed_flags<ChangeType, 0x07> {};
+}
 
 #endif // INCLUDED_SVX_TABAREA_HXX
 

@@ -388,7 +388,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
                 m_pLbLineEnds->SelectEntryPos( nPos );
 
                 // Flag fuer modifiziert setzen
-                *pnLineEndListState |= CT_MODIFIED;
+                *pnLineEndListState |= ChangeType::MODIFIED;
 
                 *pPageType = 3;
             }
@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 m_pLbLineEnds->Append( *pEntry, pLineEndList->GetUiBitmap( nLineEndCount ) );
                 m_pLbLineEnds->SelectEntryPos( m_pLbLineEnds->GetEntryCount() - 1 );
 
-                *pnLineEndListState |= CT_MODIFIED;
+                *pnLineEndListState |= ChangeType::MODIFIED;
 
                 SelectLineEndHdl_Impl( this );
             }
@@ -537,7 +537,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
             SelectLineEndHdl_Impl( this );
             *pPageType = 0; // LineEnd shall not be taken over
 
-            *pnLineEndListState |= CT_MODIFIED;
+            *pnLineEndListState |= ChangeType::MODIFIED;
 
             ChangePreviewHdl_Impl( this );
         }
@@ -558,7 +558,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 {
     sal_uInt16 nReturn = RET_YES;
 
-    if ( *pnLineEndListState & CT_MODIFIED )
+    if ( *pnLineEndListState & ChangeType::MODIFIED )
     {
         nReturn = MessageDialog( GetParentDialog()
                                 ,"AskSaveList"
@@ -599,8 +599,8 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
                 pLineEndList->SetName( aURL.getName() );
 
-                *pnLineEndListState |= CT_CHANGED;
-                *pnLineEndListState &= ~CT_MODIFIED;
+                *pnLineEndListState |= ChangeType::CHANGED;
+                *pnLineEndListState &= ~ChangeType::MODIFIED;
             }
             else
                 MessageDialog( GetParentDialog()
@@ -658,8 +658,8 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
 
         if( pLineEndList->Save() )
         {
-            *pnLineEndListState |= CT_SAVED;
-            *pnLineEndListState &= ~CT_MODIFIED;
+            *pnLineEndListState |= ChangeType::SAVED;
+            *pnLineEndListState &= ~ChangeType::MODIFIED;
         }
         else
         {

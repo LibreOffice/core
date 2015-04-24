@@ -101,10 +101,10 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     nPageType = 0;
     nPos = 0;
 
-    nColorTableState = CT_NONE;
-    nBitmapListState = CT_NONE;
-    nGradientListState = CT_NONE;
-    nHatchingListState = CT_NONE;
+    nColorTableState = ChangeType::NONE;
+    nBitmapListState = ChangeType::NONE;
+    nGradientListState = ChangeType::NONE;
+    nHatchingListState = ChangeType::NONE;
 }
 
 void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )

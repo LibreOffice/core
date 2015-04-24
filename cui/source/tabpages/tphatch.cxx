@@ -180,10 +180,10 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         if( pColorList.is() )
         {
             // ColorList
-            if( *pnColorListState & CT_CHANGED ||
-                *pnColorListState & CT_MODIFIED )
+            if( *pnColorListState & ChangeType::CHANGED ||
+                *pnColorListState & ChangeType::MODIFIED )
             {
-                if( *pnColorListState & CT_CHANGED )
+                if( *pnColorListState & ChangeType::CHANGED )
                     pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
 
                 // LbLineColor
@@ -554,7 +554,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
         }
 #endif
 
-        *pnHatchingListState |= CT_MODIFIED;
+        *pnHatchingListState |= ChangeType::MODIFIED;
 
         ChangeHatchHdl_Impl( this );
     }
@@ -623,7 +623,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
                 m_pLbLineColor->SaveValue();
                 m_pLbHatchings->SaveValue();
 
-                *pnHatchingListState |= CT_MODIFIED;
+                *pnHatchingListState |= ChangeType::MODIFIED;
             }
             else
             {
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
 
             ChangeHatchHdl_Impl( this );
 
-            *pnHatchingListState |= CT_MODIFIED;
+            *pnHatchingListState |= ChangeType::MODIFIED;
         }
     }
     // determine button state
@@ -677,7 +677,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
 
-    if ( *pnHatchingListState & CT_MODIFIED )
+    if ( *pnHatchingListState & ChangeType::MODIFIED )
     {
         nReturn = MessageDialog( GetParentDialog()
                                 ,"AskSaveList"
@@ -731,8 +731,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
                 else
                     aString += aURL.getBase();
 
-                *pnHatchingListState |= CT_CHANGED;
-                *pnHatchingListState &= ~CT_MODIFIED;
+                *pnHatchingListState |= ChangeType::CHANGED;
+                *pnHatchingListState &= ~ChangeType::MODIFIED;
             }
             else
                 MessageDialog( GetParentDialog()
@@ -803,8 +803,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
             else
                 aString += aURL.getBase();
 
-            *pnHatchingListState |= CT_SAVED;
-            *pnHatchingListState &= ~CT_MODIFIED;
+            *pnHatchingListState |= ChangeType::SAVED;
+            *pnHatchingListState &= ~ChangeType::MODIFIED;
         }
         else
         {

@@ -191,10 +191,10 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
         if( pColorList.is() )
         {
             // ColorList
-            if( *pnColorListState & CT_CHANGED ||
-                *pnColorListState & CT_MODIFIED )
+            if( *pnColorListState & ChangeType::CHANGED ||
+                *pnColorListState & ChangeType::MODIFIED )
             {
-                if( *pnColorListState & CT_CHANGED )
+                if( *pnColorListState & ChangeType::CHANGED )
                     pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
 
                 // LbColorFrom
@@ -517,7 +517,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
         }
 #endif
 
-        *pnGradientListState |= CT_MODIFIED;
+        *pnGradientListState |= ChangeType::MODIFIED;
 
         ChangeGradientHdl_Impl( this );
     }
@@ -585,7 +585,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 
                 m_pLbGradients->SelectEntryPos( nPos );
 
-                *pnGradientListState |= CT_MODIFIED;
+                *pnGradientListState |= ChangeType::MODIFIED;
             }
             else
             {
@@ -620,7 +620,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 
             ChangeGradientHdl_Impl( this );
 
-            *pnGradientListState |= CT_MODIFIED;
+            *pnGradientListState |= ChangeType::MODIFIED;
         }
     }
     // determine button state
@@ -640,7 +640,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
 
-    if ( *pnGradientListState & CT_MODIFIED )
+    if ( *pnGradientListState & ChangeType::MODIFIED )
     {
         nReturn = MessageDialog( GetParentDialog()
                                  ,"AskSaveList"
@@ -700,8 +700,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
                 else
                     aString += aURL.getBase();
 
-                *pnGradientListState |= CT_CHANGED;
-                *pnGradientListState &= ~CT_MODIFIED;
+                *pnGradientListState |= ChangeType::CHANGED;
+                *pnGradientListState &= ~ChangeType::MODIFIED;
                 LeaveWait();
             }
             else
@@ -777,8 +777,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
             else
                 aString += aURL.getBase();
 
-            *pnGradientListState |= CT_SAVED;
-            *pnGradientListState &= ~CT_MODIFIED;
+            *pnGradientListState |= ChangeType::SAVED;
+            *pnGradientListState &= ~ChangeType::MODIFIED;
         }
         else
         {

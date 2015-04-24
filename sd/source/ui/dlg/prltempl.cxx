@@ -215,10 +215,10 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     nPageType = 0;
     nPos = 0;
 
-    nColorTableState = CT_NONE;
-    nBitmapListState = CT_NONE;
-    nGradientListState = CT_NONE;
-    nHatchingListState = CT_NONE;
+    nColorTableState = ChangeType::NONE;
+    nBitmapListState = ChangeType::NONE;
+    nGradientListState = ChangeType::NONE;
+    nHatchingListState = ChangeType::NONE;
 }
 
 SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()

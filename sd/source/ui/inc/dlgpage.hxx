@@ -23,8 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 
 class SfxObjectShell;
-
-typedef sal_uInt16 ChangeType;
+enum class ChangeType;
 
 /**
  * Page configuration-tab-dialog

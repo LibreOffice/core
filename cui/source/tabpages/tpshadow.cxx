@@ -209,10 +209,10 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
         if( pColorList.is() )
         {
             // ColorList
-            if( *pnColorListState & CT_CHANGED ||
-                *pnColorListState & CT_MODIFIED )
+            if( *pnColorListState & ChangeType::CHANGED ||
+                *pnColorListState & ChangeType::MODIFIED )
             {
-                if( *pnColorListState & CT_CHANGED )
+                if( *pnColorListState & ChangeType::CHANGED )
                 {
                     SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( GetParentDialog() );
                     if( pArea )

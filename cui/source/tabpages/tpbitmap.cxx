@@ -167,10 +167,10 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
         if( pColorList.is() )
         {
             // ColorList
-            if( *pnColorListState & CT_CHANGED ||
-                *pnColorListState & CT_MODIFIED )
+            if( *pnColorListState & ChangeType::CHANGED ||
+                *pnColorListState & ChangeType::MODIFIED )
             {
-                if( *pnColorListState & CT_CHANGED )
+                if( *pnColorListState & ChangeType::CHANGED )
                     pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
 
                 // LbColor
@@ -570,7 +570,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
             m_pLbBitmaps->Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
             m_pLbBitmaps->SelectEntryPos( m_pLbBitmaps->GetEntryCount() - 1 );
 
-            *pnBitmapListState |= CT_MODIFIED;
+            *pnBitmapListState |= ChangeType::MODIFIED;
 
             ChangeBitmapHdl_Impl( this );
         }
@@ -660,7 +660,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
                 m_pLbBitmaps->Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
                 m_pLbBitmaps->SelectEntryPos( m_pLbBitmaps->GetEntryCount() - 1 );
 
-                *pnBitmapListState |= CT_MODIFIED;
+                *pnBitmapListState |= ChangeType::MODIFIED;
 
                 ChangeBitmapHdl_Impl( this );
             }
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
                 m_pLbBitmaps->Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry, nPos );
                 m_pLbBitmaps->SelectEntryPos( nPos );
 
-                *pnBitmapListState |= CT_MODIFIED;
+                *pnBitmapListState |= ChangeType::MODIFIED;
 
                 bBmpChanged = false;
             }
@@ -760,7 +760,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 
             ChangeBitmapHdl_Impl( this );
 
-            *pnBitmapListState |= CT_MODIFIED;
+            *pnBitmapListState |= ChangeType::MODIFIED;
         }
     }
     // determine button state
@@ -780,7 +780,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
     sal_uInt16 nReturn = RET_YES;
     ResMgr& rMgr = CUI_MGR();
 
-    if ( *pnBitmapListState & CT_MODIFIED )
+    if ( *pnBitmapListState & ChangeType::MODIFIED )
     {
         nReturn = MessageDialog( GetParentDialog()
                                 ,"AskSaveList"
@@ -837,8 +837,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
                 else
                     aString += aURL.getBase();
 
-                *pnBitmapListState |= CT_CHANGED;
-                *pnBitmapListState &= ~CT_MODIFIED;
+                *pnBitmapListState |= ChangeType::CHANGED;
+                *pnBitmapListState &= ~ChangeType::MODIFIED;
                 LeaveWait();
             }
             else
@@ -913,8 +913,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
             else
                 aString += aURL.getBase();
 
-            *pnBitmapListState |= CT_SAVED;
-            *pnBitmapListState &= ~CT_MODIFIED;
+            *pnBitmapListState |= ChangeType::SAVED;
+            *pnBitmapListState &= ~ChangeType::MODIFIED;
         }
         else
         {

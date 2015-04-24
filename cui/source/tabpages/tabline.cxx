@@ -60,9 +60,9 @@ SvxLineTabDialog::SvxLineTabDialog
     pLineEndList    ( pModel->GetLineEndList() ),
     pNewLineEndList ( pModel->GetLineEndList() ),
     bObjSelected    ( bHasObj ),
-    nLineEndListState( CT_NONE ),
-    nDashListState( CT_NONE ),
-    mnColorListState( CT_NONE ),
+    nLineEndListState( ChangeType::NONE ),
+    nDashListState( ChangeType::NONE ),
+    mnColorListState( ChangeType::NONE ),
     nPageType( 0 ), // We use it here primarily to get the right attributes with FillItemSet
     nPosDashLb( 0 ),
     nPosLineEndLb( 0 ),
@@ -133,7 +133,7 @@ void SvxLineTabDialog::SavePalettes()
 
     const OUString aPath( SvtPathOptions().GetPalettePath() );
 
-    if( nDashListState & CT_MODIFIED )
+    if( nDashListState & ChangeType::MODIFIED )
     {
         pDashList->SetPath( aPath );
         pDashList->Save();
@@ -143,7 +143,7 @@ void SvxLineTabDialog::SavePalettes()
             pShell->PutItem( SvxDashListItem( pDashList, SID_DASH_LIST ) );
     }
 
-    if( nLineEndListState & CT_MODIFIED )
+    if( nLineEndListState & ChangeType::MODIFIED )
     {
         pLineEndList->SetPath( aPath );
         pLineEndList->Save();
@@ -153,7 +153,7 @@ void SvxLineTabDialog::SavePalettes()
             pShell->PutItem( SvxLineEndListItem( pLineEndList, SID_LINEEND_LIST ) );
     }
 
-    if( mnColorListState & CT_MODIFIED )
+    if( mnColorListState & ChangeType::MODIFIED )
     {
         pColorList->SetPath( aPath );
         pColorList->Save();

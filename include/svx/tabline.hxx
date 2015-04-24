@@ -28,16 +28,8 @@
 #include <svx/xsetit.hxx>
 #include <svx/dlgctrl.hxx>
 #include <vcl/menubtn.hxx>
+
 class SvxBrushItem;
-// define ----------------------------------------------------------------
-
-typedef sal_uInt16 ChangeType; // auch in tab_area.hxx (mitpflegen !!!)
-
-#define CT_NONE                 ( (ChangeType) 0x0000 )
-#define CT_MODIFIED             ( (ChangeType) 0x0001 )
-#define CT_CHANGED              ( (ChangeType) 0x0002 )
-#define CT_SAVED                ( (ChangeType) 0x0004 )
-
 class SdrModel;
 class SdrObject;
 

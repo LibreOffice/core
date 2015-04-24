@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <svx/tabline.hxx>
+#include <svx/tabarea.hxx>
 
 class SvxLineTabDialog : public SfxTabDialog
 {

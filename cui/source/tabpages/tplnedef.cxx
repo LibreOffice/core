@@ -603,7 +603,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 
             m_pLbLineStyles->SelectEntryPos( m_pLbLineStyles->GetEntryCount() - 1 );
 
-            *pnDashListState |= CT_MODIFIED;
+            *pnDashListState |= ChangeType::MODIFIED;
 
             *pPageType = 2;
 
@@ -681,7 +681,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
 
                 m_pLbLineStyles->SelectEntryPos( nPos );
 
-                *pnDashListState |= CT_MODIFIED;
+                *pnDashListState |= ChangeType::MODIFIED;
 
                 *pPageType = 2;
 
@@ -727,7 +727,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
             SelectLinestyleHdl_Impl( this );
             *pPageType = 0; // style should not be taken
 
-            *pnDashListState |= CT_MODIFIED;
+            *pnDashListState |= ChangeType::MODIFIED;
 
             ChangePreviewHdl_Impl( this );
         }
@@ -749,7 +749,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 {
     sal_uInt16 nReturn = RET_YES;
 
-    if ( *pnDashListState & CT_MODIFIED )
+    if ( *pnDashListState & ChangeType::MODIFIED )
     {
         nReturn = MessageDialog( GetParentDialog()
                                 ,"AskSaveList"
@@ -789,8 +789,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 
                 pDashList->SetName( aURL.getName() );
 
-                *pnDashListState |= CT_CHANGED;
-                *pnDashListState &= ~CT_MODIFIED;
+                *pnDashListState |= ChangeType::CHANGED;
+                *pnDashListState &= ~ChangeType::MODIFIED;
             }
             else
                 //aIStream.Close();
@@ -849,8 +849,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
 
         if( pDashList->Save() )
         {
-            *pnDashListState |= CT_SAVED;
-            *pnDashListState &= ~CT_MODIFIED;
+            *pnDashListState |= ChangeType::SAVED;
+            *pnDashListState &= ~ChangeType::MODIFIED;
         }
         else
         {
