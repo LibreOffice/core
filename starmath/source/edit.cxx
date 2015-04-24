@@ -89,11 +89,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin),
     DropTargetHelper    ( this ),
     pAccessible         (0),
-    rCmdBox             (rMyCmdBoxWin),
-    pEditView           (0),
-    pHScrollBar         (0),
-    pVScrollBar         (0),
-    pScrollBox          (0)
+    rCmdBox             (rMyCmdBoxWin)
 {
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     SetMapMode(MAP_PIXEL);
@@ -141,13 +137,9 @@ SmEditWindow::~SmEditWindow()
         if (pEditEngine)
         {
             pEditEngine->SetStatusEventHdl( Link() );
-            pEditEngine->RemoveView( pEditView );
+            pEditEngine->RemoveView( pEditView.get() );
         }
-        delete pEditView;
     }
-    delete pHScrollBar;
-    delete pVScrollBar;
-    delete pScrollBox;
 }
 
 void SmEditWindow::StartCursorMove()
@@ -176,6 +168,10 @@ SmDocShell * SmEditWindow::GetDoc()
     return pView ? pView->GetDoc() : 0;
 }
 
+EditView * SmEditWindow::GetEditView()
+{
+    return pEditView.get();
+}
 
 EditEngine * SmEditWindow::GetEditEngine()
 {
@@ -384,7 +380,7 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
         if (CommandWheelMode::ZOOM == pWData->GetMode())
             bCommandHandled = true;     // no zooming in Command window
         else
-            bCommandHandled = HandleScrollCommand( rCEvt, pHScrollBar, pVScrollBar);
+            bCommandHandled = HandleScrollCommand( rCEvt, pHScrollBar.get(), pVScrollBar.get());
     }
 
     return bCommandHandled;
@@ -534,15 +530,15 @@ void SmEditWindow::CreateEditView()
     //! For example when the program is used by the document-converter
     if (!pEditView && pEditEngine)
     {
-        pEditView = new EditView( pEditEngine, this );
-        pEditEngine->InsertView( pEditView );
+        pEditView.reset(new EditView( pEditEngine, this ));
+        pEditEngine->InsertView( pEditView.get() );
 
         if (!pVScrollBar)
-            pVScrollBar = new ScrollBar(this, WinBits(WB_VSCROLL));
+            pVScrollBar.reset(new ScrollBar(this, WinBits(WB_VSCROLL)));
         if (!pHScrollBar)
-            pHScrollBar = new ScrollBar(this, WinBits(WB_HSCROLL));
+            pHScrollBar.reset(new ScrollBar(this, WinBits(WB_HSCROLL)));
         if (!pScrollBox)
-            pScrollBox  = new ScrollBarBox(this);
+            pScrollBox.reset(new ScrollBarBox(this));
         pVScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pHScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pVScrollBar->EnableDrag( true );
@@ -1096,9 +1092,9 @@ void SmEditWindow::DeleteEditView( SmViewShell & /*rView*/ )
         if (xEditEngine)
         {
             xEditEngine->SetStatusEventHdl( Link() );
-            xEditEngine->RemoveView( pEditView );
+            xEditEngine->RemoveView( pEditView.get() );
         }
-        pEditView = 0;
+        pEditView.reset();
     }
 }
 

@@ -25,6 +25,7 @@
 #include <svtools/transfer.hxx>
 #include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
+#include <memory>
 
 class SmDocShell;
 class SmViewShell;
@@ -53,10 +54,10 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     SmEditAccessible *                                          pAccessible;
 
     SmCmdBoxWindow &rCmdBox;
-    EditView       *pEditView;
-    ScrollBar      *pHScrollBar,
-                   *pVScrollBar;
-    ScrollBarBox   *pScrollBox;
+    std::unique_ptr<EditView> pEditView;
+    std::unique_ptr<ScrollBar> pHScrollBar;
+    std::unique_ptr<ScrollBar> pVScrollBar;
+    std::unique_ptr<ScrollBarBox> pScrollBox;
     Idle            aModifyIdle,
                     aCursorMoveIdle;
     ESelection      aOldSelection;
@@ -94,7 +95,7 @@ public:
 
     SmDocShell *    GetDoc();
     SmViewShell *   GetView();
-    EditView *      GetEditView()   { return pEditView; }
+    EditView *      GetEditView();
     EditEngine *    GetEditEngine();
     SfxItemPool *   GetEditEngineItemPool();
 
