@@ -763,7 +763,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
 
     KeyEvent aTranslatedKeyEvent = rKeyEvent.LogicalTextDirectionality( eTextDirection );
 
-    bool bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1() ? true : false;
+    bool bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1();
     sal_uInt16 nCode = aTranslatedKeyEvent.GetKeyCode().GetCode();
 
     if ( DoVisualCursorTraveling( aPaM.GetNode() ) )
@@ -954,7 +954,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, true );
         const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
         sal_Int32 nRTLLevel = pTextPortion->GetRightToLeft();
-        bool bPortionRTL = (nRTLLevel%2) ? true : false;
+        bool bPortionRTL = (nRTLLevel%2) != 0;
 
         if ( bStart )
         {
@@ -1026,7 +1026,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         if ( bPortionBoundary && aPaM.GetIndex() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
         {
             sal_Int32 nTmp;
-            sal_Int32 nNextTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex()+1, nTmp, bLogicalBackward ? false : true );
+            sal_Int32 nNextTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex()+1, nTmp, !bLogicalBackward );
             const TextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[nNextTextPortion];
             nRTLLevelNextPortion = pNextTextPortion->GetRightToLeft();
         }
@@ -2373,8 +2373,7 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
         return ImpDeleteSelection( EditSelection( aDelStart, aDelEnd ) );
 
     // Decide now if to delete selection (RESTOFCONTENTS)
-    bool bSpecialBackward = ( ( nMode == DEL_LEFT ) && ( nDelMode == DELMODE_SIMPLE ) )
-                                ? true : false;
+    bool bSpecialBackward = ( nMode == DEL_LEFT ) && ( nDelMode == DELMODE_SIMPLE );
     if ( aStatus.IsAnyOutliner() )
         bSpecialBackward = false;
 
@@ -2549,8 +2548,8 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
 
     EditPaM aPaM( rCurSel.Min() );
 
-    bool bDoOverwrite = ( bOverwrite &&
-            ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) ) ? true : false;
+    bool bDoOverwrite = bOverwrite &&
+            ( aPaM.GetIndex() < aPaM.GetNode()->Len() );
 
     bool bUndoAction = ( rCurSel.HasRange() || bDoOverwrite );
 
@@ -2626,7 +2625,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
         if ( IsUndoEnabled() && !IsInUndo() )
         {
             EditUndoInsertChars* pNewUndo = new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), OUString(c));
-            bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? true : false;
+            bool bTryMerge = !bDoOverwrite && ( c != ' ' );
             InsertUndo( pNewUndo, bTryMerge );
         }
 
@@ -4151,7 +4150,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex,
     if (nLineCount == 0)
         return Rectangle();
     const EditLine* pLine = NULL;
-    bool bEOL = ( nFlags & GETCRSR_ENDOFLINE ) ? true : false;
+    bool bEOL = ( nFlags & GETCRSR_ENDOFLINE ) != 0;
     for (sal_Int32 nLine = 0; nLine < nLineCount; ++nLine)
     {
         const EditLine* pTmpLine = pPortion->GetLines()[nLine];
@@ -4199,7 +4198,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex,
     }
     else
     {
-        nX = GetXPos( pPortion, pLine, nIndex, ( nFlags & GETCRSR_PREFERPORTIONSTART ) ? true : false );
+        nX = GetXPos( pPortion, pLine, nIndex, ( nFlags & GETCRSR_PREFERPORTIONSTART ) != 0 );
     }
 
     aEditCursor.Left() = aEditCursor.Right() = nX;

@@ -166,21 +166,21 @@ bool ParagraphList::HasChildren( Paragraph* pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) ) ? true : false;
+    return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() );
 }
 
 bool ParagraphList::HasHiddenChildren( Paragraph* pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible() ) ? true : false;
+    return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible();
 }
 
 bool ParagraphList::HasVisibleChildren( Paragraph* pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible() ) ? true : false;
+    return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible();
 }
 
 sal_Int32 ParagraphList::GetChildCount( Paragraph* pParent ) const

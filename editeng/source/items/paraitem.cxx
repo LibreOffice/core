@@ -86,7 +86,7 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
     const SvxLineSpacingItem& rLineSpace = static_cast<const SvxLineSpacingItem&>(rAttr);
-    return (
+    return
         // Same Linespacing Rule?
         (eLineSpace == rLineSpace.eLineSpace)
         // For maximum and minimum Linespacing be the size must coincide.
@@ -99,8 +99,7 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
             || (eInterLineSpace == SVX_INTER_LINE_SPACE_PROP
                 && nPropLineSpace == rLineSpace.nPropLineSpace)
             || (eInterLineSpace == SVX_INTER_LINE_SPACE_FIX
-                && (nInterLineSpace == rLineSpace.nInterLineSpace)))) ?
-                true : false;
+                && (nInterLineSpace == rLineSpace.nInterLineSpace)));
 }
 
 /* Who does still know why the LineSpacingItem is so complicated?

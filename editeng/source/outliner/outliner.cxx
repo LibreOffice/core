@@ -925,7 +925,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
     if (pEditEngine)
     {
         const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) );
-        bDrawBullet = rBulletState.GetValue() ? true : false;
+        bDrawBullet = rBulletState.GetValue();
     }
 
     if (bDrawBullet && ImplHasNumberFormat(nPara))

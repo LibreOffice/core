@@ -1818,7 +1818,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 nBreakPos++;
         }
 
-        bHangingPunctuation = ( nBreakPos > nMaxBreakPos ) ? true : false;
+        bHangingPunctuation = nBreakPos > nMaxBreakPos;
         pLine->SetHangingPunctuation( bHangingPunctuation );
 
         // Whether a separator or not, push the word after the separator through
@@ -2526,7 +2526,7 @@ void ImpEditEngine::SetVertical( bool bVertical )
     if ( IsVertical() != bVertical )
     {
         GetEditDoc().SetVertical( bVertical );
-        bool bUseCharAttribs = ( aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS ) ? true : false;
+        bool bUseCharAttribs = bool(aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
         GetEditDoc().CreateDefFont( bUseCharAttribs );
         if ( IsFormatted() )
         {
@@ -2967,7 +2967,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                         // Remember whether a bullet was painted.
                         const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>(
                             pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE));
-                        bPaintBullet = rBulletState.GetValue() ? true : false;
+                        bPaintBullet = rBulletState.GetValue();
                     }
 
 
@@ -4327,7 +4327,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
         short nScriptType = GetI18NScriptType( EditPaM( pNode, nIndex+1 ) );
         bCTL = nScriptType == i18n::ScriptType::COMPLEX;
         // this change was discussed in issue 37190
-        bR2L = (GetRightToLeft( nPara, nIndex + 1) % 2) ? true : false;
+        bR2L = (GetRightToLeft( nPara, nIndex + 1) % 2) != 0;
         // it also works for issue 55927
     }
 

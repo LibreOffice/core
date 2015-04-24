@@ -127,12 +127,12 @@ SvParserState EditRTFParser::CallParser()
     // Problem: Paragraph attributes may not possibly be taken over
     // => Do Character attributes.
 
-    bool bSpecialBackward = aStart1PaM.GetNode()->Len() ? false : true;
+    bool bSpecialBackward = aStart1PaM.GetNode()->Len() == 0;
     if ( bOnlyOnePara || aStart1PaM.GetNode()->Len() )
         mpEditEngine->ParaAttribsToCharAttribs( aStart2PaM.GetNode() );
     aCurSel.Min() = mpEditEngine->ConnectParagraphs(
         aStart1PaM.GetNode(), aStart2PaM.GetNode(), bSpecialBackward );
-    bSpecialBackward = aEnd1PaM.GetNode()->Len() ? true : false;
+    bSpecialBackward = aEnd1PaM.GetNode()->Len() != 0;
     // when bOnlyOnePara, then the node is gone on Connect.
     if ( !bOnlyOnePara && aEnd1PaM.GetNode()->Len() )
         mpEditEngine->ParaAttribsToCharAttribs( aEnd2PaM.GetNode() );

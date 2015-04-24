@@ -701,7 +701,7 @@ OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
     // Special case: Bullet => Paragraph start => simply return NULL...
     const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>(
             mpEditEngine->GetParaAttrib( nPos, EE_PARA_BULLETSTATE ));
-    bool bBullet = rBulletState.GetValue() ? true : false;
+    bool bBullet = rBulletState.GetValue();
     if ( !bBullet && (mpEditEngine->GetControlWord() & EEControlBits::OUTLINER) )
     {
         // The Outliner has still a Bullet at Level 0.

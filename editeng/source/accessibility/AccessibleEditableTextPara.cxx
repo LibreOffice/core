@@ -1625,7 +1625,7 @@ namespace accessibility
             if (rRes.Name == "NumberingRules")
             {
                 SfxItemSet aAttribs = rCacheTF.GetParaAttribs(GetParagraphIndex());
-                bool bVis = static_cast<const SfxUInt16Item&>(aAttribs.Get( EE_PARA_BULLETSTATE )).GetValue() ? true : false;
+                bool bVis = static_cast<const SfxUInt16Item&>(aAttribs.Get( EE_PARA_BULLETSTATE )).GetValue() != 0;
                 if(bVis)
                 {
                     rRes.Value <<= (sal_Int16)-1;

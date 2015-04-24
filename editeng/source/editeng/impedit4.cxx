@@ -270,7 +270,7 @@ bool ImpEditEngine::WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_I
         WriteItemAsRTF( *pAttrItem, rOutput, nPara, nPos,rFontTable, rColorList );
         pAttrItem = rLst.Next();
     }
-    return ( rLst.Count() ? true : false );
+    return rLst.Count() != 0;
 }
 
 static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_Int32 nIndex, sal_uInt16 nScriptType )
@@ -1029,9 +1029,8 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
     nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
-    bool bOnlyFullParagraphs = ( aSel.Min().GetIndex() ||
-        ( aSel.Max().GetIndex() < aSel.Max().GetNode()->Len() ) ) ?
-            false : true;
+    bool bOnlyFullParagraphs = !( aSel.Min().GetIndex() ||
+        ( aSel.Max().GetIndex() < aSel.Max().GetNode()->Len() ) );
 
     // Templates are not saved!
     // (Only the name and family, template itself must be in App!)
@@ -1053,7 +1052,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
         sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pNode->Len();
 
-        bool bEmptyPara = nEndPos ? false : true;
+        bool bEmptyPara = nEndPos == 0;
 
         if ( ( nNode == nStartNode ) && !bOnlyFullParagraphs )
             nStartPos = aSel.Min().GetIndex();
@@ -1233,7 +1232,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     for (sal_Int32 n = 0; n < nContents; ++n, ++nPara)
     {
         const ContentInfo* pC = &rTextObject.mpImpl->GetContents()[n];
-        bool bNewContent = aPaM.GetNode()->Len() ? false: true;
+        bool bNewContent = aPaM.GetNode()->Len() == 0;
         const sal_Int32 nStartPos = aPaM.GetIndex();
 
         aPaM = ImpFastInsertText( aPaM, pC->GetText() );
@@ -1243,7 +1242,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
         pPortion->MarkInvalid( nStartPos, pC->GetText().getLength() );
 
         // Character attributes ...
-        bool bAllreadyHasAttribs = aPaM.GetNode()->GetCharAttribs().Count() ? true : false;
+        bool bAllreadyHasAttribs = aPaM.GetNode()->GetCharAttribs().Count() != 0;
         size_t nNewAttribs = pC->GetAttribs().size();
         if ( nNewAttribs )
         {
@@ -1302,7 +1301,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             {
                 // only style and ParaAttribs when new paragraph, or
                 // completely internal ...
-                bParaAttribs = pC->GetParaAttribs().Count() ? true : false;
+                bParaAttribs = pC->GetParaAttribs().Count() != 0;
                 if ( GetStyleSheetPool() && pC->GetStyle().getLength() )
                 {
                     SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() ));

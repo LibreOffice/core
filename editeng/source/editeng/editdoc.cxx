@@ -1973,7 +1973,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
     nDefTab(DEFTAB),
     bIsVertical(false),
     bIsFixedCellHeight(false),
-    bOwnerOfPool(pPool ? false : true),
+    bOwnerOfPool(pPool == nullptr),
     bModified(false)
 {
     // Don't create a empty node, Clear() will be called in EditEngine-CTOR
@@ -3084,8 +3084,7 @@ SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
     // stored until then...
 
     long nVersion = rStream.GetVersion();
-    bool b31Format = ( nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 ) )
-                        ? true : false;
+    bool b31Format = nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 );
 
     EditEngineItemPool* pThis = const_cast<EditEngineItemPool*>(this);
     if ( b31Format )

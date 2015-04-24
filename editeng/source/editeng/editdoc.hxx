@@ -69,13 +69,12 @@ struct EPaM
 
 inline bool EPaM::operator < ( const EPaM& r ) const
 {
-    return ( ( nPara < r.nPara ) ||
-             ( ( nPara == r.nPara ) && nIndex < r.nIndex ) ) ? true : false;
+    return ( nPara < r.nPara ) || ( ( nPara == r.nPara ) && nIndex < r.nIndex );
 }
 
 inline bool EPaM::operator == ( const EPaM& r ) const
 {
-    return ( ( nPara == r.nPara ) && ( nIndex == r.nIndex ) ) ? true : false;
+    return ( nPara == r.nPara ) && ( nIndex == r.nIndex );
 }
 
 struct ScriptTypePosInfo
@@ -546,7 +545,7 @@ public:
     void            SetInvalid()                    { bInvalid = true; }
     void            SetValid()                      { bInvalid = false; }
 
-    bool            IsEmpty() const                 { return (nEnd > nStart) ? false : true; }
+    bool            IsEmpty() const                 { return nEnd <= nStart; }
 
     CharPosArrayType& GetCharPosArray() { return aPositions;}
     const CharPosArrayType& GetCharPosArray() const { return aPositions;}

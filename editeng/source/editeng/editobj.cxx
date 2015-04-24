@@ -395,7 +395,7 @@ bool EditTextObject::Store( SvStream& rOStream ) const
     rOStream.WriteUInt32( nStructSz );
     rOStream.Seek( nEndPos );
 
-    return rOStream.GetError() ? false : true;
+    return rOStream.GetError() == 0;
 }
 
 EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobalTextObjectPool )
@@ -756,7 +756,7 @@ void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttr
 
 bool EditTextObjectImpl::IsFieldObject() const
 {
-    return GetField() ? true : false;
+    return GetField() != nullptr;
 }
 
 const SvxFieldItem* EditTextObjectImpl::GetField() const

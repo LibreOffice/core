@@ -29,7 +29,7 @@
 
 inline bool IsValidPrinter( const Printer* pPtr )
 {
-    return pPtr->GetName().isEmpty() ? false : true;
+    return !pPtr->GetName().isEmpty();
 }
 
 

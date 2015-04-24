@@ -945,7 +945,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
         unsigned char nCursorDir = CURSOR_DIRECTION_NONE;
         if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
         {
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, nShowCursorFlags & GETCRSR_PREFERPORTIONSTART ? true : false );
+            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, (nShowCursorFlags & GETCRSR_PREFERPORTIONSTART) != 0 );
             const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
             if ( nRTLLevel%2 )
@@ -1556,7 +1556,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
         SetEditSelection( aNewEditSelection );
     }
 
-    bool bForceCursor = ( pDragAndDropInfo ? false : true ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
+    bool bForceCursor = pDragAndDropInfo == nullptr && !pEditEngine->pImpEditEngine->IsInSelectionMode();
     ShowCursor( bGotoCursor, bForceCursor );
     return true;
 }

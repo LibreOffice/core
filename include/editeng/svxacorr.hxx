@@ -329,7 +329,7 @@ public:
     long GetFlags() const                       { return nFlags; }
     inline SvxSwAutoFmtFlags&   GetSwFlags()    { return aSwFlags;}
     bool IsAutoCorrFlag( long nFlag ) const
-                                { return nFlags & nFlag ? true : false; }
+                                { return (nFlags & nFlag) != 0; }
     void SetAutoCorrFlag( long nFlag, bool bOn = true );
 
     // Load, Set, Get - the replacement list

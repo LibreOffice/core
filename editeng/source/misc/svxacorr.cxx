@@ -1488,7 +1488,7 @@ bool SvxAutoCorrect::AddCplSttException( const OUString& rNew,
             pLists = pLangTable->find(aLangTagUndetermined)->second;
     }
     OSL_ENSURE(pLists, "No auto correction data");
-    return pLists ? pLists->AddToCplSttExceptList(rNew) : false;
+    return pLists && pLists->AddToCplSttExceptList(rNew);
 }
 
 // Adds a single word. The list will immediately be written to the file!
@@ -1510,7 +1510,7 @@ bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
             pLists = pLangTable->find(aLangTagUndetermined)->second;
     }
     OSL_ENSURE(pLists, "No auto correction file!");
-    return pLists ? pLists->AddToWrdSttExceptList(rNew) : false;
+    return pLists && pLists->AddToWrdSttExceptList(rNew);
 }
 
 bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,

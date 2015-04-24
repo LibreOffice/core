@@ -796,7 +796,7 @@ void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, bool bI
         if (!bReplace)
         {
             const SvxNumberFormat *pFmt = Get(i);
-            bReplace = pFmt ? rNumFmt != *pFmt : true;
+            bReplace = pFmt == nullptr || rNumFmt != *pFmt;
         }
 
         if (bReplace)

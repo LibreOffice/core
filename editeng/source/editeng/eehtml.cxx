@@ -759,7 +759,7 @@ bool EditHTMLParser::ThrowAwayBlank()
 
 bool EditHTMLParser::HasTextInCurrentPara()
 {
-    return aCurSel.Max().GetNode()->Len() ? true : false;
+    return aCurSel.Max().GetNode()->Len() != 0;
 }
 
 void EditHTMLParser::AnchorStart()

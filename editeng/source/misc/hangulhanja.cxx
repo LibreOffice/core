@@ -247,7 +247,7 @@ namespace editeng
         , m_nConvOptions(_nOptions)
         , m_bIsInteractive( _bIsInteractive )
         , m_pAntiImpl( _pAntiImpl )
-        , m_bByCharacter((_nOptions & CHARACTER_BY_CHARACTER) ? true : false)
+        , m_bByCharacter((_nOptions & CHARACTER_BY_CHARACTER) != 0)
         , m_eConversionFormat( HHC::eSimpleConversion)
         , m_ePrimaryConversionDirection( HHC::eHangulToHanja)    // used for eConvHangulHanja
         , m_eCurrentConversionDirection( HHC::eHangulToHanja)    // used for eConvHangulHanja

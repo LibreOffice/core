@@ -257,7 +257,7 @@ void SvxBoundArgs::NoteRange( bool bToggle )
     DBG_ASSERT( nCount == 2 * aBoolArr.size(), "NoteRange: Incompatible Sizes" );
     while( nIdx < nCount && (*pLongArr)[ nIdx ] < nMin )
         ++nIdx;
-    bool bOdd = (nIdx % 2) ? true : false;
+    bool bOdd = (nIdx % 2) != 0;
     // No overlap with existing intervals?
     if( nIdx == nCount || ( !bOdd && nMax < (*pLongArr)[ nIdx ] ) )
     {   // Then a new one is inserted ...
