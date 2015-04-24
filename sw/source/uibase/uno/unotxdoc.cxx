@@ -20,6 +20,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -289,6 +290,12 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(Run
         Reference<lang::XMultiServiceFactory> xTmp = this;
         aRet <<= xTmp;
     }
+    if ( !aRet.hasValue() &&
+        rType == cppu::UnoType<tiledrendering::XTiledRenderable>::get())
+    {
+        Reference<tiledrendering::XTiledRenderable> xTmp = this;
+        aRet <<= xTmp;
+    }
 
     if ( !aRet.hasValue()
         && rType != cppu::UnoType<com::sun::star::document::XDocumentEventBroadcaster>::get()
@@ -338,8 +345,8 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
         }
     }
     long nIndex = aBaseTypes.getLength();
-    // don't forget the lang::XMultiServiceFactory
-    aBaseTypes.realloc(aBaseTypes.getLength() + aTextTypes.getLength() + aNumTypes.getLength() + 1);
+    // don't forget the lang::XMultiServiceFactory and the XTiledRenderable
+    aBaseTypes.realloc(aBaseTypes.getLength() + aTextTypes.getLength() + aNumTypes.getLength() + 2);
     uno::Type* pBaseTypes = aBaseTypes.getArray();
     const uno::Type* pTextTypes = aTextTypes.getConstArray();
     long nPos;
@@ -353,6 +360,7 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
         pBaseTypes[nIndex++] = pNumTypes[nPos];
     }
     pBaseTypes[nIndex++] = cppu::UnoType<lang::XMultiServiceFactory>::get();
+    pBaseTypes[nIndex++] = cppu::UnoType<tiledrendering::XTiledRenderable>::get();
     return aBaseTypes;
 }
 
@@ -3272,6 +3280,21 @@ void SwXTextDocument::resetSelection()
 
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->ResetSelect(0, false);
+}
+
+void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) throw (::css::uno::RuntimeException, ::std::exception)
+{
+    SystemGraphicsData aData;
+    aData.nSize = sizeof(SystemGraphicsData);
+    #if defined WNT
+    sal_Int64 nWindowHandle;
+    Parent >>= nWindowHandle;
+    aData.hDC = (HDC) nWindowHandle;
+    VirtualDevice aDevice(&aData, Size(1, 1), (sal_uInt16)32);
+    paintTile( aDevice, nOutputWidth, nOutputHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight );
+    #else
+    // TODO: support other platforms
+    #endif
 }
 
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()

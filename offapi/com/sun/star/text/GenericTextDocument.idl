@@ -23,6 +23,7 @@
 #include <com/sun/star/text/XTextDocument.idl>
 #include <com/sun/star/util/XSearchable.idl>
 #include <com/sun/star/util/XRefreshable.idl>
+#include <com/sun/star/tiledrendering/XTiledRenderable.idl>
 #include <com/sun/star/text/XFootnotesSupplier.idl>
 #include <com/sun/star/text/XEndnotesSupplier.idl>
 #include <com/sun/star/util/XReplaceable.idl>
@@ -75,6 +76,8 @@ published service GenericTextDocument
     interface com::sun::star::util::XSearchable;
 
     interface com::sun::star::util::XRefreshable;
+
+    [optional] interface com::sun::star::tiledrendering::XTiledRenderable;
 
     [optional] interface com::sun::star::text::XFootnotesSupplier;
 
