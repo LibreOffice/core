@@ -310,12 +310,12 @@ namespace frm
 
         // our boolean flags
         sal_Int32 nFlags = _rxInStream->readLong( );
-        m_bEnabled        = ( nFlags & PERSIST_ENABLED         ) ? true : false;
-        m_nIconSize       = ( nFlags & PERSIST_LARGEICONS      ) ?        1 :         0;
-        m_bShowPosition   = ( nFlags & PERSIST_SHOW_POSITION   ) ? true : false;
-        m_bShowNavigation = ( nFlags & PERSIST_SHOW_NAVIGATION ) ? true : false;
-        m_bShowActions    = ( nFlags & PERSIST_SHOW_ACTIONS    ) ? true : false;
-        m_bShowFilterSort = ( nFlags & PERSIST_SHOW_FILTERSORT ) ? true : false;
+        m_bEnabled        = ( nFlags & PERSIST_ENABLED         ) != 0;
+        m_nIconSize       = ( nFlags & PERSIST_LARGEICONS      ) ? 1 : 0;
+        m_bShowPosition   = ( nFlags & PERSIST_SHOW_POSITION   ) != 0;
+        m_bShowNavigation = ( nFlags & PERSIST_SHOW_NAVIGATION ) != 0;
+        m_bShowActions    = ( nFlags & PERSIST_SHOW_ACTIONS    ) != 0;
+        m_bShowFilterSort = ( nFlags & PERSIST_SHOW_FILTERSORT ) != 0;
 
         // our strings
         m_sHelpText       = _rxInStream->readUTF( );
