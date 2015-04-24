@@ -297,7 +297,7 @@ bool SmartTagSet::getContext( SdrViewContext& rContext ) const
 
 bool SmartTagSet::HasMarkablePoints() const
 {
-    return GetMarkablePointCount() != 0 ? true : false;
+    return GetMarkablePointCount() != 0;
 }
 
 sal_uLong SmartTagSet::GetMarkablePointCount() const
@@ -309,7 +309,7 @@ sal_uLong SmartTagSet::GetMarkablePointCount() const
 
 bool SmartTagSet::HasMarkedPoints() const
 {
-    return GetMarkedPointCount() != 0 ? true : false;
+    return GetMarkedPointCount() != 0;
 }
 
 sal_uLong SmartTagSet::GetMarkedPointCount() const

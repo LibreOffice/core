@@ -1098,7 +1098,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
             pTextGroup = pEffectSequence->findGroup( nGroupId );
 
         addValue( pSet, nHandleTextGrouping, makeAny( pTextGroup.get() ? pTextGroup->getTextGrouping() : (sal_Int32)-1 ) );
-        addValue( pSet, nHandleAnimateForm, makeAny( pTextGroup.get() ? pTextGroup->getAnimateForm() : true ) );
+        addValue( pSet, nHandleAnimateForm, makeAny( pTextGroup.get() == nullptr || pTextGroup->getAnimateForm() ) );
         addValue( pSet, nHandleTextGroupingAuto, makeAny( pTextGroup.get() ? pTextGroup->getTextGroupingAuto() : (double)-1.0 ) );
         addValue( pSet, nHandleTextReverse, makeAny( pTextGroup.get() && pTextGroup->getTextReverse() ) );
 
@@ -2024,7 +2024,7 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     else if( pControl == mpCBAutoPreview )
     {
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-        pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() ? true : false );
+        pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() );
     }
 
     updateControls();

@@ -612,13 +612,13 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 {
     bool bSet = false;
 
-    bool bAnimationInfo = (!mpDocSh->ISA(GraphicDocShell) &&
-                          mpDoc->GetAnimationInfo(pObj)) ? true:false;
+    bool bAnimationInfo = !mpDocSh->ISA(GraphicDocShell) &&
+                          mpDoc->GetAnimationInfo(pObj);
 
     bool bImageMapInfo = false;
 
     if (!bAnimationInfo)
-        bImageMapInfo = mpDoc->GetIMapInfo(pObj) ? true:false;
+        bImageMapInfo = mpDoc->GetIMapInfo(pObj) != nullptr;
 
     if (bAnimationInfo || bImageMapInfo)
     {

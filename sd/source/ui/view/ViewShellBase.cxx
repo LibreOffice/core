@@ -1064,7 +1064,7 @@ void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
     if (mpViewTabBar.is()
         && mpViewTabBar->GetTabControl()->IsVisible() != bShow)
     {
-        mpViewTabBar->GetTabControl()->Show(bShow ? true : false);
+        mpViewTabBar->GetTabControl()->Show(bShow);
         mrBase.Rearrange();
     }
 }

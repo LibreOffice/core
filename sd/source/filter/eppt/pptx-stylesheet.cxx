@@ -423,7 +423,7 @@ bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, 
 
     switch ( eAttr )
     {
-        case ParaAttr_BulletOn : return ( rPara.mbIsBullet ) ? ( nValue ) ? false : true : ( nValue ) ? true : false;
+        case ParaAttr_BulletOn : return ( rPara.mbIsBullet ) ? nValue == 0 : nValue != 0;
         case ParaAttr_BuHardFont :
         case ParaAttr_BulletFont : return ( rPara.mnBulletFont != nValue );
         case ParaAttr_BuHardColor :

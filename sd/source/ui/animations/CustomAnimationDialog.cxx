@@ -1377,7 +1377,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             (mpSet->getPropertyValue( nHandleDimColor ) != aDimColor) )
             pSet->setPropertyValue( nHandleDimColor, aDimColor );
 
-        bool bAfterEffectOnNextEffect = nPos != 2 ? true : false;
+        bool bAfterEffectOnNextEffect = nPos != 2;
         bool bOldAfterEffectOnNextEffect = !bAfterEffectOnNextEffect;
 
         if( mpSet->getPropertyState( nHandleAfterEffectOnNextEffect ) != STLPropertyState_AMBIGUOUS)
@@ -1519,7 +1519,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
                 aWarningBox.SetModalInputMode (true);
-                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? false : true;
+                bQuitLoop = aWarningBox.Execute() != RET_RETRY;
 
                 bValidSoundFile=false;
             }
@@ -1702,7 +1702,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
         sal_Int16 nFill = 0;
         if( pSet->getPropertyValue( nHandleRewind ) >>= nFill )
         {
-            mpCBXRewind->Check( (nFill == AnimationFill::REMOVE) ? true : false );
+            mpCBXRewind->Check( nFill == AnimationFill::REMOVE );
         }
         else
         {

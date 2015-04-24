@@ -1304,7 +1304,7 @@ bool View::ShouldToggleOn(
                         continue;
                     pOutliner->SetText(*(pText->GetOutlinerParaObject()));
                     sal_Int16 nStatus = pOutliner->GetBulletsNumberingStatus();
-                    bToggleOn = ((bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1)) ? true : bToggleOn;
+                    bToggleOn = (bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1) || bToggleOn;
                     pOutliner->Clear();
                 }
             }
@@ -1316,7 +1316,7 @@ bool View::ShouldToggleOn(
                 continue;
             pOutliner->SetText(*pParaObj);
             sal_Int16 nStatus = pOutliner->GetBulletsNumberingStatus();
-            bToggleOn = ((bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1)) ? true : bToggleOn;
+            bToggleOn = (bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1) || bToggleOn;
             pOutliner->Clear();
         }
     }
@@ -1338,9 +1338,8 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     SdrUndoGroup* pUndoGroup = bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : 0;
 
     const bool bToggleOn =
-        bSwitchOff
-        ? false
-        : ShouldToggleOn( bToggle, bHandleBullets );
+        !bSwitchOff
+        && ShouldToggleOn( bToggle, bHandleBullets );
 
     boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
     boost::scoped_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));

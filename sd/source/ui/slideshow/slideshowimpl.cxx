@@ -2476,7 +2476,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 
             for( sal_Int32 i = 0; i < nSlideCount; i++ )
             {
-                bool bVisible = ( mpDoc->GetSdPage( (sal_uInt16)i, PK_STANDARD ) )->IsExcluded() ? false : true;
+                bool bVisible = !( mpDoc->GetSdPage( (sal_uInt16)i, PK_STANDARD ) )->IsExcluded();
                 if( bVisible || (eMode == AnimationSlideController::ALL) )
                     mpSlideController->insertSlideNumber( i, bVisible );
             }
