@@ -25,6 +25,7 @@
 #include <svx/svdorect.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace sdr
 {
@@ -38,11 +39,19 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-#define SDRGRAFOBJ_TRANSFORMATTR_NONE       0x00000000UL
-#define SDRGRAFOBJ_TRANSFORMATTR_COLOR      0x00000001UL
-#define SDRGRAFOBJ_TRANSFORMATTR_MIRROR     0x00000002UL
-#define SDRGRAFOBJ_TRANSFORMATTR_ROTATE     0x00000004UL
-#define SDRGRAFOBJ_TRANSFORMATTR_ALL        0xffffffffUL
+/* options for GetTransformedGraphic() */
+enum class SdrGrafObjTransformsAttrs
+{
+    NONE       = 0x00,
+    COLOR      = 0x01,
+    MIRROR     = 0x02,
+    ROTATE     = 0x04,
+    ALL        = 0x07,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SdrGrafObjTransformsAttrs> : is_typed_flags<SdrGrafObjTransformsAttrs, 7> {};
+}
 
 class SdrGrafObjGeoData : public SdrTextObjGeoData
 {
@@ -120,7 +129,7 @@ public:
     void                    SetGraphic(const Graphic& rGrf);
     const Graphic&          GetGraphic() const;
 
-    Graphic                 GetTransformedGraphic( sal_uIntPtr nTransformFlags = SDRGRAFOBJ_TRANSFORMATTR_ALL ) const;
+    Graphic                 GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformFlags = SdrGrafObjTransformsAttrs::ALL ) const;
 
     GraphicType             GetGraphicType() const;
 

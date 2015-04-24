@@ -472,7 +472,7 @@ const Graphic& SdrGrafObj::GetGraphic() const
     return pGraphic->GetGraphic();
 }
 
-Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
+Graphic SdrGrafObj::GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformFlags ) const
 {
     // Refactored most of the code to GraphicObject, where
     // everybody can use e.g. the cropping functionality
@@ -480,15 +480,15 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
     GraphicType     eType = GetGraphicType();
     MapMode         aDestMap( pModel->GetScaleUnit(), Point(), pModel->GetScaleFraction(), pModel->GetScaleFraction() );
     const Size      aDestSize( GetLogicRect().GetSize() );
-    const bool      bMirror = ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR ) != 0;
-    const bool      bRotate = ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
+    const bool      bMirror = bool( nTransformFlags & SdrGrafObjTransformsAttrs::MIRROR );
+    const bool      bRotate = bool( nTransformFlags & SdrGrafObjTransformsAttrs::ROTATE ) &&
         ( aGeo.nRotationAngle && aGeo.nRotationAngle != 18000 ) && ( GRAPHIC_NONE != eType );
 
     // Need cropping info earlier
     const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
     GraphicAttr aActAttr;
 
-    if( SDRGRAFOBJ_TRANSFORMATTR_NONE != nTransformFlags &&
+    if( SdrGrafObjTransformsAttrs::NONE != nTransformFlags &&
         GRAPHIC_NONE != eType )
     {
         // Actually transform the graphic only in this case.
@@ -1062,7 +1062,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
     }
     else if(GRAPHIC_GDIMETAFILE == aGraphicType)
     {
-        aMtf = GetTransformedGraphic(SDRGRAFOBJ_TRANSFORMATTR_COLOR|SDRGRAFOBJ_TRANSFORMATTR_MIRROR).GetGDIMetaFile();
+        aMtf = GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
     }
 
     switch(aGraphicType)

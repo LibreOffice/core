@@ -2006,7 +2006,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 
             if(pGraf->HasGDIMetaFile())
             {
-                aMetaFile = pGraf->GetTransformedGraphic(SDRGRAFOBJ_TRANSFORMATTR_COLOR|SDRGRAFOBJ_TRANSFORMATTR_MIRROR).GetGDIMetaFile();
+                aMetaFile = pGraf->GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
             }
             else if(pGraf->isEmbeddedSvg())
             {
