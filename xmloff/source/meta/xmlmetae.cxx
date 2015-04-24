@@ -443,7 +443,7 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
     // finally, start the element
     // #i107240# no whitespace here, because the DOM may already contain
     // whitespace, which is not cleared when loading and thus accumulates.
-    mrExport.StartElement(i_rName, (m_level > 1) ? false : true);
+    mrExport.StartElement(i_rName, m_level <= 1);
     ++m_level;
 }
 

@@ -327,9 +327,7 @@ void XMLTextListsHelper::PopListFromStack()
 
 bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString& sListId ) const
 {
-    return mpListStack != 0
-           ? sListId == mpListStack->back().second
-           : false;
+    return mpListStack != 0 && sListId == mpListStack->back().second;
 }
 
 OUString
@@ -472,7 +470,7 @@ XMLTextListsHelper::MakeNumRule(
         }
     }
 
-    bool bSetDefaults(io_pSetDefaults ? *io_pSetDefaults : false);
+    bool bSetDefaults(io_pSetDefaults && *io_pSetDefaults);
     if ( !xNumRules.is() )
     {
         // If no style name has been specified for this style and for any

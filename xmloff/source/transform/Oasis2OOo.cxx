@@ -1654,8 +1654,8 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
         {
             const XMLTransformerContext *pCurrent = GetCurrentContext();
             return new XMLControlOASISTransformerContext( *this, rQName,
-                        pCurrent ? pCurrent->HasQName( XML_NAMESPACE_FORM,
-                                           XML_FORM ) : false  );
+                        pCurrent && pCurrent->HasQName( XML_NAMESPACE_FORM,
+                                           XML_FORM ) );
         }
     case XML_ETACTION_FORM_PROPERTY:
         return new XMLFormPropOASISTransformerContext( *this, rQName,
