@@ -112,9 +112,9 @@ public:
     ~Sane();
 
     static bool         IsSane()
-        { return pSaneLib ? true : false; }
+        { return pSaneLib != nullptr; }
     bool            IsOpen()
-        { return maHandle ? true : false; }
+        { return maHandle != nullptr; }
     static int              CountDevices()
         { return nDevices; }
     static OUString         GetName( int n )

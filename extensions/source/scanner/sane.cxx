@@ -907,7 +907,7 @@ int Sane::GetRange( int n, double*& rpDouble )
 
     rpDouble = 0;
     int nItems, i;
-    bool bIsFixed = mppOptions[n]->type == SANE_TYPE_FIXED ? true : false;
+    bool bIsFixed = mppOptions[n]->type == SANE_TYPE_FIXED;
 
     dbg_msg( "Sane::GetRange of option %s ", mppOptions[n]->name );
     if(mppOptions[n]->constraint_type == SANE_CONSTRAINT_RANGE )
