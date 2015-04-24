@@ -1083,6 +1083,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Rows...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertRows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1095,6 +1098,9 @@
       <node oor:name=".uno:InsertColumnDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Columns...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertColumns" oor:op="replace">
