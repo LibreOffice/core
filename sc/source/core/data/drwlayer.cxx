@@ -116,12 +116,28 @@ void ScUndoObjData::Undo()
         pData->maStart = aOldStt;
         pData->maEnd = aOldEnd;
     }
+
+    // Undo also an untransformed anchor
+    pData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    if (pData)
+    {
+        pData->maStart = aOldStt;
+        pData->maEnd = aOldEnd;
+    }
 }
 
 void ScUndoObjData::Redo()
 {
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
     OSL_ENSURE(pData,"ScUndoObjData: Data missing");
+    if (pData)
+    {
+        pData->maStart = aNewStt;
+        pData->maEnd = aNewEnd;
+    }
+
+    // Redo also an untransformed anchor
+    pData = ScDrawLayer::GetNonRotatedObjData( pObj );
     if (pData)
     {
         pData->maStart = aNewStt;
@@ -537,6 +553,15 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
             {
                 if ( pObj->ISA( SdrRectObj ) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
+
+                // Update also an untransformed anchor thats what we stored ( and still do ) to xml
+                ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj, false );
+                if ( pNoRotatedAnchor )
+                {
+                    pNoRotatedAnchor->maStart = pData->maStart;
+                    pNoRotatedAnchor->maEnd = pData->maEnd;
+                }
+
                 AddCalcUndo( new ScUndoObjData( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
                 RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
             }

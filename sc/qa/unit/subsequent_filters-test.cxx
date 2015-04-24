@@ -191,6 +191,7 @@ public:
     void testVBAUserFunctionXLSM();
     void testEmbeddedImageXLS();
     void testEditEngStrikeThroughXLSX();
+    void testMoveCellAnchoredShapes();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -280,6 +281,7 @@ public:
     CPPUNIT_TEST(testEmbeddedImageXLS);
     CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
+    CPPUNIT_TEST(testMoveCellAnchoredShapes);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2934,6 +2936,214 @@ void ScFiltersTest::testEditEngStrikeThroughXLSX()
             }
         }
     }
+}
+
+void ScFiltersTest::testMoveCellAnchoredShapes()
+{
+    ScDocShellRef xDocSh = loadDoc("move-cell-anchored-shapes.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load move-cell-anchored-shapes.ods", xDocSh.Is());
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+
+    // Check cell anchor state
+    ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObj);
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+
+    // Get anchor data
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    ScAddress aDataStart = pData->maStart;
+    ScAddress aDataEnd   = pData->maEnd;
+
+    // Get non rotated anchor data
+    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    ScAddress aNDataStart = pNData->maStart;
+    ScAddress aNDataEnd   = pNData->maEnd;
+    CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aDataStart == aNDataStart && aDataEnd == aNDataEnd);
+
+    // Insert 2 rows.
+    rDoc.InsertRow(ScRange( 0, aDataStart.Row() - 1, 0, MAXCOL, aDataStart.Row(), 0));
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    OString aStr =  OUStringToOString( rDoc.GetString( pData->maStart ), RTL_TEXTENCODING_UTF8 ) +
+                " == " +
+                OUStringToOString( rDoc.GetString( aDataStart ), RTL_TEXTENCODING_UTF8 );
+
+
+    // Check if data has moved to new rows
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to compare Address. " + aStr).getStr(),
+                pData->maStart.Row() == aDataStart.Row() + 2 &&
+                pData->maEnd.Row()   == aDataEnd.Row() + 2 );
+
+    aStr =  OUStringToOString( rDoc.GetString( pNData->maStart ), RTL_TEXTENCODING_UTF8 ) +
+                " == " +
+                OUStringToOString( rDoc.GetString( aNDataStart ), RTL_TEXTENCODING_UTF8 );
+
+
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to compare Address. " + aStr).getStr(),
+                pNData->maStart.Row() == aNDataStart.Row() + 2 &&
+                pNData->maEnd.Row()   == aNDataEnd.Row() + 2 );
+
+    // Save the anchor data
+    aDataStart = pData->maStart;
+    aDataEnd   = pData->maEnd;
+    aNDataStart = pNData->maStart;
+    aNDataEnd   = pNData->maEnd;
+
+    // Save the document and load again to check anchor persist
+    ScDocShellRef xDocSh1 = saveAndReload(&(*xDocSh), ODS);
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument& rDoc1 = xDocSh1->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc1.GetTableCount() > 0);
+
+    pDrawLayer = rDoc1.GetDrawLayer();
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+
+    // Check cell anchor state
+    oldType = ScDrawLayer::GetAnchorType(*pObj);
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    aStr =  OUStringToOString( rDoc1.GetString( pData->maStart ), RTL_TEXTENCODING_UTF8 ) +
+        " == " +
+        OUStringToOString( rDoc1.GetString( aDataStart ), RTL_TEXTENCODING_UTF8 );
+
+    // Check if data after save it
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to compare Address. " + aStr).getStr(),
+                pData->maStart == aDataStart &&
+                pData->maEnd   == aDataEnd );
+
+    aStr =  OUStringToOString( rDoc1.GetString( pNData->maStart ), RTL_TEXTENCODING_UTF8 ) +
+            " == " +
+            OUStringToOString( rDoc1.GetString( aNDataStart ), RTL_TEXTENCODING_UTF8 );
+
+
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to compare Address. " + aStr).getStr(),
+                                                        pNData->maStart == aNDataStart &&
+                                                        pNData->maEnd   == aNDataEnd );
+
+    // Insert a column.
+    rDoc1.InsertCol(ScRange( aDataStart.Col(), 0 , 0 , aDataStart.Col(), MAXROW, 0 ));
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    aStr =  OUStringToOString( rDoc1.GetString( pData->maStart ), RTL_TEXTENCODING_UTF8 ) +
+        " == " +
+        OUStringToOString( rDoc1.GetString( aDataStart ), RTL_TEXTENCODING_UTF8 );
+
+
+    // Check if data has moved to new rows
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to compare Address. " + aStr).getStr(),
+                pData->maStart.Col() == aDataStart.Col() + 1 &&
+                pData->maEnd.Col()   == aDataEnd.Col() + 1 );
+
+    aStr =  OUStringToOString( rDoc1.GetString( pNData->maStart ), RTL_TEXTENCODING_UTF8 ) +
+        " == " +
+        OUStringToOString( rDoc1.GetString( aNDataStart ), RTL_TEXTENCODING_UTF8 );
+
+
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to compare Address. " + aStr).getStr(),
+                pNData->maStart.Col() == aNDataStart.Col() + 1 &&
+                pNData->maEnd.Col()   == aNDataEnd.Col() + 1 );
+
+    // Save the anchor data
+    aDataStart = pData->maStart;
+    aDataEnd   = pData->maEnd;
+    aNDataStart = pNData->maStart;
+    aNDataEnd   = pNData->maEnd;
+
+    // Save the document and load again to check anchor persist
+    ScDocShellRef xDocSh2 = saveAndReload(&(*xDocSh1), ODS);
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument& rDoc2 = xDocSh2->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc2.GetTableCount() > 0);
+
+    pDrawLayer = rDoc2.GetDrawLayer();
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+
+    // Check cell anchor state
+    oldType = ScDrawLayer::GetAnchorType(*pObj);
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    aStr =  OUStringToOString( rDoc2.GetString( pData->maStart ), RTL_TEXTENCODING_UTF8 ) +
+        " == " +
+        OUStringToOString( rDoc2.GetString( aDataStart ), RTL_TEXTENCODING_UTF8 );
+
+    // Check if data after save it
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to compare Address. " + aStr).getStr(),
+        pData->maStart == aDataStart &&
+        pData->maEnd   == aDataEnd );
+
+    aStr =  OUStringToOString( rDoc2.GetString( pNData->maStart ), RTL_TEXTENCODING_UTF8 ) +
+        " == " +
+        OUStringToOString( rDoc2.GetString( aNDataStart ), RTL_TEXTENCODING_UTF8 );
+
+
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to compare Address. " + aStr).getStr(),
+        pNData->maStart == aNDataStart &&
+        pNData->maEnd   == aNDataEnd );
+
+    xDocSh2->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
