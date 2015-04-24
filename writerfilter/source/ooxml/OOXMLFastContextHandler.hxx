@@ -173,7 +173,7 @@ public:
     void endOfParagraph();
     void text(const OUString & sText);
     void positionOffset(const OUString & sText);
-    void ignore();
+    static void ignore();
     void alignH(const OUString & sText);
     void alignV(const OUString & sText);
     void positivePercentage(const OUString& rText);
@@ -408,7 +408,7 @@ public:
 
     virtual std::string getType() const SAL_OVERRIDE { return "TextTableCell"; }
 
-    void startCell();
+    static void startCell();
     void endCell();
 };
 
@@ -421,11 +421,11 @@ public:
 
     virtual std::string getType() const SAL_OVERRIDE { return "TextTableRow"; }
 
-    void startRow();
+    static void startRow();
     void endRow();
     void handleGridBefore( OOXMLValue::Pointer_t val );
 private:
-    OOXMLProperty::Pointer_t fakeNoBorder( Id id );
+    static OOXMLProperty::Pointer_t fakeNoBorder( Id id );
 };
 
 class OOXMLFastContextHandlerTextTable : public OOXMLFastContextHandler

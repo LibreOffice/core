@@ -741,7 +741,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
             if (ch != 0x0d && ch != 0x0a && ch != 0x20)
             {
                 b = b << 4;
-                sal_Int8 parsed = m_pTokenizer->asHex(ch);
+                sal_Int8 parsed = RTFTokenizer::asHex(ch);
                 if (parsed == -1)
                     return RTFError::HEX_INVALID;
                 b += parsed;
@@ -3367,7 +3367,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DPTXBX:
         {
             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
-            std::vector<beans::PropertyValue> aDefaults = m_pSdrImport->getTextFrameDefaults(false);
+            std::vector<beans::PropertyValue> aDefaults = RTFSdrImport::getTextFrameDefaults(false);
             for (size_t i = 0; i < aDefaults.size(); ++i)
             {
                 if (!lcl_findPropertyName(m_aStates.top().aDrawingObject.aPendingProperties, aDefaults[i].Name))
@@ -5235,7 +5235,7 @@ RTFError RTFDocumentImpl::popState()
             if (ch != 0x0d && ch != 0x0a)
             {
                 b = b << 4;
-                sal_Int8 parsed = m_pTokenizer->asHex(ch);
+                sal_Int8 parsed = RTFTokenizer::asHex(ch);
                 if (parsed == -1)
                     return RTFError::HEX_INVALID;
                 b += parsed;
@@ -5487,7 +5487,7 @@ RTFError RTFDocumentImpl::popState()
                 // If there is no fill, the Word default is 100% transparency.
                 xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
 
-            m_pSdrImport->resolveFLine(xPropertySet, rDrawing.nFLine);
+            RTFSdrImport::resolveFLine(xPropertySet, rDrawing.nFLine);
 
             if (!m_aStates.top().aDrawingObject.bHadShapeText)
             {
@@ -6033,7 +6033,7 @@ RTFError RTFDocumentImpl::handleEmbeddedObject()
         if (ch != 0x0d && ch != 0x0a)
         {
             b = b << 4;
-            sal_Int8 parsed = m_pTokenizer->asHex(ch);
+            sal_Int8 parsed = RTFTokenizer::asHex(ch);
             if (parsed == -1)
                 return RTFError::HEX_INVALID;
             b += parsed;

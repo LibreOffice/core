@@ -53,8 +53,8 @@ public:
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
     // Helper methods
-    OUString fromLocaleToScriptTag(const OUString& sLocale);
-    OUString fromLCIDToScriptTag(LanguageType lang);
+    static OUString fromLocaleToScriptTag(const OUString& sLocale);
+    static OUString fromLCIDToScriptTag(LanguageType lang);
 };
 typedef std::shared_ptr< ThemeTable >          ThemeTablePtr;
 }}

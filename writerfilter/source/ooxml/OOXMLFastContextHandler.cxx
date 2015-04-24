@@ -199,7 +199,7 @@ void OOXMLFastContextHandler::lcl_startFastElement
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    OOXMLFactory::getInstance()->startAction(this, Element);
+    OOXMLFactory::startAction(this, Element);
     if( Element == (NMSP_dmlWordDr|XML_positionV) )
         inPositionV = true;
     else if( Element == (NMSP_dmlWordDr|XML_positionH) )
@@ -211,7 +211,7 @@ void OOXMLFastContextHandler::lcl_endFastElement
 (Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    OOXMLFactory::getInstance()->endAction(this, Element);
+    OOXMLFactory::endAction(this, Element);
 }
 
 void SAL_CALL OOXMLFastContextHandler::endUnknownElement
@@ -267,7 +267,7 @@ void OOXMLFastContextHandler::lcl_characters
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if (!m_bDiscardChildren)
-        OOXMLFactory::getInstance()->characters(this, rString);
+        OOXMLFactory::characters(this, rString);
 }
 
 void OOXMLFastContextHandler::setStream(Stream * pStream)
@@ -284,17 +284,17 @@ void OOXMLFastContextHandler::attributes
 (const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
  throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    OOXMLFactory::getInstance()->attributes(this, Attribs);
+    OOXMLFactory::attributes(this, Attribs);
 }
 
 void OOXMLFastContextHandler::startAction(Token_t Element)
 {
-    OOXMLFactory::getInstance()->startAction(this, Element);
+    OOXMLFactory::startAction(this, Element);
 }
 
 void OOXMLFastContextHandler::endAction(Token_t Element)
 {
-    OOXMLFactory::getInstance()->endAction(this, Element);
+    OOXMLFactory::endAction(this, Element);
 }
 
 void OOXMLFastContextHandler::setId(Id rId)

@@ -241,13 +241,13 @@ class SectionPropertyMap : public PropertyMap
     css::uno::Reference<css::text::XTextColumns> ApplyColumnProperties(css::uno::Reference<css::beans::XPropertySet> const& xFollowPageStyle,
                                                                        DomainMapper_Impl& rDM_Impl);
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
-    void CopyHeaderFooter(css::uno::Reference<css::beans::XPropertySet> xPrevStyle,
+    static void CopyHeaderFooter(css::uno::Reference<css::beans::XPropertySet> xPrevStyle,
                           css::uno::Reference<css::beans::XPropertySet> xStyle);
     void PrepareHeaderFooterProperties( bool bFirstPage );
     bool HasHeader( bool bFirstPage ) const;
     bool HasFooter( bool bFirstPage ) const;
 
-    void SetBorderDistance(css::uno::Reference<css::beans::XPropertySet> const& xStyle,
+    static void SetBorderDistance(css::uno::Reference<css::beans::XPropertySet> const& xStyle,
                            PropertyIds eMarginId,
                            PropertyIds eDistId,
                            sal_Int32 nDistance,

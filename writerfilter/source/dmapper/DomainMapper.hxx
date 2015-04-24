@@ -162,13 +162,13 @@ private:
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
-    void handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext);
+    static void handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap>& rContext, const bool bExchangeLeftRight);
-    bool getColorFromId(const Id, sal_Int32 &nColor);
-    sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);
-    OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
-    css::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
-    sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
+    static bool getColorFromId(const Id, sal_Int32 &nColor);
+    static sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);
+    static OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
+    static css::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
+    static sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     bool mbIsSplitPara;
     boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;
 };

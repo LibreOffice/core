@@ -31,7 +31,7 @@ public:
     virtual ~RTFTokenizer();
 
     RTFError resolveParse();
-    int asHex(char ch);
+    static int asHex(char ch);
     /// Number of states on the stack.
     int getGroup() const
     {
