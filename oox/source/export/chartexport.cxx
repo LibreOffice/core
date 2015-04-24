@@ -83,6 +83,8 @@
 
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/embed/XVisualObject.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
@@ -1066,9 +1068,50 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
     pFS->endElement( FSNS( XML_c, XML_rich ) );
     pFS->endElement( FSNS( XML_c, XML_tx ) );
 
-    // TODO:customize layout
-    pFS->singleElement( FSNS( XML_c, XML_layout ),
-            FSEND );
+    uno::Any aManualLayout = xPropSet->getPropertyValue("RelativePosition");
+    if (aManualLayout.hasValue())
+    {
+        pFS->startElement(FSNS( XML_c, XML_layout ), FSEND);
+        pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
+        pFS->singleElement(FSNS(XML_c, XML_xMode),
+                XML_val, "edge",
+                FSEND);
+        pFS->singleElement(FSNS(XML_c, XML_yMode),
+                XML_val, "edge",
+                FSEND);
+
+        Reference<embed::XVisualObject> xVisObject(mxChartModel, uno::UNO_QUERY);
+        awt::Size aPageSize = xVisObject->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
+
+        // awt::Size aSize = xShape->getSize();
+        awt::Point aPos2 = xShape->getPosition();
+        double x = (double)aPos2.X / (double) aPageSize.Width;
+        double y = (double)aPos2.Y / (double) aPageSize.Height;
+        /*
+        pFS->singleElement(FSNS(XML_c, XML_wMode),
+                XML_val, "edge",
+                FSEND);
+        pFS->singleElement(FSNS(XML_c, XML_hMode),
+                XML_val, "edge",
+                FSEND);
+                */
+        pFS->singleElement(FSNS(XML_c, XML_x),
+                XML_val, IS(x),
+                FSEND);
+        pFS->singleElement(FSNS(XML_c, XML_y),
+                XML_val, IS(y),
+                FSEND);
+        /*
+        pFS->singleElement(FSNS(XML_c, XML_w),
+                XML_val, "",
+                FSEND);
+        pFS->singleElement(FSNS(XML_c, XML_h),
+                XML_val, "",
+                FSEND);
+                */
+        pFS->endElement(FSNS(XML_c, XML_manualLayout));
+        pFS->endElement(FSNS(XML_c, XML_layout));
+    }
 
     pFS->singleElement( FSNS(XML_c, XML_overlay),
             XML_val, "0",
