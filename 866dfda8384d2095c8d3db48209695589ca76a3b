@@ -290,6 +290,24 @@
     },
     {
       "key": {
+        "uuid": "fa69d971_2a311fed",
+        "filename": "sc/source/core/tool/refdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2015-04-24T22:30:29Z",
+      "side": 1,
+      "message": "You are right, I did not consider 3D references.\n\nReworking ...",
+      "parentUuid": "ba8a016a_564be42b",
+      "revId": "866dfda8384d2095c8d3db48209695589ca76a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8a016a_f02f80f4",
         "filename": "sc/source/core/tool/refdata.cxx",
         "patchSetId": 1
