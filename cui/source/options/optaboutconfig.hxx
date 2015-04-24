@@ -57,7 +57,7 @@ private:
     SvTreeListEntries m_prefBoxEntries;
 
     void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
-    std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
+    static std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
 
     DECL_LINK( StandardHdl_Impl, void * );
     DECL_LINK( ResetBtnHdl_Impl, void * );
@@ -68,7 +68,7 @@ public:
    void     InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue);
    void     Reset();
    void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess);
-   com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
+   static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
    bool FillItemSet();
 };
 

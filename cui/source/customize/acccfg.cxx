@@ -1523,7 +1523,7 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
     // may be it's a style URL .. they must be handled special
     SfxStyleInfo_Impl aStyle;
     aStyle.sCommand = sCommand;
-    if (m_aStylesInfo.parseStyleCommand(aStyle))
+    if (SfxStylesInfo_Impl::parseStyleCommand(aStyle))
     {
         m_aStylesInfo.getLabel4Style(aStyle);
         return aStyle.sLabel;

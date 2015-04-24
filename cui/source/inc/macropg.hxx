@@ -76,8 +76,8 @@ protected:
     _SvxMacroTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );
 
     void                        EnableButtons();
-    ::com::sun::star::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
-    ::std::pair< OUString, OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
+    static ::com::sun::star::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
+    static ::std::pair< OUString, OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
 
 public:
 

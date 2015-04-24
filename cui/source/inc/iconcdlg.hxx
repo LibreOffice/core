@@ -160,15 +160,15 @@ private :
     void                    FocusOnIcon ( sal_uInt16 nId );
 
 protected :
-    void                    ShowPageImpl ( IconChoicePageData* pData );
-    void                    HidePageImpl ( IconChoicePageData* pData );
+    static void             ShowPageImpl ( IconChoicePageData* pData );
+    static void             HidePageImpl ( IconChoicePageData* pData );
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
-    SfxItemSet*     CreateInputItemSet( sal_uInt16 nId );
+    static SfxItemSet*      CreateInputItemSet( sal_uInt16 nId );
     inline SfxItemSet*      GetInputSetImpl() { return const_cast<SfxItemSet*>(pSet); }
     inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage?GetPageData (nPageId)->pPage:NULL); }
-    void                    RefreshInputSet();
+    static void             RefreshInputSet();
 
     void                    ActivatePageImpl ();
     bool                    DeActivatePageImpl ();

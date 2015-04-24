@@ -171,16 +171,16 @@ private:
     static LastPageSaver*   pLastPageSaver;
 
     SfxItemSet*     CreateItemSet( sal_uInt16 nId );
-    void            ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
+    static void     ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     void            InitTreeAndHandler();
     void            Initialize( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
     void            InitWidgets();
 
     void            LoadExtensionOptions( const OUString& rExtensionId );
-    OUString   GetModuleIdentifier( const com::sun::star::uno::Reference<
+    static OUString GetModuleIdentifier( const com::sun::star::uno::Reference<
                                             com::sun::star::frame::XFrame >& xFrame );
-    Module*         LoadModule( const OUString& rModuleIdentifier );
-    VectorOfNodes   LoadNodes( Module* pModule, const OUString& rExtensionId );
+    static Module*  LoadModule( const OUString& rModuleIdentifier );
+    static VectorOfNodes LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
 protected:

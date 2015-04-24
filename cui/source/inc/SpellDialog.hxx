@@ -206,7 +206,7 @@ private:
     bool            GetNextSentence_Impl(bool bUseSavedSentence, bool bRechek /*for rechecking the current sentence*/);
     /** Corrects all errors that have been selected to be changed always
      */
-    bool            ApplyChangeAllList_Impl(SpellPortions& rSentence, bool& bHasReplaced);
+    static bool     ApplyChangeAllList_Impl(SpellPortions& rSentence, bool& bHasReplaced);
     void            SetTitle_Impl(LanguageType nLang);
 
 protected:

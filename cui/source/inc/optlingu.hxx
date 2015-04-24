@@ -133,7 +133,7 @@ private:
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
     void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
-    sal_uLong   GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
+    static sal_uLong GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
 
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( ClickHdl_Impl, PushButton * );

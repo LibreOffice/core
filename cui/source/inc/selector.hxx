@@ -143,7 +143,7 @@ class SvxConfigGroupListBox : public SvTreeListBox
         bool bIsRootNode
     );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
         OUString& docName
     );

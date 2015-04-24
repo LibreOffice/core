@@ -59,11 +59,11 @@ private:
     OUString m_sMyMacros;
     OUString m_sProdMacros;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
+    static ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
         getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& root, OUString& language );
-    void delUserData( SvTreeListEntry* pEntry );
+    static void delUserData( SvTreeListEntry* pEntry );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, OUString& docName );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, OUString& docName );
 
 protected:
     void                    ExpandTree( SvTreeListEntry* pRootEntry );
@@ -156,16 +156,16 @@ protected:
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
-    bool                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, OUString& propName );
+    static bool         getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, OUString& propName );
     void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
 
 
     void        createEntry( SvTreeListEntry* pEntry );
     void        renameEntry( SvTreeListEntry* pEntry );
     void        deleteEntry( SvTreeListEntry* pEntry );
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
+    static ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                 getBrowseNode( SvTreeListEntry* pEntry );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvTreeListEntry* pEntry );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvTreeListEntry* pEntry );
     OUString    getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();

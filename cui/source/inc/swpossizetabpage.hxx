@@ -110,9 +110,9 @@ class SvxSwPosSizeTabPage : public SfxTabPage
                             sal_uInt16 nV,  sal_uInt16 nVRel,
                             long   nX,  long   nY);
     sal_uInt16          GetMapPos(FrmMap *pMap, ListBox &rAlignLB);
-    short           GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
-    short           GetRelation(FrmMap *pMap, ListBox &rRelationLB);
-    short           GetAnchorType(bool* pbHasChanged = 0);
+    static short        GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
+    static short        GetRelation(FrmMap *pMap, ListBox &rRelationLB);
+    short               GetAnchorType(bool* pbHasChanged = 0);
     sal_uLong           FillRelLB(FrmMap *pMap, sal_uInt16 nLBSelPos, sal_uInt16 nAlign, sal_uInt16 nRel, ListBox &rLB, FixedText &rFT);
     sal_uInt16          FillPosLB(FrmMap *pMap, sal_uInt16 nAlign, const sal_uInt16 _nRel, ListBox &rLB);
 

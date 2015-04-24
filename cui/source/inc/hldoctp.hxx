@@ -54,7 +54,7 @@ private:
     enum EPathType { Type_Unknown, Type_Invalid,
                      Type_ExistsFile, Type_File,
                      Type_ExistsDir, Type_Dir };
-    EPathType GetPathType ( const OUString& rStrPath );
+    static EPathType GetPathType ( const OUString& rStrPath );
 
 protected:
     void FillDlgFields(const OUString& rStrURL) SAL_OVERRIDE;

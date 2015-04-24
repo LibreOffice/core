@@ -142,7 +142,7 @@ public:
     sal_Int32 GetColor();
 
 private:
-    bool ImplProcessKeyInput( const KeyEvent& rKEv );
+    static bool ImplProcessKeyInput( const KeyEvent& rKEv );
 };
 
 HexColorControl::HexColorControl( vcl::Window* pParent, const WinBits& nStyle )

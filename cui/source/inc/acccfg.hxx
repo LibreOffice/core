@@ -161,13 +161,13 @@ private:
     OUString                    GetLabel4Command(const OUString& rCommand);
     void                        InitAccCfg();
     sal_uLong                   MapKeyCodeToPos( const vcl::KeyCode &rCode ) const;
-    css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const OUString& sName);
+    static css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const OUString& sName);
     void                        StartFileDialog( WinBits nBits, const OUString& rTitle );
 
     void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
 
-    void                        CreateCustomItems( SvTreeListEntry* pEntry, const OUString& aCol1, const OUString& aCol2 );
+    static void                 CreateCustomItems( SvTreeListEntry* pEntry, const OUString& aCol1, const OUString& aCol2 );
 
 public:
                                 SfxAcceleratorConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );

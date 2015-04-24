@@ -90,7 +90,7 @@ private:
     DECL_LINK(CharHighlightHdl, void *);
     DECL_LINK(CharPreSelectHdl, void *);
 
-    void fillAllSubsets(ListBox &rListBox);
+    static void fillAllSubsets(ListBox &rListBox);
 
 public:
                     SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=0 );
