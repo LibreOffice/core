@@ -550,7 +550,7 @@ bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
 {
     if( eCurTok == SYMBOL || m_aTokenLabelInfo.canTokenBeLabel( eCurTok ) )
     {
-        return bNeedsColon ? DoesColonFollow() : true;
+        return !bNeedsColon || DoesColonFollow();
     }
     else
     {

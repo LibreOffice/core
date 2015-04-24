@@ -2517,7 +2517,7 @@ RTLFUNC(IsArray)
     }
     else
     {
-        rPar.Get(0)->PutBool((rPar.Get(1)->GetType() & SbxARRAY) ? true : false );
+        rPar.Get(0)->PutBool((rPar.Get(1)->GetType() & SbxARRAY) != 0);
     }
 }
 
