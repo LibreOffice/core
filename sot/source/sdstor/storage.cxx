@@ -403,7 +403,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
                     if ( !(UCBStorage::GetLinkedFile( *m_pStorStm ).isEmpty()) )
                     {
                         // detect special unpacked storages
-                        m_pOwnStg = new UCBStorage( *m_pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+                        m_pOwnStg = new UCBStorage( *m_pStorStm, (nStorageMode & STORAGE_TRANSACTED) == 0 );
                         m_bDelStm = true;
                     }
                     else
@@ -414,24 +414,24 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
 
                         // UCBStorage always works directly on the UCB content, so discard the stream first
                         DELETEZ( m_pStorStm );
-                        m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+                        m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
                     }
                 }
                 else
                 {
                     // OLEStorage can be opened with a stream
-                    m_pOwnStg = new Storage( *m_pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+                    m_pOwnStg = new Storage( *m_pStorStm, (nStorageMode & STORAGE_TRANSACTED) == 0 );
                     m_bDelStm = true;
                 }
             }
             else if ( bForceUCBStorage )
             {
-                m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+                m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
                 SetError( ERRCODE_IO_NOTSUPPORTED );
             }
             else
             {
-                m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+                m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
                 SetError( ERRCODE_IO_NOTSUPPORTED );
             }
         }
@@ -440,9 +440,9 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
     {
         // temporary storage
         if ( bForceUCBStorage )
-            m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+            m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
         else
-            m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+            m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
         m_aName = m_pOwnStg->GetName();
     }
 
@@ -701,7 +701,7 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
         nMode |= StreamMode::SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
         BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode,
-                            (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+                            (nStorageMode & STORAGE_TRANSACTED) == 0 );
         pStm = new SotStorageStream( p );
 
         if( !nE )
