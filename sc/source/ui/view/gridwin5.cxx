@@ -300,7 +300,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         {
             SdrViewEvent aVEvt;
             MouseEvent aMEvt( aPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );
-            SdrHitKind eHit = pDrView->PickAnything( aMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
+            SdrHitKind eHit = pDrView->PickAnything( aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
 
             if ( eHit != SDRHIT_NONE && aVEvt.pObj != NULL )
             {

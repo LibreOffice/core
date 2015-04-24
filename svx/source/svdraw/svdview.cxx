@@ -225,7 +225,7 @@ bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
     bool bRet = SdrCreateView::MouseButtonDown(rMEvt,pWin);
     if (!bRet && !IsExtendedMouseEventDispatcherEnabled()) {
         SdrViewEvent aVEvt;
-        PickAnything(rMEvt,SDRMOUSEBUTTONDOWN,aVEvt);
+        PickAnything(rMEvt,SdrMouseEventKind::BUTTONDOWN,aVEvt);
         bRet = DoMouseEvent(aVEvt);
     }
     return bRet;
@@ -239,7 +239,7 @@ bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
     bool bRet = !bAction && SdrCreateView::MouseButtonUp(rMEvt,pWin);
     if (!bRet && !IsExtendedMouseEventDispatcherEnabled()) {
         SdrViewEvent aVEvt;
-        PickAnything(rMEvt,SDRMOUSEBUTTONUP,aVEvt);
+        PickAnything(rMEvt,SdrMouseEventKind::BUTTONUP,aVEvt);
         bRet = DoMouseEvent(aVEvt);
     }
     return bRet;
@@ -252,7 +252,7 @@ bool SdrView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
     bool bRet = SdrCreateView::MouseMove(rMEvt,pWin);
     if (!IsExtendedMouseEventDispatcherEnabled() && !IsTextEditInSelectionMode()) {
         SdrViewEvent aVEvt;
-        PickAnything(rMEvt,SDRMOUSEMOVE,aVEvt);
+        PickAnything(rMEvt,SdrMouseEventKind::MOVE,aVEvt);
         if (DoMouseEvent(aVEvt)) bRet=true;
     }
 
@@ -276,10 +276,10 @@ SfxStyleSheet* SdrView::GetStyleSheet() const
     return SdrCreateView::GetStyleSheet();
 }
 
-SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, sal_uInt16 nEventKind, SdrViewEvent& rVEvt) const
+SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, SdrMouseEventKind nEventKind, SdrViewEvent& rVEvt) const
 {
-    rVEvt.bMouseDown=nEventKind==SDRMOUSEBUTTONDOWN;
-    rVEvt.bMouseUp=nEventKind==SDRMOUSEBUTTONUP;
+    rVEvt.bMouseDown=nEventKind==SdrMouseEventKind::BUTTONDOWN;
+    rVEvt.bMouseUp=nEventKind==SdrMouseEventKind::BUTTONUP;
     rVEvt.nMouseClicks=rMEvt.GetClicks();
     rVEvt.nMouseMode=rMEvt.GetMode();
     rVEvt.nMouseCode=rMEvt.GetButtons() | rMEvt.GetModifier();

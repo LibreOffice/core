@@ -89,7 +89,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
-    SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
     if (eHit == SDRHIT_HANDLE || rMEvt.IsMod1())
     {
@@ -144,7 +144,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     bool bCreated = false;
 
     SdrViewEvent aVEvt;
-    mpView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
+    mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aVEvt);
 
     const size_t nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 

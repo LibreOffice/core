@@ -184,7 +184,7 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
                 m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
                 // TODO character in shapes
                 //    SdrViewEvent aVEvt;
-                // m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                // m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
                 //    if ( aVEvt.pRootObj && aVEvt.pRootObj->ISA(SdrTextObj) )
                 //        SetInEditMode(static_cast<SdrTextObj *>(aVEvt.pRootObj),rMEvt, sal_False);
                 bHandled = true;
@@ -207,7 +207,7 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
     {
         SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
-        if ( m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt) != SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() )
+        if ( m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt) != SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() )
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
         if ( aVEvt.pRootObj )
             m_rView.MarkObj(aVEvt.pRootObj, pPV);
@@ -500,7 +500,7 @@ void DlgEdFunc::unColorizeOverlappedObj()
 bool DlgEdFunc::isOverlapping(const MouseEvent& rMEvt)
 {
     SdrViewEvent aVEvt;
-    bool bOverlapping = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt) != SDRHIT_NONE;
+    bool bOverlapping = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aVEvt) != SDRHIT_NONE;
     if (bOverlapping && aVEvt.pObj)
     {
         colorizeOverlappedObject(aVEvt.pObj);
@@ -579,7 +579,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
     }
 
     SdrViewEvent aVEvt;
-    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEMOVE, aVEvt);
+    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SdrMouseEventKind::MOVE, aVEvt);
     bool bIsSetPoint = (eHit == SDRHIT_UNMARKEDOBJECT);
     if ( !bIsSetPoint )
     {
@@ -670,7 +670,7 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     SdrViewEvent aVEvt;
     sal_Int16 nId = m_rView.GetCurrentObjIdentifier();
 
-    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
     if (eHit == SDRHIT_UNMARKEDOBJECT && nId != OBJ_CUSTOMSHAPE)
     {
@@ -746,7 +746,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     {
         SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
-        m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
         m_rView.MarkObj(aVEvt.pRootObj, pPV);
     }
     checkTwoCklicks(rMEvt);
@@ -812,7 +812,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         return true;
 
     SdrViewEvent aVEvt;
-    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
     if( eHit == SDRHIT_UNMARKEDOBJECT )
     {
         // if not multi selection, unmark all

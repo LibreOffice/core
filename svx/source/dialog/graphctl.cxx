@@ -617,7 +617,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
             if ( nPolyEdit )
             {
                 SdrViewEvent    aVEvt;
-                SdrHitKind      eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
+                SdrHitKind      eHit = pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
 
                 if ( nPolyEdit == SID_BEZIER_INSERT && eHit == SDRHIT_MARKEDOBJECT )
                     pView->BegInsObjPoint( aLogPt, rMEvt.IsMod1());

@@ -548,7 +548,7 @@ bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, vcl::Window* _pWin )
     if ( pFormShell && pFormShell->GetImpl() )
     {
         SdrViewEvent aViewEvent;
-        PickAnything( _rMEvt, SDRMOUSEBUTTONDOWN, aViewEvent );
+        PickAnything( _rMEvt, SdrMouseEventKind::BUTTONDOWN, aViewEvent );
         pFormShell->GetImpl()->handleMouseButtonDown( aViewEvent );
     }
 

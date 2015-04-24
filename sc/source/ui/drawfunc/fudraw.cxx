@@ -708,7 +708,7 @@ static bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, vcl::Window* pWi
 {
     SdrViewEvent aVEvt;
     MouseEvent aMEvt( rPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );
-    SdrHitKind eHit = pView->PickAnything( aMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
+    SdrHitKind eHit = pView->PickAnything( aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
 
     if ( eHit != SDRHIT_NONE && aVEvt.pObj != NULL )
     {

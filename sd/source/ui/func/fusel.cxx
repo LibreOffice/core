@@ -201,7 +201,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
         bool bTextEdit = false;
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
         if ( eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != NULL ) )
         {
@@ -438,7 +438,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         **********************************************************************/
         mpWindow->CaptureMouse();
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
         if (eHit == SDRHIT_HANDLE && aVEvt.pHdl->GetKind() == HDL_BWGT)
         {
@@ -882,7 +882,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     !rMEvt.IsShift() && !rMEvt.IsMod2())
                 {
                     SdrViewEvent aVEvt;
-                    SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                    SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
                     if (eHit == SDRHIT_NONE)
                     {

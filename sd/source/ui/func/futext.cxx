@@ -196,7 +196,7 @@ void FuText::DoExecute( SfxRequest& )
         // Try to select an object
         SdrPageView* pPV = mpView->GetSdrPageView();
         SdrViewEvent aVEvt;
-        mpView->PickAnything(aMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
         mpView->MarkObj(aVEvt.pRootObj, pPV);
 
         mxTextObj.reset( dynamic_cast< SdrTextObj* >( aVEvt.pObj ) );
@@ -255,7 +255,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     mpView->SetMarkHdlWhenTextEdit(true);
     SdrViewEvent aVEvt;
-    SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
     if (eHit == SDRHIT_TEXTEDIT)
     {
@@ -280,7 +280,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                    object. As a simple fix, we determine eHit after
                    SdrEndTextEdit again, this returns then SDRHIT_NONE. */
                 mxTextObj.reset( NULL );
-                eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
             }
 
             mpView->SetCurrentObj(OBJ_TEXT);
@@ -377,7 +377,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                                 // force new handle identification, the pointer will be dead here
                                 // since SdrEndTextEdit has resetted (deleted) the handles.
                                 aVEvt.pHdl = 0;
-                                mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                                mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
                             }
                         }
 
@@ -399,7 +399,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         if ( ! rMEvt.IsRight())
                         {
                             // we need to pick again since SdrEndTextEdit can rebuild the handles list
-                            eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                            eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
                             if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
                             {
                                 sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
@@ -743,7 +743,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     {
         SdrPageView* pPV2 = mpView->GetSdrPageView();
         SdrViewEvent aVEvt;
-        mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
         mpView->MarkObj(aVEvt.pRootObj, pPV2);
     }
 
@@ -1067,7 +1067,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                         nSdrObjKind = mxTextObj->GetObjIdentifier();
 
                         SdrViewEvent aVEvt;
-                        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                        SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
                         if (eHit == SDRHIT_TEXTEDIT)
                         {
@@ -1228,7 +1228,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
                 // Try to select an object
                 SdrPageView* pPV = mpView->GetSdrPageView();
                 SdrViewEvent aVEvt;
-                mpView->PickAnything(aMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
                 mpView->MarkObj(aVEvt.pRootObj, pPV);
 
                 if (aVEvt.pObj && aVEvt.pObj->ISA(SdrTextObj))

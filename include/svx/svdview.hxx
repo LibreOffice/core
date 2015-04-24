@@ -82,9 +82,13 @@ enum SdrEventKind  {SDREVENT_NONE,
                     SDREVENT_BRKMARK,
                     SDREVENT_EXECUTEURL};
 
-#define SDRMOUSEBUTTONDOWN 1
-#define SDRMOUSEMOVE       2
-#define SDRMOUSEBUTTONUP   3
+/* for PickAnything() */
+enum class SdrMouseEventKind
+{
+    BUTTONDOWN = 1,
+    MOVE       = 2,
+    BUTTONUP   = 3,
+};
 
 // helper class SdrViewEvent
 struct SVX_DLLPUBLIC SdrViewEvent
@@ -126,8 +130,8 @@ public:
     SdrViewEvent();
     ~SdrViewEvent();
 
-    // nEventKind is SDRMOUSEBUTTONDOWN, SDRMOUSEMOVE oder SDRMOUSEBUTTONUP
-    void SetMouseEvent(const MouseEvent& rMEvt, sal_uInt16 nEventKind);
+    // nEventKind is SdrMouseEventKind::BUTTONDOWN, SdrMouseEventKind::MOVE or SdrMouseEventKind::BUTTONUP
+    void SetMouseEvent(const MouseEvent& rMEvt, SdrMouseEventKind nEventKind);
 };
 
 // helper class for all D&D overlays
@@ -174,7 +178,7 @@ public:
     // deactivate the MouseDispatcher with the help of the methode below and you have
     // to implement it yourself. Example for MouseButtonDown:
     //      SdrViewEvent aVEvt;
-    //      SdrHitKind eHit=pSdrView->PickAnything(rMEvt,SDRMOUSEBUTTONDOWN,aVEvt);
+    //      SdrHitKind eHit=pSdrView->PickAnything(rMEvt,SdrMouseEventKind::BUTTONDOWN,aVEvt);
     //      ... hier Applikationsspezifischer Eingriff ...
     //      pSdrView->DoMouseEvent(aVEvt);
     //      SetPointer(GetPreferredPointer(...))
@@ -214,7 +218,7 @@ public:
     // OutputDevice is necessary to determine HandleSize.
     // If NULL the first signed on Win is used.
     Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, bool bLeftDown=false) const;
-    SdrHitKind PickAnything(const MouseEvent& rMEvt, sal_uInt16 nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
+    SdrHitKind PickAnything(const MouseEvent& rMEvt, SdrMouseEventKind nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
     SdrHitKind PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const;
     bool DoMouseEvent(const SdrViewEvent& rVEvt);
     virtual SdrViewContext GetContext() const;

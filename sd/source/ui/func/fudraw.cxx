@@ -546,7 +546,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
             if (pMEvt)
             {
-                eHit = mpView->PickAnything(*pMEvt, SDRMOUSEMOVE, aVEvt);
+                eHit = mpView->PickAnything(*pMEvt, SdrMouseEventKind::MOVE, aVEvt);
             }
 
             if ((eDragMode == SDRDRAG_ROTATE) && (eHit == SDRHIT_MARKEDOBJECT))
@@ -767,7 +767,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
         MouseEvent aMEvt(mpWindow->GetPointerPosPixel(), 1, MouseEventModifiers::NONE, MOUSE_LEFT);
 
-        SdrHitKind eHit = mpView->PickAnything(aMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
         SdrObject* pObj = aVEvt.pObj;
 

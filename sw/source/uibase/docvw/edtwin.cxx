@@ -3100,7 +3100,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     if (bExecHyperlinks && pSdrView)
                     {
                         SdrViewEvent aVEvt;
-                        pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                        pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
                         if (aVEvt.eEvent == SDREVENT_EXECUTEURL)
                             bExecDrawTextLink = true;
@@ -4591,7 +4591,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 SdrViewEvent aVEvt;
 
                                 if (pSdrView)
-                                    pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                                    pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
                                 if (pSdrView && aVEvt.eEvent == SDREVENT_EXECUTEURL)
                                 {
@@ -4817,7 +4817,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // When tiled rendering, single click on a shape text starts editing already.
         SdrViewEvent aViewEvent;
-        SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aViewEvent);
+        SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aViewEvent);
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         if (eHit == SDRHIT_TEXTEDITOBJ && rMarkList.GetMarkCount() == 1)
         {

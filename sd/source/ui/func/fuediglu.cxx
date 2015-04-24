@@ -99,7 +99,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         mpWindow->CaptureMouse();
 
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
         if (eHit == SDRHIT_HANDLE)
         {
@@ -240,7 +240,7 @@ bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
         !rMEvt.IsShift() && !rMEvt.IsMod2())
     {
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
         if (eHit == SDRHIT_NONE)
         {

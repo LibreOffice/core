@@ -81,7 +81,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
     }
 
     SdrViewEvent aVEvt;
-    SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
     // Only new object, if not in the basic mode (or pure selection mode).
     if (rMEvt.IsLeft() && !m_pWin->IsDrawAction())

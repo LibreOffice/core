@@ -587,7 +587,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         SdrViewEvent aVEvt;
         if ( pDrawViewWrapper->IsTextEditHit( aMPos, HITPIX ) ||
              // #i12587# support for shapes in chart
-             ( rMEvt.IsRight() && pDrawViewWrapper->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt ) == SDRHIT_MARKEDOBJECT ) )
+             ( rMEvt.IsRight() && pDrawViewWrapper->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt ) == SDRHIT_MARKEDOBJECT ) )
         {
             pDrawViewWrapper->MouseButtonDown(rMEvt,m_pChartWindow);
             return;

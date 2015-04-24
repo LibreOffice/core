@@ -228,7 +228,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                 SdrViewEvent aVEvt;
                 if ( !bAlt &&
-                    pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt ) != SDRHIT_NONE &&
+                    pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt ) != SDRHIT_NONE &&
                     aVEvt.pObj != NULL )
                 {
                     if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )       // ImageMap
@@ -513,7 +513,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 //  selektierten Objekt steht
 
                 SdrViewEvent aVEvt;
-                SdrHitKind eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
+                SdrHitKind eHit = pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
                 if (eHit != SDRHIT_NONE && aVEvt.pObj == pObj &&  pViewShell)
                 {
                     sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();

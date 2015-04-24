@@ -63,7 +63,7 @@ bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
-    (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    (void)pView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
     if (aVEvt.eEvent == SDREVENT_BEGTEXTEDIT)
     {
         // Texteingabe hier nicht zulassen
@@ -108,7 +108,7 @@ bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
     bool bSimple = false;
 
     SdrViewEvent aVEvt;
-    (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
+    (void)pView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aVEvt);
 
     pView->MouseButtonUp(rMEvt, pWindow);
 
