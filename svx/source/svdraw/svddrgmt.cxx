@@ -563,11 +563,11 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
 void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal) const
 {
-    sal_uInt16 nOpt=0;
+    ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE;
     if (IsDraggingPoints()) {
-        nOpt=IMPSDR_POINTSDESCRIPTION;
+        nOpt=ImpTakeDescriptionOptions::POINTS;
     } else if (IsDraggingGluePoints()) {
-        nOpt=IMPSDR_GLUEPOINTSDESCRIPTION;
+        nOpt=ImpTakeDescriptionOptions::GLUEPOINTS;
     }
     getSdrDragView().ImpTakeDescriptionStr(nStrCacheID,rStr,nVal,nOpt);
 }

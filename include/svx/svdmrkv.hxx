@@ -83,9 +83,13 @@ enum SdrViewEditMode {SDREDITMODE_EDIT,           // Also known as arrow or poin
                       SDREDITMODE_CREATE,         // Tool for object creation
                       SDREDITMODE_GLUEPOINTEDIT}; // Glue point editing mode
 
-#define IMPSDR_POINTSDESCRIPTION     0x0001
-#define IMPSDR_GLUEPOINTSDESCRIPTION 0x0002
-
+/** options for ImpTakeDescriptionStr() */
+enum class ImpTakeDescriptionOptions
+{
+    NONE       = 0,
+    POINTS     = 1,
+    GLUEPOINTS = 2,
+};
 
 class ImplMarkingOverlay;
 
@@ -161,7 +165,7 @@ protected:
     SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
     SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
     bool ImpIsFrameHandles() const;
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0, sal_uInt16 nOpt=0) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0, ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE) const;
 
     // Generates a string including degrees symbol, from an angel specification in 1/100deg
     bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);

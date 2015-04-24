@@ -1282,11 +1282,11 @@ OUString SdrView::GetStatusText()
             ImpTakeDescriptionStr(STR_ViewMarked,aStr);
             if (IsGluePointEditMode()) {
                 if (HasMarkedGluePoints()) {
-                    ImpTakeDescriptionStr(STR_ViewMarked,aStr,0,IMPSDR_GLUEPOINTSDESCRIPTION);
+                    ImpTakeDescriptionStr(STR_ViewMarked,aStr,0,ImpTakeDescriptionOptions::GLUEPOINTS);
                 }
             } else {
                 if (HasMarkedPoints()) {
-                    ImpTakeDescriptionStr(STR_ViewMarked,aStr,0,IMPSDR_POINTSDESCRIPTION);
+                    ImpTakeDescriptionStr(STR_ViewMarked,aStr,0,ImpTakeDescriptionOptions::POINTS);
                 }
             }
         } else {

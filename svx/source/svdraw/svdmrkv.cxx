@@ -2023,18 +2023,18 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
 
 
 
-void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal, sal_uInt16 nOpt) const
+void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal, ImpTakeDescriptionOptions nOpt) const
 {
     rStr = ImpGetResStr(nStrCacheID);
     sal_Int32 nPos = rStr.indexOf("%1");
 
     if(nPos != -1)
     {
-        if(nOpt == IMPSDR_POINTSDESCRIPTION)
+        if(nOpt == ImpTakeDescriptionOptions::POINTS)
         {
             rStr = rStr.replaceAt(nPos, 2, GetDescriptionOfMarkedPoints());
         }
-        else if(nOpt == IMPSDR_GLUEPOINTSDESCRIPTION)
+        else if(nOpt == ImpTakeDescriptionOptions::GLUEPOINTS)
         {
             rStr = rStr.replaceAt(nPos, 2, GetDescriptionOfMarkedGluePoints());
         }
