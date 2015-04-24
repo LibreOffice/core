@@ -90,6 +90,7 @@ public:
     void testInvertIfNegativeXLSX();
     void testBubble3DXLSX();
     void testNoMarkerXLSX();
+    void testTitleManualLayoutXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testInvertIfNegativeXLSX);
     CPPUNIT_TEST(testBubble3DXLSX);
     CPPUNIT_TEST(testNoMarkerXLSX);
+    CPPUNIT_TEST(testTitleManualLayoutXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1314,6 +1316,24 @@ void Chart2ExportTest::testNoMarkerXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:marker/c:symbol", "val", "none");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:marker/c:symbol", "val", "none");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:marker", "val", "0");
+}
+
+void Chart2ExportTest::testTitleManualLayoutXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "title_manual_layout.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:xMode", "val", "edge");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:yMode", "val", "edge");
+
+    OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:x", "val");
+    double nX = aXVal.toDouble();
+    CPPUNIT_ASSERT(nX > 0 && nX < 1);
+
+    OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:y", "val");
+    double nY = aYVal.toDouble();
+    CPPUNIT_ASSERT(nY > 0 && nY < 1);
+    CPPUNIT_ASSERT(nX != nY);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
