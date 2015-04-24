@@ -165,7 +165,12 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            bIsImageSelected = pMark->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF;
+            // tdf#89758 Extra check to avoid interactive crop preview from being
+            // proportionally scaled by default.
+            if (mpView->GetDragMode() != SDRDRAG_CROP)
+            {
+                bIsImageSelected = pMark->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF;
+            }
         }
     }
 
