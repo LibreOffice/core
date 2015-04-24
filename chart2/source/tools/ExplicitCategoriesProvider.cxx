@@ -449,7 +449,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
             if( bIsAutoDate )
             {
                 if( bOwnData )
-                    bIsDate = bOwnDataAnddAxisHasAnyFormat ? bOwnDataAnddAxisHasDateFormat : true;
+                    bIsDate = !bOwnDataAnddAxisHasAnyFormat || bOwnDataAnddAxisHasDateFormat;
                 else
                     bIsDate = DiagramHelper::isDateNumberFormat( xDataSequence->getNumberFormatKeyByIndex( nN ), xNumberFormats );
             }

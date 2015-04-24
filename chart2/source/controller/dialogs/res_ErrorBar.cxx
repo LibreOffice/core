@@ -41,8 +41,8 @@ void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
     if( pDialog )
     {
-        pDialog->Show( bEnable ? false : true );
-        pDialog->SetModalInputMode( bEnable ? false : true );
+        pDialog->Show( !bEnable );
+        pDialog->SetModalInputMode( !bEnable );
     }
 }
 

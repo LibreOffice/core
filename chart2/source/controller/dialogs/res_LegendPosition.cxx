@@ -167,7 +167,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
 
 IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl)
 {
-    bool bEnable = m_pCbxShow ? m_pCbxShow->IsChecked() : true;
+    bool bEnable = m_pCbxShow == nullptr || m_pCbxShow->IsChecked();
 
     m_pRbtLeft->Enable( bEnable );
     m_pRbtTop->Enable( bEnable );
@@ -224,7 +224,7 @@ void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
         nLegendPosition = chart2::LegendPosition_PAGE_END;
     rOutAttrs.Put(SfxInt32Item(SCHATTR_LEGEND_POS, nLegendPosition ));
 
-    rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, m_pCbxShow ? m_pCbxShow->IsChecked() : true) );
+    rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, m_pCbxShow == nullptr || m_pCbxShow->IsChecked()) );
 }
 
 IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )

@@ -261,7 +261,7 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
             m_BatchTextVertexID = glGetAttribLocation(m_BatchTextProID, "vPosition");
             m_BatchTextTexCoordID = glGetAttribLocation(m_BatchTextProID, "texCoord");
         }
-        mbTexBatchSupport = m_BatchTextProID ? true : false;
+        mbTexBatchSupport = m_BatchTextProID != 0;
         CHECK_GL_ERROR();
     }
     else
@@ -2455,7 +2455,7 @@ void OpenGL3DRenderer::CalcScrollMoveMatrix(bool bNewScene)
         m_fCurDistance = -m_fScrollSpeed;
     m_fCurDistance += m_fCurDistance >= m_fScrollDistance ? 0.0f : m_fScrollSpeed;
     m_ScrollMoveMatrix = glm::translate(glm::vec3(-m_fCurDistance * 0.01, 0.0f, 0.0f));
-    m_bUndrawFlag = m_fCurDistance >= m_fScrollDistance ? true : false;
+    m_bUndrawFlag = m_fCurDistance >= m_fScrollDistance;
 }
 
 glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection)
