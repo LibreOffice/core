@@ -850,10 +850,8 @@ Reference< XRow > FTPContent::getPropertyValues(
                                    : OUString(FTP_FILE) );
             else if(Name == "IsReadOnly")
                 xRow->appendBoolean(seqProp[i],
-                                    aDirEntry.m_nMode
-                                    & INETCOREFTP_FILEMODE_WRITE
-                                    ? false
-                                    : true );
+                                    (aDirEntry.m_nMode
+                                     & INETCOREFTP_FILEMODE_WRITE) == 0 );
             else if(Name == "IsDocument")
                 xRow->appendBoolean(seqProp[i],
                                     (aDirEntry.m_nMode &
