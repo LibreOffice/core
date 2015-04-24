@@ -22,6 +22,7 @@
 #include "helper/xpath.hxx"
 #include "helper/shared_test_impl.hxx"
 
+#include "userdat.hxx"
 #include "docsh.hxx"
 #include "patattr.hxx"
 #include "scitems.hxx"
@@ -144,6 +145,7 @@ public:
     void testTextUnderlineColor();
     void testSheetRunParagraphProperty();
     void testHiddenShape();
+    void testMoveCellAnchoredShapes();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -198,6 +200,7 @@ public:
     CPPUNIT_TEST(testTextUnderlineColor);
     CPPUNIT_TEST(testSheetRunParagraphProperty);
     CPPUNIT_TEST(testHiddenShape);
+    CPPUNIT_TEST(testMoveCellAnchoredShapes);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2640,6 +2643,169 @@ void ScExportTest::testHiddenShape()
     xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
+}
+
+void ScExportTest::testMoveCellAnchoredShapes()
+{
+    ScDocShellRef xDocSh = loadDoc("move-cell-anchored-shapes.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load move-cell-anchored-shapes.ods", xDocSh.Is());
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+
+    // Check cell anchor state
+    ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObj);
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+
+    // Get anchor data
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    ScAddress aDataStart = pData->maStart;
+    ScAddress aDataEnd   = pData->maEnd;
+
+    // Get non rotated anchor data
+    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    ScAddress aNDataStart = pNData->maStart;
+    ScAddress aNDataEnd   = pNData->maEnd;
+    CPPUNIT_ASSERT_EQUAL(aDataStart, aNDataStart);
+    CPPUNIT_ASSERT_EQUAL(aDataEnd , aNDataEnd);
+
+    // Insert 2 rows.
+    rDoc.InsertRow(ScRange( 0, aDataStart.Row() - 1, 0, MAXCOL, aDataStart.Row(), 0));
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    // Check if data has moved to new rows
+    CPPUNIT_ASSERT_EQUAL( pData->maStart.Row(), aDataStart.Row() + 2 );
+    CPPUNIT_ASSERT_EQUAL( pData->maEnd.Row(), aDataEnd.Row() + 2 );
+
+    CPPUNIT_ASSERT_EQUAL( pNData->maStart.Row(), aNDataStart.Row() + 2 );
+    CPPUNIT_ASSERT_EQUAL( pNData->maEnd.Row(), aNDataEnd.Row() + 2 );
+
+    // Save the anchor data
+    aDataStart = pData->maStart;
+    aDataEnd   = pData->maEnd;
+    aNDataStart = pNData->maStart;
+    aNDataEnd   = pNData->maEnd;
+
+    // Save the document and load again to check anchor persist
+    ScDocShellRef xDocSh1 = saveAndReload(&(*xDocSh), ODS);
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument& rDoc1 = xDocSh1->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc1.GetTableCount() > 0);
+
+    pDrawLayer = rDoc1.GetDrawLayer();
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+
+    // Check cell anchor state
+    oldType = ScDrawLayer::GetAnchorType(*pObj);
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    // Check if data after save it
+    CPPUNIT_ASSERT_EQUAL(pData->maStart, aDataStart);
+    CPPUNIT_ASSERT_EQUAL(pData->maEnd , aDataEnd);
+
+    CPPUNIT_ASSERT_EQUAL(pNData->maStart, aNDataStart);
+    CPPUNIT_ASSERT_EQUAL(pNData->maEnd , aNDataEnd);
+
+    // Insert a column.
+    rDoc1.InsertCol(ScRange( aDataStart.Col(), 0 , 0 , aDataStart.Col(), MAXROW, 0 ));
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    // Check if data has moved to new rows
+    CPPUNIT_ASSERT_EQUAL(pData->maStart.Col(), SCCOL(aDataStart.Col() + 1));
+    CPPUNIT_ASSERT_EQUAL(pData->maEnd.Col() , SCCOL(aDataEnd.Col() + 1));
+
+    CPPUNIT_ASSERT_EQUAL(pNData->maStart.Col(), SCCOL(aNDataStart.Col() + 1));
+    CPPUNIT_ASSERT_EQUAL(pNData->maEnd.Col() , SCCOL(aNDataEnd.Col() + 1));
+
+    // Save the anchor data
+    aDataStart = pData->maStart;
+    aDataEnd   = pData->maEnd;
+    aNDataStart = pNData->maStart;
+    aNDataEnd   = pNData->maEnd;
+
+    // Save the document and load again to check anchor persist
+    ScDocShellRef xDocSh2 = saveAndReload(&(*xDocSh1), ODS);
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument& rDoc2 = xDocSh2->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc2.GetTableCount() > 0);
+
+    pDrawLayer = rDoc2.GetDrawLayer();
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+
+    // Check cell anchor state
+    oldType = ScDrawLayer::GetAnchorType(*pObj);
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+
+    // Get anchor data
+    pData = ScDrawLayer::GetObjData(pObj, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+
+    // Get non rotated anchor data
+    pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+
+    // Check if data after save it
+    CPPUNIT_ASSERT_EQUAL(pData->maStart, aDataStart);
+    CPPUNIT_ASSERT_EQUAL(pData->maEnd , aDataEnd);
+
+    CPPUNIT_ASSERT_EQUAL(pNData->maStart, aNDataStart);
+    CPPUNIT_ASSERT_EQUAL(pNData->maEnd , aNDataEnd);
+
+    xDocSh2->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
