@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <ndole.hxx>
 #include <svl/itemiter.hxx>
 #include <fmtfsize.hxx>
@@ -2036,7 +2037,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
             // center page if possible
             long nSizeDiff = 0;
-            if (nVisWidth > nCurrentRowWidth && !(GetCurrShell() && GetCurrShell()->isTiledRendering()))
+            if (nVisWidth > nCurrentRowWidth && !comphelper::LibreOfficeKit::isActive())
                 nSizeDiff = ( nVisWidth - nCurrentRowWidth ) / 2;
 
             // adjust positions of pages in current row
