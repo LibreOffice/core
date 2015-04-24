@@ -154,7 +154,7 @@ namespace drawinglayer
                                 pTextDecoratedPortionPrimitive2D->getTextStrikeout(),
 
                                 // reset WordLineMode when BreakupUnit_word is executed; else copy original
-                                bWordLineMode ? false : pTextDecoratedPortionPrimitive2D->getWordLineMode(),
+                                !bWordLineMode && pTextDecoratedPortionPrimitive2D->getWordLineMode(),
 
                                 pTextDecoratedPortionPrimitive2D->getTextEmphasisMark(),
                                 pTextDecoratedPortionPrimitive2D->getEmphasisMarkAbove(),
