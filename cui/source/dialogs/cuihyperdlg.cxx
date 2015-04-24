@@ -330,7 +330,7 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 
     SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(GetTabPage( nPageId ));
 
-    mbIsHTMLDoc = (pItem->GetInsertMode() & HLINK_HTMLMODE) ? true : false;
+    mbIsHTMLDoc = (pItem->GetInsertMode() & HLINK_HTMLMODE) != 0;
 
     IconChoicePage* pPage = GetTabPage (nPageId);
     if(pPage)
