@@ -64,9 +64,9 @@ private:
 
     long EditHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
     long AddHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
-    long DeleteHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet);
+    static long DeleteHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet);
 
-    void EnableOpenCLHdl(VclFrame* pFrame, bool aEnable);
+    static void EnableOpenCLHdl(VclFrame* pFrame, bool aEnable);
 
 public:
     SvxOpenCLTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

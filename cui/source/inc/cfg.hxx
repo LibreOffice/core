@@ -772,7 +772,7 @@ public:
         vcl::Window *pWindow,
         const OUString& aMessage );
 
-    OUString ReplaceIconName( const OUString& );
+    static OUString ReplaceIconName( const OUString& );
     sal_uInt16 ShowDialog();
 };
 //added for issue83555

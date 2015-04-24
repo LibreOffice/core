@@ -715,9 +715,9 @@ private:
 
     Color               aCurrentColor;
 
-    void    ConvertColorValues (Color& rColor, ColorModel eModell);
-    void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
-    void    CmykToRgb_Impl( Color& rColor, const sal_uInt16 nKey );
+    static void    ConvertColorValues (Color& rColor, ColorModel eModell);
+    static void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
+    static void    CmykToRgb_Impl( Color& rColor, const sal_uInt16 nKey );
     sal_uInt16  ColorToPercent_Impl( sal_uInt16 nColor );
     sal_uInt16  PercentToColor_Impl( sal_uInt16 nPercent );
 

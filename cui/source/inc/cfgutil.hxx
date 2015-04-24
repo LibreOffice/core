@@ -65,7 +65,7 @@ struct SfxStylesInfo_Impl
         SfxStylesInfo_Impl();
         void setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 
-        bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
+        static bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
         void getLabel4Style(SfxStyleInfo_Impl& aStyle);
 
         ::std::vector< SfxStyleInfo_Impl > getStyleFamilies();
@@ -144,7 +144,7 @@ class SfxConfigGroupListBox : public SvTreeListBox
         bool bIsRootNode
     );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
         OUString& docName
     );

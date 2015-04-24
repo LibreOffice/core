@@ -274,7 +274,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     virtual void        Reset( const SfxItemSet* /*rSet*/ ) SAL_OVERRIDE {}
     virtual bool        FillItemSet( SfxItemSet* /*rSet*/ ) SAL_OVERRIDE { return true; }
-    OUString     addExtension( const OUString&, const OUString& );
+    static OUString     addExtension( const OUString&, const OUString& );
     void                FillFilterList();
 
     void                SearchFiles();

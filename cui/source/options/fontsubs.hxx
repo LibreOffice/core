@@ -50,10 +50,10 @@ class SvxFontSubstCheckListBox : public SvSimpleTable
         inline void     SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
 
         bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
-        bool            IsChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol = 0);
+        static bool     IsChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol = 0);
         void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked);
         void            CheckEntry(SvTreeListEntry* pEntry, sal_uInt16 nCol, bool bChecked);
-        SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
+        static SvButtonState GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol );
         void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
 
         void setColSizes();

@@ -820,7 +820,7 @@ void OfaACorrCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal_uIn
     }
 }
 
-SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
+SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));

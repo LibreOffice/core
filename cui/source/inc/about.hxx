@@ -54,10 +54,10 @@ private:
     void StyleControls();
     void SetLogo();
 
-    OUString GetBuildId();
+    static OUString GetBuildId();
     OUString GetVersionString();
     OUString GetCopyrightString();
-    OUString GetLocaleString();
+    static OUString GetLocaleString();
 
 protected:
     virtual bool Close() SAL_OVERRIDE;

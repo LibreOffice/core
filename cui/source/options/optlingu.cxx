@@ -512,7 +512,7 @@ class SvxLinguData_Impl
     uno::Reference< XLinguServiceManager2 >  xLinguSrvcMgr;
 
 
-    bool    AddRemove( Sequence< OUString > &rConfigured,
+    static bool AddRemove( Sequence< OUString > &rConfigured,
                            const OUString &rImplName, bool bAdd );
 
 public:

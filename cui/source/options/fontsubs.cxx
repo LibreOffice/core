@@ -179,8 +179,8 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
         SubstitutionStruct aAdd;
         aAdd.sFont = SvTabListBox::GetEntryText(pEntry, 0);
         aAdd.sReplaceBy = SvTabListBox::GetEntryText(pEntry, 1);
-        aAdd.bReplaceAlways = m_pCheckLB->IsChecked(pEntry, 0);
-        aAdd.bReplaceOnScreenOnly = m_pCheckLB->IsChecked(pEntry, 1);
+        aAdd.bReplaceAlways = SvxFontSubstCheckListBox::IsChecked(pEntry, 0);
+        aAdd.bReplaceOnScreenOnly = SvxFontSubstCheckListBox::IsChecked(pEntry, 1);
         pConfig->AddSubstitution(aAdd);
         pEntry = m_pCheckLB->Next(pEntry);
     }
@@ -525,7 +525,7 @@ void SvxFontSubstCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal
     }
 }
 
-SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
+SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));

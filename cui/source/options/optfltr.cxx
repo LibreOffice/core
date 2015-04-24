@@ -415,7 +415,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
 }
 
 SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
-                                    SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
+                                    SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
