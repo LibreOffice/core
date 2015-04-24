@@ -139,7 +139,7 @@ private:
 
 inline bool LwpDivInfo::HasContents()
 {
-    return (m_nFlags & DI_HASCONTENTS) ? true : false;
+    return (m_nFlags & DI_HASCONTENTS) != 0;
 }
 
 inline bool LwpDivInfo::IsOleDivision()
@@ -152,7 +152,7 @@ inline bool LwpDivInfo::IsOleDivision()
 
 inline bool LwpDivInfo::IsScrollable()
 {
-    return (m_nFlags & DI_SCROLLABLE) ? true : false;
+    return (m_nFlags & DI_SCROLLABLE) != 0;
 }
 
 inline bool LwpDivInfo::IsGotoable()

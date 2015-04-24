@@ -153,9 +153,9 @@ public:
     void RegisterStyle() SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     inline sal_uInt16 GetLevel(){return m_nLevel;}
-    inline bool GetUseText(){   return (m_nFlags & USETEXT) ? true : false;}
+    inline bool GetUseText(){   return (m_nFlags & USETEXT) != 0;}
     inline OUString GetSearchStyle(){return m_SearchName.str();}
-    inline bool GetUseLeadingText(){    return (m_nFlags & USENUMBER) ? true : false;}
+    inline bool GetUseLeadingText(){    return (m_nFlags & USENUMBER) != 0;}
 private:
     virtual ~LwpTocLevelData();
 

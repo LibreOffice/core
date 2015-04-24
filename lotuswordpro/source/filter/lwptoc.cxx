@@ -337,7 +337,7 @@ void LwpTocSuperLayout::AddSourceStyle(XFIndex* pToc, LwpTocLevelData * pLevel, 
 bool LwpTocSuperLayout::GetRightAlignPageNumber(sal_uInt16 index)
 {
     if (index < MAX_LEVELS)
-        return (m_nFlags[index] & TS_RIGHTALIGN) ? true : false;
+        return (m_nFlags[index] & TS_RIGHTALIGN) != 0;
     return false;
 }
 /**
@@ -348,7 +348,7 @@ bool LwpTocSuperLayout::GetRightAlignPageNumber(sal_uInt16 index)
 bool LwpTocSuperLayout::GetUsePageNumber(sal_uInt16 index)
 {
     if (index < MAX_LEVELS)
-        return (m_nFlags[index] & TS_PAGENUMBER) ? true : false;
+        return (m_nFlags[index] & TS_PAGENUMBER) != 0;
     return false;
 }
 /**

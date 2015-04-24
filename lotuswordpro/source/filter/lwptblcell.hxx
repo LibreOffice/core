@@ -290,19 +290,19 @@ LwpRowColumnQualifier::LwpRowColumnQualifier()
 inline bool
 LwpRowColumnQualifier::IsAfter()
 {
-    return cFlags & REF_AFTER ? true : false;
+    return (cFlags & REF_AFTER) != 0;
 }
 
 inline bool
 LwpRowColumnQualifier::IsBad()
 {
-    return cFlags & REF_BAD ? true : false;
+    return (cFlags & REF_BAD) != 0;
 }
 
 inline bool
 LwpRowColumnQualifier::IsAbsolute()
 {
-    return cFlags & REF_ABSOLUTE ? true : false;
+    return (cFlags & REF_ABSOLUTE) != 0;
 }
 /**
  * @brief
