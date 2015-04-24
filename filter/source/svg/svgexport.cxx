@@ -338,11 +338,8 @@ SVGExport::SVGExport(
     comphelper::SequenceAsHashMap::const_iterator iter = aFilterDataHashMap.find(SVG_PROP_EMBEDFONTS);
     if(iter==aFilterDataHashMap.end())
     {
-        const char* pSVGDisableFontEmbedding = getenv( "SVG_DISABLE_FONT_EMBEDDING" );
-        OUString aEmbedFontEnv("${SVG_DISABLE_FONT_EMBEDDING}");
-        rtl::Bootstrap::expandMacros(aEmbedFontEnv);
-        mbIsEmbedFonts = pSVGDisableFontEmbedding == nullptr
-            && aEmbedFontEnv.isEmpty();
+        OUString v;
+        mbIsEmbedFonts = !rtl::Bootstrap::get("SVG_DISABLE_FONT_EMBEDDING", v);
     }
     else
     {

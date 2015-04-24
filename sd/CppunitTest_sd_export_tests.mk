@@ -74,7 +74,7 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sd_export_tests,\
 $(eval $(call gb_CppunitTest_use_configuration,sd_export_tests))
 
 $(eval $(call gb_CppunitTest_add_arguments,sd_export_tests,\
-    "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
+    -env:SVG_DISABLE_FONT_EMBEDDING= \
 ))
 
 $(call gb_CppunitTest_get_target,sd_export_test) : $(call gb_AllLangResTarget_get_target,sd)
