@@ -688,7 +688,7 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 {
     if (PopupMenu* pThisPopup = pMenu->GetPopupMenu( nItemId ))
-        pMenu->EnableItem( nItemId, pThisPopup->GetItemCount() ? true : false );
+        pMenu->EnableItem( nItemId, pThisPopup->GetItemCount() != 0 );
 }
 
 // vcl handler
@@ -866,7 +866,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                                 pMenuItemHandler->xPopupMenuController->updatePopupMenu();
                                 bPopupMenu = true;
                                 if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( pMenuItemHandler->nItemId ))
-                                    pMenu->EnableItem( pMenuItemHandler->nItemId, pThisPopup->GetItemCount() ? true : false );
+                                    pMenu->EnableItem( pMenuItemHandler->nItemId, pThisPopup->GetItemCount() != 0 );
                             }
 
                             lcl_CheckForChildren(pMenu, pMenuItemHandler->nItemId);
@@ -1906,7 +1906,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
         if ( pPopupMenu )
         {
             Reference< XDispatchProvider > xDispatchProvider;
-            MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,xDispatchProvider, aModuleIdentifier, pPopupMenu, _bHandlePopUp ? false : bDeleteChildren, _bHandlePopUp ? false : bDeleteChildren );
+            MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,xDispatchProvider, aModuleIdentifier, pPopupMenu, !_bHandlePopUp && bDeleteChildren, !_bHandlePopUp && bDeleteChildren );
 
             Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
 
