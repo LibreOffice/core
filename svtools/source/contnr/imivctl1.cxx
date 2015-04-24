@@ -2676,7 +2676,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const Rectangle& rRect, bool bAdd,
         return;
 
     // set flag, so ToTop won't be called in Select
-    bool bAlreadySelectingRect = nFlags & F_SELECTING_RECT ? true : false;
+    bool bAlreadySelectingRect = (nFlags & F_SELECTING_RECT) != 0;
     nFlags |= F_SELECTING_RECT;
 
     CheckBoundingRects();

@@ -157,12 +157,10 @@ void FileControl::Resize()
     Size aOutSz = GetOutputSizePixel();
     long nButtonTextWidth = maButton.GetTextWidth( maButtonText );
     if ( !(mnInternalFlags & FileControlMode_Internal::ORIGINALBUTTONTEXT) ||
-        ( nButtonTextWidth < aOutSz.Width()/3 &&
-        ( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN
-        ? ( maEdit.GetTextWidth( maEdit.GetText() )
-            <= aOutSz.Width() - nButtonTextWidth - ButtonBorder )
-        : true ) )
-       )
+         ( nButtonTextWidth < aOutSz.Width()/3 &&
+           ( !( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN ) ||
+             ( maEdit.GetTextWidth( maEdit.GetText() )
+               <= aOutSz.Width() - nButtonTextWidth - ButtonBorder ) ) ) )
     {
         maButton.SetText( maButtonText );
     }

@@ -186,9 +186,7 @@ namespace svt
     {
         bool operator() ( const ::rtl::Reference< TemplateContent >& _rxLHS, const ::rtl::Reference< TemplateContent >& _rxRHS ) const
         {
-            return  _rxLHS->getURL() < _rxRHS->getURL()
-                ?   true
-                :   false;
+            return _rxLHS->getURL() < _rxRHS->getURL();
         }
     };
 
