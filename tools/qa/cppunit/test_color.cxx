@@ -13,6 +13,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 #include <tools/color.hxx>
+#include <tools/stream.hxx>
 
 namespace
 {
@@ -21,9 +22,11 @@ class Test: public CppUnit::TestFixture
 {
 public:
     void test_asRGBColor();
+    void test_readAndWriteStream();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test_asRGBColor);
+    CPPUNIT_TEST(test_readAndWriteStream);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -52,6 +55,25 @@ void Test::test_asRGBColor()
 
     aColor = COL_AUTO;
     CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("ffffff"));
+}
+
+void Test::test_readAndWriteStream()
+{
+    {
+        SvMemoryStream aStream;
+        Color aWriteColor(0x12, 0x34, 0x56);
+        Color aReadColor;
+
+        WriteColor(aStream, aWriteColor);
+
+        aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        ReadColor(aStream, aReadColor);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x12), aReadColor.GetRed());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x34), aReadColor.GetGreen());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x56), aReadColor.GetBlue());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
