@@ -526,7 +526,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_EastAsianLayout_combine:
             if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_IS_ON, uno::makeAny ( nIntValue ? true : false ));
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_IS_ON, uno::makeAny ( nIntValue != 0 ));
             break;
         case NS_ooxml::LN_CT_EastAsianLayout_combineBrackets:
             if (m_pImpl->GetTopContext())
@@ -546,7 +546,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_EastAsianLayout_vertCompress:
             if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION_IS_FIT_TO_LINE, uno::makeAny ( nIntValue ? true : false));
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION_IS_FIT_TO_LINE, uno::makeAny ( nIntValue != 0 ));
             break;
 
         case NS_ooxml::LN_CT_PageSz_code:
@@ -1171,10 +1171,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, m_pImpl ));
         break;
     case NS_ooxml::LN_CT_PPrBase_keepLines:
-        rContext->Insert(PROP_PARA_SPLIT, uno::makeAny(nIntValue ? false : true));
+        rContext->Insert(PROP_PARA_SPLIT, uno::makeAny(nIntValue == 0));
         break;
     case NS_ooxml::LN_CT_PPrBase_keepNext:
-        rContext->Insert(PROP_PARA_KEEP_TOGETHER, uno::makeAny( nIntValue ? true : false) );
+        rContext->Insert(PROP_PARA_KEEP_TOGETHER, uno::makeAny( nIntValue != 0 ) );
         break;
     case NS_ooxml::LN_CT_PPrBase_pageBreakBefore:
         rContext->Insert(PROP_BREAK_TYPE, uno::makeAny(nIntValue ? style::BreakType_PAGE_BEFORE : style::BreakType_NONE));
@@ -1235,7 +1235,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         }
         break;
     case NS_ooxml::LN_CT_PPrBase_suppressLineNumbers:
-        rContext->Insert(PROP_PARA_LINE_NUMBER_COUNT, uno::makeAny( nIntValue ? false : true) );
+        rContext->Insert(PROP_PARA_LINE_NUMBER_COUNT, uno::makeAny( nIntValue == 0 ) );
         break;
     case NS_ooxml::LN_inTbl:
         break;
@@ -1301,7 +1301,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_PBdr_bar:
         break;
     case NS_ooxml::LN_CT_PPrBase_suppressAutoHyphens:
-        rContext->Insert(PROP_PARA_IS_HYPHENATION, uno::makeAny( nIntValue ? false : true ));
+        rContext->Insert(PROP_PARA_IS_HYPHENATION, uno::makeAny( nIntValue == 0 ));
         break;
     case NS_ooxml::LN_CT_FramePr_h:
         break;
@@ -1340,7 +1340,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     }
     break;  // sprmPFWidowControl
     case NS_ooxml::LN_CT_PPrBase_overflowPunct:
-        rContext->Insert(PROP_PARA_IS_HANGING_PUNCTUATION, uno::makeAny( nIntValue ? false : true ));
+        rContext->Insert(PROP_PARA_IS_HANGING_PUNCTUATION, uno::makeAny( nIntValue == 0 ));
         break;
     case NS_ooxml::LN_CT_PPrBase_topLinePunct:
         break;
@@ -1552,7 +1552,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                     case NS_ooxml::LN_EG_RPrBase_shadow:
                     case NS_ooxml::LN_EG_RPrBase_vanish:
                     case NS_ooxml::LN_EG_RPrBase_webHidden:
-                        rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? true : false ));
+                        rContext->Insert(ePropertyId, uno::makeAny( nIntValue != 0 ));
                     break;
                     case NS_ooxml::LN_EG_RPrBase_smallCaps:
                         // If smallcaps would be just disabled and an other casemap is already inserted, don't do anything.

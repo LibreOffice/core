@@ -551,7 +551,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineDistance = nIntValue;
         break;
         case NS_ooxml::LN_CT_Border_shadow:
-            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].bHasShadow = nIntValue ? true : false;
+            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].bHasShadow = nIntValue != 0;
         break;
         case NS_ooxml::LN_CT_Border_frame:
             break;
