@@ -187,7 +187,7 @@ void FrameListAnalyzer::impl_analyze()
             // b) Or is includes this task the special backing component?
             //    Return it separated from any return list.
             //    But check if the reference task itself is the backing frame.
-            //    Our user mst know it to decide right.
+            //    Our user must know it to decide right.
             if ((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT)
             {
                 try

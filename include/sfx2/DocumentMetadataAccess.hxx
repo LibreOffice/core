@@ -41,8 +41,6 @@
     from the document, and i do not like defining an API for that.
     Also, the implementation does _no_ locking, so make sure access is
     protected externally.
-
-    @author mst
  */
 
 namespace com { namespace sun { namespace star { namespace embed {

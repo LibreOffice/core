@@ -68,7 +68,7 @@ public class _XTableCharts extends MultiMethodTest {
      * <code>false</code>. <p>
      * The following method tests are to be completed successfully before :
      * <ul>
-     *  <li> <code> addNewByName() </code> : chart mst be added first </li>
+     *  <li> <code> addNewByName() </code> : chart must be added first </li>
      * </ul>
      */
     public void _removeByName() {

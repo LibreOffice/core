@@ -100,7 +100,6 @@
     <type>MetadatableUndo<type> instance, which can be used to undo the action
     by passing it to <method>Metadatable::RestoreMetadata</method>.
 
-    @author mst
  */
 
 

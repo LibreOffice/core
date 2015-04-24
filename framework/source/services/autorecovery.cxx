@@ -231,7 +231,7 @@ public:
         /** timer must be started with special short time intervall,
             to poll for an user idle period */
         E_POLL_FOR_USER_IDLE,
-        /** timer mst be started with a very(!) short time intervall,
+        /** timer must be started with a very(!) short time interval,
             to poll for the end of an user action, which does not allow saving documents in general */
         E_POLL_TILL_AUTOSAVE_IS_ALLOWED,
         /** dont start the timer - but calls the same action then before immediately again! */

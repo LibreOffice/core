@@ -76,7 +76,6 @@
     librdf_GraphResult:     an XEnumeration<Statement>
     librdf_QuerySelectResult:   an XEnumeration<sequence<XNode>>
 
-    @author mst
  */
 
 /// anonymous implementation namespace

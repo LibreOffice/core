@@ -106,7 +106,6 @@
  * and update the DOM tree only when storing the document (in
  * <method>updateUserDefinedAndAttributes</method>).
  *
- * @author mst
  */
 
 /// anonymous implementation namespace
