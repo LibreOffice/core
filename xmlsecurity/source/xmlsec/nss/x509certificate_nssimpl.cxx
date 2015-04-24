@@ -204,7 +204,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
             if( (*extns)->critical.data == NULL )
                 crit = false ;
             else
-                crit = ( (*extns)->critical.data[0] == 0xFF ) ? true : false ;
+                crit = (*extns)->critical.data[0] == 0xFF;
             pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, reinterpret_cast<unsigned char *>(const_cast<char *>(objID.getStr())), objID.getLength(), crit ) ;
 
             xExtns[len] = pExtn ;
@@ -238,7 +238,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
                 if( (*extns)->critical.data == NULL )
                     crit = false ;
                 else
-                    crit = ( (*extns)->critical.data[0] == 0xFF ) ? true : false ;
+                    crit = (*extns)->critical.data[0] == 0xFF;
                 pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (*extns)->id.data, (*extns)->id.len, crit ) ;
                 break;
             }
