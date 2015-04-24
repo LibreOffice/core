@@ -1737,11 +1737,11 @@ bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
     return PickObj(rPnt,nTol,rpObj,rpPV,nOptions,NULL,NULL);
 }
 
-bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, sal_uInt16* pnPassNum) const
+bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect) const
 { // TODO: lacks a Pass2,Pass3
     SortMarkedObjects();
     if (ppRootObj!=NULL) *ppRootObj=NULL;
-    if (pnPassNum!=NULL) *pnPassNum=0;
+    if (pbHitPassDirect!=NULL) *pbHitPassDirect=true;
     rpObj=NULL;
     rpPV=NULL;
     bool bWholePage(nOptions & SdrSearchOptions::WHOLEPAGE);
@@ -1797,13 +1797,13 @@ bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
                 if (!bBack) nPgNum--;
                 const SetOfByte* pMVisLay=NULL;
                 SdrObjList* pObjList=NULL;
-                if (pnPassNum!=NULL) *pnPassNum&=~(SDRSEARCHPASS_MASTERPAGE|SDRSEARCHPASS_INACTIVELIST);
+                if (pbHitPassDirect!=NULL) *pbHitPassDirect = true;
                 if (nPgNum>=nPgAnz-1 || (bExtraPassForWholePage && nPgNum>=nPgAnz-2))
                 {
                     pObjList=pPV->GetObjList();
                     if (bExtraPassForWholePage && nPgNum==nPgAnz-2) {
                         pObjList=pPage;
-                        if (pnPassNum!=NULL) *pnPassNum|=SDRSEARCHPASS_INACTIVELIST;
+                        if (pbHitPassDirect!=NULL) *pbHitPassDirect = false;
                     }
                 }
                 else
@@ -1813,7 +1813,7 @@ bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
                     pMVisLay = &pPage->TRG_GetMasterPageVisibleLayers();
                     pObjList = &rMasterPage;
 
-                    if (pnPassNum!=NULL) *pnPassNum|=SDRSEARCHPASS_MASTERPAGE;
+                    if (pbHitPassDirect!=NULL) *pbHitPassDirect = false;
                     nTmpOptions=nTmpOptions | SdrSearchOptions::IMPISMASTER;
                 }
                 pHitObj=CheckSingleSdrObjectHit(aPt,nTol,pObjList,pPV,nTmpOptions,pMVisLay,pObj,&(GetMarkedObjectList()));
@@ -1849,7 +1849,6 @@ bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
         if (pObj!=NULL) {
             rpObj=pObj;
             rpPV=pPV;
-            if (pnPassNum!=NULL) *pnPassNum|=SDRSEARCHPASS_DIRECT;
         }
     }
     return rpObj!=NULL;

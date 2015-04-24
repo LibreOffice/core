@@ -344,7 +344,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     SdrPageView* pPV=NULL;
     SdrObject* pObj=NULL;
     SdrObject* pHitObj=NULL;
-    sal_uInt16 nHitPassNum=0;
+    bool bHitPassDirect=true;
     sal_uInt16 nHlplIdx=0;
     sal_uInt16 nGlueId=0;
     if (bTextEditHit || bTextEditSel)
@@ -364,7 +364,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     {
         eHit=SDRHIT_GLUEPOINT; // deselected glue point hit
     }
-    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SdrSearchOptions::DEEP|SdrSearchOptions::MARKED,&pObj,&nHitPassNum))
+    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SdrSearchOptions::DEEP|SdrSearchOptions::MARKED,&pObj,&bHitPassDirect))
     {
         eHit=SDRHIT_MARKEDOBJECT;
         ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( pObj );
@@ -384,7 +384,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             }
         }
     }
-    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SdrSearchOptions::DEEP|SdrSearchOptions::ALSOONMASTER|SdrSearchOptions::WHOLEPAGE,&pObj,&nHitPassNum))
+    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SdrSearchOptions::DEEP|SdrSearchOptions::ALSOONMASTER|SdrSearchOptions::WHOLEPAGE,&pObj,&bHitPassDirect))
     {
         // MasterPages and WholePage for Macro and URL
         eHit=SDRHIT_UNMARKEDOBJECT;
@@ -504,7 +504,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         }
     }
 
-    if (nHitPassNum==SDRSEARCHPASS_DIRECT &&
+    if (bHitPassDirect &&
         (eHit==SDRHIT_MARKEDOBJECT || eHit==SDRHIT_UNMARKEDOBJECT) &&
         (IsTextTool() || (IsEditMode() && IsQuickTextEditMode())) && pHitObj->HasTextEdit())
     {
@@ -552,7 +552,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             }
         }
     }
-    if (nHitPassNum!=SDRSEARCHPASS_DIRECT && eHit==SDRHIT_UNMARKEDOBJECT) {
+    if (!bHitPassDirect && eHit==SDRHIT_UNMARKEDOBJECT) {
         eHit=SDRHIT_NONE;
         pObj=NULL;
         pPV=NULL;

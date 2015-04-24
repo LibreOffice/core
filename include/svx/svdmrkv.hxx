@@ -56,11 +56,6 @@ namespace o3tl
     template<> struct typed_flags<SdrSearchOptions> : is_typed_flags<SdrSearchOptions, 0xbfff> {};
 }
 
-// SDRSEARCHPASS_... is return parameter value at PickObj().
-#define SDRSEARCHPASS_DIRECT       0x0000 /* Object is hit by 'direct hit' */
-#define SDRSEARCHPASS_INACTIVELIST 0x0001 /* Obj is on the page, but not in the AktGroup (at WHOLEPAGE) */
-#define SDRSEARCHPASS_MASTERPAGE   0x0002 /* Object was found on the MasterPage */
-
 enum SdrHitKind {SDRHIT_NONE,      // No hit
                  SDRHIT_OBJECT,    // Hit
                  SDRHIT_BOUNDRECT, // Hit at BoundRect
@@ -286,7 +281,7 @@ public:
     // SdrSearchOptions::DEEP SdrSearchOptions::ALSOONMASTER SdrSearchOptions::TESTMARKABLE SdrSearchOptions::TESTTEXTEDIT
     // SdrSearchOptions::WITHTEXT SdrSearchOptions::TESTTEXTAREA SdrSearchOptions::BACKWARD SdrSearchOptions::MARKED
     // SdrSearchOptions::WHOLEPAGE
-    bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, sal_uInt16* pnPassNum=NULL) const;
+    bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect=NULL) const;
     bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
     bool MarkObj(const Point& rPnt, short nTol=-2, bool bToggle=false, bool bDeep=false);
 
