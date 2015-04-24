@@ -362,8 +362,6 @@ protected:
     void ColLock()      { mbColLocked = true; }
     void ColUnlock()    { mbColLocked = false; }
 
-    void Destroy(); // for ~SwRootFrm
-
     virtual void DestroyImpl();
     virtual ~SwFrm();
 

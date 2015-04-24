@@ -610,11 +610,6 @@ void SwRootFrm::DestroyImpl()
     // Some accessible shells are left => problems on second SwFrm::Destroy call
     assert(0 == mnAccessibleShells);
 
-    // manually call base classes Destroy because it could call stuff
-    // that accesses members of this
-    SwLayoutFrm::Destroy();
-    SwFrm::Destroy();
-
     SwLayoutFrm::DestroyImpl();
 }
 

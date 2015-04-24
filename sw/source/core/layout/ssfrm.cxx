@@ -324,7 +324,7 @@ Point SwFrm::GetFrmAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
     return aAnchor;
 }
 
-void SwFrm::Destroy()
+void SwFrm::DestroyImpl()
 {
     mbInDtor = true;
 
@@ -368,14 +368,6 @@ void SwFrm::Destroy()
         }
         delete mpDrawObjs;
         mpDrawObjs = 0;
-    }
-}
-
-void SwFrm::DestroyImpl()
-{
-    if (!IsRootFrm()) // ~SwRootFrm already calls Destroy!
-    {
-        Destroy();
     }
 }
 
@@ -453,7 +445,7 @@ void SwCntntFrm::RegisterToNode( SwCntntNode& rNode )
     rNode.Add( this );
 }
 
-void SwLayoutFrm::Destroy()
+void SwLayoutFrm::DestroyImpl()
 {
     while (!m_VertPosOrientFrmsFor.empty())
     {
@@ -546,14 +538,6 @@ void SwLayoutFrm::Destroy()
             SwFrm::DestroyFrm(pFrm);
             pFrm = pNxt;
         }
-    }
-}
-
-void SwLayoutFrm::DestroyImpl()
-{
-    if (!IsRootFrm()) // ~SwRootFrm already calls Destroy!
-    {
-        Destroy();
     }
 
     SwFrm::DestroyImpl();

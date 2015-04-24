@@ -49,7 +49,6 @@ class SwLayoutFrm: public SwFrm
     void CopySubtree( const SwLayoutFrm *pDest );
 
 protected:
-    void Destroy(); // for ~SwRootFrm
 
     virtual void DestroyImpl() SAL_OVERRIDE;
     virtual ~SwLayoutFrm();
