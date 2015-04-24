@@ -540,10 +540,10 @@ protected:
 private:
     enum LineType { LINETYPE_DATA, LINETYPE_END };
 
-    LineType            readConfigLine(
+    static LineType     readConfigLine(
                             TextInputStream& rStrm,
                             OUString& orKey,
-                            OUString& orData ) const;
+                            OUString& orData );
 
     void                processConfigItem(
                             TextInputStream& rStrm,
@@ -1254,7 +1254,7 @@ protected:
     void                addPreferredStorage( const String& rStrgPath );
 
 private:
-    OUString     getSysFileName(
+    static OUString     getSysFileName(
                             const OUString& rStrmName,
                             const OUString& rSysOutPath );
 

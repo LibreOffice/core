@@ -65,7 +65,7 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
 
 sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
 {
-    return StaticTokenMap::get().getTokenFromUnicode( rValue );
+    return TokenMap::getTokenFromUnicode( rValue );
 }
 
 OUString AttributeConversion::decodeXString( const OUString& rValue )

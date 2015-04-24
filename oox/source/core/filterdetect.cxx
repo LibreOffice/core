@@ -168,7 +168,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
     }
 }
 
-OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType ) const
+OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType )
 {
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ||
         rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" )

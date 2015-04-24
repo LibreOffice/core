@@ -216,11 +216,11 @@ public:
                             sal_Int32 nPropId,
                             sal_uInt32 nOleColor ) const;
 
-    void                convertToMSColor(
+    static void         convertToMSColor(
                             PropertySet& rPropSet,
                             sal_Int32 nPropId,
                             sal_uInt32& nOleColor,
-                            sal_uInt32 nDefault = 0 ) const;
+                            sal_uInt32 nDefault = 0 );
 
 
     /** Converts the passed StdPic picture stream to UNO properties. */
@@ -229,24 +229,24 @@ public:
                             const StreamDataSequence& rPicData ) const;
 
     /** Converts the control orientation to UNO properties. */
-    void                convertOrientation(
+    static void         convertOrientation(
                             PropertyMap& rPropMap,
-                            bool bHorizontal ) const;
+                            bool bHorizontal );
 
-    void                convertToMSOrientation(
+    static void         convertToMSOrientation(
                             PropertySet& rPropMap,
-                            bool& bHorizontal ) const;
+                            bool& bHorizontal );
 
     /** Converts the vertical alignment to UNO properties. */
-    void                convertVerticalAlign(
+    static void         convertVerticalAlign(
                             PropertyMap& rPropMap,
-                            sal_Int32 nVerticalAlign ) const;
+                            sal_Int32 nVerticalAlign );
 
     /** Converts common scrollbar settings to UNO properties. */
-    void                convertScrollBar(
+    static void         convertScrollBar(
                             PropertyMap& rPropMap,
                             sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
-                            sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel ) const;
+                            sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel );
 
     /** Converts scrollability settings to UNO properties. */
     void                convertScrollabilitySettings(
@@ -278,20 +278,20 @@ public:
                             sal_Int32 nBorderStyle,
                             sal_Int32 nSpecialEffect ) const;
 
-    void                convertToAxBorder(
+    static void        convertToAxBorder(
                             PropertySet& rPropSet,
                             sal_uInt32& nBorderColor,
                             sal_Int32& nBorderStyle,
-                            sal_Int32& nSpecialEffect ) const;
+                            sal_Int32& nSpecialEffect );
 
     /** Converts the Forms 2.0 special effect to UNO properties. */
-    void                convertAxVisualEffect(
+    static void         convertAxVisualEffect(
                             PropertyMap& rPropMap,
-                            sal_Int32 nSpecialEffect ) const;
+                            sal_Int32 nSpecialEffect );
 
-    void                convertToAxVisualEffect(
+    static void         convertToAxVisualEffect(
                             PropertySet& rPropSet,
-                            sal_Int32& nSpecialEffect ) const;
+                            sal_Int32& nSpecialEffect );
 
     /** Converts the passed picture stream and Forms 2.0 position to UNO
         properties. */
@@ -311,30 +311,30 @@ public:
 
     /** Converts the Forms 2.0 value for checked/unchecked/dontknow to UNO
         properties. */
-    void                convertAxState(
+    static void         convertAxState(
                             PropertyMap& rPropMap,
                             const OUString& rValue,
                             sal_Int32 nMultiSelect,
                             ApiDefaultStateMode eDefStateMode,
-                            bool bAwtModel ) const;
+                            bool bAwtModel );
 
-    void                convertToAxState(
+    static void        convertToAxState(
                             PropertySet& rPropSet,
                             OUString& rValue,
                             sal_Int32& nMultiSelect,
                             ApiDefaultStateMode eDefStateMode,
-                            bool bAwtModel ) const;
+                            bool bAwtModel );
 
     /** Converts the Forms 2.0 control orientation to UNO properties. */
-    void                convertAxOrientation(
+    static void        convertAxOrientation(
                             PropertyMap& rPropMap,
                             const AxPairData& rSize,
-                            sal_Int32 nOrientation ) const;
+                            sal_Int32 nOrientation );
 
-    void                convertToAxOrientation(
+    static void        convertToAxOrientation(
                             PropertySet& rPropSet,
                             const AxPairData& rSize,
-                            sal_Int32& nOrientation ) const;
+                            sal_Int32& nOrientation );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxDocModel;
@@ -411,7 +411,7 @@ private:
     /** Returns the data part identifier according to the model version. */
     sal_uInt32          getDataPartId() const;
 
-    bool                readPartHeader( BinaryInputStream& rInStrm,
+    static bool         readPartHeader( BinaryInputStream& rInStrm,
                             sal_uInt32 nExpPartId,
                             sal_uInt16 nExpMajor = SAL_MAX_UINT16,
                             sal_uInt16 nExpMinor = SAL_MAX_UINT16 );

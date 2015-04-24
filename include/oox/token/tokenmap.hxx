@@ -38,7 +38,7 @@ public:
                         ~TokenMap();
 
     /** Returns the token identifier for the passed Unicode token name. */
-    sal_Int32           getTokenFromUnicode( const OUString& rUnicodeName ) const;
+    static sal_Int32    getTokenFromUnicode( const OUString& rUnicodeName );
 
     /** Returns the UTF8 name of the passed token identifier as byte sequence. */
     ::com::sun::star::uno::Sequence< sal_Int8 >
@@ -73,7 +73,7 @@ public:
     }
 
 private:
-    sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength ) const;
+    static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
 
     typedef ::std::vector< ::com::sun::star::uno::Sequence< sal_Int8 > > TokenNameVector;
 

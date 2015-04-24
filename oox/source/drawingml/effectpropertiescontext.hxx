@@ -31,7 +31,7 @@ protected:
     EffectProperties& mrEffectProperties;
 
 private:
-    void saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs );
+    static void saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs );
 };
 
 } }

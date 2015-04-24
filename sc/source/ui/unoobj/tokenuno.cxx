@@ -209,7 +209,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
                 ScDocument& rDoc = mpDocShell->GetDocument();
                 ScCompiler aCompiler( &rDoc, ScAddress());
                 aCompiler.SetGrammar(rDoc.GetGrammar());
-                mxOpCodeMap = aCompiler.CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+                mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
             }
         }
         else
@@ -230,7 +230,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
             ScDocument& rDoc = mpDocShell->GetDocument();
             ScCompiler aCompiler( &rDoc, ScAddress());
             aCompiler.SetGrammar(rDoc.GetGrammar());
-            mxOpCodeMap = aCompiler.CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+            mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
         }
         else
             throw lang::IllegalArgumentException();

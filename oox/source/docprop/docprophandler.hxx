@@ -60,8 +60,8 @@ public:
     void InitNew();
     void AddCustomProperty( const ::com::sun::star::uno::Any& aAny );
 
-    ::com::sun::star::util::DateTime GetDateTimeFromW3CDTF( const OUString& aChars );
-    ::com::sun::star::uno::Sequence< OUString > GetKeywordsSet( const OUString& aChars );
+    static ::com::sun::star::util::DateTime GetDateTimeFromW3CDTF( const OUString& aChars );
+    static ::com::sun::star::uno::Sequence< OUString > GetKeywordsSet( const OUString& aChars );
     void UpdateDocStatistic( const OUString& aChars );
 
     // com.sun.star.xml.sax.XFastDocumentHandler

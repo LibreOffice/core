@@ -207,7 +207,7 @@ public:
         @param bEnglish
             Use English number parser / formatter instead of native.
      */
-    OpCodeMapPtr CreateOpCodeMap(
+    static OpCodeMapPtr CreateOpCodeMap(
             const ::com::sun::star::uno::Sequence<
             const ::com::sun::star::sheet::FormulaOpCodeMapEntry > & rMapping,
             bool bEnglish );
@@ -249,7 +249,7 @@ public:
 
     void AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const;
     void AppendDouble( OUStringBuffer& rBuffer, double fVal ) const;
-    void AppendString( OUStringBuffer& rBuffer, const OUString & rStr ) const;
+    static void AppendString( OUStringBuffer& rBuffer, const OUString & rStr );
 
     /** Set symbol map corresponding to one of predefined formula::FormulaGrammar::Grammar,
         including an address reference convention. */

@@ -248,7 +248,7 @@ void ControlConverter::convertColor( PropertyMap& rPropMap, sal_Int32 nPropId, s
     rPropMap.setProperty( nPropId, OleHelper::decodeOleColor( mrGraphicHelper, nOleColor, mbDefaultColorBgr ) );
 }
 
-void ControlConverter::convertToMSColor( PropertySet& rPropSet, sal_Int32 nPropId, sal_uInt32& nOleColor, sal_uInt32 nDefault ) const
+void ControlConverter::convertToMSColor( PropertySet& rPropSet, sal_Int32 nPropId, sal_uInt32& nOleColor, sal_uInt32 nDefault )
 {
     sal_uInt32 nRGB = 0;
     if (rPropSet.getProperty( nRGB, nPropId ))
@@ -266,20 +266,20 @@ void ControlConverter::convertPicture( PropertyMap& rPropMap, const StreamDataSe
     }
 }
 
-void ControlConverter::convertOrientation( PropertyMap& rPropMap, bool bHorizontal ) const
+void ControlConverter::convertOrientation( PropertyMap& rPropMap, bool bHorizontal )
 {
     sal_Int32 nScrollOrient = bHorizontal ? ScrollBarOrientation::HORIZONTAL : ScrollBarOrientation::VERTICAL;
     rPropMap.setProperty( PROP_Orientation, nScrollOrient );
 }
 
-void ControlConverter::convertToMSOrientation( PropertySet& rPropSet, bool& bHorizontal ) const
+void ControlConverter::convertToMSOrientation( PropertySet& rPropSet, bool& bHorizontal )
 {
     sal_Int32 nScrollOrient = ScrollBarOrientation::HORIZONTAL;
     if ( rPropSet.getProperty( nScrollOrient, PROP_Orientation ) )
         bHorizontal = ( nScrollOrient == ScrollBarOrientation::HORIZONTAL );
 }
 
-void ControlConverter::convertVerticalAlign( PropertyMap& rPropMap, sal_Int32 nVerticalAlign ) const
+void ControlConverter::convertVerticalAlign( PropertyMap& rPropMap, sal_Int32 nVerticalAlign )
 {
     VerticalAlignment eAlign = VerticalAlignment_TOP;
     switch( nVerticalAlign )
@@ -307,7 +307,7 @@ void ControlConverter::convertScrollabilitySettings( PropertyMap& rPropMap,
 
 void ControlConverter::convertScrollBar( PropertyMap& rPropMap,
         sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
-        sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel ) const
+        sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel )
 {
     rPropMap.setProperty( PROP_ScrollValueMin, ::std::min( nMin, nMax ) );
     rPropMap.setProperty( PROP_ScrollValueMax, ::std::max( nMin, nMax ) );
@@ -417,7 +417,7 @@ void ControlConverter::convertAxBorder( PropertyMap& rPropMap,
 }
 
 void ControlConverter::convertToAxBorder( PropertySet& rPropSet,
-        sal_uInt32& nBorderColor, sal_Int32& nBorderStyle, sal_Int32& nSpecialEffect ) const
+        sal_uInt32& nBorderColor, sal_Int32& nBorderStyle, sal_Int32& nSpecialEffect )
 {
     sal_Int16 nBorder = API_BORDER_NONE;
     rPropSet.getProperty( nBorder, PROP_Border );
@@ -437,13 +437,13 @@ void ControlConverter::convertToAxBorder( PropertySet& rPropSet,
     convertToMSColor( rPropSet, PROP_BorderColor, nBorderColor );
 }
 
-void ControlConverter::convertAxVisualEffect( PropertyMap& rPropMap, sal_Int32 nSpecialEffect ) const
+void ControlConverter::convertAxVisualEffect( PropertyMap& rPropMap, sal_Int32 nSpecialEffect )
 {
     sal_Int16 nVisualEffect = (nSpecialEffect == AX_SPECIALEFFECT_FLAT) ? VisualEffect::FLAT : VisualEffect::LOOK3D;
     rPropMap.setProperty( PROP_VisualEffect, nVisualEffect );
 }
 
-void ControlConverter::convertToAxVisualEffect( PropertySet& rPropSet, sal_Int32& nSpecialEffect ) const
+void ControlConverter::convertToAxVisualEffect( PropertySet& rPropSet, sal_Int32& nSpecialEffect )
 {
     sal_Int16 nVisualEffect = AX_SPECIALEFFECT_FLAT;
     rPropSet.getProperty( nVisualEffect, PROP_VisualEffect );
@@ -498,7 +498,7 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
 }
 
 void ControlConverter::convertAxState( PropertyMap& rPropMap,
-        const OUString& rValue, sal_Int32 nMultiSelect, ApiDefaultStateMode eDefStateMode, bool bAwtModel ) const
+        const OUString& rValue, sal_Int32 nMultiSelect, ApiDefaultStateMode eDefStateMode, bool bAwtModel )
 {
     bool bBooleanState = eDefStateMode == API_DEFAULTSTATE_BOOLEAN;
     bool bSupportsTriState = eDefStateMode == API_DEFAULTSTATE_TRISTATE;
@@ -523,7 +523,7 @@ void ControlConverter::convertAxState( PropertyMap& rPropMap,
 }
 
 void ControlConverter::convertToAxState( PropertySet& rPropSet,
-        OUString& rValue, sal_Int32& nMultiSelect, ApiDefaultStateMode eDefStateMode, bool /*bAwtModel*/ ) const
+        OUString& rValue, sal_Int32& nMultiSelect, ApiDefaultStateMode eDefStateMode, bool /*bAwtModel*/ )
 {
     bool bSupportsTriState = eDefStateMode == API_DEFAULTSTATE_TRISTATE;
 
@@ -546,7 +546,7 @@ void ControlConverter::convertToAxState( PropertySet& rPropSet,
 }
 
 void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
-        const AxPairData& rSize, sal_Int32 nOrientation ) const
+        const AxPairData& rSize, sal_Int32 nOrientation )
 {
     bool bHorizontal = true;
     switch( nOrientation )
@@ -560,7 +560,7 @@ void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
 }
 
 void ControlConverter::convertToAxOrientation( PropertySet& rPropSet,
-        const AxPairData& /*rSize*/, sal_Int32& nOrientation ) const
+        const AxPairData& /*rSize*/, sal_Int32& nOrientation )
 {
     bool bHorizontal = true;
     convertToMSOrientation( rPropSet, bHorizontal );
@@ -766,8 +766,8 @@ ApiControlType ComCtlScrollBarModel::getControlType() const
 void ComCtlScrollBarModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     rPropMap.setProperty( PROP_Border, API_BORDER_NONE );
-    rConv.convertOrientation( rPropMap, getFlag( mnScrollBarFlags, COMCTL_SCROLLBAR_HOR ) );
-    rConv.convertScrollBar( rPropMap, mnMin, mnMax, mnPosition, mnSmallChange, mnLargeChange, mbAwtModel );
+    ControlConverter::convertOrientation( rPropMap, getFlag( mnScrollBarFlags, COMCTL_SCROLLBAR_HOR ) );
+    ControlConverter::convertScrollBar( rPropMap, mnMin, mnMax, mnPosition, mnSmallChange, mnLargeChange, mbAwtModel );
     ComCtlModelBase::convertProperties( rPropMap, rConv );
 }
 
@@ -1049,7 +1049,7 @@ void AxCommandButtonModel::convertProperties( PropertyMap& rPropMap, const Contr
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
     rPropMap.setProperty( PROP_FocusOnClick, mbFocusOnClick );
     rConv.convertColor( rPropMap, PROP_TextColor, mnTextColor );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
+    ControlConverter::convertVerticalAlign( rPropMap, mnVerticalAlign );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_NOTSUPPORTED );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
     AxFontDataModel::convertProperties( rPropMap, rConv );
@@ -1065,8 +1065,8 @@ void AxCommandButtonModel::convertFromProperties( PropertySet& rPropSet, const C
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
     (void)rPropSet.getProperty(mbFocusOnClick, PROP_FocusOnClick);
 
-    rConv.convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
     AxFontDataModel::convertFromProperties( rPropSet, rConv );
 }
@@ -1150,13 +1150,13 @@ void AxLabelModel::convertFromProperties( PropertySet& rPropSet, const ControlCo
     if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
 
-    rConv.convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     // VerticleAlign doesn't seem to be read from binary
 
     // not sure about background color, how do we decide when to set
     // AX_FLAGS_OPAQUE ?
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor  );
-    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor  );
+    ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
 
     AxFontDataModel::convertFromProperties( rPropSet, rConv );
 }
@@ -1195,7 +1195,7 @@ void AxLabelModel::convertProperties( PropertyMap& rPropMap, const ControlConver
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_FLAGS_ENABLED ) );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
     rConv.convertColor( rPropMap, PROP_TextColor, mnTextColor );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
+    ControlConverter::convertVerticalAlign( rPropMap, mnVerticalAlign );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
     rConv.convertAxBorder( rPropMap, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxFontDataModel::convertProperties( rPropMap, rConv );
@@ -1566,9 +1566,9 @@ void AxToggleButtonModel::convertFromProperties( PropertySet& rPropSet, const Co
     if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
 
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
     // need to process the image if one exists
-    rConv.convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1577,10 +1577,10 @@ void AxToggleButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
     rPropMap.setProperty( PROP_Toggle, true );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
+    ControlConverter::convertVerticalAlign( rPropMap, mnVerticalAlign );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_NOTSUPPORTED );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
-    rConv.convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    ControlConverter::convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 
@@ -1624,11 +1624,11 @@ void AxCheckBoxModel::convertProperties( PropertyMap& rPropMap, const ControlCon
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
+    ControlConverter::convertVerticalAlign( rPropMap, mnVerticalAlign );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
-    rConv.convertAxVisualEffect( rPropMap, mnSpecialEffect );
+    ControlConverter::convertAxVisualEffect( rPropMap, mnSpecialEffect );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
-    rConv.convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_TRISTATE, mbAwtModel );
+    ControlConverter::convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_TRISTATE, mbAwtModel );
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 
@@ -1640,10 +1640,10 @@ void AxCheckBoxModel::convertFromProperties( PropertySet& rPropSet, const Contro
     if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
 
-    rConv.convertToAxVisualEffect( rPropSet, mnSpecialEffect );
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToAxVisualEffect( rPropSet, mnSpecialEffect );
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
     // need to process the image if one exists
-    rConv.convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1686,11 +1686,11 @@ void AxOptionButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
+    ControlConverter::convertVerticalAlign( rPropMap, mnVerticalAlign );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
-    rConv.convertAxVisualEffect( rPropMap, mnSpecialEffect );
+    ControlConverter::convertAxVisualEffect( rPropMap, mnSpecialEffect );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
-    rConv.convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_SHORT, mbAwtModel );
+    ControlConverter::convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_SHORT, mbAwtModel );
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 
@@ -1702,10 +1702,10 @@ void AxOptionButtonModel::convertFromProperties( PropertySet& rPropSet, const Co
     if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
 
-    rConv.convertToAxVisualEffect( rPropSet, mnSpecialEffect );
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToAxVisualEffect( rPropSet, mnSpecialEffect );
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
     // need to process the image if one exists
-    rConv.convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1781,9 +1781,9 @@ void AxTextBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
     if ( rPropSet.getProperty( bRes,  PROP_VScroll ) )
         setFlag( mnScrollBars, AX_SCROLLBAR_VERTICAL, bRes );
 
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor, 0x80000005L );
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor, 0x80000005L );
 
-    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1843,9 +1843,9 @@ void AxNumericFieldModel::convertFromProperties( PropertySet& rPropSet, const Co
     if ( rPropSet.getProperty( bRes,  PROP_Spin ) )
         setFlag( mnScrollBars, AX_SCROLLBAR_VERTICAL, bRes );
 
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
-    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1898,10 +1898,9 @@ void AxListBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
 {
     bool bRes = false;
     if ( rPropSet.getProperty( bRes, PROP_MultiSelection ) )
+        ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
-        rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
-
-    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1986,9 +1985,9 @@ void AxComboBoxModel::convertFromProperties( PropertySet& rPropSet, const Contro
         if ( !mnListRows )
             mnListRows = 1;
     }
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
-    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    ControlConverter::convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -2111,11 +2110,11 @@ void AxSpinButtonModel::convertProperties( PropertyMap& rPropMap, const ControlC
     rPropMap.setProperty( PROP_Border, API_BORDER_NONE );
     rConv.convertColor( rPropMap, PROP_SymbolColor, mnArrowColor );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_NOTSUPPORTED );
-    rConv.convertAxOrientation( rPropMap, maSize, mnOrientation );
+    ControlConverter::convertAxOrientation( rPropMap, maSize, mnOrientation );
     AxControlModelBase::convertProperties( rPropMap, rConv );
 }
 
-void AxSpinButtonModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+void AxSpinButtonModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& )
 {
     bool bRes = false;
     if ( rPropSet.getProperty( bRes,  PROP_Enabled ) )
@@ -2125,10 +2124,10 @@ void AxSpinButtonModel::convertFromProperties( PropertySet& rPropSet, const Cont
     rPropSet.getProperty( mnSmallChange, PROP_SpinIncrement );
     rPropSet.getProperty( mnPosition, ( mbAwtModel ? PROP_SpinValue : PROP_DefaultSpinValue ) );
     rPropSet.getProperty( mnDelay, PROP_RepeatDelay );
-    rConv.convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
-    rConv.convertToAxOrientation( rPropSet, maSize, mnOrientation );
+    ControlConverter::convertToAxOrientation( rPropSet, maSize, mnOrientation );
 }
 
 void AxSpinButtonModel::exportCompObj( BinaryOutputStream& rOutStream )
@@ -2285,21 +2284,21 @@ void AxScrollBarModel::convertProperties( PropertyMap& rPropMap, const ControlCo
     }
     rConv.convertColor( rPropMap, PROP_SymbolColor, mnArrowColor );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_NOTSUPPORTED );
-    rConv.convertAxOrientation( rPropMap, maSize, mnOrientation );
-    rConv.convertScrollBar( rPropMap, mnMin, mnMax, mnPosition, mnSmallChange, mnLargeChange, mbAwtModel );
+    ControlConverter::convertAxOrientation( rPropMap, maSize, mnOrientation );
+    ControlConverter::convertScrollBar( rPropMap, mnMin, mnMax, mnPosition, mnSmallChange, mnLargeChange, mbAwtModel );
     AxControlModelBase::convertProperties( rPropMap, rConv );
 }
 
-void AxScrollBarModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+void AxScrollBarModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& )
 {
     bool bRes = false;
     if ( rPropSet.getProperty( bRes,  PROP_Enabled ) )
         setFlag( mnFlags, AX_FLAGS_ENABLED, bRes );
     rPropSet.getProperty( mnDelay, PROP_RepeatDelay );
     mnPropThumb = AX_PROPTHUMB_ON; // default
-    rConv.convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
-    rConv.convertToAxOrientation( rPropSet, maSize, mnOrientation );
+    ControlConverter::convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
+    ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    ControlConverter::convertToAxOrientation( rPropSet, maSize, mnOrientation );
 
     rPropSet.getProperty( mnMin, PROP_ScrollValueMin );
     rPropSet.getProperty( mnMax, PROP_ScrollValueMax );

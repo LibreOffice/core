@@ -298,8 +298,7 @@ namespace svt
         SolarMutexGuard aGuard;
         if ( createPicker() )
         {
-            ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
-            return aAccess.isControlSupported( aControlName );
+            return svt::OControlAccess::isControlSupported( aControlName );
         }
 
         return sal_False;

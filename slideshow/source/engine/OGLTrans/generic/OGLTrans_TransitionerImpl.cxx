@@ -206,7 +206,7 @@ protected:
             bool useMipmap,
             uno::Sequence<sal_Int8>& data,
             const OGLFormat* pFormat );
-    void prepareEnvironment ();
+    static void prepareEnvironment();
     const OGLFormat* chooseFormats();
 
 private:

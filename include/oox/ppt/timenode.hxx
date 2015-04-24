@@ -97,7 +97,7 @@ namespace oox { namespace ppt {
 
         static OUString getServiceName( sal_Int16 nNodeType );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
+        static ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
         createAndInsert(
             const ::oox::core::XmlFilterBase& rFilter,
             const OUString& rServiceName,

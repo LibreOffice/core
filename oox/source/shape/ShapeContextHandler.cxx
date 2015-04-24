@@ -463,7 +463,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
                     aValue.realloc(length+1);
 
                     diagramDrawing[0] = uno::makeAny( mxFilterBase->importFragment( aFragmentPath ) );
-                    diagramDrawing[1] = uno::makeAny( pShapePtr->resolveRelationshipsOfTypeFromOfficeDoc(
+                    diagramDrawing[1] = uno::makeAny( Shape::resolveRelationshipsOfTypeFromOfficeDoc(
                                 *mxFilterBase, aFragmentPath, "image" )  );
 
                     beans::PropertyValue* pValue = aValue.getArray();

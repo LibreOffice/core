@@ -247,7 +247,7 @@ void XclExpRoot::InitializeGlobals()
             }
             ScCompiler aCompiler( &rDoc, ScAddress());
             aCompiler.SetGrammar( rDoc.GetGrammar());
-            mrExpData.mxOpCodeMap = aCompiler.CreateOpCodeMap( aOpCodeMapping, true);
+            mrExpData.mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( aOpCodeMapping, true);
         } while(false);
     }
 
