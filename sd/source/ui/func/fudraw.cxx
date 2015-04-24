@@ -567,7 +567,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             if (eHit == SDRHIT_NONE)
             {
                 // found nothing -> look after at the masterpage
-                mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER);
+                mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER);
             }
             else if (eHit == SDRHIT_UNMARKEDOBJECT)
             {
@@ -596,7 +596,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 if (bDefPointer && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
                 {
                     // take a glance into the group
-                    if (mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                    if (mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP))
                         bDefPointer = !SetPointer(pObj, aPnt);
                 }
             }
@@ -784,7 +784,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
                 Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(aPosPixel)));
 
-                if (mpView->PickObj(aPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                if (mpView->PickObj(aPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP))
                     bReturn = SetHelpText(pObj, aPosPixel, aVEvt);
             }
         }

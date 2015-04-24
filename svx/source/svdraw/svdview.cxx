@@ -364,7 +364,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     {
         eHit=SDRHIT_GLUEPOINT; // deselected glue point hit
     }
-    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|SDRSEARCH_MARKED,&pObj,&nHitPassNum))
+    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SdrSearchOptions::DEEP|SdrSearchOptions::MARKED,&pObj,&nHitPassNum))
     {
         eHit=SDRHIT_MARKEDOBJECT;
         ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( pObj );
@@ -384,7 +384,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             }
         }
     }
-    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|SDRSEARCH_ALSOONMASTER|SDRSEARCH_WHOLEPAGE,&pObj,&nHitPassNum))
+    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SdrSearchOptions::DEEP|SdrSearchOptions::ALSOONMASTER|SdrSearchOptions::WHOLEPAGE,&pObj,&nHitPassNum))
     {
         // MasterPages and WholePage for Macro and URL
         eHit=SDRHIT_UNMARKEDOBJECT;

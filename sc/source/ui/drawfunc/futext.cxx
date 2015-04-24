@@ -202,7 +202,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         {
             if (pHdl == NULL &&
 //              pView->TakeTextEditObject(aMDPos, pObj, pPV) )
-                pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKTEXTEDIT) )
+                pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKTEXTEDIT) )
             {
                 SdrOutliner* pO = MakeOutliner();
                 lcl_UpdateHyphenator( *pO, pObj );
@@ -328,7 +328,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     if ( bRet )
                     pView->GetCreateObj()->SetGridOffset( aGridOff );
                 }
-                else if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                else if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
                 {
                     pView->UnmarkAllObj();
                     ScViewData& rViewData = pViewShell->GetViewData();

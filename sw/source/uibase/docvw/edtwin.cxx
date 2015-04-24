@@ -450,7 +450,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             SdrObject* pObj; SdrPageView* pPV;
             pSdrView->SetHitTolerancePixel( HIT_PIX );
             if ( bNotInSelObj && bExecHyperlinks &&
-                 pSdrView->PickObj( rLPt, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO ))
+                 pSdrView->PickObj( rLPt, pSdrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO ))
             {
                 SdrObjMacroHitRec aTmp;
                 aTmp.aPos = rLPt;
@@ -4243,7 +4243,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         {
             SdrObject* pObj;
             SdrPageView* pPV;
-            if (pSdrView && pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER ))
+            if (pSdrView && pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER ))
             {
                 std::map<SwFrmFmt*, SwFrmFmt*> aTextBoxShapes = SwTextBoxHelper::findShapes(rSh.GetDoc());
                 SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObj));

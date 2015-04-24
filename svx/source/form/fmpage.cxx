@@ -169,7 +169,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
 
     SdrObject* pObj = NULL;
     SdrPageView* pPV = NULL;
-    if ( !pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_DEEP ) )
+    if ( !pView->PickObj( aPos, 0, pObj, pPV, SdrSearchOptions::DEEP ) )
         return false;
 
     FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );

@@ -25,27 +25,36 @@
 #include <svx/svdsnpv.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
+// The following is not yet implemented, or just partially:
+enum class SdrSearchOptions
+{
+    NONE         = 0x0000,
+    DEEP         = 0x0001, /* recursive into group objects */
+    ALSOONMASTER = 0x0002, /* MasterPages are also scanned */
+    WHOLEPAGE    = 0x0004, /* Not just the ObjList of PageView */
+    TESTMARKABLE = 0x0008, /* just markable Objekte/Punkte/Handles/... */
+    TESTMACRO    = 0x0010, /* Just objects with macro */
+    TESTTEXTEDIT = 0x0020, /* Just TextEdit-enabed objects */
+    WITHTEXT     = 0x0040, /* Just objects with text */
+    TESTTEXTAREA = 0x0080, /* The textarea of objects with text  (TextEditHit) */
+    BACKWARD     = 0x0100, /* Backwards search */
+    NEXT         = 0x0200, /* Search starts behind the transferred object/point/... */
+    MARKED       = 0x0400, /* Just marked objects/points/... */
+    PASS2BOUND   = 0x0800, /* In case of empty search results, then 2nd. try with BoundRectHit */
+    PASS3NEAREST = 0x1000, /* In case of empty search results, then new 3rd. Try with NearestBoundRectHit */
+    BEFOREMARK   = 0x2000, /* if one marked one found, ignore all behind that */
 
-// The following is not yet implemented, or just particially:
-#define SDRSEARCH_DEEP         0x0001 /* recursive into group objects */
-#define SDRSEARCH_ALSOONMASTER 0x0002 /* MasterPages are also scanned */
-#define SDRSEARCH_WHOLEPAGE    0x0004 /* Not just the ObjList of PageView */
-#define SDRSEARCH_TESTMARKABLE 0x0008 /* just markable Objekte/Punkte/Handles/... */
-#define SDRSEARCH_TESTMACRO    0x0010 /* Just objects with macro */
-#define SDRSEARCH_TESTTEXTEDIT 0x0020 /* Just TextEdit-enabed objects */
-#define SDRSEARCH_WITHTEXT     0x0040 /* Just objects with text */
-#define SDRSEARCH_TESTTEXTAREA 0x0080 /* The textarea of objects with text  (TextEditHit) */
-#define SDRSEARCH_BACKWARD     0x0100 /* Backwards search */
-#define SDRSEARCH_NEXT         0x0200 /* Search starts behind the transferred object/point/... */
-#define SDRSEARCH_MARKED       0x0400 /* Just marked objects/points/... */
-#define SDRSEARCH_PASS2BOUND   0x0800 /* In case of empty search results, then 2nd. try with BoundRectHit */
-#define SDRSEARCH_PASS3NEAREST 0x1000 /* In case of empty search results, then new 3rd. Try with NearestBoundRectHit */
-#define SDRSEARCH_BEFOREMARK   0x2000 /* if one marked one found, ignore all behind that */
-
-#define SDRSEARCH_PICKMARKABLE (SDRSEARCH_TESTMARKABLE)
-#define SDRSEARCH_PICKTEXTEDIT (SDRSEARCH_DEEP|SDRSEARCH_TESTMARKABLE|SDRSEARCH_TESTTEXTEDIT)
-#define SDRSEARCH_PICKMACRO    (SDRSEARCH_DEEP|SDRSEARCH_ALSOONMASTER|SDRSEARCH_WHOLEPAGE|SDRSEARCH_TESTMACRO)
+    IMPISMASTER  = 0x8000, /* MasterPage is being searched right now */
+    PICKMARKABLE = TESTMARKABLE,
+    PICKTEXTEDIT = DEEP | TESTMARKABLE | TESTTEXTEDIT,
+    PICKMACRO    = DEEP | ALSOONMASTER | WHOLEPAGE | TESTMACRO,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SdrSearchOptions> : is_typed_flags<SdrSearchOptions, 0xbfff> {};
+}
 
 // SDRSEARCHPASS_... is return parameter value at PickObj().
 #define SDRSEARCHPASS_DIRECT       0x0000 /* Object is hit by 'direct hit' */
@@ -153,9 +162,9 @@ protected:
     void ForceUndirtyMrkPnt() const                                       { if (bMrkPntDirty) UndirtyMrkPnt(); }
 
     //HMHvoid ImpShowMarkHdl(bool bNoRefHdl);
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay) const;
-    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
-    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
+    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay) const;
+    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
+    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
     bool ImpIsFrameHandles() const;
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0, sal_uInt16 nOpt=0) const;
 
@@ -271,18 +280,18 @@ public:
     bool IsMarkedObjHit(const Point& rPnt, short nTol=-2) const;
 
     // Pick: Supported options for nOptions are SEARCH_NEXT, SEARCH_BACKWARD (ni)
-    SdrHdl* PickHandle(const Point& rPnt, sal_uIntPtr nOptions=0, SdrHdl* pHdl0=NULL) const;
+    SdrHdl* PickHandle(const Point& rPnt, SdrSearchOptions nOptions=SdrSearchOptions::NONE, SdrHdl* pHdl0=NULL) const;
 
     // Pick: Supported options for nOptions are:
-    // SDRSEARCH_DEEP SDRSEARCH_ALSOONMASTER SDRSEARCH_TESTMARKABLE SDRSEARCH_TESTTEXTEDIT
-    // SDRSEARCH_WITHTEXT SDRSEARCH_TESTTEXTAREA SDRSEARCH_BACKWARD SDRSEARCH_MARKED
-    // SDRSEARCH_WHOLEPAGE
-    bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions, SdrObject** ppRootObj, sal_uInt16* pnPassNum=NULL) const;
-    bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const;
+    // SdrSearchOptions::DEEP SdrSearchOptions::ALSOONMASTER SdrSearchOptions::TESTMARKABLE SdrSearchOptions::TESTTEXTEDIT
+    // SdrSearchOptions::WITHTEXT SdrSearchOptions::TESTTEXTAREA SdrSearchOptions::BACKWARD SdrSearchOptions::MARKED
+    // SdrSearchOptions::WHOLEPAGE
+    bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, sal_uInt16* pnPassNum=NULL) const;
+    bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
     bool MarkObj(const Point& rPnt, short nTol=-2, bool bToggle=false, bool bDeep=false);
 
-    // Pick: Supported options for nOptions are SDRSEARCH_PASS2BOUND und SDRSEARCH_PASS3NEAREST
-    bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const;
+    // Pick: Supported options for nOptions are SdrSearchOptions::PASS2BOUND und SdrSearchOptions::PASS3NEAREST
+    bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
 
     // Selects the most upper of the marked objects (O1) and scans from there
     // towards bottom direction, selecting the first non-marked object (O2).
@@ -382,7 +391,7 @@ public:
     // Attention: With each change of the glue point status the handle list is re-calculated.
     // All previously saved SdrHdl* became invalid by this, the same with the point IDs!
     // Pick: Supported options for nOptions are SEARCH_NEXT, SEARCH_BACKWARD
-    bool PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const;
+    bool PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
     bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV, bool bUnmark=false);
     bool UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV) { return MarkGluePoint(pObj,nId,pPV,true); }
     bool IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const;

@@ -239,7 +239,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            if (!rMEvt.IsMod2() && mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO))
+            if (!rMEvt.IsMod2() && mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO))
             {
                 mpView->BegMacroObj(aMDPos, nHitLog, pObj, pPV, mpWindow);
                 bReturn = true;
@@ -303,7 +303,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 && mpViewShell->ISA(DrawViewShell)
                 )
             {
-                if(mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER))
+                if(mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER))
                 {
                     // Animate object when not just selecting.
                     if ( ! bSelectionOnly)
@@ -314,7 +314,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         if(rMEvt.GetClicks() == 1)
                         {
                             // Look into the group
-                            if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                            if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP))
                                 bReturn = AnimateObj(pObj, aMDPos);
                         }
                         else if( !bReadOnly && rMEvt.GetClicks() == 2)
@@ -682,7 +682,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 * If a user wants to click on an object in front of a marked
                 * one, he releases the mouse button immediately
                 **************************************************************/
-                if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
                 {
                     mpView->UnmarkAllObj();
                     mpView->MarkObj(pObj,pPV,false,false);
@@ -1504,7 +1504,7 @@ SdrObject* FuSelection::pickObject (const Point& rTestPoint)
     SdrObject* pObject = NULL;
     SdrPageView* pPageView;
     sal_uInt16 nHitLog = sal_uInt16 (mpWindow->PixelToLogic(Size(HITPIX,0)).Width());
-    mpView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SDRSEARCH_PICKMARKABLE);
+    mpView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SdrSearchOptions::PICKMARKABLE);
     return pObject;
 }
 

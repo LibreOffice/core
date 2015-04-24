@@ -153,7 +153,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             SdrObject* pObj;
             SdrPageView* pPV;
             bool bAlt = rMEvt.IsMod2();
-            if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
+            if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO) )
             {
                 pView->BegMacroObj(aMDPos, pObj, pPV, pWindow);
                 bReturn = true;
@@ -161,7 +161,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             else
             {
                 OUString sURL, sTarget;
-                if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER))
+                if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER))
                 {
                    // Support for imported Excel docs
                    // Excel is of course not consistent and allows
@@ -184,7 +184,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                        if ( !pTmpInfo || pTmpInfo->GetMacro().isEmpty() )
                        {
                            SdrObject* pHit = NULL;
-                           if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
+                           if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SdrSearchOptions::DEEP ) )
                                pObj = pHit;
                        }
                    }
@@ -435,7 +435,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 * one, he releases the mouse button immediately
                 **************************************************************/
                 SdrPageView* pPV = NULL;
-                if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
                 {
                     pView->UnmarkAllObj();
                     pView->MarkObj(pObj,pPV,false,false);

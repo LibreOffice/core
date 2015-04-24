@@ -49,7 +49,7 @@ public:
 protected:
     /// override to handle HitTest for some objects specially
     using SdrView::CheckSingleSdrObjectHit;
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const SAL_OVERRIDE;
+    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay) const SAL_OVERRIDE;
 };
 
 } // namespace basctl

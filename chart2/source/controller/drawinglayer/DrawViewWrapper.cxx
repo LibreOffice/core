@@ -175,7 +175,7 @@ void DrawViewWrapper::SetMarkHandles()
 SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 {
     SdrObject* pRet = NULL;
-    sal_uLong nOptions = SDRSEARCH_DEEP | SDRSEARCH_TESTMARKABLE;
+    SdrSearchOptions nOptions = SdrSearchOptions::DEEP | SdrSearchOptions::TESTMARKABLE;
 
     SdrPageView* pSdrPageView = this->GetPageView();
     this->SdrView::PickObj(rPnt, lcl_getHitTolerance( this->GetFirstOutputDevice() ), pRet, pSdrPageView, nOptions);

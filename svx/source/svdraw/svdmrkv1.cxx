@@ -467,14 +467,14 @@ bool SdrMarkView::MarkGluePoints(const Rectangle* pRect, bool bUnmark)
     return bChgd;
 }
 
-bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, sal_uIntPtr nOptions) const
+bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, SdrSearchOptions nOptions) const
 {
     SdrObject* pObj0=rpObj;
     sal_uInt16 nId0=rnId;
     rpObj=NULL; rpPV=NULL; rnId=0;
     if (!IsGluePointEditMode()) return false;
-    bool bBack=(nOptions & SDRSEARCH_BACKWARD) !=0;
-    bool bNext=(nOptions & SDRSEARCH_NEXT) !=0;
+    bool bBack(nOptions & SdrSearchOptions::BACKWARD);
+    bool bNext(nOptions & SdrSearchOptions::NEXT);
     OutputDevice* pOut=const_cast<OutputDevice*>(pActualOutDev.get());
     if (pOut==NULL) pOut=GetFirstOutputDevice();
     if (pOut==NULL) return false;

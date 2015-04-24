@@ -103,7 +103,7 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
             SdrObject* pPickObj=0;
             SdrPageView* pPV=0;
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-            mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pPickObj, pPV, SDRSEARCH_PICKMARKABLE);
+            mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pPickObj, pPV, SdrSearchOptions::PICKMARKABLE);
 
             if( (pPickObj != 0) && !pPickObj->IsEmptyPresObj() )
             {
@@ -162,7 +162,7 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
             SdrObject* pObj=0;
             SdrPageView* pPV=0;
-            bool bOverMarkableObject = mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pObj, pPV, SDRSEARCH_PICKMARKABLE);
+            bool bOverMarkableObject = mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pObj, pPV, SdrSearchOptions::PICKMARKABLE);
 
             if(bOverMarkableObject && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
                 mpWindow->SetPointer(Pointer(POINTER_FILL));

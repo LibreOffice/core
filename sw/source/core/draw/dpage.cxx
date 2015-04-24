@@ -184,7 +184,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
 
         SdrPageView* pPV;
         SdrObject* pObj;
-        if( pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_PICKMACRO ) &&
+        if( pView->PickObj( aPos, 0, pObj, pPV, SdrSearchOptions::PICKMACRO ) &&
              pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();

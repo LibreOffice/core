@@ -1473,7 +1473,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     sal_uInt16 nOld = pDView->GetHitTolerancePixel();
     pDView->SetHitTolerancePixel( 2 );
 
-    if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV,SDRSEARCH_PICKMACRO ) &&
+    if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV,SdrSearchOptions::PICKMACRO ) &&
         pObj->ISA(SwVirtFlyDrawObj) )
     {
         SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
@@ -1583,7 +1583,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromObj( const Point& rPt, SwRect** pRectToFill
         // tolerance for Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
+        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE ) )
         {
            // first check it:
             if ( pObj->ISA(SwVirtFlyDrawObj) )
@@ -1707,7 +1707,7 @@ ObjCntType SwFEShell::GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const
         // tolerance for Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
+        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE ) )
             eType = GetObjCntType( *(rpObj = pObj) );
 
         pDView->SetHitTolerancePixel( nOld );

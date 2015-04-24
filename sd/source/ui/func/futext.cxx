@@ -654,7 +654,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             /*************************************************************
             * From text mode, you don't want to rotate immediately.
             **************************************************************/
-            if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+            if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
             {
                 mpView->UnmarkAllObj();
                 mpView->MarkObj(pObj,pPV,false,false);
