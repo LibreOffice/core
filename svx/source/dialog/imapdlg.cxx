@@ -251,7 +251,7 @@ bool SvxIMapDlg::Close()
             bRet = false;
     }
 
-    return( bRet ? SfxModelessDialog::Close() : false );
+    return bRet && SfxModelessDialog::Close();
 }
 
 // Enabled or disable all Controls

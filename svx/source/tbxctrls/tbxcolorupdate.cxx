@@ -48,7 +48,7 @@ namespace svx
         , maCurColor(COL_TRANSPARENT)
     {
         DBG_ASSERT(pToolBox, "ToolBox not found :-(");
-        mbWasHiContrastMode = pToolBox ? pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode() : false;
+        mbWasHiContrastMode = pToolBox && pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
         switch (mnSlotId)
         {
             case SID_ATTR_CHAR_COLOR:

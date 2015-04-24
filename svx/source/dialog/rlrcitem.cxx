@@ -62,14 +62,14 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_ATTR_LONG_LRSPACE:
         {
             const SvxLongLRSpaceItem *pItem = PTR_CAST(SvxLongLRSpaceItem, pState);
-            DBG_ASSERT(pState? 0 != pItem: true, "SvxLRSpaceItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
             rRuler.UpdateFrame(pItem);
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
         {
             const SvxLongULSpaceItem *pItem = PTR_CAST(SvxLongULSpaceItem, pState);
-            DBG_ASSERT(pState? 0 != pItem: true, "SvxULSpaceItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxULSpaceItem expected");
             rRuler.UpdateFrame(pItem);
             break;
         }
@@ -77,7 +77,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_ATTR_TABSTOP:
         {
             const SvxTabStopItem *pItem = PTR_CAST(SvxTabStopItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: true, "SvxTabStopItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxTabStopItem expected");
             rRuler.Update(pItem);
             break;
         }
@@ -85,7 +85,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_ATTR_PARA_LRSPACE:
         {
             const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: true, "SvxLRSpaceItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
             rRuler.UpdatePara(pItem);
             break;
         }
@@ -95,7 +95,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_RULER_ROWS_VERTICAL:
         {
             const SvxColumnItem *pItem = PTR_CAST(SvxColumnItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: true, "SvxColumnItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxColumnItem expected");
 #ifdef DBG_UTIL
             if(pItem)
             {
@@ -114,35 +114,35 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_RULER_PAGE_POS:
         {   // Position page, page width
             const SvxPagePosSizeItem *pItem = PTR_CAST(SvxPagePosSizeItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: true, "SvxPagePosSizeItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxPagePosSizeItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_OBJECT:
         {   // Object selection
             const SvxObjectItem *pItem = PTR_CAST(SvxObjectItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: true, "SvxObjectItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxObjectItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_PROTECT:
         {
             const SvxProtectItem *pItem = PTR_CAST(SvxProtectItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: true, "SvxProtectItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxProtectItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_BORDER_DISTANCE:
         {
             const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: true, "SvxLRSpaceItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
             rRuler.UpdateParaBorder(pItem);
         }
         break;
         case SID_RULER_TEXT_RIGHT_TO_LEFT :
         {
             const SfxBoolItem *pItem = PTR_CAST(SfxBoolItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: true, "SfxBoolItem expected");
+            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SfxBoolItem expected");
             rRuler.UpdateTextRTL(pItem);
         }
         break;

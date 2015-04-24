@@ -1474,8 +1474,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     E3dScene* pScene = NULL;
     SdrObject* pObjHit = (bPrev) ? pBtmObjHit : pTopObjHit;
     bool bRemap = pObjHit->ISA(E3dCompoundObject)
-        ? static_cast<E3dCompoundObject*>(pObjHit)->IsAOrdNumRemapCandidate(pScene)
-        : false;
+        && static_cast<E3dCompoundObject*>(pObjHit)->IsAOrdNumRemapCandidate(pScene);
 
     if(bPrev)
     {

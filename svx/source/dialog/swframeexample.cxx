@@ -689,7 +689,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
     DrawRect_Impl(aRect, m_aTransColor, m_aAlignColor);
 
     // Frame View
-    bool bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) ? true : bTrans;
+    bool bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) || bTrans;
     DrawRect_Impl( aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor );
 }
 

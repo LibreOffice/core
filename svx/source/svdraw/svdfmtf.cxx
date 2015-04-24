@@ -561,7 +561,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                         aPoly,
                         maClip,
                         true,
-                        aPoly.isClosed() ? false : true));
+                        !aPoly.isClosed()));
                 const basegfx::B2DRange aNewRange(aNewPoly.getB2DRange());
 
                 if(!aNewRange.isEmpty())

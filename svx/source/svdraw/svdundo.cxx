@@ -1736,32 +1736,32 @@ SdrUndoAction* SdrUndoFactory::CreateUndoGeoObject( SdrObject& rObject )
 
 SdrUndoAction* SdrUndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 {
-    return new SdrUndoAttrObj( rObject, bStyleSheet1 ? true : false, bSaveText ? true : false );
+    return new SdrUndoAttrObj( rObject, bStyleSheet1, bSaveText );
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return new SdrUndoRemoveObj( rObject, bOrdNumDirect ? true : false );
+    return new SdrUndoRemoveObj( rObject, bOrdNumDirect );
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return new SdrUndoInsertObj( rObject, bOrdNumDirect ? true : false );
+    return new SdrUndoInsertObj( rObject, bOrdNumDirect );
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return new SdrUndoDelObj( rObject, bOrdNumDirect ? true : false );
+    return new SdrUndoDelObj( rObject, bOrdNumDirect );
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return new SdrUndoNewObj( rObject, bOrdNumDirect ? true : false );
+    return new SdrUndoNewObj( rObject, bOrdNumDirect );
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoCopyObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return new SdrUndoCopyObj( rObject, bOrdNumDirect ? true : false );
+    return new SdrUndoCopyObj( rObject, bOrdNumDirect );
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
@@ -1771,7 +1771,7 @@ SdrUndoAction* SdrUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_u
 
 SdrUndoAction* SdrUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 {
-    return new SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect ? true : false );
+    return new SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect );
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )

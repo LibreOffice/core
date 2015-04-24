@@ -1616,8 +1616,8 @@ bool FormController::determineLockState() const
     if (m_bFiltering || !xResultSet.is() || !isRowSetAlive(xResultSet))
         return true;
     else
-        return (m_bCanInsert && m_bCurrentRecordNew) ? false
-        :  xResultSet->isBeforeFirst() || xResultSet->isAfterLast() || xResultSet->rowDeleted() || !m_bCanUpdate;
+        return !(m_bCanInsert && m_bCurrentRecordNew)
+            && (xResultSet->isBeforeFirst() || xResultSet->isAfterLast() || xResultSet->rowDeleted() || !m_bCanUpdate);
 }
 
 //  FocusListener

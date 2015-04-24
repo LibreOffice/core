@@ -519,7 +519,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
             //Todo: Implement Dragging functionality for leftmost edge of table.
             if( (nEdge >= 0) && (nEdge <= getColumnCount()) )
             {
-                const bool bRTL = !mpTableObj? false: (mpTableObj->GetWritingMode() == WritingMode_RL_TB);
+                const bool bRTL = mpTableObj != nullptr && (mpTableObj->GetWritingMode() == WritingMode_RL_TB);
                 sal_Int32 nWidth;
                 if(bRTL)
                 {

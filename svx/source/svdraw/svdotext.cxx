@@ -1793,20 +1793,20 @@ long SdrTextObj::GetMaxTextFrameWidth() const
 
 bool SdrTextObj::IsFontwork() const
 {
-    return (bTextFrame) ? false // Default is FALSE
-        : static_cast<const XFormTextStyleItem&>(GetObjectItemSet().Get(XATTR_FORMTXTSTYLE)).GetValue() != XFT_NONE;
+    return !bTextFrame // Default is FALSE
+        && static_cast<const XFormTextStyleItem&>(GetObjectItemSet().Get(XATTR_FORMTXTSTYLE)).GetValue() != XFT_NONE;
 }
 
 bool SdrTextObj::IsHideContour() const
 {
-    return (bTextFrame) ? false // Default is: no, don't HideContour; HideContour not together with TextFrames
-        : static_cast<const XFormTextHideFormItem&>(GetObjectItemSet().Get(XATTR_FORMTXTHIDEFORM)).GetValue();
+    return !bTextFrame // Default is: no, don't HideContour; HideContour not together with TextFrames
+        && static_cast<const XFormTextHideFormItem&>(GetObjectItemSet().Get(XATTR_FORMTXTHIDEFORM)).GetValue();
 }
 
 bool SdrTextObj::IsContourTextFrame() const
 {
-    return (bTextFrame) ? false // ContourFrame not together with normal TextFrames
-        : static_cast<const SdrOnOffItem&>(GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue();
+    return !bTextFrame // ContourFrame not together with normal TextFrames
+        && static_cast<const SdrOnOffItem&>(GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue();
 }
 
 long SdrTextObj::GetTextLeftDistance() const

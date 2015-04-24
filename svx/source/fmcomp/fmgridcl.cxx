@@ -955,7 +955,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         if ( eInspectorAction != eNone )
         {
             FmInterfaceItem aIFaceItem( SID_FM_SHOW_PROPERTY_BROWSER, xColumnToInspect );
-            SfxBoolItem aShowItem( SID_FM_SHOW_PROPERTIES, eInspectorAction == eCloseInspector ? false : true );
+            SfxBoolItem aShowItem( SID_FM_SHOW_PROPERTIES, eInspectorAction != eCloseInspector );
 
             pCurrentFrame->GetBindings().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON,
                                       &aIFaceItem, &aShowItem, 0L );

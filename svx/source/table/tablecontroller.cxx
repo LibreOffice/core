@@ -241,7 +241,7 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
 
     sal_uInt16 nAction = getKeyboardAction( rKEvt, pWindow );
 
-    return executeAction( nAction, ( rKEvt.GetKeyCode().IsShift() ) ? true : false, pWindow );
+    return executeAction( nAction, rKEvt.GetKeyCode().IsShift(), pWindow );
 }
 
 

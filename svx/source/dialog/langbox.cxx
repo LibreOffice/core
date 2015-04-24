@@ -347,8 +347,8 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
             if ( xSpell.is() )
                 m_pSpellUsedLang = new Sequence< sal_Int16 >( xSpell->getLanguages() );
         }
-        bFound = m_pSpellUsedLang ?
-            lcl_SeqHasLang( *m_pSpellUsedLang, nRealLang ) : false;
+        bFound = m_pSpellUsedLang &&
+            lcl_SeqHasLang( *m_pSpellUsedLang, nRealLang );
 
         nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }

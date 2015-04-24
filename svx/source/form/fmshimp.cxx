@@ -2733,8 +2733,8 @@ bool FmXFormShell::IsPropBrwOpen() const
     if ( impl_checkDisposed() )
         return false;
 
-    return( ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() ) ?
-            m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES) : false );
+    return m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame()
+        && m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES);
 }
 
 

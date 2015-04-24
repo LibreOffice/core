@@ -112,7 +112,7 @@ private:
 
     void                            SetupOutliner();
 
-    bool                            HasView() const { return mpView ? true : false; }
+    bool                            HasView() const { return mpView != nullptr; }
     bool                            IsEditMode() const
                                     {
                                         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
@@ -921,7 +921,7 @@ void SvxTextEditSourceImpl::unlock()
 
 bool SvxTextEditSourceImpl::IsValid() const
 {
-    return mpView && mpWindow ? true : false;
+    return mpView && mpWindow;
 }
 
 Rectangle SvxTextEditSourceImpl::GetVisArea()

@@ -662,7 +662,7 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
 
         mpTbxIndent_IncDec->EnableItem(
             nSID == SID_INC_INDENT ? nIdIncrIndent : nIdDecrIndent,
-            ( pState && eState == SfxItemState::UNKNOWN ) ? true : false );
+            pState && eState == SfxItemState::UNKNOWN );
     }
 }
 

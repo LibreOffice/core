@@ -614,7 +614,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             // PropertyBrowser anzeigen
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, false);
-            bool bShow = pShowItem ? pShowItem->GetValue() : true;
+            bool bShow = pShowItem == nullptr || pShowItem->GetValue();
 
             InterfaceBag aOnlyTheForm;
             aOnlyTheForm.insert( Reference< XInterface >( GetImpl()->getCurrentForm(), UNO_QUERY ) );
@@ -628,7 +628,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CTL_PROPERTIES:
         {
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, false);
-            bool bShow = pShowItem ? pShowItem->GetValue() : true;
+            bool bShow = pShowItem == nullptr || pShowItem->GetValue();
 
             OSL_ENSURE( GetImpl()->onlyControlsAreMarked(), "FmFormShell::Execute: ControlProperties should be disabled!" );
             if ( bShow )
