@@ -2086,7 +2086,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         const SfxPoolItem* pItem;
 
         Color* pCol = 0;
-        if( css::util::NumberFormat::TEXT != nFmt )
+        if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nFmt) )
         {
             // special text format:
             OUString sTmp;
@@ -2236,14 +2236,14 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     // is it newer or has the current been removed?
                     if( pNewVal )
                     {
-                        if( css::util::NumberFormat::TEXT != nNewFmt )
+                        if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nNewFmt) )
                         {
                             if( SfxItemState::SET == GetItemState( RES_BOXATR_VALUE, false ))
                                 nOldFmt = css::util::NumberFormat::TEXT;
                             else
                                 nNewFmt = css::util::NumberFormat::TEXT;
                         }
-                        else if( css::util::NumberFormat::TEXT == nNewFmt )
+                        else if( css::util::NumberFormat::TEXT == static_cast<sal_Int16>(nNewFmt) )
                             nOldFmt = 0;
                     }
 
@@ -2259,7 +2259,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     //          - align top for vertical alignment, if BOTTOM is set
                     SvNumberFormatter* pNumFmtr = GetDoc()->GetNumberFormatter();
                     bool bNewIsTxtFmt = pNumFmtr->IsTextFormat( nNewFmt ) ||
-                                        css::util::NumberFormat::TEXT == nNewFmt;
+                                        css::util::NumberFormat::TEXT == static_cast<sal_Int16>(nNewFmt);
 
                     if( (!bNewIsTxtFmt && nOldFmt != nNewFmt) || pNewFml )
                     {

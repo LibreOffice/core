@@ -2350,7 +2350,7 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
         RedlineModeInternGuard aGuard( rDoc, nsRedlineMode_t::REDLINE_NONE, nsRedlineMode_t::REDLINE_IGNORE );
         pBoxFmt->SetFmtAttr( aBoxSet );
     }
-    else if( css::util::NumberFormat::TEXT != nFmtIdx )
+    else if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nFmtIdx) )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
                             RES_BOXATR_FORMAT, RES_BOXATR_VALUE );

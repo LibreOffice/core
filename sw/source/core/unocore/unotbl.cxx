@@ -735,7 +735,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
     // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
     if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
         ||  pDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue())
-        ||  static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue() == css::util::NumberFormat::TEXT)
+        ||  static_cast<sal_Int16>(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue()) == css::util::NumberFormat::TEXT)
     {
         aSet.Put(SwTblBoxNumFormat(0));
     }
