@@ -380,7 +380,7 @@ void ZCodec::InitDecompress(SvStream & inStream)
         if ( nFlags & GZ_HEAD_CRC )
             inStream.SeekRel( 2 );
         if ( mbStatus )
-            mbStatus = ( inflateInit2( PZSTREAM, -MAX_WBITS) != Z_OK ) ? false : true;
+            mbStatus = inflateInit2( PZSTREAM, -MAX_WBITS) == Z_OK;
     }
     else
     {

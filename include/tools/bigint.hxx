@@ -114,7 +114,7 @@ public:
     operator        sal_uInt16() const;
     operator        sal_uIntPtr() const;
 
-    void            Set( bool bSet ) { bIsSet = bSet ? true : false; }
+    void            Set( bool bSet ) { bIsSet = bSet; }
 
     bool        IsSet() const { return (bool)bIsSet; }
     bool        IsNeg() const;
