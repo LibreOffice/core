@@ -316,7 +316,7 @@ namespace connectivity
         // we the possibility to save a any for bookmarks
         ORowSetValue& operator=(const ::com::sun::star::uno::Any& _rAny);
 
-        operator bool() const   {   return isNull() ? false : getBool();    }
+        operator bool() const   {   return !isNull() && getBool();    }
         operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8();   }
         operator sal_uInt8() const  {   return isNull() ? static_cast<sal_uInt8>(0) : getUInt8(); }
 

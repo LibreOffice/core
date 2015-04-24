@@ -271,9 +271,7 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
                     OUString sColumnName =
                         pColumnRef->getChild(0)->getTokenValue();
                     bool bAscending =
-                        SQL_ISTOKEN(pAscendingDescending, DESC)?
-                        false:
-                        true;
+                        !SQL_ISTOKEN(pAscendingDescending, DESC);
 
                     return new KabSimpleOrder(sColumnName, bAscending);
                 }
