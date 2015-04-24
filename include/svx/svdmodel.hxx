@@ -32,6 +32,7 @@
 #include <tools/datetime.hxx>
 #include <tools/fract.hxx>
 #include <svl/hint.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <svl/style.hxx>
 #include <svx/xtable.hxx>
@@ -88,11 +89,16 @@ namespace sfx2
 }
 
 
-#define SDR_SWAPGRAPHICSMODE_TEMP       0x00000001
-#define SDR_SWAPGRAPHICSMODE_DOC        0x00000002
-#define SDR_SWAPGRAPHICSMODE_PURGE      0x00000100
-#define SDR_SWAPGRAPHICSMODE_DEFAULT    (SDR_SWAPGRAPHICSMODE_TEMP|SDR_SWAPGRAPHICSMODE_DOC|SDR_SWAPGRAPHICSMODE_PURGE)
-
+enum class SdrSwapGraphicsMode
+{
+    TEMP       = 0x0001,
+    PURGE      = 0x0100,
+    DEFAULT    = TEMP | PURGE,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SdrSwapGraphicsMode> : is_typed_flags<SdrSwapGraphicsMode, 0x0101> {};
+}
 
 
 enum SdrHintKind
@@ -232,20 +238,20 @@ public:
 
     sal_uInt16          nStarDrawPreviewMasterPageNum;
     SvxForbiddenCharactersTable* mpForbiddenCharactersTable;
-    sal_uIntPtr         nSwapGraphicsMode;
+    SdrSwapGraphicsMode nSwapGraphicsMode;
 
-    SdrOutlinerCache* mpOutlinerCache;
+    SdrOutlinerCache*   mpOutlinerCache;
     //get a vector of all the SdrOutliner belonging to the model
     std::vector<SdrOutliner*> GetActiveOutliners() const;
-    SdrModelImpl*   mpImpl;
+    SdrModelImpl*       mpImpl;
     sal_uInt16          mnCharCompressType;
     sal_uInt16          mnHandoutPageCount;
     sal_uInt16          nReserveUInt6;
     sal_uInt16          nReserveUInt7;
-    bool            mbModelLocked;
-    bool            mbKernAsianPunctuation;
-    bool            mbAddExtLeading;
-    bool            mbInDestruction;
+    bool                mbModelLocked;
+    bool                mbKernAsianPunctuation;
+    bool                mbAddExtLeading;
+    bool                mbInDestruction;
 
     // Color, Dash, Line-End, Hatch, Gradient, Bitmap property lists ...
     XPropertyListRef maProperties[XPROPERTY_LIST_COUNT];
@@ -481,8 +487,8 @@ public:
     // Default=FALSE. Flag is not persistent.
     bool            IsSwapGraphics() const { return bSwapGraphics; }
     void            SetSwapGraphics(bool bJa = true);
-    void            SetSwapGraphicsMode(sal_uIntPtr nMode) { nSwapGraphicsMode = nMode; }
-    sal_uIntPtr         GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
+    void            SetSwapGraphicsMode(SdrSwapGraphicsMode nMode) { nSwapGraphicsMode = nMode; }
+    SdrSwapGraphicsMode GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
 
     bool            IsSaveOLEPreview() const          { return bSaveOLEPreview; }
     void            SetSaveOLEPreview( bool bSet) { bSaveOLEPreview = bSet; }

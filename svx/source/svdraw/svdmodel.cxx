@@ -152,7 +152,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     bSaveCompressed=false;
     bSaveNative=false;
     bSwapGraphics=false;
-    nSwapGraphicsMode=SDR_SWAPGRAPHICSMODE_DEFAULT;
+    nSwapGraphicsMode=SdrSwapGraphicsMode::DEFAULT;
     bSaveOLEPreview=false;
     bPasteResize=false;
     bNoBitmapCaching=false;

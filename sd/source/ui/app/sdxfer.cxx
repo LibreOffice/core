@@ -466,12 +466,12 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     }
     else if( mpOLEDataHelper && mpOLEDataHelper->HasFormat( rFlavor ) )
     {
-        sal_uLong nOldSwapMode = 0;
+        SdrSwapGraphicsMode nOldSwapMode;
 
         if( mpSdDrawDocumentIntern )
         {
             nOldSwapMode = mpSdDrawDocumentIntern->GetSwapGraphicsMode();
-            mpSdDrawDocumentIntern->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
+            mpSdDrawDocumentIntern->SetSwapGraphicsMode( SdrSwapGraphicsMode::PURGE );
         }
 
         // TODO/LATER: support all the graphical formats, the embedded object scenario should not have separated handling
@@ -544,12 +544,10 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
         else if( nFormat == SotClipboardFormatId::EMBED_SOURCE )
         {
-            sal_uLong nOldSwapMode = 0;
-
             if( mpSdDrawDocumentIntern )
             {
-                nOldSwapMode = mpSdDrawDocumentIntern->GetSwapGraphicsMode();
-                mpSdDrawDocumentIntern->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
+                SdrSwapGraphicsMode nOldSwapMode = mpSdDrawDocumentIntern->GetSwapGraphicsMode();
+                mpSdDrawDocumentIntern->SetSwapGraphicsMode( SdrSwapGraphicsMode::PURGE );
 
                 if( !maDocShellRef.Is() )
                 {

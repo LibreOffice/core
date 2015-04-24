@@ -1280,14 +1280,14 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             // ## test only if there are VOCs other than the preview renderer
             if(!GetViewContact().HasViewObjectContacts(true))
             {
-                const sal_uIntPtr   nSwapMode = pModel->GetSwapGraphicsMode();
+                const SdrSwapGraphicsMode nSwapMode = pModel->GetSwapGraphicsMode();
 
                 if( ( pGraphicLink ) &&
-                    ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
+                    ( nSwapMode & SdrSwapGraphicsMode::PURGE ) )
                 {
                     pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
                 }
-                else if( nSwapMode & SDR_SWAPGRAPHICSMODE_TEMP )
+                else if( nSwapMode & SdrSwapGraphicsMode::TEMP )
                 {
                     pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
                     pGraphic->SetUserData();

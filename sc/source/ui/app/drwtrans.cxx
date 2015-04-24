@@ -365,12 +365,12 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
 
         if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
         {
-            sal_uLong nOldSwapMode = 0;
+            SdrSwapGraphicsMode nOldSwapMode;
 
             if( pModel )
             {
                 nOldSwapMode = pModel->GetSwapGraphicsMode();
-                pModel->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
+                pModel->SetSwapGraphicsMode( SdrSwapGraphicsMode::PURGE );
             }
 
             bOK = SetAny( aOleData.GetAny(rFlavor, rDestDoc), rFlavor );

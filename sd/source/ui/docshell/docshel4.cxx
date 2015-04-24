@@ -606,9 +606,9 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
         if( pFilter )
         {
-            const sal_uLong nOldSwapMode = mpDoc->GetSwapGraphicsMode();
+            const SdrSwapGraphicsMode nOldSwapMode = mpDoc->GetSwapGraphicsMode();
 
-            mpDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
+            mpDoc->SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
 
             bRet = pFilter->Export();
             if( !bRet )
