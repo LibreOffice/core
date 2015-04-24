@@ -264,11 +264,11 @@ public:
     Atom AddLanguage( const char* );
 
     bool              IsPreload() const
-                          { return (nFlags & PRELOAD_FLAG) ? true : false; }
+                          { return (nFlags & PRELOAD_FLAG) != 0; }
     bool              IsSysResTest() const
-                          { return (nFlags & NOSYSRESTEST_FLAG) ? false : true; }
+                          { return (nFlags & NOSYSRESTEST_FLAG) == 0; }
     bool              IsSrsDefault() const
-                          { return (nFlags & SRSDEFAULT_FLAG) ? true : false; }
+                          { return (nFlags & SRSDEFAULT_FLAG) != 0; }
     OString           ChangeLanguage(const OString & rNewLang);
     const std::vector< sal_uInt32 >& GetFallbacks() const
                           { return aLangFallbacks; }
