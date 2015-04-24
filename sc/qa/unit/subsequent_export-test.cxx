@@ -140,6 +140,7 @@ public:
     void testSheetTextBoxHyperlink();
     void testFontSize();
     void testSheetCharacterKerningSpace();
+    void testTextUnderlineColor();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -190,6 +191,7 @@ public:
     CPPUNIT_TEST(testSheetTextBoxHyperlink);
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testSheetCharacterKerningSpace);
+    CPPUNIT_TEST(testTextUnderlineColor);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2573,6 +2575,19 @@ void ScExportTest::testSheetCharacterKerningSpace()
     xDocSh->DoClose();
 }
 
+void ScExportTest::testTextUnderlineColor()
+{
+
+    ScDocShellRef xDocSh = loadDoc("underlineColor.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    OUString color = getXPath(pDoc,
+            "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/a:solidFill/a:srgbClr", "val");
+    // make sure that the underline color is RED
+    CPPUNIT_ASSERT(color.equals("ff0000"));
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
