@@ -95,7 +95,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
         SfxViewFrame* pViewFrm = GetViewFrame();
         SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-        SC_MOD()->SetRefDialog( nId, pWnd ? false : true );
+        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
    }
    else if( nSlotId == FID_ADD_NAME )
    {
@@ -105,7 +105,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
         SfxViewFrame* pViewFrm = GetViewFrame();
         SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-        SC_MOD()->SetRefDialog( nId, pWnd ? false : true );
+        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
    }
    else
    {

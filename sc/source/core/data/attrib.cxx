@@ -977,7 +977,7 @@ bool ScPageScaleToItem::operator==( const SfxPoolItem& rCmp ) const
 {
     assert(SfxPoolItem::operator==(rCmp));
     const ScPageScaleToItem& rPageCmp = static_cast< const ScPageScaleToItem& >( rCmp );
-    return ((mnWidth == rPageCmp.mnWidth) && (mnHeight == rPageCmp.mnHeight)) ? true : false;
+    return (mnWidth == rPageCmp.mnWidth) && (mnHeight == rPageCmp.mnHeight);
 }
 
 namespace {

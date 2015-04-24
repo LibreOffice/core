@@ -300,7 +300,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
                 rReq.Ignore();
             }
             break;
@@ -311,7 +311,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
 
@@ -375,7 +375,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
 
@@ -385,7 +385,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
 
@@ -395,7 +395,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
 

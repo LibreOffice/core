@@ -803,7 +803,7 @@ bool ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 
     //  AttrArray only looks for merged cells
 
-    return pAttrArray ? pAttrArray->TestInsertCol(nStartRow, nEndRow) : true;
+    return pAttrArray == nullptr || pAttrArray->TestInsertCol(nStartRow, nEndRow);
 }
 
 bool ScColumn::TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const

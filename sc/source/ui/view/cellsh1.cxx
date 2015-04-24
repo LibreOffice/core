@@ -905,7 +905,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
 
             }
             break;
@@ -915,7 +915,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
         case SID_DESCRIPTIVE_STATISTICS_DIALOG:
@@ -924,7 +924,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
         case SID_ANALYSIS_OF_VARIANCE_DIALOG:
@@ -933,7 +933,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
         case SID_CORRELATION_DIALOG:
@@ -942,7 +942,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
         case SID_COVARIANCE_DIALOG:
@@ -951,7 +951,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
         case SID_EXPONENTIAL_SMOOTHING_DIALOG:
@@ -960,7 +960,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
         case SID_MOVING_AVERAGE_DIALOG:
@@ -969,7 +969,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
         case SID_TTEST_DIALOG:
@@ -978,7 +978,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
 
             }
             break;
@@ -988,7 +988,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
 
             }
             break;
@@ -998,7 +998,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
 
             }
             break;
@@ -1008,7 +1008,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
 
             }
             break;
@@ -1889,7 +1889,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
         case FID_ADD_NAME:
@@ -1898,7 +1898,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
 
@@ -2050,7 +2050,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : true );
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
 
             }
             break;
@@ -2699,7 +2699,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         sal_uInt16 nId  = ScPivotLayoutWrapper::GetChildWindowId();
         SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
         SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
-        pScMod->SetRefDialog( nId, pWnd ? false : true );
+        pScMod->SetRefDialog( nId, pWnd == nullptr );
     }
 }
 
@@ -2718,7 +2718,7 @@ void ScCellShell::ExecuteXMLSourceDialog()
     sal_uInt16 nId = ScXMLSourceDlgWrapper::GetChildWindowId();
     SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
     SfxChildWindow* pWnd = pViewFrame->GetChildWindow(nId);
-    pScMod->SetRefDialog(nId, pWnd ? false : true);
+    pScMod->SetRefDialog(nId, pWnd == nullptr);
 }
 
 void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)

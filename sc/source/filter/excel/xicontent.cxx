@@ -1167,12 +1167,12 @@ XclImpDocProtectBuffer::XclImpDocProtectBuffer( const XclImpRoot& rRoot ) :
 
 void XclImpDocProtectBuffer::ReadDocProtect( XclImpStream& rStrm )
 {
-    mbDocProtect = rStrm.ReaduInt16() ? true : false;
+    mbDocProtect = rStrm.ReaduInt16() != 0;
 }
 
 void XclImpDocProtectBuffer::ReadWinProtect( XclImpStream& rStrm )
 {
-    mbWinProtect = rStrm.ReaduInt16() ? true : false;
+    mbWinProtect = rStrm.ReaduInt16() != 0;
 }
 
 void XclImpDocProtectBuffer::ReadPasswordHash( XclImpStream& rStrm )

@@ -2390,7 +2390,7 @@ void ScDPDataMember::UpdateRunningTotals(
                             //    consistency.
 
                             bool bInnerNoDetails = bRefDimInCol ? HasHiddenDetails() :
-                                                 ( bRefDimInRow ? rRowParent.HasHiddenDetails() : true );
+                                                 ( !bRefDimInRow || rRowParent.HasHiddenDetails() );
                             if ( bInnerNoDetails )
                             {
                                 pSelectDim = NULL;

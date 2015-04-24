@@ -946,7 +946,7 @@ bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
     bool bRet = false;
 
     // #i3875# *Hack*
-    bool bMod1Locked = aViewData.GetViewShell()->GetLockedModifiers() & KEY_MOD1 ? true : false;
+    bool bMod1Locked = (aViewData.GetViewShell()->GetLockedModifiers() & KEY_MOD1) != 0;
     aViewData.SetSelCtrlMouseClick( rMEvt.IsMod1() || bMod1Locked );
 
     if ( pSelEngine )

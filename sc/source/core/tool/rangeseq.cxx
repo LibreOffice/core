@@ -311,7 +311,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix,
             {
                 double fVal = pMatrix->GetDouble( nCol, nRow );
                 if (bDataTypes && pMatrix->IsBoolean( nCol, nRow ))
-                    pColAry[nCol] <<= (fVal ? true : false);
+                    pColAry[nCol] <<= fVal != 0.0;
                 else
                     pColAry[nCol] <<= fVal;
             }
@@ -394,7 +394,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                     if (ScApiTypeConversion::ConvertAnyToDouble( fVal, eClass, pColArr[nCol]))
                     {
                         if (eClass == uno::TypeClass_BOOLEAN)
-                            xMatrix->PutBoolean( (fVal ? true : false),
+                            xMatrix->PutBoolean( fVal != 0.0,
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                         else

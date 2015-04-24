@@ -2485,11 +2485,11 @@ public:
             if (mvSubArguments.size() != 2)
                 throw Unhandled();
             bool bArgument1_NeedNested =
-                (mvSubArguments[0]->GetFormulaToken()->GetType()
-                == formula::svSingleVectorRef) ? false : true;
+                mvSubArguments[0]->GetFormulaToken()->GetType()
+                != formula::svSingleVectorRef;
             bool bArgument2_NeedNested =
-                (mvSubArguments[1]->GetFormulaToken()->GetType()
-                == formula::svSingleVectorRef) ? false : true;
+                mvSubArguments[1]->GetFormulaToken()->GetType()
+                != formula::svSingleVectorRef;
             ss << "(";
             ss << mpCodeGen->
                 Gen2(mvSubArguments[0]

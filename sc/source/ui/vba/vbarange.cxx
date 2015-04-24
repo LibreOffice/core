@@ -4848,7 +4848,7 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException, std::ex
     if( (thisAddress.StartRow == thisAddress.EndRow &&  thisAddress.EndRow == aOutlineAddress.EndRow ) ||
         (thisAddress.StartColumn == thisAddress.EndColumn && thisAddress.EndColumn == aOutlineAddress.EndColumn ))
     {
-        bool bColumn =thisAddress.StartRow == thisAddress.EndRow ? false:true;
+        bool bColumn = thisAddress.StartRow != thisAddress.EndRow;
         ScDocument& rDoc = getDocumentFromRange( mxRange );
         ScOutlineTable* pOutlineTable = rDoc.GetOutlineTable(static_cast<SCTAB>(thisAddress.Sheet), true);
         const ScOutlineArray& rOutlineArray =  bColumn ? pOutlineTable->GetColArray(): pOutlineTable->GetRowArray();

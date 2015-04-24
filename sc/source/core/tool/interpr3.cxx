@@ -1551,7 +1551,7 @@ void ScInterpreter::ScNormDist( int nMinParamCount )
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
-    bool bCumulative = nParamCount == 4 ? GetBool() : true;
+    bool bCumulative = nParamCount != 4 || GetBool();
     double sigma = GetDouble();                 // standard deviation
     double mue = GetDouble();                   // mean
     double x = GetDouble();                     // x
@@ -1571,7 +1571,7 @@ void ScInterpreter::ScLogNormDist( int nMinParamCount ) //expanded, see #i100119
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
-    bool bCumulative = nParamCount == 4 ? GetBool() : true; // cumulative
+    bool bCumulative = nParamCount != 4 || GetBool(); // cumulative
     double sigma = nParamCount >= 3 ? GetDouble() : 1.0; // standard deviation
     double mue = nParamCount >= 2 ? GetDouble() : 0.0;   // mean
     double x = GetDouble();                              // x
@@ -1781,7 +1781,7 @@ void ScInterpreter::ScPoissonDist()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        bool bCumulative = (nParamCount == 3 ? GetBool() : true); // default cumulative
+        bool bCumulative = nParamCount != 3 || GetBool(); // default cumulative
         double lambda    = GetDouble();                           // Mean
         double x         = ::rtl::math::approxFloor(GetDouble()); // discrete distribution
         if (lambda < 0.0 || x < 0.0)

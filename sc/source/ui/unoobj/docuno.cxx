@@ -2126,7 +2126,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         {
             // default for no model is TRUE
             ScDrawLayer* pModel = rDoc.GetDrawLayer();
-            bool bOpenInDesign = pModel ? pModel->GetOpenInDesignMode() : true;
+            bool bOpenInDesign = pModel == nullptr || pModel->GetOpenInDesignMode();
             ScUnoHelpFunctions::SetBoolInAny( aRet, bOpenInDesign );
         }
         else if ( aString == SC_UNO_AUTOCONTFOC )
