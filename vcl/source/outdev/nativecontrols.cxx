@@ -247,9 +247,6 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             aResult.reset( pNew );
         }
         break;
-    case CTRL_GENERIC:
-            aResult.reset( new ImplControlValue( rVal ) );
-            break;
     case CTRL_MENU_POPUP:
         {
             const MenupopupValue* pMVal = static_cast<const MenupopupValue*>(&rVal);
@@ -257,6 +254,16 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             pNew->maItemRect = rDev.ImplLogicToDevicePixel( pMVal->maItemRect );
             aResult.reset( pNew );
         }
+        break;
+    case CTRL_EDITBOX:
+        {
+            auto nTextHeight = rDev.ImplLogicToDevicePixel(Rectangle(0, 0, 0, rVal.getNumericVal())).GetHeight();
+            EditBoxValue* pNew = new EditBoxValue(nTextHeight);
+            aResult.reset(pNew);
+        }
+        break;
+    case CTRL_GENERIC:
+        aResult.reset( new ImplControlValue( rVal ) );
         break;
     default:
         OSL_FAIL( "unknown ImplControlValue type !" );

@@ -1040,6 +1040,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             // for native widget drawing we must find out what
             // control this border belongs to
             ControlType aCtrlType = 0;
+            std::unique_ptr<ImplControlValue> xControlValue(new ImplControlValue());
             if (pCtrl)
             {
                 switch( pCtrl->GetType() )
@@ -1073,7 +1074,13 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                     case WINDOW_SPINFIELD:
                     case WINDOW_CALCINPUTLINE:
                         mbNWFBorder = true;
-                        aCtrlType = (pCtrl->GetStyle() & WB_SPIN) ? CTRL_SPINBOX : CTRL_EDITBOX;
+                        if (pCtrl->GetStyle() & WB_SPIN)
+                            aCtrlType = CTRL_SPINBOX;
+                        else
+                        {
+                            aCtrlType = CTRL_EDITBOX;
+                            xControlValue.reset(new EditBoxValue(pWin->GetTextHeight()));
+                        }
                         break;
                     default:
                         break;
@@ -1081,12 +1088,11 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             }
             if( mbNWFBorder )
             {
-                ImplControlValue aControlValue;
                 Rectangle aCtrlRegion( (const Point&)Point(), Size( mnWidth < 10 ? 10 : mnWidth, mnHeight < 10 ? 10 : mnHeight ) );
                 Rectangle aBounds( aCtrlRegion );
                 Rectangle aContent( aCtrlRegion );
                 if( pWin->GetNativeControlRegion( aCtrlType, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                                  ControlState::ENABLED, aControlValue, OUString(),
+                                                  ControlState::ENABLED, *xControlValue, OUString(),
                                                   aBounds, aContent ) )
                 {
                     mnLeftBorder    = aContent.Left() - aBounds.Left();
@@ -1192,7 +1198,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
 
     ControlType aCtrlType = 0;
     ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
-
+    std::unique_ptr<ImplControlValue> xControlValue(new ImplControlValue());
     if( pWin && (pCtrl = mpBorderWindow->GetWindow( WINDOW_CLIENT )) != NULL )
     {
         switch( pCtrl->GetType() )
@@ -1213,7 +1219,10 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
                 if( pCtrl->GetStyle() & WB_SPIN )
                     aCtrlType = CTRL_SPINBOX;
                 else
+                {
                     aCtrlType = CTRL_EDITBOX;
+                    xControlValue.reset(new EditBoxValue(pCtrl->GetTextHeight()));
+                }
                 break;
 
             case WINDOW_LISTBOX:
@@ -1258,7 +1267,6 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
 
     if ( aCtrlType && pCtrl->IsNativeControlSupported(aCtrlType, aCtrlPart) )
     {
-        ImplControlValue aControlValue;
         ControlState     nState = ControlState::ENABLED;
 
         if ( !pWin->IsEnabled() )
@@ -1290,14 +1298,14 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
         Rectangle aContentRgn( aCtrlRegion );
         if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
             pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
-                                          nState, aControlValue, OUString(),
+                                          nState, *xControlValue, OUString(),
                                           aBoundingRgn, aContentRgn ))
         {
             aCtrlRegion=aContentRgn;
         }
 
         bNativeOK = pWin->DrawNativeControl( aCtrlType, aCtrlPart, aCtrlRegion, nState,
-                aControlValue, OUString() );
+                *xControlValue, OUString() );
 
         // if the native theme draws the spinbuttons in one call, make sure the proper settings
         // are passed, this might force a redraw though.... (TODO: improve)

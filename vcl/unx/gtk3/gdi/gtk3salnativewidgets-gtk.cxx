@@ -980,7 +980,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 }
 
 bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
-                                                const ImplControlValue&, const OUString&,
+                                                const ImplControlValue& rValue, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 {
     /* TODO: all this funcions needs improvements */
@@ -1068,6 +1068,25 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
               ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
+    }
+    else if (nType == CTRL_EDITBOX)
+    {
+        gtk_style_context_save(mpEntryStyle);
+        gtk_style_context_add_class(mpEntryStyle, GTK_STYLE_CLASS_ENTRY);
+
+        GtkBorder border;
+        gtk_style_context_get_border(mpEntryStyle, GTK_STATE_FLAG_NORMAL, &border);
+
+        GtkBorder padding;
+        gtk_style_context_get_padding(mpEntryStyle, GTK_STATE_FLAG_NORMAL, &padding);
+
+        auto nTextHeight = rValue.getNumericVal();
+
+        gint nWidgetHeight = nTextHeight + padding.top + padding.bottom + border.top + border.bottom;
+
+        aEditRect = Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nWidgetHeight));
+
+        gtk_style_context_restore(mpEntryStyle);
     }
     else
     {
