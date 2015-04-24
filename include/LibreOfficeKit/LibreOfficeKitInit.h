@@ -22,10 +22,10 @@ extern "C"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #ifndef _WIN32
 
-    #include <unistd.h>
     #include "dlfcn.h"
 
     #ifdef  _AIX
@@ -73,9 +73,6 @@ extern "C"
     }
 
 #else
-
-    #include <io.h>
-    #define F_OK 00
 
     #include <windows.h>
     #define TARGET_LIB        "sofficeapp" ".dll"
@@ -178,9 +175,12 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     dlhandle = _dlopen(imp_lib);
     if (!dlhandle)
     {
-        // If TARGET_LIB exists, but dlopen failed for some reason,
-        // don't try TARGET_MERGED_LIB.
-        if (access(imp_lib, F_OK) == 0)
+        // If TARGET_LIB exists, and likely is a real library (not a
+        // small one-line text stub as in the --enable-mergedlib
+        // case), but dlopen failed for some reason, don't try
+        // TARGET_MERGED_LIB.
+        struct stat st;
+        if (stat(imp_lib, &st) == 0 && st.st_size > 100)
         {
             fprintf(stderr, "failed to open library '%s': %s\n",
                     imp_lib, _dlerror());
