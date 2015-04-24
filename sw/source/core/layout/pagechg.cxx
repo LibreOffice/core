@@ -264,10 +264,6 @@ void SwPageFrm::DestroyImpl()
         }
     }
 
-    // Hack to make sure code called from base ~SwFtnBossFrm does not interpret
-    // this as a SwPageFrm (which it no longer is by then):
-    mnFrmType = FRM_UNUSED;
-
     SwFtnBossFrm::DestroyImpl();
 }
 

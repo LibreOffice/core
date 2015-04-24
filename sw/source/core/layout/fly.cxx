@@ -269,10 +269,6 @@ void SwFlyFrm::DestroyImpl()
 
     FinitDrawObj();
 
-    // Hack to make sure code called from base ~SwLayoutFrm does not interpret
-    // this as a SwFlyFrm (which it no longer is by then):
-    mnFrmType = FRM_UNUSED;
-
     SwLayoutFrm::DestroyImpl();
 }
 
