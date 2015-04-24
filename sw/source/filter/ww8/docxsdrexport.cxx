@@ -185,6 +185,8 @@ struct DocxSdrExport::Impl
 
     void textFrameShadow(const SwFrmFmt& rFrmFmt);
     bool isSupportedDMLShape(uno::Reference<drawing::XShape> xShape);
+    /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
+    bool checkFrameBtlr(SwNode* pStartNode, bool bDML);
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
@@ -1296,7 +1298,7 @@ void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
     ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
 
     m_pImpl->m_pBodyPrAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-    m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
+    m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], /*bDML=*/true);
     m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
     m_pImpl->m_bFlyFrameGraphic = false;
@@ -1530,7 +1532,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
 
         pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
 
-        m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
+        m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], /*bDML=*/true);
         m_pImpl->m_bFlyFrameGraphic = true;
         m_pImpl->m_rExport.WriteText();
         if (m_pImpl->m_bParagraphSdtOpen)
@@ -1625,7 +1627,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
             m_pImpl->m_pFlyAttrList->addNS(XML_w14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
     }
     sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList.release());
-    m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], m_pImpl->m_pTextboxAttrList);
+    m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], /*bDML=*/false);
     sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList);
     m_pImpl->m_pTextboxAttrList = NULL;
     m_pImpl->m_bTextFrameSyntax = false;
@@ -1678,10 +1680,13 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     m_pImpl->m_bDMLAndVMLDrawingOpen = bDMLAndVMLDrawingOpen;
 }
 
-bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList)
+bool DocxSdrExport::Impl::checkFrameBtlr(SwNode* pStartNode, bool bDML)
 {
     // The intended usage is to pass either a valid VML or DML attribute list.
-    assert(pTextboxAttrList || m_pImpl->m_pBodyPrAttrList);
+    if (bDML)
+        assert(m_pBodyPrAttrList);
+    else
+        assert(m_pTextboxAttrList);
 
     if (!pStartNode->IsTxtNode())
         return false;
@@ -1715,10 +1720,10 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
         const SvxCharRotateItem& rCharRotate = static_cast<const SvxCharRotateItem&>(*pItem);
         if (rCharRotate.GetValue() == 900)
         {
-            if (pTextboxAttrList)
-                pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
+            if (bDML)
+                m_pBodyPrAttrList->add(XML_vert, "vert270");
             else
-                m_pImpl->m_pBodyPrAttrList->add(XML_vert, "vert270");
+                m_pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
             return true;
         }
     }
