@@ -2985,6 +2985,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     }
 
     // reset object shear and rotations
+    fObjectRotation = 0.0;
     aGeo.nDrehWink = 0;
     aGeo.RecalcSinCos();
     aGeo.nShearWink = 0;
