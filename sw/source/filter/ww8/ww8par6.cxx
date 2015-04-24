@@ -917,7 +917,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     {
         // sprmSFEvenlySpaced
         aNewSection.maSep.fEvenlySpaced =
-            sal_uInt8(ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) ? true : false);
+            sal_uInt8(ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) != 0);
 
         if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
         {
@@ -4298,7 +4298,7 @@ bool SwWW8ImplReader::IsRightToLeft()
     const sal_uInt8 *pDir =
         pPlcxMan ? pPlcxMan->GetPapPLCF()->HasSprm(0x2441) : 0;
     if (pDir)
-        bRTL = *pDir ? true : false;
+        bRTL = *pDir != 0;
     else
     {
         const SvxFrameDirectionItem* pItem=

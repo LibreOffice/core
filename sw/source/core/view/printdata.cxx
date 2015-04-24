@@ -79,7 +79,7 @@ void SwRenderData::SetTempDocShell(SfxObjectShellLock const& xShell)
 
 bool SwRenderData::NeedNewViewOptionAdjust( const SwViewShell& rCompare ) const
 {
-    return m_pViewOptionAdjust ? ! m_pViewOptionAdjust->checkShell( rCompare ) : true;
+    return !(m_pViewOptionAdjust && m_pViewOptionAdjust->checkShell( rCompare ));
 }
 
 void SwRenderData::ViewOptionAdjustStart(

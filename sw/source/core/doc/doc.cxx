@@ -662,7 +662,7 @@ void SwDoc::CalculatePagesForPrinting(
     bool bPrintLeftPages    = bIsPDFExport || rOptions.IsPrintLeftPages();
     bool bPrintRightPages   = bIsPDFExport || rOptions.IsPrintRightPages();
     // #i103700# printing selections should not allow for automatic inserting empty pages
-    bool bPrintEmptyPages   = bPrintSelection ? false : rOptions.IsPrintEmptyPages( bIsPDFExport );
+    bool bPrintEmptyPages   = !bPrintSelection && rOptions.IsPrintEmptyPages( bIsPDFExport );
 
     std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
     std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
@@ -922,7 +922,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     //      of the prospect!
     bool bPrintLeftPages     = rOptions.IsPrintLeftPages();
     bool bPrintRightPages    = rOptions.IsPrintRightPages();
-    bool bPrintProspectRTL = rOptions.getIntValue( "PrintProspectRTL",  0 ) ? true : false;
+    bool bPrintProspectRTL = rOptions.getIntValue( "PrintProspectRTL",  0 ) != 0;
 
     // get pages for prospect printing according to the 'PageRange'
     // (duplicates and any order allowed!)

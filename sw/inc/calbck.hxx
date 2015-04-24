@@ -224,7 +224,7 @@ public:
 
     /** get Client information */
     virtual bool GetInfo( SfxPoolItem& rInfo) const SAL_OVERRIDE
-        { return m_pToTell ? m_pToTell->GetInfo( rInfo ) : true; }
+        { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
 protected:
     virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) SAL_OVERRIDE
     {

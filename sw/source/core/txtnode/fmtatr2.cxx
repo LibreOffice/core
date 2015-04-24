@@ -705,14 +705,14 @@ bool Meta::IsInUndo() const
 {
     const SwTxtNode * const pTxtNode( GetTxtNode() );
 // no text node: in UNDO  OSL_ENSURE(pTxtNode, "IsInUndo: no text node?");
-    return (pTxtNode) ? pTxtNode->IsInUndo() : true;
+    return pTxtNode == nullptr || pTxtNode->IsInUndo();
 }
 
 bool Meta::IsInContent() const
 {
     const SwTxtNode * const pTxtNode( GetTxtNode() );
     OSL_ENSURE(pTxtNode, "IsInContent: no text node?");
-    return (pTxtNode) ? pTxtNode->IsInContent() : true;
+    return pTxtNode == nullptr || pTxtNode->IsInContent();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >

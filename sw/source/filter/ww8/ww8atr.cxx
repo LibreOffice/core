@@ -1194,12 +1194,12 @@ void WW8AttributeOutput::CharWeight( const SvxWeightItem& rWeight )
 // Shadowed und Contour are not in WW-UI. JP: ??
 void WW8AttributeOutput::CharContour( const SvxContourItem& rContour )
 {
-    OutputWW8Attribute( 3, rContour.GetValue() ? true : false);
+    OutputWW8Attribute( 3, rContour.GetValue() );
 }
 
 void WW8AttributeOutput::CharShadow( const SvxShadowedItem& rShadow )
 {
-    OutputWW8Attribute( 4, rShadow.GetValue() ? true : false);
+    OutputWW8Attribute( 4, rShadow.GetValue() );
 }
 
 void WW8AttributeOutput::CharKerning( const SvxKerningItem& rKerning )
@@ -1304,7 +1304,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_CHRATR_WORDLINEMODE );
     bool bWord = false;
     if (pItem)
-        bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue() ? true : false;
+        bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue();
 
     // WW95 - parameters:   0 = none,   1 = single, 2 = by Word,
     //                      3 = double, 4 = dotted, 5 = hidden
@@ -2706,7 +2706,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                     + pSet->GetPar1() + " \""
                     + sVar + "\" ";
                 eFieldNo = ww::eSET;
-                bShowAsWell = (nSubType & nsSwExtendedSubType::SUB_INVISIBLE) ? false : true;
+                bShowAsWell = (nSubType & nsSwExtendedSubType::SUB_INVISIBLE) == 0;
             }
 
             SetField( *pFld, eFieldNo, sStr );

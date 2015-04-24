@@ -2345,9 +2345,9 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                 }
 
                 bool bUseLeft
-                    = (nI & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) ? true: false;
+                    = (nI & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) != 0;
                 bool bUseFirst
-                    = (nI & ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST )) ? true: false;
+                    = (nI & ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST )) != 0;
 
                 // If we are loading a first-page header/footer which is not
                 // actually enabled in this section (it still needs to be
@@ -2355,7 +2355,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                 bool bDisabledFirst = bUseFirst && !rSection.HasTitlePage();
 
                 bool bFooter
-                    = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) ? true: false;
+                    = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) != 0;
 
                 SwFrmFmt& rFmt = bUseLeft ? pPD->GetLeft()
                     : bUseFirst ? pPD->GetFirstMaster()
@@ -4453,8 +4453,10 @@ void wwSectionManager::InsertSegments()
             */
 
             bool bIgnoreCols = false;
-            bool bThisAndNextAreCompatible = (aNext != aEnd) ? ((aIter->GetPageWidth() == aNext->GetPageWidth()) &&
-                (aIter->GetPageHeight() == aNext->GetPageHeight()) && (aIter->IsLandScape() == aNext->IsLandScape())) : true;
+            bool bThisAndNextAreCompatible = (aNext == aEnd) ||
+                ((aIter->GetPageWidth() == aNext->GetPageWidth()) &&
+                 (aIter->GetPageHeight() == aNext->GetPageHeight()) &&
+                 (aIter->IsLandScape() == aNext->IsLandScape()));
 
             if (((aNext != aEnd && aNext->IsContinuous() && bThisAndNextAreCompatible) || bProtected))
             {

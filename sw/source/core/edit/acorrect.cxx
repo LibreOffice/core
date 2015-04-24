@@ -85,7 +85,7 @@ SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
                                 sal_Unicode cIns )
     : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( 0 )
     , m_nEndUndoCounter(0)
-    , bUndoIdInitialized( cIns ? false : true )
+    , bUndoIdInitialized( cIns == 0 )
 {
 }
 

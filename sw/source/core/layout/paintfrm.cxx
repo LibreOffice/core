@@ -3608,7 +3608,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     }
 
     const SwPageFrm *pPage = 0;
-    const bool bWin   = gProp.pSGlobalShell->GetWin() ? true : false;
+    const bool bWin   = gProp.pSGlobalShell->GetWin() != nullptr;
 
     while ( IsAnLower( pFrm ) )
     {
@@ -7125,7 +7125,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                 return;
     }
 
-    const bool bFlys = pPage->GetSortedObjs() ? true : false;
+    const bool bFlys = pPage->GetSortedObjs() != nullptr;
 
     const bool bCell = IsCellFrm();
     // use frame area for cells

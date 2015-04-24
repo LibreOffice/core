@@ -694,7 +694,7 @@ bool SwHHCWrapper::FindConvText_impl()
 
 bool SwHHCWrapper::HasOtherCnt_impl()
 {
-    return m_bIsSelection ? false : m_rWrtShell.HasOtherCnt();
+    return !m_bIsSelection && m_rWrtShell.HasOtherCnt();
 }
 
 void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )

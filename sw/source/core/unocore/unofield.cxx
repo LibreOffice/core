@@ -1946,9 +1946,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
         SwXTextCursor const*const pTextCursor(dynamic_cast<SwXTextCursor*>(pCursor));
         const bool bForceExpandHints(
-            (pTextCursor)
-            ? pTextCursor->IsAtEndOfMeta()
-            : false );
+            pTextCursor
+            && pTextCursor->IsAtEndOfMeta() );
         const SetAttrMode nInsertFlags =
             (bForceExpandHints)
             ? SetAttrMode::FORCEHINTEXPAND

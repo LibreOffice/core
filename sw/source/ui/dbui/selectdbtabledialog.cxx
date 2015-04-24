@@ -190,7 +190,7 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
 OUString    SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
 {
     SvTreeListEntry* pEntry = m_pTable->FirstSelected();
-    bIsTable = pEntry->GetUserData() ? false : true;
+    bIsTable = pEntry->GetUserData() == nullptr;
     return SvTabListBox::GetEntryText(pEntry, 0);
 }
 

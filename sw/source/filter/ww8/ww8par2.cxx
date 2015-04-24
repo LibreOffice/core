@@ -1238,10 +1238,10 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSe
         if (nitcLim > nWwCols)
             nitcLim = nWwCols;
 
-        bool bChangeRight  = (nFlag & 0x08) ? true : false;
-        bool bChangeBottom = (nFlag & 0x04) ? true : false;
-        bool bChangeLeft   = (nFlag & 0x02) ? true : false;
-        bool bChangeTop    = (nFlag & 0x01) ? true : false;
+        bool bChangeRight  = (nFlag & 0x08) != 0;
+        bool bChangeBottom = (nFlag & 0x04) != 0;
+        bool bChangeLeft   = (nFlag & 0x02) != 0;
+        bool bChangeTop    = (nFlag & 0x01) != 0;
 
         WW8_TCell* pAktTC  = pTCs + nitcFirst;
         WW8_BRCVer9 brcVer9;
@@ -1825,7 +1825,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                             eOri = aOriArr[*pParams & 0x3];
                         break;
                     case sprmTFBiDi:
-                        bIsBiDi = SVBT16ToShort(pParams) ? true : false;
+                        bIsBiDi = SVBT16ToShort(pParams) != 0;
                         break;
                     case sprmTDxaGapHalf:
                         pNewBand->nGapHalf = (sal_Int16)SVBT16ToShort( pParams );
@@ -2315,7 +2315,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     // if there is already some content on the Node append new node to ensure
     // that this content remains ABOVE the table
     SwPosition* pPoint = pIo->pPaM->GetPoint();
-    bool bInsNode = pPoint->nContent.GetIndex() ? true : false;
+    bool bInsNode = pPoint->nContent.GetIndex() != 0;
     bool bSetMinHeight = false;
 
     /*

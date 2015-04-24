@@ -536,7 +536,7 @@ lcl_CreateRefMarkPortion(
     {
         pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_REFMARK_START);
         pPortion->SetRefMark(xContent);
-        pPortion->SetCollapsed(rAttr.End() ? false : true);
+        pPortion->SetCollapsed(rAttr.End() == nullptr);
     }
     else
     {
@@ -556,7 +556,7 @@ lcl_InsertRubyPortion(
     SwXTextPortion* pPortion = new SwXTextPortion(pUnoCrsr,
             static_txtattr_cast<const SwTxtRuby&>(rAttr), xParent, bEnd);
     rPortions.push_back(pPortion);
-    pPortion->SetCollapsed(rAttr.End() ? false : true);
+    pPortion->SetCollapsed(rAttr.End() == nullptr);
 }
 
 static Reference<XTextRange>
@@ -577,7 +577,7 @@ lcl_CreateTOXMarkPortion(
     {
         pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_TOXMARK_START);
         pPortion->SetTOXMark(xContent);
-        pPortion->SetCollapsed(rAttr.GetEnd() ? false : true);
+        pPortion->SetCollapsed(rAttr.GetEnd() == nullptr);
     }
     else
     {

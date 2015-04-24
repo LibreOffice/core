@@ -1551,7 +1551,7 @@ long SwPostItMgr::GetNextBorder()
             {
                 SwSidebarItem_iterator aNext = b;
                 ++aNext;
-                bool bFollow = (aNext == mPages[n]->mList->end()) ? false : (*aNext)->pPostIt->IsFollow();
+                bool bFollow = (aNext != mPages[n]->mList->end()) && (*aNext)->pPostIt->IsFollow();
                 if ( mPages[n]->bScrollbar || bFollow )
                 {
                     return -1;

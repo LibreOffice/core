@@ -1594,8 +1594,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
 
     // 4263: AttrInsert durch TextInsert => kein Adjust
     const bool bRet = bInsertHint
-                      ? m_pSwpHints->TryInsertHint( pAttr, *this, nMode )
-                      : false;
+                      && m_pSwpHints->TryInsertHint( pAttr, *this, nMode );
 
     if ( !bRet )
     {

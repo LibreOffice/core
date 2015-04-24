@@ -156,7 +156,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
         OSL_ENSURE( !pSt, "+OLE: Groesse von 0 ???" );
         return false;
     }
-    bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL ) ? true : false;   // WMF lesen
+    bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL );   // WMF lesen
                     // *pSt >> aWMF  geht nicht ohne placable Header
     if (!bOk || pSt->GetError() || rWMF.GetActionSize() == 0)
     {

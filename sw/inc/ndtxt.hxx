@@ -223,7 +223,7 @@ public:
     inline const SwpHints &GetSwpHints() const;
     inline       SwpHints *GetpSwpHints()       { return m_pSwpHints; }
     inline const SwpHints *GetpSwpHints() const { return m_pSwpHints; }
-    inline       bool   HasHints() const { return m_pSwpHints ? true : false; }
+    inline       bool   HasHints() const { return m_pSwpHints != nullptr; }
     inline       SwpHints &GetOrCreateSwpHints();
 
     virtual ~SwTxtNode();

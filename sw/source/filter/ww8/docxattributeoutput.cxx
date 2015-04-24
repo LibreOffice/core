@@ -1591,7 +1591,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     {
         sal_uInt16 nSubType = rInfos.pField->GetSubType( );
         bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == RES_SETEXPFLD;
-        bool bShowRef = ( !bIsSetField || ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) ) ? false : true;
+        bool bShowRef = bIsSetField && ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
 
         if ( ( !m_sFieldBkm.isEmpty() ) && bShowRef )
         {

@@ -266,7 +266,7 @@ namespace myImplHelpers
                 pRet = 0;
         }
 
-        bool bStyExist = pRet ? true : false;
+        bool bStyExist = pRet != nullptr;
 
         if (!pRet)
         {

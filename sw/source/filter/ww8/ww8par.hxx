@@ -812,17 +812,17 @@ public:
     bool IsVertical() const;
     sal_Int16 NoCols() const { return maSep.ccolM1 + 1; }
     sal_Int32 StandardColSeparation() const { return maSep.dxaColumns; }
-    bool HasTitlePage() const { return maSep.fTitlePage ? true : false; }
+    bool HasTitlePage() const { return maSep.fTitlePage != 0; }
     sal_uInt16 PageStartAt() const { return maSep.pgnStart; }
-    bool PageRestartNo() const { return maSep.fPgnRestart ? true : false; }
-    bool IsBiDi() const { return maSep.fBiDi ? true : false; }
+    bool PageRestartNo() const { return maSep.fPgnRestart != 0; }
+    bool IsBiDi() const { return maSep.fBiDi != 0; }
     sal_uInt32 GetPageWidth() const { return nPgWidth; }
     sal_uInt32 GetTextAreaWidth() const
         { return GetPageWidth() - GetPageLeft() - GetPageRight(); }
     sal_uInt32 GetPageHeight() const { return maSep.yaPage; }
     sal_uInt32 GetPageLeft() const { return nPgLeft; }
     sal_uInt32 GetPageRight() const { return nPgRight; }
-    bool IsLandScape() const { return maSep.dmOrientPage ? true : false; }
+    bool IsLandScape() const { return maSep.dmOrientPage != 0; }
     bool IsFixedHeightHeader() const { return maSep.dyaTop < 0; }
     bool IsFixedHeightFooter() const { return maSep.dyaBottom < 0; }
 };

@@ -92,7 +92,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
 
     SwViewShell *pSh = rInf.GetVsh();
     SwDoc *const pDoc( (pSh) ? pSh->GetDoc() : 0 );
-    bool const bInClipboard( (pDoc) ? pDoc->IsClipBoard() : true );
+    bool const bInClipboard( pDoc == nullptr || pDoc->IsClipBoard() );
     bool bPlaceHolder = false;
 
     switch( pFld->GetTyp()->Which() )

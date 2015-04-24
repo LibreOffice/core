@@ -2218,7 +2218,7 @@ void RtfAttributeOutput::CharUnderline(const SvxUnderlineItem& rUnderline)
     const SfxPoolItem* pItem = m_rExport.HasItem(RES_CHRATR_WORDLINEMODE);
     bool bWord = false;
     if (pItem)
-        bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue() ? true : false;
+        bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue();
     switch (rUnderline.GetLineStyle())
     {
     case UNDERLINE_SINGLE:

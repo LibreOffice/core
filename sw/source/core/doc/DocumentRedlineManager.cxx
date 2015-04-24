@@ -688,7 +688,7 @@ SwExtraRedlineTbl& DocumentRedlineManager::GetExtraRedlineTbl()
 
 bool DocumentRedlineManager::HasExtraRedlineTbl() const
 {
-    return mpExtraRedlineTbl ? true : false;
+    return mpExtraRedlineTbl != nullptr;
 }
 
 bool DocumentRedlineManager::IsInRedlines(const SwNode & rNode) const

@@ -158,8 +158,7 @@ bool SwAccessibleChild::IsBoundAsChar() const
     {
         const SwFrmFmt* mpFrmFmt = ::FindFrmFmt( mpDrawObj );
         bRet = mpFrmFmt
-               ? (FLY_AS_CHAR == mpFrmFmt->GetAnchor().GetAnchorId())
-               : false;
+               && (FLY_AS_CHAR == mpFrmFmt->GetAnchor().GetAnchorId());
     }
     else if ( mpWindow )
     {

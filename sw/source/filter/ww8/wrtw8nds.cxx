@@ -2639,9 +2639,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 const SwTable& rTable = pTableNode->GetTable();
                 const SvxFmtKeepItem& rKeep = rTable.GetFrmFmt()->GetKeep();
                 const bool bKeep = rKeep.GetValue();
-                const bool bDontSplit = !bKeep ?
-                                        !rTable.GetFrmFmt()->GetLayoutSplit().GetValue() :
-                                        false;
+                const bool bDontSplit = !(bKeep ||
+                                          rTable.GetFrmFmt()->GetLayoutSplit().GetValue());
 
                 if ( bKeep || bDontSplit )
                 {

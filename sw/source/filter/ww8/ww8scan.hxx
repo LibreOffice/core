@@ -749,7 +749,7 @@ public:
     WW8_CP GetStartPos() const
         { return ( nIsEnd ) ? WW8_CP_MAX : pBook[0]->Where(); }
     long GetLen() const;
-    bool GetIsEnd() const { return nIsEnd ? true : false; }
+    bool GetIsEnd() const { return nIsEnd != 0; }
     long GetHandle() const;
     void SetStatus( sal_uInt16 nIndex, eBookStatus eStat );
     bool MapName(OUString& rName);

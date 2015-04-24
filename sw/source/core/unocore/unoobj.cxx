@@ -1771,9 +1771,8 @@ SwXTextCursor::setString(const OUString& aString) throw (uno::RuntimeException, 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
     (void) rUnoCursor; // just to check if valid
 
-    const bool bForceExpandHints( (CURSOR_META != m_pImpl->m_eType)
-        ? false
-        : dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get())
+    const bool bForceExpandHints( (CURSOR_META == m_pImpl->m_eType)
+        && dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get())
                 ->CheckForOwnMemberMeta(*GetPaM(), true) );
     DeleteAndInsert(aString, bForceExpandHints);
 }

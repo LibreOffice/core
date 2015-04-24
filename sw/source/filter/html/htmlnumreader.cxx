@@ -469,7 +469,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         AppendTxtNode( AM_NOSPACE, false );
     bNoParSpace = false;    // In <LI> wird kein Abstand eingefuegt!
 
-    const bool bCountedInList( HTML_LISTHEADER_ON==nToken ? false : true );
+    const bool bCountedInList = nToken != HTML_LISTHEADER_ON;
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 

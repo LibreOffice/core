@@ -3918,7 +3918,7 @@ bool SwTxtNode::IsListRestart() const
     const SfxBoolItem& aIsRestartItem =
         dynamic_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISRESTART ));
 
-    return aIsRestartItem.GetValue() ? true : false;
+    return aIsRestartItem.GetValue();
 }
 
 /** Returns if the paragraph has a visible numbering or bullet.
@@ -4013,7 +4013,7 @@ bool SwTxtNode::IsNotificationEnabled() const
     const SwDoc * pDoc = GetDoc();
     if( pDoc )
     {
-        bResult = pDoc->IsInReading() || pDoc->IsInDtor() ? false : true;
+        bResult = !(pDoc->IsInReading() || pDoc->IsInDtor());
     }
     return bResult;
 }
@@ -4038,7 +4038,7 @@ bool SwTxtNode::IsCountedInList() const
     const SfxBoolItem& aIsCountedInListItem =
         dynamic_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISCOUNTED ));
 
-    return aIsCountedInListItem.GetValue() ? true : false;
+    return aIsCountedInListItem.GetValue();
 }
 
 void SwTxtNode::AddToList()

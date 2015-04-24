@@ -97,7 +97,7 @@ bool SwPosition::operator<(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pOtherReg) ? true : false;
+            return pOtherReg != nullptr;
         }
     }
     return false;
@@ -119,7 +119,7 @@ bool SwPosition::operator>(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pThisReg) ? true : false;
+            return pThisReg != nullptr;
         }
     }
     return false;
@@ -141,7 +141,7 @@ bool SwPosition::operator<=(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pThisReg) ? false : true;
+            return pThisReg == nullptr;
         }
     }
     return false;
@@ -163,7 +163,7 @@ bool SwPosition::operator>=(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pOtherReg) ? false : true;
+            return pOtherReg == nullptr;
         }
     }
     return false;

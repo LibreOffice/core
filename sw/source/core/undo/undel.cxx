@@ -174,9 +174,8 @@ SwUndoDelete::SwUndoDelete(
                     : pEnd->nNode.GetNode().GetTxtNode();
     }
 
-    bool bMoveNds = *pStt == *pEnd      // any area still existent?
-                ? false
-                : ( SaveCntnt( pStt, pEnd, pSttTxtNd, pEndTxtNd ) || bFromTableCopy );
+    bool bMoveNds = *pStt != *pEnd      // any area still existent?
+                && ( SaveCntnt( pStt, pEnd, pSttTxtNd, pEndTxtNd ) || bFromTableCopy );
 
     if( pSttTxtNd && pEndTxtNd && pSttTxtNd != pEndTxtNd )
     {

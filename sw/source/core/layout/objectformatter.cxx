@@ -506,9 +506,8 @@ sal_uInt32 SwObjectFormatter::GetPgNumOfCollected( const sal_uInt32 _nIndex )
 */
 bool SwObjectFormatter::IsCollectedAnchoredAtMaster( const sal_uInt32 _nIndex )
 {
-    return mpPgNumAndTypeOfAnchors
-           ? mpPgNumAndTypeOfAnchors->AnchoredAtMaster(_nIndex)
-           : true;
+    return mpPgNumAndTypeOfAnchors == nullptr
+           || mpPgNumAndTypeOfAnchors->AnchoredAtMaster(_nIndex);
 }
 
 /** accessor to total number of collected anchored objects

@@ -2858,9 +2858,9 @@ void WW8Export::WriteFkpPlcUsw()
     if ( pFibData )
     {
     pFib->fReadOnlyRecommended =
-        pFibData->getReadOnlyRecommended() ? true : false;
+        pFibData->getReadOnlyRecommended();
     pFib->fWriteReservation =
-        pFibData->getWriteReservation() ? true : false;
+        pFibData->getWriteReservation();
     }
 
     pFib->Write( Strm() );  // FIB

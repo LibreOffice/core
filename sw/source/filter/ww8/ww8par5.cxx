@@ -170,7 +170,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         OUString sHex("\\x");
         bool bSetAsHex;
         bool bAllowCr = SwFltGetFlag(nFieldFlags,
-            SwFltControlStack::ALLOW_FLD_CR) ? true : false;
+            SwFltControlStack::ALLOW_FLD_CR);
 
         for( sal_Int32 nI = 0;
              nI < aVal.getLength() && aVal.getLength() < (MAX_FIELDLEN - 4);

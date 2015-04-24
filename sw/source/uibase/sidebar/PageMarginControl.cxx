@@ -470,7 +470,7 @@ bool PageMarginControl::GetUserCustomValues()
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
-        mbUserCustomMirrored = aWinData.toInt32() == 0 ? false : true;
+        mbUserCustomMirrored = aWinData.toInt32() != 0;
         bUserCustomValuesAvailable = true;
     }
 

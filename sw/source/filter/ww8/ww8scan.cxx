@@ -1155,7 +1155,7 @@ void WW8PLCFx_PCD::SetIdx( sal_uLong nIdx )
 
 bool WW8PLCFx_PCD::SeekPos(WW8_CP nCpPos)
 {
-    return pPcdI ? pPcdI->SeekPos( nCpPos ) : false;
+    return pPcdI && pPcdI->SeekPos( nCpPos );
 }
 
 WW8_CP WW8PLCFx_PCD::Where()
@@ -1388,7 +1388,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
     if (pWw8Fib->nVersion >= 8)
         bIsUnicode = false;
     else
-        bIsUnicode = pWw8Fib->fExtChar ? true : false;
+        bIsUnicode = pWw8Fib->fExtChar;
 
     if( pPieceIter )    // Complex File ?
     {
@@ -1412,7 +1412,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             }
             else
             {
-                bIsUnicode = pWw8Fib->fExtChar ? true : false;
+                bIsUnicode = pWw8Fib->fExtChar;
             }
             sal_Int32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
 
@@ -1472,7 +1472,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
     if (pWw8Fib->nVersion >= 8)
         *pIsUnicode = false;
     else
-        *pIsUnicode = pWw8Fib->fExtChar ? true : false;
+        *pIsUnicode = pWw8Fib->fExtChar;
 
     if( pPieceIter )
     {
@@ -1507,7 +1507,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         if (pWw8Fib->nVersion >= 8)
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
         else
-            *pIsUnicode = pWw8Fib->fExtChar ? true : false;
+            *pIsUnicode = pWw8Fib->fExtChar;
 
         nRet += (nCpPos - nCpStart) * (*pIsUnicode ? 2 : 1);
 
@@ -2441,7 +2441,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     sal_Size nOldPos = pSt->Tell();
 
     bool bCouldSeek = checkSeek(*pSt, nFilePos);
-    bool bCouldRead = bCouldSeek ? checkRead(*pSt, maRawData, 512) : false;
+    bool bCouldRead = bCouldSeek && checkRead(*pSt, maRawData, 512);
 
     mnIMax = bCouldRead ? maRawData[511] : 0;
 
@@ -3624,7 +3624,7 @@ void WW8PLCFx_SubDoc::SetIdx( sal_uLong nIdx )
 
 bool WW8PLCFx_SubDoc::SeekPos( WW8_CP nCpPos )
 {
-    return ( pRef ) ? pRef->SeekPos( nCpPos ) : false;
+    return pRef && pRef->SeekPos( nCpPos );
 }
 
 WW8_CP WW8PLCFx_SubDoc::Where()
@@ -3738,7 +3738,7 @@ void WW8PLCFx_FLD::SetIdx( sal_uLong nIdx )
 
 bool WW8PLCFx_FLD::SeekPos(WW8_CP nCpPos)
 {
-    return pPLCF ? pPLCF->SeekPosExact( nCpPos ) : false;
+    return pPLCF && pPLCF->SeekPosExact( nCpPos );
 }
 
 WW8_CP WW8PLCFx_FLD::Where()

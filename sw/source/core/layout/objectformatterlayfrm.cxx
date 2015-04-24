@@ -78,7 +78,7 @@ bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
 
     // #124218# - consider that the layout action has to be
     // restarted due to a deleted page frame.
-    return GetLayAction() ? !GetLayAction()->IsAgain() : true;
+    return GetLayAction() == nullptr || !GetLayAction()->IsAgain();
 }
 
 bool SwObjectFormatterLayFrm::DoFormatObjs()
