@@ -40,8 +40,6 @@ const char* pw4 = "Wow! 50.000.000 items!";
 const char* pw5 = "Wow! 10.000.000 items!";
 #endif
 
-IMPL_PTRHINT(SfxPoolItemHint,SfxPoolItem)
-
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
