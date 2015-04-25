@@ -49,7 +49,6 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -1155,9 +1154,19 @@ void ChartExport::exportPlotArea( )
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_plotArea ),
             FSEND );
-    // layout
-    pFS->singleElement( FSNS( XML_c, XML_layout ),
-            FSEND );
+
+    Reference<beans::XPropertySet> xWall(mxNewDiagram, uno::UNO_QUERY);
+    if( xWall.is() )
+    {
+        uno::Any aAny = xWall->getPropertyValue("RelativePosition");
+        if (aAny.hasValue())
+        {
+            chart2::RelativePosition aPos = aAny.get<chart2::RelativePosition>();
+            aAny = xWall->getPropertyValue("RelativeSize");
+            chart2::RelativeSize aSize = aAny.get<chart2::RelativeSize>();
+            exportManualLayout(aPos, aSize);
+        }
+    }
 
     // chart type
     Sequence< Reference< chart2::XCoordinateSystem > >
@@ -1265,6 +1274,38 @@ void ChartExport::exportPlotArea( )
 
     pFS->endElement( FSNS( XML_c, XML_plotArea ) );
 
+}
+
+void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos, const css::chart2::RelativeSize& rSize)
+{
+    FSHelperPtr pFS = GetFS();
+    pFS->startElement(FSNS(XML_c, XML_layout), FSEND);
+    pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_xMode),
+            XML_val, "edge",
+            FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_yMode),
+            XML_val, "edge",
+            FSEND);
+
+    pFS->singleElement(FSNS(XML_c, XML_x),
+            XML_val, IS(rPos.Primary),
+            FSEND);
+
+    pFS->singleElement(FSNS(XML_c, XML_y),
+            XML_val, IS(rPos.Secondary),
+            FSEND);
+
+    pFS->singleElement(FSNS(XML_c, XML_w),
+            XML_val, IS(rSize.Primary),
+            FSEND);
+
+    pFS->singleElement(FSNS(XML_c, XML_h),
+            XML_val, IS(rSize.Secondary),
+            FSEND);
+
+    pFS->endElement(FSNS(XML_c, XML_manualLayout));
+    pFS->endElement(FSNS(XML_c, XML_layout));
 }
 
 void ChartExport::exportPlotAreaShapeProps( Reference< XPropertySet > xPropSet )

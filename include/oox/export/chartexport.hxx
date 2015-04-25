@@ -27,6 +27,9 @@
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
 
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
+
 namespace com { namespace sun { namespace star {
     namespace chart {
         class XDiagram;
@@ -163,6 +166,8 @@ private:
 
     void exportErrorBar(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xErrorBarProps,
             bool bYError);
+
+    void exportManualLayout(const css::chart2::RelativePosition& rPos, const css::chart2::RelativeSize& rSize);
 
     void exportAxes( );
     void exportAxis(const AxisIdPair& rAxisIdPair);
