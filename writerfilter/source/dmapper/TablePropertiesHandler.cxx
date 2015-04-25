@@ -67,9 +67,8 @@ namespace dmapper {
         sal_Int32 nIntValue = ((pValue.get() != nullptr) ? pValue->getInt() : 0);
         switch( nSprmId )
         {
-            case NS_ooxml::LN_CT_TrPrBase_jc: //90706
+            case NS_ooxml::LN_CT_TrPrBase_jc:
             case NS_ooxml::LN_CT_TblPrBase_jc:
-            case 0x5400: // sprmTJc
             {
                 sal_Int16 nOrient = ConversionHelper::convertTableJustification( nIntValue );
                 TablePropertyMapPtr pTableMap( new TablePropertyMap );
@@ -77,17 +76,7 @@ namespace dmapper {
                 insertTableProps( pTableMap );
             }
             break;
-            case 0x9601: // sprmTDxaLeft
-            break;
-            case 0x9602: // sprmTDxaGapHalf
-            {
-                //m_nGapHalf = ConversionHelper::convertTwipToMM100( nIntValue );
-                TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->setValue( TablePropertyMap::GAP_HALF, ConversionHelper::convertTwipToMM100( nIntValue ) );
-                insertTableProps(pPropMap);
-            }
-            break;
-            case NS_ooxml::LN_CT_TrPrBase_trHeight: //90703
+            case NS_ooxml::LN_CT_TrPrBase_trHeight:
             {
                 //contains unit and value
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -181,23 +170,7 @@ namespace dmapper {
                 insertRowProps(pPropMap);
             }
             break;
-            case 0x9407: // sprmTDyaRowHeight
-            {
-                // table row height - negative values indicate 'exact height' - positive 'at least'
-                TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                bool bMinHeight = true;
-                sal_Int16 nHeight = static_cast<sal_Int16>( nIntValue );
-                if( nHeight < 0 )
-                {
-                    bMinHeight = false;
-                    nHeight *= -1;
-                }
-                pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny(bMinHeight ? text::SizeType::MIN : text::SizeType::FIX ));
-                pPropMap->Insert( PROP_HEIGHT, uno::makeAny(ConversionHelper::convertTwipToMM100( nHeight )));
-                insertRowProps(pPropMap);
-            }
-            break;
-            case NS_ooxml::LN_CT_TcPrBase_vAlign://90694
+            case NS_ooxml::LN_CT_TcPrBase_vAlign:
             {
                 sal_Int16 nVertOrient = text::VertOrientation::NONE;
                 switch( nIntValue )
@@ -314,10 +287,6 @@ namespace dmapper {
                 }
             }
             break;
-            case 0xd61a : // sprmTCellTopColor
-            case 0xd61b : // sprmTCellLeftColor
-            case 0xd61c : // sprmTCellBottomColor
-            case 0xd61d : // sprmTCellRightColor
             case NS_ooxml::LN_CT_TcPrBase_shd:
             {
                 // each color sprm contains as much colors as cells are in a row
