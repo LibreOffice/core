@@ -996,6 +996,39 @@ void ChartExport::exportLegend( Reference< css::chart::XChartDocument > rChartDo
             pFS->singleElement( FSNS( XML_c, XML_legendPos ),
                 XML_val, strPos,
                 FSEND );
+        }
+
+        uno::Any aRelativePos = xProp->getPropertyValue("RelativePosition");
+        if (aRelativePos.hasValue())
+        {
+            chart2::RelativePosition aPos = aRelativePos.get<chart2::RelativePosition>();
+            pFS->startElement(FSNS(XML_c, XML_layout), FSEND);
+            pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
+
+            pFS->singleElement(FSNS(XML_c, XML_xMode),
+                    XML_val, "edge",
+                    FSEND);
+            pFS->singleElement(FSNS(XML_c, XML_yMode),
+                    XML_val, "edge",
+                    FSEND);
+
+            double x = aPos.Primary;
+            double y = aPos.Secondary;
+
+            pFS->singleElement(FSNS(XML_c, XML_x),
+                    XML_val, IS(x),
+                    FSEND);
+            pFS->singleElement(FSNS(XML_c, XML_y),
+                    XML_val, IS(y),
+                    FSEND);
+            SAL_WARN_IF(aPos.Anchor != 0, "oox.chart", "unsupported anchor position");
+
+            pFS->endElement(FSNS(XML_c, XML_manualLayout));
+            pFS->endElement(FSNS(XML_c, XML_layout));
+        }
+
+        if (strPos != NULL)
+        {
             pFS->singleElement( FSNS( XML_c, XML_overlay ),
                     XML_val, "0",
                     FSEND );
