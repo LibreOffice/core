@@ -1069,7 +1069,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
     }
-    else if (nType == CTRL_EDITBOX)
+    else if ((nType == CTRL_EDITBOX || nType == CTRL_COMBOBOX) && nPart == PART_ENTIRE_CONTROL)
     {
         gtk_style_context_save(mpEntryStyle);
         gtk_style_context_add_class(mpEntryStyle, GTK_STYLE_CLASS_ENTRY);

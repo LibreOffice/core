@@ -1655,7 +1655,7 @@ bool ToolBox::ImplCalcItem()
     {
         Rectangle aRect( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
         Rectangle aReg( aRect );
-        ImplControlValue aVal;
+        EditBoxValue aVal(GetTextHeight());
         Rectangle aNativeBounds, aNativeContent;
         if( IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
         {

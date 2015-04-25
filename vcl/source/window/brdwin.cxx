@@ -1043,6 +1043,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             std::unique_ptr<ImplControlValue> xControlValue(new ImplControlValue());
             if (pCtrl)
             {
+                xControlValue.reset(new EditBoxValue(pCtrl->GetTextHeight()));
+
                 switch( pCtrl->GetType() )
                 {
                     case WINDOW_LISTBOX:
@@ -1077,10 +1079,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                         if (pCtrl->GetStyle() & WB_SPIN)
                             aCtrlType = CTRL_SPINBOX;
                         else
-                        {
                             aCtrlType = CTRL_EDITBOX;
-                            xControlValue.reset(new EditBoxValue(pWin->GetTextHeight()));
-                        }
                         break;
                     default:
                         break;
@@ -1201,6 +1200,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
     std::unique_ptr<ImplControlValue> xControlValue(new ImplControlValue());
     if( pWin && (pCtrl = mpBorderWindow->GetWindow( WINDOW_CLIENT )) != NULL )
     {
+        xControlValue.reset(new EditBoxValue(pCtrl->GetTextHeight()));
         switch( pCtrl->GetType() )
         {
             case WINDOW_MULTILINEEDIT:
@@ -1219,10 +1219,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
                 if( pCtrl->GetStyle() & WB_SPIN )
                     aCtrlType = CTRL_SPINBOX;
                 else
-                {
                     aCtrlType = CTRL_EDITBOX;
-                    xControlValue.reset(new EditBoxValue(pCtrl->GetTextHeight()));
-                }
                 break;
 
             case WINDOW_LISTBOX:

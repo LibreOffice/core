@@ -104,7 +104,7 @@ void ComboBox::ImplCalcEditHeight()
 
     Rectangle aCtrlRegion( Point( 0, 0 ), Size( 10, 10 ) );
     Rectangle aBoundRegion, aContentRegion;
-    ImplControlValue aControlValue;
+    EditBoxValue aControlValue(GetTextHeight());
     ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
     if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
                                 aCtrlRegion,
@@ -981,7 +981,7 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
     long nButtonDownWidth = 0;
 
     vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
-    ImplControlValue aControlValue;
+    EditBoxValue aControlValue(GetTextHeight());
     Point aPoint;
     Rectangle aContent, aBound;
 
@@ -1414,7 +1414,7 @@ ComboBox::ComboBoxBounds ComboBox::calcComboBoxDropDownComponentBounds(const Siz
     long    nBottom = rOutSz.Height();
 
     vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
-    ImplControlValue aControlValue;
+    EditBoxValue aControlValue(GetTextHeight());
     Point aPoint;
     Rectangle aContent, aBound;
 
