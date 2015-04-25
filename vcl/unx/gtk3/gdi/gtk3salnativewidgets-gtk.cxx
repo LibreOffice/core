@@ -1084,6 +1084,8 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
         gint nWidgetHeight = nTextHeight + padding.top + padding.bottom + border.top + border.bottom;
 
+        nWidgetHeight = std::max<gint>(nWidgetHeight, rControlRegion.GetHeight());
+
         aEditRect = Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nWidgetHeight));
 
         gtk_style_context_restore(mpEntryStyle);
