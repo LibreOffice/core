@@ -237,12 +237,15 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                 // Make a copy, so that in case we need to adjust the selection
                 // for the purpose of copying, our shell cursor is not touched.
                 // (Otherwise we would have to restore it.)
-                SwPaM aPaM(*PCURCRSR);
+                SwPaM aPaM(*PCURCRSR->GetMark(), *PCURCRSR->GetPoint());
                 if (bSelectAll)
+                {
                     // Selection starts at the first para of the first cell,
                     // but we want to copy the table and the start node before
                     // the first cell as well.
                     aPaM.Start()->nNode = aPaM.Start()->nNode.GetNode().FindTableNode()->GetIndex();
+                    aPaM.Start()->nContent.Assign(nullptr, 0);
+                }
                 bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, false ) || bRet;
             }
 

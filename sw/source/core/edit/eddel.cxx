@@ -95,7 +95,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
         if (bSelectAll)
         {
             assert(dynamic_cast<SwShellCrsr*>(&rPam)); // must be corrected pam
-            pNewPam.reset(new SwPaM(rPam));
+            pNewPam.reset(new SwPaM(*rPam.GetMark(), *rPam.GetPoint()));
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
             pNewPam->Start()->nNode = pNewPam->Start()->nNode.GetNode().FindTableNode()->GetIndex();
