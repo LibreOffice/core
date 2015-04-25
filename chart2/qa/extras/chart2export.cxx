@@ -1334,6 +1334,8 @@ void Chart2ExportTest::testTitleManualLayoutXLSX()
     double nY = aYVal.toDouble();
     CPPUNIT_ASSERT(nY > 0 && nY < 1);
     CPPUNIT_ASSERT(nX != nY);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:bodyPr", "rot", "1200000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
