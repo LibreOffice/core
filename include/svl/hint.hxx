@@ -28,24 +28,6 @@ public:
 };
 
 
-
-#define DECL_PTRHINT(Visibility, Name, Type) \
-        class Visibility Name: public SfxHint \
-        { \
-            Type* pObj; \
-        \
-        public: \
-            explicit Name( Type* Object ); \
-            virtual ~Name(); \
-        \
-            Type* GetObject() const { return pObj; } \
-        }
-
-#define IMPL_PTRHINT(Name, Type) \
-        Name::Name( Type* pObject ) { pObj = pObject; } \
-        Name::~Name() {}
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

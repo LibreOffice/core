@@ -41,11 +41,6 @@
 #define INETHIST_SIZE_LIMIT   1024
 #define INETHIST_MAGIC_HEAD   0x484D4849UL
 
-/*
- * INetURLHistoryHint implementation.
- */
-IMPL_PTRHINT (INetURLHistoryHint, const INetURLObject);
-
 class INetURLHistory_Impl: private boost::noncopyable
 {
     struct head_entry

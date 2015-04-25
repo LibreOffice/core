@@ -107,7 +107,14 @@ public:
 };
 
 // broadcasted from PutUrl().
-DECL_PTRHINT (SVL_DLLPUBLIC, INetURLHistoryHint, const INetURLObject);
+class SVL_DLLPUBLIC INetURLHistoryHint: public SfxHint
+{
+    INetURLObject* pObj;
+public:
+    explicit INetURLHistoryHint( INetURLObject* Object ) : pObj(Object) {}
+    virtual ~INetURLHistoryHint() {}
+    INetURLObject* GetObject() const { return pObj; }
+};
 
 #endif // INCLUDED_SVL_INETHIST_HXX
 
