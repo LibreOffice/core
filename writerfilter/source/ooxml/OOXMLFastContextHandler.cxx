@@ -199,7 +199,7 @@ void OOXMLFastContextHandler::lcl_startFastElement
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    OOXMLFactory::getInstance()->startAction(this, Element);
+    OOXMLFactory::startAction(this, Element);
     if( Element == (NMSP_dmlWordDr|XML_positionV) )
         inPositionV = true;
     else if( Element == (NMSP_dmlWordDr|XML_positionH) )
@@ -211,7 +211,7 @@ void OOXMLFastContextHandler::lcl_endFastElement
 (Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    OOXMLFactory::getInstance()->endAction(this, Element);
+    OOXMLFactory::endAction(this, Element);
 }
 
 void SAL_CALL OOXMLFastContextHandler::endUnknownElement
@@ -241,7 +241,7 @@ uno::Reference< xml::sax::XFastContextHandler >
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return OOXMLFactory::getInstance()->createFastChildContext(this, Element);
+    return OOXMLFactory::createFastChildContext(this, Element);
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
@@ -267,7 +267,7 @@ void OOXMLFastContextHandler::lcl_characters
 throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     if (!m_bDiscardChildren)
-        OOXMLFactory::getInstance()->characters(this, rString);
+        OOXMLFactory::characters(this, rString);
 }
 
 void OOXMLFastContextHandler::setStream(Stream * pStream)
@@ -284,17 +284,17 @@ void OOXMLFastContextHandler::attributes
 (const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
  throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    OOXMLFactory::getInstance()->attributes(this, Attribs);
+    OOXMLFactory::attributes(this, Attribs);
 }
 
 void OOXMLFastContextHandler::startAction(Token_t Element)
 {
-    OOXMLFactory::getInstance()->startAction(this, Element);
+    OOXMLFactory::startAction(this, Element);
 }
 
 void OOXMLFastContextHandler::endAction(Token_t Element)
 {
-    OOXMLFactory::getInstance()->endAction(this, Element);
+    OOXMLFactory::endAction(this, Element);
 }
 
 void OOXMLFastContextHandler::setId(Id rId)
@@ -1647,7 +1647,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
         case NMSP_vmlWord:
         case NMSP_vmlOffice:
             if (!bGroupShape)
-                xContextHandler.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
+                xContextHandler.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
         // no break;
         default:
             if (!xContextHandler.is())
@@ -1831,7 +1831,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
         !((oox::getBaseToken(Element) == XML_linkedTxbx) || (oox::getBaseToken(Element) == XML_txbx));
 
     if ( bInNamespaces && (!bIsWrap || static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent()) )
-        xResult.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
+        xResult.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
     else if (mxContext.is()  && !bSkipImages)
     {
         OOXMLFastContextHandlerWrapper * pWrapper =
