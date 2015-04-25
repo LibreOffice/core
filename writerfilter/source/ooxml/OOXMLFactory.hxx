@@ -85,42 +85,25 @@ public:
 class OOXMLFactory
 {
 public:
-    typedef boost::intrusive_ptr<OOXMLFactory>Pointer_t;
 
-    static Pointer_t getInstance();
+    static css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContext(OOXMLFastContextHandler * pHandler, Token_t Element);
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContext(OOXMLFastContextHandler * pHandler, Token_t Element);
+    static css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromStart(OOXMLFastContextHandler * pHandler, Token_t Element);
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromStart(OOXMLFastContextHandler * pHandler, Token_t Element);
+    static void attributes(OOXMLFastContextHandler * pHandler, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
 
-    void attributes(OOXMLFastContextHandler * pHandler, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
+    static void characters(OOXMLFastContextHandler * pHandler, const OUString & rString);
 
-    void characters(OOXMLFastContextHandler * pHandler, const OUString & rString);
+    static void startAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
+    static void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
 
-    void startAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
-    void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
-
-    virtual ~OOXMLFactory();
-public:
-    sal_uInt32 mnRefCnt;
 private:
-    static Pointer_t m_Instance;
+    OOXMLFactory() {}
+    static OOXMLFactory_ns::Pointer_t getFactoryForNamespace(Id id);
 
-    OOXMLFactory();
-    OOXMLFactory_ns::Pointer_t getFactoryForNamespace(Id id);
-
-    css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromFactory(OOXMLFastContextHandler * pHandler, OOXMLFactory_ns::Pointer_t pFactory, Token_t Element);
+    static css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromFactory(OOXMLFastContextHandler * pHandler, OOXMLFactory_ns::Pointer_t pFactory, Token_t Element);
 };
 
-  inline void intrusive_ptr_add_ref(OOXMLFactory* p)
-  {
-      p->mnRefCnt++;
-  }
-  inline void intrusive_ptr_release(OOXMLFactory* p)
-  {
-      if (!(--p->mnRefCnt))
-          delete p;
-  }
 }
 }
 
