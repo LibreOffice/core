@@ -339,7 +339,14 @@ public:
 };
 
 
-DECL_PTRHINT(SVL_DLLPUBLIC, SfxPoolItemHint, SfxPoolItem);
+class SVL_DLLPUBLIC SfxPoolItemHint: public SfxHint
+{
+    SfxPoolItem* pObj;
+public:
+    explicit SfxPoolItemHint( SfxPoolItem* Object ) : pObj(Object) {}
+    virtual ~SfxPoolItemHint() {}
+    SfxPoolItem* GetObject() const { return pObj; }
+};
 
 
 
