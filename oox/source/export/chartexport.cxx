@@ -1288,20 +1288,60 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos, 
             XML_val, "edge",
             FSEND);
 
+    double x = rPos.Primary;
+    double y = rPos.Secondary;
+    double w = rSize.Primary;
+    double h = rSize.Secondary;
+    switch (rPos.Anchor)
+    {
+        case drawing::Alignment_LEFT:
+            y -= (h/2);
+        break;
+        case drawing::Alignment_TOP_LEFT:
+        break;
+        case drawing::Alignment_BOTTOM_LEFT:
+            y -= h;
+        break;
+        case drawing::Alignment_TOP:
+            x -= (w/2);
+        break;
+        case drawing::Alignment_CENTER:
+            x -= (w/2);
+            y -= (h/2);
+        break;
+        case drawing::Alignment_BOTTOM:
+            x -= (w/2);
+            y -= h;
+        break;
+        case drawing::Alignment_TOP_RIGHT:
+            x -= w;
+        break;
+        case drawing::Alignment_BOTTOM_RIGHT:
+            x -= w;
+            y -= h;
+        break;
+        case drawing::Alignment_RIGHT:
+            y -= (h/2);
+            x -= w;
+        break;
+        default:
+            SAL_WARN("oox.chart", "unhandled alignment case for manual layout export");
+    }
+
     pFS->singleElement(FSNS(XML_c, XML_x),
-            XML_val, IS(rPos.Primary),
+            XML_val, IS(x),
             FSEND);
 
     pFS->singleElement(FSNS(XML_c, XML_y),
-            XML_val, IS(rPos.Secondary),
+            XML_val, IS(y),
             FSEND);
 
     pFS->singleElement(FSNS(XML_c, XML_w),
-            XML_val, IS(rSize.Primary),
+            XML_val, IS(w),
             FSEND);
 
     pFS->singleElement(FSNS(XML_c, XML_h),
-            XML_val, IS(rSize.Secondary),
+            XML_val, IS(h),
             FSEND);
 
     pFS->endElement(FSNS(XML_c, XML_manualLayout));
