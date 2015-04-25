@@ -804,6 +804,9 @@ void ComboBox::Modify()
 
 void ComboBox::ImplUpdateFloatSelection()
 {
+    if (!mpImplLB)
+        return;
+
     // move text in the ListBox into the visible region
     mpImplLB->SetCallSelectionChangedHdl( false );
     if ( !IsMultiSelectionEnabled() )
