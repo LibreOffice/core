@@ -71,7 +71,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
     bool bOldSelected;
 
     {
-        osl::MutexGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( m_Mutex );
         bOldSelected = bIsSelected;
         bIsSelected = bNewSelected;
     }
@@ -100,7 +100,7 @@ void SwAccessiblePage::_InvalidateFocus()
         bool bSelected;
 
         {
-            osl::MutexGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( m_Mutex );
             bSelected = bIsSelected;
         }
         OSL_ENSURE( bSelected, "focus object should be selected" );
@@ -132,7 +132,7 @@ SwAccessiblePage::~SwAccessiblePage()
 
 bool SwAccessiblePage::HasCursor()
 {
-    osl::MutexGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( m_Mutex );
     return bIsSelected;
 }
 

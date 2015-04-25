@@ -59,57 +59,57 @@ class SwAccessibleContext :
     friend class SwAccessibleSelectionHelper;
 
 protected:
-    mutable ::osl::Mutex aListenerMutex;
-    mutable ::osl::Mutex aMutex;
+    mutable ::osl::Mutex m_ListenerMutex;
+    mutable ::osl::Mutex m_Mutex;
 
 private:
-    OUString sName;  // immutable outside constructor
+    OUString m_sName;  // immutable outside constructor
 
     // The parent if it has been retrieved. This is always an
     // SwAccessibleContext. (protected by Mutex)
     ::com::sun::star::uno::WeakReference <
-        ::com::sun::star::accessibility::XAccessible > xWeakParent;
+        ::com::sun::star::accessibility::XAccessible > m_xWeakParent;
 
-    SwAccessibleMap *pMap;  // must be protected by solar mutex
+    SwAccessibleMap *m_pMap; // must be protected by solar mutex
 
-    sal_uInt32 nClientId;   // client id in the AccessibleEventNotifier queue
-    sal_Int16 nRole;        // immutable outside constructor
+    sal_uInt32 m_nClientId;  // client id in the AccessibleEventNotifier queue
+    sal_Int16 m_nRole;        // immutable outside constructor
 
     // The current states (protected by mutex)
-    bool bIsShowingState : 1;
-    bool bIsEditableState : 1;
-    bool bIsOpaqueState : 1;
-    bool bIsDefuncState : 1;
+    bool m_isShowingState : 1;
+    bool m_isEditableState : 1;
+    bool m_isOpaqueState : 1;
+    bool m_isDefuncState : 1;
 
     // Are we currently disposing that object (protected by solar mutex)?
-    bool bDisposing : 1;
+    bool m_isDisposing : 1;
 
     // #i85634# - boolean, indicating if the accessible context is
     // in general registered at the accessible map.
-    bool bRegisteredAtAccessibleMap;
+    bool m_isRegisteredAtAccessibleMap;
 
     void InitStates();
     //Add a member to identify the first time that document load
-    bool bBeginDocumentLoad;
+    bool m_isBeginDocumentLoad;
 
 protected:
-    void SetName( const OUString& rName ) { sName = rName; }
+    void SetName( const OUString& rName ) { m_sName = rName; }
     inline sal_Int16 GetRole() const
     {
-        return nRole;
+        return m_nRole;
     }
     //Add a member to identify if the document is Asyn load.
     bool isIfAsynLoad;
     //This flag is used to mark the object's selected state.
-    bool   bIsSeletedInDoc;
+    bool   m_isSelectedInDoc;
     void SetParent( SwAccessibleContext *pParent );
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> GetWeakParent() const;
 
-    bool IsDisposing() const { return bDisposing; }
+    bool IsDisposing() const { return m_isDisposing; }
 
     vcl::Window *GetWindow();
-    SwAccessibleMap *GetMap() { return pMap; }
-    const SwAccessibleMap *GetMap() const { return pMap; }
+    SwAccessibleMap *GetMap() { return m_pMap; }
+    const SwAccessibleMap *GetMap() const { return m_pMap; }
 
     /** convenience method to get the SwViewShell through accessibility map */
     inline SwViewShell* GetShell()
@@ -166,7 +166,7 @@ protected:
     virtual void _InvalidateFocus();
 
 public:
-    void SetMap(SwAccessibleMap *pM){pMap = pM;}
+    void SetMap(SwAccessibleMap *const pMap) { m_pMap = pMap; }
     void FireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
 protected:
@@ -190,14 +190,14 @@ protected:
     // #i85634#
     inline void NotRegisteredAtAccessibleMap()
     {
-        bRegisteredAtAccessibleMap = false;
+        m_isRegisteredAtAccessibleMap = false;
     }
     void RemoveFrmFromAccessibleMap();
 
     virtual ~SwAccessibleContext();
 
 public:
-    SwAccessibleContext( SwAccessibleMap *pMap, sal_Int16 nRole,
+    SwAccessibleContext( SwAccessibleMap *m_pMap, sal_Int16 nRole,
                          const SwFrm *pFrm );
 
     // XAccessible
@@ -362,7 +362,7 @@ public:
     // #i88070# - get all additional accessible children
     void GetAdditionalAccessibleChildren( std::vector< vcl::Window* >* pChildren );
 
-    const OUString& GetName() const { return sName; }
+    const OUString& GetName() const { return m_sName; }
 
     virtual bool HasCursor();   // required by map to remember that object
 
@@ -378,7 +378,7 @@ public:
 
     //This method is used to updated the selected state and fire the selected state changed event.
     virtual bool SetSelectedState(bool bSeleted);
-    bool  IsSeletedInDoc(){  return bIsSeletedInDoc; }
+    bool  IsSeletedInDoc() { return m_isSelectedInDoc; }
 
     static OUString GetResource( sal_uInt16 nResId,
                                         const OUString *pArg1 = 0,

@@ -425,7 +425,7 @@ void SwAccessibleParagraph::_InvalidateContent( bool bVisibleDataFired )
     nHeadingLevel = GetRealHeadingLevel();
     bool bOldIsHeading;
     {
-        osl::MutexGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( m_Mutex );
         bOldIsHeading = bIsHeading;
         if( bIsHeading != bNewIsHeading )
             bIsHeading = bNewIsHeading;
@@ -445,7 +445,7 @@ void SwAccessibleParagraph::_InvalidateContent( bool bVisibleDataFired )
         OUString sNewDesc( GetDescription() );
         OUString sOldDesc;
         {
-            osl::MutexGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( m_Mutex );
             sOldDesc = sDesc;
             if( sDesc != sNewDesc )
                 sDesc = sNewDesc;
@@ -470,7 +470,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     sal_Int32 nNew = GetCaretPos();
     sal_Int32 nOld;
     {
-        osl::MutexGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( m_Mutex );
         nOld = nOldCaretPos;
         nOldCaretPos = nNew;
     }
@@ -520,7 +520,7 @@ void SwAccessibleParagraph::_InvalidateFocus()
     {
         sal_Int32 nPos;
         {
-            osl::MutexGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( m_Mutex );
             nPos = nOldCaretPos;
         }
         OSL_ENSURE( nPos != -1, "focus object should be selected" );
@@ -568,7 +568,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 
 bool SwAccessibleParagraph::HasCursor()
 {
-    osl::MutexGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( m_Mutex );
     return nOldCaretPos != -1;
 }
 
@@ -933,7 +933,7 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription()
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    osl::MutexGuard aGuard2( aMutex );
+    osl::MutexGuard aGuard2( m_Mutex );
     if( sDesc.isEmpty() )
         sDesc = GetDescription();
 
@@ -1287,7 +1287,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 
     sal_Int32 nRet = GetCaretPos();
     {
-        osl::MutexGuard aOldCaretPosGuard( aMutex );
+        osl::MutexGuard aOldCaretPosGuard( m_Mutex );
         OSL_ENSURE( nRet == nOldCaretPos, "caret pos out of sync" );
         nOldCaretPos = nRet;
     }

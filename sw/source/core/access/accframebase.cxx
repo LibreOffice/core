@@ -146,7 +146,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
     bool bOldSelected;
 
     {
-        osl::MutexGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( m_Mutex );
         bOldSelected = bIsSelected;
         bIsSelected = bNewSelected;
     }
@@ -192,7 +192,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
         bool bSelected;
 
         {
-            osl::MutexGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( m_Mutex );
             bSelected = bIsSelected;
         }
         assert(bSelected && "focus object should be selected");
@@ -204,7 +204,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
 
 bool SwAccessibleFrameBase::HasCursor()
 {
-    osl::MutexGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( m_Mutex );
     return bIsSelected;
 }
 
@@ -377,12 +377,12 @@ SwFlyFrm* SwAccessibleFrameBase::getFlyFrm() const
 
 bool SwAccessibleFrameBase::SetSelectedState( bool )
 {
-    bool bParaSeleted = GetSelectedState() || IsSelected();
+    bool bParaSelected = GetSelectedState() || IsSelected();
 
-    if(bIsSeletedInDoc != bParaSeleted)
+    if (m_isSelectedInDoc != bParaSelected)
     {
-        bIsSeletedInDoc = bParaSeleted;
-        FireStateChangedEvent( AccessibleStateType::SELECTED, bParaSeleted );
+        m_isSelectedInDoc = bParaSelected;
+        FireStateChangedEvent( AccessibleStateType::SELECTED, bParaSelected );
         return true;
     }
     return false;

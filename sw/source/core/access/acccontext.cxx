@@ -55,27 +55,27 @@ using namespace ::com::sun::star::accessibility;
 
 void SwAccessibleContext::InitStates()
 {
-    bIsShowingState = GetMap() && IsShowing( *(GetMap()) );
+    m_isShowingState = GetMap() && IsShowing( *(GetMap()) );
 
     SwViewShell *pVSh = GetMap()->GetShell();
-    bIsEditableState = pVSh && IsEditable( pVSh );
-    bIsOpaqueState = pVSh && IsOpaque( pVSh );
-    bIsDefuncState = false;
+    m_isEditableState = pVSh && IsEditable( pVSh );
+    m_isOpaqueState = pVSh && IsOpaque( pVSh );
+    m_isDefuncState = false;
 }
 
 void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 {
-    osl::MutexGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( m_Mutex );
 
     uno::Reference < XAccessible > xParent( pParent );
-    xWeakParent = xParent;
+    m_xWeakParent = xParent;
 }
 
 uno::Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
 {
-    osl::MutexGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( m_Mutex );
 
-    uno::Reference< XAccessible > xParent( xWeakParent );
+    uno::Reference< XAccessible > xParent( m_xWeakParent );
     return xParent;
 }
 
@@ -278,9 +278,9 @@ void SwAccessibleContext::Scrolled( const SwRect& rOldVisArea )
     bool bIsOldShowingState;
     bool bIsNewShowingState = IsShowing( *(GetMap()) );
     {
-        osl::MutexGuard aGuard( aMutex );
-        bIsOldShowingState = bIsShowingState;
-        bIsShowingState = bIsNewShowingState;
+        osl::MutexGuard aGuard( m_Mutex );
+        bIsOldShowingState = m_isShowingState;
+        m_isShowingState = bIsNewShowingState;
     }
 
     if( bIsOldShowingState != bIsNewShowingState )
@@ -443,8 +443,8 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
         rEvent.Source = xThis;
     }
 
-    if (nClientId)
-        comphelper::AccessibleEventNotifier::addEvent( nClientId, rEvent );
+    if (m_nClientId)
+        comphelper::AccessibleEventNotifier::addEvent( m_nClientId, rEvent );
 }
 
 void SwAccessibleContext::FireVisibleDataEvent()
@@ -475,11 +475,11 @@ void SwAccessibleContext::GetStates(
     SolarMutexGuard aGuard;
 
     // SHOWING
-    if( bIsShowingState )
+    if (m_isShowingState)
         rStateSet.AddState( AccessibleStateType::SHOWING );
 
     // EDITABLE
-    if( bIsEditableState )
+    if (m_isEditableState)
     //Set editable state to graphic and other object when the document is editable
     {
         rStateSet.AddState( AccessibleStateType::EDITABLE );
@@ -490,13 +490,13 @@ void SwAccessibleContext::GetStates(
     rStateSet.AddState( AccessibleStateType::ENABLED );
 
     // OPAQUE
-    if( bIsOpaqueState )
+    if (m_isOpaqueState)
         rStateSet.AddState( AccessibleStateType::OPAQUE );
 
     // VISIBLE
     rStateSet.AddState( AccessibleStateType::VISIBLE );
 
-    if( bIsDefuncState )
+    if (m_isDefuncState)
         rStateSet.AddState( AccessibleStateType::DEFUNC );
 }
 
@@ -504,27 +504,27 @@ bool SwAccessibleContext::IsEditableState()
 {
     bool bRet;
     {
-        osl::MutexGuard aGuard( aMutex );
-        bRet = bIsEditableState;
+        osl::MutexGuard aGuard( m_Mutex );
+        bRet = m_isEditableState;
     }
 
     return bRet;
 }
 
-SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
-                                          sal_Int16 nR,
+SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *const pMap,
+                                          sal_Int16 const nRole,
                                           const SwFrm *pF )
-    : SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
-                         pM->GetShell()->IsPreview() )
-    , pMap( pM )
-    , nClientId(0)
-    , nRole( nR )
-    , bDisposing( false )
-    , bRegisteredAtAccessibleMap( true )
+    : SwAccessibleFrame( pMap->GetVisArea().SVRect(), pF,
+                         pMap->GetShell()->IsPreview() )
+    , m_pMap( pMap )
+    , m_nClientId(0)
+    , m_nRole(nRole)
+    , m_isDisposing( false )
+    , m_isRegisteredAtAccessibleMap( true )
     //Initialize the begin document load and IfAsynLoad to true
-    , bBeginDocumentLoad( true )
+    , m_isBeginDocumentLoad( true )
     , isIfAsynLoad( true )
-    , bIsSeletedInDoc( false)
+    , m_isSelectedInDoc(false)
 {
     InitStates();
 }
@@ -550,10 +550,10 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount()
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
     //Notify the frame is a document
-    if( nRole == AccessibleRole::DOCUMENT_TEXT )
+    if (m_nRole == AccessibleRole::DOCUMENT_TEXT)
         bIsAccDocUse = true;
 
-    return bDisposing ? 0 : GetChildCount( *(GetMap()) );
+    return m_isDisposing ? 0 : GetChildCount( *(GetMap()) );
 }
 
 uno::Reference< XAccessible> SAL_CALL
@@ -565,7 +565,7 @@ uno::Reference< XAccessible> SAL_CALL
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     //Notify the frame is a document
-    if( nRole == AccessibleRole::DOCUMENT_TEXT )
+    if (m_nRole == AccessibleRole::DOCUMENT_TEXT)
         bIsAccDocUse = true;
 
     const SwAccessibleChild aChild( GetChild( *(GetMap()), nIndex ) );
@@ -582,9 +582,9 @@ uno::Reference< XAccessible> SAL_CALL
     if( aChild.GetSwFrm() )
     {
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
-                GetMap()->GetContextImpl( aChild.GetSwFrm(), !bDisposing )  );
+                GetMap()->GetContextImpl( aChild.GetSwFrm(), !m_isDisposing )  );
         //Send out accessible event when begin load.
-        if( bBeginDocumentLoad && nRole == AccessibleRole::DOCUMENT_TEXT )
+        if (m_isBeginDocumentLoad && m_nRole == AccessibleRole::DOCUMENT_TEXT)
         {
 
             FireStateChangedEvent( AccessibleStateType::FOCUSABLE,true );
@@ -599,7 +599,7 @@ uno::Reference< XAccessible> SAL_CALL
                 // OFFSCREEN again?
                 // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,false );
             }
-            bBeginDocumentLoad = false;
+            m_isBeginDocumentLoad = false;
         }
         if( xChildImpl.is() )
         {
@@ -611,7 +611,7 @@ uno::Reference< XAccessible> SAL_CALL
     {
         ::rtl::Reference < ::accessibility::AccessibleShape > xChildImpl(
                 GetMap()->GetContextImpl( aChild.GetDrawObject(),
-                                          this, !bDisposing )  );
+                                          this, !m_isDisposing) );
         if( xChildImpl.is() )
             xChild = xChildImpl.get();
     }
@@ -631,18 +631,18 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent()
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     const SwFrm *pUpper = GetParent();
-    OSL_ENSURE( pUpper != 0 || bDisposing, "no upper found" );
+    OSL_ENSURE( pUpper != 0 || m_isDisposing, "no upper found" );
 
     uno::Reference< XAccessible > xAcc;
     if( pUpper )
-        xAcc = GetMap()->GetContext( pUpper, !bDisposing );
+        xAcc = GetMap()->GetContext( pUpper, !m_isDisposing );
 
-    OSL_ENSURE( xAcc.is() || bDisposing, "no parent found" );
+    OSL_ENSURE( xAcc.is() || m_isDisposing, "no parent found" );
 
     // Remember the parent as weak ref.
     {
-        osl::MutexGuard aWeakParentGuard( aMutex );
-        xWeakParent = xAcc;
+        osl::MutexGuard aWeakParentGuard( m_Mutex );
+        m_xWeakParent = xAcc;
     }
 
     return xAcc;
@@ -656,14 +656,14 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent()
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     const SwFrm *pUpper = GetParent();
-    OSL_ENSURE( pUpper != 0 || bDisposing, "no upper found" );
+    OSL_ENSURE( pUpper != 0 || m_isDisposing, "no upper found" );
 
     sal_Int32 nIndex = -1;
     if( pUpper )
     {
         ::rtl::Reference < SwAccessibleContext > xAccImpl(
-            GetMap()->GetContextImpl( pUpper, !bDisposing )  );
-        OSL_ENSURE( xAccImpl.is() || bDisposing, "no parent found" );
+            GetMap()->GetContextImpl(pUpper, !m_isDisposing) );
+        OSL_ENSURE( xAccImpl.is() || m_isDisposing, "no parent found" );
         if( xAccImpl.is() )
             nIndex = xAccImpl->GetChildIndex( *(GetMap()), SwAccessibleChild(GetFrm()) );
     }
@@ -674,7 +674,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL SwAccessibleContext::getAccessibleRole()
         throw (uno::RuntimeException, std::exception)
 {
-    return nRole;
+    return m_nRole;
 }
 
 OUString SAL_CALL SwAccessibleContext::getAccessibleDescription()
@@ -687,7 +687,7 @@ OUString SAL_CALL SwAccessibleContext::getAccessibleDescription()
 OUString SAL_CALL SwAccessibleContext::getAccessibleName()
         throw (uno::RuntimeException, std::exception)
 {
-    return sName;
+    return m_sName;
 }
 
 uno::Reference< XAccessibleRelationSet> SAL_CALL
@@ -710,7 +710,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ::utl::AccessibleStateSetHelper *pStateSet =
         new ::utl::AccessibleStateSetHelper;
 
-    if( bIsSeletedInDoc )
+    if (m_isSelectedInDoc)
         pStateSet->AddState( AccessibleStateType::SELECTED );
 
     uno::Reference<XAccessibleStateSet> xStateSet( pStateSet );
@@ -735,9 +735,9 @@ void SAL_CALL SwAccessibleContext::addAccessibleEventListener(
     if (xListener.is())
     {
         SolarMutexGuard aGuard;
-        if (!nClientId)
-            nClientId = comphelper::AccessibleEventNotifier::registerClient( );
-        comphelper::AccessibleEventNotifier::addEventListener( nClientId, xListener );
+        if (!m_nClientId)
+            m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
+        comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
     }
 }
 
@@ -748,15 +748,15 @@ void SAL_CALL SwAccessibleContext::removeAccessibleEventListener(
     if (xListener.is())
     {
         SolarMutexGuard aGuard;
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
         if ( !nListenerCount )
         {
             // no listeners anymore
             // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
             // and at least to us not firing any events anymore, in case somebody calls
             // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( nClientId );
-            nClientId = 0;
+            comphelper::AccessibleEventNotifier::revokeClient( m_nClientId );
+            m_nClientId = 0;
         }
     }
 }
@@ -1052,7 +1052,7 @@ void SwAccessibleContext::Dispose( bool bRecursive )
     OSL_ENSURE( GetMap()->GetVisArea() == GetVisArea(),
                 "invalid vis area for dispose" );
 
-    bDisposing = true;
+    m_isDisposing = true;
 
     // dispose children
     if( bRecursive )
@@ -1076,22 +1076,22 @@ void SwAccessibleContext::Dispose( bool bRecursive )
     // set defunc state (its not required to broadcast a state changed
     // event if the object is disposed afterwards)
     {
-        osl::MutexGuard aDefuncStateGuard( aMutex );
-        bIsDefuncState = true;
+        osl::MutexGuard aDefuncStateGuard( m_Mutex );
+        m_isDefuncState = true;
     }
 
     // broadcast dispose event
-    if ( nClientId )
+    if (m_nClientId)
     {
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
-        nClientId =  0;
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( m_nClientId, *this );
+        m_nClientId =  0;
     }
 
     RemoveFrmFromAccessibleMap();
     ClearFrm();
-    pMap = 0;
+    m_pMap = nullptr;
 
-    bDisposing = false;
+    m_isDisposing = false;
 }
 
 void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
@@ -1144,9 +1144,9 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
     bool bIsOldShowingState;
     bool bIsNewShowingState = IsShowing( *(GetMap()) );
     {
-        osl::MutexGuard aShowingStateGuard( aMutex );
-        bIsOldShowingState = bIsShowingState;
-        bIsShowingState = bIsNewShowingState;
+        osl::MutexGuard aShowingStateGuard( m_Mutex );
+        bIsOldShowingState = m_isShowingState;
+        m_isShowingState = bIsNewShowingState;
     }
 
     if( bIsOldShowingState != bIsNewShowingState )
@@ -1292,9 +1292,9 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
                 bool bIsOldEditableState;
                 bool bIsNewEditableState = IsEditable( pVSh );
                 {
-                    osl::MutexGuard aGuard( aMutex );
-                    bIsOldEditableState = bIsEditableState;
-                    bIsEditableState = bIsNewEditableState;
+                    osl::MutexGuard aGuard( m_Mutex );
+                    bIsOldEditableState = m_isEditableState;
+                    m_isEditableState = bIsNewEditableState;
                 }
 
                 if( bIsOldEditableState != bIsNewEditableState )
@@ -1306,9 +1306,9 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
                 bool bIsOldOpaqueState;
                 bool bIsNewOpaqueState = IsOpaque( pVSh );
                 {
-                    osl::MutexGuard aGuard( aMutex );
-                    bIsOldOpaqueState = bIsOpaqueState;
-                    bIsOpaqueState = bIsNewOpaqueState;
+                    osl::MutexGuard aGuard( m_Mutex );
+                    bIsOldOpaqueState = m_isOpaqueState;
+                    m_isOpaqueState = bIsNewOpaqueState;
                 }
 
                 if( bIsOldOpaqueState != bIsNewOpaqueState )
@@ -1438,7 +1438,7 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
 
 void SwAccessibleContext::RemoveFrmFromAccessibleMap()
 {
-    if( bRegisteredAtAccessibleMap && GetFrm() && GetMap() )
+    if (m_isRegisteredAtAccessibleMap && GetFrm() && GetMap())
         GetMap()->RemoveContext( GetFrm() );
 }
 
@@ -1489,12 +1489,12 @@ void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< vcl::Win
     }
 }
 
-bool SwAccessibleContext::SetSelectedState(bool bSeleted)
+bool SwAccessibleContext::SetSelectedState(bool const bSelected)
 {
-    if(bIsSeletedInDoc != bSeleted)
+    if (m_isSelectedInDoc != bSelected)
     {
-        bIsSeletedInDoc = bSeleted;
-        FireStateChangedEvent( AccessibleStateType::SELECTED, bSeleted );
+        m_isSelectedInDoc = bSelected;
+        FireStateChangedEvent( AccessibleStateType::SELECTED, bSelected );
         return true;
     }
     return false;
