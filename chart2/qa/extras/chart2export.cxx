@@ -91,6 +91,7 @@ public:
     void testBubble3DXLSX();
     void testNoMarkerXLSX();
     void testTitleManualLayoutXLSX();
+    void testPlotAreaManualLayoutXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -146,6 +147,7 @@ public:
     CPPUNIT_TEST(testBubble3DXLSX);
     CPPUNIT_TEST(testNoMarkerXLSX);
     CPPUNIT_TEST(testTitleManualLayoutXLSX);
+    CPPUNIT_TEST(testPlotAreaManualLayoutXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1336,6 +1338,34 @@ void Chart2ExportTest::testTitleManualLayoutXLSX()
     CPPUNIT_ASSERT(nX != nY);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:bodyPr", "rot", "1200000");
+}
+
+void Chart2ExportTest::testPlotAreaManualLayoutXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "plot_area_manual_layout.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:xMode", "val", "edge");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:yMode", "val", "edge");
+
+    OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:x", "val");
+    double nX = aXVal.toDouble();
+    CPPUNIT_ASSERT(nX > 0 && nX < 1);
+
+    OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:y", "val");
+    double nY = aYVal.toDouble();
+    CPPUNIT_ASSERT(nY > 0 && nY < 1);
+    CPPUNIT_ASSERT(nX != nY);
+
+    OUString aWVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:w", "val");
+    double nW = aWVal.toDouble();
+    CPPUNIT_ASSERT(nW > 0 && nW < 1);
+
+    OUString aHVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:h", "val");
+    double nH = aHVal.toDouble();
+    CPPUNIT_ASSERT(nH > 0 && nH < 1);
+    CPPUNIT_ASSERT(nH != nW);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
