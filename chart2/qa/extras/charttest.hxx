@@ -64,8 +64,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace css;
+using namespace css::uno;
 
 class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
@@ -152,7 +152,7 @@ void ChartTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxDesktop.set( com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) ) );
+    mxDesktop.set( css::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) ) );
 }
 
 void ChartTest::tearDown()

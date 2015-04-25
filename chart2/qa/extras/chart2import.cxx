@@ -637,7 +637,7 @@ void Chart2ImportTest::testTransparentBackground(OUString const & filename)
     Reference< beans::XPropertySet > xPropSet( xChart2Doc->getArea(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("failed to get Area", xPropSet.is());
 
-    com::sun::star::drawing::FillStyle aStyle;
+    css::drawing::FillStyle aStyle;
     xPropSet -> getPropertyValue("FillStyle") >>= aStyle;
 
     CPPUNIT_ASSERT_MESSAGE("Background needs to be with solid fill style", aStyle == 1);
