@@ -521,7 +521,6 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *const pMap,
     , m_nRole(nRole)
     , m_isDisposing( false )
     , m_isRegisteredAtAccessibleMap( true )
-    , m_isBeginDocumentLoad( true )
     , m_isSelectedInDoc(false)
 {
     InitStates();
@@ -581,21 +580,6 @@ uno::Reference< XAccessible> SAL_CALL
     {
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
                 GetMap()->GetContextImpl( aChild.GetSwFrm(), !m_isDisposing )  );
-        //Send out accessible event when begin load.
-        if (m_isBeginDocumentLoad && m_nRole == AccessibleRole::DOCUMENT_TEXT)
-        {
-
-            FireStateChangedEvent( AccessibleStateType::FOCUSABLE,true );
-            FireStateChangedEvent( AccessibleStateType::BUSY,true );
-            FireStateChangedEvent( AccessibleStateType::FOCUSED,true );
-            // OFFSCREEN == !SHOWING, should stay consistent
-            // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,true );
-            FireStateChangedEvent( AccessibleStateType::SHOWING,true );
-            FireStateChangedEvent( AccessibleStateType::BUSY,false );
-            // OFFSCREEN again?
-            // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,false );
-            m_isBeginDocumentLoad = false;
-        }
         if( xChildImpl.is() )
         {
             xChildImpl->SetParent( this );

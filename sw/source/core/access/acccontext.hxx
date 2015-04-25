@@ -89,8 +89,6 @@ private:
     bool m_isRegisteredAtAccessibleMap;
 
     void InitStates();
-    //Add a member to identify the first time that document load
-    bool m_isBeginDocumentLoad;
 
 protected:
     void SetName( const OUString& rName ) { m_sName = rName; }
