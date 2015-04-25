@@ -886,6 +886,9 @@ Any ORowSetValue::makeAny() const
     {
         switch(getTypeKind())
         {
+            case DataType::SQLNULL:
+                assert(rValue == Any());
+                break;
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::DECIMAL:
@@ -965,7 +968,7 @@ Any ORowSetValue::makeAny() const
                 break;
             default:
                 SAL_WARN( "connectivity.commontools","ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
-                rValue = makeAny();
+                rValue = getAny();
                 break;
         }
     }
