@@ -139,9 +139,8 @@ bool Window::IsDisposed() const
 
 void Window::dispose()
 {
-    mpWindowImpl->mbInDispose = true;
-
-    assert( mpWindowImpl && mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
+    assert( mpWindowImpl );
+    assert( !mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
     assert( !mpWindowImpl->mpParent ||
             !mpWindowImpl->mpParent->IsDisposed() ||
             "vcl::Window child should have its parent disposed first" );
@@ -158,6 +157,8 @@ void Window::dispose()
         if( xCanvasComponent.is() )
             xCanvasComponent->dispose();
     }
+
+    mpWindowImpl->mbInDispose = true;
 
     CallEventListeners( VCLEVENT_OBJECT_DYING );
 
@@ -576,6 +577,7 @@ void Window::dispose()
 
 Window::~Window()
 {
+    // FIXME: we should kill all LazyDeletor usage.
     vcl::LazyDeletor<vcl::Window>::Undelete( this );
     disposeOnce();
 }
