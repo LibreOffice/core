@@ -29,7 +29,7 @@ String STR_VIEWLAYOUT_BOOK
 };
 String STR_BOOKCTRL_HINT
 {
-    Text [ en-US ] = "Page number in document. Click to open Navigator window.";
+    Text [ en-US ] = "Page number in document. Click to open Navigator window or right-click for bookmark list.";
 };
 String STR_BOOKCTRL_HINT_EXTENDED
 {
