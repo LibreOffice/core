@@ -148,7 +148,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         return nullptr;
     }
 
-    return OOXMLFactory::getInstance()->createFastChildContextFromStart(getContextHandler().get(), Element);
+    return OOXMLFactory::createFastChildContextFromStart(getContextHandler().get(), Element);
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL

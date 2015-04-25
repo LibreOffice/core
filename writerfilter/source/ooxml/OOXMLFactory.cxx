@@ -38,29 +38,6 @@ OOXMLFactory_ns::~OOXMLFactory_ns()
 
 // class OOXMLFactory
 
-typedef rtl::Static< osl::Mutex, OOXMLFactory > OOXMLFactory_Mutex;
-
-OOXMLFactory::Pointer_t OOXMLFactory::m_Instance;
-
-OOXMLFactory::OOXMLFactory()
-{
-    // multi-thread-safe mutex for all platforms
-    osl::MutexGuard aGuard(OOXMLFactory_Mutex::get());
-    mnRefCnt = 0;
-}
-
-OOXMLFactory::~OOXMLFactory()
-{
-}
-
-OOXMLFactory::Pointer_t OOXMLFactory::getInstance()
-{
-    if (m_Instance.get() == nullptr)
-        m_Instance.reset(new OOXMLFactory());
-
-    return m_Instance;
-}
-
 void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                               const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
