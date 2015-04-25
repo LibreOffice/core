@@ -107,7 +107,6 @@ public:
  */
 class SwAccessibleDocument : public SwAccessibleDocumentBase,
                              public com::sun::star::accessibility::XAccessibleSelection,
-                             public com::sun::star::document::XEventListener,
                              public com::sun::star::accessibility::XAccessibleExtendedAttributes,
                              public com::sun::star::accessibility::XAccessibleGetAccFlowTo
 {
@@ -125,11 +124,6 @@ public:
     SwAccessibleDocument( SwAccessibleMap* pInitMap );
 
     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
-    //  XEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
 

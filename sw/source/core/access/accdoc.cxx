@@ -465,12 +465,6 @@ uno::Any SwAccessibleDocument::queryInterface(
         uno::Reference<XAccessibleSelection> aSelect = this;
         aRet <<= aSelect;
     }
-    //Add XEventListener interface support.
-    else if ( (rType == cppu::UnoType<com::sun::star::document::XEventListener>::get()) )
-    {
-        uno::Reference<com::sun::star::document::XEventListener> aSelect = this;
-        aRet <<= aSelect;
-    }
     else  if ( rType == cppu::UnoType<XAccessibleExtendedAttributes>::get())
     {
         uno::Reference<XAccessibleExtendedAttributes> aAttribute = this;
@@ -494,13 +488,10 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
 
     sal_Int32 nIndex = aTypes.getLength();
     //Reset types memory alloc
-    //aTypes.realloc( nIndex + 1 );
-    aTypes.realloc( nIndex + 2 );
+    aTypes.realloc( nIndex + 1 );
 
     uno::Type* pTypes = aTypes.getArray();
     pTypes[nIndex] = cppu::UnoType<XAccessibleSelection>::get();
-    //Add XEventListener interface support.
-    pTypes[nIndex + 1 ] = cppu::UnoType<com::sun::star::document::XEventListener>::get();
     return aTypes;
 }
 
@@ -560,40 +551,6 @@ void SwAccessibleDocument::deselectAccessibleChild(
             uno::RuntimeException, std::exception )
 {
     maSelectionHelper.deselectAccessibleChild( nChildIndex );
-}
-
-//Implement XEventListener interfaces
-void SAL_CALL SwAccessibleDocument::notifyEvent( const ::com::sun::star::document::EventObject& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard g;
-
-    if ( Event.EventName == "FirstPageShows" )
-    {
-        FireStateChangedEvent( AccessibleStateType::FOCUSED,true );
-    }
-    else if ( Event.EventName == "LoadFinished" )
-    {
-        // IA2 CWS. MT: OFFSCREEN == !SHOWING, should stay consistent
-        // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,true );
-        // MT: LoadFinished => Why not SHOWING == TRUE?
-        FireStateChangedEvent( AccessibleStateType::SHOWING,false );
-    }
-    else if ( Event.EventName == "FormatFinished" )
-    {
-        FireStateChangedEvent( AccessibleStateType::BUSY,false );
-        // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,false );
-        FireStateChangedEvent( AccessibleStateType::SHOWING,true );
-    }
-    else
-    {
-        isIfAsynLoad = false;
-    }
-}
-
-void SAL_CALL SwAccessibleDocument::disposing( const ::com::sun::star::lang::EventObject& )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
 }
 
 uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()

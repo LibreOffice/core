@@ -521,9 +521,7 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *const pMap,
     , m_nRole(nRole)
     , m_isDisposing( false )
     , m_isRegisteredAtAccessibleMap( true )
-    //Initialize the begin document load and IfAsynLoad to true
     , m_isBeginDocumentLoad( true )
-    , isIfAsynLoad( true )
     , m_isSelectedInDoc(false)
 {
     InitStates();
@@ -589,16 +587,13 @@ uno::Reference< XAccessible> SAL_CALL
 
             FireStateChangedEvent( AccessibleStateType::FOCUSABLE,true );
             FireStateChangedEvent( AccessibleStateType::BUSY,true );
-            if( !isIfAsynLoad )
-            {
-                FireStateChangedEvent( AccessibleStateType::FOCUSED,true );
-                // OFFSCREEN == !SHOWING, should stay consistent
-                // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,true );
-                FireStateChangedEvent( AccessibleStateType::SHOWING,true );
-                FireStateChangedEvent( AccessibleStateType::BUSY,false );
-                // OFFSCREEN again?
-                // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,false );
-            }
+            FireStateChangedEvent( AccessibleStateType::FOCUSED,true );
+            // OFFSCREEN == !SHOWING, should stay consistent
+            // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,true );
+            FireStateChangedEvent( AccessibleStateType::SHOWING,true );
+            FireStateChangedEvent( AccessibleStateType::BUSY,false );
+            // OFFSCREEN again?
+            // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,false );
             m_isBeginDocumentLoad = false;
         }
         if( xChildImpl.is() )

@@ -98,8 +98,6 @@ protected:
     {
         return m_nRole;
     }
-    //Add a member to identify if the document is Asyn load.
-    bool isIfAsynLoad;
     //This flag is used to mark the object's selected state.
     bool   m_isSelectedInDoc;
     void SetParent( SwAccessibleContext *pParent );
