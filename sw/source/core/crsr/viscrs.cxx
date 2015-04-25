@@ -528,7 +528,7 @@ SwShellCrsr::SwShellCrsr(
 {}
 
 SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
-    : SwCursor(rICrsr)
+    : SwCursor(rICrsr, &rICrsr)
     , SwSelPaintRects(*rICrsr.GetShell())
     , m_MarkPt(rICrsr.GetMkPos())
     , m_PointPt(rICrsr.GetPtPos())

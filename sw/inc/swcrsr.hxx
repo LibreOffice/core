@@ -69,6 +69,8 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
 
     using SwPaM::Find;
 
+    SwCursor(SwCursor const& rPaM) SAL_DELETED_FUNCTION;
+
 protected:
     _SwCursor_SavePos* CreateNewSavePos() const;
     void SaveState();
@@ -86,8 +88,9 @@ public:
     SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel );
     virtual ~SwCursor();
 
-    // @@@ semantic: no copy ctor.
-    SwCursor( SwCursor& rCpy);
+    /// this takes a second parameter, which indicates the Ring that
+    /// the new cursor should be part of (may be null)
+    SwCursor(SwCursor const& rCursor, SwPaM* pRing);
 
 public:
 
