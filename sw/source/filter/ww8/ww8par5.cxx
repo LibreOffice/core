@@ -2204,7 +2204,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
         WW8_CP nOldCp = pPlcxMan->Where();
         WW8_CP nCp = nOldCp + nOffset;
 
-        SwPaM aPaM(*pPaM);
+        SwPaM aPaM(*pPaM, pPaM);
         aPaM.SetMark();
         aPaM.Move(fnMoveBackward);
         aPaM.Exchange();
@@ -3318,9 +3318,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     {
         delete mpPosAfterTOC;
     }
-    mpPosAfterTOC = new SwPaM(*pPaM);
+    mpPosAfterTOC = new SwPaM(*pPaM, pPaM);
     (*pPaM).Move(fnMoveBackward);
-    SwPaM aRegion(*pPaM);
+    SwPaM aRegion(*pPaM, pPaM);
 
     OSL_ENSURE(rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
     if (SwTOXBase* pBase2 = (SwTOXBase*)rDoc.GetCurTOX(*aRegion.GetPoint()))

@@ -125,10 +125,10 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
     }
     else if (pCursor)
     {
-        SwPaM aPam(*pCursor->GetPaM());
+        SwPaM & rPam(*pCursor->GetPaM());
 
-        SwPosition* startPos = aPam.Start();
-        SwPosition* endPos   = aPam.End();
+        SwPosition* startPos = rPam.Start();
+        SwPosition* endPos   = rPam.End();
 
         commitStringMarkup (nType, aIdentifier, startPos->nContent.GetIndex(), endPos->nContent.GetIndex() - startPos->nContent.GetIndex(), xMarkupInfoContainer);
     }

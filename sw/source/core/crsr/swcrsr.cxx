@@ -124,7 +124,7 @@ SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel )
 
 // @@@ semantic: no copy ctor.
 SwCursor::SwCursor( SwCursor& rCpy )
-    : SwPaM( rCpy )
+    : SwPaM( rCpy, &rCpy )
     , m_pSavePos(nullptr)
     , m_nRowSpanOffset(rCpy.m_nRowSpanOffset)
     , m_nCursorBidiLevel(rCpy.m_nCursorBidiLevel)

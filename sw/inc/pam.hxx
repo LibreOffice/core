@@ -166,8 +166,10 @@ class SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
 
     SwPaM* MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg = 0 );
 
+    SwPaM(SwPaM const& rPaM) SAL_DELETED_FUNCTION;
+
 public:
-    SwPaM( const SwPosition& rPos, SwPaM* pRing = 0 );
+    explicit SwPaM( const SwPosition& rPos, SwPaM* pRing = 0 );
     SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing = 0 );
     SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
            long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = 0 );
@@ -181,8 +183,9 @@ public:
     SwPaM( const SwNodeIndex& rNd, sal_Int32 nCntnt = 0, SwPaM* pRing = 0 );
     virtual ~SwPaM();
 
-    /// @@@ semantic: no copy ctor.
-    SwPaM( SwPaM & );
+    /// this takes a second parameter, which indicates the Ring that
+    /// the new PaM should be part of (may be null)
+    SwPaM(SwPaM const& rPaM, SwPaM * pRing);
     /// @@@ semantic: no copy assignment for super class Ring.
     SwPaM& operator=( const SwPaM & );
 

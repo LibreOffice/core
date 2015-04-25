@@ -436,9 +436,8 @@ SwPaM::SwPaM( const SwNodeIndex& rNodeIdx, sal_Int32 nCntnt, SwPaM* pRing )
 
 SwPaM::~SwPaM() {}
 
-// @@@ semantic: no copy ctor.
-SwPaM::SwPaM( SwPaM &rPam )
-    : Ring( &rPam )
+SwPaM::SwPaM(SwPaM const& rPam, SwPaM *const pRing)
+    : Ring(pRing)
     , m_Bound1( *(rPam.m_pPoint) )
     , m_Bound2( *(rPam.m_pMark)  )
     , m_pPoint( &m_Bound1 ), m_pMark( rPam.HasMark() ? &m_Bound2 : m_pPoint )
@@ -504,7 +503,7 @@ bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
     @param fnMove  Contains information if beginning or end of document.
     @param pOrigRg The given region.
 
-    @return Newly created area.
+    @return Newly created range, in Ring with parameter pOrigRg.
 */
 SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
 {
@@ -520,7 +519,7 @@ SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
     }
     else
     {
-        pPam = new SwPaM( *const_cast<SwPaM*>(pOrigRg) ); // given search area
+        pPam = new SwPaM(*pOrigRg, const_cast<SwPaM*>(pOrigRg)); // given search range
         // make sure that SPoint is on the "real" start position
         // FORWARD: SPoint always smaller than GetMark
         // BACKWARD: SPoint always bigger than GetMark

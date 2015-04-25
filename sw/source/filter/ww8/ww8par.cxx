@@ -2474,7 +2474,7 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
         if(pPreviousNumPaM)
             delete pPreviousNumPaM, pPreviousNumPaM = 0;
 
-        pPreviousNumPaM = new SwPaM(*pPaM);
+        pPreviousNumPaM = new SwPaM(*pPaM, pPaM);
         pPrevNumRule = pRule;
     }
     else if(!pRule && pPreviousNumPaM)
@@ -4503,7 +4503,7 @@ void wwSectionManager::InsertSegments()
         if (bInsertSection)
         {
             // Start getting the bounds of this section
-            SwPaM aSectPaM(*mrReader.pPaM);
+            SwPaM aSectPaM(*mrReader.pPaM, mrReader.pPaM);
             SwNodeIndex aAnchor(aSectPaM.GetPoint()->nNode);
             if (aNext != aEnd)
             {

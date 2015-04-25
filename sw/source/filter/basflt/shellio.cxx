@@ -795,7 +795,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
             }
             else
             {
-                pPam = new SwPaM( *pPam );
+                pPam = new SwPaM( *pPam, pPam );
                 pPam->Move( fnMoveBackward, fnGoDoc );
                 pPam->SetMark();
                 pPam->Move( fnMoveForward, fnGoDoc );

@@ -144,7 +144,7 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
         do
         {
             // create new PaM
-            SwPaM *const pNew = new SwPaM(*pPam);
+            SwPaM *const pNew = new SwPaM(*pPam, nullptr);
             // insert into ring
             pNew->MoveTo(&rTarget);
             pPam = pPam->GetNext();

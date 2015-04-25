@@ -3484,7 +3484,7 @@ void SwWW8ImplReader::StopTable()
     // #i101116# - Keep PaM on table end only for nested tables
     if ( nInTable > 1 )
     {
-        mpTableEndPaM.reset(new SwPaM(*pPaM));
+        mpTableEndPaM.reset(new SwPaM(*pPaM, pPaM));
     }
 }
 

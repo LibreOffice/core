@@ -156,7 +156,7 @@ SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
                 pPam->GetPoint()->nContent += nLen;
                 return pPam;
             }
-            pPam = new SwPaM( *pPam );
+            pPam = new SwPaM(*pPam, pPam);
         }
 
         SwIndex &rContent = pPam->GetPoint()->nContent;
