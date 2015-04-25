@@ -1058,7 +1058,7 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
     if( bVertical )
         sWritingMode = "wordArtVert";
 
-    sal_Int32 nRotation;
+    sal_Int32 nRotation = 0;
     xPropSet->getPropertyValue("TextRotation") >>= nRotation;
 
     pFS->singleElement( FSNS( XML_a, XML_bodyPr ),
