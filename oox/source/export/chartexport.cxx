@@ -94,26 +94,26 @@
 
 #include <rtl/math.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing;
+using namespace css;
+using namespace css::uno;
+using namespace css::drawing;
 using namespace ::oox::core;
-using ::com::sun::star::beans::PropertyState;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::beans::XPropertyState;
-using ::com::sun::star::container::XEnumeration;
-using ::com::sun::star::container::XEnumerationAccess;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::sheet::XFormulaParser;
-using ::com::sun::star::sheet::XFormulaTokens;
+using css::beans::PropertyState;
+using css::beans::PropertyValue;
+using css::beans::XPropertySet;
+using css::beans::XPropertyState;
+using css::container::XEnumeration;
+using css::container::XEnumerationAccess;
+using css::container::XIndexAccess;
+using css::container::XNamed;
+using css::io::XOutputStream;
+using css::table::CellAddress;
+using css::sheet::XFormulaParser;
+using css::sheet::XFormulaTokens;
 using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
 
-namespace cssc = com::sun::star::chart;
+namespace cssc = css::chart;
 
 namespace oox { namespace drawingml {
 
@@ -484,12 +484,12 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         Reference< XPropertySet > xParserProps( xParser, uno::UNO_QUERY );
         if( xParserProps.is() )
         {
-            xParserProps->setPropertyValue("FormulaConvention", uno::makeAny(::com::sun::star::sheet::AddressConvention::OOO) );
+            xParserProps->setPropertyValue("FormulaConvention", uno::makeAny(css::sheet::AddressConvention::OOO) );
         }
         uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( rRange, CellAddress( 0, 0, 0 ) );
         if( xParserProps.is() )
         {
-            xParserProps->setPropertyValue("FormulaConvention", uno::makeAny(::com::sun::star::sheet::AddressConvention::XL_OOX) );
+            xParserProps->setPropertyValue("FormulaConvention", uno::makeAny(css::sheet::AddressConvention::XL_OOX) );
         }
         aResult = xParser->printFormula( aTokens, CellAddress( 0, 0, 0 ) );
     }
@@ -673,7 +673,7 @@ void ChartExport::ExportContent()
 
 void ChartExport::_ExportContent()
 {
-    Reference< ::com::sun::star::chart::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
+    Reference< css::chart::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
     {
         // determine if data comes from the outside
@@ -732,7 +732,7 @@ void ChartExport::_ExportContent()
     }
 }
 
-void ChartExport::exportChartSpace( Reference< ::com::sun::star::chart::XChartDocument > rChartDoc,
+void ChartExport::exportChartSpace( Reference< css::chart::XChartDocument > rChartDoc,
                                       bool bIncludeTable )
 {
     FSHelperPtr pFS = GetFS();
@@ -771,7 +771,7 @@ void ChartExport::exportChartSpace( Reference< ::com::sun::star::chart::XChartDo
     pFS->endElement( FSNS( XML_c, XML_chartSpace ) );
 }
 
-void ChartExport::exportExternalData( Reference< ::com::sun::star::chart::XChartDocument > rChartDoc )
+void ChartExport::exportExternalData( Reference< css::chart::XChartDocument > rChartDoc )
 {
     // Embedded external data is grab bagged for docx file hence adding export part of
     // external data for docx files only.
@@ -822,7 +822,7 @@ void ChartExport::exportExternalData( Reference< ::com::sun::star::chart::XChart
     }
 }
 
-void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocument > rChartDoc )
+void ChartExport::exportChart( Reference< css::chart::XChartDocument > rChartDoc )
 {
     Reference< chart2::XChartDocument > xNewDoc( rChartDoc, uno::UNO_QUERY );
     mxDiagram.set( rChartDoc->getDiagram() );
@@ -948,7 +948,7 @@ void ChartExport::exportMissingValueTreatment(uno::Reference<beans::XPropertySet
             FSEND);
 }
 
-void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocument > rChartDoc )
+void ChartExport::exportLegend( Reference< css::chart::XChartDocument > rChartDoc )
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_legend ),
@@ -958,7 +958,7 @@ void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocume
     if( xProp.is() )
     {
         // position
-        ::com::sun::star::chart::ChartLegendPosition aLegendPos = ::com::sun::star::chart::ChartLegendPosition_NONE;
+        css::chart::ChartLegendPosition aLegendPos = css::chart::ChartLegendPosition_NONE;
         try
         {
             Any aAny( xProp->getPropertyValue(
@@ -973,20 +973,20 @@ void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocume
         const char* strPos = NULL;
         switch( aLegendPos )
         {
-            case ::com::sun::star::chart::ChartLegendPosition_LEFT:
+            case css::chart::ChartLegendPosition_LEFT:
                 strPos = "l";
                 break;
-            case ::com::sun::star::chart::ChartLegendPosition_RIGHT:
+            case css::chart::ChartLegendPosition_RIGHT:
                 strPos = "r";
                 break;
-            case ::com::sun::star::chart::ChartLegendPosition_TOP:
+            case css::chart::ChartLegendPosition_TOP:
                 strPos = "t";
                 break;
-            case ::com::sun::star::chart::ChartLegendPosition_BOTTOM:
+            case css::chart::ChartLegendPosition_BOTTOM:
                 strPos = "b";
                 break;
-            case ::com::sun::star::chart::ChartLegendPosition_NONE:
-            case ::com::sun::star::chart::ChartLegendPosition_MAKE_FIXED_SIZE:
+            case css::chart::ChartLegendPosition_NONE:
+            case css::chart::ChartLegendPosition_MAKE_FIXED_SIZE:
                 // nothing
                 break;
         }
@@ -1262,7 +1262,7 @@ void ChartExport::exportPlotArea( )
      * Export the Plot area Shape Properties
      * eg: Fill and Outline
      */
-    Reference< ::com::sun::star::chart::X3DDisplay > xWallFloorSupplier( mxDiagram, uno::UNO_QUERY );
+    Reference< css::chart::X3DDisplay > xWallFloorSupplier( mxDiagram, uno::UNO_QUERY );
     if( xWallFloorSupplier.is() )
     {
         Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
@@ -1529,7 +1529,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
     if( mbIs3DChart )
     {
         // Shape
-        namespace cssc = ::com::sun::star::chart;
+        namespace cssc = css::chart;
         sal_Int32 nGeom3d = cssc::ChartSolidType::RECTANGULAR_SOLID;
         if( xPropSet.is() && GetProperty( xPropSet, "SolidType") )
             mAny >>= nGeom3d;
@@ -1625,7 +1625,7 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
     exportSeries( xChartType, nAttachedAxis );
 
     // show marker?
-    sal_Int32 nSymbolType = ::com::sun::star::chart::ChartSymbolType::NONE;
+    sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
     if( GetProperty( xPropSet, "SymbolType" ) )
         mAny >>= nSymbolType;
@@ -1634,7 +1634,7 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
     {
         exportHiLowLines();
         exportUpDownBars(xChartType);
-        const char* marker = nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE? "0":"1";
+        const char* marker = nSymbolType == css::chart::ChartSymbolType::NONE? "0":"1";
         pFS->singleElement( FSNS( XML_c, XML_marker ),
                 XML_val, marker,
                 FSEND );
@@ -1707,7 +1707,7 @@ void ChartExport::exportScatterChart( Reference< chart2::XChartType > xChartType
             FSEND );
     // TODO:scatterStyle
 
-    sal_Int32 nSymbolType = ::com::sun::star::chart::ChartSymbolType::NONE;
+    sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
     if( GetProperty( xPropSet, "SymbolType" ) )
         mAny >>= nSymbolType;
@@ -1743,7 +1743,7 @@ void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
     exportSeries( xChartType, nAttachedAxis );
     // export stock properties
-    Reference< ::com::sun::star::chart::XStatisticDisplay > xStockPropProvider( mxDiagram, uno::UNO_QUERY );
+    Reference< css::chart::XStatisticDisplay > xStockPropProvider( mxDiagram, uno::UNO_QUERY );
     if( xStockPropProvider.is())
     {
         exportHiLowLines();
@@ -1759,7 +1759,7 @@ void ChartExport::exportHiLowLines()
 {
     FSHelperPtr pFS = GetFS();
     // export the chart property
-    Reference< ::com::sun::star::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );
+    Reference< css::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );
 
     if (!xChartPropProvider.is())
         return;
@@ -1781,7 +1781,7 @@ void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
 
     FSHelperPtr pFS = GetFS();
     // export the chart property
-    Reference< ::com::sun::star::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );
+    Reference< css::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );
     if(xChartPropProvider.is())
     {
         //  updownbar
@@ -1926,7 +1926,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         if( GetProperty( xPropSet, "Axis") )
                         {
                             mAny >>= nAttachedAxis;
-                            if( nAttachedAxis == ::com::sun::star::chart::ChartAxisAssign::SECONDARY_Y )
+                            if( nAttachedAxis == css::chart::ChartAxisAssign::SECONDARY_Y )
                                 nAttachedAxis = AXIS_SECONDARY_Y;
                             else
                                 nAttachedAxis = AXIS_PRIMARY_Y;
@@ -2365,7 +2365,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
     {
         case AXIS_PRIMARY_X:
         {
-            Reference< ::com::sun::star::chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
+            Reference< css::chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
             if( xAxisXSupp.is())
                 xAxisProp = xAxisXSupp->getXAxis();
             if( bHasXAxisTitle )
@@ -2387,7 +2387,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
         }
         case AXIS_PRIMARY_Y:
         {
-            Reference< ::com::sun::star::chart::XAxisYSupplier > xAxisYSupp( mxDiagram, uno::UNO_QUERY );
+            Reference< css::chart::XAxisYSupplier > xAxisYSupp( mxDiagram, uno::UNO_QUERY );
             if( xAxisYSupp.is())
                 xAxisProp = xAxisYSupp->getYAxis();
             if( bHasYAxisTitle )
@@ -2404,7 +2404,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
         }
         case AXIS_PRIMARY_Z:
         {
-            Reference< ::com::sun::star::chart::XAxisZSupplier > xAxisZSupp( mxDiagram, uno::UNO_QUERY );
+            Reference< css::chart::XAxisZSupplier > xAxisZSupp( mxDiagram, uno::UNO_QUERY );
             if( xAxisZSupp.is())
                 xAxisProp = xAxisZSupp->getZAxis();
             if( bHasZAxisTitle )
@@ -2426,12 +2426,12 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
         }
         case AXIS_SECONDARY_Y:
         {
-            Reference< ::com::sun::star::chart::XTwoAxisYSupplier > xAxisTwoYSupp( mxDiagram, uno::UNO_QUERY );
+            Reference< css::chart::XTwoAxisYSupplier > xAxisTwoYSupp( mxDiagram, uno::UNO_QUERY );
             if( xAxisTwoYSupp.is())
                 xAxisProp = xAxisTwoYSupp->getSecondaryYAxis();
             if( bHasSecondaryYAxisTitle )
             {
-                Reference< ::com::sun::star::chart::XSecondAxisTitleSupplier > xAxisSupp( mxDiagram, uno::UNO_QUERY );
+                Reference< css::chart::XSecondAxisTitleSupplier > xAxisSupp( mxDiagram, uno::UNO_QUERY );
                 xAxisTitle.set( xAxisSupp->getSecondYAxisTitle(), uno::UNO_QUERY );
             }
 
@@ -2576,8 +2576,8 @@ void ChartExport::_exportAxis(
     if(GetProperty( xAxisProp, "Marks" ) )
     {
         mAny >>= nValue;
-        bool bInner = nValue & ::com::sun::star::chart::ChartAxisMarks::INNER;
-        bool bOuter = nValue & ::com::sun::star::chart::ChartAxisMarks::OUTER;
+        bool bInner = nValue & css::chart::ChartAxisMarks::INNER;
+        bool bOuter = nValue & css::chart::ChartAxisMarks::OUTER;
         const char* majorTickMark = NULL;
         if( bInner && bOuter )
             majorTickMark = "cross";
@@ -2595,8 +2595,8 @@ void ChartExport::_exportAxis(
     if(GetProperty( xAxisProp, "HelpMarks" ) )
     {
         mAny >>= nValue;
-        bool bInner = nValue & ::com::sun::star::chart::ChartAxisMarks::INNER;
-        bool bOuter = nValue & ::com::sun::star::chart::ChartAxisMarks::OUTER;
+        bool bInner = nValue & css::chart::ChartAxisMarks::INNER;
+        bool bOuter = nValue & css::chart::ChartAxisMarks::OUTER;
         const char* minorTickMark = NULL;
         if( bInner && bOuter )
             minorTickMark = "cross";
@@ -2617,18 +2617,18 @@ void ChartExport::_exportAxis(
         mAny >>= bDisplayLabel;
     if( bDisplayLabel && (GetProperty( xAxisProp, "LabelPosition" ) ) )
     {
-        ::com::sun::star::chart::ChartAxisLabelPosition eLabelPosition = ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS;
+        css::chart::ChartAxisLabelPosition eLabelPosition = css::chart::ChartAxisLabelPosition_NEAR_AXIS;
         mAny >>= eLabelPosition;
         switch( eLabelPosition )
         {
-            case ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS:
-            case ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE:
+            case css::chart::ChartAxisLabelPosition_NEAR_AXIS:
+            case css::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE:
                 sTickLblPos = "nextTo";
                 break;
-            case ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START:
+            case css::chart::ChartAxisLabelPosition_OUTSIDE_START:
                 sTickLblPos = "low";
                 break;
-            case ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END:
+            case css::chart::ChartAxisLabelPosition_OUTSIDE_END:
                 sTickLblPos = "high";
                 break;
             default:
@@ -2656,17 +2656,17 @@ void ChartExport::_exportAxis(
     const char* sCrosses = NULL;
     if(GetProperty( xAxisProp, "CrossoverPosition" ) )
     {
-        ::com::sun::star::chart::ChartAxisPosition ePosition( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+        css::chart::ChartAxisPosition ePosition( css::chart::ChartAxisPosition_ZERO );
         mAny >>= ePosition;
         switch( ePosition )
         {
-            case ::com::sun::star::chart::ChartAxisPosition_START:
+            case css::chart::ChartAxisPosition_START:
                 sCrosses = "min";
                 break;
-            case ::com::sun::star::chart::ChartAxisPosition_END:
+            case css::chart::ChartAxisPosition_END:
                 sCrosses = "max";
                 break;
-            case ::com::sun::star::chart::ChartAxisPosition_ZERO:
+            case css::chart::ChartAxisPosition_ZERO:
                 sCrosses = "autoZero";
                 break;
             default:
