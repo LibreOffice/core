@@ -92,6 +92,7 @@ public:
     void testNoMarkerXLSX();
     void testTitleManualLayoutXLSX();
     void testPlotAreaManualLayoutXLSX();
+    void testLegendManualLayoutXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -148,6 +149,7 @@ public:
     CPPUNIT_TEST(testNoMarkerXLSX);
     CPPUNIT_TEST(testTitleManualLayoutXLSX);
     CPPUNIT_TEST(testPlotAreaManualLayoutXLSX);
+    CPPUNIT_TEST(testLegendManualLayoutXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1366,6 +1368,25 @@ void Chart2ExportTest::testPlotAreaManualLayoutXLSX()
     double nH = aHVal.toDouble();
     CPPUNIT_ASSERT(nH > 0 && nH < 1);
     CPPUNIT_ASSERT(nH != nW);
+}
+
+void Chart2ExportTest::testLegendManualLayoutXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "legend_manual_layout.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:xMode", "val", "edge");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:yMode", "val", "edge");
+
+    OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:x", "val");
+    double nX = aXVal.toDouble();
+    CPPUNIT_ASSERT(nX > 0 && nX < 1);
+
+    OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:y", "val");
+    double nY = aYVal.toDouble();
+    CPPUNIT_ASSERT(nY > 0 && nY < 1);
+    CPPUNIT_ASSERT(nX != nY);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
