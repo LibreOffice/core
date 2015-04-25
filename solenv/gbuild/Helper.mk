@@ -191,7 +191,7 @@ $$(eval $$(call gb_Output_error,$(1) is not a valid group for installed librarie
 endif
 $(call gb_Helper__register_libraries,$(1),$(3))
 
-gb_Library_MODULE_$(2) += $(filter-out $(filter-out sax,$(gb_MERGEDLIBS)),$(3))
+gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS),$(3))
 
 $(if $(filter UNOVERLIBS RTVERLIBS,$(1)),\
 	gb_SdkLinkLibrary_MODULE_sdk += $(3))

@@ -40,10 +40,16 @@ gb_CppunitTest_VALGRINDTOOL := valgrind --tool=callgrind --dump-instr=yes --inst
 endif
 
 # defined by platform
-#  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
-gb_CppunitTest_CPPTESTDEPS := $(call gb_Executable_get_runtime_dependencies,cppunittester)
+gb_CppunitTest_RUNTIMEDEPS := $(call gb_Executable_get_runtime_dependencies,cppunittester)
 gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppunittester)
+
+# i18npool dlopens localedata_* libraries.
+gb_CppunitTest_RUNTIMEDEPS += \
+	$(call gb_Library_get_target,localedata_en) \
+	$(call gb_Library_get_target,localedata_es) \
+	$(call gb_Library_get_target,localedata_euro) \
+	$(call gb_Library_get_target,localedata_others) \
 
 define gb_CppunitTest__make_args
 $(HEADLESS) \
@@ -78,7 +84,7 @@ $(call gb_CppunitTest_get_clean_target,%) :
 		rm -f $(call gb_CppunitTest_get_target,$*) $(call gb_CppunitTest_get_target,$*).log)
 
 .PHONY : $(call gb_CppunitTest_get_target,%)
-$(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
+$(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \

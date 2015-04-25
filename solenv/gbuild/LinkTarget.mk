@@ -836,10 +836,7 @@ gb_BUILD_HELPER_TOOLS := $(foreach exe,\
 	svidl \
 	unoidl-check \
 	unoidl-write \
-	, $(call gb_Executable__get_workdir_linktargetname,$(exe))) \
-	$(foreach lib,\
-	expwrap \
-	, $(call gb_Library__get_workdir_linktargetname,$(lib)))
+	, $(call gb_Executable__get_workdir_linktargetname,$(exe)))
 
 # call gb_LinkTarget__is_build_lib,linktargetname
 define gb_LinkTarget__is_build_lib
