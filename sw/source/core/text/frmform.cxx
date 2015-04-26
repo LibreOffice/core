@@ -1918,8 +1918,11 @@ bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
                       ? GetFollow()->GetOfst() : aInf.GetTxt().getLength();
     do
     {
-        nStart = aLine.FormatLine( nStart );
-        if( aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd) )
+        sal_Int32 nShift = aLine.FormatLine(nStart) - nStart;
+        nStart += nShift;
+        if ((nShift != 0) // Check for special case: line is invisible,
+                          // like in too thin table cell: tdf#66141
+         && (aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd)))
             aLine.Insert( new SwLineLayout() );
     } while( aLine.Next() );
 
