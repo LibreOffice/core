@@ -965,31 +965,89 @@
 			<with-param name="image" select="."/>
 		</call-template>
 
-		<!-- Horizontal align -->
+		<!-- Horizontal & Vertical align -->
 		<if test="name(..)='draw:frame' and boolean(../@draw:style-name)">
 			<variable name="style-element" select="key('style-ref', ../@draw:style-name)"/>
-			<if test="boolean($style-element/style:graphic-properties/@style:wrap)">
-				<choose>
-					<!-- No wrap -->
-					<when test="$style-element/style:graphic-properties/@style:wrap='none'">
-						<choose>
-							<when test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
+			<choose>
+				<when test="boolean($style-element/style:graphic-properties/@style:wrap)">
+					<choose>
+						<!-- wrap=none -->
+						<when test="$style-element/style:graphic-properties/@style:wrap='none'">
+							<choose>
+								<when test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
+									<choose>
+										<when test="$style-element/style:graphic-properties/@style:horizontal-pos='center'">
+											<text>|center</text>
+										</when>
+										<otherwise>
+											<text>|none</text>
+										</otherwise>
+									</choose>
+								</when>
+								<otherwise>
+									<text>|none</text>
+								</otherwise>
+							</choose>
+						</when>
+						<!-- wrap != none -->
+						<otherwise>
+							<!-- Horizontal align -->
+							<if test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
 								<choose>
-									<when test="$style-element/style:graphic-properties/@style:horizontal-pos='center'">
-										<text>|center</text>
+									<when test="$style-element/style:graphic-properties/@style:horizontal-pos='right'">
+										<text>|right</text>
 									</when>
-									<otherwise>
-										<text>|none</text>
-									</otherwise>
+									<when test="$style-element/style:graphic-properties/@style:horizontal-pos='left'">
+										<text>|left</text>
+									</when>
 								</choose>
+							</if>
+							<!-- Vertical align -->
+							<if test="boolean($style-element/style:graphic-properties/@style:vertical-pos)">
+								<choose>
+									<when test="$style-element/style:graphic-properties/@style:vertical-pos='top'">
+										<text>|top</text>
+									</when>
+									<when test="$style-element/style:graphic-properties/@style:vertical-pos='middle'">
+										<text>|middle</text>
+									</when>
+									<when test="$style-element/style:graphic-properties/@style:vertical-pos='below'">
+										<text>|below</text>
+									</when>
+								</choose>
+							</if>
+						</otherwise>
+					</choose>
+				</when>
+				<!-- without wrap -->
+				<otherwise>
+					<!-- Horizontal align -->
+					<if test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
+						<choose>
+							<when test="$style-element/style:graphic-properties/@style:horizontal-pos='right'">
+								<text>|right</text>
 							</when>
-							<otherwise>
-								<text>|none</text>
-							</otherwise>
+							<when test="$style-element/style:graphic-properties/@style:horizontal-pos='left'">
+								<text>|left</text>
+							</when>
 						</choose>
-					</when>
-				</choose>
-			</if>
+					</if>
+					<!-- Vertical align -->
+					<if test="boolean($style-element/style:graphic-properties/@style:vertical-pos)">
+						<choose>
+							<when test="$style-element/style:graphic-properties/@style:vertical-pos='top'">
+								<text>|top</text>
+							</when>
+							<when test="$style-element/style:graphic-properties/@style:vertical-pos='middle'">
+								<text>|middle</text>
+							</when>
+							<when test="$style-element/style:graphic-properties/@style:vertical-pos='below'">
+								<text>|below</text>
+							</when>
+						</choose>
+					</if>
+				</otherwise>
+			</choose>
 		</if>
 
 		<!-- Image alt -->
