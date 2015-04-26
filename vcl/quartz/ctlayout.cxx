@@ -211,23 +211,34 @@ void CTLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     if( !mpCTLine)
+        return;
+
+    DeviceCoordinate nPixelWidth = rArgs.mnLayoutWidth;
+    if( rArgs.mpDXArray && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
+        nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
+    if( nPixelWidth <= 0)
+        return;
+
+    // short-circuit when justifying an all-whitespace string
+    if( mnTrailingSpaceCount >= mnCharCount)
     {
+        mfCachedWidth = nPixelWidth;
         return;
     }
 
-    DeviceCoordinate nPixelWidth = 0;
+    // justification requests which change the width by just one pixel are probably
+    // introduced by lossy conversions between integer based coordinate system
+    const int nOrigWidth = GetTextWidth();
+    if( (nOrigWidth >= nPixelWidth - 1) && (nOrigWidth <= nPixelWidth + 1) )
+        return;
 
-    if(rArgs.mpDXArray && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
+    if( rArgs.mpDXArray && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
     {
-        nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
-        if( nPixelWidth <= 0)
-            return;
         ApplyDXArray( rArgs );
         if( mnTrailingSpaceCount )
         {
             DeviceCoordinate nFullPixelWidth = nPixelWidth;
-            nPixelWidth = (mnTrailingSpaceCount == mnCharCount) ? 0 :
-                rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
+            nPixelWidth = rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
             mfTrailingSpaceWidth = nFullPixelWidth - nPixelWidth;
             if( nPixelWidth <= 0)
                 return;
@@ -236,15 +247,6 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
     else
     {
-        nPixelWidth = rArgs.mnLayoutWidth;
-
-        if( nPixelWidth <= 0 && rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        {
-            nPixelWidth = GetTextWidth();
-        }
-
-        if( nPixelWidth <= 0)
-            return;
 
         // if the text to be justified has whitespace in it then
         // - Writer goes crazy with its HalfSpace magic
@@ -255,10 +257,8 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             {
                 mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
                 nPixelWidth -= mfTrailingSpaceWidth;
-            }
-            if(nPixelWidth <= 0)
-            {
-                return;
+                if( nPixelWidth <= 0)
+                    return;
             }
 
             // recreate the CoreText line layout without trailing spaces
@@ -279,15 +279,12 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // in RTL-layouts trailing spaces are leftmost
             // TODO: use BiDi-algorithm to thoroughly check this assumption
             if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-            {
                 mfBaseAdv = mfTrailingSpaceWidth;
-            }
         }
         CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth);
         SAL_INFO( "vcl.ct", "CTLineCreateJustifiedLine(" << mpCTLine << ",1.0," << nPixelWidth << ") = " << pNewCTLine );
-
         if( !pNewCTLine )
-        {
+
             // CTLineCreateJustifiedLine can and does fail
             // handle failure by keeping the unjustified layout
             // TODO: a better solution such as
@@ -295,7 +292,6 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // - changing the font size
             // - changing the CTM matrix
             return;
-        }
         SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
         CFRelease( mpCTLine );
         mpCTLine = pNewCTLine;
