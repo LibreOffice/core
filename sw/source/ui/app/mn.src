@@ -40,7 +40,9 @@
     MenuItem\
     {\
         ITEM_FORMAT_PARA_DLG\
-    };\
+    };
+
+#define MN_PAGE\
     MenuItem\
     {\
         Identifier = FN_FORMAT_PAGE_DLG ; \
@@ -197,6 +199,7 @@
         SEPARATOR ;                                                         \
         MN_TXT                                                              \
         MN_NUMBERING                                                        \
+        MN_PAGE                                                             \
         ITEM_TRANSLITERATE_MENU                                             \
         SEPARATOR ;
 
@@ -690,6 +693,7 @@ Menu MN_TAB_POPUPMENU
         {
             ITEM_FORMAT_PARA_DLG
         };
+        MN_NUMBERING
         ITEM_TRANSLITERATE_MENU
         SEPARATOR ;
         _DEFAULT_TEXT_EDIT_ELEMENTS
