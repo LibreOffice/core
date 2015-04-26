@@ -64,6 +64,8 @@
 
 #include "vcl/lazydelete.hxx"
 
+#include <sfx2/sfxsids.hrc>
+
 #include <map>
 #include <vector>
 
@@ -1326,8 +1328,12 @@ bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
             bVisible = false;
         else if ( pData->eType != MenuItemType::SEPARATOR ) // separators handled above
         {
-            // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( true ) );
-            bVisible = pData->bEnabled; // do not check submenus as they might be filled at Activate().
+            // tdf#86850 Always display clipboard functions
+            if ( pData->nId == SID_CUT || pData->nId == SID_COPY || pData->nId == SID_PASTE || pData->nId == SID_MENU_PASTE_SPECIAL )
+                bVisible = true;
+            else
+                // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( true ) );
+                bVisible = pData->bEnabled; // do not check submenus as they might be filled at Activate().
         }
     }
 
