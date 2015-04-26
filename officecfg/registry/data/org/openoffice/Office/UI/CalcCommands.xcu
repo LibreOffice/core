@@ -1061,7 +1061,7 @@
       </node>
       <node oor:name=".uno:InsertRows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert ~Rows</value>
+          <value xml:lang="en-US">Insert ~Rows Above</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Rows</value>
@@ -1072,7 +1072,7 @@
       </node>
       <node oor:name=".uno:InsertColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Co~lumns</value>
+          <value xml:lang="en-US">Insert Co~lumns Left</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Co~lumns</value>
