@@ -187,8 +187,7 @@ ContextHandlerRef CatAxisContext::onCreateContext( sal_Int32 nElement, const Att
             mrModel.mnLabelOffset = rAttribs.getInteger( XML_val, 100 );
             return 0;
         case C_TOKEN( noMultiLvlLbl ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbNoMultiLevel = rAttribs.getBool( XML_val, false );
+            mrModel.mbNoMultiLevel = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( tickLblSkip ):
             mrModel.mnTickLabelSkip = rAttribs.getInteger( XML_val, 0 );
