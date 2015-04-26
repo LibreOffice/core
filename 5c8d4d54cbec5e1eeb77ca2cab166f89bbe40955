@@ -16,6 +16,24 @@
       "revId": "5c8d4d54cbec5e1eeb77ca2cab166f89bbe40955",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa69d971_aa13cf0c",
+        "filename": "sw/source/ui/app/mn.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-04-26T02:46:13Z",
+      "side": 1,
+      "message": "There are four hyperlink entries and three have 2 words and this one has 3 for no real benefit. \u0027Open Hyperlink\u0027 could easily have been \u0027Open Hyperlink Location\u0027 but the word \u0027Location\u0027 is redundant.",
+      "parentUuid": "fa69d971_aa5c2fee",
+      "revId": "5c8d4d54cbec5e1eeb77ca2cab166f89bbe40955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
