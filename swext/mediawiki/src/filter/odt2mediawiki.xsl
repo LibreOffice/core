@@ -960,37 +960,87 @@
  	</template>
  	
  	<template match="draw:image[not(boolean(ancestor::draw:text-box))]">
- 		<text>[[</text>
-		<call-template name="mk-image-name">
-			<with-param name="image" select="."/>
-		</call-template>
+		<variable name="image">
+			<text>[[</text>
+			<call-template name="mk-image-name">
+				<with-param name="image" select="."/>
+			</call-template>
+		</variable>
 
-		<!-- Horizontal align -->
-		<if test="name(..)='draw:frame' and boolean(../@draw:style-name)">
+		<!-- Horizontal & Vertical align -->
+		<choose>
+		<when test="name(..)='draw:frame' and boolean(../@draw:style-name)">
 			<variable name="style-element" select="key('style-ref', ../@draw:style-name)"/>
-			<if test="boolean($style-element/style:graphic-properties/@style:wrap)">
-				<choose>
-					<!-- No wrap -->
-					<when test="$style-element/style:graphic-properties/@style:wrap='none'">
-						<choose>
-							<when test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
+			<choose>
+				<when test="boolean($style-element/style:graphic-properties/@style:wrap)">
+					<choose>
+						<!-- wrap=none -->
+						<when test="$style-element/style:graphic-properties/@style:wrap='none'">
+							<text>{{clear}}</text>
+							<value-of select="$NL"/>
+							<value-of select="$image"/>
+							<choose>
+								<when test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
+									<choose>
+										<when test="$style-element/style:graphic-properties/@style:horizontal-pos='center'">
+											<text>|center</text>
+										</when>
+										<otherwise>
+											<text>|none</text>
+										</otherwise>
+									</choose>
+								</when>
+								<otherwise>
+									<text>|none</text>
+								</otherwise>
+							</choose>
+						</when>
+						<!-- wrap != none -->
+						<otherwise>
+							<value-of select="$image"/>
+							<!-- Horizontal align -->
+							<if test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
 								<choose>
-									<when test="$style-element/style:graphic-properties/@style:horizontal-pos='center'">
-										<text>|center</text>
+									<when test="$style-element/style:graphic-properties/@style:horizontal-pos='right'">
+										<text>|right</text>
 									</when>
-									<otherwise>
-										<text>|none</text>
-									</otherwise>
+									<when test="$style-element/style:graphic-properties/@style:horizontal-pos='left'">
+										<text>|left</text>
+									</when>
 								</choose>
+							</if>
+							<!-- Vertical align -->
+							<call-template name="mk-image-vertical-align">
+								<with-param name="style-element" select="$style-element"/>
+							</call-template>
+						</otherwise>
+					</choose>
+				</when>
+				<!-- without wrap -->
+				<otherwise>
+					<value-of select="$image"/>
+					<!-- Horizontal align -->
+					<if test="boolean($style-element/style:graphic-properties/@style:horizontal-pos)">
+						<choose>
+							<when test="$style-element/style:graphic-properties/@style:horizontal-pos='right'">
+								<text>|right</text>
 							</when>
-							<otherwise>
-								<text>|none</text>
-							</otherwise>
+							<when test="$style-element/style:graphic-properties/@style:horizontal-pos='left'">
+								<text>|left</text>
+							</when>
 						</choose>
-					</when>
-				</choose>
-			</if>
-		</if>
+					</if>
+					<!-- Vertical align -->
+					<call-template name="mk-image-vertical-align">
+						<with-param name="style-element" select="$style-element"/>
+					</call-template>
+				</otherwise>
+			</choose>
+		</when>
+		<otherwise>
+			<value-of select="$image"/>
+		</otherwise>
+		</choose>
 
 		<!-- Image alt -->
 		<if test="name(following-sibling::*)='svg:title'">
@@ -1000,6 +1050,24 @@
 		</if>
  		<text>]]</text>
  	</template>
+
+	<template name="mk-image-vertical-align">
+		<param name="style-element"/>
+
+		<if test="boolean($style-element/style:graphic-properties/@style:vertical-pos)">
+			<choose>
+				<when test="$style-element/style:graphic-properties/@style:vertical-pos='top'">
+					<text>|top</text>
+				</when>
+				<when test="$style-element/style:graphic-properties/@style:vertical-pos='middle'">
+					<text>|middle</text>
+				</when>
+				<when test="$style-element/style:graphic-properties/@style:vertical-pos='below'">
+					<text>|below</text>
+				</when>
+			</choose>
+		</if>
+	</template>	
 
 	<template name="mk-image-name">
 		<param name="image"/>
