@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa69d971_8aaa8b84",
+        "filename": "vcl/quartz/ctlayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-04-26T11:29:52Z",
+      "side": 1,
+      "message": "What is the point of removing the braces here, and the other places as well?",
+      "revId": "cc4cae42d83577f9658edb4be3d1f8c779dc8ee9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
