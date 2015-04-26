@@ -118,26 +118,23 @@ sal_uInt16 SwEditShell::GetSectionFmtCount() const
 bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly, bool bChkHidden, bool bChkTOX ) const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    sal_uInt16 nCnt = rFmts.size();
-    sal_uInt16 n;
 
-    for( n = 0; n < nCnt; ++n )
+    for( const SwSectionFmt* pFmt : rFmts )
     {
         SectionType eTmpType;
-        const SwSectionFmt* pFmt = rFmts[ n ];
         if( pFmt->IsInNodesArr() &&
             (bChkTOX  ||
                 ( (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                   && TOX_HEADER_SECTION != eTmpType ) ) )
         {
-            const SwSection& rSect = *rFmts[ n ]->GetSection();
+            const SwSection& rSect = *pFmt->GetSection();
             if( (!bChkReadOnly && !bChkHidden ) ||
                 (bChkReadOnly && rSect.IsProtectFlag() ) ||
                 (bChkHidden && rSect.IsHiddenFlag() ) )
-                break;
+                return true;
         }
     }
-    return n != nCnt;
+    return false;
 }
 
 sal_uInt16 SwEditShell::GetSectionFmtPos( const SwSectionFmt& rFmt ) const
