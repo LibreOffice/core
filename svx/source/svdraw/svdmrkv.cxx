@@ -796,13 +796,11 @@ void SdrMarkView::SetMarkHandles()
             // moved crop handling to non-frame part and the handle creation to SdrGrafObj
             if(1 == nMarkCount && pMarkedObj && SDRDRAG_CROP == eDragMode)
             {
-                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pMarkedObj);
-
-                if(pSdrGrafObj)
-                {
-                    pSdrGrafObj->addCropHandles(maHdlList);
-                    bDone = true;
-                }
+                // Default addCropHandles from SdrObject does nothing. When pMarkedObj is SdrGrafObj, previous
+                // behaviour occurs (code in svx/source/svdraw/svdograf.cxx). When pMarkedObj is SwVirtFlyDrawObj
+                // writer takes the responsibility of adding handles (code in sw/source/core/draw/dflyobj.cxx)
+                pMarkedObj->addCropHandles(maHdlList);
+                bDone = true;
             }
 
             if(!bDone)

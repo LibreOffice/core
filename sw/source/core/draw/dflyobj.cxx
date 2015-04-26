@@ -18,10 +18,12 @@
  */
 
 #include "hintids.hxx"
+#include <tools/mapunit.hxx>
 #include <svx/svdtrans.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <svx/svdpage.hxx>
+#include <vcl/svapp.hxx>
 
 #include <fmtclds.hxx>
 #include <fmtornt.hxx>
@@ -44,6 +46,7 @@
 #include "grfatr.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
+#include "wrtsh.hxx"
 
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -728,6 +731,83 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         pFmt->SetFmtAttr( aSet );
 }
 
+
+void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+{
+    // Get Wrt Shell
+    SwWrtShell *pSh = dynamic_cast<SwWrtShell*>( GetFlyFrm()->getRootFrm()->GetCurrShell() );
+    if (!pSh || !pSh->ISA(SwWrtShell))
+        return;
+
+    // Compute old and new rect. This will give us the deformation to apply to
+    // the object to crop
+    Rectangle aOldRect( aOutRect );
+
+    Rectangle aNewRect( aOutRect );
+    ResizeRect( aNewRect, rRef, xFact, yFact );
+
+    // Get graphic object size in 100th of mm
+    GraphicObject *pGraphicObject = (GraphicObject *) pSh->GetGraphicObj();
+    if (!pGraphicObject)
+        return;
+    const MapMode aMapMode100thmm(MAP_100TH_MM);
+    Size aGraphicSize(pGraphicObject->GetPrefSize());
+    if( MAP_PIXEL == pGraphicObject->GetPrefMapMode().GetMapUnit() )
+        aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
+    else
+        aGraphicSize = Application::GetDefaultDevice()->LogicToLogic( aGraphicSize, pGraphicObject->GetPrefMapMode(), aMapMode100thmm);
+    if( aGraphicSize.A() == 0 || aGraphicSize.B() == 0 )
+        return ;
+
+    // Get old values for crop in 10th of mm
+    SfxItemSet aSet( pSh->GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF ); 
+    pSh->GetCurAttr( aSet );
+    SwCropGrf aCrop( (const SwCropGrf&) aSet.Get(RES_GRFATR_CROPGRF) );
+
+    Rectangle aCropRectangle(
+        convertTwipToMm100(aCrop.GetLeft()),
+        convertTwipToMm100(aCrop.GetTop()),
+        convertTwipToMm100(aCrop.GetRight()),
+        convertTwipToMm100(aCrop.GetBottom()) );
+
+    // Compute delta to apply
+    double fScaleX = ( aGraphicSize.Width() - aCropRectangle.Left() - aCropRectangle.Right() ) / (double)aOldRect.GetWidth();
+    double fScaleY = ( aGraphicSize.Height() - aCropRectangle.Top() - aCropRectangle.Bottom() ) / (double)aOldRect.GetHeight();
+
+    sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
+    sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
+    sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
+    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
+
+    // Compute new values in 10th of mm
+    sal_Int32 nLeftCrop = static_cast<sal_Int32>( aCropRectangle.Left() + nDiffLeft * fScaleX );
+    sal_Int32 nTopCrop = static_cast<sal_Int32>( aCropRectangle.Top() + nDiffTop * fScaleY );
+    sal_Int32 nRightCrop = static_cast<sal_Int32>( aCropRectangle.Right() - nDiffRight * fScaleX );
+    sal_Int32 nBottomCrop = static_cast<sal_Int32>( aCropRectangle.Bottom() - nDiffBottom * fScaleY );
+
+    // Apply values
+    pSh->StartAllAction();
+//    pSh->StartUndo(UNDO_START);
+
+    // Set new crop values in twips
+    aCrop.SetLeft  (convertMm100ToTwip(nLeftCrop));
+    aCrop.SetTop   (convertMm100ToTwip(nTopCrop));
+    aCrop.SetRight (convertMm100ToTwip(nRightCrop));
+    aCrop.SetBottom(convertMm100ToTwip(nBottomCrop));
+    pSh->SetAttrItem(aCrop);
+
+    // Set new frame size
+    SwFrmFmt *pFmt = GetFmt();
+    SwFmtFrmSize aSz( pFmt->GetFrmSize() );
+    aSz.SetWidth(aNewRect.GetWidth());
+    aSz.SetHeight(aNewRect.GetHeight());
+    pFmt->GetDoc()->SetAttr( aSz, *pFmt );
+
+//    pSh->EndUndo(UNDO_END);
+    pSh->EndAllAction();
+
+}
+
 void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const Fraction& xFact, const Fraction& yFact)
 {
@@ -844,6 +924,30 @@ void SwVirtFlyDrawObj::Resize(const Point& rRef,
     NbcResize( rRef, xFact, yFact );
     SetChanged();
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+}
+
+void SwVirtFlyDrawObj::Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+{
+    NbcCrop( rRef, xFact, yFact );
+    SetChanged();
+    GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+}
+
+void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
+{
+    Rectangle aRect(GetSnapRect());
+
+    if(!aRect.IsEmpty())
+    {
+       rTarget.AddHdl(new SdrCropHdl(aRect.TopLeft()     , HDL_UPLFT, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.TopCenter()   , HDL_UPPER, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.TopRight()    , HDL_UPRGT, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.LeftCenter()  , HDL_LEFT , 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.RightCenter() , HDL_RIGHT, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.BottomLeft()  , HDL_LWLFT, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.BottomCenter(), HDL_LOWER, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.BottomRight() , HDL_LWRGT, 0, 0));
+    }
 }
 
 // Macro

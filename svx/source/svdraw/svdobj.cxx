@@ -1239,6 +1239,12 @@ void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
     }
 }
 
+void SdrObject::addCropHandles(SdrHdlList& /*rTarget*/) const
+{
+    // Default implementation, does nothing. Overloaded in 
+    // SdrGrafObj and SwVirtFlyDrawObj
+}
+
 Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
     Rectangle aTmpRect(GetSnapRect());
@@ -1525,6 +1531,10 @@ void SdrObject::Move(const Size& rSiz)
     }
 }
 
+void SdrObject::NbcCrop(const Point& /*rRef*/, const Fraction& /*xFact*/, const Fraction& /*yFact*/) {
+    // Default: does nothing. Real behaviour in SwVirtFlyDrawObj and SdrGrafObj
+}
+
 void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
     if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
@@ -1541,6 +1551,15 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
         BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
+}
+
+void SdrObject::Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+{
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    NbcCrop(rRef, xFact, yFact);
+    SetChanged();
+    BroadcastObjectChange();
+    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
 void SdrObject::Rotate(const Point& rRef, long nAngle, double sn, double cs)
