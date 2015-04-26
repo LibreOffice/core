@@ -32,6 +32,11 @@
 #define DEFINE_SLOTID_FOR_NUMBER_BULLETS FN_NUMBER_BULLETS
 #define MN_NUMBERING ITEM_FORMAT_NUMBERING
 
+ // DUMMY is a ID where a SubMenu is following
+ // (it has to be increased every time!)
+#define DUMMY 333
+ // not object related
+
 #define MN_TXT\
     MenuItem\
     {\
@@ -239,53 +244,123 @@
             Text [ en-US ] = "Insert ~Caption..." ;\
     };
 
-#define MN_TAB1 \
+#define MN_TABLE \
     MenuItem\
     {\
-        Identifier = FN_FORMAT_TABLE_DLG ; \
-        HelpId = CMD_FN_FORMAT_TABLE_DLG ; \
-        Text [ en-US ] = "~Table..." ; \
+       Identifier = DUMMY ; \
+       Command = ".uno:TableInsertMenu" ; \
+       Text [ en-US ] = "~Insert" ; \
+       SubMenu = Menu\
+       {\
+           ItemList =\
+           {\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_INSERT_ROW ; \
+                        Text [ en-US ] = "Row Below" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_INSERT_ROW_DLG ; \
+                        HelpId = CMD_FN_TABLE_INSERT_ROW_DLG ; \
+                        Text [ en-US ] = "~Rows..." ; \
+                    };\
+                    SEPARATOR ; \
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_INSERT_COL ; \
+                        Text [ en-US ] = "Column Right" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_INSERT_COL_DLG ; \
+                        HelpId = CMD_FN_TABLE_INSERT_COL_DLG ; \
+                        Text [ en-US ] = "~Columns..." ; \
+                    };\
+           };\
+       };\
     };\
     MenuItem\
     {\
-        Identifier = FN_TABLE_MERGE_TABLE ; \
-        HelpId = CMD_FN_TABLE_MERGE_TABLE ; \
-        Text [ en-US ] = "Merge Tables";\
+       Identifier = DUMMY + 1; \
+       Command = ".uno:TableDeleteMenu" ; \
+       Text [ en-US ] = "~Delete" ; \
+       SubMenu = Menu\
+       {\
+           ItemList =\
+           {\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_DELETE_ROW ; \
+                        HelpId = CMD_FN_TABLE_DELETE_ROW ; \
+                        Text [ en-US ] = "~Rows" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_DELETE_COL ; \
+                        HelpId = CMD_FN_TABLE_DELETE_COL ; \
+                        Text [ en-US ] = "~Columns" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_DELETE_TABLE ; \
+                        Command = ".uno:DeleteTable" ; \
+                        Text [ en-US ] = "~Table" ; \
+                    };\
+           };\
+       };\
     };\
     MenuItem\
     {\
-        Identifier = FN_TABLE_SPLIT_TABLE ; \
-        HelpId = CMD_FN_TABLE_SPLIT_TABLE ; \
-        Text [ en-US ] = "~Split Table" ; \
+       Identifier = DUMMY + 2; \
+       Command = ".uno:TableSelectMenu" ; \
+       Text [ en-US ] = "~Select" ; \
+       SubMenu = Menu\
+       {\
+           ItemList =\
+           {\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_SELECT_ROW ; \
+                        HelpId = CMD_FN_TABLE_SELECT_ROW ; \
+                        Text [ en-US ] = "~Rows" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_SELECT_COL ; \
+                        HelpId = CMD_FN_TABLE_SELECT_COL ; \
+                        Text [ en-US ] = "~Columns" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_SELECT_ALL ; \
+                        Command = ".uno:SelectTable" ; \
+                        Text [ en-US ] = "~Table" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_SELECT_CELL ; \
+                        Command = ".uno:EntireCell" ; \
+                        Text [ en-US ] = "C~ell" ; \
+                    };\
+           };\
+       };\
     };\
     MenuItem\
     {\
-        Identifier = FN_NUM_FORMAT_TABLE_DLG ; \
-        HelpId = CMD_FN_NUM_FORMAT_TABLE_DLG ; \
-        Text [ en-US ] = "N~umber Format..." ; \
+        Identifier = FN_TABLE_MERGE_CELLS ; \
+        HelpId = CMD_FN_TABLE_MERGE_CELLS ; \
+        Text [ en-US ] = "~Merge" ; \
     };\
     MenuItem\
     {\
-        Identifier = MN_CELL ; \
-        Command = ".uno:CellMenu" ; \
-        Text [ en-US ] = "~Cell" ; \
+        Identifier = MN_FORMAT_ALGN ; \
+        Command = ".uno:AlignTextMenu" ; \
+        Text [ en-US ] = "A~lignment" ; \
         SubMenu = Menu\
         {\
             ItemList = \
             {\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_MERGE_CELLS ; \
-                    HelpId = CMD_FN_TABLE_MERGE_CELLS ; \
-                    Text [ en-US ] = "~Merge" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_SPLIT_CELLS ; \
-                    HelpId = CMD_FN_TABLE_SPLIT_CELLS ; \
-                    Text [ en-US ] = "~Split..." ; \
-                };\
-                SEPARATOR ; \
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
@@ -307,86 +382,14 @@
                     HelpId = CMD_SID_TABLE_VERT_BOTTOM ; \
                     Text [ en-US ] = "~Bottom" ; \
                 };\
-                SEPARATOR ; \
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_SET_READ_ONLY_CELLS ; \
-                    HelpId = CMD_FN_TABLE_SET_READ_ONLY_CELLS ; \
-                    Text [ en-US ] = "~Protect" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_UNSET_READ_ONLY_CELLS ; \
-                    HelpId = CMD_FN_TABLE_UNSET_READ_ONLY_CELLS ; \
-                    Text [ en-US ] = "~Unprotect" ; \
-                };\
             };\
         };\
-    };
-
-#define MN_TAB2 \
-    MenuItem\
-    {\
-        Identifier = MN_SUB_TBLROW ; \
-        HelpID = HID_MN_SUB_TBLROW ; \
-        Command = ".uno:RowMenu" ;  \
-        Text [ en-US ] = "~Row" ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_SET_ROW_HEIGHT ; \
-                    HelpId = CMD_FN_TABLE_SET_ROW_HEIGHT ; \
-                    Text [ en-US ] = "~Height..." ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_ROW_SPLIT;\
-                    HelpId = CMD_FN_TABLE_ROW_SPLIT ; \
-                    Text [ en-US ] = "Allow Row to Break A~cross Pages and Columns" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_OPTIMAL_HEIGHT ; \
-                    HelpId = CMD_FN_TABLE_OPTIMAL_HEIGHT ; \
-                    Text [ en-US ] = "~Optimal Height" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_BALANCE_ROWS ; \
-                    HelpId = CMD_FN_TABLE_BALANCE_ROWS ; \
-                    Text [ en-US ] = "Space ~Equally" ; \
-                };\
-                SEPARATOR ; \
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_SELECT_ROW ; \
-                    HelpId = CMD_FN_TABLE_SELECT_ROW ; \
-                    Text [ en-US ] = "~Select" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_INSERT_ROW_DLG ; \
-                    HelpId = CMD_FN_TABLE_INSERT_ROW_DLG ; \
-                    Text [ en-US ] = "~Insert..." ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_TABLE_DELETE_ROW ; \
-                    HelpId = CMD_FN_TABLE_DELETE_ROW ; \
-                    Text [ en-US ] = "~Delete" ; \
-                };\
-            };\
-    };\
     };\
     MenuItem\
     {\
-        Identifier = MN_SUB_TBLCOL ; \
-        HelpID = HID_MN_SUB_TBLCOL ; \
-        Command = ".uno:ColumnMenu" ; \
-        Text [ en-US ] = "Colu~mn" ; \
+        Identifier = DUMMY + 4 ; \
+        Command = ".uno:TableAutoFitMenu" ; \
+        Text [ en-US ] = "Si~ze" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -395,41 +398,53 @@
                 {\
                     Identifier = FN_TABLE_SET_COL_WIDTH ; \
                     HelpId = CMD_FN_TABLE_SET_COL_WIDTH ; \
-                    Text [ en-US ] = "~Width..." ; \
+                    Text [ en-US ] = "~Column Width..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_ADJUST_CELLS ; \
                     HelpId = CMD_FN_TABLE_ADJUST_CELLS ; \
-                    Text [ en-US ] = "~Optimal Width " ; \
+                    Text [ en-US ] = "~Optimal Column Width" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_BALANCE_CELLS ; \
                     HelpId = CMD_FN_TABLE_BALANCE_CELLS ; \
-                    Text [ en-US ] = "Space ~Equally" ; \
+                    Text [ en-US ] = "~Distribute Columns Equally" ; \
                 };\
                 SEPARATOR ; \
                 MenuItem\
                 {\
-                    Identifier = FN_TABLE_SELECT_COL ; \
-                    HelpId = CMD_FN_TABLE_SELECT_COL ; \
-                    Text [ en-US ] = "~Select" ; \
+                    Identifier = FN_TABLE_SET_ROW_HEIGHT ; \
+                    HelpId = CMD_FN_TABLE_SET_ROW_HEIGHT ; \
+                    Text [ en-US ] = "~Row Height..." ; \
                 };\
                 MenuItem\
                 {\
-                    Identifier = FN_TABLE_INSERT_COL_DLG ; \
-                    HelpId = CMD_FN_TABLE_INSERT_COL_DLG ; \
-                    Text [ en-US ] = "~Insert..." ; \
+                    Identifier = FN_TABLE_OPTIMAL_HEIGHT ; \
+                    HelpId = CMD_FN_TABLE_OPTIMAL_HEIGHT ; \
+                    Text [ en-US ] = "Optimal Row ~Height" ; \
                 };\
                 MenuItem\
                 {\
-                    Identifier = FN_TABLE_DELETE_COL ; \
-                    HelpId = CMD_FN_TABLE_DELETE_COL ; \
-                    Text [ en-US ] = "~Delete" ; \
+                    Identifier = FN_TABLE_BALANCE_ROWS ; \
+                    HelpId = CMD_FN_TABLE_BALANCE_ROWS ; \
+                    Text [ en-US ] = "Distribute Rows ~Equally" ; \
                 };\
             };\
-};\
+        };\
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_NUM_FORMAT_TABLE_DLG ; \
+        HelpId = CMD_FN_NUM_FORMAT_TABLE_DLG ; \
+        Text [ en-US ] = "N~umber Format..." ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_TABLE_DLG ; \
+        HelpId = CMD_FN_FORMAT_TABLE_DLG ; \
+        Text [ en-US ] = "~Table Properties..." ; \
     };
 
 #define MN_DRWTXT \
@@ -677,8 +692,7 @@ Menu MN_TAB_POPUPMENU
         MENU_PASTE_SPECIAL
         _NUMBERING_RELATED_MENU
         SEPARATOR ;
-        MN_TAB1
-        MN_TAB2
+        MN_TABLE
         SEPARATOR ;
         MN_RESET
         SEPARATOR ;
