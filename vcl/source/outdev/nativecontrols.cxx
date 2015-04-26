@@ -150,6 +150,12 @@ PushButtonValue* PushButtonValue::clone() const
     return new PushButtonValue( *this );
 }
 
+EditBoxValue* EditBoxValue::clone() const
+{
+    assert( typeid( const EditBoxValue ) == typeid( *this ));
+    return new EditBoxValue( *this );
+}
+
 // These functions are mainly passthrough functions that allow access to
 // the SalFrame behind a Window object for native widget rendering purposes.
 

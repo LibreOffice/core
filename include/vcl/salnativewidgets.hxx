@@ -487,6 +487,7 @@ public:
         : ImplControlValue(CTRL_EDITBOX, BUTTONVALUE_DONTKNOW, nTextHeight)
     {
     }
+    virtual EditBoxValue* clone() const SAL_OVERRIDE;
 };
 
 #endif
