@@ -1118,24 +1118,22 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
                 }
             }
-            uno::Sequence< beans::PropertyValue > aProperties;
-            if( pPropertyMap.get() )
-            {
-                aProperties = pPropertyMap->GetPropertyValues();
-            }
+            std::vector<beans::PropertyValue> aProperties;
+            if (pPropertyMap.get())
+                aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
             if( !bIsDropCap )
             {
                 if( aDrop.Lines > 1 )
                 {
-                    sal_uInt32 nLength = aProperties.getLength();
-                    aProperties.realloc(  nLength + 1 );
-                    aProperties[nLength].Value <<= aDrop;
-                    aProperties[nLength].Name = rPropNameSupplier.GetName(PROP_DROP_CAP_FORMAT);
+                    beans::PropertyValue aValue;
+                    aValue.Name = rPropNameSupplier.GetName(PROP_DROP_CAP_FORMAT);
+                    aValue.Value <<= aDrop;
+                    aProperties.push_back(aValue);
                 }
                 uno::Reference< text::XTextRange > xTextRange;
                 if (rAppendContext.xInsertPosition.is())
                 {
-                    xTextRange = xTextAppend->finishParagraphInsert( aProperties, rAppendContext.xInsertPosition );
+                    xTextRange = xTextAppend->finishParagraphInsert( comphelper::containerToSequence(aProperties), rAppendContext.xInsertPosition );
                     rAppendContext.xCursor->gotoNextParagraph(false);
                     if (rAppendContext.pLastParagraphProperties.get())
                         rAppendContext.pLastParagraphProperties->SetEndingRange(xTextRange->getEnd());
@@ -1154,7 +1152,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                         appendTextPortion(sMarker, pEmpty);
                     }
 
-                    xTextRange = xTextAppend->finishParagraph( aProperties );
+                    xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
 
                     if (xCursor.is())
                     {
