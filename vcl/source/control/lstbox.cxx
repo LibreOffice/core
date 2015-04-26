@@ -116,7 +116,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         if( IsNativeWidgetEnabled() &&
             IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
         {
-                ImplControlValue aControlValue;
+                EditBoxValue aControlValue(GetTextHeight());
                 Rectangle aCtrlRegion( Point( 0, 0 ), Size( 20, mnDDHeight ) );
                 Rectangle aBoundingRgn( aCtrlRegion );
                 Rectangle aContentRgn( aCtrlRegion );
@@ -626,7 +626,7 @@ void ListBox::Resize()
 
         // Note: in case of no border, pBorder will actually be this
         vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
-        ImplControlValue aControlValue;
+        EditBoxValue aControlValue(GetTextHeight());
         Point aPoint;
         Rectangle aContent, aBound;
 
@@ -1212,7 +1212,7 @@ Size ListBox::CalcMinimumSize() const
     {
         // Try native borders; scrollbar size may not be a good indicator
         // See how large the edit area inside is to estimate what is needed for the dropdown
-        ImplControlValue aControlValue;
+        EditBoxValue aControlValue(GetTextHeight());
         Point aPoint;
         Rectangle aContent, aBound;
         Size aTestSize( 100, 20 );
@@ -1231,7 +1231,7 @@ Size ListBox::CalcMinimumSize() const
 
     if (IsDropDownBox()) // Check minimum height of dropdown box
     {
-        ImplControlValue aControlValue;
+        EditBoxValue aControlValue(GetTextHeight());
         Rectangle aRect( Point( 0, 0 ), aSz );
         Rectangle aContent, aBound;
         if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, ControlState::NONE,

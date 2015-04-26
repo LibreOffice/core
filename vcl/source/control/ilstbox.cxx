@@ -2661,7 +2661,7 @@ void ImplWin::ImplDraw( bool bLayout )
             // vcl/source/window/brdwin.cxx
             vcl::Window *pWin = GetParent();
 
-            ImplControlValue aControlValue;
+            EditBoxValue aControlValue(GetTextHeight());
             if ( !pWin->IsEnabled() )
                 nState &= ~ControlState::ENABLED;
             if ( pWin->HasFocus() )
