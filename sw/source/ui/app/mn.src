@@ -103,7 +103,7 @@
     {                                                                   \
         Identifier =  FN_COPY_HYPERLINK_LOCATION;                           \
         HelpId = CMD_FN_COPY_HYPERLINK_LOCATION;                               \
-        Text [ en-US ] = "Copy Hyperlink ~Location";                  \
+        Text [ en-US ] = "Copy Hyper~link";                  \
     };                                                                  \
     MenuItem                                                            \
     {                                                                   \
@@ -1121,7 +1121,7 @@ String MN_GRF_POPUPMENU
     {\
         Identifier = SID_MENU_MANAGE_GRAPHIC ; \
         Command = ".uno:ManageGraphicMenu" ; \
-        Text [ en-US ] = "~Rotate Image" ; \
+        Text [ en-US ] = "~Rotate" ; \
         SubMenu = Menu\
         {\
             ItemList = \
