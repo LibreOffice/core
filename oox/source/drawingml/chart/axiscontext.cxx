@@ -171,11 +171,11 @@ CatAxisContext::~CatAxisContext()
 
 ContextHandlerRef CatAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( auto ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbAuto = rAttribs.getBool( XML_val, false );
+            mrModel.mbAuto = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( axPos ):
             mrModel.mnAxisPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
@@ -211,11 +211,11 @@ DateAxisContext::~DateAxisContext()
 
 ContextHandlerRef DateAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( auto ):
-            // default is 'false', not 'true' as specified
-            mrModel.mbAuto = rAttribs.getBool( XML_val, false );
+            mrModel.mbAuto = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
         case C_TOKEN( baseTimeUnit ):
             mrModel.monBaseTimeUnit = rAttribs.getToken( XML_val, XML_days );
