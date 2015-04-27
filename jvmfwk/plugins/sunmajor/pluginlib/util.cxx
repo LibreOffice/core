@@ -976,11 +976,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             }
 
             bool bProcessRun= false;
-            if (getJavaProps(sFilePath,
+            if (!getJavaProps(sFilePath,
 #ifdef JVM_ONE_PATH_CHECK
                              sResolvedDir,
 #endif
-                             props, & bProcessRun) == false)
+                             props, & bProcessRun))
             {
                 //The java executable could not be run or the system properties
                 //could not be retrieved. We can assume that this java is corrupt.
@@ -991,7 +991,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                 //in jdk/jre/bin. We do not search any further, because we assume that if one java
                 //does not work then the other does not work as well. This saves us to run java
                 //again which is quite costly.
-                if (bProcessRun == true)
+                if (bProcessRun)
                 {
                     // 1.3.1 special treatment: jdk/bin/java and /jdk/jre/bin/java are links to
                     //a script, named .java_wrapper. The script starts jdk/bin/sparc/native_threads/java
@@ -1084,7 +1084,7 @@ Reference<VendorBase> createInstance(createInstance_func pFunc,
     Reference<VendorBase> aBase = (*pFunc)();
     if (aBase.is())
     {
-        if (aBase->initialize(properties) == false)
+        if (!aBase->initialize(properties))
             aBase = 0;
     }
     return aBase;

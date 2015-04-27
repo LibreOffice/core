@@ -76,7 +76,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         if (pInfo == NULL)
         {
-            if (false == findAndSelect(&pInfo))
+            if (!findAndSelect(&pInfo))
                 return -1;
         }
         else

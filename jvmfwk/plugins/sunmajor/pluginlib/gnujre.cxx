@@ -281,7 +281,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
             break;
         }
     }
-    if (bLdPath == false)
+    if (!bLdPath)
         return false;
 
     return true;

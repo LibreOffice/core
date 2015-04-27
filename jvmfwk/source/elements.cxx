@@ -777,7 +777,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
         bNil = false;
     else
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    if (bNil == true)
+    if (bNil)
         return;
 
     //Get javaInfo@manuallySelected attribute
@@ -890,7 +890,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
     //javaInfo@autoSelect
     xmlSetProp(pJavaInfoNode, reinterpret_cast<xmlChar const *>("autoSelect"),
-               reinterpret_cast<xmlChar const *>(bAutoSelect == true ? "true" : "false"));
+               reinterpret_cast<xmlChar const *>(bAutoSelect ? "true" : "false"));
 
     //Set xsi:nil in javaInfo element to false
     //the xmlNs pointer must not be destroyed
@@ -977,7 +977,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
 JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 {
-    if (bNil == true || m_bEmptyNode == true)
+    if (bNil || m_bEmptyNode)
         return NULL;
     JavaInfo * pInfo = static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
     if (pInfo == NULL)

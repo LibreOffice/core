@@ -418,7 +418,7 @@ JFW_MODE getMode()
     static bool g_bMode = false;
     static JFW_MODE g_mode = JFW_MODE_APPLICATION;
 
-    if (g_bMode == false)
+    if (!g_bMode)
     {
         //check if either of the "direct mode" bootstrap variables is set
         bool bDirectMode = true;
@@ -555,7 +555,7 @@ void setJavaSelected()
 bool wasJavaSelectedInSameProcess()
 {
     //g_setJavaProcId not set means no Java selected
-    if (g_bJavaSet == true)
+    if (g_bJavaSet)
         return true;
     return false;
 }

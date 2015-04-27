@@ -276,8 +276,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
                 //Check if the selected Java was set in this process. If so it
                 //must not have the requirments flag JFW_REQUIRE_NEEDRESTART
                 if ((aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART)
-                    &&
-                    (jfw::wasJavaSelectedInSameProcess() == true))
+                    && jfw::wasJavaSelectedInSameProcess())
                     return JFW_E_NEED_RESTART;
 
                 vmParams = settings.getVmParametersUtf8();
@@ -533,7 +532,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                     jfw_freeJavaInfo(arInfos[j]);
                 rtl_freeMemory(arInfos);
 
-                if (bInfoFound == true)
+                if (bInfoFound)
                     break;
                 //All Java installations found by the current plug-in lib
                 //do not provide the required features. Try the next plug-in
@@ -591,7 +590,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                             }
                         }
                     }//end iterate over paths
-                    if (bInfoFound == true)
+                    if (bInfoFound)
                         break;
                 }// end iterate plug-ins
             }
@@ -837,7 +836,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
 
-        if (g_bEnabledSwitchedOn == false && bEnabled == sal_True)
+        if (!g_bEnabledSwitchedOn && bEnabled == sal_True)
         {
             //When the process started then Enabled was false.
             //This is first time enabled is set to true.
