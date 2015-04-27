@@ -1629,7 +1629,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             OSL_ENSURE( mbMouseVisible,
                         "setProperty(): User paint overrides invisible mouse" );
 
-            if(nSwitchPenMode == true){
+            if(nSwitchPenMode){
             // Switch to Pen Mode
             maSwitchPenMode.reset( nSwitchPenMode );
             maEventMultiplexer.notifySwitchPenMode();
@@ -1645,7 +1645,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         {
             OSL_ENSURE( mbMouseVisible,
                         "setProperty(): User paint overrides invisible mouse" );
-            if(nSwitchEraserMode == true){
+            if(nSwitchEraserMode){
             // switch to Eraser mode
             maSwitchEraserMode.reset( nSwitchEraserMode );
             maEventMultiplexer.notifySwitchEraserMode();

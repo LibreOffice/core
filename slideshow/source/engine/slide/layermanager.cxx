@@ -811,8 +811,8 @@ namespace slideshow
                 const bool bThisIsBackgroundDetached(
                     pCurrShape->isBackgroundDetached() );
 
-                if( bLastWasBackgroundDetached == true &&
-                    bThisIsBackgroundDetached == false )
+                if( bLastWasBackgroundDetached &&
+                    !bThisIsBackgroundDetached )
                 {
                     // discontinuity found - current shape needs to
                     // get into a new layer
