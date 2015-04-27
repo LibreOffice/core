@@ -2312,8 +2312,8 @@ void ChartExport::exportTextProps(Reference<XPropertySet> xPropSet)
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_txPr), FSEND);
 
-    pFS->startElement(FSNS(XML_c, XML_bodyPr), FSEND);
-    pFS->endElement(FSNS(XML_c, XML_bodyPr));
+    pFS->startElement(FSNS(XML_a, XML_bodyPr), FSEND);
+    pFS->endElement(FSNS(XML_a, XML_bodyPr));
 
     pFS->startElement(FSNS(XML_a, XML_p), FSEND);
     pFS->startElement(FSNS(XML_a, XML_pPr), FSEND);
