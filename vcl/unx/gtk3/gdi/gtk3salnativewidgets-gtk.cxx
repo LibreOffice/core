@@ -1103,6 +1103,10 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     {
         aEditRect = AdjustRectForTextBordersPadding(mpComboboxStyle, rValue.getNumericVal(), rControlRegion);
     }
+    else if (CTRL_SPINBOX && nPart == PART_ENTIRE_CONTROL)
+    {
+        aEditRect = AdjustRectForTextBordersPadding(mpSpinStyle, rValue.getNumericVal(), rControlRegion);
+    }
     else
     {
         return false;
