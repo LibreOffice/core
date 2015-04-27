@@ -753,10 +753,13 @@
 					<if test="boolean(@text:style-name)">
 						<variable name="style-element" select="key('style-ref', @text:style-name)"/>
 
+						<!-- Paragraph color -->
 						<call-template name="translate-style-property">
 							<with-param name="style-name" select="'color'"/>
 							<with-param name="style-property" select="$style-element/style:text-properties/@fo:color"/>
 						</call-template>
+
+						<!-- Paragraph margins -->
 						<call-template name="translate-style-property">
 							<with-param name="style-name" select="'margin-left'"/>
 							<with-param name="style-property" select="$style-element/style:paragraph-properties/@fo:margin-left"/>
@@ -765,6 +768,13 @@
 							<with-param name="style-name" select="'margin-right'"/>
 							<with-param name="style-property" select="$style-element/style:paragraph-properties/@fo:margin-right"/>
 						</call-template>
+
+						<!-- Paragraph justification -->
+						<call-template name="translate-style-property">
+							<with-param name="style-name" select="'text-align'"/>
+							<with-param name="style-property" select="$style-element/style:paragraph-properties/@fo:text-align"/>
+						</call-template>
+
 					</if>
 				</when>
 				<otherwise>
