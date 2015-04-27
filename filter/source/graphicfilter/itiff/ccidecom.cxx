@@ -635,7 +635,7 @@ bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTarget
     if ( nEOLCount >= 5 )   // RTC (Return To Controller)
         return true;
 
-    if ( bStatus == false )
+    if ( !bStatus )
         return false;
 
     // If EOL-Codes exist, the EOL-Code also appeared in front of the first line.
@@ -648,7 +648,7 @@ bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTarget
             sal_uInt32 nCurPos = pIStream->Tell();
             sal_uInt16 nOldInputBitsBufSize = nInputBitsBufSize;
             sal_uInt32 nOldInputBitsBuf = nInputBitsBuf;
-            if ( ReadEOL( 32 ) == false )
+            if ( !ReadEOL( 32 ) )
             {
                 nInputBitsBufSize = nOldInputBitsBufSize;
                 nInputBitsBuf = nOldInputBitsBuf;
@@ -659,7 +659,7 @@ bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTarget
         }
         else
         {
-            if ( ReadEOL( nTargetBits ) == false )
+            if ( !ReadEOL( nTargetBits ) )
             {
                 return bStatus;
             }
@@ -1010,7 +1010,7 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
         // should the situation arise, switch Black <-> White:
         if (bTerminatingCode) nBlackOrWhite = ~nBlackOrWhite;
 
-    } while (nTargetBits>0 || bTerminatingCode==false);
+    } while (nTargetBits>0 || !bTerminatingCode);
 }
 
 
@@ -1026,7 +1026,7 @@ void CCIDecompressor::Read2DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
     while (nBitPos<nTargetBits && bStatus) {
 
         n2DMode=ReadCodeAndDecode(p2DModeLookUp,10);
-        if (bStatus==false) return;
+        if (!bStatus) return;
 
         if (n2DMode==CCI2DMODE_UNCOMP) {
             for (;;) {

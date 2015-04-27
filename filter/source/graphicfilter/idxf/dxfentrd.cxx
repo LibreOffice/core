@@ -709,7 +709,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
                     ( nCurrentBoundaryPathIndex < nBoundaryPathCount ) )
                     bExecutingGroupCode = pBoundaryPathData[ nCurrentBoundaryPathIndex ].EvaluateGroup( rDGR );
             }
-            if ( bExecutingGroupCode == false )
+            if ( !bExecutingGroupCode )
                 DXFBasicEntity::EvaluateGroup(rDGR);
         }
         break;

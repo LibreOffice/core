@@ -115,7 +115,7 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
 
     // read header:
 
-    if ( ImplReadHeader() == false )
+    if ( !ImplReadHeader() )
         return false;
 
     Size aBitmapSize( mpFileHeader->nColumns, mpFileHeader->nRows );

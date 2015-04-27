@@ -184,7 +184,7 @@ void PCDReader::CheckPCDImagePacFile()
 
 void PCDReader::ReadOrientation()
 {
-    if ( bStatus == false )
+    if ( !bStatus )
         return;
     m_rPCD.Seek( 194635 );
     m_rPCD.ReadUChar( nOrientation );
@@ -204,7 +204,7 @@ void PCDReader::ReadImage()
     sal_uInt8 * pCr; // red chrominance fuer je 2x2 pixel of the current pair of rows
     sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; // like above, but for the next pair of rows
 
-    if ( bStatus == false )
+    if ( !bStatus )
         return;
 
     nW2=nWidth>>1;
@@ -350,7 +350,7 @@ void PCDReader::ReadImage()
 
         if ( m_rPCD.GetError() )
             bStatus = false;
-        if ( bStatus == false )
+        if ( !bStatus )
             break;
     }
     rtl_freeMemory((void*)pL0 );

@@ -413,7 +413,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PCXReader aPCXReader(rStream);
     bool nRetValue = aPCXReader.ReadPCX(rGraphic);
-    if ( nRetValue == false )
+    if ( !nRetValue )
         rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     return nRetValue;
 }

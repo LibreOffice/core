@@ -509,7 +509,7 @@ void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPa
 {
     sal_uInt16 nIndex,nNumI,i;
 
-    if (bStatus==false) return;
+    if (!bStatus) return;
 
     //--- The Field 'Begin Color Attribute Table':
     WriteFieldIntroducer(16,BegColAtrMagic,0,0);
@@ -567,7 +567,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     sal_uInt16 nBitsPerPixel;
     sal_uInt8 nbyte;
 
-    if (bStatus==false)
+    if (!bStatus)
         return;
 
     nActColMapId=((nActBitmapId>>24)&0x000000ff) | ((nActBitmapId>> 8)&0x0000ff00) |
@@ -701,7 +701,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
         if (aTemp.GetError() || pMET->GetError()) bStatus=false;
         nActBitmapPercent=(ny+1)*100/nHeight;
         MayCallback();
-        if (bStatus==false) return;
+        if (!bStatus) return;
     }
     pBuf.reset();
 
@@ -1482,7 +1482,7 @@ void METWriter::METSetChrSet(sal_uInt8 nSet)
 
 void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 {
-    if(bStatus==false)
+    if(!bStatus)
         return;
 
     for( size_t nA = 0, nACount = pMTF->GetActionSize(); nA < nACount; nA++ )
@@ -2323,7 +2323,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
       if( pMET->GetError() )
         bStatus=false;
 
-      if( bStatus == false )
+      if( !bStatus )
         break;
     }
 }
@@ -2379,7 +2379,7 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
 {
     sal_uInt32 nSegmentSize,nPos,nDataFieldsStartPos;
 
-    if( bStatus==false )
+    if( !bStatus )
         return;
 
     //--- Das Feld 'Begin Graphics Object':
@@ -2439,7 +2439,7 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
 
 void METWriter::WriteResourceGroup(const GDIMetaFile * pMTF)
 {
-    if( bStatus==false )
+    if( !bStatus )
         return;
 
     //--- The Field 'Begin Resource Group':
@@ -2464,7 +2464,7 @@ void METWriter::WriteResourceGroup(const GDIMetaFile * pMTF)
 
 void METWriter::WriteDocument(const GDIMetaFile * pMTF)
 {
-    if( bStatus==false )
+    if( !bStatus )
         return;
 
     //--- The Field 'Begin Document':

@@ -389,7 +389,7 @@ void CGMImpressOutAct::InsertPage()
     {
         uno::Reference< drawing::XDrawPage > xPage( maXDrawPages->insertNewByIndex( 0xffff ), uno::UNO_QUERY );
         maXDrawPage = xPage;
-        if ( ImplInitPage() == false )
+        if ( !ImplInitPage() )
             mpCGM->mbStatus = false;
     }
     mnCurrentPage++;

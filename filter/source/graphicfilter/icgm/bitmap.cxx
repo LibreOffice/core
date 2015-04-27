@@ -206,7 +206,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         Bitmap::ReleaseAccess( rDesc.mpAcc );
         rDesc.mpAcc = NULL;
     }
-    if ( rDesc.mbStatus == false )
+    if ( !rDesc.mbStatus )
     {
         if ( rDesc.mpBitmap )
         {

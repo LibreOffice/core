@@ -261,7 +261,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
     sal_uInt16 nPoints,i;
     DXFVector aC;
 
-    if (SetLineAttribute(rE)==false) return;
+    if (!SetLineAttribute(rE)) return;
     rTransform.Transform(rE.aP0,aC);
     if (rE.fThickness==0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
         pVirDev->DrawEllipse(
@@ -304,7 +304,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
     DXFVector aC;
     Point aPS,aPE;
 
-    if (SetLineAttribute(rE)==false) return;
+    if (!SetLineAttribute(rE)) return;
     fA1=rE.fStart;
     fdA=rE.fEnd-fA1;
     while (fdA>=360.0) fdA-=360.0;

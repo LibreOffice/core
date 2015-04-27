@@ -306,7 +306,7 @@ double TIFFReader::ReadDoubleData()
 
 void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 {
-    if ( bStatus == false )
+    if ( !bStatus )
         return;
 
     switch ( nTagType )
@@ -605,7 +605,7 @@ bool TIFFReader::ReadMap()
                     pTIFF->Seek( pStripOffsets[ nStrip ] );
                     aCCIDecom.StartDecompression( *pTIFF );
                 }
-                if ( aCCIDecom.DecompressScanline( pMap[ np ], nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes ) == false )
+                if ( !aCCIDecom.DecompressScanline( pMap[ np ], nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes ) )
                     return false;
                 if ( pTIFF->GetError() )
                     return false;
@@ -1277,7 +1277,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     if ( pTIFF->GetError() )
                         bStatus = false;
 
-                    if ( bStatus == false )
+                    if ( !bStatus )
                         break;
                 }
                 pTIFF->ReadUInt32( nNextIfd );

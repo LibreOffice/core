@@ -775,7 +775,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 aClientDataHd.SeekToEndOfRecord( rSt );
             }
         }
-        if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE ) && ( rPersistEntry.bNotesMaster == false ) )
+        if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE ) && !rPersistEntry.bNotesMaster )
         {
             sal_uInt16 nPageNum = pSdrModel->GetPageCount();
             if ( nPageNum > 0 )
@@ -1584,7 +1584,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                 }
                             }
                             // office xp is supporting more than one stylesheet
-                            if ( ( rE2.ePageKind == PPT_MASTERPAGE ) && ( rE2.aSlideAtom.nMasterId == 0 ) && ( rE2.bNotesMaster == false ) )
+                            if ( ( rE2.ePageKind == PPT_MASTERPAGE ) && ( rE2.aSlideAtom.nMasterId == 0 ) && !rE2.bNotesMaster )
                             {
                                 PPTTextSpecInfo aTxSI( 0 );
                                 if ( aTxSIStyle.bValid && !aTxSIStyle.aList.empty() )
@@ -4084,7 +4084,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     {
         sal_uInt32 nInstance = aTxMasterStyleHd.nRecInstance;
         if ( ( nInstance < PPT_STYLESHEETENTRYS ) &&
-            ( ( nInstance != TSS_TYPE_TEXT_IN_SHAPE ) || ( bFoundTxMasterStyleAtom04 == false ) ) )
+            ( ( nInstance != TSS_TYPE_TEXT_IN_SHAPE ) || !bFoundTxMasterStyleAtom04 ) )
         {
             if ( nInstance > 4 )
             {

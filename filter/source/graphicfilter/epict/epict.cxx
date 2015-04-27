@@ -460,7 +460,7 @@ void PictWriter::WriteOpcode_TxFace(const vcl::Font & rFont)
     if (rFont.IsOutline())              nFace|=0x08;
     if (rFont.IsShadow())               nFace|=0x10;
 
-    if (bDstTxFaceValid==false || nDstTxFace!=nFace) {
+    if (!bDstTxFaceValid || nDstTxFace!=nFace) {
         pPict->WriteUInt16( 0x0004 ).WriteUChar( nFace ).WriteUChar( 0 );
         nDstTxFace=nFace;
         bDstTxFaceValid=true;
@@ -472,7 +472,7 @@ void PictWriter::WriteOpcode_TxMode(RasterOp eMode)
 {
     sal_uInt16 nVal;
 
-    if (bDstTxModeValid==false || eDstTxMode!=eMode) {
+    if (!bDstTxModeValid || eDstTxMode!=eMode) {
         switch (eMode) {
             case ROP_INVERT: nVal=0x000c; break;
             case ROP_XOR:    nVal=0x000a; break;
@@ -488,7 +488,7 @@ void PictWriter::WriteOpcode_TxMode(RasterOp eMode)
 void PictWriter::WriteOpcode_PnSize(sal_uInt16 nSize)
 {
     if (nSize==0) nSize=1;
-    if (bDstPnSizeValid==false || nDstPnSize!=nSize) {
+    if (!bDstPnSizeValid || nDstPnSize!=nSize) {
         pPict->WriteUInt16( 0x0007 ).WriteUInt16( nSize ).WriteUInt16( nSize );
         nDstPnSize=nSize;
         bDstPnSizeValid=true;
@@ -500,7 +500,7 @@ void PictWriter::WriteOpcode_PnMode(RasterOp eMode)
 {
     sal_uInt16 nVal;
 
-    if (bDstPnModeValid==false || eDstPnMode!=eMode) {
+    if (!bDstPnModeValid || eDstPnMode!=eMode) {
         switch (eMode)
         {
             case ROP_INVERT: nVal=0x000c; break;
@@ -519,7 +519,7 @@ void PictWriter::WriteOpcode_PnLinePat(bool bVisible)
     PictPattern aPat;
 
     ConvertLinePattern(aPat,bVisible);
-    if (bDstPnPatValid==false || aDstPnPat.nHi!=aPat.nHi || aDstPnPat.nLo!=aPat.nLo) {
+    if (!bDstPnPatValid || aDstPnPat.nHi!=aPat.nHi || aDstPnPat.nLo!=aPat.nLo) {
         pPict->WriteUInt16( 0x0009 ).WriteUInt32( aPat.nHi ).WriteUInt32( aPat.nLo );
         aDstPnPat=aPat;
         bDstPnPatValid=true;
@@ -532,7 +532,7 @@ void PictWriter::WriteOpcode_PnFillPat(bool bVisible)
     PictPattern aPat;
 
     ConvertFillPattern(aPat,bVisible);
-    if (bDstPnPatValid==false || aDstPnPat.nHi!=aPat.nHi || aDstPnPat.nLo!=aPat.nLo) {
+    if (!bDstPnPatValid || aDstPnPat.nHi!=aPat.nHi || aDstPnPat.nLo!=aPat.nLo) {
         pPict->WriteUInt16( 0x0009 ).WriteUInt32( aPat.nHi ).WriteUInt32( aPat.nLo );
         aDstPnPat=aPat;
         bDstPnPatValid=true;
@@ -549,7 +549,7 @@ void PictWriter::WriteOpcode_OvSize(const Size & rSize)
 
 void PictWriter::WriteOpcode_TxSize(sal_uInt16 nSize)
 {
-    if (bDstTxSizeValid==false || nDstTxSize!=nSize) {
+    if (!bDstTxSizeValid || nDstTxSize!=nSize) {
 
         nDstTxSize = (sal_uInt16) OutputDevice::LogicToLogic( Size( 0, nSize ),
                                                           aSrcMapMode, aTargetMapMode ).Height();
@@ -562,7 +562,7 @@ void PictWriter::WriteOpcode_TxSize(sal_uInt16 nSize)
 
 void PictWriter::WriteOpcode_RGBFgCol(const Color & rColor)
 {
-    if (bDstFgColValid==false || aDstFgCol!=rColor) {
+    if (!bDstFgColValid || aDstFgCol!=rColor) {
         pPict->WriteUInt16( 0x001a );
         WriteRGBColor(rColor);
         aDstFgCol=rColor;
@@ -573,7 +573,7 @@ void PictWriter::WriteOpcode_RGBFgCol(const Color & rColor)
 
 void PictWriter::WriteOpcode_RGBBkCol(const Color & rColor)
 {
-    if (bDstBkColValid==false || aDstBkCol!=rColor) {
+    if (!bDstBkColValid || aDstBkCol!=rColor) {
         pPict->WriteUInt16( 0x001b );
         WriteRGBColor(rColor);
         aDstBkCol=rColor;
@@ -648,7 +648,7 @@ void PictWriter::WriteOpcode_Text(const Point & rPoint, const OUString& rString,
     dh = aPoint.X()-aDstTextPosition.X();
     dv = aPoint.Y()-aDstTextPosition.Y();
 
-    if (bDstTextPositionValid==false || dh<0 || dh>255 || dv<0 || dv>255 || bDelta==false)
+    if (!bDstTextPositionValid || dh<0 || dh>255 || dv<0 || dv>255 || !bDelta)
     {
         pPict->WriteUInt16( 0x0028 );
         WritePoint(rPoint);
@@ -686,7 +686,7 @@ void PictWriter::WriteOpcode_FontName(const vcl::Font & rFont)
         default:                nFontId=1;
     }
 
-    if (bDstFontNameValid==false || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
+    if (!bDstFontNameValid || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
     {
         OString aString(OUStringToOString(rFont.GetName(), osl_getThreadTextEncoding()));
         sal_uInt16 nFontNameLen = aString.getLength();
@@ -881,7 +881,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     nActBitmapPercent=30;
     MayCallback();
 
-    if ( bStatus == false )
+    if ( !bStatus )
         return;
     if ( ( pAcc = aBitmap.AcquireReadAccess() ) == NULL )
         return;
@@ -2127,7 +2127,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
         if (pPict->GetError())
             bStatus=false;
 
-        if (bStatus==false)
+        if (!bStatus)
             break;
     }
 }

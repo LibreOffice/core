@@ -749,7 +749,7 @@ ImportCGM( OUString const & rFileName, uno::Reference< frame::XModel > const & r
                                 }
                             }
 
-                            if ( pCGM->Write( *pIn ) == false )
+                            if ( !pCGM->Write( *pIn ) )
                                 break;
                         }
                         if ( pCGM->IsValid() )

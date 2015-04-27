@@ -1273,7 +1273,7 @@ bool DffPropSet::IsHardAttribute( sal_uInt32 nId ) const
         bRetValue = (mpPropSetEntries[nId | 0x3f].nComplexIndexOrFlagsHAttr
                         & (1 << (0xf - (nId & 0xf)))) != 0;
     else
-        bRetValue = ( mpPropSetEntries[ nId ].aFlags.bSoftAttr == false );
+        bRetValue = !mpPropSetEntries[ nId ].aFlags.bSoftAttr;
     return bRetValue;
 };
 

@@ -80,7 +80,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
 
     // read header:
 
-    if ( ( mbStatus = ImplReadHeader() ) == false )
+    if ( !( mbStatus = ImplReadHeader() ) )
         return false;
 
     if ( ( mnMaxVal == 0 ) || ( mnWidth == 0 ) || ( mnHeight == 0 ) )
@@ -177,7 +177,7 @@ bool PBMReader::ImplReadHeader()
         default:
             return false;
     }
-    while ( bFinished == false )
+    while ( !bFinished )
     {
         if ( mrPBM.GetError() )
             return false;
@@ -318,7 +318,7 @@ bool PBMReader::ImplReadBody()
     {
         // PBM
         case 0 :
-            while ( bFinished == false )
+            while ( !bFinished )
             {
                 if ( mrPBM.IsEof() || mrPBM.GetError() )
                     return false;
@@ -361,7 +361,7 @@ bool PBMReader::ImplReadBody()
             nCount = 0;
             nGrey = 0;
 
-            while ( bFinished == false )
+            while ( !bFinished )
             {
                 if ( nCount )
                 {
@@ -435,7 +435,7 @@ bool PBMReader::ImplReadBody()
             nCount = 0;
             nRGB[ 0 ] = nRGB[ 1 ] = nRGB[ 2 ] = 0;
 
-            while ( bFinished == false )
+            while ( !bFinished )
             {
                 if ( nCount == 3 )
                 {

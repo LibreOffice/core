@@ -43,9 +43,9 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     DXF2GDIMetaFile aConverter;
     GDIMetaFile aMTF;
 
-    if ( aDXF.Read( rStream, 0, 60 ) == false )
+    if ( !aDXF.Read( rStream, 0, 60 ) )
         return false;
-    if ( aConverter.Convert( aDXF, aMTF, 60, 100 ) == false )
+    if ( !aConverter.Convert( aDXF, aMTF, 60, 100 ) )
         return false;
     rGraphic = Graphic(aMTF);
 

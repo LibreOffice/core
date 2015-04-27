@@ -63,7 +63,7 @@ namespace PictReaderInternal {
     }
 
     //! returns true if this is the default pattern
-    bool isDefault() const { return isRead == false; }
+    bool isDefault() const { return !isRead; }
 
     enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
     enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
