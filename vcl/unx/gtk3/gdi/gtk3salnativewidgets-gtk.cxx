@@ -1151,14 +1151,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetCheckedColorSpecialCase( );
 
-    // highlighting colors
-    gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
-    ::Color aHighlightColor = getColor( text_color );
-    gtk_style_context_get_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
-    ::Color aHighlightTextColor = getColor( text_color );
-    aStyleSet.SetHighlightColor( aHighlightColor );
-    aStyleSet.SetHighlightTextColor( aHighlightTextColor );
-
     // tooltip colors
     GdkRGBA tooltip_bg_color, tooltip_fg_color;
     gtk_style_context_save (pStyle);
@@ -1179,6 +1171,16 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
     gtk_style_context_set_path( pCStyle, pCPath );
     gtk_widget_path_free( pCPath );
+
+    // highlighting colors
+    gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_SELECTED, &text_color);
+    ::Color aHighlightColor = getColor( text_color );
+    gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_SELECTED, &text_color);
+    ::Color aHighlightTextColor = getColor( text_color );
+    aStyleSet.SetHighlightColor( aHighlightColor );
+    aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+
+    // field background color
     GdkRGBA field_background_color;
     gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_NORMAL, &field_background_color);
     g_object_unref( pCStyle );
@@ -1230,10 +1232,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     }
 
     gtk_style_context_get_background_color( mpMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &background_color );
-    aHighlightColor = getColor( background_color );
+    ::Color aHighlightColor = getColor( background_color );
 
     gtk_style_context_get_color( mpMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &color );
-    aHighlightTextColor = getColor( color );
+    ::Color aHighlightTextColor = getColor( color );
     if( aHighlightColor == aHighlightTextColor )
         aHighlightTextColor = (aHighlightColor.GetLuminance() < 128) ? ::Color( COL_WHITE ) : ::Color( COL_BLACK );
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
