@@ -137,6 +137,7 @@ struct SystemGraphicsData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HDC             hDC;            // handle to a device context
+    HWND            hWnd;           // optional handle to a window
 #elif defined( MACOSX )
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( ANDROID )
@@ -156,6 +157,7 @@ struct SystemGraphicsData
         : nSize( sizeof( SystemGraphicsData ) )
 #if defined( WNT )
         , hDC( 0 )
+        , hWnd( 0 )
 #elif defined( MACOSX )
         , rCGContext( NULL )
 #elif defined( ANDROID )

@@ -79,7 +79,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
 
     if( pData )
     {
-        hDC = pData->hDC;
+        hDC = (pData->hDC) ? pData->hDC : GetDC(pData->hWnd);
         hBmp = NULL;
         bOk = (hDC != NULL);
         if (bOk)
@@ -137,7 +137,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         pVDev->mpGraphics   = pVirGraphics;
         pVDev->mnBitCount   = nBitCount;
         pVDev->mbGraphics   = FALSE;
-        pVDev->mbForeignDC  = (pData != NULL);
+        pVDev->mbForeignDC  = (pData != NULL && pData->hDC != NULL );
 
         // insert VirDev in VirDevList
         pVDev->mpNext = pSalData->mpFirstVD;
