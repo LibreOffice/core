@@ -44,14 +44,11 @@ cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
 
-# Textbox
-cmd/lc_drawtext.png cmd/lc_text.png
-cmd/sc_drawtext.png cmd/sc_text.png
-
 # Shapes
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
 cmd/lc_basicshapes.ellipse.png cmd/lc_ellipse.png
 cmd/lc_basicshapes.rectangle.png cmd/lc_rect.png
+cmd/lc_rectangletoolbox.png cmd/lc_rect.png
 cmd/lc_linetoolbox.png cmd/lc_freeline.png
 cmd/lc_ellipsetoolbox.png cmd/lc_ellipse.png
 cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
@@ -61,19 +58,19 @@ cmd/sc_rectangletoolbox.png cmd/sc_rect.png
 cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_ellipsetoolbox.png cmd/sc_ellipse.png
 
-# File Menu
-cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
-cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
-
 # Number Formats
-#cmd/lc_numberformatdate.png cmd/lc_datefield.png
-#cmd/sc_numberformatdate.png cmd/sc_datefield.png
+cmd/lc_numberformatdate.png cmd/lc_datefield.png
+cmd/sc_numberformatdate.png cmd/sc_datefield.png
 
 # Find Toolbar
 cmd/lc_scrolltonext.png cmd/lc_downsearch.png
 cmd/sc_scrolltonext.png cmd/sc_downsearch.png
 cmd/lc_scrolltoprevious.png cmd/lc_upsearch.png
 cmd/sc_scrolltoprevious.png cmd/sc_upsearch.png
+
+# File Menu
+cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
+cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 
 # sort
 cmd/lc_datasort.png cmd/lc_sortascending.png
@@ -94,10 +91,18 @@ cmd/sc_browseforward.png cmd/sc_pagedown.png
 # database
 database/linked_text_table.png cmd/sc_dataimport.png
 
-# track changes
-cmd/lc_trackchangesbar.png cmd/lc_trackchanges.png
+# language support for rtl
+cmd/lc_redo.png cmd/ar/lc_undo.png
+cmd/lc_undo.png cmd/ar/lc_redo.png
+cmd/sc_redo.png cmd/ar/sc_undo.png
+cmd/sc_undo.png cmd/ar/sc_redo.png
 
-# calc insert page breaks
-cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
-cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
+cmd/lc_redo.png cmd/fa/lc_undo.png
+cmd/lc_undo.png cmd/fa/lc_redo.png
+cmd/sc_redo.png cmd/fa/sc_undo.png
+cmd/sc_undo.png cmd/fa/sc_redo.png
 
+cmd/lc_redo.png cmd/he/lc_undo.png
+cmd/lc_undo.png cmd/he/lc_redo.png
+cmd/sc_redo.png cmd/he/sc_undo.png
+cmd/sc_undo.png cmd/he/sc_redo.png
