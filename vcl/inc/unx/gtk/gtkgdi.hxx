@@ -70,6 +70,7 @@ private:
     static GtkStyleContext *mpHScrollbarStyle;
     static GtkStyleContext *mpToolbarStyle;
     static GtkStyleContext *mpToolButtonStyle;
+    static GtkStyleContext *mpToolbarSeperatorStyle;
     static GtkStyleContext *mpCheckButtonStyle;
     static GtkStyleContext *mpMenuBarStyle;
     static GtkStyleContext *mpMenuStyle;

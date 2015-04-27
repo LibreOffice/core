@@ -25,6 +25,7 @@ GtkStyleContext* GtkSalGraphics::mpVScrollbarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpToolbarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpToolButtonStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpToolbarSeperatorStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
@@ -66,12 +67,13 @@ enum {
     RENDER_BACKGROUND_AND_FRAME = 1,
     RENDER_CHECK = 2,
     RENDER_BACKGROUND = 3,
-    RENDER_LINE = 4,
-    RENDER_ARROW = 5,
-    RENDER_RADIO = 6,
-    RENDER_SCROLLBAR = 7,
-    RENDER_SPINBUTTON = 8,
-    RENDER_COMBOBOX = 9,
+    RENDER_MENU_SEPERATOR = 4,
+    RENDER_TOOLBAR_SEPERATOR = 5,
+    RENDER_ARROW = 6,
+    RENDER_RADIO = 7,
+    RENDER_SCROLLBAR = 8,
+    RENDER_SPINBUTTON = 9,
+    RENDER_COMBOBOX = 10,
 };
 
 static void PrepareComboboxStyle( GtkStyleContext *context,
@@ -861,7 +863,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         case PART_MENU_SEPARATOR:
             styleClass = GTK_STYLE_CLASS_SEPARATOR;
             context = mpMenuItemStyle;
-            renderType = RENDER_LINE;
+            renderType = RENDER_MENU_SEPERATOR;
             break;
         case PART_MENU_SUBMENU_ARROW:
             context = mpMenuStyle;
@@ -884,6 +886,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             flags = (GtkStateFlags)(flags |
                     ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
             context = mpToolButtonStyle;
+            break;
+        case PART_SEPARATOR_VERT:
+            context = mpToolbarSeperatorStyle;
+            renderType = RENDER_TOOLBAR_SEPERATOR;
             break;
         default:
             return false;
@@ -948,10 +954,15 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case RENDER_RADIO:
         PaintCheckOrRadio(context, cr, rControlRegion, nType);
         break;
-    case RENDER_LINE:
+    case RENDER_MENU_SEPERATOR:
         gtk_render_line(context, cr,
                         3, rControlRegion.GetHeight() / 2,
                         rControlRegion.GetWidth() - 3, rControlRegion.GetHeight() / 2);
+        break;
+    case RENDER_TOOLBAR_SEPERATOR:
+        gtk_render_line(context, cr,
+                        rControlRegion.GetWidth() / 2, 3,
+                        rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() - 3 );
         break;
     case RENDER_ARROW:
         gtk_render_arrow(context, cr,
@@ -1515,7 +1526,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 //                ||  nPart==PART_THUMB_VERT
                 ||  nPart==PART_BUTTON
 //                ||  nPart==PART_SEPARATOR_HORZ
-//                ||  nPart==PART_SEPARATOR_VERT
+                ||  nPart==PART_SEPARATOR_VERT
                 )
                 return true;
             break;
@@ -1633,6 +1644,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     getStyleContext(&mpToolbarStyle, gtk_toolbar_new());
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_TOOLBAR);
+
+    getStyleContext(&mpToolbarSeperatorStyle, GTK_WIDGET(gtk_separator_tool_item_new()));
 
     getStyleContext(&mpToolButtonStyle, gtk_button_new());
 
