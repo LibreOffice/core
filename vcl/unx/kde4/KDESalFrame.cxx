@@ -267,6 +267,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetPushButtonFont( aFont );
     style.SetFieldFont( aFont );
     style.SetIconFont( aFont );
+    style.SetTabFont( aFont );
     style.SetGroupFont( aFont );
 
     aFont.SetWeight( WEIGHT_BOLD );

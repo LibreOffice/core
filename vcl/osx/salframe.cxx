@@ -1176,6 +1176,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetRadioCheckFont( aLabelFont );
     aStyleSettings.SetFieldFont( aLabelFont );
     aStyleSettings.SetGroupFont( aLabelFont );
+    aStyleSettings.SetTabFont( aLabelFont );
     aStyleSettings.SetIconFont( aLabelFont );
 
     Color aHighlightColor( getColor( [NSColor selectedTextBackgroundColor],

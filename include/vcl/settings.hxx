@@ -426,6 +426,9 @@ public:
     void                            SetIconFont( const vcl::Font& rFont );
     const vcl::Font&                GetIconFont() const;
 
+    void                            SetTabFont( const vcl::Font& rFont );
+    const vcl::Font&                GetTabFont() const;
+
     long                            GetBorderSize() const;
 
     void                            SetTitleHeight( long nSize );
