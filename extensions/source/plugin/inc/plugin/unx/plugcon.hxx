@@ -93,6 +93,8 @@ extern "C" {
 
 #include <postx.h>
 
+#include <tools/solar.h>
+
 class ConnectorInstance
 {
 public:

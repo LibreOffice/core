@@ -19,6 +19,9 @@
 #ifndef INCLUDED_RSC_INC_RSCDEF_HXX
 #define INCLUDED_RSC_INC_RSCDEF_HXX
 
+#include <sal/config.h>
+
+#include <tools/solar.h>
 #include <tools/unqidx.hxx>
 #include <rsctree.hxx>
 #include <rtl/strbuf.hxx>

@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
+#include <tools/solar.h>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <boost/noncopyable.hpp>

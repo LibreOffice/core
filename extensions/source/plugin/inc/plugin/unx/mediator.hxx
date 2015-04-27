@@ -30,6 +30,7 @@
 
 #include <string.h>
 #include <tools/link.hxx>
+#include <tools/solar.h>
 #include <osl/pipe.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>

@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SC_INC_REFRESHTIMER_HXX
 #define INCLUDED_SC_INC_REFRESHTIMER_HXX
 
+#include <sal/config.h>
+
+#include <tools/solar.h>
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
 #include "scdllapi.h"
