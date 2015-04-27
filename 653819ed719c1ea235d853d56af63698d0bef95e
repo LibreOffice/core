@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_49afc1e3",
+        "filename": "i18nlangtag/source/isolang/isolang.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-27T09:31:37Z",
+      "side": 1,
+      "message": "This list is not alphabetically sorted, usually just append to the list, that way the less frequently used locales get tried last.",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_69ac05ee",
+        "filename": "i18npool/source/collator/data/cu_charset.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-27T09:31:37Z",
+      "side": 1,
+      "message": "Is there any specific reason why we need this specialized collation data?",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_09b9c92e",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-27T09:31:37Z",
+      "side": 1,
+      "message": "Do we really need to add locale data for a dormant language that is not actively used anywhere?\n\nBtw, as this seems to have been copied from ru_RU.xml, it would had been better to use locale inheritance and the ref\u003d\"...\" mechanisms, at least for the identical number formats, see locale.dtd and other locales using it. Note that the currency formats would have to use the assigned LangID 694 instead of 419.",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_4996e195",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-27T09:31:37Z",
+      "side": 1,
+      "message": "When changing/adding data please follow the indentation used.",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_a980bd47",
+        "filename": "include/i18nlangtag/lang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-27T09:31:37Z",
+      "side": 1,
+      "message": "Please follow the conventions, the define should be named LANGUAGE_USER_CHURCH_SLAVIC to distinguish it from the MS defined ones, and it should be appended to the end of the file after LANGUAGE_USER_KVEN_FINNISH.\n\nThe value should be 0x0694",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
