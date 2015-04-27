@@ -91,10 +91,20 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
             case  style::NumberingType::NUMBER_NONE:
                 bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_NO_NUMBERING);
                 nPos = 0;
-             break;
-            case  style::NumberingType::CHAR_SPECIAL:   bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
-            case  style::NumberingType::PAGE_DESCRIPTOR:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING); break;
-            case  style::NumberingType::BITMAP:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP ); break;
+
+                break;
+            case  style::NumberingType::CHAR_SPECIAL:
+                bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET);
+
+                break;
+            case  style::NumberingType::PAGE_DESCRIPTOR:
+                bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING);
+
+                break;
+            case  style::NumberingType::BITMAP:
+                bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP );
+
+                break;
             default:
                 if (nValue >  style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
