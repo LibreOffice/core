@@ -3473,7 +3473,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         }
                                     }
 
-                                    if ( GetStatus().DoOnlineSpelling() && !pPortion->GetNode()->GetWrongList()->empty() && pTextPortion->GetLen() )
+                                    const WrongList* const pWrongList = pPortion->GetNode()->GetWrongList();
+                                    if ( GetStatus().DoOnlineSpelling() && pWrongList && !pWrongList->empty() && pTextPortion->GetLen() )
                                     {
                                         {//#105750# adjust LinePos for superscript or subscript text
                                             short _nEsc = aTmpFont.GetEscapement();
