@@ -180,7 +180,7 @@ struct GraphicBorderLine
 
     bool isEmpty()
     {
-        return nLineWidth == 0 && nLineColor == 0 && bHasShadow == false;
+        return nLineWidth == 0 && nLineColor == 0 && !bHasShadow;
     }
 
 };

@@ -963,7 +963,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 if (m_pCurrentDefinition->GetCurrentLevel().get())
                 {
                     m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
-                    if( false == bIsStartVisited )
+                    if( !bIsStartVisited )
                     {
                         m_pCurrentDefinition->GetCurrentLevel( )->SetValue( NS_ooxml::LN_CT_Lvl_start, 0 );
                         bIsStartVisited = true;
