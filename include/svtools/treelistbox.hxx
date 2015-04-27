@@ -623,7 +623,6 @@ protected:
     bool            IsCellFocusEnabled() const;
     bool            SetCurrentTabPos( sal_uInt16 _nNewPos );
     sal_uInt16      GetCurrentTabPos() const;
-    void            CallImplEventListeners(sal_uLong nEvent, void* pData);
 
     void            ImplEditEntry( SvTreeListEntry* pEntry );
 

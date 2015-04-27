@@ -39,6 +39,11 @@
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
+#ifdef DBG_UTIL
+#include <typeinfo>
+#include <typeindex>
+#include <type_traits>
+#endif
 
 class VirtualDevice;
 struct ImplDelData;
@@ -68,6 +73,7 @@ class SystemWindow;
 class SalFrame;
 class MenuFloatingWindow;
 class VCLXWindow;
+class VclWindowEvent;
 
 namespace com {
 namespace sun {
@@ -666,7 +672,28 @@ protected:
 
             void                        SetCompoundControl( bool bCompound );
 
-            void                        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
+#ifdef DBG_UTIL
+    template<typename T>
+    inline void                         CallEventListeners( sal_uLong nEvent, T pData,
+                                                            typename std::enable_if<std::is_pointer<T>::value >::type* = 0)
+    {
+        static_assert(!std::is_void<typename std::remove_pointer<T>::type>::value, "no void *");
+        CallEventListeners(nEvent, typeid(T), reinterpret_cast<void*>(pData));
+    }
+
+    template<typename T>
+    inline void                         CallEventListeners( sal_uLong nEvent, T pData,
+                                                            typename std::enable_if<std::is_integral<T>::value >::type* = 0)
+    { CallEventListeners(nEvent, typeid(T), reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(pData)) ); }
+
+    inline void                         CallEventListeners( sal_uLong nEvent )
+    { CallEventListeners(nEvent, typeid(std::nullptr_t), NULL); }
+
+            void                        CallEventListeners( sal_uLong nEvent, std::type_index nTypeIndex, void * pData);
+#else
+            void                        CallEventListeners( sal_uLong nEvent, void * pData = 0);
+#endif
+protected:
     static  void                        FireVclEvent( VclSimpleEvent* pEvent );
 
     virtual bool                        AcquireGraphics() const SAL_OVERRIDE;

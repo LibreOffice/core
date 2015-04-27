@@ -25,20 +25,25 @@
 #include <vcl/dllapi.h>
 #include <vcl/impdel.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <list>
 #include <vector>
 
-class Menu;
+#ifdef DBG_UTIL
+#include <typeinfo>
+#include <typeindex>
+#include <type_traits>
+#endif
 
+class Menu;
 namespace com { namespace sun { namespace star {
     namespace accessibility {
         class XAccessible;
     }
 }}}
+class VclWindowEvent;
 
 #define VCLEVENT_OBJECT_DYING                  1
 
@@ -214,16 +219,61 @@ public:
 class VCL_DLLPUBLIC VclWindowEvent : public VclSimpleEvent
 {
 private:
-    VclPtr<vcl::Window> pWindow;
-    void*   pData;
+    VclPtr<vcl::Window> mpWindow;
+#ifdef DBG_UTIL
+    std::type_index     m_nTypeIndex;
+#endif
+    void*               mpData;
 
 public:
-    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = NULL );
+
+#ifdef DBG_UTIL
+    /** this constructor is used by Window::CallEventListeners */
+    VclWindowEvent( vcl::Window* pWin, sal_uLong nEvent, std::type_index nTypeIndex, void *pData );
+
+    template<typename T>
+    VclWindowEvent( vcl::Window* pWin, sal_uLong nEvent, T pData,
+                    typename std::enable_if<std::is_pointer<T>::value >::type* = 0)
+        : VclWindowEvent(pWin, nEvent, typeid(T), reinterpret_cast<void*>(pData))
+    {
+        static_assert(!std::is_void<typename std::remove_pointer<T>::type>::value, "no void *");
+    }
+
+    template<typename T>
+    VclWindowEvent( vcl::Window* pWin, sal_uLong nEvent, T pData,
+                    typename std::enable_if<std::is_integral<T>::value >::type* = 0)
+        : VclWindowEvent(pWin, nEvent, typeid(T), reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(pData)) )
+    {}
+
+    VclWindowEvent( vcl::Window* pWin, sal_uLong nEvent )
+        : VclWindowEvent(pWin, nEvent, typeid(std::nullptr_t), NULL)
+    {}
+#else
+    VclWindowEvent( vcl::Window* pWin, sal_uLong nEvent, void* pData = NULL);
+#endif
     virtual ~VclWindowEvent();
     TYPEINFO_OVERRIDE();
 
-    vcl::Window* GetWindow() const { return pWindow; }
-    void*   GetData() const { return pData; }
+    vcl::Window* GetWindow() const { return mpWindow; }
+
+    template<typename T>
+    inline T GetData(typename std::enable_if<std::is_pointer<T>::value >::type* = 0) const
+    {
+#ifdef DBG_UTIL
+        // some events are fired both with and without a pointer, so the absence of a value
+        // is legal
+        assert(m_nTypeIndex == std::type_index(typeid(std::nullptr_t)) || m_nTypeIndex == std::type_index(typeid(T)));
+#endif
+        return reinterpret_cast<T>(mpData);
+    }
+    template<typename T>
+    inline T GetData(typename std::enable_if<std::is_integral<T>::value >::type* = 0) const
+    {
+#ifdef DBG_UTIL
+        assert(std::type_index(typeid(T)) == m_nTypeIndex);
+#endif
+        return static_cast<T>(reinterpret_cast<sal_IntPtr>(mpData));
+    }
 };
 
 class VCL_DLLPUBLIC VclMenuEvent : public VclSimpleEvent

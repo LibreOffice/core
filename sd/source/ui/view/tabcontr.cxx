@@ -351,14 +351,12 @@ bool TabControl::DeactivatePage()
 
 void TabControl::SendActivatePageEvent()
 {
-    CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED,
-        reinterpret_cast<void*>(GetCurPageId()));
+    CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED, GetCurPageId());
 }
 
 void TabControl::SendDeactivatePageEvent()
 {
-    CallEventListeners (VCLEVENT_TABBAR_PAGEDEACTIVATED,
-        reinterpret_cast<void*>(GetCurPageId()));
+    CallEventListeners (VCLEVENT_TABBAR_PAGEDEACTIVATED, GetCurPageId());
 }
 
 } // end of namespace sd

@@ -80,7 +80,7 @@ namespace dbaui
     {
         if ( m_pToolBox && _pEvt && _pEvt->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
         {
-            DataChangedEvent* pData = static_cast<DataChangedEvent*>(_pEvt->GetData());
+            DataChangedEvent* pData = _pEvt->GetData<DataChangedEvent*>();
             if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||
             ( pData->GetType() == DataChangedEventType::DISPLAY   ))  &&
             ( pData->GetFlags() & AllSettingsFlags::STYLE        )))

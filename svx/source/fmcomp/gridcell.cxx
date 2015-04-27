@@ -3399,7 +3399,7 @@ IMPL_LINK( FmXGridCell, OnWindowEvent, VclWindowEvent*, _pEvent )
 {
     ENSURE_OR_THROW( _pEvent, "illegal event pointer" );
     ENSURE_OR_THROW( _pEvent->GetWindow(), "illegal window" );
-    onWindowEvent( _pEvent->GetId(), *_pEvent->GetWindow(), _pEvent->GetData() );
+    onWindowEvent( *_pEvent );
     return 1L;
 }
 
@@ -3416,8 +3416,10 @@ void FmXGridCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 
-void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXGridCell::onWindowEvent( const VclWindowEvent& rEvent )
 {
+    sal_uLong _nEventId = rEvent.GetId();
+    const vcl::Window& _rWindow = *rEvent.GetWindow();
     switch ( _nEventId )
     {
     case VCLEVENT_CONTROL_GETFOCUS:
@@ -3462,13 +3464,13 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
 
         const bool bButtonDown = ( _nEventId == VCLEVENT_WINDOW_MOUSEBUTTONDOWN );
 
-        awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast< const ::MouseEvent* >( _pEventData ), *this ) );
+        awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *rEvent.GetData< const ::MouseEvent* >(), *this ) );
         m_aMouseListeners.notifyEach( bButtonDown ? &awt::XMouseListener::mousePressed : &awt::XMouseListener::mouseReleased, aEvent );
     }
     break;
     case VCLEVENT_WINDOW_MOUSEMOVE:
     {
-        const MouseEvent& rMouseEvent = *static_cast< const ::MouseEvent* >( _pEventData );
+        const MouseEvent& rMouseEvent = *rEvent.GetData< ::MouseEvent* >();
         if ( rMouseEvent.IsEnterWindow() || rMouseEvent.IsLeaveWindow() )
         {
             if ( m_aMouseListeners.getLength() != 0 )
@@ -3496,7 +3498,7 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
             break;
 
         const bool bKeyPressed = ( _nEventId == VCLEVENT_WINDOW_KEYINPUT );
-        awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent( *static_cast< const ::KeyEvent* >( _pEventData ), *this ) );
+        awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent( *rEvent.GetData< ::KeyEvent* >(), *this ) );
         m_aKeyListeners.notifyEach( bKeyPressed ? &awt::XKeyListener::keyPressed: &awt::XKeyListener::keyReleased, aEvent );
     }
     break;
@@ -3816,8 +3818,9 @@ void FmXEditCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 
-void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXEditCell::onWindowEvent( const VclWindowEvent& rEvent )
 {
+    sal_uLong _nEventId = rEvent.GetId();
     switch ( _nEventId )
     {
     case VCLEVENT_EDIT_MODIFY:
@@ -3828,7 +3831,7 @@ void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
     }
     }
 
-    FmXTextCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
+    FmXTextCell::onWindowEvent( rEvent );
 }
 
 FmXCheckBoxCell::FmXCheckBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl )
@@ -3969,8 +3972,9 @@ vcl::Window* FmXCheckBoxCell::getEventWindow() const
 }
 
 
-void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXCheckBoxCell::onWindowEvent( const VclWindowEvent& rEvent )
 {
+    sal_uLong _nEventId = rEvent.GetId();
     switch ( _nEventId )
     {
     case VCLEVENT_CHECKBOX_TOGGLE:
@@ -4000,7 +4004,7 @@ void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Win
     break;
 
     default:
-        FmXDataCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
+        FmXDataCell::onWindowEvent( rEvent );
         break;
     }
 }
@@ -4301,8 +4305,10 @@ void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 nEntry) throw( RuntimeExcept
 }
 
 
-void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXListBoxCell::onWindowEvent( const VclWindowEvent& rEvent )
 {
+    sal_uLong _nEventId = rEvent.GetId();
+    const vcl::Window& _rWindow = *rEvent.GetWindow();
     if  (   ( &_rWindow == m_pBox )
         &&  ( _nEventId == VCLEVENT_LISTBOX_SELECT )
         )
@@ -4321,7 +4327,7 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Wind
         return;
     }
 
-    FmXTextCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
+    FmXTextCell::onWindowEvent( rEvent);
 }
 
 
@@ -4504,9 +4510,9 @@ void SAL_CALL FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines) throw( Run
 }
 
 
-void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXComboBoxCell::onWindowEvent( const VclWindowEvent& rEvent )
 {
-
+    sal_uLong _nEventId = rEvent.GetId();
     switch ( _nEventId )
     {
     case VCLEVENT_COMBOBOX_SELECT:
@@ -4524,7 +4530,7 @@ void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Win
     break;
 
     default:
-        FmXTextCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
+        FmXTextCell::onWindowEvent( rEvent );
         break;
     }
 }

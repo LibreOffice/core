@@ -69,7 +69,7 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
         case VCLEVENT_WINDOW_SHOW:
         case VCLEVENT_WINDOW_HIDE:
         {
-            vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
+            vcl::Window* pChildWindow = rVclWindowEvent.GetData<vcl::Window *>();
             // Just compare to the combo box text field.  All other children
             // are identical to this object in which case this object will
             // be removed in a short time.

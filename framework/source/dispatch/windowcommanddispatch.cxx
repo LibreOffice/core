@@ -106,7 +106,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     if (pEvent->GetId() != VCLEVENT_WINDOW_COMMAND)
         return 0L;
 
-    const CommandEvent* pCommand = static_cast<CommandEvent*>(pEvent->GetData());
+    const CommandEvent* pCommand = pEvent->GetData<CommandEvent*>();
     if (pCommand->GetCommand() != CommandEventId::ShowDialog)
         return 0L;
 

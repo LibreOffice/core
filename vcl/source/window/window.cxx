@@ -2003,7 +2003,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 
 void Window::Command( const CommandEvent& rCEvt )
 {
-    CallEventListeners( VCLEVENT_WINDOW_COMMAND, (void*)&rCEvt );
+    CallEventListeners( VCLEVENT_WINDOW_COMMAND, const_cast<CommandEvent*>(&rCEvt) );
 
     NotifyEvent aNEvt( MouseNotifyEvent::COMMAND, this, &rCEvt );
     if ( !Notify( aNEvt ) )
@@ -2498,7 +2498,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
     // Since #104887#, the notifications for the access bridge are done in Impl(Set|Reset)ReallyVisible. Here, we
     // now only notify with a NULL data pointer, for all other clients except the access bridge.
     if ( !bRealVisibilityChanged )
-        CallEventListeners( mpWindowImpl->mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE, NULL );
+        CallEventListeners( mpWindowImpl->mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE );
     if( aDogTag.IsDead() )
         return;
 

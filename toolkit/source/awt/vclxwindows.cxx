@@ -2694,14 +2694,14 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         case VCLEVENT_TABPAGE_DEACTIVATE:
         {
-            sal_uLong nPageID = reinterpret_cast<sal_uLong>( rVclWindowEvent.GetData() );
+            sal_uLong nPageID = rVclWindowEvent.GetData<sal_uLong>();
             maTabListeners.deactivated( nPageID );
             break;
 
         }
         case VCLEVENT_TABPAGE_ACTIVATE:
         {
-            sal_uLong nPageID = reinterpret_cast<sal_uLong>( rVclWindowEvent.GetData() );
+            sal_uLong nPageID = rVclWindowEvent.GetData<sal_uLong>();
             maTabListeners.activated( nPageID );
             break;
         }

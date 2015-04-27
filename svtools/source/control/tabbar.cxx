@@ -1561,7 +1561,7 @@ void TabBar::ImplSelect()
 {
     Select();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGESELECTED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
+    CallEventListeners( VCLEVENT_TABBAR_PAGESELECTED, mnCurPageId );
 }
 
 void TabBar::Select()
@@ -1582,7 +1582,7 @@ void TabBar::ImplActivatePage()
 {
     ActivatePage();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEACTIVATED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEACTIVATED, mnCurPageId );
 }
 
 void TabBar::ActivatePage()
@@ -1592,7 +1592,7 @@ bool TabBar::ImplDeactivatePage()
 {
     bool nRet = DeactivatePage();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEDEACTIVATED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEDEACTIVATED, mnCurPageId );
 
     return nRet;
 }
@@ -1726,7 +1726,7 @@ void TabBar::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEINSERTED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEINSERTED, nPageId );
 }
 
 Color TabBar::GetTabBgColor( sal_uInt16 nPageId ) const
@@ -1785,7 +1785,7 @@ void TabBar::RemovePage( sal_uInt16 nPageId )
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
 
-        CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
+        CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, nPageId );
     }
 }
 
@@ -1821,7 +1821,7 @@ void TabBar::MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos )
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
 
-        CallEventListeners( VCLEVENT_TABBAR_PAGEMOVED, (void*) &aPair );
+        CallEventListeners( VCLEVENT_TABBAR_PAGEMOVED, &aPair );
     }
 }
 
@@ -1844,7 +1844,7 @@ void TabBar::Clear()
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(PAGE_NOT_FOUND)) );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, PAGE_NOT_FOUND );
 }
 
 bool TabBar::IsPageEnabled( sal_uInt16 nPageId ) const
@@ -2302,7 +2302,7 @@ void TabBar::SetPageText( sal_uInt16 nPageId, const OUString& rText )
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
 
-        CallEventListeners( VCLEVENT_TABBAR_PAGETEXTCHANGED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
+        CallEventListeners( VCLEVENT_TABBAR_PAGETEXTCHANGED, nPageId );
     }
 }
 

@@ -1124,7 +1124,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
     {
         if ( pWinEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
         {
-            MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pWinEvent->GetData());
+            MouseEvent* pMouseEvt = pWinEvent->GetData<MouseEvent*>();
             if ( pMouseEvt->IsEnterWindow() )
             {
                 mbMouseOver = true;

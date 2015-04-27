@@ -160,7 +160,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             if ( m_pStatusBar )
             {
-                sal_uInt16 nItemId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                sal_uInt16 nItemId = rVclWindowEvent.GetData<sal_uInt16>();
                 sal_uInt16 nItemPos = m_pStatusBar->GetItemPos( nItemId );
                 InsertChild( nItemPos );
             }
@@ -170,7 +170,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             if ( m_pStatusBar )
             {
-                sal_uInt16 nItemId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                sal_uInt16 nItemId = rVclWindowEvent.GetData<sal_uInt16>();
                 for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
                 {
                     Reference< XAccessible > xChild( getAccessibleChild( i ) );
@@ -198,7 +198,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             if ( m_pStatusBar )
             {
-                sal_uInt16 nItemId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                sal_uInt16 nItemId = rVclWindowEvent.GetData<sal_uInt16>();
                 sal_uInt16 nItemPos = m_pStatusBar->GetItemPos( nItemId );
                 UpdateShowing( nItemPos, rVclWindowEvent.GetId() == VCLEVENT_STATUSBAR_SHOWITEM );
             }
@@ -215,7 +215,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             if ( m_pStatusBar )
             {
-                sal_uInt16 nItemId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                sal_uInt16 nItemId = rVclWindowEvent.GetData<sal_uInt16>();
                 sal_uInt16 nItemPos = m_pStatusBar->GetItemPos( nItemId );
                 UpdateItemName( nItemPos );
             }
@@ -225,7 +225,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             if ( m_pStatusBar )
             {
-                sal_uInt16 nItemId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                sal_uInt16 nItemId = rVclWindowEvent.GetData<sal_uInt16>();
                 sal_uInt16 nItemPos = m_pStatusBar->GetItemPos( nItemId );
                 UpdateItemText( nItemPos );
             }

@@ -472,7 +472,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
 
     const OutputDevice* pOutDev = GetOutDev();
     if (!pOutDev->ImplIsRecordLayout())
-        CallEventListeners(VCLEVENT_STATUSBAR_DRAWITEM, reinterpret_cast<void*>(pItem->mnId));
+        CallEventListeners(VCLEVENT_STATUSBAR_DRAWITEM, pItem->mnId);
 }
 
 void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
@@ -936,7 +936,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     if ( ImplIsItemUpdate() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_STATUSBAR_ITEMADDED, reinterpret_cast<void*>(nItemId) );
+    CallEventListeners( VCLEVENT_STATUSBAR_ITEMADDED, nItemId );
 }
 
 void StatusBar::RemoveItem( sal_uInt16 nItemId )
@@ -951,7 +951,7 @@ void StatusBar::RemoveItem( sal_uInt16 nItemId )
         if ( ImplIsItemUpdate() )
             Invalidate();
 
-        CallEventListeners( VCLEVENT_STATUSBAR_ITEMREMOVED, reinterpret_cast<void*>(nItemId) );
+        CallEventListeners( VCLEVENT_STATUSBAR_ITEMREMOVED, nItemId );
     }
 }
 
@@ -970,7 +970,7 @@ void StatusBar::ShowItem( sal_uInt16 nItemId )
             if ( ImplIsItemUpdate() )
                 Invalidate();
 
-            CallEventListeners( VCLEVENT_STATUSBAR_SHOWITEM, reinterpret_cast<void*>(nItemId) );
+            CallEventListeners( VCLEVENT_STATUSBAR_SHOWITEM, nItemId );
         }
     }
 }
@@ -990,7 +990,7 @@ void StatusBar::HideItem( sal_uInt16 nItemId )
             if ( ImplIsItemUpdate() )
                 Invalidate();
 
-            CallEventListeners( VCLEVENT_STATUSBAR_HIDEITEM, reinterpret_cast<void*>(nItemId) );
+            CallEventListeners( VCLEVENT_STATUSBAR_HIDEITEM, nItemId );
         }
     }
 }
@@ -1492,7 +1492,7 @@ void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const OUString& rName )
         if ( pItem->maAccessibleName != rName )
         {
             pItem->maAccessibleName = rName;
-            CallEventListeners( VCLEVENT_STATUSBAR_NAMECHANGED, reinterpret_cast<void*>(pItem->mnId) );
+            CallEventListeners( VCLEVENT_STATUSBAR_NAMECHANGED, pItem->mnId );
         }
     }
 }

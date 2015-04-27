@@ -624,15 +624,6 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
     }
 }
 
-void Application::ImplCallEventListeners( sal_uLong nEvent, vcl::Window *pWin, void* pData )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    VclWindowEvent aEvent( pWin, nEvent, pData );
-
-    if ( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->Call( &aEvent );
-}
-
 void Application::ImplCallEventListeners( VclSimpleEvent* pEvent )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -674,7 +665,7 @@ void Application::RemoveKeyListener( const Link<>& rKeyListener )
 bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
 {
     // let listeners process the key event
-    VclWindowEvent aEvent( pWin, nEvent, (void *) pKeyEvent );
+    VclWindowEvent aEvent( pWin, nEvent, pKeyEvent );
 
     ImplSVData* pSVData = ImplGetSVData();
     bool bProcessed = false;

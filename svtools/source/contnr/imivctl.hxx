@@ -531,7 +531,16 @@ public:
     void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide);
     void                StopSelectTimer() { aCallSelectHdlIdle.Stop(); }
 
-    void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
+    template<typename T>
+    void                CallEventListeners( sal_uLong nEvent, T pData)
+    {
+        pView->CallEventListeners( nEvent, pData );
+    }
+
+    void                CallEventListeners( sal_uLong nEvent)
+    {
+        pView->CallEventListeners( nEvent );
+    }
 
     inline ::svt::IAccessibleFactory& GetAccessibleFactory()
                         {

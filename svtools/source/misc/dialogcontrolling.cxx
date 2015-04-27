@@ -96,7 +96,7 @@ namespace svt
     {
         m_pImpl->aConcernedWindows.push_back( &_rWindow );
 
-        VclWindowEvent aEvent( &_rWindow, 0, NULL );
+        VclWindowEvent aEvent( &_rWindow, 0 );
         impl_update( aEvent, _rWindow );
     }
 

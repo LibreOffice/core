@@ -873,7 +873,7 @@ sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
 
     nRealPos = mpImplLB->InsertEntry( nRealPos, rStr );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, reinterpret_cast<void*>(nRealPos) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, nRealPos );
     return nRealPos;
 }
 
@@ -894,7 +894,7 @@ sal_Int32 ComboBox::InsertEntryWithImage(
 
     nRealPos = mpImplLB->InsertEntry( nRealPos, rStr, rImage );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, reinterpret_cast<void*>(nRealPos) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, nRealPos );
     return nRealPos;
 }
 
@@ -910,13 +910,13 @@ void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
         return;
 
     mpImplLB->RemoveEntry( nPos + nMRUCount );
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, reinterpret_cast<void*>(nPos) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, nPos );
 }
 
 void ComboBox::Clear()
 {
     mpImplLB->Clear();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, reinterpret_cast<void*>(-1) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (sal_Int32)-1 );
 }
 
 Image ComboBox::GetEntryImage( sal_Int32 nPos ) const

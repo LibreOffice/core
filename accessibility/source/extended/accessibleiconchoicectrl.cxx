@@ -73,7 +73,7 @@ namespace accessibility
 
                     if ( getCtrl() && getCtrl()->HasFocus() )
                     {
-                        SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
+                        SvxIconChoiceCtrlEntry* pEntry = rVclWindowEvent.GetData< SvxIconChoiceCtrlEntry* >();
                         if ( pEntry )
                         {
                             sal_uLong nPos = getCtrl()->GetEntryListPos( pEntry );
@@ -93,7 +93,7 @@ namespace accessibility
                     SvtIconChoiceCtrl* pCtrl = getCtrl();
                     if ( pCtrl && pCtrl->HasFocus() )
                     {
-                        SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
+                        SvxIconChoiceCtrlEntry* pEntry = rVclWindowEvent.GetData< SvxIconChoiceCtrlEntry* >();
                         if ( pEntry == NULL )
                         {
                             sal_uLong nPos=0;

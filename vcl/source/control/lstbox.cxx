@@ -240,7 +240,7 @@ IMPL_LINK_NOARG(ListBox, ImplSelectHdl)
 
 IMPL_LINK( ListBox, ImplFocusHdl, void *, nPos )
 {
-    CallEventListeners( VCLEVENT_LISTBOX_FOCUS , nPos);
+    CallEventListeners( VCLEVENT_LISTBOX_FOCUS, static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(nPos)));
     return 1;
 }
 
@@ -987,7 +987,7 @@ void ListBox::Clear()
         mpImplWin->SetImage( aImage );
         mpImplWin->Invalidate();
     }
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, reinterpret_cast<void*>(-1) );
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, (sal_Int32)-1 );
 }
 
 void ListBox::SetNoSelection()
@@ -1008,7 +1008,7 @@ sal_Int32 ListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
 {
     sal_Int32 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
     nRealPos = sal::static_int_cast<sal_Int32>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, reinterpret_cast<void*>(nRealPos) );
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, nRealPos );
     return nRealPos;
 }
 
@@ -1016,7 +1016,7 @@ sal_Int32 ListBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_I
 {
     sal_Int32 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
     nRealPos = sal::static_int_cast<sal_Int32>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, reinterpret_cast<void*>(nRealPos) );
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, nRealPos );
     return nRealPos;
 }
 
@@ -1028,7 +1028,7 @@ void ListBox::RemoveEntry( const OUString& rStr )
 void ListBox::RemoveEntry( sal_Int32 nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, reinterpret_cast<void*>(nPos) );
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, nPos );
 }
 
 Image ListBox::GetEntryImage( sal_Int32 nPos ) const
@@ -1113,9 +1113,9 @@ void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
         //Only when bSelect == true, send both Selection & Focus events
         if (nCurrentPos != nPos && bSelect)
         {
-            CallEventListeners( VCLEVENT_LISTBOX_SELECT, reinterpret_cast<void*>(nPos));
+            CallEventListeners( VCLEVENT_LISTBOX_SELECT, nPos);
             if (HasFocus())
-                CallEventListeners( VCLEVENT_LISTBOX_FOCUS, reinterpret_cast<void*>(nPos));
+                CallEventListeners( VCLEVENT_LISTBOX_FOCUS, nPos);
         }
     }
 }

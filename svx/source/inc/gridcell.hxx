@@ -815,7 +815,7 @@ public:
 
 protected:
     virtual vcl::Window* getEventWindow() const;
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const VclWindowEvent& rEvent );
 
     // default implementations call our focus listeners, don't forget to call them if you override this
     virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent );
@@ -931,7 +931,7 @@ public:
     virtual void SAL_CALL removeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
+    virtual void onWindowEvent( const VclWindowEvent& rEvent ) SAL_OVERRIDE;
 
     virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent ) SAL_OVERRIDE;
     virtual void onFocusLost( const ::com::sun::star::awt::FocusEvent& _rEvent ) SAL_OVERRIDE;
@@ -983,7 +983,7 @@ public:
 
 protected:
     virtual vcl::Window* getEventWindow() const SAL_OVERRIDE;
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
+    virtual void onWindowEvent( const VclWindowEvent& rEvent ) SAL_OVERRIDE;
 };
 
 
@@ -1035,7 +1035,7 @@ public:
     virtual void SAL_CALL SAL_CALL makeVisible(sal_Int16 nEntry) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
+    virtual void onWindowEvent( const VclWindowEvent& rEvent ) SAL_OVERRIDE;
 
     DECL_LINK( OnDoubleClick, void* );
 };
@@ -1080,7 +1080,7 @@ public:
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 _Lines ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
+    virtual void onWindowEvent( const VclWindowEvent& rEvent ) SAL_OVERRIDE;
 };
 
 

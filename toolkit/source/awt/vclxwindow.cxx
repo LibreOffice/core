@@ -466,7 +466,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 ::com::sun::star::awt::PaintEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.UpdateRect = AWTRectangle( *static_cast<Rectangle*>(rVclWindowEvent.GetData()) );
+                aEvent.UpdateRect = AWTRectangle( *rVclWindowEvent.GetData<Rectangle*>() );
                 aEvent.Count = 0;
                 mpImpl->getPaintListeners().windowPaint( aEvent );
             }
@@ -651,7 +651,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getKeyListeners().getLength() )
             {
                 ::com::sun::star::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
-                    *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this
+                    *rVclWindowEvent.GetData<KeyEvent*>(), *this
                 ) );
                 mpImpl->getKeyListeners().keyPressed( aEvent );
             }
@@ -662,7 +662,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getKeyListeners().getLength() )
             {
                 ::com::sun::star::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
-                    *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this
+                    *rVclWindowEvent.GetData<KeyEvent*>(), *this
                 ) );
                 mpImpl->getKeyListeners().keyReleased( aEvent );
             }
@@ -670,11 +670,11 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
         case VCLEVENT_WINDOW_COMMAND:
         {
-            CommandEvent* pCmdEvt = static_cast<CommandEvent*>(rVclWindowEvent.GetData());
+            CommandEvent* pCmdEvt = rVclWindowEvent.GetData<CommandEvent*>();
             if ( mpImpl->getMouseListeners().getLength() && ( pCmdEvt->GetCommand() == CommandEventId::ContextMenu ) )
             {
                 // CommandEventId::ContextMenu als mousePressed mit PopupTrigger = sal_True versenden...
-                Point aWhere = static_cast< CommandEvent* >( rVclWindowEvent.GetData() )->GetMousePosPixel();
+                Point aWhere = rVclWindowEvent.GetData< CommandEvent* >()->GetMousePosPixel();
                 if ( !pCmdEvt->IsMouseEvent() )
                 {   // for keyboard events, we set the coordinates to -1,-1. This is a slight HACK, but the current API
                     // handles a context menu command as special case of a mouse event, which is simply wrong.
@@ -698,7 +698,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
         case VCLEVENT_WINDOW_MOUSEMOVE:
         {
-            MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rVclWindowEvent.GetData());
+            MouseEvent* pMouseEvt = rVclWindowEvent.GetData<MouseEvent*>();
             if ( mpImpl->getMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
@@ -726,7 +726,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getMouseListeners().getLength() )
             {
-                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast<MouseEvent*>(rVclWindowEvent.GetData()), *this ) );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *rVclWindowEvent.GetData<MouseEvent*>(), *this ) );
                 Callback aCallback = ::boost::bind(
                     &MouseListenerMultiplexer::mousePressed,
                     &mpImpl->getMouseListeners(),
@@ -740,7 +740,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getMouseListeners().getLength() )
             {
-                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast<MouseEvent*>(rVclWindowEvent.GetData()), *this ) );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *rVclWindowEvent.GetData<MouseEvent*>(), *this ) );
                 Callback aCallback = ::boost::bind(
                     &MouseListenerMultiplexer::mouseReleased,
                     &mpImpl->getMouseListeners(),
@@ -754,7 +754,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                DockingData *pData = static_cast<DockingData*>(rVclWindowEvent.GetData());
+                DockingData *pData = rVclWindowEvent.GetData<DockingData*>();
 
                 if( pData )
                 {
@@ -775,7 +775,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                DockingData *pData = static_cast<DockingData*>(rVclWindowEvent.GetData());
+                DockingData *pData = rVclWindowEvent.GetData<DockingData*>();
 
                 if( pData )
                 {
@@ -806,7 +806,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                EndDockingData *pData = static_cast<EndDockingData*>(rVclWindowEvent.GetData());
+                EndDockingData *pData = rVclWindowEvent.GetData<EndDockingData*>();
 
                 if( pData )
                 {
@@ -824,7 +824,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                sal_Bool *p_bFloating = static_cast<sal_Bool*>(rVclWindowEvent.GetData());
+                sal_Bool *p_bFloating = rVclWindowEvent.GetData<sal_Bool*>();
 
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
@@ -854,7 +854,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                EndPopupModeData *pData = static_cast<EndPopupModeData*>(rVclWindowEvent.GetData());
+                EndPopupModeData *pData = rVclWindowEvent.GetData<EndPopupModeData*>();
 
                 if( pData )
                 {

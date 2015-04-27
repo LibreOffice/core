@@ -453,7 +453,7 @@ void    SvxFontSubstCheckListBox::KeyInput( const KeyEvent& rKEvt )
         if ( nCol < 2 )
         {
             CheckEntryPos( nSelPos, nCol, !IsChecked( nSelPos, nCol ) );
-            CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)GetEntry( nSelPos ) );
+            CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, GetEntry( nSelPos ) );
         }
         else
         {

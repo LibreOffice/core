@@ -240,7 +240,7 @@ namespace svt
         {
             case VCLEVENT_WINDOW_MOUSEBUTTONUP:
             {
-                const MouseEvent* pMouseEvent = static_cast< const MouseEvent* >( pWindowEvent->GetData() );
+                const MouseEvent* pMouseEvent = pWindowEvent->GetData< const MouseEvent* >();
                 ENSURE_OR_RETURN( pMouseEvent, "no mouse event with MouseButtonUp", 0L );
                 if ( pMouseEvent->GetButtons() == MOUSE_LEFT )
                 {
@@ -250,7 +250,7 @@ namespace svt
             break;
             case VCLEVENT_WINDOW_KEYINPUT:
             {
-                const KeyEvent* pKeyEvent = static_cast< const KeyEvent* >( pWindowEvent->GetData() );
+                const KeyEvent* pKeyEvent = pWindowEvent->GetData< const KeyEvent* >();
                 ENSURE_OR_RETURN( pKeyEvent, "no key event with KeyInput", 0L );
                 const vcl::KeyCode& rKeyCode( pKeyEvent->GetKeyCode() );
                 if ( ( rKeyCode.GetModifier() == 0 ) && ( rKeyCode.GetCode() == KEY_RETURN ) )

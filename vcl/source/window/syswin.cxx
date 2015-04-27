@@ -910,14 +910,14 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar, const css::uno::Reference<css::
                 pOldWindow = NULL;
             if ( pOldWindow )
             {
-                CallEventListeners( VCLEVENT_WINDOW_MENUBARREMOVED, (void*) pOldMenuBar );
+                CallEventListeners( VCLEVENT_WINDOW_MENUBARREMOVED, pOldMenuBar );
                 pOldWindow->SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
             }
             if ( pMenuBar )
             {
                 DBG_ASSERT( !pMenuBar->pWindow, "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow( pNewWindow = MenuBar::ImplCreate( mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar, rFrame));
-                CallEventListeners( VCLEVENT_WINDOW_MENUBARADDED, (void*) pMenuBar );
+                CallEventListeners( VCLEVENT_WINDOW_MENUBARADDED, pMenuBar );
             }
             else
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow( NULL );

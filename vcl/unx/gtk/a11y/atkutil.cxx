@@ -483,7 +483,7 @@ static void create_wrapper_for_child(
 static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
 {
     vcl::Window* pWindow = pEvent->GetWindow();
-    sal_Int32 index = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEvent->GetData());
+    sal_Int32 index = pEvent->GetData<sal_Int32>();
 
     if( pWindow && pWindow->IsReallyVisible() )
     {

@@ -243,7 +243,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = rVclWindowEvent.GetData<sal_uInt16>();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                     UpdateEnabled( nPagePos, true );
                 }
@@ -253,7 +253,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = rVclWindowEvent.GetData<sal_uInt16>();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                     UpdateEnabled( nPagePos, false );
                 }
@@ -268,7 +268,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = rVclWindowEvent.GetData<sal_uInt16>();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                     UpdateSelected( nPagePos, true );
                 }
@@ -278,7 +278,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = rVclWindowEvent.GetData<sal_uInt16>();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                     UpdateSelected( nPagePos, false );
                 }
@@ -288,7 +288,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = rVclWindowEvent.GetData<sal_uInt16>();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                     InsertChild( nPagePos );
                 }
@@ -298,7 +298,7 @@ namespace accessibility
             {
                 if ( m_pTabBar )
                 {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                    sal_uInt16 nPageId = rVclWindowEvent.GetData<sal_uInt16>();
 
                     if ( nPageId == TabBar::PAGE_NOT_FOUND )
                     {
@@ -326,14 +326,14 @@ namespace accessibility
             break;
             case VCLEVENT_TABBAR_PAGEMOVED:
             {
-                Pair* pPair = static_cast<Pair*>(rVclWindowEvent.GetData());
+                Pair* pPair = rVclWindowEvent.GetData<Pair*>();
                 if ( pPair )
                     MoveChild( pPair->A(), pPair->B() );
             }
             break;
             case VCLEVENT_TABBAR_PAGETEXTCHANGED:
             {
-                sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+                sal_uInt16 nPageId = rVclWindowEvent.GetData<sal_uInt16>();
                 sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
                 UpdatePageText( nPagePos );
             }

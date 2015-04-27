@@ -160,11 +160,19 @@ void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
 }
 
 
-VclWindowEvent::VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat ) : VclSimpleEvent(n)
+#ifdef DBG_UTIL
+VclWindowEvent::VclWindowEvent( vcl::Window* pWin, sal_uLong nEvent, std::type_index nTypeIndex, void *pData )
+    : VclSimpleEvent(nEvent), mpWindow(pWin), m_nTypeIndex( nTypeIndex ), mpData(pData)
 {
-    pWindow = pWin; pData = pDat;
 }
+#else
+VclWindowEvent::VclWindowEvent( vcl::Window* pWin, sal_uLong nEvent, void* pData = NULL)
+    : VclSimpleEvent(nEvent), mpWindow(pWin), mpData(pData)
+{
+}
+#endif
 
-VclWindowEvent::~VclWindowEvent() {}
+VclWindowEvent::~VclWindowEvent()
+{}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

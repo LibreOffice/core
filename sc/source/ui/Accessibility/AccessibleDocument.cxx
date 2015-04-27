@@ -1493,7 +1493,7 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
         {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
             {
-                vcl::Window* pChildWin = static_cast < vcl::Window * >( pVclEvent->GetData() );
+                vcl::Window* pChildWin = pVclEvent->GetData< vcl::Window * >();
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     AddChild( pChildWin->GetAccessible(), true );
@@ -1502,7 +1502,7 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
             break;
         case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
             {
-                vcl::Window* pChildWin = static_cast < vcl::Window * >( pVclEvent->GetData() );
+                vcl::Window* pChildWin = pVclEvent->GetData< vcl::Window * >();
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     RemoveChild( pChildWin->GetAccessible(), true );

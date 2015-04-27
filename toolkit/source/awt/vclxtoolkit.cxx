@@ -1772,8 +1772,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
         vcl::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
 
         // See implementation in vclxwindow.cxx for mapping between VCL and UNO AWT event
-        ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
-            static_cast< ::VclWindowEvent const * >(pEvent)->GetData());
+        ::KeyEvent * pKeyEvent = static_cast< ::VclWindowEvent const * >(pEvent)->GetData< ::KeyEvent * >();
         css::awt::KeyEvent aAwtEvent(
             static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
             (pKeyEvent->GetKeyCode().IsShift()

@@ -350,7 +350,7 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, pEvent )
 {
     if ( pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
     {
-        DataChangedEvent* pData = static_cast<DataChangedEvent*>(pEvent->GetData());
+        DataChangedEvent* pData = pEvent->GetData<DataChangedEvent*>();
         if ( (pData->GetType() == DataChangedEventType::SETTINGS) &&
              (pData->GetFlags() & AllSettingsFlags::STYLE) )
         {

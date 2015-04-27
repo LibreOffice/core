@@ -3587,7 +3587,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
                 InvalidateItem(mnCurPos);
-                CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( mnCurPos ) );
+                CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, mnCurPos);
             }
 
             mnCurPos = nNewPos;
@@ -3684,7 +3684,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                     ImplHideFocus();
                                     sal_uInt16 nPos = GetItemPos( mnHighItemId );
                                     InvalidateItem(nPos);
-                                    CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
+                                    CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, nPos );
                                 }
                                 if ( mpData->mbMenubuttonSelected )
                                 {
@@ -3722,7 +3722,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 {
                     InvalidateItem(nClearPos, (nClearPos == mnCurPos) ? 1 : 0);
                     if( nClearPos != mnCurPos )
-                        CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
+                        CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, nClearPos );
                 }
                 ImplHideFocus();
                 mnHighItemId = 0;
@@ -5318,7 +5318,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
         // set mnHighItemId to 0 already to prevent this hen/egg problem
         mnHighItemId = 0;
         InvalidateItem(nPos, 0);
-        CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
+        CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, nPos );
     }
 
     if( !bNoGrabFocus && pItem != pOldItem && pOldItem && pOldItem->mpWindow )

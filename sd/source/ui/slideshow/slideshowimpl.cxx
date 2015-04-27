@@ -2009,9 +2009,9 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
     if( !mxShow.is() || mbInputFreeze )
         return 0;
 
-    if( pEvent && (pEvent->GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(pEvent)->GetData() )
+    if( pEvent && (pEvent->GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(pEvent)->GetData<CommandEvent*>() )
     {
-        const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(pEvent)->GetData());
+        const CommandEvent& rEvent = *static_cast<VclWindowEvent*>(pEvent)->GetData<CommandEvent*>();
 
         if( rEvent.GetCommand() == CommandEventId::Media )
         {

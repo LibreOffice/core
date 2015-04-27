@@ -790,8 +790,12 @@ public:
 
      @see ImplCallEventListeners(VclSimpleEvent* pEvent)
     */
-    static void                 ImplCallEventListeners( sal_uLong nEvent, vcl::Window* pWin, void* pData );
-
+    template<typename T>
+    static void                 ImplCallEventListeners( sal_uLong nEvent, vcl::Window* pWin, T pData )
+    {
+        VclWindowEvent aEvent( pWin, nEvent, pData );
+        ImplCallEventListeners(&aEvent);
+    }
     /** Send event to all VCL application event listeners
 
      @param     pEvent          Pointer to VclSimpleEvent

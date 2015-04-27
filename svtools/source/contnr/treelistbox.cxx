@@ -2031,7 +2031,7 @@ void SvTreeListBox::CheckButtonHdl()
 {
     aCheckButtonHdl.Call( this );
     if ( pCheckButtonData )
-        pImp->CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pCheckButtonData->GetActEntry() );
+        pImp->CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, pCheckButtonData->GetActEntry() );
 }
 
 
@@ -3912,11 +3912,6 @@ Rectangle SvTreeListBox::GetBoundingRect( SvTreeListEntry* pEntry )
 void SvTreeListBox::EnableCellFocus()
 {
     pImp->EnableCellFocus();
-}
-
-void SvTreeListBox::CallImplEventListeners(sal_uLong nEvent, void* pData)
-{
-    CallEventListeners(nEvent, pData);
 }
 
 void SvTreeListBox::set_min_width_in_chars(sal_Int32 nChars)

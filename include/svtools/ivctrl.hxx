@@ -262,8 +262,6 @@ protected:
 
     virtual void        FillLayoutData() const SAL_OVERRIDE;
 
-    void                CallImplEventListeners(sal_uLong nEvent, void* pData);
-
 public:
 
                         SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle = WB_ICON | WB_BORDER );

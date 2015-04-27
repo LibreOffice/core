@@ -185,8 +185,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             case VCLEVENT_WINDOW_SHOW:
             {
                 // A new window has been created.  Is it an OLE object?
-                vcl::Window* pChildWindow = static_cast<vcl::Window*>(
-                    pWindowEvent->GetData());
+                vcl::Window* pChildWindow = pWindowEvent->GetData<vcl::Window*>();
                 if (pChildWindow!=NULL
                     && (pChildWindow->GetAccessibleRole()
                         == AccessibleRole::EMBEDDED_OBJECT))
@@ -200,8 +199,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             {
                 // A window has been destroyed.  Has that been an OLE
                 // object?
-                vcl::Window* pChildWindow = static_cast<vcl::Window*>(
-                    pWindowEvent->GetData());
+                vcl::Window* pChildWindow = pWindowEvent->GetData<vcl::Window*>();
                 if (pChildWindow!=NULL
                     && (pChildWindow->GetAccessibleRole()
                         == AccessibleRole::EMBEDDED_OBJECT))

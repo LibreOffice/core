@@ -448,10 +448,6 @@ void SvtIconChoiceCtrl::SetNoSelection()
     _pImp->SetNoSelection();
 }
 
-void SvtIconChoiceCtrl::CallImplEventListeners(sal_uLong nEvent, void* pData)
-{
-    CallEventListeners(nEvent, pData);
-}
 ::com::sun::star::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
 {
     vcl::Window* pParent = GetAccessibleParentWindow();

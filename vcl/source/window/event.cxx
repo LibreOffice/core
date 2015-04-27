@@ -18,6 +18,7 @@
  */
 
 #include <vcl/event.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/layout.hxx>
@@ -200,9 +201,15 @@ bool Window::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
+#ifdef DBG_UTIL
+void Window::CallEventListeners( sal_uLong nEvent, std::type_index nTypeIndex, void * pData)
+{
+    VclWindowEvent aEvent( this, nEvent, nTypeIndex, pData );
+#else
 void Window::CallEventListeners( sal_uLong nEvent, void* pData )
 {
     VclWindowEvent aEvent( this, nEvent, pData );
+#endif
 
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
@@ -361,7 +368,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
             if ( rNEvt.GetWindow() == this )
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, (void*)rNEvt.GetMouseEvent() );
+                CallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, const_cast<MouseEvent*>(rNEvt.GetMouseEvent()) );
             else
             {
                 MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
@@ -374,7 +381,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
             if ( rNEvt.GetWindow() == this )
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, (void*)rNEvt.GetMouseEvent() );
+                CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, const_cast<MouseEvent*>(rNEvt.GetMouseEvent()) );
             else
             {
                 MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
@@ -387,7 +394,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
             if ( rNEvt.GetWindow() == this )
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, (void*)rNEvt.GetMouseEvent() );
+                CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, const_cast<MouseEvent*>(rNEvt.GetMouseEvent()) );
             else
             {
                 MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
@@ -398,12 +405,12 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
     else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            CallEventListeners( VCLEVENT_WINDOW_KEYINPUT, (void*)rNEvt.GetKeyEvent() );
+            CallEventListeners( VCLEVENT_WINDOW_KEYINPUT, const_cast<KeyEvent*>(rNEvt.GetKeyEvent()) );
     }
     else if( rNEvt.GetType() == MouseNotifyEvent::KEYUP )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            CallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );
+            CallEventListeners( VCLEVENT_WINDOW_KEYUP, const_cast<KeyEvent*>(rNEvt.GetKeyEvent()) );
     }
 
     if ( aDelData.IsDead() )

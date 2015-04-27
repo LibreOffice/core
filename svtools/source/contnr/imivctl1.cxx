@@ -3646,10 +3646,4 @@ void SvxIconChoiceCtrl_Impl::SetOrigin( const Point& rPos )
     pView->SetMapMode( aMapMode );
 }
 
-void SvxIconChoiceCtrl_Impl::CallEventListeners( sal_uLong nEvent, void* pData )
-{
-    pView->CallImplEventListeners( nEvent, pData );
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

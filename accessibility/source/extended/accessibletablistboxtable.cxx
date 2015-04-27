@@ -96,7 +96,7 @@ namespace accessibility
                     commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
                     if ( m_pTabListBox && m_pTabListBox->HasFocus() )
                     {
-                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                        SvTreeListEntry* pEntry = rVclWindowEvent.GetData< SvTreeListEntry* >();
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
@@ -148,7 +148,7 @@ namespace accessibility
                 }
                 case VCLEVENT_LISTBOX_TREESELECT:
                     {
-                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                        SvTreeListEntry* pEntry = rVclWindowEvent.GetData< SvTreeListEntry* >();
                         if (pEntry)
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
@@ -172,7 +172,7 @@ namespace accessibility
                         if ( m_pTabListBox && m_pTabListBox->HasFocus() )
                         {
                             uno::Any aOldValue, aNewValue;
-                            SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                            SvTreeListEntry* pEntry = rVclWindowEvent.GetData< SvTreeListEntry* >();
                             if ( pEntry )
                             {
                                 sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
@@ -193,7 +193,7 @@ namespace accessibility
                 {
                     if ( m_pTabListBox && m_pTabListBox->HasFocus() )
                     {
-                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                        SvTreeListEntry* pEntry = rVclWindowEvent.GetData< SvTreeListEntry* >();
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
@@ -217,7 +217,7 @@ namespace accessibility
                     if ( m_pTabListBox->IsTransientChildrenDisabled() )
                     {
                         commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
-                        TabListBoxEventData* pData = static_cast< TabListBoxEventData* >( rVclWindowEvent.GetData() );
+                        TabListBoxEventData* pData = rVclWindowEvent.GetData< TabListBoxEventData* >();
                         SvTreeListEntry* pEntry = pData != NULL ? pData->m_pEntry : NULL;
                         if ( pEntry )
                         {
