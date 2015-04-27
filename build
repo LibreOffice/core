@@ -13,11 +13,11 @@ USAGE="USAGE: build [OPTIONEN] [<srcpath>]
   -c Configure nicht aufrufen
   -i make dev-install aufrufen
   -b Build nicht starten
-  -r Release Build  (ohne -b)
+  -s Release Build mit Symbolen (ohne -b)
   -u Dgb-Util-Build (ohne -b)
   -d debug-Build    (ohne -b)
   -k Baue mit KDE3 (Standard ist KDE4)
-  -w Windows-Build
+  -w Windows-Build (Standard ist Release-Build, außer -b, -s, -u oder -d sind angegeben)
   <srcpath> Pfad, in dem die Sourcen von LibreOffice liegen. Default ist das aktuelle Verzeichnis.
 "
 
@@ -27,7 +27,7 @@ fi
 
 # Variablen zum Steuern des Builds
 configure=1
-build_targ=""
+build_targ="--enable-release-build"
 build=1
 devinst=""
 enable_kde="kde4"
@@ -35,7 +35,7 @@ disable_kde="kde"
 clean=0
 MAKE='make'
 
-while getopts bciklwrud opt
+while getopts bciklwsud opt
   do case "$opt" in
   b) build=0;;
   c) configure=0;;
@@ -45,7 +45,7 @@ while getopts bciklwrud opt
   l) clean=1;;
   w) windows=1
      MAKE='/opt/lo/bin/make';;
-  r) build_targ="--enable-release-build";;
+  s) build_targ="--enable-symbols";;
   u) build_targ="--enable-dbgutil";;
   d) build_targ="--enable-debug";;
   [?]) error "$USAGE";;
@@ -83,7 +83,6 @@ do_configure()
       --disable-ccache
       --with-ant-home="${ANT_HOME}"
       --with-external-tar=/cygdrive/c/sources/lo-external
-      --with-jdk-home="${JDK_HOME}"
       --with-junit="${JUNIT_HOME}"
     )
   else
