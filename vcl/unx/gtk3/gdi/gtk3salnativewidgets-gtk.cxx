@@ -979,6 +979,28 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     return true;
 }
 
+Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nTextHeight, const Rectangle& rControlRegion)
+{
+    gtk_style_context_save(pStyle);
+    gtk_style_context_add_class(pStyle, GTK_STYLE_CLASS_ENTRY);
+
+    GtkBorder border;
+    gtk_style_context_get_border(pStyle, GTK_STATE_FLAG_NORMAL, &border);
+
+    GtkBorder padding;
+    gtk_style_context_get_padding(pStyle, GTK_STATE_FLAG_NORMAL, &padding);
+
+    gint nWidgetHeight = nTextHeight + padding.top + padding.bottom + border.top + border.bottom;
+
+    nWidgetHeight = std::max<gint>(nWidgetHeight, rControlRegion.GetHeight());
+
+    Rectangle aEditRect(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nWidgetHeight));
+
+    gtk_style_context_restore(pStyle);
+
+    return aEditRect;
+}
+
 bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
                                                 const ImplControlValue& rValue, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
@@ -1071,24 +1093,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     }
     else if ((nType == CTRL_EDITBOX || nType == CTRL_LISTBOX || nType == CTRL_COMBOBOX) && nPart == PART_ENTIRE_CONTROL)
     {
-        gtk_style_context_save(mpEntryStyle);
-        gtk_style_context_add_class(mpEntryStyle, GTK_STYLE_CLASS_ENTRY);
-
-        GtkBorder border;
-        gtk_style_context_get_border(mpEntryStyle, GTK_STATE_FLAG_NORMAL, &border);
-
-        GtkBorder padding;
-        gtk_style_context_get_padding(mpEntryStyle, GTK_STATE_FLAG_NORMAL, &padding);
-
-        auto nTextHeight = rValue.getNumericVal();
-
-        gint nWidgetHeight = nTextHeight + padding.top + padding.bottom + border.top + border.bottom;
-
-        nWidgetHeight = std::max<gint>(nWidgetHeight, rControlRegion.GetHeight());
-
-        aEditRect = Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nWidgetHeight));
-
-        gtk_style_context_restore(mpEntryStyle);
+        aEditRect = AdjustRectForTextBordersPadding(mpEntryStyle, rValue.getNumericVal(), rControlRegion);
     }
     else
     {
