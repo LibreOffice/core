@@ -31,6 +31,7 @@ Expr const * getSubExprOfLogicalNegation(Expr const * expr) {
 enum class Value { Unknown, False, True };
 
 Value getValue(Expr const * expr) {
+    expr = ignoreParenImpCastAndComma(expr);
     if (expr->getType()->isBooleanType()) {
         // Instead going via Expr::isCXX11ConstantExpr would turn up excatly one
         // additional place in svx/source/dialog/framelinkarray.cxx
@@ -41,8 +42,7 @@ Value getValue(Expr const * expr) {
         //
         // where it is unclear whether it is not actually better to consider
         // DIAG_DBL_CLIP_DEFAULT a tunable parameter (and thus not to simplify):
-        auto lit
-            = dyn_cast<CXXBoolLiteralExpr>(ignoreParenImpCastAndComma(expr));
+        auto lit = dyn_cast<CXXBoolLiteralExpr>(expr);
         if (lit != nullptr) {
             return lit->getValue() ? Value::True : Value::False;
         }
