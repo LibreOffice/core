@@ -133,7 +133,7 @@ struct SfxChildWin_Impl
         pWin(0),
         bCreate(false),
         pCli(0),
-        nVisibility( sal_False ),
+        nVisibility( SFX_VISIBILITY_UNVISIBLE ),
         bEnable( true ),
         bDisabled( false )
     {}
