@@ -30,6 +30,12 @@
 #include <list>
 #include <vector>
 
+#ifdef DBG_UTIL
+#include <typeinfo>
+#include <typeindex>
+#include <type_traits>
+#endif
+
 namespace vcl { class Window; }
 class Menu;
 
@@ -214,15 +220,62 @@ class VCL_DLLPUBLIC VclWindowEvent : public VclSimpleEvent
 {
 private:
     vcl::Window* pWindow;
+#ifdef DBG_UTIL
+    std::type_index m_nTypeIndex;
+#endif
     void*   pData;
 
 public:
-    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
+#ifdef DBG_UTIL
+    template<typename T>
+    inline VclWindowEvent( vcl::Window* pWin, sal_uLong n, T pDat, typename std::enable_if<std::is_pointer<T>::value >::type* = 0)
+        : VclSimpleEvent(n), pWindow(pWin),
+        m_nTypeIndex( typeid(T) ),
+        pData( (void*)pDat )
+    {
+    }
+    template<typename T>
+    inline VclWindowEvent( vcl::Window* pWin, sal_uLong n, T pDat, typename std::enable_if<std::is_integral<T>::value >::type* = 0)
+        : VclSimpleEvent(n), pWindow(pWin),
+        m_nTypeIndex( typeid(T) ),
+        pData( reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(pDat)) )
+    {
+    }
+    VclWindowEvent( vcl::Window* pWin, sal_uLong n, std::nullptr_t * = 0 )
+        : VclSimpleEvent(n), pWindow(pWin),
+        m_nTypeIndex( typeid(std::nullptr_t) ),
+        pData(NULL)
+    {
+    }
+#else
+    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = NULL)
+        : VclSimpleEvent(n), pWindow(pWin), pData(pDat)
+    {
+    }
+#endif
     virtual ~VclWindowEvent() {}
     TYPEINFO_OVERRIDE();
 
     vcl::Window* GetWindow() const { return pWindow; }
-    void*   GetData() const { return pData; }
+
+    template<typename T>
+    inline T GetData(typename std::enable_if<std::is_pointer<T>::value >::type* = 0) const
+    {
+#ifdef DBG_UTIL
+        // some events are fired both with and without a pointer, so the absence of a value
+        // is legal
+        assert(m_nTypeIndex == std::type_index(typeid(std::nullptr_t)) || m_nTypeIndex == std::type_index(typeid(T)));
+#endif
+        return reinterpret_cast<T>(pData);
+    }
+    template<typename T>
+    inline T GetData(typename std::enable_if<std::is_integral<T>::value >::type* = 0) const
+    {
+#ifdef DBG_UTIL
+        assert(std::type_index(typeid(T)) == m_nTypeIndex);
+#endif
+        return (T)reinterpret_cast<sal_IntPtr>(pData);
+    }
 };
 
 class VCL_DLLPUBLIC VclMenuEvent : public VclSimpleEvent

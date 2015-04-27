@@ -262,7 +262,11 @@ protected:
 
     virtual void        FillLayoutData() const SAL_OVERRIDE;
 
-    void                CallImplEventListeners(sal_uLong nEvent, void* pData);
+    template<typename T = std::nullptr_t>
+    void                CallImplEventListeners( sal_uLong nEvent, T pData = 0)
+    {
+        CallEventListeners(nEvent, pData);
+    }
 
 public:
 

@@ -454,19 +454,19 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
             switch (nEventId)
             {
                 case VCLEVENT_TABPAGE_ACTIVATE :
-                    pListener->activated( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
+                    pListener->activated( pWinEvt->GetData<sal_Int32>() );
                     break;
 
                 case VCLEVENT_TABPAGE_DEACTIVATE :
-                    pListener->deactivated( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
+                    pListener->deactivated( pWinEvt->GetData<sal_Int32>() );
                     break;
 
                 case VCLEVENT_TABPAGE_INSERTED :
-                    pListener->inserted( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
+                    pListener->inserted( pWinEvt->GetData<sal_Int32>() );
                     break;
 
                 case VCLEVENT_TABPAGE_REMOVED :
-                    pListener->removed( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
+                    pListener->removed( pWinEvt->GetData<sal_Int32>() );
                     break;
 
                 case VCLEVENT_TABPAGE_PAGETEXTCHANGED :

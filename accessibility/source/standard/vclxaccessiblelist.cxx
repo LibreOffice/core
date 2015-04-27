@@ -342,7 +342,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
             break;
         case VCLEVENT_LISTBOX_FOCUSITEMCHANGED:
             if ( !m_bDisableProcessEvent )
-                UpdateFocus_Impl_Acc((sal_uInt16)reinterpret_cast<sal_uIntPtr>(rVclWindowEvent.GetData()),b_IsDropDownList);
+                UpdateFocus_Impl_Acc(rVclWindowEvent.GetData<sal_uInt16>(),b_IsDropDownList);
             break;
         case VCLEVENT_WINDOW_GETFOCUS:
             break;
@@ -415,14 +415,12 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
 
         case VCLEVENT_LISTBOX_ITEMREMOVED:
         case VCLEVENT_COMBOBOX_ITEMREMOVED:
-            HandleChangedItemList (false, reinterpret_cast<sal_IntPtr>(
-                rVclWindowEvent.GetData()));
+            HandleChangedItemList (false, rVclWindowEvent.GetData<sal_Int32>());
             break;
 
         case VCLEVENT_LISTBOX_ITEMADDED:
         case VCLEVENT_COMBOBOX_ITEMADDED:
-            HandleChangedItemList (true, reinterpret_cast<sal_IntPtr>(
-                rVclWindowEvent.GetData()));
+            HandleChangedItemList (true, rVclWindowEvent.GetData<sal_Int32>());
             break;
         case VCLEVENT_CONTROL_GETFOCUS:
             {
