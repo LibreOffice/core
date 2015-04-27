@@ -324,7 +324,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
 
     bool autoCommit = false;
     try {
-        autoCommit = m_settings.cppConnection->getAutoCommit() == true;
+        autoCommit = m_settings.cppConnection->getAutoCommit();
     } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }

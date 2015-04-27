@@ -373,7 +373,7 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm()
 rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString()
     throw(SQLException, RuntimeException, std::exception)
 {
-    if (identifier_quote_string_set == false) {
+    if (!identifier_quote_string_set) {
         identifier_quote_string = impl_getStringMetaData("getIdentifierQuoteString", &sql::DatabaseMetaData::getIdentifierQuoteString);
         identifier_quote_string_set = true;
     }
