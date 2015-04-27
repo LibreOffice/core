@@ -4634,11 +4634,7 @@ RTLFUNC(MsgBox)
         pBox.reset(new MessBox( pParent, nWinBits, aTitle, aMsg ));
     }
     pBox->SetText( aTitle );
-    sal_uInt16 nRet = (sal_uInt16)pBox->Execute();
-    if( nRet == sal_True )
-    {
-        nRet = 1;
-    }
+    short nRet = pBox->Execute();
     sal_Int16 nMappedRet;
     if( nStyle == 2 )
     {
