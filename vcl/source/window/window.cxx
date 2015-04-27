@@ -3927,7 +3927,7 @@ Any Window::GetSystemDataAny() const
     return aRet;
 }
 
-void Window::Paint(vcl::RenderContext* /*pRenderContext*/, const Rectangle& rRect)
+void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     Paint(rRect);
 }

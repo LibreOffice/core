@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+y/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -702,7 +702,7 @@ public:
     virtual void                        KeyInput( const KeyEvent& rKEvt );
     virtual void                        KeyUp( const KeyEvent& rKEvt );
     virtual void                        PrePaint();
-    virtual void                        Paint(vcl::RenderContext* pRenderContext, const Rectangle& rRect);
+    virtual void                        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     virtual void                        Paint(const Rectangle& rRect);
     virtual void                        Erase() SAL_OVERRIDE;
     virtual void                        Erase( const Rectangle& rRect ) SAL_OVERRIDE { ::OutputDevice::Erase( rRect ); }
