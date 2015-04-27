@@ -162,7 +162,7 @@ int HStreamIODev::state() const
 bool HStreamIODev::setCompressed(bool flag)
 {
     compressed = flag;
-    if (flag == true)
+    if (flag)
         return 0 != (_gzfp = gz_open(*_stream));
     else if (_gzfp)
     {

@@ -853,11 +853,11 @@ void HwpReader::makeAutoStyles()
 
     for( i = 1; i <= 3 ; i++ )
     {
-        if( i == 1 && bIsLeft == false )
+        if( i == 1 && !bIsLeft )
             continue;
-        if( i == 2 && bIsMiddle == false )
+        if( i == 2 && !bIsMiddle )
             continue;
-        if( i == 3 && bIsRight == false )
+        if( i == 3 && !bIsRight )
             continue;
         padd("style:name", sXML_CDATA,
             ascii(Int2Str(i,"PNPara%d", buf)));
@@ -4359,7 +4359,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                               yarr[n] = yarr[0];
                               tarr[n] = n;
 
-                              if( bIsNatural == false ){
+                              if( !bIsNatural ){
                                   PeriodicSpline(n, tarr, xarr, xb, carr, darr);
                                   // prevent memory leak
                                   delete[] carr;

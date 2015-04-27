@@ -300,7 +300,7 @@ void HWPFile::TagsRead()
             {
                 EmPicture *emb = new EmPicture(size);
 
-                if (true == emb->Read(*this))
+                if (emb->Read(*this))
                     emblist.push_back(emb);
                 else
                     delete emb;
