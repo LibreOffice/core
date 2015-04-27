@@ -349,7 +349,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (arguments[32] >>= arg32) && arg32.member.getLength() == 1
           && arg32.member[0].member1 == 'X'
           && arg32.member[0].member2.getLength() == 1
-          && (arg32.member[0].member2[0] >>= arg32a) && arg32a == true
+          && (arg32.member[0].member2[0] >>= arg32a) && arg32a
           && (arguments[33] >>= arg33) && arg33.member.getLength() == 1
           && arg33.member[0].member1.member == 'X'
           && arg33.member[0].member2.getLength() == 1
