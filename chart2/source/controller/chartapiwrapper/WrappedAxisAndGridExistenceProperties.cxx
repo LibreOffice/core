@@ -106,7 +106,7 @@ WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool b
         {
             if( m_bAxis )
             {
-                OSL_ENSURE(m_bMain == true,"there is no secondary z axis at the old api");
+                OSL_ENSURE(m_bMain,"there is no secondary z axis at the old api");
                 m_bMain = true;
                 m_aOuterName = "HasZAxis";
             }
