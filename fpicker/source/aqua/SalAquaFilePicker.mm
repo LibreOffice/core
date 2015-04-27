@@ -255,7 +255,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 
 void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( uno::RuntimeException )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "multiSelectable?", bMode);
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "multiSelectable?", int(bMode));
 
     SolarMutexGuard aGuard;
 
