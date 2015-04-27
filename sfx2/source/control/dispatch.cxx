@@ -212,7 +212,7 @@ bool SfxDispatcher::IsAppDispatcher() const
 /** Helper function to check whether a slot can be executed and
     check the execution itself
 */
-int SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord)
+void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord)
 {
     SFX_STACK(SfxDispatcher::Call_Impl);
 
@@ -269,7 +269,7 @@ int SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest 
                 }
 
                 // do nothing after this object is dead
-                return rReq.IsDone() ? 1 : 0;
+                return;
             }
         }
 
@@ -296,12 +296,8 @@ int SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest 
                     pBindings->Update(rSlot.GetSlotId());
                 }
             }
-
-            return sal_True;
         }
     }
-
-    return sal_False;
 }
 
 void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
