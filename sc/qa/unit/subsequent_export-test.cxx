@@ -137,6 +137,7 @@ public:
 
     void testSupBookVirtualPath();
     void testSheetLocalRangeNameXLS();
+    void testSheetTextBoxHyperlink();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
+    CPPUNIT_TEST(testSheetTextBoxHyperlink);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -209,7 +211,8 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("office"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0") },
         { BAD_CAST("table"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0") },
         { BAD_CAST("text"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0") },
-        { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") }
+        { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") },
+        { BAD_CAST("xdr"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") }
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -2515,6 +2518,22 @@ void ScExportTest::testSheetLocalRangeNameXLS()
     CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testSheetTextBoxHyperlink()
+{
+    ScDocShellRef xShell = loadDoc("textbox-hyperlink.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:nvSpPr[1]/xdr:cNvPr[1]/a:hlinkClick[1]", 1);
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
