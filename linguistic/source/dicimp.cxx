@@ -335,7 +335,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
         OString aLine;
 
         // remaining lines - stock strings (a [==] b)
-        while (true == (bSuccess = pStream->ReadLine(aLine)))
+        while ((bSuccess = pStream->ReadLine(aLine)))
         {
             if (aLine[0] == '#') // skip comments
                 continue;
@@ -775,7 +775,7 @@ void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
                 DictionaryEventFlags::ACTIVATE_DIC : DictionaryEventFlags::DEACTIVATE_DIC;
 
         // remove entries from memory if dictionary is deactivated
-        if (bIsActive == false)
+        if (!bIsActive)
         {
             bool bIsEmpty = nCount == 0;
 
