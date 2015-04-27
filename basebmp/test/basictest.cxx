@@ -88,7 +88,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("right size",
                                pDevice->getSize() == aSize2 );
         CPPUNIT_ASSERT_MESSAGE("Top down format",
-                               pDevice->isTopDown() == true );
+                               pDevice->isTopDown() );
         CPPUNIT_ASSERT_MESSAGE("Scanline format",
                                pDevice->getScanlineFormat() == FORMAT_ONE_BIT_MSB_PAL );
         CPPUNIT_ASSERT_MESSAGE("Scanline len",
