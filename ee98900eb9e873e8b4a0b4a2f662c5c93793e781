@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_099f8960",
+        "filename": "include/vcl/window.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-04-27T15:14:24Z",
+      "side": 1,
+      "message": "do you really need these \"void data\" overloads, or could they be modeled with some specific CallEventListeners\u003cT*\u003e(nEvent, nullptr) instead?",
+      "revId": "ee98900eb9e873e8b4a0b4a2f662c5c93793e781",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
