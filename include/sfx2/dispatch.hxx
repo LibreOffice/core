@@ -185,7 +185,7 @@ public:
     SAL_DLLPRIVATE void SetMenu_Impl();
     SAL_DLLPRIVATE void Update_Impl( bool bForce = false ); // ObjectBars etc.
     SAL_DLLPRIVATE bool IsUpdated_Impl() const;
-    SAL_DLLPRIVATE int GetShellAndSlot_Impl( sal_uInt16 nSlot, SfxShell **ppShell, const SfxSlot **ppSlot,
+    SAL_DLLPRIVATE bool GetShellAndSlot_Impl( sal_uInt16 nSlot, SfxShell **ppShell, const SfxSlot **ppSlot,
                                               bool bOwnShellsOnly, bool bModal, bool bRealSlot=true );
     SAL_DLLPRIVATE void SetReadOnly_Impl( bool  bOn );
     SAL_DLLPRIVATE bool GetReadOnly_Impl() const;

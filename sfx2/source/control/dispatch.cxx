@@ -784,7 +784,7 @@ void SfxDispatcher::DoParentDeactivate_Impl()
                      sal_False
                      The SfxShell was not found, ppShell and ppSlot are invalid.
 */
-int SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
+bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
         const SfxSlot** ppSlot, bool bOwnShellsOnly, bool bModal, bool bRealSlot)
 {
     SFX_STACK(SfxDispatcher::GetShellAndSlot_Impl);
@@ -794,7 +794,7 @@ int SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
     if ( _FindServer(nSlot, aSvr, bModal) )
     {
         if ( bOwnShellsOnly && aSvr.GetShellLevel() >= xImp->aStack.size() )
-            return sal_False;
+            return false;
 
         *ppShell = GetShell(aSvr.GetShellLevel());
         *ppSlot = aSvr.GetSlot();
@@ -802,12 +802,12 @@ int SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
             *ppSlot = (*ppShell)->GetInterface()->GetRealSlot(*ppSlot);
         // Check only real slots as enum slots don't have an execute function!
         if ( bRealSlot && ((0 == *ppSlot) || (0 == (*ppSlot)->GetExecFnc()) ))
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 /** This method performs a request for a cached <Slot-Server>.
