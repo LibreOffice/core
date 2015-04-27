@@ -1106,8 +1106,9 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
 
     pFS->startElement( FSNS( XML_a, XML_pPr ),
             FSEND );
-    pFS->singleElement( FSNS( XML_a, XML_defRPr ),
-            FSEND );
+
+    WriteRunProperties(xPropSet, false, XML_defRPr);
+
     pFS->endElement( FSNS( XML_a, XML_pPr ) );
 
     pFS->startElement( FSNS( XML_a, XML_r ),
