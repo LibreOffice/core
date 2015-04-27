@@ -124,7 +124,7 @@ OUString SwPageNumberFieldType::Expand( sal_uInt32 nFmt, short nOff,
     if( SVX_NUM_CHAR_SPECIAL == nTmpFmt )
         return rUserStr;
 
-    return FormatNumber( (sal_uInt16)nTmp, nTmpFmt );
+    return FormatNumber( nTmp, nTmpFmt );
 }
 
 SwFieldType* SwPageNumberFieldType::Copy() const
@@ -749,7 +749,7 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
     }
 
     if( nVal <= SHRT_MAX )
-        return FormatNumber( (sal_uInt16)nVal, nFmt );
+        return FormatNumber( nVal, nFmt );
 
     return OUString::number( nVal );
 }

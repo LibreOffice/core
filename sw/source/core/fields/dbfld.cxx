@@ -816,7 +816,7 @@ OUString SwDBSetNumberField::Expand() const
 {
     if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || nNumber == 0)
         return OUString();
-    return FormatNumber((sal_uInt16)nNumber, GetFormat());
+    return FormatNumber(nNumber, GetFormat());
 }
 
 void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
