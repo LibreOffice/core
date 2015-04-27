@@ -18,6 +18,7 @@
  */
 
 #include "hintids.hxx"
+#include <comphelper/lok.hxx>
 #include <svx/svdtrans.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
@@ -467,7 +468,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
             // if there's no viewport set, all fly-frames will be painted,
             // which is slow, wastes memory, and can cause other trouble.
             (void) rViewInformation; // suppress "unused parameter" warning
-            assert(!rViewInformation.getViewport().isEmpty());
+            assert(comphelper::LibreOfficeKit::isActive() || !rViewInformation.getViewport().isEmpty());
             if ( !pFlyFrm->IsFlyInCntFrm() )
             {
                 // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
