@@ -2812,6 +2812,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aAppFont.SetWeight( WEIGHT_NORMAL );
     aStyleSettings.SetInfoFont( aAppFont );
     aStyleSettings.SetToolFont( aAppFont );
+    aStyleSettings.SetTabFont( aAppFont );
 
     BOOL bDragFull;
     if ( SystemParametersInfo( SPI_GETDRAGFULLWINDOWS, 0, &bDragFull, 0 ) )

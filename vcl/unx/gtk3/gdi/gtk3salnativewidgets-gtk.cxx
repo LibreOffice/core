@@ -1387,6 +1387,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetGroupFont( aFont );
 
     aFont.SetWeight( WEIGHT_BOLD );
+    aStyleSet.SetTabFont( aFont );  //pull from notebook style + GTK_STYLE_REGION_TAB ?
     aStyleSet.SetTitleFont( aFont );
     aStyleSet.SetFloatTitleFont( aFont );
     // get cursor blink time
