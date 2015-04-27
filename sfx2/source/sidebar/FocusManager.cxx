@@ -532,7 +532,7 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
     {
         case VCLEVENT_WINDOW_KEYINPUT:
         {
-            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
+            KeyEvent* pKeyEvent = pWindowEvent->GetData<KeyEvent*>();
             HandleKeyEvent(pKeyEvent->GetKeyCode(), *pSource);
             return 1;
         }
@@ -570,7 +570,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
     {
         case VCLEVENT_WINDOW_KEYINPUT:
         {
-            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
+            KeyEvent* pKeyEvent = pWindowEvent->GetData<KeyEvent*>();
 
             // Go up the window hierarchy to find out whether the
             // parent of the event source is known to us.

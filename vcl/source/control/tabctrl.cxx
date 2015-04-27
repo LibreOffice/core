@@ -1004,7 +1004,7 @@ IMPL_LINK( TabControl, ImplWindowEventListener, VclSimpleEvent*, pEvent )
         // Do not handle events from TabControl or its children, which is done in Notify(), where the events can be consumed.
         if ( !IsWindowOrChild( pWindowEvent->GetWindow() ) )
         {
-            KeyEvent* pKeyEvent = static_cast< KeyEvent* >(pWindowEvent->GetData());
+            KeyEvent* pKeyEvent = pWindowEvent->GetData<KeyEvent*>();
             ImplHandleKeyEvent( *pKeyEvent );
         }
     }
@@ -1664,7 +1664,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     if( mpTabCtrlData->mpListBox ) // reposition/resize listbox
         Resize();
 
-    CallEventListeners( VCLEVENT_TABPAGE_INSERTED, reinterpret_cast<void*>(nPageId) );
+    CallEventListeners( VCLEVENT_TABPAGE_INSERTED, nPageId );
 }
 
 void TabControl::RemovePage( sal_uInt16 nPageId )
@@ -1709,7 +1709,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
 
         ImplFreeLayoutData();
 
-        CallEventListeners( VCLEVENT_TABPAGE_REMOVED, reinterpret_cast<void*>(nPageId) );
+        CallEventListeners( VCLEVENT_TABPAGE_REMOVED, nPageId );
     }
 }
 
@@ -1859,7 +1859,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
     {
         ImplFreeLayoutData();
 
-        CallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, reinterpret_cast<void*>(mnCurPageId) );
+        CallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, mnCurPageId );
         if ( DeactivatePage() )
         {
             mnActPageId = nPageId;
@@ -1870,7 +1870,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
             SetCurPageId( nPageId );
             if( mpTabCtrlData->mpListBox )
                 mpTabCtrlData->mpListBox->SelectEntryPos( GetPagePos( nPageId ) );
-            CallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, reinterpret_cast<void*>(nPageId) );
+            CallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, nPageId );
         }
     }
 }
@@ -1930,7 +1930,7 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )
         if ( IsUpdateMode() )
             Invalidate();
         ImplFreeLayoutData();
-        CallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, reinterpret_cast<void*>(nPageId) );
+        CallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, nPageId );
     }
 }
 

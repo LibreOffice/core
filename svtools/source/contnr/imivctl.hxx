@@ -555,7 +555,15 @@ public:
                         );
     void                StopSelectTimer() { aCallSelectHdlIdle.Stop(); }
 
-    void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
+    template<typename T>
+    void                CallEventListeners( sal_uLong nEvent, T pData )
+    {
+        pView->CallImplEventListeners( nEvent, pData );
+    }
+    void                CallEventListeners( sal_uLong nEvent )
+    {
+        pView->CallImplEventListeners( nEvent );
+    }
 
     inline ::svt::IAccessibleFactory& GetAccessibleFactory()
                         {

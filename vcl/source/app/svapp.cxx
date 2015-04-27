@@ -624,15 +624,6 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
     }
 }
 
-void Application::ImplCallEventListeners( sal_uLong nEvent, vcl::Window *pWin, void* pData )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    VclWindowEvent aEvent( pWin, nEvent, pData );
-
-    if ( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->Call( &aEvent );
-}
-
 void Application::ImplCallEventListeners( VclSimpleEvent* pEvent )
 {
     ImplSVData* pSVData = ImplGetSVData();

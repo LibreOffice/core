@@ -289,14 +289,12 @@ void LayerTabBar::ActivatePage()
 
 void LayerTabBar::SendActivatePageEvent()
 {
-    CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED,
-        reinterpret_cast<void*>(GetCurPageId()));
+    CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED, GetCurPageId());
 }
 
 void LayerTabBar::SendDeactivatePageEvent()
 {
-    CallEventListeners (VCLEVENT_TABBAR_PAGEDEACTIVATED,
-        reinterpret_cast<void*>(GetCurPageId()));
+    CallEventListeners (VCLEVENT_TABBAR_PAGEDEACTIVATED, GetCurPageId());
 }
 
 } // end of namespace sd

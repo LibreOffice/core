@@ -205,7 +205,7 @@ IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent*, pEvent)
 {
     if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
+        MouseEvent* pMouseEvt = pEvent->GetData<MouseEvent*>();
         if(pMouseEvt)
         {
             const Point& rMousePos = pMouseEvt->GetPosPixel();
@@ -233,7 +233,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
 {
     if( pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT )
     {
-        KeyEvent* pKeyEvt = static_cast<KeyEvent*>(pEvent->GetData());
+        KeyEvent* pKeyEvt = pEvent->GetData<KeyEvent*>();
         if(pKeyEvt)
         {
             const sal_uInt16 nCode = pKeyEvt->GetKeyCode().GetCode();
@@ -338,7 +338,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
     }
     else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEBUTTONDOWN )
     {
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
+        MouseEvent* pMouseEvt = pEvent->GetData<MouseEvent*>();
         if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
         {
             m_aLastMousePos = pMouseEvt->GetPosPixel();
@@ -350,7 +350,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
         {
             m_rEventHandler.GrabFocus();
         }
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
+        MouseEvent* pMouseEvt = pEvent->GetData<MouseEvent*>();
         if(pMouseEvt && pMouseEvt->IsLeft() && m_aLastMousePos != Point(0,0))
         {
             const Point& aCurPos = pMouseEvt->GetPosPixel();
@@ -380,7 +380,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
     }
     else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEBUTTONUP )
     {
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
+        MouseEvent* pMouseEvt = pEvent->GetData<MouseEvent*>();
         if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
         {
             m_aLastMousePos = Point(0,0);

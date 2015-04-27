@@ -679,7 +679,20 @@ protected:
 
             void                        SetCompoundControl( bool bCompound );
 
-            void                        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
+            void                        CallEventListeners( sal_uLong nEvent )
+    {
+        VclWindowEvent aEvent( this, nEvent );
+        CallEventListeners(aEvent);
+    };
+    template<typename T>
+            void                        CallEventListeners( sal_uLong nEvent, T pData )
+    {
+        VclWindowEvent aEvent( this, nEvent, pData );
+        CallEventListeners(aEvent);
+    };
+private:
+            void                        CallEventListeners( VclWindowEvent& rEvent );
+protected:
     static  void                        FireVclEvent( VclSimpleEvent* pEvent );
 
     virtual bool                        AcquireGraphics() const SAL_OVERRIDE;

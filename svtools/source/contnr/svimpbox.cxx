@@ -290,7 +290,7 @@ void SvImpLBox::Clear()
 
     aContextBmpWidthVector.clear();
 
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, NULL );
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED );
 }
 
 // *********************************************************************
@@ -3427,14 +3427,6 @@ const Image& SvImpLBox::GetDefaultCollapsedNodeImage( )
     implInitDefaultNodeImages();
     return *s_pDefCollapsed;
 }
-
-
-void SvImpLBox::CallEventListeners( sal_uLong nEvent, void* pData )
-{
-    if ( pView )
-        pView->CallImplEventListeners( nEvent, pData);
-}
-
 
 
 bool SvImpLBox::SetCurrentTabPos( sal_uInt16 _nNewPos )
