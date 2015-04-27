@@ -108,7 +108,7 @@ void LinkManager::CloseCachedComps()
 void LinkManager::Remove( SvBaseLink *pLink )
 {
     // No duplicate links inserted
-    int bFound = sal_False;
+    bool bFound = false;
     for( size_t n = 0; n < aLinkTbl.size(); )
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
@@ -117,7 +117,7 @@ void LinkManager::Remove( SvBaseLink *pLink )
             (*pTmp)->Disconnect();
             (*pTmp)->SetLinkManager( NULL );
             (*pTmp).Clear();
-            bFound = sal_True;
+            bFound = true;
         }
 
         // Remove empty ones if they exist
