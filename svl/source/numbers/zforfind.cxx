@@ -3803,7 +3803,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
         }
     }
 
-    if (res == false)
+    if (!res)
     {
         eScannedType = css::util::NumberFormat::TEXT;
         fOutNumber = 0.0;
