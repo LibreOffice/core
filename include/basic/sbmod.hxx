@@ -78,7 +78,7 @@ protected:
     SbProcedureProperty* GetProcedureProperty( const OUString&, SbxDataType );
     SbIfaceMapperMethod* GetIfaceMapperMethod( const OUString&, SbMethod* );
     void            EndDefinitions( bool=false );
-    sal_uInt16      Run( SbMethod* );
+    void            Run( SbMethod* );
     void            RunInit();
     void            ClearPrivateVars();
     void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );

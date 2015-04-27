@@ -1066,12 +1066,11 @@ void SbModule::SetVBACompat( bool bCompat )
 }
 
 // Run a Basic-subprogram
-sal_uInt16 SbModule::Run( SbMethod* pMeth )
+void SbModule::Run( SbMethod* pMeth )
 {
     SAL_INFO("basic","About to run " << OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() << ", vba compatmode is " << mbVBACompat );
     static sal_uInt16 nMaxCallLevel = 0;
 
-    sal_uInt16 nRes = 0;
     bool bDelInst = ( GetSbData()->pInst == NULL );
     bool bQuit = false;
     StarBASICRef xBasic;
@@ -1195,7 +1194,6 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                     Application::Yield();
             }
 
-            nRes = sal_True;
             GetSbData()->pInst->pRun = pRt->pNext;
             GetSbData()->pInst->nCallLvl--;          // Call-Level down again
 
@@ -1269,8 +1267,6 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
     {
         Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ), NULL );
     }
-
-    return nRes;
 }
 
 // Execute of the init method of a module after the loading
