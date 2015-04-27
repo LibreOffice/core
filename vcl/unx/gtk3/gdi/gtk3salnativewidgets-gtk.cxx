@@ -1079,7 +1079,8 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
               ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) ||
                (nPart==PART_SUB_EDIT)) )
     {
-        aEditRect = NWGetSpinButtonRect( nPart, rControlRegion );
+        Rectangle aControlRegion(AdjustRectForTextBordersPadding(mpSpinStyle, rValue.getNumericVal(), rControlRegion));
+        aEditRect = NWGetSpinButtonRect(nPart, aControlRegion);
     }
     else if ( (nType==CTRL_COMBOBOX) &&
               ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
