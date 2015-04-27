@@ -30,6 +30,7 @@
  <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal" toolbar:helpid="20425"/>
  <toolbar:toolbaritem xlink:href=".uno:RotateLeft" toolbar:helpid=""/>
  <toolbar:toolbaritem xlink:href=".uno:RotateRight" toolbar:helpid=""/>
+ <toolbar:toolbaritem xlink:href=".uno:CropGraphic" toolbar:helpid=""/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GraphicDialog" toolbar:visible="false"/>
 </toolbar:toolbar>

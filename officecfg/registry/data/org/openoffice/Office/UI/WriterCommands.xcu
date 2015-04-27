@@ -765,6 +765,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:CropGraphic" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Crop I~mage</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:NewHtmlDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Create ~HTML Document</value>

@@ -574,6 +574,7 @@ public:
     virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
     virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
+    virtual void addCropHandles(SdrHdlList& rTarget) const;
 
     /// The standard transformations (Move,Resize,Rotate,Mirror,Shear) are
     /// taken over by the View (TakeXorPoly(),...).
@@ -633,12 +634,14 @@ public:
     /// Nbc means "no broadcast".
     virtual void NbcMove  (const Size& rSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void NbcCrop  (const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
     virtual void NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
+    virtual void Crop  (const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void Rotate(const Point& rRef, long nAngle, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
     virtual void Shear (const Point& rRef, long nAngle, double tn, bool bVShear);

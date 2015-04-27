@@ -1006,8 +1006,10 @@
 #define SID_PARASPACE_INCREASE                          ( SID_SVX_START + 1145 )
 #define SID_PARASPACE_DECREASE                          ( SID_SVX_START + 1146 )
 
+#define SID_CROP_GRAPHIC                                ( SID_SVX_START + 1147 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_PARASPACE_DECREASE + 1)
+#define SID_SVX_FIRSTFREE                               (SID_CROP_GRAPHIC + 1)
 
 // Overflow check for slot IDs
 

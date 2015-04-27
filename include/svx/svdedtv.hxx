@@ -100,6 +100,7 @@ protected:
     bool                        bShearAllowed : 1;
     bool                        bEdgeRadiusAllowed : 1;
     bool                        bTransparenceAllowed : 1;
+    bool                        bCropAllowed : 1;
     bool                        bGradientAllowed : 1;
     bool                        bCanConvToPath : 1;
     bool                        bCanConvToPoly : 1;
@@ -241,6 +242,7 @@ public:
     bool IsShearAllowed() const;
     bool IsEdgeRadiusAllowed() const;
     bool IsCrookAllowed(bool bNoContortion=false) const;
+    bool IsCropAllowed() const;
     bool IsDistortAllowed(bool bNoContortion=false) const;
 
     // Unite several objects to a polygon:

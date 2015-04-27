@@ -72,6 +72,7 @@ void SdrEditView::ImpResetPossibilityFlags()
     bMirror45Allowed        =false;
     bMirror90Allowed        =false;
     bTransparenceAllowed    =false;
+    bCropAllowed            =false;
     bGradientAllowed        =false;
     bShearAllowed           =false;
     bEdgeRadiusAllowed      =false;
@@ -402,6 +403,12 @@ bool SdrEditView::IsTransparenceAllowed() const
     return bTransparenceAllowed;
 }
 
+bool SdrEditView::IsCropAllowed() const
+{
+    ForcePossibilities();
+    return bCropAllowed;
+}
+
 bool SdrEditView::IsGradientAllowed() const
 {
     ForcePossibilities();
@@ -509,6 +516,7 @@ void SdrEditView::CheckPossibilities()
             // these ones are only allowed when single object is selected
             bTransparenceAllowed = (nMarkCount == 1);
             bGradientAllowed = (nMarkCount == 1);
+            bCropAllowed = (nMarkCount == 1);
             if(bGradientAllowed)
             {
                 // gradient depends on fill style
@@ -575,6 +583,10 @@ void SdrEditView::CheckPossibilities()
                         bNoMovRotFound=true;
                     }
                 }
+
+                // Must be resizeable to allow cropping
+                if (!aInfo.bResizeFreeAllowed && !aInfo.bResizePropAllowed)
+                    bCropAllowed = false;
 
                 // if one member cannot be converted, no conversion is possible
                 if(!aInfo.bCanConvToContour)

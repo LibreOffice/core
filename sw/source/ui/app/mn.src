@@ -1180,14 +1180,20 @@ Menu MN_GRF_POPUPMENU
         MN_ALIGNMENT_FRAME
         MN_ARRANGE_FRAME
         MN_ROTATE_IMAGE
+        MenuItem
+        {
+            Identifier = SID_CROP_GRAPHIC ; \
+            Command = ".uno:CropGraphic" ; \
+            Text [ en-US ] = "Crop I~mage" ; \
+        };
         SEPARATOR ;
 
         MN_FRM_CAPTION_ITEM
         MenuItem
         {
-            Identifier = FN_FORMAT_GRAFIC_DLG ;
-            HelpId = CMD_FN_FORMAT_GRAFIC_DLG ;
-            Text [ en-US ] = "Format ~Image..." ;
+            Identifier = FN_FORMAT_GRAFIC_DLG ; \
+            HelpId = CMD_FN_FORMAT_GRAFIC_DLG ; \
+            Text [ en-US ] = "Format ~Image..." ; \
         };
     };
 };
