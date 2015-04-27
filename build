@@ -83,7 +83,6 @@ do_configure()
       --disable-ccache
       --with-ant-home="${ANT_HOME}"
       --with-external-tar=/cygdrive/c/sources/lo-external
-      --with-jdk-home="${JDK_HOME}"
       --with-junit="${JUNIT_HOME}"
     )
   else
