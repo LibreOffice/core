@@ -322,7 +322,7 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, R
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
-        return sal_False;
+        return 0;
 
     if( NULL == mpWriter )
     {
@@ -351,7 +351,7 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, s
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
-        return sal_False;
+        return 0;
 
     bool bBackgroundVisible = true;
     bool bBackgroundObjectsVisible = true;
