@@ -4000,6 +4000,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                     if (pSdrView)
                     {
+                        if (pSdrView->GetDragMode() == SDRDRAG_CROP)
+                            bisResize = false;
+
                         if (rMEvt.IsShift())
                         {
                             pSdrView->SetAngleSnapEnabled(!bIsSelectionGfx);
@@ -4209,7 +4212,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
     {
-        pSdrView->SetOrtho(false);
+        // tdf34555: ortho was always reset before being used in EndSdrDrag
+        // Now, it is reset only if not in Crop mode.
+        if (pSdrView->GetDragMode() != SDRDRAG_CROP)
+            pSdrView->SetOrtho(false);
 
         if ( pSdrView->MouseButtonUp( rMEvt,this ) )
         {
