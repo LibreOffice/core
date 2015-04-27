@@ -554,7 +554,7 @@ BackendImpl::PackageImpl::isRegistered_(
             if (present)
             {
                 //we never come here in the first iteration
-                if (reg != (status.Value != sal_False)) {
+                if (reg != bool(status.Value)) {
 
                     ambig = true;
                     reg = false;

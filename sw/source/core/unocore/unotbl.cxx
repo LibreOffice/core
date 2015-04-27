@@ -670,7 +670,7 @@ static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableB
     for(size_t i = 0; i < nOldCount; ++i)
     {
         aCols[i] = pArray[i].Position;
-        if(pArray[i].IsVisible == (aCols.IsHidden(i) ? 1 : 0) ||
+        if(bool(pArray[i].IsVisible) == aCols.IsHidden(i) ||
                 (!bRow && aCols.IsHidden(i)) ||
                 aCols[i] < nLastValue ||
                 UNO_TABLE_COLUMN_SUM < aCols[i] )

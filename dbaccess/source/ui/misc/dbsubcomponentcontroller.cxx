@@ -583,7 +583,7 @@ namespace dbaui
     {
         ::osl::ClearableMutexGuard aGuard( getMutex() );
 
-        if ( (m_pImpl->m_bModified ? 1 : 0) == i_bModified )
+        if ( m_pImpl->m_bModified == bool(i_bModified) )
             return;
 
         m_pImpl->m_bModified = i_bModified;

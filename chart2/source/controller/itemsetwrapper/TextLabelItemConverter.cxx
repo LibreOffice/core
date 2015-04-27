@@ -278,14 +278,14 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 if (mbDataSeries)
                 {
                     Reference<chart2::XDataSeries> xSeries(GetPropertySet(), uno::UNO_QUERY);
-                    if ((bOldValue ? 1 : 0) != rValue ||
+                    if (bOldValue != bool(rValue) ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, CHART_UNONAME_LABEL, aOldValue))
                     {
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, CHART_UNONAME_LABEL, uno::makeAny(aLabel));
                         bChanged = true;
                     }
                 }
-                else if ((bOldValue ? 1 : 0) != rValue)
+                else if (bOldValue != bool(rValue))
                 {
                     GetPropertySet()->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabel));
                     bChanged = true;

@@ -374,7 +374,7 @@ sal_Bool SAL_CALL OBoundControl::getLock() throw(RuntimeException, std::exceptio
 
 void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(RuntimeException, std::exception)
 {
-    if ((m_bLocked ? 1 : 0) == _bLock)
+    if (m_bLocked == bool(_bLock))
         return;
 
     osl::MutexGuard aGuard(m_aMutex);

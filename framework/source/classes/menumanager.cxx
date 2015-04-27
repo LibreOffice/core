@@ -329,7 +329,7 @@ throw ( RuntimeException, std::exception )
             bool bCheckmark         = false;
             bool bMenuItemEnabled   = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
 
-            if ( Event.IsEnabled != (bMenuItemEnabled ? 1 : 0) )
+            if ( bool(Event.IsEnabled) != bMenuItemEnabled )
                 m_pVCLMenu->EnableItem( pStatusChangedMenu->nItemId, Event.IsEnabled );
 
             if ( Event.State >>= bCheckmark )

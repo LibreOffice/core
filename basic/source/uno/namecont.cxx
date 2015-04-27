@@ -2553,7 +2553,7 @@ void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal
     SfxLibrary* pImplLib = getImplLib( Name );
     if( pImplLib->mbLink )
     {
-        if( (pImplLib->mbReadOnlyLink ? 1 : 0) != bReadOnly )
+        if( pImplLib->mbReadOnlyLink != bool(bReadOnly) )
         {
             pImplLib->mbReadOnlyLink = bReadOnly;
             pImplLib->implSetModified( true );
@@ -2562,7 +2562,7 @@ void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal
     }
     else
     {
-        if( (pImplLib->mbReadOnly ? 1 : 0) != bReadOnly )
+        if( pImplLib->mbReadOnly != bool(bReadOnly) )
         {
             pImplLib->mbReadOnly = bReadOnly;
             pImplLib->implSetModified( true );

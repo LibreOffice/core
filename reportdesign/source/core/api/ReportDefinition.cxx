@@ -1812,10 +1812,10 @@ void SAL_CALL OReportDefinition::setModified( sal_Bool _bModified ) throw (beans
 
     if ( m_pImpl->m_pReportModel->IsReadOnly() && _bModified )
         throw beans::PropertyVetoException();
-    if ( (m_pImpl->m_bModified ? 1 : 0) != _bModified )
+    if ( m_pImpl->m_bModified != bool(_bModified) )
     {
         m_pImpl->m_bModified = _bModified;
-        if ( ( m_pImpl->m_pReportModel->IsChanged() ? 1 : 0 ) != _bModified )
+        if ( m_pImpl->m_pReportModel->IsChanged() != bool(_bModified) )
             m_pImpl->m_pReportModel->SetChanged(_bModified);
 
         lang::EventObject aEvent(*this);

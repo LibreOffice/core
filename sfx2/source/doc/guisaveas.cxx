@@ -1865,7 +1865,7 @@ void SfxStoringHelper::SetDocInfoState(
     }
 
     // set the modified flag back if required
-    if ( ((bNoModify && bIsModified) ? 1 : 0) != xModifiable->isModified() )
+    if ( (bNoModify && bIsModified) != bool(xModifiable->isModified()) )
         xModifiable->setModified( bIsModified );
 }
 

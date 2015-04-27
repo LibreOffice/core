@@ -2466,7 +2466,7 @@ throw (uno::RuntimeException, std::exception)
     m_bVisible = bVisible;
     aWriteLock.clear();
 
-    if ( (bWasVisible ? 1 : 0) != bVisible )
+    if ( bWasVisible != bool(bVisible) )
         implts_setVisibleState( bVisible );
 }
 

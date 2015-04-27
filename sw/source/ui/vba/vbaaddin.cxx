@@ -67,7 +67,7 @@ sal_Bool SAL_CALL SwVbaAddin::getInstalled() throw (uno::RuntimeException, std::
 
 void SAL_CALL SwVbaAddin::setInstalled( sal_Bool _installed ) throw (uno::RuntimeException, std::exception)
 {
-    if( _installed != (mbInstalled ? 1 : 0) )
+    if( bool(_installed) != mbInstalled )
     {
         mbInstalled = _installed;
         // TODO: should call AutoExec and AutoExit etc.

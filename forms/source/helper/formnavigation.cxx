@@ -100,7 +100,7 @@ namespace frm
         {
             if ( aFeature->second.aURL.Main == _rState.FeatureURL.Main )
             {
-                if  (  ( (aFeature->second.bCachedState ? 1 : 0) != _rState.IsEnabled )
+                if  (  ( aFeature->second.bCachedState != bool(_rState.IsEnabled) )
                     || ( aFeature->second.aCachedAdditionalState != _rState.State )
                     )
                 {

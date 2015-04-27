@@ -662,7 +662,7 @@ sal_Bool SAL_CALL ChartController::suspend( sal_Bool bSuspend )
     if( m_aLifeTimeManager.impl_isDisposed() )
         return sal_False; //behave passive if already disposed, return false because request was not accepted //@todo? correct
 
-    if(bSuspend == (m_bSuspended ? 1 : 0))
+    if(bool(bSuspend) == m_bSuspended)
     {
         OSL_FAIL( "new suspend mode equals old suspend mode" );
         return sal_True;

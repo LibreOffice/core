@@ -525,7 +525,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
 
     bool bCanSuspend = true;
 
-    if ( (m_bSuspended ? 1 : 0) != bSuspend )
+    if ( m_bSuspended != bool(bSuspend) )
     {
         if ( bSuspend && !closeSubComponents() )
             return sal_False;

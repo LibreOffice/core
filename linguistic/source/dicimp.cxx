@@ -768,7 +768,7 @@ void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if ((bIsActive ? 1 : 0) != bActivate)
+    if (bIsActive != bool(bActivate))
     {
         bIsActive = bActivate != 0;
         sal_Int16 nEvent = bIsActive ?

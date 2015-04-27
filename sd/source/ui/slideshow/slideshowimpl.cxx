@@ -2855,7 +2855,7 @@ sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop() throw (RuntimeException, std::
 void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    if( (maPresSettings.mbAlwaysOnTop ? 1 : 0) != bAlways )
+    if( maPresSettings.mbAlwaysOnTop != bool(bAlways) )
     {
         maPresSettings.mbAlwaysOnTop = bAlways;
         // todo, can this be changed while running?
@@ -2877,7 +2877,7 @@ sal_Bool SAL_CALL SlideshowImpl::getMouseVisible() throw (RuntimeException, std:
 void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    if( (maPresSettings.mbMouseVisible ? 1 : 0) != bVisible )
+    if( maPresSettings.mbMouseVisible != bool(bVisible) )
     {
         maPresSettings.mbMouseVisible = bVisible;
         if( mpShowWindow )
