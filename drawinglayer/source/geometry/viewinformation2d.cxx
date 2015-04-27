@@ -178,7 +178,7 @@ namespace drawinglayer
                 const bool bViewportUsed(!maViewport.isEmpty());
                 const bool bTimeUsed(0.0 < mfViewTime);
                 const bool bVisualizedPageUsed(mxVisualizedPage.is());
-                const bool bReducedDisplayQualityUsed(true == mbReducedDisplayQuality);
+                const bool bReducedDisplayQualityUsed(mbReducedDisplayQuality);
                 const bool bExtraInformation(mxExtendedInformation.hasElements());
                 sal_uInt32 nIndex(0);
                 const sal_uInt32 nCount(
