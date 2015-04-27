@@ -1268,7 +1268,7 @@ namespace svxform
             if ( pNode && ( pNode->m_xNode.is() || pNode->m_xPropSet.is() ) )
             {
                 bEnableEdit = true;
-                bEnableRemove = ( bSubmitChild != true );
+                bEnableRemove = !bSubmitChild;
                 if ( DGTInstance == m_eGroup && !m_pItemList->GetParent( pEntry ) )
                     bEnableRemove = false;
                 if ( pNode->m_xNode.is() )

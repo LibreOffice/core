@@ -391,7 +391,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                     if(nNewPt0Idx)
                     {
                         // correction necessary?
-                        DBG_ASSERT(bKorregFlag==false,"Multiple index corrections at SdrPolyEditView::RipUp().");
+                        DBG_ASSERT(!bKorregFlag,"Multiple index corrections at SdrPolyEditView::RipUp().");
                         if(!bKorregFlag)
                         {
                             bKorregFlag = true;

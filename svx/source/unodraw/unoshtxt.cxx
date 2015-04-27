@@ -237,7 +237,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
 
 SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 {
-    DBG_ASSERT( mbIsLocked == false, "text edit source was not unlocked before dispose!" );
+    DBG_ASSERT( !mbIsLocked, "text edit source was not unlocked before dispose!" );
     if( mpObject )
         mpObject->RemoveObjectUser( *this );
 

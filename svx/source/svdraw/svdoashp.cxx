@@ -492,7 +492,7 @@ bool SdrObjCustomShape::UseNoFillStyle() const
     const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
         *pAny >>= sShapeType;
-    bRet = IsCustomShapeFilledByDefault( EnhancedCustomShapeTypeNames::Get( sType ) ) == false;
+    bRet = !IsCustomShapeFilledByDefault( EnhancedCustomShapeTypeNames::Get( sType ) );
 
     return bRet;
 }
@@ -1588,12 +1588,12 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
         if ( ( ( xFact.GetNumerator() < 0 ) && ( xFact.GetDenominator() > 0 ) ) ||
             ( ( xFact.GetNumerator() > 0 ) && ( xFact.GetDenominator() < 0 ) ) )
         {
-            SetMirroredX( IsMirroredX() == false );
+            SetMirroredX( !IsMirroredX() );
         }
         if ( ( ( yFact.GetNumerator() < 0 ) && ( yFact.GetDenominator() > 0 ) ) ||
             ( ( yFact.GetNumerator() > 0 ) && ( yFact.GetDenominator() < 0 ) ) )
         {
-            SetMirroredY( IsMirroredY() == false );
+            SetMirroredY( !IsMirroredY() );
         }
     }
 
