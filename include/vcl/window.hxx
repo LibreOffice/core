@@ -702,7 +702,8 @@ public:
     virtual void                        KeyInput( const KeyEvent& rKEvt );
     virtual void                        KeyUp( const KeyEvent& rKEvt );
     virtual void                        PrePaint();
-    virtual void                        Paint( const Rectangle& rRect );
+    virtual void                        Paint(vcl::RenderContext* pRenderContext, const Rectangle& rRect);
+    virtual void                        Paint(const Rectangle& rRect);
     virtual void                        Erase() SAL_OVERRIDE;
     virtual void                        Erase( const Rectangle& rRect ) SAL_OVERRIDE { ::OutputDevice::Erase( rRect ); }
 
