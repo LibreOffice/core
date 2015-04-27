@@ -1771,9 +1771,9 @@ void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const OUString& 
     }
 }
 
-long Outliner::RemovingPagesHdl( OutlinerView* pView )
+bool Outliner::RemovingPagesHdl( OutlinerView* pView )
 {
-    return aRemovingPagesHdl.IsSet() ? aRemovingPagesHdl.Call( pView ) : sal_True;
+    return !aRemovingPagesHdl.IsSet() || aRemovingPagesHdl.Call( pView );
 }
 
 bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 _nFirstPage, sal_Int32 nPages )

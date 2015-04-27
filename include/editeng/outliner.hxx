@@ -777,7 +777,7 @@ public:
     sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(nDepthChangedHdlPrevDepth); }
     ParaFlag        GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
-    long            RemovingPagesHdl( OutlinerView* );
+    bool            RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link& rLink){aRemovingPagesHdl=rLink;}
     Link            GetRemovingPagesHdl() const { return aRemovingPagesHdl; }
     long            IndentingPagesHdl( OutlinerView* );
