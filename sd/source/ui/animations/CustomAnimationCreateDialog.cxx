@@ -311,7 +311,7 @@ IMPL_LINK( CustomAnimationCreateTabPage, implDoubleClickHdl, Control*, pControl 
     if( pControl == mpLBEffects )
     {
         if( mpLBEffects->GetSelectEntryCount() )
-            mpParent->EndDialog( sal_True );
+            mpParent->EndDialog( RET_OK );
     }
     return 0;
 }

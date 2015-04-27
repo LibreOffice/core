@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                     return 0;
             }
             m_pName->SetText(sName);
-            EndDialog( sal_True );
+            EndDialog( RET_OK );
         }
     }
     catch( const Exception& )

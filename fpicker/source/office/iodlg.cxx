@@ -806,7 +806,7 @@ IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl)
     }
     else
     {
-        EndDialog( sal_False );
+        EndDialog( RET_CANCEL );
     }
     return 1L;
 }
@@ -1113,7 +1113,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
     if ( nRet )
     {
-        pThis->EndDialog( sal_True );
+        pThis->EndDialog( RET_OK );
     }
 
     return nRet;
@@ -1380,7 +1380,7 @@ void SvtFileDialog::OpenMultiSelection_Impl()
         nRet = 1;
 
     if ( nRet )
-        EndDialog( sal_True );
+        EndDialog( RET_OK );
 }
 
 

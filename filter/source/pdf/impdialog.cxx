@@ -305,7 +305,7 @@ ImpPDFTabGeneralPage* ImpPDFTabDialog::getGeneralPage() const
 
 IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl)
 {
-    EndDialog( sal_False );
+    EndDialog( RET_CANCEL );
     return 0;
 }
 

@@ -402,7 +402,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
         OUString aOUStr( &cChar, 1 );
         m_pShowText->SetText( aOUStr );
     }
-    EndDialog( sal_True );
+    EndDialog( RET_OK );
     return 0;
 }
 
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl)
         sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
         m_pShowText->SetText(OUString(&cChar, 1));
     }
-    EndDialog( sal_True );
+    EndDialog( RET_OK );
     return 0;
 }
 

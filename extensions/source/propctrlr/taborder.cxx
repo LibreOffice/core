@@ -281,7 +281,7 @@ namespace pcr
         // TODO: UNO action (to bracket all the single actions which are being created)
         m_xModel->setControlModels( aSortedControlModelSeq );
 
-        EndDialog( sal_True );
+        EndDialog( RET_OK );
         return 0;
     }
 

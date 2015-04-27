@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl)
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
     m_aTabBgColor = aColor;
-    EndDialog( sal_True );
+    EndDialog( RET_OK );
     return 0;
 }
 
@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl)
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
     m_aTabBgColor = aColor;
-    EndDialog( sal_True );
+    EndDialog( RET_OK );
     return 0;
 }
 
@@ -156,7 +156,7 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
             sal_uInt16 nItemId = GetSelectItemId();
             const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : Color( COL_AUTO );
             m_pTabBgColorDlg->m_aTabBgColor = aColor;
-            m_pTabBgColorDlg->EndDialog(sal_True);
+            m_pTabBgColorDlg->EndDialog(RET_OK);
         }
         break;
     }

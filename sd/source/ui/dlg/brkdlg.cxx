@@ -157,7 +157,7 @@ short BreakDlg::Execute()
 IMPL_LINK_NOARG(BreakDlg, InitialUpdate)
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
-    EndDialog(sal_True);
+    EndDialog(RET_OK);
     return 0L;
 }
 
