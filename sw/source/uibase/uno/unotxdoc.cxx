@@ -3289,7 +3289,7 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #if defined WNT
     sal_Int64 nWindowHandle;
     Parent >>= nWindowHandle;
-    aData.hDC = (HDC) nWindowHandle;
+    aData.hWnd = (HWND) nWindowHandle;
     VirtualDevice aDevice(&aData, Size(1, 1), (sal_uInt16)32);
     paintTile( aDevice, nOutputWidth, nOutputHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight );
     #else
