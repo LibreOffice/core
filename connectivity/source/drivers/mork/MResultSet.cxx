@@ -352,7 +352,7 @@ bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload) throw(SQLExcep
 //    else
 //        m_aQuery.resyncRow(cardNumber);
 
-    if ( validRow( cardNumber ) == false )
+    if ( !validRow( cardNumber ) )
         return false;
 
     (m_aRow->get())[0] = (sal_Int32)cardNumber;
@@ -378,7 +378,7 @@ bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload) throw(SQLExcep
 
 const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if ( fetchRow( cardNumber ) == false )
+    if ( !fetchRow( cardNumber ) )
     {
         OSL_FAIL("fetchRow() returned False" );
         m_bWasNull = true;
@@ -1421,7 +1421,7 @@ bool OResultSet::validRow( sal_uInt32 nRow)
 #if OSL_DEBUG_LEVEL > 0
             OSL_TRACE("validRow: waiting...");
 #endif
-            if (m_aQueryHelper.checkRowAvailable( nRow ) == false)
+            if (!m_aQueryHelper.checkRowAvailable( nRow ))
             {
                 SAL_INFO(
                     "connectivity.mork",
@@ -1555,7 +1555,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
 {
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     ResultSetEntryGuard aGuard( *this );
-    if ( fetchCurrentRow() == false ) {
+    if ( !fetchCurrentRow() ) {
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
     }
 
@@ -1647,7 +1647,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
 {
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     ResultSetEntryGuard aGuard( *this );
-    if ( fetchCurrentRow() == false ) {
+    if ( !fetchCurrentRow() ) {
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
     }
 
@@ -1667,7 +1667,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 {
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     ResultSetEntryGuard aGuard( *this );
-    if ( fetchCurrentRow() == false )
+    if ( !fetchCurrentRow() )
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
 
     checkPendingUpdate();
