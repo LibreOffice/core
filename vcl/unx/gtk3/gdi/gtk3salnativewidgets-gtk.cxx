@@ -1091,9 +1091,17 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
     }
-    else if ((nType == CTRL_EDITBOX || nType == CTRL_LISTBOX || nType == CTRL_COMBOBOX) && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == CTRL_EDITBOX && nPart == PART_ENTIRE_CONTROL)
     {
         aEditRect = AdjustRectForTextBordersPadding(mpEntryStyle, rValue.getNumericVal(), rControlRegion);
+    }
+    else if (nType == CTRL_LISTBOX && nPart == PART_ENTIRE_CONTROL)
+    {
+        aEditRect = AdjustRectForTextBordersPadding(mpListboxStyle, rValue.getNumericVal(), rControlRegion);
+    }
+    else if (CTRL_COMBOBOX && nPart == PART_ENTIRE_CONTROL)
+    {
+        aEditRect = AdjustRectForTextBordersPadding(mpComboboxStyle, rValue.getNumericVal(), rControlRegion);
     }
     else
     {
