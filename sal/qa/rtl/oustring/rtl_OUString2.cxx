@@ -62,7 +62,7 @@ class number : public CppUnit::TestFixture
             double nValueATOF = doubleToFloat(atof( sValue.getStr() ));
 
             bool bEqualResult = is_float_equal(_nValue, nValueATOF);
-            CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+            CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult);
         }
 
     void number_float_test(float _nValue)
@@ -133,7 +133,7 @@ private:
             double nValueATOF = atof( sValue.getStr() );
 
             bool bEqualResult = is_double_equal(_nValue, nValueATOF);
-            CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+            CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult);
         }
 
     void number_double_test(double _nValue)
@@ -256,7 +256,7 @@ public:
                 //printf("result data is %e\n", nValueToDouble);
 
                 bool bEqualResult = is_double_equal(nValueToDouble, nValueATOF);
-                CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+                CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult);
             }
 
         void toDouble_test(rtl::OString const& _sValue)
@@ -273,22 +273,22 @@ public:
         void toDouble_selftest()
             {
                 printf("Start selftest:\n");
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.01) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000001) == false);
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.01));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.0001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.00001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.000001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.0000001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.00000001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.000000001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.0000000001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.00000000001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.000000000001));
+                CPPUNIT_ASSERT (!is_double_equal(1.0, 1.0000000000001));
                 // we check til 15 values after comma
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000000001) == true);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000000001) == true);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000000001) == true);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000000001));
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000000001));
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000000001));
                 printf("Selftest done.\n");
             }
 
@@ -391,7 +391,7 @@ public:
                 //printf("the result str is %.10f\n", nValueToFloat);
 
                 bool bEqualResult = is_float_equal(nValueToFloat, nValueATOF);
-                CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+                CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult);
             }
 
         void toFloat_test(rtl::OString const& _sValue)
@@ -408,14 +408,14 @@ public:
         void toFloat_selftest()
             {
                 printf("Start selftest:\n");
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.01f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.001f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.0001f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.00001f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.000002f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.0000001f) == true);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.00000001f) == true);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.000000001f) == true);
+                CPPUNIT_ASSERT (!is_float_equal(1.0f, 1.01f));
+                CPPUNIT_ASSERT (!is_float_equal(1.0f, 1.001f));
+                CPPUNIT_ASSERT (!is_float_equal(1.0f, 1.0001f));
+                CPPUNIT_ASSERT (!is_float_equal(1.0f, 1.00001f));
+                CPPUNIT_ASSERT (!is_float_equal(1.0f, 1.000002f));
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.0000001f));
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.00000001f));
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.000000001f));
 
                 printf("Selftest done.\n");
             }

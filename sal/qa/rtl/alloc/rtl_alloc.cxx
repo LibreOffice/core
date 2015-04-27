@@ -73,7 +73,7 @@ public:
     {
         CPPUNIT_ASSERT_MESSAGE( "Can get zero memory.", m_pMemory != NULL);
         memset(m_pMemory, 1, m_nSizeOfMemory);
-        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pMemory, m_nSizeOfMemory, 1) == true);
+        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pMemory, m_nSizeOfMemory, 1));
     }
 
     void rtl_reallocateMemory_001()
@@ -83,7 +83,7 @@ public:
 
         CPPUNIT_ASSERT_MESSAGE( "Can reallocate memory.", m_pMemory != NULL);
         memset(m_pMemory, 2, nSize);
-        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pMemory, nSize, 2) == true);
+        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pMemory, nSize, 2));
     }
 
     CPPUNIT_TEST_SUITE(Memory);
@@ -123,10 +123,10 @@ public:
     void rtl_allocateZeroMemory_001()
     {
         CPPUNIT_ASSERT_MESSAGE( "Can get zero memory.", m_pZeroMemory != NULL);
-        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 0) == true);
+        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 0));
 
         memset(m_pZeroMemory, 3, m_nSizeOfZeroMemory);
-        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 3) == true);
+        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 3));
     }
 
     CPPUNIT_TEST_SUITE(TestZeroMemory);

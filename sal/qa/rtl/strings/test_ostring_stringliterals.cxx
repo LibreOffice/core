@@ -126,53 +126,53 @@ void test::ostring::StringLiterals::checkUsage()
     rtl_string_unittest_non_const_literal_function = false; // and check for non-const variants
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = "foo" );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( "fOo" ));
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foobarfoo.match( "bar", 3 ));
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foobar.match( "foo" ));
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( FooBaRfoo.matchIgnoreAsciiCase( "bAr", 3 ));
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( "fOo" ));
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foobar.startsWith( "foo" ));
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foobar.endsWith( "bar" ));
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
 //    rtl_string_unittest_const_literal_function = false;
 //    CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( "bar" ));
 //    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foo == "foo" );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( "foo" == foo );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foo != "bar" );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( "foo" != bar );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foobarfoo.indexOf( "foo", 1 ) == 6 );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
 //    rtl_string_unittest_const_literal_function = false;
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( "foo" ) == 6 );
 //    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
     // if this is not true, some of the calls above converted to OString
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
+    CPPUNIT_ASSERT( !rtl_string_unittest_const_literal );
     // if this is not true, some of the calls above used non-const variants
-    CPPUNIT_ASSERT( rtl_string_unittest_non_const_literal_function == false );
+    CPPUNIT_ASSERT( !rtl_string_unittest_non_const_literal_function );
 }
 
 void test::ostring::StringLiterals::checkNonConstUsage()
@@ -223,8 +223,8 @@ void test::ostring::StringLiterals::checkNonConstUsage()
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( (const char*)foo_c ) == 6 );
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( foo_c ) == 6 );
     // if this is not true, some of the calls above used const variants
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == false );
+    CPPUNIT_ASSERT( !rtl_string_unittest_const_literal );
+    CPPUNIT_ASSERT( !rtl_string_unittest_const_literal_function );
 }
 
 void test::ostring::StringLiterals::checkBuffer()
@@ -232,15 +232,15 @@ void test::ostring::StringLiterals::checkBuffer()
     rtl::OStringBuffer buf;
     rtl_string_unittest_const_literal_function = false;
     buf.append( "foo" );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     CPPUNIT_ASSERT_EQUAL( rtl::OString( "foo" ), buf.toString());
     rtl_string_unittest_const_literal_function = false;
     buf.append( "bar" );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     CPPUNIT_ASSERT_EQUAL( rtl::OString( "foobar" ), buf.toString());
     rtl_string_unittest_const_literal_function = false;
     buf.insert( 3, "baz" );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     CPPUNIT_ASSERT_EQUAL( rtl::OString( "foobazbar" ), buf.toString());
 
     rtl::OString foobazbard( "foobazbard" );
@@ -250,8 +250,8 @@ void test::ostring::StringLiterals::checkBuffer()
     char d[] = "d";
     CPPUNIT_ASSERT_EQUAL( foobazbard, buf.append( d ).toString());
     CPPUNIT_ASSERT_EQUAL( foodbazbard, buf.insert( 3, d ).toString() );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == false );
+    CPPUNIT_ASSERT( !rtl_string_unittest_const_literal );
+    CPPUNIT_ASSERT( !rtl_string_unittest_const_literal_function );
 }
 
 #undef CONST_CTOR_USED

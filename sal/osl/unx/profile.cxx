@@ -196,7 +196,7 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 
     pthread_mutex_lock(&(pProfile->m_AccessLock));
 
-    if ( pProfile->m_bIsValid == false )
+    if ( !pProfile->m_bIsValid )
     {
         SAL_WARN("sal.osl", "!pProfile->m_bIsValid");
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
@@ -293,7 +293,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 
     pthread_mutex_lock(&(pProfile->m_AccessLock));
 
-    if ( pProfile->m_bIsValid == false )
+    if ( !pProfile->m_bIsValid )
     {
         SAL_WARN_IF(!pProfile->m_bIsValid, "sal.osl", "!pProfile->m_bIsValid");
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
@@ -370,7 +370,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     pthread_mutex_lock(&(pTmpProfile->m_AccessLock));
 
-    if ( pTmpProfile->m_bIsValid == false )
+    if ( !pTmpProfile->m_bIsValid )
     {
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
@@ -504,7 +504,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
 
     pthread_mutex_lock(&(pTmpProfile->m_AccessLock));
 
-    if ( pTmpProfile->m_bIsValid == false )
+    if ( !pTmpProfile->m_bIsValid )
     {
         SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid");
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
@@ -657,7 +657,7 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
 
     pthread_mutex_lock(&(pTmpProfile->m_AccessLock));
 
-    if ( pTmpProfile->m_bIsValid == false )
+    if ( !pTmpProfile->m_bIsValid )
     {
         SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid");
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
@@ -727,7 +727,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 
     pthread_mutex_lock(&(pTmpProfile->m_AccessLock));
 
-    if ( pTmpProfile->m_bIsValid == false )
+    if ( !pTmpProfile->m_bIsValid )
     {
         SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid"); 
 
@@ -810,7 +810,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
 
     pthread_mutex_lock(&(pTmpProfile->m_AccessLock));
 
-    if ( pTmpProfile->m_bIsValid == false )
+    if ( !pTmpProfile->m_bIsValid )
     {
         SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid"); 
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
