@@ -419,10 +419,26 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
         pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
-        pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+        pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                 XML_id, I32S( GetNewShapeID( xShape ) ),
                 XML_name, IDS( CustomShape ),
                 FSEND );
+
+        if( GETA( URL ) )
+        {
+            OUString sURL;
+            mAny >>= sURL;
+                if( !sURL.isEmpty() ) {
+                    OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                    sURL, true );
+
+                    mpFS->singleElementNS( XML_a, XML_hlinkClick,
+                    FSNS( XML_r,XML_id ), USS( sRelId ),
+                    FSEND );
+                 }
+        }
+        pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
         WriteNonVisualProperties( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
