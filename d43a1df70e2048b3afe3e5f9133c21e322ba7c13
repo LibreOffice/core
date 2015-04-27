@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_896db9ce",
+        "filename": "unotools/source/ucbhelper/tempfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-04-27T07:37:58Z",
+      "side": 1,
+      "message": "probably better to implicitly stick to the defaults, nInitSize\u003d512, nResize\u003d64",
+      "revId": "d43a1df70e2048b3afe3e5f9133c21e322ba7c13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
