@@ -390,16 +390,13 @@ class PerformanceHash   :   public  std::unordered_map< OUString                
                 ++pStepper;
             }
 
-            while(
-                    ( pStepper != end()     )   &&
-                    ( bFound   == false )
-                )
+            while( pStepper != end() && !bFound )
             {
                 bFound = Wildcard::match( sSearchValue, pStepper->first );
                 // If element was found - break loop by setting right return value
                 // and don't change "pStepper". He must point to found element!
                 // Otherwise step to next one.
-                if( bFound == false )
+                if( !bFound )
                     ++pStepper;
             }
             return bFound;

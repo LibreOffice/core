@@ -120,7 +120,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
     if ( xOwner.is() )
     {
         // Work only, if search was not started here ...!
-        if( m_bRecursiveSearchProtection == false )
+        if( !m_bRecursiveSearchProtection )
         {
             // This class is a helper for services, which must implement XFrames.
             // His parent and children are MY parent and children to.

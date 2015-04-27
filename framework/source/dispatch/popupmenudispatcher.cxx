@@ -282,7 +282,7 @@ void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( Runtim
     // Safe impossible cases
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
-    if( m_bAlreadyDisposed == false )
+    if( !m_bAlreadyDisposed )
     {
         m_bAlreadyDisposed = true;
 
