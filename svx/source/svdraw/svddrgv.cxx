@@ -342,7 +342,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     }
                     else
                     {
-                        if (!IsCrookAllowed(true) && !IsCrookAllowed(false))
+                        if (!IsCropAllowed())
                             return false;
                         mpCurrentSdrDragMethod = new SdrDragCrop(*this);
                     }
