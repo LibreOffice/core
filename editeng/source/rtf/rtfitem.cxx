@@ -1388,7 +1388,7 @@ static void SetBorderLine( int nBorderTyp, SvxBoxItem& rItem,
 }
 
 void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
-                                    int bTableDef )
+                                   bool bTableDef )
 {
     // then read the border attribute
     SvxBoxItem aAttr( aPardMap.nBox );
@@ -1577,7 +1577,7 @@ inline sal_uInt32 CalcShading( sal_uInt32 nColor, sal_uInt32 nFillColor, sal_uIn
 }
 
 void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
-                                        int bTableDef )
+                                       bool bTableDef )
 {
     // then read the border attribute
     bool bContinue = true;

@@ -392,11 +392,11 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             {
                 case RTF_SHADINGDEF:
                     static_cast<SvxRTFParser*>(pInfo->pParser)->ReadBackgroundAttr(
-                        pInfo->nToken, pInsDefault->aItemSet, sal_True );
+                        pInfo->nToken, pInsDefault->aItemSet, true );
                 break;
                 case RTF_BRDRDEF:
                     static_cast<SvxRTFParser*>(pInfo->pParser)->ReadBorderAttr(
-                        pInfo->nToken, pInsDefault->aItemSet, sal_True );
+                        pInfo->nToken, pInsDefault->aItemSet, true );
                 break;
             }
         }

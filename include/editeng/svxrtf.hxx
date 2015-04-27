@@ -328,8 +328,8 @@ public:
     RTFPardAttrMapIds& GetPardMap() { return aPardMap; }
     RTFPlainAttrMapIds& GetPlainMap() { return aPlainMap; }
     // to be able to assign them from the outside as for example table cells
-    void ReadBorderAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False );
-    void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False  );
+    void ReadBorderAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false );
+    void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false  );
 
     // for asynchronous read from the SvStream
     virtual void Continue( int nToken ) SAL_OVERRIDE;

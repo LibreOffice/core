@@ -415,7 +415,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
 //                  ((SvxRTFParser*)pInfo->pParser)->ReadBackgroundAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );
                 break;
                 case RTF_BRDRDEF:
-                    static_cast<SvxRTFParser*>(pInfo->pParser)->ReadBorderAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );
+                    static_cast<SvxRTFParser*>(pInfo->pParser)->ReadBorderAttr(pInfo->nToken, mpInsDefault->maItemSet, true );
                 break;
             }
         }
