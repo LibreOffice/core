@@ -136,7 +136,7 @@ private:
     void    FillCurrencyBox();
     void    FillFormatListBox_Impl( std::vector<OUString>& rEntries );
     void    UpdateOptions_Impl( bool bCheckCatChange );
-    void    UpdateFormatListBox_Impl( sal_uInt16 bCat, bool bUpdateEdit );
+    void    UpdateFormatListBox_Impl( bool bCat, bool bUpdateEdit );
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
     void    SetCategory( sal_uInt16 nPos );

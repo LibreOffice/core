@@ -567,7 +567,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     m_pLbLanguage->SelectLanguage( eLangType );
     if(pAutoEntryAttr)
         AddAutomaticLanguage_Impl(eLangType, pAutoEntryAttr->GetValue());
-    UpdateFormatListBox_Impl(sal_False,true);
+    UpdateFormatListBox_Impl(false,true);
 
 //! This spoils everything because it rematches currency formats based on
 //! the selected m_pLbCurrency entry instead of the current format.
@@ -925,7 +925,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             else
                 SetCategory(nCategory );
 
-            UpdateFormatListBox_Impl( sal_True, false );
+            UpdateFormatListBox_Impl( true, false );
         }
     }
     else if ( m_pLbFormat->GetEntryCount() > 0 )
@@ -998,7 +998,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
 
 void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
     (
-        sal_uInt16 bCat,        // Category or country/language ListBox?
+        bool bCat,        // Category or country/language ListBox?
         bool   bUpdateEdit
     )
 {
@@ -1225,7 +1225,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
     // category-ListBox -------------------------------------------------
     if (pLb == m_pLbCategory || pLb == m_pLbCurrency)
     {
-        UpdateFormatListBox_Impl( sal_True, true );
+        UpdateFormatListBox_Impl( true, true );
         EditHdl_Impl( NULL );
         UpdateOptions_Impl( false );
 
@@ -1236,7 +1236,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
     // language/country-ListBox ----------------------------------------------
     if (pLb == m_pLbLanguage)
     {
-        UpdateFormatListBox_Impl( sal_False, true );
+        UpdateFormatListBox_Impl( false, true );
         EditHdl_Impl(m_pEdFormat);
 
         return 0;
