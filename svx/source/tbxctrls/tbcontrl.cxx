@@ -192,6 +192,8 @@ private:
     }
     DECL_DLLPRIVATE_LINK( CheckAndMarkUnknownFont, VclWindowEvent* );
 
+    void            SetOptimalSize();
+
 protected:
     virtual void    Select() SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -909,10 +911,7 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( vcl::Window* pParent, const Reference<
     m_xFrame (_xFrame),
     mbEndPreview(false)
 {
-    Size aSize(LogicToPixel(aLogicalSize, MAP_APPFONT));
-    set_width_request(aSize.Width());
-    set_height_request(aSize.Height());
-    SetSizePixel(aSize);
+    SetOptimalSize();
     EnableControls_Impl();
     GetSubEdit()->AddEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
 }
@@ -1031,12 +1030,20 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
     return nHandled || FontNameBox::Notify( rNEvt );
 }
 
+void SvxFontNameBox_Impl::SetOptimalSize()
+{
+    Size aSize(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    set_width_request(aSize.Width());
+    set_height_request(aSize.Height());
+    SetSizePixel(aSize);
+}
+
 void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+        SetOptimalSize();
     }
     else if ( ( rDCEvt.GetType() == DataChangedEventType::FONTS ) ||
               ( rDCEvt.GetType() == DataChangedEventType::DISPLAY ) )
