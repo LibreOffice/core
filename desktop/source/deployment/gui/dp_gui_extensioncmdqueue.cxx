@@ -511,7 +511,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         approve = true;
     }
 
-    if (approve == false && abort == false)
+    if (!approve && !abort)
     {
         // forward to UUI handler:
         if (! m_xHandler.is()) {

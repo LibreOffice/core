@@ -76,7 +76,7 @@ void BaseCommandEnv::handle(
 void BaseCommandEnv::handle_(bool approve, bool abort,
                              Reference< task::XInteractionRequest> const & xRequest )
 {
-    if (approve == false && abort == false)
+    if (!approve && !abort)
     {
         //not handled so far -> forwarding
         if (m_forwardHandler.is())

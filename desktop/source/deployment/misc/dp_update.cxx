@@ -362,7 +362,7 @@ UpdateInfoMap getOnlineUpdateInfos(
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(extension), UpdateInfo(extension)));
-            OSL_ASSERT(insertRet.second == true);
+            OSL_ASSERT(insertRet.second);
             (void)insertRet;
         }
     }
@@ -375,7 +375,7 @@ UpdateInfoMap getOnlineUpdateInfos(
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(*i), UpdateInfo(*i)));
-            OSL_ASSERT(insertRet.second == true);
+            OSL_ASSERT(insertRet.second);
             (void)insertRet;
         }
     }

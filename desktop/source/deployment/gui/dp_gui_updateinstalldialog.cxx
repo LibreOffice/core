@@ -657,7 +657,7 @@ void UpdateCommandEnv::handle(
         approve = true;
     }
 
-    if (approve == false)
+    if (!approve)
     {
         //forward to interaction handler for main dialog.
         handleInteractionRequest( m_xContext, xRequest );

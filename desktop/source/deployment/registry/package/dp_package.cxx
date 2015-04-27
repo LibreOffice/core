@@ -706,7 +706,7 @@ bool BackendImpl::PackageImpl::checkLicense(
                 throw css::deployment::DeploymentException(
                     "Could not interact with user.", 0, Any());
 
-            if (approve == true)
+            if (approve)
                 return true;
             else
                 return false;

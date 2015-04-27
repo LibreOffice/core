@@ -1180,7 +1180,7 @@ void ExtensionBox_Impl::checkEntries()
     ITER iIndex = m_vEntries.begin();
     while ( iIndex < m_vEntries.end() )
     {
-        if ( (*iIndex)->m_bChecked == false )
+        if ( !(*iIndex)->m_bChecked )
         {
             (*iIndex)->m_bChecked = true;
             bNeedsUpdate = true;
