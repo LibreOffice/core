@@ -1001,9 +1001,6 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                         bContentReadonly = IsReadonlyAccordingACL( aPhysPath.getStr() );
                 }
 #endif
-
-                if ( bContentReadonly )
-                    pImp->m_bOriginallyReadOnly = true;
             }
 
             // do further checks only if the file not readonly in fs
@@ -2468,6 +2465,18 @@ void SfxMedium::Init_Impl()
     }
 
     SetIsRemote_Impl();
+
+    osl::DirectoryItem item;
+    if (osl::DirectoryItem::get(GetName(), item) == osl::FileBase::E_None) {
+        osl::FileStatus stat(osl_FileStatus_Mask_Attributes);
+        if (item.getFileStatus(stat) == osl::FileBase::E_None
+            && stat.isValid(osl_FileStatus_Mask_Attributes))
+        {
+            if ((stat.getAttributes() & osl_File_Attribute_ReadOnly) != 0) {
+                pImp->m_bOriginallyReadOnly = true;
+            }
+        }
+    }
 }
 
 
@@ -2865,14 +2874,15 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
         }
     }
 
+    bool readOnly = false;
     SFX_ITEMSET_ARG( pImp->m_pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, false );
     if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
-        pImp->m_bOriginallyReadOnly = true;
+        readOnly = true;
 
     SFX_ITEMSET_ARG( pImp->m_pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, false );
     if (!pFileNameItem) throw uno::RuntimeException();
     pImp->m_aLogicName = pFileNameItem->GetValue();
-    pImp->m_nStorOpenMode = pImp->m_bOriginallyReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
+    pImp->m_nStorOpenMode = readOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
     Init_Impl();
 }
 
