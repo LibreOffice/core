@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_a9ce7db2",
+        "filename": "include/svx/unoshprp.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-04-27T10:32:09Z",
+      "side": 1,
+      "message": "Would we need a fallback awt:Gradient here?",
+      "revId": "3bd500b498994f0f7456a21fe85494880a572542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_49c4a191",
+        "filename": "include/svx/unoshprp.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-04-27T10:32:09Z",
+      "side": 1,
+      "message": "c.f. the change in writer",
+      "revId": "3bd500b498994f0f7456a21fe85494880a572542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_69c16580",
+        "filename": "include/svx/unoshprp.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-04-27T10:32:09Z",
+      "side": 1,
+      "message": "same here - fallback needed?",
+      "revId": "3bd500b498994f0f7456a21fe85494880a572542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_c9cf31b2",
+        "filename": "sw/source/core/unocore/unomap.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-04-27T10:32:09Z",
+      "side": 1,
+      "message": "Might need old gradient fallback?",
+      "revId": "3bd500b498994f0f7456a21fe85494880a572542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_e9d47548",
+        "filename": "sw/source/core/unocore/unomap.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-04-27T10:32:09Z",
+      "side": 1,
+      "message": "Another api change?",
+      "revId": "3bd500b498994f0f7456a21fe85494880a572542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_89c939af",
+        "filename": "sw/source/core/unocore/unomap.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-04-27T10:32:09Z",
+      "side": 1,
+      "message": "Same here, might need fallback",
+      "revId": "3bd500b498994f0f7456a21fe85494880a572542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
