@@ -1147,14 +1147,25 @@ String MN_GRF_POPUPMENU
     MN_ALIGNMENT_FRAME \
     MN_ANCHOR
 
+#define MN_CROP_GRAPHIC \
+    MenuItem \
+    {\
+        Identifier = SID_CROP_GRAPHIC ; \
+        Command = ".uno:CropGraphic" ; \
+        Text [ en-US ] = "Crop I~mage" ; \
+    };\
+
 Menu MN_GRF_POPUPMENU
 {
     ItemList =
     {
-        MenuItem { ITEM_EXTERNAL_EDIT };
         MenuItem { ITEM_CHANGE_PICTURE };
-        MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_SAVE_GRAPHIC };
+        MenuItem { ITEM_COMPRESS_GRAPHIC };
+        MenuItem { ITEM_EXTERNAL_EDIT };
+        SEPARATOR ;
+
+        MN_CROP_GRAPHIC
         SEPARATOR ;
 
         MN_ANCHOR

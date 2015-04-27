@@ -384,6 +384,10 @@
                     <menu:menuitem menu:id=".uno:FormatArea"/>
                     <menu:menuitem menu:id=".uno:TextAttributes"/>
                     <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:CropGraphic"/>
+                    <menu:menuitem menu:id=".uno:ExternalEdit"/>
+                    <menu:menuitem menu:id=".uno:CompressGraphic"/>
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
                 </menu:menupopup>
             </menu:menu>

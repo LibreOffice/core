@@ -235,6 +235,14 @@
         };\
     };
 
+#define MN_CROP_GRAPHIC \
+    MenuItem \
+    {\
+        Identifier = SID_CROP_GRAPHIC ; \
+        Command = ".uno:CropGraphic" ; \
+        Text [ en-US ] = "Crop I~mage" ; \
+    };
+
  // Popup-Menues ---------------------------------------------------------------------
 
 String RID_POPUP_DRAW
@@ -360,6 +368,10 @@ Menu RID_POPUP_GRAPHIC
         MenuItem { ITEM_OPEN_HYPERLINK };
         MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_EXTERNAL_EDIT };
+
+        MenuItem { Separator = TRUE ; };
+
+        MN_CROP_GRAPHIC
     };
 };
 

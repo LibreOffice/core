@@ -30,6 +30,7 @@
  <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CropGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:GrafAttrCrop"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>

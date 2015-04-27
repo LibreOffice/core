@@ -216,4 +216,41 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
     Invalidate();
 }
 
+void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_CROP_GRAPHIC );
+}
+
+void ScGraphicShell::ExecuteCropGraphic( SfxRequest& )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        {
+            pView->SetEditMode(SDREDITMODE_EDIT);
+            pView->SetDragMode(SDRDRAG_CROP);
+        }
+    }
+
+    Invalidate();
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

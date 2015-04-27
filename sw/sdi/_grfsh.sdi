@@ -90,6 +90,13 @@ interface BaseTextGraphic
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_CROP_GRAPHIC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_INSERT_GRAPHIC // zeigt auf FN_FORMAT_GRAFIC_DLG
     [
         ExecMethod = Execute ;
