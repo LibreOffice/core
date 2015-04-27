@@ -890,11 +890,11 @@ VclGrid::array_type VclGrid::assembleGrid() const
     array_type B(boost::extents[nNonEmptyCols][nNonEmptyRows]);
     for (sal_Int32 x = 0, x2 = 0; x < nMaxX; ++x)
     {
-        if (aNonEmptyCols[x] == false)
+        if (!aNonEmptyCols[x])
             continue;
         for (sal_Int32 y = 0, y2 = 0; y < nMaxY; ++y)
         {
-            if (aNonEmptyRows[y] == false)
+            if (!aNonEmptyRows[y])
                 continue;
             GridEntry &rEntry = A[x][y];
             B[x2][y2++] = rEntry;

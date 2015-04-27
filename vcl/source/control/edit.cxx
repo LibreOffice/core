@@ -2851,7 +2851,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
     SolarMutexGuard aVclGuard;
 
     if ( !IsTracking() && maSelection.Len() &&
-         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || mpDDInfo->bStarterOfDD == false) ) // Kein Mehrfach D&D
+         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || !mpDDInfo->bStarterOfDD) ) // Kein Mehrfach D&D
     {
         Selection aSel( maSelection );
         aSel.Justify();

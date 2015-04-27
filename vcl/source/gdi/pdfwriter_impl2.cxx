@@ -1493,7 +1493,7 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
             for( sal_Int32 i = i_nKeyLength, y = 0; y < 5 ; y++ )
                 io_rProperties.EncryptionKey[i++] = 0;
 
-            if( io_rProperties.Security128bit == false )
+            if( !io_rProperties.Security128bit )
             {
                 //3.4
                 //step 2 and 3

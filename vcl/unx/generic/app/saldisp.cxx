@@ -582,7 +582,7 @@ void SalDisplay::Init()
             bExactResolution = true;
         }
     }
-    if( bExactResolution == false )
+    if( !bExactResolution )
     {
         /*  if Xft.dpi is not set, try and find the DPI from the
          *  reported screen sizes and resolution. If there are multiple

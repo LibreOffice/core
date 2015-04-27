@@ -385,7 +385,7 @@ struct ImplDelData
 
     bool                IsDead() const
     {
-        DBG_ASSERT( mbDel == false, "object deleted while in use !" );
+        DBG_ASSERT( !mbDel, "object deleted while in use !" );
         return mbDel;
     }
 

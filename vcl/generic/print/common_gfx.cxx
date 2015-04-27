@@ -1144,7 +1144,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
     bool bEndComments = false;
     while( ! aStream.IsEof()
            && ( ( fLeft == 0 && fRight == 0 && fTop == 0 && fBottom == 0 ) ||
-                ( aDocTitle.isEmpty() && bEndComments == false ) )
+                ( aDocTitle.isEmpty() && !bEndComments ) )
            )
     {
         aStream.ReadLine( aLine );
