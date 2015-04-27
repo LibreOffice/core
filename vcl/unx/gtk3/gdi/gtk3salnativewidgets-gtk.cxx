@@ -1498,7 +1498,10 @@ static GtkWidget* gDumbContainer;
 void GtkData::initNWF()
 {
     ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maNWFData.mbFlatMenu = true;
     pSVData->maNWFData.mbCheckBoxNeedsErase = true;
+    pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
+    pSVData->maNWFData.mbDDListBoxNoTextArea = true;
 }
 
 void GtkData::deInitNWF()
