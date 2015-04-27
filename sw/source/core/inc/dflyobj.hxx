@@ -101,9 +101,12 @@ public:
     virtual       void       NbcMove  (const Size& rSiz) SAL_OVERRIDE;
     virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
                                        const Fraction& yFact) SAL_OVERRIDE;
+    virtual       void       NbcCrop(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
     virtual       void       Move  (const Size& rSiz) SAL_OVERRIDE;
     virtual       void       Resize(const Point& rRef, const Fraction& xFact,
                                     const Fraction& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
+    virtual       void       Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual       void       addCropHandles(SdrHdlList& rTarget) const;
 
     const SwFrmFmt *GetFmt() const;
           SwFrmFmt *GetFmt();
