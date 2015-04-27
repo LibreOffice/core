@@ -93,7 +93,6 @@
 #include <svx/xflclit.hxx>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
-#define LOGICAL_EDIT_HEIGHT         12
 
 // don't make more than 15 entries visible at once
 #define MAX_STYLES_ENTRIES          static_cast< sal_uInt16 >( 15 )
@@ -529,8 +528,6 @@ void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
-        Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
-        SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
 
     ComboBox::DataChanged( rDCEvt );
@@ -1040,8 +1037,6 @@ void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
-        Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
-        SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
     else if ( ( rDCEvt.GetType() == DataChangedEventType::FONTS ) ||
               ( rDCEvt.GetType() == DataChangedEventType::DISPLAY ) )

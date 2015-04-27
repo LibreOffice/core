@@ -51,8 +51,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-#define LOGICAL_EDIT_HEIGHT         12
-
 SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
     nCurPos     ( 0 ),
@@ -235,8 +233,6 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
-        Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
-        SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
 
     LineLB::DataChanged( rDCEvt );

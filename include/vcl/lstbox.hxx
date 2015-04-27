@@ -103,8 +103,6 @@ public:
                                          long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
     void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE
                         { Control::SetPosSizePixel( rNewPos, rNewSize ); }
-    void                SetDropDownSizePixel( const Size& rNewSize )
-    { if( IsDropDownBox() ) setPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
 
     Rectangle           GetDropDownPosSizePixel() const;
 

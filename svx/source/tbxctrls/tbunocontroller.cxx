@@ -38,8 +38,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#define LOGICAL_EDIT_HEIGHT         12
-
 using namespace ::com::sun::star;
 
 namespace {
@@ -131,8 +129,6 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     SetValue( 0 );
     SetText( "" );
 }
-
-
 
 void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
 {
@@ -263,12 +259,7 @@ void SvxFontSizeBox_Impl::SetOptimalSize()
     Size aPrefSize(LogicToPixel(m_aLogicalSize, MAP_APPFONT));
     aPrefSize.Width() = get_preferred_size().Width();
     SetSizePixel(aPrefSize);
-    Size aDropSize(LogicToPixel(Size(0, LOGICAL_EDIT_HEIGHT), MAP_APPFONT));
-    aDropSize.Width() = aPrefSize.Width();
-    SetDropDownSizePixel(aDropSize);
 }
-
-
 
 void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
