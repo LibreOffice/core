@@ -1024,24 +1024,6 @@ Menu MN_ANNOTATION_POPUPMENU
 {
     ItemList =
     {
-        MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
-                };\
-        SEPARATOR ;
-        SEPARATOR ;
         MN_ANNOTATIONS
     };
 };
