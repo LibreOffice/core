@@ -510,49 +510,42 @@ static typelib_TypeClass cpp_mediate(
 extern "C" void privateSnippetExecutor( ... )
 {
     sal_uInt64 gpreg[ppc64::MAX_GPR_REGS];
+
+    register long r3 asm("r3"); gpreg[0] = r3;
+    register long r4 asm("r4"); gpreg[1] = r4;
+    register long r5 asm("r5"); gpreg[2] = r5;
+    register long r6 asm("r6"); gpreg[3] = r6;
+    register long r7 asm("r7"); gpreg[4] = r7;
+    register long r8 asm("r8"); gpreg[5] = r8;
+    register long r9 asm("r9"); gpreg[6] = r9;
+    register long r10 asm("r10"); gpreg[7] = r10;
+
     double fpreg[ppc64::MAX_SSE_REGS];
 
     __asm__ __volatile__ (
-        "std 3,   0(%0)\t\n"
-        "std 4,   8(%0)\t\n"
-        "std 5,  16(%0)\t\n"
-        "std 6,  24(%0)\t\n"
-        "std 7,  32(%0)\t\n"
-        "std 8,  40(%0)\t\n"
-        "std 9,  48(%0)\t\n"
-        "std 10, 56(%0)\t\n"
-        "stfd 1,   0(%1)\t\n"
-        "stfd 2,   8(%1)\t\n"
-        "stfd 3,  16(%1)\t\n"
-        "stfd 4,  24(%1)\t\n"
-        "stfd 5,  32(%1)\t\n"
-        "stfd 6,  40(%1)\t\n"
-        "stfd 7,  48(%1)\t\n"
-        "stfd 8,  56(%1)\t\n"
-        "stfd 9,  64(%1)\t\n"
-        "stfd 10, 72(%1)\t\n"
-        "stfd 11, 80(%1)\t\n"
-        "stfd 12, 88(%1)\t\n"
-        "stfd 13, 96(%1)\t\n"
-    : : "r" (gpreg), "r" (fpreg)
-        : "r0", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11",
-          "fr1", "fr2", "fr3", "fr4", "fr5", "fr6", "fr7", "fr8", "fr9",
+        "stfd 1,   0(%0)\t\n"
+        "stfd 2,   8(%0)\t\n"
+        "stfd 3,  16(%0)\t\n"
+        "stfd 4,  24(%0)\t\n"
+        "stfd 5,  32(%0)\t\n"
+        "stfd 6,  40(%0)\t\n"
+        "stfd 7,  48(%0)\t\n"
+        "stfd 8,  56(%0)\t\n"
+        "stfd 9,  64(%0)\t\n"
+        "stfd 10, 72(%0)\t\n"
+        "stfd 11, 80(%0)\t\n"
+        "stfd 12, 88(%0)\t\n"
+        "stfd 13, 96(%0)\t\n"
+    : : "r" (fpreg)
+        : "fr1", "fr2", "fr3", "fr4", "fr5", "fr6", "fr7", "fr8", "fr9",
           "fr10", "fr11", "fr12", "fr13"
     );
 
-    volatile long nOffsetAndIndex;
+    register long r11 asm("r11");
+    const long nOffsetAndIndex = r11;
 
-    //mr %r3, %r11            # move into arg1 the 64bit value passed from OOo
-    __asm__ __volatile__ (
-                "mr     %0,    11\n\t"
-                : "=r" (nOffsetAndIndex) : );
-
-    volatile long sp;
-
-    //stack pointer
-    __asm__ __volatile__ (
-                "mr     %0,    1\n\t"
-                : "=r" (sp) : );
+    register long r1 asm("r1");
+    const long sp = r1;
 
 #if defined(_CALL_ELF) && _CALL_ELF == 2
     volatile long nRegReturn[2];
