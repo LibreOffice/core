@@ -1029,7 +1029,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     // check for encryption, if necessary get password
     OUString aPwd( rPwd );
     bool bIsEncrypted = false;
-    if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
+    if( !checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) )
     {
         SAL_INFO(
             "sdext.pdfimport",
