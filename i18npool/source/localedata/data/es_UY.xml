@@ -29,6 +29,10 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE unoid="generic">
+    <!-- redefining separators and using with other format codes is ok here, as
+         long as only LongDate... and TimeAM/PM differ from the original
+         locale's
+     -->
     <Separators>
       <DateSeparator>/</DateSeparator>
       <ThousandSeparator>.</ThousandSeparator>
