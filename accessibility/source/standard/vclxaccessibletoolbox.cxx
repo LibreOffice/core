@@ -464,7 +464,7 @@ void VCLXAccessibleToolBox::UpdateItemEnabled_Impl( sal_Int32 _nPos )
 
 void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent, bool _bShow )
 {
-    vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
+    vcl::Window* pChildWindow = rVclWindowEvent.GetData<vcl::Window *>();
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pChildWindow
         && pToolBox
@@ -534,10 +534,10 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         case VCLEVENT_TOOLBOX_SELECT:
         {
             ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
-            if ( rVclWindowEvent.GetData() )
+            if ( rVclWindowEvent.GetData<sal_Int32>() )
             {
-                UpdateChecked_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
-                UpdateIndeterminate_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
+                UpdateChecked_Impl( rVclWindowEvent.GetData<sal_Int32>() );
+                UpdateIndeterminate_Impl( rVclWindowEvent.GetData<sal_Int32>() );
             }
             else if( pToolBox->GetItemPos(pToolBox->GetCurItemId()) != TOOLBOX_ITEM_NOTFOUND )
             {
@@ -554,10 +554,10 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
 
         case VCLEVENT_TOOLBOX_ITEMUPDATED:
         {
-            if ( rVclWindowEvent.GetData() )
+            if ( rVclWindowEvent.GetData<sal_Int32>() )
             {
                 UpdateChecked_Impl( TOOLBOX_ITEM_NOTFOUND );
-                UpdateIndeterminate_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
+                UpdateIndeterminate_Impl( rVclWindowEvent.GetData<sal_Int32>() );
             }
         break;
         }
@@ -567,11 +567,11 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             break;
 
         case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
-            ReleaseFocus_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
+            ReleaseFocus_Impl( rVclWindowEvent.GetData<sal_Int32>() );
             break;
 
         case VCLEVENT_TOOLBOX_ITEMADDED :
-            UpdateItem_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()), true );
+            UpdateItem_Impl( rVclWindowEvent.GetData<sal_Int32>(), true );
             break;
 
         case VCLEVENT_TOOLBOX_ITEMREMOVED :
@@ -583,7 +583,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
 
         case VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED:
         {
-            sal_Int32 nPos = (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
+            sal_Int32 nPos = rVclWindowEvent.GetData<sal_Int32>();
             ToolBoxItemsMap::iterator aAccessiblePos( m_aAccessibleChildren.find( nPos ) );
             if ( m_aAccessibleChildren.end() != aAccessiblePos )
             {
@@ -597,20 +597,20 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             break;
         }
         case VCLEVENT_TOOLBOX_ITEMTEXTCHANGED :
-            UpdateItemName_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
+            UpdateItemName_Impl( rVclWindowEvent.GetData<sal_Int32>() );
             break;
 
         case VCLEVENT_TOOLBOX_ITEMENABLED :
         case VCLEVENT_TOOLBOX_ITEMDISABLED :
         {
-            UpdateItemEnabled_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
+            UpdateItemEnabled_Impl( rVclWindowEvent.GetData<sal_Int32>() );
             break;
         }
 
         case VCLEVENT_DROPDOWN_OPEN:
         case VCLEVENT_DROPDOWN_CLOSE:
         {
-            UpdateCustomPopupItemp_Impl( static_cast< vcl::Window* >( rVclWindowEvent.GetData() ), rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN );
+            UpdateCustomPopupItemp_Impl( rVclWindowEvent.GetData<vcl::Window *>(), rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN );
             break;
         }
 
@@ -777,7 +777,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( c
 Reference< XAccessible > VCLXAccessibleToolBox::GetItemWindowAccessible( const VclWindowEvent& rVclWindowEvent )
 {
     Reference< XAccessible > xReturn;
-    vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
+    vcl::Window* pChildWindow = rVclWindowEvent.GetData<vcl::Window *>();
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pChildWindow && pToolBox )
     {

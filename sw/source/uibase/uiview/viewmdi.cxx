@@ -265,22 +265,27 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
     {
         VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
         OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
-        vcl::Window* pChildWin = static_cast< vcl::Window* >( pVclEvent->GetData() );
 
         switch ( pVclEvent->GetId() )
         {
             case VCLEVENT_WINDOW_HIDE:
+            {
+                vcl::Window* pChildWin = pVclEvent->GetData< vcl::Window* >();
                 if( pChildWin == m_pHScrollbar )
                     ShowHScrollbar( false );
                 else if( pChildWin == m_pVScrollbar )
                     ShowVScrollbar( false );
-                break;
+            }
+            break;
             case VCLEVENT_WINDOW_SHOW:
+            {
+                vcl::Window* pChildWin = pVclEvent->GetData< vcl::Window* >();
                 if( pChildWin == m_pHScrollbar )
                     ShowHScrollbar( true );
                 else if( pChildWin == m_pVScrollbar )
                     ShowVScrollbar( true );
-                break;
+            }
+            break;
         }
     }
 

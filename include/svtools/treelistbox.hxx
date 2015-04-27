@@ -623,7 +623,11 @@ protected:
     bool            IsCellFocusEnabled() const;
     bool            SetCurrentTabPos( sal_uInt16 _nNewPos );
     sal_uInt16      GetCurrentTabPos() const;
-    void            CallImplEventListeners(sal_uLong nEvent, void* pData);
+    template<typename T = std::nullptr_t>
+    void            CallImplEventListeners(sal_uLong nEvent, T pData = 0)
+    {
+        CallEventListeners(nEvent, pData);
+    }
 
     void            ImplEditEntry( SvTreeListEntry* pEntry );
 

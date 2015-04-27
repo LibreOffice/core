@@ -143,7 +143,7 @@ namespace accessibility
                     if( pBox && (pBox->HasFocus() || bNeedFocus) )
                     {
                         uno::Any aOldValue, aNewValue;
-                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                        SvTreeListEntry* pEntry = rVclWindowEvent.GetData< SvTreeListEntry* >();
                         if ( pEntry )
                         {
                             AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
@@ -184,7 +184,7 @@ namespace accessibility
                 break;
             case VCLEVENT_LISTBOX_ITEMREMOVED:
                 {
-                    SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                    SvTreeListEntry* pEntry = rVclWindowEvent.GetData< SvTreeListEntry* >();
                     if ( pEntry )
                     {
                         RemoveChildEntries(pEntry);
@@ -209,7 +209,7 @@ namespace accessibility
             case VCLEVENT_ITEM_EXPANDED :
             case VCLEVENT_ITEM_COLLAPSED :
                 {
-                    SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                    SvTreeListEntry* pEntry = rVclWindowEvent.GetData< SvTreeListEntry* >();
                     if ( pEntry )
                     {
                         AccessibleListBoxEntry* pAccListBoxEntry =
@@ -237,7 +237,7 @@ namespace accessibility
 
     AccessibleListBoxEntry* AccessibleListBox::GetCurEventEntry( const VclWindowEvent& rVclWindowEvent )
     {
-        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+        SvTreeListEntry* pEntry = rVclWindowEvent.GetData< SvTreeListEntry* >();
         if ( !pEntry )
             pEntry = getListBox()->GetCurEntry();
 
