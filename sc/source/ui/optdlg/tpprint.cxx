@@ -48,7 +48,7 @@ SfxTabPage* ScTpPrintOptions::Create( vcl::Window* pParent, const SfxItemSet* rA
     return new ScTpPrintOptions( pParent, *rAttrSet );
 }
 
-int ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( pSetP );

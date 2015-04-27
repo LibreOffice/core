@@ -315,7 +315,7 @@ void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
     Reset(&aSet);
 }
 
-int SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
     if( _pSet )

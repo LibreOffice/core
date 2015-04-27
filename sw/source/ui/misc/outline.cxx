@@ -810,7 +810,7 @@ void SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& )
     LevelHdl(m_pLevelLB);
 }
 
-int SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)
+SfxTabPage::sfxpg SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)
 {
     SwOutlineTabDialog::SetActNumLevel(nActLevel);
     return LEAVE_PAGE;

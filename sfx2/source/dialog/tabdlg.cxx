@@ -200,7 +200,7 @@ void SfxTabPage::ActivatePage( const SfxItemSet& )
 {
 }
 
-int SfxTabPage::DeactivatePage( SfxItemSet* )
+SfxTabPage::sfxpg SfxTabPage::DeactivatePage( SfxItemSet* )
 
 /*  [Description]
 

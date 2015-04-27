@@ -60,7 +60,7 @@ private:
     void SetLinks ();
 
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
 public:
     SvxGeneralTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

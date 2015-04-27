@@ -157,9 +157,9 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
         return false;
 }
 
-int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 {
-    int nReturn = KEEP_PAGE;
+    sfxpg nReturn = KEEP_PAGE;
 
     double fEps;
     if( m_pEdEps->GetValue( fEps ) && (fEps > 0.0) )

@@ -66,7 +66,7 @@ public:
     void                EnableTransparency(bool bColor, bool bGraphic);
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
     SvxBackgroundTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );

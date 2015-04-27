@@ -354,7 +354,7 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     maCurrentConfig = maSavedConfig;
 }
 
-int ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)
+SfxTabPage::sfxpg ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 {
     // What's this method for ?
     return KEEP_PAGE;

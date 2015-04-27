@@ -91,7 +91,7 @@ public:
     virtual void    Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
     virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual int     DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 };
 
 #endif

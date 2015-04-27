@@ -161,7 +161,7 @@ class SwColumnPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
     SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet);
 

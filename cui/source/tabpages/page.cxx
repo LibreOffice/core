@@ -1450,7 +1450,7 @@ void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 {
     // Inquiry whether the page margins are beyond the printing area.
     // If not, ask user whether they shall be taken.

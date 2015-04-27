@@ -102,7 +102,7 @@ inline void OfaMemoryOptionsPage::SetNfGraphicObjectCacheLast( long nSizeInBytes
     m_pNfGraphicObjectCache->SetLast( long( double( nSizeInBytes ) * BYTES2NF ) );
 }
 
-int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );

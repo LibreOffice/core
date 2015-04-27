@@ -217,7 +217,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( CheckChanges_Impl() == -1L )
         return KEEP_PAGE;

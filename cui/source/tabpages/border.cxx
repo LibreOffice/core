@@ -576,7 +576,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
 
 
-int SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );

@@ -129,7 +129,7 @@ SwCondCollPage::~SwCondCollPage()
 
 }
 
-int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
+SfxTabPage::sfxpg SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if( _pSet )
         FillItemSet(_pSet);

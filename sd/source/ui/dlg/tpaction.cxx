@@ -351,7 +351,7 @@ void SdTPAction::ActivatePage( const SfxItemSet& )
 {
 }
 
-int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
+SfxTabPage::sfxpg SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
 {
     if( pPageSet )
         FillItemSet( pPageSet );

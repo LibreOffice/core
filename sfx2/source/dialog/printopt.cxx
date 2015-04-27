@@ -159,7 +159,7 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
     ImplUpdateControls( m_pPrinterOutputRB->IsChecked() ? &maPrinterOptions : &maPrintFileOptions );
 }
 
-int SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet )
+SfxTabPage::sfxpg SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet )
 {
     if( pItemSet )
         FillItemSet( pItemSet );

@@ -599,7 +599,7 @@ void SvxStdParagraphTabPage::EnableRelativeMode()
     bRelativeMode = true;
 }
 
-int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     ELRLoseFocusHdl( NULL );
 
@@ -1020,7 +1020,7 @@ SvxParaAlignTabPage::~SvxParaAlignTabPage()
 {
 }
 
-int SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
@@ -1786,7 +1786,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_pOrphanBox->SaveValue();
 }
 
-int SvxExtParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxExtParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );

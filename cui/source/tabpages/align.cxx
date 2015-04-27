@@ -298,7 +298,7 @@ void AlignmentTabPage::Reset( const SfxItemSet* rCoreAttrs )
     UpdateEnableControls();
 }
 
-int AlignmentTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg AlignmentTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( _pSet );

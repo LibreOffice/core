@@ -310,7 +310,7 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pDlg )
     {
@@ -752,7 +752,7 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     bool bPosInputOk = true;
 

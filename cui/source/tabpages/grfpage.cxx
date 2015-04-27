@@ -382,11 +382,11 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     CalcZoom();
 }
 
-int SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 /*--------------------------------------------------------------------

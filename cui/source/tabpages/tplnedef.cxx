@@ -194,7 +194,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 
 
 
-int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     CheckChanges_Impl();
 

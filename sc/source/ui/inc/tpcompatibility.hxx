@@ -23,7 +23,7 @@ public:
 
     virtual bool FillItemSet(SfxItemSet* rCoreAttrs) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet* rCoreAttrs) SAL_OVERRIDE;
-    virtual int DeactivatePage(SfxItemSet* pSet = NULL) SAL_OVERRIDE;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = NULL) SAL_OVERRIDE;
 
 private:
     explicit ScTpCompatOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs);

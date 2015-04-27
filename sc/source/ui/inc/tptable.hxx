@@ -35,7 +35,7 @@ public:
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     using SfxTabPage::DeactivatePage;
-    virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
     virtual void        DataChanged     ( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:

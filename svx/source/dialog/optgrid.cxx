@@ -278,7 +278,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );

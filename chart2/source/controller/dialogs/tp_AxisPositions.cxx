@@ -252,7 +252,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
     }
 }
 
-int AxisPositionsTabPage::DeactivatePage(SfxItemSet* pItemSet)
+SfxTabPage::sfxpg AxisPositionsTabPage::DeactivatePage(SfxItemSet* pItemSet)
 {
     if( pItemSet )
         FillItemSet( pItemSet );

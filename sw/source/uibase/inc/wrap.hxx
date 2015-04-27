@@ -85,7 +85,7 @@ class SwWrapTabPage: public SfxTabPage
     void            ApplyImageList();
     void            EnableModes(const SfxItemSet& rSet);
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     DECL_LINK( RangeModifyHdl, MetricField * );

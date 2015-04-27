@@ -38,7 +38,7 @@ public:
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* rInAttrs ) SAL_OVERRIDE;
     using TabPage::DeactivatePage;
-    virtual int DeactivatePage( SfxItemSet* pItemSet = NULL ) SAL_OVERRIDE;
+    virtual sfxpg DeactivatePage( SfxItemSet* pItemSet = NULL ) SAL_OVERRIDE;
 
     void SetNumFormatter( SvNumberFormatter* pFormatter );
     void SetNumFormat();

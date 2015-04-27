@@ -210,7 +210,7 @@ void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
         *pLocalOptions = static_cast<const ScTpViewItem*>(pItem)->GetViewOptions();
 }
 
-int ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if(pSetP)
         FillItemSet(pSetP);
@@ -627,7 +627,7 @@ void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& /* rCoreSet */ )
 {
 }
 
-int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if(pSetP)
         FillItemSet(pSetP);

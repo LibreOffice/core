@@ -71,7 +71,7 @@ void ScTpDefaultsOptions::Reset(const SfxItemSet* rCoreSet)
     m_pEdSheetPrefix->SaveValue();
 }
 
-int ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
+SfxTabPage::sfxpg ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 {
     return KEEP_PAGE;
 }

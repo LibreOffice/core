@@ -2167,9 +2167,9 @@ void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
     }
 }
 
-int SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
+SfxTabPage::sfxpg SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
-    int nRet = LEAVE_PAGE;
+    sfxpg nRet = LEAVE_PAGE;
     if ( !m_pPropertiesCtrl->AreAllLinesValid() )
         nRet = KEEP_PAGE;
     return nRet;
@@ -2666,7 +2666,7 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
     m_pPropertiesCtrl.setScrollRange();
 }
 
-int SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
+SfxTabPage::sfxpg SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
     return LEAVE_PAGE;
 }

@@ -215,7 +215,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 
 
 
-int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
+SfxTabPage::sfxpg SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 {
     if ( CheckChanges_Impl() == -1L )
         return KEEP_PAGE;

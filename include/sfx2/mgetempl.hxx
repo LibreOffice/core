@@ -94,7 +94,7 @@ protected:
     using TabPage::ActivatePage;
         virtual void        ActivatePage(const SfxItemSet &) SAL_OVERRIDE;
         using TabPage::DeactivatePage;
-    virtual int     DeactivatePage(SfxItemSet * = 0) SAL_OVERRIDE;
+    virtual sfxpg DeactivatePage(SfxItemSet * = 0) SAL_OVERRIDE;
 };
 
 #endif

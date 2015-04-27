@@ -478,7 +478,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 
 
 
-int SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( CheckChanges_Impl() == -1L )
         return KEEP_PAGE;

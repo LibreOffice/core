@@ -1036,7 +1036,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     RangeHdl( 0 );
 }
 
-int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );

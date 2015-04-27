@@ -468,12 +468,12 @@ void SwLabPage::ActivatePage(const SfxItemSet& rSet)
     Reset( &rSet );
 }
 
-int SwLabPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwLabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
         FillItemSet(_pSet);
 
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 void SwLabPage::FillItem(SwLabItem& rItem)
@@ -605,7 +605,7 @@ void SwVisitingCardPage::ActivatePage(const SfxItemSet& rSet)
     UpdateFields();
 }
 
-int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
         FillItemSet(_pSet);
@@ -737,7 +737,7 @@ void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
     Reset(&rSet);
 }
 
-int  SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
         FillItemSet(_pSet);
@@ -825,7 +825,7 @@ void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)
     Reset(&rSet);
 }
 
-int  SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
         FillItemSet(_pSet);

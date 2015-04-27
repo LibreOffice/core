@@ -594,7 +594,7 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 
 }
 
-int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
     //os: VCL doesn't take care of making the active widget
     //in the dialog lose the focus
@@ -705,7 +705,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
                 _pSet->Put(SwPtrItem(FN_TABLE_REP, pTblData));
         }
     }
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 //Description: Page column configuration
@@ -1105,7 +1105,7 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 
 }
 
-int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
@@ -1164,7 +1164,7 @@ int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
         }
         _pSet->Put(SwPtrItem( FN_TABLE_REP, pTblData ));
     }
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)

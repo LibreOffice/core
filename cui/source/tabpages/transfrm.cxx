@@ -326,7 +326,7 @@ void SvxAngleTabPage::ActivatePage(const SfxItemSet& /*rSet*/)
 
 
 
-int SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
@@ -560,7 +560,7 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
@@ -996,7 +996,7 @@ void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
     {

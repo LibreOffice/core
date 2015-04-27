@@ -276,11 +276,11 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     bModified = false;
 }
 
-int  SvxSingleNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SvxSingleNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
         FillItemSet(_pSet);
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
@@ -435,11 +435,11 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     bModified = false;
 }
 
-int  SvxBulletPickTabPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SvxBulletPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
         FillItemSet(_pSet);
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
@@ -632,11 +632,11 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     bModified = false;
 }
 
-int  SvxNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SvxNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
         FillItemSet(_pSet);
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
@@ -863,11 +863,11 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     bModified = false;
 }
 
-int  SvxBitmapPickTabPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SvxBitmapPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
         FillItemSet(_pSet);
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -1192,11 +1192,11 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
 
 }
 
-int     SvxNumOptionsTabPage::DeactivatePage(SfxItemSet * _pSet)
+SfxTabPage::sfxpg SvxNumOptionsTabPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if(_pSet)
         FillItemSet(_pSet);
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 bool    SvxNumOptionsTabPage::FillItemSet( SfxItemSet* rSet )
@@ -2954,7 +2954,7 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
     m_pPreviewWIN->Invalidate();
 }
 
-int  SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
     {
@@ -2963,7 +2963,7 @@ int  SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
         DistanceHdl_Impl(m_pIndentMF);
         FillItemSet(_pSet);
     }
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 bool SvxNumPositionTabPage::FillItemSet( SfxItemSet* rSet )

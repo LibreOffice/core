@@ -472,7 +472,7 @@ void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
     InitPreview ( rSet );
 }
 
-int SvxTransparenceTabPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SvxTransparenceTabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet( _pSet );
@@ -932,7 +932,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( nDlgType == 0 ) // area dialog
     {

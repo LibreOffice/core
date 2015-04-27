@@ -183,7 +183,7 @@ void OpenGLCfg::setForceOpenGL(bool bOpenGL)
 
 // class OfaMiscTabPage --------------------------------------------------
 
-int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
+SvxGeneralTabPage::sfxpg OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
     if ( pSet_ )
         FillItemSet( pSet_ );

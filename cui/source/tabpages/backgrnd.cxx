@@ -1037,7 +1037,7 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
 
 
 
-int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 /*  [Description]
 

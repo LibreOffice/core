@@ -315,7 +315,7 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     return bDataChanged;
 }
 
-int ScTablePage::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTablePage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( pSetP );

@@ -1252,12 +1252,12 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
     Update(NULL);
 }
 
-int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
         FillItemSet(_pSet);
 
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )

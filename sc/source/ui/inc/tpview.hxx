@@ -76,7 +76,7 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 };
 
@@ -124,7 +124,7 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
     void                SetDocument(ScDocument* pPtr){pDoc = pPtr;}
 

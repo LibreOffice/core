@@ -607,7 +607,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
 
 
-int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
+SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
 /*  [Description]
 
@@ -624,7 +624,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 */
 
 {
-    int nRet = SfxTabPage::LEAVE_PAGE;
+    sfxpg nRet = SfxTabPage::LEAVE_PAGE;
 
     if ( m_pNameRw->IsModified() )
     {
@@ -677,7 +677,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
                 return SfxTabPage::KEEP_PAGE;
             }
             bModified = true;
-            nRet |= (int)SfxTabPage::REFRESH_SET;
+            nRet = sfxpg(nRet | SfxTabPage::REFRESH_SET);
         }
     }
 

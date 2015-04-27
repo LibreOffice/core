@@ -1702,7 +1702,7 @@ void SwFrmPage::ActivatePage(const SfxItemSet& rSet)
     m_pFollowTextFlowCB->SaveValue();
 }
 
-int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
+SfxTabPage::sfxpg SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if ( _pSet )
     {
@@ -1717,7 +1717,7 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
         _pSet->Put( aAnc );
     }
 
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 // swap left/right with inside/outside
@@ -2515,11 +2515,11 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
     return bModified;
 }
 
-int SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if( _pSet )
         FillItemSet( _pSet );
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)

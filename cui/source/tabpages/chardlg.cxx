@@ -1171,7 +1171,7 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
@@ -1711,7 +1711,7 @@ IMPL_LINK( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
 }
 
 
-int SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
@@ -2878,7 +2878,7 @@ void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
@@ -3442,7 +3442,7 @@ void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );

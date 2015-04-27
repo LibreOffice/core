@@ -69,7 +69,7 @@ friend class SwDropCapsPict;
      SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage();
 
-    virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     void    FillSet( SfxItemSet &rSet );
 
     DECL_LINK(ClickHdl, void *);

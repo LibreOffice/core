@@ -916,7 +916,7 @@ void OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
     static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(true);
 }
 
-int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
+SfxTabPage::sfxpg OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
 {
     return LEAVE_PAGE;
 }
@@ -1417,7 +1417,7 @@ void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
     static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(true);
 }
 
-int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
+SfxTabPage::sfxpg OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
 {
     return LEAVE_PAGE;
 }

@@ -43,7 +43,7 @@ protected:
     virtual void    ActivatePage() SAL_OVERRIDE;
     virtual void    DeactivatePage() SAL_OVERRIDE;
     virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual int     DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
     PushButton*         m_pBtnEdit;

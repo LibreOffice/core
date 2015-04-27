@@ -353,7 +353,7 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
 
 
 
-int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );

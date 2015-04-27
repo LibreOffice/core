@@ -229,7 +229,7 @@ bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
     return bDataModified;
 }
 
-int ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( pSetP );

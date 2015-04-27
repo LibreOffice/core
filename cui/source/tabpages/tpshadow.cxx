@@ -239,7 +239,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( _pSet );

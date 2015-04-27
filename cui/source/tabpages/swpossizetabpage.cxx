@@ -1047,7 +1047,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     }
 }
 
-int  SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( _pSet );

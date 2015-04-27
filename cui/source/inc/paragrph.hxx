@@ -94,7 +94,7 @@ private:
     DECL_LINK( AutoHdl_Impl, CheckBox* );
 
 protected:
-    virtual int             DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 
 public:
@@ -159,7 +159,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     virtual                 ~SvxParaAlignTabPage();
 
 protected:
-    virtual int             DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
@@ -204,7 +204,7 @@ public:
     void                DisablePageBreak();
 
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
                         SvxExtParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

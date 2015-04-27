@@ -884,7 +884,7 @@ void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
 {
 }
 
-int SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( _pSet );

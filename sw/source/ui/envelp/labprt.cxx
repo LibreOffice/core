@@ -103,12 +103,12 @@ void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )
     Reset(&rSet);
 }
 
-int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if ( _pSet )
         FillItemSet(_pSet);
 
-    return sal_True;
+    return LEAVE_PAGE;
 }
 
 void SwLabPrtPage::FillItem(SwLabItem& rItem)

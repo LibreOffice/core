@@ -148,7 +148,7 @@ public:
     using SfxTabPage::DeactivatePage;
 
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
                         virtual ~SvxCharNamePage();
@@ -230,7 +230,7 @@ private:
 public:
     using SfxTabPage::DeactivatePage;
 
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
@@ -310,7 +310,7 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 public:
@@ -355,7 +355,7 @@ public:
     using SfxTabPage::DeactivatePage;
 
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );

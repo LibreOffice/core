@@ -382,7 +382,7 @@ void ScaleTabPage::Reset(const SfxItemSet* rInAttrs)
     SetNumFormat();
 }
 
-int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
+SfxTabPage::sfxpg ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 {
     if( !pNumFormatter )
     {

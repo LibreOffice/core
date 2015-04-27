@@ -794,7 +794,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 }
 
 
-int SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );

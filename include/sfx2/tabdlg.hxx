@@ -272,7 +272,7 @@ public:
         using TabPage::ActivatePage;
         using TabPage::DeactivatePage;
     virtual void            ActivatePage( const SfxItemSet& );
-    virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 );
     void                    SetUserData(const OUString& rString)
                               { aUserString = rString; }
     OUString                GetUserData() { return aUserString; }

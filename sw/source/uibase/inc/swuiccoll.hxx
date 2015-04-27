@@ -50,7 +50,7 @@ class SwCondCollPage : public SfxTabPage
     SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwCondCollPage();
 
-    virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
     DECL_LINK( OnOffHdl, CheckBox* );
     DECL_LINK( AssignRemoveHdl, PushButton*);

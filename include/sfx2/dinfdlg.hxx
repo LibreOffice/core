@@ -518,7 +518,7 @@ protected:
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
-    virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
@@ -640,7 +640,7 @@ protected:
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
-    virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );

@@ -120,7 +120,7 @@ void ScHFPage::ActivatePage( const SfxItemSet& rSet )
     SvxHFPage::ActivatePage( rSet );
 }
 
-int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSetP ) )
         if ( pSetP )

@@ -398,12 +398,12 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
     m_pPreviewWIN->Invalidate();
 }
 
-int  SwNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
+SfxTabPage::sfxpg SwNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     SwOutlineTabDialog::SetActNumLevel(nActNumLvl);
     if(_pSet)
         FillItemSet(_pSet);
-    return sal_True;
+    return LEAVE_PAGE;
 
 }
 

@@ -239,7 +239,7 @@ void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
     m_pExampleWN->Invalidate();
 }
 
-int SwTextGridPage::DeactivatePage( SfxItemSet* )
+SfxTabPage::sfxpg SwTextGridPage::DeactivatePage( SfxItemSet* )
 {
     return LEAVE_PAGE;
 }

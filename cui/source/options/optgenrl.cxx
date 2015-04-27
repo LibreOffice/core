@@ -431,7 +431,7 @@ void SvxGeneralTabPage::SetAddress_Impl()
 
 
 
-int SvxGeneralTabPage::DeactivatePage( SfxItemSet* pSet_ )
+SvxGeneralTabPage::sfxpg SvxGeneralTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
     if ( pSet_ )
         FillItemSet( pSet_ );

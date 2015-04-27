@@ -570,7 +570,7 @@ SwDropCapsPage::~SwDropCapsPage()
 {
 }
 
-int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
+SfxTabPage::sfxpg SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if ( _pSet )
         FillSet( *_pSet );

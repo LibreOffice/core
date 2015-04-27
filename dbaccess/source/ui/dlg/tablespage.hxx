@@ -50,7 +50,7 @@ namespace dbaui
 
     public:
         virtual bool            FillItemSet(SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
-        virtual int             DeactivatePage(SfxItemSet* _pSet) SAL_OVERRIDE;
+        virtual sfxpg           DeactivatePage(SfxItemSet* _pSet) SAL_OVERRIDE;
         using OGenericAdministrationPage::DeactivatePage;
 
         virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

@@ -68,7 +68,7 @@ void ScTpCompatOptions::Reset(const SfxItemSet *rCoreAttrs)
     m_pLbKeyBindings->SaveValue();
 }
 
-int ScTpCompatOptions::DeactivatePage(SfxItemSet* /*pSet*/)
+SfxTabPage::sfxpg ScTpCompatOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 {
     return KEEP_PAGE;
 }

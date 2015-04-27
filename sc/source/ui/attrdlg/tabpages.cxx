@@ -137,7 +137,7 @@ bool ScTabPageProtection::FillItemSet( SfxItemSet* rCoreAttrs )
     return bAttrsChanged;
 }
 
-int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
+SfxTabPage::sfxpg ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( pSetP );

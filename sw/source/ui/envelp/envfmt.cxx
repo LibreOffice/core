@@ -452,7 +452,7 @@ void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
     Reset(&aSet);
 }
 
-int SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(_pSet);

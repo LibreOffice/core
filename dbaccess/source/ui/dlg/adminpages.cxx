@@ -66,7 +66,7 @@ namespace dbaui
         SetExchangeSupport(true);
     }
 
-    int OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
+    SfxTabPage::sfxpg OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
     {
         if (_pSet)
         {

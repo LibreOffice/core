@@ -1236,7 +1236,7 @@ void SwTOXSelectTabPage::ActivatePage( const SfxItemSet& )
     //nothing to do
 }
 
-int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
+SfxTabPage::sfxpg SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
         _pSet->Put(SfxUInt16Item(FN_PARAM_TOX_TYPE,
@@ -2068,7 +2068,7 @@ void SwTOXEntryTabPage::UpdateDescriptor()
         pCurrentForm->SetCommaSeparated(m_pCommaSeparatedCB->IsChecked());
 }
 
-int SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
+SfxTabPage::sfxpg SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
 {
     UpdateDescriptor();
     return LEAVE_PAGE;
@@ -3584,7 +3584,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     EnableSelectHdl(m_pParaLayLB);
 }
 
-int SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
+SfxTabPage::sfxpg SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
 {
     GetForm() = *m_pCurrentForm;
     return LEAVE_PAGE;

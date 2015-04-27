@@ -138,7 +138,7 @@ void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
         m_pPrinterInfo->SetText(pPrt->GetName());
 }
 
-int SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(_pSet);
