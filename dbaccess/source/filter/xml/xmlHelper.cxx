@@ -56,8 +56,8 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
             {
                 static const SvXMLEnumMapEntry aDisplayMap[] =
                 {
-                    { XML_VISIBLE,      sal_True },
-                    { XML_COLLAPSE,     sal_False },
+                    { XML_VISIBLE,      sal_uInt16(true) },
+                    { XML_COLLAPSE,     sal_uInt16(false) },
                     { XML_TOKEN_INVALID, 0 }
                 };
                 m_pDisplayHandler.reset(new XMLConstantsPropertyHandler(aDisplayMap, XML_TOKEN_INVALID ));

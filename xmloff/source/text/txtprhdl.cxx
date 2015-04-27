@@ -124,13 +124,13 @@ static SvXMLEnumMapEntry const pXML_HoriRelFrame_Enum[] =
 
 static SvXMLEnumMapEntry const pXML_HoriMirror_Enum[] =
 {
-    { XML_FROM_LEFT,        sal_False   },
-    { XML_FROM_INSIDE,      sal_True    },
-    { XML_LEFT,             sal_False   },
-    { XML_INSIDE,           sal_True    },
-    { XML_CENTER,           sal_False   },
-    { XML_RIGHT,            sal_False   },
-    { XML_OUTSIDE,          sal_True    },
+    { XML_FROM_LEFT,        sal_uInt16(false) },
+    { XML_FROM_INSIDE,      sal_uInt16(true) },
+    { XML_LEFT,             sal_uInt16(false) },
+    { XML_INSIDE,           sal_uInt16(true) },
+    { XML_CENTER,           sal_uInt16(false) },
+    { XML_RIGHT,            sal_uInt16(false) },
+    { XML_OUTSIDE,          sal_uInt16(true) },
     { XML_TOKEN_INVALID, 0 }
 };
 

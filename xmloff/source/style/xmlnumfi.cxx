@@ -322,15 +322,15 @@ static const ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 
 static const SvXMLEnumMapEntry aStyleValueMap[] =
 {
-    { XML_SHORT,            sal_False   },
-    { XML_LONG,             sal_True    },
+    { XML_SHORT,            sal_uInt16(false) },
+    { XML_LONG,             sal_uInt16(true) },
     { XML_TOKEN_INVALID,    0 }
 };
 
 static const SvXMLEnumMapEntry aFormatSourceMap[] =
 {
-    { XML_FIXED,            sal_False },
-    { XML_LANGUAGE,         sal_True  },
+    { XML_FIXED,            sal_uInt16(false) },
+    { XML_LANGUAGE,         sal_uInt16(true) },
     { XML_TOKEN_INVALID,    0 }
 };
 
