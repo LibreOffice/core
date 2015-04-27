@@ -94,6 +94,7 @@ public:
     void testPlotAreaManualLayoutXLSX();
     void testLegendManualLayoutXLSX();
     void testAxisCharacterPropertiesXLSX();
+    void testTitleCharacterPropertiesXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -152,6 +153,7 @@ public:
     CPPUNIT_TEST(testPlotAreaManualLayoutXLSX);
     CPPUNIT_TEST(testLegendManualLayoutXLSX);
     CPPUNIT_TEST(testAxisCharacterPropertiesXLSX);
+    CPPUNIT_TEST(testTitleCharacterPropertiesXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1406,6 +1408,19 @@ void Chart2ExportTest::testAxisCharacterPropertiesXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:txPr/a:p/a:pPr/a:defRPr", "b", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:txPr/a:p/a:pPr/a:defRPr", "strike", "sngStrike");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:txPr/a:p/a:pPr/a:defRPr/a:solidFill/a:srgbClr", "val", "ff0000");
+}
+
+void Chart2ExportTest::testTitleCharacterPropertiesXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "title_character_properties.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "sz", "2400");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "b", "1");
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr", "sz", "2400");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr", "b", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
