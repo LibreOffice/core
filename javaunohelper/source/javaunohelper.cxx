@@ -128,7 +128,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
         }
     }
 #endif
-    return bRet == false? JNI_FALSE : JNI_TRUE;
+    return bRet ? JNI_TRUE : JNI_FALSE;
 }
 
 /*
