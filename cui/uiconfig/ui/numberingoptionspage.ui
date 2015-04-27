@@ -57,6 +57,22 @@
     </columns>
     <data>
       <row>
+        <col id="0" translatable="yes">None</col>
+        <col id="1">5</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Bullet</col>
+        <col id="1">6</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Graphics</col>
+        <col id="1">8</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Linked graphics</col>
+        <col id="1">136</col>
+      </row>
+      <row>
         <col id="0" translatable="yes">1, 2, 3, ...</col>
         <col id="1">4</col>
       </row>
@@ -83,22 +99,6 @@
       <row>
         <col id="0" translatable="yes">a, .., aa, .., aaa, ...</col>
         <col id="1">10</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Bullet</col>
-        <col id="1">6</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Graphics</col>
-        <col id="1">8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Linked graphics</col>
-        <col id="1">136</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">None</col>
-        <col id="1">5</col>
       </row>
       <row>
         <col id="0" translatable="yes">Native Numbering</col>

@@ -26,6 +26,9 @@ Resource STRRES_NUMTYPES
 
         ItemList [ en-US ] =
         {
+            < "None" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Graphics" ;                  8/*SVX_NUM_BITMAP              */; > ;
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
             < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
             < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
@@ -33,9 +36,6 @@ Resource STRRES_NUMTYPES
             < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
             < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < "Image" ;                     8/*SVX_NUM_BITMAP              */; > ;
-            < "None" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
             < "Native Numbering" ;                      12 /*NATIVE_NUMBERING                   */; > ;
             < "А, Б, .., Аа, Аб, ... (Bulgarian)" ;     38 /*CHARS_CYRILLIC_UPPER_LETTER_BG     */; > ;
             < "а, б, .., аа, аб, ... (Bulgarian)" ;     39 /*CHARS_CYRILLIC_LOWER_LETTER_BG     */; > ;
