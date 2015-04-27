@@ -129,7 +129,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
 const vcl::Font& TabControl::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
-    return _rStyle.GetAppFont();
+    return _rStyle.GetTabFont();
 }
 
 const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) const

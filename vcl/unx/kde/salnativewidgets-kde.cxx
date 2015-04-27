@@ -1944,6 +1944,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetPushButtonFont( aFont );
     aStyleSettings.SetFieldFont( aFont );
     aStyleSettings.SetIconFont( aFont );
+    aStyleSettings.SetTabFont( aFont );
     aStyleSettings.SetGroupFont( aFont );
 
     aFont.SetWeight( WEIGHT_BOLD );

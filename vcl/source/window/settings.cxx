@@ -226,6 +226,9 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     aFont = aStyleSettings.GetIconFont();
     aFont.SetHeight( defFontheight );
     aStyleSettings.SetIconFont( aFont );
+    aFont = aStyleSettings.GetTabFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetTabFont( aFont );
     aFont = aStyleSettings.GetGroupFont();
     aFont.SetHeight( defFontheight );
     aStyleSettings.SetGroupFont( aFont );
@@ -294,6 +297,9 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         aFont = aStyleSettings.GetIconFont();
         aFont.SetWeight( WEIGHT_BOLD );
         aStyleSettings.SetIconFont( aFont );
+        aFont = aStyleSettings.GetTabFont();
+        aFont.SetWeight( WEIGHT_BOLD );
+        aStyleSettings.SetTabFont( aFont );
         rSettings.SetStyleSettings( aStyleSettings );
     }
 #endif

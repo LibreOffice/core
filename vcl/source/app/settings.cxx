@@ -146,6 +146,7 @@ struct ImplStyleData
     vcl::Font                       maPushButtonFont;
     vcl::Font                       maFieldFont;
     vcl::Font                       maIconFont;
+    vcl::Font                       maTabFont;
     vcl::Font                       maGroupFont;
     long                            mnBorderSize;
     long                            mnTitleHeight;
@@ -617,6 +618,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maPushButtonFont( rData.maPushButtonFont ),
     maFieldFont( rData.maFieldFont ),
     maIconFont( rData.maIconFont ),
+    maTabFont( rData.maTabFont ),
     maGroupFont( rData.maGroupFont ),
     mIconTheme(rData.mIconTheme),
     maDialogStyle( rData.maDialogStyle ),
@@ -687,6 +689,7 @@ void ImplStyleData::SetStandardStyles()
     maPushButtonFont            = aStdFont;
     maFieldFont                 = aStdFont;
     maIconFont                  = aStdFont;
+    maTabFont                   = aTabFont;
     aStdFont.SetWeight( WEIGHT_BOLD );
     maFloatTitleFont            = aStdFont;
     maTitleFont                 = aStdFont;
@@ -1661,6 +1664,19 @@ StyleSettings::GetIconFont() const
     return mxData->maIconFont;
 }
 
+void
+StyleSettings::SetTabFont( const vcl::Font& rFont )
+{
+    CopyData();
+    mxData->maTabFont = rFont;
+}
+
+const vcl::Font&
+StyleSettings::GetTabFont() const
+{
+    return mxData->maTabFont;
+}
+
 long
 StyleSettings::GetBorderSize() const
 {
@@ -2312,6 +2328,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maPushButtonFont          == rSet.mxData->maPushButtonFont)           &&
          (mxData->maFieldFont               == rSet.mxData->maFieldFont)                &&
          (mxData->maIconFont                == rSet.mxData->maIconFont)                 &&
+         (mxData->maTabFont                 == rSet.mxData->maTabFont)                  &&
          (mxData->meUseImagesInMenus        == rSet.mxData->meUseImagesInMenus)         &&
          (mxData->mbPreferredUseImagesInMenus == rSet.mxData->mbPreferredUseImagesInMenus) &&
          (mxData->mbSkipDisabledInMenus     == rSet.mxData->mbSkipDisabledInMenus)      &&

@@ -159,6 +159,7 @@ public:
         aStyleSet.SetPushButtonFont( aFont );
         aStyleSet.SetFieldFont( aFont );
         aStyleSet.SetIconFont( aFont );
+        aStyleSet.SetTabFont( aFont );
         aStyleSet.SetGroupFont( aFont );
 
         rSettings.SetStyleSettings( aStyleSet );
