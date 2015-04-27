@@ -253,6 +253,11 @@
     Command = ".uno:ExternalEdit" ; \
     Text [ en-US ] = "Edit with External Tool..." ; \
 
+#define ITEM_OBJECT_CROP \
+    Identifier = SID_OBJECT_CROP ; \
+    Command = ".uno:Crop" ; \
+    Text [ en-US ] = "Crop I~mage" ; \
+
 #define ITEM_COMPRESS_GRAPHIC \
     Identifier = SID_COMPRESS_GRAPHIC ; \
     Command = ".uno:CompressGraphic" ; \

@@ -1316,7 +1316,6 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     {
         SnapPos(aPnt);
     }
-
     if(getSdrDragView().IsOrtho())
     {
         if (DragStat().IsOrtho8Possible())
@@ -3607,7 +3606,7 @@ void SdrDragDistort::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPol
 
 
 
-TYPEINIT1(SdrDragCrop,SdrDragResize);
+TYPEINIT1(SdrDragCrop,SdrDragObjOwn);
 
 SdrDragCrop::SdrDragCrop(SdrDragView& rNewView)
 :   SdrDragObjOwn(rNewView)
@@ -3659,8 +3658,172 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     if( rMarkList.GetMarkCount() != 1 )
         return false;
 
-    SdrGrafObj* pObj = dynamic_cast<SdrGrafObj*>( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
+    SdrObject* pSdrObject = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
+    // tdf 34555: in order to implement visual crop in Writer, we need to handle two
+    // cases:
+    // EndSdrDrag when called in Impress/Draw/...: pSdrObject is a SdrGrafObj
+    // EndSdrDrag when called in Writer: pSdrObject is a SwVirtFlyDrawObj
+    // Main principle: if marked object is not SdrGrafObj, we start a generic handling
+    // based on virtual methods added to SdrObject, on MM100/Twip coordinates and so on.
+    // If marked object is SdrGrafObj, we do all the work here with matrix based
+    // coordinates.
+    if (!pSdrObject->ISA(SdrGrafObj)) {
+        const bool bUndo = getSdrDragView().IsUndoEnabled();
+        if( bUndo )
+        {
+            OUString aUndoStr;
+            ImpTakeDescriptionStr(STR_DragMethCrop, aUndoStr);
+            getSdrDragView().BegUndo( aUndoStr );
+            getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pSdrObject));
+            // also need attr undo, the SdrGrafCropItem will be changed
+            getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pSdrObject));
+        }
+
+        // We need to produce a reference point and two (X & Y) scales
+        SdrHdl* pRef1=GetHdlList().GetHdl(HDL_UPLFT);
+        SdrHdl* pRef2=GetHdlList().GetHdl(HDL_LWRGT);
+
+        if (pRef1==NULL || pRef2==NULL)
+            return false;
+
+        Rectangle rect(pRef1->GetPos(),pRef2->GetPos());
+
+        Point aEnd(DragStat().GetNow());
+        Point aStart(DragStat().GetStart());
+        Point aRef(rect.Center());
+
+        // Reference point is the point opposed to the dragged handle
+        switch(GetDragHdlKind())
+        {
+            case HDL_UPLFT: aRef = rect.BottomRight();                                  break;
+            case HDL_UPPER: aRef = rect.BottomCenter(); DragStat().SetHorFixed(true);   break;
+            case HDL_UPRGT: aRef = rect.BottomLeft();                                   break;
+            case HDL_LEFT : aRef = rect.RightCenter();  DragStat().SetVerFixed(true);   break;
+            case HDL_RIGHT: aRef = rect.LeftCenter();   DragStat().SetVerFixed(true);   break;
+            case HDL_LWLFT: aRef = rect.TopRight();                                     break;
+            case HDL_LOWER: aRef = rect.TopCenter();    DragStat().SetHorFixed(true);   break;
+            case HDL_LWRGT: aRef = rect.TopLeft();                                      break;
+            default: break;
+        }
+
+        // By default, scale is new size / old size
+        long nXDiv = aStart.X()-aRef.X(); if (nXDiv==0) nXDiv=1;
+        long nYDiv = aStart.Y()-aRef.Y(); if (nYDiv==0) nYDiv=1;
+        long nXMul = aEnd.X()-aRef.X();
+        long nYMul = aEnd.Y()-aRef.Y();
+
+        if (nXDiv<0)
+        {
+            nXDiv=-nXDiv;
+            nXMul=-nXMul;
+        }
+
+        if (nYDiv<0)
+        {
+            nYDiv=-nYDiv;
+            nYMul=-nYMul;
+        }
+
+        // Take ortho into account.
+        bool bXNeg=nXMul<0; if (bXNeg) nXMul=-nXMul;
+        bool bYNeg=nYMul<0; if (bYNeg) nYMul=-nYMul;
+        bool bOrtho=getSdrDragView().IsOrtho() || !getSdrDragView().IsResizeAllowed(false);
+
+        if (!DragStat().IsHorFixed() && !DragStat().IsVerFixed())
+        {
+            if (std::abs(nXDiv)<=1 || std::abs(nYDiv)<=1)
+                bOrtho=false;
+
+            if (bOrtho)
+            {
+                if ((Fraction(nXMul,nXDiv)>Fraction(nYMul,nYDiv)) !=getSdrDragView().IsBigOrtho())
+                {
+                    nXMul=nYMul;
+                    nXDiv=nYDiv;
+                }
+                else
+                {
+                    nYMul=nXMul;
+                    nYDiv=nXDiv;
+                }
+            }
+        }
+        else
+        {
+            if (bOrtho)
+            {
+                if (DragStat().IsHorFixed())
+                {
+                    bXNeg=false;
+                    nXMul=nYMul;
+                    nXDiv=nYDiv;
+                }
+
+                if (DragStat().IsVerFixed())
+                {
+                    bYNeg=false;
+                    nYMul=nXMul;
+                    nYDiv=nXDiv;
+                }
+            }
+            else
+            {
+                if (DragStat().IsHorFixed())
+                {
+                    bXNeg=false;
+                    nXMul=1;
+                    nXDiv=1;
+                }
+
+                if (DragStat().IsVerFixed())
+                {
+                    bYNeg=false;
+                    nYMul=1;
+                    nYDiv=1;
+                }
+            }
+        }
+        Fraction aXFact(nXMul,nXDiv);
+        Fraction aYFact(nYMul,nYDiv);
+        Fraction aMaxFact(0x7FFFFFFF,1);
+
+        if (bOrtho)
+        {
+            if (aXFact>aMaxFact)
+            {
+                aXFact=aMaxFact;
+                aYFact=aMaxFact;
+            }
+
+            if (aYFact>aMaxFact)
+            {
+                aXFact=aMaxFact;
+                aYFact=aMaxFact;
+            }
+        }
+
+        if (bXNeg)
+            aXFact=Fraction(-aXFact.GetNumerator(),aXFact.GetDenominator());
+
+        if (bYNeg)
+            aYFact=Fraction(-aYFact.GetNumerator(),aYFact.GetDenominator());
+
+        // With Ref point (opposed to dragged point), X scale and Y scale,
+        // we call crop (virtual method) on pSdrObject which calls VirtFlyDrawObj
+        // crop
+        pSdrObject->Crop(aRef, aXFact, aYFact);
+
+        if( bUndo )
+            getSdrDragView().EndUndo();
+
+        // Job's done
+        return true;
+    }
+
+    // This part of code handles the case where pSdrObject is SdrGrafObj
+
+    SdrGrafObj* pObj = dynamic_cast<SdrGrafObj*>( pSdrObject );
     if( !pObj || (pObj->GetGraphicType() == GRAPHIC_NONE) || (pObj->GetGraphicType() == GRAPHIC_DEFAULT) )
         return false;
 
@@ -3723,7 +3886,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     aInverse.invert();
 
-    // gererate start point of original drag vector in unit coordinates (the
+    // generate start point of original drag vector in unit coordinates (the
     // vis-a-vis of the drag point)
     basegfx::B2DPoint aLocalStart(0.0, 0.0);
     bool bOnAxis(false);

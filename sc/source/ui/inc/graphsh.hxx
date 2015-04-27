@@ -57,6 +57,15 @@ public:
 
     void    ExecuteCompressGraphic(SfxRequest& rReq);
     void    GetCompressGraphicState(SfxItemSet &rSet);
+
+    void    ExecuteCropGraphic(SfxRequest& rReq);
+    void    GetCropGraphicState(SfxItemSet &rSet);
+
+    void    ExecuteSaveGraphic(SfxRequest& rReq);
+    void    GetSaveGraphicState(SfxItemSet &rSet);
+
+    void    ExecuteChangePicture(SfxRequest& rReq);
+    void    GetChangePictureState(SfxItemSet &rSet);
 };
 
 #endif

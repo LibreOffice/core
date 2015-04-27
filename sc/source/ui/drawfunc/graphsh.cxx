@@ -21,11 +21,13 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/opengrf.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/compressgraphicdialog.hxx>
+#include <svx/graphichelper.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "graphsh.hxx"
@@ -34,6 +36,7 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/extedit.hxx>
+#include "tabvwsh.hxx"
 
 #define ScGraphicShell
 #include "scslots.hxx"
@@ -215,5 +218,131 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
 
     Invalidate();
 }
+
+void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_OBJECT_CROP );
+}
+
+void ScGraphicShell::ExecuteCropGraphic( SfxRequest& )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        {
+            pView->SetEditMode(SDREDITMODE_EDIT);
+            pView->SetDragMode(SDRDRAG_CROP);
+        }
+    }
+
+    Invalidate();
+}
+
+void ScGraphicShell::ExecuteSaveGraphic(SfxRequest& /*rReq*/)
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        {
+            GraphicObject aGraphicObject( static_cast<SdrGrafObj*>( pObj )->GetGraphicObject() );
+            {
+                GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), "" );
+            }
+        }
+    }
+
+    Invalidate();
+}
+
+void ScGraphicShell::GetSaveGraphicState(SfxItemSet &rSet)
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_SAVE_GRAPHIC );
+}
+
+void ScGraphicShell::ExecuteChangePicture(SfxRequest& rReq)
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        {
+            SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
+            SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC));
+
+            if( aDlg.Execute() == GRFILTER_OK )
+            {
+                Graphic aGraphic;
+                int nError = aDlg.GetGraphic(aGraphic);
+                if( nError == GRFILTER_OK )
+                {
+                    SdrGrafObj* pNewObject = pGraphicObj->Clone();
+                    pNewObject->SetGraphic( aGraphic );
+                    SdrPageView* pPageView = pView->GetSdrPageView();
+                    OUString aUndoString = pView->GetDescriptionOfMarkedObjects() + " Change";
+                    pView->BegUndo( aUndoString );
+                    pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
+                    pView->EndUndo();
+                }
+            }
+        }
+    }
+
+    Invalidate();
+}
+
+void ScGraphicShell::GetChangePictureState(SfxItemSet &rSet)
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_CHANGE_PICTURE );
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
