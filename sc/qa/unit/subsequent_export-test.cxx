@@ -137,6 +137,7 @@ public:
 
     void testSupBookVirtualPath();
     void testSheetLocalRangeNameXLS();
+    void testSheetRunParagraphProperty();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
+    CPPUNIT_TEST(testSheetRunParagraphProperty);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -209,7 +211,8 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("office"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0") },
         { BAD_CAST("table"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0") },
         { BAD_CAST("text"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0") },
-        { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") }
+        { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") },
+        { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") }
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -2515,6 +2518,22 @@ void ScExportTest::testSheetLocalRangeNameXLS()
     CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testSheetRunParagraphProperty()
+{
+    ScDocShellRef xShell = loadDoc("TextColor.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/sharedStrings.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:sst/x:si/x:r[1]/x:rPr[1]", 1);
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
