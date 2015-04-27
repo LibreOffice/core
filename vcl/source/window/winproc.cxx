@@ -1376,17 +1376,6 @@ protected:
 
 public:
 
-    struct WindowDescription
-    {
-        vcl::Window *m_pMouseWindow;
-        bool m_bIsFloat;
-        WindowDescription(vcl::Window *pMouseWindow, bool bIsFloat)
-            : m_pMouseWindow(pMouseWindow)
-            , m_bIsFloat(bIsFloat)
-        {
-        }
-    };
-
     HandleGestureEventBase(vcl::Window *pWindow, const Point &rMousePos)
         : m_pSVData(ImplGetSVData())
         , m_pWindow(pWindow)
@@ -1394,10 +1383,9 @@ public:
     {
     }
     bool Setup();
-    WindowDescription FindTarget();
-    vcl::Window *Dispatch(const WindowDescription& rTarget);
+    vcl::Window* FindTarget();
+    vcl::Window* Dispatch(vcl::Window* pTarget);
     virtual bool CallCommand(vcl::Window *pWindow, const Point &rMousePos) = 0;
-    void Teardown(const WindowDescription& rTarget);
     virtual ~HandleGestureEventBase() {}
 };
 
@@ -1414,10 +1402,9 @@ bool HandleGestureEventBase::Setup()
     return true;
 }
 
-HandleGestureEventBase::WindowDescription HandleGestureEventBase::FindTarget()
+vcl::Window* HandleGestureEventBase::FindTarget()
 {
     // first check any floating window ( eg. drop down listboxes)
-    bool bIsFloat = false;
     vcl::Window *pMouseWindow = NULL;
 
     if (m_pSVData->maWinData.mpFirstFloat && !m_pSVData->maWinData.mpCaptureWin &&
@@ -1425,10 +1412,14 @@ HandleGestureEventBase::WindowDescription HandleGestureEventBase::FindTarget()
     {
         HitTest nHitTest = HITTEST_OUTSIDE;
         pMouseWindow = m_pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( m_pWindow, m_aMousePos, nHitTest );
+        if (!pMouseWindow)
+            pMouseWindow = m_pSVData->maWinData.mpFirstFloat;
     }
     // then try the window directly beneath the mouse
     if( !pMouseWindow )
+    {
         pMouseWindow = m_pWindow->ImplFindWindow( m_aMousePos );
+    }
     else
     {
         // transform coordinates to float window frame coordinates
@@ -1437,7 +1428,6 @@ HandleGestureEventBase::WindowDescription HandleGestureEventBase::FindTarget()
                   pMouseWindow->AbsoluteScreenToOutputPixel(
                    m_pWindow->OutputToAbsoluteScreenPixel(
                     m_pWindow->ScreenToOutputPixel( m_aMousePos ) ) ) ) );
-        bIsFloat = true;
     }
 
     while (acceptableWheelScrollTarget(pMouseWindow))
@@ -1448,13 +1438,11 @@ HandleGestureEventBase::WindowDescription HandleGestureEventBase::FindTarget()
         pMouseWindow = pMouseWindow->GetParent();
     }
 
-    return WindowDescription(pMouseWindow, bIsFloat);
+    return pMouseWindow;
 }
 
-vcl::Window *HandleGestureEventBase::Dispatch(const WindowDescription& rTarget)
+vcl::Window *HandleGestureEventBase::Dispatch(vcl::Window* pMouseWindow)
 {
-    vcl::Window *pMouseWindow = rTarget.m_pMouseWindow;
-
     vcl::Window *pDispatchedTo = NULL;
 
     if (acceptableWheelScrollTarget(pMouseWindow) && pMouseWindow->IsEnabled())
@@ -1491,23 +1479,6 @@ vcl::Window *HandleGestureEventBase::Dispatch(const WindowDescription& rTarget)
         }
     }
     return pDispatchedTo;
-}
-
-void HandleGestureEventBase::Teardown(const WindowDescription& rTarget)
-{
-    // close floaters
-    if (!rTarget.m_bIsFloat && m_pSVData->maWinData.mpFirstFloat)
-    {
-        FloatingWindow* pLastLevelFloat = m_pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
-        if( pLastLevelFloat )
-        {
-            sal_uLong nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
-            if ( nPopupFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE )
-            {
-                pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-            }
-        }
-    }
 }
 
 class HandleWheelEvent : public HandleGestureEventBase
@@ -1554,21 +1525,19 @@ bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
     if (!Setup())
         return false;
 
-    WindowDescription aTarget = FindTarget();
+    vcl::Window *pMouseWindow = FindTarget();
 
     // avoid the problem that scrolling via wheel to this point brings a widget
     // under the mouse that also accepts wheel commands, so stick with the old
     // widget if the time gap is very small
     if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(pPreviousWindow))
     {
-        aTarget.m_pMouseWindow = pPreviousWindow;
+        pMouseWindow = pPreviousWindow;
     }
 
     aPreviousEvent = rEvt;
 
-    pPreviousWindow = Dispatch(aTarget);
-
-    Teardown(aTarget);
+    pPreviousWindow = Dispatch(pMouseWindow);
 
     return pPreviousWindow != NULL;
 }
@@ -1588,12 +1557,9 @@ bool HandleGestureEvent::HandleEvent()
     if (!Setup())
         return false;
 
-    WindowDescription aTarget = FindTarget();
+    vcl::Window *pTarget = FindTarget();
 
-    bool bHandled = Dispatch(aTarget) != NULL;
-
-    Teardown(aTarget);
-
+    bool bHandled = Dispatch(pTarget) != NULL;
     return bHandled;
 }
 
