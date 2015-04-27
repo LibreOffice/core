@@ -375,6 +375,8 @@ struct WindowResHeader
 
 namespace vcl {
 
+typedef OutputDevice RenderContext;
+
 class VCL_DLLPUBLIC Window : public ::OutputDevice, public Resource
 {
     friend class ::vcl::Cursor;
