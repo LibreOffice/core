@@ -97,7 +97,7 @@ namespace oglcanvas
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
         // been updated (caller should try again later)
-        return !mbIsVisible ? false : SpriteCanvasBaseT::showBuffer( bUpdateAll );
+        return mbIsVisible && SpriteCanvasBaseT::showBuffer( bUpdateAll );
     }
 
     sal_Bool SAL_CALL SpriteCanvas::switchBuffer( sal_Bool bUpdateAll ) throw (uno::RuntimeException, std::exception)
@@ -107,7 +107,7 @@ namespace oglcanvas
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
         // been updated (caller should try again later)
-        return !mbIsVisible ? false : SpriteCanvasBaseT::switchBuffer( bUpdateAll );
+        return mbIsVisible && SpriteCanvasBaseT::switchBuffer( bUpdateAll );
     }
 
     uno::Reference< rendering::XAnimatedSprite > SAL_CALL SpriteCanvas::createSpriteFromAnimation(

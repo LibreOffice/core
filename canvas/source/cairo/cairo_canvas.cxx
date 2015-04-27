@@ -93,7 +93,7 @@ namespace cairocanvas
             throw lang::NoSupportException( "Passed SystemGraphicsData invalid!" );
 
         bool bHasCairo = pOutDev->SupportsCairo();
-        ENSURE_ARG_OR_THROW(bHasCairo == true, "SpriteCanvas::SpriteCanvas: No Cairo capability");
+        ENSURE_ARG_OR_THROW(bHasCairo, "SpriteCanvas::SpriteCanvas: No Cairo capability");
 
         // setup helper
         maDeviceHelper.init( *this, *pOutDev );

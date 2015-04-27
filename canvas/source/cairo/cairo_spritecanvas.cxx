@@ -86,7 +86,7 @@ namespace cairocanvas
                 "Parent window not VCL window, or canvas out-of-process!", NULL);
 
         bool bHasCairo = pParentWindow->SupportsCairo();
-        ENSURE_ARG_OR_THROW(bHasCairo == true,
+        ENSURE_ARG_OR_THROW(bHasCairo,
                             "CairoSpriteCanvas::SpriteCanvas: No Cairo capability");
 
         Size aPixelSize( pParentWindow->GetOutputSizePixel() );
