@@ -345,7 +345,7 @@ short PrinterSetupDialog::Execute()
     if ( !mpPrinter || mpPrinter->IsPrinting() || mpPrinter->IsJobActive() )
     {
         SAL_WARN( "svtools.dialogs", "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
-        return sal_False;
+        return RET_CANCEL;
     }
 
     Printer::updatePrinters();
@@ -358,7 +358,7 @@ short PrinterSetupDialog::Execute()
     short nRet = ModalDialog::Execute();
 
     // update data if the dialog was terminated with OK
-    if ( nRet == sal_True )
+    if ( nRet == RET_OK )
     {
         if ( mpTempPrinter )
             mpPrinter->SetPrinterProps( mpTempPrinter );

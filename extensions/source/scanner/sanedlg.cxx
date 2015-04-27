@@ -258,7 +258,7 @@ short SaneDlg::Execute()
     {
         MessageDialog aErrorBox(NULL, SaneResId(STR_COULD_NOT_BE_INIT));
         aErrorBox.Execute();
-        return sal_False;
+        return RET_CANCEL;
     }
     LoadState();
     return ModalDialog::Execute();
