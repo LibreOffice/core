@@ -141,7 +141,7 @@ void    XFFrame::StartFrame(IXFStream *pStrm)
         pAttrList->AddAttribute( "draw:style-name", GetStyleName() );
 
     assert(!m_strName.isEmpty() && "name should not be null.");
-    if( !m_strName.isEmpty() && m_isTextBox == false)
+    if( !m_strName.isEmpty() && !m_isTextBox)
         pAttrList->AddAttribute( "draw:name", m_strName );
     //anchor type:
     switch( m_eAnchor )

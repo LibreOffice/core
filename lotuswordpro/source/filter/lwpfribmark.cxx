@@ -261,7 +261,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
     //end marker
     if (type == MARKER_END)
     {
-        if (pFieldMark->GetStart() == false)
+        if (!pFieldMark->GetStart())
             return;
         if (pFieldMark->IsFormulaInsert())
         {

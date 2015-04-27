@@ -1295,7 +1295,7 @@ void LwpTableLayout::SplitConflictCells()
             continue;
         }
         pRowLayout= iter1->second;
-        if (pRowLayout->GetMergeCellFlag() == false)
+        if (!pRowLayout->GetMergeCellFlag())
         {
             i++;
             continue;
@@ -1310,7 +1310,7 @@ void LwpTableLayout::SplitConflictCells()
                     if (iter2 == m_RowsMap.end())
                         continue;
                     pEffectRow = iter2->second;
-                if (pEffectRow->GetMergeCellFlag() == false)
+                if (!pEffectRow->GetMergeCellFlag())
                     continue;
                 else
                     pEffectRow->SetCellSplit(nEffectRows);
