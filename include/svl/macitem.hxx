@@ -86,7 +86,7 @@ public:
     inline SvxMacroTableDtor( const SvxMacroTableDtor &rCpy ) : aSvxMacroTable(rCpy.aSvxMacroTable) { }
 
     SvxMacroTableDtor& operator=( const SvxMacroTableDtor &rCpy );
-    int operator==( const SvxMacroTableDtor& rOther ) const;
+    bool operator==( const SvxMacroTableDtor& rOther ) const;
 
     // deletes all entries
     void clear() { aSvxMacroTable.clear(); }

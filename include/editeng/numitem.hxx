@@ -262,7 +262,7 @@ public:
     SvxNumRule(SvStream &rStream);
     virtual ~SvxNumRule();
 
-    int                     operator==( const SvxNumRule& ) const;
+    bool                    operator==( const SvxNumRule& ) const;
     bool                    operator!=( const SvxNumRule& rRule ) const {return !(*this == rRule);}
 
     SvxNumRule&             operator=( const SvxNumRule&  );

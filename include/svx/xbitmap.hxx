@@ -45,7 +45,7 @@ public:
     ~XOBitmap();
 
     XOBitmap& operator=( const XOBitmap& rXOBitmap );
-    int      operator==( const XOBitmap& rXOBitmap ) const;
+    bool      operator==( const XOBitmap& rXOBitmap ) const;
 
     void Bitmap2Array();
     void Array2Bitmap();

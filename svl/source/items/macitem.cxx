@@ -77,11 +77,11 @@ SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
     return *this;
 }
 
-int SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
+bool SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
 {
     // Count different => odd in any case
     if ( aSvxMacroTable.size() != rOther.aSvxMacroTable.size() )
-        return sal_False;
+        return false;
 
     // Compare single ones; the sequence matters due to performance reasons
     SvxMacroTable::const_iterator it1 = aSvxMacroTable.begin();
@@ -93,10 +93,10 @@ int SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
         if (    it1->first != it2->first ||
                 rOwnMac.GetLibName() != rOtherMac.GetLibName() ||
                 rOwnMac.GetMacName() != rOtherMac.GetMacName() )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )

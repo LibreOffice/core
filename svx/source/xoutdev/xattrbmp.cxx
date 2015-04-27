@@ -101,7 +101,7 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
     return *this;
 }
 
-int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
+bool XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
 {
     if( eType != rXOBitmap.eType      ||
         aGraphicObject != rXOBitmap.aGraphicObject ||
@@ -110,7 +110,7 @@ int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
         aBckgrColor != rXOBitmap.aBckgrColor ||
         bGraphicDirty != rXOBitmap.bGraphicDirty )
     {
-        return sal_False;
+        return false;
     }
 
     if( pPixelArray && rXOBitmap.pPixelArray )
@@ -119,10 +119,10 @@ int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {
             if( *( pPixelArray + i ) != *( rXOBitmap.pPixelArray + i ) )
-                return sal_False;
+                return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 Bitmap XOBitmap::GetBitmap() const

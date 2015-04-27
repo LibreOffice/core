@@ -740,13 +740,13 @@ SvxNumRule& SvxNumRule::operator=( const SvxNumRule& rCopy )
     return *this;
 }
 
-int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
+bool SvxNumRule::operator==( const SvxNumRule& rCopy) const
 {
     if(nLevelCount != rCopy.nLevelCount ||
         nFeatureFlags != rCopy.nFeatureFlags ||
             bContinuousNumbering != rCopy.bContinuousNumbering ||
                 eNumberingType != rCopy.eNumberingType)
-            return sal_False;
+            return false;
     for(sal_uInt16 i = 0; i < nLevelCount; i++)
     {
         if (
@@ -756,10 +756,10 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
             (aFmts[i] && *aFmts[i] !=  *rCopy.aFmts[i])
            )
         {
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 const SvxNumberFormat*  SvxNumRule::Get(sal_uInt16 nLevel)const
