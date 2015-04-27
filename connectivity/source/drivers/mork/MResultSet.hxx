@@ -33,6 +33,7 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase12.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <tools/gen.hxx>
 #include "MStatement.hxx"
 #include "MQueryHelper.hxx"
 #include <connectivity/CommonTools.hxx>
@@ -241,7 +242,7 @@ protected:
             sal_Int32                 m_nNewRow;        //inserted row
             sal_Int32                     m_nUpdatedRow;    //updated row
             sal_Int32                 m_RowStates;
-            sal_Int32                     m_bIsReadOnly;
+            TriState                      m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }
 
             ::rtl::Reference<connectivity::OSQLColumns>  m_xColumns; // this are the select columns

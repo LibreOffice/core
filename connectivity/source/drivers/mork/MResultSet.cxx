@@ -109,7 +109,7 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< conne
     ,m_nNewRow(0)
     ,m_nUpdatedRow(0)
     ,m_RowStates(0)
-    ,m_bIsReadOnly(-1)
+    ,m_bIsReadOnly(TRISTATE_INDET)
 {
     //m_aQuery.setMaxNrOfReturns(pStmt->getOwnConnection()->getMaxResultRecords());
 }
@@ -683,7 +683,7 @@ void OResultSet::getFastPropertyValue(
             break;
         case PROPERTY_ID_ISBOOKMARKABLE:
             const_cast< OResultSet* >( this )->determineReadOnly();
-            rValue <<= !m_bIsReadOnly;
+            rValue <<= (m_bIsReadOnly == TRISTATE_FALSE);
          break;
     }
 }
@@ -1070,7 +1070,7 @@ void OResultSet::fillRowData()
     // If the query is a 0=1 then set Row count to 0 and return
     if ( m_bIsAlwaysFalseQuery )
     {
-        m_bIsReadOnly = 1;
+        m_bIsReadOnly = TRISTATE_TRUE;
         return;
     }
 
@@ -1837,14 +1837,14 @@ bool OResultSet::determineReadOnly()
 {
 //    OSL_FAIL( "OResultSet::determineReadOnly(  ) not implemented" );
 
-    if (m_bIsReadOnly == -1)
+    if (m_bIsReadOnly == TRISTATE_INDET)
     {
-        m_bIsReadOnly = sal_True;
+        m_bIsReadOnly = TRISTATE_TRUE;
 //        OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
 //        m_bIsReadOnly = !m_aQueryHelper.isWritable(xConnection) || m_bIsAlwaysFalseQuery;
     }
 
-    return m_bIsReadOnly != 0;
+    return m_bIsReadOnly != TRISTATE_FALSE;
 }
 
 void OResultSet::setTable(OTable* _rTable)
