@@ -245,7 +245,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         aPropSet.setProperty( PROP_AnchorPosition, eLegendPos );
         aPropSet.setProperty( PROP_Expansion, eLegendExpand );
 
-        if(eLegendPos == LegendPosition_CUSTOM && bTopRight && bManualLayout==false)
+        if(eLegendPos == LegendPosition_CUSTOM && bTopRight && !bManualLayout)
             aPropSet.setProperty( PROP_RelativePosition , makeAny(eRelPos));
     }
     catch( Exception& )
