@@ -179,7 +179,7 @@ IMPL_LINK ( PlacesListBox, DoubleClick, void*, EMPTYARG )
 {
     sal_uInt16 nSelected = mpImpl->GetCurrRow();
     PlacePtr pPlace = maPlaces[nSelected];
-    if ( pPlace->IsEditable() == true && !pPlace->IsLocal( ) )
+    if ( pPlace->IsEditable() && !pPlace->IsLocal( ) )
     {
         PlaceEditDialog aDlg( mpDlg, pPlace );
         short aRetCode = aDlg.Execute();
