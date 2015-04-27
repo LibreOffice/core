@@ -154,6 +154,7 @@ private:
     void exportSeriesValues(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq, sal_Int32 nValueType = XML_val );
     void exportShapeProps( css::uno::Reference< css::beans::XPropertySet > xPropSet );
+    void exportTextProps(css::uno::Reference< css::beans::XPropertySet > xPropSet);
     void exportDataPoints(
         const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties,
         sal_Int32 nSeriesLength );

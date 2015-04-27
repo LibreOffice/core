@@ -1167,7 +1167,7 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
-void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsField )
+void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsField, sal_Int32 nElement /*= XML_rPr*/ )
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
@@ -1318,7 +1318,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         }
     }
 
-    mpFS->startElementNS( XML_a, XML_rPr,
+    mpFS->startElementNS( XML_a, nElement,
                           XML_b, bold,
                           XML_i, italic,
                           XML_lang, usLanguage.isEmpty() ? NULL : USS( usLanguage ),
@@ -1405,7 +1405,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         }
     }
 
-    mpFS->endElementNS( XML_a, XML_rPr );
+    mpFS->endElementNS( XML_a, nElement );
 }
 
 const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsField )
