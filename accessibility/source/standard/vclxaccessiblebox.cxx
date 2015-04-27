@@ -543,7 +543,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
         if ( sText.isEmpty() && nEntryCount > 0 )
             rStateSet.AddState(AccessibleStateType::INDETERMINATE);
     }
-    else if (m_aBoxType == LISTBOX && m_bIsDropDownBox == true)
+    else if (m_aBoxType == LISTBOX && m_bIsDropDownBox)
     {
         sal_Int32 nSelectedEntryCount = 0;
         ListBox* pListBox = static_cast< ListBox* >( GetWindow() );
