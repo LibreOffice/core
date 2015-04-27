@@ -1239,7 +1239,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
     Point aNewPos = _aPnt;
     OSectionView* pInSection = getSectionRelativeToPosition(_pSection, aNewPos);
     if (!_bControlKeyPressed &&
-        (_pSection && ( _pSection->IsDragResize() == false ) ) && /* Not in resize mode */
+        _pSection && !_pSection->IsDragResize() && /* Not in resize mode */
         _pSection != pInSection)
     {
         EndDragObj_removeInvisibleObjects();

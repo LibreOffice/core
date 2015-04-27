@@ -223,7 +223,7 @@ bool OSectionView::IsDragResize() const
     if (pDragMethod)
     {
         bool bMoveOnly = pDragMethod->getMoveOnly();
-        if (bMoveOnly == false)
+        if (!bMoveOnly)
         {
             // current marked components will be resized
             return true;
