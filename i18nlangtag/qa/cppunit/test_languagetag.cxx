@@ -93,9 +93,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country.isEmpty() );
         CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( klingon.getLanguageType()) );
-        CPPUNIT_ASSERT( klingon.isValidBcp47() == true );
-        CPPUNIT_ASSERT( klingon.isIsoLocale() == true );
-        CPPUNIT_ASSERT( klingon.isIsoODF() == true );
+        CPPUNIT_ASSERT( klingon.isValidBcp47() );
+        CPPUNIT_ASSERT( klingon.isIsoLocale() );
+        CPPUNIT_ASSERT( klingon.isIsoODF() );
         LanguageType nLang = klingon.getLanguageType();
         LanguageTag klingon_id( nLang);
         CPPUNIT_ASSERT( klingon_id.getBcp47() == "tlh" );
@@ -123,9 +123,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "RS" );
         CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
         CPPUNIT_ASSERT( sr_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA );
-        CPPUNIT_ASSERT( sr_RS.isValidBcp47() == true );
-        CPPUNIT_ASSERT( sr_RS.isIsoLocale() == true );
-        CPPUNIT_ASSERT( sr_RS.isIsoODF() == true );
+        CPPUNIT_ASSERT( sr_RS.isValidBcp47() );
+        CPPUNIT_ASSERT( sr_RS.isIsoLocale() );
+        CPPUNIT_ASSERT( sr_RS.isIsoODF() );
     }
 
     {
@@ -137,9 +137,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "RS" );
         CPPUNIT_ASSERT( aLocale.Variant == s_sr_Latn_RS );
         CPPUNIT_ASSERT( sr_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_LATIN_SERBIA );
-        CPPUNIT_ASSERT( sr_RS.isValidBcp47() == true );
-        CPPUNIT_ASSERT( sr_RS.isIsoLocale() == false );
-        CPPUNIT_ASSERT( sr_RS.isIsoODF() == true );
+        CPPUNIT_ASSERT( sr_RS.isValidBcp47() );
+        CPPUNIT_ASSERT( !sr_RS.isIsoLocale() );
+        CPPUNIT_ASSERT( sr_RS.isIsoODF() );
         CPPUNIT_ASSERT( sr_RS.getLanguage() == "sr" );
         CPPUNIT_ASSERT( sr_RS.getCountry() == "RS" );
         CPPUNIT_ASSERT( sr_RS.getScript() == "Latn" );
@@ -155,9 +155,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "CS" );
         CPPUNIT_ASSERT( aLocale.Variant == s_sr_Latn_CS );
         CPPUNIT_ASSERT( sr_Latn_CS.getLanguageType() == LANGUAGE_SERBIAN_LATIN_SAM );
-        CPPUNIT_ASSERT( sr_Latn_CS.isValidBcp47() == true );
-        CPPUNIT_ASSERT( sr_Latn_CS.isIsoLocale() == false );
-        CPPUNIT_ASSERT( sr_Latn_CS.isIsoODF() == true );
+        CPPUNIT_ASSERT( sr_Latn_CS.isValidBcp47() );
+        CPPUNIT_ASSERT( !sr_Latn_CS.isIsoLocale() );
+        CPPUNIT_ASSERT( sr_Latn_CS.isIsoODF() );
         CPPUNIT_ASSERT( sr_Latn_CS.getLanguage() == "sr" );
         CPPUNIT_ASSERT( sr_Latn_CS.getCountry() == "CS" );
         CPPUNIT_ASSERT( sr_Latn_CS.getScript() == "Latn" );
@@ -186,9 +186,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "RS" );
         CPPUNIT_ASSERT( aLocale.Variant == "sr-Latn-RS" );
         CPPUNIT_ASSERT( sh_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_LATIN_SERBIA );
-        CPPUNIT_ASSERT( sh_RS.isValidBcp47() == true );
-        CPPUNIT_ASSERT( sh_RS.isIsoLocale() == false );
-        CPPUNIT_ASSERT( sh_RS.isIsoODF() == true );
+        CPPUNIT_ASSERT( sh_RS.isValidBcp47() );
+        CPPUNIT_ASSERT( !sh_RS.isIsoLocale() );
+        CPPUNIT_ASSERT( sh_RS.isIsoODF() );
         CPPUNIT_ASSERT( sh_RS.getLanguage() == "sr" );
         CPPUNIT_ASSERT( sh_RS.getCountry() == "RS" );
         CPPUNIT_ASSERT( sh_RS.getScript() == "Latn" );
@@ -218,9 +218,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "BA" );
         CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
         CPPUNIT_ASSERT( bs_Latn_BA.getLanguageType() == LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA );
-        CPPUNIT_ASSERT( bs_Latn_BA.isValidBcp47() == true );
-        CPPUNIT_ASSERT( bs_Latn_BA.isIsoLocale() == true );
-        CPPUNIT_ASSERT( bs_Latn_BA.isIsoODF() == true );
+        CPPUNIT_ASSERT( bs_Latn_BA.isValidBcp47() );
+        CPPUNIT_ASSERT( bs_Latn_BA.isIsoLocale() );
+        CPPUNIT_ASSERT( bs_Latn_BA.isIsoODF() );
         CPPUNIT_ASSERT( bs_Latn_BA.getLanguage() == "bs" );
         CPPUNIT_ASSERT( bs_Latn_BA.getCountry() == "BA" );
         CPPUNIT_ASSERT( bs_Latn_BA.getScript().isEmpty() );
@@ -243,9 +243,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "ES" );
         CPPUNIT_ASSERT( aLocale.Variant == s_ca_ES_valencia );
         CPPUNIT_ASSERT( ca_ES_valencia.getLanguageType() == LANGUAGE_CATALAN_VALENCIAN );
-        CPPUNIT_ASSERT( ca_ES_valencia.isValidBcp47() == true );
-        CPPUNIT_ASSERT( ca_ES_valencia.isIsoLocale() == false );
-        CPPUNIT_ASSERT( ca_ES_valencia.isIsoODF() == false );
+        CPPUNIT_ASSERT( ca_ES_valencia.isValidBcp47() );
+        CPPUNIT_ASSERT( !ca_ES_valencia.isIsoLocale() );
+        CPPUNIT_ASSERT( !ca_ES_valencia.isIsoODF() );
         CPPUNIT_ASSERT( ca_ES_valencia.getLanguage() == "ca" );
         CPPUNIT_ASSERT( ca_ES_valencia.getCountry() == "ES" );
         CPPUNIT_ASSERT( ca_ES_valencia.getScript().isEmpty() );
@@ -269,9 +269,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country.isEmpty() );
         CPPUNIT_ASSERT( aLocale.Variant == s_ca_valencia );
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( ca_valencia.getLanguageType()) );
-        CPPUNIT_ASSERT( ca_valencia.isValidBcp47() == true );
-        CPPUNIT_ASSERT( ca_valencia.isIsoLocale() == false );
-        CPPUNIT_ASSERT( ca_valencia.isIsoODF() == false );
+        CPPUNIT_ASSERT( ca_valencia.isValidBcp47() );
+        CPPUNIT_ASSERT( !ca_valencia.isIsoLocale() );
+        CPPUNIT_ASSERT( !ca_valencia.isIsoODF() );
         CPPUNIT_ASSERT( ca_valencia.getLanguage() == "ca" );
         CPPUNIT_ASSERT( ca_valencia.getCountry().isEmpty() );
         CPPUNIT_ASSERT( ca_valencia.getScript().isEmpty() );
@@ -294,9 +294,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "ES" );
         CPPUNIT_ASSERT( aLocale.Variant == s_ca_ES_valencia );
         CPPUNIT_ASSERT( ca_XV.getLanguageType() == LANGUAGE_CATALAN_VALENCIAN );
-        CPPUNIT_ASSERT( ca_XV.isValidBcp47() == true );
-        CPPUNIT_ASSERT( ca_XV.isIsoLocale() == false );
-        CPPUNIT_ASSERT( ca_XV.isIsoODF() == false );
+        CPPUNIT_ASSERT( ca_XV.isValidBcp47() );
+        CPPUNIT_ASSERT( !ca_XV.isIsoLocale() );
+        CPPUNIT_ASSERT( !ca_XV.isIsoODF() );
         CPPUNIT_ASSERT( ca_XV.getLanguage() == "ca" );
         CPPUNIT_ASSERT( ca_XV.getCountry() == "ES" );
         CPPUNIT_ASSERT( ca_XV.getScript().isEmpty() );
@@ -320,9 +320,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "DE" );
         CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
         CPPUNIT_ASSERT( de_DE.getLanguageType() == LANGUAGE_GERMAN );
-        CPPUNIT_ASSERT( de_DE.isValidBcp47() == true );
-        CPPUNIT_ASSERT( de_DE.isIsoLocale() == true );
-        CPPUNIT_ASSERT( de_DE.isIsoODF() == true );
+        CPPUNIT_ASSERT( de_DE.isValidBcp47() );
+        CPPUNIT_ASSERT( de_DE.isIsoLocale() );
+        CPPUNIT_ASSERT( de_DE.isIsoODF() );
         CPPUNIT_ASSERT( de_DE.getLanguage() == "de" );
         CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
         CPPUNIT_ASSERT( de_DE.getScript().isEmpty() );
@@ -408,9 +408,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country.isEmpty() );
         CPPUNIT_ASSERT( aLocale.Variant == s_de_1901 );
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( de_1901.getLanguageType()) );
-        CPPUNIT_ASSERT( de_1901.isValidBcp47() == true );
-        CPPUNIT_ASSERT( de_1901.isIsoLocale() == false );
-        CPPUNIT_ASSERT( de_1901.isIsoODF() == false );
+        CPPUNIT_ASSERT( de_1901.isValidBcp47() );
+        CPPUNIT_ASSERT( !de_1901.isIsoLocale() );
+        CPPUNIT_ASSERT( !de_1901.isIsoODF() );
         CPPUNIT_ASSERT( de_1901.getLanguageAndScript() == "de" );
         CPPUNIT_ASSERT( de_1901.getVariants() == "1901" );
         ::std::vector< OUString > de_1901_Fallbacks( de_1901.getFallbackStrings( true));
@@ -430,9 +430,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "GB" );  // only 'GB' because we handle it, liblangtag would not fill this
         CPPUNIT_ASSERT( aLocale.Variant == s_en_GB_oed );
         CPPUNIT_ASSERT( en_GB_oed.getLanguageType() == LANGUAGE_USER_ENGLISH_UK_OED );
-        CPPUNIT_ASSERT( en_GB_oed.isValidBcp47() == true );
-        CPPUNIT_ASSERT( en_GB_oed.isIsoLocale() == false );
-        CPPUNIT_ASSERT( en_GB_oed.isIsoODF() == false );
+        CPPUNIT_ASSERT( en_GB_oed.isValidBcp47() );
+        CPPUNIT_ASSERT( !en_GB_oed.isIsoLocale() );
+        CPPUNIT_ASSERT( !en_GB_oed.isIsoODF() );
         CPPUNIT_ASSERT( en_GB_oed.getLanguageAndScript() == "en" );
         CPPUNIT_ASSERT( en_GB_oed.getVariants() == "oed" );
         ::std::vector< OUString > en_GB_oed_Fallbacks( en_GB_oed.getFallbackStrings( true));
@@ -582,9 +582,9 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country.isEmpty() );
         CPPUNIT_ASSERT( aLocale.Variant == s_uab );
         CPPUNIT_ASSERT( uab.getLanguageType() == LANGUAGE_DONTKNOW );
-        CPPUNIT_ASSERT( uab.isValidBcp47() == false );
-        CPPUNIT_ASSERT( uab.isIsoLocale() == false );
-        CPPUNIT_ASSERT( uab.isIsoODF() == false );
+        CPPUNIT_ASSERT( !uab.isValidBcp47() );
+        CPPUNIT_ASSERT( !uab.isIsoLocale() );
+        CPPUNIT_ASSERT( !uab.isIsoODF() );
     }
 
     // test static isValidBcp47() method
