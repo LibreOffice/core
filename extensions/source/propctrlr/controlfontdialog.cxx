@@ -167,7 +167,7 @@ namespace pcr
     void OControlFontDialog::executedDialog(sal_Int16 _nExecutionResult)
     {
         OSL_ENSURE(m_pDialog, "OControlFontDialog::executedDialog: no dialog anymore?!!");
-        if (m_pDialog && (sal_True == _nExecutionResult) && m_xControlModel.is())
+        if (m_pDialog && (RET_OK == _nExecutionResult) && m_xControlModel.is())
         {
             const SfxItemSet* pOutput = static_cast<ControlCharacterDialog*>(m_pDialog)->GetOutputItemSet();
             if (pOutput)
