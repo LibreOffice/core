@@ -56,8 +56,9 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlexport3 \
     CppunitTest_sw_ooxmlexport4 \
     CppunitTest_sw_ooxmlexport5 \
+    CppunitTest_sw_ooxmlexport6 \
+    CppunitTest_sw_ooxmlexport7 \
     CppunitTest_sw_ooxmlfieldexport \
-    CppunitTest_sw_ooxmlsdrexport \
     CppunitTest_sw_ooxmlw14export \
     CppunitTest_sw_ooxmlimport \
     CppunitTest_sw_ww8export \
