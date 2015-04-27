@@ -3109,16 +3109,16 @@ void SbaTableQueryBrowser::impl_initialize()
 
     // disable the browser if either of ShowTreeViewButton (compatibility name) or EnableBrowser
     // is present and set to FALSE
-    bool bDisableBrowser =  ( sal_False == rArguments.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
-                            ||  ( sal_False == rArguments.getOrDefault( OUString(PROPERTY_ENABLE_BROWSER), sal_True ) );
+    bool bDisableBrowser =  !rArguments.getOrDefault( "ShowTreeViewButton", sal_True )   // compatibility name
+                            ||  !rArguments.getOrDefault( OUString(PROPERTY_ENABLE_BROWSER), sal_True );
     OSL_ENSURE( !rArguments.has( "ShowTreeViewButton" ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeViewButton is superseded by EnableBrowser!" );
     m_bEnableBrowser = !bDisableBrowser;
 
     // hide the tree view it is disabled in general, or if the settings tell to hide it initially
     bool bHideTreeView =    ( !m_bEnableBrowser )
-                            ||  ( sal_False == rArguments.getOrDefault( "ShowTreeView", sal_True ) )  // compatibility name
-                            ||  ( sal_False == rArguments.getOrDefault( OUString(PROPERTY_SHOW_BROWSER), sal_True ) );
+                            ||  !rArguments.getOrDefault( "ShowTreeView", sal_True )  // compatibility name
+                            ||  !rArguments.getOrDefault( OUString(PROPERTY_SHOW_BROWSER), sal_True );
     OSL_ENSURE( !rArguments.has( "ShowTreeView" ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeView is superseded by ShowBrowser!" );
 
