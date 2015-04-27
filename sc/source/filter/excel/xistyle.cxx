@@ -281,17 +281,17 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
     sal_uInt32 nFontFlags3 = rStrm.ReaduInt32();
     rStrm.Ignore( 18 );
 
-    if( (mbHeightUsed = (nHeight <= 0x7FFF)) == true )
+    if( (mbHeightUsed = (nHeight <= 0x7FFF)) )
         maData.mnHeight = static_cast< sal_uInt16 >( nHeight );
-    if( (mbWeightUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE ) && (nWeight < 0x7FFF)) == true )
+    if( (mbWeightUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE ) && (nWeight < 0x7FFF)) )
         maData.mnWeight = static_cast< sal_uInt16 >( nWeight );
-    if( (mbItalicUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE )) == true )
+    if( (mbItalicUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE )) )
         maData.mbItalic = ::get_flag( nStyle, EXC_CF_FONT_STYLE );
-    if( (mbUnderlUsed = !::get_flag( nFontFlags3, EXC_CF_FONT_UNDERL ) && (nUnderl <= 0x7F)) == true )
+    if( (mbUnderlUsed = !::get_flag( nFontFlags3, EXC_CF_FONT_UNDERL ) && (nUnderl <= 0x7F)) )
         maData.mnUnderline = nUnderl;
-    if( (mbColorUsed = (nColor <= 0x7FFF)) == true )
+    if( (mbColorUsed = (nColor <= 0x7FFF)) )
         maData.maColor = GetPalette().GetColor( static_cast< sal_uInt16 >( nColor ) );
-    if( (mbStrikeUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STRIKEOUT )) == true )
+    if( (mbStrikeUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STRIKEOUT )) )
         maData.mbStrikeout = ::get_flag( nStyle, EXC_CF_FONT_STRIKEOUT );
 }
 

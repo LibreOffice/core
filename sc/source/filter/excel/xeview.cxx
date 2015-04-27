@@ -209,7 +209,7 @@ XclExpSelection::XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane )
     XclRangeList& rXclSel = maSelData.maXclSelection;
     bool bFound = false;
     for( XclRangeVector::const_iterator aIt = rXclSel.begin(), aEnd = rXclSel.end(); !bFound && (aIt != aEnd); ++aIt )
-        if( (bFound = aIt->Contains( maSelData.maXclCursor )) == true )
+        if( (bFound = aIt->Contains( maSelData.maXclCursor )) )
             maSelData.mnCursorIdx = static_cast< sal_uInt16 >( aIt - rXclSel.begin() );
     /*  Cursor cell not found in list? (e.g. inactive pane, or removed in
         ConvertRangeList(), because Calc cursor on invalid pos)

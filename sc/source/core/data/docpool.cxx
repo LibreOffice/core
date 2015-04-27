@@ -703,7 +703,7 @@ static bool lcl_HFPresentation
 
     if ( SfxItemState::SET == rSet.GetItemState(ATTR_PAGE_ON,false,&pItem) )
     {
-        if( false == static_cast<const SfxBoolItem*>(pItem)->GetValue() )
+        if( !static_cast<const SfxBoolItem*>(pItem)->GetValue() )
             return false;
     }
 

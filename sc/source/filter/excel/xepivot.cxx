@@ -462,7 +462,7 @@ void XclExpPCField::InsertOrigTextItem( const OUString& rText )
     // #i76047# maximum item text length in pivot cache is 255
     OUString aShortText = rText.copy( 0, ::std::min(rText.getLength(), EXC_PC_MAXSTRLEN ) );
     for( size_t nSize = maOrigItemList.GetSize(); !bFound && (nPos < nSize); ++nPos )
-        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsText( aShortText )) == true )
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsText( aShortText )) )
             InsertItemArrayIndex( nPos );
     if( !bFound )
         InsertOrigItem( new XclExpPCItem( aShortText ) );
@@ -473,7 +473,7 @@ void XclExpPCField::InsertOrigDoubleItem( double fValue )
     size_t nPos = 0;
     bool bFound = false;
     for( size_t nSize = maOrigItemList.GetSize(); !bFound && (nPos < nSize); ++nPos )
-        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsDouble( fValue )) == true )
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsDouble( fValue )) )
             InsertItemArrayIndex( nPos );
     if( !bFound )
         InsertOrigItem( new XclExpPCItem( fValue ) );
@@ -484,7 +484,7 @@ void XclExpPCField::InsertOrigDateTimeItem( const DateTime& rDateTime )
     size_t nPos = 0;
     bool bFound = false;
     for( size_t nSize = maOrigItemList.GetSize(); !bFound && (nPos < nSize); ++nPos )
-        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsDateTime( rDateTime )) == true )
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsDateTime( rDateTime )) )
             InsertItemArrayIndex( nPos );
     if( !bFound )
         InsertOrigItem( new XclExpPCItem( rDateTime ) );
@@ -495,7 +495,7 @@ void XclExpPCField::InsertOrigBoolItem( bool bValue )
     size_t nPos = 0;
     bool bFound = false;
     for( size_t nSize = maOrigItemList.GetSize(); !bFound && (nPos < nSize); ++nPos )
-        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsBool( bValue )) == true )
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsBool( bValue )) )
             InsertItemArrayIndex( nPos );
     if( !bFound )
         InsertOrigItem( new XclExpPCItem( bValue ) );

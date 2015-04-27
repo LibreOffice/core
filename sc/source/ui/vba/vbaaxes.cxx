@@ -176,7 +176,7 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) 
     // bodgy helperapi port bits
     sal_Int32 nAxisGroup = xlPrimary;
     sal_Int32 nType = -1;
-    if ( !_nType.hasValue() || ( ( _nType >>= nType ) == false )  )
+    if ( !_nType.hasValue() || !( _nType >>= nType ) )
         throw uno::RuntimeException("Axes::Item Failed to extract type"  );
 
     if ( _oAxisGroup.hasValue() )

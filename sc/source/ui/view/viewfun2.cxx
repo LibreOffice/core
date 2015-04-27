@@ -314,7 +314,7 @@ static bool lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeL
         {
             rRangeList.Append( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
             nEndRow = static_cast< SCROW >( nExtend );
-            if ( ( bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, aStart.Row() ) ) == true )
+            if ( ( bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, aStart.Row() ) ) )
             {
                 nStartRow = nEndRow;
             }
@@ -356,7 +356,7 @@ static bool lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRangeList
         {
             rRangeList.Append( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
             nEndCol = static_cast< SCCOL >( nExtend );
-            if ( ( bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, aStart.Col() ) ) == true )
+            if ( ( bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, aStart.Col() ) ) )
             {
                 nStartCol = nEndCol;
             }

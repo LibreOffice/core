@@ -1105,7 +1105,7 @@ void ScDPOutput::Output()
                         ++nEnd;
                     SCROW nEndRowPos = nDataStartRow + (SCROW)nEnd;     //TODO: check for overflow
                     outputimp.AddRow( nRowPos );
-                    if ( vbSetBorder[ nRow ] == false )
+                    if ( !vbSetBorder[ nRow ] )
                     {
                         outputimp.OutputBlockFrame( nColPos, nRowPos, nTabEndCol, nEndRowPos );
                         vbSetBorder[ nRow ]  = true;

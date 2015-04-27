@@ -74,7 +74,7 @@ ScVbaValidation::getInCellDropdown() throw (uno::RuntimeException, std::exceptio
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     sal_Int32 nShowList = 0;
     xProps->getPropertyValue( SC_UNONAME_SHOWLIST )  >>= nShowList;
-    return ( nShowList ? sal_True : false );
+    return nShowList != 0;
 }
 
 void SAL_CALL

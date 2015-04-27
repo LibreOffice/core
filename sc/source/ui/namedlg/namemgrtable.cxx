@@ -175,7 +175,7 @@ void ScRangeManagerTable::CheckForFormulaString()
     for (SvTreeListEntry* pEntry = GetFirstEntryInView(); pEntry ; pEntry = GetNextEntryInView(pEntry))
     {
         std::map<SvTreeListEntry*, bool>::const_iterator itr = maCalculatedFormulaEntries.find(pEntry);
-        if (itr == maCalculatedFormulaEntries.end() || itr->second == false)
+        if (itr == maCalculatedFormulaEntries.end() || !itr->second)
         {
             ScRangeNameLine aLine;
             GetLine( aLine, pEntry);
