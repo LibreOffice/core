@@ -2960,8 +2960,8 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
             const OUString& rTmp(GetText());
             if (rTmp.isEmpty())
             {
-                const sal_Unicode cUppercaseAlpha = 0x0391;
-                const sal_Unicode cUppercaseOmega = 0x03A9;
+                static const sal_Unicode cUppercaseAlpha = 0x0391;
+                static const sal_Unicode cUppercaseOmega = 0x03A9;
                 sal_Unicode cChar = rTmp[0];
                 // uppercase letters should be straight and lowercase letters italic
                 bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
