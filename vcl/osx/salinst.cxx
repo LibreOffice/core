@@ -488,7 +488,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         switch ([pEvent data1])
         {
             case kRemoteButtonPlay:
-                nCommand = ( bIsFullScreenMode == true ) ? MEDIA_COMMAND_PLAY_PAUSE : MEDIA_COMMAND_PLAY;
+                nCommand = bIsFullScreenMode ? MEDIA_COMMAND_PLAY_PAUSE : MEDIA_COMMAND_PLAY;
                 break;
 
             // kept for experimentation purpose (scheduled for future implementation)
