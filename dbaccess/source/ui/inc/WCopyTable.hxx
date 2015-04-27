@@ -324,7 +324,7 @@ namespace dbaui
 
         virtual ~OCopyTableWizard();
 
-        virtual long        DeactivatePage() SAL_OVERRIDE;
+        virtual bool        DeactivatePage() SAL_OVERRIDE;
         OKButton&           GetOKButton() { return static_cast<OKButton&>(*m_pbFinish); }
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
         void                EnableButton(Wizard_Button_Style eStyle, bool bEnable);

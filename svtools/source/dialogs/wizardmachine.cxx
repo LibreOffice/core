@@ -270,12 +270,12 @@ namespace svt
     }
 
 
-    long OWizardMachine::DeactivatePage()
+    bool OWizardMachine::DeactivatePage()
     {
         WizardState nCurrentState = getCurrentState();
         if (!leaveState(nCurrentState) || !WizardDialog::DeactivatePage())
-            return sal_False;
-        return sal_True;
+            return false;
+        return true;
     }
 
 

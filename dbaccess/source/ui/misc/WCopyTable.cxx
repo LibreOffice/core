@@ -834,7 +834,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
 {
     m_ePressed = WIZARD_FINISH;
-    bool bFinish = DeactivatePage() != 0;
+    bool bFinish = DeactivatePage();
 
     if(bFinish)
     {
@@ -989,10 +989,10 @@ void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle, bool bEnable)
 
 }
 
-long OCopyTableWizard::DeactivatePage()
+bool OCopyTableWizard::DeactivatePage()
 {
     OWizardPage* pPage = static_cast<OWizardPage*>(GetPage(GetCurLevel()));
-    return pPage ? pPage->LeavePage() : sal_False;
+    return pPage && pPage->LeavePage();
 }
 
 void OCopyTableWizard::AddWizardPage(OWizardPage* pPage)

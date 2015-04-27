@@ -200,7 +200,7 @@ namespace svt
     protected:
         // WizardDialog overridables
         virtual void        ActivatePage() SAL_OVERRIDE;
-        virtual long        DeactivatePage() SAL_OVERRIDE;
+        virtual bool        DeactivatePage() SAL_OVERRIDE;
 
         // our own overridables
 

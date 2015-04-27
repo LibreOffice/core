@@ -248,7 +248,7 @@ public:
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     virtual void        ActivatePage();
-    virtual long        DeactivatePage();
+    virtual bool        DeactivatePage();
 
     virtual void        queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
 
