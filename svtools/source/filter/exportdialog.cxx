@@ -326,7 +326,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
     }
 
     uno::Sequence< beans::PropertyValue > aRet( pFilterOptions->GetFilterData() );
-    if ( bUpdateConfig == false )
+    if ( !bUpdateConfig )
         delete pFilterOptions;
     return aRet;
 }

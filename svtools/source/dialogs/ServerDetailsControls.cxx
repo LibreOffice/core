@@ -174,7 +174,7 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
     bool bCheckedDavs = pCheckBox->IsChecked();
     if ( m_pEDPort->GetValue() == 80 && bCheckedDavs )
         m_pEDPort->SetValue( 443 );
-    else if ( m_pEDPort->GetValue() == 443 && bCheckedDavs == false )
+    else if ( m_pEDPort->GetValue() == 443 && !bCheckedDavs )
         m_pEDPort->SetValue( 80 );
 
     OUString sScheme( "http" );

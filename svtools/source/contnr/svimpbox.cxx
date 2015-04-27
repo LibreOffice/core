@@ -2105,7 +2105,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         // CheckButton? (TreeListBox: Check + Info)
-        if( ButtonDownCheckCtrl(rMEvt, pEntry, nY) == true)
+        if( ButtonDownCheckCtrl(rMEvt, pEntry, nY) )
             return;
         // Inplace-Editing?
     }

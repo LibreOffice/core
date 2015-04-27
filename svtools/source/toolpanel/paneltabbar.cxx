@@ -813,7 +813,7 @@ namespace svt
 
     void PanelTabBar_Impl::EnsureItemsCache()
     {
-        if ( m_bItemsDirty == false )
+        if ( !m_bItemsDirty )
         {
             DBG_CHECK( *this );
             return;
