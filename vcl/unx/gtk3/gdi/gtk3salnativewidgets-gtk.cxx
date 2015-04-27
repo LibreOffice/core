@@ -961,8 +961,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case RENDER_TOOLBAR_SEPERATOR:
         gtk_render_line(context, cr,
-                        rControlRegion.GetWidth() / 2, 3,
-                        rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() - 3 );
+                        rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() * 0.2,
+                        rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() * 0.8 );
         break;
     case RENDER_ARROW:
         gtk_render_arrow(context, cr,
