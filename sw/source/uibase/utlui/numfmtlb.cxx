@@ -96,7 +96,7 @@ void NumFormatListBox::Init(short nFormatType, bool bUsrFmts)
     else
         eCurLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
 
-    if (bUsrFmts == false)
+    if (!bUsrFmts)
     {
         pOwnFormatter = new SvNumberFormatter(comphelper::getProcessComponentContext(), eCurLanguage);
     }

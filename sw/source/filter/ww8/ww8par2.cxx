@@ -2246,10 +2246,10 @@ void WW8TabDesc::CalcDefaults()
         so the default mapping forward wont't work. So map it (and
         contiguous invalid cells backwards to the last valid cell instead.
         */
-        if (i && pR->bExist[i-1] == false)
+        if (i && !pR->bExist[i-1])
         {
             sal_uInt16 k=i-1;
-            while (k && pR->bExist[k] == false)
+            while (k && !pR->bExist[k])
                 k--;
             for (sal_uInt16 n=k+1;n<i;n++)
                 pR->nTransCell[n] = pR->nTransCell[k];
@@ -2338,7 +2338,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
         }
     }
 
-    if (bSetMinHeight == true)
+    if (bSetMinHeight)
     {
         // minimize Fontsize to minimize height growth of the header/footer
         // set font size to 1 point to minimize y-growth of Hd/Ft

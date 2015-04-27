@@ -777,7 +777,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     ListBoxEntries_t aRedlines;
 
     // don't activate
-    OSL_ENSURE( bInhibitActivate == false,
+    OSL_ENSURE( !bInhibitActivate,
                 "recursive call of CallAcceptReject?");
     bInhibitActivate = true;
 

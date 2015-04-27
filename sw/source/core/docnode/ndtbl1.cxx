@@ -1212,7 +1212,7 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
                 }
             }
 
-            if ( false == bRet )
+            if ( !bRet )
                 break;
         }
     }

@@ -2691,7 +2691,7 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     const SvxBoxItemLine* pBrd = aBorders;
 
     bool bExportDistanceFromPageEdge = false;
-    if ( rOptions.bCheckDistanceSize == true && boxHasLineLargerThan31(rBox) == true )
+    if ( rOptions.bCheckDistanceSize && boxHasLineLargerThan31(rBox) )
     {
         // The distance is larger than '31'. This cannot be exported as 'distance from text'.
         // Instead - it should be exported as 'distance from page edge'.
@@ -5461,7 +5461,7 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmF
     if ( pBottom || pTop || pLeft || pRight )
     {
         bool bExportDistanceFromPageEdge = false;
-        if ( boxHasLineLargerThan31(rBox) == true )
+        if ( boxHasLineLargerThan31(rBox) )
         {
             // The distance is larger than '31'. This cannot be exported as 'distance from text'.
             // Instead - it should be exported as 'distance from page edge'.

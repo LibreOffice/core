@@ -642,7 +642,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                 if (bStartAttr)
                 {
                     ImportSprm(aRes.pMemPos, aRes.nSprmId);
-                    if (!bDoingSymbol && bSymbol == true)
+                    if (!bDoingSymbol && bSymbol)
                     {
                         bDoingSymbol = true;
                         nStartReplace = nTxtStart;
@@ -652,7 +652,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                 else
                 {
                     EndSprm( aRes.nSprmId );
-                    if (bSymbol == false && bDoingSymbol)
+                    if (!bSymbol && bDoingSymbol)
                     {
                         bDoingSymbol = false;
                         OUStringBuffer sTemp;

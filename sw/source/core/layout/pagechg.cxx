@@ -190,7 +190,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
 
     // create and insert body area if it is not a blank page
     SwDoc *pDoc = pFmt->GetDoc();
-    if ( false == (bEmptyPage = (pFmt == pDoc->GetEmptyPageFmt())) )
+    if ( !(bEmptyPage = (pFmt == pDoc->GetEmptyPageFmt())) )
     {
         bEmptyPage = false;
         Calc();                     // so that the PrtArea is correct

@@ -2946,7 +2946,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
          A special case for converting some inline form controls to form fields
          when in winword 8+ mode
         */
-        if ((bUseEscher == true) && (eType == sw::Frame::eFormControl))
+        if (bUseEscher && (eType == sw::Frame::eFormControl))
         {
             if ( m_rWW8Export.MiserableFormFieldExportHack( rFrmFmt ) )
                 return ;

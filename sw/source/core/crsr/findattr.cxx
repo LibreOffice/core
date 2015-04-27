@@ -82,7 +82,7 @@ bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
             bNumOffsetEqual = false;
         }
 
-        if (bNumOffsetEqual == false)
+        if (!bNumOffsetEqual)
             return false;
 
         return static_cast<const SwFmtPageDesc&>(rItem1).GetPageDesc() == static_cast<const SwFmtPageDesc&>(rItem2).GetPageDesc();

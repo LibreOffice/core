@@ -179,7 +179,7 @@ bool SwEditShell::SelectionHasNumber() const
                         {
                             bResult = false;
                         }
-                        if (bResult==false) {
+                        if (!bResult) {
                             break;
                         }
                     }
@@ -218,7 +218,7 @@ bool SwEditShell::SelectionHasBullet() const
                     {
                         bResult = pTxtNd->HasBullet();
 
-                        if (bResult==false) {
+                        if (!bResult) {
                             break;
                         }
                     }

@@ -2561,11 +2561,11 @@ void SwWW8ImplReader::EndSpecial()
         StopTable();
         maApos.pop_back();
         --nInTable;
-        if (maApos[nInTable] == true)
+        if (maApos[nInTable])
             StopApo();
     }
 
-    if (maApos[0] == true)
+    if (maApos[0])
         StopApo();
 
     OSL_ENSURE(!nInTable, "unclosed table!");

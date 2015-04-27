@@ -1286,7 +1286,7 @@ SwCntntNode* SwNodes::GoNext(SwNodeIndex *pIdx) const
 
     SwNodeIndex aTmp(*pIdx, +1);
     SwNode* pNd = 0;
-    while( aTmp < Count()-1 && false == ( pNd = &aTmp.GetNode())->IsCntntNode() )
+    while( aTmp < Count()-1 && !( pNd = &aTmp.GetNode())->IsCntntNode() )
         ++aTmp;
 
     if( aTmp == Count()-1 )
@@ -1303,7 +1303,7 @@ SwCntntNode* SwNodes::GoPrevious(SwNodeIndex *pIdx) const
 
     SwNodeIndex aTmp( *pIdx, -1 );
     SwNode* pNd = 0;
-    while( aTmp.GetIndex() && false == ( pNd = &aTmp.GetNode())->IsCntntNode() )
+    while( aTmp.GetIndex() && !( pNd = &aTmp.GetNode())->IsCntntNode() )
         --aTmp;
 
     if( !aTmp.GetIndex() )

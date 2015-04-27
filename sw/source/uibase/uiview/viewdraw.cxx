@@ -709,7 +709,7 @@ bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
         const size_t nCnt = pList->GetObjCount();
 
         for (size_t i = 0; i < nCnt; ++i)
-            if ((bRet = HasOnlyObj(pList->GetObj(i), eObjInventor)) == false)
+            if (!(bRet = HasOnlyObj(pList->GetObj(i), eObjInventor)))
                 break;
     }
     else if (eObjInventor == pSdrObj->GetObjInventor())
