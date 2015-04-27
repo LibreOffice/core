@@ -684,7 +684,7 @@ UUIInteractionHelper::handlePasswordRequest(
     {
         nMode               = aDocumentPasswordRequest2.Mode;
         aDocumentName       = aDocumentPasswordRequest2.Name;
-        OSL_ENSURE( bMSCryptoMode == false, "bMSCryptoMode should be false" );
+        OSL_ENSURE( !bMSCryptoMode, "bMSCryptoMode should be false" );
         bIsPasswordToModify = aDocumentPasswordRequest2.IsRequestPasswordToModify;
 
         bDoHandleRequest = true;
@@ -695,8 +695,8 @@ UUIInteractionHelper::handlePasswordRequest(
     {
         nMode               = aDocumentPasswordRequest.Mode;
         aDocumentName       = aDocumentPasswordRequest.Name;
-        OSL_ENSURE( bMSCryptoMode == false, "bMSCryptoMode should be false" );
-        OSL_ENSURE( bIsPasswordToModify == false, "bIsPasswordToModify should be false" );
+        OSL_ENSURE( !bMSCryptoMode, "bMSCryptoMode should be false" );
+        OSL_ENSURE( !bIsPasswordToModify, "bIsPasswordToModify should be false" );
 
         bDoHandleRequest = true;
     }
@@ -718,7 +718,7 @@ UUIInteractionHelper::handlePasswordRequest(
         nMode               = aDocumentMSPasswordRequest.Mode;
         aDocumentName       = aDocumentMSPasswordRequest.Name;
         bMSCryptoMode       = true;
-        OSL_ENSURE( bIsPasswordToModify == false, "bIsPasswordToModify should be false" );
+        OSL_ENSURE( !bIsPasswordToModify, "bIsPasswordToModify should be false" );
 
         bDoHandleRequest = true;
     }
