@@ -104,7 +104,7 @@ void XDatabaseRange::testGetSortDescriptor()
         {
             bool bCopyOutputData = true;
             xProp.Value >>= bCopyOutputData;
-            CPPUNIT_ASSERT(bCopyOutputData == false);
+            CPPUNIT_ASSERT(!bCopyOutputData);
         }
         else if (xProp.Name == "OutputPosition")
         {
@@ -114,7 +114,7 @@ void XDatabaseRange::testGetSortDescriptor()
         {
             bool bIsUserListEnabled  = true;
             xProp.Value >>= bIsUserListEnabled;
-            CPPUNIT_ASSERT(bIsUserListEnabled == false);
+            CPPUNIT_ASSERT(!bIsUserListEnabled);
 
         }
         else if (xProp.Name == "UserListIndex")

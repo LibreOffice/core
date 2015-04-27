@@ -54,7 +54,7 @@ void XSheetAnnotation::testGetIsVisible()
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     bool isVisible = aSheetAnnotation->getIsVisible();
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong visible state", isVisible == true);
+    CPPUNIT_ASSERT_MESSAGE("Wrong visible state", isVisible);
 }
 void XSheetAnnotation::testSetIsVisible()
 {
@@ -62,7 +62,7 @@ void XSheetAnnotation::testSetIsVisible()
     aSheetAnnotation->setIsVisible(false);
     bool isVisible = aSheetAnnotation->getIsVisible();
 
-    CPPUNIT_ASSERT_MESSAGE("Visible state not changed", isVisible == false);
+    CPPUNIT_ASSERT_MESSAGE("Visible state not changed", !isVisible);
 }
 
 }
