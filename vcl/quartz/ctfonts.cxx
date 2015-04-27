@@ -80,7 +80,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
          ((mpFontData->GetWeight() < WEIGHT_SEMIBOLD) &&
           (mpFontData->GetWeight() != WEIGHT_DONTKNOW)) )
     {
-        int nStroke = -10.0;
+        int nStroke = -lrint((3.5F * pReqFont->GetWeight()) / mpFontData->GetWeight());
         CFNumberRef rStroke = CFNumberCreate(NULL, kCFNumberSInt32Type, &nStroke);
         CFDictionarySetValue(mpStyleDict, kCTStrokeWidthAttributeName, rStroke);
     }
