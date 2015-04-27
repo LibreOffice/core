@@ -918,7 +918,7 @@ bool OTableController::checkColumns(bool _bNew)
     Reference< XDatabaseMetaData > xMetaData = getMetaData( );
     DatabaseMetaData aMetaData( getConnection() );
 
-    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : true);
+    ::comphelper::UStringMixEqual bCase(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
     for(;aIter != aEnd;++aIter)
@@ -1001,7 +1001,7 @@ void OTableController::alterColumns()
     // contains all columns names which are already handled those which are not in the list will be deleted
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
-    ::std::map< OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : true);
+    ::std::map< OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed
@@ -1465,7 +1465,7 @@ OUString OTableController::createUniqueName(const OUString& _rName)
     OUString sName = _rName;
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
-    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : true);
+    ::comphelper::UStringMixEqual bCase(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();

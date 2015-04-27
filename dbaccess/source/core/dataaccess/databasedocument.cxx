@@ -124,7 +124,7 @@ namespace dbaccess
 
 bool ViewMonitor::onControllerConnected( const Reference< XController >& _rxController )
 {
-    bool bFirstControllerEver = ( m_bEverHadController == false );
+    bool bFirstControllerEver = !m_bEverHadController;
     m_bEverHadController = true;
 
     m_xLastConnectedController = _rxController;

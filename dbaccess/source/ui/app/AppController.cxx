@@ -387,7 +387,7 @@ void SAL_CALL OApplicationController::disposing()
             if ( !sUrl.isEmpty() )
             {
                 ::comphelper::NamedValueCollection aArgs( m_xModel->getArgs() );
-                if ( true == aArgs.getOrDefault( "PickListEntry", true ) )
+                if ( aArgs.getOrDefault( "PickListEntry", true ) )
                 {
                     OUString     aFilter;
                     INetURLObject       aURL( m_xModel->getURL() );
