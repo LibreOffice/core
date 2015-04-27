@@ -1301,7 +1301,7 @@ void UpdateHandler::createDialog()
     uno::Reference< awt::XUnoControlDialog > xControl = awt::UnoControlDialog::create( mxContext );
     xControl->setModel( xControlModel );
 
-    if ( mbVisible == false )
+    if ( !mbVisible )
     {
         xControl->setVisible( false );
     }

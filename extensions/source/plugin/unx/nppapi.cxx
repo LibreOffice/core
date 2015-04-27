@@ -69,7 +69,7 @@ IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
     osl::MutexGuard aGuard( m_aUserEventMutex );
     bool bFound = false;
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
-         it != allConnectors.end() && bFound == false; ++it )
+         it != allConnectors.end() && !bFound; ++it )
     {
         if( *it == this )
             bFound = true;
@@ -84,7 +84,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 {
     bool bFound = false;
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
-         it != allConnectors.end() && bFound == false; ++it )
+         it != allConnectors.end() && !bFound; ++it )
     {
         if( *it == this )
             bFound = true;
