@@ -576,7 +576,7 @@ ParaPortion::~ParaPortion()
 
 void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
 {
-    if ( bInvalid == false )
+    if ( !bInvalid )
     {
 //      nInvalidPosEnd = nStart;    // ??? => CreateLines
         nInvalidPosStart = ( nDiff >= 0 ) ? nStart : ( nStart + nDiff );
@@ -612,7 +612,7 @@ void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
 
 void ParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /* nEnd */ )
 {
-    if ( bInvalid == false )
+    if ( !bInvalid )
     {
         nInvalidPosStart = nStart;
 //      nInvalidPosEnd = nEnd;
