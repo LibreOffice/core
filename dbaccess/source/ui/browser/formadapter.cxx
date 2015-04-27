@@ -631,7 +631,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getRow() throw( ::com::sun::star::sdbc::SQLE
 {
     if (m_xMainForm.is())
         return m_xMainForm->getRow();
-    return sal_False;
+    return 0;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::absolute(sal_Int32 row) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
