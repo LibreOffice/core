@@ -28,29 +28,7 @@
       <DefaultName>Nicaragua</DefaultName>
     </Country>
   </LC_INFO>
-  <LC_CTYPE unoid="generic">
-    <Separators>
-      <DateSeparator>-</DateSeparator>
-      <ThousandSeparator>,</ThousandSeparator>
-      <DecimalSeparator>.</DecimalSeparator>
-      <TimeSeparator>:</TimeSeparator>
-      <Time100SecSeparator>.</Time100SecSeparator>
-      <ListSeparator>;</ListSeparator>
-      <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator> de </LongDateDaySeparator>
-      <LongDateMonthSeparator> de </LongDateMonthSeparator>
-      <LongDateYearSeparator> </LongDateYearSeparator>
-    </Separators>
-    <Markers>
-      <QuotationStart>‘</QuotationStart>
-      <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>“</DoubleQuotationStart>
-      <DoubleQuotationEnd>”</DoubleQuotationEnd>
-    </Markers>
-    <TimeAM>a.m.</TimeAM>
-    <TimePM>p.m.</TimePM>
-    <MeasurementSystem>Metric</MeasurementSystem>
-  </LC_CTYPE>
+  <LC_CTYPE ref="es_GT"/>
   <LC_FORMAT ref="es_GT" replaceTo="[$C$-4C0A] "/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
