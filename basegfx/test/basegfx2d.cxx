@@ -729,15 +729,15 @@ public:
         CPPUNIT_ASSERT_MESSAGE("#1 second control point wrong",
                                aPoly.getNextControlPoint(0) == B2DPoint(3,3));
         CPPUNIT_ASSERT_MESSAGE("next control point not used",
-                               aPoly.isNextControlPointUsed(0) == false);
+                               !aPoly.isNextControlPointUsed(0));
 
         aPoly.setNextControlPoint(0,B2DPoint(4,4));
         CPPUNIT_ASSERT_MESSAGE("#1.1 second control point wrong",
                                aPoly.getNextControlPoint(0) == B2DPoint(4,4));
         CPPUNIT_ASSERT_MESSAGE("next control point used",
-                               aPoly.isNextControlPointUsed(0) == true);
+                               aPoly.isNextControlPointUsed(0));
         CPPUNIT_ASSERT_MESSAGE("areControlPointsUsed() wrong",
-                               aPoly.areControlPointsUsed() == true);
+                               aPoly.areControlPointsUsed());
         CPPUNIT_ASSERT_MESSAGE("getContinuityInPoint() wrong",
                                aPoly.getContinuityInPoint(0) == CONTINUITY_C2);
 
@@ -749,7 +749,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("resetControlPoints() did not clear",
                                aPoly.getNextControlPoint(0) == B2DPoint(3,3));
         CPPUNIT_ASSERT_MESSAGE("areControlPointsUsed() wrong #2",
-                               aPoly.areControlPointsUsed() == false);
+                               !aPoly.areControlPointsUsed());
 
         aPoly.clear();
         aPoly.append(B2DPoint(0,0));
