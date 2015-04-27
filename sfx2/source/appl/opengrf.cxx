@@ -111,7 +111,7 @@ short SvxOpenGraphicDialog::Execute()
     sal_uInt16  nImpRet;
     bool    bQuitLoop(false);
 
-    while( bQuitLoop == false &&
+    while( !bQuitLoop &&
            mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
     {
         if( !GetPath().isEmpty() )

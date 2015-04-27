@@ -851,7 +851,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                 {
                 }
 
-                if ( bSend == false )
+                if ( !bSend )
                 {
                     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
 

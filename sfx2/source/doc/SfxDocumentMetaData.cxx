@@ -2171,7 +2171,7 @@ sal_Bool SAL_CALL SfxDocumentMetaData::isModified(  )
     checkInit();
     css::uno::Reference<css::util::XModifiable> xMB(m_xUserDefined,
         css::uno::UNO_QUERY);
-    return m_isModified || (xMB.is() ? xMB->isModified() : false);
+    return m_isModified || (xMB.is() && xMB->isModified());
 }
 
 void SAL_CALL SfxDocumentMetaData::setModified( sal_Bool bModified )
