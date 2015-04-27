@@ -213,7 +213,7 @@ OpenGL3DRenderer::ShaderResources::~ShaderResources()
 
 void OpenGL3DRenderer::CheckGLSLVersion()
 {
-    maResources.m_b330Support = GLEW_VERSION_3_3 == 1;
+    maResources.m_b330Support = GLEW_VERSION_3_3;
 }
 
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
