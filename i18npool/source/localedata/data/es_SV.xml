@@ -28,7 +28,7 @@
       <DefaultName>El Salvador</DefaultName>
     </Country>
   </LC_INFO>
-  <LC_CTYPE ref="es_NI"/>
+  <LC_CTYPE ref="es_BO"/>
   <LC_FORMAT ref="es_BO" replaceTo="[$C-440A]"/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
