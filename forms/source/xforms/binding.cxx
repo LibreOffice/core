@@ -816,9 +816,8 @@ Binding::XDataType_t Binding::getDataType()
 bool Binding::isValid_DataType()
 {
     Reference<XDataType> xDataType = getDataType();
-    return xDataType.is()
-        ? xDataType->validate( maBindingExpression.getString() )
-        : true;
+    return !xDataType.is()
+        || xDataType->validate( maBindingExpression.getString() );
 }
 
 OUString Binding::explainInvalid_DataType()

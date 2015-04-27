@@ -75,7 +75,7 @@ void PropertySetBase::registerProperty( const Property& rProperty,
     OSL_ENSURE( rAccessor.get(), "PropertySetBase::registerProperty: invalid property accessor, this will crash!" );
     m_aAccessors.insert( PropertyAccessors::value_type( rProperty.Handle, rAccessor ) );
 
-    OSL_ENSURE( ( rAccessor->isWriteable() == true )
+    OSL_ENSURE( rAccessor->isWriteable()
                 == ( ( rProperty.Attributes & com::sun::star::beans::PropertyAttribute::READONLY ) == 0 ),
         "PropertySetBase::registerProperty: inconsistence!" );
 
