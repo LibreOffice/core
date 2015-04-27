@@ -230,7 +230,7 @@ int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 
 bool SvxBitmapTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
 {
-    if( nDlgType == 0 && *pbAreaTP == false ) // area dialog
+    if( nDlgType == 0 && !*pbAreaTP ) // area dialog
     {
         if(PT_BITMAP == *pPageType)
         {

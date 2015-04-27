@@ -281,7 +281,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
 
 bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if( nDlgType == 0 && *pbAreaTP == false ) // area dialog
+    if( nDlgType == 0 && !*pbAreaTP ) // area dialog
     {
         if( *pPageType == PT_HATCH )
         {

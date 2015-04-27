@@ -959,7 +959,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
     {
         // If we are displaying Slot API commands then the dialog is being
         // run from Tools/Configure and we should not close it, just hide it
-        if ( m_bShowSlots == false )
+        if ( !m_bShowSlots )
         {
             EndDialog( RET_CANCEL );
         }
@@ -974,7 +974,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 
         // If we are displaying Slot API commands then this the dialog is being
         // run from Tools/Configure and we should not close it
-        if ( m_bShowSlots == false )
+        if ( !m_bShowSlots )
         {
             EndDialog( RET_OK );
         }

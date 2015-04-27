@@ -559,7 +559,7 @@ long SvxColorTabPage::CheckChanges_Impl()
 bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( ( nDlgType != 0 ) ||
-        ( *pPageType == PT_COLOR && *pbAreaTP == false ) )
+        ( *pPageType == PT_COLOR && !*pbAreaTP ) )
     {
         OUString aString;
         Color  aColor;

@@ -309,7 +309,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
 
 bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if( nDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == false )
+    if( nDlgType == 0 && *pPageType == PT_GRADIENT && !*pbAreaTP )
     {
         // CheckChanges(); <-- duplicate inquiry ?
 

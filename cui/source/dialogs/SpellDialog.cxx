@@ -382,7 +382,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
     //MarkNextError is not initially called if the UndoEdit mode is active
     bool bNextSentence = false;
     if((!m_pSentenceED->IsUndoEditMode() && m_pSentenceED->MarkNextError( bIgnoreCurrentError, xSpell )) ||
-            true == ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_pSentenceED->IsUndoEditMode()) && m_pSentenceED->MarkNextError( false, xSpell )))
+            ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_pSentenceED->IsUndoEditMode()) && m_pSentenceED->MarkNextError( false, xSpell )))
     {
         const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
         if( pSpellErrorDescription )
