@@ -249,7 +249,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
 #endif
             }
         }
-        else if( mbUsableSelection != true )
+        else if( !mbUsableSelection )
         {
             try
             {

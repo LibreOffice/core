@@ -119,7 +119,7 @@ void RequestQueue::AddRequest (
     Request aRequest (aKey, nPriority, eRequestClass);
 
     std::pair<Container::iterator,bool> ret = mpRequestQueue->insert(aRequest);
-    bool bInserted = ret.second == true;
+    bool bInserted = ret.second;
 
     if (bInserted)
     {

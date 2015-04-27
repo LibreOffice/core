@@ -721,7 +721,7 @@ bool ImplSdPPTImport::Import()
                     static_cast<SdPage*>(pNotesClone)->SetLayoutName( aLayoutName );
                 }
             }
-            else if ( pPersist->bStarDrawFiller == false )
+            else if ( !pPersist->bStarDrawFiller )
             {
                 PptSlidePersistEntry* pE = pPersist;
                 while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
@@ -1761,7 +1761,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                     }
                     aHd.SeekToEndOfRecord( rStCtrl );
                 }
-                if ( bTryTwice && ( bSSSlideInfoAtom == false ) )
+                if ( bTryTwice && !bSSSlideInfoAtom )
                 {
                     bTryTwice = false;
                     if ( HasMasterPage( nAktPageNum, eAktPageKind ) )

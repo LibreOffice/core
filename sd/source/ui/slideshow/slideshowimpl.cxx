@@ -1054,7 +1054,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                 SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
             aProperties.push_back(
                 beans::PropertyValue( "DisableAnimationZOrder" ,
-                    -1, Any( bZOrderEnabled == false ),
+                    -1, Any( !bZOrderEnabled ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             aProperties.push_back(

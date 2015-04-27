@@ -374,7 +374,7 @@ void AnnotationManagerImpl::InsertAnnotation()
                     }
                 }
 
-                if( bFree == false)
+                if( !bFree )
                 {
                     x += width;
                     if( x > page_width )

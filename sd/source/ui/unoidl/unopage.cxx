@@ -732,7 +732,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             bool    bVisible = false;
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
-            GetPage()->SetExcluded( bVisible == false );
+            GetPage()->SetExcluded( !bVisible );
             break;
         }
         case WID_PAGE_SOUNDFILE :
@@ -1162,7 +1162,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     case WID_PAGE_VISIBLE :
     {
-        bool bVisible = GetPage()->IsExcluded() == false;
+        bool bVisible = !GetPage()->IsExcluded();
         aAny <<= bVisible;
         break;
     }

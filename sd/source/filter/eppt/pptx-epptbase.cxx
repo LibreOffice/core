@@ -714,7 +714,7 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
 {
     while(true)
     {
-        if ( ( bGroup == false ) || ( GetCurrentGroupLevel() == 0 ) )
+        if ( !bGroup || ( GetCurrentGroupLevel() == 0 ) )
         {
             Any aAny( mXShapes->getByIndex( nIndex ) );
             aAny >>= mXShape;
@@ -972,7 +972,7 @@ bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( bool bForOOMLX )
     bool bOtherThanPlaceHolders = false;
 
     if ( nShapes )
-        for ( sal_uInt32 nIndex = 0; ( nIndex < nShapes ) && ( bOtherThanPlaceHolders == false ); nIndex++ )
+        for ( sal_uInt32 nIndex = 0; ( nIndex < nShapes ) && !bOtherThanPlaceHolders; nIndex++ )
         {
             if ( GetShapeByIndex( nIndex ) && mType != "drawing.Page" )
             {

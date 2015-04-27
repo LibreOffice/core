@@ -2583,7 +2583,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 sal_uInt16 nSpType, nSpFlags;
                 ::com::sun::star::awt::Rectangle aNewRect;
-                if ( aPropOpt.CreateConnectorProperties( mXShape, aSolverContainer, aNewRect, nSpType, nSpFlags ) == false )
+                if ( !aPropOpt.CreateConnectorProperties( mXShape, aSolverContainer, aNewRect, nSpType, nSpFlags ) )
                     continue;
 
                 maRect = MapRectangle( aNewRect );
@@ -3305,9 +3305,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( !pClientTextBox )
                     pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
 
-                if ( mbEmptyPresObj == false )
+                if ( !mbEmptyPresObj )
                 {
-                    if ( ( ePageType == NORMAL ) && ( bMasterPage == false ) )
+                    if ( ( ePageType == NORMAL ) && !bMasterPage )
                     {
                         sal_uInt32 nTextType = EPP_TEXTTYPE_Body;
                         if ( mnTextStyle == EPP_TEXTSTYLE_BODY )

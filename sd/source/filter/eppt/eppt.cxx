@@ -227,7 +227,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "LoopSound" ) ) )
         aAny >>= bLoopSound;
 
-    bool bNeedsSSSlideInfoAtom = ( bVisible == false )
+    bool bNeedsSSSlideInfoAtom = !bVisible
                                 || ( mnDiaMode == 2 )
                                 || ( bIsSound )
                                 || ( bStopSound )
@@ -260,7 +260,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nTransitionType = GetTransition( eFe, nDirection );
         if ( mnDiaMode == 2 )                                   // automatic ?
             nBuildFlags |= 0x400;
-        if ( bVisible == false )
+        if ( !bVisible )
             nBuildFlags |= 4;
         if ( bIsSound )
             nBuildFlags |= 16;
