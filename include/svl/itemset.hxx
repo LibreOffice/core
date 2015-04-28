@@ -66,7 +66,7 @@ protected:
     // Notification-Callback
     virtual void                Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew );
 
-    int                         PutDirect(const SfxPoolItem &rItem);
+    void                        PutDirect(const SfxPoolItem &rItem);
 
 public:
                                 SfxItemSet( const SfxItemSet& );

@@ -1563,7 +1563,7 @@ SfxItemSet *SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
                 : new SfxItemSet(*m_pPool, m_pWhichRanges);
 }
 
-int SfxItemSet::PutDirect(const SfxPoolItem &rItem)
+void SfxItemSet::PutDirect(const SfxPoolItem &rItem)
 {
     SfxItemArray ppFnd = m_pItems;
     const sal_uInt16* pPtr = m_pWhichRanges;
@@ -1582,7 +1582,7 @@ int SfxItemSet::PutDirect(const SfxPoolItem &rItem)
             if( pOld ) // One already present
             {
                 if( rItem == **ppFnd )
-                    return sal_False; // Already present!
+                    return; // Already present!
                 m_pPool->Remove( *pOld );
             }
             else
@@ -1598,12 +1598,11 @@ int SfxItemSet::PutDirect(const SfxPoolItem &rItem)
                     rItem.AddRef();
             }
 
-            return sal_True;
+            return;
         }
         ppFnd += *(pPtr+1) - *pPtr + 1;
         pPtr += 2;
     }
-    return sal_False;
 }
 
 sal_Int32 SfxItemSet::getHash() const
