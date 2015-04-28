@@ -149,8 +149,8 @@ class LibDialog: public ModalDialog
 private:
     VclPtr<VclFrame>       m_pStorageFrame;
     VclPtr<CheckBox>       m_pLibBox;
-    VclPtr<::CheckBox>       m_pReferenceBox;
-    VclPtr<::CheckBox>       m_pReplaceBox;
+    VclPtr< ::CheckBox>       m_pReferenceBox;
+    VclPtr< ::CheckBox>       m_pReplaceBox;
 
 public:
     LibDialog( vcl::Window* pParent );
