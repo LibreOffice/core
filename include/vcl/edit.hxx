@@ -105,7 +105,7 @@ private:
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE OUString    ImplGetText() const;
-    SAL_DLLPRIVATE void        ImplRepaint(bool bLayout = false);
+    SAL_DLLPRIVATE void        ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout = false);
     SAL_DLLPRIVATE void        ImplInvalidateOrRepaint();
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection = 0 );

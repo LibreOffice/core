@@ -475,7 +475,7 @@ void Edit::ImplInvalidateOrRepaint()
             Update();
     }
     else
-        ImplRepaint();
+        Invalidate();
 }
 
 long Edit::ImplGetTextYPosition() const
@@ -487,7 +487,7 @@ long Edit::ImplGetTextYPosition() const
     return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
 }
 
-void Edit::ImplRepaint(bool bLayout)
+void Edit::ImplRepaint(vcl::RenderContext& /*rRenderContext*/, bool bLayout)
 {
     if ( !IsReallyVisible() )
         return;
@@ -1758,13 +1758,13 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
 void Edit::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<Edit*>(this)->ImplRepaint(true);
+    const_cast<Edit*>(this)->Invalidate();
 }
 
-void Edit::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void Edit::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    if ( !mpSubEdit )
-        ImplRepaint();
+    if (!mpSubEdit)
+        ImplRepaint(rRenderContext);
 }
 
 void Edit::Resize()
