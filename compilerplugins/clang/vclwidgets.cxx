@@ -265,7 +265,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (fieldDecl->isBitField()) {
         return true;
     }
-    const CXXRecordDecl *pParentRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getParent());
+    const CXXRecordDecl *pParentRecordDecl = isa<RecordDecl>(fieldDecl->getDeclContext()) ? dyn_cast<CXXRecordDecl>(fieldDecl->getParent()) : nullptr;
     if (containsWindowSubclass(fieldDecl->getType())) {
         // have to ignore this for now, nasty reverse dependency from tools->vcl
         if (!(pParentRecordDecl != nullptr && pParentRecordDecl->getQualifiedNameAsString() == "ErrorContextImpl")) {
