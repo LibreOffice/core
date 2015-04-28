@@ -143,7 +143,7 @@ SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsPercent() const
 {
     ForceUndirtyMrkPnt();
     bool bFirst=true;
-    sal_uInt16 nRet=sal_True;
+    sal_uInt16 nRet=sal_uInt16(true);
     const_cast<SdrGlueEditView*>(this)->ImpDoMarkedGluePoints(ImpGetPercent,true,&bFirst,&nRet);
     return (SDR_TRISTATE)nRet;
 }
