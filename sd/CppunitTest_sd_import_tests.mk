@@ -89,7 +89,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     sd/util/sd \
     sd/util/sdfilt \
     sd/util/sdd \
-    sdext/source/pdfimport/pdfimport \
+    $(if $(ENABLE_PDFIMPORT),sdext/source/pdfimport/pdfimport) \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \
@@ -114,7 +114,9 @@ $(eval $(call gb_CppunitTest_use_packages,sd_import_tests,\
 	oox_customshapes \
 ))
 
+ifneq ($(ENABLE_PDFIMPORT),)
 $(eval $(call gb_CppunitTest_use_executable,sd_import_tests,xpdfimport))
+endif
 
 $(call gb_CppunitTest_get_target,sd_import_tests) : $(call gb_AllLangResTarget_get_target,sd)
 
