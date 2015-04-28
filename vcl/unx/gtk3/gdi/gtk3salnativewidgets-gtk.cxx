@@ -926,6 +926,11 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             break;
         }
         break;
+    case CTRL_TAB_ITEM:
+        context = mpNoteBookStyle;
+        if (nState & ControlState::SELECTED)
+            flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_ACTIVE);
+        break;
     default:
         return false;
     }
@@ -936,8 +941,15 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
     gtk_style_context_save(context);
     gtk_style_context_set_state(context, flags);
+    if (nType == CTRL_TAB_ITEM)
+    {
+        gtk_style_context_add_region(mpNoteBookStyle, GTK_STYLE_REGION_TAB, GTK_REGION_EVEN);
+        gtk_style_context_add_class(context, GTK_STYLE_CLASS_TOP);
+    }
     if (styleClass)
+    {
         gtk_style_context_add_class(context, styleClass);
+    }
 
     switch(renderType)
     {
@@ -947,9 +959,11 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                               0, 0,
                               rControlRegion.GetWidth(), rControlRegion.GetHeight());
         if (renderType == RENDER_BACKGROUND_AND_FRAME)
+        {
             gtk_render_frame(context, cr,
                              0, 0,
                              rControlRegion.GetWidth(), rControlRegion.GetHeight());
+        }
         break;
     case RENDER_CHECK:
     case RENDER_RADIO:
