@@ -467,7 +467,7 @@ bool LinguProps::getPropertyBool(const OUString& aPropertyName) throw (css::uno:
 sal_Int16 LinguProps::getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue(aPropertyName);
-   sal_Int16 b = sal_False;
+   sal_Int16 b = 0;
    any >>= b;
    return b;
 }
