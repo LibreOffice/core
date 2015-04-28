@@ -134,7 +134,6 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
             return 0;
 
         case C_TOKEN( overlay ):
-            // default is 'false', not 'true' as specified
             mrModel.mbOverlay = rAttribs.getBool( XML_val, !bMSO2007Doc );
             return 0;
 
