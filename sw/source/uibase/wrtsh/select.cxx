@@ -861,7 +861,7 @@ int SwWrtShell::IntelligentCut(int nSelection, bool bCut)
         // there are multiple cursors, since a second was placed
         // already at the target position.
     if( IsAddMode() || !(nSelection & nsSelectionType::SEL_TXT) )
-        return sal_False;
+        return NO_WORD;
 
     OUString sTxt;
     CharClass& rCC = GetAppCharClass();
