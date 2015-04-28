@@ -1095,8 +1095,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         aRect.Right()+=10;
     }
 
-    bool bNativeOK = false;
-    if( ! bLayout && (bNativeOK = IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL) ) )
+    if (!bLayout && IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL))
     {
         const ImplControlValue aControlValue;
 
@@ -1112,8 +1111,10 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
             aClipRgn.Intersect( rRect );
 
         if( !aClipRgn.IsEmpty() )
-            bNativeOK = DrawNativeControl( CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aRect, nState,
-                aControlValue, OUString() );
+        {
+            DrawNativeControl(CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aRect, nState,
+                aControlValue, OUString());
+        }
     }
     else
     {
