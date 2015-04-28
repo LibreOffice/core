@@ -103,7 +103,7 @@ void MyWorkWindow::LoadGraphic( const OUString& sImageFile )
     }
 }
 
-void MyWorkWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void MyWorkWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     std::cout << "==> Paint! " << mnPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
 
@@ -124,7 +124,7 @@ void MyWorkWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
     mpFixedBitmap->SetBitmap( *mpBitmap );
     mpFixedBitmap->SetSizePixel( aSize );
 
-    WorkWindow::Paint( rRect );
+    WorkWindow::Paint(rRenderContext, rRect);
 
     if (mnPaintCount == 100)
         Application::Quit();

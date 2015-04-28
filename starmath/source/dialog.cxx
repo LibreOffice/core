@@ -247,9 +247,9 @@ VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const Sfx
 /**************************************************************************/
 
 
-void SmShowFont::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    Window::Paint( rRect );
+    Window::Paint(rRenderContext, rRect);
 
     OUString   Text (GetFont().GetName());
     Size    TextSize(GetTextWidth(Text), GetTextHeight());
@@ -1427,9 +1427,9 @@ void SmShowSymbol::setFontSize(vcl::Font &rFont) const
     rFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
 }
 
-void SmShowSymbol::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &rRect)
+void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
-    Control::Paint( rRect );
+    Control::Paint(rRenderContext, rRect);
 
     vcl::Font aFont(GetFont());
     setFontSize(aFont);
@@ -1711,9 +1711,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowChar(vcl::Window
     return new SmShowChar(pParent, nWinStyle);
 }
 
-void SmShowChar::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &rRect)
+void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
-    Control::Paint( rRect );
+    Control::Paint(rRenderContext, rRect);
 
     OUString aText( GetText() );
     if (!aText.isEmpty())

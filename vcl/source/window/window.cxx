@@ -3418,7 +3418,7 @@ void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle&
     assert(mpOutDevData);
     mpOutDevData->mpRecordLayout = pLayout;
     mpOutDevData->maRecordRect = rRect;
-    Paint( rRect );
+    Paint(*this, rRect);
     mpOutDevData->mpRecordLayout = NULL;
 }
 

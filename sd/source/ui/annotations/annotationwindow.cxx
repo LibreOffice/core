@@ -657,9 +657,9 @@ void AnnotationWindow::Deactivate()
     Engine()->GetUndoManager().Clear();
 }
 
-void AnnotationWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void AnnotationWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    FloatingWindow::Paint( rRect );
+    FloatingWindow::Paint(rRenderContext, rRect);
 
     if(mpMeta->IsVisible() && !mbReadonly)
     {

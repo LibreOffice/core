@@ -322,9 +322,10 @@ Size PrintDialog::ShowNupOrderWindow::GetOptimalSize() const
     return Size(70, 70);
 }
 
-void PrintDialog::ShowNupOrderWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& i_rRect )
+void PrintDialog::ShowNupOrderWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rRect )
 {
-    Window::Paint( i_rRect );
+    Window::Paint(rRenderContext, i_rRect);
+
     SetMapMode( MAP_PIXEL );
     SetTextColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
 

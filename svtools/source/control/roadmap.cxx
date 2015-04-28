@@ -556,10 +556,9 @@ namespace svt
     }
 
 
-    void ORoadmap::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect )
+    void ORoadmap::Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
     {
-        Control::Paint( _rRect );
-
+        Control::Paint(rRenderContext, _rRect);
 
         // draw the bitmap
         if ( !!m_pImpl->getPicture() )
@@ -572,7 +571,6 @@ namespace svt
             // draw it
             DrawBitmapEx( aBitmapPos, m_pImpl->getPicture() );
         }
-
 
         // draw the headline
         DrawHeadline();

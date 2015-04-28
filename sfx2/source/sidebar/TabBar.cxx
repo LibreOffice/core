@@ -79,9 +79,9 @@ void TabBar::dispose()
     vcl::Window::dispose();
 }
 
-void TabBar::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
+void TabBar::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
 {
-    Window::Paint(rUpdateArea);
+    Window::Paint(rRenderContext, rUpdateArea);
 
     const sal_Int32 nHorizontalPadding (Theme::GetInteger(Theme::Int_TabMenuSeparatorPadding));
     SetLineColor(Theme::GetColor(Theme::Color_TabMenuSeparator));

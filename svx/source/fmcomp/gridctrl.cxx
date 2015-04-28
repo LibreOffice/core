@@ -716,9 +716,9 @@ void DbGridControl::NavigationBar::Resize()
     ArrangeControls();
 }
 
-void DbGridControl::NavigationBar::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void DbGridControl::NavigationBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Control::Paint(rRect);
+    Control::Paint(rRenderContext, rRect);
     Point aAbsolutePos = m_aAbsolute->GetPosPixel();
     Size  aAbsoluteSize = m_aAbsolute->GetSizePixel();
 

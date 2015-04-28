@@ -80,7 +80,7 @@ ScCornerButton::~ScCornerButton()
 {
 }
 
-void ScCornerButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScCornerButton::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     Size aSize = GetOutputSizePixel();
     long nPosX = aSize.Width()-1;
@@ -88,7 +88,7 @@ void ScCornerButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectan
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    Window::Paint(rRect);
+    Window::Paint(rRenderContext, rRect);
 
     bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
     long nDarkX = bLayoutRTL ? 0 : nPosX;

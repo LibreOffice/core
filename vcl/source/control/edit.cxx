@@ -1072,12 +1072,12 @@ void Edit::ImplPaintBorder( long nXStart, long nXEnd )
                 vcl::Region oldRgn( pBorder->GetClipRegion() );
                 pBorder->SetClipRegion( aClipRgn );
 
-                pBorder->Paint( Rectangle() );
+                pBorder->Paint(*pBorder, Rectangle());
 
                 pBorder->SetClipRegion( oldRgn );
             }
             else
-                pBorder->Paint( Rectangle() );
+                pBorder->Paint(*pBorder, Rectangle());
 
         }
     }

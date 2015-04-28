@@ -312,10 +312,10 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
     }
 }
 
-void OTableWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void OTableWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    Rectangle aRect( Point(0,0), GetOutputSizePixel() );
-    Window::Paint( rRect );
+    Rectangle aRect(Point(0,0), GetOutputSizePixel());
+    Window::Paint(rRenderContext, rRect);
     Draw3DBorder( aRect );
 }
 

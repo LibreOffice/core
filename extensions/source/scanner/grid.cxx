@@ -528,9 +528,9 @@ void GridWindow::drawHandles()
     }
 }
 
-void GridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void GridWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    Window::Paint(rRect);
+    Window::Paint(rRenderContext, rRect);
     drawGrid();
     drawOriginal();
     drawNew();

@@ -39,7 +39,7 @@ MenuButton::MenuButton (vcl::Window* pParentWindow)
 #endif
 }
 
-void MenuButton::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
+void MenuButton::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
 {
     switch(mePaintType)
     {
@@ -70,7 +70,7 @@ void MenuButton::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle&
             break;
         }
         case PT_Native:
-            Button::Paint(rUpdateArea);
+            Button::Paint(rRenderContext, rUpdateArea);
             //            DrawImage(maIconPosition, maIcon);
             break;
     }

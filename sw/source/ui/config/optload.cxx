@@ -425,9 +425,9 @@ Size SwCaptionPreview::GetOptimalSize() const
     return LogicToPixel(Size(106 , 20), MapMode(MAP_APPFONT));
 }
 
-void SwCaptionPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Window::Paint( rRect );
+    Window::Paint(rRenderContext, rRect);
 
     DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
     DrawText( Point( 4, 6 ), maText );

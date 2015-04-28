@@ -118,9 +118,9 @@ void MyWin::KeyUp( const KeyEvent& rKEvt )
     WorkWindow::KeyUp( rKEvt );
 }
 
-void MyWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    WorkWindow::Paint( rRect );
+    WorkWindow::Paint(rRenderContext, rRect);
 }
 
 void MyWin::Resize()

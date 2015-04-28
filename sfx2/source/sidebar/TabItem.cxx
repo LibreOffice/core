@@ -42,7 +42,7 @@ TabItem::TabItem (vcl::Window* pParentWindow)
 #endif
 }
 
-void TabItem::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
+void TabItem::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
 {
     switch(mePaintType)
     {
@@ -74,7 +74,7 @@ void TabItem::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rU
             break;
         }
         case PT_Native:
-            Button::Paint(rUpdateArea);
+            Button::Paint(rRenderContext, rUpdateArea);
             break;
     }
 }

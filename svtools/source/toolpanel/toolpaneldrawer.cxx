@@ -56,9 +56,9 @@ namespace svt
     }
 
 
-    void DrawerVisualization::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& i_rBoundingBox )
+    void DrawerVisualization::Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox )
     {
-        Window::Paint( i_rBoundingBox );
+        Window::Paint(rRenderContext, i_rBoundingBox);
         m_rDrawer.Paint();
     }
 

@@ -122,7 +122,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     {
         m_pWindow->BeginPaint();
         m_pWindow->PushPaintHelper(this);
-        m_pWindow->Paint(m_aPaintRect);
+        m_pWindow->Paint(*m_pWindow, m_aPaintRect);
         m_pWindow->EndPaint();
     }
 }
@@ -677,7 +677,7 @@ void Window::PrePaint()
 {
 }
 
-void Window::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     CallEventListeners(VCLEVENT_WINDOW_PAINT, (void*)&rRect);
 }
@@ -1085,7 +1085,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     if( ! IsPaintTransparent() && IsBackground() && ! (GetParentClipMode() & PARENTCLIPMODE_NOCLIP ) )
         Erase();
     // foreground
-    Paint( aPaintRect );
+    Paint(*this, aPaintRect);
     // put a pop action to metafile
     Pop();
 

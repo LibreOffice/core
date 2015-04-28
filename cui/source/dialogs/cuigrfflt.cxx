@@ -55,9 +55,9 @@ Size GraphicPreviewWindow::GetOptimalSize() const
 
 
 
-void GraphicPreviewWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void GraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Control::Paint( rRect );
+    Control::Paint(rRenderContext, rRect);
 
     const Size  aOutputSize( GetOutputSizePixel() );
 

@@ -914,9 +914,9 @@ void ScanPreview::UpdatePreviewBounds()
     }
 }
 
-void ScanPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Window::Paint(rRect);
+    Window::Paint(rRenderContext, rRect);
     SetMapMode(MAP_APPFONT);
     SetFillColor( Color( COL_WHITE ) );
     SetLineColor( Color( COL_WHITE ) );

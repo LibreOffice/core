@@ -220,9 +220,9 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
 }
 
 #define DELTA 5.0
-void MyWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void MyWin::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    WorkWindow::Paint( rRect );
+    WorkWindow::Paint(rRenderContext, rRect);
 
     Push( PushFlags::ALL );
     MapMode aMapMode( MAP_100TH_MM );

@@ -261,9 +261,9 @@ void OViewsWindow::Resize()
     }
 }
 
-void OViewsWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void OViewsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Window::Paint( rRect );
+    Window::Paint(rRenderContext, rRect);
 
     Size aOut = GetOutputSizePixel();
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));

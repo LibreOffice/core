@@ -2568,9 +2568,9 @@ void SvTreeListBox::AdjustEntryHeightAndRecalc( const vcl::Font& rFont )
     RecalcViewData();
 }
 
-void SvTreeListBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SvTreeListBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    Control::Paint( rRect );
+    Control::Paint(rRenderContext, rRect);
     if( nTreeFlags & SvTreeFlags::RECALCTABS )
         SetTabs();
     pImp->Paint( rRect );

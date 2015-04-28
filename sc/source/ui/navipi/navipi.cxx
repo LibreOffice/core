@@ -727,7 +727,7 @@ void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
     }
 }
 
-void ScNavigatorDlg::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScNavigatorDlg::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     if (mbUseStyleSettingsBackground)
     {
@@ -745,7 +745,7 @@ void ScNavigatorDlg::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectan
         aFtRow->SetBackground(Wallpaper());
     }
 
-    Window::Paint( rRect );
+    Window::Paint(rRenderContext, rRect);
 }
 
 void ScNavigatorDlg::DataChanged( const DataChangedEvent& rDCEvt )

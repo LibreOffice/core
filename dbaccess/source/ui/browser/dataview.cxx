@@ -93,7 +93,7 @@ namespace dbaui
     {
     }
 
-    void ODataView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect )
+    void ODataView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect)
     {
         // draw the background
         {
@@ -102,7 +102,7 @@ namespace dbaui
         }
 
         // let the base class do anything it needs
-        Window::Paint( _rRect );
+        Window::Paint(rRenderContext, _rRect);
     }
 
     void ODataView::resizeAll( const Rectangle& _rPlayground )

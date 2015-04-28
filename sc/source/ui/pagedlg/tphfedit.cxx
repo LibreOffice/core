@@ -218,7 +218,7 @@ void ScEditWindow::SetCharAttriutes()
     }
 }
 
-void ScEditWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScEditWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -227,9 +227,9 @@ void ScEditWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
 
     SetBackground( aBgColor );
 
-    Control::Paint( rRect );
+    Control::Paint(rRenderContext, rRect);
 
-    pEdView->Paint( rRect );
+    pEdView->Paint(rRect);
 
     if( HasFocus() )
         pEdView->ShowCursor(true,true);
