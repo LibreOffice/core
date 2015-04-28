@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_a9ec3d90",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-28T10:04:38Z",
+      "side": 1,
+      "message": "Why do you not simply check aPropName \u003d\u003d propName and return immediately?",
+      "revId": "adfe572096ec4f99a660823b2037456f6fc2b163",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
