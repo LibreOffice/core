@@ -574,8 +574,7 @@ sal_Bool SAL_CALL OSection::hasForms() throw (uno::RuntimeException, std::except
 {
     // no lock because m_xDrawPage_FormSupplier is const
     return (m_xDrawPage_FormSupplier.is())
-        ? m_xDrawPage_FormSupplier->hasForms()
-        : 0;
+        && m_xDrawPage_FormSupplier->hasForms();
 }
 
 
