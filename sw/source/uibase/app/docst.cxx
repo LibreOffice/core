@@ -744,7 +744,7 @@ sal_uInt16 SwDocShell::Edit(
     }
 
     if(!pStyle)
-        return sal_False;
+        return 0;
 
     // put dialogues together
     rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pStyle) ) );
