@@ -240,9 +240,14 @@ OUString AboutDialog::GetLocaleString()
 
     osl_getProcessLocale( &pLocale );
 
-    if ( pLocale && pLocale->Language && pLocale->Country )
+    if ( pLocale && pLocale->Language )
     {
-        pLocaleStr = OUString(pLocale->Language) + "_" + OUString(pLocale->Country);
+        if (pLocale->Country && rtl_uString_getLength( pLocale->Country) > 0)
+            pLocaleStr = OUString(pLocale->Language) + "_" + OUString(pLocale->Country);
+        else
+            pLocaleStr = OUString(pLocale->Language);
+        if (pLocale->Variant && rtl_uString_getLength( pLocale->Variant) > 0)
+            pLocaleStr += OUString(pLocale->Variant);
     }
 
     return pLocaleStr;
