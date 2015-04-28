@@ -1322,7 +1322,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
                           XML_b, bold,
                           XML_i, italic,
                           XML_lang, usLanguage.isEmpty() ? NULL : USS( usLanguage ),
-                          XML_sz, nSize == 1800 ? NULL : IS( nSize ),
+                          XML_sz, IS( nSize ),
                           XML_strike, strikeout,
                           XML_u, underline,
                           XML_baseline, nCharEscapement == 0 ? NULL : IS( nCharEscapement*1000 ),

@@ -138,6 +138,7 @@ public:
     void testSupBookVirtualPath();
     void testSheetLocalRangeNameXLS();
     void testSheetTextBoxHyperlink();
+    void testFontSize();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -186,6 +187,7 @@ public:
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
     CPPUNIT_TEST(testSheetTextBoxHyperlink);
+    CPPUNIT_TEST(testFontSize);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2534,6 +2536,19 @@ void ScExportTest::testSheetTextBoxHyperlink()
     assertXPath(pDoc, "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:nvSpPr[1]/xdr:cNvPr[1]/a:hlinkClick[1]", 1);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testFontSize()
+{
+    ScDocShellRef xDocSh = loadDoc("fontSize.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    OUString fontSize = getXPath(pDoc,
+                "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr", "sz");
+    // make sure that the font size is 18
+    CPPUNIT_ASSERT_EQUAL(OUString("1800"), fontSize);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
