@@ -84,7 +84,7 @@ private:
     rtl::Reference< KeyboardFocusListener > m_aFocusListener;
 
     // the list of Windows that need deeper (focus) investigation
-    std::set< vcl::Window *> m_aDocumentWindowList;
+    std::set<VclPtr<vcl::Window>> m_aDocumentWindowList;
 
     // the link object needed for Application::addEventListener
     Link m_aWindowEventLink;

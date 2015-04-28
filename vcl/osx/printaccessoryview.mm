@@ -299,14 +299,14 @@ class ControllerProperties
         {
             GDIMetaFile aMtf;
             PrinterController::PageSize aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
-            VirtualDevice aDev;
+            auto aDev(VclPtr<VirtualDevice>::Create());
             if( mpController->getPrinter()->GetPrinterOptions().IsConvertToGreyscales() )
-                aDev.SetDrawMode( aDev.GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT | 
+                aDev->SetDrawMode( aDev->GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT | 
                                                          DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
             // see salprn.cxx, currently we pretend to be a 720dpi device on printers
-            aDev.SetReferenceDevice( 720, 720 );
-            aDev.EnableOutput( TRUE );
-            Size aLogicSize( aDev.PixelToLogic( aPixelSize, MapMode( MAP_100TH_MM ) ) );
+            aDev->SetReferenceDevice( 720, 720 );
+            aDev->EnableOutput( TRUE );
+            Size aLogicSize( aDev->PixelToLogic( aPixelSize, MapMode( MAP_100TH_MM ) ) );
             double fScaleX = double(aLogicSize.Width())/double(aPageSize.aSize.Width());
             double fScaleY = double(aLogicSize.Height())/double(aPageSize.aSize.Height());
             double fScale = (fScaleX < fScaleY) ? fScaleX : fScaleY;
@@ -321,13 +321,13 @@ class ControllerProperties
             aMtf.WindStart();
             aLogicSize.Width() = long(double(aPageSize.aSize.Width()) * fScale);
             aLogicSize.Height() = long(double(aPageSize.aSize.Height()) * fScale);
-            aPixelSize = aDev.LogicToPixel( aLogicSize, MapMode( MAP_100TH_MM ) );
-            aDev.SetOutputSizePixel( aPixelSize );
+            aPixelSize = aDev->LogicToPixel( aLogicSize, MapMode( MAP_100TH_MM ) );
+            aDev->SetOutputSizePixel( aPixelSize );
             aMtf.WindStart();
-            aDev.SetMapMode( MapMode( MAP_100TH_MM ) );
-            aMtf.Play( &aDev, Point( 0, 0 ), aLogicSize );
-            aDev.EnableMapMode( FALSE );
-            Image aImage( aDev.GetBitmap( Point( 0, 0 ), aPixelSize ) );
+            aDev->SetMapMode( MapMode( MAP_100TH_MM ) );
+            aMtf.Play( aDev.get(), Point( 0, 0 ), aLogicSize );
+            aDev->EnableMapMode( FALSE );
+            Image aImage( aDev->GetBitmap( Point( 0, 0 ), aPixelSize ) );
             NSImage* pImage = CreateNSImage( aImage );
             [mpPreview setImage: [pImage autorelease]];
         }
