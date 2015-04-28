@@ -101,7 +101,7 @@ private:
 
         ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
 
-        VclPtr<::bib::BibView>      pBibView;
+        VclPtr< ::bib::BibView>      pBibView;
         VclPtr<BibToolBar>          pToolbar;
 
         OUString               sIdentifierMapping;

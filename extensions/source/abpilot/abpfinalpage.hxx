@@ -39,7 +39,7 @@ namespace abp
     class FinalPage : public AddressBookSourcePage
     {
     protected:
-        VclPtr<::svt::OFileURLControl>  m_pLocation;
+        VclPtr< ::svt::OFileURLControl>  m_pLocation;
         VclPtr<PushButton>       m_pBrowse;
         VclPtr<CheckBox>         m_pRegisterName;
         VclPtr<FixedText>        m_pNameLabel;
