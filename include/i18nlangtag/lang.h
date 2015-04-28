@@ -172,7 +172,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_CHINESE_SIMPLIFIED_LEGACY  0x0004  /* MS-.NET 'zh-CHS', primary only! but maps to 'zh-CN' */
 #define LANGUAGE_CHINESE_TRADITIONAL_LSO    0x7C04  /* MS-.NET 'zh-CHT' but maps to 'zh-Hant' */
 #define LANGUAGE_CHINESE                    LANGUAGE_CHINESE_SIMPLIFIED     /* most code uses LANGUAGE_CHINESE */
-#define LANGUAGE_CHURCH_SLAVIC              0x9999
 #define LANGUAGE_CORSICAN_FRANCE            0x0483
 #define LANGUAGE_CROATIAN                   0x041A
 #define LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA 0x101A
@@ -703,6 +702,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_FRENCH_NIGER          0x880C  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 #define LANGUAGE_USER_FRENCH_TOGO           0x8C0C  /* makeLangID( 0x23, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 #define LANGUAGE_USER_KVEN_FINNISH          0x0693
+#define LANGUAGE_USER_CHURCH_SLAVIC         0x0694
 
 
 /* Primary language ID range for on-the-fly assignment. */

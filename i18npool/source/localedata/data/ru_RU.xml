@@ -51,7 +51,7 @@
     <TimePM>PM</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT>
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$р.-419]">
     <DateAcceptancePattern>D.M.</DateAcceptancePattern>
     <DateAcceptancePattern>D/M/</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
@@ -88,22 +88,22 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode># ##0 [$р.-419];-# ##0 [$р.-419]</FormatCode>
+      <FormatCode># ##0 [CURRENCY];-# ##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode># ##0,00 [$р.-419];-# ##0,00 [$р.-419]</FormatCode>
+      <FormatCode># ##0,00 [CURRENCY];-# ##0,00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode># ##0 [$р.-419];[RED]-# ##0 [$р.-419]</FormatCode>
+      <FormatCode># ##0 [CURRENCY];[RED]-# ##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode># ##0,00 [$р.-419];[RED]-# ##0,00 [$р.-419]</FormatCode>
+      <FormatCode># ##0,00 [CURRENCY];[RED]-# ##0,00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode># ##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode># ##0,-- [$р.-419];[RED]-# ##0,-- [$р.-419]</FormatCode>
+      <FormatCode># ##0,-- [CURRENCY];[RED]-# ##0,-- [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D.M.YY</FormatCode>
