@@ -619,7 +619,7 @@ long SwView::PhyPageDown()
     return 1;
 }
 
-long SwView::PageUpCrsr( bool bSelect )
+bool SwView::PageUpCrsr( bool bSelect )
 {
     if ( !bSelect )
     {
@@ -629,7 +629,7 @@ long SwView::PageUpCrsr( bool bSelect )
             m_pWrtShell->MoveCrsr();
             m_pWrtShell->GotoFtnAnchor();
             m_pWrtShell->Right(CRSR_SKIP_CHARS, false, 1, false );
-            return 1;
+            return true;
         }
     }
 
@@ -640,12 +640,12 @@ long SwView::PageUpCrsr( bool bSelect )
          PageUp() )
     {
         m_pWrtShell->ResetCursorStack();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-long SwView::PageDownCrsr(bool bSelect)
+bool SwView::PageDownCrsr(bool bSelect)
 {
     SwTwips lOff = 0;
     if ( GetPageScrollDownOffset( lOff ) &&
@@ -654,9 +654,9 @@ long SwView::PageDownCrsr(bool bSelect)
          PageDown() )
     {
         m_pWrtShell->ResetCursorStack();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // Handler of the scrollbars

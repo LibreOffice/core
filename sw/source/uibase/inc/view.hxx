@@ -299,8 +299,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // scrollbar movements
     SAL_DLLPRIVATE long          PageUp();
     SAL_DLLPRIVATE long          PageDown();
-    SAL_DLLPRIVATE long          PageUpCrsr(bool bSelect);
-    SAL_DLLPRIVATE long          PageDownCrsr(bool bSelect);
+    SAL_DLLPRIVATE bool          PageUpCrsr(bool bSelect);
+    SAL_DLLPRIVATE bool          PageDownCrsr(bool bSelect);
     SAL_DLLPRIVATE long          PhyPageUp();
     SAL_DLLPRIVATE long          PhyPageDown();
 
