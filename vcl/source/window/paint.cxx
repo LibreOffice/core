@@ -677,9 +677,9 @@ void Window::PrePaint()
 {
 }
 
-void Window::Paint( const Rectangle& rRect )
+void Window::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    CallEventListeners( VCLEVENT_WINDOW_PAINT, (void*)&rRect );
+    CallEventListeners(VCLEVENT_WINDOW_PAINT, (void*)&rRect);
 }
 
 void Window::SetPaintTransparent( bool bTransparent )

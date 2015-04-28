@@ -3927,11 +3927,6 @@ Any Window::GetSystemDataAny() const
     return aRet;
 }
 
-void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
-{
-    Paint(rRect);
-}
-
 } /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
