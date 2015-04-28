@@ -904,7 +904,7 @@ void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos) throw( Ru
 sal_Bool SAL_CALL FmXGridControl::hasElements() throw( RuntimeException, std::exception )
 {
     Reference< XElementAccess >  xPeer(getPeer(), UNO_QUERY);
-    return xPeer.is() ? xPeer->hasElements() : 0;
+    return xPeer.is() && xPeer->hasElements();
 }
 
 
