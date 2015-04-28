@@ -460,11 +460,11 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         nRet = Edit(aParam, aEmptyOUStr, nFamily, nMask, false, OString(), pActShell );
                         break;
                     case SID_STYLE_DELETE:
-                        nRet = Delete(aParam, nFamily);
+                        nRet = sal_uInt16(Delete(aParam, nFamily));
                         break;
                     case SID_STYLE_HIDE:
                     case SID_STYLE_SHOW:
-                        nRet = Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE);
+                        nRet = sal_uInt16(Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE));
                         break;
                     case SID_STYLE_APPLY:
                         // Shell-switch in ApplyStyles
@@ -870,7 +870,7 @@ sal_uInt16 SwDocShell::Edit(
     return nRet;
 }
 
-sal_uInt16 SwDocShell::Delete(const OUString &rName, sal_uInt16 nFamily)
+bool SwDocShell::Delete(const OUString &rName, sal_uInt16 nFamily)
 {
     SfxStyleSheetBase *pStyle = m_xBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
@@ -882,12 +882,12 @@ sal_uInt16 SwDocShell::Delete(const OUString &rName, sal_uInt16 nFamily)
         m_xBasePool->Remove(pStyle);
         GetWrtShell()->EndAllAction();
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_uInt16 SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden)
+bool SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden)
 {
     SfxStyleSheetBase *pStyle = m_xBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
@@ -900,9 +900,9 @@ sal_uInt16 SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHid
         xTmp->SetHidden( bHidden );
         GetWrtShell()->EndAllAction();
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // apply template

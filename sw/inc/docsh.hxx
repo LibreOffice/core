@@ -130,8 +130,8 @@ class SW_DLLPUBLIC SwDocShell
         SwWrtShell* pActShell = 0,
         const bool bBasic = false );
 
-    SAL_DLLPRIVATE sal_uInt16            Delete(const OUString &rName, sal_uInt16 nFamily);
-    SAL_DLLPRIVATE sal_uInt16            Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
+    SAL_DLLPRIVATE bool                  Delete(const OUString &rName, sal_uInt16 nFamily);
+    SAL_DLLPRIVATE bool                  Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
     SAL_DLLPRIVATE sal_uInt16            ApplyStyles(const OUString &rName,
         const sal_uInt16 nFamily,
         SwWrtShell* pShell = 0,
