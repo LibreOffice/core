@@ -44,16 +44,16 @@ class _SfxMacroTabPage_Impl
 public:
     _SfxMacroTabPage_Impl();
 
-    OUString                        maStaticMacroLBLabel;
-    PushButton*                     pAssignPB;
-    PushButton*                     pDeletePB;
-    OUString                        sStrEvent;
-    OUString                        sAssignedMacro;
-    MacroEventListBox*              pEventLB;
-    VclFrame*                       pGroupFrame;
-    SfxConfigGroupListBox*          pGroupLB;
-    VclFrame*                       pMacroFrame;
-    SfxConfigFunctionListBox*       pMacroLB;
+    OUString                               maStaticMacroLBLabel;
+    VclPtr<PushButton>                     pAssignPB;
+    VclPtr<PushButton>                     pDeletePB;
+    OUString                               sStrEvent;
+    OUString                               sAssignedMacro;
+    VclPtr<MacroEventListBox>              pEventLB;
+    VclPtr<VclFrame>                       pGroupFrame;
+    VclPtr<SfxConfigGroupListBox>          pGroupLB;
+    VclPtr<VclFrame>                       pMacroFrame;
+    VclPtr<SfxConfigFunctionListBox>       pMacroLB;
 
     bool                            bReadOnly;
     Idle                            maFillGroupIdle;
@@ -143,7 +143,13 @@ _SfxMacroTabPage::_SfxMacroTabPage(vcl::Window* pParent, const SfxItemSet& rAttr
 
 _SfxMacroTabPage::~_SfxMacroTabPage()
 {
+    disposeOnce();
+}
+
+void _SfxMacroTabPage::dispose()
+{
     DELETEZ( mpImpl );
+    SfxTabPage::dispose();
 }
 
 void _SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventId )
@@ -454,13 +460,13 @@ SfxMacroTabPage::SfxMacroTabPage(vcl::Window* pParent, const Reference< XFrame >
 
 namespace
 {
-    SfxMacroTabPage* CreateSfxMacroTabPage( vcl::Window* pParent, const SfxItemSet& rAttrSet )
+    VclPtr<SfxMacroTabPage> CreateSfxMacroTabPage( vcl::Window* pParent, const SfxItemSet& rAttrSet )
     {
-        return new SfxMacroTabPage( pParent, NULL, rAttrSet );
+        return VclPtr<SfxMacroTabPage>( new SfxMacroTabPage( pParent, NULL, rAttrSet ), SAL_NO_ACQUIRE );
     }
 }
 
-SfxTabPage* SfxMacroTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SfxMacroTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }

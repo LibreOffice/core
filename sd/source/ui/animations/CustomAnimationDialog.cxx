@@ -107,13 +107,13 @@ public:
 
 private:
     std::map< sal_uInt16, OUString > maPropertyValues;
-    ListBox* mpControl;
+    VclPtr<ListBox> mpControl;
 };
 
 PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpControl = new ListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl = VclPtr<ListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX );
@@ -159,7 +159,7 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
 
 PresetPropertyBox::~PresetPropertyBox()
 {
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 Any PresetPropertyBox::getValue()
@@ -183,13 +183,13 @@ public:
     virtual Control* getControl() SAL_OVERRIDE;
 
 private:
-    ColorListBox* mpControl;
+    VclPtr<ColorListBox> mpControl;
 };
 
 ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpControl = new ColorListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl = VclPtr<ColorListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX );
@@ -219,7 +219,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 
 ColorPropertyBox::~ColorPropertyBox()
 {
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
@@ -256,13 +256,13 @@ public:
     virtual Control* getControl() SAL_OVERRIDE;
 
 private:
-    FontNameBox* mpControl;
+    VclPtr<FontNameBox> mpControl;
 };
 
 FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpControl = new FontNameBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl = VclPtr<FontNameBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX );
@@ -303,7 +303,7 @@ void FontPropertyBox::setValue( const Any& rValue, const OUString& )
 
 FontPropertyBox::~FontPropertyBox()
 {
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 Any FontPropertyBox::getValue()
@@ -322,6 +322,7 @@ class DropdownMenuBox : public Edit
 public:
     DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
     virtual ~DropdownMenuBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void Resize() SAL_OVERRIDE;
     bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -329,16 +330,16 @@ public:
     void SetMenuSelectHdl( const Link& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
 
 private:
-    Edit* mpSubControl;
-    MenuButton* mpDropdownButton;
-    PopupMenu* mpMenu;
+    VclPtr<Edit> mpSubControl;
+    VclPtr<MenuButton>  mpDropdownButton;
+    PopupMenu*   mpMenu;
 };
 
 DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
     mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
 {
-    mpDropdownButton = new MenuButton( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
+    mpDropdownButton = VclPtr<MenuButton>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
     mpDropdownButton->SetSymbol(SymbolType::SPIN_DOWN);
     mpDropdownButton->Show();
     mpDropdownButton->SetPopupMenu( pMenu );
@@ -350,10 +351,16 @@ DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, Popup
 
 DropdownMenuBox::~DropdownMenuBox()
 {
-    SetSubEdit( 0 );
-    delete mpSubControl;
-    delete mpDropdownButton;
+    disposeOnce();
+}
+
+void DropdownMenuBox::dispose()
+{
+    SetSubEdit(nullptr);
+    mpDropdownButton.disposeAndClear();
     delete mpMenu;
+    mpSubControl.disposeAndClear();
+    Edit::dispose();
 }
 
 void DropdownMenuBox::Resize()
@@ -405,21 +412,21 @@ public:
     DECL_LINK( implMenuSelectHdl, MenuButton* );
 
 private:
-    DropdownMenuBox* mpControl;
+    VclPtr<DropdownMenuBox> mpControl;
     PopupMenu* mpMenu;
-    MetricField* mpMetric;
+    VclPtr<MetricField> mpMetric;
 };
 
 CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpMetric = new MetricField( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
+    mpMetric.set( VclPtr<MetricField>::Create( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 1000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
     mpControl->SetModifyHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX );
@@ -430,7 +437,7 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Windo
 
 CharHeightPropertyBox::~CharHeightPropertyBox()
 {
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
@@ -450,7 +457,7 @@ IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 
 void CharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric )
+    if( mpMetric.get() )
     {
         double fValue = 0.0;
         rValue >>= fValue;
@@ -485,9 +492,9 @@ public:
     void updateMenu();
 
 private:
-    DropdownMenuBox* mpControl;
+    VclPtr<DropdownMenuBox> mpControl;
     PopupMenu* mpMenu;
-    MetricField* mpMetric;
+    VclPtr<MetricField> mpMetric;
     Link maModifyHdl;
 };
 
@@ -495,7 +502,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric = new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
+    mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 100 );
@@ -508,7 +515,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
         mpMenu->InsertItem( i, aStr );
     }
 
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, TransparencyPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX );
 
@@ -521,7 +528,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
 
 TransparencyPropertyBox::~TransparencyPropertyBox()
 {
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 void TransparencyPropertyBox::updateMenu()
@@ -534,7 +541,7 @@ void TransparencyPropertyBox::updateMenu()
 IMPL_LINK_NOARG(TransparencyPropertyBox, implModifyHdl)
 {
     updateMenu();
-    maModifyHdl.Call(mpMetric);
+    maModifyHdl.Call(mpMetric.get());
 
     return 0;
 }
@@ -552,7 +559,7 @@ IMPL_LINK( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 
 void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric )
+    if( mpMetric.get() )
     {
         double fValue = 0.0;
         rValue >>= fValue;
@@ -589,9 +596,9 @@ public:
     void updateMenu();
 
 private:
-    DropdownMenuBox* mpControl;
+    VclPtr<DropdownMenuBox> mpControl;
     PopupMenu* mpMenu;
-    MetricField* mpMetric;
+    VclPtr<MetricField> mpMetric;
     Link maModifyHdl;
 };
 
@@ -599,14 +606,14 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric = new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
+    mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_CUSTOM );
     mpMetric->SetCustomUnitText( OUString( sal_Unicode(0xb0)) ); // degree sign
     mpMetric->SetMin( -10000 );
     mpMetric->SetMax( 10000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
 
@@ -619,7 +626,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
 
 RotationPropertyBox::~RotationPropertyBox()
 {
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 void RotationPropertyBox::updateMenu()
@@ -640,7 +647,7 @@ void RotationPropertyBox::updateMenu()
 IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl)
 {
     updateMenu();
-    maModifyHdl.Call(mpMetric);
+    maModifyHdl.Call(mpMetric.get());
 
     return 0;
 }
@@ -677,7 +684,7 @@ IMPL_LINK( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 
 void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric )
+    if( mpMetric.get() )
     {
         double fValue = 0.0;
         rValue >>= fValue;
@@ -714,9 +721,9 @@ public:
     void updateMenu();
 
 private:
-    DropdownMenuBox* mpControl;
+    VclPtr<DropdownMenuBox> mpControl;
     PopupMenu* mpMenu;
-    MetricField* mpMetric;
+    VclPtr<MetricField> mpMetric;
     Link maModifyHdl;
     int mnDirection;
 };
@@ -725,13 +732,13 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric = new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
+    mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
 
@@ -744,7 +751,7 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 
 ScalePropertyBox::~ScalePropertyBox()
 {
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 void ScalePropertyBox::updateMenu()
@@ -764,7 +771,7 @@ void ScalePropertyBox::updateMenu()
 IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl)
 {
     updateMenu();
-    maModifyHdl.Call(mpMetric);
+    maModifyHdl.Call(mpMetric.get());
 
     return 0;
 }
@@ -810,7 +817,7 @@ IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 
 void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric )
+    if( mpMetric.get() )
     {
         ValuePair aValues;
         rValue >>= aValues;
@@ -876,9 +883,9 @@ public:
     void update();
 
 private:
-    DropdownMenuBox* mpControl;
+    VclPtr<DropdownMenuBox> mpControl;
     PopupMenu* mpMenu;
-    Edit* mpEdit;
+    VclPtr<Edit> mpEdit;
     Link maModifyHdl;
 
     float mfFontWeight;
@@ -890,11 +897,11 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpEdit = new Edit( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY);
+    mpEdit.set( VclPtr<Edit>::Create( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY) );
     mpEdit->SetText( SD_RESSTR(STR_CUSTOMANIMATION_SAMPLE) );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpEdit, mpMenu );
+    mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpEdit, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, FontStylePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX );
 
@@ -904,7 +911,7 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
 
 FontStylePropertyBox::~FontStylePropertyBox()
 {
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 void FontStylePropertyBox::update()
@@ -950,7 +957,7 @@ IMPL_LINK( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
     }
 
     update();
-    maModifyHdl.Call(mpEdit);
+    maModifyHdl.Call(mpEdit.get());
 
     return 0;
 }
@@ -986,6 +993,7 @@ class CustomAnimationEffectTabPage : public TabPage
 public:
     CustomAnimationEffectTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
     virtual ~CustomAnimationEffectTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void update( STLPropertySet* pSet );
     DECL_LINK( implSelectHdl, Control* );
@@ -1003,24 +1011,24 @@ private:
     bool mbHasText;
     const STLPropertySet* mpSet;
 
-    VclFrame*       mpSettings;
-    FixedText*      mpFTProperty1;
-    PropertyControl* mpLBProperty1;
-    VclHBox*        mpPlaceholderBox;
-    CheckBox*       mpCBSmoothStart;
-    CheckBox*       mpCBSmoothEnd;
+    VclPtr<VclFrame>       mpSettings;
+    VclPtr<FixedText>      mpFTProperty1;
+    VclPtr<PropertyControl> mpLBProperty1;
+    VclPtr<VclHBox>        mpPlaceholderBox;
+    VclPtr<CheckBox>       mpCBSmoothStart;
+    VclPtr<CheckBox>       mpCBSmoothEnd;
 
-    FixedText*      mpFTSound;
-    ListBox*        mpLBSound;
-    PushButton*     mpPBSoundPreview;
-    FixedText*      mpFTAfterEffect;
-    ListBox*        mpLBAfterEffect;
-    FixedText*      mpFTDimColor;
-    ColorListBox*   mpCLBDimColor;
-    FixedText*      mpFTTextAnim;
-    ListBox*        mpLBTextAnim;
-    MetricField*    mpMFTextDelay;
-    FixedText*      mpFTTextDelay;
+    VclPtr<FixedText>      mpFTSound;
+    VclPtr<ListBox>        mpLBSound;
+    VclPtr<PushButton>     mpPBSoundPreview;
+    VclPtr<FixedText>      mpFTAfterEffect;
+    VclPtr<ListBox>        mpLBAfterEffect;
+    VclPtr<FixedText>      mpFTDimColor;
+    VclPtr<ColorListBox>   mpCLBDimColor;
+    VclPtr<FixedText>      mpFTTextAnim;
+    VclPtr<ListBox>        mpLBTextAnim;
+    VclPtr<MetricField>    mpMFTextDelay;
+    VclPtr<FixedText>      mpFTTextDelay;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 };
@@ -1255,7 +1263,30 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
 
 CustomAnimationEffectTabPage::~CustomAnimationEffectTabPage()
 {
+    disposeOnce();
+}
+
+void CustomAnimationEffectTabPage::dispose()
+{
     clearSoundListBox();
+    mpSettings.clear();
+    mpFTProperty1.clear();
+    mpLBProperty1.clear();
+    mpPlaceholderBox.clear();
+    mpCBSmoothStart.clear();
+    mpCBSmoothEnd.clear();
+    mpFTSound.clear();
+    mpLBSound.clear();
+    mpPBSoundPreview.clear();
+    mpFTAfterEffect.clear();
+    mpLBAfterEffect.clear();
+    mpFTDimColor.clear();
+    mpCLBDimColor.clear();
+    mpFTTextAnim.clear();
+    mpLBTextAnim.clear();
+    mpMFTextDelay.clear();
+    mpFTTextDelay.clear();
+    TabPage::dispose();
 }
 
 void CustomAnimationEffectTabPage::updateControlStates()
@@ -1517,9 +1548,9 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
             {
                 OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
-                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (true);
-                bQuitLoop = aWarningBox.Execute() != RET_RETRY;
+                ScopedVclPtrInstance< WarningBox > aWarningBox( nullptr, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
+                aWarningBox->SetModalInputMode (true);
+                bQuitLoop = aWarningBox->Execute() != RET_RETRY;
 
                 bValidSoundFile=false;
             }
@@ -1558,6 +1589,7 @@ class CustomAnimationDurationTabPage : public TabPage
 public:
     CustomAnimationDurationTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
     virtual ~CustomAnimationDurationTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void update( STLPropertySet* pSet );
 
@@ -1566,18 +1598,18 @@ public:
 private:
     const STLPropertySet* mpSet;
 
-    FixedText* mpFTStart;
-    ListBox* mpLBStart;
-    FixedText* mpFTStartDelay;
-    MetricField* mpMFStartDelay;
-    FixedText* mpFTDuration;
-    ListBox* mpCBDuration;
-    FixedText* mpFTRepeat;
-    ListBox* mpCBRepeat;
-    CheckBox* mpCBXRewind;
-    RadioButton* mpRBClickSequence;
-    RadioButton* mpRBInteractive;
-    ListBox* mpLBTrigger;
+    VclPtr<FixedText> mpFTStart;
+    VclPtr<ListBox> mpLBStart;
+    VclPtr<FixedText> mpFTStartDelay;
+    VclPtr<MetricField> mpMFStartDelay;
+    VclPtr<FixedText> mpFTDuration;
+    VclPtr<ListBox> mpCBDuration;
+    VclPtr<FixedText> mpFTRepeat;
+    VclPtr<ListBox> mpCBRepeat;
+    VclPtr<CheckBox> mpCBXRewind;
+    VclPtr<RadioButton> mpRBClickSequence;
+    VclPtr<RadioButton> mpRBInteractive;
+    VclPtr<ListBox> mpLBTrigger;
 };
 
 CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pParent, const STLPropertySet* pSet)
@@ -1755,6 +1787,24 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
 
 CustomAnimationDurationTabPage::~CustomAnimationDurationTabPage()
 {
+    disposeOnce();
+}
+
+void CustomAnimationDurationTabPage::dispose()
+{
+    mpFTStart.clear();
+    mpLBStart.clear();
+    mpFTStartDelay.clear();
+    mpMFStartDelay.clear();
+    mpFTDuration.clear();
+    mpCBDuration.clear();
+    mpFTRepeat.clear();
+    mpCBRepeat.clear();
+    mpCBXRewind.clear();
+    mpRBClickSequence.clear();
+    mpRBInteractive.clear();
+    mpLBTrigger.clear();
+    TabPage::dispose();
 }
 
 IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )
@@ -1924,6 +1974,8 @@ class CustomAnimationTextAnimTabPage : public TabPage
 {
 public:
     CustomAnimationTextAnimTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
+    virtual ~CustomAnimationTextAnimTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void update( STLPropertySet* pSet );
 
@@ -1931,12 +1983,12 @@ public:
     DECL_LINK(implSelectHdl, void *);
 
 private:
-    FixedText*   maFTGroupText;
-    ListBox*     maLBGroupText;
-    CheckBox*    maCBXGroupAuto;
-    MetricField* maMFGroupAuto;
-    CheckBox*    maCBXAnimateForm;
-    CheckBox*    maCBXReverse;
+    VclPtr<FixedText>   maFTGroupText;
+    VclPtr<ListBox>     maLBGroupText;
+    VclPtr<CheckBox>    maCBXGroupAuto;
+    VclPtr<MetricField> maMFGroupAuto;
+    VclPtr<CheckBox>    maCBXAnimateForm;
+    VclPtr<CheckBox>    maCBXReverse;
 
     const STLPropertySet* mpSet;
 
@@ -2021,6 +2073,22 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(vcl::Window* pPar
     }
 
     updateControlStates();
+}
+
+CustomAnimationTextAnimTabPage::~CustomAnimationTextAnimTabPage()
+{
+    disposeOnce();
+}
+
+void CustomAnimationTextAnimTabPage::dispose()
+{
+    maFTGroupText.clear();
+    maLBGroupText.clear();
+    maCBXGroupAuto.clear();
+    maMFGroupAuto.clear();
+    maCBXAnimateForm.clear();
+    maCBXReverse.clear();
+    TabPage::dispose();
 }
 
 void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
@@ -2113,9 +2181,9 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
     sal_uInt16 mnTimingId = mpTabControl->GetPageId("timing");
     sal_uInt16 mnTextAnimId = mpTabControl->GetPageId("textanim");
 
-    mpEffectTabPage = new CustomAnimationEffectTabPage( mpTabControl, mpSet );
+    mpEffectTabPage = VclPtr<CustomAnimationEffectTabPage>::Create( mpTabControl, mpSet );
     mpTabControl->SetTabPage( mnEffectId, mpEffectTabPage );
-    mpDurationTabPage = new CustomAnimationDurationTabPage( mpTabControl, mpSet );
+    mpDurationTabPage = VclPtr<CustomAnimationDurationTabPage>::Create( mpTabControl, mpSet );
     mpTabControl->SetTabPage( mnTimingId, mpDurationTabPage );
 
     bool bHasText = false;
@@ -2124,7 +2192,7 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
 
     if( bHasText )
     {
-        mpTextAnimTabPage = new CustomAnimationTextAnimTabPage( mpTabControl, mpSet );
+        mpTextAnimTabPage = VclPtr<CustomAnimationTextAnimTabPage>::Create( mpTabControl, mpSet );
         mpTabControl->SetTabPage( mnTextAnimId, mpTextAnimTabPage );
     }
     else
@@ -2139,12 +2207,20 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
 
 CustomAnimationDialog::~CustomAnimationDialog()
 {
-    delete mpEffectTabPage;
-    delete mpDurationTabPage;
-    delete mpTextAnimTabPage;
+    disposeOnce();
+}
+
+void CustomAnimationDialog::dispose()
+{
+    mpEffectTabPage.disposeAndClear();
+    mpDurationTabPage.disposeAndClear();
+    mpTextAnimTabPage.disposeAndClear();
 
     delete mpSet;
     delete mpResultSet;
+
+    mpTabControl.clear();
+    TabDialog::dispose();
 }
 
 STLPropertySet* CustomAnimationDialog::getResultSet()
@@ -2222,8 +2298,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePropertyControl( vcl::
 
 PropertyControl::~PropertyControl()
 {
+    disposeOnce();
+}
+
+void PropertyControl::dispose()
+{
     if( mpSubControl )
         delete mpSubControl;
+    ListBox::dispose();
 }
 
 void PropertyControl::setSubControl( PropertySubControl* pSubControl )

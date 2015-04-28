@@ -21,6 +21,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENUBAR_HXX
 
 #include <accessibility/standard/accessiblemenucomponent.hxx>
+#include <vcl/vclptr.hxx>
 
 class VclSimpleEvent;
 class VclWindowEvent;
@@ -34,7 +35,7 @@ namespace vcl { class Window; }
 class VCLXAccessibleMenuBar :   public OAccessibleMenuComponent
 {
 protected:
-    vcl::Window*                 m_pWindow;
+    VclPtr<vcl::Window>     m_pWindow;
 
     virtual bool            IsFocused() SAL_OVERRIDE;
 

@@ -67,8 +67,20 @@ BreakDlg::BreakDlg(
 
 BreakDlg::~BreakDlg()
 {
+    disposeOnce();
+}
+
+void BreakDlg::dispose()
+{
     delete mpProgress;
+    mpProgress = NULL;
     delete pProgrInfo;
+    pProgrInfo = NULL;
+    m_pFiObjInfo.clear();
+    m_pFiActInfo.clear();
+    m_pFiInsInfo.clear();
+    m_pBtnCancel.clear();
+    SfxModalDialog::dispose();
 }
 
 // Control-Handler for cancel button
@@ -93,8 +105,8 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     // update status bar or show a error message?
     if(nInit == reinterpret_cast<void*>(1L))
     {
-        MessageDialog aErrBox(this, SD_RESSTR(STR_BREAK_FAIL));
-        aErrBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrBox(this, SD_RESSTR(STR_BREAK_FAIL));
+        aErrBox->Execute();
     }
     else
     {

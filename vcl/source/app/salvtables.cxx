@@ -28,11 +28,20 @@
 #include <salobj.hxx>
 #include <salmenu.hxx>
 
+
+SalFrame::SalFrame() : m_pWindow( NULL ), m_pProc( NULL ) {}
+
 // this file contains the virtual destructors of the sal interface
 // compilers usually put their vtables where the destructor is
 
 SalFrame::~SalFrame()
 {
+}
+
+void SalFrame::SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc )
+{
+    m_pWindow = pWindow;
+    m_pProc = pProc;
 }
 
 // default to full-frame flushes

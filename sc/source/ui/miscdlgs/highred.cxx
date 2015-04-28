@@ -46,7 +46,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl:
     , pDoc(ptrViewData->GetDocument())
     , aLocalRangeName(*(pDoc->GetRangeName()))
 {
-    m_pFilterCtr = new SvxTPFilter(get<VclContainer>("box"));
+    m_pFilterCtr = VclPtr<SvxTPFilter>::Create(get<VclContainer>("box"));
     get(m_pHighlightBox, "showchanges");
     get(m_pCbAccept, "showaccepted");
     get(m_pCbReject, "showrejected");
@@ -69,8 +69,20 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl:
 
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
+    disposeOnce();
+}
+
+void ScHighlightChgDlg::dispose()
+{
     SetDispatcherLock( false );
-    delete m_pFilterCtr;
+    m_pFilterCtr.disposeAndClear();
+    m_pHighlightBox.clear();
+    m_pCbAccept.clear();
+    m_pCbReject.clear();
+    m_pOkButton.clear();
+    m_pEdAssign.clear();
+    m_pRbAssign.clear();
+    ScAnyRefDlg::dispose();
 }
 
 void ScHighlightChgDlg::Init()

@@ -48,12 +48,13 @@ public:
         const bool bLandscape,
         const FieldUnit eFUnit );
     virtual ~PageSizeControl();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    ::svx::sidebar::ValueSetWithTextControl* mpSizeValueSet;
-    PushButton maMoreButton;
+    VclPtr<::svx::sidebar::ValueSetWithTextControl> mpSizeValueSet;
+    VclPtr<PushButton> maMoreButton;
     // hidden metric field
-    MetricField maWidthHeightField;
+    VclPtr<MetricField> maWidthHeightField;
 
     Paper mePaper;
     ::std::vector< Paper > maPaperList;

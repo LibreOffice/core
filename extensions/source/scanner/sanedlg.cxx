@@ -43,7 +43,7 @@ private:
     Rectangle maPreviewRect;
     Point     maTopLeft, maBottomRight;
     Point     maMinTopLeft, maMaxBottomRight;
-    SaneDlg*  mpParentDialog;
+    VclPtr<SaneDlg>  mpParentDialog;
     DragDirection meDragDirection;
     bool      mbDragEnable;
     bool      mbDragDrawn;
@@ -60,6 +60,12 @@ public:
         , mbDragDrawn(false)
         , mbIsDragging(false)
     {
+    }
+    virtual ~ScanPreview() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        mpParentDialog.clear();
+        vcl::Window::dispose();
     }
     void Init(SaneDlg *pParent)
     {
@@ -151,8 +157,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScanPreview(vcl::Windo
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    ScanPreview *pWindow = new ScanPreview(pParent, nWinStyle);
-    return pWindow;
+    return new ScanPreview(pParent, nWinStyle);
 }
 
 SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
@@ -239,7 +244,37 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
 
 SaneDlg::~SaneDlg()
 {
+    disposeOnce();
+}
+
+void SaneDlg::dispose()
+{
     mrSane.SetReloadOptionsHdl( maOldLink );
+    mpOKButton.clear();
+    mpCancelButton.clear();
+    mpDeviceInfoButton.clear();
+    mpPreviewButton.clear();
+    mpScanButton.clear();
+    mpButtonOption.clear();
+    mpOptionTitle.clear();
+    mpOptionDescTxt.clear();
+    mpVectorTxt.clear();
+    mpLeftField.clear();
+    mpTopField.clear();
+    mpRightField.clear();
+    mpBottomField.clear();
+    mpDeviceBox.clear();
+    mpReslBox.clear();
+    mpAdvancedBox.clear();
+    mpVectorBox.clear();
+    mpQuantumRangeBox.clear();
+    mpStringRangeBox.clear();
+    mpBoolCheckBox.clear();
+    mpStringEdit.clear();
+    mpNumericEdit.clear();
+    mpOptionBox.clear();
+    mpPreview.clear();
+    ModalDialog::dispose();
 }
 
 namespace {
@@ -256,8 +291,8 @@ short SaneDlg::Execute()
 {
     if( ! Sane::IsSane() )
     {
-        MessageDialog aErrorBox(NULL, SaneResId(STR_COULD_NOT_BE_INIT));
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SaneResId(STR_COULD_NOT_BE_INIT));
+        aErrorBox->Execute();
         return RET_CANCEL;
     }
     LoadState();
@@ -539,8 +574,8 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
             aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetType( mrSane.GetDeviceNumber() ) );
-            MessageDialog aInfoBox(this, aString, VCL_MESSAGE_INFO);
-            aInfoBox.Execute();
+            ScopedVclPtrInstance< MessageDialog > aInfoBox(this, aString, VCL_MESSAGE_INFO);
+            aInfoBox->Execute();
         }
         else if( pButton == mpPreviewButton )
             AcquirePreview();
@@ -568,11 +603,11 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
                         x[ i ] = (double)i;
                     mrSane.GetOptionValue( mnCurrentOption, y.get() );
 
-                    GridDialog aGrid( x.get(), y.get(), nElements, this );
-                    aGrid.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-                    aGrid.setBoundings( 0, mfMin, nElements, mfMax );
-                    if( aGrid.Execute() && aGrid.getNewYValues() )
-                        mrSane.SetOptionValue( mnCurrentOption, aGrid.getNewYValues() );
+                    ScopedVclPtrInstance< GridDialog > aGrid( x.get(), y.get(), nElements, this );
+                    aGrid->SetText( mrSane.GetOptionName( mnCurrentOption ) );
+                    aGrid->setBoundings( 0, mfMin, nElements, mfMax );
+                    if( aGrid->Execute() && aGrid->getNewYValues() )
+                        mrSane.SetOptionValue( mnCurrentOption, aGrid->getNewYValues() );
                 }
                 break;
                 case SANE_TYPE_BOOL:
@@ -820,8 +855,8 @@ void SaneDlg::AcquirePreview()
     if( nOption == -1 )
     {
         OUString aString(SaneResId(STR_SLOW_PREVIEW));
-        MessageDialog aBox(this, aString, VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
-        if (aBox.Execute() == RET_CANCEL)
+        ScopedVclPtrInstance< MessageDialog > aBox(this, aString, VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+        if (aBox->Execute() == RET_CANCEL)
             return;
     }
     else
@@ -830,8 +865,8 @@ void SaneDlg::AcquirePreview()
     BitmapTransporter aTransporter;
     if( ! mrSane.Start( aTransporter ) )
     {
-        MessageDialog aErrorBox(this, SaneResId(STR_ERROR_SCAN));
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SaneResId(STR_ERROR_SCAN));
+        aErrorBox->Execute();
     }
     else
     {

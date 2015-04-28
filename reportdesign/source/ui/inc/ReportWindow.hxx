@@ -45,10 +45,10 @@ namespace rptui
                             , public ::cppu::BaseMutex
                             , public ::comphelper::OPropertyChangeListener
     {
-        Ruler                   m_aHRuler;
-        ODesignView*            m_pView;
-        OScrollWindowHelper*    m_pParent;
-        OViewsWindow            m_aViewsWindow;
+        VclPtr<Ruler>                  m_aHRuler;
+        VclPtr<ODesignView>            m_pView;
+        VclPtr<OScrollWindowHelper>    m_pParent;
+        VclPtr<OViewsWindow>           m_aViewsWindow;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pReportListener;
         ::std::unique_ptr<DlgEdFactory>
                                 m_pObjFac;
@@ -67,6 +67,7 @@ namespace rptui
     public:
         OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView);
         virtual ~OReportWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void Resize() SAL_OVERRIDE;
@@ -136,7 +137,7 @@ namespace rptui
         */
         void            showRuler(bool _bShow);
 
-        inline sal_Int32 getRulerHeight() const { return m_aHRuler.GetSizePixel().Height(); }
+        inline sal_Int32 getRulerHeight() const { return m_aHRuler->GetSizePixel().Height(); }
 
         /** returns the total width of the first section
         */
@@ -179,8 +180,8 @@ namespace rptui
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
-        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
+        OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
         virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
 
 

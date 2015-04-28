@@ -82,7 +82,7 @@ public:
     virtual void Activate();        ///< activates the function
     virtual void Deactivate();      ///< deactivates the function
 
-    void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
+    void SetWindow(::sd::Window* pWin);
 
     virtual void SelectionHasChanged();
 
@@ -150,14 +150,14 @@ protected:
 
     ::sd::View* mpView;
     ViewShell* mpViewShell;
-    ::sd::Window* mpWindow;
+    VclPtr<::sd::Window> mpWindow;
     DrawDocShell* mpDocSh;
     SdDrawDocument* mpDoc;
 
     sal_uInt16          nSlotId;
     sal_uInt16          nSlotValue;
 
-    Dialog*             pDialog;
+    VclPtr<Dialog>             pDialog;
 
     Timer               aScrollTimer;           ///< for auto-scrolling
     DECL_LINK( ScrollHdl, void * );

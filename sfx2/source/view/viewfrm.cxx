@@ -495,9 +495,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
                         // ::com::sun::star::sdbcx::User offering to open it as a template
-                        MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
+                        ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
                                            VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                        if ( RET_YES == aBox.Execute() )
+                        if ( RET_YES == aBox->Execute() )
                         {
                             SfxApplication* pApp = SfxGetpApp();
                             SfxAllItemSet aSet( pApp->GetPool() );
@@ -579,9 +579,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( bDo && GetFrame().DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
-                MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
+                ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                bDo = ( RET_YES == aBox.Execute() );
+                bDo = ( RET_YES == aBox->Execute() );
             }
 
             if ( bDo )
@@ -756,9 +756,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( bForEdit && SID_EDITDOC == rReq.GetSlot() )
                     {
                         // ask user for opening as template
-                        MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
+                        ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
                                            VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                        if ( RET_YES == aBox.Execute() )
+                        if ( RET_YES == aBox->Execute() )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
@@ -1369,7 +1369,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(STR_READONLY_DOCUMENT));
                     if (pInfoBar)
                     {
-                        PushButton* pBtn = new PushButton( &GetWindow(), SfxResId(BT_READONLY_EDIT));
+                        VclPtrInstance<PushButton> pBtn( &GetWindow(), SfxResId(BT_READONLY_EDIT));
                         pBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
                         pInfoBar->addButton(pBtn);
                     }
@@ -1468,7 +1468,7 @@ SfxViewFrame::SfxViewFrame
     rFrame.SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
     Construct_Impl( pObjShell );
 
-    pImp->pWindow = new SfxFrameViewWindow_Impl( this, rFrame.GetWindow() );
+    pImp->pWindow = VclPtr<SfxFrameViewWindow_Impl>::Create( this, rFrame.GetWindow() );
     pImp->pWindow->SetSizePixel( rFrame.GetWindow().GetOutputSizePixel() );
     rFrame.SetOwnsBindings_Impl( true );
     rFrame.CreateWorkWindow_Impl();
@@ -1477,7 +1477,6 @@ SfxViewFrame::SfxViewFrame
 
 SfxViewFrame::~SfxViewFrame()
 {
-
     SetDowning_Impl();
 
     if ( SfxViewFrame::Current() == this )
@@ -1489,7 +1488,8 @@ SfxViewFrame::~SfxViewFrame()
         // The Bindings delete the Frame!
         KillDispatcher_Impl();
 
-    delete pImp->pWindow;
+    pImp->pWindow.disposeAndClear();
+    pImp->pFocusWin.clear();
 
     if ( GetFrame().GetCurrentViewFrame() == this )
         GetFrame().SetCurrentViewFrame_Impl( NULL );

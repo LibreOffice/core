@@ -82,7 +82,7 @@ ViewTabBar::ViewTabBar (
     const Reference<XResourceId>& rxViewTabBarId,
     const Reference<frame::XController>& rxController)
     : ViewTabBarInterfaceBase(maMutex),
-      mpTabControl(new TabBarControl(GetAnchorWindow(rxViewTabBarId,rxController), this)),
+      mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
       mxController(rxController),
       maTabBarButtons(),
       mpTabPage(NULL),
@@ -167,8 +167,8 @@ void ViewTabBar::disposing()
         // Set all references to the one tab page to NULL and delete the page.
         for (sal_uInt16 nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
             mpTabControl->SetTabPage(nIndex, NULL);
-        mpTabPage.reset();
-        mpTabControl.reset();
+        mpTabPage.disposeAndClear();
+        mpTabControl.disposeAndClear();
     }
 
     mxController = NULL;

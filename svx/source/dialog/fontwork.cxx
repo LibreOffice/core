@@ -163,8 +163,8 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 
     SfxChildWindow( _pParent, nId )
 {
-    SvxFontWorkDialog* pDlg = new SvxFontWorkDialog(pBindings, this, _pParent);
-    pWindow = pDlg;
+    VclPtrInstance<SvxFontWorkDialog> pDlg(pBindings, this, _pParent);
+    pWindow = pDlg.get();
 
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
@@ -288,8 +288,26 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
 
 SvxFontWorkDialog::~SvxFontWorkDialog()
 {
+    disposeOnce();
+}
+
+void SvxFontWorkDialog::dispose()
+{
     for (sal_uInt16 i = 0; i < CONTROLLER_COUNT; i++)
         DELETEZ(pCtrlItems[i]);
+    m_pTbxStyle.clear();
+    m_pTbxAdjust.clear();
+    m_pFbDistance.clear();
+    m_pMtrFldDistance.clear();
+    m_pFbTextStart.clear();
+    m_pMtrFldTextStart.clear();
+    m_pTbxShadow.clear();
+    m_pFbShadowX.clear();
+    m_pMtrFldShadowX.clear();
+    m_pFbShadowY.clear();
+    m_pMtrFldShadowY.clear();
+    m_pShadowColorLB.clear();
+    SfxDockingWindow::dispose();
 }
 
 SfxChildAlignment SvxFontWorkDialog::CheckAlignment( SfxChildAlignment eActAlign,

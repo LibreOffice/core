@@ -47,17 +47,17 @@ void SfxListenerGuard::endListening()
 
 void WindowListenerGuard::startListening(vcl::Window & rNotifier)
 {
-    OSL_ENSURE(m_pNotifier == 0, "called more than once");
+    OSL_ENSURE(m_pNotifier == nullptr, "called more than once");
     m_pNotifier = &rNotifier;
     m_pNotifier->AddEventListener(m_aListener);
 }
 
 void WindowListenerGuard::endListening()
 {
-    if (m_pNotifier != 0)
+    if (m_pNotifier)
     {
         m_pNotifier->RemoveEventListener(m_aListener);
-        m_pNotifier = 0;
+        m_pNotifier = nullptr;
     }
 }
 

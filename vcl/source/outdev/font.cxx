@@ -91,7 +91,12 @@ vcl::FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
 int OutputDevice::GetDevFontCount() const
 {
     if( !mpGetDevFontList )
+    {
+        if (!mpFontCollection)
+            return 0;
+
         mpGetDevFontList = mpFontCollection->GetDevFontList();
+    }
     return mpGetDevFontList->Count();
 }
 

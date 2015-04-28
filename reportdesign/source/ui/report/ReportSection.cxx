@@ -111,6 +111,11 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 
 OReportSection::~OReportSection()
 {
+    disposeOnce();
+}
+
+void OReportSection::dispose()
+{
     m_pPage = NULL;
     if ( m_pMulti.is() )
         m_pMulti->dispose();
@@ -125,6 +130,8 @@ OReportSection::~OReportSection()
             m_pView->EndListening( *m_pModel );
         m_pView = NULL;
     }
+    m_pParent.clear();
+    vcl::Window::dispose();
 }
 
 void OReportSection::Paint( const Rectangle& rRect )

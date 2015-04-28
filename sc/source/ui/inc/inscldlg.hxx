@@ -29,14 +29,15 @@
 class ScInsertCellDlg : public ModalDialog
 {
 private:
-    RadioButton* m_pBtnCellsDown;
-    RadioButton* m_pBtnCellsRight;
-    RadioButton* m_pBtnInsRow;
-    RadioButton* m_pBtnInsCol;
+    VclPtr<RadioButton> m_pBtnCellsDown;
+    VclPtr<RadioButton> m_pBtnCellsRight;
+    VclPtr<RadioButton> m_pBtnInsRow;
+    VclPtr<RadioButton> m_pBtnInsCol;
 
 public:
             ScInsertCellDlg( vcl::Window* pParent,bool bDisallowCellMove = false );
             virtual ~ScInsertCellDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     InsCellCmd GetInsCellCmd() const;
 };

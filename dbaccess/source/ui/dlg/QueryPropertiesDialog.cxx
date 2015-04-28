@@ -30,6 +30,15 @@ QueryPropertiesDialog::QueryPropertiesDialog(
 
 QueryPropertiesDialog::~QueryPropertiesDialog()
 {
+    disposeOnce();
+}
+
+void QueryPropertiesDialog::dispose()
+{
+    m_pRB_Distinct.clear();
+    m_pRB_NonDistinct.clear();
+    m_pLB_Limit.clear();
+    ModalDialog::dispose();
 }
 
 } ///dbaui namespace

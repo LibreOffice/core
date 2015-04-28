@@ -62,7 +62,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
     pCheckLBContainer->set_width_request(aControlSize.Width());
     pCheckLBContainer->set_height_request(aControlSize.Height());
 
-    m_pCheckLB = new SvxFontSubstCheckListBox(*pCheckLBContainer, 0);
+    m_pCheckLB = VclPtr<SvxFontSubstCheckListBox>::Create(*pCheckLBContainer, 0);
     m_pCheckLB->SetHelpId(HID_OFA_FONT_SUBST_CLB);
 
     m_pCheckLB->SetStyle(m_pCheckLB->GetStyle()|WB_HSCROLL|WB_VSCROLL);
@@ -138,15 +138,32 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
 
 SvxFontSubstTabPage::~SvxFontSubstTabPage()
 {
-    delete pCheckButtonData;
-    delete pConfig;
-    delete m_pCheckLB;
+    disposeOnce();
 }
 
-SfxTabPage*  SvxFontSubstTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void SvxFontSubstTabPage::dispose()
 {
-    return new SvxFontSubstTabPage(pParent, *rAttrSet);
+    delete pCheckButtonData;
+    pCheckButtonData = NULL;
+    delete pConfig;
+    pConfig = NULL;
+    m_pCheckLB.disposeAndClear();
+    m_pUseTableCB.clear();
+    m_pReplacements.clear();
+    m_pFont1CB.clear();
+    m_pFont2CB.clear();
+    m_pApply.clear();
+    m_pDelete.clear();
+    m_pFontNameLB.clear();
+    m_pNonPropFontsOnlyCB.clear();
+    m_pFontHeightLB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxFontSubstTabPage::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SvxFontSubstTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )

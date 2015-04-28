@@ -27,23 +27,24 @@
 
 class OfaMSFilterTabPage : public SfxTabPage
 {
-    CheckBox*       aWBasicCodeCB;
-    CheckBox*       aWBasicWbctblCB;
-    CheckBox*       aWBasicStgCB;
-    CheckBox*       aEBasicCodeCB;
-    CheckBox*       aEBasicExectblCB;
-    CheckBox*       aEBasicStgCB;
-    CheckBox*       aPBasicCodeCB;
-    CheckBox*       aPBasicStgCB;
+    VclPtr<CheckBox>       aWBasicCodeCB;
+    VclPtr<CheckBox>       aWBasicWbctblCB;
+    VclPtr<CheckBox>       aWBasicStgCB;
+    VclPtr<CheckBox>       aEBasicCodeCB;
+    VclPtr<CheckBox>       aEBasicExectblCB;
+    VclPtr<CheckBox>       aEBasicStgCB;
+    VclPtr<CheckBox>       aPBasicCodeCB;
+    VclPtr<CheckBox>       aPBasicStgCB;
 
-    OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~OfaMSFilterTabPage();
 
     DECL_LINK(LoadWordBasicCheckHdl_Impl, void *);
     DECL_LINK(LoadExcelBasicCheckHdl_Impl, void *);
 public:
+    OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~OfaMSFilterTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -73,8 +74,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         }
     };
 
-    SvSimpleTableContainer* m_pCheckLBContainer;
-    MSFltrSimpleTable* m_pCheckLB;
+    VclPtr<SvSimpleTableContainer> m_pCheckLBContainer;
+    VclPtr<MSFltrSimpleTable> m_pCheckLB;
     OUString sHeader1, sHeader2;
     OUString sChgToFromMath,
            sChgToFromWriter,
@@ -83,11 +84,11 @@ class OfaMSFilterTabPage2 : public SfxTabPage
            sChgToFromSmartArt;
     SvLBoxButtonData*   pCheckButtonData;
 
-    RadioButton*    aHighlightingRB;
-    RadioButton*    aShadingRB;
+    VclPtr<RadioButton> aHighlightingRB;
+    VclPtr<RadioButton> aShadingRB;
 
-    OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage2();
+    virtual void dispose() SAL_OVERRIDE;
 
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType );
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
@@ -95,8 +96,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     SvTreeListEntry*    GetEntry4Type( sal_IntPtr _nType ) const;
 
 public:
-
-    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

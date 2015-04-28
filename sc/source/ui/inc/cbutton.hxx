@@ -22,6 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <vcl/vclptr.hxx>
 
 class OutputDevice;
 
@@ -60,7 +61,7 @@ private:
                           bool              bState );
 
 protected:
-    OutputDevice* pOut;
+    VclPtr<OutputDevice> pOut;
     Point   aBtnPos;
     Size    aBtnSize;
 };

@@ -37,7 +37,6 @@ class LightButton : public ImageButton
 {
 public:
     LightButton( vcl::Window* pParent);
-    virtual ~LightButton();
 
     void switchLightOn(bool bOn);
     bool isLightOn() const { return m_bLightOn;}
@@ -58,6 +57,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,
         const XColorListRef &pColorTable );
     virtual ~ThreeD_SceneIllumination_TabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     DECL_LINK( ClickLightSourceButtonHdl, LightButton* );
@@ -74,22 +74,22 @@ private:
     void applyLightSourceToModel( sal_uInt32 nLightNumber );
     void applyLightSourcesToModel();
 
-    LightButton* m_pBtn_Light1;
-    LightButton* m_pBtn_Light2;
-    LightButton* m_pBtn_Light3;
-    LightButton* m_pBtn_Light4;
-    LightButton* m_pBtn_Light5;
-    LightButton* m_pBtn_Light6;
-    LightButton* m_pBtn_Light7;
-    LightButton* m_pBtn_Light8;
+    VclPtr<LightButton> m_pBtn_Light1;
+    VclPtr<LightButton> m_pBtn_Light2;
+    VclPtr<LightButton> m_pBtn_Light3;
+    VclPtr<LightButton> m_pBtn_Light4;
+    VclPtr<LightButton> m_pBtn_Light5;
+    VclPtr<LightButton> m_pBtn_Light6;
+    VclPtr<LightButton> m_pBtn_Light7;
+    VclPtr<LightButton> m_pBtn_Light8;
 
-    ColorLB*     m_pLB_LightSource;
-    PushButton*  m_pBtn_LightSource_Color;
+    VclPtr<ColorLB>     m_pLB_LightSource;
+    VclPtr<PushButton>  m_pBtn_LightSource_Color;
 
-    ColorLB*     m_pLB_AmbientLight;
-    PushButton*  m_pBtn_AmbientLight_Color;
+    VclPtr<ColorLB>     m_pLB_AmbientLight;
+    VclPtr<PushButton>  m_pBtn_AmbientLight_Color;
 
-    SvxLightCtl3D*   m_pCtl_Preview;
+    VclPtr<SvxLightCtl3D>   m_pCtl_Preview;
 
     LightSourceInfo* m_pLightSourceInfoList;
 

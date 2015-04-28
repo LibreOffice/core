@@ -22,6 +22,7 @@
 
 #include "TimerTriggeredControllerLock.hxx"
 #include "TabPageNotifiable.hxx"
+#include "../dialogs/DialogModel.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <svtools/roadmapwizard.hxx>
@@ -36,7 +37,6 @@ namespace chart
 class RangeChooserTabPage;
 class DataSourceTabPage;
 class ChartTypeTemplateProvider;
-class DialogModel;
 
 class CreationWizard : public svt::RoadmapWizard, public TabPageNotifiable
 {
@@ -47,7 +47,6 @@ public:
         , const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >& xContext
         , sal_Int32 nOnePageOnlyIndex=-1 );//if nOnePageOnlyIndex is an index of an exsisting  page starting with 0, then only this page is displayed without next/previous and roadmap
-    virtual ~CreationWizard();
 
     bool isClosable() { /*@todo*/ return m_bIsClosable;}
 
@@ -66,7 +65,7 @@ private:
     //no default constructor
     CreationWizard();
 
-    virtual svt::OWizardPage* createPage(WizardState nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage> createPage(WizardState nState) SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XChartDocument >   m_xChartModel;

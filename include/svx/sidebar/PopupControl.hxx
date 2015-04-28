@@ -38,7 +38,6 @@ public :
     PopupControl (
         vcl::Window* pParent,
         const ResId& rResId);
-    virtual ~PopupControl();
 
     virtual void Paint (const Rectangle& rect) SAL_OVERRIDE;
 };

@@ -42,6 +42,7 @@ public:
         vcl::Window* pParent,
         AreaPropertyPanel& rPanel);
     virtual ~AreaTransparencyGradientControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void Rearrange(XFillFloatTransparenceItem* pGradientItem);
     void InitStatus(XFillFloatTransparenceItem* pGradientItem);
@@ -49,20 +50,20 @@ public:
     void SetControlState_Impl(css::awt::GradientStyle eXGS);
 
 private:
-    FixedText           maFtTrgrCenterX;
-    MetricField         maMtrTrgrCenterX;
-    FixedText           maFtTrgrCenterY;
-    MetricField         maMtrTrgrCenterY;
-    FixedText           maFtTrgrAngle;
-    MetricField         maMtrTrgrAngle;
-    ToolBox             maBtnLeft45;
-    ToolBox             maBtnRight45;
-    FixedText           maFtTrgrStartValue;
-    MetricField         maMtrTrgrStartValue;
-    FixedText           maFtTrgrEndValue;
-    MetricField         maMtrTrgrEndValue;
-    FixedText           maFtTrgrBorder;
-    MetricField         maMtrTrgrBorder;
+    VclPtr<FixedText>           maFtTrgrCenterX;
+    VclPtr<MetricField>         maMtrTrgrCenterX;
+    VclPtr<FixedText>           maFtTrgrCenterY;
+    VclPtr<MetricField>         maMtrTrgrCenterY;
+    VclPtr<FixedText>           maFtTrgrAngle;
+    VclPtr<MetricField>         maMtrTrgrAngle;
+    VclPtr<ToolBox>             maBtnLeft45;
+    VclPtr<ToolBox>             maBtnRight45;
+    VclPtr<FixedText>           maFtTrgrStartValue;
+    VclPtr<MetricField>         maMtrTrgrStartValue;
+    VclPtr<FixedText>           maFtTrgrEndValue;
+    VclPtr<MetricField>         maMtrTrgrEndValue;
+    VclPtr<FixedText>           maFtTrgrBorder;
+    VclPtr<MetricField>         maMtrTrgrBorder;
     Image               maRotLeft;
     Image               maRotRight;
 

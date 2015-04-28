@@ -192,7 +192,7 @@ namespace dbaui
         if( m_pTable )
         {
             OJoinTableView* pView = m_pTable->getTableView();
-            ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable) + nIndex;
+            auto aIter = pView->getTableConnections(m_pTable) + nIndex;
             aRet.TargetSet.realloc(1);
             aRet.TargetSet[0] = getParentChild(aIter - pView->getTableConnections().begin());
             aRet.RelationType = AccessibleRelationType::CONTROLLER_FOR;
@@ -211,10 +211,10 @@ namespace dbaui
         if( AccessibleRelationType::CONTROLLER_FOR == aRelationType && m_pTable)
         {
             OJoinTableView* pView = m_pTable->getTableView();
-            const ::std::vector<OTableConnection*>& rConnectionList = pView->getTableConnections();
+            const auto& rConnectionList = pView->getTableConnections();
 
-            ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable);
-            ::std::vector<OTableConnection*>::const_iterator aEnd = rConnectionList.end();
+            auto aIter = pView->getTableConnections(m_pTable);
+            auto aEnd = rConnectionList.end();
             ::std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
             for (; aIter != aEnd ; ++aIter )

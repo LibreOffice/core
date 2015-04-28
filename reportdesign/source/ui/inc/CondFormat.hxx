@@ -70,14 +70,13 @@ namespace rptui
     class ConditionalFormattingDialog  :public ModalDialog
                                         ,public IConditionalFormatAction
     {
-        typedef ::boost::shared_ptr< Condition >    ConditionPtr;
-        typedef ::std::vector< ConditionPtr >       Conditions;
+        typedef ::std::vector< VclPtr<Condition> >  Conditions;
 
-        OModuleClient   m_aModuleClient;
-        vcl::Window*         m_pConditionPlayground;
-        Conditions      m_aConditions;
-        VclScrolledWindow* m_pScrollWindow;
-        ScrollBar*      m_pCondScroll;
+        OModuleClient             m_aModuleClient;
+        VclPtr<vcl::Window>       m_pConditionPlayground;
+        Conditions                m_aConditions;
+        VclPtr<VclScrolledWindow> m_pScrollWindow;
+        VclPtr<ScrollBar>         m_pCondScroll;
 
         ::rptui::OReportController&                         m_rController;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >
@@ -95,7 +94,7 @@ namespace rptui
             ::rptui::OReportController& _rController
         );
         virtual ~ConditionalFormattingDialog();
-
+        virtual void dispose() SAL_OVERRIDE;
         // Dialog overridables
         virtual short   Execute() SAL_OVERRIDE;
 

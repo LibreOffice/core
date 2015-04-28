@@ -33,7 +33,7 @@ class SD_DLLPUBLIC Assistent
 {
     /** contains for every page the controls, which have to be
         connected? correctly */
-    std::vector<vcl::Window*> maPages[MAX_PAGES];
+    std::vector<VclPtr<vcl::Window> > maPages[MAX_PAGES];
 
     /// number of pages
     int mnPages;

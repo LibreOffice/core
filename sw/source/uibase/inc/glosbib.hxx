@@ -70,13 +70,13 @@ public:
 
 class SwGlossaryGroupDlg : public SvxStandardDialog
 {
-    FEdit*              m_pNameED;
-    ListBox*            m_pPathLB;
-    SwGlossaryGroupTLB* m_pGroupTLB;
+    VclPtr<FEdit>              m_pNameED;
+    VclPtr<ListBox>            m_pPathLB;
+    VclPtr<SwGlossaryGroupTLB> m_pGroupTLB;
 
-    PushButton*     m_pNewPB;
-    PushButton*     m_pDelPB;
-    PushButton*     m_pRenamePB;
+    VclPtr<PushButton>     m_pNewPB;
+    VclPtr<PushButton>     m_pDelPB;
+    VclPtr<PushButton>     m_pRenamePB;
 
     typedef std::vector< OUString> OUVector_t;
     OUVector_t m_RemovedArr;
@@ -102,6 +102,7 @@ public:
                         std::vector<OUString> const& rPathArr,
                         SwGlossaryHdl *pGlosHdl);
     virtual ~SwGlossaryGroupDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     const OUString&     GetCreatedGroupName() const {return sCreatedGroup;}
 };

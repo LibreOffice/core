@@ -96,9 +96,9 @@ template <class TYPE, class SERVICEINFO>
 
 
 template <class TYPE, class SERVICEINFO>
-Dialog* OUnoAutoPilot<TYPE, SERVICEINFO>::createDialog(::vcl::Window* _pParent)
+VclPtr<Dialog> OUnoAutoPilot<TYPE, SERVICEINFO>::createDialog(::vcl::Window* _pParent)
 {
-    return new TYPE(_pParent, m_xObjectModel, m_aContext);
+    return VclPtr<TYPE>::Create(_pParent, m_xObjectModel, m_aContext);
 }
 
 

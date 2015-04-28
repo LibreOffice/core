@@ -89,14 +89,14 @@ void ValueSet::ImplInit()
     mbHasVisibleItems   = false;
 
     // #106446#, #106601# force mirroring of virtual device
-    maVirDev.EnableRTL( GetParent()->IsRTLEnabled() );
+    maVirDev->EnableRTL( GetParent()->IsRTLEnabled() );
 
     ImplInitSettings( true, true, true );
 }
 
 ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren ) :
     Control( pParent, nWinStyle ),
-    maVirDev( *this ),
+    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
     maColor( COL_TRANSPARENT )
 {
     ImplInit();
@@ -116,7 +116,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeValueSet(vcl::Window *
 
 ValueSet::ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTransientChildren ) :
     Control( pParent, rResId ),
-    maVirDev( *this ),
+    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
     maColor( COL_TRANSPARENT )
 {
     ImplInit();
@@ -125,11 +125,18 @@ ValueSet::ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTran
 
 ValueSet::~ValueSet()
 {
+    disposeOnce();
+}
+
+void ValueSet::dispose()
+{
     Reference<XComponent> xComponent(GetAccessible(false), UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
 
     ImplDeleteItems();
+    mxScrollBar.disposeAndClear();
+    Control::dispose();
 }
 
 void ValueSet::ImplDeleteItems()
@@ -199,7 +206,7 @@ void ValueSet::ImplInitScrollBar()
     {
         if ( !mxScrollBar.get() )
         {
-            mxScrollBar.reset(new ScrollBar( this, WB_VSCROLL | WB_DRAG ));
+            mxScrollBar.reset(VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG ));
             mxScrollBar->SetScrollHdl( LINK( this, ValueSet, ImplScrollHdl ) );
         }
         else
@@ -232,7 +239,7 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
         }
         else
         {
-            DecorationView aView( &maVirDev );
+            DecorationView aView( maVirDev.get() );
             aRect = aView.DrawFrame( aRect, mnFrameStyle );
         }
     }
@@ -246,11 +253,11 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
 
         if ( pItem == mpNoneItem.get() )
         {
-            maVirDev.SetFont( GetFont() );
-            maVirDev.SetTextColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor() );
-            maVirDev.SetTextFillColor();
-            maVirDev.SetFillColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor() );
-            maVirDev.DrawRect( aRect );
+            maVirDev->SetFont( GetFont() );
+            maVirDev->SetTextColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor() );
+            maVirDev->SetTextFillColor();
+            maVirDev->SetFillColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor() );
+            maVirDev->DrawRect( aRect );
             Point   aTxtPos( aRect.Left() + 2, aRect.Top() );
             long    nTxtWidth = GetTextWidth( pItem->maText );
             if ( nStyle & WB_RADIOSEL )
@@ -260,33 +267,33 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
             }
             if ( (aTxtPos.X()+nTxtWidth) > aRect.Right() )
             {
-                maVirDev.SetClipRegion( vcl::Region( aRect ) );
-                maVirDev.DrawText( aTxtPos, pItem->maText );
-                maVirDev.SetClipRegion();
+                maVirDev->SetClipRegion( vcl::Region( aRect ) );
+                maVirDev->DrawText( aTxtPos, pItem->maText );
+                maVirDev->SetClipRegion();
             }
             else
-                maVirDev.DrawText( aTxtPos, pItem->maText );
+                maVirDev->DrawText( aTxtPos, pItem->maText );
         }
         else if ( pItem->meType == VALUESETITEM_COLOR )
         {
-            maVirDev.SetFillColor( pItem->maColor );
-            maVirDev.DrawRect( aRect );
+            maVirDev->SetFillColor( pItem->maColor );
+            maVirDev->DrawRect( aRect );
         }
         else
         {
             if ( IsColor() )
-                maVirDev.SetFillColor( maColor );
+                maVirDev->SetFillColor( maColor );
             else if ( nStyle & WB_MENUSTYLEVALUESET )
-                maVirDev.SetFillColor( rStyleSettings.GetMenuColor() );
+                maVirDev->SetFillColor( rStyleSettings.GetMenuColor() );
             else if ( IsEnabled() )
-                maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
+                maVirDev->SetFillColor( rStyleSettings.GetWindowColor() );
             else
-                maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
-            maVirDev.DrawRect( aRect );
+                maVirDev->SetFillColor( rStyleSettings.GetFaceColor() );
+            maVirDev->DrawRect( aRect );
 
             if ( pItem->meType == VALUESETITEM_USERDRAW )
             {
-                UserDrawEvent aUDEvt( &maVirDev, aRect, pItem->mnId );
+                UserDrawEvent aUDEvt( maVirDev.get(), aRect, pItem->mnId );
                 UserDraw( aUDEvt );
             }
             else
@@ -304,12 +311,12 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
                 if ( aImageSize.Width()  > aRectSize.Width() ||
                      aImageSize.Height() > aRectSize.Height() )
                 {
-                    maVirDev.SetClipRegion( vcl::Region( aRect ) );
-                    maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle);
-                    maVirDev.SetClipRegion();
+                    maVirDev->SetClipRegion( vcl::Region( aRect ) );
+                    maVirDev->DrawImage( aPos, pItem->maImage, nImageStyle);
+                    maVirDev->SetClipRegion();
                 }
                 else
-                    maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
+                    maVirDev->DrawImage( aPos, pItem->maImage, nImageStyle );
             }
         }
 
@@ -324,7 +331,7 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
 
             if(!aBlendFrame.IsEmpty())
             {
-                maVirDev.DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
+                maVirDev->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
             }
         }
     }
@@ -344,18 +351,15 @@ void ValueSet::Format()
     long        nOff;
     long        nNoneHeight;
     long        nNoneSpace;
-    std::unique_ptr<ScrollBar> xDeletedScrollBar;
+    VclPtr<ScrollBar> xDeletedScrollBar;
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
         ImplInitScrollBar();
     else
     {
-        if ( mxScrollBar.get() )
-        {
-            // delete ScrollBar not until later, to prevent recursive calls
-            xDeletedScrollBar.swap(mxScrollBar);
-        }
+        xDeletedScrollBar = mxScrollBar;
+        mxScrollBar.clear();
     }
 
     // calculate item offset
@@ -486,9 +490,9 @@ void ValueSet::Format()
     }
 
     // Init VirDev
-    maVirDev.SetSettings( GetSettings() );
-    maVirDev.SetBackground( GetBackground() );
-    maVirDev.SetOutputSizePixel( aWinSize, true );
+    maVirDev->SetSettings( GetSettings() );
+    maVirDev->SetBackground( GetBackground() );
+    maVirDev->SetOutputSizePixel( aWinSize, true );
 
     // nothing is changed in case of too small items
     if ( (mnItemWidth <= 0) ||
@@ -561,7 +565,7 @@ void ValueSet::Format()
         }
 
         // calculate and draw items
-        maVirDev.SetLineColor();
+        maVirDev->SetLineColor();
         long x = nStartX;
         long y = nStartY;
 
@@ -668,6 +672,8 @@ void ValueSet::Format()
 
     // waiting for the next since the formatting is finished
     mbFormat = false;
+
+    xDeletedScrollBar.disposeAndClear();
 }
 
 void ValueSet::ImplDrawItemText(const OUString& rText)
@@ -901,7 +907,7 @@ void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
     HideFocus();
     const Point aPos  = aRect.TopLeft();
     const Size  aSize = aRect.GetSize();
-    DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
+    DrawOutDev( aPos, aSize, aPos, aSize, *maVirDev.get() );
 }
 
 void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
@@ -931,7 +937,7 @@ void ValueSet::ImplDraw()
     HideFocus();
 
     Point   aDefPos;
-    Size    aSize = maVirDev.GetOutputSizePixel();
+    Size    aSize = maVirDev->GetOutputSizePixel();
 
     if ( mxScrollBar.get() && mxScrollBar->IsVisible() )
     {
@@ -940,17 +946,17 @@ void ValueSet::ImplDraw()
         Point   aTempPos( 0, aScrPos.Y() );
         Size    aTempSize( aSize.Width(), aScrPos.Y() );
 
-        DrawOutDev( aDefPos, aTempSize, aDefPos, aTempSize, maVirDev );
+        DrawOutDev( aDefPos, aTempSize, aDefPos, aTempSize, *maVirDev.get() );
         aTempSize.Width()   = aScrPos.X() - 1;
         aTempSize.Height()  = aScrSize.Height();
-        DrawOutDev( aTempPos, aTempSize, aTempPos, aTempSize, maVirDev );
+        DrawOutDev( aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get() );
         aTempPos.Y()        = aScrPos.Y() + aScrSize.Height();
         aTempSize.Width()   = aSize.Width();
         aTempSize.Height()  = aSize.Height() - aTempPos.Y();
-        DrawOutDev( aTempPos, aTempSize, aTempPos, aTempSize, maVirDev );
+        DrawOutDev( aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get() );
     }
     else
-        DrawOutDev( aDefPos, aSize, aDefPos, aSize, maVirDev );
+        DrawOutDev( aDefPos, aSize, aDefPos, aSize, *maVirDev.get() );
 
     // draw parting line to the Namefield
     if ( GetStyle() & WB_NAMEFIELD )
@@ -1416,7 +1422,7 @@ void ValueSet::Paint( const Rectangle& )
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         SetLineColor();
         SetFillColor( rStyleSettings.GetFaceColor() );
-        long nOffY = maVirDev.GetOutputSizePixel().Height();
+        long nOffY = maVirDev->GetOutputSizePixel().Height();
         Size aWinSize = GetOutputSizePixel();
         DrawRect( Rectangle( Point( 0, nOffY ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
     }

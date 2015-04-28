@@ -41,14 +41,14 @@ namespace vcl { class Window; }
 class ImpSWFDialog : public ModalDialog
 {
 private:
-    NumericField * mpNumFldQuality;
-    CheckBox *     mpCheckExportAll;
-    CheckBox *     mpCheckExportBackgrounds;
-    CheckBox *     mpCheckExportBackgroundObjects;
-    CheckBox *     mpCheckExportSlideContents;
-    CheckBox *     mpCheckExportSound;
-    CheckBox *     mpCheckExportOLEAsJPEG;
-    CheckBox *     mpCheckExportMultipleFiles;
+    VclPtr<NumericField> mpNumFldQuality;
+    VclPtr<CheckBox>     mpCheckExportAll;
+    VclPtr<CheckBox>     mpCheckExportBackgrounds;
+    VclPtr<CheckBox>     mpCheckExportBackgroundObjects;
+    VclPtr<CheckBox>     mpCheckExportSlideContents;
+    VclPtr<CheckBox>     mpCheckExportSound;
+    VclPtr<CheckBox>     mpCheckExportOLEAsJPEG;
+    VclPtr<CheckBox>     mpCheckExportMultipleFiles;
 
     FilterConfigItem    maConfigItem;
 
@@ -58,6 +58,7 @@ public:
     ImpSWFDialog( vcl::Window* pParent,
                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
     virtual ~ImpSWFDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetFilterData();
 };

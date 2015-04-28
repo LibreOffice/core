@@ -91,10 +91,21 @@ OCollectionView::OCollectionView( vcl::Window * pParent
     m_pPB_OK->SetClickHdl( LINK( this, OCollectionView, Save_Click ) );
 }
 
-OCollectionView::~OCollectionView( )
+OCollectionView::~OCollectionView()
 {
+    disposeOnce();
 }
 
+void OCollectionView::dispose()
+{
+    m_pFTCurrentPath.clear();
+    m_pNewFolder.clear();
+    m_pUp.clear();
+    m_pView.clear();
+    m_pName.clear();
+    m_pPB_OK.clear();
+    ModalDialog::dispose();
+}
 
 IMPL_LINK_NOARG(OCollectionView, Save_Click)
 {
@@ -169,8 +180,8 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
             Reference< XContent> xContent;
             if ( xNameContainer->hasByName(sName) )
             {
-                QueryBox aBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) );
-                if ( aBox.Execute() != RET_YES )
+                ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) );
+                if ( aBox->Execute() != RET_YES )
                     return 0;
             }
             m_pName->SetText(sName);

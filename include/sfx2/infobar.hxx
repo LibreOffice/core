@@ -43,16 +43,16 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
 class SfxInfoBarWindow : public vcl::Window
 {
     private:
-        OUString m_sId;
-
-        std::unique_ptr<FixedText> m_pMessage;
-        std::unique_ptr<Button>    m_pCloseBtn;
-
-        boost::ptr_vector<PushButton> m_aActionBtns;
+        OUString                           m_sId;
+        VclPtr<FixedText>                  m_pMessage;
+        VclPtr<Button>                     m_pCloseBtn;
+        std::vector< VclPtr<PushButton> >  m_aActionBtns;
 
     public:
-        SfxInfoBarWindow(vcl::Window* parent, const OUString& sId, const OUString& sMessage);
+        SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
+                          const OUString& sMessage );
         virtual ~SfxInfoBarWindow( );
+        virtual void dispose() SAL_OVERRIDE;
 
         const OUString& getId() const { return m_sId; }
         virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
@@ -71,12 +71,13 @@ class SfxInfoBarWindow : public vcl::Window
 class SfxInfoBarContainerWindow : public vcl::Window
 {
     private:
-        SfxInfoBarContainerChild*           m_pChildWin;
-        boost::ptr_vector<SfxInfoBarWindow> m_pInfoBars;
+        SfxInfoBarContainerChild*               m_pChildWin;
+        std::vector< VclPtr<SfxInfoBarWindow> > m_pInfoBars;
 
     public:
         SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin);
         virtual ~SfxInfoBarContainerWindow( );
+        virtual void dispose() SAL_OVERRIDE;
 
         SfxInfoBarWindow* appendInfoBar(const OUString& sId, const OUString& sMessage);
         SfxInfoBarWindow* getInfoBar(const OUString& sId);

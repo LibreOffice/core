@@ -31,11 +31,11 @@ enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
 
 class NameClashDialog : public ModalDialog
 {
-    FixedText     *m_pFTMessage;
-    Edit          *m_pEDNewName;
-    PushButton    *m_pBtnOverwrite;
-    PushButton    *m_pBtnRename;
-    CancelButton  *m_pBtnCancel;
+    VclPtr<FixedText>     m_pFTMessage;
+    VclPtr<Edit>          m_pEDNewName;
+    VclPtr<PushButton>    m_pBtnOverwrite;
+    VclPtr<PushButton>    m_pBtnRename;
+    VclPtr<CancelButton>  m_pBtnCancel;
 
     OUString maSameName;
     OUString maNewName;
@@ -48,6 +48,8 @@ public:
                      OUString const & rClashingName,
                      OUString const & rProposedNewName,
                      bool bAllowOverwrite );
+    virtual ~NameClashDialog();
+    virtual void dispose() SAL_OVERRIDE;
     OUString getNewName() const { return maNewName; }
 };
 

@@ -37,13 +37,13 @@ class SwWrtShell;
 class SwBreakDlg: public SvxStandardDialog
 {
     SwWrtShell     &rSh;
-    RadioButton*    m_pLineBtn;
-    RadioButton*    m_pColumnBtn;
-    RadioButton*    m_pPageBtn;
-    FixedText*      m_pPageCollText;
-    ListBox*        m_pPageCollBox;
-    CheckBox*       m_pPageNumBox;
-    NumericField*   m_pPageNumEdit;
+    VclPtr<RadioButton>    m_pLineBtn;
+    VclPtr<RadioButton>    m_pColumnBtn;
+    VclPtr<RadioButton>    m_pPageBtn;
+    VclPtr<FixedText>      m_pPageCollText;
+    VclPtr<ListBox>        m_pPageCollBox;
+    VclPtr<CheckBox>       m_pPageNumBox;
+    VclPtr<NumericField>   m_pPageNumEdit;
 
     OUString        aTemplate;
     sal_uInt16      nKind;
@@ -64,6 +64,7 @@ protected:
 public:
     SwBreakDlg( vcl::Window *pParent, SwWrtShell &rSh );
     virtual ~SwBreakDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString    GetTemplateName() { return aTemplate; }
     sal_uInt16  GetKind() { return nKind; }

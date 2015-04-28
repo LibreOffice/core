@@ -122,13 +122,12 @@ namespace svt { namespace table
             The window's upper left corner is at position (0,0), relative to the
             table control, which is the direct parent of the data window.
         */
-        ::boost::scoped_ptr< TableDataWindow >
-                                m_pDataWindow;
+        VclPtr<TableDataWindow> m_pDataWindow;
         /// the vertical scrollbar, if any
-        ScrollBar*              m_pVScroll;
+        VclPtr<ScrollBar>       m_pVScroll;
         /// the horizontal scrollbar, if any
-        ScrollBar*              m_pHScroll;
-        ScrollBarBox*           m_pScrollCorner;
+        VclPtr<ScrollBar>       m_pHScroll;
+        VclPtr<ScrollBarBox>    m_pScrollCorner;
         //selection engine - for determining selection range, e.g. single, multiple
         SelectionEngine*        m_pSelEngine;
         //vector which contains the selected rows

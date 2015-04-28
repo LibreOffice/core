@@ -927,7 +927,7 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
 
 OutputDevice* SlideShow::getShowWindow()
 {
-    return mxController.is() ? mxController->mpShowWindow : 0;
+    return mxController.is() ? mxController->mpShowWindow.get() : 0;
 }
 
 int SlideShow::getAnimationMode()
@@ -1159,7 +1159,7 @@ void SlideShow::StartFullscreenPresentation( )
     // will be created.  This is done here explicitly so that we can make it
     // fullscreen.
     const sal_Int32 nDisplay (GetDisplay());
-    WorkWindow* pWorkWindow = new FullScreenWorkWindow(this, mpCurrentViewShellBase);
+    VclPtr<WorkWindow> pWorkWindow = VclPtr<FullScreenWorkWindow>::Create(this, mpCurrentViewShellBase);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
     pWorkWindow->StartPresentationMode( true, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
     //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);

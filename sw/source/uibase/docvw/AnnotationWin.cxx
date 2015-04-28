@@ -70,7 +70,13 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
 
 SwAnnotationWin::~SwAnnotationWin()
 {
+    disposeOnce();
+}
+
+void SwAnnotationWin::dispose()
+{
     delete mpButtonPopup;
+    sw::sidebarwindows::SwSidebarWin::dispose();
 }
 
 void SwAnnotationWin::SetPostItText()
@@ -207,7 +213,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
     return aCount - 1;
 }
 
-MenuButton* SwAnnotationWin::CreateMenuButton()
+VclPtr<MenuButton> SwAnnotationWin::CreateMenuButton()
 {
     mpButtonPopup = new PopupMenu(SW_RES(MN_ANNOTATION_BUTTON));
     OUString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
@@ -215,7 +221,7 @@ MenuButton* SwAnnotationWin::CreateMenuButton()
     aRewriter.AddRule(UndoArg1,GetAuthor());
     aText = aRewriter.Apply(aText);
     mpButtonPopup->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
-    MenuButton* pMenuButton = new AnnotationMenuButton( *this );
+    VclPtr<MenuButton> pMenuButton( new AnnotationMenuButton( *this ), SAL_NO_ACQUIRE );
     pMenuButton->SetPopupMenu( mpButtonPopup );
     pMenuButton->Show();
     return pMenuButton;

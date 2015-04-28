@@ -378,8 +378,8 @@ namespace svt
 
         void    UpdateScrollButtons()
         {
-            m_aScrollBack.Enable( m_nScrollPosition > 0 );
-            m_aScrollForward.Enable( m_nScrollPosition < m_aItems.size() - 1 );
+            m_aScrollBack->Enable( m_nScrollPosition > 0 );
+            m_aScrollForward->Enable( m_nScrollPosition < m_aItems.size() - 1 );
         }
 
         void                        Relayout();
@@ -415,7 +415,7 @@ namespace svt
         TabAlignment                m_eTabAlignment;
         IToolPanelDeck&             m_rPanelDeck;
 
-        VirtualDevice               m_aRenderDevice;
+        ScopedVclPtr<VirtualDevice> m_aRenderDevice;
         PTabBarRenderer             m_pRenderer;
 
         ::boost::optional< size_t > m_aHoveredItem;
@@ -425,8 +425,8 @@ namespace svt
         ItemDescriptors             m_aItems;
         bool                        m_bItemsDirty;
 
-        PushButton                  m_aScrollBack;
-        PushButton                  m_aScrollForward;
+        VclPtr<PushButton>          m_aScrollBack;
+        VclPtr<PushButton>          m_aScrollForward;
 
         size_t                      m_nScrollPosition;
     };
@@ -499,45 +499,45 @@ namespace svt
         ,m_aNormalizer()
         ,m_eTabAlignment( i_eAlignment )
         ,m_rPanelDeck( i_rPanelDeck )
-        ,m_aRenderDevice( i_rTabBar )
+        ,m_aRenderDevice( VclPtr<VirtualDevice>::Create(i_rTabBar) )
         ,m_pRenderer()
         ,m_aHoveredItem()
         ,m_aFocusedItem()
         ,m_bMouseButtonDown( false )
         ,m_aItems()
         ,m_bItemsDirty( true )
-        ,m_aScrollBack( &i_rTabBar, WB_BEVELBUTTON )
-        ,m_aScrollForward( &i_rTabBar, WB_BEVELBUTTON )
+        ,m_aScrollBack( VclPtr<PushButton>::Create(&i_rTabBar, WB_BEVELBUTTON) )
+        ,m_aScrollForward( VclPtr<PushButton>::Create(&i_rTabBar, WB_BEVELBUTTON) )
         ,m_nScrollPosition( 0 )
     {
 #ifdef WNT
-        if ( m_aRenderDevice.IsNativeControlSupported( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL ) )
+        if ( m_aRenderDevice->IsNativeControlSupported( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL ) )
             // this mode requires the NWF framework to be able to render those items onto a virtual
             // device. For some frameworks (some GTK themes, in particular), this is known to fail.
             // So, be on the safe side for the moment.
-            m_pRenderer.reset( new NWFTabItemRenderer( m_aRenderDevice ) );
+            m_pRenderer.reset( new NWFTabItemRenderer( *m_aRenderDevice.get() ) );
         else
 #endif
-        if ( m_aRenderDevice.IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
-            m_pRenderer.reset( new NWFToolboxItemRenderer( m_aRenderDevice ) );
+        if ( m_aRenderDevice->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
+            m_pRenderer.reset( new NWFToolboxItemRenderer( *m_aRenderDevice.get() ) );
         else
-            m_pRenderer.reset( new VCLItemRenderer( m_aRenderDevice ) );
+            m_pRenderer.reset( new VCLItemRenderer( *m_aRenderDevice.get() ) );
 
-        m_aRenderDevice.SetLineColor();
+        m_aRenderDevice->SetLineColor();
 
         m_rPanelDeck.AddListener( *this );
 
-        m_aScrollBack.SetSymbol( IsVertical() ? SymbolType::ARROW_UP : SymbolType::ARROW_LEFT );
-        m_aScrollBack.Show();
-        m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
-        m_aScrollBack.SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_FWD ).toString() );
-        m_aScrollBack.SetAccessibleName( m_aScrollBack.GetAccessibleDescription() );
+        m_aScrollBack->SetSymbol( IsVertical() ? SymbolType::ARROW_UP : SymbolType::ARROW_LEFT );
+        m_aScrollBack->Show();
+        m_aScrollBack->SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
+        m_aScrollBack->SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_FWD ).toString() );
+        m_aScrollBack->SetAccessibleName( m_aScrollBack->GetAccessibleDescription() );
 
-        m_aScrollForward.SetSymbol( IsVertical() ? SymbolType::ARROW_DOWN : SymbolType::ARROW_RIGHT );
-        m_aScrollForward.Show();
-        m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
-        m_aScrollForward.SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_BACK ).toString() );
-        m_aScrollForward.SetAccessibleName( m_aScrollForward.GetAccessibleDescription() );
+        m_aScrollForward->SetSymbol( IsVertical() ? SymbolType::ARROW_DOWN : SymbolType::ARROW_RIGHT );
+        m_aScrollForward->Show();
+        m_aScrollForward->SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
+        m_aScrollForward->SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_BACK ).toString() );
+        m_aScrollForward->SetAccessibleName( m_aScrollForward->GetAccessibleDescription() );
     }
 
 
@@ -710,7 +710,7 @@ namespace svt
 
     void PanelTabBar_Impl::CopyFromRenderDevice( const Rectangle& i_rLogicalRect ) const
     {
-        BitmapEx aBitmap( m_aRenderDevice.GetBitmapEx(
+        BitmapEx aBitmap( m_aRenderDevice->GetBitmapEx(
             i_rLogicalRect.TopLeft(),
             Size(
                 i_rLogicalRect.GetSize().Width(),
@@ -833,31 +833,31 @@ namespace svt
         const Size aLogicalOutputSize( m_aNormalizer.getReferenceSize() );
 
         // forward actual output size to our render device
-        m_aRenderDevice.SetOutputSizePixel( aLogicalOutputSize );
+        m_aRenderDevice->SetOutputSizePixel( aLogicalOutputSize );
 
         // re-calculate the size of the scroll buttons and of the items
         m_aGeometry.relayout( aLogicalOutputSize, m_aItems );
 
         if ( m_aGeometry.getButtonBackRect().IsEmpty() )
         {
-            m_aScrollBack.Hide();
+            m_aScrollBack->Hide();
         }
         else
         {
             const Rectangle aButtonBack( m_aNormalizer.getTransformed( m_aGeometry.getButtonBackRect(), m_eTabAlignment ) );
-            m_aScrollBack.SetPosSizePixel( aButtonBack.TopLeft(), aButtonBack.GetSize() );
-            m_aScrollBack.Show();
+            m_aScrollBack->SetPosSizePixel( aButtonBack.TopLeft(), aButtonBack.GetSize() );
+            m_aScrollBack->Show();
         }
 
         if ( m_aGeometry.getButtonForwardRect().IsEmpty() )
         {
-            m_aScrollForward.Hide();
+            m_aScrollForward->Hide();
         }
         else
         {
             const Rectangle aButtonForward( m_aNormalizer.getTransformed( m_aGeometry.getButtonForwardRect(), m_eTabAlignment ) );
-            m_aScrollForward.SetPosSizePixel( aButtonForward.TopLeft(), aButtonForward.GetSize() );
-            m_aScrollForward.Show();
+            m_aScrollForward->SetPosSizePixel( aButtonForward.TopLeft(), aButtonForward.GetSize() );
+            m_aScrollForward->Show();
         }
 
         UpdateScrollButtons();
@@ -921,13 +921,13 @@ namespace svt
 
     IMPL_LINK( PanelTabBar_Impl, OnScroll, const PushButton*, i_pButton )
     {
-        if ( i_pButton == &m_aScrollBack )
+        if ( i_pButton == m_aScrollBack.get() )
         {
             OSL_ENSURE( m_nScrollPosition > 0, "PanelTabBar_Impl::OnScroll: inconsistency!" );
             --m_nScrollPosition;
             m_rTabBar.Invalidate();
         }
-        else if ( i_pButton == &m_aScrollForward )
+        else if ( i_pButton == m_aScrollForward.get() )
         {
             OSL_ENSURE( m_nScrollPosition < m_aItems.size() - 1, "PanelTabBar_Impl::OnScroll: inconsistency!" );
             ++m_nScrollPosition;
@@ -996,11 +996,15 @@ namespace svt
         DBG_CHECK( *m_pImpl );
     }
 
-
     PanelTabBar::~PanelTabBar()
     {
+        disposeOnce();
     }
 
+    void PanelTabBar::dispose()
+    {
+        Control::dispose();
+    }
 
     TabItemContent PanelTabBar::GetTabItemContent() const
     {
@@ -1046,10 +1050,10 @@ namespace svt
 
         // background
         const Rectangle aNormalizedPaintArea( m_pImpl->m_aNormalizer.getNormalized( i_rRect, m_pImpl->m_eTabAlignment ) );
-        m_pImpl->m_aRenderDevice.Push( PushFlags::CLIPREGION );
-        m_pImpl->m_aRenderDevice.SetClipRegion(vcl::Region(aNormalizedPaintArea));
+        m_pImpl->m_aRenderDevice->Push( PushFlags::CLIPREGION );
+        m_pImpl->m_aRenderDevice->SetClipRegion(vcl::Region(aNormalizedPaintArea));
         m_pImpl->m_pRenderer->renderBackground();
-        m_pImpl->m_aRenderDevice.Pop();
+        m_pImpl->m_aRenderDevice->Pop();
         m_pImpl->CopyFromRenderDevice( aNormalizedPaintArea );
 
         // ensure the items really paint into their own playground only
@@ -1314,7 +1318,7 @@ namespace svt
 
     PushButton& PanelTabBar::GetScrollButton( const bool i_bForward )
     {
-        return i_bForward ? m_pImpl->m_aScrollForward : m_pImpl->m_aScrollBack;
+        return i_bForward ? *m_pImpl->m_aScrollForward.get() : *m_pImpl->m_aScrollBack.get();
     }
 
 

@@ -28,7 +28,15 @@ ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBi
 }
 
 ScPivotLayoutTreeListBase::~ScPivotLayoutTreeListBase()
-{}
+{
+    disposeOnce();
+}
+
+void ScPivotLayoutTreeListBase::dispose()
+{
+    mpParent.clear();
+    SvTreeListBox::dispose();
+}
 
 void ScPivotLayoutTreeListBase::Setup(ScPivotLayoutDialog* pParent)
 {
@@ -126,7 +134,7 @@ void ScPivotLayoutTreeListBase::GetFocus()
         if (pEntry)
             InsertEntryForSourceTarget(pEntry, NULL);
 
-        if (mpParent->mpPreviouslyFocusedListBox != NULL)
+        if (mpParent->mpPreviouslyFocusedListBox != nullptr)
             mpParent->mpPreviouslyFocusedListBox->GrabFocus();
     }
 

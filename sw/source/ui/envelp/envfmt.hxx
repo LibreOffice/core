@@ -30,20 +30,18 @@ class SwTxtFmtColl;
 
 class SwEnvFmtPage : public SfxTabPage
 {
-    MetricField*  m_pAddrLeftField;
-    MetricField*  m_pAddrTopField;
-    MenuButton*   m_pAddrEditButton;
-    MetricField*  m_pSendLeftField;
-    MetricField*  m_pSendTopField;
-    MenuButton*   m_pSendEditButton;
-    ListBox*      m_pSizeFormatBox;
-    MetricField*  m_pSizeWidthField;
-    MetricField*  m_pSizeHeightField;
-    SwEnvPreview* m_pPreview;
+    VclPtr<MetricField>  m_pAddrLeftField;
+    VclPtr<MetricField>  m_pAddrTopField;
+    VclPtr<MenuButton>   m_pAddrEditButton;
+    VclPtr<MetricField>  m_pSendLeftField;
+    VclPtr<MetricField>  m_pSendTopField;
+    VclPtr<MenuButton>   m_pSendEditButton;
+    VclPtr<ListBox>      m_pSizeFormatBox;
+    VclPtr<MetricField>  m_pSizeWidthField;
+    VclPtr<MetricField>  m_pSizeHeightField;
+    VclPtr<SwEnvPreview> m_pPreview;
 
     std::vector<sal_uInt16>  aIDs;
-
-    SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( EditHdl, MenuButton * );
@@ -59,8 +57,11 @@ class SwEnvFmtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    virtual ~SwEnvFmtPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

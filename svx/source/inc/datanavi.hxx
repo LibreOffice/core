@@ -115,7 +115,7 @@ namespace svxform
     class DataTreeListBox : public SvTreeListBox
     {
     private:
-        XFormsPage*             m_pXFormsPage;
+        VclPtr<XFormsPage>      m_pXFormsPage;
         DataGroupType           m_eGroup;
         sal_uInt16              m_nAddId;
         sal_uInt16              m_nAddElementId;
@@ -129,6 +129,7 @@ namespace svxform
     public:
         DataTreeListBox( vcl::Window* pParent, WinBits nBits );
         virtual ~DataTreeListBox();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual PopupMenu*      CreateContextMenu() SAL_OVERRIDE;
         virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) SAL_OVERRIDE;
@@ -249,8 +250,8 @@ namespace svxform
         MethodString                m_aMethodString;
         ReplaceString               m_aReplaceString;
 
-        ToolBox                     *m_pToolBox;
-        DataTreeListBox             *m_pItemList;
+        VclPtr<ToolBox>             m_pToolBox;
+        VclPtr<DataTreeListBox>     m_pItemList;
         sal_uInt16                  m_nAddId;
         sal_uInt16                  m_nAddElementId;
         sal_uInt16                  m_nAddAttributeId;
@@ -259,7 +260,7 @@ namespace svxform
 
         XFormsUIHelper1_ref         m_xUIHelper;
 
-        DataNavigatorWindow*        m_pNaviWin;
+        VclPtr<DataNavigatorWindow> m_pNaviWin;
         bool                        m_bHasModel;
         DataGroupType               m_eGroup;
         ImageList                   m_TbxImageList;
@@ -289,6 +290,7 @@ namespace svxform
     public:
         XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
         virtual ~XFormsPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void                Resize() SAL_OVERRIDE;
 
@@ -319,20 +321,20 @@ namespace svxform
 
 
 
-    typedef std::vector< XFormsPage* >          PageList;
+    typedef std::vector< VclPtr<XFormsPage> >   PageList;
     typedef ::rtl::Reference < DataListener >   DataListener_ref;
 
     class DataNavigatorWindow : public vcl::Window, public VclBuilderContainer
     {
     private:
-        ListBox*                    m_pModelsBox;
-        MenuButton*                 m_pModelBtn;
-        TabControl*                 m_pTabCtrl;
-        MenuButton*                 m_pInstanceBtn;
+        VclPtr<ListBox>             m_pModelsBox;
+        VclPtr<MenuButton>          m_pModelBtn;
+        VclPtr<TabControl>          m_pTabCtrl;
+        VclPtr<MenuButton>          m_pInstanceBtn;
 
-        XFormsPage*                 m_pInstPage;
-        XFormsPage*                 m_pSubmissionPage;
-        XFormsPage*                 m_pBindingPage;
+        VclPtr<XFormsPage>          m_pInstPage;
+        VclPtr<XFormsPage>          m_pSubmissionPage;
+        VclPtr<XFormsPage>          m_pBindingPage;
 
         sal_Int32                   m_nLastSelectedPos;
         bool                        m_bShowDetails;
@@ -372,6 +374,7 @@ namespace svxform
     public:
         DataNavigatorWindow( vcl::Window* pParent, SfxBindings* pBindings );
         virtual ~DataNavigatorWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         static void                 SetDocModified();
         void                        NotifyChanges( bool _bLoadAll = false );
@@ -388,11 +391,11 @@ namespace svxform
     class DataNavigator : public SfxDockingWindow, public SfxControllerItem
     {
     private:
-        DataNavigatorWindow         m_aDataWin;
+        VclPtr<DataNavigatorWindow> m_aDataWin;
 
     protected:
         virtual void                Resize() SAL_OVERRIDE;
-        virtual bool            Close() SAL_OVERRIDE;
+        virtual bool                Close() SAL_OVERRIDE;
         virtual void                GetFocus() SAL_OVERRIDE;
         virtual Size                CalcDockingSize( SfxChildAlignment ) SAL_OVERRIDE;
         virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) SAL_OVERRIDE;
@@ -400,6 +403,7 @@ namespace svxform
     public:
         DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, vcl::Window* pParent );
         virtual ~DataNavigator();
+        virtual void dispose() SAL_OVERRIDE;
 
         using Window::Update;
         using                       SfxDockingWindow::StateChanged;
@@ -422,30 +426,30 @@ namespace svxform
     {
     private:
 
-        VclFrame*           m_pItemFrame;
-        FixedText*          m_pNameFT;
-        Edit*               m_pNameED;
-        FixedText*          m_pDefaultFT;
-        Edit*               m_pDefaultED;
-        PushButton*         m_pDefaultBtn;
+        VclPtr<VclFrame>    m_pItemFrame;
+        VclPtr<FixedText>   m_pNameFT;
+        VclPtr<Edit>        m_pNameED;
+        VclPtr<FixedText>   m_pDefaultFT;
+        VclPtr<Edit>        m_pDefaultED;
+        VclPtr<PushButton>  m_pDefaultBtn;
 
-        VclFrame*           m_pSettingsFrame;
+        VclPtr<VclFrame>    m_pSettingsFrame;
 
-        FixedText*          m_pDataTypeFT;
-        ListBox*            m_pDataTypeLB;
+        VclPtr<FixedText>   m_pDataTypeFT;
+        VclPtr<ListBox>     m_pDataTypeLB;
 
-        CheckBox*           m_pRequiredCB;
-        PushButton*         m_pRequiredBtn;
-        CheckBox*           m_pRelevantCB;
-        PushButton*         m_pRelevantBtn;
-        CheckBox*           m_pConstraintCB;
-        PushButton*         m_pConstraintBtn;
-        CheckBox*           m_pReadonlyCB;
-        PushButton*         m_pReadonlyBtn;
-        CheckBox*           m_pCalculateCB;
-        PushButton*         m_pCalculateBtn;
+        VclPtr<CheckBox>    m_pRequiredCB;
+        VclPtr<PushButton>  m_pRequiredBtn;
+        VclPtr<CheckBox>    m_pRelevantCB;
+        VclPtr<PushButton>  m_pRelevantBtn;
+        VclPtr<CheckBox>    m_pConstraintCB;
+        VclPtr<PushButton>  m_pConstraintBtn;
+        VclPtr<CheckBox>    m_pReadonlyCB;
+        VclPtr<PushButton>  m_pReadonlyBtn;
+        VclPtr<CheckBox>    m_pCalculateCB;
+        VclPtr<PushButton>  m_pCalculateBtn;
 
-        OKButton*           m_pOKBtn;
+        VclPtr<OKButton>    m_pOKBtn;
 
         XFormsUIHelper1_ref m_xUIHelper;
         XPropertySet_ref    m_xBinding;
@@ -470,6 +474,7 @@ namespace svxform
         AddDataItemDialog(
             vcl::Window* pParent, ItemNode* _pNode, const XFormsUIHelper1_ref& _rUIHelper );
         virtual ~AddDataItemDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         void                InitText( DataItemType _eType );
     };
@@ -478,13 +483,13 @@ namespace svxform
     class AddConditionDialog : public ModalDialog
     {
     private:
-        VclMultiLineEdit*       m_pConditionED;
-        VclMultiLineEdit*       m_pResultWin;
-        PushButton*             m_pEditNamespacesBtn;
-        OKButton*               m_pOKBtn;
+        VclPtr<VclMultiLineEdit>       m_pConditionED;
+        VclPtr<VclMultiLineEdit>       m_pResultWin;
+        VclPtr<PushButton>             m_pEditNamespacesBtn;
+        VclPtr<OKButton>               m_pOKBtn;
 
         Idle                    m_aResultIdle;
-        OUString         m_sPropertyName;
+        OUString                m_sPropertyName;
 
         XFormsUIHelper1_ref     m_xUIHelper;
         XPropertySet_ref        m_xBinding;
@@ -497,6 +502,8 @@ namespace svxform
     public:
         AddConditionDialog(vcl::Window* pParent,
             const OUString& _rPropertyName, const XPropertySet_ref& _rBinding);
+        virtual ~AddConditionDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         XFormsUIHelper1_ref GetUIHelper() const { return m_xUIHelper; }
         OUString GetCondition() const { return m_pConditionED->GetText(); }
@@ -513,13 +520,13 @@ namespace svxform
     private:
         typedef std::vector< OUString > PrefixList;
 
-        SvSimpleTable*      m_pNamespacesList;
-        PushButton*         m_pAddNamespaceBtn;
-        PushButton*         m_pEditNamespaceBtn;
-        PushButton*         m_pDeleteNamespaceBtn;
-        OKButton*           m_pOKBtn;
+        VclPtr<SvSimpleTable>      m_pNamespacesList;
+        VclPtr<PushButton>         m_pAddNamespaceBtn;
+        VclPtr<PushButton>         m_pEditNamespaceBtn;
+        VclPtr<PushButton>         m_pDeleteNamespaceBtn;
+        VclPtr<OKButton>           m_pOKBtn;
 
-        AddConditionDialog* m_pConditionDlg;
+        VclPtr<AddConditionDialog> m_pConditionDlg;
         PrefixList          m_aRemovedList;
 
         XNameContainer_ref& m_rNamespaces;
@@ -533,22 +540,25 @@ namespace svxform
     public:
         NamespaceItemDialog( AddConditionDialog* pParent, XNameContainer_ref& _rContainer );
         virtual ~NamespaceItemDialog();
+        virtual void dispose() SAL_OVERRIDE;
     };
 
 
     class ManageNamespaceDialog : public ModalDialog
     {
     private:
-        Edit*               m_pPrefixED;
-        Edit*               m_pUrlED;
-        OKButton*           m_pOKBtn;
+        VclPtr<Edit>               m_pPrefixED;
+        VclPtr<Edit>               m_pUrlED;
+        VclPtr<OKButton>           m_pOKBtn;
 
-        AddConditionDialog* m_pConditionDlg;
+        VclPtr<AddConditionDialog> m_pConditionDlg;
 
         DECL_LINK(OKHdl, void *);
 
     public:
         ManageNamespaceDialog(vcl::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
+        virtual ~ManageNamespaceDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         void SetNamespace(const OUString& _rPrefix, const OUString& _rURL)
         {
@@ -566,15 +576,15 @@ namespace svxform
         MethodString        m_aMethodString;
         ReplaceString       m_aReplaceString;
 
-        Edit*               m_pNameED;
-        Edit*               m_pActionED;
-        ListBox*            m_pMethodLB;
-        Edit*               m_pRefED;
-        PushButton*         m_pRefBtn;
-        ListBox*            m_pBindLB;
-        ListBox*            m_pReplaceLB;
+        VclPtr<Edit>        m_pNameED;
+        VclPtr<Edit>        m_pActionED;
+        VclPtr<ListBox>     m_pMethodLB;
+        VclPtr<Edit>        m_pRefED;
+        VclPtr<PushButton>  m_pRefBtn;
+        VclPtr<ListBox>     m_pBindLB;
+        VclPtr<ListBox>     m_pReplaceLB;
 
-        OKButton*           m_pOKBtn;
+        VclPtr<OKButton>    m_pOKBtn;
 
         ItemNode*           m_pItemNode;
 
@@ -593,6 +603,7 @@ namespace svxform
         AddSubmissionDialog( vcl::Window* pParent, ItemNode* _pNode,
             const XFormsUIHelper1_ref& _rUIHelper );
         virtual ~AddSubmissionDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         inline const XSubmission_ref& GetNewSubmission() const { return m_xNewSubmission; }
     };
@@ -601,11 +612,13 @@ namespace svxform
     class AddModelDialog : public ModalDialog
     {
     private:
-        Edit* m_pNameED;
-        CheckBox* m_pModifyCB;
+        VclPtr<Edit>     m_pNameED;
+        VclPtr<CheckBox> m_pModifyCB;
 
     public:
         AddModelDialog( vcl::Window* pParent, bool _bEdit );
+        virtual ~AddModelDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         OUString         GetName() const { return m_pNameED->GetText(); }
         void             SetName( const OUString& _rName ) { m_pNameED->SetText( _rName );}
@@ -618,11 +631,11 @@ namespace svxform
     class AddInstanceDialog : public ModalDialog
     {
     private:
-        Edit*                   m_pNameED;
-        FixedText*              m_pURLFT;
-        SvtURLBox*              m_pURLED;
-        PushButton*             m_pFilePickerBtn;
-        CheckBox*               m_pLinkInstanceCB;
+        VclPtr<Edit>                   m_pNameED;
+        VclPtr<FixedText>              m_pURLFT;
+        VclPtr<SvtURLBox>              m_pURLED;
+        VclPtr<PushButton>             m_pFilePickerBtn;
+        VclPtr<CheckBox>               m_pLinkInstanceCB;
 
         OUString                m_sAllFilterName;
 
@@ -630,6 +643,8 @@ namespace svxform
 
     public:
         AddInstanceDialog( vcl::Window* pParent, bool _bEdit );
+        virtual ~AddInstanceDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         void SetRenameMode()
         {

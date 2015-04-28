@@ -151,8 +151,19 @@ Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
 
 Splitter::~Splitter()
 {
-    TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
-    pTList->RemoveWindow( this );
+    disposeOnce();
+}
+
+void Splitter::dispose()
+{
+    SystemWindow *pSysWin = GetSystemWindow();
+    if(pSysWin)
+    {
+        TaskPaneList *pTList = pSysWin->GetTaskPaneList();
+        pTList->RemoveWindow(this);
+    }
+    mpRefWin.clear();
+    Window::dispose();
 }
 
 void Splitter::SetHorizontal(bool bNew)

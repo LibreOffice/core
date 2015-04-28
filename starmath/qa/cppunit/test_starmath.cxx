@@ -57,8 +57,8 @@ public:
 private:
     SfxBindings m_aBindings;
     std::unique_ptr<SfxDispatcher> m_pDispatcher;
-    std::unique_ptr<SmCmdBoxWindow> m_pSmCmdBoxWindow;
-    std::unique_ptr<SmEditWindow> m_pEditWindow;
+    VclPtr<SmCmdBoxWindow> m_pSmCmdBoxWindow;
+    VclPtr<SmEditWindow> m_pEditWindow;
     SmDocShellRef m_xDocShRef;
     SmViewShell *m_pViewShell;
 };
@@ -87,17 +87,17 @@ void Test::setUp()
     m_pDispatcher.reset(new SfxDispatcher(pViewFrame));
     m_aBindings.SetDispatcher(m_pDispatcher.get());
     m_aBindings.EnterRegistrations();
-    m_pSmCmdBoxWindow.reset(new SmCmdBoxWindow(&m_aBindings, NULL, NULL));
+    m_pSmCmdBoxWindow.reset(VclPtr<SmCmdBoxWindow>::Create(&m_aBindings, nullptr, nullptr));
     m_aBindings.LeaveRegistrations();
-    m_pEditWindow.reset(new SmEditWindow(*m_pSmCmdBoxWindow));
+    m_pEditWindow = VclPtr<SmEditWindow>::Create(*m_pSmCmdBoxWindow);
     m_pViewShell = m_pEditWindow->GetView();
     CPPUNIT_ASSERT_MESSAGE("Should have a SmViewShell", m_pViewShell);
 }
 
 void Test::tearDown()
 {
-    m_pEditWindow.reset();
-    m_pSmCmdBoxWindow.reset();
+    m_pEditWindow.disposeAndClear();
+    m_pSmCmdBoxWindow.disposeAndClear();
     m_pDispatcher.reset();
     m_xDocShRef->DoClose();
     m_xDocShRef.Clear();

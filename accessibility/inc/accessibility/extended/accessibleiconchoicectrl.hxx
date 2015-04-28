@@ -30,11 +30,8 @@
 
 class SvtIconChoiceCtrl;
 
-
 namespace accessibility
 {
-
-
     typedef ::cppu::ImplHelper2<  ::com::sun::star::accessibility::XAccessible
                                 , ::com::sun::star::accessibility::XAccessibleSelection> AccessibleIconChoiceCtrl_BASE;
 
@@ -55,7 +52,8 @@ namespace accessibility
         virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
         virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 
-        SvtIconChoiceCtrl* getCtrl();
+        VclPtr< SvtIconChoiceCtrl > getCtrl();
+
     public:
         /** OAccessibleBase needs a valid view
             @param  _rIconCtrl

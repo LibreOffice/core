@@ -50,7 +50,7 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool 
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(10 * GetTextHeight());
-    mpTable = new ScRangeManagerTable(*pContainer, maRangeMap, aPos);
+    mpTable = VclPtr<ScRangeManagerTable>::Create(*pContainer, maRangeMap, aPos);
 
     m_pBtnPaste->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
     m_pBtnPasteAll->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
@@ -65,7 +65,16 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool 
 
 ScNamePasteDlg::~ScNamePasteDlg()
 {
-    delete mpTable;
+    disposeOnce();
+}
+
+void ScNamePasteDlg::dispose()
+{
+    mpTable.disposeAndClear();
+    m_pBtnPasteAll.clear();
+    m_pBtnPaste.clear();
+    m_pBtnClose.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )

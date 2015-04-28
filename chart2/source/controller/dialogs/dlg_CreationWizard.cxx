@@ -106,13 +106,9 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
     ActivatePage();
 }
 
-CreationWizard::~CreationWizard()
+VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
 {
-}
-
-svt::OWizardPage* CreationWizard::createPage(WizardState nState)
-{
-    svt::OWizardPage* pRet = 0;
+    VclPtr<svt::OWizardPage> pRet;
     if(m_nOnePageOnlyIndex!=-1 && m_nOnePageOnlyIndex!=nState)
         return pRet;
     bool bDoLiveUpdate = m_nOnePageOnlyIndex == -1;
@@ -121,7 +117,7 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
     case STATE_CHARTTYPE:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        ChartTypeTabPage* pChartTypeTabPage = new ChartTypeTabPage(this,m_xChartModel,m_xCC,bDoLiveUpdate);
+        VclPtrInstance<ChartTypeTabPage> pChartTypeTabPage(this,m_xChartModel,m_xCC,bDoLiveUpdate);
         pRet  = pChartTypeTabPage;
         m_pTemplateProvider = pChartTypeTabPage;
         if (m_pDialogModel)
@@ -131,18 +127,18 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
     case STATE_SIMPLE_RANGE:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        pRet = new RangeChooserTabPage(this, *m_pDialogModel, m_pTemplateProvider, this);
+        pRet = VclPtr<RangeChooserTabPage>::Create(this, *m_pDialogModel, m_pTemplateProvider, this);
         }
         break;
     case STATE_DATA_SERIES:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        pRet = new DataSourceTabPage(this, *m_pDialogModel, m_pTemplateProvider, this);
+        pRet = VclPtr<DataSourceTabPage>::Create(this, *m_pDialogModel, m_pTemplateProvider, this);
         }
         break;
     case STATE_OBJECTS:
         {
-        pRet  = new TitlesAndObjectsTabPage(this,m_xChartModel,m_xCC);
+        pRet  = VclPtr<TitlesAndObjectsTabPage>::Create(this,m_xChartModel,m_xCC);
         m_aTimerTriggeredControllerLock.startTimer();
         }
         break;

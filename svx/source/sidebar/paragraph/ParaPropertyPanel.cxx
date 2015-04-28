@@ -55,7 +55,7 @@ namespace svx {namespace sidebar {
 #define MAX_SC_SD               116220200
 #define NEGA_MAXVALUE          -10000000
 
-ParaPropertyPanel* ParaPropertyPanel::Create (
+VclPtr<vcl::Window> ParaPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -68,11 +68,11 @@ ParaPropertyPanel* ParaPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to ParaPropertyPanel::Create", NULL, 2);
 
-    return new ParaPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings,
-        rxSidebar);
+    return VclPtr<ParaPropertyPanel>::Create(
+                pParent,
+                rxFrame,
+                pBindings,
+                rxSidebar);
 }
 
 void ParaPropertyPanel::HandleContextChange (
@@ -189,10 +189,6 @@ void ParaPropertyPanel::HandleContextChange (
 void ParaPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
-}
-
-ParaPropertyPanel::~ParaPropertyPanel()
-{
 }
 
 void ParaPropertyPanel::ReSize(bool /* bSize */)
@@ -748,6 +744,35 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
 
     initial();
     m_aMetricCtl.RequestUpdate();
+}
+
+ParaPropertyPanel::~ParaPropertyPanel()
+{
+    disposeOnce();
+}
+
+void ParaPropertyPanel::dispose()
+{
+    mpTBxVertAlign.clear();
+    mpTBxNumBullet.clear();
+    mpTBxBackColor.clear();
+    mpTopDist.clear();
+    mpBottomDist.clear();
+    mpTbxIndent_IncDec.clear();
+    mpTbxProDemote.clear();
+    mpLeftIndent.clear();
+    mpRightIndent.clear();
+    mpFLineIndent.clear();
+
+    maLRSpaceControl.dispose();
+    maULSpaceControl.dispose();
+    maOutLineLeftControl.dispose();
+    maOutLineRightControl.dispose();
+    maDecIndentControl.dispose();
+    maIncIndentControl.dispose();
+    m_aMetricCtl.dispose();
+
+    PanelLayout::dispose();
 }
 
 } } // end of namespace svx::sidebar

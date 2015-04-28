@@ -110,7 +110,7 @@ class ScHTMLExport : public ScExportBase
     OUString         aStreamPath;
     OUString         aFilterOptions;
     OUString         aCId;           // Content-Id for Mail-Export
-    OutputDevice*    pAppWin;        // for Pixel-work
+    VclPtr<OutputDevice> pAppWin;        // for Pixel-work
     FileNameMapPtr   pFileNameMap;        // for CopyLocalFileToINet
     OUString         aNonConvertibleChars;   // collect nonconvertible characters
     rtl_TextEncoding eDestEnc;

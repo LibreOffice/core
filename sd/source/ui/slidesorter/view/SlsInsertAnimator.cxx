@@ -40,10 +40,10 @@ class AnimatorAccess
 public:
     virtual void AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun) = 0;
     virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun) = 0;
-    virtual model::SlideSorterModel& GetModel() const = 0;
-    virtual view::SlideSorterView& GetView() const = 0;
-    virtual ::boost::shared_ptr<controller::Animator> GetAnimator() = 0;
-    virtual SharedSdWindow GetContentWindow() = 0;
+    virtual model::SlideSorterModel& GetModel (void) const = 0;
+    virtual view::SlideSorterView& GetView (void) const = 0;
+    virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) = 0;
+    virtual VclPtr<sd::Window> GetContentWindow (void) = 0;
 
 protected:
     ~AnimatorAccess() {}
@@ -128,7 +128,7 @@ public:
     virtual model::SlideSorterModel& GetModel() const SAL_OVERRIDE { return mrModel; }
     virtual view::SlideSorterView& GetView() const SAL_OVERRIDE { return mrView; }
     virtual ::boost::shared_ptr<controller::Animator> GetAnimator() SAL_OVERRIDE { return mpAnimator; }
-    virtual SharedSdWindow GetContentWindow() SAL_OVERRIDE { return mrSlideSorter.GetContentWindow(); }
+    virtual VclPtr<sd::Window> GetContentWindow() SAL_OVERRIDE { return mrSlideSorter.GetContentWindow(); }
 
 private:
     model::SlideSorterModel& mrModel;

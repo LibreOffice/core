@@ -55,9 +55,9 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
 
     SmCmdBoxWindow &rCmdBox;
     std::unique_ptr<EditView> pEditView;
-    std::unique_ptr<ScrollBar> pHScrollBar;
-    std::unique_ptr<ScrollBar> pVScrollBar;
-    std::unique_ptr<ScrollBarBox> pScrollBox;
+    VclPtr<ScrollBar>      pHScrollBar,
+                           pVScrollBar;
+    VclPtr<ScrollBarBox>   pScrollBox;
     Idle            aModifyIdle,
                     aCursorMoveIdle;
     ESelection      aOldSelection;
@@ -92,6 +92,7 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
 public:
     SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin );
     virtual ~SmEditWindow();
+    virtual void         dispose() SAL_OVERRIDE;
 
     SmDocShell *    GetDoc();
     SmViewShell *   GetView();

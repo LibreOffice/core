@@ -35,6 +35,17 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShort
     m_pGlosBox->SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
 }
 
+SwSelGlossaryDlg::~SwSelGlossaryDlg()
+{
+    disposeOnce();
+}
+
+void SwSelGlossaryDlg::dispose()
+{
+    m_pGlosBox.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, /*pBox*/)
 {
     EndDialog(RET_OK);

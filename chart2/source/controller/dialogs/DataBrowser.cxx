@@ -102,7 +102,6 @@ class SeriesHeaderEdit : public Edit
 {
 public:
     SeriesHeaderEdit( vcl::Window * pParent );
-    virtual ~SeriesHeaderEdit();
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void setStartColumn( sal_Int32 nStartColumn );
@@ -121,9 +120,6 @@ SeriesHeaderEdit::SeriesHeaderEdit( vcl::Window * pParent ) :
 {
     SetHelpId(HID_SCH_DATA_SERIES_LABEL);
 }
-
-SeriesHeaderEdit::~SeriesHeaderEdit()
-{}
 
 void SeriesHeaderEdit::setStartColumn( sal_Int32 nStartColumn )
 {
@@ -182,11 +178,11 @@ public:
     bool HasFocus() const;
 
 private:
-    ::boost::shared_ptr< FixedImage >        m_spSymbol;
-    ::boost::shared_ptr< SeriesHeaderEdit >  m_spSeriesName;
-    ::boost::shared_ptr< FixedText >         m_spColorBar;
-    OutputDevice *                           m_pDevice;
-    Link                                     m_aChangeLink;
+    VclPtr< FixedImage >        m_spSymbol;
+    VclPtr< SeriesHeaderEdit >  m_spSeriesName;
+    VclPtr< FixedText >         m_spColorBar;
+    VclPtr< OutputDevice>       m_pDevice;
+    Link                        m_aChangeLink;
 
     void notifyChanges();
     DECL_LINK( SeriesNameChanged, void * );
@@ -204,9 +200,9 @@ private:
 };
 
 SeriesHeader::SeriesHeader( vcl::Window * pParent, vcl::Window *pColorParent ) :
-        m_spSymbol( new FixedImage( pParent, WB_NOBORDER )),
-        m_spSeriesName( new SeriesHeaderEdit( pParent )),
-        m_spColorBar( new FixedText( pColorParent, WB_NOBORDER )),
+        m_spSymbol( VclPtr<FixedImage>::Create( pParent, WB_NOBORDER )),
+        m_spSeriesName( VclPtr<SeriesHeaderEdit>::Create( pParent )),
+        m_spColorBar( VclPtr<FixedText>::Create( pColorParent, WB_NOBORDER )),
         m_pDevice( pParent ),
         m_nStartCol( 0 ),
         m_nEndCol( 0 ),
@@ -457,21 +453,29 @@ DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate
     m_bIsDirty( false ),
     m_bLiveUpdate( bLiveUpdate ),
     m_bDataValid( true ),
-    m_aNumberEditField( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ),
-    m_aTextEditField( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ),
-    m_rNumberEditController( new ::svt::FormattedFieldCellController( & m_aNumberEditField )),
-    m_rTextEditController( new ::svt::EditCellController( & m_aTextEditField ))
+    m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_aTextEditField( VclPtr<Edit>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_rNumberEditController( new ::svt::FormattedFieldCellController( m_aNumberEditField.get() )),
+    m_rTextEditController( new ::svt::EditCellController( m_aTextEditField.get() ))
 {
     double fNan;
     ::rtl::math::setNan( & fNan );
-    m_aNumberEditField.SetDefaultValue( fNan );
-    m_aNumberEditField.TreatAsNumber( true );
+    m_aNumberEditField->SetDefaultValue( fNan );
+    m_aNumberEditField->TreatAsNumber( true );
     RenewTable();
     SetClean();
 }
 
 DataBrowser::~DataBrowser()
 {
+    disposeOnce();
+}
+
+void DataBrowser::dispose()
+{
+    m_aNumberEditField.disposeAndClear();
+    m_aTextEditField.disposeAndClear();
+    ::svt::EditBrowseBox::dispose();
 }
 
 bool DataBrowser::MayInsertRow() const
@@ -762,9 +766,9 @@ void DataBrowser::ShowWarningBox()
 
 bool DataBrowser::ShowQueryBox()
 {
-    QueryBox* pQueryBox = new QueryBox(this, WB_YES_NO, SCH_RESSTR(STR_DATA_EDITOR_INCORRECT_INPUT));
+    ScopedVclPtrInstance<QueryBox> pQueryBox(this, WB_YES_NO, SCH_RESSTR(STR_DATA_EDITOR_INCORRECT_INPUT));
 
-    return ( pQueryBox->Execute() == RET_YES );
+    return pQueryBox->Execute() == RET_YES;
 }
 
 bool DataBrowser::IsDataValid()
@@ -777,7 +781,7 @@ bool DataBrowser::IsDataValid()
     {
         sal_uInt32 nDummy = 0;
         double fDummy = 0.0;
-        OUString aText( m_aNumberEditField.GetText());
+        OUString aText( m_aNumberEditField->GetText());
 
         if( !aText.isEmpty() &&
             m_spNumberFormatterWrapper.get() &&
@@ -821,7 +825,7 @@ void DataBrowser::SetDataFromModel(
             Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY )));
 
     if( m_spNumberFormatterWrapper.get() )
-        m_aNumberEditField.SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
+        m_aNumberEditField->SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
 
     RenewTable();
 
@@ -1041,8 +1045,8 @@ bool DataBrowser::IsTabAllowed( bool bForward ) const
 
     if( CellContainsNumbers( nRow, nCol ))
     {
-        m_aNumberEditField.UseInputStringForFormatting();
-        m_aNumberEditField.SetFormatKey( GetNumberFormatKey( nRow, nCol ));
+        m_aNumberEditField->UseInputStringForFormatting();
+        m_aNumberEditField->SetFormatKey( GetNumberFormatKey( nRow, nCol ));
         return m_rNumberEditController;
     }
 
@@ -1055,19 +1059,19 @@ void DataBrowser::InitController(
     if( rController == m_rTextEditController )
     {
         OUString aText( GetCellText( nRow, nCol ) );
-        m_aTextEditField.SetText( aText );
-        m_aTextEditField.SetSelection( Selection( 0, aText.getLength() ));
+        m_aTextEditField->SetText( aText );
+        m_aTextEditField->SetSelection( Selection( 0, aText.getLength() ));
     }
     else if( rController == m_rNumberEditController )
     {
         // treat invalid and empty text as Nan
-        m_aNumberEditField.EnableNotANumber( true );
+        m_aNumberEditField->EnableNotANumber( true );
         if( ::rtl::math::isNan( GetCellNumber( nRow, nCol )))
-            m_aNumberEditField.SetTextValue( OUString());
+            m_aNumberEditField->SetTextValue( OUString());
         else
-            m_aNumberEditField.SetValue( GetCellNumber( nRow, nCol ) );
-        OUString aText( m_aNumberEditField.GetText());
-        m_aNumberEditField.SetSelection( Selection( 0, aText.getLength()));
+            m_aNumberEditField->SetValue( GetCellNumber( nRow, nCol ) );
+        OUString aText( m_aNumberEditField->GetText());
+        m_aNumberEditField->SetSelection( Selection( 0, aText.getLength()));
     }
     else
     {
@@ -1125,7 +1129,7 @@ bool DataBrowser::SaveModified()
         {
             sal_uInt32 nDummy = 0;
             double fDummy = 0.0;
-            OUString aText( m_aNumberEditField.GetText());
+            OUString aText( m_aNumberEditField->GetText());
             // an empty string is valid, if no numberformatter exists, all
             // values are treated as valid
             if( !aText.isEmpty() && pSvNumberFormatter &&
@@ -1135,14 +1139,14 @@ bool DataBrowser::SaveModified()
             }
             else
             {
-                double fData = m_aNumberEditField.GetValue();
+                double fData = m_aNumberEditField->GetValue();
                 bChangeValid = m_apDataBrowserModel->setCellNumber( nCol, nRow, fData );
             }
         }
         break;
         case DataBrowserModel::TEXTORDATE:
         {
-            OUString aText( m_aTextEditField.GetText() );
+            OUString aText( m_aTextEditField->GetText() );
             double fDateValue = 0.0;
             bChangeValid = false;
             if( isDateString( aText, fDateValue ) )
@@ -1153,7 +1157,7 @@ bool DataBrowser::SaveModified()
         break;
         case DataBrowserModel::TEXT:
         {
-            OUString aText( m_aTextEditField.GetText());
+            OUString aText( m_aTextEditField->GetText());
             bChangeValid = m_apDataBrowserModel->setCellText( nCol, nRow, aText );
         }
         break;

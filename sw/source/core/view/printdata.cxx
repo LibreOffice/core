@@ -158,7 +158,6 @@ SwPrintUIOptions::SwPrintUIOptions(
     bool bHasSelection,
     bool bHasPostIts,
     const SwPrintData &rDefaultPrintData ) :
-    m_pLast( NULL ),
     m_rDefaultPrintData( rDefaultPrintData )
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
@@ -471,13 +470,14 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
     uno::Any aVal( getValue( "RenderDevice" ) );
     aVal >>= xRenderDevice;
 
-    OutputDevice* pOut = 0;
+    VclPtr< OutputDevice > pOut;
     if (xRenderDevice.is())
     {
         VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
-        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
+        if (pDevice)
+            pOut = pDevice->GetOutputDevice();
     }
-    bChanged = bChanged || (pOut != m_pLast);
+    bChanged = bChanged || (pOut.get() != m_pLast.get());
     if( pOut )
         m_pLast = pOut;
 

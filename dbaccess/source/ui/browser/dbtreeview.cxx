@@ -36,7 +36,7 @@ DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
                     , m_pTreeListBox(NULL)
 {
 
-    m_pTreeListBox = new DBTreeListBox(this, WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
+    m_pTreeListBox = VclPtr<DBTreeListBox>::Create(this, WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( DragDropMode::NONE );
     m_pTreeListBox->EnableInplaceEditing( true );
@@ -46,6 +46,11 @@ DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
 
 DBTreeView::~DBTreeView()
 {
+    disposeOnce();
+}
+
+void DBTreeView::dispose()
+{
     if (m_pTreeListBox)
     {
         if (m_pTreeListBox->GetModel())
@@ -53,9 +58,9 @@ DBTreeView::~DBTreeView()
             m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
             m_pTreeListBox->DisconnectFromModel();
         }
-        boost::scoped_ptr<vcl::Window> aTemp(m_pTreeListBox);
-        m_pTreeListBox = NULL;
     }
+    m_pTreeListBox.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void DBTreeView::SetPreExpandHandler(const Link& _rHdl)

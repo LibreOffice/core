@@ -84,13 +84,13 @@
 
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow );
 
-typedef ::std::vector< ToolBox* > ImplTBList;
+typedef ::std::vector< VclPtr<ToolBox> > ImplTBList;
 
 class ImplTBDragMgr
 {
 private:
     ImplTBList*     mpBoxList;
-    ToolBox*        mpDragBox;
+    VclPtr<ToolBox> mpDragBox;
     Point           maMouseOff;
     Rectangle       maRect;
     Rectangle       maStartRect;
@@ -1570,8 +1570,13 @@ ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ToolBox::~ToolBox()
 {
+    disposeOnce();
+}
+
+void ToolBox::dispose()
+{
     // custom menu event still running?
-    if( mpData->mnEventId )
+    if( mpData && mpData->mnEventId )
         Application::RemoveUserEvent( mpData->mnEventId );
 
     // #103005# make sure our activate/deactivate balance is right
@@ -1582,9 +1587,12 @@ ToolBox::~ToolBox()
     // still connected
     if ( mpFloatWin )
         mpFloatWin->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+    mpFloatWin = NULL;
 
     // delete private data
-    delete mpData;
+    if (mpData)
+        delete mpData;
+    mpData = NULL;
 
     // remove the lists when there are no more toolbox references to
     // the lists
@@ -1601,10 +1609,15 @@ ToolBox::~ToolBox()
             pSVData->maCtrlData.mpTBDragMgr = NULL;
         }
     }
+    mpFloatWin.clear();
+    DockingWindow::dispose();
 }
 
 ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
 {
+    if (!mpData)
+        return NULL;
+
     std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
     while ( it != mpData->m_aItems.end() )
     {
@@ -2630,7 +2643,7 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 
         // do not reset data if the dropdown handler opened a floating window
         // see ImplFloatControl()
-        if( mpFloatWin == NULL )
+        if( !mpFloatWin )
         {
             // no floater was opened
             Deactivate();
@@ -2651,7 +2664,7 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
 {
 
-    if( mbFormat )
+    if( mbFormat && mpData )
         ImplFormat();
 
     return 0;
@@ -2952,7 +2965,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     // no gradient background for items that have a popup open
-    bool bHasOpenPopup = (mpFloatWin != NULL) && (mnDownItemId==pItem->mnId);
+    bool bHasOpenPopup = mpFloatWin && (mnDownItemId==pItem->mnId);
 
     bool bHighContrastWhite = false;
     // check the face color as highcontrast indicator
@@ -3864,7 +3877,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                         // do not reset data if the dropdown handler opened a floating window
                         // see ImplFloatControl()
-                        if( mpFloatWin == NULL )
+                        if( !mpFloatWin )
                         {
                             // no floater was opened
                             Deactivate();
@@ -4823,7 +4836,7 @@ Size ToolBox::CalcMinimumWindowSizePixel() const
     else
     {
         // create dummy toolbox for measurements
-        ToolBox *pToolBox = new ToolBox( GetParent(), GetStyle() );
+        VclPtrInstance< ToolBox > pToolBox( GetParent(), GetStyle() );
 
         // copy until first useful item
         std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
@@ -4851,7 +4864,8 @@ Size ToolBox::CalcMinimumWindowSizePixel() const
 
         ImplGetDockingManager()->RemoveWindow( pToolBox );
         pToolBox->Clear();
-        delete pToolBox;
+
+        pToolBox.disposeAndClear();
 
         return aSize;
     }

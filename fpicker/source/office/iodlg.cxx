@@ -348,8 +348,8 @@ SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
 class CustomContainer : public vcl::Window
 {
     SvtExpFileDlg_Impl* _pImp;
-    SvtFileView* _pFileView;
-    Splitter* _pSplitter;
+    VclPtr<SvtFileView> _pFileView;
+    VclPtr<Splitter>    _pSplitter;
 
 public:
     CustomContainer(vcl::Window *pParent)
@@ -358,6 +358,13 @@ public:
         , _pFileView(NULL)
         , _pSplitter(NULL)
     {
+    }
+    virtual ~CustomContainer() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        _pFileView.clear();
+        _pSplitter.clear();
+        vcl::Window::dispose();
     }
 
     void init(SvtExpFileDlg_Impl* pImp,
@@ -404,6 +411,11 @@ public:
 
 SvtFileDialog::~SvtFileDialog()
 {
+    disposeOnce();
+}
+
+void SvtFileDialog::dispose()
+{
     if ( !_pImp->_aIniKey.isEmpty() )
     {
         // save window state
@@ -437,10 +449,17 @@ SvtFileDialog::~SvtFileDialog()
     }
 
     delete _pImp;
-    delete _pFileView;
-    delete _pSplitter;
-    delete _pContainer;
-    delete _pPrevBmp;
+    _pFileView.disposeAndClear();
+    _pSplitter.disposeAndClear();
+    _pContainer.disposeAndClear();
+    _pPrevBmp.disposeAndClear();
+    _pCbReadOnly.clear();
+    _pCbLinkBox.clear();
+    _pCbPreviewBox.clear();
+    _pCbSelection.clear();
+    _pPbPlay.clear();
+    _pPrevWin.clear();
+    ModalDialog::dispose();
 }
 
 void SvtFileDialog::Init_Impl
@@ -480,7 +499,7 @@ void SvtFileDialog::Init_Impl
 
     m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
     vcl::Window *pUpContainer = get<vcl::Window>("up");
-    _pImp->_pBtnUp = new SvtUpButton_Impl(pUpContainer, this, 0);
+    _pImp->_pBtnUp = VclPtr<SvtUpButton_Impl>::Create(pUpContainer, this, 0);
     _pImp->_pBtnUp->SetHelpId( HID_FILEOPEN_LEVELUP );
     _pImp->_pBtnUp->set_vexpand(true);
     _pImp->_pBtnUp->Show();
@@ -522,7 +541,7 @@ void SvtFileDialog::Init_Impl
     if ( ( nStyle & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
         _pImp->_bMultiSelection = true;
 
-    _pContainer = new CustomContainer(get<vcl::Window>("container"));
+    _pContainer.reset(VclPtr<CustomContainer>::Create(get<vcl::Window>("container")));
     Size aSize(LogicToPixel(Size(270, 85), MAP_APPFONT));
     _pContainer->set_height_request(aSize.Height());
     _pContainer->set_width_request(aSize.Width());
@@ -530,7 +549,7 @@ void SvtFileDialog::Init_Impl
     _pContainer->set_vexpand(true);
     _pContainer->SetStyle( _pContainer->GetStyle() | WB_TABSTOP );
 
-    _pFileView = new SvtFileView( _pContainer, WB_BORDER,
+    _pFileView = VclPtr<SvtFileView>::Create( _pContainer, WB_BORDER,
                                        FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType,
                                        _pImp->_bMultiSelection );
     _pFileView->Show();
@@ -538,7 +557,7 @@ void SvtFileDialog::Init_Impl
     _pFileView->SetHelpId( HID_FILEDLG_STANDARD );
     _pFileView->SetStyle( _pFileView->GetStyle() | WB_TABSTOP );
 
-    _pSplitter = new Splitter( _pContainer, WB_HSCROLL );
+    _pSplitter = VclPtr<Splitter>::Create( _pContainer, WB_HSCROLL );
     _pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
     _pSplitter->SetSplitHdl( LINK( this, SvtFileDialog, Split_Hdl ) );
 
@@ -662,17 +681,17 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     SmartContent aContent( pThis->_pFileView->GetViewURL( ) );
     OUString aTitle;
     aContent.getTitle( aTitle );
-    QueryFolderNameDialog aDlg( pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER) );
+    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg(pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER));
     bool bHandled = false;
 
     while ( !bHandled )
     {
-        if ( aDlg.Execute() == RET_OK )
+        if ( aDlg->Execute() == RET_OK )
         {
-            OUString aUrl = aContent.createFolder( aDlg.GetName( ) );
+            OUString aUrl = aContent.createFolder( aDlg->GetName( ) );
             if ( !aUrl.isEmpty( ) )
             {
-                pThis->_pFileView->CreatedFolder( aUrl, aDlg.GetName() );
+                pThis->_pFileView->CreatedFolder( aUrl, aDlg->GetName() );
                 bHandled = true;
             }
         }
@@ -1046,8 +1065,8 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     "$filename$",
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
                 );
-                MessageDialog aBox(pThis, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                if ( aBox.Execute() != RET_YES )
+                ScopedVclPtrInstance< MessageDialog > aBox(pThis, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                if ( aBox->Execute() != RET_YES )
                     return 0;
             }
             else
@@ -1091,8 +1110,8 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     }
                     sError = sError.replaceFirst( "$name$", sInvalidFile );
 
-                    MessageDialog aError(pThis, sError);
-                    aError.Execute();
+                    ScopedVclPtrInstance< MessageDialog > aError(pThis, sError);
+                    aError->Execute();
                     return 0;
                 }
             }
@@ -1244,13 +1263,13 @@ IMPL_STATIC_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
 {
     pThis->_pFileView->EndInplaceEditing( false );
 
-    PlaceEditDialog aDlg( pThis );
-    short aRetCode = aDlg.Execute();
+    ScopedVclPtrInstance< PlaceEditDialog > aDlg(pThis);
+    short aRetCode = aDlg->Execute();
 
     switch (aRetCode) {
         case RET_OK :
         {
-            PlacePtr newPlace = aDlg.GetPlace();
+            PlacePtr newPlace = aDlg->GetPlace();
             pThis->_pImp->_pPlaces->AppendPlace(newPlace);
 
       break;
@@ -1625,7 +1644,7 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
 class SvtDefModalDialogParent_Impl
 {
 private:
-    vcl::Window* _pOld;
+    VclPtr<vcl::Window> _pOld;
 
 public:
     SvtDefModalDialogParent_Impl( vcl::Window *pNew ) :
@@ -1812,7 +1831,7 @@ void SvtFileDialog::EnableUI( bool _bEnable )
 
     if ( _bEnable )
     {
-        for ( ::std::set< Control* >::iterator aLoop = m_aDisabledControls.begin();
+        for ( auto aLoop = m_aDisabledControls.begin();
               aLoop != m_aDisabledControls.end();
               ++aLoop
             )
@@ -1835,7 +1854,7 @@ void SvtFileDialog::EnableControl( Control* _pControl, bool _bEnable )
 
     if ( _bEnable )
     {
-        ::std::set< Control* >::iterator aPos = m_aDisabledControls.find( _pControl );
+        auto aPos = m_aDisabledControls.find( _pControl );
         if ( m_aDisabledControls.end() != aPos )
             m_aDisabledControls.erase( aPos );
     }
@@ -1880,8 +1899,8 @@ short SvtFileDialog::PrepareExecute()
 
                 if ( bEmpty )
                 {
-                    MessageDialog aBox(this, SVT_RESSTR(STR_SVT_NOREMOVABLEDEVICE));
-                    aBox.Execute();
+                    ScopedVclPtrInstance< MessageDialog > aBox(this, SVT_RESSTR(STR_SVT_NOREMOVABLEDEVICE));
+                    aBox->Execute();
                     return 0;
                 }
             }
@@ -2528,7 +2547,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevWin->SetOutputSizePixel(Size(200, 300));
         _pPrevWin->Show();
 
-        _pPrevBmp = new FixedBitmap( _pPrevWin, WinBits( WB_BORDER ) );
+        _pPrevBmp = VclPtr<FixedBitmap>::Create( _pPrevWin, WinBits( WB_BORDER ) );
         _pPrevBmp->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
         _pPrevBmp->SetSizePixel(_pPrevWin->GetSizePixel());
         _pPrevBmp->Show();
@@ -2593,7 +2612,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pLbImageTemplates->Show();
     }
 
-    _pImp->_pPlaces = new PlacesListBox(_pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER);
+    _pImp->_pPlaces = VclPtr<PlacesListBox>::Create(_pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER);
     _pImp->_pPlaces->SetHelpId("SVT_HID_FILESAVE_PLACES_LISTBOX");
     Size aSize(LogicToPixel(Size(50, 85), MAP_APPFONT));
     _pImp->_pPlaces->set_height_request(aSize.Height());
@@ -2829,6 +2848,18 @@ QueryFolderNameDialog::QueryFolderNameDialog(vcl::Window* _pParent,
         m_pNameLine->set_label( *pGroupName );
 };
 
+QueryFolderNameDialog::~QueryFolderNameDialog()
+{
+    disposeOnce();
+}
+
+void QueryFolderNameDialog::dispose()
+{
+    m_pNameEdit.clear();
+    m_pNameLine.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
 
 IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
 {

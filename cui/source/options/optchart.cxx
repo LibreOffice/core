@@ -83,12 +83,28 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(vcl::Window* pParent, const SfxIt
 
 SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 {
-    // save changes
-    pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
-    pChartOptions->Commit();
+    disposeOnce();
+}
 
-    delete pColorConfig;
-    delete pChartOptions;
+void SvxDefaultColorOptPage::dispose()
+{
+    // save changes
+    if (pChartOptions)
+    {
+        pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
+        pChartOptions->Commit();
+
+        delete pColorConfig;
+        pColorConfig = NULL;
+        delete pChartOptions;
+        pChartOptions = NULL;
+    }
+    m_pLbChartColors.clear();
+    m_pValSetColorBox.clear();
+    m_pPBDefault.clear();
+    m_pPBAdd.clear();
+    m_pPBRemove.clear();
+    SfxTabPage::dispose();
 }
 
 void SvxDefaultColorOptPage::Construct()
@@ -103,9 +119,9 @@ void SvxDefaultColorOptPage::Construct()
 }
 
 
-SfxTabPage* SvxDefaultColorOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxDefaultColorOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
 {
-    return new SvxDefaultColorOptPage( pParent, *rAttrs );
+    return VclPtr<SvxDefaultColorOptPage>::Create( pParent, *rAttrs );
 }
 
 bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )
@@ -215,9 +231,9 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
     {
         OSL_ENSURE(pColorConfig->GetColorList().size() > 1, "don't delete the last chart color");
 
-        MessageDialog aQuery(pButton, "QueryDeleteChartColorDialog",
-            "cui/ui/querydeletechartcolordialog.ui");
-        if (RET_YES == aQuery.Execute())
+        ScopedVclPtrInstance<MessageDialog> aQuery(pButton, "QueryDeleteChartColorDialog",
+                                                   "cui/ui/querydeletechartcolordialog.ui");
+        if (RET_YES == aQuery->Execute())
         {
             pColorConfig->GetColorList().remove( nIndex  );
 

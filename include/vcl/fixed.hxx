@@ -38,7 +38,7 @@ class VCL_DLLPUBLIC FixedText : public Control
 private:
     sal_Int32 m_nMaxWidthChars;
     sal_Int32 m_nMinWidthChars;
-    vcl::Window *m_pMnemonicWindow;
+    VclPtr<vcl::Window> m_pMnemonicWindow;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -62,6 +62,7 @@ public:
     explicit        FixedText( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        FixedText( vcl::Window* pParent, const ResId& rResId );
     virtual         ~FixedText();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
@@ -140,7 +141,6 @@ private:
 
 public:
     explicit        FixedBitmap( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual         ~FixedBitmap();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
@@ -178,7 +178,6 @@ protected:
 public:
     explicit        FixedImage( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        FixedImage( vcl::Window* pParent, const ResId& );
-    virtual         ~FixedImage();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;

@@ -35,8 +35,8 @@ class SwAddressTable;
 
 class SwSelectDBTableDialog : public SfxModalDialog
 {
-    SwAddressTable* m_pTable;
-    PushButton*     m_pPreviewPB;
+    VclPtr<SwAddressTable> m_pTable;
+    VclPtr<PushButton>     m_pPreviewPB;
 
     OUString        m_sName;
     OUString        m_sType;
@@ -50,6 +50,7 @@ public:
     SwSelectDBTableDialog(vcl::Window* pParent,
         const css::uno::Reference<css::sdbc::XConnection>& xConnection);
     virtual ~SwSelectDBTableDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString    GetSelectedTable(bool& bIsTable);
     void        SetSelectedTable(const OUString& rTable, bool bIsTable);

@@ -29,14 +29,15 @@ namespace abp
     class AdminDialogInvokationPage : public AddressBookSourcePage
     {
     protected:
-        PushButton* m_pInvokeAdminDialog;
-        FixedText*  m_pErrorMessage;
+        VclPtr<PushButton> m_pInvokeAdminDialog;
+        VclPtr<FixedText>  m_pErrorMessage;
 
         bool        m_bSuccessfullyExecutedDialog;
 
     public:
         AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent );
-
+        virtual ~AdminDialogInvokationPage();
+        virtual void dispose() SAL_OVERRIDE;
     protected:
         // TabDialog overridables
         virtual void        ActivatePage() SAL_OVERRIDE;

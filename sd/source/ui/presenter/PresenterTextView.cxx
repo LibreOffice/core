@@ -82,7 +82,7 @@ public:
 private:
     Reference<rendering::XBitmap> mxBitmap;
     cppcanvas::CanvasSharedPtr mpCanvas;
-    VirtualDevice* mpOutputDevice;
+    VclPtr<VirtualDevice> mpOutputDevice;
     EditEngine* mpEditEngine;
     SfxItemPool* mpEditEngineItemPool;
     Size maSize;
@@ -242,7 +242,7 @@ PresenterTextView::Implementation::Implementation()
       msTotalHeightPropertyName("TotalHeight"),
       mxBitmap(),
       mpCanvas(),
-      mpOutputDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0)),
+      mpOutputDevice(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), 0, 0)),
       mpEditEngine(NULL),
       mpEditEngineItemPool(EditEngine::CreatePool()),
       maSize(100,100),
@@ -261,7 +261,7 @@ PresenterTextView::Implementation::~Implementation()
 {
     delete mpEditEngine;
     SfxItemPool::Free(mpEditEngineItemPool);
-    delete mpOutputDevice;
+    mpOutputDevice.disposeAndClear();
 }
 
 EditEngine * PresenterTextView::Implementation::GetEditEngine()
@@ -453,9 +453,8 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap()
 
     if ( ! mxBitmap.is())
     {
-        if (mpOutputDevice != NULL)
-            delete mpOutputDevice;
-        mpOutputDevice = new VirtualDevice(*Application::GetDefaultDevice(), 0, 0);
+        mpOutputDevice.disposeAndClear();
+        mpOutputDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), 0, 0);
         mpOutputDevice->SetMapMode(MAP_PIXEL);
         mpOutputDevice->SetOutputSizePixel(maSize, true);
         mpOutputDevice->SetLineColor();

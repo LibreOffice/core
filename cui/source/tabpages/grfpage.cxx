@@ -127,12 +127,37 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
 
 SvxGrfCropPage::~SvxGrfCropPage()
 {
-    aTimer.Stop();
+    disposeOnce();
 }
 
-SfxTabPage* SvxGrfCropPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+void SvxGrfCropPage::dispose()
 {
-    return new SvxGrfCropPage( pParent, *rSet );
+    aTimer.Stop();
+    m_pCropFrame.clear();
+    m_pZoomConstRB.clear();
+    m_pSizeConstRB.clear();
+    m_pLeftMF.clear();
+    m_pRightMF.clear();
+    m_pTopMF.clear();
+    m_pBottomMF.clear();
+    m_pScaleFrame.clear();
+    m_pWidthZoomMF.clear();
+    m_pHeightZoomMF.clear();
+    m_pSizeFrame.clear();
+    m_pWidthMF.clear();
+    m_pHeightMF.clear();
+    m_pOrigSizeGrid.clear();
+    m_pOrigSizeFT.clear();
+    m_pOrigSizePB.clear();
+    m_pExampleWN.clear();
+    pLastCropField.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxGrfCropPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+{
+    return VclPtr<SfxTabPage>( new SvxGrfCropPage( pParent, *rSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
@@ -675,17 +700,17 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         // display original size
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
-        MetricField aFld(this, WB_HIDE);
-        SetFieldUnit( aFld, eMetric );
-        aFld.SetDecimalDigits( m_pWidthMF->GetDecimalDigits() );
-        aFld.SetMax( LONG_MAX - 1 );
+        ScopedVclPtrInstance< MetricField > aFld(this, WB_HIDE);
+        SetFieldUnit( *aFld.get(), eMetric );
+        aFld->SetDecimalDigits( m_pWidthMF->GetDecimalDigits() );
+        aFld->SetMax( LONG_MAX - 1 );
 
-        aFld.SetValue( aFld.Normalize( aOrigSize.Width() ), eUnit );
-        OUString sTemp = aFld.GetText();
-        aFld.SetValue( aFld.Normalize( aOrigSize.Height() ), eUnit );
+        aFld->SetValue( aFld->Normalize( aOrigSize.Width() ), eUnit );
+        OUString sTemp = aFld->GetText();
+        aFld->SetValue( aFld->Normalize( aOrigSize.Height() ), eUnit );
         // multiplication sign (U+00D7)
         sTemp += OUString( sal_Unicode (0x00D7) );
-        sTemp += aFld.GetText();
+        sTemp += aFld->GetText();
 
         if ( aOrigPixelSize.Width() && aOrigPixelSize.Height() ) {
              sal_Int32 ax = sal_Int32(floor((float)aOrigPixelSize.Width() /

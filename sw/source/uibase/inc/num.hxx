@@ -49,43 +49,43 @@ struct SwBmpItemInfo
 
 class SwNumPositionTabPage : public SfxTabPage
 {
-    ListBox* m_pLevelLB;
-    VclFrame* m_pPositionFrame;
+    VclPtr<ListBox> m_pLevelLB;
+    VclPtr<VclFrame> m_pPositionFrame;
 
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
-    FixedText*          m_pDistBorderFT;
-    MetricField*        m_pDistBorderMF;
-    CheckBox*           m_pRelativeCB;
-    FixedText*          m_pIndentFT;
-    MetricField*        m_pIndentMF;
-    FixedText*          m_pDistNumFT;
-    MetricField*        m_pDistNumMF;
-    FixedText*          m_pAlignFT;
-    ListBox*            m_pAlignLB;
+    VclPtr<FixedText>          m_pDistBorderFT;
+    VclPtr<MetricField>        m_pDistBorderMF;
+    VclPtr<CheckBox>           m_pRelativeCB;
+    VclPtr<FixedText>          m_pIndentFT;
+    VclPtr<MetricField>        m_pIndentMF;
+    VclPtr<FixedText>          m_pDistNumFT;
+    VclPtr<MetricField>        m_pDistNumMF;
+    VclPtr<FixedText>          m_pAlignFT;
+    VclPtr<ListBox>            m_pAlignLB;
 
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
-    FixedText*          m_pLabelFollowedByFT;
-    ListBox*            m_pLabelFollowedByLB;
-    FixedText*          m_pListtabFT;
-    MetricField*        m_pListtabMF;
-    FixedText*          m_pAlign2FT;
-    ListBox*            m_pAlign2LB;
-    FixedText*          m_pAlignedAtFT;
-    MetricField*        m_pAlignedAtMF;
-    FixedText*          m_pIndentAtFT;
-    MetricField*        m_pIndentAtMF;
+    VclPtr<FixedText>          m_pLabelFollowedByFT;
+    VclPtr<ListBox>            m_pLabelFollowedByLB;
+    VclPtr<FixedText>          m_pListtabFT;
+    VclPtr<MetricField>        m_pListtabMF;
+    VclPtr<FixedText>          m_pAlign2FT;
+    VclPtr<ListBox>            m_pAlign2LB;
+    VclPtr<FixedText>          m_pAlignedAtFT;
+    VclPtr<MetricField>        m_pAlignedAtMF;
+    VclPtr<FixedText>          m_pIndentAtFT;
+    VclPtr<MetricField>        m_pIndentAtMF;
 
-    PushButton*         m_pStandardPB;
+    VclPtr<PushButton>         m_pStandardPB;
 
-    NumberingPreview*   m_pPreviewWIN;
+    VclPtr<NumberingPreview>   m_pPreviewWIN;
 
     SwNumRule*          pActNum;
     SwNumRule*          pSaveNum;
     SwWrtShell*         pWrtSh;
 
-    SwOutlineTabDialog* pOutlineDlg;
+    VclPtr<SwOutlineTabDialog> pOutlineDlg;
     sal_uInt16              nActNumLvl;
 
     bool                bModified           : 1;
@@ -117,14 +117,15 @@ public:
     SwNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual sfxpg       DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
+                                      const SfxItemSet* rAttrSet);
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);

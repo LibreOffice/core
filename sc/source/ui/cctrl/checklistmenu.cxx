@@ -97,7 +97,14 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDo
 
 ScMenuFloatingWindow::~ScMenuFloatingWindow()
 {
+    disposeOnce();
+}
+
+void ScMenuFloatingWindow::dispose()
+{
     EndPopupMode();
+    mpParentMenu.clear();
+    PopupMenuFloatingWindow::dispose();
 }
 
 void ScMenuFloatingWindow::PopupModeEnd()
@@ -307,7 +314,7 @@ ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText
     MenuItemData aItem;
     aItem.maText = rText;
     aItem.mbEnabled = bEnabled;
-    aItem.mpSubMenuWin.reset(new ScMenuFloatingWindow(this, mpDoc, GetMenuStackLevel()+1));
+    aItem.mpSubMenuWin.reset(VclPtr<ScMenuFloatingWindow>::Create(this, mpDoc, GetMenuStackLevel()+1));
     aItem.mpSubMenuWin->setName(rText);
     maMenuItems.push_back(aItem);
     return aItem.mpSubMenuWin.get();
@@ -848,6 +855,17 @@ ScCheckListMenuWindow::Member::Member()
 ScCheckListMenuWindow::CancelButton::CancelButton(ScCheckListMenuWindow* pParent) :
     ::CancelButton(pParent), mpParent(pParent) {}
 
+ScCheckListMenuWindow::CancelButton::~CancelButton()
+{
+    disposeOnce();
+}
+
+void ScCheckListMenuWindow::CancelButton::dispose()
+{
+    mpParent.clear();
+    ::CancelButton::dispose();
+}
+
 void ScCheckListMenuWindow::CancelButton::Click()
 {
     mpParent->EndPopupMode();
@@ -856,13 +874,13 @@ void ScCheckListMenuWindow::CancelButton::Click()
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
-    maEdSearch(this),
-    maChecks(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
-    maChkToggleAll(this, 0),
-    maBtnSelectSingle  (this, 0),
-    maBtnUnselectSingle(this, 0),
-    maBtnOk(this),
-    maBtnCancel(this),
+    maEdSearch(new Edit (this)),
+    maChecks(VclPtr<ScCheckListBox>::Create(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT) ),
+    maChkToggleAll(VclPtr<TriStateBox>::Create(this, 0)),
+    maBtnSelectSingle(VclPtr<ImageButton>::Create(this, 0)),
+    maBtnUnselectSingle(VclPtr<ImageButton>::Create(this, 0)),
+    maBtnOk(VclPtr<OKButton>::Create(this)),
+    maBtnCancel(VclPtr<CancelButton>::Create(this)),
     mnCurTabStop(0),
     mpExtendedData(NULL),
     mpOKAction(NULL),
@@ -876,20 +894,32 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
 
     maTabStopCtrls.reserve(8);
     maTabStopCtrls.push_back(this);
-    maTabStopCtrls.push_back(&maEdSearch);
-    maTabStopCtrls.push_back(&maChecks);
-    maTabStopCtrls.push_back(&maChkToggleAll);
-    maTabStopCtrls.push_back(&maBtnSelectSingle);
-    maTabStopCtrls.push_back(&maBtnUnselectSingle);
-    maTabStopCtrls.push_back(&maBtnOk);
-    maTabStopCtrls.push_back(&maBtnCancel);
+    maTabStopCtrls.push_back(maEdSearch.get());
+    maTabStopCtrls.push_back(maChecks.get());
+    maTabStopCtrls.push_back(maChkToggleAll.get());
+    maTabStopCtrls.push_back(maBtnSelectSingle.get());
+    maTabStopCtrls.push_back(maBtnUnselectSingle.get());
+    maTabStopCtrls.push_back(maBtnOk.get());
+    maTabStopCtrls.push_back(maBtnCancel.get());
 
     // Enable type-ahead search in the check list box.
-    maChecks.SetStyle(maChecks.GetStyle() | WB_QUICK_SEARCH);
+    maChecks->SetStyle(maChecks->GetStyle() | WB_QUICK_SEARCH);
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
 {
+    disposeOnce();
+}
+
+void ScCheckListMenuWindow::dispose()
+{
+    maChecks.disposeAndClear();
+    maChkToggleAll.disposeAndClear();
+    maBtnSelectSingle.disposeAndClear();
+    maBtnUnselectSingle.disposeAndClear();
+    maBtnOk.disposeAndClear();
+    maBtnCancel.disposeAndClear();
+    ScMenuFloatingWindow::dispose();
 }
 
 void ScCheckListMenuWindow::getSectionPosSize(
@@ -958,7 +988,7 @@ void ScCheckListMenuWindow::getSectionPosSize(
         break;
         case CHECK_TOGGLE_ALL:
         {
-            long h = std::min(maChkToggleAll.CalcMinimumSize().Height(), 26L);
+            long h = std::min(maChkToggleAll->CalcMinimumSize().Height(), 26L);
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
             rPos.X() += 5;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
@@ -1029,38 +1059,38 @@ void ScCheckListMenuWindow::packWindow()
     SetOutputSizePixel(aSize);
 
     getSectionPosSize(aPos, aSize, BTN_OK);
-    maBtnOk.SetPosSizePixel(aPos, aSize);
-    maBtnOk.SetFont(getLabelFont());
-    maBtnOk.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
-    maBtnOk.Show();
+    maBtnOk->SetPosSizePixel(aPos, aSize);
+    maBtnOk->SetFont(getLabelFont());
+    maBtnOk->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
+    maBtnOk->Show();
 
     getSectionPosSize(aPos, aSize, BTN_CANCEL);
-    maBtnCancel.SetPosSizePixel(aPos, aSize);
-    maBtnCancel.SetFont(getLabelFont());
-    maBtnCancel.Show();
+    maBtnCancel->SetPosSizePixel(aPos, aSize);
+    maBtnCancel->SetFont(getLabelFont());
+    maBtnCancel->Show();
 
     getSectionPosSize(aPos, aSize, EDIT_SEARCH);
-    maEdSearch.SetPosSizePixel(aPos, aSize);
-    maEdSearch.SetFont(getLabelFont());
-    maEdSearch.SetControlBackground(rStyle.GetFieldColor());
-    maEdSearch.SetPlaceholderText(SC_STRLOAD(RID_POPUP_FILTER, STR_EDIT_SEARCH_ITEMS));
-    maEdSearch.SetModifyHdl( LINK(this, ScCheckListMenuWindow, EdModifyHdl) );
-    maEdSearch.Show();
+    maEdSearch->SetPosSizePixel(aPos, aSize);
+    maEdSearch->SetFont(getLabelFont());
+    maEdSearch->SetControlBackground(rStyle.GetFieldColor());
+    maEdSearch->SetPlaceholderText(SC_STRLOAD(RID_POPUP_FILTER, STR_EDIT_SEARCH_ITEMS));
+    maEdSearch->SetModifyHdl( LINK(this, ScCheckListMenuWindow, EdModifyHdl) );
+    maEdSearch->Show();
 
     getSectionPosSize(aPos, aSize, LISTBOX_AREA_INNER);
-    maChecks.SetPosSizePixel(aPos, aSize);
-    maChecks.SetFont(getLabelFont());
-    maChecks.SetCheckButtonHdl( LINK(this, ScCheckListMenuWindow, CheckHdl) );
-    maChecks.Show();
+    maChecks->SetPosSizePixel(aPos, aSize);
+    maChecks->SetFont(getLabelFont());
+    maChecks->SetCheckButtonHdl( LINK(this, ScCheckListMenuWindow, CheckHdl) );
+    maChecks->Show();
 
     getSectionPosSize(aPos, aSize, CHECK_TOGGLE_ALL);
-    maChkToggleAll.SetPosSizePixel(aPos, aSize);
-    maChkToggleAll.SetFont(getLabelFont());
-    maChkToggleAll.SetText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_TOGGLE_ALL));
-    maChkToggleAll.SetTextColor(rStyle.GetMenuTextColor());
-    maChkToggleAll.SetControlBackground(rStyle.GetMenuColor());
-    maChkToggleAll.SetClickHdl( LINK(this, ScCheckListMenuWindow, TriStateHdl) );
-    maChkToggleAll.Show();
+    maChkToggleAll->SetPosSizePixel(aPos, aSize);
+    maChkToggleAll->SetFont(getLabelFont());
+    maChkToggleAll->SetText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_TOGGLE_ALL));
+    maChkToggleAll->SetTextColor(rStyle.GetMenuTextColor());
+    maChkToggleAll->SetControlBackground(rStyle.GetMenuColor());
+    maChkToggleAll->SetClickHdl( LINK(this, ScCheckListMenuWindow, TriStateHdl) );
+    maChkToggleAll->Show();
 
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
 
@@ -1073,11 +1103,11 @@ void ScCheckListMenuWindow::packWindow()
     }
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
-    maBtnSelectSingle.SetPosSizePixel(aPos, aSize);
-    maBtnSelectSingle.SetQuickHelpText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT));
-    maBtnSelectSingle.SetModeImage(aSingleSelect);
-    maBtnSelectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
-    maBtnSelectSingle.Show();
+    maBtnSelectSingle->SetPosSizePixel(aPos, aSize);
+    maBtnSelectSingle->SetQuickHelpText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT));
+    maBtnSelectSingle->SetModeImage(aSingleSelect);
+    maBtnSelectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
+    maBtnSelectSingle->Show();
 
     Image aSingleUnselect(ScResId(RID_IMG_UNSELECT_CURRENT));
     if (nScaleFactor != 1)
@@ -1088,11 +1118,11 @@ void ScCheckListMenuWindow::packWindow()
     }
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
-    maBtnUnselectSingle.SetPosSizePixel(aPos, aSize);
-    maBtnUnselectSingle.SetQuickHelpText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT));
-    maBtnUnselectSingle.SetModeImage(aSingleUnselect);
-    maBtnUnselectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
-    maBtnUnselectSingle.Show();
+    maBtnUnselectSingle->SetPosSizePixel(aPos, aSize);
+    maBtnUnselectSingle->SetQuickHelpText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT));
+    maBtnUnselectSingle->SetModeImage(aSingleUnselect);
+    maBtnUnselectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
+    maBtnUnselectSingle->Show();
 }
 
 void ScCheckListMenuWindow::setAllMemberState(bool bSet)
@@ -1103,21 +1133,21 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
         aLabel = maMembers[i].maName;
         if (aLabel.isEmpty())
             aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
-        maChecks.ShowCheckEntry( aLabel, maMembers[i].mpParent, true, bSet);
+        maChecks->ShowCheckEntry( aLabel, maMembers[i].mpParent, true, bSet);
     }
 
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
-        maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
+        maBtnOk->Enable(maChecks->GetCheckedEntryCount() != 0);
 }
 
 void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
 {
     setAllMemberState(!bSet);
-    SvTreeListEntry* pEntry = maChecks.GetCurEntry();
+    SvTreeListEntry* pEntry = maChecks->GetCurEntry();
     if (!pEntry)
         return;
-    maChecks.CheckEntry(pEntry, bSet );
+    maChecks->CheckEntry(pEntry, bSet );
 }
 
 void ScCheckListMenuWindow::cycleFocus(bool bReverse)
@@ -1146,17 +1176,17 @@ void ScCheckListMenuWindow::cycleFocus(bool bReverse)
 
 IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn )
 {
-    if (pBtn == &maBtnOk)
+    if (pBtn == maBtnOk.get())
         close(true);
-    else if (pBtn == &maBtnSelectSingle)
+    else if (pBtn == maBtnSelectSingle.get())
     {
         selectCurrentMemberOnly(true);
-        CheckHdl(&maChecks);
+        CheckHdl(maChecks.get());
     }
-    else if (pBtn == &maBtnUnselectSingle)
+    else if (pBtn == maBtnUnselectSingle.get())
     {
         selectCurrentMemberOnly(false);
-        CheckHdl(&maChecks);
+        CheckHdl(maChecks.get());
     }
     return 0;
 }
@@ -1166,27 +1196,27 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl)
     switch (mePrevToggleAllState)
     {
         case TRISTATE_FALSE:
-            maChkToggleAll.SetState(TRISTATE_TRUE);
+            maChkToggleAll->SetState(TRISTATE_TRUE);
             setAllMemberState(true);
         break;
         case TRISTATE_TRUE:
-            maChkToggleAll.SetState(TRISTATE_FALSE);
+            maChkToggleAll->SetState(TRISTATE_FALSE);
             setAllMemberState(false);
         break;
         case TRISTATE_INDET:
         default:
-            maChkToggleAll.SetState(TRISTATE_TRUE);
+            maChkToggleAll->SetState(TRISTATE_TRUE);
             setAllMemberState(true);
         break;
     }
 
-    mePrevToggleAllState = maChkToggleAll.GetState();
+    mePrevToggleAllState = maChkToggleAll->GetState();
     return 0;
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
 {
-    OUString aSearchText = maEdSearch.GetText();
+    OUString aSearchText = maEdSearch->GetText();
     aSearchText = aSearchText.toAsciiLowerCase();
     bool bSearchTextEmpty = aSearchText.isEmpty();
     size_t n = maMembers.size();
@@ -1202,7 +1232,7 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
 
         if ( bSearchTextEmpty )
         {
-            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, maMembers[i].mbVisible );
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, maMembers[i].mbVisible );
             if ( maMembers[i].mbVisible )
                 ++nSelCount;
             continue;
@@ -1210,45 +1240,45 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
 
         if ( aLabelDisp.toAsciiLowerCase().indexOf( aSearchText ) != -1 )
         {
-            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, true );
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, true );
             ++nSelCount;
         }
         else
-            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, false, false );
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, false, false );
     }
 
     if ( nSelCount == n )
-        maChkToggleAll.SetState( TRISTATE_TRUE );
+        maChkToggleAll->SetState( TRISTATE_TRUE );
     else if ( nSelCount == 0 )
-        maChkToggleAll.SetState( TRISTATE_FALSE );
+        maChkToggleAll->SetState( TRISTATE_FALSE );
     else
-        maChkToggleAll.SetState( TRISTATE_INDET );
+        maChkToggleAll->SetState( TRISTATE_INDET );
 
     return 0;
 }
 
 IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
 {
-    if (pChecks != &maChecks)
+    if (pChecks != maChecks.get())
         return 0;
     SvTreeListEntry* pEntry = pChecks->GetHdlEntry();
     if ( pEntry )
-        maChecks.CheckEntry( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) );
-    size_t nNumChecked = maChecks.GetCheckedEntryCount();
+        maChecks->CheckEntry( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) );
+    size_t nNumChecked = maChecks->GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
-        maChkToggleAll.SetState(TRISTATE_TRUE);
+        maChkToggleAll->SetState(TRISTATE_TRUE);
     else if (nNumChecked == 0)
         // no members visible
-        maChkToggleAll.SetState(TRISTATE_FALSE);
+        maChkToggleAll->SetState(TRISTATE_FALSE);
     else
-        maChkToggleAll.SetState(TRISTATE_INDET);
+        maChkToggleAll->SetState(TRISTATE_INDET);
 
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
-        maBtnOk.Enable(nNumChecked != 0);
+        maBtnOk->Enable(nNumChecked != 0);
 
-    mePrevToggleAllState = maChkToggleAll.GetState();
+    mePrevToggleAllState = maChkToggleAll->GetState();
     return 0;
 }
 
@@ -1315,19 +1345,19 @@ Reference<XAccessible> ScCheckListMenuWindow::CreateAccessible()
         fillMenuItemsToAccessible(pAccTop);
 
         pAccTop->setAccessibleChild(
-            maEdSearch.CreateAccessible(), ScAccessibleFilterTopWindow::EDIT_SEARCH_BOX);
+            maEdSearch->CreateAccessible(), ScAccessibleFilterTopWindow::EDIT_SEARCH_BOX);
         pAccTop->setAccessibleChild(
-            maChecks.CreateAccessible(), ScAccessibleFilterTopWindow::LISTBOX);
+            maChecks->CreateAccessible(), ScAccessibleFilterTopWindow::LISTBOX);
         pAccTop->setAccessibleChild(
-            maChkToggleAll.CreateAccessible(), ScAccessibleFilterTopWindow::TOGGLE_ALL);
+            maChkToggleAll->CreateAccessible(), ScAccessibleFilterTopWindow::TOGGLE_ALL);
         pAccTop->setAccessibleChild(
-            maBtnSelectSingle.CreateAccessible(), ScAccessibleFilterTopWindow::SINGLE_ON_BTN);
+            maBtnSelectSingle->CreateAccessible(), ScAccessibleFilterTopWindow::SINGLE_ON_BTN);
         pAccTop->setAccessibleChild(
-            maBtnUnselectSingle.CreateAccessible(), ScAccessibleFilterTopWindow::SINGLE_OFF_BTN);
+            maBtnUnselectSingle->CreateAccessible(), ScAccessibleFilterTopWindow::SINGLE_OFF_BTN);
         pAccTop->setAccessibleChild(
-            maBtnOk.CreateAccessible(), ScAccessibleFilterTopWindow::OK_BTN);
+            maBtnOk->CreateAccessible(), ScAccessibleFilterTopWindow::OK_BTN);
         pAccTop->setAccessibleChild(
-            maBtnCancel.CreateAccessible(), ScAccessibleFilterTopWindow::CANCEL_BTN);
+            maBtnCancel->CreateAccessible(), ScAccessibleFilterTopWindow::CANCEL_BTN);
     }
 
     return mxAccessible;
@@ -1361,12 +1391,12 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     OUString aMonthName = aMonths[nMonth-1].FullName;
     OUString aDayName = OUString::number(nDay);
 
-    maChecks.SetUpdateMode(false);
+    maChecks->SetUpdateMode(false);
 
-    SvTreeListEntry* pYearEntry = maChecks.FindEntry(NULL, aYearName);
+    SvTreeListEntry* pYearEntry = maChecks->FindEntry(NULL, aYearName);
     if (!pYearEntry)
     {
-        pYearEntry = maChecks.InsertEntry(aYearName, NULL, true);
+        pYearEntry = maChecks->InsertEntry(aYearName, NULL, true);
         Member aMemYear;
         aMemYear.maName = aYearName;
         aMemYear.maRealName = rsName;
@@ -1377,10 +1407,10 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
         maMembers.push_back(aMemYear);
     }
 
-    SvTreeListEntry* pMonthEntry = maChecks.FindEntry(pYearEntry, aMonthName);
+    SvTreeListEntry* pMonthEntry = maChecks->FindEntry(pYearEntry, aMonthName);
     if (!pMonthEntry)
     {
-        pMonthEntry = maChecks.InsertEntry(aMonthName, pYearEntry, true);
+        pMonthEntry = maChecks->InsertEntry(aMonthName, pYearEntry, true);
         Member aMemMonth;
         aMemMonth.maName = aMonthName;
         aMemMonth.maRealName = rsName;
@@ -1391,10 +1421,10 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
         maMembers.push_back(aMemMonth);
     }
 
-    SvTreeListEntry* pDayEntry = maChecks.FindEntry(pMonthEntry, aDayName);
+    SvTreeListEntry* pDayEntry = maChecks->FindEntry(pMonthEntry, aDayName);
     if (!pDayEntry)
     {
-        maChecks.InsertEntry(aDayName, pMonthEntry, false);
+        maChecks->InsertEntry(aDayName, pMonthEntry, false);
         Member aMemDay;
         aMemDay.maName = aDayName;
         aMemDay.maRealName = rsName;
@@ -1405,7 +1435,7 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
         maMembers.push_back(aMemDay);
     }
 
-    maChecks.SetUpdateMode(true);
+    maChecks->SetUpdateMode(true);
 }
 
 void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
@@ -1591,20 +1621,20 @@ void ScCheckListMenuWindow::initMembers()
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
 
-    maChecks.SetUpdateMode(false);
-    maChecks.GetModel()->EnableInvalidate(false);
+    maChecks->SetUpdateMode(false);
+    maChecks->GetModel()->EnableInvalidate(false);
 
     for (size_t i = 0; i < n; ++i)
     {
         if (maMembers[i].mbDate)
         {
-            maChecks.CheckEntry(maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
+            maChecks->CheckEntry(maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
             // Expand first node of checked dates
-            if (!maMembers[i].mpParent && maChecks.IsChecked(maMembers[i].maName,  maMembers[i].mpParent))
+            if (!maMembers[i].mpParent && maChecks->IsChecked(maMembers[i].maName,  maMembers[i].mpParent))
             {
-                SvTreeListEntry* pEntry = maChecks.FindEntry(NULL, maMembers[i].maName);
+                SvTreeListEntry* pEntry = maChecks->FindEntry(NULL, maMembers[i].maName);
                 if (pEntry)
-                    maChecks.Expand(pEntry);
+                    maChecks->Expand(pEntry);
             }
         }
         else
@@ -1612,11 +1642,11 @@ void ScCheckListMenuWindow::initMembers()
             OUString aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
-            SvTreeListEntry* pEntry = maChecks.InsertEntry(
+            SvTreeListEntry* pEntry = maChecks->InsertEntry(
                 aLabel, NULL, false, TREELIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox);
 
-            maChecks.SetCheckButtonState(
+            maChecks->SetCheckButtonState(
                 pEntry, maMembers[i].mbVisible ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
         }
 
@@ -1626,23 +1656,23 @@ void ScCheckListMenuWindow::initMembers()
     if (nVisMemCount == n)
     {
         // all members visible
-        maChkToggleAll.SetState(TRISTATE_TRUE);
+        maChkToggleAll->SetState(TRISTATE_TRUE);
         mePrevToggleAllState = TRISTATE_TRUE;
     }
     else if (nVisMemCount == 0)
     {
         // no members visible
-        maChkToggleAll.SetState(TRISTATE_FALSE);
+        maChkToggleAll->SetState(TRISTATE_FALSE);
         mePrevToggleAllState = TRISTATE_FALSE;
     }
     else
     {
-        maChkToggleAll.SetState(TRISTATE_INDET);
+        maChkToggleAll->SetState(TRISTATE_INDET);
         mePrevToggleAllState = TRISTATE_INDET;
     }
 
-    maChecks.GetModel()->EnableInvalidate(true);
-    maChecks.SetUpdateMode(true);
+    maChecks->GetModel()->EnableInvalidate(true);
+    maChecks->SetUpdateMode(true);
 }
 
 void ScCheckListMenuWindow::setConfig(const Config& rConfig)
@@ -1652,7 +1682,7 @@ void ScCheckListMenuWindow::setConfig(const Config& rConfig)
 
 bool ScCheckListMenuWindow::isAllSelected() const
 {
-    return maChkToggleAll.IsChecked();
+    return maChkToggleAll->IsChecked();
 }
 
 void ScCheckListMenuWindow::getResult(ResultType& rResult)
@@ -1666,7 +1696,7 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
             OUString aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
-            bool bState =  maChecks.IsChecked( aLabel,  maMembers[i].mpParent );
+            bool bState =  maChecks->IsChecked( aLabel,  maMembers[i].mpParent );
             OUString sName;
             if ( maMembers[i].mbDate )
                 sName = maMembers[i].maRealName;
@@ -1683,7 +1713,7 @@ void ScCheckListMenuWindow::launch(const Rectangle& rRect)
     packWindow();
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
-        maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
+        maBtnOk->Enable(maChecks->GetCheckedEntryCount() != 0);
 
     Rectangle aRect(rRect);
     if (maConfig.mbRTL)

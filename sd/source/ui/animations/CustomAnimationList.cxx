@@ -210,7 +210,7 @@ public:
     virtual void Paint(
         const Point&, SvTreeListBox& rDev, const SvViewDataEntry* pView,const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 private:
-    CustomAnimationList* mpParent;
+    VclPtr<CustomAnimationList> mpParent;
     OUString        maDescription;
     CustomAnimationEffectPtr mpEffect;
 };
@@ -444,10 +444,16 @@ const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
 
 CustomAnimationList::~CustomAnimationList()
 {
+    disposeOnce();
+}
+
+void CustomAnimationList::dispose()
+{
     if( mpMainSequence.get() )
         mpMainSequence->removeListener( this );
 
     clear();
+    SvTreeListBox::dispose();
 }
 
 void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )

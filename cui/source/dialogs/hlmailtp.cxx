@@ -66,8 +66,18 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
         m_pBtAdrBook->Hide();
 }
 
-SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
+SvxHyperlinkMailTp::~SvxHyperlinkMailTp()
 {
+    disposeOnce();
+}
+
+void SvxHyperlinkMailTp::dispose()
+{
+    m_pCbbReceiver.clear();
+    m_pBtAdrBook.clear();
+    m_pFtSubject.clear();
+    m_pEdSubject.clear();
+    SvxHyperlinkTabPageBase::dispose();
 }
 
 /*************************************************************************
@@ -161,9 +171,9 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkMailTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkMailTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return new SvxHyperlinkMailTp( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkMailTp>::Create( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************

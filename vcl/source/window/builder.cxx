@@ -471,14 +471,14 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
 
     //Remove ScrollWindow parent widgets whose children in vcl implement scrolling
     //internally.
-    for (std::map<vcl::Window*, vcl::Window*>::iterator aI = m_pParserState->m_aRedundantParentWidgets.begin(),
+    for (auto aI = m_pParserState->m_aRedundantParentWidgets.begin(),
         aEnd = m_pParserState->m_aRedundantParentWidgets.end(); aI != aEnd; ++aI)
     {
         delete_by_window(aI->first);
     }
 
     //fdo#67378 merge the label into the disclosure button
-    for (std::vector<VclExpander*>::iterator aI = m_pParserState->m_aExpanderWidgets.begin(),
+    for (auto aI = m_pParserState->m_aExpanderWidgets.begin(),
         aEnd = m_pParserState->m_aExpanderWidgets.end(); aI != aEnd; ++aI)
     {
         VclExpander *pOne = *aI;
@@ -525,17 +525,24 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
 
 VclBuilder::~VclBuilder()
 {
+    disposeBuilder();
+}
+
+void VclBuilder::disposeBuilder()
+{
     for (std::vector<WinAndId>::reverse_iterator aI = m_aChildren.rbegin(),
          aEnd = m_aChildren.rend(); aI != aEnd; ++aI)
     {
-        delete aI->m_pWindow;
+        aI->m_pWindow.disposeAndClear();
     }
+    m_aChildren.clear();
 
     for (std::vector<MenuAndId>::reverse_iterator aI = m_aMenus.rbegin(),
          aEnd = m_aMenus.rend(); aI != aEnd; ++aI)
     {
         delete aI->m_pMenu;
     }
+    m_aMenus.clear();
 }
 
 void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
@@ -1259,7 +1266,7 @@ void VclBuilder::cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Wind
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
-vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
+VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap)
 {
     bool bIsPlaceHolder = name.isEmpty();
@@ -1301,7 +1308,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     }
 
     if (bIsPlaceHolder || name == "GtkTreeSelection")
-        return NULL;
+        return nullptr;
 
     extractButtonImage(id, rMap, name == "GtkRadioButton");
 
@@ -1696,7 +1703,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
 
             m_pParserState->m_nLastToolbarId = nItemId;
 
-            return NULL; // no widget to be created
+            return nullptr; // no widget to be created
         }
     }
     else if (name == "GtkSeparatorToolItem")
@@ -1705,7 +1712,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
         if (pToolBox)
         {
             pToolBox->InsertSeparator();
-            return NULL; // no widget to be created
+            return nullptr; // no widget to be created
         }
     }
     else if (name == "GtkWindow")
@@ -1763,16 +1770,17 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     SAL_WARN_IF(!pWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");
     if (pWindow)
     {
+        VclPtr< vcl::Window > xWindow( pWindow );
         pWindow->SetHelpId(m_sHelpRoot + id);
         SAL_INFO("vcl.layout", "for " << name.getStr() <<
             ", created " << pWindow << " child of " <<
-            pParent << "(" << pWindow->mpWindowImpl->mpParent << "/" <<
-            pWindow->mpWindowImpl->mpRealParent << "/" <<
-            pWindow->mpWindowImpl->mpBorderWindow << ") with helpid " <<
+            pParent << "(" << pWindow->mpWindowImpl->mpParent.get() << "/" <<
+            pWindow->mpWindowImpl->mpRealParent.get() << "/" <<
+            pWindow->mpWindowImpl->mpBorderWindow.get() << ") with helpid " <<
             pWindow->GetHelpId().getStr());
-        m_aChildren.push_back(WinAndId(id, pWindow, bVertical));
+        m_aChildren.push_back(WinAndId(id, xWindow, bVertical));
     }
-    return pWindow;
+    return VclPtr<vcl::Window>(pWindow, SAL_NO_ACQUIRE);
 }
 
 namespace
@@ -1807,10 +1815,10 @@ void VclBuilder::set_properties(vcl::Window *pWindow, const stringmap &rProps)
     }
 }
 
-vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
+VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
     const OString &rID, stringmap &rProps, stringmap &rPango, stringmap &rAtk)
 {
-    vcl::Window *pCurrentChild = NULL;
+    VclPtr<vcl::Window> pCurrentChild;
 
     if (m_pParent && !isConsideredGtkPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
     {
@@ -1821,13 +1829,13 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
         //initialize the dialog.
         if (pParent && pParent->IsSystemWindow())
         {
-            SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild);
+            SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild.get());
             pSysWin->doDeferredInit(extractDeferredBits(rProps));
             m_bToplevelHasDeferredInit = false;
         }
         else if (pParent && pParent->IsDockingWindow())
         {
-            DockingWindow *pDockWin = static_cast<DockingWindow*>(pCurrentChild);
+            DockingWindow *pDockWin = static_cast<DockingWindow*>(pCurrentChild.get());
             pDockWin->doDeferredInit(extractDeferredBits(rProps));
             m_bToplevelHasDeferredInit = false;
         }
@@ -1846,14 +1854,14 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
         //if we're being inserting under a toplevel dialog whose init is
         //deferred due to waiting to encounter it in this .ui, and it hasn't
         //been seen yet, then make unattached widgets parent-less toplevels
-        if (pParent == m_pParent && m_bToplevelHasDeferredInit)
+        if (pParent == m_pParent.get() && m_bToplevelHasDeferredInit)
             pParent = NULL;
         pCurrentChild = makeObject(pParent, rClass, rID, rProps);
     }
 
     if (pCurrentChild)
     {
-        if (pCurrentChild == m_pParent && m_bToplevelHasDeferredProperties)
+        if (pCurrentChild == m_pParent.get() && m_bToplevelHasDeferredProperties)
             m_aDeferredProperties = rProps;
         else
             set_properties(pCurrentChild, rProps);
@@ -1865,7 +1873,7 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
             pCurrentChild->set_font_attribute(rKey, rValue);
         }
 
-        m_pParserState->m_aAtkInfo[pCurrentChild] = rAtk;
+        m_pParserState->m_aAtkInfo[VclPtr<vcl::Window>(pCurrentChild)] = rAtk;
     }
 
     rProps.clear();
@@ -1873,7 +1881,7 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
     rAtk.clear();
 
     if (!pCurrentChild)
-        pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow;
+        pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow.get();
     return pCurrentChild;
 }
 
@@ -2093,14 +2101,14 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                         if (sInternalChild.startsWith("vbox") || sInternalChild.startsWith("messagedialog-vbox"))
                         {
                             if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
-                                pBoxParent->set_content_area(static_cast<VclBox*>(pCurrentChild));
+                                pBoxParent->set_content_area(static_cast<VclBox*>(pCurrentChild)); // FIXME-VCLPTR
                         }
                         else if (sInternalChild.startsWith("action_area") || sInternalChild.startsWith("messagedialog-action_area"))
                         {
                             vcl::Window *pContentArea = pCurrentChild->GetParent();
                             if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : NULL))
                             {
-                                pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild));
+                                pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild)); // FIXME-VCLPTR
                             }
                         }
 
@@ -2835,7 +2843,7 @@ template<typename T> bool insertItems(vcl::Window *pWindow, VclBuilder::stringma
     return true;
 }
 
-vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader)
+VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
     OString sClass;
     OString sID;
@@ -2867,22 +2875,22 @@ vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader
     if (sClass == "GtkListStore")
     {
         handleListStore(reader, sID);
-        return NULL;
+        return nullptr;
     }
     else if (sClass == "GtkMenu")
     {
         handleMenu(reader, sID);
-        return NULL;
+        return nullptr;
     }
     else if (sClass == "GtkSizeGroup")
     {
         handleSizeGroup(reader, sID);
-        return NULL;
+        return nullptr;
     }
     else if (sClass == "AtkObject")
     {
         handleAtkObject(reader, sID, pParent);
-        return NULL;
+        return nullptr;
     }
 
     int nLevel = 1;
@@ -2893,7 +2901,7 @@ vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
 
-    vcl::Window *pCurrentChild = NULL;
+    VclPtr<vcl::Window> pCurrentChild;
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -3015,7 +3023,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
 
     if (pCurrent->GetType() == WINDOW_SCROLLWINDOW)
     {
-        std::map<vcl::Window*, vcl::Window*>::iterator aFind = m_pParserState->m_aRedundantParentWidgets.find(pCurrent);
+        auto aFind = m_pParserState->m_aRedundantParentWidgets.find(VclPtr<vcl::Window>(pCurrent));
         if (aFind != m_pParserState->m_aRedundantParentWidgets.end())
         {
             pCurrent = aFind->second;
@@ -3213,7 +3221,7 @@ void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMa
 
 vcl::Window *VclBuilder::get_widget_root()
 {
-    return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow;
+    return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow.get();
 }
 
 vcl::Window *VclBuilder::get_by_name(const OString& sID)
@@ -3279,17 +3287,17 @@ void VclBuilder::delete_by_name(const OString& sID)
     {
         if (aI->m_sID.equals(sID))
         {
-            delete aI->m_pWindow;
+            aI->m_pWindow.disposeAndClear();
             m_aChildren.erase(aI);
             break;
         }
     }
 }
 
-void VclBuilder::delete_by_window(const vcl::Window *pWindow)
+void VclBuilder::delete_by_window(vcl::Window *pWindow)
 {
     drop_ownership(pWindow);
-    delete pWindow;
+    pWindow->disposeOnce();
 }
 
 void VclBuilder::drop_ownership(const vcl::Window *pWindow)
@@ -3550,5 +3558,9 @@ void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rT
         }
     }
 }
+
+VclBuilder::ParserState::ParserState()
+    : m_nLastToolbarId(0)
+{}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

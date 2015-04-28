@@ -288,10 +288,6 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     SetItemHeight( S_THUMB + 6 );
 }
 
-GalleryIconView::~GalleryIconView()
-{
-}
-
 void GalleryIconView::InitSettings()
 {
     SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
@@ -429,10 +425,6 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     SetMode( BrowserMode::AUTO_VSCROLL | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::AUTO_HSCROLL );
     SetDataRowHeight( 28 );
     InsertDataColumn( GALLERY_BRWBOX_TITLE, GAL_RESSTR(RID_SVXSTR_GALLERY_TITLE), 256  );
-}
-
-GalleryListView::~GalleryListView()
-{
 }
 
 void GalleryListView::InitSettings()

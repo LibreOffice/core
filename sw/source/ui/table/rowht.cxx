@@ -75,4 +75,16 @@ SwTableHeightDlg::SwTableHeightDlg(vcl::Window *pParent, SwWrtShell &rS)
     }
 }
 
+SwTableHeightDlg::~SwTableHeightDlg()
+{
+    disposeOnce();
+}
+
+void SwTableHeightDlg::dispose()
+{
+    m_pHeightEdit.clear();
+    m_pAutoHeightCB.clear();
+    SvxStandardDialog::dispose();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

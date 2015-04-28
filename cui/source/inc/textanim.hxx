@@ -37,27 +37,28 @@ class SdrView;
 class SvxTextAnimationPage : public SfxTabPage
 {
 private:
-    static const sal_uInt16 pRanges[];
-    ListBox*             m_pLbEffect;
-    VclBox*              m_pBoxDirection;
-    PushButton*          m_pBtnUp;
-    PushButton*          m_pBtnLeft;
-    PushButton*          m_pBtnRight;
-    PushButton*          m_pBtnDown;
+    static const sal_uInt16     pRanges[];
 
-    VclFrame*            m_pFlProperties;
-    TriStateBox*         m_pTsbStartInside;
-    TriStateBox*         m_pTsbStopInside;
+    VclPtr<ListBox>             m_pLbEffect;
+    VclPtr<VclBox>              m_pBoxDirection;
+    VclPtr<PushButton>          m_pBtnUp;
+    VclPtr<PushButton>          m_pBtnLeft;
+    VclPtr<PushButton>          m_pBtnRight;
+    VclPtr<PushButton>          m_pBtnDown;
 
-    VclBox*              m_pBoxCount;
-    TriStateBox*         m_pTsbEndless;
-    NumericField*        m_pNumFldCount;
+    VclPtr<VclFrame>            m_pFlProperties;
+    VclPtr<TriStateBox>         m_pTsbStartInside;
+    VclPtr<TriStateBox>         m_pTsbStopInside;
 
-    TriStateBox*         m_pTsbPixel;
-    MetricField*         m_pMtrFldAmount;
+    VclPtr<VclBox>              m_pBoxCount;
+    VclPtr<TriStateBox>         m_pTsbEndless;
+    VclPtr<NumericField>        m_pNumFldCount;
 
-    TriStateBox*         m_pTsbAuto;
-    MetricField*         m_pMtrFldDelay;
+    VclPtr<TriStateBox>         m_pTsbPixel;
+    VclPtr<MetricField>         m_pMtrFldAmount;
+
+    VclPtr<TriStateBox>         m_pTsbAuto;
+    VclPtr<MetricField>         m_pMtrFldDelay;
 
     const SfxItemSet&   rOutAttrs;
     SdrTextAniKind      eAniKind;
@@ -76,8 +77,9 @@ private:
 public:
     SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxTextAnimationPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -104,7 +106,6 @@ public:
 
             SvxTextTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                                 const SdrView* pView );
-            virtual ~SvxTextTabDialog() {};
 };
 
 

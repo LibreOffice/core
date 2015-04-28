@@ -29,11 +29,11 @@
 #include <tools/gen.hxx>
 
 #include <sfx2/objsh.hxx>
+#include <vcl/window.hxx>
 
 class SfxInPlaceClient_Impl;
 class SfxViewShell;
 class SfxObjectShell;
-namespace vcl { class Window; }
 class Fraction;
 
 
@@ -44,7 +44,7 @@ friend class SfxInPlaceClient_Impl;
 
     SfxInPlaceClient_Impl*  m_pImp;
     SfxViewShell*           m_pViewSh;
-    vcl::Window*                 m_pEditWin;
+    VclPtr<vcl::Window>     m_pEditWin;
 
     // called after the requested new object area was negotiated
     SAL_DLLPRIVATE virtual void ObjectAreaChanged();

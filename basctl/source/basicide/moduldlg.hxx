@@ -48,12 +48,14 @@ namespace ObjectMode
 class NewObjectDialog : public ModalDialog
 {
 private:
-    Edit*           m_pEdit;
-    OKButton*       m_pOKButton;
+    VclPtr<Edit>           m_pEdit;
+    VclPtr<OKButton>       m_pOKButton;
 
     DECL_LINK(OkButtonHandler, void *);
 public:
     NewObjectDialog (vcl::Window* pParent, ObjectMode::Mode, bool bCheckName = false);
+    virtual ~NewObjectDialog();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetObjectName() const { return m_pEdit->GetText(); }
     void SetObjectName( const OUString& rName )
     {
@@ -64,19 +66,21 @@ public:
 
 class GotoLineDialog : public ModalDialog
 {
-    Edit*           m_pEdit;
-    OKButton*       m_pOKButton;
+    VclPtr<Edit>           m_pEdit;
+    VclPtr<OKButton>       m_pOKButton;
     DECL_LINK(OkButtonHandler, void *);
 public:
     GotoLineDialog(vcl::Window * pParent);
+    virtual ~GotoLineDialog();
+    virtual void dispose() SAL_OVERRIDE;
     sal_Int32 GetLineNumber() const;
 };
 
 class ExportDialog : public ModalDialog
 {
 private:
-    RadioButton*    m_pExportAsPackageButton;
-    OKButton*       m_pOKButton;
+    VclPtr<RadioButton>    m_pExportAsPackageButton;
+    VclPtr<OKButton>       m_pOKButton;
 
     bool            mbExportAsPackage;
 
@@ -84,6 +88,8 @@ private:
 
 public:
     ExportDialog( vcl::Window * pParent );
+    virtual ~ExportDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool isExportAsPackage () const { return mbExportAsPackage; }
 };
@@ -107,7 +113,6 @@ protected:
 
 public:
     ExtTreeListBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~ExtTreeListBox();
 };
 
 class CheckBox : public SvTabListBox
@@ -121,6 +126,7 @@ private:
 public:
     CheckBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~CheckBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvTreeListEntry*    FindEntry( const OUString& rName );
@@ -141,13 +147,15 @@ public:
 class LibDialog: public ModalDialog
 {
 private:
-    VclFrame*       m_pStorageFrame;
-    CheckBox*       m_pLibBox;
-    ::CheckBox*     m_pReferenceBox;
-    ::CheckBox*     m_pReplaceBox;
+    VclPtr<VclFrame>       m_pStorageFrame;
+    VclPtr<CheckBox>       m_pLibBox;
+    VclPtr<::CheckBox>       m_pReferenceBox;
+    VclPtr<::CheckBox>       m_pReplaceBox;
 
 public:
     LibDialog( vcl::Window* pParent );
+    virtual ~LibDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            SetStorageName( const OUString& rName );
 
@@ -162,12 +170,13 @@ public:
 class OrganizeDialog : public TabDialog
 {
 private:
-    TabControl*        m_pTabCtrl;
+    VclPtr<TabControl> m_pTabCtrl;
     EntryDescriptor    m_aCurEntry;
 
 public:
     OrganizeDialog( vcl::Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
     virtual ~OrganizeDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual short   Execute() SAL_OVERRIDE;
 
@@ -177,11 +186,11 @@ public:
 class ObjectPage: public TabPage
 {
 protected:
-    ExtTreeListBox*     m_pBasicBox;
-    PushButton*         m_pEditButton;
-    PushButton*         m_pNewModButton;
-    PushButton*         m_pNewDlgButton;
-    PushButton*         m_pDelButton;
+    VclPtr<ExtTreeListBox>     m_pBasicBox;
+    VclPtr<PushButton>         m_pEditButton;
+    VclPtr<PushButton>         m_pNewModButton;
+    VclPtr<PushButton>         m_pNewDlgButton;
+    VclPtr<PushButton>         m_pDelButton;
 
     DECL_LINK( BasicBoxHighlightHdl, TreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
@@ -192,13 +201,15 @@ protected:
     void                NewDialog();
     void                EndTabDialog( sal_uInt16 nRet );
 
-    TabDialog*          pTabDlg;
+    VclPtr<TabDialog>          pTabDlg;
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual void        DeactivatePage() SAL_OVERRIDE;
 
 public:
     ObjectPage(vcl::Window* pParent, const OString& rName, sal_uInt16 nMode);
+    virtual ~ObjectPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void                SetCurrentEntry( EntryDescriptor& rDesc );
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
@@ -208,14 +219,14 @@ public:
 class LibPage: public TabPage
 {
 protected:
-    ListBox*            m_pBasicsBox;
-    CheckBox*           m_pLibBox;
-    PushButton*         m_pEditButton;
-    PushButton*         m_pPasswordButton;
-    PushButton*         m_pNewLibButton;
-    PushButton*         m_pInsertLibButton;
-    PushButton*         m_pExportButton;
-    PushButton*         m_pDelButton;
+    VclPtr<ListBox>            m_pBasicsBox;
+    VclPtr<CheckBox>           m_pLibBox;
+    VclPtr<PushButton>         m_pEditButton;
+    VclPtr<PushButton>         m_pPasswordButton;
+    VclPtr<PushButton>         m_pNewLibButton;
+    VclPtr<PushButton>         m_pInsertLibButton;
+    VclPtr<PushButton>         m_pExportButton;
+    VclPtr<PushButton>         m_pDelButton;
 
     ScriptDocument      m_aCurDocument;
     LibraryLocation     m_eCurLocation;
@@ -241,11 +252,12 @@ protected:
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual void        DeactivatePage() SAL_OVERRIDE;
 
-    TabDialog*          pTabDlg;
+    VclPtr<TabDialog>          pTabDlg;
 
 public:
                         LibPage( vcl::Window* pParent );
     virtual             ~LibPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };

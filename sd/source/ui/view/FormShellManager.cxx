@@ -138,7 +138,7 @@ void FormShellManager::RegisterAtCenterPane()
         return;
 
     mpMainViewShellWindow = pShell->GetActiveWindow();
-    if (mpMainViewShellWindow == NULL)
+    if (mpMainViewShellWindow == nullptr)
         return;
 
     // Register at the window to get informed when to move the form
@@ -158,7 +158,7 @@ void FormShellManager::RegisterAtCenterPane()
 
 void FormShellManager::UnregisterAtCenterPane()
 {
-    if (mpMainViewShellWindow != NULL)
+    if (mpMainViewShellWindow != nullptr)
     {
         // Unregister from the window.
         mpMainViewShellWindow->RemoveEventListener(

@@ -89,6 +89,18 @@ SwFldDokInfPage::SwFldDokInfPage(vcl::Window* pParent, const SfxItemSet& rCoreSe
 
 SwFldDokInfPage::~SwFldDokInfPage()
 {
+    disposeOnce();
+}
+
+void SwFldDokInfPage::dispose()
+{
+    m_pTypeTLB.clear();
+    m_pSelection.clear();
+    m_pSelectionLB.clear();
+    m_pFormat.clear();
+    m_pFormatLB.clear();
+    m_pFixedCB.clear();
+    SwFldPage::dispose();
 }
 
 void SwFldDokInfPage::Reset(const SfxItemSet* )
@@ -450,10 +462,10 @@ bool SwFldDokInfPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-SfxTabPage* SwFldDokInfPage::Create(    vcl::Window* pParent,
-                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwFldDokInfPage::Create( vcl::Window* pParent,
+                                            const SfxItemSet* rAttrSet )
 {
-    return ( new SwFldDokInfPage( pParent, *rAttrSet ) );
+    return VclPtr<SwFldDokInfPage>::Create( pParent, *rAttrSet );
 }
 
 sal_uInt16 SwFldDokInfPage::GetGroup()

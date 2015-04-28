@@ -128,8 +128,8 @@ class FontPrevWin_Impl
     friend class SvxFontPrevWindow;
 
     SvxFont                         aFont;
-    Printer*                        pPrinter;
-    bool                        bDelPrinter;
+    VclPtr<Printer>                 pPrinter;
+    bool                            bDelPrinter;
 
     Reference < XBreakIterator >    xBreak;
     std::vector<sal_uIntPtr>        aTextWidth;
@@ -183,7 +183,7 @@ public:
         delete pColor;
         delete pBackColor;
         if( bDelPrinter )
-            delete pPrinter;
+            pPrinter.disposeAndClear();
     }
 
     void                CheckScript();
@@ -502,7 +502,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFontPrevWindow(vcl:
 
 SvxFontPrevWindow::~SvxFontPrevWindow()
 {
+    disposeOnce();
+}
+
+void SvxFontPrevWindow::dispose()
+{
     delete pImpl;
+    vcl::Window::dispose();
 }
 
 

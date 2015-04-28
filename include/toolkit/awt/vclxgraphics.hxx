@@ -31,6 +31,7 @@
 #include <vcl/font.hxx>
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/vclptr.hxx>
 
 class OutputDevice;
 namespace vcl { class Region; }
@@ -55,7 +56,7 @@ private:
     // used to return same reference on each call to getDevice()
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice> mxDevice;
 
-    OutputDevice*   mpOutputDevice;
+    VclPtr<OutputDevice> mpOutputDevice;
     vcl::Font       maFont;
     Color           maTextColor;
     Color           maTextFillColor;

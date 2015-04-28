@@ -60,8 +60,8 @@ class SearchThread: public salhelper::Thread
 {
 private:
 
-    SearchProgress*             mpProgress;
-    TPGalleryThemeProperties*   mpBrowser;
+    VclPtr<SearchProgress>             mpProgress;
+    VclPtr<TPGalleryThemeProperties>   mpBrowser;
     INetURLObject               maStartURL;
 
     void                        ImplSearch( const INetURLObject& rStartURL,
@@ -81,10 +81,10 @@ public:
 class SearchProgress : public ModalDialog
 {
 private:
-    FixedText*          m_pFtSearchDir;
-    FixedText*          m_pFtSearchType;
-    CancelButton*       m_pBtnCancel;
-    vcl::Window * parent_;
+    VclPtr<FixedText>          m_pFtSearchDir;
+    VclPtr<FixedText>          m_pFtSearchType;
+    VclPtr<CancelButton>       m_pBtnCancel;
+    VclPtr<vcl::Window>        parent_;
     INetURLObject startUrl_;
     rtl::Reference< SearchThread > maSearchThread;
 
@@ -93,7 +93,8 @@ private:
 
 public:
                         SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL );
-                        virtual ~SearchProgress() {};
+    virtual             ~SearchProgress();
+    virtual void        dispose() SAL_OVERRIDE;
 
                         DECL_LINK( CleanUpHdl, void* );
 
@@ -107,8 +108,8 @@ class TakeThread: public salhelper::Thread
 {
 private:
 
-    TakeProgress*               mpProgress;
-    TPGalleryThemeProperties*   mpBrowser;
+    VclPtr<TakeProgress>               mpProgress;
+    VclPtr<TPGalleryThemeProperties>   mpBrowser;
     TokenList_impl&             mrTakenList;
 
     virtual                     ~TakeThread();
@@ -126,9 +127,9 @@ public:
 class TakeProgress : public ModalDialog
 {
 private:
-    FixedText*          m_pFtTakeFile;
-    CancelButton*       m_pBtnCancel;
-    vcl::Window * window_;
+    VclPtr<FixedText>          m_pFtTakeFile;
+    VclPtr<CancelButton>       m_pBtnCancel;
+    VclPtr<vcl::Window>        window_;
     rtl::Reference< TakeThread > maTakeThread;
     TokenList_impl      maTakenList;
 
@@ -138,6 +139,8 @@ private:
 public:
 
     TakeProgress( vcl::Window* pWindow );
+    virtual ~TakeProgress();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK( CleanUpHdl, void* );
 
@@ -149,8 +152,8 @@ public:
 class ActualizeProgress : public ModalDialog
 {
 private:
-    FixedText*          m_pFtActualizeFile;
-    CancelButton*       m_pBtnCancel;
+    VclPtr<FixedText>          m_pFtActualizeFile;
+    VclPtr<CancelButton>       m_pBtnCancel;
     Idle*               pIdle;
     GalleryTheme*       pTheme;
     GalleryProgress     aStatusProgress;
@@ -161,7 +164,8 @@ private:
 
 public:
                         ActualizeProgress( vcl::Window* pWindow, GalleryTheme* pThm );
-                        virtual ~ActualizeProgress() {};
+    virtual             ~ActualizeProgress();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual short       Execute() SAL_OVERRIDE;
 };
@@ -169,23 +173,27 @@ public:
 class TitleDialog : public ModalDialog
 {
 private:
-    Edit* m_pEdit;
+    VclPtr<Edit> m_pEdit;
 public:
     TitleDialog(vcl::Window* pParent, const OUString& rOldText);
+    virtual ~TitleDialog();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetTitle() const { return m_pEdit->GetText(); }
 };
 
 class GalleryIdDialog : public ModalDialog
 {
 private:
-    OKButton* m_pBtnOk;
-    ListBox* m_pLbResName;
+    VclPtr<OKButton> m_pBtnOk;
+    VclPtr<ListBox> m_pLbResName;
     GalleryTheme*   pThm;
 
     DECL_LINK( ClickOkHdl, void* );
     DECL_LINK( ClickResNameHdl, void* );
 public:
     GalleryIdDialog( vcl::Window* pParent, GalleryTheme* pThm );
+    virtual ~GalleryIdDialog();
+    virtual void dispose() SAL_OVERRIDE;
     sal_uLong GetId() const { return m_pLbResName->GetSelectEntryPos(); }
 };
 
@@ -206,12 +214,12 @@ class TPGalleryThemeGeneral : public SfxTabPage
 {
 private:
 
-    FixedImage*         m_pFiMSImage;
-    Edit*               m_pEdtMSName;
-    FixedText*          m_pFtMSShowType;
-    FixedText*          m_pFtMSShowPath;
-    FixedText*          m_pFtMSShowContent;
-    FixedText*          m_pFtMSShowChangeDate;
+    VclPtr<FixedImage>         m_pFiMSImage;
+    VclPtr<Edit>               m_pEdtMSName;
+    VclPtr<FixedText>          m_pFtMSShowType;
+    VclPtr<FixedText>          m_pFtMSShowPath;
+    VclPtr<FixedText>          m_pFtMSShowContent;
+    VclPtr<FixedText>          m_pFtMSShowChangeDate;
     ExchangeData*       pData;
 
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE {}
@@ -221,12 +229,13 @@ private:
 public:
 
                         TPGalleryThemeGeneral( vcl::Window* pParent, const SfxItemSet& rSet );
-                        virtual ~TPGalleryThemeGeneral() {}
+    virtual             ~TPGalleryThemeGeneral();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 };
 
 typedef ::std::vector< FilterEntry* > FilterEntryList_impl;
@@ -237,13 +246,13 @@ class TPGalleryThemeProperties : public SfxTabPage
     friend class TakeProgress;
     friend class TakeThread;
 
-    ComboBox*           m_pCbbFileType;
-    ListBox*            m_pLbxFound;
-    PushButton*         m_pBtnSearch;
-    PushButton*         m_pBtnTake;
-    PushButton*         m_pBtnTakeAll;
-    CheckBox*           m_pCbxPreview;
-    GalleryPreview*     m_pWndPreview;
+    VclPtr<ComboBox>           m_pCbbFileType;
+    VclPtr<ListBox>            m_pLbxFound;
+    VclPtr<PushButton>         m_pBtnSearch;
+    VclPtr<PushButton>         m_pBtnTake;
+    VclPtr<PushButton>         m_pBtnTakeAll;
+    VclPtr<CheckBox>           m_pCbxPreview;
+    VclPtr<GalleryPreview>     m_pWndPreview;
 
     ExchangeData*           pData;
     StringList              aFoundList;
@@ -287,13 +296,14 @@ class TPGalleryThemeProperties : public SfxTabPage
 public:
                         TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet );
                         virtual ~TPGalleryThemeProperties();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
 
     void                StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult );
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX

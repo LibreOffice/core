@@ -35,12 +35,12 @@ class SfxItemSet;
 class SD_DLLPUBLIC SdInsertLayerDlg : public ModalDialog
 {
 private:
-    Edit*               m_pEdtName;
-    Edit*               m_pEdtTitle;
-    VclMultiLineEdit*   m_pEdtDesc;
-    CheckBox*           m_pCbxVisible;
-    CheckBox*           m_pCbxPrintable;
-    CheckBox*           m_pCbxLocked;
+    VclPtr<Edit>               m_pEdtName;
+    VclPtr<Edit>               m_pEdtTitle;
+    VclPtr<VclMultiLineEdit>   m_pEdtDesc;
+    VclPtr<CheckBox>           m_pCbxVisible;
+    VclPtr<CheckBox>           m_pCbxPrintable;
+    VclPtr<CheckBox>           m_pCbxLocked;
 
     const SfxItemSet&   mrOutAttrs;
 
@@ -48,6 +48,9 @@ public:
 
     SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         bool bDeletable, const OUString& rStr );
+    virtual ~SdInsertLayerDlg();
+    virtual void dispose() SAL_OVERRIDE;
+
     void                GetAttr( SfxItemSet& rOutAttrs );
 };
 

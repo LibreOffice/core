@@ -23,6 +23,7 @@
 #include <editeng/svxenum.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <vcl/vclptr.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -48,7 +49,7 @@ private:
     friend class SvxHyphenWordDialog;
     friend struct SvxHyphenWordDialog_Impl;
 
-    vcl::Window*     pWin;
+    VclPtr<vcl::Window>     pWin;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
     ::com::sun::star::uno::Reference<

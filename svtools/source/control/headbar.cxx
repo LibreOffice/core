@@ -114,15 +114,20 @@ HeaderBar::HeaderBar( vcl::Window* pParent, WinBits nWinStyle ) :
 
 HeaderBar::~HeaderBar()
 {
-    // Alle Items loeschen
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        delete (*mpItemList)[ i ];
-    }
-    mpItemList->clear();
-    delete mpItemList;
+    disposeOnce();
 }
 
-
+void HeaderBar::dispose()
+{
+    if (mpItemList)
+    {
+        for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
+            delete (*mpItemList)[ i ];
+        delete mpItemList;
+        mpItemList = NULL;
+    }
+    Window::dispose();
+}
 
 void HeaderBar::ImplInitSettings( bool bFont,
                                   bool bForeground, bool bBackground )

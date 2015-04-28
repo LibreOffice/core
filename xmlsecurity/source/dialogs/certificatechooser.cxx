@@ -62,7 +62,7 @@ CertificateChooser::CertificateChooser( vcl::Window* _pParent, uno::Reference< u
     pSignatures->set_width_request(aControlSize.Width());
     pSignatures->set_height_request(aControlSize.Height());
 
-    m_pCertLB = new SvSimpleTable(*pSignatures);
+    m_pCertLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
     static long nTabs[] = { 3, 0, 30*nControlWidth/100, 60*nControlWidth/100 };
     m_pCertLB->SetTabs( &nTabs[0] );
     m_pCertLB->InsertHeaderEntry(get<FixedText>("issuedto")->GetText() + "\t" + get<FixedText>("issuedby")->GetText()
@@ -81,7 +81,15 @@ CertificateChooser::CertificateChooser( vcl::Window* _pParent, uno::Reference< u
 
 CertificateChooser::~CertificateChooser()
 {
-    delete m_pCertLB;
+    disposeOnce();
+}
+
+void CertificateChooser::dispose()
+{
+    m_pCertLB.disposeAndClear();
+    m_pViewBtn.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
 }
 
 short CertificateChooser::Execute()
@@ -217,8 +225,8 @@ void CertificateChooser::ImplShowCertificateDetails()
     uno::Reference< css::security::XCertificate > xCert = GetSelectedCertificate();
     if( xCert.is() )
     {
-        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, true );
-        aViewer.Execute();
+        ScopedVclPtrInstance< CertificateViewer > aViewer( this, mxSecurityEnvironment, xCert, true );
+        aViewer->Execute();
     }
 }
 

@@ -141,7 +141,7 @@ namespace pcr
     }
 
 
-    Dialog* OControlFontDialog::createDialog(vcl::Window* _pParent)
+    VclPtr<Dialog> OControlFontDialog::createDialog(vcl::Window* _pParent)
     {
         ControlCharacterDialog::createItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
 
@@ -152,8 +152,7 @@ namespace pcr
         // sets a new introspectee and re-executes us. In this case, the dialog returned here (upon the first
         // execute) will be re-used upon the second execute, and thus it won't be initialized correctly.
 
-        ControlCharacterDialog* pDialog = new ControlCharacterDialog(_pParent, *m_pFontItems);
-        return pDialog;
+        return VclPtr<ControlCharacterDialog>::Create(_pParent, *m_pFontItems);
     }
 
 
@@ -169,7 +168,7 @@ namespace pcr
         OSL_ENSURE(m_pDialog, "OControlFontDialog::executedDialog: no dialog anymore?!!");
         if (m_pDialog && (RET_OK == _nExecutionResult) && m_xControlModel.is())
         {
-            const SfxItemSet* pOutput = static_cast<ControlCharacterDialog*>(m_pDialog)->GetOutputItemSet();
+            const SfxItemSet* pOutput = static_cast<ControlCharacterDialog*>(m_pDialog.get())->GetOutputItemSet();
             if (pOutput)
                 ControlCharacterDialog::translateItemsToProperties( *pOutput, m_xControlModel );
         }

@@ -204,9 +204,9 @@ sal_uIntPtr Help::ShowTip( vcl::Window* pParent, const Rectangle& rScreenRect,
                      const OUString& rText, sal_uInt16 nStyle )
 {
     sal_uInt16 nHelpWinStyle = ( ( nStyle & QUICKHELP_TIP_STYLE_BALLOON ) != 0 ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
-    HelpTextWindow* pHelpWin = new HelpTextWindow( pParent, rText, nHelpWinStyle, nStyle );
+    VclPtrInstance<HelpTextWindow> pHelpWin( pParent, rText, nHelpWinStyle, nStyle );
 
-    sal_uIntPtr nId = reinterpret_cast< sal_uIntPtr >( pHelpWin );
+    sal_uIntPtr nId = reinterpret_cast< sal_uIntPtr >( pHelpWin.get() );
     UpdateTip( nId, pParent, rScreenRect, rText );
 
     pHelpWin->ShowHelp( HELPDELAY_NONE );
@@ -229,12 +229,12 @@ void Help::UpdateTip( sal_uIntPtr nId, vcl::Window* pParent, const Rectangle& rS
 
 void Help::HideTip( sal_uLong nId )
 {
-    HelpTextWindow* pHelpWin = reinterpret_cast<HelpTextWindow*>(nId);
+    VclPtr<HelpTextWindow> pHelpWin = reinterpret_cast<HelpTextWindow*>(nId);
     vcl::Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
     pHelpWin->Hide();
     // trigger update, so that a Paint is instantly triggered since we do not save the background
     pFrameWindow->ImplUpdateAll();
-    delete pHelpWin;
+    pHelpWin.disposeAndClear();
     ImplGetSVData()->maHelpData.mnLastHelpHideTime = tools::Time::GetSystemTicks();
 }
 
@@ -290,11 +290,17 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
 
 HelpTextWindow::~HelpTextWindow()
 {
+    disposeOnce();
+}
+
+void HelpTextWindow::dispose()
+{
     maShowTimer.Stop();
     maHideTimer.Stop();
 
     if( this == ImplGetSVData()->maHelpData.mpHelpWin )
         ImplGetSVData()->maHelpData.mpHelpWin = NULL;
+    FloatingWindow::dispose();
 }
 
 void HelpTextWindow::SetHelpText( const OUString& rHelpText )
@@ -524,7 +530,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, sal_uIn
             nDelayMode = HELPDELAY_NONE;
 
         DBG_ASSERT( !pHelpWin, "Noch ein HelpWin ?!" );
-        pHelpWin = new HelpTextWindow( pParent, rHelpText, nHelpWinStyle, nStyle );
+        pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
         pSVData->maHelpData.mpHelpWin = pHelpWin;
         pHelpWin->SetStatusText( rStatusText );
         if ( pHelpArea )
@@ -544,7 +550,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, sal_uIn
 void ImplDestroyHelpWindow( bool bUpdateHideTime )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
+    VclPtr<HelpTextWindow> pHelpWin = pSVData->maHelpData.mpHelpWin;
     if ( pHelpWin )
     {
         vcl::Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
@@ -555,7 +561,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
         pSVData->maHelpData.mpHelpWin = NULL;
         pSVData->maHelpData.mbKeyboardHelp = false;
         pHelpWin->Hide();
-        delete pHelpWin;
+        pHelpWin.disposeAndClear();
         if( bUpdateHideTime )
             pSVData->maHelpData.mnLastHelpHideTime = tools::Time::GetSystemTicks();
     }

@@ -124,8 +124,21 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
 
 SvxPostItDialog::~SvxPostItDialog()
 {
+    disposeOnce();
+}
+
+void SvxPostItDialog::dispose()
+{
     delete pOutSet;
     pOutSet = 0;
+    m_pLastEditFT.clear();
+    m_pEditED.clear();
+    m_pInsertAuthor.clear();
+    m_pAuthorBtn.clear();
+    m_pOKBtn.clear();
+    m_pPrevBtn.clear();
+    m_pNextBtn.clear();
+    SfxModalDialog::dispose();
 }
 
 

@@ -604,11 +604,11 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         {
                             if ( !sPrinterName.isEmpty() )
                             {
-                                SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                                VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
                                 if (pNewPrinter->IsKnown())
                                     pDocSh->SetPrinter ( pNewPrinter );
                                 else
-                                    delete pNewPrinter;
+                                    pNewPrinter.disposeAndClear();
                             }
                         }
                         else
@@ -639,7 +639,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     SfxItemSet *pItemSet = new SfxItemSet( pDocSh->GetPool(), nRange );
                     SmModule *pp = SM_MOD();
                     pp->GetConfig()->ConfigToItemSet(*pItemSet);
-                    SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
                     pDocSh->SetPrinter( pPrinter );
                 }
@@ -1020,8 +1020,8 @@ void SAL_CALL SmModel::render(
     if (xRenderDevice.is())
     {
         VCLXDevice*   pDevice = VCLXDevice::GetImplementation( xRenderDevice );
-        OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
-
+        VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice()
+                                             : VclPtr< OutputDevice >();
         if (!pOut)
             throw RuntimeException();
 

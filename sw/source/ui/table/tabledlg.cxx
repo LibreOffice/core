@@ -105,6 +105,32 @@ SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSe
     Init();
 }
 
+SwFormatTablePage::~SwFormatTablePage()
+{
+    disposeOnce();
+}
+
+void SwFormatTablePage::dispose()
+{
+    m_pNameED.clear();
+    m_pWidthFT.clear();
+    m_pRelWidthCB.clear();
+    m_pFullBtn.clear();
+    m_pLeftBtn.clear();
+    m_pFromLeftBtn.clear();
+    m_pRightBtn.clear();
+    m_pCenterBtn.clear();
+    m_pFreeBtn.clear();
+    m_pLeftFT.clear();
+    m_pRightFT.clear();
+    m_pTopFT.clear();
+    m_pTopMF.clear();
+    m_pBottomFT.clear();
+    m_pBottomMF.clear();
+    m_pTextDirectionLB.clear();
+    SfxTabPage::dispose();
+}
+
 void  SwFormatTablePage::Init()
 {
     m_aLeftMF.SetMetricFieldMin(-999999);
@@ -370,10 +396,10 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
     bModified = true;
 }
 
-SfxTabPage*  SwFormatTablePage::Create( vcl::Window* pParent,
-                                   const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwFormatTablePage::Create( vcl::Window* pParent,
+                                              const SfxItemSet* rAttrSet)
 {
-    return new SwFormatTablePage( pParent, *rAttrSet );
+    return VclPtr<SwFormatTablePage>::Create( pParent, *rAttrSet );
 }
 
 bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
@@ -749,15 +775,28 @@ SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSe
         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON));
 }
 
-//Description: Page column configuration
- SwTableColumnPage::~SwTableColumnPage()
+SwTableColumnPage::~SwTableColumnPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage*   SwTableColumnPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void SwTableColumnPage::dispose()
 {
-    return new SwTableColumnPage( pParent, *rAttrSet );
+    m_pModifyTableCB.clear();
+    m_pProportionalCB.clear();
+    m_pSpaceFT.clear();
+    m_pSpaceED.clear();
+    m_pUpBtn.clear();
+    m_pDownBtn.clear();
+    for (auto p : m_pTextArr)
+        p.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwTableColumnPage::Create( vcl::Window* pParent,
+                                              const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SwTableColumnPage>::Create( pParent, *rAttrSet );
 }
 
 void  SwTableColumnPage::Reset( const SfxItemSet* )
@@ -832,7 +871,7 @@ void  SwTableColumnPage::Init(bool bWeb)
 IMPL_LINK( SwTableColumnPage, AutoClickHdl, void *, pControl )
 {
     //move display window
-    if(pControl == m_pDownBtn)
+    if(pControl == m_pDownBtn.get())
     {
         if(aValueTbl[0] > 0)
         {
@@ -840,7 +879,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, void *, pControl )
                 aValueTbl[i] -= 1;
         }
     }
-    if (pControl == m_pUpBtn)
+    if (pControl == m_pUpBtn.get())
     {
         if( aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
         {
@@ -1307,14 +1346,37 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
     HeadLineCBClickHdl();
 }
 
- SwTextFlowPage::~SwTextFlowPage()
+SwTextFlowPage::~SwTextFlowPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage*   SwTextFlowPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void SwTextFlowPage::dispose()
 {
-    return new SwTextFlowPage(pParent, *rAttrSet);
+    m_pPgBrkCB.clear();
+    m_pPgBrkRB.clear();
+    m_pColBrkRB.clear();
+    m_pPgBrkBeforeRB.clear();
+    m_pPgBrkAfterRB.clear();
+    m_pPageCollCB.clear();
+    m_pPageCollLB.clear();
+    m_pPageNoFT.clear();
+    m_pPageNoNF.clear();
+    m_pSplitCB.clear();
+    m_pSplitRowCB.clear();
+    m_pKeepCB.clear();
+    m_pHeadLineCB.clear();
+    m_pRepeatHeaderNF.clear();
+    m_pRepeatHeaderCombo.clear();
+    m_pTextDirectionLB.clear();
+    m_pVertOrientLB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwTextFlowPage::Create( vcl::Window* pParent,
+                                           const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SfxTabPage>(new SwTextFlowPage(pParent, *rAttrSet), SAL_NO_ACQUIRE);
 }
 
 bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )

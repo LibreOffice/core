@@ -27,25 +27,27 @@
 class MacroEventListBox : public Control
 {
 private:
-    HeaderBar                   maHeaderBar;
-    SvHeaderTabListBox          maListBox;
+    VclPtr<HeaderBar>               maHeaderBar;
+    VclPtr<SvHeaderTabListBox>      maListBox;
 protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
     virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
     MacroEventListBox( vcl::Window* pParent, WinBits nStyle );
+    virtual ~MacroEventListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     SvHeaderTabListBox& GetListBox()
     {
-        return maListBox;
+        return *maListBox.get();
     }
 
     HeaderBar& GetHeaderBar()
     {
-        return maHeaderBar;
+        return *maHeaderBar.get();
     }
 
     void                        ConnectElements();/**< should be called after all manipulations on elements are done

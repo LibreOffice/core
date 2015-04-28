@@ -78,6 +78,11 @@ Size SvxXMeasurePreview::GetOptimalSize() const
 
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {
+    disposeOnce();
+}
+
+void SvxXMeasurePreview::dispose()
+{
     // No one is deleting the MeasureObj? This is not only an error but also
     // a memory leak (!). Main problem is that this object is still listening to
     // a StyleSheet of the model which was set. Thus, if You want to keep the obnject,
@@ -86,6 +91,7 @@ SvxXMeasurePreview::~SvxXMeasurePreview()
     delete pMeasureObj;
 
     delete pModel;
+    Control::dispose();
 }
 
 void SvxXMeasurePreview::Paint( const Rectangle&  )

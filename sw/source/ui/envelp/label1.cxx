@@ -170,7 +170,14 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
 SwLabDlg::~SwLabDlg()
 {
+    disposeOnce();
+}
+
+void SwLabDlg::dispose()
+{
     delete pRecs;
+    pPrtPage.clear();
+    SfxTabDialog::dispose();
 }
 
 void SwLabDlg::GetLabItem(SwLabItem &rItem)
@@ -284,6 +291,29 @@ SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     m_pMakeBox->SelectEntryPos( nLstGroup );
     m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
+}
+
+SwLabPage::~SwLabPage()
+{
+    disposeOnce();
+}
+
+void SwLabPage::dispose()
+{
+    m_pAddressFrame.clear();
+    m_pAddrBox.clear();
+    m_pWritingEdit.clear();
+    m_pDatabaseLB.clear();
+    m_pTableLB.clear();
+    m_pInsertBT.clear();
+    m_pDBFieldLB.clear();
+    m_pContButton.clear();
+    m_pSheetButton.clear();
+    m_pMakeBox.clear();
+    m_pTypeBox.clear();
+    m_pHiddenSortTypeBox.clear();
+    m_pFormatInfo.clear();
+    SfxTabPage::dispose();
 }
 
 void SwLabPage::SetToBusinessCard()
@@ -406,24 +436,24 @@ IMPL_LINK_NOARG_INLINE_END(SwLabPage, TypeHdl)
 
 void SwLabPage::DisplayFormat()
 {
-    MetricField aField(this, WinBits(0));
+    ScopedVclPtrInstance< MetricField > aField(this, WinBits(0));
     FieldUnit aMetric = ::GetDfltMetric(false);
-    SetMetric(aField, aMetric);
-    aField.SetDecimalDigits(2);
-    aField.SetMin         (0);
-    aField.SetMax         (LONG_MAX);
+    SetMetric(*aField.get(), aMetric);
+    aField->SetDecimalDigits(2);
+    aField->SetMin         (0);
+    aField->SetMax         (LONG_MAX);
 
     SwLabRec* pRec = GetSelectedEntryPos();
     aItem.aLstType = pRec->aType;
-    SETFLDVAL(aField, pRec->lWidth);
-    aField.Reformat();
-    const OUString aWString = aField.GetText();
+    SETFLDVAL(*aField.get(), pRec->lWidth);
+    aField->Reformat();
+    const OUString aWString = aField->GetText();
 
-    SETFLDVAL(aField, pRec->lHeight);
-    aField.Reformat();
+    SETFLDVAL(*aField.get(), pRec->lHeight);
+    aField->Reformat();
 
     OUString aText = pRec->aType + ": " + aWString +
-           " x " + aField.GetText() +
+           " x " + aField->GetText() +
            " (" + OUString::number( pRec->nCols ) +
            " x " + OUString::number( pRec->nRows ) + ")";
     m_pFormatInfo->SetText(aText);
@@ -458,9 +488,9 @@ void SwLabPage::InitDatabaseBox()
     }
 }
 
-SfxTabPage* SwLabPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwLabPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwLabPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwLabPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
@@ -586,17 +616,26 @@ SwVisitingCardPage::SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& r
 
 SwVisitingCardPage::~SwVisitingCardPage()
 {
+    disposeOnce();
+}
+
+void SwVisitingCardPage::dispose()
+{
     for(sal_Int32 i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); ++i)
         delete static_cast<OUString*>(m_pAutoTextGroupLB->GetEntryData( i ));
     m_xAutoText = 0;
 
     ClearUserData();
     delete pExampleFrame;
+    m_pAutoTextLB.clear();
+    m_pAutoTextGroupLB.clear();
+    m_pExampleWIN.clear();
+    SfxTabPage::dispose();
 }
 
-SfxTabPage* SwVisitingCardPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwVisitingCardPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwVisitingCardPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwVisitingCardPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwVisitingCardPage::ActivatePage(const SfxItemSet& rSet)
@@ -727,9 +766,37 @@ SwPrivateDataPage::SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSe
     SetExchangeSupport();
 }
 
-SfxTabPage* SwPrivateDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+SwPrivateDataPage::~SwPrivateDataPage()
 {
-    return new SwPrivateDataPage(pParent, *rSet);
+    disposeOnce();
+}
+
+void SwPrivateDataPage::dispose()
+{
+    m_pFirstNameED.clear();
+    m_pNameED.clear();
+    m_pShortCutED.clear();
+    m_pFirstName2ED.clear();
+    m_pName2ED.clear();
+    m_pShortCut2ED.clear();
+    m_pStreetED.clear();
+    m_pZipED.clear();
+    m_pCityED.clear();
+    m_pCountryED.clear();
+    m_pStateED.clear();
+    m_pTitleED.clear();
+    m_pProfessionED.clear();
+    m_pPhoneED.clear();
+    m_pMobilePhoneED.clear();
+    m_pFaxED.clear();
+    m_pHomePageED.clear();
+    m_pMailED.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwPrivateDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+{
+    return VclPtr<SfxTabPage>(new SwPrivateDataPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
@@ -815,9 +882,34 @@ SwBusinessDataPage::SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& r
     SetExchangeSupport();
 }
 
-SfxTabPage* SwBusinessDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+SwBusinessDataPage::~SwBusinessDataPage()
 {
-    return new SwBusinessDataPage(pParent, *rSet);
+    disposeOnce();
+}
+
+void SwBusinessDataPage::dispose()
+{
+    m_pCompanyED.clear();
+    m_pCompanyExtED.clear();
+    m_pSloganED.clear();
+    m_pStreetED.clear();
+    m_pZipED.clear();
+    m_pCityED.clear();
+    m_pCountryED.clear();
+    m_pStateED.clear();
+    m_pPositionED.clear();
+    m_pPhoneED.clear();
+    m_pMobilePhoneED.clear();
+    m_pFaxED.clear();
+    m_pHomePageED.clear();
+    m_pMailED.clear();
+    SfxTabPage::dispose();
+}
+
+
+VclPtr<SfxTabPage> SwBusinessDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+{
+    return VclPtr<SfxTabPage>(new SwBusinessDataPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)

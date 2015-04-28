@@ -158,7 +158,7 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     get(m_pLbAdjustment, "alignment");
     get(m_pBtnCreateGroup, "create");
 
-    m_pCtlDisplay = new SdDisplay(get<Window>("box"));
+    m_pCtlDisplay = VclPtr<SdDisplay>::Create(get<Window>("box"));
     m_pCtlDisplay->set_hexpand(true);
     m_pCtlDisplay->set_vexpand(true);
     m_pCtlDisplay->Show();
@@ -206,6 +206,11 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
 
 AnimationWindow::~AnimationWindow()
 {
+    disposeOnce();
+}
+
+void AnimationWindow::dispose()
+{
     delete pControllerItem;
 
     for (size_t i = 0; i < m_FrameList.size(); ++i)
@@ -219,7 +224,27 @@ AnimationWindow::~AnimationWindow()
     // delete the clones
     delete pMyDoc;
 
-    delete m_pCtlDisplay;
+    m_pCtlDisplay.disposeAndClear();
+    m_pBtnFirst.clear();
+    m_pBtnReverse.clear();
+    m_pBtnStop.clear();
+    m_pBtnPlay.clear();
+    m_pBtnLast.clear();
+    m_pNumFldBitmap.clear();
+    m_pTimeField.clear();
+    m_pLbLoopCount.clear();
+    m_pBtnGetOneObject.clear();
+    m_pBtnGetAllObjects.clear();
+    m_pBtnRemoveBitmap.clear();
+    m_pBtnRemoveAll.clear();
+    m_pFiCount.clear();
+    m_pRbtGroup.clear();
+    m_pRbtBitmap.clear();
+    m_pFtAdjustment.clear();
+    m_pLbAdjustment.clear();
+    m_pBtnCreateGroup.clear();
+    pWin.clear();
+    SfxDockingWindow::dispose();
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
@@ -430,8 +455,8 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     }
     else // delete everything
     {
-        WarningBox aWarnBox( this, WB_YES_NO, SD_RESSTR( STR_ASK_DELETE_ALL_PICTURES ) );
-        short nReturn = aWarnBox.Execute();
+        ScopedVclPtrInstance< WarningBox > aWarnBox( this, WB_YES_NO, SD_RESSTR( STR_ASK_DELETE_ALL_PICTURES ) );
+        short nReturn = aWarnBox->Execute();
 
         if( nReturn == RET_YES )
         {
@@ -523,23 +548,23 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             static_cast<SdrObject*>(pPage->GetObj(m_nCurrentFrame));
         if( pObject )
         {
-            VirtualDevice   aVD;
+            ScopedVclPtrInstance< VirtualDevice > pVD;
             Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
             Size            aObjSize( aObjRect.GetSize() );
             Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
-            MapMode         aMap( aVD.GetMapMode() );
+            MapMode         aMap( pVD->GetMapMode() );
             aMap.SetMapUnit( MAP_100TH_MM );
             aMap.SetOrigin( aOrigin );
-            aVD.SetMapMode( aMap );
-            aVD.SetOutputSize( aObjSize );
+            pVD->SetMapMode( aMap );
+            pVD->SetOutputSize( aObjSize );
             const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-            aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
-            aVD.SetDrawMode( rStyles.GetHighContrastMode()
+            pVD->SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
+            pVD->SetDrawMode( rStyles.GetHighContrastMode()
                 ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                 : ViewShell::OUTPUT_DRAWMODE_COLOR );
-            aVD.Erase();
-            pObject->SingleObjectPainter( aVD );
-            aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
+            pVD->Erase();
+            pObject->SingleObjectPainter( *pVD.get() );
+            aBmp = BitmapEx( pVD->GetBitmap( aObjRect.TopLeft(), aObjSize ) );
         }
 
         m_pCtlDisplay->SetBitmapEx(&aBmp);

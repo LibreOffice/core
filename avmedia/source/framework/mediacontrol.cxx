@@ -65,13 +65,13 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     Control( pParent ),
     maImageList( SvtMiscOptions().AreCurrentSymbolsLarge() ? AVMEDIA_RESID( AVMEDIA_IMGLST_L ) : AVMEDIA_RESID( AVMEDIA_IMGLST ) ),
     maItem( 0, AVMediaSetMask::ALL ),
-    maPlayToolBox( this, WB_3DLOOK ),
-    maTimeSlider( this, WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET ),
-    maMuteToolBox( this, WB_3DLOOK ),
-    maVolumeSlider( this, WB_HORZ | WB_DRAG | WB_SLIDERSET ),
-    maZoomToolBox( this, WB_3DLOOK ),
-    mpZoomListBox( new ListBox( &maZoomToolBox, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_3DLOOK ) ),
-    maTimeEdit( this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK | WB_READONLY ),
+    maPlayToolBox( VclPtr<ToolBox>::Create(this, WB_3DLOOK) ),
+    maTimeSlider( VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET) ),
+    maMuteToolBox( VclPtr<ToolBox>::Create(this, WB_3DLOOK) ),
+    maVolumeSlider( VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_SLIDERSET) ),
+    maZoomToolBox( VclPtr<ToolBox>::Create(this, WB_3DLOOK) ),
+    mpZoomListBox( VclPtr<ListBox>::Create( maZoomToolBox.get(), WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_3DLOOK ) ),
+    maTimeEdit( VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK | WB_READONLY) ),
     meControlStyle( eControlStyle ),
     mbLocked( false )
 {
@@ -83,88 +83,88 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
     if( MEDIACONTROLSTYLE_SINGLELINE != meControlStyle )
     {
-        maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, implGetImage( AVMEDIA_IMG_OPEN ), OUString( AVMEDIA_RESID( AVMEDIA_STR_OPEN ) ) );
-        maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_OPEN, HID_AVMEDIA_TOOLBOXITEM_OPEN );
+        maPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, implGetImage( AVMEDIA_IMG_OPEN ), OUString( AVMEDIA_RESID( AVMEDIA_STR_OPEN ) ) );
+        maPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_OPEN, HID_AVMEDIA_TOOLBOXITEM_OPEN );
 
-        maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_INSERT, implGetImage( AVMEDIA_IMG_INSERT ), OUString( AVMEDIA_RESID( AVMEDIA_STR_INSERT ) ) );
-        maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_INSERT, HID_AVMEDIA_TOOLBOXITEM_INSERT );
+        maPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_INSERT, implGetImage( AVMEDIA_IMG_INSERT ), OUString( AVMEDIA_RESID( AVMEDIA_STR_INSERT ) ) );
+        maPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_INSERT, HID_AVMEDIA_TOOLBOXITEM_INSERT );
 
-        maPlayToolBox.InsertSeparator();
+        maPlayToolBox->InsertSeparator();
     }
     else
     {
         mpZoomListBox->SetBackground();
 
-        maZoomToolBox.SetBackground();
-        maZoomToolBox.SetPaintTransparent( true );
-        maPlayToolBox.SetBackground();
-        maPlayToolBox.SetPaintTransparent( true );
-        maMuteToolBox.SetBackground();
-        maMuteToolBox.SetPaintTransparent( true );
+        maZoomToolBox->SetBackground();
+        maZoomToolBox->SetPaintTransparent( true );
+        maPlayToolBox->SetBackground();
+        maPlayToolBox->SetPaintTransparent( true );
+        maMuteToolBox->SetBackground();
+        maMuteToolBox->SetPaintTransparent( true );
 
     }
 
-    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, implGetImage( AVMEDIA_IMG_PLAY ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PLAY ) ), ToolBoxItemBits::CHECKABLE );
-       maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_PLAY, HID_AVMEDIA_TOOLBOXITEM_PLAY );
+    maPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, implGetImage( AVMEDIA_IMG_PLAY ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PLAY ) ), ToolBoxItemBits::CHECKABLE );
+       maPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_PLAY, HID_AVMEDIA_TOOLBOXITEM_PLAY );
 
-    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, implGetImage( AVMEDIA_IMG_PAUSE ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PAUSE ) ), ToolBoxItemBits::CHECKABLE );
-       maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_PAUSE, HID_AVMEDIA_TOOLBOXITEM_PAUSE );
+    maPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, implGetImage( AVMEDIA_IMG_PAUSE ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PAUSE ) ), ToolBoxItemBits::CHECKABLE );
+       maPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_PAUSE, HID_AVMEDIA_TOOLBOXITEM_PAUSE );
 
-    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_STOP, implGetImage( AVMEDIA_IMG_STOP ), OUString( AVMEDIA_RESID( AVMEDIA_STR_STOP ) ), ToolBoxItemBits::CHECKABLE );
-       maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_STOP, HID_AVMEDIA_TOOLBOXITEM_STOP );
+    maPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_STOP, implGetImage( AVMEDIA_IMG_STOP ), OUString( AVMEDIA_RESID( AVMEDIA_STR_STOP ) ), ToolBoxItemBits::CHECKABLE );
+       maPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_STOP, HID_AVMEDIA_TOOLBOXITEM_STOP );
 
-    maPlayToolBox.InsertSeparator();
+    maPlayToolBox->InsertSeparator();
 
-    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_LOOP, implGetImage( AVMEDIA_IMG_ENDLESS ), OUString( AVMEDIA_RESID( AVMEDIA_STR_ENDLESS ) ) );
-       maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_LOOP, HID_AVMEDIA_TOOLBOXITEM_LOOP );
-
-    if( MEDIACONTROLSTYLE_SINGLELINE == meControlStyle )
-        maPlayToolBox.InsertSeparator();
-
-    maPlayToolBox.SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
-    maPlayToolBox.SetSizePixel( maPlayToolBox.CalcWindowSizePixel() );
-    maPlayToolBox.Show();
-    maMinSize = maPlayToolBox.GetSizePixel();
-
-    maTimeSlider.SetSlideHdl( LINK( this, MediaControl, implTimeHdl ) );
-    maTimeSlider.SetEndSlideHdl( LINK( this, MediaControl, implTimeEndHdl ) );
-    maTimeSlider.SetRange( Range( 0, AVMEDIA_TIME_RANGE ) );
-    maTimeSlider.SetHelpId( HID_AVMEDIA_TIMESLIDER );
-    maTimeSlider.SetUpdateMode( true );
-    maTimeSlider.SetSizePixel( Size( 128, maPlayToolBox.GetSizePixel().Height() ) );
-    maTimeSlider.Show();
-    maMinSize.Width() += maTimeSlider.GetSizePixel().Width();
-
-    maTimeEdit.SetText( aTimeText );
-    maTimeEdit.SetUpdateMode( true );
-    maTimeEdit.SetSizePixel( Size( maTimeEdit.GetTextWidth( aTimeText ) + 8, maPlayToolBox.GetSizePixel().Height() ) );
-    maTimeEdit.SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
-    maTimeEdit.SetHelpId( HID_AVMEDIA_TIMEEDIT );
-    maTimeEdit.Disable();
-    maTimeEdit.Show();
-    maMinSize.Width() += maTimeEdit.GetSizePixel().Width();
+    maPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_LOOP, implGetImage( AVMEDIA_IMG_ENDLESS ), OUString( AVMEDIA_RESID( AVMEDIA_STR_ENDLESS ) ) );
+       maPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_LOOP, HID_AVMEDIA_TOOLBOXITEM_LOOP );
 
     if( MEDIACONTROLSTYLE_SINGLELINE == meControlStyle )
-        maMuteToolBox.InsertSeparator();
+        maPlayToolBox->InsertSeparator();
 
-    maMuteToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_MUTE, implGetImage( AVMEDIA_IMG_MUTE ), OUString( AVMEDIA_RESID( AVMEDIA_STR_MUTE ) ) );
-       maMuteToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_MUTE, HID_AVMEDIA_TOOLBOXITEM_MUTE );
+    maPlayToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
+    maPlayToolBox->SetSizePixel( maPlayToolBox->CalcWindowSizePixel() );
+    maPlayToolBox->Show();
+    maMinSize = maPlayToolBox->GetSizePixel();
 
-    maMuteToolBox.SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
-    maMuteToolBox.SetSizePixel( maMuteToolBox.CalcWindowSizePixel() );
-    maMuteToolBox.Show();
-    maMinSize.Width() += maMuteToolBox.GetSizePixel().Width();
+    maTimeSlider->SetSlideHdl( LINK( this, MediaControl, implTimeHdl ) );
+    maTimeSlider->SetEndSlideHdl( LINK( this, MediaControl, implTimeEndHdl ) );
+    maTimeSlider->SetRange( Range( 0, AVMEDIA_TIME_RANGE ) );
+    maTimeSlider->SetHelpId( HID_AVMEDIA_TIMESLIDER );
+    maTimeSlider->SetUpdateMode( true );
+    maTimeSlider->SetSizePixel( Size( 128, maPlayToolBox->GetSizePixel().Height() ) );
+    maTimeSlider->Show();
+    maMinSize.Width() += maTimeSlider->GetSizePixel().Width();
 
-    maVolumeSlider.SetSlideHdl( LINK( this, MediaControl, implVolumeHdl ) );
-    maVolumeSlider.SetEndSlideHdl( LINK( this, MediaControl, implVolumeEndHdl ) );
-    maVolumeSlider.SetRange( Range( AVMEDIA_DB_RANGE, 0 ) );
-    maVolumeSlider.SetUpdateMode( true );
-    maVolumeSlider.SetHelpId( HID_AVMEDIA_VOLUMESLIDER );
-    maVolumeSlider.SetSizePixel( Size( 48, maPlayToolBox.GetSizePixel().Height() ) );
-    maVolumeSlider.Show();
-    maMinSize.Width() += maVolumeSlider.GetSizePixel().Width();
+    maTimeEdit->SetText( aTimeText );
+    maTimeEdit->SetUpdateMode( true );
+    maTimeEdit->SetSizePixel( Size( maTimeEdit->GetTextWidth( aTimeText ) + 8, maPlayToolBox->GetSizePixel().Height() ) );
+    maTimeEdit->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
+    maTimeEdit->SetHelpId( HID_AVMEDIA_TIMEEDIT );
+    maTimeEdit->Disable();
+    maTimeEdit->Show();
+    maMinSize.Width() += maTimeEdit->GetSizePixel().Width();
 
-    mpZoomListBox->SetSizePixel( Size( maTimeEdit.GetSizePixel().Width(), 260 ) );
+    if( MEDIACONTROLSTYLE_SINGLELINE == meControlStyle )
+        maMuteToolBox->InsertSeparator();
+
+    maMuteToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_MUTE, implGetImage( AVMEDIA_IMG_MUTE ), OUString( AVMEDIA_RESID( AVMEDIA_STR_MUTE ) ) );
+       maMuteToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_MUTE, HID_AVMEDIA_TOOLBOXITEM_MUTE );
+
+    maMuteToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
+    maMuteToolBox->SetSizePixel( maMuteToolBox->CalcWindowSizePixel() );
+    maMuteToolBox->Show();
+    maMinSize.Width() += maMuteToolBox->GetSizePixel().Width();
+
+    maVolumeSlider->SetSlideHdl( LINK( this, MediaControl, implVolumeHdl ) );
+    maVolumeSlider->SetEndSlideHdl( LINK( this, MediaControl, implVolumeEndHdl ) );
+    maVolumeSlider->SetRange( Range( AVMEDIA_DB_RANGE, 0 ) );
+    maVolumeSlider->SetUpdateMode( true );
+    maVolumeSlider->SetHelpId( HID_AVMEDIA_VOLUMESLIDER );
+    maVolumeSlider->SetSizePixel( Size( 48, maPlayToolBox->GetSizePixel().Height() ) );
+    maVolumeSlider->Show();
+    maMinSize.Width() += maVolumeSlider->GetSizePixel().Width();
+
+    mpZoomListBox->SetSizePixel( Size( maTimeEdit->GetSizePixel().Width(), 260 ) );
     mpZoomListBox->InsertEntry( OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM_50 ) ), AVMEDIA_ZOOMLEVEL_50 );
     mpZoomListBox->InsertEntry( OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM_100 ) ), AVMEDIA_ZOOMLEVEL_100 );
     mpZoomListBox->InsertEntry( OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM_200 ) ), AVMEDIA_ZOOMLEVEL_200 );
@@ -172,14 +172,14 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpZoomListBox->SetSelectHdl( LINK( this, MediaControl, implZoomSelectHdl ) );
     mpZoomListBox->SetHelpId( HID_AVMEDIA_ZOOMLISTBOX );
 
-    maZoomToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_ZOOM, OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM ) ) );
-    maZoomToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_ZOOM, HID_AVMEDIA_ZOOMLISTBOX );
+    maZoomToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_ZOOM, OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM ) ) );
+    maZoomToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_ZOOM, HID_AVMEDIA_ZOOMLISTBOX );
 
-    maZoomToolBox.SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, mpZoomListBox );
-    maZoomToolBox.SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
-    maZoomToolBox.SetSizePixel( maZoomToolBox.CalcWindowSizePixel() );
-    maZoomToolBox.Show();
-    maMinSize.Width() += maZoomToolBox.GetSizePixel().Width();
+    maZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, mpZoomListBox );
+    maZoomToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
+    maZoomToolBox->SetSizePixel( maZoomToolBox->CalcWindowSizePixel() );
+    maZoomToolBox->Show();
+    maMinSize.Width() += maZoomToolBox->GetSizePixel().Width();
 
     if( MEDIACONTROLSTYLE_MULTILINE == meControlStyle )
     {
@@ -196,8 +196,20 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
 MediaControl::~MediaControl()
 {
-    maZoomToolBox.SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, NULL );
-    delete mpZoomListBox;
+    disposeOnce();
+}
+
+void MediaControl::dispose()
+{
+    maZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, NULL );
+    mpZoomListBox.disposeAndClear();
+    maTimeEdit.disposeAndClear();
+    maZoomToolBox.disposeAndClear();
+    maVolumeSlider.disposeAndClear();
+    maMuteToolBox.disposeAndClear();
+    maTimeSlider.disposeAndClear();
+    maPlayToolBox.disposeAndClear();
+    Control::dispose();
 }
 
 
@@ -212,56 +224,56 @@ const Size& MediaControl::getMinSizePixel() const
 void MediaControl::Resize()
 {
     Point           aPos( 0, 0 );
-    const sal_Int32 nPlayToolBoxWidth = maPlayToolBox.GetSizePixel().Width();
-    const sal_Int32 nMuteToolBoxWidth = maMuteToolBox.GetSizePixel().Width();
-    const sal_Int32 nVolumeSliderWidth = maVolumeSlider.GetSizePixel().Width();
-    const sal_Int32 nZoomToolBoxWidth = maZoomToolBox.GetSizePixel().Width();
-    const sal_Int32 nTimeEditWidth = maTimeEdit.GetSizePixel().Width();
-    const sal_Int32 nTimeSliderHeight = maTimeSlider.GetSizePixel().Height();
+    const sal_Int32 nPlayToolBoxWidth = maPlayToolBox->GetSizePixel().Width();
+    const sal_Int32 nMuteToolBoxWidth = maMuteToolBox->GetSizePixel().Width();
+    const sal_Int32 nVolumeSliderWidth = maVolumeSlider->GetSizePixel().Width();
+    const sal_Int32 nZoomToolBoxWidth = maZoomToolBox->GetSizePixel().Width();
+    const sal_Int32 nTimeEditWidth = maTimeEdit->GetSizePixel().Width();
+    const sal_Int32 nTimeSliderHeight = maTimeSlider->GetSizePixel().Height();
 
     if( MEDIACONTROLSTYLE_SINGLELINE == meControlStyle )
     {
         const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - ( AVMEDIA_CONTROLOFFSET * 3 ) -
                                            nPlayToolBoxWidth - nMuteToolBoxWidth - nVolumeSliderWidth - nTimeEditWidth - nZoomToolBoxWidth;
 
-        maPlayToolBox.SetPosSizePixel( aPos, maPlayToolBox.GetSizePixel() );
+        maPlayToolBox->SetPosSizePixel( aPos, maPlayToolBox->GetSizePixel() );
 
         aPos.X() += nPlayToolBoxWidth;
-        maTimeSlider.SetPosSizePixel( aPos, Size( nTimeSliderWidth, nTimeSliderHeight ) );
+        maTimeSlider->SetPosSizePixel( aPos, Size( nTimeSliderWidth, nTimeSliderHeight ) );
 
         aPos.X() += nTimeSliderWidth + AVMEDIA_CONTROLOFFSET;
-        maTimeEdit.SetPosSizePixel( aPos, maTimeEdit.GetSizePixel() );
+        maTimeEdit->SetPosSizePixel( aPos, maTimeEdit->GetSizePixel() );
 
         aPos.X() += nTimeEditWidth + AVMEDIA_CONTROLOFFSET;
-        maMuteToolBox.SetPosSizePixel( aPos, maMuteToolBox.GetSizePixel() );
+        maMuteToolBox->SetPosSizePixel( aPos, maMuteToolBox->GetSizePixel() );
 
         aPos.X() += nMuteToolBoxWidth;
-        maVolumeSlider.SetPosSizePixel( aPos, maVolumeSlider.GetSizePixel() );
+        maVolumeSlider->SetPosSizePixel( aPos, maVolumeSlider->GetSizePixel() );
 
         aPos.X() += nVolumeSliderWidth + AVMEDIA_CONTROLOFFSET;
-        maZoomToolBox.SetPosSizePixel( aPos, maZoomToolBox.GetSizePixel() );
+        maZoomToolBox->SetPosSizePixel( aPos, maZoomToolBox->GetSizePixel() );
     }
     else
     {
         const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - AVMEDIA_CONTROLOFFSET - nTimeEditWidth;
 
-        maTimeSlider.SetPosSizePixel( aPos, Size( nTimeSliderWidth, nTimeSliderHeight ) );
+        maTimeSlider->SetPosSizePixel( aPos, Size( nTimeSliderWidth, nTimeSliderHeight ) );
 
         aPos.X() += nTimeSliderWidth + AVMEDIA_CONTROLOFFSET;
-        maTimeEdit.SetPosSizePixel( aPos, maTimeEdit.GetSizePixel() );
+        maTimeEdit->SetPosSizePixel( aPos, maTimeEdit->GetSizePixel() );
 
         aPos.X() = 0;
         aPos.Y() += nTimeSliderHeight + AVMEDIA_CONTROLOFFSET;
-        maPlayToolBox.SetPosSizePixel( aPos, maPlayToolBox.GetSizePixel() );
+        maPlayToolBox->SetPosSizePixel( aPos, maPlayToolBox->GetSizePixel() );
 
         aPos.X() = GetSizePixel().Width() - nVolumeSliderWidth - nMuteToolBoxWidth - nZoomToolBoxWidth - AVMEDIA_CONTROLOFFSET;
-        maMuteToolBox.SetPosSizePixel( aPos, maMuteToolBox.GetSizePixel() );
+        maMuteToolBox->SetPosSizePixel( aPos, maMuteToolBox->GetSizePixel() );
 
         aPos.X() += nMuteToolBoxWidth;
-        maVolumeSlider.SetPosSizePixel( aPos, maVolumeSlider.GetSizePixel() );
+        maVolumeSlider->SetPosSizePixel( aPos, maVolumeSlider->GetSizePixel() );
 
         aPos.X() = GetSizePixel().Width() - nZoomToolBoxWidth;
-        maZoomToolBox.SetPosSizePixel( aPos, maZoomToolBox.GetSizePixel() );
+        maZoomToolBox->SetPosSizePixel( aPos, maZoomToolBox->GetSizePixel() );
     }
 }
 
@@ -286,48 +298,48 @@ void MediaControl::implUpdateToolboxes()
 {
     const bool bValidURL = !maItem.getURL().isEmpty();
 
-    maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_INSERT, bValidURL );
-    maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_PLAY, bValidURL );
-    maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_PAUSE, bValidURL );
-    maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_STOP, bValidURL );
-    maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_LOOP, bValidURL );
-    maMuteToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_MUTE, bValidURL );
+    maPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_INSERT, bValidURL );
+    maPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_PLAY, bValidURL );
+    maPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_PAUSE, bValidURL );
+    maPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_STOP, bValidURL );
+    maPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_LOOP, bValidURL );
+    maMuteToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_MUTE, bValidURL );
 
     if( !bValidURL || !IsEnabled() )
     {
         mpZoomListBox->Disable();
 
         if( MEDIACONTROLSTYLE_SINGLELINE == meControlStyle )
-            maPlayToolBox.Disable();
+            maPlayToolBox->Disable();
 
-        maMuteToolBox.Disable();
+        maMuteToolBox->Disable();
     }
     else
     {
-        maPlayToolBox.Enable();
-        maMuteToolBox.Enable();
+        maPlayToolBox->Enable();
+        maMuteToolBox->Enable();
 
         if( MEDIASTATE_PLAY == maItem.getState() )
         {
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, true );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, true );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
         }
         else if( maItem.getTime() > 0.0 && ( maItem.getTime() < maItem.getDuration() ) )
         {
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, true );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, true );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
         }
         else
         {
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_STOP, true );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, true );
         }
 
-        maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_LOOP, maItem.isLoop() );
-        maMuteToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_MUTE, maItem.isMute() );
+        maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_LOOP, maItem.isLoop() );
+        maMuteToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_MUTE, maItem.isMute() );
 
         if( !mpZoomListBox->IsTravelSelect() && !mpZoomListBox->IsInDropDown() )
         {
@@ -360,10 +372,10 @@ void MediaControl::implUpdateToolboxes()
 void MediaControl::implUpdateTimeSlider()
 {
     if( maItem.getURL().isEmpty() || !IsEnabled() )
-        maTimeSlider.Disable();
+        maTimeSlider->Disable();
     else
     {
-        maTimeSlider.Enable();
+        maTimeSlider->Enable();
 
         const double fDuration = maItem.getDuration();
 
@@ -371,13 +383,13 @@ void MediaControl::implUpdateTimeSlider()
         {
             const double fTime = ::std::min( maItem.getTime(), fDuration );
 
-            if( !maTimeSlider.GetLineSize() )
-                maTimeSlider.SetLineSize( static_cast< sal_uInt32 >( AVMEDIA_TIME_RANGE * AVMEDIA_LINEINCREMENT / fDuration ) );
+            if( !maTimeSlider->GetLineSize() )
+                maTimeSlider->SetLineSize( static_cast< sal_uInt32 >( AVMEDIA_TIME_RANGE * AVMEDIA_LINEINCREMENT / fDuration ) );
 
-            if( !maTimeSlider.GetPageSize() )
-                maTimeSlider.SetPageSize( static_cast< sal_uInt32 >( AVMEDIA_TIME_RANGE * AVMEDIA_PAGEINCREMENT / fDuration ) );
+            if( !maTimeSlider->GetPageSize() )
+                maTimeSlider->SetPageSize( static_cast< sal_uInt32 >( AVMEDIA_TIME_RANGE * AVMEDIA_PAGEINCREMENT / fDuration ) );
 
-            maTimeSlider.SetThumbPos( static_cast< sal_Int32 >( fTime / fDuration * AVMEDIA_TIME_RANGE ) );
+            maTimeSlider->SetThumbPos( static_cast< sal_Int32 >( fTime / fDuration * AVMEDIA_TIME_RANGE ) );
         }
     }
 }
@@ -387,14 +399,14 @@ void MediaControl::implUpdateTimeSlider()
 void MediaControl::implUpdateVolumeSlider()
 {
     if( maItem.getURL().isEmpty() || !IsEnabled() )
-        maVolumeSlider.Disable();
+        maVolumeSlider->Disable();
     else
     {
-        maVolumeSlider.Enable();
+        maVolumeSlider->Enable();
 
         const sal_Int32 nVolumeDB = maItem.getVolumeDB();
 
-        maVolumeSlider.SetThumbPos( ::std::min( ::std::max( nVolumeDB, static_cast< sal_Int32 >( AVMEDIA_DB_RANGE ) ),
+        maVolumeSlider->SetThumbPos( ::std::min( ::std::max( nVolumeDB, static_cast< sal_Int32 >( AVMEDIA_DB_RANGE ) ),
                                                 static_cast< sal_Int32 >( 0 ) ) );
     }
 }
@@ -414,8 +426,8 @@ void MediaControl::implUpdateTimeField( double fCurTime )
             " / " +
             rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( maItem.getDuration() ) )) );
 
-        if( maTimeEdit.GetText() != aTimeString )
-            maTimeEdit.SetText( aTimeString );
+        if( maTimeEdit->GetText() != aTimeString )
+            maTimeEdit->SetText( aTimeString );
     }
 }
 
@@ -535,13 +547,13 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
 
             case( AVMEDIA_TOOLBOXITEM_MUTE ):
             {
-                aExecItem.setMute( !maMuteToolBox.IsItemChecked( AVMEDIA_TOOLBOXITEM_MUTE ) );
+                aExecItem.setMute( !maMuteToolBox->IsItemChecked( AVMEDIA_TOOLBOXITEM_MUTE ) );
             }
             break;
 
             case( AVMEDIA_TOOLBOXITEM_LOOP ):
             {
-                aExecItem.setLoop( !maPlayToolBox.IsItemChecked( AVMEDIA_TOOLBOXITEM_LOOP ) );
+                aExecItem.setLoop( !maPlayToolBox->IsItemChecked( AVMEDIA_TOOLBOXITEM_LOOP ) );
             }
             break;
 

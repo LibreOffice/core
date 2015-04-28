@@ -126,7 +126,7 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
 private:
-    ::std::unique_ptr<VirtualDevice> mpPreviewDevice;
+    ScopedVclPtr<VirtualDevice> mpPreviewDevice;
     ::std::unique_ptr<DrawView> mpView;
     DrawDocShell* mpDocShellOfView;
     const Color maFrameColor;

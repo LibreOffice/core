@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
+#include <vcl/vclptr.hxx>
 
 class OutputDevice;
 class Point;
@@ -62,7 +63,7 @@ private:
     Fraction                maZoomX;
     Fraction                maZoomY;
     ScDocument*             mpDoc;
-    OutputDevice*           mpOutDev;
+    VclPtr<OutputDevice>    mpOutDev;
     const StyleSettings*    mpStyle;
     bool                    mbBaseButton;
     bool                    mbPopupButton;

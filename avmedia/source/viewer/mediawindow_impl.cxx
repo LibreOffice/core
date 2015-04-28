@@ -56,12 +56,6 @@ MediaWindowControl::MediaWindowControl( vcl::Window* pParent ) :
 
 
 
-MediaWindowControl::~MediaWindowControl()
-{
-}
-
-
-
 void MediaWindowControl::update()
 {
     MediaItem aItem;
@@ -92,12 +86,6 @@ MediaChildWindow::MediaChildWindow( vcl::Window* pParent, SystemWindowData* pDat
 {
 }
 #endif
-
-MediaChildWindow::~MediaChildWindow()
-{
-}
-
-
 
 void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -168,7 +156,7 @@ MediaWindowImpl::MediaWindowImpl( vcl::Window* pParent, MediaWindow* pMediaWindo
     mpMediaWindow( pMediaWindow ),
     mpEvents( NULL ),
     mbEventTransparent(true),
-    mpMediaWindowControl( bInternalMediaControl ? new MediaWindowControl( this ) : NULL ),
+    mpMediaWindowControl( bInternalMediaControl ? VclPtr<MediaWindowControl>::Create( this ) : nullptr ),
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
 {
@@ -182,6 +170,11 @@ MediaWindowImpl::MediaWindowImpl( vcl::Window* pParent, MediaWindow* pMediaWindo
 
 
 MediaWindowImpl::~MediaWindowImpl()
+{
+    disposeOnce();
+}
+
+void MediaWindowImpl::dispose()
 {
     if( mpEvents )
         mpEvents->cleanUp();
@@ -208,8 +201,13 @@ MediaWindowImpl::~MediaWindowImpl()
     mpMediaWindow = NULL;
 
     delete mpEmptyBmpEx;
+    mpEmptyBmpEx = NULL;
     delete mpAudioBmpEx;
-    delete mpMediaWindowControl;
+    mpAudioBmpEx = NULL;
+    mpMediaWindowControl.disposeAndClear();
+    mpChildWindow.disposeAndClear();
+
+    Control::dispose();
 }
 
 uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType )
@@ -510,13 +508,15 @@ void MediaWindowImpl::onURLChanged()
 {
     if( m_sMimeType == AVMEDIA_MIMETYPE_COMMON )
     {
-        mpChildWindow.reset(new MediaChildWindow(this) );
+        mpChildWindow.disposeAndClear();
+        mpChildWindow.reset(VclPtr<MediaChildWindow>::Create(this) );
     }
 #if HAVE_FEATURE_GLTF
     else if ( m_sMimeType == AVMEDIA_MIMETYPE_JSON )
     {
         SystemWindowData aWinData = OpenGLContext::generateWinData(this, false);
-        mpChildWindow.reset(new MediaChildWindow(this,&aWinData));
+        mpChildWindow.disposeAndClear();
+        mpChildWindow.reset(VclPtr<MediaChildWindow>::Create(this,&aWinData));
         mbEventTransparent = false;
     }
 #endif

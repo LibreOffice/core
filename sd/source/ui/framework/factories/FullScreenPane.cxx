@@ -46,7 +46,8 @@ FullScreenPane::FullScreenPane (
       mpWorkWindow(NULL)
 {
     vcl::Window* pParent = NULL;
-    mpWorkWindow.reset(new WorkWindow(
+    mpWorkWindow.reset(VclPtr<WorkWindow>::Create(
+
         pParent,
         0));  // For debugging (non-fullscreen) use WB_BORDER | WB_MOVEABLE | WB_SIZEABLE));
 
@@ -86,7 +87,7 @@ FullScreenPane::FullScreenPane (
     // For some reason the VCL canvas can not paint into a WorkWindow.
     // Therefore a child window is created that covers the WorkWindow
     // completely.
-    mpWindow = new vcl::Window(mpWorkWindow.get());
+    mpWindow = VclPtr<vcl::Window>::Create(mpWorkWindow.get());
     mpWindow->SetPosSizePixel(Point(0,0), mpWorkWindow->GetSizePixel());
     mpWindow->SetBackground(Wallpaper());
     mxWindow = VCLUnoHelper::GetInterface(mpWindow);
@@ -103,11 +104,7 @@ FullScreenPane::~FullScreenPane() throw()
 
 void SAL_CALL FullScreenPane::disposing()
 {
-    // We have created the window pointed to by mpWindow, we delete it.
-    if (mpWindow != NULL)
-    {
-        delete mpWindow;
-    }
+    mpWindow.disposeAndClear();
 
     if (mpWorkWindow.get() != NULL)
     {
@@ -126,7 +123,7 @@ sal_Bool SAL_CALL FullScreenPane::isVisible()
 {
     ThrowIfDisposed();
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
         return mpWindow->IsReallyVisible();
     else
         return false;
@@ -137,9 +134,9 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
 {
     ThrowIfDisposed();
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
         mpWindow->Show(bIsVisible);
-    if (mpWorkWindow != 0)
+    if (mpWorkWindow != nullptr)
         mpWorkWindow->Show(bIsVisible);
 }
 
@@ -148,7 +145,7 @@ Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessibl
 {
     ThrowIfDisposed();
 
-    if (mpWorkWindow != 0)
+    if (mpWorkWindow != nullptr)
         return mpWorkWindow->GetAccessible(false);
     else
         return NULL;
@@ -160,7 +157,7 @@ void SAL_CALL FullScreenPane::setAccessible (
 {
     ThrowIfDisposed();
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
     {
         Reference<lang::XInitialization> xInitializable (rxAccessible, UNO_QUERY);
         if (xInitializable.is())

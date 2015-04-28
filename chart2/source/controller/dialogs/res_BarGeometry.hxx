@@ -41,8 +41,8 @@ public:
     void SetSelectHdl( const Link& rLink );
 
 private:
-    FixedText* m_pFT_Geometry;
-    ListBox*   m_pLB_Geometry;
+    VclPtr<FixedText> m_pFT_Geometry;
+    VclPtr<ListBox>   m_pLB_Geometry;
 };
 
 } //namespace chart

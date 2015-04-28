@@ -174,7 +174,8 @@ class ColorConfigWindow_Impl
 {
 public:
     ColorConfigWindow_Impl(vcl::Window* pParent);
-    virtual ~ColorConfigWindow_Impl();
+    virtual ~ColorConfigWindow_Impl() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
 
 public:
     void SetLinks (Link const&, Link const&, Link const&);
@@ -192,8 +193,7 @@ private:
     class Chapter
     {
         // text
-        bool m_bOwnsWidget;
-        FixedText *m_pText;
+        VclPtr<FixedText> m_pText;
     public:
         Chapter(FixedText *pText, bool bShow);
         Chapter(vcl::Window *pGrid, unsigned nYPos, const OUString& sDisplayName);
@@ -234,11 +234,11 @@ private:
     private:
         bool m_bOwnsWidgets;
         // checkbox (CheckBox) or simple text (FixedText)
-        Control* m_pText;
+        VclPtr<Control> m_pText;
         // color list box
-        ColorListBox* m_pColorList;
+        VclPtr<ColorListBox> m_pColorList;
         // color preview box
-        vcl::Window* m_pPreview;
+        VclPtr<vcl::Window> m_pPreview;
         // default color
         Color m_aDefaultColor;
     private:
@@ -255,9 +255,9 @@ private:
 
 
 private:
-    VclGrid *m_pGrid;
-    ScrollBar *m_pVScroll;
-    HeaderBar *m_pHeaderHB;
+    VclPtr<VclGrid>   m_pGrid;
+    VclPtr<ScrollBar> m_pVScroll;
+    VclPtr<HeaderBar> m_pHeaderHB;
 
     // initialization
     void CreateEntries();
@@ -282,8 +282,7 @@ private:
 // eGroup: which group is this?
 // rResMgr: resource manager
 ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
-    : m_bOwnsWidget(false)
-    , m_pText(pText)
+    : m_pText(pText)
 {
     if (!bShow)
         Hide();
@@ -292,9 +291,8 @@ ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
 // ctor for extended groups
 ColorConfigWindow_Impl::Chapter::Chapter(vcl::Window *pGrid,
     unsigned nYPos, const OUString& rDisplayName)
-    : m_bOwnsWidget(true)
 {
-    m_pText = new FixedText(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+    m_pText = VclPtr<FixedText>::Create(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     m_pText->set_font_attribute("weight", "bold");
     m_pText->set_grid_width(3);
     m_pText->set_grid_left_attach(0);
@@ -304,8 +302,8 @@ ColorConfigWindow_Impl::Chapter::Chapter(vcl::Window *pGrid,
 
 ColorConfigWindow_Impl::Chapter::~Chapter()
 {
-    if (m_bOwnsWidget)
-        delete m_pText;
+    // FIXME: we had an horrible m_bOwnsWidget const
+    m_pText.disposeAndClear();
 }
 
 void ColorConfigWindow_Impl::Chapter::Show(Wallpaper const& rBackWall)
@@ -348,19 +346,19 @@ ColorConfigWindow_Impl::Entry::Entry( vcl::Window *pGrid, unsigned nYPos,
     : m_bOwnsWidgets(true)
     , m_aDefaultColor(rColorEntry.getDefaultColor())
 {
-    m_pText = new FixedText(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+    m_pText = VclPtr<FixedText>::Create(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     m_pText->set_grid_left_attach(0);
     m_pText->set_grid_top_attach(nYPos);
     m_pText->set_margin_left(6 + nCheckBoxLabelOffset);
     m_pText->SetText(rColorEntry.getDisplayName());
 
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|WB_DROPDOWN;
-    m_pColorList = new ColorListBox(pGrid, nWinBits);
+    m_pColorList = VclPtr<ColorListBox>::Create(pGrid, nWinBits);
     m_pColorList->EnableAutoSize(true);
     m_pColorList->set_grid_left_attach(1);
     m_pColorList->set_grid_top_attach(nYPos);
 
-    m_pPreview = new vcl::Window(pGrid, WB_BORDER);
+    m_pPreview = VclPtr<vcl::Window>::Create(pGrid, WB_BORDER);
     m_pPreview->set_grid_left_attach(2);
     m_pPreview->set_grid_top_attach(nYPos);
     m_pPreview->set_margin_right(6);
@@ -372,9 +370,9 @@ ColorConfigWindow_Impl::Entry::~Entry()
 {
     if (m_bOwnsWidgets)
     {
-        delete m_pText;
-        delete m_pColorList;
-        delete m_pPreview;
+        m_pText.disposeAndClear();
+        m_pColorList.disposeAndClear();
+        m_pPreview.disposeAndClear();
     }
 }
 
@@ -416,7 +414,7 @@ void ColorConfigWindow_Impl::Entry::SetLinks(
 {
     m_pColorList->SetSelectHdl(aColorLink);
     m_pColorList->SetGetFocusHdl(aGetFocusLink);
-    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText))
+    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText.get()))
     {
         pCheckBox->SetClickHdl(aCheckLink);
         pCheckBox->SetGetFocusHdl(aGetFocusLink);
@@ -439,7 +437,7 @@ void ColorConfigWindow_Impl::Entry::Update (
         m_pColorList->SelectEntry(aColor);
     }
     m_pPreview->SetBackground(Wallpaper(aColor));
-    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText))
+    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText.get()))
         pCheckBox->Check(rValue.bIsVisible);
 }
 
@@ -509,6 +507,15 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(vcl::Window* pParent)
     SetAppearance();
 }
 
+void ColorConfigWindow_Impl::dispose()
+{
+    disposeBuilder();
+    m_pGrid.clear();
+    m_pVScroll.clear();
+    m_pHeaderHB.clear();
+    VclContainer::dispose();
+}
+
 Size ColorConfigWindow_Impl::calculateRequisition() const
 {
     return getLayoutRequisition(*m_pGrid);
@@ -546,12 +553,12 @@ void ColorConfigWindow_Impl::CreateEntries()
     long nCheckBoxLabelOffset = 0;
     {
         OUString sSampleText("X");
-        CheckBox aCheckBox(this);
-        FixedText aFixedText(this);
-        aCheckBox.SetText(sSampleText);
-        aFixedText.SetText(sSampleText);
-        Size aCheckSize(aCheckBox.CalcMinimumSize(0x7fffffff));
-        Size aFixedSize(aFixedText.CalcMinimumSize(0x7fffffff));
+        ScopedVclPtrInstance< CheckBox > aCheckBox(this);
+        ScopedVclPtrInstance< FixedText > aFixedText(this);
+        aCheckBox->SetText(sSampleText);
+        aFixedText->SetText(sSampleText);
+        Size aCheckSize(aCheckBox->CalcMinimumSize(0x7fffffff));
+        Size aFixedSize(aFixedText->CalcMinimumSize(0x7fffffff));
         nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
     }
 
@@ -621,13 +628,13 @@ void ColorConfigWindow_Impl::SetAppearance ()
     OSL_ENSURE( vEntries.size() >= sizeof vEntryInfo / sizeof vEntryInfo[0], "wrong number of helpIDs for color listboxes" );
 
     // creating a sample color listbox with the color entries
-    ColorListBox aSampleColorList(this);
+    ScopedVclPtrInstance< ColorListBox > aSampleColorList(this);
     {
         XColorListRef const xColorTable = XColorList::CreateStdColorList();
         for (sal_Int32 i = 0; i != xColorTable->Count(); ++i)
         {
             XColorEntry& rEntry = *xColorTable->GetColor(i);
-            aSampleColorList.InsertEntry(rEntry.GetColor(), rEntry.GetName());
+            aSampleColorList->InsertEntry(rEntry.GetColor(), rEntry.GetName());
         }
     }
 
@@ -635,12 +642,9 @@ void ColorConfigWindow_Impl::SetAppearance ()
     for (size_t i = 0; i != vEntries.size(); ++i)
     {
         // appearance
-        vEntries[i]->SetAppearance(aTransparentWall, aSampleColorList);
+        vEntries[i]->SetAppearance(aTransparentWall, *aSampleColorList.get());
     }
 }
-
-ColorConfigWindow_Impl::~ColorConfigWindow_Impl ()
-{ }
 
 void ColorConfigWindow_Impl::AdjustHeaderBar()
 {
@@ -823,10 +827,10 @@ void ColorConfigWindow_Impl::Command( const CommandEvent& rCEvt )
 
 class ColorConfigCtrl_Impl : public VclVBox
 {
-    HeaderBar*              m_pHeaderHB;
-    VclHBox*                m_pBody;
-    ColorConfigWindow_Impl* m_pScrollWindow;
-    ScrollBar*              m_pVScroll;
+    VclPtr<HeaderBar>              m_pHeaderHB;
+    VclPtr<VclHBox>                m_pBody;
+    VclPtr<ColorConfigWindow_Impl> m_pScrollWindow;
+    VclPtr<ScrollBar>              m_pVScroll;
 
     EditableColorConfig*            pColorConfig;
     EditableExtendedColorConfig*    pExtColorConfig;
@@ -842,6 +846,7 @@ class ColorConfigCtrl_Impl : public VclVBox
 public:
     ColorConfigCtrl_Impl(vcl::Window* pParent);
     virtual ~ColorConfigCtrl_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
         const OUString &rColorSetting, const OUString &rPreview);
@@ -864,11 +869,11 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     , pColorConfig(0)
     , pExtColorConfig(0)
 {
-    m_pHeaderHB = new HeaderBar(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
+    m_pHeaderHB = VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
 
-    m_pBody = new VclHBox(this);
-    m_pScrollWindow = new ColorConfigWindow_Impl(m_pBody);
-    m_pVScroll = new ScrollBar(m_pBody, WB_VERT);
+    m_pBody = VclPtr<VclHBox>::Create(this);
+    m_pScrollWindow = VclPtr<ColorConfigWindow_Impl>::Create(m_pBody);
+    m_pVScroll = VclPtr<ScrollBar>::Create(m_pBody, WB_VERT);
     m_pScrollWindow->Init(m_pVScroll, m_pHeaderHB);
 
     m_pBody->set_hexpand(true);
@@ -910,10 +915,16 @@ void ColorConfigCtrl_Impl::InitHeaderBar(const OUString &rOn, const OUString &rU
 
 ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
 {
-    delete m_pVScroll;
-    delete m_pScrollWindow;
-    delete m_pBody;
-    delete m_pHeaderHB;
+    disposeOnce();
+}
+
+void ColorConfigCtrl_Impl::dispose()
+{
+    m_pVScroll.disposeAndClear();
+    m_pScrollWindow.disposeAndClear();
+    m_pBody.disposeAndClear();
+    m_pHeaderHB.disposeAndClear();
+    VclVBox::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorConfigCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
@@ -1056,28 +1067,44 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
 
 SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
 {
-    //when the dialog is cancelled but the color scheme ListBox has been changed these
-    //changes need to be undone
-    if(!bFillItemSetCalled && m_pColorSchemeLB->IsValueChangedFromSaved())
-    {
-        OUString sOldScheme =  m_pColorSchemeLB->GetEntry(m_pColorSchemeLB->GetSavedValue());
-        if(!sOldScheme.isEmpty())
-        {
-            pColorConfig->SetCurrentSchemeName(sOldScheme);
-            pExtColorConfig->SetCurrentSchemeName(sOldScheme);
-        }
-    }
-    pColorConfig->ClearModified();
-    pColorConfig->EnableBroadcast();
-    delete pColorConfig;
-    pExtColorConfig->ClearModified();
-    pExtColorConfig->EnableBroadcast();
-    delete pExtColorConfig;
+    disposeOnce();
 }
 
-SfxTabPage* SvxColorOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void SvxColorOptionsTabPage::dispose()
 {
-    return ( new SvxColorOptionsTabPage( pParent, *rAttrSet ) );
+    if (pColorConfig)
+    {
+        //when the dialog is cancelled but the color scheme ListBox has been changed these
+        //changes need to be undone
+        if(!bFillItemSetCalled && m_pColorSchemeLB->IsValueChangedFromSaved())
+        {
+            OUString sOldScheme =  m_pColorSchemeLB->GetEntry(m_pColorSchemeLB->GetSavedValue());
+            if(!sOldScheme.isEmpty())
+            {
+                pColorConfig->SetCurrentSchemeName(sOldScheme);
+                pExtColorConfig->SetCurrentSchemeName(sOldScheme);
+            }
+        }
+        pColorConfig->ClearModified();
+        pColorConfig->EnableBroadcast();
+        delete pColorConfig;
+        pColorConfig = NULL;
+
+        pExtColorConfig->ClearModified();
+        pExtColorConfig->EnableBroadcast();
+        delete pExtColorConfig;
+        pExtColorConfig = NULL;
+    }
+    m_pColorSchemeLB.clear();
+    m_pSaveSchemePB.clear();
+    m_pDeleteSchemePB.clear();
+    m_pColorConfigCT.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxColorOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SvxColorOptionsTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet*  )
@@ -1178,9 +1205,9 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     else
     {
         DBG_ASSERT(m_pColorSchemeLB->GetEntryCount() > 1, "don't delete the last scheme");
-        MessageDialog aQuery(pButton, CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-        aQuery.SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
-        if(RET_YES == aQuery.Execute())
+        ScopedVclPtrInstance< MessageDialog > aQuery(pButton, CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        aQuery->SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
+        if(RET_YES == aQuery->Execute())
         {
             OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());
             m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectEntryPos());

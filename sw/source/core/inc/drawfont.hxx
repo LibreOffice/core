@@ -22,9 +22,10 @@
 
 #include <tools/solar.h>
 #include <osl/diagnose.h>
+#include <vcl/vclptr.hxx>
+#include <vcl/outdev.hxx>
 
 class SwTxtFrm;
-class OutputDevice;
 class SwViewShell;
 class SwScriptInfo;
 class Point;
@@ -41,7 +42,7 @@ class SwUnderlineFont;
 class SwDrawTextInfo
 {
     const SwTxtFrm* pFrm;
-    OutputDevice* pOut;
+    VclPtr<OutputDevice> pOut;
     SwViewShell const * pSh;
     const SwScriptInfo* pScriptInfo;
     Point m_aPos;

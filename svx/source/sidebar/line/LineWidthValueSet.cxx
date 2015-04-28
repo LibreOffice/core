@@ -41,12 +41,15 @@ LineWidthValueSet::LineWidthValueSet (
 
 LineWidthValueSet::~LineWidthValueSet()
 {
-    delete pVDev;
-    delete[] strUnit;
+    disposeOnce();
 }
 
-
-
+void LineWidthValueSet::dispose()
+{
+    pVDev.disposeAndClear();
+    delete[] strUnit;
+    ValueSet::dispose();
+}
 
 void LineWidthValueSet::SetUnit(OUString* str)
 {

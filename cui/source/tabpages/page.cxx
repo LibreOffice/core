@@ -164,9 +164,9 @@ bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 
 // class SvxPageDescPage --------------------------------------------------
 
-SfxTabPage* SvxPageDescPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxPageDescPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxPageDescPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>(new SvxPageDescPage( pParent, *rSet ), SAL_NO_ACQUIRE );
 }
 
 SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
@@ -366,10 +366,46 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
 SvxPageDescPage::~SvxPageDescPage()
 {
+    disposeOnce();
+}
+
+void SvxPageDescPage::dispose()
+{
     if(mbDelPrinter)
     {
-        delete mpDefPrinter;
+        mpDefPrinter.disposeAndClear();
+        mbDelPrinter = false;
     }
+    m_pPaperSizeBox.clear();
+    m_pPaperWidthEdit.clear();
+    m_pPaperHeightEdit.clear();
+    m_pOrientationFT.clear();
+    m_pPortraitBtn.clear();
+    m_pLandscapeBtn.clear();
+    m_pBspWin.clear();
+    m_pTextFlowLbl.clear();
+    m_pTextFlowBox.clear();
+    m_pPaperTrayBox.clear();
+    m_pLeftMarginLbl.clear();
+    m_pLeftMarginEdit.clear();
+    m_pRightMarginLbl.clear();
+    m_pRightMarginEdit.clear();
+    m_pTopMarginEdit.clear();
+    m_pBottomMarginEdit.clear();
+    m_pPageText.clear();
+    m_pLayoutBox.clear();
+    m_pNumberFormatBox.clear();
+    m_pTblAlignFT.clear();
+    m_pHorzBox.clear();
+    m_pVertBox.clear();
+    m_pAdaptBox.clear();
+    m_pRegisterCB.clear();
+    m_pRegisterFT.clear();
+    m_pRegisterLB.clear();
+    m_pInsideLbl.clear();
+    m_pOutsideLbl.clear();
+    m_pPrintRangeQueryText.clear();
+    SfxTabPage::dispose();
 }
 
 

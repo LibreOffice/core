@@ -27,30 +27,31 @@ public:
         vcl::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScSamplingDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
-    virtual void        SetActive() SAL_OVERRIDE;
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual void    SetActive() SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
 
 private:
     // Widgets
-    FixedText*          mpInputRangeLabel;
-    formula::RefEdit*   mpInputRangeEdit;
-    formula::RefButton* mpInputRangeButton;
+    VclPtr<FixedText>          mpInputRangeLabel;
+    VclPtr<formula::RefEdit>   mpInputRangeEdit;
+    VclPtr<formula::RefButton> mpInputRangeButton;
 
-    FixedText*          mpOutputRangeLabel;
-    formula::RefEdit*   mpOutputRangeEdit;
-    formula::RefButton* mpOutputRangeButton;
+    VclPtr<FixedText>          mpOutputRangeLabel;
+    VclPtr<formula::RefEdit>   mpOutputRangeEdit;
+    VclPtr<formula::RefButton> mpOutputRangeButton;
 
-    NumericField*       mpSampleSize;
-    NumericField*       mpPeriod;
+    VclPtr<NumericField>       mpSampleSize;
+    VclPtr<NumericField>       mpPeriod;
 
-    RadioButton*        mpRandomMethodRadio;
-    RadioButton*        mpPeriodicMethodRadio;
+    VclPtr<RadioButton>        mpRandomMethodRadio;
+    VclPtr<RadioButton>        mpPeriodicMethodRadio;
 
-    OKButton*           mpButtonOk;
+    VclPtr<OKButton>           mpButtonOk;
 
-    formula::RefEdit*   mpActiveEdit;
+    VclPtr<formula::RefEdit>   mpActiveEdit;
 
     // Data
     ScViewData*         mViewData;

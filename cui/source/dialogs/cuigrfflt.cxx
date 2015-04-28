@@ -153,6 +153,16 @@ GraphicFilterDialog::GraphicFilterDialog(vcl::Window* pParent,
     mpPreview->init(&rGraphic, maModifyHdl);
 }
 
+GraphicFilterDialog::~GraphicFilterDialog()
+{
+    disposeOnce();
+}
+
+void GraphicFilterDialog::dispose()
+{
+    mpPreview.clear();
+    ModalDialog::dispose();
+}
 
 
 IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl)
@@ -204,7 +214,18 @@ GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& r
     mpMtrWidth->GrabFocus();
 }
 
+GraphicFilterMosaic::~GraphicFilterMosaic()
+{
+    disposeOnce();
+}
 
+void GraphicFilterMosaic::dispose()
+{
+    mpMtrWidth.clear();
+    mpMtrHeight.clear();
+    mpCbxEdges.clear();
+    GraphicFilterDialog::dispose();
+}
 
 Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
@@ -257,6 +278,16 @@ GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& r
     mpMtrRadius->GrabFocus();
 }
 
+GraphicFilterSmooth::~GraphicFilterSmooth()
+{
+    disposeOnce();
+}
+
+void GraphicFilterSmooth::dispose()
+{
+    mpMtrRadius.clear();
+    GraphicFilterDialog::dispose();
+}
 
 
 Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double /*fScaleX*/, double /*fScaleY*/ )
@@ -305,6 +336,17 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
     mpCbxInvert->SetToggleHdl( GetModifyHdl() );
 }
 
+GraphicFilterSolarize::~GraphicFilterSolarize()
+{
+    disposeOnce();
+}
+
+void GraphicFilterSolarize::dispose()
+{
+    mpMtrThreshold.clear();
+    mpCbxInvert.clear();
+    GraphicFilterDialog::dispose();
+}
 
 
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
@@ -356,6 +398,16 @@ GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGr
     mpMtrSepia->SetModifyHdl( GetModifyHdl() );
 }
 
+GraphicFilterSepia::~GraphicFilterSepia()
+{
+    disposeOnce();
+}
+
+void GraphicFilterSepia::dispose()
+{
+    mpMtrSepia.clear();
+    GraphicFilterDialog::dispose();
+}
 
 
 Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
@@ -399,6 +451,16 @@ GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rG
     mpNumPoster->SetModifyHdl( GetModifyHdl() );
 }
 
+GraphicFilterPoster::~GraphicFilterPoster()
+{
+    disposeOnce();
+}
+
+void GraphicFilterPoster::dispose()
+{
+    mpNumPoster.clear();
+    GraphicFilterDialog::dispose();
+}
 
 
 Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
@@ -462,6 +524,16 @@ GraphicFilterEmboss::GraphicFilterEmboss(vcl::Window* pParent,
     mpCtlLight->GrabFocus();
 }
 
+GraphicFilterEmboss::~GraphicFilterEmboss()
+{
+    disposeOnce();
+}
+
+void GraphicFilterEmboss::dispose()
+{
+    mpCtlLight.clear();
+    GraphicFilterDialog::dispose();
+}
 
 
 Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,

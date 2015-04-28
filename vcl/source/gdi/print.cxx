@@ -792,9 +792,9 @@ void Printer::ImplInitDisplay( const vcl::Window* pWindow )
     mpJobGraphics       = NULL;
 
     if ( pWindow )
-        mpDisplayDev = new VirtualDevice( *pWindow );
+        mpDisplayDev = VclPtr<VirtualDevice>::Create( *pWindow );
     else
-        mpDisplayDev = new VirtualDevice();
+        mpDisplayDev = VclPtr<VirtualDevice>::Create();
     mpFontCollection          = pSVData->maGDIData.mpScreenFontList;
     mpFontCache         = pSVData->maGDIData.mpScreenFontCache;
     mnDPIX              = mpDisplayDev->mnDPIX;
@@ -1015,16 +1015,22 @@ Printer::Printer( const OUString& rPrinterName )
 
 Printer::~Printer()
 {
+    disposeOnce();
+}
+
+void Printer::dispose()
+{
     DBG_ASSERT( !IsPrinting(), "Printer::~Printer() - Job is printing" );
     DBG_ASSERT( !IsJobActive(), "Printer::~Printer() - Job is active" );
 
     delete mpPrinterOptions;
+    mpPrinterOptions = NULL;
 
     ReleaseGraphics();
     if ( mpInfoPrinter )
         ImplGetSVData()->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
     if ( mpDisplayDev )
-        delete mpDisplayDev;
+        mpDisplayDev.disposeAndClear();
     else
     {
         // OutputDevice Dtor is tryig the same thing; that why we need to set
@@ -1060,6 +1066,10 @@ Printer::~Printer()
         mpNext->mpPrev = mpPrev;
     else
         pSVData->maGDIData.mpLastPrinter = mpPrev;
+
+    mpPrev.clear();
+    mpNext.clear();
+    OutputDevice::dispose();
 }
 
 sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
@@ -1215,8 +1225,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         ReleaseGraphics();
         if ( mpDisplayDev )
         {
-            delete mpDisplayDev;
-            mpDisplayDev = NULL;
+            mpDisplayDev.disposeAndClear();
         }
         else
         {

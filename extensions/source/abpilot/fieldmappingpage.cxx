@@ -37,6 +37,18 @@ namespace abp
         m_pInvokeDialog->SetClickHdl( LINK( this, FieldMappingPage, OnInvokeDialog ) );
     }
 
+    FieldMappingPage::~FieldMappingPage()
+    {
+        disposeOnce();
+    }
+
+    void FieldMappingPage::dispose()
+    {
+        m_pInvokeDialog.clear();
+        m_pHint.clear();
+        AddressBookSourcePage::dispose();
+    }
+
     void FieldMappingPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();

@@ -146,18 +146,18 @@ private:
     SvTreeListEntry*    pCurrentPageEntry;
     bool hasTreePendingLayout() const;
 
-    OKButton*       pOkPB;
-    PushButton*     pBackPB;
+    VclPtr<OKButton>       pOkPB;
+    VclPtr<PushButton>     pBackPB;
 
-    SvTreeListBox*  pTreeLB;
-    VclBox*         pTabBox;
+    VclPtr<SvTreeListBox>  pTreeLB;
+    VclPtr<VclBox>         pTabBox;
 
     OUString        sTitle;
     OUString        sNotLoadedError;
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
-    SvxColorTabPage *mpColorPage;
+    VclPtr<SvxColorTabPage> mpColorPage;
 
     bool        bForgetSelection;
     bool            bIsFromExtensionManager;
@@ -200,6 +200,7 @@ public:
         bool bActivateLastSelection = true );
     OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId );
     virtual ~OfaTreeOptionsDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );
     sal_uInt16              AddGroup(   const OUString& rGroupName,  SfxShell* pCreateShell,
@@ -277,6 +278,7 @@ public:
             com::sun::star::awt::XContainerWindowProvider >& rProvider );
 
     virtual ~ExtensionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    ActivatePage() SAL_OVERRIDE;
     virtual void    DeactivatePage() SAL_OVERRIDE;

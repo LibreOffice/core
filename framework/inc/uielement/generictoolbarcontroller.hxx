@@ -23,6 +23,7 @@
 #include <svtools/toolboxcontroller.hxx>
 
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class PopupMenu;
 class ToolBox;
@@ -53,11 +54,11 @@ class GenericToolbarController : public svt::ToolboxController
         DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
 
     protected:
-        ToolBox*        m_pToolbar;
-        sal_uInt16      m_nID;
-        bool        m_bEnumCommand : 1,
-                        m_bMadeInvisible : 1;
-        OUString   m_aEnumCommand;
+        VclPtr<ToolBox>     m_pToolbar;
+        sal_uInt16          m_nID;
+        bool                m_bEnumCommand : 1,
+                            m_bMadeInvisible : 1;
+        OUString            m_aEnumCommand;
 };
 
 class MenuToolbarController : public GenericToolbarController

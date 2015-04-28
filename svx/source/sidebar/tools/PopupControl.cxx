@@ -35,16 +35,6 @@ PopupControl::PopupControl (
     SetBackground(Theme::GetWallpaper(Theme::Paint_DropDownBackground));
 }
 
-
-
-
-PopupControl::~PopupControl()
-{
-}
-
-
-
-
 void PopupControl::Paint (const Rectangle& rBox)
 {
     Control::Paint(rBox);

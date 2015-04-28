@@ -45,8 +45,8 @@ class  ImplDdeItem;
 struct BaseLink_Impl
 {
     Link                m_aEndEditLink;
-    LinkManager*      m_pLinkMgr;
-    vcl::Window*             m_pParentWin;
+    LinkManager*        m_pLinkMgr;
+    VclPtr<vcl::Window> m_pParentWin;
     FileDialogHelper*   m_pFileDlg;
     bool                m_bIsConnect;
 

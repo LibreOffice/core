@@ -225,6 +225,11 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 
 CustomAnimationPane::~CustomAnimationPane()
 {
+    disposeOnce();
+}
+
+void CustomAnimationPane::dispose()
+{
     maLateInitTimer.Stop();
 
     removeListener();
@@ -235,6 +240,24 @@ CustomAnimationPane::~CustomAnimationPane()
     for( aIter = aTags.begin(); aIter != aTags.end(); ++aIter )
         (*aIter)->Dispose();
 
+    mpPBAddEffect.clear();
+    mpPBChangeEffect.clear();
+    mpPBRemoveEffect.clear();
+    mpFTEffect.clear();
+    mpFTStart.clear();
+    mpLBStart.clear();
+    mpFTProperty.clear();
+    mpPlaceholderBox.clear();
+    mpLBProperty.clear();
+    mpPBPropertyMore.clear();
+    mpFTSpeed.clear();
+    mpCBSpeed.clear();
+    mpCustomAnimationList.clear();
+    mpPBMoveUp.clear();
+    mpPBMoveDown.clear();
+    mpPBPlay.clear();
+    mpCBAutoPreview.clear();
+    PanelLayout::dispose();
 }
 
 void CustomAnimationPane::addUndo()
@@ -809,11 +832,11 @@ void CustomAnimationPane::UpdateLook()
         ::sfx2::sidebar::Theme::GetWallpaper(
             ::sfx2::sidebar::Theme::Paint_PanelBackground));
     SetBackground(aBackground);
-    if (mpFTStart != NULL)
+    if (mpFTStart != nullptr)
         mpFTStart->SetBackground(aBackground);
-    if (mpFTProperty != NULL)
+    if (mpFTProperty != nullptr)
         mpFTProperty->SetBackground(aBackground);
-    if (mpFTSpeed != NULL)
+    if (mpFTSpeed != nullptr)
         mpFTSpeed->SetBackground(aBackground);
 }
 
@@ -1550,7 +1573,7 @@ void CustomAnimationPane::showOptions(const OString& sPage)
 {
     STLPropertySet* pSet = createSelectionSet();
 
-    boost::scoped_ptr<CustomAnimationDialog> pDlg(new CustomAnimationDialog(this, pSet, sPage));
+    VclPtrInstance< CustomAnimationDialog > pDlg(this, pSet, sPage);
     if( pDlg->Execute() )
     {
         addUndo();
@@ -1729,7 +1752,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         }
     }
 
-    boost::scoped_ptr<CustomAnimationCreateDialog> pDlg(new CustomAnimationCreateDialog( this, this, aTargets, bHasText, sPresetId, fDuration ));
+    VclPtrInstance< CustomAnimationCreateDialog > pDlg( this, this, aTargets, bHasText, sPresetId, fDuration );
     if( pDlg->Execute() )
     {
         addUndo();
@@ -2263,7 +2286,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     if( pDocSh )
     {
         const Size aMinSize( pParent->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
-        pWindow = new CustomAnimationPane( pParent, rBase, rxFrame, aMinSize );
+        pWindow = VclPtr<CustomAnimationPane>::Create( pParent, rBase, rxFrame, aMinSize );
     }
 
     return pWindow;

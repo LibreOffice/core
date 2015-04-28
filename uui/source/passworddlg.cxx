@@ -44,8 +44,8 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
         const sal_uInt16 nOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
         const sal_uInt16 nErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : nOpenToModifyErrStrId;
         OUString aErrorMsg(ResId(nErrStrId, *pResourceMgr).toString());
-        MessageDialog aErrorBox(GetParent(), aErrorMsg);
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(GetParent(), aErrorMsg);
+        aErrorBox->Execute();
     }
 
     // default settings for enter password or reenter passwd...
@@ -82,6 +82,21 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     m_pOKBtn->SetClickHdl( LINK( this, PasswordDialog, OKHdl_Impl ) );
 }
 
+PasswordDialog::~PasswordDialog()
+{
+    disposeOnce();
+}
+
+void PasswordDialog::dispose()
+{
+    m_pFTPassword.clear();
+    m_pEDPassword.clear();
+    m_pFTConfirmPassword.clear();
+    m_pEDConfirmPassword.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl)
 {
     bool bEDPasswdValid = m_pEDPassword->GetText().getLength() >= nMinLen;
@@ -91,8 +106,8 @@ IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl)
 
     if (m_pEDConfirmPassword->IsVisible() && bPasswdMismatch)
     {
-        MessageDialog aErrorBox(this, aPasswdMismatch);
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aPasswdMismatch);
+        aErrorBox->Execute();
     }
     else if (bValid)
         EndDialog( RET_OK );

@@ -28,6 +28,8 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 
+#include <vcl/vclptr.hxx>
+#include <vcl/virdev.hxx>
 #include <boost/utility.hpp>
 
 #include <vcl/cairo.hxx>
@@ -269,7 +271,7 @@ namespace cairocanvas
 
     private:
 
-        boost::shared_ptr<VirtualDevice> mpVirtualDevice;
+        VclPtr<VirtualDevice> mpVirtualDevice;
 
         void useStates( const ::com::sun::star::rendering::ViewState& viewState,
                         const ::com::sun::star::rendering::RenderState& renderState,

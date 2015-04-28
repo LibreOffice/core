@@ -130,8 +130,8 @@ class ScPrintFunc
 private:
     ScDocShell*         pDocShell;
     ScDocument*         pDoc;
-    SfxPrinter*         pPrinter;
-    OutputDevice*       pDev;
+    VclPtr<SfxPrinter>   pPrinter;
+    VclPtr<OutputDevice> pDev;
     FmFormView*         pDrawView;
 
     MapMode             aOldPrinterMode;    //  MapMode before the call

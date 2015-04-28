@@ -38,6 +38,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class Dialog;
 namespace vcl { class Window; }
@@ -73,7 +74,7 @@ namespace svt
         ::osl::Mutex                    m_aExecutionMutex;  /// access safety for execute/cancel
 
     protected:
-        Dialog*                     m_pDialog;                  /// the dialog to execute
+        VclPtr<Dialog>              m_pDialog;                  /// the dialog to execute
         bool                        m_bExecuting : 1;           /// we're currently executing the dialog
         bool                        m_bCanceled : 1;            /// endDialog was called while we were executing
         bool                        m_bTitleAmbiguous : 1;      /// m_sTitle has not been set yet
@@ -124,7 +125,7 @@ namespace svt
             but the application-wide solar mutex is (to guard the not thread-safe ctor of the dialog).
             @param      pParent     the parent window for the new dialog
         */
-        virtual Dialog* createDialog(vcl::Window* _pParent) = 0;
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) = 0;
 
         /// called to destroy the dialog used. the default implementation just deletes m_pDialog and resets it to NULL
         virtual void destroyDialog();

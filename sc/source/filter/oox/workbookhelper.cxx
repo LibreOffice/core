@@ -662,15 +662,15 @@ void WorkbookGlobals::recalcFormulaCells()
         if (rDoc.IsUserInteractionEnabled())
         {
             // Ask the user if full re-calculation is desired.
-            QueryBox aBox(
+            ScopedVclPtrInstance<QueryBox> aBox(
                 rDocSh.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
-            aBox.SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
+            aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 
-            sal_Int32 nRet = aBox.Execute();
+            sal_Int32 nRet = aBox->Execute();
             bHardRecalc = nRet == RET_YES;
 
-            if (aBox.GetCheckBoxState())
+            if (aBox->GetCheckBoxState())
             {
                 // Always perform selected action in the future.
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());

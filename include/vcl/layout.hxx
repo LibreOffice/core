@@ -17,6 +17,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
+#include <vcl/vclptr.hxx>
 #include <boost/multi_array.hpp>
 #include <set>
 
@@ -353,7 +354,7 @@ private:
 
     struct GridEntry
     {
-        vcl::Window *pChild;
+        VclPtr<vcl::Window> pChild;
         sal_Int32 nSpanWidth;
         sal_Int32 nSpanHeight;
         GridEntry()
@@ -455,7 +456,7 @@ public:
 class VCL_DLLPUBLIC VclFrame : public VclBin
 {
 private:
-    vcl::Window *m_pLabel;
+    VclPtr<vcl::Window> m_pLabel;
 private:
     friend class VclBuilder;
     void designate_label(vcl::Window *pWindow);
@@ -466,6 +467,8 @@ public:
         , m_pLabel(NULL)
     {
     }
+    virtual ~VclFrame();
+    virtual void dispose() SAL_OVERRIDE;
     void set_label(const OUString &rLabel);
     OUString get_label() const;
     virtual vcl::Window *get_child() SAL_OVERRIDE;
@@ -514,11 +517,13 @@ public:
     VclExpander(vcl::Window *pParent)
         : VclBin(pParent)
         , m_bResizeTopLevel(true)
-        , m_pDisclosureButton(new DisclosureButton(this))
+        , m_pDisclosureButton(VclPtr<DisclosureButton>::Create(this))
     {
         m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
         m_pDisclosureButton->Show();
     }
+    virtual ~VclExpander() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
@@ -544,10 +549,9 @@ public:
 protected:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
-    void dispose() SAL_OVERRIDE { m_pDisclosureButton.clear(); VclBin::dispose(); }
 private:
     bool m_bResizeTopLevel;
-    DisclosureButtonPtr m_pDisclosureButton;
+    VclPtr<DisclosureButton> m_pDisclosureButton;
     Link maExpandedHdl;
     DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
 };
@@ -556,11 +560,13 @@ class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 {
 public:
     VclScrolledWindow(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
+    virtual ~VclScrolledWindow() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    ScrollBar& getVertScrollBar() { return *m_pVScroll.get(); }
-    ScrollBar& getHorzScrollBar() { return *m_pHScroll.get(); }
+    ScrollBar& getVertScrollBar() { return *m_pVScroll; }
+    ScrollBar& getHorzScrollBar() { return *m_pHScroll; }
     Size getVisibleChildSize() const;
     //set to true to disable the built-in scrolling callbacks to allow the user
     //to override it
@@ -571,12 +577,11 @@ protected:
     DECL_LINK(ScrollBarHdl, void *);
     void InitScrollBars(const Size &rRequest);
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    void dispose() SAL_OVERRIDE { m_pVScroll.clear(); m_pHScroll.clear(); VclBin::dispose(); }
 private:
     bool m_bUserManagedScrolling;
-    ScrollBarPtr m_pVScroll;
-    ScrollBarPtr m_pHScroll;
-    ScrollBarBox m_aScrollBarBox;
+    VclPtr<ScrollBar> m_pVScroll;
+    VclPtr<ScrollBar> m_pHScroll;
+    VclPtr<ScrollBarBox> m_aScrollBarBox;
 };
 
 class VCL_DLLPUBLIC VclViewport : public VclBin
@@ -618,13 +623,16 @@ private:
         }
     };
 
-    EventBoxHelper m_aEventBoxHelper;
+    VclPtr<EventBoxHelper> m_aEventBoxHelper;
+protected:
+    virtual void dispose() SAL_OVERRIDE;
+    virtual ~VclEventBox();
 public:
     VclEventBox(vcl::Window* pParent)
         : VclBin(pParent)
-        , m_aEventBoxHelper(this)
+        , m_aEventBoxHelper(VclPtr<EventBoxHelper>::Create(this))
     {
-        m_aEventBoxHelper.Show();
+        m_aEventBoxHelper->Show();
     }
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
@@ -645,7 +653,7 @@ enum VclSizeGroupMode
 class VCL_DLLPUBLIC VclSizeGroup
 {
 private:
-    std::set<vcl::Window*> m_aWindows;
+    std::set< VclPtr<vcl::Window> > m_aWindows;
     bool m_bIgnoreHidden;
     VclSizeGroupMode m_eMode;
 
@@ -658,17 +666,17 @@ public:
     }
     void insert(vcl::Window *pWindow)
     {
-        m_aWindows.insert(pWindow);
+        m_aWindows.insert(VclPtr<vcl::Window>(pWindow));
     }
     void erase(vcl::Window *pWindow)
     {
-        m_aWindows.erase(pWindow);
+        m_aWindows.erase(VclPtr<vcl::Window>(pWindow));
     }
-    const std::set<vcl::Window*>& get_widgets() const
+    const std::set< VclPtr<vcl::Window> >& get_widgets() const
     {
         return m_aWindows;
     }
-    std::set<vcl::Window*>& get_widgets()
+    std::set< VclPtr<vcl::Window> >& get_widgets()
     {
         return m_aWindows;
     }
@@ -708,14 +716,14 @@ class VCL_DLLPUBLIC MessageDialog : public Dialog
 private:
     VclButtonsType m_eButtonsType;
     VclMessageType m_eMessageType;
-    VclBox *m_pOwnedContentArea;
-    VclButtonBox *m_pOwnedActionArea;
-    VclGrid* m_pGrid;
-    FixedImage* m_pImage;
-    VclMultiLineEdit* m_pPrimaryMessage;
-    VclMultiLineEdit* m_pSecondaryMessage;
-    std::vector<PushButton*> m_aOwnedButtons;
-    std::map<const vcl::Window*, short> m_aResponses;
+    VclPtr<VclBox> m_pOwnedContentArea;
+    VclPtr<VclButtonBox> m_pOwnedActionArea;
+    VclPtr<VclGrid> m_pGrid;
+    VclPtr<FixedImage> m_pImage;
+    VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
+    VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
+    std::vector<VclPtr<PushButton> > m_aOwnedButtons;
+    std::map< VclPtr<const vcl::Window>, short> m_aResponses;
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
     DECL_DLLPRIVATE_LINK(ButtonHdl, Button *);
@@ -742,6 +750,7 @@ public:
     void set_primary_text(const OUString &rPrimaryString);
     void set_secondary_text(const OUString &rSecondaryString);
     virtual ~MessageDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     static void SetMessagesWidths(vcl::Window *pParent, VclMultiLineEdit *pPrimaryMessage,
         VclMultiLineEdit *pSecondaryMessage);

@@ -257,23 +257,23 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
 
 static short lcl_AskRedlineMode(vcl::Window *pWin)
 {
-    MessBox aQBox( pWin, 0,
+    ScopedVclPtrInstance<MessBox> aQBox( pWin, 0,
                     OUString( SW_RES( STR_REDLINE_TITLE ) ),
                     OUString( SW_RES( STR_REDLINE_MSG ) ) );
-    aQBox.SetImage( QueryBox::GetStandardImage() );
+    aQBox->SetImage( QueryBox::GetStandardImage() );
     const sal_uInt16 nBtnFlags = BUTTONDIALOG_DEFBUTTON |
                         BUTTONDIALOG_OKBUTTON |
                         BUTTONDIALOG_FOCUSBUTTON;
 
-    aQBox.AddButton(OUString(SW_RES(STR_REDLINE_ACCEPT_ALL)), RET_OK, nBtnFlags);
-    aQBox.GetPushButton( RET_OK )->SetHelpId(HID_AUTOFORMAT_ACCEPT);
-    aQBox.AddButton(OUString(SW_RES(STR_REDLINE_REJECT_ALL)), RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
-    aQBox.GetPushButton( RET_CANCEL )->SetHelpId(HID_AUTOFORMAT_REJECT  );
-    aQBox.AddButton(OUString(SW_RES(STR_REDLINE_EDIT)), 2, 0);
-    aQBox.GetPushButton( 2 )->SetHelpId(HID_AUTOFORMAT_EDIT_CHG);
-    aQBox.SetButtonHelpText( RET_OK, OUString() );
+    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_ACCEPT_ALL)), RET_OK, nBtnFlags);
+    aQBox->GetPushButton( RET_OK )->SetHelpId(HID_AUTOFORMAT_ACCEPT);
+    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_REJECT_ALL)), RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
+    aQBox->GetPushButton( RET_CANCEL )->SetHelpId(HID_AUTOFORMAT_REJECT  );
+    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_EDIT)), 2, 0);
+    aQBox->GetPushButton( 2 )->SetHelpId(HID_AUTOFORMAT_EDIT_CHG);
+    aQBox->SetButtonHelpText( RET_OK, OUString() );
 
-    return aQBox.Execute();
+    return aQBox->Execute();
 }
 
 void SwTextShell::Execute(SfxRequest &rReq)

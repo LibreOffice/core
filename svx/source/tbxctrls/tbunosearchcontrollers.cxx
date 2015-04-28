@@ -139,10 +139,6 @@ FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent, WinBits nStyle
     EnableAutocomplete(true, true);
 }
 
-FindTextFieldControl::~FindTextFieldControl()
-{
-}
-
 void FindTextFieldControl::Remember_Impl(const OUString& rStr)
 {
     sal_uInt16 nCount = GetEntryCount();
@@ -419,8 +415,7 @@ void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeExce
     if (m_pFindTextFieldControl != nullptr) {
         SearchToolbarControllersManager::createControllersManager()
             .saveSearchHistory(m_pFindTextFieldControl);
-        delete m_pFindTextFieldControl;
-        m_pFindTextFieldControl = 0;
+        m_pFindTextFieldControl.disposeAndClear();
     }
 }
 
@@ -462,7 +457,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
     if ( pParent )
     {
         ToolBox* pToolbar = static_cast<ToolBox*>(pParent);
-        m_pFindTextFieldControl = new FindTextFieldControl( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xContext  );
+        m_pFindTextFieldControl = VclPtr<FindTextFieldControl>::Create( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xContext  );
 
         Size aSize(250, m_pFindTextFieldControl->GetTextHeight() + 200);
         m_pFindTextFieldControl->SetSizePixel( aSize );
@@ -665,8 +660,7 @@ void SAL_CALL MatchCaseToolboxController::dispose() throw ( css::uno::RuntimeExc
 
     svt::ToolboxController::dispose();
 
-    delete m_pMatchCaseControl;
-    m_pMatchCaseControl = 0;
+    m_pMatchCaseControl.disposeAndClear();
 }
 
 // XInitialization
@@ -686,7 +680,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::cr
     if ( pParent )
     {
         ToolBox* pToolbar = static_cast<ToolBox*>(pParent);
-        m_pMatchCaseControl = new CheckBox( pToolbar, 0 );
+        m_pMatchCaseControl = VclPtr<CheckBox>::Create( pToolbar, 0 );
         m_pMatchCaseControl->SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_MATCHCASE ) );
         Size aSize( m_pMatchCaseControl->GetOptimalSize() );
         m_pMatchCaseControl->SetSizePixel( aSize );
@@ -954,7 +948,7 @@ void SAL_CALL SearchLabelToolboxController::statusChanged( const css::frame::Fea
 
 css::uno::Reference< css::awt::XWindow > SAL_CALL SearchLabelToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException, std::exception )
 {
-    vcl::Window *pSL= new FixedText(VCLUnoHelper::GetWindow( Parent ));
+    VclPtr<vcl::Window> pSL = VclPtr<FixedText>::Create(VCLUnoHelper::GetWindow( Parent ));
     pSL->SetSizePixel(Size(250, 25));
     return VCLUnoHelper::GetInterface(pSL);
 }

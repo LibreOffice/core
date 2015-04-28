@@ -161,7 +161,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     assert(pColPgSet);
 
     // create TabPage
-    pTabPage = static_cast<SwColumnPage*>( SwColumnPage::Create(get_content_area(), pColPgSet) );
+    pTabPage = static_cast<SwColumnPage*>( SwColumnPage::Create(get_content_area(), pColPgSet).get() );
     pTabPage->get<vcl::Window>("applytoft")->Show();
     pTabPage->get(m_pApplyToLB, "applytolb");
     m_pApplyToLB->Show();
@@ -214,10 +214,17 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
 
 SwColumnDlg::~SwColumnDlg()
 {
-    delete pTabPage;
+    disposeOnce();
+}
+
+void SwColumnDlg::dispose()
+{
+    pTabPage.disposeAndClear();
     delete pPageSet;
     delete pSectionSet;
     delete pSelectionSet;
+    m_pApplyToLB.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
@@ -542,7 +549,36 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwColumnPage::~SwColumnPage()
 {
+    disposeOnce();
+}
+
+void SwColumnPage::dispose()
+{
     delete pColMgr;
+    m_pCLNrEdt.clear();
+    m_pDefaultVS.clear();
+    m_pBalanceColsCB.clear();
+    m_pBtnBack.clear();
+    m_pLbl1.clear();
+    m_pLbl2.clear();
+    m_pLbl3.clear();
+    m_pBtnNext.clear();
+    m_pAutoWidthBox.clear();
+    m_pLineTypeLbl.clear();
+    m_pLineTypeDLB.clear();
+    m_pLineWidthLbl.clear();
+    m_pLineWidthEdit.clear();
+    m_pLineColorLbl.clear();
+    m_pLineColorDLB.clear();
+    m_pLineHeightLbl.clear();
+    m_pLineHeightEdit.clear();
+    m_pLinePosLbl.clear();
+    m_pLinePosDLB.clear();
+    m_pTextDirectionFT.clear();
+    m_pTextDirectionLB.clear();
+    m_pPgeExampleWN.clear();
+    m_pFrmExampleWN.clear();
+    SfxTabPage::dispose();
 }
 
 void SwColumnPage::SetPageWidth(long nPageWidth)
@@ -621,10 +657,11 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 }
 
 // create TabPage
-SfxTabPage* SwColumnPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwColumnPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwColumnPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwColumnPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
+
 // stuff attributes into the Set when OK
 bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 {

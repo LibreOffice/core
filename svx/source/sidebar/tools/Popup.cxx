@@ -36,7 +36,7 @@ Popup::Popup (
       msAccessibleName(rsAccessibleName),
       mxContainer()
 {
-    OSL_ASSERT(mpParent!=NULL);
+    OSL_ASSERT(mpParent!=nullptr);
     OSL_ASSERT(maControlCreator);
 }
 
@@ -94,8 +94,8 @@ void Popup::SetPopupModeEndHandler (const ::boost::function<void()>& rCallback)
 void Popup::ProvideContainerAndControl()
 {
     if ( ! (mxContainer && mxControl)
-        && mpParent!=NULL
-        && maControlCreator)
+         && mpParent != nullptr
+         && maControlCreator)
     {
         CreateContainerAndControl();
     }
@@ -103,7 +103,7 @@ void Popup::ProvideContainerAndControl()
 
 void Popup::CreateContainerAndControl()
 {
-    mxContainer.reset(new PopupContainer(mpParent));
+    mxContainer.reset(VclPtr<PopupContainer>::Create(mpParent));
     mxContainer->SetAccessibleName(msAccessibleName);
     mxContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
     mxContainer->SetBorderStyle(mxContainer->GetBorderStyle() | WindowBorderStyle::MENU);

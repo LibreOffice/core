@@ -85,8 +85,9 @@ class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
     static const sal_uInt16 pValueRanges[];
 public:
     explicit                    ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet );
-
-    static SfxTabPage*          Create( vcl::Window* pParent, const SfxItemSet* rArgSet );
+    virtual                     ~ScTPValidationValue();
+    virtual void                dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>          Create( vcl::Window* pParent, const SfxItemSet* rArgSet );
     static const sal_uInt16*    GetRanges() { return pValueRanges; }
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -104,19 +105,19 @@ private:
                                 DECL_LINK(SelectHdl, void *);
                                 DECL_LINK(CheckHdl, void *);
 
-    ListBox*                    m_pLbAllow;
-    CheckBox*                   m_pCbAllow;      /// Allow blank cells.
-    CheckBox*                   m_pCbShow;       /// Show selection list in cell.
-    CheckBox*                   m_pCbSort;       /// Sort selection list in cell.
-    FixedText*                  m_pFtValue;
-    ListBox*                    m_pLbValue;
-    FixedText*                  m_pFtMin;
-    VclContainer*               m_pMinGrid;
-    formula::RefEdit*           m_pEdMin;
-    VclMultiLineEdit*           m_pEdList;       /// Entries for explicit list
-    FixedText*                  m_pFtMax;
-    formula::RefEdit*           m_pEdMax;
-    FixedText*                  m_pFtHint;       /// Hint text for cell range validity.
+    VclPtr<ListBox>                    m_pLbAllow;
+    VclPtr<CheckBox>                   m_pCbAllow;      /// Allow blank cells.
+    VclPtr<CheckBox>                   m_pCbShow;       /// Show selection list in cell.
+    VclPtr<CheckBox>                   m_pCbSort;       /// Sort selection list in cell.
+    VclPtr<FixedText>                  m_pFtValue;
+    VclPtr<ListBox>                    m_pLbValue;
+    VclPtr<FixedText>                  m_pFtMin;
+    VclPtr<VclContainer>               m_pMinGrid;
+    VclPtr<formula::RefEdit>           m_pEdMin;
+    VclPtr<VclMultiLineEdit>           m_pEdList;       /// Entries for explicit list
+    VclPtr<FixedText>                  m_pFtMax;
+    VclPtr<formula::RefEdit>           m_pEdMax;
+    VclPtr<FixedText>                  m_pFtHint;       /// Hint text for cell range validity.
 
     OUString                    maStrMin;
     OUString                    maStrMax;
@@ -128,11 +129,11 @@ private:
     DECL_LINK(EditSetFocusHdl, void *);
     DECL_LINK( KillFocusHdl, vcl::Window *);
     void    OnClick( Button *pBtn );
-    formula::RefEdit*           m_pRefEdit;
+    VclPtr<formula::RefEdit>           m_pRefEdit;
 public:
     class ScRefButtonEx : public ::formula::RefButton
     {
-        ScTPValidationValue* m_pPage;
+        VclPtr<ScTPValidationValue> m_pPage;
         virtual void Click() SAL_OVERRIDE;
     public:
         ScRefButtonEx(vcl::Window* pParent, WinBits nStyle)
@@ -140,6 +141,8 @@ public:
             , m_pPage(NULL)
         {
         }
+        virtual ~ScRefButtonEx();
+        virtual void dispose() SAL_OVERRIDE;
         void SetParentPage(ScTPValidationValue *pPage)
         {
             m_pPage = pPage;
@@ -150,8 +153,8 @@ public:
         }
     };
 private:
-    ScRefButtonEx*              m_pBtnRef;
-    VclContainer*               m_pRefGrid;
+    VclPtr<ScRefButtonEx>              m_pBtnRef;
+    VclPtr<VclContainer>               m_pRefGrid;
     friend class ScRefButtonEx;
     void            SetReferenceHdl( const ScRange& , ScDocument* );
     void            SetActiveHdl();
@@ -175,7 +178,7 @@ class ScValidationDlg
     DECL_LINK( OkHdl, Button * );
 
     ScTabViewShell *m_pTabVwSh;
-    VclHBox* m_pHBox;
+    VclPtr<VclHBox> m_pHBox;
     sal_uInt16 m_nValuePageId;
     bool    m_bOwnRefHdlr:1;
     bool    m_bRefInputting:1;
@@ -185,10 +188,13 @@ class ScValidationDlg
 
 public:
     explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
-    virtual                     ~ScValidationDlg()
+    virtual                     ~ScValidationDlg() { disposeOnce(); }
+    virtual void                dispose() SAL_OVERRIDE
     {
         if( m_bOwnRefHdlr )
             RemoveRefDlg( false );
+        m_pHBox.clear();
+        ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>::dispose();
     }
     static ScValidationDlg * Find1AliveObject( vcl::Window *pAncestor )
     {
@@ -276,9 +282,9 @@ public:
 class ScTPValidationHelp : public SfxTabPage
 {
 private:
-    TriStateBox*      pTsbHelp;
-    Edit*             pEdtTitle;
-    VclMultiLineEdit* pEdInputHelp;
+    VclPtr<TriStateBox>      pTsbHelp;
+    VclPtr<Edit>             pEdtTitle;
+    VclPtr<VclMultiLineEdit> pEdInputHelp;
 
     void    Init();
 
@@ -288,8 +294,9 @@ private:
 public:
             ScTPValidationHelp( vcl::Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationHelp();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static  SfxTabPage* Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
@@ -297,12 +304,12 @@ public:
 class ScTPValidationError : public SfxTabPage
 {
 private:
-    TriStateBox* m_pTsbShow;
-    ListBox* m_pLbAction;
-    PushButton* m_pBtnSearch;
-    Edit* m_pEdtTitle;
-    FixedText* m_pFtError;
-    VclMultiLineEdit* m_pEdError;
+    VclPtr<TriStateBox> m_pTsbShow;
+    VclPtr<ListBox> m_pLbAction;
+    VclPtr<PushButton> m_pBtnSearch;
+    VclPtr<Edit> m_pEdtTitle;
+    VclPtr<FixedText> m_pFtError;
+    VclPtr<VclMultiLineEdit> m_pEdError;
 
     void    Init();
 
@@ -313,8 +320,9 @@ private:
 public:
             ScTPValidationError( vcl::Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationError();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static  SfxTabPage* Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };

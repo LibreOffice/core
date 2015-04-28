@@ -41,7 +41,7 @@ SwTableOptimizeCtrl::~SwTableOptimizeCtrl()
 {
 }
 
-SfxPopupWindow* SwTableOptimizeCtrl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SwTableOptimizeCtrl::CreatePopupWindow()
 {
     createAndPositionSubToolBar("private:resource/toolbar/optimizetablebar");
     return NULL;

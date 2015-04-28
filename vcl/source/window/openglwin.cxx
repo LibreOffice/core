@@ -16,21 +16,21 @@ class OpenGLWindowImpl
 {
 public:
     OpenGLWindowImpl(vcl::Window* pWindow);
+    ~OpenGLWindowImpl() { mxChildWindow.disposeAndClear(); }
     OpenGLContext& getContext() { return maContext;}
 private:
     OpenGLContext maContext;
-    std::unique_ptr<SystemChildWindow> mxChildWindow;
+    VclPtr<SystemChildWindow> mxChildWindow;
 };
 
 OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)
 {
     SystemWindowData aData = OpenGLContext::generateWinData(pWindow, false);
-    mxChildWindow.reset(new SystemChildWindow(pWindow, 0, &aData));
+    mxChildWindow.reset(VclPtr<SystemChildWindow>::Create(pWindow, 0, &aData));
     mxChildWindow->Show();
     maContext.init(mxChildWindow.get());
     pWindow->SetMouseTransparent(false);
 }
-
 
 OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
     Window(pParent, 0),
@@ -41,8 +41,16 @@ OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
 
 OpenGLWindow::~OpenGLWindow()
 {
+    disposeOnce();
+}
+
+void OpenGLWindow::dispose()
+{
     if(mpRenderer)
         mpRenderer->contextDestroyed();
+    mpRenderer = NULL;
+    mxImpl.reset();
+    Window::dispose();
 }
 
 OpenGLContext& OpenGLWindow::getContext()

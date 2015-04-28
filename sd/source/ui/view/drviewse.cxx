@@ -1721,7 +1721,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 void DrawViewShell::ShowUIControls (bool bVisible)
 {
     ViewShell::ShowUIControls (bVisible);
-    maTabControl.Show (bVisible);
+    maTabControl->Show (bVisible);
 }
 
 namespace slideshowhelp

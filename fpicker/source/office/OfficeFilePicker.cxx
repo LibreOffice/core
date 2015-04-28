@@ -463,12 +463,12 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 }
 
 
-SvtFileDialog* SvtFilePicker::implCreateDialog( vcl::Window* _pParent )
+VclPtr<SvtFileDialog> SvtFilePicker::implCreateDialog( vcl::Window* _pParent )
 {
     WinBits nExtraBits;
     WinBits nBits = getWinBits( nExtraBits );
 
-    SvtFileDialog* dialog = new SvtFileDialog( _pParent, nBits, nExtraBits );
+    VclPtrInstance<SvtFileDialog> dialog( _pParent, nBits, nExtraBits );
 
     // Set StandardDir if present
     if ( !m_aStandardDir.isEmpty())

@@ -72,7 +72,6 @@ class TestWindow : public Dialog
             Show();
         }
 
-        virtual ~TestWindow() {}
         virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
@@ -899,8 +898,8 @@ sal_uInt16 GrindApp::Exception( sal_uInt16 nError )
 
 int GrindApp::Main()
 {
-    TestWindow aWindow;
-    aWindow.Execute();
+    ScopedVclPtrInstance<TestWindow> aWindow;
+    aWindow->Execute();
     return 0;
 }
 

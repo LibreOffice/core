@@ -179,7 +179,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     {
         // The lines are only one time in the virtual device, only the outline
         // page is currently done
-        pVDev = new VirtualDevice(*pDev);
+        pVDev = VclPtr<VirtualDevice>::Create(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->EnableRTL( IsRTLEnabled() );
          pVDev->SetOutputSize( aRectSize );
@@ -423,7 +423,13 @@ void SvxNumValueSet::init(sal_uInt16 nType)
 
 SvxNumValueSet::~SvxNumValueSet()
 {
-    delete pVDev;
+    disposeOnce();
+}
+
+void SvxNumValueSet::dispose()
+{
+    pVDev.disposeAndClear();
+    ValueSet::dispose();
 }
 
 void SvxNumValueSet::SetNumberingSettings(
@@ -487,8 +493,14 @@ void SvxBmpNumValueSet::init()
 
 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
+    disposeOnce();
+}
+
+void SvxBmpNumValueSet::dispose()
+{
     GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
     aFormatIdle.Stop();
+    SvxNumValueSet::dispose();
 }
 
 void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )

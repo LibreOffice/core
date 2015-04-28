@@ -672,6 +672,17 @@ void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
     SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
 }
 
+SfxAccCfgTabListBox_Impl::~SfxAccCfgTabListBox_Impl()
+{
+    disposeOnce();
+}
+
+void SfxAccCfgTabListBox_Impl::dispose()
+{
+    m_pAccelConfigPage.clear();
+    SvTabListBox::dispose();
+}
+
 /** select the entry, which match the current key input ... excepting
     keys, which are used for the dialog itself.
   */
@@ -800,6 +811,11 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
+    disposeOnce();
+}
+
+void SfxAcceleratorConfigPage::dispose()
+{
     // free memory - remove all dynamic user data
     SvTreeListEntry* pEntry = m_pEntriesBox->First();
     while (pEntry)
@@ -823,6 +839,21 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
     m_pKeyBox->Clear();
 
     delete m_pFileDlg;
+    m_pFileDlg = NULL;
+
+    m_pEntriesBox.clear();
+    m_pOfficeButton.clear();
+    m_pModuleButton.clear();
+    m_pChangeButton.clear();
+    m_pRemoveButton.clear();
+    m_pGroupLBox.clear();
+    m_pFunctionBox.clear();
+    m_pKeyBox.clear();
+    m_pLoadButton.clear();
+    m_pSaveButton.clear();
+    m_pResetButton.clear();
+
+    SfxTabPage::dispose();
 }
 
 void SfxAcceleratorConfigPage::InitAccCfg()

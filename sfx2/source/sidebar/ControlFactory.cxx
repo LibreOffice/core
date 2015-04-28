@@ -25,14 +25,14 @@
 
 namespace sfx2 { namespace sidebar {
 
-CheckBox* ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
+VclPtr<CheckBox> ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
 {
-    return new MenuButton(pParentWindow);
+    return VclPtr<CheckBox>(new MenuButton(pParentWindow), SAL_NO_ACQUIRE);
 }
 
-ImageRadioButton* ControlFactory::CreateTabItem (vcl::Window* pParentWindow)
+VclPtr<ImageRadioButton> ControlFactory::CreateTabItem (vcl::Window* pParentWindow)
 {
-    return new TabItem(pParentWindow);
+    return VclPtr<ImageRadioButton>(new TabItem(pParentWindow), SAL_NO_ACQUIRE);
 }
 
 } } // end of namespace sfx2::sidebar

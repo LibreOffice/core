@@ -148,7 +148,7 @@ public:
 private:
     ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    ValueSet*                                                           mpParent;
+    VclPtr<ValueSet>                                                    mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
     /// The current FOCUSED state.
     bool mbIsFocused;

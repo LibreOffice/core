@@ -155,7 +155,13 @@ namespace svt
 
     HyperLabel::~HyperLabel( )
     {
+        disposeOnce();
+    }
+
+    void HyperLabel::dispose()
+    {
         delete m_pImpl;
+        FixedText::dispose();
     }
 
     void HyperLabel::SetInteractive( bool _bInteractive )

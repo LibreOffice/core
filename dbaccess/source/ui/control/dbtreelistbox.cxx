@@ -84,7 +84,13 @@ void DBTreeListBox::init()
 
 DBTreeListBox::~DBTreeListBox()
 {
+    disposeOnce();
+}
+
+void DBTreeListBox::dispose()
+{
     implStopSelectionTimer();
+    SvTreeListBox::dispose();
 }
 
 SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const

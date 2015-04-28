@@ -41,8 +41,8 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
     else
     {
         OUString aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
-        MessageDialog aErrorBox(this, aErrorMsg);
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aErrorMsg);
+        aErrorBox->Execute();
         m_pEDMasterPasswordCrt->SetText( OUString() );
         m_pEDMasterPasswordRepeat->SetText( OUString() );
         m_pEDMasterPasswordCrt->GrabFocus();
@@ -61,6 +61,19 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog(vcl::Window* pParent, Res
     m_pOKBtn->Enable( false );
     m_pOKBtn->SetClickHdl( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );
     m_pEDMasterPasswordCrt->SetModifyHdl( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
+}
+
+MasterPasswordCreateDialog::~MasterPasswordCreateDialog()
+{
+    disposeOnce();
+}
+
+void MasterPasswordCreateDialog::dispose()
+{
+    m_pEDMasterPasswordCrt.clear();
+    m_pEDMasterPasswordRepeat.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

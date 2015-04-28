@@ -75,8 +75,8 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
             // be removed in a short time.
             if (m_aBoxType==COMBOBOX)
             {
-                ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
-                if ( ( pComboBox != NULL ) && ( pChildWindow != NULL ) )
+                VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
+                if ( ( pComboBox != nullptr ) && ( pChildWindow != NULL ) )
                     if (pChildWindow == pComboBox->GetSubEdit())
                     {
                         if (rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW)
@@ -327,8 +327,8 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32
             {
                 if (m_aBoxType==COMBOBOX)
                 {
-                    ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
-                    if (pComboBox!=NULL && pComboBox->GetSubEdit()!=NULL)
+                    VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
+                    if (pComboBox!=nullptr && pComboBox->GetSubEdit()!=NULL)
                     //Set the edit's acc name the same as parent
                     {
                         pComboBox->GetSubEdit()->SetAccessibleName(getAccessibleName());
@@ -398,8 +398,8 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
 
         if (m_aBoxType == COMBOBOX)
         {
-            ComboBox* pComboBox = static_cast< ComboBox* >( GetWindow() );
-            if (pComboBox != NULL)
+            VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
+            if (pComboBox != nullptr)
             {
                 pComboBox->ToggleDropDown();
                 bNotify = true;
@@ -407,8 +407,8 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
         }
         else if (m_aBoxType == LISTBOX)
         {
-            ListBox* pListBox = static_cast< ListBox* >( GetWindow() );
-            if (pListBox != NULL)
+            VclPtr< ListBox > pListBox = GetAs< ListBox >();
+            if (pListBox != nullptr)
             {
                 pListBox->ToggleDropDown();
                 bNotify = true;
@@ -532,8 +532,8 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
     {
         OUString sText;
         sal_Int32 nEntryCount = 0;
-        ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
-        if (pComboBox != NULL)
+        VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
+        if (pComboBox != nullptr)
         {
             Edit* pSubEdit = pComboBox->GetSubEdit();
             if ( pSubEdit)
@@ -546,8 +546,8 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
     else if (m_aBoxType == LISTBOX && m_bIsDropDownBox)
     {
         sal_Int32 nSelectedEntryCount = 0;
-        ListBox* pListBox = static_cast< ListBox* >( GetWindow() );
-        if (pListBox != NULL && pListBox->GetEntryCount() > 0)
+        VclPtr< ListBox > pListBox = GetAs< ListBox >();
+        if (pListBox != nullptr && pListBox->GetEntryCount() > 0)
         {
             nSelectedEntryCount = pListBox->GetSelectEntryCount();
             if ( nSelectedEntryCount == 0)

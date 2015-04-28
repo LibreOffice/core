@@ -66,6 +66,18 @@ SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
     LoseFocusHdl();
 }
 
+SwTableWidthDlg::~SwTableWidthDlg()
+{
+    disposeOnce();
+}
+
+void SwTableWidthDlg::dispose()
+{
+    m_pColNF.clear();
+    m_pWidthMF.clear();
+    SvxStandardDialog::dispose();
+}
+
 void SwTableWidthDlg::Apply()
 {
     rFnc.InitTabCols();

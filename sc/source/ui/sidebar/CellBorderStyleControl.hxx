@@ -32,11 +32,11 @@ class CellBorderStyleControl : public svx::sidebar::PopupControl
 {
 private:
     CellAppearancePropertyPanel&    mrCellAppearancePropertyPanel;
-    ToolBox                         maTBBorder1;
-    ToolBox                         maTBBorder2;
-    ToolBox                         maTBBorder3;
-    FixedLine                       maFL1;
-    FixedLine                       maFL2;
+    VclPtr<ToolBox>                 maTBBorder1;
+    VclPtr<ToolBox>                 maTBBorder2;
+    VclPtr<ToolBox>                 maTBBorder3;
+    VclPtr<FixedLine>               maFL1;
+    VclPtr<FixedLine>               maFL2;
     Image*                          mpImageList;
 
     void Initialize();
@@ -48,6 +48,7 @@ private:
 public:
     CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);
     virtual ~CellBorderStyleControl();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 } } // end of namespace svx::sidebar

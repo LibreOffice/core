@@ -57,7 +57,7 @@ SwWrapDlg::SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bo
 
 {
     // create TabPage
-    SwWrapTabPage* pNewPage = static_cast<SwWrapTabPage*>( SwWrapTabPage::Create(get_content_area(), &rSet) );
+    VclPtr<SwWrapTabPage> pNewPage = static_cast<SwWrapTabPage*>( SwWrapTabPage::Create(get_content_area(), &rSet).get() );
     pNewPage->SetFormatUsed(false, bDrawMode);
     pNewPage->SetShell(pWrtShell);
     SetTabPage(pNewPage);
@@ -133,11 +133,31 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwWrapTabPage::~SwWrapTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SwWrapTabPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+void SwWrapTabPage::dispose()
 {
-    return new SwWrapTabPage(pParent, *rSet);
+    m_pNoWrapRB.clear();
+    m_pWrapLeftRB.clear();
+    m_pWrapRightRB.clear();
+    m_pWrapParallelRB.clear();
+    m_pWrapThroughRB.clear();
+    m_pIdealWrapRB.clear();
+    m_pLeftMarginED.clear();
+    m_pRightMarginED.clear();
+    m_pTopMarginED.clear();
+    m_pBottomMarginED.clear();
+    m_pWrapAnchorOnlyCB.clear();
+    m_pWrapTransparentCB.clear();
+    m_pWrapOutlineCB.clear();
+    m_pWrapOutsideCB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwWrapTabPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+{
+    return VclPtr<SfxTabPage>(new SwWrapTabPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwWrapTabPage::Reset(const SfxItemSet *rSet)

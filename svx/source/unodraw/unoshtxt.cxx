@@ -88,7 +88,7 @@ private:
     SdrObject*                      mpObject;
     SdrText*                        mpText;
     SdrView*                        mpView;
-    const vcl::Window*                   mpWindow;
+    VclPtr<const vcl::Window>       mpWindow;
     SdrModel*                       mpModel;
     SdrOutliner*                    mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;

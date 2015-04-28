@@ -40,7 +40,13 @@ OColorListener::OColorListener(vcl::Window* _pParent ,const OUString& _sColorEnt
 
 OColorListener::~OColorListener()
 {
+    disposeOnce();
+}
+
+void OColorListener::dispose()
+{
     EndListening(m_aExtendedColorConfig);
+    vcl::Window::dispose();
 }
 
 void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)

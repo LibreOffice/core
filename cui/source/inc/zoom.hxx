@@ -27,21 +27,21 @@
 class SvxZoomDialog : public SfxModalDialog
 {
 private:
-    RadioButton*  m_pOptimalBtn;
-    RadioButton*  m_pWholePageBtn;
-    RadioButton*  m_pPageWidthBtn;
-    RadioButton*  m_p100Btn;
-    RadioButton*  m_pUserBtn;
-    MetricField*  m_pUserEdit;
+    VclPtr<RadioButton>        m_pOptimalBtn;
+    VclPtr<RadioButton>        m_pWholePageBtn;
+    VclPtr<RadioButton>        m_pPageWidthBtn;
+    VclPtr<RadioButton>        m_p100Btn;
+    VclPtr<RadioButton>        m_pUserBtn;
+    VclPtr<MetricField>        m_pUserEdit;
 
-    VclContainer* m_pViewFrame;
-    RadioButton*  m_pAutomaticBtn;
-    RadioButton*  m_pSingleBtn;
-    RadioButton*  m_pColumnsBtn;
-    NumericField* m_pColumnsEdit;
-    CheckBox*     m_pBookModeChk;
+    VclPtr<VclContainer>       m_pViewFrame;
+    VclPtr<RadioButton>        m_pAutomaticBtn;
+    VclPtr<RadioButton>        m_pSingleBtn;
+    VclPtr<RadioButton>        m_pColumnsBtn;
+    VclPtr<NumericField>       m_pColumnsEdit;
+    VclPtr<CheckBox>           m_pBookModeChk;
 
-    OKButton*     m_pOKBtn;
+    VclPtr<OKButton>           m_pOKBtn;
 
     const SfxItemSet&           mrSet;
     std::unique_ptr<SfxItemSet> mpOutSet;
@@ -57,6 +57,7 @@ private:
 public:
     SvxZoomDialog(vcl::Window* pParent, const SfxItemSet& rCoreSet);
     virtual ~SvxZoomDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     const SfxItemSet* GetOutputItemSet() const;
 

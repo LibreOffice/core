@@ -520,7 +520,7 @@ UpdateDialog::UpdateDialog(
     get(m_pthrobber, "THROBBER");
     get(m_pUpdate, "UPDATE_LABEL");
     get(m_pContainer, "UPDATES_CONTAINER");
-    m_pUpdates = new UpdateDialog::CheckListBox(m_pContainer, *this);
+    m_pUpdates = VclPtr<UpdateDialog::CheckListBox>::Create(m_pContainer, *this);
     Size aSize(LogicToPixel(Size(240, 51), MAP_APPFONT));
     m_pUpdates->set_width_request(aSize.Width());
     m_pUpdates->set_height_request(aSize.Height());
@@ -564,6 +564,11 @@ UpdateDialog::UpdateDialog(
 
 UpdateDialog::~UpdateDialog()
 {
+    disposeOnce();
+}
+
+void UpdateDialog::dispose()
+{
     storeIgnoredUpdates();
 
     for ( std::vector< UpdateDialog::Index* >::iterator i( m_ListboxEntries.begin() ); i != m_ListboxEntries.end(); ++i )
@@ -574,7 +579,22 @@ UpdateDialog::~UpdateDialog()
     {
         delete (*i);
     }
-    delete m_pUpdates;
+    m_pUpdates.disposeAndClear();
+    m_pchecking.clear();
+    m_pthrobber.clear();
+    m_pUpdate.clear();
+    m_pContainer.clear();
+    m_pAll.clear();
+    m_pDescription.clear();
+    m_pPublisherLabel.clear();
+    m_pPublisherLink.clear();
+    m_pReleaseNotesLabel.clear();
+    m_pReleaseNotesLink.clear();
+    m_pDescriptions.clear();
+    m_pHelp.clear();
+    m_pOk.clear();
+    m_pClose.clear();
+    ModalDialog::dispose();
 }
 
 
@@ -598,9 +618,6 @@ UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & d
 {
     SetNormalStaticImage(Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT)));
 }
-
-UpdateDialog::CheckListBox::~CheckListBox() {}
-
 
 sal_uInt16 UpdateDialog::CheckListBox::getItemCount() const {
     sal_uLong i = GetEntryCount();

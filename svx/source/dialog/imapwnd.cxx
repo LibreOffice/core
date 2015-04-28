@@ -72,8 +72,14 @@ IMapWindow::IMapWindow( vcl::Window* pParent, WinBits nBits, const Reference< XF
 
 IMapWindow::~IMapWindow()
 {
+    disposeOnce();
+}
+
+void IMapWindow::dispose()
+{
     SfxItemPool::Free(pIMapPool);
     delete[] pItemInfo;
+    GraphCtrl::dispose();
 }
 
 Size IMapWindow::GetOptimalSize() const

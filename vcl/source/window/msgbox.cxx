@@ -151,9 +151,15 @@ MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
 
 MessBox::~MessBox()
 {
-    delete mpVCLMultiLineEdit;
-    delete mpFixedImage;
-    delete mpCheckBox;
+    disposeOnce();
+}
+
+void MessBox::dispose()
+{
+    mpVCLMultiLineEdit.disposeAndClear();
+    mpFixedImage.disposeAndClear();
+    mpCheckBox.disposeAndClear();
+    ButtonDialog::dispose();
 }
 
 void MessBox::ImplPosControls()
@@ -190,17 +196,12 @@ void MessBox::ImplPosControls()
     WinBits         nWinStyle = WB_LEFT | WB_NOLABEL;
     sal_uInt16          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
 
-    delete mpVCLMultiLineEdit;
-    if ( mpFixedImage )
-    {
-        delete mpFixedImage;
-        mpFixedImage = NULL;
-    }
+    mpVCLMultiLineEdit.disposeAndClear();
+    mpFixedImage.disposeAndClear();
     if ( mpCheckBox )
     {
         mbCheck = mpCheckBox->IsChecked();
-        delete mpCheckBox;
-        mpCheckBox = NULL;
+        mpCheckBox.disposeAndClear();
     }
 
     // Clean up message text with tabs
@@ -230,7 +231,7 @@ void MessBox::ImplPosControls()
         aImageSize.Width()  += 4;
         aImageSize.Height() += 4;
         aTextPos.X() += aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
-        mpFixedImage = new FixedImage( this );
+        mpFixedImage = VclPtr<FixedImage>::Create( this );
         mpFixedImage->SetPosSizePixel( Point( IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_X,
                                               IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_Y ),
                                        aImageSize );
@@ -320,7 +321,7 @@ void MessBox::ImplPosControls()
             }
         }
 
-        mpCheckBox = new CheckBox( this );
+        mpCheckBox = VclPtr<CheckBox>::Create( this );
         mpCheckBox->Check( mbCheck );
         mpCheckBox->SetText( aMnemonicString );
         mpCheckBox->SetStyle( mpCheckBox->GetStyle() | WB_WORDBREAK );
@@ -342,7 +343,7 @@ void MessBox::ImplPosControls()
         mpCheckBox->Show();
     }
 
-    mpVCLMultiLineEdit = new VclMultiLineEdit( this, nWinStyle );
+    mpVCLMultiLineEdit = VclPtr<VclMultiLineEdit>::Create( this, nWinStyle );
     mpVCLMultiLineEdit->SetText( aMessText );
     mpVCLMultiLineEdit->SetPosSizePixel( aTextPos, aMEditSize );
     mpVCLMultiLineEdit->Show();

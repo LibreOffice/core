@@ -129,12 +129,23 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDia
 
 SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 {
-    for ( sal_uInt16 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
+    disposeOnce();
+}
+
+void SvxHyperlinkNewDocTp::dispose()
+{
+    if (m_pLbDocTypes)
     {
-        DocumentTypeData* pTypeData = static_cast<DocumentTypeData*>(
-                                      m_pLbDocTypes->GetEntryData ( n ));
-        delete pTypeData;
+        for ( sal_uInt16 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
+            delete static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData ( n ));
+        m_pLbDocTypes = NULL;
     }
+    m_pRbtEditNow.clear();
+    m_pRbtEditLater.clear();
+    m_pCbbPath.clear();
+    m_pBtCreate.clear();
+    m_pLbDocTypes.clear();
+    SvxHyperlinkTabPageBase::dispose();
 }
 
 /*************************************************************************
@@ -232,9 +243,9 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStr
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkNewDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkNewDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return new SvxHyperlinkNewDocTp( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkNewDocTp>::Create( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************
@@ -260,8 +271,8 @@ bool SvxHyperlinkNewDocTp::AskApply()
     bool bRet = ImplGetURLObject( m_pCbbPath->GetText(), m_pCbbPath->GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
-        WarningBox aWarning( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
-        aWarning.Execute();
+        ScopedVclPtrInstance< WarningBox > aWarning( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
+        aWarning->Execute();
     }
     return bRet;
 }
@@ -310,8 +321,8 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
                 if( bOk )
                 {
-                    WarningBox aWarning( this, WB_YES_NO, CUI_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
-                    bCreate = aWarning.Execute() == RET_YES;
+                    ScopedVclPtrInstance<WarningBox> aWarning( this, WB_YES_NO, CUI_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
+                    bCreate = aWarning->Execute() == RET_YES;
                 }
             }
 

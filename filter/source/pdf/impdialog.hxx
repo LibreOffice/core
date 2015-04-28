@@ -56,13 +56,14 @@ public:
 
 class ImplErrorDialog : public MessageDialog
 {
-    ListBox*        m_pErrors;
-    FixedText*      m_pExplanation;
+    VclPtr<ListBox>        m_pErrors;
+    VclPtr<FixedText>      m_pExplanation;
 
     DECL_LINK(SelectHdl, void *);
     public:
     ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
     virtual ~ImplErrorDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class ImpPDFTabSecurityPage;
@@ -171,6 +172,7 @@ public:
                      const css::uno::Reference< XComponent >& rDoc
                      );
     virtual ~ImpPDFTabDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     Sequence< PropertyValue >   GetFilterData();
 
@@ -189,45 +191,45 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 {
     friend class  ImpPDFTabLinksPage;
 
-    RadioButton*  mpRbAll;
-    RadioButton*  mpRbRange;
-    RadioButton*  mpRbSelection;
-    Edit*         mpEdPages;
+    VclPtr<RadioButton>  mpRbAll;
+    VclPtr<RadioButton>  mpRbRange;
+    VclPtr<RadioButton>  mpRbSelection;
+    VclPtr<Edit>         mpEdPages;
 
-    RadioButton*  mpRbLosslessCompression;
-    RadioButton*  mpRbJPEGCompression;
-    VclContainer* mpQualityFrame;
-    MetricField*  mpNfQuality;
-    CheckBox*     mpCbReduceImageResolution;
-    ComboBox*     mpCoReduceImageResolution;
+    VclPtr<RadioButton>  mpRbLosslessCompression;
+    VclPtr<RadioButton>  mpRbJPEGCompression;
+    VclPtr<VclContainer> mpQualityFrame;
+    VclPtr<MetricField>  mpNfQuality;
+    VclPtr<CheckBox>     mpCbReduceImageResolution;
+    VclPtr<ComboBox>     mpCoReduceImageResolution;
 
-    CheckBox*     mpCbPDFA1b;
-    CheckBox*     mpCbTaggedPDF;
+    VclPtr<CheckBox>     mpCbPDFA1b;
+    VclPtr<CheckBox>     mpCbTaggedPDF;
     bool          mbTaggedPDFUserSelection;
 
-    CheckBox*     mpCbExportFormFields;
+    VclPtr<CheckBox>     mpCbExportFormFields;
     bool          mbExportFormFieldsUserSelection;
-    VclContainer* mpFormsFrame;
-    ListBox*      mpLbFormsFormat;
-    CheckBox*     mpCbAllowDuplicateFieldNames;
+    VclPtr<VclContainer> mpFormsFrame;
+    VclPtr<ListBox>      mpLbFormsFormat;
+    VclPtr<CheckBox>     mpCbAllowDuplicateFieldNames;
 
-    CheckBox*     mpCbExportBookmarks;
-    CheckBox*     mpCbExportHiddenSlides;
-    CheckBox*     mpCbExportNotes;
-    CheckBox*     mpCbViewPDF;
-    CheckBox*     mpCbExportNotesPages;
+    VclPtr<CheckBox>     mpCbExportBookmarks;
+    VclPtr<CheckBox>     mpCbExportHiddenSlides;
+    VclPtr<CheckBox>     mpCbExportNotes;
+    VclPtr<CheckBox>     mpCbViewPDF;
+    VclPtr<CheckBox>     mpCbExportNotesPages;
 
-    CheckBox*     mpCbExportEmptyPages;
-    CheckBox*     mpCbAddStream;
+    VclPtr<CheckBox>     mpCbExportEmptyPages;
+    VclPtr<CheckBox>     mpCbAddStream;
 
-    CheckBox*     mpCbWatermark;
-    FixedText*    mpFtWatermark;
-    Edit*         mpEdWatermark;
+    VclPtr<CheckBox>     mpCbWatermark;
+    VclPtr<FixedText>    mpFtWatermark;
+    VclPtr<Edit>         mpEdWatermark;
 
     bool          mbIsPresentation;
     bool          mbIsWriter;
 
-    const ImpPDFTabDialog* mpaParent;
+    VclPtr<ImpPDFTabDialog> mpaParent;
 
     DECL_LINK( TogglePagesHdl, void* );
     DECL_LINK( ToggleCompressionHdl, void* );
@@ -241,36 +243,37 @@ public:
 
     ImpPDFTabGeneralPage( vcl::Window* pParent,
                           const SfxItemSet& rSet );
-
     virtual ~ImpPDFTabGeneralPage();
-    static SfxTabPage*          Create( vcl::Window* pParent,
+    virtual void dispose() SAL_OVERRIDE;
+
+    static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet);
 
     void    GetFilterConfigItem(ImpPDFTabDialog* paParent);
-    void    SetFilterConfigItem(const ImpPDFTabDialog* paParent);
+    void    SetFilterConfigItem(ImpPDFTabDialog* paParent);
     bool    IsPdfaSelected() const { return mpCbPDFA1b->IsChecked(); }
 };
 
 //class tab page viewer
 class ImpPDFTabOpnFtrPage : public SfxTabPage
 {
-    RadioButton*                mpRbOpnPageOnly;
-    RadioButton*                mpRbOpnOutline;
-    RadioButton*                mpRbOpnThumbs;
-    NumericField*               mpNumInitialPage;
+    VclPtr<RadioButton>                mpRbOpnPageOnly;
+    VclPtr<RadioButton>                mpRbOpnOutline;
+    VclPtr<RadioButton>                mpRbOpnThumbs;
+    VclPtr<NumericField>               mpNumInitialPage;
 
-    RadioButton*                mpRbMagnDefault;
-    RadioButton*                mpRbMagnFitWin;
-    RadioButton*                mpRbMagnFitWidth;
-    RadioButton*                mpRbMagnFitVisible;
-    RadioButton*                mpRbMagnZoom;
-    NumericField*               mpNumZoom;
+    VclPtr<RadioButton>                mpRbMagnDefault;
+    VclPtr<RadioButton>                mpRbMagnFitWin;
+    VclPtr<RadioButton>                mpRbMagnFitWidth;
+    VclPtr<RadioButton>                mpRbMagnFitVisible;
+    VclPtr<RadioButton>                mpRbMagnZoom;
+    VclPtr<NumericField>               mpNumZoom;
 
-    RadioButton*                mpRbPgLyDefault;
-    RadioButton*                mpRbPgLySinglePage;
-    RadioButton*                mpRbPgLyContinue;
-    RadioButton*                mpRbPgLyContinueFacing;
-    CheckBox*                   mpCbPgLyFirstOnLeft;
+    VclPtr<RadioButton>                mpRbPgLyDefault;
+    VclPtr<RadioButton>                mpRbPgLySinglePage;
+    VclPtr<RadioButton>                mpRbPgLyContinue;
+    VclPtr<RadioButton>                mpRbPgLyContinueFacing;
+    VclPtr<CheckBox>                   mpCbPgLyFirstOnLeft;
 
     bool                    mbUseCTLFont;
 
@@ -282,7 +285,8 @@ public:
                          const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabOpnFtrPage();
-    static SfxTabPage*          Create( vcl::Window* pParent,
+    virtual void dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -292,22 +296,22 @@ public:
 //class tab page viewer
 class ImpPDFTabViewerPage : public SfxTabPage
 {
-    CheckBox*                   m_pCbResWinInit;
-    CheckBox*                   m_pCbCenterWindow;
-    CheckBox*                   m_pCbOpenFullScreen;
-    CheckBox*                   m_pCbDispDocTitle;
+    VclPtr<CheckBox>                   m_pCbResWinInit;
+    VclPtr<CheckBox>                   m_pCbCenterWindow;
+    VclPtr<CheckBox>                   m_pCbOpenFullScreen;
+    VclPtr<CheckBox>                   m_pCbDispDocTitle;
 
 
-    CheckBox*                   m_pCbHideViewerMenubar;
-    CheckBox*                   m_pCbHideViewerToolbar;
-    CheckBox*                   m_pCbHideViewerWindowControls;
+    VclPtr<CheckBox>                   m_pCbHideViewerMenubar;
+    VclPtr<CheckBox>                   m_pCbHideViewerToolbar;
+    VclPtr<CheckBox>                   m_pCbHideViewerWindowControls;
 
-    CheckBox*                   m_pCbTransitionEffects;
+    VclPtr<CheckBox>                   m_pCbTransitionEffects;
     bool                    mbIsPresentation;
 
-    RadioButton*                m_pRbAllBookmarkLevels;
-    RadioButton*                m_pRbVisibleBookmarkLevels;
-    NumericField*               m_pNumBookmarkLevels;
+    VclPtr<RadioButton>                m_pRbAllBookmarkLevels;
+    VclPtr<RadioButton>                m_pRbVisibleBookmarkLevels;
+    VclPtr<NumericField>               m_pNumBookmarkLevels;
 
     DECL_LINK( ToggleRbBookmarksHdl, void* );
 public:
@@ -315,7 +319,8 @@ public:
                          const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabViewerPage();
-    static SfxTabPage*          Create( vcl::Window* pParent,
+    virtual void dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -325,32 +330,32 @@ public:
 //class security tab page
 class ImpPDFTabSecurityPage : public SfxTabPage
 {
-    PushButton*                 mpPbSetPwd;
+    VclPtr<PushButton>                 mpPbSetPwd;
     OUString                    msStrSetPwd;
 
-    VclContainer*               mpUserPwdSet;
-    VclContainer*               mpUserPwdUnset;
-    VclContainer*               mpUserPwdPdfa;
+    VclPtr<VclContainer>               mpUserPwdSet;
+    VclPtr<VclContainer>               mpUserPwdUnset;
+    VclPtr<VclContainer>               mpUserPwdPdfa;
 
-    VclContainer*               mpOwnerPwdSet;
-    VclContainer*               mpOwnerPwdUnset;
-    VclContainer*               mpOwnerPwdPdfa;
+    VclPtr<VclContainer>               mpOwnerPwdSet;
+    VclPtr<VclContainer>               mpOwnerPwdUnset;
+    VclPtr<VclContainer>               mpOwnerPwdPdfa;
 
-    VclContainer*               mpPrintPermissions;
-    RadioButton*                mpRbPrintNone;
-    RadioButton*                mpRbPrintLowRes;
-    RadioButton*                mpRbPrintHighRes;
+    VclPtr<VclContainer>               mpPrintPermissions;
+    VclPtr<RadioButton>                mpRbPrintNone;
+    VclPtr<RadioButton>                mpRbPrintLowRes;
+    VclPtr<RadioButton>                mpRbPrintHighRes;
 
-    VclContainer*               mpChangesAllowed;
-    RadioButton*                mpRbChangesNone;
-    RadioButton*                mpRbChangesInsDel;
-    RadioButton*                mpRbChangesFillForm;
-    RadioButton*                mpRbChangesComment;
-    RadioButton*                mpRbChangesAnyNoCopy;
+    VclPtr<VclContainer>               mpChangesAllowed;
+    VclPtr<RadioButton>                mpRbChangesNone;
+    VclPtr<RadioButton>                mpRbChangesInsDel;
+    VclPtr<RadioButton>                mpRbChangesFillForm;
+    VclPtr<RadioButton>                mpRbChangesComment;
+    VclPtr<RadioButton>                mpRbChangesAnyNoCopy;
 
-    VclContainer*               mpContent;
-    CheckBox*                   mpCbEnableCopy;
-    CheckBox*                   mpCbEnableAccessibility;
+    VclPtr<VclContainer>               mpContent;
+    VclPtr<CheckBox>                   mpCbEnableCopy;
+    VclPtr<CheckBox>                   mpCbEnableAccessibility;
 
     OUString                    msUserPwdTitle;
 
@@ -370,7 +375,8 @@ public:
                            const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabSecurityPage();
-    static SfxTabPage*      Create( vcl::Window* pParent,
+    virtual void dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -382,15 +388,15 @@ public:
 //class to implement the relative link stuff
 class ImpPDFTabLinksPage : public SfxTabPage
 {
-    CheckBox*                   m_pCbExprtBmkrToNmDst;
-    CheckBox*                   m_pCbOOoToPDFTargets;
-    CheckBox*                   m_pCbExportRelativeFsysLinks;
+    VclPtr<CheckBox>                   m_pCbExprtBmkrToNmDst;
+    VclPtr<CheckBox>                   m_pCbOOoToPDFTargets;
+    VclPtr<CheckBox>                   m_pCbExportRelativeFsysLinks;
 
-    RadioButton*                m_pRbOpnLnksDefault;
+    VclPtr<RadioButton>                m_pRbOpnLnksDefault;
     bool                    mbOpnLnksDefaultUserState;
-    RadioButton*                m_pRbOpnLnksLaunch;
+    VclPtr<RadioButton>                m_pRbOpnLnksLaunch;
     bool                    mbOpnLnksLaunchUserState;
-    RadioButton*                m_pRbOpnLnksBrowser;
+    VclPtr<RadioButton>                m_pRbOpnLnksBrowser;
     bool                    mbOpnLnksBrowserUserState;
 
     DECL_LINK( ClickRbOpnLnksDefaultHdl, void* );
@@ -401,7 +407,8 @@ public:
                            const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabLinksPage();
-    static SfxTabPage*      Create( vcl::Window* pParent,
+    virtual void dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -413,14 +420,14 @@ public:
 //class to implement the digital signing
 class ImpPDFTabSigningPage : public SfxTabPage
 {
-    Edit*                       mpEdSignCert;
-    PushButton*                 mpPbSignCertSelect;
-    PushButton*                 mpPbSignCertClear;
-    Edit*                       mpEdSignPassword;
-    Edit*                       mpEdSignLocation;
-    Edit*                       mpEdSignContactInfo;
-    Edit*                       mpEdSignReason;
-    ListBox*                    mpLBSignTSA;
+    VclPtr<Edit>                       mpEdSignCert;
+    VclPtr<PushButton>                 mpPbSignCertSelect;
+    VclPtr<PushButton>                 mpPbSignCertClear;
+    VclPtr<Edit>                       mpEdSignPassword;
+    VclPtr<Edit>                       mpEdSignLocation;
+    VclPtr<Edit>                       mpEdSignContactInfo;
+    VclPtr<Edit>                       mpEdSignReason;
+    VclPtr<ListBox>                    mpLBSignTSA;
     com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
 
     DECL_LINK( ClickmaPbSignCertSelect, void* );
@@ -432,7 +439,8 @@ public:
                           const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabSigningPage();
-    static SfxTabPage*      Create( vcl::Window* pParent,
+    virtual void dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);

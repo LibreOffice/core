@@ -145,13 +145,15 @@ static void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 // At first the zoom dialog
 class SwPreviewZoomDlg : public SvxStandardDialog
 {
-    NumericField* m_pRowEdit;
-    NumericField* m_pColEdit;
+    VclPtr<NumericField> m_pRowEdit;
+    VclPtr<NumericField> m_pColEdit;
 
     virtual void  Apply() SAL_OVERRIDE;
 
 public:
     SwPreviewZoomDlg( SwPagePreviewWin& rParent );
+    virtual ~SwPreviewZoomDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 SwPreviewZoomDlg::SwPreviewZoomDlg( SwPagePreviewWin& rParent )
@@ -162,6 +164,18 @@ SwPreviewZoomDlg::SwPreviewZoomDlg( SwPagePreviewWin& rParent )
 
     m_pRowEdit->SetValue( rParent.GetRow() );
     m_pColEdit->SetValue( rParent.GetCol() );
+}
+
+SwPreviewZoomDlg::~SwPreviewZoomDlg()
+{
+    disposeOnce();
+}
+
+void SwPreviewZoomDlg::dispose()
+{
+    m_pRowEdit.clear();
+    m_pColEdit.clear();
+    SvxStandardDialog::dispose();
 }
 
 void  SwPreviewZoomDlg::Apply()
@@ -1145,12 +1159,12 @@ void SwPagePreview::Init(const SwViewOption * pPrefs)
 
 SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxViewShell( pViewFrame, SWVIEWFLAGS ),
-    pViewWin( new SwPagePreviewWin(&(GetViewFrame())->GetWindow(), *this ) ),
+    pViewWin( VclPtr<SwPagePreviewWin>::Create(&(GetViewFrame())->GetWindow(), *this ) ),
     nNewPage(USHRT_MAX),
     sPageStr(SW_RES(STR_PAGE)),
     pHScrollbar(0),
     pVScrollbar(0),
-    pScrollFill(new ScrollBarBox( &pViewFrame->GetWindow(),
+    pScrollFill(VclPtr<ScrollBarBox>::Create( &pViewFrame->GetWindow(),
         pViewFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     mnPageCount( 0 ),
     mbResetFormDesignMode( false ),
@@ -1224,11 +1238,12 @@ SwPagePreview::~SwPagePreview()
     SwViewShell* pVShell =  pViewWin->GetViewShell();
     pVShell->SetWin(0);
     delete pVShell;
-    delete pViewWin;
 
-    delete pScrollFill;
-    delete pHScrollbar;
-    delete pVScrollbar;
+    pViewWin.disposeAndClear();
+
+    pScrollFill.disposeAndClear();
+    pHScrollbar.disposeAndClear();
+    pVScrollbar.disposeAndClear();
 }
 
 SwDocShell* SwPagePreview::GetDocShell()
@@ -1239,20 +1254,20 @@ SwDocShell* SwPagePreview::GetDocShell()
 int SwPagePreview::_CreateScrollbar( bool bHori )
 {
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
-    SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
+    VclPtr<SwScrollbar>& ppScrollbar = bHori ? pHScrollbar : pVScrollbar;
 
-    assert(!*ppScrollbar); //check beforehand!
+    assert(!ppScrollbar.get()); //check beforehand!
 
-    *ppScrollbar = new SwScrollbar( pMDI, bHori );
+    ppScrollbar = VclPtr<SwScrollbar>::Create( pMDI, bHori );
 
     ScrollDocSzChg();
-    (*ppScrollbar)->EnableDrag( true );
-    (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwPagePreview, EndScrollHdl ));
+    ppScrollbar->EnableDrag( true );
+    ppScrollbar->SetEndScrollHdl( LINK( this, SwPagePreview, EndScrollHdl ));
 
-    (*ppScrollbar)->SetScrollHdl( LINK( this, SwPagePreview, ScrollHdl ));
+    ppScrollbar->SetScrollHdl( LINK( this, SwPagePreview, ScrollHdl ));
 
     InvalidateBorder();
-    (*ppScrollbar)->ExtendedShow();
+    ppScrollbar->ExtendedShow();
     return 1;
 }
 
@@ -1694,8 +1709,8 @@ bool SwPagePreview::HasPrintOptionsPage() const
     return true;
 }
 
-SfxTabPage*  SwPagePreview::CreatePrintOptionsPage( vcl::Window *pParent,
-                                                const SfxItemSet &rOptions )
+VclPtr<SfxTabPage> SwPagePreview::CreatePrintOptionsPage( vcl::Window *pParent,
+                                                          const SfxItemSet &rOptions )
 {
     return ::CreatePrintOptionsPage( pParent, rOptions, !bNormalPrint );
 }

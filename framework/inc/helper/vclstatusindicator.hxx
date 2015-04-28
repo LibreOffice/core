@@ -52,7 +52,7 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIn
                         Its guarded by the solarmutex only. Otherwise
                         we have to lock two of them, which can force a deadlock ...
             */
-        StatusBar* m_pStatusBar;
+        VclPtr<StatusBar> m_pStatusBar;
 
         /** knows the current info text of the progress. */
         OUString m_sText;

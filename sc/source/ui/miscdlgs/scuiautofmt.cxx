@@ -88,6 +88,29 @@ ScAutoFormatDlg::ScAutoFormatDlg(vcl::Window* pParent,
     m_pWndPreview->NotifyChange(it->second);
 }
 
+ScAutoFormatDlg::~ScAutoFormatDlg()
+{
+    disposeOnce();
+}
+
+void ScAutoFormatDlg::dispose()
+{
+    m_pLbFormat.clear();
+    m_pWndPreview.clear();
+    m_pBtnOk.clear();
+    m_pBtnCancel.clear();
+    m_pBtnAdd.clear();
+    m_pBtnRemove.clear();
+    m_pBtnRename.clear();
+    m_pBtnNumFormat.clear();
+    m_pBtnBorder.clear();
+    m_pBtnFont.clear();
+    m_pBtnPattern.clear();
+    m_pBtnAlignment.clear();
+    m_pBtnAdjust.clear();
+    ModalDialog::dispose();
+}
+
 void ScAutoFormatDlg::Init()
 {
     m_pLbFormat->SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
@@ -201,11 +224,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 
         while ( !bOk )
         {
-            boost::scoped_ptr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
-                                         aStrTitle,
-                                         aStrLabel,
-                                         aFormatName,
-                                         HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME ));
+            VclPtrInstance<ScStringInputDlg> pDlg( this,
+                                                   aStrTitle,
+                                                   aStrLabel,
+                                                   aFormatName,
+                                                   HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME );
 
             if ( pDlg->Execute() == RET_OK )
             {
@@ -308,11 +331,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
         OUString aFormatName = m_pLbFormat->GetSelectEntry();
         OUString aEntry;
 
-        boost::scoped_ptr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
-                                         aStrRename,
-                                         aStrLabel,
-                                         aFormatName,
-                                         HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME ));
+        VclPtrInstance<ScStringInputDlg> pDlg( this,
+                                               aStrRename,
+                                               aStrLabel,
+                                               aFormatName,
+                                               HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME );
         if( pDlg->Execute() == RET_OK )
         {
             bool bFmtRenamed = false;

@@ -296,6 +296,8 @@ public:
 
     SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();
+    virtual void dispose() SAL_OVERRIDE;
+
     /// @see OutputDevice::LogicInvalidate().
     void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;
     /// Same as MouseButtonDown(), but coordinates are in logic unit.

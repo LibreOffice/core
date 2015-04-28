@@ -44,16 +44,16 @@ class SvBaseLinksDlg : public ModalDialog
 {
     using Window::SetType;
 
-    SvTabListBox *m_pTbLinks;
-    FixedText *m_pFtFullFileName;
-    FixedText *m_pFtFullSourceName;
-    FixedText *m_pFtFullTypeName;
-    RadioButton *m_pRbAutomatic;
-    RadioButton *m_pRbManual;
-    PushButton *m_pPbUpdateNow;
-    PushButton *m_pPbOpenSource;
-    PushButton *m_pPbChangeSource;
-    PushButton *m_pPbBreakLink;
+    VclPtr<SvTabListBox> m_pTbLinks;
+    VclPtr<FixedText> m_pFtFullFileName;
+    VclPtr<FixedText> m_pFtFullSourceName;
+    VclPtr<FixedText> m_pFtFullTypeName;
+    VclPtr<RadioButton> m_pRbAutomatic;
+    VclPtr<RadioButton> m_pRbManual;
+    VclPtr<PushButton> m_pPbUpdateNow;
+    VclPtr<PushButton> m_pPbOpenSource;
+    VclPtr<PushButton> m_pPbChangeSource;
+    VclPtr<PushButton> m_pPbBreakLink;
     OUString aStrAutolink;
     OUString aStrManuallink;
     OUString aStrBrokenlink;
@@ -96,6 +96,7 @@ class SvBaseLinksDlg : public ModalDialog
 public:
     SvBaseLinksDlg( vcl::Window * pParent, sfx2::LinkManager*, bool bHtml = false );
     virtual ~SvBaseLinksDlg();
+    virtual void dispose() SAL_OVERRIDE;
     void SetActLink( sfx2::SvBaseLink * pLink );
 };
 

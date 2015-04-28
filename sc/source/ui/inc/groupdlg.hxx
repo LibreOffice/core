@@ -29,12 +29,12 @@ class ScGroupDlg : public ModalDialog
 public:
     ScGroupDlg(vcl::Window* pParent, bool bUnGroup = false, bool bRows = true);
     virtual ~ScGroupDlg();
-
+    virtual void dispose() SAL_OVERRIDE;
     bool GetColsChecked() const;
 
 private:
-    RadioButton* m_pBtnRows;
-    RadioButton* m_pBtnCols;
+    VclPtr<RadioButton> m_pBtnRows;
+    VclPtr<RadioButton> m_pBtnCols;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_GROUPDLG_HXX

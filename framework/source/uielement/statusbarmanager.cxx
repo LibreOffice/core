@@ -200,40 +200,39 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exc
 
     {
         SolarMutexGuard g;
-        if ( !m_bDisposed )
+        if ( m_bDisposed )
+            return;
+
+        RemoveControllers();
+
+        // destroy the item data
+        for ( sal_uInt16 n = 0; n < m_pStatusBar->GetItemCount(); n++ )
         {
-            RemoveControllers();
-
-            // destroy the item data
-            for ( sal_uInt16 n = 0; n < m_pStatusBar->GetItemCount(); n++ )
-            {
-                AddonStatusbarItemData *pUserData = static_cast< AddonStatusbarItemData *>(
-                    m_pStatusBar->GetItemData( m_pStatusBar->GetItemId( n ) ) );
-                if ( pUserData )
-                    delete pUserData;
-            }
-
-            delete m_pStatusBar;
-            m_pStatusBar = 0;
-
-            if ( m_bFrameActionRegistered && m_xFrame.is() )
-            {
-                try
-                {
-                    m_xFrame->removeFrameActionListener( uno::Reference< frame::XFrameActionListener >(
-                                                            static_cast< ::cppu::OWeakObject *>( this ),
-                                                            uno::UNO_QUERY ));
-                }
-                catch ( const uno::Exception& )
-                {
-                }
-            }
-
-            m_xFrame.clear();
-            m_xContext.clear();
-
-            m_bDisposed = true;
+            AddonStatusbarItemData *pUserData = static_cast< AddonStatusbarItemData *>(
+                m_pStatusBar->GetItemData( m_pStatusBar->GetItemId( n ) ) );
+            if ( pUserData )
+                delete pUserData;
         }
+
+        m_pStatusBar.disposeAndClear();
+
+        if ( m_bFrameActionRegistered && m_xFrame.is() )
+        {
+            try
+            {
+                m_xFrame->removeFrameActionListener( uno::Reference< frame::XFrameActionListener >(
+                                                        static_cast< ::cppu::OWeakObject *>( this ),
+                                                        uno::UNO_QUERY ));
+            }
+            catch ( const uno::Exception& )
+            {
+            }
+        }
+
+        m_xFrame.clear();
+        m_xContext.clear();
+
+        m_bDisposed = true;
     }
 }
 

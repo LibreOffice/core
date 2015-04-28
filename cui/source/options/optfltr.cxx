@@ -56,7 +56,22 @@ OfaMSFilterTabPage::OfaMSFilterTabPage(vcl::Window* pParent, const SfxItemSet& r
 
 OfaMSFilterTabPage::~OfaMSFilterTabPage()
 {
+    disposeOnce();
 }
+
+void OfaMSFilterTabPage::dispose()
+{
+    aWBasicCodeCB.clear();
+    aWBasicWbctblCB.clear();
+    aWBasicStgCB.clear();
+    aEBasicCodeCB.clear();
+    aEBasicExectblCB.clear();
+    aEBasicStgCB.clear();
+    aPBasicCodeCB.clear();
+    aPBasicStgCB.clear();
+    SfxTabPage::dispose();
+}
+
 
 IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl)
 {
@@ -70,10 +85,10 @@ IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl)
     return 0;
 }
 
-SfxTabPage* OfaMSFilterTabPage::Create( vcl::Window* pParent,
-                                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaMSFilterTabPage::Create( vcl::Window* pParent,
+                                               const SfxItemSet* rAttrSet )
 {
-    return new OfaMSFilterTabPage( pParent, *rAttrSet );
+    return VclPtr<OfaMSFilterTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
@@ -149,7 +164,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
     m_pCheckLBContainer->set_width_request(aControlSize.Width());
     m_pCheckLBContainer->set_height_request(aControlSize.Height());
 
-    m_pCheckLB = new MSFltrSimpleTable(*m_pCheckLBContainer);
+    m_pCheckLB = VclPtr<MSFltrSimpleTable>::Create(*m_pCheckLBContainer);
 
     static long aStaticTabs[] = { 3, 0, 20, 40 };
     m_pCheckLB->SvSimpleTable::SetTabs( aStaticTabs );
@@ -163,14 +178,25 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
 
 OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
 {
-    delete pCheckButtonData;
-    delete m_pCheckLB;
+    disposeOnce();
 }
 
-SfxTabPage* OfaMSFilterTabPage2::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+void OfaMSFilterTabPage2::dispose()
 {
-    return new OfaMSFilterTabPage2( pParent, *rAttrSet );
+    delete pCheckButtonData;
+    pCheckButtonData = NULL;
+    m_pCheckLB.clear();
+    m_pCheckLBContainer.clear();
+    aHighlightingRB.clear();
+    aShadingRB.clear();
+
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaMSFilterTabPage2::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rAttrSet )
+{
+    return VclPtr<OfaMSFilterTabPage2>::Create( pParent, *rAttrSet );
 }
 
 bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )

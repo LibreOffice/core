@@ -29,22 +29,22 @@
 struct SvxAsianLayoutPage_Impl;
 class SvxAsianLayoutPage : public SfxTabPage
 {
-    RadioButton* m_pCharKerningRB;
-    RadioButton* m_pCharPunctKerningRB;
+    VclPtr<RadioButton> m_pCharKerningRB;
+    VclPtr<RadioButton> m_pCharPunctKerningRB;
 
-    RadioButton* m_pNoCompressionRB;
-    RadioButton* m_pPunctCompressionRB;
-    RadioButton* m_pPunctKanaCompressionRB;
+    VclPtr<RadioButton> m_pNoCompressionRB;
+    VclPtr<RadioButton> m_pPunctCompressionRB;
+    VclPtr<RadioButton> m_pPunctKanaCompressionRB;
 
-    FixedText*      m_pLanguageFT;
-    SvxLanguageBox* m_pLanguageLB;
-    CheckBox*       m_pStandardCB;
+    VclPtr<FixedText>      m_pLanguageFT;
+    VclPtr<SvxLanguageBox> m_pLanguageLB;
+    VclPtr<CheckBox>       m_pStandardCB;
 
-    FixedText*   m_pStartFT;
-    Edit*        m_pStartED;
-    FixedText*   m_pEndFT;
-    Edit*        m_pEndED;
-    FixedText*   m_pHintFT;
+    VclPtr<FixedText>   m_pStartFT;
+    VclPtr<Edit>        m_pStartED;
+    VclPtr<FixedText>   m_pEndFT;
+    VclPtr<Edit>        m_pEndED;
+    VclPtr<FixedText>   m_pHintFT;
 
     SvxAsianLayoutPage_Impl* pImpl;
 
@@ -52,12 +52,12 @@ class SvxAsianLayoutPage : public SfxTabPage
     DECL_LINK(ChangeStandardHdl, CheckBox*);
     DECL_LINK(ModifyHdl, Edit*);
 
-    SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& rSet );
 public:
-
+    SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxAsianLayoutPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*  GetRanges();
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

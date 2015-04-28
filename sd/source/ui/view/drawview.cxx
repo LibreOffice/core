@@ -91,7 +91,7 @@ DrawView::DrawView( DrawDocShell* pDocSh, OutputDevice* pOutDev, DrawViewShell* 
 
 DrawView::~DrawView()
 {
-    delete mpVDev;
+    mpVDev.disposeAndClear();
 }
 
 /**
@@ -459,8 +459,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
 {
     if( mpVDev )
     {
-        delete mpVDev;
-        mpVDev = NULL;
+        mpVDev.disposeAndClear();
     }
 
     bool bStandardPaint = true;

@@ -74,11 +74,9 @@ void SAL_CALL GenericToolboxController::dispose()
 throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
-
-    svt::ToolboxController::dispose();
-
-    m_pToolbox = 0;
+    m_pToolbox.clear();
     m_nID = 0;
+    svt::ToolboxController::dispose();
 }
 
 void SAL_CALL GenericToolboxController::execute( sal_Int16 /*KeyModifier*/ )

@@ -28,14 +28,11 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/form/XForms.hpp>
 #include <tools/link.hxx>
-
+#include <vcl/window.hxx>
 #include <svx/svxdllapi.h>
 
 class SvTreeListEntry;
-
-
 class SvTreeListBox;
-
 
 namespace svxform
 {
@@ -98,7 +95,7 @@ namespace svxform
     class SVX_DLLPUBLIC OLocalExchangeHelper
     {
     protected:
-        vcl::Window*             m_pDragSource;
+        VclPtr<vcl::Window> m_pDragSource;
         OLocalExchange*     m_pTransferable;
 
     public:

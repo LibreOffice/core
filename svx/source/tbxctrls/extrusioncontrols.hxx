@@ -41,13 +41,15 @@ class ExtrusionDirectionWindow : public svtools::ToolbarMenu
 {
 public:
     ExtrusionDirectionWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
+    virtual ~ExtrusionDirectionWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
     svt::ToolboxController& mrController;
-    ValueSet* mpDirectionSet;
+    VclPtr<ValueSet>        mpDirectionSet;
 
     Image       maImgDirection[9];
     Image       maImgPerspective;
@@ -71,7 +73,7 @@ class ExtrusionDirectionControl : public svt::PopupWindowController
 public:
     ExtrusionDirectionControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
@@ -118,7 +120,7 @@ class ExtrusionDepthController : public svt::PopupWindowController
 public:
     ExtrusionDepthController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
@@ -137,7 +139,7 @@ class ExtrusionLightingWindow : public svtools::ToolbarMenu
 {
 private:
     svt::ToolboxController& mrController;
-    ValueSet*    mpLightingSet;
+    VclPtr<ValueSet>        mpLightingSet;
 
     Image maImgLightingOff[9];
     Image maImgLightingOn[9];
@@ -161,6 +163,8 @@ private:
     DECL_LINK( SelectHdl, void * );
 public:
     ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
+    virtual ~ExtrusionLightingWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -173,7 +177,7 @@ class ExtrusionLightingControl : public svt::PopupWindowController
 public:
     ExtrusionLightingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
@@ -217,7 +221,7 @@ class ExtrusionSurfaceControl : public svt::PopupWindowController
 public:
     ExtrusionSurfaceControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )

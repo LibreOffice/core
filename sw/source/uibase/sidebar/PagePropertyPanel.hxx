@@ -55,7 +55,7 @@ namespace sw { namespace sidebar {
           public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
-        static PagePropertyPanel* Create(
+        static VclPtr<vcl::Window> Create(
             vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
@@ -72,11 +72,11 @@ namespace sw { namespace sidebar {
             return mpBindings;
         }
 
-        ::svx::sidebar::PopupControl* CreatePageOrientationControl( ::svx::sidebar::PopupContainer* pParent );
+        VclPtr<::svx::sidebar::PopupControl> CreatePageOrientationControl( ::svx::sidebar::PopupContainer* pParent );
         void ExecuteOrientationChange( const bool bLandscape );
         void ClosePageOrientationPopup();
 
-        ::svx::sidebar::PopupControl* CreatePageMarginControl( ::svx::sidebar::PopupContainer* pParent );
+        VclPtr<::svx::sidebar::PopupControl> CreatePageMarginControl( ::svx::sidebar::PopupContainer* pParent );
         void ExecuteMarginLRChange(
             const long nPageLeftMargin,
             const long nPageRightMargin );
@@ -86,31 +86,32 @@ namespace sw { namespace sidebar {
         void ExecutePageLayoutChange( const bool bMirrored );
         void ClosePageMarginPopup();
 
-        ::svx::sidebar::PopupControl* CreatePageSizeControl( ::svx::sidebar::PopupContainer* pParent );
+        VclPtr<::svx::sidebar::PopupControl> CreatePageSizeControl( ::svx::sidebar::PopupContainer* pParent );
         void ExecuteSizeChange( const Paper ePaper );
         void ClosePageSizePopup();
 
-        ::svx::sidebar::PopupControl* CreatePageColumnControl( ::svx::sidebar::PopupContainer* pParent );
+        VclPtr<::svx::sidebar::PopupControl> CreatePageColumnControl( ::svx::sidebar::PopupContainer* pParent );
         void ExecuteColumnChange( const sal_uInt16 nColumnType );
         void ClosePageColumnPopup();
 
         void StartUndo();
         void EndUndo();
 
-    private:
         PagePropertyPanel(
             vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
+    private:
         virtual ~PagePropertyPanel();
+        virtual void dispose() SAL_OVERRIDE;
 
         SfxBindings* mpBindings;
 
         // toolboxes - on click open corresponding popup
-        ToolBox*                mpToolBoxOrientation;
-        ToolBox*                mpToolBoxMargin;
-        ToolBox*                mpToolBoxSize;
-        ToolBox*                mpToolBoxColumn;
+        VclPtr<ToolBox>                mpToolBoxOrientation;
+        VclPtr<ToolBox>                mpToolBoxMargin;
+        VclPtr<ToolBox>                mpToolBoxSize;
+        VclPtr<ToolBox>                mpToolBoxColumn;
 
         Image*                  maImgSize;
         Image*                  maImgSize_L;

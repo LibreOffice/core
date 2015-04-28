@@ -110,12 +110,18 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvTabListBox(vcl::Wind
 
 SvTabListBox::~SvTabListBox()
 {
+    disposeOnce();
+}
+
+void SvTabListBox::dispose()
+{
     // delete array
     delete [] pTabList;
 #ifdef DBG_UTIL
     pTabList = 0;
     nTabCount = 0;
 #endif
+    SvTreeListBox::dispose();
 }
 
 void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
@@ -497,7 +503,7 @@ namespace svt
 {
     struct SvHeaderTabListBoxImpl
     {
-        HeaderBar*              m_pHeaderBar;
+        VclPtr<HeaderBar>       m_pHeaderBar;
         AccessibleFactoryAccess m_aFactoryAccess;
 
         SvHeaderTabListBoxImpl() : m_pHeaderBar( NULL ) { }
@@ -520,7 +526,13 @@ SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle 
 
 SvHeaderTabListBox::~SvHeaderTabListBox()
 {
+    disposeOnce();
+}
+
+void SvHeaderTabListBox::dispose()
+{
     delete m_pImpl;
+    SvTabListBox::dispose();
 }
 
 

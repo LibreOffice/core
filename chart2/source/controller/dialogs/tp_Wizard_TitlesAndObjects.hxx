@@ -44,6 +44,8 @@ public:
                 ::com::sun::star::chart2::XChartDocument >& xChartModel
                 , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext );
+    virtual ~TitlesAndObjectsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        initializePage() SAL_OVERRIDE;
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;
@@ -57,9 +59,9 @@ protected:
     boost::scoped_ptr< TitleResources >            m_xTitleResources;
     boost::scoped_ptr< LegendPositionResources >   m_xLegendPositionResources;
 
-    CheckBox*          m_pCB_Grid_X;
-    CheckBox*          m_pCB_Grid_Y;
-    CheckBox*          m_pCB_Grid_Z;
+    VclPtr<CheckBox>          m_pCB_Grid_X;
+    VclPtr<CheckBox>          m_pCB_Grid_Y;
+    VclPtr<CheckBox>          m_pCB_Grid_Z;
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XChartDocument >   m_xChartModel;

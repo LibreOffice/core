@@ -24,7 +24,6 @@ class LimitBox: public NumericBox
 {
     public:
         LimitBox( vcl::Window* pParent, WinBits nStyle );
-        virtual ~LimitBox();
 
         virtual OUString    CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
 

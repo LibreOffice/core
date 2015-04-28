@@ -32,7 +32,6 @@
 #include <unotools/options.hxx>
 #include <list>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 #include "MarkedSection.hxx"
 #include "SectionWindow.hxx"
@@ -75,7 +74,7 @@ namespace rptui
 
     class OWindowPositionCorrector
     {
-        ::std::vector< ::std::pair<vcl::Window*,Point> > m_aChildren;
+        ::std::vector< ::std::pair<VclPtr<vcl::Window>,Point> > m_aChildren;
         long m_nDeltaX;
         long m_nDeltaY;
     public:
@@ -91,8 +90,8 @@ namespace rptui
         }
         ~OWindowPositionCorrector()
         {
-            ::std::vector< ::std::pair<vcl::Window*,Point> >::iterator aIter = m_aChildren.begin();
-            ::std::vector< ::std::pair<vcl::Window*,Point> >::iterator aEnd = m_aChildren.end();
+            auto aIter = m_aChildren.begin();
+            auto aEnd = m_aChildren.end();
             for (; aIter != aEnd; ++aIter)
             {
                 const Point aPos = aIter->first->GetPosPixel();
@@ -108,7 +107,7 @@ namespace rptui
     {
         typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
     public:
-        typedef ::std::vector< ::boost::shared_ptr<OSectionWindow> >                                TSectionsMap;
+        typedef ::std::vector< VclPtr<OSectionWindow> >                                TSectionsMap;
 
         struct TReportPairHelper : public ::std::unary_function< TSectionsMap::value_type, OReportSection >
         {
@@ -127,9 +126,9 @@ namespace rptui
     private:
         TSectionsMap                            m_aSections;
         svtools::ColorConfig                    m_aColorConfig;
-        OReportWindow*                          m_pParent;
-        OUString                         m_sShapeType;
-        bool                                m_bInUnmark;
+        VclPtr<OReportWindow>                   m_pParent;
+        OUString                                m_sShapeType;
+        bool                                    m_bInUnmark;
 
         void ImplInitSettings();
         /** returns the iterator at pos _nPos or the end()
@@ -153,6 +152,7 @@ namespace rptui
         OViewsWindow(
             OReportWindow* _pReportWindow);
         virtual ~OViewsWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void Resize() SAL_OVERRIDE;
@@ -181,7 +181,7 @@ namespace rptui
         * \param _nPos
         * \return the section at this pos or an empty section
         */
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const sal_uInt16 _nPos) const;
+        OSectionWindow* getSectionWindow(const sal_uInt16 _nPos) const;
 
         /** turns the grid on or off
         *
@@ -235,7 +235,7 @@ namespace rptui
         /** returns the report section window for the given xsection
             @param  _xSection   the section
         */
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+        OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
         /** checks if the keycode is known by the child windows
             @param  _rCode  the keycode
@@ -252,7 +252,7 @@ namespace rptui
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
-        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
         virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
 
         /** align all marked objects in all sections

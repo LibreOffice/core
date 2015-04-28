@@ -26,7 +26,7 @@
 //Wraps a MetricField with extra features, preferred to PercentField
 class SW_DLLPUBLIC PercentField
 {
-    MetricField* m_pField;
+    VclPtr<MetricField> m_pField;
 
     sal_Int64   nRefValue;      // 100% value for conversion (in Twips)
     sal_Int64   nOldMax;

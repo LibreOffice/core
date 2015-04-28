@@ -30,11 +30,19 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(vcl::Window *pParent, const SfxItemSet 
 
 ScTpDefaultsOptions::~ScTpDefaultsOptions()
 {
+    disposeOnce();
 }
 
-SfxTabPage* ScTpDefaultsOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
+void ScTpDefaultsOptions::dispose()
 {
-    return new ScTpDefaultsOptions(pParent, *rCoreAttrs);
+    m_pEdNSheets.clear();
+    m_pEdSheetPrefix.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> ScTpDefaultsOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
+{
+    return VclPtr<SfxTabPage>(new ScTpDefaultsOptions(pParent, *rCoreAttrs), SAL_NO_ACQUIRE);
 }
 
 bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)

@@ -35,7 +35,7 @@ namespace sw { namespace sidebar {
         , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
-        static WrapPropertyPanel* Create(
+        static VclPtr<vcl::Window> Create(
             vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
@@ -47,23 +47,23 @@ namespace sw { namespace sidebar {
             const SfxPoolItem* pState,
             const bool bIsEnabled) SAL_OVERRIDE;
 
-    private:
+        virtual ~WrapPropertyPanel();
+        virtual void dispose() SAL_OVERRIDE;
+
         WrapPropertyPanel(
             vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
             SfxBindings* pBindings );
-
-        virtual ~WrapPropertyPanel();
-
+    private:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
         SfxBindings* mpBindings;
 
-        RadioButton* mpRBNoWrap;
-        RadioButton* mpRBWrapLeft;
-        RadioButton* mpRBWrapRight;
-        RadioButton* mpRBWrapParallel;
-        RadioButton* mpRBWrapThrough;
-        RadioButton* mpRBIdealWrap;
+        VclPtr<RadioButton> mpRBNoWrap;
+        VclPtr<RadioButton> mpRBWrapLeft;
+        VclPtr<RadioButton> mpRBWrapRight;
+        VclPtr<RadioButton> mpRBWrapParallel;
+        VclPtr<RadioButton> mpRBWrapThrough;
+        VclPtr<RadioButton> mpRBIdealWrap;
 
         //Image resource.
         ImageList aWrapIL;

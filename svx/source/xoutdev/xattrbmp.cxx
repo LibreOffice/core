@@ -140,7 +140,7 @@ const GraphicObject& XOBitmap::GetGraphicObject() const
 
 void XOBitmap::Bitmap2Array()
 {
-    VirtualDevice   aVD;
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     bool            bPixelColor = false;
     const Bitmap    aBitmap( GetBitmap() );
     const sal_uInt16    nLines = 8; // type dependent
@@ -148,23 +148,23 @@ void XOBitmap::Bitmap2Array()
     if( !pPixelArray )
         pPixelArray = new sal_uInt16[ nLines * nLines ];
 
-    aVD.SetOutputSizePixel( aBitmap.GetSizePixel() );
-    aVD.DrawBitmap( Point(), aBitmap );
-    aPixelColor = aBckgrColor = aVD.GetPixel( Point() );
+    pVDev->SetOutputSizePixel( aBitmap.GetSizePixel() );
+    pVDev->DrawBitmap( Point(), aBitmap );
+    aPixelColor = aBckgrColor = pVDev->GetPixel( Point() );
 
     // create array and determine foreground and background color
     for( sal_uInt16 i = 0; i < nLines; i++ )
     {
         for( sal_uInt16 j = 0; j < nLines; j++ )
         {
-            if ( aVD.GetPixel( Point( j, i ) ) == aBckgrColor )
+            if ( pVDev->GetPixel( Point( j, i ) ) == aBckgrColor )
                 *( pPixelArray + j + i * nLines ) = 0;
             else
             {
                 *( pPixelArray + j + i * nLines ) = 1;
                 if( !bPixelColor )
                 {
-                    aPixelColor = aVD.GetPixel( Point( j, i ) );
+                    aPixelColor = pVDev->GetPixel( Point( j, i ) );
                     bPixelColor = true;
                 }
             }
@@ -175,13 +175,13 @@ void XOBitmap::Bitmap2Array()
 /// convert array, fore- and background color into a bitmap
 void XOBitmap::Array2Bitmap()
 {
-    VirtualDevice   aVD;
-    sal_uInt16          nLines = 8; // type dependent
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
+    sal_uInt16 nLines = 8; // type dependent
 
     if( !pPixelArray )
         return;
 
-    aVD.SetOutputSizePixel( Size( nLines, nLines ) );
+    pVDev->SetOutputSizePixel( Size( nLines, nLines ) );
 
     // create bitmap
     for( sal_uInt16 i = 0; i < nLines; i++ )
@@ -189,13 +189,13 @@ void XOBitmap::Array2Bitmap()
         for( sal_uInt16 j = 0; j < nLines; j++ )
         {
             if( *( pPixelArray + j + i * nLines ) == 0 )
-                aVD.DrawPixel( Point( j, i ), aBckgrColor );
+                pVDev->DrawPixel( Point( j, i ), aBckgrColor );
             else
-                aVD.DrawPixel( Point( j, i ), aPixelColor );
+                pVDev->DrawPixel( Point( j, i ), aPixelColor );
         }
     }
 
-    aGraphicObject = GraphicObject( aVD.GetBitmap( Point(), Size( nLines, nLines ) ) );
+    aGraphicObject = GraphicObject( pVDev->GetBitmap( Point(), Size( nLines, nLines ) ) );
     bGraphicDirty = false;
 }
 

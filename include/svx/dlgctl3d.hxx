@@ -51,6 +51,7 @@ protected:
 public:
     Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~Svx3DPreviewControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -104,7 +105,6 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DLightControl : public Svx3DPreviewContr
 
 public:
     Svx3DLightControl(vcl::Window* pParent, WinBits nStyle = 0);
-    virtual ~Svx3DLightControl();
 
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
@@ -145,18 +145,19 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxLightCtl3D : public Control
 {
 private:
     // local controls
-    Svx3DLightControl       maLightControl;
-    ScrollBar               maHorScroller;
-    ScrollBar               maVerScroller;
-    PushButton              maSwitcher;
+    VclPtr<Svx3DLightControl>  maLightControl;
+    VclPtr<ScrollBar>          maHorScroller;
+    VclPtr<ScrollBar>          maVerScroller;
+    VclPtr<PushButton>         maSwitcher;
 
     // callback for interactive changes
-    Link                    maUserInteractiveChangeCallback;
-    Link                    maUserSelectionChangeCallback;
+    Link                       maUserInteractiveChangeCallback;
+    Link                       maUserSelectionChangeCallback;
 
 public:
     SvxLightCtl3D(vcl::Window* pParent);
     virtual ~SvxLightCtl3D();
+    virtual void dispose() SAL_OVERRIDE;
 
     // react to size changes
     virtual void Resize() SAL_OVERRIDE;
@@ -166,7 +167,7 @@ public:
     void CheckSelection();
 
     // bring further settings to the outside world
-    Svx3DLightControl& GetSvx3DLightControl() { return maLightControl; }
+    Svx3DLightControl& GetSvx3DLightControl() { return *maLightControl.get(); }
 
     // register user callback
     void SetUserInteractiveChangeCallback(Link aNew) { maUserInteractiveChangeCallback = aNew; }

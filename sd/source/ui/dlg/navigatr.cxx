@@ -68,9 +68,9 @@ SdNavigatorWin::SdNavigatorWin(
     SfxBindings* pInBindings,
     const UpdateRequestFunctor& rUpdateRequest)
     : vcl::Window( pParent, rSdResId )
-    , maToolbox ( this, SdResId( 1 ) )
-    , maTlbObjects( this, SdResId( TLB_OBJECTS ) )
-    , maLbDocs ( this, SdResId( LB_DOCS ) )
+    , maToolbox ( VclPtr<ToolBox>::Create( this, SdResId( 1 ) ) )
+    , maTlbObjects( VclPtr<SdPageObjsTLB>::Create( this, SdResId( TLB_OBJECTS ) ) )
+    , maLbDocs ( VclPtr<ListBox>::Create( this, SdResId( LB_DOCS ) ) )
     , mpChildWinContext( pChWinCtxt )
     , mbDocImported ( false )
       // On changes of the DragType: adjust SelectionMode of TLB!
@@ -78,58 +78,58 @@ SdNavigatorWin::SdNavigatorWin(
     , mpBindings ( pInBindings )
     , maImageList ( SdResId( IL_NAVIGATR ) )
 {
-    maTlbObjects.SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
+    maTlbObjects->SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
     FreeResource();
 
-    maTlbObjects.SetAccessibleName(SD_RESSTR(STR_OBJECTS_TREE));
+    maTlbObjects->SetAccessibleName(SD_RESSTR(STR_OBJECTS_TREE));
 
     mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings, rUpdateRequest);
     mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings, rUpdateRequest);
 
     ApplyImageList(); // load images *before* calculating sizes to get something useful !!!
 
-    Size aTbxSize( maToolbox.CalcWindowSizePixel() );
-    maToolbox.SetOutputSizePixel( aTbxSize );
-    maToolbox.SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
-    maToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
-    maToolbox.SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
-    maToolbox.SetItemBits( TBI_DRAGTYPE, maToolbox.GetItemBits( TBI_DRAGTYPE ) | ToolBoxItemBits::DROPDOWNONLY );
+    Size aTbxSize( maToolbox->CalcWindowSizePixel() );
+    maToolbox->SetOutputSizePixel( aTbxSize );
+    maToolbox->SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
+    maToolbox->SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
+    maToolbox->SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
+    maToolbox->SetItemBits( TBI_DRAGTYPE, maToolbox->GetItemBits( TBI_DRAGTYPE ) | ToolBoxItemBits::DROPDOWNONLY );
 
     // Shape filter drop down menu.
-    maToolbox.SetItemBits(
+    maToolbox->SetItemBits(
         TBI_SHAPE_FILTER,
-        maToolbox.GetItemBits(TBI_SHAPE_FILTER) | ToolBoxItemBits::DROPDOWNONLY);
+        maToolbox->GetItemBits(TBI_SHAPE_FILTER) | ToolBoxItemBits::DROPDOWNONLY);
 
     // TreeListBox
     // set position below toolbox
-    long nListboxYPos = maToolbox.GetPosPixel().Y() + maToolbox.GetSizePixel().Height() + 4;
-    maTlbObjects.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
-    maTlbObjects.SetDoubleClickHdl( LINK( this, SdNavigatorWin, ClickObjectHdl ) );
-    maTlbObjects.SetSelectionMode( SINGLE_SELECTION );
+    long nListboxYPos = maToolbox->GetPosPixel().Y() + maToolbox->GetSizePixel().Height() + 4;
+    maTlbObjects->setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
+    maTlbObjects->SetDoubleClickHdl( LINK( this, SdNavigatorWin, ClickObjectHdl ) );
+    maTlbObjects->SetSelectionMode( SINGLE_SELECTION );
     // set focus to listbox, otherwise it is in the toolbox which is only useful
     // for keyboard navigation
-    maTlbObjects.GrabFocus();
-    maTlbObjects.SetSdNavigatorWinFlag(true);
+    maTlbObjects->GrabFocus();
+    maTlbObjects->SetSdNavigatorWinFlag(true);
 
     // DragTypeListBox
-    maLbDocs.SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
+    maLbDocs->SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
     // set position below treelistbox
-    nListboxYPos = maTlbObjects.GetPosPixel().Y() + maTlbObjects.GetSizePixel().Height() + 4;
-    maLbDocs.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
+    nListboxYPos = maTlbObjects->GetPosPixel().Y() + maTlbObjects->GetSizePixel().Height() + 4;
+    maLbDocs->setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
 
     // assure that tool box is at least as wide as the tree list box
     {
-        const Size aTlbSize( maTlbObjects.GetOutputSizePixel() );
+        const Size aTlbSize( maTlbObjects->GetOutputSizePixel() );
         if ( aTlbSize.Width() > aTbxSize.Width() )
         {
-            maToolbox.setPosSizePixel( 0, 0, aTlbSize.Width(), 0, WINDOW_POSSIZE_WIDTH );
-            aTbxSize = maToolbox.GetOutputSizePixel();
+            maToolbox->setPosSizePixel( 0, 0, aTlbSize.Width(), 0, WINDOW_POSSIZE_WIDTH );
+            aTbxSize = maToolbox->GetOutputSizePixel();
         }
     }
 
     // set min outputsize after all sizes are known
-    const long nFullHeight = nListboxYPos + maLbDocs.GetSizePixel().Height() + 4;
+    const long nFullHeight = nListboxYPos + maLbDocs->GetSizePixel().Height() + 4;
     maSize = GetOutputSizePixel();
     if( maSize.Height() < nFullHeight )
     {
@@ -137,7 +137,7 @@ SdNavigatorWin::SdNavigatorWin(
         SetOutputSizePixel( maSize );
     }
     maMinSize = maSize;
-    const long nMinWidth = 2*maToolbox.GetPosPixel().X() + aTbxSize.Width(); // never clip the toolbox
+    const long nMinWidth = 2*maToolbox->GetPosPixel().X() + aTbxSize.Width(); // never clip the toolbox
     if( nMinWidth > maMinSize.Width() )
         maMinSize.Width() = nMinWidth;
     maMinSize.Height() -= 40;
@@ -152,8 +152,17 @@ SdNavigatorWin::SdNavigatorWin(
 
 SdNavigatorWin::~SdNavigatorWin()
 {
+    disposeOnce();
+}
+
+void SdNavigatorWin::dispose()
+{
     delete mpNavigatorCtrlItem;
     delete mpPageNameCtrlItem;
+    maToolbox.disposeAndClear();
+    maTlbObjects.disposeAndClear();
+    maLbDocs.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 //when object is marked , fresh the corresponding entry tree .
@@ -163,17 +172,17 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
     sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     OUString aDocShName( pDocShell->GetName() );
     OUString aDocName = pDocShell->GetMedium()->GetName();
-    maTlbObjects.SetSaveTreeItemStateFlag(true); //Added by yanjun for sym2_6385
-    maTlbObjects.Clear();
-    maTlbObjects.Fill( pDoc, false, aDocName ); // Nur normale Seiten
-    maTlbObjects.SetSaveTreeItemStateFlag(false); //Added by yanjun for sym2_6385
+    maTlbObjects->SetSaveTreeItemStateFlag(true); //Added by yanjun for sym2_6385
+    maTlbObjects->Clear();
+    maTlbObjects->Fill( pDoc, false, aDocName ); // Nur normale Seiten
+    maTlbObjects->SetSaveTreeItemStateFlag(false); //Added by yanjun for sym2_6385
     RefreshDocumentLB();
-    maLbDocs.SelectEntry( aDocShName );
+    maLbDocs->SelectEntry( aDocShName );
 }
 
 void SdNavigatorWin::FreshEntry( )
 {
-    maTlbObjects.FreshCurEntry();
+    maTlbObjects->FreshCurEntry();
 }
 
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
@@ -189,35 +198,35 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     {
         ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
         if (pFrameView != NULL)
-            maTlbObjects.SetShowAllShapes(pFrameView->IsNavigatorShowingAllShapes(), false);
+            maTlbObjects->SetShowAllShapes(pFrameView->IsNavigatorShowingAllShapes(), false);
     }
 
     // Disable the shape filter drop down menu when there is a running slide
     // show.
     if (pViewShell!=NULL && sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ))
-        maToolbox.EnableItem(TBI_SHAPE_FILTER, false);
+        maToolbox->EnableItem(TBI_SHAPE_FILTER, false);
     else
-        maToolbox.EnableItem(TBI_SHAPE_FILTER);
+        maToolbox->EnableItem(TBI_SHAPE_FILTER);
 
-    if( !maTlbObjects.IsEqualToDoc( pDoc ) )
+    if( !maTlbObjects->IsEqualToDoc( pDoc ) )
     {
         OUString aDocName = pDocShell->GetMedium()->GetName();
-        maTlbObjects.Clear();
-        maTlbObjects.Fill( pDoc, false, aDocName ); // only normal pages
+        maTlbObjects->Clear();
+        maTlbObjects->Fill( pDoc, false, aDocName ); // only normal pages
 
         RefreshDocumentLB();
-        maLbDocs.SelectEntry( aDocShName );
+        maLbDocs->SelectEntry( aDocShName );
     }
     else
     {
-        maLbDocs.SetNoSelection();
-        maLbDocs.SelectEntry( aDocShName );
+        maLbDocs->SetNoSelection();
+        maLbDocs->SelectEntry( aDocShName );
 
 // commented in order to fix 30246
-//        if( maLbDocs.GetSelectEntryCount() == 0 )
+//        if( maLbDocs->GetSelectEntryCount() == 0 )
         {
             RefreshDocumentLB();
-            maLbDocs.SelectEntry( aDocShName );
+            maLbDocs->SelectEntry( aDocShName );
         }
     }
 
@@ -235,7 +244,7 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
     NavigatorDragType   eDT = meDragType;
     NavDocInfo*         pInfo = GetDocInfo();
 
-    if( ( eDT == NAVIGATOR_DRAGTYPE_LINK ) && ( ( pInfo && !pInfo->HasName() ) || !maTlbObjects.IsLinkableSelected() ) )
+    if( ( eDT == NAVIGATOR_DRAGTYPE_LINK ) && ( ( pInfo && !pInfo->HasName() ) || !maTlbObjects->IsLinkableSelected() ) )
         eDT = NAVIGATOR_DRAGTYPE_NONE;
 
     return eDT;
@@ -252,7 +261,7 @@ sd::DrawDocShell* SdNavigatorWin::GetDrawDocShell( const SdDrawDocument* pDoc )
 
 IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl)
 {
-    sal_uInt16 nId = maToolbox.GetCurItemId();
+    sal_uInt16 nId = maToolbox->GetCurItemId();
     sal_uInt16 nSId = 0;
     PageJump ePage = PAGE_NONE;
 
@@ -307,7 +316,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickToolboxHdl)
 
 IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
 {
-    sal_uInt16 nId = maToolbox.GetCurItemId();
+    sal_uInt16 nId = maToolbox->GetCurItemId();
 
     switch( nId )
     {
@@ -339,7 +348,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
             }
             NavDocInfo* pInfo = GetDocInfo();
 
-            if( ( pInfo && !pInfo->HasName() ) || !maTlbObjects.IsLinkableSelected() )
+            if( ( pInfo && !pInfo->HasName() ) || !maTlbObjects->IsLinkableSelected() )
             {
                 pMenu->EnableItem( NAVIGATOR_DRAGTYPE_LINK, false );
                 pMenu->EnableItem( NAVIGATOR_DRAGTYPE_URL, false );
@@ -349,7 +358,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
             pMenu->CheckItem( (sal_uInt16)meDragType );
             pMenu->SetSelectHdl( LINK( this, SdNavigatorWin, MenuSelectHdl ) );
 
-            pMenu->Execute( this, maToolbox.GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
+            pMenu->Execute( this, maToolbox->GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
             pBox->EndSelection();
             delete pMenu;
         }
@@ -366,13 +375,13 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
                 nShowAllShapesFilter,
                 SD_RESSTR(STR_NAVIGATOR_SHOW_ALL_SHAPES));
 
-            if (maTlbObjects.GetShowAllShapes())
+            if (maTlbObjects->GetShowAllShapes())
                 pMenu->CheckItem(nShowAllShapesFilter);
             else
                 pMenu->CheckItem(nShowNamedShapesFilter);
             pMenu->SetSelectHdl( LINK( this, SdNavigatorWin, ShapeFilterCallback ) );
 
-            pMenu->Execute( this, maToolbox.GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
+            pMenu->Execute( this, maToolbox->GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
             pBox->EndSelection();
             delete pMenu;
         }
@@ -383,14 +392,14 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
 
 IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
 {
-    if( !mbDocImported || maLbDocs.GetSelectEntryPos() != 0 )
+    if( !mbDocImported || maLbDocs->GetSelectEntryPos() != 0 )
     {
         NavDocInfo* pInfo = GetDocInfo();
 
         // if it is the active window, we jump to the page
         if( pInfo && pInfo->IsActive() )
         {
-            OUString aStr( maTlbObjects.GetSelectEntry() );
+            OUString aStr( maTlbObjects->GetSelectEntry() );
 
             if( !aStr.isEmpty() )
             {
@@ -398,7 +407,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
                 mpBindings->GetDispatcher()->Execute(
                     SID_NAVIGATOR_OBJECT, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
                 //set sign variable
-                maTlbObjects.MarkCurEntry(aStr);
+                maTlbObjects->MarkCurEntry(aStr);
 
                 // moved here from SetGetFocusHdl. Reset the
                 // focus only if something has been selected in the
@@ -419,8 +428,8 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
 
 IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
 {
-    OUString aStrLb = maLbDocs.GetSelectEntry();
-    long   nPos = maLbDocs.GetSelectEntryPos();
+    OUString aStrLb = maLbDocs->GetSelectEntry();
+    long   nPos = maLbDocs->GetSelectEntryPos();
     bool   bFound = false;
     ::sd::DrawDocShell* pDocShell = NULL;
     NavDocInfo* pInfo = GetDocInfo();
@@ -441,18 +450,18 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
     if( bFound )
     {
         SdDrawDocument* pDoc = pDocShell->GetDoc();
-        if( !maTlbObjects.IsEqualToDoc( pDoc ) )
+        if( !maTlbObjects->IsEqualToDoc( pDoc ) )
         {
             SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
             ::sd::DrawDocShell* pNCDocShell = pNonConstDoc->GetDocSh();
             OUString aDocName = pNCDocShell->GetMedium()->GetName();
-            maTlbObjects.Clear();
-            maTlbObjects.Fill( pDoc, false, aDocName ); // only normal pages
+            maTlbObjects->Clear();
+            maTlbObjects->Fill( pDoc, false, aDocName ); // only normal pages
         }
     }
 
     // check if link or url is possible
-    if( ( pInfo && !pInfo->HasName() ) || !maTlbObjects.IsLinkableSelected() || ( meDragType != NAVIGATOR_DRAGTYPE_EMBEDDED ) )
+    if( ( pInfo && !pInfo->HasName() ) || !maTlbObjects->IsLinkableSelected() || ( meDragType != NAVIGATOR_DRAGTYPE_EMBEDDED ) )
     {
         meDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
         SetDragImage();
@@ -484,13 +493,13 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
             if( meDragType == NAVIGATOR_DRAGTYPE_URL )
             {
                 // patch, prevents endless loop
-                if( maTlbObjects.GetSelectionCount() > 1 )
-                    maTlbObjects.SelectAll( false );
+                if( maTlbObjects->GetSelectionCount() > 1 )
+                    maTlbObjects->SelectAll( false );
 
-                maTlbObjects.SetSelectionMode( SINGLE_SELECTION );
+                maTlbObjects->SetSelectionMode( SINGLE_SELECTION );
             }
             else
-                maTlbObjects.SetSelectionMode( MULTIPLE_SELECTION );
+                maTlbObjects->SetSelectionMode( MULTIPLE_SELECTION );
         }
     }
     return 0;
@@ -500,7 +509,7 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
 {
     if (pMenu != NULL)
     {
-        bool bShowAllShapes (maTlbObjects.GetShowAllShapes());
+        bool bShowAllShapes (maTlbObjects->GetShowAllShapes());
         sal_uInt16 nMenuId (pMenu->GetCurItemId());
         switch (nMenuId)
         {
@@ -518,7 +527,7 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
                 break;
         }
 
-        maTlbObjects.SetShowAllShapes(bShowAllShapes, true);
+        maTlbObjects->SetShowAllShapes(bShowAllShapes, true);
 
         // Remember the selection in the FrameView.
         NavDocInfo* pInfo = GetDocInfo();
@@ -554,26 +563,26 @@ void SdNavigatorWin::Resize()
         aDiffSize.Height() = aWinSize.Height() - maSize.Height();
 
         // change size of Toolbox
-        Size aObjSize( maToolbox.GetOutputSizePixel() );
+        Size aObjSize( maToolbox->GetOutputSizePixel() );
         aObjSize.Width() += aDiffSize.Width();
-        maToolbox.SetOutputSizePixel( aObjSize );
+        maToolbox->SetOutputSizePixel( aObjSize );
 
         // change size of TreeLB
-        aObjSize = maTlbObjects.GetSizePixel();
+        aObjSize = maTlbObjects->GetSizePixel();
         aObjSize.Width() += aDiffSize.Width();
-        aObjSize.Height() = maLbDocs.GetPosPixel().Y() + aDiffSize.Height() -
-            maTlbObjects.GetPosPixel().Y() - 4;
-        maTlbObjects.SetSizePixel( aObjSize );
+        aObjSize.Height() = maLbDocs->GetPosPixel().Y() + aDiffSize.Height() -
+            maTlbObjects->GetPosPixel().Y() - 4;
+        maTlbObjects->SetSizePixel( aObjSize );
 
         Point aPt( 0, aDiffSize.Height() );
 
         // move other controls (DocumentLB)
-        maLbDocs.Hide();
-        aObjSize = maLbDocs.GetOutputSizePixel();
+        maLbDocs->Hide();
+        aObjSize = maLbDocs->GetOutputSizePixel();
         aObjSize.Width() += aDiffSize.Width();
-        maLbDocs.SetPosPixel( maLbDocs.GetPosPixel() + aPt );
-        maLbDocs.SetOutputSizePixel( aObjSize );
-        maLbDocs.Show();
+        maLbDocs->SetPosPixel( maLbDocs->GetPosPixel() + aPt );
+        maLbDocs->SetOutputSizePixel( aObjSize );
+        maLbDocs->Show();
 
         maSize = aWinSize;
     }
@@ -623,19 +632,19 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
             if (pMedium->IsStorage())
             {
                 // Now depending on mode:
-                // maTlbObjects.SetSelectionMode(MULTIPLE_SELECTION);
+                // maTlbObjects->SetSelectionMode(MULTIPLE_SELECTION);
                 // handover of ownership of pMedium;
-                SdDrawDocument* pDropDoc = maTlbObjects.GetBookmarkDoc(pMedium);
+                SdDrawDocument* pDropDoc = maTlbObjects->GetBookmarkDoc(pMedium);
 
                 if (pDropDoc)
                 {
-                    maTlbObjects.Clear();
+                    maTlbObjects->Clear();
                     maDropFileName = aFileName;
 
-                    if( !maTlbObjects.IsEqualToDoc( pDropDoc ) )
+                    if( !maTlbObjects->IsEqualToDoc( pDropDoc ) )
                     {
                         // only normal pages
-                        maTlbObjects.Fill(pDropDoc, false, maDropFileName);
+                        maTlbObjects->Fill(pDropDoc, false, maDropFileName);
                         RefreshDocumentLB( &maDropFileName );
                     }
                 }
@@ -662,28 +671,28 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
     if( pDocName )
     {
         if( mbDocImported )
-            maLbDocs.RemoveEntry( 0 );
+            maLbDocs->RemoveEntry( 0 );
 
-        maLbDocs.InsertEntry( *pDocName, 0 );
+        maLbDocs->InsertEntry( *pDocName, 0 );
         mbDocImported = true;
     }
     else
     {
-        nPos = maLbDocs.GetSelectEntryPos();
+        nPos = maLbDocs->GetSelectEntryPos();
         if( nPos == LISTBOX_ENTRY_NOTFOUND )
             nPos = 0;
 
         OUString aStr;
         if( mbDocImported )
-            aStr = maLbDocs.GetEntry( 0 );
+            aStr = maLbDocs->GetEntry( 0 );
 
-        maLbDocs.Clear();
+        maLbDocs->Clear();
 
         // delete list of DocInfos
          maDocList.clear();
 
         if( mbDocImported )
-            maLbDocs.InsertEntry( aStr, 0 );
+            maLbDocs->InsertEntry( aStr, 0 );
 
         ::sd::DrawDocShell* pCurrentDocShell =
               PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
@@ -707,7 +716,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
                 // is shown in url notation!
                 aStr = pDocShell->GetName();
 
-                maLbDocs.InsertEntry( aStr, LISTBOX_APPEND );
+                maLbDocs->InsertEntry( aStr, LISTBOX_APPEND );
 
                 if( pDocShell == pCurrentDocShell )
                     aInfo.SetActive();
@@ -719,7 +728,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
             pSfxDocShell = SfxObjectShell::GetNext( *pSfxDocShell, 0, false );
         }
     }
-    maLbDocs.SelectEntryPos( nPos );
+    maLbDocs->SelectEntryPos( nPos );
 }
 
 sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, bool bImage )
@@ -741,7 +750,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, bool bImag
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()
 {
-    sal_uInt32 nPos = maLbDocs.GetSelectEntryPos();
+    sal_uInt32 nPos = maLbDocs->GetSelectEntryPos();
 
     if( mbDocImported )
     {
@@ -834,14 +843,14 @@ void SdNavigatorWin::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SdNavigatorWin::SetDragImage()
 {
-    maToolbox.SetItemImage( TBI_DRAGTYPE, maToolbox.GetImageList().GetImage( GetDragTypeSdResId( meDragType, true ) ) );
+    maToolbox->SetItemImage( TBI_DRAGTYPE, maToolbox->GetImageList().GetImage( GetDragTypeSdResId( meDragType, true ) ) );
 }
 
 void SdNavigatorWin::ApplyImageList()
 {
 
-    maToolbox.SetImageList( maImageList );
-    maToolbox.SetItemImage(TBI_SHAPE_FILTER, Image(BitmapEx(SdResId(BMP_GRAPHIC))));
+    maToolbox->SetImageList( maImageList );
+    maToolbox->SetItemImage(TBI_SHAPE_FILTER, Image(BitmapEx(SdResId(BMP_GRAPHIC))));
 
     SetDragImage();
 }
@@ -871,17 +880,17 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
 
         // pen
         if( nState & NAVBTN_PEN_ENABLED &&
-            !pNavigatorWin->maToolbox.IsItemEnabled( TBI_PEN ) )
-            pNavigatorWin->maToolbox.EnableItem( TBI_PEN );
+            !pNavigatorWin->maToolbox->IsItemEnabled( TBI_PEN ) )
+            pNavigatorWin->maToolbox->EnableItem( TBI_PEN );
         if( nState & NAVBTN_PEN_DISABLED &&
-            pNavigatorWin->maToolbox.IsItemEnabled( TBI_PEN ) )
-            pNavigatorWin->maToolbox.EnableItem( TBI_PEN, false );
+            pNavigatorWin->maToolbox->IsItemEnabled( TBI_PEN ) )
+            pNavigatorWin->maToolbox->EnableItem( TBI_PEN, false );
         if( nState & NAVBTN_PEN_CHECKED &&
-            !pNavigatorWin->maToolbox.IsItemChecked( TBI_PEN ) )
-            pNavigatorWin->maToolbox.CheckItem( TBI_PEN );
+            !pNavigatorWin->maToolbox->IsItemChecked( TBI_PEN ) )
+            pNavigatorWin->maToolbox->CheckItem( TBI_PEN );
         if( nState & NAVBTN_PEN_UNCHECKED &&
-            pNavigatorWin->maToolbox.IsItemChecked( TBI_PEN ) )
-            pNavigatorWin->maToolbox.CheckItem( TBI_PEN, false );
+            pNavigatorWin->maToolbox->IsItemChecked( TBI_PEN ) )
+            pNavigatorWin->maToolbox->CheckItem( TBI_PEN, false );
 
         // only if doc in LB is the active
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
@@ -889,35 +898,35 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
         {
             // First
             if( nState & NAVBTN_FIRST_ENABLED &&
-                !pNavigatorWin->maToolbox.IsItemEnabled( TBI_FIRST ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_FIRST );
+                !pNavigatorWin->maToolbox->IsItemEnabled( TBI_FIRST ) )
+                pNavigatorWin->maToolbox->EnableItem( TBI_FIRST );
             if( nState & NAVBTN_FIRST_DISABLED &&
-                pNavigatorWin->maToolbox.IsItemEnabled( TBI_FIRST ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_FIRST, false );
+                pNavigatorWin->maToolbox->IsItemEnabled( TBI_FIRST ) )
+                pNavigatorWin->maToolbox->EnableItem( TBI_FIRST, false );
 
             // Prev
             if( nState & NAVBTN_PREV_ENABLED &&
-                !pNavigatorWin->maToolbox.IsItemEnabled( TBI_PREVIOUS ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_PREVIOUS );
+                !pNavigatorWin->maToolbox->IsItemEnabled( TBI_PREVIOUS ) )
+                pNavigatorWin->maToolbox->EnableItem( TBI_PREVIOUS );
             if( nState & NAVBTN_PREV_DISABLED &&
-                pNavigatorWin->maToolbox.IsItemEnabled( TBI_PREVIOUS ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_PREVIOUS, false );
+                pNavigatorWin->maToolbox->IsItemEnabled( TBI_PREVIOUS ) )
+                pNavigatorWin->maToolbox->EnableItem( TBI_PREVIOUS, false );
 
             // Last
             if( nState & NAVBTN_LAST_ENABLED &&
-                !pNavigatorWin->maToolbox.IsItemEnabled( TBI_LAST ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_LAST );
+                !pNavigatorWin->maToolbox->IsItemEnabled( TBI_LAST ) )
+                pNavigatorWin->maToolbox->EnableItem( TBI_LAST );
             if( nState & NAVBTN_LAST_DISABLED &&
-                pNavigatorWin->maToolbox.IsItemEnabled( TBI_LAST ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_LAST, false );
+                pNavigatorWin->maToolbox->IsItemEnabled( TBI_LAST ) )
+                pNavigatorWin->maToolbox->EnableItem( TBI_LAST, false );
 
             // Next
             if( nState & NAVBTN_NEXT_ENABLED &&
-                !pNavigatorWin->maToolbox.IsItemEnabled( TBI_NEXT ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_NEXT );
+                !pNavigatorWin->maToolbox->IsItemEnabled( TBI_NEXT ) )
+                pNavigatorWin->maToolbox->EnableItem( TBI_NEXT );
             if( nState & NAVBTN_NEXT_DISABLED &&
-                pNavigatorWin->maToolbox.IsItemEnabled( TBI_NEXT ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_NEXT, false );
+                pNavigatorWin->maToolbox->IsItemEnabled( TBI_NEXT ) )
+                pNavigatorWin->maToolbox->EnableItem( TBI_NEXT, false );
 
             if( nState & NAVTLB_UPDATE )
             {
@@ -956,14 +965,14 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
             DBG_ASSERT( pStateItem, "SfxStringItem expected");
             OUString aPageName = pStateItem->GetValue();
 
-            if( !pNavigatorWin->maTlbObjects.HasSelectedChildren( aPageName ) )
+            if( !pNavigatorWin->maTlbObjects->HasSelectedChildren( aPageName ) )
             {
-                if( pNavigatorWin->maTlbObjects.GetSelectionMode() == MULTIPLE_SELECTION )
+                if( pNavigatorWin->maTlbObjects->GetSelectionMode() == MULTIPLE_SELECTION )
                 {
                     // because otherwise it is always additional select
-                    pNavigatorWin->maTlbObjects.SelectAll( false );
+                    pNavigatorWin->maTlbObjects->SelectAll( false );
                 }
-                pNavigatorWin->maTlbObjects.SelectEntry( aPageName );
+                pNavigatorWin->maTlbObjects->SelectEntry( aPageName );
             }
         }
     }

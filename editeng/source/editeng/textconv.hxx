@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <editeng/hangulhanja.hxx>
+#include <vcl/vclptr.hxx>
 
 class EditView;
 
@@ -39,7 +40,7 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
                                       // starts from the cursor position
 
     EditView *      m_pEditView;
-    vcl::Window *        m_pWin;
+    VclPtr<vcl::Window>  m_pWin;
 
     bool            m_bStartChk;
     bool            m_bStartDone;

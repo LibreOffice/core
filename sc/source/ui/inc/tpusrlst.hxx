@@ -33,7 +33,7 @@ class ScRangeUtil;
 class ScTpUserLists : public SfxTabPage
 {
 public:
-    static  SfxTabPage* Create          ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rAttrSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
@@ -44,24 +44,25 @@ private:
             ScTpUserLists( vcl::Window*              pParent,
                            const SfxItemSet&    rArgSet );
             virtual ~ScTpUserLists();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    FixedText*          mpFtLists;
-    ListBox*            mpLbLists;
-    FixedText*          mpFtEntries;
-    VclMultiLineEdit*   mpEdEntries;
-    FixedText*          mpFtCopyFrom;
-    Edit*               mpEdCopyFrom;
+    VclPtr<FixedText>          mpFtLists;
+    VclPtr<ListBox>            mpLbLists;
+    VclPtr<FixedText>          mpFtEntries;
+    VclPtr<VclMultiLineEdit>   mpEdEntries;
+    VclPtr<FixedText>          mpFtCopyFrom;
+    VclPtr<Edit>               mpEdCopyFrom;
 
-    PushButton*         mpBtnNew;
-    PushButton*         mpBtnDiscard;
+    VclPtr<PushButton>         mpBtnNew;
+    VclPtr<PushButton>         mpBtnDiscard;
 
-    PushButton*         mpBtnAdd;
-    PushButton*         mpBtnModify;
+    VclPtr<PushButton>         mpBtnAdd;
+    VclPtr<PushButton>         mpBtnModify;
 
-    PushButton*         mpBtnRemove;
+    VclPtr<PushButton>         mpBtnRemove;
 
-    PushButton*         mpBtnCopy;
+    VclPtr<PushButton>         mpBtnCopy;
 
     const OUString      aStrQueryRemove;
     const OUString      aStrCopyList;

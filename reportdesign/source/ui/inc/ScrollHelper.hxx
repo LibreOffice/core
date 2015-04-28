@@ -48,14 +48,14 @@ namespace rptui
                                 ,   public IMarkedSection
     {
     private:
-        ScrollBar           m_aHScroll;
-        ScrollBar           m_aVScroll;
-        ScrollBarBox        m_aCornerWin;       // window in the bottom right corner
-        Size                m_aTotalPixelSize;
-        ODesignView*        m_pParent;
-        OReportWindow       m_aReportWindow;
+        VclPtr<ScrollBar>           m_aHScroll;
+        VclPtr<ScrollBar>           m_aVScroll;
+        VclPtr<ScrollBarBox>        m_aCornerWin;       // window in the bottom right corner
+        Size                        m_aTotalPixelSize;
+        VclPtr<ODesignView>         m_pParent;
+        VclPtr<OReportWindow>       m_aReportWindow;
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
-                            m_pReportDefintionMultiPlexer; // listener for property changes
+                                    m_pReportDefintionMultiPlexer; // listener for property changes
 
         DECL_LINK( ScrollHdl, ScrollBar*);
         Size ResizeScrollBars();
@@ -74,17 +74,18 @@ namespace rptui
     public:
         OScrollWindowHelper( ODesignView* _pReportDesignView);
         virtual ~OScrollWindowHelper();
+        virtual void dispose() SAL_OVERRIDE;
 
         /** late ctor
         */
         void                    initialize();
 
-        inline Point            getThumbPos() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
-        inline const OReportWindow& getReportWindow() const { return m_aReportWindow; }
+        inline Point            getThumbPos() const { return Point(m_aHScroll->GetThumbPos(),m_aVScroll->GetThumbPos())/*m_aScrollOffset*/; }
+        inline const OReportWindow& getReportWindow() const { return *m_aReportWindow.get(); }
         void                    setTotalSize(sal_Int32 _nWidth, sal_Int32 _nHeight);
         inline Size             getTotalSize() const { return m_aTotalPixelSize; }
-        inline ScrollBar&       GetHScroll() { return m_aHScroll; }
-        inline ScrollBar&       GetVScroll() { return m_aVScroll; }
+        inline ScrollBar&       GetHScroll() { return *m_aHScroll.get(); }
+        inline ScrollBar&       GetVScroll() { return *m_aVScroll.get(); }
 
         // forwards
         void                    SetMode( DlgEdMode _eMode );
@@ -173,8 +174,8 @@ namespace rptui
         void                    setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
-        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
+        OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
         virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
 
 

@@ -93,8 +93,17 @@ RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
 
 RTSDialog::~RTSDialog()
 {
-    delete m_pPaperPage;
-    delete m_pDevicePage;
+    disposeOnce();
+}
+
+void RTSDialog::dispose()
+{
+    m_pTabControl.clear();
+    m_pOKButton.clear();
+    m_pCancelButton.clear();
+    m_pPaperPage.disposeAndClear();
+    m_pDevicePage.disposeAndClear();
+    TabDialog::dispose();
 }
 
 IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
@@ -108,9 +117,9 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     {
         TabPage *pPage = NULL;
         if (sPage == "paper")
-            pPage = m_pPaperPage = new RTSPaperPage( this );
+            pPage = m_pPaperPage = VclPtr<RTSPaperPage>::Create( this );
         else if (sPage == "device")
-            pPage = m_pDevicePage = new RTSDevicePage( this );
+            pPage = m_pDevicePage = VclPtr<RTSDevicePage>::Create( this );
         if( pPage )
             m_pTabControl->SetTabPage( nId, pPage );
     }
@@ -187,6 +196,20 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
 
 RTSPaperPage::~RTSPaperPage()
 {
+    disposeOnce();
+}
+
+void RTSPaperPage::dispose()
+{
+    m_pParent.clear();
+    m_pPaperText.clear();
+    m_pPaperBox.clear();
+    m_pOrientBox.clear();
+    m_pDuplexText.clear();
+    m_pDuplexBox.clear();
+    m_pSlotText.clear();
+    m_pSlotBox.clear();
+    TabPage::dispose();
 }
 
 void RTSPaperPage::update()
@@ -355,6 +378,19 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
 
 RTSDevicePage::~RTSDevicePage()
 {
+    disposeOnce();
+}
+
+void RTSDevicePage::dispose()
+{
+    m_pParent.clear();
+    m_pPPDKeyBox.clear();
+    m_pPPDValueBox.clear();
+    m_pCustomEdit.clear();
+    m_pLevelBox.clear();
+    m_pSpaceBox.clear();
+    m_pDepthBox.clear();
+    TabPage::dispose();
 }
 
 sal_uLong RTSDevicePage::getDepth()
@@ -466,11 +502,11 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
 {
     int nRet = 0;
-    RTSDialog aDialog( rJobData, NULL );
+    ScopedVclPtrInstance< RTSDialog > aDialog(  rJobData, nullptr  );
 
-    if( aDialog.Execute() )
+    if( aDialog->Execute() )
     {
-        rJobData = aDialog.getSetup();
+        rJobData = aDialog->getSetup();
         nRet = 1;
     }
 

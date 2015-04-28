@@ -515,19 +515,19 @@ void AnnotationTag::deselect()
 
 BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
 {
-    VirtualDevice aVDev;
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
 
     OUString sAuthor( getInitials( mxAnnotation->getAuthor() ) );
     sAuthor += OUString( ' ' );
     sAuthor += OUString::number( mnIndex );
 
-    aVDev.SetFont( mrFont );
+    pVDev->SetFont( mrFont );
 
     const int BORDER_X = 4; // pixels
     const int BORDER_Y = 4; // pixels
 
-    maSize = Size( aVDev.GetTextWidth( sAuthor ) + 2*BORDER_X, aVDev.GetTextHeight() + 2*BORDER_Y );
-    aVDev.SetOutputSizePixel( maSize, false );
+    maSize = Size( pVDev->GetTextWidth( sAuthor ) + 2*BORDER_X, pVDev->GetTextHeight() + 2*BORDER_Y );
+    pVDev->SetOutputSizePixel( maSize, false );
 
     Color aBorderColor( maColor );
 
@@ -549,14 +549,14 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
 
     Point aPos;
     Rectangle aBorderRect( aPos, maSize );
-    aVDev.SetLineColor(aBorderColor);
-    aVDev.SetFillColor(maColor);
-    aVDev.DrawRect( aBorderRect );
+    pVDev->SetLineColor(aBorderColor);
+    pVDev->SetFillColor(maColor);
+    pVDev->DrawRect( aBorderRect );
 
-    aVDev.SetTextColor( maColor.IsDark() ? COL_WHITE : COL_BLACK );
-    aVDev.DrawText( Point( BORDER_X, BORDER_Y ), sAuthor );
+    pVDev->SetTextColor( maColor.IsDark() ? COL_WHITE : COL_BLACK );
+    pVDev->DrawText( Point( BORDER_X, BORDER_Y ), sAuthor );
 
-    return aVDev.GetBitmapEx( aPos, maSize );
+    return pVDev->GetBitmapEx( aPos, maSize );
 }
 
 void AnnotationTag::OpenPopup( bool bEdit )
@@ -577,7 +577,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
 
             Rectangle aRect( aPos, maSize );
 
-            mpAnnotationWindow.reset( new AnnotationWindow( mrManager, mrView.GetDocSh(), pWindow->GetWindow(WINDOW_FRAME) ) );
+            mpAnnotationWindow.reset( VclPtr<AnnotationWindow>::Create( mrManager, mrView.GetDocSh(), pWindow->GetWindow(WINDOW_FRAME) ) );
             mpAnnotationWindow->InitControls();
             mpAnnotationWindow->setAnnotation(mxAnnotation);
 

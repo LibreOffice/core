@@ -48,6 +48,17 @@ namespace pcr
         initialize( );
     }
 
+    ListSelectionDialog::~ListSelectionDialog()
+    {
+        disposeOnce();
+    }
+
+    void ListSelectionDialog::dispose()
+    {
+        m_pEntries.clear();
+        ModalDialog::dispose();
+    }
+
     short ListSelectionDialog::Execute()
     {
         short nResult = ModalDialog::Execute();

@@ -41,6 +41,18 @@ ScSelEntryDlg::ScSelEntryDlg(vcl::Window*  pParent, const std::vector<OUString> 
         m_pLb->SelectEntryPos( 0 );
 }
 
+ScSelEntryDlg::~ScSelEntryDlg()
+{
+    disposeOnce();
+}
+
+void ScSelEntryDlg::dispose()
+{
+    m_pLb.clear();
+    ModalDialog::dispose();
+}
+
+
 OUString ScSelEntryDlg::GetSelectEntry() const
 {
     return m_pLb->GetSelectEntry();

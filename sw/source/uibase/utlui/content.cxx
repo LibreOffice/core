@@ -91,6 +91,7 @@
 #include <unomid.h>
 
 #include "navmgr.hxx"
+#include "SidebarWin.hxx"
 #include <boost/scoped_ptr.hpp>
 
 #define CTYPE_CNT   0
@@ -836,8 +837,15 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
 
 SwContentTree::~SwContentTree()
 {
+    disposeOnce();
+}
+
+void SwContentTree::dispose()
+{
     Clear(); // If applicable erase content types previously.
     bIsInDrag = false;
+    aUpdTimer.Stop();
+    SvTreeListBox::dispose();
 }
 
 OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
@@ -1594,11 +1602,11 @@ void SwContentTree::Display( bool bActive )
         bIsLastReadOnly = bReadOnly;
         bool bDisable =  pShell == 0 || bReadOnly;
         SwNavigationPI* pNavi = GetParentWindow();
-        pNavi->aContentToolBox.EnableItem(FN_ITEM_UP , !bDisable);
-        pNavi->aContentToolBox.EnableItem(FN_ITEM_DOWN, !bDisable);
-        pNavi->aContentToolBox.EnableItem(FN_ITEM_LEFT, !bDisable);
-        pNavi->aContentToolBox.EnableItem(FN_ITEM_RIGHT, !bDisable);
-        pNavi->aContentToolBox.EnableItem(FN_SELECT_SET_AUTO_BOOKMARK, !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_ITEM_UP , !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_ITEM_DOWN, !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_ITEM_LEFT, !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_ITEM_RIGHT, !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_SELECT_SET_AUTO_BOOKMARK, !bDisable);
     }
     if(pShell)
     {
@@ -1927,7 +1935,7 @@ bool SwContentTree::ToggleToRoot()
         }
     }
     pConfig->SetRootType( nRootType );
-    GetParentWindow()->aContentToolBox.CheckItem(FN_SHOW_ROOT, bIsRoot);
+    GetParentWindow()->aContentToolBox->CheckItem(FN_SHOW_ROOT, bIsRoot);
     return bIsRoot;
 }
 
@@ -2440,6 +2448,9 @@ void    SwContentTree::HideTree()
 
 IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
 {
+    if (IsDisposed())
+        return 0;
+
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
@@ -3046,10 +3057,10 @@ bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
         }
     }
     SwNavigationPI* pNavi = GetParentWindow();
-    pNavi->aContentToolBox.EnableItem(FN_ITEM_UP ,  bEnable);
-    pNavi->aContentToolBox.EnableItem(FN_ITEM_DOWN, bEnable);
-    pNavi->aContentToolBox.EnableItem(FN_ITEM_LEFT, bEnable);
-    pNavi->aContentToolBox.EnableItem(FN_ITEM_RIGHT,bEnable);
+    pNavi->aContentToolBox->EnableItem(FN_ITEM_UP ,  bEnable);
+    pNavi->aContentToolBox->EnableItem(FN_ITEM_DOWN, bEnable);
+    pNavi->aContentToolBox->EnableItem(FN_ITEM_LEFT, bEnable);
+    pNavi->aContentToolBox->EnableItem(FN_ITEM_RIGHT,bEnable);
 
     return SvTreeListBox::Select(pEntry, bSelect);
 }

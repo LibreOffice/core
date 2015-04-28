@@ -37,6 +37,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
                          SwSidebarItem& rSidebarItem,
                          SwFmtFld* aField );
         virtual ~SwAnnotationWin();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void    UpdateData() SAL_OVERRIDE;
         virtual void    SetPostItText() SAL_OVERRIDE;
@@ -55,7 +56,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         virtual bool    IsProtected() SAL_OVERRIDE;
 
     protected:
-        virtual MenuButton* CreateMenuButton() SAL_OVERRIDE;
+        virtual VclPtr<MenuButton> CreateMenuButton() SAL_OVERRIDE;
 
     private:
         virtual SvxLanguageItem GetLanguage() SAL_OVERRIDE;

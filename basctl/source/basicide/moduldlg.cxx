@@ -62,9 +62,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtTreeListBox(vcl::Wi
     return new ExtTreeListBox(pParent, nWinBits);
 }
 
-ExtTreeListBox::~ExtTreeListBox ()
-{ }
-
 bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     bool bRet = false;
@@ -489,8 +486,19 @@ OrganizeDialog::OrganizeDialog(vcl::Window* pParent, sal_Int16 tabId,
 
 OrganizeDialog::~OrganizeDialog()
 {
-    for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
-        delete m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) );
+    disposeOnce();
+}
+
+void OrganizeDialog::dispose()
+{
+    if (m_pTabCtrl)
+    {
+        for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
+            VclPtr<vcl::Window>(m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) )).disposeAndClear();
+    }
+    m_pTabCtrl.clear();
+
+    TabDialog::dispose();
 };
 
 short OrganizeDialog::Execute()
@@ -510,25 +518,25 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     if ( !pTabCtrl->GetTabPage( nId ) )
     {
         OString sPageName(pTabCtrl->GetPageName(nId));
-        TabPage* pNewTabPage = 0;
+        VclPtr<TabPage> pNewTabPage;
         if (sPageName == "modules")
         {
-            ObjectPage* pObjectPage = new ObjectPage(pTabCtrl, "ModulePage", BROWSEMODE_MODULES);
-            pNewTabPage = pObjectPage;
+            VclPtrInstance<ObjectPage> pObjectPage(pTabCtrl, "ModulePage", BROWSEMODE_MODULES);
+            pNewTabPage.reset(pObjectPage);
             pObjectPage->SetTabDlg(this);
             pObjectPage->SetCurrentEntry(m_aCurEntry);
         }
         else if (sPageName == "dialogs")
         {
-            ObjectPage* pObjectPage = new ObjectPage( pTabCtrl, "DialogPage", BROWSEMODE_DIALOGS );
-            pNewTabPage = pObjectPage;
+            VclPtrInstance<ObjectPage> pObjectPage( pTabCtrl, "DialogPage", BROWSEMODE_DIALOGS );
+            pNewTabPage.reset(pObjectPage);
             pObjectPage->SetTabDlg(this);
             pObjectPage->SetCurrentEntry(m_aCurEntry);
         }
         else if (sPageName == "libraries")
         {
-            LibPage* pLibPage = new LibPage( pTabCtrl );
-            pNewTabPage = pLibPage;
+            VclPtrInstance<LibPage> pLibPage( pTabCtrl );
+            pNewTabPage.reset(pLibPage);
             pLibPage->SetTabDlg( this );
         }
         else
@@ -588,6 +596,22 @@ ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nM
 
     m_pEditButton->GrabFocus();
     CheckButtons();
+}
+
+ObjectPage::~ObjectPage()
+{
+    disposeOnce();
+}
+
+void ObjectPage::dispose()
+{
+    m_pBasicBox.clear();
+    m_pEditButton.clear();
+    m_pNewModButton.clear();
+    m_pNewDlgButton.clear();
+    m_pDelButton.clear();
+    pTabDlg.clear();
+    TabPage::dispose();
 }
 
 void ObjectPage::SetCurrentEntry (EntryDescriptor& rDesc)
@@ -801,12 +825,12 @@ void ObjectPage::NewDialog()
     {
         aDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-        NewObjectDialog aNewDlg(this, ObjectMode::Dialog, true);
-        aNewDlg.SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
+        ScopedVclPtrInstance< NewObjectDialog > aNewDlg(this, ObjectMode::Dialog, true);
+        aNewDlg->SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
 
-        if (aNewDlg.Execute() != 0)
+        if (aNewDlg->Execute() != 0)
         {
-            OUString aDlgName = aNewDlg.GetObjectName();
+            OUString aDlgName = aNewDlg->GetObjectName();
             if (aDlgName.isEmpty())
                 aDlgName = aDocument.createObjectName( E_DIALOGS, aLibName);
 
@@ -919,6 +943,21 @@ LibDialog::LibDialog( vcl::Window* pParent )
     m_pLibBox->set_width_request(m_pLibBox->approximate_char_width() * 32);
 }
 
+LibDialog::~LibDialog()
+{
+    disposeOnce();
+}
+
+void LibDialog::dispose()
+{
+    m_pStorageFrame.clear();
+    m_pLibBox.clear();
+    m_pReferenceBox.clear();
+    m_pReplaceBox.clear();
+    ModalDialog::dispose();
+}
+
+
 void LibDialog::SetStorageName( const OUString& rName )
 {
     OUString aName( IDE_RESSTR(RID_STR_FILENAME) );
@@ -944,13 +983,13 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
     if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
-    NewObjectDialog aNewDlg(pWin, ObjectMode::Module, true);
-    aNewDlg.SetObjectName( aModName );
+    ScopedVclPtrInstance< NewObjectDialog > aNewDlg(pWin, ObjectMode::Module, true);
+    aNewDlg->SetObjectName( aModName );
 
-    if (aNewDlg.Execute() != 0)
+    if (aNewDlg->Execute() != 0)
     {
-        if (!aNewDlg.GetObjectName().isEmpty() )
-            aModName = aNewDlg.GetObjectName();
+        if (!aNewDlg->GetObjectName().isEmpty() )
+            aModName = aNewDlg->GetObjectName();
 
         try
         {

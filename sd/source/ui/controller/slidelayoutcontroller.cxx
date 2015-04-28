@@ -67,6 +67,7 @@ class LayoutToolbarMenu : public svtools::ToolbarMenu
 public:
     LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, vcl::Window* pParent, const bool bInsertPage );
     virtual ~LayoutToolbarMenu();
+    virtual void dispose() SAL_OVERRIDE;
 
 protected:
     DECL_LINK( SelectHdl, void * );
@@ -75,8 +76,8 @@ private:
     SlideLayoutController& mrController;
     Reference< XFrame > mxFrame;
     bool mbInsertPage;
-    ValueSet* mpLayoutSet1;
-    ValueSet* mpLayoutSet2;
+    VclPtr<ValueSet> mpLayoutSet1;
+    VclPtr<ValueSet> mpLayoutSet2;
 };
 
 struct snewfoil_value_info
@@ -210,7 +211,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
     if( bVerticalEnabled && (eMode == DrawViewMode_DRAW) )
     {
-        mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+        mpLayoutSet2 = VclPtr<ValueSet>::Create( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
 
         mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
         mpLayoutSet2->SetColCount( 4 );
@@ -256,6 +257,14 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
 LayoutToolbarMenu::~LayoutToolbarMenu()
 {
+    disposeOnce();
+}
+
+void LayoutToolbarMenu::dispose()
+{
+    mpLayoutSet1.clear();
+    mpLayoutSet2.clear();
+    svtools::ToolbarMenu::dispose();
 }
 
 IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
@@ -342,9 +351,9 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
     }
 }
 
-::vcl::Window* SlideLayoutController::createPopupWindow( ::vcl::Window* pParent )
+VclPtr<::vcl::Window> SlideLayoutController::createPopupWindow( ::vcl::Window* pParent )
 {
-    return new sd::LayoutToolbarMenu( *this, m_xFrame, pParent, mbInsertPage );
+    return VclPtr<sd::LayoutToolbarMenu>::Create( *this, m_xFrame, pParent, mbInsertPage );
 }
 
 // XServiceInfo

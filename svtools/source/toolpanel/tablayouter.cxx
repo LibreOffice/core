@@ -41,14 +41,14 @@ namespace svt
     {
         TabAlignment                    eAlignment;
         IToolPanelDeck&                 rPanels;
-        ::std::unique_ptr< PanelTabBar > pTabBar;
+        VclPtr< PanelTabBar >           pTabBar;
         AccessibleFactoryAccess         aAccessibleFactory;
 
         TabDeckLayouter_Data( vcl::Window& i_rParent, IToolPanelDeck& i_rPanels,
                 const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
             :eAlignment( i_eAlignment )
             ,rPanels( i_rPanels )
-            ,pTabBar( new PanelTabBar( i_rParent, i_rPanels, i_eAlignment, i_eItemContent ) )
+            ,pTabBar( VclPtr<PanelTabBar>::Create( i_rParent, i_rPanels, i_eAlignment, i_eItemContent ) )
         {
             pTabBar->Show();
         }

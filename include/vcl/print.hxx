@@ -203,9 +203,9 @@ private:
     SalInfoPrinter*             mpInfoPrinter;
     SalPrinter*                 mpPrinter;
     SalGraphics*                mpJobGraphics;
-    Printer*                    mpPrev;
-    Printer*                    mpNext;
-    VirtualDevice*              mpDisplayDev;
+    VclPtr<Printer>             mpPrev;
+    VclPtr<Printer>             mpNext;
+    VclPtr<VirtualDevice>       mpDisplayDev;
     PrinterOptions*             mpPrinterOptions;
     OUString                    maPrinterName;
     OUString                    maDriver;
@@ -299,6 +299,7 @@ public:
                                 Printer( const QueueInfo& rQueueInfo );
                                 Printer( const OUString& rPrinterName );
     virtual                     ~Printer();
+    virtual void                dispose() SAL_OVERRIDE;
 
     static const std::vector< OUString >& GetPrinterQueues();
     static const QueueInfo*     GetQueueInfo( const OUString& rPrinterName, bool bStatusUpdate );
@@ -309,7 +310,7 @@ public:
     const OUString&             GetName() const             { return maPrinterName; }
     const OUString&             GetDriverName() const       { return maDriver; }
     bool                        IsDefPrinter() const        { return mbDefPrinter; }
-    bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
+    bool                        IsDisplayPrinter() const    { return mpDisplayDev != nullptr; }
     bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
     sal_uLong                   GetCapabilities( sal_uInt16 nType ) const;
@@ -426,7 +427,7 @@ class VCL_DLLPUBLIC PrinterController
 {
     ImplPrinterControllerData* mpImplData;
 protected:
-    PrinterController( const std::shared_ptr<Printer>& );
+    PrinterController( const VclPtr<Printer>& );
 public:
     enum NupOrderType
     { LRTB, TBLR, TBRL, RLTB };
@@ -469,7 +470,7 @@ public:
 
     virtual ~PrinterController();
 
-    const std::shared_ptr<Printer>& getPrinter() const;
+    const VclPtr<Printer>& getPrinter() const;
     /* for implementations: get current job properties as changed by e.g. print dialog
        this gets the current set of properties initially told to Printer::PrintJob
 
@@ -550,7 +551,7 @@ public:
     SAL_DLLPRIVATE PageSize getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
     VCL_PLUGIN_PUBLIC PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
     VCL_PLUGIN_PUBLIC void printFilteredPage( int i_nPage );
-    SAL_DLLPRIVATE void setPrinter( const std::shared_ptr<Printer>& );
+    SAL_DLLPRIVATE void setPrinter( const VclPtr<Printer>& );
     SAL_DLLPRIVATE void setOptionChangeHdl( const Link& );
     VCL_PLUGIN_PUBLIC void createProgressDialog();
     VCL_PLUGIN_PUBLIC bool isProgressCanceled() const;

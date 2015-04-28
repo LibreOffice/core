@@ -23,17 +23,16 @@
 #include <iderid.hxx>
 #include <sfx2/docfac.hxx>
 #include <svx/ifaceids.hxx>
-
+#include <vcl/vclptr.hxx>
+#include <sfx2/printer.hxx>
 #include <boost/scoped_ptr.hpp>
-
-class SfxPrinter;
 
 namespace basctl
 {
 
 class DocShell: public SfxObjectShell
 {
-    boost::scoped_ptr<SfxPrinter> pPrinter;
+    ScopedVclPtr<SfxPrinter> pPrinter;
 
 protected:
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,

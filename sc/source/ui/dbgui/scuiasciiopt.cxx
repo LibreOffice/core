@@ -464,7 +464,35 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
+    disposeOnce();
+}
+
+void ScImportAsciiDlg::dispose()
+{
     delete[] mpRowPosArray;
+    pFtCharSet.clear();
+    pLbCharSet.clear();
+    pFtCustomLang.clear();
+    pLbCustomLang.clear();
+    pFtRow.clear();
+    pNfRow.clear();
+    pRbFixed.clear();
+    pRbSeparated.clear();
+    pCkbTab.clear();
+    pCkbSemicolon.clear();
+    pCkbComma.clear();
+    pCkbSpace.clear();
+    pCkbOther.clear();
+    pEdOther.clear();
+    pCkbAsOnce.clear();
+    pFtTextSep.clear();
+    pCbTextSep.clear();
+    pCkbQuotedAsText.clear();
+    pCkbDetectNumber.clear();
+    pFtType.clear();
+    pLbType.clear();
+    mpTableBox.clear();
+    ModalDialog::dispose();
 }
 
 bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )

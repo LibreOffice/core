@@ -79,7 +79,7 @@ public:
     // lang::XEventListener
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 private:
-    XMLFilterTestDialog* mpDialog;
+    VclPtr<XMLFilterTestDialog> mpDialog;
 };
 
 GlobalEventListenerImpl::GlobalEventListenerImpl( XMLFilterTestDialog* pDialog )
@@ -178,6 +178,11 @@ XMLFilterTestDialog::XMLFilterTestDialog(vcl::Window* pParent,
 
 XMLFilterTestDialog::~XMLFilterTestDialog()
 {
+    disposeOnce();
+}
+
+void XMLFilterTestDialog::dispose()
+{
     try
     {
         if( mxGlobalBroadcaster.is() )
@@ -189,6 +194,21 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
     }
 
     delete m_pFilterInfo;
+    m_pExport.clear();
+    m_pFTExportXSLTFile.clear();
+    m_pPBExportBrowse.clear();
+    m_pPBCurrentDocument.clear();
+    m_pFTNameOfCurrentFile.clear();
+    m_pImport.clear();
+    m_pFTImportXSLTFile.clear();
+    m_pFTImportTemplate.clear();
+    m_pFTImportTemplateFile.clear();
+    m_pCBXDisplaySource.clear();
+    m_pPBImportBrowse.clear();
+    m_pPBRecentFile.clear();
+    m_pFTNameOfRecentFile.clear();
+    m_pPBClose.clear();
+    ModalDialog::dispose();
 }
 
 void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )

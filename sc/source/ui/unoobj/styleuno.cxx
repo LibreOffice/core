@@ -755,12 +755,12 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
             if ( eFamily == SFX_STYLE_FAMILY_PARA )
             {
                 // wie ScViewFunc::RemoveStyleSheetInUse
-                VirtualDevice aVDev;
-                Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
+                Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
                 Fraction aZoom(1,1);
-                rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+                rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
                 pDocShell->SetDocumentModified();
 
@@ -1096,12 +1096,12 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
             {
                 //  Zeilenhoehen anpassen...
 
-                VirtualDevice aVDev;
-                Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
+                Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
                 Fraction aZoom(1,1);
-                rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+                rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
 
                 if (!rDoc.IsImportingXML())
                 {
@@ -1463,12 +1463,12 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
         {
             //  row heights
 
-            VirtualDevice aVDev;
-            Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
+            Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
             Fraction aZoom(1,1);
-            rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+            rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
 
             if (!rDoc.IsImportingXML())
             {
@@ -1845,12 +1845,12 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
         {
             //  Zeilenhoehen anpassen...
 
-            VirtualDevice aVDev;
-            Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
+            Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
             Fraction aZoom(1,1);
-            rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+            rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
 
             if (!rDoc.IsImportingXML())
             {

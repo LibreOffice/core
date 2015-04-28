@@ -83,14 +83,14 @@ class ImplBorderWindow : public vcl::Window
 
 private:
     ImplBorderWindowView*   mpBorderView;
-    vcl::Window*                 mpMenuBarWindow;
+    VclPtr<vcl::Window>     mpMenuBarWindow;
     long                    mnMinWidth;
     long                    mnMinHeight;
     long                    mnMaxWidth;
     long                    mnMaxHeight;
     long                    mnRollHeight;
     long                    mnOrgMenuHeight;
-    sal_uInt16                  mnTitleType;
+    sal_uInt16              mnTitleType;
     WindowBorderStyle       mnBorderStyle;
     bool                    mbFloatWindow;
     bool                    mbSmallOutBorder;
@@ -121,7 +121,8 @@ public:
                                               sal_uInt16 nTypeStyle = 0 );
                             ImplBorderWindow( vcl::Window* pParent, WinBits nStyle = 0,
                                               sal_uInt16 nTypeStyle = 0 );
-                            virtual ~ImplBorderWindow();
+    virtual                 ~ImplBorderWindow();
+    virtual void            dispose() SAL_OVERRIDE;
 
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -173,8 +174,8 @@ public:
 
 struct ImplBorderFrameData
 {
-    ImplBorderWindow*       mpBorderWindow;
-    OutputDevice*           mpOutDev;
+    VclPtr<ImplBorderWindow> mpBorderWindow;
+    VclPtr<OutputDevice>     mpOutDev;
     Rectangle               maTitleRect;
     Rectangle               maPinRect;
     Rectangle               maCloseRect;
@@ -252,8 +253,8 @@ public:
 
 class ImplSmallBorderWindowView : public ImplBorderWindowView
 {
-    ImplBorderWindow*       mpBorderWindow;
-    OutputDevice*           mpOutDev;
+    VclPtr<ImplBorderWindow> mpBorderWindow;
+    VclPtr<OutputDevice>     mpOutDev;
     long                    mnWidth;
     long                    mnHeight;
     sal_Int32               mnLeftBorder;
@@ -275,8 +276,8 @@ public:
 class ImplStdBorderWindowView : public ImplBorderWindowView
 {
     ImplBorderFrameData     maFrameData;
-    VirtualDevice*          mpATitleVirDev;
-    VirtualDevice*          mpDTitleVirDev;
+    VclPtr<VirtualDevice>   mpATitleVirDev;
+    VclPtr<VirtualDevice>   mpDTitleVirDev;
 
 public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );

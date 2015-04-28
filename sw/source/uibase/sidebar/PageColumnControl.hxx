@@ -45,10 +45,11 @@ public:
         const bool bLandscape );
 
     virtual ~PageColumnControl();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    ::svx::sidebar::ValueSetWithTextControl* mpColumnValueSet;
-    PushButton maMoreButton;
+    VclPtr<::svx::sidebar::ValueSetWithTextControl> mpColumnValueSet;
+    VclPtr<PushButton> maMoreButton;
 
     sal_uInt16 mnColumnType;
 

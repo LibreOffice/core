@@ -43,7 +43,7 @@ using namespace ::comphelper;
 VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
 {
-    m_pTabControl = static_cast< TabControl* >( GetWindow() );
+    m_pTabControl = static_cast< TabControl* >( GetWindow().get() );
 
     if ( m_pTabControl )
         m_aAccessibleChildren.assign( m_pTabControl->GetPageCount(), Reference< XAccessible >() );

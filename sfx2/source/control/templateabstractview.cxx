@@ -128,29 +128,37 @@ bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
 TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mnCurRegionId(0),
-      maAllButton(this, SfxResId(BTN_ALL_TEMPLATES)),
-      maFTName(this, SfxResId(FT_NAME))
+      maAllButton(VclPtr<PushButton>::Create(this, SfxResId(BTN_ALL_TEMPLATES))),
+      maFTName(VclPtr<FixedText>::Create(this, SfxResId(FT_NAME)))
 {
-    maAllButton.Hide();
-    maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
-    maAllButton.SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
-    maFTName.Hide();
+    maAllButton->Hide();
+    maAllButton->SetStyle(maAllButton->GetStyle() | WB_FLATBUTTON);
+    maAllButton->SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
+    maFTName->Hide();
 }
 
 TemplateAbstractView::TemplateAbstractView(vcl::Window *pParent)
     : ThumbnailView(pParent),
       mnCurRegionId(0),
-      maAllButton(this, SfxResId(BTN_ALL_TEMPLATES)),
-      maFTName(this, SfxResId(FT_NAME))
+      maAllButton(VclPtr<PushButton>::Create(this, SfxResId(BTN_ALL_TEMPLATES))),
+      maFTName(VclPtr<FixedText>::Create(this, SfxResId(FT_NAME)))
 {
-    maAllButton.Hide();
-    maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
-    maAllButton.SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
-    maFTName.Hide();
+    maAllButton->Hide();
+    maAllButton->SetStyle(maAllButton->GetStyle() | WB_FLATBUTTON);
+    maAllButton->SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
+    maFTName->Hide();
 }
 
-TemplateAbstractView::~TemplateAbstractView ()
+TemplateAbstractView::~TemplateAbstractView()
 {
+    disposeOnce();
+}
+
+void TemplateAbstractView::dispose()
+{
+    maAllButton.disposeAndClear();
+    maFTName.disposeAndClear();
+    ThumbnailView::dispose();
 }
 
 void TemplateAbstractView::insertItem(const TemplateItemProperties &rTemplate)
@@ -283,7 +291,7 @@ void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
 
         mnCurRegionId = pContainerItem->mnRegionId+1;
         maCurRegionName = pContainerItem->maTitle;
-        maFTName.SetText(maCurRegionName);
+        maFTName->SetText(maCurRegionName);
         showRegion(pItem);
     }
     else

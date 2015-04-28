@@ -241,7 +241,7 @@ struct SwPaintProperties {
     // Only repaint the Fly content as well as the background of the Fly content if
     // a metafile is taken of the Fly.
     bool                bSFlyMetafile;
-    OutputDevice       *pSFlyMetafileOut;
+    VclPtr<OutputDevice> pSFlyMetafileOut;
     SwViewShell        *pSGlobalShell;
 
     // Retouch for transparent Flys is done by the background of the Flys.
@@ -1248,7 +1248,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
     }
 
     const OutputDevice *pOut = gProp.bSFlyMetafile ?
-                        gProp.pSFlyMetafileOut : pSh->GetOut();
+                        gProp.pSFlyMetafileOut.get() : pSh->GetOut();
 
     // Hold original rectangle in pixel
     const Rectangle aOrgPxRect = pOut->LogicToPixel( rRect.SVRect() );
@@ -7660,21 +7660,21 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pFirst);
 
         OutputDevice *pOld = pSh->GetOut();
-        VirtualDevice aDev( *pOld );
-        aDev.EnableOutput( false );
+        ScopedVclPtrInstance< VirtualDevice > pDev( *pOld );
+        pDev->EnableOutput( false );
 
         GDIMetaFile aMet;
         MapMode aMap( pOld->GetMapMode().GetMapUnit() );
-        aDev.SetMapMode( aMap );
+        pDev->SetMapMode( aMap );
         aMet.SetPrefMapMode( aMap );
 
         ::SwCalcPixStatics( pSh->GetOut() );
         aMet.SetPrefSize( pFly->Frm().SSize() );
 
-        aMet.Record( &aDev );
-        aDev.SetLineColor();
-        aDev.SetFillColor();
-        aDev.SetFont( pOld->GetFont() );
+        aMet.Record( pDev.get() );
+        pDev->SetLineColor();
+        pDev->SetFillColor();
+        pDev->SetFont( pOld->GetFont() );
 
         //Enlarge the rectangle if needed, so the border is painted too.
         SwRect aOut( pFly->Frm() );
@@ -7691,7 +7691,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         vcl::Window *pWin = pSh->GetWin();
         sal_uInt16 nZoom = pSh->GetViewOptions()->GetZoom();
-        ::SetOutDevAndWin( pSh, &aDev, 0, 100 );
+        ::SetOutDevAndWin( pSh, pDev, 0, 100 );
         gProp.bSFlyMetafile = true;
         gProp.pSFlyMetafileOut = pWin;
 
@@ -7709,15 +7709,15 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pImp->PaintLayer( pIDDMA->GetHellId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
-        gProp.pSLines->PaintLines( &aDev, gProp );
+        gProp.pSLines->PaintLines( pDev, gProp );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
-        gProp.pSLines->PaintLines( &aDev, gProp );
+        gProp.pSLines->PaintLines( pDev, gProp );
         // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
-        gProp.pSLines->PaintLines( &aDev, gProp );
+        gProp.pSLines->PaintLines( pDev, gProp );
         DELETEZ( gProp.pSLines );
         gProp.pSFlyOnlyDraw = 0;
 

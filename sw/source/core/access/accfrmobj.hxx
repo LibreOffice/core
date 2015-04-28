@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJ_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJ_HXX
 
+#include <vcl/vclptr.hxx>
 
 class SwAccessibleMap;
 class SwFrm;
@@ -71,7 +72,7 @@ class SwAccessibleChild
     private:
         const SwFrm* mpFrm;
         const SdrObject* mpDrawObj;
-        vcl::Window* mpWindow;
+        VclPtr<vcl::Window> mpWindow;
 
         void Init( const SdrObject* pDrawObj );
         void Init( const SwFrm* pFrm );

@@ -115,11 +115,45 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mpBindings->Update( SID_ATTR_METRIC );
 }
 
-
-
 PosSizePropertyPanel::~PosSizePropertyPanel()
 {
+    disposeOnce();
 }
+
+void PosSizePropertyPanel::dispose()
+{
+    mpFtPosX.clear();
+    mpMtrPosX.clear();
+    mpFtPosY.clear();
+    mpMtrPosY.clear();
+    mpFtWidth.clear();
+    mpMtrWidth.clear();
+    mpFtHeight.clear();
+    mpMtrHeight.clear();
+    mpCbxScale.clear();
+    mpFtAngle.clear();
+    mpMtrAngle.clear();
+    mpDial.clear();
+    mpFtFlip.clear();
+    mpFlipTbx.clear();
+
+    maTransfPosXControl.dispose();
+    maTransfPosYControl.dispose();
+    maTransfWidthControl.dispose();
+    maTransfHeightControl.dispose();
+
+    maSvxAngleControl.dispose();
+    maRotXControl.dispose();
+    maRotYControl.dispose();
+    maProPosControl.dispose();
+    maProSizeControl.dispose();
+    maAutoWidthControl.dispose();
+    maAutoHeightControl.dispose();
+    m_aMetricCtl.dispose();
+
+    PanelLayout::dispose();
+}
+
 
 namespace
 {
@@ -213,7 +247,7 @@ void PosSizePropertyPanel::SetupIcons()
 
 
 
-PosSizePropertyPanel* PosSizePropertyPanel::Create (
+VclPtr<vcl::Window> PosSizePropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -226,11 +260,11 @@ PosSizePropertyPanel* PosSizePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to PosSizePropertyPanel::Create", NULL, 2);
 
-    return new PosSizePropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings,
-        rxSidebar);
+    return VclPtr<PosSizePropertyPanel>::Create(
+                        pParent,
+                        rxFrame,
+                        pBindings,
+                        rxSidebar);
 }
 
 

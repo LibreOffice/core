@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/vclptr.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svdtypes.hxx>
@@ -174,7 +175,7 @@ class SVX_DLLPUBLIC SdrObjMacroHitRec
 public:
     Point                       aPos;
     Point                       aDownPos;
-    OutputDevice*               pOut;
+    VclPtr<OutputDevice>        pOut;
     const SetOfByte*            pVisiLayer;
     const SdrPageView*          pPageView;
     sal_uInt16                  nTol;

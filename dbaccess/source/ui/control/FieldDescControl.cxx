@@ -76,17 +76,15 @@ using namespace ::com::sun::star::util;
 namespace
 {
 
-    template< typename T1, typename T2> void lcl_HideAndDeleteControl(short& _nPos,T1** _pControl,T2** _pControlText)
+    template< typename T1, typename T2> void lcl_HideAndDeleteControl(short& _nPos,VclPtr<T1>& _pControl, VclPtr<T2>& _pControlText)
     {
-        if ( *_pControl )
+        if ( _pControl )
         {
             --_nPos;
-            (*_pControl)->Hide();
-            (*_pControlText)->Hide();
-            delete *_pControl;
-            delete *_pControlText;
-            (*_pControl) = NULL;
-            (*_pControlText) = NULL;
+            _pControl->Hide();
+            _pControlText->Hide();
+            _pControl.disposeAndClear();
+            _pControlText.disposeAndClear();
         }
     }
 
@@ -141,8 +139,8 @@ OFieldDescControl::OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar*
 
 void OFieldDescControl::Contruct()
 {
-    m_pVertScroll = new ScrollBar(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);
-    m_pHorzScroll = new ScrollBar(this, WB_HSCROLL | WB_REPEAT | WB_DRAG);
+    m_pVertScroll = VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);
+    m_pHorzScroll = VclPtr<ScrollBar>::Create(this, WB_HSCROLL | WB_REPEAT | WB_DRAG);
     m_pVertScroll->SetScrollHdl(LINK(this, OFieldDescControl, OnScroll));
     m_pHorzScroll->SetScrollHdl(LINK(this, OFieldDescControl, OnScroll));
     m_pVertScroll->Show();
@@ -161,18 +159,13 @@ void OFieldDescControl::Contruct()
 
 OFieldDescControl::~OFieldDescControl()
 {
+    disposeOnce();
+}
 
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pVertScroll);
-        m_pVertScroll    = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pHorzScroll);
-        m_pHorzScroll    = NULL;
-    }
+void OFieldDescControl::dispose()
+{
     if ( m_bAdded )
         ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    pLastFocusWindow = NULL;
 
     // Destroy children
     DeactivateAggregate( tpDefault );
@@ -187,6 +180,37 @@ OFieldDescControl::~OFieldDescControl()
     DeactivateAggregate( tpColumnName );
     DeactivateAggregate( tpType );
     DeactivateAggregate( tpAutoIncrementValue );
+    pHelp.clear();
+    pLastFocusWindow.clear();
+    m_pActFocusWindow.clear();
+    pDefaultText.clear();
+    pRequiredText.clear();
+    pAutoIncrementText.clear();
+    pTextLenText.clear();
+    pNumTypeText.clear();
+    pLengthText.clear();
+    pScaleText.clear();
+    pFormatText.clear();
+    pBoolDefaultText.clear();
+    m_pColumnNameText.clear();
+    m_pTypeText.clear();
+    m_pAutoIncrementValueText.clear();
+    pRequired.clear();
+    pNumType.clear();
+    pAutoIncrement.clear();
+    pDefault.clear();
+    pTextLen.clear();
+    pLength.clear();
+    pScale.clear();
+    pFormatSample.clear();
+    pBoolDefault.clear();
+    m_pColumnName.clear();
+    m_pType.clear();
+    m_pAutoIncrementValue.clear();
+    pFormat.clear();
+    m_pVertScroll.clear();
+    m_pHorzScroll.clear();
+    TabPage::dispose();
 }
 
 OUString OFieldDescControl::BoolStringPersistent(const OUString& rUIString) const
@@ -680,8 +704,8 @@ void OFieldDescControl::ArrangeAggregates()
     // A Control's description
     struct AGGREGATE_DESCRIPTION
     {
-        Control*    pctrlInputControl;  // The actual Control for input
-        Control*    pctrlTextControl;   // The corresponding Label
+        VclPtr<Control>    pctrlInputControl;  // The actual Control for input
+        VclPtr<Control>    pctrlTextControl;   // The corresponding Label
         sal_uInt16      nPosSizeArgument;   // The second argument for SetPosSize
     };
     AGGREGATE_DESCRIPTION adAggregates[] = {
@@ -717,8 +741,8 @@ void OFieldDescControl::ArrangeAggregates()
     {
         if (adAggregates[i].pctrlInputControl)
         {
-            SetPosSize(&adAggregates[i].pctrlTextControl, nCurrentControlPos, 0);
-            SetPosSize(&adAggregates[i].pctrlInputControl, nCurrentControlPos, adAggregates[i].nPosSizeArgument);
+            SetPosSize(adAggregates[i].pctrlTextControl, nCurrentControlPos, 0);
+            SetPosSize(adAggregates[i].pctrlInputControl, nCurrentControlPos, adAggregates[i].nPosSizeArgument);
 
             // Set the z-order in a way such that the Controls can be traversed in the same sequence in which they have been arranged here
             adAggregates[i].pctrlTextControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? WINDOW_ZORDER_BEHIND : WINDOW_ZORDER_FIRST);
@@ -758,7 +782,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         pDefaultText = CreateText(STR_DEFAULT_VALUE);
-        pDefault = new OPropEditCtrl( this, STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT, WB_BORDER );
+        pDefault = VclPtr<OPropEditCtrl>::Create( this, STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT, WB_BORDER );
         InitializeControl(pDefault,HID_TAB_ENT_DEFAULT,false);
         break;
     case tpAutoIncrementValue:
@@ -766,7 +790,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         m_pAutoIncrementValueText = CreateText(STR_AUTOINCREMENT_VALUE);
-        m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PROPERTY_AUTOINCREMENT, WB_BORDER );
+        m_pAutoIncrementValue = VclPtr<OPropEditCtrl>::Create( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PROPERTY_AUTOINCREMENT, WB_BORDER );
         m_pAutoIncrementValue->SetText( getAutoIncrementValue() );
         InitializeControl(m_pAutoIncrementValue,HID_TAB_AUTOINCREMENTVALUE,false);
         break;
@@ -781,7 +805,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         {
             m_nPos++;
             pRequiredText = CreateText(STR_FIELD_REQUIRED);
-            pRequired = new OPropListBoxCtrl( this, STR_HELP_FIELD_REQUIRED, FIELD_PROPERTY_REQUIRED, WB_DROPDOWN);
+            pRequired = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_FIELD_REQUIRED, FIELD_PROPERTY_REQUIRED, WB_DROPDOWN);
 
             pRequired->InsertEntry( aYes );
             pRequired->InsertEntry( aNo );
@@ -797,7 +821,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         pAutoIncrementText = CreateText(STR_FIELD_AUTOINCREMENT);
-        pAutoIncrement = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_AUTOINC, WB_DROPDOWN );
+        pAutoIncrement = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_AUTOINC, WB_DROPDOWN );
         pAutoIncrement->InsertEntry( aYes );
         pAutoIncrement->InsertEntry( aNo );
         pAutoIncrement->SelectEntryPos(0);
@@ -817,7 +841,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         m_pTypeText = CreateText(STR_TAB_FIELD_DATATYPE);
-        m_pType = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_TYPE, WB_DROPDOWN );
+        m_pType = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_TYPE, WB_DROPDOWN );
         m_pType->SetDropDownLineCount(20);
         {
             const OTypeInfoMap* pTypeInfo = getTypeInfo();
@@ -850,7 +874,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
                 DBG_UNHANDLED_EXCEPTION();
             }
             m_pColumnNameText = CreateText(STR_TAB_FIELD_NAME);
-            m_pColumnName = new OPropColumnEditCtrl( this,
+            m_pColumnName = VclPtr<OPropColumnEditCtrl>::Create( this,
                                                     aTmpString,
                                                     STR_HELP_DEFAULT_VALUE,
                                                     FIELD_PROPERTY_COLUMNNAME,
@@ -867,7 +891,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_nPos++;
         pNumTypeText = CreateText(STR_NUMERIC_TYPE);
 
-        pNumType = new OPropListBoxCtrl( this, STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE, WB_DROPDOWN );
+        pNumType = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE, WB_DROPDOWN );
         pNumType->SetDropDownLineCount(5);
 
         pNumType->InsertEntry( OUString("Byte") );
@@ -901,12 +925,12 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             m_nPos++;
             pFormatText = CreateText(STR_FORMAT);
 
-            pFormatSample = new OPropEditCtrl( this, STR_HELP_FORMAT_CODE, -1, WB_BORDER );
+            pFormatSample = VclPtr<OPropEditCtrl>::Create( this, STR_HELP_FORMAT_CODE, -1, WB_BORDER );
             pFormatSample->SetReadOnly(true);
             pFormatSample->Enable(false);
             InitializeControl(pFormatSample,HID_TAB_ENT_FORMAT_SAMPLE,false);
 
-            pFormat = new PushButton( this, ModuleRes(PB_FORMAT) );
+            pFormat = VclPtr<PushButton>::Create( this, ModuleRes(PB_FORMAT) );
             const sal_Int32 nControlHeight = GetMaxControlHeight();
             pFormat->SetSizePixel(Size(nControlHeight, nControlHeight));
             pFormat->SetClickHdl( LINK( this, OFieldDescControl, FormatClickHdl ) );
@@ -921,7 +945,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
         m_nPos++;
         pBoolDefaultText = CreateText(STR_DEFAULT_VALUE);
-        pBoolDefault = new OPropListBoxCtrl( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
+        pBoolDefault = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
         pBoolDefault->SetDropDownLineCount(3);
         pBoolDefault->InsertEntry(OUString(ModuleRes(STR_VALUE_NONE)));
         pBoolDefault->InsertEntry(aYes);
@@ -943,17 +967,17 @@ void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHe
     _pControl->EnableClipSiblings();
 }
 
-FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
+VclPtr<FixedText> OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
 {
-    FixedText* pFixedText = new FixedText( this );
+    VclPtrInstance<FixedText> pFixedText( this );
     pFixedText->SetText( ModuleRes(_nTextRes) );
     pFixedText->EnableClipSiblings();
     return pFixedText;
 }
 
-OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId)
+VclPtr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId)
 {
-    OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
+    VclPtrInstance<OPropNumericEditCtrl> pControl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
     pControl->SetMax(0x7FFFFFFF);   // Should be changed outside, if needed
@@ -971,62 +995,61 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     switch( eType )
     {
     case tpDefault:
-        lcl_HideAndDeleteControl(m_nPos,&pDefault,&pDefaultText);
+        lcl_HideAndDeleteControl(m_nPos,pDefault,pDefaultText);
         break;
 
     case tpAutoIncrementValue:
-        lcl_HideAndDeleteControl(m_nPos,&m_pAutoIncrementValue,&m_pAutoIncrementValueText);
+        lcl_HideAndDeleteControl(m_nPos,m_pAutoIncrementValue,m_pAutoIncrementValueText);
         break;
 
     case tpColumnName:
-        lcl_HideAndDeleteControl(m_nPos,&m_pColumnName,&m_pColumnNameText);
+        lcl_HideAndDeleteControl(m_nPos,m_pColumnName,m_pColumnNameText);
         break;
 
     case tpType:
-        lcl_HideAndDeleteControl(m_nPos,&m_pType,&m_pTypeText);
+        lcl_HideAndDeleteControl(m_nPos,m_pType,m_pTypeText);
         break;
 
     case tpAutoIncrement:
-        lcl_HideAndDeleteControl(m_nPos,&pAutoIncrement,&pAutoIncrementText);
+        lcl_HideAndDeleteControl(m_nPos,pAutoIncrement,pAutoIncrementText);
         break;
 
     case tpRequired:
-        lcl_HideAndDeleteControl(m_nPos,&pRequired,&pRequiredText);
+        lcl_HideAndDeleteControl(m_nPos,pRequired,pRequiredText);
         break;
 
     case tpTextLen:
-        lcl_HideAndDeleteControl(m_nPos,&pTextLen,&pTextLenText);
+        lcl_HideAndDeleteControl(m_nPos,pTextLen,pTextLenText);
         break;
 
     case tpNumType:
-        lcl_HideAndDeleteControl(m_nPos,&pNumType,&pNumTypeText);
+        lcl_HideAndDeleteControl(m_nPos,pNumType,pNumTypeText);
         break;
 
     case tpLength:
-        lcl_HideAndDeleteControl(m_nPos,&pLength,&pLengthText);
+        lcl_HideAndDeleteControl(m_nPos,pLength,pLengthText);
         break;
 
     case tpScale:
-        lcl_HideAndDeleteControl(m_nPos,&pScale,&pScaleText);
+        lcl_HideAndDeleteControl(m_nPos,pScale,pScaleText);
         break;
 
     case tpFormat:
         // TODO: we have to check if we have to increment m_nPos again
-        lcl_HideAndDeleteControl(m_nPos,&pFormat,&pFormatText);
+        lcl_HideAndDeleteControl(m_nPos,pFormat,pFormatText);
         if ( pFormatSample )
         {
             pFormatSample->Hide();
-            delete pFormatSample;
-            pFormatSample = NULL;
+            pFormatSample.disposeAndClear();
         }
         break;
     case tpBoolDefault:
-        lcl_HideAndDeleteControl(m_nPos,&pBoolDefault,&pBoolDefaultText);
+        lcl_HideAndDeleteControl(m_nPos,pBoolDefault,pBoolDefaultText);
         break;
     }
 }
 
-void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol )
+void OFieldDescControl::SetPosSize( VclPtr<Control>& rControl, long nRow, sal_uInt16 nCol )
 {
 
     // Calculate size
@@ -1077,18 +1100,18 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         aPosition.X() = 0;
     }
 
-    (*ppControl)->SetSizePixel( aSize );
-    aSize = (*ppControl)->GetSizePixel( );
+    rControl->SetSizePixel( aSize );
+    aSize = rControl->GetSizePixel( );
 
     const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
     aPosition.Y() += ((nRow+1)*nControl_Spacing_y) +
                     (nRow*nControlHeight);
 
     // Display Control
-    (*ppControl)->SetPosSizePixel( aPosition, aSize );
-    aSize = (*ppControl)->GetSizePixel();
+    rControl->SetPosSizePixel( aPosition, aSize );
+    aSize = rControl->GetSizePixel();
 
-    (*ppControl)->Show();
+    rControl->Show();
 }
 
 void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
@@ -1453,7 +1476,7 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
     if (pControl == pFormat)
         strHelpText = ModuleRes(STR_HELP_FORMAT_BUTTON);
 
-    if (!strHelpText.isEmpty() && (pHelp != NULL))
+    if (!strHelpText.isEmpty() && (pHelp != nullptr))
         pHelp->SetHelpText(strHelpText);
 
     m_pActFocusWindow = pControl;
@@ -1579,30 +1602,30 @@ void OFieldDescControl::LoseFocus()
 
 bool OFieldDescControl::isCopyAllowed()
 {
-    bool bAllowed = (m_pActFocusWindow != NULL) &&
+    bool bAllowed = (m_pActFocusWindow != nullptr) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
                         m_pActFocusWindow == m_pAutoIncrementValue) &&
-                        !static_cast<Edit*>(m_pActFocusWindow)->GetSelected().isEmpty();
+                        !static_cast<Edit*>(m_pActFocusWindow.get())->GetSelected().isEmpty();
 
     return bAllowed;
 }
 
 bool OFieldDescControl::isCutAllowed()
 {
-    bool bAllowed = (m_pActFocusWindow != NULL) &&
+    bool bAllowed = (m_pActFocusWindow != nullptr) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
                         m_pActFocusWindow == m_pAutoIncrementValue) &&
-                        !static_cast<Edit*>(m_pActFocusWindow)->GetSelected().isEmpty();
+                        !static_cast<Edit*>(m_pActFocusWindow.get())->GetSelected().isEmpty();
     return bAllowed;
 }
 
 bool OFieldDescControl::isPasteAllowed()
 {
-    bool bAllowed = (m_pActFocusWindow != NULL) &&
+    bool bAllowed = (m_pActFocusWindow != nullptr) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
@@ -1618,19 +1641,19 @@ bool OFieldDescControl::isPasteAllowed()
 void OFieldDescControl::cut()
 {
     if(isCutAllowed())
-        static_cast<Edit*>(m_pActFocusWindow)->Cut();
+        static_cast<Edit*>(m_pActFocusWindow.get())->Cut();
 }
 
 void OFieldDescControl::copy()
 {
     if(isCopyAllowed()) // this only checks if the focus window is valid
-        static_cast<Edit*>(m_pActFocusWindow)->Copy();
+        static_cast<Edit*>(m_pActFocusWindow.get())->Copy();
 }
 
 void OFieldDescControl::paste()
 {
     if(m_pActFocusWindow) // this only checks if the focus window is valid
-        static_cast<Edit*>(m_pActFocusWindow)->Paste();
+        static_cast<Edit*>(m_pActFocusWindow.get())->Paste();
 }
 
 bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr, sal_uInt32& _nFormatKey) const

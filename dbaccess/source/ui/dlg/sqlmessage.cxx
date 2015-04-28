@@ -292,8 +292,8 @@ namespace
 
 class OExceptionChainDialog : public ModalDialog
 {
-    SvTreeListBox*    m_pExceptionList;
-    VclMultiLineEdit* m_pExceptionText;
+    VclPtr<SvTreeListBox>    m_pExceptionList;
+    VclPtr<VclMultiLineEdit> m_pExceptionText;
 
     OUString        m_sStatusLabel;
     OUString        m_sErrorCodeLabel;
@@ -302,6 +302,13 @@ class OExceptionChainDialog : public ModalDialog
 
 public:
     OExceptionChainDialog( vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions );
+    virtual ~OExceptionChainDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pExceptionList.clear();
+        m_pExceptionText.clear();
+        ModalDialog::dispose();
+    }
 
 protected:
     DECL_LINK(OnExceptionSelected, void*);
@@ -470,24 +477,24 @@ void OSQLMessageBox::impl_positionControls()
     }
 
     // image
-    lcl_positionInAppFont( *this, m_aInfoImage, OUTER_MARGIN, OUTER_MARGIN, IMAGE_SIZE, IMAGE_SIZE );
-    m_aInfoImage.Show();
+    lcl_positionInAppFont( *this, *m_aInfoImage.get(), OUTER_MARGIN, OUTER_MARGIN, IMAGE_SIZE, IMAGE_SIZE );
+    m_aInfoImage->Show();
 
     // primary text
-    lcl_positionInAppFont( *this, m_aTitle, TEXT_POS_X, OUTER_MARGIN, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 16 );
+    lcl_positionInAppFont( *this, *m_aTitle.get(), TEXT_POS_X, OUTER_MARGIN, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 16 );
     sPrimary = lcl_stripOOoBaseVendor( sPrimary );
-    m_aTitle.SetText( sPrimary );
-    m_aTitle.Show();
+    m_aTitle->SetText( sPrimary );
+    m_aTitle->Show();
 
-    Rectangle aPrimaryRect( m_aTitle.GetPosPixel(), m_aTitle.GetSizePixel() );
+    Rectangle aPrimaryRect( m_aTitle->GetPosPixel(), m_aTitle->GetSizePixel() );
 
     // secondary text (if applicable)
-    m_aMessage.SetStyle( m_aMessage.GetStyle() | WB_NOLABEL );
+    m_aMessage->SetStyle( m_aMessage->GetStyle() | WB_NOLABEL );
     sSecondary = lcl_stripOOoBaseVendor( sSecondary );
-    m_aMessage.SetText( sSecondary );
+    m_aMessage->SetText( sSecondary );
 
-    lcl_positionInAppFont( *this, m_aMessage, TEXT_POS_X, OUTER_MARGIN + 16 + 3, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 8 );
-    Rectangle aSecondaryRect( m_aMessage.GetPosPixel(), m_aMessage.GetSizePixel() );
+    lcl_positionInAppFont( *this, *m_aMessage.get(), TEXT_POS_X, OUTER_MARGIN + 16 + 3, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 8 );
+    Rectangle aSecondaryRect( m_aMessage->GetPosPixel(), m_aMessage->GetSizePixel() );
 
     bool bHaveSecondaryText = !sSecondary.isEmpty();
 
@@ -498,8 +505,8 @@ void OSQLMessageBox::impl_positionControls()
         aSecondaryRect.Bottom() = aSecondaryRect.Top() - 1;
 
     // adjust secondary control height accordingly
-    m_aMessage.SetSizePixel( aSecondaryRect.GetSize() );
-    m_aMessage.Show( aSecondaryRect.GetHeight() > 0 );
+    m_aMessage->SetSizePixel( aSecondaryRect.GetSize() );
+    m_aMessage->Show( aSecondaryRect.GetHeight() > 0 );
 
     // if there's no secondary text ...
     if ( !bHaveSecondaryText )
@@ -508,23 +515,23 @@ void OSQLMessageBox::impl_positionControls()
         aPrimaryRect.Right() = aPrimaryRect.Left() + aSuggestedRect.GetWidth();
         aPrimaryRect.Bottom() = aPrimaryRect.Top() + aSuggestedRect.GetHeight();
         // and center it horizontally
-        m_aTitle.SetStyle( ( m_aTitle.GetStyle() & ~WB_LEFT ) | WB_CENTER );
+        m_aTitle->SetStyle( ( m_aTitle->GetStyle() & ~WB_LEFT ) | WB_CENTER );
 
-        Rectangle aInfoRect( m_aInfoImage.GetPosPixel(), m_aInfoImage.GetSizePixel() );
+        Rectangle aInfoRect( m_aInfoImage->GetPosPixel(), m_aInfoImage->GetSizePixel() );
         // also, if it's not as high as the image ...
-        if ( aPrimaryRect.GetHeight() < m_aInfoImage.GetSizePixel().Height() )
+        if ( aPrimaryRect.GetHeight() < m_aInfoImage->GetSizePixel().Height() )
         {   // ... make it fit the image height
             aPrimaryRect.Bottom() += aInfoRect.GetHeight() - aPrimaryRect.GetHeight();
             // and center it vertically
-            m_aTitle.SetStyle( m_aTitle.GetStyle() | WB_VCENTER );
+            m_aTitle->SetStyle( m_aTitle->GetStyle() | WB_VCENTER );
         }
         else
         {   // ... otherwise, center the image vertically, relative to the primary text
             aInfoRect.Move( 0, ( aPrimaryRect.GetHeight() - aInfoRect.GetHeight() ) / 2 );
-            m_aInfoImage.SetPosSizePixel( aInfoRect.TopLeft(), aInfoRect.GetSize() );
+            m_aInfoImage->SetPosSizePixel( aInfoRect.TopLeft(), aInfoRect.GetSize() );
         }
 
-        m_aTitle.SetPosSizePixel( aPrimaryRect.TopLeft(), aPrimaryRect.GetSize() );
+        m_aTitle->SetPosSizePixel( aPrimaryRect.TopLeft(), aPrimaryRect.GetSize() );
     }
 
     // adjust dialog size accordingly
@@ -546,16 +553,16 @@ void OSQLMessageBox::impl_initImage( MessageType _eImage )
             OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
             /* Fall through */
         case Info:
-            m_aInfoImage.SetImage(InfoBox::GetStandardImage());
+            m_aInfoImage->SetImage(InfoBox::GetStandardImage());
             break;
         case Warning:
-            m_aInfoImage.SetImage(WarningBox::GetStandardImage());
+            m_aInfoImage->SetImage(WarningBox::GetStandardImage());
             break;
         case Error:
-            m_aInfoImage.SetImage(ErrorBox::GetStandardImage());
+            m_aInfoImage->SetImage(ErrorBox::GetStandardImage());
             break;
         case Query:
-            m_aInfoImage.SetImage(QueryBox::GetStandardImage());
+            m_aInfoImage->SetImage(QueryBox::GetStandardImage());
             break;
     }
 }
@@ -606,7 +613,7 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
 
 void OSQLMessageBox::impl_addDetailsButton()
 {
-    size_t nFirstPageVisible = m_aMessage.IsVisible() ? 2 : 1;
+    size_t nFirstPageVisible = m_aMessage->IsVisible() ? 2 : 1;
 
     bool bMoreDetailsAvailable = m_pImpl->aDisplayInfo.size() > nFirstPageVisible;
     if ( !bMoreDetailsAvailable )
@@ -664,9 +671,9 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 
 OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const OUString& _rHelpURL )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
-    ,m_aInfoImage( this )
-    ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
-    ,m_aMessage( this, WB_WORDBREAK | WB_LEFT )
+    ,m_aInfoImage( VclPtr<FixedImage>::Create(this) )
+    ,m_aTitle( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
+    ,m_aMessage( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
     ,m_sHelpURL( _rHelpURL )
     ,m_pImpl( new SQLMessageBox_Impl( _rException ) )
 {
@@ -675,9 +682,9 @@ OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _r
 
 OSQLMessageBox::OSQLMessageBox( vcl::Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
-    ,m_aInfoImage( this )
-    ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
-    ,m_aMessage( this, WB_WORDBREAK | WB_LEFT )
+    ,m_aInfoImage( VclPtr<FixedImage>::Create(this) )
+    ,m_aTitle( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
+    ,m_aMessage( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
 {
     SQLContext aError;
     aError.Message = _rTitle;
@@ -692,12 +699,21 @@ OSQLMessageBox::OSQLMessageBox( vcl::Window* _pParent, const OUString& _rTitle, 
 
 OSQLMessageBox::~OSQLMessageBox()
 {
+    disposeOnce();
+}
+
+void OSQLMessageBox::dispose()
+{
+    m_aInfoImage.disposeAndClear();
+    m_aTitle.disposeAndClear();
+    m_aMessage.disposeAndClear();
+    ButtonDialog::dispose();
 }
 
 IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 {
-    OExceptionChainDialog aDlg( this, m_pImpl->aDisplayInfo );
-    aDlg.Execute();
+    ScopedVclPtrInstance< OExceptionChainDialog > aDlg( this, m_pImpl->aDisplayInfo );
+    aDlg->Execute();
     return 0;
 }
 

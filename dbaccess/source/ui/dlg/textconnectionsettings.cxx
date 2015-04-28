@@ -34,13 +34,21 @@ namespace dbaui
         ,m_rItems( _rItems )
     {
         get(m_pOK, "ok");
-        m_pTextConnectionHelper.reset( new OTextConnectionHelper( get<VclVBox>("TextPageContainer"), TC_HEADER | TC_SEPARATORS | TC_CHARSET ) );
+        m_pTextConnectionHelper.reset( VclPtr<OTextConnectionHelper>::Create( get<VclVBox>("TextPageContainer"), TC_HEADER | TC_SEPARATORS | TC_CHARSET ) );
 
         m_pOK->SetClickHdl( LINK( this, TextConnectionSettingsDialog, OnOK ) );
     }
 
     TextConnectionSettingsDialog::~TextConnectionSettingsDialog()
     {
+        disposeOnce();
+    }
+
+    void TextConnectionSettingsDialog::dispose()
+    {
+        m_pOK.clear();
+        m_pTextConnectionHelper.disposeAndClear();
+        ModalDialog::dispose();
     }
 
     void TextConnectionSettingsDialog::bindItemStorages( SfxItemSet& _rSet, PropertyValues& _rValues )

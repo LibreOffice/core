@@ -712,16 +712,16 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(pParent, pDescriptor.get(), "CharDialog");
+            ScopedVclPtrInstance< ORptPageDialog > aDlg(pParent, pDescriptor.get(), "CharDialog");
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
-                aDlg.RemoveTabPage("background");
-            bSuccess = ( RET_OK == aDlg.Execute() );
+                aDlg->RemoveTabPage("background");
+            bSuccess = ( RET_OK == aDlg->Execute() );
             if ( bSuccess )
             {
                 lcl_itemsToCharProperties( lcl_getReportControlFont( _rxReportControlFormat,WESTERN ),
                     lcl_getReportControlFont( _rxReportControlFormat,ASIAN ),
-                    lcl_getReportControlFont( _rxReportControlFormat,COMPLEX ), *aDlg.GetOutputItemSet(), _out_rNewValues );
+                    lcl_getReportControlFont( _rxReportControlFormat,COMPLEX ), *aDlg->GetOutputItemSet(), _out_rNewValues );
             }
         }
     }
@@ -1027,13 +1027,14 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
             CharClass aCC(_xContext, aLangTag);
             svl::SharedStringPool aStringPool(&aCC);
 
-            FormulaDialog aDlg(
-                pParent, xServiceFactory, pFormulaManager, aFormula.getUndecoratedContent(), _xRowSet, aStringPool);
+            ScopedVclPtrInstance<FormulaDialog> aDlg(
+                pParent, xServiceFactory, pFormulaManager,
+                aFormula.getUndecoratedContent(), _xRowSet, aStringPool);
 
-            bSuccess = aDlg.Execute() == RET_OK;
+            bSuccess = aDlg->Execute() == RET_OK;
             if ( bSuccess )
             {
-                OUString sFormula = aDlg.getCurrentFormula();
+                OUString sFormula = aDlg->getCurrentFormula();
                 if ( sFormula[0] == '=' )
                     _in_out_rFormula = "rpt:" + sFormula.copy(1);
                  else

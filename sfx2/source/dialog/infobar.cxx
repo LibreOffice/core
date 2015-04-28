@@ -118,8 +118,8 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
        const OUString& sMessage) :
     Window(pParent, 0),
     m_sId(sId),
-    m_pMessage(new FixedText(this, 0)),
-    m_pCloseBtn(new SfxCloseButton(this)),
+    m_pMessage(VclPtr<FixedText>::Create(this, 0)),
+    m_pCloseBtn(VclPtr<SfxCloseButton>::Create(this)),
     m_aActionBtns()
 {
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
@@ -136,14 +136,27 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     Resize();
 }
 
-SfxInfoBarWindow::~SfxInfoBarWindow()
-{}
-
 void SfxInfoBarWindow::addButton(PushButton* pButton) {
     pButton->SetParent(this);
     pButton->Show();
     m_aActionBtns.push_back(pButton);
     Resize();
+}
+
+SfxInfoBarWindow::~SfxInfoBarWindow()
+{
+    disposeOnce();
+}
+
+void SfxInfoBarWindow::dispose()
+{
+    for ( auto it = m_aActionBtns.begin( ); it != m_aActionBtns.end( ); ++it )
+        it->disposeAndClear();
+
+    m_pMessage.disposeAndClear();
+    m_pCloseBtn.disposeAndClear();
+    m_aActionBtns.clear( );
+    vcl::Window::dispose();
 }
 
 void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
@@ -203,12 +216,11 @@ void SfxInfoBarWindow::Resize()
     long nX = m_pCloseBtn->GetPosPixel().getX() - 15 * nScaleFactor;
     long nButtonGap = 5 * nScaleFactor;
 
-    boost::ptr_vector<PushButton>::iterator it;
-    for (it = m_aActionBtns.begin(); it != m_aActionBtns.end(); ++it)
+    for (auto it = m_aActionBtns.begin(); it != m_aActionBtns.end(); ++it)
     {
-        long nButtonWidth = it->GetSizePixel().getWidth();
+        long nButtonWidth = (*it)->GetSizePixel().getWidth();
         nX -= nButtonWidth;
-        it->SetPosSizePixel(Point(nX, 5 * nScaleFactor), Size(nButtonWidth, 30 * nScaleFactor));
+        (*it)->SetPosSizePixel(Point(nX, 5 * nScaleFactor), Size(nButtonWidth, 30 * nScaleFactor));
         nX -= nButtonGap;
     }
 
@@ -233,13 +245,22 @@ SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(SfxInfoBarContainerChild* p
 
 SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow()
 {
+    disposeOnce();
+}
+
+void SfxInfoBarContainerWindow::dispose()
+{
+    for ( auto it = m_pInfoBars.begin( ); it != m_pInfoBars.end( ); ++it )
+        it->disposeAndClear();
+    m_pInfoBars.clear( );
+    Window::dispose();
 }
 
 SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sMessage)
 {
     Size aSize = GetSizePixel();
 
-    SfxInfoBarWindow* pInfoBar = new SfxInfoBarWindow(this, sId, sMessage);
+    VclPtrInstance<SfxInfoBarWindow> pInfoBar(this, sId, sMessage);
     pInfoBar->SetPosPixel(Point(0, aSize.getHeight()));
     pInfoBar->Show();
     m_pInfoBars.push_back(pInfoBar);
@@ -252,32 +273,31 @@ SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, 
 
 SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar(const OUString& sId)
 {
-    boost::ptr_vector<SfxInfoBarWindow>::iterator it;
-    for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
+    for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        if (it->getId() == sId)
-            return &(*it);
+        if ((*it)->getId() == sId)
+            return it->get();
     }
     return NULL;
 }
 
 void SfxInfoBarContainerWindow::removeInfoBar(SfxInfoBarWindow* pInfoBar)
 {
-    boost::ptr_vector<SfxInfoBarWindow>::iterator it;
-    for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
+    for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        if (pInfoBar == &(*it))
+        if (pInfoBar == it->get())
         {
             m_pInfoBars.erase(it);
             break;
         }
     }
+    pInfoBar->disposeOnce();
 
     long nY = 0;
-    for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
+    for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        it->SetPosPixel(Point(0, nY));
-        nY += it->GetSizePixel().getHeight();
+        (*it)->SetPosPixel(Point(0, nY));
+        nY += (*it)->GetSizePixel().getHeight();
     }
 
     Size aSize = GetSizePixel();
@@ -292,13 +312,12 @@ void SfxInfoBarContainerWindow::Resize()
     // Only need to change the width of the infobars
     long nWidth = GetSizePixel().getWidth();
 
-    boost::ptr_vector<SfxInfoBarWindow>::iterator it;
-    for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
+    for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        Size aSize = it->GetSizePixel();
+        Size aSize = (*it)->GetSizePixel();
         aSize.setWidth(nWidth);
-        it->SetSizePixel(aSize);
-        it->Resize();
+        (*it)->SetSizePixel(aSize);
+        (*it)->Resize();
     }
 }
 
@@ -308,7 +327,7 @@ SfxInfoBarContainerChild::SfxInfoBarContainerChild( vcl::Window* _pParent, sal_u
     SfxChildWindow(_pParent, nId),
     m_pBindings(pBindings)
 {
-    pWindow = new SfxInfoBarContainerWindow(this);
+    pWindow = VclPtr<SfxInfoBarContainerWindow>::Create(this);
     pWindow->SetPosSizePixel(Point(0, 0), Size(_pParent->GetSizePixel().getWidth(), 0));
     pWindow->Show();
 

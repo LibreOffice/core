@@ -104,7 +104,7 @@ void VisibleAreaManager::MakeVisible()
     if (maVisibleRequests.empty())
         return;
 
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     if ( ! pWindow)
         return;
     const Point aCurrentTopLeft (pWindow->PixelToLogic(Point(0,0)));
@@ -148,7 +148,7 @@ void VisibleAreaManager::MakeVisible()
 
 ::boost::optional<Point> VisibleAreaManager::GetRequestedTopLeft() const
 {
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     if ( ! pWindow)
         return ::boost::optional<Point>();
 

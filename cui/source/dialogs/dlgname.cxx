@@ -45,6 +45,19 @@ SvxNameDialog::SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const
     pEdtName->SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
 }
 
+SvxNameDialog::~SvxNameDialog()
+{
+    disposeOnce();
+}
+
+void SvxNameDialog::dispose()
+{
+    pFtDescription.clear();
+    pEdtName.clear();
+    pBtnOK.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
 {
     if(aCheckNameHdl.IsSet())
@@ -72,6 +85,19 @@ SvxObjectNameDialog::SvxObjectNameDialog(
     ModifyHdl(&pEdtName);
     pEdtName->SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
 }
+
+SvxObjectNameDialog::~SvxObjectNameDialog()
+{
+    disposeOnce();
+}
+
+void SvxObjectNameDialog::dispose()
+{
+    pEdtName.clear();
+    pBtnOK.clear();
+    ModalDialog::dispose();
+}
+
 
 IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
 {
@@ -105,6 +131,17 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
     pEdtTitle->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
 }
 
+SvxObjectTitleDescDialog::~SvxObjectTitleDescDialog()
+{
+    disposeOnce();
+}
+
+void SvxObjectTitleDescDialog::dispose()
+{
+    pEdtTitle.clear();
+    pEdtDescription.clear();
+    ModalDialog::dispose();
+}
 
 
 /*************************************************************************
@@ -138,7 +175,18 @@ SvxMessDialog::SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const
 
 SvxMessDialog::~SvxMessDialog()
 {
+    disposeOnce();
+}
+
+void SvxMessDialog::dispose()
+{
     delete pImage;
+    pImage = NULL;
+    pFtDescription.clear();
+    pBtn1.clear();
+    pBtn2.clear();
+    pFtImage.clear();
+    ModalDialog::dispose();
 }
 
 /*************************************************************************/

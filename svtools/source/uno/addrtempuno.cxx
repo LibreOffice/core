@@ -71,7 +71,7 @@ namespace {
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
 
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
 
@@ -134,7 +134,7 @@ namespace {
 
         if ( _nExecutionResult )
             if ( m_pDialog )
-                static_cast< AddressBookSourceDialog* >( m_pDialog )->getFieldMapping( m_aAliases );
+                static_cast< AddressBookSourceDialog* >( m_pDialog.get() )->getFieldMapping( m_aAliases );
     }
 
     void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments) throw(Exception, RuntimeException, std::exception)
@@ -212,12 +212,12 @@ namespace {
     }
 
 
-    Dialog* OAddressBookSourceDialogUno::createDialog(vcl::Window* _pParent)
+    VclPtr<Dialog> OAddressBookSourceDialogUno::createDialog(vcl::Window* _pParent)
     {
         if ( m_xDataSource.is() && !m_sTable.isEmpty() )
-            return new AddressBookSourceDialog(_pParent, m_aContext, m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
+            return VclPtr<AddressBookSourceDialog>::Create(_pParent, m_aContext, m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
         else
-            return new AddressBookSourceDialog( _pParent, m_aContext );
+            return VclPtr<AddressBookSourceDialog>::Create( _pParent, m_aContext );
     }
 
 }

@@ -62,7 +62,22 @@ SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwLabPrtPage::~SwLabPrtPage()
 {
-    delete pPrinter;
+    disposeOnce();
+}
+
+void SwLabPrtPage::dispose()
+{
+    pPrinter.disposeAndClear();
+    m_pPageButton.clear();
+    m_pSingleButton.clear();
+    m_pSingleGrid.clear();
+    m_pPrinterFrame.clear();
+    m_pColField.clear();
+    m_pRowField.clear();
+    m_pSynchronCB.clear();
+    m_pPrinterInfo.clear();
+    m_pPrtSetup.clear();
+    SfxTabPage::dispose();
 }
 
 IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
@@ -73,7 +88,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         if (!pPrinter)
             pPrinter = new Printer;
 
-        boost::scoped_ptr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
+        VclPtrInstance< PrinterSetupDialog > pDlg(this);
         pDlg->SetPrinter(pPrinter);
         pDlg->Execute();
         pDlg.reset();
@@ -93,9 +108,9 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
     return 0;
 }
 
-SfxTabPage* SwLabPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwLabPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwLabPrtPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>(new SwLabPrtPage( pParent, *rSet ), SAL_NO_ACQUIRE);
 }
 
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )

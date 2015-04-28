@@ -130,7 +130,16 @@ namespace rptui
 
     ConditionalFormattingDialog::~ConditionalFormattingDialog()
     {
+        disposeOnce();
+    }
+
+    void ConditionalFormattingDialog::dispose()
+    {
         m_aConditions.clear();
+        m_pConditionPlayground.clear();
+        m_pScrollWindow.clear();
+        m_pCondScroll.clear();
+        ModalDialog::dispose();
     }
 
     void ConditionalFormattingDialog::impl_updateConditionIndicies()
@@ -183,7 +192,7 @@ namespace rptui
             ::comphelper::copyProperties(m_xCopy.get(),xCond.get());
             m_xCopy->insertByIndex( _nNewCondIndex, makeAny( xCond ) );
 
-            ConditionPtr pCon( new Condition( m_pConditionPlayground, *this, m_rController ) );
+            VclPtrInstance<Condition> pCon( m_pConditionPlayground, *this, m_rController );
             pCon->setCondition( xCond );
             pCon->reorderWithinParent(_nNewCondIndex);
             m_aConditions.insert( m_aConditions.begin() + _nNewCondIndex, pCon );
@@ -264,7 +273,7 @@ namespace rptui
 
         // do this in two steps, so we don't become inconsistent if any of the UNO actions fails
         Any aMovedCondition;
-        ConditionPtr pMovedCondition;
+        Condition *pMovedCondition;
         try
         {
             aMovedCondition = m_xCopy->getByIndex( (sal_Int32)nOldConditionIndex );
@@ -342,7 +351,7 @@ namespace rptui
             sal_Int32 nCount = m_xCopy->getCount();
             for ( sal_Int32 i = 0; i < nCount ; ++i )
             {
-                ConditionPtr pCon( new Condition( m_pConditionPlayground, *this, m_rController ) );
+                VclPtrInstance<Condition> pCon( m_pConditionPlayground, *this, m_rController );
                 Reference< XFormatCondition > xCond( m_xCopy->getByIndex(i), UNO_QUERY );
                 pCon->reorderWithinParent(i);
                 pCon->setCondition( xCond );

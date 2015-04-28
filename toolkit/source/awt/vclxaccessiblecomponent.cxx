@@ -356,14 +356,15 @@ void VCLXAccessibleComponent::disposing()
     mpVCLXindow = NULL;
 }
 
-vcl::Window* VCLXAccessibleComponent::GetWindow() const
+VclPtr<vcl::Window> VCLXAccessibleComponent::GetWindow() const
 {
-    return GetVCLXWindow() ? GetVCLXWindow()->GetWindow() : NULL;
+    return GetVCLXWindow() ? GetVCLXWindow()->GetWindow()
+                           : VclPtr<vcl::Window>();
 }
 
 void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
@@ -394,7 +395,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
 
 void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    vcl::Window* pWindow = GetWindow();
+    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsVisible() )
@@ -433,7 +434,7 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
             rStateSet.AddState( accessibility::AccessibleStateType::MOVEABLE );
         if( pWindow->IsDialog() )
         {
-            Dialog *pDlg = static_cast< Dialog* >( pWindow );
+            Dialog *pDlg = static_cast< Dialog* >( pWindow.get() );
             if( pDlg->IsInExecute() )
                 rStateSet.AddState( accessibility::AccessibleStateType::MODAL );
         }
@@ -442,26 +443,26 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         if( pWindow && pWindow->GetType() == WINDOW_COMBOBOX )
         {
             if( !( pWindow->GetStyle() & WB_READONLY) ||
-                !static_cast<Edit*>(pWindow)->IsReadOnly() )
+                !static_cast<Edit*>(pWindow.get())->IsReadOnly() )
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
         }
 
-        vcl::Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        VclPtr<vcl::Window> pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
 
         while( pWindow && pChild )
         {
-            vcl::Window* pWinTemp = pChild->GetWindow( WINDOW_FIRSTCHILD );
+            VclPtr<vcl::Window> pWinTemp = pChild->GetWindow( WINDOW_FIRSTCHILD );
             if( pWinTemp && pWinTemp->GetType() == WINDOW_EDIT )
             {
                 if( !( pWinTemp->GetStyle() & WB_READONLY) ||
-                    !static_cast<Edit*>(pWinTemp)->IsReadOnly() )
+                    !static_cast<Edit*>(pWinTemp.get())->IsReadOnly() )
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
                 break;
             }
             if( pChild->GetType() == WINDOW_EDIT )
             {
                 if( !( pChild->GetStyle() & WB_READONLY) ||
-                    !static_cast<Edit*>(pChild)->IsReadOnly())
+                    !static_cast<Edit*>(pChild.get())->IsReadOnly())
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
                 break;
             }

@@ -606,7 +606,7 @@ class ImplRulerData;
 class SVT_DLLPUBLIC Ruler : public vcl::Window
 {
 private:
-    VirtualDevice   maVirDev;
+    ScopedVclPtr<VirtualDevice>   maVirDev;
     MapMode         maMapMode;
     long            mnBorderOff;
     long            mnWinOff;
@@ -708,6 +708,7 @@ protected:
 public:
             Ruler( vcl::Window* pParent, WinBits nWinStyle = WB_STDRULER );
     virtual ~Ruler();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

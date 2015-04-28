@@ -56,60 +56,78 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     vcl::Window* pParent,
     AreaPropertyPanel& rPanel)
     : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_AREAPAGE_TRGR)),
-      maFtTrgrCenterX(this, SVX_RES(FT_TRGR_CENTER_X)),
-      maMtrTrgrCenterX(this, SVX_RES(MTR_TRGR_CENTER_X)),
-      maFtTrgrCenterY(this, SVX_RES(FT_TRGR_CENTER_Y)),
-      maMtrTrgrCenterY(this, SVX_RES(MTR_TRGR_CENTER_Y)),
-      maFtTrgrAngle(this, SVX_RES(FT_TRGR_ANGLE)),
-      maMtrTrgrAngle(this, SVX_RES(MTR_TRGR_ANGLE)),
-      maBtnLeft45(this, SVX_RES(BTN_LEFT_SECOND)),
-      maBtnRight45(this, SVX_RES(BTN_RIGHT_FIRST)),
-      maFtTrgrStartValue(this, SVX_RES(FT_TRGR_START_VALUE)),
-      maMtrTrgrStartValue(this, SVX_RES(MTR_TRGR_START_VALUE)),
-      maFtTrgrEndValue(this, SVX_RES(FT_TRGR_END_VALUE)),
-      maMtrTrgrEndValue(this, SVX_RES(MTR_TRGR_END_VALUE)),
-      maFtTrgrBorder(this, SVX_RES(FT_TRGR_BORDER)),
-      maMtrTrgrBorder(this, SVX_RES(MTR_TRGR_BORDER)),
+      maFtTrgrCenterX(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_CENTER_X))),
+      maMtrTrgrCenterX(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_CENTER_X))),
+      maFtTrgrCenterY(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_CENTER_Y))),
+      maMtrTrgrCenterY(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_CENTER_Y))),
+      maFtTrgrAngle(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_ANGLE))),
+      maMtrTrgrAngle(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_ANGLE))),
+      maBtnLeft45(VclPtr<ToolBox>::Create(this, SVX_RES(BTN_LEFT_SECOND))),
+      maBtnRight45(VclPtr<ToolBox>::Create(this, SVX_RES(BTN_RIGHT_FIRST))),
+      maFtTrgrStartValue(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_START_VALUE))),
+      maMtrTrgrStartValue(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_START_VALUE))),
+      maFtTrgrEndValue(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_END_VALUE))),
+      maMtrTrgrEndValue(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_END_VALUE))),
+      maFtTrgrBorder(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_BORDER))),
+      maMtrTrgrBorder(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_BORDER))),
       maRotLeft( SVX_RES(IMG_ROT_LEFT)),
       maRotRight( SVX_RES(IMG_ROT_RIGHT)),
       mrAreaPropertyPanel(rPanel),
       mpBindings(NULL)
 {
     Link aLink = LINK( this, AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl);
-    maMtrTrgrCenterX.SetModifyHdl( aLink );
-    maMtrTrgrCenterY.SetModifyHdl( aLink );
-    maMtrTrgrAngle.SetModifyHdl( aLink );
-    maMtrTrgrBorder.SetModifyHdl( aLink );
-    maMtrTrgrStartValue.SetModifyHdl( aLink );
-    maMtrTrgrEndValue.SetModifyHdl( aLink );
+    maMtrTrgrCenterX->SetModifyHdl( aLink );
+    maMtrTrgrCenterY->SetModifyHdl( aLink );
+    maMtrTrgrAngle->SetModifyHdl( aLink );
+    maMtrTrgrBorder->SetModifyHdl( aLink );
+    maMtrTrgrStartValue->SetModifyHdl( aLink );
+    maMtrTrgrEndValue->SetModifyHdl( aLink );
     aLink = LINK( this, AreaTransparencyGradientControl, Left_Click45_Impl);
-    maBtnLeft45.SetSelectHdl( aLink );
+    maBtnLeft45->SetSelectHdl( aLink );
     aLink = LINK( this, AreaTransparencyGradientControl, Right_Click45_Impl);
-    maBtnRight45.SetSelectHdl( aLink );
-    maBtnLeft45.SetItemImage(1,maRotLeft);
-    Size aTbxSize = maBtnLeft45.CalcWindowSizePixel();
-    maBtnLeft45.SetOutputSizePixel( aTbxSize );
-    maBtnLeft45.SetQuickHelpText(1, SVX_RESSTR(STR_HELP_LEFT));    //acc wj
+    maBtnRight45->SetSelectHdl( aLink );
+    maBtnLeft45->SetItemImage(1,maRotLeft);
+    Size aTbxSize = maBtnLeft45->CalcWindowSizePixel();
+    maBtnLeft45->SetOutputSizePixel( aTbxSize );
+    maBtnLeft45->SetQuickHelpText(1, SVX_RESSTR(STR_HELP_LEFT));    //acc wj
 
-    maBtnRight45.SetItemImage(1,maRotRight);
-    aTbxSize = maBtnRight45.CalcWindowSizePixel();
-    maBtnRight45.SetOutputSizePixel( aTbxSize );
-    maBtnRight45.SetQuickHelpText(1, SVX_RESSTR(STR_HELP_RIGHT));  //acc wj
+    maBtnRight45->SetItemImage(1,maRotRight);
+    aTbxSize = maBtnRight45->CalcWindowSizePixel();
+    maBtnRight45->SetOutputSizePixel( aTbxSize );
+    maBtnRight45->SetQuickHelpText(1, SVX_RESSTR(STR_HELP_RIGHT));  //acc wj
 
-    maBtnLeft45.SetBackground(Wallpaper());
-    maBtnLeft45.SetPaintTransparent(true);
-    maBtnRight45.SetBackground(Wallpaper());
-    maBtnRight45.SetPaintTransparent(true);
+    maBtnLeft45->SetBackground(Wallpaper());
+    maBtnLeft45->SetPaintTransparent(true);
+    maBtnRight45->SetBackground(Wallpaper());
+    maBtnRight45->SetPaintTransparent(true);
 
     FreeResource();
     mpBindings = mrAreaPropertyPanel.GetBindings();
 }
 
 
-
-
 AreaTransparencyGradientControl::~AreaTransparencyGradientControl()
 {
+    disposeOnce();
+}
+
+void AreaTransparencyGradientControl::dispose()
+{
+    maFtTrgrCenterX.disposeAndClear();
+    maMtrTrgrCenterX.disposeAndClear();
+    maFtTrgrCenterY.disposeAndClear();
+    maMtrTrgrCenterY.disposeAndClear();
+    maFtTrgrAngle.disposeAndClear();
+    maMtrTrgrAngle.disposeAndClear();
+    maBtnLeft45.disposeAndClear();
+    maBtnRight45.disposeAndClear();
+    maFtTrgrStartValue.disposeAndClear();
+    maMtrTrgrStartValue.disposeAndClear();
+    maFtTrgrEndValue.disposeAndClear();
+    maMtrTrgrEndValue.disposeAndClear();
+    maFtTrgrBorder.disposeAndClear();
+    maMtrTrgrBorder.disposeAndClear();
+    PopupControl::dispose();
 }
 
 void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGradientItem)
@@ -123,60 +141,60 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
     aSize2 = LogicToPixel( aSize2, MapMode(MAP_APPFONT) );
     long aPosY = 0;
     Point aPointAngle;
-    Size aSizeAngle = maMtrTrgrAngle.GetSizePixel();
-    Size aTbxSize = maBtnLeft45.CalcWindowSizePixel();
+    Size aSizeAngle = maMtrTrgrAngle->GetSizePixel();
+    Size aTbxSize = maBtnLeft45->CalcWindowSizePixel();
 
     switch(eXGS)
     {
     case css::awt::GradientStyle_LINEAR:
     case css::awt::GradientStyle_AXIAL:
-        maFtTrgrCenterX.Hide();
-        maMtrTrgrCenterX.Hide();
-        maFtTrgrCenterY.Hide();
-        maMtrTrgrCenterY.Hide();
-        maFtTrgrAngle.Show();
-        maFtTrgrAngle.SetPosPixel(APOS1_1);
-        maMtrTrgrAngle.Show();
-        maMtrTrgrAngle.SetPosPixel(APOS2_1);
-        maFtTrgrStartValue.SetPosPixel(APOS1_3);
-        maMtrTrgrStartValue.SetPosPixel(APOS1_4);
-        maFtTrgrEndValue.SetPosPixel(APOS2_3);
-        maMtrTrgrEndValue.SetPosPixel(APOS2_4);
-        maFtTrgrBorder.SetPosPixel(APOS1_5);
-        maMtrTrgrBorder.SetPosPixel(APOS1_6);
+        maFtTrgrCenterX->Hide();
+        maMtrTrgrCenterX->Hide();
+        maFtTrgrCenterY->Hide();
+        maMtrTrgrCenterY->Hide();
+        maFtTrgrAngle->Show();
+        maFtTrgrAngle->SetPosPixel(APOS1_1);
+        maMtrTrgrAngle->Show();
+        maMtrTrgrAngle->SetPosPixel(APOS2_1);
+        maFtTrgrStartValue->SetPosPixel(APOS1_3);
+        maMtrTrgrStartValue->SetPosPixel(APOS1_4);
+        maFtTrgrEndValue->SetPosPixel(APOS2_3);
+        maMtrTrgrEndValue->SetPosPixel(APOS2_4);
+        maFtTrgrBorder->SetPosPixel(APOS1_5);
+        maMtrTrgrBorder->SetPosPixel(APOS1_6);
 
-        maBtnLeft45.Show();
-        maBtnRight45.Show();
+        maBtnLeft45->Show();
+        maBtnRight45->Show();
 
-        aPointAngle = maMtrTrgrAngle.GetPosPixel();
+        aPointAngle = maMtrTrgrAngle->GetPosPixel();
         aPosY = aPointAngle.getY() + aSizeAngle.getHeight() - aTbxSize.getHeight();
 
-        maBtnLeft45.SetPosPixel(Point(APOS_Left_Right_1.getX(), aPosY));
-        maBtnRight45.SetPosPixel(Point(APOS_Left_Right_2.getX(), aPosY));
+        maBtnLeft45->SetPosPixel(Point(APOS_Left_Right_1.getX(), aPosY));
+        maBtnRight45->SetPosPixel(Point(APOS_Left_Right_2.getX(), aPosY));
 
         SetSizePixel(aSize2);
         break;
 
     case css::awt::GradientStyle_RADIAL:
-        maFtTrgrCenterX.Show();
-        maFtTrgrCenterX.SetPosPixel(APOS1_1);
-        maMtrTrgrCenterX.Show();
-        maMtrTrgrCenterX.SetPosPixel(APOS2_1);
-        maFtTrgrCenterY.Show();
-        maFtTrgrCenterY.SetPosPixel(APOS1_2);
-        maMtrTrgrCenterY.Show();
-        maMtrTrgrCenterY.SetPosPixel(APOS2_2);
-        maFtTrgrAngle.Hide();
-        maMtrTrgrAngle.Hide();
-        maFtTrgrStartValue.SetPosPixel(APOS1_3);
-        maMtrTrgrStartValue.SetPosPixel(APOS1_4);
-        maFtTrgrEndValue.SetPosPixel(APOS2_3);
-        maMtrTrgrEndValue.SetPosPixel(APOS2_4);
-        maFtTrgrBorder.SetPosPixel(APOS1_5);
-        maMtrTrgrBorder.SetPosPixel(APOS1_6);
+        maFtTrgrCenterX->Show();
+        maFtTrgrCenterX->SetPosPixel(APOS1_1);
+        maMtrTrgrCenterX->Show();
+        maMtrTrgrCenterX->SetPosPixel(APOS2_1);
+        maFtTrgrCenterY->Show();
+        maFtTrgrCenterY->SetPosPixel(APOS1_2);
+        maMtrTrgrCenterY->Show();
+        maMtrTrgrCenterY->SetPosPixel(APOS2_2);
+        maFtTrgrAngle->Hide();
+        maMtrTrgrAngle->Hide();
+        maFtTrgrStartValue->SetPosPixel(APOS1_3);
+        maMtrTrgrStartValue->SetPosPixel(APOS1_4);
+        maFtTrgrEndValue->SetPosPixel(APOS2_3);
+        maMtrTrgrEndValue->SetPosPixel(APOS2_4);
+        maFtTrgrBorder->SetPosPixel(APOS1_5);
+        maMtrTrgrBorder->SetPosPixel(APOS1_6);
 
-        maBtnLeft45.Hide();
-        maBtnRight45.Hide();
+        maBtnLeft45->Hide();
+        maBtnRight45->Hide();
 
         SetSizePixel(aSize2);
 
@@ -185,34 +203,34 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
     case css::awt::GradientStyle_ELLIPTICAL:
     case css::awt::GradientStyle_SQUARE:
     case css::awt::GradientStyle_RECT:
-        maFtTrgrCenterX.Show();
-        maFtTrgrCenterX.SetPosPixel(APOS1_1);
-        maMtrTrgrCenterX.Show();
-        maMtrTrgrCenterX.SetPosPixel(APOS2_1);
-        maFtTrgrCenterY.Show();
-        maFtTrgrCenterY.SetPosPixel(APOS1_2);
-        maMtrTrgrCenterY.Show();
-        maMtrTrgrCenterY.SetPosPixel(APOS2_2);
-        maFtTrgrAngle.Show();
-        maFtTrgrAngle.SetPosPixel(APOS1_3);
-        maMtrTrgrAngle.Show();
-        maMtrTrgrAngle.SetPosPixel(APOS1_4);
+        maFtTrgrCenterX->Show();
+        maFtTrgrCenterX->SetPosPixel(APOS1_1);
+        maMtrTrgrCenterX->Show();
+        maMtrTrgrCenterX->SetPosPixel(APOS2_1);
+        maFtTrgrCenterY->Show();
+        maFtTrgrCenterY->SetPosPixel(APOS1_2);
+        maMtrTrgrCenterY->Show();
+        maMtrTrgrCenterY->SetPosPixel(APOS2_2);
+        maFtTrgrAngle->Show();
+        maFtTrgrAngle->SetPosPixel(APOS1_3);
+        maMtrTrgrAngle->Show();
+        maMtrTrgrAngle->SetPosPixel(APOS1_4);
 
-        maFtTrgrStartValue.SetPosPixel(APOS1_5);
-        maMtrTrgrStartValue.SetPosPixel(APOS1_6);
-        maFtTrgrEndValue.SetPosPixel(APOS2_5);
-        maMtrTrgrEndValue.SetPosPixel(APOS2_6);
-        maFtTrgrBorder.SetPosPixel(APOS1_7);
-        maMtrTrgrBorder.SetPosPixel(APOS1_8);
+        maFtTrgrStartValue->SetPosPixel(APOS1_5);
+        maMtrTrgrStartValue->SetPosPixel(APOS1_6);
+        maFtTrgrEndValue->SetPosPixel(APOS2_5);
+        maMtrTrgrEndValue->SetPosPixel(APOS2_6);
+        maFtTrgrBorder->SetPosPixel(APOS1_7);
+        maMtrTrgrBorder->SetPosPixel(APOS1_8);
 
-        maBtnLeft45.Show();
-        maBtnRight45.Show();
+        maBtnLeft45->Show();
+        maBtnRight45->Show();
 
-        aPointAngle = maMtrTrgrAngle.GetPosPixel();
+        aPointAngle = maMtrTrgrAngle->GetPosPixel();
         aPosY = aPointAngle.getY() + aSizeAngle.getHeight() - aTbxSize.getHeight();
 
-        maBtnLeft45.SetPosPixel(Point(APOS_Left_Right_3.getX(), aPosY));
-        maBtnRight45.SetPosPixel(Point(APOS_Left_Right_4.getX(), aPosY));
+        maBtnLeft45->SetPosPixel(Point(APOS_Left_Right_3.getX(), aPosY));
+        maBtnRight45->SetPosPixel(Point(APOS_Left_Right_4.getX(), aPosY));
 
         SetSizePixel(aSize);
 
@@ -247,12 +265,12 @@ void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem* pGr
     {
         aGradient = rGradient;
     }
-    maMtrTrgrCenterX.SetValue(aGradient.GetXOffset());
-    maMtrTrgrCenterY.SetValue(aGradient.GetYOffset());
-    maMtrTrgrAngle.SetValue(aGradient.GetAngle() / 10);
-    maMtrTrgrStartValue.SetValue((sal_uInt16)((((sal_uInt16)aGradient.GetStartColor().GetRed() + 1) * 100) / 255));
-    maMtrTrgrEndValue.SetValue((sal_uInt16)((((sal_uInt16)aGradient.GetEndColor().GetRed() + 1) * 100) / 255));
-    maMtrTrgrBorder.SetValue(aGradient.GetBorder());
+    maMtrTrgrCenterX->SetValue(aGradient.GetXOffset());
+    maMtrTrgrCenterY->SetValue(aGradient.GetYOffset());
+    maMtrTrgrAngle->SetValue(aGradient.GetAngle() / 10);
+    maMtrTrgrStartValue->SetValue((sal_uInt16)((((sal_uInt16)aGradient.GetStartColor().GetRed() + 1) * 100) / 255));
+    maMtrTrgrEndValue->SetValue((sal_uInt16)((((sal_uInt16)aGradient.GetEndColor().GetRed() + 1) * 100) / 255));
+    maMtrTrgrBorder->SetValue(aGradient.GetBorder());
 }
 
 
@@ -261,21 +279,21 @@ void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem* pGr
 void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, sal_uInt8 nEndCol )
 {
     //Added
-    sal_Int16 aMtrValue = (sal_Int16)maMtrTrgrAngle.GetValue();
+    sal_Int16 aMtrValue = (sal_Int16)maMtrTrgrAngle->GetValue();
     while(aMtrValue<0)
         aMtrValue += 360;
     sal_uInt16 nVal = aMtrValue/360;
     nVal = aMtrValue - nVal*360;
-    maMtrTrgrAngle.SetValue(nVal);
+    maMtrTrgrAngle->SetValue(nVal);
     //End of new code
     XGradient aTmpGradient(
         Color(nStartCol, nStartCol, nStartCol),
         Color(nEndCol, nEndCol, nEndCol),
         (css::awt::GradientStyle)(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
-        (sal_uInt16)maMtrTrgrAngle.GetValue() * 10,
-        (sal_uInt16)maMtrTrgrCenterX.GetValue(),
-        (sal_uInt16)maMtrTrgrCenterY.GetValue(),
-        (sal_uInt16)maMtrTrgrBorder.GetValue(),
+        (sal_uInt16)maMtrTrgrAngle->GetValue() * 10,
+        (sal_uInt16)maMtrTrgrCenterX->GetValue(),
+        (sal_uInt16)maMtrTrgrCenterY->GetValue(),
+        (sal_uInt16)maMtrTrgrBorder->GetValue(),
         100, 100);
 
     mrAreaPropertyPanel.SetGradient(aTmpGradient);
@@ -292,8 +310,8 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
 
 IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)
 {
-    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue.GetValue() * 255) / 100);
-    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue.GetValue() * 255) / 100);
+    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
+    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
     ExecuteValueModify( nStartCol, nEndCol );
     return 0L;
 }
@@ -303,13 +321,13 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)
 
 IMPL_LINK_NOARG(AreaTransparencyGradientControl, Left_Click45_Impl)
 {
-    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue.GetValue() * 255) / 100);
-    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue.GetValue() * 255) / 100);
-    sal_uInt16 aTemp = (sal_uInt16)maMtrTrgrAngle.GetValue();
+    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
+    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
+    sal_uInt16 aTemp = (sal_uInt16)maMtrTrgrAngle->GetValue();
     if(aTemp>=315)
         aTemp -= 360;
     aTemp += 45;
-    maMtrTrgrAngle.SetValue(aTemp);
+    maMtrTrgrAngle->SetValue(aTemp);
     ExecuteValueModify( nStartCol, nEndCol );
     return 0L;
 }
@@ -319,13 +337,13 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, Left_Click45_Impl)
 
 IMPL_LINK_NOARG(AreaTransparencyGradientControl, Right_Click45_Impl)
 {
-    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue.GetValue() * 255) / 100);
-    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue.GetValue() * 255) / 100);
-    sal_uInt16 aTemp = (sal_uInt16)maMtrTrgrAngle.GetValue();
+    sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
+    sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
+    sal_uInt16 aTemp = (sal_uInt16)maMtrTrgrAngle->GetValue();
     if(aTemp<45)
         aTemp += 360;
     aTemp -= 45;
-    maMtrTrgrAngle.SetValue(aTemp);
+    maMtrTrgrAngle->SetValue(aTemp);
     ExecuteValueModify( nStartCol, nEndCol );
     return 0L;
 }

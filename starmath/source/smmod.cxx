@@ -174,6 +174,7 @@ SmModule::~SmModule()
 {
     if (mpColorConfig)
         mpColorConfig->RemoveListener(this);
+    mpVirtualDev.disposeAndClear();
 }
 
 void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
@@ -241,7 +242,7 @@ VirtualDevice &SmModule::GetDefaultVirtualDev()
 {
     if (!mpVirtualDev)
     {
-        mpVirtualDev.reset(new VirtualDevice);
+        mpVirtualDev.reset( VclPtr<VirtualDevice>::Create() );
         mpVirtualDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
     }
     return *mpVirtualDev;
@@ -287,9 +288,9 @@ void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         GetConfig()->ItemSetToConfig(rSet);
     }
 }
-SfxTabPage*  SmModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage*  pRet = 0;
+    VclPtr<SfxTabPage> pRet;
     if(nId == SID_SM_TP_PRINTOPTIONS)
         pRet = SmPrintOptionsTabPage::Create( pParent, rSet );
     return pRet;

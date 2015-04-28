@@ -21,6 +21,7 @@
 #define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGPAGE_HXX
 
 #include "abspage.hxx"
+#include <vcl/vclptr.hxx>
 
 
 namespace abp
@@ -33,12 +34,13 @@ namespace abp
     class FieldMappingPage : public AddressBookSourcePage
     {
     protected:
-        PushButton*     m_pInvokeDialog;
-        FixedText*      m_pHint;
+        VclPtr<PushButton>     m_pInvokeDialog;
+        VclPtr<FixedText>      m_pHint;
 
     public:
         FieldMappingPage( OAddessBookSourcePilot* _pParent );
-
+        virtual ~FieldMappingPage();
+        virtual void dispose() SAL_OVERRIDE;
     protected:
         // OWizardPage overridables
         virtual void        initializePage() SAL_OVERRIDE;

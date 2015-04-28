@@ -57,6 +57,7 @@ public:
     ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
     virtual ~ImplDockFloatWin2();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Move() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -97,8 +98,14 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
 {
+    disposeOnce();
+}
+
+void ImplDockFloatWin2::dispose()
+{
     if( mnLastUserEvent )
         Application::RemoveUserEvent( mnLastUserEvent );
+    FloatingWindow::dispose();
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
@@ -477,6 +484,7 @@ private:
 public:
     ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
     virtual ~ImplPopupFloatWin();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -513,7 +521,13 @@ ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWra
 
 ImplPopupFloatWin::~ImplPopupFloatWin()
 {
+    disposeOnce();
+}
+
+void ImplPopupFloatWin::dispose()
+{
     mpDockingWin = NULL;
+    FloatingWindow::dispose();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ImplPopupFloatWin::CreateAccessible()
@@ -813,7 +827,7 @@ ImplDockingWindowWrapper::ImplDockingWindowWrapper( const vcl::Window *pWindow )
     , mbStartDockingEnabled(false)
     , mbLocked(false)
 {
-    DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow );
+    DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow.get() );
     if( pDockWin )
         mnFloatBits = pDockWin->GetFloatStyle();
 }
@@ -842,14 +856,14 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     mbStartFloat    = mbLastFloatMode;
 
     // calculate FloatingBorder
-    FloatingWindow* pWin;
+    VclPtr<FloatingWindow> pWin;
     if ( mpFloatWin )
         pWin = mpFloatWin;
     else
-        pWin = new ImplDockFloatWin2( mpParent, mnFloatBits, NULL );
+        pWin = VclPtr<ImplDockFloatWin2>::Create( mpParent, mnFloatBits, nullptr );
     pWin->GetBorder( mnDockLeft, mnDockTop, mnDockRight, mnDockBottom );
     if ( !mpFloatWin )
-        delete pWin;
+        pWin.disposeAndClear();
 
     Point   aPos    = GetWindow()->ImplOutputToFrame( Point() );
     Size    aSize   = GetWindow()->GetOutputSizePixel();
@@ -1098,11 +1112,11 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLon
     // prepare reparenting
     vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
     mpOldBorderWin = GetWindow()->GetWindow( WINDOW_BORDER );
-    if( mpOldBorderWin == GetWindow() )
+    if( mpOldBorderWin.get() == GetWindow() )
         mpOldBorderWin = NULL;  // no border window found
 
     // the new parent for popup mode
-    ImplPopupFloatWin* pWin = new ImplPopupFloatWin( mpParent, this, (nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) != 0 );
+    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, this, (nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) != 0 );
 
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
     pWin->SetText( GetWindow()->GetText() );
@@ -1153,7 +1167,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
 
     // set parameter for handler before destroying floating window
-    ImplPopupFloatWin *pPopupFloatWin = static_cast<ImplPopupFloatWin*>(mpFloatWin);
+    ImplPopupFloatWin *pPopupFloatWin = static_cast<ImplPopupFloatWin*>(mpFloatWin.get());
     EndPopupModeData aData( pPopupFloatWin->GetTearOffPosition(), mpFloatWin->IsPopupModeTearOff() );
 
     // before deleting change parent back, so we can delete the floating window alone
@@ -1162,7 +1176,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     if ( mpOldBorderWin )
     {
         GetWindow()->SetParent( mpOldBorderWin );
-        static_cast<ImplBorderWindow*>(mpOldBorderWin)->GetBorder(
+        static_cast<ImplBorderWindow*>(mpOldBorderWin.get())->GetBorder(
             GetWindow()->mpWindowImpl->mnLeftBorder, GetWindow()->mpWindowImpl->mnTopBorder,
             GetWindow()->mpWindowImpl->mnRightBorder, GetWindow()->mpWindowImpl->mnBottomBorder );
         mpOldBorderWin->Resize();
@@ -1171,8 +1185,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     GetWindow()->SetParent( pRealParent );
     GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
-    delete mpFloatWin;
-    mpFloatWin = NULL;
+    mpFloatWin.disposeAndClear();
 
     // call handler - which will destroy the window and thus the wrapper as well !
     GetWindow()->CallEventListeners( VCLEVENT_WINDOW_ENDPOPUPMODE, &aData );
@@ -1212,7 +1225,8 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                     mpOldBorderWin = NULL;  // no border window found
 
                 ImplDockFloatWin2* pWin =
-                    new ImplDockFloatWin2(
+                    VclPtr<ImplDockFloatWin2>::Create(
+
                                          mpParent,
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?
                                           mnFloatBits | WB_SYSTEMWINDOW
@@ -1277,7 +1291,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 if ( mpOldBorderWin )
                 {
                     GetWindow()->SetParent( mpOldBorderWin );
-                    static_cast<ImplBorderWindow*>(mpOldBorderWin)->GetBorder(
+                    static_cast<ImplBorderWindow*>(mpOldBorderWin.get())->GetBorder(
                         GetWindow()->mpWindowImpl->mnLeftBorder, GetWindow()->mpWindowImpl->mnTopBorder,
                         GetWindow()->mpWindowImpl->mnRightBorder, GetWindow()->mpWindowImpl->mnBottomBorder );
                     mpOldBorderWin->Resize();
@@ -1286,8 +1300,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 GetWindow()->SetParent( pRealParent );
                 GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
-                delete static_cast<ImplDockFloatWin2*>(mpFloatWin);
-                mpFloatWin = NULL;
+                mpFloatWin.disposeAndClear();
                 GetWindow()->SetPosPixel( maDockPos );
 
                 if ( bVisible )
@@ -1350,7 +1363,7 @@ void ImplDockingWindowWrapper::SetMaxOutputSizePixel( const Size& rSize )
 
 bool ImplDockingWindowWrapper::IsFloatingMode() const
 {
-    return (mpFloatWin != NULL);
+    return (mpFloatWin != nullptr);
 }
 
 void    ImplDockingWindowWrapper::SetDragArea( const Rectangle& rRect )

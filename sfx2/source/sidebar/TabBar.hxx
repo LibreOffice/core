@@ -68,6 +68,7 @@ public:
         const ::boost::function<void(const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider);
     virtual ~TabBar();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) SAL_OVERRIDE;
@@ -93,12 +94,12 @@ public:
 
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    ::boost::scoped_ptr<CheckBox> mpMenuButton;
+    VclPtr<CheckBox> mpMenuButton;
     class Item
     {
     public:
         DECL_LINK(HandleClick, Button*);
-        ::boost::shared_ptr<RadioButton> mpButton;
+        VclPtr<RadioButton> mpButton;
         ::rtl::OUString msDeckId;
         ::boost::function<void(const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
         bool mbIsHidden;
@@ -110,7 +111,7 @@ private:
     sal_Int32 mnMenuSeparatorY;
     PopupMenuProvider maPopupMenuProvider;
 
-    RadioButton* CreateTabItem (const DeckDescriptor& rDeckDescriptor);
+    VclPtr<RadioButton> CreateTabItem (const DeckDescriptor& rDeckDescriptor);
     Image GetItemImage (const DeckDescriptor& rDeskDescriptor) const;
     void Layout();
     void UpdateButtonIcons();

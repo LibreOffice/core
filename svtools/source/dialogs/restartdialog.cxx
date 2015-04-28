@@ -47,14 +47,21 @@ public:
         btnYes_->SetClickHdl(LINK(this, RestartDialog, hdlYes));
         btnNo_->SetClickHdl(LINK(this, RestartDialog, hdlNo));
     }
-
+    virtual ~RestartDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        reason_.clear();
+        btnYes_.clear();
+        btnNo_.clear();
+        ModalDialog::dispose();
+    }
 private:
     DECL_LINK(hdlYes, void *);
     DECL_LINK(hdlNo, void *);
 
-    vcl::Window * reason_;
-    PushButton * btnYes_;
-    PushButton * btnNo_;
+    VclPtr<vcl::Window> reason_;
+    VclPtr<PushButton> btnYes_;
+    VclPtr<PushButton> btnNo_;
 };
 
 IMPL_LINK_NOARG(RestartDialog, hdlYes) {

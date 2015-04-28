@@ -249,10 +249,9 @@ private:
 #endif
 
     GLWindow m_aGLWin;
-    std::unique_ptr<vcl::Window> m_xWindow;
-    vcl::Window* mpWindow; //points to m_xWindow or the parent window, don't delete it
-    SystemChildWindow* m_pChildWindow;
-    std::unique_ptr<SystemChildWindow> m_xChildWindowGC;
+    VclPtr<vcl::Window> m_xWindow;
+    VclPtr<vcl::Window> mpWindow; //points to m_pWindow or the parent window, don't delete it
+    VclPtr<SystemChildWindow> m_pChildWindow;
     bool mbInitialized;
     int  mnRefCount;
     bool mbRequestLegacyContext;

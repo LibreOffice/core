@@ -135,7 +135,14 @@ FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
 
 FmGridHeader::~FmGridHeader()
 {
+    disposeOnce();
+}
+
+void FmGridHeader::dispose()
+{
     delete m_pImpl;
+    m_pImpl = NULL;
+    svt::EditBrowserHeader::dispose();
 }
 
 sal_uInt16 FmGridHeader::GetModelColumnPos(sal_uInt16 nId) const
@@ -1412,10 +1419,10 @@ void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& /*rEvent
 
 }
 
-BrowserHeader* FmGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
+VclPtr<BrowserHeader> FmGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 {
     DBG_ASSERT( pParent == this, "FmGridControl::imp_CreateHeaderBar: parent?" );
-    return new FmGridHeader( pParent );
+    return VclPtr<FmGridHeader>::Create( pParent );
 }
 
 void FmGridControl::markColumn(sal_uInt16 nId)

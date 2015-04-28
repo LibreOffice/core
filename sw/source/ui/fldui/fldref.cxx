@@ -107,6 +107,21 @@ SwFldRefPage::SwFldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
 SwFldRefPage::~SwFldRefPage()
 {
+    disposeOnce();
+}
+
+void SwFldRefPage::dispose()
+{
+    m_pTypeLB.clear();
+    m_pSelection.clear();
+    m_pSelectionLB.clear();
+    m_pSelectionToolTipLB.clear();
+    m_pFormat.clear();
+    m_pFormatLB.clear();
+    m_pNameFT.clear();
+    m_pNameED.clear();
+    m_pValueED.clear();
+    SwFldPage::dispose();
 }
 
 // #i83479#
@@ -935,10 +950,10 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-SfxTabPage* SwFldRefPage::Create(   vcl::Window* pParent,
-                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwFldRefPage::Create( vcl::Window* pParent,
+                                         const SfxItemSet* rAttrSet )
 {
-    return ( new SwFldRefPage( pParent, *rAttrSet ) );
+    return VclPtr<SwFldRefPage>::Create( pParent, *rAttrSet );
 }
 
 sal_uInt16 SwFldRefPage::GetGroup()

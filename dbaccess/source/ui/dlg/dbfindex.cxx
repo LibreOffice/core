@@ -76,6 +76,25 @@ ODbaseIndexDialog::ODbaseIndexDialog(vcl::Window * pParent, const OUString& aDat
     SetCtrls();
 }
 
+ODbaseIndexDialog::~ODbaseIndexDialog()
+{
+    disposeOnce();
+}
+
+void ODbaseIndexDialog::dispose()
+{
+    m_pPB_OK.clear();
+    m_pCB_Tables.clear();
+    m_pIndexes.clear();
+    m_pLB_TableIndexes.clear();
+    m_pLB_FreeIndexes.clear();
+    m_pAdd.clear();
+    m_pRemove.clear();
+    m_pAddAll.clear();
+    m_pRemoveAll.clear();
+    ModalDialog::dispose();
+}
+
 bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator& _rPosition)
 {
     for (   _rPosition = m_aTableInfoList.begin();

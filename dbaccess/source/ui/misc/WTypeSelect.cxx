@@ -45,13 +45,18 @@ using namespace ::com::sun::star::sdbc;
 OWizTypeSelectControl::OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar)
     : OFieldDescControl(pParent, pHelpBar)
 {
-
     m_pParentTabPage = pParentTabPage;
 }
 
 OWizTypeSelectControl::~OWizTypeSelectControl()
 {
+    disposeOnce();
+}
 
+void OWizTypeSelectControl::dispose()
+{
+    m_pParentTabPage.clear();
+    OFieldDescControl::dispose();
 }
 
 void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
@@ -87,7 +92,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     OSL_ENSURE(nRow == -1,"nRow muss -1 sein!");
     (void)nRow;
 
-    MultiListBox *pListBox = static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pColumnNames;
+    MultiListBox *pListBox = static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pColumnNames;
 
     OFieldDescription* pCurFieldDescr = getCurrentFieldDescData();
 
@@ -137,13 +142,13 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                     pWiz->showError(strMessage);
                     pCurFieldDescr->SetName(sName);
                     DisplayData(pCurFieldDescr);
-                    static_cast<OWizTypeSelect*>(m_pParentTabPage)->setDuplicateName(true);
+                    static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->setDuplicateName(true);
                     return;
                 }
 
                 OUString sOldName = pCurFieldDescr->GetName();
                 pCurFieldDescr->SetName(sNewName);
-                static_cast<OWizTypeSelect*>(m_pParentTabPage)->setDuplicateName(false);
+                static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->setDuplicateName(false);
 
                 // now we change the name
                 OCopyTableWizard::TNameMapping::iterator aIter = pWiz->m_mNameMapping.begin();
@@ -172,48 +177,48 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
 ::com::sun::star::lang::Locale  OWizTypeSelectControl::GetLocale() const
 {
-    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pParent->GetLocale();
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->GetLocale();
 }
 
 Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter() const
 {
-    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pParent->GetFormatter();
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->GetFormatter();
 }
 
 TOTypeInfoSP    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 {
-    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pParent->getDestTypeInfo(_nPos);
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->getDestTypeInfo(_nPos);
 }
 
 const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 {
-    return &static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pParent->getDestTypeInfo();
+    return &static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->getDestTypeInfo();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
 {
-    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pParent->m_xDestConnection->getMetaData();
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->m_xDestConnection->getMetaData();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OWizTypeSelectControl::getConnection()
 {
-    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pParent->m_xDestConnection;
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->m_xDestConnection;
 }
 
 bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
 {
-    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_bAutoIncrementEnabled;
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_bAutoIncrementEnabled;
 }
 
 OUString OWizTypeSelectControl::getAutoIncrementValue() const
 {
-    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_sAutoIncrementValue;
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_sAutoIncrementValue;
 }
 
 #define IMG_PRIMARY_KEY 1
 OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
                :OWizardPage( pParent, "TypeSelect", "dbaccess/ui/typeselectpage.ui")
-               ,m_pTypeControl(new OWizTypeSelectControl(get<VclVBox>("control_container"), this) )
+               ,m_pTypeControl(VclPtr<OWizTypeSelectControl>::Create(get<VclVBox>("control_container"), this) )
                ,m_pParserStream( _pStream )
                ,m_nDisplayRow(0)
                ,m_bAutoIncrementEnabled(false)
@@ -255,7 +260,19 @@ OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
 
 OWizTypeSelect::~OWizTypeSelect()
 {
-    delete m_pTypeControl;
+    disposeOnce();
+}
+
+void OWizTypeSelect::dispose()
+{
+    m_pTypeControl.disposeAndClear();
+    m_pColumnNames.clear();
+    m_pColumns.clear();
+    m_pAutoType.clear();
+    m_pAutoFt.clear();
+    m_pAutoEt.clear();
+    m_pAutoPb.clear();
+    OWizardPage::dispose();
 }
 
 OUString OWizTypeSelect::GetTitle() const
@@ -344,6 +361,17 @@ IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
     return 0;
 }
 
+OWizTypeSelectList::~OWizTypeSelectList()
+{
+    disposeOnce();
+}
+
+void OWizTypeSelectList::dispose()
+{
+    m_pParentTabPage.clear();
+    MultiListBox::dispose();
+}
+
 bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
     sal_uInt16 nCount = GetSelectEntryCount();
@@ -364,7 +392,7 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt
     RemoveEntry(_nPos);
     _pFieldDescr->SetPrimaryKey(_bSet);
     if( _bSet )
-        InsertEntry(sColumnName, static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_imgPKey,_nPos);
+        InsertEntry(sColumnName, static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_imgPKey,_nPos);
     else if( _pFieldDescr->getTypeInfo()->bNullable )
     {
         _pFieldDescr->SetControlDefault(Any());

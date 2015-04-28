@@ -63,24 +63,24 @@ public:
 
 class SwCaptionDialog : public SvxStandardDialog
 {
-    Edit*        m_pTextEdit;
-    ComboBox*    m_pCategoryBox;
+    VclPtr<Edit>        m_pTextEdit;
+    VclPtr<ComboBox>    m_pCategoryBox;
     OUString     m_sNone;
     TextFilterAutoConvert m_aTextFilter;
-    FixedText*   m_pFormatText;
-    ListBox*     m_pFormatBox;
+    VclPtr<FixedText>   m_pFormatText;
+    VclPtr<ListBox>     m_pFormatBox;
     //#i61007# order of captions
-    FixedText*   m_pNumberingSeparatorFT;
-    Edit*        m_pNumberingSeparatorED;
-    FixedText*   m_pSepText;
-    Edit*        m_pSepEdit;
-    FixedText*   m_pPosText;
-    ListBox*     m_pPosBox;
-    OKButton*    m_pOKButton;
-    PushButton*  m_pAutoCaptionButton;
-    PushButton*  m_pOptionButton;
+    VclPtr<FixedText>   m_pNumberingSeparatorFT;
+    VclPtr<Edit>        m_pNumberingSeparatorED;
+    VclPtr<FixedText>   m_pSepText;
+    VclPtr<Edit>        m_pSepEdit;
+    VclPtr<FixedText>   m_pPosText;
+    VclPtr<ListBox>     m_pPosBox;
+    VclPtr<OKButton>    m_pOKButton;
+    VclPtr<PushButton>  m_pAutoCaptionButton;
+    VclPtr<PushButton>  m_pOptionButton;
 
-    SwCaptionPreview* m_pPreview;
+    VclPtr<SwCaptionPreview> m_pPreview;
 
     SwView       &rView; // search per active, avoid View
     SwFldMgr     *pMgr;      // pointer to save the include
@@ -109,6 +109,7 @@ class SwCaptionDialog : public SvxStandardDialog
 public:
      SwCaptionDialog( vcl::Window *pParent, SwView &rV );
     virtual ~SwCaptionDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

@@ -27,18 +27,20 @@ class SwMailMergeWizard;
 
 class SwMailMergeOutputTypePage : public svt::OWizardPage
 {
-    RadioButton*    m_pLetterRB;
-    RadioButton*    m_pMailRB;
+    VclPtr<RadioButton>    m_pLetterRB;
+    VclPtr<RadioButton>    m_pMailRB;
 
-    FixedText*      m_pLetterHint;
-    FixedText*      m_pMailHint;
+    VclPtr<FixedText>      m_pLetterHint;
+    VclPtr<FixedText>      m_pMailHint;
 
-    SwMailMergeWizard*  m_pWizard;
+    VclPtr<SwMailMergeWizard>  m_pWizard;
 
     DECL_LINK(TypeHdl_Impl, void *);
 
 public:
     SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent);
+    virtual ~SwMailMergeOutputTypePage();
+    virtual void dispose() SAL_OVERRIDE;
 };
 #endif
 

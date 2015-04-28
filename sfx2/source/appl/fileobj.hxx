@@ -35,7 +35,7 @@ class SvFileObject : public sfx2::SvLinkSource
     SfxMediumRef        xMed;
     ImplSVEvent*        nPostUserEventId;
     SfxMediumRef*       pDelMed;
-    vcl::Window*        pOldParent;
+    VclPtr<vcl::Window> pOldParent;
 
     sal_uInt8 nType;
 

@@ -35,7 +35,7 @@ class FmFieldWin;
 class FmFieldWinListBox
                     :public SvTreeListBox
 {
-    FmFieldWin* pTabWin;
+    VclPtr<FmFieldWin> pTabWin;
 
 protected:
 //  virtual void Command( const CommandEvent& rEvt );
@@ -43,6 +43,7 @@ protected:
 public:
     FmFieldWinListBox( FmFieldWin* pParent );
     virtual ~FmFieldWinListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
@@ -72,7 +73,7 @@ class FmFieldWin :public SfxFloatingWindow
                     ,public ::comphelper::OPropertyChangeListener
 {
     ::osl::Mutex        m_aMutex;
-    FmFieldWinListBox* pListBox;
+    VclPtr<FmFieldWinListBox> pListBox;
     FmFieldWinData*    pData;
     ::dbtools::SharedConnection
                        m_aConnection;
@@ -87,6 +88,7 @@ public:
                SfxChildWindow *pMgr, vcl::Window* pParent);
 
     virtual ~FmFieldWin();
+    virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual bool Close() SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;

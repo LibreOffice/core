@@ -209,7 +209,7 @@ namespace cairocanvas
 
     uno::Any DeviceHelper::getDeviceHandle() const
     {
-        return uno::makeAny( reinterpret_cast< sal_Int64 >(mpRefDevice) );
+        return uno::makeAny( reinterpret_cast< sal_Int64 >(mpRefDevice.get()) );
     }
 
     uno::Any DeviceHelper::getSurfaceHandle() const

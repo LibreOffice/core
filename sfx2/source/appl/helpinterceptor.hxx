@@ -28,6 +28,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 #include <vector>
 
 struct HelpHistoryEntry_Impl
@@ -63,7 +64,7 @@ friend class SfxHelpWindow_Impl;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > m_xListener;
 
     HelpHistoryList_Impl*       m_pHistory;
-    SfxHelpWindow_Impl*         m_pWindow;
+    VclPtr<SfxHelpWindow_Impl>  m_pWindow;
     sal_uIntPtr                 m_nCurPos;
     OUString                    m_aCurrentURL;
     com::sun::star::uno::Any    m_aViewData;

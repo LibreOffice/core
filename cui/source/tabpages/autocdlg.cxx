@@ -137,6 +137,18 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
         SetCurPageId("smarttags");
 }
 
+OfaAutoCorrDlg::~OfaAutoCorrDlg()
+{
+    disposeOnce();
+}
+
+void OfaAutoCorrDlg::dispose()
+{
+    m_pLanguageBox.clear();
+    m_pLanguageLB.clear();
+    SfxTabDialog::dispose();
+}
+
 void OfaAutoCorrDlg::EnableLanguage(bool bEnable)
 {
     m_pLanguageBox->Enable(bEnable);
@@ -192,10 +204,21 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxIt
     get(m_pCheckLB, "checklist");
 }
 
-SfxTabPage* OfaAutocorrOptionsPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rSet)
+OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
 {
-    return new OfaAutocorrOptionsPage(pParent, *rSet);
+    disposeOnce();
+}
+
+void OfaAutocorrOptionsPage::dispose()
+{
+    m_pCheckLB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaAutocorrOptionsPage::Create( vcl::Window* pParent,
+                                                   const SfxItemSet* rSet)
+{
+    return VclPtr<OfaAutocorrOptionsPage>::Create(pParent, *rSet);
 }
 
 bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
@@ -282,13 +305,16 @@ struct ImpUserData
 
 class OfaAutoFmtPrcntSet : public ModalDialog
 {
-    MetricField* m_pPrcntMF;
+    VclPtr<MetricField> m_pPrcntMF;
 public:
     OfaAutoFmtPrcntSet(vcl::Window* pParent)
         : ModalDialog(pParent, "PercentDialog","cui/ui/percentdialog.ui")
     {
         get(m_pPrcntMF, "margin");
     }
+    virtual ~OfaAutoFmtPrcntSet() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { m_pPrcntMF.clear(); ModalDialog::dispose(); }
+
     MetricField& GetPrcntFld()
     {
         return *m_pPrcntMF;
@@ -417,7 +443,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pCheckLBContainer->set_width_request(aControlSize.Width());
     pCheckLBContainer->set_height_request(aControlSize.Height());
-    m_pCheckLB = new OfaACorrCheckListBox(*pCheckLBContainer);
+    m_pCheckLB = VclPtr<OfaACorrCheckListBox>::Create(*pCheckLBContainer);
 
     m_pCheckLB->SetStyle(m_pCheckLB->GetStyle()|WB_HSCROLL| WB_VSCROLL);
 
@@ -469,17 +495,28 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
 
 OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
-    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( REPLACE_BULLETS ));
-    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( APPLY_NUMBERING ));
-    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
-    delete pCheckButtonData;
-    delete m_pCheckLB;
+    disposeOnce();
 }
 
-SfxTabPage* OfaSwAutoFmtOptionsPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void OfaSwAutoFmtOptionsPage::dispose()
 {
-    return new OfaSwAutoFmtOptionsPage(pParent, *rAttrSet);
+    if (m_pCheckLB)
+    {
+        delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( REPLACE_BULLETS ));
+        delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( APPLY_NUMBERING ));
+        delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
+        delete pCheckButtonData;
+        pCheckButtonData = NULL;
+    }
+    m_pCheckLB.disposeAndClear();
+    m_pEditPB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaSwAutoFmtOptionsPage::Create( vcl::Window* pParent,
+                                                    const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SfxTabPage>( new OfaSwAutoFmtOptionsPage(pParent, *rAttrSet), SAL_NO_ACQUIRE );
 }
 
 bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
@@ -694,7 +731,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
     if( nSelEntryPos == REPLACE_BULLETS ||
         nSelEntryPos == APPLY_NUMBERING)
     {
-        boost::scoped_ptr<SvxCharacterMap> pMapDlg(new SvxCharacterMap(this));
+        ScopedVclPtrInstance< SvxCharacterMap > pMapDlg(this);
         ImpUserData* pUserData = static_cast<ImpUserData*>(m_pCheckLB->FirstSelected()->GetUserData());
         pMapDlg->SetCharFont(*pUserData->pFont);
         pMapDlg->SetChar( (*pUserData->pString)[0] );
@@ -711,11 +748,11 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
     else if( MERGE_SINGLE_LINE_PARA == nSelEntryPos )
     {
         // dialog for per cent settings
-        OfaAutoFmtPrcntSet aDlg(this);
-        aDlg.GetPrcntFld().SetValue(nPercent);
-        if(RET_OK == aDlg.Execute())
+        ScopedVclPtrInstance< OfaAutoFmtPrcntSet > aDlg(this);
+        aDlg->GetPrcntFld().SetValue(nPercent);
+        if(RET_OK == aDlg->Execute())
         {
-            nPercent = (sal_uInt16)aDlg.GetPrcntFld().GetValue();
+            nPercent = (sal_uInt16)aDlg->GetPrcntFld().GetValue();
             sMargin = " " +
                 unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
         }
@@ -897,16 +934,31 @@ void OfaAutocorrReplacePage::Resize()
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
 {
+    disposeOnce();
+}
+
+void OfaAutocorrReplacePage::dispose()
+{
     aDoubleStringTable.clear();
     aChangesTable.clear();
 
     delete pCompareClass;
+    pCompareClass = NULL;
     delete pCharClass;
+    pCharClass = NULL;
+
+    m_pTextOnlyCB.clear();
+    m_pShortED.clear();
+    m_pReplaceED.clear();
+    m_pReplaceTLB.clear();
+    m_pNewReplacePB.clear();
+    m_pDeleteReplacePB.clear();
+    SfxTabPage::dispose();
 }
 
-SfxTabPage* OfaAutocorrReplacePage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> OfaAutocorrReplacePage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new OfaAutocorrReplacePage(pParent, *rSet);
+    return VclPtr<OfaAutocorrReplacePage>::Create(pParent, *rSet);
 }
 
 void OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
@@ -1400,14 +1452,30 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(vcl::Window* pParent, const SfxItem
 
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 {
-    aStringsTable.clear();
-    delete pCompareClass;
+    disposeOnce();
 }
 
-SfxTabPage* OfaAutocorrExceptPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rSet)
+void OfaAutocorrExceptPage::dispose()
 {
-    return new OfaAutocorrExceptPage(pParent, *rSet);
+    aStringsTable.clear();
+    delete pCompareClass;
+    m_pAbbrevED.clear();
+    m_pAbbrevLB.clear();
+    m_pNewAbbrevPB.clear();
+    m_pDelAbbrevPB.clear();
+    m_pAutoAbbrevCB.clear();
+    m_pDoubleCapsED.clear();
+    m_pDoubleCapsLB.clear();
+    m_pNewDoublePB.clear();
+    m_pDelDoublePB.clear();
+    m_pAutoCapsCB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaAutocorrExceptPage::Create( vcl::Window* pParent,
+                                                  const SfxItemSet* rSet)
+{
+    return VclPtr<OfaAutocorrExceptPage>::Create(pParent, *rSet);
 }
 
 void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
@@ -1618,7 +1686,7 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet* )
 
 IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, void*, pBtn)
 {
-    if((pBtn == m_pNewAbbrevPB || pBtn == m_pAbbrevED )
+    if((pBtn == m_pNewAbbrevPB || pBtn == m_pAbbrevED.get() )
         && !m_pAbbrevED->GetText().isEmpty())
     {
         m_pAbbrevLB->InsertEntry(m_pAbbrevED->GetText());
@@ -1629,7 +1697,7 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, void*, pBtn)
         m_pAbbrevLB->RemoveEntry(m_pAbbrevED->GetText());
         ModifyHdl(m_pAbbrevED);
     }
-    else if((pBtn == m_pNewDoublePB || pBtn == m_pDoubleCapsED )
+    else if((pBtn == m_pNewDoublePB || pBtn == m_pDoubleCapsED.get() )
             && !m_pDoubleCapsED->GetText().isEmpty())
     {
         m_pDoubleCapsLB->InsertEntry(m_pDoubleCapsED->GetText());
@@ -1756,7 +1824,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pListContainer->set_width_request(aControlSize.Width());
     pListContainer->set_height_request(aControlSize.Height());
-    m_pSwCheckLB = new OfaACorrCheckListBox(*pListContainer),
+    m_pSwCheckLB = VclPtr<OfaACorrCheckListBox>::Create(*pListContainer),
 
     get(m_pSingleTypoCB, "singlereplace");
     get(m_pSglStartQuotePB, "startsingle");
@@ -1817,14 +1885,35 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 OfaQuoteTabPage::~OfaQuoteTabPage()
 {
-    delete pCheckButtonData;
-    delete m_pSwCheckLB;
+    disposeOnce();
 }
 
-SfxTabPage* OfaQuoteTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void OfaQuoteTabPage::dispose()
 {
-    return new OfaQuoteTabPage(pParent, *rAttrSet);
+    delete pCheckButtonData;
+    pCheckButtonData = NULL;
+    m_pSwCheckLB.disposeAndClear();
+    m_pCheckLB.disposeAndClear();
+    m_pSingleTypoCB.clear();
+    m_pSglStartQuotePB.clear();
+    m_pSglStartExFT.clear();
+    m_pSglEndQuotePB.clear();
+    m_pSglEndExFT.clear();
+    m_pSglStandardPB.clear();
+    m_pDoubleTypoCB.clear();
+    m_pDblStartQuotePB.clear();
+    m_pDblStartExFT.clear();
+    m_pDblEndQuotePB.clear();
+    m_pDblEndExFT.clear();
+    m_pDblStandardPB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaQuoteTabPage::Create( vcl::Window* pParent,
+                                            const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SfxTabPage>( new OfaQuoteTabPage(pParent, *rAttrSet),
+                               SAL_NO_ACQUIRE );
 }
 
 bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
@@ -1973,7 +2062,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     else if (pBtn == m_pDblEndQuotePB)
         nMode = DBL_END;
     // start character selection dialog
-    boost::scoped_ptr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
+    ScopedVclPtrInstance< SvxCharacterMap > pMap( this, true );
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? m_sStartQuoteDlg  : m_sEndQuoteDlg );
@@ -2143,12 +2232,28 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
 
 OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* OfaAutoCompleteTabPage::Create( vcl::Window* pParent,
-                                            const SfxItemSet* rSet)
+void OfaAutoCompleteTabPage::dispose()
 {
-    return new OfaAutoCompleteTabPage( pParent, *rSet );
+    m_pCBActiv.clear();
+    m_pCBAppendSpace.clear();
+    m_pCBAsTip.clear();
+    m_pCBCollect.clear();
+    m_pCBRemoveList.clear();
+    m_pDCBExpandKey.clear();
+    m_pNFMinWordlen.clear();
+    m_pNFMaxEntries.clear();
+    m_pLBEntries.clear();
+    m_pPBEntries.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaAutoCompleteTabPage::Create( vcl::Window* pParent,
+                                                   const SfxItemSet* rSet)
+{
+    return VclPtr<SfxTabPage>( new OfaAutoCompleteTabPage( pParent, *rSet ), SAL_NO_ACQUIRE );
 }
 
 bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
@@ -2318,6 +2423,17 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
     }
 }
 
+OfaAutoCompleteTabPage::AutoCompleteMultiListBox::~AutoCompleteMultiListBox()
+{
+    disposeOnce();
+}
+
+void OfaAutoCompleteTabPage::AutoCompleteMultiListBox::dispose()
+{
+    m_pPage.clear();
+    MultiListBox::dispose();
+}
+
 bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
             NotifyEvent& rNEvt )
 {
@@ -2381,12 +2497,20 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( vcl::Window* pParent,
 
 OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
 {
-
+    disposeOnce();
 }
 
-SfxTabPage* OfaSmartTagOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+void OfaSmartTagOptionsTabPage::dispose()
 {
-    return new OfaSmartTagOptionsTabPage( pParent, *rSet );
+    m_pMainCB.clear();
+    m_pSmartTagTypesLB.clear();
+    m_pPropertiesPB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaSmartTagOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+{
+    return VclPtr<OfaSmartTagOptionsTabPage>::Create( pParent, *rSet );
 }
 
 /** This struct is used to associate list box entries with smart tag data

@@ -22,6 +22,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/vclptr.hxx>
 #include "scdllapi.h"
 #include "csvcontrol.hxx"
 #include "csvruler.hxx"
@@ -44,11 +45,11 @@ class SC_DLLPUBLIC ScCsvTableBox : public ScCsvControl
 private:
     ScCsvLayoutData             maData;             /// Current layout data of the controls.
 
-    ScCsvRuler                  maRuler;            /// The ruler for fixed width mode.
-    ScCsvGrid                   maGrid;             /// Calc-like data table for fixed width mode.
-    ScrollBar                   maHScroll;          /// Horizontal scroll bar.
-    ScrollBar                   maVScroll;          /// Vertical scroll bar.
-    ScrollBarBox                maScrollBox;        /// For the bottom right edge.
+    VclPtr<ScCsvRuler>          maRuler;            /// The ruler for fixed width mode.
+    VclPtr<ScCsvGrid>           maGrid;             /// Calc-like data table for fixed width mode.
+    VclPtr<ScrollBar>           maHScroll;          /// Horizontal scroll bar.
+    VclPtr<ScrollBar>           maVScroll;          /// Vertical scroll bar.
+    VclPtr<ScrollBarBox>        maScrollBox;        /// For the bottom right edge.
 
     Link                        maUpdateTextHdl;    /// Updates all cell texts.
     Link                        maColTypeHdl;       /// Handler for exporting the column type.
@@ -62,6 +63,8 @@ private:
 
 public:
     explicit                    ScCsvTableBox( vcl::Window* pParent, WinBits nBits );
+    virtual                     ~ScCsvTableBox();
+    virtual void                dispose() SAL_OVERRIDE;
 
     /** Finishes initialization. Must be called after constructing a new object. */
     void Init();
@@ -102,7 +105,7 @@ public:
     /** Reads UI strings for data types from the list box. */
     void                        InitTypes( const ListBox& rListBox );
     /** Returns the data type of the selected columns. */
-    inline sal_Int32            GetSelColumnType() const { return maGrid.GetSelColumnType(); }
+    inline sal_Int32            GetSelColumnType() const { return maGrid->GetSelColumnType(); }
 
     /** Fills the options object with current column data. */
     void                        FillColumnData( ScAsciiOptions& rOptions ) const;

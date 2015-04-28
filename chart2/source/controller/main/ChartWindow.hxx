@@ -37,6 +37,7 @@ class ChartWindow : public vcl::Window
 public:
     ChartWindow( ChartController* pController, vcl::Window* pParent, WinBits nStyle );
     virtual ~ChartWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     void clear();
 
@@ -67,7 +68,7 @@ public:
 private:
     ChartController* m_pWindowController;
     bool m_bInPaint;
-    OpenGLWindow* m_pOpenGLWindow;
+    VclPtr<OpenGLWindow> m_pOpenGLWindow;
 
     void adjustHighContrastMode();
 };

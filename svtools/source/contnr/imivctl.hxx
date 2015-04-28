@@ -24,6 +24,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
 #include "svtaccessiblefactory.hxx"
@@ -160,9 +161,9 @@ class SvxIconChoiceCtrl_Impl
 
     bool                    bChooseWithCursor;
     EntryList_Impl          aEntries;
-    ScrollBar               aVerSBar;
-    ScrollBar               aHorSBar;
-    ScrollBarBox            aScrBarBox;
+    VclPtr<ScrollBar>       aVerSBar;
+    VclPtr<ScrollBar>       aHorSBar;
+    VclPtr<ScrollBarBox>    aScrBarBox;
     Rectangle               aCurSelectionRect;
     std::vector<Rectangle*> aSelectedRectList;
     Idle                    aEditIdle;                 // for editing in place
@@ -178,14 +179,14 @@ class SvxIconChoiceCtrl_Impl
     Point                   aDDLastRectPos;
     Point                   aDDPaintOffs;
     Point                   aDDStartPos;
-    SvtIconChoiceCtrl*      pView;
+    VclPtr<SvtIconChoiceCtrl>  pView;
     IcnCursor_Impl*         pImpCursor;
     IcnGridMap_Impl*        pGridMap;
     long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
     long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     SvxIconChoiceCtrlEntryList_impl*    pZOrderList;
     SvxIconChoiceCtrlColumnInfoMap* pColumns;
-    IcnViewEdit_Impl*       pEdit;
+    VclPtr<IcnViewEdit_Impl>   pEdit;
     WinBits                 nWinBits;
     long                    nMaxBoundHeight;            // height of highest BoundRects
     sal_uInt16              nFlags;
@@ -199,10 +200,10 @@ class SvxIconChoiceCtrl_Impl
     SvxIconChoiceCtrlEntry* pPrevDropTarget;
     SvxIconChoiceCtrlEntry* pHdlEntry;
     SvxIconChoiceCtrlEntry* pDDRefEntry;
-    VirtualDevice*          pDDDev;
-    VirtualDevice*          pDDBufDev;
-    VirtualDevice*          pDDTempDev;
-    VirtualDevice*          pEntryPaintDev;
+    VclPtr<VirtualDevice>   pDDDev;
+    VclPtr<VirtualDevice>   pDDBufDev;
+    VclPtr<VirtualDevice>   pDDTempDev;
+    VclPtr<VirtualDevice>   pEntryPaintDev;
     SvxIconChoiceCtrlEntry* pAnchor;                    // for selection
     LocalFocus              aFocus;                             // Data for focusrect
     ::svt::AccessibleFactoryAccess aAccFactory;

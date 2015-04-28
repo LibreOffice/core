@@ -32,8 +32,8 @@ class SwLayVout
     friend void _FrmFinit();    //deletes Vout
 private:
     SwViewShell*      pSh;
-    OutputDevice*   pOut;
-    VirtualDevice*  pVirDev;
+    VclPtr<OutputDevice>  pOut;
+    VclPtr<VirtualDevice> pVirDev;
     SwRect          aRect;
     SwRect          aOrgRect;
     Size            aSize;
@@ -43,7 +43,7 @@ private:
 
 public:
     SwLayVout() : pSh(0), pOut(0), pVirDev(0), aSize(0, VIRTUALHEIGHT), nCount(0) {}
-    ~SwLayVout() { delete pVirDev; }
+    ~SwLayVout() { pVirDev.disposeAndClear(); }
 
     /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
     void Enter( SwViewShell *pShell, SwRect &rRect, bool bOn );

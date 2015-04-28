@@ -44,6 +44,21 @@ ScColOrRowDlg::ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
     m_pBtnOk->SetClickHdl( LINK( this, ScColOrRowDlg, OkHdl ) );
 }
 
+ScColOrRowDlg::~ScColOrRowDlg()
+{
+    disposeOnce();
+}
+
+void ScColOrRowDlg::dispose()
+{
+    m_pFrame.clear();
+    m_pBtnRows.clear();
+    m_pBtnCols.clear();
+    m_pBtnOk.clear();
+    ModalDialog::dispose();
+}
+
+
 IMPL_LINK_NOARG_INLINE_START(ScColOrRowDlg, OkHdl)
 {
     EndDialog( m_pBtnCols->IsChecked() ? SCRET_COLS : SCRET_ROWS );

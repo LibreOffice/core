@@ -85,9 +85,9 @@ private:
     OUString                m_sRM_FinalText;
     INetURLObject           m_aDocURL;
     OUString                m_sWorkPath;
-    OGeneralPageWizard*     m_pGeneralPage;
-    OMySQLIntroPageSetup*   m_pMySQLIntroPage;
-    OFinalDBPageSetup*      m_pFinalPage;
+    VclPtr<OGeneralPageWizard>     m_pGeneralPage;
+    VclPtr<OMySQLIntroPageSetup>   m_pMySQLIntroPage;
+    VclPtr<OFinalDBPageSetup>      m_pFinalPage;
 
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
@@ -102,6 +102,7 @@ public:
         ,const ::com::sun::star::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialogSetup();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
     virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
@@ -127,7 +128,7 @@ public:
 
 protected:
     /// to override to create new pages
-    virtual TabPage*    createPage(WizardState _nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage> createPage(WizardState _nState) SAL_OVERRIDE;
     virtual bool        leaveState(WizardState _nState) SAL_OVERRIDE;
     virtual void        enterState(WizardState _nState) SAL_OVERRIDE;
     virtual ::svt::IWizardPageController* getPageController( TabPage* _pCurrentPage ) const SAL_OVERRIDE;

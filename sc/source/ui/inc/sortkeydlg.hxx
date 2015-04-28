@@ -25,11 +25,11 @@
 
 struct ScSortKeyItem : public VclBuilderContainer
 {
-    VclFrame*       m_pFrame;
-    FixedText*      m_pFlSort;
-    ListBox*        m_pLbSort;
-    RadioButton*    m_pBtnUp;
-    RadioButton*    m_pBtnDown;
+    VclPtr<VclFrame>       m_pFrame;
+    VclPtr<FixedText>      m_pFlSort;
+    VclPtr<ListBox>        m_pLbSort;
+    VclPtr<RadioButton>    m_pBtnUp;
+    VclPtr<RadioButton>    m_pBtnDown;
 
     ScSortKeyItem(vcl::Window* pParent);
 
@@ -44,7 +44,7 @@ typedef boost::ptr_vector<ScSortKeyItem> ScSortKeyItems;
 class ScSortKeyWindow
 {
 private:
-    VclBox*         m_pBox;
+    VclPtr<VclBox>         m_pBox;
     sal_Int32       nItemHeight;
 
     ScSortKeyItems& mrSortKeyItems;

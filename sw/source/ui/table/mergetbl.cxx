@@ -28,6 +28,18 @@ SwMergeTblDlg::SwMergeTblDlg( vcl::Window *pParent, bool& rWithPrev )
     m_pMergePrevRB->Check();
 }
 
+SwMergeTblDlg::~SwMergeTblDlg()
+{
+    disposeOnce();
+}
+
+void SwMergeTblDlg::dispose()
+{
+    m_pMergePrevRB.clear();
+    SvxStandardDialog::dispose();
+}
+
+
 void SwMergeTblDlg::Apply()
 {
     m_rMergePrev = m_pMergePrevRB->IsChecked();

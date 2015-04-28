@@ -1815,7 +1815,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         delete pAt;
     }
 
-    delete pVirDev;
+    pVirDev.disposeAndClear();
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();

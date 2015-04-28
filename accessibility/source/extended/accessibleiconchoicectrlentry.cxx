@@ -91,7 +91,7 @@ throw(RuntimeException, std::exception)
         if ( _rSource.Source == m_xParent )
         {
             dispose();
-            OSL_ENSURE( !m_xParent.is() && ( NULL == m_pIconCtrl ), "" );
+            OSL_ENSURE( !m_xParent.is() && ( nullptr == m_pIconCtrl ), "" );
         }
     }
 

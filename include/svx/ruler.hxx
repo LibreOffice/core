@@ -57,7 +57,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     std::unique_ptr<SvxColumnItem>      mxColumnItem;     // columns
     std::unique_ptr<SvxObjectItem>      mxObjectItem;     // object
 
-    vcl::Window*         pEditWin;
+    VclPtr<vcl::Window>         pEditWin;
 
     std::unique_ptr<SvxRuler_Impl> mxRulerImpl;
 
@@ -254,6 +254,7 @@ public:
     SvxRuler(vcl::Window* pParent, vcl::Window *pEditWin, sal_uInt16 nRulerFlags,
              SfxBindings &rBindings, WinBits nWinStyle = WB_STDRULER);
     virtual ~SvxRuler();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetMinFrameSize(long lSize);
     long GetMinFrameSize() const ;

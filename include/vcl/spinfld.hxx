@@ -26,13 +26,10 @@
 #include <vcl/timer.hxx>
 
 
-// - SpinField -
-
-
 class VCL_DLLPUBLIC SpinField : public Edit
 {
 protected:
-    Edit*           mpEdit;
+    VclPtr<Edit>    mpEdit;
     AutoTimer       maRepeatTimer;
     Rectangle       maUpperRect;
     Rectangle       maLowerRect;
@@ -73,6 +70,7 @@ public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        SpinField( vcl::Window* pParent, const ResId& );
     virtual         ~SpinField();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual bool    ShowDropDown( bool bShow );
 

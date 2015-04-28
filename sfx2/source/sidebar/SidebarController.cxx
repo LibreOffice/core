@@ -95,7 +95,7 @@ SidebarController::SidebarController (
     : SidebarControllerInterfaceBase(m_aMutex),
       mpCurrentDeck(),
       mpParentWindow(pParentWindow),
-      mpTabBar(new TabBar(
+      mpTabBar(VclPtr<TabBar>::Create(
               mpParentWindow,
               rxFrame,
               ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, _1),
@@ -117,8 +117,7 @@ SidebarController::SidebarController (
       mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(NULL),
-      mnWidthOnSplitterButtonDown(0),
-      mpCloseIndicator()
+      mnWidthOnSplitterButtonDown(0)
 {
     // Listen for context change events.
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
@@ -173,6 +172,8 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
 
 void SAL_CALL SidebarController::disposing()
 {
+    mpCloseIndicator.disposeAndClear();
+
     SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame));
     if (iEntry != maSidebarControllerContainer.end())
         maSidebarControllerContainer.erase(iEntry);
@@ -188,13 +189,13 @@ void SAL_CALL SidebarController::disposing()
 
     if (mxReadOnlyModeDispatch.is())
         mxReadOnlyModeDispatch->removeStatusListener(this, Tools::GetURL(gsReadOnlyCommandName));
-    if (mpSplitWindow != NULL)
+    if (mpSplitWindow != nullptr)
     {
         mpSplitWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
         mpSplitWindow = NULL;
     }
 
-    if (mpParentWindow != NULL)
+    if (mpParentWindow != nullptr)
     {
         mpParentWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
         mpParentWindow = NULL;
@@ -202,12 +203,11 @@ void SAL_CALL SidebarController::disposing()
 
     if (mpCurrentDeck)
     {
-        mpCurrentDeck->Dispose();
-        mpCurrentDeck->PrintWindowTree();
-        mpCurrentDeck.reset();
+        mpCurrentDeck.disposeAndClear();
+//        mpCurrentDeck->PrintWindowTree();
     }
 
-    mpTabBar.reset();
+    mpTabBar.disposeAndClear();
 
     Theme::GetPropertySet()->removePropertyChangeListener(
         OUString(""),
@@ -292,7 +292,7 @@ void SidebarController::NotifyResize()
 {
     if (mpTabBar == 0)
     {
-        OSL_ASSERT(mpTabBar!=0);
+        OSL_ASSERT(mpTabBar!=nullptr);
         return;
     }
 
@@ -527,18 +527,13 @@ void SidebarController::SwitchToDeck (
 
     const bool bForceNewDeck ((mnRequestedForceFlags&SwitchFlag_ForceNewDeck)!=0);
     const bool bForceNewPanels ((mnRequestedForceFlags&SwitchFlag_ForceNewPanels)!=0);
-    mnRequestedForceFlags = SwitchFlag_NoForce;
 
     if ( ! msCurrentDeckId.equals(rDeckDescriptor.msId)
         || bForceNewDeck)
     {
         // When the deck changes then destroy the deck and all panels
         // and create everything new.
-        if (mpCurrentDeck)
-        {
-            mpCurrentDeck->Dispose();
-            mpCurrentDeck.reset();
-        }
+        mpCurrentDeck.disposeAndClear();
 
         msCurrentDeckId = rDeckDescriptor.msId;
     }
@@ -576,7 +571,7 @@ void SidebarController::SwitchToDeck (
     if ( ! mpCurrentDeck)
     {
         mpCurrentDeck.reset(
-            new Deck(
+            VclPtr<Deck>::Create(
                 rDeckDescriptor,
                 mpParentWindow,
                 ::boost::bind(&SidebarController::RequestCloseDeck, this)));
@@ -597,6 +592,7 @@ void SidebarController::SwitchToDeck (
     const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
     SharedPanelContainer aNewPanels;
     const SharedPanelContainer& rCurrentPanels (mpCurrentDeck->GetPanels());
+
     aNewPanels.resize(nNewPanelCount);
     sal_Int32 nWriteIndex (0);
     bool bHasPanelSetChanged (false);
@@ -612,19 +608,19 @@ void SidebarController::SwitchToDeck (
 
         // Find the corresponding panel among the currently active
         // panels.
-        SharedPanelContainer::const_iterator iPanel;
-        if (bForceNewPanels)
+        SharedPanelContainer::const_iterator iPanel = rCurrentPanels.end();
+
+        if (!bForceNewPanels)
         {
-            // All panels have to be created in any case.  There is no
-            // point in searching already existing panels.
             iPanel = rCurrentPanels.end();
-        }
-        else
-        {
-            iPanel = ::std::find_if(
-                rCurrentPanels.begin(),
-                rCurrentPanels.end(),
-                ::boost::bind(&Panel::HasIdPredicate, _1, ::boost::cref(rPanelContexDescriptor.msId)));
+            for (auto a = rCurrentPanels.begin(); a != rCurrentPanels.end(); ++a)
+            {
+                if ((*a)->HasIdPredicate(rPanelContexDescriptor.msId))
+                {
+                    iPanel = a;
+                    break;
+                }
+            }
         }
         if (iPanel != rCurrentPanels.end())
         {
@@ -643,7 +639,7 @@ void SidebarController::SwitchToDeck (
                 rContext);
             bHasPanelSetChanged = true;
         }
-        if (aNewPanels[nWriteIndex] != 0)
+        if (aNewPanels[nWriteIndex] != nullptr)
         {
             // Depending on the context we have to change the command
             // for the "more options" dialog.
@@ -659,6 +655,7 @@ void SidebarController::SwitchToDeck (
         }
 
     }
+    // mpCurrentPanels - may miss stuff (?)
     aNewPanels.resize(nWriteIndex);
 
     // Activate the deck and the new set of panels.
@@ -668,7 +665,7 @@ void SidebarController::SwitchToDeck (
         mpParentWindow->GetSizePixel().Width()-TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor(),
         mpParentWindow->GetSizePixel().Height());
 
-    mpCurrentDeck->SetPanels(aNewPanels);
+    mpCurrentDeck->ResetPanels(aNewPanels);
     mpCurrentDeck->Show();
 
     mpParentWindow->SetText(rDeckDescriptor.msTitle);
@@ -684,7 +681,7 @@ void SidebarController::SwitchToDeck (
     UpdateTitleBarIcons();
 }
 
-SharedPanel SidebarController::CreatePanel (
+VclPtr<Panel> SidebarController::CreatePanel (
     const OUString& rsPanelId,
     vcl::Window* pParentWindow,
     const bool bIsInitiallyExpanded,
@@ -692,15 +689,15 @@ SharedPanel SidebarController::CreatePanel (
 {
     const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
     if (pPanelDescriptor == NULL)
-        return SharedPanel();
+        return NULL;
 
     // Create the panel which is the parent window of the UIElement.
-    SharedPanel pPanel (new Panel(
+    VclPtr<Panel> pPanel = VclPtr<Panel>::Create(
         *pPanelDescriptor,
         pParentWindow,
         bIsInitiallyExpanded,
         ::boost::bind(&Deck::RequestLayout, mpCurrentDeck.get()),
-        ::boost::bind(&SidebarController::GetCurrentContext, this)));
+        ::boost::bind(&SidebarController::GetCurrentContext, this));
 
     // Create the XUIElement.
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
@@ -715,7 +712,7 @@ SharedPanel SidebarController::CreatePanel (
     }
     else
     {
-        pPanel.reset();
+        pPanel.disposeAndClear();
     }
 
     return pPanel;
@@ -737,7 +734,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
         ::comphelper::NamedValueCollection aCreationArguments;
         aCreationArguments.put("Frame", makeAny(mxFrame));
         aCreationArguments.put("ParentWindow", makeAny(rxWindow));
-        SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(mpParentWindow);
+        SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(mpParentWindow.get());
         if (pSfxDockingWindow != NULL)
             aCreationArguments.put("SfxBindings", makeAny(sal_uInt64(&pSfxDockingWindow->GetBindings())));
         aCreationArguments.put("Theme", Theme::GetPropertySet());
@@ -802,7 +799,7 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
         }
     }
-    else if (pEvent->GetWindow()==mpSplitWindow && mpSplitWindow!=NULL)
+    else if (pEvent->GetWindow()==mpSplitWindow && mpSplitWindow!=nullptr)
     {
         switch (pEvent->GetId())
         {
@@ -1060,7 +1057,7 @@ void SidebarController::RestrictWidth (sal_Int32 nWidth)
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
     if (pSplitWindow != NULL)
     {
-        const sal_uInt16 nId (pSplitWindow->GetItemId(mpParentWindow));
+        const sal_uInt16 nId (pSplitWindow->GetItemId(mpParentWindow.get()));
         const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
         pSplitWindow->SetItemSizeRange(
             nSetId,
@@ -1071,17 +1068,17 @@ void SidebarController::RestrictWidth (sal_Int32 nWidth)
 
 SfxSplitWindow* SidebarController::GetSplitWindow()
 {
-    if (mpParentWindow != NULL)
+    if (mpParentWindow != nullptr)
     {
         SfxSplitWindow* pSplitWindow = dynamic_cast<SfxSplitWindow*>(mpParentWindow->GetParent());
         if (pSplitWindow != mpSplitWindow)
         {
-            if (mpSplitWindow != NULL)
+            if (mpSplitWindow != nullptr)
                 mpSplitWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
 
             mpSplitWindow = pSplitWindow;
 
-            if (mpSplitWindow != NULL)
+            if (mpSplitWindow != nullptr)
                 mpSplitWindow->AddEventListener(LINK(this, SidebarController, WindowEventHandler));
         }
         return mpSplitWindow;
@@ -1092,7 +1089,7 @@ SfxSplitWindow* SidebarController::GetSplitWindow()
 
 void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
 {
-    if (mpParentWindow == NULL)
+    if (mpParentWindow == nullptr)
         return;
 
     if (bCloseAfterDrag)
@@ -1100,7 +1097,7 @@ void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
         // Make sure that the indicator exists.
         if ( ! mpCloseIndicator)
         {
-            mpCloseIndicator.reset(new FixedImage(mpParentWindow));
+            mpCloseIndicator.reset(VclPtr<FixedImage>::Create(mpParentWindow));
             FixedImage* pFixedImage = static_cast<FixedImage*>(mpCloseIndicator.get());
             const Image aImage (Theme::GetImage(Theme::Image_CloseIndicator));
             pFixedImage->SetImage(aImage);

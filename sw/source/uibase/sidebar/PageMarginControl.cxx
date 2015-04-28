@@ -50,18 +50,18 @@ PageMarginControl::PageMarginControl(
     const SfxMapUnit eUnit )
     : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_MARGIN) )
     , mpMarginValueSet( new ::svx::sidebar::ValueSetWithTextControl( ::svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_MARGIN) ) )
-    , maCustom(this, SW_RES(FT_CUSTOM))
-    , maLeft(this, SW_RES(FT_LEFT))
-    , maInner(this, SW_RES(FT_INNER))
-    , maLeftMarginEdit(this, SW_RES(MF_SWLEFT_MARGIN))
-    , maRight(this, SW_RES(FT_RIGHT))
-    , maOuter(this, SW_RES(FT_OUTER))
-    , maRightMarginEdit(this, SW_RES(MF_SWRIGHT_MARGIN))
-    , maTop(this, SW_RES(FT_TOP))
-    , maTopMarginEdit(this, SW_RES(MF_SWTOP_MARGIN))
-    , maBottom(this, SW_RES(FT_BOTTOM))
-    , maBottomMarginEdit(this, SW_RES(MF_SWBOTTOM_MARGIN))
-    , maWidthHeightField( this, SW_RES(FLD_WIDTH_HEIGHT) )
+    , maCustom(VclPtr<FixedText>::Create(this, SW_RES(FT_CUSTOM)))
+    , maLeft(VclPtr<FixedText>::Create(this, SW_RES(FT_LEFT)))
+    , maInner(VclPtr<FixedText>::Create(this, SW_RES(FT_INNER)))
+    , maLeftMarginEdit(VclPtr<MetricField>::Create(this, SW_RES(MF_SWLEFT_MARGIN)))
+    , maRight(VclPtr<FixedText>::Create(this, SW_RES(FT_RIGHT)))
+    , maOuter(VclPtr<FixedText>::Create(this, SW_RES(FT_OUTER)))
+    , maRightMarginEdit(VclPtr<MetricField>::Create(this, SW_RES(MF_SWRIGHT_MARGIN)))
+    , maTop(VclPtr<FixedText>::Create(this, SW_RES(FT_TOP)))
+    , maTopMarginEdit(VclPtr<MetricField>::Create(this, SW_RES(MF_SWTOP_MARGIN)))
+    , maBottom(VclPtr<FixedText>::Create(this, SW_RES(FT_BOTTOM)))
+    , maBottomMarginEdit(VclPtr<MetricField>::Create(this, SW_RES(MF_SWBOTTOM_MARGIN)))
+    , maWidthHeightField(VclPtr<MetricField>::Create( this, SW_RES(FLD_WIDTH_HEIGHT) ) )
     , mnPageLeftMargin( aPageLRMargin.GetLeft() )
     , mnPageRightMargin( aPageLRMargin.GetRight() )
     , mnPageTopMargin( aPageULMargin.GetUpper() )
@@ -77,8 +77,8 @@ PageMarginControl::PageMarginControl(
     , mbCustomValuesUsed( false )
     , mrPagePropPanel(rPanel)
 {
-    maWidthHeightField.Hide();
-    SetFieldUnit( maWidthHeightField, eFUnit );
+    maWidthHeightField->Hide();
+    SetFieldUnit( *maWidthHeightField.get(), eFUnit );
 
     mbUserCustomValuesAvailable = GetUserCustomValues();
 
@@ -93,39 +93,39 @@ PageMarginControl::PageMarginControl(
 
     SelectValueSetItem();
 
-    SetFieldUnit( maLeftMarginEdit, eFUnit );
+    SetFieldUnit( *maLeftMarginEdit.get(), eFUnit );
     Link aLinkLR = LINK( this, PageMarginControl, ModifyLRMarginHdl );
-    maLeftMarginEdit.SetModifyHdl( aLinkLR );
-    SetMetricValue( maLeftMarginEdit, mnPageLeftMargin, meUnit );
+    maLeftMarginEdit->SetModifyHdl( aLinkLR );
+    SetMetricValue( *maLeftMarginEdit.get(), mnPageLeftMargin, meUnit );
 
-    SetFieldUnit( maRightMarginEdit, eFUnit );
-    maRightMarginEdit.SetModifyHdl( aLinkLR );
-    SetMetricValue( maRightMarginEdit, mnPageRightMargin, meUnit );
+    SetFieldUnit( *maRightMarginEdit.get(), eFUnit );
+    maRightMarginEdit->SetModifyHdl( aLinkLR );
+    SetMetricValue( *maRightMarginEdit.get(), mnPageRightMargin, meUnit );
 
     Link aLinkUL = LINK( this, PageMarginControl, ModifyULMarginHdl );
-    SetFieldUnit( maTopMarginEdit, eFUnit );
-    maTopMarginEdit.SetModifyHdl( aLinkUL );
-    SetMetricValue( maTopMarginEdit, mnPageTopMargin, meUnit );
+    SetFieldUnit( *maTopMarginEdit.get(), eFUnit );
+    maTopMarginEdit->SetModifyHdl( aLinkUL );
+    SetMetricValue( *maTopMarginEdit.get(), mnPageTopMargin, meUnit );
 
-    SetFieldUnit( maBottomMarginEdit, eFUnit );
-    maBottomMarginEdit.SetModifyHdl( aLinkUL );
-    SetMetricValue( maBottomMarginEdit, mnPageBottomMargin, meUnit );
+    SetFieldUnit( *maBottomMarginEdit.get(), eFUnit );
+    maBottomMarginEdit->SetModifyHdl( aLinkUL );
+    SetMetricValue( *maBottomMarginEdit.get(), mnPageBottomMargin, meUnit );
 
     SetMetricFieldMaxValues(rPageSize);
 
     if ( mbMirrored )
     {
-        maLeft.Hide();
-        maRight.Hide();
-        maInner.Show();
-        maOuter.Show();
+        maLeft->Hide();
+        maRight->Hide();
+        maInner->Show();
+        maOuter->Show();
     }
     else
     {
-        maLeft.Show();
-        maRight.Show();
-        maInner.Hide();
-        maOuter.Hide();
+        maLeft->Show();
+        maRight->Show();
+        maInner->Hide();
+        maOuter->Hide();
     }
 
     FreeResource();
@@ -133,36 +133,55 @@ PageMarginControl::PageMarginControl(
 
 PageMarginControl::~PageMarginControl()
 {
-    delete mpMarginValueSet;
+    disposeOnce();
+}
+
+void PageMarginControl::dispose()
+{
+    mpMarginValueSet.disposeAndClear();
 
     StoreUserCustomValues();
+
+    maCustom.disposeAndClear();
+    maLeft.disposeAndClear();
+    maInner.disposeAndClear();
+    maLeftMarginEdit.disposeAndClear();
+    maRight.disposeAndClear();
+    maOuter.disposeAndClear();
+    maRightMarginEdit.disposeAndClear();
+    maTop.disposeAndClear();
+    maTopMarginEdit.disposeAndClear();
+    maBottom.disposeAndClear();
+    maBottomMarginEdit.disposeAndClear();
+    maWidthHeightField.disposeAndClear();
+    ::svx::sidebar::PopupControl::dispose();
 }
 
 void PageMarginControl::SetMetricFieldMaxValues(const Size& rPageSize)
 {
-    const long nML = maLeftMarginEdit.Denormalize( maLeftMarginEdit.GetValue(FUNIT_TWIP) );
-    const long nMR = maRightMarginEdit.Denormalize( maRightMarginEdit.GetValue(FUNIT_TWIP) );
-    const long nMT = maTopMarginEdit.Denormalize(maTopMarginEdit.GetValue(FUNIT_TWIP) );
-    const long nMB = maBottomMarginEdit.Denormalize( maBottomMarginEdit.GetValue(FUNIT_TWIP) );
+    const long nML = maLeftMarginEdit->Denormalize( maLeftMarginEdit->GetValue(FUNIT_TWIP) );
+    const long nMR = maRightMarginEdit->Denormalize( maRightMarginEdit->GetValue(FUNIT_TWIP) );
+    const long nMT = maTopMarginEdit->Denormalize(maTopMarginEdit->GetValue(FUNIT_TWIP) );
+    const long nMB = maBottomMarginEdit->Denormalize( maBottomMarginEdit->GetValue(FUNIT_TWIP) );
 
     const long nPH  = LogicToLogic( rPageSize.Height(), (MapUnit)meUnit, MAP_TWIP );
     const long nPW  = LogicToLogic( rPageSize.Width(),  (MapUnit)meUnit, MAP_TWIP );
 
     // Left
     long nMax = nPW - nMR - MINBODY;
-    maLeftMarginEdit.SetMax(maLeftMarginEdit.Normalize(nMax), FUNIT_TWIP);
+    maLeftMarginEdit->SetMax(maLeftMarginEdit->Normalize(nMax), FUNIT_TWIP);
 
     // Right
     nMax = nPW - nML - MINBODY;
-    maRightMarginEdit.SetMax(maRightMarginEdit.Normalize(nMax), FUNIT_TWIP);
+    maRightMarginEdit->SetMax(maRightMarginEdit->Normalize(nMax), FUNIT_TWIP);
 
     //Top
     nMax = nPH - nMB - MINBODY;
-    maTopMarginEdit.SetMax(maTopMarginEdit.Normalize(nMax), FUNIT_TWIP);
+    maTopMarginEdit->SetMax(maTopMarginEdit->Normalize(nMax), FUNIT_TWIP);
 
     //Bottom
     nMax = nPH - nMT -  MINBODY;
-    maBottomMarginEdit.SetMax(maTopMarginEdit.Normalize(nMax), FUNIT_TWIP);
+    maBottomMarginEdit->SetMax(maTopMarginEdit->Normalize(nMax), FUNIT_TWIP);
 }
 
 void PageMarginControl::FillValueSet(
@@ -174,8 +193,8 @@ void PageMarginControl::FillValueSet(
     const OUString aTop = SW_RESSTR(STR_MARGIN_TOOLTIP_TOP);
     const OUString aBottom = SW_RESSTR(STR_MARGIN_TOOLTIP_BOT);
 
-    SetMetricValue( maWidthHeightField, SWPAGE_NARROW_VALUE, meUnit );
-    const OUString aNarrowValText = maWidthHeightField.GetText();
+    SetMetricValue( *maWidthHeightField.get(), SWPAGE_NARROW_VALUE, meUnit );
+    const OUString aNarrowValText = maWidthHeightField->GetText();
     OUString aHelpText = aLeft;
     aHelpText += aNarrowValText;
     aHelpText += aRight;
@@ -188,8 +207,8 @@ void PageMarginControl::FillValueSet(
         Image((bLandscape) ? SW_RES(IMG_NARROW_L) : SW_RES(IMG_NARROW)), 0,
         SW_RESSTR(STR_NARROW), &aHelpText );
 
-    SetMetricValue( maWidthHeightField, SWPAGE_NORMAL_VALUE, meUnit );
-    const OUString aNormalValText = maWidthHeightField.GetText();
+    SetMetricValue( *maWidthHeightField.get(), SWPAGE_NORMAL_VALUE, meUnit );
+    const OUString aNormalValText = maWidthHeightField->GetText();
     aHelpText = aLeft;
     aHelpText += aNormalValText;
     aHelpText += aRight;
@@ -202,10 +221,10 @@ void PageMarginControl::FillValueSet(
         Image((bLandscape) ? SW_RES(IMG_NORMAL_L) : SW_RES(IMG_NORMAL)), 0,
         SW_RESSTR(STR_NORMAL), &aHelpText );
 
-    SetMetricValue( maWidthHeightField, SWPAGE_WIDE_VALUE1, meUnit );
-    const OUString aWide1ValText = maWidthHeightField.GetText();
-    SetMetricValue( maWidthHeightField, SWPAGE_WIDE_VALUE2, meUnit );
-    const OUString aWide2ValText = maWidthHeightField.GetText();
+    SetMetricValue( *maWidthHeightField.get(), SWPAGE_WIDE_VALUE1, meUnit );
+    const OUString aWide1ValText = maWidthHeightField->GetText();
+    SetMetricValue( *maWidthHeightField.get(), SWPAGE_WIDE_VALUE2, meUnit );
+    const OUString aWide2ValText = maWidthHeightField->GetText();
     aHelpText = aLeft;
     aHelpText += aWide2ValText;
     aHelpText += aRight;
@@ -221,8 +240,8 @@ void PageMarginControl::FillValueSet(
     const OUString aInner = SW_RESSTR(STR_MARGIN_TOOLTIP_INNER);
     const OUString aOuter = SW_RESSTR(STR_MARGIN_TOOLTIP_OUTER);
 
-    SetMetricValue( maWidthHeightField, SWPAGE_WIDE_VALUE3, meUnit );
-    const OUString aWide3ValText = maWidthHeightField.GetText();
+    SetMetricValue( *maWidthHeightField.get(), SWPAGE_WIDE_VALUE3, meUnit );
+    const OUString aWide3ValText = maWidthHeightField->GetText();
     aHelpText = aInner;
     aHelpText += aWide3ValText;
     aHelpText += aOuter;
@@ -238,17 +257,17 @@ void PageMarginControl::FillValueSet(
     if ( bUserCustomValuesAvailable )
     {
         aHelpText = mbUserCustomMirrored ? aInner : aLeft;
-        SetMetricValue( maWidthHeightField, mnUserCustomPageLeftMargin, meUnit );
-        aHelpText += maWidthHeightField.GetText();
+        SetMetricValue( *maWidthHeightField.get(), mnUserCustomPageLeftMargin, meUnit );
+        aHelpText += maWidthHeightField->GetText();
         aHelpText += mbUserCustomMirrored ? aOuter : aRight;
-        SetMetricValue( maWidthHeightField, mnUserCustomPageRightMargin, meUnit );
-        aHelpText += maWidthHeightField.GetText();
+        SetMetricValue( *maWidthHeightField.get(), mnUserCustomPageRightMargin, meUnit );
+        aHelpText += maWidthHeightField->GetText();
         aHelpText += aTop;
-        SetMetricValue( maWidthHeightField, mnUserCustomPageTopMargin, meUnit );
-        aHelpText += maWidthHeightField.GetText();
+        SetMetricValue( *maWidthHeightField.get(), mnUserCustomPageTopMargin, meUnit );
+        aHelpText += maWidthHeightField->GetText();
         aHelpText += aBottom;
-        SetMetricValue( maWidthHeightField, mnUserCustomPageBottomMargin, meUnit );
-        aHelpText += maWidthHeightField.GetText();
+        SetMetricValue( *maWidthHeightField.get(), mnUserCustomPageBottomMargin, meUnit );
+        aHelpText += maWidthHeightField->GetText();
     }
     else
     {
@@ -389,8 +408,8 @@ IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, EMPTYARG )
     mpMarginValueSet->Format();
     mpMarginValueSet->StartSelection();
 
-    mnPageLeftMargin = GetCoreValue( maLeftMarginEdit, meUnit );
-    mnPageRightMargin = GetCoreValue( maRightMarginEdit, meUnit );
+    mnPageLeftMargin = GetCoreValue( *maLeftMarginEdit.get(), meUnit );
+    mnPageRightMargin = GetCoreValue( *maRightMarginEdit.get(), meUnit );
     mrPagePropPanel.ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
     mbCustomValuesUsed = true;
     return 0;
@@ -403,8 +422,8 @@ IMPL_LINK( PageMarginControl, ModifyULMarginHdl, MetricField *, EMPTYARG )
     mpMarginValueSet->Format();
     mpMarginValueSet->StartSelection();
 
-    mnPageTopMargin = GetCoreValue( maTopMarginEdit, meUnit );
-    mnPageBottomMargin = GetCoreValue( maBottomMarginEdit, meUnit );
+    mnPageTopMargin = GetCoreValue( *maTopMarginEdit.get(), meUnit );
+    mnPageBottomMargin = GetCoreValue( *maBottomMarginEdit.get(), meUnit );
     mrPagePropPanel.ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
     mbCustomValuesUsed = true;
     return 0;

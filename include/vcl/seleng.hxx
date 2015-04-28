@@ -83,7 +83,7 @@ class VCL_DLLPUBLIC SelectionEngine
 {
 private:
     FunctionSet*        pFunctionSet;
-    vcl::Window*             pWin;
+    VclPtr<vcl::Window> pWin;
     Rectangle           aArea;
     Timer               aWTimer; // generate fake mouse moves
     MouseEvent          aLastMove;

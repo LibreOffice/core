@@ -186,7 +186,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 
     SfxDockingWindow( _pBindings, pCW, _pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE ),
     pColorList      (),
-    aColorSet       ( this ),
+    aColorSet       ( VclPtr<SvxColorValueSet_docking>::Create(this) ),
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
     nCols           ( 20 ),
@@ -197,9 +197,9 @@ SvxColorDockingWindow::SvxColorDockingWindow
     SetSizePixel(LogicToPixel(Size(150, 22), MapMode(MAP_APPFONT)));
     SetHelpId(HID_CTRL_COLOR);
 
-    aColorSet.SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
-    aColorSet.SetHelpId(HID_COLOR_CTL_COLORS);
-    aColorSet.SetPosSizePixel(LogicToPixel(Point(2, 2), MapMode(MAP_APPFONT)),
+    aColorSet->SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
+    aColorSet->SetHelpId(HID_COLOR_CTL_COLORS);
+    aColorSet->SetPosSizePixel(LogicToPixel(Point(2, 2), MapMode(MAP_APPFONT)),
                               LogicToPixel(Size(146, 18), MapMode(MAP_APPFONT)));
 
     // Get the model from the view shell.  Using SfxObjectShell::Current()
@@ -230,21 +230,28 @@ SvxColorDockingWindow::SvxColorDockingWindow
         }
     }
 
-    aItemSize = aColorSet.CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
+    aItemSize = aColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
     aItemSize.Width() = aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength();
     aItemSize.Width() /= 2;
     aItemSize.Height() = aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength();
     aItemSize.Height() /= 2;
 
     SetSize();
-    aColorSet.Show();
+    aColorSet->Show();
     if (_pBindings != NULL)
         StartListening( *_pBindings, true );
 }
 
 SvxColorDockingWindow::~SvxColorDockingWindow()
 {
+    disposeOnce();
+}
+
+void SvxColorDockingWindow::dispose()
+{
     EndListening( GetBindings() );
+    aColorSet.disposeAndClear();
+    SfxDockingWindow::dispose();
 }
 
 void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
@@ -264,25 +271,25 @@ void SvxColorDockingWindow::FillValueSet()
     if( pColorList.is() )
     {
         nCount = pColorList->Count();
-        aColorSet.Clear();
+        aColorSet->Clear();
 
         // create the first entry for 'invisible/none'
         const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
         long nPtX = aColorSize.Width() - 1;
         long nPtY = aColorSize.Height() - 1;
-        VirtualDevice aVD;
+        ScopedVclPtrInstance< VirtualDevice > pVD;
 
-        aVD.SetOutputSizePixel( aColorSize );
-        aVD.SetLineColor( Color( COL_BLACK ) );
-        aVD.SetBackground( Wallpaper( Color( COL_WHITE ) ) );
-        aVD.DrawLine( Point(), Point( nPtX, nPtY ) );
-        aVD.DrawLine( Point( 0, nPtY ), Point( nPtX, 0 ) );
+        pVD->SetOutputSizePixel( aColorSize );
+        pVD->SetLineColor( Color( COL_BLACK ) );
+        pVD->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+        pVD->DrawLine( Point(), Point( nPtX, nPtY ) );
+        pVD->DrawLine( Point( 0, nPtY ), Point( nPtX, 0 ) );
 
-        Bitmap aBmp( aVD.GetBitmap( Point(), aColorSize ) );
+        Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
 
-        aColorSet.InsertItem( (sal_uInt16)1, Image(aBmp), SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
+        aColorSet->InsertItem( (sal_uInt16)1, Image(aBmp), SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
 
-        aColorSet.addEntriesForXColorList(*pColorList, 2);
+        aColorSet->addEntriesForXColorList(*pColorList, 2);
     }
 }
 
@@ -300,31 +307,31 @@ void SvxColorDockingWindow::SetSize()
         nLines++;
 
     // Scrollbar setzen/entfernen
-    WinBits nBits = aColorSet.GetStyle();
+    WinBits nBits = aColorSet->GetStyle();
     if ( static_cast<long>(nLines) * nCols >= nCount )
         nBits &= ~WB_VSCROLL;
     else
         nBits |= WB_VSCROLL;
-    aColorSet.SetStyle( nBits );
+    aColorSet->SetStyle( nBits );
 
     // ScrollBar ?
-    long nScrollWidth = aColorSet.GetScrollWidth();
+    long nScrollWidth = aColorSet->GetScrollWidth();
     if( nScrollWidth > 0 )
     {
         // Spalten mit ScrollBar berechnen
         nCols = (sal_uInt16) ( ( aSize.Width() - nScrollWidth ) / aItemSize.Width() );
     }
-    aColorSet.SetColCount( nCols );
+    aColorSet->SetColCount( nCols );
 
     if( IsFloatingMode() )
-        aColorSet.SetLineCount( nLines );
+        aColorSet->SetLineCount( nLines );
     else
     {
-        aColorSet.SetLineCount( 0 ); // sonst wird LineHeight ignoriert
-        aColorSet.SetItemHeight( aItemSize.Height() );
+        aColorSet->SetLineCount( 0 ); // sonst wird LineHeight ignoriert
+        aColorSet->SetItemHeight( aItemSize.Height() );
     }
 
-    aColorSet.SetPosSizePixel( Point( 2, 2 ), aSize );
+    aColorSet->SetPosSizePixel( Point( 2, 2 ), aSize );
 }
 
 bool SvxColorDockingWindow::Close()
@@ -339,11 +346,11 @@ bool SvxColorDockingWindow::Close()
 IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
-    sal_uInt16 nPos = aColorSet.GetSelectItemId();
-    Color  aColor( aColorSet.GetItemColor( nPos ) );
-    OUString aStr( aColorSet.GetItemText( nPos ) );
+    sal_uInt16 nPos = aColorSet->GetSelectItemId();
+    Color  aColor( aColorSet->GetItemColor( nPos ) );
+    OUString aStr( aColorSet->GetItemText( nPos ) );
 
-    if (aColorSet.IsLeftButton())
+    if (aColorSet->IsLeftButton())
     {
         if ( nLeftSlot == SID_ATTR_FILL_COLOR )
         {
@@ -444,15 +451,15 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
         nLines = 1;
 
     // Scrollbar setzen/entfernen
-    WinBits nBits = aColorSet.GetStyle();
+    WinBits nBits = aColorSet->GetStyle();
     if ( static_cast<long>(nLines) * nCols >= nCount )
         nBits &= ~WB_VSCROLL;
     else
         nBits |= WB_VSCROLL;
-    aColorSet.SetStyle( nBits );
+    aColorSet->SetStyle( nBits );
 
     // ScrollBar ?
-    long nScrollWidth = aColorSet.GetScrollWidth();
+    long nScrollWidth = aColorSet->GetScrollWidth();
     if( nScrollWidth > 0 )
     {
         // Spalten mit ScrollBar berechnen
@@ -489,7 +496,7 @@ void SvxColorDockingWindow::GetFocus()
     SfxDockingWindow::GetFocus();
     // Grab the focus to the color value set so that it can be controlled
     // with the keyboard.
-    aColorSet.GrabFocus();
+    aColorSet->GrabFocus();
 }
 
 bool SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )

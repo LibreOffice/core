@@ -116,11 +116,11 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
     bool            m_bInterfaceLocked;
 
-    PushButton     *m_pOptionsBtn;
-    PushButton     *m_pEnableBtn;
-    PushButton     *m_pRemoveBtn;
+    VclPtr<PushButton>     m_pOptionsBtn;
+    VclPtr<PushButton>     m_pEnableBtn;
+    VclPtr<PushButton>     m_pRemoveBtn;
 
-    ExtMgrDialog   *m_pParent;
+    VclPtr<ExtMgrDialog>   m_pParent;
 
     void            SetButtonPos( const Rectangle& rRect );
     void            SetButtonStatus( const TEntry_Impl& rEntry );
@@ -137,6 +137,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 public:
                     ExtBoxWithBtns_Impl(vcl::Window* pParent);
                    virtual ~ExtBoxWithBtns_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
@@ -165,9 +166,9 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 
     m_pParent = pParentDialog;
 
-    m_pOptionsBtn = new PushButton( this, WB_TABSTOP );
-    m_pEnableBtn = new PushButton( this, WB_TABSTOP );
-    m_pRemoveBtn = new PushButton( this, WB_TABSTOP );
+    m_pOptionsBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
+    m_pEnableBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
+    m_pRemoveBtn = VclPtr<PushButton>::Create( this, WB_TABSTOP );
 
     SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
     m_pOptionsBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_OPTIONS );
@@ -202,9 +203,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtBoxWithBtns(vcl::Wi
 
 ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 {
-    delete m_pOptionsBtn;
-    delete m_pEnableBtn;
-    delete m_pRemoveBtn;
+    disposeOnce();
+}
+
+void ExtBoxWithBtns_Impl::dispose()
+{
+    m_pOptionsBtn.disposeAndClear();
+    m_pEnableBtn.disposeAndClear();
+    m_pRemoveBtn.disposeAndClear();
+    m_pParent.clear();
+    ExtensionBox_Impl::dispose();
 }
 
 
@@ -400,8 +408,8 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
                                 break;
             case CMD_SHOW_LICENSE:
                 {
-                    ShowLicenseDialog aLicenseDlg( m_pParent, GetEntryData( nPos )->m_xPackage );
-                    aLicenseDlg.Execute();
+                    ScopedVclPtrInstance< ShowLicenseDialog > aLicenseDlg( m_pParent, GetEntryData( nPos )->m_xPackage );
+                    aLicenseDlg->Execute();
                     break;
                 }
         }
@@ -587,12 +595,11 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const SolarMutexGuard guard;
-        MessageDialog aInfoBox(pParent, getResId(nResID),
-                               VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
-
+        ScopedVclPtrInstance<MessageDialog> aInfoBox(pParent, getResId(nResID),
+                                                     VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
         bHadWarning = true;
 
-        if ( RET_OK == aInfoBox.Execute() )
+        if ( RET_OK == aInfoBox->Execute() )
             return true;
         else
             return false;
@@ -619,32 +626,32 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        MessageDialog aErrorBox(NULL, msg);
-        aErrorBox.SetText( sTitle );
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
+        aErrorBox->SetText( sTitle );
+        aErrorBox->Execute();
     }
 }
 
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    MessageDialog aInfo(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
-                        VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+    ScopedVclPtrInstance<MessageDialog> aInfo(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
+                                              VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
 
-    OUString sText(aInfo.get_primary_text());
+    OUString sText(aInfo->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
-    aInfo.set_primary_text(sText);
+    aInfo->set_primary_text(sText);
 
-    return ( RET_OK == aInfo.Execute() );
+    return ( RET_OK == aInfo->Execute() );
 }
 
 bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
 {
     const SolarMutexGuard guard;
-    MessageDialog aQuery(m_pVCLWindow, "InstallForAllDialog",
-                         "desktop/ui/installforalldialog.ui");
+    ScopedVclPtrInstance<MessageDialog> aQuery(m_pVCLWindow, "InstallForAllDialog",
+                                               "desktop/ui/installforalldialog.ui");
 
-    short nRet = aQuery.Execute();
+    short nRet = aQuery->Execute();
     if (nRet == RET_CANCEL)
         return false;
 
@@ -716,7 +723,24 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager)
 
 ExtMgrDialog::~ExtMgrDialog()
 {
+    disposeOnce();
+}
+
+void ExtMgrDialog::dispose()
+{
     m_aIdle.Stop();
+    m_pExtensionBox.clear();
+    m_pAddBtn.clear();
+    m_pUpdateBtn.clear();
+    m_pCloseBtn.clear();
+    m_pBundledCbx.clear();
+    m_pSharedCbx.clear();
+    m_pUserCbx.clear();
+    m_pGetExtensions.clear();
+    m_pProgressText.clear();
+    m_pProgressBar.clear();
+    m_pCancelBtn.clear();
+    ModelessDialog::dispose();
 }
 
 
@@ -769,14 +793,14 @@ void ExtMgrDialog::checkEntries()
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    MessageDialog aInfo(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
-                        VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+    ScopedVclPtrInstance<MessageDialog> aInfo(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
+                                              VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
 
-    OUString sText(aInfo.get_primary_text());
+    OUString sText(aInfo->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
-    aInfo.set_primary_text(sText);
+    aInfo->set_primary_text(sText);
 
-    return ( RET_OK == aInfo.Execute() );
+    return ( RET_OK == aInfo->Execute() );
 }
 
 bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
@@ -1197,7 +1221,20 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
 
 UpdateRequiredDialog::~UpdateRequiredDialog()
 {
+    disposeOnce();
+}
+
+void UpdateRequiredDialog::dispose()
+{
     m_aIdle.Stop();
+    m_pExtensionBox.clear();
+    m_pUpdateNeeded.clear();
+    m_pUpdateBtn.clear();
+    m_pCloseBtn.clear();
+    m_pCancelBtn.clear();
+    m_pProgressText.clear();
+    m_pProgressBar.clear();
+    ModalDialog::dispose();
 }
 
 long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
@@ -1570,6 +1607,16 @@ ShowLicenseDialog::ShowLicenseDialog( vcl::Window * pParent,
     m_pLicenseText->SetText(xPackage->getLicenseText());
 }
 
+ShowLicenseDialog::~ShowLicenseDialog()
+{
+    disposeOnce();
+}
+
+void ShowLicenseDialog::dispose()
+{
+    m_pLicenseText.clear();
+    ModalDialog::dispose();
+}
 
 // UpdateRequiredDialogService
 

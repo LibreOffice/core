@@ -51,7 +51,13 @@ namespace svt { namespace table
 
     TableDataWindow::~TableDataWindow()
     {
+        disposeOnce();
+    }
+
+    void TableDataWindow::dispose()
+    {
         impl_hideTipWindow();
+        Window::dispose();
     }
 
     void TableDataWindow::Paint( const Rectangle& rUpdateRect )

@@ -23,12 +23,13 @@ class PlacesListBox;
 class PlacesListBox_Impl : public SvHeaderTabListBox
 {
     private:
-        HeaderBar*           mpHeaderBar;
-        PlacesListBox*       mpParent;
+        VclPtr<HeaderBar>           mpHeaderBar;
+        VclPtr<PlacesListBox>       mpParent;
 
     public:
         PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle );
         virtual ~PlacesListBox_Impl( );
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 };
@@ -39,10 +40,10 @@ class PlacesListBox : public Control
 {
     private:
         std::vector< PlacePtr > maPlaces;
-        SvtFileDialog*       mpDlg;
-        PlacesListBox_Impl*  mpImpl;
-        PushButton*          mpAddBtn;
-        PushButton*          mpDelBtn;
+        VclPtr<SvtFileDialog>       mpDlg;
+        VclPtr<PlacesListBox_Impl>  mpImpl;
+        VclPtr<PushButton>          mpAddBtn;
+        VclPtr<PushButton>          mpDelBtn;
         sal_Int32            mnNbEditables;
         bool                 mbUpdated;
         bool                 mbSelectionChanged;
@@ -50,6 +51,7 @@ class PlacesListBox : public Control
     public:
         PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, const OUString& rTitle, WinBits nBits );
         virtual ~PlacesListBox( );
+        virtual void dispose() SAL_OVERRIDE;
 
         void AppendPlace( PlacePtr pPlace );
         void RemovePlace( sal_uInt16 nPos );

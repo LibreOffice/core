@@ -62,7 +62,7 @@ SfxPopupWindowType SdTbxControl::GetPopupWindowType() const
  * rItemRect are screen coordinates
  */
 
-SfxPopupWindow* SdTbxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SdTbxControl::CreatePopupWindow()
 {
     SfxPopupWindow *pWin = NULL;
     OUString aToolBarResStr;

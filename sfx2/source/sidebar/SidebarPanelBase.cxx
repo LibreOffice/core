@@ -67,7 +67,7 @@ SidebarPanelBase::SidebarPanelBase (
         if (xMultiplexer.is())
             xMultiplexer->addContextChangeEventListener(this, mxFrame->getController());
     }
-    if (mpControl != NULL)
+    if (mpControl != nullptr)
     {
         mpControl->SetBackground(Theme::GetWallpaper(Theme::Paint_PanelBackground));
         mpControl->Show();
@@ -81,11 +81,7 @@ SidebarPanelBase::~SidebarPanelBase()
 void SAL_CALL SidebarPanelBase::disposing()
     throw (css::uno::RuntimeException)
 {
-    if (mpControl != NULL)
-    {
-        delete mpControl;
-        mpControl = NULL;
-    }
+    mpControl.disposeAndClear();
 
     if (mxFrame.is())
     {
@@ -104,7 +100,7 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
     throw (css::uno::RuntimeException, std::exception)
 {
     IContextChangeReceiver* pContextChangeReceiver
-        = dynamic_cast<IContextChangeReceiver*>(mpControl);
+        = dynamic_cast<IContextChangeReceiver*>(mpControl.get());
     if (pContextChangeReceiver != NULL)
     {
         const EnumContext aContext(
@@ -161,7 +157,7 @@ Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessibl
 Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow()
     throw(css::uno::RuntimeException, std::exception)
 {
-    if (mpControl != NULL)
+    if (mpControl != nullptr)
         return Reference<awt::XWindow>(
             mpControl->GetComponentInterface(),
             UNO_QUERY);
@@ -176,7 +172,7 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
         return maLayoutSize;
     else
     {
-        ILayoutableWindow* pLayoutableWindow = dynamic_cast<ILayoutableWindow*>(mpControl);
+        ILayoutableWindow* pLayoutableWindow = dynamic_cast<ILayoutableWindow*>(mpControl.get());
 
         if (isLayoutEnabled(mpControl))
         {
@@ -186,7 +182,7 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
         }
         else if (pLayoutableWindow != NULL)
             return pLayoutableWindow->GetHeightForWidth(nWidth);
-        else if (mpControl != NULL)
+        else if (mpControl != nullptr)
         {
             const sal_Int32 nHeight (mpControl->GetSizePixel().Height());
             return ui::LayoutSize(nHeight,nHeight,nHeight);

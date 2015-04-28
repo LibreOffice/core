@@ -105,7 +105,7 @@ namespace pcr
         ::cppu::OInterfaceContainerHelper   m_aDisposeListeners;
         ::cppu::OInterfaceContainerHelper   m_aControlObservers;
         // meta data about the properties
-        OPropertyBrowserView*               m_pView;
+        VclPtr<OPropertyBrowserView>        m_pView;
 
         OUString                     m_sPageSelection;
         OUString                     m_sLastValidPageSelection;
@@ -242,7 +242,7 @@ namespace pcr
         // stop the inspection
         void stopInspection( bool _bCommitModified );
 
-        bool haveView() const { return NULL != m_pView; }
+        bool haveView() const { return nullptr != m_pView; }
         OPropertyEditor&    getPropertyBox() { return m_pView->getPropertyBox(); }
 
         // does the inspection of the objects as indicated by our model

@@ -145,6 +145,11 @@ namespace pcr
 
     OSelectLabelDialog::~OSelectLabelDialog()
     {
+        disposeOnce();
+    }
+
+    void OSelectLabelDialog::dispose()
+    {
         // delete the entry datas of the listbox entries
         SvTreeListEntry* pLoop = m_pControlTree->First();
         while (pLoop)
@@ -154,7 +159,10 @@ namespace pcr
                 delete static_cast<Reference< XPropertySet > *>(pData);
             pLoop = m_pControlTree->Next(pLoop);
         }
-
+        m_pMainDesc.clear();
+        m_pControlTree.clear();
+        m_pNoAssignment.clear();
+        ModalDialog::dispose();
     }
 
     sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, SvTreeListEntry* pContainerEntry)

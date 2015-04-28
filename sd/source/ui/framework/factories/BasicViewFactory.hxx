@@ -34,6 +34,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <vcl/vclptr.hxx>
 
 namespace sd {
 class ViewShell;
@@ -104,7 +105,7 @@ private:
     FrameView* mpFrameView;
 
     class ViewCache;
-    ::boost::shared_ptr<vcl::Window> mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     ::boost::shared_ptr<ViewCache> mpViewCache;
 
     css::uno::Reference<css::drawing::framework::XPane> mxLocalPane;

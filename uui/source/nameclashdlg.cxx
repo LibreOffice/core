@@ -34,8 +34,8 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
         OUString aNewName = m_pEDNewName->GetText();
         if ( ( aNewName == maNewName ) || aNewName.isEmpty() )
         {
-            MessageDialog aError(NULL, maSameName);
-            aError.Execute();
+            ScopedVclPtrInstance< MessageDialog > aError(nullptr, maSameName);
+            aError->Execute();
             return 1;
         }
         maNewName = aNewName;
@@ -92,6 +92,21 @@ NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
         m_pEDNewName->SetText( rProposedNewName );
     else
         m_pEDNewName->SetText( rClashingName );
+}
+
+NameClashDialog::~NameClashDialog()
+{
+    disposeOnce();
+}
+
+void NameClashDialog::dispose()
+{
+    m_pFTMessage.clear();
+    m_pEDNewName.clear();
+    m_pBtnOverwrite.clear();
+    m_pBtnRename.clear();
+    m_pBtnCancel.clear();
+    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

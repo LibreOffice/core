@@ -33,21 +33,21 @@ class SwLineNumberingDlg : public SfxModalDialog
 {
 private:
     SwWrtShell* pSh;
-    VclContainer* m_pBodyContent;
-    vcl::Window* m_pDivIntervalFT;
-    NumericField* m_pDivIntervalNF;
-    vcl::Window* m_pDivRowsFT;
-    NumericField* m_pNumIntervalNF;
-    ListBox* m_pCharStyleLB;
-    SwNumberingTypeListBox* m_pFormatLB;
-    ListBox* m_pPosLB;
-    MetricField* m_pOffsetMF;
-    Edit* m_pDivisorED;
-    CheckBox* m_pCountEmptyLinesCB;
-    CheckBox* m_pCountFrameLinesCB;
-    CheckBox* m_pRestartEachPageCB;
-    CheckBox* m_pNumberingOnCB;
-    CheckBox* m_pNumberingOnFooterHeader;
+    VclPtr<VclContainer> m_pBodyContent;
+    VclPtr<vcl::Window> m_pDivIntervalFT;
+    VclPtr<NumericField> m_pDivIntervalNF;
+    VclPtr<vcl::Window> m_pDivRowsFT;
+    VclPtr<NumericField> m_pNumIntervalNF;
+    VclPtr<ListBox> m_pCharStyleLB;
+    VclPtr<SwNumberingTypeListBox> m_pFormatLB;
+    VclPtr<ListBox> m_pPosLB;
+    VclPtr<MetricField> m_pOffsetMF;
+    VclPtr<Edit> m_pDivisorED;
+    VclPtr<CheckBox> m_pCountEmptyLinesCB;
+    VclPtr<CheckBox> m_pCountFrameLinesCB;
+    VclPtr<CheckBox> m_pRestartEachPageCB;
+    VclPtr<CheckBox> m_pNumberingOnCB;
+    VclPtr<CheckBox> m_pNumberingOnFooterHeader;
     DECL_LINK(OKHdl, void *);
     DECL_LINK(LineOnOffHdl, void * = 0);
     DECL_LINK(ModifyHdl, void * = 0);
@@ -56,6 +56,7 @@ public:
     SwWrtShell* GetWrtShell() const { return pSh; }
     SwLineNumberingDlg(SwView *pVw);
     virtual ~SwLineNumberingDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

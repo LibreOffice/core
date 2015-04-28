@@ -91,7 +91,6 @@ namespace dbaui
         : OGenericAdministrationPage(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
         , m_bUserGrabFocus(false)
         , m_pCollection(NULL)
-        , m_bDelete(false)
     {
         get(m_pFT_Connection, "browseurllabel");
         get(m_pConnectionURL, "browseurl");
@@ -110,13 +109,17 @@ namespace dbaui
 
     OConnectionHelper::~OConnectionHelper()
     {
-        if(m_bDelete)
-        {
-            delete m_pFT_Connection;
-            delete m_pConnectionURL;
-            delete m_pPB_Connection;
-            delete m_pPB_CreateDB;
-        }
+        disposeOnce();
+    }
+
+    void OConnectionHelper::dispose()
+    {
+        // FIXME: used to have an if (m_bDelete) ...
+        m_pFT_Connection.disposeAndClear();
+        m_pConnectionURL.disposeAndClear();
+        m_pPB_Connection.disposeAndClear();
+        m_pPB_CreateDB.disposeAndClear();
+        OGenericAdministrationPage::dispose();
     }
 
     void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -306,16 +309,16 @@ namespace dbaui
                     aProfiles.insert(pArray[index]);
 
                 // execute the select dialog
-                ODatasourceSelectDialog aSelector(GetParent(), aProfiles);
+                ScopedVclPtrInstance< ODatasourceSelectDialog > aSelector(GetParent(), aProfiles);
                 OUString sOldProfile=getURLNoPrefix();
 
                 if (!sOldProfile.isEmpty())
-                    aSelector.Select(sOldProfile);
+                    aSelector->Select(sOldProfile);
                 else
-                    aSelector.Select(xMozillaBootstrap->getDefaultProfile(profileType));
+                    aSelector->Select(xMozillaBootstrap->getDefaultProfile(profileType));
 
-                if ( RET_OK == aSelector.Execute() )
-                    setURLNoPrefix(aSelector.GetSelected());
+                if ( RET_OK == aSelector->Execute() )
+                    setURLNoPrefix(aSelector->GetSelected());
                 break;
             }
             case ::dbaccess::DST_FIREBIRD:
@@ -476,8 +479,8 @@ namespace dbaui
             sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
             m_bUserGrabFocus = false;
-            QueryBox aQuery(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery);
-            sal_Int32 nQueryResult = aQuery.Execute();
+            ScopedVclPtrInstance< QueryBox > aQuery(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery);
+            sal_Int32 nQueryResult = aQuery->Execute();
             m_bUserGrabFocus = true;
 
             switch (nQueryResult)
@@ -493,8 +496,8 @@ namespace dbaui
                             sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
                             m_bUserGrabFocus = false;
-                            QueryBox aWhatToDo(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery);
-                            nQueryResult = aWhatToDo.Execute();
+                            ScopedVclPtrInstance< QueryBox > aWhatToDo(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery);
+                            nQueryResult = aWhatToDo->Execute();
                             m_bUserGrabFocus = true;
 
                             if (RET_RETRY == nQueryResult)

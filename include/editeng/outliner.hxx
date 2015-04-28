@@ -30,6 +30,7 @@
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/outdev.hxx>
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>
 #include <editeng/editengdllapi.h>
@@ -476,7 +477,7 @@ struct EDITENG_DLLPUBLIC PaintFirstLineInfo
     long mnBaseLineY;
     const Point& mrOrigin;
     short mnOrientation;
-    OutputDevice* mpOutDev;
+    VclPtr<OutputDevice> mpOutDev;
 
     PaintFirstLineInfo( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
         : mnPara( nPara ), mrStartPos( rStartPos ), mnBaseLineY( nBaseLineY ), mrOrigin( rOrigin ), mnOrientation( nOrientation ), mpOutDev( pOutDev )

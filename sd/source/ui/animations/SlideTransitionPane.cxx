@@ -386,7 +386,7 @@ struct lcl_AppendSoundToListBox : public ::std::unary_function< OUString, void >
     }
 
 private:
-    ListBox*  mrListBox;
+    VclPtr<ListBox>  mrListBox;
 };
 
 void lcl_FillSoundListBox(
@@ -483,8 +483,27 @@ SlideTransitionPane::SlideTransitionPane(
 
 SlideTransitionPane::~SlideTransitionPane()
 {
+    disposeOnce();
+}
+
+void SlideTransitionPane::dispose()
+{
     maLateInitTimer.Stop();
     removeListener();
+    mpLB_SLIDE_TRANSITIONS.clear();
+    mpFT_SPEED.clear();
+    mpLB_SPEED.clear();
+    mpFT_SOUND.clear();
+    mpLB_SOUND.clear();
+    mpCB_LOOP_SOUND.clear();
+    mpRB_ADVANCE_ON_MOUSE.clear();
+    mpRB_ADVANCE_AUTO.clear();
+    mpMF_ADVANCE_AUTO_AFTER.clear();
+    mpPB_APPLY_TO_ALL.clear();
+    mpPB_PLAY.clear();
+    mpPB_SLIDE_SHOW.clear();
+    mpCB_AUTO_PREVIEW.clear();
+    PanelLayout::dispose();
 }
 
 void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
@@ -724,9 +743,9 @@ void SlideTransitionPane::openSoundFileDialog()
             {
                 OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
-                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (true);
-                bQuitLoop = (aWarningBox.Execute() != RET_RETRY);
+                ScopedVclPtrInstance< WarningBox > aWarningBox( nullptr, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
+                aWarningBox->SetModalInputMode (true);
+                bQuitLoop = (aWarningBox->Execute() != RET_RETRY);
 
                 bValidSoundFile = false;
             }
@@ -1082,7 +1101,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
     if( pDocSh )
     {
         Size aMinSize( pParent->LogicToPixel( Size( 72, 216 ), MAP_APPFONT ) );
-        pWindow = new SlideTransitionPane( pParent, rBase, aMinSize, pDocSh->GetDoc(), rxFrame );
+        pWindow = VclPtr<SlideTransitionPane>::Create( pParent, rBase, aMinSize, pDocSh->GetDoc(), rxFrame );
     }
 
     return pWindow;

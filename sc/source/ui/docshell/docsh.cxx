@@ -472,14 +472,14 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
         {
             // Generator is not LibreOffice.  Ask if the user wants to perform
             // full re-calculation.
-            QueryBox aBox(
+            ScopedVclPtrInstance<QueryBox> aBox(
                 GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
-            aBox.SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
+            aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 
-            bHardRecalc = aBox.Execute() == RET_YES;
+            bHardRecalc = aBox->Execute() == RET_YES;
 
-            if (aBox.GetCheckBoxState())
+            if (aBox->GetCheckBoxState())
             {
                 // Always perform selected action in the future.
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -689,11 +689,11 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
                         if ( aAppOptions.GetShowSharedDocumentWarning() )
                         {
-                            WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                            ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), WinBits( WB_OK ),
                                 ScGlobal::GetRscString( STR_SHARED_DOC_WARNING ) );
-                            aBox.SetDefaultCheckBoxText();
-                            aBox.Execute();
-                            bool bChecked = aBox.GetCheckBoxState();
+                            aBox->SetDefaultCheckBoxText();
+                            aBox->Execute();
+                            bool bChecked = aBox->GetCheckBoxState();
                             if ( bChecked )
                             {
                                 aAppOptions.SetShowSharedDocumentWarning( !bChecked );
@@ -818,8 +818,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
                                             aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                            WarningBox aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
-                                            if ( aBox.Execute() == RET_RETRY )
+                                            ScopedVclPtrInstance< WarningBox > aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
+                                            if ( aBox->Execute() == RET_RETRY )
                                             {
                                                 bRetry = true;
                                             }
@@ -893,9 +893,9 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     }
                                     else
                                     {
-                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), WinBits( WB_OK ),
                                             ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
-                                        aBox.Execute();
+                                        aBox->Execute();
 
                                         SfxBindings* pBindings = GetViewBindings();
                                         if ( pBindings )
@@ -934,10 +934,10 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     if ( GetDocument().GetExternalRefManager()->containsUnsavedReferences() )
                     {
-                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO ),
+                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), WinBits( WB_YES_NO ),
                                 ScGlobal::GetRscString( STR_UNSAVED_EXT_REF ) );
 
-                        if( RET_NO == aBox.Execute())
+                        if( RET_NO == aBox->Execute())
                         {
                             SetError( ERRCODE_IO_ABORT, OUString( OSL_LOG_PREFIX ) ); // this error code will produce no error message, but will break the further saving process
                         }
@@ -1454,7 +1454,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         Fraction aZoom( 1, 1 );
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / GetOutputFactor(); // Factor is printer display ratio
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
-        VirtualDevice aVirtDev;
+        ScopedVclPtrInstance< VirtualDevice > pVirtDev;
         //  all sheets (for Excel import)
         SCTAB nTabCount = aDocument.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
@@ -1477,7 +1477,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         aColWidthParam[nCol].mbSimpleText = false;
 
                     sal_uInt16 nWidth = aDocument.GetOptimalColWidth(
-                        nCol, nTab, &aVirtDev, nPPTX, nPPTY, aZoom, aZoom, false, &aMark,
+                        nCol, nTab, pVirtDev, nPPTX, nPPTY, aZoom, aZoom, false, &aMark,
                         &aColWidthParam[nCol] );
                     aDocument.SetColWidth( nCol, nTab,
                         nWidth + (sal_uInt16)ScGlobal::nLastColWidthExtra );
@@ -2880,10 +2880,10 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
                 (sal_uInt16) ScPrintFunc( this, pPrinter, i ).GetTotalPages() );
 }
 
-SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
+VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(
                                          vcl::Window *pParent, const SfxItemSet &rSet )
 {
-    SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
+    VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( pParent, rSet );
     ScDocShell*            pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
 
     // Only for statistics, if this Doc is shown; not from the Doc Manager

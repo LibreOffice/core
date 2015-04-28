@@ -50,7 +50,13 @@ void SvxCheckListBox::SetNormalStaticImage(const Image& rNormalStaticImage)
 
 SvxCheckListBox::~SvxCheckListBox()
 {
+    disposeOnce();
+}
+
+void SvxCheckListBox::dispose()
+{
     delete pCheckButton;
+    SvTreeListBox::dispose();
 }
 
 void SvxCheckListBox::Init_Impl()

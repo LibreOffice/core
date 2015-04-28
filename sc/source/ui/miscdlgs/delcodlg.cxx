@@ -71,6 +71,25 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( vcl::Window* pParent,
     aBtnDelAll->SetClickHdl( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
 }
 
+ScDeleteContentsDlg::~ScDeleteContentsDlg()
+{
+    disposeOnce();
+}
+
+void ScDeleteContentsDlg::dispose()
+{
+    aBtnDelAll.clear();
+    aBtnDelStrings.clear();
+    aBtnDelNumbers.clear();
+    aBtnDelDateTime.clear();
+    aBtnDelFormulas.clear();
+    aBtnDelNotes.clear();
+    aBtnDelAttrs.clear();
+    aBtnDelObjects.clear();
+    aBtnOk.clear();
+    ModalDialog::dispose();
+}
+
 InsertDeleteFlags ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {
     ScDeleteContentsDlg::nPreviousChecks = IDF_NONE;
@@ -138,9 +157,5 @@ IMPL_LINK_NOARG_INLINE_START(ScDeleteContentsDlg, DelAllHdl)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScDeleteContentsDlg, DelAllHdl)
-
-ScDeleteContentsDlg::~ScDeleteContentsDlg()
-{
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

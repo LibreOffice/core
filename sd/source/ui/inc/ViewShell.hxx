@@ -465,26 +465,26 @@ protected:
         document.
     */
 
-    ::boost::shared_ptr<sd::Window> mpContentWindow;
+    VclPtr<sd::Window> mpContentWindow;
 
     /// Horizontal scroll bar for the current slide is displayed when needed.
-    ::boost::shared_ptr<ScrollBar> mpHorizontalScrollBar;
+    VclPtr<ScrollBar> mpHorizontalScrollBar;
     /// Vertical scroll bar for whole document is always visible.
-    ::boost::shared_ptr<ScrollBar> mpVerticalScrollBar;
+    VclPtr<ScrollBar> mpVerticalScrollBar;
     /// Horizontal ruler is not shown by default.
-    ::std::unique_ptr<SvxRuler> mpHorizontalRuler;
+    VclPtr<SvxRuler> mpHorizontalRuler;
     /// Vertical ruler is not shown by default.
-    ::std::unique_ptr<SvxRuler> mpVerticalRuler;
+    VclPtr<SvxRuler> mpVerticalRuler;
     /// Filler of the little square enclosed by the two scroll bars.
-    ::boost::shared_ptr<ScrollBarBox> mpScrollBarBox;
+    VclPtr<ScrollBarBox> mpScrollBarBox;
     /// Layer tab bar.
-    ::std::unique_ptr<LayerTabBar> mpLayerTabBar;
+    VclPtr<LayerTabBar> mpLayerTabBar;
 
     /// This flag controls whether the rulers are visible.
     bool mbHasRulers;
 
     /// The active window.
-    ::sd::Window* mpActiveWindow;
+    VclPtr<::sd::Window> mpActiveWindow;
     ::sd::View* mpView;
     FrameView*  mpFrameView;
 
@@ -568,7 +568,7 @@ protected:
     void doShow();
 
 private:
-    ::vcl::Window* mpParentWindow;
+    VclPtr<::vcl::Window> mpParentWindow;
     /** This window updater is used to keep all relevant windows up to date
         with reference to the digit language used to display digits in text
         shapes.

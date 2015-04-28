@@ -34,7 +34,6 @@ class LimitBoxImpl: public LimitBox
 {
     public:
         LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl );
-        virtual ~LimitBoxImpl();
 
         virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
@@ -45,10 +44,6 @@ class LimitBoxImpl: public LimitBox
 LimitBoxImpl::LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl )
     : LimitBox( pParent, WinBits( WB_DROPDOWN | WB_VSCROLL) )
     , m_pControl( pCtrl )
-{
-}
-
-LimitBoxImpl::~LimitBoxImpl()
 {
 }
 
@@ -144,8 +139,7 @@ throw (uno::RuntimeException, std::exception)
     svt::ToolboxController::dispose();
 
     SolarMutexGuard aSolarMutexGuard;
-    delete m_pLimitBox;
-    m_pLimitBox = 0;
+    m_pLimitBox.disposeAndClear();
 }
 
 /// XStatusListener
@@ -206,7 +200,7 @@ uno::Reference< awt::XWindow > SAL_CALL LimitBoxController::createItemWindow(
     if ( pParent )
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_pLimitBox = new LimitBoxImpl(pParent, this);
+        m_pLimitBox = VclPtr<LimitBoxImpl>::Create(pParent, this);
         m_pLimitBox->SetSizePixel(m_pLimitBox->CalcBlockSize(6,1));
         xItemWindow = VCLUnoHelper::GetInterface( m_pLimitBox );
     }

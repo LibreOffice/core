@@ -202,11 +202,22 @@ namespace sfx2
 
     TaskPaneDockingWindow::TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper, vcl::Window* i_pParent, WinBits i_nBits )
         :TitledDockingWindow( i_pBindings, &i_rWrapper, i_pParent, i_nBits )
-        ,m_aTaskPane( GetContentWindow(), lcl_getFrame( i_pBindings ) )
-        ,m_aPaneController( m_aTaskPane, *this )
+        ,m_aTaskPane( VclPtr<ModuleTaskPane>::Create(GetContentWindow(), lcl_getFrame( i_pBindings )) )
+        ,m_aPaneController( *m_aTaskPane.get(), *this )
     {
-        m_aTaskPane.Show();
+        m_aTaskPane->Show();
         SetText( SfxResId( SID_TASKPANE ).toString() );
+    }
+
+    TaskPaneDockingWindow::~TaskPaneDockingWindow()
+    {
+        disposeOnce();
+    }
+
+    void TaskPaneDockingWindow::dispose()
+    {
+        m_aTaskPane.disposeAndClear();
+        TitledDockingWindow::dispose();
     }
 
 
@@ -219,13 +230,13 @@ namespace sfx2
     void TaskPaneDockingWindow::GetFocus()
     {
         TitledDockingWindow::GetFocus();
-        m_aTaskPane.GrabFocus();
+        m_aTaskPane->GrabFocus();
     }
 
 
     void TaskPaneDockingWindow::onLayoutDone()
     {
-        m_aTaskPane.SetPosSizePixel( Point(), GetContentWindow().GetOutputSizePixel() );
+        m_aTaskPane->SetPosSizePixel( Point(), GetContentWindow().GetOutputSizePixel() );
     }
 
 
@@ -238,7 +249,7 @@ namespace sfx2
     TaskPaneWrapper::TaskPaneWrapper( vcl::Window* i_pParent, sal_uInt16 i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
         :SfxChildWindow( i_pParent, i_nId )
     {
-        pWindow = new TaskPaneDockingWindow( i_pBindings, *this, i_pParent,
+        pWindow = VclPtr<TaskPaneDockingWindow>::Create( i_pBindings, *this, i_pParent,
             WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
         eChildAlignment = SfxChildAlignment::RIGHT;
 
@@ -507,9 +518,9 @@ namespace sfx2
             :m_rAntiImpl( i_rAntiImpl )
             ,m_sModuleIdentifier( lcl_identifyModule( i_rDocumentFrame ) )
             ,m_xFrame( i_rDocumentFrame )
-            ,m_aPanelDeck( i_rAntiImpl )
+            ,m_aPanelDeck( new ::svt::ToolPanelDeck(i_rAntiImpl) )
         {
-            m_aPanelDeck.Show();
+            m_aPanelDeck->Show();
             OnResize();
             impl_initFromConfiguration();
         }
@@ -523,7 +534,7 @@ namespace sfx2
 
         static bool ModuleHasToolPanels( const OUString& i_rModuleIdentifier );
 
-              ::svt::ToolPanelDeck& GetPanelDeck()          { return m_aPanelDeck; }
+        ::svt::ToolPanelDeck& GetPanelDeck()          { return *m_aPanelDeck.get(); }
 
         ::boost::optional< size_t >
                     GetPanelPos( const OUString& i_rResourceURL );
@@ -540,28 +551,28 @@ namespace sfx2
         DECL_LINK( OnActivatePanel, void* );
 
     private:
-        ModuleTaskPane&             m_rAntiImpl;
-        const OUString       m_sModuleIdentifier;
-        const Reference< XFrame >   m_xFrame;
-        ::svt::ToolPanelDeck        m_aPanelDeck;
+        ModuleTaskPane&              m_rAntiImpl;
+        const OUString               m_sModuleIdentifier;
+        const Reference< XFrame >    m_xFrame;
+        VclPtr<::svt::ToolPanelDeck> m_aPanelDeck;
     };
 
 
     void ModuleTaskPane_Impl::OnResize()
     {
-        m_aPanelDeck.SetPosSizePixel( Point(), m_rAntiImpl.GetOutputSizePixel() );
+        m_aPanelDeck->SetPosSizePixel( Point(), m_rAntiImpl.GetOutputSizePixel() );
     }
 
 
     void ModuleTaskPane_Impl::OnGetFocus()
     {
-        m_aPanelDeck.GrabFocus();
+        m_aPanelDeck->GrabFocus();
     }
 
 
     IMPL_LINK( ModuleTaskPane_Impl, OnActivatePanel, void*, i_pArg )
     {
-        m_aPanelDeck.ActivatePanel( reinterpret_cast< size_t >( i_pArg ) );
+        m_aPanelDeck->ActivatePanel( reinterpret_cast< size_t >( i_pArg ) );
         return 1L;
     }
 
@@ -595,8 +606,8 @@ namespace sfx2
             ::utl::OConfigurationNode aResourceNode( aWindowStateConfig.openNode( *resource ) );
             ::svt::PToolPanel pCustomPanel( new CustomToolPanel( aResourceNode, m_xFrame ) );
 
-            size_t nPanelPos = m_aPanelDeck.GetPanelCount();
-            nPanelPos = m_aPanelDeck.InsertPanel( pCustomPanel, nPanelPos );
+            size_t nPanelPos = m_aPanelDeck->GetPanelCount();
+            nPanelPos = m_aPanelDeck->InsertPanel( pCustomPanel, nPanelPos );
 
             if ( ::comphelper::getBOOL( aResourceNode.getNodeValue( "Visible" ) ) )
                 sFirstVisiblePanelResource = *resource;
@@ -637,9 +648,9 @@ namespace sfx2
     ::boost::optional< size_t > ModuleTaskPane_Impl::GetPanelPos( const OUString& i_rResourceURL )
     {
         ::boost::optional< size_t > aPanelPos;
-        for ( size_t i = 0; i < m_aPanelDeck.GetPanelCount(); ++i )
+        for ( size_t i = 0; i < m_aPanelDeck->GetPanelCount(); ++i )
         {
-            const ::svt::PToolPanel pPanel( m_aPanelDeck.GetPanel( i ) );
+            const ::svt::PToolPanel pPanel( m_aPanelDeck->GetPanel( i ) );
             const CustomToolPanel* pCustomPanel = dynamic_cast< const CustomToolPanel* >( pPanel.get() );
             if ( !pCustomPanel )
             {
@@ -656,21 +667,20 @@ namespace sfx2
         return aPanelPos;
     }
 
-
     void ModuleTaskPane_Impl::SetDrawersLayout()
     {
-        const ::svt::PDeckLayouter pLayouter( m_aPanelDeck.GetLayouter() );
+        const ::svt::PDeckLayouter pLayouter( m_aPanelDeck->GetLayouter() );
         const ::svt::DrawerDeckLayouter* pDrawerLayouter = dynamic_cast< const ::svt::DrawerDeckLayouter* >( pLayouter.get() );
         if ( pDrawerLayouter != NULL )
             // already have the proper layout
             return;
-        m_aPanelDeck.SetLayouter( new ::svt::DrawerDeckLayouter( m_aPanelDeck, m_aPanelDeck ) );
+        m_aPanelDeck->SetLayouter( new ::svt::DrawerDeckLayouter( *m_aPanelDeck.get(), *m_aPanelDeck.get() ) );
     }
 
 
     void ModuleTaskPane_Impl::SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent )
     {
-        ::svt::PDeckLayouter pLayouter( m_aPanelDeck.GetLayouter() );
+        ::svt::PDeckLayouter pLayouter( m_aPanelDeck->GetLayouter() );
         ::svt::TabDeckLayouter* pTabLayouter = dynamic_cast< ::svt::TabDeckLayouter* >( pLayouter.get() );
         if  (   ( pTabLayouter != NULL )
             &&  ( pTabLayouter->GetTabAlignment() == i_eTabAlignment )
@@ -686,7 +696,7 @@ namespace sfx2
             return;
         }
 
-        m_aPanelDeck.SetLayouter( new ::svt::TabDeckLayouter( m_aPanelDeck, m_aPanelDeck, i_eTabAlignment, i_eTabContent ) );
+        m_aPanelDeck->SetLayouter( new ::svt::TabDeckLayouter( *m_aPanelDeck.get(), *m_aPanelDeck.get(), i_eTabAlignment, i_eTabContent ) );
     }
 
 
@@ -699,11 +709,10 @@ namespace sfx2
     {
     }
 
-
     ModuleTaskPane::~ModuleTaskPane()
     {
+        disposeOnce();
     }
-
 
     bool ModuleTaskPane::ModuleHasToolPanels( const Reference< XFrame >& i_rDocumentFrame )
     {

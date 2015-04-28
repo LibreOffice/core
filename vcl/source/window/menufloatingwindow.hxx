@@ -80,7 +80,8 @@ protected:
 
 public:
                     MenuFloatingWindow( Menu* pMenu, vcl::Window* pParent, WinBits nStyle );
-                    virtual ~MenuFloatingWindow();
+    virtual         ~MenuFloatingWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
             void    doShutdown();
 

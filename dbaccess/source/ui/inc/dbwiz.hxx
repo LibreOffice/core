@@ -76,6 +76,7 @@ public:
         ,const ::com::sun::star::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
     virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
@@ -92,7 +93,7 @@ public:
 
 protected:
     /// to override to create new pages
-    virtual TabPage*    createPage(WizardState _nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage> createPage(WizardState _nState) SAL_OVERRIDE;
     virtual WizardState determineNextState(WizardState _nCurrentState) const SAL_OVERRIDE;
     virtual bool        leaveState(WizardState _nState) SAL_OVERRIDE;
     virtual ::svt::IWizardPageController*

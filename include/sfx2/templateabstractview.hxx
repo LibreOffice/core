@@ -83,7 +83,8 @@ public:
     TemplateAbstractView(vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren);
     TemplateAbstractView(vcl::Window* pParent);
 
-    virtual ~TemplateAbstractView ();
+    virtual ~TemplateAbstractView();
+    virtual void dispose() SAL_OVERRIDE;
 
     void insertItem (const TemplateItemProperties &rTemplate);
 
@@ -137,8 +138,8 @@ protected:
     sal_uInt16 mnCurRegionId;
     OUString maCurRegionName;
 
-    PushButton maAllButton;
-    FixedText  maFTName;
+    VclPtr<PushButton> maAllButton;
+    VclPtr<FixedText>  maFTName;
 
     Link maOpenRegionHdl;
     Link maOpenTemplateHdl;

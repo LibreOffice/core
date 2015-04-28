@@ -39,7 +39,7 @@ public:
     ImplData();
     ~ImplData();
 
-    ToolBox*        mpBox;
+    VclPtr<ToolBox> mpBox;
     Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
 };
 
@@ -107,7 +107,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
                 nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
                 nStyle |= WB_CLOSEABLE; // make undecorated floaters closeable
             }
-            pBorderWin  = new ImplBorderWindow( pParent, nStyle, nBorderStyle );
+            pBorderWin  = VclPtr<ImplBorderWindow>::Create( pParent, nStyle, nBorderStyle );
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
             pBorderWin->mpWindowImpl->mpClientWindow = this;
             pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
@@ -185,18 +185,32 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
 
 FloatingWindow::~FloatingWindow()
 {
-    if( mbPopupModeCanceled )
-        // indicates that ESC key was pressed
-        // will be handled in Window::ImplGrabFocus()
-        SetDialogControlFlags( GetDialogControlFlags() | WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL );
+    disposeOnce();
+}
 
-    if ( IsInPopupMode() )
-        EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL | FLOATWIN_POPUPMODEEND_DONTCALLHDL );
+void FloatingWindow::dispose()
+{
+    if (mpImplData)
+    {
+        if( mbPopupModeCanceled )
+            // indicates that ESC key was pressed
+            // will be handled in Window::ImplGrabFocus()
+            SetDialogControlFlags( GetDialogControlFlags() | WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL );
 
-    if ( mnPostId )
-        Application::RemoveUserEvent( mnPostId );
+        if ( IsInPopupMode() )
+            EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL | FLOATWIN_POPUPMODEEND_DONTCALLHDL );
+
+        if ( mnPostId )
+            Application::RemoveUserEvent( mnPostId );
+        mnPostId = 0;
+    }
 
     delete mpImplData;
+    mpImplData = NULL;
+
+    mpNextFloat.clear();
+    mpFirstPopupModeWin.clear();
+    SystemWindow::dispose();
 }
 
 Point FloatingWindow::CalcFloatingPosition( vcl::Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex )
@@ -593,8 +607,8 @@ void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
             nTitleStyle = BORDERWINDOW_TITLE_POPUP;
         else // nTitle == FLOATWIN_TITLE_NONE
             nTitleStyle = BORDERWINDOW_TITLE_NONE;
-        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetTitleType( nTitleStyle, aOutSize );
-        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetTitleType( nTitleStyle, aOutSize );
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     }
 }
 
@@ -734,7 +748,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     mbInCleanUp = true; // prevent killing this window due to focus change while working with it
 
     // stop the PopupMode also for all following PopupMode windows
-    while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat != this )
+    while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat.get() != this )
         pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
 
     // delete window from the list

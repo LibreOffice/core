@@ -540,15 +540,15 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
         // collect character styles
-        ListBox rCharFmtLB(this);
-        rCharFmtLB.Clear();
-        rCharFmtLB.InsertEntry( SwViewShell::GetShellRes()->aStrNone );
+        ScopedVclPtrInstance< ListBox > rCharFmtLB(this);
+        rCharFmtLB->Clear();
+        rCharFmtLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
         SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-        ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
+        ::FillCharStyleListBox(*rCharFmtLB.get(),  pDocShell);
 
         std::vector<OUString> aList;
-        for(sal_Int32 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
-             aList.push_back( rCharFmtLB.GetEntry(j) );
+        for(sal_Int32 j = 0; j < rCharFmtLB->GetEntryCount(); j++)
+             aList.push_back( rCharFmtLB->GetEntry(j) );
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
         FieldUnit eMetric = ::GetDfltMetric(pDocShell->ISA(SwWebDocShell));

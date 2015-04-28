@@ -138,7 +138,8 @@ class WaitWindow_Impl : public WorkWindow
 
     public:
                      WaitWindow_Impl();
-                    virtual ~WaitWindow_Impl();
+    virtual          ~WaitWindow_Impl();
+    virtual void     dispose() SAL_OVERRIDE;
     virtual void     Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
@@ -470,8 +471,7 @@ void SfxDocTplService_Impl::init_Impl()
             aGuard.clear();
             SolarMutexClearableGuard aSolarGuard;
 
-            WaitWindow_Impl* pWin = new WaitWindow_Impl();
-
+            VclPtrInstance< WaitWindow_Impl > pWin;
             aSolarGuard.clear();
             ::osl::ClearableMutexGuard anotherGuard( maMutex );
 
@@ -480,7 +480,7 @@ void SfxDocTplService_Impl::init_Impl()
             anotherGuard.clear();
             SolarMutexGuard aSecondSolarGuard;
 
-            delete pWin;
+            pWin.disposeAndClear();
         }
         else if ( needsUpdate() )
             // the UI should be shown only on the first update
@@ -2449,7 +2449,13 @@ WaitWindow_Impl::WaitWindow_Impl()
 
 WaitWindow_Impl::~WaitWindow_Impl()
 {
+    disposeOnce();
+}
+
+void  WaitWindow_Impl::dispose()
+{
     Hide();
+    WorkWindow::dispose();
 }
 
 

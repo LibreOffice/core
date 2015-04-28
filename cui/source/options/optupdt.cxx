@@ -82,10 +82,24 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(vcl::Window* pParent, const SfxIt
     UpdateLastCheckedText();
 }
 
-
-
 SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
 {
+    disposeOnce();
+}
+
+void SvxOnlineUpdateTabPage::dispose()
+{
+    m_pAutoCheckCheckBox.clear();
+    m_pEveryDayButton.clear();
+    m_pEveryWeekButton.clear();
+    m_pEveryMonthButton.clear();
+    m_pCheckNowButton.clear();
+    m_pAutoDownloadCheckBox.clear();
+    m_pDestPathLabel.clear();
+    m_pDestPath.clear();
+    m_pChangePathButton.clear();
+    m_pLastChecked.clear();
+    SfxTabPage::dispose();
 }
 
 
@@ -146,16 +160,11 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
     m_pLastChecked->SetText( aText );
 }
 
-
-
-SfxTabPage*
+VclPtr<SfxTabPage>
 SvxOnlineUpdateTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxOnlineUpdateTabPage( pParent, *rAttrSet );
+    return VclPtr<SvxOnlineUpdateTabPage>::Create( pParent, *rAttrSet );
 }
-
-
-
 
 bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
 {

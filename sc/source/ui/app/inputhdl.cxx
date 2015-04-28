@@ -1750,6 +1750,11 @@ void ScInputHandler::UpdateActiveView()
         pTopView = NULL;
 }
 
+void ScInputHandler::SetInputWindow(  ScInputWindow* pNew )
+{
+    pInputWin = pNew;
+}
+
 void ScInputHandler::StopInputWinEngine( bool bAll )
 {
     if (pInputWin)

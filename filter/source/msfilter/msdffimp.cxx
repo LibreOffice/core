@@ -4397,8 +4397,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 rOutliner.SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(pModel->GetStyleSheetPool()) );
                             rOutliner.SetUpdateMode( false );
                             rOutliner.SetText( *pParaObj );
-                            VirtualDevice aVirDev( 1 );
-                            aVirDev.SetMapMode( MAP_100TH_MM );
+                            ScopedVclPtrInstance< VirtualDevice > pVirDev( 1 );
+                            pVirDev->SetMapMode( MAP_100TH_MM );
                             sal_Int32 i, nParagraphs = rOutliner.GetParagraphCount();
                             if ( nParagraphs )
                             {
@@ -4406,7 +4406,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 for ( i = 0; i < nParagraphs; i++ )
                                 {
                                     OUString aString(rOutliner.GetText(rOutliner.GetParagraph(i)));
-                                    bool bIsRTL = aVirDev.GetTextIsRTL(aString, 0, aString.getLength());
+                                    bool bIsRTL = pVirDev->GetTextIsRTL(aString, 0, aString.getLength());
                                     if ( bIsRTL )
                                     {
                                         SfxItemSet aSet2( rOutliner.GetParaAttribs( i ) );

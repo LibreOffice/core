@@ -31,7 +31,7 @@ class TextCharacterSpacingPopup
 public :
     TextCharacterSpacingPopup (
         vcl::Window* pParent,
-        const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
+        const ::boost::function<VclPtr<PopupControl>(PopupContainer*)>& rControlCreator);
     virtual ~TextCharacterSpacingPopup();
 
     void Rearrange (bool bLBAvailable,bool bAvailable, long nKerning);

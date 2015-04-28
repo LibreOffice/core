@@ -117,8 +117,16 @@ ControllerItem::ControllerItem (
 
 ControllerItem::~ControllerItem()
 {
+    dispose();
+}
+
+void ControllerItem::dispose()
+{
     if (mxFrameActionListener.is())
         mxFrameActionListener->dispose();
+    mxFrameActionListener.clear();
+
+    SfxControllerItem::dispose();
 }
 
 void ControllerItem::StateChanged (

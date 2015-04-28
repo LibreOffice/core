@@ -42,7 +42,7 @@ using namespace ::com::sun::star::frame;
 OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     :Window(_pParent)
 {
-    m_pEdit = new OSqlEdit(this);
+    m_pEdit = VclPtr<OSqlEdit>::Create(this);
     m_pEdit->SetRightToLeft(false);
     m_pEdit->ClearModifyFlag();
     m_pEdit->SaveValue();
@@ -52,8 +52,13 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 
 OQueryTextView::~OQueryTextView()
 {
-    boost::scoped_ptr<vcl::Window> aTemp(m_pEdit);
-    m_pEdit = NULL;
+    disposeOnce();
+}
+
+void OQueryTextView::dispose()
+{
+    m_pEdit.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void OQueryTextView::GetFocus()

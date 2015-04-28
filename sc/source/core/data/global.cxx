@@ -577,13 +577,13 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     }
 
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    VirtualDevice aVirtWindow( *pDefaultDev );
-    aVirtWindow.SetMapMode(MAP_PIXEL);
+    ScopedVclPtrInstance< VirtualDevice > pVirtWindow( *pDefaultDev );
+    pVirtWindow->SetMapMode(MAP_PIXEL);
     vcl::Font aDefFont;
-    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow); // Font color doesn't matter here
-    aVirtWindow.SetFont(aDefFont);
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow); // Font color doesn't matter here
+    pVirtWindow->SetFont(aDefFont);
     sal_uInt16 nTest = static_cast<sal_uInt16>(
-        aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()), MAP_TWIP).Height());
+        pVirtWindow->PixelToLogic(Size(0, pVirtWindow->GetTextHeight()), MAP_TWIP).Height());
 
     if (nTest > nDefFontHeight)
         nDefFontHeight = nTest;

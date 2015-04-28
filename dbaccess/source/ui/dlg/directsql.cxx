@@ -76,11 +76,23 @@ namespace dbaui
 
     DirectSQLDialog::~DirectSQLDialog()
     {
+        disposeOnce();
+    }
+
+    void DirectSQLDialog::dispose()
+    {
         {
             ::osl::MutexGuard aGuard(m_aMutex);
             stopAllComponentListening();
         }
-
+        m_pSQL.clear();
+        m_pExecute.clear();
+        m_pSQLHistory.clear();
+        m_pStatus.clear();
+        m_pShowOutput.clear();
+        m_pOutput.clear();
+        m_pClose.clear();
+        ModalDialog::dispose();
     }
 
     void DirectSQLDialog::_disposing( const EventObject& _rSource )
@@ -94,8 +106,8 @@ namespace dbaui
 
         {
             OUString sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
-            MessageDialog aError(this, sMessage);
-            aError.Execute();
+            ScopedVclPtrInstance< MessageDialog > aError(this, sMessage);
+            aError->Execute();
         }
 
         PostUserEvent(LINK(this, DirectSQLDialog, OnClose));

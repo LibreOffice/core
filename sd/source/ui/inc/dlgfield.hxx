@@ -34,10 +34,10 @@ class SvxFieldData;
 class SdModifyFieldDlg : public ModalDialog
 {
 private:
-    RadioButton* m_pRbtFix;
-    RadioButton* m_pRbtVar;
-    SvxLanguageBox* m_pLbLanguage;
-    ListBox* m_pLbFormat;
+    VclPtr<RadioButton> m_pRbtFix;
+    VclPtr<RadioButton> m_pRbtVar;
+    VclPtr<SvxLanguageBox> m_pLbLanguage;
+    VclPtr<ListBox> m_pLbFormat;
     SfxItemSet          maInputSet;
 
     const SvxFieldData* pField;
@@ -49,7 +49,8 @@ private:
 
 public:
     SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );
-    virtual ~SdModifyFieldDlg() {}
+    virtual ~SdModifyFieldDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     SvxFieldData*       GetField();
     SfxItemSet          GetItemSet();

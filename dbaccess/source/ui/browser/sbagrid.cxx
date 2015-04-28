@@ -309,7 +309,7 @@ void SAL_CALL SbaXGridPeer::dispose() throw( RuntimeException, std::exception )
 
 void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl, const Reference< ::com::sun::star::frame::XStatusListener > & xControl)
 {
-    SbaGridControl* pGrid = static_cast<SbaGridControl*>(GetWindow());
+    VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if (!pGrid)
         return;
 
@@ -361,7 +361,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDis
 
 IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
 {
-    SbaGridControl* pGrid = static_cast< SbaGridControl* >( GetWindow() );
+    VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if ( pGrid )    // if this fails, we were disposing before arriving here
     {
         if ( Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier() )
@@ -398,7 +398,7 @@ SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
 
 void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException, std::exception )
 {
-    SbaGridControl* pGrid = static_cast<SbaGridControl*>(GetWindow());
+    VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if (!pGrid)
         return;
 
@@ -549,9 +549,9 @@ SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rx
     return NULL;
 }
 
-FmGridControl* SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
+VclPtr<FmGridControl> SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
 {
-    return new SbaGridControl( m_xContext, pParent, this, nStyle);
+    return VclPtr<SbaGridControl>::Create( m_xContext, pParent, this, nStyle);
 }
 
 // SbaGridHeader
@@ -717,13 +717,19 @@ SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
 
 SbaGridControl::~SbaGridControl()
 {
-    if (m_nAsyncDropEvent)
-        Application::RemoveUserEvent(m_nAsyncDropEvent);
+    disposeOnce();
 }
 
-BrowserHeader* SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
+void SbaGridControl::dispose()
 {
-    return new SbaGridHeader(pParent);
+    if (m_nAsyncDropEvent)
+        Application::RemoveUserEvent(m_nAsyncDropEvent);
+    FmGridControl::dispose();
+}
+
+VclPtr<BrowserHeader> SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
+{
+    return VclPtr<SbaGridHeader>::Create(pParent);
 }
 
 CellController* SbaGridControl::GetController(long nRow, sal_uInt16 nCol)
@@ -786,10 +792,10 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
         Any aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
         sal_Int32 nCurWidth = aWidth.hasValue() ? ::comphelper::getINT32(aWidth) : -1;
 
-        DlgSize aDlgColWidth(this, nCurWidth, false);
-        if (aDlgColWidth.Execute())
+        ScopedVclPtrInstance< DlgSize > aDlgColWidth(this, nCurWidth, false);
+        if (aDlgColWidth->Execute())
         {
-            sal_Int32 nValue = aDlgColWidth.GetValue();
+            sal_Int32 nValue = aDlgColWidth->GetValue();
             Any aNewWidth;
             if (-1 == nValue)
             {   // set to default
@@ -815,10 +821,10 @@ void SbaGridControl::SetRowHeight()
     Any aHeight = xCols->getPropertyValue(PROPERTY_ROW_HEIGHT);
     sal_Int32 nCurHeight = aHeight.hasValue() ? ::comphelper::getINT32(aHeight) : -1;
 
-    DlgSize aDlgRowHeight(this, nCurHeight, true);
-    if (aDlgRowHeight.Execute())
+    ScopedVclPtrInstance< DlgSize > aDlgRowHeight(this, nCurHeight, true);
+    if (aDlgRowHeight->Execute())
     {
-        sal_Int32 nValue = aDlgRowHeight.GetValue();
+        sal_Int32 nValue = aDlgRowHeight->GetValue();
         Any aNewHeight;
         if ((sal_Int16)-1 == nValue)
         {   // set to default

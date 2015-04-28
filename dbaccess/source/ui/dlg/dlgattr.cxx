@@ -52,8 +52,13 @@ SbaSbAttrDlg::SbaSbAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs,
 
 SbaSbAttrDlg::~SbaSbAttrDlg()
 {
-    delete pNumberInfoItem;
+    disposeOnce();
+}
 
+void SbaSbAttrDlg::dispose()
+{
+    delete pNumberInfoItem;
+    SfxTabDialog::dispose();
 }
 
 void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )

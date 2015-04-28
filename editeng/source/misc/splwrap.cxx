@@ -39,9 +39,9 @@
 #include <editeng/editerr.hxx>
 #include <boost/scoped_ptr.hpp>
 
-#define WAIT_ON() if(pWin != NULL) { pWin->EnterWait(); }
+#define WAIT_ON() if(pWin != nullptr) { pWin->EnterWait(); }
 
-#define WAIT_OFF() if(pWin != NULL) { pWin->LeaveWait(); }
+#define WAIT_OFF() if(pWin != nullptr) { pWin->LeaveWait(); }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -411,8 +411,8 @@ bool SvxSpellWrapper::SpellNext( )
         WAIT_OFF();
 
         sal_uInt16 nResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
-        MessageDialog aBox(pWin, EditResId(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-        if ( aBox.Execute() != RET_YES )
+        ScopedVclPtrInstance< MessageDialog > aBox(pWin, EditResId(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        if ( aBox->Execute() != RET_YES )
         {
             // sacrifice the other area if necessary ask for special area
             WAIT_ON();

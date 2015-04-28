@@ -26,14 +26,16 @@
 #include <svx/stddlg.hxx>
 #include <svx/svxdlg.hxx>
 
-class SvxNewTableDialog : public SvxAbstractNewTableDialog, public ModalDialog
+class SvxNewTableDialog : public SvxAbstractNewTableDialog
 {
 private:
-    NumericField*       mpNumColumns;
-    NumericField*       mpNumRows;
+    VclPtr<ModalDialog>  m_pDialog;
+    VclPtr<NumericField> mpNumColumns;
+    VclPtr<NumericField> mpNumRows;
 
 public:
     SvxNewTableDialog( vcl::Window* pWindow );
+    virtual ~SvxNewTableDialog();
 
     virtual short Execute() SAL_OVERRIDE;
 

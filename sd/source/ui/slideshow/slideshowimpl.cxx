@@ -705,14 +705,12 @@ void SAL_CALL SlideshowImpl::disposing()
     }
 
     if( mpTimeButton )
-    {
         mpTimeButton->Hide();
-        delete mpTimeButton;
-        mpTimeButton = 0;
-    }
+    mpTimeButton.disposeAndClear();
 
     if( mpShowWindow )
         mpShowWindow->Hide();
+    mpShowWindow.disposeAndClear();
 
     if ( mpViewShell )
     {
@@ -743,8 +741,7 @@ void SAL_CALL SlideshowImpl::disposing()
 
     if( mpShowWindow )
     {
-        delete mpShowWindow;
-        mpShowWindow = 0;
+        mpShowWindow.clear();
     }
 
     setActiveXToolbarsVisible( true );
@@ -805,7 +802,7 @@ bool SlideshowImpl::startPreview(
         mpSlideController->insertSlideNumber( nSlideNumber-1 );
         mpSlideController->setPreviewNode( xAnimationNode );
 
-        mpShowWindow = new ShowWindow( this, ((pParent == 0) && mpViewShell) ?  mpParentWindow : pParent );
+        mpShowWindow = VclPtr<ShowWindow>::Create( this, ((pParent == 0) && mpViewShell) ?  mpParentWindow.get() : pParent );
         if( mpViewShell )
         {
             mpViewShell->SetActiveWindow( mpShowWindow );
@@ -857,7 +854,7 @@ bool SlideshowImpl::startPreview(
 
         bRet = startShowImpl( aProperties );
 
-        if( mpShowWindow != 0 && meAnimationMode == ANIMATIONMODE_PREVIEW )
+        if( mpShowWindow != nullptr && meAnimationMode == ANIMATIONMODE_PREVIEW )
             mpShowWindow->SetPreviewMode();
 
     }
@@ -882,8 +879,8 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
     DBG_ASSERT( !mxShow.is(), "sd::SlideshowImpl::startShow(), called twice!" );
     if( mxShow.is() )
         return true;
-    DBG_ASSERT( mpParentWindow!=NULL, "sd::SlideshowImpl::startShow() called without parent window" );
-    if (mpParentWindow == NULL)
+    DBG_ASSERT( mpParentWindow!=nullptr, "sd::SlideshowImpl::startShow() called without parent window" );
+    if (mpParentWindow == nullptr)
         return false;
 
     // Autoplay (pps/ppsx)
@@ -970,7 +967,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             // hide child windows
             hideChildWindows();
 
-            mpShowWindow = new ShowWindow( this, mpParentWindow );
+            mpShowWindow = VclPtr<ShowWindow>::Create( this, mpParentWindow );
             mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
             if( mpViewShell )
             {
@@ -3346,7 +3343,8 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
         Reference< XWindow > xWindow;
         if( rValue >>= xWindow )
         {
-            mpParentWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : 0;
+            mpParentWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow )
+                                          : VclPtr<vcl::Window>();
             return;
         }
     }

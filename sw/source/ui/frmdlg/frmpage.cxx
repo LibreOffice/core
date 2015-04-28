@@ -712,6 +712,49 @@ SwFrmPage::SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pAutoHeightCB->SetClickHdl( LINK( this, SwFrmPage, AutoHeightClickHdl ) );
 }
 
+SwFrmPage::~SwFrmPage()
+{
+    disposeOnce();
+}
+
+void SwFrmPage::dispose()
+{
+    m_pWidthFT.clear();
+    m_pWidthAutoFT.clear();
+    m_pRelWidthCB.clear();
+    m_pRelWidthRelationLB.clear();
+    m_pAutoWidthCB.clear();
+    m_pHeightFT.clear();
+    m_pHeightAutoFT.clear();
+    m_pRelHeightCB.clear();
+    m_pRelHeightRelationLB.clear();
+    m_pAutoHeightCB.clear();
+    m_pFixedRatioCB.clear();
+    m_pRealSizeBT.clear();
+    m_pAnchorFrame.clear();
+    m_pAnchorAtPageRB.clear();
+    m_pAnchorAtParaRB.clear();
+    m_pAnchorAtCharRB.clear();
+    m_pAnchorAsCharRB.clear();
+    m_pAnchorAtFrameRB.clear();
+    m_pHorizontalFT.clear();
+    m_pHorizontalDLB.clear();
+    m_pAtHorzPosFT.clear();
+    m_pAtHorzPosED.clear();
+    m_pHoriRelationFT.clear();
+    m_pHoriRelationLB.clear();
+    m_pMirrorPagesCB.clear();
+    m_pVerticalFT.clear();
+    m_pVerticalDLB.clear();
+    m_pAtVertPosFT.clear();
+    m_pAtVertPosED.clear();
+    m_pVertRelationFT.clear();
+    m_pVertRelationLB.clear();
+    m_pFollowTextFlowCB.clear();
+    m_pExampleWN.clear();
+    SfxTabPage::dispose();
+}
+
 namespace
 {
     struct FrmMaps
@@ -815,13 +858,9 @@ void SwFrmPage::setOptimalRelWidth()
     m_pHoriRelationLB->Clear();
 }
 
-SwFrmPage::~SwFrmPage()
+VclPtr<SfxTabPage> SwFrmPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-}
-
-SfxTabPage* SwFrmPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
-{
-    return new SwFrmPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>(new SwFrmPage( pParent, *rSet ), SAL_NO_ACQUIRE);
 }
 
 void SwFrmPage::EnableGraficMode()
@@ -2364,12 +2403,27 @@ SwGrfExtPage::SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwGrfExtPage::~SwGrfExtPage()
 {
-    delete pGrfDlg;
+    disposeOnce();
 }
 
-SfxTabPage* SwGrfExtPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
+void SwGrfExtPage::dispose()
 {
-    return new SwGrfExtPage( pParent, *rSet );
+    delete pGrfDlg;
+    m_pMirror.clear();
+    m_pMirrorVertBox.clear();
+    m_pMirrorHorzBox.clear();
+    m_pAllPagesRB.clear();
+    m_pLeftPagesRB.clear();
+    m_pRightPagesRB.clear();
+    m_pBmpWin.clear();
+    m_pConnectED.clear();
+    m_pBrowseBT.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwGrfExtPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
+{
+    return VclPtr<SfxTabPage>(new SwGrfExtPage( pParent, *rSet ), SAL_NO_ACQUIRE);
 }
 
 void SwGrfExtPage::Reset(const SfxItemSet *rSet)
@@ -2702,6 +2756,18 @@ SwFrmURLPage::SwFrmURLPage( vcl::Window *pParent, const SfxItemSet &rSet ) :
 
 SwFrmURLPage::~SwFrmURLPage()
 {
+    disposeOnce();
+}
+
+void SwFrmURLPage::dispose()
+{
+    pURLED.clear();
+    pSearchPB.clear();
+    pNameED.clear();
+    pFrameCB.clear();
+    pServerCB.clear();
+    pClientCB.clear();
+    SfxTabPage::dispose();
 }
 
 void SwFrmURLPage::Reset( const SfxItemSet *rSet )
@@ -2781,9 +2847,9 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-SfxTabPage* SwFrmURLPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwFrmURLPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwFrmURLPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>(new SwFrmURLPage( pParent, *rSet ), SAL_NO_ACQUIRE);
 }
 
 IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
@@ -2844,11 +2910,38 @@ SwFrmAddPage::SwFrmAddPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwFrmAddPage::~SwFrmAddPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SwFrmAddPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+void SwFrmAddPage::dispose()
 {
-    return new SwFrmAddPage(pParent, *rSet);
+    pNameFrame.clear();
+    pNameFT.clear();
+    pNameED.clear();
+    pAltNameFT.clear();
+    pAltNameED.clear();
+    pPrevFT.clear();
+    pPrevLB.clear();
+    pNextFT.clear();
+    pNextLB.clear();
+    pProtectFrame.clear();
+    pProtectContentCB.clear();
+    pProtectFrameCB.clear();
+    pProtectSizeCB.clear();
+    m_pContentAlignFrame.clear();
+    m_pVertAlignLB.clear();
+    pPropertiesFrame.clear();
+    pEditInReadonlyCB.clear();
+    pPrintFrameCB.clear();
+    pTextFlowFT.clear();
+    pTextFlowLB.clear();
+    SfxTabPage::dispose();
+}
+
+
+VclPtr<SfxTabPage> SwFrmAddPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+{
+    return VclPtr<SfxTabPage>(new SwFrmAddPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwFrmAddPage::Reset(const SfxItemSet *rSet )

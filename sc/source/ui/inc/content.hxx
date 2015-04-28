@@ -46,7 +46,7 @@ const sal_uLong SC_CONTENT_NOCHILD  = ~0UL;
 
 class ScContentTree : public SvTreeListBox
 {
-    ScNavigatorDlg*     pParentWindow;
+    VclPtr<ScNavigatorDlg>  pParentWindow;
     ImageList           aEntryImages;
     SvTreeListEntry*        pRootNodes[SC_CONTENT_COUNT];
     sal_uInt16              nRootType;          // set as Root
@@ -124,6 +124,7 @@ protected:
 public:
             ScContentTree( vcl::Window* pParent, const ResId& rResId );
             virtual ~ScContentTree();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString getAltLongDescText(SvTreeListEntry* pEntry, bool isAltText) const;
     OUString GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;

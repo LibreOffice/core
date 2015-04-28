@@ -50,9 +50,9 @@ private:
     XFillHatchItem*     mpHatchItem;
     XFillBitmapItem*    mpBitmapItem;
 
-    FillControl*        mpFillControl;
-    SvxFillTypeBox*     mpFillTypeLB;
-    SvxFillAttrBox*     mpFillAttrLB;
+    VclPtr<FillControl>        mpFillControl;
+    VclPtr<SvxFillTypeBox>     mpFillTypeLB;
+    VclPtr<SvxFillAttrBox>     mpFillAttrLB;
 
     css::drawing::FillStyle          meLastXFS;
 
@@ -67,7 +67,7 @@ public:
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
     void Update(const SfxPoolItem* pState);
-    virtual vcl::Window* CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
 };
 
 
@@ -77,8 +77,8 @@ class SAL_WARN_UNUSED FillControl : public vcl::Window
 private:
     friend class SvxFillToolBoxControl;
 
-    SvxFillTypeBox*     mpLbFillType;
-    SvxFillAttrBox*     mpLbFillAttr;
+    VclPtr<SvxFillTypeBox>     mpLbFillType;
+    VclPtr<SvxFillAttrBox>     mpLbFillAttr;
     Size                maLogicalFillSize;
     Size                maLogicalAttrSize;
 
@@ -101,6 +101,7 @@ private:
 public:
     FillControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~FillControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Resize() SAL_OVERRIDE;
 };

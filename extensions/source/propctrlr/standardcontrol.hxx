@@ -374,15 +374,16 @@ namespace pcr
     class DropDownEditControl : public DropDownEditControl_Base
     {
     private:
-        OMultilineFloatingEdit*             m_pFloatingEdit;
-        MultiLineEdit*                      m_pImplEdit;
-        PushButton*                         m_pDropdownButton;
+        VclPtr<OMultilineFloatingEdit>             m_pFloatingEdit;
+        VclPtr<MultiLineEdit>               m_pImplEdit;
+        VclPtr<PushButton>                         m_pDropdownButton;
         MultiLineOperationMode              m_nOperationMode;
         bool                                m_bDropdown : 1;
 
     public:
         DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle );
         virtual ~DropDownEditControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         void setOperationMode( MultiLineOperationMode _eMode ) { m_nOperationMode = _eMode; }
         MultiLineOperationMode getOperationMode() const { return m_nOperationMode; }

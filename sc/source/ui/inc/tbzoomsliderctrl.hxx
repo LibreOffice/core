@@ -34,7 +34,7 @@ public:
     virtual ~ScZoomSliderControl();
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual vcl::Window* CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 class ScZoomSliderWnd: public vcl::Window
@@ -54,6 +54,7 @@ public:
     ScZoomSliderWnd( vcl::Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , sal_uInt16 nCurrentZoom );
     virtual ~ScZoomSliderWnd();
+    virtual void dispose() SAL_OVERRIDE;
     void            UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem );
 
 protected:

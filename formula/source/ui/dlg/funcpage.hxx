@@ -64,8 +64,8 @@ private:
     OModuleClient   m_aModuleClient;
     Link            aDoubleClickLink;
     Link            aSelectionLink;
-    ListBox         *m_pLbCategory;
-    FormulaListBox  *m_pLbFunction;
+    VclPtr<ListBox> m_pLbCategory;
+    VclPtr<FormulaListBox> m_pLbFunction;
     const IFunctionManager*
                     m_pFunctionManager;
 
@@ -86,6 +86,8 @@ protected:
 public:
 
                     FuncPage( vcl::Window* pParent,const IFunctionManager* _pFunctionManager);
+    virtual         ~FuncPage();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetCategory(sal_Int32  nCat);
     void            SetFunction(sal_Int32  nFunc);

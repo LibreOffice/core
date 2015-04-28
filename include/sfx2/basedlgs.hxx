@@ -81,6 +81,7 @@ protected:
 
 public:
     virtual ~SfxModalDialog();
+    virtual void dispose() SAL_OVERRIDE;
     const SfxItemSet*   GetOutputItemSet() const { return pOutputSet; }
     const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
 };
@@ -102,6 +103,7 @@ protected:
     SfxModelessDialog( SfxBindings*, SfxChildWindow*,
         vcl::Window*, const OUString& rID, const OUString& rUIXMLDescription );
     virtual ~SfxModelessDialog();
+    virtual void dispose() SAL_OVERRIDE;
     virtual bool            Close() SAL_OVERRIDE;
     virtual void            Resize() SAL_OVERRIDE;
     virtual void            Move() SAL_OVERRIDE;
@@ -140,6 +142,7 @@ protected:
                                               const OString& rID, const OUString& rUIXMLDescription,
                                               const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
                             virtual ~SfxFloatingWindow();
+    virtual void            dispose() SAL_OVERRIDE;
 
     virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual bool            Close() SAL_OVERRIDE;
@@ -161,16 +164,12 @@ public:
 
 struct SingleTabDlgImpl
 {
-    SfxTabPage*                 m_pSfxPage;
-    FixedLine*                  m_pLine;
+    VclPtr<SfxTabPage>          m_pSfxPage;
+    VclPtr<FixedLine>           m_pLine;
     OUString                    m_sInfoURL;
     Link                        m_aInfoLink;
 
-    SingleTabDlgImpl()
-        : m_pSfxPage(NULL)
-        , m_pLine(NULL)
-    {
-    }
+    SingleTabDlgImpl();
 };
 
 typedef const sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
@@ -187,6 +186,7 @@ public:
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
     virtual             ~SfxSingleTabDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0, sal_uInt32 nSettingsId = 0);
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
@@ -197,9 +197,9 @@ public:
 protected:
     GetTabPageRanges    fnGetRanges;
 
-    OKButton*           pOKBtn;
-    CancelButton*       pCancelBtn;
-    HelpButton*         pHelpBtn;
+    VclPtr<OKButton>      pOKBtn;
+    VclPtr<CancelButton>  pCancelBtn;
+    VclPtr<HelpButton>    pHelpBtn;
 
     SingleTabDlgImpl*   pImpl;
 

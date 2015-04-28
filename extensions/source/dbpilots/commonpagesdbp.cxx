@@ -77,6 +77,19 @@ namespace dbp
         m_pDatasource->SetDropDownLineCount(10);
     }
 
+    OTableSelectionPage::~OTableSelectionPage()
+    {
+        disposeOnce();
+    }
+
+    void OTableSelectionPage::dispose()
+    {
+        m_pDatasourceLabel.clear();
+        m_pDatasource.clear();
+        m_pSearchDatabase.clear();
+        m_pTable.clear();
+        OControlWizardPage::dispose();
+    }
 
     void OTableSelectionPage::ActivatePage()
     {
@@ -383,6 +396,19 @@ namespace dbp
     {
     }
 
+    OMaybeListSelectionPage::~OMaybeListSelectionPage()
+    {
+        disposeOnce();
+    }
+
+    void OMaybeListSelectionPage::dispose()
+    {
+        m_pYes.clear();
+        m_pNo.clear();
+        m_pList.clear();
+        OControlWizardPage::dispose();
+    }
+
     void OMaybeListSelectionPage::announceControls(RadioButton& _rYesButton, RadioButton& _rNoButton, ListBox& _rSelection)
     {
         m_pYes = &_rYesButton;
@@ -453,6 +479,19 @@ namespace dbp
         m_pStoreWhere->SetDropDownLineCount(10);
     }
 
+    ODBFieldPage::~ODBFieldPage()
+    {
+        disposeOnce();
+    }
+
+    void ODBFieldPage::dispose()
+    {
+        m_pDescription.clear();
+        m_pStoreYes.clear();
+        m_pStoreNo.clear();
+        m_pStoreWhere.clear();
+        OMaybeListSelectionPage::dispose();
+    }
 
     void ODBFieldPage::initializePage()
     {

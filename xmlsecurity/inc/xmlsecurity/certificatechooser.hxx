@@ -48,9 +48,9 @@ private:
     css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
     SignatureInformations maCertsToIgnore;
 
-    SvSimpleTable*     m_pCertLB;
-    PushButton*         m_pViewBtn;
-    OKButton*           m_pOKBtn;
+    VclPtr<SvSimpleTable>     m_pCertLB;
+    VclPtr<PushButton>         m_pViewBtn;
+    VclPtr<OKButton>           m_pOKBtn;
 
     bool                mbInitialized;
 
@@ -65,6 +65,7 @@ private:
 public:
     CertificateChooser( vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
     virtual ~CertificateChooser();
+    virtual void dispose() SAL_OVERRIDE;
 
     short Execute() SAL_OVERRIDE;
 

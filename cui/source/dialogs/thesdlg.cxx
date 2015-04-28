@@ -66,6 +66,17 @@ LookUpComboBox::LookUpComboBox(vcl::Window *pParent)
     EnableAutocomplete( false );
 }
 
+LookUpComboBox::~LookUpComboBox()
+{
+    disposeOnce();
+}
+
+void LookUpComboBox::dispose()
+{
+    m_pDialog.clear();
+    ComboBox::dispose();
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLookUpComboBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new LookUpComboBox(pParent);
@@ -74,10 +85,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLookUpComboBox(vcl::Wi
 void LookUpComboBox::init(SvxThesaurusDialog *pDialog)
 {
     m_pDialog = pDialog;
-}
-
-LookUpComboBox::~LookUpComboBox()
-{
 }
 
 void LookUpComboBox::Modify()
@@ -100,13 +107,21 @@ ReplaceEdit::ReplaceEdit(vcl::Window *pParent)
 {
 }
 
+ReplaceEdit::~ReplaceEdit()
+{
+    disposeOnce();
+}
+
+void ReplaceEdit::dispose()
+{
+    m_pBtn.clear();
+    Edit::dispose();
+}
+
+
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeReplaceEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ReplaceEdit(pParent);
-}
-
-ReplaceEdit::~ReplaceEdit()
-{
 }
 
 void ReplaceEdit::Modify()
@@ -178,7 +193,14 @@ void ThesaurusAlternativesCtrl::init(SvxThesaurusDialog *pDialog)
 
 ThesaurusAlternativesCtrl::~ThesaurusAlternativesCtrl()
 {
+    disposeOnce();
+}
+
+void ThesaurusAlternativesCtrl::dispose()
+{
     ClearExtraData();
+    m_pDialog.clear();
+    SvxCheckListBox::dispose();
 }
 
 void ThesaurusAlternativesCtrl::ClearExtraData()
@@ -516,14 +538,25 @@ SvxThesaurusDialog::SvxThesaurusDialog(
         Enable( false );
 }
 
+SvxThesaurusDialog::~SvxThesaurusDialog()
+{
+    disposeOnce();
+}
+
+void SvxThesaurusDialog::dispose()
+{
+    m_pLeftBtn.clear();
+    m_pWordCB.clear();
+    m_pAlternativesCT.clear();
+    m_pReplaceEdit.clear();
+    m_pLangLB.clear();
+    SvxStandardDialog::dispose();
+}
+
 IMPL_LINK( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, EMPTYARG /*pBtn*/ )
 {
     EndDialog(RET_OK);
     return 0;
-}
-
-SvxThesaurusDialog::~SvxThesaurusDialog()
-{
 }
 
 void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )

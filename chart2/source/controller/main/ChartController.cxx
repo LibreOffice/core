@@ -388,7 +388,7 @@ void SAL_CALL ChartController::attachFrame(
     {
         // calls to VCL
         SolarMutexGuard aSolarGuard;
-        m_pChartWindow = new ChartWindow(this,pParent,pParent?pParent->GetStyle():0);
+        m_pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
         m_pChartWindow->SetBackground();//no Background
         m_xViewWindow = uno::Reference< awt::XWindow >( m_pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
         m_pChartWindow->Show();
@@ -1271,8 +1271,8 @@ void ChartController::executeDispatch_ChartType()
 
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
-    ChartTypeDialog aDlg( m_pChartWindow, getModel(), m_xCC );
-    if( aDlg.Execute() == RET_OK )
+    ScopedVclPtrInstance< ChartTypeDialog > aDlg( m_pChartWindow, getModel(), m_xCC );
+    if( aDlg->Execute() == RET_OK )
     {
         impl_adaptDataSeriesAutoResize();
         aUndoGuard.commit();
@@ -1292,8 +1292,8 @@ void ChartController::executeDispatch_SourceData()
     if( xChartDoc.is())
     {
         SolarMutexGuard aSolarGuard;
-        ::chart::DataSourceDialog aDlg( m_pChartWindow, xChartDoc, m_xCC );
-        if( aDlg.Execute() == RET_OK )
+        ScopedVclPtrInstance< ::chart::DataSourceDialog > aDlg( m_pChartWindow, xChartDoc, m_xCC );
+        if( aDlg->Execute() == RET_OK )
         {
             impl_adaptDataSeriesAutoResize();
             aUndoGuard.commit();

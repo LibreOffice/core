@@ -655,9 +655,11 @@ namespace svx
         fillFeatureDispatchers( m_xActiveControl, pDialogSlots, aAdditionalFestures );
         transferFeatureStatesToItemSet( aAdditionalFestures, *xCurrentItems, true );
 
-        boost::scoped_ptr<SfxTabDialog> xDialog ( _eSet == eCharAttribs
-                                                ? static_cast< SfxTabDialog* >( new TextControlCharAttribDialog( NULL, *xCurrentItems, *pFontList ) )
-                                                : static_cast< SfxTabDialog* >( new TextControlParaAttribDialog( NULL, *xCurrentItems ) ) );
+        VclPtr<SfxTabDialog> xDialog;
+        if ( _eSet == eCharAttribs)
+            xDialog = VclPtr<TextControlCharAttribDialog>::Create( nullptr, *xCurrentItems, *pFontList );
+        else
+            xDialog = VclPtr<TextControlParaAttribDialog>::Create( nullptr, *xCurrentItems );
         if ( RET_OK == xDialog->Execute() )
         {
             const SfxItemSet& rModifiedItems = *xDialog->GetOutputItemSet();

@@ -152,13 +152,12 @@ IMPL_STATIC_LINK_NOINSTANCE( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, Execute
 }
 
 
-vcl::Window* SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pParent )
 {
-    SvtURLBox* pURLBox = new SvtURLBox( pParent );
+    VclPtrInstance<SvtURLBox> pURLBox( pParent );
     pURLBox->SetOpenHdl( LINK( this, SfxURLToolBoxControl_Impl, OpenHdl ) );
     pURLBox->SetSelectHdl( LINK( this, SfxURLToolBoxControl_Impl, SelectHdl ) );
-
-    return pURLBox;
+    return pURLBox.get();
 }
 
 IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, SelectHdl)

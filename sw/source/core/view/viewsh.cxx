@@ -322,7 +322,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                 pRegion->Compress();
 
-                VirtualDevice *pVout = 0;
+                VclPtr<VirtualDevice> pVout;
                 while ( !pRegion->empty() )
                 {
                     SwRect aRect( pRegion->back() );
@@ -333,7 +333,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                     {
                         //create virtual device and set.
                         if ( !pVout )
-                            pVout = new VirtualDevice( *GetOut() );
+                            pVout = VclPtr<VirtualDevice>::Create( *GetOut() );
                         MapMode aMapMode( GetOut()->GetMapMode() );
                         pVout->SetMapMode( aMapMode );
 
@@ -375,7 +375,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             aMapMode.SetOrigin( aOrigin );
                             pVout->SetMapMode( aMapMode );
 
-                            mpOut = pVout;
+                            mpOut = pVout.get();
                             if ( bPaintsFromSystem )
                                 PaintDesktop( aRect );
                             pCurrentLayout->Paint( aRect );
@@ -411,7 +411,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                     lcl_PaintTransparentFormControls(*this, aRect); // i#107365
                 }
 
-                delete pVout;
+                pVout.disposeAndClear();
                 delete pRegion;
                 Imp()->DelRegion();
             }
@@ -464,7 +464,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
         if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() )
         {
             //Refresh with virtual device to avoid flickering.
-            VirtualDevice *pVout = new VirtualDevice( *mpOut );
+            VclPtrInstance<VirtualDevice> pVout( *mpOut );
             pVout->SetMapMode( mpOut->GetMapMode() );
             Size aSize( VisArea().SSize() );
             aSize.Width() += 20;
@@ -483,7 +483,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
                 DLPrePaint2(aRepaintRegion);
 
                 OutputDevice *pOld = mpOut;
-                mpOut = pVout;
+                mpOut = pVout.get();
                 Paint( VisArea().SVRect() );
                 mpOut = pOld;
                 mpOut->DrawOutDev( VisArea().Pos(), aSize,
@@ -500,7 +500,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
                 GetWin()->EnablePaint( true );
                 GetWin()->Invalidate( INVALIDATE_CHILDREN );
             }
-            delete pVout;
+            pVout.disposeAndClear();
         }
         else
         {
@@ -1207,7 +1207,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
 
         //create virtual device and set.
         const Size aPixSz = GetWin()->PixelToLogic(Size(1,1));
-        VirtualDevice *pVout = new VirtualDevice( *GetWin() );
+        VclPtrInstance<VirtualDevice> pVout( *GetWin() );
         pVout->SetLineColor( GetWin()->GetLineColor() );
         pVout->SetFillColor( GetWin()->GetFillColor() );
         MapMode aMapMode( GetWin()->GetMapMode() );
@@ -1239,7 +1239,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
             aMapMode.SetOrigin( aPt );
             pVout->SetMapMode( aMapMode );
             OutputDevice *pOld = mpOut;
-            mpOut = pVout;
+            mpOut = pVout.get();
 
             {
                 // #i75172# To get a clean repaint, a new ObjectContact is needed here. Without, the
@@ -1384,14 +1384,14 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                         --mnLockPaint;
                 }
             }
-            delete pVout;
+            pVout.disposeAndClear();
             GetWin()->Update();
             if ( !Imp()->bStopSmooth )
                 --mnLockPaint;
             SetFirstVisPageInvalid();
             return true;
         }
-        delete pVout;
+        pVout.disposeAndClear();
     }
 #endif
 
@@ -2262,7 +2262,7 @@ SwViewShell::CreateAccessiblePreview()
 
 void SwViewShell::InvalidateAccessibleFocus()
 {
-    if( Imp()->IsAccessible() )
+    if( Imp() && Imp()->IsAccessible() )
         Imp()->GetAccessibleMap().InvalidateFocus();
 }
 

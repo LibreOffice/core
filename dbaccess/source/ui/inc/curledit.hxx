@@ -36,13 +36,14 @@ class OConnectionURLEdit : public Edit
 {
     ::dbaccess::ODsnTypeCollection*
                         m_pTypeCollection;
-    FixedText*          m_pForcedPrefix;
+    VclPtr<FixedText>          m_pForcedPrefix;
     OUString            m_sSaveValueNoPrefix;
     bool            m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
 
 public:
     OConnectionURLEdit(vcl::Window* pParent, WinBits _nBits,bool _bShowPrefix = false);
     virtual ~OConnectionURLEdit();
+    virtual void dispose() SAL_OVERRIDE;
 
 public:
     // Edit overridables

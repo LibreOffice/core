@@ -241,6 +241,7 @@ public:
     explicit                    ScCsvControl( ScCsvControl& rParent );
     explicit                    ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
     virtual                     ~ScCsvControl();
+    virtual void                dispose() SAL_OVERRIDE;
 
     // event handling ---------------------------------------------------------
 

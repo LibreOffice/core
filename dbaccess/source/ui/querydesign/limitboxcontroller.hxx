@@ -13,6 +13,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svtools/toolboxcontroller.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/vclptr.hxx>
 
 #include "apitools.hxx"
 
@@ -59,7 +60,7 @@ class LimitBoxController: public svt::ToolboxController,
         using svt::ToolboxController::dispatchCommand;
 
     private:
-        LimitBoxImpl* m_pLimitBox;
+        VclPtr<LimitBoxImpl> m_pLimitBox;
 };
 
 } ///dbaui namespace

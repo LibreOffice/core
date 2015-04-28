@@ -200,10 +200,10 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
         if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-            CompressGraphicsDialog dialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() );
-            if ( dialog.Execute() == RET_OK )
+            ScopedVclPtrInstance< CompressGraphicsDialog > dialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() );
+            if ( dialog->Execute() == RET_OK )
             {
-                SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
+                SdrGrafObj* pNewObject = dialog->GetCompressedSdrGrafObj();
                 SdrPageView* pPageView = pView->GetSdrPageView();
                 OUString aUndoString = pView->GetDescriptionOfMarkedObjects() + " Compress";
                 pView->BegUndo( aUndoString );

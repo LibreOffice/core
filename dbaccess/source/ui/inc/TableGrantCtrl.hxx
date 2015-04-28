@@ -53,14 +53,15 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 
     mutable TTablePrivilegeMap  m_aPrivMap;
     OUString             m_sUserName;
-    ::svt::CheckBoxControl*     m_pCheckCell;
-    Edit*                       m_pEdit;
+    VclPtr<::svt::CheckBoxControl>     m_pCheckCell;
+    VclPtr<Edit>                       m_pEdit;
     long                        m_nDataPos;
     ImplSVEvent *               m_nDeactivateEvent;
 
 public:
     OTableGrantControl( vcl::Window* pParent, WinBits nBits);
     virtual ~OTableGrantControl();
+    virtual void dispose() SAL_OVERRIDE;
     void UpdateTables();
     void setUserName(const OUString& _sUserName);
     void setGrantUser(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>& _xGrantUser);

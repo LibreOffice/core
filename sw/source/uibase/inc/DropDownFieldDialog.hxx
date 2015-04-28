@@ -33,12 +33,12 @@ namespace sw
 {
 class DropDownFieldDialog : public SvxStandardDialog
 {
-    ListBox*            m_pListItemsLB;
+    VclPtr<ListBox>            m_pListItemsLB;
 
-    OKButton*           m_pOKPB;
-    PushButton*         m_pNextPB;
+    VclPtr<OKButton>           m_pOKPB;
+    VclPtr<PushButton>         m_pNextPB;
 
-    PushButton*         m_pEditPB;
+    VclPtr<PushButton>         m_pEditPB;
 
     SwWrtShell          &rSh;
     SwDropDownField*    pDropField;
@@ -48,6 +48,8 @@ class DropDownFieldDialog : public SvxStandardDialog
 public:
     DropDownFieldDialog(   vcl::Window *pParent, SwWrtShell &rSh,
                                 SwField* pField, bool bNextButton = false );
+    virtual ~DropDownFieldDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 } //namespace sw
 

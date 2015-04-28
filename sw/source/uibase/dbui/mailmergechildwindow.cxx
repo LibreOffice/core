@@ -43,7 +43,7 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( vcl::Window* _pParent,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )
 {
-    pWindow = new SwMailMergeChildWin( pBindings, this, _pParent);
+    pWindow = VclPtr<SwMailMergeChildWin>::Create( pBindings, this, _pParent);
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {
@@ -59,7 +59,7 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( vcl::Window* _pParent,
         pInfo->aSize = pWindow->GetSizePixel();
     }
 
-    static_cast<SwMailMergeChildWin *>(pWindow)->Initialize(pInfo);
+    static_cast<SwMailMergeChildWin *>(pWindow.get())->Initialize(pInfo);
     pWindow->Show();
 }
 
@@ -71,6 +71,17 @@ SwMailMergeChildWin::SwMailMergeChildWin(SfxBindings* _pBindings,
     get(m_pBackTB, "back");
     m_pBackTB->SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
     m_pBackTB->SetButtonType( ButtonType::SYMBOLTEXT );
+}
+
+SwMailMergeChildWin::~SwMailMergeChildWin()
+{
+    disposeOnce();
+}
+
+void SwMailMergeChildWin::dispose()
+{
+    m_pBackTB.clear();
+    SfxFloatingWindow::dispose();
 }
 
 IMPL_LINK_NOARG(SwMailMergeChildWin, BackHdl)

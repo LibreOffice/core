@@ -197,6 +197,27 @@ SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 }
 
+SwEnvFmtPage::~SwEnvFmtPage()
+{
+    disposeOnce();
+}
+
+void SwEnvFmtPage::dispose()
+{
+    m_pAddrLeftField.clear();
+    m_pAddrTopField.clear();
+    m_pAddrEditButton.clear();
+    m_pSendLeftField.clear();
+    m_pSendTopField.clear();
+    m_pSendEditButton.clear();
+    m_pSizeFormatBox.clear();
+    m_pSizeWidthField.clear();
+    m_pSizeHeightField.clear();
+    m_pPreview.clear();
+    SfxTabPage::dispose();
+}
+
+
 IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 {
     long lWVal = static_cast< long >(GetFldVal(*m_pSizeWidthField ));
@@ -298,7 +319,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         ::PrepareBoxInfo( aTmpSet, *pSh );
 
         const OUString sFmtStr = pColl->GetName();
-        boost::scoped_ptr<SwParaDlg> pDlg(new SwParaDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFmtStr));
+        VclPtrInstance< SwParaDlg > pDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFmtStr);
 
         if ( pDlg->Execute() == RET_OK )
         {
@@ -440,9 +461,9 @@ void SwEnvFmtPage::SetMinMax()
     m_pSizeHeightField->Reformat();
 }
 
-SfxTabPage* SwEnvFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwEnvFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwEnvFmtPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwEnvFmtPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)

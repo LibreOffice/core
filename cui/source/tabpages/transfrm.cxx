@@ -116,12 +116,6 @@ SvxTransformTabDialog::SvxTransformTabDialog( vcl::Window* pParent, const SfxIte
 
 
 
-SvxTransformTabDialog::~SvxTransformTabDialog()
-{
-}
-
-
-
 void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
     if (nId==nPosSize)
@@ -201,6 +195,23 @@ SvxAngleTabPage::SvxAngleTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
     m_pCtlAngle->SetLinkedField( m_pNfAngle, 2 );
+}
+
+SvxAngleTabPage::~SvxAngleTabPage()
+{
+    disposeOnce();
+}
+
+void SvxAngleTabPage::dispose()
+{
+    m_pFlPosition.clear();
+    m_pMtrPosX.clear();
+    m_pMtrPosY.clear();
+    m_pCtlRect.clear();
+    m_pFlAngle.clear();
+    m_pNfAngle.clear();
+    m_pCtlAngle.clear();
+    SvxTabPage::dispose();
 }
 
 void SvxAngleTabPage::Construct()
@@ -313,9 +324,9 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 
 
 
-SfxTabPage* SvxAngleTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxAngleTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet)
 {
-    return new SvxAngleTabPage(pWindow, *rSet);
+    return VclPtr<SvxAngleTabPage>::Create(pWindow, *rSet);
 }
 
 
@@ -426,6 +437,20 @@ SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "no pool (!)" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
+}
+
+SvxSlantTabPage::~SvxSlantTabPage()
+{
+    disposeOnce();
+}
+
+void SvxSlantTabPage::dispose()
+{
+    m_pFlRadius.clear();
+    m_pMtrRadius.clear();
+    m_pFlAngle.clear();
+    m_pMtrAngle.clear();
+    SvxTabPage::dispose();
 }
 
 void SvxSlantTabPage::Construct()
@@ -540,9 +565,9 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
 
 
-SfxTabPage* SvxSlantTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxSlantTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return new SvxSlantTabPage( pWindow, *rOutAttrs );
+    return VclPtr<SvxSlantTabPage>::Create( pWindow, *rOutAttrs );
 }
 
 
@@ -641,6 +666,33 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxIt
     m_pTsbPosProtect->SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangePosProtectHdl ) );
     m_pTsbSizeProtect->SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangeSizeProtectHdl ) );
 
+}
+
+SvxPositionSizeTabPage::~SvxPositionSizeTabPage()
+{
+    disposeOnce();
+}
+
+void SvxPositionSizeTabPage::dispose()
+{
+    m_pFlPosition.clear();
+    m_pMtrPosX.clear();
+    m_pMtrPosY.clear();
+    m_pCtlPos.clear();
+    m_pFlSize.clear();
+    m_pFtWidth.clear();
+    m_pMtrWidth.clear();
+    m_pFtHeight.clear();
+    m_pMtrHeight.clear();
+    m_pCbxScale.clear();
+    m_pCtlSize.clear();
+    m_pFlProtect.clear();
+    m_pTsbPosProtect.clear();
+    m_pTsbSizeProtect.clear();
+    m_pFlAdjust.clear();
+    m_pTsbAutoGrowWidth.clear();
+    m_pTsbAutoGrowHeight.clear();
+    SvxTabPage::dispose();
 }
 
 void SvxPositionSizeTabPage::Construct()
@@ -972,9 +1024,9 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
 
 
-SfxTabPage* SvxPositionSizeTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxPositionSizeTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return new SvxPositionSizeTabPage( pWindow, *rOutAttrs );
+    return VclPtr<SvxPositionSizeTabPage>::Create( pWindow, *rOutAttrs );
 }
 
 

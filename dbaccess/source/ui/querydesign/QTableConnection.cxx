@@ -37,10 +37,6 @@ OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
     // no own members, so base class functionality is sufficient
 }
 
-OQueryTableConnection::~OQueryTableConnection()
-{
-}
-
 OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnection& rConn)
 {
     if (&rConn == this)

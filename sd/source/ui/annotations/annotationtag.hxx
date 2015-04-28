@@ -79,13 +79,13 @@ protected:
 private:
     AnnotationManagerImpl& mrManager;
     css::uno::Reference< css::office::XAnnotation > mxAnnotation;
-    std::unique_ptr<AnnotationWindow>               mpAnnotationWindow;
+    VclPtr<AnnotationWindow>                        mpAnnotationWindow;
     Color                                           maColor;
     int                                             mnIndex;
     const ::vcl::Font&                              mrFont;
     Size                                            maSize;
     ImplSVEvent *                                   mnClosePopupEvent;
-    vcl::Window*                                       mpListenWindow;
+    VclPtr<vcl::Window>                             mpListenWindow;
     Point                                           maMouseDownPos;
 };
 

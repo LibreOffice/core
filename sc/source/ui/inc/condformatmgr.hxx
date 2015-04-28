@@ -50,17 +50,18 @@ class ScCondFormatManagerDlg : public ModalDialog
 public:
     ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos);
     virtual ~ScCondFormatManagerDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     ScConditionalFormatList* GetConditionalFormatList();
 
     bool CondFormatsChanged() { return mbModified;}
 
 private:
-    PushButton *m_pBtnAdd;
-    PushButton *m_pBtnRemove;
-    PushButton *m_pBtnEdit;
+    VclPtr<PushButton> m_pBtnAdd;
+    VclPtr<PushButton> m_pBtnRemove;
+    VclPtr<PushButton> m_pBtnEdit;
     ScConditionalFormatList* mpFormatList;
-    ScCondFormatManagerWindow *m_pCtrlManager;
+    VclPtr<ScCondFormatManagerWindow> m_pCtrlManager;
 
     ScDocument* mpDoc;
     ScAddress maPos;

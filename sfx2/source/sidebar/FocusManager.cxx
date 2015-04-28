@@ -65,9 +65,9 @@ void FocusManager::Clear()
 
 void FocusManager::ClearPanels()
 {
-    ::std::vector<Panel*> aPanels;
+    ::std::vector<VclPtr<Panel> > aPanels;
     aPanels.swap(maPanels);
-    for (::std::vector<Panel*>::iterator iPanel(aPanels.begin()),iEnd(aPanels.end());
+    for (auto iPanel(aPanels.begin()),iEnd(aPanels.end());
          iPanel!=iEnd;
         ++iPanel)
     {
@@ -84,9 +84,9 @@ void FocusManager::ClearPanels()
 
 void FocusManager::ClearButtons()
 {
-    ::std::vector<Button*> aButtons;
+    ::std::vector<VclPtr<Button> > aButtons;
     aButtons.swap(maButtons);
-    for (::std::vector<Button*>::iterator iButton(aButtons.begin()),iEnd(aButtons.end());
+    for (auto iButton(aButtons.begin()),iEnd(aButtons.end());
          iButton!=iEnd;
         ++iButton)
     {
@@ -96,14 +96,14 @@ void FocusManager::ClearButtons()
 
 void FocusManager::SetDeckTitle (DeckTitleBar* pDeckTitleBar)
 {
-    if (mpDeckTitleBar != NULL)
+    if (mpDeckTitleBar != nullptr)
     {
         UnregisterWindow(*mpDeckTitleBar);
         UnregisterWindow(mpDeckTitleBar->GetToolBox());
     }
     mpDeckTitleBar = pDeckTitleBar;
 
-    if (mpDeckTitleBar != NULL)
+    if (mpDeckTitleBar != nullptr)
     {
         RegisterWindow(*mpDeckTitleBar);
         RegisterWindow(mpDeckTitleBar->GetToolBox());
@@ -156,7 +156,7 @@ void FocusManager::UnregisterWindow (vcl::Window& rWindow)
 FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& rWindow) const
 {
     // Check the deck title.
-    if (mpDeckTitleBar != NULL)
+    if (mpDeckTitleBar != nullptr)
     {
         if (mpDeckTitleBar == &rWindow)
             return FocusLocation(PC_DeckTitle, -1);
@@ -186,7 +186,7 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
 
 void FocusManager::FocusDeckTitle()
 {
-    if (mpDeckTitleBar != NULL)
+    if (mpDeckTitleBar != nullptr)
     {
         if (IsDeckTitleVisible())
         {
@@ -207,7 +207,7 @@ void FocusManager::FocusDeckTitle()
 
 bool FocusManager::IsDeckTitleVisible() const
 {
-    return mpDeckTitleBar != NULL && mpDeckTitleBar->IsVisible();
+    return mpDeckTitleBar != nullptr && mpDeckTitleBar->IsVisible();
 }
 
 bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
@@ -286,7 +286,7 @@ void FocusManager::ClickButton (const sal_Int32 nButtonIndex)
 
 void FocusManager::RemoveWindow (vcl::Window& rWindow)
 {
-    ::std::vector<Panel*>::iterator iPanel (::std::find(maPanels.begin(), maPanels.end(), &rWindow));
+    auto iPanel (::std::find(maPanels.begin(), maPanels.end(), &rWindow));
     if (iPanel != maPanels.end())
     {
         UnregisterWindow(rWindow);
@@ -299,7 +299,7 @@ void FocusManager::RemoveWindow (vcl::Window& rWindow)
         return;
     }
 
-    ::std::vector<Button*>::iterator iButton (::std::find(maButtons.begin(), maButtons.end(), &rWindow));
+    auto iButton (::std::find(maButtons.begin(), maButtons.end(), &rWindow));
     if (iButton != maButtons.end())
     {
         UnregisterWindow(rWindow);
@@ -596,7 +596,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
                         break;
 
                     case KEY_TAB:
-                        if (mpFirstFocusedContentControl!=NULL
+                        if (mpFirstFocusedContentControl!=nullptr
                             && mpLastFocusedWindow == mpFirstFocusedContentControl)
                         {
                             // Move focus back to panel (or deck)

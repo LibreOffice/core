@@ -109,7 +109,7 @@ void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventOb
 
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
     : ViewShell (pFrame, pParentWindow, rViewShellBase)
-    , maTabControl(this, pParentWindow)
+    , maTabControl(VclPtr<sd::TabControl>::Create(this, pParentWindow))
     , mbIsLayerModeActive(false)
     , mbIsInSwitchPage(false)
     , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
@@ -191,6 +191,8 @@ DrawViewShell::~DrawViewShell()
 
     mpFrameView->Disconnect();
     delete [] mpSlotArray;
+
+    maTabControl.disposeAndClear();
 }
 
 /**
@@ -288,7 +290,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     GetDoc()->SetMaxObjSize(aSize);
 
     // Split-Handler for TabControls
-    maTabControl.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
+    maTabControl->SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
 
     /* In order to set the correct EditMode of the FrameView, we select another
        one (small trick).  */
@@ -702,7 +704,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         // Always show the slide/page number.
         OUString aOUString = (nPageCount == nActivePageCount) ? SD_RESSTR(STR_SD_PAGE_COUNT) : SD_RESSTR(STR_SD_PAGE_COUNT_CUSTOM);
 
-        aOUString = aOUString.replaceFirst("%1", OUString::number(maTabControl.GetCurPageId()));
+        aOUString = aOUString.replaceFirst("%1", OUString::number(maTabControl->GetCurPageId()));
         aOUString = aOUString.replaceFirst("%2", OUString::number(nPageCount));
         if(nPageCount != nActivePageCount)
             aOUString = aOUString.replaceFirst("%3", OUString::number(nActivePageCount));

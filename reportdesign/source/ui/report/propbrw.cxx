@@ -185,6 +185,11 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
 
 PropBrw::~PropBrw()
 {
+    disposeOnce();
+}
+
+void PropBrw::dispose()
+{
     if (m_xBrowserController.is())
         implDetachController();
 
@@ -204,6 +209,8 @@ PropBrw::~PropBrw()
     {}
 
     ::rptui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+    m_pDesignView.clear();
+    DockingWindow::dispose();
 }
 
 void PropBrw::setCurrentPage(const OUString& _sLastActivePage)
@@ -507,7 +514,7 @@ void PropBrw::Update( OSectionView* pNewView )
         const sal_uInt16 nSectionCount = pViews->getSectionCount();
         for (sal_uInt16 i = 0; i < nSectionCount; ++i)
         {
-            ::boost::shared_ptr<OSectionWindow> pSectionWindow = pViews->getSectionWindow(i);
+            OSectionWindow* pSectionWindow = pViews->getSectionWindow(i);
             if ( pSectionWindow )
             {
                 const SdrMarkList& rMarkList = pSectionWindow->getReportSection().getSectionView().GetMarkedObjectList();

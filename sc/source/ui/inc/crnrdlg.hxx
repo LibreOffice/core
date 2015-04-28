@@ -36,6 +36,7 @@ public:
                     ScColRowNameRangesDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScViewData*    ptrViewData );
                     virtual ~ScColRowNameRangesDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 
@@ -44,19 +45,19 @@ public:
     virtual bool    Close() SAL_OVERRIDE;
 
 private:
-    ListBox*         pLbRange;
+    VclPtr<ListBox>         pLbRange;
 
-    formula::RefEdit*        pEdAssign;
-    formula::RefButton*      pRbAssign;
-    RadioButton*     pBtnColHead;
-    RadioButton*     pBtnRowHead;
-    formula::RefEdit*        pEdAssign2;
-    formula::RefButton*      pRbAssign2;
+    VclPtr<formula::RefEdit>        pEdAssign;
+    VclPtr<formula::RefButton>      pRbAssign;
+    VclPtr<RadioButton>     pBtnColHead;
+    VclPtr<RadioButton>     pBtnRowHead;
+    VclPtr<formula::RefEdit>        pEdAssign2;
+    VclPtr<formula::RefButton>      pRbAssign2;
 
-    OKButton*        pBtnOk;
-    CancelButton*    pBtnCancel;
-    PushButton*      pBtnAdd;
-    PushButton*      pBtnRemove;
+    VclPtr<OKButton>        pBtnOk;
+    VclPtr<CancelButton>    pBtnCancel;
+    VclPtr<PushButton>      pBtnAdd;
+    VclPtr<PushButton>      pBtnRemove;
 
     ScRange         theCurArea;
     ScRange         theCurData;
@@ -68,7 +69,7 @@ private:
     NameRangeMap    aRangeMap;
     ScViewData*     pViewData;
     ScDocument*     pDoc;
-    formula::RefEdit*       pEdActive;
+    VclPtr<formula::RefEdit>       pEdActive;
     bool            bDlgLostFocus;
 
     void Init               ();

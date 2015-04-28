@@ -41,11 +41,20 @@ ScTpPrintOptions::ScTpPrintOptions( vcl::Window*           pParent,
 
 ScTpPrintOptions::~ScTpPrintOptions()
 {
+    disposeOnce();
 }
 
-SfxTabPage* ScTpPrintOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void ScTpPrintOptions::dispose()
 {
-    return new ScTpPrintOptions( pParent, *rAttrSet );
+    m_pSkipEmptyPagesCB.clear();
+    m_pSelectedSheetsCB.clear();
+    m_pForceBreaksCB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> ScTpPrintOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SfxTabPage>(new ScTpPrintOptions( pParent, *rAttrSet ), SAL_NO_ACQUIRE);
 }
 
 SfxTabPage::sfxpg ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )

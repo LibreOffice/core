@@ -64,7 +64,14 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItem
 
 SvxSearchFormatDialog::~SvxSearchFormatDialog()
 {
+    disposeOnce();
+}
+
+void SvxSearchFormatDialog::dispose()
+{
     delete m_pFontList;
+    m_pFontList = NULL;
+    SfxTabDialog::dispose();
 }
 
 void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
@@ -171,6 +178,17 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
     m_pAttrLB->SelectEntryPos( 0 );
 }
 
+SvxSearchAttributeDialog::~SvxSearchAttributeDialog()
+{
+    disposeOnce();
+}
+
+void SvxSearchAttributeDialog::dispose()
+{
+    m_pAttrLB.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
 
 
 IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
@@ -239,6 +257,20 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
     m_pShorterFld->SetValue( nShorter );
     m_pLongerFld->SetValue( nLonger );
     m_pRelaxBox->Check( bRelax );
+}
+
+SvxSearchSimilarityDialog::~SvxSearchSimilarityDialog()
+{
+    disposeOnce();
+}
+
+void SvxSearchSimilarityDialog::dispose()
+{
+    m_pOtherFld.clear();
+    m_pLongerFld.clear();
+    m_pShorterFld.clear();
+    m_pRelaxBox.clear();
+    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

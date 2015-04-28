@@ -125,12 +125,12 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SwRect        maInvalidRect;
 
     SfxViewShell *mpSfxViewShell;
-    SwViewShellImp    *mpImp;             // Core-internals of SwViewShell.
-                                    // The pointer is never 0.
+    SwViewShellImp *mpImp;           // Core-internals of SwViewShell.
+                                     // The pointer is never 0.
 
-    ::vcl::Window *mpWin;             ///< = 0 during printing or pdf export
-    OutputDevice *mpOut;              ///< Window, Printer, VirtDev, ...
-    OutputDevice* mpTmpRef;           // Temporariy reference device. Is used
+    VclPtr<::vcl::Window> mpWin;     ///< = 0 during printing or pdf export
+    VclPtr<OutputDevice>  mpOut;     ///< Window, Printer, VirtDev, ...
+    VclPtr<OutputDevice>  mpTmpRef;  // Temporariy reference device. Is used
                                      // during (printer depending) prospect
                                      // and page preview printing
                                      // (because a scaling has to be set at
@@ -161,7 +161,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     bool mbInConstructor:1;
 
     SdrPaintWindow*         mpTargetPaintWindow;
-    OutputDevice*           mpBufferedOut;
+    VclPtr<OutputDevice>    mpBufferedOut;
 
     SwRootFrmPtr            mpLayout;
 
@@ -236,7 +236,7 @@ public:
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
     std::stack<vcl::Region> mPrePostPaintRegions; // acts also as a lock counter (empty == not locked)
-    OutputDevice*           mpPrePostOutDev;
+    VclPtr<OutputDevice>    mpPrePostOutDev;
     MapMode                 maPrePostMapMode;
 public:
     void PrePaint();

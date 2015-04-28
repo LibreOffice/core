@@ -96,7 +96,7 @@ class SmElementsControl : public Control
     SmElementList maElementList;
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
-    std::unique_ptr<ScrollBar> mxScroll;
+    VclPtr< ScrollBar > mxScroll;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
 
@@ -109,6 +109,7 @@ class SmElementsControl : public Control
 public:
     SmElementsControl(vcl::Window *pParent);
     virtual ~SmElementsControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void setElementSetId(sal_uInt16 aSetId);
 
@@ -126,8 +127,8 @@ class SmElementsDockingWindow : public SfxDockingWindow
 {
     static const sal_uInt16 aCategories[];
 
-    SmElementsControl*  mpElementsControl;
-    ListBox*            mpElementListBox;
+    VclPtr<SmElementsControl>  mpElementsControl;
+    VclPtr<ListBox>            mpElementListBox;
 
     virtual void Resize() SAL_OVERRIDE;
     SmViewShell* GetView();
@@ -141,6 +142,7 @@ public:
                              SfxChildWindow* pChildWindow,
                              vcl::Window* pParent );
     virtual ~SmElementsDockingWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) SAL_OVERRIDE;
     virtual void ToggleFloatingMode() SAL_OVERRIDE;

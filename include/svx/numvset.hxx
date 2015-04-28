@@ -53,7 +53,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
     sal_uInt16      nPageType;
     bool            bHTMLMode;
     Rectangle       aOrgRect;
-    VirtualDevice*  pVDev;
+    VclPtr<VirtualDevice> pVDev;
 
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
     com::sun::star::lang::Locale aLocale;
@@ -66,27 +66,26 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
         com::sun::star::uno::Reference<
             com::sun::star::container::XIndexAccess> > aOutlineSettings;
 
-    public:
+public:
     SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
     void init(sal_uInt16 nType);
     virtual ~SvxNumValueSet();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     void            SetHTMLMode(bool bSet) {bHTMLMode = bSet;}
     void            SetNumberingSettings(
-        const com::sun::star::uno::Sequence<
-            com::sun::star::uno::Sequence<
-                com::sun::star::beans::PropertyValue> >& aNum,
-        com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter>& xFormatter,
-        const com::sun::star::lang::Locale& rLocale );
+        const css::uno::Sequence<
+                  css::uno::Sequence<css::beans::PropertyValue> >& aNum,
+        css::uno::Reference<css::text::XNumberingFormatter>& xFormatter,
+        const css::lang::Locale& rLocale );
 
     void            SetOutlineNumberingSettings(
-            com::sun::star::uno::Sequence<
-                com::sun::star::uno::Reference<
-                    com::sun::star::container::XIndexAccess> >& rOutline,
-            com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter>& xFormatter,
-            const com::sun::star::lang::Locale& rLocale);
+            css::uno::Sequence<
+                css::uno::Reference<css::container::XIndexAccess> >& rOutline,
+            css::uno::Reference<css::text::XNumberingFormatter>& xFormatter,
+            const css::lang::Locale& rLocale);
 };
 
 class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
@@ -96,7 +95,7 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 
     void init();
 
-    protected:
+protected:
         DECL_LINK(FormatHdl_Impl, void *);
 
     void            SetGrfNotFound(bool bSet) {bGrfNotFound = bSet;}
@@ -104,9 +103,10 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 
     Idle&          GetFormatIdle() {return aFormatIdle;}
 
-    public:
+public:
     SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
     virtual ~SvxBmpNumValueSet();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 

@@ -53,17 +53,24 @@ CertificateViewer::CertificateViewer(
     mnDetailsId = mpTabCtrl->GetPageId("details");
     mnPathId = mpTabCtrl->GetPageId("path");
 
-    mpTabCtrl->SetTabPage(mnGeneralId, new CertificateViewerGeneralTP( mpTabCtrl, this));
-    mpTabCtrl->SetTabPage(mnDetailsId, new CertificateViewerDetailsTP( mpTabCtrl, this));
-    mpTabCtrl->SetTabPage(mnPathId, new CertificateViewerCertPathTP( mpTabCtrl, this));
+    mpTabCtrl->SetTabPage(mnGeneralId, VclPtr<CertificateViewerGeneralTP>::Create( mpTabCtrl, this));
+    mpTabCtrl->SetTabPage(mnDetailsId, VclPtr<CertificateViewerDetailsTP>::Create( mpTabCtrl, this));
+    mpTabCtrl->SetTabPage(mnPathId, VclPtr<CertificateViewerCertPathTP>::Create( mpTabCtrl, this));
     mpTabCtrl->SetCurPageId(mnGeneralId);
 }
 
 CertificateViewer::~CertificateViewer()
 {
-    delete mpTabCtrl->GetTabPage(mnGeneralId);
-    delete mpTabCtrl->GetTabPage(mnDetailsId);
-    delete mpTabCtrl->GetTabPage(mnPathId);
+    disposeOnce();
+}
+
+void CertificateViewer::dispose()
+{
+    mpTabCtrl->GetTabPage(mnGeneralId)->disposeOnce();
+    mpTabCtrl->GetTabPage(mnDetailsId)->disposeOnce();
+    mpTabCtrl->GetTabPage(mnPathId)->disposeOnce();
+    mpTabCtrl.clear();
+    TabDialog::dispose();
 }
 
 CertificateViewerTP::CertificateViewerTP( vcl::Window* _pParent, const OString& rID,
@@ -72,6 +79,18 @@ CertificateViewerTP::CertificateViewerTP( vcl::Window* _pParent, const OString& 
     , mpDlg(_pDlg)
 {
 }
+
+CertificateViewerTP::~CertificateViewerTP()
+{
+    disposeOnce();
+}
+
+void CertificateViewerTP::dispose()
+{
+    mpDlg.clear();
+    TabPage::dispose();
+}
+
 
 CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, "CertGeneral", "xmlsec/ui/certgeneral.ui", _pDlg )
@@ -130,6 +149,24 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     }
 }
 
+CertificateViewerGeneralTP::~CertificateViewerGeneralTP()
+{
+    disposeOnce();
+}
+
+void CertificateViewerGeneralTP::dispose()
+{
+    m_pCertImg.clear();
+    m_pHintNotTrustedFI.clear();
+    m_pIssuedToFI.clear();
+    m_pIssuedByFI.clear();
+    m_pValidFromDateFI.clear();
+    m_pValidToDateFI.clear();
+    m_pKeyImg.clear();
+    m_pHintCorrespPrivKeyFI.clear();
+    CertificateViewerTP::dispose();
+}
+
 void CertificateViewerGeneralTP::ActivatePage()
 {
 
@@ -180,7 +217,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 {
     get( m_pValueDetails, "valuedetails" );
     get( m_pElementsLBContainer, "tablecontainer" );
-    m_pElementsLB = new SvSimpleTable( *m_pElementsLBContainer );
+    m_pElementsLB = VclPtr<SvSimpleTable>::Create( *m_pElementsLBContainer );
 
     m_aStdFont = m_pValueDetails->GetControlFont();
     WinBits nStyle = m_pElementsLB->GetStyle();
@@ -256,8 +293,16 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 
 CertificateViewerDetailsTP::~CertificateViewerDetailsTP()
 {
+    disposeOnce();
+}
+
+void CertificateViewerDetailsTP::dispose()
+{
     Clear();
-    delete m_pElementsLB;
+    m_pElementsLB.disposeAndClear();
+    m_pElementsLBContainer.clear();
+    m_pValueDetails.clear();
+    CertificateViewerTP::dispose();
 }
 
 void CertificateViewerDetailsTP::ActivatePage()
@@ -327,7 +372,17 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( vcl::Window* _pParent,
 
 CertificateViewerCertPathTP::~CertificateViewerCertPathTP()
 {
+    disposeOnce();
+}
+
+void CertificateViewerCertPathTP::dispose()
+{
     Clear();
+    mpCertPathLB.clear();
+    mpViewCertPB.clear();
+    mpCertStatusML.clear();
+    mpParent.clear();
+    CertificateViewerTP::dispose();
 }
 
 void CertificateViewerCertPathTP::ActivatePage()
@@ -370,8 +425,11 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
     SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
     if( pEntry )
     {
-        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, static_cast<CertPath_UserData*>(pEntry->GetUserData())->mxCert, false );
-        aViewer.Execute();
+        ScopedVclPtrInstance< CertificateViewer > aViewer(
+                this, mpDlg->mxSecurityEnvironment,
+                static_cast<CertPath_UserData*>(pEntry->GetUserData())->mxCert,
+                false );
+        aViewer->Execute();
     }
 
     return 0;

@@ -27,9 +27,9 @@
 
 // Dokumentinfo-Tabpage:
 
-SfxTabPage* ScDocStatPage::Create( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> ScDocStatPage::Create( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return new ScDocStatPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new ScDocStatPage ( pParent, *rSet ), SAL_NO_ACQUIRE );
 }
 
 ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )
@@ -56,7 +56,17 @@ ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )
 
 ScDocStatPage::~ScDocStatPage()
 {
+    disposeOnce();
 }
+
+void ScDocStatPage::dispose()
+{
+    m_pFtTables.clear();
+    m_pFtCells.clear();
+    m_pFtPages.clear();
+    SfxTabPage::dispose();
+}
+
 
 bool ScDocStatPage::FillItemSet( SfxItemSet* /* rSet */ )
 {

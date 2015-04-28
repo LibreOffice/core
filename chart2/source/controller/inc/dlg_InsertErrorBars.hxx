@@ -36,7 +36,6 @@ public:
                            const ::com::sun::star::uno::Reference<
                                ::com::sun::star::chart2::XChartDocument > & xChartDocument,
                            ErrorBarResources::tErrorBarType eType );
-    virtual ~InsertErrorBarsDialog();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
 

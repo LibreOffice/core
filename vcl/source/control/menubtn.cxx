@@ -82,8 +82,14 @@ MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
 
 MenuButton::~MenuButton()
 {
+    disposeOnce();
+}
+
+void MenuButton::dispose()
+{
     delete mpMenuTimer;
     delete mpOwnMenu;
+    PushButton::dispose();
 }
 
 IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)

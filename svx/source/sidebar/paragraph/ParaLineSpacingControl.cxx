@@ -62,7 +62,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     mpLineDistAtPercentBox = get<MetricField>("percent_box");
     mpLineDistAtMetricBox = get<MetricField>("metric_box");
 
-    mpActLineDistFld = mpLineDistAtPercentBox;
+    mpActLineDistFld = mpLineDistAtPercentBox.get();
 
     meLNSpaceUnit = SFX_MAPUNIT_100TH_MM;
 
@@ -94,6 +94,21 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
 
 ParaLineSpacingControl::~ParaLineSpacingControl()
 {
+    disposeOnce();
+}
+
+void ParaLineSpacingControl::dispose()
+{
+    mpActLineDistFld.clear();
+    mpSpacing1Button.clear();
+    mpSpacing115Button.clear();
+    mpSpacing15Button.clear();
+    mpSpacing2Button.clear();
+    mpLineDist.clear();
+    mpLineDistLabel.clear();
+    mpLineDistAtPercentBox.clear();
+    mpLineDistAtMetricBox.clear();
+    SfxPopupWindow::dispose();
 }
 
 void ParaLineSpacingControl::Initialize()
@@ -245,7 +260,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
         case LLINESPACE_DURCH:
             mpLineDistAtPercentBox->Hide();
 
-            mpActLineDistFld = mpLineDistAtMetricBox;
+            mpActLineDistFld = mpLineDistAtMetricBox.get();
             mpLineDistAtMetricBox->SetMin(0);
 
             if (mpLineDistAtMetricBox->GetText().isEmpty())
@@ -259,7 +274,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
         case LLINESPACE_MIN:
             mpLineDistAtPercentBox->Hide();
 
-            mpActLineDistFld = mpLineDistAtMetricBox;
+            mpActLineDistFld = mpLineDistAtMetricBox.get();
             mpLineDistAtMetricBox->SetMin(0);
 
             if (mpLineDistAtMetricBox->GetText().isEmpty())
@@ -273,7 +288,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
         case LLINESPACE_PROP:
             mpLineDistAtMetricBox->Hide();
 
-            mpActLineDistFld = mpLineDistAtPercentBox;
+            mpActLineDistFld = mpLineDistAtPercentBox.get();
 
             if (mpLineDistAtPercentBox->GetText().isEmpty())
                 mpLineDistAtPercentBox->SetValue(mpLineDistAtPercentBox->Normalize(100), FUNIT_TWIP);
@@ -286,7 +301,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
         case LLINESPACE_FIX:
             mpLineDistAtPercentBox->Hide();
 
-            mpActLineDistFld = mpLineDistAtMetricBox;
+            mpActLineDistFld = mpLineDistAtMetricBox.get();
             sal_Int64 nTemp = mpLineDistAtMetricBox->GetValue();
             mpLineDistAtMetricBox->SetMin(mpLineDistAtMetricBox->Normalize(MIN_FIXED_DISTANCE), FUNIT_TWIP);
 

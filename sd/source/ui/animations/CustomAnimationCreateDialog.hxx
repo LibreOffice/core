@@ -41,6 +41,7 @@ class CustomAnimationCreateDialog : public TabDialog
 public:
     CustomAnimationCreateDialog( vcl::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration );
     virtual ~CustomAnimationCreateDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;
@@ -56,15 +57,15 @@ private:
     DECL_LINK(implDeactivatePagekHdl, void *);
 
 private:
-    CustomAnimationPane* mpPane;
+    VclPtr<CustomAnimationPane> mpPane;
     const std::vector< ::com::sun::star::uno::Any >& mrTargets;
 
     double mfDuration;
     bool mbIsPreview;
 
-    TabControl* mpTabControl;
+    VclPtr<TabControl> mpTabControl;
 
-    CustomAnimationCreateTabPage* mpTabPages[5];
+    VclPtr<CustomAnimationCreateTabPage> mpTabPages[5];
     sal_uInt16 mnEntranceId, mnEmphasisId, mnExitId, mnMPathId, mnMiscId;
 };
 

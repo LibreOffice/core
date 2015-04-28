@@ -124,7 +124,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
 // initialise controls
 void SwFldEditDlg::Init()
 {
-    SwFldPage* pTabPage = static_cast<SwFldPage*>(GetTabPage());
+    VclPtr<SwFldPage> pTabPage = static_cast<SwFldPage*>(GetTabPage());
 
     if( pTabPage )
     {
@@ -159,10 +159,10 @@ void SwFldEditDlg::Init()
                            !pSh->HasReadonlySel() );
 }
 
-SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
+VclPtr<SfxTabPage> SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 {
     // create TabPage
-    SfxTabPage* pTabPage = 0;
+    VclPtr<SfxTabPage> pTabPage;
 
     switch (nGroup)
     {
@@ -193,7 +193,7 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
             }
         case GRP_DB:
             pTabPage = SwFldDBPage::Create(get_content_area(), 0);
-            static_cast<SwFldDBPage*>(pTabPage)->SetWrtShell(*pSh);
+            static_cast<SwFldDBPage*>(pTabPage.get())->SetWrtShell(*pSh);
             break;
         case GRP_VAR:
             pTabPage = SwFldVarPage::Create(get_content_area(), 0);
@@ -205,7 +205,7 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 
     if (pTabPage)
     {
-        static_cast<SwFldPage*>(pTabPage)->SetWrtShell(pSh);
+        static_cast<SwFldPage*>(pTabPage.get())->SetWrtShell(pSh);
         SetTabPage(pTabPage);
     }
 
@@ -214,8 +214,17 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 
 SwFldEditDlg::~SwFldEditDlg()
 {
+    disposeOnce();
+}
+
+void SwFldEditDlg::dispose()
+{
     SwViewShell::SetCareWin(NULL);
     pSh->EnterStdMode();
+    m_pPrevBT.clear();
+    m_pNextBT.clear();
+    m_pAddressBT.clear();
+    SfxSingleTabDialog::dispose();
 }
 
 void SwFldEditDlg::EnableInsert(bool bEnable)
@@ -235,12 +244,9 @@ IMPL_LINK_NOARG(SwFldEditDlg, OKHdl)
 {
     if (GetOKButton()->IsEnabled())
     {
-        SfxTabPage* pTabPage = GetTabPage();
+        VclPtr<SfxTabPage> pTabPage = GetTabPage();
         if (pTabPage)
-        {
             pTabPage->FillItemSet(0);
-
-        }
         EndDialog( RET_OK );
     }
 
@@ -261,7 +267,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     pSh->EnterStdMode();
 
     SwFieldType *pOldTyp = 0;
-    SwFldPage* pTabPage = static_cast<SwFldPage*>(GetTabPage());
+    VclPtr<SwFldPage> pTabPage = static_cast<SwFldPage*>(GetTabPage());
 
     //#112462# FillItemSet may delete the current field
     //that's why it has to be called before accessing the current field
@@ -281,7 +287,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     sal_uInt16 nGroup = rMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     if (nGroup != pTabPage->GetGroup())
-        pTabPage = static_cast<SwFldPage*>(CreatePage(nGroup));
+        pTabPage = static_cast<SwFldPage*>(CreatePage(nGroup).get());
 
     pTabPage->EditNewField();
 

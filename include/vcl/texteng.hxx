@@ -20,6 +20,7 @@
 #define INCLUDED_VCL_TEXTENG_HXX
 
 #include <vcl/dllapi.h>
+#include <vcl/vclptr.hxx>
 
 class TextDoc;
 class TextView;
@@ -91,7 +92,7 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
 private:
     TextDoc*            mpDoc;
     TEParaPortions*     mpTEParaPortions;
-    OutputDevice*       mpRefDev;
+    VclPtr<OutputDevice> mpRefDev;
 
     TextViews*          mpViews;
     TextView*           mpActiveView;

@@ -199,17 +199,38 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
 SfxSaveTabPage::~SfxSaveTabPage()
 {
-    delete pImpl;
+    disposeOnce();
 }
 
-
-
-SfxTabPage* SfxSaveTabPage::Create( vcl::Window* pParent,
-                                    const SfxItemSet* rAttrSet )
+void SvxSaveTabPage::dispose()
 {
-    return ( new SfxSaveTabPage( pParent, *rAttrSet ) );
+    delete pImpl;
+    pImpl = NULL;
+    aLoadUserSettingsCB.clear();
+    aLoadDocPrinterCB.clear();
+    aDocInfoCB.clear();
+    aBackupCB.clear();
+    aAutoSaveCB.clear();
+    aAutoSaveEdit.clear();
+    aMinuteFT.clear();
+    aUserAutoSaveCB.clear();
+    aRelativeFsysCB.clear();
+    aRelativeInetCB.clear();
+    aODFVersionLB.clear();
+    aWarnAlienFormatCB.clear();
+    aDocTypeLB.clear();
+    aSaveAsFT.clear();
+    aSaveAsLB.clear();
+    aODFWarningFI.clear();
+    aODFWarningFT.clear();
+    SfxTabPage::dispose();
 }
 
+VclPtr<SfxTabPage> SfxSaveTabPage::Create( vcl::Window* pParent,
+                                           const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SfxSaveTabPage>::Create( pParent, *rAttrSet );
+}
 
 void SfxSaveTabPage::DetectHiddenControls()
 {

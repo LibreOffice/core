@@ -111,11 +111,11 @@ namespace dbaui
 
     class OTasksWindow : public vcl::Window
     {
-        OCreationList                       m_aCreation;
-        FixedText                           m_aDescription;
-        FixedText                           m_aHelpText;
-        FixedLine                           m_aFL;
-        OApplicationDetailView*             m_pDetailView;
+        VclPtr<OCreationList>               m_aCreation;
+        VclPtr<FixedText>                   m_aDescription;
+        VclPtr<FixedText>                   m_aHelpText;
+        VclPtr<FixedLine>                   m_aFL;
+        VclPtr<OApplicationDetailView>      m_pDetailView;
 
         DECL_LINK( OnEntrySelectHdl,        SvTreeListBox* );
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
@@ -124,6 +124,7 @@ namespace dbaui
     public:
         OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView);
         virtual ~OTasksWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void Resize() SAL_OVERRIDE;
@@ -135,7 +136,7 @@ namespace dbaui
 
         inline bool HandleKeyInput( const KeyEvent& _rKEvt )
         {
-            return m_aCreation.HandleKeyInput( _rKEvt );
+            return m_aCreation->HandleKeyInput( _rKEvt );
         }
 
         void Clear();
@@ -144,11 +145,11 @@ namespace dbaui
     class OApplicationDetailView : public OSplitterView
                                  , public IClipboardTest
     {
-        Splitter                            m_aHorzSplitter;
-        OTitleWindow                        m_aTasks;
-        OTitleWindow                        m_aContainer;
+        VclPtr<Splitter>                    m_aHorzSplitter;
+        VclPtr<OTitleWindow>                m_aTasks;
+        VclPtr<OTitleWindow>                m_aContainer;
         OAppBorderWindow&                   m_rBorderWin;       // my parent
-        OAppDetailPageHelper*               m_pControlHelper;
+        VclPtr<OAppDetailPageHelper>        m_pControlHelper;
         ::std::vector< TaskPaneData >       m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
 
@@ -161,6 +162,7 @@ namespace dbaui
         OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
         // Window overrides
+        virtual void dispose() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 
         /** creates the tables page
@@ -188,7 +190,7 @@ namespace dbaui
         bool    interceptKeyInput( const KeyEvent& _rEvent );
 
         inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
-        inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks.getChildWindow() ); }
+        inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks->getChildWindow() ); }
 
         bool isCutAllowed() SAL_OVERRIDE ;
         bool isCopyAllowed() SAL_OVERRIDE    ;

@@ -51,40 +51,40 @@ class SwIndexMarkPane
 
     friend class SwIndexMarkFloatDlg;
     friend class SwIndexMarkModalDlg;
-    VclFrame*       m_pFrame;
-    FixedText*      m_pTypeFT;
-    ListBox*        m_pTypeDCB;
-    PushButton*     m_pNewBT;
+    VclPtr<VclFrame>       m_pFrame;
+    VclPtr<FixedText>      m_pTypeFT;
+    VclPtr<ListBox>        m_pTypeDCB;
+    VclPtr<PushButton>     m_pNewBT;
 
-    Edit*           m_pEntryED;
-    FixedText*      m_pPhoneticFT0;
-    Edit*           m_pPhoneticED0;
+    VclPtr<Edit>           m_pEntryED;
+    VclPtr<FixedText>      m_pPhoneticFT0;
+    VclPtr<Edit>           m_pPhoneticED0;
 
-    FixedText*      m_pKey1FT;
-    ComboBox*       m_pKey1DCB;
-    FixedText*      m_pPhoneticFT1;
-    Edit*           m_pPhoneticED1;
+    VclPtr<FixedText>      m_pKey1FT;
+    VclPtr<ComboBox>       m_pKey1DCB;
+    VclPtr<FixedText>      m_pPhoneticFT1;
+    VclPtr<Edit>           m_pPhoneticED1;
 
-    FixedText*      m_pKey2FT;
-    ComboBox*       m_pKey2DCB;
-    FixedText*      m_pPhoneticFT2;
-    Edit*           m_pPhoneticED2;
+    VclPtr<FixedText>      m_pKey2FT;
+    VclPtr<ComboBox>       m_pKey2DCB;
+    VclPtr<FixedText>      m_pPhoneticFT2;
+    VclPtr<Edit>           m_pPhoneticED2;
 
-    FixedText*      m_pLevelFT;
-    NumericField*   m_pLevelNF;
-    CheckBox*       m_pMainEntryCB;
-    CheckBox*       m_pApplyToAllCB;
-    CheckBox*       m_pSearchCaseSensitiveCB;
-    CheckBox*       m_pSearchCaseWordOnlyCB;
+    VclPtr<FixedText>      m_pLevelFT;
+    VclPtr<NumericField>   m_pLevelNF;
+    VclPtr<CheckBox>       m_pMainEntryCB;
+    VclPtr<CheckBox>       m_pApplyToAllCB;
+    VclPtr<CheckBox>       m_pSearchCaseSensitiveCB;
+    VclPtr<CheckBox>       m_pSearchCaseWordOnlyCB;
 
-    PushButton*     m_pOKBT;
-    CloseButton*    m_pCloseBT;
-    PushButton*     m_pDelBT;
+    VclPtr<PushButton>     m_pOKBT;
+    VclPtr<CloseButton>    m_pCloseBT;
+    VclPtr<PushButton>     m_pDelBT;
 
-    PushButton*     m_pPrevSameBT;
-    PushButton*     m_pNextSameBT;
-    PushButton*     m_pPrevBT;
-    PushButton*     m_pNextBT;
+    VclPtr<PushButton>     m_pPrevSameBT;
+    VclPtr<PushButton>     m_pNextSameBT;
+    VclPtr<PushButton>     m_pPrevBT;
+    VclPtr<PushButton>     m_pNextBT;
 
     OUString        aOrgStr;
     bool            bDel;
@@ -182,17 +182,17 @@ class SwAuthorMarkPane
     friend class SwAuthMarkModalDlg;
     friend class SwAuthMarkFloatDlg;
 
-    RadioButton*    m_pFromComponentRB;
-    RadioButton*    m_pFromDocContentRB;
-    FixedText*      m_pAuthorFI;
-    FixedText*      m_pTitleFI;
-    Edit*           m_pEntryED;
-    ListBox*        m_pEntryLB;
+    VclPtr<RadioButton>    m_pFromComponentRB;
+    VclPtr<RadioButton>    m_pFromDocContentRB;
+    VclPtr<FixedText>      m_pAuthorFI;
+    VclPtr<FixedText>      m_pTitleFI;
+    VclPtr<Edit>           m_pEntryED;
+    VclPtr<ListBox>        m_pEntryLB;
 
-    PushButton*     m_pActionBT;
-    CloseButton*    m_pCloseBT;
-    PushButton*     m_pCreateEntryPB;
-    PushButton*     m_pEditEntryPB;
+    VclPtr<PushButton>     m_pActionBT;
+    VclPtr<CloseButton>    m_pCloseBT;
+    VclPtr<PushButton>     m_pCreateEntryPB;
+    VclPtr<PushButton>     m_pEditEntryPB;
 
     bool        bNewEntry;
     bool        bBibAccessInitialized;

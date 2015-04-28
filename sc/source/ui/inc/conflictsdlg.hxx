@@ -117,12 +117,12 @@ public:
 class ScConflictsDlg : public ModalDialog
 {
 private:
-    SvSimpleTableContainer *m_pLbConflictsContainer;
-    boost::scoped_ptr<SvxRedlinTable>    m_pLbConflicts;
-    PushButton          *m_pBtnKeepMine;
-    PushButton          *m_pBtnKeepOther;
-    PushButton          *m_pBtnKeepAllMine;
-    PushButton          *m_pBtnKeepAllOthers;
+    VclPtr<SvSimpleTableContainer> m_pLbConflictsContainer;
+    VclPtr<SvxRedlinTable>      m_pLbConflicts;
+    VclPtr<PushButton>          m_pBtnKeepMine;
+    VclPtr<PushButton>          m_pBtnKeepOther;
+    VclPtr<PushButton>          m_pBtnKeepAllMine;
+    VclPtr<PushButton>          m_pBtnKeepAllOthers;
 
     OUString            maStrTitleConflict;
     OUString            maStrTitleAuthor;
@@ -160,6 +160,7 @@ private:
 public:
                         ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );
                         virtual ~ScConflictsDlg();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                UpdateView();
 };

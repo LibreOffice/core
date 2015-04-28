@@ -121,7 +121,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
         uno::Reference< uno::XInterface >                           m_xContent;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pListener;
         ::rtl::Reference< comphelper::OContainerListenerAdapter>    m_pContainerListener;
-        NavigatorTree*                                              m_pTree;
+        VclPtr<NavigatorTree>                                       m_pTree;
     public:
         UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent);
         virtual ~UserData();
@@ -182,6 +182,7 @@ protected:
 public:
     NavigatorTree(vcl::Window* pParent,OReportController& _rController );
     virtual ~NavigatorTree();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK(OnEntrySelDesel, NavigatorTree*);
     DECL_LINK( OnDropActionTimer, void* );
@@ -255,6 +256,11 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
 
 NavigatorTree::~NavigatorTree()
 {
+    disposeOnce();
+}
+
+void NavigatorTree::dispose()
+{
     SvTreeListEntry* pCurrent = First();
     while ( pCurrent )
     {
@@ -263,6 +269,7 @@ NavigatorTree::~NavigatorTree()
     }
     m_pReportListener->dispose();
     m_pSelectionListener->dispose();
+    SvTreeListBox::dispose();
 }
 
 void NavigatorTree::Command( const CommandEvent& rEvt )
@@ -875,13 +882,13 @@ public:
 
     uno::Reference< report::XReportDefinition>  m_xReport;
     ::rptui::OReportController&                 m_rController;
-    ::std::unique_ptr<NavigatorTree>            m_pNavigatorTree;
+    VclPtr<NavigatorTree>                       m_pNavigatorTree;
 };
 
 ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent)
     :m_xReport(_rController.getReportDefinition())
     ,m_rController(_rController)
-    ,m_pNavigatorTree(new NavigatorTree(_pParent->get<vcl::Window>("box"),_rController))
+    ,m_pNavigatorTree(VclPtr<NavigatorTree>::Create(_pParent->get<vcl::Window>("box"),_rController))
 {
     reportdesign::OReportVisitor aVisitor(m_pNavigatorTree.get());
     aVisitor.start(m_xReport);

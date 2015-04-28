@@ -57,10 +57,6 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
     m_apErrorBarResources->SetChartDocumentForRangeChoosing( xChartDocument );
 }
 
-InsertErrorBarsDialog::~InsertErrorBarsDialog()
-{
-}
-
 void InsertErrorBarsDialog::FillItemSet(SfxItemSet& rOutAttrs)
 {
     m_apErrorBarResources->FillItemSet(rOutAttrs);

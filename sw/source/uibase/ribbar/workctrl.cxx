@@ -122,7 +122,7 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
 
 }
 
-SfxPopupWindow* SwTbxInsertCtrl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SwTbxInsertCtrl::CreatePopupWindow()
 {
     if(GetSlotId() == FN_INSERT_CTRL)
     {
@@ -176,7 +176,7 @@ SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
     DelPopup();
 }
 
-SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
 {
     SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
@@ -288,7 +288,7 @@ SwTbxFieldCtrl::~SwTbxFieldCtrl()
 {
 }
 
-SfxPopupWindow* SwTbxFieldCtrl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SwTbxFieldCtrl::CreatePopupWindow()
 {
     SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
@@ -398,7 +398,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
         "modules/swriter/ui/floatingnavigation.ui", rFrame),
     aIList(SW_RES(IL_VALUES))
 {
-    m_pToolBox = new SwScrollNaviToolBox(get<vcl::Window>("box"), this, 0);
+    m_pToolBox = VclPtr<SwScrollNaviToolBox>::Create(get<vcl::Window>("box"), this, 0);
     get(m_pInfoField, "label");
 
     sal_uInt16 i;
@@ -448,7 +448,14 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
 
 SwScrollNaviPopup::~SwScrollNaviPopup()
 {
-    delete m_pToolBox;
+    disposeOnce();
+}
+
+void SwScrollNaviPopup::dispose()
+{
+    m_pToolBox.disposeAndClear();
+    m_pInfoField.clear();
+    SfxPopupWindow::dispose();
 }
 
 void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
@@ -470,9 +477,9 @@ void SwScrollNaviPopup::ApplyImageList()
     }
 }
 
-SfxPopupWindow* SwScrollNaviPopup::Clone() const
+VclPtr<SfxPopupWindow> SwScrollNaviPopup::Clone() const
 {
-    return new SwScrollNaviPopup( GetId(), GetFrame(), GetParent() );
+    return VclPtr<SwScrollNaviPopup>::Create( GetId(), GetFrame(), GetParent() );
 }
 
 IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
@@ -503,6 +510,17 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
     return 0;
 }
 
+SwScrollNaviToolBox::~SwScrollNaviToolBox()
+{
+    disposeOnce();
+}
+
+void SwScrollNaviToolBox::dispose()
+{
+    m_pNaviPopup.disposeAndClear();
+    ToolBox::dispose();
+}
+
 void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ToolBox::MouseButtonUp(rMEvt);
@@ -515,7 +533,6 @@ void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
     SetItemText(NID_NEXT, SwScrollNaviPopup::GetQuickHelpText(true));
     SetItemText(NID_PREV, SwScrollNaviPopup::GetQuickHelpText(false));
     ToolBox::RequestHelp( rHEvt );
-
 }
 
 OUString SwScrollNaviPopup::GetQuickHelpText(bool bNext)
@@ -699,10 +716,10 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     }
 }
 
-vcl::Window* SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent )
 {
-    SwZoomBox_Impl* pRet = new SwZoomBox_Impl( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
-    return pRet;
+    VclPtrInstance<SwZoomBox_Impl> pRet( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
+    return pRet.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -63,7 +63,7 @@ namespace cairocanvas
         // adjust to stretched/shrunk font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
         {
-            OutputDevice* pOutDev( mpRefDevice->getOutputDevice() );
+            VclPtr<OutputDevice> pOutDev( mpRefDevice->getOutputDevice() );
 
             if( pOutDev )
             {

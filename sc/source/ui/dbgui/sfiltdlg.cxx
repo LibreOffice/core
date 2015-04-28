@@ -97,6 +97,11 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
+    disposeOnce();
+}
+
+void ScSpecialFilterDlg::dispose()
+{
     sal_uInt16 nEntries = pLbFilterArea->GetEntryCount();
     sal_uInt16 i;
 
@@ -111,6 +116,26 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
     // Hack: RefInput-Kontrolle
     pIdle->Stop();
     delete pIdle;
+
+    pLbFilterArea.clear();
+    pEdFilterArea.clear();
+    pRbFilterArea.clear();
+    pExpander.clear();
+    pBtnCase.clear();
+    pBtnRegExp.clear();
+    pBtnHeader.clear();
+    pBtnUnique.clear();
+    pBtnCopyResult.clear();
+    pLbCopyArea.clear();
+    pEdCopyArea.clear();
+    pRbCopyArea.clear();
+    pBtnDestPers.clear();
+    pFtDbAreaLabel.clear();
+    pFtDbArea.clear();
+    pBtnOk.clear();
+    pBtnCancel.clear();
+    pRefInputEdit.clear();
+    ScAnyRefDlg::dispose();
 }
 
 void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )

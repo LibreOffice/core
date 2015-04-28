@@ -54,9 +54,9 @@ namespace dbaui
         friend class OTableWindowListBox;
     protected:
         // and the table itself (needed for me as I want to lock it as long as the window is alive)
-        FixedImage              m_aTypeImage;
-        OTableWindowTitle       m_aTitle;
-        OTableWindowListBox*    m_pListBox;
+        VclPtr<FixedImage>          m_aTypeImage;
+        VclPtr<OTableWindowTitle>   m_aTitle;
+        VclPtr<OTableWindowListBox>    m_pListBox;
         OTableWindowAccess*     m_pAccessible;
 
     private:
@@ -82,7 +82,7 @@ namespace dbaui
         virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-        OTableWindowListBox*    CreateListBox();
+        VclPtr<OTableWindowListBox> CreateListBox();
             // called at FIRST Init
         bool FillListBox();
             // called at EACH Init
@@ -125,6 +125,7 @@ namespace dbaui
 
     public:
         virtual ~OTableWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // late Constructor, see also CreateListbox and FillListbox
         virtual bool Init();
@@ -148,7 +149,7 @@ namespace dbaui
         OUString             GetComposedName() const { return m_pData->GetComposedName(); }
         OTableWindowListBox*         GetListBox() const { return m_pListBox; }
         TTableWindowData::value_type GetData() const { return m_pData; }
-        OTableWindowTitle&           GetTitleCtrl() { return m_aTitle; }
+        OTableWindowTitle&           GetTitleCtrl() { return *m_aTitle.get(); }
 
         /** returns the name which should be used when displaying join or relations
             @return

@@ -402,8 +402,8 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
     // create all internal windows and sub frames ...
     Reference< ::com::sun::star::awt::XWindow > xParentWindow = xHelpTask->getContainerWindow();
-    vcl::Window*                                     pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
-    SfxHelpWindow_Impl*                         pHelpWindow   = new SfxHelpWindow_Impl( xHelpTask, pParentWindow, WB_DOCKBORDER );
+    vcl::Window*                                pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
+    VclPtrInstance<SfxHelpWindow_Impl>          pHelpWindow( xHelpTask, pParentWindow, WB_DOCKBORDER );
     Reference< ::com::sun::star::awt::XWindow > xHelpWindow   = VCLUnoHelper::GetInterface( pHelpWindow );
 
     Reference< XFrame > xHelpContent;
@@ -429,7 +429,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
     if (!xHelpContent.is())
     {
-        delete pHelpWindow;
+        pHelpWindow.disposeAndClear();
         return NULL;
     }
 
@@ -605,8 +605,8 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         if ( impl_showOnlineHelp( aHelpURL ) )
             return true;
 
-        NoHelpErrorBox aErrBox( const_cast< vcl::Window* >( pWindow ) );
-        aErrBox.Execute();
+        ScopedVclPtrInstance< NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
+        aErrBox->Execute();
         return false;
     }
 
@@ -626,7 +626,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     if (!xHelp.is())
         pHelpWindow = impl_createHelp(xHelp, xHelpContent);
     else
-        pHelpWindow = static_cast<SfxHelpWindow_Impl*>(VCLUnoHelper::GetWindow(xHelp->getComponentWindow()));
+        pHelpWindow = static_cast<SfxHelpWindow_Impl*>(VCLUnoHelper::GetWindow(xHelp->getComponentWindow()).get());
     if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
         return false;
 

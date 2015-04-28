@@ -47,7 +47,7 @@ class SvxBackgroundTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
     static const sal_uInt16 pPageRanges[];
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     // returns the area of the which-values
     static const sal_uInt16* GetRanges() { return pPageRanges; }
 
@@ -71,40 +71,41 @@ protected:
 private:
     SvxBackgroundTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     virtual ~SvxBackgroundTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    VclContainer*           m_pAsGrid;
-    FixedText*              m_pSelectTxt;
-    ListBox*                m_pLbSelect;
-    FixedText*              m_pTblDesc;
-    ListBox*                m_pTblLBox;
-    ListBox*                m_pParaLBox;
+    VclPtr<VclContainer>           m_pAsGrid;
+    VclPtr<FixedText>              m_pSelectTxt;
+    VclPtr<ListBox>                m_pLbSelect;
+    VclPtr<FixedText>              m_pTblDesc;
+    VclPtr<ListBox>                m_pTblLBox;
+    VclPtr<ListBox>                m_pParaLBox;
 
-    VclFrame*               m_pBackGroundColorFrame;
-    SvxColorValueSet*       m_pBackgroundColorSet;
-    BackgroundPreviewImpl*  m_pPreviewWin1;
+    VclPtr<VclFrame>               m_pBackGroundColorFrame;
+    VclPtr<SvxColorValueSet>       m_pBackgroundColorSet;
+    VclPtr<BackgroundPreviewImpl>  m_pPreviewWin1;
 
-    FixedText*              m_pColTransFT;///<color transparency
-    MetricField*            m_pColTransMF;
-    CheckBox*               m_pBtnPreview;
+    VclPtr<FixedText>              m_pColTransFT;///<color transparency
+    VclPtr<MetricField>            m_pColTransMF;
+    VclPtr<CheckBox>               m_pBtnPreview;
 
     // Background Bitmap ----------------------------------
-    VclContainer*           m_pBitmapContainer;
-    VclContainer*           m_pFileFrame;
-    PushButton*             m_pBtnBrowse;
-    CheckBox*               m_pBtnLink;
-    FixedText*              m_pFtUnlinked;
-    FixedText*              m_pFtFile;
+    VclPtr<VclContainer>           m_pBitmapContainer;
+    VclPtr<VclContainer>           m_pFileFrame;
+    VclPtr<PushButton>             m_pBtnBrowse;
+    VclPtr<CheckBox>               m_pBtnLink;
+    VclPtr<FixedText>              m_pFtUnlinked;
+    VclPtr<FixedText>              m_pFtFile;
 
-    VclContainer*           m_pTypeFrame;
-    RadioButton*            m_pBtnPosition;
-    RadioButton*            m_pBtnArea;
-    RadioButton*            m_pBtnTile;
-    SvxRectCtl*             m_pWndPosition;
+    VclPtr<VclContainer>           m_pTypeFrame;
+    VclPtr<RadioButton>            m_pBtnPosition;
+    VclPtr<RadioButton>            m_pBtnArea;
+    VclPtr<RadioButton>            m_pBtnTile;
+    VclPtr<SvxRectCtl>             m_pWndPosition;
 
-    VclContainer*           m_pGraphTransFrame;///<transparency of graphics
-    MetricField*            m_pGraphTransMF;
+    VclPtr<VclContainer>           m_pGraphTransFrame;///<transparency of graphics
+    VclPtr<MetricField>            m_pGraphTransMF;
 
-    BackgroundPreviewImpl*  m_pPreviewWin2;
+    VclPtr<BackgroundPreviewImpl>  m_pPreviewWin2;
 
     // DDListBox for Writer -------------------------------
 

@@ -78,7 +78,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     SdrLayerID nLay,
     const Rectangle& rRect)
 :   maTmpList(),
-    maVD(),
+    mpVD(VclPtr<VirtualDevice>::Create()),
     maScaleRect(rRect),
     mnMapScalingOfs(0),
     mpLineAttr(0),
@@ -105,10 +105,10 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mbLastObjWasLine(false),
     maClip()
 {
-    maVD.EnableOutput(false);
-    maVD.SetLineColor();
-    maVD.SetFillColor();
-    maOldLineColor.SetRed( maVD.GetLineColor().GetRed() + 1 );
+    mpVD->EnableOutput(false);
+    mpVD->SetLineColor();
+    mpVD->SetFillColor();
+    maOldLineColor.SetRed( mpVD->GetLineColor().GetRed() + 1 );
     mpLineAttr = new SfxItemSet(rModel.GetItemPool(), XATTR_LINE_FIRST, XATTR_LINE_LAST, 0, 0);
     mpFillAttr = new SfxItemSet(rModel.GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
     mpTextAttr = new SfxItemSet(rModel.GetItemPool(), EE_ITEMS_START, EE_ITEMS_END, 0, 0);
@@ -340,12 +340,12 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
             mpLineAttr->Put(XLineWidthItem(0));
         }
 
-        maOldLineColor = maVD.GetLineColor();
+        maOldLineColor = mpVD->GetLineColor();
 
-        if(maVD.IsLineColor())
+        if(mpVD->IsLineColor())
         {
             mpLineAttr->Put(XLineStyleItem(drawing::LineStyle_SOLID));
-            mpLineAttr->Put(XLineColorItem(OUString(), maVD.GetLineColor()));
+            mpLineAttr->Put(XLineColorItem(OUString(), mpVD->GetLineColor()));
         }
         else
         {
@@ -390,10 +390,10 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
     if(bFill)
     {
-        if(maVD.IsFillColor())
+        if(mpVD->IsFillColor())
         {
             mpFillAttr->Put(XFillStyleItem(drawing::FillStyle_SOLID));
-            mpFillAttr->Put(XFillColorItem(OUString(), maVD.GetFillColor()));
+            mpFillAttr->Put(XFillColorItem(OUString(), mpVD->GetFillColor()));
         }
         else
         {
@@ -407,7 +407,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
     if(bText && mbFntDirty)
     {
-        vcl::Font aFnt(maVD.GetFont());
+        vcl::Font aFnt(mpVD->GetFont());
         const sal_uInt32 nHeight(FRound(aFnt.GetSize().Height() * mfScaleY));
 
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO ) );
@@ -429,7 +429,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
         mpTextAttr->Put(SvxWordLineModeItem(aFnt.IsWordLineMode(), EE_CHAR_WLM));
         mpTextAttr->Put(SvxContourItem(aFnt.IsOutline(), EE_CHAR_OUTLINE));
-        mpTextAttr->Put(SvxColorItem(maVD.GetTextColor(), EE_CHAR_COLOR));
+        mpTextAttr->Put(SvxColorItem(mpVD->GetTextColor(), EE_CHAR_COLOR));
         //... svxfont textitem svditext
         mbFntDirty = false;
     }
@@ -779,7 +779,7 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
     }
 
     // #i73407# reformulation to use new B2DPolygon classes
-    if(mbLastObjWasLine && (maOldLineColor == maVD.GetLineColor()) && rSrcPoly.count())
+    if(mbLastObjWasLine && (maOldLineColor == mpVD->GetLineColor()) && rSrcPoly.count())
     {
         SdrObject* pTmpObj = maTmpList.size() ? maTmpList[maTmpList.size() - 1] : 0;
         SdrPathObj* pLastPoly = dynamic_cast< SdrPathObj* >(pTmpObj);
@@ -871,9 +871,9 @@ bool ImpSdrGDIMetaFileImport::CheckLastPolyLineAndFillMerge(const basegfx::B2DPo
 
 void ImpSdrGDIMetaFileImport::checkClip()
 {
-    if(maVD.IsClipRegion())
+    if(mpVD->IsClipRegion())
     {
-        maClip = maVD.GetClipRegion().GetAsB2DPolyPolygon();
+        maClip = mpVD->GetClipRegion().GetAsB2DPolyPolygon();
 
         if(isClip())
         {
@@ -984,12 +984,12 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
 {
     // calc text box size, add 5% to make it fit safely
 
-    FontMetric aFontMetric( maVD.GetFontMetric() );
-    vcl::Font aFnt( maVD.GetFont() );
+    FontMetric aFontMetric( mpVD->GetFontMetric() );
+    vcl::Font aFnt( mpVD->GetFont() );
     FontAlign eAlg( aFnt.GetAlign() );
 
-    sal_Int32 nTextWidth = (sal_Int32)( maVD.GetTextWidth( rStr ) * mfScaleX );
-    sal_Int32 nTextHeight = (sal_Int32)( maVD.GetTextHeight() * mfScaleY );
+    sal_Int32 nTextWidth = (sal_Int32)( mpVD->GetTextWidth( rStr ) * mfScaleX );
+    sal_Int32 nTextHeight = (sal_Int32)( mpVD->GetTextHeight() * mfScaleY );
 
     Point aPos( FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()) );
     Size aSize( nTextWidth, nTextHeight );
@@ -1168,13 +1168,13 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaLineColorAction& rAct)
 {
-    rAct.Execute(&maVD);
+    rAct.Execute(mpVD);
 }
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 {
     MapScaling();
-    rAct.Execute(&maVD);
+    rAct.Execute(mpVD);
     mbLastObjWasPolyWithoutLine = false;
     mbLastObjWasLine = false;
 }
@@ -1182,7 +1182,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 void ImpSdrGDIMetaFileImport::MapScaling()
 {
     const size_t nCount(maTmpList.size());
-    const MapMode& rMap = maVD.GetMapMode();
+    const MapMode& rMap = mpVD->GetMapMode();
     Point aMapOrg( rMap.GetOrigin() );
     bool bMov2(aMapOrg.X() != 0 || aMapOrg.Y() != 0);
 
@@ -1276,7 +1276,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTextRectAction& rAct)
 {
     GDIMetaFile aTemp;
 
-    maVD.AddTextRectActions(rAct.GetRect(), rAct.GetText(), rAct.GetStyle(), aTemp);
+    mpVD->AddTextRectActions(rAct.GetRect(), rAct.GetText(), rAct.GetStyle(), aTemp);
     DoLoopActions(aTemp, 0, 0);
 }
 
@@ -1558,12 +1558,12 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
         else
         {
             // gradient transparence
-            VirtualDevice aVDev;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
 
-            aVDev.SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
-            aVDev.DrawGradient(Rectangle(Point(0, 0), aVDev.GetOutputSizePixel()), rGradient);
+            pVDev->SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
+            pVDev->DrawGradient(Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
 
-            aNewMask = AlphaMask(aVDev.GetBitmap(Point(0, 0), aVDev.GetOutputSizePixel()));
+            aNewMask = AlphaMask(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
             bHasNewMask = true;
         }
 

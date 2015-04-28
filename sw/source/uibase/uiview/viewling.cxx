@@ -459,8 +459,8 @@ void SwView::HyphenateDocument()
         // turned on no special area
         {
             // I want also in special areas hyphenation
-            MessageDialog aBox(&GetEditWin(), SW_RES(STR_QUERY_SPECIAL_FORCED), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-            if( aBox.Execute() == RET_YES )
+            ScopedVclPtrInstance< MessageDialog > aBox(&GetEditWin(), SW_RES(STR_QUERY_SPECIAL_FORCED), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+            if( aBox->Execute() == RET_YES )
             {
                 bOther = true;
                 if (xProp.is())
@@ -799,18 +799,20 @@ bool SwView::ExecSmartTagPopup( const Point& rPt )
 class SwFieldDialog : public FloatingWindow
 {
 private:
-    ListBox aListBox;
+    VclPtr<ListBox> aListBox;
     IFieldmark *pFieldmark;
 
     DECL_LINK( MyListBoxHandler, ListBox * );
 
 public:
     SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM );
+    virtual ~SwFieldDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
     FloatingWindow( parent, WB_BORDER | WB_SYSTEMWINDOW ),
-    aListBox(this),
+    aListBox(VclPtr<ListBox>::Create(this)),
     pFieldmark( fieldBM )
 {
     if ( fieldBM != NULL )
@@ -827,7 +829,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
                 pCurrent != vListEntries.getArray() + vListEntries.getLength();
                 ++pCurrent)
             {
-                aListBox.InsertEntry(*pCurrent);
+                aListBox->InsertEntry(*pCurrent);
             }
         }
 
@@ -838,18 +840,29 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
         {
             sal_Int32 nSelection = -1;
             pResult->second >>= nSelection;
-            aListBox.SelectEntryPos( nSelection );
+            aListBox->SelectEntryPos( nSelection );
         }
     }
 
-    Size lbSize(aListBox.GetOptimalSize());
+    Size lbSize(aListBox->GetOptimalSize());
     lbSize.Width()+=50;
     lbSize.Height()+=20;
-    aListBox.SetSizePixel(lbSize);
-    aListBox.SetSelectHdl( LINK( this, SwFieldDialog, MyListBoxHandler ) );
-    aListBox.Show();
+    aListBox->SetSizePixel(lbSize);
+    aListBox->SetSelectHdl( LINK( this, SwFieldDialog, MyListBoxHandler ) );
+    aListBox->Show();
 
     SetSizePixel( lbSize );
+}
+
+SwFieldDialog::~SwFieldDialog()
+{
+    disposeOnce();
+}
+
+void SwFieldDialog::dispose()
+{
+    aListBox.disposeAndClear();
+    FloatingWindow::dispose();
 }
 
 IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
@@ -875,11 +888,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
 
 IMPL_LINK_NOARG(SwView, FieldPopupModeEndHdl)
 {
-    if ( m_pFieldPopup )
-    {
-        delete m_pFieldPopup;
-        m_pFieldPopup = NULL;
-    }
+    m_pFieldPopup.disposeAndClear();
     return 0;
 }
 
@@ -887,7 +896,7 @@ void SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
 {
     const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 
-    m_pFieldPopup = new SwFieldDialog( m_pEditWin, fieldBM );
+    m_pFieldPopup = VclPtr<SwFieldDialog>::Create( m_pEditWin, fieldBM );
     m_pFieldPopup->SetPopupModeEndHdl( LINK( this, SwView, FieldPopupModeEndHdl ) );
 
     Rectangle aRect( m_pEditWin->OutputToScreenPixel( aPixPos ), Size( 0, 0 ) );

@@ -76,6 +76,14 @@ namespace dbaui
 
     OGeneralPage::~OGeneralPage()
     {
+        disposeOnce();
+    }
+
+    void OGeneralPage::dispose()
+    {
+        m_pSpecialMessage.clear();
+        m_pDatasourceType.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     namespace
@@ -537,6 +545,24 @@ namespace dbaui
         m_pPB_OpenDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnOpenDocument ) );
     }
 
+    OGeneralPageWizard::~OGeneralPageWizard()
+    {
+        disposeOnce();
+    }
+
+    void OGeneralPageWizard::dispose()
+    {
+        m_pRB_CreateDatabase.clear();
+        m_pRB_OpenExistingDatabase.clear();
+        m_pRB_ConnectDatabase.clear();
+        m_pFT_EmbeddedDBLabel.clear();
+        m_pEmbeddedDBType.clear();
+        m_pFT_DocListLabel.clear();
+        m_pLB_DocumentList.clear();
+        m_pPB_OpenDatabase.clear();
+        OGeneralPage::dispose();
+    }
+
     OGeneralPageWizard::CreationMode OGeneralPageWizard::GetDatabaseCreationMode() const
     {
         if ( m_pRB_CreateDatabase->IsChecked() )
@@ -712,8 +738,8 @@ namespace dbaui
             if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() || !pFilter->GetWildcard().Matches(sPath) )
             {
                 OUString sMessage(ModuleRes(STR_ERR_USE_CONNECT_TO));
-                InfoBox aError(this, sMessage);
-                aError.Execute();
+                ScopedVclPtrInstance< InfoBox > aError(this, sMessage);
+                aError->Execute();
                 m_pRB_ConnectDatabase->Check();
                 OnSetupModeSelected( m_pRB_ConnectDatabase );
                 return 0L;

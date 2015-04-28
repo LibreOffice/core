@@ -1593,7 +1593,7 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
 #endif
         if ( !pDragAndDropInfo->pBackground )
         {
-            pDragAndDropInfo->pBackground = new VirtualDevice( *GetWindow() );
+            pDragAndDropInfo->pBackground = VclPtr<VirtualDevice>::Create( *GetWindow() );
             MapMode aMapMode( GetWindow()->GetMapMode() );
             aMapMode.SetOrigin( Point( 0, 0 ) );
             pDragAndDropInfo->pBackground->SetMapMode( aMapMode );

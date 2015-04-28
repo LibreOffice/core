@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
 
 #include <vcl/font.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/mempool.hxx>
 #include "swtypes.hxx"
 #include "swcache.hxx"
@@ -63,7 +64,7 @@ class SwFntObj : public SwCacheObj
     vcl::Font aFont;
     vcl::Font *pScrFont;
     vcl::Font *pPrtFont;
-    OutputDevice* pPrinter;
+    VclPtr<OutputDevice> pPrinter;
     sal_uInt16 nGuessedLeading;
     sal_uInt16 nExtLeading;
     sal_uInt16 nScrAscent;
@@ -77,7 +78,7 @@ class SwFntObj : public SwCacheObj
 
     static long nPixWidth;
     static MapMode *pPixMap;
-    static OutputDevice *pPixOut;
+    static VclPtr<OutputDevice> pPixOut;
 
     void calcLinePos(SwDrawTextInfo& rInf, Point& aStart, Point& aEnd, sal_Int32 nStart,
        sal_Int32 nWrLen, sal_Int32 nCnt, const bool bSwitchH2V, const bool bSwitchL2R,

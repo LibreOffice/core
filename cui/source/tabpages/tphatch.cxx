@@ -137,6 +137,27 @@ SvxHatchTabPage::SvxHatchTabPage
     setPreviewsToSamePlace(pParent, this);
 }
 
+SvxHatchTabPage::~SvxHatchTabPage()
+{
+    disposeOnce();
+}
+
+void SvxHatchTabPage::dispose()
+{
+    m_pMtrDistance.clear();
+    m_pMtrAngle.clear();
+    m_pCtlAngle.clear();
+    m_pLbLineType.clear();
+    m_pLbLineColor.clear();
+    m_pLbHatchings.clear();
+    m_pCtlPreview.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnDelete.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
+    SvxTabPage::dispose();
+}
 
 
 void SvxHatchTabPage::Construct()
@@ -240,10 +261,10 @@ long SvxHatchTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
-                                                        SVX_RESSTR( RID_SVXSTR_HATCH ),
-                                                        CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
-                                                        &aWarningBoxImage ));
+        ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
+                                                      SVX_RESSTR( RID_SVXSTR_HATCH ),
+                                                      CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
+                                                      &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialog creation failed!");
         aMessDlg->SetButtonText( MESS_BTN_1,
                                 OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
@@ -339,10 +360,10 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 
 
 
-SfxTabPage* SvxHatchTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxHatchTabPage::Create( vcl::Window* pWindow,
+                                            const SfxItemSet* rSet )
 {
-    return new SvxHatchTabPage( pWindow, *rSet );
+    return VclPtr<SvxHatchTabPage>::Create( pWindow, *rSet );
 }
 
 
@@ -479,7 +500,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
     DBG_ASSERT(pFact, "Dialog creation failed!");
     boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    boost::scoped_ptr<MessageDialog> pWarnBox;
+    ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -499,7 +520,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox.reset(new MessageDialog( GetParentDialog()
+            pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                          ,"DuplicateNameDialog"
                                          ,"cui/ui/queryduplicatedialog.ui"));
         }
@@ -606,10 +627,10 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
-                                    ,"DuplicateNameDialog"
-                                    ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
+                                                          ,"DuplicateNameDialog"
+                                                          ,"cui/ui/queryduplicatedialog.ui" );
+                aBox->Execute();
             }
         }
     }
@@ -624,9 +645,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog(),"AskDelHatchDialog","cui/ui/querydeletehatchdialog.ui");
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelHatchDialog","cui/ui/querydeletehatchdialog.ui");
 
-        if( aQueryBox.Execute() == RET_YES )
+        if( aQueryBox->Execute() == RET_YES )
         {
             delete pHatchingList->Remove( nPos );
             m_pLbHatchings->RemoveEntry( nPos );

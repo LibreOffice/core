@@ -71,11 +71,37 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet
 }
 
 SchAxisLabelTabPage::~SchAxisLabelTabPage()
-{delete m_pOrientHlp;}
-
-SfxTabPage* SchAxisLabelTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
 {
-    return new SchAxisLabelTabPage( pParent, *rAttrs );
+    disposeOnce();
+}
+
+void SchAxisLabelTabPage::dispose()
+{
+    delete m_pOrientHlp;
+    m_pOrientHlp = NULL;
+    m_pCbShowDescription.clear();
+    m_pFlOrder.clear();
+    m_pRbSideBySide.clear();
+    m_pRbUpDown.clear();
+    m_pRbDownUp.clear();
+    m_pRbAuto.clear();
+    m_pFlTextFlow.clear();
+    m_pCbTextOverlap.clear();
+    m_pCbTextBreak.clear();
+    m_pFtABCD.clear();
+    m_pFlOrient.clear();
+    m_pCtrlDial.clear();
+    m_pFtRotate.clear();
+    m_pNfRotate.clear();
+    m_pCbStacked.clear();
+    m_pFtTextDirection.clear();
+    m_pLbTextDirection.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SchAxisLabelTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
+{
+    return VclPtr<SchAxisLabelTabPage>::Create( pParent, *rAttrs );
 }
 
 bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )

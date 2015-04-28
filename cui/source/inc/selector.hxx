@@ -102,6 +102,7 @@ friend class SvxConfigGroupListBox;
 public:
     SvxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxConfigFunctionListBox();
+    virtual void                    dispose() SAL_OVERRIDE;
     void                            ClearAll();
     OUString                        GetHelpText( SvTreeListEntry *pEntry );
     using Window::GetHelpText;
@@ -122,7 +123,7 @@ class SvxConfigGroupListBox : public SvTreeListBox
     SvxGroupInfoArr_Impl            aArr;
     bool                            m_bShowSlots;
 
-    SvxConfigFunctionListBox*  pFunctionListBox;
+    VclPtr<SvxConfigFunctionListBox>  pFunctionListBox;
     ImageProvider*                  m_pImageProvider;
 
     ::com::sun::star::uno::Reference
@@ -162,6 +163,7 @@ protected:
 public:
     SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxConfigGroupListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Init(bool bShowSlots, const ::com::sun::star::uno::Reference
                     < ::com::sun::star::frame::XFrame >& xFrame);
@@ -179,12 +181,12 @@ public:
 
 class SvxScriptSelectorDialog : public ModelessDialog
 {
-    FixedText*                      m_pDialogDescription;
-    SvxConfigGroupListBox*          m_pCategories;
-    SvxConfigFunctionListBox*       m_pCommands;
-    PushButton*                     m_pOKButton;
-    PushButton*                     m_pCancelButton;
-    VclMultiLineEdit*               m_pDescriptionText;
+    VclPtr<FixedText>                      m_pDialogDescription;
+    VclPtr<SvxConfigGroupListBox>          m_pCategories;
+    VclPtr<SvxConfigFunctionListBox>       m_pCommands;
+    VclPtr<PushButton>                     m_pOKButton;
+    VclPtr<PushButton>                     m_pCancelButton;
+    VclPtr<VclMultiLineEdit>               m_pDescriptionText;
     OUString                        m_sDefaultDesc;
     bool                        m_bShowSlots;
     Link                            m_aAddHdl;
@@ -203,8 +205,8 @@ public:
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::frame::XFrame >& xFrame = 0
     );
-
-    virtual ~SvxScriptSelectorDialog ( );
+    virtual ~SvxScriptSelectorDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void        SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
     const Link& GetAddHdl() const { return m_aAddHdl; }

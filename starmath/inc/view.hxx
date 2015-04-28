@@ -95,6 +95,7 @@ private:
 public:
     SmGraphicWindow(SmViewShell* pShell);
     virtual ~SmGraphicWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     // Window
     virtual void    MouseButtonDown(const MouseEvent &rMEvt) SAL_OVERRIDE;
@@ -159,7 +160,7 @@ public:
 
 class SmCmdBoxWindow : public SfxDockingWindow
 {
-    SmEditWindow        aEdit;
+    VclPtr<SmEditWindow>        aEdit;
     SmEditController    aController;
     bool                bExiting;
 
@@ -187,10 +188,11 @@ public:
                    Window         *pParent);
 
     virtual ~SmCmdBoxWindow ();
+    virtual void dispose() SAL_OVERRIDE;
 
     void AdjustPosition();
 
-    SmEditWindow& GetEditWindow() { return aEdit; }
+    SmEditWindow& GetEditWindow() { return *aEdit.get(); }
     SmViewShell  *GetView();
 };
 
@@ -214,7 +216,7 @@ public:
 
     SmEditWindow& GetEditWindow()
     {
-        return static_cast<SmCmdBoxWindow *>(pWindow)->GetEditWindow();
+        return static_cast<SmCmdBoxWindow *>(pWindow.get())->GetEditWindow();
     }
 
 };
@@ -231,7 +233,7 @@ class SmViewShell: public SfxViewShell
 
     std::unique_ptr<SmViewShell_Impl> pImpl;
 
-    SmGraphicWindow     aGraphic;
+    VclPtr<SmGraphicWindow>     aGraphic;
     SmGraphicController aGraphicController;
     OUString            aStatusText;
 
@@ -268,8 +270,8 @@ protected:
     void InsertFrom(SfxMedium &rMedium);
 
     virtual bool HasPrintOptionsPage() const SAL_OVERRIDE;
-    virtual SfxTabPage *CreatePrintOptionsPage(::vcl::Window    *pParent,
-                                               const SfxItemSet &rOptions) SAL_OVERRIDE;
+    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(::vcl::Window    *pParent,
+                                                      const SfxItemSet &rOptions) SAL_OVERRIDE;
     virtual void Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
     virtual void Activate(bool IsMDIActivate) SAL_OVERRIDE;
     virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize) SAL_OVERRIDE;
@@ -290,8 +292,8 @@ public:
     }
 
     SmEditWindow * GetEditWindow();
-          SmGraphicWindow & GetGraphicWindow()       { return aGraphic; }
-    const SmGraphicWindow & GetGraphicWindow() const { return aGraphic; }
+          SmGraphicWindow & GetGraphicWindow()       { return *aGraphic.get(); }
+    const SmGraphicWindow & GetGraphicWindow() const { return *aGraphic.get(); }
 
     void        SetStatusText(const OUString& rText);
 

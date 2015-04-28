@@ -57,19 +57,33 @@ SchAlignmentTabPage::SchAlignmentTabPage(vcl::Window* pWindow,
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
 {
+    disposeOnce();
+}
+
+void SchAlignmentTabPage::dispose()
+{
     delete m_pOrientHlp;
+    m_pOrientHlp = NULL;
+    m_pCtrlDial.clear();
+    m_pFtRotate.clear();
+    m_pNfRotate.clear();
+    m_pCbStacked.clear();
+    m_pFtTextDirection.clear();
+    m_pLbTextDirection.clear();
+    m_pFtABCD.clear();
+    SfxTabPage::dispose();
 }
 
-SfxTabPage* SchAlignmentTabPage::Create(vcl::Window* pParent,
-                                        const SfxItemSet* rInAttrs)
+VclPtr<SfxTabPage> SchAlignmentTabPage::Create(vcl::Window* pParent,
+                                               const SfxItemSet* rInAttrs)
 {
-    return new SchAlignmentTabPage(pParent, *rInAttrs);
+    return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs);
 }
 
-SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(vcl::Window* pParent,
-                                        const SfxItemSet* rInAttrs)
+VclPtr<SfxTabPage> SchAlignmentTabPage::CreateWithoutRotation(vcl::Window* pParent,
+                                                              const SfxItemSet* rInAttrs)
 {
-    return new SchAlignmentTabPage(pParent, *rInAttrs, false);
+    return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs, false);
 }
 
 bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)

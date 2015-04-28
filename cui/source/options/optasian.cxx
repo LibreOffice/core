@@ -151,12 +151,32 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& 
 
 SvxAsianLayoutPage::~SvxAsianLayoutPage()
 {
-    delete pImpl;
+    disposeOnce();
 }
 
-SfxTabPage* SvxAsianLayoutPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void SvxAsianLayoutPage::dispose()
 {
-    return new SvxAsianLayoutPage(pParent, *rAttrSet);
+    delete pImpl;
+    pImpl = NULL;
+    m_pCharKerningRB.clear();
+    m_pCharPunctKerningRB.clear();
+    m_pNoCompressionRB.clear();
+    m_pPunctCompressionRB.clear();
+    m_pPunctKanaCompressionRB.clear();
+    m_pLanguageFT.clear();
+    m_pLanguageLB.clear();
+    m_pStandardCB.clear();
+    m_pStartFT.clear();
+    m_pStartED.clear();
+    m_pEndFT.clear();
+    m_pEndED.clear();
+    m_pHintFT.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxAsianLayoutPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SvxAsianLayoutPage>::Create(pParent, *rAttrSet);
 }
 
 bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )

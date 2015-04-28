@@ -34,14 +34,13 @@ namespace dbaui
     {
     protected:
         OGeneralPage( vcl::Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems );
-        virtual ~OGeneralPage();
 
         OUString            m_eCurrentSelection;    /// currently selected type
         ::dbaccess::DATASOURCE_TYPE
                             m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
 
     private:
-        FixedText*          m_pSpecialMessage;
+        VclPtr<FixedText>          m_pSpecialMessage;
 
         enum SPECIAL_MESSAGE
         {
@@ -57,7 +56,7 @@ namespace dbaui
         void                insertDatasourceTypeEntryData( const OUString& _sType, const OUString& sDisplayName );
 
     protected:
-        ListBox*            m_pDatasourceType;
+        VclPtr<ListBox>            m_pDatasourceType;
 
         ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
@@ -66,6 +65,9 @@ namespace dbaui
                             m_aURLPrefixes;
 
     public:
+        virtual ~OGeneralPage();
+        virtual void dispose() SAL_OVERRIDE;
+
         /// set a handler which gets called every time the user selects a new type
         void            SetTypeSelectHandler( const Link& _rHandler ) { m_aTypeSelectHandler = _rHandler; }
 
@@ -116,7 +118,8 @@ namespace dbaui
     {
     public:
         OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems );
-
+        virtual ~OGeneralPageWizard();
+        virtual void dispose() SAL_OVERRIDE;
     public:
         enum CreationMode
         {
@@ -133,16 +136,16 @@ namespace dbaui
 
     private:
         // dialog controls
-        RadioButton*            m_pRB_CreateDatabase;
-        RadioButton*            m_pRB_OpenExistingDatabase;
-        RadioButton*            m_pRB_ConnectDatabase;
+        VclPtr<RadioButton>            m_pRB_CreateDatabase;
+        VclPtr<RadioButton>            m_pRB_OpenExistingDatabase;
+        VclPtr<RadioButton>            m_pRB_ConnectDatabase;
 
-        FixedText*              m_pFT_EmbeddedDBLabel;
-        ListBox*                m_pEmbeddedDBType;
+        VclPtr<FixedText>              m_pFT_EmbeddedDBLabel;
+        VclPtr<ListBox>                m_pEmbeddedDBType;
 
-        FixedText*              m_pFT_DocListLabel;
-        OpenDocumentListBox*    m_pLB_DocumentList;
-        OpenDocumentButton*     m_pPB_OpenDatabase;
+        VclPtr<FixedText>              m_pFT_DocListLabel;
+        VclPtr<OpenDocumentListBox>    m_pLB_DocumentList;
+        VclPtr<OpenDocumentButton>     m_pPB_OpenDatabase;
 
         // state
         DocumentDescriptor      m_aBrowsedDocument;

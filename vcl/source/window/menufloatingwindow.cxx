@@ -104,7 +104,14 @@ void MenuFloatingWindow::doShutdown()
 
 MenuFloatingWindow::~MenuFloatingWindow()
 {
+    disposeOnce();
+}
+
+void MenuFloatingWindow::dispose()
+{
     doShutdown();
+
+    FloatingWindow::dispose();
 }
 
 void MenuFloatingWindow::Resize()
@@ -406,8 +413,8 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 {
     if ( pActivePopup && ( !pThisOnly || ( pThisOnly == pActivePopup ) ) )
     {
-        if( pActivePopup->pWindow != NULL )
-            if( static_cast<FloatingWindow *>(pActivePopup->pWindow)->IsInCleanUp() )
+        if( pActivePopup->pWindow )
+            if( static_cast<FloatingWindow *>(pActivePopup->pWindow.get())->IsInCleanUp() )
                 return; // kill it later
         if ( pActivePopup->bInCallback )
             pActivePopup->bCanceled = true;

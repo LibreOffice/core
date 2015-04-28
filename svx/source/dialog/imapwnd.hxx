@@ -134,6 +134,7 @@ public:
 
                         IMapWindow( vcl::Window* pParent, WinBits nBits, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
                         virtual ~IMapWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     bool                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
 

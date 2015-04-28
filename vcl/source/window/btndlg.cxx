@@ -30,10 +30,10 @@ typedef boost::ptr_vector<ImplBtnDlgItem>::const_iterator btn_const_iterator;
 struct ImplBtnDlgItem
 {
     sal_uInt16              mnId;
-    bool                mbOwnButton;
-    bool                mbDummyAlign;
-    long                mnSepSize;
-    PushButton*         mpPushButton;
+    bool                    mbOwnButton;
+    bool                    mbDummyAlign;
+    long                    mnSepSize;
+    VclPtr<PushButton>      mpPushButton;
 };
 
 void ButtonDialog::ImplInitButtonDialogData()
@@ -59,11 +59,18 @@ ButtonDialog::ButtonDialog( vcl::Window* pParent, WinBits nStyle ) :
 
 ButtonDialog::~ButtonDialog()
 {
+    disposeOnce();
+}
+
+void ButtonDialog::dispose()
+{
     for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
     {
-        if ( it->mpPushButton && it->mbOwnButton )
-            delete it->mpPushButton;
+        if ( it->mbOwnButton )
+            it->mpPushButton.disposeAndClear();
     }
+    maItemList.clear();
+    Dialog::dispose();
 }
 
 PushButton* ButtonDialog::ImplCreatePushButton( sal_uInt16 nBtnFlags )
@@ -74,13 +81,13 @@ PushButton* ButtonDialog::ImplCreatePushButton( sal_uInt16 nBtnFlags )
     if ( nBtnFlags & BUTTONDIALOG_DEFBUTTON )
         nStyle |= WB_DEFBUTTON;
     if ( nBtnFlags & BUTTONDIALOG_CANCELBUTTON )
-        pBtn = new CancelButton( this, nStyle );
+        pBtn = VclPtr<CancelButton>::Create( this, nStyle );
     else if ( nBtnFlags & BUTTONDIALOG_OKBUTTON )
-        pBtn = new OKButton( this, nStyle );
+        pBtn = VclPtr<OKButton>::Create( this, nStyle );
     else if ( nBtnFlags & BUTTONDIALOG_HELPBUTTON )
-        pBtn = new HelpButton( this, nStyle );
+        pBtn = VclPtr<HelpButton>::Create( this, nStyle );
     else
-        pBtn = new PushButton( this, nStyle );
+        pBtn = VclPtr<PushButton>::Create( this, nStyle );
 
     if ( !(nBtnFlags & BUTTONDIALOG_HELPBUTTON) )
         pBtn->SetClickHdl( LINK( this, ButtonDialog, ImplClickHdl ) );
@@ -327,10 +334,10 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
         if (it->mnId == nId)
         {
             it->mpPushButton->Hide();
-
-            if (it->mbOwnButton )
-                delete it->mpPushButton;
-
+            if (it->mbOwnButton)
+                it->mpPushButton.disposeAndClear();
+            else
+                it->mpPushButton.clear();
             maItemList.erase(it);
             return;
         }
@@ -344,9 +351,8 @@ void ButtonDialog::Clear()
     for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
     {
         it->mpPushButton->Hide();
-
-        if (it->mbOwnButton )
-            delete it->mpPushButton;
+        if (it->mbOwnButton)
+            it->mpPushButton.disposeAndClear();
     }
 
     maItemList.clear();

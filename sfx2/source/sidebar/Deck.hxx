@@ -47,13 +47,12 @@ public:
         vcl::Window* pParentWindow,
         const ::boost::function<void()>& rCloserAction);
     virtual ~Deck();
-
-    void Dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
     const ::rtl::OUString& GetId() const { return msId;}
     DeckTitleBar* GetTitleBar() const;
     Rectangle GetContentArea() const;
-    void SetPanels (const SharedPanelContainer& rPanels);
+    void ResetPanels (const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels() const { return maPanels;}
     void RequestLayout();
     vcl::Window* GetPanelParentWindow();
@@ -77,7 +76,6 @@ public:
     {
     public:
         ScrollContainerWindow (vcl::Window* pParentWindow);
-        virtual ~ScrollContainerWindow();
         virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
         void SetSeparators (const ::std::vector<sal_Int32>& rSeparators);
     private:
@@ -89,11 +87,11 @@ private:
     Image maIcon;
     sal_Int32 mnMinimalWidth;
     SharedPanelContainer maPanels;
-    ::boost::scoped_ptr<DeckTitleBar> mpTitleBar;
-    ::boost::scoped_ptr<vcl::Window> mpScrollClipWindow;
-    ::boost::scoped_ptr<ScrollContainerWindow> mpScrollContainer;
-    ::boost::scoped_ptr<vcl::Window> mpFiller;
-    ::boost::scoped_ptr<ScrollBar> mpVerticalScrollBar;
+    VclPtr<DeckTitleBar> mpTitleBar;
+    VclPtr<vcl::Window> mpScrollClipWindow;
+    VclPtr<ScrollContainerWindow> mpScrollContainer;
+    VclPtr<vcl::Window> mpFiller;
+    VclPtr<ScrollBar> mpVerticalScrollBar;
 
     DECL_LINK(HandleVerticalScrollBarChange,void*);
     bool ProcessWheelEvent(CommandEvent* pCommandEvent);

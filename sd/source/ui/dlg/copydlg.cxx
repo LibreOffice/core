@@ -84,30 +84,23 @@ CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
 
 CopyDlg::~CopyDlg()
 {
-    OUString& rStr = GetExtraData();
+    disposeOnce();
+}
 
-    rStr = OUString::number(m_pNumFldCopies->GetValue());
-    rStr += OUString(TOKEN);
-
-    rStr += OUString::number(m_pMtrFldMoveX->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number(m_pMtrFldMoveY->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number(m_pMtrFldAngle->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number(m_pMtrFldWidth->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number(m_pMtrFldHeight->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number( m_pLbStartColor->GetSelectEntryColor().GetColor() );
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number( m_pLbEndColor->GetSelectEntryColor().GetColor() );
+void CopyDlg::dispose()
+{
+    m_pNumFldCopies.clear();
+    m_pBtnSetViewData.clear();
+    m_pMtrFldMoveX.clear();
+    m_pMtrFldMoveY.clear();
+    m_pMtrFldAngle.clear();
+    m_pMtrFldWidth.clear();
+    m_pMtrFldHeight.clear();
+    m_pLbStartColor.clear();
+    m_pFtEndColor.clear();
+    m_pLbEndColor.clear();
+    m_pBtnSetDefault.clear();
+    SfxModalDialog::dispose();
 }
 
 /**

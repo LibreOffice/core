@@ -38,10 +38,10 @@ class LayerInvalidator : public ILayerInvalidator
 public:
     LayerInvalidator (
         const ::boost::shared_ptr<LayeredDevice>& rpLayeredDevice,
-        const SharedSdWindow& rpTargetWindow,
+        sd::Window *pTargetWindow,
         const int nLayer)
         : mpLayeredDevice(rpLayeredDevice),
-          mpTargetWindow(rpTargetWindow),
+          mpTargetWindow(pTargetWindow),
           mnLayer(nLayer)
     {
     }
@@ -58,7 +58,7 @@ public:
 
 private:
     const ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
-    SharedSdWindow mpTargetWindow;
+    VclPtr<sd::Window> mpTargetWindow;
     const int mnLayer;
 };
 
@@ -107,7 +107,7 @@ public:
     Layer();
     ~Layer();
 
-    void Initialize (const SharedSdWindow& rpTargetWindow);
+    void Initialize (sd::Window *pTargetWindow);
     void InvalidateRectangle (const Rectangle& rInvalidationBox);
     void InvalidateRegion (const vcl::Region& rInvalidationRegion);
     void Validate (const MapMode& rMapMode);
@@ -121,7 +121,7 @@ public:
     void Dispose();
 
 private:
-    ::boost::shared_ptr<VirtualDevice> mpLayerDevice;
+    ScopedVclPtr<VirtualDevice> mpLayerDevice;
     ::std::vector<SharedILayerPainter> maPainters;
     vcl::Region maInvalidationRegion;
 
@@ -159,11 +159,11 @@ private:
 
 //===== LayeredDevice =========================================================
 
-LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
-    : mpTargetWindow(rpTargetWindow),
+LayeredDevice::LayeredDevice (VclPtr<sd::Window> pTargetWindow)
+    : mpTargetWindow(pTargetWindow),
       mpLayers(new LayerContainer()),
-      mpBackBuffer(new VirtualDevice(*mpTargetWindow)),
-      maSavedMapMode(rpTargetWindow->GetMapMode())
+      mpBackBuffer(VclPtr<VirtualDevice>::Create(*mpTargetWindow)),
+      maSavedMapMode(pTargetWindow->GetMapMode())
 {
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
 }
@@ -379,15 +379,15 @@ Layer::~Layer()
 {
 }
 
-void Layer::Initialize (const SharedSdWindow& rpTargetWindow)
+void Layer::Initialize (sd::Window *pTargetWindow)
 {
 #if 0
-    (void)rpTargetWindow;
+    (void)pTargetWindow;
 #else
     if ( ! mpLayerDevice)
     {
-        mpLayerDevice.reset(new VirtualDevice(*rpTargetWindow));
-        mpLayerDevice->SetOutputSizePixel(rpTargetWindow->GetSizePixel());
+        mpLayerDevice.reset(VclPtr<VirtualDevice>::Create(*pTargetWindow));
+        mpLayerDevice->SetOutputSizePixel(pTargetWindow->GetSizePixel());
     }
 #endif
 }

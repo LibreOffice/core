@@ -154,6 +154,31 @@ SvxLineDefTabPage::SvxLineDefTabPage
     pDashList = NULL;
 }
 
+SvxLineDefTabPage::~SvxLineDefTabPage()
+{
+    disposeOnce();
+}
+
+void SvxLineDefTabPage::dispose()
+{
+    m_pLbLineStyles.clear();
+    m_pLbType1.clear();
+    m_pLbType2.clear();
+    m_pNumFldNumber1.clear();
+    m_pNumFldNumber2.clear();
+    m_pMtrLength1.clear();
+    m_pMtrLength2.clear();
+    m_pMtrDistance.clear();
+    m_pCbxSynchronize.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnDelete.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
+    m_pCtlPreview.clear();
+    SfxTabPage::dispose();
+}
+
 void SvxLineDefTabPage::Construct()
 {
     // Line style fill; do *not* add default fields here
@@ -221,10 +246,10 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
-                                                    SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
-                                                    OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
-                                                    &aWarningBoxImage ));
+        ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
+                                                      SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
+                                                      OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
+                                                      &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialog creation failed!");
         aMessDlg->SetButtonText( MESS_BTN_1, OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
         aMessDlg->SetButtonText( MESS_BTN_2, OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
@@ -325,9 +350,9 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxLineDefTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxLineDefTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return new SvxLineDefTabPage( pWindow, *rOutAttrs );
+    return VclPtr<SvxLineDefTabPage>::Create( pWindow, *rOutAttrs );
 }
 
 
@@ -593,11 +618,10 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
         }
         else
         {
-
-            MessageDialog aBox( GetParentDialog()
-                                ,"DuplicateNameDialog"
-                                ,"cui/ui/queryduplicatedialog.ui");
-            aBox.Execute();
+            ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
+                                                      ,"DuplicateNameDialog"
+                                                      ,"cui/ui/queryduplicatedialog.ui" );
+            aBox->Execute();
         }
     }
     pDlg.reset();
@@ -672,10 +696,10 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
-                                   ,"DuplicateNameDialog"
-                                   ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
+                                                          ,"DuplicateNameDialog"
+                                                          ,"cui/ui/queryduplicatedialog.ui" );
+                aBox->Execute();
             }
         }
     }
@@ -690,11 +714,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog()
-                                ,"AskDelLineStyleDialog"
-                                ,"cui/ui/querydeletelinestyledialog.ui");
+        ScopedVclPtrInstance<MessageDialog> aQueryBox( GetParentDialog()
+                                                       ,"AskDelLineStyleDialog"
+                                                       ,"cui/ui/querydeletelinestyledialog.ui" );
 
-        if ( aQueryBox.Execute() == RET_YES )
+        if ( aQueryBox->Execute() == RET_YES )
         {
             delete pDashList->Remove( nPos );
             m_pLbLineStyles->RemoveEntry( nPos );

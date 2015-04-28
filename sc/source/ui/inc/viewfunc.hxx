@@ -335,7 +335,7 @@ public:
                     DataFormPutData( SCROW nCurrentRow ,
                                      SCROW nStartRow , SCCOL nStartCol ,
                                      SCROW nEndRow , SCCOL nEndCol ,
-                                     boost::ptr_vector<boost::nullable<Edit> >& aEdits,
+                                     std::vector<VclPtr<Edit> >& aEdits,
                                      sal_uInt16 aColLength );
     void            UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr = NULL );
                                                 // Internal helper functions

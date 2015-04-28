@@ -37,6 +37,8 @@
 #include "vcl/layout.hxx"
 #include "vcl/button.hxx"
 #include "vcl/dockwin.hxx"
+#include "vcl/print.hxx"
+#include "vcl/virdev.hxx"
 #include "salinst.hxx"
 #include "salframe.hxx"
 #include "salgdi.hxx"
@@ -45,6 +47,8 @@
 #include "salimestatus.hxx"
 #include "salsys.hxx"
 #include "svids.hrc"
+#include "helpwin.hxx"
+#include "../window/scrwnd.hxx"
 
 #include "com/sun/star/accessibility/MSAAService.hpp"
 
@@ -82,6 +86,14 @@ ImplSVData::ImplSVData()
     memset( this, 0, sizeof( ImplSVData ) );
     maHelpData.mbAutoHelpId = true;
     maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
+}
+
+ImplSVGDIData::~ImplSVGDIData()
+{
+    // FIXME: deliberately leak any remaining OutputDevice
+    // until we have their pGraphics reference counted, doing
+    // any disposes so late in shutdown is rather unsafe.
+    memset( this, 0, sizeof( ImplSVGDIData ) );
 }
 
 void ImplDeInitSVData()
@@ -124,7 +136,7 @@ vcl::Window* ImplGetDefaultWindow()
         if ( !pSVData->mpDefaultWin && !pSVData->mbDeInit )
         {
             DBG_WARNING( "ImplGetDefaultWindow(): No AppWindow" );
-            pSVData->mpDefaultWin = new WorkWindow( 0, WB_DEFAULTWIN );
+            pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, WB_DEFAULTWIN );
             pSVData->mpDefaultWin->SetText( OUString( "VCL ImplGetDefaultWindow"  ) );
 
             // Add a reference to the default context so it never gets deleted
@@ -160,8 +172,8 @@ ResMgr* ImplGetResMgr()
                 "Missing vcl resource. This indicates that files vital to localization are missing. "
                 "You might have a corrupt installation.";
             fprintf( stderr, "%s\n", pMsg );
-            MessageDialog aBox(NULL, OUString(pMsg, strlen(pMsg), RTL_TEXTENCODING_ASCII_US));
-            aBox.Execute();
+            ScopedVclPtrInstance< MessageDialog > aBox( nullptr, OUString(pMsg, strlen(pMsg), RTL_TEXTENCODING_ASCII_US) );
+            aBox->Execute();
         }
     }
     return pSVData->mpResMgr;

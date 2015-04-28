@@ -159,6 +159,7 @@ public:
 private:
     void            ImplTrack( const Point& rScreenPos );
 
+    virtual void    dispose() SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -174,6 +175,11 @@ ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
     SetPointer(Pointer(POINTER_HSIZEBAR));
     SetSizePixel(Size(7 * nScaleFactor, 0));
+}
+
+void ImplTabSizer::dispose()
+{
+    vcl::Window::dispose();
 }
 
 void ImplTabSizer::ImplTrack( const Point& rScreenPos )
@@ -328,25 +334,17 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 
 struct TabBar_Impl
 {
-    std::unique_ptr<ImplTabSizer> mpSizer;
-    std::unique_ptr<ImplTabButton> mpFirstButton;
-    std::unique_ptr<ImplTabButton> mpPrevButton;
-    std::unique_ptr<ImplTabButton> mpNextButton;
-    std::unique_ptr<ImplTabButton> mpLastButton;
-    std::unique_ptr<TabBarEdit> mpEdit;
-    ImplTabBarList mpItemList;
+    ScopedVclPtr<ImplTabSizer>  mpSizer;
+    ScopedVclPtr<ImplTabButton> mpFirstButton;
+    ScopedVclPtr<ImplTabButton> mpPrevButton;
+    ScopedVclPtr<ImplTabButton> mpNextButton;
+    ScopedVclPtr<ImplTabButton> mpLastButton;
+    ScopedVclPtr<TabBarEdit>    mpEdit;
+    ImplTabBarList              mpItemList;
 
     svt::AccessibleFactoryAccess  maAccessibleFactory;
 
-    TabBar_Impl()
-        : mpSizer()
-        , mpFirstButton()
-        , mpPrevButton()
-        , mpNextButton()
-        , mpLastButton()
-        , mpEdit()
-        , mpItemList()
-    {}
+    TabBar_Impl() {}
 
     ~TabBar_Impl()
     {
@@ -372,7 +370,14 @@ TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
 
 TabBar::~TabBar()
 {
+    disposeOnce();
+}
+
+void TabBar::dispose()
+{
     EndEditMode( true );
+    mpImpl.reset();
+    Window::dispose();
 }
 
 const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
@@ -650,14 +655,12 @@ void TabBar::ImplInitControls()
     {
         if (!mpImpl->mpSizer)
         {
-            mpImpl->mpSizer.reset(new ImplTabSizer( this, mnWinStyle & (WB_DRAG | WB_3DLOOK)));
+            mpImpl->mpSizer.reset(VclPtr<ImplTabSizer>::Create( this, mnWinStyle & (WB_DRAG | WB_3DLOOK)));
         }
         mpImpl->mpSizer->Show();
     }
     else
-    {
-        mpImpl->mpSizer.reset();
-    }
+        mpImpl->mpSizer.disposeAndClear();
 
     Link aLink = LINK( this, TabBar, ImplClickHdl );
 
@@ -665,7 +668,7 @@ void TabBar::ImplInitControls()
     {
         if (!mpImpl->mpPrevButton)
         {
-            mpImpl->mpPrevButton.reset(new ImplTabButton(this, WB_REPEAT));
+            mpImpl->mpPrevButton.reset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
             mpImpl->mpPrevButton->SetClickHdl(aLink);
         }
         mpImpl->mpPrevButton->SetSymbol(mbMirrored ? SymbolType::NEXT : SymbolType::PREV);
@@ -673,7 +676,7 @@ void TabBar::ImplInitControls()
 
         if (!mpImpl->mpNextButton)
         {
-            mpImpl->mpNextButton.reset(new ImplTabButton(this, WB_REPEAT));
+            mpImpl->mpNextButton.reset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
             mpImpl->mpNextButton->SetClickHdl(aLink);
         }
         mpImpl->mpNextButton->SetSymbol(mbMirrored ? SymbolType::PREV : SymbolType::NEXT);
@@ -681,15 +684,15 @@ void TabBar::ImplInitControls()
     }
     else
     {
-        mpImpl->mpPrevButton.reset();
-        mpImpl->mpNextButton.reset();
+        mpImpl->mpPrevButton.disposeAndClear();
+        mpImpl->mpNextButton.disposeAndClear();
     }
 
     if ( mnWinStyle & WB_SCROLL )
     {
         if (!mpImpl->mpFirstButton)
         {
-            mpImpl->mpFirstButton.reset(new ImplTabButton(this));
+            mpImpl->mpFirstButton.reset(VclPtr<ImplTabButton>::Create(this));
             mpImpl->mpFirstButton->SetClickHdl(aLink);
         }
         mpImpl->mpFirstButton->SetSymbol(mbMirrored ? SymbolType::LAST : SymbolType::FIRST);
@@ -697,7 +700,7 @@ void TabBar::ImplInitControls()
 
         if (!mpImpl->mpLastButton)
         {
-            mpImpl->mpLastButton.reset(new ImplTabButton(this));
+            mpImpl->mpLastButton.reset(VclPtr<ImplTabButton>::Create(this));
             mpImpl->mpLastButton->SetClickHdl(aLink);
         }
         mpImpl->mpLastButton->SetSymbol(mbMirrored ? SymbolType::FIRST : SymbolType::LAST);
@@ -705,8 +708,8 @@ void TabBar::ImplInitControls()
     }
     else
     {
-        mpImpl->mpFirstButton.reset();
-        mpImpl->mpLastButton.reset();
+        mpImpl->mpFirstButton.disposeAndClear();
+        mpImpl->mpLastButton.disposeAndClear();
     }
 
     mbHasInsertTab  = (mnWinStyle & WB_INSERTTAB);
@@ -2176,7 +2179,7 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
         ImplFormat();
         Update();
 
-        mpImpl->mpEdit.reset(new TabBarEdit(this, WB_CENTER));
+        mpImpl->mpEdit.reset(VclPtr<TabBarEdit>::Create(this, WB_CENTER));
         Rectangle aRect = GetPageRect( mnEditId );
         long nX = aRect.Left();
         long nWidth = aRect.GetWidth();
@@ -2262,7 +2265,8 @@ void TabBar::EndEditMode( bool bCancel )
         else
         {
             // close edit and call end hdl
-            mpImpl->mpEdit.reset();
+            mpImpl->mpEdit.disposeAndClear();
+
             EndRenaming();
             mnEditId = 0;
         }

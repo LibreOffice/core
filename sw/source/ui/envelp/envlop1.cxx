@@ -153,8 +153,14 @@ SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
 SwEnvDlg::~SwEnvDlg()
 {
+    disposeOnce();
+}
+
+void SwEnvDlg::dispose()
+{
     delete pAddresseeSet;
     delete pSenderSet;
+    SfxTabDialog::dispose();
 }
 
 void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
@@ -229,6 +235,20 @@ SwEnvPage::SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwEnvPage::~SwEnvPage()
 {
+    disposeOnce();
+}
+
+void SwEnvPage::dispose()
+{
+    m_pAddrEdit.clear();
+    m_pDatabaseLB.clear();
+    m_pTableLB.clear();
+    m_pDBFieldLB.clear();
+    m_pInsertBT.clear();
+    m_pSenderBox.clear();
+    m_pSenderEdit.clear();
+    m_pPreview.clear();
+    SfxTabPage::dispose();
 }
 
 IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
@@ -303,9 +323,9 @@ void SwEnvPage::InitDatabaseBox()
     }
 }
 
-SfxTabPage* SwEnvPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwEnvPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwEnvPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwEnvPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)

@@ -42,7 +42,6 @@ class SFX2_DLLPUBLIC RecentDocsView : public ThumbnailView
 {
 public:
     RecentDocsView( vcl::Window* pParent );
-    virtual ~RecentDocsView();
 
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
 

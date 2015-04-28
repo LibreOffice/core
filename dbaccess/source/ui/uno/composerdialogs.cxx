@@ -77,7 +77,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 
-    Dialog* ComposerDialog::createDialog(vcl::Window* _pParent)
+    VclPtr<Dialog> ComposerDialog::createDialog(vcl::Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection;
@@ -140,9 +140,9 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new RowsetFilterDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    Dialog* RowsetFilterDialog::createComposerDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
+    VclPtr<Dialog> RowsetFilterDialog::createComposerDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
-        return new DlgFilterCrit( _pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns );
+        return VclPtr<DlgFilterCrit>::Create( _pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns );
     }
 
     void SAL_CALL RowsetFilterDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
@@ -169,7 +169,7 @@ namespace dbaui
         ComposerDialog::executedDialog( _nExecutionResult );
 
         if ( _nExecutionResult && m_pDialog )
-            static_cast< DlgFilterCrit* >( m_pDialog )->BuildWherePart();
+            static_cast< DlgFilterCrit* >( m_pDialog.get() )->BuildWherePart();
     }
 
     // RowsetOrderDialog
@@ -188,9 +188,9 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new RowsetOrderDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    Dialog* RowsetOrderDialog::createComposerDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
+    VclPtr<Dialog> RowsetOrderDialog::createComposerDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
-        return new DlgOrderCrit( _pParent, _rxConnection, m_xComposer, _rxColumns );
+        return VclPtr<DlgOrderCrit>::Create( _pParent, _rxConnection, m_xComposer, _rxColumns );
     }
 
     void SAL_CALL RowsetOrderDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
@@ -216,9 +216,9 @@ namespace dbaui
             return;
 
         if ( _nExecutionResult )
-            static_cast< DlgOrderCrit* >( m_pDialog )->BuildOrderPart();
+            static_cast< DlgOrderCrit* >( m_pDialog.get() )->BuildOrderPart();
         else if ( m_xComposer.is() )
-            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog )->GetOrignalOrder() );
+            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog.get() )->GetOrignalOrder() );
     }
 
 }   // namespace dbaui

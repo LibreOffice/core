@@ -48,7 +48,7 @@ DataEditor::DataEditor(vcl::Window* pParent,
     , m_xChartDoc(xChartDoc)
     , m_xContext(xContext)
 {
-    m_xBrwData.reset(new DataBrowser(get<vcl::Window>("datawindow"), WB_BORDER | WB_TABSTOP, true /* bLiveUpdate */));
+    m_xBrwData.reset(VclPtr<DataBrowser>::Create(get<vcl::Window>("datawindow"), WB_BORDER | WB_TABSTOP, true /* bLiveUpdate */));
     m_xBrwData->set_hexpand(true);
     m_xBrwData->set_vexpand(true);
     m_xBrwData->set_expand(true);
@@ -95,12 +95,20 @@ DataEditor::DataEditor(vcl::Window* pParent,
 
 DataEditor::~DataEditor()
 {
+    disposeOnce();
+}
+
+void DataEditor::dispose()
+{
     notifySystemWindow( this, m_pTbxData, ::comphelper::mem_fun( & TaskPaneList::RemoveWindow ));
 
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK( this, DataEditor, MiscHdl ) );
 
     OSL_TRACE( "DataEditor: DTOR" );
+    m_pTbxData.clear();
+    m_xBrwData.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 // react on click (or keypress) on toolbar icon

@@ -45,12 +45,18 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateLocalView(vcl:
 
 TemplateLocalView::~TemplateLocalView()
 {
+    disposeOnce();
+}
+
+void TemplateLocalView::dispose()
+{
     for (size_t i = 0; i < maRegions.size(); ++i)
         delete maRegions[i];
 
     maRegions.clear();
 
     delete mpDocTemplates;
+    TemplateAbstractView::dispose();
 }
 
 void TemplateLocalView::Populate ()
@@ -141,8 +147,8 @@ void TemplateLocalView::showRootRegion()
         items[i] = pItem;
     }
 
-    maAllButton.Show(false);
-    maFTName.Show(false);
+    maAllButton->Show(false);
+    maFTName->Show(false);
 
     updateItems(items);
 
@@ -151,12 +157,12 @@ void TemplateLocalView::showRootRegion()
 
 void TemplateLocalView::showRegion(ThumbnailViewItem *pItem)
 {
-    mnHeaderHeight = maAllButton.GetSizePixel().getHeight() + maAllButton.GetPosPixel().Y() * 2;
+    mnHeaderHeight = maAllButton->GetSizePixel().getHeight() + maAllButton->GetPosPixel().Y() * 2;
 
     mnCurRegionId = static_cast<TemplateContainerItem*>(pItem)->mnRegionId+1;
     maCurRegionName = pItem->maTitle;
-    maAllButton.Show(true);
-    maFTName.Show(true);
+    maAllButton->Show(true);
+    maFTName->Show(true);
 
     insertItems(reinterpret_cast<TemplateContainerItem*>(pItem)->maTemplates);
 
@@ -169,7 +175,7 @@ void TemplateLocalView::showRegion(const OUString &rName)
     {
         if (maRegions[i]->maTitle == rName)
         {
-            maFTName.SetText(rName);
+            maFTName->SetText(rName);
             showRegion(maRegions[i]);
             break;
         }

@@ -151,11 +151,28 @@ namespace abp
 
     TypeSelectionPage::~TypeSelectionPage()
     {
+        disposeOnce();
+    }
+
+    void TypeSelectionPage::dispose()
+    {
         for ( ::std::vector< ButtonItem >::iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
             loop->m_bVisible = false;
         }
+        m_pEvolution.clear();
+        m_pEvolutionGroupwise.clear();
+        m_pEvolutionLdap.clear();
+        m_pMORK.clear();
+        m_pThunderbird.clear();
+        m_pKab.clear();
+        m_pMacab.clear();
+        m_pLDAP.clear();
+        m_pOutlook.clear();
+        m_pOE.clear();
+        m_pOther.clear();
+        AddressBookSourcePage::dispose();
     }
 
 
@@ -226,8 +243,8 @@ namespace abp
 
         if (AST_INVALID == getSelectedType( ))
         {
-            MessageDialog aError(this, ModuleRes(RID_STR_NEEDTYPESELECTION));
-            aError.Execute();
+            ScopedVclPtrInstance< MessageDialog > aError(this, ModuleRes(RID_STR_NEEDTYPESELECTION));
+            aError->Execute();
             return false;
         }
 

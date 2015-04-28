@@ -125,7 +125,7 @@ static int ImplGetLen( sal_uInt8* pBuf, int nMax )
 
 static void MakeAsMeta(Graphic &rGraphic)
 {
-    VirtualDevice   aVDev;
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     GDIMetaFile     aMtf;
     Bitmap          aBmp( rGraphic.GetBitmap() );
     Size            aSize = aBmp.GetPrefSize();
@@ -137,9 +137,9 @@ static void MakeAsMeta(Graphic &rGraphic)
         aSize = OutputDevice::LogicToLogic( aSize,
             aBmp.GetPrefMapMode(), MAP_100TH_MM );
 
-    aVDev.EnableOutput( false );
-    aMtf.Record( &aVDev );
-    aVDev.DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
+    pVDev->EnableOutput( false );
+    aMtf.Record( pVDev );
+    pVDev->DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode( MAP_100TH_MM );
@@ -442,22 +442,22 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     long nWidth, long nHeight, Graphic &rGraphic)
 {
     GDIMetaFile aMtf;
-    VirtualDevice   aVDev;
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     vcl::Font       aFont;
 
-    aVDev.EnableOutput( false );
-    aMtf.Record( &aVDev );
-    aVDev.SetLineColor( Color( COL_RED ) );
-    aVDev.SetFillColor();
+    pVDev->EnableOutput( false );
+    aMtf.Record( pVDev );
+    pVDev->SetLineColor( Color( COL_RED ) );
+    pVDev->SetFillColor();
 
     aFont.SetColor( COL_LIGHTRED );
 //  aFont.SetSize( Size( 0, 32 ) );
 
-    aVDev.Push( PushFlags::FONT );
-    aVDev.SetFont( aFont );
+    pVDev->Push( PushFlags::FONT );
+    pVDev->SetFont( aFont );
 
     Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
-    aVDev.DrawRect( aRect );
+    pVDev->DrawRect( aRect );
 
     OUString aString;
     int nLen;
@@ -511,8 +511,8 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             aString += " LanguageLevel:" + OUString::number( nNumber );
         }
     }
-    aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
-    aVDev.Pop();
+    pVDev->DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
+    pVDev->Pop();
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode( MAP_POINT );
@@ -679,17 +679,17 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             }
                             if ( bIsValid )
                             {
-                                VirtualDevice   aVDev;
+                                ScopedVclPtrInstance<VirtualDevice> pVDev;
                                 GDIMetaFile     aMtf;
                                 Size            aSize;
-                                aVDev.EnableOutput( false );
-                                aMtf.Record( &aVDev );
+                                pVDev->EnableOutput( false );
+                                aMtf.Record( pVDev );
                                 aSize = aBitmap.GetPrefSize();
                                 if( !aSize.Width() || !aSize.Height() )
                                     aSize = Application::GetDefaultDevice()->PixelToLogic( aBitmap.GetSizePixel(), MAP_100TH_MM );
                                 else
                                     aSize = OutputDevice::LogicToLogic( aSize, aBitmap.GetPrefMapMode(), MAP_100TH_MM );
-                                aVDev.DrawBitmap( Point(), aSize, aBitmap );
+                                pVDev->DrawBitmap( Point(), aSize, aBitmap );
                                 aMtf.Stop();
                                 aMtf.WindStart();
                                 aMtf.SetPrefMapMode( MAP_100TH_MM );

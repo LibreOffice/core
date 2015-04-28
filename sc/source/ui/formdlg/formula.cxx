@@ -241,6 +241,11 @@ void ScFormulaDlg::fill()
 
 ScFormulaDlg::~ScFormulaDlg()
 {
+    disposeOnce();
+}
+
+void ScFormulaDlg::dispose()
+{
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
 
@@ -250,6 +255,7 @@ ScFormulaDlg::~ScFormulaDlg()
         pScMod->SetRefInputHdl(NULL);
         StoreFormEditData(pData);
     }
+    formula::FormulaDlg::dispose();
 }
 
 bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)

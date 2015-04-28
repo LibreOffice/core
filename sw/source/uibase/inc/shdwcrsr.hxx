@@ -27,7 +27,7 @@ namespace vcl { class Window; }
 
 class SwShadowCursor
 {
-    vcl::Window* pWin;
+    VclPtr<vcl::Window> pWin;
     Color aCol;
     Point aOldPt;
     long nOldHeight;

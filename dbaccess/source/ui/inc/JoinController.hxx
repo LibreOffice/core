@@ -51,7 +51,7 @@ namespace dbaui
         Fraction                                m_aZoom;
         ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
 
-        OAddTableDlg*                               m_pAddTableDialog;
+        VclPtr<OAddTableDlg>                          m_pAddTableDialog;
         ::std::unique_ptr< AddTableDialogContext >    m_pDialogContext;
         Point                                   m_aMinimumTableViewSize;
 

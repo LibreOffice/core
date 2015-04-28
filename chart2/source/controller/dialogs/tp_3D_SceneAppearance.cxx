@@ -121,7 +121,18 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
 }
 
 ThreeD_SceneAppearance_TabPage::~ThreeD_SceneAppearance_TabPage()
-{}
+{
+    disposeOnce();
+}
+
+void ThreeD_SceneAppearance_TabPage::dispose()
+{
+    m_pLB_Scheme.clear();
+    m_pCB_Shading.clear();
+    m_pCB_ObjectLines.clear();
+    m_pCB_RoundedEdge.clear();
+    TabPage::dispose();
+}
 
 void ThreeD_SceneAppearance_TabPage::ActivatePage()
 {

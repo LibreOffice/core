@@ -59,6 +59,18 @@ ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
     m_pBtnOk->SetClickHdl( HDL(TabBgColorOKHdl_Impl) );
 }
 
+ScTabBgColorDlg::~ScTabBgColorDlg()
+{
+    disposeOnce();
+}
+
+void ScTabBgColorDlg::dispose()
+{
+    m_pTabBgColorSet.clear();
+    m_pBtnOk.clear();
+    ModalDialog::dispose();
+}
+
 void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
 {
     rColor = this->m_aTabBgColor;
@@ -133,6 +145,17 @@ ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(vcl::Window* pParent
     : SvxColorValueSet(pParent, nStyle)
     , m_pTabBgColorDlg(NULL)
 {
+}
+
+ScTabBgColorDlg::ScTabBgColorValueSet::~ScTabBgColorValueSet()
+{
+    disposeOnce();
+}
+
+void ScTabBgColorDlg::ScTabBgColorValueSet::dispose()
+{
+    m_pTabBgColorDlg.clear();
+    SvxColorValueSet::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScTabBgColorValueSet(vcl::Window *pParent, VclBuilder::stringmap &rMap)

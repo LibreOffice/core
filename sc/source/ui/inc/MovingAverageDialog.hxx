@@ -24,7 +24,7 @@
 class ScMovingAverageDialog : public ScStatisticsInputOutputDialog
 {
 private:
-    NumericField* mpIntervalSpin;
+    VclPtr<NumericField> mpIntervalSpin;
 
 public:
     ScMovingAverageDialog(
@@ -32,6 +32,7 @@ public:
         vcl::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScMovingAverageDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool Close() SAL_OVERRIDE;
 

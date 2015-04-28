@@ -91,7 +91,7 @@ class SmModule : public SfxModule, utl::ConfigurationListener
     std::unique_ptr<SmConfig> mpConfig;
     std::unique_ptr<SmLocalizedSymbolData> mpLocSymbolData;
     std::unique_ptr<SvtSysLocale> mpSysLocale;
-    std::unique_ptr<VirtualDevice> mpVirtualDev;
+    VclPtr<VirtualDevice>    mpVirtualDev;
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
@@ -125,7 +125,7 @@ public:
     //virtual methods for options dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual VclPtr<SfxTabPage> CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 #define SM_MOD() ( *reinterpret_cast<SmModule**>(GetAppData(SHL_SM)) )

@@ -30,6 +30,7 @@ class SwModalRedlineAcceptDlg : public SfxModalDialog
 public:
     SwModalRedlineAcceptDlg(vcl::Window *pParent);
     virtual ~SwModalRedlineAcceptDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            AcceptAll( bool bAccept );
     virtual void    Activate() SAL_OVERRIDE;

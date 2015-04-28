@@ -375,7 +375,7 @@ void Window::StartTracking( sal_uInt16 nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpTrackWin != this )
+    if ( pSVData->maWinData.mpTrackWin.get() != this )
     {
         if ( pSVData->maWinData.mpTrackWin )
             pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
@@ -402,7 +402,7 @@ void Window::EndTracking( sal_uInt16 nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpTrackWin == this )
+    if ( pSVData->maWinData.mpTrackWin.get() == this )
     {
         // due to DbgChkThis in brackets, as the window could be destroyed
         // in the handler
@@ -449,7 +449,7 @@ void Window::StartAutoScroll( sal_uInt16 nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpAutoScrollWin != this )
+    if ( pSVData->maWinData.mpAutoScrollWin.get() != this )
     {
         if ( pSVData->maWinData.mpAutoScrollWin )
             pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
@@ -457,14 +457,14 @@ void Window::StartAutoScroll( sal_uInt16 nFlags )
 
     pSVData->maWinData.mpAutoScrollWin = this;
     pSVData->maWinData.mnAutoScrollFlags = nFlags;
-    pSVData->maAppData.mpWheelWindow = new ImplWheelWindow( this );
+    pSVData->maAppData.mpWheelWindow = VclPtr<ImplWheelWindow>::Create( this );
 }
 
 void Window::EndAutoScroll()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpAutoScrollWin == this )
+    if ( pSVData->maWinData.mpAutoScrollWin.get() == this )
     {
         pSVData->maWinData.mpAutoScrollWin = NULL;
         pSVData->maWinData.mnAutoScrollFlags = 0;
@@ -938,7 +938,7 @@ void Window::EnableDocking( bool bEnable )
 }
 
 // retrieves the list of owner draw decorated windows for this window hiearchy
-::std::vector<vcl::Window *>& Window::ImplGetOwnerDrawList()
+::std::vector<VclPtr<vcl::Window> >& Window::ImplGetOwnerDrawList()
 {
     return ImplGetTopmostFrameWindow()->mpWindowImpl->mpFrameData->maOwnerDrawList;
 }
@@ -975,27 +975,27 @@ vcl::Window* Window::ImplGetWindow()
 
 ImplFrameData* Window::ImplGetFrameData()
 {
-    return mpWindowImpl->mpFrameData;
+    return mpWindowImpl ? mpWindowImpl->mpFrameData : NULL;
 }
 
 SalFrame* Window::ImplGetFrame() const
 {
-    return mpWindowImpl->mpFrame;
+    return mpWindowImpl ? mpWindowImpl->mpFrame : NULL;
 }
 
 vcl::Window* Window::ImplGetParent() const
 {
-    return mpWindowImpl->mpParent;
+    return mpWindowImpl ? mpWindowImpl->mpParent.get() : NULL;
 }
 
 vcl::Window* Window::ImplGetClientWindow() const
 {
-    return mpWindowImpl->mpClientWindow;
+    return mpWindowImpl ? mpWindowImpl->mpClientWindow.get() : NULL;
 }
 
 vcl::Window* Window::ImplGetBorderWindow() const
 {
-    return mpWindowImpl->mpBorderWindow;
+    return mpWindowImpl ? mpWindowImpl->mpBorderWindow.get() : NULL;
 }
 
 vcl::Window* Window::ImplGetFirstOverlapWindow()
@@ -1016,37 +1016,38 @@ const vcl::Window* Window::ImplGetFirstOverlapWindow() const
 
 vcl::Window* Window::ImplGetFrameWindow() const
 {
-    return mpWindowImpl->mpFrameWindow;
+    return mpWindowImpl ? mpWindowImpl->mpFrameWindow.get() : NULL;
 }
 
 bool Window::IsDockingWindow() const
 {
-    return mpWindowImpl->mbDockWin;
+    return mpWindowImpl ? mpWindowImpl->mbDockWin : false;
 }
 
 bool Window::ImplIsFloatingWindow() const
 {
-    return mpWindowImpl->mbFloatWin;
+    return mpWindowImpl ? mpWindowImpl->mbFloatWin : false;
 }
 
 bool Window::ImplIsSplitter() const
 {
-    return mpWindowImpl->mbSplitter;
+    return mpWindowImpl ? mpWindowImpl->mbSplitter : false;
 }
 
 bool Window::ImplIsPushButton() const
 {
-    return mpWindowImpl->mbPushButton;
+    return mpWindowImpl ? mpWindowImpl->mbPushButton : false;
 }
 
 bool Window::ImplIsOverlapWindow() const
 {
-    return mpWindowImpl->mbOverlapWin;
+    return mpWindowImpl ? mpWindowImpl->mbOverlapWin : false;
 }
 
 void Window::ImplSetMouseTransparent( bool bTransparent )
 {
-    mpWindowImpl->mbMouseTransparent = bTransparent;
+    if (mpWindowImpl)
+        mpWindowImpl->mbMouseTransparent = bTransparent;
 }
 
 Point Window::ImplOutputToFrame( const Point& rPos )
@@ -1061,7 +1062,8 @@ Point Window::ImplFrameToOutput( const Point& rPos )
 
 void Window::SetCompoundControl( bool bCompound )
 {
-    mpWindowImpl->mbCompoundControl = bCompound;
+    if (mpWindowImpl)
+        mpWindowImpl->mbCompoundControl = bCompound;
 }
 
 void Window::IncrementLockCount()
@@ -1076,27 +1078,31 @@ void Window::DecrementLockCount()
 
 WinBits Window::GetStyle() const
 {
-    return mpWindowImpl->mnStyle;
+    return mpWindowImpl ? mpWindowImpl->mnStyle : 0;
 }
 
 WinBits Window::GetPrevStyle() const
 {
-    return mpWindowImpl->mnPrevStyle;
+    return mpWindowImpl ? mpWindowImpl->mnPrevStyle : 0;
 }
 
 WinBits Window::GetExtendedStyle() const
 {
-    return mpWindowImpl->mnExtendedStyle;
+    return mpWindowImpl ? mpWindowImpl->mnExtendedStyle : 0;
 }
 
 void Window::SetType( WindowType nType )
 {
-    mpWindowImpl->mnType = nType;
+    if (mpWindowImpl)
+        mpWindowImpl->mnType = nType;
 }
 
 WindowType Window::GetType() const
 {
-    return mpWindowImpl->mnType;
+    if (mpWindowImpl)
+        return mpWindowImpl->mnType;
+    else
+        return WINDOW_PARENT;
 }
 
 Dialog* Window::GetParentDialog() const
@@ -1116,22 +1122,22 @@ Dialog* Window::GetParentDialog() const
 
 bool Window::IsSystemWindow() const
 {
-    return mpWindowImpl->mbSysWin;
+    return mpWindowImpl ? mpWindowImpl->mbSysWin : false;
 }
 
 bool Window::IsDialog() const
 {
-    return mpWindowImpl->mbDialog;
+    return mpWindowImpl ? mpWindowImpl->mbDialog : false;
 }
 
 bool Window::IsMenuFloatingWindow() const
 {
-    return mpWindowImpl->mbMenuFloatingWindow;
+    return mpWindowImpl ? mpWindowImpl->mbMenuFloatingWindow : false;
 }
 
 bool Window::IsToolbarFloatingWindow() const
 {
-    return mpWindowImpl->mbToolbarFloatingWindow;
+    return mpWindowImpl ? mpWindowImpl->mbToolbarFloatingWindow : false;
 }
 
 void Window::EnableAllResize( bool bEnable )
@@ -1146,17 +1152,17 @@ void Window::EnableChildTransparentMode( bool bEnable )
 
 bool Window::IsChildTransparentModeEnabled() const
 {
-    return mpWindowImpl->mbChildTransparent;
+    return mpWindowImpl ? mpWindowImpl->mbChildTransparent : false;
 }
 
 bool Window::IsMouseTransparent() const
 {
-    return mpWindowImpl->mbMouseTransparent;
+    return mpWindowImpl ? mpWindowImpl->mbMouseTransparent : false;
 }
 
 bool Window::IsPaintTransparent() const
 {
-    return mpWindowImpl->mbPaintTransparent;
+    return mpWindowImpl ? mpWindowImpl->mbPaintTransparent : false;
 }
 
 void Window::SetDialogControlStart( bool bStart )
@@ -1166,7 +1172,7 @@ void Window::SetDialogControlStart( bool bStart )
 
 bool Window::IsDialogControlStart() const
 {
-    return mpWindowImpl->mbDlgCtrlStart;
+    return mpWindowImpl ? mpWindowImpl->mbDlgCtrlStart : false;
 }
 
 void Window::SetDialogControlFlags( sal_uInt16 nFlags )
@@ -1211,27 +1217,27 @@ bool Window::IsControlBackground() const
 
 bool Window::IsInPaint() const
 {
-    return mpWindowImpl->mbInPaint;
+    return mpWindowImpl ? mpWindowImpl->mbInPaint : false;
 }
 
 vcl::Window* Window::GetParent() const
 {
-    return mpWindowImpl->mpRealParent;
+    return mpWindowImpl ? mpWindowImpl->mpRealParent.get() : NULL;
 }
 
 bool Window::IsVisible() const
 {
-    return mpWindowImpl->mbVisible;
+    return mpWindowImpl ? mpWindowImpl->mbVisible : false;
 }
 
 bool Window::IsReallyVisible() const
 {
-    return mpWindowImpl->mbReallyVisible;
+    return mpWindowImpl ? mpWindowImpl->mbReallyVisible : false;
 }
 
 bool Window::IsReallyShown() const
 {
-    return mpWindowImpl->mbReallyShown;
+    return mpWindowImpl ? mpWindowImpl->mbReallyShown : false;
 }
 
 bool Window::IsInInitShow() const
@@ -1241,12 +1247,12 @@ bool Window::IsInInitShow() const
 
 bool Window::IsEnabled() const
 {
-    return !mpWindowImpl->mbDisabled;
+    return mpWindowImpl ? !mpWindowImpl->mbDisabled : false;
 }
 
 bool Window::IsInputEnabled() const
 {
-    return !mpWindowImpl->mbInputDisabled;
+    return mpWindowImpl ? !mpWindowImpl->mbInputDisabled : false;
 }
 
 bool Window::IsAlwaysEnableInput() const
@@ -1317,6 +1323,8 @@ bool Window::IsWait() const
 
 vcl::Cursor* Window::GetCursor() const
 {
+    if (!mpWindowImpl)
+        return NULL;
     return mpWindowImpl->mpCursor;
 }
 
@@ -1338,7 +1346,8 @@ void Window::SetHelpText( const OUString& rHelpText )
 
 void Window::SetQuickHelpText( const OUString& rHelpText )
 {
-    mpWindowImpl->maQuickHelpText = rHelpText;
+    if (mpWindowImpl)
+        mpWindowImpl->maQuickHelpText = rHelpText;
 }
 
 const OUString& Window::GetQuickHelpText() const
@@ -1364,8 +1373,8 @@ bool Window::IsCreatedWithToolkit() const
 void Window::SetCreatedWithToolkit( bool b )
 {
     mpWindowImpl->mbCreatedWithToolkit = b;
-
 }
+
 const Pointer& Window::GetPointer() const
 {
     return mpWindowImpl->maPointer;
@@ -1373,7 +1382,7 @@ const Pointer& Window::GetPointer() const
 
 VCLXWindow* Window::GetWindowPeer() const
 {
-    return mpWindowImpl->mpVCLXWindow;
+    return mpWindowImpl ? mpWindowImpl->mpVCLXWindow : NULL;
 }
 
 void Window::SetPosPixel( const Point& rNewPos )
@@ -1436,6 +1445,9 @@ void Window::InvalidateSizeCache()
 
 void Window::queue_resize(StateChangedType eReason)
 {
+    if (IsDisposed())
+        return;
+
     bool bSomeoneCares = queue_ungrouped_resize(this);
 
     if (eReason != StateChangedType::VISIBLE)
@@ -1446,9 +1458,8 @@ void Window::queue_resize(StateChangedType eReason)
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
     {
-        std::set<vcl::Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
-        for (std::set<vcl::Window*>::iterator aI = rWindows.begin(),
-            aEnd = rWindows.end(); aI != aEnd; ++aI)
+        std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
+        for (auto aI = rWindows.begin(), aEnd = rWindows.end(); aI != aEnd; ++aI)
         {
             vcl::Window *pOther = *aI;
             if (pOther == this)
@@ -1743,9 +1754,8 @@ Size Window::get_preferred_size() const
         if (eMode != VCL_SIZE_GROUP_NONE)
         {
             const bool bIgnoreInHidden = pWindowImpl->m_xSizeGroup->get_ignore_hidden();
-            const std::set<vcl::Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
-            for (std::set<vcl::Window*>::const_iterator aI = rWindows.begin(),
-                aEnd = rWindows.end(); aI != aEnd; ++aI)
+            const std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
+            for (auto aI = rWindows.begin(), aEnd = rWindows.end(); aI != aEnd; ++aI)
             {
                 const vcl::Window *pOther = *aI;
                 if (pOther == this)
@@ -2029,8 +2039,8 @@ void Window::remove_from_all_size_groups()
 
 void Window::add_mnemonic_label(FixedText *pLabel)
 {
-    std::vector<FixedText*>& v = mpWindowImpl->m_aMnemonicLabels;
-    if (std::find(v.begin(), v.end(), pLabel) != v.end())
+    std::vector<VclPtr<FixedText> >& v = mpWindowImpl->m_aMnemonicLabels;
+    if (std::find(v.begin(), v.end(), VclPtr<FixedText>(pLabel)) != v.end())
         return;
     v.push_back(pLabel);
     pLabel->set_mnemonic_widget(this);
@@ -2038,15 +2048,15 @@ void Window::add_mnemonic_label(FixedText *pLabel)
 
 void Window::remove_mnemonic_label(FixedText *pLabel)
 {
-    std::vector<FixedText*>& v = mpWindowImpl->m_aMnemonicLabels;
-    std::vector<FixedText*>::iterator aFind = std::find(v.begin(), v.end(), pLabel);
+    std::vector<VclPtr<FixedText> >& v = mpWindowImpl->m_aMnemonicLabels;
+    auto aFind = std::find(v.begin(), v.end(), VclPtr<FixedText>(pLabel));
     if (aFind == v.end())
         return;
     v.erase(aFind);
     pLabel->set_mnemonic_widget(NULL);
 }
 
-std::vector<FixedText*> Window::list_mnemonic_labels() const
+std::vector<VclPtr<FixedText> > Window::list_mnemonic_labels() const
 {
     return mpWindowImpl->m_aMnemonicLabels;
 }

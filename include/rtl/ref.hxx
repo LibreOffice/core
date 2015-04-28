@@ -49,13 +49,19 @@ public:
 
     /** Constructor...
      */
+    inline Reference (reference_type * pBody, __sal_NoAcquire)
+        : m_pBody (pBody)
+    {
+    }
+
+    /** Constructor...
+     */
     inline Reference (reference_type * pBody)
         : m_pBody (pBody)
     {
         if (m_pBody)
             m_pBody->acquire();
     }
-
 
     /** Copy constructor...
      */

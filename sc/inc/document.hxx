@@ -24,7 +24,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <rtl/ref.hxx>
+#include <vcl/vclptr.hxx>
 #include "scdllapi.h"
 #include "rangelst.hxx"
 #include "rangenam.hxx"
@@ -286,8 +286,8 @@ private:
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
     ScNoteEditEngine*   pNoteEngine;                    // uses pEditPool from xPoolHelper
     SfxObjectShell*     pShell;
-    SfxPrinter*         pPrinter;
-    VirtualDevice*      pVirtualDevice_100th_mm;
+    VclPtr<SfxPrinter>    pPrinter;
+    VclPtr<VirtualDevice> pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     rtl::Reference<XColorList> pColorList;
     ScValidationDataList* pValidationList;              // validity

@@ -68,6 +68,28 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
 
 AlignmentPropertyPanel::~AlignmentPropertyPanel()
 {
+    disposeOnce();
+}
+
+void AlignmentPropertyPanel::dispose()
+{
+    mpFTLeftIndent.clear();
+    mpMFLeftIndent.clear();
+    mpCBXWrapText.clear();
+    mpCBXMergeCell.clear();
+    mpFtRotate.clear();
+    mpCtrlDial.clear();
+    mpMtrAngle.clear();
+    mpCbStacked.clear();
+
+    maAlignHorControl.dispose();
+    maLeftIndentControl.dispose();
+    maMergeCellControl.dispose();
+    maWrapTextControl.dispose();
+    maAngleControl.dispose();
+    maStackControl.dispose();
+
+    PanelLayout::dispose();
 }
 
 void AlignmentPropertyPanel::Initialize()
@@ -204,7 +226,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
+VclPtr<vcl::Window> AlignmentPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -216,10 +238,8 @@ AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to AlignmentPropertyPanel::Create", NULL, 2);
 
-    return new AlignmentPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return  VclPtr<AlignmentPropertyPanel>::Create(
+                        pParent, rxFrame, pBindings);
 }
 
 void AlignmentPropertyPanel::DataChanged(

@@ -39,6 +39,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
     virtual ~ThreeD_SceneAppearance_TabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void ActivatePage() SAL_OVERRIDE;
 
@@ -56,11 +57,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         m_xChartModel;
 
-    ListBox*         m_pLB_Scheme;
+    VclPtr<ListBox>         m_pLB_Scheme;
 
-    CheckBox*        m_pCB_Shading;
-    CheckBox*        m_pCB_ObjectLines;
-    CheckBox*        m_pCB_RoundedEdge;
+    VclPtr<CheckBox>        m_pCB_Shading;
+    VclPtr<CheckBox>        m_pCB_ObjectLines;
+    VclPtr<CheckBox>        m_pCB_RoundedEdge;
 
     bool            m_bUpdateOtherControls;
     bool            m_bCommitToModel;

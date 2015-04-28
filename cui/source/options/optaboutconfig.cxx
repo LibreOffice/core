@@ -130,7 +130,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_pSearchBtn( get<PushButton>("searchButton") ),
     m_pSearchEdit( get<Edit>("searchEntry") ),
     m_vectorOfModified(),
-    m_pPrefBox( new SvSimpleTable(*m_pPrefCtrl, WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
+    m_pPrefBox( VclPtr<SvSimpleTable>::Create(*m_pPrefCtrl, WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
 {
     Size aControlSize(LogicToPixel(Size(385, 230), MAP_APPFONT));
     m_pPrefCtrl->set_width_request(aControlSize.Width());
@@ -162,6 +162,21 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
 
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
     m_pPrefBox->SetAlternatingRowColors( true );
+}
+
+CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
+{
+    disposeOnce();
+}
+
+void CuiAboutConfigTabPage::dispose()
+{
+    m_pPrefCtrl.clear();
+    m_pResetBtn.clear();
+    m_pEditBtn.clear();
+    m_pSearchBtn.clear();
+    m_pSearchEdit.clear();
+    ModelessDialog::dispose();
 }
 
 void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue)
@@ -477,6 +492,17 @@ CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( vcl::Window* pWindow,
 
 }
 
+CuiAboutConfigValueDialog::~CuiAboutConfigValueDialog()
+{
+    disposeOnce();
+}
+
+void CuiAboutConfigValueDialog::dispose()
+{
+    m_pEDValue.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl )
 {
     Reset();
@@ -538,7 +564,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
             else if( sPropertyType == "hyper" )
                 limit = HYPER_LEN_LIMIT;
 
-            CuiAboutConfigValueDialog* pValueDialog = new CuiAboutConfigValueDialog(0, sDialogValue, limit);
+            VclPtrInstance<CuiAboutConfigValueDialog> pValueDialog(nullptr, sDialogValue, limit);
 
             if( pValueDialog->Execute() == RET_OK )
             {

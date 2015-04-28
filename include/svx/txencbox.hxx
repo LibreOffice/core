@@ -35,6 +35,7 @@ private:
 public:
     SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits );
     virtual ~SvxTextEncodingBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** Fill with all known encodings but exclude those matching one or more
         given flags as defined in rtl/tencinfo.h

@@ -43,10 +43,6 @@ namespace dbaui
         return new CharSetListBox(pParent);
     }
 
-    CharSetListBox::~CharSetListBox()
-    {
-    }
-
     void CharSetListBox::SelectEntryByIanaName( const OUString& _rIanaName )
     {
         OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );

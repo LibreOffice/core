@@ -40,11 +40,11 @@ class ScPreviewShell: public SfxViewShell
 {
     ScDocShell*     pDocShell;
 
-    SystemWindow*   mpFrameWindow;
-    ScPreview*      pPreview;               // Output window
-    ScrollBar*      pHorScroll;
-    ScrollBar*      pVerScroll;
-    vcl::Window*         pCorner;
+    VclPtr<SystemWindow>   mpFrameWindow;
+    VclPtr<ScPreview>      pPreview;               // Output window
+    VclPtr<ScrollBar>      pHorScroll;
+    VclPtr<ScrollBar>      pVerScroll;
+    VclPtr<vcl::Window>    pCorner;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
     TriState        nSourceDesignMode;      // form design mode from TabView
@@ -109,7 +109,7 @@ public:
     virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
     virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
-    virtual SfxTabPage*     CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
+    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );

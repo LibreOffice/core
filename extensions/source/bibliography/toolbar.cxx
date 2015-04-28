@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/mnemonic.hxx>
 #include "bibbeam.hxx"
+#include "bibview.hxx"
 #include "toolbar.hrc"
 #include "bibresid.hxx"
 
@@ -179,10 +180,10 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link aLink, WinBits nStyle):
     ToolBox(pParent,BibResId(RID_BIB_TOOLBAR)),
     aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
     aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),
-    aFtSource(this,WB_VCENTER),
-    aLBSource(this,WB_DROPDOWN),
-    aFtQuery(this,WB_VCENTER),
-    aEdQuery(this),
+    aFtSource(VclPtr<FixedText>::Create(this,WB_VCENTER)),
+    aLBSource(VclPtr<ListBox>::Create(this,WB_DROPDOWN)),
+    aFtQuery(VclPtr<FixedText>::Create(this,WB_VCENTER)),
+    aEdQuery(VclPtr<Edit>::Create(this)),
     nMenuId(0),
     nSelMenuItem(0),
     aLayoutManager( aLink ),
@@ -198,10 +199,10 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link aLink, WinBits nStyle):
     SetOutStyle(TOOLBOX_STYLE_FLAT);
     Size a2Size(GetOutputSizePixel());
     a2Size.Width()=100;
-    aLBSource.SetSizePixel(a2Size);
-    aLBSource.SetDropDownLineCount(9);
-    aLBSource.Show();
-    aLBSource.SetSelectHdl(LINK( this, BibToolBar, SelHdl));
+    aLBSource->SetSizePixel(a2Size);
+    aLBSource->SetDropDownLineCount(9);
+    aLBSource->Show();
+    aLBSource->SetSelectHdl(LINK( this, BibToolBar, SelHdl));
 
     SvtMiscOptions().AddListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
@@ -211,32 +212,42 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link aLink, WinBits nStyle):
 
     SetDropdownClickHdl( LINK( this, BibToolBar, MenuHdl));
 
-    aEdQuery.SetSizePixel(aLBSource.GetSizePixel());
-    aEdQuery.Show();
+    aEdQuery->SetSizePixel(aLBSource->GetSizePixel());
+    aEdQuery->Show();
 
     OUString aStr=GetItemText(TBC_FT_SOURCE);
-    aFtSource.SetText(aStr);
-    aFtSource.SetSizePixel(aFtSource.get_preferred_size());
-    aFtSource.SetBackground(Wallpaper( COL_TRANSPARENT ));
+    aFtSource->SetText(aStr);
+    aFtSource->SetSizePixel(aFtSource->get_preferred_size());
+    aFtSource->SetBackground(Wallpaper( COL_TRANSPARENT ));
 
     aStr=GetItemText(TBC_FT_QUERY);
-    aFtQuery.SetText(aStr);
-    aFtQuery.SetSizePixel(aFtQuery.get_preferred_size());
-    aFtQuery.SetBackground(Wallpaper( COL_TRANSPARENT ));
+    aFtQuery->SetText(aStr);
+    aFtQuery->SetSizePixel(aFtQuery->get_preferred_size());
+    aFtQuery->SetBackground(Wallpaper( COL_TRANSPARENT ));
 
-    SetItemWindow(TBC_FT_SOURCE,&aFtSource);
-    SetItemWindow(TBC_LB_SOURCE,&aLBSource);
-    SetItemWindow(TBC_FT_QUERY ,&aFtQuery);
-    SetItemWindow(TBC_ED_QUERY ,&aEdQuery);
+    SetItemWindow(TBC_FT_SOURCE, aFtSource.get());
+    SetItemWindow(TBC_LB_SOURCE, aLBSource.get());
+    SetItemWindow(TBC_FT_QUERY , aFtQuery.get());
+    SetItemWindow(TBC_ED_QUERY , aEdQuery.get());
 
     ::bib::AddToTaskPaneList( this );
 }
 
 BibToolBar::~BibToolBar()
 {
+    disposeOnce();
+}
+
+void BibToolBar::dispose()
+{
     SvtMiscOptions().RemoveListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::RemoveEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
     ::bib::RemoveFromTaskPaneList( this );
+    aFtSource.disposeAndClear();
+    aFtQuery.disposeAndClear();
+    aEdQuery.disposeAndClear();
+    aLBSource.disposeAndClear();
+    ToolBox::dispose();
 }
 
 void BibToolBar::InitListener()
@@ -308,7 +319,7 @@ void BibToolBar::Select()
         Sequence<PropertyValue> aPropVal(2);
         PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
         pPropertyVal[0].Name="QueryText";
-        OUString aSelection = aEdQuery.GetText();
+        OUString aSelection = aEdQuery->GetText();
         pPropertyVal[0].Value <<= aSelection;
 
         pPropertyVal[1].Name="QueryField";
@@ -386,39 +397,39 @@ void BibToolBar::SelectFilterItem(sal_uInt16    nId)
 
 void BibToolBar::EnableSourceList(bool bFlag)
 {
-    aFtSource.Enable(bFlag);
-    aLBSource.Enable(bFlag);
+    aFtSource->Enable(bFlag);
+    aLBSource->Enable(bFlag);
 }
 
 void BibToolBar::ClearSourceList()
 {
-    aLBSource.Clear();
+    aLBSource->Clear();
 }
 
 void BibToolBar::UpdateSourceList(bool bFlag)
 {
-    aLBSource.SetUpdateMode(bFlag);
+    aLBSource->SetUpdateMode(bFlag);
 }
 
 void BibToolBar::InsertSourceEntry(const OUString& aEntry, sal_Int32 nPos)
 {
-    aLBSource.InsertEntry(aEntry, nPos);
+    aLBSource->InsertEntry(aEntry, nPos);
 }
 
 void BibToolBar::SelectSourceEntry(const OUString& aStr)
 {
-    aLBSource.SelectEntry(aStr);
+    aLBSource->SelectEntry(aStr);
 }
 
 void BibToolBar::EnableQuery(bool bFlag)
 {
-    aFtQuery.Enable(bFlag);
-    aEdQuery.Enable(bFlag);
+    aFtQuery->Enable(bFlag);
+    aEdQuery->Enable(bFlag);
 }
 
 void BibToolBar::SetQueryString(const OUString& aStr)
 {
-    aEdQuery.SetText(aStr);
+    aEdQuery->SetText(aStr);
 }
 
 
@@ -427,7 +438,7 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
     bool nResult = true;
 
     MouseNotifyEvent nSwitch=rNEvt.GetType();
-    if(aEdQuery.HasFocus() && nSwitch==MouseNotifyEvent::KEYINPUT)
+    if(aEdQuery->HasFocus() && nSwitch==MouseNotifyEvent::KEYINPUT)
     {
         const vcl::KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = aKeyCode.GetCode();
@@ -436,7 +447,7 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
             Sequence<PropertyValue> aPropVal(2);
             PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
             pPropertyVal[0].Name = "QueryText";
-            OUString aSelection = aEdQuery.GetText();
+            OUString aSelection = aEdQuery->GetText();
             pPropertyVal[0].Value <<= aSelection;
             pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;
@@ -462,7 +473,7 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
     pPropertyVal[0].Name = "DataSourceName";
-    OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) );
+    OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource->GetSelectEntry() ) );
     OUString aSelection = aEntry;
     pPropertyVal[0].Value <<= aSelection;
     SendDispatch(TBC_LB_SOURCE,aPropVal);
@@ -490,7 +501,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
             Sequence<PropertyValue> aPropVal(2);
             PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
             pPropertyVal[0].Name = "QueryText";
-            OUString aSelection = aEdQuery.GetText();
+            OUString aSelection = aEdQuery->GetText();
             pPropertyVal[0].Value <<= aSelection;
             pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;

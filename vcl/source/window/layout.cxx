@@ -1286,6 +1286,17 @@ void VclBin::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, Point(0, 0), rAllocation);
 }
 
+VclFrame::~VclFrame()
+{
+    disposeOnce();
+}
+
+void VclFrame::dispose()
+{
+    m_pLabel.clear();
+    VclBin::dispose();
+}
+
 //To-Do, hook a DecorationView into VclFrame ?
 
 Size VclFrame::calculateRequisition() const
@@ -1467,11 +1478,17 @@ bool VclAlignment::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
+void VclExpander::dispose()
+{
+    m_pDisclosureButton.disposeAndClear();
+    VclBin::dispose();
+}
+
 const vcl::Window *VclExpander::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    assert(pWindowImpl->mpFirstChild == m_pDisclosureButton.get());
+    assert(pWindowImpl->mpFirstChild == m_pDisclosureButton);
 
     return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
 }
@@ -1488,12 +1505,12 @@ Size VclExpander::calculateRequisition() const
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
     const vcl::Window *pChild = get_child();
-    const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild.get() : NULL;
 
     if (pChild && pChild->IsVisible() && m_pDisclosureButton->IsChecked())
         aRet = getLayoutRequisition(*pChild);
 
-    Size aExpanderSize = getLayoutRequisition(*m_pDisclosureButton.get());
+    Size aExpanderSize = getLayoutRequisition(*m_pDisclosureButton);
 
     if (pLabel && pLabel->IsVisible())
     {
@@ -1525,9 +1542,9 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     //The label widget is the last (of two) children
     vcl::Window *pChild = get_child();
-    vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild.get() ? pWindowImpl->mpLastChild.get() : NULL;
 
-    Size aButtonSize = getLayoutRequisition(*m_pDisclosureButton.get());
+    Size aButtonSize = getLayoutRequisition(*m_pDisclosureButton);
     Size aLabelSize;
     Size aExpanderSize = aButtonSize;
     if (pLabel && pLabel->IsVisible())
@@ -1545,7 +1562,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     long nExtraExpanderHeight = aExpanderSize.Height() - aButtonSize.Height();
     Point aButtonPos(aChildPos.X(), aChildPos.Y() + nExtraExpanderHeight/2);
-    setLayoutAllocation(*m_pDisclosureButton.get(), aButtonPos, aButtonSize);
+    setLayoutAllocation(*m_pDisclosureButton, aButtonPos, aButtonSize);
 
     if (pLabel && pLabel->IsVisible())
     {
@@ -1610,15 +1627,23 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
     : VclBin(pParent, nStyle)
     , m_bUserManagedScrolling(false)
-    , m_pVScroll(new ScrollBar(this, WB_HIDE | WB_VERT))
-    , m_pHScroll(new ScrollBar(this, WB_HIDE | WB_HORZ))
-    , m_aScrollBarBox(this, WB_HIDE)
+    , m_pVScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_VERT))
+    , m_pHScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_HORZ))
+    , m_aScrollBarBox(VclPtr<ScrollBarBox>::Create(this, WB_HIDE))
 {
     SetType(WINDOW_SCROLLWINDOW);
 
     Link aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
     m_pVScroll->SetScrollHdl(aLink);
     m_pHScroll->SetScrollHdl(aLink);
+}
+
+void VclScrolledWindow::dispose()
+{
+    m_pVScroll.disposeAndClear();
+    m_pHScroll.disposeAndClear();
+    m_aScrollBarBox.disposeAndClear();
+    VclBin::dispose();
 }
 
 IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
@@ -1672,10 +1697,10 @@ Size VclScrolledWindow::calculateRequisition() const
         aRet = getLayoutRequisition(*pChild);
 
     if (GetStyle() & WB_VSCROLL)
-        aRet.Width() += getLayoutRequisition(*m_pVScroll.get()).Width();
+        aRet.Width() += getLayoutRequisition(*m_pVScroll).Width();
 
     if (GetStyle() & WB_HSCROLL)
-        aRet.Height() += getLayoutRequisition(*m_pHScroll.get()).Height();
+        aRet.Height() += getLayoutRequisition(*m_pHScroll).Height();
 
     return aRet;
 }
@@ -1721,7 +1746,7 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     }
 
     if (m_pVScroll->IsVisible())
-        nAvailWidth -= getLayoutRequisition(*m_pVScroll.get()).Width();
+        nAvailWidth -= getLayoutRequisition(*m_pVScroll).Width();
 
     // horz. ScrollBar
     if (GetStyle() & WB_AUTOHSCROLL)
@@ -1730,7 +1755,7 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
         m_pHScroll->Show(bShowHScroll);
 
         if (bShowHScroll)
-            nAvailHeight -= getLayoutRequisition(*m_pHScroll.get()).Height();
+            nAvailHeight -= getLayoutRequisition(*m_pHScroll).Height();
 
         if (GetStyle() & WB_AUTOVSCROLL)
             m_pVScroll->Show(nAvailHeight < aChildReq.Height());
@@ -1741,10 +1766,10 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
 
     if (m_pVScroll->IsVisible())
     {
-        nScrollBarWidth = getLayoutRequisition(*m_pVScroll.get()).Width();
+        nScrollBarWidth = getLayoutRequisition(*m_pVScroll).Width();
         Point aScrollPos(rAllocation.Width() - nScrollBarWidth, 0);
         Size aScrollSize(nScrollBarWidth, rAllocation.Height());
-        setLayoutAllocation(*m_pVScroll.get(), aScrollPos, aScrollSize);
+        setLayoutAllocation(*m_pVScroll, aScrollPos, aScrollSize);
         aChildAllocation.Width() -= nScrollBarWidth;
         aInnerSize.Width() -= nScrollBarWidth;
         aChildAllocation.Height() = aChildReq.Height();
@@ -1752,10 +1777,10 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
 
     if (m_pHScroll->IsVisible())
     {
-        nScrollBarHeight = getLayoutRequisition(*m_pHScroll.get()).Height();
+        nScrollBarHeight = getLayoutRequisition(*m_pHScroll).Height();
         Point aScrollPos(0, rAllocation.Height() - nScrollBarHeight);
         Size aScrollSize(rAllocation.Width(), nScrollBarHeight);
-        setLayoutAllocation(*m_pHScroll.get(), aScrollPos, aScrollSize);
+        setLayoutAllocation(*m_pHScroll, aScrollPos, aScrollSize);
         aChildAllocation.Height() -= nScrollBarHeight;
         aInnerSize.Height() -= nScrollBarHeight;
         aChildAllocation.Width() = aChildReq.Width();
@@ -1764,12 +1789,12 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     if (m_pVScroll->IsVisible() && m_pHScroll->IsVisible())
     {
         Point aBoxPos(aInnerSize.Width(), aInnerSize.Height());
-        m_aScrollBarBox.SetPosSizePixel(aBoxPos, Size(nScrollBarWidth, nScrollBarHeight));
-        m_aScrollBarBox.Show();
+        m_aScrollBarBox->SetPosSizePixel(aBoxPos, Size(nScrollBarWidth, nScrollBarHeight));
+        m_aScrollBarBox->Show();
     }
     else
     {
-        m_aScrollBarBox.Hide();
+        m_aScrollBarBox->Hide();
     }
 
     if (pChild && pChild->IsVisible())
@@ -1811,7 +1836,7 @@ bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
             {
-                nDone = HandleScrollCommand(rCEvt, m_pHScroll.get(), m_pVScroll.get());
+                nDone = HandleScrollCommand(rCEvt, m_pHScroll, m_pVScroll);
             }
         }
     }
@@ -1835,7 +1860,7 @@ const vcl::Window *VclEventBox::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    assert(pWindowImpl->mpFirstChild == &m_aEventBoxHelper);
+    assert(pWindowImpl->mpFirstChild.get() == m_aEventBoxHelper.get());
 
     return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
 }
@@ -1876,6 +1901,17 @@ Size VclEventBox::calculateRequisition() const
 void VclEventBox::Command(const CommandEvent&)
 {
     //discard events by default to block them reaching children
+}
+
+VclEventBox::~VclEventBox()
+{
+    disposeOnce();
+}
+
+void VclEventBox::dispose()
+{
+    m_aEventBoxHelper.disposeAndClear();
+    VclBin::dispose();
 }
 
 void VclSizeGroup::trigger_queue_resize()
@@ -1939,10 +1975,10 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
 void MessageDialog::create_owned_areas()
 {
     set_border_width(12);
-    m_pOwnedContentArea = new VclVBox(this, false, 24);
+    m_pOwnedContentArea.set(VclPtr<VclVBox>::Create(this, false, 24));
     set_content_area(m_pOwnedContentArea);
     m_pOwnedContentArea->Show();
-    m_pOwnedActionArea = new VclHButtonBox(m_pOwnedContentArea);
+    m_pOwnedActionArea.set( VclPtr<VclHButtonBox>::Create(m_pOwnedContentArea) );
     set_action_area(m_pOwnedActionArea);
     m_pOwnedActionArea->Show();
 }
@@ -1992,16 +2028,24 @@ MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUS
 {
 }
 
-MessageDialog::~MessageDialog()
+void MessageDialog::dispose()
 {
     for (size_t i = 0; i < m_aOwnedButtons.size(); ++i)
-        delete m_aOwnedButtons[i];
-    delete m_pSecondaryMessage;
-    delete m_pPrimaryMessage;
-    delete m_pImage;
-    delete m_pGrid;
-    delete m_pOwnedActionArea;
-    delete m_pOwnedContentArea;
+        m_aOwnedButtons[i].disposeAndClear();
+    m_aOwnedButtons.clear();
+
+    m_pPrimaryMessage.disposeAndClear();
+    m_pSecondaryMessage.disposeAndClear();
+    m_pImage.disposeAndClear();
+    m_pGrid.disposeAndClear();
+    m_pOwnedActionArea.disposeAndClear();
+    m_pOwnedContentArea.disposeAndClear();
+    Dialog::dispose();
+}
+
+MessageDialog::~MessageDialog()
+{
+    disposeOnce();
 }
 
 void MessageDialog::response(short nResponseId)
@@ -2017,7 +2061,7 @@ IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton)
 
 short MessageDialog::get_response(const vcl::Window *pWindow) const
 {
-    std::map<const vcl::Window*, short>::const_iterator aFind = m_aResponses.find(pWindow);
+    auto aFind = m_aResponses.find(pWindow);
     if (aFind != m_aResponses.end())
         return aFind->second;
     if (!m_pUIBuilder)
@@ -2090,12 +2134,12 @@ short MessageDialog::Execute()
         VclContainer *pContainer = get_content_area();
         assert(pContainer);
 
-        m_pGrid = new VclGrid(pContainer);
+        m_pGrid.set( VclPtr<VclGrid>::Create(pContainer) );
         m_pGrid->reorderWithinParent(0);
         m_pGrid->set_column_spacing(12);
         m_pGrid->set_row_spacing(GetTextHeight());
 
-        m_pImage = new FixedImage(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
+        m_pImage = VclPtr<FixedImage>::Create(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
         switch (m_eMessageType)
         {
             case VCL_MESSAGE_INFO:
@@ -2120,7 +2164,7 @@ short MessageDialog::Execute()
 
         bool bHasSecondaryText = !m_sSecondaryString.isEmpty();
 
-        m_pPrimaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
+        m_pPrimaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pGrid, nWinStyle);
         m_pPrimaryMessage->SetPaintTransparent(true);
         m_pPrimaryMessage->EnableCursor(false);
 
@@ -2130,7 +2174,7 @@ short MessageDialog::Execute()
         m_pPrimaryMessage->SetText(m_sPrimaryString);
         m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
 
-        m_pSecondaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
+        m_pSecondaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pGrid, nWinStyle);
         m_pSecondaryMessage->SetPaintTransparent(true);
         m_pSecondaryMessage->EnableCursor(false);
         m_pSecondaryMessage->set_grid_left_attach(1);
@@ -2139,44 +2183,44 @@ short MessageDialog::Execute()
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(bHasSecondaryText);
 
-        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage : NULL);
+        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage.get() : NULL);
 
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);
 
-        PushButton *pBtn;
+        VclPtr<PushButton> pBtn;
         switch (m_eButtonsType)
         {
             case VCL_BUTTONS_NONE:
                 break;
             case VCL_BUTTONS_OK:
-                pBtn = new OKButton(pButtonBox);
+                pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_OK;
                 break;
             case VCL_BUTTONS_CLOSE:
-                pBtn = new CloseButton(pButtonBox);
+                pBtn.set( VclPtr<CloseButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CLOSE;
                 break;
             case VCL_BUTTONS_CANCEL:
-                pBtn = new CancelButton(pButtonBox);
+                pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CANCEL;
                 break;
             case VCL_BUTTONS_YES_NO:
-                pBtn = new PushButton(pButtonBox);
+                pBtn = VclPtr<PushButton>::Create(pButtonBox);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes));
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_YES;
 
-                pBtn = new PushButton(pButtonBox);
+                pBtn.set( VclPtr<PushButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::No));
                 pBtn->Show();
@@ -2184,12 +2228,12 @@ short MessageDialog::Execute()
                 m_aResponses[pBtn] = RET_NO;
                 break;
             case VCL_BUTTONS_OK_CANCEL:
-                pBtn = new OKButton(pButtonBox);
+                pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_OK;
 
-                pBtn = new CancelButton(pButtonBox);
+                pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);

@@ -29,6 +29,7 @@
 #include <vcl/edit.hxx>
 #include <tools/debug.hxx>
 #include "bibbeam.hxx"
+#include "bibview.hxx"
 #include "toolbar.hrc"
 #include "bibresid.hxx"
 #include "datman.hxx"
@@ -87,6 +88,7 @@ namespace bib
 
             BibGridwin(vcl::Window* pParent, WinBits nStyle = WB_3DLOOK );
             virtual ~BibGridwin();
+            virtual void dispose() SAL_OVERRIDE;
 
             void createGridWin(const Reference< awt::XControlModel > & xDbForm);
             void disposeGridWin();
@@ -107,9 +109,15 @@ namespace bib
 
     BibGridwin::~BibGridwin()
     {
+        disposeOnce();
+    }
+
+    void BibGridwin::dispose()
+    {
         RemoveFromTaskPaneList( this );
 
         disposeGridWin();
+        vcl::Window::dispose();
     }
 
     void BibGridwin::Resize()
@@ -195,6 +203,11 @@ namespace bib
 
     BibBeamer::~BibBeamer()
     {
+        disposeOnce();
+    }
+
+    void BibBeamer::dispose()
+    {
         if ( isFormConnected() )
             disconnectForm();
 
@@ -202,25 +215,16 @@ namespace bib
             m_xToolBarRef->dispose();
 
         if ( pToolBar )
-        {
             pDatMan->SetToolbar(0);
 
-            DELETEZ( pToolBar );
-        }
-
-        if( pGridWin )
-        {
-            BibGridwin* pDel = pGridWin;
-            pGridWin = NULL;
-            pDel->disposeGridWin();
-            delete pDel;
-        }
-
+        pToolBar.disposeAndClear();
+        pGridWin.disposeAndClear();
+        BibSplitWindow::dispose();
     }
 
     void BibBeamer::createToolBar()
     {
-        pToolBar= new BibToolBar(this, LINK( this, BibBeamer, RecalcLayout_Impl ));
+        pToolBar= VclPtr<BibToolBar>::Create(this, LINK( this, BibBeamer, RecalcLayout_Impl ));
         ::Size aSize=pToolBar->GetSizePixel();
         InsertItem(ID_TOOLBAR, pToolBar, aSize.Height(), 0, 0, SWIB_FIXED );
         if ( m_xController.is() )
@@ -229,7 +233,7 @@ namespace bib
 
     void BibBeamer::createGridWin()
     {
-        pGridWin = new BibGridwin(this,0);
+        pGridWin = VclPtr<BibGridwin>::Create(this,0);
 
         InsertItem(ID_GRIDWIN, pGridWin, 40, 1, 0, SWIB_RELATIVESIZE );
 

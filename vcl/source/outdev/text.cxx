@@ -236,7 +236,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // cache virtual device for rotation
     if (!mpOutDevData->mpRotateDev)
-        mpOutDevData->mpRotateDev = new VirtualDevice( *this, 1 );
+        mpOutDevData->mpRotateDev = VclPtr<VirtualDevice>::Create( *this, 1 );
     VirtualDevice* pVDev = mpOutDevData->mpRotateDev;
 
     // size it accordingly
@@ -2494,18 +2494,18 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
-    VirtualDevice aVDev( 1 );
+    ScopedVclPtrInstance< VirtualDevice > aVDev(  1  );
     vcl::Font aFont( GetFont() );
     aFont.SetShadow( false );
     aFont.SetOutline( false );
     aFont.SetRelief( RELIEF_NONE );
     aFont.SetOrientation( 0 );
     aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
-    aVDev.SetFont( aFont );
-    aVDev.SetTextAlign( ALIGN_TOP );
+    aVDev->SetFont( aFont );
+    aVDev->SetTextAlign( ALIGN_TOP );
 
     // layout the text on the virtual device
-    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
+    pSalLayout = aVDev->ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
     if( !pSalLayout )
         return false;
 
@@ -2515,7 +2515,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
     Point aOffset( nWidth/2, 8 );
     Size aOutSize( nWidth + 2*aOffset.X(), nHeight + 2*aOffset.Y() );
-    if( !nWidth || !aVDev.SetOutputSizePixel( aOutSize ) )
+    if( !nWidth || !aVDev->SetOutputSizePixel( aOutSize ) )
     {
         pSalLayout->Release();
         return false;
@@ -2523,14 +2523,14 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
     // draw text in black
     pSalLayout->DrawBase() = aOffset;
-    aVDev.SetTextColor( Color( COL_BLACK ) );
-    aVDev.SetTextFillColor();
-    aVDev.ImplInitTextColor();
-    aVDev.ImplDrawText( *pSalLayout );
+    aVDev->SetTextColor( Color( COL_BLACK ) );
+    aVDev->SetTextFillColor();
+    aVDev->ImplInitTextColor();
+    aVDev->ImplDrawText( *pSalLayout );
     pSalLayout->Release();
 
     // find extents using the bitmap
-    Bitmap aBmp = aVDev.GetBitmap( Point(), aOutSize );
+    Bitmap aBmp = aVDev->GetBitmap( Point(), aOutSize );
     BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
     if( !pAcc )
         return false;
@@ -2718,7 +2718,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
         + mnEmphasisDescent;
     pSalLayout->Release();
 
-    VirtualDevice aVDev(1);
+    ScopedVclPtrInstance< VirtualDevice > aVDev( 1 );
 
     vcl::Font aFont(GetFont());
     aFont.SetShadow(false);
@@ -2728,19 +2728,19 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     if( bOptimize )
     {
         aFont.SetSize( Size( 0, GLYPH_FONT_HEIGHT ) );
-        aVDev.SetMapMode( MAP_PIXEL );
+        aVDev->SetMapMode( MAP_PIXEL );
     }
-    aVDev.SetFont( aFont );
-    aVDev.SetTextAlign( ALIGN_TOP );
-    aVDev.SetTextColor( Color(COL_BLACK) );
-    aVDev.SetTextFillColor();
+    aVDev->SetFont( aFont );
+    aVDev->SetTextAlign( ALIGN_TOP );
+    aVDev->SetTextColor( Color(COL_BLACK) );
+    aVDev->SetTextFillColor();
 
-    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
+    pSalLayout = aVDev->ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
     if (pSalLayout == 0)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
-    long nHeight = ((OutputDevice*)&aVDev)->mpFontEntry->mnLineHeight + ((OutputDevice*)&aVDev)->mnEmphasisAscent
-        + ((OutputDevice*)&aVDev)->mnEmphasisDescent;
+    long nHeight = aVDev->mpFontEntry->mnLineHeight + aVDev->mnEmphasisAscent +
+                   aVDev->mnEmphasisDescent;
     pSalLayout->Release();
 
     if( !nWidth || !nHeight )
@@ -2755,7 +2755,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     {
         sal_Int32 nStart  = ((nBase < nIndex) ? nBase : nIndex);
         sal_Int32 nLength = ((nBase > nIndex) ? nBase : nIndex) - nStart;
-        pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength, Point(0,0), nLayoutWidth, pDXArray );
+        pSalLayout = aVDev->ImplLayout( rStr, nStart, nLength, Point(0,0), nLayoutWidth, pDXArray );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -2776,25 +2776,25 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
         bool bSuccess = false;
 
         // draw character into virtual device
-        pSalLayout = aVDev.ImplLayout( rStr, nCharPos, 1, Point(0,0), nLayoutWidth, pDXArray );
+        pSalLayout = aVDev->ImplLayout( rStr, nCharPos, 1, Point(0,0), nLayoutWidth, pDXArray );
         if (pSalLayout == 0)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();
 
         Point aOffset(nCharWidth / 2, 8);
         Size aSize(nCharWidth + 2 * aOffset.X(), nHeight + 2 * aOffset.Y());
-        bSuccess = (bool)aVDev.SetOutputSizePixel(aSize);
+        bSuccess = (bool)aVDev->SetOutputSizePixel(aSize);
         if( bSuccess )
         {
             // draw glyph into virtual device
-            aVDev.Erase();
+            aVDev->Erase();
             pSalLayout->DrawBase() += aOffset;
-            pSalLayout->DrawBase() += Point( ((OutputDevice*)&aVDev)->mnTextOffX, ((OutputDevice*)&aVDev)->mnTextOffY );
-            pSalLayout->DrawText( *((OutputDevice*)&aVDev)->mpGraphics );
+            pSalLayout->DrawBase() += Point( aVDev->mnTextOffX, aVDev->mnTextOffY );
+            pSalLayout->DrawText( *aVDev->mpGraphics );
             pSalLayout->Release();
 
             // convert character image into outline
-            Bitmap aBmp( aVDev.GetBitmap(Point(0, 0), aSize));
+            Bitmap aBmp( aVDev->GetBitmap(Point(0, 0), aSize));
 
             tools::PolyPolygon aPolyPoly;
             bool bVectorized = aBmp.Vectorize(aPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES);
@@ -2810,8 +2810,8 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                     {
                         Point& rPt = rPoly[k];
                         rPt -= aOffset;
-                        int nPixelX = rPt.X() - ((OutputDevice&)aVDev).mnTextOffX + nXOffset;
-                        int nPixelY = rPt.Y() - ((OutputDevice&)aVDev).mnTextOffY;
+                        int nPixelX = rPt.X() - ((OutputDevice*)aVDev.get())->mnTextOffX + nXOffset;
+                        int nPixelY = rPt.Y() - ((OutputDevice*)aVDev.get())->mnTextOffY;
                         rPt.X() = ImplDevicePixelToLogicWidth( nPixelX );
                         rPt.Y() = ImplDevicePixelToLogicHeight( nPixelY );
                     }

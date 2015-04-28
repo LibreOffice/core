@@ -38,7 +38,7 @@ struct ImplCursorData
     unsigned char   mnDirection;        // indicates writing direction
     sal_uInt16          mnStyle;            // Cursor-Style
     bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
-    vcl::Window*         mpWindow;           // Zugeordnetes Windows
+    VclPtr<vcl::Window> mpWindow;           // Zugeordnetes Windows
 };
 
 static void ImplCursorInvert( ImplCursorData* pData )
@@ -319,7 +319,7 @@ void vcl::Cursor::Hide()
 
 void vcl::Cursor::SetWindow( vcl::Window* pWindow )
 {
-    if ( mpWindow != pWindow )
+    if ( mpWindow.get() != pWindow )
     {
         mpWindow = pWindow;
         ImplNew();

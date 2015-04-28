@@ -244,13 +244,13 @@ namespace cairo
      *
      * @return The new virtual device
      **/
-    boost::shared_ptr<VirtualDevice> QuartzSurface::createVirtualDevice() const
+    VclPtr<VirtualDevice> QuartzSurface::createVirtualDevice() const
     {
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.rCGContext = getCGContext();
-        return boost::shared_ptr<VirtualDevice>(
-            new VirtualDevice( &aSystemGraphicsData, Size(1, 1), getDepth() ));
+        return VclPtr<VirtualDevice>(
+            VclPtr<VirtualDevice>::Create( &aSystemGraphicsData, Size(1, 1), getDepth() ));
     }
 
 }  // namespace cairo

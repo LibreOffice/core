@@ -81,10 +81,11 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    SfxTabPage* OConnectionTabPage::Create( vcl::Window* pParent,    const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> OConnectionTabPage::Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new OConnectionTabPage( pParent, *_rAttrSet ) );
+        return VclPtr<SfxTabPage>(new OConnectionTabPage( pParent, *_rAttrSet ), SAL_NO_ACQUIRE);
     }
+
     // OConnectionTabPage
     OConnectionTabPage::OConnectionTabPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionHelper(pParent, "ConnectionPage", "dbaccess/ui/connectionpage.ui", _rCoreAttrs)
@@ -111,6 +112,21 @@ namespace dbaui
 
     OConnectionTabPage::~OConnectionTabPage()
     {
+        disposeOnce();
+    }
+
+    void OConnectionTabPage::dispose()
+    {
+        m_pFL2.clear();
+        m_pUserNameLabel.clear();
+        m_pUserName.clear();
+        m_pPasswordRequired.clear();
+        m_pFL3.clear();
+        m_pJavaDriverLabel.clear();
+        m_pJavaDriver.clear();
+        m_pTestJavaDriver.clear();
+        m_pTestConnection.clear();
+        OConnectionHelper::dispose();
     }
 
     void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -293,8 +309,8 @@ namespace dbaui
 
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
-        aMsg.Execute();
+        ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
+        aMsg->Execute();
         return 0L;
     }
     bool OConnectionTabPage::checkTestConnection()

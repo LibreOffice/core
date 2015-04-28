@@ -44,8 +44,8 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-OldStylePrintAdaptor::OldStylePrintAdaptor(const std::shared_ptr< Printer >& i_xPrinter)
-    : PrinterController(i_xPrinter)
+OldStylePrintAdaptor::OldStylePrintAdaptor( const VclPtr< Printer >& i_xPrinter )
+    : PrinterController( i_xPrinter )
     , mpData( new ImplOldStyleAdaptorData() )
 {
 }
@@ -64,7 +64,7 @@ void OldStylePrintAdaptor::StartPage()
     getPrinter()->SetConnectMetaFile( &mpData->maPages.back().maPage );
 
     // copy state into metafile
-    std::shared_ptr<Printer> xPrinter(getPrinter());
+    VclPtr<Printer> xPrinter( getPrinter() );
     xPrinter->SetMapMode(xPrinter->GetMapMode());
     xPrinter->SetFont(xPrinter->GetFont());
     xPrinter->SetDrawMode(xPrinter->GetDrawMode());

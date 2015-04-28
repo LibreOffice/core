@@ -97,7 +97,7 @@ namespace svt
         i_rStateSet.AddState( AccessibleStateType::EXPANDABLE );
         i_rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
-        const ToolPanelDrawer* pDrawer( dynamic_cast< const ToolPanelDrawer* > ( GetWindow() ) );
+        VclPtr< ToolPanelDrawer > pDrawer = GetAsDynamic< ToolPanelDrawer > ();
         ENSURE_OR_RETURN_VOID( pDrawer, "ToolPanelDrawerContext::FillAccessibleStateSet: illegal window!" );
         if ( pDrawer->IsExpanded() )
             i_rStateSet.AddState( AccessibleStateType::EXPANDED );

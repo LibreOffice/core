@@ -42,13 +42,21 @@ ScGroupDlg::ScGroupDlg(vcl::Window* pParent, bool bUngroup, bool bRows)
     m_pBtnRows->GrabFocus();
 }
 
+ScGroupDlg::~ScGroupDlg()
+{
+    disposeOnce();
+}
+
+void ScGroupDlg::dispose()
+{
+    m_pBtnRows.clear();
+    m_pBtnCols.clear();
+    ModalDialog::dispose();
+}
+
 bool ScGroupDlg::GetColsChecked() const
 {
     return m_pBtnCols->IsChecked();
-}
-
-ScGroupDlg::~ScGroupDlg()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

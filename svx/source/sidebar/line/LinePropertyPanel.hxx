@@ -60,7 +60,10 @@ class LinePropertyPanel : public PanelLayout,
                           public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static LinePropertyPanel* Create(
+    virtual ~LinePropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
@@ -82,21 +85,27 @@ public:
 
     void EndLineWidthPopupMode();
 
+    // constructor/destuctor
+    LinePropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
+
 private:
     //ui controls
-    FixedText*   mpFTWidth;
-    ToolBox*     mpTBWidth;
-    FixedText*   mpFTStyle;
-    ListBox*     mpLBStyle;
-    FixedText*   mpFTTrancparency;
-    MetricField* mpMFTransparent;
-    FixedText*   mpFTArrow;
-    ListBox*     mpLBStart;
-    ListBox*     mpLBEnd;
-    FixedText*   mpFTEdgeStyle;
-    ListBox*     mpLBEdgeStyle;
-    FixedText*   mpFTCapStyle;
-    ListBox*     mpLBCapStyle;
+    VclPtr<FixedText>   mpFTWidth;
+    VclPtr<ToolBox>     mpTBWidth;
+    VclPtr<FixedText>   mpFTStyle;
+    VclPtr<ListBox>     mpLBStyle;
+    VclPtr<FixedText>   mpFTTrancparency;
+    VclPtr<MetricField> mpMFTransparent;
+    VclPtr<FixedText>   mpFTArrow;
+    VclPtr<ListBox>     mpLBStart;
+    VclPtr<ListBox>     mpLBEnd;
+    VclPtr<FixedText>   mpFTEdgeStyle;
+    VclPtr<ListBox>     mpLBEdgeStyle;
+    VclPtr<FixedText>   mpFTCapStyle;
+    VclPtr<ListBox>     mpLBCapStyle;
 
     //ControllerItem
     sfx2::sidebar::ControllerItem maStyleControl;
@@ -152,14 +161,7 @@ private:
     DECL_LINK(ChangeEdgeStyleHdl, void *);
     DECL_LINK(ChangeCapStyleHdl, void *);
 
-    // constructor/destuctor
-    LinePropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
-    virtual ~LinePropertyPanel();
-
-    PopupControl* CreateLineWidthPopupControl (PopupContainer* pParent);
+    VclPtr<PopupControl> CreateLineWidthPopupControl (PopupContainer* pParent);
 };
 
 } } // end of namespace svx::sidebar

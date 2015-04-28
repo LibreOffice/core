@@ -118,6 +118,33 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl)
     return 0L;
 }
 
+SvxTransparenceTabPage::~SvxTransparenceTabPage()
+{
+    disposeOnce();
+}
+
+void SvxTransparenceTabPage::dispose()
+{
+    m_pRbtTransOff.clear();
+    m_pRbtTransLinear.clear();
+    m_pRbtTransGradient.clear();
+    m_pMtrTransparent.clear();
+    m_pGridGradient.clear();
+    m_pLbTrgrGradientType.clear();
+    m_pFtTrgrCenterX.clear();
+    m_pMtrTrgrCenterX.clear();
+    m_pFtTrgrCenterY.clear();
+    m_pMtrTrgrCenterY.clear();
+    m_pFtTrgrAngle.clear();
+    m_pMtrTrgrAngle.clear();
+    m_pMtrTrgrBorder.clear();
+    m_pMtrTrgrStartValue.clear();
+    m_pMtrTrgrEndValue.clear();
+    m_pCtlBitmapPreview.clear();
+    m_pCtlXRectPreview.clear();
+    SvxTabPage::dispose();
+}
+
 void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 {
     m_pMtrTransparent->Enable(bActivate);
@@ -287,9 +314,9 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     SetExchangeSupport();
 }
 
-SfxTabPage* SvxTransparenceTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxTransparenceTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rAttrs)
 {
-    return new SvxTransparenceTabPage(pWindow, *rAttrs);
+    return VclPtr<SvxTransparenceTabPage>::Create(pWindow, *rAttrs);
 }
 
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
@@ -768,6 +795,51 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pCtlXRectPreview->set_height_request(aSize2.Height());
 }
 
+SvxAreaTabPage::~SvxAreaTabPage()
+{
+    disposeOnce();
+}
+
+void SvxAreaTabPage::dispose()
+{
+    m_pTypeLB.clear();
+    m_pFillLB.clear();
+    m_pLbColor.clear();
+    m_pLbGradient.clear();
+    m_pLbHatching.clear();
+    m_pLbBitmap.clear();
+    m_pCtlBitmapPreview.clear();
+    m_pTsbStepCount.clear();
+    m_pFlStepCount.clear();
+    m_pNumFldStepCount.clear();
+    m_pFlHatchBckgrd.clear();
+    m_pCbxHatchBckgrd.clear();
+    m_pLbHatchBckgrdColor.clear();
+    m_pBxBitmap.clear();
+    m_pFlSize.clear();
+    m_pTsbOriginal.clear();
+    m_pTsbScale.clear();
+    m_pGridX_Y.clear();
+    m_pFtXSize.clear();
+    m_pMtrFldXSize.clear();
+    m_pFtYSize.clear();
+    m_pMtrFldYSize.clear();
+    m_pFlPosition.clear();
+    m_pCtlPosition.clear();
+    m_pGridOffset.clear();
+    m_pMtrFldXOffset.clear();
+    m_pMtrFldYOffset.clear();
+    m_pBxTile.clear();
+    m_pTsbTile.clear();
+    m_pTsbStretch.clear();
+    m_pFlOffset.clear();
+    m_pRbtRow.clear();
+    m_pRbtColumn.clear();
+    m_pMtrFldOffset.clear();
+    m_pCtlXRectPreview.clear();
+    m_pBtnImport.clear();
+    SvxTabPage::dispose();
+}
 
 
 void SvxAreaTabPage::Construct()
@@ -1758,10 +1830,10 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxAreaTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxAreaTabPage::Create( vcl::Window* pWindow,
+                                           const SfxItemSet* rAttrs )
 {
-    return new SvxAreaTabPage( pWindow, *rAttrs );
+    return VclPtr<SvxAreaTabPage>::Create( pWindow, *rAttrs );
 }
 
 

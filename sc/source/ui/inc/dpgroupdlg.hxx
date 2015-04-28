@@ -49,9 +49,9 @@ private:
     DECL_LINK( ClickHdl, RadioButton* );
 
 private:
-    RadioButton*        mpRbAuto;
-    RadioButton*        mpRbMan;
-    Edit*               mpEdValue;
+    VclPtr<RadioButton>        mpRbAuto;
+    VclPtr<RadioButton>        mpRbMan;
+    VclPtr<Edit>               mpEdValue;
 };
 
 class ScDPNumGroupEditHelper : public ScDPGroupEditHelper
@@ -61,14 +61,13 @@ public:
                             RadioButton* pRbAuto, RadioButton* pRbMan,
                             ScDoubleField* pEdValue );
 
-    virtual ~ScDPNumGroupEditHelper() {}
-
+    virtual             ~ScDPNumGroupEditHelper() {}
 private:
     virtual bool        ImplGetValue( double& rfValue ) const SAL_OVERRIDE;
     virtual void        ImplSetValue( double fValue ) SAL_OVERRIDE;
 
 private:
-    ScDoubleField*      mpEdValue;
+    VclPtr<ScDoubleField>      mpEdValue;
 };
 
 class ScDPDateGroupEditHelper : public ScDPGroupEditHelper
@@ -85,7 +84,7 @@ private:
     virtual void        ImplSetValue( double fValue ) SAL_OVERRIDE;
 
 private:
-    DateField*          mpEdValue;
+    VclPtr<DateField>          mpEdValue;
     Date                maNullDate;
 };
 
@@ -93,17 +92,18 @@ class ScDPNumGroupDlg : public ModalDialog
 {
 public:
     explicit            ScDPNumGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo );
-
+    virtual             ~ScDPNumGroupDlg();
+    virtual void        dispose() SAL_OVERRIDE;
     ScDPNumGroupInfo    GetGroupInfo() const;
 
 private:
-    RadioButton*         mpRbAutoStart;
-    RadioButton*         mpRbManStart;
-    ScDoubleField*       mpEdStart;
-    RadioButton*         mpRbAutoEnd;
-    RadioButton*         mpRbManEnd;
-    ScDoubleField*       mpEdEnd;
-    ScDoubleField*       mpEdBy;
+    VclPtr<RadioButton>         mpRbAutoStart;
+    VclPtr<RadioButton>         mpRbManStart;
+    VclPtr<ScDoubleField>       mpEdStart;
+    VclPtr<RadioButton>         mpRbAutoEnd;
+    VclPtr<RadioButton>         mpRbManEnd;
+    VclPtr<ScDoubleField>       mpEdEnd;
+    VclPtr<ScDoubleField>       mpEdBy;
     ScDPNumGroupEditHelper maStartHelper;
     ScDPNumGroupEditHelper maEndHelper;
 };
@@ -113,7 +113,8 @@ class ScDPDateGroupDlg : public ModalDialog
 public:
     explicit            ScDPDateGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo,
                             sal_Int32 nDatePart, const Date& rNullDate );
-
+    virtual             ~ScDPDateGroupDlg();
+    virtual void        dispose() SAL_OVERRIDE;
     ScDPNumGroupInfo    GetGroupInfo() const;
     sal_Int32           GetDatePart() const;
 
@@ -122,17 +123,17 @@ private:
     DECL_LINK( CheckHdl, SvxCheckListBox* );
 
 private:
-    RadioButton*         mpRbAutoStart;
-    RadioButton*         mpRbManStart;
-    DateField*           mpEdStart;
-    RadioButton*         mpRbAutoEnd;
-    RadioButton*         mpRbManEnd;
-    DateField*           mpEdEnd;
-    RadioButton*         mpRbNumDays;
-    RadioButton*         mpRbUnits;
-    NumericField*        mpEdNumDays;
-    SvxCheckListBox*     mpLbUnits;
-    OKButton*            mpBtnOk;
+    VclPtr<RadioButton>         mpRbAutoStart;
+    VclPtr<RadioButton>         mpRbManStart;
+    VclPtr<DateField>           mpEdStart;
+    VclPtr<RadioButton>         mpRbAutoEnd;
+    VclPtr<RadioButton>         mpRbManEnd;
+    VclPtr<DateField>           mpEdEnd;
+    VclPtr<RadioButton>         mpRbNumDays;
+    VclPtr<RadioButton>         mpRbUnits;
+    VclPtr<NumericField>        mpEdNumDays;
+    VclPtr<SvxCheckListBox>     mpLbUnits;
+    VclPtr<OKButton>            mpBtnOk;
     ScDPDateGroupEditHelper maStartHelper;
     ScDPDateGroupEditHelper maEndHelper;
 };

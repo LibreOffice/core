@@ -69,9 +69,9 @@ private:
     ExtTextView*    pTextView;
     ExtTextEngine*  pTextEngine;
 
-    TextViewOutWin* pOutWin;
-    ScrollBar       *pHScrollbar,
-                    *pVScrollbar;
+    VclPtr<TextViewOutWin> pOutWin;
+    VclPtr<ScrollBar>      pHScrollbar,
+                           pVScrollbar;
 
     SwSrcView*      pSrcView;
 
@@ -118,6 +118,7 @@ protected:
 public:
                     SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView );
                     virtual ~SwSrcEditWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetScrollBarRanges();
     void            InitScrollBars();

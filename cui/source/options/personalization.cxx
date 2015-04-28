@@ -92,6 +92,25 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     }
 }
 
+SelectPersonaDialog::~SelectPersonaDialog()
+{
+    disposeOnce();
+}
+
+void SelectPersonaDialog::dispose()
+{
+    m_pEdit.clear();
+    m_pSearchButton.clear();
+    m_pProgressLabel.clear();
+    for (VclPtr<PushButton> vp : m_vResultList)
+        vp.clear();
+    for (VclPtr<PushButton> vp : m_vSearchSuggestions)
+        vp.clear();
+    m_pOkButton.clear();
+    m_pCancelButton.clear();
+    ModalDialog::dispose();
+}
+
 OUString SelectPersonaDialog::GetSelectedPersona() const
 {
     if( !m_aSelectedPersona.isEmpty( ) )
@@ -293,11 +312,27 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
 
 SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SvxPersonalizationTabPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
+void SvxPersonalizationTabPage::dispose()
 {
-    return new SvxPersonalizationTabPage( pParent, *rSet );
+    m_pNoPersona.clear();
+    m_pDefaultPersona.clear();
+    m_pOwnPersona.clear();
+    m_pSelectPersona.clear();
+    for (int i=0; i<3; ++i)
+        m_vDefaultPersonaImages[i].clear();
+    m_pExtensionPersonaPreview.clear();
+    m_pPersonaList.clear();
+    m_pExtensionLabel.clear();
+    SfxTabPage::dispose();
+}
+
+
+VclPtr<SfxTabPage> SvxPersonalizationTabPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
+{
+    return VclPtr<SvxPersonalizationTabPage>::Create( pParent, *rSet );
 }
 
 bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
@@ -441,11 +476,11 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 {
-    SelectPersonaDialog aDialog( NULL );
+    ScopedVclPtrInstance< SelectPersonaDialog > aDialog(nullptr);
 
-    if ( aDialog.Execute() == RET_OK )
+    if ( aDialog->Execute() == RET_OK )
     {
-        OUString aPersonaSetting( aDialog.GetAppliedPersonaSetting() );
+        OUString aPersonaSetting( aDialog->GetAppliedPersonaSetting() );
         if ( !aPersonaSetting.isEmpty() )
         {
             SetPersonaSettings( aPersonaSetting );

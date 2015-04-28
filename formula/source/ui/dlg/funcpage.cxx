@@ -91,6 +91,18 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
     m_pLbFunction->SetDoubleClickHdl( LINK( this, FuncPage, DblClkHdl ) );
 }
 
+FuncPage::~FuncPage()
+{
+    disposeOnce();
+}
+
+void FuncPage::dispose()
+{
+    m_pLbCategory.clear();
+    m_pLbFunction.clear();
+    TabPage::dispose();
+}
+
 void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
 {
     const sal_uInt32 nCount = _pCategory->getCount();

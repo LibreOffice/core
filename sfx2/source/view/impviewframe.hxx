@@ -35,9 +35,9 @@ struct SfxViewFrame_Impl
     OUString            aActualURL;
     SfxFrame&           rFrame;
     svtools::AsynchronLink* pReloader;
-    vcl::Window*             pWindow;
+    VclPtr<vcl::Window> pWindow;
     SfxViewFrame*       pActiveChild;
-    vcl::Window*             pFocusWin;
+    VclPtr<vcl::Window> pFocusWin;
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
     bool            bResizeInToOut:1;

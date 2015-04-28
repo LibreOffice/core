@@ -50,8 +50,8 @@ class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
          DECL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo* );
 
     private:
-        ToolBox*    m_pToolbox;
-        sal_uInt16  m_nID;
+        VclPtr<ToolBox>    m_pToolbox;
+        sal_uInt16         m_nID;
 };
 
 }

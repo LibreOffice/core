@@ -185,9 +185,8 @@ IMPL_LINK( MyWin, Test, PushButton*, pBtn )
 printf("Test\n");
     if ( pBtn == &aOKBtn )
     {
-        SvtFileDialog* pDlg = new SvtFileDialog( this,SFXWB_PATHDIALOG);
+        ScopedVclPtrInstance<SvtFileDialog> pDlg(this,SFXWB_PATHDIALOG);
         pDlg->Execute();
-        delete pDlg;
         printf("ok\n");
     }
 

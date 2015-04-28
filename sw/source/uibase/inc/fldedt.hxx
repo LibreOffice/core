@@ -28,21 +28,22 @@ class SwFldMgr;
 class SwFldEditDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
-    PushButton* m_pPrevBT;
-    PushButton* m_pNextBT;
-    PushButton* m_pAddressBT;
+    VclPtr<PushButton> m_pPrevBT;
+    VclPtr<PushButton> m_pNextBT;
+    VclPtr<PushButton> m_pAddressBT;
 
     DECL_LINK(AddressHdl, void *);
     DECL_LINK(NextPrevHdl, Button *pBt = 0);
 
     void            Init();
-    SfxTabPage*     CreatePage(sal_uInt16 nGroup);
+    VclPtr<SfxTabPage> CreatePage(sal_uInt16 nGroup);
 
     void EnsureSelection(SwField *pCurFld, SwFldMgr &rMgr);
 public:
 
     SwFldEditDlg(SwView& rVw);
     virtual ~SwFldEditDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK(OKHdl, void *);
 

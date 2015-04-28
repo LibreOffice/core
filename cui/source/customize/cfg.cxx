@@ -735,24 +735,24 @@ ConvertToolbarEntry(
     return aPropSeq;
 }
 
-SfxTabPage *CreateSvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> CreateSvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxMenuConfigPage( pParent, *rSet );
+    return VclPtr<SvxMenuConfigPage>::Create( pParent, *rSet );
 }
 
-SfxTabPage *CreateKeyboardConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> CreateKeyboardConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-       return new SfxAcceleratorConfigPage( pParent, *rSet );
+       return VclPtr<SfxAcceleratorConfigPage>::Create( pParent, *rSet );
 }
 
-SfxTabPage *CreateSvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxToolbarConfigPage( pParent, *rSet );
+    return VclPtr<SvxToolbarConfigPage>::Create( pParent, *rSet );
 }
 
-SfxTabPage *CreateSvxEventConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> CreateSvxEventConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxEventConfigPage( pParent, *rSet, SvxEventConfigPage::EarlyInit() );
+    return VclPtr<SvxEventConfigPage>::Create( pParent, *rSet, SvxEventConfigPage::EarlyInit() );
 }
 
 namespace {
@@ -1397,7 +1397,13 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(vcl::Window* pParent, SvxConfigPage
 
 SvxMenuEntriesListBox::~SvxMenuEntriesListBox()
 {
-    // do nothing
+    disposeOnce();
+}
+
+void SvxMenuEntriesListBox::dispose()
+{
+    pPage.clear();
+    SvTreeListBox::dispose();
 }
 
 // drag and drop support
@@ -1545,6 +1551,32 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
 
     m_pDescriptionField->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     m_pDescriptionField->EnableCursor( false );
+}
+
+SvxConfigPage::~SvxConfigPage()
+{
+    disposeOnce();
+}
+
+void SvxConfigPage::dispose()
+{
+    m_pTopLevel.clear();
+    m_pTopLevelLabel.clear();
+    m_pTopLevelListBox.clear();
+    m_pNewTopLevelButton.clear();
+    m_pModifyTopLevelButton.clear();
+    m_pContents.clear();
+    m_pContentsLabel.clear();
+    m_pEntries.clear();
+    m_pContentsListBox.disposeAndClear();
+    m_pAddCommandsButton.clear();
+    m_pModifyCommandButton.clear();
+    m_pMoveUpButton.clear();
+    m_pMoveDownButton.clear();
+    m_pSaveInListBox.clear();
+    m_pDescriptionField.clear();
+    m_pSelectorDlg.disposeAndClear();
+    SfxTabPage::dispose();
 }
 
 void SvxConfigPage::Reset( const SfxItemSet* )
@@ -2174,7 +2206,7 @@ bool SvxConfigPage::MoveEntryData(
 SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SvxConfigPage(pParent, rSet)
 {
-    m_pContentsListBox = new SvxMenuEntriesListBox(m_pEntries, this);
+    m_pContentsListBox = VclPtr<SvxMenuEntriesListBox>::Create(m_pEntries, this);
     m_pContentsListBox->set_grid_left_attach(0);
     m_pContentsListBox->set_grid_top_attach(0);
     m_pContentsListBox->set_hexpand(true);
@@ -2211,6 +2243,11 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
         LINK( this, SvxMenuConfigPage, EntrySelectHdl ) );
 }
 
+SvxMenuConfigPage::~SvxMenuConfigPage()
+{
+    disposeOnce();
+}
+
 // Populates the Menu combo box
 void SvxMenuConfigPage::Init()
 {
@@ -2224,7 +2261,7 @@ void SvxMenuConfigPage::Init()
     m_pTopLevelListBox->GetSelectHdl().Call(this);
 }
 
-SvxMenuConfigPage::~SvxMenuConfigPage()
+void SvxMenuConfigPage::dispose()
 {
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
@@ -2233,9 +2270,11 @@ SvxMenuConfigPage::~SvxMenuConfigPage()
 
         delete pData;
     }
+    m_pSaveInListBox->Clear();
 
-    delete m_pSelectorDlg;
-    delete m_pContentsListBox;
+    m_pSelectorDlg.clear();
+    m_pContentsListBox.clear();
+    SvxConfigPage::dispose();
 }
 
 IMPL_LINK( SvxMenuConfigPage, SelectMenuEntry, Control *, pBox )
@@ -2354,9 +2393,9 @@ short SvxMenuConfigPage::QueryReset()
 
     OUString label = replaceSaveInName( msg, saveInName );
 
-    QueryBox qbox( this, WB_YES_NO, label );
+    ScopedVclPtrInstance<QueryBox> qbox( this, WB_YES_NO, label );
 
-    return qbox.Execute();
+    return qbox->Execute();
 }
 
 IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
@@ -2404,7 +2443,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
         OUString aNewName( stripHotKey( pMenuData->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
@@ -2421,8 +2460,8 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        boost::scoped_ptr<SvxMainMenuOrganizerDialog> pDialog(
-            new SvxMainMenuOrganizerDialog( this,
+        VclPtr<SvxMainMenuOrganizerDialog> pDialog(
+            VclPtr<SvxMainMenuOrganizerDialog>::Create( this,
                 GetSaveInData()->GetEntries(), pMenuData ));
 
         if ( pDialog->Execute() == RET_OK )
@@ -2447,7 +2486,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         OUString aNewName;
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
 
-        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
 
@@ -2484,7 +2523,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
@@ -2524,9 +2563,8 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
 {
     (void)pButton;
 
-    boost::scoped_ptr<SvxMainMenuOrganizerDialog> pDialog(
-        new SvxMainMenuOrganizerDialog( 0,
-            GetSaveInData()->GetEntries(), NULL, true ));
+    VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
+        nullptr, GetSaveInData()->GetEntries(), nullptr, true );
 
     if ( pDialog->Execute() == RET_OK )
     {
@@ -2542,10 +2580,10 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
 {
     (void)pButton;
 
-    if ( m_pSelectorDlg == NULL )
+    if ( m_pSelectorDlg == nullptr )
     {
         // Create Script Selector which also shows builtin commands
-        m_pSelectorDlg = new SvxScriptSelectorDialog( this, true, m_xFrame );
+        m_pSelectorDlg = VclPtr<SvxScriptSelectorDialog>::Create( this, true, m_xFrame );
 
         m_pSelectorDlg->SetAddHdl(
             LINK( this, SvxMenuConfigPage, AddFunctionHdl ) );
@@ -2655,6 +2693,21 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
 }
 
+SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog()
+{
+    disposeOnce();
+}
+
+void SvxMainMenuOrganizerDialog::dispose()
+{
+    m_pMenuBox.clear();
+    m_pMenuNameEdit.clear();
+    m_pMenuListBox.clear();
+    m_pMoveUpButton.clear();
+    m_pMoveDownButton.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
 {
     (void)pEdit;
@@ -2673,10 +2726,6 @@ IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
     m_pMenuListBox->SetEntryText( pNewMenuEntry, pNewEntryData->GetName() );
 
     return 0;
-}
-
-SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog()
-{
 }
 
 IMPL_LINK( SvxMainMenuOrganizerDialog, SelectHdl, Control*, pCtrl )
@@ -2838,7 +2887,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 {
     SetHelpId( HID_SVX_CONFIG_TOOLBAR );
 
-    m_pContentsListBox = new SvxToolbarEntriesListBox(m_pEntries, this);
+    m_pContentsListBox = VclPtr<SvxToolbarEntriesListBox>::Create(m_pEntries, this);
     m_pContentsListBox->set_grid_left_attach(0);
     m_pContentsListBox->set_grid_top_attach(0);
     m_pContentsListBox->set_hexpand(true);
@@ -2916,6 +2965,11 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
 SvxToolbarConfigPage::~SvxToolbarConfigPage()
 {
+    disposeOnce();
+}
+
+void SvxToolbarConfigPage::dispose()
+{
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         ToolbarSaveInData* pData =
@@ -2923,14 +2977,11 @@ SvxToolbarConfigPage::~SvxToolbarConfigPage()
 
         delete pData;
     }
+    m_pSaveInListBox->Clear();
 
-    if ( m_pSelectorDlg != NULL )
-    {
-        delete m_pSelectorDlg;
-    }
-
-
-    delete m_pContentsListBox;
+    m_pSelectorDlg.disposeAndClear();
+    m_pContentsListBox.disposeAndClear();
+    SvxConfigPage::dispose();
 }
 
 void SvxToolbarConfigPage::DeleteSelectedTopLevel()
@@ -2993,10 +3044,10 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
         if ( m_pContentsListBox->GetEntryCount() == 0 &&
              GetTopLevelSelection()->IsDeletable() )
         {
-            MessageDialog qbox(this,
+            ScopedVclPtrInstance<MessageDialog> qbox(this,
                 CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
-            if ( qbox.Execute() == RET_YES )
+            if ( qbox->Execute() == RET_YES )
             {
                 DeleteSelectedTopLevel();
             }
@@ -3051,7 +3102,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
             OUString aNewName( stripHotKey( pToolbar->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-            boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+            VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
@@ -3073,10 +3124,10 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         }
         case ID_DEFAULT_STYLE:
         {
-            MessageDialog qbox(this,
+            ScopedVclPtrInstance<MessageDialog> qbox(this,
                 CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
-            if ( qbox.Execute() == RET_YES )
+            if ( qbox->Execute() == RET_YES )
             {
                 ToolbarSaveInData* pSaveInData_ =
                     static_cast<ToolbarSaveInData*>(GetSaveInData());
@@ -3137,7 +3188,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             OUString aNewName( stripHotKey( pEntry->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-            boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+            VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
@@ -3267,8 +3318,8 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 }
             }
 
-            boost::scoped_ptr<SvxIconSelectorDialog> pIconDialog(
-                new SvxIconSelectorDialog( 0,
+            VclPtr<SvxIconSelectorDialog> pIconDialog(
+                VclPtr<SvxIconSelectorDialog>::Create( nullptr,
                     GetSaveInData()->GetImageManager(),
                     GetSaveInData()->GetParentImageManager() ));
 
@@ -4304,9 +4355,9 @@ short SvxToolbarConfigPage::QueryReset()
 
     OUString label = replaceSaveInName( msg, saveInName );
 
-    QueryBox qbox( this, WB_YES_NO, label );
+    ScopedVclPtrInstance< QueryBox > qbox( this, WB_YES_NO, label );
 
-    return qbox.Execute();
+    return qbox->Execute();
 }
 
 IMPL_LINK( SvxToolbarConfigPage, SelectToolbar, ListBox *, pBox )
@@ -4395,7 +4446,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     OUString aNewURL =
         generateCustomURL( GetSaveInData()->GetEntries() );
 
-    boost::scoped_ptr<SvxNewToolbarDialog> pNameDialog(new SvxNewToolbarDialog( 0, aNewName ));
+    VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
 
     sal_uInt16 nInsertPos;
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
@@ -4450,10 +4501,10 @@ IMPL_LINK( SvxToolbarConfigPage, AddCommandsHdl, Button *, pButton )
 {
     (void)pButton;
 
-    if ( m_pSelectorDlg == NULL )
+    if ( m_pSelectorDlg == nullptr )
     {
         // Create Script Selector which shows slot commands
-        m_pSelectorDlg = new SvxScriptSelectorDialog( this, true, m_xFrame );
+        m_pSelectorDlg = VclPtr<SvxScriptSelectorDialog>::Create( this, true, m_xFrame );
 
         // Position the Script Selector over the Add button so it is
         // beside the menu contents list and does not obscure it
@@ -4522,7 +4573,16 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(vcl::Window* pParent, SvxTool
 
 SvxToolbarEntriesListBox::~SvxToolbarEntriesListBox()
 {
+    disposeOnce();
+}
+
+void SvxToolbarEntriesListBox::dispose()
+{
     delete m_pButtonData;
+    m_pButtonData = NULL;
+
+    pPage.clear();
+    SvxMenuEntriesListBox::dispose();
 }
 
 void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pData )
@@ -4532,28 +4592,28 @@ void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pDat
     // in all color modes, like high contrast.
     const AllSettings& rSettings = Application::GetSettings();
 
-    VirtualDevice   aDev;
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     Size            aSize( 26, 20 );
 
-    aDev.SetOutputSizePixel( aSize );
+    pVDev->SetOutputSizePixel( aSize );
 
-    Image aImage = GetSizedImage( aDev, aSize,
+    Image aImage = GetSizedImage( *pVDev.get(), aSize,
         CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT ));
 
     // Fill button data struct with new images
     pData->SetImage(SvBmp::UNCHECKED,     aImage);
-    pData->SetImage(SvBmp::CHECKED,       GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED )) );
-    pData->SetImage(SvBmp::HICHECKED,     GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED )) );
-    pData->SetImage(SvBmp::HIUNCHECKED,   GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED)) );
-    pData->SetImage(SvBmp::TRISTATE,      GetSizedImage( aDev, aSize, Image() ) ); // Use tristate bitmaps to have no checkbox for separator entries
-    pData->SetImage(SvBmp::HITRISTATE,    GetSizedImage( aDev, aSize, Image() ) );
+    pData->SetImage(SvBmp::CHECKED,       GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED )) );
+    pData->SetImage(SvBmp::HICHECKED,     GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED )) );
+    pData->SetImage(SvBmp::HIUNCHECKED,   GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED)) );
+    pData->SetImage(SvBmp::TRISTATE,      GetSizedImage( *pVDev.get(), aSize, Image() ) ); // Use tristate bitmaps to have no checkbox for separator entries
+    pData->SetImage(SvBmp::HITRISTATE,    GetSizedImage( *pVDev.get(), aSize, Image() ) );
 
     // Get image size
     m_aCheckBoxImageSizePixel = aImage.GetSizePixel();
 }
 
 Image SvxToolbarEntriesListBox::GetSizedImage(
-    VirtualDevice& aDev, const Size& aNewSize, const Image& aImage )
+    VirtualDevice& rVDev, const Size& aNewSize, const Image& aImage )
 {
     // Create new checkbox images for treelistbox. They must have a
     // decent width to have a clear column for the visibility checkbox.
@@ -4567,18 +4627,18 @@ Image SvxToolbarEntriesListBox::GetSizedImage(
     sal_uInt16  nPosX = std::max( (sal_uInt16) (((( aNewSize.Width() - 2 ) - aImage.GetSizePixel().Width() ) / 2 ) - 1), (sal_uInt16) 0 );
     sal_uInt16  nPosY = std::max( (sal_uInt16) (((( aNewSize.Height() - 2 ) - aImage.GetSizePixel().Height() ) / 2 ) + 1), (sal_uInt16) 0 );
     Point   aPos( nPosX > 0 ? nPosX : 0, nPosY > 0 ? nPosY : 0 );
-    aDev.SetFillColor( aFillColor );
-    aDev.SetLineColor( aFillColor );
-    aDev.DrawRect( Rectangle( Point(), aNewSize ));
-    aDev.DrawImage( aPos, aImage );
+    rVDev.SetFillColor( aFillColor );
+    rVDev.SetLineColor( aFillColor );
+    rVDev.DrawRect( Rectangle( Point(), aNewSize ));
+    rVDev.DrawImage( aPos, aImage );
 
     // Draw separator line 2 pixels left from the right border
     Color aLineColor = GetDisplayBackground().GetColor().IsDark() ? Color( COL_WHITE ) : Color( COL_BLACK );
-    aDev.SetLineColor( aLineColor );
-    aDev.DrawLine( Point( aNewSize.Width()-3, 0 ), Point( aNewSize.Width()-3, aNewSize.Height()-1 ));
+    rVDev.SetLineColor( aLineColor );
+    rVDev.DrawLine( Point( aNewSize.Width()-3, 0 ), Point( aNewSize.Width()-3, aNewSize.Height()-1 ));
 
     // Create new image that uses the fillcolor as transparent
-    return Image( aDev.GetBitmap( Point(), aNewSize ), aFillColor );
+    return Image( rVDev.GetBitmap( Point(), aNewSize ), aFillColor );
 }
 
 void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
@@ -4673,7 +4733,7 @@ TriState SvxToolbarEntriesListBox::NotifyCopying(
     if ( !m_bIsInternalDrag )
     {
         // if the target is NULL then add function to the start of the list
-        static_cast<SvxToolbarConfigPage*>(pPage)->AddFunction( pTarget, pTarget == NULL );
+        static_cast<SvxToolbarConfigPage*>(pPage.get())->AddFunction( pTarget, pTarget == NULL );
 
         // Instant Apply changes to UI
         SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
@@ -4704,6 +4764,20 @@ SvxNewToolbarDialog::SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& r
     ModifyHdl(m_pEdtName);
     m_pEdtName->SetModifyHdl(LINK(this, SvxNewToolbarDialog, ModifyHdl));
 }
+
+SvxNewToolbarDialog::~SvxNewToolbarDialog()
+{
+    disposeOnce();
+}
+
+void SvxNewToolbarDialog::dispose()
+{
+    m_pEdtName.clear();
+    m_pBtnOK.clear();
+    m_pSaveInListBox.clear();
+    ModalDialog::dispose();
+}
+
 
 IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
 {
@@ -4906,20 +4980,32 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
 SvxIconSelectorDialog::~SvxIconSelectorDialog()
 {
-    sal_uInt16 nCount = pTbSymbol->GetItemCount();
+    disposeOnce();
+}
 
-    for (sal_uInt16 n = 0; n < nCount; ++n )
+void SvxIconSelectorDialog::dispose()
+{
+    if (pTbSymbol)
     {
-        sal_uInt16 nId = pTbSymbol->GetItemId(n);
+        sal_uInt16 nCount = pTbSymbol->GetItemCount();
 
-        uno::XInterface* xi = static_cast< uno::XInterface* >(
-            pTbSymbol->GetItemData( nId ) );
-
-        if ( xi != NULL )
+        for (sal_uInt16 n = 0; n < nCount; ++n )
         {
+            sal_uInt16 nId = pTbSymbol->GetItemId(n);
+
+            uno::XInterface* xi = static_cast< uno::XInterface* >(
+                pTbSymbol->GetItemData( nId ) );
+
+            if ( xi != NULL )
             xi->release();
         }
     }
+
+    pTbSymbol.clear();
+    pFtNote.clear();
+    pBtnImport.clear();
+    pBtnDelete.clear();
+    ModalDialog::dispose();
 }
 
 uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
@@ -5211,8 +5297,8 @@ void SvxIconSelectorDialog::ImportGraphics(
             message += newLine;
         }
 
-        SvxIconChangeDialog aDialog(this, message);
-        aDialog.Execute();
+        ScopedVclPtrInstance< SvxIconChangeDialog > aDialog(this, message);
+        aDialog->Execute();
     }
 }
 
@@ -5362,6 +5448,18 @@ SvxIconChangeDialog::SvxIconChangeDialog(
     pFImageInfo->SetImage(InfoBox::GetStandardImage());
     pLineEditDescription->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     pLineEditDescription->SetText(aMessage);
+}
+
+SvxIconChangeDialog::~SvxIconChangeDialog()
+{
+    disposeOnce();
+}
+
+void SvxIconChangeDialog::dispose()
+{
+    pFImageInfo.clear();
+    pLineEditDescription.clear();
+    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

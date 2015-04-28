@@ -209,6 +209,7 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
     mrFrameSel( rFrameSel ),
+    mpVirDev( VclPtr<VirtualDevice>::Create() ),
     maILArrows( 16 ),
     maLeft( FRAMEBORDER_LEFT ),
     maRight( FRAMEBORDER_RIGHT ),
@@ -269,6 +270,7 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
 }
 
 FrameSelectorImpl::~FrameSelectorImpl()
+
 {
     if( mpAccess )
         mpAccess->Invalidate();
@@ -345,7 +347,7 @@ void FrameSelectorImpl::InitGlobalGeometry()
 
     /*  The final size of the usable area. */
     mnCtrlSize = 2 * nBetwBordersSize + nFixedSize;
-    maVirDev.SetOutputSizePixel( Size( mnCtrlSize, mnCtrlSize ) );
+    mpVirDev->SetOutputSizePixel( Size( mnCtrlSize, mnCtrlSize ) );
 
     /*  Center the virtual device in the control. */
     maVirDevPos = Point( (aCtrlSize.Width() - mnCtrlSize) / 2, (aCtrlSize.Height() - mnCtrlSize) / 2 );
@@ -517,14 +519,14 @@ FrameBorder& FrameSelectorImpl::GetBorderAccess( FrameBorderType eBorder )
 void FrameSelectorImpl::DrawBackground()
 {
     // clear the area
-    maVirDev.SetLineColor();
-    maVirDev.SetFillColor( maBackCol );
-    maVirDev.DrawRect( Rectangle( Point( 0, 0 ), maVirDev.GetOutputSizePixel() ) );
+    mpVirDev->SetLineColor();
+    mpVirDev->SetFillColor( maBackCol );
+    mpVirDev->DrawRect( Rectangle( Point( 0, 0 ), mpVirDev->GetOutputSizePixel() ) );
 
     // draw the inner gray (or whatever color) rectangle
-    maVirDev.SetLineColor();
-    maVirDev.SetFillColor( maMarkCol );
-    maVirDev.DrawRect( Rectangle(
+    mpVirDev->SetLineColor();
+    mpVirDev->SetFillColor( maMarkCol );
+    mpVirDev->DrawRect( Rectangle(
         mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
 
     // draw the white space for enabled frame borders
@@ -532,9 +534,9 @@ void FrameSelectorImpl::DrawBackground()
     for( FrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
         (*aIt)->MergeFocusToPolyPolygon( aPPoly );
     aPPoly.Optimize( PolyOptimizeFlags::CLOSE );
-    maVirDev.SetLineColor( maBackCol );
-    maVirDev.SetFillColor( maBackCol );
-    maVirDev.DrawPolyPolygon( aPPoly );
+    mpVirDev->SetLineColor( maBackCol );
+    mpVirDev->SetFillColor( maBackCol );
+    mpVirDev->DrawPolyPolygon( aPPoly );
 }
 
 void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
@@ -587,8 +589,8 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
 
     // Arrow or marker? Do not draw arrows into disabled control.
     sal_uInt16 nSelectAdd = (mrFrameSel.IsEnabled() && rBorder.IsSelected()) ? 0 : 8;
-    maVirDev.DrawImage( aPos1, maILArrows.GetImage( nImgId1 + nSelectAdd ) );
-    maVirDev.DrawImage( aPos2, maILArrows.GetImage( nImgId2 + nSelectAdd ) );
+    mpVirDev->DrawImage( aPos1, maILArrows.GetImage( nImgId1 + nSelectAdd ) );
+    mpVirDev->DrawImage( aPos2, maILArrows.GetImage( nImgId2 + nSelectAdd ) );
 }
 
 void FrameSelectorImpl::DrawAllArrows()
@@ -656,7 +658,7 @@ void FrameSelectorImpl::DrawAllFrameBorders()
             maArray.SetCellStyleDiag( nCol, nRow, maTLBR.GetUIStyle(), maBLTR.GetUIStyle() );
 
     // Let the helper array draw itself
-    maArray.DrawArray( maVirDev );
+    maArray.DrawArray( *mpVirDev.get() );
 }
 
 void FrameSelectorImpl::DrawVirtualDevice()
@@ -671,7 +673,7 @@ void FrameSelectorImpl::CopyVirDevToControl()
 {
     if( mbFullRepaint )
         DrawVirtualDevice();
-    mrFrameSel.DrawBitmap( maVirDevPos, maVirDev.GetBitmap( Point( 0, 0 ), maVirDev.GetOutputSizePixel() ) );
+    mrFrameSel.DrawBitmap( maVirDevPos, mpVirDev->GetBitmap( Point( 0, 0 ), mpVirDev->GetOutputSizePixel() ) );
 }
 
 void FrameSelectorImpl::DrawAllTrackingRects()
@@ -685,7 +687,7 @@ void FrameSelectorImpl::DrawAllTrackingRects()
     }
     else
         // no frame border selected -> draw tracking rectangle around entire control
-        aPPoly.Insert( Polygon( Rectangle( maVirDevPos, maVirDev.GetOutputSizePixel() ) ) );
+        aPPoly.Insert( Polygon( Rectangle( maVirDevPos, mpVirDev->GetOutputSizePixel() ) ) );
 
     aPPoly.Optimize( PolyOptimizeFlags::CLOSE );
     for( sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx )
@@ -789,13 +791,14 @@ FrameSelector::FrameSelector(vcl::Window* pParent)
     EnableRTL( false ); // #107808# don't mirror the mouse handling
 }
 
+FrameSelector::~FrameSelector()
+{
+    disposeOnce();
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFrameSelector(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new FrameSelector(pParent);
-}
-
-FrameSelector::~FrameSelector()
-{
 }
 
 void FrameSelector::Initialize( FrameSelFlags nFlags )

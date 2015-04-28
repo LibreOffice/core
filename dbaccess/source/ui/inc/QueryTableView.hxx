@@ -47,7 +47,7 @@ namespace dbaui
         virtual void ConnDoubleClicked(OTableConnection* pConnection) SAL_OVERRIDE;
         virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
 
-        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
+        virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
 
         /** called when init fails at the tablewindowdata because the m_xTable
             object could not provide columns, but no exception was thrown.
@@ -58,7 +58,6 @@ namespace dbaui
 
     public:
         OQueryTableView(vcl::Window* pParent,OQueryDesignView* pView);
-        virtual ~OQueryTableView();
 
         /// base class overwritten: create and delete windows
         /// (not really delete, as it becomes an UndoAction)

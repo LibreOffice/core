@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 #include <tools/diagnose_ex.h>
+#include <vcl/vclptr.hxx>
 
 #include <boost/optional.hpp>
 
@@ -68,15 +69,15 @@ namespace svt
     public:
         ToolPanelDeck_Impl( ToolPanelDeck& i_rDeck )
             :m_rDeck( i_rDeck )
-            ,m_aPanelAnchor( &i_rDeck, WB_DIALOGCONTROL | WB_CHILDDLGCTRL )
+            ,m_aPanelAnchor( VclPtr<vcl::Window>::Create(&i_rDeck, WB_DIALOGCONTROL | WB_CHILDDLGCTRL) )
             ,m_aPanels()
             ,m_pDummyPanel( new DummyPanel )
             ,m_pLayouter()
             ,m_bInDtor( false )
         {
             m_aPanels.AddListener( *this );
-            m_aPanelAnchor.Show();
-            m_aPanelAnchor.SetAccessibleRole( AccessibleRole::PANEL );
+            m_aPanelAnchor->Show();
+            m_aPanelAnchor->SetAccessibleRole( AccessibleRole::PANEL );
         }
 
         virtual ~ToolPanelDeck_Impl()
@@ -87,7 +88,7 @@ namespace svt
         PDeckLayouter       GetLayouter() const { return m_pLayouter; }
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
 
-        vcl::Window&             GetPanelWindowAnchor()       { return m_aPanelAnchor; }
+        vcl::Window&             GetPanelWindowAnchor()       { return *m_aPanelAnchor.get(); }
 
         bool                IsDead() const { return m_bInDtor; }
 
@@ -130,7 +131,7 @@ namespace svt
 
     private:
         ToolPanelDeck&      m_rDeck;
-        vcl::Window         m_aPanelAnchor;
+        VclPtr<vcl::Window> m_aPanelAnchor;
         ToolPanelCollection m_aPanels;
         PToolPanel          m_pDummyPanel;
         PanelDeckListeners  m_aListeners;
@@ -210,11 +211,11 @@ namespace svt
         {
             aPlaygroundArea = m_pLayouter->Layout( aDeckPlayground );
         }
-        m_aPanelAnchor.SetPosSizePixel( aPlaygroundArea.TopLeft(), aPlaygroundArea.GetSize() );
+        m_aPanelAnchor->SetPosSizePixel( aPlaygroundArea.TopLeft(), aPlaygroundArea.GetSize() );
 
         // position the active panel
         const PToolPanel pActive( GetActiveOrDummyPanel_Impl() );
-        pActive->SetSizePixel( m_aPanelAnchor.GetOutputSizePixel() );
+        pActive->SetSizePixel( m_aPanelAnchor->GetOutputSizePixel() );
     }
 
 
@@ -261,7 +262,7 @@ namespace svt
         case ACTION_TOGGLE_FOCUS:
             {
                 PToolPanel pActivePanel( GetActiveOrDummyPanel_Impl() );
-                if ( !m_aPanelAnchor.HasChildPathFocus() )
+                if ( !m_aPanelAnchor->HasChildPathFocus() )
                     pActivePanel->GrabFocus();
                 else
                     GetLayouter()->SetFocusToPanelSelector();
@@ -313,11 +314,11 @@ namespace svt
 
         // position and show the new panel
         const PToolPanel pNewActive( !i_rNewActive ? m_pDummyPanel : m_aPanels.GetPanel( *i_rNewActive ) );
-        pNewActive->Activate( m_aPanelAnchor );
+        pNewActive->Activate( *m_aPanelAnchor.get() );
         pNewActive->GrabFocus();
 
         // resize the panel (cannot guarantee it has ever been resized before
-        pNewActive->SetSizePixel( m_aPanelAnchor.GetOutputSizePixel() );
+        pNewActive->SetSizePixel( m_aPanelAnchor->GetOutputSizePixel() );
 
         // multiplex to our own listeners
         m_aListeners.ActivePanelChanged( i_rOldActive, i_rNewActive );
@@ -353,6 +354,11 @@ namespace svt
 
     ToolPanelDeck::~ToolPanelDeck()
     {
+        disposeOnce();
+    }
+
+    void ToolPanelDeck::dispose()
+    {
         m_pImpl->NotifyDying();
         GetLayouter()->Destroy();
 
@@ -362,6 +368,7 @@ namespace svt
             PToolPanel pPanel( GetPanel( i ) );
             pPanel->Dispose();
         }
+        Control::dispose();
     }
 
 

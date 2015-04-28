@@ -37,14 +37,14 @@ class DependencyDialog: public ModalDialog {
 public:
     DependencyDialog(
         vcl::Window * parent, std::vector< OUString > const & dependencies);
-
     virtual ~DependencyDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     DependencyDialog(DependencyDialog &) SAL_DELETED_FUNCTION;
     void operator =(DependencyDialog &) SAL_DELETED_FUNCTION;
 
-    ListBox*  m_list;
+    VclPtr<ListBox>  m_list;
 };
 
 }

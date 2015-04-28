@@ -21,10 +21,11 @@
 #define INCLUDED_SD_SOURCE_UI_INC_CREATETABLEDESIGNPANEL_HXX
 
 #include <sal/config.h>
+#include <vcl/vclptr.hxx>
 
 namespace sd {
 
-::vcl::Window * createTableDesignPanel (::vcl::Window* pParent, ViewShellBase& rBase);
+VclPtr<::vcl::Window> createTableDesignPanel (::vcl::Window* pParent, ViewShellBase& rBase);
 
 }
 

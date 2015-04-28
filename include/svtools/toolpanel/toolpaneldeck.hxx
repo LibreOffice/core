@@ -138,6 +138,7 @@ namespace svt
     public:
         ToolPanelDeck( vcl::Window& i_rParent, const WinBits i_nStyle = WB_DIALOGCONTROL );
         virtual ~ToolPanelDeck();
+        virtual void dispose() SAL_OVERRIDE;
 
         // attributes
         PDeckLayouter       GetLayouter() const;

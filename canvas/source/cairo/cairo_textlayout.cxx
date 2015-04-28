@@ -179,14 +179,14 @@ namespace cairocanvas
         if( !pOutDev )
             return geometry::RealRectangle2D();
 
-        VirtualDevice aVDev( *pOutDev );
-        aVDev.SetFont( mpFont->getVCLFont() );
+        ScopedVclPtrInstance< VirtualDevice > pVDev( *pOutDev );
+        pVDev->SetFont( mpFont->getVCLFont() );
 
         // need metrics for Y offset, the XCanvas always renders
         // relative to baseline
-        const ::FontMetric& aMetric( aVDev.GetFontMetric() );
+        const ::FontMetric& aMetric( pVDev->GetFontMetric() );
 
-        setupLayoutMode( aVDev, mnTextDirection );
+        setupLayoutMode( *pVDev.get(), mnTextDirection );
 
         const sal_Int32 nAboveBaseline( -aMetric.GetIntLeading() - aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
@@ -200,7 +200,7 @@ namespace cairocanvas
         else
         {
             return geometry::RealRectangle2D( 0, nAboveBaseline,
-                                              aVDev.GetTextWidth(
+                                              pVDev->GetTextWidth(
                                                   maText.Text,
                                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),

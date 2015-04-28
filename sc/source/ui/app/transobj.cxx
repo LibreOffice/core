@@ -337,13 +337,13 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             Rectangle aMMRect = pDoc->GetMMRect( aBlock.aStart.Col(), aBlock.aStart.Row(),
                                                  aBlock.aEnd.Col(), aBlock.aEnd.Row(),
                                                  aBlock.aStart.Tab() );
-            VirtualDevice aVirtDev;
-            aVirtDev.SetOutputSizePixel( aVirtDev.LogicToPixel( aMMRect.GetSize(), MAP_100TH_MM ) );
+            ScopedVclPtrInstance< VirtualDevice > pVirtDev;
+            pVirtDev->SetOutputSizePixel( pVirtDev->LogicToPixel( aMMRect.GetSize(), MAP_100TH_MM ) );
 
-            PaintToDev( &aVirtDev, pDoc, 1.0, aBlock, false );
+            PaintToDev( pVirtDev, pDoc, 1.0, aBlock, false );
 
-            aVirtDev.SetMapMode( MapMode( MAP_PIXEL ) );
-            Bitmap aBmp = aVirtDev.GetBitmap( Point(), aVirtDev.GetOutputSize() );
+            pVirtDev->SetMapMode( MapMode( MAP_PIXEL ) );
+            Bitmap aBmp = pVirtDev->GetBitmap( Point(), pVirtDev->GetOutputSize() );
             bOK = SetBitmapEx( aBmp, rFlavor );
         }
         else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
@@ -358,17 +358,17 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             // like SvEmbeddedTransfer::GetData:
             GDIMetaFile     aMtf;
-            VirtualDevice   aVDev;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             MapMode         aMapMode( pEmbObj->GetMapUnit() );
             Rectangle       aVisArea( pEmbObj->GetVisArea( ASPECT_CONTENT ) );
 
-            aVDev.EnableOutput( false );
-            aVDev.SetMapMode( aMapMode );
+            pVDev->EnableOutput( false );
+            pVDev->SetMapMode( aMapMode );
             aMtf.SetPrefSize( aVisArea.GetSize() );
             aMtf.SetPrefMapMode( aMapMode );
-            aMtf.Record( &aVDev );
+            aMtf.Record( pVDev );
 
-            pEmbObj->DoDraw( &aVDev, Point(), aVisArea.GetSize(), JobSetup(), ASPECT_CONTENT );
+            pEmbObj->DoDraw( pVDev, Point(), aVisArea.GetSize(), JobSetup(), ASPECT_CONTENT );
 
             aMtf.Stop();
             aMtf.WindStart();

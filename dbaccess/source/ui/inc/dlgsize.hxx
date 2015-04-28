@@ -39,11 +39,13 @@ namespace dbaui
     protected:
         DECL_LINK( CbClickHdl, Button * );
 
-        MetricField*    m_pMF_VALUE;
-        CheckBox*       m_pCB_STANDARD;
+        VclPtr<MetricField>    m_pMF_VALUE;
+        VclPtr<CheckBox>       m_pCB_STANDARD;
 
     public:
         DlgSize( vcl::Window * pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard = -1 );
+        virtual ~DlgSize();
+        virtual void dispose() SAL_OVERRIDE;
         sal_Int32 GetValue();
     };
 }   // namespace dbaui

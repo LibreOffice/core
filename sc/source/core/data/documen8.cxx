@@ -138,7 +138,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
         pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
-        pPrinter = new SfxPrinter( pSet );
+        pPrinter = VclPtr<SfxPrinter>::Create( pSet );
         pPrinter->SetMapMode( MAP_100TH_MM );
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
@@ -149,7 +149,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
 
 void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
 {
-    if ( pNewPrinter == pPrinter )
+    if ( pNewPrinter == pPrinter.get() )
     {
         //  #i6706# SetPrinter is called with the same printer again if
         //  the JobSetup has changed. In that case just call UpdateDrawPrinter
@@ -158,11 +158,10 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
     }
     else
     {
-        SfxPrinter* pOld = pPrinter;
+        ScopedVclPtr<SfxPrinter> pOld( pPrinter );
         pPrinter = pNewPrinter;
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
-        delete pOld;
     }
     InvalidateTextWidth(NULL, NULL, false);     // in both cases
 }
@@ -194,9 +193,9 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
     if (!pVirtualDevice_100th_mm)
     {
 #ifdef IOS
-        pVirtualDevice_100th_mm = new VirtualDevice( 8 );
+        pVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create( 8 );
 #else
-        pVirtualDevice_100th_mm = new VirtualDevice( 1 );
+        pVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create( 1 );
 #endif
         pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
         MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
@@ -844,8 +843,8 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
         aBuf.appendAscii("\n\n");
         aBuf.append(aFile);
-        MessageDialog aBox(pWin, aBuf.makeStringAndClear());
-        aBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aBox(pWin, aBuf.makeStringAndClear());
+        aBox->Execute();
     }
 
     pExternalRefMgr->enableDocTimer(true);

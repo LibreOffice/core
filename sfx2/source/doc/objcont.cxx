@@ -131,11 +131,11 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 
     std::shared_ptr<GDIMetaFile> xFile(new GDIMetaFile);
 
-    VirtualDevice aDevice;
-    aDevice.EnableOutput( false );
+    ScopedVclPtrInstance< VirtualDevice > pDevice;
+    pDevice->EnableOutput( false );
 
     MapMode aMode( this->GetMapUnit() );
-    aDevice.SetMapMode( aMode );
+    pDevice->SetMapMode( aMode );
     xFile->SetPrefMapMode( aMode );
 
     Size aTmpSize;
@@ -155,7 +155,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
         "size of first page is 0, override GetFirstPageSize or set vis-area!" );
 
-    xFile->Record( &aDevice );
+    xFile->Record( pDevice );
 
     LanguageType eLang;
     SvtCTLOptions aCTLOptions;
@@ -166,9 +166,9 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     else
         eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
 
-    aDevice.SetDigitLanguage( eLang );
+    pDevice->SetDigitLanguage( eLang );
 
-    const_cast<SfxObjectShell*>(this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
+    const_cast<SfxObjectShell*>(this)->DoDraw( pDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
 
     xFile->Stop();
 
@@ -286,13 +286,13 @@ void SfxObjectShell::UpdateTime_Impl(
 
 
 
-SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
+VclPtr<SfxDocumentInfoDialog> SfxObjectShell::CreateDocumentInfoDialog
 (
     vcl::Window*             pParent,
     const SfxItemSet&   rSet
 )
 {
-    return new SfxDocumentInfoDialog(pParent, rSet);
+    return VclPtr<SfxDocumentInfoDialog>::Create(pParent, rSet);
 }
 
 
@@ -471,8 +471,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     {
                         OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString() );
                         sMessage = sMessage.replaceAll( "$(ARG1)", aTemplName );
-                        sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
-                        if ( RET_YES == aBox.Execute() )
+                        ScopedVclPtrInstance< sfx2::QueryTemplateBox > aBox(GetDialogParent(), sMessage);
+                        if ( RET_YES == aBox->Execute() )
                             bLoad = true;
                     }
 

@@ -35,7 +35,7 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
     m_pCertPathListContainer->set_width_request(aSize.Width());
     m_pCertPathListContainer->set_height_request(aSize.Height());
     m_pCertPathList =
-        new svx::SvxRadioButtonListBox(*m_pCertPathListContainer, 0);
+        VclPtr<svx::SvxRadioButtonListBox>::Create(*m_pCertPathListContainer, 0);
     m_sAddDialogText = get<FixedText>("certdir")->GetText();
     m_sManual = get<FixedText>("manual")->GetText();
 
@@ -144,6 +144,11 @@ OUString CertPathDialog::getDirectory() const
 
 CertPathDialog::~CertPathDialog()
 {
+    disposeOnce();
+}
+
+void CertPathDialog::dispose()
+{
     SvTreeListEntry* pEntry = m_pCertPathList->First();
     while (pEntry)
     {
@@ -151,7 +156,11 @@ CertPathDialog::~CertPathDialog()
         delete pCertPath;
         pEntry = m_pCertPathList->Next( pEntry );
     }
-    delete m_pCertPathList;
+    m_pCertPathList.disposeAndClear();
+    m_pCertPathListContainer.clear();
+    m_pAddBtn.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvSimpleTable *, pList )

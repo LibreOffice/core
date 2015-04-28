@@ -33,7 +33,7 @@ class SwLabDlg : public SfxTabDialog
 {
     SwLabelConfig   aLabelsCfg;
     SwDBManager*     pDBManager;
-    SwLabPrtPage*   pPrtPage;
+    VclPtr<SwLabPrtPage>   pPrtPage;
 
     std::vector<sal_uInt16> aTypeIds;
     std::vector<OUString> aMakes;
@@ -56,6 +56,7 @@ public:
      SwLabDlg( vcl::Window* pParent, const SfxItemSet& rSet,
                  SwDBManager* pDBManager, bool bLabel);
     virtual ~SwLabDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     SwLabRec*   GetRecord(const OUString &rRecName, bool bCont);
     void        GetLabItem(SwLabItem &rItem);

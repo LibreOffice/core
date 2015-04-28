@@ -69,8 +69,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvx3DPreviewControl(vc
 
 Svx3DPreviewControl::~Svx3DPreviewControl()
 {
+    disposeOnce();
+}
+
+void Svx3DPreviewControl::dispose()
+{
     delete mp3DView;
     delete mpModel;
+    Control::dispose();
 }
 
 void Svx3DPreviewControl::Construct()
@@ -270,12 +276,6 @@ Svx3DLightControl::Svx3DLightControl(vcl::Window* pParent, WinBits nStyle)
     mbGeometrySelected(false)
 {
     Construct2();
-}
-
-Svx3DLightControl::~Svx3DLightControl()
-{
-    // SdrObjects like mpExpansionObject and mpLampBottomObject/mpLampShaftObject get deleted
-    // with deletion of the DrawingLayer and model
 }
 
 void Svx3DLightControl::Construct2()
@@ -948,10 +948,10 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 
 SvxLightCtl3D::SvxLightCtl3D( vcl::Window* pParent)
 :   Control(pParent, WB_BORDER | WB_TABSTOP),
-    maLightControl(this, 0),
-    maHorScroller(this, WB_HORZ | WB_DRAG),
-    maVerScroller(this, WB_VERT | WB_DRAG),
-    maSwitcher(this, 0)
+    maLightControl(VclPtr<Svx3DLightControl>::Create(this, 0)),
+    maHorScroller(VclPtr<ScrollBar>::Create(this, WB_HORZ | WB_DRAG)),
+    maVerScroller(VclPtr<ScrollBar>::Create(this, WB_VERT | WB_DRAG)),
+    maSwitcher(VclPtr<PushButton>::Create(this, 0))
 {
     // init members
     Init();
@@ -970,33 +970,33 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLightCtl3D(vcl::Win
 void SvxLightCtl3D::Init()
 {
     // #i58240# set HelpIDs for scrollbars and switcher
-    maHorScroller.SetHelpId(HID_CTRL3D_HSCROLL);
-    maVerScroller.SetHelpId(HID_CTRL3D_VSCROLL);
-    maSwitcher.SetHelpId(HID_CTRL3D_SWITCHER);
-    maSwitcher.SetAccessibleName(SVX_RESSTR(STR_SWITCH));
+    maHorScroller->SetHelpId(HID_CTRL3D_HSCROLL);
+    maVerScroller->SetHelpId(HID_CTRL3D_VSCROLL);
+    maSwitcher->SetHelpId(HID_CTRL3D_SWITCHER);
+    maSwitcher->SetAccessibleName(SVX_RESSTR(STR_SWITCH));
 
     // Light preview
-    maLightControl.Show();
-    maLightControl.SetChangeCallback( LINK(this, SvxLightCtl3D, InternalInteractiveChange) );
-    maLightControl.SetSelectionChangeCallback( LINK(this, SvxLightCtl3D, InternalSelectionChange) );
+    maLightControl->Show();
+    maLightControl->SetChangeCallback( LINK(this, SvxLightCtl3D, InternalInteractiveChange) );
+    maLightControl->SetSelectionChangeCallback( LINK(this, SvxLightCtl3D, InternalSelectionChange) );
 
     // Horiz Scrollbar
-    maHorScroller.Show();
-    maHorScroller.SetRange(Range(0, 36000));
-    maHorScroller.SetLineSize(100);
-    maHorScroller.SetPageSize(1000);
-    maHorScroller.SetScrollHdl( LINK(this, SvxLightCtl3D, ScrollBarMove) );
+    maHorScroller->Show();
+    maHorScroller->SetRange(Range(0, 36000));
+    maHorScroller->SetLineSize(100);
+    maHorScroller->SetPageSize(1000);
+    maHorScroller->SetScrollHdl( LINK(this, SvxLightCtl3D, ScrollBarMove) );
 
     // Vert Scrollbar
-    maVerScroller.Show();
-    maVerScroller.SetRange(Range(0, 18000));
-    maVerScroller.SetLineSize(100);
-    maVerScroller.SetPageSize(1000);
-    maVerScroller.SetScrollHdl( LINK(this, SvxLightCtl3D, ScrollBarMove) );
+    maVerScroller->Show();
+    maVerScroller->SetRange(Range(0, 18000));
+    maVerScroller->SetLineSize(100);
+    maVerScroller->SetPageSize(1000);
+    maVerScroller->SetScrollHdl( LINK(this, SvxLightCtl3D, ScrollBarMove) );
 
     // Switch Button
-    maSwitcher.Show();
-    maSwitcher.SetClickHdl( LINK(this, SvxLightCtl3D, ButtonPress) );
+    maSwitcher->Show();
+    maSwitcher->SetClickHdl( LINK(this, SvxLightCtl3D, ButtonPress) );
 
     // check selection
     CheckSelection();
@@ -1007,6 +1007,16 @@ void SvxLightCtl3D::Init()
 
 SvxLightCtl3D::~SvxLightCtl3D()
 {
+    disposeOnce();
+}
+
+void SvxLightCtl3D::dispose()
+{
+    maLightControl.disposeAndClear();
+    maHorScroller.disposeAndClear();
+    maVerScroller.disposeAndClear();
+    maSwitcher.disposeAndClear();
+    Control::dispose();
 }
 
 void SvxLightCtl3D::Resize()
@@ -1022,43 +1032,43 @@ void SvxLightCtl3D::NewLayout()
 {
     // Layout members
     const Size aSize(GetOutputSizePixel());
-    const sal_Int32 nScrollSize(maHorScroller.GetSizePixel().Height());
+    const sal_Int32 nScrollSize(maHorScroller->GetSizePixel().Height());
 
     // Preview control
     Point aPoint(0, 0);
     Size aDestSize(aSize.Width() - nScrollSize, aSize.Height() - nScrollSize);
-    maLightControl.SetPosSizePixel(aPoint, aDestSize);
+    maLightControl->SetPosSizePixel(aPoint, aDestSize);
 
     // hor scrollbar
     aPoint.Y() = aSize.Height() - nScrollSize;
     aDestSize.Height() = nScrollSize;
-    maHorScroller.SetPosSizePixel(aPoint, aDestSize);
+    maHorScroller->SetPosSizePixel(aPoint, aDestSize);
 
     // vert scrollbar
     aPoint.X() = aSize.Width() - nScrollSize;
     aPoint.Y() = 0;
     aDestSize.Width() = nScrollSize;
     aDestSize.Height() = aSize.Height() - nScrollSize;
-    maVerScroller.SetPosSizePixel(aPoint, aDestSize);
+    maVerScroller->SetPosSizePixel(aPoint, aDestSize);
 
     // button
     aPoint.Y() = aSize.Height() - nScrollSize;
     aDestSize.Height() = nScrollSize;
-    maSwitcher.SetPosSizePixel(aPoint, aDestSize);
+    maSwitcher->SetPosSizePixel(aPoint, aDestSize);
 }
 
 void SvxLightCtl3D::CheckSelection()
 {
-    const bool bSelectionValid(maLightControl.IsSelectionValid() || maLightControl.IsGeometrySelected());
-    maHorScroller.Enable(bSelectionValid);
-    maVerScroller.Enable(bSelectionValid);
+    const bool bSelectionValid(maLightControl->IsSelectionValid() || maLightControl->IsGeometrySelected());
+    maHorScroller->Enable(bSelectionValid);
+    maVerScroller->Enable(bSelectionValid);
 
     if(bSelectionValid)
     {
         double fHor(0.0), fVer(0.0);
-        maLightControl.GetPosition(fHor, fVer);
-        maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
-        maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
+        maLightControl->GetPosition(fHor, fVer);
+        maHorScroller->SetThumbPos( sal_Int32(fHor * 100.0) );
+        maVerScroller->SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
     }
 }
 
@@ -1066,7 +1076,7 @@ void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
 {
     double fHor(0.0), fVer(0.0);
 
-    maLightControl.GetPosition(fHor, fVer);
+    maLightControl->GetPosition(fHor, fVer);
     fHor += fDeltaHor;
     fVer += fDeltaVer;
 
@@ -1076,9 +1086,9 @@ void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
     if ( fVer < -90.0 )
         return;
 
-    maLightControl.SetPosition(fHor, fVer);
-    maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
-    maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
+    maLightControl->SetPosition(fHor, fVer);
+    maHorScroller->SetThumbPos( sal_Int32(fHor * 100.0) );
+    maVerScroller->SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
 
     if(maUserInteractiveChangeCallback.IsSet())
     {
@@ -1124,9 +1134,9 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
         }
         case KEY_PAGEUP:
         {
-            sal_Int32 nLight(maLightControl.GetSelectedLight() - 1);
+            sal_Int32 nLight(maLightControl->GetSelectedLight() - 1);
 
-            while((nLight >= 0) && !maLightControl.GetLightOnOff(nLight))
+            while((nLight >= 0) && !maLightControl->GetLightOnOff(nLight))
             {
                 nLight--;
             }
@@ -1135,7 +1145,7 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
             {
                 nLight = 7;
 
-                while((nLight >= 0) && !maLightControl.GetLightOnOff(nLight))
+                while((nLight >= 0) && !maLightControl->GetLightOnOff(nLight))
                 {
                     nLight--;
                 }
@@ -1143,7 +1153,7 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
 
             if(nLight >= 0)
             {
-                maLightControl.SelectLight(nLight);
+                maLightControl->SelectLight(nLight);
                 CheckSelection();
 
                 if(maUserSelectionChangeCallback.IsSet())
@@ -1156,9 +1166,9 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
         }
         case KEY_PAGEDOWN:
         {
-            sal_Int32 nLight(maLightControl.GetSelectedLight() - 1);
+            sal_Int32 nLight(maLightControl->GetSelectedLight() - 1);
 
-            while(nLight <= 7 && !maLightControl.GetLightOnOff(nLight))
+            while(nLight <= 7 && !maLightControl->GetLightOnOff(nLight))
             {
                 nLight++;
             }
@@ -1167,7 +1177,7 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
             {
                 nLight = 0;
 
-                while(nLight <= 7 && !maLightControl.GetLightOnOff(nLight))
+                while(nLight <= 7 && !maLightControl->GetLightOnOff(nLight))
                 {
                     nLight++;
                 }
@@ -1175,7 +1185,7 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
 
             if(nLight <= 7)
             {
-                maLightControl.SelectLight(nLight);
+                maLightControl->SelectLight(nLight);
                 CheckSelection();
 
                 if(maUserSelectionChangeCallback.IsSet())
@@ -1202,16 +1212,16 @@ void SvxLightCtl3D::GetFocus()
     {
         CheckSelection();
 
-        Size aFocusSize = maLightControl.GetOutputSizePixel();
+        Size aFocusSize = maLightControl->GetOutputSizePixel();
 
         aFocusSize.Width() -= 4;
         aFocusSize.Height() -= 4;
 
         Rectangle aFocusRect( Point( 2, 2 ), aFocusSize );
 
-        aFocusRect = maLightControl.PixelToLogic( aFocusRect );
+        aFocusRect = maLightControl->PixelToLogic( aFocusRect );
 
-        maLightControl.ShowFocus( aFocusRect );
+        maLightControl->ShowFocus( aFocusRect );
     }
 }
 
@@ -1219,15 +1229,15 @@ void SvxLightCtl3D::LoseFocus()
 {
     Control::LoseFocus();
 
-    maLightControl.HideFocus();
+    maLightControl->HideFocus();
 }
 
 IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove)
 {
-    const sal_Int32 nHor(maHorScroller.GetThumbPos());
-    const sal_Int32 nVer(maVerScroller.GetThumbPos());
+    const sal_Int32 nHor(maHorScroller->GetThumbPos());
+    const sal_Int32 nVer(maVerScroller->GetThumbPos());
 
-    maLightControl.SetPosition(
+    maLightControl->SetPosition(
         ((double)nHor) / 100.0,
         ((double)((18000 - nVer) - 9000)) / 100.0);
 
@@ -1257,9 +1267,9 @@ IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange)
 {
     double fHor(0.0), fVer(0.0);
 
-    maLightControl.GetPosition(fHor, fVer);
-    maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
-    maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
+    maLightControl->GetPosition(fHor, fVer);
+    maHorScroller->SetThumbPos( sal_Int32(fHor * 100.0) );
+    maVerScroller->SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
 
     if(maUserInteractiveChangeCallback.IsSet())
     {

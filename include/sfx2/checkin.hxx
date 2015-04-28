@@ -16,15 +16,17 @@
 class SfxCheckinDialog : public ModalDialog
 {
     private:
-        Edit*       m_pCommentED;
-        CheckBox*   m_pMajorCB;
+        VclPtr<Edit>       m_pCommentED;
+        VclPtr<CheckBox>   m_pMajorCB;
 
-        OKButton*   m_pOKBtn;
+        VclPtr<OKButton>   m_pOKBtn;
 
         DECL_DLLPRIVATE_LINK(OKHdl, void *);
 
     public:
         SfxCheckinDialog( vcl::Window* pParent );
+        virtual ~SfxCheckinDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         OUString GetComment( );
         bool IsMajor( );

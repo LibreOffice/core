@@ -45,7 +45,7 @@ namespace rptui
     {
         OReportPage*                        m_pPage;
         OSectionView*                       m_pView;
-        OSectionWindow*                     m_pParent;
+        VclPtr<OSectionWindow>              m_pParent;
         ::std::unique_ptr<DlgEdFunc>        m_pFunc;
         ::boost::shared_ptr<OReportModel>   m_pModel;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pMulti;
@@ -81,6 +81,7 @@ namespace rptui
     public:
         OReportSection(OSectionWindow* _pParent,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
         virtual ~OReportSection();
+        virtual void dispose() SAL_OVERRIDE;
 
         // window overrides
         virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

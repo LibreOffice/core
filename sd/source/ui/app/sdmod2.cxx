@@ -727,9 +727,9 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         pViewShell->GetViewFrame()->GetBindings().InvalidateAll( true );
 }
 
-SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> SdModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage* pRet = NULL;
+    VclPtr<SfxTabPage> pRet;
     SfxAllItemSet aSet(*(rSet.GetPool()));
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     if( pFact )

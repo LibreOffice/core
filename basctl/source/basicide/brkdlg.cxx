@@ -106,6 +106,22 @@ BreakPointDialog::BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkPn
     CheckButtons();
 }
 
+BreakPointDialog::~BreakPointDialog()
+{
+    disposeOnce();
+}
+
+void BreakPointDialog::dispose()
+{
+    m_pComboBox.clear();
+    m_pOKButton.clear();
+    m_pNewButton.clear();
+    m_pDelButton.clear();
+    m_pNumericField.clear();
+    m_pCheckBox.clear();
+    ModalDialog::dispose();
+}
+
 void BreakPointDialog::SetCurrentBreakPoint( BreakPoint* pBrk )
 {
     OUString aStr( "# " + OUString::number(pBrk->nLine) );

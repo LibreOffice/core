@@ -40,8 +40,8 @@ namespace dbaui
 
         Link                        m_aModifyHdl;
 
-        ::svt::ListBoxControl*      m_pSortingCell;
-        ::svt::ListBoxControl*      m_pFieldNameCell;
+        VclPtr<::svt::ListBoxControl>      m_pSortingCell;
+        VclPtr<::svt::ListBoxControl>      m_pFieldNameCell;
 
         OUString                    m_sAscendingText;
         OUString                    m_sDescendingText;
@@ -52,6 +52,7 @@ namespace dbaui
     public:
         IndexFieldsControl( vcl::Window* _pParent, WinBits nWinStyle);
         virtual ~IndexFieldsControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         void Init(const ::com::sun::star::uno::Sequence< OUString >& _rAvailableFields, sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix);
 

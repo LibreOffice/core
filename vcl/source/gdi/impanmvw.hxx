@@ -34,7 +34,7 @@ private:
     friend class Animation;
 
     Animation*      mpParent;
-    OutputDevice*   mpOut;
+    VclPtr<OutputDevice>   mpOut;
     long            mnExtraData;
     Point           maPt;
     Point           maDispPt;
@@ -45,8 +45,8 @@ private:
     Size            maRestSz;
     MapMode         maMap;
     vcl::Region     maClip;
-    VirtualDevice*  mpBackground;
-    VirtualDevice*  mpRestore;
+    VclPtr<VirtualDevice>  mpBackground;
+    VclPtr<VirtualDevice>  mpRestore;
     sal_uLong       mnActPos;
     Disposal        meLastDisposal;
     bool            mbPause;

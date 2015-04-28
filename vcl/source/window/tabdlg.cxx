@@ -197,7 +197,7 @@ void TabDialog::ImplPosControls()
     {
         Size aDlgSize = GetOutputSizePixel();
         if ( !mpFixedLine )
-            mpFixedLine = new FixedLine( this );
+            mpFixedLine = VclPtr<FixedLine>::Create( this );
         mpFixedLine->SetPosSizePixel( Point( 0, nOffY ),
                                       Size( aDlgSize.Width(), 2 ) );
         mpFixedLine->Show();
@@ -221,7 +221,14 @@ TabDialog::TabDialog( vcl::Window* pParent, const OUString& rID, const OUString&
 
 TabDialog::~TabDialog()
 {
-    delete mpFixedLine;
+    disposeOnce();
+}
+
+void TabDialog::dispose()
+{
+    mpFixedLine.disposeAndClear();
+    mpViewWindow.clear();
+    Dialog::dispose();
 }
 
 void TabDialog::StateChanged( StateChangedType nType )

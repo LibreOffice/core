@@ -48,6 +48,22 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pParent)
 
 }
 
+SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
+{
+    disposeOnce();
+}
+
+void SwMailMergeOutputTypePage::dispose()
+{
+    m_pLetterRB.clear();
+    m_pMailRB.clear();
+    m_pLetterHint.clear();
+    m_pMailHint.clear();
+    m_pWizard.clear();
+    svt::OWizardPage::dispose();
+}
+
+
 IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl)
 {
     bool bLetter = m_pLetterRB->IsChecked();
@@ -123,7 +139,7 @@ const SwMailDescriptor* SwSendMailDialog_Impl::GetNextDescriptor()
 using namespace ::com::sun::star;
 class SwMailDispatcherListener_Impl : public IMailDispatcherListener
 {
-    SwSendMailDialog* m_pSendMailDialog;
+    VclPtr<SwSendMailDialog> m_pSendMailDialog;
 
 public:
     SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
@@ -208,9 +224,15 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
 
 class SwSendWarningBox_Impl : public MessageDialog
 {
-    VclMultiLineEdit  *m_pDetailED;
+    VclPtr<VclMultiLineEdit> m_pDetailED;
 public:
     SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails);
+    virtual ~SwSendWarningBox_Impl() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pDetailED.clear();
+        MessageDialog::dispose();
+    }
 };
 
 SwSendWarningBox_Impl::SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails)
@@ -253,7 +275,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     Size aSize = m_pContainer->LogicToPixel(Size(226, 80), MAP_APPFONT);
     m_pContainer->set_width_request(aSize.Width());
     m_pContainer->set_height_request(aSize.Height());
-    m_pStatus = new SvSimpleTable(*m_pContainer);
+    m_pStatus = VclPtr<SvSimpleTable>::Create(*m_pContainer);
     m_pStatusHB = &(m_pStatus->GetTheHeaderBar());
 
     m_nStatusHeight = m_pContainer->get_height_request();
@@ -283,6 +305,11 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
 
 SwSendMailDialog::~SwSendMailDialog()
 {
+    disposeOnce();
+}
+
+void SwSendMailDialog::dispose()
+{
     if(m_pImpl->xMailDispatcher.is())
     {
         try
@@ -306,8 +333,17 @@ SwSendMailDialog::~SwSendMailDialog()
         {
         }
     }
-    delete m_pStatus;
     delete m_pImpl;
+    m_pStatus.disposeAndClear();
+    m_pTransferStatus.clear();
+    m_pPaused.clear();
+    m_pProgressBar.clear();
+    m_pErrorStatus.clear();
+    m_pContainer.clear();
+    m_pStatusHB.clear();
+    m_pStop.clear();
+    m_pClose.clear();
+    ModelessDialog::dispose();
 }
 
 void SwSendMailDialog::AddDocument( SwMailDescriptor& rDesc )
@@ -375,7 +411,7 @@ IMPL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer )
             (!pThis->m_pImpl->xMailDispatcher.is() ||
                     !pThis->m_pImpl->xMailDispatcher->isRunning()))
     {
-        delete pThis;
+        pThis->disposeOnce();
     }
     else
     {
@@ -546,7 +582,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
 
     if (pError)
     {
-        boost::scoped_ptr<SwSendWarningBox_Impl> pDlg(new SwSendWarningBox_Impl(0, *pError));
+        VclPtrInstance< SwSendWarningBox_Impl > pDlg(nullptr, *pError);
         pDlg->Execute();
     }
 }

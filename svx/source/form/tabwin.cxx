@@ -113,9 +113,15 @@ FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     SetHighlightRange( );
 }
 
-
 FmFieldWinListBox::~FmFieldWinListBox()
 {
+    disposeOnce();
+}
+
+void FmFieldWinListBox::dispose()
+{
+    pTabWin.clear();
+    SvTreeListBox::dispose();
 }
 
 
@@ -183,7 +189,7 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Wind
     SetHelpId( HID_FIELD_SEL_WIN );
 
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
-    pListBox = new FmFieldWinListBox( this );
+    pListBox = VclPtr<FmFieldWinListBox>::Create( this );
     pListBox->Show();
     UpdateContent(NULL);
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
@@ -192,14 +198,20 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Wind
 
 FmFieldWin::~FmFieldWin()
 {
+    disposeOnce();
+}
+
+void FmFieldWin::dispose()
+{
     if (m_pChangeListener)
     {
         m_pChangeListener->dispose();
         m_pChangeListener->release();
         //  delete m_pChangeListener;
     }
-    delete pListBox;
+    pListBox.disposeAndClear();
     delete pData;
+    SfxFloatingWindow::dispose();
 }
 
 
@@ -411,10 +423,10 @@ FmFieldWinMgr::FmFieldWinMgr(vcl::Window* _pParent, sal_uInt16 _nId,
                SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    pWindow = new FmFieldWin(_pBindings, this, _pParent);
+    pWindow = VclPtr<FmFieldWin>::Create(_pBindings, this, _pParent);
     SetHideNotDelete(true);
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-    static_cast<SfxFloatingWindow*>(pWindow)->Initialize( _pInfo );
+    static_cast<SfxFloatingWindow*>(pWindow.get())->Initialize( _pInfo );
 }
 
 

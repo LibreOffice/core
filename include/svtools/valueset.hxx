@@ -197,11 +197,11 @@ class SVT_DLLPUBLIC ValueSet : public Control
 {
 private:
 
-    VirtualDevice   maVirDev;
+    ScopedVclPtr<VirtualDevice>   maVirDev;
     Timer           maTimer;
     ValueItemList   mItemList;
     ValueSetItemPtr mpNoneItem;
-    std::unique_ptr<ScrollBar> mxScrollBar;
+    VclPtr<ScrollBar> mxScrollBar;
     Rectangle       maNoneItemRect;
     Rectangle       maItemListRect;
     long            mnItemWidth;
@@ -284,7 +284,8 @@ protected:
 public:
                     ValueSet( vcl::Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren = false );
                     ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
-                    virtual ~ValueSet();
+    virtual         ~ValueSet();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;

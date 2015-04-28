@@ -107,9 +107,9 @@ namespace cairo
             mpGraphics->WidgetQueueDraw();
     }
 
-    boost::shared_ptr<VirtualDevice> Gtk3Surface::createVirtualDevice() const
+    VclPtr<VirtualDevice> Gtk3Surface::createVirtualDevice() const
     {
-        return boost::shared_ptr<VirtualDevice>(new VirtualDevice(NULL, Size(1, 1), 0));
+        return VclPtrInstance<VirtualDevice>(nullptr, Size(1, 1), 0);
     }
 
 }

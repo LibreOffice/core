@@ -116,7 +116,7 @@ TextEngine::~TextEngine()
     delete mpDoc;
     delete mpTEParaPortions;
     delete mpViews; // only the list, not the Views
-    delete mpRefDev;
+    mpRefDev.disposeAndClear();
     delete mpUndoManager;
     delete mpIMEInfos;
     delete mpLocaleDataWrapper;

@@ -17,7 +17,7 @@ class Point;
   */
 class SwFrameControl
 {
-    SwEditWin*            m_pEditWin;
+    VclPtr<SwEditWin>     m_pEditWin;
     const SwFrm*          m_pFrm;
 
 public:

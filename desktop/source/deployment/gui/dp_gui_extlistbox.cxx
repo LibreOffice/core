@@ -201,7 +201,7 @@ void ExtensionBox_Impl::Init()
 {
     SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
 
-    m_pScrollBar = new ScrollBar( this, WB_VERT );
+    m_pScrollBar = VclPtr<ScrollBar>::Create( this, WB_VERT );
     m_pScrollBar->SetScrollHdl( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
     m_pScrollBar->EnableDrag();
 
@@ -239,6 +239,11 @@ void ExtensionBox_Impl::Init()
 
 ExtensionBox_Impl::~ExtensionBox_Impl()
 {
+    disposeOnce();
+}
+
+void ExtensionBox_Impl::dispose()
+{
     if ( ! m_bInDelete )
         DeleteRemoved();
 
@@ -248,22 +253,19 @@ ExtensionBox_Impl::~ExtensionBox_Impl()
 
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
     {
-        if ( (*iIndex)->m_pPublisher )
-        {
-            delete (*iIndex)->m_pPublisher;
-            (*iIndex)->m_pPublisher = NULL;
-        }
+        (*iIndex)->m_pPublisher.disposeAndClear();
         (*iIndex)->m_xPackage->removeEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
     }
 
     m_vEntries.clear();
 
-    delete m_pScrollBar;
+    m_pScrollBar.disposeAndClear();
 
     m_xRemoveListener.clear();
 
     delete m_pLocale;
     delete m_pCollator;
+    ::svt::IExtensionListBox::dispose();
 }
 
 
@@ -433,11 +435,7 @@ void ExtensionBox_Impl::DeleteRemoved()
 
         for ( ITER iIndex = m_vRemovedEntries.begin(); iIndex < m_vRemovedEntries.end(); ++iIndex )
         {
-            if ( (*iIndex)->m_pPublisher )
-            {
-                delete (*iIndex)->m_pPublisher;
-                (*iIndex)->m_pPublisher = NULL;
-            }
+            (*iIndex)->m_pPublisher.disposeAndClear();
         }
 
         m_vRemovedEntries.clear();
@@ -546,7 +544,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl& rEnt
     // Init publisher link here
     if ( !rEntry->m_pPublisher && !rEntry->m_sPublisher.isEmpty() )
     {
-        rEntry->m_pPublisher = new FixedHyperlink( this );
+        rEntry->m_pPublisher = VclPtr<FixedHyperlink>::Create( this );
         rEntry->m_pPublisher->SetBackground();
         rEntry->m_pPublisher->SetPaintTransparent( true );
         rEntry->m_pPublisher->SetURL( rEntry->m_sPublisherURL );

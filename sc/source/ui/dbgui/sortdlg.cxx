@@ -50,6 +50,19 @@ ScSortWarningDlg::ScSortWarningDlg(vcl::Window* pParent,
     aBtnCurSort->SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
 }
 
+ScSortWarningDlg::~ScSortWarningDlg()
+{
+    disposeOnce();
+}
+
+void ScSortWarningDlg::dispose()
+{
+    aFtText.clear();
+    aBtnExtSort.clear();
+    aBtnCurSort.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK( ScSortWarningDlg, BtnHdl, PushButton*, pBtn )
 {
     if ( pBtn == aBtnExtSort )

@@ -29,8 +29,11 @@ class BrowseBox;
 
 class SVT_DLLPUBLIC BrowserHeader: public HeaderBar
 {
-    BrowseBox*          _pBrowseBox;
+    VclPtr<BrowseBox>   _pBrowseBox;
 
+public:
+    virtual             ~BrowserHeader();
+    virtual void        dispose() SAL_OVERRIDE;
 protected:
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void        Select() SAL_OVERRIDE;

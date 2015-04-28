@@ -36,11 +36,12 @@ class EmptyPanel
 public:
     EmptyPanel (vcl::Window* pParent);
     virtual ~EmptyPanel();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Resize() SAL_OVERRIDE;
 
 private:
-    FixedText maMessageControl;
+    VclPtr<FixedText> maMessageControl;
 };
 
 } } // end of namespace ::svx::sidebar

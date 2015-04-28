@@ -27,7 +27,7 @@ namespace vcl { class Window; }
 class ScWaitCursorOff
 {
 private:
-    vcl::Window*                 pWin;
+    VclPtr<vcl::Window>     pWin;
     sal_uInt32              nWaiters;
 public:
                         ScWaitCursorOff( vcl::Window* pWin );

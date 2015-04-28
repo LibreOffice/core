@@ -83,7 +83,20 @@ SchAxisDlg::SchAxisDlg(vcl::Window* pWindow,
 
 SchAxisDlg::~SchAxisDlg()
 {
+    disposeOnce();
 }
+
+void SchAxisDlg::dispose()
+{
+    m_pCbPrimaryX.clear();
+    m_pCbPrimaryY.clear();
+    m_pCbPrimaryZ.clear();
+    m_pCbSecondaryX.clear();
+    m_pCbSecondaryY.clear();
+    m_pCbSecondaryZ.clear();
+    ModalDialog::dispose();
+}
+
 
 void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 {
@@ -97,10 +110,6 @@ void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 
 SchGridDlg::SchGridDlg( vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput )
                 : SchAxisDlg( pParent, rInput, false )//rInAttrs, b3D, bNet, bSecondaryX, bSecondaryY, false )
-{
-}
-
-SchGridDlg::~SchGridDlg()
 {
 }
 

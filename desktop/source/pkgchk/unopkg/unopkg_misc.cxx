@@ -472,10 +472,10 @@ Reference<XComponentContext> getUNO(
                 if ( ! InitVCL() )
                     throw RuntimeException( "Cannot initialize VCL!" );
                 {
-                    WarningBox warn(NULL, WB_OK | WB_DEF_OK, sMsg);
-                    warn.SetText(utl::ConfigManager::getProductName());
-                    warn.SetIcon(0);
-                    warn.Execute();
+                    ScopedVclPtrInstance< WarningBox > warn(nullptr, WB_OK | WB_DEF_OK, sMsg);
+                    warn->SetText(utl::ConfigManager::getProductName());
+                    warn->SetIcon(0);
+                    warn->Execute();
                 }
                 DeInitVCL();
             }

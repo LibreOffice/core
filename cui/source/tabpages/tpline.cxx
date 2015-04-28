@@ -230,12 +230,20 @@ void SvxLineTabPage::ShowSymbolControls(bool bOn)
 
 SvxLineTabPage::~SvxLineTabPage()
 {
+    disposeOnce();
+}
+
+void SvxLineTabPage::dispose()
+{
     // Symbols on a line (e.g. StarCharts), dtor new!
+    if (m_pSymbolMB)
+    {
+        delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
-    delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
-
-    if(pSymbolList)
-        delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
+        if(pSymbolList)
+            delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
+        m_pSymbolMB = NULL;
+    }
 
     for ( size_t i = 0, n = aGrfBrushItems.size(); i < n; ++i )
     {
@@ -243,7 +251,40 @@ SvxLineTabPage::~SvxLineTabPage()
         delete pInfo->pBrushItem;
         delete pInfo;
     }
+    aGrfBrushItems.clear();
+
+    m_pBoxColor.clear();
+    m_pLbLineStyle.clear();
+    m_pLbColor.clear();
+    m_pBoxWidth.clear();
+    m_pMtrLineWidth.clear();
+    m_pBoxTransparency.clear();
+    m_pMtrTransparent.clear();
+    m_pFlLineEnds.clear();
+    m_pBoxArrowStyles.clear();
+    m_pLbStartStyle.clear();
+    m_pBoxStart.clear();
+    m_pMtrStartWidth.clear();
+    m_pTsbCenterStart.clear();
+    m_pBoxEnd.clear();
+    m_pLbEndStyle.clear();
+    m_pMtrEndWidth.clear();
+    m_pTsbCenterEnd.clear();
+    m_pCbxSynchronize.clear();
+    m_pCtlPreview.clear();
+    m_pFLEdgeStyle.clear();
+    m_pGridEdgeCaps.clear();
+    m_pLBEdgeStyle.clear();
+    m_pLBCapStyle.clear();
+    m_pFlSymbol.clear();
+    m_pGridIconSize.clear();
+    m_pSymbolMB.clear();
+    m_pSymbolWidthMF.clear();
+    m_pSymbolHeightMF.clear();
+    m_pSymbolRatioCB.clear();
+    SvxTabPage::dispose();
 }
+
 void SvxLineTabPage::Construct()
 {
     // Color chart
@@ -319,8 +360,8 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
     if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && pSymbolList)
     {
-        VirtualDevice aVDev;
-        aVDev.SetMapMode(MapMode(MAP_100TH_MM));
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
+        pVDev->SetMapMode(MapMode(MAP_100TH_MM));
         boost::scoped_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
         // Page
@@ -329,7 +370,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         pModel->InsertPage( pPage, 0 );
         {
         // 3D View
-        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), &aVDev ));
+        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
 
@@ -1114,8 +1155,8 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
     else if(nSymType >= 0)
     {
-        VirtualDevice aVDev;
-        aVDev.SetMapMode(MapMode(MAP_100TH_MM));
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
+        pVDev->SetMapMode(MapMode(MAP_100TH_MM));
 
         boost::scoped_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
@@ -1123,7 +1164,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
         {
-        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), &aVDev ));
+        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
         SdrObject *pObj=NULL;
@@ -1488,10 +1529,10 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxLineTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxLineTabPage::Create( vcl::Window* pWindow,
+                                           const SfxItemSet* rAttrs )
 {
-    return new SvxLineTabPage( pWindow, *rAttrs );
+    return VclPtr<SvxLineTabPage>::Create( pWindow, *rAttrs );
 }
 
 

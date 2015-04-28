@@ -42,13 +42,13 @@ using namespace ::com::sun::star::beans;
 
 // class OTableBorderWindow
 OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB_BORDER)
-    ,m_aHorzSplitter( this )
+    ,m_aHorzSplitter( VclPtr<Splitter>::Create(this) )
 {
 
     ImplInitSettings( true, true, true );
     // Children erzeugen
-    m_pEditorCtrl   = new OTableEditorCtrl( this);
-    m_pFieldDescWin = new OTableFieldDescWin( this );
+    m_pEditorCtrl   = VclPtr<OTableEditorCtrl>::Create( this);
+    m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create( this );
 
     m_pFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
 
@@ -56,26 +56,25 @@ OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB
     m_pEditorCtrl->SetDescrWin(m_pFieldDescWin);
 
     // Splitter einrichten
-    m_aHorzSplitter.SetSplitHdl( LINK(this, OTableBorderWindow, SplitHdl) );
-    m_aHorzSplitter.Show();
+    m_aHorzSplitter->SetSplitHdl( LINK(this, OTableBorderWindow, SplitHdl) );
+    m_aHorzSplitter->Show();
 }
 
 OTableBorderWindow::~OTableBorderWindow()
+{
+    disposeOnce();
+}
+
+void OTableBorderWindow::dispose()
 {
     // Children zerstoeren
     //  ::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pEditorCtrl->Hide();
     m_pFieldDescWin->Hide();
-
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pEditorCtrl);
-        m_pEditorCtrl = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pFieldDescWin);
-        m_pFieldDescWin = NULL;
-    }
-
+    m_pEditorCtrl.disposeAndClear();
+    m_pFieldDescWin.disposeAndClear();
+    m_aHorzSplitter.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void OTableBorderWindow::Resize()
@@ -86,18 +85,18 @@ void OTableBorderWindow::Resize()
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
-    long nSplitPos      = m_aHorzSplitter.GetSplitPosPixel();
+    long nSplitPos      = m_aHorzSplitter->GetSplitPosPixel();
 
     // Verschiebebereich Splitter mittleres Drittel des Outputs
     long nDragPosY = nOutputHeight/3;
     long nDragSizeHeight = nOutputHeight/3;
-    m_aHorzSplitter.SetDragRectPixel( Rectangle(Point(0,nDragPosY), Size(nOutputWidth,nDragSizeHeight) ), this );
+    m_aHorzSplitter->SetDragRectPixel( Rectangle(Point(0,nDragPosY), Size(nOutputWidth,nDragSizeHeight) ), this );
     if( (nSplitPos < nDragPosY) || (nSplitPos > (nDragPosY+nDragSizeHeight)) )
         nSplitPos = nDragPosY+nDragSizeHeight-5;
 
     // Splitter setzen
-    m_aHorzSplitter.SetPosSizePixel( Point( 0, nSplitPos ), Size(nOutputWidth, nSplitterHeight));
-    m_aHorzSplitter.SetSplitPosPixel( nSplitPos );
+    m_aHorzSplitter->SetPosSizePixel( Point( 0, nSplitPos ), Size(nOutputWidth, nSplitterHeight));
+    m_aHorzSplitter->SetSplitPosPixel( nSplitPos );
 
     // Fenster setzen
     m_pEditorCtrl->SetPosSizePixel( Point(0, 0), Size(nOutputWidth , nSplitPos) );
@@ -108,9 +107,9 @@ void OTableBorderWindow::Resize()
 
 IMPL_LINK( OTableBorderWindow, SplitHdl, Splitter*, pSplit )
 {
-    if(pSplit == &m_aHorzSplitter)
+    if(pSplit == m_aHorzSplitter.get())
     {
-        m_aHorzSplitter.SetPosPixel( Point( m_aHorzSplitter.GetPosPixel().X(),m_aHorzSplitter.GetSplitPosPixel() ) );
+        m_aHorzSplitter->SetPosPixel( Point( m_aHorzSplitter->GetPosPixel().X(),m_aHorzSplitter->GetSplitPosPixel() ) );
         Resize();
     }
     return 0;
@@ -184,18 +183,20 @@ OTableDesignView::OTableDesignView( vcl::Window* pParent,
     {
     }
 
-    m_pWin = new OTableBorderWindow(this);
+    m_pWin = VclPtr<OTableBorderWindow>::Create(this);
     m_pWin->Show();
 }
 
 OTableDesignView::~OTableDesignView()
 {
-    m_pWin->Hide();
+    disposeOnce();
+}
 
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
-        m_pWin = NULL;
-    }
+void OTableDesignView::dispose()
+{
+    m_pWin->Hide();
+    m_pWin.disposeAndClear();
+    ODataView::dispose();
 }
 
 void OTableDesignView::initialize()

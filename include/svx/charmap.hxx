@@ -22,6 +22,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/vclptr.hxx>
+#include <boost/shared_ptr.hpp>
 #include <map>
 #include <memory>
 #include <svx/svxdllapi.h>
@@ -44,6 +46,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxShowCharSet : public Control
 public:
                     SvxShowCharSet( vcl::Window* pParent );
                     virtual ~SvxShowCharSet();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetFont( const vcl::Font& rFont );
 
@@ -71,7 +74,7 @@ public:
     static sal_uInt16           GetRowPos(sal_uInt16 _nPos);
     static sal_uInt16           GetColumnPos(sal_uInt16 _nPos);
 
-    ScrollBar&                  getScrollBar() { return aVscrollSB;}
+    ScrollBar&                  getScrollBar() { return *aVscrollSB.get();}
     void                        ReleaseAccessible();
     sal_Int32                   getMaxCharCount() const;
 
@@ -112,7 +115,7 @@ private:
     sal_Int32       nSelectedIndex;
 
     FontCharMapPtr  mpFontCharMap;
-    ScrollBar       aVscrollSB;
+    VclPtr<ScrollBar>  aVscrollSB;
 
 private:
     void            DrawChars_Impl( int n1, int n2);

@@ -98,6 +98,23 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     get<PushButton>("close")->GrabFocus();
 }
 
+AboutDialog::~AboutDialog()
+{
+    disposeOnce();
+}
+
+void AboutDialog::dispose()
+{
+    m_pVersion.clear();
+    m_pDescriptionText.clear();
+    m_pCopyrightText.clear();
+    m_pLogoImage.clear();
+    m_pLogoReplacement.clear();
+    m_pCreditsButton.clear();
+    m_pWebsiteButton.clear();
+    SfxModalDialog::dispose();
+}
+
 IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
 {
     OUString sURL = "";
@@ -126,9 +143,9 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        MessageDialog aErrorBox(NULL, msg);
-        aErrorBox.SetText( GetText() );
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
+        aErrorBox->SetText( GetText() );
+        aErrorBox->Execute();
     }
 
     return 1;

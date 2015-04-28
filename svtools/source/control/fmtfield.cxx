@@ -334,10 +334,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFormattedField(vcl::Wi
     return new FormattedField(pParent, nWinBits);
 }
 
-FormattedField::~FormattedField()
-{
-}
-
 void FormattedField::SetText(const OUString& rStr)
 {
 
@@ -1026,7 +1022,13 @@ void FormattedField::UseInputStringForFormatting( bool bUseInputStr /* = true */
 
 DoubleNumericField::~DoubleNumericField()
 {
+    disposeOnce();
+}
+
+void DoubleNumericField::dispose()
+{
     delete m_pNumberValidator;
+    FormattedField::dispose();
 }
 
 void DoubleNumericField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)

@@ -82,6 +82,19 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( vcl::Window* pParent ) :
     m_pLbType->SetSelectHdl( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
 }
 
+ScDataPilotDatabaseDlg::~ScDataPilotDatabaseDlg()
+{
+    disposeOnce();
+}
+
+void ScDataPilotDatabaseDlg::dispose()
+{
+    m_pLbDatabase.clear();
+    m_pCbObject.clear();
+    m_pLbType.clear();
+    ModalDialog::dispose();
+}
+
 void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
 {
     sal_uInt16 nSelect = m_pLbType->GetSelectEntryPos();

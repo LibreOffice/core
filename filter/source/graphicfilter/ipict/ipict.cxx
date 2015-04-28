@@ -146,7 +146,7 @@ class PictReader {
 private:
 
     SvStream    * pPict;             // The Pict file to read.
-    VirtualDevice * pVirDev;         // Here the drawing methos will be called.
+    VclPtr<VirtualDevice> pVirDev;         // Here the drawing methos will be called.
                                      // A recording into the GDIMetaFile will take place.
 
     sal_uLong     nOrigPos;          // Initial position in pPict.
@@ -1881,7 +1881,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     aHRes = aVRes = Fraction( 1, 1 );
 
-    pVirDev = new VirtualDevice();
+    pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
     rGDIMetaFile.Record(pVirDev);
 
@@ -1942,7 +1942,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     pVirDev->SetClipRegion();
     rGDIMetaFile.Stop();
-    delete pVirDev;
+    pVirDev.disposeAndClear();
 
     rGDIMetaFile.SetPrefMapMode( MapMode( MAP_INCH, Point(), aHRes, aVRes ) );
     rGDIMetaFile.SetPrefSize( aBoundingRect.GetSize() );

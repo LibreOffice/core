@@ -309,11 +309,28 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 OfaMiscTabPage::~OfaMiscTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void OfaMiscTabPage::dispose()
 {
-    return new OfaMiscTabPage( pParent, *rAttrSet );
+    m_pToolTipsCB.clear();
+    m_pExtHelpCB.clear();
+    m_pFileDlgROImage.clear();
+    m_pFileDlgCB.clear();
+    m_pPrintDlgCB.clear();
+    m_pDocStatusCB.clear();
+    m_pSaveAlwaysCB.clear();
+    m_pYearFrame.clear();
+    m_pYearValueField.clear();
+    m_pToYearFT.clear();
+    m_pCollectUsageInfo.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<OfaMiscTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
@@ -686,9 +703,35 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 OfaViewTabPage::~OfaViewTabPage()
 {
+    disposeOnce();
+}
+
+void OfaViewTabPage::dispose()
+{
     delete mpDrawinglayerOpt;
+    mpDrawinglayerOpt = NULL;
     delete pCanvasSettings;
+    pCanvasSettings = NULL;
     delete pAppearanceCfg;
+    pAppearanceCfg = NULL;
+    m_pWindowSizeMF.clear();
+    m_pIconSizeLB.clear();
+    m_pIconStyleLB.clear();
+    m_pFontAntiAliasing.clear();
+    m_pAAPointLimitLabel.clear();
+    m_pAAPointLimit.clear();
+    m_pMenuIconsLB.clear();
+    m_pFontShowCB.clear();
+    m_pFontHistoryCB.clear();
+    m_pUseHardwareAccell.clear();
+    m_pUseAntiAliase.clear();
+    m_pUseOpenGL.clear();
+    m_pForceOpenGL.clear();
+    m_pMousePosLB.clear();
+    m_pMouseMiddleLB.clear();
+    m_pSelectionCB.clear();
+    m_pSelectionMF.clear();
+    SfxTabPage::dispose();
 }
 
 #if defined( UNX )
@@ -714,9 +757,9 @@ IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
     return 0;
 }
 
-SfxTabPage* OfaViewTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaViewTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new OfaViewTabPage(pParent, *rAttrSet);
+    return VclPtr<OfaViewTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -1205,12 +1248,35 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
 
 OfaLanguagesTabPage::~OfaLanguagesTabPage()
 {
-    delete pLangConfig;
+    disposeOnce();
 }
 
-SfxTabPage* OfaLanguagesTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void OfaLanguagesTabPage::dispose()
 {
-    return new OfaLanguagesTabPage(pParent, *rAttrSet);
+    delete pLangConfig;
+    pLangConfig = NULL;
+    m_pUserInterfaceLB.clear();
+    m_pLocaleSettingFT.clear();
+    m_pLocaleSettingLB.clear();
+    m_pDecimalSeparatorCB.clear();
+    m_pCurrencyFT.clear();
+    m_pCurrencyLB.clear();
+    m_pDatePatternsFT.clear();
+    m_pDatePatternsED.clear();
+    m_pWesternLanguageLB.clear();
+    m_pWesternLanguageFT.clear();
+    m_pAsianLanguageLB.clear();
+    m_pComplexLanguageLB.clear();
+    m_pCurrentDocCB.clear();
+    m_pAsianSupportCB.clear();
+    m_pCTLSupportCB.clear();
+    m_pIgnoreLanguageChangeCB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaLanguagesTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<OfaLanguagesTabPage>::Create(pParent, *rAttrSet);
 }
 
 static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)
@@ -1290,8 +1356,8 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             xProp->setPropertyValue(sUserLocaleKey, makeAny(aLangString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             // display info
-            MessageDialog aBox(this, CUI_RES(RID_SVXSTR_LANGUAGE_RESTART), VCL_MESSAGE_INFO);
-            aBox.Execute();
+            ScopedVclPtrInstance< MessageDialog > aBox(this, CUI_RES(RID_SVXSTR_LANGUAGE_RESTART), VCL_MESSAGE_INFO);
+            aBox->Execute();
 
             // tell quickstarter to stop being a veto listener
 

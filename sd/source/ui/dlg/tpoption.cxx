@@ -99,10 +99,10 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     pCbxRotate->GetClickHdl().Call(0);
 }
 
-SfxTabPage* SdTpOptionsSnap::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SdTpOptionsSnap::Create( vcl::Window* pWindow,
+                                            const SfxItemSet* rAttrs )
 {
-    return new SdTpOptionsSnap( pWindow, *rAttrs );
+    return VclPtr<SdTpOptionsSnap>::Create( pWindow, *rAttrs );
 }
 
 /*************************************************************************
@@ -122,6 +122,16 @@ SdTpOptionsContents::SdTpOptionsContents( vcl::Window* pParent, const SfxItemSet
 
 SdTpOptionsContents::~SdTpOptionsContents()
 {
+    disposeOnce();
+}
+
+void SdTpOptionsContents::dispose()
+{
+    m_pCbxRuler.clear();
+    m_pCbxDragStripes.clear();
+    m_pCbxHandlesBezier.clear();
+    m_pCbxMoveOutline.clear();
+    SfxTabPage::dispose();
 }
 
 bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
@@ -165,10 +175,10 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_pCbxHandlesBezier->SaveValue();
 }
 
-SfxTabPage* SdTpOptionsContents::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SdTpOptionsContents::Create( vcl::Window* pWindow,
+                                                const SfxItemSet* rAttrs )
 {
-    return new SdTpOptionsContents( pWindow, *rAttrs );
+    return VclPtr<SdTpOptionsContents>::Create( pWindow, *rAttrs );
 }
 
 /*************************************************************************
@@ -276,6 +286,38 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
 
 SdTpOptionsMisc::~SdTpOptionsMisc()
 {
+    disposeOnce();
+}
+
+void SdTpOptionsMisc::dispose()
+{
+    m_pCbxQuickEdit.clear();
+    m_pCbxPickThrough.clear();
+    m_pNewDocumentFrame.clear();
+    m_pCbxStartWithTemplate.clear();
+    m_pCbxMasterPageCache.clear();
+    m_pCbxCopy.clear();
+    m_pCbxMarkedHitMovesAlways.clear();
+    m_pPresentationFrame.clear();
+    m_pLbMetric.clear();
+    m_pMtrFldTabstop.clear();
+    m_pCbxEnableSdremote.clear();
+    m_pCbxEnablePresenterScreen.clear();
+    m_pCbxUsePrinterMetrics.clear();
+    m_pCbxCompatibility.clear();
+    m_pScaleFrame.clear();
+    m_pCbScale.clear();
+    m_pNewDocLb.clear();
+    m_pFiInfo1.clear();
+    m_pMtrFldOriginalWidth.clear();
+    m_pWidthLb.clear();
+    m_pHeightLb.clear();
+    m_pFiInfo2.clear();
+    m_pMtrFldOriginalHeight.clear();
+    m_pCbxDistrot.clear();
+    m_pMtrFldInfo1.clear();
+    m_pMtrFldInfo2.clear();
+    SfxTabPage::dispose();
 }
 
 void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
@@ -331,10 +373,9 @@ SfxTabPage::sfxpg SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
             FillItemSet( pActiveSet );
         return LEAVE_PAGE;
     }
-    WarningBox aWarnBox( GetParent(), WB_YES_NO, SD_RESSTR( STR_WARN_SCALE_FAIL ) );
-    short nReturn = aWarnBox.Execute();
+    ScopedVclPtrInstance< WarningBox > aWarnBox( GetParent(), WB_YES_NO, SD_RESSTR( STR_WARN_SCALE_FAIL ) );
 
-    if( nReturn == RET_YES )
+    if( aWarnBox->Execute() == RET_YES )
         return KEEP_PAGE;
 
     if( pActiveSet )
@@ -488,10 +529,10 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     UpdateCompatibilityControls ();
 }
 
-SfxTabPage* SdTpOptionsMisc::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SdTpOptionsMisc::Create( vcl::Window* pWindow,
+                                            const SfxItemSet* rAttrs )
 {
-    return new SdTpOptionsMisc( pWindow, *rAttrs );
+    return VclPtr<SdTpOptionsMisc>::Create( pWindow, *rAttrs );
 }
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)

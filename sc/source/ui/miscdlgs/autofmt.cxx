@@ -58,7 +58,7 @@ ScAutoFmtPreview::ScAutoFmtPreview(vcl::Window* pParent)
     : Window(pParent)
     , pCurData(NULL)
     , aVD(*this)
-    , aScriptedText(aVD)
+    , aScriptedText(*aVD.get())
     , bFitWidth(false)
     , mbRTL(false)
     , aStrJan(ScResId(STR_JAN))
@@ -90,7 +90,13 @@ void ScAutoFmtPreview::Resize()
 
 ScAutoFmtPreview::~ScAutoFmtPreview()
 {
+    disposeOnce();
+}
+
+void ScAutoFmtPreview::dispose()
+{
     delete pNumFmt;
+    vcl::Window::dispose();
 }
 
 static void lcl_SetFontProperties(
@@ -376,11 +382,11 @@ void ScAutoFmtPreview::DrawBackground()
                 const SvxBrushItem* pItem = static_cast< const SvxBrushItem* >(
                     pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BACKGROUND ) );
 
-                aVD.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-                aVD.SetLineColor();
-                aVD.SetFillColor( pItem->GetColor() );
-                aVD.DrawRect( maArray.GetCellRect( nCol, nRow ) );
-                aVD.Pop();
+                aVD->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+                aVD->SetLineColor();
+                aVD->SetFillColor( pItem->GetColor() );
+                aVD->DrawRect( maArray.GetCellRect( nCol, nRow ) );
+                aVD->Pop();
             }
         }
     }
@@ -399,7 +405,7 @@ void ScAutoFmtPreview::PaintCells()
 
         // 3) border
         if ( pCurData->GetIncludeFrame() )
-            maArray.DrawArray( aVD );
+            maArray.DrawArray( *aVD.get() );
     }
 }
 
@@ -484,20 +490,20 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 
 void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {
-    sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
+    sal_uInt32 nOldDrawMode = aVD->GetDrawMode();
 
     Size aWndSize( GetSizePixel() );
-    vcl::Font aFont( aVD.GetFont() );
+    vcl::Font aFont( aVD->GetFont() );
     Color aBackCol( GetSettings().GetStyleSettings().GetWindowColor() );
     Point aTmpPoint;
     Rectangle aRect( aTmpPoint, aWndSize );
 
     aFont.SetTransparent( true );
-    aVD.SetFont( aFont );
-    aVD.SetLineColor();
-    aVD.SetFillColor( aBackCol );
-    aVD.SetOutputSize( aWndSize );
-    aVD.DrawRect( aRect );
+    aVD->SetFont( aFont );
+    aVD->SetLineColor();
+    aVD->SetFillColor( aBackCol );
+    aVD->SetOutputSize( aWndSize );
+    aVD->DrawRect( aRect );
 
     PaintCells();
     SetLineColor();
@@ -507,9 +513,9 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     Point aPos( (aWndSize.Width() - aPrvSize.Width()) / 2, (aWndSize.Height() - aPrvSize.Height()) / 2 );
     if (AllSettings::GetLayoutRTL())
        aPos.X() = -aPos.X();
-    DrawOutDev( aPos, aWndSize, Point(), aWndSize, aVD );
+    DrawOutDev( aPos, aWndSize, Point(), aWndSize, *aVD.get() );
 
-    aVD.SetDrawMode( nOldDrawMode );
+    aVD->SetDrawMode( nOldDrawMode );
 }
 
 void ScAutoFmtPreview::Paint( const Rectangle& rRect )

@@ -53,9 +53,16 @@ Layout::Layout (vcl::Window* pParent) :
     SetFont(aFont);
 }
 
-// virtual dtor
 Layout::~Layout()
-{ }
+{
+    disposeOnce();
+}
+
+void Layout::dispose()
+{
+    pChild.clear();
+    Window::dispose();
+}
 
 // removes a docking window
 void Layout::Remove (DockingWindow* pWin)
@@ -166,9 +173,9 @@ Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
     bVertical(eSide == Left || eSide == Right),
     bLower(eSide == Left || eSide == Top),
     nSize(0),
-    aSplitter(pParent, bVertical ? WB_HSCROLL : WB_VSCROLL)
+    aSplitter(VclPtr<Splitter>::Create(pParent, bVertical ? WB_HSCROLL : WB_VSCROLL))
 {
-    InitSplitter(aSplitter);
+    InitSplitter(*aSplitter.get());
 }
 
 
@@ -188,7 +195,7 @@ void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
     // splitter
     if (!vItems.empty())
     {
-        aItem.pSplit = boost::make_shared<Splitter>(&rLayout, bVertical ? WB_VSCROLL : WB_HSCROLL);
+        aItem.pSplit = VclPtr<Splitter>::Create(&rLayout, bVertical ? WB_VSCROLL : WB_HSCROLL);
         aItem.pSplit->SetSplitPosPixel(aItem.nStartPos - nSplitThickness);
         InitSplitter(*aItem.pSplit);
     }
@@ -267,19 +274,19 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
     // shown if any of the windows is docked
     if (!bEmpty)
     {
-        aSplitter.Show();
+        aSplitter->Show();
         // split position
-        aSplitter.SetSplitPosPixel((bLower ? nSize : nPos1) - nSplitThickness);
+        aSplitter->SetSplitPosPixel((bLower ? nSize : nPos1) - nSplitThickness);
         // the actual position and size
-        aSplitter.SetPosSizePixel(
-            MakePoint(nPos2, aSplitter.GetSplitPosPixel()),
+        aSplitter->SetPosSizePixel(
+            MakePoint(nPos2, aSplitter->GetSplitPosPixel()),
             MakeSize(nLength, nSplitThickness)
         );
         // dragging rectangle
-        aSplitter.SetDragRectPixel(aRect);
+        aSplitter->SetDragRectPixel(aRect);
     }
     else
-        aSplitter.Hide();
+        aSplitter->Hide();
 
     // positioning separator lines and windows
     bool bPrevDocking = false; // is the previous window docked?
@@ -350,7 +357,7 @@ IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter)
     // checking margins
     CheckMarginsFor(pSplitter);
     // changing stored sizes
-    if (pSplitter == &aSplitter)
+    if (pSplitter == aSplitter.get())
     {
         // nSize
         if (bLower)

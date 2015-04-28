@@ -55,6 +55,7 @@ class ComboBoxControl : public ComboBox
     public:
         ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener );
         virtual ~ComboBoxControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Select() SAL_OVERRIDE;
         virtual void DoubleClick() SAL_OVERRIDE;
@@ -76,7 +77,13 @@ ComboBoxControl::ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBo
 
 ComboBoxControl::~ComboBoxControl()
 {
+    disposeOnce();
+}
+
+void ComboBoxControl::dispose()
+{
     m_pComboBoxListener = 0;
+    ComboBox::dispose();
 }
 
 void ComboBoxControl::Select()
@@ -142,7 +149,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pComboBox( 0 )
 {
-    m_pComboBox = new ComboBoxControl( m_pToolbar, WB_DROPDOWN, this );
+    m_pComboBox = VclPtr<ComboBoxControl>::Create( m_pToolbar, WB_DROPDOWN, this );
     if ( nWidth == 0 )
         nWidth = 100;
 
@@ -164,11 +171,9 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
-    delete m_pComboBox;
+    m_pComboBox.disposeAndClear();
 
     ComplexToolbarController::dispose();
-
-    m_pComboBox = 0;
 }
 
 Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

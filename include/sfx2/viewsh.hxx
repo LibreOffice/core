@@ -37,6 +37,8 @@
 #include <tools/errcode.hxx>
 #include <vcl/jobset.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/vclptr.hxx>
+#include <sfx2/tabdlg.hxx>
 
 class SfxBaseController;
 class Size;
@@ -51,7 +53,6 @@ class SfxMedium;
 class SfxModule;
 class SfxViewFrame;
 class SfxItemPool;
-class SfxTabPage;
 class SfxFrameSetDescriptor;
 class Printer;
 class SfxPrinter;
@@ -145,7 +146,7 @@ friend class SfxPrinterController;
     struct SfxViewShell_Impl*   pImp;
     SfxViewFrame*               pFrame;
     SfxShell*                   pSubShell;
-    vcl::Window*                     pWindow;
+    VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
 
 protected:
@@ -233,7 +234,7 @@ public:
     virtual SfxPrinter*         GetPrinter( bool bCreate = false );
     virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual bool                HasPrintOptionsPage() const;
-    virtual SfxTabPage*         CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
+    virtual VclPtr<SfxTabPage>  CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
     static JobSetup             GetJobSetup();
     Printer*                    GetActivePrinter() const;
 
@@ -294,7 +295,7 @@ public:
     SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );
     SAL_DLLPRIVATE void DiscardClients_Impl();
 
-    SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( SfxPrinter *pNewPrinter );
+    SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter );
     SAL_DLLPRIVATE bool IsShowView_Impl() const;
 
     SAL_DLLPRIVATE bool HandleNotifyEvent_Impl( NotifyEvent& rEvent );

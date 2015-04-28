@@ -52,8 +52,8 @@ namespace bib
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  m_xGridWin;
 
             BibDataManager*         pDatMan;
-            BibToolBar*             pToolBar;
-            BibGridwin*             pGridWin;
+            VclPtr<BibToolBar>      pToolBar;
+            VclPtr<BibGridwin>      pGridWin;
 
             DECL_LINK( RecalcLayout_Impl, void* );
 
@@ -72,6 +72,7 @@ namespace bib
 
             BibBeamer(vcl::Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
             virtual ~BibBeamer();
+            virtual void dispose() SAL_OVERRIDE;
 
             void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
 

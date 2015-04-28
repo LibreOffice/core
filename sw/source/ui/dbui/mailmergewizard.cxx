@@ -101,19 +101,19 @@ SwMailMergeWizard::~SwMailMergeWizard()
 {
 }
 
-OWizardPage*    SwMailMergeWizard::createPage(WizardState _nState)
+VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
 {
-    OWizardPage* pRet = 0;
+    VclPtr<OWizardPage> pRet;
     switch(_nState)
     {
-        case MM_DOCUMENTSELECTPAGE : pRet = new SwMailMergeDocSelectPage(this);     break;
-        case MM_OUTPUTTYPETPAGE : pRet = new SwMailMergeOutputTypePage(this);       break;
-        case MM_ADDRESSBLOCKPAGE  : pRet = new SwMailMergeAddressBlockPage(this);     break;
-        case MM_GREETINGSPAGE     : pRet = new SwMailMergeGreetingsPage(this);      break;
-        case MM_LAYOUTPAGE        : pRet = new SwMailMergeLayoutPage(this);     break;
-        case MM_PREPAREMERGEPAGE  : pRet = new SwMailMergePrepareMergePage(this);   break;
-        case MM_MERGEPAGE         : pRet = new SwMailMergeMergePage(this);          break;
-        case MM_OUTPUTPAGE       :  pRet = new SwMailMergeOutputPage(this);         break;
+        case MM_DOCUMENTSELECTPAGE : pRet = VclPtr<SwMailMergeDocSelectPage>::Create(this);     break;
+        case MM_OUTPUTTYPETPAGE : pRet = VclPtr<SwMailMergeOutputTypePage>::Create(this);       break;
+        case MM_ADDRESSBLOCKPAGE  : pRet = VclPtr<SwMailMergeAddressBlockPage>::Create(this);     break;
+        case MM_GREETINGSPAGE     : pRet = VclPtr<SwMailMergeGreetingsPage>::Create(this);      break;
+        case MM_LAYOUTPAGE        : pRet = VclPtr<SwMailMergeLayoutPage>::Create(this);     break;
+        case MM_PREPAREMERGEPAGE  : pRet = VclPtr<SwMailMergePrepareMergePage>::Create(this);   break;
+        case MM_MERGEPAGE         : pRet = VclPtr<SwMailMergeMergePage>::Create(this);          break;
+        case MM_OUTPUTPAGE       :  pRet = VclPtr<SwMailMergeOutputPage>::Create(this);         break;
     }
     OSL_ENSURE(pRet, "no page created in ::createPage");
     return pRet;

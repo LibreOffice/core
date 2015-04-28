@@ -78,6 +78,14 @@ ScHFPage::ScHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSe
 
 ScHFPage::~ScHFPage()
 {
+    disposeOnce();
+}
+
+void ScHFPage::dispose()
+{
+    m_pBtnEdit.clear();
+    pStyleDlg.clear();
+    SvxHFPage::dispose();
 }
 
 void ScHFPage::Reset( const SfxItemSet* rSet )
@@ -193,7 +201,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
     else
     {
         OUString  aText;
-        boost::scoped_ptr<SfxSingleTabDialog> pDlg(new SfxSingleTabDialog(this, aDataSet));
+        VclPtrInstance< SfxSingleTabDialog > pDlg(this, aDataSet);
         const int nSettingsId = 42;
         bool bRightPage =   m_pCntSharedBox->IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
@@ -239,9 +247,9 @@ ScHeaderPage::ScHeaderPage( vcl::Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-SfxTabPage* ScHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
 {
-    return ( new ScHeaderPage( pParent, *rCoreSet ) );
+    return VclPtr<SfxTabPage>( new ScHeaderPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE );
 }
 
 const sal_uInt16* ScHeaderPage::GetRanges()
@@ -256,9 +264,9 @@ ScFooterPage::ScFooterPage( vcl::Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-SfxTabPage* ScFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
 {
-    return ( new ScFooterPage( pParent, *rCoreSet ) );
+    return VclPtr<SfxTabPage>( new ScFooterPage( pParent, *rCoreSet ), SAL_NO_ACQUIRE );
 }
 
 const sal_uInt16* ScFooterPage::GetRanges()

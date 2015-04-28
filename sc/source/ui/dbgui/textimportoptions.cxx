@@ -38,7 +38,19 @@ ScTextImportOptionsDlg::ScTextImportOptionsDlg(vcl::Window* pParent)
 
 ScTextImportOptionsDlg::~ScTextImportOptionsDlg()
 {
+    disposeOnce();
 }
+
+void ScTextImportOptionsDlg::dispose()
+{
+    m_pBtnOk.clear();
+    m_pRbAutomatic.clear();
+    m_pRbCustom.clear();
+    m_pLbCustomLang.clear();
+    m_pBtnConvertDate.clear();
+    ModalDialog::dispose();
+}
+
 
 short ScTextImportOptionsDlg::Execute()
 {

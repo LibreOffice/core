@@ -54,22 +54,32 @@ ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :
 
 ScRetypePassDlg::~ScRetypePassDlg()
 {
+    disposeOnce();
+}
+
+void ScRetypePassDlg::dispose()
+{
     DeleteSheets();
+    mpBtnOk.clear();
+    mpTextDocStatus.clear();
+    mpBtnRetypeDoc.clear();
+    mpSheetsBox.clear();
+    ModalDialog::dispose();
 }
 
 void ScRetypePassDlg::DeleteSheets()
 {
-    for(std::vector<VclHBox*>::iterator it = maSheets.begin(); it != maSheets.end(); ++it)
+    for(auto it = maSheets.begin(); it != maSheets.end(); ++it)
     {
-        vcl::Window *pWindow = (*it);
+        VclPtr<vcl::Window> pWindow = (*it);
         vcl::Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
         while (pChild)
         {
-            vcl::Window *pOldChild = pChild;
+            VclPtr<vcl::Window> pOldChild = pChild;
             pChild = pChild->GetWindow(WINDOW_NEXT);
-            delete pOldChild;
+            pOldChild.disposeAndClear();
         }
-        delete pWindow;
+        pWindow.disposeAndClear();
     }
 }
 
@@ -100,17 +110,17 @@ void ScRetypePassDlg::SetDataFromDocument(const ScDocument& rDoc)
             aTabItem.mpProtect.reset(new ScTableProtection(*pTabProtect));
 
         maTableItems.push_back(aTabItem);
-        VclHBox* pSheet = new VclHBox(mpSheetsBox, false, 12);
+        VclPtr<VclHBox> pSheet = VclPtr<VclHBox>::Create(mpSheetsBox, false, 12);
         pSheet->Show(true);
 
-        FixedText* pFtSheetName = new FixedText(pSheet);
+        VclPtr<FixedText> pFtSheetName = VclPtr<FixedText>::Create(pSheet);
         pFtSheetName->Show(true);
         pFtSheetName->SetStyle(WB_VCENTER);
-        FixedText* pFtSheetStatus = new FixedText(pSheet);
+        FixedText* pFtSheetStatus = VclPtr<FixedText>::Create(pSheet);
         pFtSheetStatus->Show(true);
         pFtSheetStatus->SetStyle(WB_VCENTER);
 
-        PushButton* pBtnSheet = new PushButton(pSheet);
+        VclPtr<PushButton> pBtnSheet = VclPtr<PushButton>::Create((vcl::Window*)pSheet);
         pBtnSheet->SetText(ScResId(STR_RETYPE));
         pBtnSheet->SetClickHdl(LINK(this, ScRetypePassDlg, RetypeBtnHdl));
         pBtnSheet->Disable();
@@ -283,11 +293,11 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         // What the ... !?
         return 0;
 
-    ScRetypePassInputDlg aDlg(this, pProtected);
-    if (aDlg.Execute() == RET_OK)
+    ScopedVclPtrInstance< ScRetypePassInputDlg > aDlg(this, pProtected);
+    if (aDlg->Execute() == RET_OK)
     {
         // OK is pressed.  Update the protected item.
-        if (aDlg.IsRemovePassword())
+        if (aDlg->IsRemovePassword())
         {
             // Remove password from this item.
             pProtected->setPassword(OUString());
@@ -295,7 +305,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         else
         {
             // Set a new password.
-            OUString aNewPass = aDlg.GetNewPassword();
+            OUString aNewPass = aDlg->GetNewPassword();
             pProtected->setPassword(aNewPass);
         }
 
@@ -323,6 +333,19 @@ ScRetypePassInputDlg::ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProte
 
 ScRetypePassInputDlg::~ScRetypePassInputDlg()
 {
+    disposeOnce();
+}
+
+void ScRetypePassInputDlg::dispose()
+{
+    m_pBtnOk.clear();
+    m_pBtnRetypePassword.clear();
+    m_pPasswordGrid.clear();
+    m_pPassword1Edit.clear();
+    m_pPassword2Edit.clear();
+    m_pBtnMatchOldPass.clear();
+    m_pBtnRemovePassword.clear();
+    ModalDialog::dispose();
 }
 
 short ScRetypePassInputDlg::Execute()

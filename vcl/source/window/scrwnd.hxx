@@ -70,7 +70,8 @@ protected:
 public:
 
                         ImplWheelWindow( vcl::Window* pParent );
-                        virtual ~ImplWheelWindow();
+    virtual             ~ImplWheelWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                ImplStop();
     void                ImplSetWheelMode( sal_uLong nWheelMode );

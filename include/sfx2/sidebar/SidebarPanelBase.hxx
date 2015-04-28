@@ -33,6 +33,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/function.hpp>
+#include <vcl/vclptr.hxx>
 
 
 namespace vcl { class Window; }
@@ -111,7 +112,7 @@ protected:
         throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    vcl::Window* mpControl;
+    VclPtr<vcl::Window> mpControl;
     const ::rtl::OUString msResourceURL;
     const css::ui::LayoutSize maLayoutSize;
 };

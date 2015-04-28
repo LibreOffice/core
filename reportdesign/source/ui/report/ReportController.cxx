@@ -339,7 +339,6 @@ void OReportController::disposing()
     {
         SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
         aDlgOpt.SetWindowState(OStringToOUString(m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
-        ::std::unique_ptr<FloatingWindow> aTemp(m_pGroupsFloater);
         m_pGroupsFloater = NULL;
     }
 
@@ -362,7 +361,7 @@ void OReportController::disposing()
     {
         try
         {
-            ::boost::shared_ptr<OSectionWindow> pSectionWindow;
+            OSectionWindow* pSectionWindow = NULL;
             if ( getDesignView() )
                 pSectionWindow = getDesignView()->getMarkedSection();
             if ( pSectionWindow )
@@ -583,7 +582,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isEditable() && getDesignView()->HasSelection() && !getDesignView()->isHandleEvent(_nId);
             if ( aReturn.bEnabled )
             {
-                ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
+                OSectionWindow* pSectionWindow = getDesignView()->getMarkedSection();
                 if ( pSectionWindow )
                     aReturn.bEnabled = !pSectionWindow->getReportSection().isUiActive();
             }
@@ -1135,7 +1134,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_TERMINATE_INPLACEACTIVATION:
             {
-                ::boost::shared_ptr<OSectionWindow> pSection = getDesignView()->getMarkedSection();
+                OSectionWindow* pSection = getDesignView()->getMarkedSection();
                 if ( pSection )
                     pSection->getReportSection().deactivateOle();
             }
@@ -1568,8 +1567,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 uno::Reference< report::XFormattedField> xFormattedField(getDesignView()->getCurrentControlModel(),uno::UNO_QUERY);
                 if ( xFormattedField.is() )
                 {
-                    ConditionalFormattingDialog aDlg( getView(), xFormattedField.get(), *this );
-                    aDlg.Execute();
+                    ScopedVclPtrInstance< ConditionalFormattingDialog > aDlg( getView(), xFormattedField.get(), *this );
+                    aDlg->Execute();
                 }
             }
             break;
@@ -1578,8 +1577,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    ODateTimeDialog aDlg(getView(),getDesignView()->getCurrentSection(),this);
-                    aDlg.Execute();
+                    ScopedVclPtrInstance< ODateTimeDialog > aDlg(getView(),getDesignView()->getCurrentSection(),this);
+                    aDlg->Execute();
                 }
                 else
                     createDateTime(aArgs);
@@ -1590,8 +1589,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    OPageNumberDialog aDlg(getView(),m_xReportDefinition,this);
-                    aDlg.Execute();
+                    ScopedVclPtrInstance< OPageNumberDialog > aDlg(getView(),m_xReportDefinition,this);
+                    aDlg->Execute();
                 }
                 else
                     createPageNumber(aArgs);
@@ -1783,9 +1782,9 @@ void OReportController::doOpenHelpAgent()
 
 bool OReportController::Construct(vcl::Window* pParent)
 {
-    ODesignView* pMyOwnView = new ODesignView( pParent, m_xContext, *this );
+    VclPtrInstance<ODesignView> pMyOwnView( pParent, m_xContext, *this );
     StartListening( *pMyOwnView );
-    setView( *pMyOwnView );
+    setView( pMyOwnView );
 
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
@@ -2481,15 +2480,16 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         }
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(getView(), pDescriptor.get(),_xSection.is()
-                ? OUString("BackgroundDialog")
-                : OUString("PageDialog"));
-            if (RET_OK == aDlg.Execute())
+            ScopedVclPtrInstance<ORptPageDialog> aDlg(
+                getView(), pDescriptor.get(),_xSection.is()
+                           ? OUString("BackgroundDialog")
+                           : OUString("PageDialog"));
+            if (RET_OK == aDlg->Execute())
             {
 
                 // ItemSet->UNO
                 // UNO-properties
-                const SfxItemSet* pSet = aDlg.GetOutputItemSet();
+                const SfxItemSet* pSet = aDlg->GetOutputItemSet();
                 if ( _xSection.is() )
                 {
                     const SfxPoolItem* pItem;
@@ -2578,7 +2578,7 @@ void OReportController::openSortingAndGroupingDialog()
         return;
     if ( !m_pGroupsFloater )
     {
-        m_pGroupsFloater = new OGroupsSortingDialog(getView(),!isEditable(),this);
+        m_pGroupsFloater = VclPtr<OGroupsSortingDialog>::Create(getView(),!isEditable(),this);
         SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
         if ( aDlgOpt.Exists() )
             m_pGroupsFloater->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
@@ -2791,8 +2791,8 @@ uno::Any SAL_CALL OReportController::getViewData() throw( uno::RuntimeException,
             aViewData.put( "CollapsedSections", aCollapsedSections );
         }
 
-        ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
-        if ( pSectionWindow.get() )
+        OSectionWindow* pSectionWindow = getDesignView()->getMarkedSection();
+        if ( pSectionWindow )
         {
             aViewData.put( "MarkedSection", (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNum() );
         }
@@ -3159,7 +3159,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
 {
     SequenceAsHashMap aMap(_aArgs);
     getDesignView()->setMarked(_xSection, true);
-    ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
+    OSectionWindow* pSectionWindow = getDesignView()->getMarkedSection();
     if ( !pSectionWindow )
         return;
 
@@ -3337,7 +3337,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     getDesignView()->unmarkAllObjects(NULL);
 
     // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
-    ::boost::shared_ptr<OSectionWindow> pSectionWindow[2];
+    OSectionWindow* pSectionWindow[2];
     pSectionWindow[0] = getDesignView()->getMarkedSection();
 
     if ( !pSectionWindow[0] )
@@ -3651,8 +3651,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 OSectionView* OReportController::getCurrentSectionView() const
 {
     OSectionView* pSectionView = NULL;
-    ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
-    if ( pSectionWindow.get() )
+    OSectionWindow* pSectionWindow = getDesignView()->getMarkedSection();
+    if ( pSectionWindow )
         pSectionView = &pSectionWindow->getReportSection().getSectionView();
     return pSectionView;
 }
@@ -3966,7 +3966,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
 
 void OReportController::collapseSection(const bool _bCollapse)
 {
-    ::boost::shared_ptr<OSectionWindow> pSection = getDesignView()->getMarkedSection();
+    OSectionWindow *pSection = getDesignView()->getMarkedSection();
     if ( pSection )
     {
         pSection->setCollapsed(_bCollapse);
@@ -3975,10 +3975,10 @@ void OReportController::collapseSection(const bool _bCollapse)
 
 void OReportController::markSection(const bool _bNext)
 {
-    ::boost::shared_ptr<OSectionWindow> pSection = getDesignView()->getMarkedSection();
+    OSectionWindow *pSection = getDesignView()->getMarkedSection();
     if ( pSection )
     {
-        ::boost::shared_ptr<OSectionWindow> pPrevSection = getDesignView()->getMarkedSection(_bNext ? POST : PREVIOUS);
+        OSectionWindow *pPrevSection = getDesignView()->getMarkedSection(_bNext ? POST : PREVIOUS);
         if ( pPrevSection != pSection && pPrevSection )
             select(uno::makeAny(pPrevSection->getReportSection().getSection()));
         else
@@ -4219,16 +4219,15 @@ void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomSh
 }
 
 
-::boost::shared_ptr<OSectionWindow> OReportController::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+OSectionWindow* OReportController::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
 {
     if ( getDesignView() )
     {
-        return  getDesignView()->getSectionWindow(_xSection);
+        return getDesignView()->getSectionWindow(_xSection);
     }
 
     // throw NullPointerException?
-    ::boost::shared_ptr<OSectionWindow> pEmpty;
-    return pEmpty;
+    return NULL;
 }
 
 

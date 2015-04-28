@@ -25,7 +25,7 @@ namespace vclcanvas
 {
     BackBuffer::BackBuffer( const OutputDevice& rRefDevice,
                             bool                bMonochromeBuffer ) :
-        maVDev( new VirtualDevice( rRefDevice,
+        maVDev( VclPtr<VirtualDevice>::Create( rRefDevice,
                                    sal_uInt16(bMonochromeBuffer) ) )
     {
         if( !bMonochromeBuffer )
@@ -43,14 +43,20 @@ namespace vclcanvas
         }
     }
 
+    BackBuffer::~BackBuffer()
+    {
+        SolarMutexGuard aGuard;
+        maVDev.disposeAndClear();
+    }
+
     OutputDevice& BackBuffer::getOutDev()
     {
-        return maVDev.get();
+        return *maVDev.get();
     }
 
     const OutputDevice& BackBuffer::getOutDev() const
     {
-        return maVDev.get();
+        return *maVDev.get();
     }
 
     void BackBuffer::setSize( const ::Size& rNewSize )

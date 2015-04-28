@@ -53,6 +53,18 @@ ScSolverProgressDialog::ScSolverProgressDialog(vcl::Window* pParent)
     get(m_pFtTime, "progress");
 }
 
+ScSolverProgressDialog::~ScSolverProgressDialog()
+{
+    disposeOnce();
+}
+
+void ScSolverProgressDialog::dispose()
+{
+    m_pFtTime.clear();
+    ModelessDialog::dispose();
+}
+
+
 void ScSolverProgressDialog::HideTimeLimit()
 {
     m_pFtTime->Hide();
@@ -72,6 +84,17 @@ ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( vcl::Window* pParent, const 
     m_pFtErrorText->SetText(rErrorText);
 }
 
+ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
+{
+    disposeOnce();
+}
+
+void ScSolverNoSolutionDialog::dispose()
+{
+    m_pFtErrorText.clear();
+    ModalDialog::dispose();
+}
+
 ScSolverSuccessDialog::ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution )
     : ModalDialog(pParent, "SolverSuccessDialog", "modules/scalc/ui/solversuccessdialog.ui")
 {
@@ -82,6 +105,19 @@ ScSolverSuccessDialog::ScSolverSuccessDialog( vcl::Window* pParent, const OUStri
     m_pBtnCancel->SetClickHdl(LINK(this, ScSolverSuccessDialog, ClickHdl));
     OUString aMessage = m_pFtResult->GetText() + " " + rSolution;
     m_pFtResult->SetText(aMessage);
+}
+
+ScSolverSuccessDialog::~ScSolverSuccessDialog()
+{
+    disposeOnce();
+}
+
+void ScSolverSuccessDialog::dispose()
+{
+    m_pFtResult.clear();
+    m_pBtnOk.clear();
+    m_pBtnCancel.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK( ScSolverSuccessDialog, ClickHdl, PushButton*, pBtn )
@@ -101,7 +137,7 @@ ScCursorRefEdit::ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel )
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCursorRefEdit(vcl::Window *pParent,
     VclBuilder::stringmap &)
 {
-    return new ScCursorRefEdit(pParent, NULL);
+    return new ScCursorRefEdit(pParent, nullptr);
 }
 
 void ScCursorRefEdit::SetCursorLinks( const Link& rUp, const Link& rDown )
@@ -267,6 +303,63 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Windo
 
 ScOptSolverDlg::~ScOptSolverDlg()
 {
+    disposeOnce();
+}
+
+void ScOptSolverDlg::dispose()
+{
+    m_pFtObjectiveCell.clear();
+    m_pEdObjectiveCell.clear();
+    m_pRBObjectiveCell.clear();
+    m_pRbMax.clear();
+    m_pRbMin.clear();
+    m_pRbValue.clear();
+    m_pEdTargetValue.clear();
+    m_pRBTargetValue.clear();
+    m_pFtVariableCells.clear();
+    m_pEdVariableCells.clear();
+    m_pRBVariableCells.clear();
+    m_pFtCellRef.clear();
+    m_pEdLeft1.clear();
+    m_pRBLeft1.clear();
+    m_pFtOperator.clear();
+    m_pLbOp1.clear();
+    m_pFtConstraint.clear();
+    m_pEdRight1.clear();
+    m_pRBRight1.clear();
+    m_pBtnDel1.clear();
+    m_pEdLeft2.clear();
+    m_pRBLeft2.clear();
+    m_pLbOp2.clear();
+    m_pEdRight2.clear();
+    m_pRBRight2.clear();
+    m_pBtnDel2.clear();
+    m_pEdLeft3.clear();
+    m_pRBLeft3.clear();
+    m_pLbOp3.clear();
+    m_pEdRight3.clear();
+    m_pRBRight3.clear();
+    m_pBtnDel3.clear();
+    m_pEdLeft4.clear();
+    m_pRBLeft4.clear();
+    m_pLbOp4.clear();
+    m_pEdRight4.clear();
+    m_pRBRight4.clear();
+    m_pBtnDel4.clear();
+    m_pScrollBar.clear();
+    m_pBtnOpt.clear();
+    m_pBtnCancel.clear();
+    m_pBtnSolve.clear();
+    mpEdActive.clear();
+    for (auto p : mpLeftButton)
+        p.clear();
+    for (auto p : mpRightButton)
+        p.clear();
+    for (auto p : mpOperator)
+        p.clear();
+    for (auto p : mpDelButton)
+        p.clear();
+    ScAnyRefDlg::dispose();
 }
 
 void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
@@ -506,7 +599,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 bool ScOptSolverDlg::IsRefInputMode() const
 {
-    return mpEdActive != NULL;
+    return mpEdActive != nullptr;
 }
 
 // Handler:
@@ -543,8 +636,8 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
     else if ( pBtn == m_pBtnOpt )
     {
         //! move options dialog to UI lib?
-        boost::scoped_ptr<ScSolverOptionsDialog> pOptDlg(
-            new ScSolverOptionsDialog( this, maImplNames, maDescriptions, maEngine, maProperties ));
+        ScopedVclPtr<ScSolverOptionsDialog> pOptDlg(
+            VclPtr<ScSolverOptionsDialog>::Create( this, maImplNames, maDescriptions, maEngine, maProperties ));
         if ( pOptDlg->Execute() == RET_OK )
         {
             maEngine = pOptDlg->GetEngine();
@@ -569,11 +662,11 @@ IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         if( pCtrl == mpLeftEdit[nRow] || pCtrl == mpLeftButton[nRow] )
-            pEdit = mpEdActive = mpLeftEdit[nRow];
+            pEdit = mpEdActive = mpLeftEdit[nRow].get();
         else if( pCtrl == mpRightEdit[nRow] || pCtrl == mpRightButton[nRow] )
-            pEdit = mpEdActive = mpRightEdit[nRow];
+            pEdit = mpEdActive = mpRightEdit[nRow].get();
         else if( pCtrl == mpOperator[nRow] )    // focus on "operator" list box
-            mpEdActive = mpRightEdit[nRow];     // use right edit for ref input, but don't change selection
+            mpEdActive = mpRightEdit[nRow].get();     // use right edit for ref input, but don't change selection
     }
     if( pCtrl == m_pRbValue )                   // focus on "Value of" radio button
         mpEdActive = m_pEdTargetValue;          // use value edit for ref input, but don't change selection
@@ -609,7 +702,7 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
                     // If the button is disabled, focus would normally move to the next control,
                     // (left edit of the next row). Move it to left edit of this row instead.
 
-                    mpEdActive = mpLeftEdit[nRow];
+                    mpEdActive = mpLeftEdit[nRow].get();
                     mpEdActive->GrabFocus();
                 }
             }
@@ -768,15 +861,15 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 {
     // show progress dialog
 
-    ScSolverProgressDialog aProgress( this );
+    ScopedVclPtrInstance< ScSolverProgressDialog > aProgress( this );
     sal_Int32 nTimeout = 0;
     if ( FindTimeout( nTimeout ) )
-        aProgress.SetTimeLimit( nTimeout );
+        aProgress->SetTimeLimit( nTimeout );
     else
-        aProgress.HideTimeLimit();
-    aProgress.Show();
-    aProgress.Update();
-    aProgress.Sync();
+        aProgress->HideTimeLimit();
+    aProgress->Show();
+    aProgress->Update();
+    aProgress->Sync();
     // try to make sure the progress dialog is painted before continuing
     Application::Reschedule(true);
 
@@ -967,7 +1060,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     xSolver->solve();
     bool bSuccess = xSolver->getSuccess();
 
-    aProgress.Hide();
+    aProgress->Hide();
     bool bClose = false;
     bool bRestore = true;   // restore old values unless a solution is accepted
     if ( bSuccess )
@@ -993,8 +1086,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             static_cast<SCCOL>(aObjective.Column), static_cast<SCROW>(aObjective.Row),
             static_cast<SCTAB>(aObjective.Sheet));
 
-        ScSolverSuccessDialog aDialog( this, aResultStr );
-        if ( aDialog.Execute() == RET_OK )
+        ScopedVclPtrInstance< ScSolverSuccessDialog > aDialog( this, aResultStr );
+        if ( aDialog->Execute() == RET_OK )
         {
             // keep results and close dialog
             bRestore = false;
@@ -1007,8 +1100,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
         if ( xDesc.is() )
             aError = xDesc->getStatusDescription();         // error description from component
-        ScSolverNoSolutionDialog aDialog( this, aError );
-        aDialog.Execute();
+        ScopedVclPtrInstance< ScSolverNoSolutionDialog > aDialog( this, aError );
+        aDialog->Execute();
     }
 
     if ( bRestore )         // restore old values

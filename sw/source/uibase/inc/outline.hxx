@@ -58,7 +58,7 @@ class SwOutlineTabDialog : public SfxTabDialog
 
     bool                bModified : 1;
 
-    protected:
+protected:
     DECL_LINK(CancelHdl, void *);
     DECL_LINK( FormHdl, Button * );
     DECL_LINK( MenuSelectHdl, Menu * );
@@ -66,33 +66,34 @@ class SwOutlineTabDialog : public SfxTabDialog
         virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;
         virtual short   Ok() SAL_OVERRIDE;
 
-    public:
+public:
         SwOutlineTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
         virtual ~SwOutlineTabDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     SwNumRule*          GetNumRule() {return pNumRule;}
-    sal_uInt16              GetLevel(const OUString &rFmtName) const;
+    sal_uInt16          GetLevel(const OUString &rFmtName) const;
     OUString*           GetCollNames() {return aCollNames;}
 
-    static sal_uInt16       GetActNumLevel() {return nNumLevel;}
+    static sal_uInt16   GetActNumLevel() {return nNumLevel;}
     static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}
 };
 
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
-    ListBox*        m_pLevelLB;
+    VclPtr<ListBox>        m_pLevelLB;
 
-    ListBox*        m_pCollBox;
-    SwNumberingTypeListBox* m_pNumberBox;
-    ListBox*        m_pCharFmtLB;
-    FixedText*      m_pAllLevelFT;
-    NumericField*   m_pAllLevelNF;
-    Edit*           m_pPrefixED;
-    Edit*           m_pSuffixED;
-    NumericField*   m_pStartEdit;
-    NumberingPreview* m_pPreviewWIN;
+    VclPtr<ListBox>        m_pCollBox;
+    VclPtr<SwNumberingTypeListBox> m_pNumberBox;
+    VclPtr<ListBox>        m_pCharFmtLB;
+    VclPtr<FixedText>      m_pAllLevelFT;
+    VclPtr<NumericField>   m_pAllLevelNF;
+    VclPtr<Edit>           m_pPrefixED;
+    VclPtr<Edit>           m_pSuffixED;
+    VclPtr<NumericField>   m_pStartEdit;
+    VclPtr<NumberingPreview> m_pPreviewWIN;
 
     OUString            aNoFmtName;
     OUString            aSaveCollNames[MAXLEVEL];
@@ -121,6 +122,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 public:
     SwOutlineSettingsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwOutlineSettingsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetWrtShell(SwWrtShell* pShell);
 
@@ -129,8 +131,8 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    static SfxTabPage*  Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+                                       const SfxItemSet* rAttrSet);
 };
 
 #endif

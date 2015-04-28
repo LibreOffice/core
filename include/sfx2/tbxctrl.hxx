@@ -151,8 +151,9 @@ public:
                                             vcl::Window* pParentWindow,
                                             WinBits nBits );
                             virtual ~SfxPopupWindow();
+    virtual void            dispose() SAL_OVERRIDE;
 
-    virtual SfxPopupWindow* Clone() const;
+    virtual VclPtr<SfxPopupWindow> Clone() const;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void                    StartCascading();
@@ -200,9 +201,9 @@ protected:
     virtual void               DoubleClick();
     virtual void               Click();
     virtual SfxPopupWindowType GetPopupWindowType() const;
-    virtual SfxPopupWindow*    CreatePopupWindow();
+    virtual VclPtr<SfxPopupWindow>    CreatePopupWindow();
     virtual SfxPopupWindow*    CreatePopupWindowCascading();
-    virtual vcl::Window*            CreateItemWindow( vcl::Window *pParent );
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent );
 
     // Must be called by subclass to set a new popup window instance
     void                       SetPopupWindow( SfxPopupWindow* pWindow );
@@ -305,7 +306,7 @@ class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
-    virtual vcl::Window*         CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
     virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
 };
 
@@ -329,7 +330,7 @@ public:
     virtual ~SfxRecentFilesToolBoxControl();
 
 protected:
-    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 };
 
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl

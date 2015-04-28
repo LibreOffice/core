@@ -62,10 +62,6 @@ Size SvxSwFrameExample::GetOptimalSize() const
     return LogicToPixel(Size(52, 86), MapMode(MAP_APPFONT));
 }
 
-SvxSwFrameExample::~SvxSwFrameExample()
-{
-}
-
 void SvxSwFrameExample::InitColors_Impl()
 {
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();

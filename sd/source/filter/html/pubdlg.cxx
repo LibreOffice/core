@@ -347,12 +347,13 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
 class SdDesignNameDlg : public ModalDialog
 {
 private:
-    Edit*           m_pEdit;
-    OKButton*       m_pBtnOK;
+    VclPtr<Edit>           m_pEdit;
+    VclPtr<OKButton>       m_pBtnOK;
 
 public:
     SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName );
-
+    virtual ~SdDesignNameDlg();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetDesignName();
     DECL_LINK(ModifyHdl, void *);
 };
@@ -483,7 +484,96 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
 
 SdPublishingDlg::~SdPublishingDlg()
 {
+    disposeOnce();
 }
+
+void SdPublishingDlg::dispose()
+{
+    pPage1.clear();
+    pPage1_Titel.clear();
+    pPage1_NewDesign.clear();
+    pPage1_OldDesign.clear();
+    pPage1_Designs.clear();
+    pPage1_DelDesign.clear();
+    pPage1_Desc.clear();
+    pPage2.clear();
+    pPage2Frame2.clear();
+    pPage2Frame3.clear();
+    pPage2Frame4.clear();
+    pPage2_Titel.clear();
+    pPage2_Standard.clear();
+    pPage2_Frames.clear();
+    pPage2_SingleDocument.clear();
+    pPage2_Kiosk.clear();
+    pPage2_WebCast.clear();
+    pPage2_Standard_FB.clear();
+    pPage2_Frames_FB.clear();
+    pPage2_Kiosk_FB.clear();
+    pPage2_WebCast_FB.clear();
+    pPage2_Titel_Html.clear();
+    pPage2_Content.clear();
+    pPage2_Notes.clear();
+    pPage2_Titel_WebCast.clear();
+    pPage2_ASP.clear();
+    pPage2_PERL.clear();
+    pPage2_URL_txt.clear();
+    pPage2_URL.clear();
+    pPage2_CGI_txt.clear();
+    pPage2_CGI.clear();
+    pPage2_Index_txt.clear();
+    pPage2_Index.clear();
+    pPage2_Titel_Kiosk.clear();
+    pPage2_ChgDefault.clear();
+    pPage2_ChgAuto.clear();
+    pPage2_Duration_txt.clear();
+    pPage2_Duration.clear();
+    pPage2_Endless.clear();
+    pPage3.clear();
+    pPage3_Titel1.clear();
+    pPage3_Png.clear();
+    pPage3_Gif.clear();
+    pPage3_Jpg.clear();
+    pPage3_Quality_txt.clear();
+    pPage3_Quality.clear();
+    pPage3_Titel2.clear();
+    pPage3_Resolution_1.clear();
+    pPage3_Resolution_2.clear();
+    pPage3_Resolution_3.clear();
+    pPage3_Titel3.clear();
+    pPage3_SldSound.clear();
+    pPage3_HiddenSlides.clear();
+    pPage4.clear();
+    pPage4_Titel1.clear();
+    pPage4_Author_txt.clear();
+    pPage4_Author.clear();
+    pPage4_Email_txt.clear();
+    pPage4_Email.clear();
+    pPage4_WWW_txt.clear();
+    pPage4_WWW.clear();
+    pPage4_Titel2.clear();
+    pPage4_Misc.clear();
+    pPage4_Download.clear();
+    pPage5.clear();
+    pPage5_Titel.clear();
+    pPage5_TextOnly.clear();
+    pPage5_Buttons.clear();
+    pPage6.clear();
+    pPage6_Titel.clear();
+    pPage6_Default.clear();
+    pPage6_User.clear();
+    pPage6_Back.clear();
+    pPage6_Text.clear();
+    pPage6_Link.clear();
+    pPage6_VLink.clear();
+    pPage6_ALink.clear();
+    pPage6_DocColors.clear();
+    pPage6_Preview.clear();
+    pLastPageButton.clear();
+    pNextPageButton.clear();
+    pFinishButton.clear();
+    ModalDialog::dispose();
+}
+
 
 // Generate dialog controls and embed them in the pages
 void SdPublishingDlg::CreatePages()
@@ -1072,11 +1162,11 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
         {
             bRetry = false;
 
-            SdDesignNameDlg aDlg(this, aName );
+            ScopedVclPtrInstance< SdDesignNameDlg > aDlg(this, aName );
 
-            if ( aDlg.Execute() == RET_OK )
+            if ( aDlg->Execute() == RET_OK )
             {
-                pDesign->m_aDesignName = aDlg.GetDesignName();
+                pDesign->m_aDesignName = aDlg->GetDesignName();
 
                 boost::ptr_vector<SdPublishingDesign>::iterator iter;
                 for (iter = m_aDesignList.begin(); iter != m_aDesignList.end(); ++iter)
@@ -1087,9 +1177,9 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 
                 if (iter != m_aDesignList.end())
                 {
-                    MessageDialog aErrorBox(this, SD_RESSTR(STR_PUBDLG_SAMENAME),
+                    ScopedVclPtrInstance<MessageDialog> aErrorBox(this, SD_RESSTR(STR_PUBDLG_SAMENAME),
                         VCL_MESSAGE_ERROR, VCL_BUTTONS_YES_NO);
-                    bRetry = aErrorBox.Execute() == RET_NO;
+                    bRetry = aErrorBox->Execute() == RET_NO;
 
                     if(!bRetry)
                         m_aDesignList.erase(iter);
@@ -1540,6 +1630,18 @@ SdDesignNameDlg::SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName)
     m_pEdit->SetModifyHdl(LINK(this, SdDesignNameDlg, ModifyHdl ));
     m_pEdit->SetText(aName);
     m_pBtnOK->Enable(!aName.isEmpty());
+}
+
+SdDesignNameDlg::~SdDesignNameDlg()
+{
+    disposeOnce();
+}
+
+void SdDesignNameDlg::dispose()
+{
+    m_pEdit.clear();
+    m_pBtnOK.clear();
+    ModalDialog::dispose();
 }
 
 OUString SdDesignNameDlg::GetDesignName()

@@ -1063,14 +1063,15 @@ bool ScTabViewShell::HasPrintOptionsPage() const
     return true;
 }
 
-SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions )
+VclPtr<SfxTabPage> ScTabViewShell::CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
     ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
     if ( ScTpPrintOptionsCreate )
-        return  (*ScTpPrintOptionsCreate)( pParent, &rOptions);
-    return 0;
+        return VclPtr<SfxTabPage>((*ScTpPrintOptionsCreate)( pParent, &rOptions),
+                                  SAL_NO_ACQUIRE);
+    return VclPtr<SfxTabPage>();
 }
 
 void ScTabViewShell::StopEditShell()

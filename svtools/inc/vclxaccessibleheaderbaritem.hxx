@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <vector>
 
@@ -53,7 +54,7 @@ class VCLXAccessibleHeaderBarItem :    public AccessibleExtendedComponentHelper_
 {
 private:
     VCLExternalSolarLock*    m_pExternalLock;
-    HeaderBar*                m_pHeadBar;
+    VclPtr<HeaderBar>        m_pHeadBar;
     sal_Int32                m_nIndexInParent;
 
 protected:

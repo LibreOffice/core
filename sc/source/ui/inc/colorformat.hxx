@@ -23,24 +23,24 @@ class ScDocument;
 class ScDataBarSettingsDlg : public ModalDialog
 {
 private:
-    OKButton* mpBtnOk;
-    CancelButton* mpBtnCancel;
+    VclPtr<OKButton> mpBtnOk;
+    VclPtr<CancelButton> mpBtnCancel;
 
-    ColorListBox* mpLbPos;
-    ColorListBox* mpLbNeg;
-    ColorListBox* mpLbAxisCol;
+    VclPtr<ColorListBox> mpLbPos;
+    VclPtr<ColorListBox> mpLbNeg;
+    VclPtr<ColorListBox> mpLbFillType;
+    VclPtr<ColorListBox> mpLbAxisCol;
 
-    ListBox* mpLbTypeMin;
-    ListBox* mpLbTypeMax;
-    ListBox* mpLbFillType;
-    ListBox* mpLbAxisPos;
+    VclPtr<ListBox> mpLbTypeMin;
+    VclPtr<ListBox> mpLbTypeMax;
+    VclPtr<ListBox> mpLbAxisPos;
 
-    Edit* mpEdMin;
-    Edit* mpEdMax;
-    Edit* mpLenMin;
-    Edit* mpLenMax;
+    VclPtr<Edit> mpEdMin;
+    VclPtr<Edit> mpEdMax;
+    VclPtr<Edit> mpLenMin;
+    VclPtr<Edit> mpLenMax;
 
-    CheckBox *mpCbOnlyBar;
+    VclPtr<CheckBox> mpCbOnlyBar;
 
     OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
@@ -56,6 +56,8 @@ private:
 
 public:
     ScDataBarSettingsDlg(vcl::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
+    virtual ~ScDataBarSettingsDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     ScDataBarFormatData* GetData();
 };

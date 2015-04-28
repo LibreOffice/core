@@ -38,8 +38,8 @@ private:
     Timer               maShowTimer;
     Timer               maHideTimer;
 
-    sal_uInt16              mnHelpWinStyle;
-    sal_uInt16              mnStyle;
+    sal_uInt16          mnHelpWinStyle;
+    sal_uInt16          mnStyle;
 
 protected:
                         DECL_LINK( TimerHdl, Timer* );
@@ -50,7 +50,8 @@ protected:
 
 public:
                         HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle );
-                        virtual ~HelpTextWindow();
+    virtual             ~HelpTextWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     const OUString&     GetHelpText() const { return maHelpText; }
     void                SetHelpText( const OUString& rHelpText );

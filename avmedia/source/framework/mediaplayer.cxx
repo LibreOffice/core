@@ -40,9 +40,9 @@ namespace avmedia
 MediaPlayer::MediaPlayer( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
-    pWindow = new MediaFloater( _pBindings, this, _pParent );
+    pWindow.reset( VclPtr<MediaFloater>::Create( _pBindings, this, _pParent ) );
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-    static_cast< MediaFloater* >( pWindow )->Initialize( pInfo );
+    static_cast< MediaFloater* >( pWindow.get() )->Initialize( pInfo );
 };
 
 
@@ -75,8 +75,14 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::W
 
 MediaFloater::~MediaFloater()
 {
+    disposeOnce();
+}
+
+void MediaFloater::dispose()
+{
     delete mpMediaWindow;
     mpMediaWindow = NULL;
+    SfxDockingWindow::dispose();
 }
 
 

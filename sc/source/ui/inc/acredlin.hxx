@@ -98,13 +98,13 @@ private:
 
     Idle                    aSelectionIdle;
     Idle                    aReOpenIdle;
-    SvxAcceptChgCtr*        m_pAcceptChgCtr;
+    VclPtr<SvxAcceptChgCtr> m_pAcceptChgCtr;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
     ScRangeName             aLocalRangeName;
-    SvxTPFilter*            pTPFilter;
-    SvxTPView*              pTPView;
-    SvxRedlinTable*         pTheView; // #i48648 now SvHeaderTabListBox
+    VclPtr<SvxTPFilter>     pTPFilter;
+    VclPtr<SvxTPView>       pTPView;
+    VclPtr<SvxRedlinTable>  pTheView; // #i48648 now SvHeaderTabListBox
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
     OUString           aStrInsertCols;
@@ -206,6 +206,7 @@ public:
                                ScViewData*      ptrViewData);
 
                     virtual ~ScAcceptChgDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            ReInit(ScViewData* ptrViewData);
 

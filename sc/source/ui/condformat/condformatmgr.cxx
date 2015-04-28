@@ -120,7 +120,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
     Size aSize(LogicToPixel(Size(290, 220), MAP_APPFONT));
     pContainer->set_width_request(aSize.Width());
     pContainer->set_height_request(aSize.Height());
-    m_pCtrlManager = new ScCondFormatManagerWindow(*pContainer, mpDoc, mpFormatList);
+    m_pCtrlManager = VclPtr<ScCondFormatManagerWindow>::Create(*pContainer, mpDoc, mpFormatList);
     get(m_pBtnAdd, "add");
     get(m_pBtnRemove, "remove");
     get(m_pBtnEdit, "edit");
@@ -133,8 +133,17 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
 {
-    delete m_pCtrlManager;
+    disposeOnce();
+}
+
+void ScCondFormatManagerDlg::dispose()
+{
     delete mpFormatList;
+    m_pBtnAdd.clear();
+    m_pBtnRemove.clear();
+    m_pBtnEdit.clear();
+    m_pCtrlManager.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 
@@ -162,8 +171,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     sal_uInt16 nId = 1;
     ScModule* pScMod = SC_MOD();
     pScMod->SetRefDialog( nId, true );
-    boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
-                                               pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
+    VclPtrInstance<ScCondFormatDlg> pDlg(this, mpDoc, pFormat, pFormat->GetRange(),
+                                         pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE);
     Show(false, 0);
     if(pDlg->Execute() == RET_OK)
     {
@@ -208,8 +217,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
     sal_uInt16 nId = 1;
     ScModule* pScMod = SC_MOD();
     pScMod->SetRefDialog( nId, true );
-    boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
-                                               maPos, condformat::dialog::CONDITION));
+    VclPtrInstance<ScCondFormatDlg> pDlg(this, mpDoc, nullptr, ScRangeList(),
+                                         maPos, condformat::dialog::CONDITION);
     Show(false, 0);
     if(pDlg->Execute() == RET_OK)
     {

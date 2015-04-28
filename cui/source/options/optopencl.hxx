@@ -31,26 +31,26 @@ class SvxOpenCLTabPage : public SfxTabPage
 private:
     OpenCLConfig maConfig;
 
-    CheckBox* mpUseOpenCL;
+    VclPtr<CheckBox> mpUseOpenCL;
 
-    VclFrame* mpBlackListFrame;
-    SvSimpleTable* mpBlackList;
-    SvSimpleTableContainer* mpBlackListTable;
-    PushButton* mpBlackListEdit;
-    PushButton* mpBlackListAdd;
-    PushButton* mpBlackListDelete;
-    FixedText*  mpOS;
-    FixedText*  mpOSVersion;
-    FixedText*  mpDevice;
-    FixedText*  mpVendor;
-    FixedText*  mpDrvVersion;
+    VclPtr<VclFrame> mpBlackListFrame;
+    VclPtr<SvSimpleTable> mpBlackList;
+    VclPtr<SvSimpleTableContainer> mpBlackListTable;
+    VclPtr<PushButton> mpBlackListEdit;
+    VclPtr<PushButton> mpBlackListAdd;
+    VclPtr<PushButton> mpBlackListDelete;
+    VclPtr<FixedText> mpOS;
+    VclPtr<FixedText> mpOSVersion;
+    VclPtr<FixedText> mpDevice;
+    VclPtr<FixedText> mpVendor;
+    VclPtr<FixedText> mpDrvVersion;
 
-    VclFrame* mpWhiteListFrame;
-    SvSimpleTable* mpWhiteList;
-    SvSimpleTableContainer* mpWhiteListTable;
-    PushButton* mpWhiteListEdit;
-    PushButton* mpWhiteListAdd;
-    PushButton* mpWhiteListDelete;
+    VclPtr<VclFrame> mpWhiteListFrame;
+    VclPtr<SvSimpleTable> mpWhiteList;
+    VclPtr<SvSimpleTableContainer> mpWhiteListTable;
+    VclPtr<PushButton> mpWhiteListEdit;
+    VclPtr<PushButton> mpWhiteListAdd;
+    VclPtr<PushButton> mpWhiteListDelete;
 
     DECL_LINK(BlackListEditHdl, void*);
     DECL_LINK(BlackListAddHdl, void*);
@@ -71,8 +71,9 @@ private:
 public:
     SvxOpenCLTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxOpenCLTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

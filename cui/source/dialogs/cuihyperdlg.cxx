@@ -93,7 +93,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     // insert pages
     Image aImage;
     OUString aStrTitle;
-    SvxIconChoiceCtrlEntry* pEntry = NULL;
+    SvxIconChoiceCtrlEntry *pEntry;
 
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
@@ -157,11 +157,19 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
 
 SvxHpLinkDlg::~SvxHpLinkDlg ()
 {
+    disposeOnce();
+}
+
+void SvxHpLinkDlg::dispose()
+{
     // delete config item, so the base class (IconChoiceDialog) can not load it on the next start
     SvtViewOptions aViewOpt( E_TABDIALOG, OUString::number(SID_HYPERLINK_DIALOG) );
     aViewOpt.Delete();
 
     delete mpItemSet;
+    mpItemSet = NULL;
+
+    IconChoiceDialog::dispose();
 }
 
 /*************************************************************************

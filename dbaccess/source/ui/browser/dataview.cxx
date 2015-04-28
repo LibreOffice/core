@@ -42,7 +42,7 @@ namespace dbaui
     class ColorChanger
     {
     protected:
-        OutputDevice*   m_pDev;
+        VclPtr<OutputDevice> m_pDev;
 
     public:
         ColorChanger( OutputDevice* _pDev, const ::Color& _rNewLineColor, const ::Color& _rNewFillColor )
@@ -65,12 +65,11 @@ namespace dbaui
                             WinBits nStyle)
         :Window(pParent,nStyle)
         ,m_xContext(_rxContext)
-        ,m_rController( _rController )
-        ,m_aSeparator( this )
+        ,m_xController( &_rController )
+        ,m_aSeparator( VclPtr<FixedLine>::Create(this) )
     {
-        m_rController.acquire();
         m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
-        m_aSeparator.Show();
+        m_aSeparator->Show();
     }
 
     void ODataView::Construct()
@@ -79,8 +78,15 @@ namespace dbaui
 
     ODataView::~ODataView()
     {
+        disposeOnce();
+    }
 
-        m_rController.release();
+    void ODataView::dispose()
+    {
+        m_xController.clear();
+        m_aSeparator.disposeAndClear();
+        m_pAccel.reset();
+        vcl::Window::dispose();
     }
 
     void ODataView::resizeDocumentView( Rectangle& /*_rPlayground*/ )
@@ -105,7 +111,7 @@ namespace dbaui
 
         // position the separator
         const Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
-        m_aSeparator.SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
+        m_aSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
         aPlayground.Top() += aSeparatorSize.Height() + 1;
 
         // position the controls of the document's view
@@ -134,7 +140,7 @@ namespace dbaui
             case MouseNotifyEvent::KEYUP:
             case MouseNotifyEvent::MOUSEBUTTONDOWN:
             case MouseNotifyEvent::MOUSEBUTTONUP:
-                bHandled = m_rController.interceptUserInput( _rNEvt );
+                bHandled = m_xController->interceptUserInput( _rNEvt );
                 break;
             default:
                 break;
@@ -148,7 +154,7 @@ namespace dbaui
         if ( nType == StateChangedType::CONTROLBACKGROUND )
         {
             // Check if we need to get new images for normal/high contrast mode
-            m_rController.notifyHiContrastChanged();
+            m_xController->notifyHiContrastChanged();
         }
 
         if ( nType == StateChangedType::INITSHOW )
@@ -157,7 +163,7 @@ namespace dbaui
             // model's arguments.
             try
             {
-                Reference< XController > xController( m_rController.getXController(), UNO_SET_THROW );
+                Reference< XController > xController( m_xController->getXController(), UNO_SET_THROW );
                 Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
                 if ( xModel.is() )
                 {
@@ -183,7 +189,7 @@ namespace dbaui
             (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
         {
             // Check if we need to get new images for normal/high contrast mode
-            m_rController.notifyHiContrastChanged();
+            m_xController->notifyHiContrastChanged();
         }
     }
     void ODataView::attachFrame(const Reference< XFrame >& _xFrame)

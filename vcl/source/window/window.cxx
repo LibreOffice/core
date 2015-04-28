@@ -33,6 +33,7 @@
 #include <vcl/syschild.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/button.hxx>
 #include <vcl/taskpanelist.hxx>
@@ -131,13 +132,18 @@ namespace
 }
 #endif
 
-Window::~Window()
+bool Window::IsDisposed() const
 {
-    vcl::LazyDeletor<vcl::Window>::Undelete( this );
+    return !mpWindowImpl;
+}
 
-    DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
-
-    dispose();
+void Window::dispose()
+{
+    assert( mpWindowImpl );
+    assert( !mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
+    assert( !mpWindowImpl->mpParent ||
+            !mpWindowImpl->mpParent->IsDisposed() ||
+            "vcl::Window child should have its parent disposed first" );
 
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
@@ -152,7 +158,7 @@ Window::~Window()
             xCanvasComponent->dispose();
     }
 
-    mpWindowImpl->mbInDtor = true;
+    mpWindowImpl->mbInDispose = true;
 
     CallEventListeners( VCLEVENT_OBJECT_DYING );
 
@@ -167,9 +173,8 @@ Window::~Window()
     // remove ownerdraw decorated windows from list in the top-most frame window
     if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
     {
-        ::std::vector< vcl::Window* >& rList = ImplGetOwnerDrawList();
-        ::std::vector< vcl::Window* >::iterator p;
-        p = ::std::find( rList.begin(), rList.end(), this );
+        ::std::vector< VclPtr<vcl::Window> >& rList = ImplGetOwnerDrawList();
+        auto p = ::std::find( rList.begin(), rList.end(), VclPtr<vcl::Window>(this) );
         if( p != rList.end() )
             rList.erase( p );
     }
@@ -232,9 +237,9 @@ Window::~Window()
     if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
         ImplDestroyHelpWindow( true );
 
-    DBG_ASSERT( pSVData->maWinData.mpTrackWin != this,
+    DBG_ASSERT( pSVData->maWinData.mpTrackWin.get() != this,
                 "Window::~Window(): Window is in TrackingMode" );
-    DBG_ASSERT( pSVData->maWinData.mpCaptureWin != this,
+    DBG_ASSERT( pSVData->maWinData.mpCaptureWin.get() != this,
                 "Window::~Window(): Window has the mouse captured" );
 
     // due to old compatibility
@@ -251,6 +256,22 @@ Window::~Window()
         OStringBuffer aErrorStr;
         bool        bError = false;
         vcl::Window*     pTempWin;
+
+        if ( mpWindowImpl->mpFirstChild )
+        {
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(lcl_createWindowInfo(*this));
+            aTempStr.append(") with live children destroyed: ");
+            pTempWin = mpWindowImpl->mpFirstChild;
+            while ( pTempWin )
+            {
+                aTempStr.append(lcl_createWindowInfo(*pTempWin));
+                pTempWin = pTempWin->mpWindowImpl->mpNext;
+            }
+            OSL_FAIL( aTempStr.getStr() );
+            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+        }
+
         if (mpWindowImpl->mpFrameData != 0)
         {
             pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
@@ -267,8 +288,7 @@ Window::~Window()
             {
                 OStringBuffer aTempStr;
                 aTempStr.append("Window (");
-                aTempStr.append(OUStringToOString(GetText(),
-                                                       RTL_TEXTENCODING_UTF8));
+                aTempStr.append(lcl_createWindowInfo(*this));
                 aTempStr.append(") with live SystemWindows destroyed: ");
                 aTempStr.append(aErrorStr.toString());
                 OSL_FAIL(aTempStr.getStr());
@@ -292,24 +312,9 @@ Window::~Window()
         if ( bError )
         {
             OStringBuffer aTempStr( "Window (" );
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(lcl_createWindowInfo(*this));
             aTempStr.append(") with live SystemWindows destroyed: ");
             aTempStr.append(aErrorStr.toString());
-            OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
-        }
-
-        if ( mpWindowImpl->mpFirstChild )
-        {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") with live children destroyed: ");
-            pTempWin = mpWindowImpl->mpFirstChild;
-            while ( pTempWin )
-            {
-                aTempStr.append(lcl_createWindowInfo(*pTempWin));
-                pTempWin = pTempWin->mpWindowImpl->mpNext;
-            }
             OSL_FAIL( aTempStr.getStr() );
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
@@ -317,7 +322,7 @@ Window::~Window()
         if ( mpWindowImpl->mpFirstOverlap )
         {
             OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(lcl_createWindowInfo(*this));
             aTempStr.append(") with live SystemWindows destroyed: ");
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
@@ -343,7 +348,7 @@ Window::~Window()
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
         {
             OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(lcl_createWindowInfo(*this));
             aTempStr.append(") still in TaskPanelList!");
             OSL_FAIL( aTempStr.getStr() );
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
@@ -381,9 +386,8 @@ Window::~Window()
     remove_from_all_size_groups();
 
     // clear mnemonic labels
-    std::vector<FixedText*> aMnemonicLabels(list_mnemonic_labels());
-    for (std::vector<FixedText*>::iterator aI = aMnemonicLabels.begin();
-        aI != aMnemonicLabels.end(); ++aI)
+    std::vector<VclPtr<FixedText> > aMnemonicLabels(list_mnemonic_labels());
+    for (auto aI = aMnemonicLabels.begin(); aI != aMnemonicLabels.end(); ++aI)
     {
         remove_mnemonic_label(*aI);
     }
@@ -499,7 +503,7 @@ Window::~Window()
     while ( pDelData )
     {
         pDelData->mbDel = true;
-        pDelData->mpWindow = NULL;  // #112873# pDel is not associated with a Window anymore
+        pDelData->mpWindow.clear();  // #112873# pDel is not associated with a Window anymore
         pDelData = pDelData->mpNext;
     }
 
@@ -514,8 +518,8 @@ Window::~Window()
         {
             ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
 
-            ::std::list< vcl::Window* >::iterator myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
-                pParentWinData->maTopWindowChildren.end(), this );
+            auto myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
+                pParentWinData->maTopWindowChildren.end(), VclPtr<vcl::Window>(this) );
             DBG_ASSERT( myPos != pParentWinData->maTopWindowChildren.end(), "Window::~Window: inconsistency in top window chain!" );
             if ( myPos != pParentWinData->maTopWindowChildren.end() )
                 pParentWinData->maTopWindowChildren.erase( myPos );
@@ -546,17 +550,18 @@ Window::~Window()
         delete mpWindowImpl->mpOverlapData;
 
     // remove BorderWindow or Frame window data
-    if ( mpWindowImpl->mpBorderWindow )
-        delete mpWindowImpl->mpBorderWindow;
-    else if ( mpWindowImpl->mbFrame )
+    mpWindowImpl->mpBorderWindow.disposeAndClear();
+    if ( mpWindowImpl->mbFrame )
     {
         if ( pSVData->maWinData.mpFirstFrame == this )
             pSVData->maWinData.mpFirstFrame = mpWindowImpl->mpFrameData->mpNextFrame;
         else
         {
             vcl::Window* pSysWin = pSVData->maWinData.mpFirstFrame;
-            while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame != this )
+            while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame.get() != this )
                 pSysWin = pSysWin->mpWindowImpl->mpFrameData->mpNextFrame;
+
+            assert (mpWindowImpl->mpFrameData->mpNextFrame.get() != pSysWin);
             pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
         }
         mpWindowImpl->mpFrame->SetCallback( NULL, NULL );
@@ -566,6 +571,31 @@ Window::~Window()
 
     // should be the last statements
     delete mpWindowImpl; mpWindowImpl = NULL;
+
+    OutputDevice::dispose();
+}
+
+Window::~Window()
+{
+    // FIXME: we should kill all LazyDeletor usage.
+    vcl::LazyDeletor<vcl::Window>::Undelete( this );
+    disposeOnce();
+}
+
+// We will eventually being removing the inheritance of OutputDevice
+// from Window. It will be replaced with a transient relationship such
+// that the OutputDevice is only live for the scope of the Paint method.
+// In the meantime this can help move us towards a Window use an
+// OutputDevice, not being one.
+
+::OutputDevice const* Window::GetOutDev() const
+{
+    return this;
+}
+
+::OutputDevice* Window::GetOutDev()
+{
+    return this;
 }
 
 } /* namespace vcl */
@@ -584,8 +614,8 @@ WindowImpl::WindowImpl( WindowType nType )
     mpOverlapWindow                     = NULL;                      // first overlap parent
     mpBorderWindow                      = NULL;                      // Border-Window
     mpClientWindow                      = NULL;                      // Client-Window of a FrameWindow
-    mpParent                            = NULL;                      // parent (inkl. BorderWindow)
-    mpRealParent                        = NULL;                      // real parent (exkl. BorderWindow)
+    mpParent                            = NULL;                      // parent (incl. BorderWindow)
+    mpRealParent                        = NULL;                      // real parent (excl. BorderWindow)
     mpFirstChild                        = NULL;                      // first child window
     mpLastChild                         = NULL;                      // last child window
     mpFirstOverlap                      = NULL;                      // first overlap window (only set in overlap windows)
@@ -704,7 +734,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbCompoundControlHasFocus           = false;                     // true: Composite Control has focus somewhere
     mbPaintDisabled                     = false;                     // true: Paint should not be executed
     mbAllResize                         = false;                     // true: Also sent ResizeEvents with 0,0
-    mbInDtor                            = false;                     // true: We're still in Window-Dtor
+    mbInDispose                         = false;                     // true: We're still in Window::dispose()
     mbExtTextInput                      = false;                     // true: ExtTextInput-Mode is active
     mbInFocusHdl                        = false;                     // true: Within GetFocus-Handler
     mbCreatedWithToolkit                = false;
@@ -876,7 +906,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             nBorderTypeStyle |= BORDERWINDOW_STYLE_FRAME;
             nStyle |= WB_BORDER;
         }
-        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
+        VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
         ((vcl::Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -989,6 +1019,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpOverlapWindow = this;
 
         // set frame data
+        assert (pSVData->maWinData.mpFirstFrame.get() != this);
         mpWindowImpl->mpFrameData->mpNextFrame        = pSVData->maWinData.mpFirstFrame;
         pSVData->maWinData.mpFirstFrame = this;
         mpWindowImpl->mpFrameData->mpFirstOverlap     = NULL;
@@ -1181,13 +1212,6 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
 
 void Window::ImplInitWindowData( WindowType nType )
 {
-    // We will eventually being removing the inheritance of OutputDevice from Window.
-    // It will be replaced with a composition relationship. A Window will use an OutputDevice,
-    // it will not *be* an OutputDevice
-    mpOutputDevice = (OutputDevice*)this;
-
-    mnRefCnt = 0;
-
     mpWindowImpl = new WindowImpl( nType );
 
     meOutDevType        = OUTDEV_WINDOW;
@@ -1352,6 +1376,12 @@ void Window::ImplSetReallyVisible()
 
 void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
+    if ( IsDisposed() )
+    {
+        pDel->mbDel = true;
+        return;
+    }
+
     DBG_ASSERT( !pDel->mpWindow, "Window::ImplAddDel(): cannot add ImplDelData twice !" );
     if( !pDel->mpWindow )
     {
@@ -1364,6 +1394,10 @@ void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompat
 void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
     pDel->mpWindow = NULL;      // #112873# pDel is not associated with a Window anymore
+
+    if ( IsDisposed() )
+        return;
+
     if ( mpWindowImpl->mpFirstDel == pDel )
         mpWindowImpl->mpFirstDel = pDel->mpNext;
     else
@@ -2074,7 +2108,7 @@ void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
             // this is a little awkward: some controls (e.g. svtools ProgressBar)
             // cannot avoid getting constructed with WB_BORDER but want to disable
             // borders in case of NWF drawing. So they need a method to remove their border window
-            vcl::Window* pBorderWin = mpWindowImpl->mpBorderWindow;
+            VclPtr<vcl::Window> pBorderWin = mpWindowImpl->mpBorderWindow;
             // remove us as border window's client
             pBorderWin->mpWindowImpl->mpClientWindow = NULL;
             mpWindowImpl->mpBorderWindow = NULL;
@@ -2086,7 +2120,7 @@ void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
             Size aBorderSize( pBorderWin->GetSizePixel() );
             setPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
             // release border window
-            delete pBorderWin;
+            pBorderWin.disposeAndClear();
 
             // set new style bits
             SetStyle( GetStyle() & (~WB_BORDER) );
@@ -2094,7 +2128,7 @@ void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
         else
         {
             if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetBorderStyle( nBorderStyle );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetBorderStyle( nBorderStyle );
             else
                 mpWindowImpl->mpBorderWindow->SetBorderStyle( nBorderStyle );
         }
@@ -2107,7 +2141,7 @@ WindowBorderStyle Window::GetBorderStyle() const
     if ( mpWindowImpl->mpBorderWindow )
     {
         if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->GetBorderStyle();
+            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetBorderStyle();
         else
             return mpWindowImpl->mpBorderWindow->GetBorderStyle();
     }
@@ -2121,7 +2155,7 @@ long Window::CalcTitleWidth() const
     if ( mpWindowImpl->mpBorderWindow )
     {
         if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->CalcTitleWidth();
+            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->CalcTitleWidth();
         else
             return mpWindowImpl->mpBorderWindow->CalcTitleWidth();
     }
@@ -2241,8 +2275,7 @@ vcl::Font Window::GetPointFont() const
 
 void Window::Show( bool bVisible, sal_uInt16 nFlags )
 {
-
-    if ( mpWindowImpl->mbVisible == bVisible )
+    if ( IsDisposed() || mpWindowImpl->mbVisible == bVisible )
         return;
 
     ImplDelData aDogTag( this );
@@ -2482,7 +2515,7 @@ Size Window::GetSizePixel() const
     // #i43257# trigger pending resize handler to assure correct window sizes
     if( mpWindowImpl->mpFrameData->maResizeIdle.IsActive() )
     {
-        ImplDelData aDogtag( this );
+        ImplDelData aDogtag( const_cast<Window*>(this) );
         mpWindowImpl->mpFrameData->maResizeIdle.Stop();
         mpWindowImpl->mpFrameData->maResizeIdle.GetIdleHdl().Call( NULL );
         if( aDogtag.IsDead() )
@@ -2504,6 +2537,8 @@ void Window::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
 
 void Window::Enable( bool bEnable, bool bChild )
 {
+    if ( IsDisposed() )
+        return;
 
     if ( !bEnable )
     {
@@ -2525,15 +2560,15 @@ void Window::Enable( bool bEnable, bool bChild )
     {
         mpWindowImpl->mpBorderWindow->Enable( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
-             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->Enable( bEnable, true );
+             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->Enable( bEnable, true );
     }
 
     // #i56102# restore app focus win in case the
     // window was disabled when the frame focus changed
     ImplSVData* pSVData = ImplGetSVData();
     if( bEnable &&
-        pSVData->maWinData.mpFocusWin == NULL &&
+        pSVData->maWinData.mpFocusWin == nullptr &&
         mpWindowImpl->mpFrameData->mbHasFocus &&
         mpWindowImpl->mpFrameData->mpFocusWin == this )
         pSVData->maWinData.mpFocusWin = this;
@@ -2587,8 +2622,8 @@ void Window::EnableInput( bool bEnable, bool bChild )
     {
         mpWindowImpl->mpBorderWindow->EnableInput( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
-             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->EnableInput( bEnable, true );
+             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->EnableInput( bEnable, true );
     }
 
     if ( (! bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) ||
@@ -2616,7 +2651,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
     // window was disabled when the frame focus changed
     ImplSVData* pSVData = ImplGetSVData();
     if( bEnable &&
-        pSVData->maWinData.mpFocusWin == NULL &&
+        pSVData->maWinData.mpFocusWin == nullptr &&
         mpWindowImpl->mpFrameData->mbHasFocus &&
         mpWindowImpl->mpFrameData->mpFocusWin == this )
         pSVData->maWinData.mpFocusWin = this;
@@ -2688,8 +2723,8 @@ void Window::EnableInput( bool bEnable, bool bChild, bool bSysWin,
         // the same for ownerdraw floating windows
         if( mpWindowImpl->mbFrame )
         {
-            ::std::vector< vcl::Window* >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
-            ::std::vector< vcl::Window* >::iterator p = rList.begin();
+            ::std::vector< VclPtr<vcl::Window> >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
+            auto p = rList.begin();
             while( p != rList.end() )
             {
                 // Is Window in the path from this window
@@ -3055,7 +3090,7 @@ Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bo
     if( pRelativeWindow )
     {
         // #106399# express coordinates relative to borderwindow
-        vcl::Window *pRelWin = (!bClientOnly && pRelativeWindow->mpWindowImpl->mpBorderWindow) ? pRelativeWindow->mpWindowImpl->mpBorderWindow : pRelativeWindow;
+        vcl::Window *pRelWin = (!bClientOnly && pRelativeWindow->mpWindowImpl->mpBorderWindow) ? pRelativeWindow->mpWindowImpl->mpBorderWindow.get() : pRelativeWindow;
         aPos = pRelWin->AbsoluteScreenToOutputPixel( aPos );
     }
     return Rectangle( aPos, aSize );
@@ -3102,7 +3137,6 @@ void Window::SetUpdateMode( bool bUpdate )
 
 void Window::GrabFocus()
 {
-
     ImplGrabFocus( 0 );
 }
 
@@ -3608,7 +3642,7 @@ void Window::ImplIncModalCount()
         {
             pParent = pParent->GetParent();
         }
-        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow : NULL;
+        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : NULL;
     }
 }
 void Window::ImplDecModalCount()
@@ -3622,7 +3656,7 @@ void Window::ImplDecModalCount()
         {
             pParent = pParent->GetParent();
         }
-        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow : NULL;
+        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : NULL;
     }
 }
 

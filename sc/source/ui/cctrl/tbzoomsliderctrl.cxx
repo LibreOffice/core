@@ -79,14 +79,14 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     }
 }
 
-vcl::Window* ScZoomSliderControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> ScZoomSliderControl::CreateItemWindow( vcl::Window *pParent )
 {
     // #i98000# Don't try to get a value via SfxViewFrame::Current here.
     // The view's value is always notified via StateChanged later.
-    ScZoomSliderWnd* pSlider    = new ScZoomSliderWnd( pParent,
+    VclPtrInstance<ScZoomSliderWnd> pSlider( pParent,
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >( m_xFrame->getController(),
         ::com::sun::star::uno::UNO_QUERY ), m_xFrame, 100 );
-    return  pSlider;
+    return pSlider.get();
 }
 
 struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
@@ -233,7 +233,13 @@ ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent, const ::com::sun::star::
 
 ScZoomSliderWnd::~ScZoomSliderWnd()
 {
+    disposeOnce();
+}
+
+void ScZoomSliderWnd::dispose()
+{
     delete mpImpl;
+    vcl::Window::dispose();
 }
 
 void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
@@ -395,7 +401,7 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
     Size aSliderWindowSize = GetOutputSizePixel();
     Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
 
-    VirtualDevice* pVDev = new VirtualDevice( *this );
+    ScopedVclPtrInstance< VirtualDevice > pVDev( *this );
     pVDev->SetOutputSizePixel( aSliderWindowSize );
 
     Rectangle   aSlider = aRect;
@@ -478,9 +484,6 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
     pVDev->DrawImage( aImagePoint, mpImpl->maIncreaseButton );
 
     DrawOutDev( Point(0, 0), aSliderWindowSize, Point(0, 0), aSliderWindowSize, *pVDev );
-
-    delete pVDev;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

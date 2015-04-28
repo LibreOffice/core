@@ -32,7 +32,7 @@ class ScDocOptions;
 class ScTpCalcOptions : public SfxTabPage
 {
 public:
-    static  SfxTabPage* Create          ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
@@ -43,27 +43,28 @@ private:
                 ScTpCalcOptions( vcl::Window*            pParent,
                                  const SfxItemSet&  rCoreSet );
                 virtual ~ScTpCalcOptions();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    CheckBox*       m_pBtnIterate;
-    FixedText*      m_pFtSteps;
-    NumericField*   m_pEdSteps;
-    FixedText*      m_pFtEps;
-    ScDoubleField*  m_pEdEps;
+    VclPtr<CheckBox>       m_pBtnIterate;
+    VclPtr<FixedText>      m_pFtSteps;
+    VclPtr<NumericField>   m_pEdSteps;
+    VclPtr<FixedText>      m_pFtEps;
+    VclPtr<ScDoubleField>  m_pEdEps;
 
-    RadioButton*    m_pBtnDateStd;
-    RadioButton*    m_pBtnDateSc10;
-    RadioButton*    m_pBtnDate1904;
+    VclPtr<RadioButton>    m_pBtnDateStd;
+    VclPtr<RadioButton>    m_pBtnDateSc10;
+    VclPtr<RadioButton>    m_pBtnDate1904;
 
-    CheckBox*       m_pBtnCase;
-    CheckBox*       m_pBtnCalc;
-    CheckBox*       m_pBtnMatch;
-    CheckBox*       m_pBtnRegex;
-    CheckBox*       m_pBtnLookUp;
-    CheckBox*       m_pBtnGeneralPrec;
+    VclPtr<CheckBox>       m_pBtnCase;
+    VclPtr<CheckBox>       m_pBtnCalc;
+    VclPtr<CheckBox>       m_pBtnMatch;
+    VclPtr<CheckBox>       m_pBtnRegex;
+    VclPtr<CheckBox>       m_pBtnLookUp;
+    VclPtr<CheckBox>       m_pBtnGeneralPrec;
 
-    FixedText*      m_pFtPrec;
-    NumericField*   m_pEdPrec;
+    VclPtr<FixedText>      m_pFtPrec;
+    VclPtr<NumericField>   m_pEdPrec;
 
     ScDocOptions*   pOldOptions;
     ScDocOptions*   pLocalOptions;

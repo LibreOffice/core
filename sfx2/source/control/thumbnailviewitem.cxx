@@ -53,7 +53,6 @@ class ResizableMultiLineEdit : public VclMultiLineEdit
 
     public:
         ResizableMultiLineEdit (vcl::Window* pParent, ThumbnailViewItem* pItem);
-        virtual ~ResizableMultiLineEdit ();
 
         void SetInGrabFocus(bool bInGrabFocus) { mbIsInGrabFocus = bInGrabFocus; }
 
@@ -65,10 +64,6 @@ ResizableMultiLineEdit::ResizableMultiLineEdit (vcl::Window* pParent, ThumbnailV
     VclMultiLineEdit (pParent, WB_CENTER | WB_BORDER),
     mpItem(pItem),
     mbIsInGrabFocus(false)
-{
-}
-
-ResizableMultiLineEdit::~ResizableMultiLineEdit ()
 {
 }
 
@@ -117,12 +112,12 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
     , mpTitleED(NULL)
     , maTextEditMaxArea()
 {
-    mpTitleED = new ResizableMultiLineEdit(&rView, this);
+    mpTitleED = VclPtr<ResizableMultiLineEdit>::Create(&rView, this);
 }
 
 ThumbnailViewItem::~ThumbnailViewItem()
 {
-    delete mpTitleED;
+    mpTitleED.disposeAndClear();
     if( mpxAcc )
     {
         static_cast< ThumbnailViewItemAcc* >( mpxAcc->get() )->ParentDestroyed();
@@ -183,9 +178,9 @@ void ThumbnailViewItem::setEditTitle (bool edit, bool bChangeFocus)
     {
         mpTitleED->SetText(maTitle);
         updateTitleEditSize();
-        static_cast<ResizableMultiLineEdit*>(mpTitleED)->SetInGrabFocus(true);
+        static_cast<ResizableMultiLineEdit*>(mpTitleED.get())->SetInGrabFocus(true);
         mpTitleED->GrabFocus();
-        static_cast<ResizableMultiLineEdit*>(mpTitleED)->SetInGrabFocus(false);
+        static_cast<ResizableMultiLineEdit*>(mpTitleED.get())->SetInGrabFocus(false);
     }
     else if (bChangeFocus)
     {

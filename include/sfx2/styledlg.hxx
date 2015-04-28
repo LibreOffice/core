@@ -41,6 +41,7 @@ public:
         const OUString& rUIXMLDescription, SfxStyleSheetBase&);
 
     virtual ~SfxStyleDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     SfxStyleSheetBase&          GetStyleSheet() { return *pStyle; }
     const SfxStyleSheetBase&    GetStyleSheet() const { return *pStyle; }

@@ -37,11 +37,11 @@ private:
     SdDrawDocument* mpDoc;
     SdPage*         mpCurrentPage;
 
-    CheckBox*       mpCBDate;
-    CheckBox*       mpCBPageNumber;
-    CheckBox*       mpCBSlideNumber;
-    CheckBox*       mpCBHeader;
-    CheckBox*       mpCBFooter;
+    VclPtr<CheckBox>       mpCBDate;
+    VclPtr<CheckBox>       mpCBPageNumber;
+    VclPtr<CheckBox>       mpCBSlideNumber;
+    VclPtr<CheckBox>       mpCBHeader;
+    VclPtr<CheckBox>       mpCBFooter;
 
     bool            mbOldHeader;
     bool            mbOldFooter;
@@ -54,6 +54,8 @@ private:
 
 public:
     MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
+    virtual ~MasterLayoutDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute() SAL_OVERRIDE;
 };

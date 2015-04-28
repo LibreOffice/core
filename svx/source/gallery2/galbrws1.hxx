@@ -41,7 +41,6 @@ private:
 public:
 
                     GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits );
-                    virtual ~GalleryButton();
 };
 
 // - GalleryThemeListBox -
@@ -58,7 +57,6 @@ protected:
 public:
 
                     GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWinBits );
-                    virtual ~GalleryThemeListBox();
 };
 
 // - GalleryBrowser1 -
@@ -82,8 +80,8 @@ class GalleryBrowser1 : public Control, SfxListener
 
 private:
 
-    GalleryButton           maNewTheme;
-    GalleryThemeListBox*    mpThemes;
+    VclPtr<GalleryButton>   maNewTheme;
+    VclPtr<GalleryThemeListBox>  mpThemes;
     Gallery*                mpGallery;
     ExchangeData*           mpExchangeData;
     SfxItemSet*             mpThemePropsDlgItemSet;
@@ -127,6 +125,7 @@ public:
                                 const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
                                 const ::boost::function<void()>& rThemeSlectionHandler);
                             virtual ~GalleryBrowser1();
+    virtual void            dispose() SAL_OVERRIDE;
 
     void                    SelectTheme( const OUString& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
     void                    SelectTheme( sal_uIntPtr nThemePos ) { mpThemes->SelectEntryPos( (sal_uInt16) nThemePos ); SelectThemeHdl( NULL ); }

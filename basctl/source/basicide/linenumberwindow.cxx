@@ -26,7 +26,15 @@ LineNumberWindow::LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin
 }
 
 LineNumberWindow::~LineNumberWindow()
-{ }
+{
+    disposeOnce();
+}
+
+void LineNumberWindow::dispose()
+{
+    m_pModulWindow.clear();
+    Window::dispose();
+}
 
 void LineNumberWindow::Paint( const Rectangle& )
 {

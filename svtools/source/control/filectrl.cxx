@@ -36,17 +36,17 @@ using namespace ::com::sun::star::ui;
 
 FileControl::FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode nFlags ) :
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
-    maEdit( this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP ),
-    maButton( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ),
+    maEdit( VclPtr<Edit>::Create(this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP) ),
+    maButton( VclPtr<PushButton>::Create( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ) ),
     maButtonText( SVT_RESSTR(STR_FILECTRL_BUTTONTEXT) ),
     mnFlags( nFlags ),
     mnInternalFlags( FileControlMode_Internal::ORIGINALBUTTONTEXT )
 {
-    maButton.SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
+    maButton->SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
     mbOpenDlg = true;
 
-    maButton.Show();
-    maEdit.Show();
+    maButton->Show();
+    maEdit->Show();
 
     SetCompoundControl( true );
 
@@ -59,17 +59,17 @@ WinBits FileControl::ImplInitStyle( WinBits nStyle )
 {
     if ( !( nStyle & WB_NOTABSTOP ) )
     {
-        maEdit.SetStyle( (maEdit.GetStyle()|WB_TABSTOP)&(~WB_NOTABSTOP) );
-        maButton.SetStyle( (maButton.GetStyle()|WB_TABSTOP)&(~WB_NOTABSTOP) );
+        maEdit->SetStyle( (maEdit->GetStyle()|WB_TABSTOP)&(~WB_NOTABSTOP) );
+        maButton->SetStyle( (maButton->GetStyle()|WB_TABSTOP)&(~WB_NOTABSTOP) );
     }
     else
     {
-        maEdit.SetStyle( (maEdit.GetStyle()|WB_NOTABSTOP)&(~WB_TABSTOP) );
-        maButton.SetStyle( (maButton.GetStyle()|WB_NOTABSTOP)&(~WB_TABSTOP) );
+        maEdit->SetStyle( (maEdit->GetStyle()|WB_NOTABSTOP)&(~WB_TABSTOP) );
+        maButton->SetStyle( (maButton->GetStyle()|WB_NOTABSTOP)&(~WB_TABSTOP) );
     }
 
     const WinBits nAlignmentStyle = ( WB_TOP | WB_VCENTER | WB_BOTTOM );
-    maEdit.SetStyle( ( maEdit.GetStyle() & ~nAlignmentStyle ) | ( nStyle & nAlignmentStyle ) );
+    maEdit->SetStyle( ( maEdit->GetStyle() & ~nAlignmentStyle ) | ( nStyle & nAlignmentStyle ) );
 
     if ( !(nStyle & WB_NOGROUP) )
         nStyle |= WB_GROUP;
@@ -86,13 +86,19 @@ WinBits FileControl::ImplInitStyle( WinBits nStyle )
 
 FileControl::~FileControl()
 {
+    disposeOnce();
 }
 
-
+void FileControl::dispose()
+{
+    maEdit.disposeAndClear();
+    maButton.disposeAndClear();
+    Window::dispose();
+}
 
 void FileControl::SetText( const OUString& rStr )
 {
-    maEdit.SetText( rStr );
+    maEdit->SetText( rStr );
     if ( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN )
         Resize();
 }
@@ -101,7 +107,7 @@ void FileControl::SetText( const OUString& rStr )
 
 OUString FileControl::GetText() const
 {
-    return maEdit.GetText();
+    return maEdit->GetText();
 }
 
 
@@ -110,8 +116,8 @@ void FileControl::StateChanged( StateChangedType nType )
 {
     if ( nType == StateChangedType::ENABLE )
     {
-        maEdit.Enable( IsEnabled() );
-        maButton.Enable( IsEnabled() );
+        maEdit->Enable( IsEnabled() );
+        maButton->Enable( IsEnabled() );
     }
     else if ( nType == StateChangedType::ZOOM )
     {
@@ -155,25 +161,25 @@ void FileControl::Resize()
     mnInternalFlags |= FileControlMode_Internal::INRESIZE;//InResize = sal_True
 
     Size aOutSz = GetOutputSizePixel();
-    long nButtonTextWidth = maButton.GetTextWidth( maButtonText );
+    long nButtonTextWidth = maButton->GetTextWidth( maButtonText );
     if ( !(mnInternalFlags & FileControlMode_Internal::ORIGINALBUTTONTEXT) ||
          ( nButtonTextWidth < aOutSz.Width()/3 &&
            ( !( mnFlags & FileControlMode::RESIZEBUTTONBYPATHLEN ) ||
-             ( maEdit.GetTextWidth( maEdit.GetText() )
+             ( maEdit->GetTextWidth( maEdit->GetText() )
                <= aOutSz.Width() - nButtonTextWidth - ButtonBorder ) ) ) )
     {
-        maButton.SetText( maButtonText );
+        maButton->SetText( maButtonText );
     }
     else
     {
         OUString aSmallText( "..." );
-        maButton.SetText( aSmallText );
-        nButtonTextWidth = maButton.GetTextWidth( aSmallText );
+        maButton->SetText( aSmallText );
+        nButtonTextWidth = maButton->GetTextWidth( aSmallText );
     }
 
     long nButtonWidth = nButtonTextWidth+ButtonBorder;
-    maEdit.setPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
-    maButton.setPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
+    maEdit->setPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
+    maButton->setPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
 
     mnInternalFlags &= ~FileControlMode_Internal::INRESIZE; //InResize = sal_False
 }
@@ -191,7 +197,7 @@ IMPL_LINK_NOARG(FileControl, ButtonHdl)
 
 void FileControl::GetFocus()
 {
-    maEdit.GrabFocus();
+    maEdit->GrabFocus();
 }
 
 
@@ -237,7 +243,7 @@ void FileControl::ImplBrowseFile( )
                 if ( aObj.GetProtocol() == INetProtocol::File )
                     aNewText = aObj.PathToFileName();
                 SetText( aNewText );
-                maEdit.GetModifyHdl().Call( &maEdit );
+                maEdit->GetModifyHdl().Call( &maEdit );
             }
         }
     }

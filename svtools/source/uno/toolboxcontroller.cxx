@@ -785,7 +785,7 @@ bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
     if( (m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == 0) )
         return m_nToolBoxId;
 
-    ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+    ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
 
     if( (m_nToolBoxId == SAL_MAX_UINT16) && pToolBox )
     {

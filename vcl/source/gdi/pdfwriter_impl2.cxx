@@ -244,10 +244,10 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 {
     bool bAssertionFired( false );
 
-    std::unique_ptr<VirtualDevice> xPrivateDevice;
+    ScopedVclPtr<VirtualDevice> xPrivateDevice;
     if( ! pDummyVDev )
     {
-        xPrivateDevice.reset(new VirtualDevice());
+        xPrivateDevice.reset(VclPtr<VirtualDevice>::Create());
         pDummyVDev = xPrivateDevice.get();
         pDummyVDev->EnableOutput( false );
         pDummyVDev->SetMapMode( i_rMtf.GetPrefMapMode() );
@@ -431,7 +431,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         if ( nPixelX && nPixelY )
                         {
                             Size aDstSizePixel( nPixelX, nPixelY );
-                            std::unique_ptr<VirtualDevice> xVDev(new VirtualDevice);
+                            ScopedVclPtrInstance<VirtualDevice> xVDev;
                             if( xVDev->SetOutputSizePixel( aDstSizePixel ) )
                             {
                                 Bitmap          aPaint, aMask;

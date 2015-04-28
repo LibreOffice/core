@@ -1874,7 +1874,7 @@ PDFWriterImpl::~PDFWriterImpl()
 {
     if( m_aDocDigest )
         rtl_digest_destroyMD5( m_aDocDigest );
-    delete static_cast<VirtualDevice*>(m_pReferenceDevice);
+    m_pReferenceDevice.disposeAndClear();
 
     if( m_aCipher )
         rtl_cipher_destroyARCFOUR( m_aCipher );
@@ -2220,7 +2220,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
 {
     if( ! m_pReferenceDevice )
     {
-        VirtualDevice*  pVDev = new VirtualDevice( 0 );
+        VclPtrInstance<VirtualDevice> pVDev( 0 );
 
         m_pReferenceDevice = pVDev;
 
@@ -10938,16 +10938,16 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     sal_Int32 nFunctionObject = createObject();
     CHECK_RETURN( updateObject( nFunctionObject ) );
 
-    VirtualDevice aDev;
-    aDev.SetOutputSizePixel( rObject.m_aSize );
-    aDev.SetMapMode( MapMode( MAP_PIXEL ) );
+    ScopedVclPtrInstance< VirtualDevice > aDev;
+    aDev->SetOutputSizePixel( rObject.m_aSize );
+    aDev->SetMapMode( MapMode( MAP_PIXEL ) );
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
-        aDev.SetDrawMode( aDev.GetDrawMode() |
+        aDev->SetDrawMode( aDev->GetDrawMode() |
                           ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
                             DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
-    aDev.DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
+    aDev->DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
 
-    Bitmap aSample = aDev.GetBitmap( Point( 0, 0 ), rObject.m_aSize );
+    Bitmap aSample = aDev->GetBitmap( Point( 0, 0 ), rObject.m_aSize );
     BitmapReadAccess* pAccess = aSample.AcquireReadAccess();
     AccessReleaser aReleaser( pAccess );
 

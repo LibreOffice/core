@@ -1024,9 +1024,9 @@ executeMessageBox(
 {
     SolarMutexGuard aGuard;
 
-    MessBox xBox( pParent, nButtonMask, rTitle, rMessage );
+    ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, rTitle, rMessage);
 
-    sal_uInt16 aResult = xBox.Execute();
+    sal_uInt16 aResult = xBox->Execute();
     switch( aResult )
     {
     case RET_OK:
@@ -1059,11 +1059,11 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *p
     if ( !xManager.get() )
         return ABORT;
 
-    NameClashDialog aDialog( pParent, xManager.get(), rTargetFolderURL,
-                             rClashingName, rProposedNewName, bAllowOverwrite );
+    ScopedVclPtrInstance<NameClashDialog> aDialog(pParent, xManager.get(), rTargetFolderURL,
+                                                  rClashingName, rProposedNewName, bAllowOverwrite);
 
-    NameClashResolveDialogResult eResult = (NameClashResolveDialogResult) aDialog.Execute();
-    rProposedNewName = aDialog.getNewName();
+    NameClashResolveDialogResult eResult = (NameClashResolveDialogResult) aDialog->Execute();
+    rProposedNewName = aDialog->getNewName();
     return eResult;
 }
 
@@ -1207,20 +1207,20 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     if ( pResMgr.get() )
     {
         bool bShowSignatures = aSignInfo.getLength() > 0;
-        MacroWarning aWarning(
+        ScopedVclPtrInstance<MacroWarning> aWarning(
             getParentProperty(), bShowSignatures, *pResMgr.get() );
 
-        aWarning.SetDocumentURL( aDocumentURL );
+        aWarning->SetDocumentURL( aDocumentURL );
         if ( aSignInfo.getLength() > 1 )
         {
-            aWarning.SetStorage( xZipStorage, aDocumentVersion, aSignInfo );
+            aWarning->SetStorage( xZipStorage, aDocumentVersion, aSignInfo );
         }
         else if ( aSignInfo.getLength() == 1 )
         {
-            aWarning.SetCertificate( aSignInfo[ 0 ].Signer );
+            aWarning->SetCertificate( aSignInfo[ 0 ].Signer );
         }
 
-        bApprove = aWarning.Execute() == RET_OK;
+        bApprove = aWarning->Execute() == RET_OK;
     }
 
     if ( bApprove && xApprove.is() )

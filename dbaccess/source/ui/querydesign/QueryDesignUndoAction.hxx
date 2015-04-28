@@ -20,6 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNUNDOACTION_HXX
 
 #include "GeneralUndo.hxx"
+#include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
@@ -28,7 +29,7 @@ namespace dbaui
     class OQueryDesignUndoAction : public OCommentUndoAction
     {
     protected:
-        OJoinTableView* m_pOwner;       // in this container it all happens
+        VclPtr<OJoinTableView> m_pOwner;       // in this container it all happens
 
     public:
         OQueryDesignUndoAction(OJoinTableView* pOwner, sal_uInt16 nCommentID) : OCommentUndoAction(nCommentID), m_pOwner(pOwner) { }

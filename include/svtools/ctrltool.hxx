@@ -147,8 +147,8 @@ private:
     OUString                maBlack;
     OUString                maBlackItalic;
     sal_IntPtr*             mpSizeAry;
-    OutputDevice*           mpDev;
-    OutputDevice*           mpDev2;
+    VclPtr<OutputDevice>    mpDev;
+    VclPtr<OutputDevice>    mpDev2;
     boost::ptr_vector<ImplFontListNameInfo> maEntries;
 
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const OUString& rSearchName, sal_uLong* pIndex ) const;

@@ -45,7 +45,7 @@ public:
     ImplData();
     ~ImplData();
 
-    VirtualDevice*      mpVirDev;
+    VclPtr<VirtualDevice> mpVirDev;
     long                mnItemBorderWidth;
     bool                mbDrawItemFrames:1;
 };
@@ -123,7 +123,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     // remember WinBits
     mpItemList      = new ImplStatusItemList;
-    mpImplData->mpVirDev        = new VirtualDevice( *this );
+    mpImplData->mpVirDev        = VclPtr<VirtualDevice>::Create( *this );
     mnCurItemId     = 0;
     mbFormat        = true;
     mbVisibleItems  = true;
@@ -151,6 +151,11 @@ StatusBar::StatusBar( vcl::Window* pParent, WinBits nStyle ) :
 
 StatusBar::~StatusBar()
 {
+    disposeOnce();
+}
+
+void StatusBar::dispose()
+{
     // delete all items
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
         delete (*mpItemList)[ i ];
@@ -158,8 +163,9 @@ StatusBar::~StatusBar()
     delete mpItemList;
 
     // delete VirtualDevice
-    delete mpImplData->mpVirDev;
+    mpImplData->mpVirDev.disposeAndClear();
     delete mpImplData;
+    Window::dispose();
 }
 
 void StatusBar::AdjustItemWidthsForHiDPI(bool bAdjustHiDPI)

@@ -26,6 +26,7 @@
 
 #include <uielement/complextoolbarcontroller.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/vclptr.hxx>
 
 class ToolBox;
 
@@ -74,7 +75,7 @@ class DropdownToolbarController : public IListBoxListener,
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const SAL_OVERRIDE;
 
     private:
-        ListBoxControl*    m_pListBoxControl;
+        VclPtr<ListBoxControl>    m_pListBoxControl;
 };
 
 }

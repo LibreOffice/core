@@ -84,13 +84,13 @@ public:
 
 class MaskSet : public ValueSet
 {
-    SvxBmpMask*     pSvxBmpMask;
-
+    VclPtr<SvxBmpMask> pSvxBmpMask;
 
 public:
     MaskSet(SvxBmpMask* pMask, vcl::Window* pParent);
-
-    virtual void    Select() SAL_OVERRIDE;
+    virtual ~MaskSet() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { pSvxBmpMask.clear(); ValueSet::dispose(); }
+    virtual void Select() SAL_OVERRIDE;
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE
@@ -160,7 +160,7 @@ void MaskSet::onEditColor()
 
 class MaskData
 {
-    SvxBmpMask*     pMask;
+    VclPtr<SvxBmpMask>     pMask;
     bool            bIsReady;
     bool            bExecState;
     SfxBindings&    rBindings;
@@ -361,7 +361,7 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow(vcl::Window* pParent_, sal_uInt16 n
                                              SfxChildWinInfo* pInfo)
     : SfxChildWindow(pParent_, nId)
 {
-    SvxBmpMask* pDlg = new SvxBmpMask(pBindings, this, pParent_);
+    VclPtr<SvxBmpMask> pDlg = VclPtr<SvxBmpMask>::Create(pBindings, this, pParent_);
 
     pWindow = pDlg;
 
@@ -381,35 +381,35 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pTbxPipette->SetItemBits(m_pTbxPipette->GetItemId(0),
         ToolBoxItemBits::AUTOCHECK);
     get(m_pBtnExec, "replace");
-    m_pCtlPipette = new ColorWindow(get<Window>("toolgrid"));
+    m_pCtlPipette = VclPtr<ColorWindow>::Create(get<Window>("toolgrid"));
     m_pCtlPipette->Show();
     m_pCtlPipette->set_grid_left_attach(1);
     m_pCtlPipette->set_grid_top_attach(0);
     m_pCtlPipette->set_hexpand(true);
     get(m_pCbx1, "cbx1");
     Window *pGrid = get<Window>("colorgrid");
-    m_pQSet1 = new MaskSet(this, pGrid);
+    m_pQSet1 = VclPtr<MaskSet>::Create(this, pGrid);
     m_pQSet1->set_grid_left_attach(1);
     m_pQSet1->set_grid_top_attach(1);
     m_pQSet1->Show();
     get(m_pSp1, "tol1");
     get(m_pLbColor1, "color1");
     get(m_pCbx2, "cbx2");
-    m_pQSet2 = new MaskSet(this, pGrid);
+    m_pQSet2 = VclPtr<MaskSet>::Create(this, pGrid);
     m_pQSet2->set_grid_left_attach(1);
     m_pQSet2->set_grid_top_attach(2);
     m_pQSet2->Show();
     get(m_pSp2, "tol2");
     get(m_pLbColor2, "color2");
     get(m_pCbx3, "cbx3");
-    m_pQSet3 = new MaskSet(this, pGrid);
+    m_pQSet3 = VclPtr<MaskSet>::Create(this, pGrid);
     m_pQSet3->set_grid_left_attach(1);
     m_pQSet3->set_grid_top_attach(3);
     m_pQSet3->Show();
     get(m_pSp3, "tol3");
     get(m_pLbColor3, "color3");
     get(m_pCbx4, "cbx4");
-    m_pQSet4   = new MaskSet(this, pGrid);
+    m_pQSet4   = VclPtr<MaskSet>::Create(this, pGrid);
     m_pQSet4->set_grid_left_attach(1);
     m_pQSet4->set_grid_top_attach(4);
     m_pQSet4->Show();
@@ -483,12 +483,34 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
 
 SvxBmpMask::~SvxBmpMask()
 {
-    delete m_pQSet1;
-    delete m_pQSet2;
-    delete m_pQSet3;
-    delete m_pQSet4;
-    delete m_pCtlPipette;
+    disposeOnce();
+}
+
+void SvxBmpMask::dispose()
+{
+    m_pQSet1.disposeAndClear();
+    m_pQSet2.disposeAndClear();
+    m_pQSet3.disposeAndClear();
+    m_pQSet4.disposeAndClear();
+    m_pCtlPipette.disposeAndClear();
     delete pData;
+    m_pTbxPipette.clear();
+    m_pBtnExec.clear();
+    m_pCbx1.clear();
+    m_pSp1.clear();
+    m_pLbColor1.clear();
+    m_pCbx2.clear();
+    m_pSp2.clear();
+    m_pLbColor2.clear();
+    m_pCbx3.clear();
+    m_pSp3.clear();
+    m_pLbColor3.clear();
+    m_pCbx4.clear();
+    m_pSp4.clear();
+    m_pLbColor4.clear();
+    m_pCbxTrans.clear();
+    m_pLbColorTrans.clear();
+    SfxDockingWindow::dispose();
 }
 
 /** is called by a MaskSet when it is selected */
@@ -982,22 +1004,22 @@ Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Colo
 
 GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const Color& rColor )
 {
-    VirtualDevice   aVDev;
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     GDIMetaFile     aMtf;
     const MapMode&  rPrefMap = rMtf.GetPrefMapMode();
     const Size&     rPrefSize = rMtf.GetPrefSize();
     const size_t    nActionCount = rMtf.GetActionSize();
 
-    aVDev.EnableOutput( false );
-    aMtf.Record( &aVDev );
+    pVDev->EnableOutput( false );
+    aMtf.Record( pVDev );
     aMtf.SetPrefSize( rPrefSize );
     aMtf.SetPrefMapMode( rPrefMap );
-    aVDev.SetLineColor( rColor );
-    aVDev.SetFillColor( rColor );
+    pVDev->SetLineColor( rColor );
+    pVDev->SetFillColor( rColor );
 
     // retrieve one action at the time; first
     // set the whole area to the replacement color.
-    aVDev.DrawRect( Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
+    pVDev->DrawRect( Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
     for ( size_t i = 0; i < nActionCount; i++ )
     {
         MetaAction* pAct = rMtf.GetAction( i );

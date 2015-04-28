@@ -189,7 +189,7 @@ class ToolBarManager : public ToolbarManager_Base
 
         long m_lImageRotation;
 
-        ToolBox* m_pToolBar;
+        VclPtr<ToolBox> m_pToolBar;
 
         OUString m_aModuleIdentifier;
         OUString m_aResourceName;

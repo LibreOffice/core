@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    _xController;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >     _xCursor;
 
-    SwFrmCtrlWindow aTopWindow;
+    VclPtr<SwFrmCtrlWindow> aTopWindow;
     Idle            aLoadedIdle;
     Link            aInitializedLink;
 

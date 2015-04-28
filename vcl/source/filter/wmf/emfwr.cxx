@@ -266,7 +266,7 @@ void EMFWriter::ImplWritePlusColor( const Color& rColor, const sal_uInt32& nTran
 void EMFWriter::ImplWritePlusPoint( const Point& rPoint )
 {
     // Convert to pixels
-    const Point aPoint(maVDev.LogicToPixel( rPoint, maDestMapMode ));
+    const Point aPoint(maVDev->LogicToPixel( rPoint, maDestMapMode ));
     m_rStm.WriteUInt16( aPoint.X() ).WriteUInt16( aPoint.Y() );
 }
 
@@ -276,7 +276,7 @@ void EMFWriter::ImplWritePlusFillPolygonRecord( const Polygon& rPoly, const sal_
     if( rPoly.GetSize() )
     {
         ImplBeginPlusRecord( EmfPlusFillPolygon, 0xC000 ); // Sets the color as well
-        ImplWritePlusColor( maVDev.GetFillColor(), nTrans );
+        ImplWritePlusColor( maVDev->GetFillColor(), nTrans );
         m_rStm.WriteUInt32( rPoly.GetSize() );
         for( sal_uInt16 i = 0; i < rPoly.GetSize(); i++ )
             ImplWritePlusPoint( rPoly[ i ] );
@@ -289,8 +289,8 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
 {
     const sal_uLong nHeaderPos = m_rStm.Tell();
 
-    maVDev.EnableOutput( false );
-    maVDev.SetMapMode( rMtf.GetPrefMapMode() );
+    maVDev->EnableOutput( false );
+    maVDev->SetMapMode( rMtf.GetPrefMapMode() );
     // don't work with pixel as destination map mode -> higher resolution preferrable
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
     mpHandlesUsed = new bool[ MAXHANDLES ];
@@ -301,7 +301,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
     mnHorTextAlign = 0;
 
-    const Size aMtfSizePix( maVDev.LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
+    const Size aMtfSizePix( maVDev->LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
     const Size aMtfSizeLog( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
 
     // seek over header
@@ -319,7 +319,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETVIEWPORTEXTEX );
-    m_rStm.WriteInt32( maVDev.GetDPIX() ).WriteInt32( maVDev.GetDPIY() );
+    m_rStm.WriteInt32( maVDev->GetDPIX() ).WriteInt32( maVDev->GetDPIY() );
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETWINDOWEXTEX );
@@ -466,12 +466,12 @@ void EMFWriter::ImplCheckLineAttr()
 {
     if( mbLineChanged && ImplPrepareHandleSelect( mnLineHandle, LINE_SELECT ) )
     {
-        sal_uInt32 nStyle = maVDev.IsLineColor() ? 0 : 5;
+        sal_uInt32 nStyle = maVDev->IsLineColor() ? 0 : 5;
         sal_uInt32 nWidth = 0, nHeight = 0;
 
         ImplBeginRecord( WIN_EMR_CREATEPEN );
         m_rStm.WriteUInt32( mnLineHandle ).WriteUInt32( nStyle ).WriteUInt32( nWidth ).WriteUInt32( nHeight );
-        ImplWriteColor( maVDev.GetLineColor() );
+        ImplWriteColor( maVDev->GetLineColor() );
         ImplEndRecord();
 
         ImplBeginRecord( WIN_EMR_SELECTOBJECT );
@@ -484,12 +484,12 @@ void EMFWriter::ImplCheckFillAttr()
 {
     if( mbFillChanged && ImplPrepareHandleSelect( mnFillHandle, FILL_SELECT ) )
     {
-        sal_uInt32 nStyle = maVDev.IsFillColor() ? 0 : 1;
+        sal_uInt32 nStyle = maVDev->IsFillColor() ? 0 : 1;
         sal_uInt32 nPatternStyle = 0;
 
         ImplBeginRecord( WIN_EMR_CREATEBRUSHINDIRECT );
         m_rStm.WriteUInt32( mnFillHandle ).WriteUInt32( nStyle );
-        ImplWriteColor( maVDev.GetFillColor() );
+        ImplWriteColor( maVDev->GetFillColor() );
         m_rStm.WriteUInt32( nPatternStyle );
         ImplEndRecord();
 
@@ -503,7 +503,7 @@ void EMFWriter::ImplCheckTextAttr()
 {
     if( mbTextChanged && ImplPrepareHandleSelect( mnTextHandle, TEXT_SELECT ) )
     {
-        const vcl::Font& rFont = maVDev.GetFont();
+        const vcl::Font& rFont = maVDev->GetFont();
         OUString         aFontName( rFont.GetName() );
         sal_Int32        nWeight;
         sal_uInt16       i;
@@ -601,7 +601,7 @@ void EMFWriter::ImplCheckTextAttr()
 
         // Text color
         ImplBeginRecord( WIN_EMR_SETTEXTCOLOR );
-        ImplWriteColor( maVDev.GetTextColor() );
+        ImplWriteColor( maVDev->GetTextColor() );
         ImplEndRecord();
 
         ImplBeginRecord( WIN_EMR_SELECTOBJECT );
@@ -638,25 +638,25 @@ void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
 
 void EMFWriter::ImplWriteExtent( long nExtent )
 {
-    nExtent = OutputDevice::LogicToLogic( Size( nExtent, 0 ), maVDev.GetMapMode(), maDestMapMode ).Width();
+    nExtent = OutputDevice::LogicToLogic( Size( nExtent, 0 ), maVDev->GetMapMode(), maDestMapMode ).Width();
     m_rStm.WriteInt32( nExtent );
 }
 
 void EMFWriter::ImplWritePoint( const Point& rPoint )
 {
-    const Point aPoint( OutputDevice::LogicToLogic( rPoint, maVDev.GetMapMode(), maDestMapMode ));
+    const Point aPoint( OutputDevice::LogicToLogic( rPoint, maVDev->GetMapMode(), maDestMapMode ));
      m_rStm.WriteInt32( aPoint.X() ).WriteInt32( aPoint.Y() );
 }
 
 void EMFWriter::ImplWriteSize( const Size& rSize)
 {
-    const Size aSize( OutputDevice::LogicToLogic( rSize, maVDev.GetMapMode(), maDestMapMode ));
+    const Size aSize( OutputDevice::LogicToLogic( rSize, maVDev->GetMapMode(), maDestMapMode ));
      m_rStm.WriteInt32( aSize.Width() ).WriteInt32( aSize.Height() );
 }
 
 void EMFWriter::ImplWriteRect( const Rectangle& rRect )
 {
-    const Rectangle aRect( OutputDevice::LogicToLogic ( rRect, maVDev.GetMapMode(), maDestMapMode ));
+    const Rectangle aRect( OutputDevice::LogicToLogic ( rRect, maVDev->GetMapMode(), maDestMapMode ));
     m_rStm
        .WriteInt32( aRect.Left() )
        .WriteInt32( aRect.Top() )
@@ -840,7 +840,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         const sal_uLong nOffPos = m_rStm.Tell();
         m_rStm.SeekRel( 16 );
 
-        m_rStm.WriteUInt32( 0 ).WriteInt32( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
+        m_rStm.WriteUInt32( 0 ).WriteInt32( ( ROP_XOR == maVDev->GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
         ImplWriteSize( rSz );
 
         WriteDIB(rBmp, aMemStm, true, false);
@@ -898,19 +898,19 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
         // get text sizes
         if( pDXArray )
         {
-            nNormWidth = maVDev.GetTextWidth( rText );
+            nNormWidth = maVDev->GetTextWidth( rText );
             pDX = const_cast<long*>(pDXArray);
         }
         else
         {
             pOwnArray.reset(new long[ nLen ]);
-            nNormWidth = maVDev.GetTextArray( rText, pOwnArray.get() );
+            nNormWidth = maVDev->GetTextArray( rText, pOwnArray.get() );
             pDX = pOwnArray.get();
         }
 
         if( nLen > 1 )
         {
-            nNormWidth = pDX[ nLen - 2 ] + maVDev.GetTextWidth( OUString(rText[ nLen - 1 ]) );
+            nNormWidth = pDX[ nLen - 2 ] + maVDev->GetTextWidth( OUString(rText[ nLen - 1 ]) );
 
             if( nWidth && nNormWidth && ( nWidth != nNormWidth ) )
             {
@@ -924,7 +924,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
         // write text record
         ImplBeginRecord( WIN_EMR_EXTTEXTOUTW );
 
-        ImplWriteRect( Rectangle( rPos, Size( nNormWidth, maVDev.GetTextHeight() ) ) );
+        ImplWriteRect( Rectangle( rPos, Size( nNormWidth, maVDev->GetTextHeight() ) ) );
         m_rStm.WriteUInt32( 1 );
         m_rStm.WriteInt32( 0 ).WriteInt32( 0 );
         ImplWritePoint( rPos );
@@ -975,11 +975,11 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
 
         if(aFillPolyPolygon.count())
         {
-            const Color aOldLineColor(maVDev.GetLineColor());
-            const Color aOldFillColor(maVDev.GetFillColor());
+            const Color aOldLineColor(maVDev->GetLineColor());
+            const Color aOldFillColor(maVDev->GetFillColor());
 
-            maVDev.SetLineColor();
-            maVDev.SetFillColor(aOldLineColor);
+            maVDev->SetLineColor();
+            maVDev->SetFillColor(aOldLineColor);
 
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
@@ -987,8 +987,8 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
                 ImplWritePolyPolygonRecord(tools::PolyPolygon(Polygon(aPolygon)));
             }
 
-            maVDev.SetLineColor(aOldLineColor);
-            maVDev.SetFillColor(aOldFillColor);
+            maVDev->SetLineColor(aOldLineColor);
+            maVDev->SetFillColor(aOldFillColor);
         }
     }
 }
@@ -1016,14 +1016,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_POINT_ACTION ):
             {
-                if( maVDev.IsLineColor() )
+                if( maVDev->IsLineColor() )
                 {
                     const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
 
                     ImplCheckLineAttr();
                     ImplBeginRecord( WIN_EMR_SETPIXELV );
                     ImplWritePoint( pA->GetPoint() );
-                    ImplWriteColor( maVDev.GetLineColor() );
+                    ImplWriteColor( maVDev->GetLineColor() );
                     ImplEndRecord();
                 }
             }
@@ -1031,7 +1031,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_LINE_ACTION ):
             {
-                if( maVDev.IsLineColor() )
+                if( maVDev->IsLineColor() )
                 {
                     const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
 
@@ -1049,7 +1049,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
                         ImplBeginRecord( WIN_EMR_SETPIXELV );
                         ImplWritePoint( pA->GetEndPoint() );
-                        ImplWriteColor( maVDev.GetLineColor() );
+                        ImplWriteColor( maVDev->GetLineColor() );
                         ImplEndRecord();
                     }
                     else
@@ -1066,7 +1066,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_RECT_ACTION ):
             {
-                if( maVDev.IsLineColor() || maVDev.IsFillColor() )
+                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
                     const MetaRectAction* pA = static_cast<const MetaRectAction*>(pAction);
 
@@ -1082,7 +1082,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_ROUNDRECT_ACTION ):
             {
-                if( maVDev.IsLineColor() || maVDev.IsFillColor() )
+                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
                     const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
 
@@ -1099,7 +1099,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_ELLIPSE_ACTION ):
             {
-                if( maVDev.IsLineColor() || maVDev.IsFillColor() )
+                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
                     const MetaEllipseAction* pA = static_cast<const MetaEllipseAction*>(pAction);
 
@@ -1118,7 +1118,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_CHORD_ACTION ):
             case( META_POLYGON_ACTION ):
             {
-                if( maVDev.IsLineColor() || maVDev.IsFillColor() )
+                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
                     Polygon aPoly;
 
@@ -1157,7 +1157,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_POLYLINE_ACTION ):
             {
-                if( maVDev.IsLineColor() )
+                if( maVDev->IsLineColor() )
                 {
                     const MetaPolyLineAction*   pA = static_cast<const MetaPolyLineAction*>(pAction);
                     const Polygon&              rPoly = pA->GetPolygon();
@@ -1180,7 +1180,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_POLYPOLYGON_ACTION ):
             {
-                if( maVDev.IsLineColor() || maVDev.IsFillColor() )
+                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                     ImplWritePolyPolygonRecord( static_cast<const MetaPolyPolygonAction*>(pAction)->GetPolyPolygon() );
             }
             break;
@@ -1190,7 +1190,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
                 GDIMetaFile                 aTmpMtf;
 
-                maVDev.AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
+                maVDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
                 ImplWrite( aTmpMtf );
             }
             break;
@@ -1200,7 +1200,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
                 GDIMetaFile             aTmpMtf;
 
-                maVDev.AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
+                maVDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
                 ImplWrite( aTmpMtf );
             }
             break;
@@ -1261,19 +1261,19 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                     const MetaAction* pSubstAct = aSubstitute.GetAction( i );
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                     {
-                        maVDev.Push( PushFlags::ALL );
+                        maVDev->Push( PushFlags::ALL );
                         ImplBeginRecord( WIN_EMR_SAVEDC );
                         ImplEndRecord();
 
                         MapMode aMapMode( aSubstitute.GetPrefMapMode() );
-                        Size aOutSize( OutputDevice::LogicToLogic( pA->GetSize(), maVDev.GetMapMode(), aMapMode ) );
+                        Size aOutSize( OutputDevice::LogicToLogic( pA->GetSize(), maVDev->GetMapMode(), aMapMode ) );
                         aMapMode.SetScaleX( Fraction( aOutSize.Width(), aSubstitute.GetPrefSize().Width() ) );
                         aMapMode.SetScaleY( Fraction( aOutSize.Height(), aSubstitute.GetPrefSize().Height() ) );
-                        aMapMode.SetOrigin( OutputDevice::LogicToLogic( pA->GetPoint(), maVDev.GetMapMode(), aMapMode ) );
-                        maVDev.SetMapMode( aMapMode );
+                        aMapMode.SetOrigin( OutputDevice::LogicToLogic( pA->GetPoint(), maVDev->GetMapMode(), aMapMode ) );
+                        maVDev->SetMapMode( aMapMode );
                         ImplWrite( aSubstitute );
 
-                        maVDev.Pop();
+                        maVDev->Pop();
                         ImplBeginRecord( WIN_EMR_RESTOREDC );
                         m_rStm.WriteInt32( -1 );
                         ImplEndRecord();
@@ -1286,7 +1286,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_BMP_ACTION:
             {
                 const MetaBmpAction* pA = static_cast<const MetaBmpAction *>(pAction);
-                ImplWriteBmpRecord( pA->GetBitmap(), pA->GetPoint(), maVDev.PixelToLogic( pA->GetBitmap().GetSizePixel() ), WIN_SRCCOPY );
+                ImplWriteBmpRecord( pA->GetBitmap(), pA->GetPoint(), maVDev->PixelToLogic( pA->GetBitmap().GetSizePixel() ), WIN_SRCCOPY );
             }
             break;
 
@@ -1317,8 +1317,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
                     aMsk.Invert();
-                    ImplWriteBmpRecord( aMsk, pA->GetPoint(), maVDev.PixelToLogic( aMsk.GetSizePixel() ), WIN_SRCPAINT );
-                    ImplWriteBmpRecord( aBmp, pA->GetPoint(), maVDev.PixelToLogic( aBmp.GetSizePixel() ), WIN_SRCAND );
+                    ImplWriteBmpRecord( aMsk, pA->GetPoint(), maVDev->PixelToLogic( aMsk.GetSizePixel() ), WIN_SRCPAINT );
+                    ImplWriteBmpRecord( aBmp, pA->GetPoint(), maVDev->PixelToLogic( aBmp.GetSizePixel() ), WIN_SRCAND );
                 }
                 else
                     ImplWriteBmpRecord( aBmp, pA->GetPoint(), aBmp.GetSizePixel(), WIN_SRCCOPY );
@@ -1405,14 +1405,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_LINECOLOR_ACTION ):
             {
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 mbLineChanged = true;
             }
             break;
 
             case( META_FILLCOLOR_ACTION ):
             {
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 mbFillChanged = true;
             }
             break;
@@ -1423,14 +1423,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_TEXTALIGN_ACTION ):
             case( META_FONT_ACTION ):
             {
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 mbTextChanged = true;
             }
             break;
 
             case( META_ISECTRECTCLIPREGION_ACTION ):
             {
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
 
                 ImplBeginRecord( WIN_EMR_INTERSECTCLIPRECT );
                 ImplWriteRect( static_cast<const MetaISectRectClipRegionAction*>(pAction)->GetRect() );
@@ -1442,18 +1442,18 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_ISECTREGIONCLIPREGION_ACTION ):
             case( META_MOVECLIPREGION_ACTION ):
             {
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
             }
             break;
 
             case( META_REFPOINT_ACTION ):
             case( META_MAPMODE_ACTION ):
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
             break;
 
             case( META_PUSH_ACTION ):
             {
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
 
                 ImplBeginRecord( WIN_EMR_SAVEDC );
                 ImplEndRecord();
@@ -1462,20 +1462,20 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_POP_ACTION ):
             {
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
 
                 ImplBeginRecord( WIN_EMR_RESTOREDC );
                 m_rStm.WriteInt32( -1 );
                 ImplEndRecord();
 
-                ImplWriteRasterOp( maVDev.GetRasterOp() );
+                ImplWriteRasterOp( maVDev->GetRasterOp() );
                 mbLineChanged = mbFillChanged = mbTextChanged = true;
             }
             break;
 
             case( META_RASTEROP_ACTION ):
             {
-                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 ImplWriteRasterOp( static_cast<const MetaRasterOpAction*>(pAction)->GetRasterOp() );
             }
             break;

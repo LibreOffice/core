@@ -239,8 +239,26 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
 ScImportOptionsDlg::~ScImportOptionsDlg()
 {
+    disposeOnce();
+}
+
+void ScImportOptionsDlg::dispose()
+{
     delete pFieldSepTab;
     delete pTextSepTab;
+    m_pFieldFrame.clear();
+    m_pFtCharset.clear();
+    m_pLbCharset.clear();
+    m_pFtFieldSep.clear();
+    m_pEdFieldSep.clear();
+    m_pFtTextSep.clear();
+    m_pEdTextSep.clear();
+    m_pCbShown.clear();
+    m_pCbFormulas.clear();
+    m_pCbQuoteAll.clear();
+    m_pCbFixed.clear();
+    m_pBtnOk.clear();
+    ModalDialog::dispose();
 }
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const

@@ -41,6 +41,7 @@ public:
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~Ruler();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetNullOffset(const Point& rOffset);
 
@@ -49,7 +50,7 @@ public:
     using ::Ruler::SetNullOffset;
 protected:
     ::sd::View* pSdView;
-    ::sd::Window* pSdWin;
+    VclPtr<::sd::Window> pSdWin;
     DrawViewShell* pDrViewShell;
     RulerCtrlItem* pCtrlItem;
     bool bHorz;

@@ -105,17 +105,29 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
 
 }
 
+SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
+{
+    disposeOnce();
+}
+
+void SvxLineEndDefTabPage::dispose()
+{
+    m_pEdtName.clear();
+    m_pLbLineEnds.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnDelete.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
+    m_pCtlPreview.clear();
+    SfxTabPage::dispose();
+}
+
 void SvxLineEndDefTabPage::Resize()
 {
     rXLSet.Put(XLineStartWidthItem(m_pCtlPreview->GetOutputSize().Height()  / 2 ));
     rXLSet.Put(XLineEndWidthItem(m_pCtlPreview->GetOutputSize().Height() / 2 ));
     SfxTabPage::Resize();
-}
-
-
-
-SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
-{
 }
 
 
@@ -194,11 +206,10 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
         if( aString != m_pLbLineEnds->GetSelectEntry() )
         {
-            MessageDialog aQueryBox( GetParentDialog()
-                                    ,"AskChangeLineEndDialog"
-                                    ,"cui/ui/querychangelineenddialog.ui");
-
-            if ( aQueryBox.Execute() == RET_YES )
+            ScopedVclPtrInstance<MessageDialog> aQueryBox( GetParentDialog()
+                                                           ,"AskChangeLineEndDialog"
+                                                           ,"cui/ui/querychangelineenddialog.ui" );
+            if ( aQueryBox->Execute() == RET_YES )
                 ClickModifyHdl_Impl( this );
         }
     }
@@ -269,9 +280,9 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 
 
 
-SfxTabPage* SvxLineEndDefTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet )
 {
-    return new SvxLineEndDefTabPage( pWindow, *rSet );
+    return VclPtr<SvxLineEndDefTabPage>::Create( pWindow, *rSet );
 }
 
 
@@ -331,10 +342,10 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         // if yes, repeat and demand a new name
         if ( !bDifferent )
         {
-            MessageDialog aWarningBox( GetParentDialog()
-                                      ,"DuplicateNameDialog"
-                                      ,"cui/ui/queryduplicatedialog.ui");
-            aWarningBox.Execute();
+            ScopedVclPtrInstance<MessageDialog> aWarningBox( GetParentDialog()
+                                                             ,"DuplicateNameDialog"
+                                                             ,"cui/ui/queryduplicatedialog.ui" );
+            aWarningBox->Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialog creation failed!");
@@ -356,7 +367,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
                 if( bDifferent )
                     bLoop = false;
                 else
-                    aWarningBox.Execute();
+                    aWarningBox->Execute();
             }
         }
 
@@ -485,10 +496,10 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
-                                   ,"DuplicateNameDialog"
-                                   ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
+                                                          ,"DuplicateNameDialog"
+                                                          ,"cui/ui/queryduplicatedialog.ui" );
+                aBox->Execute();
             }
         }
     }
@@ -513,11 +524,11 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog()
-                                ,"AskDelLineEndDialog"
-                                ,"cui/ui/querydeletelineenddialog.ui");
+        ScopedVclPtrInstance<MessageDialog> aQueryBox( GetParentDialog()
+                                                       ,"AskDelLineEndDialog"
+                                                       ,"cui/ui/querydeletelineenddialog.ui" );
 
-        if ( aQueryBox.Execute() == RET_YES )
+        if ( aQueryBox->Execute() == RET_YES )
         {
             delete pLineEndList->Remove( nPos );
             m_pLbLineEnds->RemoveEntry( nPos );

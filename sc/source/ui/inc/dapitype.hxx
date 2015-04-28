@@ -30,16 +30,16 @@
 class ScDataPilotSourceTypeDlg : public ModalDialog
 {
 private:
-    RadioButton* m_pBtnSelection;
-    RadioButton* m_pBtnNamedRange;
-    RadioButton* m_pBtnDatabase;
-    RadioButton* m_pBtnExternal;
-    ListBox*     m_pLbNamedRange;
+    VclPtr<RadioButton> m_pBtnSelection;
+    VclPtr<RadioButton> m_pBtnNamedRange;
+    VclPtr<RadioButton> m_pBtnDatabase;
+    VclPtr<RadioButton> m_pBtnExternal;
+    VclPtr<ListBox>     m_pLbNamedRange;
 
 public:
     ScDataPilotSourceTypeDlg(vcl::Window* pParent, bool bEnableExternal);
     virtual ~ScDataPilotSourceTypeDlg();
-
+    virtual void dispose() SAL_OVERRIDE;
     bool IsDatabase() const;
     bool IsExternal() const;
     bool IsNamedRange() const;
@@ -53,16 +53,17 @@ private:
 class ScDataPilotServiceDlg : public ModalDialog
 {
 private:
-    ListBox         *m_pLbService;
-    Edit            *m_pEdSource;
-    Edit            *m_pEdName;
-    Edit            *m_pEdUser;
-    Edit            *m_pEdPasswd;
+    VclPtr<ListBox>         m_pLbService;
+    VclPtr<Edit>            m_pEdSource;
+    VclPtr<Edit>            m_pEdName;
+    VclPtr<Edit>            m_pEdUser;
+    VclPtr<Edit>            m_pEdPasswd;
 
 public:
             ScDataPilotServiceDlg( vcl::Window* pParent,
                     const com::sun::star::uno::Sequence<OUString>& rServices );
             virtual ~ScDataPilotServiceDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString  GetServiceName() const;
     OUString  GetParSource() const;

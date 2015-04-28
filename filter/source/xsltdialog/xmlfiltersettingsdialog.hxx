@@ -39,9 +39,9 @@ class SvxPathControl : public vcl::Window
 {
 private:
     bool bHasBeenShown;
-    VclVBox* m_pVBox;
-    HeaderBar* m_pHeaderBar;
-    XMLFilterListBox* m_pFocusCtrl;
+    VclPtr<VclVBox> m_pVBox;
+    VclPtr<HeaderBar> m_pHeaderBar;
+    VclPtr<XMLFilterListBox> m_pFocusCtrl;
 protected:
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -50,6 +50,7 @@ public:
     HeaderBar* getHeaderBar() { return m_pHeaderBar; }
     XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
     virtual ~SvxPathControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
@@ -59,7 +60,7 @@ class HeaderBar;
 class XMLFilterListBox : public SvTabListBox
 {
 private:
-    HeaderBar*  m_pHeaderBar;
+    VclPtr<HeaderBar>  m_pHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
@@ -68,6 +69,8 @@ private:
 
 public:
     XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl);
+    virtual ~XMLFilterListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** adds a new filter info entry to the ui filter list */
     void addFilterEntry( const filter_info_impl* pInfo );
@@ -84,6 +87,8 @@ class XMLFilterSettingsDialog : public ModelessDialog
 public:
     XMLFilterSettingsDialog(vcl::Window* pParent,
         const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext);
+    virtual ~XMLFilterSettingsDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK(ClickHdl_Impl, PushButton * );
     DECL_LINK(SelectionChangedHdl_Impl, void * );
@@ -124,15 +129,15 @@ private:
 
     std::vector< filter_info_impl* > maFilterVector;
 
-    XMLFilterListBox*   m_pFilterListBox;
-    SvxPathControl* m_pCtrlFilterList;
-    PushButton* m_pPBNew;
-    PushButton* m_pPBEdit;
-    PushButton* m_pPBTest;
-    PushButton* m_pPBDelete;
-    PushButton* m_pPBSave;
-    PushButton* m_pPBOpen;
-    CloseButton* m_pPBClose;
+    VclPtr<XMLFilterListBox>   m_pFilterListBox;
+    VclPtr<SvxPathControl> m_pCtrlFilterList;
+    VclPtr<PushButton> m_pPBNew;
+    VclPtr<PushButton> m_pPBEdit;
+    VclPtr<PushButton> m_pPBTest;
+    VclPtr<PushButton> m_pPBDelete;
+    VclPtr<PushButton> m_pPBSave;
+    VclPtr<PushButton> m_pPBOpen;
+    VclPtr<CloseButton> m_pPBClose;
 
     bool m_bIsClosable;
 

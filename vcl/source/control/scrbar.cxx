@@ -125,7 +125,13 @@ ScrollBar::ScrollBar( vcl::Window* pParent, WinBits nStyle ) :
 
 ScrollBar::~ScrollBar()
 {
-    delete mpData;
+    disposeOnce();
+}
+
+void ScrollBar::dispose()
+{
+    delete mpData; mpData = NULL;
+    Control::dispose();
 }
 
 void ScrollBar::ImplUpdateRects( bool bUpdate )

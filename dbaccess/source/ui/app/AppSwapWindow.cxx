@@ -38,35 +38,41 @@ using namespace ::com::sun::star::container;
 // class OApplicationSwapWindow
 OApplicationSwapWindow::OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow )
     :Window(_pParent,WB_DIALOGCONTROL )
-    ,m_aIconControl(this)
+    ,m_aIconControl(VclPtr<OApplicationIconControl>::Create(this))
     ,m_eLastType(E_NONE)
     ,m_rBorderWin( _rBorderWindow )
 {
 
     ImplInitSettings( true, true, true );
 
-    m_aIconControl.SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
-    m_aIconControl.setControlActionListener( &m_rBorderWin.getView()->getAppController() );
-    m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
-    m_aIconControl.Show();
+    m_aIconControl->SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
+    m_aIconControl->setControlActionListener( &m_rBorderWin.getView()->getAppController() );
+    m_aIconControl->SetHelpId(HID_APP_SWAP_ICONCONTROL);
+    m_aIconControl->Show();
 }
 
 OApplicationSwapWindow::~OApplicationSwapWindow()
 {
+    disposeOnce();
+}
 
+void OApplicationSwapWindow::dispose()
+{
+    m_aIconControl.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void OApplicationSwapWindow::Resize()
 {
     Size aFLSize = LogicToPixel( Size( 8, 0 ), MAP_APPFONT );
     long nX = 0;
-    if ( m_aIconControl.GetEntryCount() != 0 )
-        nX = m_aIconControl.GetBoundingBox( m_aIconControl.GetEntry(0) ).GetWidth() + aFLSize.Width();
+    if ( m_aIconControl->GetEntryCount() != 0 )
+        nX = m_aIconControl->GetBoundingBox( m_aIconControl->GetEntry(0) ).GetWidth() + aFLSize.Width();
 
     Size aOutputSize = GetOutputSize();
 
-    m_aIconControl.SetPosSizePixel( Point(static_cast<long>((aOutputSize.Width() - nX)*0.5), 0)  ,Size(nX,aOutputSize.Height()));
-    m_aIconControl.ArrangeIcons();
+    m_aIconControl->SetPosSizePixel( Point(static_cast<long>((aOutputSize.Width() - nX)*0.5), 0)  ,Size(nX,aOutputSize.Height()));
+    m_aIconControl->ArrangeIcons();
 }
 
 void OApplicationSwapWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
@@ -106,24 +112,24 @@ void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OApplicationSwapWindow::clearSelection()
 {
-    m_aIconControl.SetNoSelection();
+    m_aIconControl->SetNoSelection();
     sal_uLong nPos = 0;
-    SvxIconChoiceCtrlEntry* pEntry = m_aIconControl.GetSelectedEntry(nPos);
+    SvxIconChoiceCtrlEntry* pEntry = m_aIconControl->GetSelectedEntry(nPos);
     if ( pEntry )
-        m_aIconControl.InvalidateEntry(pEntry);
-    m_aIconControl.GetClickHdl().Call(&m_aIconControl);
+        m_aIconControl->InvalidateEntry(pEntry);
+    m_aIconControl->GetClickHdl().Call(&m_aIconControl);
 }
 
 void OApplicationSwapWindow::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )
 {
-    m_aIconControl.CreateAutoMnemonics( _rMnemonics );
+    m_aIconControl->CreateAutoMnemonics( _rMnemonics );
 }
 
 bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 {
     const vcl::KeyCode& rKeyCode = _rEvent.GetKeyCode();
     if ( rKeyCode.GetModifier() == KEY_MOD2 )
-        return m_aIconControl.DoKeyInput( _rEvent );
+        return m_aIconControl->DoKeyInput( _rEvent );
 
     // not handled
     return false;
@@ -132,7 +138,7 @@ bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 ElementType OApplicationSwapWindow::getElementType() const
 {
     sal_uLong nPos = 0;
-    SvxIconChoiceCtrlEntry* pEntry = m_aIconControl.GetSelectedEntry(nPos);
+    SvxIconChoiceCtrlEntry* pEntry = m_aIconControl->GetSelectedEntry(nPos);
     return ( pEntry ) ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
 }
 
@@ -174,18 +180,18 @@ IMPL_LINK_NOARG(OApplicationSwapWindow, ChangeToLastSelected)
 
 void OApplicationSwapWindow::selectContainer(ElementType _eType)
 {
-    sal_uLong nCount = m_aIconControl.GetEntryCount();
+    sal_uLong nCount = m_aIconControl->GetEntryCount();
     SvxIconChoiceCtrlEntry* pEntry = NULL;
     for (sal_uLong i=0; i < nCount; ++i)
     {
-        pEntry = m_aIconControl.GetEntry(i);
+        pEntry = m_aIconControl->GetEntry(i);
         if ( pEntry && *static_cast<ElementType*>(pEntry->GetUserData()) == _eType )
             break;
         pEntry = NULL;
     }
 
     if ( pEntry )
-        m_aIconControl.SetCursor(pEntry); // this call also initiates a onContainerSelected call
+        m_aIconControl->SetCursor(pEntry); // this call also initiates a onContainerSelected call
     else
         onContainerSelected( _eType );
 }

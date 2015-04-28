@@ -28,6 +28,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/dndhelp.hxx>
+#include <vcl/vclptr.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com {
@@ -68,7 +69,7 @@ enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOM
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
 {
 private:
-    Edit*               mpSubEdit;
+    VclPtr<Edit>        mpSubEdit;
     Timer*              mpUpdateDataTimer;
     TextFilter*         mpFilterText;
     DDInfo*             mpDDInfo;
@@ -85,7 +86,7 @@ private:
     sal_Int32           mnMaxWidthChars;
     AutocompleteAction  meAutocompleteAction;
     sal_Unicode         mcEchoChar;
-    bool            mbModified:1,
+    bool                mbModified:1,
                         mbInternModified:1,
                         mbReadOnly:1,
                         mbInsertMode:1,
@@ -164,6 +165,7 @@ public:
                         Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
                         Edit( vcl::Window* pParent, const ResId& rResId );
                         virtual ~Edit();
+                        virtual void dispose() SAL_OVERRIDE;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;

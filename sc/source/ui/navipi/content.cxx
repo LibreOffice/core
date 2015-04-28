@@ -142,6 +142,13 @@ ScContentTree::ScContentTree( vcl::Window* pParent, const ResId& rResId ) :
 
 ScContentTree::~ScContentTree()
 {
+    disposeOnce();
+}
+
+void ScContentTree::dispose()
+{
+    pParentWindow.clear();
+    SvTreeListBox::dispose();
 }
 
 // helper function for  GetEntryAltText and GetEntryLongDescription

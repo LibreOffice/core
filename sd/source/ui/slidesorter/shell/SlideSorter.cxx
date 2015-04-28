@@ -71,18 +71,18 @@ private:
 
 ::boost::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
     ViewShell& rViewShell,
-    const ::boost::shared_ptr<sd::Window>& rpContentWindow,
-    const ::boost::shared_ptr<ScrollBar>& rpHorizontalScrollBar,
-    const ::boost::shared_ptr<ScrollBar>& rpVerticalScrollBar,
-    const ::boost::shared_ptr<ScrollBarBox>& rpScrollBarBox)
+    sd::Window* pContentWindow,
+    ScrollBar* pHorizontalScrollBar,
+    ScrollBar* pVerticalScrollBar,
+    ScrollBarBox* pScrollBarBox)
 {
     ::boost::shared_ptr<SlideSorter> pSlideSorter(
         new SlideSorter(
             rViewShell,
-            rpContentWindow,
-            rpHorizontalScrollBar,
-            rpVerticalScrollBar,
-            rpScrollBarBox));
+            pContentWindow,
+            pHorizontalScrollBar,
+            pVerticalScrollBar,
+            pScrollBarBox));
     pSlideSorter->Init();
     return pSlideSorter;
 }
@@ -103,10 +103,10 @@ private:
 
 SlideSorter::SlideSorter (
     ViewShell& rViewShell,
-    const ::boost::shared_ptr<sd::Window>& rpContentWindow,
-    const ::boost::shared_ptr<ScrollBar>& rpHorizontalScrollBar,
-    const ::boost::shared_ptr<ScrollBar>& rpVerticalScrollBar,
-    const ::boost::shared_ptr<ScrollBarBox>& rpScrollBarBox)
+    sd::Window* pContentWindow,
+    ScrollBar* pHorizontalScrollBar,
+    ScrollBar* pVerticalScrollBar,
+    ScrollBarBox* pScrollBarBox)
     : mbIsValid(false),
       mpSlideSorterController(),
       mpSlideSorterModel(),
@@ -114,11 +114,11 @@ SlideSorter::SlideSorter (
       mxControllerWeak(),
       mpViewShell(&rViewShell),
       mpViewShellBase(&rViewShell.GetViewShellBase()),
-      mpContentWindow(rpContentWindow),
+      mpContentWindow(pContentWindow),
       mbOwnesContentWindow(false),
-      mpHorizontalScrollBar(rpHorizontalScrollBar),
-      mpVerticalScrollBar(rpVerticalScrollBar),
-      mpScrollBarBox(rpScrollBarBox),
+      mpHorizontalScrollBar(pHorizontalScrollBar),
+      mpVerticalScrollBar(pVerticalScrollBar),
+      mpScrollBarBox(pScrollBarBox),
       mbLayoutPending(true),
       mpProperties(new controller::Properties()),
       mpTheme(new view::Theme(mpProperties))
@@ -136,11 +136,11 @@ SlideSorter::SlideSorter (
       mxControllerWeak(),
       mpViewShell(pViewShell),
       mpViewShellBase(&rBase),
-      mpContentWindow(new ContentWindow(rParentWindow,*this )),
+      mpContentWindow(VclPtr<ContentWindow>::Create(rParentWindow,*this )),
       mbOwnesContentWindow(true),
-      mpHorizontalScrollBar(new ScrollBar(&rParentWindow,WinBits(WB_HSCROLL | WB_DRAG))),
-      mpVerticalScrollBar(new ScrollBar(&rParentWindow,WinBits(WB_VSCROLL | WB_DRAG))),
-      mpScrollBarBox(new ScrollBarBox(&rParentWindow)),
+      mpHorizontalScrollBar(VclPtr<ScrollBar>::Create(&rParentWindow,WinBits(WB_HSCROLL | WB_DRAG))),
+      mpVerticalScrollBar(VclPtr<ScrollBar>::Create(&rParentWindow,WinBits(WB_VSCROLL | WB_DRAG))),
+      mpScrollBarBox(VclPtr<ScrollBarBox>::Create(&rParentWindow)),
       mbLayoutPending(true),
       mpProperties(new controller::Properties()),
       mpTheme(new view::Theme(mpProperties))
@@ -170,7 +170,7 @@ void SlideSorter::Init()
     SetupListeners ();
 
     // Initialize the window.
-    SharedSdWindow pContentWindow (GetContentWindow());
+    sd::Window *pContentWindow (GetContentWindow());
     if (pContentWindow)
     {
         ::vcl::Window* pParentWindow = pContentWindow->GetParent();
@@ -211,18 +211,6 @@ SlideSorter::~SlideSorter()
     mpHorizontalScrollBar.reset();
     mpVerticalScrollBar.reset();
     mpScrollBarBox.reset();
-
-    if (mbOwnesContentWindow)
-    {
-        OSL_ASSERT(mpContentWindow.unique());
-    }
-    else
-    {
-        // Assume that outside this class only the owner holds a reference
-        // to the content window.
-        OSL_ASSERT(mpContentWindow.use_count()==2);
-    }
-    mpContentWindow.reset();
 }
 
 model::SlideSorterModel& SlideSorter::GetModel() const
@@ -253,7 +241,7 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
 {
     GetController().Paint(
         rRepaintArea,
-        GetContentWindow().get());
+        GetContentWindow());
 }
 
 void SlideSorter::SetupControls (::vcl::Window* )
@@ -263,7 +251,7 @@ void SlideSorter::SetupControls (::vcl::Window* )
 
 void SlideSorter::SetupListeners()
 {
-    SharedSdWindow pWindow (GetContentWindow());
+    sd::Window *pWindow (GetContentWindow());
     if (pWindow)
     {
         ::vcl::Window* pParentWindow = pWindow->GetParent();
@@ -292,7 +280,7 @@ void SlideSorter::ReleaseListeners()
 {
     mpSlideSorterController->GetScrollBarManager().Disconnect();
 
-    SharedSdWindow pWindow (GetContentWindow());
+    sd::Window *pWindow (GetContentWindow());
     if (pWindow)
     {
         pWindow->RemoveEventListener(

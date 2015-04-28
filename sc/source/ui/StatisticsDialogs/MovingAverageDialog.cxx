@@ -37,7 +37,15 @@ ScMovingAverageDialog::ScMovingAverageDialog(
 }
 
 ScMovingAverageDialog::~ScMovingAverageDialog()
-{}
+{
+    disposeOnce();
+}
+
+void ScMovingAverageDialog::dispose()
+{
+    mpIntervalSpin.clear();
+    ScStatisticsInputOutputDialog::dispose();
+}
 
 bool ScMovingAverageDialog::Close()
 {

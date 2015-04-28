@@ -195,11 +195,15 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
 
 BackingWindow::~BackingWindow()
 {
+    disposeOnce();
+}
+
+void BackingWindow::dispose()
+{
     // deregister drag&drop helper
     if (mxDropTargetListener.is())
     {
-        for (std::vector<vcl::Window*>::iterator aI = maDndWindows.begin(),
-            aEnd = maDndWindows.end(); aI != aEnd; ++aI)
+        for (auto aI = maDndWindows.begin(), aEnd = maDndWindows.end(); aI != aEnd; ++aI)
         {
             vcl::Window *pDndWin = *aI;
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
@@ -212,6 +216,29 @@ BackingWindow::~BackingWindow()
         }
         mxDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
     }
+    disposeBuilder();
+    mpOpenButton.clear();
+    mpRecentButton.clear();
+    mpTemplateButton.clear();
+    mpCreateLabel.clear();
+    mpWriterAllButton.clear();
+    mpCalcAllButton.clear();
+    mpImpressAllButton.clear();
+    mpDrawAllButton.clear();
+    mpDBAllButton.clear();
+    mpMathAllButton.clear();
+    mpHelpButton.clear();
+    mpExtensionsButton.clear();
+    mpAllButtonsBox.clear();
+    mpButtonsBox.clear();
+    mpSmallButtonsBox.clear();
+    mpThinBox1.clear();
+    mpThinBox2.clear();
+    mpHelpBox.clear();
+    mpExtensionsBox.clear();
+    mpAllRecentThumbnails.clear();
+    mpLocalView.clear();
+    vcl::Window::dispose();
 }
 
 void BackingWindow::initControls()
@@ -368,15 +395,15 @@ void BackingWindow::Paint( const Rectangle& )
     DrawWallpaper( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ), aBack );
     Pop();
 
-    VirtualDevice aDev( *this );
-    aDev.EnableRTL( IsRTLEnabled() );
-    aDev.SetOutputSizePixel( maStartCentButtons.GetSize() );
+    ScopedVclPtrInstance< VirtualDevice > pVDev( *this );
+    pVDev->EnableRTL( IsRTLEnabled() );
+    pVDev->SetOutputSizePixel( maStartCentButtons.GetSize() );
     Point aOffset( Point( 0, 0 ) - maStartCentButtons.TopLeft());
-    aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
+    pVDev->DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
     DrawOutDev( maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
                 Point( 0, 0 ), maStartCentButtons.GetSize(),
-                aDev );
+                *pVDev.get() );
 }
 
 bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
@@ -462,8 +489,7 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
     // establish drag&drop mode
     mxDropTargetListener.set(new OpenFileDropTargetListener(mxContext, mxFrame));
 
-    for (std::vector<vcl::Window*>::iterator aI = maDndWindows.begin(),
-        aEnd = maDndWindows.end(); aI != aEnd; ++aI)
+    for (auto aI = maDndWindows.begin(), aEnd = maDndWindows.end(); aI != aEnd; ++aI)
     {
         vcl::Window *pDndWin = *aI;
         css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =

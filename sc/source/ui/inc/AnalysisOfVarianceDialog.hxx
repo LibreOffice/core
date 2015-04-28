@@ -33,10 +33,10 @@ private:
         TWO_FACTOR
     };
 
-    NumericField* mpAlphaField;
-    RadioButton*  mpSingleFactorRadio;
-    RadioButton*  mpTwoFactorRadio;
-    NumericField* mpRowsPerSampleField;
+    VclPtr<NumericField> mpAlphaField;
+    VclPtr<RadioButton>  mpSingleFactorRadio;
+    VclPtr<RadioButton>  mpTwoFactorRadio;
+    VclPtr<NumericField> mpRowsPerSampleField;
 
     DECL_LINK(FactorChanged,   void*);
 
@@ -55,6 +55,7 @@ public:
         vcl::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScAnalysisOfVarianceDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool Close() SAL_OVERRIDE;
 

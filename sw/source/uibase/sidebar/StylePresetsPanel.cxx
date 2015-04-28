@@ -43,7 +43,7 @@
 
 namespace sw { namespace sidebar {
 
-StylePresetsPanel* StylePresetsPanel::Create (vcl::Window* pParent,
+VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
                                         const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                         SfxBindings* pBindings)
 {
@@ -54,7 +54,7 @@ StylePresetsPanel* StylePresetsPanel::Create (vcl::Window* pParent,
     if (pBindings == NULL)
         throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
-    return new StylePresetsPanel(pParent, rxFrame, pBindings);
+    return VclPtr<vcl::Window>(new StylePresetsPanel(pParent, rxFrame, pBindings), SAL_NO_ACQUIRE);
 }
 
 StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
@@ -91,6 +91,14 @@ StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
 
 StylePresetsPanel::~StylePresetsPanel()
 {
+    disposeOnce();
+}
+
+void StylePresetsPanel::dispose()
+{
+    mpListBox.disposeAndClear();
+
+    PanelLayout::dispose();
 }
 
 IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl)

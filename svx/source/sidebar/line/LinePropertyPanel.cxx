@@ -194,6 +194,37 @@ LinePropertyPanel::LinePropertyPanel(
 
 LinePropertyPanel::~LinePropertyPanel()
 {
+    disposeOnce();
+}
+
+void LinePropertyPanel::dispose()
+{
+    mpFTWidth.clear();
+    mpTBWidth.clear();
+    mpFTStyle.clear();
+    mpLBStyle.clear();
+    mpFTTrancparency.clear();
+    mpMFTransparent.clear();
+    mpFTArrow.clear();
+    mpLBStart.clear();
+    mpLBEnd.clear();
+    mpFTEdgeStyle.clear();
+    mpLBEdgeStyle.clear();
+    mpFTCapStyle.clear();
+    mpLBCapStyle.clear();
+
+    maStyleControl.dispose();
+    maDashControl.dispose();
+    maWidthControl.dispose();
+    maStartControl.dispose();
+    maEndControl.dispose();
+    maLineEndListControl.dispose();
+    maLineStyleListControl.dispose();
+    maTransControl.dispose();
+    maEdgeStyle.dispose();
+    maCapStyle.dispose();
+
+    PanelLayout::dispose();
 }
 
 void LinePropertyPanel::Initialize()
@@ -267,7 +298,7 @@ void LinePropertyPanel::SetupIcons()
     }
 }
 
-LinePropertyPanel* LinePropertyPanel::Create (
+VclPtr<vcl::Window> LinePropertyPanel::Create (
     vcl::Window* pParent,
     const uno::Reference<frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -279,7 +310,7 @@ LinePropertyPanel* LinePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to LinePropertyPanel::Create", NULL, 2);
 
-    return new LinePropertyPanel(pParent, rxFrame, pBindings);
+    return VclPtr<LinePropertyPanel>::Create(pParent, rxFrame, pBindings);
 }
 
 void LinePropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
@@ -750,9 +781,9 @@ IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
     return 0L;
 }
 
-PopupControl* LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pParent)
+VclPtr<PopupControl> LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pParent)
 {
-    return new LineWidthControl(pParent, *this);
+    return VclPtrInstance<LineWidthControl>(pParent, *this);
 }
 
 void LinePropertyPanel::EndLineWidthPopupMode()

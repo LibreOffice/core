@@ -33,7 +33,6 @@ public:
         const ::rtl::OUString& rsTitle,
         vcl::Window* pParentWindow,
         const ::boost::function<void()>& rCloserAction);
-    virtual ~DeckTitleBar();
 
     void SetCloserVisible (const bool bIsCloserVisible);
 

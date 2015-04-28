@@ -131,9 +131,9 @@ SvInplaceEdit2::SvInplaceEdit2
 {
 
     if( bMulti )
-        pEdit = new MyMultiEdit_Impl( pParent, this );
+        pEdit = VclPtr<MyMultiEdit_Impl>::Create( pParent, this );
     else
-        pEdit = new MyEdit_Impl( pParent, this );
+        pEdit = VclPtr<MyEdit_Impl>::Create( pParent, this );
 
     vcl::Font aFont( pParent->GetFont() );
     aFont.SetTransparent( false );
@@ -166,7 +166,7 @@ SvInplaceEdit2::~SvInplaceEdit2()
         Application::RemoveAccel( &aAccReturn );
         Application::RemoveAccel( &aAccEscape );
     }
-    delete pEdit;
+    pEdit.disposeAndClear();
 }
 
 OUString SvInplaceEdit2::GetSavedValue() const
@@ -1539,29 +1539,49 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
 
 SvTreeListBox::~SvTreeListBox()
 {
+    disposeOnce();
+}
 
-    pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
-    delete pImp;
-    delete mpImpl->m_pLink;
-    ClearTabList();
-
-    delete pEdCtrl;
-    pEdCtrl = 0;
-    pModel->RemoveView( this );
-    if ( pModel->GetRefCount() == 0 )
+void SvTreeListBox::dispose()
+{
+    if( pImp )
     {
-        pModel->Clear();
-        delete pModel;
-        pModel = NULL;
+        pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
+        delete pImp;
+        pImp = NULL;
+    }
+    if( mpImpl )
+    {
+        delete mpImpl->m_pLink;
+        mpImpl->m_pLink = NULL;
+
+        ClearTabList();
+
+        delete pEdCtrl;
+        pEdCtrl = NULL;
+
+        if( pModel )
+        {
+            pModel->RemoveView( this );
+            if ( pModel->GetRefCount() == 0 )
+            {
+                pModel->Clear();
+                delete pModel;
+                pModel = NULL;
+            }
+        }
+
+        SvTreeListBox::RemoveBoxFromDDList_Impl( *this );
+
+        if( this == pDDSource )
+            pDDSource = 0;
+        if( this == pDDTarget )
+            pDDTarget = 0;
+        delete mpImpl;
+        mpImpl = NULL;
     }
 
-    SvTreeListBox::RemoveBoxFromDDList_Impl( *this );
-
-    if( this == pDDSource )
-        pDDSource = 0;
-    if( this == pDDTarget )
-        pDDTarget = 0;
-    delete mpImpl;
+    Control::dispose();
 }
 
 void SvTreeListBox::SetExtendedWinBits( ExtendedWinBits _nBits )
@@ -2197,12 +2217,11 @@ void SvTreeListBox::GetFocus()
 
 void SvTreeListBox::LoseFocus()
 {
-    //If there is no item in the tree, delete visual focus.
-    if( !First())
-    {
+    // If there is no item in the tree, delete visual focus.
+    if ( !First() )
         Invalidate();
-    }
-    pImp->LoseFocus();
+    if ( pImp )
+        pImp->LoseFocus();
     Control::LoseFocus();
 }
 
@@ -2234,17 +2253,17 @@ void SvTreeListBox::ShowTargetEmphasis( SvTreeListEntry* pEntry, bool /*bShow*/ 
 
 void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
 {
-    if( !nDeltaEntries || !pImp->aVerSBar.IsVisible() )
+    if( !nDeltaEntries || !pImp->aVerSBar->IsVisible() )
         return;
 
-    long nThumb = pImp->aVerSBar.GetThumbPos();
-    long nMax = pImp->aVerSBar.GetRange().Max();
+    long nThumb = pImp->aVerSBar->GetThumbPos();
+    long nMax = pImp->aVerSBar->GetRange().Max();
 
     if( nDeltaEntries < 0 )
     {
         // move window up
         nDeltaEntries *= -1;
-        long nVis = pImp->aVerSBar.GetVisibleSize();
+        long nVis = pImp->aVerSBar->GetVisibleSize();
         long nTemp = nThumb + nVis;
         if( nDeltaEntries > (nMax - nTemp) )
             nDeltaEntries = (short)(nMax - nTemp);
@@ -3495,6 +3514,8 @@ void SvTreeListBox::NotifyScrolled()
 
 void SvTreeListBox::Invalidate( sal_uInt16 nInvalidateFlags )
 {
+    if (!pImp)
+        return;
     if( nFocusWidth == -1 )
         // to make sure that the control doesn't show the wrong focus rectangle
         // after painting
@@ -3666,12 +3687,12 @@ void SvTreeListBox::EndSelection()
 
 ScrollBar *SvTreeListBox::GetVScroll()
 {
-    return &((SvTreeListBox*)this)->pImp->aVerSBar;
+    return pImp->aVerSBar.get();
 }
 
 ScrollBar *SvTreeListBox::GetHScroll()
 {
-    return &((SvTreeListBox*)this)->pImp->aHorSBar;
+    return pImp->aHorSBar.get();
 }
 
 void SvTreeListBox::EnableAsyncDrag( bool b )

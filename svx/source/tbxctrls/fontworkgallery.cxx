@@ -94,12 +94,17 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pP
     fillFavorites( GALLERY_THEME_FONTWORK );
 }
 
-
 FontWorkGalleryDialog::~FontWorkGalleryDialog()
 {
+    disposeOnce();
 }
 
-
+void FontWorkGalleryDialog::dispose()
+{
+    mpCtlFavorites.clear();
+    mpOKButton.clear();
+    ModalDialog::dispose();
+}
 
 void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 {
@@ -119,7 +124,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
         if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !!aThumb)
         {
-            VirtualDevice aVDev;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             const Point aNull(0, 0);
 
             if (GetDPIScaleFactor() > 1)
@@ -127,7 +132,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
             const Size aSize(aThumb.GetSizePixel());
 
-            aVDev.SetOutputSizePixel(aSize);
+            pVDev->SetOutputSizePixel(aSize);
 
             if(rStyleSettings.GetPreviewUsesCheckeredBackground())
             {
@@ -135,16 +140,16 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
                 static const Color aW(COL_WHITE);
                 static const Color aG(0xef, 0xef, 0xef);
 
-                aVDev.DrawCheckered(aNull, aSize, nLen, aW, aG);
+                pVDev->DrawCheckered(aNull, aSize, nLen, aW, aG);
             }
             else
             {
-                aVDev.SetBackground(rStyleSettings.GetFieldColor());
-                aVDev.Erase();
+                pVDev->SetBackground(rStyleSettings.GetFieldColor());
+                pVDev->Erase();
             }
 
-            aVDev.DrawBitmapEx(aNull, aThumb);
-            maFavoritesHorizontal.push_back(aVDev.GetBitmap(aNull, aSize));
+            pVDev->DrawBitmapEx(aNull, aThumb);
+            maFavoritesHorizontal.push_back(pVDev->GetBitmap(aNull, aSize));
         }
     }
 
@@ -278,7 +283,7 @@ SfxPopupWindowType FontWorkShapeTypeControl::GetPopupWindowType() const
 
 
 
-SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> FontWorkShapeTypeControl::CreatePopupWindow()
 {
     OUString aSubTbxResName( "private:resource/toolbar/fontworkshapetype" );
     createAndPositionSubToolBar( aSubTbxResName );
@@ -391,7 +396,7 @@ class FontworkAlignmentControl : public svt::PopupWindowController
 public:
     FontworkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
@@ -414,9 +419,9 @@ FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentC
 
 
 
-vcl::Window* FontworkAlignmentControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> FontworkAlignmentControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new FontworkAlignmentWindow( *this, m_xFrame, pParent );
+    return VclPtr<FontworkAlignmentWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization
@@ -631,7 +636,7 @@ class FontworkCharacterSpacingControl : public svt::PopupWindowController
 public:
     FontworkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
@@ -652,9 +657,9 @@ FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Referenc
 
 
 
-vcl::Window* FontworkCharacterSpacingControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> FontworkCharacterSpacingControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new FontworkCharacterSpacingWindow( *this, m_xFrame, pParent );
+    return VclPtr<FontworkCharacterSpacingWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization
@@ -712,6 +717,17 @@ FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( vcl::Window* pPa
 {
     get(m_pMtrScale, "entry");
     m_pMtrScale->SetValue( nScale );
+}
+
+FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
+{
+    disposeOnce();
+}
+
+void FontworkCharacterSpacingDialog::dispose()
+{
+    m_pMtrScale.clear();
+    ModalDialog::dispose();
 }
 
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const

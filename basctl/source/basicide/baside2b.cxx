@@ -227,7 +227,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     bHighlightning(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),
-    pCodeCompleteWnd(new CodeCompleteWindow(this))
+    pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
     SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
     SetPointer( Pointer( POINTER_TEXT ) );
@@ -250,6 +250,11 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
 
 EditorWindow::~EditorWindow()
 {
+    disposeOnce();
+}
+
+void EditorWindow::dispose()
+{
     Reference< beans::XMultiPropertySet > n;
     {
         osl::MutexGuard g(mutex_);
@@ -266,6 +271,8 @@ EditorWindow::~EditorWindow()
         EndListening( *pEditEngine );
         pEditEngine->RemoveView(pEditView.get());
     }
+    pCodeCompleteWnd.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 OUString EditorWindow::GetWordAtCursor()
@@ -1376,12 +1383,6 @@ BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWin
     SetHelpId(HID_BASICIDE_BREAKPOINTWINDOW);
 }
 
-BreakPointWindow::~BreakPointWindow()
-{
-}
-
-
-
 void BreakPointWindow::Paint( const Rectangle& )
 {
     if ( SyncYOffset() )
@@ -1519,9 +1520,9 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
                 break;
                 case RID_BRKPROPS:
                 {
-                    BreakPointDialog aBrkDlg( this, GetBreakPoints() );
-                    aBrkDlg.SetCurrentBreakPoint( pBrk );
-                    aBrkDlg.Execute();
+                    ScopedVclPtrInstance< BreakPointDialog > aBrkDlg( this, GetBreakPoints() );
+                    aBrkDlg->SetCurrentBreakPoint( pBrk );
+                    aBrkDlg->Execute();
                     Invalidate();
                 }
                 break;
@@ -1534,8 +1535,8 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
             {
                 case RID_BRKDLG:
                 {
-                    BreakPointDialog aBrkDlg( this, GetBreakPoints() );
-                    aBrkDlg.Execute();
+                    ScopedVclPtrInstance< BreakPointDialog > aBrkDlg( this, GetBreakPoints() );
+                    aBrkDlg->Execute();
                     Invalidate();
                 }
                 break;
@@ -1598,69 +1599,69 @@ namespace
 WatchWindow::WatchWindow (Layout* pParent) :
     DockingWindow(pParent),
     aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
-    aXEdit( this, IDEResId( RID_EDT_WATCHEDIT ) ),
-    aRemoveWatchButton( this, IDEResId( RID_IMGBTN_REMOVEWATCH ) ),
-    aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP
-                                  | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
-    aHeaderBar( this, WB_BUTTONSTYLE | WB_BORDER )
+    aXEdit( VclPtr<ExtendedEdit>::Create(this, IDEResId( RID_EDT_WATCHEDIT )) ),
+    aRemoveWatchButton( VclPtr<ImageButton>::Create(this, IDEResId( RID_IMGBTN_REMOVEWATCH )) ),
+    aTreeListBox( VclPtr<WatchTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP
+                                  | WB_HASLINESATROOT | WB_HASBUTTONSATROOT) ),
+    aHeaderBar( VclPtr<HeaderBar>::Create( this, WB_BUTTONSTYLE | WB_BORDER ) )
 {
-    aXEdit.SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
-    aTreeListBox.SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
+    aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
+    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
 
     long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
-    aXEdit.SetPosPixel( Point( nTextLen, 3 ) );
-    aXEdit.SetAccHdl( LINK( this, WatchWindow, EditAccHdl ) );
-    aXEdit.GetAccelerator().InsertItem( 1, vcl::KeyCode( KEY_RETURN ) );
-    aXEdit.GetAccelerator().InsertItem( 2, vcl::KeyCode( KEY_ESCAPE ) );
-    aXEdit.Show();
+    aXEdit->SetPosPixel( Point( nTextLen, 3 ) );
+    aXEdit->SetAccHdl( LINK( this, WatchWindow, EditAccHdl ) );
+    aXEdit->GetAccelerator().InsertItem( 1, vcl::KeyCode( KEY_RETURN ) );
+    aXEdit->GetAccelerator().InsertItem( 2, vcl::KeyCode( KEY_ESCAPE ) );
+    aXEdit->Show();
 
-    aRemoveWatchButton.Disable();
-    aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
-    aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
-    Size aSz( aRemoveWatchButton.GetModeImage().GetSizePixel() );
+    aRemoveWatchButton->Disable();
+    aRemoveWatchButton->SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
+    aRemoveWatchButton->SetPosPixel( Point( nTextLen + aXEdit->GetSizePixel().Width() + 4, 2 ) );
+    Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
     aSz.Width() += 6;
     aSz.Height() += 6;
-    aRemoveWatchButton.SetSizePixel( aSz );
-    aRemoveWatchButton.Show();
+    aRemoveWatchButton->SetSizePixel( aSz );
+    aRemoveWatchButton->Show();
 
-    long nRWBtnSize = aRemoveWatchButton.GetModeImage().GetSizePixel().Height() + 10;
-    nVirtToolBoxHeight = aXEdit.GetSizePixel().Height() + 7;
+    long nRWBtnSize = aRemoveWatchButton->GetModeImage().GetSizePixel().Height() + 10;
+    nVirtToolBoxHeight = aXEdit->GetSizePixel().Height() + 7;
 
     if ( nRWBtnSize > nVirtToolBoxHeight )
         nVirtToolBoxHeight = nRWBtnSize;
 
     nHeaderBarHeight = 16;
 
-    aTreeListBox.SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
-    aTreeListBox.EnableInplaceEditing(true);
-    aTreeListBox.SetSelectHdl( LINK( this, WatchWindow, TreeListHdl ) );
-    aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight + nHeaderBarHeight ) );
-    aTreeListBox.SetHighlightRange( 1, 5 );
+    aTreeListBox->SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
+    aTreeListBox->EnableInplaceEditing(true);
+    aTreeListBox->SetSelectHdl( LINK( this, WatchWindow, TreeListHdl ) );
+    aTreeListBox->SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight + nHeaderBarHeight ) );
+    aTreeListBox->SetHighlightRange( 1, 5 );
 
     Point aPnt( DWBORDER, nVirtToolBoxHeight + 1 );
-    aHeaderBar.SetPosPixel( aPnt );
-    aHeaderBar.SetEndDragHdl( LINK( this, WatchWindow, implEndDragHdl ) );
+    aHeaderBar->SetPosPixel( aPnt );
+    aHeaderBar->SetEndDragHdl( LINK( this, WatchWindow, implEndDragHdl ) );
 
     long nVarTabWidth = 220;
     long nValueTabWidth = 100;
     long nTypeTabWidth = 1250;
-    aHeaderBar.InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE).toString(), nVarTabWidth );
-    aHeaderBar.InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE).toString(), nValueTabWidth );
-    aHeaderBar.InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE).toString(), nTypeTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE).toString(), nVarTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE).toString(), nValueTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE).toString(), nTypeTabWidth );
 
     long tabs[ 4 ];
     tabs[ 0 ] = 3; // two tabs
     tabs[ 1 ] = 0;
     tabs[ 2 ] = nVarTabWidth;
     tabs[ 3 ] = nVarTabWidth + nValueTabWidth;
-    aTreeListBox.SvHeaderTabListBox::SetTabs( tabs, MAP_PIXEL );
-    aTreeListBox.InitHeaderBar( &aHeaderBar );
+    aTreeListBox->SvHeaderTabListBox::SetTabs( tabs, MAP_PIXEL );
+    aTreeListBox->InitHeaderBar( aHeaderBar.get() );
 
-    aTreeListBox.SetNodeDefaultImages( );
+    aTreeListBox->SetNodeDefaultImages( );
 
-    aHeaderBar.Show();
+    aHeaderBar->Show();
 
-    aTreeListBox.Show();
+    aTreeListBox->Show();
 
     SetText(IDEResId(RID_STR_WATCHNAME).toString());
 
@@ -1674,7 +1675,18 @@ WatchWindow::WatchWindow (Layout* pParent) :
 
 WatchWindow::~WatchWindow()
 {
-    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    disposeOnce();
+}
+
+void WatchWindow::dispose()
+{
+    aXEdit.disposeAndClear();
+    aRemoveWatchButton.disposeAndClear();
+    aHeaderBar.disposeAndClear();
+    aTreeListBox.disposeAndClear();
+    if (!IsDisposed())
+        GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    DockingWindow::dispose();
 }
 
 
@@ -1698,11 +1710,11 @@ void WatchWindow::Resize()
         aBoxSz.Height() = 0;
 
     aBoxSz.Height() -= nHeaderBarHeight;
-    aTreeListBox.SetSizePixel( aBoxSz );
-    aTreeListBox.GetHScroll()->SetPageSize( aTreeListBox.GetHScroll()->GetVisibleSize() );
+    aTreeListBox->SetSizePixel( aBoxSz );
+    aTreeListBox->GetHScroll()->SetPageSize( aTreeListBox->GetHScroll()->GetVisibleSize() );
 
     aBoxSz.Height() = nHeaderBarHeight;
-    aHeaderBar.SetSizePixel( aBoxSz );
+    aHeaderBar->SetSizePixel( aBoxSz );
 
     Invalidate();
 }
@@ -1766,29 +1778,29 @@ void WatchWindow::AddWatch( const OUString& rVName )
 
     OUString aWatchStr_( aVar );
     aWatchStr_ += "\t\t";
-    SvTreeListEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, true, TREELIST_APPEND );
+    SvTreeListEntry* pNewEntry = aTreeListBox->InsertEntry( aWatchStr_, 0, true, TREELIST_APPEND );
     pNewEntry->SetUserData( pWatchItem );
 
-    aTreeListBox.Select(pNewEntry, true);
-    aTreeListBox.MakeVisible(pNewEntry);
-    aRemoveWatchButton.Enable();
+    aTreeListBox->Select(pNewEntry, true);
+    aTreeListBox->MakeVisible(pNewEntry);
+    aRemoveWatchButton->Enable();
 
     UpdateWatches();
 }
 
 bool WatchWindow::RemoveSelectedWatch()
 {
-    SvTreeListEntry* pEntry = aTreeListBox.GetCurEntry();
+    SvTreeListEntry* pEntry = aTreeListBox->GetCurEntry();
     if ( pEntry )
     {
-        aTreeListBox.GetModel()->Remove( pEntry );
-        pEntry = aTreeListBox.GetCurEntry();
+        aTreeListBox->GetModel()->Remove( pEntry );
+        pEntry = aTreeListBox->GetCurEntry();
         if ( pEntry )
-            aXEdit.SetText( static_cast<WatchItem*>(pEntry->GetUserData())->maName );
+            aXEdit->SetText( static_cast<WatchItem*>(pEntry->GetUserData())->maName );
         else
-            aXEdit.SetText( OUString() );
-        if ( !aTreeListBox.GetEntryCount() )
-            aRemoveWatchButton.Disable();
+            aXEdit->SetText( OUString() );
+        if ( !aTreeListBox->GetEntryCount() )
+            aRemoveWatchButton->Disable();
         return true;
     }
     else
@@ -1798,7 +1810,7 @@ bool WatchWindow::RemoveSelectedWatch()
 
 IMPL_LINK_INLINE_START( WatchWindow, ButtonHdl, ImageButton *, pButton )
 {
-    if (pButton == &aRemoveWatchButton)
+    if (pButton == aRemoveWatchButton.get())
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute(SID_BASICIDE_REMOVEWATCH);
     return 0;
@@ -1809,9 +1821,9 @@ IMPL_LINK_INLINE_END( WatchWindow, ButtonHdl, ImageButton *, pButton )
 
 IMPL_LINK_NOARG_INLINE_START(WatchWindow, TreeListHdl)
 {
-    SvTreeListEntry* pCurEntry = aTreeListBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aTreeListBox->GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
-        aXEdit.SetText( static_cast<WatchItem*>(pCurEntry->GetUserData())->maName );
+        aXEdit->SetText( static_cast<WatchItem*>(pCurEntry->GetUserData())->maName );
 
     return 0;
 }
@@ -1824,29 +1836,29 @@ IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
 
     const sal_Int32 TAB_WIDTH_MIN = 10;
     sal_Int32 nMaxWidth =
-        aHeaderBar.GetSizePixel().getWidth() - 2 * TAB_WIDTH_MIN;
+        aHeaderBar->GetSizePixel().getWidth() - 2 * TAB_WIDTH_MIN;
 
-    sal_Int32 nVariableWith = aHeaderBar.GetItemSize( ITEM_ID_VARIABLE );
+    sal_Int32 nVariableWith = aHeaderBar->GetItemSize( ITEM_ID_VARIABLE );
     if( nVariableWith < TAB_WIDTH_MIN )
-        aHeaderBar.SetItemSize( ITEM_ID_VARIABLE, TAB_WIDTH_MIN );
+        aHeaderBar->SetItemSize( ITEM_ID_VARIABLE, TAB_WIDTH_MIN );
     else if( nVariableWith > nMaxWidth )
-        aHeaderBar.SetItemSize( ITEM_ID_VARIABLE, nMaxWidth );
+        aHeaderBar->SetItemSize( ITEM_ID_VARIABLE, nMaxWidth );
 
-    sal_Int32 nValueWith = aHeaderBar.GetItemSize( ITEM_ID_VALUE );
+    sal_Int32 nValueWith = aHeaderBar->GetItemSize( ITEM_ID_VALUE );
     if( nValueWith < TAB_WIDTH_MIN )
-        aHeaderBar.SetItemSize( ITEM_ID_VALUE, TAB_WIDTH_MIN );
+        aHeaderBar->SetItemSize( ITEM_ID_VALUE, TAB_WIDTH_MIN );
     else if( nValueWith > nMaxWidth )
-        aHeaderBar.SetItemSize( ITEM_ID_VALUE, nMaxWidth );
+        aHeaderBar->SetItemSize( ITEM_ID_VALUE, nMaxWidth );
 
-    if (aHeaderBar.GetItemSize( ITEM_ID_TYPE ) < TAB_WIDTH_MIN)
-        aHeaderBar.SetItemSize( ITEM_ID_TYPE, TAB_WIDTH_MIN );
+    if (aHeaderBar->GetItemSize( ITEM_ID_TYPE ) < TAB_WIDTH_MIN)
+        aHeaderBar->SetItemSize( ITEM_ID_TYPE, TAB_WIDTH_MIN );
 
     sal_Int32 nPos = 0;
-    sal_uInt16 nTabs = aHeaderBar.GetItemCount();
+    sal_uInt16 nTabs = aHeaderBar->GetItemCount();
     for( sal_uInt16 i = 1 ; i < nTabs ; ++i )
     {
-        nPos += aHeaderBar.GetItemSize( i );
-        aTreeListBox.SetTab( i, nPos, MAP_PIXEL );
+        nPos += aHeaderBar->GetItemSize( i );
+        aTreeListBox->SetTab( i, nPos, MAP_PIXEL );
     }
     return 0;
 }
@@ -1859,17 +1871,17 @@ IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
     {
         case KEY_RETURN:
         {
-            OUString aCurText( aXEdit.GetText() );
+            OUString aCurText( aXEdit->GetText() );
             if ( !aCurText.isEmpty() )
             {
                 AddWatch( aCurText );
-                aXEdit.SetSelection( Selection( 0, 0xFFFF ) );
+                aXEdit->SetSelection( Selection( 0, 0xFFFF ) );
             }
         }
         break;
         case KEY_ESCAPE:
         {
-            aXEdit.SetText( OUString() );
+            aXEdit->SetText( OUString() );
         }
         break;
     }
@@ -1879,7 +1891,7 @@ IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
 
 void WatchWindow::UpdateWatches( bool bBasicStopped )
 {
-    aTreeListBox.UpdateWatches( bBasicStopped );
+    aTreeListBox->UpdateWatches( bBasicStopped );
 }
 
 
@@ -1890,16 +1902,16 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 
 StackWindow::StackWindow (Layout* pParent) :
     DockingWindow(pParent),
-    aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
+    aTreeListBox( VclPtr<SvTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP) ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
-    aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
-    aTreeListBox.SetAccessibleName(IDEResId(RID_STR_STACKNAME).toString());
-    aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
-    aTreeListBox.SetHighlightRange();
-    aTreeListBox.SetSelectionMode( NO_SELECTION );
-    aTreeListBox.InsertEntry( OUString(), 0, false, TREELIST_APPEND );
-    aTreeListBox.Show();
+    aTreeListBox->SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
+    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_STACKNAME).toString());
+    aTreeListBox->SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
+    aTreeListBox->SetHighlightRange();
+    aTreeListBox->SetSelectionMode( NO_SELECTION );
+    aTreeListBox->InsertEntry( OUString(), 0, false, TREELIST_APPEND );
+    aTreeListBox->Show();
 
     SetText(IDEResId(RID_STR_STACKNAME).toString());
 
@@ -1913,7 +1925,15 @@ StackWindow::StackWindow (Layout* pParent) :
 
 StackWindow::~StackWindow()
 {
-    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    disposeOnce();
+}
+
+void StackWindow::dispose()
+{
+    if (!IsDisposed())
+        GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    aTreeListBox.disposeAndClear();
+    DockingWindow::dispose();
 }
 
 
@@ -1936,20 +1956,20 @@ void StackWindow::Resize()
     if ( aBoxSz.Height() < 4 )
         aBoxSz.Height() = 0;
 
-    aTreeListBox.SetSizePixel( aBoxSz );
+    aTreeListBox->SetSizePixel( aBoxSz );
 
     Invalidate();
 }
 
 void StackWindow::UpdateCalls()
 {
-    aTreeListBox.SetUpdateMode(false);
-    aTreeListBox.Clear();
+    aTreeListBox->SetUpdateMode(false);
+    aTreeListBox->Clear();
 
     if ( StarBASIC::IsRunning() )
     {
         SbxError eOld = SbxBase::GetError();
-        aTreeListBox.SetSelectionMode( SINGLE_SELECTION );
+        aTreeListBox->SetSelectionMode( SINGLE_SELECTION );
 
         sal_Int32 nScope = 0;
         SbMethod* pMethod = StarBASIC::GetActiveMethod( nScope );
@@ -1998,7 +2018,7 @@ void StackWindow::UpdateCalls()
                 }
                 aEntry += ")";
             }
-            aTreeListBox.InsertEntry( aEntry, 0, false, TREELIST_APPEND );
+            aTreeListBox->InsertEntry( aEntry, 0, false, TREELIST_APPEND );
             nScope++;
             pMethod = StarBASIC::GetActiveMethod( nScope );
         }
@@ -2009,11 +2029,11 @@ void StackWindow::UpdateCalls()
     }
     else
     {
-        aTreeListBox.SetSelectionMode( NO_SELECTION );
-        aTreeListBox.InsertEntry( OUString(), 0, false, TREELIST_APPEND );
+        aTreeListBox->SetSelectionMode( NO_SELECTION );
+        aTreeListBox->InsertEntry( OUString(), 0, false, TREELIST_APPEND );
     }
 
-    aTreeListBox.SetUpdateMode(true);
+    aTreeListBox->SetUpdateMode(true);
 }
 
 
@@ -2024,18 +2044,33 @@ void StackWindow::UpdateCalls()
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     Window( pParent, WB_3DLOOK | WB_CLIPCHILDREN ),
-    aBrkWindow(this, pParent),
-    aLineNumberWindow(this, pParent),
-    aEdtWindow(this, pParent),
-    aEWVScrollBar( this, WB_VSCROLL | WB_DRAG )
+    aBrkWindow(VclPtr<BreakPointWindow>::Create(this, pParent)),
+    aLineNumberWindow(VclPtr<LineNumberWindow>::Create(this, pParent)),
+    aEdtWindow(VclPtr<EditorWindow>::Create(this, pParent)),
+    aEWVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG) )
 {
-    aEdtWindow.Show();
-    aBrkWindow.Show();
+    aEdtWindow->Show();
+    aBrkWindow->Show();
 
-    aEWVScrollBar.SetLineSize(nScrollLine);
-    aEWVScrollBar.SetPageSize(nScrollPage);
-    aEWVScrollBar.SetScrollHdl( LINK( this, ComplexEditorWindow, ScrollHdl ) );
-    aEWVScrollBar.Show();
+    aEWVScrollBar->SetLineSize(nScrollLine);
+    aEWVScrollBar->SetPageSize(nScrollPage);
+    aEWVScrollBar->SetScrollHdl( LINK( this, ComplexEditorWindow, ScrollHdl ) );
+    aEWVScrollBar->Show();
+}
+
+
+ComplexEditorWindow::~ComplexEditorWindow()
+{
+    disposeOnce();
+}
+
+void ComplexEditorWindow::dispose()
+{
+    aBrkWindow.disposeAndClear();
+    aLineNumberWindow.disposeAndClear();
+    aEdtWindow.disposeAndClear();
+    aEWVScrollBar.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void ComplexEditorWindow::Resize()
@@ -2045,40 +2080,40 @@ void ComplexEditorWindow::Resize()
     aSz.Width() -= 2*DWBORDER;
     aSz.Height() -= 2*DWBORDER;
     long nBrkWidth = 20;
-    long nSBWidth = aEWVScrollBar.GetSizePixel().Width();
+    long nSBWidth = aEWVScrollBar->GetSizePixel().Width();
 
     Size aBrkSz(nBrkWidth, aSz.Height());
 
-    Size aLnSz(aLineNumberWindow.GetWidth(), aSz.Height());
+    Size aLnSz(aLineNumberWindow->GetWidth(), aSz.Height());
 
-    if (aLineNumberWindow.IsVisible())
+    if (aLineNumberWindow->IsVisible())
     {
-        aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
-        aLineNumberWindow.SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aLnSz);
-        Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow.GetWidth() - nSBWidth + 2, aSz.Height());
-        aEdtWindow.SetPosSizePixel( Point( DWBORDER + aBrkSz.Width() + aLnSz.Width() - 1, DWBORDER ), aEWSz );
+        aBrkWindow->SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
+        aLineNumberWindow->SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aLnSz);
+        Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow->GetWidth() - nSBWidth + 2, aSz.Height());
+        aEdtWindow->SetPosSizePixel( Point( DWBORDER + aBrkSz.Width() + aLnSz.Width() - 1, DWBORDER ), aEWSz );
     }
     else
     {
-        aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
+        aBrkWindow->SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
         Size aEWSz(aSz.Width() - nBrkWidth - nSBWidth + 2, aSz.Height());
-        aEdtWindow.SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aEWSz);
+        aEdtWindow->SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aEWSz);
     }
 
-    aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
+    aEWVScrollBar->SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }
 
 IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 {
-    if ( aEdtWindow.GetEditView() )
+    if ( aEdtWindow->GetEditView() )
     {
-        DBG_ASSERT( pCurScrollBar == &aEWVScrollBar, "Wer scrollt hier ?" );
-        long nDiff = aEdtWindow.GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
-        aEdtWindow.GetEditView()->Scroll( 0, nDiff );
-        aBrkWindow.DoScroll( 0, nDiff );
-        aLineNumberWindow.DoScroll(0, nDiff);
-        aEdtWindow.GetEditView()->ShowCursor(false, true);
-        pCurScrollBar->SetThumbPos( aEdtWindow.GetEditView()->GetStartDocPos().Y() );
+        DBG_ASSERT( pCurScrollBar == aEWVScrollBar.get(), "Wer scrollt hier ?" );
+        long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
+        aEdtWindow->GetEditView()->Scroll( 0, nDiff );
+        aBrkWindow->DoScroll( 0, nDiff );
+        aLineNumberWindow->DoScroll(0, nDiff);
+        aEdtWindow->GetEditView()->ShowCursor(false, true);
+        pCurScrollBar->SetThumbPos( aEdtWindow->GetEditView()->GetStartDocPos().Y() );
     }
 
     return 0;
@@ -2102,7 +2137,7 @@ void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 
 void ComplexEditorWindow::SetLineNumberDisplay(bool b)
 {
-    aLineNumberWindow.Show(b);
+    aLineNumberWindow->Show(b);
     Resize();
 }
 
@@ -2135,13 +2170,20 @@ WatchTreeListBox::WatchTreeListBox( vcl::Window* pParent, WinBits nWinBits )
 
 WatchTreeListBox::~WatchTreeListBox()
 {
+    disposeOnce();
+}
+
+void WatchTreeListBox::dispose()
+{
     // Destroy user data
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
         delete static_cast<WatchItem*>(pEntry->GetUserData());
+        pEntry->SetUserData(NULL);
         pEntry = Next( pEntry );
     }
+    SvHeaderTabListBox::dispose();
 }
 
 void WatchTreeListBox::SetTabs()
@@ -2642,6 +2684,17 @@ pCodeCompleteWindow( pPar )
     SetSelectHdl(LINK(this, CodeCompleteListBox, ImplSelectHdl));
 }
 
+CodeCompleteListBox::~CodeCompleteListBox()
+{
+    disposeOnce();
+}
+
+void CodeCompleteListBox::dispose()
+{
+    pCodeCompleteWindow.clear();
+    ListBox::dispose();
+}
+
 IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
 {
     InsertSelectedEntry();
@@ -2807,10 +2860,22 @@ void CodeCompleteListBox::HideAndRestoreFocus()
 CodeCompleteWindow::CodeCompleteWindow( EditorWindow* pPar )
 : Window( pPar ),
 pParent( pPar ),
-pListBox( new CodeCompleteListBox(this) )
+pListBox( VclPtr<CodeCompleteListBox>::Create(this) )
 {
     SetSizePixel( Size(151,151) ); //default, later it changes
     InitListBox();
+}
+
+CodeCompleteWindow::~CodeCompleteWindow()
+{
+    disposeOnce();
+}
+
+void CodeCompleteWindow::dispose()
+{
+    pListBox.disposeAndClear();
+    pParent.clear();
+    vcl::Window::dispose();
 }
 
 void CodeCompleteWindow::InitListBox()

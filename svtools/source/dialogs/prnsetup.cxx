@@ -53,8 +53,9 @@ void ImplFreePrnDlgListBox( ListBox* pBox, bool bClear )
 
 
 Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
-                                  Printer* pPrinter, Printer* pTempPrinter )
+                                  Printer* pPrinter, Printer* pTempPrinterIn )
 {
+    VclPtr<Printer> pTempPrinter( pTempPrinterIn );
     if ( pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
         const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), true );
@@ -64,17 +65,17 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
             {
                 if ( (pPrinter->GetName() == pInfo->GetPrinterName()) &&
                      (pPrinter->GetDriverName() == pInfo->GetDriver()) )
-                    pTempPrinter = new Printer( pPrinter->GetJobSetup() );
+                    pTempPrinter = VclPtr<Printer>::Create( pPrinter->GetJobSetup() );
                 else
-                    pTempPrinter = new Printer( *pInfo );
+                    pTempPrinter = VclPtr<Printer>::Create( *pInfo );
             }
             else
             {
                 if ( (pTempPrinter->GetName() != pInfo->GetPrinterName()) ||
                      (pTempPrinter->GetDriverName() != pInfo->GetDriver()) )
                 {
-                    delete pTempPrinter;
-                    pTempPrinter = new Printer( *pInfo );
+                    pTempPrinter.disposeAndClear();
+                    pTempPrinter = VclPtr<Printer>::Create( *pInfo );
                 }
             }
 
@@ -91,8 +92,9 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
 
 
 
-Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
+Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinterIn )
 {
+    VclPtr<Printer> pTempPrinter( pTempPrinterIn );
     OUString aPrnName;
     if ( pTempPrinter )
         aPrnName = pTempPrinter->GetName();
@@ -101,8 +103,7 @@ Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
 
     if ( ! Printer::GetQueueInfo( aPrnName, false ) )
     {
-        if ( pTempPrinter )
-            delete pTempPrinter;
+        pTempPrinter.disposeAndClear();
         pTempPrinter = new Printer;
     }
 
@@ -245,11 +246,23 @@ PrinterSetupDialog::PrinterSetupDialog(vcl::Window* pParent)
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
-    ImplFreePrnDlgListBox(m_pLbName, false);
-    delete mpTempPrinter;
+    disposeOnce();
 }
 
-
+void PrinterSetupDialog::dispose()
+{
+    ImplFreePrnDlgListBox(m_pLbName, false);
+    m_pLbName.clear();
+    m_pBtnProperties.clear();
+    m_pBtnOptions.clear();
+    m_pFiStatus.clear();
+    m_pFiType.clear();
+    m_pFiLocation.clear();
+    m_pFiComment.clear();
+    mpTempPrinter.disposeAndClear();
+    mpPrinter.clear();
+    ModalDialog::dispose();
+}
 
 void PrinterSetupDialog::SetOptionsHdl( const Link& rLink )
 {
@@ -293,7 +306,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
 {
     if ( !mpTempPrinter )
-        mpTempPrinter = new Printer( mpPrinter->GetJobSetup() );
+        mpTempPrinter = VclPtr<Printer>::Create( mpPrinter->GetJobSetup() );
     mpTempPrinter->Setup( this );
 
     return 0;

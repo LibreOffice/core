@@ -43,7 +43,7 @@ namespace dbaui
         Show();
     }
 
-    OTableConnection::OTableConnection( const OTableConnection& _rConn ) : Window(_rConn.m_pParent)
+    OTableConnection::OTableConnection( const OTableConnection& _rConn ) : Window(_rConn.m_pParent.get())
         ,m_pData(_rConn.GetData()->NewInstance())
         ,m_pParent(NULL)
     {

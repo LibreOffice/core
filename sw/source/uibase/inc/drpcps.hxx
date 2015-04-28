@@ -45,29 +45,26 @@ class SwDropCapsPict;
 class SwDropCapsPage : public SfxTabPage
 {
 friend class SwDropCapsPict;
-    CheckBox*        m_pDropCapsBox;
-    CheckBox*        m_pWholeWordCB;
-    FixedText*       m_pSwitchText;
-    NumericField*    m_pDropCapsField;
-    FixedText*       m_pLinesText;
-    NumericField*    m_pLinesField;
-    FixedText*       m_pDistanceText;
-    MetricField*     m_pDistanceField;
-    FixedText*       m_pTextText;
-    Edit*            m_pTextEdit;
-    FixedText*       m_pTemplateText;
-    ListBox*         m_pTemplateBox;
+    VclPtr<CheckBox>        m_pDropCapsBox;
+    VclPtr<CheckBox>        m_pWholeWordCB;
+    VclPtr<FixedText>       m_pSwitchText;
+    VclPtr<NumericField>    m_pDropCapsField;
+    VclPtr<FixedText>       m_pLinesText;
+    VclPtr<NumericField>    m_pLinesField;
+    VclPtr<FixedText>       m_pDistanceText;
+    VclPtr<MetricField>     m_pDistanceField;
+    VclPtr<FixedText>       m_pTextText;
+    VclPtr<Edit>            m_pTextEdit;
+    VclPtr<FixedText>       m_pTemplateText;
+    VclPtr<ListBox>         m_pTemplateBox;
 
-    SwDropCapsPict*  m_pPict;
+    VclPtr<SwDropCapsPict>  m_pPict;
 
     bool          bModified;
     bool          bFormat;
     bool          bHtmlMode;
 
     SwWrtShell &rSh;
-
-     SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwDropCapsPage();
 
     virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     void    FillSet( SfxItemSet &rSet );
@@ -83,8 +80,11 @@ friend class SwDropCapsPict;
     static const sal_uInt16 aPageRg[];
 
 public:
+    SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    virtual ~SwDropCapsPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
 

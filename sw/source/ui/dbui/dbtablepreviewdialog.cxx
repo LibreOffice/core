@@ -81,11 +81,19 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(vcl::Window* pParent, uno::Sequen
 
 SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
 {
+    disposeOnce();
+}
+
+void SwDBTablePreviewDialog::dispose()
+{
     if(m_xFrame.is())
     {
         m_xFrame->setComponent(NULL, NULL);
         m_xFrame->dispose();
     }
+    m_pDescriptionFI.clear();
+    m_pBeamerWIN.clear();
+    SfxModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

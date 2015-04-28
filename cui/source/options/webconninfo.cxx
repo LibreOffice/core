@@ -111,7 +111,7 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     get(m_pChangeBtn, "change");
 
     SvSimpleTableContainer *pPasswordsLBContainer = get<SvSimpleTableContainer>("logins");
-    m_pPasswordsLB = new PasswordTable(*pPasswordsLBContainer, 0);
+    m_pPasswordsLB = VclPtr<PasswordTable>::Create(*pPasswordsLBContainer, 0);
 
     long aStaticTabs[]= { 2, 0, 0 };
     m_pPasswordsLB->SetTabs( aStaticTabs );
@@ -142,9 +142,17 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
 
 WebConnectionInfoDialog::~WebConnectionInfoDialog()
 {
-    delete m_pPasswordsLB;
+    disposeOnce();
 }
 
+void WebConnectionInfoDialog::dispose()
+{
+    m_pPasswordsLB.disposeAndClear();
+    m_pRemoveBtn.clear();
+    m_pRemoveAllBtn.clear();
+    m_pChangeBtn.clear();
+    ModalDialog::dispose();
+}
 
 IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable )
 {

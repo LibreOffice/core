@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_LAZYDELETE_HXX
 
 #include <vcl/dllapi.h>
+#include <vcl/vclptr.hxx>
 
 #include <unordered_map>
 #include <vector>
@@ -101,8 +102,8 @@ namespace vcl
 
         struct DeleteObjectEntry
         {
-            T*      m_pObject;
-            bool    m_bDeleted;
+            VclPtr<T> m_pObject;
+            bool      m_bDeleted;
 
             DeleteObjectEntry() :
                 m_pObject( NULL ),
@@ -136,7 +137,7 @@ namespace vcl
 
             // do the actual work
             unsigned int nCount = m_aObjects.size();
-            std::vector<T*> aRealDelete;
+            std::vector< VclPtr < T > > aRealDelete;
             aRealDelete.reserve( nCount );
             for( unsigned int i = 0; i < nCount; i++ )
             {
@@ -158,8 +159,8 @@ namespace vcl
                 #endif
                 // check if the object to be deleted is not already destroyed
                 // as a side effect of a previous lazily destroyed object
-                if( ! m_aObjects[ m_aPtrToIndex[ reinterpret_cast<sal_IntPtr>(aRealDelete[n]) ] ].m_bDeleted )
-                    delete aRealDelete[n];
+                if( ! m_aObjects[ m_aPtrToIndex[ reinterpret_cast<sal_IntPtr>(aRealDelete[n].get()) ] ].m_bDeleted )
+                    aRealDelete[n].disposeAndClear();
             }
         }
 

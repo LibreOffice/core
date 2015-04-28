@@ -66,6 +66,7 @@ class SwSidebarWin : public vcl::Window
                       SwPostItBits aBits,
                       SwSidebarItem& rSidebarItem );
         virtual ~SwSidebarWin();
+        virtual void dispose() SAL_OVERRIDE;
 
         void SetSize( const Size& rNewSize );
         void SetPosSizePixelRect( long nX,
@@ -183,7 +184,7 @@ class SwSidebarWin : public vcl::Window
         virtual void    LoseFocus() SAL_OVERRIDE;
         virtual void    Paint( const Rectangle& rRect) SAL_OVERRIDE;
         virtual void    GetFocus() SAL_OVERRIDE;
-        virtual MenuButton* CreateMenuButton() = 0;
+        virtual VclPtr<MenuButton> CreateMenuButton() = 0;
 
         void        SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
         SfxItemSet  DefaultItem();
@@ -210,11 +211,11 @@ class SwSidebarWin : public vcl::Window
         OutlinerView*   mpOutlinerView;
         Outliner*       mpOutliner;
 
-        sw::sidebarwindows::SidebarTxtControl* mpSidebarTxtControl;
-        ScrollBar*      mpVScrollbar;
-        Edit*           mpMetadataAuthor;
-        Edit*           mpMetadataDate;
-        MenuButton*     mpMenuButton;
+        VclPtr<sw::sidebarwindows::SidebarTxtControl> mpSidebarTxtControl;
+        VclPtr<ScrollBar>      mpVScrollbar;
+        VclPtr<Edit>           mpMetadataAuthor;
+        VclPtr<Edit>           mpMetadataDate;
+        VclPtr<MenuButton>     mpMenuButton;
 
         sw::sidebarwindows::AnchorOverlayObject* mpAnchor;
         sw::sidebarwindows::ShadowOverlayObject* mpShadow;

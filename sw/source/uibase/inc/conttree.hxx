@@ -144,6 +144,7 @@ protected:
 public:
     SwContentTree(vcl::Window* pParent, const ResId& rResId);
     virtual ~SwContentTree();
+    virtual void dispose() SAL_OVERRIDE;
     OUString        GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
@@ -232,11 +233,11 @@ private:
     ImageList           aEntryImages;
 
     SwWrtShell*             pActiveShell;
-    SvTreeListEntry*            pEmphasisEntry; // Drag'n Drop emphasis
-    SvTreeListEntry*            pDDSource;      // source for Drag'n Drop
+    SvTreeListEntry*        pEmphasisEntry; // Drag'n Drop emphasis
+    SvTreeListEntry*        pDDSource;      // source for Drag'n Drop
     SwGlblDocContents*      pSwGlblDocContents; // array with sorted content
 
-    vcl::Window*                 pDefParentWin;
+    VclPtr<vcl::Window>     pDefParentWin;
     SwGlblDocContent*       pDocContent;
     sfx2::DocumentInserter* pDocInserter;
 
@@ -313,6 +314,7 @@ protected:
 public:
     SwGlobalTree(vcl::Window* pParent, const ResId& rResId);
     virtual ~SwGlobalTree();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);
     void                InsertRegion( const SwGlblDocContent* pCont,

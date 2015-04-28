@@ -62,7 +62,7 @@ const sal_uInt16 SwDropCapsPage::aPageRg[] = {
 
 class SwDropCapsPict : public Control
 {
-    SwDropCapsPage* mpPage;
+    VclPtr<SwDropCapsPage> mpPage;
     OUString        maText;
     OUString        maScriptText;
     Color           maBackColor;
@@ -72,7 +72,7 @@ class SwDropCapsPict : public Control
     long            mnLineH;
     long            mnTextH;
     sal_uInt16      mnDistance;
-    Printer*        mpPrinter;
+    VclPtr<Printer> mpPrinter;
     bool            mbDelPrinter;
     /// The _ScriptInfo structure holds information on where we change from one
     /// script to another.
@@ -117,6 +117,7 @@ public:
     void SetDropCapsPage(SwDropCapsPage* pPage) { mpPage = pPage; }
 
     virtual ~SwDropCapsPict();
+    virtual void dispose() SAL_OVERRIDE;
 
     void UpdatePaintSettings();       // also invalidates control!
 
@@ -202,8 +203,15 @@ static void calcFontHeightAnyAscent( OutputDevice* _pWin, vcl::Font& _rFont, lon
 
 SwDropCapsPict::~SwDropCapsPict()
 {
+    disposeOnce();
+}
+
+void SwDropCapsPict::dispose()
+{
      if( mbDelPrinter )
-         delete mpPrinter;
+         mpPrinter.disposeAndClear();
+     mpPage.clear();
+     Control::dispose();
 }
 
 /// Get the details of the first script change.
@@ -512,7 +520,7 @@ void SwDropCapsPict::_InitPrinter()
 SwDropCapsDlg::SwDropCapsDlg(vcl::Window *pParent, const SfxItemSet &rSet )
     : SfxSingleTabDialog(pParent, rSet)
 {
-    SwDropCapsPage* pNewPage = static_cast<SwDropCapsPage*>( SwDropCapsPage::Create(get_content_area(), &rSet));
+    VclPtr<SwDropCapsPage> pNewPage( static_cast<SwDropCapsPage*>( SwDropCapsPage::Create(get_content_area(), &rSet).get() ) );
     pNewPage->SetFormat(false);
     SetTabPage(pNewPage);
 }
@@ -568,6 +576,25 @@ SwDropCapsPage::SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwDropCapsPage::~SwDropCapsPage()
 {
+    disposeOnce();
+}
+
+void SwDropCapsPage::dispose()
+{
+    m_pDropCapsBox.clear();
+    m_pWholeWordCB.clear();
+    m_pSwitchText.clear();
+    m_pDropCapsField.clear();
+    m_pLinesText.clear();
+    m_pLinesField.clear();
+    m_pDistanceText.clear();
+    m_pDistanceField.clear();
+    m_pTextText.clear();
+    m_pTextEdit.clear();
+    m_pTemplateText.clear();
+    m_pTemplateBox.clear();
+    m_pPict.clear();
+    SfxTabPage::dispose();
 }
 
 SfxTabPage::sfxpg SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
@@ -578,10 +605,10 @@ SfxTabPage::sfxpg SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
     return LEAVE_PAGE;
 }
 
-SfxTabPage*  SwDropCapsPage::Create(vcl::Window *pParent,
-    const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwDropCapsPage::Create(vcl::Window *pParent,
+                                          const SfxItemSet *rSet)
 {
-    return new SwDropCapsPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwDropCapsPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)

@@ -137,7 +137,24 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl)
 
 SwInsTableDlg::~SwInsTableDlg()
 {
+    disposeOnce();
+}
+
+void SwInsTableDlg::dispose()
+{
     delete pTAutoFmt;
+    m_pNameEdit.clear();
+    m_pColNF.clear();
+    m_pRowNF.clear();
+    m_pHeaderCB.clear();
+    m_pRepeatHeaderCB.clear();
+    m_pRepeatHeaderNF.clear();
+    m_pRepeatGroup.clear();
+    m_pDontSplitCB.clear();
+    m_pBorderCB.clear();
+    m_pInsertBtn.clear();
+    m_pAutoFmtBtn.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )

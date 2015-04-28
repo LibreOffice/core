@@ -120,14 +120,14 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
     // Create a framework view.
-    vcl::Window* pControl = NULL;
+    VclPtr<vcl::Window> pControl;
     css::ui::LayoutSize aLayoutSize (-1,-1,-1);
 
 #define EndsWith(s,t) s.endsWithAsciiL(t,strlen(t))
     if (EndsWith(rsUIElementResourceURL, gsResourceNameCustomAnimations))
-        pControl = new CustomAnimationPanel(pParentWindow, *pBase, xFrame);
+        pControl = VclPtr<vcl::Window>(new CustomAnimationPanel(pParentWindow, *pBase, xFrame), SAL_NO_ACQUIRE);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameLayouts))
-        pControl = new LayoutMenu(pParentWindow, *pBase, xSidebar);
+        pControl = VclPtr<vcl::Window>(new LayoutMenu(pParentWindow, *pBase, xSidebar), SAL_NO_ACQUIRE);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameAllMasterPages))
         pControl = AllMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameRecentMasterPages))
@@ -135,14 +135,14 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameUsedMasterPages))
         pControl = CurrentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameSlideTransitions))
-        pControl = new SlideTransitionPanel(pParentWindow, *pBase, xFrame);
+        pControl = VclPtr<vcl::Window>(new SlideTransitionPanel(pParentWindow, *pBase, xFrame), SAL_NO_ACQUIRE);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameTableDesign))
-        pControl = new TableDesignPanel(pParentWindow, *pBase);
+        pControl = VclPtr<vcl::Window>(new TableDesignPanel(pParentWindow, *pBase), SAL_NO_ACQUIRE);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameNavigator))
-        pControl = new NavigatorWrapper(pParentWindow, *pBase, pBindings);
+        pControl = VclPtr<vcl::Window>(new NavigatorWrapper(pParentWindow, *pBase, pBindings), SAL_NO_ACQUIRE);
 #undef EndsWith
 
-    if (pControl == NULL)
+    if (!pControl)
         throw lang::IllegalArgumentException();
 
     // Create a wrapper around the control that implements the

@@ -102,7 +102,26 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent
 
 ScNameDlg::~ScNameDlg()
 {
-    delete m_pRangeManagerTable;
+    disposeOnce();
+}
+
+void ScNameDlg::dispose()
+{
+    m_pRangeManagerTable.disposeAndClear();
+    m_pEdName.clear();
+    m_pEdAssign.clear();
+    m_pRbAssign.clear();
+    m_pLbScope.clear();
+    m_pBtnPrintArea.clear();
+    m_pBtnColHeader.clear();
+    m_pBtnCriteria.clear();
+    m_pBtnRowHeader.clear();
+    m_pBtnAdd.clear();
+    m_pBtnDelete.clear();
+    m_pBtnOk.clear();
+    m_pBtnCancel.clear();
+    m_pFtInfo.clear();
+    ScAnyRefDlg::dispose();
 }
 
 void ScNameDlg::Init()
@@ -117,7 +136,7 @@ void ScNameDlg::Init()
     SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("names");
     pCtrl->set_height_request(pCtrl->GetTextHeight()*12);
 
-    m_pRangeManagerTable = new ScRangeManagerTable(*pCtrl, maRangeMap, maCursorPos);
+    m_pRangeManagerTable = VclPtr<ScRangeManagerTable>::Create(*pCtrl, maRangeMap, maCursorPos);
     m_pRangeManagerTable->setInitListener(this);
     m_pRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
     m_pRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );

@@ -127,8 +127,8 @@ namespace dbaui
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
         OSL_ENSURE(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
-        OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xContext);
-        sal_Int16 nResult = aDlg.Execute();
+        ScopedVclPtrInstance< OParameterDialog > aDlg(nullptr, _rParamRequest.Parameters, _rParamRequest.Connection, m_xContext);
+        sal_Int16 nResult = aDlg->Execute();
         try
         {
             switch (nResult)
@@ -136,7 +136,7 @@ namespace dbaui
                 case RET_OK:
                     if (xParamCallback.is())
                     {
-                        xParamCallback->setParameters(aDlg.getValues());
+                        xParamCallback->setParameters(aDlg->getValues());
                         xParamCallback->select();
                     }
                     break;
@@ -182,9 +182,9 @@ namespace dbaui
         }
 
         // execute the dialog
-        OSQLMessageBox aDialog(NULL, _rSqlInfo, nDialogStyle);
+        ScopedVclPtrInstance< OSQLMessageBox > aDialog(nullptr, _rSqlInfo, nDialogStyle);
         // TODO: need a way to specify the parent window
-        sal_Int16 nResult = aDialog.Execute();
+        sal_Int16 nResult = aDialog->Execute();
         try
         {
             switch (nResult)
@@ -256,8 +256,8 @@ namespace dbaui
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
                 OSL_ENSURE(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
 
-                OCollectionView aDlg(NULL, _rDocuRequest.Content, _rDocuRequest.Name, m_xContext);
-                sal_Int16 nResult = aDlg.Execute();
+                ScopedVclPtrInstance< OCollectionView > aDlg(nullptr, _rDocuRequest.Content, _rDocuRequest.Name, m_xContext);
+                sal_Int16 nResult = aDlg->Execute();
                 try
                 {
                     switch (nResult)
@@ -265,7 +265,7 @@ namespace dbaui
                         case RET_OK:
                             if (xCallback.is())
                             {
-                                xCallback->setName(aDlg.getName(),aDlg.getSelectedFolder());
+                                xCallback->setName(aDlg->getName(), aDlg->getSelectedFolder());
                                 xCallback->select();
                             }
                             break;

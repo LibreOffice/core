@@ -65,13 +65,15 @@ namespace pcr
     class FieldLinkRow : public TabPage
     {
     private:
-        ComboBox*   m_pDetailColumn;
-        ComboBox*   m_pMasterColumn;
+        VclPtr<ComboBox>   m_pDetailColumn;
+        VclPtr<ComboBox>   m_pMasterColumn;
 
         Link        m_aLinkChangeHandler;
 
     public:
         FieldLinkRow( vcl::Window* _pParent );
+        virtual ~FieldLinkRow();
+        virtual void dispose() SAL_OVERRIDE;
 
         inline void         SetLinkChangeHandler( const Link& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
 
@@ -106,6 +108,17 @@ namespace pcr
         m_pMasterColumn->SetModifyHdl( LINK( this, FieldLinkRow, OnFieldNameChanged ) );
     }
 
+    FieldLinkRow::~FieldLinkRow()
+    {
+        disposeOnce();
+    }
+
+    void FieldLinkRow::dispose()
+    {
+        m_pDetailColumn.clear();
+        m_pMasterColumn.clear();
+        TabPage::dispose();
+    }
 
     void FieldLinkRow::fillList( LinkParticipant _eWhich, const Sequence< OUString >& _rFieldNames )
     {
@@ -156,10 +169,10 @@ namespace pcr
             const OUString& _sDetailLabel,
             const OUString& _sMasterLabel)
         :ModalDialog( _pParent, "FormLinks", "modules/spropctrlr/ui/formlinksdialog.ui" )
-        ,m_aRow1       ( new FieldLinkRow( get<VclVBox>("box") ) )
-        ,m_aRow2       ( new FieldLinkRow( get<VclVBox>("box") ) )
-        ,m_aRow3       ( new FieldLinkRow( get<VclVBox>("box") ) )
-        ,m_aRow4       ( new FieldLinkRow( get<VclVBox>("box") ) )
+        ,m_aRow1       ( VclPtr<FieldLinkRow>::Create( get<VclVBox>("box") ) )
+        ,m_aRow2       ( VclPtr<FieldLinkRow>::Create( get<VclVBox>("box") ) )
+        ,m_aRow3       ( VclPtr<FieldLinkRow>::Create( get<VclVBox>("box") ) )
+        ,m_aRow4       ( VclPtr<FieldLinkRow>::Create( get<VclVBox>("box") ) )
         ,m_xContext    ( _rxContext )
         ,m_xDetailForm( _rxDetailForm )
         ,m_xMasterForm( _rxMasterForm )
@@ -194,8 +207,24 @@ namespace pcr
 
     FormLinkDialog::~FormLinkDialog( )
     {
+        disposeOnce();
     }
 
+    void FormLinkDialog::dispose( )
+    {
+        m_pExplanation.clear();
+        m_pDetailLabel.clear();
+        m_pMasterLabel.clear();
+        m_pOK.clear();
+        m_pSuggest.clear();
+
+        m_aRow1.disposeAndClear();
+        m_aRow2.disposeAndClear();
+        m_aRow3.disposeAndClear();
+        m_aRow4.disposeAndClear();
+
+        ModalDialog::dispose();
+    }
 
     void FormLinkDialog::commitLinkPairs()
     {

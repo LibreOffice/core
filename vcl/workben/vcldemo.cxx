@@ -774,12 +774,12 @@ public:
         void SizeAndRender(OutputDevice &rDev, const Rectangle& r, RenderType eType,
                            const RenderContext &rCtx)
         {
-            VirtualDevice *pNested;
+            ScopedVclPtr<VirtualDevice> pNested;
 
             if ((int)eType < RENDER_AS_BITMAPEX)
-                pNested = new VirtualDevice(rDev);
+                pNested = VclPtr<VirtualDevice>::Create(rDev).get();
             else
-                pNested = new VirtualDevice(rDev,0,0);
+                pNested = VclPtr<VirtualDevice>::Create(rDev,0,0).get();
 
             pNested->SetOutputSizePixel(r.GetSize());
             Rectangle aWhole(Point(0,0), r.GetSize());
@@ -804,7 +804,6 @@ public:
                                 aWhole.TopLeft(), aWhole.GetSize(),
                                 *pNested);
             }
-            delete pNested;
         }
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
@@ -945,19 +944,20 @@ public:
         BitmapEx AlphaRecovery(OutputDevice &rDev, Point aPt, BitmapEx &aSrc)
         {
             // Compositing onto 2x colors beyond our control
-            VirtualDevice aWhite, aBlack;
-            aWhite.SetOutputSizePixel(aSrc.GetSizePixel());
-            aWhite.SetBackground(Wallpaper(COL_WHITE));
-            aWhite.Erase();
-            aBlack.SetOutputSizePixel(aSrc.GetSizePixel());
-            aBlack.SetBackground(Wallpaper(COL_BLACK));
-            aBlack.Erase();
-            aWhite.DrawBitmapEx(Point(), aSrc);
-            aBlack.DrawBitmapEx(Point(), aSrc);
+            ScopedVclPtrInstance< VirtualDevice > aWhite;
+            ScopedVclPtrInstance< VirtualDevice > aBlack;
+            aWhite->SetOutputSizePixel(aSrc.GetSizePixel());
+            aWhite->SetBackground(Wallpaper(COL_WHITE));
+            aWhite->Erase();
+            aBlack->SetOutputSizePixel(aSrc.GetSizePixel());
+            aBlack->SetBackground(Wallpaper(COL_BLACK));
+            aBlack->Erase();
+            aWhite->DrawBitmapEx(Point(), aSrc);
+            aBlack->DrawBitmapEx(Point(), aSrc);
 
             // Now recover that alpha...
-            Bitmap aWhiteBmp = aWhite.GetBitmap(Point(),aSrc.GetSizePixel());
-            Bitmap aBlackBmp = aBlack.GetBitmap(Point(),aSrc.GetSizePixel());
+            Bitmap aWhiteBmp = aWhite->GetBitmap(Point(),aSrc.GetSizePixel());
+            Bitmap aBlackBmp = aBlack->GetBitmap(Point(),aSrc.GetSizePixel());
             AlphaMask aMask(aSrc.GetSizePixel());
             Bitmap aRecovered(aSrc.GetSizePixel(), 24);
             {
@@ -1133,12 +1133,11 @@ public:
             }
         }
     }
-    std::vector<vcl::Window *> maInvalidates;
+    std::vector<VclPtr<vcl::Window> > maInvalidates;
     void addInvalidate(vcl::Window *pWindow) { maInvalidates.push_back(pWindow); };
     void removeInvalidate(vcl::Window *pWindow)
     {
-        std::vector<vcl::Window *>::iterator aIt;
-        for (aIt = maInvalidates.begin(); aIt != maInvalidates.end(); ++aIt)
+        for (auto aIt = maInvalidates.begin(); aIt != maInvalidates.end(); ++aIt)
         {
             if (*aIt == pWindow)
             {
@@ -1231,8 +1230,8 @@ bool DemoRenderer::MouseButtonDown(const MouseEvent& rMEvt)
     // otherwise bounce floating windows
     if (!mpButton)
     {
-        mpButtonWin = new FloatingWindow(this);
-        mpButton = new PushButton(mpButtonWin);
+        mpButtonWin = VclPtr<FloatingWindow>::Create(this);
+        mpButton = VclPtr<PushButton>::Create(mpButtonWin);
         mpButton->SetSymbol(SymbolType::HELP);
         mpButton->SetText("PushButton demo");
         mpButton->SetPosSizePixel(Point(0,0), mpButton->GetOptimalSize());
@@ -1385,8 +1384,13 @@ public:
     }
     virtual ~DemoWin()
     {
+        disposeOnce();
+    }
+    virtual void dispose() SAL_OVERRIDE
+    {
         mxThread.clear();
         mrRenderer.removeInvalidate(this);
+        WorkWindow::dispose();
     }
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE
     {
@@ -1402,7 +1406,7 @@ public:
             }
             else
             { // spawn another window
-                DemoWin *pNewWin = new DemoWin(mrRenderer, testThreads);
+                VclPtrInstance<DemoWin> pNewWin(mrRenderer, testThreads);
                 pNewWin->SetText("Another interactive VCL demo window");
                 pNewWin->Show();
             }
@@ -1445,16 +1449,16 @@ public:
 
 class DemoWidgets : public WorkWindow
 {
-    VclBox     *mpBox;
-    ToolBox    *mpToolbox;
-    PushButton *mpButton;
+    VclPtr<VclBox> mpBox;
+    VclPtr<ToolBox> mpToolbox;
+    VclPtr<PushButton> mpButton;
 
 public:
     DemoWidgets() :
         WorkWindow(NULL, WB_STDWORK),
-        mpBox(new VclVBox(this, false, 3)),
-        mpToolbox(new ToolBox(mpBox)),
-        mpButton(new PushButton(mpBox))
+        mpBox(VclPtrInstance<VclVBox>(this, false, 3)),
+        mpToolbox(VclPtrInstance<ToolBox>(mpBox.get())),
+        mpButton(VclPtrInstance<PushButton>(mpBox.get()))
     {
         SetText("VCL widget demo");
 
@@ -1477,14 +1481,14 @@ public:
 
         Show();
     }
-
-    virtual ~DemoWidgets()
+    virtual ~DemoWidgets() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
     {
-        delete mpButton;
-        delete mpToolbox;
-        delete mpBox;
+        mpBox.disposeAndClear();
+        mpToolbox.disposeAndClear();
+        mpButton.disposeAndClear();
+        WorkWindow::dispose();
     }
-
     virtual void Paint(const Rectangle&) SAL_OVERRIDE
     {
         Rectangle aWholeSize(Point(0, 0),GetOutputSizePixel());
@@ -1499,16 +1503,16 @@ public:
         DrawWallpaper(aWholeSize, aWallpaper);
         Pop();
 
-        VirtualDevice aDev(*this);
-        aDev.EnableRTL(IsRTLEnabled());
-        aDev.SetOutputSizePixel(aExclude.GetSize());
+        ScopedVclPtrInstance< VirtualDevice > pDev(*this);
+        pDev->EnableRTL(IsRTLEnabled());
+        pDev->SetOutputSizePixel(aExclude.GetSize());
 
         Rectangle aSubRect(aWholeSize);
         aSubRect.Move(-aExclude.Left(), -aExclude.Top());
-        aDev.DrawWallpaper(aSubRect, aWallpaper );
+        pDev->DrawWallpaper(aSubRect, aWallpaper );
 
         DrawOutDev(aExclude.TopLeft(), aExclude.GetSize(),
-                   Point( 0, 0 ), aExclude.GetSize(), aDev );
+                   Point( 0, 0 ), aExclude.GetSize(), *pDev.get() );
     }
 };
 
@@ -1612,20 +1616,23 @@ public:
                 }
             }
 
-            DemoWin aMainWin(aRenderer, bThreads);
-            std::unique_ptr<DemoWidgets> xWidgets;
-            std::unique_ptr<DemoPopup> xPopup;
+            ScopedVclPtrInstance<DemoWin> aMainWin(aRenderer, bThreads);
+            VclPtr<DemoWidgets> xWidgets;
+            VclPtr<DemoPopup> xPopup;
 
-            aMainWin.SetText("Interactive VCL demo #1");
+            aMainWin->SetText("Interactive VCL demo #1");
 
             if (bWidgets)
-                xWidgets.reset(new DemoWidgets());
+                xWidgets = VclPtr< DemoWidgets >::Create ();
             else if (bPopup)
-                xPopup.reset(new DemoPopup());
+                xPopup = VclPtrInstance< DemoPopup> ();
             else
-                aMainWin.Show();
+                aMainWin->Show();
 
             Application::Execute();
+
+            xWidgets.disposeAndClear();
+            xPopup.disposeAndClear();
         }
         catch (const css::uno::Exception& e)
         {

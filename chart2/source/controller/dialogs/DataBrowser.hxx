@@ -69,6 +69,7 @@ protected:
 public:
     DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate );
     virtual ~DataBrowser();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** GetCellText returns the text at the given position
         @param  nRow
@@ -164,8 +165,8 @@ private:
     bool                m_bLiveUpdate;
     bool                m_bDataValid;
 
-    FormattedField      m_aNumberEditField;
-    Edit                m_aTextEditField;
+    VclPtr<FormattedField>      m_aNumberEditField;
+    VclPtr<Edit>                m_aTextEditField;
 
     /// note: m_aNumberEditField must precede this member!
     ::svt::CellControllerRef m_rNumberEditController;

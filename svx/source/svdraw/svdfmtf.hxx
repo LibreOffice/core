@@ -45,7 +45,7 @@ class ImpSdrGDIMetaFileImport
 {
 protected:
     ::std::vector< SdrObject* > maTmpList;
-    VirtualDevice               maVD;
+    ScopedVclPtr<VirtualDevice> mpVD;
     Rectangle                   maScaleRect;
     size_t                      mnMapScalingOfs; // from here on, not edited with MapScaling
     SfxItemSet*                 mpLineAttr;
@@ -106,18 +106,18 @@ protected:
     void DoAction(MetaHatchAction           & rAct);
     void DoAction(MetaLineColorAction       & rAct);
     void DoAction(MetaMapModeAction         & rAct);
-    void DoAction(MetaFillColorAction       & rAct) { rAct.Execute(&maVD); }
-    void DoAction(MetaTextColorAction       & rAct) { rAct.Execute(&maVD); }
-    void DoAction(MetaTextFillColorAction   & rAct) { rAct.Execute(&maVD); }
-    void DoAction(MetaFontAction            & rAct) { rAct.Execute(&maVD); mbFntDirty = true; }
-    void DoAction(MetaTextAlignAction       & rAct) { rAct.Execute(&maVD); mbFntDirty = true; }
-    void DoAction(MetaClipRegionAction      & rAct) { rAct.Execute(&maVD); checkClip(); }
-    void DoAction(MetaRasterOpAction        & rAct) { rAct.Execute(&maVD); }
-    void DoAction(MetaPushAction            & rAct) { rAct.Execute(&maVD); checkClip(); }
-    void DoAction(MetaPopAction             & rAct) { rAct.Execute(&maVD); mbFntDirty = true; checkClip(); }
-    void DoAction(MetaMoveClipRegionAction  & rAct) { rAct.Execute(&maVD); checkClip(); }
-    void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(&maVD); checkClip(); }
-    void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(&maVD); checkClip(); }
+    void DoAction(MetaFillColorAction       & rAct) { rAct.Execute(mpVD); }
+    void DoAction(MetaTextColorAction       & rAct) { rAct.Execute(mpVD); }
+    void DoAction(MetaTextFillColorAction   & rAct) { rAct.Execute(mpVD); }
+    void DoAction(MetaFontAction            & rAct) { rAct.Execute(mpVD); mbFntDirty = true; }
+    void DoAction(MetaTextAlignAction       & rAct) { rAct.Execute(mpVD); mbFntDirty = true; }
+    void DoAction(MetaClipRegionAction      & rAct) { rAct.Execute(mpVD); checkClip(); }
+    void DoAction(MetaRasterOpAction        & rAct) { rAct.Execute(mpVD); }
+    void DoAction(MetaPushAction            & rAct) { rAct.Execute(mpVD); checkClip(); }
+    void DoAction(MetaPopAction             & rAct) { rAct.Execute(mpVD); mbFntDirty = true; checkClip(); }
+    void DoAction(MetaMoveClipRegionAction  & rAct) { rAct.Execute(mpVD); checkClip(); }
+    void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(mpVD); checkClip(); }
+    void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(mpVD); checkClip(); }
 
     // #i125211# The MetaCommentAction needs to advance (if used), thus
     // give current metafile and index which may be changed
@@ -134,14 +134,14 @@ protected:
     static void DoAction(MetaWallpaperAction& rAct);
     void DoAction(MetaTransparentAction& rAct);
     static void DoAction(MetaEPSAction& rAct);
-    void DoAction(MetaRefPointAction& rAct)  { rAct.Execute(&maVD); }
-    void DoAction(MetaTextLineColorAction& rAct)  { rAct.Execute(&maVD); mbFntDirty = true; }
+    void DoAction(MetaRefPointAction& rAct)  { rAct.Execute(mpVD); }
+    void DoAction(MetaTextLineColorAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
     static void DoAction(MetaTextLineAction& rAct);
     void DoAction(MetaFloatTransparentAction& rAct);
     void DoAction(MetaGradientExAction& rAct);
-    void DoAction(MetaLayoutModeAction& rAct)  { rAct.Execute(&maVD); mbFntDirty = true; }
-    void DoAction(MetaTextLanguageAction& rAct)  { rAct.Execute(&maVD); mbFntDirty = true; }
-    void DoAction(MetaOverlineColorAction& rAct)  { rAct.Execute(&maVD); mbFntDirty = true; }
+    void DoAction(MetaLayoutModeAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
+    void DoAction(MetaTextLanguageAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
+    void DoAction(MetaOverlineColorAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
 
     void ImportText(const Point& rPos, const OUString& rStr, const MetaAction& rAct);
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);

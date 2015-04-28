@@ -84,8 +84,26 @@ ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
 
 ScTpUserLists::~ScTpUserLists()
 {
+    disposeOnce();
+}
+
+void ScTpUserLists::dispose()
+{
     delete pUserLists;
     delete pRangeUtil;
+    mpFtLists.clear();
+    mpLbLists.clear();
+    mpFtEntries.clear();
+    mpEdEntries.clear();
+    mpFtCopyFrom.clear();
+    mpEdCopyFrom.clear();
+    mpBtnNew.clear();
+    mpBtnDiscard.clear();
+    mpBtnAdd.clear();
+    mpBtnModify.clear();
+    mpBtnRemove.clear();
+    mpBtnCopy.clear();
+    SfxTabPage::dispose();
 }
 
 void ScTpUserLists::Init()
@@ -135,9 +153,9 @@ void ScTpUserLists::Init()
 
 }
 
-SfxTabPage* ScTpUserLists::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> ScTpUserLists::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new ScTpUserLists( pParent, *rAttrSet ) );
+    return VclPtr<SfxTabPage>( new ScTpUserLists( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
 }
 
 void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )

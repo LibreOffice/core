@@ -34,7 +34,13 @@ CellLineStyleValueSet::CellLineStyleValueSet( vcl::Window* pParent, const ResId&
 
 CellLineStyleValueSet::~CellLineStyleValueSet()
 {
-    delete pVDev;
+    disposeOnce();
+}
+
+void CellLineStyleValueSet::dispose()
+{
+    pVDev.disposeAndClear();
+    ValueSet::dispose();
 }
 
 void CellLineStyleValueSet::SetUnit(const OUString* str)

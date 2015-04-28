@@ -22,6 +22,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/vclptr.hxx>
 
 
 namespace svt
@@ -45,7 +46,6 @@ namespace svt
     {
     public:
         DrawerVisualization( ToolPanelDrawer& i_rParent );
-        virtual ~DrawerVisualization();
 
     protected:
         // Window overridables
@@ -64,6 +64,7 @@ namespace svt
     public:
         ToolPanelDrawer( vcl::Window& i_rParent, const OUString& i_rTitle );
         virtual ~ToolPanelDrawer();
+        virtual void dispose() SAL_OVERRIDE;
 
         long    GetPreferredHeightPixel() const;
         void    SetExpanded( const bool i_bExpanded );
@@ -96,8 +97,8 @@ namespace svt
         using Window::Paint;
 
     private:
-        ::std::unique_ptr< VirtualDevice >  m_pPaintDevice;
-        DrawerVisualization                 m_aVisualization;
+        ScopedVclPtr< VirtualDevice >       m_pPaintDevice;
+        VclPtr<DrawerVisualization>         m_aVisualization;
         bool                                m_bFocused;
         bool                                m_bExpanded;
     };

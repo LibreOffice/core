@@ -116,6 +116,7 @@ public:
 
     SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     virtual ~SvxRedlinTable();
+    virtual void    dispose() SAL_OVERRIDE;
 
     // For FilterPage only {
     void            SetFilterDate(bool bFlag=true);
@@ -179,25 +180,25 @@ private:
     Link            aRefLink;
     Link            aModifyComLink;
 
-    SvxRedlinTable* pRedlinTable;
-    CheckBox*       m_pCbDate;
-    ListBox*        m_pLbDate;
-    DateField*      m_pDfDate;
-    TimeField*      m_pTfDate;
-    PushButton*     m_pIbClock;
-    FixedText*      m_pFtDate2;
-    DateField*      m_pDfDate2;
-    TimeField*      m_pTfDate2;
-    PushButton*     m_pIbClock2;
-    CheckBox*       m_pCbAuthor;
-    ListBox*        m_pLbAuthor;
-    CheckBox*       m_pCbRange;
-    Edit*           m_pEdRange;
-    PushButton*     m_pBtnRange;
-    CheckBox*       m_pCbAction;
-    ListBox*        m_pLbAction;
-    CheckBox*       m_pCbComment;
-    Edit*           m_pEdComment;
+    VclPtr<SvxRedlinTable> pRedlinTable;
+    VclPtr<CheckBox>       m_pCbDate;
+    VclPtr<ListBox>        m_pLbDate;
+    VclPtr<DateField>      m_pDfDate;
+    VclPtr<TimeField>      m_pTfDate;
+    VclPtr<PushButton>     m_pIbClock;
+    VclPtr<FixedText>      m_pFtDate2;
+    VclPtr<DateField>      m_pDfDate2;
+    VclPtr<TimeField>      m_pTfDate2;
+    VclPtr<PushButton>     m_pIbClock2;
+    VclPtr<CheckBox>       m_pCbAuthor;
+    VclPtr<ListBox>        m_pLbAuthor;
+    VclPtr<CheckBox>       m_pCbRange;
+    VclPtr<Edit>           m_pEdRange;
+    VclPtr<PushButton>     m_pBtnRange;
+    VclPtr<CheckBox>       m_pCbAction;
+    VclPtr<ListBox>        m_pLbAction;
+    VclPtr<CheckBox>       m_pCbComment;
+    VclPtr<Edit>           m_pEdComment;
     bool            bModified;
 
     DECL_LINK( SelDateHdl, ListBox* );
@@ -215,6 +216,8 @@ protected:
 
 public:
                     SvxTPFilter( vcl::Window * pParent);
+    virtual         ~SvxTPFilter();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    DeactivatePage() SAL_OVERRIDE;
     void            SetRedlinTable(SvxRedlinTable*);
@@ -304,12 +307,12 @@ private:
     Link            RejectAllClickLk;
     Link            UndoClickLk;
 
-    SvxRedlinTable* m_pViewData;
-    PushButton*     m_pAccept;
-    PushButton*     m_pReject;
-    PushButton*     m_pAcceptAll;
-    PushButton*     m_pRejectAll;
-    PushButton*     m_pUndo;
+    VclPtr<SvxRedlinTable> m_pViewData;
+    VclPtr<PushButton>     m_pAccept;
+    VclPtr<PushButton>     m_pReject;
+    VclPtr<PushButton>     m_pAcceptAll;
+    VclPtr<PushButton>     m_pRejectAll;
+    VclPtr<PushButton>     m_pUndo;
 
     bool bEnableAccept;
     bool bEnableAcceptAll;
@@ -322,6 +325,7 @@ private:
 public:
     SvxTPView(vcl::Window * pParent, VclBuilderContainer *pTopLevel);
     virtual ~SvxTPView();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            InsertWriterHeader();
     void            InsertCalcHeader();
@@ -370,8 +374,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxAcceptChgCtr
 {
 private:
 
-    SvxTPFilter*    pTPFilter;
-    SvxTPView*      pTPView;
+    VclPtr<SvxTPFilter>    pTPFilter;
+    VclPtr<SvxTPView>      pTPView;
 
     sal_uInt16      m_nViewPageId;
     sal_uInt16      m_nFilterPageId;
@@ -380,6 +384,7 @@ public:
                     SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel);
 
                     virtual ~SvxAcceptChgCtr();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            ShowFilterPage();
     void            ShowViewPage();

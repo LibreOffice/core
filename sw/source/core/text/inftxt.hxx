@@ -156,8 +156,8 @@ protected:
     SwViewShell    *m_pVsh;
 
     // m_pOut is the output device, m_pRef is the device used for formatting
-    OutputDevice* m_pOut;
-    OutputDevice* m_pRef;
+    VclPtr<OutputDevice> m_pOut;
+    VclPtr<OutputDevice> m_pRef;
 
     // performance hack - this is only used by SwTxtFormatInfo but
     // because it's not even possible to dynamic_cast these things

@@ -86,7 +86,7 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    StatusBar* pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow));
+    VclPtr< StatusBar > pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow).get());
     if ( pStatusBar )
     {
         const sal_uInt16 nCount = pStatusBar->GetItemCount();

@@ -53,9 +53,9 @@ struct ImplSplitItem
     long                mnOldWidth;
     long                mnOldHeight;
     ImplSplitSet*       mpSet;
-    vcl::Window*             mpWindow;
-    vcl::Window*             mpOrgParent;
-    sal_uInt16              mnId;
+    VclPtr<vcl::Window> mpWindow;
+    VclPtr<vcl::Window> mpOrgParent;
+    sal_uInt16          mnId;
     SplitWindowItemBits mnBits;
     bool                mbFixed;
     bool                mbSubSize;
@@ -1347,9 +1347,16 @@ SplitWindow::SplitWindow( vcl::Window* pParent, WinBits nStyle ) :
 
 SplitWindow::~SplitWindow()
 {
+    disposeOnce();
+}
+
+void SplitWindow::dispose()
+{
     // delete Sets
-    ImplDeleteSet( mpMainSet );
+    if (mpMainSet)
+        ImplDeleteSet( mpMainSet );
     mpMainSet = NULL; //NULL for base-class callbacks during dtoring
+    DockingWindow::dispose();
 }
 
 void SplitWindow::ImplSetWindowSize( long nDelta )

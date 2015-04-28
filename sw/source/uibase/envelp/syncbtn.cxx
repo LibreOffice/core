@@ -37,7 +37,7 @@ SwSyncChildWin::SwSyncChildWin( vcl::Window* _pParent,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )
 {
-    pWindow = new SwSyncBtnDlg( pBindings, this, _pParent);
+    pWindow = VclPtr<SwSyncBtnDlg>::Create( pBindings, this, _pParent);
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {
@@ -53,7 +53,7 @@ SwSyncChildWin::SwSyncChildWin( vcl::Window* _pParent,
         pInfo->aSize = pWindow->GetSizePixel();
     }
 
-    static_cast<SwSyncBtnDlg *>(pWindow)->Initialize(pInfo);
+    static_cast<SwSyncBtnDlg *>(pWindow.get())->Initialize(pInfo);
 
     pWindow->Show();
 }
@@ -66,6 +66,17 @@ SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
     get(m_pSyncBtn, "sync");
     m_pSyncBtn->SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));
     Show();
+}
+
+SwSyncBtnDlg::~SwSyncBtnDlg()
+{
+    disposeOnce();
+}
+
+void SwSyncBtnDlg::dispose()
+{
+    m_pSyncBtn.clear();
+    SfxFloatingWindow::dispose();
 }
 
 IMPL_LINK_NOARG(SwSyncBtnDlg, BtnHdl)

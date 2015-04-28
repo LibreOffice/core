@@ -75,7 +75,7 @@ class EditToolbarController : public IEditListener,
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const SAL_OVERRIDE;
 
     private:
-        EditControl*    m_pEditControl;
+        VclPtr<EditControl>    m_pEditControl;
 };
 
 }

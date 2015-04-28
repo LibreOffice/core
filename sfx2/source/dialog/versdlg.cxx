@@ -213,7 +213,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 
-    m_pVersionBox = new SfxVersionsTabListBox_Impl(*pContainer, WB_TABSTOP);
+    m_pVersionBox = VclPtr<SfxVersionsTabListBox_Impl>::Create(*pContainer, WB_TABSTOP);
 
     Link aClickLink = LINK( this, SfxVersionDialog, ButtonHdl_Impl );
     m_pViewButton->SetClickHdl ( aClickLink );
@@ -329,8 +329,21 @@ void SfxVersionDialog::Init_Impl()
 
 SfxVersionDialog::~SfxVersionDialog()
 {
+    disposeOnce();
+}
+
+void SfxVersionDialog::dispose()
+{
     delete m_pTable;
-    delete m_pVersionBox;
+    m_pVersionBox.disposeAndClear();
+    m_pSaveButton.clear();
+    m_pSaveCheckBox.clear();
+    m_pOpenButton.clear();
+    m_pViewButton.clear();
+    m_pDeleteButton.clear();
+    m_pCompareButton.clear();
+    m_pCmisButton.clear();
+    SfxModalDialog::dispose();
 }
 
 void SfxVersionDialog::Open_Impl()
@@ -394,7 +407,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     {
         SfxVersionInfo aInfo;
         aInfo.aAuthor = SvtUserOptions().GetFullName();
-        boost::scoped_ptr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, aInfo, true));
+        VclPtrInstance< SfxViewVersionDialog_Impl > pDlg(this, aInfo, true);
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )
         {
@@ -426,7 +439,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     else if (pButton == m_pViewButton && pEntry)
     {
         SfxVersionInfo* pInfo = static_cast<SfxVersionInfo*>(pEntry->GetUserData());
-        boost::scoped_ptr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, *pInfo, false));
+        VclPtrInstance<SfxViewVersionDialog_Impl> pDlg(this, *pInfo, false);
         pDlg->Execute();
     }
     else if (pEntry && pButton == m_pCompareButton)
@@ -449,7 +462,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     }
     else if (pButton == m_pCmisButton)
     {
-        boost::scoped_ptr<SfxCmisVersionsDialog> pDlg(new SfxCmisVersionsDialog(pViewFrame, false));
+        VclPtrInstance< SfxCmisVersionsDialog > pDlg(pViewFrame, false);
         pDlg->Execute();
     }
 
@@ -493,6 +506,22 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVe
     }
 }
 
+SfxViewVersionDialog_Impl::~SfxViewVersionDialog_Impl()
+{
+    disposeOnce();
+}
+
+void SfxViewVersionDialog_Impl::dispose()
+{
+    m_pDateTimeText.clear();
+    m_pSavedByText.clear();
+    m_pEdit.clear();
+    m_pOKButton.clear();
+    m_pCancelButton.clear();
+    m_pCloseButton.clear();
+    SfxModalDialog::dispose();
+}
+
 IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton)
 {
     assert(pButton == m_pOKButton);
@@ -519,7 +548,7 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, bool bIsS
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 
-    m_pVersionBox = new SfxVersionsTabListBox_Impl(*pContainer, WB_TABSTOP);
+    m_pVersionBox = VclPtr<SfxVersionsTabListBox_Impl>::Create(*pContainer, WB_TABSTOP);
 
     m_pVersionBox->GrabFocus();
     m_pVersionBox->SetStyle( m_pVersionBox->GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
@@ -557,8 +586,18 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, bool bIsS
 
 SfxCmisVersionsDialog::~SfxCmisVersionsDialog()
 {
+    disposeOnce();
+}
+
+void SfxCmisVersionsDialog::dispose()
+{
     delete m_pTable;
-    delete m_pVersionBox;
+    m_pVersionBox.disposeAndClear();
+    m_pOpenButton.clear();
+    m_pViewButton.clear();
+    m_pDeleteButton.clear();
+    m_pCompareButton.clear();
+    SfxModalDialog::dispose();
 }
 
 void SfxCmisVersionsDialog::LoadVersions()

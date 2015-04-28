@@ -61,7 +61,7 @@ SfxPopupWindowType SvxTbxCtlAlign::GetPopupWindowType() const
  * rItemRect sind die Screen-Koordinaten
  */
 
-SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxTbxCtlAlign::CreatePopupWindow()
 {
     SolarMutexGuard aGuard;
     if ( GetSlotId() == SID_OBJECT_ALIGN )

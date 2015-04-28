@@ -22,15 +22,22 @@
 #include "newtabledlg.hxx"
 
 SvxNewTableDialog::SvxNewTableDialog( vcl::Window* pParent )
-: ModalDialog( pParent, "NewTableDialog", "cui/ui/newtabledialog.ui" )
+    : m_pDialog( VclPtr<ModalDialog>::Create( pParent, "NewTableDialog", "cui/ui/newtabledialog.ui" ) )
 {
-    get(mpNumRows, "rows");
-    get(mpNumColumns, "columns");
+    m_pDialog->get(mpNumRows, "rows");
+    m_pDialog->get(mpNumColumns, "columns");
+}
+
+SvxNewTableDialog::~SvxNewTableDialog()
+{
+    mpNumColumns.clear();
+    mpNumRows.clear();
+    m_pDialog.disposeAndClear();
 }
 
 short SvxNewTableDialog::Execute()
 {
-    return ModalDialog::Execute();
+    return m_pDialog->Execute();
 }
 
 sal_Int32 SvxNewTableDialog::getRows() const

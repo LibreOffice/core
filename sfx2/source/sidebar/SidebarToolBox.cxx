@@ -57,6 +57,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarToolBox(vcl::Wi
 
 SidebarToolBox::~SidebarToolBox()
 {
+    disposeOnce();
+}
+
+void SidebarToolBox::dispose()
+{
     ControllerContainer aControllers;
     aControllers.swap(maControllers);
     for (ControllerContainer::iterator iController(aControllers.begin()), iEnd(aControllers.end());
@@ -76,7 +81,10 @@ SidebarToolBox::~SidebarToolBox()
         SetSelectHdl(Link());
         SetActivateHdl(Link());
         SetDeactivateHdl(Link());
+        mbAreHandlersRegistered = false;
     }
+
+    ToolBox::dispose();
 }
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,

@@ -24,8 +24,7 @@
 #include <tools/gen.hxx>
 #include <vector>
 #include <vcl/dllapi.h>
-
-class Control;
+#include <vcl/ctrl.hxx>
 
 namespace vcl
 {
@@ -42,9 +41,9 @@ struct VCL_DLLPUBLIC ControlLayoutData
     // start indices of lines
     std::vector< long >                 m_aLineIndices;
     // notify parent control on destruction
-    const Control*                      m_pParent;
+    VclPtr<const Control>               m_pParent;
 
-    ControlLayoutData() : m_pParent( NULL ) {}
+    ControlLayoutData();
     ~ControlLayoutData();
 
     Rectangle GetCharacterBounds( long nIndex ) const;

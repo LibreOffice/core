@@ -67,11 +67,11 @@ typedef std::vector<SvLBoxEntryPtr> SvLBoxEntryArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
-    vcl::Window*            pParentDlg;
+    VclPtr<vcl::Window>     pParentDlg;
     SwRedlineDataParentArr  aRedlineParents;
     SwRedlineDataChildArr   aRedlineChildren;
     SwRedlineDataParentSortArr aUsedSeqNo;
-    SvxAcceptChgCtr         aTabPagesCTRL;
+    VclPtr<SvxAcceptChgCtr>    aTabPagesCTRL;
     PopupMenu               aPopup;
     Timer                   aDeselectTimer;
     Timer                   aSelectTimer;
@@ -82,8 +82,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     OUString                sFmtCollSet;
     OUString                sFilterAction;
     OUString                sAutoFormat;
-    SvxTPView*              pTPView;
-    SvxRedlinTable*         pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    VclPtr<SvxTPView>       pTPView;
+    VclPtr<SvxRedlinTable>  pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     Link                    aOldSelectHdl;
     Link                    aOldDeselectHdl;
     bool                    bOnlyFormatedRedlines;
@@ -120,7 +120,7 @@ public:
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
 
-    inline SvxAcceptChgCtr& GetChgCtrl()        { return aTabPagesCTRL; }
+    inline SvxAcceptChgCtr& GetChgCtrl()        { return *aTabPagesCTRL.get(); }
     inline bool     HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
 
     void            Init(sal_uInt16 nStart = 0);
@@ -140,6 +140,7 @@ class SwModelessRedlineAcceptDlg : public SfxModelessDialog
 public:
     SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, vcl::Window *pParent);
     virtual ~SwModelessRedlineAcceptDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Activate() SAL_OVERRIDE;
     virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
@@ -166,6 +167,7 @@ class SwRedlineAcceptPanel : public PanelLayout, public SfxListener
 public:
     SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
     virtual ~SwRedlineAcceptPanel();
+    virtual void dispose() SAL_OVERRIDE;
 
     /// We need to be a SfxListener to be able to update the list of changes when we get SFX_HINT_DOCCHANGED.
     using Control::Notify;

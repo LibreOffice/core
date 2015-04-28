@@ -62,6 +62,7 @@ public:
                                     ScViewData* pViewData,
                                     ScSplitPos eWhich );
     virtual                     ~ScOutlineWindow();
+    virtual void                dispose() SAL_OVERRIDE;
 
     /** Sets the size of the header area (width/height dep. on window type). */
     void                        SetHeaderSize( long nNewSize );

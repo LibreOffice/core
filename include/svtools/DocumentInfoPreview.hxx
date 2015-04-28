@@ -43,6 +43,7 @@ public:
     ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits);
 
     virtual ~ODocumentInfoPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Resize() SAL_OVERRIDE;
 
@@ -54,8 +55,8 @@ public:
         OUString const & rURL);
 
 private:
-    ExtMultiLineEdit m_pEditWin;
-    std::unique_ptr< SvtDocInfoTable_Impl > m_xInfoTable;
+    VclPtr<ExtMultiLineEdit> m_pEditWin;
+    boost::scoped_ptr< SvtDocInfoTable_Impl > m_xInfoTable;
     LanguageTag m_aLanguageTag;
 
     void insertEntry(OUString const & title, OUString const & value);

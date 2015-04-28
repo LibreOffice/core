@@ -47,7 +47,7 @@ protected:
     SwScriptInfo* pScriptInfo;
 
 private:
-    OutputDevice *pLastOut;
+    VclPtr<OutputDevice> pLastOut;
     short nChgCnt;
     SwRedlineItr *pRedln;
     size_t nStartIndex;

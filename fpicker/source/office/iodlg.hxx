@@ -82,16 +82,16 @@ class CustomContainer;
 class SvtFileDialog : public ModalDialog, public ::svt::IFilePickerController
 {
 private:
-    CheckBox*                   _pCbReadOnly;
-    CheckBox*                   _pCbLinkBox;
-    CheckBox*                   _pCbPreviewBox;
-    CheckBox*                   _pCbSelection;
-    PushButton*                 _pPbPlay;
-    vcl::Window*                     _pPrevWin;
-    FixedBitmap*                _pPrevBmp;
-    CustomContainer*            _pContainer;
-    SvtFileView*                _pFileView;
-    Splitter*                   _pSplitter;
+    VclPtr<CheckBox>                   _pCbReadOnly;
+    VclPtr<CheckBox>                   _pCbLinkBox;
+    VclPtr<CheckBox>                   _pCbPreviewBox;
+    VclPtr<CheckBox>                   _pCbSelection;
+    VclPtr<PushButton>                 _pPbPlay;
+    VclPtr<vcl::Window>                _pPrevWin;
+    VclPtr<FixedBitmap>                _pPrevBmp;
+    VclPtr<CustomContainer>            _pContainer;
+    VclPtr<SvtFileView>                _pFileView;
+    VclPtr<Splitter>                   _pSplitter;
     ::svt::IFilePickerListener* _pFileNotifier;
     SvtExpFileDlg_Impl*         _pImp;
     WinBits                     _nExtraBits;
@@ -100,7 +100,7 @@ private:
     ImageList                   m_aImages;
     ::svt::SmartContent         m_aContent;
 
-    ::std::set< Control* >      m_aDisabledControls;
+    ::std::set< VclPtr<Control> >      m_aDisabledControls;
 
     ::utl::OConfigurationNode   m_aConfiguration;
     ::rtl::Reference< ::svt::AsyncPickerAction >
@@ -194,6 +194,7 @@ public:
                                 SvtFileDialog( vcl::Window* _pParent, WinBits nBits, WinBits nExtraBits );
                                 SvtFileDialog( vcl::Window* _pParent, WinBits nBits );
                                 virtual ~SvtFileDialog();
+    virtual void                dispose() SAL_OVERRIDE;
 
     virtual short               Execute() SAL_OVERRIDE;
     virtual void                StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;

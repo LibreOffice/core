@@ -24,7 +24,6 @@
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
 #include <helpid.h>
-#include <boost/scoped_ptr.hpp>
 
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         vcl::Window* pParent, const SwCSVData& rOldData)
@@ -61,7 +60,20 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
 
 SwCustomizeAddressListDialog::~SwCustomizeAddressListDialog()
 {
+    disposeOnce();
 }
+
+void SwCustomizeAddressListDialog::dispose()
+{
+    m_pFieldsLB.clear();
+    m_pAddPB.clear();
+    m_pDeletePB.clear();
+    m_pRenamePB.clear();
+    m_pUpPB.clear();
+    m_pDownPB.clear();
+    SfxModalDialog::dispose();
+}
+
 
 IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl)
 {
@@ -76,11 +88,11 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
-    boost::scoped_ptr<SwAddRenameEntryDialog> pDlg;
+    ScopedVclPtr<SwAddRenameEntryDialog> pDlg;
     if (bRename)
-        pDlg.reset(new SwRenameEntryDialog(pButton, m_pNewData->aDBColumnHeaders));
+        pDlg.reset(VclPtr<SwRenameEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders));
     else
-        pDlg.reset(new SwAddEntryDialog(pButton, m_pNewData->aDBColumnHeaders));
+        pDlg.reset(VclPtr<SwAddEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders));
     if(bRename)
     {
         OUString aTemp = m_pFieldsLB->GetEntry(nPos);
@@ -111,7 +123,6 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
         m_pFieldsLB->InsertEntry(sNew, nPos);
         m_pFieldsLB->SelectEntryPos(nPos);
     }
-    pDlg.reset();
     UpdateButtons();
     return 0;
 }
@@ -182,6 +193,18 @@ SwAddRenameEntryDialog::SwAddRenameEntryDialog(
     get(m_pFieldNameED, "entry");
     m_pFieldNameED->SetModifyHdl(LINK(this, SwAddRenameEntryDialog, ModifyHdl_Impl));
     ModifyHdl_Impl(m_pFieldNameED);
+}
+
+SwAddRenameEntryDialog::~SwAddRenameEntryDialog()
+{
+    disposeOnce();
+}
+
+void SwAddRenameEntryDialog::dispose()
+{
+    m_pFieldNameED.clear();
+    m_pOK.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)

@@ -75,53 +75,53 @@ class SvxPageDescPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 private:
     // paper format
-    ListBox*             m_pPaperSizeBox;
+    VclPtr<ListBox>             m_pPaperSizeBox;
 
-    MetricField*         m_pPaperWidthEdit;
-    MetricField*         m_pPaperHeightEdit;
+    VclPtr<MetricField>         m_pPaperWidthEdit;
+    VclPtr<MetricField>         m_pPaperHeightEdit;
 
-    FixedText*           m_pOrientationFT;
-    RadioButton*         m_pPortraitBtn;
-    RadioButton*         m_pLandscapeBtn;
+    VclPtr<FixedText>           m_pOrientationFT;
+    VclPtr<RadioButton>         m_pPortraitBtn;
+    VclPtr<RadioButton>         m_pLandscapeBtn;
 
-    SvxPageWindow*       m_pBspWin;
+    VclPtr<SvxPageWindow>       m_pBspWin;
 
-    FixedText*           m_pTextFlowLbl;
-    svx::FrameDirectionListBox*  m_pTextFlowBox;
+    VclPtr<FixedText>           m_pTextFlowLbl;
+    VclPtr<svx::FrameDirectionListBox>  m_pTextFlowBox;
 
-    ListBox*             m_pPaperTrayBox;
+    VclPtr<ListBox>             m_pPaperTrayBox;
 
     // Margins
-    FixedText*           m_pLeftMarginLbl;
-    MetricField*         m_pLeftMarginEdit;
-    FixedText*           m_pRightMarginLbl;
-    MetricField*         m_pRightMarginEdit;
-    MetricField*         m_pTopMarginEdit;
-    MetricField*         m_pBottomMarginEdit;
+    VclPtr<FixedText>           m_pLeftMarginLbl;
+    VclPtr<MetricField>         m_pLeftMarginEdit;
+    VclPtr<FixedText>           m_pRightMarginLbl;
+    VclPtr<MetricField>         m_pRightMarginEdit;
+    VclPtr<MetricField>         m_pTopMarginEdit;
+    VclPtr<MetricField>         m_pBottomMarginEdit;
 
     // layout settings
-    FixedText*           m_pPageText;
-    ListBox*             m_pLayoutBox;
-    ListBox*             m_pNumberFormatBox;
+    VclPtr<FixedText>           m_pPageText;
+    VclPtr<ListBox>             m_pLayoutBox;
+    VclPtr<ListBox>             m_pNumberFormatBox;
 
     //Extras Calc
-    FixedText*           m_pTblAlignFT;
-    CheckBox*            m_pHorzBox;
-    CheckBox*            m_pVertBox;
+    VclPtr<FixedText>           m_pTblAlignFT;
+    VclPtr<CheckBox>            m_pHorzBox;
+    VclPtr<CheckBox>            m_pVertBox;
 
     // Impress and Draw
-    CheckBox*            m_pAdaptBox;
+    VclPtr<CheckBox>            m_pAdaptBox;
 
     //Register Writer
-    CheckBox*            m_pRegisterCB;
-    FixedText*           m_pRegisterFT;
-    ListBox*             m_pRegisterLB;
+    VclPtr<CheckBox>            m_pRegisterCB;
+    VclPtr<FixedText>           m_pRegisterFT;
+    VclPtr<ListBox>             m_pRegisterLB;
 
     OUString             sStandardRegister;
 
-    FixedText*           m_pInsideLbl;
-    FixedText*           m_pOutsideLbl;
-    FixedText*           m_pPrintRangeQueryText;
+    VclPtr<FixedText>           m_pInsideLbl;
+    VclPtr<FixedText>           m_pOutsideLbl;
+    VclPtr<FixedText>           m_pPrintRangeQueryText;
 
     long                nFirstLeftMargin;
     long                nFirstRightMargin;
@@ -140,7 +140,7 @@ private:
 
     //UUUU SvxPage_Impl*        pImpl;
     MarginPosition      m_nPos;
-    Printer*            mpDefPrinter;
+    VclPtr<Printer>     mpDefPrinter;
 
     bool                mbDelPrinter : 1;
 
@@ -188,7 +188,7 @@ protected:
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     // returns the range of the Which values
     static const sal_uInt16* GetRanges() { return pRanges; }
 
@@ -197,6 +197,7 @@ public:
     virtual void        FillUserData() SAL_OVERRIDE;
 
     virtual ~SvxPageDescPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetMode( SvxModeType eMType ) { eMode = eMType; }
     void                SetPaperFormatRanges( Paper eStart, Paper eEnd )

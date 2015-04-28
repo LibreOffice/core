@@ -112,8 +112,31 @@ MacroChooser::MacroChooser( vcl::Window* pParnt, bool bCreateEntries )
 
 MacroChooser::~MacroChooser()
 {
+    disposeOnce();
+}
+
+void MacroChooser::dispose()
+{
     if ( bForceStoreBasic )
+    {
         SfxGetpApp()->SaveBasicAndDialogContainer();
+        bForceStoreBasic = false;
+    }
+    m_pMacroNameEdit.clear();
+    m_pMacroFromTxT.clear();
+    m_pMacrosSaveInTxt.clear();
+    m_pBasicBox.clear();
+    m_pMacrosInTxt.clear();
+    m_pMacroBox.clear();
+    m_pRunButton.clear();
+    m_pCloseButton.clear();
+    m_pAssignButton.clear();
+    m_pEditButton.clear();
+    m_pDelButton.clear();
+    m_pOrganizeButton.clear();
+    m_pNewLibButton.clear();
+    m_pNewModButton.clear();
+    SfxModalDialog::dispose();
 }
 
 void MacroChooser::StoreMacroDescription()
@@ -754,7 +777,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         StoreMacroDescription();
 
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(m_pBasicBox->FirstSelected());
-        boost::scoped_ptr<OrganizeDialog> pDlg(new OrganizeDialog( this, 0, aDesc ));
+        VclPtrInstance< OrganizeDialog > pDlg( this, 0, aDesc );
         sal_uInt16 nRet = pDlg->Execute();
         pDlg.reset();
 

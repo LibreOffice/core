@@ -37,10 +37,10 @@ class ImplWin;
 class VCL_DLLPUBLIC ListBox : public Control
 {
 private:
-    ImplListBox*                mpImplLB;
-    ImplListBoxFloatingWindow*  mpFloatWin;
-    ImplWin*                    mpImplWin;
-    ImplBtn*                    mpBtn;
+    VclPtr<ImplListBox>                mpImplLB;
+    VclPtr<ImplListBoxFloatingWindow>  mpFloatWin;
+    VclPtr<ImplWin>                    mpImplWin;
+    VclPtr<ImplBtn>                    mpBtn;
     sal_uInt16                  mnDDHeight;
     sal_Int32                   mnSaveValue;
     sal_Int32                   m_nMaxWidthChars;
@@ -83,6 +83,7 @@ public:
     explicit            ListBox( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
     explicit            ListBox( vcl::Window* pParent, const ResId& );
     virtual             ~ListBox();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;

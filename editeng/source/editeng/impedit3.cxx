@@ -2811,7 +2811,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
         if ( ( nIntLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
         {
             // Lets see what Leading one gets on the screen
-            VirtualDevice* pVDev = GetVirtualDevice( pRefDev->GetMapMode(), pRefDev->GetDrawMode() );
+            VclPtr<VirtualDevice> pVDev = GetVirtualDevice( pRefDev->GetMapMode(), pRefDev->GetDrawMode() );
             rFont.SetPhysFont( pVDev );
             aMetric = pVDev->GetFontMetric();
 

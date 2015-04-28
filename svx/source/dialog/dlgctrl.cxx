@@ -106,10 +106,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxRectCtl(vcl::Window
 
 SvxRectCtl::~SvxRectCtl()
 {
+    disposeOnce();
+}
+
+void SvxRectCtl::dispose()
+{
     delete pBitmap;
 
     if( pAccContext )
         pAccContext->release();
+    Control::dispose();
 }
 
 
@@ -841,7 +847,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPixelCtl(vcl::Windo
 
 SvxPixelCtl::~SvxPixelCtl( )
 {
+    disposeOnce();
+}
+
+void SvxPixelCtl::dispose()
+{
     delete []pPixel;
+    Control::dispose();
 }
 
 // Changes the foreground or Background color
@@ -1427,8 +1439,8 @@ namespace
     {
         if(!rBitmapEx.IsEmpty() && rSize.Width() > 0 && rSize.Height() > 0)
         {
-            VirtualDevice aVirtualDevice;
-            aVirtualDevice.SetOutputSizePixel(rSize);
+            ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
+            pVirtualDevice->SetOutputSizePixel(rSize);
 
             if(rBitmapEx.IsTransparent())
             {
@@ -1441,19 +1453,19 @@ namespace
                     static const Color aW(COL_WHITE);
                     static const Color aG(0xef, 0xef, 0xef);
 
-                    aVirtualDevice.DrawCheckered(aNull, rSize, nLen, aW, aG);
+                    pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
                 }
                 else
                 {
-                    aVirtualDevice.SetBackground(rStyleSettings.GetFieldColor());
-                    aVirtualDevice.Erase();
+                    pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
+                    pVirtualDevice->Erase();
                 }
             }
 
             if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
             {
                 rBitmapEx.Scale(rSize, BMP_SCALE_DEFAULT);
-                aVirtualDevice.DrawBitmapEx(Point(0, 0), rBitmapEx);
+                pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
             }
             else
             {
@@ -1463,14 +1475,14 @@ namespace
                 {
                     for(sal_Int32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
                     {
-                        aVirtualDevice.DrawBitmapEx(
+                        pVirtualDevice->DrawBitmapEx(
                             Point(x, y),
                             rBitmapEx);
                     }
                 }
             }
 
-            rBitmapEx = aVirtualDevice.GetBitmap(Point(0, 0), rSize);
+            rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
         }
     }
 } // end of anonymous namespace
@@ -1594,10 +1606,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineLB(vcl::Window *pP
     return pListBox;
 }
 
-LineLB::~LineLB()
-{
-}
-
 void LineLB::setAddStandardFields(bool bNew)
 {
     if(getAddStandardFields() != bNew)
@@ -1696,17 +1704,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineEndLB(vcl::Window 
     return pListBox;
 }
 
-LineEndLB::~LineEndLB()
-{
-}
-
 void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
 {
     if( !pList.is() )
         return;
 
     long nCount = pList->Count();
-    VirtualDevice aVD;
+    ScopedVclPtrInstance< VirtualDevice > pVD;
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
@@ -1716,10 +1720,10 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
         if( !aBitmap.IsEmpty() )
         {
             Size aBmpSize( aBitmap.GetSizePixel() );
-            aVD.SetOutputSizePixel( aBmpSize, false );
-            aVD.DrawBitmap( Point(), aBitmap );
+            pVD->SetOutputSizePixel( aBmpSize, false );
+            pVD->DrawBitmap( Point(), aBitmap );
             InsertEntry( pEntry->GetName(),
-                Image(aVD.GetBitmap(
+                Image(pVD->GetBitmap(
                     (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
             //delete pBitmap;
@@ -1736,14 +1740,14 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool
 {
     if(!rBitmap.IsEmpty())
     {
-        VirtualDevice aVD;
+        ScopedVclPtrInstance< VirtualDevice > pVD;
         const Size aBmpSize(rBitmap.GetSizePixel());
 
-        aVD.SetOutputSizePixel(aBmpSize, false);
-        aVD.DrawBitmap(Point(), rBitmap);
+        pVD->SetOutputSizePixel(aBmpSize, false);
+        pVD->DrawBitmap(Point(), rBitmap);
         InsertEntry(
             rEntry.GetName(),
-            Image(aVD.GetBitmap(
+            Image(pVD->GetBitmap(
                 (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
                 Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
     }
@@ -1761,14 +1765,14 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitma
 
     if(!rBitmap.IsEmpty())
     {
-        VirtualDevice aVD;
+        ScopedVclPtrInstance< VirtualDevice > pVD;
         const Size aBmpSize(rBitmap.GetSizePixel());
 
-        aVD.SetOutputSizePixel(aBmpSize, false);
-        aVD.DrawBitmap(Point(), rBitmap);
+        pVD->SetOutputSizePixel(aBmpSize, false);
+        pVD->DrawBitmap(Point(), rBitmap);
         InsertEntry(
             rEntry.GetName(),
-            Image(aVD.GetBitmap(
+            Image(pVD->GetBitmap(
                     (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))),
             nPos);
@@ -1820,7 +1824,7 @@ void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
 SvxPreviewBase::SvxPreviewBase(vcl::Window* pParent)
     : Control(pParent, WB_BORDER)
     , mpModel(new SdrModel())
-    , mpBufferDevice(new VirtualDevice(*this))
+    , mpBufferDevice(VclPtr<VirtualDevice>::Create(*this))
 {
     //  Draw the control's border as a flat thin black line.
     SetBorderStyle(WindowBorderStyle::MONO);
@@ -1833,8 +1837,14 @@ SvxPreviewBase::SvxPreviewBase(vcl::Window* pParent)
 
 SvxPreviewBase::~SvxPreviewBase()
 {
+    disposeOnce();
+}
+
+void SvxPreviewBase::dispose()
+{
     delete mpModel;
-    delete mpBufferDevice;
+    mpBufferDevice.disposeAndClear();
+    Control::dispose();
 }
 
 void SvxPreviewBase::LocalPrePaint()
@@ -1988,12 +1998,18 @@ Size SvxXLinePreview::GetOptimalSize() const
 
 SvxXLinePreview::~SvxXLinePreview()
 {
+    disposeOnce();
+}
+
+void SvxXLinePreview::dispose()
+{
     SdrObject *pFoo = mpLineObjA;
     SdrObject::Free( pFoo );
     pFoo = mpLineObjB;
     SdrObject::Free( pFoo );
     pFoo = mpLineObjC;
     SdrObject::Free( pFoo );
+    SvxPreviewBase::dispose();
 }
 
 
@@ -2094,7 +2110,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXRectPreview(vcl::W
 
 SvxXRectPreview::~SvxXRectPreview()
 {
+    disposeOnce();
+}
+
+void SvxXRectPreview::dispose()
+{
     SdrObject::Free(mpRectangleObject);
+    SvxPreviewBase::dispose();
 }
 
 void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
@@ -2149,8 +2171,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXShadowPreview (vcl
 
 SvxXShadowPreview::~SvxXShadowPreview()
 {
+    disposeOnce();
+}
+
+void SvxXShadowPreview::dispose()
+{
     SdrObject::Free(mpRectangleObject);
     SdrObject::Free(mpRectangleShadow);
+    SvxPreviewBase::dispose();
 }
 
 void SvxXShadowPreview::SetRectangleAttributes(const SfxItemSet& rItemSet)

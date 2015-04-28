@@ -136,10 +136,10 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     std::unique_ptr<ScNoteMarker> mpNoteMarker;
 
-    std::unique_ptr<ScFilterListBox> mpFilterBox;
-    std::unique_ptr<FloatingWindow> mpFilterFloat;
-    std::unique_ptr<ScCheckListMenuWindow> mpAutoFilterPopup;
-    std::unique_ptr<ScCheckListMenuWindow> mpDPFieldPopup;
+    VclPtr<ScFilterListBox>          mpFilterBox;
+    VclPtr<FloatingWindow>           mpFilterFloat;
+    VclPtr<ScCheckListMenuWindow>    mpAutoFilterPopup;
+    VclPtr<ScCheckListMenuWindow>    mpDPFieldPopup;
     std::unique_ptr<ScDPFieldButton> mpFilterButton;
 
     sal_uInt16              nCursorHideCount;
@@ -310,6 +310,7 @@ public:
 
     ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
     virtual ~ScGridWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     // #i70788# flush and get overlay

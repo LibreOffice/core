@@ -512,9 +512,22 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
         Enable( false );
 }
 
-
 SvxHyphenWordDialog::~SvxHyphenWordDialog()
 {
+    disposeOnce();
+}
+
+void SvxHyphenWordDialog::dispose()
+{
+    m_pWordEdit.clear();
+    m_pLeftBtn.clear();
+    m_pRightBtn.clear();
+    m_pOkBtn.clear();
+    m_pContBtn.clear();
+    m_pDelBtn.clear();
+    m_pHyphAll.clear();
+    m_pCloseBtn.clear();
+    SfxModalDialog::dispose();
 }
 
 

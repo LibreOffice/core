@@ -49,11 +49,23 @@ MasterPasswordDialog::MasterPasswordDialog
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         OUString aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, *pResourceMgr ));
-        MessageDialog aErrorBox(pParent, aErrorMsg);
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(pParent, aErrorMsg);
+        aErrorBox->Execute();
     }
 
     m_pOKBtn->SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
 };
+
+MasterPasswordDialog::~MasterPasswordDialog()
+{
+    disposeOnce();
+}
+
+void MasterPasswordDialog::dispose()
+{
+    m_pEDMasterPassword.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

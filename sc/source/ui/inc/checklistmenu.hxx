@@ -48,6 +48,7 @@ public:
 
     explicit ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
+     void dispose() SAL_OVERRIDE;
 
     virtual void PopupModeEnd() SAL_OVERRIDE;
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
@@ -148,7 +149,7 @@ private:
         bool            mbSeparator:1;
 
         ::boost::shared_ptr<Action> mpAction;
-        ::boost::shared_ptr<ScMenuFloatingWindow> mpSubMenuWin;
+        VclPtr<ScMenuFloatingWindow> mpSubMenuWin;
 
         MenuItemData();
     };
@@ -158,7 +159,7 @@ private:
     struct SubMenuItemData
     {
         Timer                   maTimer;
-        ScMenuFloatingWindow*   mpSubMenu;
+        VclPtr<ScMenuFloatingWindow>   mpSubMenu;
         size_t                  mnMenuPos;
 
         DECL_LINK( TimeoutHdl, void* );
@@ -167,7 +168,7 @@ private:
         void reset();
 
     private:
-        ScMenuFloatingWindow* mpParent;
+        VclPtr<ScMenuFloatingWindow> mpParent;
     };
     SubMenuItemData   maOpenTimer;
     SubMenuItemData   maCloseTimer;
@@ -184,7 +185,7 @@ private:
 
     ScDocument* mpDoc;
 
-    ScMenuFloatingWindow* mpParentMenu;
+    VclPtr<ScMenuFloatingWindow> mpParentMenu;
 };
 
 class ScCheckListBox : public SvTreeListBox
@@ -196,7 +197,8 @@ class ScCheckListBox : public SvTreeListBox
     public:
 
     ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    virtual ~ScCheckListBox() { delete mpCheckButton; }
+    virtual ~ScCheckListBox() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { delete mpCheckButton; SvTreeListBox::dispose(); }
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
     void CheckEntry( SvTreeListEntry* pEntry, bool bCheck = true );
@@ -238,6 +240,7 @@ public:
 
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc);
     virtual ~ScCheckListMenuWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
@@ -291,11 +294,13 @@ private:
     {
     public:
         CancelButton(ScCheckListMenuWindow* pParent);
+        virtual ~CancelButton();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Click() SAL_OVERRIDE;
 
     private:
-        ScCheckListMenuWindow* mpParent;
+        VclPtr<ScCheckListMenuWindow> mpParent;
     };
 
     enum SectionType {
@@ -329,18 +334,17 @@ private:
 private:
     SvTreeListEntry* findEntry(  SvTreeListEntry* pParent, const OUString& rText );
 
-    Edit maEdSearch;
+    VclPtr<Edit>           maEdSearch;
+    VclPtr<ScCheckListBox> maChecks;
 
-    ScCheckListBox maChecks;
+    VclPtr<TriStateBox>     maChkToggleAll;
+    VclPtr<ImageButton>     maBtnSelectSingle;
+    VclPtr<ImageButton>     maBtnUnselectSingle;
 
-    TriStateBox     maChkToggleAll;
-    ImageButton     maBtnSelectSingle;
-    ImageButton     maBtnUnselectSingle;
+    VclPtr<OKButton>        maBtnOk;
+    VclPtr<CancelButton>    maBtnCancel;
 
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
-
-    ::std::vector<vcl::Window*>          maTabStopCtrls;
+    ::std::vector<VclPtr<vcl::Window> >          maTabStopCtrls;
     size_t                          mnCurTabStop;
 
     ::std::vector<Member>           maMembers;

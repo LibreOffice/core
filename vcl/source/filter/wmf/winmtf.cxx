@@ -236,12 +236,11 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     {
         // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
         SolarMutexGuard aGuard;
-        VirtualDevice aVDev;
-
+        VclPtrInstance< VirtualDevice > pVDev;
         // converting the cell height into a font height
         aFont.SetSize( aFontSize );
-        aVDev.SetFont( aFont );
-        FontMetric aMetric( aVDev.GetFontMetric() );
+        pVDev->SetFont( aFont );
+        FontMetric aMetric( pVDev->GetFontMetric() );
         long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
         if (nHeight)
         {
@@ -1448,20 +1447,19 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
     {
         // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
         SolarMutexGuard aGuard;
-        VirtualDevice aVDev;
-
+        VclPtrInstance< VirtualDevice > pVDev;
         sal_Int32 nTextWidth;
-        aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
-        aVDev.SetFont( maFont );
+        pVDev->SetMapMode( MapMode( MAP_100TH_MM ) );
+        pVDev->SetFont( maFont );
         if( pDXArry )
         {
             sal_uInt32 nLen = rText.getLength();
-            nTextWidth = aVDev.GetTextWidth( OUString(rText[ nLen - 1 ]) );
+            nTextWidth = pVDev->GetTextWidth( OUString(rText[ nLen - 1 ]) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
         }
         else
-            nTextWidth = aVDev.GetTextWidth( rText );
+            nTextWidth = pVDev->GetTextWidth( rText );
 
         if( mnTextAlign & TA_UPDATECP )
             rPosition = maActPos;
@@ -1497,12 +1495,11 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         {
             // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
             SolarMutexGuard aGuard;
-            VirtualDevice aVDev;
-
+            VclPtrInstance< VirtualDevice > pVDev;
             pDX = new long[ rText.getLength() ];
-            aVDev.SetMapMode( MAP_100TH_MM );
-            aVDev.SetFont( maLatestFont );
-            aVDev.GetTextArray( rText, pDX, 0, rText.getLength());
+            pVDev->SetMapMode( MAP_100TH_MM );
+            pVDev->SetFont( maLatestFont );
+            pVDev->GetTextArray( rText, pDX, 0, rText.getLength());
         }
         mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
         if ( !pDXArry )     // this means we have created our own array
@@ -1516,26 +1513,26 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
     BitmapEx aBmpEx( rBitmap );
     if ( mbComplexClip )
     {
-        VirtualDevice aVDev;
+        VclPtrInstance< VirtualDevice > pVDev;
         MapMode aMapMode( MAP_100TH_MM );
         aMapMode.SetOrigin( Point( -rPos.X(), -rPos.Y() ) );
-        const Size aOutputSizePixel( aVDev.LogicToPixel( rSize, aMapMode ) );
+        const Size aOutputSizePixel( pVDev->LogicToPixel( rSize, aMapMode ) );
         const Size aSizePixel( rBitmap.GetSizePixel() );
         if ( aOutputSizePixel.Width() && aOutputSizePixel.Height() )
         {
             aMapMode.SetScaleX( Fraction( aSizePixel.Width(), aOutputSizePixel.Width() ) );
             aMapMode.SetScaleY( Fraction( aSizePixel.Height(), aOutputSizePixel.Height() ) );
         }
-        aVDev.SetMapMode( aMapMode );
-        aVDev.SetOutputSizePixel( aSizePixel );
-        aVDev.SetFillColor( Color( COL_BLACK ) );
+        pVDev->SetMapMode( aMapMode );
+        pVDev->SetOutputSizePixel( aSizePixel );
+        pVDev->SetFillColor( Color( COL_BLACK ) );
         const tools::PolyPolygon aClip( aClipPath.getClipPath() );
-        aVDev.DrawPolyPolygon( aClip );
+        pVDev->DrawPolyPolygon( aClip );
         const Point aEmptyPoint;
 
         // #i50672# Extract whole VDev content (to match size of rBitmap)
-        aVDev.EnableMapMode( false );
-        Bitmap aMask( aVDev.GetBitmap( aEmptyPoint, aSizePixel ).CreateMask( Color( COL_WHITE ) ) );
+        pVDev->EnableMapMode( false );
+        Bitmap aMask( pVDev->GetBitmap( aEmptyPoint, aSizePixel ).CreateMask( Color( COL_WHITE ) ) );
 
         if ( aBmpEx.IsTransparent() )
         {

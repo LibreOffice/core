@@ -51,6 +51,19 @@ DlgSize::DlgSize( vcl::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nA
     LINK(this,DlgSize,CbClickHdl).Call(m_pCB_STANDARD);
 }
 
+DlgSize::~DlgSize()
+{
+    disposeOnce();
+}
+
+void DlgSize::dispose()
+{
+    m_pMF_VALUE.clear();
+    m_pCB_STANDARD.clear();
+    ModalDialog::dispose();
+}
+
+
 void DlgSize::SetValue( sal_Int32 nVal )
 {
     m_pMF_VALUE->SetValue(nVal, FUNIT_CM );

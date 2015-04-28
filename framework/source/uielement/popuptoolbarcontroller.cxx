@@ -146,7 +146,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
     }
 
     SolarMutexGuard aSolarLock;
-    ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+    VclPtr< ToolBox > pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if ( pToolBox )
     {
         ToolBoxItemBits nCurStyle( pToolBox->GetItemBits( m_nToolBoxId ) );
@@ -181,7 +181,7 @@ PopupMenuToolbarController::createPopupWindow()
     createPopupMenuController();
 
     SolarMutexGuard aSolarLock;
-    ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+    VclPtr< ToolBox > pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if ( !pToolBox )
         return xRet;
 
@@ -540,7 +540,7 @@ static bool Impl_ExistURLInMenu(
 void NewToolbarController::setItemImage( const OUString &rCommand )
 {
     SolarMutexGuard aSolarLock;
-    ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+    VclPtr< ToolBox> pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if ( !pToolBox )
         return;
 

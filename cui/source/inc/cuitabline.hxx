@@ -64,7 +64,6 @@ public:
     SvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                       SdrModel* pModel, const SdrObject* pObj = NULL,
                       bool bHasObj = true );
-    virtual ~SvxLineTabDialog();
 
     void                SetNewDashList( XDashListRef pInLst)
                         { pNewDashList = pInLst; }
@@ -92,34 +91,34 @@ class SvxLineTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
     static const sal_uInt16 pLineRanges[];
 private:
-    VclBox*             m_pBoxColor;
-    LineLB*             m_pLbLineStyle;
-    ColorLB*            m_pLbColor;
-    VclBox*             m_pBoxWidth;
-    MetricField*        m_pMtrLineWidth;
-    VclBox*             m_pBoxTransparency;
-    MetricField*        m_pMtrTransparent;
+    VclPtr<VclBox>             m_pBoxColor;
+    VclPtr<LineLB>             m_pLbLineStyle;
+    VclPtr<ColorLB>            m_pLbColor;
+    VclPtr<VclBox>             m_pBoxWidth;
+    VclPtr<MetricField>        m_pMtrLineWidth;
+    VclPtr<VclBox>             m_pBoxTransparency;
+    VclPtr<MetricField>        m_pMtrTransparent;
 
-    VclFrame*           m_pFlLineEnds;
-    VclBox*             m_pBoxArrowStyles;
-    LineEndLB*          m_pLbStartStyle;
-    VclBox*             m_pBoxStart;
-    MetricField*        m_pMtrStartWidth;
-    TriStateBox*        m_pTsbCenterStart;
-    VclBox*             m_pBoxEnd;
-    LineEndLB*          m_pLbEndStyle;
-    MetricField*        m_pMtrEndWidth;
-    TriStateBox*        m_pTsbCenterEnd;
-    CheckBox*           m_pCbxSynchronize;
-    SvxXLinePreview*    m_pCtlPreview;
+    VclPtr<VclFrame>           m_pFlLineEnds;
+    VclPtr<VclBox>             m_pBoxArrowStyles;
+    VclPtr<LineEndLB>          m_pLbStartStyle;
+    VclPtr<VclBox>             m_pBoxStart;
+    VclPtr<MetricField>        m_pMtrStartWidth;
+    VclPtr<TriStateBox>        m_pTsbCenterStart;
+    VclPtr<VclBox>             m_pBoxEnd;
+    VclPtr<LineEndLB>          m_pLbEndStyle;
+    VclPtr<MetricField>        m_pMtrEndWidth;
+    VclPtr<TriStateBox>        m_pTsbCenterEnd;
+    VclPtr<CheckBox>           m_pCbxSynchronize;
+    VclPtr<SvxXLinePreview>    m_pCtlPreview;
 
     // #116827#
-    VclFrame*           m_pFLEdgeStyle;
-    VclGrid*            m_pGridEdgeCaps;
-    ListBox*            m_pLBEdgeStyle;
+    VclPtr<VclFrame>           m_pFLEdgeStyle;
+    VclPtr<VclGrid>            m_pGridEdgeCaps;
+    VclPtr<ListBox>            m_pLBEdgeStyle;
 
     // LineCaps
-    ListBox*             m_pLBCapStyle;
+    VclPtr<ListBox>             m_pLBCapStyle;
 
     //#58425# symbols on a line (e. g. StarChart) ->
     /** a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview.
@@ -132,12 +131,12 @@ private:
     long                nSymbolType;
     /// attributes for the shown symbols; only necessary if not equal to line properties
     SfxItemSet*         pSymbolAttr;
-    VclFrame*           m_pFlSymbol;
-    VclGrid*            m_pGridIconSize;
-    MenuButton*         m_pSymbolMB;
-    MetricField*        m_pSymbolWidthMF;
-    MetricField*        m_pSymbolHeightMF;
-    CheckBox*           m_pSymbolRatioCB;
+    VclPtr<VclFrame>           m_pFlSymbol;
+    VclPtr<VclGrid>            m_pGridIconSize;
+    VclPtr<MenuButton>         m_pSymbolMB;
+    VclPtr<MetricField>        m_pSymbolWidthMF;
+    VclPtr<MetricField>        m_pSymbolHeightMF;
+    VclPtr<CheckBox>           m_pSymbolRatioCB;
     std::vector<OUString> aGrfNames;
     SvxBmpItemInfoList  aGrfBrushItems;
     bool            bLastWidthModified;
@@ -205,10 +204,11 @@ public:
 
     SvxLineTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pLineRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -246,21 +246,21 @@ class SvxLineDefTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 private:
-    LineLB*              m_pLbLineStyles;
-    ListBox*             m_pLbType1;
-    ListBox*             m_pLbType2;
-    NumericField*        m_pNumFldNumber1;
-    NumericField*        m_pNumFldNumber2;
-    MetricField*         m_pMtrLength1;
-    MetricField*         m_pMtrLength2;
-    MetricField*         m_pMtrDistance;
-    CheckBox*            m_pCbxSynchronize;
-    PushButton*          m_pBtnAdd;
-    PushButton*          m_pBtnModify;
-    PushButton*          m_pBtnDelete;
-    PushButton*          m_pBtnLoad;
-    PushButton*          m_pBtnSave;
-    SvxXLinePreview*     m_pCtlPreview;
+    VclPtr<LineLB>              m_pLbLineStyles;
+    VclPtr<ListBox>             m_pLbType1;
+    VclPtr<ListBox>             m_pLbType2;
+    VclPtr<NumericField>        m_pNumFldNumber1;
+    VclPtr<NumericField>        m_pNumFldNumber2;
+    VclPtr<MetricField>         m_pMtrLength1;
+    VclPtr<MetricField>         m_pMtrLength2;
+    VclPtr<MetricField>         m_pMtrDistance;
+    VclPtr<CheckBox>            m_pCbxSynchronize;
+    VclPtr<PushButton>          m_pBtnAdd;
+    VclPtr<PushButton>          m_pBtnModify;
+    VclPtr<PushButton>          m_pBtnDelete;
+    VclPtr<PushButton>          m_pBtnLoad;
+    VclPtr<PushButton>          m_pBtnSave;
+    VclPtr<SvxXLinePreview>     m_pCtlPreview;
 
     const SfxItemSet&   rOutAttrs;
     XDash               aDash;
@@ -303,10 +303,12 @@ private:
 
 public:
     SvxLineDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    virtual ~SvxLineDefTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -333,14 +335,14 @@ class SvxLineEndDefTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    Edit*                m_pEdtName;
-    LineEndLB*           m_pLbLineEnds;
-    PushButton*          m_pBtnAdd;
-    PushButton*          m_pBtnModify;
-    PushButton*          m_pBtnDelete;
-    PushButton*          m_pBtnLoad;
-    PushButton*          m_pBtnSave;
-    SvxXLinePreview*     m_pCtlPreview;
+    VclPtr<Edit>                m_pEdtName;
+    VclPtr<LineEndLB>           m_pLbLineEnds;
+    VclPtr<PushButton>          m_pBtnAdd;
+    VclPtr<PushButton>          m_pBtnModify;
+    VclPtr<PushButton>          m_pBtnDelete;
+    VclPtr<PushButton>          m_pBtnLoad;
+    VclPtr<PushButton>          m_pBtnSave;
+    VclPtr<SvxXLinePreview>     m_pCtlPreview;
 
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
@@ -373,10 +375,11 @@ private:
 public:
     SvxLineEndDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineEndDefTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 

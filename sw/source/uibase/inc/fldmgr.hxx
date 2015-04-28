@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <vector>
+#include <vcl/vclptr.hxx>
 
 namespace com{namespace sun{namespace star{
     namespace container{
@@ -75,7 +76,7 @@ struct SwInsertFld_Data
     ::com::sun::star::uno::Any aDBDataSource;
     ::com::sun::star::uno::Any aDBConnection;
     ::com::sun::star::uno::Any aDBColumn;
-    vcl::Window* pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
+    VclPtr<vcl::Window> pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
 
     SwInsertFld_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
                     sal_uLong nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :

@@ -38,11 +38,11 @@
 ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
-    maFtCondNr( this, ScResId( FT_COND_NR ) ),
-    maFtCondition( this, ScResId( FT_CONDITION ) ),
+    maFtCondNr( VclPtr<FixedText>::Create( this, ScResId( FT_COND_NR ) ) ),
+    maFtCondition( VclPtr<FixedText>::Create( this, ScResId( FT_CONDITION ) ) ),
     mnIndex(0),
     maStrCondition(ScResId( STR_CONDITION ).toString()),
-    maLbType( this, ScResId( LB_TYPE ) ),
+    maLbType( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE ) ) ),
     mpDoc(pDoc),
     maPos(rPos)
 {
@@ -51,18 +51,27 @@ ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
     SetControlBackground(aBack);
     SetBackground(GetControlBackground());
 
-    maFtCondNr.SetControlBackground(aBack);
-    maFtCondNr.SetBackground(maFtCondNr.GetControlBackground());
+    maFtCondNr->SetControlBackground(aBack);
+    maFtCondNr->SetBackground(maFtCondNr->GetControlBackground());
 
-    maFtCondition.SetControlBackground(aBack);
-    maFtCondition.SetBackground(maFtCondition.GetControlBackground());
+    maFtCondition->SetControlBackground(aBack);
+    maFtCondition->SetBackground(maFtCondition->GetControlBackground());
 
-    maLbType.SetSelectHdl( LINK( pParent, ScCondFormatList, TypeListHdl ) );
+    maLbType->SetSelectHdl( LINK( pParent, ScCondFormatList, TypeListHdl ) );
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
 }
 
 ScCondFrmtEntry::~ScCondFrmtEntry()
 {
+    disposeOnce();
+}
+
+void ScCondFrmtEntry::dispose()
+{
+    maFtCondNr.disposeAndClear();
+    maFtCondition.disposeAndClear();
+    maLbType.disposeAndClear();
+    Control::dispose();
 }
 
 bool ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
@@ -79,7 +88,7 @@ void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
     mnIndex = nIndex;
     OUStringBuffer aBuffer(maStrCondition);
     aBuffer.append(OUString::number(nIndex));
-    maFtCondNr.SetText(aBuffer.makeStringAndClear());
+    maFtCondNr->SetText(aBuffer.makeStringAndClear());
 }
 
 void ScCondFrmtEntry::SetHeight()
@@ -109,9 +118,9 @@ void ScCondFrmtEntry::SetHeight()
 
 void ScCondFrmtEntry::Select()
 {
-    maFtCondition.SetText(OUString());
-    maFtCondition.Hide();
-    maLbType.Show();
+    maFtCondition->SetText(OUString());
+    maFtCondition->Hide();
+    maLbType->Show();
     mbActive = true;
     SetHeight();
 }
@@ -119,9 +128,9 @@ void ScCondFrmtEntry::Select()
 void ScCondFrmtEntry::Deselect()
 {
     OUString maCondText = GetExpressionString();
-    maFtCondition.SetText(maCondText);
-    maFtCondition.Show();
-    maLbType.Hide();
+    maFtCondition->SetText(maCondText);
+    maFtCondition->Show();
+    maLbType->Hide();
     mbActive = false;
     SetHeight();
 }
@@ -179,18 +188,18 @@ const ScConditionMode ScConditionFrmtEntry::mpEntryToCond[ScConditionFrmtEntry::
 ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
         const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maLbCondType( this, ScResId( LB_CELLIS_TYPE ) ),
-    maEdVal1( this, NULL, NULL, ScResId( ED_VAL1 ) ),
-    maEdVal2( this, NULL, NULL, ScResId( ED_VAL2 ) ),
-    maFtVal( this, ScResId( FT_VAL ) ),
-    maFtStyle( this, ScResId( FT_STYLE ) ),
-    maLbStyle( this, ScResId( LB_STYLE ) ),
-    maWdPreview( this, ScResId( WD_PREVIEW ) ),
+    maLbCondType( VclPtr<ListBox>::Create( this, ScResId( LB_CELLIS_TYPE ) ) ),
+    maEdVal1( VclPtr<formula::RefEdit>::Create( this, nullptr, nullptr, ScResId( ED_VAL1 ) ) ),
+    maEdVal2( VclPtr<formula::RefEdit>::Create( this, nullptr, nullptr, ScResId( ED_VAL2 ) ) ),
+    maFtVal( VclPtr<FixedText>::Create( this, ScResId( FT_VAL ) ) ),
+    maFtStyle( VclPtr<FixedText>::Create( this, ScResId( FT_STYLE ) ) ),
+    maLbStyle( VclPtr<ListBox>::Create( this, ScResId( LB_STYLE ) ) ),
+    maWdPreview( VclPtr<SvxFontPrevWindow>::Create( this, ScResId( WD_PREVIEW ) ) ),
     mbIsInStyleCreate(false)
 {
 
     FreeResource();
-    maLbType.SelectEntryPos(1);
+    maLbType->SelectEntryPos(1);
 
     Init(pDialogParent);
 
@@ -199,76 +208,93 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
     if(pFormatEntry)
     {
         OUString aStyleName = pFormatEntry->GetStyle();
-        maLbStyle.SelectEntry(aStyleName);
+        maLbStyle->SelectEntry(aStyleName);
         StyleSelectHdl(NULL);
         ScConditionMode eMode = pFormatEntry->GetOperation();
 
-        maLbCondType.SelectEntryPos(ConditionModeToEntryPos(eMode));
+        maLbCondType->SelectEntryPos(ConditionModeToEntryPos(eMode));
 
         switch(GetNumberEditFields(eMode))
         {
             case 0:
-                maEdVal1.Hide();
-                maEdVal2.Hide();
+                maEdVal1->Hide();
+                maEdVal2->Hide();
                 break;
             case 1:
-                maEdVal1.Show();
-                maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
-                maEdVal2.Hide();
-                OnEdChanged(&maEdVal1);
+                maEdVal1->Show();
+                maEdVal1->SetText(pFormatEntry->GetExpression(maPos, 0));
+                maEdVal2->Hide();
+                OnEdChanged(maEdVal1);
                 break;
             case 2:
-                maEdVal1.Show();
-                maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
-                OnEdChanged(&maEdVal1);
-                maEdVal2.Show();
-                maEdVal2.SetText(pFormatEntry->GetExpression(maPos, 1));
-                OnEdChanged(&maEdVal2);
+                maEdVal1->Show();
+                maEdVal1->SetText(pFormatEntry->GetExpression(maPos, 0));
+                OnEdChanged(maEdVal1);
+                maEdVal2->Show();
+                maEdVal2->SetText(pFormatEntry->GetExpression(maPos, 1));
+                OnEdChanged(maEdVal2);
                 break;
         }
     }
     else
     {
-        maLbCondType.SelectEntryPos(0);
-        maEdVal2.Hide();
-        maLbStyle.SelectEntryPos(1);
+        maLbCondType->SelectEntryPos(0);
+        maEdVal2->Hide();
+        maLbStyle->SelectEntryPos(1);
     }
+}
+
+ScConditionFrmtEntry::~ScConditionFrmtEntry()
+{
+    disposeOnce();
+}
+
+void ScConditionFrmtEntry::dispose()
+{
+    maLbCondType.disposeAndClear();
+    maEdVal1.disposeAndClear();
+    maEdVal2.disposeAndClear();
+    maFtVal.disposeAndClear();
+    maFtStyle.disposeAndClear();
+    maLbStyle.disposeAndClear();
+    maWdPreview.disposeAndClear();
+    ScCondFrmtEntry::dispose();
 }
 
 void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 {
-    maEdVal1.SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdVal2.SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdVal1.SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
-    maEdVal2.SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
+    maEdVal1->SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdVal2->SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdVal1->SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
+    maEdVal2->SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
-    maEdVal1.SetStyle( maEdVal1.GetStyle() | WB_FORCECTRLBACKGROUND );
-    maEdVal2.SetStyle( maEdVal2.GetStyle() | WB_FORCECTRLBACKGROUND );
+    maEdVal1->SetStyle( maEdVal1->GetStyle() | WB_FORCECTRLBACKGROUND );
+    maEdVal2->SetStyle( maEdVal2->GetStyle() | WB_FORCECTRLBACKGROUND );
 
-    maEdVal1.SetModifyHdl( LINK( this, ScConditionFrmtEntry, OnEdChanged ) );
-    maEdVal2.SetModifyHdl( LINK( this, ScConditionFrmtEntry, OnEdChanged ) );
+    maEdVal1->SetModifyHdl( LINK( this, ScConditionFrmtEntry, OnEdChanged ) );
+    maEdVal2->SetModifyHdl( LINK( this, ScConditionFrmtEntry, OnEdChanged ) );
 
-    FillStyleListBox( mpDoc, maLbStyle );
-    maLbStyle.SetSelectHdl( LINK( this, ScConditionFrmtEntry, StyleSelectHdl ) );
+    FillStyleListBox( mpDoc, *maLbStyle.get() );
+    maLbStyle->SetSelectHdl( LINK( this, ScConditionFrmtEntry, StyleSelectHdl ) );
 
-    maLbCondType.SetSelectHdl( LINK( this, ScConditionFrmtEntry, ConditionTypeSelectHdl ) );
+    maLbCondType->SetSelectHdl( LINK( this, ScConditionFrmtEntry, ConditionTypeSelectHdl ) );
 }
 
 ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
 {
-    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType.GetSelectEntryPos());
-    OUString aExpr1 = maEdVal1.GetText();
+    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType->GetSelectEntryPos());
+    OUString aExpr1 = maEdVal1->GetText();
     OUString aExpr2;
     if (GetNumberEditFields(eMode) == 2)
     {
-        aExpr2 = maEdVal2.GetText();
+        aExpr2 = maEdVal2->GetText();
         if (aExpr2.isEmpty())
         {
             return NULL;
         }
     }
 
-    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle->GetSelectEntry());
     return pEntry;
 }
 
@@ -278,7 +304,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
 
     if( aFormula.isEmpty() )
     {
-        maFtVal.SetText(ScGlobal::GetRscString(STR_ENTER_VALUE));
+        maFtVal->SetText(ScGlobal::GetRscString(STR_ENTER_VALUE));
         return 0;
     }
 
@@ -290,7 +316,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
     if( ta->GetCodeError() )
     {
         pEdit->SetControlBackground(COL_LIGHTRED);
-        maFtVal.SetText(ScGlobal::GetRscString(STR_VALID_DEFERROR));
+        maFtVal->SetText(ScGlobal::GetRscString(STR_VALID_DEFERROR));
         return 0;
     }
 
@@ -303,24 +329,24 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
       )
     {
         pEdit->SetControlBackground(COL_YELLOW);
-        maFtVal.SetText(ScGlobal::GetRscString(STR_UNQUOTED_STRING));
+        maFtVal->SetText(ScGlobal::GetRscString(STR_UNQUOTED_STRING));
         return 0;
     }
 
     pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
-    maFtVal.SetText("");
+    maFtVal->SetText("");
     return 0;
 }
 
 void ScConditionFrmtEntry::Select()
 {
-    maFtVal.Show();
+    maFtVal->Show();
     ScCondFrmtEntry::Select();
 }
 
 void ScConditionFrmtEntry::Deselect()
 {
-    maFtVal.Hide();
+    maFtVal->Hide();
     ScCondFrmtEntry::Deselect();
 }
 
@@ -383,7 +409,7 @@ sal_Int32 ScConditionFrmtEntry::GetNumberEditFields( ScConditionMode eMode ) con
 
 OUString ScConditionFrmtEntry::GetExpressionString()
 {
-    return ScCondFormatHelper::GetExpression(CONDITION, maLbCondType.GetSelectEntryPos(), maEdVal1.GetText(), maEdVal2.GetText());
+    return ScCondFormatHelper::GetExpression(CONDITION, maLbCondType->GetSelectEntryPos(), maEdVal1->GetText(), maEdVal2->GetText());
 }
 
 ScFormatEntry* ScConditionFrmtEntry::GetEntry() const
@@ -393,33 +419,33 @@ ScFormatEntry* ScConditionFrmtEntry::GetEntry() const
 
 void ScConditionFrmtEntry::SetActive()
 {
-    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType.GetSelectEntryPos());
-    maLbCondType.Show();
+    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType->GetSelectEntryPos());
+    maLbCondType->Show();
     switch(GetNumberEditFields(eMode))
     {
         case 1:
-            maEdVal1.Show();
+            maEdVal1->Show();
             break;
         case 2:
-            maEdVal1.Show();
-            maEdVal2.Show();
+            maEdVal1->Show();
+            maEdVal2->Show();
             break;
     }
-    maFtStyle.Show();
-    maLbStyle.Show();
-    maWdPreview.Show();
+    maFtStyle->Show();
+    maLbStyle->Show();
+    maWdPreview->Show();
 
     Select();
 }
 
 void ScConditionFrmtEntry::SetInactive()
 {
-    maLbCondType.Hide();
-    maEdVal1.Hide();
-    maEdVal2.Hide();
-    maFtStyle.Hide();
-    maLbStyle.Hide();
-    maWdPreview.Hide();
+    maLbCondType->Hide();
+    maEdVal1->Hide();
+    maEdVal2->Hide();
+    maFtStyle->Hide();
+    maLbStyle->Hide();
+    maWdPreview->Hide();
 
     Deselect();
 }
@@ -449,7 +475,7 @@ void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
     if(nHint == SfxStyleSheetHintId::MODIFIED)
     {
         if(!mbIsInStyleCreate)
-            UpdateStyleList(maLbStyle, mpDoc);
+            UpdateStyleList(*maLbStyle.get(), mpDoc);
     }
 }
 
@@ -523,7 +549,7 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
 IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
 {
     mbIsInStyleCreate = true;
-    StyleSelect( maLbStyle, mpDoc, maWdPreview );
+    StyleSelect( *maLbStyle.get(), mpDoc, *maWdPreview.get() );
     mbIsInStyleCreate = false;
     return 0;
 }
@@ -532,41 +558,55 @@ IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
 
 ScFormulaFrmtEntry::ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maFtStyle( this, ScResId( FT_STYLE ) ),
-    maLbStyle( this, ScResId( LB_STYLE ) ),
-    maWdPreview( this, ScResId( WD_PREVIEW ) ),
-    maEdFormula( this, NULL, NULL, ScResId( ED_FORMULA ) )
+    maFtStyle( VclPtr<FixedText>::Create( this, ScResId( FT_STYLE ) ) ),
+    maLbStyle( VclPtr<ListBox>::Create( this, ScResId( LB_STYLE ) ) ),
+    maWdPreview( VclPtr<SvxFontPrevWindow>::Create( this, ScResId( WD_PREVIEW ) ) ),
+    maEdFormula( VclPtr<formula::RefEdit>::Create(this, nullptr, nullptr, ScResId( ED_FORMULA ) ) )
 {
     Init(pDialogParent);
 
     FreeResource();
-    maLbType.SelectEntryPos(2);
+    maLbType->SelectEntryPos(2);
 
     if(pFormat)
     {
-        maEdFormula.SetText(pFormat->GetExpression(rPos, 0, 0, pDoc->GetGrammar()));
-        maLbStyle.SelectEntry(pFormat->GetStyle());
+        maEdFormula->SetText(pFormat->GetExpression(rPos, 0, 0, pDoc->GetGrammar()));
+        maLbStyle->SelectEntry(pFormat->GetStyle());
     }
     else
     {
-        maLbStyle.SelectEntryPos(1);
+        maLbStyle->SelectEntryPos(1);
     }
 
     StyleSelectHdl(NULL);
 }
 
+ScFormulaFrmtEntry::~ScFormulaFrmtEntry()
+{
+    disposeOnce();
+}
+
+void ScFormulaFrmtEntry::dispose()
+{
+    maFtStyle.disposeAndClear();
+    maLbStyle.disposeAndClear();
+    maWdPreview.disposeAndClear();
+    maEdFormula.disposeAndClear();
+    ScCondFrmtEntry::dispose();
+}
+
 void ScFormulaFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 {
-    maEdFormula.SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdFormula.SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
+    maEdFormula->SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdFormula->SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
-    FillStyleListBox( mpDoc, maLbStyle );
-    maLbStyle.SetSelectHdl( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );
+    FillStyleListBox( mpDoc, *maLbStyle.get() );
+    maLbStyle->SetSelectHdl( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );
 }
 
 IMPL_LINK_NOARG(ScFormulaFrmtEntry, StyleSelectHdl)
 {
-    StyleSelect( maLbStyle, mpDoc, maWdPreview );
+    StyleSelect( *maLbStyle.get(), mpDoc, *maWdPreview.get() );
 
     return 0;
 }
@@ -574,12 +614,12 @@ IMPL_LINK_NOARG(ScFormulaFrmtEntry, StyleSelectHdl)
 ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
 {
     ScConditionMode eMode = SC_COND_DIRECT;
-    OUString aFormula = maEdFormula.GetText();
+    OUString aFormula = maEdFormula->GetText();
     if(aFormula.isEmpty())
         return NULL;
 
     OUString aExpr2;
-    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aFormula, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aFormula, aExpr2, mpDoc, maPos, maLbStyle->GetSelectEntry());
     return pEntry;
 }
 
@@ -590,25 +630,25 @@ ScFormatEntry* ScFormulaFrmtEntry::GetEntry() const
 
 OUString ScFormulaFrmtEntry::GetExpressionString()
 {
-    return ScCondFormatHelper::GetExpression(FORMULA, 0, maEdFormula.GetText());
+    return ScCondFormatHelper::GetExpression(FORMULA, 0, maEdFormula->GetText());
 }
 
 void ScFormulaFrmtEntry::SetActive()
 {
-    maWdPreview.Show();
-    maFtStyle.Show();
-    maLbStyle.Show();
-    maEdFormula.Show();
+    maWdPreview->Show();
+    maFtStyle->Show();
+    maLbStyle->Show();
+    maEdFormula->Show();
 
     Select();
 }
 
 void ScFormulaFrmtEntry::SetInactive()
 {
-    maWdPreview.Hide();
-    maFtStyle.Hide();
-    maLbStyle.Hide();
-    maEdFormula.Hide();
+    maWdPreview->Hide();
+    maFtStyle->Hide();
+    maLbStyle->Hide();
+    maEdFormula->Hide();
 
     Deselect();
 }
@@ -702,45 +742,62 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
 
 ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
-    maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
-    maLbEntryTypeMax( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ),
-    maEdMin( this, ScResId( ED_COL_SCALE_MIN ) ),
-    maEdMax( this, ScResId( ED_COL_SCALE_MAX ) ),
-    maLbColMin( this, ScResId( LB_COL_MIN ) ),
-    maLbColMax( this, ScResId( LB_COL_MAX ) )
+    maLbColorFormat( VclPtr<ListBox>::Create( this, ScResId( LB_COLOR_FORMAT ) ) ),
+    maLbEntryTypeMin( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
+    maLbEntryTypeMax( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
+    maEdMin( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MIN ) ) ),
+    maEdMax( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MAX ) ) ),
+    maLbColMin( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MIN ) ) ),
+    maLbColMax( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MAX ) ) )
 {
     // remove the automatic entry from color scales
-    maLbEntryTypeMin.RemoveEntry(0);
-    maLbEntryTypeMax.RemoveEntry(0);
+    maLbEntryTypeMin->RemoveEntry(0);
+    maLbEntryTypeMax->RemoveEntry(0);
 
-    maLbType.SelectEntryPos(0);
-    maLbColorFormat.SelectEntryPos(0);
+    maLbType->SelectEntryPos(0);
+    maLbColorFormat->SelectEntryPos(0);
     Init();
     if(pFormat)
     {
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin, pDoc);
+        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMin.get(), *maEdMin.get(), *maLbColMin.get(), pDoc);
         ++itr;
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax, pDoc);
+        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMax.get(), *maEdMax.get(), *maLbColMax.get(), pDoc);
     }
     else
     {
-        maLbEntryTypeMin.SelectEntryPos(0);
-        maLbEntryTypeMax.SelectEntryPos(1);
+        maLbEntryTypeMin->SelectEntryPos(0);
+        maLbEntryTypeMax->SelectEntryPos(1);
     }
     FreeResource();
 
-    maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
+    maLbColorFormat->SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
 
-    EntryTypeHdl(&maLbEntryTypeMin);
-    EntryTypeHdl(&maLbEntryTypeMax);
+    EntryTypeHdl(maLbEntryTypeMin.get());
+    EntryTypeHdl(maLbEntryTypeMax.get());
+}
+
+ScColorScale2FrmtEntry::~ScColorScale2FrmtEntry()
+{
+    disposeOnce();
+}
+
+void ScColorScale2FrmtEntry::dispose()
+{
+    maLbColorFormat.disposeAndClear();
+    maLbEntryTypeMin.disposeAndClear();
+    maLbEntryTypeMax.disposeAndClear();
+    maEdMin.disposeAndClear();
+    maEdMax.disposeAndClear();
+    maLbColMin.disposeAndClear();
+    maLbColMax.disposeAndClear();
+    ScCondFrmtEntry::dispose();
 }
 
 void ScColorScale2FrmtEntry::Init()
 {
-    maLbEntryTypeMin.SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
-    maLbEntryTypeMax.SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMin->SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMax->SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
 
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     XColorListRef       pColorTable;
@@ -756,30 +813,30 @@ void ScColorScale2FrmtEntry::Init()
     if ( pColorTable.is() )
     {
         // filling the line color box
-        maLbColMin.SetUpdateMode( false );
-        maLbColMax.SetUpdateMode( false );
+        maLbColMin->SetUpdateMode( false );
+        maLbColMax->SetUpdateMode( false );
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
             XColorEntry* pEntry = pColorTable->GetColor(i);
-            maLbColMin.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-            maLbColMax.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            maLbColMin->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            maLbColMax->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
 
             if(pEntry->GetColor() == Color(COL_LIGHTRED))
-                maLbColMin.SelectEntryPos(i);
+                maLbColMin->SelectEntryPos(i);
             if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
-                maLbColMax.SelectEntryPos(i);
+                maLbColMax->SelectEntryPos(i);
         }
-        maLbColMin.SetUpdateMode( true );
-        maLbColMax.SetUpdateMode( true );
+        maLbColMin->SetUpdateMode( true );
+        maLbColMax->SetUpdateMode( true );
     }
 }
 
 ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
 {
     ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mpDoc);
-    pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMin, maLbColMin, maEdMin, mpDoc, maPos));
-    pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMax, maLbColMax, maEdMax, mpDoc, maPos));
+    pColorScale->AddEntry(createColorScaleEntry(*maLbEntryTypeMin.get(), *maLbColMin.get(), *maEdMin.get(), mpDoc, maPos));
+    pColorScale->AddEntry(createColorScaleEntry(*maLbEntryTypeMax.get(), *maLbColMax.get(), *maEdMax.get(), mpDoc, maPos));
     return pColorScale;
 }
 
@@ -795,32 +852,32 @@ ScFormatEntry* ScColorScale2FrmtEntry::GetEntry() const
 
 void ScColorScale2FrmtEntry::SetActive()
 {
-    maLbColorFormat.Show();
+    maLbColorFormat->Show();
 
-    maLbEntryTypeMin.Show();
-    maLbEntryTypeMax.Show();
+    maLbEntryTypeMin->Show();
+    maLbEntryTypeMax->Show();
 
-    maEdMin.Show();
-    maEdMax.Show();
+    maEdMin->Show();
+    maEdMax->Show();
 
-    maLbColMin.Show();
-    maLbColMax.Show();
+    maLbColMin->Show();
+    maLbColMax->Show();
 
     Select();
 }
 
 void ScColorScale2FrmtEntry::SetInactive()
 {
-    maLbColorFormat.Hide();
+    maLbColorFormat->Hide();
 
-    maLbEntryTypeMin.Hide();
-    maLbEntryTypeMax.Hide();
+    maLbEntryTypeMin->Hide();
+    maLbEntryTypeMax->Hide();
 
-    maEdMin.Hide();
-    maEdMax.Hide();
+    maEdMin->Hide();
+    maEdMax->Hide();
 
-    maLbColMin.Hide();
-    maLbColMax.Hide();
+    maLbColMin->Hide();
+    maLbColMax->Hide();
 
     Deselect();
 }
@@ -828,10 +885,10 @@ void ScColorScale2FrmtEntry::SetInactive()
 IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 {
     Edit* pEd = NULL;
-    if (pBox == &maLbEntryTypeMin)
-        pEd = &maEdMin;
-    else if (pBox == &maLbEntryTypeMax)
-        pEd = &maEdMax;
+    if (pBox == maLbEntryTypeMin.get())
+        pEd = maEdMin;
+    else if (pBox == maLbEntryTypeMax.get())
+        pEd = maEdMax.get();
 
     if (!pEd)
         return 0;
@@ -853,56 +910,76 @@ IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 
 ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
-    maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
-    maLbEntryTypeMiddle( this, ScResId( LB_TYPE_COL_SCALE_MIDDLE ) ),
-    maLbEntryTypeMax( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ),
-    maEdMin( this, ScResId( ED_COL_SCALE_MIN ) ),
-    maEdMiddle( this, ScResId( ED_COL_SCALE_MIDDLE ) ),
-    maEdMax( this, ScResId( ED_COL_SCALE_MAX ) ),
-    maLbColMin( this, ScResId( LB_COL_MIN ) ),
-    maLbColMiddle( this, ScResId( LB_COL_MIDDLE ) ),
-    maLbColMax( this, ScResId( LB_COL_MAX ) )
+    maLbColorFormat( VclPtr<ListBox>::Create( this, ScResId( LB_COLOR_FORMAT ) ) ),
+    maLbEntryTypeMin( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
+    maLbEntryTypeMiddle( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MIDDLE ) ) ),
+    maLbEntryTypeMax( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
+    maEdMin( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MIN ) ) ),
+    maEdMiddle( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MIDDLE ) ) ),
+    maEdMax( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MAX ) ) ),
+    maLbColMin( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MIN ) ) ),
+    maLbColMiddle( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MIDDLE ) ) ),
+    maLbColMax( VclPtr<ColorListBox>::Create( this, ScResId( LB_COL_MAX ) ) )
 {
     // remove the automatic entry from color scales
-    maLbEntryTypeMin.RemoveEntry(0);
-    maLbEntryTypeMiddle.RemoveEntry(0);
-    maLbEntryTypeMax.RemoveEntry(0);
-    maLbColorFormat.SelectEntryPos(1);
+    maLbEntryTypeMin->RemoveEntry(0);
+    maLbEntryTypeMiddle->RemoveEntry(0);
+    maLbEntryTypeMax->RemoveEntry(0);
+    maLbColorFormat->SelectEntryPos(1);
 
     Init();
-    maLbType.SelectEntryPos(0);
+    maLbType->SelectEntryPos(0);
     if(pFormat)
     {
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin, pDoc);
+        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMin.get(), *maEdMin.get(), *maLbColMin.get(), pDoc);
         assert(pFormat->size() == 3);
         ++itr;
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMiddle, maEdMiddle, maLbColMiddle, pDoc);
+        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMiddle.get(), *maEdMiddle.get(), *maLbColMiddle.get(), pDoc);
         ++itr;
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax, pDoc);
+        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMax.get(), *maEdMax.get(), *maLbColMax.get(), pDoc);
     }
     else
     {
-        maLbColorFormat.SelectEntryPos(1);
-        maLbEntryTypeMin.SelectEntryPos(0);
-        maLbEntryTypeMiddle.SelectEntryPos(2);
-        maLbEntryTypeMax.SelectEntryPos(1);
-        maEdMiddle.SetText(OUString::number(50));
+        maLbColorFormat->SelectEntryPos(1);
+        maLbEntryTypeMin->SelectEntryPos(0);
+        maLbEntryTypeMiddle->SelectEntryPos(2);
+        maLbEntryTypeMax->SelectEntryPos(1);
+        maEdMiddle->SetText(OUString::number(50));
     }
     FreeResource();
 
-    maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
-    EntryTypeHdl(&maLbEntryTypeMin);
-    EntryTypeHdl(&maLbEntryTypeMiddle);
-    EntryTypeHdl(&maLbEntryTypeMax);
+    maLbColorFormat->SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
+    EntryTypeHdl(maLbEntryTypeMin.get());
+    EntryTypeHdl(maLbEntryTypeMiddle.get());
+    EntryTypeHdl(maLbEntryTypeMax.get());
+}
+
+ScColorScale3FrmtEntry::~ScColorScale3FrmtEntry()
+{
+    disposeOnce();
+}
+
+void ScColorScale3FrmtEntry::dispose()
+{
+    maLbColorFormat.disposeAndClear();
+    maLbEntryTypeMin.disposeAndClear();
+    maLbEntryTypeMiddle.disposeAndClear();
+    maLbEntryTypeMax.disposeAndClear();
+    maEdMin.disposeAndClear();
+    maEdMiddle.disposeAndClear();
+    maEdMax.disposeAndClear();
+    maLbColMin.disposeAndClear();
+    maLbColMiddle.disposeAndClear();
+    maLbColMax.disposeAndClear();
+    ScCondFrmtEntry::dispose();
 }
 
 void ScColorScale3FrmtEntry::Init()
 {
-    maLbEntryTypeMin.SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
-    maLbEntryTypeMax.SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
-    maLbEntryTypeMiddle.SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMin->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMax->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMiddle->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
 
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     XColorListRef       pColorTable;
@@ -918,37 +995,37 @@ void ScColorScale3FrmtEntry::Init()
     if ( pColorTable.is() )
     {
         // filling the line color box
-        maLbColMin.SetUpdateMode( false );
-        maLbColMiddle.SetUpdateMode( false );
-        maLbColMax.SetUpdateMode( false );
+        maLbColMin->SetUpdateMode( false );
+        maLbColMiddle->SetUpdateMode( false );
+        maLbColMax->SetUpdateMode( false );
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
             XColorEntry* pEntry = pColorTable->GetColor(i);
-            maLbColMin.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-            maLbColMiddle.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-            maLbColMax.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            maLbColMin->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            maLbColMiddle->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            maLbColMax->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
 
             if(pEntry->GetColor() == Color(COL_LIGHTRED))
-                maLbColMin.SelectEntryPos(i);
+                maLbColMin->SelectEntryPos(i);
             if(pEntry->GetColor() == Color(COL_GREEN))
-                maLbColMiddle.SelectEntryPos(i);
+                maLbColMiddle->SelectEntryPos(i);
             if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
-                maLbColMax.SelectEntryPos(i);
+                maLbColMax->SelectEntryPos(i);
         }
-        maLbColMin.SetUpdateMode( true );
-        maLbColMiddle.SetUpdateMode( true );
-        maLbColMax.SetUpdateMode( true );
+        maLbColMin->SetUpdateMode( true );
+        maLbColMiddle->SetUpdateMode( true );
+        maLbColMax->SetUpdateMode( true );
     }
 }
 
 ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
 {
     ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mpDoc);
-    pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMin, maLbColMin, maEdMin, mpDoc, maPos));
-    if(maLbColorFormat.GetSelectEntryPos() == 1)
-        pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMiddle, maLbColMiddle, maEdMiddle, mpDoc, maPos));
-    pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMax, maLbColMax, maEdMax, mpDoc, maPos));
+    pColorScale->AddEntry(createColorScaleEntry(*maLbEntryTypeMin.get(), *maLbColMin.get(), *maEdMin.get(), mpDoc, maPos));
+    if(maLbColorFormat->GetSelectEntryPos() == 1)
+        pColorScale->AddEntry(createColorScaleEntry(*maLbEntryTypeMiddle.get(), *maLbColMiddle.get(), *maEdMiddle.get(), mpDoc, maPos));
+    pColorScale->AddEntry(createColorScaleEntry(*maLbEntryTypeMax.get(), *maLbColMax.get(), *maEdMax.get(), mpDoc, maPos));
     return pColorScale;
 }
 
@@ -964,37 +1041,37 @@ ScFormatEntry* ScColorScale3FrmtEntry::GetEntry() const
 
 void ScColorScale3FrmtEntry::SetActive()
 {
-    maLbColorFormat.Show();
-    maLbEntryTypeMin.Show();
-    maLbEntryTypeMiddle.Show();
-    maLbEntryTypeMax.Show();
+    maLbColorFormat->Show();
+    maLbEntryTypeMin->Show();
+    maLbEntryTypeMiddle->Show();
+    maLbEntryTypeMax->Show();
 
-    maEdMin.Show();
-    maEdMiddle.Show();
-    maEdMax.Show();
+    maEdMin->Show();
+    maEdMiddle->Show();
+    maEdMax->Show();
 
-    maLbColMin.Show();
-    maLbColMiddle.Show();
-    maLbColMax.Show();
+    maLbColMin->Show();
+    maLbColMiddle->Show();
+    maLbColMax->Show();
 
     Select();
 }
 
 void ScColorScale3FrmtEntry::SetInactive()
 {
-    maLbColorFormat.Hide();
+    maLbColorFormat->Hide();
 
-    maLbEntryTypeMin.Hide();
-    maLbEntryTypeMiddle.Hide();
-    maLbEntryTypeMax.Hide();
+    maLbEntryTypeMin->Hide();
+    maLbEntryTypeMiddle->Hide();
+    maLbEntryTypeMax->Hide();
 
-    maEdMin.Hide();
-    maEdMiddle.Hide();
-    maEdMax.Hide();
+    maEdMin->Hide();
+    maEdMiddle->Hide();
+    maEdMax->Hide();
 
-    maLbColMin.Hide();
-    maLbColMiddle.Hide();
-    maLbColMax.Hide();
+    maLbColMin->Hide();
+    maLbColMiddle->Hide();
+    maLbColMax->Hide();
 
     Deselect();
 }
@@ -1002,12 +1079,12 @@ void ScColorScale3FrmtEntry::SetInactive()
 IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 {
     Edit* pEd = NULL;
-    if(pBox == &maLbEntryTypeMin)
-        pEd = &maEdMin;
-    else if(pBox == &maLbEntryTypeMiddle)
-        pEd = &maEdMiddle;
-    else if(pBox == &maLbEntryTypeMax)
-        pEd = &maEdMax;
+    if(pBox == maLbEntryTypeMin.get())
+        pEd = maEdMin.get();
+    else if(pBox == maLbEntryTypeMiddle.get())
+        pEd = maEdMiddle.get();
+    else if(pBox == maLbEntryTypeMax.get())
+        pEd = maEdMax.get();
 
     if (!pEd)
         return 0;
@@ -1029,24 +1106,24 @@ IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 
 IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl )
 {
-    sal_Int32 nSelectPos = maLbCondType.GetSelectEntryPos();
+    sal_Int32 nSelectPos = maLbCondType->GetSelectEntryPos();
     ScConditionMode eMode = EntryPosToConditionMode(nSelectPos);
     switch(GetNumberEditFields(eMode))
     {
         case 0:
-            maEdVal1.Hide();
-            maEdVal2.Hide();
-            maFtVal.Hide();
+            maEdVal1->Hide();
+            maEdVal2->Hide();
+            maFtVal->Hide();
             break;
         case 1:
-            maEdVal1.Show();
-            maEdVal2.Hide();
-            maFtVal.Show();
+            maEdVal1->Show();
+            maEdVal2->Hide();
+            maFtVal->Show();
             break;
         case 2:
-            maEdVal1.Show();
-            maEdVal2.Show();
-            maFtVal.Show();
+            maEdVal1->Show();
+            maEdVal2->Show();
+            maFtVal->Show();
             break;
     }
 
@@ -1087,33 +1164,49 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
 
 ScDataBarFrmtEntry::ScDataBarFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
-    maLbDataBarMinType( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
-    maLbDataBarMaxType( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ),
-    maEdDataBarMin( this, ScResId( ED_COL_SCALE_MIN ) ),
-    maEdDataBarMax( this, ScResId( ED_COL_SCALE_MAX ) ),
-    maBtOptions( this, ScResId( BTN_OPTIONS ) )
+    maLbColorFormat( VclPtr<ListBox>::Create( this, ScResId( LB_COLOR_FORMAT ) ) ),
+    maLbDataBarMinType( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ) ),
+    maLbDataBarMaxType( VclPtr<ListBox>::Create( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ) ),
+    maEdDataBarMin( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MIN ) ) ),
+    maEdDataBarMax( VclPtr<Edit>::Create( this, ScResId( ED_COL_SCALE_MAX ) ) ),
+    maBtOptions( VclPtr<PushButton>::Create( this, ScResId( BTN_OPTIONS ) ) )
 {
-    maLbColorFormat.SelectEntryPos(2);
-    maLbType.SelectEntryPos(0);
+    maLbColorFormat->SelectEntryPos(2);
+    maLbType->SelectEntryPos(0);
     if(pFormat)
     {
         mpDataBarData.reset(new ScDataBarFormatData(*pFormat->GetDataBarData()));
-        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin, pDoc);
-        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax, pDoc);
+        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, *maLbDataBarMinType.get(), *maEdDataBarMin.get(), pDoc);
+        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), pDoc);
         DataBarTypeSelectHdl(NULL);
     }
     else
     {
-        maLbDataBarMinType.SelectEntryPos(0);
-        maLbDataBarMaxType.SelectEntryPos(0);
+        maLbDataBarMinType->SelectEntryPos(0);
+        maLbDataBarMaxType->SelectEntryPos(0);
         DataBarTypeSelectHdl(NULL);
     }
     Init();
 
-    maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
+    maLbColorFormat->SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
 
     FreeResource();
+}
+
+ScDataBarFrmtEntry::~ScDataBarFrmtEntry()
+{
+    disposeOnce();
+}
+
+void ScDataBarFrmtEntry::dispose()
+{
+    maLbColorFormat.disposeAndClear();
+    maLbDataBarMinType.disposeAndClear();
+    maLbDataBarMaxType.disposeAndClear();
+    maEdDataBarMin.disposeAndClear();
+    maEdDataBarMax.disposeAndClear();
+    maBtOptions.disposeAndClear();
+    ScCondFrmtEntry::dispose();
 }
 
 ScFormatEntry* ScDataBarFrmtEntry::GetEntry() const
@@ -1123,10 +1216,10 @@ ScFormatEntry* ScDataBarFrmtEntry::GetEntry() const
 
 void ScDataBarFrmtEntry::Init()
 {
-    maLbDataBarMinType.SetSelectHdl( LINK( this, ScDataBarFrmtEntry, DataBarTypeSelectHdl ) );
-    maLbDataBarMaxType.SetSelectHdl( LINK( this, ScDataBarFrmtEntry, DataBarTypeSelectHdl ) );
+    maLbDataBarMinType->SetSelectHdl( LINK( this, ScDataBarFrmtEntry, DataBarTypeSelectHdl ) );
+    maLbDataBarMaxType->SetSelectHdl( LINK( this, ScDataBarFrmtEntry, DataBarTypeSelectHdl ) );
 
-    maBtOptions.SetClickHdl( LINK( this, ScDataBarFrmtEntry, OptionBtnHdl ) );
+    maBtOptions->SetClickHdl( LINK( this, ScDataBarFrmtEntry, OptionBtnHdl ) );
 
     if(!mpDataBarData)
     {
@@ -1141,8 +1234,8 @@ void ScDataBarFrmtEntry::Init()
 
 ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
 {
-    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos, true);
-    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos, true);
+    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(), *maEdDataBarMin.get(), mpDoc, maPos, true);
+    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc, maPos, true);
     ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
     pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData.get()));
     return pDataBar;
@@ -1155,57 +1248,57 @@ OUString ScDataBarFrmtEntry::GetExpressionString()
 
 void ScDataBarFrmtEntry::SetActive()
 {
-    maLbColorFormat.Show();
+    maLbColorFormat->Show();
 
-    maLbDataBarMinType.Show();
-    maLbDataBarMaxType.Show();
-    maEdDataBarMin.Show();
-    maEdDataBarMax.Show();
-    maBtOptions.Show();
+    maLbDataBarMinType->Show();
+    maLbDataBarMaxType->Show();
+    maEdDataBarMin->Show();
+    maEdDataBarMax->Show();
+    maBtOptions->Show();
 
     Select();
 }
 
 void ScDataBarFrmtEntry::SetInactive()
 {
-    maLbColorFormat.Hide();
+    maLbColorFormat->Hide();
 
-    maLbDataBarMinType.Hide();
-    maLbDataBarMaxType.Hide();
-    maEdDataBarMin.Hide();
-    maEdDataBarMax.Hide();
-    maBtOptions.Hide();
+    maLbDataBarMinType->Hide();
+    maLbDataBarMaxType->Hide();
+    maEdDataBarMin->Hide();
+    maEdDataBarMax->Hide();
+    maBtOptions->Hide();
 
     Deselect();
 }
 
 IMPL_LINK_NOARG( ScDataBarFrmtEntry, DataBarTypeSelectHdl )
 {
-    sal_Int32 nSelectPos = maLbDataBarMinType.GetSelectEntryPos();
+    sal_Int32 nSelectPos = maLbDataBarMinType->GetSelectEntryPos();
     if(nSelectPos <= COLORSCALE_MAX)
-        maEdDataBarMin.Disable();
+        maEdDataBarMin->Disable();
     else
-        maEdDataBarMin.Enable();
+        maEdDataBarMin->Enable();
 
-    nSelectPos = maLbDataBarMaxType.GetSelectEntryPos();
+    nSelectPos = maLbDataBarMaxType->GetSelectEntryPos();
     if(nSelectPos <= COLORSCALE_MAX)
-        maEdDataBarMax.Disable();
+        maEdDataBarMax->Disable();
     else
-        maEdDataBarMax.Enable();
+        maEdDataBarMax->Enable();
 
     return 0;
 }
 
 IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
 {
-    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos, true);
-    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos, true);
-    ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this, *mpDataBarData, mpDoc, maPos);
+    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(), *maEdDataBarMin.get(), mpDoc, maPos, true);
+    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc, maPos, true);
+    ScopedVclPtrInstance<ScDataBarSettingsDlg> pDlg(this, *mpDataBarData, mpDoc, maPos);
     if( pDlg->Execute() == RET_OK)
     {
         mpDataBarData.reset(pDlg->GetData());
-        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin, mpDoc);
-        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax, mpDoc);
+        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, *maLbDataBarMinType, *maEdDataBarMin.get(), mpDoc);
+        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc);
         DataBarTypeSelectHdl(NULL);
     }
     return 0;
@@ -1213,10 +1306,10 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
 
 ScDateFrmtEntry::ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, ScAddress() ),
-    maLbDateEntry( this, ScResId( LB_DATE_TYPE ) ),
-    maFtStyle( this, ScResId( FT_STYLE ) ),
-    maLbStyle( this, ScResId( LB_STYLE ) ),
-    maWdPreview( this, ScResId( WD_PREVIEW ) ),
+    maLbDateEntry( VclPtr<ListBox>::Create( this, ScResId( LB_DATE_TYPE ) ) ),
+    maFtStyle( VclPtr<FixedText>::Create( this, ScResId( FT_STYLE ) ) ),
+    maLbStyle( VclPtr<ListBox>::Create( this, ScResId( LB_STYLE ) ) ),
+    maWdPreview( VclPtr<SvxFontPrevWindow>::Create( this, ScResId( WD_PREVIEW ) ) ),
     mbIsInStyleCreate(false)
 {
     Init();
@@ -1227,41 +1320,55 @@ ScDateFrmtEntry::ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const 
     if(pFormat)
     {
         sal_Int32 nPos = static_cast<sal_Int32>(pFormat->GetDateType());
-        maLbDateEntry.SelectEntryPos(nPos);
+        maLbDateEntry->SelectEntryPos(nPos);
 
         OUString aStyleName = pFormat->GetStyleName();
-        maLbStyle.SelectEntry(aStyleName);
+        maLbStyle->SelectEntry(aStyleName);
     }
 
     StyleSelectHdl(NULL);
 }
 
+ScDateFrmtEntry::~ScDateFrmtEntry()
+{
+    disposeOnce();
+}
+
+void ScDateFrmtEntry::dispose()
+{
+    maLbDateEntry.disposeAndClear();
+    maFtStyle.disposeAndClear();
+    maLbStyle.disposeAndClear();
+    maWdPreview.disposeAndClear();
+    ScCondFrmtEntry::dispose();
+}
+
 void ScDateFrmtEntry::Init()
 {
-    maLbDateEntry.SelectEntryPos(0);
-    maLbType.SelectEntryPos(3);
+    maLbDateEntry->SelectEntryPos(0);
+    maLbType->SelectEntryPos(3);
 
-    FillStyleListBox( mpDoc, maLbStyle );
-    maLbStyle.SetSelectHdl( LINK( this, ScDateFrmtEntry, StyleSelectHdl ) );
-    maLbStyle.SelectEntryPos(1);
+    FillStyleListBox( mpDoc, *maLbStyle.get() );
+    maLbStyle->SetSelectHdl( LINK( this, ScDateFrmtEntry, StyleSelectHdl ) );
+    maLbStyle->SelectEntryPos(1);
 }
 
 void ScDateFrmtEntry::SetActive()
 {
-    maLbDateEntry.Show();
-    maFtStyle.Show();
-    maWdPreview.Show();
-    maLbStyle.Show();
+    maLbDateEntry->Show();
+    maFtStyle->Show();
+    maWdPreview->Show();
+    maLbStyle->Show();
 
     Select();
 }
 
 void ScDateFrmtEntry::SetInactive()
 {
-    maLbDateEntry.Hide();
-    maFtStyle.Hide();
-    maWdPreview.Hide();
-    maLbStyle.Hide();
+    maLbDateEntry->Hide();
+    maFtStyle->Hide();
+    maWdPreview->Hide();
+    maLbStyle->Hide();
 
     Deselect();
 }
@@ -1276,16 +1383,16 @@ void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if(nHint == SfxStyleSheetHintId::MODIFIED)
     {
         if(!mbIsInStyleCreate)
-            UpdateStyleList(maLbStyle, mpDoc);
+            UpdateStyleList(*maLbStyle.get(), mpDoc);
     }
 }
 
 ScFormatEntry* ScDateFrmtEntry::GetEntry() const
 {
     ScCondDateFormatEntry* pNewEntry = new ScCondDateFormatEntry(mpDoc);
-    condformat::ScCondFormatDateType eType = static_cast<condformat::ScCondFormatDateType>(maLbDateEntry.GetSelectEntryPos());
+    condformat::ScCondFormatDateType eType = static_cast<condformat::ScCondFormatDateType>(maLbDateEntry->GetSelectEntryPos());
     pNewEntry->SetDateType(eType);
-    pNewEntry->SetStyleName(maLbStyle.GetSelectEntry());
+    pNewEntry->SetStyleName(maLbStyle->GetSelectEntry());
     return pNewEntry;
 }
 
@@ -1297,7 +1404,7 @@ OUString ScDateFrmtEntry::GetExpressionString()
 IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl )
 {
     mbIsInStyleCreate = true;
-    StyleSelect( maLbStyle, mpDoc, maWdPreview );
+    StyleSelect( *maLbStyle.get(), mpDoc, *maWdPreview.get() );
     mbIsInStyleCreate = false;
 
     return 0;
@@ -1306,14 +1413,16 @@ IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl )
 class ScIconSetFrmtDataEntry : public Control
 {
     private:
-        FixedImage maImgIcon;
-        FixedText maFtEntry;
-        Edit maEdEntry;
-        ListBox maLbEntryType;
+        VclPtr<FixedImage> maImgIcon;
+        VclPtr<FixedText> maFtEntry;
+        VclPtr<Edit> maEdEntry;
+        VclPtr<ListBox> maLbEntryType;
 
     public:
         ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc,
                 sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
+        virtual ~ScIconSetFrmtDataEntry();
+        virtual void dispose() SAL_OVERRIDE;
 
         ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
 
@@ -1322,31 +1431,31 @@ class ScIconSetFrmtDataEntry : public Control
 
 ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry ):
     Control( pParent, ScResId( RID_ICON_SET_ENTRY ) ),
-    maImgIcon( this, ScResId( IMG_ICON ) ),
-    maFtEntry( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ),
-    maEdEntry( this, ScResId( ED_ICON_SET_ENTRY_VALUE ) ),
-    maLbEntryType( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) )
+    maImgIcon( VclPtr<FixedImage>::Create( this, ScResId( IMG_ICON ) ) ),
+    maFtEntry( VclPtr<FixedText>::Create( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ) ),
+    maEdEntry( VclPtr<Edit>::Create( this, ScResId( ED_ICON_SET_ENTRY_VALUE ) ) ),
+    maLbEntryType( VclPtr<ListBox>::Create( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) ) )
 {
-    maImgIcon.SetImage(Image(ScIconSetFormat::getBitmap(eType, i)));
+    maImgIcon->SetImage(Image(ScIconSetFormat::getBitmap(eType, i)));
     if(pEntry)
     {
         switch(pEntry->GetType())
         {
             case COLORSCALE_VALUE:
-                maLbEntryType.SelectEntryPos(0);
-                maEdEntry.SetText(convertNumberToString(pEntry->GetValue(), pDoc));
+                maLbEntryType->SelectEntryPos(0);
+                maEdEntry->SetText(convertNumberToString(pEntry->GetValue(), pDoc));
                 break;
             case COLORSCALE_PERCENTILE:
-                maLbEntryType.SelectEntryPos(2);
-                maEdEntry.SetText(convertNumberToString(pEntry->GetValue(), pDoc));
+                maLbEntryType->SelectEntryPos(2);
+                maEdEntry->SetText(convertNumberToString(pEntry->GetValue(), pDoc));
                 break;
             case COLORSCALE_PERCENT:
-                maLbEntryType.SelectEntryPos(1);
-                maEdEntry.SetText(convertNumberToString(pEntry->GetValue(), pDoc));
+                maLbEntryType->SelectEntryPos(1);
+                maEdEntry->SetText(convertNumberToString(pEntry->GetValue(), pDoc));
                 break;
             case COLORSCALE_FORMULA:
-                maLbEntryType.SelectEntryPos(3);
-                maEdEntry.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+                maLbEntryType->SelectEntryPos(3);
+                maEdEntry->SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
                 break;
             default:
                 assert(false);
@@ -1354,15 +1463,29 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetT
     }
     else
     {
-        maLbEntryType.SelectEntryPos(1);
+        maLbEntryType->SelectEntryPos(1);
     }
     FreeResource();
 }
 
+ScIconSetFrmtDataEntry::~ScIconSetFrmtDataEntry()
+{
+    disposeOnce();
+}
+
+void ScIconSetFrmtDataEntry::dispose()
+{
+    maImgIcon.disposeAndClear();
+    maFtEntry.disposeAndClear();
+    maEdEntry.disposeAndClear();
+    maLbEntryType.disposeAndClear();
+    Control::dispose();
+}
+
 ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
 {
-    sal_Int32 nPos = maLbEntryType.GetSelectEntryPos();
-    OUString aText = maEdEntry.GetText();
+    sal_Int32 nPos = maLbEntryType->GetSelectEntryPos();
+    OUString aText = maEdEntry->GetText();
     ScColorScaleEntry* pEntry = new ScColorScaleEntry();
 
     sal_uInt32 nIndex = 0;
@@ -1395,69 +1518,81 @@ ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const S
 
 void ScIconSetFrmtDataEntry::SetFirstEntry()
 {
-    maEdEntry.Hide();
-    maLbEntryType.Hide();
-    maFtEntry.Hide();
-    maEdEntry.SetText(OUString("0"));
-    maLbEntryType.SelectEntryPos(1);
+    maEdEntry->Hide();
+    maLbEntryType->Hide();
+    maFtEntry->Hide();
+    maEdEntry->SetText(OUString("0"));
+    maLbEntryType->SelectEntryPos(1);
 }
 
 ScIconSetFrmtEntry::ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat ):
         ScCondFrmtEntry( pParent, pDoc, rPos ),
-        maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
-        maLbIconSetType( this, ScResId( LB_ICONSET_TYPE ) )
+        maLbColorFormat( VclPtr<ListBox>::Create( this, ScResId( LB_COLOR_FORMAT ) ) ),
+        maLbIconSetType( VclPtr<ListBox>::Create( this, ScResId( LB_ICONSET_TYPE ) ) )
 {
     Init();
     FreeResource();
-    maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
+    maLbColorFormat->SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
 
     if(pFormat)
     {
         const ScIconSetFormatData* pIconSetFormatData = pFormat->GetIconSetData();
         ScIconSetType eType = pIconSetFormatData->eIconSetType;
         sal_Int32 nType = static_cast<sal_Int32>(eType);
-        maLbIconSetType.SelectEntryPos(nType);
+        maLbIconSetType->SelectEntryPos(nType);
 
         for(size_t i = 0, n = pIconSetFormatData->maEntries.size();
                 i < n; ++i)
         {
-            maEntries.push_back( new ScIconSetFrmtDataEntry( this, eType, pDoc, i, &pIconSetFormatData->maEntries[i] ) );
-            Point aPos = maEntries[0].GetPosPixel();
-            aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
-            maEntries[i].SetPosPixel( aPos );
+            maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create( this, eType, pDoc, i, &pIconSetFormatData->maEntries[i] ) );
+            Point aPos = maEntries[0]->GetPosPixel();
+            aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
+            maEntries[i]->SetPosPixel( aPos );
         }
-        maEntries.begin()->SetFirstEntry();
+        maEntries[0]->SetFirstEntry();
     }
     else
         IconSetTypeHdl(NULL);
 }
 
+ScIconSetFrmtEntry::~ScIconSetFrmtEntry()
+{
+    disposeOnce();
+}
+
+void ScIconSetFrmtEntry::dispose()
+{
+    maLbColorFormat.disposeAndClear();
+    maLbIconSetType.disposeAndClear();
+    ScCondFrmtEntry::dispose();
+}
+
 void ScIconSetFrmtEntry::Init()
 {
-    maLbColorFormat.SelectEntryPos(3);
-    maLbType.SelectEntryPos(0);
-    maLbIconSetType.SelectEntryPos(0);
+    maLbColorFormat->SelectEntryPos(3);
+    maLbType->SelectEntryPos(0);
+    maLbIconSetType->SelectEntryPos(0);
 
-    maLbIconSetType.SetSelectHdl( LINK( this, ScIconSetFrmtEntry, IconSetTypeHdl ) );
+    maLbIconSetType->SetSelectHdl( LINK( this, ScIconSetFrmtEntry, IconSetTypeHdl ) );
 }
 
 IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
 {
     ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
 
-    sal_Int32 nPos = maLbIconSetType.GetSelectEntryPos();
+    sal_Int32 nPos = maLbIconSetType->GetSelectEntryPos();
     sal_uInt32 nElements = pMap[nPos].nElements;
     maEntries.clear();
 
     for(size_t i = 0; i < nElements; ++i)
     {
-        maEntries.push_back( new ScIconSetFrmtDataEntry( this, static_cast<ScIconSetType>(nPos), mpDoc, i ) );
-        Point aPos = maEntries[0].GetPosPixel();
-        aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
-        maEntries[i].SetPosPixel( aPos );
-        maEntries[i].Show();
+        maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create( this, static_cast<ScIconSetType>(nPos), mpDoc, i ) );
+        Point aPos = maEntries[0]->GetPosPixel();
+        aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
+        maEntries[i]->SetPosPixel( aPos );
+        maEntries[i]->Show();
     }
-    maEntries.begin()->SetFirstEntry();
+    maEntries[0]->SetFirstEntry();
 
     SetHeight();
     static_cast<ScCondFormatList*>(GetParent())->RecalcAll();
@@ -1472,12 +1607,12 @@ OUString ScIconSetFrmtEntry::GetExpressionString()
 
 void ScIconSetFrmtEntry::SetActive()
 {
-    maLbColorFormat.Show();
-    maLbIconSetType.Show();
+    maLbColorFormat->Show();
+    maLbIconSetType->Show();
     for(ScIconSetFrmtDataEntriesType::iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        itr->Show();
+        (*itr)->Show();
     }
 
     Select();
@@ -1485,12 +1620,12 @@ void ScIconSetFrmtEntry::SetActive()
 
 void ScIconSetFrmtEntry::SetInactive()
 {
-    maLbColorFormat.Hide();
-    maLbIconSetType.Hide();
+    maLbColorFormat->Hide();
+    maLbIconSetType->Hide();
     for(ScIconSetFrmtDataEntriesType::iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        itr->Hide();
+        (*itr)->Hide();
     }
 
     Deselect();
@@ -1501,11 +1636,11 @@ ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
     ScIconSetFormat* pFormat = new ScIconSetFormat(mpDoc);
 
     ScIconSetFormatData* pData = new ScIconSetFormatData;
-    pData->eIconSetType = static_cast<ScIconSetType>(maLbIconSetType.GetSelectEntryPos());
+    pData->eIconSetType = static_cast<ScIconSetType>(maLbIconSetType->GetSelectEntryPos());
     for(ScIconSetFrmtDataEntriesType::const_iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        pData->maEntries.push_back(itr->CreateEntry(mpDoc, maPos));
+        pData->maEntries.push_back((*itr)->CreateEntry(mpDoc, maPos));
     }
     pFormat->SetIconSetData(pData);
 

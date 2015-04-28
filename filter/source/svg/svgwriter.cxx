@@ -1658,7 +1658,7 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
 SVGActionWriter::~SVGActionWriter()
 {
     DBG_ASSERT( !mpContext, "Not all contexts are closed" );
-    delete mpVDev;
+    mpVDev.disposeAndClear();
 }
 
 long SVGActionWriter::ImplMap( sal_Int32 nVal ) const

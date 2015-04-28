@@ -26,8 +26,15 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
 
 PanelLayout::~PanelLayout()
 {
+    disposeOnce();
+}
+
+void PanelLayout::dispose()
+{
     m_bInClose = true;
     m_aPanelLayoutIdle.Stop();
+    disposeBuilder();
+    Control::dispose();
 }
 
 Size PanelLayout::GetOptimalSize() const

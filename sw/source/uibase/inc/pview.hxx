@@ -150,7 +150,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
 {
     // ViewWindow and handle to core
     // current dispatcher shell
-    SwPagePreviewWin*        pViewWin;
+    VclPtr<SwPagePreviewWin> pViewWin;
     //viewdata of the previous SwView and the new crsrposition
     OUString                sSwViewData;
     //and the new cursor position if the user double click in the PagePreview
@@ -163,14 +163,14 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     Rectangle               aVisArea;
 
     // MDI control elements
-    SwScrollbar             *pHScrollbar;
-    SwScrollbar             *pVScrollbar;
+    VclPtr<SwScrollbar>      pHScrollbar;
+    VclPtr<SwScrollbar>     pVScrollbar;
     bool                    mbHScrollbarEnabled;
     bool                    mbVScrollbarEnabled;
-    ImageButton             *pPageUpBtn,
-                            *pPageDownBtn;
+    VclPtr<ImageButton>     pPageUpBtn,
+                            pPageDownBtn;
     // dummy window for filling the lower right edge when both scrollbars are active
-    ::vcl::Window           *pScrollFill;
+    VclPtr<::vcl::Window>   pScrollFill;
 
     sal_uInt16              mnPageCount;
     bool                    bNormalPrint;
@@ -192,7 +192,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( vcl::Window *pParent,
+    SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
                                                 const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );

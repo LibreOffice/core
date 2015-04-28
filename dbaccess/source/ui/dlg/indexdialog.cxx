@@ -311,9 +311,23 @@ namespace dbaui
 
     DbaIndexDialog::~DbaIndexDialog( )
     {
+        disposeOnce();
+    }
+
+    void DbaIndexDialog::dispose()
+    {
         setToolBox(NULL);
         delete m_pIndexes;
-
+        m_pActions.clear();
+        m_pIndexList.clear();
+        m_pIndexDetails.clear();
+        m_pDescriptionLabel.clear();
+        m_pDescription.clear();
+        m_pUnique.clear();
+        m_pFieldsLabel.clear();
+        m_pFields.clear();
+        m_pClose.clear();
+        ModalDialog::dispose();
     }
 
     bool DbaIndexDialog::implCommit(SvTreeListEntry* _pEntry)
@@ -408,8 +422,8 @@ namespace dbaui
             {
                 OUString sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
                 sConfirm = sConfirm.replaceFirst("$name$", m_pIndexList->GetEntryText(pSelected));
-                MessageDialog aConfirm(this, sConfirm, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                if (RET_YES != aConfirm.Execute())
+                ScopedVclPtrInstance< MessageDialog > aConfirm(this, sConfirm, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                if (RET_YES != aConfirm->Execute())
                     return;
             }
 
@@ -572,9 +586,9 @@ namespace dbaui
 
             if (aSelected->isModified() || aSelected->isNew())
             {
-                MessageDialog aQuestion(this, "SaveIndexDialog",
-                                        "dbaccess/ui/saveindexdialog.ui");
-                nResponse = aQuestion.Execute();
+                ScopedVclPtrInstance<MessageDialog> aQuestion(this, "SaveIndexDialog",
+                                                              "dbaccess/ui/saveindexdialog.ui" );
+                nResponse = aQuestion->Execute();
             }
         }
 
@@ -616,8 +630,8 @@ namespace dbaui
         {
             OUString sError(ModuleRes(STR_INDEX_NAME_ALREADY_USED));
             sError = sError.replaceFirst("$name$", sNewName);
-            MessageDialog aError(this, sError);
-            aError.Execute();
+            ScopedVclPtrInstance< MessageDialog > aError(this, sError);
+            aError->Execute();
 
             updateToolbox();
             m_bEditAgain = true;
@@ -677,8 +691,8 @@ namespace dbaui
         // need at least one field
         if (0 == _rPos->aFields.size())
         {
-            MessageDialog aError(this, ModuleRes(STR_NEED_INDEX_FIELDS));
-            aError.Execute();
+            ScopedVclPtrInstance< MessageDialog > aError(this, ModuleRes(STR_NEED_INDEX_FIELDS));
+            aError->Execute();
             m_pFields->GrabFocus();
             return false;
         }
@@ -695,8 +709,8 @@ namespace dbaui
                 // a column is specified twice ... won't work anyway, so prevent this here and now
                 OUString sMessage(ModuleRes(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
                 sMessage = sMessage.replaceFirst("$name$", aFieldCheck->sFieldName);
-                MessageDialog aError(this, sMessage);
-                aError.Execute();
+                ScopedVclPtrInstance< MessageDialog > aError(this, sMessage);
+                aError->Execute();
                 m_pFields->GrabFocus();
                 return false;
             }

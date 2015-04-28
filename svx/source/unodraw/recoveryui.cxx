@@ -67,7 +67,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** @short TODO */
-        vcl::Window* m_pParentWindow;
+        VclPtr<vcl::Window> m_pParentWindow;
 
         /** @short TODO */
         RecoveryUI::EJob m_eJob;
@@ -245,7 +245,7 @@ bool RecoveryUI::impl_doEmergencySave()
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create dialog for this operation and bind it to the used core service
-    boost::scoped_ptr<Dialog> xDialog(new svxdr::SaveDialog(m_pParentWindow, pCore));
+    VclPtrInstance<svxdr::SaveDialog> xDialog(m_pParentWindow, pCore);
 
     // start the dialog
     short nRet = xDialog->Execute();
@@ -260,7 +260,7 @@ void RecoveryUI::impl_doRecovery()
 
     // create all needed dialogs for this operation
     // and bind it to the used core service
-    boost::scoped_ptr<Dialog> xDialog(new svxdr::RecoveryDialog(m_pParentWindow, pCore));
+    VclPtrInstance<svxdr::RecoveryDialog> xDialog(m_pParentWindow, pCore);
 
     // start the dialog
     xDialog->Execute();

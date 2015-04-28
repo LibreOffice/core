@@ -141,15 +141,26 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSe
     m_pNfGraphicCache->SetModifyHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
 }
 
-
-
 OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* OfaMemoryOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void OfaMemoryOptionsPage::dispose()
 {
-    return new OfaMemoryOptionsPage( pParent, *rAttrSet );
+    m_pUndoEdit.clear();
+    m_pNfGraphicCache.clear();
+    m_pNfGraphicObjectCache.clear();
+    m_pTfGraphicObjectTime.clear();
+    m_pNfOLECache.clear();
+    m_pQuickStarterFrame.clear();
+    m_pQuickLaunchCB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaMemoryOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<OfaMemoryOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )

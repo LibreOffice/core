@@ -198,7 +198,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     pSignatures->set_width_request(aControlSize.Width());
     pSignatures->set_height_request(aControlSize.Height());
 
-    m_pSignaturesLB = new SvSimpleTable(*pSignatures);
+    m_pSignaturesLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
     // #i48253# the tablistbox needs its own unique id
     m_pSignaturesLB->Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
     static long aTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };
@@ -235,7 +235,28 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
-    delete m_pSignaturesLB;
+    disposeOnce();
+}
+
+void DigitalSignaturesDialog::dispose()
+{
+    m_pSignaturesLB.disposeAndClear();
+    m_pHintDocFT.clear();
+    m_pHintBasicFT.clear();
+    m_pHintPackageFT.clear();
+    m_pSigsValidImg.clear();
+    m_pSigsValidFI.clear();
+    m_pSigsInvalidImg.clear();
+    m_pSigsInvalidFI.clear();
+    m_pSigsNotvalidatedImg.clear();
+    m_pSigsNotvalidatedFI.clear();
+    m_pSigsOldSignatureImg.clear();
+    m_pSigsOldSignatureFI.clear();
+    m_pViewBtn.clear();
+    m_pAddBtn.clear();
+    m_pRemoveBtn.clear();
+    m_pCloseBtn.clear();
+    ModalDialog::dispose();
 }
 
 bool DigitalSignaturesDialog::Init()
@@ -292,8 +313,8 @@ bool DigitalSignaturesDialog::canAddRemove()
     if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
     {
         //#4
-        MessageDialog err(NULL, XMLSEC_RES(STR_XMLSECDLG_OLD_ODF_FORMAT));
-        err.Execute();
+        ScopedVclPtrInstance< MessageDialog > err(nullptr, XMLSEC_RES(STR_XMLSECDLG_OLD_ODF_FORMAT));
+        err->Execute();
         ret = false;
     }
 
@@ -411,10 +432,10 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
 
         uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
-        CertificateChooser aChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations );
-        if ( aChooser.Execute() == RET_OK )
+        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations );
+        if ( aChooser->Execute() == RET_OK )
         {
-            uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
+            uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
             if ( !xCert.is() )
             {
                 SAL_WARN( "xmlsecurity.dialogs", "no certificate selected" );
@@ -746,8 +767,8 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, false );
-            aViewer.Execute();
+            ScopedVclPtrInstance< CertificateViewer > aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, false );
+            aViewer->Execute();
         }
     }
 }

@@ -73,16 +73,16 @@ typedef ::std::list< OTableInfo >   TableInfoList;
 class ODbaseIndexDialog : public ModalDialog
 {
 protected:
-    OKButton*       m_pPB_OK;
-    ComboBox*       m_pCB_Tables;
-    VclContainer*   m_pIndexes;
-    ListBox*        m_pLB_TableIndexes;
-    ListBox*        m_pLB_FreeIndexes;
+    VclPtr<OKButton>       m_pPB_OK;
+    VclPtr<ComboBox>       m_pCB_Tables;
+    VclPtr<VclContainer>   m_pIndexes;
+    VclPtr<ListBox>        m_pLB_TableIndexes;
+    VclPtr<ListBox>        m_pLB_FreeIndexes;
 
-    PushButton*     m_pAdd;
-    PushButton*     m_pRemove;
-    PushButton*     m_pAddAll;
-    PushButton*     m_pRemoveAll;
+    VclPtr<PushButton>     m_pAdd;
+    VclPtr<PushButton>     m_pRemove;
+    VclPtr<PushButton>     m_pAddAll;
+    VclPtr<PushButton>     m_pRemoveAll;
 
     DECL_LINK( TableSelectHdl, ComboBox* );
     DECL_LINK( AddClickHdl, PushButton* );
@@ -113,6 +113,8 @@ protected:
 
 public:
     ODbaseIndexDialog( vcl::Window * pParent, const OUString& aDataSrcName );
+    virtual ~ODbaseIndexDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 }   // namespace dbaui

@@ -43,7 +43,10 @@ class ParaPropertyPanel
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static ParaPropertyPanel* Create (
+    virtual ~ParaPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
+    static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
@@ -63,21 +66,27 @@ public:
 
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 
+    ParaPropertyPanel (
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings,
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+
 private:
     // UI controls
     //Alignment
-    ToolBox*            mpTBxVertAlign;
+    VclPtr<ToolBox>            mpTBxVertAlign;
     //NumBullet&Backcolor
-    ToolBox*            mpTBxNumBullet;
-    ToolBox*            mpTBxBackColor;
+    VclPtr<ToolBox>            mpTBxNumBullet;
+    VclPtr<ToolBox>            mpTBxBackColor;
     //Paragraph spacing
-    SvxRelativeField*   mpTopDist;
-    SvxRelativeField*   mpBottomDist;
-    ToolBox*            mpTbxIndent_IncDec;
-    ToolBox*            mpTbxProDemote;
-    SvxRelativeField*   mpLeftIndent;
-    SvxRelativeField*   mpRightIndent;
-    SvxRelativeField*   mpFLineIndent;
+    VclPtr<SvxRelativeField>   mpTopDist;
+    VclPtr<SvxRelativeField>   mpBottomDist;
+    VclPtr<ToolBox>            mpTbxIndent_IncDec;
+    VclPtr<ToolBox>            mpTbxProDemote;
+    VclPtr<SvxRelativeField>   mpLeftIndent;
+    VclPtr<SvxRelativeField>   mpRightIndent;
+    VclPtr<SvxRelativeField>   mpFLineIndent;
 
     // Resources
     Image  maSpace3;
@@ -107,13 +116,6 @@ private:
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
-
-    ParaPropertyPanel (
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~ParaPropertyPanel();
 
     DECL_LINK(ModifyIndentHdl_Impl, void*);
     DECL_LINK(ClickIndent_IncDec_Hdl_Impl, ToolBox*);

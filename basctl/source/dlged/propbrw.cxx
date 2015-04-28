@@ -190,8 +190,14 @@ void PropBrw::ImplReCreateController()
 
 PropBrw::~PropBrw()
 {
+    disposeOnce();
+}
+
+void PropBrw::dispose()
+{
     if ( m_xBrowserController.is() )
         ImplDestroyController();
+    DockingWindow::dispose();
 }
 
 

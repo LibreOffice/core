@@ -40,19 +40,19 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     bool        bExtCharAvailable;
     bool        bEdit;
 
-    VclFrame*       m_pNumberFrame;
-    RadioButton*    m_pNumberAutoBtn;
-    RadioButton*    m_pNumberCharBtn;
-    Edit*           m_pNumberCharEdit;
-    PushButton*     m_pNumberExtChar;
+    VclPtr<VclFrame>       m_pNumberFrame;
+    VclPtr<RadioButton>    m_pNumberAutoBtn;
+    VclPtr<RadioButton>    m_pNumberCharBtn;
+    VclPtr<Edit>           m_pNumberCharEdit;
+    VclPtr<PushButton>     m_pNumberExtChar;
 
     // everything for the selection footnote/endnote
-    RadioButton*    m_pFtnBtn;
-    RadioButton*    m_pEndNoteBtn;
+    VclPtr<RadioButton>    m_pFtnBtn;
+    VclPtr<RadioButton>    m_pEndNoteBtn;
 
-    PushButton*     m_pOkBtn;
-    PushButton*     m_pPrevBT;
-    PushButton*     m_pNextBT;
+    VclPtr<PushButton>     m_pOkBtn;
+    VclPtr<PushButton>     m_pPrevBT;
+    VclPtr<PushButton>     m_pNextBT;
 
     DECL_LINK(NumberCharHdl, void *);
     DECL_LINK(NumberEditHdl, void *);
@@ -67,6 +67,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
 public:
     SwInsFootNoteDlg(vcl::Window * pParent, SwWrtShell &rSh, bool bEd = false);
     virtual ~SwInsFootNoteDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     rtl_TextEncoding GetCharSet() { return eCharSet; }
     bool        IsExtCharAvailable() { return bExtCharAvailable; }

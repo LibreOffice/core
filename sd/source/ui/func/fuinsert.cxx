@@ -151,8 +151,8 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
                     // really store as link only?
                     if( SvtMiscOptions().ShowLinkWarningDialog() )
                     {
-                        SvxLinkWarningDialog aWarnDlg(mpWindow,aDlg.GetPath());
-                        if( aWarnDlg.Execute() != RET_OK )
+                        ScopedVclPtrInstance< SvxLinkWarningDialog > aWarnDlg(mpWindow,aDlg.GetPath());
+                        if( aWarnDlg->Execute() != RET_OK )
                             return; // don't store as link
                     }
 

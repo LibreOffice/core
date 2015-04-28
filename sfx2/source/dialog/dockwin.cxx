@@ -62,7 +62,7 @@ static const int NUM_OF_DOCKINGWINDOWS = 10;
 
 class SfxTitleDockingWindow : public SfxDockingWindow
 {
-    vcl::Window*             m_pWrappedWindow;
+    VclPtr<vcl::Window>   m_pWrappedWindow;
 
 public:
                         SfxTitleDockingWindow(
@@ -71,8 +71,9 @@ public:
                             vcl::Window* pParent ,
                             WinBits nBits);
     virtual             ~SfxTitleDockingWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
-    vcl::Window*             GetWrappedWindow() const { return m_pWrappedWindow; }
+    vcl::Window*        GetWrappedWindow() const { return m_pWrappedWindow; }
     void                SetWrappedWindow(vcl::Window* const pWindow);
 
     virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
@@ -129,7 +130,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     const OUString aDockWindowResourceURL( "private:resource/dockingwindow/" );
 
-    SfxTitleDockingWindow* pTitleDockWindow = new SfxTitleDockingWindow( pBindings, this, pParentWnd,
+    VclPtr<SfxTitleDockingWindow> pTitleDockWindow = VclPtr<SfxTitleDockingWindow>::Create( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
     pWindow = pTitleDockWindow;
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
@@ -207,7 +208,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
 
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
-    static_cast<SfxDockingWindow*>( pWindow )->Initialize( pInfo );
+    static_cast<SfxDockingWindow*>( pWindow.get() )->Initialize( pInfo );
     SetHideNotDelete( true );
 }
 
@@ -252,7 +253,13 @@ SfxTitleDockingWindow::SfxTitleDockingWindow( SfxBindings* pBind ,
 
 SfxTitleDockingWindow::~SfxTitleDockingWindow()
 {
-    delete m_pWrappedWindow;
+    disposeOnce();
+}
+
+void SfxTitleDockingWindow::dispose()
+{
+    m_pWrappedWindow.disposeAndClear();
+    SfxDockingWindow::dispose();
 }
 
 void SfxTitleDockingWindow::SetWrappedWindow( vcl::Window* const pWindow )
@@ -402,7 +409,7 @@ friend class SfxDockingWindow;
     SfxChildAlignment   eDockAlignment;
     bool                bConstructed;
     Size                aMinSize;
-    SfxSplitWindow*     pSplitWin;
+    VclPtr<SfxSplitWindow>  pSplitWin;
     bool                bSplitable;
     Idle                aMoveIdle;
 
@@ -1267,8 +1274,14 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
 SfxDockingWindow::~SfxDockingWindow()
 {
+    disposeOnce();
+}
+
+void SfxDockingWindow::dispose()
+{
     ReleaseChildWindow_Impl();
-    delete pImp;
+    delete pImp; pImp = NULL;
+    DockingWindow::dispose();
 }
 
 void SfxDockingWindow::ReleaseChildWindow_Impl()

@@ -123,7 +123,8 @@ private:
                         SplitWindow & operator= (const SplitWindow &) SAL_DELETED_FUNCTION;
 public:
                         SplitWindow( vcl::Window* pParent, WinBits nStyle = 0 );
-                        virtual ~SplitWindow();
+    virtual             ~SplitWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        StartSplit();
     virtual void        Split();

@@ -28,7 +28,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
-
+#include <vcl/vclptr.hxx>
 #include <vector>
 
 class UserDrawEvent;
@@ -37,7 +37,7 @@ class ImplCommonButtonData;
 class VCL_DLLPUBLIC Button : public Control
 {
 private:
-    ImplCommonButtonData *mpButtonData;
+    std::unique_ptr<ImplCommonButtonData> mpButtonData;
     Link maClickHdl;
 
     /// Command URL (like .uno:Save) in case the button should handle it.
@@ -64,6 +64,7 @@ protected:
 
 public:
     virtual            ~Button();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        Click();
 
@@ -153,7 +154,6 @@ protected:
 public:
     explicit        PushButton( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        PushButton( vcl::Window* pParent, const ResId& );
-    virtual         ~PushButton();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
@@ -226,7 +226,6 @@ public:
     virtual void    Click() SAL_OVERRIDE;
 };
 
-
 class VCL_DLLPUBLIC CancelButton : public PushButton
 {
 protected:
@@ -275,7 +274,7 @@ public:
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
-    std::shared_ptr< std::vector<RadioButton*> > m_xGroup;
+    std::shared_ptr< std::vector< VclPtr< RadioButton > > > m_xGroup;
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
@@ -336,6 +335,7 @@ public:
     explicit        RadioButton( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        RadioButton( vcl::Window* pParent, const ResId& );
     virtual         ~RadioButton();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
@@ -389,7 +389,7 @@ public:
     on return contains the <code>RadioButton</code>s
     in the same group as this <code>RadioButton</code>.
     */
-    std::vector<RadioButton*> GetRadioButtonGroup(bool bIncludeThis = true) const;
+    std::vector<VclPtr<RadioButton> > GetRadioButtonGroup(bool bIncludeThis = true) const;
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 
@@ -518,9 +518,8 @@ private:
                             ImageButton & operator= ( const ImageButton & ) SAL_DELETED_FUNCTION;
 
 public:
-                    ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
-                    ImageButton( vcl::Window* pParent, const ResId& rResId );
-                    virtual ~ImageButton();
+                 ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
+                 ImageButton( vcl::Window* pParent, const ResId& rResId );
 };
 
 class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
@@ -530,7 +529,6 @@ class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
 
 public:
     explicit        ImageRadioButton( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual         ~ImageRadioButton();
 };
 
 class VCL_DLLPUBLIC TriStateBox : public CheckBox
@@ -540,7 +538,6 @@ class VCL_DLLPUBLIC TriStateBox : public CheckBox
 
 public:
     explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual         ~TriStateBox();
 };
 
 class VCL_DLLPUBLIC DisclosureButton : public CheckBox
@@ -552,8 +549,6 @@ public:
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
-
-typedef rtl::Reference<DisclosureButton> DisclosureButtonPtr;
 
 #endif // INCLUDED_VCL_BUTTON_HXX
 

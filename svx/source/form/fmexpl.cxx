@@ -505,7 +505,7 @@ namespace svxform
     {
         SetHelpId( HID_FORM_NAVIGATOR_WIN );
 
-        m_pNavigatorTree = new NavigatorTree( this );
+        m_pNavigatorTree = VclPtr<NavigatorTree>::Create( this );
         m_pNavigatorTree->Show();
         SetText( SVX_RES(RID_STR_FMEXPLORER) );
         SfxDockingWindow::SetFloatingSize( Size(200,200) );
@@ -514,7 +514,13 @@ namespace svxform
 
     NavigatorFrame::~NavigatorFrame()
     {
-        delete m_pNavigatorTree;
+        disposeOnce();
+    }
+
+    void NavigatorFrame::dispose()
+    {
+        m_pNavigatorTree.disposeAndClear();
+        SfxDockingWindow::dispose();
     }
 
 
@@ -607,9 +613,9 @@ namespace svxform
                                         SfxBindings* _pBindings, SfxChildWinInfo* _pInfo )
                      :SfxChildWindow( _pParent, _nId )
     {
-        pWindow = new NavigatorFrame( _pBindings, this, _pParent );
+        pWindow = VclPtr<NavigatorFrame>::Create( _pBindings, this, _pParent );
         eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-        static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
+        static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
     }
 
 

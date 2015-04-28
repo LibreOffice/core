@@ -569,7 +569,7 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( vcl::Window *pWin, SfxFrame *pFrm, S
                             n == SFX_SPLITWINDOWS_RIGHT ? SfxChildAlignment::RIGHT :
                             n == SFX_SPLITWINDOWS_TOP ? SfxChildAlignment::TOP :
                                 SfxChildAlignment::BOTTOM );
-        SfxSplitWindow *pSplitWin = new SfxSplitWindow(pWorkWin, eAlign, this, pParent==0 );
+        VclPtr<SfxSplitWindow> pSplitWin = VclPtr<SfxSplitWindow>::Create(pWorkWin, eAlign, this, pParent==0 );
         pSplit[n] = pSplitWin;
     }
 
@@ -606,7 +606,6 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxBindings& rB, SfxWorkWindow*
     m_aTbxTypeName( "private:resource/toolbar/" ),
     m_aProgressBarResName( "private:resource/progressbar/progressbar" )
 {
-    memset(pSplit, 0, sizeof(pSplit));
     DBG_ASSERT (pBindings, "No Bindings!");
 
     pBindings->SetWorkWindow_Impl( this );
@@ -633,10 +632,10 @@ SfxWorkWindow::~SfxWorkWindow()
     // Delete SplitWindows
     for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
-        SfxSplitWindow *p = pSplit[n];
+        VclPtr<SfxSplitWindow> p = pSplit[n];
         if (p->GetWindowCount())
             ReleaseChild_Impl(*p);
-        delete p;
+        pSplit[n].disposeAndClear();
     }
 
     // Delete help structure for Child-Windows
@@ -677,8 +676,8 @@ void SfxWorkWindow::DeleteControllers_Impl()
     for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         SfxSplitWindow *p = pSplit[n];
-           if (p->GetWindowCount())
-        p->Lock();
+        if (p->GetWindowCount())
+            p->Lock();
     }
 
     // Delete Child-Windows
@@ -853,7 +852,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::LOWESTTOP:
                 aSize.Width() = aTmp.GetWidth();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 bAllowHiding = false;
                 aBorder.Top() += aSize.Height();
                 aPos = aTmp.TopLeft();
@@ -868,7 +867,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::HIGHESTBOTTOM:
                 aSize.Width() = aTmp.GetWidth();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 aBorder.Bottom() += aSize.Height();
                 aPos = aTmp.BottomLeft();
                 aPos.Y() -= (aSize.Height()-1);
@@ -883,7 +882,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::TOOLBOXLEFT:
                 aSize.Height() = aTmp.GetHeight();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 bAllowHiding = false;
                 aBorder.Left() += aSize.Width();
                 aPos = aTmp.TopLeft();
@@ -898,7 +897,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::TOOLBOXRIGHT:
                 aSize.Height() = aTmp.GetHeight();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 aBorder.Right() += aSize.Width();
                 aPos = aTmp.TopRight();
                 aPos.X() -= (aSize.Width()-1);
@@ -1071,10 +1070,10 @@ void SfxWorkWindow::ShowChildren_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        static_cast<DockingWindow*>(pCli->pWin)->Show( true, nFlags );
+                        static_cast<DockingWindow*>(pCli->pWin.get())->Show( true, nFlags );
                         break;
                     case RSC_SPLITWINDOW :
-                        static_cast<SplitWindow*>(pCli->pWin)->Show( true, nFlags );
+                        static_cast<SplitWindow*>(pCli->pWin.get())->Show( true, nFlags );
                         break;
                     default:
                         pCli->pWin->Show( true, nFlags );
@@ -1088,7 +1087,7 @@ void SfxWorkWindow::ShowChildren_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        static_cast<DockingWindow*>(pCli->pWin)->Hide();
+                        static_cast<DockingWindow*>(pCli->pWin.get())->Hide();
                         break;
                     default:
                         pCli->pWin->Hide();
@@ -1111,7 +1110,7 @@ void SfxWorkWindow::HideChildren_Impl()
             switch ( pChild->pWin->GetType() )
             {
                 case RSC_DOCKINGWINDOW :
-                    static_cast<DockingWindow*>(pChild->pWin)->Hide();
+                    static_cast<DockingWindow*>(pChild->pWin.get())->Hide();
                     break;
                 default:
                     pChild->pWin->Hide();
@@ -2534,7 +2533,7 @@ bool SfxWorkWindow::IsAutoHideMode( const SfxSplitWindow *pSplitWin )
 {
     for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
-        if ( pSplit[n] != pSplitWin && pSplit[n]->IsAutoHide( true ) )
+        if ( pSplit[n].get() != pSplitWin && pSplit[n]->IsAutoHide( true ) )
             return true;
     }
     return false;

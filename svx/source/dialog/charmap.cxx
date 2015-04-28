@@ -56,7 +56,7 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , m_pAccessible(NULL)
-    , aVscrollSB( this, WB_VERT)
+    , aVscrollSB( VclPtr<ScrollBar>::Create(this, WB_VERT) )
 {
     init();
     InitSettings( true, true );
@@ -69,8 +69,8 @@ void SvxShowCharSet::init()
     m_nYGap = 0;
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN );
-    aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
-    aVscrollSB.EnableDrag( true );
+    aVscrollSB->SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
+    aVscrollSB->EnableDrag( true );
     // other settings like aVscroll depend on selected font => see SetFont
 
     bDrag = false;
@@ -190,7 +190,7 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
 
 void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 {
-    if( !HandleScrollCommand( rCEvt, 0, &aVscrollSB ) )
+    if( !HandleScrollCommand( rCEvt, 0, aVscrollSB.get() ) )
         Control::Command( rCEvt );
 }
 
@@ -213,8 +213,8 @@ sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos)
 int SvxShowCharSet::FirstInView() const
 {
     int nIndex = 0;
-    if( aVscrollSB.IsVisible() )
-        nIndex += aVscrollSB.GetThumbPos() * COLUMN_COUNT;
+    if( aVscrollSB->IsVisible() )
+        nIndex += aVscrollSB->GetThumbPos() * COLUMN_COUNT;
     return nIndex;
 }
 
@@ -365,8 +365,8 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
         return;
 
     Size aOutputSize = GetOutputSizePixel();
-    if (aVscrollSB.IsVisible())
-        aOutputSize.Width() -= aVscrollSB.GetOptimalSize().Width();
+    if (aVscrollSB->IsVisible())
+        aOutputSize.Width() -= aVscrollSB->GetOptimalSize().Width();
 
     int i;
     for ( i = 1; i < COLUMN_COUNT; ++i )
@@ -513,7 +513,7 @@ void SvxShowCharSet::SetFont( const vcl::Font& rFont )
         getSelectedChar() = mpFontCharMap->GetCharFromIndex( nSelectedIndex );
 
     Size aSize = GetOutputSizePixel();
-    long nSBWidth = aVscrollSB.GetOptimalSize().Width();
+    long nSBWidth = aVscrollSB->GetOptimalSize().Width();
     aSize.Width() -= nSBWidth;
 
     vcl::Font aFont = rFont;
@@ -528,18 +528,18 @@ void SvxShowCharSet::SetFont( const vcl::Font& rFont )
     nX = aSize.Width() / COLUMN_COUNT;
     nY = aSize.Height() / ROW_COUNT;
 
-    aVscrollSB.setPosSizePixel( aSize.Width(), 0, nSBWidth, aSize.Height() );
-    aVscrollSB.SetRangeMin( 0 );
+    aVscrollSB->setPosSizePixel( aSize.Width(), 0, nSBWidth, aSize.Height() );
+    aVscrollSB->SetRangeMin( 0 );
     int nLastRow = (mpFontCharMap->GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
-    aVscrollSB.SetRangeMax( nLastRow );
-    aVscrollSB.SetPageSize( ROW_COUNT-1 );
-    aVscrollSB.SetVisibleSize( ROW_COUNT );
+    aVscrollSB->SetRangeMax( nLastRow );
+    aVscrollSB->SetPageSize( ROW_COUNT-1 );
+    aVscrollSB->SetVisibleSize( ROW_COUNT );
 
     // restore last selected unicode
     int nMapIndex = mpFontCharMap->GetIndexFromChar( getSelectedChar() );
     SelectIndex( nMapIndex );
 
-    aVscrollSB.Show();
+    aVscrollSB->Show();
 
     // rearrange CharSet element in sync with nX- and nY-multiples
     Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
@@ -559,7 +559,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
         sal_uInt32 cPrev = mpFontCharMap->GetPrevChar( getSelectedChar() );
         int nMapIndex = mpFontCharMap->GetIndexFromChar( cPrev );
         int nNewPos = nMapIndex / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( nNewPos );
+        aVscrollSB->SetThumbPos( nNewPos );
         nSelectedIndex = bFocus ? nMapIndex+1 : -1;
         Invalidate();
         Update();
@@ -567,9 +567,9 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
     else if( nNewIndex < FirstInView() )
     {
         // need to scroll up to see selected item
-        int nOldPos = aVscrollSB.GetThumbPos();
+        int nOldPos = aVscrollSB->GetThumbPos();
         int nDelta = (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( nOldPos - nDelta );
+        aVscrollSB->SetThumbPos( nOldPos - nDelta );
         nSelectedIndex = nNewIndex;
         Invalidate();
         if( nDelta )
@@ -578,15 +578,15 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
     else if( nNewIndex > LastInView() )
     {
         // need to scroll down to see selected item
-        int nOldPos = aVscrollSB.GetThumbPos();
+        int nOldPos = aVscrollSB->GetThumbPos();
         int nDelta = (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( nOldPos + nDelta );
+        aVscrollSB->SetThumbPos( nOldPos + nDelta );
         if( nNewIndex < mpFontCharMap->GetCharCount() )
         {
             nSelectedIndex = nNewIndex;
             Invalidate();
         }
-        if( nOldPos != aVscrollSB.GetThumbPos() )
+        if( nOldPos != aVscrollSB->GetThumbPos() )
         {
             Invalidate();
             Update();
@@ -603,8 +603,8 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
         Point aOldPixel = MapIndexToPixel( nSelectedIndex );
         aOldPixel.Move( +1, +1);
         Size aOutputSize = GetOutputSizePixel();
-        if (aVscrollSB.IsVisible())
-            aOutputSize.Width() -= aVscrollSB.GetOptimalSize().Width();
+        if (aVscrollSB->IsVisible())
+            aOutputSize.Width() -= aVscrollSB->GetOptimalSize().Width();
         DrawRect( getGridRectangle(aOldPixel, aOutputSize) );
         SetLineColor( aLineCol );
         SetFillColor( aFillCol );
@@ -655,7 +655,7 @@ void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, bool bFocus )
     if( !bFocus )
     {
         // move selected item to top row if not in focus
-        aVscrollSB.SetThumbPos( nMapIndex / COLUMN_COUNT );
+        aVscrollSB->SetThumbPos( nMapIndex / COLUMN_COUNT );
         Invalidate();
     }
 }
@@ -691,8 +691,15 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl)
 
 SvxShowCharSet::~SvxShowCharSet()
 {
+    disposeOnce();
+}
+
+void SvxShowCharSet::dispose()
+{
     if ( m_pAccessible )
         ReleaseAccessible();
+    aVscrollSB.disposeAndClear();
+    Control::dispose();
 }
 
 void SvxShowCharSet::ReleaseAccessible()

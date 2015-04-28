@@ -127,7 +127,7 @@ namespace svt
 
         ImplInitSettings(true, true, true);
 
-        pCheckBoxPaint = new CheckBoxControl(&GetDataWindow());
+        pCheckBoxPaint = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
         pCheckBoxPaint->SetPaintTransparent( true );
         pCheckBoxPaint->SetBackground();
     }
@@ -183,6 +183,11 @@ namespace svt
 
     EditBrowseBox::~EditBrowseBox()
     {
+        disposeOnce();
+    }
+
+    void EditBrowseBox::dispose()
+    {
         if (nStartEvent)
             Application::RemoveUserEvent(nStartEvent);
         if (nEndEvent)
@@ -190,8 +195,10 @@ namespace svt
         if (nCellModifiedEvent)
             Application::RemoveUserEvent(nCellModifiedEvent);
 
-        delete pCheckBoxPaint;
-
+        pCheckBoxPaint.disposeAndClear();
+        m_pFocusWhileRequest.clear();
+        pHeader.clear();
+        BrowseBox::dispose();
     }
 
 
@@ -203,7 +210,7 @@ namespace svt
     }
 
 
-    BrowserHeader* EditBrowseBox::CreateHeaderBar(BrowseBox* pParent)
+    VclPtr<BrowserHeader> EditBrowseBox::CreateHeaderBar(BrowseBox* pParent)
     {
         pHeader = imp_CreateHeaderBar(pParent);
         if (!IsUpdateMode())
@@ -212,9 +219,9 @@ namespace svt
     }
 
 
-    BrowserHeader* EditBrowseBox::imp_CreateHeaderBar(BrowseBox* pParent)
+    VclPtr<BrowserHeader> EditBrowseBox::imp_CreateHeaderBar(BrowseBox* pParent)
     {
-        return new EditBrowserHeader(pParent);
+        return VclPtr<EditBrowserHeader>::Create(pParent);
     }
 
 
@@ -251,7 +258,7 @@ namespace svt
         if (IsEditing())
         {
             EnableAndShow();
-            if (!aController->GetWindow().HasFocus() && (m_pFocusWhileRequest == Application::GetFocusWindow()))
+            if (!aController->GetWindow().HasFocus() && (m_pFocusWhileRequest.get() == Application::GetFocusWindow()))
                 aController->GetWindow().GrabFocus();
         }
         return 0;

@@ -190,7 +190,7 @@ private:
     */
     ::boost::weak_ptr<ViewShell> mpWeakViewShell;
     /// This window contains the view.
-    ::sd::Window* mpWindow;
+    VclPtr<::sd::Window> mpWindow;
     /// The document on whose objects and pages this class operates.
     SdDrawDocument* mpDrawDocument;
 

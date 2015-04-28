@@ -51,19 +51,20 @@ namespace vcl
             GDIMetaFile         maMtf;
             Size                maOrigSize;
             Size                maPreviewSize;
-            VirtualDevice       maPageVDev;
+            VclPtr<VirtualDevice> maPageVDev;
             Bitmap              maPreviewBitmap;
-            OUString       maReplacementString;
-            OUString       maToolTipString;
+            OUString            maReplacementString;
+            OUString            maToolTipString;
             bool                mbGreyscale;
-            FixedLine           maHorzDim;
-            FixedLine           maVertDim;
+            VclPtr<FixedLine>   maHorzDim;
+            VclPtr<FixedLine>   maVertDim;
 
             void preparePreviewBitmap();
 
         public:
             PrintPreviewWindow( vcl::Window* pParent );
             virtual ~PrintPreviewWindow();
+            virtual void dispose() SAL_OVERRIDE;
 
             virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
             virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
@@ -86,7 +87,6 @@ namespace vcl
             void ImplInitSettings();
         public:
             ShowNupOrderWindow( vcl::Window* pParent );
-            virtual ~ShowNupOrderWindow();
 
             virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
@@ -106,31 +106,31 @@ namespace vcl
         class NUpTabPage
         {
         public:
-            RadioButton*                            mpPagesBtn;
-            RadioButton*                            mpBrochureBtn;
-            FixedText*                              mpPagesBoxTitleTxt;
-            ListBox*                                mpNupPagesBox;
+            VclPtr<RadioButton>                     mpPagesBtn;
+            VclPtr<RadioButton>                     mpBrochureBtn;
+            VclPtr<FixedText>                       mpPagesBoxTitleTxt;
+            VclPtr<ListBox>                         mpNupPagesBox;
 
             // controls for "Custom" page mode
-            FixedText*                              mpNupNumPagesTxt;
-            NumericField*                           mpNupColEdt;
-            FixedText*                              mpNupTimesTxt;
-            NumericField*                           mpNupRowsEdt;
-            FixedText*                              mpPageMarginTxt1;
-            MetricField*                            mpPageMarginEdt;
-            FixedText*                              mpPageMarginTxt2;
-            FixedText*                              mpSheetMarginTxt1;
-            MetricField*                            mpSheetMarginEdt;
-            FixedText*                              mpSheetMarginTxt2;
-            FixedText*                              mpNupOrientationTxt;
-            ListBox*                                mpNupOrientationBox;
+            VclPtr<FixedText>                       mpNupNumPagesTxt;
+            VclPtr<NumericField>                    mpNupColEdt;
+            VclPtr<FixedText>                       mpNupTimesTxt;
+            VclPtr<NumericField>                    mpNupRowsEdt;
+            VclPtr<FixedText>                       mpPageMarginTxt1;
+            VclPtr<MetricField>                     mpPageMarginEdt;
+            VclPtr<FixedText>                       mpPageMarginTxt2;
+            VclPtr<FixedText>                       mpSheetMarginTxt1;
+            VclPtr<MetricField>                     mpSheetMarginEdt;
+            VclPtr<FixedText>                       mpSheetMarginTxt2;
+            VclPtr<FixedText>                       mpNupOrientationTxt;
+            VclPtr<ListBox>                         mpNupOrientationBox;
 
             // page order ("left to right, then down")
-            FixedText*                              mpNupOrderTxt;
-            ListBox*                                mpNupOrderBox;
-            ShowNupOrderWindow*                     mpNupOrderWin;
+            VclPtr<FixedText>                       mpNupOrderTxt;
+            VclPtr<ListBox>                         mpNupOrderBox;
+            VclPtr<ShowNupOrderWindow>              mpNupOrderWin;
             /// border around each page
-            CheckBox*                               mpBorderCB;
+            VclPtr<CheckBox>                        mpBorderCB;
 
             void setupLayout();
 
@@ -145,18 +145,18 @@ namespace vcl
         class JobTabPage
         {
         public:
-            ListBox*                                mpPrinters;
-            FixedText*                              mpStatusTxt;
-            FixedText*                              mpLocationTxt;
-            FixedText*                              mpCommentTxt;
+            VclPtr<ListBox>                         mpPrinters;
+            VclPtr<FixedText>                       mpStatusTxt;
+            VclPtr<FixedText>                       mpLocationTxt;
+            VclPtr<FixedText>                       mpCommentTxt;
 
-            PushButton*                             mpSetupButton;
+            VclPtr<PushButton>                      mpSetupButton;
 
-            FixedLine*                              mpCopySpacer;
-            NumericField*                           mpCopyCountField;
-            CheckBox*                               mpCollateBox;
-            FixedImage*                             mpCollateImage;
-            CheckBox*                               mpReverseOrderBox;
+            VclPtr<FixedLine>                       mpCopySpacer;
+            VclPtr<NumericField>                    mpCopyCountField;
+            VclPtr<CheckBox>                        mpCollateBox;
+            VclPtr<FixedImage>                      mpCollateImage;
+            VclPtr<CheckBox>                        mpReverseOrderBox;
 
             Image                                   maCollateImg;
             Image                                   maNoCollateImg;
@@ -172,9 +172,9 @@ namespace vcl
         class OutputOptPage
         {
         public:
-            CheckBox*                           mpToFileBox;
-            CheckBox*                           mpCollateSingleJobsBox;
-            CheckBox*                           mpPapersizeFromSetup;
+            VclPtr<CheckBox>                    mpToFileBox;
+            VclPtr<CheckBox>                    mpCollateSingleJobsBox;
+            VclPtr<CheckBox>                    mpPapersizeFromSetup;
 
             OutputOptPage( VclBuilder* );
 
@@ -185,31 +185,31 @@ namespace vcl
         VclBuilder*                             mpCustomOptionsUIBuilder;
 
         std::shared_ptr<PrinterController>      maPController;
-        TabControl*                             mpTabCtrl;
+        VclPtr<TabControl>                      mpTabCtrl;
         NUpTabPage                              maNUpPage;
         JobTabPage                              maJobPage;
         OutputOptPage                           maOptionsPage;
-        PrintPreviewWindow*                     mpPreviewWindow;
-        NumericField*                           mpPageEdit;
+        VclPtr<PrintPreviewWindow>              mpPreviewWindow;
+        VclPtr<NumericField>                    mpPageEdit;
 
-        FixedText*                              mpNumPagesText;
-        PushButton*                             mpBackwardBtn;
-        PushButton*                             mpForwardBtn;
+        VclPtr<FixedText>                       mpNumPagesText;
+        VclPtr<PushButton>                      mpBackwardBtn;
+        VclPtr<PushButton>                      mpForwardBtn;
 
-        OKButton*                               mpOKButton;
-        CancelButton*                           mpCancelButton;
-        HelpButton*                             mpHelpButton;
+        VclPtr<OKButton>                        mpOKButton;
+        VclPtr<CancelButton>                    mpCancelButton;
+        VclPtr<HelpButton>                      mpHelpButton;
 
-        OUString                           maPageStr;
-        OUString                           maNoPageStr;
+        OUString                                maPageStr;
+        OUString                                maNoPageStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
-        std::map< vcl::Window*, OUString >      maControlToPropertyMap;
-        std::map< OUString, std::vector< vcl::Window* > >
+        std::map< VclPtr<vcl::Window>, OUString >      maControlToPropertyMap;
+        std::map< OUString, std::vector< VclPtr<vcl::Window> > >
                                                 maPropertyToWindowMap;
-        std::map< vcl::Window*, sal_Int32 >          maControlToNumValMap;
-        std::set< OUString >               maReverseDependencySet;
+        std::map< VclPtr<vcl::Window>, sal_Int32 >          maControlToNumValMap;
+        std::set< OUString >                    maReverseDependencySet;
 
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
@@ -258,6 +258,7 @@ namespace vcl
     public:
         PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         bool isPrintToFile();
         bool isCollate();
@@ -270,9 +271,9 @@ namespace vcl
     class PrintProgressDialog : public ModelessDialog
     {
         OUString            maStr;
-        FixedText*          mpText;
-        ProgressBar*        mpProgress;
-        CancelButton*       mpButton;
+        VclPtr<FixedText>   mpText;
+        VclPtr<ProgressBar> mpProgress;
+        VclPtr<CancelButton> mpButton;
 
         bool                mbCanceled;
         sal_Int32           mnCur;
@@ -282,7 +283,8 @@ namespace vcl
 
     public:
         PrintProgressDialog(vcl::Window* i_pParent, int i_nMax);
-
+        virtual ~PrintProgressDialog();
+        virtual void dispose() SAL_OVERRIDE;
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent, int i_nMax = -1 );
         void tick();

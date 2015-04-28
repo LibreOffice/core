@@ -63,7 +63,7 @@ ScFunctionChildWindow::ScFunctionChildWindow( vcl::Window* pParentP,
                                     SfxChildWinInfo* pInfo ) :
     SfxChildWindow( pParentP, nId )
 {
-    ScFunctionDockWin* pWin = new ScFunctionDockWin( pBindings, this,
+    VclPtr<ScFunctionDockWin> pWin = VclPtr<ScFunctionDockWin>::Create( pBindings, this,
                                         pParentP, ScResId( FID_FUNCTION_BOX ) );
     pWindow = pWin;
 
@@ -90,12 +90,12 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
                 SfxChildWindow *pCW, vcl::Window* pParent, const ResId& rResId ) :
 
     SfxDockingWindow( pBindingsP, pCW, pParent, rResId ),
-    aPrivatSplit    ( this, ResId( FT_SPLIT, *rResId.GetResMgr()  ),SC_SPLIT_VERT),
-    aCatBox         ( this, ResId( CB_CAT, *rResId.GetResMgr()  ) ),
-    aFuncList       ( this, ResId( LB_FUNC, *rResId.GetResMgr()  ) ),
-    aDDFuncList     ( this, ResId( DDLB_FUNC, *rResId.GetResMgr()  ) ),
-    aInsertButton   ( this, ResId( IMB_INSERT, *rResId.GetResMgr()  ) ),
-    aFiFuncDesc     ( this, ResId( FI_FUNCDESC, *rResId.GetResMgr()  ) ),
+    aPrivatSplit    ( VclPtr<ScPrivatSplit>::Create( this, ResId( FT_SPLIT, *rResId.GetResMgr()  ),SC_SPLIT_VERT) ),
+    aCatBox         ( VclPtr<ListBox>::Create( this, ResId( CB_CAT, *rResId.GetResMgr() ) ) ),
+    aFuncList       ( VclPtr<ListBox>::Create( this, ResId( LB_FUNC, *rResId.GetResMgr() ) ) ),
+    aDDFuncList     ( VclPtr<ListBox>::Create( this, ResId( DDLB_FUNC, *rResId.GetResMgr() ) ) ),
+    aInsertButton   ( VclPtr<ImageButton>::Create( this, ResId( IMB_INSERT, *rResId.GetResMgr() ) ) ),
+    aFiFuncDesc     ( VclPtr<FixedText>::Create( this, ResId( FI_FUNCDESC, *rResId.GetResMgr() ) ) ),
     aOldSize        (0,0),
     pFuncDesc       (NULL)
 {
@@ -111,45 +111,45 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     else
         eSfxNewAlignment=SfxChildAlignment::RIGHT;
     eSfxOldAlignment=eSfxNewAlignment;
-    aFiFuncDesc.SetUpdateMode(true);
-    pAllFuncList=&aFuncList;
-    aDDFuncList.Disable();
-    aDDFuncList.Hide();
+    aFiFuncDesc->SetUpdateMode(true);
+    pAllFuncList=aFuncList.get();
+    aDDFuncList->Disable();
+    aDDFuncList->Hide();
     nArgs=0;
     nDockMode=0;
     bSizeFlag=false;
-    aCatBox.SetDropDownLineCount(9);
-    vcl::Font aFont=aFiFuncDesc.GetFont();
+    aCatBox->SetDropDownLineCount(9);
+    vcl::Font aFont=aFiFuncDesc->GetFont();
     aFont.SetColor(Color(COL_BLACK));
-    aFiFuncDesc.SetFont(aFont);
-    aFiFuncDesc.SetBackground( GetBackground() );       //! never transparent?
+    aFiFuncDesc->SetFont(aFont);
+    aFiFuncDesc->SetBackground( GetBackground() );       //! never transparent?
 
     Link aLink=LINK( this, ScFunctionDockWin, SelHdl);
-    aCatBox.SetSelectHdl(aLink);
-    aFuncList.SetSelectHdl(aLink);
-    aDDFuncList.SetSelectHdl(aLink);
+    aCatBox->SetSelectHdl(aLink);
+    aFuncList->SetSelectHdl(aLink);
+    aDDFuncList->SetSelectHdl(aLink);
 
     Link a2Link=LINK( this, ScFunctionDockWin, SetSelectionHdl);
-    aFuncList.SetDoubleClickHdl(a2Link);
-    aDDFuncList.SetSelectHdl(aLink);
-    aInsertButton.SetClickHdl(a2Link);
+    aFuncList->SetDoubleClickHdl(a2Link);
+    aDDFuncList->SetSelectHdl(aLink);
+    aInsertButton->SetClickHdl(a2Link);
 
     Link a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
-    aPrivatSplit.SetCtrModifiedHdl(a3Link);
+    aPrivatSplit->SetCtrModifiedHdl(a3Link);
     StartListening( *pBindingsP, true );
 
-    Point aTopLeft=aCatBox.GetPosPixel();
+    Point aTopLeft=aCatBox->GetPosPixel();
     OUString aString("ww");
-    Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
+    Size aTxtSize( aFiFuncDesc->GetTextWidth(aString), aFiFuncDesc->GetTextHeight() );
     nMinWidth=aTxtSize.Width()+aTopLeft.X()
-            +2*aFuncList.GetPosPixel().X();
+            +2*aFuncList->GetPosPixel().X();
     nMinHeight=19*aTxtSize.Height();
-    aCatBox.SelectEntryPos(0);
+    aCatBox->SelectEntryPos(0);
 
-    Range aYRange(3*aTxtSize.Height()+aFuncList.GetPosPixel().Y(),
+    Range aYRange(3*aTxtSize.Height()+aFuncList->GetPosPixel().Y(),
                 GetOutputSizePixel().Height()-2*aTxtSize.Height());
-    aPrivatSplit.SetYRange(aYRange);
-    SelHdl(&aCatBox);
+    aPrivatSplit->SetYRange(aYRange);
+    SelHdl(aCatBox.get());
     bInit = true;
 }
 
@@ -169,7 +169,20 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 
 ScFunctionDockWin::~ScFunctionDockWin()
 {
+    disposeOnce();
+}
+
+void ScFunctionDockWin::dispose()
+{
     EndListening( GetBindings() );
+    aPrivatSplit.disposeAndClear();
+    aCatBox.disposeAndClear();
+    aFuncList.disposeAndClear();
+    aDDFuncList.disposeAndClear();
+    aInsertButton.disposeAndClear();
+    aFiFuncDesc.disposeAndClear();
+    pAllFuncList.clear();
+    SfxDockingWindow::dispose();
 }
 
 /*************************************************************************
@@ -192,7 +205,7 @@ void ScFunctionDockWin::InitLRUList()
     ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
     pFuncMgr->fillLastRecentlyUsedFunctions(aLRUList);
 
-    sal_Int32  nSelPos   = aCatBox.GetSelectEntryPos();
+    sal_Int32  nSelPos   = aCatBox->GetSelectEntryPos();
 
     if(nSelPos == 0)
         UpdateFunctionList();
@@ -254,18 +267,18 @@ void ScFunctionDockWin::SetSize()
                         if(nDockMode!=nNewDockMode)
                         {
                             nDockMode=nNewDockMode;
-                            nSelEntry=aFuncList.GetSelectEntryPos();
-                            aFuncList.Clear();
-                            aFiFuncDesc.SetPosPixel(aFuncList.GetPosPixel());
-                            aDDFuncList.Enable();
-                            aDDFuncList.Show();
-                            aPrivatSplit.Disable();
-                            aPrivatSplit.Hide();
-                            aFuncList.Disable();
-                            aFuncList.Hide();
-                            pAllFuncList=&aDDFuncList;
-                            SelHdl(&aCatBox);
-                            aDDFuncList.SelectEntryPos(nSelEntry);
+                            nSelEntry=aFuncList->GetSelectEntryPos();
+                            aFuncList->Clear();
+                            aFiFuncDesc->SetPosPixel(aFuncList->GetPosPixel());
+                            aDDFuncList->Enable();
+                            aDDFuncList->Show();
+                            aPrivatSplit->Disable();
+                            aPrivatSplit->Hide();
+                            aFuncList->Disable();
+                            aFuncList->Hide();
+                            pAllFuncList=aDDFuncList.get();
+                            SelHdl(aCatBox.get());
+                            aDDFuncList->SelectEntryPos(nSelEntry);
                         }
                         break;
 
@@ -273,17 +286,17 @@ void ScFunctionDockWin::SetSize()
                         if(nDockMode!=nNewDockMode)
                         {
                             nDockMode=nNewDockMode;
-                            nSelEntry=aDDFuncList.GetSelectEntryPos();
-                            aDDFuncList.Clear();
-                            aDDFuncList.Disable();
-                            aDDFuncList.Hide();
-                            aPrivatSplit.Enable();
-                            aPrivatSplit.Show();
-                            aFuncList.Enable();
-                            aFuncList.Show();
-                            pAllFuncList=&aFuncList;
-                            SelHdl(&aCatBox);
-                            aFuncList.SelectEntryPos(nSelEntry);
+                            nSelEntry=aDDFuncList->GetSelectEntryPos();
+                            aDDFuncList->Clear();
+                            aDDFuncList->Disable();
+                            aDDFuncList->Hide();
+                            aPrivatSplit->Enable();
+                            aPrivatSplit->Show();
+                            aFuncList->Enable();
+                            aFuncList->Show();
+                            pAllFuncList=aFuncList.get();
+                            SelHdl(aCatBox.get());
+                            aFuncList->SelectEntryPos(nSelEntry);
                         }
                         break;
     }
@@ -324,11 +337,11 @@ void ScFunctionDockWin::SetLeftRightSize()
         aDiffSize.Height()-=aNewSize.Height();
 
         OUString aString("ww");
-        Size aTxtSize( aFuncList.GetTextWidth(aString), aFuncList.GetTextHeight() );
+        Size aTxtSize( aFuncList->GetTextWidth(aString), aFuncList->GetTextHeight() );
 
-        Range aYRange(3*aTxtSize.Height()+aFuncList.GetPosPixel().Y(),
+        Range aYRange(3*aTxtSize.Height()+aFuncList->GetPosPixel().Y(),
                     GetOutputSizePixel().Height()-2*aTxtSize.Height());
-        aPrivatSplit.SetYRange(aYRange);
+        aPrivatSplit->SetYRange(aYRange);
 
         if(aOldSize.Width()!=aNewSize.Width())
             SetMyWidthLeRi(aNewSize);
@@ -396,23 +409,23 @@ void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 {
     if((sal_uLong)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
 
-    Size aCDSize=aCatBox.GetSizePixel();
-    Size aFLSize=aFuncList.GetSizePixel();
-    Size aSplitterSize=aPrivatSplit.GetSizePixel();
-    Size aFDSize=aFiFuncDesc.GetSizePixel();
+    Size aCDSize=aCatBox->GetSizePixel();
+    Size aFLSize=aFuncList->GetSizePixel();
+    Size aSplitterSize=aPrivatSplit->GetSizePixel();
+    Size aFDSize=aFiFuncDesc->GetSizePixel();
 
-    Point aCDTopLeft=aCatBox.GetPosPixel();
-    Point aFLTopLeft=aFuncList.GetPosPixel();
+    Point aCDTopLeft=aCatBox->GetPosPixel();
+    Point aFLTopLeft=aFuncList->GetPosPixel();
 
     aCDSize.Width()=aNewSize.Width()-aCDTopLeft.X()-aFLTopLeft.X();
     aFLSize.Width()=aNewSize.Width()-2*aFLTopLeft.X();
     aFDSize.Width()=aFLSize.Width();
     aSplitterSize.Width()=aFLSize.Width();
 
-    aCatBox.SetSizePixel(aCDSize);
-    aFuncList.SetSizePixel(aFLSize);
-    aPrivatSplit.SetSizePixel(aSplitterSize);
-    aFiFuncDesc.SetSizePixel(aFDSize);
+    aCatBox->SetSizePixel(aCDSize);
+    aFuncList->SetSizePixel(aFLSize);
+    aPrivatSplit->SetSizePixel(aSplitterSize);
+    aFiFuncDesc->SetSizePixel(aFDSize);
 }
 
 /*************************************************************************
@@ -434,18 +447,18 @@ void ScFunctionDockWin::SetMyHeightLeRi(Size &aNewSize)
 {
     if((sal_uLong)aNewSize.Height()<nMinHeight) aNewSize.Height()=nMinHeight;
 
-    Size aFLSize=aFuncList.GetSizePixel();
-    Size aSplitterSize=aPrivatSplit.GetSizePixel();
-    Size aFDSize=aFiFuncDesc.GetSizePixel();
+    Size aFLSize=aFuncList->GetSizePixel();
+    Size aSplitterSize=aPrivatSplit->GetSizePixel();
+    Size aFDSize=aFiFuncDesc->GetSizePixel();
 
-    Point aFLTopLeft=aFuncList.GetPosPixel();
-    Point aSplitterTopLeft=aPrivatSplit.GetPosPixel();
-    Point aFDTopLeft=aFiFuncDesc.GetPosPixel();
+    Point aFLTopLeft=aFuncList->GetPosPixel();
+    Point aSplitterTopLeft=aPrivatSplit->GetPosPixel();
+    Point aFDTopLeft=aFiFuncDesc->GetPosPixel();
 
-    long nTxtHeight = aFuncList.GetTextHeight();
+    long nTxtHeight = aFuncList->GetTextHeight();
 
     short nY=(short)(3*nTxtHeight+
-        aFuncList.GetPosPixel().Y()+aSplitterSize.Height());
+        aFuncList->GetPosPixel().Y()+aSplitterSize.Height());
 
     aFDTopLeft.Y()=aNewSize.Height()-aFDSize.Height()-4;
     if(nY>aFDTopLeft.Y())
@@ -456,10 +469,10 @@ void ScFunctionDockWin::SetMyHeightLeRi(Size &aNewSize)
     aSplitterTopLeft.Y()=aFDTopLeft.Y()-aSplitterSize.Height()-1;
     aFLSize.Height()=aSplitterTopLeft.Y()-aFLTopLeft.Y()-1;
 
-    aFuncList.SetSizePixel(aFLSize);
-    aPrivatSplit.SetPosPixel(aSplitterTopLeft);
-    aFiFuncDesc.SetPosPixel(aFDTopLeft);
-    aFiFuncDesc.SetSizePixel(aFDSize);
+    aFuncList->SetSizePixel(aFLSize);
+    aPrivatSplit->SetPosPixel(aSplitterTopLeft);
+    aFiFuncDesc->SetPosPixel(aFDTopLeft);
+    aFiFuncDesc->SetSizePixel(aFDSize);
 
 }
 
@@ -483,13 +496,13 @@ void ScFunctionDockWin::SetMyWidthToBo(Size &aNewSize)
 {
     if((sal_uLong)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
 
-    Size aCDSize=aCatBox.GetSizePixel();
-    Size aDdFLSize=aDDFuncList.GetSizePixel();
-    Size aFDSize=aFiFuncDesc.GetSizePixel();
+    Size aCDSize=aCatBox->GetSizePixel();
+    Size aDdFLSize=aDDFuncList->GetSizePixel();
+    Size aFDSize=aFiFuncDesc->GetSizePixel();
 
-    Point aCDTopLeft=aCatBox.GetPosPixel();
-    Point aDdFLTopLeft=aDDFuncList.GetPosPixel();
-    Point aFDTopLeft=aFiFuncDesc.GetPosPixel();
+    Point aCDTopLeft=aCatBox->GetPosPixel();
+    Point aDdFLTopLeft=aDDFuncList->GetPosPixel();
+    Point aFDTopLeft=aFiFuncDesc->GetPosPixel();
 
     aCDSize.Width()=aDdFLTopLeft.X()-aFDTopLeft.X()-aCDTopLeft.X();
     aDdFLTopLeft.X()=aCDSize.Width()+aCDTopLeft.X()+aFDTopLeft.X();
@@ -498,10 +511,10 @@ void ScFunctionDockWin::SetMyWidthToBo(Size &aNewSize)
 
     aFDSize.Width()=aNewSize.Width()-2*aFDTopLeft.X();
 
-    aDDFuncList.SetPosPixel(aDdFLTopLeft);
-    aDDFuncList.SetSizePixel(aDdFLSize);
-    aCatBox.SetSizePixel(aCDSize);
-    aFiFuncDesc.SetSizePixel(aFDSize);
+    aDDFuncList->SetPosPixel(aDdFLTopLeft);
+    aDDFuncList->SetSizePixel(aDdFLSize);
+    aCatBox->SetSizePixel(aCDSize);
+    aFiFuncDesc->SetSizePixel(aFDSize);
 }
 
 /*************************************************************************
@@ -524,12 +537,12 @@ void ScFunctionDockWin::SetMyHeightToBo(Size &aNewSize)
 {
     if((sal_uLong)aNewSize.Height()<nMinHeight) aNewSize.Height()=nMinHeight;
 
-    Size aFDSize=aFiFuncDesc.GetSizePixel();
+    Size aFDSize=aFiFuncDesc->GetSizePixel();
 
-    Point aFDTopLeft=aFiFuncDesc.GetPosPixel();
-    Point aCBTopLeft=aCatBox.GetPosPixel();
+    Point aFDTopLeft=aFiFuncDesc->GetPosPixel();
+    Point aCBTopLeft=aCatBox->GetPosPixel();
     aFDSize.Height()=aNewSize.Height()-aFDTopLeft.Y()-aCBTopLeft.Y();
-    aFiFuncDesc.SetSizePixel(aFDSize);
+    aFiFuncDesc->SetSizePixel(aFDSize);
 
 }
 
@@ -549,7 +562,7 @@ void ScFunctionDockWin::SetMyHeightToBo(Size &aNewSize)
 
 void ScFunctionDockWin::SetDescription()
 {
-    aFiFuncDesc.SetText( EMPTY_OUSTRING );
+    aFiFuncDesc->SetText( EMPTY_OUSTRING );
     const ScFuncDesc* pDesc =
              static_cast<const ScFuncDesc*>(pAllFuncList->GetEntryData(
                     pAllFuncList->GetSelectEntryPos() ));
@@ -580,10 +593,10 @@ void ScFunctionDockWin::SetDescription()
 
         aBuf.append(*pDesc->pFuncDesc);
 
-        aFiFuncDesc.SetText(aBuf.makeStringAndClear());
-        aFiFuncDesc.StateChanged(StateChangedType::TEXT);
-        aFiFuncDesc.Invalidate();
-        aFiFuncDesc.Update();
+        aFiFuncDesc->SetText(aBuf.makeStringAndClear());
+        aFiFuncDesc->StateChanged(StateChangedType::TEXT);
+        aFiFuncDesc->Invalidate();
+        aFiFuncDesc->Update();
 
     }
  }
@@ -641,7 +654,7 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
                                 SfxChildAlignment aChildAlign)
 {
     OUString aString("ww");
-    Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
+    Size aTxtSize( aFiFuncDesc->GetTextWidth(aString), aFiFuncDesc->GetTextHeight() );
     if(!bInit)
     {
         eSfxOldAlignment=eSfxNewAlignment;
@@ -671,14 +684,14 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
 
         case SfxChildAlignment::NOALIGNMENT:
 
-                        aString = aCatBox.GetEntry(0);
+                        aString = aCatBox->GetEntry(0);
                         aString += "www";
-                        aTxtSize = Size( aFiFuncDesc.GetTextWidth(aString),
-                                            aFiFuncDesc.GetTextHeight() );
+                        aTxtSize = Size( aFiFuncDesc->GetTextWidth(aString),
+                                            aFiFuncDesc->GetTextHeight() );
                         // fall-through
-        default:        Point aTopLeft=aCatBox.GetPosPixel();
+        default:        Point aTopLeft=aCatBox->GetPosPixel();
                         nMinWidth=aTxtSize.Width()+aTopLeft.X()
-                                +2*aFuncList.GetPosPixel().X();
+                                +2*aFuncList->GetPosPixel().X();
                         nMinHeight=19*aTxtSize.Height();
 
                         break;
@@ -733,7 +746,7 @@ void ScFunctionDockWin::Resize()
 
 void ScFunctionDockWin::UpdateFunctionList()
 {
-    sal_Int32  nSelPos   = aCatBox.GetSelectEntryPos();
+    sal_Int32  nSelPos   = aCatBox->GetSelectEntryPos();
     sal_Int32  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? (nSelPos-1) : 0;
 
@@ -912,13 +925,13 @@ void ScFunctionDockWin::DoEnter()
 
 IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 {
-    if ( pLb == &aCatBox)
+    if ( pLb == aCatBox.get() )
     {
         UpdateFunctionList();
         SetDescription();
     }
 
-    if ( pLb == &aFuncList||pLb == &aDDFuncList)
+    if ( pLb == aFuncList.get() || pLb == aDDFuncList.get() )
     {
         SetDescription();
     }
@@ -944,8 +957,8 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 
 IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
 {
-    if (static_cast<ImageButton *>(pCtrl) == &aInsertButton ||
-        static_cast<ListBox *>(pCtrl) == &aFuncList)
+    if (static_cast<ImageButton *>(pCtrl) == aInsertButton.get() ||
+        static_cast<ListBox *>(pCtrl) == aFuncList.get())
     {
         DoEnter();          // Uebernimmt die Eingabe
     }
@@ -970,19 +983,19 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
 
 IMPL_LINK( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit*, pCtrl )
 {
-    if (pCtrl == &aPrivatSplit)
+    if (pCtrl == aPrivatSplit.get())
     {
-        short nDeltaY=aPrivatSplit.GetDeltaY();
-        Size aFLSize=aFuncList.GetSizePixel();
-        Size aFDSize=aFiFuncDesc.GetSizePixel();
-        Point aFDTopLeft=aFiFuncDesc.GetPosPixel();
+        short nDeltaY=aPrivatSplit->GetDeltaY();
+        Size aFLSize=aFuncList->GetSizePixel();
+        Size aFDSize=aFiFuncDesc->GetSizePixel();
+        Point aFDTopLeft=aFiFuncDesc->GetPosPixel();
 
         aFLSize.Height()+=nDeltaY;
         aFDSize.Height()-=nDeltaY;
         aFDTopLeft.Y()+=nDeltaY;
-        aFuncList.SetSizePixel(aFLSize);
-        aFiFuncDesc.SetPosPixel(aFDTopLeft);
-        aFiFuncDesc.SetSizePixel(aFDSize);
+        aFuncList->SetSizePixel(aFLSize);
+        aFiFuncDesc->SetPosPixel(aFDTopLeft);
+        aFiFuncDesc->SetSizePixel(aFDSize);
     }
 
     return 0;
@@ -1040,13 +1053,13 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
 
     if ( !aStr.isEmpty())
     {
-        aSplitterInitPos = aPrivatSplit.GetPosPixel();
+        aSplitterInitPos = aPrivatSplit->GetPosPixel();
         aSplitterInitPos.Y() = (sal_uInt16) aStr.toInt32();
         sal_Int32 n1 = aStr.indexOf(';');
         aStr = aStr.copy( n1+1 );
         sal_Int32 nSelPos = aStr.toInt32();
-        aCatBox.SelectEntryPos(nSelPos);
-        SelHdl(&aCatBox);
+        aCatBox->SelectEntryPos(nSelPos);
+        SelHdl(aCatBox.get());
 
         //  if the window has already been shown (from SfxDockingWindow::Initialize if docked),
         //  set the splitter position now, otherwise it is set in StateChanged with type INITSHOW
@@ -1058,17 +1071,17 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
 void ScFunctionDockWin::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxDockingWindow::FillInfo(rInfo);
-    Point aPoint=aPrivatSplit.GetPosPixel();
+    Point aPoint=aPrivatSplit->GetPosPixel();
     rInfo.aExtraString += "ScFuncList:(" +
                           OUString::number(aPoint.Y()) + ";" +
-                          OUString::number(aCatBox.GetSelectEntryPos()) + ")";
+                          OUString::number(aCatBox->GetSelectEntryPos()) + ")";
 }
 
 void ScFunctionDockWin::UseSplitterInitPos()
 {
-    if ( IsVisible() && aPrivatSplit.IsEnabled() && aSplitterInitPos != Point() )
+    if ( IsVisible() && aPrivatSplit->IsEnabled() && aSplitterInitPos != Point() )
     {
-        aPrivatSplit.MoveSplitTo(aSplitterInitPos);
+        aPrivatSplit->MoveSplitTo(aSplitterInitPos);
         aSplitterInitPos = Point();     // use only once
     }
 }

@@ -39,6 +39,17 @@ FmShowColsDialog::FmShowColsDialog(vcl::Window* pParent)
     m_pOK->SetClickHdl( LINK( this, FmShowColsDialog, OnClickedOk ) );
 }
 
+FmShowColsDialog::~FmShowColsDialog()
+{
+    disposeOnce();
+}
+
+void FmShowColsDialog::dispose()
+{
+    m_pList.clear();
+    m_pOK.clear();
+    ModalDialog::dispose();
+}
 
 IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
 {

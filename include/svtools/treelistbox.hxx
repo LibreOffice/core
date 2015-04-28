@@ -373,6 +373,7 @@ public:
     SvTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
     SvTreeListBox( vcl::Window* pParent, const ResId& rResId );
     virtual ~SvTreeListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     SvTreeList* GetModel() const
     {
@@ -385,11 +386,11 @@ public:
 
     sal_uLong GetEntryCount() const
     {
-        return pModel->GetEntryCount();
+        return pModel ? pModel->GetEntryCount() : 0;
     }
     SvTreeListEntry* First() const
     {
-        return pModel->First();
+        return pModel ? pModel->First() : NULL;
     }
     SvTreeListEntry* Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth = 0 ) const
     {
@@ -401,7 +402,7 @@ public:
     }
     SvTreeListEntry* Last() const
     {
-        return pModel->Last();
+        return pModel ? pModel->Last() : NULL;
     }
 
     SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
@@ -820,7 +821,7 @@ public:
 struct SvLBoxDDInfo
 {
     Application*    pApp;
-    SvTreeListBox*         pSource;
+    VclPtr<SvTreeListBox>         pSource;
     SvTreeListEntry*    pDDStartEntry;
     // Relative position in the Entry at DragBeginn (IconView)
     long            nMouseRelX,nMouseRelY;
@@ -833,7 +834,7 @@ class SvInplaceEdit2
     Accelerator aAccReturn;
     Accelerator aAccEscape;
     Idle        aIdle;
-    Edit*       pEdit;
+    VclPtr<Edit>  pEdit;
     bool        bCanceled;
     bool        bAlreadyInCallBack;
 

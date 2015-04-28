@@ -80,12 +80,12 @@ class ImplDockingWindowWrapper
 private:
 
     // the original 'Docking'window
-    vcl::Window *mpDockingWindow;
+    VclPtr<vcl::Window>    mpDockingWindow;
 
     // the original DockingWindow members
-    FloatingWindow* mpFloatWin;
-    vcl::Window*         mpOldBorderWin;
-    vcl::Window*         mpParent;
+    VclPtr<FloatingWindow> mpFloatWin;
+    VclPtr<vcl::Window>    mpOldBorderWin;
+    VclPtr<vcl::Window>    mpParent;
     Point           maFloatPos;
     Point           maDockPos;
     Point           maMouseOff;
@@ -225,8 +225,8 @@ class VCL_DLLPUBLIC DockingWindow
 {
     class   ImplData;
 private:
-    FloatingWindow* mpFloatWin;
-    vcl::Window*         mpOldBorderWin;
+    VclPtr<FloatingWindow> mpFloatWin;
+    VclPtr<vcl::Window>    mpOldBorderWin;
     ImplData*       mpImplData;
     Point           maFloatPos;
     Point           maDockPos;
@@ -261,7 +261,7 @@ private:
                     mbIsCalculatingInitialLayoutSize:1,
                     mbInitialLayoutDone:1;
 
-    vcl::Window*    mpDialogParent;
+    VclPtr<vcl::Window>  mpDialogParent;
 
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
@@ -299,6 +299,7 @@ public:
     DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual ~DockingWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    StartDocking();
     virtual bool    Docking( const Point& rPos, Rectangle& rRect );

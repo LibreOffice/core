@@ -22,6 +22,9 @@
 #include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
+#include <svx/sidebar/PopupContainer.hxx>
+#include <svx/sidebar/PopupControl.hxx>
 
 #include <boost/function.hpp>
 
@@ -29,9 +32,6 @@ namespace vcl { class Window; }
 class ToolBox;
 
 namespace svx { namespace sidebar {
-
-class PopupContainer;
-class PopupControl;
 
 /** A wrapper around a PopupContainer and a PopupControl object.
     Usually used as drop down for a toolbox.  Use Show() to start
@@ -76,7 +76,7 @@ public :
     void SetPopupModeEndHandler (const ::boost::function<void()>& rCallback);
 
 protected:
-    std::unique_ptr<PopupControl> mxControl;
+    VclPtr<PopupControl> mxControl;
 
     /** Make sure that both PopupContainer and PopupControl objects
         exist.  Calls the maControlCreator functor if necessary.
@@ -89,11 +89,11 @@ protected:
     void CreateContainerAndControl();
 
 private:
-    vcl::Window* mpParent;
-    ::boost::function<PopupControl*(PopupContainer*)> maControlCreator;
+    VclPtr<vcl::Window> mpParent;
+    ::boost::function<VclPtr<PopupControl>(PopupContainer*)> maControlCreator;
     ::boost::function<void()> maPopupModeEndCallback;
     const ::rtl::OUString msAccessibleName;
-    std::unique_ptr<PopupContainer> mxContainer;
+    VclPtr<PopupContainer> mxContainer;
 
     DECL_LINK(PopupModeEndHandler, void*);
 };

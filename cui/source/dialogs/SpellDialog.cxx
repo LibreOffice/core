@@ -246,17 +246,43 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
 
 SpellDialog::~SpellDialog()
 {
-    // save possibly modified user-dictionaries
-    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
-    if (xDicList.is())
-    {
-        SaveDictionaries( xDicList );
-    }
-
-    delete pImpl;
+    disposeOnce();
 }
 
+void SpellDialog::dispose()
+{
+    if (pImpl)
+    {
+        // save possibly modified user-dictionaries
+        Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+        if (xDicList.is())
+            SaveDictionaries( xDicList );
 
+        delete pImpl;
+        pImpl = NULL;
+    }
+    m_pLanguageFT.clear();
+    m_pLanguageLB.clear();
+    m_pExplainFT.clear();
+    m_pExplainLink.clear();
+    m_pNotInDictFT.clear();
+    m_pSentenceED.clear();
+    m_pSuggestionFT.clear();
+    m_pSuggestionLB.clear();
+    m_pIgnorePB.clear();
+    m_pIgnoreAllPB.clear();
+    m_pIgnoreRulePB.clear();
+    m_pAddToDictPB.clear();
+    m_pAddToDictMB.clear();
+    m_pChangePB.clear();
+    m_pChangeAllPB.clear();
+    m_pAutoCorrPB.clear();
+    m_pCheckGrammarCB.clear();
+    m_pOptionsPB.clear();
+    m_pUndoPB.clear();
+    m_pClosePB.clear();
+    SfxModelessDialog::dispose();
+}
 
 void SpellDialog::Init_Impl()
 {
@@ -497,10 +523,10 @@ void SpellDialog::StartSpellOptDlg_Impl()
     };
     SfxItemSet aSet( SfxGetpApp()->GetPool(), aSpellInfos);
     aSet.Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
-    boost::scoped_ptr<SfxSingleTabDialog> pDlg(
-        new SfxSingleTabDialog(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui"));
-    SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), &aSet );
-    static_cast<SvxLinguTabPage*>(pPage)->HideGroups( GROUP_MODULES );
+    VclPtr<SfxSingleTabDialog> pDlg(
+        VclPtr<SfxSingleTabDialog>::Create(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui"));
+    VclPtr<SfxTabPage> pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), &aSet );
+    static_cast<SvxLinguTabPage*>(pPage.get())->HideGroups( GROUP_MODULES );
     pDlg->SetTabPage( pPage );
     if(RET_OK == pDlg->Execute())
     {
@@ -1199,9 +1225,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSentenceEditWindow(vcl
 }
 
 
-SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
-{
-}
 /*-------------------------------------------------------------------------
     The selection before inputting a key may have a range or not
     and it may be inside or outside of field or error attributes.
@@ -2032,9 +2055,9 @@ IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        MessageDialog aErrorBox(NULL, msg);
-        aErrorBox.SetText(sTitle);
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
+        aErrorBox->SetText(sTitle);
+        aErrorBox->Execute();
     }
 
     return 1;

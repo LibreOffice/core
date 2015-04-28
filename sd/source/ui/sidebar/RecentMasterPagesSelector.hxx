@@ -30,7 +30,7 @@ class RecentMasterPagesSelector
     : public MasterPagesSelector
 {
 public:
-    static MasterPagesSelector* Create (
+    static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
@@ -65,6 +65,7 @@ private:
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~RecentMasterPagesSelector();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void LateInit() SAL_OVERRIDE;
 };

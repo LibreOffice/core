@@ -722,7 +722,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
 #ifdef DBG_UTIL
-            if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+            if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
             pTextEditOutliner->ClearModifyFlag();
 
@@ -1202,7 +1202,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
-            if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+            if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
             ImpMakeTextCursorAreaVisible();
             return true;
@@ -1218,7 +1218,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
         if (!bPostIt) {
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
-            else if (pTextEditWin!=NULL) aPt=pTextEditWin->PixelToLogic(aPt);
+            else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
             bPostIt=IsTextEditHit(aPt,nHitTolLog);
         }
         if (bPostIt) {
@@ -1236,7 +1236,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
             if (pTextEditOutlinerView->MouseButtonDown(aMEvt)) {
                 if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
-                if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+                if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
@@ -1253,7 +1253,7 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
         if (!bPostIt) {
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
-            else if (pTextEditWin!=NULL) aPt=pTextEditWin->PixelToLogic(aPt);
+            else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
             bPostIt=IsTextEditHit(aPt,nHitTolLog);
         }
         if (bPostIt) {
@@ -1267,7 +1267,7 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonUp(aMEvt)) {
 #ifdef DBG_UTIL
-                if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+                if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
@@ -1305,7 +1305,7 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseMove(aMEvt) && bSelMode) {
 #ifdef DBG_UTIL
-                if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+                if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
@@ -1325,7 +1325,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
             if (!bPostIt && rCEvt.IsMouseEvent()) {
                 Point aPt(rCEvt.GetMousePosPixel());
                 if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
-                else if (pTextEditWin!=NULL) aPt=pTextEditWin->PixelToLogic(aPt);
+                else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
                 bPostIt=IsTextEditHit(aPt,nHitTolLog);
             }
             if (bPostIt) {
@@ -1342,7 +1342,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 pTextEditOutlinerView->Command(aCEvt);
                 if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
-                if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+                if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
@@ -1392,7 +1392,7 @@ bool SdrObjEditView::ImpIsTextEditAllSelected() const
 
 void SdrObjEditView::ImpMakeTextCursorAreaVisible()
 {
-    if (pTextEditOutlinerView!=NULL && pTextEditWin!=NULL) {
+    if (pTextEditOutlinerView!=nullptr && pTextEditWin!=nullptr) {
         vcl::Cursor* pCsr=pTextEditWin->GetCursor();
         if (pCsr!=NULL) {
             Size aSiz(pCsr->GetSize());
@@ -1613,7 +1613,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             pTextEditOutlinerView->SetAttribs(rSet);
 
 #ifdef DBG_UTIL
-            if (pItemBrowser!=NULL)
+            if (pItemBrowser!=nullptr)
                 pItemBrowser->SetDirty();
 #endif
 
@@ -1733,7 +1733,7 @@ void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
         aHitRec.nTol=nMacroTol;
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
-        aHitRec.pOut=pMacroWin;
+        aHitRec.pOut=pMacroWin.get();
         pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
         bMacroDown=false;
     }
@@ -1750,7 +1750,7 @@ void SdrObjEditView::ImpMacroDown(const Point& rDownPos)
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
         aHitRec.bDown=true;
-        aHitRec.pOut=pMacroWin;
+        aHitRec.pOut=pMacroWin.get();
         pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
         bMacroDown=true;
     }
@@ -1766,7 +1766,7 @@ void SdrObjEditView::MovMacroObj(const Point& rPnt)
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
         aHitRec.bDown=bMacroDown;
-        aHitRec.pOut=pMacroWin;
+        aHitRec.pOut=pMacroWin.get();
         bool bDown=pMacroObj->IsMacroHit(aHitRec);
         if (bDown) ImpMacroDown(rPnt);
         else ImpMacroUp(rPnt);
@@ -1794,7 +1794,7 @@ bool SdrObjEditView::EndMacroObj()
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
         aHitRec.bDown=true;
-        aHitRec.pOut=pMacroWin;
+        aHitRec.pOut=pMacroWin.get();
         bool bRet=pMacroObj->DoMacro(aHitRec);
         pMacroObj=NULL;
         pMacroPV=NULL;

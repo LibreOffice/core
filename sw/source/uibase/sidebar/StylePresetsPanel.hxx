@@ -42,7 +42,7 @@ class StylePresetsPanel : public PanelLayout,
                        public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static StylePresetsPanel* Create(vcl::Window* pParent,
+    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
                                   const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                   SfxBindings* pBindings);
 
@@ -73,10 +73,11 @@ private:
                    SfxBindings* pBindings);
 
     virtual ~StylePresetsPanel();
+    virtual void dispose() SAL_OVERRIDE;
 
     SfxBindings* mpBindings;
 
-    ListBox* mpListBox;
+    VclPtr<ListBox> mpListBox;
 
     std::vector<std::unique_ptr<TemplateEntry>> maTemplateEntries;
 

@@ -347,8 +347,8 @@ void Dialog::ImplInitDialogData()
     mbOldSaveBack           = false;
     mbInClose               = false;
     mbModalMode             = false;
-    mpContentArea           = NULL;
-    mpActionArea            = NULL;
+    mpContentArea.clear();
+    mpActionArea.clear();
     mnMousePositioned       = 0;
     mpDialogImpl            = new DialogImpl;
 }
@@ -403,7 +403,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle )
         // create window with a small border ?
         if ( (nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER )
         {
-            ImplBorderWindow* pBorderWin  = new ImplBorderWindow( pParent, nStyle, BORDERWINDOW_STYLE_FRAME );
+            VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle, BORDERWINDOW_STYLE_FRAME );
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
             pBorderWin->mpWindowImpl->mpClientWindow = this;
             pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
@@ -421,7 +421,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle )
     }
     else
     {
-        ImplBorderWindow* pBorderWin  = new ImplBorderWindow( pParent, nStyle, BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER );
+        VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle, BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER );
         SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
         pBorderWin->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
@@ -456,6 +456,12 @@ Dialog::Dialog( WindowType nType )
     ImplInitDialogData();
 }
 
+void VclBuilderContainer::disposeBuilder()
+{
+    if (m_pUIBuilder)
+        m_pUIBuilder->disposeBuilder();
+}
+
 OUString VclBuilderContainer::getUIRootDir()
 {
     /*to-do, check if user config has an override before using shared one, etc*/
@@ -482,7 +488,7 @@ OUString VclBuilderContainer::getUIRootDir()
 //do the init. Find the real parent stashed in mpDialogParent.
 void Dialog::doDeferredInit(WinBits nBits)
 {
-    vcl::Window *pParent = mpDialogParent;
+    VclPtr<vcl::Window> pParent = mpDialogParent;
     mpDialogParent = NULL;
     ImplInit(pParent, nBits);
     mbIsDefferedInit = false;
@@ -509,14 +515,14 @@ Dialog::Dialog(vcl::Window* pParent, WinBits nStyle)
     ImplInit( pParent, nStyle );
 }
 
-void Dialog::set_action_area(VclButtonBox* pActionArea)
+void Dialog::set_action_area(VclButtonBox* pBox)
 {
-    mpActionArea = pActionArea;
+    mpActionArea.set(pBox);
 }
 
-void Dialog::set_content_area(VclBox* pContentArea)
+void Dialog::set_content_area(VclBox* pBox)
 {
-    mpContentArea = pContentArea;
+    mpContentArea.set(pBox);
 }
 
 void Dialog::settingOptimalLayoutSize(Window *pBox)
@@ -538,8 +544,17 @@ void Dialog::settingOptimalLayoutSize(Window *pBox)
 
 Dialog::~Dialog()
 {
+    disposeOnce();
+}
+
+void Dialog::dispose()
+{
     delete mpDialogImpl;
     mpDialogImpl = NULL;
+    mpPrevExecuteDlg.clear();
+    mpActionArea.clear();
+    mpContentArea.clear();
+    SystemWindow::dispose();
 }
 
 IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
@@ -991,7 +1006,7 @@ void Dialog::SetModalInputMode( bool bModal )
                 pPrevModalDlg = pPrevModalDlg->mpPrevExecuteDlg;
 
             if( pPrevModalDlg &&
-            ( pPrevModalDlg == mpPrevExecuteDlg
+            ( pPrevModalDlg == mpPrevExecuteDlg.get()
                 || !pPrevModalDlg->IsWindowOrChild( this, true ) ) )
             {
                 mpPrevExecuteDlg->SetModalInputMode( false );
@@ -1050,8 +1065,8 @@ void Dialog::GrabFocusToFirstControl()
 
 void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder, sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
-    ImplBorderWindow aImplWin( (vcl::Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
-    aImplWin.GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
+    ScopedVclPtrInstance<ImplBorderWindow> aImplWin( (vcl::Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
+    aImplWin->GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
 
 void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
@@ -1077,13 +1092,13 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 
     if (!( GetStyle() & WB_NOBORDER ))
     {
-        ImplBorderWindow aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
-        aImplWin.SetText( GetText() );
-        aImplWin.setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
-        aImplWin.SetDisplayActive( true );
-        aImplWin.InitView();
+        ScopedVclPtrInstance< ImplBorderWindow > aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
+        aImplWin->SetText( GetText() );
+        aImplWin->setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
+        aImplWin->SetDisplayActive( true );
+        aImplWin->InitView();
 
-        aImplWin.Draw( Rectangle( aPos, aSize ), pDev, aPos );
+        aImplWin->Draw( Rectangle( aPos, aSize ), pDev, aPos );
     }
 
     pDev->Pop();

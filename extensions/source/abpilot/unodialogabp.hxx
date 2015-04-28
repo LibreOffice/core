@@ -84,7 +84,7 @@ namespace abp
         using OABSPilotUno_DBase::execute;
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
         virtual void executedDialog(sal_Int16 _nExecutionResult) SAL_OVERRIDE;
     };
 

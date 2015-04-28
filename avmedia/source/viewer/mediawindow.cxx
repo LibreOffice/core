@@ -46,7 +46,7 @@ namespace avmedia {
 
 
 MediaWindow::MediaWindow( vcl::Window* parent, bool bInternalMediaControl ) :
-    mpImpl( new priv::MediaWindowImpl( parent, this, bInternalMediaControl ) )
+    mpImpl( VclPtr<priv::MediaWindowImpl>::Create( parent, this, bInternalMediaControl ) )
 {
     mpImpl->Show();
 }
@@ -327,9 +327,10 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window* /* pParent */,
 
 void MediaWindow::executeFormatErrorBox( vcl::Window* pParent )
 {
-    MessageDialog aErrBox( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) );
+    ScopedVclPtrInstance< MessageDialog > aErrBox( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) );
 
-    aErrBox.Execute();
+    aErrBox->Execute();
+    aErrBox.disposeAndClear();
 }
 
 

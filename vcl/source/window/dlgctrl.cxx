@@ -530,9 +530,9 @@ namespace
                );
     }
 
-    bool focusNextInGroup(std::vector<RadioButton*>::iterator aStart, std::vector<RadioButton*> &rGroup)
+    bool focusNextInGroup(const std::vector<VclPtr<RadioButton> >::iterator& aStart, std::vector<VclPtr<RadioButton> > &rGroup)
     {
-        std::vector<RadioButton*>::iterator aI(aStart);
+        std::vector<VclPtr<RadioButton> >::iterator aI(aStart);
 
         if (aStart != rGroup.end())
             ++aI;
@@ -564,7 +564,7 @@ namespace
 
     bool nextInGroup(RadioButton *pSourceWindow, bool bBackward)
     {
-        std::vector<RadioButton*> aGroup(pSourceWindow->GetRadioButtonGroup(true));
+        std::vector<VclPtr<RadioButton> > aGroup(pSourceWindow->GetRadioButtonGroup(true));
 
         if (aGroup.size() == 1) //only one button in group
             return false;
@@ -572,7 +572,7 @@ namespace
         if (bBackward)
             std::reverse(aGroup.begin(), aGroup.end());
 
-        std::vector<RadioButton*>::iterator aStart(std::find(aGroup.begin(), aGroup.end(), pSourceWindow));
+        auto aStart(std::find(aGroup.begin(), aGroup.end(), VclPtr<RadioButton>(pSourceWindow)));
 
         assert(aStart != aGroup.end());
 
@@ -716,9 +716,9 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
         if ( bKeyInput && mpWindowImpl->mpDlgCtrlDownWindow )
         {
-            if ( mpWindowImpl->mpDlgCtrlDownWindow != pButtonWindow )
+            if ( mpWindowImpl->mpDlgCtrlDownWindow.get() != pButtonWindow )
             {
-                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
+                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
                 mpWindowImpl->mpDlgCtrlDownWindow = NULL;
                 return true;
             }
@@ -928,16 +928,16 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     {
         if ( bKeyInput )
         {
-            if ( mpWindowImpl->mpDlgCtrlDownWindow && (mpWindowImpl->mpDlgCtrlDownWindow != pButtonWindow) )
+            if ( mpWindowImpl->mpDlgCtrlDownWindow && (mpWindowImpl->mpDlgCtrlDownWindow.get() != pButtonWindow) )
             {
-                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
+                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
                 mpWindowImpl->mpDlgCtrlDownWindow = NULL;
             }
 
             static_cast<PushButton*>(pButtonWindow)->SetPressed( true );
             mpWindowImpl->mpDlgCtrlDownWindow = pButtonWindow;
         }
-        else if ( mpWindowImpl->mpDlgCtrlDownWindow == pButtonWindow )
+        else if ( mpWindowImpl->mpDlgCtrlDownWindow.get() == pButtonWindow )
         {
             mpWindowImpl->mpDlgCtrlDownWindow = NULL;
             static_cast<PushButton*>(pButtonWindow)->SetPressed( false );
@@ -1060,7 +1060,7 @@ void Window::ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus )
 {
     if ( mpWindowImpl->mpDlgCtrlDownWindow && !bGetFocus )
     {
-        static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
+        static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
         mpWindowImpl->mpDlgCtrlDownWindow = NULL;
     }
 

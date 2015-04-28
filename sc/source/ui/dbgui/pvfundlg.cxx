@@ -214,6 +214,25 @@ ScDPFunctionDlg::ScDPFunctionDlg(
     Init( rLabelData, rFuncData );
 }
 
+ScDPFunctionDlg::~ScDPFunctionDlg()
+{
+    disposeOnce();
+}
+
+void ScDPFunctionDlg::dispose()
+{
+    mpLbFunc.clear();
+    mpFtName.clear();
+    mpLbType.clear();
+    mpFtBaseField.clear();
+    mpLbBaseField.clear();
+    mpFtBaseItem.clear();
+    mpLbBaseItem.clear();
+    mpBtnOk.clear();
+    ModalDialog::dispose();
+}
+
+
 sal_uInt16 ScDPFunctionDlg::GetFuncMask() const
 {
     return mpLbFunc->GetSelection();
@@ -431,6 +450,24 @@ ScDPSubtotalDlg::ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
     Init( rLabelData, rFuncData );
 }
 
+ScDPSubtotalDlg::~ScDPSubtotalDlg()
+{
+    disposeOnce();
+}
+
+void ScDPSubtotalDlg::dispose()
+{
+    mpRbNone.clear();
+    mpRbAuto.clear();
+    mpRbUser.clear();
+    mpLbFunc.clear();
+    mpFtName.clear();
+    mpCbShowAll.clear();
+    mpBtnOk.clear();
+    mpBtnOptions.clear();
+    ModalDialog::dispose();
+}
+
 sal_uInt16 ScDPSubtotalDlg::GetFuncMask() const
 {
     sal_uInt16 nFuncMask = PIVOT_FUNC_NONE;
@@ -502,7 +539,7 @@ IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
 {
     if (pBtn == mpBtnOptions)
     {
-        boost::scoped_ptr<ScDPSubtotalOptDlg> pDlg(new ScDPSubtotalOptDlg( this, mrDPObj, maLabelData, mrDataFields, mbEnableLayout ));
+        VclPtrInstance< ScDPSubtotalOptDlg > pDlg( this, mrDPObj, maLabelData, mrDataFields, mbEnableLayout );
         if( pDlg->Execute() == RET_OK )
             pDlg->FillLabelData( maLabelData );
     }
@@ -543,6 +580,35 @@ ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj
     m_xLbShowFromWrp.reset(new ScDPListBoxWrapper(*m_pLbShowFrom, spShowFromMap));
 
     Init( rDataFields, bEnableLayout );
+}
+
+ScDPSubtotalOptDlg::~ScDPSubtotalOptDlg()
+{
+    disposeOnce();
+}
+
+void ScDPSubtotalOptDlg::dispose()
+{
+    m_pLbSortBy.clear();
+    m_pRbSortAsc.clear();
+    m_pRbSortDesc.clear();
+    m_pRbSortMan.clear();
+    m_pLayoutFrame.clear();
+    m_pLbLayout.clear();
+    m_pCbLayoutEmpty.clear();
+    m_pCbRepeatItemLabels.clear();
+    m_pCbShow.clear();
+    m_pNfShow.clear();
+    m_pFtShow.clear();
+    m_pFtShowFrom.clear();
+    m_pLbShowFrom.clear();
+    m_pFtShowUsing.clear();
+    m_pLbShowUsing.clear();
+    m_pHideFrame.clear();
+    m_pLbHide.clear();
+    m_pFtHierarchy.clear();
+    m_pLbHierarchy.clear();
+    ModalDialog::dispose();
 }
 
 void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
@@ -796,6 +862,18 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, 
         mpLbDims->SelectEntryPos( 0 );
 
     mpLbDims->SetDoubleClickHdl( LINK( this, ScDPShowDetailDlg, DblClickHdl ) );
+}
+
+ScDPShowDetailDlg::~ScDPShowDetailDlg()
+{
+    disposeOnce();
+}
+
+void ScDPShowDetailDlg::dispose()
+{
+    mpLbDims.clear();
+    mpBtnOk.clear();
+    ModalDialog::dispose();
 }
 
 short ScDPShowDetailDlg::Execute()

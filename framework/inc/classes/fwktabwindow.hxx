@@ -68,6 +68,7 @@ public:
         const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider );
 
     virtual ~FwkTabPage();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    ActivatePage() SAL_OVERRIDE;
     virtual void    DeactivatePage() SAL_OVERRIDE;
@@ -77,8 +78,8 @@ public:
 struct TabEntry
 {
     sal_Int32           m_nIndex;
-    FwkTabPage*         m_pPage;
-    OUString     m_sPageURL;
+    ScopedVclPtr<FwkTabPage>  m_pPage;
+    OUString            m_sPageURL;
     css::uno::Reference< css::awt::XContainerWindowEventHandler > m_xEventHdl;
 
     TabEntry() :
@@ -86,8 +87,7 @@ struct TabEntry
 
     TabEntry( sal_Int32 nIndex, const OUString& sURL, const css::uno::Reference< css::awt::XContainerWindowEventHandler > & rEventHdl ) :
         m_nIndex( nIndex ), m_pPage( NULL ), m_sPageURL( sURL ), m_xEventHdl( rEventHdl ) {}
-
-    ~TabEntry() { delete m_pPage; }
+    ~TabEntry() { m_pPage.disposeAndClear(); }
 };
 
 typedef std::vector< TabEntry* > TabEntryList;
@@ -95,8 +95,8 @@ typedef std::vector< TabEntry* > TabEntryList;
 class FwkTabWindow : public vcl::Window
 {
 private:
-    FwkTabControl   m_aTabCtrl;
-    TabEntryList    m_TabList;
+    VclPtr<FwkTabControl>  m_aTabCtrl;
+    TabEntryList           m_TabList;
 
     css::uno::Reference< css::awt::XContainerWindowProvider >   m_xWinProvider;
 
@@ -110,6 +110,7 @@ private:
 public:
     FwkTabWindow( vcl::Window* pParent );
     virtual ~FwkTabWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            AddEventListener( const Link& rEventListener );
     void            RemoveEventListener( const Link& rEventListener );

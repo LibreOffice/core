@@ -47,8 +47,8 @@ class SwInputWindow : public ToolBox
 {
 friend class InputEdit;
 
-    Edit            aPos;
-    InputEdit       aEdit;
+    VclPtr<Edit>        aPos;
+    VclPtr<InputEdit>   aEdit;
     PopupMenu       aPopMenu;
     SwFldMgr*       pMgr;
     SwWrtShell*     pWrtShell;
@@ -82,6 +82,7 @@ protected:
 public:
                     SwInputWindow( vcl::Window* pParent, SfxBindings* pBindings );
     virtual         ~SwInputWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
@@ -108,9 +109,9 @@ public:
     virtual ~SwInputChild();
     SFX_DECL_CHILDWINDOW_WITHID( SwInputChild );
     void            SetFormula( const OUString& rFormula, bool bDelSel = true )
-                        { static_cast<SwInputWindow*>(pWindow)->SetFormula(
+                        { static_cast<SwInputWindow*>(pWindow.get())->SetFormula(
                                     rFormula, bDelSel ); }
-    const SwView*   GetView() const{return static_cast<SwInputWindow*>(pWindow)->GetView();}
+    const SwView*   GetView() const{return static_cast<SwInputWindow*>(pWindow.get())->GetView();}
 
 };
 

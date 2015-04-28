@@ -217,8 +217,8 @@ private:
 
 protected:
     DbGridColumn&               m_rColumn;
-    vcl::Window*                     m_pPainter;
-    vcl::Window*                     m_pWindow;
+    VclPtr<vcl::Window>         m_pPainter;
+    VclPtr<vcl::Window>         m_pWindow;
 
 protected:
     // attribute access
@@ -565,7 +565,7 @@ public:
     virtual ::svt::CellControllerRef    CreateController() const SAL_OVERRIDE;
 
 protected:
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -587,7 +587,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) SAL_OVERRIDE;
 
     // DbSpinField
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -612,7 +612,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) SAL_OVERRIDE;
 
     // DbSpinField
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -641,7 +641,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) SAL_OVERRIDE;
 
     // DbSpinField
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -666,7 +666,7 @@ protected:
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) SAL_OVERRIDE;
 
     // DbSpinField
-    virtual SpinField*  createField(
+    virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -949,8 +949,8 @@ class FmXCheckBoxCell : public FmXDataCell,
 {
     ::cppu::OInterfaceContainerHelper   m_aItemListeners;
     ::cppu::OInterfaceContainerHelper   m_aActionListeners;
-    OUString                     m_aActionCommand;
-    CheckBox*                           m_pBox;
+    OUString                            m_aActionCommand;
+    VclPtr<CheckBox>                    m_pBox;
 
 protected:
     virtual ~FmXCheckBoxCell();
@@ -994,7 +994,7 @@ class FmXListBoxCell    :public FmXTextCell
 {
     ::cppu::OInterfaceContainerHelper   m_aItemListeners,
                                         m_aActionListeners;
-    ListBox*                            m_pBox;
+    VclPtr<ListBox>                     m_pBox;
 
 protected:
     virtual ~FmXListBoxCell();
@@ -1049,7 +1049,7 @@ class FmXComboBoxCell   :public FmXTextCell
 private:
     ::cppu::OInterfaceContainerHelper   m_aItemListeners,
                                         m_aActionListeners;
-    ComboBox*                           m_pComboBox;
+    VclPtr<ComboBox>                    m_pComboBox;
 
 protected:
     virtual ~FmXComboBoxCell();

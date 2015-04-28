@@ -842,7 +842,7 @@ void Window::ImplSaveOverlapBackground()
             if ( nSaveBackSize+mpWindowImpl->mpFrameData->mnAllSaveBackSize <= IMPL_MAXALLSAVEBACKSIZE )
             {
                 Size aOutSize( mnOutWidth, mnOutHeight );
-                mpWindowImpl->mpOverlapData->mpSaveBackDev = new VirtualDevice( *mpWindowImpl->mpFrameWindow );
+                mpWindowImpl->mpOverlapData->mpSaveBackDev = VclPtr<VirtualDevice>::Create( *mpWindowImpl->mpFrameWindow );
                 if ( mpWindowImpl->mpOverlapData->mpSaveBackDev->SetOutputSizePixel( aOutSize ) )
                 {
                     mpWindowImpl->mpFrameWindow->ImplUpdateAll();
@@ -863,8 +863,7 @@ void Window::ImplSaveOverlapBackground()
                 }
                 else
                 {
-                    delete mpWindowImpl->mpOverlapData->mpSaveBackDev;
-                    mpWindowImpl->mpOverlapData->mpSaveBackDev = NULL;
+                    mpWindowImpl->mpOverlapData->mpSaveBackDev.disposeAndClear();
                 }
             }
         }
@@ -915,8 +914,7 @@ void Window::ImplDeleteOverlapBackground()
     if ( mpWindowImpl->mpOverlapData->mpSaveBackDev )
     {
         mpWindowImpl->mpFrameData->mnAllSaveBackSize -= mpWindowImpl->mpOverlapData->mnSaveBackSize;
-        delete mpWindowImpl->mpOverlapData->mpSaveBackDev;
-        mpWindowImpl->mpOverlapData->mpSaveBackDev = NULL;
+        mpWindowImpl->mpOverlapData->mpSaveBackDev.disposeAndClear();
         if ( mpWindowImpl->mpOverlapData->mpSaveBackRgn )
         {
             delete mpWindowImpl->mpOverlapData->mpSaveBackRgn;
@@ -929,7 +927,7 @@ void Window::ImplDeleteOverlapBackground()
         else
         {
             vcl::Window* pTemp = mpWindowImpl->mpFrameData->mpFirstBackWin;
-            while ( pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin != this )
+            while ( pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin.get() != this )
                 pTemp = pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin;
             pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin = mpWindowImpl->mpOverlapData->mpNextBackWin;
         }

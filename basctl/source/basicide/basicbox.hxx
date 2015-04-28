@@ -33,11 +33,10 @@ public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
                         LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                        virtual ~LibBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 /** base class for list boxes which need to update their content according to the list
@@ -49,6 +48,7 @@ class DocListenerBox    :public ListBox
 protected:
     DocListenerBox( vcl::Window* pParent );
     virtual ~DocListenerBox();
+    virtual void dispose() SAL_OVERRIDE;
 
 protected:
     virtual void    FillBox() = 0;
@@ -95,7 +95,8 @@ protected:
 public:
                     LibBox( vcl::Window* pParent,
                                  const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-                    virtual ~LibBox();
+    virtual         ~LibBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     using           Window::Update;
     void            Update( const SfxStringItem* pItem );
@@ -107,10 +108,9 @@ public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
                         LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                        virtual ~LanguageBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 class LanguageBox : public DocListenerBox
@@ -135,6 +135,7 @@ protected:
 public:
     LanguageBox( vcl::Window* pParent );
     virtual ~LanguageBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     using           Window::Update;
     void            Update( const SfxStringItem* pItem );

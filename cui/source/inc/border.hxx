@@ -45,7 +45,9 @@ class SvxBorderTabPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    virtual ~SvxBorderTabPage();
+    virtual void dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
     static const sal_uInt16*      GetRanges() { return pRanges; }
 
@@ -61,40 +63,39 @@ protected:
 
 private:
     SvxBorderTabPage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs );
-    virtual ~SvxBorderTabPage();
 
     // Controls
-    ValueSet*           m_pWndPresets;
-    FixedText*          m_pUserDefFT;
-    svx::FrameSelector* m_pFrameSel;
+    VclPtr<ValueSet>           m_pWndPresets;
+    VclPtr<FixedText>          m_pUserDefFT;
+    VclPtr<svx::FrameSelector> m_pFrameSel;
 
-    LineListBox*        m_pLbLineStyle;
-    ColorListBox*       m_pLbLineColor;
-    MetricField*        m_pLineWidthMF;
+    VclPtr<LineListBox>        m_pLbLineStyle;
+    VclPtr<ColorListBox>       m_pLbLineColor;
+    VclPtr<MetricField>        m_pLineWidthMF;
 
-    VclContainer*       m_pSpacingFrame;
-    FixedText*          m_pLeftFT;
-    MetricField*        m_pLeftMF;
-    FixedText*          m_pRightFT;
-    MetricField*        m_pRightMF;
-    FixedText*          m_pTopFT;
-    MetricField*        m_pTopMF;
-    FixedText*          m_pBottomFT;
-    MetricField*        m_pBottomMF;
-    CheckBox*           m_pSynchronizeCB;
+    VclPtr<VclContainer>       m_pSpacingFrame;
+    VclPtr<FixedText>          m_pLeftFT;
+    VclPtr<MetricField>        m_pLeftMF;
+    VclPtr<FixedText>          m_pRightFT;
+    VclPtr<MetricField>        m_pRightMF;
+    VclPtr<FixedText>          m_pTopFT;
+    VclPtr<MetricField>        m_pTopMF;
+    VclPtr<FixedText>          m_pBottomFT;
+    VclPtr<MetricField>        m_pBottomMF;
+    VclPtr<CheckBox>           m_pSynchronizeCB;
 
-    VclContainer*       m_pShadowFrame;
-    ValueSet*           m_pWndShadows;
-    FixedText*          m_pFtShadowSize;
-    MetricField*        m_pEdShadowSize;
-    FixedText*          m_pFtShadowColor;
-    ColorListBox*       m_pLbShadowColor;
+    VclPtr<VclContainer>       m_pShadowFrame;
+    VclPtr<ValueSet>           m_pWndShadows;
+    VclPtr<FixedText>          m_pFtShadowSize;
+    VclPtr<MetricField>        m_pEdShadowSize;
+    VclPtr<FixedText>          m_pFtShadowColor;
+    VclPtr<ColorListBox>       m_pLbShadowColor;
 
 
-    VclContainer*       m_pPropertiesFrame;///< properties - "Merge with next paragraph" in Writer
-    CheckBox*           m_pMergeWithNextCB;
+    VclPtr<VclContainer>       m_pPropertiesFrame;///< properties - "Merge with next paragraph" in Writer
+    VclPtr<CheckBox>           m_pMergeWithNextCB;
     // #i29550#
-    CheckBox*           m_pMergeAdjacentBordersCB;
+    VclPtr<CheckBox>           m_pMergeAdjacentBordersCB;
 
     ImageList           aShadowImgLstH;
     ImageList           aShadowImgLst;
@@ -114,8 +115,8 @@ private:
     std::set<sal_Int16> maUsedBorderStyles;
 
     // Handler
-    DECL_LINK( SelStyleHdl_Impl, ListBox* pLb );
-    DECL_LINK( SelColHdl_Impl, ListBox* pLb );
+    DECL_LINK( SelStyleHdl_Impl, ListBox* );
+    DECL_LINK( SelColHdl_Impl, ListBox* );
     DECL_LINK( SelPreHdl_Impl, void* );
     DECL_LINK( SelSdwHdl_Impl, void* );
     DECL_LINK( LinesChanged_Impl, void* );

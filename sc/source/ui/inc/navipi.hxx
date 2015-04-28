@@ -97,10 +97,11 @@ class ScScenarioWindow : public vcl::Window
 public:
             ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List, const OUString& aQH_Comment);
             virtual ~ScScenarioWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    NotifyState( const SfxPoolItem* pState );
     void    SetComment( const OUString& rComment )
-                { aEdComment.SetText( rComment ); }
+                { aEdComment->SetText( rComment ); }
 
     void    SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
 
@@ -109,8 +110,8 @@ protected:
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
-    ScScenarioListBox   aLbScenario;
-    MultiLineEdit       aEdComment;
+    VclPtr<ScScenarioListBox>   aLbScenario;
+    VclPtr<MultiLineEdit>       aEdComment;
 };
 
 //  class ColumnEdit
@@ -220,14 +221,14 @@ private:
     SfxBindings&        rBindings;      // must be first member
 
     ImageList           aCmdImageList;  // must be before aTbxCmd
-    FixedInfo           aFtCol;
-    ColumnEdit          aEdCol;
-    FixedInfo           aFtRow;
-    RowEdit             aEdRow;
-    CommandToolBox      aTbxCmd;
-    ScContentTree       aLbEntries;
-    ScScenarioWindow    aWndScenarios;
-    ScDocListBox        aLbDocuments;
+    VclPtr<FixedInfo>        aFtCol;
+    VclPtr<ColumnEdit>       aEdCol;
+    VclPtr<FixedInfo>        aFtRow;
+    VclPtr<RowEdit>          aEdRow;
+    VclPtr<CommandToolBox>   aTbxCmd;
+    VclPtr<ScContentTree>    aLbEntries;
+    VclPtr<ScScenarioWindow> aWndScenarios;
+    VclPtr<ScDocListBox>     aLbDocuments;
 
     Idle            aContentIdle;
 
@@ -309,6 +310,7 @@ public:
                 ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl::Window* pParent,
                     const bool bUseStyleSettingsBackground);
                 virtual ~ScNavigatorDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     using Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -329,7 +331,7 @@ public:
     virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
 
 private:
-    ScNavigatorDlg* pNavigator;
+    VclPtr<ScNavigatorDlg> pNavigator;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX

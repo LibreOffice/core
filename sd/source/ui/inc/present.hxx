@@ -37,37 +37,37 @@ class SdStartPresentationDlg : public ModalDialog
 {
 private:
 
-    RadioButton*        aRbtAll;
-    RadioButton*        aRbtAtDia;
-    RadioButton*        aRbtCustomshow;
-    ListBox*            aLbDias;
-    ListBox*            aLbCustomshow;
+    VclPtr<RadioButton>        aRbtAll;
+    VclPtr<RadioButton>        aRbtAtDia;
+    VclPtr<RadioButton>        aRbtCustomshow;
+    VclPtr<ListBox>            aLbDias;
+    VclPtr<ListBox>            aLbCustomshow;
 
-    RadioButton*        aRbtStandard;
-    RadioButton*        aRbtWindow;
-    RadioButton*        aRbtAuto;
-    TimeField*          aTmfPause;
-    CheckBox*           aCbxAutoLogo;
+    VclPtr<RadioButton>        aRbtStandard;
+    VclPtr<RadioButton>        aRbtWindow;
+    VclPtr<RadioButton>        aRbtAuto;
+    VclPtr<TimeField>          aTmfPause;
+    VclPtr<CheckBox>           aCbxAutoLogo;
 
-    CheckBox*           aCbxManuel;
-    CheckBox*           aCbxMousepointer;
-    CheckBox*           aCbxPen;
-    CheckBox*           aCbxNavigator;
-    CheckBox*           aCbxAnimationAllowed;
-    CheckBox*           aCbxChangePage;
-    CheckBox*           aCbxAlwaysOnTop;
+    VclPtr<CheckBox>           aCbxManuel;
+    VclPtr<CheckBox>           aCbxMousepointer;
+    VclPtr<CheckBox>           aCbxPen;
+    VclPtr<CheckBox>           aCbxNavigator;
+    VclPtr<CheckBox>           aCbxAnimationAllowed;
+    VclPtr<CheckBox>           aCbxChangePage;
+    VclPtr<CheckBox>           aCbxAlwaysOnTop;
 
-    FixedText*          maFtMonitor;
-    ListBox*            maLBMonitor;
+    VclPtr<FixedText>          maFtMonitor;
+    VclPtr<ListBox>            maLBMonitor;
 
     SdCustomShowList*   pCustomShowList;
     const SfxItemSet&   rOutAttrs;
     sal_Int32           mnMonitors;
 
-    FixedText*          msMonitor;
-    FixedText*          msAllMonitors;
-    FixedText*          msMonitorExternal;
-    FixedText*          msExternal;
+    VclPtr<FixedText>          msMonitor;
+    VclPtr<FixedText>          msAllMonitors;
+    VclPtr<FixedText>          msMonitorExternal;
+    VclPtr<FixedText>          msExternal;
 
                         DECL_LINK( ChangeRangeHdl, void * );
                         DECL_LINK( ClickWindowPresentationHdl, void * );
@@ -88,6 +88,8 @@ public:
                                 const SfxItemSet& rInAttrs,
                                 const std::vector<OUString> &rPageNames,
                                 SdCustomShowList* pCSList );
+    virtual             ~SdStartPresentationDlg();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                GetAttr( SfxItemSet& rOutAttrs );
 };

@@ -43,11 +43,11 @@ class FuPoor
 protected:
     ScDrawView*     pView;
     ScTabViewShell* pViewShell;
-    vcl::Window*         pWindow;
+    VclPtr<vcl::Window>     pWindow;
     SdrModel*       pDrDoc;
 
     SfxRequest      aSfxRequest;
-    Dialog*         pDialog;
+    VclPtr<Dialog>          pDialog;
 
     Timer           aScrollTimer;           // for Autoscrolling
     DECL_LINK( ScrollHdl, void * );

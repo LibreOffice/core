@@ -66,9 +66,14 @@ ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
 
 ODbAdminDialog::~ODbAdminDialog()
 {
+    disposeOnce();
+}
+
+void ODbAdminDialog::dispose()
+{
     SetInputSet(NULL);
     DELETEZ(pExampleSet);
-
+    SfxTabDialog::dispose();
 }
 
 short ODbAdminDialog::Ok()

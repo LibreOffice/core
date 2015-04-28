@@ -95,8 +95,8 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 
                                               SfxChildWinInfo* pInfo ) :
             SfxChildWindow( _pParent, nId )
 {
-    pWindow = new SvxIMapDlg( pBindings, this, _pParent );
-    SvxIMapDlg* pDlg = static_cast<SvxIMapDlg*>(pWindow);
+    pWindow = VclPtr<SvxIMapDlg>::Create( pBindings, this, _pParent );
+    SvxIMapDlg* pDlg = static_cast<SvxIMapDlg*>(pWindow.get());
 
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
         pDlg->RollUp();
@@ -168,7 +168,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     get(m_pStbStatus, "statusbar");
 
     VclVBox* _pContainer = get<VclVBox>("container");
-    pIMapWnd = new IMapWindow( _pContainer, WB_BORDER, _pBindings->GetActiveFrame() );
+    pIMapWnd = VclPtr<IMapWindow>::Create( _pContainer, WB_BORDER, _pBindings->GetActiveFrame() );
     pIMapWnd->set_hexpand(true);
     pIMapWnd->set_vexpand(true);
     pIMapWnd->Show();
@@ -217,9 +217,23 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
 
 SvxIMapDlg::~SvxIMapDlg()
 {
+    disposeOnce();
+}
+
+void SvxIMapDlg::dispose()
+{
     // Delete URL-List
-    delete pIMapWnd;
+    pIMapWnd.disposeAndClear();
     delete pOwnData;
+    m_pTbxIMapDlg1.clear();
+    m_pFtURL.clear();
+    m_pURLBox.clear();
+    m_pFtText.clear();
+    m_pEdtText.clear();
+    m_pFtTarget.clear();
+    m_pCbbTarget.clear();
+    m_pStbStatus.clear();
+    SfxModelessDialog::dispose();
 }
 
 bool SvxIMapDlg::Close()
@@ -228,8 +242,8 @@ bool SvxIMapDlg::Close()
 
     if ( m_pTbxIMapDlg1->IsItemEnabled( mnApplyId ) )
     {
-        MessageDialog aQBox( this,"QueryModifyImageMapChangesDialog","svx/ui/querymodifyimagemapchangesdialog.ui");
-        const long  nRet = aQBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aQBox(this,"QueryModifyImageMapChangesDialog","svx/ui/querymodifyimagemapchangesdialog.ui");
+        const long  nRet = aQBox->Execute();
 
         if( nRet == RET_YES )
         {
@@ -242,8 +256,8 @@ bool SvxIMapDlg::Close()
     }
     else if( pIMapWnd->IsChanged() )
     {
-        MessageDialog aQBox( this,"QuerySaveImageMapChangesDialog","svx/ui/querysaveimagemapchangesdialog.ui");
-        const long  nRet = aQBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aQBox(this,"QuerySaveImageMapChangesDialog","svx/ui/querysaveimagemapchangesdialog.ui");
+        const long  nRet = aQBox->Execute();
 
         if( nRet == RET_YES )
             bRet = DoSave();

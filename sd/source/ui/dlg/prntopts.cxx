@@ -30,7 +30,7 @@
  */
 SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
     SfxTabPage          ( pParent, "prntopts" , "modules/simpress/ui/prntopts.ui" , &rInAttrs ),
-        rOutAttrs               ( rInAttrs )
+    rOutAttrs           ( rInAttrs )
 {
     get( m_pFrmContent , "contentframe" );
     get( m_pCbxDraw , "drawingcb" );
@@ -74,6 +74,31 @@ SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs
 
 SdPrintOptions::~SdPrintOptions()
 {
+    disposeOnce();
+}
+
+void SdPrintOptions::dispose()
+{
+    m_pFrmContent.clear();
+    m_pCbxDraw.clear();
+    m_pCbxNotes.clear();
+    m_pCbxHandout.clear();
+    m_pCbxOutline.clear();
+    m_pRbtColor.clear();
+    m_pRbtGrayscale.clear();
+    m_pRbtBlackWhite.clear();
+    m_pCbxPagename.clear();
+    m_pCbxDate.clear();
+    m_pCbxTime.clear();
+    m_pCbxHiddenPages.clear();
+    m_pRbtDefault.clear();
+    m_pRbtPagesize.clear();
+    m_pRbtPagetile.clear();
+    m_pRbtBooklet.clear();
+    m_pCbxFront.clear();
+    m_pCbxBack.clear();
+    m_pCbxPaperbin.clear();
+    SfxTabPage::dispose();
 }
 
 bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
@@ -182,10 +207,10 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     ClickBookletHdl( NULL );
 }
 
-SfxTabPage* SdPrintOptions::Create( vcl::Window* pWindow,
-                const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SdPrintOptions::Create( vcl::Window* pWindow,
+                                           const SfxItemSet* rOutAttrs )
 {
-    return( new SdPrintOptions( pWindow, *rOutAttrs ) );
+    return VclPtr<SdPrintOptions>::Create( pWindow, *rOutAttrs );
 }
 
 IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )

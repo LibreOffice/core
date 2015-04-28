@@ -49,6 +49,7 @@ namespace svt { namespace table
     public:
         TableDataWindow( TableControl_Impl& _rTableControl );
         virtual ~TableDataWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         inline void         SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
         inline const Link&  GetSelectHdl() const                { return m_aSelectHdl; }

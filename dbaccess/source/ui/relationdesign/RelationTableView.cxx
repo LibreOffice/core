@@ -73,8 +73,15 @@ ORelationTableView::ORelationTableView( vcl::Window* pParent, ORelationDesignVie
 
 ORelationTableView::~ORelationTableView()
 {
+    disposeOnce();
+}
+
+void ORelationTableView::dispose()
+{
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
+    m_pExistingConnection.clear();
+    OJoinTableView::dispose();
 }
 
 void ORelationTableView::ReSync()
@@ -99,14 +106,14 @@ void ORelationTableView::ReSync()
     for(;aIter != rTabWinDataList.rend();++aIter)
     {
         TTableWindowData::value_type pData = *aIter;
-        OTableWindow* pTabWin = createWindow(pData);
+        VclPtr<OTableWindow> pTabWin = createWindow(pData);
 
         if (!pTabWin->Init())
         {
             // initialisation failed, which means this TabWin is not available, therefore,
             // it should be cleaned up, including its data in the document
             pTabWin->clearListBox();
-            delete pTabWin;
+            pTabWin.disposeAndClear();
             arrInvalidTables.push_back(pData->GetTableName());
 
             rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
@@ -144,7 +151,7 @@ void ORelationTableView::ReSync()
             }
         }
 
-        addConnection( new ORelationTableConnection(this, *aConIter), false ); // don't add the data again
+        addConnection( VclPtr<ORelationTableConnection>::Create(this, *aConIter), false );
     }
 
     if ( !GetTabWinMap().empty() )
@@ -164,8 +171,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OTableWindow* pSourceWin = jxdSource.pListBox->GetTabWin();
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
-    ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections().begin();
-    ::std::vector<OTableConnection*>::const_iterator aEnd = getTableConnections().end();
+    auto aIter = getTableConnections().begin();
+    auto aEnd = getTableConnections().end();
     for(;aIter != aEnd;++aIter)
     {
         OTableConnection* pFirst = *aIter;
@@ -200,7 +207,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
             if( pTabConnData->Update() )
             {
                 // enter UI-object into ConnList
-                addConnection( new ORelationTableConnection( this, pTabConnData ) );
+                addConnection( VclPtr<ORelationTableConnection>::Create( this, pTabConnData ) );
             }
         }
         catch(const SQLException&)
@@ -216,8 +223,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 
 void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 {
-    ORelationDialog aRelDlg( this, pConnection->GetData() );
-    switch (aRelDlg.Execute())
+    ScopedVclPtrInstance< ORelationDialog > aRelDlg( this, pConnection->GetData() );
+    switch (aRelDlg->Execute())
     {
         case RET_OK:
             // successfully updated
@@ -244,14 +251,14 @@ void ORelationTableView::AddNewRelation()
 {
 
     TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
-    ORelationDialog aRelDlg(this, pNewConnData, true);
+    ScopedVclPtrInstance< ORelationDialog > aRelDlg(this, pNewConnData, true);
 
-    bool bSuccess = (aRelDlg.Execute() == RET_OK);
+    bool bSuccess = (aRelDlg->Execute() == RET_OK);
     if (bSuccess)
     {
         // already updated by the dialog
         // announce it to the document
-        addConnection( new ORelationTableConnection(this, pNewConnData) );
+        addConnection( VclPtr<ORelationTableConnection>::Create(this, pNewConnData) );
     }
 }
 
@@ -293,7 +300,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
     pNewTabWinData->ShowAll(false);
 
     // link new window into the window list
-    OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
+    VclPtr<OTableWindow> pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
     {
         m_pView->getController().getTableWindowData().push_back( pNewTabWinData);
@@ -313,14 +320,14 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
     else
     {
         pNewTabWin->clearListBox();
-        delete pNewTabWin;
+        pNewTabWin.disposeAndClear();
     }
 }
 
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    OSQLWarningBox aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
-    if ( m_bInRemove || aDlg.Execute() == RET_YES )
+    ScopedVclPtrInstance< OSQLWarningBox > aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
+    if ( m_bInRemove || aDlg->Execute() == RET_YES )
     {
         m_pView->getController().ClearUndoManager();
         OJoinTableView::RemoveTabWin( pTabWin );
@@ -337,13 +344,13 @@ void ORelationTableView::lookForUiActivities()
     {
         OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
         sTitle = sTitle.copy(3);
-        OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
-        aDlg.SetText(sTitle);
-        aDlg.RemoveButton(aDlg.GetButtonId(0));
-        aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-        aDlg.AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES, 0);
-        aDlg.AddButton( StandardButtonType::Cancel,RET_CANCEL,0);
-        sal_uInt16 nRet = aDlg.Execute();
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
+        aDlg->SetText(sTitle);
+        aDlg->RemoveButton(aDlg->GetButtonId(0));
+        aDlg->AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
+        aDlg->AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES, 0);
+        aDlg->AddButton( StandardButtonType::Cancel,RET_CANCEL,0);
+        sal_uInt16 nRet = aDlg->Execute();
         if( nRet == RET_CANCEL)
         {
             m_pCurrentlyTabConnData.reset();
@@ -357,19 +364,19 @@ void ORelationTableView::lookForUiActivities()
     }
     if(m_pCurrentlyTabConnData)
     {
-        ORelationDialog aRelDlg( this, m_pCurrentlyTabConnData );
-        if (aRelDlg.Execute() == RET_OK)
+        ScopedVclPtrInstance< ORelationDialog > aRelDlg( this, m_pCurrentlyTabConnData );
+        if (aRelDlg->Execute() == RET_OK)
         {
             // already updated by the dialog
-            addConnection( new ORelationTableConnection( this, m_pCurrentlyTabConnData ) );
+            addConnection( VclPtr<ORelationTableConnection>::Create( this, m_pCurrentlyTabConnData ) );
         }
         m_pCurrentlyTabConnData.reset();
     }
 }
 
-OTableWindow* ORelationTableView::createWindow(const TTableWindowData::value_type& _pData)
+VclPtr<OTableWindow> ORelationTableView::createWindow(const TTableWindowData::value_type& _pData)
 {
-    return new ORelationTableWindow(this,_pData);
+    return VclPtr<ORelationTableWindow>::Create(this,_pData);
 }
 
 bool ORelationTableView::allowQueries() const

@@ -51,10 +51,6 @@ GalleryButton::GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits ) :
 {
 }
 
-GalleryButton::~GalleryButton()
-{
-}
-
 void GalleryButton::KeyInput( const KeyEvent& rKEvt )
 {
     if( !static_cast< GalleryBrowser1* >( GetParent() )->KeyInput( rKEvt, this ) )
@@ -67,10 +63,6 @@ GalleryThemeListBox::GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWin
     ListBox( pParent, nWinBits )
 {
     InitSettings();
-}
-
-GalleryThemeListBox::~GalleryThemeListBox()
-{
 }
 
 void GalleryThemeListBox::InitSettings()
@@ -119,8 +111,8 @@ GalleryBrowser1::GalleryBrowser1(
     const ::boost::function<void()>& rThemeSlectionHandler)
     :
     Control               ( pParent, WB_TABSTOP ),
-    maNewTheme            ( this, WB_3DLOOK ),
-    mpThemes              ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
+    maNewTheme            ( VclPtr<GalleryButton>::Create(this, WB_3DLOOK) ),
+    mpThemes              ( VclPtr<GalleryThemeListBox>::Create( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
     mpGallery             ( pGallery ),
     mpExchangeData        ( new ExchangeData ),
     mpThemePropsDlgItemSet( NULL ),
@@ -132,13 +124,13 @@ GalleryBrowser1::GalleryBrowser1(
 {
     StartListening( *mpGallery );
 
-    maNewTheme.SetHelpId( HID_GALLERY_NEWTHEME );
-    maNewTheme.SetText( GAL_RESSTR(RID_SVXSTR_GALLERY_CREATETHEME));
-    maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
+    maNewTheme->SetHelpId( HID_GALLERY_NEWTHEME );
+    maNewTheme->SetText( GAL_RESSTR(RID_SVXSTR_GALLERY_CREATETHEME));
+    maNewTheme->SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     // disable creation of new themes if a writable directory is not available
     if( mpGallery->GetUserURL().GetProtocol() == INetProtocol::NotValid )
-        maNewTheme.Disable();
+        maNewTheme->Disable();
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
@@ -148,17 +140,23 @@ GalleryBrowser1::GalleryBrowser1(
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );
 
     ImplAdjustControls();
-    maNewTheme.Show( true );
+    maNewTheme->Show( true );
     mpThemes->Show( true );
 }
 
 GalleryBrowser1::~GalleryBrowser1()
 {
+    disposeOnce();
+}
+
+void GalleryBrowser1::dispose()
+{
     EndListening( *mpGallery );
-    delete mpThemes;
-    mpThemes = NULL;
+    mpThemes.disposeAndClear();
     delete mpExchangeData;
     mpExchangeData = NULL;
+    maNewTheme.disposeAndClear();
+    Control::dispose();
 }
 
 sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
@@ -190,7 +188,7 @@ void GalleryBrowser1::ImplAdjustControls()
     const long  nNewThemeHeight = LogicToPixel( Size( 0, 14 ), MAP_APPFONT ).Height();
     const long  nStartY = nNewThemeHeight + 4;
 
-    maNewTheme.SetPosSizePixel( Point(),
+    maNewTheme->SetPosSizePixel( Point(),
                                 Size( aOutSize.Width(), nNewThemeHeight ) );
 
     mpThemes->SetPosSizePixel( Point( 0, nStartY ),

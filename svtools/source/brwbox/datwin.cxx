@@ -227,11 +227,20 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
 
 BrowserDataWin::~BrowserDataWin()
 {
+    disposeOnce();
+}
+
+void BrowserDataWin::dispose()
+{
     bInDtor = true;
 
     for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i )
         delete aInvalidRegion[ i ];
     aInvalidRegion.clear();
+    pHeaderBar.clear();
+    pEventWin.clear();
+    pCornerWin.clear();
+    Control::dispose();
 }
 
 
@@ -408,7 +417,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
     if ( ( (rEvt.GetCommand() == COMMAND_WHEEL) ||
            (rEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
            (rEvt.GetCommand() == COMMAND_AUTOSCROLL) ) &&
-         ( HandleScrollCommand( rEvt, &pBox->aHScroll, pBox->pVScroll ) ) )
+         ( HandleScrollCommand( rEvt, pBox->aHScroll.get(), pBox->pVScroll ) ) )
       return;
 
     Point aEventPos( rEvt.GetMousePosPixel() );
@@ -721,7 +730,16 @@ void BrowserDataWin::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
         Window::Invalidate( rRect, nFlags );
 }
 
+BrowserScrollBar::~BrowserScrollBar()
+{
+    disposeOnce();
+}
 
+void BrowserScrollBar::dispose()
+{
+    _pDataWin.clear();
+    ScrollBar::dispose();
+}
 
 void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
 {

@@ -223,7 +223,13 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
 SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 {
+    disposeOnce();
+}
+
+void SdPresLayoutTemplateDlg::dispose()
+{
     delete pOutSet;
+    SfxTabDialog::dispose();
 }
 
 void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )

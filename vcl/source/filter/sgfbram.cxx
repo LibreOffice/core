@@ -390,7 +390,7 @@ Color Hpgl2SvFarbe( sal_uInt8 nFarb )
 
 bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
 {
-    VirtualDevice aOutDev;
+    ScopedVclPtrInstance< VirtualDevice > aOutDev;
     SgfVector aVect;
     sal_uInt8      nFarb;
     sal_uInt8      nFrb0=7;
@@ -401,9 +401,9 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
     Point     aP1(0,0);
     sal_uInt16    RecNr=0;
 
-    rMtf.Record(&aOutDev);
-    aOutDev.SetLineColor(Color(COL_BLACK));
-    aOutDev.SetFillColor(Color(COL_BLACK));
+    rMtf.Record(aOutDev.get());
+    aOutDev->SetLineColor(Color(COL_BLACK));
+    aOutDev->SetFillColor(Color(COL_BLACK));
 
     while (!bEoDt && !rInp.GetError()) {
         ReadSgfVector( rInp, aVect ); RecNr++;
@@ -429,15 +429,15 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
                 switch(nOTyp) {
                     case 1: if (nFarb!=nFrb0) {
                                 switch(rHead.SwGrCol) {
-                                    case SgfVectFarb: aOutDev.SetLineColor(Hpgl2SvFarbe(nFarb)); break;
+                                    case SgfVectFarb: aOutDev->SetLineColor(Hpgl2SvFarbe(nFarb)); break;
                                     case SgfVectGray:                          break;
                                     case SgfVectWdth:                          break;
                                 }
                             }
-                            aOutDev.DrawLine(aP0,aP1);            break; // line
+                            aOutDev->DrawLine(aP0,aP1);            break; // line
                     case 2:                                       break; // circle
                     case 3:                                       break; // text
-                    case 5: aOutDev.DrawRect(Rectangle(aP0,aP1)); break; // rectangle (solid)
+                    case 5: aOutDev->DrawRect(Rectangle(aP0,aP1)); break; // rectangle (solid)
                 }
             }
             aP0=aP1;

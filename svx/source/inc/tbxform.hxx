@@ -32,7 +32,6 @@ class SvxFmAbsRecWin : public NumericField
         // for invalidating our content whe losing the focus
 public:
     SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController );
-    virtual ~SvxFmAbsRecWin();
 
     virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
     virtual void LoseFocus() SAL_OVERRIDE;
@@ -59,7 +58,7 @@ public:
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 };
 
 
@@ -72,7 +71,7 @@ public:
     SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlAbsRec();
 
-    virtual vcl::Window* CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -87,7 +86,7 @@ public:
     SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecText();
 
-    virtual vcl::Window* CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 };
 
 
@@ -99,13 +98,13 @@ public:
     SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecFromText();
 
-    virtual vcl::Window* CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 };
 
 
 class SvxFmTbxCtlRecTotal : public SfxToolBoxControl
 {
-    FixedText* pFixedText;
+    VclPtr<FixedText> pFixedText;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -113,7 +112,7 @@ public:
     SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecTotal();
 
-    virtual vcl::Window* CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
 };

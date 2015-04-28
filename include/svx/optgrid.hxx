@@ -101,8 +101,10 @@ class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 
 public:
     SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~SvxGridTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet& rAttrSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -111,30 +113,30 @@ public:
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
 private:
-    CheckBox*            pCbxUseGridsnap;
-    CheckBox*            pCbxGridVisible;
+    VclPtr<CheckBox>            pCbxUseGridsnap;
+    VclPtr<CheckBox>            pCbxGridVisible;
 
-    MetricField*         pMtrFldDrawX;
-    MetricField*         pMtrFldDrawY;
+    VclPtr<MetricField>         pMtrFldDrawX;
+    VclPtr<MetricField>         pMtrFldDrawY;
 
-    NumericField*        pNumFldDivisionX;
-    NumericField*        pNumFldDivisionY;
+    VclPtr<NumericField>        pNumFldDivisionX;
+    VclPtr<NumericField>        pNumFldDivisionY;
 
-    CheckBox*            pCbxSynchronize;
+    VclPtr<CheckBox>            pCbxSynchronize;
 protected:
     //these controls are used in draw and impress
-    VclContainer*    pSnapFrames;
-    CheckBox*        pCbxSnapHelplines;
-    CheckBox*        pCbxSnapBorder;
-    CheckBox*        pCbxSnapFrame;
-    CheckBox*        pCbxSnapPoints;
-    MetricField*     pMtrFldSnapArea;
+    VclPtr<VclContainer>    pSnapFrames;
+    VclPtr<CheckBox>        pCbxSnapHelplines;
+    VclPtr<CheckBox>        pCbxSnapBorder;
+    VclPtr<CheckBox>        pCbxSnapFrame;
+    VclPtr<CheckBox>        pCbxSnapPoints;
+    VclPtr<MetricField>     pMtrFldSnapArea;
 
-    CheckBox*        pCbxOrtho;
-    CheckBox*        pCbxBigOrtho;
-    CheckBox*        pCbxRotate;
-    MetricField*     pMtrFldAngle;
-    MetricField*     pMtrFldBezAngle;
+    VclPtr<CheckBox>        pCbxOrtho;
+    VclPtr<CheckBox>        pCbxBigOrtho;
+    VclPtr<CheckBox>        pCbxRotate;
+    VclPtr<MetricField>     pMtrFldAngle;
+    VclPtr<MetricField>     pMtrFldBezAngle;
 
 private:
     bool                bAttrModified;

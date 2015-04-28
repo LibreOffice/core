@@ -54,6 +54,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 public:
     SwDBTreeList(vcl::Window* pParent, WinBits nStyle);
     virtual ~SwDBTreeList();
+    virtual void dispose() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     OUString GetDBName( OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = 0);

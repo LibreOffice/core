@@ -439,7 +439,7 @@ namespace
 
         private:
             bool mbMapModeRestored;
-            OutputDevice* mpOutDev;
+            VclPtr<OutputDevice> mpOutDev;
     };
 }
 // <--

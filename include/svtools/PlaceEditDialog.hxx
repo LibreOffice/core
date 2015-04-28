@@ -27,16 +27,15 @@
 class SVT_DLLPUBLIC PlaceEditDialog : public ModalDialog
 {
 private :
-
-    Edit*      m_pEDServerName;
-    ListBox*   m_pLBServerType;
+    VclPtr<Edit>         m_pEDServerName;
+    VclPtr<ListBox>      m_pLBServerType;
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;
 
-    Edit*         m_pEDUsername;
-    OKButton*     m_pBTOk;
-    CancelButton* m_pBTCancel;
+    VclPtr<Edit>         m_pEDUsername;
+    VclPtr<OKButton>     m_pBTOk;
+    VclPtr<CancelButton> m_pBTCancel;
 
-    PushButton*   m_pBTDelete;
+    VclPtr<PushButton>   m_pBTDelete;
 
     /** Vector holding the details UI control for each server type.
 
@@ -51,11 +50,12 @@ public :
      PlaceEditDialog( vcl::Window* pParent);
      PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place> &rPlace );
      virtual ~PlaceEditDialog();
+     virtual void dispose() SAL_OVERRIDE;
 
      // Returns a place instance with given information
      std::shared_ptr<Place> GetPlace();
 
-    OUString GetServerName() { return m_pEDServerName->GetText(); }
+     OUString GetServerName() { return m_pEDServerName->GetText(); }
      OUString GetServerUrl();
 
 private:

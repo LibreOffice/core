@@ -660,7 +660,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
                 double, double,
                 UCHAR* cLine, bool TextFit)
 {
-    VirtualDevice vOut;
+    ScopedVclPtrInstance< VirtualDevice > vOut;
     UCHAR        c,c0;
     bool         First;               // first char ?
     sal_uInt8    Just = 0;            // paragraph format
@@ -684,18 +684,18 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     sal_uInt16       i,j,k,h;
     sal_uInt16       re,li;
 
-    vOut.SetMapMode(MapMode(MAP_10TH_MM,Point(),Fraction(1,4),Fraction(1,4)));
+    vOut->SetMapMode(MapMode(MAP_10TH_MM,Point(),Fraction(1,4),Fraction(1,4)));
 
     nChars=0;
-    SetTextContext(vOut,AktAtr,false,0,1,1,1,1);
+    SetTextContext(*vOut.get(),AktAtr,false,0,1,1,1,1);
     InitProcessCharState(*R,AktAtr,Index);
     (*R0)=(*R); (*WErec)=(*R); WEnChar=0; c0=0; Border0=false;
     Border=false; First=true;
     WordEndCnt=0;
 
     do {               // check how many words to on that line
-        if (Border) c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,DoTrenn,Line,cLine);
-        else        c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
+        if (Border) c=ProcessChar(*vOut.get(),TBuf,*R,Atr0,nChars,DoTrenn,Line,cLine);
+        else        c=ProcessChar(*vOut.get(),TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
         AbsEnd=(c==AbsatzEnd || c==TextEnd);
         //if not AbsEnd then
         {
@@ -729,8 +729,8 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         (*TRrec)=(*R); TRnChar=nChars;
         Border0=false; Border=false;
         do {                // first check how many syllables fit
-            UCHAR ct=ProcessChar(vOut,TBuf,*TRrec,Atr0,TRnChar,DoTrenn,Line,cLine);
-            c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
+            UCHAR ct=ProcessChar(*vOut.get(),TBuf,*TRrec,Atr0,TRnChar,DoTrenn,Line,cLine);
+            c=ProcessChar(*vOut.get(),TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
             AbsEnd=(ct==AbsatzEnd) || (ct==TextEnd) || (nChars>=MaxLineChars);
 
             Border=TRrec->ChrXP>UmbWdt;
@@ -754,7 +754,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         } while (!(AbsEnd || (Border && ((WordEndCnt>0) || WordEnd || Trenn))));
 
         while (WErec0->Index<WErec->Index) { // to assure Line[] matches }
-            ProcessChar(vOut,TBuf,*WErec0,Atr0,WEnChar0,WEnChar-WEnChar0-1,Line,cLine);
+            ProcessChar(*vOut.get(),TBuf,*WErec0,Atr0,WEnChar0,WEnChar-WEnChar0-1,Line,cLine);
         }
 
         (*R)=(*WErec); nChars=WEnChar;

@@ -169,8 +169,8 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     else
     {
-        MessageDialog aErrorBox(NULL, SD_RESSTR(nId));
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SD_RESSTR(nId));
+        aErrorBox->Execute();
     }
 }
 

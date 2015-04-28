@@ -163,19 +163,19 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 Graphic aGraphic = Graphic( *pGraphic );
 
-                CompressGraphicsDialog aDialog( GetView().GetWindow(), aGraphic, aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings() );
-                if( aDialog.Execute() == RET_OK )
+                ScopedVclPtrInstance< CompressGraphicsDialog > aDialog( GetView().GetWindow(), aGraphic, aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings() );
+                if( aDialog->Execute() == RET_OK )
                 {
                     rSh.StartAllAction();
                     rSh.StartUndo(UNDO_START);
-                    Rectangle aScaledCropedRectangle = aDialog.GetScaledCropRectangle();
+                    Rectangle aScaledCropedRectangle = aDialog->GetScaledCropRectangle();
 
                     aCrop.SetLeft(   convertMm100ToTwip( aScaledCropedRectangle.Left() ));
                     aCrop.SetTop(    convertMm100ToTwip( aScaledCropedRectangle.Top() ));
                     aCrop.SetRight(  convertMm100ToTwip( aScaledCropedRectangle.Right() ));
                     aCrop.SetBottom( convertMm100ToTwip( aScaledCropedRectangle.Bottom() ));
 
-                    Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
+                    Graphic aCompressedGraphic( aDialog->GetCompressedGraphic() );
                     rSh.ReRead(OUString(), OUString(), (const Graphic*) &aCompressedGraphic);
 
                     rSh.SetAttrItem(aCrop);

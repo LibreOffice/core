@@ -42,6 +42,19 @@ ArgEdit::ArgEdit( vcl::Window* pParent, WinBits nBits )
 {
 }
 
+ArgEdit::~ArgEdit()
+{
+    disposeOnce();
+}
+
+void ArgEdit::dispose()
+{
+    pEdPrev.clear();
+    pEdNext.clear();
+    pSlider.clear();
+    RefEdit::dispose();
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeArgEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ArgEdit(pParent, WB_BORDER);
@@ -149,17 +162,17 @@ void ArgInput::InitArgInput( FixedText* pftArg, PushButton* pbtnFx,
     pEdArg =pedArg;
     pRefBtn=prefBtn;
 
-    if(pBtnFx!=NULL)
+    if(pBtnFx!=nullptr)
     {
         pBtnFx->SetClickHdl   ( LINK( this, ArgInput, FxBtnClickHdl ) );
         pBtnFx->SetGetFocusHdl( LINK( this, ArgInput, FxBtnFocusHdl ) );
     }
-    if(pRefBtn!=NULL)
+    if(pRefBtn!=nullptr)
     {
         pRefBtn->SetClickHdl   ( LINK( this, ArgInput, RefBtnClickHdl ) );
         pRefBtn->SetGetFocusHdl( LINK( this, ArgInput, RefBtnFocusHdl ) );
     }
-    if(pEdArg!=NULL)
+    if(pEdArg!=nullptr)
     {
         pEdArg->SetGetFocusHdl ( LINK( this, ArgInput, EdFocusHdl ) );
         pEdArg->SetModifyHdl   ( LINK( this, ArgInput, EdModifyHdl ) );
@@ -170,14 +183,14 @@ void ArgInput::InitArgInput( FixedText* pftArg, PushButton* pbtnFx,
 // Sets the Name for the Argument
 void ArgInput::SetArgName(const OUString &aArg)
 {
-    if(pFtArg !=NULL) pFtArg->SetText(aArg );
+    if(pFtArg !=nullptr) pFtArg->SetText(aArg );
 }
 
 // Returns the Name for the Argument
 OUString ArgInput::GetArgName()
 {
     OUString aPrivArgName;
-    if(pFtArg !=NULL)
+    if(pFtArg !=nullptr)
         aPrivArgName=pFtArg->GetText();
 
     return aPrivArgName;
@@ -186,19 +199,19 @@ OUString ArgInput::GetArgName()
 //Sets the Name for the Argument
 void ArgInput::SetArgNameFont   (const vcl::Font &aFont)
 {
-    if(pFtArg !=NULL) pFtArg->SetFont(aFont);
+    if(pFtArg !=nullptr) pFtArg->SetFont(aFont);
 }
 
 //Sets up the Selection for the EditBox.
 void ArgInput::SetArgSelection  (const Selection& rSel )
 {
-    if(pEdArg !=NULL) pEdArg ->SetSelection(rSel );
+    if(pEdArg !=nullptr) pEdArg ->SetSelection(rSel );
 }
 
 //Sets the Value for the Argument
 void ArgInput::SetArgVal(const OUString &rVal)
 {
-    if(pEdArg !=NULL)
+    if(pEdArg != nullptr)
     {
         pEdArg ->SetRefString(rVal);
     }
@@ -208,7 +221,7 @@ void ArgInput::SetArgVal(const OUString &rVal)
 OUString ArgInput::GetArgVal()
 {
     OUString aResult;
-    if(pEdArg!=NULL)
+    if(pEdArg!=nullptr)
     {
         aResult=pEdArg->GetText();
     }
@@ -340,7 +353,7 @@ EditBox::EditBox( vcl::Window* pParent, WinBits nBits )
     WinBits nStyle=GetStyle();
     SetStyle( nStyle| WB_DIALOGCONTROL);
 
-    pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | (nStyle & WB_TABSTOP) |
+    pMEdit=VclPtr<MultiLineEdit>::Create(this,WB_LEFT | WB_VSCROLL | (nStyle & WB_TABSTOP) |
                     WB_NOBORDER | WB_NOHIDESELECTION | WB_IGNORETAB);
     pMEdit->Show();
     aOldSel=pMEdit->GetSelection();
@@ -361,10 +374,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeEditBox(vcl::Window *p
 
 EditBox::~EditBox()
 {
-    MultiLineEdit* pTheEdit=pMEdit;
+    disposeOnce();
+}
+
+void EditBox::dispose()
+{
     pMEdit->Disable();
-    pMEdit=NULL;
-    delete pTheEdit;
+    pMEdit.disposeAndClear();
+    Control::dispose();
 }
 
 // When the selection is changed this function will be called
@@ -377,14 +394,14 @@ void EditBox::SelectionChanged()
 void EditBox::Resize()
 {
     Size aSize=GetOutputSizePixel();
-    if(pMEdit!=NULL) pMEdit->SetOutputSizePixel(aSize);
+    if(pMEdit!=nullptr) pMEdit->SetOutputSizePixel(aSize);
 }
 
 // When the Control is activated, the Selection is repealed
 // and the Cursor set at the end.
 void EditBox::GetFocus()
 {
-    if(pMEdit!=NULL)
+    if(pMEdit!=nullptr)
     {
         pMEdit->GrabFocus();
     }
@@ -396,7 +413,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
 {
     bool nResult = true;
 
-    if(pMEdit==NULL) return nResult;
+    if(pMEdit==nullptr) return nResult;
 
     MouseNotifyEvent nSwitch=rNEvt.GetType();
     if(nSwitch==MouseNotifyEvent::KEYINPUT)// || nSwitch==MouseNotifyEvent::KEYUP)
@@ -431,7 +448,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
 //first called.
 IMPL_LINK_NOARG(EditBox, ChangedHdl)
 {
-    if(pMEdit!=NULL)
+    if(pMEdit!=nullptr)
     {
         Selection aNewSel=pMEdit->GetSelection();
 
@@ -481,8 +498,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefEdit(vcl::Window *p
 
 RefEdit::~RefEdit()
 {
+    disposeOnce();
+}
+
+void RefEdit::dispose()
+{
     aIdle.SetIdleHdl( Link() );
     aIdle.Stop();
+    pLabelWidget.clear();
+    Edit::dispose();
 }
 
 void RefEdit::SetRefString( const OUString& rStr )
@@ -579,6 +603,17 @@ RefButton::RefButton( vcl::Window* _pParent, WinBits nStyle ) :
     pRefEdit( NULL )
 {
     SetStartImage();
+}
+
+RefButton::~RefButton()
+{
+    disposeOnce();
+}
+
+void RefButton::dispose()
+{
+    pRefEdit.clear();
+    ImageButton::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefButton(vcl::Window *pParent, VclBuilder::stringmap &)

@@ -35,11 +35,11 @@ struct SwDBData;
 // exchange database at fields
 class SwChangeDBDlg: public SvxStandardDialog
 {
-    SvTreeListBox*  m_pUsedDBTLB;
-    SwDBTreeList*   m_pAvailDBTLB;
-    PushButton*     m_pAddDBPB;
-    FixedText*      m_pDocDBNameFT;
-    PushButton*     m_pDefineBT;
+    VclPtr<SvTreeListBox>  m_pUsedDBTLB;
+    VclPtr<SwDBTreeList>   m_pAvailDBTLB;
+    VclPtr<PushButton>     m_pAddDBPB;
+    VclPtr<FixedText>      m_pDocDBNameFT;
+    VclPtr<PushButton>     m_pDefineBT;
 
     ImageList       aImageList;
 
@@ -59,6 +59,7 @@ class SwChangeDBDlg: public SvxStandardDialog
 public:
     SwChangeDBDlg(SwView& rVw);
     virtual ~SwChangeDBDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

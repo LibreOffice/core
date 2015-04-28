@@ -67,7 +67,7 @@ Color *pWaveCol = 0;
 
 long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = NULL;
-OutputDevice* SwFntObj::pPixOut = NULL;
+VclPtr<OutputDevice> SwFntObj::pPixOut;
 
 namespace
 {
@@ -1401,7 +1401,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         if ( pPrinter )
         {
             // pTmpFont has already been set as current font for rInf.GetOut()
-            if ( pPrinter != rInf.GetpOut() || pTmpFont != pPrtFont )
+            if ( pPrinter.get() != rInf.GetpOut() || pTmpFont != pPrtFont )
             {
                 if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
                     pPrinter->SetFont( *pPrtFont );
@@ -1886,7 +1886,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
     // This is the part used e.g., for cursor travelling
     // See condition for DrawText or DrawTextArray (bDirectPrint)
-    if ( pPrinter && pPrinter != rInf.GetpOut() )
+    if ( pPrinter && pPrinter.get() != rInf.GetpOut() )
     {
         if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
             pPrinter->SetFont(*pPrtFont);
@@ -2247,7 +2247,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                               ( !pFntObj->pPrinter || pFntObj->pPrinter == pOut ) ) )
             pFntObj = pFntCache->Next( pFntObj );
 
-        if( pFntObj && pFntObj->pPrinter != pOut )
+        if( pFntObj && pFntObj->pPrinter.get() != pOut )
         {
             // found one without printer, let's see if there is one with
             // the same printer as well
@@ -2272,7 +2272,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
         else  // Font has been found, so we lock it.
         {
             pFntObj->Lock();
-            if (pFntObj->pPrinter != pOut) // if no printer is known by now
+            if (pFntObj->pPrinter.get() != pOut) // if no printer is known by now
             {
                 OSL_ENSURE( !pFntObj->pPrinter, "SwFntAccess: Printer Changed" );
                 pFntObj->CreatePrtFont( *pOut );

@@ -96,7 +96,7 @@ namespace o3tl
 
 struct SfxChild_Impl
 {
-    vcl::Window*                     pWin;
+    VclPtr<vcl::Window>             pWin;
     Size                            aSize;
     SfxChildAlignment               eAlign;
     SfxChildVisibility              nVisible;
@@ -222,16 +222,16 @@ protected:
     Rectangle               aClientArea;
     Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
-    SfxSplitWindow*         pSplit[SFX_SPLITWINDOWS_MAX];
+    VclPtr<SfxSplitWindow>  pSplit[SFX_SPLITWINDOWS_MAX];
     SfxChildList_Impl       aChildren;
     SfxChildWindows_Impl    aChildWins;
     SfxBindings*            pBindings;
-    vcl::Window*                 pWorkWin;
+    VclPtr<vcl::Window>     pWorkWin;
     SfxShell*               pConfigShell;
-    vcl::Window*                 pActiveChild;
-    sal_uInt16                  nUpdateMode;
-    sal_uInt16                  nChildren;
-    sal_uInt16                  nOrigMode;
+    VclPtr<vcl::Window>     pActiveChild;
+    sal_uInt16              nUpdateMode;
+    sal_uInt16              nChildren;
+    sal_uInt16              nOrigMode;
     bool                    bSorted : 1;
     bool                    bDockingAllowed : 1;
     bool                    bInternalDockingAllowed : 1;

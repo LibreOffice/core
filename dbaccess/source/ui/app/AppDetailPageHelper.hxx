@@ -77,15 +77,15 @@ namespace dbaui
     // Combines general functionality.
     class OAppDetailPageHelper : public vcl::Window
     {
-        DBTreeListBox*      m_pLists[ELEMENT_COUNT];
+        VclPtr<DBTreeListBox>     m_pLists[ELEMENT_COUNT];
         OAppBorderWindow&   m_rBorderWin;
-        FixedLine           m_aFL;
-        ToolBox             m_aTBPreview;
-        Window              m_aBorder;
-        OPreviewWindow      m_aPreview;
-        ::svtools::ODocumentInfoPreview
-                            m_aDocumentInfo;
-        vcl::Window*             m_pTablePreview;
+        VclPtr<FixedLine>         m_aFL;
+        VclPtr<ToolBox>           m_aTBPreview;
+        VclPtr<Window>            m_aBorder;
+        VclPtr<OPreviewWindow>    m_aPreview;
+        VclPtr<::svtools::ODocumentInfoPreview>
+                                  m_aDocumentInfo;
+        VclPtr<vcl::Window>       m_pTablePreview;
         ::std::unique_ptr<PopupMenu> m_aMenu;
         PreviewMode         m_ePreviewMode;
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
@@ -169,6 +169,7 @@ namespace dbaui
     public:
         OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void Resize() SAL_OVERRIDE;
@@ -193,7 +194,7 @@ namespace dbaui
         inline DBTreeListBox* getCurrentView() const
         {
             ElementType eType = getElementType();
-            return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)] : NULL;
+            return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)].get() : NULL;
         }
 
         /// select all entries in the visible control

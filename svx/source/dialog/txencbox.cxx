@@ -59,7 +59,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxTextEncodingBox(vcl
 
 SvxTextEncodingBox::~SvxTextEncodingBox()
 {
+    disposeOnce();
+}
+
+void SvxTextEncodingBox::dispose()
+{
     delete m_pEncTable;
+    ListBox::dispose();
 }
 
 

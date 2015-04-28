@@ -199,7 +199,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     Size aSize = pHeaderTreeContainer->LogicToPixel(Size(182 , 102), MAP_APPFONT);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
-    m_pListLB = new SwAddrSourceLB(*pHeaderTreeContainer);
+    m_pListLB = VclPtr<SwAddrSourceLB>::Create(*pHeaderTreeContainer);
 
     m_pListLB->InsertHeaderEntry(m_sName + "\t" + m_sTable);
     m_pListLB->setColSizes();
@@ -265,6 +265,11 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
 SwAddressListDialog::~SwAddressListDialog()
 {
+    disposeOnce();
+}
+
+void SwAddressListDialog::dispose()
+{
     SvTreeListEntry* pEntry = m_pListLB->First();
     while(pEntry)
     {
@@ -272,7 +277,16 @@ SwAddressListDialog::~SwAddressListDialog()
         delete pUserData;
         pEntry = m_pListLB->Next( pEntry );
     }
-    delete m_pListLB;
+    m_pListLB.disposeAndClear();
+    m_pAddressPage.clear();
+    m_pDescriptionFI.clear();
+    m_pLoadListPB.clear();
+    m_pCreateListPB.clear();
+    m_pFilterPB.clear();
+    m_pEditPB.clear();
+    m_pTablePB.clear();
+    m_pOK.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
@@ -344,8 +358,9 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 {
     OUString sInputURL;
-    boost::scoped_ptr<SwCreateAddressListDialog> pDlg(
-            new SwCreateAddressListDialog(
+    VclPtr<SwCreateAddressListDialog> pDlg(
+            VclPtr<SwCreateAddressListDialog>::Create(
+
                     pButton,
                     sInputURL,
                     m_pAddressPage->GetWizard()->GetConfigItem()));
@@ -443,8 +458,9 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
         pUserData->xColumnsSupplier.clear();
         pUserData->xConnection.clear();
             // will automatically close if it was the las reference
-        boost::scoped_ptr<SwCreateAddressListDialog> pDlg(
-                new SwCreateAddressListDialog(
+        VclPtr<SwCreateAddressListDialog> pDlg(
+                VclPtr<SwCreateAddressListDialog>::Create(
+
                         pButton,
                         pUserData->sURL,
                         m_pAddressPage->GetWizard()->GetConfigItem()));
@@ -562,7 +578,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             if(nTables > 1 && bWidthDialog)
             {
                 //now call the table select dialog - if more than one table exists
-                boost::scoped_ptr<SwSelectDBTableDialog> pDlg(new SwSelectDBTableDialog(this, pUserData->xConnection));
+                VclPtrInstance<SwSelectDBTableDialog> pDlg(this, pUserData->xConnection);
                 const OUString sTable = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
                 if(!sTable.isEmpty())
                     pDlg->SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);

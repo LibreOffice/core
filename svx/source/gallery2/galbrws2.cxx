@@ -110,10 +110,10 @@ class GalleryThemePopup : public ::cppu::WeakImplHelper1< css::frame::XStatusLis
 private:
     const GalleryTheme* mpTheme;
     sal_uIntPtr         mnObjectPos;
-    bool            mbPreview;
+    bool                mbPreview;
     PopupMenu           maPopupMenu;
     PopupMenu           maBackgroundPopup;
-    GalleryBrowser2*    mpBrowser;
+    VclPtr<GalleryBrowser2> mpBrowser;
 
     typedef std::map< int, CommandInfo > CommandInfoMap;
     CommandInfoMap   m_aCommandInfo;
@@ -403,10 +403,6 @@ GalleryToolBox::GalleryToolBox( GalleryBrowser2* pParent ) :
 {
 }
 
-GalleryToolBox::~GalleryToolBox()
-{
-}
-
 void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
 {
     if( !static_cast< GalleryBrowser2* >( GetParent() )->KeyInput( rKEvt, this ) )
@@ -418,12 +414,12 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
     Control             ( pParent, WB_TABSTOP ),
     mpGallery           ( pGallery ),
     mpCurTheme          ( NULL ),
-    mpIconView          ( new GalleryIconView( this, NULL ) ),
-    mpListView          ( new GalleryListView( this, NULL ) ),
-    mpPreview           ( new GalleryPreview(this) ),
-    maViewBox           ( this ),
-    maSeparator         ( this, WB_VERT ),
-    maInfoBar           ( this, WB_LEFT | WB_VCENTER ),
+    mpIconView          ( VclPtr<GalleryIconView>::Create( this, nullptr ) ),
+    mpListView          ( VclPtr<GalleryListView>::Create( this, nullptr ) ),
+    mpPreview           ( VclPtr<GalleryPreview>::Create(this) ),
+    maViewBox           ( VclPtr<GalleryToolBox>::Create(this) ),
+    maSeparator         ( VclPtr<FixedLine>::Create(this, WB_VERT) ),
+    maInfoBar           ( VclPtr<FixedText>::Create(this, WB_LEFT | WB_VCENTER) ),
     mnCurActionPos      ( 0xffffffff ),
     meMode              ( GALLERYBROWSERMODE_NONE ),
     meLastMode          ( GALLERYBROWSERMODE_NONE )
@@ -438,29 +434,29 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
 
     Image       aDummyImage;
     const Link  aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
-    vcl::Font   aInfoFont( maInfoBar.GetControlFont() );
+    vcl::Font   aInfoFont( maInfoBar->GetControlFont() );
 
     maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
-    maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
-    maViewBox.SetItemBits( TBX_ID_ICON, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
-    maViewBox.SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
-    maViewBox.SetQuickHelpText( TBX_ID_ICON, GAL_RESSTR(RID_SVXSTR_GALLERY_ICONVIEW) );
+    maViewBox->InsertItem( TBX_ID_ICON, aDummyImage );
+    maViewBox->SetItemBits( TBX_ID_ICON, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
+    maViewBox->SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
+    maViewBox->SetQuickHelpText( TBX_ID_ICON, GAL_RESSTR(RID_SVXSTR_GALLERY_ICONVIEW) );
 
-    maViewBox.InsertItem( TBX_ID_LIST, aDummyImage );
-    maViewBox.SetItemBits( TBX_ID_LIST, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
-    maViewBox.SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
-    maViewBox.SetQuickHelpText( TBX_ID_LIST, GAL_RESSTR(RID_SVXSTR_GALLERY_LISTVIEW) );
+    maViewBox->InsertItem( TBX_ID_LIST, aDummyImage );
+    maViewBox->SetItemBits( TBX_ID_LIST, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
+    maViewBox->SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
+    maViewBox->SetQuickHelpText( TBX_ID_LIST, GAL_RESSTR(RID_SVXSTR_GALLERY_LISTVIEW) );
 
     MiscHdl( NULL );
-    maViewBox.SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );
-    maViewBox.Show();
+    maViewBox->SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );
+    maViewBox->Show();
 
     mpIconView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
     mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
 
-    maInfoBar.Show();
-    maSeparator.Show();
+    maInfoBar->Show();
+    maSeparator->Show();
 
     mpIconView->SetSelectHdl( aSelectHdl );
     mpListView->SetSelectHdl( aSelectHdl );
@@ -469,40 +465,48 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
 
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GalleryBrowser2::meInitMode ) ? GalleryBrowser2::meInitMode : GALLERYBROWSERMODE_ICON );
 
-    if(maInfoBar.GetText().isEmpty())
+    if(maInfoBar->GetText().isEmpty())
         mpIconView->SetAccessibleRelationLabeledBy(mpIconView);
     else
-        mpIconView->SetAccessibleRelationLabeledBy(&maInfoBar);
+        mpIconView->SetAccessibleRelationLabeledBy(maInfoBar.get());
     mpIconView->SetAccessibleRelationMemberOf(mpIconView);
 }
 
 GalleryBrowser2::~GalleryBrowser2()
 {
+    disposeOnce();
+}
+
+void GalleryBrowser2::dispose()
+{
     maMiscOptions.RemoveListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
-    delete mpPreview;
-    delete mpListView;
-    delete mpIconView;
+    mpPreview.disposeAndClear();
+    mpListView.disposeAndClear();
+    mpIconView.disposeAndClear();
 
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
-
+    maSeparator.disposeAndClear();
+    maInfoBar.disposeAndClear();
+    maViewBox.disposeAndClear();
+    Control::dispose();
 }
 
 void GalleryBrowser2::InitSettings()
 {
-    vcl::Font  aInfoFont( maInfoBar.GetControlFont() );
+    vcl::Font  aInfoFont( maInfoBar->GetControlFont() );
 
     aInfoFont.SetWeight( WEIGHT_BOLD );
     aInfoFont.SetColor( GALLERY_FG_COLOR );
-    maInfoBar.SetControlFont( aInfoFont );
+    maInfoBar->SetControlFont( aInfoFont );
 
-    maInfoBar.SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
-    maInfoBar.SetControlBackground( GALLERY_DLG_COLOR );
+    maInfoBar->SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
+    maInfoBar->SetControlBackground( GALLERY_DLG_COLOR );
 
-    maSeparator.SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
-    maSeparator.SetControlBackground( GALLERY_BG_COLOR );
-    maSeparator.SetControlForeground( GALLERY_FG_COLOR );
+    maSeparator->SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    maSeparator->SetControlBackground( GALLERY_BG_COLOR );
+    maSeparator->SetControlForeground( GALLERY_FG_COLOR );
 }
 
 void GalleryBrowser2::DataChanged( const DataChangedEvent& rDCEvt )
@@ -522,14 +526,14 @@ void GalleryBrowser2::Resize()
     mpPreview->Hide();
 
     const Size  aOutSize( GetOutputSizePixel() );
-    const Size  aBoxSize( maViewBox.GetOutputSizePixel() );
+    const Size  aBoxSize( maViewBox->GetOutputSizePixel() );
     const long  nOffset = 2, nSepWidth = 2;
     const long  nInfoBarX = aBoxSize.Width() + ( nOffset * 3 ) + nSepWidth;
     const Point aPt( 0, aBoxSize.Height() + 3 );
     const Size  aSz( aOutSize.Width(), aOutSize.Height() - aPt.Y() );
 
-    maSeparator.SetPosSizePixel( Point( aBoxSize.Width() + nOffset, 0 ), Size( nSepWidth, aBoxSize.Height() ) );
-    maInfoBar.SetPosSizePixel( Point( nInfoBarX, 0 ), Size( aOutSize.Width() - nInfoBarX, aBoxSize.Height() ) );
+    maSeparator->SetPosSizePixel( Point( aBoxSize.Width() + nOffset, 0 ), Size( nSepWidth, aBoxSize.Height() ) );
+    maInfoBar->SetPosSizePixel( Point( nInfoBarX, 0 ), Size( aOutSize.Width() - nInfoBarX, aBoxSize.Height() ) );
 
     mpIconView->SetPosSizePixel( aPt, aSz );
     mpListView->SetPosSizePixel( aPt, aSz );
@@ -661,7 +665,7 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
     if (pParentControl != NULL)
         bRet = pParentControl->GalleryKeyInput(rKEvt, pWindow);
 
-    if( !bRet && !maViewBox.HasFocus() && nItemId && mpCurTheme )
+    if( !bRet && !maViewBox->HasFocus() && nItemId && mpCurTheme )
     {
         sal_uInt16          nExecuteId = 0;
         INetURLObject       aURL;
@@ -736,18 +740,18 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 
 void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 {
-    delete mpIconView, mpIconView = NULL;
-    delete mpListView, mpListView = NULL;
-    delete mpPreview, mpPreview = NULL;
+    mpIconView.disposeAndClear();
+    mpListView.disposeAndClear();
+    mpPreview.disposeAndClear();
 
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
 
     mpCurTheme = mpGallery->AcquireTheme( rThemeName, *this );
 
-    mpIconView = new GalleryIconView( this, mpCurTheme );
-    mpListView = new GalleryListView( this, mpCurTheme );
-    mpPreview = new GalleryPreview( this, WB_TABSTOP | WB_BORDER, mpCurTheme );
+    mpIconView = VclPtr<GalleryIconView>::Create( this, mpCurTheme );
+    mpListView = VclPtr<GalleryListView>::Create( this, mpCurTheme );
+    mpPreview = VclPtr<GalleryPreview>::Create( this, WB_TABSTOP | WB_BORDER, mpCurTheme );
 
     mpIconView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
     mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
@@ -764,14 +768,14 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
     Resize();
     ImplUpdateViews( 1 );
 
-    maViewBox.EnableItem( TBX_ID_ICON, true );
-    maViewBox.EnableItem( TBX_ID_LIST, true );
-    maViewBox.CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST, true );
+    maViewBox->EnableItem( TBX_ID_ICON, true );
+    maViewBox->EnableItem( TBX_ID_LIST, true );
+    maViewBox->CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST, true );
 
-    if(maInfoBar.GetText().isEmpty())
+    if(maInfoBar->GetText().isEmpty())
         mpIconView->SetAccessibleRelationLabeledBy(mpIconView);
     else
-        mpIconView->SetAccessibleRelationLabeledBy(&maInfoBar);
+        mpIconView->SetAccessibleRelationLabeledBy(maInfoBar.get());
     mpIconView->SetAccessibleRelationMemberOf(mpIconView);
 }
 
@@ -793,11 +797,11 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpIconView->Show();
 
-                maViewBox.EnableItem( TBX_ID_ICON, true );
-                maViewBox.EnableItem( TBX_ID_LIST, true );
+                maViewBox->EnableItem( TBX_ID_ICON, true );
+                maViewBox->EnableItem( TBX_ID_LIST, true );
 
-                maViewBox.CheckItem( TBX_ID_ICON, true );
-                maViewBox.CheckItem( TBX_ID_LIST, false );
+                maViewBox->CheckItem( TBX_ID_ICON, true );
+                maViewBox->CheckItem( TBX_ID_LIST, false );
             }
             break;
 
@@ -811,11 +815,11 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpListView->Show();
 
-                maViewBox.EnableItem( TBX_ID_ICON, true );
-                maViewBox.EnableItem( TBX_ID_LIST, true );
+                maViewBox->EnableItem( TBX_ID_ICON, true );
+                maViewBox->EnableItem( TBX_ID_LIST, true );
 
-                maViewBox.CheckItem( TBX_ID_ICON, false );
-                maViewBox.CheckItem( TBX_ID_LIST, true );
+                maViewBox->CheckItem( TBX_ID_ICON, false );
+                maViewBox->CheckItem( TBX_ID_LIST, true );
             }
             break;
 
@@ -841,8 +845,8 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                     if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
                         GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
-                    maViewBox.EnableItem( TBX_ID_ICON, false );
-                    maViewBox.EnableItem( TBX_ID_LIST, false );
+                    maViewBox->EnableItem( TBX_ID_ICON, false );
+                    maViewBox->EnableItem( TBX_ID_LIST, false );
                 }
             }
             break;
@@ -957,7 +961,7 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 void GalleryBrowser2::ImplUpdateInfoBar()
 {
     if( mpCurTheme )
-         maInfoBar.SetText( mpCurTheme->GetName() );
+         maInfoBar->SetText( mpCurTheme->GetName() );
 }
 
 sal_uIntPtr GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
@@ -1337,7 +1341,7 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 
 IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)
 {
-    maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
+    maViewBox->SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
     BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RES( RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
     BitmapEx aListBmpEx = BitmapEx( Image( GAL_RES( RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
@@ -1350,9 +1354,9 @@ IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)
         aListBmpEx.Scale( aLargeSize );
     }
 
-    maViewBox.SetItemImage(TBX_ID_ICON, Image(aIconBmpEx));
-    maViewBox.SetItemImage(TBX_ID_LIST, Image(aListBmpEx));
-    maViewBox.SetSizePixel( maViewBox.CalcWindowSizePixel() );
+    maViewBox->SetItemImage(TBX_ID_ICON, Image(aIconBmpEx));
+    maViewBox->SetItemImage(TBX_ID_LIST, Image(aListBmpEx));
+    maViewBox->SetSizePixel( maViewBox->CalcWindowSizePixel() );
 
     Resize();
 

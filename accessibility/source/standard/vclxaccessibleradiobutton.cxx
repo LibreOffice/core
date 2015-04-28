@@ -90,16 +90,16 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
 {
     VCLXAccessibleTextComponent::FillAccessibleRelationSet( rRelationSet );
 
-    RadioButton* pRadioButton = dynamic_cast< RadioButton* >( GetWindow() );
+    VclPtr< RadioButton > pRadioButton = GetAsDynamic< RadioButton >();
     if ( pRadioButton )
     {
-        ::std::vector< RadioButton* > aGroup(pRadioButton->GetRadioButtonGroup(true));
+        ::std::vector< VclPtr<RadioButton> > aGroup(pRadioButton->GetRadioButtonGroup(true));
         if (!aGroup.empty())
         {
             sal_Int32 i = 0;
             Sequence< Reference< XInterface > > aSequence( static_cast< sal_Int32 >( aGroup.size() ) );
-            ::std::vector< RadioButton* >::const_iterator aEndItr = aGroup.end();
-            for ( ::std::vector< RadioButton* >::const_iterator aItr = aGroup.begin(); aItr < aEndItr; ++aItr )
+            auto aEndItr = aGroup.end();
+            for ( auto aItr = aGroup.begin(); aItr < aEndItr; ++aItr )
             {
                 aSequence[i++] = (*aItr)->GetAccessible();
             }

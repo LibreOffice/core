@@ -36,16 +36,18 @@ namespace dbp
     class OTableSelectionPage : public OControlWizardPage
     {
     protected:
-        FixedText       *m_pDatasourceLabel;
-        ListBox         *m_pDatasource;
-        PushButton      *m_pSearchDatabase;
-        ListBox         *m_pTable;
+        VclPtr<FixedText>       m_pDatasourceLabel;
+        VclPtr<ListBox>         m_pDatasource;
+        VclPtr<PushButton>      m_pSearchDatabase;
+        VclPtr<ListBox>         m_pTable;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
                         m_xDSContext;
 
     public:
         OTableSelectionPage(OControlWizard* _pParent);
+        virtual ~OTableSelectionPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // TabPage overridables
@@ -74,12 +76,14 @@ namespace dbp
     class OMaybeListSelectionPage : public OControlWizardPage
     {
     protected:
-        RadioButton*    m_pYes;
-        RadioButton*    m_pNo;
-        ListBox*        m_pList;
+        VclPtr<RadioButton>    m_pYes;
+        VclPtr<RadioButton>    m_pNo;
+        VclPtr<ListBox>        m_pList;
 
     public:
         OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription );
+        virtual ~OMaybeListSelectionPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         DECL_LINK( OnRadioSelected, RadioButton* );
@@ -105,13 +109,15 @@ namespace dbp
     class ODBFieldPage : public OMaybeListSelectionPage
     {
     protected:
-        FixedText*      m_pDescription;
-        RadioButton*    m_pStoreYes;
-        RadioButton*    m_pStoreNo;
-        ListBox*        m_pStoreWhere;
+        VclPtr<FixedText>      m_pDescription;
+        VclPtr<RadioButton>    m_pStoreYes;
+        VclPtr<RadioButton>    m_pStoreNo;
+        VclPtr<ListBox>        m_pStoreWhere;
 
     public:
         ODBFieldPage( OControlWizard* _pParent );
+        virtual ~ODBFieldPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         void setDescriptionText(const OUString& _rDesc) { m_pDescription->SetText(_rDesc); }

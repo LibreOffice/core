@@ -38,10 +38,6 @@ ORelationTableConnection::ORelationTableConnection( const ORelationTableConnecti
     // no own members, thus the base class functionality is enough
 }
 
-ORelationTableConnection::~ORelationTableConnection()
-{
-}
-
 ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTableConnection& rConn )
 {
     // this doesn't change anything, since the base class tests this, too and I don't have my own members to copy

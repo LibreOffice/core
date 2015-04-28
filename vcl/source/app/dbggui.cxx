@@ -207,98 +207,104 @@ NULL
 class DbgInfoDialog : public ModalDialog
 {
 private:
-    ListBox         maListBox;
-    OKButton        maOKButton;
-    bool            mbHelpText;
+    VclPtr<ListBox>   maListBox;
+    VclPtr<OKButton>  maOKButton;
+    bool              mbHelpText;
 
 public:
                     DbgInfoDialog( vcl::Window* pParent, bool bHelpText = false );
 
     void            SetInfoText( const OUString& rStr );
+private:
+    virtual void    dispose() SAL_OVERRIDE;
+    virtual         ~DbgInfoDialog() { disposeOnce(); }
 };
 
 class DbgDialog : public ModalDialog
 {
 private:
-    CheckBox        maRes;
-    CheckBox        maDialog;
-    CheckBox        maBoldAppFont;
-    GroupBox        maBox3;
+    VclPtr<CheckBox>     maRes;
+    VclPtr<CheckBox>     maDialog;
+    VclPtr<CheckBox>     maBoldAppFont;
+    VclPtr<GroupBox>     maBox3;
 
-    OKButton        maOKButton;
-    CancelButton    maCancelButton;
-    HelpButton      maHelpButton;
+    VclPtr<OKButton>     maOKButton;
+    VclPtr<CancelButton> maCancelButton;
+    VclPtr<HelpButton>   maHelpButton;
 
 public:
                     DbgDialog();
 
                     DECL_LINK( ClickHdl, Button* );
     void            RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+private:
+    virtual void    dispose() SAL_OVERRIDE;
+    virtual         ~DbgDialog() { disposeOnce(); }
 };
 
 DbgDialog::DbgDialog() :
     ModalDialog( NULL, WB_STDMODAL | WB_SYSTEMWINDOW ),
-    maRes( this ),
-    maDialog( this ),
-    maBoldAppFont( this ),
-    maBox3( this ),
-    maOKButton( this, WB_DEFBUTTON ),
-    maCancelButton( this ),
-    maHelpButton( this )
+    maRes(VclPtr<CheckBox>::Create(this)),
+    maDialog(VclPtr<CheckBox>::Create(this)),
+    maBoldAppFont(VclPtr<CheckBox>::Create(this)),
+    maBox3(VclPtr<GroupBox>::Create(this)),
+    maOKButton(VclPtr<OKButton>::Create(this, WB_DEFBUTTON)),
+    maCancelButton(VclPtr<CancelButton>::Create(this)),
+    maHelpButton(VclPtr<HelpButton>::Create(this))
 {
     DbgData*    pData = DbgGetData();
     MapMode     aAppMap( MAP_APPFONT );
     Size        aButtonSize = LogicToPixel( Size( 60, 12 ), aAppMap );
 
     {
-    maRes.Show();
-    maRes.SetText("~Resourcen");
+    maRes->Show();
+    maRes->SetText("~Resourcen");
     if ( pData->nTestFlags & DBG_TEST_RESOURCE )
-        maRes.Check( true );
-    maRes.SetPosSizePixel( LogicToPixel( Point( 75, 95 ), aAppMap ),
+        maRes->Check( true );
+    maRes->SetPosSizePixel( LogicToPixel( Point( 75, 95 ), aAppMap ),
                            aButtonSize );
     }
 
     {
-    maDialog.Show();
-    maDialog.SetText("~Dialog");
+    maDialog->Show();
+    maDialog->SetText("~Dialog");
     if ( pData->nTestFlags & DBG_TEST_DIALOG )
-        maDialog.Check( true );
-    maDialog.SetPosSizePixel( LogicToPixel( Point( 140, 95 ), aAppMap ),
+        maDialog->Check( true );
+    maDialog->SetPosSizePixel( LogicToPixel( Point( 140, 95 ), aAppMap ),
                               aButtonSize );
     }
 
     {
-    maBoldAppFont.Show();
-    maBoldAppFont.SetText("~Bold AppFont");
+    maBoldAppFont->Show();
+    maBoldAppFont->SetText("~Bold AppFont");
     if ( pData->nTestFlags & DBG_TEST_BOLDAPPFONT )
-        maBoldAppFont.Check( true );
-    maBoldAppFont.SetPosSizePixel( LogicToPixel( Point( 205, 95 ), aAppMap ),
+        maBoldAppFont->Check( true );
+    maBoldAppFont->SetPosSizePixel( LogicToPixel( Point( 205, 95 ), aAppMap ),
                                    aButtonSize );
-    maBoldAppFont.SaveValue();
+    maBoldAppFont->SaveValue();
     }
 
     {
-    maBox3.Show();
-    maBox3.SetText("Test Options");
-    maBox3.SetPosSizePixel( LogicToPixel( Point( 5, 85 ), aAppMap ),
+    maBox3->Show();
+    maBox3->SetText("Test Options");
+    maBox3->SetPosSizePixel( LogicToPixel( Point( 5, 85 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
     }
 
     {
-    maOKButton.Show();
-    maOKButton.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
-    maOKButton.SetPosSizePixel( LogicToPixel( Point( 10, 260 ), aAppMap ),
+    maOKButton->Show();
+    maOKButton->SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
+    maOKButton->SetPosSizePixel( LogicToPixel( Point( 10, 260 ), aAppMap ),
                                 LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
     {
-    maCancelButton.Show();
-    maCancelButton.SetPosSizePixel( LogicToPixel( Point( 70, 260 ), aAppMap ),
+    maCancelButton->Show();
+    maCancelButton->SetPosSizePixel( LogicToPixel( Point( 70, 260 ), aAppMap ),
                                     LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
     {
-    maHelpButton.Show();
-    maHelpButton.SetPosSizePixel( LogicToPixel( Point( 190, 260 ), aAppMap ),
+    maHelpButton->Show();
+    maHelpButton->SetPosSizePixel( LogicToPixel( Point( 190, 260 ), aAppMap ),
                                   LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
 
@@ -310,20 +316,20 @@ DbgDialog::DbgDialog() :
 
 IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
 {
-    if ( pButton == &maOKButton )
+    if ( pButton == maOKButton )
     {
         DbgData aData;
 
         memcpy( &aData, DbgGetData(), sizeof( DbgData ) );
         aData.nTestFlags = 0;
 
-        if ( maRes.IsChecked() )
+        if ( maRes->IsChecked() )
             aData.nTestFlags |= DBG_TEST_RESOURCE;
 
-        if ( maDialog.IsChecked() )
+        if ( maDialog->IsChecked() )
             aData.nTestFlags |= DBG_TEST_DIALOG;
 
-        if ( maBoldAppFont.IsChecked() )
+        if ( maBoldAppFont->IsChecked() )
             aData.nTestFlags |= DBG_TEST_BOLDAPPFONT;
 
         // Daten speichern
@@ -333,12 +339,12 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         #define IMMEDIATE_FLAGS (DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT)
         pData->nTestFlags &= ~IMMEDIATE_FLAGS;
         pData->nTestFlags |= aData.nTestFlags & IMMEDIATE_FLAGS;
-        if ( maBoldAppFont.IsValueChangedFromSaved() )
+        if ( maBoldAppFont->IsValueChangedFromSaved() )
         {
             AllSettings aSettings = Application::GetSettings();
             StyleSettings aStyleSettings = aSettings.GetStyleSettings();
             vcl::Font aFont = aStyleSettings.GetAppFont();
-            if ( maBoldAppFont.IsChecked() )
+            if ( maBoldAppFont->IsChecked() )
                 aFont.SetWeight( WEIGHT_BOLD );
             else
                 aFont.SetWeight( WEIGHT_NORMAL );
@@ -348,10 +354,10 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         }
         if( (aData.nTestFlags & ~IMMEDIATE_FLAGS) != (pData->nTestFlags & ~IMMEDIATE_FLAGS) )
         {
-            MessageDialog aBox(this, OUString(
+            ScopedVclPtrInstance<MessageDialog> aBox(this, OUString(
                 "Some of the changed settings will only be active after "
                 "restarting the process"), VCL_MESSAGE_INFO);
-            aBox.Execute();
+            aBox->Execute();
         }
         EndDialog( RET_OK );
     }
@@ -363,7 +369,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & HelpEventMode::CONTEXT )
     {
-        DbgInfoDialog aInfoDialog( this, true );
+        ScopedVclPtrInstance< DbgInfoDialog > aInfoDialog(  this, true  );
         OUString aHelpText;
         const sal_Char** pHelpStrs = pDbgHelpText;
         while ( *pHelpStrs )
@@ -371,16 +377,28 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
             aHelpText += OUString::createFromAscii(*pHelpStrs);
             pHelpStrs++;
         }
-        aInfoDialog.SetText( "Debug Hilfe" );
-        aInfoDialog.SetInfoText( aHelpText );
-        aInfoDialog.Execute();
+        aInfoDialog->SetText( "Debug Hilfe" );
+        aInfoDialog->SetInfoText( aHelpText );
+        aInfoDialog->Execute();
     }
+}
+
+void DbgDialog::dispose()
+{
+    maRes.disposeAndClear();
+    maDialog.disposeAndClear();
+    maBoldAppFont.disposeAndClear();
+    maBox3.disposeAndClear();
+    maOKButton.disposeAndClear();
+    maCancelButton.disposeAndClear();
+    maHelpButton.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 DbgInfoDialog::DbgInfoDialog( vcl::Window* pParent, bool bHelpText ) :
     ModalDialog( pParent, WB_STDMODAL ),
-    maListBox( this, WB_BORDER | WB_AUTOHSCROLL ),
-    maOKButton( this, WB_DEFBUTTON )
+    maListBox(VclPtr<ListBox>::Create( this, WB_BORDER | WB_AUTOHSCROLL )),
+    maOKButton(VclPtr<OKButton>::Create(this, WB_DEFBUTTON))
 {
     mbHelpText = bHelpText;
 
@@ -389,21 +407,21 @@ DbgInfoDialog::DbgInfoDialog( vcl::Window* pParent, bool bHelpText ) :
         vcl::Font aFont = GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US, 0 );
         aFont.SetHeight( 8 );
         aFont.SetPitch( PITCH_FIXED );
-        maListBox.SetControlFont( aFont );
+        maListBox->SetControlFont( aFont );
     }
-    maListBox.SetPosSizePixel( Point( 5, 5 ), Size( 630, 380 ) );
-    maListBox.Show();
+    maListBox->SetPosSizePixel( Point( 5, 5 ), Size( 630, 380 ) );
+    maListBox->Show();
 
-    maOKButton.SetPosSizePixel( Point( 290, 390 ), Size( 60, 25 ) );
-    maOKButton.Show();
+    maOKButton->SetPosSizePixel( Point( 290, 390 ), Size( 60, 25 ) );
+    maOKButton->Show();
 
     SetOutputSizePixel( Size( 640, 420 ) );
 }
 
 void DbgInfoDialog::SetInfoText( const OUString& rStr )
 {
-    maListBox.SetUpdateMode( false );
-    maListBox.Clear();
+    maListBox->SetUpdateMode( false );
+    maListBox->Clear();
     OUString aStr = convertLineEnd(rStr, LINEEND_LF);
     sal_Int32 nStrIndex = 0;
     sal_Int32 nFoundIndex;
@@ -413,18 +431,18 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
         OUString aTextParagraph = aStr.copy( nStrIndex, nFoundIndex-nStrIndex );
         if ( mbHelpText )
         {
-            long    nMaxWidth = maListBox.GetOutputSizePixel().Width()-30;
+            long    nMaxWidth = maListBox->GetOutputSizePixel().Width()-30;
             sal_Int32  nLastIndex = 0;
             sal_Int32  nIndex = aTextParagraph.indexOf( ' ' );
             while ( nIndex != -1 )
             {
-                if ( maListBox.GetTextWidth( aTextParagraph, 0, nIndex ) > nMaxWidth )
+                if ( maListBox->GetTextWidth( aTextParagraph, 0, nIndex ) > nMaxWidth )
                 {
                     if ( !nLastIndex )
                         nLastIndex = nIndex+1;
                     OUString aTempStr = aTextParagraph.copy( 0, nLastIndex );
                     aTextParagraph = aTextParagraph.replaceAt( 0, nLastIndex, "" );
-                    maListBox.InsertEntry( aTempStr );
+                    maListBox->InsertEntry( aTempStr );
                     nLastIndex = 0;
                 }
                 else
@@ -432,20 +450,27 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
                 nIndex = aTextParagraph.indexOf( ' ', nLastIndex );
             }
 
-            if ( maListBox.GetTextWidth( aTextParagraph, 0, nIndex ) > nMaxWidth )
+            if ( maListBox->GetTextWidth( aTextParagraph, 0, nIndex ) > nMaxWidth )
             {
                 if ( !nLastIndex )
                     nLastIndex = nIndex+1;
                 OUString aTempStr = aTextParagraph.copy( 0, nLastIndex );
                 aTextParagraph = aTextParagraph.replaceAt( 0, nLastIndex, "" );
-                maListBox.InsertEntry( aTempStr );
+                maListBox->InsertEntry( aTempStr );
             }
         }
-        maListBox.InsertEntry( aTextParagraph );
+        maListBox->InsertEntry( aTextParagraph );
         nStrIndex = nFoundIndex+1;
     }
     while ( nFoundIndex != -1 );
-    maListBox.SetUpdateMode( true );
+    maListBox->SetUpdateMode( true );
+}
+
+void DbgInfoDialog::dispose()
+{
+    maListBox.disposeAndClear();
+    maOKButton.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 void DbgDialogTest( vcl::Window* pWindow )
@@ -808,7 +833,7 @@ void DbgGUIStart()
 
     if ( pData )
     {
-        std::unique_ptr<DbgDialog> xDialog(new DbgDialog);
+        ScopedVclPtrInstance< DbgDialog > xDialog;
         // we switch off dialog tests for the debug dialog
         sal_uLong nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;

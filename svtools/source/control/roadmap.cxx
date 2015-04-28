@@ -45,20 +45,18 @@ namespace svt
     {
     public:
         IDLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
-        virtual ~IDLabel( );
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     };
 
     class RoadmapItem : public RoadmapTypes
     {
     private:
-        IDLabel*                mpID;
-        HyperLabel*             mpDescription;
+        VclPtr<IDLabel>         mpID;
+        VclPtr<HyperLabel>      mpDescription;
         const Size              m_aItemPlayground;
 
     public:
         RoadmapItem( ORoadmap& _rParent, const Size& _rItemPlayground );
-        ~RoadmapItem( );
 
         void                    SetID( sal_Int16 _ID );
         sal_Int16               GetID() const;
@@ -204,6 +202,11 @@ namespace svt
 
     ORoadmap::~ORoadmap( )
     {
+        disposeOnce();
+    }
+
+    void ORoadmap::dispose()
+    {
         HL_Vector aItemsCopy = m_pImpl->getHyperLabels();
         m_pImpl->getHyperLabels().clear();
         for ( HL_Vector::iterator i = aItemsCopy.begin(); i != aItemsCopy.end(); ++i )
@@ -214,6 +217,7 @@ namespace svt
             delete m_pImpl->InCompleteHyperLabel;
         delete m_pImpl;
         m_pImpl = NULL;
+        Control::dispose();
     }
 
 
@@ -677,10 +681,10 @@ namespace svt
     RoadmapItem::RoadmapItem( ORoadmap& _rParent, const Size& _rItemPlayground )
         :m_aItemPlayground( _rItemPlayground )
     {
-        mpID = new IDLabel( &_rParent, WB_WORDBREAK );
+        mpID = VclPtr<IDLabel>::Create( &_rParent, WB_WORDBREAK );
         mpID->SetTextColor( mpID->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
         mpID->Show();
-        mpDescription = new HyperLabel( &_rParent, WB_NOTABSTOP | WB_WORDBREAK );
+        mpDescription = VclPtr<HyperLabel>::Create( &_rParent, WB_NOTABSTOP | WB_WORDBREAK );
         mpDescription->Show();
     }
 
@@ -823,19 +827,6 @@ namespace svt
     }
 
 
-    RoadmapItem::~RoadmapItem( )
-    {
-        {
-            boost::scoped_ptr<Control> xTakeOnership(mpID);
-            mpID = NULL;
-        }
-        {
-            boost::scoped_ptr<Control> xTakeOnership(mpDescription);
-            mpDescription = NULL;
-        }
-    }
-
-
     void RoadmapItem::SetClickHdl( const Link& rLink )
     {
         if ( mpDescription )
@@ -847,11 +838,6 @@ namespace svt
         :FixedText( _pParent, _nWinStyle )
     {
 
-    }
-
-
-    IDLabel::~IDLabel( )
-    {
     }
 
 

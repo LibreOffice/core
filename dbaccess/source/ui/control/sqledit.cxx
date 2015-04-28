@@ -105,6 +105,11 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
 
 OSqlEdit::~OSqlEdit()
 {
+    disposeOnce();
+}
+
+void OSqlEdit::dispose()
+{
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();
     css::uno::Reference< css::beans::XMultiPropertySet > n;
@@ -116,6 +121,8 @@ OSqlEdit::~OSqlEdit()
         n->removePropertiesChangeListener(m_listener.get());
     }
     m_ColorConfig.RemoveListener(this);
+    m_pView.clear();
+    MultiLineEditSyntaxHighlight::dispose();
 }
 
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )

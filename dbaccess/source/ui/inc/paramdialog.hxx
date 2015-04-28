@@ -52,11 +52,11 @@ namespace dbaui
     {
     protected:
         // the controls
-        ListBox*        m_pAllParams;
-        Edit*           m_pParam;
-        PushButton*     m_pTravelNext;
-        OKButton*       m_pOKBtn;
-        CancelButton*   m_pCancelBtn;
+        VclPtr<ListBox>        m_pAllParams;
+        VclPtr<Edit>           m_pParam;
+        VclPtr<PushButton>     m_pTravelNext;
+        VclPtr<OKButton>       m_pOKBtn;
+        VclPtr<CancelButton>   m_pCancelBtn;
 
         sal_Int32       m_nCurrentlySelected;
 
@@ -84,6 +84,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
         virtual ~OParameterDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                     getValues() const { return m_aFinalValues; }

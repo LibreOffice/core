@@ -22,6 +22,7 @@
 #include <com/sun/star/ui/XStatusbarItem.hpp>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <vcl/vclptr.hxx>
 
 class StatusBar;
 
@@ -67,7 +68,7 @@ public:
     virtual void SAL_CALL repaint(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    StatusBar              *m_pStatusBar;
+    VclPtr<StatusBar>       m_pStatusBar;
     AddonStatusbarItemData *m_pItemData;
     sal_uInt16              m_nId;
     sal_uInt16              m_nStyle;

@@ -156,12 +156,38 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
 
 SwContentOptPage::~SwContentOptPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SwContentOptPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void SwContentOptPage::dispose()
 {
-    return new SwContentOptPage(pParent, *rAttrSet);
+    m_pCrossCB.clear();
+    m_pHScrollBox.clear();
+    m_pVScrollBox.clear();
+    m_pAnyRulerCB.clear();
+    m_pHRulerCBox.clear();
+    m_pHMetric.clear();
+    m_pVRulerCBox.clear();
+    m_pVRulerRightCBox.clear();
+    m_pVMetric.clear();
+    m_pSmoothCBox.clear();
+    m_pGrfCB.clear();
+    m_pTblCB.clear();
+    m_pDrwCB.clear();
+    m_pFldNameCB.clear();
+    m_pPostItCB.clear();
+    m_pSettingsFrame.clear();
+    m_pSettingsLabel.clear();
+    m_pMetricLabel.clear();
+    m_pMetricLB.clear();
+    SfxTabPage::dispose();
+}
+
+
+VclPtr<SfxTabPage> SwContentOptPage::Create( vcl::Window* pParent,
+                                             const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SwContentOptPage>::Create(pParent, *rAttrSet);
 }
 
 static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
@@ -352,6 +378,36 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(vcl::Window* pParent,
     m_pProspectCB_RTL->Show(aCTLOptions.IsCTLFontEnabled());
 }
 
+SwAddPrinterTabPage::~SwAddPrinterTabPage()
+{
+    disposeOnce();
+}
+
+void SwAddPrinterTabPage::dispose()
+{
+    m_pGrfCB.clear();
+    m_pCtrlFldCB.clear();
+    m_pBackgroundCB.clear();
+    m_pBlackFontCB.clear();
+    m_pPrintHiddenTextCB.clear();
+    m_pPrintTextPlaceholderCB.clear();
+    m_pPagesFrame.clear();
+    m_pLeftPageCB.clear();
+    m_pRightPageCB.clear();
+    m_pProspectCB.clear();
+    m_pProspectCB_RTL.clear();
+    m_pCommentsFrame.clear();
+    m_pNoRB.clear();
+    m_pOnlyRB.clear();
+    m_pEndRB.clear();
+    m_pEndPageRB.clear();
+    m_pInMarginsRB.clear();
+    m_pPrintEmptyPagesCB.clear();
+    m_pPaperFromSetupCB.clear();
+    m_pFaxLB.clear();
+    SfxTabPage::dispose();
+}
+
 void SwAddPrinterTabPage::SetPreview(bool bPrev)
 {
     bPreview = bPrev;
@@ -359,10 +415,11 @@ void SwAddPrinterTabPage::SetPreview(bool bPrev)
     m_pPagesFrame->Enable(!bPreview);
 }
 
-SfxTabPage* SwAddPrinterTabPage::Create( vcl::Window* pParent,
-                                       const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwAddPrinterTabPage::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rAttrSet )
 {
-    return ( new SwAddPrinterTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SfxTabPage>(new SwAddPrinterTabPage( pParent, *rAttrSet ),
+                              SAL_NO_ACQUIRE);
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -573,17 +630,35 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
 
 SwStdFontTabPage::~SwStdFontTabPage()
 {
-    delete pFontList;
-    if (bDeletePrinter)
-    {
-        delete pPrt;
-    }
+    disposeOnce();
 }
 
-SfxTabPage* SwStdFontTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+void SwStdFontTabPage::dispose()
 {
-    return new SwStdFontTabPage(pParent, *rAttrSet);
+    delete pFontList;
+    if (bDeletePrinter)
+        pPrt.disposeAndClear();
+    pLabelFT.clear();
+    pStandardBox.clear();
+    pStandardHeightLB.clear();
+    pTitleBox.clear();
+    pTitleHeightLB.clear();
+    pListBox.clear();
+    pListHeightLB.clear();
+    pLabelBox.clear();
+    pLabelHeightLB.clear();
+    pIdxBox.clear();
+    pIndexHeightLB.clear();
+    pDocOnlyCB.clear();
+    pStandardPB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwStdFontTabPage::Create( vcl::Window* pParent,
+                                             const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SfxTabPage>(new SwStdFontTabPage(pParent, *rAttrSet),
+                              SAL_NO_ACQUIRE);
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -758,7 +833,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
 
     if (bDeletePrinter)
     {
-        delete pPrt;
+        pPrt.disposeAndClear();
     }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
@@ -771,7 +846,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
-        pPrt = new SfxPrinter(pPrinterSet);
+        pPrt = VclPtr<SfxPrinter>::Create(pPrinterSet);
     }
     delete pFontList;
     pFontList = new FontList( pPrt );
@@ -1082,12 +1157,33 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxIte
 
 SwTableOptionsTabPage::~SwTableOptionsTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SwTableOptionsTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+void SwTableOptionsTabPage::dispose()
 {
-    return new SwTableOptionsTabPage(pParent, *rAttrSet );
+    pHeaderCB.clear();
+    pRepeatHeaderCB.clear();
+    pDontSplitCB.clear();
+    pBorderCB.clear();
+    pNumFormattingCB.clear();
+    pNumFmtFormattingCB.clear();
+    pNumAlignmentCB.clear();
+    pRowMoveMF.clear();
+    pColMoveMF.clear();
+    pRowInsertMF.clear();
+    pColInsertMF.clear();
+    pFixRB.clear();
+    pFixPropRB.clear();
+    pVarRB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwTableOptionsTabPage::Create( vcl::Window* pParent,
+                                                  const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SfxTabPage>( new SwTableOptionsTabPage(pParent, *rAttrSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1318,11 +1414,36 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
 
 SwShdwCrsrOptionsTabPage::~SwShdwCrsrOptionsTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SwShdwCrsrOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+void SwShdwCrsrOptionsTabPage::dispose()
 {
-    return new SwShdwCrsrOptionsTabPage( pParent, *rSet );
+    m_pParaCB.clear();
+    m_pSHyphCB.clear();
+    m_pSpacesCB.clear();
+    m_pHSpacesCB.clear();
+    m_pTabCB.clear();
+    m_pBreakCB.clear();
+    m_pCharHiddenCB.clear();
+    m_pFldHiddenCB.clear();
+    m_pFldHiddenParaCB.clear();
+    m_pDirectCursorFrame.clear();
+    m_pOnOffCB.clear();
+    m_pFillMarginRB.clear();
+    m_pFillIndentRB.clear();
+    m_pFillTabRB.clear();
+    m_pFillSpaceRB.clear();
+    m_pCursorProtFrame.clear();
+    m_pCrsrInProtCB.clear();
+    m_pIgnoreProtCB.clear();
+    m_pMathBaselineAlignmentCB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwShdwCrsrOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+{
+    return VclPtr<SfxTabPage>(new SwShdwCrsrOptionsTabPage( pParent, *rSet ), SAL_NO_ACQUIRE);
 }
 
 void SwShdwCrsrOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
@@ -1659,7 +1780,7 @@ namespace
 }
 
 SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
-                                                    const SfxItemSet& rSet )
+                                                  const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptRedLinePage",
         "modules/swriter/ui/optredlinepage.ui" , &rSet)
     , sNone(SW_RESSTR(SW_STR_NONE))
@@ -1731,11 +1852,29 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
 
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SwRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+void SwRedlineOptionsTabPage::dispose()
 {
-    return new SwRedlineOptionsTabPage( pParent, *rSet );
+    pInsertLB.clear();
+    pInsertColorLB.clear();
+    pInsertedPreviewWN.clear();
+    pDeletedLB.clear();
+    pDeletedColorLB.clear();
+    pDeletedPreviewWN.clear();
+    pChangedLB.clear();
+    pChangedColorLB.clear();
+    pChangedPreviewWN.clear();
+    pMarkPosLB.clear();
+    pMarkColorLB.clear();
+    pMarkPreviewWN.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+{
+    return VclPtr<SfxTabPage>( new SwRedlineOptionsTabPage( pParent, *rSet ), SAL_NO_ACQUIRE );
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2232,11 +2371,24 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(  vcl::Window* pParent, const S
 
 SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SwCompareOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void SwCompareOptionsTabPage::dispose()
 {
-    return new SwCompareOptionsTabPage( pParent, *rAttrSet );
+    m_pAutoRB.clear();
+    m_pWordRB.clear();
+    m_pCharRB.clear();
+    m_pRsidCB.clear();
+    m_pIgnoreCB.clear();
+    m_pLenNF.clear();
+    m_pStoreRsidCB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwCompareOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SfxTabPage>(new SwCompareOptionsTabPage( pParent, *rAttrSet ), SAL_NO_ACQUIRE);
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2367,10 +2519,30 @@ SwTestTabPage::SwTestTabPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
 }
 
-SfxTabPage* SwTestTabPage::Create( vcl::Window* pParent,
-                                       const SfxItemSet* rAttrSet )
+SwTestTabPage::~SwTestTabPage()
 {
-    return new SwTestTabPage(pParent, *rAttrSet);
+    disposeOnce();
+}
+
+void SwTestTabPage::dispose()
+{
+    m_pTest1CBox.clear();
+    m_pTest2CBox.clear();
+    m_pTest3CBox.clear();
+    m_pTest4CBox.clear();
+    m_pTest5CBox.clear();
+    m_pTest6CBox.clear();
+    m_pTest7CBox.clear();
+    m_pTest8CBox.clear();
+    m_pTest9CBox.clear();
+    m_pTest10CBox.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SwTestTabPage::Create( vcl::Window* pParent,
+                                          const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SwTestTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )

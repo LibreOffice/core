@@ -2764,7 +2764,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
         UnmergeCells( aPasteDest, false );
 
-    VirtualDevice aVirtDev;
     bool bDestHeight = AdjustRowHeight(
                             ScRange( 0,nDestRow,nDestTab, MAXCOL,nDestEndRow,nDestEndTab ),
                             false );
@@ -3757,8 +3756,8 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                InfoBox aBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
-                aBox.Execute();
+                ScopedVclPtrInstance< InfoBox > aBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                aBox->Execute();
             }
             return false;
         }
@@ -3787,8 +3786,8 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                InfoBox aBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
-                aBox.Execute();
+                ScopedVclPtrInstance< InfoBox > aBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                aBox->Execute();
             }
             return false;
         }

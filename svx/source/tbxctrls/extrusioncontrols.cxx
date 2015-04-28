@@ -104,6 +104,17 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     AddStatusListener( msExtrusionProjection );
 }
 
+ExtrusionDirectionWindow::~ExtrusionDirectionWindow()
+{
+    disposeOnce();
+}
+
+void ExtrusionDirectionWindow::dispose()
+{
+    mpDirectionSet.clear();
+    ToolbarMenu::dispose();
+}
+
 void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ToolbarMenu::DataChanged( rDCEvt );
@@ -233,9 +244,9 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 
 
 
-vcl::Window* ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new ExtrusionDirectionWindow( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionDirectionWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization
@@ -296,6 +307,17 @@ ExtrusionDepthDialog::ExtrusionDepthDialog( vcl::Window* pParent, double fDepth,
     get(m_pMtrDepth, "depth");
     m_pMtrDepth->SetUnit( eDefaultUnit );
     m_pMtrDepth->SetValue( (int) fDepth * 100, FUNIT_100TH_MM );
+}
+
+ExtrusionDepthDialog::~ExtrusionDepthDialog()
+{
+    disposeOnce();
+}
+
+void ExtrusionDepthDialog::dispose()
+{
+    m_pMtrDepth.clear();
+    ModalDialog::dispose();
 }
 
 double ExtrusionDepthDialog::getDepth() const
@@ -468,9 +490,9 @@ ExtrusionDepthController::ExtrusionDepthController(
 
 
 
-vcl::Window* ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
 {
-    return new ExtrusionDepthWindow( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionDepthWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization
@@ -576,6 +598,17 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
 
     AddStatusListener( msExtrusionLightingDirection );
     AddStatusListener( msExtrusionLightingIntensity );
+}
+
+ExtrusionLightingWindow::~ExtrusionLightingWindow()
+{
+    disposeOnce();
+}
+
+void ExtrusionLightingWindow::dispose()
+{
+    mpLightingSet.clear();
+    ToolbarMenu::dispose();
 }
 
 void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )
@@ -724,9 +757,9 @@ ExtrusionLightingControl::ExtrusionLightingControl(
 
 
 
-vcl::Window* ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new ExtrusionLightingWindow( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionLightingWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization
@@ -870,9 +903,9 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 
 
 
-vcl::Window* ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
 {
-    return new ExtrusionSurfaceWindow( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionSurfaceWindow>::Create( *this, m_xFrame, pParent );
 }
 
 // XInitialization

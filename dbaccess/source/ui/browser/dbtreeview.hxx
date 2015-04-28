@@ -31,7 +31,7 @@ namespace dbaui
     class DBTreeView : public vcl::Window
     {
     private:
-        DBTreeListBox*  m_pTreeListBox;
+        VclPtr<DBTreeListBox>  m_pTreeListBox;
     protected:
         // window overridables
         virtual void Resize() SAL_OVERRIDE;
@@ -40,6 +40,7 @@ namespace dbaui
         DBTreeView( vcl::Window* pParent,
                 WinBits nBits );
         virtual ~DBTreeView();
+        virtual void dispose() SAL_OVERRIDE;
 
         /** sets a handler which is called when an list box entry is to be expanded.
             <p>When calling the link, the parameter is an SvTreeListEntry marking the entry to be expanded.

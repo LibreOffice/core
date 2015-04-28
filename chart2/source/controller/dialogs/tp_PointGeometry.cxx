@@ -39,13 +39,20 @@ SchLayoutTabPage::SchLayoutTabPage(vcl::Window* pWindow,const SfxItemSet& rInAtt
 
 SchLayoutTabPage::~SchLayoutTabPage()
 {
-    delete m_pGeometryResources;
+    disposeOnce();
 }
 
-SfxTabPage* SchLayoutTabPage::Create(vcl::Window* pWindow,
-                                        const SfxItemSet* rOutAttrs)
+void SchLayoutTabPage::dispose()
 {
-    return new SchLayoutTabPage(pWindow, *rOutAttrs);
+    delete m_pGeometryResources;
+    m_pGeometryResources = NULL;
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SchLayoutTabPage::Create(vcl::Window* pWindow,
+                                            const SfxItemSet* rOutAttrs)
+{
+    return VclPtr<SchLayoutTabPage>::Create(pWindow, *rOutAttrs);
 }
 
 bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)

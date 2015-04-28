@@ -31,14 +31,15 @@ namespace com{ namespace sun{ namespace star{
 
 class SwDBTablePreviewDialog : public SfxModalDialog
 {
-    FixedText*      m_pDescriptionFI;
-    vcl::Window*         m_pBeamerWIN;
+    VclPtr<FixedText>      m_pDescriptionFI;
+    VclPtr<vcl::Window>    m_pBeamerWIN;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >         m_xFrame;
 public:
     SwDBTablePreviewDialog(vcl::Window* pParent,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rValues  );
     virtual ~SwDBTablePreviewDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
 };
 #endif

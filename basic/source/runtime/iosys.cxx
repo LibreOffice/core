@@ -66,25 +66,27 @@ using namespace com::sun::star::bridge;
 
 
 class SbiInputDialog : public ModalDialog {
-    Edit aInput;
-    OKButton aOk;
-    CancelButton aCancel;
+    VclPtr<Edit> aInput;
+    VclPtr<OKButton> aOk;
+    VclPtr<CancelButton> aCancel;
     OUString aText;
     DECL_LINK( Ok, vcl::Window * );
     DECL_LINK( Cancel, vcl::Window * );
 public:
     SbiInputDialog( vcl::Window*, const OUString& );
+    virtual ~SbiInputDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
     const OUString& GetInput() { return aText; }
 };
 
 SbiInputDialog::SbiInputDialog( vcl::Window* pParent, const OUString& rPrompt )
             :ModalDialog( pParent, WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
-             aInput( this, WB_3DLOOK | WB_LEFT | WB_BORDER ),
-             aOk( this ), aCancel( this )
+             aInput( VclPtr<Edit>::Create(this, WB_3DLOOK | WB_LEFT | WB_BORDER) ),
+             aOk( new OKButton(this) ), aCancel( VclPtr<CancelButton>::Create(this) )
 {
     SetText( rPrompt );
-    aOk.SetClickHdl( LINK( this, SbiInputDialog, Ok ) );
-    aCancel.SetClickHdl( LINK( this, SbiInputDialog, Cancel ) );
+    aOk->SetClickHdl( LINK( this, SbiInputDialog, Ok ) );
+    aCancel->SetClickHdl( LINK( this, SbiInputDialog, Cancel ) );
     SetMapMode( MapMode( MAP_APPFONT ) );
 
     Point aPt = LogicToPixel( Point( 50, 50 ) );
@@ -92,24 +94,32 @@ SbiInputDialog::SbiInputDialog( vcl::Window* pParent, const OUString& rPrompt )
     SetPosSizePixel( aPt, aSz );
     aPt = LogicToPixel( Point( 10, 10 ) );
     aSz = LogicToPixel( Size( 120, 12 ) );
-    aInput.SetPosSizePixel( aPt, aSz );
+    aInput->SetPosSizePixel( aPt, aSz );
     aPt = LogicToPixel( Point( 15, 30 ) );
     aSz = LogicToPixel( Size( 45, 15) );
-    aOk.SetPosSizePixel( aPt, aSz );
+    aOk->SetPosSizePixel( aPt, aSz );
     aPt = LogicToPixel( Point( 80, 30 ) );
     aSz = LogicToPixel( Size( 45, 15) );
-    aCancel.SetPosSizePixel( aPt, aSz );
+    aCancel->SetPosSizePixel( aPt, aSz );
 
-    aInput.Show();
-    aOk.Show();
-    aCancel.Show();
+    aInput->Show();
+    aOk->Show();
+    aCancel->Show();
+}
+
+void SbiInputDialog::dispose()
+{
+    aInput.disposeAndClear();
+    aOk.disposeAndClear();
+    aCancel.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_INLINE_START( SbiInputDialog, Ok, vcl::Window *, pWindow )
 {
     (void)pWindow;
 
-    aText = aInput.GetText();
+    aText = aInput->GetText();
     EndDialog( 1 );
     return 0;
 }
@@ -956,10 +966,10 @@ void SbiIoSystem::CloseAll()
 void SbiIoSystem::ReadCon(OString& rIn)
 {
     OUString aPromptStr(OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
-    SbiInputDialog aDlg( NULL, aPromptStr );
-    if( aDlg.Execute() )
+    ScopedVclPtrInstance< SbiInputDialog > aDlg(nullptr, aPromptStr);
+    if( aDlg->Execute() )
     {
-        rIn = OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());
+        rIn = OUStringToOString(aDlg->GetInput(), osl_getThreadTextEncoding());
     }
     else
     {

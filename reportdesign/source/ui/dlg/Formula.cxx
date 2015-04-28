@@ -87,16 +87,21 @@ void FormulaDialog::fill()
 
 FormulaDialog::~FormulaDialog()
 {
+    disposeOnce();
+}
+
+void FormulaDialog::dispose()
+{
     if ( m_pAddField )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( HID_RPT_FIELD_SEL_WIN ) );
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
-
-        boost::scoped_ptr<vcl::Window> aTemp2(m_pAddField);
-        m_pAddField = NULL;
     }
 
     StoreFormEditData( m_pFormulaData );
+    m_pEdit.clear();
+    m_pAddField.clear();
+    formula::FormulaModalDialog::dispose();
 }
 
 
@@ -199,7 +204,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 
     if ( !m_pAddField )
     {
-        m_pAddField = new OAddFieldWindow(this,m_xRowSet);
+        m_pAddField = VclPtr<OAddFieldWindow>::Create(this,m_xRowSet);
         m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( HID_RPT_FIELD_SEL_WIN ) );
         if ( aDlgOpt.Exists() )

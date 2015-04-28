@@ -39,18 +39,20 @@ namespace dbaui
         bool            m_bUserGrabFocus : 1;
     protected:
 
-        FixedText           *m_pHelpText;
-        FixedText           *m_pHeaderText;
+        VclPtr<FixedText>           m_pHelpText;
+        VclPtr<FixedText>           m_pHeaderText;
 
         // called when the test connection button was clicked
         DECL_LINK(OnEditModified,Edit*);
 
     public:
-        static  OGenericAdministrationPage* CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateODBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual ~OConnectionTabPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
+        static  VclPtr<OGenericAdministrationPage> CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateODBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  VclPtr<OGenericAdministrationPage> CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 
@@ -71,7 +73,6 @@ namespace dbaui
         OConnectionTabPageSetup(vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
         virtual bool checkTestConnection() SAL_OVERRIDE;
             // nControlFlags is a combination of the CBTP_xxx-constants
-        virtual ~OConnectionTabPageSetup();
     };
 
 }   // namespace dbaui

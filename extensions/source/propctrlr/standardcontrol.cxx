@@ -959,14 +959,16 @@ namespace pcr
     class OMultilineFloatingEdit : public FloatingWindow
     {
     private:
-        MultiLineEdit   m_aImplEdit;
+        VclPtr<MultiLineEdit>   m_aImplEdit;
 
     protected:
         virtual void    Resize() SAL_OVERRIDE;
 
     public:
                         OMultilineFloatingEdit(vcl::Window* _pParen);
-        MultiLineEdit&  getEdit() { return m_aImplEdit; }
+        virtual         ~OMultilineFloatingEdit();
+        virtual void    dispose() SAL_OVERRIDE;
+        MultiLineEdit&  getEdit() { return *m_aImplEdit.get(); }
 
     protected:
         virtual bool    PreNotify(NotifyEvent& _rNEvt) SAL_OVERRIDE;
@@ -975,15 +977,25 @@ namespace pcr
 
     OMultilineFloatingEdit::OMultilineFloatingEdit(vcl::Window* _pParent)
         :FloatingWindow(_pParent, WB_BORDER)
-        ,m_aImplEdit(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER)
+        ,m_aImplEdit(VclPtr<MultiLineEdit>::Create(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER))
     {
-        m_aImplEdit.Show();
+        m_aImplEdit->Show();
     }
 
+    OMultilineFloatingEdit::~OMultilineFloatingEdit()
+    {
+        disposeOnce();
+    }
+
+    void OMultilineFloatingEdit::dispose()
+    {
+        m_aImplEdit.disposeAndClear();
+        FloatingWindow::dispose();
+    }
 
     void OMultilineFloatingEdit::Resize()
     {
-        m_aImplEdit.SetSizePixel(GetOutputSizePixel());
+        m_aImplEdit->SetSizePixel(GetOutputSizePixel());
     }
 
 
@@ -1023,26 +1035,25 @@ namespace pcr
     DropDownEditControl::DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle )
         :DropDownEditControl_Base( _pParent, _nStyle )
         ,m_pFloatingEdit( NULL )
-        ,m_pImplEdit( NULL )
         ,m_pDropdownButton( NULL )
         ,m_nOperationMode( eStringList )
         ,m_bDropdown( false )
     {
         SetCompoundControl( true );
 
-        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
+        m_pImplEdit = VclPtr<MultiLineEdit>::Create( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 
         if ( _nStyle & WB_DROPDOWN )
         {
-            m_pDropdownButton = new PushButton( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
+            m_pDropdownButton = VclPtr<PushButton>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
             m_pDropdownButton->SetSymbol(SymbolType::SPIN_DOWN);
             m_pDropdownButton->SetClickHdl( LINK( this, DropDownEditControl, DropDownHdl ) );
             m_pDropdownButton->Show();
         }
 
-        m_pFloatingEdit = new OMultilineFloatingEdit(this); //FloatingWindow
+        m_pFloatingEdit = VclPtr<OMultilineFloatingEdit>::Create(this);
 
         m_pFloatingEdit->SetPopupModeEndHdl( LINK( this, DropDownEditControl, ReturnHdl ) );
         m_pFloatingEdit->getEdit().SetReadOnly( ( _nStyle & WB_READONLY ) != 0 );
@@ -1061,19 +1072,16 @@ namespace pcr
 
     DropDownEditControl::~DropDownEditControl()
     {
-        {
-            boost::scoped_ptr<vcl::Window> aTemp(m_pFloatingEdit);
-            m_pFloatingEdit = NULL;
-        }
-        {
-            boost::scoped_ptr<vcl::Window> aTemp(m_pImplEdit);
-            SetSubEdit( NULL );
-            m_pImplEdit = NULL;
-        }
-        {
-            boost::scoped_ptr<vcl::Window> aTemp(m_pDropdownButton);
-            m_pDropdownButton = NULL;
-        }
+        disposeOnce();
+    }
+
+    void DropDownEditControl::dispose()
+    {
+        SetSubEdit(nullptr);
+        m_pImplEdit.disposeAndClear();
+        m_pFloatingEdit.disposeAndClear();
+        m_pDropdownButton.disposeAndClear();
+        DropDownEditControl_Base::dispose();
     }
 
 
@@ -1081,7 +1089,7 @@ namespace pcr
     {
         ::Size aOutSz = GetOutputSizePixel();
 
-        if (m_pDropdownButton!=NULL)
+        if (m_pDropdownButton!=nullptr)
         {
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             nSBWidth = CalcZoom( nSBWidth );
@@ -1106,7 +1114,7 @@ namespace pcr
             {
                 if ( m_pHelper )
                 {
-                    m_pHelper->LoseFocusHdl( m_pImplEdit );
+                    m_pHelper->LoseFocusHdl( m_pImplEdit.get() );
                     m_pHelper->activateNextControl();
                 }
             }

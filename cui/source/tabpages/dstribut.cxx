@@ -37,8 +37,19 @@ SvxDistributeDialog::SvxDistributeDialog(vcl::Window* pParent,
         "cui/ui/distributiondialog.ui")
     , mpPage(NULL)
 {
-    mpPage = new SvxDistributePage(get_content_area(), rInAttrs, eHor, eVer);
+    mpPage = VclPtr<SvxDistributePage>::Create(get_content_area(), rInAttrs, eHor, eVer);
     SetTabPage(mpPage);
+}
+
+SvxDistributeDialog::~SvxDistributeDialog()
+{
+    disposeOnce();
+}
+
+void SvxDistributeDialog::dispose()
+{
+    mpPage.clear();
+    SfxSingleTabDialog::dispose();
 }
 
 /*************************************************************************
@@ -68,16 +79,37 @@ SvxDistributePage::SvxDistributePage(vcl::Window* pWindow,
     get(m_pBtnVerBottom, "verbottom");
 }
 
+SvxDistributePage::~SvxDistributePage()
+{
+    disposeOnce();
+}
+
+void SvxDistributePage::dispose()
+{
+    m_pBtnHorNone.clear();
+    m_pBtnHorLeft.clear();
+    m_pBtnHorCenter.clear();
+    m_pBtnHorDistance.clear();
+    m_pBtnHorRight.clear();
+    m_pBtnVerNone.clear();
+    m_pBtnVerTop.clear();
+    m_pBtnVerCenter.clear();
+    m_pBtnVerDistance.clear();
+    m_pBtnVerBottom.clear();
+    SvxTabPage::dispose();
+}
+
+
 /*************************************************************************
 |*
 |* create the tabpage
 |*
 \************************************************************************/
 
-SfxTabPage* SvxDistributePage::Create(vcl::Window* pWindow, const SfxItemSet& rAttrs,
+VclPtr<SfxTabPage> SvxDistributePage::Create(vcl::Window* pWindow, const SfxItemSet& rAttrs,
     SvxDistributeHorizontal eHor, SvxDistributeVertical eVer)
 {
-    return new SvxDistributePage(pWindow, rAttrs, eHor, eVer);
+    return VclPtr<SvxDistributePage>::Create(pWindow, rAttrs, eHor, eVer);
 }
 
 void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RECT_POINT /*eRP*/)

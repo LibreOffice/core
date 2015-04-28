@@ -38,46 +38,46 @@ namespace sdr
     {
         void OverlayManagerBuffered::ImpPrepareBufferDevice()
         {
-            // compare size of maBufferDevice with size of visible area
-            if(maBufferDevice.GetOutputSizePixel() != getOutputDevice().GetOutputSizePixel())
+            // compare size of mpBufferDevice with size of visible area
+            if(mpBufferDevice->GetOutputSizePixel() != getOutputDevice().GetOutputSizePixel())
             {
                 // set new buffer size, copy as much content as possible (use bool parameter for vcl).
                 // Newly uncovered regions will be repainted.
-                maBufferDevice.SetOutputSizePixel(getOutputDevice().GetOutputSizePixel(), false);
+                mpBufferDevice->SetOutputSizePixel(getOutputDevice().GetOutputSizePixel(), false);
             }
 
             // compare the MapModes for zoom/scroll changes
-            if(maBufferDevice.GetMapMode() != getOutputDevice().GetMapMode())
+            if(mpBufferDevice->GetMapMode() != getOutputDevice().GetMapMode())
             {
                 const bool bZoomed(
-                    maBufferDevice.GetMapMode().GetScaleX() != getOutputDevice().GetMapMode().GetScaleX()
-                    || maBufferDevice.GetMapMode().GetScaleY() != getOutputDevice().GetMapMode().GetScaleY());
+                    mpBufferDevice->GetMapMode().GetScaleX() != getOutputDevice().GetMapMode().GetScaleX()
+                    || mpBufferDevice->GetMapMode().GetScaleY() != getOutputDevice().GetMapMode().GetScaleY());
 
                 if(!bZoomed)
                 {
-                    const Point& rOriginOld = maBufferDevice.GetMapMode().GetOrigin();
+                    const Point& rOriginOld = mpBufferDevice->GetMapMode().GetOrigin();
                     const Point& rOriginNew = getOutputDevice().GetMapMode().GetOrigin();
                     const bool bScrolled(rOriginOld != rOriginNew);
 
                     if(bScrolled)
                     {
                         // get pixel bounds
-                        const Point aOriginOldPixel(maBufferDevice.LogicToPixel(rOriginOld));
-                        const Point aOriginNewPixel(maBufferDevice.LogicToPixel(rOriginNew));
-                        const Size aOutputSizePixel(maBufferDevice.GetOutputSizePixel());
+                        const Point aOriginOldPixel(mpBufferDevice->LogicToPixel(rOriginOld));
+                        const Point aOriginNewPixel(mpBufferDevice->LogicToPixel(rOriginNew));
+                        const Size aOutputSizePixel(mpBufferDevice->GetOutputSizePixel());
 
                         // remember and switch off MapMode
-                        const bool bMapModeWasEnabled(maBufferDevice.IsMapModeEnabled());
-                        maBufferDevice.EnableMapMode(false);
+                        const bool bMapModeWasEnabled(mpBufferDevice->IsMapModeEnabled());
+                        mpBufferDevice->EnableMapMode(false);
 
                         // scroll internally buffered stuff
                         const Point aDestinationOffsetPixel(aOriginNewPixel - aOriginOldPixel);
-                        maBufferDevice.DrawOutDev(
+                        mpBufferDevice->DrawOutDev(
                             aDestinationOffsetPixel, aOutputSizePixel, // destination
                             Point(), aOutputSizePixel); // source
 
                         // restore MapMode
-                        maBufferDevice.EnableMapMode(bMapModeWasEnabled);
+                        mpBufferDevice->EnableMapMode(bMapModeWasEnabled);
 
                         // scroll remembered region, too.
                         if(!maBufferRememberedRangePixel.isEmpty())
@@ -91,13 +91,13 @@ namespace sdr
                 }
 
                 // copy new MapMode
-                maBufferDevice.SetMapMode(getOutputDevice().GetMapMode());
+                mpBufferDevice->SetMapMode(getOutputDevice().GetMapMode());
             }
 
             // #i29186#
-            maBufferDevice.SetDrawMode(getOutputDevice().GetDrawMode());
-            maBufferDevice.SetSettings(getOutputDevice().GetSettings());
-            maBufferDevice.SetAntialiasing(getOutputDevice().GetAntialiasing());
+            mpBufferDevice->SetDrawMode(getOutputDevice().GetDrawMode());
+            mpBufferDevice->SetSettings(getOutputDevice().GetSettings());
+            mpBufferDevice->SetAntialiasing(getOutputDevice().GetAntialiasing());
         }
 
         void OverlayManagerBuffered::ImpRestoreBackground() const
@@ -114,9 +114,9 @@ namespace sdr
         {
             // MapModes off
             const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
-            const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
+            const bool bMapModeWasEnabledSource(mpBufferDevice->IsMapModeEnabled());
             getOutputDevice().EnableMapMode(false);
-            const_cast<OverlayManagerBuffered*>(this)->maBufferDevice.EnableMapMode(false);
+            const_cast<OverlayManagerBuffered*>(this)->mpBufferDevice->EnableMapMode(false);
 
             // local region
             RectangleVector aRectangles;
@@ -143,12 +143,12 @@ namespace sdr
                 getOutputDevice().DrawOutDev(
                     aTopLeft, aSize, // destination
                     aTopLeft, aSize, // source
-                    maBufferDevice);
+                    *mpBufferDevice.get());
             }
 
             // restore MapModes
             getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
-            const_cast<OverlayManagerBuffered*>(this)->maBufferDevice.EnableMapMode(bMapModeWasEnabledSource);
+            const_cast<OverlayManagerBuffered*>(this)->mpBufferDevice->EnableMapMode(bMapModeWasEnabledSource);
         }
 
         void OverlayManagerBuffered::ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice)
@@ -176,14 +176,14 @@ namespace sdr
             }
 
             // also limit to buffer size
-            const Rectangle aBufferDeviceRectanglePixel(Point(), maBufferDevice.GetOutputSizePixel());
+            const Rectangle aBufferDeviceRectanglePixel(Point(), mpBufferDevice->GetOutputSizePixel());
             aRegion.Intersect(aBufferDeviceRectanglePixel);
 
             // MapModes off
             const bool bMapModeWasEnabledDest(rSource.IsMapModeEnabled());
-            const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
+            const bool bMapModeWasEnabledSource(mpBufferDevice->IsMapModeEnabled());
             rSource.EnableMapMode(false);
-            maBufferDevice.EnableMapMode(false);
+            mpBufferDevice->EnableMapMode(false);
 
             // prepare to iterate over the rectangles from the region in pixels
             RectangleVector aRectangles;
@@ -195,7 +195,7 @@ namespace sdr
                 const Point aTopLeft(aRectIter->TopLeft());
                 const Size aSize(aRectIter->GetSize());
 
-                maBufferDevice.DrawOutDev(
+                mpBufferDevice->DrawOutDev(
                     aTopLeft, aSize, // destination
                     aTopLeft, aSize, // source
                     rSource);
@@ -203,7 +203,7 @@ namespace sdr
 
             // restore MapModes
             rSource.EnableMapMode(bMapModeWasEnabledDest);
-            maBufferDevice.EnableMapMode(bMapModeWasEnabledSource);
+            mpBufferDevice->EnableMapMode(bMapModeWasEnabledSource);
         }
 
         IMPL_LINK(OverlayManagerBuffered, ImpBufferTimerHandler, AutoTimer*, /*pTimer*/)
@@ -241,20 +241,20 @@ namespace sdr
 
                 if(DoRefreshWithPreRendering())
                 {
-                    // #i73602# ensure valid and sized maOutputBufferDevice
-                    const Size aDestinationSizePixel(maBufferDevice.GetOutputSizePixel());
-                    const Size aOutputBufferSizePixel(maOutputBufferDevice.GetOutputSizePixel());
+                    // #i73602# ensure valid and sized mpOutputBufferDevice
+                    const Size aDestinationSizePixel(mpBufferDevice->GetOutputSizePixel());
+                    const Size aOutputBufferSizePixel(mpOutputBufferDevice->GetOutputSizePixel());
 
                     if(aDestinationSizePixel != aOutputBufferSizePixel)
                     {
-                        maOutputBufferDevice.SetOutputSizePixel(aDestinationSizePixel);
+                        mpOutputBufferDevice->SetOutputSizePixel(aDestinationSizePixel);
                     }
 
-                    maOutputBufferDevice.SetMapMode(getOutputDevice().GetMapMode());
-                    maOutputBufferDevice.EnableMapMode(false);
-                    maOutputBufferDevice.SetDrawMode(maBufferDevice.GetDrawMode());
-                    maOutputBufferDevice.SetSettings(maBufferDevice.GetSettings());
-                    maOutputBufferDevice.SetAntialiasing(maBufferDevice.GetAntialiasing());
+                    mpOutputBufferDevice->SetMapMode(getOutputDevice().GetMapMode());
+                    mpOutputBufferDevice->EnableMapMode(false);
+                    mpOutputBufferDevice->SetDrawMode(mpBufferDevice->GetDrawMode());
+                    mpOutputBufferDevice->SetSettings(mpBufferDevice->GetSettings());
+                    mpOutputBufferDevice->SetAntialiasing(mpBufferDevice->GetAntialiasing());
 
                     // calculate sizes
                     Rectangle aRegionRectanglePixel(
@@ -289,23 +289,23 @@ namespace sdr
                     const Size aSize(aRegionRectanglePixel.GetSize());
 
                     {
-                        const bool bMapModeWasEnabledDest(maBufferDevice.IsMapModeEnabled());
-                        maBufferDevice.EnableMapMode(false);
+                        const bool bMapModeWasEnabledDest(mpBufferDevice->IsMapModeEnabled());
+                        mpBufferDevice->EnableMapMode(false);
 
-                        maOutputBufferDevice.DrawOutDev(
+                        mpOutputBufferDevice->DrawOutDev(
                             aTopLeft, aSize, // destination
                             aTopLeft, aSize, // source
-                            maBufferDevice);
+                            *mpBufferDevice.get());
 
                         // restore MapModes
-                        maBufferDevice.EnableMapMode(bMapModeWasEnabledDest);
+                        mpBufferDevice->EnableMapMode(bMapModeWasEnabledDest);
                     }
 
                     // paint overlay content for remembered region, use
                     // method from base class directly
-                    maOutputBufferDevice.EnableMapMode(true);
-                    OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, maOutputBufferDevice);
-                    maOutputBufferDevice.EnableMapMode(false);
+                    mpOutputBufferDevice->EnableMapMode(true);
+                    OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, *mpOutputBufferDevice.get());
+                    mpOutputBufferDevice->EnableMapMode(false);
 
                     // copy to output
                     {
@@ -315,7 +315,7 @@ namespace sdr
                         getOutputDevice().DrawOutDev(
                             aTopLeft, aSize, // destination
                             aTopLeft, aSize, // source
-                            maOutputBufferDevice);
+                            *mpOutputBufferDevice.get());
 
                         // debug
                         /*getOutputDevice().SetLineColor(COL_RED);
@@ -381,6 +381,8 @@ namespace sdr
             const SdrModel* pModel,
             bool bRefreshWithPreRendering)
         :   OverlayManager(rOutputDevice, pModel),
+            mpBufferDevice(VclPtr<VirtualDevice>::Create()),
+            mpOutputBufferDevice(VclPtr<VirtualDevice>::Create()),
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer
@@ -432,7 +434,7 @@ namespace sdr
         void OverlayManagerBuffered::copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize)
         {
             // scroll local buffered area
-            maBufferDevice.CopyArea(rDestPt, rSrcPt, rSrcSize);
+            mpBufferDevice->CopyArea(rDestPt, rSrcPt, rSrcSize);
         }
 
         void OverlayManagerBuffered::restoreBackground(const vcl::Region& rRegion) const

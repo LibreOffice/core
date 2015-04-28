@@ -60,9 +60,9 @@ namespace dbaui
 {
 using namespace ::com::sun::star;
 
-    OGenericAdministrationPage* OTextConnectionPageSetup::CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OTextConnectionPageSetup( pParent, _rAttrSet ) );
+        return VclPtr<OTextConnectionPageSetup>::Create( pParent, _rAttrSet );
     }
 
     // OTextConnectionPageSetup
@@ -70,14 +70,19 @@ using namespace ::com::sun::star;
         :OConnectionTabPageSetup(pParent, "DBWizTextPage", "dbaccess/ui/dbwiztextpage.ui", _rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
     {
 
-        m_pTextConnectionHelper = new OTextConnectionHelper( get<VclVBox>("TextPageContainer"), TC_EXTENSION | TC_SEPARATORS );
+        m_pTextConnectionHelper = VclPtr<OTextConnectionHelper>::Create( get<VclVBox>("TextPageContainer"), TC_EXTENSION | TC_SEPARATORS );
         m_pTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
     }
 
     OTextConnectionPageSetup::~OTextConnectionPageSetup()
     {
-        DELETEZ(m_pTextConnectionHelper);
+        disposeOnce();
+    }
 
+    void OTextConnectionPageSetup::dispose()
+    {
+        m_pTextConnectionHelper.disposeAndClear();
+        OConnectionTabPageSetup::dispose();
     }
 
     IMPL_LINK(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, /*_pTextConnectionHelper*/)
@@ -124,9 +129,9 @@ using namespace ::com::sun::star;
         return m_pTextConnectionHelper->prepareLeave();
     }
 
-    OGenericAdministrationPage* OLDAPConnectionPageSetup::CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OLDAPConnectionPageSetup( pParent, _rAttrSet ) );
+        return VclPtr<OLDAPConnectionPageSetup>::Create( pParent, _rAttrSet );
     }
 
     // OLDAPPageSetup
@@ -149,6 +154,25 @@ using namespace ::com::sun::star;
         m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
         m_pCBUseSSL->SetToggleHdl(getControlModifiedLink());
         SetRoadmapStateValue(false);
+    }
+
+    OLDAPConnectionPageSetup::~OLDAPConnectionPageSetup()
+    {
+        disposeOnce();
+    }
+
+    void OLDAPConnectionPageSetup::dispose()
+    {
+        m_pFTHelpText.clear();
+        m_pFTHostServer.clear();
+        m_pETHostServer.clear();
+        m_pFTBaseDN.clear();
+        m_pETBaseDN.clear();
+        m_pFTPortNumber.clear();
+        m_pNFPortNumber.clear();
+        m_pFTDefaultPortNumber.clear();
+        m_pCBUseSSL.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
@@ -217,9 +241,9 @@ using namespace ::com::sun::star;
         return 0L;
     }
 
-    OMySQLIntroPageSetup* OMySQLIntroPageSetup::CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OMySQLIntroPageSetup( _pParent, _rAttrSet) );
+        return VclPtr<OMySQLIntroPageSetup>::Create( _pParent, _rAttrSet);
     }
 
 
@@ -235,15 +259,23 @@ using namespace ::com::sun::star;
         m_pNATIVEDatabase->SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
     }
 
+    OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
+    {
+        disposeOnce();
+    }
+
+    void OMySQLIntroPageSetup::dispose()
+    {
+        m_pODBCDatabase.clear();
+        m_pJDBCDatabase.clear();
+        m_pNATIVEDatabase.clear();
+        OGenericAdministrationPage::dispose();
+    }
+
     IMPL_LINK(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton*, /*_pBox*/)
     {
         maClickHdl.Call( this );
         return long(true);
-    }
-
-    OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
-    {
-
     }
 
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
@@ -292,38 +324,50 @@ using namespace ::com::sun::star;
     // MySQLNativeSetupPage
     MySQLNativeSetupPage::MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage( _pParent, "DBWizMysqlNativePage", "dbaccess/ui/dbwizmysqlnativepage.ui", _rCoreAttrs )
-        ,m_aMySQLSettings       ( *get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink() )
+        ,m_aMySQLSettings       ( VclPtr<MySQLNativeSettings>::Create(*get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink()) )
     {
         get(m_pHelpText, "helptext");
-        m_aMySQLSettings.Show();
+        m_aMySQLSettings->Show();
 
         SetRoadmapStateValue(false);
     }
 
-    OGenericAdministrationPage* MySQLNativeSetupPage::Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    MySQLNativeSetupPage::~MySQLNativeSetupPage()
     {
-        return new MySQLNativeSetupPage( pParent, _rAttrSet );
+        disposeOnce();
+    }
+
+    void MySQLNativeSetupPage::dispose()
+    {
+        m_aMySQLSettings.disposeAndClear();
+        m_pHelpText.clear();
+        OGenericAdministrationPage::dispose();
+    }
+
+    VclPtr<OGenericAdministrationPage> MySQLNativeSetupPage::Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return VclPtr<MySQLNativeSetupPage>::Create( pParent, _rAttrSet );
     }
 
     void MySQLNativeSetupPage::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        m_aMySQLSettings.fillControls( _rControlList );
+        m_aMySQLSettings->fillControls( _rControlList );
     }
 
     void MySQLNativeSetupPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new ODisableWrapper< FixedText >( m_pHelpText ) );
-        m_aMySQLSettings.fillWindows( _rControlList );
+        m_aMySQLSettings->fillWindows( _rControlList );
     }
 
     bool MySQLNativeSetupPage::FillItemSet( SfxItemSet* _rSet )
     {
-        return m_aMySQLSettings.FillItemSet( _rSet );
+        return m_aMySQLSettings->FillItemSet( _rSet );
     }
 
     void MySQLNativeSetupPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
-        m_aMySQLSettings.implInitControls( _rSet );
+        m_aMySQLSettings->implInitControls( _rSet );
 
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
 
@@ -337,7 +381,7 @@ using namespace ::com::sun::star;
 
     IMPL_LINK( MySQLNativeSetupPage, OnModified, Edit*, _pEdit )
     {
-        SetRoadmapStateValue( m_aMySQLSettings.canAdvance() );
+        SetRoadmapStateValue( m_aMySQLSettings->canAdvance() );
 
         return OGenericAdministrationPage::getControlModifiedLink().Call( _pEdit );
     }
@@ -387,26 +431,48 @@ using namespace ::com::sun::star;
         SetRoadmapStateValue(false);
     }
 
-    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    OGeneralSpecialJDBCConnectionPageSetup::~OGeneralSpecialJDBCConnectionPageSetup()
     {
-        return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
+        disposeOnce();
+    }
+
+    void OGeneralSpecialJDBCConnectionPageSetup::dispose()
+    {
+        m_pHeaderText.clear();
+        m_pFTHelpText.clear();
+        m_pFTDatabasename.clear();
+        m_pETDatabasename.clear();
+        m_pFTHostname.clear();
+        m_pETHostname.clear();
+        m_pFTPortNumber.clear();
+        m_pFTDefaultPortNumber.clear();
+        m_pNFPortNumber.clear();
+        m_pFTDriverClass.clear();
+        m_pETDriverClass.clear();
+        m_pPBTestJavaDriver.clear();
+        OGenericAdministrationPage::dispose();
+    }
+
+    VclPtr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return VclPtr<OGeneralSpecialJDBCConnectionPageSetup>::Create( pParent,
                                                          _rAttrSet,
                                                          DSID_MYSQL_PORTNUMBER ,
                                                          STR_MYSQL_DEFAULT,
                                                          STR_MYSQLJDBC_HELPTEXT,
                                                          STR_MYSQLJDBC_HEADERTEXT,
-                                                         STR_MYSQL_DRIVERCLASSTEXT) );
+                                                         STR_MYSQL_DRIVERCLASSTEXT);
     }
 
-    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
+        return VclPtr<OGeneralSpecialJDBCConnectionPageSetup>::Create( pParent,
                                                           _rAttrSet,
                                                           DSID_ORACLE_PORTNUMBER,
                                                           STR_ORACLE_DEFAULT,
                                                           STR_ORACLE_HELPTEXT,
                                                           STR_ORACLE_HEADERTEXT,
-                                                          STR_ORACLE_DRIVERCLASSTEXT) );
+                                                          STR_ORACLE_DRIVERCLASSTEXT);
     }
 
     void OGeneralSpecialJDBCConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -497,8 +563,8 @@ using namespace ::com::sun::star;
 #endif
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
-        aMsg.Execute();
+        ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
+        aMsg->Execute();
         return 0L;
     }
 
@@ -512,9 +578,9 @@ using namespace ::com::sun::star;
         return 0L;
     }
 
-    OGenericAdministrationPage* OJDBCConnectionPageSetup::CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OJDBCConnectionPageSetup::CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OJDBCConnectionPageSetup( pParent, _rAttrSet));
+        return VclPtr<OJDBCConnectionPageSetup>::Create( pParent, _rAttrSet);
     }
 
     // OMySQLJDBCConnectionPageSetup
@@ -527,6 +593,19 @@ using namespace ::com::sun::star;
         get(m_pPBTestJavaDriver, "jdbcButton");
         m_pETDriverClass->SetModifyHdl(LINK(this, OJDBCConnectionPageSetup, OnEditModified));
         m_pPBTestJavaDriver->SetClickHdl(LINK(this,OJDBCConnectionPageSetup,OnTestJavaClickHdl));
+    }
+
+    OJDBCConnectionPageSetup::~OJDBCConnectionPageSetup()
+    {
+        disposeOnce();
+    }
+
+    void OJDBCConnectionPageSetup::dispose()
+    {
+        m_pFTDriverClass.clear();
+        m_pETDriverClass.clear();
+        m_pPBTestJavaDriver.clear();
+        OConnectionTabPageSetup::dispose();
     }
 
     void OJDBCConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -606,8 +685,8 @@ using namespace ::com::sun::star;
         }
 #endif
         sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
-        OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString() );
-        aMsg.Execute();
+        ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString() );
+        aMsg->Execute();
         return 0L;
     }
 
@@ -621,9 +700,9 @@ using namespace ::com::sun::star;
         return 0L;
     }
 
-    OGenericAdministrationPage* OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OSpreadSheetConnectionPageSetup( pParent, _rAttrSet ) );
+        return VclPtr<OSpreadSheetConnectionPageSetup>::Create( pParent, _rAttrSet );
     }
 
 
@@ -636,7 +715,13 @@ using namespace ::com::sun::star;
 
     OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
     {
+        disposeOnce();
+    }
 
+    void OSpreadSheetConnectionPageSetup::dispose()
+    {
+        m_pPasswordrequired.clear();
+        OConnectionTabPageSetup::dispose();
     }
 
     void OSpreadSheetConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
@@ -662,9 +747,9 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    OGenericAdministrationPage* OAuthentificationPageSetup::CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OAuthentificationPageSetup::CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OAuthentificationPageSetup( pParent, _rAttrSet) );
+        return VclPtr<OAuthentificationPageSetup>::Create( pParent, _rAttrSet);
     }
 
 
@@ -685,7 +770,17 @@ using namespace ::com::sun::star;
 
     OAuthentificationPageSetup::~OAuthentificationPageSetup()
     {
+        disposeOnce();
+    }
 
+    void OAuthentificationPageSetup::dispose()
+    {
+        m_pFTHelpText.clear();
+        m_pFTUserName.clear();
+        m_pETUserName.clear();
+        m_pCBPasswordRequired.clear();
+        m_pPBTestConnection.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     void OAuthentificationPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -729,9 +824,9 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    OGenericAdministrationPage* OFinalDBPageSetup::CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet)
+    VclPtr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet)
     {
-        return ( new OFinalDBPageSetup( pParent, _rAttrSet) );
+        return VclPtr<OFinalDBPageSetup>::Create( pParent, _rAttrSet);
     }
 
 
@@ -755,7 +850,20 @@ using namespace ::com::sun::star;
 
     OFinalDBPageSetup::~OFinalDBPageSetup()
     {
+        disposeOnce();
+    }
 
+    void OFinalDBPageSetup::dispose()
+    {
+        m_pFTFinalHeader.clear();
+        m_pFTFinalHelpText.clear();
+        m_pRBRegisterDataSource.clear();
+        m_pRBDontregisterDataSource.clear();
+        m_pFTAdditionalSettings.clear();
+        m_pCBOpenAfterwards.clear();
+        m_pCBStartTableWizard.clear();
+        m_pFTFinalText.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()

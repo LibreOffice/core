@@ -42,7 +42,7 @@ class ThemePanel : public PanelLayout,
                        public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static ThemePanel* Create(vcl::Window* pParent,
+    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
                                   const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                   SfxBindings* pBindings);
 
@@ -62,12 +62,13 @@ private:
                    SfxBindings* pBindings);
 
     virtual ~ThemePanel();
+    virtual void dispose() SAL_OVERRIDE;
 
     SfxBindings* mpBindings;
 
-    ListBox* mpListBoxFonts;
-    ListBox* mpListBoxColors;
-    PushButton* mpApplyButton;
+    VclPtr<ListBox> mpListBoxFonts;
+    VclPtr<ListBox> mpListBoxColors;
+    VclPtr<PushButton> mpApplyButton;
 
     DECL_LINK(ClickHdl, void*);
 };

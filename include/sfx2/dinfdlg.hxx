@@ -180,27 +180,27 @@ public:
 class SfxDocumentPage : public SfxTabPage
 {
 private:
-    FixedImage*                 m_pBmp;
-    SelectableFixedText*        m_pNameED;
-    PushButton*                 m_pChangePassBtn;
+    VclPtr<FixedImage>            m_pBmp;
+    VclPtr<SelectableFixedText>   m_pNameED;
+    VclPtr<PushButton>            m_pChangePassBtn;
 
-    SelectableFixedText*        m_pShowTypeFT;
-    Edit*                       m_pFileValEd;
-    SelectableFixedText*        m_pShowSizeFT;
+    VclPtr<SelectableFixedText>   m_pShowTypeFT;
+    VclPtr<Edit>                  m_pFileValEd;
+    VclPtr<SelectableFixedText>   m_pShowSizeFT;
 
-    SelectableFixedText*        m_pCreateValFt;
-    SelectableFixedText*        m_pChangeValFt;
-    SelectableFixedText*        m_pSignedValFt;
-    PushButton*                 m_pSignatureBtn;
-    SelectableFixedText*        m_pPrintValFt;
-    SelectableFixedText*        m_pTimeLogValFt;
-    SelectableFixedText*        m_pDocNoValFt;
+    VclPtr<SelectableFixedText>   m_pCreateValFt;
+    VclPtr<SelectableFixedText>   m_pChangeValFt;
+    VclPtr<SelectableFixedText>   m_pSignedValFt;
+    VclPtr<PushButton>            m_pSignatureBtn;
+    VclPtr<SelectableFixedText>   m_pPrintValFt;
+    VclPtr<SelectableFixedText>   m_pTimeLogValFt;
+    VclPtr<SelectableFixedText>   m_pDocNoValFt;
 
-    CheckBox*                   m_pUseUserDataCB;
-    PushButton*                 m_pDeleteBtn;
+    VclPtr<CheckBox>              m_pUseUserDataCB;
+    VclPtr<PushButton>            m_pDeleteBtn;
 
-    FixedText*                  m_pTemplFt;
-    SelectableFixedText*        m_pTemplValFt;
+    VclPtr<FixedText>             m_pTemplFt;
+    VclPtr<SelectableFixedText>   m_pTemplValFt;
 
     OUString                    m_aUnknownSize;
     OUString                    m_aMultiSignedStr;
@@ -215,13 +215,15 @@ private:
     void                ImplCheckPasswordState();
 
 protected:
-    SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
+    virtual ~SfxDocumentPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
+    SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 
     void                EnableUseUserData();
 };
@@ -231,20 +233,22 @@ public:
 class SfxDocumentDescPage : public SfxTabPage
 {
 private:
-    Edit*                   m_pTitleEd;
-    Edit*                   m_pThemaEd;
-    Edit*                   m_pKeywordsEd;
-    VclMultiLineEdit*       m_pCommentEd;
-    SfxDocumentInfoItem*    m_pInfoItem;
+    VclPtr<Edit>              m_pTitleEd;
+    VclPtr<Edit>              m_pThemaEd;
+    VclPtr<Edit>              m_pKeywordsEd;
+    VclPtr<VclMultiLineEdit>  m_pCommentEd;
+    SfxDocumentInfoItem*      m_pInfoItem;
 
 protected:
-    SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
+    virtual ~SfxDocumentDescPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool            FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* );
+    SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -335,7 +339,6 @@ protected:
     virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 public:
     CustomPropertiesDurationField(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
-    virtual ~CustomPropertiesDurationField();
 
     void SetDuration( const com::sun::star::util::Duration& rDuration );
     const com::sun::star::util::Duration& GetDuration() const { return m_aDuration; }
@@ -347,7 +350,6 @@ class CustomPropertiesEditButton : public PushButton
 
 public:
     CustomPropertiesEditButton(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
-    virtual ~CustomPropertiesEditButton();
 
     DECL_LINK(ClickHdl, void *);
 };
@@ -370,33 +372,35 @@ public:
 class CustomPropertiesYesNoButton : public Control
 {
 private:
-    RadioButton                     m_aYesButton;
-    RadioButton                     m_aNoButton;
+    VclPtr<RadioButton>             m_aYesButton;
+    VclPtr<RadioButton>             m_aNoButton;
 
 public:
     CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId );
+    virtual ~CustomPropertiesYesNoButton();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Resize() SAL_OVERRIDE;
 
-    inline void     CheckYes() { m_aYesButton.Check(); }
-    inline void     CheckNo() { m_aNoButton.Check(); }
-    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked(); }
+    inline void     CheckYes() { m_aYesButton->Check(); }
+    inline void     CheckNo() { m_aNoButton->Check(); }
+    inline bool     IsYesChecked() const { return m_aYesButton->IsChecked(); }
 };
 
 // struct CustomPropertyLine ---------------------------------------------
 
 struct CustomPropertyLine
 {
-    ComboBox                        m_aNameBox;
-    CustomPropertiesTypeBox         m_aTypeBox;
-    CustomPropertiesEdit            m_aValueEdit;
-    CustomPropertiesDateField       m_aDateField;
-    CustomPropertiesTimeField       m_aTimeField;
-    const OUString                  m_sDurationFormat;
-    CustomPropertiesDurationField   m_aDurationField;
-    CustomPropertiesEditButton      m_aEditButton;
-    CustomPropertiesYesNoButton     m_aYesNoButton;
-    CustomPropertiesRemoveButton    m_aRemoveButton;
+    VclPtr<ComboBox>                      m_aNameBox;
+    VclPtr<CustomPropertiesTypeBox>       m_aTypeBox;
+    VclPtr<CustomPropertiesEdit>          m_aValueEdit;
+    VclPtr<CustomPropertiesDateField>     m_aDateField;
+    VclPtr<CustomPropertiesTimeField>     m_aTimeField;
+    const OUString                        m_sDurationFormat;
+    VclPtr<CustomPropertiesDurationField> m_aDurationField;
+    VclPtr<CustomPropertiesEditButton>    m_aEditButton;
+    VclPtr<CustomPropertiesYesNoButton>   m_aYesNoButton;
+    VclPtr<CustomPropertiesRemoveButton>  m_aRemoveButton;
 
     bool                            m_bIsDate;
     bool                            m_bIsRemoved;
@@ -412,19 +416,19 @@ struct CustomPropertyLine
 class CustomPropertiesWindow : public vcl::Window
 {
 private:
-    FixedText*                          m_pHeaderAccName;
-    FixedText*                          m_pHeaderAccType;
-    FixedText*                          m_pHeaderAccValue;
+    VclPtr<FixedText>                   m_pHeaderAccName;
+    VclPtr<FixedText>                   m_pHeaderAccType;
+    VclPtr<FixedText>                   m_pHeaderAccValue;
 
-    ComboBox                            m_aNameBox;
-    ListBox                             m_aTypeBox;
-    Edit                                m_aValueEdit;
-    DateField                           m_aDateField;
-    TimeField                           m_aTimeField;
-    Edit                                m_aDurationField;
-    PushButton                          m_aEditButton;
-    CustomPropertiesYesNoButton         m_aYesNoButton;
-    ImageButton                         m_aRemoveButton;
+    VclPtr<ComboBox>                    m_aNameBox;
+    VclPtr<ListBox>                     m_aTypeBox;
+    VclPtr<Edit>                        m_aValueEdit;
+    VclPtr<DateField>                   m_aDateField;
+    VclPtr<TimeField>                   m_aTimeField;
+    VclPtr<Edit>                        m_aDurationField;
+    VclPtr<PushButton>                  m_aEditButton;
+    VclPtr<CustomPropertiesYesNoButton> m_aYesNoButton;
+    VclPtr<ImageButton>                 m_aRemoveButton;
 
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
@@ -454,6 +458,7 @@ public:
         FixedText *pHeaderAccType,
         FixedText *pHeaderAccValue);
     virtual ~CustomPropertiesWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
     sal_uInt16          GetVisibleLineCount() const;
@@ -476,11 +481,11 @@ public:
 class CustomPropertiesControl : public vcl::Window
 {
 private:
-    VclVBox*                m_pVBox;
-    HeaderBar*              m_pHeaderBar;
-    VclHBox*                m_pBody;
-    CustomPropertiesWindow* m_pPropertiesWin;
-    ScrollBar*              m_pVertScroll;
+    VclPtr<VclVBox>                m_pVBox;
+    VclPtr<HeaderBar>              m_pHeaderBar;
+    VclPtr<VclHBox>                m_pBody;
+    VclPtr<CustomPropertiesWindow> m_pPropertiesWin;
+    VclPtr<ScrollBar>              m_pVertScroll;
 
     sal_Int32               m_nThumbPos;
 
@@ -490,6 +495,7 @@ private:
 public:
     CustomPropertiesControl(vcl::Window* pParent);
     virtual ~CustomPropertiesControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            AddLine( const OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
 
@@ -507,42 +513,44 @@ public:
 class SfxCustomPropertiesPage : public SfxTabPage
 {
 private:
-    CustomPropertiesControl* m_pPropertiesCtrl;
+    VclPtr<CustomPropertiesControl> m_pPropertiesCtrl;
 
     DECL_LINK(AddHdl, void *);
 
     using TabPage::DeactivatePage;
 
 protected:
-    SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
+    virtual ~SfxCustomPropertiesPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
+    SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 struct CmisValue : public VclBuilderContainer
 {
-    Edit*   m_aValueEdit;
+    VclPtr<Edit>   m_aValueEdit;
 
     CmisValue( vcl::Window* pParent, const OUString& aStr );
 };
 
 struct CmisDateTime : public VclBuilderContainer
 {
-    DateField*  m_aDateField;
-    TimeField*  m_aTimeField;
+    VclPtr<DateField>  m_aDateField;
+    VclPtr<TimeField>  m_aTimeField;
 
     CmisDateTime( vcl::Window* pParent, const ::com::sun::star::util::DateTime& aDateTime );
 };
 
 struct CmisYesNo : public VclBuilderContainer
 {
-    RadioButton* m_aYesButton;
-    RadioButton* m_aNoButton;
+    VclPtr<RadioButton> m_aYesButton;
+    VclPtr<RadioButton> m_aNoButton;
 
     CmisYesNo( vcl::Window* pParent, bool bValue);
 };
@@ -551,15 +559,15 @@ struct CmisYesNo : public VclBuilderContainer
 
 struct CmisPropertyLine : public VclBuilderContainer
 {
-    VclFrame*                     m_pFrame;
+    VclPtr<VclFrame>              m_pFrame;
     OUString                      m_sId;
     OUString                      m_sType;
     bool                          m_bUpdatable;
     bool                          m_bRequired;
     bool                          m_bMultiValued;
     bool                          m_bOpenChoice;
-    FixedText*                    m_aName;
-    FixedText*                    m_aType;
+    VclPtr<FixedText>             m_aName;
+    VclPtr<FixedText>             m_aType;
     std::vector< CmisValue* >     m_aValues;
     std::vector< CmisDateTime* >  m_aDateTimes;
     std::vector< CmisYesNo* >     m_aYesNos;
@@ -574,7 +582,7 @@ struct CmisPropertyLine : public VclBuilderContainer
 class CmisPropertiesWindow
 {
 private:
-    VclBox*                             m_pBox;
+    VclPtr<VclBox>                      m_pBox;
     sal_Int32                           m_nItemHeight;
     SvNumberFormatter                   m_aNumberFormatter;
     std::vector< CmisPropertyLine* >    m_aCmisPropertiesLines;
@@ -636,14 +644,13 @@ private:
     DECL_LINK(UpdateHdl, void *);
 
 protected:
-    SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
-
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
+    SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX

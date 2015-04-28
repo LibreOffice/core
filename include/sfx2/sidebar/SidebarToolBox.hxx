@@ -41,6 +41,7 @@ class SFX2_DLLPUBLIC SidebarToolBox
 public:
     SidebarToolBox(vcl::Window* pParentWindow);
     virtual ~SidebarToolBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,

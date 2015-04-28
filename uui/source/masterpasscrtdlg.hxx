@@ -32,9 +32,9 @@
 class MasterPasswordCreateDialog : public ModalDialog
 {
 private:
-    Edit*     m_pEDMasterPasswordCrt;
-    Edit*     m_pEDMasterPasswordRepeat;
-    OKButton* m_pOKBtn;
+    VclPtr<Edit>     m_pEDMasterPasswordCrt;
+    VclPtr<Edit>     m_pEDMasterPasswordRepeat;
+    VclPtr<OKButton> m_pOKBtn;
 
 
     DECL_LINK(OKHdl_Impl, void *);
@@ -42,6 +42,8 @@ private:
 
 public:
     MasterPasswordCreateDialog( vcl::Window* pParent, ResMgr * pResMgr );
+    virtual ~MasterPasswordCreateDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString GetMasterPassword() const { return m_pEDMasterPasswordCrt->GetText(); }
 

@@ -32,7 +32,7 @@ namespace dbaui
                                public OJoinTableView,
                                public ::comphelper::OContainerListener
     {
-        OTableConnection* m_pExistingConnection; ///< is set when a connection was draged on an existing connection
+        VclPtr<OTableConnection> m_pExistingConnection; ///< is set when a connection was draged on an existing connection
         TTableConnectionData::value_type m_pCurrentlyTabConnData; ///< set when we creating a connection with more than one keycolumn
         ::rtl::Reference< comphelper::OContainerListenerAdapter> m_pContainerListener;
         bool m_bInRemove;
@@ -40,7 +40,7 @@ namespace dbaui
         virtual void ConnDoubleClicked( OTableConnection* pConnection ) SAL_OVERRIDE;
         virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool bNewTable = false) SAL_OVERRIDE;
 
-        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
+        virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
 
         /** determines whether the classes Init method should accept a query
             name, or only table names */
@@ -54,6 +54,7 @@ namespace dbaui
     public:
         ORelationTableView( vcl::Window* pParent, ORelationDesignView* pView );
         virtual ~ORelationTableView();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void RemoveTabWin( OTableWindow* pTabWin ) SAL_OVERRIDE;
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) SAL_OVERRIDE;

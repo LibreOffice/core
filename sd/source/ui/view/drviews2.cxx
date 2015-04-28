@@ -373,7 +373,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     mpDrawView->SdrEndTextEdit();
                 }
-                sal_uInt16 nPage = maTabControl.GetCurPageId() - 1;
+                sal_uInt16 nPage = maTabControl->GetCurPageId() - 1;
                 mpActualPage = GetDoc()->GetSdPage(nPage, mePageKind);
                 ::sd::ViewShell::mpImpl->ProcessModifyPageSlot (
                     rReq,
@@ -410,7 +410,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     mpDrawView->SdrEndTextEdit();
                 }
 
-                sal_uInt16 nPageId = maTabControl.GetCurPageId();
+                sal_uInt16 nPageId = maTabControl->GetCurPageId();
                 SdPage* pCurrentPage = ( GetEditMode() == EM_PAGE )
                     ? GetDoc()->GetSdPage( nPageId - 1, GetPageKind() )
                     : GetDoc()->GetMasterSdPage( nPageId - 1, GetPageKind() );
@@ -456,7 +456,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     mpDrawView->SdrEndTextEdit();
                 }
 
-                maTabControl.StartEditMode( maTabControl.GetCurPageId() );
+                maTabControl->StartEditMode( maTabControl->GetCurPageId() );
             }
 
             Cancel();
@@ -993,10 +993,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
                     SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-                    CompressGraphicsDialog dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
-                    if ( dialog.Execute() == RET_OK )
+                    ScopedVclPtrInstance< CompressGraphicsDialog > dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
+                    if ( dialog->Execute() == RET_OK )
                     {
-                        SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
+                        SdrGrafObj* pNewObject = dialog->GetCompressedSdrGrafObj();
                         SdrPageView* pPageView = mpDrawView->GetSdrPageView();
                         OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects();
                         aUndoString += " Compress";
@@ -1422,11 +1422,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             || aLayerName.isEmpty() )
                         {
                             // name already exists
-                            WarningBox aWarningBox (
+                            ScopedVclPtrInstance<WarningBox> aWarningBox (
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
                                 SD_RESSTR(STR_WARN_NAME_DUPLICATE));
-                            aWarningBox.Execute();
+                            aWarningBox->Execute();
                         }
                         else
                             bLoop = false;
@@ -1591,11 +1591,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                              aLayerName != aOldLayerName) || aLayerName.isEmpty() )
                         {
                             // name already exists
-                            WarningBox aWarningBox (
+                            ScopedVclPtrInstance<WarningBox> aWarningBox (
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
                                 SD_RESSTR(STR_WARN_NAME_DUPLICATE));
-                            aWarningBox.Execute();
+                            aWarningBox->Execute();
                         }
                         else
                             bLoop = false;

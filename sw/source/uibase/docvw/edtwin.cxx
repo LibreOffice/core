@@ -4968,17 +4968,36 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 
 SwEditWin::~SwEditWin()
 {
+    disposeOnce();
+}
+
+void SwEditWin::dispose()
+{
     m_aKeyInputTimer.Stop();
+
     delete m_pShadCrsr;
+    m_pShadCrsr = NULL;
+
     delete m_pRowColumnSelectionStart;
+    m_pRowColumnSelectionStart = NULL;
+
     if( m_pQuickHlpData->m_bIsDisplayed && m_rView.GetWrtShellPtr() )
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
     g_bExecuteDrag = false;
     delete m_pApplyTempl;
+    m_pApplyTempl = NULL;
+
     m_rView.SetDrawFuncPtr(NULL);
 
     delete m_pUserMarker;
+    m_pUserMarker = NULL;
+
     delete m_pAnchorMarker;
+    m_pAnchorMarker = NULL;
+
+    m_aFrameControlsManager.dispose();
+
+    vcl::Window::dispose();
 }
 
 /**
@@ -5061,9 +5080,10 @@ void SwEditWin::GetFocus()
 
 void SwEditWin::LoseFocus()
 {
-    m_rView.GetWrtShell().InvalidateAccessibleFocus();
+    if (m_rView.GetWrtShellPtr())
+        m_rView.GetWrtShell().InvalidateAccessibleFocus();
     Window::LoseFocus();
-    if( m_pQuickHlpData->m_bIsDisplayed )
+    if( m_pQuickHlpData && m_pQuickHlpData->m_bIsDisplayed )
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
 }
 

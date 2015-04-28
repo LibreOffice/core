@@ -210,19 +210,19 @@ void OTableEditorCtrl::InitCellController()
         OSL_FAIL("getMaxColumnNameLength");
     }
 
-    pNameCell = new OSQLNameEdit(&GetDataWindow(), WB_LEFT, sExtraNameChars);
+    pNameCell = VclPtr<OSQLNameEdit>::Create(&GetDataWindow(), WB_LEFT, sExtraNameChars);
     pNameCell->SetMaxTextLen( nMaxTextLen );
     pNameCell->setCheck( isSQL92CheckEnabled(xCon) );
 
     // Cell type
-    pTypeCell = new ListBoxControl( &GetDataWindow() );
+    pTypeCell = VclPtr<ListBoxControl>::Create( &GetDataWindow() );
     pTypeCell->SetDropDownLineCount( 15 );
 
     // Cell description
-    pDescrCell = new Edit( &GetDataWindow(), WB_LEFT );
+    pDescrCell = VclPtr<Edit>::Create( &GetDataWindow(), WB_LEFT );
     pDescrCell->SetMaxTextLen( MAX_DESCR_LEN );
 
-    pHelpTextCell = new Edit( &GetDataWindow(), WB_LEFT );
+    pHelpTextCell = VclPtr<Edit>::Create( &GetDataWindow(), WB_LEFT );
     pHelpTextCell->SetMaxTextLen( MAX_DESCR_LEN );
 
     pNameCell->SetHelpId(HID_TABDESIGN_NAMECELL);
@@ -253,6 +253,11 @@ void OTableEditorCtrl::ClearModified()
 
 OTableEditorCtrl::~OTableEditorCtrl()
 {
+    disposeOnce();
+}
+
+void OTableEditorCtrl::dispose()
+{
     // Reset the Undo-Manager
     GetUndoManager().Clear();
 
@@ -269,10 +274,12 @@ OTableEditorCtrl::~OTableEditorCtrl()
         Application::RemoveUserEvent( nInvalidateTypeEvent );
 
     // Delete the control types
-    delete pNameCell;
-    delete pTypeCell;
-    delete pDescrCell;
-    delete pHelpTextCell;
+    pNameCell.disposeAndClear();
+    pTypeCell.disposeAndClear();
+    pDescrCell.disposeAndClear();
+    pHelpTextCell.disposeAndClear();
+    pDescrWin.clear();
+    OTableRowView::dispose();
 }
 
 bool OTableEditorCtrl::SetDataPtr( long nRow )

@@ -33,6 +33,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 class VCLXWindow;
@@ -83,7 +84,11 @@ public:
     virtual ~VCLXAccessibleComponent();
 
     VCLXWindow*    GetVCLXWindow() const { return mpVCLXindow; }
-    vcl::Window*        GetWindow() const;
+    VclPtr<vcl::Window> GetWindow() const;
+    template< class derived_type > VclPtr< derived_type > GetAs() const {
+        return VclPtr< derived_type >( static_cast< derived_type * >( GetWindow().get() ) ); }
+    template< class derived_type > VclPtr< derived_type > GetAsDynamic() const {
+        return VclPtr< derived_type >( dynamic_cast< derived_type * >( GetWindow().get() ) ); }
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 

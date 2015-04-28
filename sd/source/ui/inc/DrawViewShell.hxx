@@ -279,7 +279,7 @@ public:
     void            UnlockInput();
     bool            IsInputLocked() const { return mnLockCount > 0UL; }
 
-    sal_uInt16          GetCurPageId() { return( maTabControl.GetCurPageId() ); }
+    sal_uInt16          GetCurPageId() { return maTabControl->GetCurPageId(); }
 
     /** Show controls of the UI or hide them, depending on the given flag.
         Do not call this method directly.  Call the method at ViewShellBase
@@ -345,7 +345,7 @@ public:
 
     /** Return a pointer to the tab control for pages.
     */
-    TabControl& GetPageTabControl() { return maTabControl;}
+    TabControl& GetPageTabControl() { return *maTabControl.get(); }
 
     /** Return a pointer to the tab control for layers.
     */
@@ -384,7 +384,7 @@ protected:
     Rectangle       maMarkRect;
     Point           maMousePos;
     bool            mbMousePosFreezed;
-    TabControl      maTabControl;
+    VclPtr<TabControl>  maTabControl;
     EditMode        meEditMode;
     PageKind        mePageKind;
     bool            mbZoomOnPage;

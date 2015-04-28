@@ -146,43 +146,43 @@ namespace formula
         mutable const sheet::FormulaOpCodeMapEntry*             m_pBinaryOpCodesEnd;
         ::std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
         IFormulaEditorHelper*                                   m_pHelper;
-        Dialog*  m_pParent;
+        VclPtr<Dialog>          m_pParent;
         IControlReferenceHandler*  m_pDlg;
-        TabControl      *m_pTabCtrl;
-        VclVBox         *m_pParaWinBox;
-        ParaWin*        pParaWin;
-        FixedText       *m_pFtHeadLine;
-        FixedText       *m_pFtFuncName;
-        FixedText       *m_pFtFuncDesc;
+        VclPtr<TabControl>      m_pTabCtrl;
+        VclPtr<VclVBox>         m_pParaWinBox;
+        VclPtr<ParaWin>         pParaWin;
+        VclPtr<FixedText>       m_pFtHeadLine;
+        VclPtr<FixedText>       m_pFtFuncName;
+        VclPtr<FixedText>       m_pFtFuncDesc;
 
-        FixedText       *m_pFtEditName;
+        VclPtr<FixedText>       m_pFtEditName;
 
-        FixedText       *m_pFtResult;
-        Edit            *m_pWndResult;
+        VclPtr<FixedText>       m_pFtResult;
+        VclPtr<Edit>            m_pWndResult;
 
-        FixedText       *m_pFtFormula;
-        EditBox         *m_pMEFormula;
+        VclPtr<FixedText>       m_pFtFormula;
+        VclPtr<EditBox>         m_pMEFormula;
 
-        CheckBox        *m_pBtnMatrix;
-        CancelButton    *m_pBtnCancel;
+        VclPtr<CheckBox>        m_pBtnMatrix;
+        VclPtr<CancelButton>    m_pBtnCancel;
 
-        PushButton      *m_pBtnBackward;
-        PushButton      *m_pBtnForward;
-        OKButton        *m_pBtnEnd;
+        VclPtr<PushButton>      m_pBtnBackward;
+        VclPtr<PushButton>      m_pBtnForward;
+        VclPtr<OKButton>        m_pBtnEnd;
 
-        RefEdit         *m_pEdRef;
-        RefButton       *m_pRefBtn;
+        VclPtr<RefEdit>         m_pEdRef;
+        VclPtr<RefButton>       m_pRefBtn;
 
-        FixedText       *m_pFtFormResult;
-        Edit            *m_pWndFormResult;
+        VclPtr<FixedText>       m_pFtFormResult;
+        VclPtr<Edit>            m_pWndFormResult;
 
-        RefEdit*        pTheRefEdit;
-        RefButton*      pTheRefButton;
-        FuncPage*       pFuncPage;
-        StructPage*     pStructPage;
+        VclPtr<RefEdit>        pTheRefEdit;
+        VclPtr<RefButton>      pTheRefButton;
+        VclPtr<FuncPage>       pFuncPage;
+        VclPtr<StructPage>     pStructPage;
         OUString        aOldFormula;
         bool        bStructUpdate;
-        MultiLineEdit*  pMEdit;
+        VclPtr<MultiLineEdit>  pMEdit;
         bool        bUserMatrixFlag;
         Idle            aIdle;
 
@@ -286,7 +286,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     pParent->get(m_pRefBtn, "RB_REF");
     m_pRefBtn->SetReferences(_pDlg, m_pEdRef);
 
-    pParaWin = new ParaWin(m_pParaWinBox, _pDlg);
+    pParaWin = VclPtr<ParaWin>::Create(m_pParaWinBox, _pDlg);
     pParaWin->Show();
     m_pParaWinBox->Hide();
     m_pFtEditName->Hide();
@@ -306,8 +306,8 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     pParaWin->SetArgModifiedHdl(LINK( this, FormulaDlg_Impl, ModifyHdl ) );
     pParaWin->SetFxHdl(LINK( this, FormulaDlg_Impl, FxHdl ) );
 
-    pFuncPage= new FuncPage( m_pTabCtrl,_pFunctionMgr);
-    pStructPage= new StructPage( m_pTabCtrl);
+    pFuncPage= VclPtr<FuncPage>::Create( m_pTabCtrl,_pFunctionMgr);
+    pStructPage= VclPtr<StructPage>::Create( m_pTabCtrl);
     pFuncPage->Hide();
     pStructPage->Hide();
     m_pTabCtrl->SetTabPage( TP_FUNCTION, pFuncPage);
@@ -364,9 +364,9 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
     m_pTabCtrl->RemovePage(TP_FUNCTION);
     m_pTabCtrl->RemovePage(TP_STRUCT);
 
-    delete pStructPage;
-    delete pFuncPage;
-    delete pParaWin;
+    pStructPage.disposeAndClear();
+    pFuncPage.disposeAndClear();
+    pParaWin.disposeAndClear();
     DeleteArgs();
 }
 
@@ -1426,7 +1426,7 @@ void FormulaDlg_Impl::UpdateSelection()
     m_pRefBtn->Show( pButton != NULL );
 
     ::std::pair<RefButton*,RefEdit*> aPair;
-    aPair.first = pButton ? m_pRefBtn : NULL;
+    aPair.first = pButton ? m_pRefBtn.get() : NULL;
     aPair.second = m_pEdRef;
     return aPair;
 }
@@ -1473,7 +1473,7 @@ void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
 }
 RefEdit* FormulaDlg_Impl::GetCurrRefEdit()
 {
-    return m_pEdRef->IsVisible() ? m_pEdRef : pParaWin->GetActiveEdit();
+    return m_pEdRef->IsVisible() ? m_pEdRef.get() : pParaWin->GetActiveEdit();
 }
 void FormulaDlg_Impl::Update()
 {
@@ -1612,7 +1612,7 @@ bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
 
     OUString      aStrEd;
     Edit* pEd = GetCurrRefEdit();
-    if(pEd!=NULL && pTheRefEdit==NULL)
+    if(pEd!=NULL && pTheRefEdit==nullptr)
     {
         _rSelection=pEd->GetSelection();
         _rSelection.Justify();
@@ -1626,7 +1626,7 @@ bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
         _rSelection.Justify();
         aStrEd= m_pEdRef->GetText();
     }
-    return pTheRefEdit == NULL;
+    return pTheRefEdit == nullptr;
 }
 
 void FormulaDlg_Impl::SetEdSelection()

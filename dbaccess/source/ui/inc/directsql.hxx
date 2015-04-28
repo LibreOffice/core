@@ -49,13 +49,13 @@ namespace dbaui
         OModuleClient m_aModuleClient;
         ::osl::Mutex    m_aMutex;
 
-        MultiLineEditSyntaxHighlight*    m_pSQL;
-        PushButton*       m_pExecute;
-        ListBox*          m_pSQLHistory;
-        VclMultiLineEdit* m_pStatus;
-        CheckBox*         m_pShowOutput;
-        VclMultiLineEdit* m_pOutput;
-        PushButton*       m_pClose;
+        VclPtr<MultiLineEditSyntaxHighlight>    m_pSQL;
+        VclPtr<PushButton>       m_pExecute;
+        VclPtr<ListBox>          m_pSQLHistory;
+        VclPtr<VclMultiLineEdit> m_pStatus;
+        VclPtr<CheckBox>         m_pShowOutput;
+        VclPtr<VclMultiLineEdit> m_pOutput;
+        VclPtr<PushButton>       m_pClose;
 
         typedef ::std::deque< OUString >  StringQueue;
         StringQueue     m_aStatementHistory;    // previous statements
@@ -72,6 +72,7 @@ namespace dbaui
             vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
         virtual ~DirectSQLDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// number of history entries
         sal_Int32 getHistorySize() const;

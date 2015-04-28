@@ -33,9 +33,9 @@ class ScDocShell;
 class ScShareDocumentDlg : public ModalDialog
 {
 private:
-    CheckBox*           m_pCbShare;
-    FixedText*          m_pFtWarning;
-    SvSimpleTable*      m_pLbUsers;
+    VclPtr<CheckBox>           m_pCbShare;
+    VclPtr<FixedText>          m_pFtWarning;
+    VclPtr<SvSimpleTable>      m_pLbUsers;
 
     OUString            m_aStrNoUserData;
     OUString            m_aStrUnknownUser;
@@ -49,6 +49,7 @@ private:
 public:
                         ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData );
                         virtual ~ScShareDocumentDlg();
+    virtual void        dispose() SAL_OVERRIDE;
 
     bool                IsShareDocumentChecked() const;
     void                UpdateView();

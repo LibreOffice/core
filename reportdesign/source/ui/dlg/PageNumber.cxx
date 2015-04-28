@@ -63,6 +63,18 @@ OPageNumberDialog::OPageNumberDialog( vcl::Window* _pParent
 
 OPageNumberDialog::~OPageNumberDialog()
 {
+    disposeOnce();
+}
+
+void OPageNumberDialog::dispose()
+{
+    m_pPageN.clear();
+    m_pPageNofM.clear();
+    m_pTopPage.clear();
+    m_pBottomPage.clear();
+    m_pAlignmentLst.clear();
+    m_pShowNumberOnFirstPage.clear();
+    ModalDialog::dispose();
 }
 
 short OPageNumberDialog::Execute()

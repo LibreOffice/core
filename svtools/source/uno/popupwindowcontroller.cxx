@@ -47,8 +47,8 @@ public:
     DECL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window* );
 
 private:
-    vcl::Window* mpPopupWindow;
-    ToolBox* mpToolBox;
+    VclPtr<vcl::Window> mpPopupWindow;
+    VclPtr<ToolBox>     mpToolBox;
 };
 
 PopupWindowControllerImpl::PopupWindowControllerImpl()
@@ -99,7 +99,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
                     mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_OPEN, (void*)mpPopupWindow );
                 mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS, 0 );
 
-                svtools::ToolbarMenu* pToolbarMenu = dynamic_cast< svtools::ToolbarMenu* >( mpPopupWindow );
+                svtools::ToolbarMenu* pToolbarMenu = dynamic_cast< svtools::ToolbarMenu* >( mpPopupWindow.get() );
                 if( pToolbarMenu )
                     pToolbarMenu->highlightFirstEntry();
                 break;
@@ -126,7 +126,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
 IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window*, pWindow )
 {
     (void)*pThis;
-    delete pWindow;
+    pWindow->disposeOnce();
     return 0;
 }
 
@@ -216,7 +216,7 @@ void SAL_CALL PopupWindowController::doubleClick() throw (RuntimeException, std:
 
 Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() throw (RuntimeException, std::exception)
 {
-    ToolBox* pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+    VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if( pToolBox )
     {
         vcl::Window* pItemWindow = pToolBox->GetItemWindow( pToolBox->GetDownItemId() );

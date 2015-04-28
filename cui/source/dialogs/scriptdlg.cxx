@@ -96,12 +96,18 @@ SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSFTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
-    return new SFTreeListBox(pParent);
+    return VclPtr<SFTreeListBox>::Create(pParent);
 }
 
 SFTreeListBox::~SFTreeListBox()
 {
+    disposeOnce();
+}
+
+void SFTreeListBox::dispose()
+{
     deleteAllTree();
+    SvTreeListBox::dispose();
 }
 
 void SFTreeListBox::delUserData( SvTreeListEntry* pEntry )
@@ -437,6 +443,17 @@ CuiInputDialog::CuiInputDialog(vcl::Window * pParent, sal_uInt16 nMode )
     }
 }
 
+CuiInputDialog::~CuiInputDialog()
+{
+    disposeOnce();
+}
+
+void CuiInputDialog::dispose()
+{
+    m_pEdit.clear();
+    ModalDialog::dispose();
+}
+
 
 // ScriptOrgDialog ------------------------------------------------------------
 
@@ -487,8 +504,21 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( vcl::Window* pParent, const OUString& la
 
 SvxScriptOrgDialog::~SvxScriptOrgDialog()
 {
+    disposeOnce();
+}
+
+void SvxScriptOrgDialog::dispose()
+{
     // clear the SelectHdl so that it isn't called during the dtor
     m_pScriptsBox->SetSelectHdl( Link() );
+    m_pScriptsBox.clear();
+    m_pRunButton.clear();
+    m_pCloseButton.clear();
+    m_pCreateButton.clear();
+    m_pEditButton.clear();
+    m_pRenameButton.clear();
+    m_pDelButton.clear();
+    SfxModalDialog::dispose();
 };
 
 short SvxScriptOrgDialog::Execute()
@@ -876,7 +906,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             }
         }
 
-        boost::scoped_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<vcl::Window*>(this), nMode ) );
+        ScopedVclPtrInstance< CuiInputDialog > xNewDlg( static_cast<vcl::Window*>(this), nMode );
         xNewDlg->SetObjectName( aNewName );
 
         do
@@ -892,9 +922,9 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                         bValid = false;
                         OUString aError( m_createErrStr );
                         aError += m_createDupStr;
-                        MessageDialog aErrorBox(static_cast<vcl::Window*>(this), aError);
-                        aErrorBox.SetText( m_createErrTitleStr );
-                        aErrorBox.Execute();
+                        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
+                        aErrorBox->SetText( m_createErrTitleStr );
+                        aErrorBox->Execute();
                         xNewDlg->SetObjectName( aNewName );
                         break;
                     }
@@ -974,9 +1004,9 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_createErrStr );
-        MessageDialog aErrorBox(static_cast<vcl::Window*>(this), aError);
-        aErrorBox.SetText( m_createErrTitleStr );
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
+        aErrorBox->SetText( m_createErrTitleStr );
+        aErrorBox->Execute();
     }
 }
 
@@ -999,7 +1029,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         }
         sal_uInt16 nMode = INPUTMODE_RENAME;
 
-        boost::scoped_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<vcl::Window*>(this), nMode ) );
+        ScopedVclPtrInstance< CuiInputDialog > xNewDlg( static_cast<vcl::Window*>(this), nMode );
         xNewDlg->SetObjectName( aNewName );
 
         bool bValid;
@@ -1050,9 +1080,9 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_renameErrStr );
-        MessageDialog aErrorBox(static_cast<vcl::Window*>(this), aError);
-        aErrorBox.SetText( m_renameErrTitleStr );
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
+        aErrorBox->SetText( m_renameErrTitleStr );
+        aErrorBox->Execute();
     }
 }
 void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
@@ -1061,9 +1091,9 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
-    MessageDialog aQueryBox(static_cast<vcl::Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-    aQueryBox.SetText( m_delQueryTitleStr );
-    if ( aQueryBox.Execute() == RET_NO )
+    VclPtrInstance< MessageDialog > aQueryBox(static_cast<vcl::Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    aQueryBox->SetText( m_delQueryTitleStr );
+    if ( aQueryBox->Execute() == RET_NO )
     {
         return;
     }
@@ -1096,9 +1126,9 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     else
     {
         //ISSUE L10N & message from exception?
-        MessageDialog aErrorBox(static_cast<vcl::Window*>(this), m_delErrStr);
-        aErrorBox.SetText( m_delErrTitleStr );
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), m_delErrStr);
+        aErrorBox->SetText( m_delErrTitleStr );
+        aErrorBox->Execute();
     }
 
 }
@@ -1468,11 +1498,10 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, OUString*, pMessage )
         message = OUString( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     }
 
-    MessageDialog* pBox = new MessageDialog(NULL, message, VCL_MESSAGE_WARNING);
+    ScopedVclPtrInstance<MessageDialog> pBox( nullptr, message, VCL_MESSAGE_WARNING );
     pBox->SetText( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     pBox->Execute();
 
-    delete pBox;
     delete pMessage;
 
     return 0;

@@ -41,4 +41,15 @@ FmInputRecordNoDialog::FmInputRecordNoDialog(vcl::Window * pParent)
     m_pRecordNo->SetDecimalDigits(0);
 }
 
+FmInputRecordNoDialog::~FmInputRecordNoDialog()
+{
+    disposeOnce();
+}
+
+void FmInputRecordNoDialog::dispose()
+{
+    m_pRecordNo.clear();
+    ModalDialog::dispose();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

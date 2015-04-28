@@ -128,7 +128,17 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
 
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
+    disposeOnce();
+}
+
+void SwCompatibilityOptPage::dispose()
+{
     delete m_pImpl;
+    m_pMain.clear();
+    m_pFormattingLB.clear();
+    m_pOptionsLB.clear();
+    m_pDefaultPB.clear();
+    SfxTabPage::dispose();
 }
 
 sal_uLong convertBools2Ulong_Impl
@@ -309,9 +319,9 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
 {
-    MessageDialog aQuery(this, "QueryDefaultCompatDialog",
-        "modules/swriter/ui/querydefaultcompatdialog.ui");
-    if (aQuery.Execute() == RET_YES)
+    ScopedVclPtrInstance<MessageDialog> aQuery(this, "QueryDefaultCompatDialog",
+                                               "modules/swriter/ui/querydefaultcompatdialog.ui");
+    if (aQuery->Execute() == RET_YES)
     {
         for ( vector< CompatibilityItem >::iterator pItem = m_pImpl->m_aList.begin();
               pItem != m_pImpl->m_aList.end(); ++pItem )
@@ -400,9 +410,9 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bExpandWordSpace );
 }
 
-SfxTabPage* SwCompatibilityOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCompatibilityOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SwCompatibilityOptPage( pParent, *rAttrSet );
+    return VclPtr<SwCompatibilityOptPage>::Create( pParent, *rAttrSet );
 }
 
 bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )

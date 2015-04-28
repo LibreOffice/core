@@ -46,6 +46,7 @@ public:
     ScAutoFmtPreview(vcl::Window* pParent);
     void DetectRTL(ScViewData *pViewData);
     virtual ~ScAutoFmtPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     void NotifyChange( ScAutoFormatData* pNewData );
 
@@ -55,7 +56,7 @@ protected:
 
 private:
     ScAutoFormatData*       pCurData;
-    VirtualDevice           aVD;
+    ScopedVclPtrInstance<VirtualDevice> aVD;
     SvtScriptedTextHelper   aScriptedText;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
     bool                    bFitWidth;

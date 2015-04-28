@@ -184,7 +184,41 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
 }
 
 ScPivotLayoutDialog::~ScPivotLayoutDialog()
-{}
+{
+    disposeOnce();
+}
+
+void ScPivotLayoutDialog::dispose()
+{
+    mpPreviouslyFocusedListBox.clear();
+    mpCurrentlyFocusedListBox.clear();
+    mpListBoxField.clear();
+    mpListBoxPage.clear();
+    mpListBoxColumn.clear();
+    mpListBoxRow.clear();
+    mpListBoxData.clear();
+    mpCheckIgnoreEmptyRows.clear();
+    mpCheckTotalColumns.clear();
+    mpCheckAddFilter.clear();
+    mpCheckIdentifyCategories.clear();
+    mpCheckTotalRows.clear();
+    mpCheckDrillToDetail.clear();
+    mpSourceRadioNamedRange.clear();
+    mpSourceRadioSelection.clear();
+    mpSourceListBox.clear();
+    mpSourceEdit.clear();
+    mpSourceButton.clear();
+    mpDestinationRadioNewSheet.clear();
+    mpDestinationRadioNamedRange.clear();
+    mpDestinationRadioSelection.clear();
+    mpDestinationListBox.clear();
+    mpDestinationEdit.clear();
+    mpDestinationButton.clear();
+    mpBtnOK.clear();
+    mpBtnCancel.clear();
+    mpActiveEdit.clear();
+    ScAnyRefDlg::dispose();
+}
 
 void ScPivotLayoutDialog::SetupSource()
 {
@@ -314,7 +348,7 @@ void ScPivotLayoutDialog::SetActive()
     if (mbDialogLostFocus)
     {
         mbDialogLostFocus = false;
-        if(mpActiveEdit != NULL)
+        if(mpActiveEdit != nullptr)
         {
             mpActiveEdit->GrabFocus();
             if (mpActiveEdit == mpSourceEdit)
@@ -334,7 +368,7 @@ void ScPivotLayoutDialog::SetReference(const ScRange& rReferenceRange, ScDocumen
     if (!mbDialogLostFocus)
         return;
 
-    if (mpActiveEdit == NULL)
+    if (mpActiveEdit == nullptr)
         return;
 
     if (rReferenceRange.aStart != rReferenceRange.aEnd)

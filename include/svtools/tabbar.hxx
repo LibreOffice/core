@@ -315,6 +315,8 @@ class SVT_DLLPUBLIC TabBar : public vcl::Window
 private:
     std::unique_ptr<TabBar_Impl> mpImpl;
 
+    ImplTabBarList* mpItemList;
+
     OUString        maEditText;
     Color           maSelColor;
     Color           maSelTextColor;
@@ -384,6 +386,7 @@ public:
 
                     TabBar( vcl::Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
     virtual         ~TabBar();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

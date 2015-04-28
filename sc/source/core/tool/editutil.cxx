@@ -53,6 +53,14 @@ using namespace com::sun::star;
 // STATIC DATA
 //  Delimiters zusaetzlich zu EditEngine-Default:
 
+ScEditUtil::ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
+                            const Point& rScrPosPixel,
+                            OutputDevice* pDevice, double nScaleX, double nScaleY,
+                            const Fraction& rX, const Fraction& rY ) :
+                    pDoc(pDocument),nCol(nX),nRow(nY),nTab(nZ),
+                    aScrPos(rScrPosPixel),pDev(pDevice),
+                    nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY) {}
+
 OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 {
     // underscore is used in function argument names

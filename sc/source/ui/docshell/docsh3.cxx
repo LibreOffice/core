@@ -368,11 +368,11 @@ void ScDocShell::CalcOutputFactor()
     pRefDev->SetFont(aOldFont);
     pRefDev->SetMapMode(aOldMode);
 
-    VirtualDevice aVirtWindow( *Application::GetDefaultDevice() );
-    aVirtWindow.SetMapMode(MAP_PIXEL);
-    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);    // font color doesn't matter here
-    aVirtWindow.SetFont(aDefFont);
-    nWindowWidth = aVirtWindow.GetTextWidth(aTestString);
+    ScopedVclPtrInstance< VirtualDevice > pVirtWindow( *Application::GetDefaultDevice() );
+    pVirtWindow->SetMapMode(MAP_PIXEL);
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow);    // font color doesn't matter here
+    pVirtWindow->SetFont(aDefFont);
+    nWindowWidth = pVirtWindow->GetTextWidth(aTestString);
     nWindowWidth = (long) ( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );
 
     if (nPrinterWidth && nWindowWidth)
@@ -1202,12 +1202,12 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                 while ( bLoop )
                 {
                     bLoop = false;
-                    ScConflictsDlg aDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList );
-                    if ( aDlg.Execute() == RET_CANCEL )
+                    ScopedVclPtrInstance< ScConflictsDlg > aDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList );
+                    if ( aDlg->Execute() == RET_CANCEL )
                     {
-                        QueryBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                        ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
                             ScGlobal::GetRscString( STR_DOC_WILLNOTBESAVED ) );
-                        if ( aBox.Execute() == RET_YES )
+                        if ( aBox->Execute() == RET_YES )
                         {
                             return false;
                         }
@@ -1320,8 +1320,8 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         PostPaintExtras();
         PostPaintGridAll();
 
-        InfoBox aInfoBox( GetActiveDialogParent(), ScGlobal::GetRscString( STR_DOC_UPDATED ) );
-        aInfoBox.Execute();
+        ScopedVclPtrInstance< InfoBox > aInfoBox( GetActiveDialogParent(), ScGlobal::GetRscString( STR_DOC_UPDATED ) );
+        aInfoBox->Execute();
     }
 
     return ( pThisAction != NULL );

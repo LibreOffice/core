@@ -89,23 +89,23 @@ static sal_uInt16 aWndFunc(
     aErr = aErr.replaceAll("$(ACTION)", aAction);
     aErr = aErr.replaceAll("$(ERROR)", rErr);
 
-    boost::scoped_ptr<MessBox> pBox;
+    VclPtr<MessBox> pBox;
     switch ( nFlags & 0xf000 )
     {
         case ERRCODE_MSG_ERROR:
-            pBox.reset(new ErrorBox(pWin, eBits, aErr));
+            pBox.reset(VclPtr<ErrorBox>::Create(pWin, eBits, aErr));
             break;
 
         case ERRCODE_MSG_WARNING:
-            pBox.reset(new WarningBox(pWin, eBits, aErr));
+            pBox.reset(VclPtr<WarningBox>::Create(pWin, eBits, aErr));
             break;
 
         case ERRCODE_MSG_INFO:
-            pBox.reset(new InfoBox(pWin, aErr));
+            pBox.reset(VclPtr<InfoBox>::Create(pWin, aErr));
             break;
 
         case ERRCODE_MSG_QUERY:
-            pBox.reset(new QueryBox(pWin, eBits, aErr));
+            pBox.reset(VclPtr<QueryBox>::Create(pWin, eBits, aErr));
             break;
 
         default:

@@ -161,7 +161,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pJavaListContainer->set_width_request(aControlSize.Width());
     pJavaListContainer->set_height_request(aControlSize.Height());
-    m_pJavaList = new SvxJavaListBox(*pJavaListContainer, m_sAccessibilityText);
+    m_pJavaList = VclPtr<SvxJavaListBox>::Create(*pJavaListContainer, m_sAccessibilityText);
 
     long aStaticTabs[]= { 4, 0, 0, 0, 0 };
 
@@ -202,9 +202,14 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
 
 SvxJavaOptionsPage::~SvxJavaOptionsPage()
 {
-    delete m_pJavaList;
-    delete m_pParamDlg;
-    delete m_pPathDlg;
+    disposeOnce();
+}
+
+void SvxJavaOptionsPage::dispose()
+{
+    m_pJavaList.disposeAndClear();
+    m_pParamDlg.disposeAndClear();
+    m_pPathDlg.disposeAndClear();
     ClearJavaInfo();
 #if HAVE_FEATURE_JAVA
     std::vector< JavaInfo* >::iterator pIter;
@@ -213,9 +218,20 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
         JavaInfo* pInfo = *pIter;
         jfw_freeJavaInfo( pInfo );
     }
+    m_aAddedInfos.clear();
 
     jfw_unlock();
 #endif
+    m_pJavaEnableCB.clear();
+    m_pJavaBox.clear();
+    m_pJavaPathText.clear();
+    m_pAddBtn.clear();
+    m_pParameterBtn.clear();
+    m_pClassPathBtn.clear();
+    m_pExpertConfigBtn.clear();
+    m_pExperimentalCB.clear();
+    m_pMacroCB.clear();
+    SfxTabPage::dispose();
 }
 
 
@@ -290,7 +306,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
     Sequence< OUString > aParameterList;
     if ( !m_pParamDlg )
     {
-        m_pParamDlg = new SvxJavaParameterDlg( this );
+        m_pParamDlg = VclPtr<SvxJavaParameterDlg>::Create( this );
         javaFrameworkError eErr = jfw_getVMParameters( &m_parParameters, &m_nParamSize );
         if ( JFW_E_NONE == eErr && m_parParameters && m_nParamSize > 0 )
         {
@@ -320,8 +336,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                MessageDialog aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
-                aWarnBox.Execute();
+                ScopedVclPtrInstance< MessageDialog > aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
+                aWarnBox->Execute();
             }
         }
     }
@@ -340,7 +356,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
 
     if ( !m_pPathDlg )
     {
-          m_pPathDlg = new SvxJavaClassPathDlg( this );
+          m_pPathDlg = VclPtr<SvxJavaClassPathDlg>::Create( this );
         javaFrameworkError eErr = jfw_getUserClassPath( &m_pClassPath );
         if ( JFW_E_NONE == eErr && m_pClassPath )
         {
@@ -365,8 +381,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                MessageDialog aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
-                aWarnBox.Execute();
+                ScopedVclPtrInstance< MessageDialog > aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
+                aWarnBox->Execute();
             }
         }
     }
@@ -421,7 +437,7 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 
 IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
 {
-    CuiAboutConfigTabPage* m_pExpertConfigDlg = new CuiAboutConfigTabPage(this);
+    ScopedVclPtrInstance< CuiAboutConfigTabPage > m_pExpertConfigDlg(this);
     m_pExpertConfigDlg->Reset();//initialize and reset function
 
     if( RET_OK == m_pExpertConfigDlg->Execute() )
@@ -429,7 +445,7 @@ IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
         m_pExpertConfigDlg->FillItemSet();//save changes if there are any
     }
 
-    delete m_pExpertConfigDlg;
+    m_pExpertConfigDlg.disposeAndClear();
     return 0;
 }
 
@@ -614,13 +630,13 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
     {
-        MessageDialog aErrBox( this, CUI_RES( RID_SVXSTR_JRE_NOT_RECOGNIZED ) );
-        aErrBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrBox( this, CUI_RES( RID_SVXSTR_JRE_NOT_RECOGNIZED ) );
+        aErrBox->Execute();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
-        MessageDialog aErrBox( this, CUI_RES( RID_SVXSTR_JRE_FAILED_VERSION ) );
-        aErrBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrBox( this, CUI_RES( RID_SVXSTR_JRE_FAILED_VERSION ) );
+        aErrBox->Execute();
     }
 
     if ( bStartAgain )
@@ -635,9 +651,9 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
 
 
-SfxTabPage* SvxJavaOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxJavaOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new SvxJavaOptionsPage( pParent, *rAttrSet ) );
+    return VclPtr<SvxJavaOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -805,12 +821,19 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( vcl::Window* pParent ) :
     EnableRemoveButton();
 }
 
-
-
 SvxJavaParameterDlg::~SvxJavaParameterDlg()
 {
+    disposeOnce();
 }
 
+void SvxJavaParameterDlg::dispose()
+{
+    m_pParameterEdit.clear();
+    m_pAssignBtn.clear();
+    m_pAssignedList.clear();
+    m_pRemoveBtn.clear();
+    ModalDialog::dispose();
+}
 
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
@@ -939,12 +962,24 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg(vcl::Window* pParent)
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
-    sal_Int32 i, nCount = m_pPathList->GetEntryCount();
-    for ( i = 0; i < nCount; ++i )
-        delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
+    disposeOnce();
 }
 
-
+void SvxJavaClassPathDlg::dispose()
+{
+    if (m_pPathList)
+    {
+        sal_Int32 i, nCount = m_pPathList->GetEntryCount();
+        for ( i = 0; i < nCount; ++i )
+            delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
+        m_pPathList = NULL;
+    }
+    m_pPathList.clear();
+    m_pAddArchiveBtn.clear();
+    m_pAddPathBtn.clear();
+    m_pRemoveBtn.clear();
+    ModalDialog::dispose();
+}
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
 {

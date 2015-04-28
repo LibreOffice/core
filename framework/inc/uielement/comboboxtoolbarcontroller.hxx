@@ -78,7 +78,7 @@ class ComboboxToolbarController : public IComboBoxListener,
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const SAL_OVERRIDE;
 
     private:
-        ComboBoxControl*    m_pComboBox;
+        VclPtr<ComboBoxControl>    m_pComboBox;
 };
 
 }

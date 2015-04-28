@@ -55,7 +55,7 @@ namespace svt
 
     struct RoadmapWizardImpl : public RoadmapWizardTypes
     {
-        ORoadmap*           pRoadmap;
+        ScopedVclPtr<ORoadmap> pRoadmap;
         Paths               aPaths;
         PathId              nActivePath;
         StateDescriptions   aStateDescriptors;
@@ -67,11 +67,6 @@ namespace svt
             ,nActivePath( -1 )
             ,bActivePathIsDefinite( false )
         {
-        }
-
-        ~RoadmapWizardImpl()
-        {
-            delete pRoadmap;
         }
 
         /// returns the index of the current state in given path, or -1
@@ -137,7 +132,7 @@ namespace svt
         SetLeftAlignedButtonCount( 1 );
         SetEmptyViewMargin();
 
-        m_pImpl->pRoadmap = new ORoadmap( this, WB_TABSTOP );
+        m_pImpl->pRoadmap.reset( VclPtr<ORoadmap>::Create( this, WB_TABSTOP ) );
         m_pImpl->pRoadmap->SetText( SVT_RESSTR( STR_WIZDLG_ROADMAP_TITLE ) );
         m_pImpl->pRoadmap->SetPosPixel( Point( 0, 0 ) );
         m_pImpl->pRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );
@@ -154,7 +149,13 @@ namespace svt
 
     RoadmapWizard::~RoadmapWizard()
     {
+        disposeOnce();
+    }
+
+    void RoadmapWizard::dispose()
+    {
         delete m_pImpl;
+        OWizardMachine::dispose();
     }
 
 
@@ -531,9 +532,9 @@ namespace svt
     }
 
 
-    TabPage* RoadmapWizard::createPage( WizardState _nState )
+    VclPtr<TabPage> RoadmapWizard::createPage( WizardState _nState )
     {
-        TabPage* pPage( NULL );
+        VclPtr<TabPage> pPage;
 
         StateDescriptions::const_iterator pos = m_pImpl->aStateDescriptors.find( _nState );
         OSL_ENSURE( pos != m_pImpl->aStateDescriptors.end(),

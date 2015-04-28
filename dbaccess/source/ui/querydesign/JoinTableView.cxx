@@ -65,9 +65,9 @@ using namespace ::com::sun::star::lang;
 #define TABWIN_HEIGHT_STD   120
 
 OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParent)
-    ,m_aHScrollBar( this, WB_HSCROLL|WB_REPEAT|WB_DRAG )
-    ,m_aVScrollBar( this, WB_VSCROLL|WB_REPEAT|WB_DRAG )
-    ,m_pCornerWindow(new ScrollBarBox(this, WB_3DLOOK))
+    ,m_aHScrollBar( VclPtr<ScrollBar>::Create(this, WB_HSCROLL|WB_REPEAT|WB_DRAG) )
+    ,m_aVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL|WB_REPEAT|WB_DRAG) )
+    ,m_pCornerWindow(VclPtr<ScrollBarBox>::Create(this, WB_3DLOOK))
     ,m_pTableView(NULL)
 {
 
@@ -89,9 +89,16 @@ OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParen
 
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    boost::scoped_ptr<vcl::Window> aTemp(m_pCornerWindow);
-    m_pCornerWindow = NULL;
-    m_pTableView = NULL;
+    disposeOnce();
+}
+
+void OScrollWindowHelper::dispose()
+{
+    m_aHScrollBar.disposeAndClear();
+    m_aVScrollBar.disposeAndClear();
+    m_pCornerWindow.disposeAndClear();
+    m_pTableView.clear();
+    vcl::Window::dispose();
 }
 
 void OScrollWindowHelper::setTableView(OJoinTableView* _pTableView)
@@ -174,6 +181,11 @@ OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
 
 OJoinTableView::~OJoinTableView()
 {
+    disposeOnce();
+}
+
+void OJoinTableView::dispose()
+{
     if( m_pAccessible )
     {
         m_pAccessible->clearTableView();
@@ -181,6 +193,12 @@ OJoinTableView::~OJoinTableView()
     }
     // delete lists
     clearLayoutInformation();
+    m_pDragWin.clear();
+    m_pSizingWin.clear();
+    m_pSelectedConn.clear();
+    m_pLastFocusTabWin.clear();
+    m_pView.clear();
+    vcl::Window::dispose();
 }
 
 IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar )
@@ -246,9 +264,7 @@ bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,bool _bDelete )
                                                 makeAny(_pConn->GetAccessible()),
                                                 Any());
     if ( _bDelete )
-    {
-        delete _pConn;
-    }
+        _pConn->disposeOnce();
 
     return true;
 }
@@ -257,7 +273,7 @@ OTableWindow* OJoinTableView::GetTabWindow( const OUString& rName )
 {
     OTableWindowMap::iterator aIter = m_aTableMap.find(rName);
 
-    return aIter == m_aTableMap.end() ? NULL : aIter->second;
+    return aIter == m_aTableMap.end() ? nullptr : aIter->second;
 }
 
 TTableWindowData::value_type OJoinTableView::createTableWindowData(const OUString& _rComposedName
@@ -308,7 +324,7 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
 
     // insert new window in window list
-    OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
+    VclPtr<OTableWindow> pNewTabWin = createWindow( pNewTabWinData );
     if ( pNewTabWin->Init() )
     {
         m_pView->getController().getTableWindowData().push_back( pNewTabWinData);
@@ -330,7 +346,7 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
     else
     {
         pNewTabWin->clearListBox();
-        delete pNewTabWin;
+        pNewTabWin.disposeAndClear();
     }
 }
 
@@ -340,7 +356,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     bool bRemove = true;
     TTableWindowData::value_type pData = pTabWin->GetData();
     sal_Int32 nCount = m_vTableConnection.size();
-    ::std::vector<OTableConnection*>::reverse_iterator aIter = m_vTableConnection.rbegin();
+    auto aIter = m_vTableConnection.rbegin();
     while(aIter != m_vTableConnection.rend() && bRemove)
     {
         OTableConnection* pTabConn = (*aIter);
@@ -380,9 +396,9 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
             m_pLastFocusTabWin = NULL;
 
         pTabWin->clearListBox();
-        delete pTabWin;
-
+        pTabWin->disposeOnce();
     }
+
     if ( (sal_Int32)m_vTableConnection.size() < (nCount-1) ) // if some connections could be removed
         modified();
 }
@@ -814,8 +830,8 @@ void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
     {
         DeselectConn(GetSelectedConn());
 
-        ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-        ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+        auto aIter = m_vTableConnection.begin();
+        auto aEnd = m_vTableConnection.end();
         for(;aIter != aEnd;++aIter)
         {
             if( (*aIter)->CheckHit(rEvt.GetPosPixel()) )
@@ -927,20 +943,21 @@ void OJoinTableView::Paint( const Rectangle& rRect )
 void OJoinTableView::InvalidateConnections()
 {
     // draw Joins
-    ::std::for_each(m_vTableConnection.begin(),m_vTableConnection.end(),
-        ::std::mem_fun(& OTableConnection::InvalidateConnection));
+    for(auto & conn : m_vTableConnection)
+        conn->InvalidateConnection();
 }
 
 void OJoinTableView::DrawConnections( const Rectangle& rRect )
 {
     // draw Joins
-    ::std::for_each(m_vTableConnection.begin(),m_vTableConnection.end(),boost::bind( &OTableConnection::Draw, _1, boost::cref( rRect )));
+    for(auto conn : m_vTableConnection)
+        conn->Draw(rRect);
     // finally redraw the selected one above all others
     if (GetSelectedConn())
         GetSelectedConn()->Draw( rRect );
 }
 
-::std::vector<OTableConnection*>::const_iterator OJoinTableView::getTableConnections(const OTableWindow* _pFromWin) const
+::std::vector<VclPtr<OTableConnection> >::const_iterator OJoinTableView::getTableConnections(const OTableWindow* _pFromWin) const
 {
     return ::std::find_if(  m_vTableConnection.begin(),
                             m_vTableConnection.end(),
@@ -966,8 +983,8 @@ void OJoinTableView::ClearAll()
     HideTabWins();
 
     // and the same with the Connections
-    ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-    ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+    auto aIter = m_vTableConnection.begin();
+    auto aEnd = m_vTableConnection.end();
     for(;aIter != aEnd;++aIter)
         RemoveConnection( *aIter ,true);
     m_vTableConnection.clear();
@@ -983,7 +1000,7 @@ void OJoinTableView::ClearAll()
 
 bool OJoinTableView::ScrollWhileDragging()
 {
-    OSL_ENSURE(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging must not be called when a window is being dragged !");
+    OSL_ENSURE(m_pDragWin != nullptr, "OJoinTableView::ScrollWhileDragging must not be called when a window is being dragged !");
 
     // kill the timer
     if (m_aDragScrollIdle.IsActive())
@@ -1155,8 +1172,8 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
                 DeselectConn(pSelConnection);
 
                 const Point& aMousePos = rEvt.GetMousePosPixel();
-                ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-                ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+                auto aIter = m_vTableConnection.begin();
+                auto aEnd = m_vTableConnection.end();
                 for(;aIter != aEnd;++aIter)
                 {
                     if( (*aIter)->CheckHit(aMousePos) )
@@ -1185,8 +1202,8 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
     {
         bool bFoundStart = _rpFirstAfter == nullptr;
 
-        ::std::vector<OTableConnection*>::const_iterator aIter = m_vTableConnection.begin();
-        ::std::vector<OTableConnection*>::const_iterator aEnd = m_vTableConnection.end();
+        auto aIter = m_vTableConnection.begin();
+        auto aEnd = m_vTableConnection.end();
         for(;aIter != aEnd;++aIter)
         {
             OTableConnection* pData = *aIter;
@@ -1318,12 +1335,12 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                         {   // no active tab win -> travel the connections
                             // find the currently selected conn within the conn list
                             sal_Int32 i(0);
-                            for (   ::std::vector<OTableConnection*>::iterator connectionIter = m_vTableConnection.begin();
+                            for (   auto connectionIter = m_vTableConnection.begin();
                                     connectionIter != m_vTableConnection.end();
                                     ++connectionIter, ++i
                                 )
                             {
-                                if ( (*connectionIter) == GetSelectedConn() )
+                                if ( (*connectionIter).get() == GetSelectedConn() )
                                     break;
                             }
                             if (i == sal_Int32(m_vTableConnection.size() - 1) && bForward)
@@ -1511,16 +1528,14 @@ void OJoinTableView::clearLayoutInformation()
     {
         if ( aIter->second )
             aIter->second->clearListBox();
-        boost::scoped_ptr<vcl::Window> aTemp(aIter->second);
         aIter->second = NULL;
     }
 
     m_aTableMap.clear();
 
-    ::std::vector<OTableConnection*>::const_iterator aIter2 = m_vTableConnection.begin();
-    ::std::vector<OTableConnection*>::const_iterator aEnd2 = m_vTableConnection.end();
-    for(;aIter2 != aEnd2;++aIter2)
-        delete *aIter2;
+    for(auto i = m_vTableConnection.begin();
+             i != m_vTableConnection.end(); ++i)
+        i->disposeAndClear();
 
     m_vTableConnection.clear();
 }
