@@ -84,8 +84,11 @@ typedef sal_uInt32      ControlType;
 // the active tab
 #define CTRL_TAB_PANE           55
 
+// The background to the tab area
+#define CTRL_TAB_HEADER         56
+
 // Background of a Tab Pane
-#define CTRL_TAB_BODY           56
+#define CTRL_TAB_BODY           57
 
 // Normal scrollbar, including
 // all parts like slider, buttons
