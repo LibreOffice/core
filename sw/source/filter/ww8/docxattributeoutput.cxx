@@ -6005,6 +6005,8 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         }
         m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
 
+        WriteCollectedRunProperties();
+
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
 
