@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_c930910a",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-28T14:26:03Z",
+      "side": 1,
+      "message": "The nValue variable is not needed.",
+      "revId": "8ea6254de72086d4e90b1bf4b4fa0ee39ec7766f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_2955ad1c",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-28T14:26:03Z",
+      "side": 1,
+      "message": "Please do not use C-style casts.",
+      "revId": "8ea6254de72086d4e90b1bf4b4fa0ee39ec7766f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
