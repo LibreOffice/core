@@ -44,6 +44,7 @@ View3DContext::~View3DContext()
 
 ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
     {
         case C_TOKEN( view3D ):
@@ -59,8 +60,7 @@ ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const Attr
                     mrModel.mnPerspective = rAttribs.getInteger( XML_val, 30 );
                     return 0;
                 case C_TOKEN( rAngAx ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbRightAngled = rAttribs.getBool( XML_val, false );
+                    mrModel.mbRightAngled = rAttribs.getBool( XML_val, !bMSO2007Doc );
                     return 0;
                 case C_TOKEN( rotX ):
                     // default value dependent on chart type

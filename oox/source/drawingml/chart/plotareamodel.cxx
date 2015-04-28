@@ -23,10 +23,10 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-View3DModel::View3DModel() :
+View3DModel::View3DModel(bool bMSO2007Doc) :
     mnDepthPercent( 100 ),
     mnPerspective( 30 ),
-    mbRightAngled( false )
+    mbRightAngled( !bMSO2007Doc )
 {
 }
 

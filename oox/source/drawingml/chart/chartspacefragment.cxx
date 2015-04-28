@@ -115,7 +115,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( title ):
                     return new TitleContext( *this, mrModel.mxTitle.create() );
                 case C_TOKEN( view3D ):
-                    return new View3DContext( *this, mrModel.mxView3D.create() );
+                    return new View3DContext( *this, mrModel.mxView3D.create(bMSO2007Document) );
             }
         break;
     }

@@ -40,7 +40,7 @@ struct View3DModel
     sal_Int32           mnPerspective;      /// Eye distance to the 3D objects.
     bool                mbRightAngled;      /// True = right-angled axes in 3D view.
 
-    explicit            View3DModel();
+    explicit            View3DModel(bool bMSO2007Doc);
                         ~View3DModel();
 };
 

@@ -78,9 +78,10 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     PropertySet aBackPropSet( getChartDocument()->getPageBackground() );
     getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
 
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
     // convert plot area (container of all chart type groups)
     PlotAreaConverter aPlotAreaConv( *this, mrModel.mxPlotArea.getOrCreate() );
-    aPlotAreaConv.convertFromModel( mrModel.mxView3D.getOrCreate() );
+    aPlotAreaConv.convertFromModel( mrModel.mxView3D.getOrCreate(bMSO2007Doc) );
 
     // plot area converter has created the diagram object
     Reference< XDiagram > xDiagram = getChartDocument()->getFirstDiagram();
