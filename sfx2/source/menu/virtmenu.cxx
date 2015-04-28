@@ -138,7 +138,7 @@ static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFr
     if the OLE server application exist or not.
 */
 
-bool IsItemHidden_Impl( sal_uInt16 nItemId, int bOleServer, int bMac )
+bool IsItemHidden_Impl( sal_uInt16 nItemId, bool bOleServer, bool bMac )
 {
     return ( bMac &&
              ( nItemId == SID_MINIMIZED ) ) ||
@@ -327,8 +327,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
     // remember some values
     SfxGetpApp();
-    const int bOleServer = sal_False;
-    const int bMac = sal_False;
+    const bool bOleServer = false;
+    const bool bMac = false;
     SvtMenuOptions aOptions;
     aOptions.AddListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
