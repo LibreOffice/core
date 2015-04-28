@@ -30,6 +30,7 @@
 #include <stack>
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
+#include <vcl/vclptr.hxx>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -128,7 +129,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SwViewShellImp *mpImp;           // Core-internals of SwViewShell.
                                      // The pointer is never 0.
 
-    VclPtr< ::vcl::Window> mpWin;     ///< = 0 during printing or pdf export
+    VclPtr<vcl::Window>   mpWin;     ///< = 0 during printing or pdf export
     VclPtr<OutputDevice>  mpOut;     ///< Window, Printer, VirtDev, ...
     VclPtr<OutputDevice>  mpTmpRef;  // Temporariy reference device. Is used
                                      // during (printer depending) prospect
@@ -186,7 +187,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
 protected:
     static ShellResource*   mpShellRes;      ///< Resources for the Shell.
-    static vcl::Window*          mpCareWindow;    ///< Avoid this window.
+    static vcl::Window*     mpCareWindow;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
     SwDoc                   *mpDoc;          ///< The document; never 0.
