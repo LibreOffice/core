@@ -1006,7 +1006,7 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
     (void) pTbl;
 #if OSL_DEBUG_LEVEL > 0
     std::list<SwFrmFmt*> checkFmts;
-    for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
+    for ( size_t i = 0; i < pTbl->size(); ++i )
     {
         SwFrmFmt *pFmt = (*pTbl)[i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
