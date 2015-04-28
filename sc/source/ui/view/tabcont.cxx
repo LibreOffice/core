@@ -538,12 +538,12 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 pViewData->GetView()->MoveTable( lcl_DocShellNr(pDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
 
                 rData.pCellTransfer->SetDragWasInternal();          // don't delete
-                return sal_True;
+                return DND_ACTION_COPY;
             }
         }
     }
 
-    return 0;
+    return DND_ACTION_NONE;
 }
 
 sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )

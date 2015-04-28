@@ -1395,7 +1395,7 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     insertFilterItem(m_aControlExchange->getDraggedEntries(),pTargetItems,DND_ACTION_COPY == rEvt.mnAction);
 
-    return sal_True;
+    return DND_ACTION_COPY;
 }
 
 

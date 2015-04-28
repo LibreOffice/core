@@ -362,7 +362,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     {
         OSL_FAIL("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(xStatement);
-        return sal_False;
+        return DND_ACTION_NONE;
     }
 
     return DND_ACTION_LINK;
