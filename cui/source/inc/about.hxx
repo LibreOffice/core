@@ -49,7 +49,7 @@ private:
     OUString m_aBasedDerivedTextStr;
     OUString m_aCreditsLinkStr;
     OUString m_sBuildStr;
-    OUString m_pLocaleStr;
+    OUString m_aLocaleStr;
 
     void StyleControls();
     void SetLogo();
