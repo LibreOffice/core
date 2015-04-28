@@ -3986,7 +3986,7 @@ void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Win
         {
             awt::ItemEvent aEvent;
             aEvent.Source = *this;
-            aEvent.Highlighted = sal_False;
+            aEvent.Highlighted = 0;
             aEvent.Selected = m_pBox->GetState();
             m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
         }
@@ -4312,7 +4312,7 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Wind
 
         ::com::sun::star::awt::ItemEvent aEvent;
         aEvent.Source = *this;
-        aEvent.Highlighted = sal_False;
+        aEvent.Highlighted = 0;
 
         // Bei Mehrfachselektion 0xFFFF, sonst die ID
         aEvent.Selected = (m_pBox->GetSelectEntryCount() == 1 )
@@ -4514,7 +4514,7 @@ void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Win
     {
         awt::ItemEvent aEvent;
         aEvent.Source = *this;
-        aEvent.Highlighted = sal_False;
+        aEvent.Highlighted = 0;
 
         // Bei Mehrfachselektion 0xFFFF, sonst die ID
         aEvent.Selected =   ( m_pComboBox->GetSelectEntryCount() == 1 )

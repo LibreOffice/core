@@ -1032,7 +1032,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 {
                     ::com::sun::star::awt::ItemEvent aEvent;
                     aEvent.Source = (::cppu::OWeakObject*)this;
-                    aEvent.Highlighted = sal_False;
+                    aEvent.Highlighted = 0;
                     aEvent.Selected = pCheckBox->GetState();
                     maItemListeners.itemStateChanged( aEvent );
                 }
@@ -1330,7 +1330,7 @@ void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
     {
         ::com::sun::star::awt::ItemEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.Highlighted = sal_False;
+        aEvent.Highlighted = 0;
         aEvent.Selected = pRadioButton->IsChecked() ? 1 : 0;
         maItemListeners.itemStateChanged( aEvent );
     }
@@ -2049,7 +2049,7 @@ void VCLXListBox::ImplCallItemListeners()
     {
         ::com::sun::star::awt::ItemEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.Highlighted = sal_False;
+        aEvent.Highlighted = 0;
 
         // Set to 0xFFFF on multiple selection, selected entry ID otherwise
         aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 ) ? pListBox->GetSelectEntryPos() : 0xFFFF;
@@ -4469,7 +4469,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     {
                         ::com::sun::star::awt::ItemEvent aEvent;
                         aEvent.Source = (::cppu::OWeakObject*)this;
-                        aEvent.Highlighted = sal_False;
+                        aEvent.Highlighted = 0;
 
                         // Set to 0xFFFF on multiple selection, selected entry ID otherwise
                         aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
