@@ -509,7 +509,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     {
         bool bDelete = true;
 
-        if ( !mbDisableQueryBox && pBox && m_pTurnOnBox->GetSavedValue() == sal_True )
+        if ( !mbDisableQueryBox && pBox && m_pTurnOnBox->GetSavedValue() == TRISTATE_TRUE )
         {
             short nResult;
             if (nId == SID_ATTR_PAGE_HEADERSET)
