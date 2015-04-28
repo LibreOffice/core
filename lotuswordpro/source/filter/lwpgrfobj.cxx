@@ -308,7 +308,7 @@ void LwpGraphicObject::CreateDrawObjects()
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(rMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
     pBentoContainer->CreateGraphicStream(pDrawObjStream, aGrfObjName.c_str());
@@ -360,7 +360,7 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(rMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
     pBentoContainer->CreateGraphicStream(pGrafStream, aGrfObjName.c_str());
@@ -403,7 +403,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(rMyID,  aGrfObjName);
+    GetBentoNamebyID(rMyID,  aGrfObjName);
 
     char sDName[64]="";
     sprintf(sDName, "%s-D", aGrfObjName.c_str());

@@ -109,9 +109,9 @@ public:
 
     UChar32 GetBulletChar();
 
-    OUString GetPrefix() { return OUString(); }
+    static OUString GetPrefix() { return OUString(); }
 
-    OUString GetSuffix() { return OUString(); }
+    static OUString GetSuffix() { return OUString(); }
 
     inline OUString GetNumberingName();
 
@@ -121,7 +121,7 @@ public:
 
     static OUString GetNumCharByStyleID(LwpFribParaNumber* pParaNumber);
 
-    inline bool IsPosCumulative(sal_uInt16 nHideLevels);
+    static inline bool IsPosCumulative(sal_uInt16 nHideLevels);
     inline bool IsLesserLevel(sal_uInt16 nPos);
     inline bool IsNewSection(sal_uInt16 nPos);
 

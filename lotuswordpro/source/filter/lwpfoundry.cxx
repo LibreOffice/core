@@ -111,7 +111,7 @@ void LwpFoundry::Read(LwpObjectStream *pStrm)
 {
     if (!m_pDoc->IsChildDoc())
     {
-        m_VerMgr.Read(pStrm);
+        LwpVersionManager::Read(pStrm);
     }
     m_ObjMgr.Read(pStrm);
 

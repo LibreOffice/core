@@ -276,7 +276,7 @@ protected:
 private:
     virtual ~LwpPara();
 
-    void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);//add by  1-24
+    static void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);//add by  1-24
     void OverrideIndent(LwpIndentOverride* base,LwpIndentOverride* over,XFParaStyle* pOverStyle);
     void OverrideSpacing(LwpSpacingOverride* base,LwpSpacingOverride* over,XFParaStyle* pOverStyle);
     void OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyle);

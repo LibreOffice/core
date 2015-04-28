@@ -76,7 +76,7 @@ public:
     LwpUserDictFiles(){}
     LwpUserDictFiles(LwpObjectStream *pStrm);
     ~LwpUserDictFiles(){}
-    void Read(LwpObjectStream *pStrm);
+    static void Read(LwpObjectStream *pStrm);
 };
 #endif
 

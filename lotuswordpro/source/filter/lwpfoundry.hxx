@@ -86,8 +86,8 @@ public:
     LwpVersionManager(){}
     ~LwpVersionManager(){}
 public:
-    void Read(LwpObjectStream *pStrm);
-    void Skip(LwpObjectStream *pStrm);
+    static void Read(LwpObjectStream *pStrm);
+    static void Skip(LwpObjectStream *pStrm);
 };
 
 class LwpObjectManager

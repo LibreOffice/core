@@ -172,7 +172,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
         for (sal_uInt8 nC = 1; nC < 11; nC++)
         {
             pListStyle->SetListBullet(nC, pSilverBullet->GetBulletChar(), pSilverBullet->GetBulletFontName(),
-                pSilverBullet->GetPrefix(), pSilverBullet->GetSuffix());
+                LwpSilverBullet::GetPrefix(), LwpSilverBullet::GetSuffix());
 
             if (pIndent->GetMRest() > 0) /* note: used to be 0.001, no idea why */
             {

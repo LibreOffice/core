@@ -194,7 +194,7 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         LwpParaBorderOverride *pBorder = dynamic_cast<LwpParaBorderOverride*>(pPiece->GetOverride());
         if( pBorder )
         {
-            this->ApplyParaBorder(pParaStyle, pBorder);
+            ApplyParaBorder(pParaStyle, pBorder);
         }
     }
 

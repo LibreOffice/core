@@ -119,7 +119,7 @@ public:
     void ConstructTree1();
     void ConstructTree2();
     void fillArray();
-    void ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen);
+    static void ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen);
 };
 #endif
 

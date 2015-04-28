@@ -174,7 +174,7 @@ public:
 private:
     void MaxNumberOfPages(sal_uInt16& nNumPages);
     void XFConvertFrameInPage(XFContentContainer* pCont);
-    void ChangeStyleName();
+    static void ChangeStyleName();
     bool IsSkippedDivision();
 };
 

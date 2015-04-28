@@ -85,7 +85,7 @@ protected:
     bool GetUsePageNumber(sal_uInt16 index);
     sal_uInt16 GetSeparatorType(sal_uInt16 index);
     LwpTocLevelData * GetSearchLevelPtr(sal_uInt16 index);
-    LwpTocLevelData * GetNextSearchLevelPtr(sal_uInt16 index, LwpTocLevelData * pCurData);
+    static LwpTocLevelData * GetNextSearchLevelPtr(sal_uInt16 index, LwpTocLevelData * pCurData);
     void AddSourceStyle(XFIndex* pToc, LwpTocLevelData * pLevel,  LwpFoundry * pFoundry);
 private:
     enum {MAX_LEVELS = 9};

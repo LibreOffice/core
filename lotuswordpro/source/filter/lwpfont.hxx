@@ -280,8 +280,8 @@ public:
 
 private:
     void Override(sal_uInt32 fontID, rtl::Reference<XFFont> const & pFont);
-    inline sal_uInt16 GetFontNameIndex(sal_uInt32 fontID);
-    inline sal_uInt16 GetFontAttrIndex(sal_uInt32 fontID);
+    static inline sal_uInt16 GetFontNameIndex(sal_uInt32 fontID);
+    static inline sal_uInt16 GetFontAttrIndex(sal_uInt32 fontID);
 };
 
 sal_uInt16 LwpFontManager::GetFontNameIndex(sal_uInt32 fontID)

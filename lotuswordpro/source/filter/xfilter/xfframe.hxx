@@ -174,7 +174,7 @@ public:
 private:
     void    StartFrame(IXFStream *pStrm);
 
-    void    EndFrame(IXFStream *pStrm);
+    static void EndFrame(IXFStream *pStrm);
 
     void    AdjustZIndex();
 

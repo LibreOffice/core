@@ -369,7 +369,7 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
         pLocalBorder->Override(pFinalBorder.get());
     }
 
-    pParaStyle->ApplyParaBorder(pOverStyle, pFinalBorder.get());
+    LwpParaStyle::ApplyParaBorder(pOverStyle, pFinalBorder.get());
 }
 /**
  * @short:   Override parabreaks style.

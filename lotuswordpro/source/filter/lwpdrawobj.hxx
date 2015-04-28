@@ -95,11 +95,11 @@ private:
 protected:
     void ReadClosedObjStyle();
     void SetFillStyle(XFDrawStyle* pStyle);
-    void SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 nLineStyle,
+    static void SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 nLineStyle,
         const SdwColor& rColor);
     void SetPosition(XFFrame* pObj);
-    void SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag, sal_uInt8 nLineWidth);
-    OUString GetArrowName(sal_uInt8 nArrowStyle);
+    static void SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag, sal_uInt8 nLineWidth);
+    static OUString GetArrowName(sal_uInt8 nArrowStyle);
 
 protected:
     /**

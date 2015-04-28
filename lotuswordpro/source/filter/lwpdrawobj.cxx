@@ -317,11 +317,11 @@ void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag
 
     if (nLeftArrow)
     {
-        pOpenedObjStyle->SetArrowStart( this->GetArrowName(nLeftArrow), fArrowSize, true);
+        pOpenedObjStyle->SetArrowStart( GetArrowName(nLeftArrow), fArrowSize, true);
     }
     if (nRightArrow)
     {
-        pOpenedObjStyle->SetArrowEnd( this->GetArrowName(nRightArrow), fArrowSize, true);
+        pOpenedObjStyle->SetArrowEnd( GetArrowName(nRightArrow), fArrowSize, true);
     }
 
 }
@@ -440,10 +440,10 @@ OUString LwpDrawLine::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aLineRec.nLineWidth, m_aLineRec.nLineStyle, m_aLineRec.aPenColor);
+    SetLineStyle(pStyle, m_aLineRec.nLineWidth, m_aLineRec.nLineStyle, m_aLineRec.aPenColor);
 
     // set arrow head
-    this->SetArrowHead(pStyle, m_aLineRec.nLineEnd, m_aLineRec.nLineWidth);
+    SetArrowHead(pStyle, m_aLineRec.nLineEnd, m_aLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     return (pXFStyleManager->AddStyle(pStyle)).m_pStyle->GetStyleName();
@@ -522,11 +522,11 @@ OUString LwpDrawPolyLine::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aPolyLineRec.nLineWidth, m_aPolyLineRec.nLineStyle,
+    SetLineStyle(pStyle, m_aPolyLineRec.nLineWidth, m_aPolyLineRec.nLineStyle,
         m_aPolyLineRec.aPenColor);
 
     // set arrow head
-    this->SetArrowHead(pStyle, m_aPolyLineRec.nLineEnd, m_aPolyLineRec.nLineWidth);
+    SetArrowHead(pStyle, m_aPolyLineRec.nLineEnd, m_aPolyLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
@@ -608,7 +608,7 @@ OUString LwpDrawPolygon::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
+    SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
     // set fill style
@@ -688,7 +688,7 @@ OUString LwpDrawRectangle::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
+    SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
     // set fill style
@@ -847,7 +847,7 @@ OUString LwpDrawEllipse::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
+    SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
     // set fill style
@@ -926,11 +926,11 @@ OUString LwpDrawArc::RegisterStyle()
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     // set line style
-    this->SetLineStyle(pStyle, m_aArcRec.nLineWidth, m_aArcRec.nLineStyle,
+    SetLineStyle(pStyle, m_aArcRec.nLineWidth, m_aArcRec.nLineStyle,
         m_aArcRec.aPenColor);
 
     // set arrow head
-    this->SetArrowHead(pStyle, m_aArcRec.nLineEnd, m_aArcRec.nLineWidth);
+    SetArrowHead(pStyle, m_aArcRec.nLineEnd, m_aArcRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
