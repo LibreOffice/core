@@ -102,8 +102,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( plotArea ):
                     return new PlotAreaContext( *this, mrModel.mxPlotArea.create() );
                 case C_TOKEN( plotVisOnly ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbPlotVisOnly = rAttribs.getBool( XML_val, false );
+                    mrModel.mbPlotVisOnly = rAttribs.getBool( XML_val, !bMSO2007Document );
                     return 0;
                 case C_TOKEN( showDLblsOverMax ):
                     // default is 'false', not 'true' as specified
