@@ -89,7 +89,7 @@ public:
     // inline functions
 
     inline NSView* getUserPane() {
-        if (m_bIsUserPaneLaidOut == false) {
+        if (!m_bIsUserPaneLaidOut) {
             createUserPane();
         }
         return m_pUserPane;
@@ -101,7 +101,7 @@ public:
 
     inline void    setFilterControlNeeded(bool bNeeded) {
         m_bIsFilterControlNeeded = bNeeded;
-        if (bNeeded == true) {
+        if (bNeeded) {
             m_bUserPaneNeeded = true;
         }
     }

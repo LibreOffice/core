@@ -313,7 +313,7 @@ void ControlHelper::createUserPane()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    if (m_bUserPaneNeeded == false) {
+    if (!m_bUserPaneNeeded) {
         SAL_INFO("fpicker.aqua","no user pane needed");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
@@ -325,7 +325,7 @@ void ControlHelper::createUserPane()
         return;
     }
 
-    if (m_bIsFilterControlNeeded == true && m_pFilterControl == nil) {
+    if (m_bIsFilterControlNeeded && m_pFilterControl == nil) {
         createFilterControl();
     }
 
@@ -478,7 +478,7 @@ void ControlHelper::createControls()
 
     CResourceProvider aResProvider;
     for (int i = 0; i < LIST_LAST; i++) {
-        if (true == m_bListVisibility[i]) {
+        if (m_bListVisibility[i]) {
             m_bUserPaneNeeded = true;
 
             int elementName = getControlElementName([NSPopUpButton class], i);
@@ -504,7 +504,7 @@ void ControlHelper::createControls()
     }
 
     for (int i = 0/*#i102102*/; i < TOGGLE_LAST; i++) {
-        if (true == m_bToggleVisibility[i]) {
+        if (m_bToggleVisibility[i]) {
             m_bUserPaneNeeded = true;
 
             int elementName = getControlElementName([NSButton class], i);
@@ -802,7 +802,7 @@ void ControlHelper::layoutControls()
         return;
     }
 
-    if (m_bIsUserPaneLaidOut == true) {
+    if (m_bIsUserPaneLaidOut) {
         SAL_INFO("fpicker.aqua","user pane already laid out");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
@@ -993,7 +993,7 @@ void ControlHelper::updateFilterUI()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    if (m_bIsFilterControlNeeded == false || m_pFilterHelper == NULL) {
+    if (!m_bIsFilterControlNeeded || m_pFilterHelper == NULL) {
         SAL_INFO("fpicker.aqua","no filter control needed or no filter helper present");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;

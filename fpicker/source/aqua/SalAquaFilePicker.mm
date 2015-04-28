@@ -755,7 +755,7 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
 
     SolarMutexGuard aGuard;
 
-    if (m_pControlHelper->isAutoExtensionEnabled() == false) {
+    if (!m_pControlHelper->isAutoExtensionEnabled()) {
         OSL_TRACE("allowing other file types");
         [m_pDialog setAllowedFileTypes:nil];
         [m_pDialog setAllowsOtherFileTypes:YES];

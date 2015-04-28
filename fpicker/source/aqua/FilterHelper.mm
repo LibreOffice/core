@@ -261,7 +261,7 @@ void FilterHelper::SetCurFilter( const rtl::OUString& rFilter )
 
     SolarMutexGuard aGuard;
 
-    if(m_aCurrentFilter.equals(rFilter) == false)
+    if(!m_aCurrentFilter.equals(rFilter))
     {
         m_aCurrentFilter = rFilter;
     }
