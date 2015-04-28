@@ -219,19 +219,19 @@ void lcl_debug_TableBorder(table::TableBorder & rBorder)
 {
     dmapper_logger->startElement("TableBorder");
     lcl_debug_BorderLine(rBorder.TopLine);
-    dmapper_logger->attribute("IsTopLineValid", rBorder.IsTopLineValid);
+    dmapper_logger->attribute("IsTopLineValid", sal_uInt32(rBorder.IsTopLineValid));
     lcl_debug_BorderLine(rBorder.BottomLine);
-    dmapper_logger->attribute("IsBottomLineValid", rBorder.IsBottomLineValid);
+    dmapper_logger->attribute("IsBottomLineValid", sal_uInt32(rBorder.IsBottomLineValid));
     lcl_debug_BorderLine(rBorder.LeftLine);
-    dmapper_logger->attribute("IsLeftLineValid", rBorder.IsLeftLineValid);
+    dmapper_logger->attribute("IsLeftLineValid", sal_uInt32(rBorder.IsLeftLineValid));
     lcl_debug_BorderLine(rBorder.RightLine);
-    dmapper_logger->attribute("IsRightLineValid", rBorder.IsRightLineValid);
+    dmapper_logger->attribute("IsRightLineValid", sal_uInt32(rBorder.IsRightLineValid));
     lcl_debug_BorderLine(rBorder.VerticalLine);
-    dmapper_logger->attribute("IsVerticalLineValid", rBorder.IsVerticalLineValid);
+    dmapper_logger->attribute("IsVerticalLineValid", sal_uInt32(rBorder.IsVerticalLineValid));
     lcl_debug_BorderLine(rBorder.HorizontalLine);
-    dmapper_logger->attribute("IsHorizontalLineValid", rBorder.IsHorizontalLineValid);
+    dmapper_logger->attribute("IsHorizontalLineValid", sal_uInt32(rBorder.IsHorizontalLineValid));
     dmapper_logger->attribute("Distance", rBorder.Distance);
-    dmapper_logger->attribute("IsDistanceValid", rBorder.IsDistanceValid);
+    dmapper_logger->attribute("IsDistanceValid", sal_uInt32(rBorder.IsDistanceValid));
     dmapper_logger->endElement();
 }
 #endif
