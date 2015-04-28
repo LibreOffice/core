@@ -69,31 +69,31 @@ inline void DbgSaveData( const DbgData& rData )
     DbgFunc( DBG_FUNC_SAVEDATA, (void*)&rData );
 }
 
-inline sal_uIntPtr DbgIsResource()
+inline bool DbgIsResource()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return pData->nTestFlags & DBG_TEST_RESOURCE;
     else
-        return sal_False;
+        return false;
 }
 
-inline sal_uIntPtr DbgIsDialog()
+inline bool DbgIsDialog()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return pData->nTestFlags & DBG_TEST_DIALOG;
     else
-        return sal_False;
+        return false;
 }
 
-inline sal_uIntPtr DbgIsBoldAppFont()
+inline bool DbgIsBoldAppFont()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return pData->nTestFlags & DBG_TEST_BOLDAPPFONT;
     else
-        return sal_False;
+        return false;
 }
 
 inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
