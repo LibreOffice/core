@@ -107,7 +107,7 @@ public:
     // Add <MV_SELPAGE>, <MV_SCROLL>
     enum MoveMode{ MV_CALC, MV_PAGE_UP, MV_PAGE_DOWN, MV_DOC_STT, MV_DOC_END,
                    MV_SELPAGE, MV_SCROLL, MV_NEWWINSIZE };
-    int MovePage( int eMoveMode );
+    bool MovePage( int eMoveMode );
 
     // Create the status bar's string
     OUString GetStatusStr( sal_uInt16 nPageCount ) const;

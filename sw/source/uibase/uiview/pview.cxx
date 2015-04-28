@@ -270,7 +270,7 @@ void SwPagePreviewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
 }
 
 // mnSttPage is Absolute
-int SwPagePreviewWin::MovePage( int eMoveMode )
+bool SwPagePreviewWin::MovePage( int eMoveMode )
 {
     // number of pages up
     const sal_uInt16 nPages = mnRow * mnCol;
@@ -353,7 +353,7 @@ int SwPagePreviewWin::MovePage( int eMoveMode )
                               maPaintedPreviewDocRect, bPaintPageAtFirstCol );
     if( nNewSttPage == mnSttPage &&
         eMoveMode != MV_SELPAGE )
-        return sal_False;
+        return false;
 
     SetPagePreview(mnRow, mnCol);
     mnSttPage = nNewSttPage;
@@ -368,7 +368,7 @@ int SwPagePreviewWin::MovePage( int eMoveMode )
     SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
     rBindings.Invalidate( aInval );
 
-    return sal_True;
+    return true;
 }
 
 void SwPagePreviewWin::SetWinSize( const Size& rNewSize )
