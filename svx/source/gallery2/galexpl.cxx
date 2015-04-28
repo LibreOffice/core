@@ -197,7 +197,7 @@ sal_uIntPtr GalleryExplorer::GetSdrObjCount( const OUString& rThemeName )
 sal_uIntPtr GalleryExplorer::GetSdrObjCount( sal_uIntPtr nThemeId  )
 {
     Gallery* pGal = ::Gallery::GetGalleryInstance();
-    return( pGal ? GetSdrObjCount( pGal->GetThemeName( nThemeId ) ) : sal_False );
+    return( pGal ? GetSdrObjCount( pGal->GetThemeName( nThemeId ) ) : 0 );
 }
 
 bool GalleryExplorer::GetSdrObj( const OUString& rThemeName, sal_uIntPtr nSdrModelPos,
