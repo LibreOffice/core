@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_poppler.h>
+
 #include "sdmodeltestbase.hxx"
 
 #include <svl/stritem.hxx>
@@ -94,8 +96,10 @@ public:
     void testShapeLineStyle();
     void testBnc862510_6();
     void testBnc862510_7();
+#if ENABLE_PDFIMPORT
     void testPDFImport();
     void testPDFImportSkipImages();
+#endif
     void testBnc910045();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
@@ -129,8 +133,10 @@ public:
     CPPUNIT_TEST(testShapeLineStyle);
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
+#if ENABLE_PDFIMPORT
     CPPUNIT_TEST(testPDFImport);
     CPPUNIT_TEST(testPDFImportSkipImages);
+#endif
     CPPUNIT_TEST(testBnc910045);
 
     CPPUNIT_TEST_SUITE_END();
@@ -1079,6 +1085,8 @@ void SdImportTest::testBnc862510_7()
     xDocShRef->DoClose();
 }
 
+#if ENABLE_PDFIMPORT
+
 void SdImportTest::testPDFImport()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF);
@@ -1115,6 +1123,8 @@ void SdImportTest::testPDFImportSkipImages()
 
     xDocShRef->DoClose();
 }
+
+#endif
 
 void SdImportTest::testBnc910045()
 {

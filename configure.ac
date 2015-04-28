@@ -10399,6 +10399,7 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
         BUILD_TYPE="$BUILD_TYPE POPPLER"
         AC_DEFINE([HAVE_POPPLER_VERSION_H], 1)
     fi
+    AC_DEFINE([ENABLE_PDFIMPORT],1)
 else
     AC_MSG_RESULT([no])
 fi
