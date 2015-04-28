@@ -239,7 +239,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
 
     Rectangle aCtrlRegion( Point( 0, 0 ), aSize );
     Rectangle aBoundingRgn, aContentRgn;
-    const ImplControlValue aControlValue;
+    const EditBoxValue aControlValue(GetTextHeight());
     if(GetNativeControlRegion( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion,
                                            ControlState::ENABLED, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )

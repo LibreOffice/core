@@ -78,6 +78,7 @@ private:
     static GtkStyleContext *mpSpinStyle;
     static GtkStyleContext *mpComboboxStyle;
     static GtkStyleContext *mpListboxStyle;
+    static GtkStyleContext *mpNoteBookStyle;
 
     void getStyleContext(GtkStyleContext** style, GtkWidget* widget);
     Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );

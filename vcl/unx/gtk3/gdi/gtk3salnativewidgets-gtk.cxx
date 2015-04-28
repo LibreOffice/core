@@ -33,6 +33,7 @@ GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpListboxStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpNoteBookStyle = NULL;
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
@@ -993,7 +994,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nTextHeight, const Rectangle& rControlRegion)
 {
     gtk_style_context_save(pStyle);
-    gtk_style_context_add_class(pStyle, GTK_STYLE_CLASS_ENTRY);
 
     GtkBorder border;
     gtk_style_context_get_border(pStyle, GTK_STATE_FLAG_NORMAL, &border);
@@ -1118,6 +1118,18 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     else if (nType == CTRL_SPINBOX && nPart == PART_ENTIRE_CONTROL)
     {
         aEditRect = AdjustRectForTextBordersPadding(mpSpinStyle, rValue.getNumericVal(), rControlRegion);
+    }
+    else if (nType == CTRL_TAB_ITEM && nPart == PART_ENTIRE_CONTROL)
+    {
+        gtk_style_context_save(mpNoteBookStyle);
+
+        gtk_style_context_add_region(mpNoteBookStyle, GTK_STYLE_REGION_TAB, GTK_REGION_ONLY);
+        gtk_style_context_add_class(mpNoteBookStyle, GTK_STYLE_CLASS_TOP);
+
+
+        aEditRect = AdjustRectForTextBordersPadding(mpSpinStyle, rValue.getNumericVal(), rControlRegion);
+
+        gtk_style_context_restore(mpNoteBookStyle);
     }
     else
     {
@@ -1507,12 +1519,12 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 //        case CTRL_WINDOW_BACKGROUND:
 //            return true;
 
-//        case CTRL_TAB_ITEM:
+        case CTRL_TAB_ITEM:
 //        case CTRL_TAB_PANE:
 //        case CTRL_TAB_BODY:
-//            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_TABS_DRAW_RTL)
-//                return true;
-//            break;
+            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_TABS_DRAW_RTL)
+                return true;
+            break;
 
         case CTRL_LISTBOX:
             if(nPart==PART_ENTIRE_CONTROL || nPart==PART_WINDOW || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_BUTTON_DOWN)
@@ -1689,6 +1701,9 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     /* Spinbutton */
     getStyleContext(&mpSpinStyle, gtk_spin_button_new(NULL, 0, 0));
+
+    /* NoteBook */
+    getStyleContext(&mpNoteBookStyle, gtk_notebook_new());
 
     /* Combobox */
     mpComboboxStyle = gtk_style_context_new();
