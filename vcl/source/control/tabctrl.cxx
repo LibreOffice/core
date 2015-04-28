@@ -1101,7 +1101,6 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         const ImplControlValue aControlValue;
 
         ControlState nState = ControlState::ENABLED;
-        int part = PART_ENTIRE_CONTROL;
         if ( !IsEnabled() )
             nState &= ~ControlState::ENABLED;
         if ( HasFocus() )
@@ -1113,7 +1112,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
             aClipRgn.Intersect( rRect );
 
         if( !aClipRgn.IsEmpty() )
-            bNativeOK = DrawNativeControl( CTRL_TAB_PANE, part, aRect, nState,
+            bNativeOK = DrawNativeControl( CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aRect, nState,
                 aControlValue, OUString() );
     }
     else
