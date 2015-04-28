@@ -626,7 +626,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
     {
         if (  ( GetStyle() & WB_NOBORDER ) )
         {
-            Rectangle aRectNoTab( (const Point&)Point( 0, 0 ), GetSizePixel() );
+            Rectangle aRectNoTab(Point(0, 0), GetSizePixel());
             pPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );
         }
         else
@@ -684,7 +684,7 @@ bool TabControl::ImplPosCurTabPage()
     {
         if (  ( GetStyle() & WB_NOBORDER ) )
         {
-            Rectangle aRectNoTab( (const Point&)Point( 0, 0 ), GetSizePixel() );
+            Rectangle aRectNoTab(Point(0, 0), GetSizePixel());
             pItem->mpTabPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );
             return true;
         }
