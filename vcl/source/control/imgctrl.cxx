@@ -131,9 +131,9 @@ void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Poi
     }   // switch ( mnScaleMode )
 }
 
-void ImageControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
+void ImageControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    ImplDraw( *this, 0, Point(), GetOutputSizePixel() );
+    ImplDraw(rRenderContext, 0, Point(), GetOutputSizePixel());
 
     if( HasFocus() )
     {

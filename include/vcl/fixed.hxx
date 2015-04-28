@@ -103,7 +103,7 @@ private:
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void    ImplDraw( bool bLayout = false );
+    SAL_DLLPRIVATE void    ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout = false);
 
 protected:
     virtual void    FillLayoutData() const SAL_OVERRIDE;

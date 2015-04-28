@@ -234,9 +234,9 @@ void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     );
 }
 
-void FixedText::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void FixedText::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    ImplDraw( this, 0, Point(), GetOutputSizePixel() );
+    ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
 }
 
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
@@ -543,7 +543,7 @@ void FixedLine::ImplInitSettings( bool bFont,
     }
 }
 
-void FixedLine::ImplDraw( bool bLayout )
+void FixedLine::ImplDraw(vcl::RenderContext& /*rRenderContext*/, bool bLayout)
 {
     Size                    aOutSize = GetOutputSizePixel();
     OUString                aText = GetText();
@@ -638,12 +638,12 @@ FixedLine::FixedLine( vcl::Window* pParent, const ResId& rResId ) :
 void  FixedLine::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<FixedLine*>(this)->ImplDraw( true );
+    const_cast<FixedLine*>(this)->Invalidate();
 }
 
-void FixedLine::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void FixedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    ImplDraw();
+    ImplDraw(rRenderContext);
 }
 
 void FixedLine::Draw( OutputDevice*, const Point&, const Size&, sal_uLong )
@@ -773,9 +773,9 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
     }
 }
 
-void FixedBitmap::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    ImplDraw( this, 0, Point(), GetOutputSizePixel() );
+    ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
 }
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
@@ -943,9 +943,9 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     }
 }
 
-void FixedImage::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void FixedImage::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    ImplDraw( this, 0, Point(), GetOutputSizePixel() );
+    ImplDraw(&rRenderContext, 0, Point(), GetOutputSizePixel());
 }
 
 Size FixedImage::GetOptimalSize() const
