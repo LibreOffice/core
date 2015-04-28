@@ -70,6 +70,8 @@ public:
     iterator  begin()      { return iterator(*this, 0); }
     iterator  end()        { return iterator(*this, size()); }
 
+    V*        data()       { return detail_values; }
+
 //private:
     V detail_values[max_index + 1];
 };
@@ -83,6 +85,10 @@ public:
     typedef enumarray_iterator<EA>  self_type;
     typedef typename EA::value_type value_type;
     typedef typename EA::key_type   key_type;
+    typedef std::bidirectional_iterator_tag iterator_category; //should be random access, but that would require define subtraction operators on the enums
+    typedef typename EA::key_type   difference_type;
+    typedef typename EA::value_type*   pointer;
+    typedef typename EA::value_type&   reference;
 
     enumarray_iterator(EA& b, size_t start_pos)
          : m_buf(b), m_pos(start_pos) {}
@@ -90,6 +96,7 @@ public:
     value_type *operator->() { return &(operator*()); }
     self_type  &operator++() { ++m_pos; return *this; }
     bool        operator!=(const self_type& other) { return &m_buf != &other.m_buf || m_pos != other.m_pos; }
+    bool        operator==(const self_type& other) { return &m_buf == &other.m_buf && m_pos == other.m_pos; }
 };
 
 }; // namespace o3tl

@@ -564,36 +564,36 @@ ScVbaEventsHelper::~ScVbaEventsHelper()
 void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& rEvent ) throw (css::uno::RuntimeException, std::exception)
 {
     static const uno::Sequence< uno::Any > saEmptyArgs;
-    if( (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC )) ||
-        (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CREATEDOC )) )  // CREATEDOC triggered e.g. during VBA Workbooks.Add
+    if( (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC )) ||
+        (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CREATEDOC )) )  // CREATEDOC triggered e.g. during VBA Workbooks.Add
     {
         processVbaEventNoThrow( WORKBOOK_OPEN, saEmptyArgs );
     }
-    else if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC ) )
+    else if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::ACTIVATEDOC ) )
     {
         processVbaEventNoThrow( WORKBOOK_ACTIVATE, saEmptyArgs );
     }
-    else if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC ) )
+    else if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::DEACTIVATEDOC ) )
     {
         processVbaEventNoThrow( WORKBOOK_DEACTIVATE, saEmptyArgs );
     }
-    else if( (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_SAVEDOCDONE )) ||
-             (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_SAVEASDOCDONE )) ||
-             (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_SAVETODOCDONE )) )
+    else if( (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVEDOCDONE )) ||
+             (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVEASDOCDONE )) ||
+             (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVETODOCDONE )) )
     {
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= true;
         processVbaEventNoThrow( WORKBOOK_AFTERSAVE, aArgs );
     }
-    else if( (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_SAVEDOCFAILED )) ||
-             (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_SAVEASDOCFAILED )) ||
-             (rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_SAVETODOCFAILED )) )
+    else if( (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVEDOCFAILED )) ||
+             (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVEASDOCFAILED )) ||
+             (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVETODOCFAILED )) )
     {
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= false;
         processVbaEventNoThrow( WORKBOOK_AFTERSAVE, aArgs );
     }
-    else if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ) )
+    else if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ) )
     {
         /*  Trigger the WORKBOOK_WINDOWDEACTIVATE and WORKBOOK_DEACTIVATE
             events and stop listening to the model (done in base class). */
@@ -606,7 +606,7 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
         }
         processVbaEventNoThrow( WORKBOOK_DEACTIVATE, saEmptyArgs );
     }
-    else if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ) )
+    else if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::VIEWCREATED ) )
     {
         uno::Reference< frame::XController > xController( mxModel->getCurrentController() );
         if( mxListener.get() && xController.is() )

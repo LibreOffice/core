@@ -1576,7 +1576,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
         TransformParameters( nSlotId, aArgs, *pParams );
 
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOC), m_pData->m_pObjectShell ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOC), m_pData->m_pObjectShell ) );
 
         bool bRet = false;
 
@@ -1617,7 +1617,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "successful saving."  ) );
             m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
 
-            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCDONE), m_pData->m_pObjectShell ) );
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCDONE), m_pData->m_pObjectShell ) );
         }
         else
         {
@@ -1625,7 +1625,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             m_pData->m_pObjectShell->StoreLog();
 
             // write the contents of the logger to the file
-            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCFAILED), m_pData->m_pObjectShell ) );
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCFAILED), m_pData->m_pObjectShell ) );
 
             throw task::ErrorCodeIOException(
                 "SfxBaseModel::storeSelf: 0x" + OUString::number(nErrCode, 16),
@@ -2831,11 +2831,11 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
                 OUString aTitle = m_pData->m_pObjectShell->GetTitle();
                 addTitle_Impl( m_pData->m_seqArguments, aTitle );
-                postEvent_Impl( GlobalEventConfig::GetEventName( STR_EVENT_TITLECHANGED ) );
+                postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::TITLECHANGED ) );
             }
             if ( pSimpleHint->GetId() == SFX_HINT_MODECHANGED )
             {
-                postEvent_Impl( GlobalEventConfig::GetEventName( STR_EVENT_MODECHANGED ) );
+                postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::MODECHANGED ) );
             }
         }
     }
@@ -3008,7 +3008,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
     if ( !bSaved && m_pData->m_pObjectShell )
     {
-        SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOC : STR_EVENT_SAVEASDOC ),
+        SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
                                                 m_pData->m_pObjectShell ) );
 
         SfxAllItemSet *aParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
@@ -3108,14 +3108,14 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
                 m_pData->m_pObjectShell->SetModifyPasswordEntered();
 
-                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEASDOCDONE), m_pData->m_pObjectShell ) );
+                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, GlobalEventConfig::GetEventName(GlobalEventId::SAVEASDOCDONE), m_pData->m_pObjectShell ) );
             }
             else
             {
                 m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
                 m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
 
-                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVETODOCDONE), m_pData->m_pObjectShell ) );
+                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, GlobalEventConfig::GetEventName(GlobalEventId::SAVETODOCDONE), m_pData->m_pObjectShell ) );
             }
         }
         else
@@ -3128,7 +3128,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
 
 
-            SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOCFAILED : STR_EVENT_SAVEASDOCFAILED),
+            SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
                                                     m_pData->m_pObjectShell ) );
 
             throw task::ErrorCodeIOException(

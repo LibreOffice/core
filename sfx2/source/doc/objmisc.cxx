@@ -369,7 +369,7 @@ void SfxObjectShell::ModifyChanged()
     Invalidate( SID_MACRO_SIGNATURE );
     Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
 
-    SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, GlobalEventConfig::GetEventName(STR_EVENT_MODIFYCHANGED), this ) );
+    SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, GlobalEventConfig::GetEventName(GlobalEventId::MODIFYCHANGED), this ) );
 }
 
 
@@ -1030,9 +1030,9 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
             if ( nId == SFX_EVENT_OPENDOC )
-                pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_OPENDOC), this, pFrame->GetFrame().GetController() ), false);
+                pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(GlobalEventId::OPENDOC), this, pFrame->GetFrame().GetController() ), false);
             else if (nId == SFX_EVENT_CREATEDOC )
-                pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_CREATEDOC), this, pFrame->GetFrame().GetController() ), false);
+                pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(GlobalEventId::CREATEDOC), this, pFrame->GetFrame().GetController() ), false);
         }
     }
 }

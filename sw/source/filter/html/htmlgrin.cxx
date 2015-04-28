@@ -882,7 +882,7 @@ void SwHTMLParser::InsertBodyOptions()
                 eScriptType2 = STARBASIC;
                 //fallthrough
             case HTML_O_ONLOAD:
-                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC );
+                aEvent = GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC );
                 bSetEvent = true;
                 break;
 
@@ -890,7 +890,7 @@ void SwHTMLParser::InsertBodyOptions()
                 eScriptType2 = STARBASIC;
                 //fallthrough
             case HTML_O_ONUNLOAD:
-                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC );
+                aEvent = GlobalEventConfig::GetEventName( GlobalEventId::PREPARECLOSEDOC );
                 bSetEvent = true;
                 break;
 
@@ -898,7 +898,7 @@ void SwHTMLParser::InsertBodyOptions()
                 eScriptType2 = STARBASIC;
                 //fallthrough
             case HTML_O_ONFOCUS:
-                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC );
+                aEvent = GlobalEventConfig::GetEventName( GlobalEventId::ACTIVATEDOC );
                 bSetEvent = true;
                 break;
 
@@ -906,7 +906,7 @@ void SwHTMLParser::InsertBodyOptions()
                 eScriptType2 = STARBASIC;
                 //fallthrough
             case HTML_O_ONBLUR:
-                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC );
+                aEvent = GlobalEventConfig::GetEventName( GlobalEventId::DEACTIVATEDOC );
                 bSetEvent = true;
                 break;
 

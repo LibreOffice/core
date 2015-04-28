@@ -333,7 +333,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         if ( pOldContainerFrame )
         {
             if ( bTaskActivate )
-                NotifyEvent( SfxViewEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_DEACTIVATEDOC), pOldContainerFrame->GetObjectShell(), pOldContainerFrame->GetFrame().GetController() ) );
+                NotifyEvent( SfxViewEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(GlobalEventId::DEACTIVATEDOC), pOldContainerFrame->GetObjectShell(), pOldContainerFrame->GetFrame().GetController() ) );
             pOldContainerFrame->DoDeactivate( bTaskActivate, pFrame );
 
             if( pOldContainerFrame->GetProgress() )
@@ -348,7 +348,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
             if ( bTaskActivate && pNewContainerFrame->GetObjectShell() )
             {
                 pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl( pNewContainerFrame );
-                NotifyEvent(SfxViewEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_ACTIVATEDOC), pNewContainerFrame->GetObjectShell(), pNewContainerFrame->GetFrame().GetController() ) );
+                NotifyEvent(SfxViewEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(GlobalEventId::ACTIVATEDOC), pNewContainerFrame->GetObjectShell(), pNewContainerFrame->GetFrame().GetController() ) );
             }
 
             SfxProgress *pProgress = pNewContainerFrame->GetProgress();

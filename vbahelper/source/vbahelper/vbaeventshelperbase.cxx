@@ -132,7 +132,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
 void SAL_CALL VbaEventsHelperBase::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException, std::exception)
 {
     SAL_INFO("vbahelper", "VbaEventsHelperBase::notifyEvent( \"" << rEvent.EventName << "\" )");
-    if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ) )
+    if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ) )
         stopListening();
 }
 

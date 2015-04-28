@@ -207,7 +207,7 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
                 bOther = ( &pFrame->GetFrame() != this );
             }
 
-            SfxGetpApp()->NotifyEvent( SfxViewEventHint(SFX_EVENT_PREPARECLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEVIEW ), pCur, GetController() ) );
+            SfxGetpApp()->NotifyEvent( SfxViewEventHint(SFX_EVENT_PREPARECLOSEVIEW, GlobalEventConfig::GetEventName( GlobalEventId::PREPARECLOSEVIEW ), pCur, GetController() ) );
 
             if ( bOther )
                 // if there are other views only the current view of this frame must be asked

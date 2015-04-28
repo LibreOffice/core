@@ -822,7 +822,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     // Propagate document closure.
-                    SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), xOldObj ) );
+                    SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ), xOldObj ) );
                 }
 
                 // Record as done

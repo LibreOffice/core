@@ -607,7 +607,7 @@ bool SfxObjectShell::PrepareClose
     }
 
     SfxApplication *pSfxApp = SfxGetpApp();
-    pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(STR_EVENT_PREPARECLOSEDOC), this) );
+    pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(GlobalEventId::PREPARECLOSEDOC), this) );
 
     if( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
@@ -1155,11 +1155,11 @@ void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
     if ( i_fromInitNew )
     {
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(STR_EVENT_DOCCREATED), this ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(GlobalEventId::DOCCREATED), this ) );
     }
     else
     {
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(STR_EVENT_LOADFINISHED), this ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(GlobalEventId::LOADFINISHED), this ) );
     }
 }
 

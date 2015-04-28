@@ -121,7 +121,7 @@ public:
                 const css::uno::Reference< css::frame::XController2 >& xController )
         : SfxViewEventHint(
             SFX_EVENT_PRINTDOC,
-            GlobalEventConfig::GetEventName( STR_EVENT_PRINTDOC ),
+            GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ),
             pObj,
             xController )
         , mnPrintableState( nEvent )

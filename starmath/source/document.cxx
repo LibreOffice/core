@@ -171,7 +171,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
                 // have SwOleClient::FormatChanged() to align the modified formula properly
                 // even if the vis area does not change (e.g. when formula text changes from
                 // "{a over b + c} over d" to "d over {a over b + c}"
-                SfxGetpApp()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(STR_EVENT_VISAREACHANGED), this));
+                SfxGetpApp()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
 
                 Repaint();
             }

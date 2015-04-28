@@ -657,10 +657,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pSrcView->SaveContent(aTempFile.GetURL());
                         bDone = true;
                         SvxMacro aMac(aEmptyOUStr, aEmptyOUStr, STARBASIC);
-                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC ), aMac, this);
-                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC ), aMac, this);
-                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC ),     aMac, this);
-                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC ), aMac, this);
+                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC ), aMac, this);
+                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( GlobalEventId::PREPARECLOSEDOC ), aMac, this);
+                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( GlobalEventId::ACTIVATEDOC ),     aMac, this);
+                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( GlobalEventId::DEACTIVATEDOC ), aMac, this);
                         ReloadFromHtml(aTempFile.GetURL(), pSrcView);
                         nSlot = 0;
                     }

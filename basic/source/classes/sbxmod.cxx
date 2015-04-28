@@ -2426,7 +2426,7 @@ public:
     virtual void SAL_CALL documentEventOccured( const document::DocumentEvent& rEvent ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         // early dosposing on document event "OnUnload", to be sure Basic still exists when calling VBA "UserForm_Terminate"
-        if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ) )
+        if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ) )
         {
             removeListener();
             mbDisposed = true;

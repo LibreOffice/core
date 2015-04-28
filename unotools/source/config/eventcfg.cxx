@@ -24,6 +24,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/enumarray.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -43,7 +45,7 @@ static const char ROOTNODE_EVENTS[] = "Office.Events/ApplicationEvents";
 #define SETNODE_BINDINGS "Bindings"
 #define PROPERTYNAME_BINDINGURL "BindingURL"
 
-const char* pEventAsciiNames[] =
+static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames =
 {
 "OnStartApp",
 "OnCloseApp",
@@ -75,38 +77,43 @@ const char* pEventAsciiNames[] =
 "OnStorageChanged"
 };
 
+typedef std::unordered_map< OUString, OUString, OUStringHash, std::equal_to< OUString > > EventBindingHash;
+typedef std::vector< css::uno::WeakReference< css::frame::XFrame > > FrameVector;
+typedef o3tl::enumarray< GlobalEventId, OUString > SupportedEventsVector;
+
+class GlobalEventConfig_Impl : public utl::ConfigItem
+{
+private:
+    EventBindingHash m_eventBindingHash;
+    FrameVector m_lFrames;
+    SupportedEventsVector m_supportedEvents;
+
+    void initBindingInfo();
+
+    virtual void ImplCommit() SAL_OVERRIDE;
+
+public:
+    GlobalEventConfig_Impl( );
+    virtual ~GlobalEventConfig_Impl( );
+
+    void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+
+    void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+    bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+    OUString GetEventName( GlobalEventId nID );
+};
+
+
 GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     :   ConfigItem( ROOTNODE_EVENTS, CONFIG_MODE_IMMEDIATE_UPDATE )
 {
     // the supported event names
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STARTAPP] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEAPP] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DOCCREATED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CREATEDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_LOADFINISHED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_OPENDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PREPARECLOSEDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOCDONE] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOCFAILED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOCDONE] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOCFAILED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOCDONE] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOCFAILED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_ACTIVATEDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DEACTIVATEDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PRINTDOC] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_VIEWCREATED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PREPARECLOSEVIEW] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEVIEW] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_MODIFYCHANGED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_TITLECHANGED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_VISAREACHANGED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_MODECHANGED] ) );
-    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STORAGECHANGED] ) );
+    for (GlobalEventId id : o3tl::enumrange<GlobalEventId>())
+        m_supportedEvents[id] = OUString::createFromAscii( pEventAsciiNames[id] );
 
     initBindingInfo();
 
@@ -125,12 +132,9 @@ GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
     assert(!IsModified()); // should have been committed
 }
 
-OUString GlobalEventConfig_Impl::GetEventName( sal_Int32 nIndex )
+OUString GlobalEventConfig_Impl::GetEventName( GlobalEventId nIndex )
 {
-    if ( nIndex < (sal_Int32) m_supportedEvents.size() )
-        return m_supportedEvents[nIndex];
-    else
-        return OUString();
+    return m_supportedEvents[nIndex];
 }
 
 //  public method
@@ -257,7 +261,7 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
     else
     {
         // not yet accessed - is it a supported name?
-        SupportedEventsVector::const_iterator pos = ::std::find(
+        SupportedEventsVector::iterator pos = ::std::find(
             m_supportedEvents.begin(), m_supportedEvents.end(), aName );
         if ( pos == m_supportedEvents.end() )
             throw container::NoSuchElementException( aName );
@@ -270,7 +274,7 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
 
 Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  ) throw (RuntimeException)
 {
-    return uno::Sequence< OUString >(m_supportedEvents.data(), m_supportedEvents.size());
+    return uno::Sequence< OUString >(m_supportedEvents.data(), SupportedEventsVector::size());
 }
 
 bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (RuntimeException)
@@ -279,7 +283,7 @@ bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (
         return true;
 
     // never accessed before - is it supported in general?
-    SupportedEventsVector::const_iterator pos = ::std::find(
+    SupportedEventsVector::iterator pos = ::std::find(
         m_supportedEvents.begin(), m_supportedEvents.end(), aName );
     if ( pos != m_supportedEvents.end() )
         return true;
@@ -381,7 +385,7 @@ Mutex& GlobalEventConfig::GetOwnStaticMutex()
     return theGlobalEventConfigMutex::get();
 }
 
-OUString GlobalEventConfig::GetEventName( sal_Int32 nIndex )
+OUString GlobalEventConfig::GetEventName( GlobalEventId nIndex )
 {
     return GlobalEventConfig().m_pImpl->GetEventName( nIndex );
 }

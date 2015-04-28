@@ -3115,7 +3115,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
             SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false, false );
             pImp->m_bCreateTempStor = false;
-            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
         }
         catch( uno::Exception& )
         {
@@ -3266,7 +3266,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
 
     if ( bSendNotification )
     {
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
     }
 
     return bResult;
