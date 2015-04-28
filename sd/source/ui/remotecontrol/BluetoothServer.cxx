@@ -1332,7 +1332,7 @@ void SAL_CALL BluetoothServer::run()
     }
 
     SOCKADDR aName;
-    int aNameSize = sizeof(aAddr);
+    int aNameSize = sizeof(aName);
     getsockname( aSocket, &aName, &aNameSize ); // Retrieve the local address and port
 
     CSADDR_INFO aAddrInfo;
