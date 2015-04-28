@@ -105,8 +105,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     mrModel.mbPlotVisOnly = rAttribs.getBool( XML_val, !bMSO2007Document );
                     return 0;
                 case C_TOKEN( showDLblsOverMax ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbShowLabelsOverMax = rAttribs.getBool( XML_val, false );
+                    mrModel.mbShowLabelsOverMax = rAttribs.getBool( XML_val, !bMSO2007Document );
                     return 0;
                 case C_TOKEN( sideWall ):
                     return new WallFloorContext( *this, mrModel.mxSideWall.create() );
