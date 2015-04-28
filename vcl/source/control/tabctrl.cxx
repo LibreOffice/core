@@ -1115,6 +1115,22 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
             DrawNativeControl(CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aRect, nState,
                 aControlValue, OUString());
         }
+
+        if (IsNativeControlSupported(CTRL_TAB_HEADER, PART_ENTIRE_CONTROL))
+        {
+            Rectangle aHeaderRect(0, 0, GetSizePixel().Width(), aRect.Top());
+
+            aClipRgn = GetActiveClipRegion();
+            aClipRgn.Intersect( aHeaderRect );
+            if( !rRect.IsEmpty() )
+                aClipRgn.Intersect( rRect );
+
+            if( !aClipRgn.IsEmpty() )
+            {
+                DrawNativeControl(CTRL_TAB_HEADER, PART_ENTIRE_CONTROL, aHeaderRect, nState,
+                    aControlValue, OUString());
+            }
+        }
     }
     else
     {

@@ -932,6 +932,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case CTRL_TAB_PANE:
         context = mpNoteBookStyle;
         break;
+    case CTRL_TAB_HEADER:
+        context = mpNoteBookStyle;
+        styleClass = GTK_STYLE_CLASS_HEADER;
+        break;
     case CTRL_TAB_ITEM:
         context = mpNoteBookStyle;
         if (nState & ControlState::SELECTED)
@@ -1540,6 +1544,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 //            return true;
 
         case CTRL_TAB_ITEM:
+        case CTRL_TAB_HEADER:
         case CTRL_TAB_PANE:
         case CTRL_TAB_BODY:
             if(nPart==PART_ENTIRE_CONTROL || nPart==PART_TABS_DRAW_RTL)
