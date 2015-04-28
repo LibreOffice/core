@@ -32,16 +32,23 @@
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class OutputDevice;
 namespace vcl { class Region; }
 
 
-#define INITOUTDEV_FONT         0x0001
-#define INITOUTDEV_COLORS       0x0002
-#define INITOUTDEV_RASTEROP     0x0004
-#define INITOUTDEV_CLIPREGION   0x0008
-
+enum class InitOutDevFlags
+{
+    FONT         = 0x0001,
+    COLORS       = 0x0002,
+    RASTEROP     = 0x0004,
+    CLIPREGION   = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<InitOutDevFlags> : is_typed_flags<InitOutDevFlags, 0x0f> {};
+}
 
 
 //  class VCLXGraphics
@@ -72,7 +79,7 @@ public:
                     virtual ~VCLXGraphics();
 
     void            Init( OutputDevice* pOutDev );
-    void            InitOutputDevice( sal_uInt16 nFlags );
+    void            InitOutputDevice( InitOutDevFlags nFlags );
 
     void            SetOutputDevice( OutputDevice* pOutDev );
     OutputDevice*   GetOutputDevice() const { return mpOutputDevice; }
