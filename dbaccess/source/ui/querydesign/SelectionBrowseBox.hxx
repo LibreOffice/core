@@ -57,11 +57,11 @@ namespace dbaui
         long                                m_nSeekRow;
         BrowserMode                         m_nMode;                    // remember the BrowseModes
         VclPtr<Edit>                               m_pTextCell;
-        VclPtr<::svt::CheckBoxControl>             m_pVisibleCell;
-        VclPtr<::svt::ComboBoxControl>             m_pFieldCell;
-        VclPtr<::svt::ListBoxControl>              m_pFunctionCell;
-        VclPtr<::svt::ListBoxControl>              m_pTableCell;
-        VclPtr<::svt::ListBoxControl>              m_pOrderCell;
+        VclPtr< ::svt::CheckBoxControl>             m_pVisibleCell;
+        VclPtr< ::svt::ComboBoxControl>             m_pFieldCell;
+        VclPtr< ::svt::ListBoxControl>              m_pFunctionCell;
+        VclPtr< ::svt::ListBoxControl>              m_pTableCell;
+        VclPtr< ::svt::ListBoxControl>              m_pOrderCell;
 
         OTableFieldDescRef                  m_pEmptyEntry;              // default entry in the list may reference more than once
 
