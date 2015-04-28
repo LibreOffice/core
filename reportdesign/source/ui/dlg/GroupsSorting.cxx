@@ -99,7 +99,7 @@ class OFieldExpressionControl : public ::svt::EditBrowseBox
     ::osl::Mutex                    m_aMutex;
     ::std::vector<sal_Int32>        m_aGroupPositions;
     ::std::vector<ColumnInfo>       m_aColumnInfo;
-    VclPtr<::svt::ComboBoxControl>  m_pComboCell;
+    VclPtr< ::svt::ComboBoxControl>  m_pComboCell;
     sal_Int32                       m_nDataPos;
     sal_Int32                       m_nCurrentPos;
     ImplSVEvent *                   m_nPasteEvent;
