@@ -279,7 +279,7 @@ bool AbstractSdInsertPasteDlg_Impl::IsInsertBefore() const
     return pDlg->IsInsertBefore();
 }
 
-::vcl::Window* AbstractSdInsertPagesObjsDlg_Impl::GetWindow()
+vcl::Window* AbstractSdInsertPagesObjsDlg_Impl::GetWindow()
 {
     return (vcl::Window*)pDlg;
 }

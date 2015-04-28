@@ -103,7 +103,7 @@ namespace
             aColor.SetTransparency(0);
             //aColor.SetTransparency(128);
 
-            rColorSequence = ::vcl::unotools::colorToDoubleSequence(
+            rColorSequence = vcl::unotools::colorToDoubleSequence(
                 aColor,
                 rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
         }
@@ -545,10 +545,10 @@ namespace cppcanvas
                     uno::Reference<rendering::XColorSpace> xColorSpace(
                         rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
                     const uno::Sequence< double > aStartColor(
-                        ::vcl::unotools::colorToDoubleSequence( aVCLStartColor,
+                        vcl::unotools::colorToDoubleSequence( aVCLStartColor,
                                                                 xColorSpace ));
                     const uno::Sequence< double > aEndColor(
-                        ::vcl::unotools::colorToDoubleSequence( aVCLEndColor,
+                        vcl::unotools::colorToDoubleSequence( aVCLEndColor,
                                                                 xColorSpace ));
 
                     uno::Sequence< uno::Sequence < double > > aColors(2);
@@ -851,7 +851,7 @@ namespace cppcanvas
                 else
                     aFontMatrix.m11 *= nScaleY / nScaleX;
             }
-            aFontRequest.CellSize = (rState.mapModeTransform * ::vcl::unotools::b2DSizeFromSize(rFontSizeLog)).getY();
+            aFontRequest.CellSize = (rState.mapModeTransform * vcl::unotools::b2DSizeFromSize(rFontSizeLog)).getY();
 
             return rParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
                                                                 uno::Sequence< beans::PropertyValue >(),
@@ -898,7 +898,7 @@ namespace cppcanvas
                 aShadowOffset.setHeight( nShadowOffset );
 
                 // determine shadow color (from outdev3.cxx)
-                ::Color aTextColor = ::vcl::unotools::doubleSequenceToColor(
+                ::Color aTextColor = vcl::unotools::doubleSequenceToColor(
                     rState.textColor, xColorSpace );
                 bool bIsDark = (aTextColor.GetColor() == COL_BLACK)
                     || (aTextColor.GetLuminance() < 8);
@@ -922,7 +922,7 @@ namespace cppcanvas
                 aReliefOffset.setHeight( nReliefOffset );
 
                 // determine relief color (from outdev3.cxx)
-                ::Color aTextColor = ::vcl::unotools::doubleSequenceToColor(
+                ::Color aTextColor = vcl::unotools::doubleSequenceToColor(
                     rState.textColor, xColorSpace );
 
                 aReliefColor = ::Color( COL_LIGHTGRAY );
@@ -934,7 +934,7 @@ namespace cppcanvas
                 {
                     aTextColor = ::Color( COL_WHITE );
                     rParms.mrStates.getState().textColor =
-                        ::vcl::unotools::colorToDoubleSequence(
+                        vcl::unotools::colorToDoubleSequence(
                             aTextColor, xColorSpace );
                 }
 
@@ -1435,7 +1435,7 @@ namespace cppcanvas
                             aColor.SetTransparency(0);
 
                             rStates.getState().textColor =
-                                ::vcl::unotools::colorToDoubleSequence(
+                                vcl::unotools::colorToDoubleSequence(
                                     aColor,
                                     rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
                         }
@@ -1728,7 +1728,7 @@ namespace cppcanvas
 
                                     aTexture.Alpha = 1.0 - aFill.getTransparency();
                                     aTexture.Bitmap =
-                                        ::vcl::unotools::xBitmapFromBitmapEx(
+                                        vcl::unotools::xBitmapFromBitmapEx(
                                             rCanvas->getUNOCanvas()->getDevice(),
                                             aBmpEx );
                                     if( aFill.isTiling() )
@@ -1817,7 +1817,7 @@ namespace cppcanvas
                         {
                             ActionSharedPtr pPointAction(
                                 internal::PointActionFactory::createPointAction(
-                                    rState.mapModeTransform * ::vcl::unotools::b2DPointFromPoint(
+                                    rState.mapModeTransform * vcl::unotools::b2DPointFromPoint(
                                         static_cast<MetaPointAction*>(pCurrAct)->GetPoint() ),
                                     rCanvas,
                                     rState ) );
@@ -1842,7 +1842,7 @@ namespace cppcanvas
                         {
                             ActionSharedPtr pPointAction(
                                 internal::PointActionFactory::createPointAction(
-                                    rState.mapModeTransform * ::vcl::unotools::b2DPointFromPoint(
+                                    rState.mapModeTransform * vcl::unotools::b2DPointFromPoint(
                                         static_cast<MetaPixelAction*>(pCurrAct)->GetPoint() ),
                                     rCanvas,
                                     rState,
@@ -1871,9 +1871,9 @@ namespace cppcanvas
                             const LineInfo& rLineInfo( pLineAct->GetLineInfo() );
 
                             const ::basegfx::B2DPoint aStartPoint(
-                                rState.mapModeTransform * ::vcl::unotools::b2DPointFromPoint( pLineAct->GetStartPoint() ));
+                                rState.mapModeTransform * vcl::unotools::b2DPointFromPoint( pLineAct->GetStartPoint() ));
                             const ::basegfx::B2DPoint aEndPoint(
-                                rState.mapModeTransform * ::vcl::unotools::b2DPointFromPoint( pLineAct->GetEndPoint() ));
+                                rState.mapModeTransform * vcl::unotools::b2DPointFromPoint( pLineAct->GetEndPoint() ));
 
                             ActionSharedPtr pLineAction;
 
@@ -1944,9 +1944,9 @@ namespace cppcanvas
 
                         const OutDevState& rState( rStates.getState() );
                         const ::basegfx::B2DPoint aTopLeftPixel(
-                            rState.mapModeTransform * ::vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ) );
+                            rState.mapModeTransform * vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ) );
                         const ::basegfx::B2DPoint aBottomRightPixel(
-                            rState.mapModeTransform * ::vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
+                            rState.mapModeTransform * vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
                             // #121100# OutputDevice::DrawRect() fills
                             // rectangles Apple-like, i.e. with one
                             // additional pixel to the right and bottom.
@@ -1970,8 +1970,8 @@ namespace cppcanvas
                         ::basegfx::B2DPolygon aPoly(
                             ::basegfx::tools::createPolygonFromRect(
                                 ::basegfx::B2DRange(
-                                    ::vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
-                                    ::vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
+                                    vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
+                                    vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
                                     ::basegfx::B2DPoint(1,1) ),
                                 ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound() ) / rRect.GetWidth(),
                                 ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound() ) / rRect.GetHeight() ) );
@@ -1991,8 +1991,8 @@ namespace cppcanvas
                             break;
 
                         const ::basegfx::B2DRange aRange(
-                            ::vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
-                            ::vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
+                            vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
+                            vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
                             ::basegfx::B2DPoint(1,1) );
 
                         ::basegfx::B2DPolygon aPoly(
@@ -2140,7 +2140,7 @@ namespace cppcanvas
                                 internal::BitmapActionFactory::createBitmapAction(
                                     pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform *
-                                    ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                    vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rCanvas,
                                     rStates.getState() ) );
 
@@ -2164,9 +2164,9 @@ namespace cppcanvas
                                 internal::BitmapActionFactory::createBitmapAction(
                                     pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform *
-                                    ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                    vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform *
-                                    ::vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                    vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
                                     rCanvas,
                                     rStates.getState() ) );
 
@@ -2197,9 +2197,9 @@ namespace cppcanvas
                                 internal::BitmapActionFactory::createBitmapAction(
                                     aBmp,
                                     rStates.getState().mapModeTransform *
-                                    ::vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
+                                    vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                     rStates.getState().mapModeTransform *
-                                    ::vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
+                                    vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
                                     rCanvas,
                                     rStates.getState() ) );
 
@@ -2223,7 +2223,7 @@ namespace cppcanvas
                                 internal::BitmapActionFactory::createBitmapAction(
                                     pAct->GetBitmapEx(),
                                     rStates.getState().mapModeTransform *
-                                    ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                    vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rCanvas,
                                     rStates.getState() ) );
 
@@ -2247,9 +2247,9 @@ namespace cppcanvas
                                 internal::BitmapActionFactory::createBitmapAction(
                                     pAct->GetBitmapEx(),
                                     rStates.getState().mapModeTransform *
-                                    ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                    vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform *
-                                    ::vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                    vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
                                     rCanvas,
                                     rStates.getState() ) );
 
@@ -2280,9 +2280,9 @@ namespace cppcanvas
                             internal::BitmapActionFactory::createBitmapAction(
                                 aBmp,
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
+                                vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
+                                vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2312,7 +2312,7 @@ namespace cppcanvas
                             internal::BitmapActionFactory::createBitmapAction(
                                 aBmp,
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2342,9 +2342,9 @@ namespace cppcanvas
                             internal::BitmapActionFactory::createBitmapAction(
                                 aBmp,
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2380,9 +2380,9 @@ namespace cppcanvas
                             internal::BitmapActionFactory::createBitmapAction(
                                 aBmp,
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
+                                vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
+                                vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2456,9 +2456,9 @@ namespace cppcanvas
                                 std::move(pGradient),
                                 rParms,
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                 rStates.getState().mapModeTransform *
-                                ::vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2532,8 +2532,8 @@ namespace cppcanvas
                                 tools::createTextLinesPolyPolygon(
                                     rState.mapModeTransform *
                                     ::basegfx::B2DPoint(
-                                        ::vcl::unotools::b2DPointFromPoint(pAct->GetStartPoint()) +
-                                        ::vcl::unotools::b2DSizeFromSize(aBaselineOffset)),
+                                        vcl::unotools::b2DPointFromPoint(pAct->GetStartPoint()) +
+                                        vcl::unotools::b2DSizeFromSize(aBaselineOffset)),
                                     aSize.getX(),
                                     tools::createTextLineInfo( rVDev,
                                                                rState )),
@@ -2985,7 +2985,7 @@ namespace cppcanvas
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
 
                 rState.xFont = createFont( rState.fontRotation,
-                                           ::vcl::Font(), // default font
+                                           vcl::Font(), // default font
                                            aParms );
             }
 

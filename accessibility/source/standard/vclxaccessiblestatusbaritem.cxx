@@ -138,7 +138,7 @@ void VCLXAccessibleStatusBarItem::SetItemText( const OUString& sItemText )
 OUString VCLXAccessibleStatusBarItem::GetItemText()
 {
     OUString sText;
-    ::vcl::ControlLayoutData aLayoutData;
+    vcl::ControlLayoutData aLayoutData;
     if ( m_pStatusBar )
     {
         Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
@@ -533,7 +533,7 @@ awt::Rectangle VCLXAccessibleStatusBarItem::getCharacterBounds( sal_Int32 nIndex
     awt::Rectangle aBounds( 0, 0, 0, 0 );
     if ( m_pStatusBar )
     {
-        ::vcl::ControlLayoutData aLayoutData;
+        vcl::ControlLayoutData aLayoutData;
         Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
         m_pStatusBar->RecordLayoutData( &aLayoutData, aItemRect );
         Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
@@ -553,7 +553,7 @@ sal_Int32 VCLXAccessibleStatusBarItem::getIndexAtPoint( const awt::Point& aPoint
     sal_Int32 nIndex = -1;
     if ( m_pStatusBar )
     {
-        ::vcl::ControlLayoutData aLayoutData;
+        vcl::ControlLayoutData aLayoutData;
         Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
         m_pStatusBar->RecordLayoutData( &aLayoutData, aItemRect );
         Point aPnt( VCLPoint( aPoint ) );
@@ -591,7 +591,7 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
         {
             OUString sText( getTextRange( nStartIndex, nEndIndex ) );
 
-            ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
+            vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 
             SolarMutexReleaser aReleaser;
             xClipboard->setContents( pDataObj, NULL );

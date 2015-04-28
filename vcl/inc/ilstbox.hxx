@@ -175,7 +175,7 @@ public:
     sal_Int32       FindFirstSelectable( sal_Int32  nPos, bool bForward = true );
 };
 
-class ImplListBoxWindow : public Control, public ::vcl::ISearchableStringList
+class ImplListBoxWindow : public Control, public vcl::ISearchableStringList
 {
 private:
     ImplEntryList*  mpEntryList;     ///< EntryList
@@ -237,7 +237,7 @@ private:
     Link            maFocusHdl;
     Link            maListItemSelectHdl;
 
-    ::vcl::QuickSelectionEngine maQuickSelectionEngine;
+    vcl::QuickSelectionEngine maQuickSelectionEngine;
 
 protected:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -373,9 +373,9 @@ public:
 
 protected:
     // ISearchableStringList
-    virtual ::vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const SAL_OVERRIDE;
-    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const SAL_OVERRIDE;
-    virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry ) SAL_OVERRIDE;
+    virtual vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const SAL_OVERRIDE;
+    virtual vcl::StringEntryIdentifier    NextEntry( vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const SAL_OVERRIDE;
+    virtual void                            SelectEntry( vcl::StringEntryIdentifier _entry ) SAL_OVERRIDE;
 };
 
 class ImplListBox : public Control

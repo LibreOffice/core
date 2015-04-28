@@ -57,7 +57,7 @@ namespace vclcanvas
         const Size aPixelSize( rOutDev.LogicToPixel(Size(1,1)) );
         rOutDev.SetMapMode( aOldMapMode );
 
-        return ::vcl::unotools::size2DFromSize( aPixelSize );
+        return vcl::unotools::size2DFromSize( aPixelSize );
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
@@ -72,7 +72,7 @@ namespace vclcanvas
         const Size aLogSize( rOutDev.PixelToLogic(rOutDev.GetOutputSizePixel()) );
         rOutDev.SetMapMode( aOldMapMode );
 
-        return ::vcl::unotools::size2DFromSize( aLogSize );
+        return vcl::unotools::size2DFromSize( aLogSize );
     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
@@ -115,7 +115,7 @@ namespace vclcanvas
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
+            new CanvasBitmap( vcl::unotools::sizeFromIntegerSize2D(size),
                               false,
                               *rDevice.get(),
                               mpOutDev ) );
@@ -136,7 +136,7 @@ namespace vclcanvas
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
+            new CanvasBitmap( vcl::unotools::sizeFromIntegerSize2D(size),
                               true,
                               *rDevice.get(),
                               mpOutDev ) );

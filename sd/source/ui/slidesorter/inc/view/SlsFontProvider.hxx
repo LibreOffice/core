@@ -36,7 +36,7 @@ class FontProvider
     : public SdGlobalResource
 {
 public:
-    typedef boost::shared_ptr< ::vcl::Font> SharedFontPointer;
+    typedef boost::shared_ptr<vcl::Font> SharedFontPointer;
 
     /** Return the single instance of this class.  Throws a RuntimeException
         when no instance can be created.

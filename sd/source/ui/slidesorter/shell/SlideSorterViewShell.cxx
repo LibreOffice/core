@@ -93,7 +93,7 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
 ::boost::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
-    ::vcl::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument,
     const bool bIsCenterPane)
 {
@@ -118,7 +118,7 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
 SlideSorterViewShell::SlideSorterViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
-    ::vcl::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)
     : ViewShell (pFrame, pParentWindow, rViewShellBase),
       mpSlideSorter(),
@@ -292,7 +292,7 @@ SlideSorter& SlideSorterViewShell::GetSlideSorter() const
     return *mpSlideSorter;
 }
 
-bool SlideSorterViewShell::RelocateToParentWindow (::vcl::Window* pParentWindow)
+bool SlideSorterViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
 {
     OSL_ASSERT(mpSlideSorter);
     if ( ! mpSlideSorter)
@@ -638,7 +638,7 @@ void SlideSorterViewShell::UpdateScrollBars()
 
 void SlideSorterViewShell::StartDrag (
     const Point& rDragPt,
-    ::vcl::Window* pWindow )
+    vcl::Window* pWindow )
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetClipboard().StartDrag (

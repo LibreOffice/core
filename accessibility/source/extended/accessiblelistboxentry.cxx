@@ -665,7 +665,7 @@ namespace accessibility
         SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
         {
-            ::vcl::ControlLayoutData aLayoutData;
+            vcl::ControlLayoutData aLayoutData;
             Rectangle aItemRect = GetBoundingBox();
             getListBox()->RecordLayoutData( &aLayoutData, aItemRect );
             Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
@@ -687,7 +687,7 @@ namespace accessibility
         SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
         {
-            ::vcl::ControlLayoutData aLayoutData;
+            vcl::ControlLayoutData aLayoutData;
             Rectangle aItemRect = GetBoundingBox();
             getListBox()->RecordLayoutData( &aLayoutData, aItemRect );
             Point aPnt( VCLPoint( aPoint ) );

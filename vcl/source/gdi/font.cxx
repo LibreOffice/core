@@ -736,13 +736,13 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
     return rOStm;
 }
 
-SvStream& ReadFont( SvStream& rIStm, ::vcl::Font& rFont )
+SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
 {
     rFont.MakeUnique();
     return ReadImpl_Font( rIStm, *rFont.mpImplFont );
 }
 
-SvStream& WriteFont( SvStream& rOStm, const ::vcl::Font& rFont )
+SvStream& WriteFont( SvStream& rOStm, const vcl::Font& rFont )
 {
     return WriteImpl_Font( rOStm, *rFont.mpImplFont );
 }

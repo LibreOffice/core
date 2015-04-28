@@ -257,7 +257,7 @@ SalI18N_InputMethod::SalI18N_InputMethod( )
 
 SalI18N_InputMethod::~SalI18N_InputMethod()
 {
-    ::vcl::I18NStatus::free();
+    vcl::I18NStatus::free();
     if ( mpStyles != NULL )
         XFree( mpStyles );
     if ( maMethod != NULL )

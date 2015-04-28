@@ -48,8 +48,8 @@ static bool EnableNativeWidget( const OutputDevice& i_rDevice )
 
     case OUTDEV_VIRDEV:
     {
-        const ::vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
-        const ::vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const ::vcl::PDFExtOutDevData* >( pOutDevData ) );
+        const vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
+        const vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const vcl::PDFExtOutDevData* >( pOutDevData ) );
         if ( pPDFData != NULL )
             return false;
         return true;

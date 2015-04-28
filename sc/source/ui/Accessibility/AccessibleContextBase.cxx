@@ -528,7 +528,7 @@ void ScAccessibleContextBase::CommitFocusGained() const
 
     CommitChange(aEvent);
 
-    ::vcl::unohelper::NotifyAccessibleStateEventGlobally(aEvent);
+    vcl::unohelper::NotifyAccessibleStateEventGlobally(aEvent);
 }
 
 void ScAccessibleContextBase::CommitFocusLost() const

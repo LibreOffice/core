@@ -365,7 +365,7 @@ void TableValueSet::updateSettings()
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::vcl::Window* SAL_CALL makeTableValueSet(::vcl::Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTableValueSet(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -806,12 +806,12 @@ short TableDesignDialog::Execute()
     return RET_CANCEL;
 }
 
-VclPtr< ::vcl::Window> createTableDesignPanel( ::vcl::Window* pParent, ViewShellBase& rBase )
+VclPtr<vcl::Window> createTableDesignPanel( vcl::Window* pParent, ViewShellBase& rBase )
 {
     return VclPtr<TableDesignPane>::Create( pParent, rBase );
 }
 
-void showTableDesignDialog( ::vcl::Window* pParent, ViewShellBase& rBase )
+void showTableDesignDialog( vcl::Window* pParent, ViewShellBase& rBase )
 {
     ScopedVclPtrInstance< TableDesignDialog > xDialog( pParent, rBase );
     xDialog->Execute();

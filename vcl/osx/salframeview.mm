@@ -1734,7 +1734,7 @@ private:
 {
     if ( !mpReferenceWrapper ) {
         // some frames never become visible ..
-        ::vcl::Window *pWindow = mpFrame -> GetWindow();
+        vcl::Window *pWindow = mpFrame -> GetWindow();
         if ( ! pWindow )
             return nil;
 

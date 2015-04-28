@@ -120,7 +120,7 @@ void SAL_CALL ChildWindowPane::disposing()
     Pane::disposing();
 }
 
-::vcl::Window* ChildWindowPane::GetWindow()
+vcl::Window* ChildWindowPane::GetWindow()
 {
     do
     {

@@ -1644,7 +1644,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
 namespace
 {
-    static ::vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_Int32 _nPos, OUString& _out_entryText )
+    static vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_Int32 _nPos, OUString& _out_entryText )
     {
         OSL_PRECOND( ( _nPos != LISTBOX_ENTRY_NOTFOUND ), "lcl_getEntry: invalid position!" );
         sal_Int32 nEntryCount( _rList.GetEntryCount() );
@@ -1652,30 +1652,30 @@ namespace
             _nPos = 0;
         _out_entryText = _rList.GetEntryText( _nPos );
 
-        // ::vcl::StringEntryIdentifier does not allow for 0 values, but our position is 0-based
+        // vcl::StringEntryIdentifier does not allow for 0 values, but our position is 0-based
         // => normalize
-        return reinterpret_cast< ::vcl::StringEntryIdentifier >( _nPos + 1 );
+        return reinterpret_cast< vcl::StringEntryIdentifier >( _nPos + 1 );
     }
 
-    static sal_Int32 lcl_getEntryPos( ::vcl::StringEntryIdentifier _entry )
+    static sal_Int32 lcl_getEntryPos( vcl::StringEntryIdentifier _entry )
     {
         // our pos is 0-based, but StringEntryIdentifier does not allow for a NULL
         return static_cast< sal_Int32 >( reinterpret_cast< sal_Int64 >( _entry ) ) - 1;
     }
 }
 
-::vcl::StringEntryIdentifier ImplListBoxWindow::CurrentEntry( OUString& _out_entryText ) const
+vcl::StringEntryIdentifier ImplListBoxWindow::CurrentEntry( OUString& _out_entryText ) const
 {
     return lcl_getEntry( *GetEntryList(), ( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND ) ? 0 : mnCurrentPos, _out_entryText );
 }
 
-::vcl::StringEntryIdentifier ImplListBoxWindow::NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const
+vcl::StringEntryIdentifier ImplListBoxWindow::NextEntry( vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const
 {
     sal_Int32 nNextPos = lcl_getEntryPos( _currentEntry ) + 1;
     return lcl_getEntry( *GetEntryList(), nNextPos, _out_entryText );
 }
 
-void ImplListBoxWindow::SelectEntry( ::vcl::StringEntryIdentifier _entry )
+void ImplListBoxWindow::SelectEntry( vcl::StringEntryIdentifier _entry )
 {
     sal_Int32 nSelect = lcl_getEntryPos( _entry );
     if ( mpEntryList->IsEntryPosSelected( nSelect ) )

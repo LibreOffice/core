@@ -238,8 +238,8 @@ class SVT_DLLPUBLIC SvTreeListBox
                 ,public SvListView
                 ,public DropTargetHelper
                 ,public DragSourceHelper
-                ,public ::vcl::IMnemonicEntryList
-                ,public ::vcl::ISearchableStringList
+                ,public vcl::IMnemonicEntryList
+                ,public vcl::ISearchableStringList
 {
     friend class SvImpLBox;
     friend class TreeControlPeer;
@@ -364,9 +364,9 @@ protected:
     virtual void        ExecuteSearchEntry( const void* _pEntry ) const SAL_OVERRIDE;
 
     // ISearchableStringList
-    virtual ::vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const SAL_OVERRIDE;
-    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const SAL_OVERRIDE;
-    virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry ) SAL_OVERRIDE;
+    virtual vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const SAL_OVERRIDE;
+    virtual vcl::StringEntryIdentifier    NextEntry( vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const SAL_OVERRIDE;
+    virtual void                            SelectEntry( vcl::StringEntryIdentifier _entry ) SAL_OVERRIDE;
 
 public:
 

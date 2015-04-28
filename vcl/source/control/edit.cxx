@@ -1289,7 +1289,7 @@ void Edit::ImplCopyToSelectionClipboard()
 
 void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
 {
-    ::vcl::unohelper::TextDataObject::CopyStringTo( GetSelected(), rxClipboard );
+    vcl::unohelper::TextDataObject::CopyStringTo( GetSelected(), rxClipboard );
 }
 
 void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
@@ -2884,7 +2884,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
             if ( IsTracking() )
                 EndTracking();  // Vor D&D Tracking ausschalten
 
-            ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( GetSelected() );
+            vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( GetSelected() );
             sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
             if ( !IsReadOnly() )
                 nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;

@@ -139,7 +139,7 @@ void SVGFontExport::implCollectGlyphs()
                 {
                     GlyphSet& rGlyphSet = implGetGlyphSet( pVDev->GetFont() );
                     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI(
-                        ::vcl::unohelper::CreateBreakIterator() );
+                        vcl::unohelper::CreateBreakIterator() );
 
                     if( xBI.is() )
                     {

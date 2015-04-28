@@ -25,7 +25,7 @@
 namespace sd { namespace sidebar {
 
 TableDesignPanel::TableDesignPanel (
-    ::vcl::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
     : PanelBase(pParentWindow, rViewShellBase)
 {
@@ -38,8 +38,8 @@ TableDesignPanel::~TableDesignPanel()
 {
 }
 
-::vcl::Window* TableDesignPanel::CreateWrappedControl (
-    ::vcl::Window* pParentWindow,
+vcl::Window* TableDesignPanel::CreateWrappedControl (
+    vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
 {
     return createTableDesignPanel(pParentWindow, rViewShellBase);

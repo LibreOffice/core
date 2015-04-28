@@ -80,20 +80,20 @@ namespace toolkitform
 
         /** (default-)creates a PDF widget according to a given FormComponentType
         */
-        ::vcl::PDFWriter::AnyWidget* createDefaultWidget( sal_Int16 _nFormComponentType )
+        vcl::PDFWriter::AnyWidget* createDefaultWidget( sal_Int16 _nFormComponentType )
         {
             switch ( _nFormComponentType )
             {
             case FormComponentType::COMMANDBUTTON:
-                return new ::vcl::PDFWriter::PushButtonWidget;
+                return new vcl::PDFWriter::PushButtonWidget;
             case FormComponentType::CHECKBOX:
-                return new ::vcl::PDFWriter::CheckBoxWidget;
+                return new vcl::PDFWriter::CheckBoxWidget;
             case FormComponentType::RADIOBUTTON:
-                return new ::vcl::PDFWriter::RadioButtonWidget;
+                return new vcl::PDFWriter::RadioButtonWidget;
             case FormComponentType::LISTBOX:
-                return new ::vcl::PDFWriter::ListBoxWidget;
+                return new vcl::PDFWriter::ListBoxWidget;
             case FormComponentType::COMBOBOX:
-                return new ::vcl::PDFWriter::ComboBoxWidget;
+                return new vcl::PDFWriter::ComboBoxWidget;
 
             case FormComponentType::TEXTFIELD:
             case FormComponentType::FILECONTROL:
@@ -102,7 +102,7 @@ namespace toolkitform
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
             case FormComponentType::PATTERNFIELD:
-                return new ::vcl::PDFWriter::EditWidget;
+                return new vcl::PDFWriter::EditWidget;
             }
             return NULL;
         }
@@ -255,7 +255,7 @@ namespace toolkitform
     /** creates a PDF compatible control descriptor for the given control
     */
     std::unique_ptr<vcl::PDFWriter::AnyWidget> describePDFControl( const Reference< XControl >& _rxControl,
-        ::vcl::PDFExtOutDevData& i_pdfExportData )
+        vcl::PDFExtOutDevData& i_pdfExportData )
     {
         std::unique_ptr<vcl::PDFWriter::AnyWidget> Descriptor;
         OSL_ENSURE( _rxControl.is(), "describePDFControl: invalid (NULL) control!" );
@@ -418,9 +418,9 @@ namespace toolkitform
             // special widget properties
 
             // edits
-            if ( Descriptor->getType() == ::vcl::PDFWriter::Edit )
+            if ( Descriptor->getType() == vcl::PDFWriter::Edit )
             {
-                ::vcl::PDFWriter::EditWidget* pEditWidget = static_cast< ::vcl::PDFWriter::EditWidget* >( Descriptor.get() );
+                vcl::PDFWriter::EditWidget* pEditWidget = static_cast< vcl::PDFWriter::EditWidget* >( Descriptor.get() );
 
                 // multiline (already flagged in the TextStyle)
                 pEditWidget->MultiLine = ( Descriptor->TextStyle & TEXT_DRAW_MULTILINE ) != 0;
@@ -454,9 +454,9 @@ namespace toolkitform
 
 
             // buttons
-            if ( Descriptor->getType() == ::vcl::PDFWriter::PushButton )
+            if ( Descriptor->getType() == vcl::PDFWriter::PushButton )
             {
-                ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( Descriptor.get() );
+                vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< vcl::PDFWriter::PushButtonWidget* >( Descriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
                 OSL_VERIFY( xModelProps->getPropertyValue("ButtonType") >>= eButtonType );
                 static const char FM_PROP_TARGET_URL[] = "TargetURL";
@@ -491,8 +491,8 @@ namespace toolkitform
                         pButtonWidget->Dest = i_pdfExportData.RegisterDest();
 
                         // and put it into the bookmarks, to ensure the future handling really happens
-                        ::std::vector< ::vcl::PDFExtOutDevBookmarkEntry >& rBookmarks( i_pdfExportData.GetBookmarks() );
-                        ::vcl::PDFExtOutDevBookmarkEntry aBookmark;
+                        ::std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks( i_pdfExportData.GetBookmarks() );
+                        vcl::PDFExtOutDevBookmarkEntry aBookmark;
                         aBookmark.nDestId = pButtonWidget->Dest;
                         aBookmark.aBookmark = sURL;
                         rBookmarks.push_back( aBookmark );
@@ -519,9 +519,9 @@ namespace toolkitform
 
             // check boxes
             static const char FM_PROP_STATE[] = "State";
-            if ( Descriptor->getType() == ::vcl::PDFWriter::CheckBox )
+            if ( Descriptor->getType() == vcl::PDFWriter::CheckBox )
             {
-                ::vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< ::vcl::PDFWriter::CheckBoxWidget* >( Descriptor.get() );
+                vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< vcl::PDFWriter::CheckBoxWidget* >( Descriptor.get() );
                 sal_Int16 nState = 0;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_STATE ) >>= nState );
                 pCheckBoxWidget->Checked = ( nState != 0 );
@@ -529,9 +529,9 @@ namespace toolkitform
 
 
             // radio buttons
-            if ( Descriptor->getType() == ::vcl::PDFWriter::RadioButton )
+            if ( Descriptor->getType() == vcl::PDFWriter::RadioButton )
             {
-                ::vcl::PDFWriter::RadioButtonWidget* pRadioWidget = static_cast< ::vcl::PDFWriter::RadioButtonWidget* >( Descriptor.get() );
+                vcl::PDFWriter::RadioButtonWidget* pRadioWidget = static_cast< vcl::PDFWriter::RadioButtonWidget* >( Descriptor.get() );
                 sal_Int16 nState = 0;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_STATE ) >>= nState );
                 pRadioWidget->Selected = ( nState != 0 );
@@ -549,9 +549,9 @@ namespace toolkitform
 
 
             // list boxes
-            if ( Descriptor->getType() == ::vcl::PDFWriter::ListBox )
+            if ( Descriptor->getType() == vcl::PDFWriter::ListBox )
             {
-                ::vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< ::vcl::PDFWriter::ListBoxWidget* >( Descriptor.get() );
+                vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< vcl::PDFWriter::ListBoxWidget* >( Descriptor.get() );
 
                 // drop down
                 static const char FM_PROP_DROPDOWN[] = "Dropdown";
@@ -583,9 +583,9 @@ namespace toolkitform
 
 
             // combo boxes
-            if ( Descriptor->getType() == ::vcl::PDFWriter::ComboBox )
+            if ( Descriptor->getType() == vcl::PDFWriter::ComboBox )
             {
-                ::vcl::PDFWriter::ComboBoxWidget* pComboWidget = static_cast< ::vcl::PDFWriter::ComboBoxWidget* >( Descriptor.get() );
+                vcl::PDFWriter::ComboBoxWidget* pComboWidget = static_cast< vcl::PDFWriter::ComboBoxWidget* >( Descriptor.get() );
 
                 // entries
                 getStringItemVector( xModelProps, pComboWidget->Entries );

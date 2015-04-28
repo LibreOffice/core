@@ -170,7 +170,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     VclPtr<ImageButton>     pPageUpBtn,
                             pPageDownBtn;
     // dummy window for filling the lower right edge when both scrollbars are active
-    VclPtr< ::vcl::Window>   pScrollFill;
+    VclPtr<vcl::Window>   pScrollFill;
 
     sal_uInt16              mnPageCount;
     bool                    bNormalPrint;

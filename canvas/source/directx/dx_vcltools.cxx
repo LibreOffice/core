@@ -500,7 +500,7 @@ namespace dxcanvas
             if( !xIntBmp.is() )
                 return false;
 
-            ::BitmapEx aBmpEx = ::vcl::unotools::bitmapExFromXBitmap( xIntBmp );
+            ::BitmapEx aBmpEx = vcl::unotools::bitmapExFromXBitmap( xIntBmp );
             if( !aBmpEx )
                 return false;
 

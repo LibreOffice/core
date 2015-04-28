@@ -29,15 +29,8 @@
 
 class ScrollBar;
 class ScrollBarBox;
-namespace vcl { class Window; }
 
-namespace sd {
-namespace vcl { class Window; }
-}
-
-namespace sd { namespace slidesorter {
-    class SlideSorter;
-} }
+namespace sd { namespace slidesorter { class SlideSorter; } }
 
 namespace sd { namespace slidesorter { namespace controller {
 

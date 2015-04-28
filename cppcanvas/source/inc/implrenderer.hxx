@@ -241,7 +241,7 @@ static float GetSwapFloat( SvStream& rSt )
 
             static ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
-                                                                       const ::vcl::Font&              rFont,
+                                                                       const vcl::Font&              rFont,
                                                                        const ActionFactoryParameters&  rParms );
             bool createActions( GDIMetaFile&                    rMtf,
                                 const ActionFactoryParameters&  rParms,

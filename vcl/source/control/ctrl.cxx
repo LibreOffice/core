@@ -108,7 +108,7 @@ void Control::FillLayoutData() const
 void Control::CreateLayoutData() const
 {
     DBG_ASSERT( !mpControlData->mpLayoutData, "Control::CreateLayoutData: should be called with non-existent layout data only!" );
-    mpControlData->mpLayoutData = new ::vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
 }
 
 bool Control::HasLayoutData() const
@@ -116,7 +116,7 @@ bool Control::HasLayoutData() const
     return mpControlData && mpControlData->mpLayoutData != NULL;
 }
 
-::vcl::ControlLayoutData* Control::GetLayoutData() const
+vcl::ControlLayoutData* Control::GetLayoutData() const
 {
     return mpControlData->mpLayoutData;
 }

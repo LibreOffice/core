@@ -106,7 +106,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         /** @deprecated
                 replaced by internal class AsyncAccelExec ...
                 remove this resource here if we go forwards to next major */
-        ::vcl::EventPoster m_aAsyncCallback;
+        vcl::EventPoster m_aAsyncCallback;
 
 
     // interface

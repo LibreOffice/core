@@ -113,7 +113,7 @@ namespace cairocanvas
         const Size aPixelSize( mpRefDevice->LogicToPixel(Size(1,1)) );
         mpRefDevice->SetMapMode( aOldMapMode );
 
-        return ::vcl::unotools::size2DFromSize( aPixelSize );
+        return vcl::unotools::size2DFromSize( aPixelSize );
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
@@ -127,7 +127,7 @@ namespace cairocanvas
         const Size aLogSize( mpRefDevice->PixelToLogic(mpRefDevice->GetOutputSizePixel()) );
         mpRefDevice->SetMapMode( aOldMapMode );
 
-        return ::vcl::unotools::size2DFromSize( aLogSize );
+        return vcl::unotools::size2DFromSize( aLogSize );
     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(

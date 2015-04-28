@@ -73,7 +73,7 @@ private:
     ::boost::shared_ptr<cache::PageCache> mpCache;
     ::boost::shared_ptr<controller::Properties> mpProperties;
     ::boost::shared_ptr<view::Theme> mpTheme;
-    ::boost::shared_ptr< ::vcl::Font> mpPageNumberFont;
+    ::boost::shared_ptr<vcl::Font> mpPageNumberFont;
     ::boost::scoped_ptr<FramePainter> mpShadowPainter;
     ::boost::scoped_ptr<FramePainter> mpFocusBorderPainter;
     Bitmap maNormalBackground;

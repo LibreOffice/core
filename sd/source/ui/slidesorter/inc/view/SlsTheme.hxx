@@ -58,7 +58,7 @@ public:
         Font_PageNumber,
         Font_PageCount
     };
-    static boost::shared_ptr< ::vcl::Font> GetFont (
+    static boost::shared_ptr<vcl::Font> GetFont (
         const FontType eType,
         const OutputDevice& rDevice);
 

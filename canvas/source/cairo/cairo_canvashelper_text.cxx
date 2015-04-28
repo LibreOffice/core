@@ -135,7 +135,7 @@ namespace cairocanvas
 
             if( renderState.DeviceColor.getLength() > 2 )
             {
-                aColor = ::vcl::unotools::stdColorSpaceSequenceToColor( renderState.DeviceColor );
+                aColor = vcl::unotools::stdColorSpaceSequenceToColor( renderState.DeviceColor );
             }
 
             // extract alpha, and make color opaque
@@ -217,7 +217,7 @@ namespace cairocanvas
 
         if( renderState.DeviceColor.getLength() > 2 )
         {
-            aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(renderState.DeviceColor );
+            aColor = vcl::unotools::stdColorSpaceSequenceToColor(renderState.DeviceColor );
         }
 
         // setup font color

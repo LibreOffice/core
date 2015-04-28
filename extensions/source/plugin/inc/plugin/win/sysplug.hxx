@@ -59,7 +59,7 @@
 
 class PluginComm_Impl :
     public PluginComm,
-    public ::vcl::SolarThreadExecutor
+    public vcl::SolarThreadExecutor
 
 {
     enum CallType {

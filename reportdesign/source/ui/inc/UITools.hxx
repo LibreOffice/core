@@ -126,7 +126,7 @@ namespace rptui
             ::comphelper::mem_fun(&TaskPaneList::AddWindow)
             ::comphelper::mem_fun(&TaskPaneList::RemoveWindow)
     */
-    void notifySystemWindow(::vcl::Window* pWindow, ::vcl::Window* pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList, ::vcl::Window*>& rMemFunc);
+    void notifySystemWindow(vcl::Window* pWindow, vcl::Window* pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList, vcl::Window*>& rMemFunc);
 
 
     const sal_Int16 ISOVER_IGNORE_CUSTOMSHAPES = 1;
@@ -176,7 +176,7 @@ namespace rptui
         @param  _aZoom      the zoom scale
         @param  _rWindow    where to set the map mode
     */
-    void setZoomFactor(const Fraction& _aZoom, ::vcl::Window& _rWindow);
+    void setZoomFactor(const Fraction& _aZoom, vcl::Window& _rWindow);
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_UITOOLS_HXX
 

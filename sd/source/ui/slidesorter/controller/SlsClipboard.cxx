@@ -217,7 +217,7 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
     }
 }
 
-void Clipboard::DoCut (::vcl::Window* pWindow)
+void Clipboard::DoCut (vcl::Window* pWindow)
 {
     if (mrSlideSorter.GetModel().GetPageCount() > 1)
     {
@@ -226,7 +226,7 @@ void Clipboard::DoCut (::vcl::Window* pWindow)
     }
 }
 
-void Clipboard::DoDelete (::vcl::Window* )
+void Clipboard::DoDelete (vcl::Window* )
 {
     if (mrSlideSorter.GetModel().GetPageCount() > 1)
     {
@@ -234,12 +234,12 @@ void Clipboard::DoDelete (::vcl::Window* )
     }
 }
 
-void Clipboard::DoCopy (::vcl::Window* pWindow )
+void Clipboard::DoCopy (vcl::Window* pWindow )
 {
     CreateSlideTransferable( pWindow, false );
 }
 
-void Clipboard::DoPaste (::vcl::Window* pWindow)
+void Clipboard::DoPaste (vcl::Window* pWindow)
 {
     SdTransferable* pClipTransferable = SD_MOD()->pTransferClip;
 
@@ -259,7 +259,7 @@ void Clipboard::DoPaste (::vcl::Window* pWindow)
     }
 }
 
-sal_Int32 Clipboard::GetInsertionPosition (::vcl::Window* pWindow)
+sal_Int32 Clipboard::GetInsertionPosition (vcl::Window* pWindow)
 {
     sal_Int32 nInsertPosition = -1;
 
@@ -377,7 +377,7 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
 }
 
 void Clipboard::CreateSlideTransferable (
-    ::vcl::Window* pWindow,
+    vcl::Window* pWindow,
     bool bDrag)
 {
     std::vector<OUString> aBookmarkList;
@@ -442,7 +442,7 @@ void Clipboard::CreateSlideTransferable (
             aObjDesc.maDisplayName = pDocument->GetDocSh()
                 ->GetMedium()->GetURLObject().GetURLNoPass();
 
-        ::vcl::Window* pActionWindow = pWindow;
+        vcl::Window* pActionWindow = pWindow;
         if (pActionWindow == NULL)
         {
             ViewShell* pViewShell = mrSlideSorter.GetViewShell();
@@ -556,7 +556,7 @@ void Clipboard::CreateSlideTransferable (
 
 void Clipboard::StartDrag (
     const Point& rPosition,
-    ::vcl::Window* pWindow)
+    vcl::Window* pWindow)
 {
     maPagesToRemove.clear();
     maPagesToSelect.clear();

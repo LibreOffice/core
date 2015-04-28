@@ -1093,9 +1093,9 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
     return 0;
 }
 
-::vcl::Window * createSlideTransitionPanel( ::vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
+vcl::Window * createSlideTransitionPanel( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
 {
-    ::vcl::Window* pWindow = 0;
+    vcl::Window* pWindow = 0;
 
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )

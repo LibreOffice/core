@@ -163,7 +163,7 @@ public:
 
 ::boost::shared_ptr<BitmapReplacement> PngCompression::Compress (const Bitmap& rBitmap) const
 {
-    ::vcl::PNGWriter aWriter (rBitmap);
+    vcl::PNGWriter aWriter (rBitmap);
     SvMemoryStream aStream (32768, 32768);
     aWriter.Write(aStream);
 
@@ -184,7 +184,7 @@ Bitmap PngCompression::Decompress (
     if (pData != NULL)
     {
         SvMemoryStream aStream (pData->mpData, pData->mnDataSize, StreamMode::READ);
-        ::vcl::PNGReader aReader (aStream);
+        vcl::PNGReader aReader (aStream);
         aResult = aReader.Read().GetBitmap();
     }
 

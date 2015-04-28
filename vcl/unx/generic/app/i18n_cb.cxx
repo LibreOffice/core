@@ -507,7 +507,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
             if( nLength )
                 aText = OUString( pMBString, nLength, osl_getThreadTextEncoding() );
         }
-        ::vcl::I18NStatus::get().setStatusText( aText );
+        vcl::I18NStatus::get().setStatusText( aText );
     }
 #if OSL_DEBUG_LEVEL > 1
     else
@@ -523,7 +523,7 @@ void
 SwitchIMCallback (XIC, XPointer, XPointer call_data)
 {
     XIMSwitchIMNotifyCallbackStruct* pCallData = reinterpret_cast<XIMSwitchIMNotifyCallbackStruct*>(call_data);
-    ::vcl::I18NStatus::get().changeIM( OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
+    vcl::I18NStatus::get().changeIM( OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
 }
 
 // vii. destroy callbacks: internally disable all IC/IM calls

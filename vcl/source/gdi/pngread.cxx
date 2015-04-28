@@ -1640,7 +1640,7 @@ sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()
 }
 
 PNGReader::PNGReader(SvStream& rIStream) :
-    mpImpl(new ::vcl::PNGReaderImpl(rIStream))
+    mpImpl(new vcl::PNGReaderImpl(rIStream))
 {
 }
 

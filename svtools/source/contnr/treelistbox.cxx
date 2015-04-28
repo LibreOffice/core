@@ -1134,7 +1134,7 @@ void SvTreeListBox::ExecuteSearchEntry( const void* /*_pEntry*/ ) const
     // nothing to do here, we have no "execution"
 }
 
-::vcl::StringEntryIdentifier SvTreeListBox::CurrentEntry( OUString& _out_entryText ) const
+vcl::StringEntryIdentifier SvTreeListBox::CurrentEntry( OUString& _out_entryText ) const
 {
     // always accept the current entry if there is one
     SvTreeListEntry* pCurrentEntry( GetCurEntry() );
@@ -1146,12 +1146,12 @@ void SvTreeListBox::ExecuteSearchEntry( const void* /*_pEntry*/ ) const
     return FirstSearchEntry( _out_entryText );
 }
 
-::vcl::StringEntryIdentifier SvTreeListBox::NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const
+vcl::StringEntryIdentifier SvTreeListBox::NextEntry( vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const
 {
     return NextSearchEntry( _currentEntry, _out_entryText );
 }
 
-void SvTreeListBox::SelectEntry( ::vcl::StringEntryIdentifier _entry )
+void SvTreeListBox::SelectEntry( vcl::StringEntryIdentifier _entry )
 {
     SelectSearchEntry( _entry );
 }

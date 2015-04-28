@@ -290,12 +290,12 @@ public:
 #else
         SelectionFunction& rSelectionFunction,
         const Point& rMousePosition,
-        ::vcl::Window* pWindow);
+        vcl::Window* pWindow);
 #endif
     virtual ~DragAndDropModeHandler();
 
 #ifndef MACOSX
-    void Initialize(const Point& rMousePosition, ::vcl::Window* pWindow);
+    void Initialize(const Point& rMousePosition, vcl::Window* pWindow);
 #endif
 
     virtual SelectionFunction::Mode GetMode() const SAL_OVERRIDE;
@@ -389,7 +389,7 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
     FocusManager& rFocusManager (mrController.GetFocusManager());
     bool bResult = false;
 
-    const ::vcl::KeyCode& rCode (rEvent.GetKeyCode());
+    const vcl::KeyCode& rCode (rEvent.GetKeyCode());
     switch (rCode.GetCode())
     {
         case KEY_RETURN:
@@ -1507,14 +1507,14 @@ DragAndDropModeHandler::DragAndDropModeHandler (
 #else
     SelectionFunction& rSelectionFunction,
     const Point& rMousePosition,
-    ::vcl::Window* pWindow)
+    vcl::Window* pWindow)
 #endif
     : ModeHandler(rSlideSorter, rSelectionFunction, false)
 {
 #ifndef MACOSX
 }
 
-void DragAndDropModeHandler::Initialize(const Point& rMousePosition, ::vcl::Window* pWindow)
+void DragAndDropModeHandler::Initialize(const Point& rMousePosition, vcl::Window* pWindow)
 {
 #endif
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;

@@ -50,10 +50,10 @@ namespace {
 class ContentWindow : public ::sd::Window
 {
 public:
-    ContentWindow(::vcl::Window& rParent, SlideSorter& rSlideSorter);
+    ContentWindow(vcl::Window& rParent, SlideSorter& rSlideSorter);
     virtual ~ContentWindow();
     void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
-    virtual void Paint(::vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
     virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;
     virtual void MouseButtonUp (const MouseEvent& rEvent) SAL_OVERRIDE;
@@ -90,7 +90,7 @@ private:
 ::boost::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter (
     ViewShellBase& rBase,
     ViewShell* pViewShell,
-    ::vcl::Window& rParentWindow)
+    vcl::Window& rParentWindow)
 {
     ::boost::shared_ptr<SlideSorter> pSlideSorter(
         new SlideSorter(
@@ -128,7 +128,7 @@ SlideSorter::SlideSorter (
 SlideSorter::SlideSorter (
     ViewShellBase& rBase,
     ViewShell* pViewShell,
-    ::vcl::Window& rParentWindow)
+    vcl::Window& rParentWindow)
     : mbIsValid(false),
       mpSlideSorterController(),
       mpSlideSorterModel(),
@@ -173,7 +173,7 @@ void SlideSorter::Init()
     sd::Window *pContentWindow (GetContentWindow());
     if (pContentWindow)
     {
-        ::vcl::Window* pParentWindow = pContentWindow->GetParent();
+        vcl::Window* pParentWindow = pContentWindow->GetParent();
         if (pParentWindow != NULL)
             pParentWindow->SetBackground(Wallpaper());
         pContentWindow->SetBackground(Wallpaper());
@@ -244,7 +244,7 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
         GetContentWindow());
 }
 
-void SlideSorter::SetupControls (::vcl::Window* )
+void SlideSorter::SetupControls (vcl::Window* )
 {
     GetVerticalScrollBar()->Show();
 }
@@ -254,7 +254,7 @@ void SlideSorter::SetupListeners()
     sd::Window *pWindow (GetContentWindow());
     if (pWindow)
     {
-        ::vcl::Window* pParentWindow = pWindow->GetParent();
+        vcl::Window* pParentWindow = pWindow->GetParent();
         if (pParentWindow != NULL)
             pParentWindow->AddEventListener(
                 LINK(
@@ -288,7 +288,7 @@ void SlideSorter::ReleaseListeners()
                 controller::SlideSorterController,
                 WindowEventHandler));
 
-        ::vcl::Window* pParentWindow = pWindow->GetParent();
+        vcl::Window* pParentWindow = pWindow->GetParent();
         if (pParentWindow != NULL)
             pParentWindow->RemoveEventListener(
                 LINK(mpSlideSorterController.get(),
@@ -371,14 +371,14 @@ void SlideSorter::ArrangeGUIElements (
     }
 }
 
-bool SlideSorter::RelocateToWindow (::vcl::Window* pParentWindow)
+bool SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
 {
    // Stop all animations for they have been started for the old window.
     mpSlideSorterController->GetAnimator()->RemoveAllAnimations();
 
     ReleaseListeners();
 
-    ::vcl::Window *pNewWindow = NULL;
+    vcl::Window *pNewWindow = NULL;
     if (mpViewShell)
     {
         mpViewShell->ViewShell::RelocateToParentWindow(pParentWindow);
@@ -436,7 +436,7 @@ void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
 namespace {
 
 ContentWindow::ContentWindow(
-    ::vcl::Window& rParent,
+    vcl::Window& rParent,
     SlideSorter& rSlideSorter)
     : ::sd::Window(&rParent),
     mrSlideSorter(rSlideSorter),
@@ -455,7 +455,7 @@ void ContentWindow::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction
     mpCurrentFunction = rpFunction;
 }
 
-void ContentWindow::Paint (::vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void ContentWindow::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     mrSlideSorter.Paint(rRect);
 }

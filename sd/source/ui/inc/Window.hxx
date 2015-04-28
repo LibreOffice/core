@@ -40,7 +40,7 @@ class ViewShell;
     be an integer percent value.
 */
 class Window
-    : public ::vcl::Window,
+    : public vcl::Window,
       public ::DropTargetHelper
 {
 public:
@@ -172,7 +172,7 @@ protected:
 
     virtual void Resize() SAL_OVERRIDE;
     virtual void PrePaint() SAL_OVERRIDE;
-    virtual void Paint(::vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;

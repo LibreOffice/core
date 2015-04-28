@@ -101,7 +101,7 @@ namespace svx
     public:
         void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
             Rectangle* _pPrimaryLocation = NULL, Rectangle* _pSecondaryLocation = NULL,
-            ::vcl::ControlLayoutData* _pLayoutData = NULL );
+            vcl::ControlLayoutData* _pLayoutData = NULL );
     };
 
     PseudoRubyText::PseudoRubyText()
@@ -118,7 +118,7 @@ namespace svx
 
 
     void PseudoRubyText::Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
-        Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation, ::vcl::ControlLayoutData* _pLayoutData )
+        Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation, vcl::ControlLayoutData* _pLayoutData )
     {
         bool            bLayoutOnly  = NULL != _pLayoutData;
         MetricVector*   pTextMetrics = bLayoutOnly ? &_pLayoutData->m_aUnicodeBoundRects : NULL;

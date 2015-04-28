@@ -70,7 +70,7 @@ class ScPrintUIOptions;
 class ScSheetSaveData;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
-                    public ::vcl::ITiledRenderable,
+                    public vcl::ITiledRenderable,
                     public com::sun::star::sheet::XSpreadsheetDocument,
                     public com::sun::star::document::XActionLockable,
                     public com::sun::star::sheet::XCalculatable,

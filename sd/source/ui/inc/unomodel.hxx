@@ -81,7 +81,7 @@ class SD_DLLPUBLIC SdXImpressDocument : public SfxBaseModel, // implements SfxLi
                            public ::com::sun::star::ucb::XAnyCompareFactory,
                            public ::com::sun::star::presentation::XHandoutMasterSupplier,
                            public ::com::sun::star::view::XRenderable,
-                           public ::vcl::ITiledRenderable
+                           public vcl::ITiledRenderable
 {
     friend class SdDrawPagesAccess;
     friend class SdMasterPagesAccess;

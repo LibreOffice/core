@@ -269,7 +269,7 @@ namespace vcl
                 \<do something with xFactory>
     */
     template <typename I>
-    class DeleteUnoReferenceOnDeinit : public ::vcl::DeleteOnDeinitBase
+    class DeleteUnoReferenceOnDeinit : public vcl::DeleteOnDeinitBase
     {
         ::com::sun::star::uno::Reference<I> m_xI;
         virtual void doCleanup() SAL_OVERRIDE { set(NULL); }

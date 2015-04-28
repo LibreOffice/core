@@ -70,7 +70,7 @@ class SVT_DLLPRIVATE AsyncAccelExec
         DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
 
     private:
-        ::vcl::EventPoster m_aAsyncCallback;
+        vcl::EventPoster m_aAsyncCallback;
         css::uno::Reference< css::frame::XDispatch > m_xDispatch;
         css::util::URL m_aURL;
 };

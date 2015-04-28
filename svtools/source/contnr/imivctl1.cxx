@@ -1626,7 +1626,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(
 
 void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
     IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
-    OutputDevice* pOut, const OUString* pStr, ::vcl::ControlLayoutData* _pLayoutData )
+    OutputDevice* pOut, const OUString* pStr, vcl::ControlLayoutData* _pLayoutData )
 {
     if( eItem == IcnViewFieldTypeText )
     {

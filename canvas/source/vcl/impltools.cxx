@@ -87,7 +87,7 @@ namespace vclcanvas
                 uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
                     xBitmap, uno::UNO_QUERY_THROW );
 
-                ::BitmapEx aBmpEx = ::vcl::unotools::bitmapExFromXBitmap( xIntBmp );
+                ::BitmapEx aBmpEx = vcl::unotools::bitmapExFromXBitmap( xIntBmp );
                 if( !!aBmpEx )
                     return aBmpEx;
 
@@ -181,7 +181,7 @@ namespace vclcanvas
                                                                    rViewState,
                                                                    rRenderState);
 
-            return ::vcl::unotools::pointFromB2DPoint( aPoint );
+            return vcl::unotools::pointFromB2DPoint( aPoint );
         }
 
         ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&  rPoly,

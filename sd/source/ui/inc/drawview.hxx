@@ -42,7 +42,7 @@ public:
     virtual ~DrawView();
 
     virtual void MarkListHasChanged() SAL_OVERRIDE;
-    void CompleteRedraw(OutputDevice* pOutDev, const ::vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
+    void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
 
     virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false) SAL_OVERRIDE;
 
@@ -53,10 +53,10 @@ public:
     bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false) SAL_OVERRIDE;
     virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const SAL_OVERRIDE;
 
-    virtual void MakeVisible(const Rectangle& rRect, ::vcl::Window& rWin) SAL_OVERRIDE;
+    virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin) SAL_OVERRIDE;
     virtual void HideSdrPage() SAL_OVERRIDE; // SdrPageView* pPV);
 
-    void    PresPaint(const ::vcl::Region& rRegion);
+    void    PresPaint(const vcl::Region& rRegion);
 
     virtual void DeleteMarked() SAL_OVERRIDE; // from SdrView
 protected:

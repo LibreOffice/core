@@ -126,7 +126,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
                 for(sal_Int32 a(0); a < aInputString.getLength(); a++)
                 {
                     sal_Char aChar = (sal_Char)aInputString[a];
-                    ::vcl::KeyCode aKeyCode;
+                    vcl::KeyCode aKeyCode;
                     KeyEvent aKeyEvent(aChar, aKeyCode);
 
                     // add actual character
@@ -682,7 +682,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
 
     if (!bConsumed)
     {
-        ::vcl::KeyCode aKCode(KEY_DELETE);
+        vcl::KeyCode aKCode(KEY_DELETE);
         KeyEvent aKEvt( 0, aKCode);
 
         bConsumed = mpDrawView->getSmartTags().KeyInput( aKEvt );
@@ -937,7 +937,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
                 if (pOLV)
                 {
-                    ::vcl::KeyCode aKCode(KEY_DELETE);
+                    vcl::KeyCode aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode);
                     pOLV->PostKeyEvent(aKEvt);
                 }

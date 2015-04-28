@@ -1409,7 +1409,7 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
 
     if( !pSVData->mxDisplayConnection.is() )
     {
-        pSVData->mxDisplayConnection.set( new ::vcl::DisplayConnection );
+        pSVData->mxDisplayConnection.set( new vcl::DisplayConnection );
         pSVData->mxDisplayConnection->start();
     }
 

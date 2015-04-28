@@ -103,7 +103,7 @@ namespace drawinglayer
                     if(bDoSaveForVisualControl)
                     {
                         SvFileStream aNew(OUString("c:\\test_content.png"), StreamMode::WRITE|StreamMode::TRUNC);
-                        ::vcl::PNGWriter aPNGWriter(aContent);
+                        vcl::PNGWriter aPNGWriter(aContent);
                         aPNGWriter.Write(aNew);
                     }
 #endif
@@ -133,7 +133,7 @@ namespace drawinglayer
                     if(bDoSaveForVisualControl)
                     {
                         SvFileStream aNew(OUString("c:\\test_alpha.png"), StreamMode::WRITE|StreamMode::TRUNC);
-                        ::vcl::PNGWriter aPNGWriter(aAlpha);
+                        vcl::PNGWriter aPNGWriter(aAlpha);
                         aPNGWriter.Write(aNew);
                     }
 #endif
@@ -144,7 +144,7 @@ namespace drawinglayer
                     if(bDoSaveForVisualControl)
                     {
                         SvFileStream aNew(OUString("c:\\test_combined.png"), StreamMode::WRITE|StreamMode::TRUNC);
-                        ::vcl::PNGWriter aPNGWriter(aRetval);
+                        vcl::PNGWriter aPNGWriter(aRetval);
                         aPNGWriter.Write(aNew);
                     }
 #endif

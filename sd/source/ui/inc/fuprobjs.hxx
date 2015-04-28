@@ -29,7 +29,6 @@ namespace sd {
 
 class View;
 class ViewShell;
-namespace vcl { class Window; }
 
 class FuPresentationObjects
     : public FuPoor

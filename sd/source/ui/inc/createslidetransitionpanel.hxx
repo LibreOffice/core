@@ -24,7 +24,7 @@
 
 namespace sd {
 
-::vcl::Window* createSlideTransitionPanel (::vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame);
+vcl::Window* createSlideTransitionPanel (vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 }
 

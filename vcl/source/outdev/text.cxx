@@ -494,7 +494,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 
 long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                      long nWidth, const OUString& rStr,
-                                     sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout )
+                                     sal_uInt16 nStyle, const vcl::ITextLayout& _rLayout )
 {
     DBG_ASSERTWARNING( nWidth >= 0, "ImplGetTextLines: nWidth <= 0!" );
 
@@ -1537,7 +1537,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                  const OUString& rOrigStr, sal_uInt16 nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
-                                 ::vcl::ITextLayout& _rLayout )
+                                 vcl::ITextLayout& _rLayout )
 {
 
     Color aOldTextColor;
@@ -1834,7 +1834,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
 
 void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, sal_uInt16 nStyle,
                              MetricVector* pVector, OUString* pDisplayText,
-                             ::vcl::ITextLayout* _pTextLayout )
+                             vcl::ITextLayout* _pTextLayout )
 {
     if (mpOutDevData->mpRecordLayout)
     {
@@ -1878,7 +1878,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
 Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
                                      const OUString& rStr, sal_uInt16 nStyle,
                                      TextRectInfo* pInfo,
-                                     const ::vcl::ITextLayout* _pTextLayout ) const
+                                     const vcl::ITextLayout* _pTextLayout ) const
 {
 
     Rectangle           aRect = rRect;
@@ -2012,7 +2012,7 @@ OUString OutputDevice::GetEllipsisString( const OUString& rOrigStr, long nMaxWid
 }
 
 OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rOrigStr, long nMaxWidth,
-                                               sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout )
+                                               sal_uInt16 nStyle, const vcl::ITextLayout& _rLayout )
 {
     OUString aStr = rOrigStr;
     sal_Int32 nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.getLength() );

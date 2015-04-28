@@ -36,7 +36,7 @@ namespace vcl
 
     //= ISearchableStringList
 
-    // TODO: consolidate this with ::vcl::IMnemonicEntryList
+    // TODO: consolidate this with vcl::IMnemonicEntryList
     class SAL_NO_VTABLE VCL_DLLPUBLIC ISearchableStringList
     {
     public:

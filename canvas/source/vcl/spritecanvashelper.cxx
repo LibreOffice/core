@@ -71,8 +71,8 @@ namespace vclcanvas
                                 OutputDevice&               rBackBuffer,
                                 const ::basegfx::B2DRange&  rArea )
         {
-            const ::Point& rPos( ::vcl::unotools::pointFromB2DPoint( rArea.getMinimum()) );
-            const ::Size& rSize( ::vcl::unotools::sizeFromB2DSize( rArea.getRange()) );
+            const ::Point& rPos( vcl::unotools::pointFromB2DPoint( rArea.getMinimum()) );
+            const ::Size& rSize( vcl::unotools::sizeFromB2DSize( rArea.getRange()) );
 
             rOutDev.DrawOutDev( rPos, rSize, rPos, rSize, rBackBuffer );
         }
@@ -82,7 +82,7 @@ namespace vclcanvas
                                      const ::basegfx::B2IRange&         rArea )
         {
             const Rectangle& rRequestedArea(
-                ::vcl::unotools::rectangleFromB2IRectangle( rArea ) );
+                vcl::unotools::rectangleFromB2IRectangle( rArea ) );
 
             // clip output to actual update region (otherwise a)
             // wouldn't save much render time, and b) will clutter
@@ -444,8 +444,8 @@ namespace vclcanvas
         else
         {
             // scroll rOutDev content
-            rOutDev.CopyArea( ::vcl::unotools::pointFromB2IPoint( aDestPos ),
-                              ::vcl::unotools::pointFromB2IPoint( aSourceRect.getMinimum() ),
+            rOutDev.CopyArea( vcl::unotools::pointFromB2IPoint( aDestPos ),
+                              vcl::unotools::pointFromB2IPoint( aSourceRect.getMinimum() ),
                               // TODO(Q2): use numeric_cast to check range
                               ::Size( static_cast<sal_Int32>(aSourceRect.getRange().getX()),
                                       static_cast<sal_Int32>(aSourceRect.getRange().getY()) ) );
@@ -583,7 +583,7 @@ namespace vclcanvas
                          rSortedUpdateSprites.end(),
                          ::boost::bind( &spriteRedrawStub2,
                                         ::boost::ref( *maVDev.get() ),
-                                        ::vcl::unotools::b2DPointFromPoint(
+                                        vcl::unotools::b2DPointFromPoint(
                                             aOutputPosition),
                                         _1 ) );
 

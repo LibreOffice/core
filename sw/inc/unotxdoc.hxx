@@ -128,7 +128,7 @@ SwXTextDocumentBaseClass;
 class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel,
-    public ::vcl::ITiledRenderable
+    public vcl::ITiledRenderable
 {
 private:
     class Impl;

@@ -387,7 +387,7 @@ private:
     Timer m_aTimer;
 
     /** @short  make our dispatch asynchronous ... if required to do so! */
-    ::vcl::EventPoster m_aAsyncDispatcher;
+    vcl::EventPoster m_aAsyncDispatcher;
 
     /** @see    DispatchParams
      */

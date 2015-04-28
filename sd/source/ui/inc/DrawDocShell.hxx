@@ -102,7 +102,7 @@ public:
     virtual Size            GetFirstPageSize() SAL_OVERRIDE;
     virtual void            FillClass(SvGlobalName* pClassName, SotClipboardFormatId* pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, bool bTemplate = false ) const SAL_OVERRIDE;
     virtual void            SetModified( bool = true ) SAL_OVERRIDE;
-    virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( ::vcl::Window *pParent,
+    virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( vcl::Window *pParent,
                                                               const SfxItemSet &rSet ) SAL_OVERRIDE;
 
     using SfxObjectShell::GetVisArea;

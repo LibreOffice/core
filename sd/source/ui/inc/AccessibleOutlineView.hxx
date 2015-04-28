@@ -23,10 +23,7 @@
 #include "AccessibleDocumentViewBase.hxx"
 #include <svx/AccessibleTextHelper.hxx>
 
-namespace sd {
-class OutlineViewShell;
-namespace vcl { class Window; }
-}
+namespace sd { class OutlineViewShell; }
 
 namespace accessibility {
 

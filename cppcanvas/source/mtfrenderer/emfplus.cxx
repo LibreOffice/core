@@ -1259,7 +1259,7 @@ namespace cppcanvas
         }
 
 #define COLOR(x) \
-    ::vcl::unotools::colorToDoubleSequence( ::Color (0xff - (x >> 24), \
+    vcl::unotools::colorToDoubleSequence( ::Color (0xff - (x >> 24), \
                              (x >> 16) & 0xff, \
                              (x >> 8) & 0xff, \
                              x & 0xff), \
@@ -1336,7 +1336,7 @@ namespace cppcanvas
                     {
                         fillColor = brush->secondColor;
                     }
-                    rState.fillColor = ::vcl::unotools::colorToDoubleSequence(fillColor, rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
+                    rState.fillColor = vcl::unotools::colorToDoubleSequence(fillColor, rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
                     pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
                 }
                 else if (brush->type == 3 || brush->type == 4)
@@ -1399,10 +1399,10 @@ namespace cppcanvas
                     OUString aGradientService;
 
                     const uno::Sequence< double > aStartColor(
-                            ::vcl::unotools::colorToDoubleSequence( brush->solidColor,
+                            vcl::unotools::colorToDoubleSequence( brush->solidColor,
                                 rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
                     const uno::Sequence< double > aEndColor(
-                            ::vcl::unotools::colorToDoubleSequence( brush->secondColor,
+                            vcl::unotools::colorToDoubleSequence( brush->secondColor,
                                 rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
                     uno::Sequence< uno::Sequence < double > > aColors (2);
                     uno::Sequence< double > aStops (2);
@@ -1435,7 +1435,7 @@ namespace cppcanvas
 
                         for (int i = 0; i < brush->colorblendPoints; i++) {
                             aStops[i] = brush->colorblendPositions [i];
-                            aColors[(brush->type == 4) ? i : brush->colorblendPoints - 1 - i] = ::vcl::unotools::colorToDoubleSequence( brush->colorblendColors [i],
+                            aColors[(brush->type == 4) ? i : brush->colorblendPoints - 1 - i] = vcl::unotools::colorToDoubleSequence( brush->colorblendColors [i],
                                     rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
                         }
                     } else {
@@ -1591,7 +1591,7 @@ namespace cppcanvas
             {
                 rState.isFillColorSet = false;
                 rState.isLineColorSet = true;
-                rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
+                rState.lineColor = vcl::unotools::colorToDoubleSequence (pen->GetColor (),
                                                                            rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
 
                 basegfx::B2DPolyPolygon aPolyPolygon(polygon);
@@ -2169,7 +2169,7 @@ namespace cppcanvas
                                     TextActionFactory::createTextAction(
                                                                         // position is just rough guess for now
                                                                         // we should calculate it exactly from layoutRect or font
-                                        ::vcl::unotools::pointFromB2DPoint ( point ),
+                                        vcl::unotools::pointFromB2DPoint ( point ),
                                         ::Size(),
                                         ::Color(),
                                         ::Size(),
@@ -2426,7 +2426,7 @@ namespace cppcanvas
 
                             ActionSharedPtr pTextAction(
                                     TextActionFactory::createTextAction(
-                                        ::vcl::unotools::pointFromB2DPoint ( point ),
+                                        vcl::unotools::pointFromB2DPoint ( point ),
                                         ::Size(),
                                         ::Color(),
                                         ::Size(),

@@ -25,7 +25,6 @@
 #include <svl/solar.hrc>
 #include <com/sun/star/view/XRenderable.hpp>
 
-using namespace ::vcl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

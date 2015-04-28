@@ -103,7 +103,7 @@ namespace dxcanvas
             Color aColor( COL_WHITE );
 
             if( rRenderState.DeviceColor.getLength() > 2 )
-                aColor = ::vcl::unotools::doubleSequenceToColor(
+                aColor = vcl::unotools::doubleSequenceToColor(
                     rRenderState.DeviceColor,
                     mxGraphicDevice->getDeviceColorSpace());
             aColor.SetTransparency(0);

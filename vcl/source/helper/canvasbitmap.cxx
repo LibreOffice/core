@@ -33,7 +33,7 @@
 
 #include <algorithm>
 
-using namespace ::vcl::unotools;
+using namespace vcl::unotools;
 using namespace ::com::sun::star;
 
 namespace

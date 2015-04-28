@@ -35,7 +35,7 @@ class Ruler
 public:
     Ruler (
         DrawViewShell& rViewSh,
-        ::vcl::Window* pParent,
+        vcl::Window* pParent,
         ::sd::Window* pWin,
         SvxRulerSupportFlags nRulerFlags,
         SfxBindings& rBindings,

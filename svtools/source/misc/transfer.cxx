@@ -746,7 +746,7 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
         if(rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
         {
             // write a PNG
-            ::vcl::PNGWriter aPNGWriter(rBitmapEx);
+            vcl::PNGWriter aPNGWriter(rBitmapEx);
 
             aPNGWriter.Write(aMemStm);
         }
@@ -1686,7 +1686,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
         if(!bSuppressPNG && rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
         {
             // it's a PNG, import to BitmapEx
-            ::vcl::PNGReader aPNGReader(*xStm);
+            vcl::PNGReader aPNGReader(*xStm);
 
             rBmpEx = aPNGReader.Read();
         }

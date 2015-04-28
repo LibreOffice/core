@@ -407,7 +407,7 @@ void AccessibleBase::BroadcastAccEvent(
     // send event to global message queue
     if( bSendGlobally )
     {
-        ::vcl::unohelper::NotifyAccessibleStateEventGlobally( aEvent );
+        vcl::unohelper::NotifyAccessibleStateEventGlobally( aEvent );
     }
 }
 

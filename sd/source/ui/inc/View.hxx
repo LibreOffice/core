@@ -93,7 +93,7 @@ public:
         ViewShell* pViewSh=NULL);
     virtual ~View();
 
-    void                    CompleteRedraw( OutputDevice* pOutDev, const ::vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
+    void                    CompleteRedraw( OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
 
     virtual bool            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
     virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
@@ -137,7 +137,7 @@ public:
     inline SdDrawDocument& GetDoc() const;
     inline ViewShell* GetViewShell() const { return mpViewSh; }
 
-    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::vcl::Window* pWin = 0L, bool bIsNewObj = false,
+    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, vcl::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true) SAL_OVERRIDE;
 

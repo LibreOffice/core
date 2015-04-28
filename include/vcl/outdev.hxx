@@ -940,11 +940,11 @@ public:
     void                        DrawText( const Rectangle& rRect,
                                           const OUString& rStr, sal_uInt16 nStyle = 0,
                                           MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
-                                          ::vcl::ITextLayout* _pTextLayout = NULL );
+                                          vcl::ITextLayout* _pTextLayout = NULL );
 
     static void                 ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const OUString& rOrigStr, sal_uInt16 nStyle,
-                                              MetricVector* pVector, OUString* pDisplayText, ::vcl::ITextLayout& _rLayout );
+                                              MetricVector* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
 
     void                        ImplDrawText( SalLayout& );
 
@@ -974,7 +974,7 @@ public:
     Rectangle                   GetTextRect( const Rectangle& rRect,
                                              const OUString& rStr, sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
                                              TextRectInfo* pInfo = NULL,
-                                             const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
+                                             const vcl::ITextLayout* _pTextLayout = NULL ) const;
 
     /** Return the exact bounding rectangle of rStr.
 
@@ -1157,7 +1157,7 @@ private:
     SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const vcl::Font& );
 
     static
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const vcl::ITextLayout& _rLayout );
     ///@}
 
 
@@ -1258,7 +1258,7 @@ private:
 
     static
     SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
-                                                       long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
+                                                       long nMaxWidth, sal_uInt16 nStyle, const vcl::ITextLayout& _rLayout );
 
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );

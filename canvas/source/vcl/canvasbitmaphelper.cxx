@@ -95,7 +95,7 @@ namespace vclcanvas
         if( !mpBackBuffer )
             return geometry::IntegerSize2D();
 
-        return ::vcl::unotools::integerSize2DFromSize( mpBackBuffer->getBitmapSizePixel() );
+        return vcl::unotools::integerSize2DFromSize( mpBackBuffer->getBitmapSizePixel() );
     }
 
     void CanvasBitmapHelper::clear()
@@ -118,7 +118,7 @@ namespace vclcanvas
 
         BitmapEx aRes( mpBackBuffer->getBitmapReference() );
 
-        aRes.Scale( ::vcl::unotools::sizeFromRealSize2D(newSize),
+        aRes.Scale( vcl::unotools::sizeFromRealSize2D(newSize),
                      beFast ? BMP_SCALE_DEFAULT : BMP_SCALE_BESTQUALITY );
 
         return uno::Reference< rendering::XBitmap >(

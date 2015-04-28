@@ -1344,7 +1344,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
     {
         boost::scoped_ptr<SvStream> pStream (
             ::utl::UcbStreamHelper::CreateStream (xIStream));
-        ::vcl::PNGReader aReader (*pStream);
+        vcl::PNGReader aReader (*pStream);
         aThumbnail = aReader.Read ();
     }
 

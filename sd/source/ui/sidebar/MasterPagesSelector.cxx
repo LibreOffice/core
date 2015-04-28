@@ -65,7 +65,7 @@ using namespace ::com::sun::star::text;
 namespace sd { namespace sidebar {
 
 MasterPagesSelector::MasterPagesSelector (
-    ::vcl::Window* pParent,
+    vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,

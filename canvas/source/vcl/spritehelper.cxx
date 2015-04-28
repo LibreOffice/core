@@ -114,8 +114,8 @@ namespace vclcanvas
             // rounded to integer values. From now on, only those
             // rounded values are used, to keep clip and content in
             // sync.
-            ::Size  aOutputSize( ::vcl::unotools::sizeFromB2DSize( rOrigOutputSize ) );
-            ::Point aOutPos( ::vcl::unotools::pointFromB2DPoint( rPos ) );
+            ::Size  aOutputSize( vcl::unotools::sizeFromB2DSize( rOrigOutputSize ) );
+            ::Point aOutPos( vcl::unotools::pointFromB2DPoint( rPos ) );
 
 
             // TODO(F3): Support for alpha-VDev

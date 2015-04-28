@@ -53,7 +53,7 @@ void Pane::disposing()
     mpWindow = NULL;
 }
 
-::vcl::Window* Pane::GetWindow()
+vcl::Window* Pane::GetWindow()
 {
     if (mxWindow.is())
         return mpWindow;

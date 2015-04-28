@@ -155,7 +155,7 @@ public:
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
     void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-                const ::vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
+                const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
 
     /** This is called internally when text conversion is started.
         The position of current view mode/page/object/caret position

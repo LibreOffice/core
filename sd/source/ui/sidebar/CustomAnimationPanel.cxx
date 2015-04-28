@@ -25,7 +25,7 @@
 namespace sd { namespace sidebar {
 
 CustomAnimationPanel::CustomAnimationPanel (
-    ::vcl::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::frame::XFrame>& rxFrame
     )
@@ -43,8 +43,8 @@ CustomAnimationPanel::~CustomAnimationPanel()
 {
 }
 
-::vcl::Window* CustomAnimationPanel::CreateWrappedControl (
-    ::vcl::Window* pParentWindow,
+vcl::Window* CustomAnimationPanel::CreateWrappedControl (
+    vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
 {
     return createCustomAnimationPanel(pParentWindow, rViewShellBase, mxFrame);

@@ -728,7 +728,7 @@ namespace drawinglayer
               Adding support...
               OOps, the necessary helper stuff is in svx/source/form/formpdxexport.cxx in namespace
               svxform. Have to talk to FS if this has to be like that. Especially since
-              ::vcl::PDFWriter::AnyWidget is filled out, which is already part of vcl.
+              vcl::PDFWriter::AnyWidget is filled out, which is already part of vcl.
               Wrote an eMail to FS, he is on vacation currently. I see no reason why not to move
               that stuff to somewhere else, maybe tools or svtools ?!? We will see...
               Moved to toolkit, so i have to link against it. I tried VCL first, but it did
@@ -901,7 +901,7 @@ namespace drawinglayer
                             // PDF export. Emulate data handling from UnoControlPDFExportContact
                             // I have now moved describePDFControl to toolkit, thus i can implement the PDF
                             // form control support now as follows
-                            ::std::unique_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl(
+                            ::std::unique_ptr< vcl::PDFWriter::AnyWidget > pPDFControl(
                                 ::toolkitform::describePDFControl( rXControl, *mpPDFExtOutDevData ) );
 
                             if(pPDFControl.get())

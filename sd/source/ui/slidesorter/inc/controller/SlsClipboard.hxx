@@ -70,14 +70,14 @@ public:
 
     void HandleSlotCall (SfxRequest& rRequest);
 
-    void DoCut (::vcl::Window* pWindow = 0);
-    void DoCopy (::vcl::Window* pWindow = 0);
-    void DoPaste (::vcl::Window* pWindow = 0);
-    void DoDelete (::vcl::Window* pWindow = 0);
+    void DoCut (vcl::Window* pWindow = 0);
+    void DoCopy (vcl::Window* pWindow = 0);
+    void DoPaste (vcl::Window* pWindow = 0);
+    void DoDelete (vcl::Window* pWindow = 0);
 
     void StartDrag (
         const Point& rDragPt,
-        ::vcl::Window* pWindow );
+        vcl::Window* pWindow );
 
     void DragFinished (
         sal_Int8 nDropAction);
@@ -139,7 +139,7 @@ private:
     ImplSVEvent * mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (
-        ::vcl::Window* pWindow,
+        vcl::Window* pWindow,
         bool bDrag);
 
     /** Determine the position of where to insert the pages in the current
@@ -151,7 +151,7 @@ private:
             The index in the range [0,n] (both inclusive) with n the number
             of pages is returned.
     */
-    sal_Int32 GetInsertionPosition (::vcl::Window* pWindow);
+    sal_Int32 GetInsertionPosition (vcl::Window* pWindow);
 
     /** Paste the pages of the transferable of the sd module at the given
         position.

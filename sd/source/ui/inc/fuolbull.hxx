@@ -31,7 +31,6 @@ namespace sd {
 
 class View;
 class ViewShell;
-namespace vcl { class Window; }
 
 /**
  * bullet functions in outline mode

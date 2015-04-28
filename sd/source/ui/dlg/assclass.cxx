@@ -34,7 +34,7 @@ Assistent::Assistent(int nNoOfPages)
         mpPageStatus[i] = true;
 }
 
-bool Assistent::InsertControl(int nDestPage, ::vcl::Window* pUsedControl)
+bool Assistent::InsertControl(int nDestPage, vcl::Window* pUsedControl)
 {
     DBG_ASSERT( (nDestPage > 0) && (nDestPage <= mnPages), "Page not aviable!");
 

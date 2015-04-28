@@ -2496,7 +2496,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             }
             else
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI( ::vcl::unohelper::CreateBreakIterator() );
+                ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI( vcl::unohelper::CreateBreakIterator() );
                 const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                 sal_Int32 nCurPos = 0, nLastPos = 0, nX = aPos.X();
 

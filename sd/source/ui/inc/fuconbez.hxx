@@ -27,8 +27,6 @@ class SdDrawDocument;
 
 namespace sd {
 
-namespace vcl { class Window; }
-
 class FuConstructBezierPolygon
     : public FuConstruct
 {

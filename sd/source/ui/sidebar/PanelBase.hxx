@@ -59,7 +59,7 @@ public:
     virtual void SetSidebar (const css::uno::Reference<css::ui::XSidebar>& rxSidebar) SAL_OVERRIDE;
 
 protected:
-    VclPtr< vcl::Window> mpWrappedControl;
+    VclPtr<vcl::Window> mpWrappedControl;
     virtual vcl::Window* CreateWrappedControl (
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase) = 0;

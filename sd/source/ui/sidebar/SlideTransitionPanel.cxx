@@ -25,7 +25,7 @@
 namespace sd { namespace sidebar {
 
 SlideTransitionPanel::SlideTransitionPanel (
-    ::vcl::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::frame::XFrame>& rxFrame
     )
@@ -41,8 +41,8 @@ SlideTransitionPanel::~SlideTransitionPanel()
 {
 }
 
-::vcl::Window* SlideTransitionPanel::CreateWrappedControl (
-    ::vcl::Window* pParentWindow,
+vcl::Window* SlideTransitionPanel::CreateWrappedControl (
+    vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
 {
     return createSlideTransitionPanel(pParentWindow, rViewShellBase, mxFrame);

@@ -133,8 +133,8 @@ namespace vclcanvas
 
             // calc length of bound rect diagonal
             const ::basegfx::B2DVector aBoundRectDiagonal(
-                ::vcl::unotools::b2DPointFromPoint( rBounds.TopLeft() ) -
-                ::vcl::unotools::b2DPointFromPoint( rBounds.BottomRight() ) );
+                vcl::unotools::b2DPointFromPoint( rBounds.TopLeft() ) -
+                vcl::unotools::b2DPointFromPoint( rBounds.BottomRight() ) );
             const double nDiagonalLength( aBoundRectDiagonal.getLength() );
 
             // create direction of gradient:
@@ -153,7 +153,7 @@ namespace vclcanvas
                                                              aLeftBottom,
                                                              aRightTop,
                                                              aRightBottom,
-                                                             ::vcl::unotools::b2DRectangleFromRectangle( rBounds ) );
+                                                             vcl::unotools::b2DRectangleFromRectangle( rBounds ) );
 
 
             // render gradient
@@ -643,11 +643,11 @@ namespace vclcanvas
                                                             aTextureTransform );
                 rOutDev.SetLineColor( COL_RED );
                 rOutDev.SetFillColor();
-                rOutDev.DrawRect( ::vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
+                rOutDev.DrawRect( vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
                 rOutDev.SetLineColor( COL_BLUE );
                 ::Polygon aPoly1(
-                    ::vcl::unotools::rectangleFromB2DRectangle( aRect ));
+                    vcl::unotools::rectangleFromB2DRectangle( aRect ));
                 ::basegfx::B2DPolygon aPoly2( aPoly1.getB2DPolygon() );
                 aPoly2.transform( aTextureTransform );
                 ::Polygon aPoly3( aPoly2 );
@@ -767,7 +767,7 @@ namespace vclcanvas
                                                             aTotalTransform );
 
                 const ::Rectangle aIntegerTextureDeviceRect(
-                    ::vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
+                    vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
                 if( bRectangularPolygon &&
                     aIntegerTextureDeviceRect == aPolygonDeviceRect )
@@ -911,7 +911,7 @@ namespace vclcanvas
                     // start point from it.
                     ::basegfx::B2DRectangle aTextureSpacePolygonRect;
                     ::canvas::tools::calcTransformedRectBounds( aTextureSpacePolygonRect,
-                                                                ::vcl::unotools::b2DRectangleFromRectangle(
+                                                                vcl::unotools::b2DRectangleFromRectangle(
                                                                     aPolygonDeviceRect ),
                                                                 aInverseTextureTransform );
 
@@ -939,12 +939,12 @@ namespace vclcanvas
                                                                 aSingleTextureRect,
                                                                 aPureTotalTransform );
 
-                    const ::Point aPtRepeat( ::vcl::unotools::pointFromB2DPoint(
+                    const ::Point aPtRepeat( vcl::unotools::pointFromB2DPoint(
                                                  aSingleDeviceTextureRect.getMinimum() ) );
                     const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width ),
                                        ::basegfx::fround( aScale.getY() * aBmpSize.Height ) );
-                    const ::Size  aIntegerNextTileX( ::vcl::unotools::sizeFromB2DSize(aNextTileX) );
-                    const ::Size  aIntegerNextTileY( ::vcl::unotools::sizeFromB2DSize(aNextTileY) );
+                    const ::Size  aIntegerNextTileX( vcl::unotools::sizeFromB2DSize(aNextTileX) );
+                    const ::Size  aIntegerNextTileY( vcl::unotools::sizeFromB2DSize(aNextTileY) );
 
                     const ::Point aPt( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
                                        ::basegfx::fround( aOutputPos.getX() ) : aPtRepeat.X(),

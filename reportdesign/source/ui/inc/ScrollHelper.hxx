@@ -41,7 +41,7 @@ namespace rptui
     /** This class defines the scrollable area of the report design. It includes
         the h-ruler and the sections, and end marker. Not the start marker.
     */
-    typedef ::vcl::Window OScrollWindowHelper_BASE;
+    typedef vcl::Window OScrollWindowHelper_BASE;
     class OScrollWindowHelper :     public ::cppu::BaseMutex
                                 ,   public OScrollWindowHelper_BASE/*TabPage*/
                                 ,   public ::comphelper::OPropertyChangeListener

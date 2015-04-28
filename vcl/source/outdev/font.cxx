@@ -59,7 +59,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::utl;
-using namespace ::vcl;
 
 vcl::FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
@@ -231,7 +230,7 @@ FontMetric OutputDevice::GetFontMetric() const
 FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
 {
     // select font, query metrics, select original font again
-    Font aOldFont = GetFont();
+    vcl::Font aOldFont = GetFont();
     const_cast<OutputDevice*>(this)->SetFont( rFont );
     FontMetric aMetric( GetFontMetric() );
     const_cast<OutputDevice*>(this)->SetFont( aOldFont );
@@ -265,7 +264,7 @@ bool OutputDevice::GetFontCharMap( FontCharMapPtr& rFontCharMap ) const
     return true;
 }
 
-bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) const
+bool OutputDevice::GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const
 {
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
@@ -773,8 +772,8 @@ void ImplFontSubstitute( OUString& rFontName )
 }
 
 //hidpi TODO: This routine has hard-coded font-sizes that break places such as DialControl
-Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
-                                   sal_uLong nFlags, const OutputDevice* pOutDev )
+vcl::Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
+                                        sal_uLong nFlags, const OutputDevice* pOutDev )
 {
     if (!pOutDev) // default is NULL
         pOutDev = Application::GetDefaultDevice();
@@ -793,7 +792,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
     else
         aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // use the UI font as a fallback
 
-    Font aFont;
+    vcl::Font aFont;
     aFont.SetPitch( PITCH_VARIABLE );
 
     switch ( nType )
@@ -1656,12 +1655,12 @@ bool OutputDevice::ImplNewFont() const
         if( (nNewWidth != nOrigWidth) && (nNewWidth != 0) )
         {
             Size aOrigSize = maFont.GetSize();
-            const_cast<Font&>(maFont).SetSize( Size( nNewWidth, aSize.Height() ) );
+            const_cast<vcl::Font&>(maFont).SetSize( Size( nNewWidth, aSize.Height() ) );
             mbMap = false;
             mbNewFont = true;
             ImplNewFont();  // recurse once using stretched width
             mbMap = true;
-            const_cast<Font&>(maFont).SetSize( aOrigSize );
+            const_cast<vcl::Font&>(maFont).SetSize( aOrigSize );
         }
     }
 

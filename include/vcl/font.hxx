@@ -133,8 +133,8 @@ public:
                             { return !(Font::operator==( rFont )); }
     bool                IsSameInstance( const Font& ) const;
 
-    friend VCL_DLLPUBLIC SvStream&  ::ReadFont( SvStream& rIStm, ::vcl::Font& );
-    friend VCL_DLLPUBLIC SvStream&  ::WriteFont( SvStream& rOStm, const ::vcl::Font& );
+    friend VCL_DLLPUBLIC SvStream&  ::ReadFont( SvStream& rIStm, vcl::Font& );
+    friend VCL_DLLPUBLIC SvStream&  ::WriteFont( SvStream& rOStm, const vcl::Font& );
 
     static Font identifyFont( const void* pBuffer, sal_uInt32 nLen );
 };

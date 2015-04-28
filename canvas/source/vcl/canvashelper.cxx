@@ -723,7 +723,7 @@ namespace vclcanvas
             {
                 // optimized case: identity matrix, or only
                 // translational components.
-                mpOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
+                mpOutDev->getOutDev().DrawBitmapEx( vcl::unotools::pointFromB2DPoint( aOutputPos ),
                                                     aBmpEx );
 
                 if( mp2ndOutDev )
@@ -743,7 +743,7 @@ namespace vclcanvas
                         aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetMask() );
                     }
 
-                    mp2ndOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
+                    mp2ndOutDev->getOutDev().DrawBitmapEx( vcl::unotools::pointFromB2DPoint( aOutputPos ),
                                                            aBmpEx );
                 }
 
@@ -838,7 +838,7 @@ namespace vclcanvas
                 }
 
                 // output GraphicObject
-                const ::Point aPt( ::vcl::unotools::pointFromB2DPoint( aOutputPos ) );
+                const ::Point aPt( vcl::unotools::pointFromB2DPoint( aOutputPos ) );
                 const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width() ),
                                    ::basegfx::fround( aScale.getY() * aBmpSize.Height() ) );
 
@@ -904,7 +904,7 @@ namespace vclcanvas
         if( !mpOutDev.get() )
             return geometry::IntegerSize2D(); // we're disposed
 
-        return ::vcl::unotools::integerSize2DFromSize( mpOutDev->getOutDev().GetOutputSizePixel() );
+        return vcl::unotools::integerSize2DFromSize( mpOutDev->getOutDev().GetOutputSizePixel() );
     }
 
     uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
@@ -925,7 +925,7 @@ namespace vclcanvas
 
         Bitmap aBitmap( rOutDev.GetBitmap(aEmptyPoint, aBmpSize) );
 
-        aBitmap.Scale( ::vcl::unotools::sizeFromRealSize2D(newSize),
+        aBitmap.Scale( vcl::unotools::sizeFromRealSize2D(newSize),
                        beFast ? BMP_SCALE_DEFAULT : BMP_SCALE_BESTQUALITY );
 
         return uno::Reference< rendering::XBitmap >(
@@ -941,7 +941,7 @@ namespace vclcanvas
         rLayout = getMemoryLayout();
 
         // TODO(F2): Support alpha canvas here
-        const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
+        const Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
@@ -1002,7 +1002,7 @@ namespace vclcanvas
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
 
-        const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
+        const Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
         const sal_uInt16    nBitCount( ::std::min( (sal_uInt16)24U,
                                                (sal_uInt16)rOutDev.GetBitCount() ) );
         const BitmapPalette* pPalette = NULL;
@@ -1144,7 +1144,7 @@ namespace vclcanvas
                              "Mismatching memory layout" );
 
         // TODO(F2): Support alpha canvas here
-        rOutDev.DrawPixel( ::vcl::unotools::pointFromIntegerPoint2D( pos ),
+        rOutDev.DrawPixel( vcl::unotools::pointFromIntegerPoint2D( pos ),
                            ::canvas::tools::stdIntSequenceToColor( color ));
     }
 
@@ -1175,7 +1175,7 @@ namespace vclcanvas
         // TODO(F2): Support alpha canvas here
         return ::canvas::tools::colorToStdIntSequence(
             rOutDev.GetPixel(
-                ::vcl::unotools::pointFromIntegerPoint2D( pos )));
+                vcl::unotools::pointFromIntegerPoint2D( pos )));
     }
 
     rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
@@ -1222,7 +1222,7 @@ namespace vclcanvas
 
         if( renderState.DeviceColor.getLength() > 2 )
         {
-            aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(
+            aColor = vcl::unotools::stdColorSpaceSequenceToColor(
                 renderState.DeviceColor );
         }
 
@@ -1297,7 +1297,7 @@ namespace vclcanvas
 
         if( renderState.DeviceColor.getLength() > 2 )
         {
-            aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(
+            aColor = vcl::unotools::stdColorSpaceSequenceToColor(
                 renderState.DeviceColor );
         }
 

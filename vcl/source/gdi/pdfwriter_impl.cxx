@@ -9385,7 +9385,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
 
         if ( nTextHeight )
         {
-            ::vcl::DefaultTextLayout aLayout( *m_pReferenceDevice );
+            vcl::DefaultTextLayout aLayout( *m_pReferenceDevice );
             OutputDevice::ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
             nLines = nHeight/nTextHeight;
             nFormatLines = aMultiLineInfo.Count();

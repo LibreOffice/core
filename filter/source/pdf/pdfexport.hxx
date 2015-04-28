@@ -99,7 +99,7 @@ private:
     sal_Int32               mnDefaultLinkAction;
     bool                mbConvertOOoTargetToPDFTarget;
     bool                mbExportBmkToDest;
-    bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
+    bool                ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
 
     bool                mbSignPDF;
@@ -110,7 +110,7 @@ private:
     Reference< security::XCertificate > maSignCertificate;
     OUString                msSignTSA;
 
-    void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
+    void                    ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:
 
                             PDFExport( const Reference< XComponent >& rxSrcDoc,

@@ -3795,7 +3795,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
 
     // Create canvas instance with window handle
 
-    static ::vcl::DeleteUnoReferenceOnDeinit<XMultiComponentFactory> xStaticCanvasFactory(
+    static vcl::DeleteUnoReferenceOnDeinit<XMultiComponentFactory> xStaticCanvasFactory(
         css::rendering::CanvasFactory::create( xContext ) );
     Reference<XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
 

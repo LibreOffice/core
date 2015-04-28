@@ -452,7 +452,7 @@ public:
                             sal_uInt16 nPaintFlags,
                             OutputDevice* pOut,
                             const OUString* pStr = 0,
-                            ::vcl::ControlLayoutData* _pLayoutData = NULL
+                            vcl::ControlLayoutData* _pLayoutData = NULL
                         );
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true

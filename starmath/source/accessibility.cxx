@@ -755,7 +755,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
         {
             OUString sText( getTextRange(nStartIndex, nEndIndex) );
 
-            ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
+            vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
             SolarMutexReleaser aReleaser;
             xClipboard->setContents( pDataObj, NULL );
 

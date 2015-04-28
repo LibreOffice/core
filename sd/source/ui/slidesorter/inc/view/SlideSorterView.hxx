@@ -88,7 +88,7 @@ public:
     void RequestRepaint();
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
     void RequestRepaint (const Rectangle& rRepaintBox);
-    void RequestRepaint (const ::vcl::Region& rRepaintRegion);
+    void RequestRepaint (const vcl::Region& rRepaintRegion);
 
     Rectangle GetModelArea();
 
@@ -129,7 +129,7 @@ public:
     void Resize();
     virtual void CompleteRedraw (
         OutputDevice* pDevice,
-        const ::vcl::Region& rPaintArea,
+        const vcl::Region& rPaintArea,
         sdr::contact::ViewObjectContactRedirector* pRedirector = NULL) SAL_OVERRIDE;
     void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea);
 
@@ -255,7 +255,7 @@ private:
     sal_Int32 mnButtonUnderMouse;
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
-    ::vcl::Region maRedrawRegion;
+    vcl::Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
     ::boost::scoped_ptr<ToolTip> mpToolTip;
     bool mbIsRearrangePending;

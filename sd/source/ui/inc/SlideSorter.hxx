@@ -115,7 +115,7 @@ public:
     static ::boost::shared_ptr<SlideSorter> CreateSlideSorter (
         ViewShellBase& rBase,
         ViewShell* pViewShell,
-        ::vcl::Window& rParentWindow);
+        vcl::Window& rParentWindow);
 
     /** Return the control of the vertical scroll bar.
     */
@@ -168,7 +168,7 @@ public:
         const Point& rOffset,
         const Size& rSize);
 
-    bool RelocateToWindow (::vcl::Window* pWindow);
+    bool RelocateToWindow (vcl::Window* pWindow);
 
     /** Set the current function at the view shell or, when it is not
         present, set it at the content window.  This method supports the use
@@ -246,7 +246,7 @@ private:
     SlideSorter (
         ViewShellBase& rBase,
         ViewShell* pViewShell,
-        ::vcl::Window& rParentWindow);
+        vcl::Window& rParentWindow);
 
     void Init();
     /** Create the controls for the slide sorter.  This are the tab bar
@@ -255,7 +255,7 @@ private:
        This method is usually called exactly one time from the
        constructor.
     */
-    void SetupControls (::vcl::Window* pParentWindow);
+    void SetupControls (vcl::Window* pParentWindow);
 
     /** This method is usually called exactly one time from the
         constructor.

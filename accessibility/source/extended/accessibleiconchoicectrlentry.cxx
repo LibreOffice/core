@@ -460,7 +460,7 @@ throw(RuntimeException, std::exception)
         sal_Int32 nIndex = -1;
         if ( m_pIconCtrl )
         {
-            ::vcl::ControlLayoutData aLayoutData;
+            vcl::ControlLayoutData aLayoutData;
             Rectangle aItemRect = GetBoundingBox_Impl();
             m_pIconCtrl->RecordLayoutData( &aLayoutData, aItemRect );
             Point aPnt( VCLPoint( aPoint ) );

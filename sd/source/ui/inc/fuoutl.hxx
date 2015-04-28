@@ -31,7 +31,6 @@ class OutlineView;
 class OutlineViewShell;
 class View;
 class ViewShell;
-namespace vcl { class Window; }
 
 /**
  * Base class of functions of outline mode

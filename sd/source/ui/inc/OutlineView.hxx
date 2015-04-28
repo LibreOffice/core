@@ -57,7 +57,7 @@ class OutlineView
     friend class OutlineViewModelChangeGuard;
 public:
     OutlineView (DrawDocShell& rDocSh,
-        ::vcl::Window* pWindow,
+        vcl::Window* pWindow,
         OutlineViewShell& rOutlineViewSh);
     virtual ~OutlineView();
 
@@ -80,7 +80,7 @@ public:
     virtual void AddWindowToPaintView(OutputDevice* pWin) SAL_OVERRIDE;
     virtual void DeleteWindowFromPaintView(OutputDevice* pWin) SAL_OVERRIDE;
 
-    OutlinerView*   GetViewByWindow(::vcl::Window* pWin) const;
+    OutlinerView*   GetViewByWindow(vcl::Window* pWin) const;
     SdrOutliner&    GetOutliner() { return mrOutliner; }
 
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
@@ -206,8 +206,8 @@ private:
     /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
     std::unique_ptr< OutlineViewModelChangeGuard > maDragAndDropModelGuard;
 
-    ::vcl::Font maPageNumberFont;
-    ::vcl::Font maBulletFont;
+    vcl::Font maPageNumberFont;
+    vcl::Font maBulletFont;
 
     SvxLRSpaceItem maLRSpaceItem;
     Image maSlideImage;

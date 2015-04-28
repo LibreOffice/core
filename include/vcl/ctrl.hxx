@@ -37,7 +37,7 @@ class StyleSettings;
 class VCL_DLLPUBLIC Control : public vcl::Window
 {
 protected:
-    ::vcl::ImplControlData* mpControlData;
+    vcl::ImplControlData* mpControlData;
 
 private:
     bool                    mbHasControlFocus;
@@ -61,7 +61,7 @@ protected:
     /// determines whether we currently have layout data
     bool            HasLayoutData() const;
     /// returns the current layout data
-    ::vcl::ControlLayoutData*
+    vcl::ControlLayoutData*
                     GetLayoutData() const;
 
     /** this calls both our event listeners, and a specified handler

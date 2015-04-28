@@ -34,17 +34,12 @@
 #include <svx/svxdllapi.h>
 #include <deque>
 
-class VirtualDevice;
 class OutputDevice;
-namespace vcl { class Region; }
-namespace vcl { class Window; }
 class SdrHdlList;
 class SdrMarkView;
 class SdrObject;
 class SdrPageView;
 class MouseEvent;
-
-
 
 // Every object must be able to create its handles. They will be fetched on
 // selection, registered at the View and made visible.

@@ -549,7 +549,7 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
     if (!aRet)
     {
         BitmapEx rBitmap;
-        bool res = ::vcl::ImageRepository::loadDefaultImage(rBitmap);
+        bool res = vcl::ImageRepository::loadDefaultImage(rBitmap);
         if (res)
             aRet =  Image(rBitmap);
     }

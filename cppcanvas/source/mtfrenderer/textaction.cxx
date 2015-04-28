@@ -514,7 +514,7 @@ namespace cppcanvas
                     ::canvas::tools::appendToRenderState(aShadowState, aTranslate);
 
                     aShadowState.DeviceColor =
-                        ::vcl::unotools::colorToDoubleSequence( rShadowColor,
+                        vcl::unotools::colorToDoubleSequence( rShadowColor,
                                                                 xColorSpace );
 
                     rRenderer( aShadowState );
@@ -532,7 +532,7 @@ namespace cppcanvas
                     ::canvas::tools::appendToRenderState(aReliefState, aTranslate);
 
                     aReliefState.DeviceColor =
-                        ::vcl::unotools::colorToDoubleSequence( rReliefColor,
+                        vcl::unotools::colorToDoubleSequence( rReliefColor,
                                                                 xColorSpace );
 
                     rRenderer( aReliefState );
@@ -1633,7 +1633,7 @@ namespace cppcanvas
                 maState(),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
-                    ::vcl::unotools::colorToDoubleSequence(
+                    vcl::unotools::colorToDoubleSequence(
                         ::Color( COL_WHITE ),
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
@@ -1677,7 +1677,7 @@ namespace cppcanvas
                 maState(),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
-                    ::vcl::unotools::colorToDoubleSequence(
+                    vcl::unotools::colorToDoubleSequence(
                         ::Color( COL_WHITE ),
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
@@ -1772,7 +1772,7 @@ namespace cppcanvas
                                               const rendering::ViewState&                        rViewState,
                                               double                                             nOutlineWidth ) :
                     maFillColor(
-                        ::vcl::unotools::colorToDoubleSequence(
+                        vcl::unotools::colorToDoubleSequence(
                             ::Color( COL_WHITE ),
                             rCanvas->getDevice()->getDeviceColorSpace() )),
                     mnOutlineWidth( nOutlineWidth ),
@@ -2106,9 +2106,9 @@ namespace cppcanvas
                                     rStartPoint.Y() + aBaselineOffset.Height()) );
 
             const ::basegfx::B2DSize aReliefOffset(
-                rState.mapModeTransform * ::vcl::unotools::b2DSizeFromSize( rReliefOffset ) );
+                rState.mapModeTransform * vcl::unotools::b2DSizeFromSize( rReliefOffset ) );
             const ::basegfx::B2DSize aShadowOffset(
-                rState.mapModeTransform * ::vcl::unotools::b2DSizeFromSize( rShadowOffset ) );
+                rState.mapModeTransform * vcl::unotools::b2DSizeFromSize( rShadowOffset ) );
 
             if( rState.isTextOutlineModeSet )
             {

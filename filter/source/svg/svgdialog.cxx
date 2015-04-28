@@ -33,7 +33,6 @@
 #define SVG_DIALOG_IMPLEMENTATION_NAME  SVG_DIALOG_SERVICE_NAME
 #define SVG_FILTER_DATA_NAME            "FilterData"
 
-using namespace ::vcl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

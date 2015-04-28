@@ -319,7 +319,7 @@ namespace cairocanvas
         // TODO(F1): Add support for floating point bitmap formats
         uno::Reference<rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap,
                                                                   uno::UNO_QUERY_THROW);
-        ::BitmapEx aBmpEx = ::vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+        ::BitmapEx aBmpEx = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
         if( !!aBmpEx )
             return aBmpEx;
 

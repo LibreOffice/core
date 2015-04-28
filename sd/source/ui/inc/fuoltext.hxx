@@ -25,11 +25,12 @@
 class SdDrawDocument;
 class SfxRequest;
 
+namespace vcl { class Window; }
+
 namespace sd {
 
 class View;
 class ViewShell;
-namespace vcl { class Window; }
 
 /**
  * text functions in outline mode

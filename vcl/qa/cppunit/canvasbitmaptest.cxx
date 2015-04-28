@@ -43,7 +43,7 @@
 #include "canvasbitmap.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::vcl::unotools;
+using namespace vcl::unotools;
 
 namespace com { namespace sun { namespace star { namespace rendering
 {

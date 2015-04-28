@@ -59,7 +59,7 @@ public:
     ShellDescriptor (const ShellDescriptor& rDescriptor);
     ShellDescriptor& operator= (const ShellDescriptor& rDescriptor);
     bool IsMainViewShell() const;
-    ::vcl::Window* GetWindow() const;
+    vcl::Window* GetWindow() const;
 };
 
 /** This functor can be used to search for a shell in an STL container when the
@@ -221,7 +221,7 @@ private:
     ShellDescriptor CreateSubShell (
         SfxShell* pShell,
         ShellId nShellId,
-        ::vcl::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         FrameView* pFrameView);
     void DestroyViewShell (ShellDescriptor& rDescriptor);
     void DestroySubShell (
@@ -429,7 +429,7 @@ void ViewShellManager::Implementation::ActivateViewShell (ViewShell* pViewShell)
     // window can be moved to the top of the shell stack.
     if (aResult.mpShell != NULL)
     {
-        ::vcl::Window* pWindow = aResult.GetWindow();
+        vcl::Window* pWindow = aResult.GetWindow();
         if (pWindow != NULL)
         {
             pWindow->AddEventListener(
@@ -988,7 +988,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
 {
     if (pEvent != NULL)
     {
-        ::vcl::Window* pEventWindow
+        vcl::Window* pEventWindow
             = static_cast<VclWindowEvent*>(pEvent)->GetWindow();
 
         switch (pEvent->GetId())
@@ -999,7 +999,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
                      aI!=maActiveViewShells.end();
                      ++aI)
                 {
-                    if (pEventWindow == static_cast< ::vcl::Window*>(aI->GetWindow()))
+                    if (pEventWindow == static_cast< vcl::Window*>(aI->GetWindow()))
                     {
                         MoveToTop(*aI->mpShell);
                         break;
@@ -1035,7 +1035,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
 ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
     SfxShell* pParentShell,
     ShellId nShellId,
-    ::vcl::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     FrameView* pFrameView)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -1072,7 +1072,7 @@ void ViewShellManager::Implementation::DestroyViewShell (
     if (rDescriptor.mbIsListenerAddedToWindow)
     {
         rDescriptor.mbIsListenerAddedToWindow = false;
-        ::vcl::Window* pWindow = rDescriptor.GetWindow();
+        vcl::Window* pWindow = rDescriptor.GetWindow();
         if (pWindow != NULL)
         {
             pWindow->RemoveEventListener(

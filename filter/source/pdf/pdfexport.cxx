@@ -76,7 +76,6 @@
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::vcl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -379,7 +378,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
     INetURLObject   aURL( rFile );
     bool        bRet = false;
 
-    std::set< PDFWriter::ErrorCode > aErrors;
+    std::set< vcl::PDFWriter::ErrorCode > aErrors;
 
     if( aURL.GetProtocol() != INetProtocol::File )
     {
@@ -398,7 +397,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             VCLXDevice*                 pXDevice = new VCLXDevice;
             OUString                    aPageRange;
             Any                         aSelection;
-            PDFWriter::PDFWriterContext aContext;
+            vcl::PDFWriter::PDFWriterContext aContext;
             OUString aOpenPassword, aPermissionPassword;
             Reference< beans::XMaterialHolder > xEnc;
             Sequence< beans::NamedValue > aPreparedPermissionPassword;
@@ -566,10 +565,10 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
             default:
             case 0:
-                aContext.Version    = PDFWriter::PDF_1_4;
+                aContext.Version    = vcl::PDFWriter::PDF_1_4;
                 break;
             case 1:
-                aContext.Version    = PDFWriter::PDF_A_1;
+                aContext.Version    = vcl::PDFWriter::PDF_A_1;
                 //force the tagged PDF as well
                 mbUseTaggedPDF = true;
                 //force disabling of form conversion
@@ -600,32 +599,32 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
                 default:
                 case 0:
-                    aContext.PDFDocumentMode = PDFWriter::ModeDefault;
+                    aContext.PDFDocumentMode = vcl::PDFWriter::ModeDefault;
                     break;
                 case 1:
-                    aContext.PDFDocumentMode = PDFWriter::UseOutlines;
+                    aContext.PDFDocumentMode = vcl::PDFWriter::UseOutlines;
                     break;
                 case 2:
-                    aContext.PDFDocumentMode = PDFWriter::UseThumbs;
+                    aContext.PDFDocumentMode = vcl::PDFWriter::UseThumbs;
                     break;
             }
             switch( mnPDFDocumentAction )
             {
                 default:
                 case 0:
-                    aContext.PDFDocumentAction = PDFWriter::ActionDefault;
+                    aContext.PDFDocumentAction = vcl::PDFWriter::ActionDefault;
                     break;
                 case 1:
-                    aContext.PDFDocumentAction = PDFWriter::FitInWindow;
+                    aContext.PDFDocumentAction = vcl::PDFWriter::FitInWindow;
                     break;
                 case 2:
-                    aContext.PDFDocumentAction = PDFWriter::FitWidth;
+                    aContext.PDFDocumentAction = vcl::PDFWriter::FitWidth;
                     break;
                 case 3:
-                    aContext.PDFDocumentAction = PDFWriter::FitVisible;
+                    aContext.PDFDocumentAction = vcl::PDFWriter::FitVisible;
                     break;
                 case 4:
-                    aContext.PDFDocumentAction = PDFWriter::ActionZoom;
+                    aContext.PDFDocumentAction = vcl::PDFWriter::ActionZoom;
                     aContext.Zoom = mnZoom;
                     break;
             }
@@ -634,23 +633,23 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
                 default:
                 case 0:
-                    aContext.PageLayout = PDFWriter::DefaultLayout;
+                    aContext.PageLayout = vcl::PDFWriter::DefaultLayout;
                     break;
                 case 1:
-                    aContext.PageLayout = PDFWriter::SinglePage;
+                    aContext.PageLayout = vcl::PDFWriter::SinglePage;
                     break;
                 case 2:
-                    aContext.PageLayout = PDFWriter::Continuous;
+                    aContext.PageLayout = vcl::PDFWriter::Continuous;
                     break;
                 case 3:
-                    aContext.PageLayout = PDFWriter::ContinuousFacing;
+                    aContext.PageLayout = vcl::PDFWriter::ContinuousFacing;
                     break;
             }
 
             aContext.FirstPageLeft = mbFirstPageLeft;
 
 //check if PDF/A, which does not allow encryption
-            if( aContext.Version != PDFWriter::PDF_A_1 )
+            if( aContext.Version != vcl::PDFWriter::PDF_A_1 )
             {
 //set values needed in encryption
 //set encryption level, fixed, but here it can set by the UI if needed.
@@ -712,7 +711,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aContext.Encryption.CanCopyOrExtract                = mbCanCopyOrExtract;
                 aContext.Encryption.CanExtractForAccessibility  = mbCanExtractForAccessibility;
                 if( mbEncrypt && ! xEnc.is() )
-                    xEnc = PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword, aContext.Encryption.Security128bit );
+                    xEnc = vcl::PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword, aContext.Encryption.Security128bit );
                 if( mbEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.getLength() )
                     aPreparedPermissionPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aPermissionPassword );
             }
@@ -729,17 +728,17 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             switch( mnFormsFormat )
             {
                 case 1:
-                    aContext.SubmitFormat = PDFWriter::PDF;
+                    aContext.SubmitFormat = vcl::PDFWriter::PDF;
                     break;
                 case 2:
-                    aContext.SubmitFormat = PDFWriter::HTML;
+                    aContext.SubmitFormat = vcl::PDFWriter::HTML;
                     break;
                 case 3:
-                    aContext.SubmitFormat = PDFWriter::XML;
+                    aContext.SubmitFormat = vcl::PDFWriter::XML;
                     break;
                 default:
                 case 0:
-                    aContext.SubmitFormat = PDFWriter::FDF;
+                    aContext.SubmitFormat = vcl::PDFWriter::FDF;
                     break;
             }
             aContext.AllowDuplicateFieldNames = mbAllowDuplicateFieldNames;
@@ -759,25 +758,25 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 default:
 //default: URI, without fragment conversion (the bookmark in PDF may not work)
                 case 0:
-                    aContext.DefaultLinkAction = PDFWriter::URIAction;
+                    aContext.DefaultLinkAction = vcl::PDFWriter::URIAction;
                     break;
 //view PDF through the reader application
                 case 1:
                     aContext.ForcePDFAction = true;
-                    aContext.DefaultLinkAction = PDFWriter::LaunchAction;
+                    aContext.DefaultLinkAction = vcl::PDFWriter::LaunchAction;
                     break;
 //view PDF through an Internet browser
                 case 2:
-                    aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
+                    aContext.DefaultLinkAction = vcl::PDFWriter::URIActionDestination;
                     break;
                 }
                 aContext.ConvertOOoTargetToPDFTarget = mbConvertOOoTargetToPDFTarget;
 // check for Link Launch action, not allowed on PDF/A-1
 // this code chunk checks when the filter is called from scripting
-                if( aContext.Version == PDFWriter::PDF_A_1 &&
-                    aContext.DefaultLinkAction == PDFWriter::LaunchAction )
+                if( aContext.Version == vcl::PDFWriter::PDF_A_1 &&
+                    aContext.DefaultLinkAction == vcl::PDFWriter::LaunchAction )
                 {   //force the similar allowed URI action
-                    aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
+                    aContext.DefaultLinkAction = vcl::PDFWriter::URIActionDestination;
                     //and remove the remote goto action forced on PDF file
                     aContext.ForcePDFAction = false;
                 }
@@ -792,7 +791,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.SignTSA = msSignTSA;
 
 // all context data set, time to create the printing device
-            boost::scoped_ptr<PDFWriter> pPDFWriter(new PDFWriter( aContext, xEnc ));
+            boost::scoped_ptr<vcl::PDFWriter> pPDFWriter(new vcl::PDFWriter( aContext, xEnc ));
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
@@ -980,14 +979,14 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFEr
 
 } // namespace
 
-void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
+void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors )
 {
     if( ! rErrors.empty() && mxIH.is() )
     {
         task::PDFExportException aExc;
         aExc.ErrorCodes.realloc( sal_Int32(rErrors.size()) );
         sal_Int32 i = 0;
-        for( std::set< PDFWriter::ErrorCode >::const_iterator it = rErrors.begin();
+        for( std::set< vcl::PDFWriter::ErrorCode >::const_iterator it = rErrors.begin();
              it != rErrors.end(); ++it, i++ )
         {
             aExc.ErrorCodes.getArray()[i] = (sal_Int32)*it;
@@ -999,7 +998,7 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 
 
 
-bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
+bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
     const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_POINT ) );
     Point           aOrigin;
@@ -1041,10 +1040,10 @@ bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFExtOut
 
 
 
-void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
+void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
 {
     OUString aText( "Watermark" );
-    Font aFont( OUString( "Helvetica" ), Size( 0, 3*rPageSize.Height()/4 ) );
+    vcl::Font aFont( OUString( "Helvetica" ), Size( 0, 3*rPageSize.Height()/4 ) );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );

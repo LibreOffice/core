@@ -91,7 +91,7 @@ namespace cppcanvas
                 maState()
             {
                 tools::initRenderState(maState,rState);
-                maState.DeviceColor = ::vcl::unotools::colorToDoubleSequence(
+                maState.DeviceColor = vcl::unotools::colorToDoubleSequence(
                     rAltColor,
                     rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
             }

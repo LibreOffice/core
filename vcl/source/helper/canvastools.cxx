@@ -67,7 +67,7 @@ namespace vcl
         uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx( const uno::Reference< rendering::XGraphicDevice >&    /*xGraphicDevice*/,
                                                                   const ::BitmapEx&                                     inputBitmap )
         {
-            SAL_INFO( "vcl.helper", "::vcl::unotools::xBitmapFromBitmapEx()" );
+            SAL_INFO( "vcl.helper", "vcl::unotools::xBitmapFromBitmapEx()" );
 
             return new vcl::unotools::VclCanvasBitmap( inputBitmap );
         }
@@ -183,7 +183,7 @@ namespace vcl
 
         ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
         {
-            SAL_INFO( "vcl.helper", "::vcl::unotools::bitmapExFromXBitmap()" );
+            SAL_INFO( "vcl.helper", "vcl::unotools::bitmapExFromXBitmap()" );
 
             if( !xInputBitmap.is() )
                 return ::BitmapEx();

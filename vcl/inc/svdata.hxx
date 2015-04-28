@@ -336,7 +336,7 @@ struct ImplSVData
     rtl::Reference< vcl::DisplayConnection > mxDisplayConnection;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxAccessBridge;
-    ::vcl::SettingsConfigItem* mpSettingsConfigItem;
+    vcl::SettingsConfigItem* mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList;
     std::unordered_map< int, OUString >* mpPaperNames;
 
