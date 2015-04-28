@@ -419,7 +419,7 @@ void AbstractSvxZoomDialog_Impl::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
     pDlg->SetLimits( nMin, nMax );
 }
 
-void AbstractSvxZoomDialog_Impl::HideButton( sal_uInt16 nBtnId )
+void AbstractSvxZoomDialog_Impl::HideButton( ZoomButtonId nBtnId )
 {
     pDlg->HideButton( nBtnId );
 }

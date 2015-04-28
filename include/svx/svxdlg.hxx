@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SVXDLG_HXX
 
 #include <sfx2/sfxdlg.hxx>
+#include <svx/zoom_def.hxx>
 #include <editeng/edtdlg.hxx>
 
 class SdrModel;
@@ -76,7 +77,7 @@ class AbstractSvxZoomDialog : public VclAbstractDialog
 {
  public:
     virtual void    SetLimits( sal_uInt16 nMin, sal_uInt16 nMax ) = 0;
-    virtual void    HideButton( sal_uInt16 nBtnId )= 0;
+    virtual void    HideButton( ZoomButtonId nBtnId )= 0;
     virtual const SfxItemSet*   GetOutputItemSet() const = 0 ;
 };
 

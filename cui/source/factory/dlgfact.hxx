@@ -20,6 +20,7 @@
 #define INCLUDED_CUI_SOURCE_FACTORY_DLGFACT_HXX
 
 #include <svx/svxdlg.hxx>
+#include <svx/zoom_def.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
 
 #include "tools/link.hxx"
@@ -195,7 +196,7 @@ class AbstractSvxZoomDialog_Impl : public AbstractSvxZoomDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl,SvxZoomDialog)
     virtual void    SetLimits( sal_uInt16 nMin, sal_uInt16 nMax ) SAL_OVERRIDE;
-    virtual void    HideButton( sal_uInt16 nBtnId ) SAL_OVERRIDE;
+    virtual void    HideButton( ZoomButtonId nBtnId ) SAL_OVERRIDE;
     virtual const SfxItemSet*   GetOutputItemSet() const SAL_OVERRIDE ;
 
 };

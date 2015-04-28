@@ -20,6 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_ZOOM_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <svx/zoom_def.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
@@ -62,9 +63,9 @@ public:
     const SfxItemSet* GetOutputItemSet() const;
 
     sal_uInt16 GetFactor() const;
-    void       SetFactor(sal_uInt16 nNewFactor, sal_uInt16 nButtonId = 0);
+    void       SetFactor(sal_uInt16 nNewFactor, ZoomButtonId nButtonId = ZoomButtonId::NONE);
 
-    void HideButton(sal_uInt16 nButtonId);
+    void HideButton(ZoomButtonId nButtonId);
     void SetLimits(sal_uInt16 nMin, sal_uInt16 nMax);
 };
 

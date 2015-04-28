@@ -652,7 +652,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                         boost::scoped_ptr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(NULL, aSet));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
                         pDlg->SetLimits( 20, 400 );
-                        pDlg->HideButton( ZOOMBTN_OPTIMAL );
+                        pDlg->HideButton( ZoomButtonId::OPTIMAL );
                         bCancel = ( RET_CANCEL == pDlg->Execute() );
 
                         if ( !bCancel )

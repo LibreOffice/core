@@ -49,11 +49,11 @@ sal_uInt16 SvxZoomDialog::GetFactor() const
         return SPECIAL_FACTOR;
 }
 
-void SvxZoomDialog::SetFactor(sal_uInt16 nNewFactor, sal_uInt16 nButtonId)
+void SvxZoomDialog::SetFactor(sal_uInt16 nNewFactor, ZoomButtonId nButtonId)
 {
     m_pUserEdit->Disable();
 
-    if (!nButtonId)
+    if (nButtonId == ZoomButtonId::NONE)
     {
         if ( nNewFactor == 100 )
         {
@@ -73,41 +73,42 @@ void SvxZoomDialog::SetFactor(sal_uInt16 nNewFactor, sal_uInt16 nButtonId)
         m_pUserEdit->SetValue(static_cast<long>(nNewFactor));
         switch(nButtonId)
         {
-            case ZOOMBTN_OPTIMAL:
+            case ZoomButtonId::OPTIMAL:
             {
                 m_pOptimalBtn->Check();
                 m_pOptimalBtn->GrabFocus();
                 break;
             }
-            case ZOOMBTN_PAGEWIDTH:
+            case ZoomButtonId::PAGEWIDTH:
             {
                 m_pPageWidthBtn->Check();
                 m_pPageWidthBtn->GrabFocus();
                 break;
             }
-            case ZOOMBTN_WHOLEPAGE:
+            case ZoomButtonId::WHOLEPAGE:
             {
                 m_pWholePageBtn->Check();
                 m_pWholePageBtn->GrabFocus();
                 break;
             }
+            default: break;
         }
     }
 }
 
-void SvxZoomDialog::HideButton(sal_uInt16 nButtonId)
+void SvxZoomDialog::HideButton(ZoomButtonId nButtonId)
 {
     switch (nButtonId)
     {
-        case ZOOMBTN_OPTIMAL:
+        case ZoomButtonId::OPTIMAL:
             m_pOptimalBtn->Hide();
             break;
 
-        case ZOOMBTN_PAGEWIDTH:
+        case ZoomButtonId::PAGEWIDTH:
             m_pPageWidthBtn->Hide();
             break;
 
-        case ZOOMBTN_WHOLEPAGE:
+        case ZoomButtonId::WHOLEPAGE:
             m_pWholePageBtn->Hide();
             break;
 
@@ -208,18 +209,18 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
         const sal_uInt16 nZoom = rZoomItem.GetValue();
         const SvxZoomType eType = rZoomItem.GetType();
         const SvxZoomEnableFlags nValSet = rZoomItem.GetValueSet();
-        sal_uInt16 nButtonId = 0;
+        ZoomButtonId nButtonId = ZoomButtonId::NONE;
 
         switch (eType)
         {
             case SvxZoomType::OPTIMAL:
-                nButtonId = ZOOMBTN_OPTIMAL;
+                nButtonId = ZoomButtonId::OPTIMAL;
                 break;
             case SvxZoomType::PAGEWIDTH:
-                nButtonId = ZOOMBTN_PAGEWIDTH;
+                nButtonId = ZoomButtonId::PAGEWIDTH;
                 break;
             case SvxZoomType::WHOLEPAGE:
-                nButtonId = ZOOMBTN_WHOLEPAGE;
+                nButtonId = ZoomButtonId::WHOLEPAGE;
                 break;
             case SvxZoomType::PERCENT:
                 break;
