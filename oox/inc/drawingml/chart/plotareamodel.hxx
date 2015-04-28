@@ -29,8 +29,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 struct View3DModel
 {
     OptValue< sal_Int32 > monHeightPercent; /// Height of the 3D view, relative to chart width.
@@ -44,8 +42,6 @@ struct View3DModel
                         ~View3DModel();
 };
 
-
-
 struct WallFloorModel
 {
     typedef ModelRef< Shape >               ShapeRef;
@@ -58,8 +54,6 @@ struct WallFloorModel
                         ~WallFloorModel();
 };
 
-
-
 struct DataTableModel
 {
     bool                mbShowHBorder;      /// Show Horizontal Border
@@ -68,8 +62,6 @@ struct DataTableModel
     explicit            DataTableModel();
                         ~DataTableModel();
 };
-
-
 
 struct PlotAreaModel
 {
@@ -88,8 +80,6 @@ struct PlotAreaModel
     explicit            PlotAreaModel();
                         ~PlotAreaModel();
 };
-
-
 
 } // namespace chart
 } // namespace drawingml
