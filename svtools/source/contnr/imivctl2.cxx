@@ -34,7 +34,7 @@ IcnCursor_Impl::~IcnCursor_Impl()
 }
 
 sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, long nValue,
-    int bVertical )
+    bool bVertical )
 {
     sal_uInt16 nCount = rList.size();
     if( !nCount )
@@ -85,11 +85,11 @@ void IcnCursor_Impl::ImplCreate()
             nX = sal::static_int_cast< short >(nCols - 1);
 
         SvxIconChoiceCtrlEntryPtrVec& rColEntry = (*xColumns)[nX];
-        sal_uInt16 nIns = GetSortListPos( rColEntry, rRect.Top(), sal_True );
+        sal_uInt16 nIns = GetSortListPos( rColEntry, rRect.Top(), true );
         rColEntry.insert( rColEntry.begin() + nIns, pEntry );
 
         SvxIconChoiceCtrlEntryPtrVec& rRowEntry = (*xRows)[nY];
-        nIns = GetSortListPos( rRowEntry, rRect.Left(), sal_False );
+        nIns = GetSortListPos( rRowEntry, rRect.Left(), false );
         rRowEntry.insert( rRowEntry.begin() + nIns, pEntry );
 
         pEntry->nX = nX;
@@ -497,7 +497,7 @@ void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists, SvxIconChoiceCt
             SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
             const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
-            sal_uInt16 nIns = GetSortListPos( rLists[nY], rRect.Left(), sal_False );
+            sal_uInt16 nIns = GetSortListPos( rLists[nY], rRect.Left(), false );
             rLists[ nY ].insert( rLists[ nY ].begin() + nIns, pEntry );
         }
     }
@@ -518,7 +518,7 @@ void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists, SvxIconChoiceCt
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
             if( nY == nRefRow )
             {
-                sal_uInt16 nIns = GetSortListPos( rRow, rRect.Left(), sal_False );
+                sal_uInt16 nIns = GetSortListPos( rRow, rRect.Left(), false );
                 rRow.insert( rRow.begin() + nIns, pEntry );
             }
         }

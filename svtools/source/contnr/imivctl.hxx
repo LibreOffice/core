@@ -584,7 +584,7 @@ class IcnCursor_Impl
     sal_uInt16              GetSortListPos(
                                 SvxIconChoiceCtrlEntryPtrVec& rList,
                                 long nValue,
-                                int bVertical);
+                                bool bVertical);
     SvxIconChoiceCtrlEntry* SearchCol(
                                 sal_uInt16 nCol,
                                 sal_uInt16 nTop,
