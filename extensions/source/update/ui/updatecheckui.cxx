@@ -128,8 +128,8 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
     OUString       maBubbleText;
     OUString       maBubbleImageURL;
     Image               maBubbleImage;
-    BubbleWindow*       mpBubbleWin;
-    SystemWindow*       mpIconSysWin;
+    VclPtr<BubbleWindow> mpBubbleWin;
+    VclPtr<SystemWindow> mpIconSysWin;
     MenuBar*            mpIconMBar;
     ResMgr*             mpUpdResMgr;
     ResMgr*             mpSfxResMgr;
@@ -200,8 +200,6 @@ public:
 
 UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xContext) :
       m_xContext(xContext)
-    , mpBubbleWin( NULL )
-    , mpIconSysWin( NULL )
     , mpIconMBar( NULL )
     , mbShowBubble( false )
     , mbShowMenuIcon( false )
@@ -557,8 +555,7 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 
     if ( mpBubbleWin )
     {
-        delete mpBubbleWin;
-        mpBubbleWin = NULL;
+        mpBubbleWin.disposeAndClear();
     }
 
     if ( bRemoveIcon )
@@ -709,7 +706,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     {
         SolarMutexGuard aGuard;
         if ( ( mpIconSysWin == pEvent->GetWindow() ) &&
-             ( mpBubbleWin != NULL ) && ( mpIconMBar != NULL ) )
+             mpBubbleWin && ( mpIconMBar != NULL ) )
         {
             Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
             Point aWinPos = aIconRect.BottomCenter();
