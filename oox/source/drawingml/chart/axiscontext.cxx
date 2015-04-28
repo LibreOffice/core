@@ -113,8 +113,7 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
                 case C_TOKEN( majorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMajorGridLines.create() );
                 case C_TOKEN( majorTickMark ):
-                    // default is 'out', not 'cross' as specified
-                    mrModel.mnMajorTickMark = rAttribs.getToken( XML_val, XML_out );
+                    mrModel.mnMajorTickMark = rAttribs.getToken( XML_val, bMSO2007Doc ? XML_out : XML_cross );
                     return 0;
                 case C_TOKEN( minorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMinorGridLines.create() );

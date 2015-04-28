@@ -40,7 +40,7 @@ AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mnCrossMode( XML_autoZero ),
     mnLabelAlign( XML_ctr ),
     mnLabelOffset( 100 ),
-    mnMajorTickMark( XML_out ),
+    mnMajorTickMark( bMSO2007Doc ? XML_out : XML_cross ),
     mnMajorTimeUnit( XML_days ),
     mnMinorTickMark( XML_none ),
     mnMinorTimeUnit( XML_days ),
