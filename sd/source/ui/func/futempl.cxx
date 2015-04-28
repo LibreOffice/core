@@ -206,12 +206,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             if( pStyleSheet )
             {
                 pSSPool->Remove( pStyleSheet );
-                nRetMask = sal_True;
+                nRetMask = sal_uInt16(true);
                 mpDoc->SetChanged(true);
             }
             else
             {
-                nRetMask = sal_False;
+                nRetMask = sal_uInt16(false);
             }
         break;
 
@@ -219,7 +219,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_SHOW:
             pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
             pStyleSheet->SetHidden( nSId == SID_STYLE_HIDE );
-            nRetMask = sal_True;
+            nRetMask = sal_uInt16(true);
         break;
 
         case SID_STYLE_APPLY:
