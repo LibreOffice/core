@@ -717,7 +717,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual long    StartDrag();
+    virtual bool    StartDrag();
     virtual void    Drag();
     virtual void    EndDrag();
     virtual void    Click();

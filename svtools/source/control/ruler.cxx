@@ -2287,12 +2287,12 @@ void Ruler::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-long Ruler::StartDrag()
+bool Ruler::StartDrag()
 {
     if ( maStartDragHdl.IsSet() )
         return maStartDragHdl.Call( this );
     else
-        return sal_False;
+        return false;
 }
 
 void Ruler::Drag()

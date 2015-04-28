@@ -3174,7 +3174,7 @@ void SvxRuler::CalcMinMax()
     }
 }
 
-long SvxRuler::StartDrag()
+bool SvxRuler::StartDrag()
 {
     /*
        Beginning of a drag operation (SV-handler) evaluates modifier and
@@ -3189,12 +3189,12 @@ long SvxRuler::StartDrag()
     bool bContentProtected = mxRulerImpl->aProtectItem.IsCntntProtected();
 
     if(!bValid)
-        return sal_False;
+        return false;
 
     mxRulerImpl->lLastLMargin = GetMargin1();
     mxRulerImpl->lLastRMargin = GetMargin2();
 
-    long bOk = 1;
+    bool bOk = true;
 
     if(GetStartDragHdl().IsSet())
         bOk = Ruler::StartDrag();
@@ -3215,7 +3215,7 @@ long SvxRuler::StartDrag()
                 }
                 else
                 {
-                    bOk = sal_False;
+                    bOk = false;
                 }
                 break;
             case RULER_TYPE_BORDER: // Table, column (Modifier)
@@ -3232,7 +3232,7 @@ long SvxRuler::StartDrag()
             case RULER_TYPE_INDENT: // Paragraph indents (Modifier)
             {
                 if( bContentProtected )
-                    return sal_False;
+                    return false;
                 sal_uInt16 nIndent = INDENT_LEFT_MARGIN;
                 if((nIndent) == GetDragAryPos() + INDENT_GAP) {  // Left paragraph indent
                     mpIndents[0] = mpIndents[INDENT_FIRST_LINE];
@@ -3249,7 +3249,7 @@ long SvxRuler::StartDrag()
             }
             case RULER_TYPE_TAB: // Tabs (Modifier)
                 if( bContentProtected )
-                    return sal_False;
+                    return false;
                 EvalModifier();
                 mpTabs[0] = mpTabs[GetDragAryPos() + 1];
                 mpTabs[0].nStyle |= RULER_STYLE_DONTKNOW;

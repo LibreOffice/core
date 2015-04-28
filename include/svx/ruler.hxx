@@ -212,7 +212,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 protected:
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void    Click() SAL_OVERRIDE;
-    virtual long    StartDrag() SAL_OVERRIDE;
+    virtual bool    StartDrag() SAL_OVERRIDE;
     virtual void    Drag() SAL_OVERRIDE;
     virtual void    EndDrag() SAL_OVERRIDE;
     virtual void    ExtraDown() SAL_OVERRIDE;
