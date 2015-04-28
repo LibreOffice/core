@@ -700,7 +700,7 @@ void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void StatusBar::Paint( const Rectangle& )
+void StatusBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if ( mbFormat )
         ImplFormat();

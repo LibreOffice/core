@@ -1914,7 +1914,7 @@ void ImplListBoxWindow::ImplDoPaint( const Rectangle& rRect, bool bLayout )
         ImplShowFocusRect();
 }
 
-void ImplListBoxWindow::Paint( const Rectangle& rRect )
+void ImplListBoxWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     ImplDoPaint( rRect );
 }
@@ -2766,7 +2766,7 @@ void ImplWin::ImplDraw( bool bLayout )
     }
 }
 
-void ImplWin::Paint( const Rectangle& )
+void ImplWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw();
 }

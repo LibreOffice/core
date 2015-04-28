@@ -213,7 +213,7 @@ void Window::PrePaint()
         mpViewShell->PrePaint();
 }
 
-void Window::Paint(const Rectangle& rRect)
+void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     if ( mpViewShell )
         mpViewShell->Paint(rRect, this);

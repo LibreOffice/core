@@ -166,7 +166,7 @@ void Svx3DPreviewControl::Resize()
     mpScene->SetSnapRect( aRect );
 }
 
-void Svx3DPreviewControl::Paint(const Rectangle& rRect)
+void Svx3DPreviewControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     mp3DView->CompleteRedraw(this, vcl::Region(rRect));
 }
@@ -530,7 +530,7 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
     }
 }
 
-void Svx3DLightControl::Paint(const Rectangle& rRect)
+void Svx3DLightControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     Svx3DPreviewControl::Paint(rRect);
 }

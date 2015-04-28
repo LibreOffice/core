@@ -36,7 +36,7 @@ void LineNumberWindow::dispose()
     Window::dispose();
 }
 
-void LineNumberWindow::Paint( const Rectangle& )
+void LineNumberWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if(SyncYOffset())
         return;

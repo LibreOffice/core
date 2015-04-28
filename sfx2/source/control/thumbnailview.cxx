@@ -858,7 +858,7 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
     Control::Command( rCEvt );
 }
 
-void ThumbnailView::Paint(const Rectangle &aRect)
+void ThumbnailView::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &aRect)
 {
     size_t nItemCount = mItemList.size();
 

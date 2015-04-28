@@ -81,7 +81,7 @@ public:
     virtual void    Resize() SAL_OVERRIDE;
 
 protected:
-    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

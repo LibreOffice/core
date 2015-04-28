@@ -107,7 +107,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPageWindow(vcl::Win
 
 
 
-void SvxPageWindow::Paint(const Rectangle&)
+void SvxPageWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     Fraction aXScale(aWinSize.Width(),std::max((long)(aSize.Width() * 2 + aSize.Width() / 8),1L));
     Fraction aYScale(aWinSize.Height(),std::max(aSize.Height(),1L));

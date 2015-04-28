@@ -57,7 +57,7 @@ public:
 
     virtual void Resize() SAL_OVERRIDE;
 protected:
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
     SwTableAutoFmt          aCurData;
@@ -924,7 +924,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     aVD->SetDrawMode( nOldDrawMode );
 }
 
-void AutoFmtPreview::Paint( const Rectangle& rRect )
+void AutoFmtPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     DoPaint( rRect );
 }

@@ -70,7 +70,7 @@ namespace svt
 
     protected:
         // Window overridables
-        virtual void    Paint( const Rectangle& i_rRect ) SAL_OVERRIDE;
+        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rRect ) SAL_OVERRIDE;
         virtual void    Resize() SAL_OVERRIDE;
         virtual void    MouseMove( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
         virtual void    MouseButtonDown( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;

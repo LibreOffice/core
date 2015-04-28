@@ -58,7 +58,7 @@ public:
     virtual ~SplashScreenWindow() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
     // workwindow
-    virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
 };
 
 class  SplashScreen
@@ -605,7 +605,7 @@ void SplashScreen::determineProgressRatioValues(
     }
 }
 
-void SplashScreenWindow::Paint( const Rectangle&)
+void SplashScreenWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     if (!pSpl || !pSpl->_bVisible)
         return;

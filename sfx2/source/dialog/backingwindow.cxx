@@ -381,7 +381,7 @@ void BackingWindow::setupButton( MenuButton* pButton )
     pButton->SetSelectHdl(LINK(this, BackingWindow, MenuSelectHdl));
 }
 
-void BackingWindow::Paint( const Rectangle& )
+void BackingWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Resize();
 

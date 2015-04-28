@@ -1761,7 +1761,7 @@ void Edit::FillLayoutData() const
     const_cast<Edit*>(this)->ImplRepaint(true);
 }
 
-void Edit::Paint( const Rectangle& )
+void Edit::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if ( !mpSubEdit )
         ImplRepaint();

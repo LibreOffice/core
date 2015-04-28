@@ -70,7 +70,7 @@ public:
     virtual void    SelectHdl() SAL_OVERRIDE;
     virtual bool    DoubleClickHdl() SAL_OVERRIDE;
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;

@@ -208,7 +208,7 @@ void SwSidebarWin::dispose()
     vcl::Window::dispose();
 }
 
-void SwSidebarWin::Paint( const Rectangle& rRect)
+void SwSidebarWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     Window::Paint(rRect);
 

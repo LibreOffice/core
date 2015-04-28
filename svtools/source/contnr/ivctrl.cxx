@@ -121,7 +121,7 @@ OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, bool )
     return pEntry->GetText();
 }
 
-void SvtIconChoiceCtrl::Paint( const Rectangle& rRect )
+void SvtIconChoiceCtrl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     _pImp->Paint( rRect );
 }

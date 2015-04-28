@@ -800,7 +800,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxCropExample(vcl::Wi
     return new SvxCropExample(pParent, nWinStyle);
 }
 
-void SvxCropExample::Paint( const Rectangle& )
+void SvxCropExample::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Size aWinSize( PixelToLogic(GetOutputSizePixel() ));
     SetLineColor();

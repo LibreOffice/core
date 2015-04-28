@@ -80,7 +80,7 @@ ScCornerButton::~ScCornerButton()
 {
 }
 
-void ScCornerButton::Paint( const Rectangle& rRect )
+void ScCornerButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     Size aSize = GetOutputSizePixel();
     long nPosX = aSize.Width()-1;

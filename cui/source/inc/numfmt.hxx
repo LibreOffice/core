@@ -51,7 +51,7 @@ private:
     void            InitSettings( bool bForeground, bool bBackground );
 
 protected:
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

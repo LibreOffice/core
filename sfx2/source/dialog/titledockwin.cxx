@@ -141,7 +141,7 @@ namespace sfx2
     }
 
 
-    void TitledDockingWindow::Paint( const Rectangle& i_rArea )
+    void TitledDockingWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& i_rArea )
     {
         if ( m_bLayoutPending )
             impl_layout();

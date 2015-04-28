@@ -48,7 +48,7 @@ private:
 public:
     explicit        GroupBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;

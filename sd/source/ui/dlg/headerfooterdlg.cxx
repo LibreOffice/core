@@ -77,7 +77,7 @@ public:
     PresLayoutPreview( vcl::Window* pParent );
     virtual ~PresLayoutPreview();
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void init( SdPage* pMaster );
@@ -782,7 +782,7 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
     }
 }
 
-void PresLayoutPreview::Paint( const Rectangle& )
+void PresLayoutPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Push();
 

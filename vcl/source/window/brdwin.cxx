@@ -1877,7 +1877,7 @@ void ImplBorderWindow::Tracking( const TrackingEvent& rTEvt )
     mpBorderView->Tracking( rTEvt );
 }
 
-void ImplBorderWindow::Paint( const Rectangle& )
+void ImplBorderWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     mpBorderView->DrawWindow( BORDERWINDOW_DRAW_ALL );
 }

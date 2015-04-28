@@ -318,7 +318,7 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 
 
 
-void SvxShowCharSet::Paint( const Rectangle& )
+void SvxShowCharSet::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     DrawChars_Impl( FirstInView(), LastInView() );
 }

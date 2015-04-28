@@ -1415,7 +1415,7 @@ void ValueSet::Command( const CommandEvent& rCommandEvent )
     Control::Command( rCommandEvent );
 }
 
-void ValueSet::Paint( const Rectangle& )
+void ValueSet::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if ( GetStyle() & WB_FLATVALUESET )
     {

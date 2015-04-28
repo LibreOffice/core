@@ -294,7 +294,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
 protected:
     virtual void    PrePaint() SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
 

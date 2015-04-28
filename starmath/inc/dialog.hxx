@@ -79,7 +79,7 @@ public:
 
 class SmShowFont : public vcl::Window
 {
-    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
 
 public:
     SmShowFont(vcl::Window *pParent, WinBits nStyle)
@@ -279,7 +279,7 @@ class SmShowSymbolSetWindow : public Control
     void SetScrollBarRange();
     Point OffsetPoint(const Point &rPoint) const;
 
-    virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -324,7 +324,7 @@ class SmShowSymbol : public Control
 {
     Link  aDblClickHdlLink;
 
-    virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
 
@@ -389,7 +389,7 @@ public:
 
 class SmShowChar : public Control
 {
-    virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
 
 public:

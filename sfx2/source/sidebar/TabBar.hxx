@@ -70,7 +70,7 @@ public:
     virtual ~TabBar();
     virtual void dispose() SAL_OVERRIDE;
 
-    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) SAL_OVERRIDE;
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 

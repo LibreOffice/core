@@ -58,7 +58,7 @@ OpenGLContext& OpenGLWindow::getContext()
     return mxImpl->getContext();
 }
 
-void OpenGLWindow::Paint(const Rectangle&)
+void OpenGLWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     if(mpRenderer)
         mpRenderer->update();

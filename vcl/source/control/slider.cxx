@@ -808,7 +808,7 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-void Slider::Paint( const Rectangle& )
+void Slider::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw( SLIDER_DRAW_ALL );
 }

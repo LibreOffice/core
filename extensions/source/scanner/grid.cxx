@@ -128,7 +128,7 @@ public:
 
     void ChangeMode(int nType);
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 GridWindow::GridWindow(vcl::Window* pParent)
@@ -528,7 +528,7 @@ void GridWindow::drawHandles()
     }
 }
 
-void GridWindow::Paint( const Rectangle& rRect )
+void GridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     Window::Paint(rRect);
     drawGrid();

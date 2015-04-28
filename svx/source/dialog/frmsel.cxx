@@ -1043,7 +1043,7 @@ Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) const
 }
 
 // virtual functions from base class
-void FrameSelector::Paint( const Rectangle& )
+void FrameSelector::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     mxImpl->CopyVirDevToControl();
     if( HasFocus() )

@@ -66,7 +66,7 @@ namespace vcl
             virtual ~PrintPreviewWindow();
             virtual void dispose() SAL_OVERRIDE;
 
-            virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+            virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
             virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
             virtual void Resize() SAL_OVERRIDE;
             virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
@@ -90,7 +90,7 @@ namespace vcl
 
             virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-            virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
+            virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
 
             void setValues( int i_nOrderMode, int i_nColumns, int i_nRows )
             {

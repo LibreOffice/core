@@ -39,7 +39,7 @@ public :
         vcl::Window* pParent,
         const ResId& rResId);
 
-    virtual void Paint (const Rectangle& rect) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rect) SAL_OVERRIDE;
 };
 
 } } // end of namespace svx::sidebar

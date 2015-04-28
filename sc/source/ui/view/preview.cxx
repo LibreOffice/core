@@ -624,7 +624,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     }
 }
 
-void ScPreview::Paint( const Rectangle& /* rRect */ )
+void ScPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /* rRect */ )
 {
     bool bWasInPaint = bInPaint;        // nested calls shouldn't be necessary, but allow for now
     bInPaint = true;

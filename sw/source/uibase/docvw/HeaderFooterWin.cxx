@@ -262,7 +262,7 @@ bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
     return false;
 }
 
-void SwHeaderFooterWin::Paint( const Rectangle& )
+void SwHeaderFooterWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
     drawinglayer::primitive2d::Primitive2DSequence aSeq( 3 );

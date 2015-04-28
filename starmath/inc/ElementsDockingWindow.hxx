@@ -81,7 +81,7 @@ class SmElementsControl : public Control
     static const sal_uInt16 aFormats[][2];
     static const sal_uInt16 aOthers[][2];
 
-    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 

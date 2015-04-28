@@ -89,7 +89,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwLabPreview(vcl::Wind
     return new SwLabPreview(pParent);
 }
 
-void SwLabPreview::Paint(const Rectangle &)
+void SwLabPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &)
 {
     const Size aSz(GetOutputSizePixel());
 

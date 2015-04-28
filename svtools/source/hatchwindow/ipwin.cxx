@@ -612,7 +612,7 @@ void SvResizeWindow::Resize()
 |*
 |*    Description
 *************************************************************************/
-void SvResizeWindow::Paint( const Rectangle & /*rRect*/ )
+void SvResizeWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle & /*rRect*/ )
 {
     m_aResizer.Draw( this );
 }

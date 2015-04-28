@@ -935,7 +935,7 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     }
 }
 
-void OJoinTableView::Paint( const Rectangle& rRect )
+void OJoinTableView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     DrawConnections( rRect );
 }

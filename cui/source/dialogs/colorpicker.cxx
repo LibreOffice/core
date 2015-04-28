@@ -260,7 +260,7 @@ class ColorPreviewControl : public Control
 public:
     ColorPreviewControl( vcl::Window* pParent, const WinBits& nStyle );
 
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
 
     void SetColor( const Color& rColor );
 private:
@@ -296,7 +296,7 @@ void ColorPreviewControl::SetColor( const Color& rCol )
     }
 }
 
-void ColorPreviewControl::Paint( const Rectangle& rRect )
+void ColorPreviewControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     DrawRect( rRect );
 }
@@ -315,7 +315,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -641,7 +641,7 @@ void ColorFieldControl::KeyInput( const KeyEvent& rKEvt )
     Control::KeyInput( rKEvt );
 }
 
-void ColorFieldControl::Paint( const Rectangle& rRect )
+void ColorFieldControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if( !mpBitmap )
         UpdateBitmap();
@@ -716,7 +716,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;
 
     void                UpdateBitmap();
@@ -914,7 +914,7 @@ void ColorSliderControl::KeyInput( const KeyEvent& rKEvt )
     Control::KeyInput( rKEvt );
 }
 
-void ColorSliderControl::Paint( const Rectangle& /*rRect*/ )
+void ColorSliderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
     if( !mpBitmap )
         UpdateBitmap();

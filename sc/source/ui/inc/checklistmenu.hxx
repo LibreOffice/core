@@ -55,7 +55,7 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void addMenuItem(const OUString& rText, bool bEnabled, Action* pAction);
@@ -244,7 +244,7 @@ public:
 
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 

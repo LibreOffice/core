@@ -313,7 +313,7 @@ class SwMarkPreview : public vcl::Window
     using OutputDevice::DrawRect;
     void            DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
 
-    void            Paint(const Rectangle&) SAL_OVERRIDE;
+    void            Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     void            PaintPage(const Rectangle &rRect);
     void            InitColors();
 

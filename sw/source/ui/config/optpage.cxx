@@ -1647,7 +1647,7 @@ void SwMarkPreview::DataChanged( const DataChangedEvent& rDCEvt )
         InitColors();
 }
 
-void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
+void SwMarkPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*rRect*/)
 {
     const Size aSz(GetOutputSizePixel());
 

@@ -1631,7 +1631,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
 
 
 
-void Calendar::Paint( const Rectangle& )
+void Calendar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw( true );
 }

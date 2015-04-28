@@ -74,7 +74,7 @@ public:
         Invalidate();
     }
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE
     {
@@ -321,7 +321,7 @@ IMPL_LINK_NOARG(MaskData, ExecHdl)
     return 0L;
 }
 
-void ColorWindow::Paint( const Rectangle &/*Rect*/ )
+void ColorWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*Rect*/ )
 {
     const Color& rOldLineColor = GetLineColor();
     const Color& rOldFillColor = GetFillColor();

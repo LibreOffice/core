@@ -259,7 +259,7 @@ protected:
 
     virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void GetFocus() SAL_OVERRIDE;
 

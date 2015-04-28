@@ -40,7 +40,7 @@ public:
      * Paint the ruler.
      * \param rRect ignored
      */
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
 protected:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility

@@ -1295,7 +1295,7 @@ bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangl
     return bRet;
 }
 
-void OPreviewWindow::Paint( const Rectangle& rRect )
+void OPreviewWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     Window::Paint( rRect );
 

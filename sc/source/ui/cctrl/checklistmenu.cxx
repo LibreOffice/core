@@ -239,7 +239,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
         Window::KeyInput(rKEvt);
 }
 
-void ScMenuFloatingWindow::Paint(const Rectangle& /*rRect*/)
+void ScMenuFloatingWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/)
 {
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
     Color aBackColor = rStyle.GetMenuColor();
@@ -1307,7 +1307,7 @@ bool ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
     return ScMenuFloatingWindow::Notify(rNEvt);
 }
 
-void ScCheckListMenuWindow::Paint(const Rectangle& rRect)
+void ScCheckListMenuWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     ScMenuFloatingWindow::Paint(rRect);
 

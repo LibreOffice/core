@@ -42,7 +42,7 @@ SdHtmlAttrPreview::~SdHtmlAttrPreview()
 {
 }
 
-void SdHtmlAttrPreview::Paint( const Rectangle& rRect )
+void SdHtmlAttrPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     DecorationView aDecoView( this );
 

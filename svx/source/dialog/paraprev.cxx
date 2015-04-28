@@ -57,7 +57,7 @@ Size SvxParaPrevWindow::GetOptimalSize() const
 
 
 
-void SvxParaPrevWindow::Paint( const Rectangle& )
+void SvxParaPrevWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     DrawParagraph( true );
 }

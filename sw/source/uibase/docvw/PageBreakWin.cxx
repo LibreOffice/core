@@ -135,7 +135,7 @@ void SwPageBreakWin::dispose()
     MenuButton::dispose();
 }
 
-void SwPageBreakWin::Paint( const Rectangle& )
+void SwPageBreakWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
 

@@ -63,7 +63,7 @@ public:
     */
     void ShowPanel (const Panel& rPanel);
 
-    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
@@ -76,7 +76,7 @@ public:
     {
     public:
         ScrollContainerWindow (vcl::Window* pParentWindow);
-        virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+        virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
         void SetSeparators (const ::std::vector<sal_Int32>& rSeparators);
     private:
         ::std::vector<sal_Int32> maSeparators;

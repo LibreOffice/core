@@ -518,7 +518,7 @@ void ScCsvRuler::EndMouseTracking( bool bApply )
 
 // painting -------------------------------------------------------------------
 
-void ScCsvRuler::Paint( const Rectangle& )
+void ScCsvRuler::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Repaint();
 }

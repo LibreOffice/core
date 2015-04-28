@@ -77,7 +77,7 @@ namespace dbaui
 
     protected:
         virtual void    Resize() SAL_OVERRIDE;
-        virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void    MouseMove( const MouseEvent& rEvt ) SAL_OVERRIDE;
         virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

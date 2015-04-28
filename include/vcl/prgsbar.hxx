@@ -73,7 +73,7 @@ private:
 public:
                         ProgressBar( vcl::Window* pParent, WinBits nWinBits = WB_STDPROGRESSBAR );
 
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

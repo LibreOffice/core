@@ -60,7 +60,7 @@ public:
 
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
 
     virtual void    GetFocus() SAL_OVERRIDE;
@@ -805,7 +805,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
         Window::KeyInput( rKEvent );
 }
 
-void TextWindow::Paint( const Rectangle& rRect )
+void TextWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     mpExtTextView->Paint( rRect );
 }

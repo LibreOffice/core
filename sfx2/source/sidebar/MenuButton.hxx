@@ -29,7 +29,7 @@ class MenuButton
 public:
     MenuButton (vcl::Window* pParentWindow);
 
-    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;
     virtual void MouseButtonDown (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
     virtual void MouseButtonUp (const MouseEvent& rMouseEvent) SAL_OVERRIDE;

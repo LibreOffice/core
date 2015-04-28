@@ -50,7 +50,7 @@ public:
             const Size& rRequestedSize = Size(),
             sal_uInt16 nPos = TOOLBOX_APPEND) SAL_OVERRIDE;
 
-    virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 

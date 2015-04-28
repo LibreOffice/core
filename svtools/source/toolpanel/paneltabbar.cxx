@@ -1044,7 +1044,7 @@ namespace svt
     }
 
 
-    void PanelTabBar::Paint( const Rectangle& i_rRect )
+    void PanelTabBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& i_rRect )
     {
         m_pImpl->EnsureItemsCache();
 

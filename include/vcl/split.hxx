@@ -78,7 +78,7 @@ public:
     virtual void        GetFocus() SAL_OVERRIDE;
     virtual void        LoseFocus() SAL_OVERRIDE;
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        Paint( const Rectangle& rPaintRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect ) SAL_OVERRIDE;
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

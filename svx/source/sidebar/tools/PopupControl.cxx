@@ -35,7 +35,7 @@ PopupControl::PopupControl (
     SetBackground(Theme::GetWallpaper(Theme::Paint_DropDownBackground));
 }
 
-void PopupControl::Paint (const Rectangle& rBox)
+void PopupControl::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rBox)
 {
     Control::Paint(rBox);
 

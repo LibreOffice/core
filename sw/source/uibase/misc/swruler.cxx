@@ -60,7 +60,7 @@ void SwCommentRuler::dispose()
     SvxRuler::dispose();
 }
 
-void SwCommentRuler::Paint( const Rectangle& rRect )
+void SwCommentRuler::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     SvxRuler::Paint( rRect );
     // Don't draw if there is not any note

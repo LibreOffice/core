@@ -600,7 +600,7 @@ void ScOutlineWindow::HideFocus()
     }
 }
 
-void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
+void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /* rRect */ )
 {
     long nEntriesSign = mbMirrorEntries ? -1 : 1;
     long nLevelsSign  = mbMirrorLevels  ? -1 : 1;

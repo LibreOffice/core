@@ -241,7 +241,7 @@ void GraphCtrl::Resize()
     Invalidate();
 }
 
-void GraphCtrl::Paint( const Rectangle& rRect )
+void GraphCtrl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     // #i72889# used splitted repaint to be able to paint an own background
     // even to the buffered view

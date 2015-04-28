@@ -50,7 +50,7 @@ public:
     void SetCheckHandler(const Link& _rHdl) { m_aCheckButtonHandler = _rHdl; }
 
 protected:
-    virtual void Paint(const Rectangle& _rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) SAL_OVERRIDE;
     virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
 
     SvButtonState   implDetermineState(SvTreeListEntry* _pEntry);

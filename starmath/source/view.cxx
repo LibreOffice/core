@@ -385,7 +385,7 @@ const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
     return pNode;
 }
 
-void SmGraphicWindow::Paint(const Rectangle&)
+void SmGraphicWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     SAL_WARN_IF( !pViewShell, "starmath", "view shell missing" );
 
@@ -762,7 +762,7 @@ void SmCmdBoxWindow::Resize()
     Invalidate();
 }
 
-void SmCmdBoxWindow::Paint(const Rectangle& /*rRect*/)
+void SmCmdBoxWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/)
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
     aRect.Left()   += CMD_BOX_PADDING;

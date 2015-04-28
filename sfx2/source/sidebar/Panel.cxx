@@ -130,7 +130,7 @@ bool Panel::HasIdPredicate (const ::rtl::OUString& rsId) const
     return msPanelId.equals(rsId);
 }
 
-void Panel::Paint (const Rectangle& rUpdateArea)
+void Panel::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
 {
     Window::Paint(rUpdateArea);
 }

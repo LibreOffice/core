@@ -95,7 +95,7 @@ private:
     SwFmtCol    m_aCols;
 
 protected:
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
 public:
     SwColumnOnlyExample(vcl::Window*);

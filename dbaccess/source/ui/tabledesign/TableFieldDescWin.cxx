@@ -103,7 +103,7 @@ void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
     getGenPage()->SaveData( pFieldDescr );
 }
 
-void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
+void OTableFieldDescWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
     // 3D-line at the top window border
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();

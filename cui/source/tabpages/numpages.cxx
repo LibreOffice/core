@@ -2371,7 +2371,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumberingPreview(vc
 }
 
 // paint preview of numeration
-void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
+void    SvxNumberingPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
     Size aSize(PixelToLogic(GetOutputSizePixel()));
 

@@ -1481,7 +1481,7 @@ void XMLFilterListBox::dispose()
     SvTabListBox::dispose();
 }
 
-void XMLFilterListBox::Paint( const Rectangle& rRect )
+void XMLFilterListBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     SvTabListBox::Paint( rRect );
 }

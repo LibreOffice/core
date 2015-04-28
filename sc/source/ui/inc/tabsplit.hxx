@@ -39,7 +39,7 @@ public:
                     virtual ~ScTabSplitter();
 
     void            SetFixed(bool bSet);
-    virtual void    Paint( const Rectangle& rPaintRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect ) SAL_OVERRIDE;
 };
 
 #endif

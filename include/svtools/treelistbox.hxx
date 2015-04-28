@@ -706,7 +706,7 @@ public:
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

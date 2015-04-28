@@ -40,7 +40,7 @@ public:
     void SetTitle (const ::rtl::OUString& rsTitle);
     void SetIcon (const Image& rIcon);
 
-    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual void setPosSizePixel (
         long nX,

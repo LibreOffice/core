@@ -487,7 +487,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -713,7 +713,7 @@ void ImplPopupFloatWin::DrawGrip()
         SetFillColor();
 }
 
-void ImplPopupFloatWin::Paint( const Rectangle& )
+void ImplPopupFloatWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Point aPt;
     Rectangle aRect( aPt, GetOutputSizePixel() );

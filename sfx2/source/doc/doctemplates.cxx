@@ -140,7 +140,7 @@ class WaitWindow_Impl : public WorkWindow
                      WaitWindow_Impl();
     virtual          ~WaitWindow_Impl();
     virtual void     dispose() SAL_OVERRIDE;
-    virtual void     Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void     Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
 };
 
 #define X_OFFSET 15
@@ -2459,7 +2459,7 @@ void  WaitWindow_Impl::dispose()
 }
 
 
-void WaitWindow_Impl::Paint( const Rectangle& /*rRect*/ )
+void WaitWindow_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
     DrawText( _aRect, _aText, _nTextStyle );
 }

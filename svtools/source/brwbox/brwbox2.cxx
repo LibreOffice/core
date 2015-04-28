@@ -612,7 +612,7 @@ void BrowseBox::Resize()
 
 
 
-void BrowseBox::Paint( const Rectangle& rRect )
+void BrowseBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
 
     // initializations

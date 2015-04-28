@@ -217,7 +217,7 @@ namespace svx
         virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     protected:
-        virtual void    Paint( const Rectangle& _rRect ) SAL_OVERRIDE;
+        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect ) SAL_OVERRIDE;
 
     private:
         PseudoRubyText m_aRubyText;
@@ -234,7 +234,7 @@ namespace svx
     }
 
 
-    void RubyRadioButton::Paint( const Rectangle& )
+    void RubyRadioButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
     {
         HideFocus();
 

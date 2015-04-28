@@ -41,7 +41,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     virtual void GetFocus() SAL_OVERRIDE;
-    virtual void Paint(const Rectangle& rect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect) SAL_OVERRIDE;
 
     void SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit);
     bool IsCloseByEdit() { return mbCloseByEdit;}

@@ -479,7 +479,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void  TextViewOutWin::Paint( const Rectangle& rRect )
+void  TextViewOutWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     pTextView->Paint( rRect );
 }

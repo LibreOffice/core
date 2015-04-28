@@ -115,7 +115,7 @@ Rectangle Deck::GetContentArea() const
         aWindowSize.Height() - 1 - Theme::GetInteger(Theme::Int_DeckBottomPadding) - nBorderSize);
 }
 
-void Deck::Paint (const Rectangle& rUpdateArea)
+void Deck::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
 {
     (void) rUpdateArea;
 
@@ -328,7 +328,7 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
 #endif
 }
 
-void Deck::ScrollContainerWindow::Paint (const Rectangle& rUpdateArea)
+void Deck::ScrollContainerWindow::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
 {
     (void)rUpdateArea;
 

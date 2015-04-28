@@ -150,7 +150,7 @@ void SdDocPreviewWin::ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev )
     }
 }
 
-void SdDocPreviewWin::Paint( const Rectangle& rRect )
+void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if( (!mxSlideShow.is()) || (!mxSlideShow->isRunning() ) )
     {

@@ -90,7 +90,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent & rEvt ) SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent & rEvt ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle & ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle & ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 

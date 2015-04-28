@@ -80,7 +80,7 @@ protected:
     void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
 
     virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
-    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
     virtual void StateChanged( StateChangedType eChanged ) SAL_OVERRIDE;
@@ -173,7 +173,7 @@ protected :
     // Window
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
     virtual Size CalcDockingSize(SfxChildAlignment eAlign) SAL_OVERRIDE;

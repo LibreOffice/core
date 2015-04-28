@@ -68,7 +68,7 @@ ScHintWindow::~ScHintWindow()
 {
 }
 
-void ScHintWindow::Paint( const Rectangle& /* rRect */ )
+void ScHintWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /* rRect */ )
 {
     SetFont( aHeadFont );
     DrawText( Point(HINT_MARGIN,HINT_MARGIN), aTitle );

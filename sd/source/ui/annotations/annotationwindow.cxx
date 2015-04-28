@@ -127,7 +127,7 @@ void AnnotationTextWindow::dispose()
     Control::dispose();
 }
 
-void AnnotationTextWindow::Paint( const Rectangle& rRect)
+void AnnotationTextWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
     if ( !bHighContrast )
@@ -657,7 +657,7 @@ void AnnotationWindow::Deactivate()
     Engine()->GetUndoManager().Clear();
 }
 
-void AnnotationWindow::Paint( const Rectangle& rRect)
+void AnnotationWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     FloatingWindow::Paint( rRect );
 

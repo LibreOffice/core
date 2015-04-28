@@ -73,7 +73,7 @@ void TitleBar::SetIcon (const Image& rIcon)
     Invalidate();
 }
 
-void TitleBar::Paint (const Rectangle& rUpdateArea)
+void TitleBar::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
 {
     (void)rUpdateArea;
 

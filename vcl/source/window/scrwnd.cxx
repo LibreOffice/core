@@ -286,7 +286,7 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
     return eStyle;
 }
 
-void ImplWheelWindow::Paint( const Rectangle& )
+void ImplWheelWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDrawWheel();
 }

@@ -110,7 +110,7 @@ void DialogWindow::LoseFocus()
 
 
 
-void DialogWindow::Paint( const Rectangle& rRect )
+void DialogWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     pEditor->Paint( rRect );
 }

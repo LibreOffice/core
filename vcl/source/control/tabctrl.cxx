@@ -1048,7 +1048,7 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
     Control::KeyInput( rKEvt );
 }
 
-void TabControl::Paint( const Rectangle& rRect )
+void TabControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if (  !( GetStyle() & WB_NOBORDER ) )
         ImplPaint( rRect, false );

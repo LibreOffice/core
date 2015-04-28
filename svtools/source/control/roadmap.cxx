@@ -556,7 +556,7 @@ namespace svt
     }
 
 
-    void ORoadmap::Paint( const Rectangle& _rRect )
+    void ORoadmap::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect )
     {
         Control::Paint( _rRect );
 

@@ -1010,7 +1010,7 @@ void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32
 
 // painting -------------------------------------------------------------------
 
-void ScCsvGrid::Paint( const Rectangle& )
+void ScCsvGrid::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Repaint();
 }

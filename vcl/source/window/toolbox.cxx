@@ -4014,7 +4014,7 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
     DockingWindow::Tracking( rTEvt );
 }
 
-void ToolBox::Paint( const Rectangle& rPaintRect )
+void ToolBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rPaintRect )
 {
     if( mpData->mbIsPaintLocked )
         return;

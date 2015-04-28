@@ -235,7 +235,7 @@ void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBase
         DrawRect( Rectangle( nStart, nCenterPos+1, nEnd, nBarSize-1 ) );
 }
 
-void ScHeaderControl::Paint( const Rectangle& rRect )
+void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     //  fuer VCL ist es wichtig, wenig Aufrufe zu haben, darum werden die aeusseren
     //  Linien zusammengefasst

@@ -51,7 +51,7 @@ public:
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
 protected:
-    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
 
 private:
     long            mnY;

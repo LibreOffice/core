@@ -992,7 +992,7 @@ void HeaderBar::Tracking( const TrackingEvent& rTEvt )
 
 
 
-void HeaderBar::Paint( const Rectangle& rRect )
+void HeaderBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if ( mnBorderOff1 || mnBorderOff2 )
     {

@@ -207,7 +207,7 @@ void SvxXConnectionPreview::Construct()
     AdaptSize();
 }
 
-void SvxXConnectionPreview::Paint( const Rectangle& )
+void SvxXConnectionPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if( pObjList )
     {

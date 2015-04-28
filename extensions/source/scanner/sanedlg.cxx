@@ -81,7 +81,7 @@ public:
     void EnableDrag() { mbDragEnable = true; }
     void DisableDrag() { mbDragEnable = false; }
     bool IsDragEnabled() { return mbDragEnable; }
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
@@ -914,7 +914,7 @@ void ScanPreview::UpdatePreviewBounds()
     }
 }
 
-void ScanPreview::Paint(const Rectangle& rRect)
+void ScanPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     Window::Paint(rRect);
     SetMapMode(MAP_APPFONT);

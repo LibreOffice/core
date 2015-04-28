@@ -189,7 +189,7 @@ public:
     void            NotifyChange( const Bitmap* pBitmap );
 
 protected:
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
 
@@ -323,7 +323,7 @@ void BackgroundPreviewImpl::Resize()
 
 
 
-void BackgroundPreviewImpl::Paint( const Rectangle& )
+void BackgroundPreviewImpl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));

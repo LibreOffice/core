@@ -131,7 +131,7 @@ bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangl
     return bRet;
 }
 
-void GalleryPreview::Paint( const Rectangle& rRect )
+void GalleryPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     Window::Paint( rRect );
 

@@ -43,7 +43,7 @@ private:
 
 protected:
                         DECL_LINK( TimerHdl, Timer* );
-    virtual void        Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual OUString    GetText() const SAL_OVERRIDE;
     void                ImplShow();

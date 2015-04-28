@@ -871,7 +871,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     return bDone;
 }
 
-void MenuBarWindow::Paint( const Rectangle& )
+void MenuBarWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if( ! pMenu )
         return;

@@ -46,7 +46,7 @@ void OMarkableTreeListBox::dispose()
     DBTreeListBox::dispose();
 }
 
-void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
+void OMarkableTreeListBox::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect)
 {
     if (!IsEnabled())
     {

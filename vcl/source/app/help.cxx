@@ -352,7 +352,7 @@ void HelpTextWindow::ImplShow()
     Update();
 }
 
-void HelpTextWindow::Paint( const Rectangle& )
+void HelpTextWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     // paint native background
     bool bNativeOK = false;

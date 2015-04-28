@@ -54,7 +54,7 @@ class SwLabPreview : public vcl::Window
 
     SwLabItem aItem;
 
-    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 

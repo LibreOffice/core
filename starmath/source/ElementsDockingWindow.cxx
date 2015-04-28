@@ -254,7 +254,7 @@ void SmElementsControl::setVerticalMode(bool bVerticalMode)
     mbVerticalMode = bVerticalMode;
 }
 
-void SmElementsControl::Paint(const Rectangle&)
+void SmElementsControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     Push();
 

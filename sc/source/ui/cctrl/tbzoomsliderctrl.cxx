@@ -388,7 +388,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
        Paint(aRect);
 }
 
-void ScZoomSliderWnd::Paint( const Rectangle& rRect )
+void ScZoomSliderWnd::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     DoPaint( rRect );
 }

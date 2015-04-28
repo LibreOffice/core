@@ -53,7 +53,7 @@ public:
     virtual ~Svx3DPreviewControl();
     virtual void dispose() SAL_OVERRIDE;
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -106,7 +106,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DLightControl : public Svx3DPreviewContr
 public:
     Svx3DLightControl(vcl::Window* pParent, WinBits nStyle = 0);
 
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;

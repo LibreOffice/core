@@ -86,7 +86,7 @@ public:
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
     // From vcl::Window
-    virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 
     /** Show a context menu when the right mouse button is pressed.

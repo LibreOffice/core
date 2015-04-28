@@ -278,7 +278,7 @@ void DialControl::Resize()
     InvalidateControl();
 }
 
-void DialControl::Paint( const Rectangle&  )
+void DialControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle&  )
 {
     Point aPos;
     DrawBitmapEx( aPos, mpImpl->mxBmpBuffered->GetBitmapEx( aPos, mpImpl->maWinSize ) );

@@ -49,7 +49,7 @@ namespace svt
 
     protected:
         // Window overridables
-        virtual void Paint( const Rectangle& i_rBoundingBox ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox ) SAL_OVERRIDE;
 
     private:
         ToolPanelDrawer&    m_rDrawer;

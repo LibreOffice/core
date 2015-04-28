@@ -39,7 +39,7 @@ namespace frm
     }
 
 
-    void RichTextViewPort::Paint( const Rectangle& _rRect )
+    void RichTextViewPort::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect )
     {
         m_pView->Paint( _rRect );
     }

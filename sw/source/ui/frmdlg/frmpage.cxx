@@ -2666,7 +2666,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBmpWindow(vcl::Window 
     return new BmpWindow(pParent, 0);
 }
 
-void BmpWindow::Paint( const Rectangle& )
+void BmpWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Point aPntPos;
     Size  aPntSz( GetSizePixel() );

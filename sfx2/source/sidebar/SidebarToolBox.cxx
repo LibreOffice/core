@@ -97,7 +97,7 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
     RegisterHandlers();
 }
 
-void SidebarToolBox::Paint (const Rectangle& rRect)
+void SidebarToolBox::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     ToolBox::Paint(rRect);
 

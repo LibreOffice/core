@@ -29,7 +29,7 @@ SwDashedLine::~SwDashedLine( )
 {
 }
 
-void SwDashedLine::Paint( const Rectangle& )
+void SwDashedLine::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(

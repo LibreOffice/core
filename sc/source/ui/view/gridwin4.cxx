@@ -299,7 +299,7 @@ void ScGridWindow::PrePaint()
     }
 }
 
-void ScGridWindow::Paint( const Rectangle& rRect )
+void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     if ( pDoc->IsInInterpreter() )

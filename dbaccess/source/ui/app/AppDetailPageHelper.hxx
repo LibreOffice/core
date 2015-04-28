@@ -69,7 +69,7 @@ namespace dbaui
         OPreviewWindow(vcl::Window* _pParent);
 
         // Window overrides
-        virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
     };

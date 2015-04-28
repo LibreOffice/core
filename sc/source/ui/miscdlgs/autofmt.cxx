@@ -518,7 +518,7 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     aVD->SetDrawMode( nOldDrawMode );
 }
 
-void ScAutoFmtPreview::Paint( const Rectangle& rRect )
+void ScAutoFmtPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     DoPaint( rRect );
 }

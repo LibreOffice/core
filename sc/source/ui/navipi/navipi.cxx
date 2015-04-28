@@ -727,7 +727,7 @@ void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
     }
 }
 
-void ScNavigatorDlg::Paint( const Rectangle& rRect )
+void ScNavigatorDlg::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if (mbUseStyleSettingsBackground)
     {

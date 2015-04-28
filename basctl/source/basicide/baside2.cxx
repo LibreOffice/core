@@ -256,7 +256,7 @@ void ModulWindow::DoInit()
 }
 
 
-void ModulWindow::Paint( const Rectangle& )
+void ModulWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
 }
 
@@ -1494,7 +1494,7 @@ void ModulWindowLayout::UpdateDebug (bool bBasicStopped)
     aStackWindow->UpdateCalls();
 }
 
-void ModulWindowLayout::Paint (Rectangle const&)
+void ModulWindowLayout::Paint (vcl::RenderContext& /*rRenderContext*/, Rectangle const&)
 {
     DrawText(Point(), IDEResId(RID_STR_NOMODULE).toString());
 }

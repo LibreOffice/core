@@ -103,7 +103,7 @@ private:
     using Window::SetZoom;
 
 protected:
-    virtual void   Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void   Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void   Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void   KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void   MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

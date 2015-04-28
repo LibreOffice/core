@@ -1086,7 +1086,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
     }
 }
 
-void MenuFloatingWindow::Paint( const Rectangle& )
+void MenuFloatingWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if( ! pMenu )
         return;

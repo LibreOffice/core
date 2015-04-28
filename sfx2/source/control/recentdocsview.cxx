@@ -252,7 +252,7 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
         pRecentItem->OpenDocument();
 }
 
-void RecentDocsView::Paint( const Rectangle &aRect )
+void RecentDocsView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle &aRect )
 {
     if ( mItemList.size() == 0 )
     {

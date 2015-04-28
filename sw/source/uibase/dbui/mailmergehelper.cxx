@@ -315,7 +315,7 @@ void SwAddressPreview::UpdateScrollBar()
     }
 }
 
-void SwAddressPreview::Paint(const Rectangle&)
+void SwAddressPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     SetFillColor(rSettings.GetWindowColor());

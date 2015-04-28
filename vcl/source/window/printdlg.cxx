@@ -161,7 +161,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
 }
 
-void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
+void PrintDialog::PrintPreviewWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     long nTextHeight = maHorzDim->GetTextHeight();
     Size aSize( GetSizePixel() );
@@ -322,7 +322,7 @@ Size PrintDialog::ShowNupOrderWindow::GetOptimalSize() const
     return Size(70, 70);
 }
 
-void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
+void PrintDialog::ShowNupOrderWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& i_rRect )
 {
     Window::Paint( i_rRect );
     SetMapMode( MAP_PIXEL );

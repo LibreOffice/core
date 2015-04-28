@@ -485,7 +485,7 @@ bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
     return true;
 }
 
-void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
+void ClientBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*rPaintRect*/ )
 {
     if ( !m_bInDelete )
         DeleteRemoved();

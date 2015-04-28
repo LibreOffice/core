@@ -140,7 +140,7 @@ public:
     virtual void    dispose() SAL_OVERRIDE;
 
     void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;
+    void    Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) SAL_OVERRIDE;
     void    Resize() SAL_OVERRIDE;
     Size    GetOptimalSize() const SAL_OVERRIDE;
     bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

@@ -556,7 +556,7 @@ void ScInputWindow::Select()
     }
 }
 
-void ScInputWindow::Paint( const Rectangle& rRect )
+void ScInputWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     ToolBox::Paint( rRect );
 
@@ -1176,7 +1176,7 @@ ScMultiTextWnd::~ScMultiTextWnd()
 {
 }
 
-void ScMultiTextWnd::Paint( const Rectangle& rRect )
+void ScMultiTextWnd::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     EditView* pView = GetEditView();
     if ( pView )
@@ -1514,7 +1514,7 @@ void ScTextWnd::dispose()
     ScTextWndBase::dispose();
 }
 
-void ScTextWnd::Paint( const Rectangle& rRect )
+void ScTextWnd::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if (pEditView)
         pEditView->Paint( rRect );

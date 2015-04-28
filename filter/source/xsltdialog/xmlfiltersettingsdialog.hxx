@@ -77,7 +77,7 @@ public:
 
     void changeEntry( const filter_info_impl* pInfo );
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 

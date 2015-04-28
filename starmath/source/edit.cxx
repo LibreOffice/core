@@ -531,7 +531,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     }
 }
 
-void SmEditWindow::Paint(const Rectangle& rRect)
+void SmEditWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     if (!pEditView)
         CreateEditView();

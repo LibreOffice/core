@@ -52,7 +52,7 @@ private:
     SVX_DLLPRIVATE void             InitSettings();
 
     // Window
-    SVX_DLLPRIVATE virtual void     Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void     Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual Size     GetOptimalSize() const SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void     MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void     Command(const CommandEvent& rCEvt) SAL_OVERRIDE;

@@ -42,7 +42,7 @@ protected:
     virtual void        MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void        SdrObjCreated( const SdrObject& rObj ) SAL_OVERRIDE;
     virtual void        InitSdrModel() SAL_OVERRIDE;
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
     void                CreatePolyPolygon();

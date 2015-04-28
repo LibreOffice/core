@@ -90,7 +90,7 @@ public:
     DECL_LINK( NotifyHdl, void* );
 
 protected:
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -185,7 +185,7 @@ protected:
     void SetScrollBarRange();
     void InitEditEngine();
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     DECL_LINK( NotifyHdl, EENotify* );
     DECL_LINK( ModifyHdl, EENotify* );
 private:
@@ -243,7 +243,7 @@ public:
     virtual         ~ScInputWindow();
     virtual void    dispose() SAL_OVERRIDE;
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Select() SAL_OVERRIDE;
 

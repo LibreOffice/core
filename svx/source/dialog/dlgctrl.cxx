@@ -388,7 +388,7 @@ void SvxRectCtl::DataChanged( const DataChangedEvent& rDCEvt )
 
 // the control (rectangle with 9 circles)
 
-void SvxRectCtl::Paint( const Rectangle& )
+void SvxRectCtl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Point   aPtDiff( PixelToLogic( Point( 1, 1 ) ) );
 
@@ -889,7 +889,7 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
 // Draws the Control (Rectangle with nine circles)
 
-void SvxPixelCtl::Paint( const Rectangle& )
+void SvxPixelCtl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if (!aRectSize.Width() || !aRectSize.Height())
         return;
@@ -2049,7 +2049,7 @@ void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
 
 
 
-void SvxXLinePreview::Paint( const Rectangle& )
+void SvxXLinePreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     LocalPrePaint();
 
@@ -2125,7 +2125,7 @@ void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
     mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 }
 
-void SvxXRectPreview::Paint( const Rectangle& )
+void SvxXRectPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     LocalPrePaint();
 
@@ -2198,7 +2198,7 @@ void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
     maShadowOffset = rPos;
 }
 
-void SvxXShadowPreview::Paint( const Rectangle& )
+void SvxXShadowPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     LocalPrePaint();
 

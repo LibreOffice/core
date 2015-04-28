@@ -44,7 +44,7 @@ namespace frm
         bool    GetHideInactiveSelection() const { return m_bHideInactiveSelection; }
 
     protected:
-        virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void        GetFocus() SAL_OVERRIDE;
         virtual void        LoseFocus() SAL_OVERRIDE;
         virtual void        KeyInput( const KeyEvent& _rKEvt ) SAL_OVERRIDE;

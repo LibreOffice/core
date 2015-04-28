@@ -42,7 +42,7 @@ class Printer;
 
 class SwEnvPreview : public vcl::Window
 {
-    void Paint(const Rectangle&) SAL_OVERRIDE;
+    void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
 
 public:
 

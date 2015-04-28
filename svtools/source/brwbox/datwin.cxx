@@ -318,7 +318,7 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-void BrowserDataWin::Paint( const Rectangle& rRect )
+void BrowserDataWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if ( !nUpdateLock && GetUpdateMode() )
     {

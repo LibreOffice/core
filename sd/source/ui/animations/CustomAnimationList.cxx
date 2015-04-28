@@ -921,7 +921,7 @@ void CustomAnimationList::notify_change()
     mpController->onSelect();
 }
 
-void CustomAnimationList::Paint( const Rectangle& rRect )
+void CustomAnimationList::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if( mbIgnorePaint )
         return;

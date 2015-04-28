@@ -188,7 +188,7 @@ protected:
 
     virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
     virtual void    PrePaint() SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;

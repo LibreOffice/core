@@ -60,10 +60,10 @@ public:
 
     virtual ~SfxCloseButton() {}
 
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
 };
 
-void SfxCloseButton::Paint(const Rectangle&)
+void SfxCloseButton::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     const ViewInformation2D aNewViewInfos;
     const unique_ptr<BaseProcessor2D> pProcessor(
@@ -159,7 +159,7 @@ void SfxInfoBarWindow::dispose()
     vcl::Window::dispose();
 }
 
-void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
+void SfxInfoBarWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rPaintRect)
 {
     const ViewInformation2D aNewViewInfos;
     const unique_ptr<BaseProcessor2D> pProcessor(

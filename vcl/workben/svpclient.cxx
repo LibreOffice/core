@@ -104,7 +104,7 @@ public:
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 
     virtual bool Close() SAL_OVERRIDE;
@@ -301,7 +301,7 @@ void MyWin::KeyUp( const KeyEvent& rKEvt )
     WorkWindow::KeyUp( rKEvt );
 }
 
-void MyWin::Paint( const Rectangle& rRect )
+void MyWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 }

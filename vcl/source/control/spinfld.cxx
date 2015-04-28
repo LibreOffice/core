@@ -604,7 +604,7 @@ void SpinField::FillLayoutData() const
         Edit::FillLayoutData();
 }
 
-void SpinField::Paint( const Rectangle& rRect )
+void SpinField::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if ( mbSpin )
     {

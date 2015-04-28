@@ -93,7 +93,7 @@ namespace dbaui
     {
     }
 
-    void ODataView::Paint( const Rectangle& _rRect )
+    void ODataView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect )
     {
         // draw the background
         {

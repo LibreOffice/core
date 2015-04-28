@@ -1326,7 +1326,7 @@ void PushButton::FillLayoutData() const
     const_cast<PushButton*>(this)->ImplDrawPushButton( true );
 }
 
-void PushButton::Paint( const Rectangle& )
+void PushButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDrawPushButton();
 }
@@ -2412,7 +2412,7 @@ void RadioButton::FillLayoutData() const
     const_cast<RadioButton*>(this)->ImplDrawRadioButton( true );
 }
 
-void RadioButton::Paint( const Rectangle& )
+void RadioButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDrawRadioButton();
 }
@@ -3294,7 +3294,7 @@ void CheckBox::FillLayoutData() const
     const_cast<CheckBox*>(this)->ImplDrawCheckBox( true );
 }
 
-void CheckBox::Paint( const Rectangle& )
+void CheckBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDrawCheckBox();
 }

@@ -927,7 +927,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeNumberingPreview(vcl::
 }
 
 // paint numbering's preview
-void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
+void NumberingPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
     const Size aSize(PixelToLogic(GetOutputSizePixel()));
 

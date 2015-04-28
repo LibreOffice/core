@@ -78,7 +78,7 @@ public:
     virtual void dispose() SAL_OVERRIDE { mpFixedBitmap.clear(); WorkWindow::dispose(); }
     void LoadGraphic( const OUString& sImageFile );
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 };
 
@@ -103,7 +103,7 @@ void MyWorkWindow::LoadGraphic( const OUString& sImageFile )
     }
 }
 
-void MyWorkWindow::Paint( const Rectangle& rRect )
+void MyWorkWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     std::cout << "==> Paint! " << mnPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
 

@@ -72,7 +72,7 @@ class TestWindow : public Dialog
             Show();
         }
 
-        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 };
 
 typedef boost::function1<void, OutputDevice*>   functor_type;
@@ -879,7 +879,7 @@ void outDevGrind( OutputDevice& rTarget, sal_Int32 nTurns=100 )
     }
 }
 
-void TestWindow::Paint( const Rectangle& )
+void TestWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     outDevGrind( *this );
     fflush( stdout );

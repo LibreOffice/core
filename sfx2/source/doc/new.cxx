@@ -111,7 +111,7 @@ void SfxPreviewWin_Impl::ImpPaint(
     }
 }
 
-void SfxPreviewWin_Impl::Paint( const Rectangle& rRect )
+void SfxPreviewWin_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     ImpPaint( rRect, xMetaFile.get(), this );
 }

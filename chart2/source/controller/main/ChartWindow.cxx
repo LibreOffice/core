@@ -102,7 +102,7 @@ void ChartWindow::PrePaint()
     }
 }
 
-void ChartWindow::Paint( const Rectangle& rRect )
+void ChartWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     m_bInPaint = true;
     if (m_pOpenGLWindow && m_pOpenGLWindow->IsVisible())

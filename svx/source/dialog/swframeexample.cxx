@@ -463,7 +463,7 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
     return aRect;
 }
 
-void SvxSwFrameExample::Paint(const Rectangle&)
+void SvxSwFrameExample::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     InitAllRects_Impl();
 

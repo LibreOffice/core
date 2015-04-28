@@ -262,7 +262,7 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
     return ui::LayoutSize(nPreferredHeight,nPreferredHeight,nPreferredHeight);
 }
 
-void LayoutMenu::Paint (const Rectangle& rRect)
+void LayoutMenu::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     if (mbSelectionUpdatePending)
     {

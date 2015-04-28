@@ -804,7 +804,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyPreview(vcl::Windo
     return new RubyPreview(pParent);
 }
 
-void RubyPreview::Paint( const Rectangle& /* rRect */ )
+void RubyPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /* rRect */ )
 {
     Size aWinSize = GetOutputSize();
 

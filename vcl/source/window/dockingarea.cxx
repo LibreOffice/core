@@ -159,7 +159,7 @@ WindowAlign DockingAreaWindow::GetAlign() const
     return mpImplData->meAlign;
 }
 
-void DockingAreaWindow::Paint( const Rectangle& )
+void DockingAreaWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     EnableNativeWidget( true ); // only required because the toolkit currently switches this flag off
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )

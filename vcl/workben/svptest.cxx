@@ -85,7 +85,7 @@ public:
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 };
 
@@ -220,7 +220,7 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
 }
 
 #define DELTA 5.0
-void MyWin::Paint( const Rectangle& rRect )
+void MyWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 

@@ -234,7 +234,7 @@ void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     );
 }
 
-void FixedText::Paint( const Rectangle& )
+void FixedText::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
@@ -641,7 +641,7 @@ void  FixedLine::FillLayoutData() const
     const_cast<FixedLine*>(this)->ImplDraw( true );
 }
 
-void FixedLine::Paint( const Rectangle& )
+void FixedLine::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw();
 }
@@ -773,7 +773,7 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
     }
 }
 
-void FixedBitmap::Paint( const Rectangle& )
+void FixedBitmap::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
@@ -943,7 +943,7 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     }
 }
 
-void FixedImage::Paint( const Rectangle& )
+void FixedImage::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }

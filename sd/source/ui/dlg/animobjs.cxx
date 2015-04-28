@@ -82,7 +82,7 @@ void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
     }
 }
 
-void SdDisplay::Paint( const Rectangle& )
+void SdDisplay::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Point aPt;
     Size aSize = GetOutputSize();

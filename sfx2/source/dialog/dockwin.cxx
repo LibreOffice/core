@@ -1743,7 +1743,7 @@ bool SfxDockingWindow::Close()
 
 
 
-void SfxDockingWindow::Paint(const Rectangle& /*rRect*/)
+void SfxDockingWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/)
 
 /*  [Description]
 

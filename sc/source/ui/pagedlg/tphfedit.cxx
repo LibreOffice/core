@@ -218,7 +218,7 @@ void ScEditWindow::SetCharAttriutes()
     }
 }
 
-void ScEditWindow::Paint( const Rectangle& rRect )
+void ScEditWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();

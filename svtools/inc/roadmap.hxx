@@ -52,7 +52,7 @@ namespace svt
     protected:
         RoadmapImpl*    m_pImpl;
         // Window overridables
-        void            Paint( const Rectangle& _rRect ) SAL_OVERRIDE;
+        void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect ) SAL_OVERRIDE;
         void            implInit();
 
     public:

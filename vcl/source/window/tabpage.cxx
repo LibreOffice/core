@@ -126,7 +126,7 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void TabPage::Paint( const Rectangle& )
+void TabPage::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )

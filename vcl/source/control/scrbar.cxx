@@ -1120,7 +1120,7 @@ void ScrollBar::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-void ScrollBar::Paint( const Rectangle& )
+void ScrollBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw( SCRBAR_DRAW_ALL, this );
 }

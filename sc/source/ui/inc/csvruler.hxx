@@ -141,7 +141,7 @@ private:
 
     // painting ---------------------------------------------------------------
 protected:
-    virtual void                Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
 
 public:
     /** Redraws the entire ruler. */

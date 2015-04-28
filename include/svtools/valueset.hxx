@@ -293,7 +293,7 @@ public:
     virtual void    Tracking( const TrackingEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;

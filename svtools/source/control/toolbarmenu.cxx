@@ -1483,7 +1483,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
 
 
-void ToolbarMenu::Paint( const Rectangle& )
+void ToolbarMenu::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
 

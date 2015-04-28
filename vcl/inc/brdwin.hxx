@@ -127,7 +127,7 @@ public:
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void            Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void            Activate() SAL_OVERRIDE;
     virtual void            Deactivate() SAL_OVERRIDE;
     virtual void            Resize() SAL_OVERRIDE;

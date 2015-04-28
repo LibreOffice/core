@@ -537,7 +537,7 @@ void SvHeaderTabListBox::dispose()
 
 
 
-void SvHeaderTabListBox::Paint( const Rectangle& rRect )
+void SvHeaderTabListBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if ( m_bFirstPaint )
     {

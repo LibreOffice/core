@@ -60,7 +60,7 @@ namespace svt { namespace table
         Window::dispose();
     }
 
-    void TableDataWindow::Paint( const Rectangle& rUpdateRect )
+    void TableDataWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateRect )
     {
         m_rTableControl.doPaintContent( rUpdateRect );
     }

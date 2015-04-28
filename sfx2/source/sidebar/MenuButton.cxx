@@ -39,7 +39,7 @@ MenuButton::MenuButton (vcl::Window* pParentWindow)
 #endif
 }
 
-void MenuButton::Paint (const Rectangle& rUpdateArea)
+void MenuButton::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
 {
     switch(mePaintType)
     {

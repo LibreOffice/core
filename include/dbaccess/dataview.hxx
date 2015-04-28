@@ -72,7 +72,7 @@ namespace dbaui
         void attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
     protected:
         // window overridables
-        virtual void Paint( const Rectangle& _rRect ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect ) SAL_OVERRIDE;
 
         /// re-arrange all controls, including the toolbox, it's separator, and the "real view"
         virtual void resizeAll( const Rectangle& _rPlayground );

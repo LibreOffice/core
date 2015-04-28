@@ -217,7 +217,7 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         GraphCtrl::MouseButtonUp( rMEvt );
 }
 
-void ContourWindow::Paint( const Rectangle& rRect )
+void ContourWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     // #i75482#
     // encapsulate the redraw using Begin/End and use the returned

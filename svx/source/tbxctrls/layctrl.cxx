@@ -84,7 +84,7 @@ public:
     void                    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void            Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
     virtual void            PopupModeEnd() SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 
@@ -269,7 +269,7 @@ void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 
 
-void TableWindow::Paint( const Rectangle& )
+void TableWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     const long nSelectionWidth = mnTablePosX + nCol*mnTableCellWidth;
     const long nSelectionHeight = mnTablePosY + nLine*mnTableCellHeight;
@@ -428,7 +428,7 @@ public:
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void            Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
     virtual void            PopupModeEnd() SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 };
@@ -631,7 +631,7 @@ void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 
 
-void ColumnsWindow::Paint( const Rectangle& )
+void ColumnsWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     long    i;
     long    nLineWidth;

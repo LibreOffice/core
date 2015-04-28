@@ -272,7 +272,7 @@ namespace dbaui
         virtual void MouseButtonUp( const MouseEvent& rEvt ) SAL_OVERRIDE;
         virtual void MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
         virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

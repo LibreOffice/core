@@ -43,7 +43,7 @@ class TextViewOutWin : public vcl::Window
     ExtTextView*    pTextView;
 
 protected:
-    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

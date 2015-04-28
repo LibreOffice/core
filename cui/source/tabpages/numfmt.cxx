@@ -147,7 +147,7 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 #*
 #************************************************************************/
 
-void SvxNumberPreview::Paint( const Rectangle& )
+void SvxNumberPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     vcl::Font aDrawFont   = GetFont();
     Size      aSzWnd      = GetOutputSizePixel();

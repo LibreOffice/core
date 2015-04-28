@@ -61,7 +61,7 @@ namespace dbaui
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
         virtual void LoseFocus() SAL_OVERRIDE;

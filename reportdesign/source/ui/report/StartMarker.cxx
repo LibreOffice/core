@@ -104,7 +104,7 @@ sal_Int32 OStartMarker::getMinHeight() const
     return LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() + (long)aExtraWidth;
 }
 
-void OStartMarker::Paint( const Rectangle& rRect )
+void OStartMarker::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     (void)rRect;
     Size aSize = GetOutputSizePixel();

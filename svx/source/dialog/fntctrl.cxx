@@ -621,7 +621,7 @@ void SvxFontPrevWindow::UseResourceText( bool bUse )
 
 
 
-void SvxFontPrevWindow::Paint( const Rectangle& )
+void SvxFontPrevWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     Printer* pPrinter = pImpl->pPrinter;
     const SvxFont& rFont = pImpl->aFont;

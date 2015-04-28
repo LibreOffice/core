@@ -1417,7 +1417,7 @@ public:
         mrRenderer.SetSizePixel(GetSizePixel());
         mrRenderer.KeyInput(rKEvt);
     }
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE
+    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE
     {
         mrRenderer.SetSizePixel(GetSizePixel());
         fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
@@ -1489,7 +1489,7 @@ public:
         mpButton.disposeAndClear();
         WorkWindow::dispose();
     }
-    virtual void Paint(const Rectangle&) SAL_OVERRIDE
+    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&) SAL_OVERRIDE
     {
         Rectangle aWholeSize(Point(0, 0),GetOutputSizePixel());
         vcl::Region aClip(aWholeSize);
@@ -1530,7 +1530,7 @@ class DemoPopup : public FloatingWindow
         Update();
     }
 
-    virtual void Paint( const Rectangle& ) SAL_OVERRIDE
+    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&) SAL_OVERRIDE
     {
         // Interestingly in GL mode on Windows, this doesn't render.
 

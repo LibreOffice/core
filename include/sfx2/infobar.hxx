@@ -55,7 +55,7 @@ class SfxInfoBarWindow : public vcl::Window
         virtual void dispose() SAL_OVERRIDE;
 
         const OUString& getId() const { return m_sId; }
-        virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
         virtual void Resize( ) SAL_OVERRIDE;
 
         /** Add button to Infobar.

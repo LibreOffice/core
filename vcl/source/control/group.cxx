@@ -188,7 +188,7 @@ void GroupBox::FillLayoutData() const
     const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 
-void GroupBox::Paint( const Rectangle& )
+void GroupBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }

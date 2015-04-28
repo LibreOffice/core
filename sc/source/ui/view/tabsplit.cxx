@@ -54,7 +54,7 @@ void ScTabSplitter::SetFixed(bool bSet)
         SetPointer(POINTER_VSPLIT);
 }
 
-void ScTabSplitter::Paint( const Rectangle& rRect )
+void ScTabSplitter::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     const Color oldFillCol = GetFillColor();
     const Color oldLineCol = GetLineColor();

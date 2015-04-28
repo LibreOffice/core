@@ -92,7 +92,7 @@ namespace sfx2
 
     protected:
         // Window overridables
-        virtual void Paint( const Rectangle& i_rArea ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rArea ) SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;
         virtual void StateChanged( StateChangedType i_nType ) SAL_OVERRIDE;
         virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) SAL_OVERRIDE;

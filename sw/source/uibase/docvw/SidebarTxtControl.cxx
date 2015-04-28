@@ -151,7 +151,7 @@ void SidebarTxtControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& r
     }
 }
 
-void SidebarTxtControl::Paint( const Rectangle& rRect)
+void SidebarTxtControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {

@@ -120,7 +120,7 @@ private:
     TextSelection GetLastHighlightPortionTextSelection();
 
 protected:
-    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -177,7 +177,7 @@ private:
     void setBackgroundColor(Color aColor);
 
 protected:
-    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
     BreakPoint*     FindBreakPoint( const Point& rMousePos );
     void            ShowMarker( bool bShow );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -233,7 +233,7 @@ private:
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
     DECL_LINK( ButtonHdl, ImageButton * );
     DECL_LINK(TreeListHdl, void *);
@@ -262,7 +262,7 @@ private:
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
 public:
                     StackWindow (Layout* pParent);
@@ -322,7 +322,7 @@ private:
 protected:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
     virtual void    DoInit() SAL_OVERRIDE;
     virtual void    DoScroll( ScrollBar* pCurScrollBar ) SAL_OVERRIDE;
 
@@ -439,7 +439,7 @@ public:
 
 protected:
     // Window:
-    virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     // Layout:
     virtual void OnFirstSize (long nWidth, long nHeight) SAL_OVERRIDE;
 

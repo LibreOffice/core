@@ -162,7 +162,7 @@ private:
     virtual void    dispose() SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
 
     Point           maStartPos;
     long            mnStartWidth;
@@ -221,7 +221,7 @@ void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
         ImplTrack( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
 }
 
-void ImplTabSizer::Paint( const Rectangle& )
+void ImplTabSizer::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     DecorationView aDecoView(this);
     Rectangle aOutputRect(Point(0, 0), GetOutputSizePixel());
@@ -1223,7 +1223,7 @@ private:
 
 } // anonymous namespace
 
-void TabBar::Paint( const Rectangle& rect )
+void TabBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rect )
 {
     if(IsNativeControlSupported(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL))
         DrawNativeControl(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL,rect,

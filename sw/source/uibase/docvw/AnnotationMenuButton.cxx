@@ -120,7 +120,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     MenuButton::MouseButtonDown( rMEvt );
 }
 
-void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
+void AnnotationMenuButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
     if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         SetFillColor(COL_BLACK);

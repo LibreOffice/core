@@ -146,7 +146,7 @@ namespace rptui
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
     public:
         OViewsWindow(

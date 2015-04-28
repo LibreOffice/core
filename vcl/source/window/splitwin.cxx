@@ -2514,7 +2514,7 @@ bool SplitWindow::PreNotify( NotifyEvent& rNEvt )
     return Window::PreNotify( rNEvt );
 }
 
-void SplitWindow::Paint( const Rectangle& )
+void SplitWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     if ( mnWinStyle & WB_BORDER )
         ImplDrawBorder( this );

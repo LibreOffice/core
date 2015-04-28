@@ -444,7 +444,7 @@ void SwEditWin::PrePaint()
     }
 }
 
-void  SwEditWin::Paint(const Rectangle& rRect)
+void  SwEditWin::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)

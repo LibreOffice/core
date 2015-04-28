@@ -76,7 +76,7 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 
     DECL_LINK(EditStatusHdl ,EditStatus *);
     DECL_LINK(ScrollHdl, ScrollBar *);

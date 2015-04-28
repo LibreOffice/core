@@ -300,7 +300,7 @@ void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
     }
 }
 
-void TemplateAbstractView::Paint( const Rectangle& rRect )
+void TemplateAbstractView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     ThumbnailView::Paint( rRect );
 

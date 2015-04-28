@@ -124,7 +124,7 @@ namespace avmedia
             virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
             virtual void    Resize() SAL_OVERRIDE;
             virtual void    StateChanged( StateChangedType ) SAL_OVERRIDE;
-            virtual void    Paint( const Rectangle& ) SAL_OVERRIDE; // const
+            virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE; // const
             virtual void    GetFocus() SAL_OVERRIDE;
 
             // DropTargetHelper

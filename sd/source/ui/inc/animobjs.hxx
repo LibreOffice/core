@@ -68,7 +68,7 @@ public:
     SdDisplay(vcl::Window* pWin);
     virtual ~SdDisplay();
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
     void    SetBitmapEx( BitmapEx* pBmpEx );
     void    SetScale( const Fraction& rFrac );

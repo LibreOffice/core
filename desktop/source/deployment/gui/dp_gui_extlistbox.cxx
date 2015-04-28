@@ -746,7 +746,7 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 }
 
 
-void ExtensionBox_Impl::Paint( const Rectangle &/*rPaintRect*/ )
+void ExtensionBox_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*rPaintRect*/ )
 {
     if ( !m_bInDelete )
         DeleteRemoved();

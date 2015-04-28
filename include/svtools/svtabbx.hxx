@@ -142,7 +142,7 @@ public:
     virtual ~SvHeaderTabListBox();
     virtual void dispose() SAL_OVERRIDE;
 
-    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
 
     void            InitHeaderBar( HeaderBar* pHeaderBar );
     static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );

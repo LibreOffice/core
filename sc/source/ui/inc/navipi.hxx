@@ -107,7 +107,7 @@ public:
 
 protected:
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
     VclPtr<ScScenarioListBox>   aLbScenario;
@@ -303,7 +303,7 @@ private:
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     void            Resizing( Size& rSize );
 
 public:

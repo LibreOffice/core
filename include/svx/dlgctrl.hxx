@@ -102,7 +102,7 @@ public:
     virtual ~SvxRectCtl();
     virtual void dispose() SAL_OVERRIDE;
 
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
@@ -182,7 +182,7 @@ public:
     virtual ~SvxPixelCtl();
     virtual void dispose() SAL_OVERRIDE;
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -411,7 +411,7 @@ public:
     void SetSymbol( Graphic* p, const Size& s );
     void ResizeSymbol( const Size& s );
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
@@ -434,7 +434,7 @@ public:
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 };
 
@@ -462,7 +462,7 @@ public:
     void SetShadowAttributes(const SfxItemSet& rItemSet);
     void SetShadowPosition(const Point& rPos);
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_DLGCTRL_HXX

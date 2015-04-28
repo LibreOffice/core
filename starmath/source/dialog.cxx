@@ -247,7 +247,7 @@ VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const Sfx
 /**************************************************************************/
 
 
-void SmShowFont::Paint(const Rectangle& rRect )
+void SmShowFont::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     Window::Paint( rRect );
 
@@ -1172,7 +1172,7 @@ Point SmShowSymbolSetWindow::OffsetPoint(const Point &rPoint) const
     return Point(rPoint.X() + nXOffset, rPoint.Y() + nYOffset);
 }
 
-void SmShowSymbolSetWindow::Paint(const Rectangle&)
+void SmShowSymbolSetWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     Push(PushFlags::MAPMODE);
 
@@ -1427,7 +1427,7 @@ void SmShowSymbol::setFontSize(vcl::Font &rFont) const
     rFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
 }
 
-void SmShowSymbol::Paint(const Rectangle &rRect)
+void SmShowSymbol::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &rRect)
 {
     Control::Paint( rRect );
 
@@ -1711,7 +1711,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowChar(vcl::Window
     return new SmShowChar(pParent, nWinStyle);
 }
 
-void SmShowChar::Paint(const Rectangle &rRect)
+void SmShowChar::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &rRect)
 {
     Control::Paint( rRect );
 

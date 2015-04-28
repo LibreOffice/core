@@ -348,7 +348,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwColumnOnlyExample(vc
     return new SwColumnOnlyExample(pParent);
 }
 
-void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
+void SwColumnOnlyExample::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();

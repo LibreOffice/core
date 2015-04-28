@@ -69,7 +69,7 @@ void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
 }
 
-void SwEnvPreview::Paint(const Rectangle &)
+void SwEnvPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &)
 {
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 

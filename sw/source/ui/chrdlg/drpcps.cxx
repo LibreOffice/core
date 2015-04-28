@@ -91,7 +91,7 @@ class SwDropCapsPict : public Control
     Size            maTextSize;
     Reference< css::i18n::XBreakIterator >   xBreak;
 
-    virtual void    Paint(const Rectangle &rRect) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &rRect) SAL_OVERRIDE;
     void            CheckScript();
     Size            CalcTextSize();
     inline void     InitPrinter();
@@ -345,7 +345,7 @@ void SwDropCapsPict::UpdatePaintSettings()
     Invalidate();
 }
 
-void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
+void  SwDropCapsPict::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*rRect*/)
 {
     if (!IsVisible())
         return;

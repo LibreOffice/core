@@ -64,7 +64,7 @@ protected:
     virtual bool        Docking( const Point& rPos, Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode ) SAL_OVERRIDE;
     virtual void        Resizing( Size& rSize ) SAL_OVERRIDE;
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual bool        Close() SAL_OVERRIDE;
     virtual void        Move() SAL_OVERRIDE;
 

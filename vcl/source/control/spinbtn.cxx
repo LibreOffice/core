@@ -165,7 +165,7 @@ void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-void SpinButton::Paint( const Rectangle& )
+void SpinButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     HideFocus();
 

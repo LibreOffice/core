@@ -267,7 +267,7 @@ void ThesaurusAlternativesCtrl::KeyInput( const KeyEvent& rKEvt )
         SvxCheckListBox::KeyInput( rKEvt );
 }
 
-void ThesaurusAlternativesCtrl::Paint( const Rectangle& rRect )
+void ThesaurusAlternativesCtrl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if (!m_pDialog->WordFound())
     {

@@ -145,7 +145,7 @@ void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
                     Rectangle( Point(), GetSizePixel() ) );
 }
 
-void ProgressBar::Paint( const Rectangle& )
+void ProgressBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     ImplDrawProgress( 0, mnPercent );
 }

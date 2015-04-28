@@ -79,7 +79,7 @@ void LineWidthControl::dispose()
 
 
 
-void LineWidthControl::Paint(const Rectangle& rect)
+void LineWidthControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rect)
 {
     svx::sidebar::PopupControl::Paint(rect);
 

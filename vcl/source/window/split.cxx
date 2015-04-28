@@ -697,7 +697,7 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void Splitter::Paint( const Rectangle& rPaintRect )
+void Splitter::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rPaintRect )
 {
     DrawRect( rPaintRect );
 

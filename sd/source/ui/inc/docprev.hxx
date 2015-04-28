@@ -49,7 +49,7 @@ protected:
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
     static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
     void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );

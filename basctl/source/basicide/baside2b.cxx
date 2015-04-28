@@ -915,7 +915,7 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     pEditView->GetWindow()->GrabFocus();
 }
 
-void EditorWindow::Paint( const Rectangle& rRect )
+void EditorWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     if ( !pEditEngine )     // We need it now at latest
         CreateEditEngine();
@@ -1383,7 +1383,7 @@ BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWin
     SetHelpId(HID_BASICIDE_BREAKPOINTWINDOW);
 }
 
-void BreakPointWindow::Paint( const Rectangle& )
+void BreakPointWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
     if ( SyncYOffset() )
         return;
@@ -1691,7 +1691,7 @@ void WatchWindow::dispose()
 
 
 
-void WatchWindow::Paint( const Rectangle& )
+void WatchWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     DrawText( Point( DWBORDER, 7 ), aWatchStr );
     lcl_DrawIDEWindowFrame( this );
@@ -1938,7 +1938,7 @@ void StackWindow::dispose()
 
 
 
-void StackWindow::Paint( const Rectangle& )
+void StackWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {
     DrawText( Point( DWBORDER, 7 ), aStackStr );
     lcl_DrawIDEWindowFrame( this );

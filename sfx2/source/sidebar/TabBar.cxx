@@ -79,7 +79,7 @@ void TabBar::dispose()
     vcl::Window::dispose();
 }
 
-void TabBar::Paint (const Rectangle& rUpdateArea)
+void TabBar::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
 {
     Window::Paint(rUpdateArea);
 
