@@ -1968,7 +1968,7 @@ namespace
 
                     if(nTextLength && rPropertyHolders.Current().getTextColorActive())
                     {
-                        const std::vector< double > aDXArray;
+                        const std::vector< double > aDXArray{};
                         processMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
