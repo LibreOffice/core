@@ -770,7 +770,7 @@ void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
 
     if (bIsActive != bool(bActivate))
     {
-        bIsActive = bActivate != 0;
+        bIsActive = bActivate;
         sal_Int16 nEvent = bIsActive ?
                 DictionaryEventFlags::ACTIVATE_DIC : DictionaryEventFlags::DEACTIVATE_DIC;
 
