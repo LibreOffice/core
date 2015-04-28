@@ -40,7 +40,7 @@ namespace svx
     class ODocumentLinkDialog : public ModalDialog
     {
     protected:
-        VclPtr<::svt::OFileURLControl> m_pURL;
+        VclPtr< ::svt::OFileURLControl> m_pURL;
         VclPtr<PushButton>             m_pBrowseFile;
         VclPtr<Edit>                   m_pName;
         VclPtr<OKButton>               m_pOK;

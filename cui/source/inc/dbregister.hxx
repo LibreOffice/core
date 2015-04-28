@@ -51,7 +51,7 @@ namespace svx
         VclPtr<PushButton>         m_pEdit;
         VclPtr<PushButton>         m_pDelete;
 
-        VclPtr<::svx::OptHeaderTabListBox> pPathBox;
+        VclPtr< ::svx::OptHeaderTabListBox> pPathBox;
         SvTreeListEntry*        m_pCurEntry;
         sal_uLong               m_nOldCount;
         bool                m_bModified;
