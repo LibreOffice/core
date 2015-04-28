@@ -499,9 +499,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
 		postgresql-sdbc-impl) \
 ))
 
+ifneq ($(ENABLE_PDFIMPORT),)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,pdfimport, \
 	pdfimport \
 ))
+endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,python, \
 	pythonloader \
