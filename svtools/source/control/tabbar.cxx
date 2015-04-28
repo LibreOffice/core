@@ -1909,7 +1909,7 @@ TabBarPageBits TabBar::GetPageBits( sal_uInt16 nPageId ) const
     if ( nPos != PAGE_NOT_FOUND )
         return mpImpl->mpItemList[nPos]->mnBits;
     else
-        return sal_False;
+        return 0;
 }
 
 sal_uInt16 TabBar::GetPageCount() const
