@@ -156,11 +156,36 @@ or:
 
 ---------- Who owns & disposes what ? ----------
 
-** referencing / ownership inheritance / hierarchy.
+	Window sub-classes tend to create their widgets in one of two
+ways and often both.
 
-** VclBuilder
-	+ and it's magic dispose method.
+	1. Derive from VclBuilderContainer. The VclBuilder then owns
+	   many of the sub-windows, which are fetched by a 'get'
+	   method into local variables often in constructors eg.
 
+	   VclPtr<PushButton> mpButton;  // in the class
+	   , get(mpButton, "buttonName") // in the constructor
+	   mpButton.clear();             // in dispose.
+
+	   We only clear, not disposeAndClear() in our dispose method
+	   for this case, since the VclBuilder / Container truly owns
+	   this Window, and needs to dispose its hierarchy in the
+	   right order - first children then parents.
+
+	 2. Explicitly allocated Windows. These are often created and
+	    managed by custom widgets:
+
+	    VclPtr<ComplexWidget> mpComplex;                     // in the class
+	    , mpComplex( VclPtr<ComplexWidget>::Create( this ) ) // constructor
+	    mpComplex.disposeAndClear();                         // in dispose
+
+	    ie. an owner has to dispose things they explicitly allocate.
+
+	  In order to ensure that the VclBuilderConstructor
+	  sub-classes have their Windows disposed at the correct time
+	  there is a disposeBuilder(); method - that should be added
+	  -only- to the class immediately deriving from
+	  VclBuilderContainer's dispose.
 
 ---------- What remains to be done ? ----------
 
