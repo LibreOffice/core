@@ -192,7 +192,7 @@ namespace frm
             @complexity O(log n)
             @return NULL if the given id is not a known feature id (which is a valid usage)
         */
-        const char* getFeatureURLAscii( sal_Int16 _nFeatureId );
+        static const char* getFeatureURLAscii( sal_Int16 _nFeatureId );
 
         /** retrieves the feature URL belonging to an feature id
 
@@ -210,7 +210,7 @@ namespace frm
                 the id of the feature URL, or -1 if the URl is not known
                 (which is a valid usage)
         */
-        sal_Int16   getFeatureId( const OUString& _rCompleteURL );
+        static sal_Int16 getFeatureId( const OUString& _rCompleteURL );
 
     private:
         OFormNavigationMapper( const OFormNavigationMapper& ) SAL_DELETED_FUNCTION;

@@ -138,7 +138,7 @@ namespace frm
     }
 
 
-    bool FontControlModel::isFontRelatedProperty( sal_Int32 _nPropertyHandle ) const
+    bool FontControlModel::isFontRelatedProperty( sal_Int32 _nPropertyHandle )
     {
         return isFontAggregateProperty( _nPropertyHandle )
             || ( _nPropertyHandle == PROPERTY_ID_FONT )
@@ -149,7 +149,7 @@ namespace frm
     }
 
 
-    bool FontControlModel::isFontAggregateProperty( sal_Int32 _nPropertyHandle ) const
+    bool FontControlModel::isFontAggregateProperty( sal_Int32 _nPropertyHandle )
     {
         return ( _nPropertyHandle == PROPERTY_ID_FONT_CHARWIDTH )
             || ( _nPropertyHandle == PROPERTY_ID_FONT_ORIENTATION )
@@ -186,7 +186,7 @@ namespace frm
     }
 
 
-    void FontControlModel::describeFontRelatedProperties( Sequence< Property >& /* [out] */ _rProps ) const
+    void FontControlModel::describeFontRelatedProperties( Sequence< Property >& /* [out] */ _rProps)
     {
         sal_Int32 nPos = _rProps.getLength();
         _rProps.realloc( nPos + 21 );

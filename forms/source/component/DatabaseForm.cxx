@@ -929,7 +929,7 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
 }
 
 
-void ODatabaseForm::Encode( OUString& rString ) const
+void ODatabaseForm::Encode( OUString& rString )
 {
     OUStringBuffer aResult;
 

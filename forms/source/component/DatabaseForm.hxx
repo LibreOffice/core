@@ -527,9 +527,9 @@ private:
 
     void FillSuccessfulList(HtmlSuccessfulObjList& rList, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& rxSubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
 
-    void InsertTextPart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rData);
-    bool InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
-    void Encode(OUString& rString) const;
+    static void InsertTextPart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rData);
+    static bool InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
+    static void Encode(OUString& rString);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection();
 

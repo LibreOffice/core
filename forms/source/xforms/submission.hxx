@@ -89,7 +89,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocumentFragment >
         createSubmissionDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject,
                                  bool bRemoveWSNodes = false);
-    com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument >
+    static com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument >
         getInstanceDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject);
 
 public:

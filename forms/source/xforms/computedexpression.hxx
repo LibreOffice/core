@@ -70,7 +70,7 @@ protected:
     const OUString _getExpressionForEvaluation() const { return msExpression; }
 
     /// obtain a (suitable) XPathAPI implementation
-    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
+    static com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
 
     /// evaluate the expression relative to the content node.
     bool _evaluate( const xforms::EvaluationContext& rContext,

@@ -692,7 +692,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     return aReturn;
 }
 
-OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxIFace) const
+OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxIFace)
 {
     OGridColumn* pImplementation = NULL;
     Reference< XUnoTunnel > xUnoTunnel( _rxIFace, UNO_QUERY );

@@ -140,16 +140,18 @@ namespace frm
         // iterating through item windows
         typedef void (NavigationToolBar::*ItemWindowHandler) (sal_uInt16, vcl::Window*, const void*) const;
         void    forEachItemWindow( ItemWindowHandler _handler, const void* _pParam );
+        typedef void (*ItemWindowHandler2) (sal_uInt16, vcl::Window*, const void*);
+        void    forEachItemWindow( ItemWindowHandler2 _handler, const void* _pParam );
 
-        void setItemBackground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor ) const;
-        void setTextLineColor( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor ) const;
+        static void setItemBackground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor );
+        static void setTextLineColor( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor );
 #if 0
         void setItemWindowZoom( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
 #endif
         void setItemControlFont( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
         void setItemControlForeground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
         void adjustItemWindowWidth( sal_uInt16 _nItemId, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled ) const;
+        static void enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled );
     };
 
     class RecordPositionInput : public NumericField

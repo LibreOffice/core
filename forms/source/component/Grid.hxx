@@ -184,7 +184,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  createColumn(sal_Int32 nTypeId) const;
 
-    OGridColumn* getColumnImplementation(const InterfaceRef& _rxIFace) const;
+    static OGridColumn* getColumnImplementation(const InterfaceRef& _rxIFace);
 
     virtual ElementDescription* createElementMetaData( ) SAL_OVERRIDE;
 

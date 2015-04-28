@@ -567,8 +567,18 @@ namespace frm
         }
     }
 
+    void NavigationToolBar::forEachItemWindow( ItemWindowHandler2 _handler, const void* _pParam )
+    {
+        for ( sal_uInt16 item = 0; item < m_pToolbar->GetItemCount(); ++item )
+        {
+            sal_uInt16 nItemId = m_pToolbar->GetItemId( item );
+            vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( nItemId );
+            if ( pItemWindow )
+                (*_handler)( nItemId, pItemWindow, _pParam );
+        }
+    }
 
-    void NavigationToolBar::setItemBackground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor ) const
+    void NavigationToolBar::setItemBackground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor )
     {
         if ( _pColor )
             _pItemWindow->SetControlBackground( *static_cast< const Color* >( _pColor ) );
@@ -577,7 +587,7 @@ namespace frm
     }
 
 
-    void NavigationToolBar::setTextLineColor( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor ) const
+    void NavigationToolBar::setTextLineColor( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor )
     {
         if ( _pColor )
             _pItemWindow->SetTextLineColor( *static_cast< const Color* >( _pColor ) );
@@ -642,7 +652,7 @@ namespace frm
     }
 
 
-    void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled ) const
+    void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled )
     {
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
     }

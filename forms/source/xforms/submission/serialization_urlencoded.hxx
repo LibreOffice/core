@@ -31,8 +31,8 @@ class CSerializationURLEncoded : public CSerialization
 private:
     css::uno::Reference< css::io::XPipe > m_aPipe;
 
-    bool is_unreserved(sal_Char);
-    void encode_and_append(const OUString& aString, OStringBuffer& aBuffer);
+    static bool is_unreserved(sal_Char);
+    static void encode_and_append(const OUString& aString, OStringBuffer& aBuffer);
     void serialize_node(const css::uno::Reference< css::xml::dom::XNode >& aNode);
     void serialize_nodeset();
 

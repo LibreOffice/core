@@ -323,7 +323,7 @@ private:
 
     /// get the model implementation
     xforms::Model* getModelImpl() const;
-    xforms::Model* getModelImpl( const Model_t& xModel ) const;
+    static xforms::Model* getModelImpl( const Model_t& xModel );
 
     /// get MIP evaluation contexts
     /// (only valid if control has already been bound)

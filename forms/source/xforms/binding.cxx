@@ -486,7 +486,7 @@ Model* Binding::getModelImpl() const
     return getModelImpl( mxModel );
 }
 
-Model* Binding::getModelImpl( const Model_t& xModel ) const
+Model* Binding::getModelImpl( const Model_t& xModel )
 {
     Reference<XUnoTunnel> xTunnel( xModel, UNO_QUERY );
     Model* pModel = xTunnel.is()

@@ -65,12 +65,12 @@ namespace frm
         FontControlModel( const FontControlModel* _pOriginal );
 
     protected:
-        bool     isFontRelatedProperty( sal_Int32 _nPropertyHandle ) const;
-        bool     isFontAggregateProperty( sal_Int32 _nPropertyHandle ) const;
+        static bool isFontRelatedProperty( sal_Int32 _nPropertyHandle );
+        static bool isFontAggregateProperty( sal_Int32 _nPropertyHandle );
 
         /// appends (!) the description of all font related properties to the given sequence
-        void     describeFontRelatedProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps ) const;
+        static void describeFontRelatedProperties(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps );
 
         void     getFastPropertyValue            ( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const;
         bool convertFastPropertyValue        ( ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw( ::com::sun::star::lang::IllegalArgumentException );
