@@ -197,7 +197,7 @@ void _SfxMacroTabPage::LaunchFillGroup()
 {
     if (!mpImpl->maFillGroupIdle.GetIdleHdl().IsSet())
     {
-        mpImpl->maFillGroupIdle.SetIdleHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
+        mpImpl->maFillGroupIdle.SetIdleHdl( LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
         mpImpl->maFillGroupIdle.SetPriority( SchedulerPriority::HIGHEST );
         mpImpl->maFillGroupIdle.Start();
     }
@@ -369,15 +369,15 @@ void _SfxMacroTabPage::InitAndSetHandler()
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     HeaderBar&          rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link                aLnk(STATIC_LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
+    Link                aLnk(LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pMacroLB->SetDoubleClickHdl( aLnk );
     mpImpl->pDeletePB->SetClickHdl( aLnk );
     mpImpl->pAssignPB->SetClickHdl( aLnk );
     rListBox.SetDoubleClickHdl( aLnk );
 
-    rListBox.SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectEvent_Impl ));
-    mpImpl->pGroupLB->SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectGroup_Impl ));
-    mpImpl->pMacroLB->SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectMacro_Impl ));
+    rListBox.SetSelectHdl( LINK( this, _SfxMacroTabPage, SelectEvent_Impl ));
+    mpImpl->pGroupLB->SetSelectHdl( LINK( this, _SfxMacroTabPage, SelectGroup_Impl ));
+    mpImpl->pMacroLB->SetSelectHdl( LINK( this, _SfxMacroTabPage, SelectMacro_Impl ));
 
     rListBox.SetSelectionMode( SINGLE_SELECTION );
     rListBox.SetTabs( &nTabs[0], MAP_APPFONT );

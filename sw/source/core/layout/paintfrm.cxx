@@ -1987,7 +1987,7 @@ void DrawGraphic(
                 const_cast<SvxBrushItem*>(pBrush)->SetDoneLink( Link() );
             }
             else
-                const_cast<SvxBrushItem*>(pBrush)->SetDoneLink( STATIC_LINK(
+                const_cast<SvxBrushItem*>(pBrush)->SetDoneLink( LINK(
                                     rSh.GetDoc(), SwDoc, BackgroundDone ) );
             OUString referer;
             SfxObjectShell * sh = rSh.GetDoc()->GetPersist();

@@ -1878,7 +1878,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 pExecuteInfo->nCmd            = EXEC_CMD_DOCKTOOLBAR;
                 pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
 
-                Application::PostUserEvent( STATIC_LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
+                Application::PostUserEvent( LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 
@@ -1890,7 +1890,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 pExecuteInfo->nCmd            = EXEC_CMD_DOCKALLTOOLBARS;
                 pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
 
-                Application::PostUserEvent( STATIC_LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
+                Application::PostUserEvent( LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 
@@ -1918,7 +1918,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
                 pExecuteInfo->xWindow         = VCLUnoHelper::GetInterface( m_pToolBar );
 
-                Application::PostUserEvent( STATIC_LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
+                Application::PostUserEvent( LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 

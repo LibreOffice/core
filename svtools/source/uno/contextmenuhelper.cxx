@@ -367,7 +367,7 @@ ContextMenuHelper::dispatchCommand(
         pExecuteInfo->aTargetURL   = aTargetURL;
         pExecuteInfo->aArgs        = m_aDefaultArgs;
 
-        Application::PostUserEvent( STATIC_LINK(0, ContextMenuHelper , ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK(0, ContextMenuHelper , ExecuteHdl_Impl), pExecuteInfo );
         return true;
     }
 

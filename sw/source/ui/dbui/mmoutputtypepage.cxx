@@ -540,7 +540,7 @@ void  SwSendMailDialog::IterateMails()
 
 void SwSendMailDialog::ShowDialog()
 {
-    Application::PostUserEvent( STATIC_LINK( this, SwSendMailDialog,
+    Application::PostUserEvent( LINK( this, SwSendMailDialog,
                                                 StartSendMails ), this );
     ModelessDialog::Show();
 }
@@ -550,7 +550,7 @@ void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
     ModelessDialog::StateChanged( nStateChange );
     if(StateChangedType::VISIBLE == nStateChange && !IsVisible())
     {
-        m_pImpl->aRemoveIdle.SetIdleHdl( STATIC_LINK( this, SwSendMailDialog,
+        m_pImpl->aRemoveIdle.SetIdleHdl( LINK( this, SwSendMailDialog,
                                                     RemoveThis ) );
         m_pImpl->aRemoveIdle.Start();
     }
@@ -564,7 +564,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
     if(pError &&
         m_pImpl->xMailDispatcher.is() && m_pImpl->xMailDispatcher->isStarted())
     {
-        Application::PostUserEvent( STATIC_LINK( this, SwSendMailDialog,
+        Application::PostUserEvent( LINK( this, SwSendMailDialog,
                                                     StopSendMails ), this );
     }
     Image aInsertImg = m_aImageList.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );

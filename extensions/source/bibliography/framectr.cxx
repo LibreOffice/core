@@ -516,7 +516,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if( _rURL.Complete == "slot:5503" || aCommand == "CloseDoc" )
         {
-            Application::PostUserEvent( STATIC_LINK( this, BibFrameController_Impl,
+            Application::PostUserEvent( LINK( this, BibFrameController_Impl,
                                         DisposeHdl ), 0 );
 
         }

@@ -43,7 +43,7 @@ public:
         if (test::isHeadless()) {
             Application::EnableHeadlessMode(true);
         }
-        Application::setDeInitHook(STATIC_LINK(this, Protector, deinitHook));
+        Application::setDeInitHook(LINK(this, Protector, deinitHook));
     }
 
 private:

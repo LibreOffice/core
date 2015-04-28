@@ -217,7 +217,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         {
             // #i75416# move the execution of the search to an asynchronously called static link
             bool* pbNext = new bool( FN_DOWN == nCurrItemId );
-            Application::PostUserEvent( STATIC_LINK(pView, SwView, MoveNavigationHdl), pbNext );
+            Application::PostUserEvent( LINK(pView, SwView, MoveNavigationHdl), pbNext );
         }
         break;
         case FN_SHOW_ROOT:

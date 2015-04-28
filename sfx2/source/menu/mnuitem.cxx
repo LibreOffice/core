@@ -451,7 +451,7 @@ sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
         pExecuteInfo->xDispatch     = xDisp;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = Sequence< PropertyValue >();
-        Application::PostUserEvent( STATIC_LINK( 0, SfxAppMenuControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK( 0, SfxAppMenuControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
     }
 
     return sal_True;

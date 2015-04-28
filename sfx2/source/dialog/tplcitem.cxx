@@ -107,7 +107,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
             }
             //not necessary if the last event is still on the way
             if(!nUserEventId)
-                nUserEventId = Application::PostUserEvent( STATIC_LINK(
+                nUserEventId = Application::PostUserEvent( LINK(
                             this, SfxTemplateControllerItem, SetWaterCanStateHdl_Impl ) );
             break;
         }

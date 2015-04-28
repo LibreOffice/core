@@ -740,7 +740,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                                     pExecuteInfo->xDispatch     = xDispatch;
                                     pExecuteInfo->aTargetURL    = aURL;
                                     pExecuteInfo->aArgs         = aArgs;
-                                    Application::PostUserEvent( STATIC_LINK(0, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
+                                    Application::PostUserEvent( LINK(0, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
                                 }
                             }
                             catch (const Exception&)

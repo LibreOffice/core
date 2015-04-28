@@ -390,7 +390,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ImplSVAppData, ImplQuitMsg, void*, EMPTYARG )
 
 void Application::Quit()
 {
-    Application::PostUserEvent( STATIC_LINK( NULL, ImplSVAppData, ImplQuitMsg ) );
+    Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplQuitMsg ) );
 }
 
 comphelper::SolarMutex& Application::GetSolarMutex()
@@ -695,7 +695,7 @@ ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, Ke
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pKeyEvent );
 
         nEventId = PostUserEvent(
-                       STATIC_LINK( NULL, Application, PostEventHandler ),
+                       LINK( NULL, Application, PostEventHandler ),
                        pPostEventData );
 
         if( nEventId )
@@ -728,7 +728,7 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, 
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
 
         nEventId = PostUserEvent(
-                       STATIC_LINK( NULL, Application, PostEventHandler ),
+                       LINK( NULL, Application, PostEventHandler ),
                        pPostEventData );
 
         if( nEventId )
@@ -762,7 +762,7 @@ ImplSVEvent * Application::PostZoomEvent( sal_uLong nEvent, vcl::Window *pWin, Z
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
 
         nEventId = PostUserEvent(
-                       STATIC_LINK( NULL, Application, PostEventHandler ),
+                       LINK( NULL, Application, PostEventHandler ),
                        pPostEventData );
 
         if( nEventId )
@@ -787,7 +787,7 @@ ImplSVEvent * Application::PostScrollEvent( sal_uLong nEvent, vcl::Window *pWin,
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pScrollEvent );
 
         nEventId = PostUserEvent(
-                       STATIC_LINK( NULL, Application, PostEventHandler ),
+                       LINK( NULL, Application, PostEventHandler ),
                        pPostEventData );
 
         if( nEventId )

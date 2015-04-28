@@ -56,7 +56,7 @@ bAllowDoubles
             {
                 _pIdle = new Idle;
                 _pIdle->SetPriority( SchedulerPriority::HIGHEST );
-                _pIdle->SetIdleHdl( STATIC_LINK(
+                _pIdle->SetIdleHdl( LINK(
                     this, AsynchronLink, HandleCall) );
             }
             _pIdle->Start();
@@ -64,7 +64,7 @@ bAllowDoubles
         else
         {
             if( _pMutex ) _pMutex->acquire();
-            _nEventId = Application::PostUserEvent( STATIC_LINK( this, AsynchronLink, HandleCall), 0 );
+            _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall), 0 );
             if( _pMutex ) _pMutex->release();
         }
     }

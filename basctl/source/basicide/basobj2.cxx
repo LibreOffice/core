@@ -358,7 +358,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
                 MacroExecutionData* pExecData = new MacroExecutionData;
                 pExecData->aDocument = aDocument;
                 pExecData->xMethod = pMethod;   // keep alive until the event has been processed
-                Application::PostUserEvent( STATIC_LINK( NULL, MacroExecution, ExecuteMacroEvent ), pExecData );
+                Application::PostUserEvent( LINK( NULL, MacroExecution, ExecuteMacroEvent ), pExecData );
             }
         }
         break;

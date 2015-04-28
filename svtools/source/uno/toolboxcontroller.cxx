@@ -688,7 +688,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, sTarget, 0 ), UNO_QUERY_THROW );
 
         DispatchInfo *pDispatchInfo = new DispatchInfo( xDispatch, aURL, rArgs );
-        if ( !Application::PostUserEvent( STATIC_LINK(0, ToolboxController, ExecuteHdl_Impl),
+        if ( !Application::PostUserEvent( LINK(0, ToolboxController, ExecuteHdl_Impl),
                                           pDispatchInfo ) )
             delete pDispatchInfo;
 

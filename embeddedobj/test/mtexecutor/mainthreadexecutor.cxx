@@ -69,7 +69,7 @@ uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::Named
     if ( xJob.is() )
     {
         MainThreadExecutorRequest* pMainThreadExecutorRequest = new MainThreadExecutorRequest( xJob, aValues );
-        Application::PostUserEvent( STATIC_LINK( NULL, MainThreadExecutor, worker ), pMainThreadExecutorRequest );
+        Application::PostUserEvent( LINK( NULL, MainThreadExecutor, worker ), pMainThreadExecutorRequest );
     }
 
     // TODO: wait for result

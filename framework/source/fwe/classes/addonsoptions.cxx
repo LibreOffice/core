@@ -411,7 +411,7 @@ void AddonsOptions_Impl::ReadConfigurationData()
 
 void AddonsOptions_Impl::Notify( const Sequence< OUString >& /*lPropertyNames*/ )
 {
-    Application::PostUserEvent( STATIC_LINK( 0, AddonsOptions, Notify ) );
+    Application::PostUserEvent( LINK( 0, AddonsOptions, Notify ) );
 }
 
 //  public method

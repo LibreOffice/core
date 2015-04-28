@@ -443,7 +443,7 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox 
 
     //! workaround to set the selection since calling SelectEntryPos within
     //! the double click handler does not work
-    Application::PostUserEvent( STATIC_LINK( this, SvxThesaurusDialog, SelectFirstHdl_Impl ), pBox );
+    Application::PostUserEvent( LINK( this, SvxThesaurusDialog, SelectFirstHdl_Impl ), pBox );
     return 0;
 }
 

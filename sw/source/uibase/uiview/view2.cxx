@@ -1063,7 +1063,7 @@ void SwView::Execute(SfxRequest &rReq)
             if (nSlot == FN_SCROLL_PREV)
                 *pbNext = false;
             // #i75416# move the execution of the search to an asynchronously called static link
-            Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
+            Application::PostUserEvent( LINK(this, SwView, MoveNavigationHdl), pbNext );
         }
         break;
         case FN_NAVIGATION_POPUP:

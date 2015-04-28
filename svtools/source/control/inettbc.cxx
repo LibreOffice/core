@@ -129,7 +129,7 @@ namespace
 SvtMatchContext_Impl::SvtMatchContext_Impl(
     SvtURLBox* pBoxP, const OUString& rText )
     : Thread( "SvtMatchContext_Impl" )
-    , aLink( STATIC_LINK( this, SvtMatchContext_Impl, Select_Impl ) )
+    , aLink( LINK( this, SvtMatchContext_Impl, Select_Impl ) )
     , aBaseURL( pBoxP->aBaseURL )
     , aText( rText )
     , pBox( pBoxP )

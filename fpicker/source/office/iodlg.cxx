@@ -523,7 +523,7 @@ void SvtFileDialog::Init_Impl
 
     // Create control element, the order defines the tab control.
     _pImp->_pEdFileName->SetSelectHdl( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
-    _pImp->_pEdFileName->SetOpenHdl( STATIC_LINK( this, SvtFileDialog, OpenHdl_Impl ) );
+    _pImp->_pEdFileName->SetOpenHdl( LINK( this, SvtFileDialog, OpenHdl_Impl ) );
 
     // in folder picker mode, only auto-complete directories (no files)
     bool bIsFolderPicker = ( _pImp->_eDlgType == FILEDLG_TYPE_PATHDLG );
@@ -613,14 +613,14 @@ void SvtFileDialog::Init_Impl
     }
 
     // Setting preferences of the control elements.
-    _pImp->_pBtnNewFolder->SetClickHdl( STATIC_LINK( this, SvtFileDialog, NewFolderHdl_Impl ) );
-    _pImp->_pBtnFileOpen->SetClickHdl( STATIC_LINK( this, SvtFileDialog, OpenHdl_Impl ) );
+    _pImp->_pBtnNewFolder->SetClickHdl( LINK( this, SvtFileDialog, NewFolderHdl_Impl ) );
+    _pImp->_pBtnFileOpen->SetClickHdl( LINK( this, SvtFileDialog, OpenHdl_Impl ) );
     _pImp->_pBtnCancel->SetClickHdl( LINK( this, SvtFileDialog, CancelHdl_Impl ) );
-    _pImp->SetFilterListSelectHdl( STATIC_LINK( this, SvtFileDialog, FilterSelectHdl_Impl ) );
-    _pImp->_pEdFileName->SetGetFocusHdl( STATIC_LINK( this, SvtFileDialog, FileNameGetFocusHdl_Impl ) );
-    _pImp->_pEdFileName->SetModifyHdl( STATIC_LINK( this, SvtFileDialog, FileNameModifiedHdl_Impl ) );
-    _pImp->_pEdCurrentPath->SetOpenHdl ( STATIC_LINK( this, SvtFileDialog, URLBoxModifiedHdl_Impl ) );
-    _pImp->_pBtnConnectToServer->SetClickHdl( STATIC_LINK ( this, SvtFileDialog, ConnectToServerPressed_Hdl ) );
+    _pImp->SetFilterListSelectHdl( LINK( this, SvtFileDialog, FilterSelectHdl_Impl ) );
+    _pImp->_pEdFileName->SetGetFocusHdl( LINK( this, SvtFileDialog, FileNameGetFocusHdl_Impl ) );
+    _pImp->_pEdFileName->SetModifyHdl( LINK( this, SvtFileDialog, FileNameModifiedHdl_Impl ) );
+    _pImp->_pEdCurrentPath->SetOpenHdl ( LINK( this, SvtFileDialog, URLBoxModifiedHdl_Impl ) );
+    _pImp->_pBtnConnectToServer->SetClickHdl( LINK ( this, SvtFileDialog, ConnectToServerPressed_Hdl ) );
 
 
     _pFileView->SetSelectHdl( LINK( this, SvtFileDialog, SelectHdl_Impl ) );
@@ -630,7 +630,7 @@ void SvtFileDialog::Init_Impl
 
     // set timer for the filterbox travel
     _pImp->_aFilterTimer.SetTimeout( TRAVELFILTER_TIMEOUT );
-    _pImp->_aFilterTimer.SetTimeoutHdl( STATIC_LINK( this, SvtFileDialog, FilterSelectHdl_Impl ) );
+    _pImp->_aFilterTimer.SetTimeoutHdl( LINK( this, SvtFileDialog, FilterSelectHdl_Impl ) );
 
     if ( WB_SAVEAS & nStyle )
     {

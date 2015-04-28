@@ -218,7 +218,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
     for (sal_Int32 i = 0; i < 31; ++i)
         maDayTexts[i] = OUString::number(i+1);
 
-    maDragScrollTimer.SetTimeoutHdl( STATIC_LINK( this, Calendar, ScrollHdl ) );
+    maDragScrollTimer.SetTimeoutHdl( LINK( this, Calendar, ScrollHdl ) );
     maDragScrollTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
     mnDragScrollHitTest = 0;
 

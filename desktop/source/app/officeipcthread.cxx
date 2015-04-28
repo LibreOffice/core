@@ -309,12 +309,12 @@ IMPL_STATIC_LINK_NOINSTANCE( ProcessEventsClass_Impl, ProcessDocumentsEvent, voi
 
 void ImplPostForeignAppEvent( ApplicationEvent* pEvent )
 {
-    Application::PostUserEvent( STATIC_LINK( NULL, ProcessEventsClass_Impl, CallEvent ), pEvent );
+    Application::PostUserEvent( LINK( NULL, ProcessEventsClass_Impl, CallEvent ), pEvent );
 }
 
 void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
 {
-    Application::PostUserEvent( STATIC_LINK( NULL, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent );
+    Application::PostUserEvent( LINK( NULL, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent );
 }
 
 oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo)

@@ -92,7 +92,7 @@ void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XC
         SolarMutexGuard aSolarGuard;
 
         CallbackData* pCallbackData = new CallbackData( xCallback, aData );
-        Application::PostUserEvent( STATIC_LINK( this, AsyncCallback, Notify_Impl ), pCallbackData );
+        Application::PostUserEvent( LINK( this, AsyncCallback, Notify_Impl ), pCallbackData );
     }
 }
 

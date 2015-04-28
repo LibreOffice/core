@@ -338,7 +338,7 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
     if(rFormat.pGraphicBrush)
     {
         pGraphicBrush = new SvxBrushItem(*rFormat.pGraphicBrush);
-        pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
+        pGraphicBrush->SetDoneLink( LINK( this, SvxNumberFormat, GraphicArrived) );
     }
     DELETEZ(pBulletFont);
     if(rFormat.pBulletFont)
@@ -402,7 +402,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
     {
         delete pGraphicBrush;
         pGraphicBrush =  static_cast<SvxBrushItem*>(pBrushItem->Clone());
-        pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
+        pGraphicBrush->SetDoneLink( LINK( this, SvxNumberFormat, GraphicArrived) );
    }
 
     if(pOrient)
@@ -422,7 +422,7 @@ void SvxNumberFormat::SetGraphic( const OUString& rName )
 
     delete pGraphicBrush;
     pGraphicBrush = new SvxBrushItem( rName, "", GPOS_AREA, 0 );
-    pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
+    pGraphicBrush->SetDoneLink( LINK( this, SvxNumberFormat, GraphicArrived) );
     if( eVertOrient == text::VertOrientation::NONE )
         eVertOrient = text::VertOrientation::TOP;
 

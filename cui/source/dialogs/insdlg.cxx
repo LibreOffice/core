@@ -556,7 +556,7 @@ void SfxInsertFloatingFrameDialog::Init()
     get(m_pNMMarginHeight, "height");
     get(m_pCBMarginHeightDefault, "defaultheight");
 
-    Link aLink( STATIC_LINK( this, SfxInsertFloatingFrameDialog, CheckHdl ) );
+    Link aLink( LINK( this, SfxInsertFloatingFrameDialog, CheckHdl ) );
     m_pCBMarginWidthDefault->SetClickHdl( aLink );
     m_pCBMarginHeightDefault->SetClickHdl( aLink );
 
@@ -565,7 +565,7 @@ void SfxInsertFloatingFrameDialog::Init()
     m_pRBScrollingAuto->Check();
     m_pRBFrameBorderOn->Check();
 
-    m_pBTOpen->SetClickHdl( STATIC_LINK( this, SfxInsertFloatingFrameDialog, OpenHdl ) );
+    m_pBTOpen->SetClickHdl( LINK( this, SfxInsertFloatingFrameDialog, OpenHdl ) );
 }
 
 short SfxInsertFloatingFrameDialog::Execute()

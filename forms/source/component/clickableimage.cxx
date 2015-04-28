@@ -795,7 +795,7 @@ namespace frm
             m_bProdStarted = false;
 
             // Kick off download (caution: can be synchronous).
-            m_pMedium->Download(STATIC_LINK(this, OClickableImageBaseModel, DownloadDoneLink));
+            m_pMedium->Download(LINK(this, OClickableImageBaseModel, DownloadDoneLink));
         }
         else
         {

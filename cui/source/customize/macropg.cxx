@@ -723,14 +723,14 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     m_xModifiable = xModifiable;
     SvHeaderTabListBox&    rListBox = mpImpl->pEventLB->GetListBox();
     HeaderBar&            rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link                aLnk(STATIC_LINK(this, _SvxMacroTabPage, AssignDeleteHdl_Impl ));
+    Link                aLnk(LINK(this, _SvxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pDeletePB->SetClickHdl(    aLnk );
     mpImpl->pAssignPB->SetClickHdl(    aLnk );
     if( mpImpl->pAssignComponentPB )
         mpImpl->pAssignComponentPB->SetClickHdl( aLnk );
-    rListBox.SetDoubleClickHdl( STATIC_LINK(this, _SvxMacroTabPage, DoubleClickHdl_Impl ) );
+    rListBox.SetDoubleClickHdl( LINK(this, _SvxMacroTabPage, DoubleClickHdl_Impl ) );
 
-    rListBox.SetSelectHdl( STATIC_LINK( this, _SvxMacroTabPage, SelectEvent_Impl ));
+    rListBox.SetSelectHdl( LINK( this, _SvxMacroTabPage, SelectEvent_Impl ));
 
     rListBox.SetSelectionMode( SINGLE_SELECTION );
     rListBox.SetTabs( &nTabs[0], MAP_APPFONT );

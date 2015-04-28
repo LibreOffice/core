@@ -72,8 +72,6 @@ typedef sal_IntPtr (*PSTUB)( void*, void* );
 #define LINK( Inst, Class, Member ) \
     Link( static_cast<Class*>(Inst), &Class::LinkStub##Member )
 
-#define STATIC_LINK( Inst, Class, Member ) LINK(Inst, Class, Member)
-
 #define IMPL_LINK( Class, Method, ArgType, ArgName ) \
     IMPL_STUB( Class, Method, ArgType ) \
     sal_IntPtr Class::Method( ArgType ArgName )

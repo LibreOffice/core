@@ -3688,7 +3688,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                 "SvNumberFormatter::ImpInitCurrencyTable: system currency not in I18N locale data.");
     }
     pLocaleData.reset();
-    SvtSysLocaleOptions::SetCurrencyChangeLink( STATIC_LINK( NULL, SvNumberFormatter, CurrencyChangeLink ) );
+    SvtSysLocaleOptions::SetCurrencyChangeLink( LINK( NULL, SvNumberFormatter, CurrencyChangeLink ) );
     bInitializing = false;
     bCurrencyTableInitialized = true;
 }

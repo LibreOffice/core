@@ -124,7 +124,7 @@ throw ( RuntimeException, std::exception )
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
 
@@ -260,7 +260,7 @@ void ComplexToolbarController::addNotifyInfo(
         aInfoSeq[nCount].Value = uno::makeAny( getFrameInterface() );
         pNotifyInfo->aInfoSeq  = aInfoSeq;
 
-        Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController, Notify_Impl), pNotifyInfo );
+        Application::PostUserEvent( LINK(0, ComplexToolbarController, Notify_Impl), pNotifyInfo );
     }
 }
 

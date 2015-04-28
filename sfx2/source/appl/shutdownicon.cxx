@@ -359,7 +359,7 @@ void ShutdownIcon::StartFileDialog()
         m_pFileDlg = new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                 SFXWB_MULTISELECTION, OUString() );
-    m_pFileDlg->StartExecuteModal( STATIC_LINK( this, ShutdownIcon, DialogClosedHdl_Impl ) );
+    m_pFileDlg->StartExecuteModal( LINK( this, ShutdownIcon, DialogClosedHdl_Impl ) );
 }
 
 

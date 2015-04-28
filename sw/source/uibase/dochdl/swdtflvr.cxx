@@ -2585,7 +2585,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                     pSect->SetLinkFileName( sFileURL );
                     pSect->SetProtectFlag( true );
 
-                    Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
+                    Application::PostUserEvent( LINK( &rSh, SwWrtShell,
                                                 InsertRegionDialog ), pSect );
                     nRet = true;
                     }

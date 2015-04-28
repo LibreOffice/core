@@ -474,7 +474,7 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
 IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
 {
     SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
-    Application::PostUserEvent( STATIC_LINK( this, SwAddressListDialog,
+    Application::PostUserEvent( LINK( this, SwAddressListDialog,
                                                 StaticListBoxSelectHdl_Impl ), pSelect );
     return 0;
 }

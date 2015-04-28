@@ -713,7 +713,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                     pExecuteInfo->xDispatch     = xDispatch;
                     pExecuteInfo->aTargetURL    = aTargetURL;
                     pExecuteInfo->aArgs         = aArgs;
-                    Application::PostUserEvent( STATIC_LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
+                    Application::PostUserEvent( LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
                 }
             }
             else

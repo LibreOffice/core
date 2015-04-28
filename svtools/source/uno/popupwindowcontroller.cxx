@@ -68,7 +68,7 @@ void PopupWindowControllerImpl::SetPopupWindow( vcl::Window* pPopupWindow, ToolB
     if( mpPopupWindow )
     {
         mpPopupWindow->RemoveEventListener( LINK( this, PopupWindowControllerImpl, WindowEventListener ) );
-        Application::PostUserEvent( STATIC_LINK( this, PopupWindowControllerImpl, AsyncDeleteWindowHdl ), mpPopupWindow );
+        Application::PostUserEvent( LINK( this, PopupWindowControllerImpl, AsyncDeleteWindowHdl ), mpPopupWindow );
     }
     mpPopupWindow = pPopupWindow;
     mpToolBox = pToolBox;

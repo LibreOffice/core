@@ -147,7 +147,7 @@ void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL, cons
 
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
 
-        Application::PostUserEvent( STATIC_LINK(0, PopupMenuControllerBase, ExecuteHdl_Impl), new PopupMenuControllerBaseDispatchInfo( xDispatch, aURL, rArgs ) );
+        Application::PostUserEvent( LINK(0, PopupMenuControllerBase, ExecuteHdl_Impl), new PopupMenuControllerBaseDispatchInfo( xDispatch, aURL, rArgs ) );
 
     }
     catch( Exception& )

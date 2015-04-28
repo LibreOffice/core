@@ -285,7 +285,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq    = aArgsList;
 
-        Application::PostUserEvent( STATIC_LINK(0, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
+        Application::PostUserEvent( LINK(0, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
     }
 }
 

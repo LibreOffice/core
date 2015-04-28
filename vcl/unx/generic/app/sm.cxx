@@ -341,7 +341,7 @@ void SessionManagerClient::SaveYourselfProc(
     }
     // Smuggle argument in as void*:
     sal_uIntPtr nStateVal = shutdown;
-    Application::PostUserEvent( STATIC_LINK( 0, SessionManagerClient, SaveYourselfHdl ), reinterpret_cast< void * >(nStateVal) );
+    Application::PostUserEvent( LINK( 0, SessionManagerClient, SaveYourselfHdl ), reinterpret_cast< void * >(nStateVal) );
     SAL_INFO("vcl.sm", "waiting for save yourself event to be processed" );
 }
 
@@ -368,7 +368,7 @@ void SessionManagerClient::DieProc(
     SAL_INFO("vcl.sm", "Session: die");
     if( connection == m_pSmcConnection )
     {
-        Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, ShutDownHdl ) );
+        Application::PostUserEvent( LINK( NULL, SessionManagerClient, ShutDownHdl ) );
         SAL_INFO("vcl.sm", "waiting for shutdown event to be processed" );
     }
 }
@@ -387,7 +387,7 @@ void SessionManagerClient::ShutdownCanceledProc(
 {
     SAL_INFO("vcl.sm", "Session: shutdown canceled" );
     if( connection == m_pSmcConnection )
-        Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, ShutDownCancelHdl ) );
+        Application::PostUserEvent( LINK( NULL, SessionManagerClient, ShutDownCancelHdl ) );
 }
 
 void SessionManagerClient::InteractProc(
@@ -396,7 +396,7 @@ void SessionManagerClient::InteractProc(
 {
     SAL_INFO("vcl.sm", "Session: interaction request completed" );
     if( connection == m_pSmcConnection )
-        Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, InteractionHdl ) );
+        Application::PostUserEvent( LINK( NULL, SessionManagerClient, InteractionHdl ) );
 }
 
 void SessionManagerClient::saveDone()

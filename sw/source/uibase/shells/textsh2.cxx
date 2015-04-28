@@ -154,7 +154,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                     pNew->xCursor               = xCursor;
                     pNew->xConnection           = xConnection;
 
-                    Application::PostUserEvent( STATIC_LINK( this, SwBaseShell,
+                    Application::PostUserEvent( LINK( this, SwBaseShell,
                                             InsertDBTextHdl ), pNew );
                     // the pNew will be removed in InsertDBTextHdl !!
                 }

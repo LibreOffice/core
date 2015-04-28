@@ -226,7 +226,7 @@ void GalleryThemePopup::Execute(
         pInfo->Dispatch = rCmdInfo.Dispatch;
 
         if ( !Application::PostUserEvent(
-                STATIC_LINK( 0, GalleryBrowser2, AsyncDispatch_Impl), pInfo ) )
+                LINK( 0, GalleryBrowser2, AsyncDispatch_Impl), pInfo ) )
             delete pInfo;
     }
 }
@@ -1133,7 +1133,7 @@ void GalleryBrowser2::Dispatch(
             pInfo->Dispatch = xDispatch;
 
             if ( !Application::PostUserEvent(
-                    STATIC_LINK( 0, GalleryBrowser2, AsyncDispatch_Impl), pInfo ) )
+                    LINK( 0, GalleryBrowser2, AsyncDispatch_Impl), pInfo ) )
                 delete pInfo;
         }
         break;

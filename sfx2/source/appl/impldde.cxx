@@ -85,9 +85,9 @@ SvDDELinkEditDialog::SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* pLin
     m_pEdDdeTopic->SetText( sTopic );
     m_pEdDdeItem->SetText( sItem );
 
-    m_pEdDdeApp->SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
-    m_pEdDdeTopic->SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
-    m_pEdDdeItem->SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_pEdDdeApp->SetModifyHdl( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_pEdDdeTopic->SetModifyHdl( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_pEdDdeItem->SetModifyHdl( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
 
     m_pOKButton->Enable( !sServer.isEmpty() && !sTopic.isEmpty() && !sItem.isEmpty() );
 }

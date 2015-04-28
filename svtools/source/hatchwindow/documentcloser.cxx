@@ -93,7 +93,7 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
             worker( NULL, pMTRequest );
         }
         else
-            Application::PostUserEvent( STATIC_LINK( NULL, MainThreadFrameCloserRequest, worker ), pMTRequest );
+            Application::PostUserEvent( LINK( NULL, MainThreadFrameCloserRequest, worker ), pMTRequest );
     }
 }
 

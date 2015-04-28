@@ -221,7 +221,7 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pSwTbl,
     , bMustNotResize( false )
     , bMustNotRecalc( false )
 {
-    aResizeTimer.SetTimeoutHdl( STATIC_LINK( this, SwHTMLTableLayout,
+    aResizeTimer.SetTimeoutHdl( LINK( this, SwHTMLTableLayout,
                                              DelayedResize_Impl ) );
 }
 

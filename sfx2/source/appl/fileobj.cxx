@@ -268,7 +268,7 @@ bool SvFileObject::LoadFile_Impl()
 
         SfxMediumRef xTmpMed = xMed;
         bInCallDownload = true;
-        xMed->Download( STATIC_LINK( this, SvFileObject, LoadGrfReady_Impl ) );
+        xMed->Download( LINK( this, SvFileObject, LoadGrfReady_Impl ) );
         bInCallDownload = false;
 
         bClearMedium = !xMed.Is();
@@ -488,7 +488,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
             pThis->xMed->SetDoneLink( Link() );
             pThis->pDelMed = new SfxMediumRef(pThis->xMed);
             pThis->nPostUserEventId = Application::PostUserEvent(
-                        STATIC_LINK( pThis, SvFileObject, DelMedium_Impl ),
+                        LINK( pThis, SvFileObject, DelMedium_Impl ),
                         pThis->pDelMed);
             pThis->xMed.Clear();
         }
