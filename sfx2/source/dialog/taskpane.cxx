@@ -554,7 +554,7 @@ namespace sfx2
         ModuleTaskPane&              m_rAntiImpl;
         const OUString               m_sModuleIdentifier;
         const Reference< XFrame >    m_xFrame;
-        VclPtr<::svt::ToolPanelDeck> m_aPanelDeck;
+        VclPtr< ::svt::ToolPanelDeck> m_aPanelDeck;
     };
 
 
