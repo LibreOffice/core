@@ -484,7 +484,7 @@ protected:
     bool mbHasRulers;
 
     /// The active window.
-    VclPtr<::sd::Window> mpActiveWindow;
+    VclPtr< ::sd::Window> mpActiveWindow;
     ::sd::View* mpView;
     FrameView*  mpFrameView;
 
@@ -568,7 +568,7 @@ protected:
     void doShow();
 
 private:
-    VclPtr<::vcl::Window> mpParentWindow;
+    VclPtr< ::vcl::Window> mpParentWindow;
     /** This window updater is used to keep all relevant windows up to date
         with reference to the digit language used to display digits in text
         shapes.

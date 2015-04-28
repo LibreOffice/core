@@ -150,7 +150,7 @@ public:
     void DropScroll (const Point& rMousePos);
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
 protected:
-    VclPtr<::sd::Window> mpShareWin;
+    VclPtr< ::sd::Window> mpShareWin;
     Point maWinPos;
     Point maViewOrigin;
     Size maViewSize;

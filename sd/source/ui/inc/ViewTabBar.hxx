@@ -67,7 +67,7 @@ public:
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    VclPtr<::TabControl> GetTabControl() const { return mpTabControl;}
+    VclPtr< ::TabControl> GetTabControl() const { return mpTabControl;}
 
     bool ActivatePage();
 

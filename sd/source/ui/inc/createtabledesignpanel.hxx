@@ -25,7 +25,7 @@
 
 namespace sd {
 
-VclPtr<::vcl::Window> createTableDesignPanel (::vcl::Window* pParent, ViewShellBase& rBase);
+VclPtr< ::vcl::Window> createTableDesignPanel (::vcl::Window* pParent, ViewShellBase& rBase);
 
 }
 

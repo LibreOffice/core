@@ -347,8 +347,8 @@ private:
     OUString        maCharBuffer;
     Pointer         maOldPointer;
     Pointer         maPencil;
-    std::vector< VclPtr<::sd::Window> > maDrawModeWindows;
-    VclPtr<::sd::Window>   mpOldActiveWindow;
+    std::vector< VclPtr< ::sd::Window> > maDrawModeWindows;
+    VclPtr< ::sd::Window>   mpOldActiveWindow;
     Link            maStarBASICGlobalErrorHdl;
     unsigned long   mnChildMask;
     bool            mbGridVisible;

@@ -150,7 +150,7 @@ protected:
 
     ::sd::View* mpView;
     ViewShell* mpViewShell;
-    VclPtr<::sd::Window> mpWindow;
+    VclPtr< ::sd::Window> mpWindow;
     DrawDocShell* mpDocSh;
     SdDrawDocument* mpDoc;
 
