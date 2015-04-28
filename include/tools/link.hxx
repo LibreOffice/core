@@ -92,11 +92,6 @@ typedef sal_IntPtr (*PSTUB)( void*, void* );
 #define IMPL_LINK_NOARG_INLINE_END( Class, Method ) \
     IMPL_STUB( Class, Method, void* )
 
-#define IMPL_LINK_INLINE( Class, Method, ArgType, ArgName, Body ) \
-    sal_IntPtr Class::Method( ArgType ArgName ) \
-    Body \
-    IMPL_STUB( Class, Method, ArgType )
-
 #define EMPTYARG
 
 class TOOLS_DLLPUBLIC Link
