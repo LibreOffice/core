@@ -113,7 +113,7 @@ void Control::CreateLayoutData() const
 
 bool Control::HasLayoutData() const
 {
-    return mpControlData ? mpControlData->mpLayoutData != NULL : false;
+    return mpControlData && mpControlData->mpLayoutData != NULL;
 }
 
 ::vcl::ControlLayoutData* Control::GetLayoutData() const

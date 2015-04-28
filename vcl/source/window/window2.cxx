@@ -1021,27 +1021,27 @@ vcl::Window* Window::ImplGetFrameWindow() const
 
 bool Window::IsDockingWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbDockWin : false;
+    return mpWindowImpl && mpWindowImpl->mbDockWin;
 }
 
 bool Window::ImplIsFloatingWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbFloatWin : false;
+    return mpWindowImpl && mpWindowImpl->mbFloatWin;
 }
 
 bool Window::ImplIsSplitter() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbSplitter : false;
+    return mpWindowImpl && mpWindowImpl->mbSplitter;
 }
 
 bool Window::ImplIsPushButton() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbPushButton : false;
+    return mpWindowImpl && mpWindowImpl->mbPushButton;
 }
 
 bool Window::ImplIsOverlapWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbOverlapWin : false;
+    return mpWindowImpl && mpWindowImpl->mbOverlapWin;
 }
 
 void Window::ImplSetMouseTransparent( bool bTransparent )
@@ -1122,22 +1122,22 @@ Dialog* Window::GetParentDialog() const
 
 bool Window::IsSystemWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbSysWin : false;
+    return mpWindowImpl && mpWindowImpl->mbSysWin;
 }
 
 bool Window::IsDialog() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbDialog : false;
+    return mpWindowImpl && mpWindowImpl->mbDialog;
 }
 
 bool Window::IsMenuFloatingWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbMenuFloatingWindow : false;
+    return mpWindowImpl && mpWindowImpl->mbMenuFloatingWindow;
 }
 
 bool Window::IsToolbarFloatingWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbToolbarFloatingWindow : false;
+    return mpWindowImpl && mpWindowImpl->mbToolbarFloatingWindow;
 }
 
 void Window::EnableAllResize( bool bEnable )
@@ -1152,17 +1152,17 @@ void Window::EnableChildTransparentMode( bool bEnable )
 
 bool Window::IsChildTransparentModeEnabled() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbChildTransparent : false;
+    return mpWindowImpl && mpWindowImpl->mbChildTransparent;
 }
 
 bool Window::IsMouseTransparent() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbMouseTransparent : false;
+    return mpWindowImpl && mpWindowImpl->mbMouseTransparent;
 }
 
 bool Window::IsPaintTransparent() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbPaintTransparent : false;
+    return mpWindowImpl && mpWindowImpl->mbPaintTransparent;
 }
 
 void Window::SetDialogControlStart( bool bStart )
@@ -1172,7 +1172,7 @@ void Window::SetDialogControlStart( bool bStart )
 
 bool Window::IsDialogControlStart() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbDlgCtrlStart : false;
+    return mpWindowImpl && mpWindowImpl->mbDlgCtrlStart;
 }
 
 void Window::SetDialogControlFlags( sal_uInt16 nFlags )
@@ -1217,7 +1217,7 @@ bool Window::IsControlBackground() const
 
 bool Window::IsInPaint() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbInPaint : false;
+    return mpWindowImpl && mpWindowImpl->mbInPaint;
 }
 
 vcl::Window* Window::GetParent() const
@@ -1227,17 +1227,17 @@ vcl::Window* Window::GetParent() const
 
 bool Window::IsVisible() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbVisible : false;
+    return mpWindowImpl && mpWindowImpl->mbVisible;
 }
 
 bool Window::IsReallyVisible() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbReallyVisible : false;
+    return mpWindowImpl && mpWindowImpl->mbReallyVisible;
 }
 
 bool Window::IsReallyShown() const
 {
-    return mpWindowImpl ? mpWindowImpl->mbReallyShown : false;
+    return mpWindowImpl && mpWindowImpl->mbReallyShown;
 }
 
 bool Window::IsInInitShow() const
@@ -1247,12 +1247,12 @@ bool Window::IsInInitShow() const
 
 bool Window::IsEnabled() const
 {
-    return mpWindowImpl ? !mpWindowImpl->mbDisabled : false;
+    return mpWindowImpl && !mpWindowImpl->mbDisabled;
 }
 
 bool Window::IsInputEnabled() const
 {
-    return mpWindowImpl ? !mpWindowImpl->mbInputDisabled : false;
+    return mpWindowImpl && !mpWindowImpl->mbInputDisabled;
 }
 
 bool Window::IsAlwaysEnableInput() const
