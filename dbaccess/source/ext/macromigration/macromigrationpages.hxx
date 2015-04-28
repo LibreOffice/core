@@ -83,7 +83,7 @@ namespace dbmm
         void            grabLocationFocus() { m_pSaveAsLocation->GrabFocus(); }
 
     protected:
-        VclPtr<::svt::OFileURLControl>  m_pSaveAsLocation;
+        VclPtr< ::svt::OFileURLControl>  m_pSaveAsLocation;
         VclPtr<PushButton>             m_pBrowseSaveAsLocation;
         VclPtr<FixedText>              m_pStartMigration;
         ::svx::DatabaseLocationInputController* m_pLocationController;

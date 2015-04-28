@@ -83,7 +83,7 @@ namespace dbaui
         VclPtr<ToolBox>           m_aTBPreview;
         VclPtr<Window>            m_aBorder;
         VclPtr<OPreviewWindow>    m_aPreview;
-        VclPtr<::svtools::ODocumentInfoPreview>
+        VclPtr< ::svtools::ODocumentInfoPreview>
                                   m_aDocumentInfo;
         VclPtr<vcl::Window>       m_pTablePreview;
         ::std::unique_ptr<PopupMenu> m_aMenu;
