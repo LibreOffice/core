@@ -244,14 +244,14 @@ protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
 
     bool            SelectEntries( sal_Int32  nSelect, LB_EVENT_TYPE eLET, bool bShift = false, bool bCtrl = false, bool bSelectPosChange = false );
-    void            ImplPaint( sal_Int32  nPos, bool bErase = false, bool bLayout = false );
-    void            ImplDoPaint( const Rectangle& rRect, bool bLayout = false );
+    void            ImplPaint(sal_Int32 nPos, bool bErase = false, bool bLayout = false);
+    void            ImplDoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bLayout = false);
     void            ImplCalcMetrics();
     void            ImplUpdateEntryMetrics( ImplEntryType& rEntry );
     void            ImplCallSelect();

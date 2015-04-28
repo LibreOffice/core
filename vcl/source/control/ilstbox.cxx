@@ -1880,11 +1880,10 @@ void ImplListBoxWindow::DrawEntry( sal_Int32 nPos, bool bDrawImage, bool bDrawTe
 void ImplListBoxWindow::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<ImplListBoxWindow*>(this)->
-        ImplDoPaint( Rectangle( Point( 0, 0 ), GetOutputSize() ), true );
+    const_cast<ImplListBoxWindow*>(this)->Invalidate(Rectangle(Point(0, 0), GetOutputSize()));
 }
 
-void ImplListBoxWindow::ImplDoPaint( const Rectangle& rRect, bool bLayout )
+void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect, bool bLayout)
 {
     sal_Int32 nCount = mpEntryList->GetEntryCount();
 
@@ -1914,9 +1913,9 @@ void ImplListBoxWindow::ImplDoPaint( const Rectangle& rRect, bool bLayout )
         ImplShowFocusRect();
 }
 
-void ImplListBoxWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ImplListBoxWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    ImplDoPaint( rRect );
+    ImplDoPaint(rRenderContext, rRect);
 }
 
 sal_uInt16 ImplListBoxWindow::GetDisplayLineCount() const
