@@ -95,7 +95,7 @@ namespace accessibility
     public:
         AccessibleToolPanelDeck&    m_rAntiImpl;
         Reference< XAccessible >    m_xAccessibleParent;
-        VclPtr<::svt::ToolPanelDeck>    m_pPanelDeck;
+        VclPtr< ::svt::ToolPanelDeck >  m_pPanelDeck;
 
         Reference< XAccessible >        m_xActivePanelAccessible;
     };

@@ -120,7 +120,7 @@ namespace accessibility
         AccessibleToolPanelTabBar&                  m_rAntiImpl;
         Reference< XAccessible >                    m_xAccessibleParent;
         ::svt::IToolPanelDeck*                      m_pPanelDeck;
-        VclPtr<::svt::PanelTabBar>                  m_pTabBar;
+        VclPtr< ::svt::PanelTabBar >                m_pTabBar;
         ::std::vector< Reference< XAccessible > >   m_aChildren;
     };
 
