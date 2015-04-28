@@ -31,7 +31,7 @@ typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XMultiPage > Mu
 
 class ScVbaMultiPage : public MultiPageImpl_BASE
 {
-    css::uno::Reference< css::container::XIndexAccess > getPages( sal_Int32 nPages );
+    static css::uno::Reference< css::container::XIndexAccess > getPages( sal_Int32 nPages );
 public:
     ScVbaMultiPage(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
@@ -49,7 +49,7 @@ public:
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Value"); }
+    static OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Value"); }
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAMULTIPAGE_HXX

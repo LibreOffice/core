@@ -35,14 +35,14 @@ private:
     OUString                                            m_sResourceUrl;
     bool                                                m_bIsMenu;
 
-    css::uno::Sequence< css::beans::PropertyValue > CreateMenuItemData( const OUString& sCommandURL,
+    static css::uno::Sequence< css::beans::PropertyValue > CreateMenuItemData( const OUString& sCommandURL,
                                                                         const OUString& sHelpURL,
                                                                         const OUString& sLabel,
                                                                         sal_uInt16 nType,
                                                                         const css::uno::Any& aSubMenu,
                                                                         bool isVisible,
                                                                         bool isEnabled );
-    css::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const css::uno::Any& aSubMenu, bool isVisible, sal_Int32 nStyle );
+    static css::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const css::uno::Any& aSubMenu, bool isVisible, sal_Int32 nStyle );
 
 public:
     ScVbaCommandBarControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw( css::uno::RuntimeException );
