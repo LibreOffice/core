@@ -941,6 +941,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         if (nState & ControlState::SELECTED)
             flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_ACTIVE);
         break;
+    case CTRL_WINDOW_BACKGROUND:
+        context = gtk_widget_get_style_context(mpWindow);
+        break;
     default:
         return false;
     }
@@ -1543,8 +1546,8 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 //            break;
 
 //        case CTRL_FRAME:
-//        case CTRL_WINDOW_BACKGROUND:
-//            return true;
+        case CTRL_WINDOW_BACKGROUND:
+            return true;
 
         case CTRL_TAB_ITEM:
         case CTRL_TAB_HEADER:
