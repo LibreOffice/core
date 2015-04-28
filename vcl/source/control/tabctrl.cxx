@@ -1118,7 +1118,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
 
         if (IsNativeControlSupported(CTRL_TAB_HEADER, PART_ENTIRE_CONTROL))
         {
-            Rectangle aHeaderRect(0, 0, GetSizePixel().Width(), aRect.Top());
+            Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
 
             aClipRgn = GetActiveClipRegion();
             aClipRgn.Intersect( aHeaderRect );
