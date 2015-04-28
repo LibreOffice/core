@@ -960,6 +960,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     {
         gtk_style_context_add_class(context, styleClass);
     }
+    if (nType == CTRL_TAB_HEADER || nType == CTRL_TAB_PANE)
+    {
+        gtk_style_context_add_class(context, GTK_STYLE_CLASS_FRAME);
+    }
 
     switch(renderType)
     {
@@ -1149,7 +1153,6 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
         gtk_style_context_add_region(mpNoteBookStyle, GTK_STYLE_REGION_TAB, GTK_REGION_ONLY);
         gtk_style_context_add_class(mpNoteBookStyle, GTK_STYLE_CLASS_TOP);
-
 
         aEditRect = AdjustRectForTextBordersPadding(mpSpinStyle, rValue.getNumericVal(), rControlRegion);
 
