@@ -27,7 +27,7 @@ namespace rptui
     class ColorChanger
     {
     protected:
-        OutputDevice*   m_pDev;
+        VclPtr<OutputDevice> m_pDev;
 
     public:
         ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor)

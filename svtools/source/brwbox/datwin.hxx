@@ -103,9 +103,9 @@ class BrowserDataWin
             ,public DropTargetHelper
 {
 public:
-    BrowserHeader*  pHeaderBar;     // only for BrowserMode::HEADERBAR_NEW
-    vcl::Window*         pEventWin;      // Window of forwarded events
-    ScrollBarBox*   pCornerWin;     // Window in the corner btw the ScrollBars
+    VclPtr<BrowserHeader> pHeaderBar;     // only for BrowserMode::HEADERBAR_NEW
+    VclPtr<vcl::Window>   pEventWin;      // Window of forwarded events
+    VclPtr<ScrollBarBox>  pCornerWin;     // Window in the corner btw the ScrollBars
     bool            bInDtor;
     AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
     MouseEvent      aRepeatEvt;     // a MouseEvent to repeat
@@ -137,7 +137,8 @@ public:
 
 public:
                     BrowserDataWin( BrowseBox* pParent );
-                    virtual ~BrowserDataWin();
+    virtual         ~BrowserDataWin();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -196,7 +197,7 @@ class BrowserScrollBar: public ScrollBar
 {
     sal_uLong           _nTip;
     sal_uLong           _nLastPos;
-    BrowserDataWin* _pDataWin;
+    VclPtr<BrowserDataWin> _pDataWin;
 
 public:
                     BrowserScrollBar( vcl::Window* pParent, WinBits nStyle,
@@ -206,6 +207,8 @@ public:
                         _nLastPos( ULONG_MAX ),
                         _pDataWin( pDataWin )
                     {}
+   virtual          ~BrowserScrollBar();
+   virtual void     dispose() SAL_OVERRIDE;
                     //ScrollBar( vcl::Window* pParent, const ResId& rResId );
 
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;

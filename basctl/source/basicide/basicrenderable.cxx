@@ -77,17 +77,17 @@ Renderable::~Renderable()
 {
 }
 
-Printer* Renderable::getPrinter()
+VclPtr< Printer > Renderable::getPrinter()
 {
-    Printer* pPrinter = NULL;
+    VclPtr< Printer > pPrinter;
     Any aValue( getValue( "RenderDevice" ) );
     Reference<awt::XDevice> xRenderDevice;
 
     if( aValue >>= xRenderDevice )
     {
         VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
-        OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
-        pPrinter = dynamic_cast<Printer*>(pOut);
+        VclPtr< OutputDevice > pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
+        pPrinter = dynamic_cast<Printer*>(pOut.get());
     }
     return pPrinter;
 }

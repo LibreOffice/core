@@ -72,7 +72,7 @@ void ScTbxInsertCtrl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState,
     }
 }
 
-SfxPopupWindow* ScTbxInsertCtrl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> ScTbxInsertCtrl::CreatePopupWindow()
 {
     sal_uInt16 nSlotId = GetSlotId();
     if (nSlotId == SID_TBXCTL_INSERT)

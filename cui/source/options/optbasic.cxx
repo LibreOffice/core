@@ -47,6 +47,18 @@ SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxI
 
 SvxBasicIDEOptionsPage::~SvxBasicIDEOptionsPage()
 {
+    disposeOnce();
+}
+
+void SvxBasicIDEOptionsPage::dispose()
+{
+    pCodeCompleteChk.clear();
+    pAutocloseProcChk.clear();
+    pAutocloseParenChk.clear();
+    pAutocloseQuotesChk.clear();
+    pAutoCorrectChk.clear();
+    pUseExtendedTypesChk.clear();
+    SfxTabPage::dispose();
 }
 
 void SvxBasicIDEOptionsPage::LoadConfig()
@@ -136,9 +148,9 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     pUseExtendedTypesChk->SaveValue();
 }
 
-SfxTabPage* SvxBasicIDEOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxBasicIDEOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new SvxBasicIDEOptionsPage( pParent, *rAttrSet ) );
+    return VclPtr<SvxBasicIDEOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 void SvxBasicIDEOptionsPage::FillUserData()

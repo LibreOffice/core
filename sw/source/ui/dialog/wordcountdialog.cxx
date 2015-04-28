@@ -46,7 +46,26 @@ IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
+    disposeOnce();
+}
+
+void SwWordCountFloatDlg::dispose()
+{
     SwViewShell::SetCareWin( 0 );
+    m_pCurrentWordFT.clear();
+    m_pCurrentCharacterFT.clear();
+    m_pCurrentCharacterExcludingSpacesFT.clear();
+    m_pCurrentCjkcharsFT.clear();
+    m_pCurrentStandardizedPagesFT.clear();
+    m_pDocWordFT.clear();
+    m_pDocCharacterFT.clear();
+    m_pDocCharacterExcludingSpacesFT.clear();
+    m_pDocCjkcharsFT.clear();
+    m_pDocStandardizedPagesFT.clear();
+    m_pCjkcharsLabelFT.clear();
+    m_pStandardizedPagesLabelFT.clear();
+    m_pClosePB.clear();
+    SfxModelessDialog::dispose();
 }
 
 namespace

@@ -312,6 +312,11 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl)
 
 ImpPDFTabDialog::~ImpPDFTabDialog()
 {
+    disposeOnce();
+}
+
+void ImpPDFTabDialog::dispose()
+{
 //delete the pages, needed because otherwise the child tab pages
 //don't get destroyed
     RemoveTabPage(mnGeneralPageId);
@@ -320,6 +325,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     RemoveTabPage(mnLinksPage);
     RemoveTabPage(mnSecurityPageId);
     RemoveTabPage(mnSigningPageId);
+    SfxTabDialog::dispose();
 }
 
 
@@ -546,10 +552,42 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
 
 ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
 {
+    disposeOnce();
 }
 
+void ImpPDFTabGeneralPage::dispose()
+{
+    mpRbAll.clear();
+    mpRbRange.clear();
+    mpRbSelection.clear();
+    mpEdPages.clear();
+    mpRbLosslessCompression.clear();
+    mpRbJPEGCompression.clear();
+    mpQualityFrame.clear();
+    mpNfQuality.clear();
+    mpCbReduceImageResolution.clear();
+    mpCoReduceImageResolution.clear();
+    mpCbPDFA1b.clear();
+    mpCbTaggedPDF.clear();
+    mpCbExportFormFields.clear();
+    mpFormsFrame.clear();
+    mpLbFormsFormat.clear();
+    mpCbAllowDuplicateFieldNames.clear();
+    mpCbExportBookmarks.clear();
+    mpCbExportHiddenSlides.clear();
+    mpCbExportNotes.clear();
+    mpCbViewPDF.clear();
+    mpCbExportNotesPages.clear();
+    mpCbExportEmptyPages.clear();
+    mpCbAddStream.clear();
+    mpCbWatermark.clear();
+    mpFtWatermark.clear();
+    mpEdWatermark.clear();
+    mpaParent.clear();
+    SfxTabPage::dispose();
+}
 
-void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent )
+void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
 {
     mpaParent = paParent;
 
@@ -696,10 +734,10 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 }
 
 
-SfxTabPage*  ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
-                                           const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabGeneralPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabGeneralPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -806,8 +844,8 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
     // if a password was set, inform the user that this will not be used in PDF/A case
     if( mpCbPDFA1b->IsChecked() && pSecPage && pSecPage->hasPassword() )
     {
-        MessageDialog aBox(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING);
-        aBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aBox(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING);
+        aBox->Execute();
     }
 
     return 0;
@@ -844,13 +882,33 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(vcl::Window* pParent, const SfxItemSet&
 
 ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
 {
+    disposeOnce();
 }
 
-
-SfxTabPage*  ImpPDFTabOpnFtrPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+void ImpPDFTabOpnFtrPage::dispose()
 {
-    return ( new  ImpPDFTabOpnFtrPage( pParent, *rAttrSet ) );
+    mpRbOpnPageOnly.clear();
+    mpRbOpnOutline.clear();
+    mpRbOpnThumbs.clear();
+    mpNumInitialPage.clear();
+    mpRbMagnDefault.clear();
+    mpRbMagnFitWin.clear();
+    mpRbMagnFitWidth.clear();
+    mpRbMagnFitVisible.clear();
+    mpRbMagnZoom.clear();
+    mpNumZoom.clear();
+    mpRbPgLyDefault.clear();
+    mpRbPgLySinglePage.clear();
+    mpRbPgLyContinue.clear();
+    mpRbPgLyContinueFacing.clear();
+    mpCbPgLyFirstOnLeft.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rAttrSet)
+{
+    return VclPtr<ImpPDFTabOpnFtrPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -999,6 +1057,23 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage( vcl::Window* pParent,
 
 ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
 {
+    disposeOnce();
+}
+
+void ImpPDFTabViewerPage::dispose()
+{
+    m_pCbResWinInit.clear();
+    m_pCbCenterWindow.clear();
+    m_pCbOpenFullScreen.clear();
+    m_pCbDispDocTitle.clear();
+    m_pCbHideViewerMenubar.clear();
+    m_pCbHideViewerToolbar.clear();
+    m_pCbHideViewerWindowControls.clear();
+    m_pCbTransitionEffects.clear();
+    m_pRbAllBookmarkLevels.clear();
+    m_pRbVisibleBookmarkLevels.clear();
+    m_pNumBookmarkLevels.clear();
+    SfxTabPage::dispose();
 }
 
 IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
@@ -1007,10 +1082,10 @@ IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
     return 0;
 }
 
-SfxTabPage*  ImpPDFTabViewerPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabViewerPage::Create( vcl::Window* pParent,
+                                                const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabViewerPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabViewerPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -1096,13 +1171,38 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(vcl::Window* i_pParent, const SfxIt
 
 ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 {
+    disposeOnce();
 }
 
-
-SfxTabPage*  ImpPDFTabSecurityPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+void ImpPDFTabSecurityPage::dispose()
 {
-    return ( new  ImpPDFTabSecurityPage( pParent, *rAttrSet ) );
+    mpPbSetPwd.clear();
+    mpUserPwdSet.clear();
+    mpUserPwdUnset.clear();
+    mpUserPwdPdfa.clear();
+    mpOwnerPwdSet.clear();
+    mpOwnerPwdUnset.clear();
+    mpOwnerPwdPdfa.clear();
+    mpPrintPermissions.clear();
+    mpRbPrintNone.clear();
+    mpRbPrintLowRes.clear();
+    mpRbPrintHighRes.clear();
+    mpChangesAllowed.clear();
+    mpRbChangesNone.clear();
+    mpRbChangesInsDel.clear();
+    mpRbChangesFillForm.clear();
+    mpRbChangesComment.clear();
+    mpRbChangesAnyNoCopy.clear();
+    mpContent.clear();
+    mpCbEnableCopy.clear();
+    mpCbEnableAccessibility.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create( vcl::Window* pParent,
+                                                  const SfxItemSet* rAttrSet)
+{
+    return VclPtr<ImpPDFTabSecurityPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -1191,17 +1291,17 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 
 IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
 {
-    SfxPasswordDialog aPwdDialog( this, &msUserPwdTitle );
-    aPwdDialog.SetMinLen( 0 );
-    aPwdDialog.ShowMinLengthText(false);
-    aPwdDialog.ShowExtras( SfxShowExtras::CONFIRM | SfxShowExtras::PASSWORD2 | SfxShowExtras::CONFIRM2 );
-    aPwdDialog.SetText(msStrSetPwd);
-    aPwdDialog.SetGroup2Text(msOwnerPwdTitle);
-    aPwdDialog.AllowAsciiOnly();
-    if( aPwdDialog.Execute() == RET_OK )  //OK issued get password and set it
+    ScopedVclPtrInstance< SfxPasswordDialog > aPwdDialog( this, &msUserPwdTitle );
+    aPwdDialog->SetMinLen( 0 );
+    aPwdDialog->ShowMinLengthText(false);
+    aPwdDialog->ShowExtras( SfxShowExtras::CONFIRM | SfxShowExtras::PASSWORD2 | SfxShowExtras::CONFIRM2 );
+    aPwdDialog->SetText(msStrSetPwd);
+    aPwdDialog->SetGroup2Text(msOwnerPwdTitle);
+    aPwdDialog->AllowAsciiOnly();
+    if( aPwdDialog->Execute() == RET_OK )  //OK issued get password and set it
     {
-        OUString aUserPW( aPwdDialog.GetPassword() );
-        OUString aOwnerPW( aPwdDialog.GetPassword2() );
+        OUString aUserPW( aPwdDialog->GetPassword() );
+        OUString aOwnerPW( aPwdDialog->GetPassword2() );
 
         mbHaveUserPassword = !aUserPW.isEmpty();
         mbHaveOwnerPassword = !aOwnerPW.isEmpty();
@@ -1317,13 +1417,24 @@ ImpPDFTabLinksPage::ImpPDFTabLinksPage( vcl::Window* pParent,
 
 ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
 {
+    disposeOnce();
 }
 
-
-SfxTabPage*  ImpPDFTabLinksPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+void ImpPDFTabLinksPage::dispose()
 {
-    return ( new  ImpPDFTabLinksPage( pParent, *rAttrSet ) );
+    m_pCbExprtBmkrToNmDst.clear();
+    m_pCbOOoToPDFTargets.clear();
+    m_pCbExportRelativeFsysLinks.clear();
+    m_pRbOpnLnksDefault.clear();
+    m_pRbOpnLnksLaunch.clear();
+    m_pRbOpnLnksBrowser.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create( vcl::Window* pParent,
+                                               const SfxItemSet* rAttrSet)
+{
+    return VclPtr<ImpPDFTabLinksPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -1511,9 +1622,17 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
 
 ImplErrorDialog::~ImplErrorDialog()
 {
+    disposeOnce();
+}
+
+void ImplErrorDialog::dispose()
+{
     // free strings again
     for( sal_uInt16 n = 0; n < m_pErrors->GetEntryCount(); n++ )
         delete static_cast<OUString*>(m_pErrors->GetEntryData( n ));
+    m_pErrors.clear();
+    m_pExplanation.clear();
+    MessageDialog::dispose();
 }
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
@@ -1548,6 +1667,19 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(vcl::Window* pParent, const SfxItemSe
 
 ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
 {
+    disposeOnce();
+}
+
+void ImpPDFTabSigningPage::dispose()
+{
+    mpEdSignCert.clear();
+    mpPbSignCertSelect.clear();
+    mpPbSignCertClear.clear();
+    mpEdSignPassword.clear();
+    mpEdSignLocation.clear();
+    mpEdSignContactInfo.clear();
+    mpEdSignReason.clear();
+    SfxTabPage::dispose();
 }
 
 IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect )
@@ -1610,10 +1742,10 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, SelectLBSignTSA )
     return 0;
 }
 
-SfxTabPage*  ImpPDFTabSigningPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> ImpPDFTabSigningPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabSigningPage( pParent, *rAttrSet ) );
+    return VclPtr<ImpPDFTabSigningPage>::Create( pParent, *rAttrSet );
 }
 
 

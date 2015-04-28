@@ -59,21 +59,21 @@ namespace rptui
     class ODesignView : public dbaui::ODataView, public SfxBroadcaster, public IMarkedSection
     {
     private:
-        SplitWindow                         m_aSplitWin;
+        VclPtr<SplitWindow>                 m_aSplitWin;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
         OReportController&                  m_rReportController;
-        OScrollWindowHelper                 m_aScrollWindow;
-        vcl::Window*                             m_pTaskPane;
-        PropBrw*                            m_pPropWin;
-        OAddFieldWindow*                    m_pAddField;
+        VclPtr<OScrollWindowHelper>         m_aScrollWindow;
+        VclPtr<vcl::Window>                 m_pTaskPane;
+        VclPtr<PropBrw>                     m_pPropWin;
+        VclPtr<OAddFieldWindow>             m_pAddField;
         OSectionView*                       m_pCurrentView;
-        ONavigator*                         m_pReportExplorer;
+        VclPtr<ONavigator>                  m_pReportExplorer;
         Idle                                m_aMarkIdle;
         Point                               m_aScrollOffset;
         DlgEdMode                           m_eMode;
-        sal_uInt16                              m_nCurrentPosition;
-        sal_uInt16                              m_eActObj;
+        sal_uInt16                          m_nCurrentPosition;
+        sal_uInt16                          m_eActObj;
         bool                                m_bFirstDraw;
         Size                                m_aGridSizeCoarse;
         Size                                m_aGridSizeFine;
@@ -100,6 +100,7 @@ namespace rptui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
                     OReportController& _rController);
         virtual ~ODesignView();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -212,8 +213,8 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > getCurrentControlModel() const;
 
         // IMarkedSection
-        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
+        OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
         virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
 
         /** fills the positions of all collapsed sections.

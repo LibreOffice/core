@@ -91,6 +91,37 @@ SwFldFuncPage::SwFldFuncPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
 SwFldFuncPage::~SwFldFuncPage()
 {
+    disposeOnce();
+}
+
+void SwFldFuncPage::dispose()
+{
+    m_pTypeLB.clear();
+    m_pSelectionLB.clear();
+    m_pFormat.clear();
+    m_pFormatLB.clear();
+    m_pNameFT.clear();
+    m_pNameED.clear();
+    m_pValueGroup.clear();
+    m_pValueFT.clear();
+    m_pValueED.clear();
+    m_pCond1FT.clear();
+    m_pCond1ED.clear();
+    m_pCond2FT.clear();
+    m_pCond2ED.clear();
+    m_pMacroBT.clear();
+    m_pListGroup.clear();
+    m_pListItemFT.clear();
+    m_pListItemED.clear();
+    m_pListAddPB.clear();
+    m_pListItemsFT.clear();
+    m_pListItemsLB.clear();
+    m_pListRemovePB.clear();
+    m_pListUpPB.clear();
+    m_pListDownPB.clear();
+    m_pListNameFT.clear();
+    m_pListNameED.clear();
+    SwFldPage::dispose();
 }
 
 void SwFldFuncPage::Reset(const SfxItemSet* )
@@ -597,10 +628,10 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
     return rMacro;
 }
 
-SfxTabPage* SwFldFuncPage::Create(  vcl::Window* pParent,
-                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwFldFuncPage::Create( vcl::Window* pParent,
+                                          const SfxItemSet* rAttrSet )
 {
-    return ( new SwFldFuncPage( pParent, *rAttrSet ) );
+    return VclPtr<SwFldFuncPage>::Create( pParent, *rAttrSet );
 }
 
 sal_uInt16 SwFldFuncPage::GetGroup()

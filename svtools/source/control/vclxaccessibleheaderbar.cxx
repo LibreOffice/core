@@ -56,9 +56,8 @@ VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar( VCLXWindow* pVCLWindow )
     :VCLXAccessibleComponent( pVCLWindow )
     ,m_pHeadBar(NULL)
 {
-    m_pHeadBar = static_cast< HeaderBar* >( GetWindow() );
+    m_pHeadBar = GetAs< HeaderBar >();
 }
-
 
 
 VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()

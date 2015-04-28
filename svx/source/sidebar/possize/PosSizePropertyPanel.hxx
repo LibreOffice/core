@@ -50,7 +50,10 @@ class PosSizePropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static PosSizePropertyPanel* Create(
+    virtual ~PosSizePropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
@@ -70,30 +73,37 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    // constructor/destuctor
+    PosSizePropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings,
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+
 private:
     //Position
-    FixedText*        mpFtPosX;
-    MetricField*      mpMtrPosX;
-    FixedText*        mpFtPosY;
-    MetricField*      mpMtrPosY;
+    VclPtr<FixedText>        mpFtPosX;
+    VclPtr<MetricField>      mpMtrPosX;
+    VclPtr<FixedText>        mpFtPosY;
+    VclPtr<MetricField>      mpMtrPosY;
 
     // size
-    FixedText*        mpFtWidth;
-    MetricField*      mpMtrWidth;
-    FixedText*        mpFtHeight;
-    MetricField*      mpMtrHeight;
-    CheckBox*         mpCbxScale;
+    VclPtr<FixedText>        mpFtWidth;
+    VclPtr<MetricField>      mpMtrWidth;
+    VclPtr<FixedText>        mpFtHeight;
+    VclPtr<MetricField>      mpMtrHeight;
+    VclPtr<CheckBox>         mpCbxScale;
 
     //rotation
-    FixedText*        mpFtAngle;
-    MetricBox*        mpMtrAngle;
+    VclPtr<FixedText>        mpFtAngle;
+    VclPtr<MetricBox>        mpMtrAngle;
 
     //rotation control
-    SidebarDialControl*  mpDial;
+    VclPtr<SidebarDialControl>  mpDial;
 
     //flip
-    FixedText*        mpFtFlip;
-    ToolBox*          mpFlipTbx;
+    VclPtr<FixedText>        mpFtFlip;
+    VclPtr<ToolBox>          mpFlipTbx;
 
     // Internal variables
     basegfx::B2DRange                       maRect;
@@ -153,14 +163,6 @@ private:
     void executePosX();
     void executePosY();
     void executeSize();
-
-    // constructor/destuctor
-    PosSizePropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~PosSizePropertyPanel();
 
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );

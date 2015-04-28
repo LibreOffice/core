@@ -1931,7 +1931,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const ScPatternAttr* pPattern = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
                 const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
                 bool bContainsCondFormat = !rCondFormats.empty();
-                boost::scoped_ptr<ScCondFormatDlg> pCondFormatDlg;
+                VclPtr<ScCondFormatDlg> pCondFormatDlg;
                 if(bContainsCondFormat)
                 {
                     bool bContainsExistingCondFormat = false;
@@ -1950,7 +1950,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             // found a matching range, edit this conditional format
                             nKey = pCondFormat->GetKey();
-                            pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                            pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
                             break;
                         }
                     }
@@ -1960,9 +1960,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if(!pCondFormatDlg && bContainsExistingCondFormat)
                     {
-                        QueryBox aBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                        ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
                                ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) );
-                        bool bEditExisting = aBox.Execute() == RET_YES;
+                        bool bEditExisting = aBox->Execute() == RET_YES;
                         if(bEditExisting)
                         {
                             // differentiate between ranges where one conditional format is defined
@@ -1975,7 +1975,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 assert(pCondFormat);
                                 const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                                 nKey = pCondFormat->GetKey();
-                                pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                                pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
                             }
                             else
                             {
@@ -2023,7 +2023,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             assert(false);
                             break;
                     }
-                    pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType ) );
+                    pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, nullptr, aRangeList, aRangeList.GetTopLeftCorner(), eType ) );
                 }
 
                 sal_uInt16 nId = 1;
@@ -2652,10 +2652,10 @@ void ScCellShell::ExecuteDataPilotDialog()
                     {
                         //  confirm selection if it contains SubTotal cells
 
-                        QueryBox aBox( pTabViewShell->GetDialogParent(),
+                        ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(),
                                         WinBits(WB_YES_NO | WB_DEF_YES),
                                         ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
-                        if (aBox.Execute() == RET_NO)
+                        if (aBox->Execute() == RET_NO)
                             bOK = false;
                     }
                     if (bOK)
@@ -2682,8 +2682,8 @@ void ScCellShell::ExecuteDataPilotDialog()
         if (nSrcErrorId)
         {
             // Error occurred during data creation.  Launch an error and bail out.
-            InfoBox aBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId));
-            aBox.Execute();
+            ScopedVclPtrInstance< InfoBox > aBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId));
+            aBox->Execute();
             return;
         }
 

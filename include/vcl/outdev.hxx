@@ -263,13 +263,34 @@ class VCL_DLLPUBLIC OutputDevice
     friend class vcl::PDFWriterImpl;
     friend void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
+    // All of this will need to be replicated in Window
+    // or a shared base-class as/when we can break the
+    // OutputDevice -> Window inheritance.
+private:
+    mutable int mnRefCnt;         // reference count
+
+    template<typename T> friend class ::rtl::Reference;
+    template<typename T> friend class ::VclPtr;
+
+    inline void acquire() const
+    {
+        mnRefCnt++;
+    }
+
+    inline void release() const
+    {
+        assert(mnRefCnt>0);
+        if (!--mnRefCnt)
+            delete this;
+    }
+
 private:
     OutputDevice(const OutputDevice&) SAL_DELETED_FUNCTION;
     OutputDevice& operator=(const OutputDevice&) SAL_DELETED_FUNCTION;
 
     mutable SalGraphics*            mpGraphics;         ///< Graphics context to draw on
-    mutable OutputDevice*           mpPrevGraphics;     ///< Previous output device in list
-    mutable OutputDevice*           mpNextGraphics;     ///< Next output device in list
+    mutable VclPtr<OutputDevice>    mpPrevGraphics;     ///< Previous output device in list
+    mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
     mutable ImplFontEntry*          mpFontEntry;
     mutable ImplFontCache*          mpFontCache;
@@ -283,7 +304,7 @@ private:
     vcl::ExtOutDevData*             mpExtOutDevData;
 
     // TEMP TEMP TEMP
-    VirtualDevice*                  mpAlphaVDev;
+    VclPtr<VirtualDevice>           mpAlphaVDev;
 
     /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
     long                            mnOutOffOrigX;
@@ -352,6 +373,7 @@ private:
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
+    mutable bool                    mbDisposed : 1;
 
     /** @name Initialization and accessor functions
      */
@@ -359,9 +381,17 @@ private:
 
 protected:
                                 OutputDevice();
-
 public:
     virtual                     ~OutputDevice();
+
+protected:
+    /// release all references to other objects.
+    virtual void                        dispose();
+
+public:
+    /// call the dispose() method if we have not already been disposed.
+    void                                disposeOnce();
+    bool                                isDisposed() const { return mbDisposed; }
 
 public:
 

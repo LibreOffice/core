@@ -66,6 +66,11 @@ ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle, bool bDis
 
 ThumbnailView::~ThumbnailView()
 {
+    disposeOnce();
+}
+
+void ThumbnailView::dispose()
+{
     com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
             xComponent(GetAccessible(false),
                        com::sun::star::uno::UNO_QUERY);
@@ -73,11 +78,12 @@ ThumbnailView::~ThumbnailView()
     if (xComponent.is())
         xComponent->dispose ();
 
-    delete mpScrBar;
+    mpScrBar.disposeAndClear();
     delete mpItemAttrs;
     delete mpProcessor;
 
     ImplDeleteItems();
+    Control::dispose();
 }
 
 void ThumbnailView::MouseMove(const MouseEvent& rMEvt)
@@ -230,7 +236,7 @@ void ThumbnailView::ImplInitScrollBar()
     {
         if ( !mpScrBar )
         {
-            mpScrBar = new ScrollBar( this, WB_VSCROLL | WB_DRAG );
+            mpScrBar = VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG );
             mpScrBar->SetScrollHdl( LINK( this, ThumbnailView, ImplScrollHdl ) );
         }
         else
@@ -270,7 +276,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     Size        aWinSize = GetOutputSizePixel();
     size_t      nItemCount = mFilteredItemList.size();
     WinBits     nStyle = GetStyle();
-    ScrollBar*  pDelScrBar = NULL;
+    VclPtr<ScrollBar>  pDelScrBar;
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
@@ -435,7 +441,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     }
 
     // delete ScrollBar
-    delete pDelScrBar;
+    pDelScrBar.disposeAndClear();
 }
 
 size_t ThumbnailView::ImplGetItem( const Point& rPos ) const

@@ -104,7 +104,7 @@ namespace dbaui
 
     protected:
         // OGenericUnoDialog overridables
-        virtual Dialog* createDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
         virtual void implInitialize( const com::sun::star::uno::Any& _rValue ) SAL_OVERRIDE;
     protected:
         using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
@@ -204,9 +204,9 @@ namespace dbaui
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    Dialog* OTextConnectionSettingsDialog::createDialog(vcl::Window* _pParent)
+    VclPtr<Dialog> OTextConnectionSettingsDialog::createDialog(vcl::Window* _pParent)
     {
-        return new TextConnectionSettingsDialog( _pParent, *m_pDatasourceItems );
+        return VclPtr<TextConnectionSettingsDialog>::Create( _pParent, *m_pDatasourceItems );
     }
 
     void OTextConnectionSettingsDialog::implInitialize(const Any& _rValue)

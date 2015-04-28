@@ -156,8 +156,8 @@ private:
     sal_uInt32               nWrittenBitmaps;  // number of already written Bitmaps
     sal_uInt32               nActBitmapPercent; // percentage of the next bitmap that's already written
 
-    ::std::unique_ptr< VirtualDevice >  apDummyVDev;
-    OutputDevice*                       pCompDev;
+    ScopedVclPtr<VirtualDevice>  apDummyVDev;
+    VclPtr<OutputDevice>         pCompDev;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
@@ -261,6 +261,7 @@ public:
         pCompDev = reinterpret_cast< OutputDevice* >( Application::GetAppWindow() );
         if( !pCompDev )
         {
+            apDummyVDev.disposeAndClear();
             apDummyVDev.reset( new VirtualDevice );
             pCompDev = apDummyVDev.get();
         }
@@ -1850,12 +1851,12 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
                 if( aGDIFont.GetAlign() != ALIGN_BASELINE)
                 {
-                    VirtualDevice aVDev;
+                    ScopedVclPtrInstance< VirtualDevice > pVDev;
 
                     if( aGDIFont.GetAlign()==ALIGN_TOP )
-                        aPt.Y()+=(long)aVDev.GetFontMetric( aGDIFont ).GetAscent();
+                        aPt.Y()+=(long)pVDev->GetFontMetric( aGDIFont ).GetAscent();
                     else
-                        aPt.Y()-=(long)aVDev.GetFontMetric( aGDIFont ).GetDescent();
+                        aPt.Y()-=(long)pVDev->GetFontMetric( aGDIFont ).GetDescent();
                 }
 
                 METSetMix(eGDIRasterOp);
@@ -1879,11 +1880,11 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
                 if( aGDIFont.GetAlign() != ALIGN_BASELINE )
                 {
-                    VirtualDevice aVDev;
+                    ScopedVclPtrInstance< VirtualDevice > pVDev;
                     if( aGDIFont.GetAlign() == ALIGN_TOP )
-                        aPt.Y()+=(long)aVDev.GetFontMetric(aGDIFont).GetAscent();
+                        aPt.Y()+=(long)pVDev->GetFontMetric(aGDIFont).GetAscent();
                     else
-                        aPt.Y()-=(long)aVDev.GetFontMetric(aGDIFont).GetDescent();
+                        aPt.Y()-=(long)pVDev->GetFontMetric(aGDIFont).GetDescent();
                 }
 
                 METSetMix(eGDIRasterOp);
@@ -1922,7 +1923,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             case META_STRETCHTEXT_ACTION:
             {
                 const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pMA);
-                VirtualDevice                   aVDev;
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 sal_uInt16                          i;
                 sal_Int32                       nNormSize;
                 OUString                        aStr;
@@ -1931,14 +1932,14 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 Point                           aPt( pA->GetPoint() );
                 Point                           aPt2;
 
-                aVDev.SetFont( aGDIFont );
+                pVDev->SetFont( aGDIFont );
 
                 if( aGDIFont.GetAlign() != ALIGN_BASELINE)
                 {
                     if( aGDIFont.GetAlign() == ALIGN_TOP )
-                        aPt.Y()+=(long)aVDev.GetFontMetric().GetAscent();
+                        aPt.Y()+=(long)pVDev->GetFontMetric().GetAscent();
                     else
-                        aPt.Y()-=(long)aVDev.GetFontMetric().GetDescent();
+                        aPt.Y()-=(long)pVDev->GetFontMetric().GetDescent();
                 }
 
                 METSetMix(eGDIRasterOp);
@@ -1949,7 +1950,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrSet(FindChrSet(aGDIFont));
                 aStr = pA->GetText().copy(pA->GetIndex(),pA->GetLen());
                 boost::scoped_array<long> pDXAry(new long[aStr.getLength()]);
-                nNormSize = aVDev.GetTextArray( aStr, pDXAry.get() );
+                nNormSize = pVDev->GetTextArray( aStr, pDXAry.get() );
 
                 for ( i = 0; i < aStr.getLength(); i++ )
                 {
@@ -2067,24 +2068,24 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_GRADIENT_ACTION:
             {
-                VirtualDevice               aVDev;
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 GDIMetaFile                 aTmpMtf;
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pMA);
 
-                aVDev.SetMapMode( aTargetMapMode );
-                aVDev.AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
+                pVDev->SetMapMode( aTargetMapMode );
+                pVDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
                 WriteOrders( &aTmpMtf );
             }
             break;
 
             case META_HATCH_ACTION:
             {
-                VirtualDevice           aVDev;
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 GDIMetaFile             aTmpMtf;
                 const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pMA);
 
-                aVDev.SetMapMode( aTargetMapMode );
-                aVDev.AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
+                pVDev->SetMapMode( aTargetMapMode );
+                pVDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
                 WriteOrders( &aTmpMtf );
             }
             break;

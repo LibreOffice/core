@@ -60,108 +60,108 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DWin : public SfxDockingWindow
     using Window::Update;
 
 private:
-    PushButton*         m_pBtnGeo;
-    PushButton*         m_pBtnRepresentation;
-    PushButton*         m_pBtnLight;
-    PushButton*         m_pBtnTexture;
-    PushButton*         m_pBtnMaterial;
-    PushButton*         m_pBtnUpdate;
-    PushButton*         m_pBtnAssign;
+    VclPtr<PushButton>         m_pBtnGeo;
+    VclPtr<PushButton>         m_pBtnRepresentation;
+    VclPtr<PushButton>         m_pBtnLight;
+    VclPtr<PushButton>         m_pBtnTexture;
+    VclPtr<PushButton>         m_pBtnMaterial;
+    VclPtr<PushButton>         m_pBtnUpdate;
+    VclPtr<PushButton>         m_pBtnAssign;
 
 // geometry
-    VclContainer*       m_pFLGeometrie;
-    FixedText*          m_pFtPercentDiagonal;
-    MetricField*        m_pMtrPercentDiagonal;
-    FixedText*          m_pFtBackscale;
-    MetricField*        m_pMtrBackscale;
-    FixedText*          m_pFtEndAngle;
-    MetricField*        m_pMtrEndAngle;
-    FixedText*          m_pFtDepth;
-    MetricField*        m_pMtrDepth;
+    VclPtr<VclContainer>       m_pFLGeometrie;
+    VclPtr<FixedText>          m_pFtPercentDiagonal;
+    VclPtr<MetricField>        m_pMtrPercentDiagonal;
+    VclPtr<FixedText>          m_pFtBackscale;
+    VclPtr<MetricField>        m_pMtrBackscale;
+    VclPtr<FixedText>          m_pFtEndAngle;
+    VclPtr<MetricField>        m_pMtrEndAngle;
+    VclPtr<FixedText>          m_pFtDepth;
+    VclPtr<MetricField>        m_pMtrDepth;
 
-    VclContainer*       m_pFLSegments;
-    NumericField*       m_pNumHorizontal;
-    NumericField*       m_pNumVertical;
+    VclPtr<VclContainer>       m_pFLSegments;
+    VclPtr<NumericField>       m_pNumHorizontal;
+    VclPtr<NumericField>       m_pNumVertical;
 
-    VclContainer*       m_pFLNormals;
-    PushButton*         m_pBtnNormalsObj;
-    PushButton*         m_pBtnNormalsFlat;
-    PushButton*         m_pBtnNormalsSphere;
-    PushButton*         m_pBtnNormalsInvert;
-    PushButton*         m_pBtnTwoSidedLighting;
-    PushButton*         m_pBtnDoubleSided;
+    VclPtr<VclContainer>       m_pFLNormals;
+    VclPtr<PushButton>         m_pBtnNormalsObj;
+    VclPtr<PushButton>         m_pBtnNormalsFlat;
+    VclPtr<PushButton>         m_pBtnNormalsSphere;
+    VclPtr<PushButton>         m_pBtnNormalsInvert;
+    VclPtr<PushButton>         m_pBtnTwoSidedLighting;
+    VclPtr<PushButton>         m_pBtnDoubleSided;
 
 // presentation
-    VclContainer*       m_pFLRepresentation;
-    ListBox*            m_pLbShademode;
+    VclPtr<VclContainer>       m_pFLRepresentation;
+    VclPtr<ListBox>            m_pLbShademode;
 
-    VclContainer*       m_pFLShadow;
-    PushButton*         m_pBtnShadow3d;
-    FixedText*          m_pFtSlant;
-    MetricField*        m_pMtrSlant;
+    VclPtr<VclContainer>       m_pFLShadow;
+    VclPtr<PushButton>         m_pBtnShadow3d;
+    VclPtr<FixedText>          m_pFtSlant;
+    VclPtr<MetricField>        m_pMtrSlant;
 
-    VclContainer*       m_pFLCamera;
-    MetricField*        m_pMtrDistance;
-    MetricField*        m_pMtrFocalLength;
+    VclPtr<VclContainer>       m_pFLCamera;
+    VclPtr<MetricField>        m_pMtrDistance;
+    VclPtr<MetricField>        m_pMtrFocalLength;
 
 // lighting
-    VclContainer*       m_pFLLight;
-    PushButton*         m_pBtnLight1;
-    PushButton*         m_pBtnLight2;
-    PushButton*         m_pBtnLight3;
-    PushButton*         m_pBtnLight4;
-    PushButton*         m_pBtnLight5;
-    PushButton*         m_pBtnLight6;
-    PushButton*         m_pBtnLight7;
-    PushButton*         m_pBtnLight8;
-    ColorLB*            m_pLbLight1;
-    ColorLB*            m_pLbLight2;
-    ColorLB*            m_pLbLight3;
-    ColorLB*            m_pLbLight4;
-    ColorLB*            m_pLbLight5;
-    ColorLB*            m_pLbLight6;
-    ColorLB*            m_pLbLight7;
-    ColorLB*            m_pLbLight8;
-    PushButton*         m_pBtnLightColor;
-    ColorLB*            m_pLbAmbientlight;    // ListBox
-    PushButton*         m_pBtnAmbientColor;   // color button
+    VclPtr<VclContainer>       m_pFLLight;
+    VclPtr<PushButton>         m_pBtnLight1;
+    VclPtr<PushButton>         m_pBtnLight2;
+    VclPtr<PushButton>         m_pBtnLight3;
+    VclPtr<PushButton>         m_pBtnLight4;
+    VclPtr<PushButton>         m_pBtnLight5;
+    VclPtr<PushButton>         m_pBtnLight6;
+    VclPtr<PushButton>         m_pBtnLight7;
+    VclPtr<PushButton>         m_pBtnLight8;
+    VclPtr<ColorLB>            m_pLbLight1;
+    VclPtr<ColorLB>            m_pLbLight2;
+    VclPtr<ColorLB>            m_pLbLight3;
+    VclPtr<ColorLB>            m_pLbLight4;
+    VclPtr<ColorLB>            m_pLbLight5;
+    VclPtr<ColorLB>            m_pLbLight6;
+    VclPtr<ColorLB>            m_pLbLight7;
+    VclPtr<ColorLB>            m_pLbLight8;
+    VclPtr<PushButton>         m_pBtnLightColor;
+    VclPtr<ColorLB>            m_pLbAmbientlight;    // ListBox
+    VclPtr<PushButton>         m_pBtnAmbientColor;   // color button
 
 // Textures
-    VclContainer*       m_pFLTexture;
-    PushButton*         m_pBtnTexLuminance;
-    PushButton*         m_pBtnTexColor;
-    PushButton*         m_pBtnTexReplace;
-    PushButton*         m_pBtnTexModulate;
-    PushButton*         m_pBtnTexBlend;
-    PushButton*         m_pBtnTexObjectX;
-    PushButton*         m_pBtnTexParallelX;
-    PushButton*         m_pBtnTexCircleX;
-    PushButton*         m_pBtnTexObjectY;
-    PushButton*         m_pBtnTexParallelY;
-    PushButton*         m_pBtnTexCircleY;
-    PushButton*         m_pBtnTexFilter;
+    VclPtr<VclContainer>       m_pFLTexture;
+    VclPtr<PushButton>         m_pBtnTexLuminance;
+    VclPtr<PushButton>         m_pBtnTexColor;
+    VclPtr<PushButton>         m_pBtnTexReplace;
+    VclPtr<PushButton>         m_pBtnTexModulate;
+    VclPtr<PushButton>         m_pBtnTexBlend;
+    VclPtr<PushButton>         m_pBtnTexObjectX;
+    VclPtr<PushButton>         m_pBtnTexParallelX;
+    VclPtr<PushButton>         m_pBtnTexCircleX;
+    VclPtr<PushButton>         m_pBtnTexObjectY;
+    VclPtr<PushButton>         m_pBtnTexParallelY;
+    VclPtr<PushButton>         m_pBtnTexCircleY;
+    VclPtr<PushButton>         m_pBtnTexFilter;
 
 // material
 // material editor
-    VclContainer*       m_pFLMaterial;
-    ListBox*            m_pLbMatFavorites;
-    ColorLB*            m_pLbMatColor;
-    PushButton*         m_pBtnMatColor;
-    ColorLB*            m_pLbMatEmission;
-    PushButton*         m_pBtnEmissionColor;
+    VclPtr<VclContainer>       m_pFLMaterial;
+    VclPtr<ListBox>            m_pLbMatFavorites;
+    VclPtr<ColorLB>            m_pLbMatColor;
+    VclPtr<PushButton>         m_pBtnMatColor;
+    VclPtr<ColorLB>            m_pLbMatEmission;
+    VclPtr<PushButton>         m_pBtnEmissionColor;
 
-    VclContainer*       m_pFLMatSpecular;
-    ColorLB*            m_pLbMatSpecular;
-    PushButton*         m_pBtnSpecularColor;
-    MetricField*        m_pMtrMatSpecularIntensity;
+    VclPtr<VclContainer>       m_pFLMatSpecular;
+    VclPtr<ColorLB>            m_pLbMatSpecular;
+    VclPtr<PushButton>         m_pBtnSpecularColor;
+    VclPtr<MetricField>        m_pMtrMatSpecularIntensity;
 
-    Svx3DPreviewControl* m_pCtlPreview;
-    SvxLightCtl3D*      m_pCtlLightPreview;
+    VclPtr<Svx3DPreviewControl> m_pCtlPreview;
+    VclPtr<SvxLightCtl3D>      m_pCtlLightPreview;
 
 // bottom part
-    PushButton*         m_pBtnConvertTo3D;
-    PushButton*         m_pBtnLatheObject;
-    PushButton*         m_pBtnPerspective;
+    VclPtr<PushButton>         m_pBtnConvertTo3D;
+    VclPtr<PushButton>         m_pBtnLatheObject;
+    VclPtr<PushButton>         m_pBtnPerspective;
 
 // the rest ...
     Image               aImgLightOn;
@@ -171,7 +171,7 @@ private:
 
     // Model, Page, View etc. for favourites
     FmFormModel*        pModel;
-    VirtualDevice*      pVDev;
+    VclPtr<VirtualDevice> pVDev;
     E3dView*            p3DView;
 
     SfxBindings*                pBindings;
@@ -188,8 +188,6 @@ private:
     SfxItemSet*         mpRemember2DAttributes;
 
     bool                bOnly3DChanged;
-
-
 
     DECL_LINK( ClickViewTypeHdl, void * );
     DECL_LINK( ClickUpdateHdl, void * );
@@ -220,6 +218,7 @@ public:
             Svx3DWin( SfxBindings* pBindings, SfxChildWindow *pCW,
                         vcl::Window* pParent );
             virtual ~Svx3DWin();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    InitColorLB( const SdrModel* pDoc );
     bool    IsUpdateMode() const { return bUpdate; }

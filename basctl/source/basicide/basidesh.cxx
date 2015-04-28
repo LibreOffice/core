@@ -148,11 +148,11 @@ unsigned Shell::nShellCount = 0;
 Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
     SfxViewShell( pFrame_, SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::NO_NEWWINDOW ),
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
-    aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
-    aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
-    aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
+    aHScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG )) ),
+    aVScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG )) ),
+    aScrollBarBox( VclPtr<ScrollBarBox>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE )) ),
     pLayout(0),
-    aObjectCatalog(&GetViewFrame()->GetWindow()),
+    aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame()->GetWindow())),
     m_bAppBasicModified( false ),
     m_aNotifier( *this )
 {
@@ -188,7 +188,7 @@ void Shell::Init()
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
     bCreatingWindow = false;
 
-    pTabBar.reset(new TabBar(&GetViewFrame()->GetWindow()));
+    pTabBar.reset(VclPtr<TabBar>::Create(&GetViewFrame()->GetWindow()));
     pTabBar->SetSplitHdl( LINK( this, Shell, TabBarSplitHdl ) );
     bTabBarSplitted = false;
 
@@ -225,11 +225,14 @@ Shell::~Shell()
     SetWindow( 0 );
     SetCurWindow( 0 );
 
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    for (WindowTable::iterator it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
         // no store; does already happen when the BasicManagers are destroyed
-        delete it->second;
+        it->second.disposeAndClear();
     }
+
+    // no store; does already happen when the BasicManagers are destroyed
+    aWindowTable.clear();
 
     // Destroy all ContainerListeners for Basic Container.
     if (ContainerListenerImpl* pListener = static_cast<ContainerListenerImpl*>(m_xLibListener.get()))
@@ -290,7 +293,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
 
     bool bSetCurWindow = false;
     bool bSetCurLib = ( _rDocument == m_aCurDocument );
-    std::vector<BaseWindow*> aDeleteVec;
+    std::vector<VclPtr<BaseWindow> > aDeleteVec;
 
     // remove all windows which belong to this document
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
@@ -311,7 +314,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
         }
     }
     // delete windows outside main loop so we don't invalidate the original iterator
-    for (std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it)
+    for (auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it)
     {
         BaseWindow* pWin = *it;
         pWin->StoreData();
@@ -409,15 +412,15 @@ bool Shell::PrepareClose( bool bUI )
 
 void Shell::InitScrollBars()
 {
-    aVScrollBar.SetLineSize( 300 );
-    aVScrollBar.SetPageSize( 2000 );
-    aHScrollBar.SetLineSize( 300 );
-    aHScrollBar.SetPageSize( 2000 );
-    aHScrollBar.Enable();
-    aVScrollBar.Enable();
-    aVScrollBar.Show();
-    aHScrollBar.Show();
-    aScrollBarBox.Show();
+    aVScrollBar->SetLineSize( 300 );
+    aVScrollBar->SetPageSize( 2000 );
+    aHScrollBar->SetLineSize( 300 );
+    aHScrollBar->SetPageSize( 2000 );
+    aHScrollBar->Enable();
+    aVScrollBar->Enable();
+    aVScrollBar->Show();
+    aHScrollBar->Show();
+    aScrollBarBox->Show();
 }
 
 
@@ -485,16 +488,16 @@ bool Shell::NextPage( bool bPrev )
 
 void Shell::ArrangeTabBar()
 {
-    long nBoxPos = aScrollBarBox.GetPosPixel().X() - 1;
+    long nBoxPos = aScrollBarBox->GetPosPixel().X() - 1;
     long nPos = pTabBar->GetSplitSize();
     if ( nPos <= nBoxPos )
     {
         Point aPnt( pTabBar->GetPosPixel() );
-        long nH = aHScrollBar.GetSizePixel().Height();
+        long nH = aHScrollBar->GetSizePixel().Height();
         pTabBar->SetPosSizePixel( aPnt, Size( nPos, nH ) );
         long nScrlStart = aPnt.X() + nPos;
-        aHScrollBar.SetPosSizePixel( Point( nScrlStart, aPnt.Y() ), Size( nBoxPos - nScrlStart + 2, nH ) );
-        aHScrollBar.Update();
+        aHScrollBar->SetPosSizePixel( Point( nScrlStart, aPnt.Y() ), Size( nBoxPos - nScrlStart + 2, nH ) );
+        aHScrollBar->Update();
     }
 }
 
@@ -523,7 +526,7 @@ void Shell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 case SFX_HINT_DYING:
                 {
                     EndListening( rBC, true /* log off all */ );
-                    aObjectCatalog.UpdateEntries();
+                    aObjectCatalog->UpdateEntries();
                 }
                 break;
             }
@@ -592,14 +595,14 @@ void Shell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 void Shell::CheckWindows()
 {
     bool bSetCurWindow = false;
-    std::vector<BaseWindow*> aDeleteVec;
+    std::vector<VclPtr<BaseWindow> > aDeleteVec;
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
         BaseWindow* pWin = it->second;
         if ( pWin->GetStatus() & BASWIN_TOBEKILLED )
             aDeleteVec.push_back( pWin );
     }
-    for ( std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
     {
         BaseWindow* pWin = *it;
         pWin->StoreData();
@@ -615,15 +618,15 @@ void Shell::CheckWindows()
 
 void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy )
 {
-    bool bChangeCurWindow = pCurWin == nullptr;
-    std::vector<BaseWindow*> aDeleteVec;
+    bool bChangeCurWindow = pCurWin;
+    std::vector<VclPtr<BaseWindow> > aDeleteVec;
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
         BaseWindow* pWin = it->second;
         if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName )
             aDeleteVec.push_back( pWin );
     }
-    for ( std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
     {
         BaseWindow* pWin = *it;
         if ( pWin == pCurWin )
@@ -643,7 +646,7 @@ void Shell::UpdateWindows()
     bool bChangeCurWindow = pCurWin == nullptr;
     if ( !m_aCurLibName.isEmpty() )
     {
-        std::vector<BaseWindow*> aDeleteVec;
+        std::vector<VclPtr<BaseWindow> > aDeleteVec;
         for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
         {
             BaseWindow* pWin = it->second;
@@ -659,7 +662,7 @@ void Shell::UpdateWindows()
                     aDeleteVec.push_back( pWin );
             }
         }
-        for ( std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+        for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
         {
             RemoveWindow( *it, false, false );
         }
@@ -806,7 +809,7 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
     {
         if ( !( pWindow_->GetStatus() & BASWIN_INRESCHEDULE ) )
         {
-            delete pWindow_;
+            pWindow_->disposeOnce();
         }
         else
         {
@@ -901,8 +904,8 @@ void Shell::InvalidateBasicIDESlots()
 
 void Shell::EnableScrollbars( bool bEnable )
 {
-    aHScrollBar.Enable(bEnable);
-    aVScrollBar.Enable(bEnable);
+    aHScrollBar->Enable(bEnable);
+    aVScrollBar->Enable(bEnable);
 }
 
 void Shell::SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows, bool bCheck )

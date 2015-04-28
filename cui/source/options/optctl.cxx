@@ -59,11 +59,23 @@ SvxCTLOptionsPage::SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rS
 
 SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SvxCTLOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void SvxCTLOptionsPage::dispose()
 {
-    return new SvxCTLOptionsPage( pParent, *rAttrSet );
+    m_pSequenceCheckingCB.clear();
+    m_pRestrictedCB.clear();
+    m_pTypeReplaceCB.clear();
+    m_pMovementLogicalRB.clear();
+    m_pMovementVisualRB.clear();
+    m_pNumeralsLB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxCTLOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SvxCTLOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )

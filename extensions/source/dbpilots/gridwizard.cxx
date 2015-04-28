@@ -228,17 +228,16 @@ namespace dbp
     }
 
 
-    OWizardPage* OGridWizard::createPage(WizardState _nState)
+    VclPtr<TabPage> OGridWizard::createPage(WizardState _nState)
     {
         switch (_nState)
         {
             case GW_STATE_DATASOURCE_SELECTION:
-                return new OTableSelectionPage(this);
+                return VclPtr<OTableSelectionPage>::Create(this);
             case GW_STATE_FIELDSELECTION:
-                return new OGridFieldsSelection(this);
+                return VclPtr<OGridFieldsSelection>::Create(this);
         }
-
-        return NULL;
+        return VclPtr<TabPage>();
     }
 
 
@@ -319,6 +318,21 @@ namespace dbp
         m_pSelFields->SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
     }
 
+    OGridFieldsSelection::~OGridFieldsSelection()
+    {
+        disposeOnce();
+    }
+
+    void OGridFieldsSelection::dispose()
+    {
+        m_pExistFields.clear();
+        m_pSelectOne.clear();
+        m_pSelectAll.clear();
+        m_pDeselectOne.clear();
+        m_pDeselectAll.clear();
+        m_pSelFields.clear();
+        OGridPage::dispose();
+    }
 
     void OGridFieldsSelection::ActivatePage()
     {

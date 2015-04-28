@@ -50,8 +50,8 @@ public:
     ScTabPageSortFields( vcl::Window*             pParent,
             const SfxItemSet&   rArgSet );
     virtual ~ScTabPageSortFields();
-
-    static  SfxTabPage* Create      ( vcl::Window*               pParent,
+    virtual void        dispose() SAL_OVERRIDE;
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -72,7 +72,7 @@ private:
     OUString            aStrRow;
 
     const sal_uInt16    nWhichSort;
-    ScSortDlg*          pDlg;
+    VclPtr<ScSortDlg>          pDlg;
     ScViewData*         pViewData;
     ScSortParam         aSortData;
     std::vector<SCCOLROW>  nFieldArr;
@@ -109,10 +109,11 @@ public:
     ScTabPageSortOptions( vcl::Window*            pParent,
             const SfxItemSet&  rArgSet );
     virtual ~ScTabPageSortOptions();
+    virtual void dispose() SAL_OVERRIDE;
 
 #undef SfxTabPage
 #define SfxTabPage ::SfxTabPage
-    static  SfxTabPage* Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -125,24 +126,24 @@ protected:
 
 private:
 
-    CheckBox*           m_pBtnCase;
-    CheckBox*           m_pBtnHeader;
-    CheckBox*           m_pBtnFormats;
-    CheckBox*           m_pBtnNaturalSort;
+    VclPtr<CheckBox>           m_pBtnCase;
+    VclPtr<CheckBox>           m_pBtnHeader;
+    VclPtr<CheckBox>           m_pBtnFormats;
+    VclPtr<CheckBox>           m_pBtnNaturalSort;
 
-    CheckBox*           m_pBtnCopyResult;
-    ListBox*            m_pLbOutPos;
-    Edit*               m_pEdOutPos;
+    VclPtr<CheckBox>           m_pBtnCopyResult;
+    VclPtr<ListBox>            m_pLbOutPos;
+    VclPtr<Edit>               m_pEdOutPos;
 
-    CheckBox*           m_pBtnSortUser;
-    ListBox*            m_pLbSortUser;
+    VclPtr<CheckBox>           m_pBtnSortUser;
+    VclPtr<ListBox>            m_pLbSortUser;
 
-    SvxLanguageBox*     m_pLbLanguage;
-    FixedText*          m_pFtAlgorithm;
-    ListBox*            m_pLbAlgorithm;
+    VclPtr<SvxLanguageBox>     m_pLbLanguage;
+    VclPtr<FixedText>          m_pFtAlgorithm;
+    VclPtr<ListBox>            m_pLbAlgorithm;
 
-    RadioButton*        m_pBtnTopDown;
-    RadioButton*        m_pBtnLeftRight;
+    VclPtr<RadioButton>        m_pBtnTopDown;
+    VclPtr<RadioButton>        m_pBtnLeftRight;
 
     OUString            aStrRowLabel;
     OUString            aStrColLabel;
@@ -153,7 +154,7 @@ private:
     ScSortParam         aSortData;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
-    ScSortDlg*          pDlg;
+    VclPtr<ScSortDlg>          pDlg;
     ScAddress           theOutPos;
 
     CollatorResource*  pColRes;

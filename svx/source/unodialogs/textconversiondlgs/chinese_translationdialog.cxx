@@ -63,12 +63,23 @@ ChineseTranslationDialog::ChineseTranslationDialog( vcl::Window* pParent )
 
 ChineseTranslationDialog::~ChineseTranslationDialog()
 {
+    disposeOnce();
+}
+
+void ChineseTranslationDialog::dispose()
+{
     if(m_pDictionaryDialog)
     {
         if(m_pDictionaryDialog->IsInExecute())
             m_pDictionaryDialog->EndDialog();
-        delete m_pDictionaryDialog;
     }
+    m_pDictionaryDialog.disposeAndClear();
+    m_pRB_To_Simplified.clear();
+    m_pRB_To_Traditional.clear();
+    m_pCB_Translate_Commonterms.clear();
+    m_pPB_Editterms.clear();
+    m_pBP_OK.clear();
+    ModalDialog::dispose();
 }
 
 void ChineseTranslationDialog::getSettings( bool& rbDirectionToSimplified
@@ -96,7 +107,7 @@ IMPL_LINK_NOARG(ChineseTranslationDialog, DictionaryHdl)
 {
     if( !m_pDictionaryDialog )
     {
-        m_pDictionaryDialog = new ChineseDictionaryDialog(this);
+        m_pDictionaryDialog = VclPtr<ChineseDictionaryDialog>::Create(this);
     }
     if( m_pDictionaryDialog )
     {

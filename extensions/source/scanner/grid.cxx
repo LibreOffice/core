@@ -120,6 +120,7 @@ public:
     GridWindow(vcl::Window* pParent);
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
     virtual ~GridWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
 
@@ -212,9 +213,29 @@ GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Win
     m_pResetButton->SetClickHdl( LINK( this, GridDialog, ClickButtonHdl ) );
 }
 
+GridDialog::~GridDialog()
+{
+    disposeOnce();
+}
+
+void GridDialog::dispose()
+{
+    m_pOKButton.clear();
+    m_pResetTypeBox.clear();
+    m_pResetButton.clear();
+    m_pGridWindow.clear();
+    ModalDialog::dispose();
+}
+
 GridWindow::~GridWindow()
 {
+    disposeOnce();
+}
+
+void GridWindow::dispose()
+{
     delete [] m_pNewYValues;
+    vcl::Window::dispose();
 }
 
 double GridWindow::findMinX()

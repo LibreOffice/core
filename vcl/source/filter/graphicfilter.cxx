@@ -1892,16 +1892,16 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
         {
             Size aSizePixel;
             sal_uLong nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
-            VirtualDevice aVirDev;
+            ScopedVclPtrInstance< VirtualDevice > aVirDev;
 
             nMaxMem = 1024;
             nMaxMem *= 1024; // In Bytes
 
             // Calculate how big the image would normally be:
-            aSizePixel=aVirDev.LogicToPixel(aGraphic.GetPrefSize(),aGraphic.GetPrefMapMode());
+            aSizePixel=aVirDev->LogicToPixel(aGraphic.GetPrefSize(),aGraphic.GetPrefMapMode());
 
             // Calculate how much memory the image will take up
-            nColorCount=aVirDev.GetColorCount();
+            nColorCount=aVirDev->GetColorCount();
             if      (nColorCount<=2)     nBitsPerPixel=1;
             else if (nColorCount<=4)     nBitsPerPixel=2;
             else if (nColorCount<=16)    nBitsPerPixel=4;
@@ -1918,12 +1918,12 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 aSizePixel.Height()=(sal_uLong)(((double)aSizePixel.Height())*fFak);
             }
 
-            aVirDev.SetMapMode(MapMode(MAP_PIXEL));
-            aVirDev.SetOutputSizePixel(aSizePixel);
+            aVirDev->SetMapMode(MapMode(MAP_PIXEL));
+            aVirDev->SetOutputSizePixel(aSizePixel);
             Graphic aGraphic2=aGraphic;
-            aGraphic2.Draw(&aVirDev,Point(0,0),aSizePixel); // this changes the MapMode
-            aVirDev.SetMapMode(MapMode(MAP_PIXEL));
-            aGraphic=Graphic(aVirDev.GetBitmap(Point(0,0),aSizePixel));
+            aGraphic2.Draw(aVirDev.get(),Point(0,0),aSizePixel); // this changes the MapMode
+            aVirDev->SetMapMode(MapMode(MAP_PIXEL));
+            aGraphic=Graphic(aVirDev->GetBitmap(Point(0,0),aSizePixel));
         }
     }
     if( rOStm.GetError() )

@@ -159,10 +159,10 @@ namespace
                 }
             }
 
-            OQueryTableConnection aInfo(pTableView, aInfoData);
+            ScopedVclPtrInstance< OQueryTableConnection > aInfo(pTableView, aInfoData);
             // Because OQueryTableConnection never takes ownership of the data passed to it, but only remembers the pointer,
             // this pointer to a local variable is not critical, as aInfoData and aInfo have the same lifetime
-            pTableView->NotifyTabConnection( aInfo );
+            pTableView->NotifyTabConnection( *aInfo.get() );
         }
         else
         {
@@ -509,12 +509,12 @@ namespace
         pEntryConn->SetVisited(true);
 
         // first search for the "to" window
-        const ::std::vector<OTableConnection*>& rConnections = pEntryConn->GetParent()->getTableConnections();
-        ::std::vector<OTableConnection*>::const_iterator aIter = rConnections.begin();
-        ::std::vector<OTableConnection*>::const_iterator aEnd = rConnections.end();
+        const auto& rConnections = pEntryConn->GetParent()->getTableConnections();
+        auto aIter = rConnections.begin();
+        auto aEnd = rConnections.end();
         for(;aIter != aEnd;++aIter)
         {
-            OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(*aIter);
+            OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>((*aIter).get());
             if(!pNext->IsVisited() && (pNext->GetSourceWin() == pEntryTabTo || pNext->GetDestWin() == pEntryTabTo))
             {
                 OQueryTableWindow* pEntryTab = pNext->GetSourceWin() == pEntryTabTo ? static_cast<OQueryTableWindow*>(pNext->GetDestWin()) : static_cast<OQueryTableWindow*>(pNext->GetSourceWin());
@@ -532,7 +532,7 @@ namespace
             aIter = rConnections.begin();
             for(;aIter != aEnd;++aIter)
             {
-                OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(*aIter);
+                OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>((*aIter).get());
                 if(!pNext->IsVisited() && (pNext->GetSourceWin() == pEntryTabFrom || pNext->GetDestWin() == pEntryTabFrom))
                 {
                     OQueryTableWindow* pEntryTab = pNext->GetSourceWin() == pEntryTabFrom ? static_cast<OQueryTableWindow*>(pNext->GetDestWin()) : static_cast<OQueryTableWindow*>(pNext->GetSourceWin());
@@ -666,7 +666,7 @@ namespace
                         bool bFound = false;
                         for(;!bFound && tableIter != tableEnd ;++tableIter)
                         {
-                            OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(tableIter->second);
+                            OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(tableIter->second.get());
 
                             bFound = pTabWin->ExistsField( rFieldName, aInfo );
                             if ( bFound )
@@ -985,13 +985,13 @@ namespace
 
     void GenerateInnerJoinCriterias(const Reference< XConnection>& _xConnection,
                                     OUString& _rJoinCrit,
-                                    const ::std::vector<OTableConnection*>* _pConnList)
+                                    const ::std::vector<VclPtr<OTableConnection> >& _rConnList)
     {
-        ::std::vector<OTableConnection*>::const_iterator aIter = _pConnList->begin();
-        ::std::vector<OTableConnection*>::const_iterator aEnd = _pConnList->end();
+        auto aIter = _rConnList.begin();
+        auto aEnd = _rConnList.end();
         for(;aIter != aEnd;++aIter)
         {
-            const OQueryTableConnection* pEntryConn = static_cast<const OQueryTableConnection*>(*aIter);
+            const OQueryTableConnection* pEntryConn = static_cast<const OQueryTableConnection*>((*aIter).get());
             OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get());
             if ( pEntryConnData->GetJoinType() == INNER_JOIN && !pEntryConnData->isNatural() )
             {
@@ -1018,7 +1018,7 @@ namespace
     }
     OUString GenerateFromClause( const Reference< XConnection>& _xConnection,
                                         const OQueryTableView::OTableWindowMap* pTabList,
-                                        const ::std::vector<OTableConnection*>* pConnList
+                                        const ::std::vector<VclPtr<OTableConnection> >& rConnList
                                         )
     {
 
@@ -1027,14 +1027,14 @@ namespace
         tableNames_t aTableNames;
 
         // generate outer join clause in from
-        if(!pConnList->empty())
+        if(!rConnList.empty())
         {
-            ::std::vector<OTableConnection*>::const_iterator aIter = pConnList->begin();
-            ::std::vector<OTableConnection*>::const_iterator aEnd = pConnList->end();
+            auto aIter = rConnList.begin();
+            auto aEnd = rConnList.end();
             ::std::map<OTableWindow*,sal_Int32> aConnectionCount;
             for(;aIter != aEnd;++aIter)
             {
-                static_cast<OQueryTableConnection*>(*aIter)->SetVisited(false);
+                static_cast<OQueryTableConnection*>((*aIter).get())->SetVisited(false);
                 ++aConnectionCount[(*aIter)->GetSourceWin()];
                 ++aConnectionCount[(*aIter)->GetDestWin()];
             }
@@ -1051,10 +1051,10 @@ namespace
             ::std::multimap<sal_Int32 , OTableWindow*>::reverse_iterator aREnd = aMulti.rend();
             for(;aRIter != aREnd;++aRIter)
             {
-                ::std::vector<OTableConnection*>::const_iterator aConIter = aRIter->second->getTableView()->getTableConnections(aRIter->second);
+                auto aConIter = aRIter->second->getTableView()->getTableConnections(aRIter->second);
                 for(;aConIter != aEnd;++aConIter)
                 {
-                    OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>(*aConIter);
+                    OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>((*aConIter).get());
                     if(!pEntryConn->IsVisited() && pEntryConn->GetSourceWin() == aRIter->second )
                     {
                         OUString aJoin;
@@ -1097,10 +1097,10 @@ namespace
             // "FROM tbl1, tbl2 WHERE tbl1.col1=tlb2.col2"
             // rather than
             // "FROM tbl1 INNER JOIN tbl2 ON tbl1.col1=tlb2.col2"
-            aIter = pConnList->begin();
+            aIter = rConnList.begin();
             for(;aIter != aEnd;++aIter)
             {
-                OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>(*aIter);
+                OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>((*aIter).get());
                 if(!pEntryConn->IsVisited())
                 {
                     searchAndAppendName(_xConnection,
@@ -1120,7 +1120,7 @@ namespace
         OQueryTableView::OTableWindowMap::const_iterator aTabEnd = pTabList->end();
         for(;aTabIter != aTabEnd;++aTabIter)
         {
-            const OQueryTableWindow* pEntryTab = static_cast<const OQueryTableWindow*>(aTabIter->second);
+            const OQueryTableWindow* pEntryTab = static_cast<const OQueryTableWindow*>(aTabIter->second.get());
             if(!pEntryTab->ExistsAConn())
             {
                 aTableListStr += BuildTable(_xConnection,pEntryTab);
@@ -1541,7 +1541,7 @@ namespace
                     OJoinTableView::OTableWindowMap::iterator aTabEnd = rTabList.end();
                     for(;aIter != aTabEnd;++aIter)
                     {
-                        OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
+                        OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second.get());
                         if (pTabWin->ExistsField( OUString("*"), aDragLeft ))
                         {
                             aDragLeft->SetAlias(OUString());
@@ -1749,7 +1749,7 @@ namespace
             OJoinTableView::OTableWindowMap::const_iterator aEnd = _rTabList.end();
             for ( ; aIter != aEnd; ++aIter )
             {
-                OQueryTableWindow* pTabWin = static_cast< OQueryTableWindow* >( aIter->second );
+                OQueryTableWindow* pTabWin = static_cast< OQueryTableWindow* >( aIter->second.get() );
                 if ( pTabWin && pTabWin->ExistsField( _rColumName, _rInfo ) )
                     return pTabWin;
             }
@@ -2105,7 +2105,7 @@ namespace
         OJoinTableView::OTableWindowMap::iterator aEnd = _pTabList->end();
         for(;aIter != aEnd && eOk == eErrorCode ;++aIter)
         {
-            OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
+            OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second.get());
             OTableFieldDescRef  aInfo = new OTableFieldDesc();
             if (pTabWin->ExistsField( sAsterisk, aInfo ))
             {
@@ -2202,7 +2202,7 @@ namespace
                                 const OJoinTableView::OTableWindowMap::const_iterator aEnd  = pTabList->end();
                                 for(;aIter != aEnd;++aIter)
                                 {
-                                    OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
+                                    OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second.get());
                                     if (pTabWin->ExistsField( OUString("*"), aInfo ))
                                     {
                                         aInfo->SetAlias(OUString());
@@ -2491,7 +2491,7 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
                                     OQueryController& _rController,
                                     const Reference< XComponentContext >& _rxContext)
     :OQueryView( _pParent, _rController, _rxContext )
-    ,m_aSplitter( this )
+    ,m_aSplitter( VclPtr<Splitter>::Create(this) )
     ,m_eChildFocus(NONE)
     ,m_bInSplitHandler( false )
 {
@@ -2506,23 +2506,28 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     {
     }
 
-    m_pSelectionBox = new OSelectionBrowseBox(this);
+    m_pSelectionBox = VclPtr<OSelectionBrowseBox>::Create(this);
 
     setNoneVisbleRow(static_cast<OQueryController&>(getController()).getVisibleRows());
     m_pSelectionBox->Show();
     // setup Splitter
-    m_aSplitter.SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
-    m_aSplitter.Show();
+    m_aSplitter->SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
+    m_aSplitter->Show();
 
 }
 
 OQueryDesignView::~OQueryDesignView()
 {
+    disposeOnce();
+}
+
+void OQueryDesignView::dispose()
+{
     if ( m_pTableView )
         ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    boost::scoped_ptr<vcl::Window> aTemp(m_pSelectionBox);
-    m_pSelectionBox = NULL;
-
+    m_pSelectionBox.disposeAndClear();
+    m_aSplitter.disposeAndClear();
+    OQueryView::dispose();
 }
 
 IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
@@ -2530,8 +2535,8 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
     if (!getController().isReadOnly())
     {
         m_bInSplitHandler = true;
-        m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
-        static_cast<OQueryController&>(getController()).setSplitPos(m_aSplitter.GetSplitPosPixel());
+        m_aSplitter->SetPosPixel( Point( m_aSplitter->GetPosPixel().X(),m_aSplitter->GetSplitPosPixel() ) );
+        static_cast<OQueryController&>(getController()).setSplitPos(m_aSplitter->GetSplitPosPixel());
         static_cast<OQueryController&>(getController()).setModified( sal_True );
         Resize();
         m_bInSplitHandler = true;
@@ -2541,7 +2546,7 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
 
 void OQueryDesignView::Construct()
 {
-    m_pTableView = new OQueryTableView(m_pScrollWindow,this);
+    m_pTableView = VclPtr<OQueryTableView>::Create(m_pScrollWindow,this);
     ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     OQueryView::Construct();
 }
@@ -2550,8 +2555,8 @@ void OQueryDesignView::initialize()
 {
     if(static_cast<OQueryController&>(getController()).getSplitPos() != -1)
     {
-        m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),static_cast<OQueryController&>(getController()).getSplitPos() ) );
-        m_aSplitter.SetSplitPosPixel(static_cast<OQueryController&>(getController()).getSplitPos());
+        m_aSplitter->SetPosPixel( Point( m_aSplitter->GetPosPixel().X(),static_cast<OQueryController&>(getController()).getSplitPos() ) );
+        m_aSplitter->SetSplitPosPixel(static_cast<OQueryController&>(getController()).getSplitPos());
     }
     m_pSelectionBox->initialize();
     reset();
@@ -2572,7 +2577,7 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
         {
             // let the selection browse box determine an optimal size
             Size aSelectionBoxSize = m_pSelectionBox->CalcOptimalSize( aPlaygroundSize );
-            nSplitPos = aPlaygroundSize.Height() - aSelectionBoxSize.Height() - m_aSplitter.GetSizePixel().Height();
+            nSplitPos = aPlaygroundSize.Height() - aSelectionBoxSize.Height() - m_aSplitter->GetSizePixel().Height();
             // still an invalid size?
             if ( nSplitPos == -1 || nSplitPos >= aPlaygroundSize.Height() )
                 nSplitPos = sal_Int32(aPlaygroundSize.Height()*0.6);
@@ -2587,13 +2592,13 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
             if ( aSelBoxSize.Height() )
             {
                 // keep the size of the sel box constant
-                nSplitPos = aPlaygroundSize.Height() - m_aSplitter.GetSizePixel().Height() - aSelBoxSize.Height();
+                nSplitPos = aPlaygroundSize.Height() - m_aSplitter->GetSizePixel().Height() - aSelBoxSize.Height();
 
                 // and if the box is smaller than the optimal size, try to do something about it
                 Size aSelBoxOptSize = m_pSelectionBox->CalcOptimalSize( aPlaygroundSize );
                 if ( aSelBoxOptSize.Height() > aSelBoxSize.Height() )
                 {
-                    nSplitPos = aPlaygroundSize.Height() - m_aSplitter.GetSizePixel().Height() - aSelBoxOptSize.Height();
+                    nSplitPos = aPlaygroundSize.Height() - m_aSplitter->GetSizePixel().Height() - aSelBoxOptSize.Height();
                 }
 
                 static_cast< OQueryController& >(getController()).setSplitPos( nSplitPos );
@@ -2603,7 +2608,7 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
 
     // normalize the split pos
     Point   aSplitPos       = Point( _rPlayground.Left(), nSplitPos );
-    Size    aSplitSize      = Size( _rPlayground.GetSize().Width(), m_aSplitter.GetSizePixel().Height() );
+    Size    aSplitSize      = Size( _rPlayground.GetSize().Width(), m_aSplitter->GetSizePixel().Height() );
 
     if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aPlaygroundSize.Height() ))
         aSplitPos.Y() = aPlaygroundSize.Height() - aSplitSize.Height();
@@ -2620,8 +2625,8 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
     m_pSelectionBox->SetPosSizePixel( aPos, Size( aPlaygroundSize.Width(), aPlaygroundSize.Height() - aSplitSize.Height() - aTableViewSize.Height() ));
 
     // set the size of the splitter
-    m_aSplitter.SetPosSizePixel( aSplitPos, aSplitSize );
-    m_aSplitter.SetDragRectPixel( _rPlayground );
+    m_aSplitter->SetPosSizePixel( aSplitPos, aSplitSize );
+    m_aSplitter->SetDragRectPixel( _rPlayground );
 
     // just for completeness: there is no space left, we occupied it all ...
     _rPlayground.SetPos( _rPlayground.BottomRight() );
@@ -2746,7 +2751,7 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
     OJoinTableView::OTableWindowMap::iterator aEnd  = rTabWins.end();
     for(;aIter != aEnd;++aIter)
     {
-        OQueryTableWindow* pCurrentWin = static_cast<OQueryTableWindow*>(aIter->second);
+        OQueryTableWindow* pCurrentWin = static_cast<OQueryTableWindow*>(aIter->second.get());
         if (bAllTables || (pCurrentWin->GetAliasName() == sAliasName))
         {
             strCurrentPrefix = pCurrentWin->GetAliasName();
@@ -2846,9 +2851,9 @@ OUString OQueryDesignView::getStatement()
     // and trigger a error message
     // ----------------- Build table list ----------------------
 
-    const ::std::vector<OTableConnection*>& rConnList = m_pTableView->getTableConnections();
+    const auto& rConnList = m_pTableView->getTableConnections();
     Reference< XConnection> xConnection = rController.getConnection();
-    OUString aTableListStr(GenerateFromClause(xConnection,&rTabList,&rConnList));
+    OUString aTableListStr(GenerateFromClause(xConnection,&rTabList,rConnList));
     OSL_ENSURE(!aTableListStr.isEmpty(), "OQueryDesignView::getStatement() : unexpected : have Fields, but no Tables !");
     // if fields exist now, these only can be created by inserting from an already existing table; if on the other hand
     // a table is deleted, also the belonging fields will be deleted -> therefore it CANNOT occur that fields
@@ -2860,7 +2865,7 @@ OUString OQueryDesignView::getStatement()
         return OUString();
 
     OUString aJoinCrit;
-    GenerateInnerJoinCriterias(xConnection,aJoinCrit,&rConnList);
+    GenerateInnerJoinCriterias(xConnection,aJoinCrit,rConnList);
     if(!aJoinCrit.isEmpty())
     {
         OUString aTmp = "( " + aJoinCrit + " )";
@@ -2994,8 +2999,8 @@ void OQueryDesignView::SaveUIConfig()
     OQueryController& rCtrl = static_cast<OQueryController&>(getController());
     rCtrl.SaveTabWinsPosSize( &m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar().GetThumbPos(), m_pScrollWindow->GetVScrollBar().GetThumbPos() );
     rCtrl.setVisibleRows( m_pSelectionBox->GetNoneVisibleRows() );
-    if ( m_aSplitter.GetSplitPosPixel() != 0 )
-        rCtrl.setSplitPos( m_aSplitter.GetSplitPosPixel() );
+    if ( m_aSplitter->GetSplitPosPixel() != 0 )
+        rCtrl.setSplitPos( m_aSplitter->GetSplitPosPixel() );
 }
 
 OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pEntry,

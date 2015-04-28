@@ -34,7 +34,7 @@ class _SdrItemBrowserControl: public BrowseBox
 friend class ImpItemEdit;
     std::vector<ImpItemListRow*> aList;
     long nAktPaintRow;
-    Edit* pEditControl;
+    VclPtr<Edit> pEditControl;
     OUString aWNamMerk;
     Link aEntryChangedHdl;
     Link aSetDirtyHdl;
@@ -69,6 +69,7 @@ protected:
 public:
     _SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
     virtual ~_SdrItemBrowserControl();
+    virtual void dispose() SAL_OVERRIDE;
     void Clear();
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
     sal_uIntPtr GetCurrentPos() const;
@@ -99,16 +100,16 @@ public:
 #define WB_STDSIZEABLEFLOATWIN (WB_STDFLOATWIN|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEMOVE)
 
 class _SdrItemBrowserWindow: public FloatingWindow {
-    _SdrItemBrowserControl aBrowse;
+    VclPtr<_SdrItemBrowserControl> aBrowse;
 public:
     _SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits=WB_STDSIZEABLEDOCKWIN);
     virtual ~_SdrItemBrowserWindow();
+    virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
-    void Clear()                                            { aBrowse.Clear(); }
-    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse.SetAttributes(pAttr,p2ndSet); }
-    const _SdrItemBrowserControl& GetBrowserControl() const { return aBrowse; }
-    _SdrItemBrowserControl& GetBrowserControl()             { return aBrowse; }
+    void Clear()                                            { aBrowse->Clear(); }
+    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse->SetAttributes(pAttr,p2ndSet); }
+    _SdrItemBrowserControl *GetBrowserControl() { return aBrowse.get(); }
 };
 
 class SdrView;

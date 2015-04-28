@@ -36,13 +36,15 @@ public:
         vcl::Window* pParent,
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
+    virtual ~TextUnderlineControl();
+    virtual void dispose() SAL_OVERRIDE;
     void Rearrange(FontUnderline eLine);
 
 private:
     svx::sidebar::TextPropertyPanel&     mrTextPropertyPanel;
     SfxBindings*        mpBindings;
-    ValueSet            maVSUnderline;
-    PushButton          maPBOptions;
+    VclPtr<ValueSet>    maVSUnderline;
+    VclPtr<PushButton>  maPBOptions;
 
     Image               maIMGSingle;
     Image               maIMGDouble;

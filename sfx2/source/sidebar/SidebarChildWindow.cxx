@@ -37,17 +37,17 @@ SidebarChildWindow::SidebarChildWindow (
     SfxChildWinInfo* pInfo)
     : SfxChildWindow(pParentWindow, nId)
 {
-    pWindow = new SidebarDockingWindow(
+    pWindow.reset(VclPtr<SidebarDockingWindow>::Create(
         pBindings,
         *this,
         pParentWindow,
-        WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
+        WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE));
     eChildAlignment = SfxChildAlignment::RIGHT;
 
     pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
     pWindow->SetOutputSizePixel(Size(GetDefaultWidth(pWindow), 450));
 
-    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pWindow);
+    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pWindow.get());
     if (pDockingParent != NULL)
     {
         if (pInfo && pInfo->aExtraString.isEmpty() && pInfo->aModule != "sdraw" && pInfo->aModule != "simpress")

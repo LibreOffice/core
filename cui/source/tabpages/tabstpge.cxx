@@ -38,7 +38,7 @@
 
 class TabWin_Impl : public vcl::Window
 {
-    SvxTabulatorTabPage* mpPage;
+    VclPtr<SvxTabulatorTabPage> mpPage;
 private:
     sal_uInt16  nTabStyle;
 
@@ -50,8 +50,10 @@ public:
         , nTabStyle(0)
     {
     }
+    virtual ~TabWin_Impl() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { mpPage.clear(); vcl::Window::dispose(); }
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     void SetTabulatorTabPage(SvxTabulatorTabPage* pPage) { mpPage = pPage; }
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
@@ -185,13 +187,37 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet
     aAktTab.GetDecimal() = rLocaleWrapper.getNumDecimalSep()[0];
 }
 
-
-
 SvxTabulatorTabPage::~SvxTabulatorTabPage()
 {
+    disposeOnce();
 }
 
-
+void SvxTabulatorTabPage::dispose()
+{
+    m_pTabBox.clear();
+    m_pLeftTab.clear();
+    m_pRightTab.clear();
+    m_pCenterTab.clear();
+    m_pDezTab.clear();
+    m_pLeftWin.clear();
+    m_pRightWin.clear();
+    m_pCenterWin.clear();
+    m_pDezWin.clear();
+    m_pDezCharLabel.clear();
+    m_pDezChar.clear();
+    m_pNoFillChar.clear();
+    m_pFillPoints.clear();
+    m_pFillDashLine.clear();
+    m_pFillSolidLine.clear();
+    m_pFillSpecial.clear();
+    m_pFillChar.clear();
+    m_pNewBtn.clear();
+    m_pDelAllBtn.clear();
+    m_pDelBtn.clear();
+    m_pTypeFrame.clear();
+    m_pFillFrame.clear();
+    SfxTabPage::dispose();
+}
 
 bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
 {
@@ -252,10 +278,11 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-SfxTabPage* SvxTabulatorTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxTabulatorTabPage::Create( vcl::Window* pParent,
                                          const SfxItemSet* rSet)
 {
-    return ( new SvxTabulatorTabPage( pParent, *rSet ) );
+    return VclPtr<SfxTabPage>( new SvxTabulatorTabPage( pParent, *rSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 

@@ -34,8 +34,8 @@ class OReportSection;
 class OSectionView : public SdrView
 {
 private:
-    OReportWindow*      m_pReportWindow;
-    OReportSection*     m_pSectionWindow;
+    VclPtr<OReportWindow>      m_pReportWindow;
+    VclPtr<OReportSection>     m_pSectionWindow;
 
     void ObjectRemovedInAliveMode( const SdrObject* pObject );
     OSectionView(const OSectionView&) SAL_DELETED_FUNCTION;

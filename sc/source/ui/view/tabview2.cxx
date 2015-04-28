@@ -1423,8 +1423,8 @@ void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
         }
     }
 
-    InfoBox aBox( pParent, ScGlobal::GetRscString( nGlobStrId ) );
-    aBox.Execute();
+    ScopedVclPtrInstance< InfoBox > aBox( pParent, ScGlobal::GetRscString( nGlobStrId ) );
+    aBox->Execute();
     if (bFocus)
         pParent->GrabFocus();
 }

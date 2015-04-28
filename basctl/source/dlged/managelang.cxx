@@ -75,7 +75,17 @@ ManageLanguageDialog::ManageLanguageDialog(vcl::Window* pParent, boost::shared_p
 
 ManageLanguageDialog::~ManageLanguageDialog()
 {
+    disposeOnce();
+}
+
+void ManageLanguageDialog::dispose()
+{
     ClearLanguageBox();
+    m_pLanguageLB.clear();
+    m_pAddPB.clear();
+    m_pDeletePB.clear();
+    m_pMakeDefPB.clear();
+    ModalDialog::dispose();
 }
 
 void ManageLanguageDialog::Init()
@@ -136,11 +146,11 @@ void ManageLanguageDialog::ClearLanguageBox()
 
 IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 {
-    SetDefaultLanguageDialog aDlg( this, m_xLocalizationMgr );
-    if ( RET_OK == aDlg.Execute() )
+    ScopedVclPtrInstance< SetDefaultLanguageDialog > aDlg( this, m_xLocalizationMgr );
+    if ( RET_OK == aDlg->Execute() )
     {
         // add new locales
-        Sequence< Locale > aLocaleSeq = aDlg.GetLocales();
+        Sequence< Locale > aLocaleSeq = aDlg->GetLocales();
         m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
         // update listbox
         ClearLanguageBox();
@@ -154,8 +164,8 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 {
-    MessageDialog aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelang.ui");
-    if ( aQBox.Execute() == RET_OK )
+    ScopedVclPtrInstance< MessageDialog > aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelang.ui");
+    if ( aQBox->Execute() == RET_OK )
     {
         sal_uInt16 i, nCount = m_pLanguageLB->GetSelectEntryCount();
         sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
@@ -245,6 +255,22 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(vcl::Window* pParent, boost::
     }
 
     FillLanguageBox();
+}
+
+SetDefaultLanguageDialog::~SetDefaultLanguageDialog()
+{
+    disposeOnce();
+}
+
+void SetDefaultLanguageDialog::dispose()
+{
+    m_pLanguageFT.clear();
+    m_pLanguageLB.clear();
+    m_pCheckLangFT.clear();
+    m_pCheckLangLB.clear();
+    m_pDefinedFT.clear();
+    m_pAddedFT.clear();
+    ModalDialog::dispose();
 }
 
 void SetDefaultLanguageDialog::FillLanguageBox()

@@ -36,12 +36,12 @@ namespace sfx2 {
 class SearchDialog : public ModelessDialog
 {
 private:
-    ComboBox*           m_pSearchEdit;
-    CheckBox*           m_pWholeWordsBox;
-    CheckBox*           m_pMatchCaseBox;
-    CheckBox*           m_pWrapAroundBox;
-    CheckBox*           m_pBackwardsBox;
-    PushButton*         m_pFindBtn;
+    VclPtr<ComboBox>           m_pSearchEdit;
+    VclPtr<CheckBox>           m_pWholeWordsBox;
+    VclPtr<CheckBox>           m_pMatchCaseBox;
+    VclPtr<CheckBox>           m_pWrapAroundBox;
+    VclPtr<CheckBox>           m_pBackwardsBox;
+    VclPtr<PushButton>         m_pFindBtn;
 
     Link                m_aFindHdl;
     Link                m_aCloseHdl;
@@ -59,6 +59,7 @@ private:
 public:
     SearchDialog( vcl::Window* pWindow, const OUString& rConfigName );
     virtual ~SearchDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
     void         SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }
@@ -70,11 +71,11 @@ public:
     bool         IsWrapAround() const { return ( m_pWrapAroundBox->IsChecked() ); }
     bool         IsSearchBackwards() const { return ( m_pBackwardsBox->IsChecked() ); }
 
-    void                SetFocusOnEdit();
+    void            SetFocusOnEdit();
 
     virtual bool    Close() SAL_OVERRIDE;
-    virtual void        Move() SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    Move() SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 };
 
 

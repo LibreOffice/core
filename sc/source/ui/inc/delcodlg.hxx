@@ -27,15 +27,15 @@
 class ScDeleteContentsDlg : public ModalDialog
 {
 private:
-    CheckBox*        aBtnDelAll;
-    CheckBox*        aBtnDelStrings;
-    CheckBox*        aBtnDelNumbers;
-    CheckBox*        aBtnDelDateTime;
-    CheckBox*        aBtnDelFormulas;
-    CheckBox*        aBtnDelNotes;
-    CheckBox*        aBtnDelAttrs;
-    CheckBox*        aBtnDelObjects;
-    OKButton*        aBtnOk;
+    VclPtr<CheckBox>        aBtnDelAll;
+    VclPtr<CheckBox>        aBtnDelStrings;
+    VclPtr<CheckBox>        aBtnDelNumbers;
+    VclPtr<CheckBox>        aBtnDelDateTime;
+    VclPtr<CheckBox>        aBtnDelFormulas;
+    VclPtr<CheckBox>        aBtnDelNotes;
+    VclPtr<CheckBox>        aBtnDelAttrs;
+    VclPtr<CheckBox>        aBtnDelObjects;
+    VclPtr<OKButton>        aBtnOk;
 
     bool             bObjectsDisabled;
 
@@ -49,6 +49,7 @@ public:
             ScDeleteContentsDlg( vcl::Window* pParent,
                                  InsertDeleteFlags nCheckDefaults = IDF_NONE );
             virtual ~ScDeleteContentsDlg();
+    virtual void dispose() SAL_OVERRIDE;
     void    DisableObjects();
 
     InsertDeleteFlags GetDelContentsCmdBits() const;

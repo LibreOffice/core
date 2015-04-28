@@ -92,20 +92,22 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontWorkDialog : public SfxDockingWindow
 
     SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
 
-    ToolBox*        m_pTbxStyle;
-    ToolBox*        m_pTbxAdjust;
+    VclPtr<ToolBox>         m_pTbxStyle;
+    VclPtr<ToolBox>         m_pTbxAdjust;
 
-    MetricField*    m_pMtrFldDistance;
-    MetricField*    m_pMtrFldTextStart;
+    VclPtr<FixedImage>      m_pFbDistance;
+    VclPtr<MetricField>     m_pMtrFldDistance;
+    VclPtr<FixedImage>      m_pFbTextStart;
+    VclPtr<MetricField>     m_pMtrFldTextStart;
 
-    ToolBox*        m_pTbxShadow;
+    VclPtr<ToolBox>         m_pTbxShadow;
 
-    FixedImage*     m_pFbShadowX;
-    MetricField*    m_pMtrFldShadowX;
-    FixedImage*     m_pFbShadowY;
-    MetricField*    m_pMtrFldShadowY;
+    VclPtr<FixedImage>      m_pFbShadowX;
+    VclPtr<MetricField>     m_pMtrFldShadowX;
+    VclPtr<FixedImage>      m_pFbShadowY;
+    VclPtr<MetricField>     m_pMtrFldShadowY;
 
-    ColorLB*        m_pShadowColorLB;
+    VclPtr<ColorLB>         m_pShadowColorLB;
 
     SfxBindings&    rBindings;
     Idle            aInputIdle;
@@ -172,6 +174,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontWorkDialog : public SfxDockingWindow
     SvxFontWorkDialog(SfxBindings *pBinding, SfxChildWindow *pCW,
                       vcl::Window* pParent);
     virtual ~SvxFontWorkDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetColorList(const XColorListRef &pTable);
 };

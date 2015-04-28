@@ -40,12 +40,12 @@ private:
     Link            aAbortedHdl;
     Link            aChangeHdl;
 
-    FixedText* m_pFtAssign;
-    formula::RefEdit* m_pEdAssign;
-    formula::RefButton* m_pRbAssign;
+    VclPtr<FixedText> m_pFtAssign;
+    VclPtr<formula::RefEdit> m_pEdAssign;
+    VclPtr<formula::RefButton> m_pRbAssign;
 
-    OKButton*       m_pBtnOk;
-    CancelButton*   m_pBtnCancel;
+    VclPtr<OKButton>       m_pBtnOk;
+    VclPtr<CancelButton>   m_pBtnCancel;
 
     ScRange         theCurArea;
     bool            bCloseFlag;
@@ -66,6 +66,7 @@ protected:
 public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent);
                     virtual ~ScSimpleRefDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 

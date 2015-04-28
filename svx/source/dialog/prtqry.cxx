@@ -37,9 +37,4 @@ SvxPrtQryBox::SvxPrtQryBox(vcl::Window* pParent) :
     SetButtonHelpText( RET_OK, OUString() );
 }
 
-SvxPrtQryBox::~SvxPrtQryBox()
-{
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,13 +37,20 @@ public:
         m_pBtnCol->Check(bCol);
         m_pBtnRow->Check(bRow);
     }
+    virtual ~ScColRowLabelDlg() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pBtnRow.clear();
+        m_pBtnCol.clear();
+        ModalDialog::dispose();
+    }
 
     bool IsCol() const { return m_pBtnCol->IsChecked(); }
     bool IsRow() const { return m_pBtnRow->IsChecked(); }
 
 private:
-    CheckBox* m_pBtnRow;
-    CheckBox* m_pBtnCol;
+    VclPtr<CheckBox> m_pBtnRow;
+    VclPtr<CheckBox> m_pBtnCol;
 };
 
 #endif

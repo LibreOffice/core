@@ -24,12 +24,12 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <vcl/tabctrl.hxx>
+#include <vcl/vclptr.hxx>
+#include <boost/mem_fn.hpp>
 #include <map>
-
 
 namespace pcr
 {
-
 
     class IPropertyLineListener;
     class IPropertyControlObserver;
@@ -47,13 +47,13 @@ namespace pcr
         struct HiddenPage
         {
             sal_uInt16  nPos;
-            TabPage*    pPage;
+            VclPtr<TabPage>    pPage;
             HiddenPage() : nPos( 0 ), pPage( NULL ) { }
             HiddenPage( sal_uInt16 _nPos, TabPage* _pPage ) : nPos( _nPos ), pPage( _pPage ) { }
         };
 
     private:
-        TabControl                  m_aTabControl;
+        VclPtr<TabControl>          m_aTabControl;
         IPropertyLineListener*      m_pListener;
         IPropertyControlObserver*   m_pObserver;
         sal_uInt16                  m_nNextId;
@@ -73,6 +73,7 @@ namespace pcr
                                     OPropertyEditor (vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
 
                                     virtual ~OPropertyEditor();
+        virtual void                dispose() SAL_OVERRIDE;
 
         void                        EnableUpdate();
         void                        DisableUpdate();

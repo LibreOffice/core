@@ -217,11 +217,33 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxProxyTabPage::~SvxProxyTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SvxProxyTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void SvxProxyTabPage::dispose()
 {
-    return new SvxProxyTabPage(pParent, *rAttrSet);
+    m_pProxyModeLB.clear();
+    m_pHttpProxyFT.clear();
+    m_pHttpProxyED.clear();
+    m_pHttpPortFT.clear();
+    m_pHttpPortED.clear();
+    m_pHttpsProxyFT.clear();
+    m_pHttpsProxyED.clear();
+    m_pHttpsPortFT.clear();
+    m_pHttpsPortED.clear();
+    m_pFtpProxyFT.clear();
+    m_pFtpProxyED.clear();
+    m_pFtpPortFT.clear();
+    m_pFtpPortED.clear();
+    m_pNoProxyForFT.clear();
+    m_pNoProxyForED.clear();
+    m_pNoProxyDescFT.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxProxyTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SvxProxyTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SvxProxyTabPage::ReadConfigData_Impl()
@@ -626,16 +648,35 @@ SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& r
 
 SvxSecurityTabPage::~SvxSecurityTabPage()
 {
-    delete mpCertPathDlg;
+    disposeOnce();
+}
 
+void SvxSecurityTabPage::dispose()
+{
     delete mpSecOptions;
-    delete mpSecOptDlg;
+    mpSecOptions = NULL;
+    mpCertPathDlg.disposeAndClear();
+    mpSecOptDlg.clear();
+    m_pSecurityOptionsPB.clear();
+    m_pSavePasswordsCB.clear();
+    m_pShowConnectionsPB.clear();
+    m_pMasterPasswordCB.clear();
+    m_pMasterPasswordFT.clear();
+    m_pMasterPasswordPB.clear();
+    m_pMacroSecFrame.clear();
+    m_pMacroSecPB.clear();
+    m_pCertFrame.clear();
+    m_pCertPathPB.clear();
+    m_pTSAURLsFrame.clear();
+    m_pTSAURLsPB.clear();
+
+    SfxTabPage::dispose();
 }
 
 IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl)
 {
     if ( !mpSecOptDlg )
-        mpSecOptDlg = new svx::SecurityOptionsDialog( this, mpSecOptions );
+        mpSecOptDlg = VclPtr<svx::SecurityOptionsDialog>::Create( this, mpSecOptions );
     mpSecOptDlg->Execute();
     return 0;
 }
@@ -667,8 +708,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
         }
         else
         {
-            QueryBox aQuery( this, WB_YES_NO|WB_DEF_NO, m_sPasswordStoringDeactivateStr );
-            sal_uInt16 nRet = aQuery.Execute();
+            ScopedVclPtrInstance< QueryBox > aQuery( this, WB_YES_NO|WB_DEF_NO, m_sPasswordStoringDeactivateStr );
+            sal_uInt16 nRet = aQuery->Execute();
 
             if( RET_YES == nRet )
             {
@@ -764,8 +805,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
 
         if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< task::XInteractionHandler>() ) )
         {
-            svx::WebConnectionInfoDialog aDlg( this );
-            aDlg.Execute();
+            ScopedVclPtrInstance< svx::WebConnectionInfoDialog > aDlg(this);
+            aDlg->Execute();
         }
     }
     catch (const Exception&)
@@ -776,15 +817,15 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
 IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
 {
     if (!mpCertPathDlg)
-        mpCertPathDlg = new CertPathDialog(this);
+        mpCertPathDlg = VclPtr<CertPathDialog>::Create(this);
 
     OUString sOrig = mpCertPathDlg->getDirectory();
     short nRet = mpCertPathDlg->Execute();
 
     if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
     {
-        MessageDialog aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
-        aWarnBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
+        aWarnBox->Execute();
     }
 
     return 0;
@@ -795,11 +836,9 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl)
     // Unlike the mpCertPathDlg, we *don't* keep the same dialog object around between
     // invocations. Seems clearer to my little brain that way.
 
-    TSAURLsDialog* pTSAURLsDlg = new TSAURLsDialog(this);
+    ScopedVclPtrInstance<TSAURLsDialog> pTSAURLsDlg(this);
 
     pTSAURLsDlg->Execute();
-
-    delete pTSAURLsDlg;
 
     return 0;
 }
@@ -875,9 +914,9 @@ void SvxSecurityTabPage::InitControls()
     }
 }
 
-SfxTabPage* SvxSecurityTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxSecurityTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxSecurityTabPage(pParent, *rAttrSet);
+    return VclPtr<SfxTabPage>(new SvxSecurityTabPage(pParent, *rAttrSet), SAL_NO_ACQUIRE);
 }
 
 void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
@@ -972,14 +1011,28 @@ SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxEMailTabPage::~SvxEMailTabPage()
 {
+    disposeOnce();
+}
+
+void SvxEMailTabPage::dispose()
+{
     delete pImpl;
+    pImpl = NULL;
+    m_pMailContainer.clear();
+    m_pMailerURLFI.clear();
+    m_pMailerURLED.clear();
+    m_pMailerURLPB.clear();
+    m_pSuppressHiddenContainer.clear();
+    m_pSuppressHiddenFI.clear();
+    m_pSuppressHidden.clear();
+    SfxTabPage::dispose();
 }
 
 /* -------------------------------------------------------------------------*/
 
-SfxTabPage*  SvxEMailTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage>  SvxEMailTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxEMailTabPage(pParent, *rAttrSet);
+    return VclPtr<SvxEMailTabPage>::Create(pParent, *rAttrSet);
 }
 
 /* -------------------------------------------------------------------------*/

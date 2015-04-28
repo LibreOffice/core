@@ -162,14 +162,14 @@ private:
     DECL_LINK( processWindowResizeEvent, vcl::Window* );
 
 private:
-    typedef ::std::map< vcl::Window*, uno::Reference< frame::XController > > WindowControllerMap;
+    typedef ::std::map< VclPtr<vcl::Window>, uno::Reference< frame::XController > > WindowControllerMap;
 
     ::osl::Mutex        maMutex;
     ScVbaEventsHelper&  mrVbaEvents;
     uno::Reference< frame::XModel > mxModel;
     ScDocShell*         mpDocShell;
     WindowControllerMap maControllers;          /// Maps VCL top windows to their controllers.
-    vcl::Window*             mpActiveWindow;         /// Currently activated window, to prevent multiple (de)activation.
+    VclPtr<vcl::Window>            mpActiveWindow;         /// Currently activated window, to prevent multiple (de)activation.
     bool                mbWindowResized;        /// True = window resize system event processed.
     bool                mbBorderChanged;        /// True = borders changed system event processed.
     bool                mbDisposed;
@@ -274,7 +274,7 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
     {
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
         vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        OSL_TRACE( "ScVbaEventListener::windowActivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow );
+        OSL_TRACE( "ScVbaEventListener::windowActivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow.get() );
         // do not fire activation event multiple time for the same window
         if( pWindow && (pWindow != mpActiveWindow) )
         {
@@ -296,7 +296,7 @@ void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rE
     {
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
         vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        OSL_TRACE( "ScVbaEventListener::windowDeactivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow );
+        OSL_TRACE( "ScVbaEventListener::windowDeactivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow.get() );
         // do not fire the deactivation event, if the window is not active (prevent multiple deactivation)
         if( pWindow && (pWindow == mpActiveWindow) )
             processWindowActivateEvent( pWindow, false );

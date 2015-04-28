@@ -48,6 +48,7 @@ public:
     NumFormatListBox(vcl::Window* pWin, WinBits nStyle);
 
     virtual ~NumFormatListBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            Clear();
 

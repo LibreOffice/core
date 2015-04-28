@@ -105,11 +105,25 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
     mpMarkWnd = new SvxHlinkDlgMarkWnd ( this );
 }
 
-SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase ()
+SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase()
+{
+    disposeOnce();
+}
+
+void SvxHyperlinkTabPageBase::dispose()
 {
     maTimer.Stop();
 
-    delete mpMarkWnd;
+    mpMarkWnd.disposeAndClear();
+
+    mpCbbFrame.clear();
+    mpLbForm.clear();
+    mpEdIndication.clear();
+    mpEdText.clear();
+    mpBtScript.clear();
+    mpDialog.clear();
+
+    IconChoicePage::dispose();
 }
 
 void SvxHyperlinkTabPageBase::ActivatePage()
@@ -283,13 +297,13 @@ void SvxHyperlinkTabPageBase::SetInitFocus()
 // Ask dialog whether the curretn doc is a HTML-doc
 bool SvxHyperlinkTabPageBase::IsHTMLDoc() const
 {
-    return static_cast<SvxHpLinkDlg*>(mpDialog)->IsHTMLDoc();
+    return static_cast<SvxHpLinkDlg*>(mpDialog.get())->IsHTMLDoc();
 }
 
 // retrieve dispatcher
 SfxDispatcher* SvxHyperlinkTabPageBase::GetDispatcher() const
 {
-    return static_cast<SvxHpLinkDlg*>(mpDialog)->GetDispatcher();
+    return static_cast<SvxHpLinkDlg*>(mpDialog.get())->GetDispatcher();
 }
 
 // Click on imagebutton : Script
@@ -319,10 +333,10 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
         bool bIsInputEnabled = GetParent()->IsInputEnabled();
         if ( bIsInputEnabled )
             GetParent()->EnableInput( false );
-        SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
+        ScopedVclPtrInstance< SfxMacroAssignDlg > aDlg( this, mxDocumentFrame, *pItemSet );
 
         // add events
-        SfxMacroTabPage *pMacroPage = static_cast<SfxMacroTabPage*>( aDlg.GetTabPage() );
+        SfxMacroTabPage *pMacroPage = static_cast<SfxMacroTabPage*>( aDlg->GetTabPage() );
 
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOVER_OBJECT )
             pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
@@ -338,11 +352,11 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
             GetParent()->EnableInput( true );
         // execute dlg
         DisableClose( true );
-        short nRet = aDlg.Execute();
+        short nRet = aDlg->Execute();
         DisableClose( false );
         if ( RET_OK == nRet )
         {
-            const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
+            const SfxItemSet* pOutSet = aDlg->GetOutputItemSet();
             const SfxPoolItem* pItem;
             if( SfxItemState::SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, false, &pItem ))
             {

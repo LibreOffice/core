@@ -71,8 +71,19 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
     maTimer.SetTimeoutHdl ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 
-SvxHyperlinkDocTp::~SvxHyperlinkDocTp ()
+SvxHyperlinkDocTp::~SvxHyperlinkDocTp()
 {
+    disposeOnce();
+}
+
+void SvxHyperlinkDocTp::dispose()
+{
+    m_pCbbPath.clear();
+    m_pBtFileopen.clear();
+    m_pEdTarget.clear();
+    m_pFtFullURL.clear();
+    m_pBtBrowse.clear();
+    SvxHyperlinkTabPageBase::dispose();
 }
 
 /*************************************************************************
@@ -157,9 +168,9 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return new SvxHyperlinkDocTp( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkDocTp>::Create( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************

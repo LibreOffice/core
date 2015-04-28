@@ -62,7 +62,7 @@ namespace accessibility
         virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
         virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 
-        SvTreeListBox*  getListBox() const;
+        VclPtr< SvTreeListBox > getListBox() const;
 
         void            RemoveChildEntries(SvTreeListEntry*);
 

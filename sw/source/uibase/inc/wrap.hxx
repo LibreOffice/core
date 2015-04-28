@@ -43,24 +43,24 @@ public:
 class SwWrapTabPage: public SfxTabPage
 {
     // WRAPPING
-    RadioButton*   m_pNoWrapRB;
-    RadioButton*   m_pWrapLeftRB;
-    RadioButton*   m_pWrapRightRB;
-    RadioButton*   m_pWrapParallelRB;
-    RadioButton*   m_pWrapThroughRB;
-    RadioButton*   m_pIdealWrapRB;
+    VclPtr<RadioButton>   m_pNoWrapRB;
+    VclPtr<RadioButton>   m_pWrapLeftRB;
+    VclPtr<RadioButton>   m_pWrapRightRB;
+    VclPtr<RadioButton>   m_pWrapParallelRB;
+    VclPtr<RadioButton>   m_pWrapThroughRB;
+    VclPtr<RadioButton>   m_pIdealWrapRB;
 
     // MARGIN
-    MetricField*   m_pLeftMarginED;
-    MetricField*   m_pRightMarginED;
-    MetricField*   m_pTopMarginED;
-    MetricField*   m_pBottomMarginED;
+    VclPtr<MetricField>   m_pLeftMarginED;
+    VclPtr<MetricField>   m_pRightMarginED;
+    VclPtr<MetricField>   m_pTopMarginED;
+    VclPtr<MetricField>   m_pBottomMarginED;
 
     // OPTIONS
-    CheckBox*      m_pWrapAnchorOnlyCB;
-    CheckBox*      m_pWrapTransparentCB;
-    CheckBox*      m_pWrapOutlineCB;
-    CheckBox*      m_pWrapOutsideCB;
+    VclPtr<CheckBox>      m_pWrapAnchorOnlyCB;
+    VclPtr<CheckBox>      m_pWrapTransparentCB;
+    VclPtr<CheckBox>      m_pWrapOutlineCB;
+    VclPtr<CheckBox>      m_pWrapOutsideCB;
 
     sal_uInt16              nOldLeftMargin;
     sal_uInt16              nOldRightMargin;
@@ -79,8 +79,8 @@ class SwWrapTabPage: public SfxTabPage
     bool bDrawMode;
     bool bContourImage;
 
-    SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwWrapTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            ApplyImageList();
     void            EnableModes(const SfxItemSet& rSet);
@@ -98,8 +98,9 @@ class SwWrapTabPage: public SfxTabPage
     static const sal_uInt16 aWrapPageRg[];
 
 public:
+    SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet);
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
     virtual bool    FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet *rSet) SAL_OVERRIDE;

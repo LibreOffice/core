@@ -25,6 +25,7 @@
 #include <tools/link.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/vclptr.hxx>
 #include <vector>
 
 class OutputDevice;
@@ -80,7 +81,7 @@ private:
     Link            aHookHdlLink;
     GDIMetaFile*    pPrev;
     GDIMetaFile*    pNext;
-    OutputDevice*   pOutDev;
+    VclPtr<OutputDevice> pOutDev;
     bool            bPause;
     bool            bRecord;
     bool            bUseCanvas;

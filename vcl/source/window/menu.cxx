@@ -133,16 +133,13 @@ Menu::Menu()
 
 Menu::~Menu()
 {
-
-    vcl::LazyDeletor<Menu>::Undelete( this );
-
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING, ITEMPOS_INVALID );
 
     // at the window free the reference to the accessible component
     // and make sure the MenuFloatingWindow knows about our destruction
     if ( pWindow )
     {
-        MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow);
+        MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow.get());
         if( pFloat->pMenu == this )
             pFloat->pMenu = NULL;
         pWindow->SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
@@ -1704,7 +1701,7 @@ Size Menu::ImplCalcSize( const vcl::Window* pWin )
 
         // account for the size of the close button, which actually is a toolbox
         // due to NWF this is variable
-        long nCloseButtonHeight = static_cast<MenuBarWindow*>(pWindow)->MinCloseButtonSize().Height();
+        long nCloseButtonHeight = static_cast<MenuBarWindow*>(pWindow.get())->MinCloseButtonSize().Height();
         if (aSz.Height() < nCloseButtonHeight)
             aSz.Height() = nCloseButtonHeight;
     }
@@ -2269,7 +2266,7 @@ void Menu::ImplFillLayoutData() const
         }
         else
         {
-            MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow);
+            MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow.get());
             ImplPaint( pWindow, pFloat->nScrollerHeight, pFloat->ImplGetStartY(), 0, false, true );
         }
     }
@@ -2381,9 +2378,9 @@ bool Menu::IsHighlighted( sal_uInt16 nItemPos ) const
     if( pWindow )
     {
         if (IsMenuBar())
-            bRet = ( nItemPos == static_cast< MenuBarWindow * > (pWindow)->GetHighlightedItem() );
+            bRet = ( nItemPos == static_cast< MenuBarWindow * > (pWindow.get())->GetHighlightedItem() );
         else
-            bRet = ( nItemPos == static_cast< MenuFloatingWindow * > (pWindow)->GetHighlightedItem() );
+            bRet = ( nItemPos == static_cast< MenuFloatingWindow * > (pWindow.get())->GetHighlightedItem() );
     }
 
     return bRet;
@@ -2395,13 +2392,13 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
     {
         if (IsMenuBar())
         {
-            MenuBarWindow* pMenuWin = static_cast< MenuBarWindow* >( pWindow );
+            MenuBarWindow* pMenuWin = static_cast< MenuBarWindow* >( pWindow.get() );
             pMenuWin->SetAutoPopup( false );
             pMenuWin->ChangeHighlightItem( nItemPos, false );
         }
         else
         {
-            static_cast< MenuFloatingWindow* >( pWindow )->ChangeHighlightItem( nItemPos, false );
+            static_cast< MenuFloatingWindow* >( pWindow.get() )->ChangeHighlightItem( nItemPos, false );
         }
     }
 }
@@ -2411,7 +2408,7 @@ IMenuBarWindow* MenuBar::getMenuBarWindow()
 {
     // so far just a dynamic_cast, hopefully to be turned into something saner
     // at some stage
-    IMenuBarWindow *pWin = dynamic_cast<IMenuBarWindow*>(pWindow);
+    IMenuBarWindow *pWin = dynamic_cast<IMenuBarWindow*>(pWindow.get());
     //either there is no window (fdo#87663) or it is an IMenuBarWindow
     assert(!pWindow || pWin);
     return pWin;
@@ -2505,7 +2502,7 @@ vcl::Window* MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWindow, Men
     MenuBarWindow *pMenuBarWindow = dynamic_cast<MenuBarWindow*>(pWindow);
     if (!pMenuBarWindow)
     {
-        pWindow = pMenuBarWindow = new MenuBarWindow( pParent );
+        pWindow = pMenuBarWindow = VclPtr<MenuBarWindow>::Create( pParent );
     }
 
     pMenu->pStartedFrom = 0;
@@ -2532,7 +2529,7 @@ void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
         IMenuBarWindow* pMenuWin = pMenu->getMenuBarWindow();
         if (pMenuWin)
             pMenuWin->KillActivePopup();
-        delete pWindow;
+        pWindow->disposeOnce();
     }
     pMenu->pWindow = NULL;
 }
@@ -2929,7 +2926,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
         CreateAutoMnemonics();
     }
 
-    MenuFloatingWindow* pWin = new MenuFloatingWindow( this, pW, nStyle | WB_SYSTEMWINDOW );
+    VclPtrInstance<MenuFloatingWindow> pWin( this, pW, nStyle | WB_SYSTEMWINDOW );
     if( pSVData->maNWFData.mbFlatMenu )
         pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );
     else
@@ -3009,9 +3006,9 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
         {
             sal_uInt16 aPos;
             if (pSFrom->IsMenuBar())
-                aPos = static_cast<MenuBarWindow *>(pSFrom->pWindow)->GetHighlightedItem();
+                aPos = static_cast<MenuBarWindow *>(pSFrom->pWindow.get())->GetHighlightedItem();
             else
-                aPos = static_cast<MenuFloatingWindow *>(pSFrom->pWindow)->GetHighlightedItem();
+                aPos = static_cast<MenuFloatingWindow *>(pSFrom->pWindow.get())->GetHighlightedItem();
 
             pWin->SetPosInParent( aPos );  // store position to be sent in SUBMENUDEACTIVATE
             pSFrom->ImplCallEventListeners( VCLEVENT_MENU_SUBMENUACTIVATE, aPos );

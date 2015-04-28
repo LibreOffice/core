@@ -119,10 +119,10 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
     eZoom = SvxZoomType::WHOLEPAGE;
 
-    pCorner = new ScrollBarBox( pParent, WB_SIZEABLE );
+    pCorner = VclPtr<ScrollBarBox>::Create( pParent, WB_SIZEABLE );
 
-    pHorScroll = new ScrollBar(pParent, WB_HSCROLL );
-    pVerScroll = new ScrollBar(pParent, WB_VSCROLL);
+    pHorScroll = VclPtr<ScrollBar>::Create(pParent, WB_HSCROLL );
+    pVerScroll = VclPtr<ScrollBar>::Create(pParent, WB_VSCROLL);
 
     // SSA: --- RTL --- no mirroring for horizontal scrollbars
     pHorScroll->EnableRTL( false );
@@ -130,7 +130,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
     pHorScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
     pVerScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
 
-    pPreview = new ScPreview( pParent, pDocShell, this );
+    pPreview = VclPtr<ScPreview>::Create( pParent, pDocShell, this );
 
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( pPreview );
@@ -197,10 +197,10 @@ ScPreviewShell::~ScPreviewShell()
     EndListening(*pDocShell);
 
     SetWindow(0);
-    delete pPreview;
-    delete pHorScroll;
-    delete pVerScroll;
-    delete pCorner;
+    pPreview.disposeAndClear();
+    pHorScroll.disposeAndClear();
+    pVerScroll.disposeAndClear();
+    pCorner.disposeAndClear();
 
     //  normal mode of operation is switching back to default view in the same frame,
     //  so there's no need to activate any other window here anymore
@@ -532,14 +532,15 @@ bool ScPreviewShell::HasPrintOptionsPage() const
     return true;
 }
 
-SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions )
+VclPtr<SfxTabPage> ScPreviewShell::CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-    ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
+    ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
     if ( ScTpPrintOptionsCreate )
-        return  (*ScTpPrintOptionsCreate)( pParent, &rOptions);
-    return 0;
+        return VclPtr<SfxTabPage>((*ScTpPrintOptionsCreate)( pParent, &rOptions),
+                                  SAL_NO_ACQUIRE);
+    return VclPtr<SfxTabPage>();
 }
 
 void ScPreviewShell::Activate(bool bMDI)

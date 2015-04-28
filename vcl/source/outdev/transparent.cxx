@@ -116,7 +116,7 @@ sal_uInt16 OutputDevice::GetAlphaBitCount() const
 
 bool OutputDevice::HasAlpha()
 {
-    return mpAlphaVDev != NULL;
+    return mpAlphaVDev != nullptr;
 }
 
 void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
@@ -431,25 +431,25 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
         if( !bDrawn )
         {
-            VirtualDevice aVDev( *this, 1 );
+            ScopedVclPtrInstance< VirtualDevice > aVDev(  *this, 1  );
             const Size aDstSz( aDstRect.GetSize() );
             const sal_uInt8 cTrans = (sal_uInt8) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
 
             if( aDstRect.Left() || aDstRect.Top() )
                 aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );
 
-            if( aVDev.SetOutputSizePixel( aDstSz ) )
+            if( aVDev->SetOutputSizePixel( aDstSz ) )
             {
                 const bool bOldMap = mbMap;
 
                 EnableMapMode( false );
 
-                aVDev.SetLineColor( COL_BLACK );
-                aVDev.SetFillColor( COL_BLACK );
-                aVDev.DrawPolyPolygon( aPolyPoly );
+                aVDev->SetLineColor( COL_BLACK );
+                aVDev->SetFillColor( COL_BLACK );
+                aVDev->DrawPolyPolygon( aPolyPoly );
 
                 Bitmap aPaint( GetBitmap( aDstRect.TopLeft(), aDstSz ) );
-                Bitmap aPolyMask( aVDev.GetBitmap( Point(), aDstSz ) );
+                Bitmap aPolyMask( aVDev->GetBitmap( Point(), aDstSz ) );
 
                 // #107766# check for non-empty bitmaps before accessing them
                 if( !!aPaint && !!aPolyMask )
@@ -683,7 +683,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
         if( !aDstRect.IsEmpty() )
         {
-            std::unique_ptr<VirtualDevice> xVDev(new VirtualDevice);
+            ScopedVclPtrInstance< VirtualDevice > xVDev;
 
             ((OutputDevice*)xVDev.get())->mnDPIX = mnDPIX;
             ((OutputDevice*)xVDev.get())->mnDPIY = mnDPIY;

@@ -51,17 +51,27 @@ using namespace comphelper;
 
 class OPasswordDialog : public ModalDialog
 {
-    VclFrame* m_pUser;
-    Edit*     m_pEDOldPassword;
-    Edit*     m_pEDPassword;
-    Edit*     m_pEDPasswordRepeat;
-    OKButton* m_pOKBtn;
+    VclPtr<VclFrame> m_pUser;
+    VclPtr<Edit>     m_pEDOldPassword;
+    VclPtr<Edit>     m_pEDPassword;
+    VclPtr<Edit>     m_pEDPasswordRepeat;
+    VclPtr<OKButton> m_pOKBtn;
 
     DECL_LINK( OKHdl_Impl, void * );
     DECL_LINK( ModifiedHdl, Edit * );
 
 public:
     OPasswordDialog( vcl::Window* pParent,const OUString& _sUserName);
+    virtual ~OPasswordDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pUser.clear();
+        m_pEDOldPassword.clear();
+        m_pEDPassword.clear();
+        m_pEDPasswordRepeat.clear();
+        m_pOKBtn.clear();
+        ModalDialog::dispose();
+    }
 
     OUString        GetOldPassword() const { return m_pEDOldPassword->GetText(); }
     OUString        GetNewPassword() const { return m_pEDPassword->GetText(); }
@@ -92,8 +102,8 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
     else
     {
         OUString aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
-        MessageDialog aErrorBox(this, aErrorMsg);
-        aErrorBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aErrorMsg);
+        aErrorBox->Execute();
         m_pEDPassword->SetText( OUString() );
         m_pEDPasswordRepeat->SetText( OUString() );
         m_pEDPassword->GrabFocus();
@@ -114,9 +124,9 @@ OUserAdmin::OUserAdmin(vcl::Window* pParent,const SfxItemSet& _rAttrSet)
     , m_pNEWUSER(0)
     , m_pCHANGEPWD(0)
     , m_pDELETEUSER(0)
-    ,m_TableCtrl(get<VclAlignment>("table"), WB_TABSTOP)
+    ,m_TableCtrl(VclPtr<OTableGrantControl>::Create(get<VclAlignment>("table"), WB_TABSTOP))
 {
-    m_TableCtrl.Show();
+    m_TableCtrl->Show();
     get(m_pUSER, "user");
     get(m_pNEWUSER, "add");
     get(m_pCHANGEPWD, "changepass");
@@ -131,7 +141,18 @@ OUserAdmin::OUserAdmin(vcl::Window* pParent,const SfxItemSet& _rAttrSet)
 
 OUserAdmin::~OUserAdmin()
 {
+    disposeOnce();
+}
+
+void OUserAdmin::dispose()
+{
     m_xConnection = NULL;
+    m_TableCtrl.disposeAndClear();
+    m_pUSER.clear();
+    m_pNEWUSER.clear();
+    m_pCHANGEPWD.clear();
+    m_pDELETEUSER.clear();
+    OGenericAdministrationPage::dispose();
 }
 
 void OUserAdmin::FillUserNames()
@@ -162,11 +183,11 @@ void OUserAdmin::FillUserNames()
                 {
                     Reference<XAuthorizable> xAuth;
                     m_xUsers->getByName(m_UserName) >>= xAuth;
-                    m_TableCtrl.setGrantUser(xAuth);
+                    m_TableCtrl->setGrantUser(xAuth);
                 }
 
-                m_TableCtrl.setUserName(GetUser());
-                m_TableCtrl.Init();
+                m_TableCtrl->setUserName(GetUser());
+                m_TableCtrl->Init();
             }
         }
     }
@@ -177,13 +198,13 @@ void OUserAdmin::FillUserNames()
     m_pDELETEUSER->Enable(xDrop.is());
 
     m_pCHANGEPWD->Enable(m_xUsers.is());
-    m_TableCtrl.Enable(m_xUsers.is());
+    m_TableCtrl->Enable(m_xUsers.is());
 
 }
 
-SfxTabPage* OUserAdmin::Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
+VclPtr<SfxTabPage> OUserAdmin::Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
 {
-    return ( new OUserAdmin( pParent, *_rAttrSet ) );
+    return VclPtr<SfxTabPage>(new OUserAdmin( pParent, *_rAttrSet ), SAL_NO_ACQUIRE);
 }
 
 IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
@@ -192,16 +213,16 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
     {
         if(pButton == m_pNEWUSER)
         {
-            SfxPasswordDialog aPwdDlg(this);
-            aPwdDlg.ShowExtras(SfxShowExtras::ALL);
-            if(aPwdDlg.Execute())
+            ScopedVclPtrInstance< SfxPasswordDialog > aPwdDlg(this);
+            aPwdDlg->ShowExtras(SfxShowExtras::ALL);
+            if(aPwdDlg->Execute())
             {
                 Reference<XDataDescriptorFactory> xUserFactory(m_xUsers,UNO_QUERY);
                 Reference<XPropertySet> xNewUser = xUserFactory->createDataDescriptor();
                 if(xNewUser.is())
                 {
-                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(OUString(aPwdDlg.GetUser())));
-                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(OUString(aPwdDlg.GetPassword())));
+                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(OUString(aPwdDlg->GetUser())));
+                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(OUString(aPwdDlg->GetPassword())));
                     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
                     if(xAppend.is())
                         xAppend->appendByDescriptor(xNewUser);
@@ -219,11 +240,11 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 if(xUser.is())
                 {
                     OUString sNewPassword,sOldPassword;
-                    OPasswordDialog aDlg(this,sName);
-                    if(aDlg.Execute() == RET_OK)
+                    ScopedVclPtrInstance< OPasswordDialog > aDlg(this,sName);
+                    if(aDlg->Execute() == RET_OK)
                     {
-                        sNewPassword = aDlg.GetNewPassword();
-                        sOldPassword = aDlg.GetOldPassword();
+                        sNewPassword = aDlg->GetNewPassword();
+                        sOldPassword = aDlg->GetOldPassword();
 
                         if(!sNewPassword.isEmpty())
                             xUser->changePassword(sOldPassword,sNewPassword);
@@ -238,8 +259,8 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    MessageDialog aQry(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                    if(aQry.Execute() == RET_YES)
+                    ScopedVclPtrInstance< MessageDialog > aQry(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                    if(aQry->Execute() == RET_YES)
                         xDrop->dropByName(GetUser());
                 }
             }
@@ -261,10 +282,10 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
 
 IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )
 {
-    m_TableCtrl.setUserName(GetUser());
-    m_TableCtrl.UpdateTables();
-    m_TableCtrl.DeactivateCell();
-    m_TableCtrl.ActivateCell(m_TableCtrl.GetCurRow(),m_TableCtrl.GetCurColumnId());
+    m_TableCtrl->setUserName(GetUser());
+    m_TableCtrl->UpdateTables();
+    m_TableCtrl->DeactivateCell();
+    m_TableCtrl->ActivateCell(m_TableCtrl->GetCurRow(),m_TableCtrl->GetCurColumnId());
     return 0;
 }
 
@@ -283,7 +304,7 @@ void OUserAdmin::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlLis
 
 void OUserAdmin::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
 {
-    m_TableCtrl.setComponentContext(m_xORB);
+    m_TableCtrl->setComponentContext(m_xORB);
     try
     {
         if ( !m_xConnection.is() && m_pAdminDialog )
@@ -302,7 +323,7 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
             }
             if ( xUsersSup.is() )
             {
-                m_TableCtrl.setTablesSupplier(xTablesSup);
+                m_TableCtrl->setTablesSupplier(xTablesSup);
                 m_xUsers = xUsersSup->getUsers();
             }
         }

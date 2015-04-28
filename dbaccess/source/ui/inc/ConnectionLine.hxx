@@ -22,6 +22,7 @@
 #include <tools/gen.hxx>
 #include "ConnectionLineData.hxx"
 #include <functional>
+#include <vcl/vclptr.hxx>
 
 class OutputDevice;
 namespace dbaui
@@ -38,7 +39,7 @@ namespace dbaui
     class OTableConnection;
     class OConnectionLine
     {
-        OTableConnection*       m_pTabConn;
+        VclPtr<OTableConnection>       m_pTabConn;
         OConnectionLineDataRef  m_pData;
 
         Point                   m_aSourceConnPos,
@@ -72,7 +73,7 @@ namespace dbaui
     /// draws a connectionline object on outputdevice
     struct TConnectionLineDrawFunctor : ::std::unary_function<OConnectionLine*,void>
     {
-        OutputDevice* pDevice;
+        VclPtr<OutputDevice> pDevice;
         TConnectionLineDrawFunctor(OutputDevice* _pDevice)
         {
             pDevice = _pDevice;

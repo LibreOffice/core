@@ -32,9 +32,9 @@ namespace dbaui
     class OTableEditorCtrl;
     class OTableBorderWindow : public vcl::Window
     {
-        Splitter                            m_aHorzSplitter;
-        OTableFieldDescWin*                 m_pFieldDescWin;
-        OTableEditorCtrl*                   m_pEditorCtrl;
+        VclPtr<Splitter>                    m_aHorzSplitter;
+        VclPtr<OTableFieldDescWin>          m_pFieldDescWin;
+        VclPtr<OTableEditorCtrl>            m_pEditorCtrl;
 
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         void ArrangeChildren( long nSplitPos ,Rectangle& rRect);
@@ -45,6 +45,7 @@ namespace dbaui
         OTableBorderWindow(vcl::Window* pParent);
         virtual ~OTableBorderWindow();
         // Window overrides
+        virtual void dispose() SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 
@@ -62,7 +63,7 @@ namespace dbaui
         };
     private:
         ::com::sun::star::lang::Locale      m_aLocale;
-        OTableBorderWindow*                 m_pWin;
+        VclPtr<OTableBorderWindow>          m_pWin;
         OTableController&                   m_rController;
         ChildFocusState                     m_eChildFocus;
 
@@ -77,6 +78,7 @@ namespace dbaui
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
                             OTableController& _rController);
         virtual ~OTableDesignView();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

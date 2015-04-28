@@ -250,10 +250,41 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
 
 SwSortDlg::~SwSortDlg()
 {
+    disposeOnce();
+}
+
+void SwSortDlg::dispose()
+{
     ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB1);
     ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB2);
     ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB3);
     delete pColRes;
+    m_pColLbl.clear();
+    m_pTypLbl.clear();
+    m_pKeyCB1.clear();
+    m_pColEdt1.clear();
+    m_pTypDLB1.clear();
+    m_pSortUp1RB.clear();
+    m_pSortDn1RB.clear();
+    m_pKeyCB2.clear();
+    m_pColEdt2.clear();
+    m_pTypDLB2.clear();
+    m_pSortUp2RB.clear();
+    m_pSortDn2RB.clear();
+    m_pKeyCB3.clear();
+    m_pColEdt3.clear();
+    m_pTypDLB3.clear();
+    m_pSortUp3RB.clear();
+    m_pSortDn3RB.clear();
+    m_pColumnRB.clear();
+    m_pRowRB.clear();
+    m_pDelimTabRB.clear();
+    m_pDelimFreeRB.clear();
+    m_pDelimEdt.clear();
+    m_pDelimPB.clear();
+    m_pLangLB.clear();
+    m_pCaseCB.clear();
+    SvxStandardDialog::dispose();
 }
 
 sal_Unicode SwSortDlg::GetDelimChar() const
@@ -381,7 +412,7 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
 
 IMPL_LINK( SwSortDlg, CheckHdl, void *, pControl )
 {
-    if( pControl == m_pRowRB)
+    if( pControl == m_pRowRB.get())
     {
         m_pColLbl->SetText(aColTxt);
         m_pColEdt1->SetMax(nY);
@@ -392,7 +423,7 @@ IMPL_LINK( SwSortDlg, CheckHdl, void *, pControl )
         m_pColEdt2->SetAccessibleName(aColTxt);
         m_pColEdt3->SetAccessibleName(aColTxt);
     }
-    else if( pControl == m_pColumnRB)
+    else if( pControl == m_pColumnRB.get())
     {
         m_pColLbl->SetText(aRowTxt);
         m_pColEdt1->SetMax(nX);

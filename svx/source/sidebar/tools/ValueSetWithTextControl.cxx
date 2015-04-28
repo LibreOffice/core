@@ -41,12 +41,6 @@ ValueSetWithTextControl::ValueSetWithTextControl(
     SetColCount( 1 );
 }
 
-
-ValueSetWithTextControl::~ValueSetWithTextControl()
-{
-}
-
-
 void ValueSetWithTextControl::AddItem(
     const Image& rItemImage,
     const Image* pSelectedItemImage,

@@ -105,7 +105,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     Size aSize = pHeaderTreeContainer->LogicToPixel(Size(238 , 50), MAP_APPFONT);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
-    m_pTable = new SwAddressTable(*pHeaderTreeContainer);
+    m_pTable = VclPtr<SwAddressTable>::Create(*pHeaderTreeContainer);
     long aStaticTabs[]= { 2, 0, 0 };
     m_pTable->SetTabs( aStaticTabs );
     m_pTable->InsertHeaderItem(1, m_sName, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER);
@@ -147,7 +147,14 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
 
 SwSelectDBTableDialog::~SwSelectDBTableDialog()
 {
-    delete m_pTable;
+    disposeOnce();
+}
+
+void SwSelectDBTableDialog::dispose()
+{
+    m_pTable.disposeAndClear();
+    m_pPreviewPB.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
@@ -180,7 +187,7 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
         pProperties[4].Name = "ShowTreeViewButton";
         pProperties[4].Value <<= sal_False;
 
-        boost::scoped_ptr<SwDBTablePreviewDialog> pDlg(new SwDBTablePreviewDialog(pButton, aProperties));
+        VclPtrInstance< SwDBTablePreviewDialog > pDlg(pButton, aProperties);
         pDlg->Execute();
     }
 

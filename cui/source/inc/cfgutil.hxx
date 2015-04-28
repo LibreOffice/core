@@ -113,6 +113,7 @@ class SfxConfigFunctionListBox : public SvTreeListBox
 public:
     SfxConfigFunctionListBox(vcl::Window*, WinBits nStyle);
     virtual ~SfxConfigFunctionListBox();
+    virtual void  dispose() SAL_OVERRIDE;
 
     void          ClearAll();
     using Window::GetHelpText;
@@ -127,7 +128,7 @@ struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox : public SvTreeListBox
 {
     SvxConfigGroupBoxResource_Impl* pImp;
-    SfxConfigFunctionListBox*  pFunctionListBox;
+    VclPtr<SfxConfigFunctionListBox>  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
 
     OUString m_sModuleLongName;
@@ -162,6 +163,7 @@ protected:
 public:
     SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SfxConfigGroupListBox();
+    virtual void        dispose() SAL_OVERRIDE;
     void                ClearAll();
 
     void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,

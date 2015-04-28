@@ -56,15 +56,19 @@ OJoinDesignView::OJoinDesignView(vcl::Window* _pParent, OJoinController& _rContr
     ,m_pTableView(NULL)
     ,m_rController( _rController )
 {
-    m_pScrollWindow = new OScrollWindowHelper(this);
+    m_pScrollWindow = VclPtr<OScrollWindowHelper>::Create(this);
 }
 
 OJoinDesignView::~OJoinDesignView()
 {
-    boost::scoped_ptr<vcl::Window> aT3(m_pScrollWindow);
-    m_pScrollWindow = NULL;
-    boost::scoped_ptr<vcl::Window> aT2(m_pTableView);
-    m_pTableView = NULL;
+    disposeOnce();
+}
+
+void OJoinDesignView::dispose()
+{
+    m_pScrollWindow.disposeAndClear();
+    m_pTableView.disposeAndClear();
+    ODataView::dispose();
 }
 
 void OJoinDesignView::Construct()

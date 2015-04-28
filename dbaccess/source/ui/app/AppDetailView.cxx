@@ -341,30 +341,41 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
 
 OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView)
     : Window(_pParent,WB_DIALOGCONTROL )
-    ,m_aCreation(*this)
-    ,m_aDescription(this)
-    ,m_aHelpText(this,WB_WORDBREAK)
-    ,m_aFL(this,WB_VERT)
+    ,m_aCreation(VclPtr<OCreationList>::Create(*this))
+    ,m_aDescription(VclPtr<FixedText>::Create(this))
+    ,m_aHelpText(VclPtr<FixedText>::Create(this,WB_WORDBREAK))
+    ,m_aFL(VclPtr<FixedLine>::Create(this,WB_VERT))
     ,m_pDetailView(_pDetailView)
 {
     SetUniqueId(UID_APP_TASKS_WINDOW);
-    m_aCreation.SetHelpId(HID_APP_CREATION_LIST);
-    m_aCreation.SetSelectHdl(LINK(this, OTasksWindow, OnEntrySelectHdl));
-    m_aHelpText.SetHelpId(HID_APP_HELP_TEXT);
-    m_aDescription.SetHelpId(HID_APP_DESCRIPTION_TEXT);
-    m_aDescription.SetText(ModuleRes(STR_DESCRIPTION));
+    m_aCreation->SetHelpId(HID_APP_CREATION_LIST);
+    m_aCreation->SetSelectHdl(LINK(this, OTasksWindow, OnEntrySelectHdl));
+    m_aHelpText->SetHelpId(HID_APP_HELP_TEXT);
+    m_aDescription->SetHelpId(HID_APP_DESCRIPTION_TEXT);
+    m_aDescription->SetText(ModuleRes(STR_DESCRIPTION));
 
     ImageProvider aImageProvider;
     Image aFolderImage = aImageProvider.getFolderImage( css::sdb::application::DatabaseObject::FORM );
-    m_aCreation.SetDefaultCollapsedEntryBmp( aFolderImage );
-    m_aCreation.SetDefaultExpandedEntryBmp( aFolderImage );
+    m_aCreation->SetDefaultCollapsedEntryBmp( aFolderImage );
+    m_aCreation->SetDefaultExpandedEntryBmp( aFolderImage );
 
     ImplInitSettings(true,true,true);
 }
 
 OTasksWindow::~OTasksWindow()
 {
+    disposeOnce();
+}
+
+void OTasksWindow::dispose()
+{
     Clear();
+    m_aCreation.disposeAndClear();
+    m_aDescription.disposeAndClear();
+    m_aHelpText.disposeAndClear();
+    m_aFL.disposeAndClear();
+    m_pDetailView.clear();
+    vcl::Window::dispose();
 }
 
 void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -394,23 +405,23 @@ void OTasksWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
     {
         SetTextColor( rStyleSettings.GetFieldTextColor() );
         SetTextFillColor();
-        m_aHelpText.SetTextColor( rStyleSettings.GetFieldTextColor() );
-        m_aHelpText.SetTextFillColor();
-        m_aDescription.SetTextColor( rStyleSettings.GetFieldTextColor() );
-        m_aDescription.SetTextFillColor();
+        m_aHelpText->SetTextColor( rStyleSettings.GetFieldTextColor() );
+        m_aHelpText->SetTextFillColor();
+        m_aDescription->SetTextColor( rStyleSettings.GetFieldTextColor() );
+        m_aDescription->SetTextFillColor();
     }
 
     if( bBackground )
     {
         SetBackground( rStyleSettings.GetFieldColor() );
-        m_aHelpText.SetBackground( rStyleSettings.GetFieldColor() );
-        m_aDescription.SetBackground( rStyleSettings.GetFieldColor() );
-        m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
+        m_aHelpText->SetBackground( rStyleSettings.GetFieldColor() );
+        m_aDescription->SetBackground( rStyleSettings.GetFieldColor() );
+        m_aFL->SetBackground( rStyleSettings.GetFieldColor() );
     }
 
-    vcl::Font aFont = m_aDescription.GetControlFont();
+    vcl::Font aFont = m_aDescription->GetControlFont();
     aFont.SetWeight(WEIGHT_BOLD);
-    m_aDescription.SetControlFont(aFont);
+    m_aDescription->SetControlFont(aFont);
 }
 
 void OTasksWindow::setHelpText(sal_uInt16 _nId)
@@ -418,20 +429,20 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
     if ( _nId )
     {
         OUString sText = ModuleRes(_nId);
-        m_aHelpText.SetText(sText);
+        m_aHelpText->SetText(sText);
     }
     else
     {
-        m_aHelpText.SetText(OUString());
+        m_aHelpText->SetText(OUString());
 }
 
 }
 
 IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
 {
-    SvTreeListEntry* pEntry = m_aCreation.GetHdlEntry();
+    SvTreeListEntry* pEntry = m_aCreation->GetHdlEntry();
     if ( pEntry )
-        m_aHelpText.SetText( ModuleRes( static_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
+        m_aHelpText->SetText( ModuleRes( static_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
     return 1L;
 }
 
@@ -446,14 +457,14 @@ void OTasksWindow::Resize()
     sal_Int32 n6PPT = aFLSize.Height();
     long nHalfOutputWidth = static_cast<long>(nOutputWidth * 0.5);
 
-    m_aCreation.SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
+    m_aCreation->SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
     // i77897 make the m_aHelpText a little bit smaller. (-5)
     sal_Int32 nNewWidth = nOutputWidth - nHalfOutputWidth - aFLSize.Width() - 5;
-    m_aDescription.SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, 0), Size(nNewWidth, nOutputHeight) );
-    Size aDesc = m_aDescription.CalcMinimumSize();
-    m_aHelpText.SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, aDesc.Height() ), Size(nNewWidth, nOutputHeight - aDesc.Height() - n6PPT) );
+    m_aDescription->SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, 0), Size(nNewWidth, nOutputHeight) );
+    Size aDesc = m_aDescription->CalcMinimumSize();
+    m_aHelpText->SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, aDesc.Height() ), Size(nNewWidth, nOutputHeight - aDesc.Height() - n6PPT) );
 
-    m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0), Size(aFLSize.Width(), nOutputHeight ) );
+    m_aFL->SetPosSizePixel( Point(nHalfOutputWidth , 0), Size(aFLSize.Width(), nOutputHeight ) );
 }
 
 void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
@@ -485,79 +496,88 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
         for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages )
         {
-            SvTreeListEntry* pEntry = m_aCreation.InsertEntry( pTask->sTitle );
+            SvTreeListEntry* pEntry = m_aCreation->InsertEntry( pTask->sTitle );
             pEntry->SetUserData( reinterpret_cast< void* >( new TaskEntry( *pTask ) ) );
 
             Image aImage = Image( *pImages );
-            m_aCreation.SetExpandedEntryBmp(  pEntry, aImage );
-            m_aCreation.SetCollapsedEntryBmp( pEntry, aImage );
+            m_aCreation->SetExpandedEntryBmp(  pEntry, aImage );
+            m_aCreation->SetCollapsedEntryBmp( pEntry, aImage );
         }
     }
     catch(Exception&)
     {
     }
 
-    m_aCreation.Show();
-    m_aCreation.SelectAll(false);
-    m_aHelpText.Show();
-    m_aDescription.Show();
-    m_aFL.Show();
-    m_aCreation.updateHelpText();
+    m_aCreation->Show();
+    m_aCreation->SelectAll(false);
+    m_aHelpText->Show();
+    m_aDescription->Show();
+    m_aFL->Show();
+    m_aCreation->updateHelpText();
     Enable(!_rList.empty());
 }
 
 void OTasksWindow::Clear()
 {
-    m_aCreation.resetLastActive();
-    SvTreeListEntry* pEntry = m_aCreation.First();
+    m_aCreation->resetLastActive();
+    SvTreeListEntry* pEntry = m_aCreation->First();
     while ( pEntry )
     {
         delete static_cast< TaskEntry* >( pEntry->GetUserData() );
-        pEntry = m_aCreation.Next(pEntry);
+        pEntry = m_aCreation->Next(pEntry);
     }
-    m_aCreation.Clear();
+    m_aCreation->Clear();
 }
 
 // class OApplicationDetailView
 
 OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent,false )
-    ,m_aHorzSplitter(this)
-    ,m_aTasks(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL )
-    ,m_aContainer(this,0,WB_BORDER | WB_DIALOGCONTROL )
+    ,m_aHorzSplitter(VclPtr<Splitter>::Create(this))
+    ,m_aTasks(VclPtr<dbaui::OTitleWindow>::Create(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL) )
+    ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this,0,WB_BORDER | WB_DIALOGCONTROL) )
     ,m_rBorderWin(_rParent)
 {
     SetUniqueId(UID_APP_DETAIL_VIEW);
     ImplInitSettings( true, true, true );
 
-    m_pControlHelper = new OAppDetailPageHelper(&m_aContainer,m_rBorderWin,_ePreviewMode);
+    m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer.get(),m_rBorderWin,_ePreviewMode);
     m_pControlHelper->Show();
-    m_aContainer.setChildWindow(m_pControlHelper);
+    m_aContainer->setChildWindow(m_pControlHelper);
 
-    OTasksWindow* pTasks = new OTasksWindow(&m_aTasks,this);
+    VclPtrInstance<OTasksWindow> pTasks(m_aTasks.get(),this);
     pTasks->Show();
     pTasks->Disable(m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
-    m_aTasks.setChildWindow(pTasks);
-    m_aTasks.SetUniqueId(UID_APP_TASKS_VIEW);
-    m_aTasks.Show();
+    m_aTasks->setChildWindow(pTasks);
+    m_aTasks->SetUniqueId(UID_APP_TASKS_VIEW);
+    m_aTasks->Show();
 
-    m_aContainer.SetUniqueId(UID_APP_CONTAINER_VIEW);
-    m_aContainer.Show();
+    m_aContainer->SetUniqueId(UID_APP_CONTAINER_VIEW);
+    m_aContainer->Show();
 
     const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
-    m_aHorzSplitter.SetPosSizePixel( Point(0,50), Size(0,nFrameWidth) );
+    m_aHorzSplitter->SetPosSizePixel( Point(0,50), Size(0,nFrameWidth) );
     // now set the components at the base class
-    set(&m_aContainer,&m_aTasks);
+    set(m_aContainer.get(),m_aTasks.get());
 
-    m_aHorzSplitter.Show();
-    m_aHorzSplitter.SetUniqueId(UID_APP_VIEW_HORZ_SPLIT);
-    setSplitter(&m_aHorzSplitter);
+    m_aHorzSplitter->Show();
+    m_aHorzSplitter->SetUniqueId(UID_APP_VIEW_HORZ_SPLIT);
+    setSplitter(m_aHorzSplitter.get());
 }
 
 OApplicationDetailView::~OApplicationDetailView()
 {
+    disposeOnce();
+}
+
+void OApplicationDetailView::dispose()
+{
     set(NULL,NULL);
     setSplitter(NULL);
-    m_pControlHelper = NULL;
+    m_aHorzSplitter.disposeAndClear();
+    m_aTasks.disposeAndClear();
+    m_aContainer.disposeAndClear();
+    m_pControlHelper.clear();
+    OSplitterView::dispose();
 }
 
 void OApplicationDetailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
@@ -580,9 +600,9 @@ void OApplicationDetailView::ImplInitSettings( bool bFont, bool bForeground, boo
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 
-    m_aHorzSplitter.SetBackground( rStyleSettings.GetDialogColor() );
-    m_aHorzSplitter.SetFillColor( rStyleSettings.GetDialogColor() );
-    m_aHorzSplitter.SetTextFillColor(rStyleSettings.GetDialogColor() );
+    m_aHorzSplitter->SetBackground( rStyleSettings.GetDialogColor() );
+    m_aHorzSplitter->SetFillColor( rStyleSettings.GetDialogColor() );
+    m_aHorzSplitter->SetTextFillColor(rStyleSettings.GetDialogColor() );
 }
 
 void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
@@ -642,7 +662,7 @@ void OApplicationDetailView::impl_createPage( ElementType _eType, const Referenc
     bool bEnabled = !rData.aTasks.empty()
                 && getBorderWin().getView()->getCommandController().isCommandEnabled( rData.aTasks[0].sUNOCommand );
     getTasksWindow().Enable( bEnabled );
-    m_aContainer.setTitle( rData.nTitleId );
+    m_aContainer->setTitle( rData.nTitleId );
 
     // let our helper create the object list
     if ( _eType == E_TABLE )

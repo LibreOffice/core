@@ -55,12 +55,12 @@ class SwNavigationPI : public vcl::Window,
     friend class SwContentTree;
     friend class SwGlobalTree;
 
-    SwNavHelpToolBox    aContentToolBox;
-    SwHelpToolBox       aGlobalToolBox;
-    ImageList           aContentImageList;
-    SwContentTree       aContentTree;
-    SwGlobalTree        aGlobalTree;
-    ListBox             aDocListBox;
+    VclPtr<SwNavHelpToolBox>    aContentToolBox;
+    VclPtr<SwHelpToolBox>       aGlobalToolBox;
+    ImageList                   aContentImageList;
+    VclPtr<SwContentTree>       aContentTree;
+    VclPtr<SwGlobalTree>        aGlobalTree;
+    VclPtr<ListBox>             aDocListBox;
     Idle                aPageChgIdle;
     OUString            sContentFileName;
     OUString            aContextArr[3];
@@ -72,8 +72,8 @@ class SwNavigationPI : public vcl::Window,
     SwWrtShell          *pContentWrtShell;
     SwView              *pActContView;
     SwView              *pCreateView;
-    SfxPopupWindow      *pPopupWindow;
-    SfxPopupWindow      *pFloatingWindow;
+    VclPtr<SfxPopupWindow>      pPopupWindow;
+    VclPtr<SfxPopupWindow>      pFloatingWindow;
 
     SfxChildWindowContext* pContextWin;
 
@@ -137,6 +137,7 @@ public:
 
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, vcl::Window*);
     virtual ~SwNavigationPI();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            GotoPage(); // jump to page; bindable function
 

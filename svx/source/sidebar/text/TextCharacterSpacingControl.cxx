@@ -36,13 +36,13 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
 :   PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_SPACING))
 ,   mrTextPropertyPanel(rPanel)
 ,   mpBindings(pBindings)
-,   maVSSpacing     (ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES(VS_SPACING))
-,   maLastCus       (this, SVX_RES(FT_LASTCUSTOM))
+,   maVSSpacing     (VclPtr<ValueSetWithTextControl>::Create(ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES(VS_SPACING)))
+,   maLastCus       (VclPtr<FixedText>::Create(this, SVX_RES(FT_LASTCUSTOM)))
 //, maBorder        (this, SVX_RES(CT_BORDER))
-,   maFTSpacing     (this, SVX_RES(FT_SPACING))
-,   maLBKerning     (this, SVX_RES(LB_KERNING))
-,   maFTBy          (this, SVX_RES(FT_BY))
-,   maEditKerning   (this, SVX_RES(ED_KERNING))
+,   maFTSpacing     (VclPtr<FixedText>::Create(this, SVX_RES(FT_SPACING)))
+,   maLBKerning     (VclPtr<ListBox>::Create(this, SVX_RES(LB_KERNING)))
+,   maFTBy          (VclPtr<FixedText>::Create(this, SVX_RES(FT_BY)))
+,   maEditKerning   (VclPtr<MetricField>::Create(this, SVX_RES(ED_KERNING)))
 
 ,   mpImg           (NULL)
 ,   mpImgSel        (NULL)
@@ -65,36 +65,49 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
     initial();
     FreeResource();
     Link aLink = LINK(this, TextCharacterSpacingControl, KerningSelectHdl);
-    maLBKerning.SetSelectHdl(aLink);
+    maLBKerning->SetSelectHdl(aLink);
     aLink =LINK(this, TextCharacterSpacingControl, KerningModifyHdl);
-    maEditKerning.SetModifyHdl(aLink);
+    maEditKerning->SetModifyHdl(aLink);
 
 }
+
 TextCharacterSpacingControl::~TextCharacterSpacingControl()
+{
+    disposeOnce();
+}
+
+void TextCharacterSpacingControl::dispose()
 {
     delete[] mpImg;
     delete[] mpImgSel;
     delete[] mpStr;
     delete[] mpStrTip;
+    maVSSpacing.disposeAndClear();
+    maLastCus.disposeAndClear();
+    maFTSpacing.disposeAndClear();
+    maLBKerning.disposeAndClear();
+    maFTBy.disposeAndClear();
+    maEditKerning.disposeAndClear();
+    svx::sidebar::PopupControl::dispose();
 }
 
 void TextCharacterSpacingControl::initial()
 {
-    maVSSpacing.SetStyle( maVSSpacing.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );
+    maVSSpacing->SetStyle( maVSSpacing->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );
     {
-        maVSSpacing.SetControlBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
+        maVSSpacing->SetControlBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
         sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-        maVSSpacing.SetColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
+        maVSSpacing->SetColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
         sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-        maVSSpacing.SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
+        maVSSpacing->SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
         sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-        maFTSpacing.SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
+        maFTSpacing->SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
         sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-        maFTBy.SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
+        maFTBy->SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
         sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
     }
@@ -128,21 +141,21 @@ void TextCharacterSpacingControl::initial()
     mpStrTip[4] = SVX_RESSTR(STR_VERY_LOOSE_TIP);
 
     for (int i=0;i<5;i++)
-        maVSSpacing.AddItem(mpImg[i], &mpImgSel[i],mpStr[i],&mpStrTip[i]);
+        maVSSpacing->AddItem(mpImg[i], &mpImgSel[i],mpStr[i],&mpStrTip[i]);
 
-    maVSSpacing.AddItem( maImgCus, 0, maStrCus, 0 );
+    maVSSpacing->AddItem( maImgCus, 0, maStrCus, 0 );
 
-    maVSSpacing.SetNoSelection();
+    maVSSpacing->SetNoSelection();
     Link aLink = LINK(this, TextCharacterSpacingControl,VSSelHdl );
-    maVSSpacing.SetSelectHdl(aLink);
-    maVSSpacing.StartSelection();
-    maVSSpacing.Show();
+    maVSSpacing->SetSelectHdl(aLink);
+    maVSSpacing->StartSelection();
+    maVSSpacing->Show();
 }
 
 void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, long nKerning)
 {
     mbVS = true;
-    maVSSpacing.SetNoSelection();
+    maVSSpacing->SetNoSelection();
     SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE );
     if ( aWinOpt.Exists() )
     {
@@ -164,131 +177,131 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
 
     if( !mnLastCus )
     {
-        maVSSpacing.ReplaceItemImages(6, maImgCusGrey,0);
+        maVSSpacing->ReplaceItemImages(6, maImgCusGrey,0);
     }
     else
     {
         //set custom tips
-        maVSSpacing.ReplaceItemImages(6, maImgCus,0);
+        maVSSpacing->ReplaceItemImages(6, maImgCus,0);
         if(mnCustomKern > 0)
         {
             OUString aStrTip( maStrCusE);   //LAST CUSTOM no tip defect //add
             aStrTip += OUString::number( (double)mnCustomKern / 10);
             aStrTip += " " + maStrUnit;      // modify
-            maVSSpacing.SetItemText(6,aStrTip);
+            maVSSpacing->SetItemText(6,aStrTip);
         }
         else if(mnCustomKern < 0)
         {
             OUString aStrTip(maStrCusC) ;     //LAST CUSTOM no tip defect //add
             aStrTip += OUString::number( (double)-mnCustomKern / 10);
             aStrTip += " " + maStrUnit;      // modify
-            maVSSpacing.SetItemText( 6, aStrTip );
+            maVSSpacing->SetItemText( 6, aStrTip );
         }
         else
         {
             OUString aStrTip(maStrCusN) ;     //LAST CUSTOM no tip defect //add
-            maVSSpacing.SetItemText( 6, aStrTip );
+            maVSSpacing->SetItemText( 6, aStrTip );
         }
 
     }
 
     if(bLBAvailable && bAvailable)
     {
-        maLBKerning.Enable();
-        maFTSpacing.Enable();
+        maLBKerning->Enable();
+        maFTSpacing->Enable();
 
         SfxMapUnit eUnit = mrTextPropertyPanel.GetSpaceController().GetCoreMetric();
         MapUnit eOrgUnit = (MapUnit)eUnit;
         MapUnit ePntUnit( MAP_POINT );
-        long nBig = maEditKerning.Normalize(nKerning);
+        long nBig = maEditKerning->Normalize(nKerning);
         nKerning = LogicToLogic( nBig, eOrgUnit, ePntUnit );
 
         if ( nKerning > 0 )
         {
-            maFTBy.Enable();
-            maEditKerning.Enable();
-            maEditKerning.SetMax( 9999 );
-            maEditKerning.SetLast( 9999 );
-            maEditKerning.SetValue( nKerning );
-            maLBKerning.SelectEntryPos( SIDEBAR_SPACE_EXPAND );
+            maFTBy->Enable();
+            maEditKerning->Enable();
+            maEditKerning->SetMax( 9999 );
+            maEditKerning->SetLast( 9999 );
+            maEditKerning->SetValue( nKerning );
+            maLBKerning->SelectEntryPos( SIDEBAR_SPACE_EXPAND );
             if(nKerning == 30)
             {
-                maVSSpacing.SelectItem(4);
+                maVSSpacing->SelectItem(4);
             }
             else if(nKerning == 60)
             {
-                maVSSpacing.SelectItem(5);
+                maVSSpacing->SelectItem(5);
             }
             else
             {
-                maVSSpacing.SetNoSelection();
-                maVSSpacing.SelectItem(0);
+                maVSSpacing->SetNoSelection();
+                maVSSpacing->SelectItem(0);
                 mbVS = false;
             }
         }
         else if ( nKerning < 0 )
         {
-            maFTBy.Enable();
-            maEditKerning.Enable();
-            maEditKerning.SetValue( -nKerning );
-            maLBKerning.SelectEntryPos( SIDEBAR_SPACE_CONDENSED );
+            maFTBy->Enable();
+            maEditKerning->Enable();
+            maEditKerning->SetValue( -nKerning );
+            maLBKerning->SelectEntryPos( SIDEBAR_SPACE_CONDENSED );
             long nMax = mrTextPropertyPanel.GetSelFontSize()/6;
-            maEditKerning.SetMax( maEditKerning.Normalize( nMax ), FUNIT_POINT );
-            maEditKerning.SetLast( maEditKerning.GetMax( maEditKerning.GetUnit() ) );
+            maEditKerning->SetMax( maEditKerning->Normalize( nMax ), FUNIT_POINT );
+            maEditKerning->SetLast( maEditKerning->GetMax( maEditKerning->GetUnit() ) );
             if( nKerning == -30 )
             {
-                maVSSpacing.SelectItem(1);
+                maVSSpacing->SelectItem(1);
             }
             else if( nKerning == -15 )
             {
-                maVSSpacing.SelectItem(2);
+                maVSSpacing->SelectItem(2);
             }
             else
             {
-                maVSSpacing.SetNoSelection();
-                maVSSpacing.SelectItem(0);
+                maVSSpacing->SetNoSelection();
+                maVSSpacing->SelectItem(0);
                 mbVS = false;
             }
         }
         else
         {
-            maVSSpacing.SelectItem(3);
-            maLBKerning.SelectEntryPos( SIDEBAR_SPACE_NORMAL );
-            maFTBy.Disable();
-            maEditKerning.Disable();
-            maEditKerning.SetValue( 0 );
-            maEditKerning.SetMax( 9999 );
-            maEditKerning.SetLast( 9999 );
+            maVSSpacing->SelectItem(3);
+            maLBKerning->SelectEntryPos( SIDEBAR_SPACE_NORMAL );
+            maFTBy->Disable();
+            maEditKerning->Disable();
+            maEditKerning->SetValue( 0 );
+            maEditKerning->SetMax( 9999 );
+            maEditKerning->SetLast( 9999 );
         }
     }
     else if(bLBAvailable && !bAvailable)
     {
         //modified
-        maVSSpacing.SetNoSelection();
-        maVSSpacing.SelectItem(0);
+        maVSSpacing->SetNoSelection();
+        maVSSpacing->SelectItem(0);
         mbVS = false;
-        maLBKerning.Enable();
-        maFTSpacing.Enable();
-        maLBKerning.SetNoSelection();
-        maEditKerning.SetText(OUString());
-        maEditKerning.Disable();
-        maFTBy.Disable();
+        maLBKerning->Enable();
+        maFTSpacing->Enable();
+        maLBKerning->SetNoSelection();
+        maEditKerning->SetText(OUString());
+        maEditKerning->Disable();
+        maFTBy->Disable();
     }
     else
     {
-        maVSSpacing.SetNoSelection();
-        maVSSpacing.SelectItem(0);
+        maVSSpacing->SetNoSelection();
+        maVSSpacing->SelectItem(0);
         mbVS = false;
-        maEditKerning.SetText(OUString());
-        maLBKerning.SetNoSelection();
-        maLBKerning.Disable();
-        maFTSpacing.Disable();
-        maEditKerning.Disable();
-        maFTBy.Disable();
+        maEditKerning->SetText(OUString());
+        maLBKerning->SetNoSelection();
+        maLBKerning->Disable();
+        maFTSpacing->Disable();
+        maEditKerning->Disable();
+        maFTBy->Disable();
     }
     GetFocus();
-    maVSSpacing.Format();
-    maVSSpacing.StartSelection();
+    maVSSpacing->Format();
+    maVSSpacing->StartSelection();
 }
 IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
 {
@@ -296,14 +309,14 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
 
     if(pControl == &maVSSpacing)
     {
-        sal_uInt16 iPos = maVSSpacing.GetSelectItemId();
+        sal_uInt16 iPos = maVSSpacing->GetSelectItemId();
         short nKern = 0;
         SfxMapUnit eUnit = mrTextPropertyPanel.GetSpaceController().GetCoreMetric();
         long nVal = 0;
         if(iPos == 1)
         {
             nVal = LogicToLogic(30, MAP_POINT, (MapUnit)eUnit);
-            nKern = (short)maEditKerning.Denormalize(nVal);
+            nKern = (short)maEditKerning->Denormalize(nVal);
             SvxKerningItem aKernItem(-nKern, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
@@ -311,7 +324,7 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
         else if(iPos == 2)
         {
             nVal = LogicToLogic(15, MAP_POINT, (MapUnit)eUnit);
-            nKern = (short)maEditKerning.Denormalize(nVal);
+            nKern = (short)maEditKerning->Denormalize(nVal);
             SvxKerningItem aKernItem(-nKern, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
@@ -325,7 +338,7 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
         else if(iPos == 4)
         {
             nVal = LogicToLogic(30, MAP_POINT, (MapUnit)eUnit);
-            nKern = (short)maEditKerning.Denormalize(nVal);
+            nKern = (short)maEditKerning->Denormalize(nVal);
             SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
@@ -333,7 +346,7 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
         else if(iPos == 5)
         {
             nVal = LogicToLogic(60, MAP_POINT, (MapUnit)eUnit);
-            nKern = (short)maEditKerning.Denormalize(nVal);
+            nKern = (short)maEditKerning->Denormalize(nVal);
             SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
@@ -344,17 +357,17 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
             if(mbCusEnable)
             {
                 nVal = LogicToLogic(mnCustomKern, MAP_POINT, (MapUnit)eUnit);
-                nKern = (short)maEditKerning.Denormalize(nVal);
+                nKern = (short)maEditKerning->Denormalize(nVal);
                 SvxKerningItem aKernItem(nKern , SID_ATTR_CHAR_KERNING);
                 mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
                 mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
             }
             else
             {
-                maVSSpacing.SetNoSelection();       //add , set no selection and keep the last select item
-                maVSSpacing.Format();
+                maVSSpacing->SetNoSelection();       //add , set no selection and keep the last select item
+                maVSSpacing->Format();
                 Invalidate();
-                maVSSpacing.StartSelection();
+                maVSSpacing->StartSelection();
             }
             //modify end
         }
@@ -370,67 +383,67 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
 
 IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*, EMPTYARG)
 {
-    if ( maLBKerning.GetSelectEntryPos() > 0 )
+    if ( maLBKerning->GetSelectEntryPos() > 0 )
     {
-        maFTBy.Enable();
-        maEditKerning.Enable();
+        maFTBy->Enable();
+        maEditKerning->Enable();
     }
     else
     {
-        maEditKerning.SetValue( 0 );
-        maFTBy.Disable();
-        maEditKerning.Disable();
+        maEditKerning->SetValue( 0 );
+        maFTBy->Disable();
+        maEditKerning->Disable();
     }
 
-    if ( maVSSpacing.GetSelectItemId() > 0 )
+    if ( maVSSpacing->GetSelectItemId() > 0 )
     {
-        maVSSpacing.SetNoSelection();
-        maVSSpacing.SelectItem(0);
-        maVSSpacing.Format();
+        maVSSpacing->SetNoSelection();
+        maVSSpacing->SelectItem(0);
+        maVSSpacing->Format();
         Invalidate();
-        maVSSpacing.StartSelection();
+        maVSSpacing->StartSelection();
     }
     KerningModifyHdl( NULL );
     return 0;
 }
 IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*, EMPTYARG)
 {
-    if ( maVSSpacing.GetSelectItemId() > 0 )
+    if ( maVSSpacing->GetSelectItemId() > 0 )
     {
-        maVSSpacing.SetNoSelection();
-        maVSSpacing.SelectItem(0);
-        maVSSpacing.Format();
+        maVSSpacing->SetNoSelection();
+        maVSSpacing->SelectItem(0);
+        maVSSpacing->Format();
         Invalidate();
-        maVSSpacing.StartSelection();
+        maVSSpacing->StartSelection();
     }
-    sal_uInt16 nPos = maLBKerning.GetSelectEntryPos();
+    sal_uInt16 nPos = maLBKerning->GetSelectEntryPos();
     short nKern = 0;
     SfxMapUnit eUnit = mrTextPropertyPanel.GetSpaceController().GetCoreMetric();
     mnLastCus = SPACING_CLOSE_BY_CUS_EDIT;
     if ( nPos == SIDEBAR_SPACE_EXPAND || nPos == SIDEBAR_SPACE_CONDENSED )
     {
-        long nTmp = static_cast<long>(maEditKerning.GetValue());
+        long nTmp = static_cast<long>(maEditKerning->GetValue());
         if ( nPos == SIDEBAR_SPACE_CONDENSED )
         {
             long nMax =  mrTextPropertyPanel.GetSelFontSize()/6;
-            maEditKerning.SetMax( maEditKerning.Normalize( nMax ), FUNIT_TWIP );
-            maEditKerning.SetLast( maEditKerning.GetMax( maEditKerning.GetUnit() ) );
-            if(nTmp > maEditKerning.GetMax())
-                nTmp = maEditKerning.GetMax();
+            maEditKerning->SetMax( maEditKerning->Normalize( nMax ), FUNIT_TWIP );
+            maEditKerning->SetLast( maEditKerning->GetMax( maEditKerning->GetUnit() ) );
+            if(nTmp > maEditKerning->GetMax())
+                nTmp = maEditKerning->GetMax();
             mnCustomKern = -nTmp;
             long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
-            nKern = (short)maEditKerning.Denormalize( nVal );
+            nKern = (short)maEditKerning->Denormalize( nVal );
             nKern *= - 1;
         }
         else
         {
-            maEditKerning.SetMax( 9999 );
-            maEditKerning.SetLast( 9999 );
-            if(nTmp > maEditKerning.GetMax(FUNIT_TWIP))
-                nTmp = maEditKerning.GetMax(FUNIT_TWIP);
+            maEditKerning->SetMax( 9999 );
+            maEditKerning->SetLast( 9999 );
+            if(nTmp > maEditKerning->GetMax(FUNIT_TWIP))
+                nTmp = maEditKerning->GetMax(FUNIT_TWIP);
             mnCustomKern = nTmp;
             long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
-            nKern = (short)maEditKerning.Denormalize( nVal );
+            nKern = (short)maEditKerning->Denormalize( nVal );
         }
     }
     else

@@ -1068,9 +1068,9 @@ void Outliner::ShowEndOfSearchDialog()
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
-    MessageDialog aInfoBox(NULL, aString, VCL_MESSAGE_INFO);
+    ScopedVclPtrInstance< MessageDialog > aInfoBox(nullptr, aString, VCL_MESSAGE_INFO);
 
-    ShowModalMessageBox (aInfoBox);
+    ShowModalMessageBox (*aInfoBox.get());
 
     mbWholeDocumentProcessed = true;
 }
@@ -1109,12 +1109,10 @@ bool Outliner::ShowWrapArroundDialog()
 
         // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
-        QueryBox aQuestionBox (
-            NULL,
-            WB_YES_NO | WB_DEF_YES,
-            SD_RESSTR(nStringId));
-        aQuestionBox.SetImage (QueryBox::GetStandardImage());
-        sal_uInt16 nBoxResult = ShowModalMessageBox(aQuestionBox);
+        ScopedVclPtrInstance<QueryBox> aQuestionBox (
+            nullptr, WB_YES_NO | WB_DEF_YES, SD_RESSTR(nStringId));
+        aQuestionBox->SetImage (QueryBox::GetStandardImage());
+        sal_uInt16 nBoxResult = ShowModalMessageBox(*aQuestionBox.get());
         bDoWrapArround = (nBoxResult == RET_YES);
     }
 
@@ -1157,9 +1155,9 @@ void Outliner::PrepareSpellCheck()
     {
         mbError = true;
         mbEndOfSearch = true;
-        MessageDialog aErrorBox (NULL,
-            SD_RESSTR(STR_NOLANGUAGE));
-        ShowModalMessageBox (aErrorBox);
+        ScopedVclPtrInstance<MessageDialog> aErrorBox (
+            nullptr, SD_RESSTR(STR_NOLANGUAGE));
+        ShowModalMessageBox (*aErrorBox.get());
     }
     else if (eState != EE_SPELL_OK)
     {
@@ -1376,8 +1374,8 @@ bool Outliner::HandleFailedSearch()
         if (HasNoPreviousMatch ())
         {
             // No match found in the whole presentation.  Tell the user.
-            InfoBox aInfoBox (NULL, SD_RESSTR(STR_SAR_NOT_FOUND));
-            ShowModalMessageBox (aInfoBox);
+            ScopedVclPtrInstance< InfoBox > aInfoBox(nullptr, SD_RESSTR(STR_SAR_NOT_FOUND));
+            ShowModalMessageBox (*aInfoBox.get());
         }
 
         else

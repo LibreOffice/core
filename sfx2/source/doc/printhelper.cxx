@@ -346,7 +346,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 
             if ( aPrinterName != pPrinter->GetName() )
             {
-                pPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aPrinterName );
+                pPrinter = VclPtr<SfxPrinter>::Create( pPrinter->GetOptions().Clone(), aPrinterName );
                 nChangeFlags = SfxPrinterChangeFlags::PRINTER;
             }
             break;
@@ -477,7 +477,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 {
     private:
         /// of course we must know the printer which execute the job
-        SfxPrinter* m_pPrinter;
+        VclPtr<SfxPrinter> m_pPrinter;
         /// this describes the target location for the printed temp file
         OUString m_sTargetURL;
         /// it holds the temp file alive, till the print job will finish and remove it from disk automatically if the object die
@@ -504,7 +504,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 SolarMutexGuard aGuard;
                 while( m_pPrinter->IsPrinting() )
                     Application::Yield();
-                m_pPrinter = NULL; // don't delete it! It's borrowed only :-)
+                m_pPrinter.clear(); // don't delete it! It's borrowed only :-)
             }
             /* } SAFE */
 

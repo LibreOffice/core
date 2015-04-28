@@ -46,7 +46,10 @@ class TextPropertyPanel
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static TextPropertyPanel* Create (
+    virtual ~TextPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
+    static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
@@ -71,13 +74,19 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) SAL_OVERRIDE;
 
+    TextPropertyPanel (
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings,
+        const ::sfx2::sidebar::EnumContext& rContext);
+
 private:
     //ui controls
-    ToolBox* mpToolBoxFont;
-    ToolBox* mpToolBoxIncDec;
-    ToolBox* mpToolBoxSpacing;
-    ToolBox* mpToolBoxFontColorSw;
-    ToolBox* mpToolBoxFontColor;
+    VclPtr<ToolBox> mpToolBoxFont;
+    VclPtr<ToolBox> mpToolBoxIncDec;
+    VclPtr<ToolBox> mpToolBoxSpacing;
+    VclPtr<ToolBox> mpToolBoxFontColorSw;
+    VclPtr<ToolBox> mpToolBoxFontColor;
 
     //control items
     ::sfx2::sidebar::ControllerItem maFontSizeControl;
@@ -97,16 +106,8 @@ private:
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
 
-    TextPropertyPanel (
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const ::sfx2::sidebar::EnumContext& rContext);
-    virtual ~TextPropertyPanel();
-
-
-    PopupControl* CreateCharacterSpacingControl (PopupContainer* pParent);
-    PopupControl* CreateUnderlinePopupControl (PopupContainer* pParent);
+    VclPtr<PopupControl> CreateCharacterSpacingControl (PopupContainer* pParent);
+    VclPtr<PopupControl> CreateUnderlinePopupControl (PopupContainer* pParent);
     DECL_LINK(SpacingClickHdl, ToolBox*);
     DECL_LINK(UnderlineClickHdl, ToolBox* );
 

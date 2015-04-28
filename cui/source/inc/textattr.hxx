@@ -38,22 +38,23 @@ class SvxTextAttrPage : public SvxTabPage
 {
 private:
     static const sal_uInt16 pRanges[];
-    TriStateBox*         m_pTsbAutoGrowWidth;
-    TriStateBox*         m_pTsbAutoGrowHeight;
-    TriStateBox*         m_pTsbFitToSize;
-    TriStateBox*         m_pTsbContour;
-    TriStateBox*         m_pTsbWordWrapText;
-    TriStateBox*         m_pTsbAutoGrowSize;
 
-    VclFrame*            m_pFlDistance;
-    MetricField*         m_pMtrFldLeft;
-    MetricField*         m_pMtrFldRight;
-    MetricField*         m_pMtrFldTop;
-    MetricField*         m_pMtrFldBottom;
+    VclPtr<TriStateBox>         m_pTsbAutoGrowWidth;
+    VclPtr<TriStateBox>         m_pTsbAutoGrowHeight;
+    VclPtr<TriStateBox>         m_pTsbFitToSize;
+    VclPtr<TriStateBox>         m_pTsbContour;
+    VclPtr<TriStateBox>         m_pTsbWordWrapText;
+    VclPtr<TriStateBox>         m_pTsbAutoGrowSize;
 
-    VclFrame*            m_pFlPosition;
-    SvxRectCtl*          m_pCtlPosition;
-    TriStateBox*         m_pTsbFullWidth;
+    VclPtr<VclFrame>            m_pFlDistance;
+    VclPtr<MetricField>         m_pMtrFldLeft;
+    VclPtr<MetricField>         m_pMtrFldRight;
+    VclPtr<MetricField>         m_pMtrFldTop;
+    VclPtr<MetricField>         m_pMtrFldBottom;
+
+    VclPtr<VclFrame>            m_pFlPosition;
+    VclPtr<SvxRectCtl>          m_pCtlPosition;
+    VclPtr<TriStateBox>         m_pTsbFullWidth;
 
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
@@ -77,8 +78,9 @@ public:
 
     SvxTextAttrPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxTextAttrPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

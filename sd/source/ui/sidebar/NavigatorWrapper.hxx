@@ -44,8 +44,8 @@ public:
         vcl::Window* pParent,
         sd::ViewShellBase& rViewShellBase,
         SfxBindings* pBindings);
-
     virtual ~NavigatorWrapper();
+    virtual void dispose() SAL_OVERRIDE;
 
     // Control
     virtual void Resize() SAL_OVERRIDE;
@@ -56,7 +56,7 @@ public:
 
 private:
     ViewShellBase& mrViewShellBase;
-    SdNavigatorWin maNavigator;
+    VclPtr<SdNavigatorWin> maNavigator;
 
     void UpdateNavigator();
 };

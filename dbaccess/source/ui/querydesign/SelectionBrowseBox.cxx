@@ -117,12 +117,12 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
                 |   BrowserMode::HLINES      | BrowserMode::VLINES
                 |   BrowserMode::HEADERBAR_NEW   ;
 
-    m_pTextCell     = new Edit(&GetDataWindow(), 0);
-    m_pVisibleCell  = new CheckBoxControl(&GetDataWindow());
-    m_pTableCell    = new ListBoxControl(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
-    m_pFieldCell    = new ComboBoxControl(&GetDataWindow());    m_pFieldCell->SetDropDownLineCount( 20 );
-    m_pOrderCell    = new ListBoxControl(&GetDataWindow());
-    m_pFunctionCell = new ListBoxControl(&GetDataWindow());     m_pFunctionCell->SetDropDownLineCount( 20 );
+    m_pTextCell     = VclPtr<Edit>::Create(&GetDataWindow(), 0);
+    m_pVisibleCell  = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
+    m_pTableCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
+    m_pFieldCell    = VclPtr<ComboBoxControl>::Create(&GetDataWindow());    m_pFieldCell->SetDropDownLineCount( 20 );
+    m_pOrderCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());
+    m_pFunctionCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());     m_pFunctionCell->SetDropDownLineCount( 20 );
 
     m_pVisibleCell->SetHelpId(HID_QRYDGN_ROW_VISIBLE);
     m_pTableCell->SetHelpId(HID_QRYDGN_ROW_TABLE);
@@ -154,13 +154,18 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
 
 OSelectionBrowseBox::~OSelectionBrowseBox()
 {
+    disposeOnce();
+}
 
-    delete m_pTextCell;
-    delete m_pVisibleCell;
-    delete m_pFieldCell;
-    delete m_pTableCell;
-    delete m_pOrderCell;
-    delete m_pFunctionCell;
+void OSelectionBrowseBox::dispose()
+{
+    m_pTextCell.disposeAndClear();
+    m_pVisibleCell.disposeAndClear();
+    m_pFieldCell.disposeAndClear();
+    m_pTableCell.disposeAndClear();
+    m_pOrderCell.disposeAndClear();
+    m_pFunctionCell.disposeAndClear();
+    ::svt::EditBrowseBox::dispose();
 }
 
 void OSelectionBrowseBox::initialize()
@@ -241,11 +246,13 @@ namespace
 {
     class OSelectionBrwBoxHeader : public ::svt::EditBrowserHeader
     {
-        OSelectionBrowseBox* m_pBrowseBox;
+        VclPtr<OSelectionBrowseBox> m_pBrowseBox;
     protected:
         virtual void Select() SAL_OVERRIDE;
     public:
         OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent);
+        virtual ~OSelectionBrwBoxHeader() { disposeOnce(); }
+        virtual void dispose() SAL_OVERRIDE { m_pBrowseBox.clear(); ::svt::EditBrowserHeader::dispose(); }
     };
     OSelectionBrwBoxHeader::OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent)
         : ::svt::EditBrowserHeader(pParent,WB_BUTTONSTYLE|WB_DRAG)
@@ -275,9 +282,9 @@ namespace
     }
 }
 
-BrowserHeader* OSelectionBrowseBox::imp_CreateHeaderBar(BrowseBox* /*pParent*/)
+VclPtr<BrowserHeader> OSelectionBrowseBox::imp_CreateHeaderBar(BrowseBox* /*pParent*/)
 {
-    return new OSelectionBrwBoxHeader(this);
+    return VclPtr<OSelectionBrwBoxHeader>::Create(this);
 }
 
 void OSelectionBrowseBox::ColumnMoved( sal_uInt16 nColId, bool _bCreateUndo )
@@ -491,7 +498,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
                 OJoinTableView::OTableWindowMap::iterator aEnd = rTabWinList.end();
 
                 for(;aIter != aEnd;++aIter)
-                    m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(aIter->second)->GetAliasName());
+                    m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(aIter->second.get())->GetAliasName());
 
                 m_pTableCell->InsertEntry(OUString(ModuleRes(STR_QUERY_NOTABLE)), 0);
                 if (!pEntry->GetAlias().isEmpty())
@@ -986,7 +993,7 @@ bool OSelectionBrowseBox::SaveModified()
                     OJoinTableView::OTableWindowMap::iterator aIter = rTabWinList.find(aAliasName);
                     if(aIter != rTabWinList.end())
                     {
-                        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
+                        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second.get());
                         if (pEntryTab)
                         {
                             pEntry->SetTable(pEntryTab->GetTableName());
@@ -2603,7 +2610,7 @@ bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef& _pEntry,const OUStr
     OJoinTableView::OTableWindowMap::iterator aIter = rTabWinList.find(_sTableName);
     if(aIter != rTabWinList.end())
     {
-        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
+        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second.get());
         if (pEntryTab)
         {
             _pEntry->SetTable(pEntryTab->GetTableName());

@@ -64,6 +64,19 @@ TabBar::TabBar (
 
 TabBar::~TabBar()
 {
+    disposeOnce();
+}
+
+void TabBar::dispose()
+{
+    for(ItemContainer::iterator
+            iItem(maItems.begin()), iEnd(maItems.end());
+        iItem!=iEnd;
+        ++iItem)
+        iItem->mpButton.disposeAndClear();
+    maItems.clear();
+    mpMenuButton.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void TabBar::Paint (const Rectangle& rUpdateArea)
@@ -94,7 +107,7 @@ void TabBar::SetDecks (
             iItem!=iEnd;
             ++iItem)
         {
-            iItem->mpButton.reset();
+            iItem->mpButton.disposeAndClear();
         }
         maItems.clear();
     }
@@ -115,7 +128,8 @@ void TabBar::SetDecks (
 
         Item& rItem (maItems[nIndex++]);
         rItem.msDeckId = pDescriptor->msId;
-        rItem.mpButton.reset(CreateTabItem(*pDescriptor));
+        rItem.mpButton.disposeAndClear();
+        rItem.mpButton = CreateTabItem(*pDescriptor);
         rItem.mpButton->SetClickHdl(LINK(&rItem, TabBar::Item, HandleClick));
         rItem.maDeckActivationFunctor = maDeckActivationFunctor;
         rItem.mbIsHiddenByDefault = false;
@@ -176,7 +190,7 @@ void TabBar::Layout()
         Theme::GetInteger(Theme::Int_TabItemHeight) * GetDPIScaleFactor());
 
     // Place the menu button and the separator.
-    if (mpMenuButton != 0)
+    if (mpMenuButton != nullptr)
     {
         mpMenuButton->SetPosSizePixel(
             Point(nX,nY),
@@ -245,12 +259,11 @@ bool TabBar::Notify (NotifyEvent&)
     return false;
 }
 
-RadioButton* TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
+VclPtr<RadioButton> TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
 {
-    RadioButton* pItem = ControlFactory::CreateTabItem(this);
+    VclPtr<RadioButton> pItem = ControlFactory::CreateTabItem(this);
     pItem->SetHelpText(rDeckDescriptor.msHelpText);
     pItem->SetQuickHelpText(rDeckDescriptor.msHelpText);
-
     return pItem;
 }
 

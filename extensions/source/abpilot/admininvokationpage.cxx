@@ -34,7 +34,16 @@ namespace abp
         get(m_pErrorMessage, "warning");
         m_pInvokeAdminDialog->SetClickHdl( LINK(this, AdminDialogInvokationPage, OnInvokeAdminDialog) );
     }
-
+    AdminDialogInvokationPage::~AdminDialogInvokationPage()
+    {
+        disposeOnce();
+    }
+    void AdminDialogInvokationPage::dispose()
+    {
+        m_pInvokeAdminDialog.clear();
+        m_pErrorMessage.clear();
+        AddressBookSourcePage::dispose();
+    }
     void AdminDialogInvokationPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();

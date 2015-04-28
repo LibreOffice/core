@@ -65,6 +65,26 @@ SchOptionTabPage::SchOptionTabPage(vcl::Window* pWindow,const SfxItemSet& rInAtt
 
 SchOptionTabPage::~SchOptionTabPage()
 {
+    disposeOnce();
+}
+
+void SchOptionTabPage::dispose()
+{
+    m_pGrpAxis.clear();
+    m_pRbtAxis1.clear();
+    m_pRbtAxis2.clear();
+    m_pGrpBar.clear();
+    m_pMTGap.clear();
+    m_pMTOverlap.clear();
+    m_pCBConnect.clear();
+    m_pCBAxisSideBySide.clear();
+    m_pGrpPlotOptions.clear();
+    m_pGridPlotOptions.clear();
+    m_pRB_DontPaint.clear();
+    m_pRB_AssumeZero.clear();
+    m_pRB_ContinueLine.clear();
+    m_pCBIncludeHiddenCells.clear();
+    SfxTabPage::dispose();
 }
 
 IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
@@ -77,9 +97,10 @@ IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
     return 0;
 }
 
-SfxTabPage* SchOptionTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SchOptionTabPage::Create(vcl::Window* pWindow,
+                                            const SfxItemSet* rOutAttrs)
 {
-    return new SchOptionTabPage(pWindow, *rOutAttrs);
+    return VclPtr<SchOptionTabPage>::Create(pWindow, *rOutAttrs);
 }
 
 bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)

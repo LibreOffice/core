@@ -47,8 +47,7 @@ public:
         const ::boost::function<void()>& rDeckLayoutTrigger,
         const ::boost::function<Context()>& rContextAccess);
     virtual ~Panel();
-
-    void Dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
     PanelTitleBar* GetTitleBar() const;
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional;}
@@ -67,7 +66,7 @@ public:
 
 private:
     const ::rtl::OUString msPanelId;
-    ::boost::scoped_ptr<PanelTitleBar> mpTitleBar;
+    VclPtr<PanelTitleBar> mpTitleBar;
     const bool mbIsTitleBarOptional;
     css::uno::Reference<css::ui::XUIElement> mxElement;
     css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
@@ -75,8 +74,7 @@ private:
     const ::boost::function<void()> maDeckLayoutTrigger;
     const ::boost::function<Context()> maContextAccess;
 };
-typedef ::boost::shared_ptr<Panel> SharedPanel;
-typedef ::std::vector<SharedPanel> SharedPanelContainer;
+typedef ::std::vector< VclPtr< Panel > > SharedPanelContainer;
 
 } } // end of namespace sfx2::sidebar
 

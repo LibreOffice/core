@@ -59,17 +59,17 @@ public:
 
 class SwCharURLPage : public SfxTabPage
 {
-    Edit*               m_pURLED;
-    FixedText*          m_pTextFT;
-    Edit*               m_pTextED;
-    Edit*               m_pNameED;
-    ComboBox*           m_pTargetFrmLB;
-    PushButton*         m_pURLPB;
-    PushButton*         m_pEventPB;
-    ListBox*            m_pVisitedLB;
-    ListBox*            m_pNotVisitedLB;
+    VclPtr<Edit>               m_pURLED;
+    VclPtr<FixedText>          m_pTextFT;
+    VclPtr<Edit>               m_pTextED;
+    VclPtr<Edit>               m_pNameED;
+    VclPtr<ComboBox>           m_pTargetFrmLB;
+    VclPtr<PushButton>         m_pURLPB;
+    VclPtr<PushButton>         m_pEventPB;
+    VclPtr<ListBox>            m_pVisitedLB;
+    VclPtr<ListBox>            m_pNotVisitedLB;
 
-    VclContainer*       m_pCharStyleContainer;
+    VclPtr<VclContainer>       m_pCharStyleContainer;
 
     SvxMacroItem*       pINetItem;
     bool                bModified;
@@ -82,8 +82,9 @@ public:
                                            const SfxItemSet& rSet );
 
                         virtual ~SwCharURLPage();
-    static SfxTabPage*  Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet);
+    virtual void        dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
+                                      const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

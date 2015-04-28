@@ -1755,14 +1755,14 @@ SvxFont EditEngine::GetStandardSvxFont( sal_Int32 nPara )
 
 void EditEngine::StripPortions()
 {
-    VirtualDevice aTmpDev;
+    ScopedVclPtrInstance< VirtualDevice > aTmpDev;
     Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
     if ( IsVertical() )
     {
         aBigRect.Right() = 0;
         aBigRect.Left() = -0x7FFFFFFF;
     }
-    pImpEditEngine->Paint( &aTmpDev, aBigRect, Point(), true );
+    pImpEditEngine->Paint( aTmpDev.get(), aBigRect, Point(), true );
 }
 
 void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )

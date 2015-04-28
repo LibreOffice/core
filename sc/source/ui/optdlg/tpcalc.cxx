@@ -66,8 +66,30 @@ ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAt
 
 ScTpCalcOptions::~ScTpCalcOptions()
 {
+    disposeOnce();
+}
+
+void ScTpCalcOptions::dispose()
+{
     delete pOldOptions;
     delete pLocalOptions;
+    m_pBtnIterate.clear();
+    m_pFtSteps.clear();
+    m_pEdSteps.clear();
+    m_pFtEps.clear();
+    m_pEdEps.clear();
+    m_pBtnDateStd.clear();
+    m_pBtnDateSc10.clear();
+    m_pBtnDate1904.clear();
+    m_pBtnCase.clear();
+    m_pBtnCalc.clear();
+    m_pBtnMatch.clear();
+    m_pBtnRegex.clear();
+    m_pBtnLookUp.clear();
+    m_pBtnGeneralPrec.clear();
+    m_pFtPrec.clear();
+    m_pEdPrec.clear();
+    SfxTabPage::dispose();
 }
 
 void ScTpCalcOptions::Init()
@@ -79,9 +101,9 @@ void ScTpCalcOptions::Init()
     m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
 }
 
-SfxTabPage* ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new ScTpCalcOptions( pParent, *rAttrSet ) );
+    return VclPtr<SfxTabPage>( new ScTpCalcOptions ( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
 }
 
 void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )

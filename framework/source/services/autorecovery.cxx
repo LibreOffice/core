@@ -4205,11 +4205,11 @@ void AutoRecovery::impl_showFullDiscError()
     if (sBackupPath.getLength() < 1)
         sBackupPath = sBackupURL;
 
-    ErrorBox dlgError(
-        0, WB_OK,
+    ScopedVclPtrInstance<ErrorBox> dlgError(
+        nullptr, WB_OK,
         sMsg.replaceAll("%PATH", sBackupPath));
-    dlgError.SetButtonText(dlgError.GetButtonId(0), sBtn);
-    dlgError.Execute();
+    dlgError->SetButtonText(dlgError->GetButtonId(0), sBtn);
+    dlgError->Execute();
 }
 
 void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,

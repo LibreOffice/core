@@ -41,17 +41,17 @@ public:
     SfxViewFrame*             pCurrentViewFrame;
     SfxFrameDescriptor*       pDescr;
     sal_uInt16                nLocks;
-    bool                  bClosing : 1;
-    bool                  bPrepClosing : 1;
-    bool                  bInCancelTransfers : 1;
-    bool                  bOwnsBindings : 1;
-    bool                  bReleasingComponent : 1;
-    bool                  bInPlace : 1;
+    bool                      bClosing : 1;
+    bool                      bPrepClosing : 1;
+    bool                      bInCancelTransfers : 1;
+    bool                      bOwnsBindings : 1;
+    bool                      bReleasingComponent : 1;
+    bool                      bInPlace : 1;
     SfxFrame*                 pFrame;
     SfxWorkWindow*            pWorkWin;
     SvBorder                  aBorder;
     // formerly SfxTopFrame
-    vcl::Window*                   pExternalContainerWindow;
+    VclPtr<vcl::Window>       pExternalContainerWindow;
     bool                      bHidden;
     bool                      bLockResize;
     bool                      bMenuBarOn;

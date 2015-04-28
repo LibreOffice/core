@@ -139,6 +139,34 @@ SvxGradientTabPage::SvxGradientTabPage
     setPreviewsToSamePlace(pParent, this);
 }
 
+SvxGradientTabPage::~SvxGradientTabPage()
+{
+    disposeOnce();
+}
+
+void SvxGradientTabPage::dispose()
+{
+    m_pLbGradientType.clear();
+    m_pFtCenterX.clear();
+    m_pMtrCenterX.clear();
+    m_pFtCenterY.clear();
+    m_pMtrCenterY.clear();
+    m_pFtAngle.clear();
+    m_pMtrAngle.clear();
+    m_pMtrBorder.clear();
+    m_pLbColorFrom.clear();
+    m_pMtrColorFrom.clear();
+    m_pLbColorTo.clear();
+    m_pMtrColorTo.clear();
+    m_pLbGradients.clear();
+    m_pCtlPreview.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnDelete.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
+    SfxTabPage::dispose();
+}
 
 
 void SvxGradientTabPage::Construct()
@@ -263,10 +291,10 @@ long SvxGradientTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
-                                                        SVX_RESSTR( RID_SVXSTR_GRADIENT ),
-                                                        CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
-                                                        &aWarningBoxImage ));
+            ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
+                                                          SVX_RESSTR( RID_SVXSTR_GRADIENT ),
+                                                          CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
+                                                          &aWarningBoxImage );
             DBG_ASSERT(aMessDlg, "Dialog creation failed!");
             aMessDlg->SetButtonText( MESS_BTN_1,
                                     OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
@@ -366,10 +394,10 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
 
 
 
-SfxTabPage* SvxGradientTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxGradientTabPage::Create( vcl::Window* pWindow,
+                                               const SfxItemSet* rOutAttrs )
 {
-    return new SvxGradientTabPage( pWindow, *rOutAttrs );
+    return VclPtr<SvxGradientTabPage>::Create( pWindow, *rOutAttrs );
 }
 
 
@@ -429,7 +457,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     DBG_ASSERT(pFact, "Dialog creation failed!");
     boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    boost::scoped_ptr<MessageDialog> pWarnBox;
+    ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -450,7 +478,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox.reset(new MessageDialog( GetParentDialog()
+            pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                         ,"DuplicateNameDialog"
                                         ,"cui/ui/queryduplicatedialog.ui"));
         }
@@ -561,10 +589,10 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
-                                    ,"DuplicateNameDialog"
-                                    ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
+                                                          ,"DuplicateNameDialog"
+                                                          ,"cui/ui/queryduplicatedialog.ui" );
+                aBox->Execute();
             }
 
         }
@@ -580,9 +608,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui");
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui");
 
-        if ( aQueryBox.Execute() == RET_YES )
+        if ( aQueryBox->Execute() == RET_YES )
         {
             delete pGradientList->Remove( nPos );
             m_pLbGradients->RemoveEntry( nPos );

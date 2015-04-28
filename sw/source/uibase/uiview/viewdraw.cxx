@@ -177,9 +177,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if ( pSdrView )
         {
             SdrObject* pObj = NULL;
-            svx::FontWorkGalleryDialog aDlg( pSdrView, pWin, nSlotId );
-            aDlg.SetSdrObjectRef( &pObj, pSdrView->GetModel() );
-            aDlg.Execute();
+            ScopedVclPtrInstance< svx::FontWorkGalleryDialog > aDlg( pSdrView, pWin, nSlotId );
+            aDlg->SetSdrObjectRef( &pObj, pSdrView->GetModel() );
+            aDlg->Execute();
             if ( pObj )
             {
                 Size            aDocSize( m_pWrtShell->GetDocSize() );

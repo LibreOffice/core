@@ -49,7 +49,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
         : Window(pParent, nStyle)
         , m_pWindowController( pController )
         , m_bInPaint(false)
-        , m_pOpenGLWindow(new OpenGLWindow(this))
+        , m_pOpenGLWindow(VclPtr<OpenGLWindow>::Create(this))
 {
     this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
@@ -64,7 +64,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
     {
         m_pOpenGLWindow->Show();
         uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(pController->getModel(), uno::UNO_QUERY_THROW);
-        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(m_pOpenGLWindow);
+        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(m_pOpenGLWindow.get());
         x3DWindowProvider->setWindow(nWindowPtr);
         x3DWindowProvider->update();
     }
@@ -72,13 +72,19 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
 
 ChartWindow::~ChartWindow()
 {
+    disposeOnce();
+}
+
+void ChartWindow::dispose()
+{
     if (m_pWindowController && m_pWindowController->getModel().is())
     {
         uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(m_pWindowController->getModel(), uno::UNO_QUERY_THROW);
         x3DWindowProvider->setWindow(0);
         x3DWindowProvider->update();
     }
-    delete m_pOpenGLWindow;
+    m_pOpenGLWindow.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void ChartWindow::clear()

@@ -29,7 +29,7 @@ public:
 
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual void Click() SAL_OVERRIDE;
-    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 
     SFX_DECL_TOOLBOX_CONTROL();
 

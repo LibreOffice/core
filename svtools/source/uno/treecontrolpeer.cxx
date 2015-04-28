@@ -86,6 +86,7 @@ class UnoTreeListBoxImpl : public SvTreeListBox
 public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pParent, WinBits nWinStyle );
     virtual ~UnoTreeListBoxImpl();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
 
@@ -206,7 +207,7 @@ UnoTreeListEntry* TreeControlPeer::getEntry( const Reference< XTreeNode >& xNode
 
 vcl::Window* TreeControlPeer::createVclControl( vcl::Window* pParent, sal_Int64 nWinStyle )
 {
-    mpTreeImpl = new UnoTreeListBoxImpl( this, pParent, nWinStyle );
+    mpTreeImpl = VclPtr<UnoTreeListBoxImpl>::Create( this, pParent, nWinStyle );
     return mpTreeImpl;
 }
 
@@ -222,7 +223,7 @@ void TreeControlPeer::disposeControl()
 
 
 
-void TreeControlPeer::SetWindow( vcl::Window* pWindow )
+void TreeControlPeer::SetWindow( const VclPtr< vcl::Window > &pWindow )
 {
     VCLXWindow::SetWindow( pWindow );
 }
@@ -1490,8 +1491,14 @@ UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pPa
 
 UnoTreeListBoxImpl::~UnoTreeListBoxImpl()
 {
+    disposeOnce();
+}
+
+void UnoTreeListBoxImpl::dispose()
+{
     if( mxPeer.is() )
         mxPeer->disposeControl();
+    SvTreeListBox::dispose();
 }
 
 

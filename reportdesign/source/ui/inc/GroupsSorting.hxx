@@ -60,21 +60,21 @@ class OGroupsSortingDialog :    public FloatingWindow
 {
     friend class OFieldExpressionControl;
 
-    ToolBox*                                m_pToolBox;
+    VclPtr<ToolBox>                                m_pToolBox;
     sal_uInt16                              m_nMoveUpId;
     sal_uInt16                              m_nMoveDownId;
     sal_uInt16                              m_nDeleteId;
 
-    VclContainer*                           m_pProperties;
-    ListBox*                                m_pOrderLst;
-    ListBox*                                m_pHeaderLst;
-    ListBox*                                m_pFooterLst;
-    ListBox*                                m_pGroupOnLst;
-    NumericField*                           m_pGroupIntervalEd;
-    ListBox*                                m_pKeepTogetherLst;
-    FixedText*                              m_pHelpWindow;
+    VclPtr<VclContainer>                           m_pProperties;
+    VclPtr<ListBox>                                m_pOrderLst;
+    VclPtr<ListBox>                                m_pHeaderLst;
+    VclPtr<ListBox>                                m_pFooterLst;
+    VclPtr<ListBox>                                m_pGroupOnLst;
+    VclPtr<NumericField>                           m_pGroupIntervalEd;
+    VclPtr<ListBox>                                m_pKeepTogetherLst;
+    VclPtr<FixedText>                              m_pHelpWindow;
 
-    OFieldExpressionControl*                m_pFieldExpression;
+    VclPtr<OFieldExpressionControl>                m_pFieldExpression;
     ::rptui::OReportController*             m_pController;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pCurrentGroupListener;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pReportListener;
@@ -145,6 +145,7 @@ public:
                         ,bool _bReadOnly
                         ,::rptui::OReportController* _pController);
     virtual ~OGroupsSortingDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** sets the newe columns at the groups dialog.
         @param  _xColumns the new columns

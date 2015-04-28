@@ -39,7 +39,7 @@ public:
     virtual ~ParaLineSpacingPopup();
 
     virtual SfxPopupWindowType GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 };
 
 } // namespace svx

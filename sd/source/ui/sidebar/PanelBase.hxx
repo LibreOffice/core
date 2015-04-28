@@ -45,6 +45,7 @@ public:
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
     virtual ~PanelBase();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Resize() SAL_OVERRIDE;
 
@@ -58,7 +59,7 @@ public:
     virtual void SetSidebar (const css::uno::Reference<css::ui::XSidebar>& rxSidebar) SAL_OVERRIDE;
 
 protected:
-    ::boost::scoped_ptr< vcl::Window> mpWrappedControl;
+    VclPtr< vcl::Window> mpWrappedControl;
     virtual vcl::Window* CreateWrappedControl (
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase) = 0;

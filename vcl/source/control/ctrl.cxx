@@ -67,7 +67,13 @@ Control::Control( vcl::Window* pParent, const ResId& rResId ) :
 
 Control::~Control()
 {
+    disposeOnce();
+}
+
+void Control::dispose()
+{
     delete mpControlData, mpControlData = NULL;
+    Window::dispose();
 }
 
 void Control::EnableRTL( bool bEnable )
@@ -107,7 +113,7 @@ void Control::CreateLayoutData() const
 
 bool Control::HasLayoutData() const
 {
-    return mpControlData->mpLayoutData != NULL;
+    return mpControlData ? mpControlData->mpLayoutData != NULL : false;
 }
 
 ::vcl::ControlLayoutData* Control::GetLayoutData() const
@@ -119,6 +125,10 @@ void Control::SetText( const OUString& rStr )
 {
     ImplClearLayoutData();
     Window::SetText( rStr );
+}
+
+ControlLayoutData::ControlLayoutData() : m_pParent( NULL )
+{
 }
 
 Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
@@ -338,7 +348,11 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
 
 void Control::ImplClearLayoutData() const
 {
-    delete mpControlData->mpLayoutData, mpControlData->mpLayoutData = NULL;
+    if (mpControlData)
+    {
+        delete mpControlData->mpLayoutData;
+        mpControlData->mpLayoutData = NULL;
+    }
 }
 
 void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )

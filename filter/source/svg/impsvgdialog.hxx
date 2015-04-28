@@ -48,17 +48,17 @@ class ImpSVGDialog : public ModalDialog
 {
 private:
 
-    FixedLine           maFI;
-    CheckBox            maCBTinyProfile;
-    CheckBox            maCBEmbedFonts;
-    CheckBox            maCBUseNativeDecoration;
+    VclPtr<FixedLine>           maFI;
+    VclPtr<CheckBox>            maCBTinyProfile;
+    VclPtr<CheckBox>            maCBEmbedFonts;
+    VclPtr<CheckBox>            maCBUseNativeDecoration;
 
-    OKButton            maBTOK;
-    CancelButton        maBTCancel;
-    HelpButton          maBTHelp;
+    VclPtr<OKButton>            maBTOK;
+    VclPtr<CancelButton>        maBTCancel;
+    VclPtr<HelpButton>          maBTHelp;
 
-    FilterConfigItem    maConfigItem;
-    bool            mbOldNativeDecoration;
+    FilterConfigItem            maConfigItem;
+    bool                        mbOldNativeDecoration;
 
     DECL_LINK( OnToggleCheckbox, CheckBox* );
 
@@ -67,6 +67,7 @@ public:
     ImpSVGDialog( vcl::Window* pParent, /*ResMgr& rResMgr,*/
                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
     virtual ~ImpSVGDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetFilterData();
 };

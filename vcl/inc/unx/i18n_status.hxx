@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <salimestatus.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <vector>
 
@@ -57,7 +58,7 @@ public:
     };
 private:
     SalFrame*                       m_pParent;
-    StatusWindow*                   m_pStatusWindow;
+    VclPtr<StatusWindow>            m_pStatusWindow;
     OUString                        m_aCurrentIM;
     ::std::vector< ChoiceData >     m_aChoices;
 

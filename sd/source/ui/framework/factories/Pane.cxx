@@ -175,7 +175,7 @@ Reference<rendering::XCanvas> Pane::CreateCanvas()
 {
     Reference<rendering::XCanvas> xCanvas;
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
     {
         ::cppcanvas::SpriteCanvasSharedPtr pCanvas (
             cppcanvas::VCLFactory::createSpriteCanvas(*mpWindow));

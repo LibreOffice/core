@@ -105,10 +105,11 @@ IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl)
 IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
 
-AbstractSvxZoomDialog_Impl::~AbstractSvxZoomDialog_Impl()                                       \
+AbstractSvxZoomDialog_Impl::~AbstractSvxZoomDialog_Impl()
 {
-    delete pDlg;
+    pDlg.disposeAndClear();
 }
+
 short AbstractSvxZoomDialog_Impl::Execute()
 {
     return pDlg->Execute();
@@ -154,7 +155,7 @@ IMPL_ABSTDLG_BASE(AbstractPasswordToOpenModifyDialog_Impl);
 // virtual
 VclAbstractDialog2_Impl::~VclAbstractDialog2_Impl()
 {
-    delete m_pDlg;
+    m_pDlg.disposeAndClear();
 }
 
 // virtual
@@ -970,12 +971,12 @@ bool AbstractPasswordToOpenModifyDialog_Impl::IsRecommendToOpenReadonly() const
 // Create dialogs with simplest interface
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId )
 {
-    Dialog* pDlg=NULL;
+    VclPtr<Dialog> pDlg;
     switch ( nResId )
     {
         case RID_DEFAULTABOUT:
         {
-            pDlg = new AboutDialog(pParent);
+            pDlg = VclPtr<AboutDialog>::Create(pParent);
             break;
         }
         case SID_OPTIONS_TREEDIALOG :
@@ -986,7 +987,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( vcl::Window* pPa
             if (nResId == SID_OPTIONS_TREEDIALOG)
                 bActivateLastSelection = true;
             Reference< frame::XFrame > xFrame;
-            OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, xFrame, bActivateLastSelection );
+            VclPtrInstance<OfaTreeOptionsDialog> pOptDlg( pParent, xFrame, bActivateLastSelection );
             if (nResId == SID_OPTIONS_DATABASES)
             {
                 pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
@@ -996,7 +997,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( vcl::Window* pPa
                 //open the tab page "tools/options/languages"
                 pOptDlg->ActivatePage(OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE);
             }
-            pDlg = pOptDlg;
+            pDlg.reset(pOptDlg);
         }
         break;
         default:
@@ -1018,17 +1019,17 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
     vcl::Window* pParent, const Reference< frame::XFrame >& rxFrame,
     sal_uInt32 nResId, const OUString& rParameter )
 {
-    Dialog* pDlg = NULL;
+    VclPtr<Dialog> pDlg;
     if ( SID_OPTIONS_TREEDIALOG == nResId || SID_OPTIONS_DATABASES == nResId )
     {
         // only activate last page if we dont want to activate a special page
         bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.isEmpty() );
-        OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, rxFrame, bActivateLastSelection );
+        VclPtrInstance<OfaTreeOptionsDialog> pOptDlg( pParent, rxFrame, bActivateLastSelection );
         if ( nResId == SID_OPTIONS_DATABASES )
             pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
         else if ( !rParameter.isEmpty() )
             pOptDlg->ActivatePage( rParameter );
-        pDlg = pOptDlg;
+        pDlg.reset(pOptDlg);
     }
 
     if ( pDlg )
@@ -1049,10 +1050,10 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
     switch ( nResId )
     {
         case RID_OFA_AUTOCORR_DLG :
-            pDlg = new OfaAutoCorrDlg( pParent, pAttrSet );
+            pDlg = VclPtr<OfaAutoCorrDlg>::Create( pParent, pAttrSet );
             break;
         case RID_SVXDLG_CUSTOMIZE :
-            pDlg = new SvxConfigDialog( pParent, pAttrSet );
+            pDlg = VclPtr<SvxConfigDialog>::Create( pParent, pAttrSet );
             break;
         default:
             break;
@@ -1070,17 +1071,17 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
                                                 bool /*bEditFmt*/,
                                                 const OUString * )
 {
-    SfxTabDialog* pDlg=NULL;
+    VclPtr<SfxTabDialog> pDlg;
     switch ( nResId )
     {
         case RID_OFA_AUTOCORR_DLG :
-            pDlg = new OfaAutoCorrDlg( pParent, pAttrSet );
+            pDlg = VclPtr<OfaAutoCorrDlg>::Create( pParent, pAttrSet );
             break;
         case RID_SVXDLG_CUSTOMIZE :
             {
-                SvxConfigDialog* pDlg1 = new SvxConfigDialog( pParent, pAttrSet );
+                VclPtrInstance<SvxConfigDialog> pDlg1( pParent, pAttrSet );
                 pDlg1->SetFrame(xViewFrame);
-                pDlg = (SfxTabDialog*)pDlg1;
+                pDlg.reset(pDlg1);
             }
             break;
         default:
@@ -1098,7 +1099,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( vcl::Wind
                                             SdrView* pView,
                                             SdrModel* )
 {
-    SfxTabDialog* pDlg = new SvxTextTabDialog( pParent, pAttrSet, pView );
+    VclPtrInstance<SvxTextTabDialog> pDlg( pParent, pAttrSet, pView );
     return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
@@ -1107,7 +1108,7 @@ AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog(
                                             const SdrView* pView,
                                             sal_uInt16 nAnchorTypes )
 {
-    SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog( pParent, pView, nAnchorTypes );
+    VclPtrInstance<SvxCaptionTabDialog> pDlg( pParent, pView, nAnchorTypes );
     return new AbstractSvxCaptionDialog_Impl( pDlg );
 }
 
@@ -1116,14 +1117,14 @@ AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeD
                                             SvxDistributeHorizontal eHor ,
                                             SvxDistributeVertical eVer)
 {
-    SvxDistributeDialog* pDlg = new SvxDistributeDialog( pParent, rAttr, eHor, eVer);
+    VclPtrInstance<SvxDistributeDialog> pDlg( pParent, rAttr, eHor, eVer);
     return new AbstractSvxDistributeDialog_Impl( pDlg );
 }
 
 AbstractHangulHanjaConversionDialog* AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(vcl::Window* pParent,
                                                                        editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection )
 {
-    HangulHanjaConversionDialog* pDlg = new HangulHanjaConversionDialog( pParent, _ePrimaryDirection);
+    VclPtrInstance<HangulHanjaConversionDialog> pDlg( pParent, _ePrimaryDirection);
     return new AbstractHangulHanjaConversionDialog_Impl( pDlg );
 }
 
@@ -1131,7 +1132,7 @@ AbstractThesaurusDialog* AbstractDialogFactory_Impl::CreateThesaurusDialog( vcl:
                                 css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                                 const OUString &rWord, sal_Int16 nLanguage )
 {
-    SvxThesaurusDialog* pDlg = new SvxThesaurusDialog( pParent, xThesaurus, rWord, nLanguage );
+    VclPtrInstance<SvxThesaurusDialog> pDlg( pParent, xThesaurus, rWord, nLanguage );
     return new AbstractThesaurusDialog_Impl( pDlg );
 }
 
@@ -1140,19 +1141,19 @@ AbstractHyphenWordDialog* AbstractDialogFactory_Impl::CreateHyphenWordDialog( vc
                                                 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper )
 {
-    SvxHyphenWordDialog* pDlg = new SvxHyphenWordDialog( rWord, nLang, pParent, xHyphen, pWrapper );
+    VclPtrInstance<SvxHyphenWordDialog> pDlg( rWord, nLang, pParent, xHyphen, pWrapper );
     return new AbstractHyphenWordDialog_Impl( pDlg );
 }
 
 AbstractFmShowColsDialog * AbstractDialogFactory_Impl::CreateFmShowColsDialog( vcl::Window* pParent )
 {
-    FmShowColsDialog* pDlg = new FmShowColsDialog( pParent);
+    VclPtrInstance<FmShowColsDialog> pDlg( pParent);
     return new AbstractFmShowColsDialog_Impl( pDlg );
 }
 AbstractSvxZoomDialog * AbstractDialogFactory_Impl::CreateSvxZoomDialog( vcl::Window* pParent,
                                             const SfxItemSet& rCoreSet)
 {
-    SvxZoomDialog* pDlg = new SvxZoomDialog( pParent, rCoreSet);
+    VclPtrInstance<SvxZoomDialog> pDlg( pParent, rCoreSet);
     return new AbstractSvxZoomDialog_Impl( pDlg );
 }
 
@@ -1161,26 +1162,26 @@ AbstractSpellDialog *  AbstractDialogFactory_Impl::CreateSvxSpellDialog(
                         SfxBindings* pBindings,
                         svx::SpellDialogChildWindow* pSpellChildWindow )
 {
-    svx::SpellDialog* pDlg = new svx::SpellDialog(pSpellChildWindow, pParent, pBindings);
+    VclPtrInstance<svx::SpellDialog> pDlg(pSpellChildWindow, pParent, pBindings);
     return new AbstractSpellDialog_Impl(pDlg);
 }
 
 VclAbstractRefreshableDialog * AbstractDialogFactory_Impl::CreateActualizeProgressDialog( vcl::Window* pParent, GalleryTheme* pThm )
 {
-   Dialog* pDlg = new ActualizeProgress( pParent, pThm);
+   VclPtrInstance<ActualizeProgress> pDlg(pParent, pThm);
    return new VclAbstractRefreshableDialog_Impl( pDlg );
 }
 
 AbstractSearchProgress * AbstractDialogFactory_Impl::CreateSearchProgressDialog( vcl::Window* pParent,
                                             const INetURLObject& rStartURL )
 {
-    SearchProgress* pDlg = new SearchProgress( pParent, rStartURL);
+    SearchProgress* pDlg = VclPtr<SearchProgress>::Create( pParent, rStartURL);
     return new AbstractSearchProgress_Impl( pDlg );
 }
 
 AbstractTakeProgress * AbstractDialogFactory_Impl::CreateTakeProgressDialog( vcl::Window* pParent )
 {
-    TakeProgress* pDlg = new TakeProgress( pParent );
+    VclPtrInstance<TakeProgress> pDlg( pParent );
     return new AbstractTakeProgress_Impl( pDlg );
 }
 
@@ -1195,7 +1196,7 @@ AbstractScriptSelectorDialog*
 AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
     vcl::Window* pParent, bool bShowSlots, const Reference< frame::XFrame >& _rxFrame )
 {
-    SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog(pParent, bShowSlots, _rxFrame);
+    VclPtrInstance<SvxScriptSelectorDialog> pDlg(pParent, bShowSlots, _rxFrame);
     return new AbstractScriptSelectorDialog_Impl(pDlg);
 }
 
@@ -1216,21 +1217,21 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
 VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( vcl::Window* pParent,
                                             const OUString& rLanguage)
 {
-    Dialog* pDlg = new SvxScriptOrgDialog( pParent, rLanguage);
+    VclPtrInstance<SvxScriptOrgDialog> pDlg( pParent, rLanguage);
     return new CuiVclAbstractDialog_Impl( pDlg );
 }
 
 AbstractTitleDialog * AbstractDialogFactory_Impl::CreateTitleDialog( vcl::Window* pParent,
                                             const OUString& rOldText)
 {
-   TitleDialog* pDlg = new TitleDialog( pParent, rOldText);
+   VclPtrInstance<TitleDialog> pDlg( pParent, rOldText);
    return new AbstractTitleDialog_Impl( pDlg );
 }
 
 AbstractGalleryIdDialog * AbstractDialogFactory_Impl::CreateGalleryIdDialog( vcl::Window* pParent,
                                             GalleryTheme* pThm )
 {
-   GalleryIdDialog* pDlg = new GalleryIdDialog( pParent, pThm);
+   VclPtrInstance<GalleryIdDialog> pDlg( pParent, pThm);
    return new AbstractGalleryIdDialog_Impl( pDlg );
 }
 
@@ -1238,7 +1239,7 @@ VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDia
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet)
 {
-    Dialog* pDlg = new GalleryThemeProperties( pParent, pData, pItemSet);
+    VclPtrInstance<GalleryThemeProperties> pDlg( pParent, pData, pItemSet);
     return new VclAbstractDialog2_Impl( pDlg );
 }
 
@@ -1247,7 +1248,8 @@ AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( vcl::Window* pPare
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList )
 {
-    URLDlg* pDlg = new URLDlg( pParent, rURL, rAltText, rDescription, rTarget, rName, rTargetList);
+    VclPtrInstance<URLDlg> pDlg( pParent, rURL, rAltText, rDescription,
+                                 rTarget, rName, rTargetList);
     return new AbstractURLDlg_Impl( pDlg );
 }
 
@@ -1257,7 +1259,7 @@ AbstractSvxHlinkDlgMarkWnd* AbstractDialogFactory_Impl::CreateSvxHlinkDlgMarkWnd
     switch ( nResId )
     {
         case RID_SVXFLOAT_HYPERLINK_MARKWND :
-            pDlg = new  SvxHlinkDlgMarkWnd( pParent );
+            pDlg = VclPtr<SvxHlinkDlgMarkWnd>::Create ( pParent );
             break;
         default:
             break;
@@ -1271,7 +1273,7 @@ AbstractSvxHlinkDlgMarkWnd* AbstractDialogFactory_Impl::CreateSvxHlinkDlgMarkWnd
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog(vcl::Window* pParent,
     const SfxItemSet& rSet)
 {
-    SfxTabDialog* pDlg = new SvxSearchFormatDialog(pParent, rSet);
+    VclPtrInstance<SvxSearchFormatDialog> pDlg(pParent, rSet);
     return new CuiAbstractTabDialog_Impl(pDlg);
 }
 
@@ -1279,7 +1281,7 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxSearchAttributeDial
                                             SearchAttrItemList& rLst,
                                             const sal_uInt16* pWhRanges )
 {
-    Dialog* pDlg = new SvxSearchAttributeDialog( pParent, rLst, pWhRanges);
+    VclPtrInstance<SvxSearchAttributeDialog> pDlg( pParent, rLst, pWhRanges);
     return new CuiVclAbstractDialog_Impl( pDlg );
 }
 
@@ -1289,7 +1291,7 @@ AbstractSvxSearchSimilarityDialog * AbstractDialogFactory_Impl::CreateSvxSearchS
                                                             sal_uInt16 nShorter,
                                                             sal_uInt16 nLonger)
 {
-    SvxSearchSimilarityDialog* pDlg = new SvxSearchSimilarityDialog( pParent, bRelax, nOther, nShorter, nLonger );
+    VclPtrInstance<SvxSearchSimilarityDialog> pDlg( pParent, bRelax, nOther, nShorter, nLonger );
     return new AbstractSvxSearchSimilarityDialog_Impl( pDlg );
 }
 
@@ -1300,7 +1302,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg(
     bool bEnableSelector,
     bool bEnableDrawingLayerFillStyles)
 {
-    SfxTabDialog* pDlg = new SvxBorderBackgroundDlg(
+    VclPtrInstance<SvxBorderBackgroundDlg> pDlg(
         pParent,
         rCoreSet,
         bEnableSelector,
@@ -1314,7 +1316,7 @@ AbstractSvxTransformTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTab
                                                                                 const SdrView* pView,
                                                                                 sal_uInt16 nAnchorTypes )
 {
-    SvxTransformTabDialog* pDlg = new SvxTransformTabDialog( pParent, pAttr,pView, nAnchorTypes);
+    VclPtrInstance<SvxTransformTabDialog> pDlg( pParent, pAttr,pView, nAnchorTypes);
     return new AbstractSvxTransformTabDialog_Impl( pDlg );
 }
 
@@ -1325,19 +1327,19 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSchTransformTabDialog( v
                                                                 bool bSizeTabPage
                                                                 )
 {
-    SfxTabDialog* pDlg=NULL;
+    VclPtr<SfxTabDialog> pDlg;
     switch ( nResId )
     {
         case RID_SCH_TransformTabDLG_SVXPAGE_ANGLE :
             {
-            pDlg = new SvxTransformTabDialog( pParent, pAttr,pSdrView, bSizeTabPage ? SVX_OBJ_NOPROTECT :  SVX_OBJ_NOPROTECT|SVX_OBJ_NORESIZE);
+            pDlg.reset( VclPtr<SvxTransformTabDialog>::Create( pParent, pAttr,pSdrView, bSizeTabPage ? SVX_OBJ_NOPROTECT :  SVX_OBJ_NOPROTECT|SVX_OBJ_NORESIZE) );
             pDlg->RemoveTabPage( "RID_SVXPAGE_ANGLE" );
             pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
             }
             break;
         case RID_SCH_TransformTabDLG_SVXPAGE_SLANT:
             {
-            pDlg = new  SvxTransformTabDialog( pParent, pAttr,pSdrView, bSizeTabPage ? SVX_OBJ_NOPROTECT :  SVX_OBJ_NOPROTECT|SVX_OBJ_NORESIZE);
+            pDlg.reset(VclPtr<SvxTransformTabDialog>::Create ( pParent, pAttr,pSdrView, bSizeTabPage ? SVX_OBJ_NOPROTECT :  SVX_OBJ_NOPROTECT|SVX_OBJ_NORESIZE ) );
             pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
             }
             break;
@@ -1354,20 +1356,20 @@ AbstractSvxJSearchOptionsDialog * AbstractDialogFactory_Impl::CreateSvxJSearchOp
                                                             const SfxItemSet& rOptionsSet,
                                                             sal_Int32 nInitialFlags)
 {
-    SvxJSearchOptionsDialog* pDlg = new SvxJSearchOptionsDialog( pParent, rOptionsSet, nInitialFlags );
+    VclPtrInstance<SvxJSearchOptionsDialog> pDlg( pParent, rOptionsSet, nInitialFlags );
     return new AbstractSvxJSearchOptionsDialog_Impl( pDlg );
 }
 
 AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog( vcl::Window* pParent )
 {
-    FmInputRecordNoDialog* pDlg = new FmInputRecordNoDialog( pParent );
+    VclPtrInstance<FmInputRecordNoDialog> pDlg( pParent );
     return new AbstractFmInputRecordNoDialog_Impl( pDlg );
 }
 
 AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( vcl::Window* pParent,
                                             ::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl )
 {
-    SvxNewDictionaryDialog* pDlg = new SvxNewDictionaryDialog( pParent, xSpl );
+    VclPtrInstance<SvxNewDictionaryDialog> pDlg( pParent, xSpl );
     return new AbstractSvxNewDictionaryDialog_Impl( pDlg );
 }
 
@@ -1380,7 +1382,7 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialo
     switch ( nResId )
     {
         case RID_SFXDLG_EDITDICT :
-            pDlg = new SvxEditDictionaryDialog( pParent, rName, xSpl );
+            pDlg = VclPtr<SvxEditDictionaryDialog>::Create( pParent, rName, xSpl );
             break;
         default:
             break;
@@ -1394,36 +1396,36 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialo
 AbstractSvxNameDialog * AbstractDialogFactory_Impl::CreateSvxNameDialog( vcl::Window* pParent,
                                     const OUString& rName, const OUString& rDesc )
 {
-    SvxNameDialog* pDlg = new SvxNameDialog( pParent, rName, rDesc );
+    VclPtrInstance<SvxNameDialog> pDlg( pParent, rName, rDesc );
     return new AbstractSvxNameDialog_Impl( pDlg );
 }
 
 AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(vcl::Window* pParent, const OUString& rName )
 {
-    return new AbstractSvxObjectNameDialog_Impl(new SvxObjectNameDialog(pParent, rName));
+    return new AbstractSvxObjectNameDialog_Impl(VclPtr<SvxObjectNameDialog>::Create(pParent, rName));
 }
 
 AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(vcl::Window* pParent, const OUString& rTitle, const OUString& rDescription)
 {
-    return new AbstractSvxObjectTitleDescDialog_Impl(new SvxObjectTitleDescDialog(pParent, rTitle, rDescription));
+    return new AbstractSvxObjectTitleDescDialog_Impl(VclPtr<SvxObjectTitleDescDialog>::Create(pParent, rTitle, rDescription));
 }
 
 AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( vcl::Window* pParent, sal_uInt32,
                                     const OUString& rText, const OUString& rDesc, Image* pImg )
 {
-    SvxMessDialog* pDlg = new SvxMessDialog( pParent, rText, rDesc, pImg );
+    VclPtrInstance<SvxMessDialog> pDlg( pParent, rText, rDesc, pImg );
     return new AbstractSvxMessDialog_Impl( pDlg );
 }
 
 AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(vcl::Window* pParent)
 {
-    SvxMultiPathDialog* pDlg = new SvxMultiPathDialog(pParent);
+    VclPtrInstance<SvxMultiPathDialog> pDlg(pParent);
     return new AbstractSvxMultiPathDialog_Impl( pDlg );
 }
 
 AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxPathSelectDialog(vcl::Window* pParent)
 {
-    SvxPathSelectDialog* pDlg = new SvxPathSelectDialog(pParent);
+    VclPtrInstance<SvxPathSelectDialog> pDlg(pParent);
     return new AbstractSvxPathSelectDialog_Impl( pDlg );
 }
 
@@ -1435,7 +1437,7 @@ AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl::Wind
     switch ( nResId )
     {
         case SID_HYPERLINK_DIALOG :
-            pDlg = new SvxHpLinkDlg( pParent, pBindings );
+            pDlg = VclPtr<SvxHpLinkDlg>::Create( pParent, pBindings );
             break;
         default:
             break;
@@ -1452,7 +1454,8 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::W
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier)
 {
-    FmSearchDialog* pDlg = new FmSearchDialog( pParent, strInitialText, _rContexts, nInitialContext, lnkContextSupplier );
+    VclPtrInstance<FmSearchDialog> pDlg( pParent, strInitialText, _rContexts,
+                                         nInitialContext, lnkContextSupplier );
     return new AbstractFmSearchDialog_Impl( pDlg );
 }
 
@@ -1460,7 +1463,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmb
                                             const Graphic& rGraphic,
                                             RECT_POINT eLightSource)
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterEmboss( pParent, rGraphic, eLightSource );
+    VclPtrInstance<GraphicFilterEmboss> pDlg( pParent, rGraphic, eLightSource );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1468,7 +1471,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPos
                                             const Graphic& rGraphic,
                                             sal_uInt16 nCount)
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterPoster( pParent, rGraphic, nCount );
+    VclPtrInstance<GraphicFilterPoster> pDlg( pParent, rGraphic, nCount );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1476,21 +1479,21 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSep
                                             const Graphic& rGraphic,
                                             sal_uInt16 nCount)
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterSepia( pParent, rGraphic, nCount );
+    VclPtrInstance<GraphicFilterSepia> pDlg( pParent, rGraphic, nCount );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmooth(vcl::Window* pParent,
                                             const Graphic& rGraphic, double nRadius)
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterSmooth( pParent, rGraphic, nRadius );
+    VclPtrInstance<GraphicFilterSmooth> pDlg( pParent, rGraphic, nRadius );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (vcl::Window* pParent,
                                             const Graphic& rGraphic, sal_uInt8 nGreyThreshold, bool bInvert)
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
+    VclPtrInstance<GraphicFilterSolarize> pDlg( pParent, rGraphic, nGreyThreshold, bInvert );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1498,7 +1501,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMos
                                             const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
                                             bool bEnhanceEdges)
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterMosaic(pParent, rGraphic, nTileWidth, nTileHeight, bEnhanceEdges);
+    VclPtrInstance<GraphicFilterMosaic> pDlg(pParent, rGraphic, nTileWidth, nTileHeight, bEnhanceEdges);
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1507,7 +1510,7 @@ AbstractSvxAreaTabDialog* AbstractDialogFactory_Impl::CreateSvxAreaTabDialog( vc
                                                             SdrModel* pModel,
                                                             bool bShadow)
 {
-    SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( pParent, pAttr, pModel, bShadow );
+    VclPtrInstance<SvxAreaTabDialog> pDlg( pParent, pAttr, pModel, bShadow );
     return new AbstractSvxAreaTabDialog_Impl( pDlg );
 }
 
@@ -1516,7 +1519,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxLineTabDialog( vcl::W
                                                                  const SdrObject* pObj ,
                                                                  bool bHasObj)
 {
-    SfxTabDialog* pDlg = new SvxLineTabDialog( pParent, pAttr, pModel,pObj,bHasObj );
+    VclPtrInstance<SvxLineTabDialog> pDlg( pParent, pAttr, pModel,pObj,bHasObj );
     return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
@@ -1530,10 +1533,10 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pPa
     switch ( nResId )
     {
         case SID_EVENTCONFIG :
-            pDlg = new SfxMacroAssignDlg( pParent, _rxDocumentFrame, rAttr );
+            pDlg = VclPtr<SfxMacroAssignDlg>::Create( pParent, _rxDocumentFrame, rAttr );
             break;
         case RID_SVXDLG_CHARMAP :
-            pDlg = new SvxCharacterMap( pParent, true, &rAttr );
+            pDlg = VclPtr<SvxCharacterMap>::Create( pParent, true, &rAttr );
             break;
         default:
             break;
@@ -1555,13 +1558,13 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pPa
     switch ( nResId )
     {
         case RID_SVXPAGE_MEASURE :
-            pDlg = new SvxMeasureDialog( pParent, rAttr, pView );
+            pDlg = VclPtr<SvxMeasureDialog>::Create( pParent, rAttr, pView );
             break;
         case RID_SVXPAGE_CONNECTION :
-            pDlg = new SvxConnectionDialog( pParent, rAttr, pView );
+            pDlg = VclPtr<SvxConnectionDialog>::Create( pParent, rAttr, pView );
             break;
         case RID_SFXPAGE_DBREGISTER :
-            pDlg = new DatabaseRegistrationDialog( pParent, rAttr );
+            pDlg = VclPtr<DatabaseRegistrationDialog>::Create( pParent, rAttr );
             break;
         default:
             break;
@@ -1577,7 +1580,7 @@ AbstractSvxPostItDialog* AbstractDialogFactory_Impl::CreateSvxPostItDialog( vcl:
                                                                         const SfxItemSet& rCoreSet,
                                                                         bool bPrevNext )
 {
-    SvxPostItDialog* pDlg = new SvxPostItDialog( pParent, rCoreSet, bPrevNext );
+    VclPtrInstance<SvxPostItDialog> pDlg( pParent, rCoreSet, bPrevNext );
     return new AbstractSvxPostItDialog_Impl( pDlg );
 }
 
@@ -1589,7 +1592,7 @@ public:
         :m_aItems( SfxGetpApp()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM )
     {
         m_aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, _bUnoDialogMode ) );
-        m_pDialog.reset( new SvxMacroAssignDlg( _pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent ) );
+        m_pDialog.reset( VclPtr<SvxMacroAssignDlg>::Create( _pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent ) );
     }
 
     virtual short Execute() SAL_OVERRIDE;
@@ -1597,7 +1600,7 @@ public:
 
 private:
     SfxItemSet                              m_aItems;
-    ::std::unique_ptr< SvxMacroAssignDlg >  m_pDialog;
+    VclPtr< SvxMacroAssignDlg >             m_pDialog;
 };
 
 short SvxMacroAssignDialog::Execute()
@@ -1765,11 +1768,11 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
 {
     InsertObjectDialog_Impl* pDlg=0;
     if ( rCommand == ".uno:InsertObject" )
-        pDlg = new SvInsertOleDlg( pParent, xStor, pList );
+        pDlg = VclPtr<SvInsertOleDlg>::Create( pParent, xStor, pList );
     else if ( rCommand == ".uno:InsertPlugin" )
-        pDlg = new SvInsertPlugInDialog( pParent, xStor );
+        pDlg = VclPtr<SvInsertPlugInDialog>::Create( pParent, xStor );
     else if ( rCommand == ".uno:InsertObjectFloatingFrame" )
-        pDlg = new SfxInsertFloatingFrameDialog( pParent, xStor );
+        pDlg = VclPtr<SfxInsertFloatingFrameDialog>::Create( pParent, xStor );
 
     if ( pDlg )
     {
@@ -1784,7 +1787,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( vcl::Wind
 {
     if ( rCommand == ".uno:InsertObjectFloatingFrame" )
     {
-        InsertObjectDialog_Impl* pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
+        VclPtrInstance<SfxInsertFloatingFrameDialog> pDlg( pParent, xObj );
         pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new CuiVclAbstractDialog_Impl( pDlg );
     }
@@ -1795,12 +1798,12 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( vcl::Wind
 
 SfxAbstractPasteDialog* AbstractDialogFactory_Impl::CreatePasteDialog( vcl::Window* pParent )
 {
-    return new AbstractPasteDialog_Impl( new SvPasteObjectDialog( pParent ) );
+    return new AbstractPasteDialog_Impl( VclPtr<SvPasteObjectDialog>::Create( pParent ) );
 }
 
 SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p)
 {
-    SvBaseLinksDlg* pLinkDlg = new SvBaseLinksDlg( pParent, pMgr, bHTML );
+    VclPtrInstance<SvBaseLinksDlg> pLinkDlg( pParent, pMgr, bHTML );
     if ( p )
         pLinkDlg->SetActLink(p);
     return new AbstractLinksDialog_Impl( pLinkDlg );
@@ -1808,7 +1811,7 @@ SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( vcl::Wind
 
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* /*pObj*/ )
 {
-    return new CuiAbstractTabDialog_Impl( new SvxFormatCellsDialog( pParent, pAttr, pModel ) );
+    return new CuiAbstractTabDialog_Impl( VclPtr<SvxFormatCellsDialog>::Create( pParent, pAttr, pModel ) );
 }
 
 SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
@@ -1824,7 +1827,7 @@ SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog( 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
     vcl::Window* pParent, const OUString& rExtensionId, const OUString& /*rApplicationContext*/ )
 {
-    return new CuiVclAbstractDialog_Impl( new OfaTreeOptionsDialog( pParent, rExtensionId ) );
+    return new CuiVclAbstractDialog_Impl( VclPtr<OfaTreeOptionsDialog>::Create( pParent, rExtensionId ) );
 }
 
 SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId )
@@ -1836,7 +1839,7 @@ AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordT
     vcl::Window * pParent,
     sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify )
 {
-    PasswordToOpenModifyDialog * pDlg = new PasswordToOpenModifyDialog( pParent, nMinPasswdLen, nMaxPasswdLen, bIsPasswordToModify );
+    VclPtrInstance<PasswordToOpenModifyDialog> pDlg( pParent, nMinPasswdLen, nMaxPasswdLen, bIsPasswordToModify );
     return new AbstractPasswordToOpenModifyDialog_Impl( pDlg );
 }
 

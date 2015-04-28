@@ -17,7 +17,6 @@ class SFX2_DLLPUBLIC TemplateDefaultView : public TemplateLocalView
 {
 public:
     TemplateDefaultView(Window *pParent);
-    virtual ~TemplateDefaultView();
 
     virtual void reload() SAL_OVERRIDE;
 protected:

@@ -253,8 +253,8 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     {
         //TODO: different error message, if found, but not bAllowed ??
 
-        MessageDialog aBox( pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
-        aBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aBox( pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
+        aBox->Execute();
     }
 
     return bScriptReturnedFalse;
@@ -359,8 +359,8 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
     {
         //TODO: different error message, if found, but not bAllowed ??
 
-        MessageDialog aBox(pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
-        aBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aBox(pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
+        aBox->Execute();
     }
 
     return bRet;
@@ -410,8 +410,8 @@ bool ScValidationData::DoError( vcl::Window* pParent, const OUString& rInput,
         }
     }
 
-    MessBox aBox( pParent, WinBits(nStyle), aTitle, aMessage );
-    sal_uInt16 nRet = aBox.Execute();
+    ScopedVclPtrInstance< MessBox > aBox( pParent, WinBits(nStyle), aTitle, aMessage );
+    sal_uInt16 nRet = aBox->Execute();
 
     return ( eErrorStyle == SC_VALERR_STOP || nRet == RET_CANCEL );
 }

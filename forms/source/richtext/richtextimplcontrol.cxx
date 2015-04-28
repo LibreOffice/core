@@ -56,7 +56,7 @@ namespace frm
         OSL_ENSURE( m_pAntiImpl, "RichTextControlImpl::RichTextControlImpl: invalid window!" );
         OSL_ENSURE( m_pEngine,   "RichTextControlImpl::RichTextControlImpl: invalid edit engine! This will *definitely* crash!" );
 
-        m_pViewport = new RichTextViewPort( m_pAntiImpl );
+        m_pViewport = VclPtr<RichTextViewPort>::Create( m_pAntiImpl );
         m_pViewport->setAttributeInvalidationHandler( LINK( this, RichTextControlImpl, OnInvalidateAllAttributes ) );
         m_pViewport->Show();
 
@@ -91,10 +91,10 @@ namespace frm
         m_pEngine->RemoveView( m_pView );
         m_pEngine->revokeEngineStatusListener( this );
         delete m_pView;
-        delete m_pViewport;
-        delete m_pHScroll;
-        delete m_pVScroll;
-        delete m_pScrollCorner;
+        m_pViewport.disposeAndClear();
+        m_pHScroll.disposeAndClear();
+        m_pVScroll.disposeAndClear();
+        m_pScrollCorner.disposeAndClear();
     }
 
 
@@ -344,38 +344,35 @@ namespace frm
         // create or delete the scrollbars, as necessary
         if ( !bNeedVScroll )
         {
-            delete m_pVScroll;
-            m_pVScroll = NULL;
+            m_pVScroll.disposeAndClear();
         }
         else
         {
-            m_pVScroll = new ScrollBar( m_pAntiImpl, WB_VSCROLL | WB_DRAG | WB_REPEAT );
+            m_pVScroll = VclPtr<ScrollBar>::Create( m_pAntiImpl, WB_VSCROLL | WB_DRAG | WB_REPEAT );
             m_pVScroll->SetScrollHdl ( LINK( this, RichTextControlImpl, OnVScroll ) );
             m_pVScroll->Show();
         }
 
         if ( !bNeedHScroll )
         {
-            delete m_pHScroll;
-            m_pHScroll = NULL;
+            m_pHScroll.disposeAndClear();
         }
         else
         {
-            m_pHScroll = new ScrollBar( m_pAntiImpl, WB_HSCROLL | WB_DRAG | WB_REPEAT );
+            m_pHScroll = VclPtr<ScrollBar>::Create( m_pAntiImpl, WB_HSCROLL | WB_DRAG | WB_REPEAT );
             m_pHScroll->SetScrollHdl ( LINK( this, RichTextControlImpl, OnHScroll ) );
             m_pHScroll->Show();
         }
 
         if ( m_pHScroll && m_pVScroll )
         {
-            delete m_pScrollCorner;
-            m_pScrollCorner = new ScrollBarBox( m_pAntiImpl );
+            m_pScrollCorner.disposeAndClear();
+            m_pScrollCorner = VclPtr<ScrollBarBox>::Create( m_pAntiImpl );
             m_pScrollCorner->Show();
         }
         else
         {
-            delete m_pScrollCorner;
-            m_pScrollCorner = NULL;
+            m_pScrollCorner.disposeAndClear();
         }
 
         layoutWindow();

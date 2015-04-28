@@ -169,7 +169,7 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
     vcl::Window* pImpl = VCLUnoHelper::GetWindow( xParentPeer );
     if (pImpl)
     {
-        _pSysChild = new SystemChildWindow( pImpl, WB_CLIPCHILDREN );
+        _pSysChild = VclPtr<SystemChildWindow>::Create( pImpl, WB_CLIPCHILDREN );
         if (pImpl->HasFocus())
             _pSysChild->GrabFocus();
 

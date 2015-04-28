@@ -32,10 +32,10 @@ namespace dbaui
 
     class OTableListBoxControl
     {
-        ListBox*                                m_pLeftTable;
-        ListBox*                                m_pRightTable;
+        VclPtr<ListBox>                                m_pLeftTable;
+        VclPtr<ListBox>                                m_pRightTable;
 
-        ORelationControl*                       m_pRC_Tables;
+        VclPtr<ORelationControl>                       m_pRC_Tables;
         const OJoinTableView::OTableWindowMap*  m_pTableMap;
         IRelationControlInterface*              m_pParentDialog;
         OUString                                m_strCurrentLeft;

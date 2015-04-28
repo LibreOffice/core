@@ -86,12 +86,34 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
 
 OfaHtmlTabPage::~OfaHtmlTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* OfaHtmlTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+void OfaHtmlTabPage::dispose()
 {
-    return new OfaHtmlTabPage(pParent, *rAttrSet);
+    aSize1NF.clear();
+    aSize2NF.clear();
+    aSize3NF.clear();
+    aSize4NF.clear();
+    aSize5NF.clear();
+    aSize6NF.clear();
+    aSize7NF.clear();
+    aNumbersEnglishUSCB.clear();
+    aUnknownTagCB.clear();
+    aIgnoreFontNamesCB.clear();
+    aExportLB.clear();
+    aStarBasicCB.clear();
+    aStarBasicWarningCB.clear();
+    aPrintExtensionCB.clear();
+    aSaveGrfLocalCB.clear();
+    aCharSetLB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> OfaHtmlTabPage::Create( vcl::Window* pParent,
+                                           const SfxItemSet* rAttrSet )
+{
+    return VclPtr<OfaHtmlTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )

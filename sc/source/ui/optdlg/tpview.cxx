@@ -95,13 +95,40 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
 
 ScTpContentOptions::~ScTpContentOptions()
 {
-    delete pLocalOptions;
+    disposeOnce();
 }
 
-SfxTabPage* ScTpContentOptions::Create( vcl::Window*     pParent,
-                              const SfxItemSet*     rCoreSet )
+void ScTpContentOptions::dispose()
 {
-    return new ScTpContentOptions(pParent, *rCoreSet);
+    delete pLocalOptions;
+    pGridLB.clear();
+    pColorFT.clear();
+    pColorLB.clear();
+    pBreakCB.clear();
+    pGuideLineCB.clear();
+    pFormulaCB.clear();
+    pNilCB.clear();
+    pAnnotCB.clear();
+    pValueCB.clear();
+    pAnchorCB.clear();
+    pClipMarkCB.clear();
+    pRangeFindCB.clear();
+    pObjGrfLB.clear();
+    pDiagramLB.clear();
+    pDrawLB.clear();
+    pSyncZoomCB.clear();
+    pRowColHeaderCB.clear();
+    pHScrollCB.clear();
+    pVScrollCB.clear();
+    pTblRegCB.clear();
+    pOutlineCB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> ScTpContentOptions::Create( vcl::Window*     pParent,
+                                               const SfxItemSet*     rCoreSet )
+{
+    return VclPtr<SfxTabPage>( new ScTpContentOptions (pParent, *rCoreSet), SAL_NO_ACQUIRE );
 }
 
 bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
@@ -406,12 +433,34 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
 
 ScTpLayoutOptions::~ScTpLayoutOptions()
 {
+    disposeOnce();
 }
 
-SfxTabPage* ScTpLayoutOptions::Create( vcl::Window*          pParent,
-                                    const SfxItemSet*   rCoreSet )
+void ScTpLayoutOptions::dispose()
 {
-    ScTpLayoutOptions* pNew = new ScTpLayoutOptions(pParent, *rCoreSet);
+    m_pUnitLB.clear();
+    m_pTabMF.clear();
+    m_pAlwaysRB.clear();
+    m_pRequestRB.clear();
+    m_pNeverRB.clear();
+    m_pAlignCB.clear();
+    m_pAlignLB.clear();
+    m_pEditModeCB.clear();
+    m_pFormatCB.clear();
+    m_pExpRefCB.clear();
+    m_pSortRefUpdateCB.clear();
+    m_pMarkHdrCB.clear();
+    m_pTextFmtCB.clear();
+    m_pReplWarnCB.clear();
+    m_pLegacyCellSelectionCB.clear();
+    SfxTabPage::dispose();
+}
+
+
+VclPtr<SfxTabPage> ScTpLayoutOptions::Create( vcl::Window*          pParent,
+                                              const SfxItemSet*   rCoreSet )
+{
+    VclPtr<ScTpLayoutOptions> pNew( new ScTpLayoutOptions( pParent, *rCoreSet), SAL_NO_ACQUIRE );
     ScDocShell* pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
 
     if(pDocSh!=NULL)

@@ -325,8 +325,13 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
 
 Svx3DWin::~Svx3DWin()
 {
+    disposeOnce();
+}
+
+void Svx3DWin::dispose()
+{
     delete p3DView;
-    delete pVDev;
+    pVDev.disposeAndClear();
     delete pModel;
 
     delete pControllerItem;
@@ -336,6 +341,16 @@ Svx3DWin::~Svx3DWin()
     delete mpRemember2DAttributes;
 
     delete mpImpl;
+
+    m_pBtnGeo.clear();
+    m_pBtnRepresentation.clear();
+    m_pBtnLight.clear();
+    m_pBtnTexture.clear();
+    m_pBtnMaterial.clear();
+    m_pBtnUpdate.clear();
+    m_pBtnAssign.clear();
+
+    SfxDockingWindow::dispose();
 }
 
 
@@ -2270,7 +2285,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
         m_pBtnLight->Check( eViewType == VIEWTYPE_LIGHT );
         m_pBtnTexture->Check( eViewType == VIEWTYPE_TEXTURE );
         m_pBtnMaterial->Check( eViewType == VIEWTYPE_MATERIAL );
-    }
+     }
     return 0L;
 }
 
@@ -2901,7 +2916,7 @@ Svx3DChildWindow::Svx3DChildWindow( vcl::Window* _pParent,
                                                          SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
-    Svx3DWin* pWin = new Svx3DWin( pBindings, this, _pParent );
+    VclPtr<Svx3DWin> pWin = VclPtr<Svx3DWin>::Create( pBindings, this, _pParent );
     pWindow = pWin;
 
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;

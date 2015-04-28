@@ -257,6 +257,11 @@ Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
 
 Calendar::~Calendar()
 {
+    disposeOnce();
+}
+
+void Calendar::dispose()
+{
     delete mpStandardColor;
     delete mpSaturdayColor;
     delete mpSundayColor;
@@ -264,6 +269,7 @@ Calendar::~Calendar()
     delete mpSelectTable;
     delete mpOldSelectTable;
     delete mpRestoreSelectTable;
+    Control::dispose();
 }
 
 
@@ -2183,14 +2189,15 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
 class ImplCFieldFloatWin : public FloatingWindow
 {
 private:
-    Calendar*       mpCalendar;
-    PushButton*     mpTodayBtn;
-    PushButton*     mpNoneBtn;
-    FixedLine*      mpFixedLine;
+    VclPtr<Calendar>    mpCalendar;
+    VclPtr<PushButton>  mpTodayBtn;
+    VclPtr<PushButton>  mpNoneBtn;
+    VclPtr<FixedLine>   mpFixedLine;
 
 public:
                     ImplCFieldFloatWin( vcl::Window* pParent );
-                    virtual ~ImplCFieldFloatWin();
+    virtual         ~ImplCFieldFloatWin();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetCalendar( Calendar* pCalendar )
                         { mpCalendar = pCalendar; }
@@ -2217,9 +2224,16 @@ ImplCFieldFloatWin::ImplCFieldFloatWin( vcl::Window* pParent ) :
 
 ImplCFieldFloatWin::~ImplCFieldFloatWin()
 {
-    delete mpTodayBtn;
-    delete mpNoneBtn;
-    delete mpFixedLine;
+    disposeOnce();
+}
+
+void ImplCFieldFloatWin::dispose()
+{
+    mpTodayBtn.disposeAndClear();
+    mpNoneBtn.disposeAndClear();
+    mpFixedLine.disposeAndClear();
+    mpCalendar.clear();
+    FloatingWindow::dispose();
 }
 
 
@@ -2230,7 +2244,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( bool bEnable )
     {
         if ( !mpTodayBtn )
         {
-            mpTodayBtn = new PushButton( this, WB_NOPOINTERFOCUS );
+            mpTodayBtn = VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS );
             OUString aTodayText(SVT_RESSTR(STR_SVT_CALENDAR_TODAY));
             mpTodayBtn->SetText( aTodayText );
             Size aSize;
@@ -2244,11 +2258,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( bool bEnable )
     }
     else
     {
-        if ( mpTodayBtn )
-        {
-            delete mpTodayBtn;
-            mpTodayBtn = NULL;
-        }
+        mpTodayBtn.disposeAndClear();
     }
 
     return mpTodayBtn;
@@ -2262,7 +2272,7 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( bool bEnable )
     {
         if ( !mpNoneBtn )
         {
-            mpNoneBtn = new PushButton( this, WB_NOPOINTERFOCUS );
+            mpNoneBtn = VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS );
             OUString aNoneText(SVT_RESSTR(STR_SVT_CALENDAR_NONE));
             mpNoneBtn->SetText( aNoneText );
             Size aSize;
@@ -2276,11 +2286,7 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( bool bEnable )
     }
     else
     {
-        if ( mpNoneBtn )
-        {
-            delete mpNoneBtn;
-            mpNoneBtn = NULL;
-        }
+        mpNoneBtn.disposeAndClear();
     }
 
     return mpNoneBtn;
@@ -2333,7 +2339,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
     {
         if ( !mpFixedLine )
         {
-            mpFixedLine = new FixedLine( this );
+            mpFixedLine = VclPtr<FixedLine>::Create( this );
             mpFixedLine->Show();
         }
         long nLineWidth = aOutSize.Width()-(CALFIELD_BORDERLINE_X*2);
@@ -2344,11 +2350,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
     }
     else
     {
-        if ( mpFixedLine )
-        {
-            delete mpFixedLine;
-            mpFixedLine = NULL;
-        }
+        mpFixedLine.disposeAndClear();
     }
 }
 
@@ -2381,11 +2383,16 @@ CalendarField::CalendarField(vcl::Window* pParent, WinBits nWinStyle)
 
 CalendarField::~CalendarField()
 {
-    if ( mpFloatWin )
-    {
-        delete mpCalendar;
-        delete mpFloatWin;
-    }
+    disposeOnce();
+}
+
+void CalendarField::dispose()
+{
+    mpCalendar.disposeAndClear();
+    mpFloatWin.disposeAndClear();
+    mpTodayBtn.clear();
+    mpNoneBtn.clear();
+    DateField::dispose();
 }
 
 
@@ -2510,9 +2517,9 @@ bool CalendarField::ShowDropDown( bool bShow )
 
 
 
-Calendar* CalendarField::CreateCalendar( vcl::Window* pParent )
+VclPtr<Calendar> CalendarField::CreateCalendar( vcl::Window* pParent )
 {
-    return new Calendar( pParent, mnCalendarStyle | WB_TABSTOP );
+    return VclPtr<Calendar>::Create( pParent, mnCalendarStyle | WB_TABSTOP );
 }
 
 
@@ -2521,7 +2528,7 @@ Calendar* CalendarField::GetCalendar()
 {
     if ( !mpFloatWin )
     {
-        mpFloatWin = new ImplCFieldFloatWin( this );
+        mpFloatWin = VclPtr<ImplCFieldFloatWin>::Create( this );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, CalendarField, ImplPopupModeEndHdl ) );
         mpCalendar = CreateCalendar( mpFloatWin );
         mpCalendar->SetPosPixel( Point() );

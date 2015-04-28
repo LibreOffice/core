@@ -29,7 +29,7 @@ class SW_DLLPUBLIC CancelableDialog : public Dialog
     bool mbModal;
 
 protected:
-    CancelButton* m_pCancelButton;
+    VclPtr<CancelButton> m_pCancelButton;
     CancelableDialog( vcl::Window *pParent, bool modal, const OUString& rID,
                       const OUString& rUIXMLDescription );
 
@@ -40,6 +40,8 @@ protected:
 
 public:
     virtual ~CancelableDialog();
+    virtual void dispose() SAL_OVERRIDE;
+
     void SetCancelHdl( const Link& rLink );
     void Show();
 };
@@ -53,18 +55,22 @@ public:
         MONITOR_TYPE_SAVE
     };
 
-    FixedText* m_pDocName;
-    FixedText* m_pPrinting;
-    FixedText* m_pPrinter;
-    FixedText* m_pPrintInfo;
+    VclPtr<FixedText> m_pDocName;
+    VclPtr<FixedText> m_pPrinting;
+    VclPtr<FixedText> m_pPrinter;
+    VclPtr<FixedText> m_pPrintInfo;
 
     PrintMonitor( vcl::Window *pParent, bool modal, PrintMonitorType eType );
+    virtual ~PrintMonitor();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class CreateMonitor : public CancelableDialog
 {
 public:
     CreateMonitor( vcl::Window *pParent, bool modal );
+    virtual ~CreateMonitor();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetTotalCount( sal_Int32 nTotal );
     void SetCurrentPosition( sal_Int32 nCurrent );
@@ -73,7 +79,7 @@ private:
     void UpdateCountingText();
 
 private:
-    FixedText*      m_pCounting;
+    VclPtr<FixedText>      m_pCounting;
 
     OUString        m_sCountingPattern;
     OUString        m_sVariable_Total;

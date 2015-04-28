@@ -48,35 +48,35 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 : Window( _pParent,WB_DIALOGCONTROL)
 ,OPropertyChangeListener(m_aMutex)
 ,m_pParent(_pParent)
-,m_aStartMarker( this,_sColorEntry)
-,m_aReportSection( this,_xSection)
-,m_aSplitter(this)
-,m_aEndMarker( this,_sColorEntry)
+,m_aStartMarker( VclPtr<rptui::OStartMarker>::Create(this,_sColorEntry))
+,m_aReportSection( VclPtr<rptui::OReportSection>::Create(this,_xSection))
+,m_aSplitter(VclPtr<Splitter>::Create(this))
+,m_aEndMarker( VclPtr<rptui::OEndMarker>::Create(this,_sColorEntry))
 {
     SetUniqueId(UID_RPT_SECTIONSWINDOW);
     const MapMode& rMapMode = _pParent->GetMapMode();
     SetMapMode( rMapMode );
     ImplInitSettings();
     // TRY
-    m_aSplitter.SetMapMode( MapMode( MAP_100TH_MM ) );
-    m_aSplitter.SetStartSplitHdl(LINK(this, OSectionWindow,StartSplitHdl));
-    m_aSplitter.SetSplitHdl(LINK(this, OSectionWindow,SplitHdl));
-    m_aSplitter.SetEndSplitHdl(LINK(this, OSectionWindow,EndSplitHdl));
-    m_aSplitter.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
-    m_aSplitter.SetSplitPosPixel(m_aSplitter.LogicToPixel(Size(0,_xSection->getHeight())).Height());
+    m_aSplitter->SetMapMode( MapMode( MAP_100TH_MM ) );
+    m_aSplitter->SetStartSplitHdl(LINK(this, OSectionWindow,StartSplitHdl));
+    m_aSplitter->SetSplitHdl(LINK(this, OSectionWindow,SplitHdl));
+    m_aSplitter->SetEndSplitHdl(LINK(this, OSectionWindow,EndSplitHdl));
+    m_aSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
+    m_aSplitter->SetSplitPosPixel(m_aSplitter->LogicToPixel(Size(0,_xSection->getHeight())).Height());
 
 
-    m_aStartMarker.setCollapsedHdl(LINK(this,OSectionWindow,Collapsed));
+    m_aStartMarker->setCollapsedHdl(LINK(this,OSectionWindow,Collapsed));
 
-    m_aStartMarker.zoom(rMapMode.GetScaleX());
-    setZoomFactor(rMapMode.GetScaleX(),m_aReportSection);
-    setZoomFactor(rMapMode.GetScaleX(),m_aSplitter);
-    setZoomFactor(rMapMode.GetScaleX(),m_aEndMarker);
+    m_aStartMarker->zoom(rMapMode.GetScaleX());
+    setZoomFactor(rMapMode.GetScaleX(), *m_aReportSection.get());
+    setZoomFactor(rMapMode.GetScaleX(), *m_aSplitter.get());
+    setZoomFactor(rMapMode.GetScaleX(), *m_aEndMarker.get());
 
-    m_aSplitter.Show();
-    m_aStartMarker.Show();
-    m_aReportSection.Show();
-    m_aEndMarker.Show();
+    m_aSplitter->Show();
+    m_aStartMarker->Show();
+    m_aReportSection->Show();
+    m_aEndMarker->Show();
     Show();
 
     m_pSectionMulti = new OPropertyChangeMultiplexer(this,_xSection.get());
@@ -100,6 +100,11 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 
 OSectionWindow::~OSectionWindow()
 {
+    disposeOnce();
+}
+
+void OSectionWindow::dispose()
+{
     try
     {
         if ( m_pSectionMulti.is() )
@@ -110,6 +115,12 @@ OSectionWindow::~OSectionWindow()
     catch (uno::Exception&)
     {
     }
+    m_aStartMarker.disposeAndClear();
+    m_aReportSection.disposeAndClear();
+    m_aSplitter.disposeAndClear();
+    m_aEndMarker.disposeAndClear();
+    m_pParent.clear();
+    vcl::Window::dispose();
 }
 
 void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
@@ -119,7 +130,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     const uno::Reference< report::XSection > xSection(_rEvent.Source,uno::UNO_QUERY);
     if ( xSection.is() )
     {
-        const uno::Reference< report::XSection> xCurrentSection = m_aReportSection.getSection();
+        const uno::Reference< report::XSection> xCurrentSection = m_aReportSection->getSection();
         if ( _rEvent.PropertyName == PROPERTY_HEIGHT )
         {
             m_pParent->getView()->SetUpdateMode(false);
@@ -137,13 +148,13 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_HEADER,::std::mem_fun(&OReportHelper::getPageHeader),::std::mem_fun(&OReportHelper::getPageHeaderOn))
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_FOOTER,::std::mem_fun(&OReportHelper::getPageFooter),::std::mem_fun(&OReportHelper::getPageFooterOn)) )
             {
-                m_aStartMarker.Invalidate(INVALIDATE_NOERASE);
+                m_aStartMarker->Invalidate(INVALIDATE_NOERASE);
             }
             else
             {
                 OUString sTitle = ModuleRes(RID_STR_DETAIL);
-                m_aStartMarker.setTitle(sTitle);
-                m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
+                m_aStartMarker->setTitle(sTitle);
+                m_aStartMarker->Invalidate(INVALIDATE_CHILDREN);
             }
         }
     }
@@ -160,12 +171,12 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool,OReportHelper>& _pIsSectionOn)
 {
     OReportHelper aReportHelper(_xReport);
-    const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection.getSection();
+    const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection->getSection();
     if ( bRet )
     {
         OUString sTitle = ModuleRes(_nResId);
-        m_aStartMarker.setTitle(sTitle);
-        m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
+        m_aStartMarker->setTitle(sTitle);
+        m_aStartMarker->Invalidate(INVALIDATE_CHILDREN);
     }
     return bRet;
 }
@@ -173,7 +184,7 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
 bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool,OGroupHelper>& _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
-    const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;
+    const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection->getSection() ;
     if ( bRet )
     {
         OUString sExpression = _xGroup->getExpression();
@@ -185,8 +196,8 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
 
         OUString sTitle( ModuleRes(_nResId).toString() );
         sTitle = sTitle.replaceFirst("#", sExpression);
-        m_aStartMarker.setTitle( sTitle );
-        m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
+        m_aStartMarker->setTitle( sTitle );
+        m_aStartMarker->Invalidate(INVALIDATE_CHILDREN);
     }
     return bRet;
 }
@@ -225,12 +236,12 @@ void OSectionWindow::Resize()
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
     aOutputSize.Width() -= aThumbPos.X();
-    aOutputSize.Height() -=  m_aSplitter.GetSizePixel().Height();
+    aOutputSize.Height() -=  m_aSplitter->GetSizePixel().Height();
 
-    if ( m_aStartMarker.isCollapsed() )
+    if ( m_aStartMarker->isCollapsed() )
     {
         Point aPos(0,0);
-        m_aStartMarker.SetPosSizePixel(aPos,aOutputSize);
+        m_aStartMarker->SetPosSizePixel(aPos,aOutputSize);
     }
     else
     {
@@ -240,49 +251,49 @@ void OSectionWindow::Resize()
         aStartWidth *= GetMapMode().GetScaleX();
 
         // set start marker
-        m_aStartMarker.SetPosSizePixel(Point(0,0),Size(aStartWidth,aOutputSize.Height()));
+        m_aStartMarker->SetPosSizePixel(Point(0,0),Size(aStartWidth,aOutputSize.Height()));
 
         // set report section
-        const uno::Reference< report::XSection> xSection = m_aReportSection.getSection();
+        const uno::Reference< report::XSection> xSection = m_aReportSection->getSection();
         Size aSectionSize = LogicToPixel( Size( 0,xSection->getHeight() ) );
         Point aReportPos(aStartWidth,0);
         aSectionSize.Width() = aOutputSize.Width() - (long)aStartWidth;
         if ( bShowEndMarker )
             aSectionSize.Width() -= (long)aEndWidth;
 
-        m_aReportSection.SetPosSizePixel(aReportPos,aSectionSize);
+        m_aReportSection->SetPosSizePixel(aReportPos,aSectionSize);
 
         // set splitter
         aReportPos.Y() += aSectionSize.Height();
-        m_aSplitter.SetPosSizePixel(aReportPos,Size(aSectionSize.Width(),m_aSplitter.GetSizePixel().Height()));
+        m_aSplitter->SetPosSizePixel(aReportPos,Size(aSectionSize.Width(),m_aSplitter->GetSizePixel().Height()));
         aSectionSize.Height() = (long)(1000 * (double)GetMapMode().GetScaleY());
-        m_aSplitter.SetDragRectPixel( Rectangle(Point(aStartWidth,0),aSectionSize));
+        m_aSplitter->SetDragRectPixel( Rectangle(Point(aStartWidth,0),aSectionSize));
 
         // set end marker
         aReportPos.X() += aSectionSize.Width();
         aReportPos.Y() = 0;
-        m_aEndMarker.Show(bShowEndMarker);
-        m_aEndMarker.SetPosSizePixel(aReportPos,Size(aEndWidth,aOutputSize.Height()));
+        m_aEndMarker->Show(bShowEndMarker);
+        m_aEndMarker->SetPosSizePixel(aReportPos,Size(aEndWidth,aOutputSize.Height()));
     }
 }
 
 void OSectionWindow::setCollapsed(bool _bCollapsed)
 {
-    if ( m_aStartMarker.isCollapsed() != _bCollapsed )
+    if ( m_aStartMarker->isCollapsed() != _bCollapsed )
     {
-        m_aStartMarker.setCollapsed(_bCollapsed);
+        m_aStartMarker->setCollapsed(_bCollapsed);
     }
 }
 
 void OSectionWindow::showProperties()
 {
-    m_pParent->getView()->showProperties( m_aReportSection.getSection().get() );
+    m_pParent->getView()->showProperties( m_aReportSection->getSection().get() );
 }
 
 void OSectionWindow::setMarked(bool _bMark)
 {
-    m_aStartMarker.setMarked(_bMark);
-    m_aEndMarker.setMarked(_bMark);
+    m_aStartMarker->setMarked(_bMark);
+    m_aEndMarker->setMarked(_bMark);
 }
 
 IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
@@ -290,9 +301,9 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
     if ( _pMarker )
     {
         bool bShow = !_pMarker->isCollapsed();
-        m_aReportSection.Show(bShow);
-        m_aEndMarker.Show(bShow);
-        m_aSplitter.Show(bShow);
+        m_aReportSection->Show(bShow);
+        m_aEndMarker->Show(bShow);
+        m_aSplitter->Show(bShow);
 
         m_pParent->resize(*this);
     }
@@ -302,11 +313,11 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
 void OSectionWindow::zoom(const Fraction& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
-    m_aStartMarker.zoom(_aZoom);
+    m_aStartMarker->zoom(_aZoom);
 
-    setZoomFactor(_aZoom,m_aReportSection);
-    setZoomFactor(_aZoom,m_aSplitter);
-    setZoomFactor(_aZoom,m_aEndMarker);
+    setZoomFactor(_aZoom, *m_aReportSection.get());
+    setZoomFactor(_aZoom, *m_aSplitter.get());
+    setZoomFactor(_aZoom, *m_aEndMarker.get());
     Invalidate();
 }
 
@@ -332,8 +343,8 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
 
-    const uno::Reference< report::XSection> xSection = m_aReportSection.getSection();
-    nSplitPos = m_aSplitter.PixelToLogic(Size(0,nSplitPos)).Height();
+    const uno::Reference< report::XSection> xSection = m_aReportSection->getSection();
+    nSplitPos = m_aSplitter->PixelToLogic(Size(0,nSplitPos)).Height();
 
     const sal_Int32 nCount = xSection->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
@@ -349,7 +360,7 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
         nSplitPos = 0;
 
     xSection->setHeight(nSplitPos);
-    m_aSplitter.SetSplitPosPixel(m_aSplitter.LogicToPixel(Size(0,nSplitPos)).Height());
+    m_aSplitter->SetSplitPosPixel(m_aSplitter->LogicToPixel(Size(0,nSplitPos)).Height());
 
     return 0L;
 }
@@ -371,21 +382,21 @@ void OSectionWindow::scrollChildren(long _nX)
 {
     const Point aDelta( _nX,0 );
 
-    MapMode aMapMode( m_aReportSection.GetMapMode() );
+    MapMode aMapMode( m_aReportSection->GetMapMode() );
     const Point aOld = aMapMode.GetOrigin();
-    lcl_setOrigin(m_aReportSection,aDelta.X(), 0);
+    lcl_setOrigin(*m_aReportSection.get(), aDelta.X(), 0);
 
-    aMapMode = m_aReportSection.GetMapMode();
+    aMapMode = m_aReportSection->GetMapMode();
     const Point aNew = aMapMode.GetOrigin();
     const Point aDiff = aOld - aNew;
     {
-        lcl_scroll(m_aReportSection,aDiff);
+        lcl_scroll(*m_aReportSection.get(), aDiff);
     }
 
-    lcl_scroll(m_aEndMarker,m_aEndMarker.PixelToLogic(Point(_nX,0)));
+    lcl_scroll(*m_aEndMarker.get(), m_aEndMarker->PixelToLogic(Point(_nX,0)));
 
-    lcl_setOrigin(m_aSplitter,_nX, 0);
-    lcl_scroll(m_aSplitter,aDiff);
+    lcl_setOrigin(*m_aSplitter.get(),_nX, 0);
+    lcl_scroll(*m_aSplitter.get(),aDiff);
 }
 
 } // rptui

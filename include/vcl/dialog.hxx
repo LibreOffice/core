@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/vclptr.hxx>
 
 // parameter to pass to the dialog constructor if really no parent is wanted
 // whereas NULL chooses the default dialog parent
@@ -39,7 +40,7 @@ class VclButtonBox;
 class VCL_DLLPUBLIC Dialog : public SystemWindow
 {
 private:
-    Dialog*         mpPrevExecuteDlg;
+    VclPtr<Dialog>  mpPrevExecuteDlg;
     DialogImpl*     mpDialogImpl;
     long            mnMousePositioned;
     bool            mbInExecute;
@@ -47,8 +48,8 @@ private:
     bool            mbInClose;
     bool            mbModalMode;
 
-    VclButtonBox*   mpActionArea;
-    VclBox*         mpContentArea;
+    VclPtr<VclButtonBox> mpActionArea;
+    VclPtr<VclBox>       mpContentArea;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -74,13 +75,14 @@ protected:
 
 protected:
     friend class VclBuilder;
-    void set_action_area(VclButtonBox *pBox);
-    void set_content_area(VclBox *pBox);
+    void set_action_area(VclButtonBox* pBox);
+    void set_content_area(VclBox* pBox);
 
 public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
     explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
@@ -88,8 +90,8 @@ public:
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    VclButtonBox* get_action_area() { return mpActionArea;}
-    VclBox* get_content_area() { return mpContentArea;}
+    VclButtonBox* get_action_area() { return mpActionArea; }
+    VclBox* get_content_area() { return mpContentArea; }
 
     virtual bool    Close() SAL_OVERRIDE;
 

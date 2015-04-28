@@ -20,14 +20,16 @@ class VclMultiLineEdit;
 class SwMessageAndEditDialog : public ModalDialog
 {
 protected:
-    OKButton*         m_pOKPB;
-    FixedImage*       m_pImageIM;
-    VclMultiLineEdit* m_pPrimaryMessage;
-    VclMultiLineEdit* m_pSecondaryMessage;
-    Edit*             m_pEdit;
+    VclPtr<OKButton>         m_pOKPB;
+    VclPtr<FixedImage>       m_pImageIM;
+    VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
+    VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
+    VclPtr<Edit>             m_pEdit;
 public:
     SwMessageAndEditDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
+    virtual ~SwMessageAndEditDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX

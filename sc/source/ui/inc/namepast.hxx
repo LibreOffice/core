@@ -37,11 +37,11 @@ class ScNamePasteDlg : public ModalDialog
     DECL_LINK( ButtonHdl, Button * );
 
 private:
-    PushButton* m_pBtnPasteAll;
-    PushButton* m_pBtnPaste;
-    PushButton* m_pBtnClose;
+    VclPtr<PushButton> m_pBtnPasteAll;
+    VclPtr<PushButton> m_pBtnPaste;
+    VclPtr<PushButton> m_pBtnClose;
 
-    ScRangeManagerTable* mpTable;
+    VclPtr<ScRangeManagerTable> mpTable;
 
     std::vector<OUString> maSelectedNames;
     boost::ptr_map<OUString, ScRangeName> maRangeMap;
@@ -49,6 +49,7 @@ public:
     ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true );
 
     virtual ~ScNamePasteDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     std::vector<OUString> GetSelectedNames() const;
 };

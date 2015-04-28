@@ -25,27 +25,27 @@
 struct SvxAccessibilityOptionsTabPage_Impl;
 class SvxAccessibilityOptionsTabPage : public SfxTabPage
 {
-    CheckBox*       m_pAccessibilityTool;
-    CheckBox*       m_pTextSelectionInReadonly;
-    CheckBox*       m_pAnimatedGraphics;
-    CheckBox*       m_pAnimatedTexts;
-    CheckBox*       m_pTipHelpCB;
-    NumericField*   m_pTipHelpNF;
-    CheckBox*       m_pAutoDetectHC;
-    CheckBox*       m_pAutomaticFontColor;
-    CheckBox*       m_pPagePreviews;
+    VclPtr<CheckBox>       m_pAccessibilityTool;
+    VclPtr<CheckBox>       m_pTextSelectionInReadonly;
+    VclPtr<CheckBox>       m_pAnimatedGraphics;
+    VclPtr<CheckBox>       m_pAnimatedTexts;
+    VclPtr<CheckBox>       m_pTipHelpCB;
+    VclPtr<NumericField>   m_pTipHelpNF;
+    VclPtr<CheckBox>       m_pAutoDetectHC;
+    VclPtr<CheckBox>       m_pAutomaticFontColor;
+    VclPtr<CheckBox>       m_pPagePreviews;
 
     DECL_LINK(TipHelpHdl, CheckBox*);
     void EnableTipHelp(bool bCheck);
 
     SvxAccessibilityOptionsTabPage_Impl* m_pImpl;
 
-    SvxAccessibilityOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 public:
-
+    SvxAccessibilityOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxAccessibilityOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };

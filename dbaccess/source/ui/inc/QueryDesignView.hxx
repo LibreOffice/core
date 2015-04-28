@@ -64,18 +64,19 @@ namespace dbaui
             NONE
         };
 
-        Splitter                            m_aSplitter;
+        VclPtr<Splitter>                    m_aSplitter;
 
         ::com::sun::star::lang::Locale      m_aLocale;
-        OUString                     m_sDecimalSep;
+        OUString                            m_sDecimalSep;
 
-        OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
+        VclPtr<OSelectionBrowseBox>         m_pSelectionBox;    // presents the lower window
         ChildFocusState                     m_eChildFocus;
-        bool                            m_bInSplitHandler;
+        bool                                m_bInSplitHandler;
 
     public:
         OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OQueryDesignView();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual bool isCutAllowed() SAL_OVERRIDE;
         virtual bool isPasteAllowed() SAL_OVERRIDE;

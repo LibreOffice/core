@@ -32,6 +32,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <comphelper/namedvaluecollection.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 namespace dbaui
@@ -49,7 +50,7 @@ namespace dbaui
                     m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
                     m_xDocumentUI;
-        vcl::Window*     m_pDialogParent;
+        VclPtr<vcl::Window>    m_pDialogParent;
         OUString    m_sCurrentlyEditing;
         OUString    m_sDataSourceName;
 

@@ -47,7 +47,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
 
     // Create instances for fixedtext and progress ...
     m_xText         = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xProgressBar = new ProgressBar(rxContext);
+    m_xProgressBar = VclPtr<ProgressBar>::Create(rxContext);
     // ... cast controls to css::uno::Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
     css::uno::Reference< XControl > xTextControl      ( m_xText       , UNO_QUERY );

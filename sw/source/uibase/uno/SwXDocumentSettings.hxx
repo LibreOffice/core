@@ -47,7 +47,7 @@ protected:
     /** the printer should be set only once; since there are several
      * printer-related properties, remember the last printer and set it in
      * _postSetValues */
-    SfxPrinter*             mpPrinter;
+    VclPtr<SfxPrinter>      mpPrinter;
 
     virtual void _preSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) SAL_OVERRIDE;

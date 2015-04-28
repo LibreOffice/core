@@ -45,28 +45,28 @@ public:
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 
 private:
-    CheckBox*            m_pCBNumber;
-    PushButton*          m_pPB_NumberFormatForValue;
-    CheckBox*            m_pCBPercent;
-    PushButton*          m_pPB_NumberFormatForPercent;
-    FixedText*           m_pFT_NumberFormatForPercent;
-    CheckBox*            m_pCBCategory;
-    CheckBox*            m_pCBSymbol;
+    VclPtr<CheckBox>            m_pCBNumber;
+    VclPtr<PushButton>          m_pPB_NumberFormatForValue;
+    VclPtr<CheckBox>            m_pCBPercent;
+    VclPtr<PushButton>          m_pPB_NumberFormatForPercent;
+    VclPtr<FixedText>           m_pFT_NumberFormatForPercent;
+    VclPtr<CheckBox>            m_pCBCategory;
+    VclPtr<CheckBox>            m_pCBSymbol;
 
-    VclHBox*             m_pSeparatorResources;
-    ListBox*             m_pLB_Separator;
+    VclPtr<VclHBox>             m_pSeparatorResources;
+    VclPtr<ListBox>             m_pLB_Separator;
     OUString             m_aEntryMap[NUMBER_SEPARATORS];
 
-    VclHBox*             m_pBxLabelPlacement;
-    ListBox*             m_pLB_LabelPlacement;
+    VclPtr<VclHBox>             m_pBxLabelPlacement;
+    VclPtr<ListBox>             m_pLB_LabelPlacement;
 
-    VclHBox*             m_pBxOrientation;
-    svx::DialControl*    m_pDC_Dial;
-    FixedText*           m_pFT_Dial;
-    NumericField*        m_pNF_Degrees;
+    VclPtr<VclHBox>             m_pBxOrientation;
+    VclPtr<svx::DialControl>    m_pDC_Dial;
+    VclPtr<FixedText>           m_pFT_Dial;
+    VclPtr<NumericField>        m_pNF_Degrees;
 
-    VclHBox*             m_pBxTextDirection;
-    TextDirectionListBox*    m_pLB_TextDirection;
+    VclPtr<VclHBox>             m_pBxTextDirection;
+    VclPtr<TextDirectionListBox>    m_pLB_TextDirection;
 
     ::std::map< sal_Int32, sal_uInt16 > m_aPlacementToListBoxMap;
     ::std::map< sal_uInt16, sal_Int32 > m_aListBoxToPlacementMap;
@@ -82,7 +82,7 @@ private:
     bool                m_bSourceFormatForValue;
     bool                m_bSourceFormatForPercent;
 
-    vcl::Window*             m_pWindow;
+    VclPtr<vcl::Window>             m_pWindow;
     SfxItemPool*        m_pPool;
 
     DECL_LINK(NumberFormatDialogHdl, PushButton * );

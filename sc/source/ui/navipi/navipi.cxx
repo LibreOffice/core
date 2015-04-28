@@ -174,7 +174,7 @@ void ColumnEdit::EvalText()
 
 void ColumnEdit::ExecuteCol()
 {
-    SCROW nRow = rDlg.aEdRow.GetRow();
+    SCROW nRow = rDlg.aEdRow->GetRow();
 
     EvalText(); // setzt nCol
 
@@ -285,7 +285,7 @@ void RowEdit::LoseFocus()
 
 void RowEdit::ExecuteRow()
 {
-    SCCOL nCol = rDlg.aEdCol.GetCol();
+    SCCOL nCol = rDlg.aEdCol->GetCol();
     SCROW nRow = (SCROW)GetValue();
 
     if ( (nCol > 0) && (nRow > 0) )
@@ -309,7 +309,7 @@ void ScDocListBox::Select()
     ScNavigatorDlg::ReleaseFocus();
 
     OUString aDocName = GetSelectEntry();
-    rDlg.aLbEntries.SelectDoc( aDocName );
+    rDlg.aLbEntries->SelectDoc( aDocName );
 }
 
 //  class CommandToolBox
@@ -368,7 +368,7 @@ void CommandToolBox::Select( sal_uInt16 nSelId )
                 rDlg.EndOfDataArea();
                 break;
             case IID_CHANGEROOT:
-                rDlg.aLbEntries.ToggleRoot();
+                rDlg.aLbEntries->ToggleRoot();
                 UpdateButtons();
                 break;
         }
@@ -424,7 +424,7 @@ void CommandToolBox::UpdateButtons()
     else
     {
         EnableItem( IID_CHANGEROOT, true );
-        bool bRootSet = rDlg.aLbEntries.GetRootType() != SC_CONTENT_ROOT;
+        bool bRootSet = rDlg.aLbEntries->GetRootType() != SC_CONTENT_ROOT;
         CheckItem( IID_CHANGEROOT, bRootSet );
     }
 
@@ -483,7 +483,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
                                     SfxChildWinInfo* /* pInfo */ ) :
         SfxChildWindowContext( nId )
 {
-    pNavigator = new ScNavigatorDlg( pBind, this, pParent, true );
+    pNavigator = VclPtr<ScNavigatorDlg>::Create( pBind, this, pParent, true );
     SetWindow( pNavigator );
 
     //  handle configurations elsewhere,
@@ -531,7 +531,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
     }
     if (nCmdId)
     {
-        pNavigator->aTbxCmd.CheckItem( nCmdId );
+        pNavigator->aTbxCmd->CheckItem( nCmdId );
         pNavigator->DoResize();
     }
 
@@ -555,14 +555,14 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
         rBindings   ( *pB ),                                // is used in CommandToolBox ctor
         aCmdImageList( ScResId( IL_CMD ) ),
-        aFtCol      ( this, ScResId( FT_COL ) ),
-        aEdCol      ( this, ScResId( ED_COL ) ),
-        aFtRow      ( this, ScResId( FT_ROW ) ),
-        aEdRow      ( this, ScResId( ED_ROW ) ),
-        aTbxCmd     ( this, ScResId( TBX_CMD ) ),
-        aLbEntries  ( this, ScResId( LB_ENTRIES ) ),
-        aWndScenarios( this,ScResId( STR_QHLP_SCEN_LISTBOX), ScResId(STR_QHLP_SCEN_COMMENT)),
-        aLbDocuments( this, ScResId( LB_DOCUMENTS ) ),
+        aFtCol      ( VclPtr<FixedInfo>::Create( this, ScResId( FT_COL ) ) ),
+        aEdCol      ( VclPtr<ColumnEdit>::Create( this, ScResId( ED_COL ) ) ),
+        aFtRow      ( VclPtr<FixedInfo>::Create( this, ScResId( FT_ROW ) ) ),
+        aEdRow      ( VclPtr<RowEdit>::Create( this, ScResId( ED_ROW ) ) ),
+        aTbxCmd     ( VclPtr<CommandToolBox>::Create( this, ScResId( TBX_CMD ) ) ),
+        aLbEntries  ( VclPtr<ScContentTree>::Create( this, ScResId( LB_ENTRIES ) ) ),
+        aWndScenarios( VclPtr<ScScenarioWindow>::Create( this,ScResId( STR_QHLP_SCEN_LISTBOX), ScResId(STR_QHLP_SCEN_COMMENT)) ),
+        aLbDocuments( VclPtr<ScDocListBox>::Create( this, ScResId( LB_DOCUMENTS ) ) ),
         aStrDragMode ( ScResId( STR_DRAGMODE ) ),
         aStrDisplay  ( ScResId( STR_DISPLAY ) ),
         aStrActiveWin( ScResId( STR_ACTIVEWIN ) ),
@@ -583,7 +583,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     nDropMode = rCfg.GetDragMode();
     //  eListMode is set from outside, Root further below
 
-    aLbDocuments.SetDropDownLineCount(9);
+    aLbDocuments->SetDropDownLineCount(9);
     OUString aOpen(" (");
     aStrActive = aOpen;
     aStrActive += OUString( ScResId( STR_ACTIVE ) );
@@ -599,19 +599,19 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
 
     const long nListboxYPos =
         ::std::max(
-            (aTbxCmd.GetPosPixel().Y() + aTbxCmd.GetSizePixel().Height()),
-            (aEdRow.GetPosPixel().Y() + aEdRow.GetSizePixel().Height()) )
+            (aTbxCmd->GetPosPixel().Y() + aTbxCmd->GetSizePixel().Height()),
+            (aEdRow->GetPosPixel().Y() + aEdRow->GetSizePixel().Height()) )
         + 4;
-    aLbEntries.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y);
+    aLbEntries->setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y);
 
-    nBorderOffset = aLbEntries.GetPosPixel().X();
+    nBorderOffset = aLbEntries->GetPosPixel().X();
 
-    aInitSize.Width()  =  aTbxCmd.GetPosPixel().X()
-                        + aTbxCmd.GetSizePixel().Width()
+    aInitSize.Width()  =  aTbxCmd->GetPosPixel().X()
+                        + aTbxCmd->GetSizePixel().Width()
                         + nBorderOffset;
-    aInitSize.Height() = aLbEntries.GetPosPixel().Y();
+    aInitSize.Height() = aLbEntries->GetPosPixel().Y();
 
-    nInitListHeight = aLbEntries.GetSizePixel().Height();
+    nInitListHeight = aLbEntries->GetSizePixel().Height();
     nListModeHeight =  aInitSize.Height()
                      + nInitListHeight;
 
@@ -629,41 +629,41 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     StartListening( *(SfxGetpApp()) );
     StartListening( rBindings );
 
-    aLbDocuments.Hide();        // does not exist at NAV_LMODE_NONE
+    aLbDocuments->Hide();        // does not exist at NAV_LMODE_NONE
 
-    aLbEntries.InitWindowBits(true);
+    aLbEntries->InitWindowBits(true);
 
-    aLbEntries.SetSpaceBetweenEntries(0);
-    aLbEntries.SetSelectionMode( SINGLE_SELECTION );
-    aLbEntries.SetDragDropMode(     DragDropMode::CTRL_MOVE |
-                                    DragDropMode::CTRL_COPY |
-                                    DragDropMode::ENABLE_TOP );
+    aLbEntries->SetSpaceBetweenEntries(0);
+    aLbEntries->SetSelectionMode( SINGLE_SELECTION );
+    aLbEntries->SetDragDropMode( DragDropMode::CTRL_MOVE |
+                                 DragDropMode::CTRL_COPY |
+                                 DragDropMode::ENABLE_TOP );
 
     //  was a category chosen as root?
     sal_uInt16 nLastRoot = rCfg.GetRootType();
     if ( nLastRoot )
-        aLbEntries.SetRootType( nLastRoot );
+        aLbEntries->SetRootType( nLastRoot );
 
-    aLbEntries.Refresh();
+    aLbEntries->Refresh();
     GetDocNames();
 
-    aTbxCmd.UpdateButtons();
+    aTbxCmd->UpdateButtons();
 
     UpdateColumn();
     UpdateRow();
     UpdateTable();
-    aLbEntries.Hide();
-    aWndScenarios.Hide();
-    aWndScenarios.SetPosPixel( aLbEntries.GetPosPixel() );
+    aLbEntries->Hide();
+    aWndScenarios->Hide();
+    aWndScenarios->SetPosPixel( aLbEntries->GetPosPixel() );
 
     aContentIdle.SetIdleHdl( LINK( this, ScNavigatorDlg, TimeHdl ) );
     aContentIdle.SetPriority( SchedulerPriority::LOWEST );
 
     FreeResource();
 
-    aLbEntries.SetAccessibleRelationLabeledBy(&aLbEntries);
-    aTbxCmd.SetAccessibleRelationLabeledBy(&aTbxCmd);
-    aLbDocuments.SetAccessibleName(aStrActiveWin);
+    aLbEntries->SetAccessibleRelationLabeledBy(aLbEntries.get());
+    aTbxCmd->SetAccessibleRelationLabeledBy(aTbxCmd.get());
+    aLbDocuments->SetAccessibleName(aStrActiveWin);
 
     if (pContextWin == NULL)
     {
@@ -671,13 +671,18 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         // displayed in the sidebar and has the whole deck to fill.
         // Therefore hide the button that hides all controls below the
         // top two rows of buttons.
-        aTbxCmd.Select(IID_ZOOMOUT);
-        aTbxCmd.RemoveItem(aTbxCmd.GetItemPos(IID_ZOOMOUT));
+        aTbxCmd->Select(IID_ZOOMOUT);
+        aTbxCmd->RemoveItem(aTbxCmd->GetItemPos(IID_ZOOMOUT));
     }
-    aLbEntries.SetNavigatorDlgFlag(true);
+    aLbEntries->SetNavigatorDlgFlag(true);
 }
 
 ScNavigatorDlg::~ScNavigatorDlg()
+{
+    disposeOnce();
+}
+
+void ScNavigatorDlg::dispose()
 {
     aContentIdle.Stop();
 
@@ -690,6 +695,16 @@ ScNavigatorDlg::~ScNavigatorDlg()
 
     EndListening( *(SfxGetpApp()) );
     EndListening( rBindings );
+
+    aFtCol.disposeAndClear();
+    aEdCol.disposeAndClear();
+    aFtRow.disposeAndClear();
+    aEdRow.disposeAndClear();
+    aTbxCmd.disposeAndClear();
+    aLbEntries.disposeAndClear();
+    aWndScenarios.disposeAndClear();
+    aLbDocuments.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
@@ -721,13 +736,13 @@ void ScNavigatorDlg::Paint( const Rectangle& rRect )
         Wallpaper aBack( aBgColor );
 
         SetBackground( aBack );
-        aFtCol.SetBackground( aBack );
-        aFtRow.SetBackground( aBack );
+        aFtCol->SetBackground( aBack );
+        aFtRow->SetBackground( aBack );
     }
     else
     {
-        aFtCol.SetBackground(Wallpaper());
-        aFtRow.SetBackground(Wallpaper());
+        aFtCol->SetBackground(Wallpaper());
+        aFtRow->SetBackground(Wallpaper());
     }
 
     Window::Paint( rRect );
@@ -774,28 +789,28 @@ void ScNavigatorDlg::DoResize()
     //  even if the content is not visible, adapt the size,
     //  so the width fit
 
-    Point aEntryPos = aLbEntries.GetPosPixel();
-    Point aListPos = aLbDocuments.GetPosPixel();
+    Point aEntryPos = aLbEntries->GetPosPixel();
+    Point aListPos = aLbDocuments->GetPosPixel();
     aNewSize.Width() -= 2*nBorderOffset;
-    Size aDocSize = aLbDocuments.GetSizePixel();
+    Size aDocSize = aLbDocuments->GetSizePixel();
     aDocSize.Width() = aNewSize.Width();
 
     if(!bSmall)
     {
 
-        long nListHeight = aLbDocuments.GetSizePixel().Height();
+        long nListHeight = aLbDocuments->GetSizePixel().Height();
         aNewSize.Height() -= ( aEntryPos.Y() + nListHeight + 2*nBorderOffset );
         if(aNewSize.Height()<0) aNewSize.Height()=0;
 
         aListPos.Y() = aEntryPos.Y() + aNewSize.Height() + nBorderOffset;
 
-        if(aListPos.Y() > aLbEntries.GetPosPixel().Y())
-                            aLbDocuments.SetPosPixel( aListPos );
+        if(aListPos.Y() > aLbEntries->GetPosPixel().Y())
+                            aLbDocuments->SetPosPixel( aListPos );
 
     }
-    aLbEntries.SetSizePixel( aNewSize );
-    aWndScenarios.SetSizePixel( aNewSize );
-    aLbDocuments.SetSizePixel( aDocSize );
+    aLbEntries->SetSizePixel( aNewSize );
+    aWndScenarios->SetSizePixel( aNewSize );
+    aLbDocuments->SetSizePixel( aDocSize );
 
     bool bListMode = (eListMode != NAV_LMODE_NONE);
     if (pContextWin != NULL)
@@ -815,7 +830,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         if ( nHintId == SC_HINT_DOCNAME_CHANGED )
         {
-            aLbEntries.ActiveDocChanged();
+            aLbEntries->ActiveDocChanged();
         }
         else if ( NAV_LMODE_NONE == eListMode )
         {
@@ -826,25 +841,25 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
             switch ( nHintId )
             {
                 case SC_HINT_TABLES_CHANGED:
-                    aLbEntries.Refresh( SC_CONTENT_TABLE );
+                    aLbEntries->Refresh( SC_CONTENT_TABLE );
                     break;
 
                 case SC_HINT_DBAREAS_CHANGED:
-                    aLbEntries.Refresh( SC_CONTENT_DBAREA );
+                    aLbEntries->Refresh( SC_CONTENT_DBAREA );
                     break;
 
                 case SC_HINT_AREAS_CHANGED:
-                    aLbEntries.Refresh( SC_CONTENT_RANGENAME );
+                    aLbEntries->Refresh( SC_CONTENT_RANGENAME );
                     break;
 
                 case SC_HINT_DRAW_CHANGED:
-                    aLbEntries.Refresh( SC_CONTENT_GRAPHIC );
-                    aLbEntries.Refresh( SC_CONTENT_OLEOBJECT );
-                    aLbEntries.Refresh( SC_CONTENT_DRAWING );
+                    aLbEntries->Refresh( SC_CONTENT_GRAPHIC );
+                    aLbEntries->Refresh( SC_CONTENT_OLEOBJECT );
+                    aLbEntries->Refresh( SC_CONTENT_DRAWING );
                     break;
 
                 case SC_HINT_AREALINKS_CHANGED:
-                    aLbEntries.Refresh( SC_CONTENT_AREALINK );
+                    aLbEntries->Refresh( SC_CONTENT_AREALINK );
                     break;
 
                 //  SFX_HINT_DOCCHANGED not only at document change
@@ -858,9 +873,9 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     aContentIdle.Start();      // Do not search notes immediately
                     break;
                 case FID_KILLEDITVIEW:
-                    aLbEntries.ObjectFresh( SC_CONTENT_OLEOBJECT );
-                    aLbEntries.ObjectFresh( SC_CONTENT_DRAWING );
-                    aLbEntries.ObjectFresh( SC_CONTENT_GRAPHIC );
+                    aLbEntries->ObjectFresh( SC_CONTENT_OLEOBJECT );
+                    aLbEntries->ObjectFresh( SC_CONTENT_DRAWING );
+                    aLbEntries->ObjectFresh( SC_CONTENT_GRAPHIC );
                     break;
                 default:
                     break;
@@ -872,7 +887,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
         sal_uLong nEventId = static_cast<const SfxEventHint&>(rHint).GetEventId();
         if ( nEventId == SFX_EVENT_ACTIVATEDOC )
         {
-            aLbEntries.ActiveDocChanged();
+            aLbEntries->ActiveDocChanged();
             UpdateAll();
         }
     }
@@ -883,14 +898,14 @@ IMPL_LINK( ScNavigatorDlg, TimeHdl, Idle*, pIdle )
     if ( pIdle != &aContentIdle )
         return 0;
 
-    aLbEntries.Refresh( SC_CONTENT_NOTE );
+    aLbEntries->Refresh( SC_CONTENT_NOTE );
     return 0;
 }
 
 void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
 {
     nDropMode = nNew;
-    aTbxCmd.UpdateButtons();
+    aTbxCmd->UpdateButtons();
 
     ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
     rCfg.SetDragMode(nDropMode);
@@ -1008,7 +1023,7 @@ void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
     else if ( GetViewData() )
         nCurCol = pViewData->GetCurX() + 1;
 
-    aEdCol.SetCol( nCurCol );
+    aEdCol->SetCol( nCurCol );
     CheckDataArea();
 }
 
@@ -1019,7 +1034,7 @@ void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
     else if ( GetViewData() )
         nCurRow = pViewData->GetCurY() + 1;
 
-    aEdRow.SetRow( nCurRow );
+    aEdRow->SetRow( nCurRow );
     CheckDataArea();
 }
 
@@ -1040,7 +1055,7 @@ void ScNavigatorDlg::UpdateAll()
         case NAV_LMODE_DOCS:
         case NAV_LMODE_DBAREAS:
         case NAV_LMODE_AREAS:
-            aLbEntries.Refresh();
+            aLbEntries->Refresh();
             break;
 
         case NAV_LMODE_NONE:
@@ -1072,7 +1087,7 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, bool bSetSize )
             case NAV_LMODE_AREAS:
             case NAV_LMODE_DBAREAS:
             case NAV_LMODE_DOCS:
-                aLbEntries.Refresh();
+                aLbEntries->Refresh();
                 ShowList( true, bSetSize );
                 break;
 
@@ -1081,7 +1096,7 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, bool bSetSize )
                 break;
         }
 
-        aTbxCmd.UpdateButtons();
+        aTbxCmd->UpdateButtons();
 
         if ( eMode != NAV_LMODE_NONE )
         {
@@ -1107,8 +1122,8 @@ void ScNavigatorDlg::ShowList( bool bShow, bool bSetSize )
         if ( pFloat )
             pFloat->SetMinOutputSizePixel( aMinSize );
         aSize.Height() = nListModeHeight;
-        aLbEntries.Show();
-        aLbDocuments.Show();
+        aLbEntries->Show();
+        aLbDocuments->Show();
     }
     else
     {
@@ -1118,10 +1133,10 @@ void ScNavigatorDlg::ShowList( bool bShow, bool bSetSize )
             nListModeHeight = aSize.Height();
         }
         aSize.Height() = aInitSize.Height();
-        aLbEntries.Hide();
-        aLbDocuments.Hide();
+        aLbEntries->Hide();
+        aLbDocuments->Hide();
     }
-    aWndScenarios.Hide();
+    aWndScenarios->Hide();
 
     if ( pFloat )
     {
@@ -1156,8 +1171,8 @@ void ScNavigatorDlg::ShowScenarios( bool bShow, bool bSetSize )
         rBindings.Invalidate( SID_SELECT_SCENARIO );
         rBindings.Update( SID_SELECT_SCENARIO );
 
-        aWndScenarios.Show();
-        aLbDocuments.Show();
+        aWndScenarios->Show();
+        aLbDocuments->Show();
     }
     else
     {
@@ -1167,10 +1182,10 @@ void ScNavigatorDlg::ShowScenarios( bool bShow, bool bSetSize )
             nListModeHeight = aSize.Height();
         }
         aSize.Height() = aInitSize.Height();
-        aWndScenarios.Hide();
-        aLbDocuments.Hide();
+        aWndScenarios->Hide();
+        aLbDocuments->Hide();
     }
-    aLbEntries.Hide();
+    aLbEntries->Hide();
 
     if ( pFloat )
     {
@@ -1190,8 +1205,8 @@ void ScNavigatorDlg::ShowScenarios( bool bShow, bool bSetSize )
 
 void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
 {
-    aLbDocuments.Clear();
-    aLbDocuments.SetUpdateMode( false );
+    aLbDocuments->Clear();
+    aLbDocuments->SetUpdateMode( false );
 
     ScDocShell* pCurrentSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
 
@@ -1207,7 +1222,7 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
                 aEntry += aStrActive;
             else
                 aEntry += aStrNotActive;
-            aLbDocuments.InsertEntry( aEntry );
+            aLbDocuments->InsertEntry( aEntry );
 
             if ( pManualSel ? ( aName == *pManualSel )
                             : ( pSh == pCurrentSh ) )
@@ -1217,22 +1232,22 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
         pSh = SfxObjectShell::GetNext( *pSh );
     }
 
-    aLbDocuments.InsertEntry( aStrActiveWin );
+    aLbDocuments->InsertEntry( aStrActiveWin );
 
-    OUString aHidden =  aLbEntries.GetHiddenTitle();
+    OUString aHidden =  aLbEntries->GetHiddenTitle();
     if (!aHidden.isEmpty())
     {
         OUString aEntry = aHidden;
         aEntry += aStrHidden;
-        aLbDocuments.InsertEntry( aEntry );
+        aLbDocuments->InsertEntry( aEntry );
 
         if ( pManualSel && aHidden == *pManualSel )
             aSelEntry = aEntry;
     }
 
-    aLbDocuments.SetUpdateMode( true );
+    aLbDocuments->SetUpdateMode( true );
 
-    aLbDocuments.SelectEntry( aSelEntry );
+    aLbDocuments->SelectEntry( aSelEntry );
 }
 
 void ScNavigatorDlg::MarkDataArea()
@@ -1268,7 +1283,7 @@ void ScNavigatorDlg::UnmarkDataArea()
 
 void ScNavigatorDlg::CheckDataArea()
 {
-    if ( aTbxCmd.IsItemChecked( IID_DATA ) && pMarkArea )
+    if ( aTbxCmd->IsItemChecked( IID_DATA ) && pMarkArea )
     {
         if (   nCurTab   != pMarkArea->nTab
             || nCurCol <  pMarkArea->nColStart+1
@@ -1276,8 +1291,8 @@ void ScNavigatorDlg::CheckDataArea()
             || nCurRow <  pMarkArea->nRowStart+1
             || nCurRow >  pMarkArea->nRowEnd+1 )
         {
-            aTbxCmd.SetItemState( IID_DATA, TriState(TRISTATE_TRUE) );
-            aTbxCmd.Select( IID_DATA );
+            aTbxCmd->SetItemState( IID_DATA, TriState(TRISTATE_TRUE) );
+            aTbxCmd->Select( IID_DATA );
         }
     }
 }
@@ -1295,7 +1310,7 @@ void ScNavigatorDlg::StartOfDataArea()
         SCCOL nCol = aMarkRange.aStart.Col();
         SCROW nRow = aMarkRange.aStart.Row();
 
-        if ( (nCol+1 != aEdCol.GetCol()) || (nRow+1 != aEdRow.GetRow()) )
+        if ( (nCol+1 != aEdCol->GetCol()) || (nRow+1 != aEdRow->GetRow()) )
             SetCurrentCell( nCol, nRow );
     }
 }
@@ -1313,7 +1328,7 @@ void ScNavigatorDlg::EndOfDataArea()
         SCCOL nCol = aMarkRange.aEnd.Col();
         SCROW nRow = aMarkRange.aEnd.Row();
 
-        if ( (nCol+1 != aEdCol.GetCol()) || (nRow+1 != aEdRow.GetRow()) )
+        if ( (nCol+1 != aEdCol->GetCol()) || (nRow+1 != aEdRow->GetRow()) )
             SetCurrentCell( nCol, nRow );
     }
 }

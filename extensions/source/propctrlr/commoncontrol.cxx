@@ -47,18 +47,13 @@ namespace pcr
         ,m_pModifyListener( _pModifyListener )
         ,m_bModified( false )
     {
-        DBG_ASSERT( m_pControlWindow != NULL, "ControlHelper::ControlHelper: invalid window!" );
+        DBG_ASSERT( m_pControlWindow != nullptr, "ControlHelper::ControlHelper: invalid window!" );
     }
 
 
     ControlHelper::~ControlHelper()
     {
     }
-
-
-
-
-
 
     void SAL_CALL ControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext ) throw (RuntimeException)
     {
@@ -93,7 +88,7 @@ namespace pcr
 
     void SAL_CALL ControlHelper::dispose()
     {
-        DELETEZ( m_pControlWindow );
+        m_pControlWindow.disposeAndClear();
     }
 
 
@@ -103,9 +98,9 @@ namespace pcr
         if ( !m_pControlWindow )
             return;
 
-        ComboBox aComboBox(m_pControlWindow, WB_DROPDOWN);
-        aComboBox.SetPosSizePixel(Point(0,0), Size(100,100));
-        m_pControlWindow->SetSizePixel(aComboBox.GetSizePixel());
+        ScopedVclPtrInstance< ComboBox > aComboBox(m_pControlWindow, WB_DROPDOWN);
+        aComboBox->SetPosSizePixel(Point(0,0), Size(100,100));
+        m_pControlWindow->SetSizePixel(aComboBox->GetSizePixel());
 
         // TODO/UNOize: why do the controls this themselves? Shouldn't this be the task
         // of the browser listbox/line?

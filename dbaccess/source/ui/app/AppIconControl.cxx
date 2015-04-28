@@ -62,6 +62,11 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
 
 OApplicationIconControl::~OApplicationIconControl()
 {
+    disposeOnce();
+}
+
+void OApplicationIconControl::dispose()
+{
     sal_uLong nCount = GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; ++i )
     {
@@ -72,7 +77,7 @@ OApplicationIconControl::~OApplicationIconControl()
             pEntry->SetUserData(NULL);
         }
     }
-
+    SvtIconChoiceCtrl::dispose();
 }
 
 sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )

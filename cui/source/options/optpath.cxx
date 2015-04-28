@@ -214,7 +214,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pPathCtrl->set_width_request(aControlSize.Width());
     m_pPathCtrl->set_height_request(aControlSize.Height());
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new svx::OptHeaderTabListBox( *m_pPathCtrl, nBits );
+    pPathBox = VclPtr<svx::OptHeaderTabListBox>::Create( *m_pPathCtrl, nBits );
 
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
     rBar.SetSelectHdl( LINK( this, SvxPathTabPage, HeaderSelect_Impl ) );
@@ -247,21 +247,30 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxPathTabPage::~SvxPathTabPage()
 {
-    for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
-        delete static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
-    delete pPathBox;
-    delete pImpl;
+    disposeOnce();
 }
 
-
-
-SfxTabPage* SvxPathTabPage::Create( vcl::Window* pParent,
-                                    const SfxItemSet* rAttrSet )
+void SvxPathTabPage::dispose()
 {
-    return ( new SvxPathTabPage( pParent, *rAttrSet ) );
+    if ( pPathBox )
+    {
+        for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
+            delete static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
+        pPathBox.disposeAndClear();
+    }
+    delete pImpl;
+    pImpl = NULL;
+    m_pPathCtrl.clear();
+    m_pStandardBtn.clear();
+    m_pPathBtn.clear();
+    SfxTabPage::dispose();
 }
 
-
+VclPtr<SfxTabPage> SvxPathTabPage::Create( vcl::Window* pParent,
+                                           const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SvxPathTabPage>::Create( pParent, *rAttrSet );
+}
 
 bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 {

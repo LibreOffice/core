@@ -123,19 +123,19 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxPreviewWin(vcl::Win
 
 class SfxNewFileDialog_Impl
 {
-    ListBox*  m_pRegionLb;
-    ListBox*  m_pTemplateLb;
+    VclPtr<ListBox>  m_pRegionLb;
+    VclPtr<ListBox>  m_pTemplateLb;
 
-    SfxPreviewWin_Impl* m_pPreviewWin;
+    VclPtr<SfxPreviewWin_Impl> m_pPreviewWin;
 
-    CheckBox* m_pTextStyleCB;
-    CheckBox* m_pFrameStyleCB;
-    CheckBox* m_pPageStyleCB;
-    CheckBox* m_pNumStyleCB;
-    CheckBox* m_pMergeStyleCB;
-    PushButton* m_pLoadFilePB;
+    VclPtr<CheckBox> m_pTextStyleCB;
+    VclPtr<CheckBox> m_pFrameStyleCB;
+    VclPtr<CheckBox> m_pPageStyleCB;
+    VclPtr<CheckBox> m_pNumStyleCB;
+    VclPtr<CheckBox> m_pMergeStyleCB;
+    VclPtr<PushButton> m_pLoadFilePB;
 
-    VclExpander* m_pMoreBt;
+    VclPtr<VclExpander> m_pMoreBt;
     Idle aPrevIdle;
     OUString aNone;
     OUString sLoadTemplate;
@@ -143,7 +143,7 @@ class SfxNewFileDialog_Impl
     sal_uInt16 nFlags;
     SfxDocumentTemplates aTemplates;
     SfxObjectShellLock xDocShell;
-    SfxNewFileDialog* pAntiImpl;
+    VclPtr<SfxNewFileDialog> pAntiImpl;
 
     DECL_LINK( Update, void * );
 
@@ -454,7 +454,13 @@ SfxNewFileDialog::SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags)
 
 SfxNewFileDialog::~SfxNewFileDialog()
 {
+    disposeOnce();
+}
+
+void SfxNewFileDialog::dispose()
+{
     delete pImpl;
+    SfxModalDialog::dispose();
 }
 
 bool SfxNewFileDialog::IsTemplate() const

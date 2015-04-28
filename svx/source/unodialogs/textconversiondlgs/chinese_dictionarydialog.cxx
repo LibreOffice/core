@@ -60,6 +60,19 @@ DictionaryList::DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits)
 {
 }
 
+DictionaryList::~DictionaryList()
+{
+    disposeOnce();
+}
+
+void DictionaryList::dispose()
+{
+    m_pED_Term.clear();
+    m_pED_Mapping.clear();
+    m_pLB_Property.clear();
+    SvSimpleTable::dispose();
+}
+
 OUString DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) const
 {
     if(!m_pLB_Property || !m_pLB_Property->GetEntryCount())
@@ -449,10 +462,10 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
 
     get(mpToSimplifiedContainer, "tradtosimpleview");
     mpToSimplifiedContainer->set_height_request(mpToSimplifiedContainer->GetTextHeight() * 8);
-    m_pCT_DictionaryToSimplified = new DictionaryList(*mpToSimplifiedContainer, 0);
+    m_pCT_DictionaryToSimplified = VclPtr<DictionaryList>::Create(*mpToSimplifiedContainer, 0);
     get(mpToTraditionalContainer, "simpletotradview");
     mpToTraditionalContainer->set_height_request(mpToTraditionalContainer->GetTextHeight() * 8);
-    m_pCT_DictionaryToTraditional = new DictionaryList(*mpToTraditionalContainer, 0);
+    m_pCT_DictionaryToTraditional = VclPtr<DictionaryList>::Create(*mpToTraditionalContainer, 0);
 
     SvtLinguConfig  aLngCfg;
     bool bValue;
@@ -542,9 +555,29 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
 
 ChineseDictionaryDialog::~ChineseDictionaryDialog()
 {
+    disposeOnce();
+}
+
+void ChineseDictionaryDialog::dispose()
+{
     m_xContext=0;
-    delete m_pCT_DictionaryToSimplified;
-    delete m_pCT_DictionaryToTraditional;
+    m_pCT_DictionaryToSimplified.disposeAndClear();
+    m_pCT_DictionaryToTraditional.disposeAndClear();
+    m_pRB_To_Simplified.clear();
+    m_pRB_To_Traditional.clear();
+    m_pCB_Reverse.clear();
+    m_pFT_Term.clear();
+    m_pED_Term.clear();
+    m_pFT_Mapping.clear();
+    m_pED_Mapping.clear();
+    m_pFT_Property.clear();
+    m_pLB_Property.clear();
+    mpToSimplifiedContainer.clear();
+    mpToTraditionalContainer.clear();
+    m_pPB_Add.clear();
+    m_pPB_Modify.clear();
+    m_pPB_Delete.clear();
+    ModalDialog::dispose();
 }
 
 void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ )

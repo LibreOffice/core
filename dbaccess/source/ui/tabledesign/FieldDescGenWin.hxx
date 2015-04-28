@@ -32,13 +32,14 @@ namespace dbaui
                             ,public IClipboardTest
     {
 
-        OTableFieldControl  *m_pFieldControl;
+        VclPtr<OTableFieldControl>  m_pFieldControl;
     protected:
         virtual void Resize() SAL_OVERRIDE;
 
     public:
         OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar );
         virtual ~OFieldDescGenWin();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void GetFocus() SAL_OVERRIDE;
         virtual void LoseFocus() SAL_OVERRIDE;

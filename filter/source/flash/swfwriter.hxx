@@ -25,6 +25,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <vcl/font.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/vclptr.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
@@ -395,7 +396,7 @@ private:
     sal_uInt16 mnWhiteBackgroundShapeId;
     sal_uInt16 mnPageButtonId;
 
-    VirtualDevice*  mpVDev;
+    VclPtrInstance<VirtualDevice> mpVDev;
 
     const tools::PolyPolygon* mpClipPolyPolygon;
 

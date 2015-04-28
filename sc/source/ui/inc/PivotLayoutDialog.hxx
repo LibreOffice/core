@@ -44,8 +44,8 @@ class ScPivotLayoutDialog : public ScAnyRefDlg
 public:
     ScDPObject maPivotTableObject;
 
-    ScPivotLayoutTreeListBase* mpPreviouslyFocusedListBox;
-    ScPivotLayoutTreeListBase* mpCurrentlyFocusedListBox;
+    VclPtr<ScPivotLayoutTreeListBase> mpPreviouslyFocusedListBox;
+    VclPtr<ScPivotLayoutTreeListBase> mpCurrentlyFocusedListBox;
 
 private:
     ScViewData* mpViewData;
@@ -53,38 +53,38 @@ private:
 
     bool mbNewPivotTable;
 
-    ScPivotLayoutTreeListLabel* mpListBoxField;
-    ScPivotLayoutTreeList*      mpListBoxPage;
-    ScPivotLayoutTreeList*      mpListBoxColumn;
-    ScPivotLayoutTreeList*      mpListBoxRow;
-    ScPivotLayoutTreeListData*  mpListBoxData;
+    VclPtr<ScPivotLayoutTreeListLabel> mpListBoxField;
+    VclPtr<ScPivotLayoutTreeList>      mpListBoxPage;
+    VclPtr<ScPivotLayoutTreeList>      mpListBoxColumn;
+    VclPtr<ScPivotLayoutTreeList>      mpListBoxRow;
+    VclPtr<ScPivotLayoutTreeListData>  mpListBoxData;
 
-    CheckBox* mpCheckIgnoreEmptyRows;
-    CheckBox* mpCheckTotalColumns;
-    CheckBox* mpCheckAddFilter;
-    CheckBox* mpCheckIdentifyCategories;
-    CheckBox* mpCheckTotalRows;
-    CheckBox* mpCheckDrillToDetail;
+    VclPtr<CheckBox> mpCheckIgnoreEmptyRows;
+    VclPtr<CheckBox> mpCheckTotalColumns;
+    VclPtr<CheckBox> mpCheckAddFilter;
+    VclPtr<CheckBox> mpCheckIdentifyCategories;
+    VclPtr<CheckBox> mpCheckTotalRows;
+    VclPtr<CheckBox> mpCheckDrillToDetail;
 
-    RadioButton* mpSourceRadioNamedRange;
-    RadioButton* mpSourceRadioSelection;
+    VclPtr<RadioButton> mpSourceRadioNamedRange;
+    VclPtr<RadioButton> mpSourceRadioSelection;
 
-    ListBox*            mpSourceListBox;
-    formula::RefEdit*   mpSourceEdit;
-    formula::RefButton* mpSourceButton;
+    VclPtr<ListBox>            mpSourceListBox;
+    VclPtr<formula::RefEdit>   mpSourceEdit;
+    VclPtr<formula::RefButton> mpSourceButton;
 
-    RadioButton*        mpDestinationRadioNewSheet;
-    RadioButton*        mpDestinationRadioNamedRange;
-    RadioButton*        mpDestinationRadioSelection;
+    VclPtr<RadioButton>        mpDestinationRadioNewSheet;
+    VclPtr<RadioButton>        mpDestinationRadioNamedRange;
+    VclPtr<RadioButton>        mpDestinationRadioSelection;
 
-    ListBox*            mpDestinationListBox;
-    formula::RefEdit*   mpDestinationEdit;
-    formula::RefButton* mpDestinationButton;
+    VclPtr<ListBox>            mpDestinationListBox;
+    VclPtr<formula::RefEdit>   mpDestinationEdit;
+    VclPtr<formula::RefButton> mpDestinationButton;
 
-    PushButton*      mpBtnOK;
-    CancelButton*     mpBtnCancel;
+    VclPtr<PushButton>       mpBtnOK;
+    VclPtr<CancelButton>     mpBtnCancel;
 
-    formula::RefEdit*   mpActiveEdit;
+    VclPtr<formula::RefEdit>   mpActiveEdit;
     ScAddress::Details  maAddressDetails;
     bool                mbDialogLostFocus;
 
@@ -111,6 +111,7 @@ public:
     ScPivotLayoutDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent,
                              ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bCreateNewPivotTable);
     virtual ~ScPivotLayoutDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void SetReference(const ScRange& rReferenceRange, ScDocument* pDocument) SAL_OVERRIDE;
     virtual void SetActive() SAL_OVERRIDE;

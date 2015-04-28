@@ -30,27 +30,27 @@ namespace basctl
 
 ObjectCatalog::ObjectCatalog (vcl::Window* pParent) :
     DockingWindow(pParent),
-    aTitle(this),
-    aTree(this, IDEResId(RID_TLB_MACROS))
+    aTitle(VclPtr<FixedText>::Create(this)),
+    aTree(VclPtr<TreeListBox>::Create(this, IDEResId(RID_TLB_MACROS)))
 {
     SetHelpId("basctl:FloatingWindow:RID_BASICIDE_OBJCAT");
     SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
 
     // title
-    aTitle.SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
-    aTitle.SetStyle(WB_CENTER);
+    aTitle->SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
+    aTitle->SetStyle(WB_CENTER);
 
     // tree list
-    aTree.Hide();
-    aTree.SetStyle(
+    aTree->Hide();
+    aTree->SetStyle(
         WB_BORDER | WB_TABSTOP | WB_HSCROLL |
         WB_HASLINES | WB_HASLINESATROOT |
         WB_HASBUTTONS | WB_HASBUTTONSATROOT
     );
-    aTree.SetAccessibleName(IDEResId(RID_STR_TLB_MACROS).toString());
-    aTree.SetHelpId(HID_BASICIDE_OBJECTCAT);
-    aTree.ScanAllEntries();
-    aTree.GrabFocus();
+    aTree->SetAccessibleName(IDEResId(RID_STR_TLB_MACROS).toString());
+    aTree->SetHelpId(HID_BASICIDE_OBJECTCAT);
+    aTree->ScanAllEntries();
+    aTree->GrabFocus();
 
     {
         // centered after AppWin:
@@ -67,9 +67,18 @@ ObjectCatalog::ObjectCatalog (vcl::Window* pParent) :
     GetParent()->GetSystemWindow()->GetTaskPaneList()->AddWindow(this);
 }
 
-ObjectCatalog::~ObjectCatalog ()
+ObjectCatalog::~ObjectCatalog()
 {
-    GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow(this);
+    disposeOnce();
+}
+
+void ObjectCatalog::dispose()
+{
+    if (!IsDisposed())
+        GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow(this);
+    aTitle.disposeAndClear();
+    aTree.disposeAndClear();
+    DockingWindow::dispose();
 }
 
 // Resize() -- called by Window
@@ -97,14 +106,14 @@ void ObjectCatalog::ArrangeWindows ()
     // title
     // (showing only if no title bar)
     if (bFloating)
-        aTitle.Hide();
+        aTitle->Hide();
     else
     {
         Size aTitleSize = LogicToPixel(Size(3, 10), MAP_APPFONT);
         aTitleSize.Width() = aSize.Width() - 2*aTitleSize.Width();
-        aTitle.SetPosPixel(LogicToPixel(Point(3, 3), MAP_APPFONT));
-        aTitle.SetSizePixel(aTitleSize);
-        aTitle.Show();
+        aTitle->SetPosPixel(LogicToPixel(Point(3, 3), MAP_APPFONT));
+        aTitle->SetSizePixel(aTitleSize);
+        aTitle->Show();
     }
 
     // tree
@@ -116,11 +125,11 @@ void ObjectCatalog::ArrangeWindows ()
     );
     if (aTreeSize.Height() > 0)
     {
-        aTree.SetPosSizePixel(aTreePos, aTreeSize);
-        aTree.Show();
+        aTree->SetPosSizePixel(aTreePos, aTreeSize);
+        aTree->Show();
     }
     else
-        aTree.Hide();
+        aTree->Hide();
 }
 
 void ObjectCatalog::SetCurrentEntry (BaseWindow* pCurWin)
@@ -128,7 +137,7 @@ void ObjectCatalog::SetCurrentEntry (BaseWindow* pCurWin)
     EntryDescriptor aDescriptor;
     if (pCurWin)
         aDescriptor = pCurWin->CreateEntryDescriptor();
-    aTree.SetCurrentEntry(aDescriptor);
+    aTree->SetCurrentEntry(aDescriptor);
 }
 
 

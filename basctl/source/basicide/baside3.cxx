@@ -100,9 +100,6 @@ DialogWindow::DialogWindow (
         SetReadOnly(true);
 }
 
-DialogWindow::~DialogWindow()
-{ }
-
 void DialogWindow::LoseFocus()
 {
     if ( IsModified() )
@@ -1027,8 +1024,8 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
                 OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TEXT));
                 aQueryBoxText = aQueryBoxText.replaceAll("$(ARG1)", aXmlDlgName);
 
-                NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
-                sal_uInt16 nRet = aQueryBox.Execute();
+                ScopedVclPtrInstance< NameClashQueryBox > aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
+                sal_uInt16 nRet = aQueryBox->Execute();
                 if( RET_YES == nRet )
                 {
                     // RET_YES == Rename, see NameClashQueryBox::NameClashQueryBox
@@ -1089,8 +1086,8 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             {
                 OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TITLE));
                 OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TEXT));
-                LanguageMismatchQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
-                sal_uInt16 nRet = aQueryBox.Execute();
+                ScopedVclPtrInstance< LanguageMismatchQueryBox > aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
+                sal_uInt16 nRet = aQueryBox->Execute();
                 if( RET_YES == nRet )
                 {
                     // RET_YES == Add, see LanguageMismatchQueryBox::LanguageMismatchQueryBox
@@ -1411,11 +1408,16 @@ DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rOb
 
 DialogWindowLayout::~DialogWindowLayout()
 {
-    if (pPropertyBrowser != 0)
-    {
+    disposeOnce();
+}
+
+void DialogWindowLayout::dispose()
+{
+    if (pPropertyBrowser)
         Remove(pPropertyBrowser);
-        delete pPropertyBrowser;
-    }
+    pPropertyBrowser.disposeAndClear();
+    pChild.clear();
+    Layout::dispose();
 }
 
 // shows the property browser (and creates if necessary)
@@ -1425,7 +1427,7 @@ void DialogWindowLayout::ShowPropertyBrowser ()
     if (!pPropertyBrowser)
     {
         // creating
-        pPropertyBrowser = new PropBrw(*this);
+        pPropertyBrowser = VclPtr<PropBrw>::Create(*this);
         pPropertyBrowser->Show();
         // after OnFirstSize():
         if (HasSize())

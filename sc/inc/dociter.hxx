@@ -26,6 +26,7 @@
 #include "scdllapi.h"
 #include "cellvalue.hxx"
 #include "mtvelements.hxx"
+#include <vcl/vclptr.hxx>
 
 #include <memory>
 
@@ -588,7 +589,7 @@ private:
 
 private:
     ScDocument& mrDoc;
-    OutputDevice* mpOutDev;
+    VclPtr<OutputDevice> mpOutDev;
     double mfPPTX;
     double mfPPTY;
     const ::std::vector<TabRanges>* mpTabRangesArray;

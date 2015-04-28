@@ -25,6 +25,7 @@
 #include <comphelper/sequence.hxx>
 #include "framectr.hxx"
 #include "datman.hxx"
+#include "bibview.hxx"
 #include "bibresid.hxx"
 #include "bib.hrc"
 #include <toolkit/helper/vclunohelper.hxx>

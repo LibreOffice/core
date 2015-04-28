@@ -32,7 +32,7 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParen
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 
-    mpList = new SvSimpleTable(*pContainer);
+    mpList = VclPtr<SvSimpleTable>::Create(*pContainer);
     long nTabs[] = {3, 0, 40, 60};
     mpList->SetTabs(&nTabs[0]);
     mpList->InsertHeaderEntry(SC_RESSTR(STR_SHEET) + "\t" + SC_RESSTR(STR_CELL) + "\t" + SC_RESSTR(STR_CONTENT));
@@ -41,7 +41,13 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParen
 
 SearchResultsDlg::~SearchResultsDlg()
 {
-    delete mpList;
+    disposeOnce();
+}
+
+void SearchResultsDlg::dispose()
+{
+    mpList.disposeAndClear();
+    ModelessDialog::dispose();
 }
 
 void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatchedRanges )
@@ -118,7 +124,7 @@ SearchResultsDlgWrapper::SearchResultsDlgWrapper(
     vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* /*pInfo*/ ) :
     SfxChildWindow(_pParent, nId)
 {
-    pWindow = new SearchResultsDlg(pBindings, _pParent, nId);
+    pWindow = VclPtr<SearchResultsDlg>::Create(pBindings, _pParent, nId);
 }
 
 SearchResultsDlgWrapper::~SearchResultsDlgWrapper() {}

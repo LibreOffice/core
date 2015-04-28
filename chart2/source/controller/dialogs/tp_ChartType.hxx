@@ -55,6 +55,7 @@ public:
                 ::com::sun::star::uno::XComponentContext >& xContext
                 , bool bDoLiveUpdate, bool bShowDescription = true );
     virtual ~ChartTypeTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        initializePage() SAL_OVERRIDE;
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;
@@ -77,9 +78,9 @@ protected:
     DECL_LINK( SelectSubTypeHdl, void* );
 
 protected:
-    FixedText*  m_pFT_ChooseType;
-    ListBox*    m_pMainTypeList;
-    ValueSet*   m_pSubTypeList;
+    VclPtr<FixedText>  m_pFT_ChooseType;
+    VclPtr<ListBox>    m_pMainTypeList;
+    VclPtr<ValueSet>   m_pSubTypeList;
 
     Dim3DLookResourceGroup*     m_pDim3DLookResourceGroup;
     StackingResourceGroup*      m_pStackingResourceGroup;

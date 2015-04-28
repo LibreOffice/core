@@ -53,6 +53,17 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(vcl::Window* pParent, bool bE
 
 ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
 {
+    disposeOnce();
+}
+
+void ScDataPilotSourceTypeDlg::dispose()
+{
+    m_pBtnSelection.clear();
+    m_pBtnNamedRange.clear();
+    m_pBtnDatabase.clear();
+    m_pBtnExternal.clear();
+    m_pLbNamedRange.clear();
+    ModalDialog::dispose();
 }
 
 bool ScDataPilotSourceTypeDlg::IsDatabase() const
@@ -115,7 +126,19 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( vcl::Window* pParent,
 
 ScDataPilotServiceDlg::~ScDataPilotServiceDlg()
 {
+    disposeOnce();
 }
+
+void ScDataPilotServiceDlg::dispose()
+{
+    m_pLbService.clear();
+    m_pEdSource.clear();
+    m_pEdName.clear();
+    m_pEdUser.clear();
+    m_pEdPasswd.clear();
+    ModalDialog::dispose();
+}
+
 
 OUString ScDataPilotServiceDlg::GetServiceName() const
 {

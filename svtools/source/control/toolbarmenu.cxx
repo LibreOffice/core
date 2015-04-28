@@ -129,7 +129,7 @@ ToolbarMenuEntry::~ToolbarMenuEntry()
             xComponent->dispose();
         mxAccContext.clear();
     }
-    delete mpControl;
+    mpControl.disposeAndClear();
 }
 
 
@@ -292,7 +292,7 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl
     for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
     {
         ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
-        if( pEntry && (pEntry->mpControl == pControl) )
+        if( pEntry && (pEntry->mpControl.get() == pControl) )
         {
             return pEntry->getAccessibleChild( childIndex );
         }
@@ -393,7 +393,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
             {
                 sal_Int32 nChildIndex = 0;
                 // todo: if other controls than ValueSet are allowed, addapt this code
-                ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl );
+                ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
                 if( pValueSet )
                     nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectItemId() ) );
 
@@ -459,6 +459,11 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 
 ToolbarMenu::~ToolbarMenu()
 {
+    disposeOnce();
+}
+
+void ToolbarMenu::dispose()
+{
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
@@ -478,6 +483,7 @@ ToolbarMenu::~ToolbarMenu()
     }
 
     delete mpImpl;
+    DockingWindow::dispose();
 }
 
 
@@ -815,9 +821,9 @@ void ToolbarMenu::appendSeparator()
 
 
 /** creates an empty ValueSet that is initialized and can be inserted with appendEntry. */
-ValueSet* ToolbarMenu::createEmptyValueSetControl()
+VclPtr<ValueSet> ToolbarMenu::createEmptyValueSetControl()
 {
-    ValueSet* pSet = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    VclPtr<ValueSet> pSet = VclPtr<ValueSet>::Create( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     pSet->EnableFullItemMode( false );
     pSet->SetColor( GetControlBackground() );
     pSet->SetHighlightHdl( LINK( this, ToolbarMenu, HighlightHdl ) );
@@ -868,7 +874,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
             {
                 if( !bHighlight )
                 {
-                    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl );
+                    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
                     if( pValueSet )
                     {
                         pValueSet->SetNoSelection();
@@ -1571,7 +1577,7 @@ public:
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    ToolbarMenu* mpMenu;
+    VclPtr<ToolbarMenu> mpMenu;
 };
 
 
@@ -1588,7 +1594,7 @@ ToolbarMenuStatusListener::ToolbarMenuStatusListener(
 
 void SAL_CALL ToolbarMenuStatusListener::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    mpMenu = 0;
+    mpMenu.clear();
     svt::FrameStatusListener::dispose();
 }
 

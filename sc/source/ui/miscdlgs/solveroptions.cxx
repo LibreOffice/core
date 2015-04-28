@@ -159,7 +159,16 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
 
 ScSolverOptionsDialog::~ScSolverOptionsDialog()
 {
+    disposeOnce();
+}
+
+void ScSolverOptionsDialog::dispose()
+{
     delete mpCheckButtonData;
+    m_pLbEngine.clear();
+    m_pLbSettings.clear();
+    m_pBtnEdit.clear();
+    ModalDialog::dispose();
 }
 
 const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties()
@@ -308,23 +317,23 @@ void ScSolverOptionsDialog::EditOption()
             {
                 if ( pStringItem->IsDouble() )
                 {
-                    ScSolverValueDialog aValDialog( this );
-                    aValDialog.SetOptionName( pStringItem->GetText() );
-                    aValDialog.SetValue( pStringItem->GetDoubleValue() );
-                    if ( aValDialog.Execute() == RET_OK )
+                    ScopedVclPtrInstance< ScSolverValueDialog > aValDialog( this );
+                    aValDialog->SetOptionName( pStringItem->GetText() );
+                    aValDialog->SetValue( pStringItem->GetDoubleValue() );
+                    if ( aValDialog->Execute() == RET_OK )
                     {
-                        pStringItem->SetDoubleValue( aValDialog.GetValue() );
+                        pStringItem->SetDoubleValue( aValDialog->GetValue() );
                         m_pLbSettings->InvalidateEntry( pEntry );
                     }
                 }
                 else
                 {
-                    ScSolverIntegerDialog aIntDialog( this );
-                    aIntDialog.SetOptionName( pStringItem->GetText() );
-                    aIntDialog.SetValue( pStringItem->GetIntValue() );
-                    if ( aIntDialog.Execute() == RET_OK )
+                    ScopedVclPtrInstance< ScSolverIntegerDialog > aIntDialog( this );
+                    aIntDialog->SetOptionName( pStringItem->GetText() );
+                    aIntDialog->SetValue( pStringItem->GetIntValue() );
+                    if ( aIntDialog->Execute() == RET_OK )
                     {
-                        pStringItem->SetIntValue( aIntDialog.GetValue() );
+                        pStringItem->SetIntValue( aIntDialog->GetValue() );
                         m_pLbSettings->InvalidateEntry( pEntry );
                     }
                 }
@@ -388,6 +397,18 @@ ScSolverIntegerDialog::ScSolverIntegerDialog(vcl::Window * pParent)
     get(m_pNfValue, "value");
 }
 
+ScSolverIntegerDialog::~ScSolverIntegerDialog()
+{
+    disposeOnce();
+}
+
+void ScSolverIntegerDialog::dispose()
+{
+    m_pFrame.clear();
+    m_pNfValue.clear();
+    ModalDialog::dispose();
+}
+
 void ScSolverIntegerDialog::SetOptionName( const OUString& rName )
 {
     m_pFrame->set_label(rName);
@@ -414,6 +435,18 @@ ScSolverValueDialog::ScSolverValueDialog( vcl::Window * pParent )
 {
     get(m_pFrame, "frame");
     get(m_pEdValue, "value");
+}
+
+ScSolverValueDialog::~ScSolverValueDialog()
+{
+    disposeOnce();
+}
+
+void ScSolverValueDialog::dispose()
+{
+    m_pFrame.clear();
+    m_pEdValue.clear();
+    ModalDialog::dispose();
 }
 
 void ScSolverValueDialog::SetOptionName( const OUString& rName )

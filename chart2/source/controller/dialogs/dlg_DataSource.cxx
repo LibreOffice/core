@@ -133,7 +133,7 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
     , m_xContext(xContext)
     , m_apDocTemplateProvider(new DocumentChartTypeTemplateProvider(xChartDocument))
     , m_apDialogModel(new DialogModel(xChartDocument, xContext))
-    , m_pTabControl(new DataSourceTabControl(get_content_area()))
+    , m_pTabControl(VclPtr<DataSourceTabControl>::Create(get_content_area()))
     , m_pRangeChooserTabePage(0)
     , m_pDataSourceTabPage(0)
     , m_bRangeChooserTabIsValid(true)
@@ -143,9 +143,9 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
 
     m_pTabControl->Show();
 
-    m_pRangeChooserTabePage = new RangeChooserTabPage( m_pTabControl, *(m_apDialogModel.get()),
+    m_pRangeChooserTabePage = VclPtr<RangeChooserTabPage>::Create( m_pTabControl, *(m_apDialogModel.get()),
                                      m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
-    m_pDataSourceTabPage = new DataSourceTabPage( m_pTabControl, *(m_apDialogModel.get()),
+    m_pDataSourceTabPage = VclPtr<DataSourceTabPage>::Create( m_pTabControl, *(m_apDialogModel.get()),
                                     m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
 
     m_pTabControl->InsertPage( TP_RANGECHOOSER, SCH_RESSTR(STR_PAGE_DATA_RANGE) );
@@ -159,11 +159,18 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
 
 DataSourceDialog::~DataSourceDialog()
 {
-    delete m_pRangeChooserTabePage;
-    delete m_pDataSourceTabPage;
+    disposeOnce();
+}
 
-    m_nLastPageId = m_pTabControl->GetCurPageId();
-    delete m_pTabControl;
+void DataSourceDialog::dispose()
+{
+    m_pRangeChooserTabePage.disposeAndClear();
+    m_pDataSourceTabPage.disposeAndClear();
+    if (m_pTabControl)
+        m_nLastPageId = m_pTabControl->GetCurPageId();
+    m_pTabControl.disposeAndClear();
+    m_pBtnOK.clear();
+    TabDialog::dispose();
 }
 
 short DataSourceDialog::Execute()

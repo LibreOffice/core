@@ -60,8 +60,8 @@ namespace frm
         const ::boost::shared_ptr< const ICommandDescriptionProvider >
                                         m_pDescriptionProvider;
         ImageSize                       m_eImageSize;
-        ImplNavToolBar*                 m_pToolbar;
-        ::std::vector< vcl::Window* >        m_aChildWins;
+        VclPtr<ImplNavToolBar>          m_pToolbar;
+        ::std::vector< VclPtr<vcl::Window> > m_aChildWins;
 
     public:
         NavigationToolBar(
@@ -71,6 +71,7 @@ namespace frm
             const ::boost::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
         );
         virtual ~NavigationToolBar( );
+        virtual void dispose() SAL_OVERRIDE;
 
         /** sets the dispatcher which is to be used for the features
 
@@ -158,7 +159,6 @@ namespace frm
 
     public:
         RecordPositionInput( vcl::Window* _pParent );
-        virtual ~RecordPositionInput();
 
         /** sets the dispatcher which is to be used for the features
         */

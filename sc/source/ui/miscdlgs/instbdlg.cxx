@@ -64,9 +64,28 @@ ScInsertTableDlg::ScInsertTableDlg( vcl::Window* pParent, ScViewData& rData, SCT
 
 ScInsertTableDlg::~ScInsertTableDlg()
 {
+    disposeOnce();
+}
+
+void ScInsertTableDlg::dispose()
+{
     if (pDocShTables)
         pDocShTables->DoClose();
     delete pDocInserter;
+    m_pBtnBefore.clear();
+    m_pBtnBehind.clear();
+    m_pBtnNew.clear();
+    m_pBtnFromFile.clear();
+    m_pFtCount.clear();
+    m_pNfCount.clear();
+    m_pFtName.clear();
+    m_pEdName.clear();
+    m_pLbTables.clear();
+    m_pFtPath.clear();
+    m_pBtnBrowse.clear();
+    m_pBtnLink.clear();
+    m_pBtnOk.clear();
+    ModalDialog::dispose();
 }
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )

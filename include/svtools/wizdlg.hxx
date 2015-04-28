@@ -202,10 +202,10 @@ private:
     Size                maPageSize;
     ImplWizPageData*    mpFirstPage;
     ImplWizButtonData*  mpFirstBtn;
-    TabPage*            mpCurTabPage;
-    PushButton*         mpPrevBtn;
-    PushButton*         mpNextBtn;
-    vcl::Window*             mpViewWindow;
+    VclPtr<TabPage>         mpCurTabPage;
+    VclPtr<PushButton>      mpPrevBtn;
+    VclPtr<PushButton>      mpNextBtn;
+    VclPtr<vcl::Window>     mpViewWindow;
     sal_uInt16              mnCurLevel;
     WindowAlign         meViewAlign;
     Link                maActivateHdl;
@@ -242,6 +242,7 @@ public:
     WizardDialog( vcl::Window* pParent, WinBits nStyle = WB_STDTABDIALOG );
     WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual ~WizardDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
@@ -272,7 +273,7 @@ public:
     PushButton*         GetNextButton() const { return mpNextBtn; }
 
     void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
-    vcl::Window*             GetViewWindow() const { return mpViewWindow; }
+    vcl::Window*        GetViewWindow() const { return mpViewWindow; }
     void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
     WindowAlign         GetViewAlign() const { return meViewAlign; }
 

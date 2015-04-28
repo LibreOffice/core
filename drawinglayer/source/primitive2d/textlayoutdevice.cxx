@@ -59,7 +59,7 @@ namespace
     class ImpTimedRefDev : public Timer
     {
         scoped_timed_RefDev&                mrOwnerOfMe;
-        VirtualDevice*                      mpVirDev;
+        VclPtr<VirtualDevice>               mpVirDev;
         sal_uInt32                          mnUseCount;
 
     public:
@@ -84,7 +84,7 @@ namespace
     {
         OSL_ENSURE(0L == mnUseCount, "destruction of a still used ImpTimedRefDev (!)");
         const SolarMutexGuard aGuard;
-        delete mpVirDev;
+        mpVirDev.disposeAndClear();
     }
 
     void ImpTimedRefDev::Invoke()
@@ -97,7 +97,7 @@ namespace
     {
         if(!mpVirDev)
         {
-            mpVirDev = new VirtualDevice();
+            mpVirDev = VclPtr<VirtualDevice>::Create();
             mpVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
         }
 

@@ -1894,19 +1894,19 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
         // First combine very small bitmaps into a larger tile
 
 
-        VirtualDevice   aVDev;
+        ScopedVclPtrInstance< VirtualDevice > aVDev;
         const int       nNumTilesInCacheX( (nTileCacheSize1D + rSizePixel.Width()-1) / rSizePixel.Width() );
         const int       nNumTilesInCacheY( (nTileCacheSize1D + rSizePixel.Height()-1) / rSizePixel.Height() );
 
-        aVDev.SetOutputSizePixel( Size( nNumTilesInCacheX*rSizePixel.Width(),
+        aVDev->SetOutputSizePixel( Size( nNumTilesInCacheX*rSizePixel.Width(),
                                         nNumTilesInCacheY*rSizePixel.Height() ) );
-        aVDev.SetMapMode( aMapMode );
+        aVDev->SetMapMode( aMapMode );
 
         // draw bitmap content
-        if( ImplRenderTempTile( aVDev, SubdivisionExponent, nNumTilesInCacheX,
+        if( ImplRenderTempTile( *aVDev.get(), SubdivisionExponent, nNumTilesInCacheX,
                                 nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
         {
-            BitmapEx aTileBitmap( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) );
+            BitmapEx aTileBitmap( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) );
 
             // draw alpha content, if any
             if( IsTransparent() )
@@ -1918,16 +1918,16 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
                 else
                     aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
 
-                if( aAlphaGraphic.ImplRenderTempTile( aVDev, SubdivisionExponent, nNumTilesInCacheX,
+                if( aAlphaGraphic.ImplRenderTempTile( *aVDev.get(), SubdivisionExponent, nNumTilesInCacheX,
                                                       nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
                 {
                     // Combine bitmap and alpha/mask
                     if( GetGraphic().IsAlpha() )
                         aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                AlphaMask( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) ) );
+                                                AlphaMask( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) ) );
                     else
                         aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
+                                                aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
                 }
             }
 

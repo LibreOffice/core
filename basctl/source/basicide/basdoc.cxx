@@ -51,7 +51,9 @@ DocShell::DocShell()
 }
 
 DocShell::~DocShell()
-{ }
+{
+    pPrinter.disposeAndClear();
+}
 
 SfxPrinter* DocShell::GetPrinter( bool bCreate )
 {
@@ -66,7 +68,10 @@ SfxPrinter* DocShell::GetPrinter( bool bCreate )
 void DocShell::SetPrinter( SfxPrinter* pPr )
 {
     if (pPr != pPrinter.get())
+    {
+        pPrinter.disposeAndClear();
         pPrinter.reset(pPr);
+    }
 }
 
 void DocShell::FillClass( SvGlobalName*, SotClipboardFormatId*, OUString*, OUString*, OUString*, sal_Int32, bool bTemplate) const

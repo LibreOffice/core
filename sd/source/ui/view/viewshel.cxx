@@ -151,7 +151,7 @@ ViewShell::~ViewShell()
 
     delete mpZoomList;
 
-    mpLayerTabBar.reset();
+    mpLayerTabBar.disposeAndClear();
 
     if (mpImpl->mpSubShellFactory.get() != NULL)
         GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(
@@ -163,8 +163,14 @@ ViewShell::~ViewShell()
             "sd.ui",
             "destroying mpContentWindow at " << mpContentWindow.get()
                 << " with parent " << mpContentWindow->GetParent());
-        mpContentWindow.reset();
+        mpContentWindow.disposeAndClear();
     }
+
+    mpScrollBarBox.disposeAndClear();
+    mpVerticalRuler.disposeAndClear();
+    mpHorizontalRuler.disposeAndClear();
+    mpVerticalScrollBar.disposeAndClear();
+    mpHorizontalScrollBar.disposeAndClear();
 }
 
 /**
@@ -204,16 +210,16 @@ void ViewShell::construct()
     if ( ! GetDocSh()->IsPreview())
     {
         // Create scroll bars and the filler between the scroll bars.
-        mpHorizontalScrollBar.reset (new ScrollBar(GetParentWindow(), WinBits(WB_HSCROLL | WB_DRAG)));
+        mpHorizontalScrollBar.reset (VclPtr<ScrollBar>::Create(GetParentWindow(), WinBits(WB_HSCROLL | WB_DRAG)));
         mpHorizontalScrollBar->EnableRTL (false);
         mpHorizontalScrollBar->SetRange(Range(0, 32000));
         mpHorizontalScrollBar->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
 
-        mpVerticalScrollBar.reset (new ScrollBar(GetParentWindow(), WinBits(WB_VSCROLL | WB_DRAG)));
+        mpVerticalScrollBar.reset (VclPtr<ScrollBar>::Create(GetParentWindow(), WinBits(WB_VSCROLL | WB_DRAG)));
         mpVerticalScrollBar->SetRange(Range(0, 32000));
         mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
 
-        mpScrollBarBox.reset(new ScrollBarBox(GetParentWindow(), WB_SIZEABLE));
+        mpScrollBarBox.reset(VclPtr<ScrollBarBox>::Create(GetParentWindow(), WB_SIZEABLE));
     }
 
     OUString aName( "ViewShell" );
@@ -891,7 +897,7 @@ void ViewShell::Resize()
 {
     SetupRulers ();
 
-    if (mpParentWindow == NULL)
+    if (mpParentWindow == nullptr)
         return;
 
     // Make sure that the new size is not degenerate.

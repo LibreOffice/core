@@ -117,6 +117,19 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( vcl::Window* pParent,
     pLanguageLB->SelectEntryPos(0);
 }
 
+SvxNewDictionaryDialog::~SvxNewDictionaryDialog()
+{
+    disposeOnce();
+}
+
+void SvxNewDictionaryDialog::dispose()
+{
+    pNameEdit.clear();
+    pLanguageLB.clear();
+    pExceptBtn.clear();
+    pOKBtn.clear();
+    ModalDialog::dispose();
+}
 
 
 IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
@@ -212,8 +225,7 @@ IMPL_LINK_NOARG_INLINE_END(SvxNewDictionaryDialog, ModifyHdl_Impl)
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxDictEdit(vcl::Window *pParent, VclBuilder::stringmap&)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK;
-    SvxDictEdit *pEdit = new SvxDictEdit(pParent, nWinStyle);
-    return pEdit;
+    return new SvxDictEdit(pParent, nWinStyle);
 };
 
 SvxEditDictionaryDialog::SvxEditDictionaryDialog(
@@ -331,10 +343,23 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     }
 }
 
-
-
 SvxEditDictionaryDialog::~SvxEditDictionaryDialog()
 {
+    disposeOnce();
+}
+
+void SvxEditDictionaryDialog::dispose()
+{
+    pAllDictsLB.clear();
+    pLangFT.clear();
+    pLangLB.clear();
+    pWordED.clear();
+    pReplaceFT.clear();
+    pReplaceED.clear();
+    pWordsLB.clear();
+    pNewReplacePB.clear();
+    pDeletePB.clear();
+    ModalDialog::dispose();
 }
 
 
@@ -451,12 +476,12 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
 
     if ( nLang != nOldLang )
     {
-        MessageDialog aBox(this, CUI_RES( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-        OUString sTxt(aBox.get_primary_text());
+        ScopedVclPtrInstance< MessageDialog > aBox(this, CUI_RES( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        OUString sTxt(aBox->get_primary_text());
         sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectEntry() );
-        aBox.set_primary_text(sTxt);
+        aBox->set_primary_text(sTxt);
 
-        if ( aBox.Execute() == RET_YES )
+        if ( aBox->Execute() == RET_YES )
         {
             xDic->setLocale( LanguageTag::convertToLocale( nLang ) );
             bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;

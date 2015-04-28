@@ -34,7 +34,7 @@ class SdrUndoManager;
 class ScDrawView: public FmFormView
 {
     ScViewData*             pViewData;
-    OutputDevice*           pDev;                   //! needed ?
+    VclPtr<OutputDevice>    pDev;                   //! needed ?
     ScDocument*             pDoc;
     SCTAB                   nTab;
     Fraction                aScaleX;                // Factor for Drawing-MapMode

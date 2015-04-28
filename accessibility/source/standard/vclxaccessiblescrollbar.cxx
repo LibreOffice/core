@@ -139,7 +139,7 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw 
         throw IndexOutOfBoundsException();
 
     bool bReturn = false;
-    ScrollBar* pScrollBar = static_cast< ScrollBar* >( GetWindow() );
+    VclPtr< ScrollBar > pScrollBar = GetAs< ScrollBar >();
     if ( pScrollBar )
     {
         ScrollType eScrollType;

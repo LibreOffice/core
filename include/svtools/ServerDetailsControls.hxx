@@ -25,7 +25,7 @@ class DetailsContainer
 {
     private:
         Link m_aChangeHdl;
-        VclFrame*       m_pFrame;
+        VclPtr<VclFrame>       m_pFrame;
 
     public:
         DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame );
@@ -57,9 +57,9 @@ class HostDetailsContainer : public DetailsContainer
         OUString m_sScheme;
 
     protected:
-        Edit*           m_pEDHost;
-        NumericField*   m_pEDPort;
-        Edit*           m_pEDPath;
+        VclPtr<Edit>           m_pEDHost;
+        VclPtr<NumericField>   m_pEDPort;
+        VclPtr<Edit>           m_pEDPath;
 
     public:
         HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, const OUString& sScheme );
@@ -81,7 +81,7 @@ class HostDetailsContainer : public DetailsContainer
 class DavDetailsContainer : public HostDetailsContainer
 {
     private:
-        CheckBox*   m_pCBDavs;
+        VclPtr<CheckBox>   m_pCBDavs;
 
     public:
         DavDetailsContainer( VclBuilderContainer* pBuilder );
@@ -99,9 +99,9 @@ class DavDetailsContainer : public HostDetailsContainer
 class SmbDetailsContainer : public DetailsContainer
 {
     private:
-        Edit*           m_pEDHost;
-        Edit*           m_pEDShare;
-        Edit*           m_pEDPath;
+        VclPtr<Edit>           m_pEDHost;
+        VclPtr<Edit>           m_pEDShare;
+        VclPtr<Edit>           m_pEDPath;
 
     public:
         SmbDetailsContainer( VclBuilderContainer* pBuilder );
@@ -120,11 +120,11 @@ class CmisDetailsContainer : public DetailsContainer
         std::vector< OUString > m_aRepoIds;
         OUString m_sRepoId;
 
-        Edit*       m_pEDBinding;
-        ListBox*    m_pLBRepository;
-        Button*     m_pBTRepoRefresh;
-        ListBox*    m_pLBServerType;
-        Edit*       m_pEDPath;
+        VclPtr<Edit>       m_pEDBinding;
+        VclPtr<ListBox>    m_pLBRepository;
+        VclPtr<Button>     m_pBTRepoRefresh;
+        VclPtr<ListBox>    m_pLBServerType;
+        VclPtr<Edit>       m_pEDPath;
 
     public:
         CmisDetailsContainer( VclBuilderContainer* pBuilder );

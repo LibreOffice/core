@@ -39,4 +39,16 @@ ScStringInputDlg::ScStringInputDlg( vcl::Window*         pParent,
     m_pEdInput->SetHelpId( sEditHelpId );
 }
 
+ScStringInputDlg::~ScStringInputDlg()
+{
+    disposeOnce();
+}
+
+void ScStringInputDlg::dispose()
+{
+    m_pFtEditTitle.clear();
+    m_pEdInput.clear();
+    ModalDialog::dispose();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

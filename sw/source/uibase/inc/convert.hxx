@@ -32,24 +32,24 @@ struct SwInsertTableOptions;
 
 class SwConvertTableDlg: public SfxModalDialog
 {
-    RadioButton*    mpTabBtn;
-    RadioButton*    mpSemiBtn;
-    RadioButton*    mpParaBtn;
-    RadioButton*    mpOtherBtn;
-    Edit*           mpOtherEd;
-    CheckBox*       mpKeepColumn;
+    VclPtr<RadioButton>    mpTabBtn;
+    VclPtr<RadioButton>    mpSemiBtn;
+    VclPtr<RadioButton>    mpParaBtn;
+    VclPtr<RadioButton>    mpOtherBtn;
+    VclPtr<Edit>           mpOtherEd;
+    VclPtr<CheckBox>       mpKeepColumn;
 
-    VclContainer*   mpOptions;
+    VclPtr<VclContainer>   mpOptions;
 
-    CheckBox*       mpHeaderCB;
-    CheckBox*       mpRepeatHeaderCB;
+    VclPtr<CheckBox>       mpHeaderCB;
+    VclPtr<CheckBox>       mpRepeatHeaderCB;
 
-    VclContainer*   mpRepeatRows;
-    NumericField*   mpRepeatHeaderNF;
+    VclPtr<VclContainer>   mpRepeatRows;
+    VclPtr<NumericField>   mpRepeatHeaderNF;
 
-    CheckBox*       mpDontSplitCB;
-    CheckBox*       mpBorderCB;
-    PushButton*     mpAutoFmtBtn;
+    VclPtr<CheckBox>       mpDontSplitCB;
+    VclPtr<CheckBox>       mpBorderCB;
+    VclPtr<PushButton>     mpAutoFmtBtn;
 
     OUString        sConvertTextTable;
     SwTableAutoFmt* pTAutoFmt;
@@ -63,6 +63,7 @@ class SwConvertTableDlg: public SfxModalDialog
 public:
     SwConvertTableDlg( SwView& rView, bool bToTable );
     virtual ~SwConvertTableDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTblOpts,

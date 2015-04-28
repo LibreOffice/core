@@ -33,21 +33,29 @@ sal_uInt16 SvxInsRowColDlg::getInsertCount() const
 }
 
 SvxInsRowColDlg::SvxInsRowColDlg(vcl::Window* pParent, bool bCol, const OString& sHelpId )
-    : ModalDialog(pParent, "InsertRowColumnDialog", "cui/ui/insertrowcolumn.ui")
+    : m_pDialog(VclPtr<ModalDialog>::Create(pParent, "InsertRowColumnDialog", "cui/ui/insertrowcolumn.ui"))
     , aRow(CUI_RESSTR(RID_SVXSTR_ROW))
     , aCol(CUI_RESSTR(RID_SVXSTR_COL))
     , bColumn(bCol)
 {
-    get(m_pCountEdit, "insert_number");
-    get(m_pBeforeBtn, "insert_before");
-    get(m_pAfterBtn,  "insert_after");
-    SetText( bColumn ? aCol : aRow );
-    SetHelpId( sHelpId );
+    m_pDialog->get(m_pCountEdit, "insert_number");
+    m_pDialog->get(m_pBeforeBtn, "insert_before");
+    m_pDialog->get(m_pAfterBtn,  "insert_after");
+    m_pDialog->SetText( bColumn ? aCol : aRow );
+    m_pDialog->SetHelpId( sHelpId );
+}
+
+SvxInsRowColDlg::~SvxInsRowColDlg()
+{
+    m_pCountEdit.clear();
+    m_pBeforeBtn.clear();
+    m_pAfterBtn.clear();
+    m_pDialog.disposeAndClear();
 }
 
 short SvxInsRowColDlg::Execute()
 {
-    return ModalDialog::Execute();
+    return m_pDialog->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

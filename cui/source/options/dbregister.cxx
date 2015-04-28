@@ -78,13 +78,9 @@ DatabaseRegistrationDialog::DatabaseRegistrationDialog( vcl::Window* pParent, co
     : RegistrationItemSetHolder(rInAttrs)
     , SfxSingleTabDialog(pParent, getRegistrationItems())
 {
-    SfxTabPage* page = DbRegistrationOptionsPage::Create(get_content_area(), &getRegistrationItems());
+    VclPtr<SfxTabPage> page = DbRegistrationOptionsPage::Create(get_content_area(), &getRegistrationItems());
     SetTabPage(page);
     SetText(page->get<VclFrame>("frame1")->get_label());
-}
-
-DatabaseRegistrationDialog::~DatabaseRegistrationDialog()
-{
 }
 
 short DatabaseRegistrationDialog::Execute()
@@ -167,17 +163,27 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
 
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
+    disposeOnce();
+}
+
+void DbRegistrationOptionsPage::dispose()
+{
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
         delete static_cast< DatabaseRegistration* >( pPathBox->GetEntry(i)->GetUserData() );
-    delete pPathBox;
+    pPathBox.disposeAndClear();
+    m_pPathCtrl.clear();
+    m_pNew.clear();
+    m_pEdit.clear();
+    m_pDelete.clear();
+    SfxTabPage::dispose();
 }
 
 
 
-SfxTabPage* DbRegistrationOptionsPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> DbRegistrationOptionsPage::Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet )
 {
-    return ( new DbRegistrationOptionsPage( pParent, *rAttrSet ) );
+    return VclPtr<DbRegistrationOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -272,8 +278,8 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
     if ( pEntry )
     {
-        MessageDialog aQuery(this, CUI_RES(RID_SVXSTR_QUERY_DELETE_CONFIRM), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-        if ( aQuery.Execute() == RET_YES )
+        ScopedVclPtrInstance< MessageDialog > aQuery(this, CUI_RES(RID_SVXSTR_QUERY_DELETE_CONFIRM), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        if ( aQuery->Execute() == RET_YES )
             pPathBox->GetModel()->Remove(pEntry);
     }
     return 0;
@@ -408,15 +414,15 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
 
 void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry)
 {
-    ODocumentLinkDialog aDlg(this,_pEntry == NULL);
+    ScopedVclPtrInstance< ODocumentLinkDialog > aDlg(this,_pEntry == nullptr);
 
-    aDlg.setLink(_sOldName,_sOldLocation);
-    aDlg.setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );
+    aDlg->setLink(_sOldName,_sOldLocation);
+    aDlg->setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );
 
-    if ( aDlg.Execute() == RET_OK )
+    if ( aDlg->Execute() == RET_OK )
     {
         OUString sNewName,sNewLocation;
-        aDlg.getLink(sNewName,sNewLocation);
+        aDlg->getLink(sNewName,sNewLocation);
         if ( _pEntry == NULL || sNewName != _sOldName || sNewLocation != _sOldLocation )
         {
             if ( _pEntry )

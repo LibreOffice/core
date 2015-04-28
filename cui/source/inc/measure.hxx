@@ -33,23 +33,23 @@ class SvxMeasurePage : public SvxTabPage
 private:
     static const sal_uInt16 pRanges[];
 
-    MetricField*         m_pMtrFldLineDist;
-    MetricField*         m_pMtrFldHelplineOverhang;
-    MetricField*         m_pMtrFldHelplineDist;
-    MetricField*         m_pMtrFldHelpline1Len;
-    MetricField*         m_pMtrFldHelpline2Len;
-    TriStateBox*         m_pTsbBelowRefEdge;
-    MetricField*         m_pMtrFldDecimalPlaces;
+    VclPtr<MetricField>         m_pMtrFldLineDist;
+    VclPtr<MetricField>         m_pMtrFldHelplineOverhang;
+    VclPtr<MetricField>         m_pMtrFldHelplineDist;
+    VclPtr<MetricField>         m_pMtrFldHelpline1Len;
+    VclPtr<MetricField>         m_pMtrFldHelpline2Len;
+    VclPtr<TriStateBox>         m_pTsbBelowRefEdge;
+    VclPtr<MetricField>         m_pMtrFldDecimalPlaces;
 
-    SvxRectCtl*          m_pCtlPosition;
-    TriStateBox*         m_pTsbAutoPosV;
-    TriStateBox*         m_pTsbAutoPosH;
-    TriStateBox*         m_pTsbShowUnit;
-    ListBox*             m_pLbUnit;
-    TriStateBox*         m_pTsbParallel;
-    FixedText*           m_pFtAutomatic;
+    VclPtr<SvxRectCtl>          m_pCtlPosition;
+    VclPtr<TriStateBox>         m_pTsbAutoPosV;
+    VclPtr<TriStateBox>         m_pTsbAutoPosH;
+    VclPtr<TriStateBox>         m_pTsbShowUnit;
+    VclPtr<ListBox>             m_pLbUnit;
+    VclPtr<TriStateBox>         m_pTsbParallel;
+    VclPtr<FixedText>           m_pFtAutomatic;
 
-    SvxXMeasurePreview*  m_pCtlPreview;
+    VclPtr<SvxXMeasurePreview>  m_pCtlPreview;
 
     const SfxItemSet&   rOutAttrs;
     SfxItemSet          aAttrSet;
@@ -67,8 +67,9 @@ public:
 
     SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxMeasurePage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

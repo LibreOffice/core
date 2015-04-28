@@ -72,8 +72,8 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     mpWhiteListDelete->SetClickHdl(LINK(this, SvxOpenCLTabPage, WhiteListDeleteHdl));
 
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    mpBlackList = new SvSimpleTable( *mpBlackListTable, nBits );
-    mpWhiteList = new SvSimpleTable( *mpWhiteListTable, nBits );
+    mpBlackList = VclPtr<SvSimpleTable>::Create( *mpBlackListTable, nBits );
+    mpWhiteList = VclPtr<SvSimpleTable>::Create( *mpWhiteListTable, nBits );
 
     HeaderBar &rBlBar = mpBlackList->GetTheHeaderBar();
     HeaderBar &rWiBar = mpWhiteList->GetTheHeaderBar();
@@ -104,17 +104,41 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxOpenCLTabPage::~SvxOpenCLTabPage()
 {
-    for ( sal_uInt16 i = 0; i < mpBlackList->GetEntryCount(); ++i )
+    disposeOnce();
+}
+
+void SvxOpenCLTabPage::dispose()
+{
+   for ( sal_uInt16 i = 0; i < mpBlackList->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(mpBlackList->GetEntry(i)->GetUserData());
     for ( sal_uInt16 i = 0; i < mpWhiteList->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(mpWhiteList->GetEntry(i)->GetUserData());
-    delete mpBlackList;
-    delete mpWhiteList;
+    mpBlackList.disposeAndClear();
+    mpWhiteList.disposeAndClear();
+
+    mpUseOpenCL.clear();
+    mpBlackListFrame.clear();
+    mpBlackListTable.clear();
+    mpBlackListEdit.clear();
+    mpBlackListAdd.clear();
+    mpBlackListDelete.clear();
+    mpOS.clear();
+    mpOSVersion.clear();
+    mpDevice.clear();
+    mpVendor.clear();
+    mpDrvVersion.clear();
+    mpWhiteListFrame.clear();
+    mpWhiteListTable.clear();
+    mpWhiteListEdit.clear();
+    mpWhiteListAdd.clear();
+    mpWhiteListDelete.clear();
+
+    SfxTabPage::dispose();
 }
 
-SfxTabPage* SvxOpenCLTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxOpenCLTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxOpenCLTabPage(pParent, *rAttrSet);
+    return VclPtr<SvxOpenCLTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
@@ -189,16 +213,27 @@ class ListEntryDialog : public ModalDialog
 public:
     OpenCLConfig::ImplMatcher maEntry;
 
-    ListBox* mpOS;
-    Edit* mpOSVersion;
-    Edit* mpPlatformVendor;
-    Edit* mpDevice;
-    Edit* mpDriverVersion;
+    VclPtr<ListBox> mpOS;
+    VclPtr<Edit> mpOSVersion;
+    VclPtr<Edit> mpPlatformVendor;
+    VclPtr<Edit> mpDevice;
+    VclPtr<Edit> mpDriverVersion;
 
     DECL_LINK(OSSelectHdl, ListBox*);
     DECL_LINK(EditModifiedHdl, Edit*);
 
     ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplMatcher& rEntry, const OString& rTag);
+    virtual ~ListEntryDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        mpOS.clear();
+        mpOSVersion.clear();
+        mpPlatformVendor.clear();
+        mpDevice.clear();
+        mpDriverVersion.clear();
+        ModalDialog::dispose();
+    }
+
 };
 
 ListEntryDialog::ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplMatcher& rEntry, const OString& rTag)
@@ -268,10 +303,10 @@ IMPL_LINK(ListEntryDialog, EditModifiedHdl, Edit*, pEdit)
 
 void openListDialog(SvxOpenCLTabPage* pTabPage, OpenCLConfig::ImplMatcher& rEntry, const OString& rTag)
 {
-    ListEntryDialog aDlg(pTabPage, rEntry, rTag);
+    ScopedVclPtrInstance< ListEntryDialog > aDlg(pTabPage, rEntry, rTag);
 
-    if (aDlg.Execute() == RET_OK)
-        rEntry = aDlg.maEntry;
+    if (aDlg->Execute() == RET_OK)
+        rEntry = aDlg->maEntry;
 }
 
 const OpenCLConfig::ImplMatcher& findCurrentEntry(OpenCLConfig::ImplMatcherSet& rSet, SvSimpleTable* pListBox)

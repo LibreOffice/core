@@ -170,10 +170,7 @@ OJoinDesignView* OJoinController::getJoinView()
 
 void OJoinController::disposing()
 {
-    {
-        boost::scoped_ptr< vcl::Window > pEnsureDelete( m_pAddTableDialog );
-        m_pAddTableDialog   = NULL;
-    }
+    m_pAddTableDialog   = NULL;
 
     OJoinController_BASE::disposing();
 
@@ -225,7 +222,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
         case ID_BROWSER_ADDTABLE:
             aReturn.bEnabled = ( getView() != NULL )
                             && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed();
-            aReturn.bChecked = aReturn.bEnabled && m_pAddTableDialog != NULL && m_pAddTableDialog->IsVisible() ;
+            aReturn.bChecked = aReturn.bEnabled && m_pAddTableDialog != nullptr && m_pAddTableDialog->IsVisible() ;
             if ( aReturn.bEnabled )
                 aReturn.sTitle = OAddTableDlg::getDialogTitleForContext( impl_getDialogContext() );
             break;
@@ -272,7 +269,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
             return;
         case ID_BROWSER_ADDTABLE:
             if ( !m_pAddTableDialog )
-                m_pAddTableDialog = new OAddTableDlg( getView(), impl_getDialogContext() );
+                m_pAddTableDialog = VclPtr<OAddTableDlg>::Create( getView(), impl_getDialogContext() );
 
             if ( m_pAddTableDialog->IsVisible() )
             {

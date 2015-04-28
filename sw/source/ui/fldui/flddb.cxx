@@ -74,6 +74,24 @@ SwFldDBPage::SwFldDBPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
 SwFldDBPage::~SwFldDBPage()
 {
+    disposeOnce();
+}
+
+void SwFldDBPage::dispose()
+{
+    m_pTypeLB.clear();
+    m_pDatabaseTLB.clear();
+    m_pAddDBPB.clear();
+    m_pCondition.clear();
+    m_pConditionED.clear();
+    m_pValue.clear();
+    m_pValueED.clear();
+    m_pDBFormatRB.clear();
+    m_pNewFormatRB.clear();
+    m_pNumFormatLB.clear();
+    m_pFormatLB.clear();
+    m_pFormat.clear();
+    SwFldPage::dispose();
 }
 
 // initialise TabPage
@@ -246,10 +264,10 @@ bool SwFldDBPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-SfxTabPage* SwFldDBPage::Create(    vcl::Window* pParent,
-                        const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwFldDBPage::Create( vcl::Window* pParent,
+                                        const SfxItemSet* rAttrSet )
 {
-    return ( new SwFldDBPage( pParent, *rAttrSet ) );
+    return VclPtr<SwFldDBPage>::Create( pParent, *rAttrSet );
 }
 
 sal_uInt16 SwFldDBPage::GetGroup()

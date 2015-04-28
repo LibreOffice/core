@@ -97,13 +97,21 @@ SvxPasswordDialog::SvxPasswordDialog(vcl::Window* pParent, bool bAllowEmptyPassw
     }
 }
 
-
-
 SvxPasswordDialog::~SvxPasswordDialog()
 {
+    disposeOnce();
 }
 
-
+void SvxPasswordDialog::dispose()
+{
+    m_pOldFL.clear();
+    m_pOldPasswdFT.clear();
+    m_pOldPasswdED.clear();
+    m_pNewPasswdED.clear();
+    m_pRepeatPasswdED.clear();
+    m_pOKBtn.clear();
+    SfxModalDialog::dispose();
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

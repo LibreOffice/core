@@ -71,6 +71,9 @@ SfxStyleDialog::SfxStyleDialog
 
 
 SfxStyleDialog::~SfxStyleDialog()
+{
+    disposeOnce();
+}
 
 /*  [Description]
 
@@ -78,9 +81,11 @@ SfxStyleDialog::~SfxStyleDialog()
     the Set from Style.
 */
 
+void SfxStyleDialog::dispose()
 {
     pExampleSet = 0;
     pStyle = 0;
+    SfxTabDialog::dispose();
 }
 
 

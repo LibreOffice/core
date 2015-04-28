@@ -29,20 +29,22 @@
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
 
-class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
+class SvxInsRowColDlg : public SvxAbstractInsRowColDlg
 {
-    NumericField*   m_pCountEdit;
+    VclPtr<ModalDialog>    m_pDialog;
+    VclPtr<NumericField>   m_pCountEdit;
 
-    RadioButton*    m_pBeforeBtn;
-    RadioButton*    m_pAfterBtn;
+    VclPtr<RadioButton>    m_pBeforeBtn;
+    VclPtr<RadioButton>    m_pAfterBtn;
 
     OUString   aRow;
     OUString   aCol;
 
-    bool            bColumn;
+    bool bColumn;
 
 public:
     SvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId );
+    virtual ~SvxInsRowColDlg();
 
     virtual short Execute() SAL_OVERRIDE;
 

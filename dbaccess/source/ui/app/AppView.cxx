@@ -68,9 +68,9 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
     SetBorderStyle(WindowBorderStyle::MONO);
 
-    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL, false);
+    m_pPanel = VclPtr<OTitleWindow>::Create(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL, false);
     m_pPanel->SetBorderStyle(WindowBorderStyle::MONO);
-    OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
+    VclPtrInstance<OApplicationSwapWindow> pSwap( m_pPanel, *this );
     pSwap->Show();
     pSwap->SetUniqueId(UID_APP_SWAP_VIEW);
 
@@ -78,7 +78,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
     m_pPanel->SetUniqueId(UID_APP_DATABASE_VIEW);
     m_pPanel->Show();
 
-    m_pDetailView = new OApplicationDetailView(*this,_ePreviewMode);
+    m_pDetailView = VclPtr<OApplicationDetailView>::Create(*this,_ePreviewMode);
     m_pDetailView->Show();
 
     ImplInitSettings();
@@ -86,20 +86,20 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
 OAppBorderWindow::~OAppBorderWindow()
 {
+    disposeOnce();
+}
+
+void OAppBorderWindow::dispose()
+{
     // destroy children
     if ( m_pPanel )
-    {
         m_pPanel->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pPanel);
-        m_pPanel = NULL;
-    }
+    m_pPanel.disposeAndClear();
     if ( m_pDetailView )
-    {
         m_pDetailView->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pDetailView);
-        m_pDetailView = NULL;
-    }
-
+    m_pDetailView.disposeAndClear();
+    m_pView.clear();
+    vcl::Window::dispose();
 }
 
 void OAppBorderWindow::GetFocus()
@@ -195,7 +195,7 @@ OApplicationView::OApplicationView( vcl::Window* pParent
     {
     }
 
-    m_pWin = new OAppBorderWindow(this,_ePreviewMode);
+    m_pWin = VclPtr<OAppBorderWindow>::Create(this,_ePreviewMode);
     m_pWin->SetUniqueId(UID_APP_VIEW_BORDER_WIN);
     m_pWin->Show();
 
@@ -204,13 +204,16 @@ OApplicationView::OApplicationView( vcl::Window* pParent
 
 OApplicationView::~OApplicationView()
 {
+    disposeOnce();
+}
 
-    {
-        stopComponentListening(m_xObject);
-        m_pWin->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
-        m_pWin = NULL;
-    }
+void OApplicationView::dispose()
+{
+    stopComponentListening(m_xObject);
+    m_xObject.clear();
+    m_pWin->Hide();
+    m_pWin.disposeAndClear();
+    ODataView::dispose();
 }
 
 void OApplicationView::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )

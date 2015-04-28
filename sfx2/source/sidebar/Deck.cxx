@@ -48,11 +48,11 @@ Deck::Deck (
       maIcon(),
       mnMinimalWidth(0),
       maPanels(),
-      mpTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, this, rCloserAction)),
-      mpScrollClipWindow(new vcl::Window(this)),
-      mpScrollContainer(new ScrollContainerWindow(mpScrollClipWindow.get())),
-      mpFiller(new vcl::Window(this)),
-      mpVerticalScrollBar(new ScrollBar(this))
+      mpTitleBar(VclPtr<DeckTitleBar>::Create(rDeckDescriptor.msTitle, this, rCloserAction)),
+      mpScrollClipWindow(VclPtr<vcl::Window>::Create(this)),
+      mpScrollContainer(VclPtr<ScrollContainerWindow>::Create(mpScrollClipWindow.get())),
+      mpFiller(VclPtr<vcl::Window>::Create(this)),
+      mpVerticalScrollBar(VclPtr<ScrollBar>::Create(this))
 {
     SetBackground(Wallpaper());
 
@@ -75,35 +75,27 @@ Deck::Deck (
 
 Deck::~Deck()
 {
-    Dispose();
+    disposeOnce();
+}
+
+void Deck::dispose()
+{
+    SharedPanelContainer aPanels;
+    aPanels.swap(maPanels);
 
     // We have to explicitly trigger the destruction of panels.
     // Otherwise that is done by one of our base class destructors
     // without updating maPanels.
-    maPanels.clear();
-}
+    for (size_t i = 0; i < aPanels.size(); i++)
+        aPanels[i].disposeAndClear();
 
-void Deck::Dispose()
-{
-    SharedPanelContainer aPanels;
-    aPanels.swap(maPanels);
-    for (SharedPanelContainer::iterator
-             iPanel(aPanels.begin()),
-             iEnd(aPanels.end());
-         iPanel!=iEnd;
-         ++iPanel)
-    {
-        if (*iPanel)
-        {
-            (*iPanel)->Dispose();
-            OSL_ASSERT(iPanel->unique());
-            iPanel->reset();
-        }
-    }
+    mpTitleBar.disposeAndClear();
+    mpFiller.disposeAndClear();
+    mpVerticalScrollBar.disposeAndClear();
+    mpScrollContainer.disposeAndClear();
+    mpScrollClipWindow.disposeAndClear();
 
-    mpTitleBar.reset();
-    mpFiller.reset();
-    mpVerticalScrollBar.reset();
+    vcl::Window::dispose();
 }
 
 DeckTitleBar* Deck::GetTitleBar() const
@@ -210,8 +202,21 @@ bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)
     return true;
 }
 
-void Deck::SetPanels (const SharedPanelContainer& rPanels)
+/**
+ * This container may contain existing panels that are
+ * being re-used, and new ones too.
+ */
+void Deck::ResetPanels (const SharedPanelContainer& rPanels)
 {
+    // First dispose old panels we no longer need.
+    for (size_t i = 0; i < maPanels.size(); i++)
+    {
+        bool bFound = false;
+        for (size_t j = 0; j < rPanels.size(); j++)
+            bFound = bFound || (maPanels[i].get() == rPanels[j].get());
+        if (!bFound) // this one didn't survive.
+            maPanels[i].disposeAndClear();
+    }
     maPanels = rPanels;
 
     RequestLayout();
@@ -321,10 +326,6 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
 #ifdef DEBUG
     SetText(OUString("ScrollContainerWindow"));
 #endif
-}
-
-Deck::ScrollContainerWindow::~ScrollContainerWindow()
-{
 }
 
 void Deck::ScrollContainerWindow::Paint (const Rectangle& rUpdateArea)

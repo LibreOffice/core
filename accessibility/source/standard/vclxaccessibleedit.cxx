@@ -133,7 +133,7 @@ OUString VCLXAccessibleEdit::implGetText()
 {
     OUString aText;
 
-    Edit* pEdit = static_cast< Edit* >( GetWindow() );
+    VclPtr< Edit > pEdit = GetAs< Edit >();
     if ( pEdit )
     {
         aText = OutputDevice::GetNonMnemonicString( pEdit->GetText() );
@@ -225,7 +225,7 @@ sal_Int16 VCLXAccessibleEdit::getAccessibleRole(  ) throw (RuntimeException, std
     OExternalLockGuard aGuard( this );
 
     sal_Int16 nRole;
-    Edit* pEdit = static_cast< Edit* >( GetWindow() );
+    VclPtr< Edit > pEdit = GetAs< Edit >();
     if ( pEdit && ( ( pEdit->GetStyle() & WB_PASSWORD ) || pEdit->GetEchoChar() ) )
         nRole = AccessibleRole::PASSWORD_TEXT;
     else
@@ -336,7 +336,7 @@ awt::Rectangle VCLXAccessibleEdit::getCharacterBounds( sal_Int32 nIndex ) throw 
     if ( !implIsValidRange( nIndex, nIndex, nLength ) )
         throw IndexOutOfBoundsException();
 
-    Control* pControl = static_cast< Control* >( GetWindow() );
+    VclPtr< Control > pControl = GetAs< Control >();
     if ( pControl )
     {
         if ( nIndex == nLength )
@@ -425,7 +425,7 @@ sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEnd
         throw IndexOutOfBoundsException();
 
     VCLXEdit* pVCLXEdit = static_cast< VCLXEdit* >( GetVCLXWindow() );
-    Edit* pEdit = static_cast< Edit* >( GetWindow() );
+    VclPtr< Edit > pEdit = GetAs< Edit >();
     if ( pVCLXEdit && pEdit && pEdit->IsEnabled() )
     {
         pVCLXEdit->setSelection( awt::Selection( nStartIndex, nEndIndex ) );

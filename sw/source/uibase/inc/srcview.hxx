@@ -32,7 +32,7 @@ class SfxMedium;
 
 class SwSrcView: public SfxViewShell
 {
-    SwSrcEditWindow     aEditWin;
+    VclPtr<SwSrcEditWindow> aEditWin;
 
     SvxSearchItem*      pSearchItem;
 
@@ -64,11 +64,11 @@ public:
     virtual ~SwSrcView();
 
     SwDocShell*         GetDocShell();
-    SwSrcEditWindow&    GetEditWin() {return aEditWin;}
+    SwSrcEditWindow&    GetEditWin() { return *aEditWin.get(); }
     void                SaveContent(const OUString& rTmpFile);
     void                SaveContentTo(SfxMedium& rMed);
 
-    bool                IsModified() {return aEditWin.IsModified();}
+    bool                IsModified() {return aEditWin->IsModified();}
 
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);

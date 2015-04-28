@@ -56,7 +56,7 @@ protected:
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Dialog* createDialog( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<Dialog> createDialog( vcl::Window* pParent ) SAL_OVERRIDE;
     virtual void executedDialog( sal_Int16 nExecutionResult ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;

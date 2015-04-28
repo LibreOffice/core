@@ -30,10 +30,10 @@ void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
     bScrolling = false;
 
     // set the handlers for the scrollbars
-    aVScroll.SetScrollHdl( LINK(this, ScrollableWindow, ScrollHdl) );
-    aHScroll.SetScrollHdl( LINK(this, ScrollableWindow, ScrollHdl) );
-    aVScroll.SetEndScrollHdl( LINK(this, ScrollableWindow, EndScrollHdl) );
-    aHScroll.SetEndScrollHdl( LINK(this, ScrollableWindow, EndScrollHdl) );
+    aVScroll->SetScrollHdl( LINK(this, ScrollableWindow, ScrollHdl) );
+    aHScroll->SetScrollHdl( LINK(this, ScrollableWindow, ScrollHdl) );
+    aVScroll->SetEndScrollHdl( LINK(this, ScrollableWindow, EndScrollHdl) );
+    aHScroll->SetEndScrollHdl( LINK(this, ScrollableWindow, EndScrollHdl) );
 
     nColumnPixW = nLinePixH = GetSettings().GetStyleSettings().GetScrollBarSize();
 }
@@ -43,13 +43,26 @@ void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
 ScrollableWindow::ScrollableWindow( vcl::Window* pParent, WinBits nBits,
                                     ScrollableWindowFlags nFlags ) :
     Window( pParent, WinBits(nBits|WB_CLIPCHILDREN) ),
-    aVScroll( this, WinBits(WB_VSCROLL | WB_DRAG) ),
-    aHScroll( this, WinBits(WB_HSCROLL | WB_DRAG) ),
-    aCornerWin( this )
+    aVScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL | WB_DRAG)) ),
+    aHScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL | WB_DRAG)) ),
+    aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
 {
     ImpInitialize( nFlags );
 }
 
+
+ScrollableWindow::~ScrollableWindow()
+{
+    disposeOnce();
+}
+
+void ScrollableWindow::dispose()
+{
+    aVScroll.disposeAndClear();
+    aHScroll.disposeAndClear();
+    aCornerWin.disposeAndClear();
+    Window::dispose();
+}
 
 
 void ScrollableWindow::Command( const CommandEvent& rCEvt )
@@ -60,12 +73,12 @@ void ScrollableWindow::Command( const CommandEvent& rCEvt )
     {
         ScrollBar* pHScrBar;
         ScrollBar* pVScrBar;
-        if ( aHScroll.IsVisible() )
-            pHScrBar = &aHScroll;
+        if ( aHScroll->IsVisible() )
+            pHScrBar = aHScroll.get();
         else
             pHScrBar = NULL;
-        if ( aVScroll.IsVisible() )
-            pVScrBar = &aVScroll;
+        if ( aVScroll->IsVisible() )
+            pVScrBar = aVScroll.get();
         else
             pVScrBar = NULL;
         if ( HandleScrollCommand( rCEvt, pHScrBar, pVScrBar ) )
@@ -96,9 +109,9 @@ Size ScrollableWindow::GetOutputSizePixel() const
     Size aSz( Window::GetOutputSizePixel() );
 
     long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
-    if ( aHScroll.IsVisible() )
+    if ( aHScroll->IsVisible() )
         aSz.Height() -= nTmp;
-    if ( aVScroll.IsVisible() )
+    if ( aVScroll->IsVisible() )
         aSz.Width() -= nTmp;
     return aSz;
 }
@@ -112,12 +125,12 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
         bScrolling = true;
 
     // get the delta in logic coordinates
-    Size aDelta( PixelToLogic( Size( aHScroll.GetDelta(), aVScroll.GetDelta() ) ) );
+    Size aDelta( PixelToLogic( Size( aHScroll->GetDelta(), aVScroll->GetDelta() ) ) );
 
     // scroll the window, if this is not already done
     if ( !bHandleDragging )
     {
-        if ( pScroll == &aHScroll )
+        if ( pScroll == aHScroll.get() )
             Scroll( aDelta.Width(), 0 );
         else
             Scroll( 0, aDelta.Height() );
@@ -140,8 +153,8 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
     {
         // get the delta in logic coordinates
         Size aDelta( PixelToLogic(
-            Size( aHScroll.GetDelta(), aVScroll.GetDelta() ) ) );
-        if ( pScroll == &aHScroll )
+            Size( aHScroll->GetDelta(), aVScroll->GetDelta() ) ) );
+        if ( pScroll == aHScroll.get() )
             Scroll( aDelta.Width(), 0 );
         else
             Scroll( 0, aDelta.Height() );
@@ -219,9 +232,9 @@ void ScrollableWindow::Resize()
                             ? (aOutPixSz.Height()-aTotPixSz.Height()) / 2
                             : 0 ) );
     }
-    if ( bHVisible && !aHScroll.IsVisible() )
+    if ( bHVisible && !aHScroll->IsVisible() )
         aPixOffset.X() = 0;
-    if ( bVVisible && !aVScroll.IsVisible() )
+    if ( bVVisible && !aVScroll->IsVisible() )
         aPixOffset.Y() = 0;
 
     // select the shifted map-mode
@@ -235,41 +248,41 @@ void ScrollableWindow::Resize()
     }
 
     // show or hide scrollbars
-    aVScroll.Show( bVVisible );
-    aHScroll.Show( bHVisible );
+    aVScroll->Show( bVVisible );
+    aHScroll->Show( bHVisible );
 
     // disable painting in the corner between the scrollbars
     if ( bVVisible && bHVisible )
     {
-        aCornerWin.SetPosSizePixel(Point(aOutPixSz.Width(), aOutPixSz.Height()),
+        aCornerWin->SetPosSizePixel(Point(aOutPixSz.Width(), aOutPixSz.Height()),
             Size(nScrSize, nScrSize) );
-        aCornerWin.Show();
+        aCornerWin->Show();
     }
     else
-        aCornerWin.Hide();
+        aCornerWin->Hide();
 
     // resize scrollbars and set their ranges
     if ( bHVisible )
     {
-        aHScroll.SetPosSizePixel(
+        aHScroll->SetPosSizePixel(
             Point( 0, aOutPixSz.Height() ),
             Size( aOutPixSz.Width(), nScrSize ) );
-        aHScroll.SetRange( Range( 0, aTotPixSz.Width() ) );
-        aHScroll.SetPageSize( aOutPixSz.Width() );
-        aHScroll.SetVisibleSize( aOutPixSz.Width() );
-        aHScroll.SetLineSize( nColumnPixW );
-        aHScroll.SetThumbPos( -aPixOffset.X() );
+        aHScroll->SetRange( Range( 0, aTotPixSz.Width() ) );
+        aHScroll->SetPageSize( aOutPixSz.Width() );
+        aHScroll->SetVisibleSize( aOutPixSz.Width() );
+        aHScroll->SetLineSize( nColumnPixW );
+        aHScroll->SetThumbPos( -aPixOffset.X() );
     }
     if ( bVVisible )
     {
-        aVScroll.SetPosSizePixel(
+        aVScroll->SetPosSizePixel(
             Point( aOutPixSz.Width(), 0 ),
             Size( nScrSize,aOutPixSz.Height() ) );
-        aVScroll.SetRange( Range( 0, aTotPixSz.Height() ) );
-        aVScroll.SetPageSize( aOutPixSz.Height() );
-        aVScroll.SetVisibleSize( aOutPixSz.Height() );
-        aVScroll.SetLineSize( nLinePixH );
-        aVScroll.SetThumbPos( -aPixOffset.Y() );
+        aVScroll->SetRange( Range( 0, aTotPixSz.Height() ) );
+        aVScroll->SetPageSize( aOutPixSz.Height() );
+        aVScroll->SetVisibleSize( aOutPixSz.Height() );
+        aVScroll->SetLineSize( nLinePixH );
+        aVScroll->SetThumbPos( -aPixOffset.Y() );
     }
 }
 
@@ -366,9 +379,9 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
     if ( !bScrolling )
     {
         if ( nDeltaX )
-            aHScroll.SetThumbPos( -aPixOffset.X() );
+            aHScroll->SetThumbPos( -aPixOffset.X() );
         if ( nDeltaY )
-            aVScroll.SetThumbPos( -aPixOffset.Y() );
+            aVScroll->SetThumbPos( -aPixOffset.Y() );
     }
 }
 

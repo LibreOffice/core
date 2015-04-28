@@ -38,7 +38,7 @@ class SvxHpLinkDlg;
 class SvxHlinkCtrl : public SfxControllerItem
 {
 private :
-    SvxHpLinkDlg *pParent;
+    VclPtr<SvxHpLinkDlg> pParent;
 
     SfxStatusForwarder aRdOnlyForwarder;
 
@@ -80,6 +80,7 @@ protected:
 public:
     SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings );
     virtual ~SvxHpLinkDlg ();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) SAL_OVERRIDE;
 

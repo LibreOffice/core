@@ -133,12 +133,18 @@ SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle, Syst
 
 SystemChildWindow::~SystemChildWindow()
 {
+    disposeOnce();
+}
+
+void SystemChildWindow::dispose()
+{
     Hide();
-    if ( mpWindowImpl->mpSysObj )
+    if ( mpWindowImpl && mpWindowImpl->mpSysObj )
     {
         ImplGetSVData()->mpDefInst->DestroyObject( mpWindowImpl->mpSysObj );
         mpWindowImpl->mpSysObj = NULL;
     }
+    Window::dispose();
 }
 
 const SystemEnvData* SystemChildWindow::GetSystemData() const

@@ -45,8 +45,8 @@ class LayeredDevice
 
 {
 public:
-    LayeredDevice (const SharedSdWindow& rpTargetWindow);
-    ~LayeredDevice();
+    LayeredDevice (VclPtr<sd::Window> pTargetWindow);
+    ~LayeredDevice ();
 
     void Invalidate (
         const Rectangle& rInvalidationBox,
@@ -72,10 +72,10 @@ public:
     void Dispose();
 
 private:
-    SharedSdWindow mpTargetWindow;
+    VclPtr<sd::Window> mpTargetWindow;
     class LayerContainer;
     ::boost::scoped_ptr<LayerContainer> mpLayers;
-    ::boost::scoped_ptr<VirtualDevice> mpBackBuffer;
+    ScopedVclPtr<VirtualDevice> mpBackBuffer;
     MapMode maSavedMapMode;
 
     void RepaintRectangle (const Rectangle& rRepaintRectangle);

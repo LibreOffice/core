@@ -58,6 +58,18 @@ ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
     m_pBtnDefVal->Check( nCurrentValue == nDefaultValue );
 }
 
+ScMetricInputDlg::~ScMetricInputDlg()
+{
+    disposeOnce();
+}
+
+void ScMetricInputDlg::dispose()
+{
+    m_pEdValue.clear();
+    m_pBtnDefVal.clear();
+    ModalDialog::dispose();
+}
+
 long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 {
 /*

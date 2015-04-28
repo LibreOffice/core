@@ -50,7 +50,7 @@ private:
     friend class CellBorderStyleControl;
 
 public:
-    static CellAppearancePropertyPanel* Create(
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
@@ -69,14 +69,22 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    // constructor/destuctor
+    CellAppearancePropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
+    virtual ~CellAppearancePropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
 private:
     //ui controls
 
-    ToolBox*                                mpTBCellBorder;
-    ToolBox*                                mpTBLineStyle;
-    ToolBox*                                mpTBLineColor;
+    VclPtr<ToolBox>                                mpTBCellBorder;
+    VclPtr<ToolBox>                                mpTBLineStyle;
+    VclPtr<ToolBox>                                mpTBLineColor;
     ::boost::scoped_ptr< CellBorderUpdater > mpCellBorderUpdater;
-    CheckBox*                               mpCBXShowGrid;
+    VclPtr<CheckBox>                               mpCBXShowGrid;
 
     ::sfx2::sidebar::ControllerItem         maLineStyleControl;
     ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
@@ -144,13 +152,6 @@ private:
     // for CellBorderStyle popup
     svx::sidebar::PopupControl* CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent);
     void EndCellBorderStylePopupMode();
-
-    // constructor/destuctor
-    CellAppearancePropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
-    virtual ~CellAppearancePropertyPanel();
 
     void Initialize();
     void SetStyleIcon();

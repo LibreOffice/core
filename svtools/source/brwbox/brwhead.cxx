@@ -36,6 +36,18 @@ BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
 }
 
 
+BrowserHeader::~BrowserHeader()
+{
+    disposeOnce();
+}
+
+void BrowserHeader::dispose()
+{
+    _pBrowseBox.clear();
+    HeaderBar::dispose();
+}
+
+
 
 void BrowserHeader::Command( const CommandEvent& rCEvt )
 {

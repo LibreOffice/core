@@ -29,7 +29,7 @@ class ScTablePage : public SfxTabPage
 {
     static const sal_uInt16 pPageTableRanges[];
 public:
-    static  SfxTabPage* Create          ( vcl::Window*           pParent,
+    static  VclPtr<SfxTabPage> Create          ( vcl::Window*           pParent,
                                           const SfxItemSet* rCoreSet );
     static  const sal_uInt16* GetRanges () { return pPageTableRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
@@ -38,42 +38,42 @@ public:
     virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
     virtual void        DataChanged     ( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
+    virtual         ~ScTablePage();
+    virtual void    dispose() SAL_OVERRIDE;
 private:
                     ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
-    virtual         ~ScTablePage();
-
     void            ShowImage();
 
 private:
-    RadioButton*     m_pBtnTopDown;
-    RadioButton*     m_pBtnLeftRight;
-    FixedImage*      m_pBmpPageDir;
-    CheckBox*        m_pBtnPageNo;
-    NumericField*    m_pEdPageNo;
+    VclPtr<RadioButton>     m_pBtnTopDown;
+    VclPtr<RadioButton>     m_pBtnLeftRight;
+    VclPtr<FixedImage>      m_pBmpPageDir;
+    VclPtr<CheckBox>        m_pBtnPageNo;
+    VclPtr<NumericField>    m_pEdPageNo;
 
-    CheckBox*        m_pBtnHeaders;
-    CheckBox*        m_pBtnGrid;
-    CheckBox*        m_pBtnNotes;
-    CheckBox*        m_pBtnObjects;
-    CheckBox*        m_pBtnCharts;
-    CheckBox*        m_pBtnDrawings;
-    CheckBox*        m_pBtnFormulas;
-    CheckBox*        m_pBtnNullVals;
+    VclPtr<CheckBox>        m_pBtnHeaders;
+    VclPtr<CheckBox>        m_pBtnGrid;
+    VclPtr<CheckBox>        m_pBtnNotes;
+    VclPtr<CheckBox>        m_pBtnObjects;
+    VclPtr<CheckBox>        m_pBtnCharts;
+    VclPtr<CheckBox>        m_pBtnDrawings;
+    VclPtr<CheckBox>        m_pBtnFormulas;
+    VclPtr<CheckBox>        m_pBtnNullVals;
 
-    ListBox*             m_pLbScaleMode;
-    VclHBox*             m_pBxScaleAll;
-    MetricField*         m_pEdScaleAll;
-    VclGrid*             m_pGrHeightWidth;
-    NumericField*        m_pEdScalePageWidth;
-    NumericField*        m_pEdScalePageHeight;
-    VclHBox*             m_pBxScalePageNum;
-    NumericField*        m_pEdScalePageNum;
+    VclPtr<ListBox>             m_pLbScaleMode;
+    VclPtr<VclHBox>             m_pBxScaleAll;
+    VclPtr<MetricField>         m_pEdScaleAll;
+    VclPtr<VclGrid>             m_pGrHeightWidth;
+    VclPtr<NumericField>        m_pEdScalePageWidth;
+    VclPtr<NumericField>        m_pEdScalePageHeight;
+    VclPtr<VclHBox>             m_pBxScalePageNum;
+    VclPtr<NumericField>        m_pEdScalePageNum;
 
 private:
 
     // Handler:
     DECL_LINK(PageDirHdl, void *);
-    DECL_LINK( PageNoHdl,       CheckBox* );
+    DECL_LINK( PageNoHdl, CheckBox* );
     DECL_LINK(ScaleHdl, void *);
 };
 

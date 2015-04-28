@@ -286,7 +286,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
 
 void SpinField::ImplInitSpinFieldData()
 {
-    mpEdit          = NULL;
+    mpEdit.disposeAndClear();
     mbSpin          = false;
     mbRepeat        = false;
     mbUpperIn       = false;
@@ -311,11 +311,11 @@ void SpinField::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
         if ( (nWinStyle & WB_SPIN) && ImplUseNativeBorder( nWinStyle ) )
         {
             SetBackground();
-            mpEdit = new Edit( this, WB_NOBORDER );
+            mpEdit.set( VclPtr<Edit>::Create( this, WB_NOBORDER ) );
             mpEdit->SetBackground();
         }
         else
-            mpEdit = new Edit( this, WB_NOBORDER );
+            mpEdit.set( VclPtr<Edit>::Create( this, WB_NOBORDER ) );
 
         mpEdit->EnableRTL( false );
         mpEdit->SetPosPixel( Point() );
@@ -359,7 +359,14 @@ SpinField::SpinField( vcl::Window* pParent, const ResId& rResId ) :
 
 SpinField::~SpinField()
 {
-    delete mpEdit;
+    disposeOnce();
+}
+
+void SpinField::dispose()
+{
+    mpEdit.disposeAndClear();
+
+    Edit::dispose();
 }
 
 void SpinField::Up()

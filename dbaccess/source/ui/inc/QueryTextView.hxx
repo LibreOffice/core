@@ -28,10 +28,11 @@ namespace dbaui
     class OQueryTextView : public vcl::Window
     {
         friend class OQueryViewSwitch;
-        OSqlEdit*   m_pEdit;
+        VclPtr<OSqlEdit>   m_pEdit;
     public:
         OQueryTextView( OQueryContainerWindow* pParent );
         virtual ~OQueryTextView();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void GetFocus() SAL_OVERRIDE;
 

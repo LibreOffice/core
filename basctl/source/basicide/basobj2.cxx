@@ -149,16 +149,16 @@ bool RenameModule (
 
     if ( rDocument.hasModule( rLibName, rNewName ) )
     {
-        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2));
-        aError.Execute();
+        ScopedVclPtrInstance< MessageDialog > aError(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2));
+        aError->Execute();
         return false;
     }
 
     // #i74440
     if ( rNewName.isEmpty() )
     {
-        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME));
-        aError.Execute();
+        ScopedVclPtrInstance< MessageDialog > aError(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME));
+        aError->Execute();
         return false;
     }
 
@@ -242,7 +242,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
     OUString aScriptURL;
     SbMethod* pMethod = NULL;
 
-    boost::scoped_ptr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
+    ScopedVclPtrInstance< MacroChooser > pChooser( nullptr, true );
     if ( bChooseOnly || !SvtModuleOptions::IsBasicIDE() )
         pChooser->SetMode(MacroChooser::ChooseOnly);
 

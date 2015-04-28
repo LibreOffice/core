@@ -87,7 +87,24 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
 }
 
 ScStatisticsInputOutputDialog::~ScStatisticsInputOutputDialog()
-{}
+{
+    disposeOnce();
+}
+
+void ScStatisticsInputOutputDialog::dispose()
+{
+    mpInputRangeLabel.clear();
+    mpInputRangeEdit.clear();
+    mpInputRangeButton.clear();
+    mpOutputRangeLabel.clear();
+    mpOutputRangeEdit.clear();
+    mpOutputRangeButton.clear();
+    mpGroupByColumnsRadio.clear();
+    mpGroupByRowsRadio.clear();
+    mpButtonOk.clear();
+    mpActiveEdit.clear();
+    ScAnyRefDlg::dispose();
+}
 
 void ScStatisticsInputOutputDialog::Init()
 {

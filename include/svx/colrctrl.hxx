@@ -26,6 +26,7 @@
 #include <svl/lstner.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xtable.hxx>
+#include <vcl/vclptr.hxx>
 
 class SvData;
 
@@ -75,7 +76,7 @@ friend class SvxColorChildWindow;
 
 private:
     XColorListRef       pColorList;
-    SvxColorValueSet_docking aColorSet;
+    VclPtr<SvxColorValueSet_docking> aColorSet;
     sal_uInt16          nLeftSlot;
     sal_uInt16          nRightSlot;
     sal_uInt16          nCols;
@@ -103,6 +104,7 @@ public:
                           SfxChildWindow *pCW,
                           vcl::Window* pParent);
     virtual ~SvxColorDockingWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 

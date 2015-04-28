@@ -60,9 +60,9 @@ using namespace ::com::sun::star;
 
 class SwNumNamesDlg : public ModalDialog
 {
-    Edit*     m_pFormEdit;
-    ListBox*  m_pFormBox;
-    OKButton* m_pOKBtn;
+    VclPtr<Edit>     m_pFormEdit;
+    VclPtr<ListBox>  m_pFormBox;
+    VclPtr<OKButton> m_pOKBtn;
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( SelectHdl, ListBox * );
@@ -70,10 +70,26 @@ class SwNumNamesDlg : public ModalDialog
 
 public:
     SwNumNamesDlg(vcl::Window *pParent);
+    virtual ~SwNumNamesDlg();
+    virtual void dispose() SAL_OVERRIDE;
     void SetUserNames(const OUString *pList[]);
     OUString GetName() const { return m_pFormEdit->GetText(); }
     sal_Int32 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
 };
+
+SwNumNamesDlg::~SwNumNamesDlg()
+{
+    disposeOnce();
+}
+
+void SwNumNamesDlg::dispose()
+{
+    m_pFormEdit.clear();
+    m_pFormBox.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
+
 
 // remember selected entry
 IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
@@ -193,7 +209,13 @@ SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* p
 
 SwOutlineTabDialog::~SwOutlineTabDialog()
 {
+    disposeOnce();
+}
+
+void SwOutlineTabDialog::dispose()
+{
     delete pNumRule;
+    SfxTabDialog::dispose();
 }
 
 void SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
@@ -265,7 +287,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
         nLevelNo = 9;
     else if (sIdent == "saveas")
     {
-        boost::scoped_ptr<SwNumNamesDlg> pDlg(new SwNumNamesDlg(this));
+        VclPtrInstance< SwNumNamesDlg > pDlg(this);
         const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
@@ -740,7 +762,24 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
 
 SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage()
 {
+    disposeOnce();
 }
+
+void SwOutlineSettingsTabPage::dispose()
+{
+    m_pLevelLB.clear();
+    m_pCollBox.clear();
+    m_pNumberBox.clear();
+    m_pCharFmtLB.clear();
+    m_pAllLevelFT.clear();
+    m_pAllLevelNF.clear();
+    m_pPrefixED.clear();
+    m_pSuffixED.clear();
+    m_pStartEdit.clear();
+    m_pPreviewWIN.clear();
+    SfxTabPage::dispose();
+}
+
 
 void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 {
@@ -826,10 +865,10 @@ void SwOutlineSettingsTabPage::Reset( const SfxItemSet* rSet )
     ActivatePage(*rSet);
 }
 
-SfxTabPage* SwOutlineSettingsTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwOutlineSettingsTabPage::Create( vcl::Window* pParent,
+                                                     const SfxItemSet* rAttrSet)
 {
-    return new SwOutlineSettingsTabPage(pParent, *rAttrSet);
+    return VclPtr<SwOutlineSettingsTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
@@ -892,7 +931,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     const Size aSize(PixelToLogic(GetOutputSizePixel()));
 
-    boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice(*this));
+    ScopedVclPtrInstance< VirtualDevice > pVDev(*this);
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 

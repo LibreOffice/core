@@ -33,6 +33,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <vcl/vclptr.hxx>
 #include <vector>
 
 class ThumbnailView;
@@ -121,7 +122,7 @@ public:
 private:
     ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    ThumbnailView*                                                           mpParent;
+    VclPtr<ThumbnailView>                                               mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
     /// The current FOCUSED state.
     bool mbIsFocused;

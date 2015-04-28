@@ -258,7 +258,8 @@ protected:
 
 public:
                     Calendar( vcl::Window* pParent, WinBits nWinStyle = 0 );
-                    virtual ~Calendar();
+    virtual         ~Calendar();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -400,11 +401,11 @@ method in CalendarField and create an own calendar there ourselves.
 class SVT_DLLPUBLIC CalendarField : public DateField
 {
 private:
-    ImplCFieldFloatWin* mpFloatWin;
-    Calendar*           mpCalendar;
+    VclPtr<ImplCFieldFloatWin> mpFloatWin;
+    VclPtr<Calendar>    mpCalendar;
     WinBits             mnCalendarStyle;
-    PushButton*         mpTodayBtn;
-    PushButton*         mpNoneBtn;
+    VclPtr<PushButton>  mpTodayBtn;
+    VclPtr<PushButton>  mpNoneBtn;
     Date                maDefaultDate;
     bool                mbToday;
     bool                mbNone;
@@ -416,12 +417,13 @@ private:
 
 public:
                         CalendarField( vcl::Window* pParent, WinBits nWinStyle );
-                        virtual ~CalendarField();
+    virtual             ~CalendarField();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void        Select();
 
     virtual bool        ShowDropDown( bool bShow ) SAL_OVERRIDE;
-    Calendar*   CreateCalendar( vcl::Window* pParent );
+    VclPtr<Calendar>    CreateCalendar( vcl::Window* pParent );
     Calendar*           GetCalendar();
 
     void                SetDefaultDate( const Date& rDate ) { maDefaultDate = rDate; }

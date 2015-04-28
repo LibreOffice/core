@@ -190,7 +190,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PRESENTATION_DLG:
             FuSlideShowDlg::Create (
                 pShell,
-                mrSlideSorter.GetContentWindow().get(),
+                mrSlideSorter.GetContentWindow(),
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
@@ -199,7 +199,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_CUSTOMSHOW_DLG:
             FuCustomShowDlg::Create (
                 pShell,
-                mrSlideSorter.GetContentWindow().get(),
+                mrSlideSorter.GetContentWindow(),
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
@@ -208,7 +208,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_EXPAND_PAGE:
             FuExpandPage::Create (
                 pShell,
-                mrSlideSorter.GetContentWindow().get(),
+                mrSlideSorter.GetContentWindow(),
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
@@ -217,7 +217,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_SUMMARY_PAGE:
             FuSummaryPage::Create (
                 pShell,
-                mrSlideSorter.GetContentWindow().get(),
+                mrSlideSorter.GetContentWindow(),
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
@@ -263,7 +263,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
-                mrSlideSorter.GetContentWindow().get(),
+                mrSlideSorter.GetContentWindow(),
                 pDocument) : 0);
 
             if (pDlg)
@@ -280,7 +280,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 #ifdef ENABLE_SDREMOTE
              SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
              VclAbstractDialog* pDlg = pFact ?
-                 pFact->CreateRemoteDialog( mrSlideSorter.GetContentWindow().get() ) :
+                 pFact->CreateRemoteDialog( mrSlideSorter.GetContentWindow() ) :
                  0;
              if (pDlg)
                  pDlg->Execute();
@@ -904,7 +904,7 @@ void SlotManager::RenameSlide()
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialog creation failed!");
             boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
-                mrSlideSorter.GetContentWindow().get(),
+                mrSlideSorter.GetContentWindow(),
                 aPageName, aDescr));
             DBG_ASSERT(aNameDlg, "Dialog creation failed!");
             aNameDlg->SetText( aTitle );

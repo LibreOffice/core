@@ -32,9 +32,9 @@
 
 class SwRenameXNamedDlg : public ModalDialog
 {
-    Edit*     m_pNewNameED;
+    VclPtr<Edit>     m_pNewNameED;
     TextFilter m_aTextFilter;
-    OKButton* m_pOk;
+    VclPtr<OKButton> m_pOk;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > &   xNamed;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess;
@@ -48,6 +48,8 @@ public:
     SwRenameXNamedDlg( vcl::Window* pParent,
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess );
+    virtual ~SwRenameXNamedDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetForbiddenChars(const OUString& rSet)
     {

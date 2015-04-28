@@ -85,6 +85,21 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
 
 SdCustomShowDlg::~SdCustomShowDlg()
 {
+    disposeOnce();
+}
+
+void SdCustomShowDlg::dispose()
+{
+    m_pLbCustomShows.clear();
+    m_pCbxUseCustomShow.clear();
+    m_pBtnNew.clear();
+    m_pBtnEdit.clear();
+    m_pBtnRemove.clear();
+    m_pBtnCopy.clear();
+    m_pBtnHelp.clear();
+    m_pBtnStartShow.clear();
+    m_pBtnOK.clear();
+    ModalDialog::dispose();
 }
 
 void SdCustomShowDlg::CheckState()
@@ -111,8 +126,8 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
     if( p == m_pBtnNew )
     {
         pCustomShow = NULL;
-        SdDefineCustomShowDlg aDlg( this, rDoc, pCustomShow );
-        if( aDlg.Execute() == RET_OK )
+        ScopedVclPtrInstance< SdDefineCustomShowDlg > aDlg( this, rDoc, pCustomShow );
+        if( aDlg->Execute() == RET_OK )
         {
             if( pCustomShow )
             {
@@ -125,7 +140,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                 m_pLbCustomShows->SelectEntry( pCustomShow->GetName() );
             }
 
-            if( aDlg.IsModified() )
+            if( aDlg->IsModified() )
                 bModified = true;
         }
         else if( pCustomShow )
@@ -139,9 +154,9 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         {
             DBG_ASSERT( pCustomShowList, "pCustomShowList does not exist" );
             pCustomShow = (*pCustomShowList)[ nPos ];
-            SdDefineCustomShowDlg aDlg( this, rDoc, pCustomShow );
+            ScopedVclPtrInstance< SdDefineCustomShowDlg > aDlg( this, rDoc, pCustomShow );
 
-            if( aDlg.Execute() == RET_OK )
+            if( aDlg->Execute() == RET_OK )
             {
                 if( pCustomShow )
                 {
@@ -151,7 +166,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                     m_pLbCustomShows->InsertEntry( pCustomShow->GetName(), nPos );
                     m_pLbCustomShows->SelectEntryPos( nPos );
                 }
-                if( aDlg.IsModified() )
+                if( aDlg->IsModified() )
                     bModified = true;
             }
         }
@@ -336,6 +351,20 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
 
 SdDefineCustomShowDlg::~SdDefineCustomShowDlg()
 {
+    disposeOnce();
+}
+
+void SdDefineCustomShowDlg::dispose()
+{
+    m_pEdtName.clear();
+    m_pLbPages.clear();
+    m_pBtnAdd.clear();
+    m_pBtnRemove.clear();
+    m_pLbCustomPages.clear();
+    m_pBtnOK.clear();
+    m_pBtnCancel.clear();
+    m_pBtnHelp.clear();
+    ModalDialog::dispose();
 }
 
 // CheckState

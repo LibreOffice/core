@@ -174,14 +174,14 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
 
         {
             bool bDelPrinter = false;
-            SfxPrinter* pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : 0;
+            VclPtr<SfxPrinter> pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : 0;
             if( !pPrt )
             {
                 SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                             0 );
-                pPrt = new SfxPrinter( pSet );
+                pPrt = VclPtr<SfxPrinter>::Create( pSet );
                 bDelPrinter = true;
             }
 
@@ -211,7 +211,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
             m_pFontLB->SelectEntry( aOpt.GetFontName() );
 
             if( bDelPrinter )
-                delete pPrt;
+                pPrt.disposeAndClear();
         }
 
     }
@@ -242,7 +242,22 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
 
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
 {
+    disposeOnce();
 }
+
+void SwAsciiFilterDlg::dispose()
+{
+    m_pCharSetLB.clear();
+    m_pFontFT.clear();
+    m_pFontLB.clear();
+    m_pLanguageFT.clear();
+    m_pLanguageLB.clear();
+    m_pCRLF_RB.clear();
+    m_pCR_RB.clear();
+    m_pLF_RB.clear();
+    SfxModalDialog::dispose();
+}
+
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {

@@ -291,7 +291,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
         xParent = xFrame->getContainerWindow();
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
-        vcl::Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
+        VclPtr< vcl::Window > pParentWin = pParentComponent ? pParentComponent->GetWindow() : VclPtr< vcl::Window >();
         if (!pParentWin)
         {
             throw IllegalArgumentException("Parent window is null", *this, 1 );
@@ -312,7 +312,6 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     catch(Exception&)
     {
         // no one clears my view if I won't
-        boost::scoped_ptr<vcl::Window> aTemp(m_pView);
         m_pView = NULL;
         throw;
     }
@@ -981,6 +980,16 @@ Reference< XConnection > OGenericUnoController::connect( const OUString& _rDataS
     startConnectionListening( xConnection );
 
     return xConnection;
+}
+
+void OGenericUnoController::setView( const VclPtr<ODataView> &i_rView )
+{
+    m_pView = i_rView;
+}
+
+void OGenericUnoController::clearView()
+{
+    m_pView = NULL;
 }
 
 void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)

@@ -451,8 +451,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SHOW_LICENSE:
         {
-            LicenseDialog aDialog;
-            aDialog.Execute();
+            ScopedVclPtrInstance< LicenseDialog > aDialog;
+            aDialog->Execute();
             break;
         }
 
@@ -539,16 +539,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TEMPLATE_MANAGER:
         {
-            SfxTemplateManagerDlg dlg;
-            dlg.Execute();
+            ScopedVclPtrInstance< SfxTemplateManagerDlg > dlg;
+            dlg->Execute();
             bDone = true;
             break;
         }
 
         case SID_TEMPLATE_ADDRESSBOKSOURCE:
         {
-            svt::AddressBookSourceDialog aDialog(GetTopWindow(), ::comphelper::getProcessComponentContext());
-            aDialog.Execute();
+            ScopedVclPtrInstance< svt::AddressBookSourceDialog > aDialog(GetTopWindow(), ::comphelper::getProcessComponentContext());
+            aDialog->Execute();
             bDone = true;
             break;
         }

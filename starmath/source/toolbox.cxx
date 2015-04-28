@@ -127,7 +127,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     sal_uInt16 i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
     {
-        ToolBox *pBox = new ToolBox(get<vcl::Window>("box"), SmResId( TOOLBOX_CAT_A + i ));
+        VclPtrInstance<ToolBox> pBox(get<vcl::Window>("box"), SmResId( TOOLBOX_CAT_A + i ));
         vToolBoxCategories[i] = pBox;
         pBox->SetSelectHdl(LINK(this, SmToolBoxWindow, CmdSelectHdl));
     }
@@ -139,14 +139,24 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
 
 SmToolBoxWindow::~SmToolBoxWindow()
 {
+    disposeOnce();
+}
+
+void SmToolBoxWindow::dispose()
+{
     int i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
-    {
-        ToolBox *pBox = vToolBoxCategories[i];
-        delete pBox;
-    }
+        vToolBoxCategories[i].disposeAndClear();
+
+    pToolBoxCmd = 0;
     for (i = 0;  i < NUM_TBX_CATEGORIES + 1;  ++i)
+    {
         delete aImageLists[i];
+        aImageLists[i] = 0;
+    }
+    m_pToolBoxCat.clear();
+    pToolBoxCmd.clear();
+    SfxFloatingWindow::dispose();
 }
 
 SmViewShell * SmToolBoxWindow::GetView()
@@ -351,8 +361,8 @@ SmToolBoxWrapper::SmToolBoxWrapper(vcl::Window *pParentWindow,
 {
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
-    pWindow = new SmToolBoxWindow(pBindings, this, pParentWindow);
-    static_cast<SfxFloatingWindow *>(pWindow)->Initialize(pInfo);
+    pWindow.reset(VclPtr<SmToolBoxWindow>::Create(pBindings, this, pParentWindow));
+    static_cast<SfxFloatingWindow *>(pWindow.get())->Initialize(pInfo);
 }
 
 

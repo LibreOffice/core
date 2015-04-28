@@ -49,7 +49,6 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     mnGlobalTransparency(0),
     mnJPEGCompressMode(nJPEGcompressMode)
 {
-    mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( false );
 
     maMovieTempFile.EnableKillingFile();
@@ -100,7 +99,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
 
 Writer::~Writer()
 {
-    delete mpVDev;
+    mpVDev.disposeAndClear();
     delete mpSprite;
     delete mpTag;
 }

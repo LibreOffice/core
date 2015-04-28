@@ -497,8 +497,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     }
 
     LineInfo            aLineInfo( LINE_NONE, 0 );
-    ::std::stack< LineInfo* > aLIStack;
-    VirtualDevice       aFontVDev;
+    ::std::stack< LineInfo* >    aLIStack;
+    ScopedVclPtrInstance< VirtualDevice > aFontVDev;
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     bool                bFatLine = false;
 
@@ -848,7 +848,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
 
                     // #106172# Track font relevant data in shadow VDev
-                    aFontVDev.SetFont( aFont );
+                    aFontVDev->SetFont( aFont );
                 }
                 break;
 
@@ -904,7 +904,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 {
                                     boost::scoped_array<long> pTmpAry(new long[nStrLen]);
 
-                                    aFontVDev.GetTextArray( aStr, pTmpAry.get(), nIndex, nLen );
+                                    aFontVDev->GetTextArray( aStr, pTmpAry.get(), nIndex, nLen );
 
                                     // now, the difference between the
                                     // last and the second last DX array
@@ -1022,7 +1022,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaMapModeAction( aMapMode ) );
 
                     // #106172# Track font relevant data in shadow VDev
-                    aFontVDev.SetMapMode( aMapMode );
+                    aFontVDev->SetMapMode( aMapMode );
                 }
                 break;
 
@@ -1132,7 +1132,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaPushAction( PushFlags::ALL ) );
 
                     // #106172# Track font relevant data in shadow VDev
-                    aFontVDev.Push();
+                    aFontVDev->Push();
                 }
                 break;
 
@@ -1159,7 +1159,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaPopAction() );
 
                     // #106172# Track font relevant data in shadow VDev
-                    aFontVDev.Pop();
+                    aFontVDev->Pop();
                 }
                 break;
 
@@ -1259,9 +1259,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     // #106172# Track font relevant data in shadow VDev
                     if( bSet )
-                        aFontVDev.SetRefPoint( aRefPoint );
+                        aFontVDev->SetRefPoint( aRefPoint );
                     else
-                        aFontVDev.SetRefPoint();
+                        aFontVDev->SetRefPoint();
                 }
                 break;
 
@@ -1374,7 +1374,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     const Size          aPrefSize( rMtf.GetPrefSize() );
     bool                bRop_0_1 = false;
-    VirtualDevice       aSaveVDev;
+    ScopedVclPtrInstance< VirtualDevice > aSaveVDev;
     Color               aLineCol( COL_BLACK );
     ::std::stack< Color* >  aLineColStack;
 
@@ -1392,7 +1392,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     nCountPos = rOStm.Tell();
     rOStm.SeekRel( 4L );
 
-    const sal_Int32 nActCount = ImplWriteActions( rOStm, rMtf, aSaveVDev, bRop_0_1, aLineCol, aLineColStack, eActualCharSet );
+    const sal_Int32 nActCount = ImplWriteActions( rOStm, rMtf, *aSaveVDev.get(), bRop_0_1, aLineCol, aLineColStack, eActualCharSet );
     const sal_uLong nActPos = rOStm.Tell();
 
     rOStm.Seek( nCountPos );
@@ -2311,10 +2311,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 {
                     // write actions for hatch
-                    VirtualDevice   aVDev;
+                    ScopedVclPtrInstance< VirtualDevice > aVDev;
                     GDIMetaFile     aTmpMtf;
 
-                    aVDev.AddHatchActions( rPolyPoly, rHatch, aTmpMtf );
+                    aVDev->AddHatchActions( rPolyPoly, rHatch, aTmpMtf );
                     nAddCount = ImplWriteActions( rOStm, aTmpMtf, rSaveVDev, rRop_0_1, rLineCol, rLineColStack, rActualCharSet );
                     nNewPos = rOStm.Tell();
                     rOStm.Seek( nOldPos );

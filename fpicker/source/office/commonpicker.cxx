@@ -123,8 +123,7 @@ namespace svt
                 m_pDlg->EndDialog( RET_CANCEL );
         }
 
-        delete m_pDlg;
-        m_pDlg = NULL;
+        m_pDlg.disposeAndClear();
         m_xWindow = NULL;
         m_xDialogParent = NULL;
     }
@@ -150,9 +149,10 @@ namespace svt
             stopWindowListening();
 
             if ( !bDialogDying )    // it's the parent which is dying -> delete the dialog
-                delete m_pDlg;
+                m_pDlg.disposeAndClear();
+            else
+                m_pDlg.clear();
 
-            m_pDlg = NULL;
             m_xWindow = NULL;
             m_xDialogParent = NULL;
         }
@@ -201,7 +201,7 @@ namespace svt
     {
         if ( !m_pDlg )
         {
-            m_pDlg = implCreateDialog( VCLUnoHelper::GetWindow( m_xDialogParent ) );
+            m_pDlg.reset( implCreateDialog( VCLUnoHelper::GetWindow( m_xDialogParent ) ) );
             DBG_ASSERT( m_pDlg, "OCommonPicker::createPicker: invalid dialog returned!" );
 
             if ( m_pDlg )
@@ -240,7 +240,7 @@ namespace svt
             }
         }
 
-        return NULL != m_pDlg;
+        return nullptr != m_pDlg;
     }
 
 

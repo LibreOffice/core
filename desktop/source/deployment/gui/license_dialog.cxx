@@ -57,6 +57,7 @@ class LicenseView : public MultiLineEdit, public SfxListener
 public:
     LicenseView( vcl::Window* pParent, WinBits nStyle );
     virtual ~LicenseView();
+    virtual void dispose() SAL_OVERRIDE;
 
     void ScrollDown( ScrollType eScroll );
 
@@ -76,14 +77,14 @@ protected:
 struct LicenseDialogImpl : public ModalDialog
 {
     cssu::Reference<cssu::XComponentContext> m_xComponentContext;
-    FixedText* m_pFtHead;
-    FixedImage* m_pArrow1;
-    FixedImage* m_pArrow2;
-    LicenseView* m_pLicense;
-    PushButton* m_pDown;
+    VclPtr<FixedText> m_pFtHead;
+    VclPtr<FixedImage> m_pArrow1;
+    VclPtr<FixedImage> m_pArrow2;
+    VclPtr<LicenseView> m_pLicense;
+    VclPtr<PushButton> m_pDown;
 
-    PushButton* m_pAcceptButton;
-    PushButton* m_pDeclineButton;
+    VclPtr<PushButton> m_pAcceptButton;
+    VclPtr<PushButton> m_pDeclineButton;
 
     DECL_LINK(PageDownHdl, void *);
     DECL_LINK(ScrolledHdl, void *);
@@ -98,10 +99,25 @@ struct LicenseDialogImpl : public ModalDialog
         css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & sExtensionName,
         const OUString & sLicenseText);
+    virtual ~LicenseDialogImpl() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Activate() SAL_OVERRIDE;
 
 };
+
+void LicenseDialogImpl::dispose()
+{
+    m_pFtHead.clear();
+    m_pArrow1.clear();
+    m_pArrow2.clear();
+    m_pLicense.clear();
+    m_pDown.clear();
+    m_pAcceptButton.clear();
+    m_pDeclineButton.clear();
+    ModalDialog::dispose();
+}
+
 
 LicenseView::LicenseView( vcl::Window* pParent, WinBits nStyle )
     : MultiLineEdit( pParent, nStyle )
@@ -122,9 +138,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLicenseView(vcl::Windo
 
 LicenseView::~LicenseView()
 {
+    disposeOnce();
+}
+
+void LicenseView::dispose()
+{
     maEndReachedHdl = Link();
     maScrolledHdl   = Link();
     EndListeningAll();
+    MultiLineEdit::dispose();
 }
 
 void LicenseView::ScrollDown( ScrollType eScroll )
@@ -307,8 +329,9 @@ sal_Int16 LicenseDialog::execute() throw (RuntimeException, std::exception)
 
 sal_Int16 LicenseDialog::solar_execute()
 {
-    std::unique_ptr<LicenseDialogImpl> dlg(
-        new LicenseDialogImpl(
+    VclPtr<LicenseDialogImpl> dlg(
+        VclPtr<LicenseDialogImpl>::Create(
+
             VCLUnoHelper::GetWindow(m_parent),
             m_xComponentContext, m_sExtensionName, m_sLicenseText));
 

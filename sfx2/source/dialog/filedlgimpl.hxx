@@ -54,7 +54,7 @@ namespace sfx2
         SfxFilterMatcher*           mpMatcher;
         GraphicFilter*              mpGraphicFilter;
         FileDialogHelper*           mpAntiImpl;
-        vcl::Window*                     mpPreferredParentWindow;
+        VclPtr<vcl::Window>         mpPreferredParentWindow;
 
         ::std::vector< OUString > mlLastURLs;
 

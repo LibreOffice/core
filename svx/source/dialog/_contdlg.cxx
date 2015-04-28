@@ -67,7 +67,7 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( vcl::Window* _pParent, sal_u
                                                     SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
             SfxChildWindow( _pParent, nId )
 {
-    SvxSuperContourDlg* pDlg = new SvxSuperContourDlg(pBindings, this, _pParent);
+    VclPtr<SvxSuperContourDlg> pDlg = VclPtr<SvxSuperContourDlg>::Create(pBindings, this, _pParent);
     pWindow = pDlg;
 
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
@@ -88,6 +88,18 @@ SvxContourDlg::SvxContourDlg(SfxBindings* _pBindings, SfxChildWindow* pCW,
 
 SvxContourDlg::~SvxContourDlg()
 {
+    disposeOnce();
+}
+
+void SvxContourDlg::dispose()
+{
+    pSuperClass.clear();
+    SfxFloatingWindow::dispose();
+}
+
+void SvxContourDlg::SetSuperClass( SvxSuperContourDlg& rSuperClass )
+{
+    pSuperClass = &rSuperClass;
 }
 
 tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
@@ -101,16 +113,16 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     {
         if( rGraphic.IsAnimated() )
         {
-            VirtualDevice       aVDev;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             MapMode             aTransMap;
             const Animation     aAnim( rGraphic.GetAnimation() );
             const Size&         rSizePix = aAnim.GetDisplaySizePixel();
             const sal_uInt16        nCount = aAnim.Count();
 
-            if ( aVDev.SetOutputSizePixel( rSizePix ) )
+            if ( pVDev->SetOutputSizePixel( rSizePix ) )
             {
-                aVDev.SetLineColor( Color( COL_BLACK ) );
-                aVDev.SetFillColor( Color( COL_BLACK ) );
+                pVDev->SetLineColor( Color( COL_BLACK ) );
+                pVDev->SetFillColor( Color( COL_BLACK ) );
 
                 for( sal_uInt16 i = 0; i < nCount; i++ )
                 {
@@ -119,13 +131,13 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                     // Push Polygon output to the right place; this is the
                     // offset of the sub-image within the total animation
                     aTransMap.SetOrigin( Point( rStepBmp.aPosPix.X(), rStepBmp.aPosPix.Y() ) );
-                    aVDev.SetMapMode( aTransMap );
-                    aVDev.DrawPolyPolygon( CreateAutoContour( rStepBmp.aBmpEx, pRect, nFlags ) );
+                    pVDev->SetMapMode( aTransMap );
+                    pVDev->DrawPolyPolygon( CreateAutoContour( rStepBmp.aBmpEx, pRect, nFlags ) );
                 }
 
                 aTransMap.SetOrigin( Point() );
-                aVDev.SetMapMode( aTransMap );
-                aBmp = aVDev.GetBitmap( Point(), rSizePix );
+                pVDev->SetMapMode( aTransMap );
+                aBmp = pVDev->GetBitmap( Point(), rSizePix );
                 aBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
             }
         }
@@ -140,8 +152,8 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     else if( rGraphic.GetType() != GRAPHIC_NONE )
     {
         const Graphic   aTmpGrf( rGraphic.GetGDIMetaFile().GetMonochromeMtf( Color( COL_BLACK ) ) );
-        VirtualDevice   aVDev;
-        Size            aSizePix( aVDev.LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
+        Size            aSizePix( pVDev->LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
 
         if( aSizePix.Width() && aSizePix.Height() && ( aSizePix.Width() > 512 || aSizePix.Height() > 512 ) )
         {
@@ -153,11 +165,11 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                 aSizePix.Height() = FRound( ( aSizePix.Width() = 512 ) / fWH );
         }
 
-        if( aVDev.SetOutputSizePixel( aSizePix ) )
+        if( pVDev->SetOutputSizePixel( aSizePix ) )
         {
             const Point aPt;
-            aTmpGrf.Draw( &aVDev, aPt, aSizePix );
-            aBmp = aVDev.GetBitmap( aPt, aSizePix );
+            aTmpGrf.Draw( pVDev, aPt, aSizePix );
+            aBmp = pVDev->GetBitmap( aPt, aSizePix );
         }
 
         nContourFlags |= XOUTBMP_CONTOUR_EDGEDETECT;
@@ -211,7 +223,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 {
     get(m_pTbx1, "toolbar");
     get(m_pMtfTolerance, "spinbutton");
-    m_pContourWnd = new ContourWindow(get<vcl::Window>("container"), WB_BORDER);
+    m_pContourWnd = VclPtr<ContourWindow>::Create(get<vcl::Window>("container"), WB_BORDER);
     m_pContourWnd->set_hexpand(true);
     m_pContourWnd->set_vexpand(true);
     m_pContourWnd->Show();
@@ -282,9 +294,18 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 
 SvxSuperContourDlg::~SvxSuperContourDlg()
 {
+    disposeOnce();
+}
+
+void SvxSuperContourDlg::dispose()
+{
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK(this, SvxSuperContourDlg, MiscHdl) );
-    delete m_pContourWnd;
+    m_pContourWnd.disposeAndClear();
+    m_pTbx1.clear();
+    m_pMtfTolerance.clear();
+    m_pStbStatus.clear();
+    SvxContourDlg::dispose();
 }
 
 bool SvxSuperContourDlg::Close()
@@ -293,8 +314,8 @@ bool SvxSuperContourDlg::Close()
 
     if (m_pTbx1->IsItemEnabled(mnApplyId))
     {
-        MessageDialog aQBox( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui");
-        const long  nRet = aQBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aQBox( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui");
+        const long  nRet = aQBox->Execute();
 
         if ( nRet == RET_YES )
         {
@@ -425,9 +446,9 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
     {
         if (m_pTbx1->IsItemChecked(mnWorkSpaceId))
         {
-            MessageDialog aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui");
+            ScopedVclPtrInstance< MessageDialog > aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui" );
 
-            if ( !m_pContourWnd->IsContourChanged() || ( aQBox.Execute() == RET_YES ) )
+            if ( !m_pContourWnd->IsContourChanged() || ( aQBox->Execute() == RET_YES ) )
                 m_pContourWnd->SetWorkplaceMode( true );
             else
                 m_pTbx1->CheckItem(mnWorkSpaceId, false);
@@ -499,10 +520,9 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
             m_pStbStatus->Invalidate();
         else if ( bGraphicLinked )
         {
-            MessageDialog aQBox(this, "QueryUnlinkGraphicsDialog",
-                "svx/ui/queryunlinkgraphicsdialog.ui");
-
-            if (aQBox.Execute() != RET_YES)
+            ScopedVclPtrInstance<MessageDialog> aQBox(this, "QueryUnlinkGraphicsDialog",
+                                                      "svx/ui/queryunlinkgraphicsdialog.ui");
+            if (aQBox->Execute() != RET_YES)
             {
                 bPipette = false;
                 m_pTbx1->CheckItem(mnPipetteId, bPipette);
@@ -693,7 +713,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 
             if( !!aMask )
             {
-                MessageDialog aQBox( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui");
+                ScopedVclPtrInstance< MessageDialog > aQBox( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui" );
                 bool        bNewContour;
 
                 aRedoGraphic = Graphic();
@@ -701,7 +721,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
                 aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
                 nGrfChanged++;
 
-                bNewContour = ( aQBox.Execute() == RET_YES );
+                bNewContour = ( aQBox->Execute() == RET_YES );
                 pWnd->SetGraphic( aGraphic, bNewContour );
 
                 if( bNewContour )

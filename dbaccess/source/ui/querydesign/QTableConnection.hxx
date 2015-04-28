@@ -32,7 +32,6 @@ namespace dbaui
     public:
         OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData);
         OQueryTableConnection(const OQueryTableConnection& rConn);
-        virtual ~OQueryTableConnection();
 
         OQueryTableConnection& operator=(const OQueryTableConnection& rConn);
         bool operator==(const OQueryTableConnection& rCompare);

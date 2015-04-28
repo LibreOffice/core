@@ -58,6 +58,20 @@ ScInsertCellDlg::ScInsertCellDlg( vcl::Window* pParent,bool bDisallowCellMove) :
     }
 }
 
+ScInsertCellDlg::~ScInsertCellDlg()
+{
+    disposeOnce();
+}
+
+void ScInsertCellDlg::dispose()
+{
+    m_pBtnCellsDown.clear();
+    m_pBtnCellsRight.clear();
+    m_pBtnInsRow.clear();
+    m_pBtnInsCol.clear();
+    ModalDialog::dispose();
+}
+
 InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 {
     InsCellCmd nReturn = INS_NONE;
@@ -84,10 +98,6 @@ InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
     }
 
     return nReturn;
-}
-
-ScInsertCellDlg::~ScInsertCellDlg()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

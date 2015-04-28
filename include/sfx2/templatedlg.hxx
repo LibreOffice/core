@@ -50,7 +50,8 @@ public:
 
     SfxTemplateManagerDlg(vcl::Window *parent = NULL);
 
-    virtual ~SfxTemplateManagerDlg ();
+    virtual ~SfxTemplateManagerDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void setSaveMode();
 
@@ -142,16 +143,16 @@ private:
 
 private:
 
-    TabControl *mpTabControl;
+    VclPtr<TabControl> mpTabControl;
 
-    Edit *mpSearchEdit;
-    ToolBox *mpViewBar;
-    ToolBox *mpActionBar;
-    ToolBox *mpTemplateBar;
-    TemplateSearchView *mpSearchView;
-    TemplateAbstractView *mpCurView;
-    TemplateLocalView *mpLocalView;
-    TemplateRemoteView *mpRemoteView;
+    VclPtr<Edit> mpSearchEdit;
+    VclPtr<ToolBox> mpViewBar;
+    VclPtr<ToolBox> mpActionBar;
+    VclPtr<ToolBox> mpTemplateBar;
+    VclPtr<TemplateSearchView> mpSearchView;
+    VclPtr<TemplateAbstractView> mpCurView;
+    VclPtr<TemplateLocalView> mpLocalView;
+    VclPtr<TemplateRemoteView> mpRemoteView;
     PopupMenu *mpActionMenu;
     PopupMenu *mpRepositoryMenu;
     PopupMenu *mpTemplateDefaultMenu;

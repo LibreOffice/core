@@ -122,6 +122,41 @@ ScaleTabPage::ScaleTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs) :
     HideAllControls();
 }
 
+ScaleTabPage::~ScaleTabPage()
+{
+    disposeOnce();
+}
+
+void ScaleTabPage::dispose()
+{
+    m_pCbxReverse.clear();
+    m_pCbxLogarithm.clear();
+    m_pBxType.clear();
+    m_pLB_AxisType.clear();
+    m_pBxMinMax.clear();
+    m_pFmtFldMin.clear();
+    m_pCbxAutoMin.clear();
+    m_pFmtFldMax.clear();
+    m_pCbxAutoMax.clear();
+    m_pBxResolution.clear();
+    m_pLB_TimeResolution.clear();
+    m_pCbx_AutoTimeResolution.clear();
+    m_pTxtMain.clear();
+    m_pFmtFldStepMain.clear();
+    m_pMt_MainDateStep.clear();
+    m_pLB_MainTimeUnit.clear();
+    m_pCbxAutoStepMain.clear();
+    m_pTxtHelpCount.clear();
+    m_pTxtHelp.clear();
+    m_pMtStepHelp.clear();
+    m_pLB_HelpTimeUnit.clear();
+    m_pCbxAutoStepHelp.clear();
+    m_pFmtFldOrigin.clear();
+    m_pCbxAutoOrigin.clear();
+    m_pBxOrigin.clear();
+    SfxTabPage::dispose();
+}
+
 IMPL_LINK( ScaleTabPage, FmtFieldModifiedHdl, FormattedField*, pFmtFied )
 {
     if( pFmtFied )
@@ -236,9 +271,9 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
     return 0;
 }
 
-SfxTabPage* ScaleTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> ScaleTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
 {
-    return new ScaleTabPage(pWindow, *rOutAttrs);
+    return VclPtr<ScaleTabPage>::Create(pWindow, *rOutAttrs);
 }
 
 bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)

@@ -546,8 +546,8 @@ void SwIndexMarkPane::UpdateKeyBoxes()
 
 class SwNewUserIdxDlg : public ModalDialog
 {
-    OKButton*        m_pOKPB;
-    Edit*            m_pNameED;
+    VclPtr<OKButton>        m_pOKPB;
+    VclPtr<Edit>            m_pNameED;
 
     SwIndexMarkPane* m_pDlg;
 
@@ -565,6 +565,13 @@ class SwNewUserIdxDlg : public ModalDialog
                 m_pOKPB->Enable(false);
                 m_pNameED->GrabFocus();
             }
+    virtual ~SwNewUserIdxDlg() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pOKPB.clear();
+        m_pNameED.clear();
+        ModalDialog::dispose();
+    }
 
     OUString  GetName(){return m_pNameED->GetText();}
 };
@@ -577,7 +584,7 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
 {
-    boost::scoped_ptr<SwNewUserIdxDlg> pDlg(new SwNewUserIdxDlg(this));
+    ScopedVclPtrInstance< SwNewUserIdxDlg > pDlg(this);
     if(RET_OK == pDlg->Execute())
     {
         OUString sNewName(pDlg->GetName());
@@ -982,12 +989,12 @@ void SwIndexMarkModalDlg::Apply()
 
 class SwCreateAuthEntryDlg_Impl : public ModalDialog
 {
-    FixedText*      pFixedTexts[AUTH_FIELD_END];
-    ListBox*        pTypeListBox;
-    ComboBox*       pIdentifierBox;
-    Edit*           pEdits[AUTH_FIELD_END];
+    VclPtr<FixedText>      pFixedTexts[AUTH_FIELD_END];
+    VclPtr<ListBox>        pTypeListBox;
+    VclPtr<ComboBox>       pIdentifierBox;
+    VclPtr<Edit>           pEdits[AUTH_FIELD_END];
 
-    OKButton*       m_pOKBT;
+    VclPtr<OKButton>       m_pOKBT;
 
     Link            aShortNameCheckLink;
 
@@ -1007,6 +1014,7 @@ public:
                             bool bNewEntry,
                             bool bCreate);
     virtual ~SwCreateAuthEntryDlg_Impl();
+    virtual void    dispose() SAL_OVERRIDE;
 
     OUString        GetEntryText(ToxAuthorityField eField) const;
 
@@ -1200,8 +1208,8 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                MessageDialog aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                if(RET_YES != aQuery.Execute())
+                ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                if(RET_YES != aQuery->Execute())
                     return 0;
             }
         }
@@ -1240,14 +1248,14 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
     OUString sOldId = m_sCreatedEntry[0];
     for(int i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
-    SwCreateAuthEntryDlg_Impl aDlg(pButton,
+    ScopedVclPtrInstance<SwCreateAuthEntryDlg_Impl> aDlg(pButton,
                 bCreate ? m_sCreatedEntry : m_sFields,
                 *pSh, bNewEntry, bCreate);
     if(bNewEntry)
     {
-        aDlg.SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
+        aDlg->SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
     }
-    if(RET_OK == aDlg.Execute())
+    if(RET_OK == aDlg->Execute())
     {
         if(bCreate && !sOldId.isEmpty())
         {
@@ -1255,7 +1263,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
         }
         for(int i = 0; i < AUTH_FIELD_END; i++)
         {
-            m_sFields[i] = aDlg.GetEntryText((ToxAuthorityField)i);
+            m_sFields[i] = aDlg->GetEntryText((ToxAuthorityField)i);
             m_sCreatedEntry[i] = m_sFields[i];
         }
         if(bNewEntry && !m_pFromDocContentRB->IsChecked())
@@ -1438,7 +1446,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
     {
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
 
-        pFixedTexts[nIndex] = new FixedText(bLeft ? pLeft : pRight, WB_VCENTER);
+        pFixedTexts[nIndex] = VclPtr<FixedText>::Create(bLeft ? pLeft : pRight, WB_VCENTER);
 
         pFixedTexts[nIndex]->set_grid_left_attach(0);
         pFixedTexts[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
@@ -1447,7 +1455,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         pEdits[nIndex] = 0;
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
-            pTypeListBox = new ListBox(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
+            pTypeListBox = VclPtr<ListBox>::Create(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
             for(int j = 0; j < AUTH_TYPE_END; j++)
                 pTypeListBox->InsertEntry(SW_RESSTR(STR_AUTH_TYPE_START + j));
             if(!pFields[aCurInfo.nToxField].isEmpty())
@@ -1464,7 +1472,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
-            pIdentifierBox = new ComboBox(bLeft ? pLeft : pRight, WB_BORDER|WB_DROPDOWN|WB_VCENTER);
+            pIdentifierBox = VclPtr<ComboBox>::Create(bLeft ? pLeft : pRight, WB_BORDER|WB_DROPDOWN|WB_VCENTER);
 
             pIdentifierBox->SetSelectHdl(LINK(this,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
@@ -1488,7 +1496,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         }
         else
         {
-            pEdits[nIndex] = new Edit(bLeft ? pLeft : pRight, WB_BORDER|WB_VCENTER);
+            pEdits[nIndex] = VclPtr<Edit>::Create(bLeft ? pLeft : pRight, WB_BORDER|WB_VCENTER);
             pEdits[nIndex]->SetWidthInChars(14);
             pEdits[nIndex]->set_grid_left_attach(1);
             pEdits[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
@@ -1519,13 +1527,20 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
 
 SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
 {
+    disposeOnce();
+}
+
+void SwCreateAuthEntryDlg_Impl::dispose()
+{
     for(int i = 0; i < AUTH_FIELD_END; i++)
     {
-        delete pFixedTexts[i];
-        delete pEdits[i];
+        pFixedTexts[i].disposeAndClear();
+        pEdits[i].disposeAndClear();
     }
-    delete pTypeListBox;
-    delete pIdentifierBox;
+    pTypeListBox.disposeAndClear();
+    pIdentifierBox.disposeAndClear();
+    m_pOKBT.clear();
+    ModalDialog::dispose();
 }
 
 OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const

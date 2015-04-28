@@ -33,6 +33,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class SvtFileDialog;
 namespace vcl { class Window; }
@@ -64,7 +65,7 @@ namespace svt
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xWindow;
         // </properties>
 
-        SvtFileDialog*      m_pDlg;
+        VclPtr<SvtFileDialog>      m_pDlg;
         ImplSVEvent *       m_nCancelEvent;
         bool            m_bExecuting;
 
@@ -92,7 +93,7 @@ namespace svt
         // overridables
 
         // will be called with locked SolarMutex
-        virtual SvtFileDialog*  implCreateDialog( vcl::Window* _pParent ) = 0;
+        virtual VclPtr<SvtFileDialog> implCreateDialog( vcl::Window* _pParent ) = 0;
         virtual sal_Int16       implExecutePicker( ) = 0;
             // do NOT override XExecutableDialog::execute! We need to do some stuff there ourself ...
 

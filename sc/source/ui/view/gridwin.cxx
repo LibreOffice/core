@@ -205,7 +205,7 @@ bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 class ScFilterListBox : public ListBox
 {
 private:
-    ScGridWindow*   pGridWin;
+    VclPtr<ScGridWindow>   pGridWin;
     SCCOL           nCol;
     SCROW           nRow;
     bool            bButtonDown;
@@ -224,6 +224,7 @@ public:
                 ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
                 virtual ~ScFilterListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    Select() SAL_OVERRIDE;
@@ -258,8 +259,15 @@ ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
 
 ScFilterListBox::~ScFilterListBox()
 {
+    disposeOnce();
+}
+
+void ScFilterListBox::dispose()
+{
     if (IsMouseCaptured())
         ReleaseMouse();
+    pGridWin.clear();
+    ListBox::dispose();
 }
 
 void ScFilterListBox::EndInit()
@@ -337,6 +345,7 @@ class ScFilterFloatingWindow : public FloatingWindow
 public:
     ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
     virtual ~ScFilterFloatingWindow();
+    virtual void dispose() SAL_OVERRIDE;
     // required for System FloatingWindows that will not process KeyInput by themselves
     virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
 };
@@ -347,7 +356,13 @@ ScFilterFloatingWindow::ScFilterFloatingWindow( vcl::Window* pParent, WinBits nS
 
 ScFilterFloatingWindow::~ScFilterFloatingWindow()
 {
+    disposeOnce();
+}
+
+void ScFilterFloatingWindow::dispose()
+{
     EndPopupMode();
+    FloatingWindow::dispose();
 }
 
 vcl::Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
@@ -522,6 +537,21 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
 
 ScGridWindow::~ScGridWindow()
 {
+    disposeOnce();
+}
+
+void ScGridWindow::dispose()
+{
+    // #114409#
+    ImpDestroyOverlayObjects();
+
+    mpFilterBox.disposeAndClear();
+    mpFilterFloat.disposeAndClear();
+    mpNoteMarker.reset();
+    mpAutoFilterPopup.disposeAndClear();
+    mpDPFieldPopup.disposeAndClear();
+
+    vcl::Window::dispose();
 }
 
 void ScGridWindow::ClickExtern()
@@ -535,8 +565,8 @@ void ScGridWindow::ClickExtern()
         {
             break;
         }
-        mpFilterBox.reset();
-        mpFilterFloat.reset();
+        mpFilterBox.disposeAndClear();
+        mpFilterFloat.disposeAndClear();
     }
     while (false);
 
@@ -612,7 +642,7 @@ struct AutoFilterData : public ScCheckListMenuWindow::ExtendedData
 
 class AutoFilterAction : public ScMenuFloatingWindow::Action
 {
-    ScGridWindow* mpWindow;
+    VclPtr<ScGridWindow> mpWindow;
     ScGridWindow::AutoFilterMode meMode;
 public:
     AutoFilterAction(ScGridWindow* p, ScGridWindow::AutoFilterMode eMode) :
@@ -625,7 +655,7 @@ public:
 
 class AutoFilterPopupEndAction : public ScMenuFloatingWindow::Action
 {
-    ScGridWindow* mpWindow;
+    VclPtr<ScGridWindow> mpWindow;
     ScAddress maPos;
 public:
     AutoFilterPopupEndAction(ScGridWindow* p, const ScAddress& rPos) :
@@ -673,7 +703,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
 
-    mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pDoc));
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
     mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, Normal));
     mpAutoFilterPopup->setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
@@ -933,8 +963,8 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
 
 void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 {
-    mpFilterBox.reset();
-    mpFilterFloat.reset();
+    mpFilterBox.disposeAndClear();
+    mpFilterFloat.disposeAndClear();
 
     SCCOL nCol = rScenRange.aEnd.Col();     // Zelle unterhalb des Buttons
     SCROW nRow = rScenRange.aStart.Row();
@@ -964,9 +994,9 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     //  Die ListBox direkt unter der schwarzen Linie auf dem Zellgitter
     //  (wenn die Linie verdeckt wird, sieht es komisch aus...)
 
-    mpFilterFloat.reset(new ScFilterFloatingWindow(this, WinBits(WB_BORDER)));
+    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
-    mpFilterBox.reset(new ScFilterListBox(mpFilterFloat.get(), this, nCol, nRow, SC_FILTERBOX_SCENARIO));
+    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, SC_FILTERBOX_SCENARIO));
     if (bLayoutRTL)
         mpFilterBox->EnableMirroring();
 
@@ -1069,8 +1099,8 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 
 void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect )
 {
-    mpFilterBox.reset();
-    mpFilterFloat.reset();
+    mpFilterBox.disposeAndClear();
+    mpFilterFloat.disposeAndClear();
 
     sal_uInt16 i;
     ScDocument* pDoc = pViewData->GetDocument();
@@ -1090,10 +1120,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     aPos.X() -= 1;
     aPos.Y() += nSizeY - 1;
 
-    mpFilterFloat.reset(new ScFilterFloatingWindow(this, WinBits(WB_BORDER)));
+    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
     ScFilterBoxMode eFilterMode = bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER;
-    mpFilterBox.reset(new ScFilterListBox(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
+    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
     // Fix for bug fdo#44925
     if (AllSettings::GetLayoutRTL() != bLayoutRTL)
         mpFilterBox->EnableMirroring();
@@ -1305,8 +1335,8 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
     if ( bEmpty )
     {
-        mpFilterBox.reset();
-        mpFilterFloat.reset();
+        mpFilterBox.disposeAndClear();
+        mpFilterFloat.disposeAndClear();
     }
     else
     {

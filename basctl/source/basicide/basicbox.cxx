@@ -46,12 +46,6 @@ LibBoxControl::LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
 
 
 
-LibBoxControl::~LibBoxControl()
-{
-}
-
-
-
 void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     LibBox* pBox = static_cast<LibBox*>(GetToolBox().GetItemWindow(GetId()));
@@ -71,9 +65,9 @@ void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPool
 
 
 
-vcl::Window* LibBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> LibBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return new LibBox( pParent, m_xFrame );
+    return VclPtr<LibBox>::Create( pParent, m_xFrame );
 }
 
 
@@ -88,7 +82,13 @@ DocListenerBox::DocListenerBox( vcl::Window* pParent )
 
 DocListenerBox::~DocListenerBox()
 {
+    disposeOnce();
+}
+
+void DocListenerBox::dispose()
+{
     m_aNotifier.dispose();
+    ListBox::dispose();
 }
 
 void DocListenerBox::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
@@ -156,7 +156,13 @@ LibBox::LibBox( vcl::Window* pParent, const uno::Reference< frame::XFrame >& rFr
 
 LibBox::~LibBox()
 {
+    disposeOnce();
+}
+
+void LibBox::dispose()
+{
     ClearBox();
+    DocListenerBox::dispose();
 }
 
 void LibBox::Update( const SfxStringItem* pItem )
@@ -341,10 +347,6 @@ LanguageBoxControl::LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, Tool
 {
 }
 
-LanguageBoxControl::~LanguageBoxControl()
-{
-}
-
 void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, const SfxPoolItem* pItem )
 {
     (void)nID;
@@ -360,9 +362,9 @@ void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, cons
     }
 }
 
-vcl::Window* LanguageBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> LanguageBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return new LanguageBox( pParent );
+    return VclPtr<LanguageBox>::Create( pParent );
 }
 
 // class basctl::LanguageBox -----------------------------------------------
@@ -384,7 +386,13 @@ LanguageBox::LanguageBox( vcl::Window* pParent ) :
 
 LanguageBox::~LanguageBox()
 {
+    disposeOnce();
+}
+
+void LanguageBox::dispose()
+{
     ClearBox();
+    DocListenerBox::dispose();
 }
 
 void LanguageBox::FillBox()

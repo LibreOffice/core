@@ -255,11 +255,19 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 
 SdPageObjsTLB::~SdPageObjsTLB()
 {
+    disposeOnce();
+}
+
+void SdPageObjsTLB::dispose()
+{
     if ( mpBookmarkDoc )
         CloseBookmarkDoc();
     else
         // no document was created from mpMedium, so this object is still the owner of it
         delete mpMedium;
+    mpParent.clear();
+    mpDropNavWin.clear();
+    SvTreeListBox::dispose();
 }
 
 // helper function for  GetEntryAltText and GetEntryLongDescription
@@ -1004,8 +1012,8 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 
         if ( !mpBookmarkDoc )
         {
-            MessageDialog aErrorBox(this, SD_RESSTR(STR_READ_DATA_ERROR));
-            aErrorBox.Execute();
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SD_RESSTR(STR_READ_DATA_ERROR));
+            aErrorBox->Execute();
             mpMedium = 0; //On failure the SfxMedium is invalid
         }
     }
@@ -1343,7 +1351,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 OUString                aFile;
 
                 if( aDataHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aFile ) &&
-                    static_cast<SdNavigatorWin*>(mpParent)->InsertFile( aFile ) )
+                    static_cast<SdNavigatorWin*>(mpParent.get())->InsertFile( aFile ) )
                 {
                     nRet = rEvt.mnAction;
                 }

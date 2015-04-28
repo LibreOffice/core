@@ -30,12 +30,14 @@
 class ScSelEntryDlg : public ModalDialog
 {
 private:
-    ListBox* m_pLb;
+    VclPtr<ListBox> m_pLb;
 
     DECL_LINK( DblClkHdl, void * );
 
 public:
     ScSelEntryDlg(vcl::Window* pParent, const std::vector<OUString> &rEntryList);
+    virtual ~ScSelEntryDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString GetSelectEntry() const;
 };

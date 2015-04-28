@@ -31,9 +31,7 @@
 #include <vcl/apptypes.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/inputctx.hxx>
-#include <vcl/vclevent.hxx>
-// Only for compatibility - because many people outside haven't included event.hxx
-#include <vcl/event.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <rtl/ustring.hxx>
@@ -63,6 +61,7 @@ class CommandEvent;
 class TrackingEvent;
 class HelpEvent;
 class DataChangedEvent;
+class VclSimpleEvent;
 class NotifyEvent;
 class SystemWindow;
 class SalFrame;
@@ -118,6 +117,8 @@ namespace vcl {
 }
 
 namespace svt { class PopupWindowControllerImpl; }
+
+template<class T> class VclPtr;
 
 
 // - WindowTypes -
@@ -361,6 +362,8 @@ class VclBuilder;
 class ImplDockingWindowWrapper;
 class ImplPopupFloatWin;
 class MenuFloatingWindow;
+class LifecycleTest;
+
 namespace svt { class PopupWindowControllerImpl; }
 
 struct WindowResHeader
@@ -390,6 +393,7 @@ class VCL_DLLPUBLIC Window : public ::OutputDevice, public Resource
     friend class ::ImplBorderWindow;
     friend class ::VclBuilder;
     friend class ::PaintHelper;
+    friend class ::LifecycleTest;
 
     // TODO: improve missing functionality
     // only required because of SetFloatingMode()
@@ -410,12 +414,6 @@ private:
     //       but use class WindowImpl instead
 
     WindowImpl* mpWindowImpl;
-
-    // This is a first attempt to start to remove the dependency of Window on
-    // OutputDevice
-    ::OutputDevice* mpOutputDevice;
-
-    mutable int mnRefCnt;        // reference count
 
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );
@@ -495,24 +493,10 @@ public:
 
     SAL_DLLPRIVATE static void          ImplCalcSymbolRect( Rectangle& rRect );
 
-private:
-    template<typename T> friend class ::rtl::Reference;
-
-    inline void acquire() const
-    {
-        mnRefCnt++;
-    }
-
-    inline void release() const
-    {
-        if (!--mnRefCnt)
-            delete this;
-    }
-
 protected:
 
     /** This is intended to be used to clear any locally held references to other Window-subclass objects */
-    virtual void dispose() {}
+    virtual void                        dispose() SAL_OVERRIDE;
 
     SAL_DLLPRIVATE void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
 
@@ -656,7 +640,7 @@ private:
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
 
     // retrieves the list of owner draw decorated windows for this window hiearchy
-    SAL_DLLPRIVATE ::std::vector<vcl::Window *>& ImplGetOwnerDrawList();
+    SAL_DLLPRIVATE ::std::vector<VclPtr<vcl::Window> >& ImplGetOwnerDrawList();
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow();
 
@@ -706,8 +690,8 @@ public:
                                         Window( vcl::Window* pParent, const ResId& rResId );
     virtual                             ~Window();
 
-    ::OutputDevice const*               GetOutDev() const { return mpOutputDevice; };
-    ::OutputDevice*                     GetOutDev()       { return mpOutputDevice; };
+    ::OutputDevice const*               GetOutDev() const;
+    ::OutputDevice*                     GetOutDev();
 
     virtual void                        EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;
     virtual void                        MouseMove( const MouseEvent& rMEvt );
@@ -765,6 +749,7 @@ public:
     bool                                IsMenuFloatingWindow() const;
     bool                                IsToolbarFloatingWindow() const;
     bool                                IsTopWindow() const;
+    bool                                IsDisposed() const;
     SystemWindow*                       GetSystemWindow() const;
 
     void                                EnableAllResize( bool bEnable = true );
@@ -1424,7 +1409,7 @@ public:
      */
     void add_mnemonic_label(FixedText *pLabel);
     void remove_mnemonic_label(FixedText *pLabel);
-    std::vector<FixedText*> list_mnemonic_labels() const;
+    std::vector<VclPtr<FixedText> > list_mnemonic_labels() const;
 
     /*
      * Move this widget to be the nNewPosition'd child of its parent
@@ -1467,6 +1452,11 @@ public:
 };
 
 }
+
+// Only for compatibility - because many people outside haven't included event.hxx
+// These require Window to be defined for VclPtr<Window>
+#include <vcl/vclevent.hxx>
+#include <vcl/event.hxx>
 
 #endif // INCLUDED_VCL_WINDOW_HXX
 

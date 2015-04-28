@@ -142,7 +142,14 @@ namespace svxform
 
     DataTreeListBox::~DataTreeListBox()
     {
+        disposeOnce();
+    }
+
+    void DataTreeListBox::dispose()
+    {
         DeleteAndClear();
+        m_pXFormsPage.clear();
+        SvTreeListBox::dispose();
     }
 
     sal_Int8 DataTreeListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
@@ -370,6 +377,15 @@ namespace svxform
 
     XFormsPage::~XFormsPage()
     {
+        disposeOnce();
+    }
+
+    void XFormsPage::dispose()
+    {
+        m_pToolBox.clear();
+        m_pItemList.clear();
+        m_pNaviWin.clear();
+        TabPage::dispose();
     }
 
     IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl)
@@ -467,12 +483,12 @@ namespace svxform
             DBG_ASSERT( xModel.is(), "XFormsPage::DoToolBoxAction(): Action without model" );
             if ( DGTSubmission == m_eGroup )
             {
-                AddSubmissionDialog aDlg( this, NULL, m_xUIHelper );
-                if ( aDlg.Execute() == RET_OK && aDlg.GetNewSubmission().is() )
+                ScopedVclPtrInstance< AddSubmissionDialog > aDlg( this, nullptr, m_xUIHelper );
+                if ( aDlg->Execute() == RET_OK && aDlg->GetNewSubmission().is() )
                 {
                     try
                     {
-                        Reference< css::xforms::XSubmission > xNewSubmission = aDlg.GetNewSubmission();
+                        Reference< css::xforms::XSubmission > xNewSubmission = aDlg->GetNewSubmission();
                         Reference< XSet > xSubmissions( xModel->getSubmissions(), UNO_QUERY );
                         xSubmissions->insert( makeAny( xNewSubmission ) );
                         Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
@@ -499,8 +515,8 @@ namespace svxform
                 {
                     if ( !m_sInstanceURL.isEmpty() )
                     {
-                        LinkedInstanceWarningBox aMsgBox( this );
-                        if ( aMsgBox.Execute() != RET_OK )
+                        ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
+                        if ( aMsgBox->Execute() != RET_OK )
                             return bHandled;
                     }
 
@@ -594,10 +610,10 @@ namespace svxform
                     }
                 }
 
-                AddDataItemDialog aDlg( this, pNode, m_xUIHelper );
-                aDlg.SetText( SVX_RESSTR( nResId ) );
-                aDlg.InitText( eType );
-                short nReturn = aDlg.Execute();
+                ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
+                aDlg->SetText( SVX_RESSTR( nResId ) );
+                aDlg->InitText( eType );
+                short nReturn = aDlg->Execute();
                 if (  DGTInstance == m_eGroup )
                 {
                     if ( RET_OK == nReturn )
@@ -662,12 +678,12 @@ namespace svxform
                 {
                     if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
                     {
-                        LinkedInstanceWarningBox aMsgBox( this );
-                        if ( aMsgBox.Execute() != RET_OK )
+                        ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
+                        if ( aMsgBox->Execute() != RET_OK )
                             return bHandled;
                     }
 
-                    AddDataItemDialog aDlg( this, pNode, m_xUIHelper );
+                    ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
                     DataItemType eType = DITElement;
                     sal_uInt16 nResId = RID_STR_DATANAV_EDIT_ELEMENT;
                     if ( pNode && pNode->m_xNode.is() )
@@ -691,9 +707,9 @@ namespace svxform
                         nResId = RID_STR_DATANAV_EDIT_BINDING;
                         eType = DITBinding;
                     }
-                    aDlg.SetText( SVX_RESSTR( nResId ) );
-                    aDlg.InitText( eType );
-                    if ( aDlg.Execute() == RET_OK )
+                    aDlg->SetText( SVX_RESSTR( nResId ) );
+                    aDlg->InitText( eType );
+                    if ( aDlg->Execute() == RET_OK )
                     {
                         // Set the new name
                         OUString sNewName;
@@ -733,9 +749,9 @@ namespace svxform
                 }
                 else
                 {
-                    AddSubmissionDialog aDlg( this, pNode, m_xUIHelper );
-                    aDlg.SetText( SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
-                    if ( aDlg.Execute() == RET_OK )
+                    ScopedVclPtrInstance< AddSubmissionDialog > aDlg( this, pNode, m_xUIHelper );
+                    aDlg->SetText( SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
+                    if ( aDlg->Execute() == RET_OK )
                     {
                         EditEntry( pNode->m_xPropSet );
                         bIsDocModified = true;
@@ -748,8 +764,8 @@ namespace svxform
             bHandled = true;
             if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
             {
-                LinkedInstanceWarningBox aMsgBox( this );
-                if ( aMsgBox.Execute() != RET_OK )
+                ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
+                if ( aMsgBox->Execute() != RET_OK )
                     return bHandled;
             }
             bIsDocModified = RemoveEntry();
@@ -940,12 +956,12 @@ namespace svxform
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
                     sal_uInt16 nResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
-                    MessageDialog aQBox(this, SVX_RES(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                    OUString sMessText = aQBox.get_primary_text();
+                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SVX_RES(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                    OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst(
                         sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, sal_False ) );
-                    aQBox.set_primary_text(sMessText);
-                    if ( aQBox.Execute() == RET_YES )
+                    aQBox->set_primary_text(sMessText);
+                    if ( aQBox->Execute() == RET_YES )
                     {
                         SvTreeListEntry* pParent = m_pItemList->GetParent( pEntry );
                         DBG_ASSERT( pParent, "XFormsPage::RemoveEntry(): no parent entry" );
@@ -982,12 +998,12 @@ namespace svxform
                 {
                     SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
                 }
-                MessageDialog aQBox(this, SVX_RES(nResId),
-                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                OUString sMessText = aQBox.get_primary_text();
+                ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES(nResId),
+                                                          VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                OUString sMessText = aQBox->get_primary_text();
                 sMessText = sMessText.replaceFirst( sSearch, sName);
-                aQBox.set_primary_text(sMessText);
-                if ( aQBox.Execute() == RET_YES )
+                aQBox->set_primary_text(sMessText);
+                if ( aQBox->Execute() == RET_YES )
                 {
                     try
                     {
@@ -1405,24 +1421,37 @@ namespace svxform
 
     DataNavigatorWindow::~DataNavigatorWindow()
     {
+        disposeOnce();
+    }
+
+    void DataNavigatorWindow::dispose()
+    {
         SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
         aViewOpt.SetPageID( static_cast< sal_Int32 >( m_pTabCtrl->GetCurPageId() ) );
         Any aAny;
         aAny <<= m_bShowDetails;
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS,aAny);
 
-        delete m_pInstPage;
-        delete m_pSubmissionPage;
-        delete m_pBindingPage;
+        m_pInstPage.disposeAndClear();
+        m_pSubmissionPage.disposeAndClear();
+        m_pBindingPage.disposeAndClear();
 
         sal_Int32 i, nCount = m_aPageList.size();
         for ( i = 0; i < nCount; ++i )
-            delete m_aPageList[i];
+            m_aPageList[i].disposeAndClear();
+        m_aPageList.clear();
+
         Reference< XFrameActionListener > xListener(
             static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
         m_xFrame->removeFrameActionListener( xListener );
         RemoveBroadcaster();
         m_xDataListener.clear();
+        disposeBuilder();
+        m_pModelsBox.clear();
+        m_pModelBtn.clear();
+        m_pTabCtrl.clear();
+        m_pInstanceBtn.clear();
+        vcl::Window::dispose();
     }
 
 
@@ -1467,22 +1496,22 @@ namespace svxform
             OString sIdent(pBtn->GetCurItemIdent());
             if (sIdent == "modelsadd")
             {
-                AddModelDialog aDlg( this, false );
+                ScopedVclPtrInstance< AddModelDialog > aDlg( this, false );
                 bool bShowDialog = true;
                 while ( bShowDialog )
                 {
                     bShowDialog = false;
-                    if ( aDlg.Execute() == RET_OK )
+                    if ( aDlg->Execute() == RET_OK )
                     {
-                        OUString sNewName = aDlg.GetName();
-                        bool bDocumentData = aDlg.GetModifyDoc();
+                        OUString sNewName = aDlg->GetName();
+                        bool bDocumentData = aDlg->GetModifyDoc();
 
                         if ( m_pModelsBox->GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                         {
                             // error: model name already exists
-                            MessageDialog aErrBox( this, SVX_RES( RID_STR_DOUBLE_MODELNAME ) );
-                            aErrBox.set_primary_text(aErrBox.get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
-                            aErrBox.Execute();
+                            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SVX_RES( RID_STR_DOUBLE_MODELNAME ) );
+                            aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
+                            aErrBox->Execute();
                             bShowDialog = true;
                         }
                         else
@@ -1513,8 +1542,8 @@ namespace svxform
             }
             else if (sIdent == "modelsedit")
             {
-                AddModelDialog aDlg( this, true );
-                aDlg.SetName( sSelectedModel );
+                ScopedVclPtrInstance< AddModelDialog > aDlg( this, true );
+                aDlg->SetName( sSelectedModel );
 
                 bool bDocumentData( false );
                 try
@@ -1531,13 +1560,13 @@ namespace svxform
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
-                aDlg.SetModifyDoc( bDocumentData );
+                aDlg->SetModifyDoc( bDocumentData );
 
-                if ( aDlg.Execute() == RET_OK )
+                if ( aDlg->Execute() == RET_OK )
                 {
-                    if ( aDlg.GetModifyDoc() != bool( bDocumentData ) )
+                    if ( aDlg->GetModifyDoc() != bool( bDocumentData ) )
                     {
-                        bDocumentData = aDlg.GetModifyDoc();
+                        bDocumentData = aDlg->GetModifyDoc();
                         try
                         {
                             Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
@@ -1554,7 +1583,7 @@ namespace svxform
                         }
                     }
 
-                    OUString sNewName = aDlg.GetName();
+                    OUString sNewName = aDlg->GetName();
                     if ( !sNewName.isEmpty() && ( sNewName != sSelectedModel ) )
                     {
                         try
@@ -1575,12 +1604,12 @@ namespace svxform
             }
             else if (sIdent == "modelsremove")
             {
-                MessageDialog aQBox(this, SVX_RES( RID_STR_QRY_REMOVE_MODEL),
+                ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES( RID_STR_QRY_REMOVE_MODEL),
                                     VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                OUString sText = aQBox.get_primary_text();
+                OUString sText = aQBox->get_primary_text();
                 sText = sText.replaceFirst( MODELNAME, sSelectedModel );
-                aQBox.set_primary_text(sText);
-                if ( aQBox.Execute() == RET_YES )
+                aQBox->set_primary_text(sText);
+                if ( aQBox->Execute() == RET_YES )
                 {
                     try
                     {
@@ -1608,13 +1637,13 @@ namespace svxform
             OString sIdent(pBtn->GetCurItemIdent());
             if (sIdent == "instancesadd")
             {
-                AddInstanceDialog aDlg( this, false );
-                if ( aDlg.Execute() == RET_OK )
+                ScopedVclPtrInstance< AddInstanceDialog > aDlg( this, false );
+                if ( aDlg->Execute() == RET_OK )
                 {
                     sal_uInt16 nInst = GetNewPageId();
-                    OUString sName = aDlg.GetName();
-                    OUString sURL = aDlg.GetURL();
-                    bool bLinkOnce = aDlg.IsLinkInstance();
+                    OUString sName = aDlg->GetName();
+                    OUString sURL = aDlg->GetURL();
+                    bool bLinkOnce = aDlg->IsLinkInstance();
                     try
                     {
                         Reference< css::xml::dom::XDocument > xNewInst =
@@ -1640,16 +1669,16 @@ namespace svxform
                 XFormsPage* pPage = GetCurrentPage( nId );
                 if ( pPage )
                 {
-                    AddInstanceDialog aDlg( this, true );
-                    aDlg.SetName( pPage->GetInstanceName() );
-                    aDlg.SetURL( pPage->GetInstanceURL() );
-                    aDlg.SetLinkInstance( pPage->GetLinkOnce() );
-                    OUString sOldName = aDlg.GetName();
-                    if ( aDlg.Execute() == RET_OK )
+                    ScopedVclPtrInstance< AddInstanceDialog > aDlg( this, true );
+                    aDlg->SetName( pPage->GetInstanceName() );
+                    aDlg->SetURL( pPage->GetInstanceURL() );
+                    aDlg->SetLinkInstance( pPage->GetLinkOnce() );
+                    OUString sOldName = aDlg->GetName();
+                    if ( aDlg->Execute() == RET_OK )
                     {
-                        OUString sNewName = aDlg.GetName();
-                        OUString sURL = aDlg.GetURL();
-                        bool bLinkOnce = aDlg.IsLinkInstance();
+                        OUString sNewName = aDlg->GetName();
+                        OUString sURL = aDlg->GetURL();
+                        bool bLinkOnce = aDlg->IsLinkInstance();
                         try
                         {
                             xUIHelper->renameInstance( sOldName,
@@ -1672,16 +1701,16 @@ namespace svxform
             else if (sIdent == "instancesremove")
             {
                 sal_uInt16 nId = 0;
-                XFormsPage* pPage = GetCurrentPage( nId );
+                VclPtr<XFormsPage> pPage = GetCurrentPage( nId );
                 if ( pPage )
                 {
                     OUString sInstName = pPage->GetInstanceName();
-                    MessageDialog aQBox(this, SVX_RES(RID_STR_QRY_REMOVE_INSTANCE),
-                                        VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                    OUString sMessText = aQBox.get_primary_text();
+                    ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES(RID_STR_QRY_REMOVE_INSTANCE),
+                                                              VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                    OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
-                    aQBox.set_primary_text(sMessText);
-                    if ( aQBox.Execute() == RET_YES )
+                    aQBox->set_primary_text(sMessText);
+                    if ( aQBox->Execute() == RET_YES )
                     {
                         bool bDoRemove = false;
                         if (IsAdditionalPage(nId))
@@ -1692,13 +1721,13 @@ namespace svxform
                             if ( aFoundPage != aPageListEnd )
                             {
                                 m_aPageList.erase( aFoundPage );
-                                delete pPage;
+                                pPage.disposeAndClear() ;
                                 bDoRemove = true;
                             }
                         }
                         else
                         {
-                            DELETEZ( m_pInstPage );
+                            m_pInstPage.disposeAndClear();
                             bDoRemove = true;
                         }
 
@@ -1802,19 +1831,19 @@ namespace svxform
         if (sName == "submissions")
         {
             if ( !m_pSubmissionPage )
-                m_pSubmissionPage = new XFormsPage(m_pTabCtrl, this, DGTSubmission);
+                m_pSubmissionPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTSubmission);
             pPage = m_pSubmissionPage;
         }
         else if (sName == "bindings")
         {
             if ( !m_pBindingPage )
-                m_pBindingPage = new XFormsPage(m_pTabCtrl, this, DGTBinding);
+                m_pBindingPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTBinding);
             pPage = m_pBindingPage;
         }
         else if (sName == "instance")
         {
             if ( !m_pInstPage )
-                m_pInstPage = new XFormsPage(m_pTabCtrl, this, DGTInstance);
+                m_pInstPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTInstance);
             pPage = m_pInstPage;
         }
         else
@@ -1826,7 +1855,7 @@ namespace svxform
                 pPage = m_aPageList[nPos];
             else
             {
-                pPage = new XFormsPage(m_pTabCtrl, this, DGTInstance);
+                pPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTInstance);
                 m_aPageList.push_back( pPage );
             }
         }
@@ -1984,10 +2013,10 @@ namespace svxform
         sal_Int32 i, nCount = m_aPageList.size();
         for ( i = 0; i < nCount; ++i )
         {
-            XFormsPage* pPage = m_aPageList[i];
+            VclPtr<XFormsPage> pPage = m_aPageList[i];
             pPage->ClearModel();
             if ( bClearPages )
-                delete pPage;
+                pPage.disposeAndClear();
         }
 
         if ( bClearPages )
@@ -2131,24 +2160,30 @@ namespace svxform
                           WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) ),
         SfxControllerItem( SID_FM_DATANAVIGATOR_CONTROL, *_pBindings ),
 
-        m_aDataWin( this, _pBindings )
+        m_aDataWin( VclPtr<DataNavigatorWindow>::Create(this, _pBindings) )
 
     {
 
         SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
 
-        Size aSize = m_aDataWin.GetOutputSizePixel();
+        Size aSize = m_aDataWin->GetOutputSizePixel();
         Size aLogSize = PixelToLogic( aSize, MAP_APPFONT );
         SfxDockingWindow::SetFloatingSize( aLogSize );
 
-        m_aDataWin.Show();
+        m_aDataWin->Show();
     }
 
 
     DataNavigator::~DataNavigator()
     {
+        disposeOnce();
     }
 
+    void DataNavigator::dispose()
+    {
+        m_aDataWin.disposeAndClear();
+        SfxDockingWindow::dispose();
+    }
 
     void DataNavigator::StateChanged( sal_uInt16 , SfxItemState , const SfxPoolItem*  )
     {
@@ -2203,7 +2238,7 @@ namespace svxform
         Point aExplPos = LogicToPixel( Point(1,1), MAP_APPFONT );
         Size aExplSize = LogicToPixel( aLogExplSize, MAP_APPFONT );
 
-        m_aDataWin.SetPosSizePixel( aExplPos, aExplSize );
+        m_aDataWin->SetPosSizePixel( aExplPos, aExplSize );
     }
 
 
@@ -2221,10 +2256,10 @@ namespace svxform
         SfxChildWindow( _pParent, _nId )
 
     {
-        pWindow = new DataNavigator( _pBindings, this, _pParent );
+        pWindow = VclPtr<DataNavigator>::Create( _pBindings, this, _pParent );
         eChildAlignment = SfxChildAlignment::RIGHT;
         pWindow->SetSizePixel( Size( 250, 400 ) );
-        static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
+        static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
     }
 
     AddDataItemDialog::AddDataItemDialog(vcl::Window* pParent, ItemNode* _pNode,
@@ -2269,6 +2304,11 @@ namespace svxform
 
     AddDataItemDialog::~AddDataItemDialog()
     {
+        disposeOnce();
+    }
+
+    void AddDataItemDialog::dispose()
+    {
         if ( m_xTempBinding.is() )
         {
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -2291,6 +2331,27 @@ namespace svxform
             // remove binding, if it does not convey 'useful' information
             m_xUIHelper->removeBindingIfUseless( m_xBinding );
         }
+        m_pItemFrame.clear();
+        m_pNameFT.clear();
+        m_pNameED.clear();
+        m_pDefaultFT.clear();
+        m_pDefaultED.clear();
+        m_pDefaultBtn.clear();
+        m_pSettingsFrame.clear();
+        m_pDataTypeFT.clear();
+        m_pDataTypeLB.clear();
+        m_pRequiredCB.clear();
+        m_pRequiredBtn.clear();
+        m_pRelevantCB.clear();
+        m_pRelevantBtn.clear();
+        m_pConstraintCB.clear();
+        m_pConstraintBtn.clear();
+        m_pReadonlyCB.clear();
+        m_pReadonlyBtn.clear();
+        m_pCalculateCB.clear();
+        m_pCalculateBtn.clear();
+        m_pOKBtn.clear();
+        ModalDialog::dispose();
     }
 
 
@@ -2344,7 +2405,7 @@ namespace svxform
             sPropName = PN_READONLY_EXPR;
         else if (m_pCalculateBtn == pBtn)
             sPropName = PN_CALCULATE_EXPR;
-        AddConditionDialog aDlg( this, sPropName, m_xTempBinding );
+        ScopedVclPtrInstance< AddConditionDialog > aDlg(this, sPropName, m_xTempBinding);
         bool bIsDefBtn = ( m_pDefaultBtn == pBtn );
         OUString sCondition;
         if ( bIsDefBtn )
@@ -2356,11 +2417,11 @@ namespace svxform
                 sTemp = TRUE_VALUE;
             sCondition = sTemp;
         }
-        aDlg.SetCondition( sCondition );
+        aDlg->SetCondition( sCondition );
 
-        if ( aDlg.Execute() == RET_OK )
+        if ( aDlg->Execute() == RET_OK )
         {
-            OUString sNewCondition = aDlg.GetCondition();
+            OUString sNewCondition = aDlg->GetCondition();
             if ( bIsDefBtn )
                 m_pDefaultED->SetText( sNewCondition );
             else
@@ -2418,9 +2479,9 @@ namespace svxform
              ( bIsHandleBinding && sNewName.isEmpty() ) )
         {
             // Error and don't close the dialog
-            MessageDialog aErrBox( this, SVX_RES( RID_STR_INVALID_XMLNAME ) );
-            aErrBox.set_primary_text(aErrBox.get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
-            aErrBox.Execute();
+            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SVX_RES( RID_STR_INVALID_XMLNAME ) );
+            aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
+            aErrBox->Execute();
             return 0;
         }
 
@@ -2759,6 +2820,19 @@ namespace svxform
         ResultHdl( &m_aResultIdle );
     }
 
+    AddConditionDialog::~AddConditionDialog()
+    {
+        disposeOnce();
+    }
+
+    void AddConditionDialog::dispose()
+    {
+        m_pConditionED.clear();
+        m_pResultWin.clear();
+        m_pEditNamespacesBtn.clear();
+        m_pOKBtn.clear();
+        ModalDialog::dispose();
+    }
 
     IMPL_LINK_NOARG(AddConditionDialog, EditHdl)
     {
@@ -2771,8 +2845,8 @@ namespace svxform
         {
             SAL_WARN( "svx.form", "AddDataItemDialog::EditHdl(): exception caught" );
         }
-        NamespaceItemDialog aDlg( this, xNameContnr );
-        aDlg.Execute();
+        ScopedVclPtrInstance< NamespaceItemDialog > aDlg( this, xNameContnr );
+        aDlg->Execute();
         try
         {
             m_xBinding->setPropertyValue( PN_BINDING_NAMESPACES, makeAny( xNameContnr ) );
@@ -2848,7 +2922,7 @@ namespace svxform
         aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
         pNamespacesListContainer->set_width_request(aControlSize.Width());
         pNamespacesListContainer->set_height_request(aControlSize.Height());
-        m_pNamespacesList = new SvSimpleTable(*pNamespacesListContainer, 0);
+        m_pNamespacesList = VclPtr<SvSimpleTable>::Create(*pNamespacesListContainer, 0);
 
         static long aStaticTabs[]= { 3, 0, 35, 200 };
         m_pNamespacesList->SvSimpleTable::SetTabs( aStaticTabs );
@@ -2872,7 +2946,18 @@ namespace svxform
 
     NamespaceItemDialog::~NamespaceItemDialog()
     {
-        delete m_pNamespacesList;
+        disposeOnce();
+    }
+
+    void NamespaceItemDialog::dispose()
+    {
+        m_pNamespacesList.disposeAndClear();
+        m_pAddNamespaceBtn.clear();
+        m_pEditNamespaceBtn.clear();
+        m_pDeleteNamespaceBtn.clear();
+        m_pOKBtn.clear();
+        m_pConditionDlg.clear();
+        ModalDialog::dispose();
     }
 
 
@@ -2890,32 +2975,32 @@ namespace svxform
     {
         if ( m_pAddNamespaceBtn == pBtn )
         {
-            ManageNamespaceDialog aDlg( this, m_pConditionDlg, false );
-            if ( aDlg.Execute() == RET_OK )
+            ScopedVclPtrInstance< ManageNamespaceDialog > aDlg(this, m_pConditionDlg, false);
+            if ( aDlg->Execute() == RET_OK )
             {
-                OUString sEntry = aDlg.GetPrefix();
+                OUString sEntry = aDlg->GetPrefix();
                 sEntry += "\t";
-                sEntry += aDlg.GetURL();
+                sEntry += aDlg->GetURL();
                 m_pNamespacesList->InsertEntry( sEntry );
             }
         }
         else if ( m_pEditNamespaceBtn == pBtn )
         {
-            ManageNamespaceDialog aDlg( this, m_pConditionDlg, true );
+            ScopedVclPtrInstance< ManageNamespaceDialog > aDlg( this, m_pConditionDlg, true );
             SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
             OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
-            aDlg.SetNamespace(
+            aDlg->SetNamespace(
                 sPrefix,
                 SvTabListBox::GetEntryText( pEntry, 1 ) );
-            if ( aDlg.Execute() == RET_OK )
+            if ( aDlg->Execute() == RET_OK )
             {
                 // if a prefix was changed, mark the old prefix as 'removed'
-                if( sPrefix != aDlg.GetPrefix() )
+                if( sPrefix != aDlg->GetPrefix() )
                     m_aRemovedList.push_back( sPrefix );
 
-                m_pNamespacesList->SetEntryText( aDlg.GetPrefix(), pEntry, 0 );
-                m_pNamespacesList->SetEntryText( aDlg.GetURL(), pEntry, 1 );
+                m_pNamespacesList->SetEntryText( aDlg->GetPrefix(), pEntry, 0 );
+                m_pNamespacesList->SetEntryText( aDlg->GetURL(), pEntry, 1 );
             }
         }
         else if ( m_pDeleteNamespaceBtn == pBtn )
@@ -3013,6 +3098,19 @@ namespace svxform
         m_pOKBtn->SetClickHdl( LINK( this, ManageNamespaceDialog, OKHdl ) );
     }
 
+    ManageNamespaceDialog::~ManageNamespaceDialog()
+    {
+        disposeOnce();
+    }
+
+    void ManageNamespaceDialog::dispose()
+    {
+        m_pOKBtn.clear();
+        m_pPrefixED.clear();
+        m_pUrlED.clear();
+        m_pConditionDlg.clear();
+        ModalDialog::dispose();
+    }
 
     IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl)
     {
@@ -3022,9 +3120,9 @@ namespace svxform
         {
             if ( !m_pConditionDlg->GetUIHelper()->isValidPrefixName( sPrefix ) )
             {
-                MessageDialog aErrBox( this, SVX_RES( RID_STR_INVALID_XMLPREFIX ) );
-                aErrBox.set_primary_text(aErrBox.get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
-                aErrBox.Execute();
+                ScopedVclPtrInstance< MessageDialog > aErrBox(this, SVX_RES( RID_STR_INVALID_XMLPREFIX ) );
+                aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
+                aErrBox->Execute();
                 return 0;
             }
         }
@@ -3063,18 +3161,32 @@ namespace svxform
 
     AddSubmissionDialog::~AddSubmissionDialog()
     {
+        disposeOnce();
+    }
+
+    void AddSubmissionDialog::dispose()
+    {
         // #i38991# if we have added a binding, we need to remove it as well.
         if( m_xCreatedBinding.is() && m_xUIHelper.is() )
             m_xUIHelper->removeBindingIfUseless( m_xCreatedBinding );
+        m_pNameED.clear();
+        m_pActionED.clear();
+        m_pMethodLB.clear();
+        m_pRefED.clear();
+        m_pRefBtn.clear();
+        m_pBindLB.clear();
+        m_pReplaceLB.clear();
+        m_pOKBtn.clear();
+        ModalDialog::dispose();
     }
 
 
     IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl)
     {
-        AddConditionDialog aDlg( this, PN_BINDING_EXPR, m_xTempBinding );
-        aDlg.SetCondition( m_pRefED->GetText() );
-        if ( aDlg.Execute() == RET_OK )
-            m_pRefED->SetText( aDlg.GetCondition() );
+        ScopedVclPtrInstance< AddConditionDialog > aDlg(this, PN_BINDING_EXPR, m_xTempBinding );
+        aDlg->SetCondition( m_pRefED->GetText() );
+        if ( aDlg->Execute() == RET_OK )
+            m_pRefED->SetText( aDlg->GetCondition() );
 
         return 0;
     }
@@ -3085,9 +3197,9 @@ namespace svxform
         OUString sName(m_pNameED->GetText());
         if(sName.isEmpty()) {
 
-            MessageDialog aErrorBox(this,SVX_RES(RID_STR_EMPTY_SUBMISSIONNAME));
-            aErrorBox.set_primary_text( Application::GetDisplayName() );
-            aErrorBox.Execute();
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(this,SVX_RES(RID_STR_EMPTY_SUBMISSIONNAME));
+            aErrorBox->set_primary_text( Application::GetDisplayName() );
+            aErrorBox->Execute();
             return 0;
         }
 
@@ -3266,6 +3378,18 @@ namespace svxform
             SetText(get<FixedText>("alttitle")->GetText());
     }
 
+    AddModelDialog::~AddModelDialog()
+    {
+        disposeOnce();
+    }
+
+    void AddModelDialog::dispose()
+    {
+        m_pNameED.clear();
+        m_pModifyCB.clear();
+        ModalDialog::dispose();
+    }
+
     AddInstanceDialog::AddInstanceDialog(vcl::Window* pParent, bool _bEdit)
         : ModalDialog(pParent, "AddInstanceDialog" , "svx/ui/addinstancedialog.ui")
     {
@@ -3285,6 +3409,20 @@ namespace svxform
         m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office")).toString();
     }
 
+    AddInstanceDialog::~AddInstanceDialog()
+    {
+        disposeOnce();
+    }
+
+    void AddInstanceDialog::dispose()
+    {
+        m_pNameED.clear();
+        m_pURLFT.clear();
+        m_pURLED.clear();
+        m_pFilePickerBtn.clear();
+        m_pLinkInstanceCB.clear();
+        ModalDialog::dispose();
+    }
 
     IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl)
     {

@@ -763,9 +763,9 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 if ( pNode )
                 {
                     vcl::Window* pView = getView();
-                    ModalDialog* pWindow = new ModalDialog( pView, WB_STDMODAL | WB_SIZEMOVE | WB_CENTER );
+                    ScopedVclPtrInstance<ModalDialog> pWindow( pView, WB_STDMODAL | WB_SIZEMOVE | WB_CENTER );
                     pWindow->SetSizePixel( ::Size( pView->GetSizePixel().Width() / 2, pView->GetSizePixel().Height() / 2 ) );
-                    SvTreeListBox* pTreeBox = new SvTreeListBox( pWindow, WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_VSCROLL );
+                    ScopedVclPtrInstance<SvTreeListBox> pTreeBox( pWindow, WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_VSCROLL );
                     pTreeBox->SetPosSizePixel( ::Point( 6, 6 ), ::Size( pWindow->GetSizePixel().Width() - 12, pWindow->GetSizePixel().Height() - 12 ));
                     pTreeBox->SetNodeDefaultImages();
 
@@ -799,8 +799,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     pTreeBox->Show();
                     pWindow->Execute();
 
-                    delete pTreeBox;
-                    delete pWindow;
                     delete pNode;
                 }
                 break;
@@ -987,8 +985,8 @@ void OQueryController::impl_initialize()
                 OUString aTitle( ModuleRes( STR_QUERYDESIGN_NO_VIEW_SUPPORT ) );
                 OUString aMessage( ModuleRes( STR_QUERYDESIGN_NO_VIEW_ASK ) );
                 ODataView* pWindow = getView();
-                OSQLMessageBox aDlg( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query );
-                bClose = aDlg.Execute() == RET_NO;
+                ScopedVclPtrInstance< OSQLMessageBox > aDlg( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query );
+                bClose = aDlg->Execute() == RET_NO;
             }
             if ( bClose )
                 throw VetoException();
@@ -1117,7 +1115,7 @@ bool OQueryController::Construct(vcl::Window* pParent)
 {
     // TODO: we have to check if we should create the text view or the design view
 
-    setView( * new OQueryContainerWindow( pParent, *this, getORB() ) );
+    setView( VclPtr<OQueryContainerWindow>::Create( pParent, *this, getORB() ) );
 
     return OJoinController::Construct(pParent);
 }
@@ -1238,13 +1236,13 @@ void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollectio
 
 void OQueryController::execute_QueryPropDlg()
 {
-    QueryPropertiesDialog aQueryPropDlg(
+    ScopedVclPtrInstance<QueryPropertiesDialog> aQueryPropDlg(
         getContainer(), m_bDistinct, m_nLimit );
 
-    if( aQueryPropDlg.Execute() == RET_OK )
+    if( aQueryPropDlg->Execute() == RET_OK )
     {
-        m_bDistinct = aQueryPropDlg.getDistinct();
-        m_nLimit = aQueryPropDlg.getLimit();
+        m_bDistinct = aQueryPropDlg->getDistinct();
+        m_nLimit = aQueryPropDlg->getLimit();
         InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
         InvalidateFeature( SID_QUERY_LIMIT, 0, true );
     }
@@ -1398,7 +1396,7 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
         }
 
         DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
-        OSaveAsDlg aDlg(
+        ScopedVclPtrInstance<OSaveAsDlg> aDlg(
                 getView(),
                 m_nCommandType,
                 getORB(),
@@ -1407,14 +1405,14 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
                 aNameChecker,
                 SAD_DEFAULT );
 
-        bRet = ( aDlg.Execute() == RET_OK );
+        bRet = ( aDlg->Execute() == RET_OK );
         if ( bRet )
         {
-            m_sName = aDlg.getName();
+            m_sName = aDlg->getName();
             if ( editingView() )
             {
-                m_sUpdateCatalogName    = aDlg.getCatalog();
-                m_sUpdateSchemaName     = aDlg.getSchema();
+                m_sUpdateCatalogName    = aDlg->getCatalog();
+                m_sUpdateSchemaName     = aDlg->getSchema();
             }
         }
     }
@@ -1802,9 +1800,9 @@ short OQueryController::saveModified()
         )
     {
         OUString sMessageText( lcl_getObjectResourceString( STR_QUERY_SAVEMODIFIED, m_nCommandType ) );
-        QueryBox aQry( getView(), WB_YES_NO_CANCEL | WB_DEF_YES, sMessageText );
+        ScopedVclPtrInstance< QueryBox > aQry( getView(), WB_YES_NO_CANCEL | WB_DEF_YES, sMessageText );
 
-        nRet = aQry.Execute();
+        nRet = aQry->Execute();
         if  (   ( nRet == RET_YES )
             &&  !doSaveAsDoc( false )
             )
@@ -1914,8 +1912,8 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
                         OUString aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
-                        OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
-                        aDlg.Execute();
+                        ScopedVclPtrInstance< OSQLMessageBox > aDlg(getView(),aTitle,aErrorMsg);
+                        aDlg->Execute();
                     }
                     bError = true;
                 }

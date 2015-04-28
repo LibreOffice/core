@@ -21,6 +21,7 @@
 
 #include "dsntypes.hxx"
 #include <svl/poolitem.hxx>
+#include <vcl/vclptr.hxx>
 #include <vector>
 
 class SfxTabPage;
@@ -44,53 +45,53 @@ namespace dbaui
 
         /** Creates the detail page for Dbase
         */
-        static  SfxTabPage* CreateDbase2( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateDbase2( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ado
         */
-        static  SfxTabPage* CreateDbase( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateDbase( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ado
         */
-        static  SfxTabPage* CreateAdo( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateAdo( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ODBC
         */
-        static  SfxTabPage* CreateODBC( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateODBC( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for user
         */
-        static  SfxTabPage* CreateUser( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateUser( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLODBC
         */
-        static  SfxTabPage* CreateMySQLODBC( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateMySQLODBC( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLJDBC
         */
-        static  SfxTabPage* CreateMySQLJDBC( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateMySQLJDBC( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLNATIVE
         */
-        static  SfxTabPage* CreateMySQLNATIVE( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateMySQLNATIVE( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for Oracle JDBC
         */
-        static SfxTabPage*  CreateOracleJDBC( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
+        static VclPtr<SfxTabPage>  CreateOracleJDBC( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for LDAP
         */
-        static  SfxTabPage* CreateLDAP( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateLDAP( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /// Creates the detail page for Text
-        static  SfxTabPage* CreateText( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateText( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
 
         /// creates the GeneratedValues page
-        static  SfxTabPage* CreateGeneratedValuesPage( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateGeneratedValuesPage( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /// creates the "Special Settings" page of the "Advanced Settings" dialog
-        static  SfxTabPage* CreateSpecialSettingsPage( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
+        static  VclPtr<SfxTabPage> CreateSpecialSettingsPage( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
     };
 }
 

@@ -49,6 +49,7 @@ class AutoFmtPreview : public vcl::Window
 public:
     AutoFmtPreview(vcl::Window* pParent, WinBits nStyle);
     virtual ~AutoFmtPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     void NotifyChange( const SwTableAutoFmt& rNewData );
 
@@ -60,7 +61,7 @@ protected:
 
 private:
     SwTableAutoFmt          aCurData;
-    VirtualDevice           aVD;
+    ScopedVclPtr<VirtualDevice> aVD;
     SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    bFitWidth;
@@ -105,11 +106,12 @@ public:
                             const OUString& rEditTitle,
                             const OUString& rDefault );
             virtual ~SwStringInputDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString GetInputString() const;
 
 private:
-    Edit*           m_pEdInput;   // Edit obtains the focus.
+    VclPtr<Edit>           m_pEdInput;   // Edit obtains the focus.
 };
 
 SwStringInputDlg::SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
@@ -130,6 +132,13 @@ OUString SwStringInputDlg::GetInputString() const
 
 SwStringInputDlg::~SwStringInputDlg()
 {
+    disposeOnce();
+}
+
+void SwStringInputDlg::dispose()
+{
+    m_pEdInput.clear();
+    ModalDialog::dispose();
 }
 
 // AutoFormat-Dialogue:
@@ -174,9 +183,28 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
 
 SwAutoFormatDlg::~SwAutoFormatDlg()
 {
+    disposeOnce();
+}
+
+void SwAutoFormatDlg::dispose()
+{
     if (bCoreDataChanged)
         pTableTbl->Save();
     delete pTableTbl;
+    m_pLbFormat.clear();
+    m_pFormatting.clear();
+    m_pBtnNumFormat.clear();
+    m_pBtnBorder.clear();
+    m_pBtnFont.clear();
+    m_pBtnPattern.clear();
+    m_pBtnAlignment.clear();
+    m_pBtnOk.clear();
+    m_pBtnCancel.clear();
+    m_pBtnAdd.clear();
+    m_pBtnRemove.clear();
+    m_pBtnRename.clear();
+    m_pWndPreview.clear();
+    SfxModalDialog::dispose();
 }
 
 void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
@@ -287,10 +315,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
     bool bOk = false, bFmtInserted = false;
     while( !bOk )
     {
-        boost::scoped_ptr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
-                                                       aStrTitle,
-                                                       aStrLabel,
-                                                       OUString() ));
+        VclPtrInstance<SwStringInputDlg> pDlg( this, aStrTitle,
+                                               aStrLabel, OUString() );
         if( RET_OK == pDlg->Execute() )
         {
             const OUString aFormatName( pDlg->GetInputString() );
@@ -349,8 +375,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
     aMessage += m_pLbFormat->GetSelectEntry();
     aMessage += "\n";
 
-    boost::scoped_ptr<MessBox> pBox(new MessBox( this, WinBits( WB_OK_CANCEL ),
-                                                 aStrDelTitle, aMessage));
+    VclPtrInstance<MessBox> pBox( this, WinBits( WB_OK_CANCEL ),
+                                  aStrDelTitle, aMessage );
 
     if ( pBox->Execute() == RET_OK )
     {
@@ -384,10 +410,9 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
     bool bOk = false;
     while( !bOk )
     {
-        boost::scoped_ptr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
-                                                       aStrRenameTitle,
-                                                       m_pLbFormat->GetSelectEntry(),
-                                                       OUString() ));
+        VclPtrInstance<SwStringInputDlg> pDlg( this, aStrRenameTitle,
+                                               m_pLbFormat->GetSelectEntry(),
+                                               OUString() );
         if( pDlg->Execute() == RET_OK )
         {
             bool bFmtRenamed = false;
@@ -489,8 +514,8 @@ IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :
         Window          ( pParent, nStyle ),
         aCurData        ( OUString() ),
-        aVD             ( *this ),
-        aScriptedText   ( aVD ),
+        aVD             ( VclPtr<VirtualDevice>::Create(*this) ),
+        aScriptedText   ( *aVD.get() ),
         bFitWidth       ( false ),
         mbRTL           ( false ),
         aStrJan         ( SW_RES( STR_JAN ) ),
@@ -537,7 +562,13 @@ void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
 
 AutoFmtPreview::~AutoFmtPreview()
 {
+    disposeOnce();
+}
+
+void AutoFmtPreview::dispose()
+{
     delete pNumFmt;
+    vcl::Window::dispose();
 }
 
 static void lcl_SetFontProperties(
@@ -762,11 +793,11 @@ void AutoFmtPreview::DrawBackground()
         {
             SvxBrushItem aBrushItem( aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
 
-            aVD.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-            aVD.SetLineColor();
-            aVD.SetFillColor( aBrushItem.GetColor() );
-            aVD.DrawRect( maArray.GetCellRect( nCol, nRow ) );
-            aVD.Pop();
+            aVD->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+            aVD->SetLineColor();
+            aVD->SetFillColor( aBrushItem.GetColor() );
+            aVD->DrawRect( maArray.GetCellRect( nCol, nRow ) );
+            aVD->Pop();
         }
     }
 }
@@ -782,7 +813,7 @@ void AutoFmtPreview::PaintCells()
 
     // 3) border
     if ( aCurData.IsFrame() )
-        maArray.DrawArray( aVD );
+        maArray.DrawArray( *aVD.get() );
 }
 
 void AutoFmtPreview::Init()
@@ -851,9 +882,9 @@ void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 
 void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
 {
-    sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
+    sal_uInt32 nOldDrawMode = aVD->GetDrawMode();
     if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+        aVD->SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     Bitmap  thePreview;
     Point   aCenterPos;
@@ -861,36 +892,36 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     Color   oldColor;
     vcl::Font aFont;
 
-    aFont = aVD.GetFont();
+    aFont = aVD->GetFont();
     aFont.SetTransparent( true );
 
-    aVD.SetFont          ( aFont );
-    aVD.SetLineColor     ();
+    aVD->SetFont          ( aFont );
+    aVD->SetLineColor     ();
     const Color& rWinColor = GetSettings().GetStyleSettings().GetWindowColor();
-    aVD.SetBackground    ( Wallpaper(rWinColor) );
-    aVD.SetFillColor     ( rWinColor );
-    aVD.SetOutputSizePixel  ( aPrvSize );
+    aVD->SetBackground    ( Wallpaper(rWinColor) );
+    aVD->SetFillColor     ( rWinColor );
+    aVD->SetOutputSizePixel  ( aPrvSize );
 
     // Draw cells on virtual device
     // and save the result
     PaintCells();
-    thePreview = aVD.GetBitmap( Point(0,0), aPrvSize );
+    thePreview = aVD->GetBitmap( Point(0,0), aPrvSize );
 
     // Draw the Frame and center the preview:
     // (virtual Device for window output)
-    aVD.SetOutputSizePixel( theWndSize );
-    oldColor = aVD.GetLineColor();
-    aVD.SetLineColor();
-    aVD.DrawRect( Rectangle( Point(0,0), theWndSize ) );
+    aVD->SetOutputSizePixel( theWndSize );
+    oldColor = aVD->GetLineColor();
+    aVD->SetLineColor();
+    aVD->DrawRect( Rectangle( Point(0,0), theWndSize ) );
     SetLineColor( oldColor );
     aCenterPos  = Point( (theWndSize.Width()  - aPrvSize.Width() ) / 2,
                          (theWndSize.Height() - aPrvSize.Height()) / 2 );
-    aVD.DrawBitmap( aCenterPos, thePreview );
+    aVD->DrawBitmap( aCenterPos, thePreview );
 
     // Output in the preview window:
-    DrawBitmap( Point(0,0), aVD.GetBitmap( Point(0,0), theWndSize ) );
+    DrawBitmap( Point(0,0), aVD->GetBitmap( Point(0,0), theWndSize ) );
 
-    aVD.SetDrawMode( nOldDrawMode );
+    aVD->SetDrawMode( nOldDrawMode );
 }
 
 void AutoFmtPreview::Paint( const Rectangle& rRect )

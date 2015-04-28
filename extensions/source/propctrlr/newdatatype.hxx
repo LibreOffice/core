@@ -35,14 +35,16 @@ namespace pcr
     class NewDataTypeDialog : public ModalDialog
     {
     private:
-        Edit*           m_pName;
-        OKButton*       m_pOK;
+        VclPtr<Edit>           m_pName;
+        VclPtr<OKButton>       m_pOK;
 
         ::std::set< OUString > m_aProhibitedNames;
 
     public:
         NewDataTypeDialog(vcl::Window* _pParent, const OUString& _rNameBase,
             const ::std::vector< OUString >& _rProhibitedNames );
+        virtual ~NewDataTypeDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         OUString GetName() const { return m_pName->GetText(); }
 

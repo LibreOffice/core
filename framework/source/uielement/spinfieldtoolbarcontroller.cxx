@@ -59,6 +59,7 @@ class SpinfieldControl : public SpinField
     public:
         SpinfieldControl( vcl::Window* pParent, WinBits nStyle, ISpinfieldListener* pSpinFieldListener );
         virtual ~SpinfieldControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Up() SAL_OVERRIDE;
         virtual void Down() SAL_OVERRIDE;
@@ -84,7 +85,13 @@ SpinfieldControl::SpinfieldControl( vcl::Window* pParent, WinBits nStyle, ISpinf
 
 SpinfieldControl::~SpinfieldControl()
 {
+    disposeOnce();
+}
+
+void SpinfieldControl::dispose()
+{
     m_pSpinFieldListener = 0;
+    SpinField::dispose();
 }
 
 void SpinfieldControl::Up()
@@ -185,7 +192,7 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     ,   m_nStep( 0.0 )
     ,   m_pSpinfieldControl( 0 )
 {
-    m_pSpinfieldControl = new SpinfieldControl( m_pToolbar, WB_SPIN|WB_BORDER, this );
+    m_pSpinfieldControl = VclPtr<SpinfieldControl>::Create( m_pToolbar, WB_SPIN|WB_BORDER, this );
     if ( nWidth == 0 )
         nWidth = 100;
 
@@ -206,11 +213,9 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
-    delete m_pSpinfieldControl;
+    m_pSpinfieldControl.disposeAndClear();
 
     ComplexToolbarController::dispose();
-
-    m_pSpinfieldControl = 0;
 }
 
 Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

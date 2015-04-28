@@ -36,10 +36,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeMultiLineEditSyntaxHig
     return new MultiLineEditSyntaxHighlight(pParent);
 }
 
-MultiLineEditSyntaxHighlight::~MultiLineEditSyntaxHighlight()
-{
-}
-
 void MultiLineEditSyntaxHighlight::SetText(const OUString& rNewText)
 {
     MultiLineEdit::SetText(rNewText);

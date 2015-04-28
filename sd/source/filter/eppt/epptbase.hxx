@@ -35,6 +35,8 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
+#include <vcl/vclptr.hxx>
+#include <vcl/outdev.hxx>
 
 #include "grouptable.hxx"
 
@@ -176,7 +178,6 @@ struct FontCollectionEntry
         void ImplInit( const OUString& rName );
 };
 
-class VirtualDevice;
 class FontCollection
 {
 public :
@@ -197,7 +198,7 @@ public :
 
 private:
 
-    VirtualDevice* pVDev;
+    VclPtr<VirtualDevice> pVDev;
     boost::ptr_vector<FontCollectionEntry> maFonts;
 };
 

@@ -74,7 +74,7 @@ void ScTabView::Init()
 
     for (i=0; i<4; i++)
         pGridWin[i] = NULL;
-    pGridWin[SC_SPLIT_BOTTOMLEFT] = new ScGridWindow( pFrameWin, &aViewData, SC_SPLIT_BOTTOMLEFT );
+    pGridWin[SC_SPLIT_BOTTOMLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOMLEFT );
 
     pSelEngine = new ScViewSelectionEngine( pGridWin[SC_SPLIT_BOTTOMLEFT], this,
                                                 SC_SPLIT_BOTTOMLEFT );
@@ -82,23 +82,23 @@ void ScTabView::Init()
 
     pHdrSelEng = new ScHeaderSelectionEngine( pFrameWin, &aHdrFunc );
 
-    pColBar[SC_SPLIT_LEFT] = new ScColBar( pFrameWin, &aViewData, SC_SPLIT_LEFT,
+    pColBar[SC_SPLIT_LEFT] = VclPtr<ScColBar>::Create( pFrameWin, &aViewData, SC_SPLIT_LEFT,
                                                 &aHdrFunc, pHdrSelEng );
     pColBar[SC_SPLIT_RIGHT] = NULL;
-    pRowBar[SC_SPLIT_BOTTOM] = new ScRowBar( pFrameWin, &aViewData, SC_SPLIT_BOTTOM,
+    pRowBar[SC_SPLIT_BOTTOM] = VclPtr<ScRowBar>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOM,
                                                 &aHdrFunc, pHdrSelEng );
     pRowBar[SC_SPLIT_TOP] = NULL;
     for (i=0; i<2; i++)
         pColOutline[i] = pRowOutline[i] = NULL;
 
-    pHSplitter = new ScTabSplitter( pFrameWin, WinBits( WB_HSCROLL ), &aViewData );
-    pVSplitter = new ScTabSplitter( pFrameWin, WinBits( WB_VSCROLL ), &aViewData );
+    pHSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_HSCROLL ), &aViewData );
+    pVSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_VSCROLL ), &aViewData );
 
     // SSA: override default keyboard step size to allow snap to row/column
     pHSplitter->SetKeyboardStepSize( 1 );
     pVSplitter->SetKeyboardStepSize( 1 );
 
-    pTabControl = new ScTabControl(pFrameWin, &aViewData);
+    pTabControl = VclPtr<ScTabControl>::Create(pFrameWin, &aViewData);
     if (mbInlineWithScrollbar)
         pTabControl->SetStyle(pTabControl->GetStyle() | WB_SIZEABLE);
 
@@ -108,10 +108,10 @@ void ScTabView::Init()
         explicitly because the parent frame window is already RTL disabled. */
     pTabControl->EnableRTL( AllSettings::GetLayoutRTL() );
 
-    InitScrollBar( aHScrollLeft,    MAXCOL+1 );
-    InitScrollBar( aHScrollRight,   MAXCOL+1 );
-    InitScrollBar( aVScrollTop,     MAXROW+1 );
-    InitScrollBar( aVScrollBottom,  MAXROW+1 );
+    InitScrollBar( *aHScrollLeft.get(),    MAXCOL+1 );
+    InitScrollBar( *aHScrollRight.get(),   MAXCOL+1 );
+    InitScrollBar( *aVScrollTop.get(),     MAXROW+1 );
+    InitScrollBar( *aVScrollBottom.get(),  MAXROW+1 );
     /*  #i97900# scrollbars remain in correct RTL mode, needed mirroring etc.
         is now handled correctly at the respective places. */
 
@@ -176,24 +176,31 @@ ScTabView::~ScTabView()
     delete pSelEngine;
 
     // Delete this before the grid windows, since it's a child window of one of them.
-    mpInputHintWindow.reset();
+    mpInputHintWindow.disposeAndClear();
     for (i=0; i<4; i++)
-        delete pGridWin[i];
+        pGridWin[i].disposeAndClear();
 
     delete pHdrSelEng;
 
     for (i=0; i<2; i++)
     {
-        delete pColBar[i];
-        delete pRowBar[i];
-        delete pColOutline[i];
-        delete pRowOutline[i];
+        pColBar[i].disposeAndClear();
+        pRowBar[i].disposeAndClear();
+        pColOutline[i].disposeAndClear();
+        pRowOutline[i].disposeAndClear();
     }
 
-    delete pHSplitter;
-    delete pVSplitter;
+    aScrollBarBox.disposeAndClear();
+    aCornerButton.disposeAndClear();
+    aTopButton.disposeAndClear();
+    aHScrollLeft.disposeAndClear();
+    aHScrollRight.disposeAndClear();
+    aVScrollTop.disposeAndClear();
+    aVScrollBottom.disposeAndClear();
 
-    delete pTabControl;
+    pHSplitter.disposeAndClear();
+    pVSplitter.disposeAndClear();
+    pTabControl.disposeAndClear();
 }
 
 void ScTabView::MakeDrawView( TriState nForceDesignMode )

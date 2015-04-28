@@ -73,16 +73,16 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
-    m_aPinBox( this, 0 ),
-    m_aDeauthoriseButton( this ),
-    m_aScrollBar( this, WB_VERT )
+    m_aPinBox( VclPtr<NumericBox>::Create( this, 0 ) ),
+    m_aDeauthoriseButton( VclPtr<PushButton>::Create( this ) ),
+    m_aScrollBar( VclPtr<ScrollBar>::Create( this, WB_VERT ) )
 {
-    m_aScrollBar.SetScrollHdl( LINK( this, ClientBox, ScrollHdl ) );
-    m_aScrollBar.EnableDrag();
+    m_aScrollBar->SetScrollHdl( LINK( this, ClientBox, ScrollHdl ) );
+    m_aScrollBar->EnableDrag();
 
-    m_aPinBox.SetUseThousandSep(false);
-    m_aDeauthoriseButton.SetText( SD_RESSTR(STR_DEAUTHORISE_CLIENT) );
-    m_aDeauthoriseButton.SetClickHdl( LINK( this, ClientBox, DeauthoriseHdl ) );
+    m_aPinBox->SetUseThousandSep(false);
+    m_aDeauthoriseButton->SetText( SD_RESSTR(STR_DEAUTHORISE_CLIENT) );
+    m_aDeauthoriseButton->SetClickHdl( LINK( this, ClientBox, DeauthoriseHdl ) );
 
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
     long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
@@ -124,6 +124,11 @@ Size ClientBox::GetOptimalSize() const
 
 ClientBox::~ClientBox()
 {
+    disposeOnce();
+}
+
+void ClientBox::dispose()
+{
     if ( ! m_bInDelete )
         DeleteRemoved();
 
@@ -132,6 +137,11 @@ ClientBox::~ClientBox()
     m_vEntries.clear();
 
     m_xRemoveListener.clear();
+
+    m_aPinBox.disposeAndClear();
+    m_aDeauthoriseButton.disposeAndClear();
+    m_aScrollBar.disposeAndClear();
+    Control::dispose();
 }
 
 // Title + description
@@ -152,7 +162,7 @@ void ClientBox::CalcActiveHeight( const long nPos )
     // Text entry height
     Size aSize = GetOutputSizePixel();
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
+        aSize.Width() -= m_aScrollBar->GetSizePixel().Width();
 
     aSize.Width() -= ICON_OFFSET;
 
@@ -173,7 +183,7 @@ Rectangle ClientBox::GetEntryRect( const long nPos ) const
     Size aSize( GetOutputSizePixel() );
 
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
+        aSize.Width() -= m_aScrollBar->GetSizePixel().Width();
 
     if ( m_vEntries[ nPos ]->m_bActive )
         aSize.Height() = m_nActiveHeight;
@@ -246,7 +256,7 @@ void ClientBox::selectEntry( const long nPos )
 
     // We empty the pin box now too, just in case the user previously
     // entered a pin, but then changed their selected device.
-    m_aPinBox.SetText( "" );
+    m_aPinBox->SetText( "" );
     if ( m_bHasActive )
     {
         bool bAlreadyAuthorised =
@@ -254,11 +264,11 @@ void ClientBox::selectEntry( const long nPos )
 
         if ( bAlreadyAuthorised )
         {
-            m_aDeauthoriseButton.GetFocus();
+            m_aDeauthoriseButton->GetFocus();
         }
         else
         {
-            m_aPinBox.GetFocus();
+            m_aPinBox->GetFocus();
         }
     }
 
@@ -350,19 +360,19 @@ void ClientBox::RecalcAll()
     Size aPBSize = LogicToPixel(
                       Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
                       MapMode( MAP_APPFONT ) );
-    m_aPinBox.SetSizePixel( aPBSize );
-    m_aDeauthoriseButton.SetSizePixel( m_aDeauthoriseButton.GetOptimalSize() );
+    m_aPinBox->SetSizePixel( aPBSize );
+    m_aDeauthoriseButton->SetSizePixel( m_aDeauthoriseButton->GetOptimalSize() );
 
     if ( !m_bHasActive )
     {
-        m_aPinBox.Show( false );
-        m_aDeauthoriseButton.Show( false );
+        m_aPinBox->Show( false );
+        m_aDeauthoriseButton->Show( false );
     }
     else
     {
         Rectangle aEntryRect = GetEntryRect( m_nActive );
 
-        Size  aPinBoxSize( m_aPinBox.GetSizePixel() );
+        Size  aPinBoxSize( m_aPinBox->GetSizePixel() );
         Point aPos( aEntryRect.Left(),
                     aEntryRect.Bottom() - TOP_OFFSET - aPinBoxSize.Height() );
 
@@ -378,7 +388,7 @@ void ClientBox::RecalcAll()
 
             aPos = Point( aEntryRect.Left() + GetTextWidth( sPinText ),
                           aEntryRect.Bottom() - TOP_OFFSET - aPinBoxSize.Height() );
-            m_aPinBox.SetPosPixel( aPos );
+            m_aPinBox->SetPosPixel( aPos );
             // The text would have it's TOP aligned with the top of
             // the pin box -- hence we push it down to align baselines.
             m_sPinTextRect += Point( 0, 4 );
@@ -386,11 +396,11 @@ void ClientBox::RecalcAll()
         else
         {
             aPos += Point( 20, 0 );
-            m_aDeauthoriseButton.SetPosPixel( aPos );
+            m_aDeauthoriseButton->SetPosPixel( aPos );
         }
 
-        m_aPinBox.Show( !bAlreadyAuthorised );
-        m_aDeauthoriseButton.Show( bAlreadyAuthorised );
+        m_aPinBox->Show( !bAlreadyAuthorised );
+        m_aDeauthoriseButton->Show( bAlreadyAuthorised );
 
         if ( m_bAdjustActive )
         {
@@ -424,7 +434,7 @@ void ClientBox::RecalcAll()
             }
 
             if ( m_bHasScrollBar )
-                m_aScrollBar.SetThumbPos( m_nTopIndex );
+                m_aScrollBar->SetThumbPos( m_nTopIndex );
         }
     }
 
@@ -487,7 +497,7 @@ void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
     Size aSize( GetOutputSizePixel() );
 
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
+        aSize.Width() -= m_aScrollBar->GetSizePixel().Width();
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
@@ -525,20 +535,20 @@ void ClientBox::SetupScrollBar()
         if ( m_nTopIndex + aSize.Height() > nTotalHeight )
             m_nTopIndex = nTotalHeight - aSize.Height();
 
-        m_aScrollBar.SetPosSizePixel( Point( aSize.Width() - nScrBarSize, 0 ),
+        m_aScrollBar->SetPosSizePixel( Point( aSize.Width() - nScrBarSize, 0 ),
                                        Size( nScrBarSize, aSize.Height() ) );
-        m_aScrollBar.SetRangeMax( nTotalHeight );
-        m_aScrollBar.SetVisibleSize( aSize.Height() );
-        m_aScrollBar.SetPageSize( ( aSize.Height() * 4 ) / 5 );
-        m_aScrollBar.SetLineSize( m_nStdHeight );
-        m_aScrollBar.SetThumbPos( m_nTopIndex );
+        m_aScrollBar->SetRangeMax( nTotalHeight );
+        m_aScrollBar->SetVisibleSize( aSize.Height() );
+        m_aScrollBar->SetPageSize( ( aSize.Height() * 4 ) / 5 );
+        m_aScrollBar->SetLineSize( m_nStdHeight );
+        m_aScrollBar->SetThumbPos( m_nTopIndex );
 
         if ( !m_bHasScrollBar )
-            m_aScrollBar.Show();
+            m_aScrollBar->Show();
     }
     else if ( m_bHasScrollBar )
     {
-        m_aScrollBar.Hide();
+        m_aScrollBar->Hide();
         m_nTopIndex = 0;
     }
 
@@ -567,7 +577,7 @@ long ClientBox::PointToPos( const Point& rPos )
 
 OUString ClientBox::getPin()
 {
-    return OUString::number( m_aPinBox.GetValue() );
+    return OUString::number( m_aPinBox->GetValue() );
 }
 
 void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
@@ -608,11 +618,11 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
             if ( pData->GetMode() == CommandWheelMode::SCROLL )
             {
-                long nThumbPos = m_aScrollBar.GetThumbPos();
+                long nThumbPos = m_aScrollBar->GetThumbPos();
                 if ( pData->GetDelta() < 0 )
-                    m_aScrollBar.DoScroll( nThumbPos + m_nStdHeight );
+                    m_aScrollBar->DoScroll( nThumbPos + m_nStdHeight );
                 else
-                    m_aScrollBar.DoScroll( nThumbPos - m_nStdHeight );
+                    m_aScrollBar->DoScroll( nThumbPos - m_nStdHeight );
                 bHandled = true;
             }
         }
@@ -702,13 +712,13 @@ void ClientBox::populateEntries()
 void ClientBox::DoScroll( long nDelta )
 {
     m_nTopIndex += nDelta;
-    Point aNewSBPt( m_aScrollBar.GetPosPixel() );
+    Point aNewSBPt( m_aScrollBar->GetPosPixel() );
 
     Rectangle aScrRect( Point(), GetOutputSizePixel() );
-    aScrRect.Right() -= m_aScrollBar.GetSizePixel().Width();
+    aScrRect.Right() -= m_aScrollBar->GetSizePixel().Width();
     Scroll( 0, -nDelta, aScrRect );
 
-    m_aScrollBar.SetPosPixel( aNewSBPt );
+    m_aScrollBar->SetPosPixel( aNewSBPt );
 }
 
 IMPL_LINK( ClientBox, ScrollHdl, ScrollBar*, pScrBar )

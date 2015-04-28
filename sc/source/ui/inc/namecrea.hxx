@@ -28,13 +28,14 @@
 class ScNameCreateDlg : public ModalDialog
 {
 protected:
-    CheckBox* m_pTopBox;
-    CheckBox* m_pLeftBox;
-    CheckBox* m_pBottomBox;
-    CheckBox* m_pRightBox;
+    VclPtr<CheckBox> m_pTopBox;
+    VclPtr<CheckBox> m_pLeftBox;
+    VclPtr<CheckBox> m_pBottomBox;
+    VclPtr<CheckBox> m_pRightBox;
 public:
     ScNameCreateDlg( vcl::Window * pParent, sal_uInt16 nFlags );
-
+    virtual ~ScNameCreateDlg();
+    virtual void dispose() SAL_OVERRIDE;
     sal_uInt16          GetFlags() const;
 };
 

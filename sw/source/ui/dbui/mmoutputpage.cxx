@@ -194,8 +194,8 @@ IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, Edit*, pEdit)
 
 class SwCopyToDialog : public SfxModalDialog
 {
-    Edit* m_pCCED;
-    Edit* m_pBCCED;
+    VclPtr<Edit> m_pCCED;
+    VclPtr<Edit> m_pBCCED;
 
 public:
     SwCopyToDialog(vcl::Window* pParent)
@@ -204,6 +204,13 @@ public:
     {
         get(m_pCCED, "cc");
         get(m_pBCCED, "bcc");
+    }
+    virtual ~SwCopyToDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pCCED.clear();
+        m_pBCCED.clear();
+        SfxModalDialog::dispose();
     }
 
     OUString GetCC() {return m_pCCED->GetText();}
@@ -300,7 +307,44 @@ SwMailMergeOutputPage::SwMailMergeOutputPage(SwMailMergeWizard* _pParent)
 
 SwMailMergeOutputPage::~SwMailMergeOutputPage()
 {
-    delete m_pTempPrinter;
+    disposeOnce();
+}
+
+void SwMailMergeOutputPage::dispose()
+{
+    m_pTempPrinter.disposeAndClear();
+    m_pSaveStartDocRB.clear();
+    m_pSaveMergedDocRB.clear();
+    m_pPrintRB.clear();
+    m_pSendMailRB.clear();
+    m_pSeparator.clear();
+    m_pSaveStartDocPB.clear();
+    m_pSaveAsOneRB.clear();
+    m_pSaveIndividualRB.clear();
+    m_pPrintAllRB.clear();
+    m_pSendAllRB.clear();
+    m_pFromRB.clear();
+    m_pFromNF.clear();
+    m_pToFT.clear();
+    m_pToNF.clear();
+    m_pSaveNowPB.clear();
+    m_pPrinterFT.clear();
+    m_pPrinterLB.clear();
+    m_pPrinterSettingsPB.clear();
+    m_pPrintNowPB.clear();
+    m_pMailToFT.clear();
+    m_pMailToLB.clear();
+    m_pCopyToPB.clear();
+    m_pSubjectFT.clear();
+    m_pSubjectED.clear();
+    m_pSendAsFT.clear();
+    m_pSendAsLB.clear();
+    m_pAttachmentGroup.clear();
+    m_pAttachmentED.clear();
+    m_pSendAsPB.clear();
+    m_pSendDocumentsPB.clear();
+    m_pWizard.clear();
+    svt::OWizardPage::dispose();
 }
 
 void SwMailMergeOutputPage::ActivatePage()
@@ -479,7 +523,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             SendTypeHdl_Impl(m_pSendAsLB);
         }
     }
-    m_pFromRB->GetClickHdl().Call(m_pFromRB->IsChecked() ? m_pFromRB : 0);
+    m_pFromRB->GetClickHdl().Call(m_pFromRB->IsChecked() ? m_pFromRB.get() : 0);
 
     SetUpdateMode(false);
     return 0;
@@ -496,7 +540,7 @@ IMPL_LINK(SwMailMergeOutputPage, DocumentSelectionHdl_Impl, RadioButton*, pButto
 
 IMPL_LINK(SwMailMergeOutputPage, CopyToHdl_Impl, PushButton*, pButton)
 {
-    boost::scoped_ptr<SwCopyToDialog> pDlg(new SwCopyToDialog(pButton));
+    ScopedVclPtrInstance< SwCopyToDialog > pDlg(pButton);
     pDlg->SetCC(m_sCC );
     pDlg->SetBCC(m_sBCC);
     if(RET_OK == pDlg->Execute())
@@ -689,12 +733,12 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         }
 
         SwView* pSourceView = rConfigItem.GetSourceView();
-        PrintMonitor aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
-        aSaveMonitor.m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
-        aSaveMonitor.SetCancelHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
-        aSaveMonitor.m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
+        ScopedVclPtrInstance< PrintMonitor > aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
+        aSaveMonitor->m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
+        aSaveMonitor->SetCancelHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
+        aSaveMonitor->m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
         m_bCancelSaving = false;
-        aSaveMonitor.Show();
+        aSaveMonitor->Show();
         m_pWizard->enableButtons(WZB_CANCEL, false);
 
         for(sal_uInt32 nDoc = nBegin; nDoc < nEnd && !m_bCancelSaving; ++nDoc)
@@ -707,7 +751,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 sPath += "." + sExtension;
             }
             OUString sStat = OUString(SW_RES(STR_STATSTR_LETTER)) + " " + OUString::number( nDoc );
-            aSaveMonitor.m_pPrintInfo->SetText(sStat);
+            aSaveMonitor->m_pPrintInfo->SetText(sStat);
 
             //now extract a document from the target document
             // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
@@ -755,9 +799,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
                 if(bFailed)
                 {
-                    SwSaveWarningBox_Impl aWarning( pButton, sOutPath );
-                    if(RET_OK == aWarning.Execute())
-                        sOutPath = aWarning.GetFileName();
+                    ScopedVclPtrInstance< SwSaveWarningBox_Impl > aWarning( pButton, sOutPath );
+                    if(RET_OK == aWarning->Execute())
+                        sOutPath = aWarning->GetFileName();
                     else
                     {
                         xTempDocShell->DoClose();
@@ -794,23 +838,23 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
                 if ((pDocumentPrinter->GetName() == pInfo->GetPrinterName()) &&
                     (pDocumentPrinter->GetDriverName() == pInfo->GetDriver()))
                 {
-                    m_pTempPrinter = new Printer(pDocumentPrinter->GetJobSetup());
+                    m_pTempPrinter = VclPtr<Printer>::Create(pDocumentPrinter->GetJobSetup());
                 }
                 else
-                    m_pTempPrinter = new Printer( *pInfo );
+                    m_pTempPrinter = VclPtr<Printer>::Create( *pInfo );
             }
             else
             {
                 if( (m_pTempPrinter->GetName() != pInfo->GetPrinterName()) ||
                      (m_pTempPrinter->GetDriverName() != pInfo->GetDriver()) )
                 {
-                    delete m_pTempPrinter;
-                    m_pTempPrinter = new Printer( *pInfo );
+                    m_pTempPrinter.disposeAndClear();
+                    m_pTempPrinter = VclPtr<Printer>::Create( *pInfo );
                 }
             }
         }
         else if( ! m_pTempPrinter )
-            m_pTempPrinter = new Printer();
+            m_pTempPrinter = VclPtr<Printer>::Create();
 
         m_pPrinterSettingsPB->Enable( m_pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
     }
@@ -916,7 +960,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
 
 IMPL_LINK(SwMailMergeOutputPage, SendAsHdl_Impl, PushButton*, pButton)
 {
-    SwMailBodyDialog* pDlg = new SwMailBodyDialog(pButton, m_pWizard);
+    VclPtr<SwMailBodyDialog> pDlg = VclPtr<SwMailBodyDialog>::Create(pButton, m_pWizard);
     pDlg->SetBody(m_sBody);
     if(RET_OK == pDlg->Execute())
     {
@@ -939,12 +983,12 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     if(rConfigItem.GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(rConfigItem.GetMailAddress()) )
     {
-        QueryBox aQuery(pButton, WB_YES_NO_CANCEL, m_sConfigureMail);
-        sal_uInt16 nRet = aQuery.Execute();
+        ScopedVclPtrInstance< QueryBox > aQuery(pButton, WB_YES_NO_CANCEL, m_sConfigureMail);
+        sal_uInt16 nRet = aQuery->Execute();
         if(RET_YES == nRet )
         {
             SfxAllItemSet aSet(pTargetView->GetPool());
-            boost::scoped_ptr<SwMailConfigDlg> pDlg(new SwMailConfigDlg(pButton, aSet));
+            ScopedVclPtrInstance< SwMailConfigDlg > pDlg(pButton, aSet);
             nRet = pDlg->Execute();
         }
 
@@ -1033,26 +1077,26 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     if(m_pSubjectED->GetText().isEmpty())
     {
-        SwSendQueryBox_Impl aQuery(pButton, "SubjectDialog",
-         "modules/swriter/ui/subjectdialog.ui");
-        aQuery.SetIsEmptyTextAllowed(true);
-        aQuery.SetValue(m_sNoSubjectST);
-        if(RET_OK == aQuery.Execute())
+        ScopedVclPtrInstance<SwSendQueryBox_Impl> aQuery(pButton, "SubjectDialog",
+                                                         "modules/swriter/ui/subjectdialog.ui");
+        aQuery->SetIsEmptyTextAllowed(true);
+        aQuery->SetValue(m_sNoSubjectST);
+        if(RET_OK == aQuery->Execute())
         {
-            if(aQuery.GetValue() != m_sNoSubjectST)
-                m_pSubjectED->SetText(aQuery.GetValue());
+            if(aQuery->GetValue() != m_sNoSubjectST)
+                m_pSubjectED->SetText(aQuery->GetValue());
         }
         else
             return 0;
     }
     if(!bAsBody && m_pAttachmentED->GetText().isEmpty())
     {
-        SwSendQueryBox_Impl aQuery(pButton, "AttachNameDialog",
-         "modules/swriter/ui/attachnamedialog.ui");
-        aQuery.SetIsEmptyTextAllowed(false);
-        if(RET_OK == aQuery.Execute())
+        ScopedVclPtrInstance<SwSendQueryBox_Impl> aQuery(pButton, "AttachNameDialog",
+                                                         "modules/swriter/ui/attachnamedialog.ui");
+        aQuery->SetIsEmptyTextAllowed(false);
+        if(RET_OK == aQuery->Execute())
         {
-            OUString sAttach(aQuery.GetValue());
+            OUString sAttach(aQuery->GetValue());
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if (2 > nTokenCount)
             {
@@ -1101,7 +1145,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     xStore->storeToURL( sTargetTempURL, aValues   );
 
     //create the send dialog
-    SwSendMailDialog* pDlg = new SwSendMailDialog( pButton, rConfigItem );
+    VclPtr<SwSendMailDialog> pDlg = VclPtr<SwSendMailDialog>::Create( pButton, rConfigItem );
     pDlg->SetDocumentCount( nEnd );
     pDlg->ShowDialog();
     //help to force painting the dialog

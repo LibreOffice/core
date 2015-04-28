@@ -374,7 +374,7 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
 ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList )
     :ModalDialog( pParent, "ConflictsDialog", "modules/scalc/ui/conflictsdialog.ui" )
     ,m_pLbConflictsContainer  ( get<SvSimpleTableContainer>("container") )
-    ,m_pLbConflicts     ( new SvxRedlinTable(*m_pLbConflictsContainer) )
+    ,m_pLbConflicts     ( VclPtr<SvxRedlinTable>::Create(*m_pLbConflictsContainer) )
     ,maStrTitleConflict ( ScResId( STR_TITLE_CONFLICT ) )
     ,maStrTitleAuthor   ( ScResId( STR_TITLE_AUTHOR ) )
     ,maStrTitleDate     ( ScResId( STR_TITLE_DATE ) )
@@ -442,6 +442,18 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
 
 ScConflictsDlg::~ScConflictsDlg()
 {
+    disposeOnce();
+}
+
+void ScConflictsDlg::dispose()
+{
+    m_pLbConflictsContainer.clear();
+    m_pLbConflicts.disposeAndClear();
+    m_pBtnKeepMine.clear();
+    m_pBtnKeepOther.clear();
+    m_pBtnKeepAllMine.clear();
+    m_pBtnKeepAllOthers.clear();
+    ModalDialog::dispose();
 }
 
 OUString ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflictEntry )

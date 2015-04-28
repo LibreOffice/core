@@ -182,7 +182,7 @@ private:
     Reference< XCommandEnvironment >    mxCmdEnv;
 
     ::osl::Mutex            maMutex;
-    HeaderBar*              mpHeaderBar;
+    VclPtr<HeaderBar>       mpHeaderBar;
     SvtFileView_Impl*       mpParent;
     Timer                   maResetQuickSearch;
     OUString                maQuickSearchText;
@@ -206,7 +206,8 @@ protected:
 
 public:
     ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, FileViewFlags nFlags );
-   virtual ~ViewTabListBox_Impl();
+    virtual ~ViewTabListBox_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -419,7 +420,7 @@ class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
                         ,public ITimeoutHandler
 {
 protected:
-    SvtFileView*                mpAntiImpl;
+    VclPtr<SvtFileView>         mpAntiImpl;
     Link                        m_aSelectHandler;
 
     ::rtl::Reference< ::svt::FileViewContentEnumerator >
@@ -437,7 +438,7 @@ public:
     ::std::vector< SortingData_Impl* >  maContent;
     ::osl::Mutex                        maMutex;
 
-    ViewTabListBox_Impl*    mpView;
+    VclPtr<ViewTabListBox_Impl>         mpView;
     NameTranslator_Impl*    mpNameTrans;
     sal_uInt16              mnSortColumn;
     bool                    mbAscending     : 1;
@@ -596,7 +597,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     mbShowHeader        ( !(nFlags & FileViewFlags::SHOW_NONE) )
 {
     Size aBoxSize = pParentWin->GetSizePixel();
-    mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
+    mpHeaderBar = VclPtr<HeaderBar>::Create( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
     HeaderBarItemBits nBits = ( HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE );
@@ -648,9 +649,15 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
 
 ViewTabListBox_Impl::~ViewTabListBox_Impl()
 {
+    disposeOnce();
+}
+
+void ViewTabListBox_Impl::dispose()
+{
     maResetQuickSearch.Stop();
 
-    delete mpHeaderBar;
+    mpHeaderBar.disposeAndClear();
+    SvHeaderTabListBox::dispose();
 }
 
 
@@ -886,16 +893,16 @@ void ViewTabListBox_Impl::DeleteEntries()
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
             INetURLObject aObj( aURL );
-            svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+            ScopedVclPtrInstance< svtools::QueryDeleteDlg_Impl > aDlg(nullptr, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
             if ( sDialogPosition.getLength() )
-                aDlg.SetWindowState( sDialogPosition );
+                aDlg->SetWindowState( sDialogPosition );
 
             if ( GetSelectionCount() > 1 )
-                aDlg.EnableAllButton();
+                aDlg->EnableAllButton();
 
-            eResult = aDlg.Execute();
+            eResult = aDlg->Execute();
 
-            sDialogPosition = aDlg.GetWindowState( );
+            sDialogPosition = aDlg->GetWindowState( );
         }
 
         if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
@@ -1103,10 +1110,16 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
 
 SvtFileView::~SvtFileView()
 {
+    disposeOnce();
+}
+
+void SvtFileView::dispose()
+{
     // use temp pointer to prevent access of deleted member (GetFocus())
     SvtFileView_Impl* pTemp = mpImp;
     mpImp = NULL;
     delete pTemp;
+    Control::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtFileView(vcl::Window *pParent,
@@ -1582,7 +1595,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
 
 {
     maAllFilter = "*.*";
-    mpView = new ViewTabListBox_Impl( mpAntiImpl, this, nFlags );
+    mpView = VclPtr<ViewTabListBox_Impl>::Create( mpAntiImpl, this, nFlags );
     mpView->EnableCellFocus();
 }
 
@@ -1590,11 +1603,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
 SvtFileView_Impl::~SvtFileView_Impl()
 {
     Clear();
-
-    // use temp pointer to prevent access of deleted member (GetFocus())
-    ViewTabListBox_Impl* pTemp = mpView;
-    mpView = NULL;
-    delete pTemp;
+    mpView.disposeAndClear();
 }
 
 
@@ -2333,6 +2342,17 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& r
 
     // display specified texts
     set_secondary_text(get_secondary_text().replaceFirst("%s", rName));
+}
+
+QueryDeleteDlg_Impl::~QueryDeleteDlg_Impl()
+{
+    disposeOnce();
+}
+
+void QueryDeleteDlg_Impl::dispose()
+{
+    m_pAllButton.clear();
+    MessageDialog::dispose();
 }
 
 }

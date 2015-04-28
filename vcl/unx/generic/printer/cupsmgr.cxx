@@ -913,13 +913,14 @@ namespace
 {
     class RTSPWDialog : public ModalDialog
     {
-        FixedText* m_pText;
-        Edit*      m_pUserEdit;
-        Edit*      m_pPassEdit;
+        VclPtr<FixedText> m_pText;
+        VclPtr<Edit>      m_pUserEdit;
+        VclPtr<Edit>      m_pPassEdit;
 
     public:
         RTSPWDialog(const OString& rServer, const OString& rUserName, vcl::Window* pParent);
-
+        virtual ~RTSPWDialog();
+        virtual void dispose() SAL_OVERRIDE;
         OString getUserName() const;
         OString getPassword() const;
     };
@@ -938,6 +939,19 @@ namespace
         m_pUserEdit->SetText( OStringToOUString(rUserName, osl_getThreadTextEncoding()));
     }
 
+    RTSPWDialog::~RTSPWDialog()
+    {
+        disposeOnce();
+    }
+
+    void RTSPWDialog::dispose()
+    {
+        m_pText.clear();
+        m_pUserEdit.clear();
+        m_pPassEdit.clear();
+        ModalDialog::dispose();
+    }
+
     OString RTSPWDialog::getUserName() const
     {
         return OUStringToOString( m_pUserEdit->GetText(), osl_getThreadTextEncoding() );
@@ -952,11 +966,11 @@ namespace
     {
         bool bRet = false;
 
-        RTSPWDialog aDialog(rServer, rUserName, NULL);
-        if (aDialog.Execute())
+        ScopedVclPtrInstance<RTSPWDialog> aDialog(rServer, rUserName, nullptr);
+        if (aDialog->Execute())
         {
-            rUserName = aDialog.getUserName();
-            rPassword = aDialog.getPassword();
+            rUserName = aDialog->getUserName();
+            rPassword = aDialog->getPassword();
             bRet = true;
         }
 

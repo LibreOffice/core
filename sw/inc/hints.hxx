@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_HINTS_HXX
 
 #include <swatrset.hxx>
+#include <vcl/vclptr.hxx>
 #include <vector>
 
 class SwFmt;
@@ -132,13 +133,13 @@ public:
 class SwRefMarkFldUpdate : public SwMsgPoolItem
 {
 public:
-    const OutputDevice* pOut; ///< pointer to the current output device
+    VclPtr<OutputDevice> pOut; ///< pointer to the current output device
     /** Is sent if reference marks should be updated.
 
         To get the page/chapter number, the frame has to be asked. For that we need
         the current OutputDevice.
     */
-    SwRefMarkFldUpdate( const OutputDevice* );
+    SwRefMarkFldUpdate( OutputDevice* );
 };
 
 /** SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position

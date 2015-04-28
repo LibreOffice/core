@@ -33,6 +33,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <SidebarWindowsTypes.hxx>
 #include <svl/lstner.hxx>
+#include <vcl/vclptr.hxx>
 
 class OutputDevice;
 class SwWrtShell;
@@ -140,12 +141,12 @@ class SwPostItMgr: public SfxListener
     private:
         SwView*                         mpView;
         SwWrtShell*                     mpWrtShell;
-        SwEditWin*                      mpEditWin;
+        VclPtr<SwEditWin>               mpEditWin;
         std::list< SwSidebarItem*>      mvPostItFlds;
         std::vector<SwPostItPageItem*>  mPages;
         ImplSVEvent *                   mnEventId;
         bool                            mbWaitingForCalcRects;
-        sw::sidebarwindows::SwSidebarWin* mpActivePostIt;
+        VclPtr<sw::sidebarwindows::SwSidebarWin> mpActivePostIt;
         bool                            mbLayout;
         long                            mbLayoutHeight;
         bool                            mbLayouting;

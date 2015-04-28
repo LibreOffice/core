@@ -264,7 +264,16 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
 
 ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 {
+    disposeOnce();
+}
+
+void ODbTypeWizDialogSetup::dispose()
+{
     delete m_pOutSet;
+    m_pGeneralPage.clear();
+    m_pMySQLIntroPage.clear();
+    m_pFinalPage.clear();
+    svt::RoadmapWizard::dispose();
 }
 
 IMPL_LINK(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage*, /*_pTabPage*/)
@@ -420,7 +429,7 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
     ::dbaccess::DATASOURCE_TYPE LocDatabaseType = _DatabaseType;
     if ((LocDatabaseType ==  ::dbaccess::DST_MYSQL_JDBC) || (LocDatabaseType ==  ::dbaccess::DST_MYSQL_ODBC) || (LocDatabaseType ==  ::dbaccess::DST_MYSQL_NATIVE))
     {
-        if (m_pMySQLIntroPage != NULL)
+        if (m_pMySQLIntroPage != nullptr)
         {
             switch( m_pMySQLIntroPage->getMySQLMode() )
             {
@@ -439,7 +448,7 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
 OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
 {
     OUString sRet = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(_rSet);
-    if (m_pMySQLIntroPage != NULL && m_pMySQLIntroPage->IsVisible() )
+    if (m_pMySQLIntroPage != nullptr && m_pMySQLIntroPage->IsVisible() )
     {
         switch( m_pMySQLIntroPage->getMySQLMode() )
         {
@@ -462,16 +471,16 @@ void ODbTypeWizDialogSetup::clearPassword()
     m_pImpl->clearPassword();
 }
 
-TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
+VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
 {
-    SfxTabPage* pFirstPage;
-    OGenericAdministrationPage* pPage = NULL;
+    VclPtr<SfxTabPage> pFirstPage;
+    VclPtr<OGenericAdministrationPage> pPage;
     switch(_nState)
     {
         case PAGE_DBSETUPWIZARD_INTRO:
-            pFirstPage = new OGeneralPageWizard(this,*m_pOutSet);
-            pPage = static_cast<OGenericAdministrationPage*> (pFirstPage);
-            m_pGeneralPage = static_cast<OGeneralPageWizard*>(pFirstPage);
+            pFirstPage = VclPtr<OGeneralPageWizard>::Create(this,*m_pOutSet);
+            pPage = static_cast<OGenericAdministrationPage*> (pFirstPage.get());
+            m_pGeneralPage = static_cast<OGeneralPageWizard*>(pFirstPage.get());
             m_pGeneralPage->SetTypeSelectHandler(LINK(this, ODbTypeWizDialogSetup, OnTypeSelected));
             m_pGeneralPage->SetCreationModeHandler(LINK( this, ODbTypeWizDialogSetup, OnChangeCreationMode ) );
             m_pGeneralPage->SetDocumentSelectionHandler(LINK( this, ODbTypeWizDialogSetup, OnRecentDocumentSelected ) );
@@ -543,7 +552,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
 
         case PAGE_DBSETUPWIZARD_FINAL:
             pPage = OFinalDBPageSetup::CreateFinalDBTabPageSetup(this,*m_pOutSet);
-            m_pFinalPage = static_cast<OFinalDBPageSetup*> (pPage);
+            m_pFinalPage = static_cast<OFinalDBPageSetup*> (pPage.get());
             break;
     }
 
@@ -734,7 +743,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
             return true;
 
-        if ( m_pFinalPage != NULL )
+        if ( m_pFinalPage != nullptr )
             return m_pFinalPage->IsDatabaseDocumentToBeOpened();
 
         return true;
@@ -745,7 +754,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
             return false;
 
-        if ( m_pFinalPage != NULL )
+        if ( m_pFinalPage != nullptr )
             return m_pFinalPage->IsTableWizardToBeStarted();
 
         return false;

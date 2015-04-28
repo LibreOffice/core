@@ -72,12 +72,12 @@ ScrollBarManager::~ScrollBarManager()
 
 void ScrollBarManager::Connect()
 {
-    if (mpVerticalScrollBar != 0)
+    if (mpVerticalScrollBar != nullptr)
     {
         mpVerticalScrollBar->SetScrollHdl (
             LINK(this, ScrollBarManager, VerticalScrollBarHandler));
     }
-    if (mpHorizontalScrollBar != 0)
+    if (mpHorizontalScrollBar != nullptr)
     {
         mpHorizontalScrollBar->SetScrollHdl(
             LINK(this, ScrollBarManager, HorizontalScrollBarHandler));
@@ -86,11 +86,11 @@ void ScrollBarManager::Connect()
 
 void ScrollBarManager::Disconnect()
 {
-    if (mpVerticalScrollBar != 0)
+    if (mpVerticalScrollBar != nullptr)
     {
         mpVerticalScrollBar->SetScrollHdl (Link());
     }
-    if (mpHorizontalScrollBar != 0)
+    if (mpHorizontalScrollBar != nullptr)
     {
         mpHorizontalScrollBar->SetScrollHdl (Link());
     }
@@ -117,13 +117,13 @@ Rectangle ScrollBarManager::PlaceScrollBars (
         bIsHorizontalScrollBarAllowed,
         bIsVerticalScrollBarAllowed));
 
-    if (mpHorizontalScrollBar!=0 && mpHorizontalScrollBar->IsVisible())
+    if (mpHorizontalScrollBar!=nullptr && mpHorizontalScrollBar->IsVisible())
         PlaceHorizontalScrollBar (rAvailableArea);
 
-    if (mpVerticalScrollBar!=0 && mpVerticalScrollBar->IsVisible())
+    if (mpVerticalScrollBar!=nullptr && mpVerticalScrollBar->IsVisible())
         PlaceVerticalScrollBar (rAvailableArea);
 
-    if (mpScrollBarFiller!=0 && mpScrollBarFiller->IsVisible())
+    if (mpScrollBarFiller!=nullptr && mpScrollBarFiller->IsVisible())
         PlaceFiller (rAvailableArea);
 
     return aRemainingSpace;
@@ -177,12 +177,12 @@ void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
 void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScrolling)
 {
     Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     Size aWindowModelSize (pWindow->PixelToLogic(pWindow->GetSizePixel()));
 
     // The horizontal scroll bar is only shown when the window is
     // horizontally smaller than the view.
-    if (mpHorizontalScrollBar != 0 && mpHorizontalScrollBar->IsVisible())
+    if (mpHorizontalScrollBar != nullptr && mpHorizontalScrollBar->IsVisible())
     {
         mpHorizontalScrollBar->Show();
         mpHorizontalScrollBar->SetRange (
@@ -212,7 +212,7 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
     }
 
     // The vertical scroll bar is always shown.
-    if (mpVerticalScrollBar != 0 && mpVerticalScrollBar->IsVisible())
+    if (mpVerticalScrollBar != nullptr && mpVerticalScrollBar->IsVisible())
     {
         mpVerticalScrollBar->SetRange (
             Range(aModelArea.Top(), aModelArea.Bottom()));
@@ -257,7 +257,7 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
     if (pScrollBar!=NULL
         && pScrollBar==mpVerticalScrollBar.get()
         && pScrollBar->IsVisible()
-        && mrSlideSorter.GetContentWindow()!=0)
+        && mrSlideSorter.GetContentWindow())
     {
         double nRelativePosition = double(pScrollBar->GetThumbPos())
             / double(pScrollBar->GetRange().Len());
@@ -273,7 +273,7 @@ IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar)
     if (pScrollBar!=NULL
         && pScrollBar==mpHorizontalScrollBar.get()
         && pScrollBar->IsVisible()
-        && mrSlideSorter.GetContentWindow()!=0)
+        && mrSlideSorter.GetContentWindow())
     {
         double nRelativePosition = double(pScrollBar->GetThumbPos())
             / double(pScrollBar->GetRange().Len());
@@ -291,7 +291,7 @@ void ScrollBarManager::SetWindowOrigin (
     mnHorizontalPosition = nHorizontalPosition;
     mnVerticalPosition = nVerticalPosition;
 
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     Size aViewSize (pWindow->GetViewSize());
     Point aOrigin (
         (long int) (mnHorizontalPosition * aViewSize.Width()),
@@ -431,7 +431,7 @@ void ScrollBarManager::SetTopLeft(const Point& rNewTopLeft)
 
 int ScrollBarManager::GetVerticalScrollBarWidth() const
 {
-    if (mpVerticalScrollBar != 0 && mpVerticalScrollBar->IsVisible())
+    if (mpVerticalScrollBar != nullptr && mpVerticalScrollBar->IsVisible())
         return mpVerticalScrollBar->GetSizePixel().Width();
     else
         return 0;
@@ -439,7 +439,7 @@ int ScrollBarManager::GetVerticalScrollBarWidth() const
 
 int ScrollBarManager::GetHorizontalScrollBarHeight() const
 {
-    if (mpHorizontalScrollBar != 0 && mpHorizontalScrollBar->IsVisible())
+    if (mpHorizontalScrollBar != nullptr && mpHorizontalScrollBar->IsVisible())
         return mpHorizontalScrollBar->GetSizePixel().Height();
     else
         return 0;
@@ -447,7 +447,7 @@ int ScrollBarManager::GetHorizontalScrollBarHeight() const
 
 void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 {
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
 
     int nDx = 0;
     int nDy = 0;
@@ -458,7 +458,7 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
         pWindow->LogicToPixel(mrSlideSorter.GetView().GetModelArea()));
 
     if (aWindowSize.Width() > maScrollBorder.Width() * 3
-        && mpHorizontalScrollBar != 0
+        && mpHorizontalScrollBar != nullptr
         && mpHorizontalScrollBar->IsVisible())
     {
         if (rMouseWindowPosition.X() < maScrollBorder.Width()

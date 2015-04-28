@@ -42,7 +42,6 @@ class MediaToolBoxControl_Impl : public MediaControl
 public:
 
                             MediaToolBoxControl_Impl( vcl::Window& rParent, MediaToolBoxControl& rControl );
-                            virtual ~MediaToolBoxControl_Impl();
 
     void                    update() SAL_OVERRIDE;
     void                    execute( const MediaItem& rItem ) SAL_OVERRIDE;
@@ -59,12 +58,6 @@ MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( vcl::Window& rParent, MediaT
     mpToolBoxControl( &rControl )
 {
     SetSizePixel( getMinSizePixel() );
-}
-
-
-
-MediaToolBoxControl_Impl::~MediaToolBoxControl_Impl()
-{
 }
 
 
@@ -131,9 +124,9 @@ void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eSta
 
 
 
-vcl::Window* MediaToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> MediaToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return( pParent ? new MediaToolBoxControl_Impl( *pParent, *this ) : NULL );
+    return ( pParent ? VclPtr<MediaToolBoxControl_Impl>::Create( *pParent, *this ) : nullptr );
 }
 
 

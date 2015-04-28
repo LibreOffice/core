@@ -39,9 +39,9 @@
 class SvxMultiPathDialog : public ModalDialog
 {
 private:
-    svx::SvxRadioButtonListBox* m_pRadioLB;
-    PushButton*                 m_pAddBtn;
-    PushButton*                 m_pDelBtn;
+    VclPtr<svx::SvxRadioButtonListBox> m_pRadioLB;
+    VclPtr<PushButton>                 m_pAddBtn;
+    VclPtr<PushButton>                 m_pDelBtn;
 
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(DelHdl_Impl, void *);
@@ -51,6 +51,7 @@ private:
 public:
     SvxMultiPathDialog(vcl::Window* pParent);
     virtual ~SvxMultiPathDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );
@@ -59,9 +60,9 @@ public:
 class SvxPathSelectDialog : public ModalDialog
 {
 private:
-    ListBox*                    m_pPathLB;
-    PushButton*                 m_pAddBtn;
-    PushButton*                 m_pDelBtn;
+    VclPtr<ListBox>                    m_pPathLB;
+    VclPtr<PushButton>                 m_pAddBtn;
+    VclPtr<PushButton>                 m_pDelBtn;
 
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(DelHdl_Impl, void *);
@@ -70,6 +71,7 @@ private:
 public:
     SvxPathSelectDialog(vcl::Window* pParent);
     virtual ~SvxPathSelectDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );

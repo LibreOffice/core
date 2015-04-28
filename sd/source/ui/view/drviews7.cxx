@@ -912,7 +912,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_DELETE_PAGE )
         || SfxItemState::DEFAULT == rSet.GetItemState( SID_DELETE_MASTER_PAGE ) )
     {
-        if (maTabControl.GetPageCount() == 1 ||
+        if (maTabControl->GetPageCount() == 1 ||
             meEditMode == EM_MASTERPAGE     ||
             mePageKind == PK_NOTES          ||
             mePageKind == PK_HANDOUT        ||

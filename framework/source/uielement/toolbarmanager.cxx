@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -250,7 +249,7 @@ ToolBarManager::~ToolBarManager()
 
 void ToolBarManager::Destroy()
 {
-    OSL_ASSERT( m_pToolBar != 0 );
+    OSL_ASSERT( m_pToolBar != nullptr );
     SolarMutexGuard g;
     if ( m_bAddedToTaskPaneList )
     {
@@ -288,7 +287,7 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetDataChangedHdl( aEmpty );
     m_pToolBar->SetCommandHdl( aEmpty );
 
-    m_pToolBar = 0;
+    m_pToolBar.clear();
 
     SvtMiscOptions().RemoveListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }
@@ -599,6 +598,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
 
         // We have to destroy our toolbar instance now.
         Destroy();
+        m_pToolBar.clear();
 
         if ( m_bFrameActionRegistered && m_xFrame.is() )
         {
@@ -727,7 +727,7 @@ void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap
 {
     const ::std::vector< sal_uInt16 >& _rIDs = _pIter->second.aIds;
     m_pToolBar->SetItemImage( _pIter->second.nId, _aImage );
-    ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBox::SetItemImage,m_pToolBar,_1,_aImage));
+    ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBox::SetItemImage,m_pToolBar.get(),_1,_aImage));
 }
 
 void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)

@@ -23,7 +23,7 @@ class SwPageFrm;
 class SwPageBreakWin : public MenuButton, public SwFrameControl
 {
     PopupMenu*            m_pPopupMenu;
-    vcl::Window*               m_pLine;
+    VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;
     int                   m_nDelayAppearing; ///< Before we show the control, let it transparent for a few timer ticks to avoid appearing with every mouse over.
@@ -35,6 +35,7 @@ class SwPageBreakWin : public MenuButton, public SwFrameControl
 public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm );
     virtual ~SwPageBreakWin( );
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Select( ) SAL_OVERRIDE;

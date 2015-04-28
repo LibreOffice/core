@@ -124,7 +124,7 @@ private:
     MenuItemList*       pItemList;          // Liste mit den MenuItems
     MenuLogo*           pLogo;
     Menu*               pStartedFrom;
-    vcl::Window*             pWindow;
+    VclPtr<vcl::Window> pWindow;
 
     Link                aActivateHdl;       // Active-Handler
     Link                aDeactivateHdl;     // Deactivate-Handler

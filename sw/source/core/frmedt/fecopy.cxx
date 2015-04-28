@@ -1239,16 +1239,16 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFmt, Graphic& rGrf ) co
                             Point aPt;
                             GetGrfSize( aSz );
 
-                            VirtualDevice aVirtDev;
-                            aVirtDev.EnableOutput( false );
+                            ScopedVclPtrInstance< VirtualDevice > pVirtDev;
+                            pVirtDev->EnableOutput( false );
 
                             MapMode aTmp( GetWin()->GetMapMode() );
                             aTmp.SetOrigin( aPt );
-                            aVirtDev.SetMapMode( aTmp );
+                            pVirtDev->SetMapMode( aTmp );
 
                             GDIMetaFile aMtf;
-                            aMtf.Record( &aVirtDev );
-                            aGrf.Draw( &aVirtDev, aPt, aSz );
+                            aMtf.Record( pVirtDev.get() );
+                            aGrf.Draw( pVirtDev, aPt, aSz );
                             aMtf.Stop();
                             aMtf.SetPrefMapMode( aTmp );
                             aMtf.SetPrefSize( aSz );
@@ -1266,14 +1266,14 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFmt, Graphic& rGrf ) co
                         // Otherwise it could happen that for vector graphics
                         // many MB's of memory are allocated.
                         const Size aSz( FindFlyFrm()->Prt().SSize() );
-                        VirtualDevice aVirtDev( *GetWin() );
+                        ScopedVclPtrInstance< VirtualDevice > pVirtDev(*GetWin());
 
                         MapMode aTmp( MAP_TWIP );
-                        aVirtDev.SetMapMode( aTmp );
-                        if( aVirtDev.SetOutputSize( aSz ) )
+                        pVirtDev->SetMapMode( aTmp );
+                        if( pVirtDev->SetOutputSize( aSz ) )
                         {
-                            aGrf.Draw( &aVirtDev, Point(), aSz );
-                            rGrf = aVirtDev.GetBitmap( Point(), aSz );
+                            aGrf.Draw( pVirtDev.get(), Point(), aSz );
+                            rGrf = pVirtDev->GetBitmap( Point(), aSz );
                         }
                         else
                         {

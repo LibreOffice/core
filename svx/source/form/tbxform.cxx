@@ -59,11 +59,6 @@ SvxFmAbsRecWin::SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pCont
 }
 
 
-SvxFmAbsRecWin::~SvxFmAbsRecWin()
-{
-}
-
-
 void SvxFmAbsRecWin::FirePosition( bool _bForce )
 {
     if ( _bForce || IsValueChangedFromSaved() )
@@ -202,7 +197,7 @@ SfxPopupWindowType SvxFmTbxCtlConfig::GetPopupWindowType() const
 }
 
 
-SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxFmTbxCtlConfig::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_FM_CONFIG )
     {
@@ -275,11 +270,11 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 }
 
 
-vcl::Window* SvxFmTbxCtlAbsRec::CreateItemWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxFmTbxCtlAbsRec::CreateItemWindow( vcl::Window* pParent )
 {
-    SvxFmAbsRecWin* pWin = new SvxFmAbsRecWin( pParent, this );
+    VclPtrInstance<SvxFmAbsRecWin> pWin( pParent, this );
     pWin->SetUniqueId( UID_ABSOLUTE_RECORD_WINDOW );
-    return pWin;
+    return pWin.get();
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecText, SfxBoolItem );
@@ -295,10 +290,10 @@ SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 }
 
 
-vcl::Window* SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
 {
     OUString aText(SVX_RESSTR(RID_STR_REC_TEXT));
-    FixedText* pFixedText = new FixedText( pParent );
+    VclPtrInstance<FixedText> pFixedText( pParent );
     Size aSize( pFixedText->GetTextWidth( aText ), pFixedText->GetTextHeight( ) );
     pFixedText->SetText( aText );
     aSize.Width() += 6;
@@ -321,16 +316,16 @@ SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText()
 }
 
 
-vcl::Window* SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pParent )
 {
     OUString aText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
-    FixedText* pFixedText = new FixedText( pParent, WB_CENTER );
+    VclPtrInstance<FixedText> pFixedText( pParent, WB_CENTER );
     Size aSize( pFixedText->GetTextWidth( aText ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;
     pFixedText->SetText( aText );
     pFixedText->SetSizePixel( aSize );
     pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
-    return pFixedText;
+    return pFixedText.get();
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecTotal, SfxStringItem );
@@ -348,9 +343,9 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 }
 
 
-vcl::Window* SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
 {
-    pFixedText = new FixedText( pParent );
+    pFixedText.reset(VclPtr<FixedText>::Create( pParent ));
     OUString aSample("123456");
     Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;

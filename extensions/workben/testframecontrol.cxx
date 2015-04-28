@@ -239,7 +239,7 @@ void FrameControlApplication::init()
     XInterfaceRef xInst = xMgr->createInstance( L"stardiv.one.frame.FrameControl" );
     if (xInst->queryInterface( XControl::getSmartUik(), _xControl ))
     {
-        _pWorkWin = new WorkWindow( NULL, WB_APP | WB_STDWORK );
+        _pWorkWin = VclPtr<WorkWindow>::Create( nullptr, WB_APP | WB_STDWORK );
         _pWorkWin->Show();
         XWindowPeerRef xParent( _pWorkWin->GetComponentInterface() );
 

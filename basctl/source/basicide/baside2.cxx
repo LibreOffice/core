@@ -192,10 +192,10 @@ ModulWindow::ModulWindow (
     BaseWindow(pParent, rDocument, aLibName, aName),
     rLayout(*pParent),
     nValid(ValidWindow),
-    aXEditorWindow(this),
+    aXEditorWindow(VclPtr<ComplexEditorWindow>::Create(this)),
     m_aModule(aModule)
 {
-    aXEditorWindow.Show();
+    aXEditorWindow->Show();
     SetBackground();
 }
 
@@ -227,9 +227,15 @@ SbModuleRef ModulWindow::XModule()
 
 ModulWindow::~ModulWindow()
 {
-    nValid = 0;
+    disposeOnce();
+}
 
+void ModulWindow::dispose()
+{
+    nValid = 0;
     StarBASIC::Stop();
+    aXEditorWindow.disposeAndClear();
+    BaseWindow::dispose();
 }
 
 
@@ -237,7 +243,7 @@ void ModulWindow::GetFocus()
 {
     if (nValid != ValidWindow)
         return;
-    aXEditorWindow.GetEdtWindow().GrabFocus();
+    aXEditorWindow->GetEdtWindow().GrabFocus();
     // don't call basic calls because focus is somewhere else...
 }
 
@@ -256,7 +262,7 @@ void ModulWindow::Paint( const Rectangle& )
 
 void ModulWindow::Resize()
 {
-    aXEditorWindow.SetPosSizePixel( Point( 0, 0 ),
+    aXEditorWindow->SetPosSizePixel( Point( 0, 0 ),
                                     Size( GetOutputSizePixel() ) );
 }
 
@@ -580,7 +586,7 @@ bool ModulWindow::BasicToggleBreakPoint()
             bNewBreakPoint = true;
     }
 
-    aXEditorWindow.GetBrkWindow().Invalidate();
+    aXEditorWindow->GetBrkWindow().Invalidate();
     return bNewBreakPoint;
 }
 
@@ -613,8 +619,8 @@ void ModulWindow::BasicToggleBreakPointEnabled()
 void ModulWindow::ManageBreakPoints()
 {
     BreakPointWindow& rBrkWin = GetBreakPointWindow();
-    BreakPointDialog aBrkDlg( &rBrkWin, GetBreakPoints() );
-    aBrkDlg.Execute();
+    ScopedVclPtrInstance< BreakPointDialog > aBrkDlg( &rBrkWin, GetBreakPoints() );
+    aBrkDlg->Execute();
     rBrkWin.Invalidate();
 }
 
@@ -638,7 +644,7 @@ bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     // if other basic, the IDE should try to display the correct module
     bool const bMarkError = pBasic == GetBasic();
     if ( bMarkError )
-        aXEditorWindow.GetBrkWindow().SetMarkerPos(nErrorLine, true);
+        aXEditorWindow->GetBrkWindow().SetMarkerPos(nErrorLine, true);
 
     // #i47002#
     Reference< awt::XWindow > xWindow = VCLUnoHelper::GetInterface( this );
@@ -651,7 +657,7 @@ bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
         return false;
 
     if ( bMarkError )
-        aXEditorWindow.GetBrkWindow().SetNoMarker();
+        aXEditorWindow->GetBrkWindow().SetNoMarker();
     return false;
 }
 
@@ -676,7 +682,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 
     AssertValidEditEngine();
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, 0 ), TextPaM( nErrorLine, 0 ) ) );
-    aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine );
+    aXEditorWindow->GetBrkWindow().SetMarkerPos( nErrorLine );
 
     rLayout.UpdateDebug(false);
 
@@ -691,7 +697,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
         Application::Yield();
 
     aStatus.bIsInReschedule = false;
-    aXEditorWindow.GetBrkWindow().SetNoMarker();
+    aXEditorWindow->GetBrkWindow().SetNoMarker();
 
     ClearStatus( BASWIN_INRESCHEDULE );
 
@@ -1022,7 +1028,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         {
             SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), false);
             bSourceLinesEnabled = pItem && pItem->GetValue();
-            aXEditorWindow.SetLineNumberDisplay(bSourceLinesEnabled);
+            aXEditorWindow->SetLineNumberDisplay(bSourceLinesEnabled);
         }
         break;
         case SID_BASICIDE_DELETECURRENT:
@@ -1037,9 +1043,9 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             break;
         case SID_GOTOLINE:
         {
-            GotoLineDialog aGotoDlg(this);
-            if (aGotoDlg.Execute())
-                if (sal_Int32 const nLine = aGotoDlg.GetLineNumber())
+            ScopedVclPtrInstance< GotoLineDialog > aGotoDlg(this);
+            if (aGotoDlg->Execute())
+                if (sal_Int32 const nLine = aGotoDlg->GetLineNumber())
                 {
                     TextSelection const aSel(TextPaM(nLine - 1, 0), TextPaM(nLine - 1, 0));
                     GetEditView()->SetSelection(aSel);
@@ -1236,7 +1242,7 @@ void ModulWindow::AssertValidEditEngine()
 
 void ModulWindow::Activating ()
 {
-    aXEditorWindow.SetLineNumberDisplay(bSourceLinesEnabled);
+    aXEditorWindow->SetLineNumberDisplay(bSourceLinesEnabled);
     Show();
 }
 
@@ -1420,7 +1426,7 @@ bool ModulWindow::IsPasteAllowed()
 
 void ModulWindow::OnNewDocument ()
 {
-    aXEditorWindow.SetLineNumberDisplay(bSourceLinesEnabled);
+    aXEditorWindow->SetLineNumberDisplay(bSourceLinesEnabled);
 }
 
 char const* ModulWindow::GetHid () const
@@ -1464,15 +1470,28 @@ void ModulWindow::UpdateModule ()
 ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(0),
-    aWatchWindow(this),
-    aStackWindow(this),
+    aWatchWindow(VclPtr<WatchWindow>::Create(this)),
+    aStackWindow(VclPtr<StackWindow>::Create(this)),
     rObjectCatalog(rObjectCatalog_)
 { }
 
+ModulWindowLayout::~ModulWindowLayout()
+{
+    disposeOnce();
+}
+
+void ModulWindowLayout::dispose()
+{
+    aWatchWindow.disposeAndClear();
+    aStackWindow.disposeAndClear();
+    pChild.clear();
+    Layout::dispose();
+}
+
 void ModulWindowLayout::UpdateDebug (bool bBasicStopped)
 {
-    aWatchWindow.UpdateWatches(bBasicStopped);
-    aStackWindow.UpdateCalls();
+    aWatchWindow->UpdateWatches(bBasicStopped);
+    aStackWindow->UpdateCalls();
 }
 
 void ModulWindowLayout::Paint (Rectangle const&)
@@ -1493,8 +1512,8 @@ void ModulWindowLayout::Activating (BaseWindow& rChild)
 {
     assert(dynamic_cast<ModulWindow*>(&rChild));
     pChild = &static_cast<ModulWindow&>(rChild);
-    aWatchWindow.Show();
-    aStackWindow.Show();
+    aWatchWindow->Show();
+    aStackWindow->Show();
     rObjectCatalog.Show();
     rObjectCatalog.SetLayoutWindow(this);
     rObjectCatalog.UpdateEntries();
@@ -1506,8 +1525,8 @@ void ModulWindowLayout::Deactivating ()
 {
     aSyntaxColors.SetActiveEditor(0);
     Layout::Deactivating();
-    aWatchWindow.Hide();
-    aStackWindow.Hide();
+    aWatchWindow->Hide();
+    aStackWindow->Hide();
     rObjectCatalog.Hide();
     pChild = 0;
 }
@@ -1528,19 +1547,19 @@ void ModulWindowLayout::GetState (SfxItemSet &rSet, unsigned nWhich)
 
 void ModulWindowLayout::BasicAddWatch (OUString const& rWatchStr)
 {
-    aWatchWindow.AddWatch(rWatchStr);
+    aWatchWindow->AddWatch(rWatchStr);
 }
 
 void ModulWindowLayout::BasicRemoveWatch ()
 {
-    aWatchWindow.RemoveSelectedWatch();
+    aWatchWindow->RemoveSelectedWatch();
 }
 
 void ModulWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
 {
     AddToLeft(&rObjectCatalog, Size(nWidth * 0.20, nHeight * 0.75));
-    AddToBottom(&aWatchWindow, Size(nWidth * 0.67, nHeight * 0.25));
-    AddToBottom(&aStackWindow, Size(nWidth * 0.33, nHeight * 0.25));
+    AddToBottom(aWatchWindow.get(), Size(nWidth * 0.67, nHeight * 0.25));
+    AddToBottom(aStackWindow.get(), Size(nWidth * 0.33, nHeight * 0.25));
 }
 
 

@@ -41,11 +41,11 @@ namespace dbaui
 class OUserAdmin : public OGenericAdministrationPage
 {
 protected:
-    ListBox             *m_pUSER;
-    PushButton          *m_pNEWUSER;
-    PushButton          *m_pCHANGEPWD;
-    PushButton          *m_pDELETEUSER;
-    OTableGrantControl  m_TableCtrl; // show the grant rights of one user
+    VclPtr<ListBox>             m_pUSER;
+    VclPtr<PushButton>          m_pNEWUSER;
+    VclPtr<PushButton>          m_pCHANGEPWD;
+    VclPtr<PushButton>          m_pDELETEUSER;
+    VclPtr<OTableGrantControl>  m_TableCtrl; // show the grant rights of one user
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
@@ -62,9 +62,10 @@ protected:
 
     OUserAdmin( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
+    static  VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
 
     virtual ~OUserAdmin();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetUser();
 
     // subclasses must override this, but it isn't pure virtual

@@ -48,7 +48,7 @@ namespace dbaui
     // SpecialSettingsPage
     struct BooleanSettingDesc
     {
-        CheckBox**  ppControl;          // the dialog's control which displays this setting
+        VclPtr<CheckBox>* ppControl;    // the dialog's control which displays this setting
         OString     sControlId;         // the widget name of the control in the .ui
         sal_uInt16  nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
         bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is sal_False, and vice versa
@@ -95,7 +95,7 @@ namespace dbaui
             sal_uInt16 nItemId = setting->nItemId;
             if ( rFeatures.has( nItemId ) )
             {
-                get((*setting->ppControl), setting->sControlId);
+                get(*setting->ppControl, setting->sControlId);
                 (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
                 (*setting->ppControl)->Show();
 
@@ -134,7 +134,33 @@ namespace dbaui
 
     SpecialSettingsPage::~SpecialSettingsPage()
     {
+        disposeOnce();
+    }
+
+    void SpecialSettingsPage::dispose()
+    {
         m_aControlDependencies.clear();
+        m_pIsSQL92Check.clear();
+        m_pAppendTableAlias.clear();
+        m_pAsBeforeCorrelationName.clear();
+        m_pEnableOuterJoin.clear();
+        m_pIgnoreDriverPrivileges.clear();
+        m_pParameterSubstitution.clear();
+        m_pSuppressVersionColumn.clear();
+        m_pCatalog.clear();
+        m_pSchema.clear();
+        m_pIndexAppendix.clear();
+        m_pDosLineEnds.clear();
+        m_pCheckRequiredFields.clear();
+        m_pIgnoreCurrency.clear();
+        m_pEscapeDateTime.clear();
+        m_pPrimaryKeySupport.clear();
+        m_pRespectDriverResultSetType.clear();
+        m_pBooleanComparisonModeLabel.clear();
+        m_pBooleanComparisonMode.clear();
+        m_pMaxRowScanLabel.clear();
+        m_pMaxRowScan.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     void SpecialSettingsPage::impl_initBooleanSettings()
@@ -149,22 +175,21 @@ namespace dbaui
             { &m_pEnableOuterJoin,              "useoj",           DSID_ENABLEOUTERJOIN,       false },
             { &m_pIgnoreDriverPrivileges,       "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false },
             { &m_pParameterSubstitution,        "replaceparams",   DSID_PARAMETERNAMESUBST,    false },
-            { &m_pSuppressVersionColumn,        "displayver",      DSID_SUPPRESSVERSIONCL,     true },
+            { &m_pSuppressVersionColumn,        "displayver",      DSID_SUPPRESSVERSIONCL,     true  },
             { &m_pCatalog,                      "usecatalogname",  DSID_CATALOG,               false },
             { &m_pSchema,                       "useschemaname",   DSID_SCHEMA,                false },
             { &m_pIndexAppendix,                "createindex",     DSID_INDEXAPPENDIX,         false },
             { &m_pDosLineEnds,                  "eol",             DSID_DOSLINEENDS,           false },
-            { &m_pCheckRequiredFields,          "inputchecks",     DSID_CHECK_REQUIRED_FIELDS, false },
-            { &m_pIgnoreCurrency,               "ignorecurrency",  DSID_IGNORECURRENCY,        false },
+            { &m_pCheckRequiredFields,          "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false },
+            { &m_pIgnoreCurrency,               "inputchecks",     DSID_IGNORECURRENCY,        false },
             { &m_pEscapeDateTime,               "useodbcliterals", DSID_ESCAPE_DATETIME,       false },
             { &m_pPrimaryKeySupport,            "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false },
-            { &m_pRespectDriverResultSetType,   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false },
-            { NULL,                             "",                0,                          false }
+            { &m_pRespectDriverResultSetType,   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false }
         };
 
-        for ( const BooleanSettingDesc* pCopy = aSettings; pCopy->nItemId != 0; ++pCopy )
+        for ( const BooleanSettingDesc& pCopy : aSettings )
         {
-            m_aBooleanSettings.push_back( *pCopy );
+            m_aBooleanSettings.push_back( pCopy );
         }
     }
 
@@ -187,7 +212,7 @@ namespace dbaui
                 ++setting
              )
         {
-            if ( *setting->ppControl )
+            if ( (*setting->ppControl) )
             {
                 _rControlList.push_back( new OSaveValueWrapper< CheckBox >( *setting->ppControl ) );
             }
@@ -217,7 +242,7 @@ namespace dbaui
                 ++setting
              )
         {
-            if ( !*setting->ppControl )
+            if ( !(*setting->ppControl) )
                 continue;
 
             ::boost::optional< bool > aValue(false);
@@ -317,7 +342,19 @@ namespace dbaui
 
     GeneratedValuesPage::~GeneratedValuesPage()
     {
+        disposeOnce();
+    }
+
+    void GeneratedValuesPage::dispose()
+    {
         m_aControlDependencies.clear();
+        m_pAutoFrame.clear();
+        m_pAutoRetrievingEnabled.clear();
+        m_pAutoIncrementLabel.clear();
+        m_pAutoIncrement.clear();
+        m_pAutoRetrievingLabel.clear();
+        m_pAutoRetrieving.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     void GeneratedValuesPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
@@ -406,8 +443,14 @@ namespace dbaui
 
     AdvancedSettingsDialog::~AdvancedSettingsDialog()
     {
+        disposeOnce();
+    }
+
+    void AdvancedSettingsDialog::dispose()
+    {
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
+        SfxTabDialog::dispose();
     }
 
     bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const OUString& _sURL )

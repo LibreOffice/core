@@ -588,6 +588,43 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pPositionCB->SetClickHdl(LINK(this, SvxSwPosSizeTabPage, ProtectHdl));
 }
 
+SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
+{
+    disposeOnce();
+}
+
+void SvxSwPosSizeTabPage::dispose()
+{
+    m_pWidthMF.clear();
+    m_pHeightMF.clear();
+    m_pKeepRatioCB.clear();
+    m_pToPageRB.clear();
+    m_pToParaRB.clear();
+    m_pToCharRB.clear();
+    m_pAsCharRB.clear();
+    m_pToFrameRB.clear();
+    m_pPositionCB.clear();
+    m_pSizeCB.clear();
+    m_pPosFrame.clear();
+    m_pHoriFT.clear();
+    m_pHoriLB.clear();
+    m_pHoriByFT.clear();
+    m_pHoriByMF.clear();
+    m_pHoriToFT.clear();
+    m_pHoriToLB.clear();
+    m_pHoriMirrorCB.clear();
+    m_pVertFT.clear();
+    m_pVertLB.clear();
+    m_pVertByFT.clear();
+    m_pVertByMF.clear();
+    m_pVertToFT.clear();
+    m_pVertToLB.clear();
+    m_pFollowCB.clear();
+    m_pExampleWN.clear();
+    SfxTabPage::dispose();
+}
+
+
 namespace
 {
     struct FrmMaps
@@ -689,13 +726,9 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
     m_pHoriLB->Clear();
 }
 
-SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
+VclPtr<SfxTabPage> SvxSwPosSizeTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
-}
-
-SfxTabPage* SvxSwPosSizeTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
-{
-    return new SvxSwPosSizeTabPage(pParent, *rSet);
+    return VclPtr<SvxSwPosSizeTabPage>::Create(pParent, *rSet);
 }
 
 const sal_uInt16* SvxSwPosSizeTabPage::GetRanges()

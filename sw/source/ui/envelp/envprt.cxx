@@ -67,6 +67,23 @@ SwEnvPrtPage::SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_aIds[ENV_VER_RGHT] = m_pAlignBox->GetItemId("vertright");
 }
 
+SwEnvPrtPage::~SwEnvPrtPage()
+{
+    disposeOnce();
+}
+
+void SwEnvPrtPage::dispose()
+{
+    m_pAlignBox.clear();
+    m_pTopButton.clear();
+    m_pBottomButton.clear();
+    m_pRightField.clear();
+    m_pDownField.clear();
+    m_pPrinterInfo.clear();
+    m_pPrtSetup.clear();
+    SfxTabPage::dispose();
+}
+
 IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl)
 {
     if (m_pBottomButton->IsChecked())
@@ -99,7 +116,7 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
         // Call printer setup
         if (pPrt)
         {
-            boost::scoped_ptr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
+            VclPtrInstance< PrinterSetupDialog > pDlg(this);
             pDlg->SetPrinter(pPrt);
             pDlg->Execute();
             pDlg.reset();
@@ -127,9 +144,9 @@ IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
     return 0;
 }
 
-SfxTabPage* SwEnvPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwEnvPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwEnvPrtPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwEnvPrtPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)

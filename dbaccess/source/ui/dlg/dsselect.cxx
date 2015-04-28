@@ -72,7 +72,17 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const St
 
 ODatasourceSelectDialog::~ODatasourceSelectDialog()
 {
+    disposeOnce();
 }
+
+void ODatasourceSelectDialog::dispose()
+{
+    m_pDatasource.clear();
+    m_pOk.clear();
+    m_pCancel.clear();
+    ModalDialog::dispose();
+}
+
 
 IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
 {

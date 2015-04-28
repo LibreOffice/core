@@ -118,7 +118,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mnPaintEntranceCount(0),
       mbIsContextMenuOpen(false)
 {
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     OSL_ASSERT(pWindow);
     if (pWindow)
     {
@@ -502,7 +502,7 @@ void SlideSorterController::PostModelChange()
     mbPostModelChangePending = false;
     mrModel.Resync();
 
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
         GetCurrentSlideManager()->HandleModelChange();
@@ -541,7 +541,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
     if (pEvent != NULL)
     {
         ::vcl::Window* pWindow = pEvent->GetWindow();
-        SharedSdWindow pActiveWindow (mrSlideSorter.GetContentWindow());
+        sd::Window *pActiveWindow (mrSlideSorter.GetContentWindow());
         switch (pEvent->GetId())
         {
             case VCLEVENT_WINDOW_ACTIVATE:
@@ -557,12 +557,12 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
 
             case VCLEVENT_WINDOW_GETFOCUS:
                 if (pActiveWindow)
-                    if (pWindow == pActiveWindow.get())
+                    if (pWindow == pActiveWindow)
                         GetFocusManager().ShowFocus(false);
                 break;
 
             case VCLEVENT_WINDOW_LOSEFOCUS:
-                if (pActiveWindow && pWindow == pActiveWindow.get())
+                if (pActiveWindow && pWindow == pActiveWindow)
                 {
                     GetFocusManager().HideFocus();
                     mrView.GetToolTip().Hide();
@@ -584,7 +584,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                     : ViewShell::OUTPUT_DRAWMODE_COLOR);
                 if (mrSlideSorter.GetViewShell() != NULL)
                     mrSlideSorter.GetViewShell()->GetFrameView()->SetDrawMode(nDrawMode);
-                if (pActiveWindow != 0)
+                if (pActiveWindow != nullptr)
                     pActiveWindow->SetDrawMode(nDrawMode);
                 mrView.HandleDrawModeChange();
 
@@ -714,7 +714,7 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
     else
         mbIsForcedRearrangePending = false;
 
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
         if (bForce)
@@ -864,7 +864,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
 
     // Get a pointer to the corresponding accessible object and notify
     // that of the name change.
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     if ( ! pWindow)
         return;
 

@@ -56,12 +56,14 @@ namespace
     class SwBreakDashedLine : public SwDashedLine
     {
         private:
-            SwPageBreakWin* m_pWin;
+            VclPtr<SwPageBreakWin> m_pWin;
 
         public:
             SwBreakDashedLine( vcl::Window* pParent, Color& ( *pColorFn )(), SwPageBreakWin* pWin ) :
                 SwDashedLine( pParent, pColorFn ),
                 m_pWin( pWin ) {};
+            virtual ~SwBreakDashedLine() { disposeOnce(); }
+            virtual void dispose() SAL_OVERRIDE { m_pWin.clear(); SwDashedLine::dispose(); }
 
             virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     };
@@ -103,7 +105,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
     // Create the line control
-    m_pLine = new SwBreakDashedLine( GetEditWin(), &SwViewOption::GetPageBreakColor, this );
+    m_pLine = VclPtr<SwBreakDashedLine>::Create( GetEditWin(), &SwViewOption::GetPageBreakColor, this );
 
     // Create the popup menu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_PAGEBREAK_BUTTON ) );
@@ -116,12 +118,21 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
 
 SwPageBreakWin::~SwPageBreakWin( )
 {
+    disposeOnce();
+}
+
+void SwPageBreakWin::dispose()
+{
     m_bDestroyed = true;
     m_aFadeTimer.Stop();
 
+    m_pLine.disposeAndClear();
     delete m_pPopupMenu;
-    delete m_pLine;
+    m_pPopupMenu = NULL;
     delete m_pMousePt;
+    m_pMousePt = NULL;
+
+    MenuButton::dispose();
 }
 
 void SwPageBreakWin::Paint( const Rectangle& )

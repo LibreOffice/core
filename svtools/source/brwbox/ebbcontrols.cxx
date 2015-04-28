@@ -238,7 +238,7 @@ namespace svt
 
         EnableChildTransparentMode();
 
-        pBox = new TriStateBox(this,WB_CENTER|WB_VCENTER);
+        pBox = VclPtr<TriStateBox>::Create(this,WB_CENTER|WB_VCENTER);
         pBox->SetLegacyNoTextAlign( true );
         pBox->EnableChildTransparentMode();
         pBox->SetPaintTransparent( true );
@@ -249,7 +249,13 @@ namespace svt
 
     CheckBoxControl::~CheckBoxControl()
     {
-        delete pBox;
+        disposeOnce();
+    }
+
+    void CheckBoxControl::dispose()
+    {
+        pBox.disposeAndClear();
+        Control::dispose();
     }
 
 

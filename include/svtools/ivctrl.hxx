@@ -268,6 +268,7 @@ public:
 
                         SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle = WB_ICON | WB_BORDER );
     virtual             ~SvtIconChoiceCtrl();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const;

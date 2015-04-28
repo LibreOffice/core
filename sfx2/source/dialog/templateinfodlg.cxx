@@ -38,7 +38,7 @@ SfxTemplateInfoDlg::SfxTemplateInfoDlg (vcl::Window *pParent)
     get(mpBtnClose, "close");
     get(mpBox, "box");
     get(mpInfoView, "infoDrawingArea");
-    mpPreviewView = new vcl::Window(mpBox);
+    mpPreviewView = VclPtr<vcl::Window>::Create(mpBox.get());
 
     Size aSize(LogicToPixel(Size(250, 160), MAP_APPFONT));
     mpBox->set_width_request(aSize.Width());
@@ -54,7 +54,17 @@ SfxTemplateInfoDlg::SfxTemplateInfoDlg (vcl::Window *pParent)
 
 SfxTemplateInfoDlg::~SfxTemplateInfoDlg()
 {
+    disposeOnce();
+}
+
+void SfxTemplateInfoDlg::dispose()
+{
     m_xFrame->dispose();
+    mpBtnClose.clear();
+    mpBox.clear();
+    mpPreviewView.clear();
+    mpInfoView.clear();
+    ModalDialog::dispose();
 }
 
 void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)

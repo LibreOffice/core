@@ -99,13 +99,21 @@ namespace dbaui
 
     OTableSubscriptionPage::~OTableSubscriptionPage()
     {
+        disposeOnce();
+    }
+
+    void OTableSubscriptionPage::dispose()
+    {
         // just to make sure that our connection will be removed
         try
         {
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
-
+        m_pTables.clear();
+        m_pTablesList.clear();
+        m_pTablesDlg.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     void OTableSubscriptionPage::StateChanged( StateChangedType nType )
@@ -319,8 +327,8 @@ namespace dbaui
             if (aErrorInfo.isValid())
             {
                 // establishing the connection failed. Show an error window and exit.
-                OSQLMessageBox aMessageBox( GetParentDialog(), aErrorInfo );
-                aMessageBox.Execute();
+                ScopedVclPtrInstance< OSQLMessageBox > aMessageBox( GetParentDialog(), aErrorInfo );
+                aMessageBox->Execute();
                 m_pTables->Enable(false);
                 m_pTablesList->Clear();
 

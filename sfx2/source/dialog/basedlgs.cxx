@@ -45,6 +45,12 @@ using namespace ::com::sun::star::uno;
 
 #define USERITEM_NAME OUString("UserItem")
 
+SingleTabDlgImpl::SingleTabDlgImpl()
+        : m_pSfxPage(NULL)
+        , m_pLine(NULL)
+    {
+    }
+
 class SfxModelessDialog_Impl : public SfxListener
 {
 public:
@@ -163,15 +169,15 @@ SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const 
 }
 
 SfxModalDialog::~SfxModalDialog()
+{
+    disposeOnce();
+}
 
-/*  [Description]
-
-    Destructor; writes the Dialog position in the ini-file.
-*/
-
+void SfxModalDialog::dispose()
 {
     SetDialogData_Impl();
     delete pOutputSet;
+    ModalDialog::dispose();
 }
 
 void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
@@ -355,16 +361,16 @@ bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
 
 
 SfxModelessDialog::~SfxModelessDialog()
+{
+    disposeOnce();
+}
 
-/*  [Description]
-
-    Destructor
-*/
-
+void SfxModelessDialog::dispose()
 {
     if ( pImp->pMgr->GetFrame().is() && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( NULL );
     delete pImp;
+    ModelessDialog::dispose();
 }
 
 
@@ -505,19 +511,18 @@ bool SfxFloatingWindow::Close()
 
 
 SfxFloatingWindow::~SfxFloatingWindow()
-
-/*  [Description]
-
-    Destructor
-*/
-
 {
-    if ( pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
-        pBindings->SetActiveFrame( NULL );
-    delete pImp;
+    disposeOnce();
 }
 
-
+void SfxFloatingWindow::dispose()
+{
+    if ( pImp && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
+        pBindings->SetActiveFrame( NULL );
+    delete pImp;
+    pImp = NULL;
+    FloatingWindow::dispose();
+}
 
 void SfxFloatingWindow::Resize()
 
@@ -702,9 +707,18 @@ SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window* pParent, const SfxItemSet* p
 
 SfxSingleTabDialog::~SfxSingleTabDialog()
 {
-    delete pImpl->m_pSfxPage;
-    delete pImpl->m_pLine;
+    disposeOnce();
+}
+
+void SfxSingleTabDialog::dispose()
+{
+    pImpl->m_pSfxPage.disposeAndClear();
+    pImpl->m_pLine.disposeAndClear();
     delete pImpl;
+    pOKBtn.clear();
+    pCancelBtn.clear();
+    pHelpBtn.clear();
+    SfxModalDialog::dispose();
 }
 
 void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
@@ -718,7 +732,7 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
 
 {
     SetUniqId(nSettingsId);
-    delete pImpl->m_pSfxPage;
+    pImpl->m_pSfxPage.disposeAndClear();
     pImpl->m_pSfxPage = pTabPage;
     fnGetRanges = pRangesFunc;
 

@@ -219,14 +219,23 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
 
 SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 {
-    delete pActNum;
-    delete pSaveNum;
+    disposeOnce();
 }
 
-SfxTabPage*  SvxSingleNumPickTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void SvxSingleNumPickTabPage::dispose()
 {
-    return new SvxSingleNumPickTabPage(pParent, *rAttrSet);
+    delete pActNum;
+    pActNum = NULL;
+    delete pSaveNum;
+    pSaveNum = NULL;
+    m_pExamplesVS.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxSingleNumPickTabPage::Create( vcl::Window* pParent,
+                                                    const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SvxSingleNumPickTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -380,14 +389,23 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(vcl::Window* pParent,
 
 SvxBulletPickTabPage::~SvxBulletPickTabPage()
 {
-    delete pActNum;
-    delete pSaveNum;
+    disposeOnce();
 }
 
-SfxTabPage*  SvxBulletPickTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void SvxBulletPickTabPage::dispose()
 {
-    return new SvxBulletPickTabPage(pParent, *rAttrSet);
+    delete pActNum;
+    pActNum = NULL;
+    delete pSaveNum;
+    pSaveNum = NULL;
+    m_pExamplesVS.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxBulletPickTabPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SvxBulletPickTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -577,14 +595,23 @@ SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
 
 SvxNumPickTabPage::~SvxNumPickTabPage()
 {
-    delete pActNum;
-    delete pSaveNum;
+    disposeOnce();
 }
 
-SfxTabPage*  SvxNumPickTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void SvxNumPickTabPage::dispose()
 {
-    return new SvxNumPickTabPage(pParent, *rAttrSet);
+    delete pActNum;
+    pActNum = NULL;
+    delete pSaveNum;
+    pSaveNum = NULL;
+    m_pExamplesVS.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxNumPickTabPage::Create( vcl::Window* pParent,
+                                              const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SvxNumPickTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool  SvxNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -818,14 +845,24 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
 
 SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 {
-    delete pActNum;
-    delete pSaveNum;
+    disposeOnce();
 }
 
-SfxTabPage*  SvxBitmapPickTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+void SvxBitmapPickTabPage::dispose()
 {
-    return new SvxBitmapPickTabPage(pParent, *rAttrSet);
+    delete pActNum;
+    pActNum = NULL;
+    delete pSaveNum;
+    pSaveNum = NULL;
+    m_pErrorText.clear();
+    m_pExamplesVS.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxBitmapPickTabPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet)
+{
+    return VclPtr<SvxBitmapPickTabPage>::Create(pParent, *rAttrSet);
 }
 
 void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -1125,9 +1162,53 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
 
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 {
-    delete m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
+    disposeOnce();
+}
+
+void SvxNumOptionsTabPage::dispose()
+{
+    if (m_pBitmapMB)
+    {
+        delete m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
+    }
     delete pActNum;
+    pActNum = NULL;
     delete pSaveNum;
+    pSaveNum = NULL;
+    m_pLevelLB.clear();
+    m_pFmtLB.clear();
+    m_pSeparatorFT.clear();
+    m_pPrefixFT.clear();
+    m_pPrefixED.clear();
+    m_pSuffixFT.clear();
+    m_pSuffixED.clear();
+    m_pCharFmtFT.clear();
+    m_pCharFmtLB.clear();
+    m_pBulColorFT.clear();
+    m_pBulColLB.clear();
+    m_pBulRelSizeFT.clear();
+    m_pBulRelSizeMF.clear();
+    m_pAllLevelFT.clear();
+    m_pAllLevelNF.clear();
+    m_pStartFT.clear();
+    m_pStartED.clear();
+    m_pBulletFT.clear();
+    m_pBulletPB.clear();
+    m_pAlignFT.clear();
+    m_pAlignLB.clear();
+    m_pBitmapFT.clear();
+    m_pBitmapMB.clear();
+    m_pWidthFT.clear();
+    m_pWidthMF.clear();
+    m_pHeightFT.clear();
+    m_pHeightMF.clear();
+    m_pRatioCB.clear();
+    m_pOrientFT.clear();
+    m_pOrientLB.clear();
+    m_pAllLevelsFrame.clear();
+    m_pSameLevelCB.clear();
+    m_pPreviewWIN.clear();
+    SfxTabPage::dispose();
 }
 
 void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
@@ -1141,10 +1222,10 @@ void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
     m_pHeightMF->SetUnit( eMetric );
 }
 
-SfxTabPage* SvxNumOptionsTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet)
 {
-    return new SvxNumOptionsTabPage(pParent, *rAttrSet);
+    return VclPtr<SvxNumOptionsTabPage>::Create(pParent, *rAttrSet);
 };
 
 void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -2014,7 +2095,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
 {
-    boost::scoped_ptr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
+    VclPtrInstance< SvxCharacterMap > pMap( this, true );
 
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = 0;
@@ -2298,7 +2379,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
     const Color aBackColor = rStyleSettings.GetFieldColor();
     const Color aTextColor = rStyleSettings.GetFieldTextColor();
 
-    boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice(*this));
+    ScopedVclPtrInstance< VirtualDevice > pVDev(*this);
     pVDev->EnableRTL( IsRTLEnabled() );
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
@@ -2683,9 +2764,40 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
 
 SvxNumPositionTabPage::~SvxNumPositionTabPage()
 {
-    delete pActNum;
-    delete pSaveNum;
+    disposeOnce();
 }
+
+void SvxNumPositionTabPage::dispose()
+{
+    delete pActNum;
+    pActNum = NULL;
+    delete pSaveNum;
+    pSaveNum = NULL;
+    m_pLevelLB.clear();
+    m_pDistBorderFT.clear();
+    m_pDistBorderMF.clear();
+    m_pRelativeCB.clear();
+    m_pIndentFT.clear();
+    m_pIndentMF.clear();
+    m_pDistNumFT.clear();
+    m_pDistNumMF.clear();
+    m_pAlignFT.clear();
+    m_pAlignLB.clear();
+    m_pLabelFollowedByFT.clear();
+    m_pLabelFollowedByLB.clear();
+    m_pListtabFT.clear();
+    m_pListtabMF.clear();
+    m_pAlign2FT.clear();
+    m_pAlign2LB.clear();
+    m_pAlignedAtFT.clear();
+    m_pAlignedAtMF.clear();
+    m_pIndentAtFT.clear();
+    m_pIndentAtMF.clear();
+    m_pStandardPB.clear();
+    m_pPreviewWIN.clear();
+    SfxTabPage::dispose();
+}
+
 /*-------------------------------------------------------*/
 
 #if OSL_DEBUG_LEVEL > 1
@@ -3108,10 +3220,10 @@ void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_pIndentAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-SfxTabPage* SvxNumPositionTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SvxNumPositionTabPage::Create( vcl::Window* pParent,
+                                                  const SfxItemSet* rAttrSet)
 {
-    return new SvxNumPositionTabPage(pParent, *rAttrSet);
+    return VclPtr<SvxNumPositionTabPage>::Create(pParent, *rAttrSet);
 }
 
 void    SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)

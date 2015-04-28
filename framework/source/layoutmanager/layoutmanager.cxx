@@ -906,7 +906,7 @@ void LayoutManager::implts_createProgressBar()
             vcl::Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             if ( pWindow )
             {
-                StatusBar* pStatusBar = new StatusBar( pWindow, WinBits( WB_LEFT | WB_3DLOOK ) );
+                VclPtrInstance<StatusBar> pStatusBar( pWindow, WinBits( WB_LEFT | WB_3DLOOK ) );
                 Reference< awt::XWindow > xStatusBarWindow2( VCLUnoHelper::GetInterface( pStatusBar ));
                 pWrapper->setStatusBar( xStatusBarWindow2, true );
             }

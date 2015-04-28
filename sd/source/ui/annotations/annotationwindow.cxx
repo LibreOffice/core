@@ -118,6 +118,13 @@ AnnotationTextWindow::AnnotationTextWindow( AnnotationWindow* pParent, WinBits n
 
 AnnotationTextWindow::~AnnotationTextWindow()
 {
+    disposeOnce();
+}
+
+void AnnotationTextWindow::dispose()
+{
+    mpAnnotationWindow.clear();
+    Control::dispose();
 }
 
 void AnnotationTextWindow::Paint( const Rectangle& rRect)
@@ -284,21 +291,27 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 
 AnnotationWindow::~AnnotationWindow()
 {
-    delete mpMeta;
+    disposeOnce();
+}
+
+void AnnotationWindow::dispose()
+{
+    mpMeta.disposeAndClear();
     delete mpOutlinerView;
     delete mpOutliner;
-    delete mpVScrollbar;
-    delete mpTextWindow;
+    mpVScrollbar.disposeAndClear();
+    mpTextWindow.disposeAndClear();
+    FloatingWindow::dispose();
 }
 
 void AnnotationWindow::InitControls()
 {
     // actual window which holds the user text
-    mpTextWindow = new AnnotationTextWindow(this, WB_NODIALOGCONTROL);
+    mpTextWindow = VclPtr<AnnotationTextWindow>::Create(this, WB_NODIALOGCONTROL);
     mpTextWindow->SetPointer(Pointer(POINTER_TEXT));
 
     // window control for author and date
-    mpMeta = new MultiLineEdit(this,0);
+    mpMeta = VclPtr<MultiLineEdit>::Create(this,0);
     mpMeta->SetReadOnly();
     mpMeta->SetRightToLeft(AllSettings::GetLayoutRTL());
     mpMeta->AlwaysDisableInput(true);
@@ -332,7 +345,7 @@ void AnnotationWindow::InitControls()
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
 
     //create Scrollbars
-    mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+    mpVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
     mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
     mpVScrollbar->SetScrollHdl(LINK(this, AnnotationWindow, ScrollHdl));

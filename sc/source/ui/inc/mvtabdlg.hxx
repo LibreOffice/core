@@ -32,6 +32,7 @@ class ScMoveTableDlg : public ModalDialog
 public:
     ScMoveTableDlg(vcl::Window* pParent, const OUString& rDefault);
     virtual ~ScMoveTableDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt16  GetSelectedDocument     () const { return nDocument; }
     SCTAB   GetSelectedTable        () const { return nTable; }
@@ -49,13 +50,13 @@ private:
     bool IsCurrentDocSelected() const;
 
 private:
-    RadioButton*     pBtnMove;
-    RadioButton*     pBtnCopy;
-    ListBox*         pLbDoc;
-    ListBox*         pLbTable;
-    Edit*            pEdTabName;
-    FixedText*       pFtWarn;
-    OKButton*        pBtnOk;
+    VclPtr<RadioButton>     pBtnMove;
+    VclPtr<RadioButton>     pBtnCopy;
+    VclPtr<ListBox>         pLbDoc;
+    VclPtr<ListBox>         pLbTable;
+    VclPtr<Edit>            pEdTabName;
+    VclPtr<FixedText>       pFtWarn;
+    VclPtr<OKButton>        pBtnOk;
 
     OUString   msCurrentDoc;
     OUString   msNewDoc;

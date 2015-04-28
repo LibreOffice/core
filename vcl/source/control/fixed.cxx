@@ -460,7 +460,14 @@ void FixedText::set_mnemonic_widget(vcl::Window *pWindow)
 
 FixedText::~FixedText()
 {
+    disposeOnce();
+}
+
+void FixedText::dispose()
+{
     set_mnemonic_widget(NULL);
+    m_pMnemonicWindow.clear();
+    Control::dispose();
 }
 
 SelectableFixedText::SelectableFixedText(vcl::Window* pParent, WinBits nStyle)
@@ -748,10 +755,6 @@ FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-FixedBitmap::~FixedBitmap()
-{
-}
-
 void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
                             const Point& rPos, const Size& rSize )
 {
@@ -913,10 +916,6 @@ FixedImage::FixedImage( vcl::Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-FixedImage::~FixedImage()
-{
 }
 
 void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,

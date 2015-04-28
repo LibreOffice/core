@@ -33,8 +33,10 @@ public:
 class VCL_DLLPUBLIC OpenGLWindow : public vcl::Window
 {
 public:
-    OpenGLWindow(vcl::Window* pParent);
-    virtual ~OpenGLWindow();
+                   OpenGLWindow(vcl::Window* pParent);
+    virtual        ~OpenGLWindow();
+    virtual void   dispose() SAL_OVERRIDE;
+
     OpenGLContext& getContext();
 
     void setRenderer(IRenderer* pRenderer);

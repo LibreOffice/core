@@ -37,7 +37,7 @@ class SfxViewFrame;
 class SfxTabPage;
 class SfxBindings;
 
-typedef SfxTabPage* (*CreateTabPage)(vcl::Window *pParent, const SfxItemSet *rAttrSet);
+typedef VclPtr<SfxTabPage> (*CreateTabPage)(vcl::Window *pParent, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 
@@ -64,16 +64,16 @@ friend class SfxTabDialogController;
 
     SfxViewFrame*   pFrame;
 
-    VclBox *m_pBox;
-    TabControl *m_pTabCtrl;
+    VclPtr<VclBox>     m_pBox;
+    VclPtr<TabControl> m_pTabCtrl;
 
-    PushButton* m_pOKBtn;
-    PushButton* m_pApplyBtn;
-    PushButton* m_pUserBtn;
-    CancelButton* m_pCancelBtn;
-    HelpButton* m_pHelpBtn;
-    PushButton* m_pResetBtn;
-    PushButton* m_pBaseFmtBtn;
+    VclPtr<PushButton> m_pOKBtn;
+    VclPtr<PushButton> m_pApplyBtn;
+    VclPtr<PushButton> m_pUserBtn;
+    VclPtr<CancelButton> m_pCancelBtn;
+    VclPtr<HelpButton> m_pHelpBtn;
+    VclPtr<PushButton> m_pResetBtn;
+    VclPtr<PushButton> m_pBaseFmtBtn;
 
     bool m_bOwnsOKBtn;
     bool m_bOwnsCancelBtn;
@@ -106,7 +106,7 @@ protected:
     virtual void                RefreshInputSet();
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
-    VclButtonBox*   m_pActionArea;
+    VclPtr<VclButtonBox>   m_pActionArea;
     SfxItemSet*     pExampleSet;
     SfxItemSet*     GetInputSetImpl();
     SfxTabPage*     GetTabPage( sal_uInt16 nPageId ) const;
@@ -129,6 +129,7 @@ public:
                  const OUString& rID, const OUString& rUIXMLDescription,
                  const SfxItemSet * = 0, bool bEditFmt = false);
     virtual ~SfxTabDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
                                     CreateTabPage pCreateFunc,      // != 0
@@ -249,6 +250,7 @@ protected:
 
 public:
     virtual             ~SfxTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 

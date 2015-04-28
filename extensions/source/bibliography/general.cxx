@@ -35,6 +35,7 @@
 #include "bibprop.hrc"
 #include "bib.hrc"
 #include "bibmod.hxx"
+#include "bibview.hxx"
 #include "bibtools.hxx"
 #include "bibliography.hrc"
 #include <tools/debug.hxx>
@@ -69,7 +70,7 @@ static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos
 
 class BibPosListener    :public cppu::WeakImplHelper1 <sdbc::XRowSetListener>
 {
-    BibGeneralPage*     pParentPage;
+    VclPtr<BibGeneralPage>     pParentPage;
 public:
     BibPosListener(BibGeneralPage* pParent);
 
@@ -167,6 +168,7 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::
 BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
     sErrorPrefix(BIB_RESSTR(ST_ERROR_PREFIX)),
+    maBibGeneralPageFocusListener(this),
     pDatMan(pMan)
 {
     get(pIdentifierFT, "shortname");
@@ -340,12 +342,52 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
 
 BibGeneralPage::~BibGeneralPage()
 {
+    disposeOnce();
+}
+
+void BibGeneralPage::dispose()
+{
     if (pDatMan && xPosListener.is())
     {
         uno::Reference< sdbc::XRowSet >  xRowSet(pDatMan->getForm(), UNO_QUERY);
         if(xRowSet.is())
             xRowSet->removeRowSetListener(xPosListener);
     }
+    pGrid.clear();
+    pScrolledWindow.clear();
+    pIdentifierFT.clear();
+    pAuthTypeFT.clear();
+    pYearFT.clear();
+    pAuthorFT.clear();
+    pTitleFT.clear();
+    pPublisherFT.clear();
+    pAddressFT.clear();
+    pISBNFT.clear();
+    pChapterFT.clear();
+    pPagesFT.clear();
+    pEditorFT.clear();
+    pEditionFT.clear();
+    pBooktitleFT.clear();
+    pVolumeFT.clear();
+    pHowpublishedFT.clear();
+    pOrganizationsFT.clear();
+    pInstitutionFT.clear();
+    pSchoolFT.clear();
+    pReportTypeFT.clear();
+    pMonthFT.clear();
+    pJournalFT.clear();
+    pNumberFT.clear();
+    pSeriesFT.clear();
+    pAnnoteFT.clear();
+    pNoteFT.clear();
+    pURLFT.clear();
+    pCustom1FT.clear();
+    pCustom2FT.clear();
+    pCustom3FT.clear();
+    pCustom4FT.clear();
+    pCustom5FT.clear();
+    for (auto & a: aFixedTexts) a.clear();
+    BibTabPage::dispose();
 }
 
 void BibGeneralPage::RemoveListeners()
@@ -355,7 +397,7 @@ void BibGeneralPage::RemoveListeners()
         if(aControls[i].is())
         {
             uno::Reference< awt::XWindow > xCtrWin(aControls[i], uno::UNO_QUERY );
-            xCtrWin->removeFocusListener( this );
+            xCtrWin->removeFocusListener( &maBibGeneralPageFocusListener );
             aControls[i] = 0;
         }
     }
@@ -446,7 +488,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     // Peer as Child to the FrameWindow
                     xCtrlContnr->addControl(rName, xControl);
                     uno::Reference< awt::XWindow >  xCtrWin(xControl, UNO_QUERY );
-                    xCtrWin->addFocusListener( this );
+                    xCtrWin->addFocusListener( &maBibGeneralPageFocusListener );
                     rIndex = -1;    // -> implies, that not found
                     for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
                         if(!aControls[i].is())
@@ -567,10 +609,6 @@ void BibGeneralPage::focusLost(const awt::FocusEvent& ) throw( uno::RuntimeExcep
     CommitActiveControl();
 }
 
-void BibGeneralPage::disposing(const lang::EventObject& /*Source*/) throw( uno::RuntimeException, std::exception )
-{
-}
-
 void BibGeneralPage::GetFocus()
 {
     Reference< awt::XWindow >*  pxControl = aControls;
@@ -652,5 +690,21 @@ bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
 
     return bHandled;
 }
+
+BibGeneralPageFocusListener::BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage): mpBibGeneralPage(pBibGeneralPage)
+{}
+
+void BibGeneralPageFocusListener::focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception )
+{
+    mpBibGeneralPage->focusGained(e);
+}
+
+void BibGeneralPageFocusListener::focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception )
+{
+    mpBibGeneralPage->focusLost(e);
+}
+
+void BibGeneralPageFocusListener::disposing( const ::com::sun::star::lang::EventObject& ) throw( com::sun::star::uno::RuntimeException, std::exception )
+{}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

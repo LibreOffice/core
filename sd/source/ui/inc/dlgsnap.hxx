@@ -41,15 +41,15 @@ namespace sd {
 class SdSnapLineDlg : public ModalDialog
 {
 private:
-    FixedText*          m_pFtX;
-    MetricField*        m_pMtrFldX;
-    FixedText*          m_pFtY;
-    MetricField*        m_pMtrFldY;
-    VclContainer*       m_pRadioGroup;
-    RadioButton*        m_pRbPoint;
-    RadioButton*        m_pRbVert;
-    RadioButton*        m_pRbHorz;
-    PushButton*         m_pBtnDelete;
+    VclPtr<FixedText>          m_pFtX;
+    VclPtr<MetricField>        m_pMtrFldX;
+    VclPtr<FixedText>          m_pFtY;
+    VclPtr<MetricField>        m_pMtrFldY;
+    VclPtr<VclContainer>       m_pRadioGroup;
+    VclPtr<RadioButton>        m_pRbPoint;
+    VclPtr<RadioButton>        m_pRbVert;
+    VclPtr<RadioButton>        m_pRbHorz;
+    VclPtr<PushButton>         m_pBtnDelete;
     long                nXValue;
     long                nYValue;
     FieldUnit           eUIUnit;
@@ -59,6 +59,8 @@ private:
 
 public:
     SdSnapLineDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
+    virtual ~SdSnapLineDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void GetAttr(SfxItemSet& rOutAttrs);
 

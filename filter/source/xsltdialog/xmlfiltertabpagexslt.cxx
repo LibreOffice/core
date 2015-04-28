@@ -58,6 +58,20 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( vcl::Window* pParent) :
 
 XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()
 {
+    disposeOnce();
+}
+
+void XMLFilterTabPageXSLT::dispose()
+{
+    m_pEDDocType.clear();
+    m_pEDExportXSLT.clear();
+    m_pPBExprotXSLT.clear();
+    m_pEDImportXSLT.clear();
+    m_pPBImportXSLT.clear();
+    m_pEDImportTemplate.clear();
+    m_pPBImportTemplate.clear();
+    m_pCBNeedsXSLT2.clear();
+    TabPage::dispose();
 }
 
 bool XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )

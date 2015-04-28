@@ -49,7 +49,6 @@ public:
     SvxLineBox( vcl::Window* pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                 WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-    virtual ~SvxLineBox();
 
     void FillControl();
 
@@ -87,7 +86,6 @@ public:
     SvxMetricField( vcl::Window* pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                     WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
-    virtual ~SvxMetricField();
 
     void            Update( const XLineWidthItem* pItem );
     void            SetCoreUnit( SfxMapUnit eUnit );
@@ -100,7 +98,6 @@ class SvxFillTypeBox : public FillTypeLB
 {
 public:
     SvxFillTypeBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-    virtual ~SvxFillTypeBox();
 
     void            Selected() { bSelect = true; }
     bool            IsRelease() { return bRelease;}
@@ -123,7 +120,6 @@ class SvxFillAttrBox : public FillAttrLB
 {
 public:
     SvxFillAttrBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-    virtual ~SvxFillAttrBox();
 
     bool            IsRelease() { return bRelease;}
 

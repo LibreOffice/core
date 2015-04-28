@@ -69,24 +69,24 @@ namespace dbp
     }
 
 
-    OWizardPage* OGroupBoxWizard::createPage(::svt::WizardTypes::WizardState _nState)
+    VclPtr<TabPage> OGroupBoxWizard::createPage(::svt::WizardTypes::WizardState _nState)
     {
         switch (_nState)
         {
             case GBW_STATE_OPTIONLIST:
-                return new ORadioSelectionPage(this);
+                return VclPtr<ORadioSelectionPage>::Create(this);
 
             case GBW_STATE_DEFAULTOPTION:
-                return new ODefaultFieldSelectionPage(this);
+                return VclPtr<ODefaultFieldSelectionPage>::Create(this);
 
             case GBW_STATE_OPTIONVALUES:
-                return new OOptionValuesPage(this);
+                return VclPtr<OOptionValuesPage>::Create(this);
 
             case GBW_STATE_DBFIELD:
-                return new OOptionDBFieldPage(this);
+                return VclPtr<OOptionDBFieldPage>::Create(this);
 
             case GBW_STATE_FINALIZE:
-                return new OFinalizeGBWPage(this);
+                return VclPtr<OFinalizeGBWPage>::Create(this);
         }
 
         return NULL;
@@ -207,11 +207,24 @@ namespace dbp
         implCheckMoveButtons();
         m_pExistingRadios->EnableMultiSelection(true);
 
-        getDialog()->defaultButton(m_pMoveRight);
+        getDialog()->defaultButton(m_pMoveRight.get());
 
         m_pExistingRadios->SetAccessibleRelationMemberOf(m_pExistingRadios);
     }
 
+    ORadioSelectionPage::~ORadioSelectionPage()
+    {
+        disposeOnce();
+    }
+
+    void ORadioSelectionPage::dispose()
+    {
+        m_pRadioName.clear();
+        m_pMoveRight.clear();
+        m_pMoveLeft.clear();
+        m_pExistingRadios.clear();
+        OGBWPage::dispose();
+    }
 
     void ORadioSelectionPage::ActivatePage()
     {
@@ -315,7 +328,7 @@ namespace dbp
         if (bUnfinishedInput)
         {
             if (0 == (m_pMoveRight->GetStyle() & WB_DEFBUTTON))
-                getDialog()->defaultButton(m_pMoveRight);
+                getDialog()->defaultButton(m_pMoveRight.get());
         }
         else
         {
@@ -341,6 +354,18 @@ namespace dbp
         m_pDefSelection->SetStyle(WB_DROPDOWN);
     }
 
+    ODefaultFieldSelectionPage::~ODefaultFieldSelectionPage()
+    {
+        disposeOnce();
+    }
+
+    void ODefaultFieldSelectionPage::dispose()
+    {
+        m_pDefSelYes.clear();
+        m_pDefSelNo.clear();
+        m_pDefSelection.clear();
+        OMaybeListSelectionPage::dispose();
+    }
 
     void ODefaultFieldSelectionPage::initializePage()
     {
@@ -388,6 +413,17 @@ namespace dbp
         m_pOptions->SetAccessibleRelationMemberOf(m_pOptions);
     }
 
+    OOptionValuesPage::~OOptionValuesPage()
+    {
+        disposeOnce();
+    }
+
+    void OOptionValuesPage::dispose()
+    {
+        m_pValue.clear();
+        m_pOptions.clear();
+        OGBWPage::dispose();
+    }
 
     IMPL_LINK( OOptionValuesPage, OnOptionSelected, ListBox*, /*NOTINTERESTEDIN*/ )
     {
@@ -486,6 +522,16 @@ namespace dbp
         get(m_pName, "nameit");
     }
 
+    OFinalizeGBWPage::~OFinalizeGBWPage()
+    {
+        disposeOnce();
+    }
+
+    void OFinalizeGBWPage::dispose()
+    {
+        m_pName.clear();
+        OGBWPage::dispose();
+    }
 
     void OFinalizeGBWPage::ActivatePage()
     {

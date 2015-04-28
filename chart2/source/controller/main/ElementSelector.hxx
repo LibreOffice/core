@@ -47,7 +47,6 @@ class SelectorListBox : public ListBox
 {
     public:
         SelectorListBox( vcl::Window* pParent, WinBits nStyle );
-        virtual ~SelectorListBox();
 
         virtual void Select() SAL_OVERRIDE;
         virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -111,7 +110,7 @@ private:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
-    boost::scoped_ptr< SelectorListBox > m_apSelectorListBox;
+    VclPtr< SelectorListBox > m_apSelectorListBox;
 };
 
 } //namespace chart

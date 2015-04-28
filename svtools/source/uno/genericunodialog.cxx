@@ -178,7 +178,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     // the title
     OUString sTitle = m_sTitle;
 
-    Dialog* pDialog = createDialog( pParent );
+    VclPtr<Dialog> pDialog = createDialog( pParent );
     OSL_ENSURE( pDialog, "OGenericUnoDialog::impl_ensureDialog_lck: createDialog returned nonsense!" );
     if ( !pDialog )
         return false;
@@ -313,8 +313,7 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
 
 void OGenericUnoDialog::destroyDialog()
 {
-    delete m_pDialog;
-    m_pDialog = NULL;
+    m_pDialog.disposeAndClear();
 }
 
 

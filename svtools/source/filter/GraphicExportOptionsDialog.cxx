@@ -44,7 +44,17 @@ GraphicExportOptionsDialog::GraphicExportOptionsDialog(vcl::Window* pWindow, con
 }
 
 GraphicExportOptionsDialog::~GraphicExportOptionsDialog()
-{}
+{
+    disposeOnce();
+}
+
+void GraphicExportOptionsDialog::dispose()
+{
+    mpWidth.clear();
+    mpHeight.clear();
+    mpResolution.clear();
+    ModalDialog::dispose();
+}
 
 void GraphicExportOptionsDialog::initialize()
 {

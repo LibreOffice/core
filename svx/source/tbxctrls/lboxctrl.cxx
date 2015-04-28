@@ -54,17 +54,19 @@ class SvxPopupWindowListBox: public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
 
-    ListBox *       m_pListBox;
+    VclPtr<ListBox> m_pListBox;
     ToolBox &       rToolBox;
     bool            bUserSel;
-    sal_uInt16          nTbxId;
-    OUString   maCommandURL;
+    sal_uInt16      nTbxId;
+    OUString        maCommandURL;
 
 public:
     SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
+    virtual ~SvxPopupWindowListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     // SfxPopupWindow
-    virtual SfxPopupWindow *    Clone() const SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
     virtual void                PopupModeEnd() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -96,9 +98,20 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString&
     AddStatusListener( rCommandURL );
 }
 
-SfxPopupWindow* SvxPopupWindowListBox::Clone() const
+SvxPopupWindowListBox::~SvxPopupWindowListBox()
 {
-    return new SvxPopupWindowListBox( GetId(), maCommandURL, nTbxId, rToolBox );
+    disposeOnce();
+}
+
+void SvxPopupWindowListBox::dispose()
+{
+    m_pListBox.clear();
+    SfxPopupWindow::dispose();
+}
+
+VclPtr<SfxPopupWindow> SvxPopupWindowListBox::Clone() const
+{
+    return VclPtr<SvxPopupWindowListBox>::Create( GetId(), maCommandURL, nTbxId, rToolBox );
 }
 
 void SvxPopupWindowListBox::PopupModeEnd()
@@ -140,11 +153,9 @@ SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBo
 
 
 SvxListBoxControl::~SvxListBoxControl()
-{
-}
+{}
 
-
-SfxPopupWindow* SvxListBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxListBoxControl::CreatePopupWindow()
 {
     OSL_FAIL( "not implemented" );
     return 0;
@@ -270,7 +281,7 @@ void SvxUndoRedoControl::StateChanged(
     }
 }
 
-SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxUndoRedoControl::CreatePopupWindow()
 {
     DBG_ASSERT(( SID_UNDO == GetSlotId() || SID_REDO == GetSlotId() ), "mismatching ids" );
 
@@ -281,7 +292,7 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
 
     ToolBox& rBox = GetToolBox();
 
-    pPopupWin = new SvxPopupWindowListBox( GetSlotId(), m_aCommandURL, GetId(), rBox );
+    pPopupWin = VclPtr<SvxPopupWindowListBox>::Create( GetSlotId(), m_aCommandURL, GetId(), rBox );
     pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoRedoControl,
                                             PopupModeEndHdl ) );
     ListBox &rListBox = pPopupWin->GetListBox();

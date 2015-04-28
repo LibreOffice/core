@@ -47,7 +47,8 @@ private:
 
 public:
                     TextWindow( vcl::Window* pParent );
-                    virtual ~TextWindow();
+    virtual         ~TextWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
     ExtTextView*    GetTextView() const { return mpExtTextView; }
@@ -75,12 +76,12 @@ public:
 class ImpVclMEdit : public SfxListener
 {
 private:
-    VclMultiLineEdit*   pVclMultiLineEdit;
+    VclPtr<VclMultiLineEdit>   pVclMultiLineEdit;
 
-    TextWindow*         mpTextWindow;
-    ScrollBar*          mpHScrollBar;
-    ScrollBar*          mpVScrollBar;
-    ScrollBarBox*       mpScrollBox;
+    VclPtr<TextWindow>         mpTextWindow;
+    VclPtr<ScrollBar>          mpHScrollBar;
+    VclPtr<ScrollBar>          mpVScrollBar;
+    VclPtr<ScrollBarBox>       mpScrollBox;
 
     Point               maTextWindowOffset;
     sal_Int32           mnTextWidth;
@@ -152,7 +153,7 @@ ImpVclMEdit::ImpVclMEdit( VclMultiLineEdit* pEdt, WinBits nWinStyle )
 {
     pVclMultiLineEdit = pEdt;
     mnTextWidth = 0;
-    mpTextWindow = new TextWindow( pEdt );
+    mpTextWindow = VclPtr<TextWindow>::Create( pEdt );
     mpTextWindow->Show();
     InitFromStyle( nWinStyle );
     StartListening( *mpTextWindow->GetTextEngine() );
@@ -160,9 +161,9 @@ ImpVclMEdit::ImpVclMEdit( VclMultiLineEdit* pEdt, WinBits nWinStyle )
 
 void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 {
-    const bool bHaveVScroll = (NULL != mpVScrollBar);
-    const bool bHaveHScroll = (NULL != mpHScrollBar);
-    const bool bHaveScrollBox = (NULL != mpScrollBox);
+    const bool bHaveVScroll = (nullptr != mpVScrollBar);
+    const bool bHaveHScroll = (nullptr != mpHScrollBar);
+    const bool bHaveScrollBox = (nullptr != mpScrollBox);
 
           bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
     const bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
@@ -183,8 +184,8 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
     bool bScrollbarsChanged = false;
     if ( bHaveVScroll != bNeedVScroll )
     {
-        delete mpVScrollBar;
-        mpVScrollBar = bNeedVScroll ? new ScrollBar( pVclMultiLineEdit, WB_VSCROLL|WB_DRAG ) : NULL;
+        mpVScrollBar.disposeAndClear();
+        mpVScrollBar = bNeedVScroll ? VclPtr<ScrollBar>::Create( pVclMultiLineEdit, WB_VSCROLL|WB_DRAG ) : nullptr;
 
         if ( bNeedVScroll )
         {
@@ -197,8 +198,8 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 
     if ( bHaveHScroll != bNeedHScroll )
     {
-        delete mpHScrollBar;
-        mpHScrollBar = bNeedHScroll ? new ScrollBar( pVclMultiLineEdit, WB_HSCROLL|WB_DRAG ) : NULL;
+        mpHScrollBar.disposeAndClear();
+        mpHScrollBar = bNeedHScroll ? VclPtr<ScrollBar>::Create( pVclMultiLineEdit, WB_HSCROLL|WB_DRAG ) : nullptr;
 
         if ( bNeedHScroll )
         {
@@ -211,8 +212,8 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 
     if ( bHaveScrollBox != bNeedScrollBox )
     {
-        delete mpScrollBox;
-        mpScrollBox = bNeedScrollBox ? new ScrollBarBox( pVclMultiLineEdit, WB_SIZEABLE ) : NULL;
+        mpScrollBox.disposeAndClear();
+        mpScrollBox = bNeedScrollBox ? VclPtr<ScrollBarBox>::Create( pVclMultiLineEdit, WB_SIZEABLE ) : nullptr;
 
         if ( bNeedScrollBox )
             mpScrollBox->Show();
@@ -257,10 +258,11 @@ void ImpVclMEdit::InitFromStyle( WinBits nWinStyle )
 ImpVclMEdit::~ImpVclMEdit()
 {
     EndListening( *mpTextWindow->GetTextEngine() );
-    delete mpTextWindow;
-    delete mpHScrollBar;
-    delete mpVScrollBar;
-    delete mpScrollBox;
+    mpTextWindow.disposeAndClear();
+    mpHScrollBar.disposeAndClear();
+    mpVScrollBar.disposeAndClear();
+    mpScrollBox.disposeAndClear();
+    pVclMultiLineEdit.disposeAndClear();
 }
 
 void ImpVclMEdit::ImpSetScrollBarRanges()
@@ -730,8 +732,14 @@ TextWindow::TextWindow( vcl::Window* pParent ) : Window( pParent )
 
 TextWindow::~TextWindow()
 {
+    disposeOnce();
+}
+
+void TextWindow::dispose()
+{
     delete mpExtTextView;
     delete mpExtTextEngine;
+    Window::dispose();
 }
 
 void TextWindow::MouseMove( const MouseEvent& rMEvt )
@@ -937,11 +945,19 @@ VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
 
 VclMultiLineEdit::~VclMultiLineEdit()
 {
+    disposeOnce();
+}
+
+void VclMultiLineEdit::dispose()
+{
     {
         std::unique_ptr< ImpVclMEdit > xDelete(pImpVclMEdit);
         pImpVclMEdit = NULL;
     }
     delete pUpdateDataTimer;
+    pUpdateDataTimer = NULL;
+
+    Edit::dispose();
 }
 
 WinBits VclMultiLineEdit::ImplInitStyle( WinBits nStyle )
@@ -1145,17 +1161,17 @@ void VclMultiLineEdit::SetText( const OUString& rStr )
 
 OUString VclMultiLineEdit::GetText() const
 {
-    return pImpVclMEdit->GetText();
+    return pImpVclMEdit ? pImpVclMEdit->GetText() : OUString("");
 }
 
 OUString VclMultiLineEdit::GetText( LineEnd aSeparator ) const
 {
-    return pImpVclMEdit->GetText( aSeparator );
+    return pImpVclMEdit ? pImpVclMEdit->GetText( aSeparator ) : OUString("");
 }
 
-OUString VclMultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
+OUString VclMultiLineEdit::GetTextLines( LineEnd aSeparator ) const
 {
-    return pImpVclMEdit->GetTextLines( aSeparator );
+    return pImpVclMEdit ? pImpVclMEdit->GetTextLines( aSeparator ) : OUString("");
 }
 
 void VclMultiLineEdit::Resize()

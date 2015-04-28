@@ -60,7 +60,7 @@ struct Data_Impl
     sal_uInt16 nId;                   // The ID
     CreateTabPage fnCreatePage;   // Pointer to Factory
     GetTabPageRanges fnGetRanges; // Pointer to Ranges-Function
-    SfxTabPage* pTabPage;         // The TabPage itself
+    VclPtr<SfxTabPage> pTabPage;         // The TabPage itself
     bool bOnDemand;              // Flag: ItemSet onDemand
     bool bRefresh;                // Flag: Page must be re-initialized
 
@@ -171,12 +171,14 @@ SfxTabPage::SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString&
 }
 
 SfxTabPage::~SfxTabPage()
-/*  [Description]
+{
+    disposeOnce();
+}
 
-    Destructor
-*/
+void SfxTabPage::dispose()
 {
     delete pImpl;
+    TabPage::dispose();
 }
 
 bool SfxTabPage::FillItemSet( SfxItemSet* rSet )
@@ -363,6 +365,11 @@ SfxTabDialog::SfxTabDialog
 
 SfxTabDialog::~SfxTabDialog()
 {
+    disposeOnce();
+}
+
+void SfxTabDialog::dispose()
+{
     SavePosAndId();
 
     for ( SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it )
@@ -391,7 +398,7 @@ SfxTabDialog::~SfxTabDialog()
 
             if ( pDataObject->bOnDemand )
                 delete &pDataObject->pTabPage->GetItemSet();
-            delete pDataObject->pTabPage;
+            pDataObject->pTabPage.disposeAndClear();
         }
         delete pDataObject;
     }
@@ -403,15 +410,26 @@ SfxTabDialog::~SfxTabDialog()
     delete [] pRanges;
 
     if (m_bOwnsBaseFmtBtn)
-        delete m_pBaseFmtBtn;
+        m_pBaseFmtBtn.disposeAndClear();
     if (m_bOwnsResetBtn)
-        delete m_pResetBtn;
+        m_pResetBtn.disposeAndClear();
     if (m_bOwnsHelpBtn)
-        delete m_pHelpBtn;
+        m_pHelpBtn.disposeAndClear();
     if (m_bOwnsCancelBtn)
-        delete m_pCancelBtn;
+        m_pCancelBtn.disposeAndClear();
     if (m_bOwnsOKBtn)
-        delete m_pOKBtn;
+        m_pOKBtn.disposeAndClear();
+    m_pBox.clear();
+    m_pTabCtrl.clear();
+    m_pOKBtn.clear();
+    m_pApplyBtn.clear();
+    m_pUserBtn.clear();
+    m_pCancelBtn.clear();
+    m_pHelpBtn.clear();
+    m_pResetBtn.clear();
+    m_pBaseFmtBtn.clear();
+    m_pActionArea.clear();
+    TabDialog::dispose();
 }
 
 void SfxTabDialog::Init_Impl(bool bFmtFlag)
@@ -430,33 +448,33 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     assert(m_pActionArea);
 
     m_pOKBtn = m_pUIBuilder->get<PushButton>("ok");
-    m_bOwnsOKBtn = m_pOKBtn == NULL;
+    m_bOwnsOKBtn = m_pOKBtn == nullptr;
     if (m_bOwnsOKBtn)
-        m_pOKBtn = new OKButton(m_pActionArea);
+        m_pOKBtn = VclPtr<OKButton>::Create(m_pActionArea);
 
     m_pApplyBtn = m_pUIBuilder->get<PushButton>("apply");
     m_pUserBtn = m_pUIBuilder->get<PushButton>("user");
     m_pCancelBtn = m_pUIBuilder->get<CancelButton>("cancel");
-    m_bOwnsCancelBtn = m_pCancelBtn == NULL;
+    m_bOwnsCancelBtn = m_pCancelBtn == nullptr;
     if (m_bOwnsCancelBtn)
-        m_pCancelBtn = new CancelButton(m_pActionArea);
+        m_pCancelBtn = VclPtr<CancelButton>::Create(m_pActionArea);
 
     m_pHelpBtn = m_pUIBuilder->get<HelpButton>("help");
-    m_bOwnsHelpBtn = m_pHelpBtn == NULL;
+    m_bOwnsHelpBtn = m_pHelpBtn == nullptr;
     if (m_bOwnsHelpBtn)
-        m_pHelpBtn = new HelpButton(m_pActionArea);
+        m_pHelpBtn = VclPtr<HelpButton>::Create(m_pActionArea);
 
     m_pResetBtn = m_pUIBuilder->get<PushButton>("reset");
-    m_bOwnsResetBtn = m_pResetBtn == NULL;
+    m_bOwnsResetBtn = m_pResetBtn == nullptr;
     if (m_bOwnsResetBtn)
-        m_pResetBtn = new PushButton(m_pActionArea);
+        m_pResetBtn = VclPtr<PushButton>::Create(m_pActionArea.get());
     else
         pImpl->bHideResetBtn = !m_pResetBtn->IsVisible();
 
     m_pBaseFmtBtn = m_pUIBuilder->get<PushButton>("standard");
-    m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == NULL;
+    m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == nullptr;
     if (m_bOwnsBaseFmtBtn)
-        m_pBaseFmtBtn = new PushButton(m_pActionArea);
+        m_pBaseFmtBtn = VclPtr<PushButton>::Create(m_pActionArea.get());
 
     m_pOKBtn->SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     m_pCancelBtn->SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
@@ -690,7 +708,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
 
             if ( pDataObject->bOnDemand )
                 delete &pDataObject->pTabPage->GetItemSet();
-            delete pDataObject->pTabPage;
+            pDataObject->pTabPage.disposeAndClear();
         }
 
         delete pDataObject;
@@ -1127,7 +1145,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         else
             pTabPage = (pDataObject->fnCreatePage)
                             ( pTabCtrl, CreateInputItemSet( nId ) );
-        DBG_ASSERT( NULL == pDataObject->pTabPage, "create TabPage more than once" );
+        DBG_ASSERT( nullptr == pDataObject->pTabPage, "create TabPage more than once" );
         pDataObject->pTabPage = pTabPage;
 
         OUString sConfigId = OStringToOUString(pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
@@ -1247,7 +1265,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
         {
             Data_Impl* pObj = *it;
 
-            if ( pObj->pTabPage != pPage ) // Do not refresh own Page anymore
+            if ( pObj->pTabPage.get() != pPage ) // Do not refresh own Page anymore
                 pObj->bRefresh = true;
             else
                 pObj->bRefresh = false;

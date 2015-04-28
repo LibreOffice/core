@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
@@ -35,7 +36,7 @@ namespace dbaui
     class OConnectionLineAccess     :   public VCLXAccessibleComponent
                                     ,   public OConnectionLineAccess_BASE
     {
-        const OTableConnection*             m_pLine; // the window which I should give accessibility to
+        VclPtr<const OTableConnection>             m_pLine; // the window which I should give accessibility to
     protected:
         /** this function is called upon disposing the component
         */

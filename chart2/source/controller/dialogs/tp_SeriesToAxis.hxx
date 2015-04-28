@@ -32,8 +32,9 @@ class SchOptionTabPage : public SfxTabPage
 public:
     SchOptionTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
     virtual ~SchOptionTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
 
@@ -43,23 +44,23 @@ private: //methods
     void AdaptControlPositionsAndVisibility();
 
 private: //member
-    VclFrame*    m_pGrpAxis;
-    RadioButton* m_pRbtAxis1;
-    RadioButton* m_pRbtAxis2;
+    VclPtr<VclFrame>    m_pGrpAxis;
+    VclPtr<RadioButton> m_pRbtAxis1;
+    VclPtr<RadioButton> m_pRbtAxis2;
 
-    VclFrame*    m_pGrpBar;
-    MetricField* m_pMTGap;
-    MetricField* m_pMTOverlap;
-    CheckBox*    m_pCBConnect;
-    CheckBox*    m_pCBAxisSideBySide;
+    VclPtr<VclFrame>    m_pGrpBar;
+    VclPtr<MetricField> m_pMTGap;
+    VclPtr<MetricField> m_pMTOverlap;
+    VclPtr<CheckBox>    m_pCBConnect;
+    VclPtr<CheckBox>    m_pCBAxisSideBySide;
 
-    VclFrame*    m_pGrpPlotOptions;
-    VclGrid*     m_pGridPlotOptions;
-    RadioButton* m_pRB_DontPaint;
-    RadioButton* m_pRB_AssumeZero;
-    RadioButton* m_pRB_ContinueLine;
+    VclPtr<VclGrid>     m_pGrpPlotOptions;
+    VclPtr<VclGrid>     m_pGridPlotOptions;
+    VclPtr<RadioButton> m_pRB_DontPaint;
+    VclPtr<RadioButton> m_pRB_AssumeZero;
+    VclPtr<RadioButton> m_pRB_ContinueLine;
 
-    CheckBox*    m_pCBIncludeHiddenCells;
+    VclPtr<CheckBox>    m_pCBIncludeHiddenCells;
 
     DECL_LINK(EnableHdl, void * );
 

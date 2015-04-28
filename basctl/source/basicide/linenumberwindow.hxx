@@ -19,7 +19,7 @@ class ModulWindow;
 class LineNumberWindow : public vcl::Window
 {
 private:
-    ModulWindow* m_pModulWindow;
+    VclPtr<ModulWindow> m_pModulWindow;
     int m_nWidth;
     long m_nCurYOffset;
     int m_nBaseWidth;
@@ -31,6 +31,7 @@ protected:
 public:
     LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin);
     virtual ~LineNumberWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     void DoScroll( long nHorzScroll, long nVertScroll );
 

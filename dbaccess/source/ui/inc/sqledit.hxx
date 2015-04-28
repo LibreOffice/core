@@ -43,7 +43,7 @@ namespace dbaui
         Timer                   m_timerUndoActionCreation;
         Link                    m_lnkTextModifyHdl;
         OUString                m_strOrigText;      // is restored on undo
-        OQueryTextView*         m_pView;
+        VclPtr<OQueryTextView>         m_pView;
         bool                m_bAccelAction;     // is set on cut, copy, paste
         bool                m_bStopTimer;
         svtools::ColorConfig    m_ColorConfig;
@@ -68,6 +68,7 @@ namespace dbaui
     public:
         OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle = WB_LEFT | WB_VSCROLL |WB_BORDER);
         virtual ~OSqlEdit();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Edit overridables
         virtual void SetText(const OUString& rNewText) SAL_OVERRIDE;

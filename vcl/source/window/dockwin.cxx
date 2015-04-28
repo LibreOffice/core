@@ -42,8 +42,8 @@ public:
     ImplData();
     ~ImplData();
 
-    vcl::Window*         mpParent;
-    Size            maMaxOutSize;
+    VclPtr<vcl::Window> mpParent;
+    Size                maMaxOutSize;
 };
 
 DockingWindow::ImplData::ImplData()
@@ -59,7 +59,7 @@ DockingWindow::ImplData::~ImplData()
 class ImplDockFloatWin : public FloatingWindow
 {
 private:
-    DockingWindow*  mpDockWin;
+    VclPtr<DockingWindow> mpDockWin;
     sal_uInt64      mnLastTicks;
     Idle            maDockIdle;
     Point           maDockPos;
@@ -73,6 +73,7 @@ public:
     ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
     virtual ~ImplDockFloatWin();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Move() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -111,8 +112,18 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
 
 ImplDockFloatWin::~ImplDockFloatWin()
 {
+    disposeOnce();
+}
+
+void ImplDockFloatWin::dispose()
+{
     if( mnLastUserEvent )
         Application::RemoveUserEvent( mnLastUserEvent );
+
+    disposeBuilder();
+
+    mpDockWin.clear();
+    FloatingWindow::dispose();
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
@@ -253,14 +264,14 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
     mbStartFloat    = mbLastFloatMode;
 
     // calculate FloatingBorder
-    FloatingWindow* pWin;
+    VclPtr<FloatingWindow> pWin;
     if ( mpFloatWin )
         pWin = mpFloatWin;
     else
-        pWin = new ImplDockFloatWin( mpImplData->mpParent, mnFloatBits, NULL );
+        pWin = VclPtr<ImplDockFloatWin>::Create( mpImplData->mpParent, mnFloatBits, nullptr );
     pWin->GetBorder( mnDockLeft, mnDockTop, mnDockRight, mnDockBottom );
     if ( !mpFloatWin )
-        delete pWin;
+        pWin.disposeAndClear();
 
     Point   aPos    = ImplOutputToFrame( Point() );
     Size    aSize   = Window::GetOutputSizePixel();
@@ -460,6 +471,11 @@ DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID,
 
 DockingWindow::~DockingWindow()
 {
+    disposeOnce();
+}
+
+void DockingWindow::dispose()
+{
     if ( IsFloatingMode() )
     {
         Show( false, SHOW_NOFOCUSCHANGE );
@@ -467,6 +483,11 @@ DockingWindow::~DockingWindow()
     }
     delete mpImplData;
     mpImplData = NULL;
+    mpFloatWin.clear();
+    mpOldBorderWin.clear();
+    mpDialogParent.clear();
+    disposeBuilder();
+    Window::dispose();
 }
 
 void DockingWindow::Tracking( const TrackingEvent& rTEvt )
@@ -781,7 +802,8 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 mpOldBorderWin = mpWindowImpl->mpBorderWindow;
 
                 ImplDockFloatWin* pWin =
-                    new ImplDockFloatWin(
+                    VclPtr<ImplDockFloatWin>::Create(
+
                                          mpImplData->mpParent,
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_SYSTEMWINDOW : mnFloatBits,
                                          this );
@@ -851,14 +873,13 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 if ( mpOldBorderWin )
                 {
                     SetParent( mpOldBorderWin );
-                    static_cast<ImplBorderWindow*>(mpOldBorderWin)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+                    static_cast<ImplBorderWindow*>(mpOldBorderWin.get())->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
                     mpOldBorderWin->Resize();
                 }
                 mpWindowImpl->mpBorderWindow = mpOldBorderWin;
                 SetParent( pRealParent );
                 mpWindowImpl->mpRealParent = pRealParent;
-                delete static_cast<ImplDockFloatWin*>(mpFloatWin);
-                mpFloatWin = NULL;
+                mpFloatWin.disposeAndClear();
                 SetPosPixel( maDockPos );
 
                 ToggleFloatingMode();
@@ -1033,7 +1054,7 @@ bool DockingWindow::IsFloatingMode() const
     if( pWrapper )
         return pWrapper->IsFloatingMode();
     else
-        return (mpFloatWin != NULL);
+        return (mpFloatWin != nullptr);
 }
 
 void DockingWindow::SetMaxOutputSizePixel( const Size& rSize )

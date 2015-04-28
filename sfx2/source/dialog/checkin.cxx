@@ -20,6 +20,19 @@ SfxCheckinDialog::SfxCheckinDialog( vcl::Window* pParent ) :
     m_pOKBtn->SetClickHdl( LINK( this, SfxCheckinDialog, OKHdl ) );
 }
 
+SfxCheckinDialog::~SfxCheckinDialog()
+{
+    disposeOnce();
+}
+
+void SfxCheckinDialog::dispose()
+{
+    m_pCommentED.clear();
+    m_pMajorCB.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
+
 OUString SfxCheckinDialog::GetComment( )
 {
     return m_pCommentED->GetText( );

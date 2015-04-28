@@ -27,11 +27,11 @@
 #include "JoinTableView.hxx"
 #include "RelControliFace.hxx"
 #include "moduledbu.hxx"
+#include "RelationControl.hxx"
 
 namespace dbaui
 {
     class OJoinTableView;
-    class OTableListBoxControl;
     class ORelationDialog : public ModalDialog
                             ,public IRelationControlInterface
     {
@@ -39,16 +39,16 @@ namespace dbaui
         boost::scoped_ptr<OTableListBoxControl> m_xTableControl;
         OJoinTableView::OTableWindowMap*        m_pTableMap;
 
-        RadioButton* m_pRB_NoCascUpd;
-        RadioButton* m_pRB_CascUpd;
-        RadioButton* m_pRB_CascUpdNull;
-        RadioButton* m_pRB_CascUpdDefault;
-        RadioButton* m_pRB_NoCascDel;
-        RadioButton* m_pRB_CascDel;
-        RadioButton* m_pRB_CascDelNull;
-        RadioButton* m_pRB_CascDelDefault;
+        VclPtr<RadioButton> m_pRB_NoCascUpd;
+        VclPtr<RadioButton> m_pRB_CascUpd;
+        VclPtr<RadioButton> m_pRB_CascUpdNull;
+        VclPtr<RadioButton> m_pRB_CascUpdDefault;
+        VclPtr<RadioButton> m_pRB_NoCascDel;
+        VclPtr<RadioButton> m_pRB_CascDel;
+        VclPtr<RadioButton> m_pRB_CascDelNull;
+        VclPtr<RadioButton> m_pRB_CascDelDefault;
 
-        OKButton*   m_pPB_OK;
+        VclPtr<OKButton>   m_pPB_OK;
 
         TTableConnectionData::value_type                                        m_pConnData;
         TTableConnectionData::value_type                                        m_pOrigConnData;
@@ -61,6 +61,7 @@ namespace dbaui
                         const TTableConnectionData::value_type& pConnectionData,
                         bool bAllowTableSelect = false );
         virtual ~ORelationDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
 

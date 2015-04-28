@@ -39,7 +39,15 @@ OSplitterView::OSplitterView(vcl::Window* _pParent,bool _bVertical) : Window(_pP
 
 OSplitterView::~OSplitterView()
 {
-    m_pRight = m_pLeft = NULL;
+    disposeOnce();
+}
+
+void OSplitterView::dispose()
+{
+    m_pSplitter.clear();
+    m_pLeft.clear();
+    m_pRight.clear();
+    vcl::Window::dispose();
 }
 
 IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )

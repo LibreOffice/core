@@ -194,8 +194,14 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
 LayoutMenu::~LayoutMenu()
 {
+    disposeOnce();
+}
+
+void LayoutMenu::dispose()
+{
     SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
     Dispose();
+    ValueSet::dispose();
 }
 
 void LayoutMenu::Dispose()

@@ -256,7 +256,7 @@ namespace {
     {
     public:
         PrintInfo (
-            const Printer* pPrinter,
+            Printer* pPrinter,
             const bool bPrintMarkedOnly)
             : mpPrinter(pPrinter),
               mnDrawMode(DRAWMODE_DEFAULT),
@@ -269,7 +269,7 @@ namespace {
               mbPrintMarkedOnly(bPrintMarkedOnly)
         {}
 
-        const Printer* mpPrinter;
+        const VclPtr<Printer> mpPrinter;
         sal_uLong mnDrawMode;
         OUString msTimeDate;
         OUString msPageString;
@@ -1201,8 +1201,9 @@ public:
         if (aDev >>= xRenderDevice)
         {
             VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
-            OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
-            mpPrinter = dynamic_cast<Printer*>(pOut);
+            VclPtr< OutputDevice > pOut = pDevice ? pDevice->GetOutputDevice()
+                                                  : VclPtr< OutputDevice >();
+            mpPrinter = dynamic_cast<Printer*>(pOut.get());
             Size aPageSizePixel = mpPrinter ? mpPrinter->GetPaperSizePixel() : Size();
             if( aPageSizePixel != maPrinterPageSizePixel )
             {
@@ -1300,11 +1301,11 @@ public:
                 // Show warning that the orientation could not be set.
                 if (pViewShell)
                 {
-                    WarningBox aWarnBox(
+                    ScopedVclPtrInstance<WarningBox> aWarnBox(
                         pViewShell->GetActiveWindow(),
                         (WinBits)(WB_OK_CANCEL | WB_DEF_CANCEL),
                         SD_RESSTR(STR_WARN_PRINTFORMAT_FAILURE));
-                    if (aWarnBox.Execute() != RET_OK)
+                    if (aWarnBox->Execute() != RET_OK)
                         return;
                 }
             }
@@ -1337,7 +1338,7 @@ private:
     SfxObjectShellRef mxObjectShell; // destroying mpPrintView
     ViewShellBase& mrBase;
     bool mbIsDisposed;
-    Printer* mpPrinter;
+    VclPtr<Printer> mpPrinter;
     Size maPrinterPageSizePixel;
     ::boost::scoped_ptr<PrintOptions> mpOptions;
     ::std::vector< ::boost::shared_ptr< ::sd::PrinterPage> > maPrinterPages;
@@ -1422,7 +1423,7 @@ private:
 
         PrintInfo aInfo (mpPrinter, mpOptions->IsPrintMarkedOnly());
 
-        if (aInfo.mpPrinter!=NULL && pShell!=NULL)
+        if (aInfo.mpPrinter!=nullptr && pShell!=NULL)
         {
 
             MapMode aMap (aInfo.mpPrinter->GetMapMode());
@@ -1879,7 +1880,7 @@ private:
         const PageKind ePageKind,
         PrintInfo& rInfo)
     {
-        OSL_ASSERT(rInfo.mpPrinter != NULL);
+        OSL_ASSERT(rInfo.mpPrinter != nullptr);
 
         // Fill in page kind specific data.
         SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();

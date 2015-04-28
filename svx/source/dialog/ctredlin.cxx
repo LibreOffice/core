@@ -112,7 +112,14 @@ SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
 
 SvxRedlinTable::~SvxRedlinTable()
 {
+    disposeOnce();
+}
+
+void SvxRedlinTable::dispose()
+{
     delete pCommentSearcher;
+    pCommentSearcher = NULL;
+    SvSimpleTable::dispose();
 }
 
 sal_Int32 SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
@@ -378,7 +385,7 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pTable->set_width_request(aControlSize.Width());
     pTable->set_height_request(aControlSize.Height());
-    m_pViewData = new SvxRedlinTable(*pTable, 0);
+    m_pViewData = VclPtr<SvxRedlinTable>::Create(*pTable, 0);
 
     Link aLink=LINK( this, SvxTPView, PbClickHdl);
 
@@ -411,7 +418,18 @@ void SvxTPView::DeactivatePage()
 
 SvxTPView::~SvxTPView()
 {
-    delete m_pViewData;
+    disposeOnce();
+}
+
+void SvxTPView::dispose()
+{
+    m_pViewData.disposeAndClear();
+    m_pAccept.clear();
+    m_pReject.clear();
+    m_pAcceptAll.clear();
+    m_pRejectAll.clear();
+    m_pUndo.clear();
+    TabPage::dispose();
 }
 
 void SvxTPView::InsertWriterHeader()
@@ -582,6 +600,35 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     HideRange();
     ShowAction();
     bModified=false;
+}
+
+SvxTPFilter::~SvxTPFilter()
+{
+    disposeOnce();
+}
+
+void SvxTPFilter::dispose()
+{
+    pRedlinTable.clear();
+    m_pCbDate.clear();
+    m_pLbDate.clear();
+    m_pDfDate.clear();
+    m_pTfDate.clear();
+    m_pIbClock.clear();
+    m_pFtDate2.clear();
+    m_pDfDate2.clear();
+    m_pTfDate2.clear();
+    m_pIbClock2.clear();
+    m_pCbAuthor.clear();
+    m_pLbAuthor.clear();
+    m_pCbRange.clear();
+    m_pEdRange.clear();
+    m_pBtnRange.clear();
+    m_pCbAction.clear();
+    m_pLbAction.clear();
+    m_pCbComment.clear();
+    m_pEdComment.clear();
+    TabPage::dispose();
 }
 
 void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)
@@ -950,7 +997,7 @@ void SvxTPFilter::DeactivatePage()
 {
     if(bModified)
     {
-        if(pRedlinTable!=NULL)
+        if(pRedlinTable!=nullptr)
         {
             pRedlinTable->SetFilterDate(IsDate());
             pRedlinTable->SetDateTimeMode(GetDateMode());
@@ -1003,7 +1050,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
         if(m_pDfDate->GetText().isEmpty())
            m_pDfDate->SetDate(aDate);
 
-        if(pRedlinTable!=NULL)
+        if(pRedlinTable!=nullptr)
             pRedlinTable->SetFirstDate(m_pDfDate->GetDate());
     }
     else if (m_pDfDate2==pTF)
@@ -1011,7 +1058,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
         if(m_pDfDate2->GetText().isEmpty())
            m_pDfDate2->SetDate(aDate);
 
-        if(pRedlinTable!=NULL)
+        if(pRedlinTable!=nullptr)
             pRedlinTable->SetLastDate(m_pDfDate2->GetDate());
     }
     else if (m_pTfDate==pTF)
@@ -1019,7 +1066,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
         if(m_pTfDate->GetText().isEmpty())
            m_pTfDate->SetTime(aTime);
 
-        if(pRedlinTable!=NULL)
+        if(pRedlinTable!=nullptr)
             pRedlinTable->SetFirstTime(m_pTfDate->GetTime());
     }
     else if (m_pTfDate2==pTF)
@@ -1027,7 +1074,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
         if(m_pTfDate2->GetText().isEmpty())
            m_pTfDate2->SetTime(aTime);
 
-        if(pRedlinTable!=NULL)
+        if(pRedlinTable!=nullptr)
             pRedlinTable->SetLastTime(m_pTfDate2->GetTime());
 
     }
@@ -1049,8 +1096,8 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTop
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/redlinecontrol.ui", "RedlineControl");
 
-    pTPFilter = new SvxTPFilter(this);
-    pTPView = new SvxTPView(this, pTopLevel);
+    pTPFilter = VclPtr<SvxTPFilter>::Create(this);
+    pTPView = VclPtr<SvxTPView>::Create(this, pTopLevel);
 
     m_nViewPageId = GetPageId("view");
     m_nFilterPageId = GetPageId("filter");
@@ -1066,8 +1113,15 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTop
 
 SvxAcceptChgCtr::~SvxAcceptChgCtr()
 {
-    delete pTPView;
-    delete pTPFilter;
+    disposeOnce();
+}
+
+void SvxAcceptChgCtr::dispose()
+{
+    disposeBuilder();
+    pTPView.disposeAndClear();
+    pTPFilter.disposeAndClear();
+    TabControl::dispose();
 }
 
 void SvxAcceptChgCtr::ShowFilterPage()

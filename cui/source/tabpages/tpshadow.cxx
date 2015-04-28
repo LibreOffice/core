@@ -165,6 +165,23 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pMtrDistance->SetModifyHdl( aLink );
 }
 
+SvxShadowTabPage::~SvxShadowTabPage()
+{
+    disposeOnce();
+}
+
+void SvxShadowTabPage::dispose()
+{
+    m_pTsbShowShadow.clear();
+    m_pGridShadow.clear();
+    m_pCtlPosition.clear();
+    m_pMtrDistance.clear();
+    m_pLbShadowColor.clear();
+    m_pMtrTransparent.clear();
+    m_pCtlXRectPreview.clear();
+    SvxTabPage::dispose();
+}
+
 void SvxShadowTabPage::Construct()
 {
     m_pLbShadowColor->Fill( pColorList );
@@ -466,10 +483,10 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxShadowTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxShadowTabPage::Create( vcl::Window* pWindow,
+                                             const SfxItemSet* rAttrs )
 {
-    return new SvxShadowTabPage( pWindow, *rAttrs );
+    return VclPtr<SvxShadowTabPage>::Create( pWindow, *rAttrs );
 }
 
 

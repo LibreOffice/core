@@ -35,6 +35,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/vclptr.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -53,7 +54,10 @@ class AreaPropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static AreaPropertyPanel* Create(
+    virtual ~AreaPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
@@ -80,6 +84,12 @@ public:
     void SetGradient (const XGradient& rGradient);
     sal_Int32 GetSelectedTransparencyTypeIndex() const;
 
+    // constructor/destuctor
+    AreaPropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
+
 private:
     sal_uInt16                                          meLastXFS;
 
@@ -96,14 +106,14 @@ private:
     XGradient                                           maGradientRect;
 
     //ui controls
-    FixedText*                                          mpColorTextFT;
-    SvxFillTypeBox*                                     mpLbFillType;
-    SvxFillAttrBox*                                     mpLbFillAttr;
-    ToolBox*                                            mpToolBoxColor; // for new color picker
-    FixedText*                                          mpTrspTextFT;
-    ListBox*                                            mpLBTransType;
-    MetricField*                                        mpMTRTransparent;
-    ToolBox*                                            mpBTNGradient;
+    VclPtr<FixedText>                                          mpColorTextFT;
+    VclPtr<SvxFillTypeBox>                                     mpLbFillType;
+    VclPtr<SvxFillAttrBox>                                     mpLbFillAttr;
+    VclPtr<ToolBox>                                            mpToolBoxColor; // for new color picker
+    VclPtr<FixedText>                                          mpTrspTextFT;
+    VclPtr<ListBox>                                            mpLBTransType;
+    VclPtr<MetricField>                                        mpMTRTransparent;
+    VclPtr<ToolBox>                                            mpBTNGradient;
 
     ::boost::scoped_ptr< XFillStyleItem >               mpStyleItem;
     ::boost::scoped_ptr< XFillColorItem >               mpColorItem;
@@ -143,15 +153,8 @@ private:
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
 
     // for transparency gradient
-    PopupControl* CreateTransparencyGradientControl (PopupContainer* pParent);
+    VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
     DECL_LINK( ClickTrGrHdl_Impl, ToolBox* );
-
-    // constructor/destuctor
-    AreaPropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
-    virtual ~AreaPropertyPanel();
 
     static void SetupIcons();
     void Initialize();

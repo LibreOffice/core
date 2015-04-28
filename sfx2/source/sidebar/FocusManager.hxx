@@ -68,13 +68,13 @@ public:
     void SetButtons (const ::std::vector<Button*>& rButtons);
 
 private:
-    DeckTitleBar* mpDeckTitleBar;
-    ::std::vector<Panel*> maPanels;
-    ::std::vector<Button*> maButtons;
+    VclPtr<DeckTitleBar> mpDeckTitleBar;
+    ::std::vector<VclPtr<Panel> > maPanels;
+    ::std::vector<VclPtr<Button> > maButtons;
     const ::boost::function<void(const Panel&)> maShowPanelFunctor;
     bool mbObservingContentControlFocus;
-    vcl::Window* mpFirstFocusedContentControl;
-    vcl::Window* mpLastFocusedWindow;
+    VclPtr<vcl::Window> mpFirstFocusedContentControl;
+    VclPtr<vcl::Window> mpLastFocusedWindow;
 
     enum PanelComponent
     {

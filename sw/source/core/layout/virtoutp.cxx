@@ -119,7 +119,7 @@ bool SwLayVout::DoesFit( const Size &rNew )
         return true;
     if( !pVirDev )
     {
-        pVirDev = new VirtualDevice();
+        pVirDev = VclPtr<VirtualDevice>::Create();
         pVirDev->SetLineColor();
         if( pOut )
         {
@@ -133,8 +133,7 @@ bool SwLayVout::DoesFit( const Size &rNew )
         aSize.Width() = rNew.Width();
         if( !pVirDev->SetOutputSizePixel( aSize ) )
         {
-            delete pVirDev;
-            pVirDev = NULL;
+            pVirDev.disposeAndClear();
             aSize.Width() = 0;
             return false;
         }

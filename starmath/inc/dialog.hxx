@@ -52,15 +52,15 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont);
 
 class SmPrintOptionsTabPage : public SfxTabPage
 {
-    CheckBox*       m_pTitle;
-    CheckBox*       m_pText;
-    CheckBox*       m_pFrame;
-    RadioButton*    m_pSizeNormal;
-    RadioButton*    m_pSizeScaled;
-    RadioButton*    m_pSizeZoomed;
-    MetricField*    m_pZoom;
-    CheckBox*       m_pNoRightSpaces;
-    CheckBox*       m_pSaveOnlyUsedSymbols;
+    VclPtr<CheckBox>       m_pTitle;
+    VclPtr<CheckBox>       m_pText;
+    VclPtr<CheckBox>       m_pFrame;
+    VclPtr<RadioButton>    m_pSizeNormal;
+    VclPtr<RadioButton>    m_pSizeScaled;
+    VclPtr<RadioButton>    m_pSizeZoomed;
+    VclPtr<MetricField>    m_pZoom;
+    VclPtr<CheckBox>       m_pNoRightSpaces;
+    VclPtr<CheckBox>       m_pSaveOnlyUsedSymbols;
 
     DECL_LINK(SizeButtonClickHdl, Button *);
 
@@ -68,9 +68,11 @@ class SmPrintOptionsTabPage : public SfxTabPage
     virtual void    Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage* Create(vcl::Window *pWindow, const SfxItemSet &rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pWindow, const SfxItemSet &rSet);
 
     SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItemSet &rOptions);
+    virtual ~SmPrintOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 /**************************************************************************/
@@ -90,11 +92,11 @@ public:
 
 class SmFontDialog : public ModalDialog
 {
-    ComboBox*       m_pFontBox;
-    VclContainer*   m_pAttrFrame;
-    CheckBox*       m_pBoldCheckBox;
-    CheckBox*       m_pItalicCheckBox;
-    SmShowFont*     m_pShowFont;
+    VclPtr<ComboBox>       m_pFontBox;
+    VclPtr<VclContainer>   m_pAttrFrame;
+    VclPtr<CheckBox>       m_pBoldCheckBox;
+    VclPtr<CheckBox>       m_pItalicCheckBox;
+    VclPtr<SmShowFont>     m_pShowFont;
 
     vcl::Font       Face;
 
@@ -108,6 +110,8 @@ class SmFontDialog : public ModalDialog
 
 public:
     SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
+    virtual ~SmFontDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     const vcl::Font& GetFont() const { return Face; }
     void        SetFont(const vcl::Font &rFont);
@@ -117,18 +121,20 @@ public:
 
 class SmFontSizeDialog : public ModalDialog
 {
-    MetricField* m_pBaseSize;
-    MetricField* m_pTextSize;
-    MetricField* m_pIndexSize;
-    MetricField* m_pFunctionSize;
-    MetricField* m_pOperatorSize;
-    MetricField* m_pBorderSize;
-    PushButton* m_pDefaultButton;
+    VclPtr<MetricField> m_pBaseSize;
+    VclPtr<MetricField> m_pTextSize;
+    VclPtr<MetricField> m_pIndexSize;
+    VclPtr<MetricField> m_pFunctionSize;
+    VclPtr<MetricField> m_pOperatorSize;
+    VclPtr<MetricField> m_pBorderSize;
+    VclPtr<PushButton> m_pDefaultButton;
 
     DECL_LINK(DefaultButtonClickHdl, Button *);
 
 public:
     SmFontSizeDialog(vcl::Window *pParent);
+    virtual ~SmFontSizeDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -138,17 +144,17 @@ public:
 
 class SmFontTypeDialog : public ModalDialog
 {
-    SmFontPickListBox* m_pVariableFont;
-    SmFontPickListBox* m_pFunctionFont;
-    SmFontPickListBox* m_pNumberFont;
-    SmFontPickListBox* m_pTextFont;
-    SmFontPickListBox* m_pSerifFont;
-    SmFontPickListBox* m_pSansFont;
-    SmFontPickListBox* m_pFixedFont;
-    MenuButton* m_pMenuButton;
-    PushButton* m_pDefaultButton;
+    VclPtr<SmFontPickListBox> m_pVariableFont;
+    VclPtr<SmFontPickListBox> m_pFunctionFont;
+    VclPtr<SmFontPickListBox> m_pNumberFont;
+    VclPtr<SmFontPickListBox> m_pTextFont;
+    VclPtr<SmFontPickListBox> m_pSerifFont;
+    VclPtr<SmFontPickListBox> m_pSansFont;
+    VclPtr<SmFontPickListBox> m_pFixedFont;
+    VclPtr<MenuButton> m_pMenuButton;
+    VclPtr<PushButton> m_pDefaultButton;
 
-    OutputDevice       *pFontListDev;
+    VclPtr<OutputDevice> pFontListDev;
 
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(DefaultButtonClickHdl, Button *);
@@ -156,6 +162,8 @@ class SmFontTypeDialog : public ModalDialog
 
 public:
     SmFontTypeDialog(vcl::Window *pParent, OutputDevice *pFntListDevice);
+    virtual ~SmFontTypeDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -194,19 +202,19 @@ public:
 
 class SmDistanceDialog : public ModalDialog
 {
-    VclFrame*       m_pFrame;
-    FixedText*      m_pFixedText1;
-    MetricField*    m_pMetricField1;
-    FixedText*      m_pFixedText2;
-    MetricField*    m_pMetricField2;
-    FixedText*      m_pFixedText3;
-    MetricField*    m_pMetricField3;
-    CheckBox*       m_pCheckBox1;
-    FixedText*      m_pFixedText4;
-    MetricField*    m_pMetricField4;
-    MenuButton*     m_pMenuButton;
-    PushButton*     m_pDefaultButton;
-    FixedImage*     m_pBitmap;
+    VclPtr<VclFrame>       m_pFrame;
+    VclPtr<FixedText>      m_pFixedText1;
+    VclPtr<MetricField>    m_pMetricField1;
+    VclPtr<FixedText>      m_pFixedText2;
+    VclPtr<MetricField>    m_pMetricField2;
+    VclPtr<FixedText>      m_pFixedText3;
+    VclPtr<MetricField>    m_pMetricField3;
+    VclPtr<CheckBox>       m_pCheckBox1;
+    VclPtr<FixedText>      m_pFixedText4;
+    VclPtr<MetricField>    m_pMetricField4;
+    VclPtr<MenuButton>     m_pMenuButton;
+    VclPtr<PushButton>     m_pDefaultButton;
+    VclPtr<FixedImage>     m_pBitmap;
 
     SmCategoryDesc *Categories[NOCATEGORIES];
     sal_uInt16          nActiveCategory;
@@ -224,6 +232,7 @@ class SmDistanceDialog : public ModalDialog
 public:
     SmDistanceDialog(vcl::Window *pParent);
     virtual ~SmDistanceDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) /*const*/;
@@ -238,15 +247,17 @@ public:
 
 class SmAlignDialog : public ModalDialog
 {
-    RadioButton* m_pLeft;
-    RadioButton* m_pCenter;
-    RadioButton* m_pRight;
-    PushButton*  m_pDefaultButton;
+    VclPtr<RadioButton> m_pLeft;
+    VclPtr<RadioButton> m_pCenter;
+    VclPtr<RadioButton> m_pRight;
+    VclPtr<PushButton>  m_pDefaultButton;
 
     DECL_LINK(DefaultButtonClickHdl, Button *);
 
 public:
     SmAlignDialog(vcl::Window *pParent);
+    virtual ~SmAlignDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -256,7 +267,7 @@ public:
 
 class SmShowSymbolSetWindow : public Control
 {
-    ScrollBar*  m_pVScrollBar;
+    VclPtr<ScrollBar>  m_pVScrollBar;
     SymbolPtrVec_t aSymbolSet;
     Link        aSelectHdlLink;
     Link        aDblClickHdlLink;
@@ -277,6 +288,8 @@ class SmShowSymbolSetWindow : public Control
     DECL_LINK( ScrollHdl, ScrollBar* );
 public:
     SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyle);
+    virtual ~SmShowSymbolSetWindow();
+    virtual void dispose() SAL_OVERRIDE;
     void setScrollbar(ScrollBar *pVScrollBar);
     void calccols();
     void    SelectSymbol(sal_uInt16 nSymbol);
@@ -288,19 +301,21 @@ public:
 
 class SmShowSymbolSet : public VclHBox
 {
-    SmShowSymbolSetWindow aSymbolWindow;
-    ScrollBar   aVScrollBar;
+    VclPtr<SmShowSymbolSetWindow> aSymbolWindow;
+    VclPtr<ScrollBar>             aVScrollBar;
 
 public:
     SmShowSymbolSet(vcl::Window *pParent);
+    virtual ~SmShowSymbolSet();
+    virtual void dispose() SAL_OVERRIDE;
 
-    void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet) { aSymbolWindow.SetSymbolSet(rSymbolSet); }
+    void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet) { aSymbolWindow->SetSymbolSet(rSymbolSet); }
 
-    void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow.SelectSymbol(nSymbol); }
-    sal_uInt16  GetSelectSymbol() const { return aSymbolWindow.GetSelectSymbol(); }
+    void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow->SelectSymbol(nSymbol); }
+    sal_uInt16  GetSelectSymbol() const { return aSymbolWindow->GetSelectSymbol(); }
 
-    void SetSelectHdl(const Link& rLink)   { aSymbolWindow.SetSelectHdl(rLink); }
-    void SetDblClickHdl(const Link& rLink) { aSymbolWindow.SetDblClickHdl(rLink); }
+    void SetSelectHdl(const Link& rLink)   { aSymbolWindow->SetSelectHdl(rLink); }
+    void SetDblClickHdl(const Link& rLink) { aSymbolWindow->SetDblClickHdl(rLink); }
 };
 
 
@@ -331,12 +346,12 @@ class SmSymDefineDialog;
 
 class SmSymbolDialog : public ModalDialog
 {
-    ListBox*         m_pSymbolSets;
-    SmShowSymbolSet* m_pSymbolSetDisplay;
-    FixedText*       m_pSymbolName;
-    SmShowSymbol*    m_pSymbolDisplay;
-    PushButton*      m_pGetBtn;
-    PushButton*      m_pEditBtn;
+    VclPtr<ListBox>         m_pSymbolSets;
+    VclPtr<SmShowSymbolSet> m_pSymbolSetDisplay;
+    VclPtr<FixedText>       m_pSymbolName;
+    VclPtr<SmShowSymbol>    m_pSymbolDisplay;
+    VclPtr<PushButton>      m_pGetBtn;
+    VclPtr<PushButton>      m_pEditBtn;
 
     SmViewShell        &rViewSh;
     SmSymbolManager    &rSymbolMgr;
@@ -344,7 +359,7 @@ class SmSymbolDialog : public ModalDialog
     OUString       aSymbolSetName;
     SymbolPtrVec_t      aSymbolSet;
 
-    OutputDevice       *pFontListDev;
+    VclPtr<OutputDevice> pFontListDev;
 
     DECL_LINK(SymbolSetChangeHdl, void*);
     DECL_LINK(SymbolChangeHdl, void*);
@@ -362,6 +377,8 @@ class SmSymbolDialog : public ModalDialog
 public:
     SmSymbolDialog(vcl::Window * pParent, OutputDevice *pFntListDevice,
             SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell);
+    virtual ~SmSymbolDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool    SelectSymbolSet(const OUString &rSymbolSetName);
     void    SelectSymbol(sal_uInt16 nSymbolPos);
@@ -389,23 +406,23 @@ public:
 
 class SmSymDefineDialog : public ModalDialog
 {
-    ComboBox*        pOldSymbols;
-    ComboBox*        pOldSymbolSets;
-    SvxShowCharSet*  pCharsetDisplay;
-    ComboBox*        pSymbols;
-    ComboBox*        pSymbolSets;
-    ListBox*         pFonts;
-    ListBox*         pFontsSubsetLB;
-    FontStyleBox*    pStyles;
-    FixedText*       pOldSymbolName;
-    SmShowChar*     pOldSymbolDisplay;
-    FixedText*       pOldSymbolSetName;
-    FixedText*       pSymbolName;
-    SmShowChar*     pSymbolDisplay;
-    FixedText*       pSymbolSetName;
-    PushButton*      pAddBtn;
-    PushButton*      pChangeBtn;
-    PushButton*      pDeleteBtn;
+    VclPtr<ComboBox>        pOldSymbols;
+    VclPtr<ComboBox>        pOldSymbolSets;
+    VclPtr<SvxShowCharSet>  pCharsetDisplay;
+    VclPtr<ComboBox>        pSymbols;
+    VclPtr<ComboBox>        pSymbolSets;
+    VclPtr<ListBox>         pFonts;
+    VclPtr<ListBox>         pFontsSubsetLB;
+    VclPtr<FontStyleBox>    pStyles;
+    VclPtr<FixedText>       pOldSymbolName;
+    VclPtr<SmShowChar>      pOldSymbolDisplay;
+    VclPtr<FixedText>       pOldSymbolSetName;
+    VclPtr<FixedText>       pSymbolName;
+    VclPtr<SmShowChar>      pSymbolDisplay;
+    VclPtr<FixedText>       pSymbolSetName;
+    VclPtr<PushButton>      pAddBtn;
+    VclPtr<PushButton>      pChangeBtn;
+    VclPtr<PushButton>      pDeleteBtn;
 
     SmSymbolManager     aSymbolMgrCopy,
                        &rSymbolMgr;
@@ -455,6 +472,7 @@ class SmSymDefineDialog : public ModalDialog
 public:
     SmSymDefineDialog(vcl::Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
     virtual ~SmSymDefineDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     using OutputDevice::SetFont;
 

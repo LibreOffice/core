@@ -92,7 +92,13 @@ DockingAreaWindow::DockingAreaWindow( vcl::Window* pParent ) :
 
 DockingAreaWindow::~DockingAreaWindow()
 {
+    disposeOnce();
+}
+
+void DockingAreaWindow::dispose()
+{
     delete mpImplData;
+    Window::dispose();
 }
 
 void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )

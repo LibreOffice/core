@@ -40,9 +40,9 @@ namespace pcr
             :public ModalDialog
             ,public PcrClient
     {
-        FixedText       *m_pMainDesc;
-        SvTreeListBox   *m_pControlTree;
-        CheckBox        *m_pNoAssignment;
+        VclPtr<FixedText>       m_pMainDesc;
+        VclPtr<SvTreeListBox>   m_pControlTree;
+        VclPtr<CheckBox>        m_pNoAssignment;
 
         ImageList       m_aModelImages;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;
@@ -58,6 +58,7 @@ namespace pcr
     public:
         OSelectLabelDialog(vcl::Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);
         virtual ~OSelectLabelDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  GetSelected() const { return m_pNoAssignment->IsChecked() ? ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > () : m_xSelectedControl; }
 

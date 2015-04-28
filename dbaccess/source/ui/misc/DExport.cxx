@@ -687,8 +687,8 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
 {
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
     OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
-    OCopyTableWizard aWizard(
-        NULL,
+    ScopedVclPtrInstance<OCopyTableWizard> aWizard(
+        nullptr,
         sTableName,
         bHaveDefaultTable ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData,
         m_aDestColumns,
@@ -703,14 +703,14 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
     bool bError = false;
     try
     {
-        if (aWizard.Execute())
+        if (aWizard->Execute())
         {
-            switch(aWizard.getOperation())
+            switch(aWizard->getOperation())
             {
                 case CopyTableOperation::CopyDefinitionAndData:
                 case CopyTableOperation::AppendData:
                     {
-                        m_xTable = aWizard.createTable();
+                        m_xTable = aWizard->createTable();
                         bError = !m_xTable.is();
                         if(m_xTable.is())
                         {
@@ -718,10 +718,10 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
                             if(_aTextColor.hasValue())
                                 m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
                         }
-                        m_bIsAutoIncrement  = aWizard.shouldCreatePrimaryKey();
-                        m_vColumns          = aWizard.GetColumnPositions();
-                        m_vColumnTypes      = aWizard.GetColumnTypes();
-                        m_bAppendFirstLine  = !aWizard.UseHeaderLine();
+                        m_bIsAutoIncrement  = aWizard->shouldCreatePrimaryKey();
+                        m_vColumns          = aWizard->GetColumnPositions();
+                        m_vColumnTypes      = aWizard->GetColumnTypes();
+                        m_bAppendFirstLine  = !aWizard->UseHeaderLine();
                     }
                     break;
                 default:
@@ -736,7 +736,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
     }
     catch( const SQLException&)
     {
-        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), &aWizard, m_xContext );
+        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), aWizard.get(), m_xContext );
         bError = true;
     }
     catch( const Exception& )
@@ -754,9 +754,9 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
         OUString aMsg(e.Message);
         aMsg += "\n";
         aMsg += ModuleRes( STR_QRY_CONTINUE );
-        OSQLWarningBox aBox( NULL, aMsg, WB_YES_NO | WB_DEF_NO );
+        ScopedVclPtrInstance< OSQLWarningBox > aBox( nullptr, aMsg, WB_YES_NO | WB_DEF_NO );
 
-        if (aBox.Execute() == RET_YES)
+        if (aBox->Execute() == RET_YES)
             m_bDontAskAgain = true;
         else
             m_bError = true;

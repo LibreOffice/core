@@ -47,10 +47,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTextDirectionListBox(v
          return new TextDirectionListBox(pParent);
      }
 
-TextDirectionListBox::~TextDirectionListBox()
-{
-}
-
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

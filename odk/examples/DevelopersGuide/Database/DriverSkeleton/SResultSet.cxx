@@ -410,7 +410,7 @@ void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     }
-    dispose();
+    disposeOnce();
 }
 
 

@@ -58,8 +58,7 @@ void ChineseTranslation_UnoDialog::impl_DeleteDialog()
     {
         if(m_pDialog->IsInExecute())
             m_pDialog->EndDialog(RET_CANCEL);
-        delete m_pDialog;
-        m_pDialog = 0;
+        m_pDialog.disposeAndClear();
     }
 }
 
@@ -137,7 +136,7 @@ sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeExc
                     pParent = pImplementation->GetWindow();
             }
             uno::Reference< XComponent > xComp( this );
-            m_pDialog = new ChineseTranslationDialog( pParent );
+            m_pDialog = VclPtr<ChineseTranslationDialog>::Create( pParent );
         }
         if( !m_pDialog )
             return nRet;

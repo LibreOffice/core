@@ -58,6 +58,7 @@ public:
 
                         MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle );
     virtual             ~MediaControl();
+    virtual void        dispose() SAL_OVERRIDE;
 
     const Size&         getMinSizePixel() const;
 
@@ -89,13 +90,13 @@ private:
     ImageList           maImageList;
     Idle                maIdle;
     MediaItem           maItem;
-    ToolBox             maPlayToolBox;
-    Slider              maTimeSlider;
-    ToolBox             maMuteToolBox;
-    Slider              maVolumeSlider;
-    ToolBox             maZoomToolBox;
-    ListBox*            mpZoomListBox;
-    Edit                maTimeEdit;
+    VclPtr<ToolBox>     maPlayToolBox;
+    VclPtr<Slider>      maTimeSlider;
+    VclPtr<ToolBox>     maMuteToolBox;
+    VclPtr<Slider>      maVolumeSlider;
+    VclPtr<ToolBox>     maZoomToolBox;
+    VclPtr<ListBox>     mpZoomListBox;
+    VclPtr<Edit>        maTimeEdit;
     Size                maMinSize;
     MediaControlStyle   meControlStyle;
     bool                mbLocked;

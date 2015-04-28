@@ -110,9 +110,14 @@ namespace dbaui
 
     IndexFieldsControl::~IndexFieldsControl()
     {
-        delete m_pSortingCell;
-        delete m_pFieldNameCell;
+        disposeOnce();
+    }
 
+    void IndexFieldsControl::dispose()
+    {
+        m_pSortingCell.disposeAndClear();
+        m_pFieldNameCell.disposeAndClear();
+        ::svt::EditBrowseBox::dispose();
     }
 
     bool IndexFieldsControl::SeekRow(long nRow)
@@ -240,7 +245,7 @@ namespace dbaui
             nSortOrderColumnWidth += GetTextWidth(OUString('0')) * 2;
             InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HeaderBarItemBits::STDSTYLE, 1);
 
-            m_pSortingCell = new ListBoxControl(&GetDataWindow());
+            m_pSortingCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());
             m_pSortingCell->InsertEntry(m_sAscendingText);
             m_pSortingCell->InsertEntry(m_sDescendingText);
             m_pSortingCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_SORTORDER );
@@ -256,7 +261,7 @@ namespace dbaui
 
         // create the cell controllers
         // for the field name cell
-        m_pFieldNameCell = new ListBoxControl(&GetDataWindow());
+        m_pFieldNameCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());
         m_pFieldNameCell->InsertEntry(OUString());
         m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
         const OUString* pFields = _rAvailableFields.getConstArray();

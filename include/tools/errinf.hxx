@@ -28,9 +28,11 @@
 #include <tools/errcode.hxx>
 #include <tools/toolsdllapi.h>
 
+// FIXME: horrible legacy dependency on VCL from tools.
+namespace vcl { class Window; }
+
 class EDcr_Impl;
 class ErrHdl_Impl;
-namespace vcl { class Window; }
 
 class ErrorInfo
 {
@@ -115,20 +117,20 @@ private:
     OUString           aArg;
 };
 
+struct ErrorContextImpl;
 class TOOLS_DLLPUBLIC ErrorContext
 {
     friend class ErrorHandler;
 
 private:
-    ErrorContext*           pNext;
-    vcl::Window*                 pWin;
+    ErrorContextImpl *pImpl;
 
 public:
                             ErrorContext(vcl::Window *pWin=0);
     virtual                 ~ErrorContext();
 
     virtual bool            GetString( sal_uIntPtr nErrId, OUString& rCtxStr ) = 0;
-    vcl::Window*                 GetParent() { return pWin; }
+    vcl::Window*            GetParent();
 
     static ErrorContext*    GetContext();
 };

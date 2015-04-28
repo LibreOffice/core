@@ -48,13 +48,12 @@ namespace svt { namespace uno
             const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >& i_rController,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int16 > >& i_rPaths
         );
-        virtual ~WizardShell();
 
         // Dialog overridables
         virtual short   Execute() SAL_OVERRIDE;
 
         // OWizardMachine overridables
-        virtual TabPage*    createPage( WizardState i_nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage> createPage( WizardState i_nState ) SAL_OVERRIDE;
         virtual void        enterState( WizardState i_nState ) SAL_OVERRIDE;
         virtual bool        leaveState( WizardState i_nState ) SAL_OVERRIDE;
         virtual OUString    getStateDisplayName( WizardState i_nState ) const SAL_OVERRIDE;
@@ -118,7 +117,7 @@ namespace svt { namespace uno
         using WizardShell_Base::activatePath;
 
     private:
-        typedef ::std::map< TabPage*, PWizardPageController > Page2ControllerMap;
+        typedef ::std::map< VclPtr<TabPage>, PWizardPageController > Page2ControllerMap;
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >  m_xController;
         const sal_Int16                                                                             m_nFirstPageID;

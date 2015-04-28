@@ -36,6 +36,17 @@ ScSubTotalDlg::ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
     m_pBtnRemove->SetClickHdl( LINK( this, ScSubTotalDlg, RemoveHdl ) );
 }
 
+ScSubTotalDlg::~ScSubTotalDlg()
+{
+    disposeOnce();
+}
+
+void ScSubTotalDlg::dispose()
+{
+    m_pBtnRemove.clear();
+    SfxTabDialog::dispose();
+}
+
 IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
 {
     if (pBtn == m_pBtnRemove)

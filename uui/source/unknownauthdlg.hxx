@@ -31,10 +31,10 @@
 class UnknownAuthDialog : public MessageDialog
 {
 private:
-    PushButton* m_pCommandButtonOK;
-    PushButton* m_pView_Certificate;
-    RadioButton* m_pOptionButtonAccept;
-    RadioButton* m_pOptionButtonDontAccept;
+    VclPtr<PushButton> m_pCommandButtonOK;
+    VclPtr<PushButton> m_pView_Certificate;
+    VclPtr<RadioButton> m_pOptionButtonAccept;
+    VclPtr<RadioButton> m_pOptionButtonDontAccept;
 
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
@@ -46,6 +46,8 @@ public:
     UnknownAuthDialog(vcl::Window* pParent,
         const css::uno::Reference< css::security::XCertificate >& rXCert,
         const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    virtual ~UnknownAuthDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     css::uno::Reference< css::security::XCertificate > getCert()
     {

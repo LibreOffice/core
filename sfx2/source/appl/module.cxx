@@ -33,6 +33,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/taskpane.hxx>
 #include <tools/diagnose_ex.h>
@@ -331,9 +332,9 @@ ImageList* SfxModule::GetImageList_Impl( bool bBig )
     return pImpl->GetImageList( pResMgr, bBig );
 }
 
-SfxTabPage*     SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const SfxItemSet& )
+VclPtr<SfxTabPage> SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const SfxItemSet& )
 {
-    return NULL;
+    return VclPtr<SfxTabPage>();
 }
 
 SfxModuleArr_Impl& SfxModule::GetModules_Impl()

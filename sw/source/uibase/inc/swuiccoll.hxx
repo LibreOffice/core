@@ -26,18 +26,18 @@ class SwFmt;
 
 class SwCondCollPage : public SfxTabPage
 {
-    CheckBox*           m_pConditionCB;
+    VclPtr<CheckBox>           m_pConditionCB;
 
-    FixedText*          m_pContextFT;
-    FixedText*          m_pUsedFT;
-    SvTabListBox*       m_pTbLinks;
+    VclPtr<FixedText>          m_pContextFT;
+    VclPtr<FixedText>          m_pUsedFT;
+    VclPtr<SvTabListBox>       m_pTbLinks;
 
-    FixedText*          m_pStyleFT;
-    ListBox*            m_pStyleLB;
-    ListBox*            m_pFilterLB;
+    VclPtr<FixedText>          m_pStyleFT;
+    VclPtr<ListBox>            m_pStyleLB;
+    VclPtr<ListBox>            m_pFilterLB;
 
-    PushButton*         m_pRemovePB;
-    PushButton*         m_pAssignPB;
+    VclPtr<PushButton>         m_pRemovePB;
+    VclPtr<PushButton>         m_pAssignPB;
 
     std::vector<OUString> m_aStrArr;
 
@@ -47,8 +47,8 @@ class SwCondCollPage : public SfxTabPage
 
     bool                bNewTemplate;
 
-    SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwCondCollPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
@@ -62,8 +62,9 @@ class SwCondCollPage : public SfxTabPage
     static const sal_uInt16 aPageRg[];
 
 public:
+    SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet);
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;

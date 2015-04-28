@@ -186,13 +186,13 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
 
 struct SfxToolBoxControl_Impl
 {
-    ToolBox*                pBox;
+    VclPtr<ToolBox>         pBox;
     bool                    bShowString;
     SfxTbxCtrlFactory*      pFact;
     sal_uInt16              nTbxId;
     sal_uInt16              nSlotId;
-    SfxPopupWindow*         mpFloatingWindow;
-    SfxPopupWindow*         mpPopupWindow;
+    VclPtr<SfxPopupWindow>  mpFloatingWindow;
+    VclPtr<SfxPopupWindow>  mpPopupWindow;
     Reference< XUIElement > mxUIElement;
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
@@ -207,10 +207,9 @@ IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent 
     {
         vcl::Window* pWindow( static_cast<VclWindowEvent*>(pEvent)->GetWindow() );
         if (( pWindow == mpFloatingWindow ) &&
-            ( mpPopupWindow != 0 ))
+            ( mpPopupWindow != nullptr ))
         {
-            delete mpPopupWindow;
-            mpPopupWindow = 0;
+            mpPopupWindow.disposeAndClear();
         }
     }
 
@@ -275,9 +274,9 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
 
     // Remove and destroy our item window at our toolbox
     SolarMutexGuard aGuard;
-    vcl::Window* pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
+    VclPtr< vcl::Window > pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
     pImpl->pBox->SetItemWindow( pImpl->nTbxId, 0 );
-    delete pWindow;
+    pWindow.disposeAndClear();
 
     // Dispose an open sub toolbar. It's possible that we have an open
     // sub toolbar while we get disposed. Therefore we have to dispose
@@ -292,11 +291,8 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     pImpl->mxUIElement = 0;
 
     // Delete my popup windows
-    delete pImpl->mpFloatingWindow;
-    delete pImpl->mpPopupWindow;
-
-    pImpl->mpFloatingWindow = 0;
-    pImpl->mpPopupWindow = 0;
+    pImpl->mpFloatingWindow.disposeAndClear();
+    pImpl->mpPopupWindow.disposeAndClear();
 }
 
 
@@ -866,9 +862,9 @@ IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
     {
         // Replace floating window with popup window and destroy
         // floating window instance.
-        delete pImpl->mpFloatingWindow;
+        pImpl->mpFloatingWindow.disposeAndClear();
         pImpl->mpFloatingWindow = pImpl->mpPopupWindow;
-        pImpl->mpPopupWindow    = 0;
+        pImpl->mpPopupWindow.clear();
         // We also need to know when the user tries to use the
         // floating window.
         pImpl->mpFloatingWindow->AddEventListener( LINK( pImpl, SfxToolBoxControl_Impl, WindowEventListener ));
@@ -877,7 +873,7 @@ IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
     {
         // Popup window has been closed by the user. No replacement, instance
         // will destroy itself.
-        pImpl->mpPopupWindow = 0;
+        pImpl->mpPopupWindow.clear();
     }
 
     return 1;
@@ -903,7 +899,7 @@ void SfxToolBoxControl::StateChanged
     const SfxPoolItem*  pState
 )
 {
-    DBG_ASSERT( pImpl->pBox != 0, "setting state to dangling ToolBox" );
+    DBG_ASSERT( pImpl->pBox != nullptr, "setting state to dangling ToolBox" );
 
     if ( GetId() >= SID_OBJECTMENU0 && GetId() <= SID_OBJECTMENU_LAST )
         return;
@@ -981,7 +977,7 @@ SfxPopupWindowType SfxToolBoxControl::GetPopupWindowType() const
 
 
 
-SfxPopupWindow* SfxToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SfxToolBoxControl::CreatePopupWindow()
 {
     return 0;
 }
@@ -993,9 +989,9 @@ SfxPopupWindow* SfxToolBoxControl::CreatePopupWindowCascading()
 
 
 
-vcl::Window* SfxToolBoxControl::CreateItemWindow( vcl::Window * )
+VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )
 {
-    return 0;
+    return VclPtr<vcl::Window>();
 }
 
 
@@ -1204,6 +1200,11 @@ SfxPopupWindow::SfxPopupWindow(
 
 SfxPopupWindow::~SfxPopupWindow()
 {
+    disposeOnce();
+}
+
+void SfxPopupWindow::dispose()
+{
     if ( m_xStatusListener.is() )
     {
         m_xStatusListener->dispose();
@@ -1213,6 +1214,7 @@ SfxPopupWindow::~SfxPopupWindow()
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
+    FloatingWindow::dispose();
 }
 
 
@@ -1333,7 +1335,7 @@ void SfxPopupWindow::StartCascading()
 
 
 
-SfxPopupWindow* SfxPopupWindow::Clone() const
+VclPtr<SfxPopupWindow> SfxPopupWindow::Clone() const
 
 /*  [Description]
 
@@ -1382,7 +1384,7 @@ void SfxPopupWindow::Delete()
 {
     if ( m_aDeleteLink.IsSet() )
         m_aDeleteLink.Call( this );
-    delete this;
+    disposeOnce();
 }
 
 
@@ -1397,7 +1399,7 @@ SfxRecentFilesToolBoxControl::~SfxRecentFilesToolBoxControl()
 {
 }
 
-SfxPopupWindow* SfxRecentFilesToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SfxRecentFilesToolBoxControl::CreatePopupWindow()
 {
     ToolBox& rBox = GetToolBox();
     sal_uInt16 nItemId = GetId();

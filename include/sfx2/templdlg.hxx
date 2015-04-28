@@ -43,6 +43,7 @@ class SFX2_DLLPUBLIC SfxTemplatePanelControl : public DockingWindow
 public:
     SfxTemplatePanelControl (SfxBindings* pBindings, vcl::Window* pParentWindow);
     virtual ~SfxTemplatePanelControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
@@ -50,7 +51,7 @@ public:
     void FreeResource();
 
 private:
-    const std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
+    std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
     SfxBindings* mpBindings;
 };
 

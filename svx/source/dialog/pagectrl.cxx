@@ -90,8 +90,14 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
 
 SvxPageWindow::~SvxPageWindow()
 {
+    disposeOnce();
+}
+
+void SvxPageWindow::dispose()
+{
     delete pHdBorder;
     delete pFtBorder;
+    vcl::Window::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPageWindow(vcl::Window *pParent, VclBuilder::stringmap &)

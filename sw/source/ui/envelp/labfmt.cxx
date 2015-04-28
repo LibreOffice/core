@@ -353,7 +353,28 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwLabFmtPage::~SwLabFmtPage()
 {
+    disposeOnce();
 }
+
+void SwLabFmtPage::dispose()
+{
+    m_pMakeFI.clear();
+    m_pTypeFI.clear();
+    m_pPreview.clear();
+    m_pHDistField.clear();
+    m_pVDistField.clear();
+    m_pWidthField.clear();
+    m_pHeightField.clear();
+    m_pLeftField.clear();
+    m_pUpperField.clear();
+    m_pColsField.clear();
+    m_pRowsField.clear();
+    m_pPWidthField.clear();
+    m_pPHeightField.clear();
+    m_pSavePB.clear();
+    SfxTabPage::dispose();
+}
+
 
 // Modify-handler of MetricFields. start preview timer
 IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, ModifyHdl)
@@ -464,9 +485,9 @@ void SwLabFmtPage::ChangeMinMax()
     m_pPHeightField->Reformat();
 }
 
-SfxTabPage* SwLabFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwLabFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwLabFmtPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwLabFmtPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
 void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)
@@ -558,7 +579,7 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     aRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
     aRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     aRec.bCont = aItem.bCont;
-    boost::scoped_ptr<SwSaveLabelDlg> pSaveDlg(new SwSaveLabelDlg(this, aRec));
+    ScopedVclPtrInstance< SwSaveLabelDlg > pSaveDlg(this, aRec);
     pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
     pSaveDlg->Execute();
     if(pSaveDlg->GetLabel(aItem))
@@ -600,6 +621,20 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec)
     }
 }
 
+SwSaveLabelDlg::~SwSaveLabelDlg()
+{
+    disposeOnce();
+}
+
+void SwSaveLabelDlg::dispose()
+{
+    m_pMakeCB.clear();
+    m_pTypeED.clear();
+    m_pOKPB.clear();
+    pLabPage.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
 {
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
@@ -614,15 +649,15 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
             return 0;
         }
 
-        MessageDialog aQuery(this, "QuerySaveLabelDialog",
-            "modules/swriter/ui/querysavelabeldialog.ui");
+        ScopedVclPtrInstance<MessageDialog> aQuery(this, "QuerySaveLabelDialog",
+                                                   "modules/swriter/ui/querysavelabeldialog.ui");
 
-        aQuery.set_primary_text(aQuery.get_primary_text().
+        aQuery->set_primary_text(aQuery->get_primary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
-        aQuery.set_secondary_text(aQuery.get_secondary_text().
+        aQuery->set_secondary_text(aQuery->get_secondary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
 
-        if (RET_YES != aQuery.Execute())
+        if (RET_YES != aQuery->Execute())
             return 0;
     }
     rLabRec.aType = sType;

@@ -37,7 +37,7 @@ namespace pcr
 
     class OPropertyBrowserView : public vcl::Window
     {
-        OPropertyEditor*        m_pPropBox;
+        VclPtr<OPropertyEditor>        m_pPropBox;
         sal_uInt16              m_nActivePage;
         Link                    m_aPageActivationHandler;
 
@@ -50,6 +50,7 @@ namespace pcr
         OPropertyBrowserView( vcl::Window* pParent, WinBits nBits = 0);
 
         virtual ~OPropertyBrowserView();
+        virtual void dispose() SAL_OVERRIDE;
 
         OPropertyEditor&    getPropertyBox() { return *m_pPropBox; }
 

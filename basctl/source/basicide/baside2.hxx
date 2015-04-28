@@ -109,7 +109,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(bool bCreate = true) SAL_OVERRIDE;
     CodeCompleteDataCache aCodeCompleteCache;
-    boost::scoped_ptr< CodeCompleteWindow > pCodeCompleteWnd;
+    VclPtr<CodeCompleteWindow> pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
     void SetupAndShowCodeCompleteWnd(const std::vector< OUString >& aEntryVect, TextSelection aSel );
     void HandleAutoCorrect();
@@ -137,6 +137,7 @@ protected:
 public:
                     EditorWindow (vcl::Window* pParent, ModulWindow*);
                     virtual ~EditorWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     ExtTextEngine*  GetEditEngine() const   { return pEditEngine.get(); }
     ExtTextView*    GetEditView() const     { return pEditView.get(); }
@@ -186,7 +187,6 @@ protected:
 
 public:
                     BreakPointWindow (vcl::Window* pParent, ModulWindow*);
-                    virtual ~BreakPointWindow();
 
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
     void            SetNoMarker ();
@@ -211,6 +211,7 @@ protected:
 public:
     WatchTreeListBox( vcl::Window* pParent, WinBits nWinBits );
     virtual ~WatchTreeListBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            RequestingChildren( SvTreeListEntry * pParent ) SAL_OVERRIDE;
     void            UpdateWatches( bool bBasicStopped = false );
@@ -225,10 +226,10 @@ class WatchWindow : public DockingWindow
 {
 private:
     OUString            aWatchStr;
-    ExtendedEdit        aXEdit;
-    ImageButton         aRemoveWatchButton;
-    WatchTreeListBox    aTreeListBox;
-    HeaderBar           aHeaderBar;
+    VclPtr<ExtendedEdit>        aXEdit;
+    VclPtr<ImageButton>         aRemoveWatchButton;
+    VclPtr<WatchTreeListBox>    aTreeListBox;
+    VclPtr<HeaderBar>           aHeaderBar;
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
@@ -243,20 +244,21 @@ protected:
 public:
                     WatchWindow (Layout* pParent);
                     virtual ~WatchWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            AddWatch( const OUString& rVName );
     bool            RemoveSelectedWatch();
     void            UpdateWatches( bool bBasicStopped = false );
 
-    WatchTreeListBox&   GetWatchTreeListBox() { return aTreeListBox; }
+    WatchTreeListBox&   GetWatchTreeListBox() { return *aTreeListBox.get(); }
 };
 
 
 class StackWindow : public DockingWindow
 {
 private:
-    SvTreeListBox   aTreeListBox;
-    OUString        aStackStr;
+    VclPtr<SvTreeListBox>  aTreeListBox;
+    OUString               aStackStr;
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
@@ -265,6 +267,7 @@ protected:
 public:
                     StackWindow (Layout* pParent);
                     virtual ~StackWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            UpdateCalls();
 };
@@ -273,10 +276,10 @@ public:
 class ComplexEditorWindow : public vcl::Window
 {
 private:
-    BreakPointWindow    aBrkWindow;
-    LineNumberWindow    aLineNumberWindow;
-    EditorWindow        aEdtWindow;
-    ScrollBar           aEWVScrollBar;
+    VclPtr<BreakPointWindow> aBrkWindow;
+    VclPtr<LineNumberWindow> aLineNumberWindow;
+    VclPtr<EditorWindow>     aEdtWindow;
+    VclPtr<ScrollBar>        aEWVScrollBar;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt) SAL_OVERRIDE;
 
@@ -286,11 +289,12 @@ protected:
 
 public:
                         ComplexEditorWindow( ModulWindow* pParent );
-
-    BreakPointWindow&   GetBrkWindow()      { return aBrkWindow; }
-    LineNumberWindow&   GetLineNumberWindow() { return aLineNumberWindow; }
-    EditorWindow&       GetEdtWindow()      { return aEdtWindow; }
-    ScrollBar&          GetEWVScrollBar()   { return aEWVScrollBar; }
+    virtual             ~ComplexEditorWindow();
+    virtual void        dispose() SAL_OVERRIDE;
+    BreakPointWindow&   GetBrkWindow()      { return *aBrkWindow.get(); }
+    LineNumberWindow&   GetLineNumberWindow() { return *aLineNumberWindow.get(); }
+    EditorWindow&       GetEdtWindow()      { return *aEdtWindow.get(); }
+    ScrollBar&          GetEWVScrollBar()   { return *aEWVScrollBar.get(); }
 
     void SetLineNumberDisplay(bool b);
 };
@@ -302,7 +306,7 @@ private:
     ModulWindowLayout&  rLayout;
     StarBASICRef        xBasic;
     short               nValid;
-    ComplexEditorWindow aXEditorWindow;
+    VclPtr<ComplexEditorWindow> aXEditorWindow;
     BasicStatus         aStatus;
     SbModuleRef         xModule;
     OUString            aCurPath;
@@ -328,6 +332,7 @@ public:
     ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString& aModule );
 
                     virtual ~ModulWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    ExecuteCommand (SfxRequest& rReq) SAL_OVERRIDE;
     virtual void    ExecuteGlobal (SfxRequest& rReq) SAL_OVERRIDE;
@@ -386,10 +391,10 @@ public:
     virtual SearchOptionFlags GetSearchOptions() SAL_OVERRIDE;
     virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false) SAL_OVERRIDE;
 
-    EditorWindow&       GetEditorWindow()       { return aXEditorWindow.GetEdtWindow(); }
-    BreakPointWindow&   GetBreakPointWindow()   { return aXEditorWindow.GetBrkWindow(); }
-    LineNumberWindow&   GetLineNumberWindow()   { return aXEditorWindow.GetLineNumberWindow(); }
-    ScrollBar&          GetEditVScrollBar()     { return aXEditorWindow.GetEWVScrollBar(); }
+    EditorWindow&       GetEditorWindow()       { return aXEditorWindow->GetEdtWindow(); }
+    BreakPointWindow&   GetBreakPointWindow()   { return aXEditorWindow->GetBrkWindow(); }
+    LineNumberWindow&   GetLineNumberWindow()   { return aXEditorWindow->GetLineNumberWindow(); }
+    ScrollBar&          GetEditVScrollBar()     { return aXEditorWindow->GetEWVScrollBar(); }
     ExtTextEngine*      GetEditEngine()         { return GetEditorWindow().GetEditEngine(); }
     ExtTextView*        GetEditView()           { return GetEditorWindow().GetEditView(); }
     BreakPointList&     GetBreakPoints()        { return GetBreakPointWindow().GetBreakPoints(); }
@@ -419,6 +424,8 @@ class ModulWindowLayout: public Layout
 {
 public:
     ModulWindowLayout (vcl::Window* pParent, ObjectCatalog&);
+    virtual ~ModulWindowLayout();
+    virtual void dispose() SAL_OVERRIDE;
 public:
     // Layout:
     virtual void Activating (BaseWindow&) SAL_OVERRIDE;
@@ -438,10 +445,10 @@ protected:
 
 private:
     // main child window
-    ModulWindow* pChild;
+    VclPtr<ModulWindow> pChild;
     // dockable windows
-    WatchWindow aWatchWindow;
-    StackWindow aStackWindow;
+    VclPtr<WatchWindow> aWatchWindow;
+    VclPtr<StackWindow> aStackWindow;
     ObjectCatalog& rObjectCatalog;
 private:
     virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
@@ -468,7 +475,7 @@ private:
         // the configuration
         svtools::ColorConfig aConfig;
         // the active editor
-        EditorWindow* pEditor;
+        VclPtr<EditorWindow> pEditor;
 
     } aSyntaxColors;
 };
@@ -482,7 +489,7 @@ private:
     /* a buffer to build up function name when typing
      * a function name, used for showing/hiding listbox values
      * */
-    CodeCompleteWindow* pCodeCompleteWindow; // parent window
+    VclPtr<CodeCompleteWindow> pCodeCompleteWindow; // parent window
 
     void SetMatchingEntries(); // sets the visible entries based on aFuncBuffer variable
     void HideAndRestoreFocus();
@@ -490,6 +497,8 @@ private:
 
 public:
     CodeCompleteListBox( CodeCompleteWindow* pPar );
+    virtual ~CodeCompleteListBox();
+    virtual void dispose() SAL_OVERRIDE;
     void InsertSelectedEntry(); //insert the selected entry
 
     DECL_LINK(ImplDoubleClickHdl, void*);
@@ -503,15 +512,16 @@ class CodeCompleteWindow: public vcl::Window
 {
 friend class CodeCompleteListBox;
 private:
-    EditorWindow* pParent; // parent window
+    VclPtr<EditorWindow> pParent; // parent window
     TextSelection aTextSelection;
-    CodeCompleteListBox* pListBox;
+    VclPtr<CodeCompleteListBox> pListBox;
 
     void InitListBox(); // initialize the ListBox
 
 public:
     CodeCompleteWindow( EditorWindow* pPar );
-    virtual ~CodeCompleteWindow(){ delete pListBox; }
+    virtual ~CodeCompleteWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     void InsertEntry( const OUString& aStr );
     void ClearListBox();

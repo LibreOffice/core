@@ -22,6 +22,7 @@
 
 #include <svl/lstner.hxx>
 #include <svl/ctloptions.hxx>
+#include <vcl/vclptr.hxx>
 #include "sddllapi.h"
 
 #include <vector>
@@ -120,7 +121,7 @@ private:
     /** Type and data member for a list of devices that have to be kept
         up-to-date.
     */
-    typedef ::std::vector< vcl::Window*> tWindowList;
+    typedef ::std::vector< VclPtr<vcl::Window> > tWindowList;
     tWindowList maWindowList;
 
     /** The central method of this class.  Update the given output device.

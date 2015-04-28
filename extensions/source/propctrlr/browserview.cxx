@@ -21,6 +21,7 @@
 #include "propertyeditor.hxx"
 #include "propctrlr.hrc"
 #include <boost/scoped_ptr.hpp>
+#include <vcl/tabpage.hxx>
 
 namespace pcr
 {
@@ -34,7 +35,7 @@ namespace pcr
                   :Window(_pParent, nBits | WB_3DLOOK)
                   ,m_nActivePage(0)
     {
-        m_pPropBox = new OPropertyEditor( this );
+        m_pPropBox = VclPtr<OPropertyEditor>::Create( this );
         m_pPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
         m_pPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
 
@@ -53,15 +54,19 @@ namespace pcr
 
     OPropertyBrowserView::~OPropertyBrowserView()
     {
+        disposeOnce();
+    }
+
+    void OPropertyBrowserView::dispose()
+    {
         if(m_pPropBox)
         {
             sal_uInt16 nTmpPage = m_pPropBox->GetCurPage();
             if (nTmpPage)
                 m_nActivePage = nTmpPage;
-            boost::scoped_ptr<vcl::Window> aTemp(m_pPropBox);
-            m_pPropBox = NULL;
         }
-
+        m_pPropBox.disposeAndClear();
+        vcl::Window::dispose();
     }
 
 

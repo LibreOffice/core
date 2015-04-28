@@ -62,7 +62,20 @@ ScLinkedAreaDlg::ScLinkedAreaDlg(vcl::Window* pParent)
 
 ScLinkedAreaDlg::~ScLinkedAreaDlg()
 {
+    disposeOnce();
+}
+
+void ScLinkedAreaDlg::dispose()
+{
     // pSourceShell is deleted by aSourceRef
+    m_pCbUrl.clear();
+    m_pBtnBrowse.clear();
+    m_pLbRanges.clear();
+    m_pBtnReload.clear();
+    m_pNfDelay.clear();
+    m_pFtSeconds.clear();
+    m_pBtnOk.clear();
+    ModalDialog::dispose();
 }
 
 short ScLinkedAreaDlg::Execute()

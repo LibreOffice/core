@@ -35,19 +35,17 @@ class SwEnvDlg;
 
 class SwEnvPrtPage : public SfxTabPage
 {
-    ToolBox*     m_pAlignBox;
-    RadioButton* m_pTopButton;
-    RadioButton* m_pBottomButton;
-    MetricField* m_pRightField;
-    MetricField* m_pDownField;
-    FixedText*   m_pPrinterInfo;
-    PushButton*  m_pPrtSetup;
+    VclPtr<ToolBox>     m_pAlignBox;
+    VclPtr<RadioButton> m_pTopButton;
+    VclPtr<RadioButton> m_pBottomButton;
+    VclPtr<MetricField> m_pRightField;
+    VclPtr<MetricField> m_pDownField;
+    VclPtr<FixedText>   m_pPrinterInfo;
+    VclPtr<PushButton>  m_pPrtSetup;
 
     sal_uInt16 m_aIds[ENV_VER_RGHT-ENV_HOR_LEFT+1];
 
-    Printer* pPrt;
-
-    SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    VclPtr<Printer>     pPrt;
 
     DECL_LINK(ClickHdl, void *);
     DECL_LINK(AlignHdl, void *);
@@ -59,8 +57,11 @@ class SwEnvPrtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    virtual ~SwEnvPrtPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

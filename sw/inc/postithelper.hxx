@@ -89,7 +89,7 @@ namespace SwPostItHelper
 class SwSidebarItem
 {
 public:
-    sw::sidebarwindows::SwSidebarWin* pPostIt;
+    VclPtr<sw::sidebarwindows::SwSidebarWin> pPostIt;
     bool bShow;
     bool bFocus;
 
@@ -114,7 +114,7 @@ public:
     virtual bool UseElement() = 0;
     virtual const SwFmtFld& GetFmtFld() const = 0;
     virtual const SfxBroadcaster* GetBroadCaster() const = 0;
-    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
+    virtual VclPtr<sw::sidebarwindows::SwSidebarWin> GetSidebarWindow( SwEditWin& rEditWin,
                                                                 WinBits nBits,
                                                                 SwPostItMgr& aMgr,
                                                                 SwPostItBits aBits) = 0;
@@ -146,7 +146,7 @@ public:
     {
         return dynamic_cast<const SfxBroadcaster *> (&mrFmtFld);
     }
-    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow(
+    virtual VclPtr<sw::sidebarwindows::SwSidebarWin> GetSidebarWindow(
         SwEditWin& rEditWin,
         WinBits nBits,
         SwPostItMgr& aMgr,

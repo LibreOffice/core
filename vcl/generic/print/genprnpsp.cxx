@@ -91,16 +91,24 @@ namespace
     class QueryString : public ModalDialog
     {
     private:
-        OKButton*    m_pOKButton;
-        FixedText*   m_pFixedText;
-        Edit*        m_pEdit;
-        OUString&    m_rReturnValue;
+        VclPtr<OKButton>    m_pOKButton;
+        VclPtr<FixedText>   m_pFixedText;
+        VclPtr<Edit>        m_pEdit;
+        OUString&           m_rReturnValue;
 
         DECL_LINK( ClickBtnHdl, Button* );
 
     public:
         // parent window, Query text, initial value
         QueryString(vcl::Window*, OUString &, OUString &);
+        virtual ~QueryString() { disposeOnce(); }
+        virtual void dispose() SAL_OVERRIDE
+        {
+            m_pOKButton.clear();
+            m_pFixedText.clear();
+            m_pEdit.clear();
+            ModalDialog::dispose();
+        }
     };
 
     /*
@@ -136,8 +144,8 @@ namespace
     int QueryFaxNumber(OUString& rNumber)
     {
         OUString aTmpString(VclResId(SV_PRINT_QUERYFAXNUMBER_TXT));
-        QueryString aQuery(NULL, aTmpString, rNumber);
-        return aQuery.Execute();
+        ScopedVclPtrInstance< QueryString > aQuery( nullptr, aTmpString, rNumber );
+        return aQuery->Execute();
     }
 }
 
@@ -1071,7 +1079,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
 
     std::shared_ptr<vcl::PDFWriter> xWriter;
     std::vector< PDFPrintFile > aPDFFiles;
-    std::shared_ptr<Printer> xPrinter(i_rController.getPrinter());
+    VclPtr<Printer> xPrinter( i_rController.getPrinter() );
     int nAllPages = i_rController.getFilteredPageCount();
     i_rController.createProgressDialog();
     bool bAborted = false;

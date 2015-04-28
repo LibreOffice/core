@@ -83,10 +83,34 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
 
 ScPivotFilterDlg::~ScPivotFilterDlg()
 {
+    disposeOnce();
+}
+
+void ScPivotFilterDlg::dispose()
+{
     for (sal_uInt16 i=0; i<=MAXCOL; i++)
         delete pEntryLists[i];
 
     delete pOutItem;
+    m_pLbField1.clear();
+    m_pLbCond1.clear();
+    m_pEdVal1.clear();
+    m_pLbConnect1.clear();
+    m_pLbField2.clear();
+    m_pLbCond2.clear();
+    m_pEdVal2.clear();
+    m_pLbConnect2.clear();
+    m_pLbField3.clear();
+    m_pLbCond3.clear();
+    m_pEdVal3.clear();
+    m_pBtnCase.clear();
+    m_pBtnRegExp.clear();
+    m_pBtnUnique.clear();
+    m_pFtDbArea.clear();
+    for (auto a : aValueEdArr) a.clear();
+    for (auto a : aFieldLbArr) a.clear();
+    for (auto a : aCondLbArr) a.clear();
+    ModalDialog::dispose();
 }
 
 void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )

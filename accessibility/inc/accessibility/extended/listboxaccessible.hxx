@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class SvTreeListBox;
 class VclSimpleEvent;
@@ -41,7 +42,7 @@ namespace accessibility
     class ListBoxAccessibleBase
     {
     private:
-        SvTreeListBox* m_pWindow;
+        VclPtr<SvTreeListBox> m_pWindow;
 
     protected:
         inline SvTreeListBox*       getListBox() const
@@ -49,7 +50,7 @@ namespace accessibility
             return  const_cast< ListBoxAccessibleBase* >( this )->m_pWindow;
         }
 
-        inline  bool                    isAlive() const     { return NULL != m_pWindow; }
+        inline  bool                    isAlive() const     { return nullptr != m_pWindow; }
 
     public:
         ListBoxAccessibleBase( SvTreeListBox& _rWindow );

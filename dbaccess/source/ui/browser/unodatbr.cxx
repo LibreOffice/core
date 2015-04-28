@@ -348,11 +348,11 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
         // create controls and set sizes
         const long  nFrameWidth = getBrowserView()->LogicToPixel( ::Size( 3, 0 ), MAP_APPFONT ).Width();
 
-        m_pSplitter = new Splitter(getBrowserView(),WB_HSCROLL);
+        m_pSplitter = VclPtr<Splitter>::Create(getBrowserView(),WB_HSCROLL);
         m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
-        m_pTreeView = new DBTreeView(getBrowserView(), WB_TABSTOP | WB_BORDER);
+        m_pTreeView = VclPtr<DBTreeView>::Create(getBrowserView(), WB_TABSTOP | WB_BORDER);
         m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
 
         m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));

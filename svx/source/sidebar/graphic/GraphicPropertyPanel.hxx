@@ -39,7 +39,10 @@ class GraphicPropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static GraphicPropertyPanel* Create(
+    virtual ~GraphicPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
@@ -55,16 +58,22 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    // constructor/destuctor
+    GraphicPropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
+
 private:
     //ui controls
-    MetricField*                                        mpMtrBrightness;
-    MetricField*                                        mpMtrContrast;
-    ListBox*                                            mpLBColorMode;
-    MetricField*                                        mpMtrTrans;
-    MetricField*                                        mpMtrRed;
-    MetricField*                                        mpMtrGreen;
-    MetricField*                                        mpMtrBlue;
-    MetricField*                                        mpMtrGamma;
+    VclPtr<MetricField>                                        mpMtrBrightness;
+    VclPtr<MetricField>                                        mpMtrContrast;
+    VclPtr<ListBox>                                            mpLBColorMode;
+    VclPtr<MetricField>                                        mpMtrTrans;
+    VclPtr<MetricField>                                        mpMtrRed;
+    VclPtr<MetricField>                                        mpMtrGreen;
+    VclPtr<MetricField>                                        mpMtrBlue;
+    VclPtr<MetricField>                                        mpMtrGamma;
 
     ::sfx2::sidebar::ControllerItem                     maBrightControl;
     ::sfx2::sidebar::ControllerItem                     maContrastControl;
@@ -92,13 +101,6 @@ private:
     DECL_LINK( GreenHdl, void*);
     DECL_LINK( BlueHdl, void*);
     DECL_LINK( GammaHdl, void*);
-
-    // constructor/destuctor
-    GraphicPropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
-    virtual ~GraphicPropertyPanel();
 
     static void SetupIcons();
     void Initialize();

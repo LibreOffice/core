@@ -76,7 +76,7 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     mnClientId( 0 ),
     mbDisposed( false )
 {
-    if (mpControl != NULL)
+    if (mpControl != nullptr)
     {
         mpModel = mpControl->GetSdrModel();
         if (mpModel != NULL)
@@ -478,7 +478,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus() throw( RuntimeException
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpControl )
+    if( nullptr == mpControl )
         throw DisposedException();
 
     mpControl->GrabFocus();
@@ -729,7 +729,7 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen() throw( Runtime
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpControl )
+    if( nullptr == mpControl )
         throw DisposedException();
 
     return Rectangle(

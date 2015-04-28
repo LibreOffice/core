@@ -183,6 +183,7 @@ public:
     BackgroundPreviewImpl(vcl::Window* pParent);
     void setBmp(bool bBmp);
     virtual ~BackgroundPreviewImpl();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            NotifyChange( const Color&  rColor );
     void            NotifyChange( const Bitmap* pBitmap );
@@ -230,9 +231,15 @@ void BackgroundPreviewImpl::setBmp(bool bBmp)
 
 BackgroundPreviewImpl::~BackgroundPreviewImpl()
 {
-    delete pBitmap;
+    disposeOnce();
 }
 
+void BackgroundPreviewImpl::dispose()
+{
+    delete pBitmap;
+    pBitmap = NULL;
+    vcl::Window::dispose();
+}
 
 void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 {
@@ -422,9 +429,20 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
 {
-    delete pPageImpl->pLoadIdle;
-    delete pPageImpl;
+    disposeOnce();
+}
+
+void SvxBackgroundTabPage::dispose()
+{
+    if (pPageImpl)
+    {
+        delete pPageImpl->pLoadIdle;
+        delete pPageImpl;
+        pPageImpl = NULL;
+    }
+
     delete pImportDlg;
+    pImportDlg = NULL;
 
     if( pTableBck_Impl)
     {
@@ -432,6 +450,7 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
         delete pTableBck_Impl->pRowBrush;
         delete pTableBck_Impl->pTableBrush;
         delete pTableBck_Impl;
+        pTableBck_Impl = NULL;
     }
 
     if(pParaBck_Impl)
@@ -439,21 +458,44 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
         delete pParaBck_Impl->pParaBrush;
         delete pParaBck_Impl->pCharBrush;
         delete pParaBck_Impl;
+        pParaBck_Impl = NULL;
     }
+
+    m_pAsGrid.clear();
+    m_pSelectTxt.clear();
+    m_pLbSelect.clear();
+    m_pTblDesc.clear();
+    m_pTblLBox.clear();
+    m_pParaLBox.clear();
+    m_pBackGroundColorFrame.clear();
+    m_pBackgroundColorSet.clear();
+    m_pPreviewWin1.clear();
+    m_pColTransFT.clear();
+    m_pColTransMF.clear();
+    m_pBtnPreview.clear();
+    m_pBitmapContainer.clear();
+    m_pFileFrame.clear();
+    m_pBtnBrowse.clear();
+    m_pBtnLink.clear();
+    m_pFtUnlinked.clear();
+    m_pFtFile.clear();
+    m_pTypeFrame.clear();
+    m_pBtnPosition.clear();
+    m_pBtnArea.clear();
+    m_pBtnTile.clear();
+    m_pWndPosition.clear();
+    m_pGraphTransFrame.clear();
+    m_pGraphTransMF.clear();
+    m_pPreviewWin2.clear();
+    SvxTabPage::dispose();
 }
 
 
 
-SfxTabPage* SvxBackgroundTabPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet )
-
-/*  [Description]
-
-    create method for the TabDialog
-*/
-
+VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent,
+                                                 const SfxItemSet* rAttrSet )
 {
-    return ( new SvxBackgroundTabPage( pParent, *rAttrSet ) );
+    return VclPtr<SfxTabPage>( new SvxBackgroundTabPage( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
 }
 
 

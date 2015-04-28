@@ -83,7 +83,7 @@ public:
     void                        RegisterStatusBarControl(SfxStbCtrlFactory*);
     void                        RegisterMenuControl(SfxMenuCtrlFactory*);
 
-    virtual SfxTabPage*         CreateTabPage( sal_uInt16 nId,
+    virtual VclPtr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
                                                vcl::Window* pParent,
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) SAL_OVERRIDE;

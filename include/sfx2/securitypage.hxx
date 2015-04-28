@@ -33,14 +33,12 @@ class SfxSecurityPage : public SfxTabPage
     std::unique_ptr< SfxSecurityPage_Impl > m_pImpl;
 
 protected:
-    SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& );
-    virtual ~SfxSecurityPage();
-
     virtual bool            FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
+    SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 

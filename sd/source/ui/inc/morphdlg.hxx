@@ -39,6 +39,7 @@ public:
         const SdrObject* pObj1,
         const SdrObject* pObj2);
     virtual ~MorphDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            SaveSettings() const;
     sal_uInt16      GetFadeSteps() const { return (sal_uInt16) m_pMtfSteps->GetValue(); }
@@ -46,9 +47,9 @@ public:
     bool            IsOrientationFade() const { return m_pCbxOrientation->IsChecked(); }
 
 private:
-    NumericField*   m_pMtfSteps;
-    CheckBox*       m_pCbxAttributes;
-    CheckBox*       m_pCbxOrientation;
+    VclPtr<NumericField>   m_pMtfSteps;
+    VclPtr<CheckBox>       m_pCbxAttributes;
+    VclPtr<CheckBox>       m_pCbxOrientation;
 
     void            LoadSettings();
 };

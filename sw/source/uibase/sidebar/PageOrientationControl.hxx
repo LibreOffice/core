@@ -38,9 +38,10 @@ public:
         PagePropertyPanel& rPanel,
         const bool bLandscape );
     virtual ~PageOrientationControl();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    ::svx::sidebar::ValueSetWithTextControl* mpOrientationValueSet;
+    VclPtr<::svx::sidebar::ValueSetWithTextControl> mpOrientationValueSet;
 
     bool mbLandscape;
 

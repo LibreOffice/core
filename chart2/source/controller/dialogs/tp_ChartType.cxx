@@ -56,8 +56,8 @@ private:
     DECL_LINK( SelectSchemeHdl, void* );
 
 private:
-    CheckBox* m_pCB_3DLook;
-    ListBox*  m_pLB_Scheme;
+    VclPtr<CheckBox> m_pCB_3DLook;
+    VclPtr<ListBox>  m_pLB_Scheme;
 };
 
 Dim3DLookResourceGroup::Dim3DLookResourceGroup(VclBuilderContainer* pWindow)
@@ -129,7 +129,7 @@ private:
     DECL_LINK( SortByXValuesCheckHdl, void* );
 
 private:
-    CheckBox* m_pCB_XValueSorting;
+    VclPtr<CheckBox> m_pCB_XValueSorting;
 };
 
 SortByXValuesResourceGroup::SortByXValuesResourceGroup(VclBuilderContainer* pWindow )
@@ -176,10 +176,10 @@ private:
     DECL_LINK( StackingEnableHdl, void* );
 
 private:
-    CheckBox*    m_pCB_Stacked;
-    RadioButton* m_pRB_Stack_Y;
-    RadioButton* m_pRB_Stack_Y_Percent;
-    RadioButton* m_pRB_Stack_Z;
+    VclPtr<CheckBox>    m_pCB_Stacked;
+    VclPtr<RadioButton> m_pRB_Stack_Y;
+    VclPtr<RadioButton> m_pRB_Stack_Y_Percent;
+    VclPtr<RadioButton> m_pRB_Stack_Z;
 
     bool m_bShowDeepStacking;
 };
@@ -278,7 +278,7 @@ public:
 private:
     DECL_LINK( SettingChangedHdl, void* );
 private:
-    CheckBox* m_pCB_RoundedEdge;
+    VclPtr<CheckBox> m_pCB_RoundedEdge;
 };
 
 GL3DResourceGroup::GL3DResourceGroup( VclBuilderContainer* pWindow )
@@ -313,7 +313,8 @@ class SplinePropertiesDialog : public ModalDialog
 {
 public:
     SplinePropertiesDialog( vcl::Window* pParent );
-    virtual ~SplinePropertiesDialog();
+    virtual ~SplinePropertiesDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
 
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
@@ -324,11 +325,11 @@ private:
     DECL_LINK( SplineTypeListBoxHdl, void* );
 
 private:
-    ListBox* m_pLB_Spline_Type;
+    VclPtr<ListBox>      m_pLB_Spline_Type;
 
-    NumericField* m_pMF_SplineResolution;
-    FixedText*    m_pFT_SplineOrder;
-    NumericField* m_pMF_SplineOrder;
+    VclPtr<NumericField> m_pMF_SplineResolution;
+    VclPtr<FixedText>    m_pFT_SplineOrder;
+    VclPtr<NumericField> m_pMF_SplineOrder;
 };
 
 const sal_uInt16 CUBIC_SPLINE_POS = 0;
@@ -347,8 +348,13 @@ SplinePropertiesDialog::SplinePropertiesDialog( vcl::Window* pParent )
     m_pLB_Spline_Type->SetSelectHdl( LINK (this, SplinePropertiesDialog, SplineTypeListBoxHdl ) );
 }
 
-SplinePropertiesDialog::~SplinePropertiesDialog()
+void SplinePropertiesDialog::dispose()
 {
+    m_pLB_Spline_Type.clear();
+    m_pMF_SplineResolution.clear();
+    m_pFT_SplineOrder.clear();
+    m_pMF_SplineOrder.clear();
+    ModalDialog::dispose();
 }
 
 void SplinePropertiesDialog::StateChanged( StateChangedType nType )
@@ -400,7 +406,8 @@ class SteppedPropertiesDialog : public ModalDialog
 {
 public:
     SteppedPropertiesDialog( vcl::Window* pParent );
-    virtual ~SteppedPropertiesDialog();
+    virtual ~SteppedPropertiesDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
 
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSteppedLines );
@@ -410,10 +417,10 @@ public:
 private:
 
 private:
-    RadioButton* m_pRB_Start;
-    RadioButton* m_pRB_End;
-    RadioButton* m_pRB_CenterX;
-    RadioButton* m_pRB_CenterY;
+    VclPtr<RadioButton> m_pRB_Start;
+    VclPtr<RadioButton> m_pRB_End;
+    VclPtr<RadioButton> m_pRB_CenterX;
+    VclPtr<RadioButton> m_pRB_CenterY;
 };
 
 SteppedPropertiesDialog::SteppedPropertiesDialog( vcl::Window* pParent )
@@ -427,8 +434,13 @@ SteppedPropertiesDialog::SteppedPropertiesDialog( vcl::Window* pParent )
     SetText(SCH_RESSTR(STR_DLG_STEPPED_LINE_PROPERTIES));
 }
 
-SteppedPropertiesDialog::~SteppedPropertiesDialog()
+void SteppedPropertiesDialog::dispose()
 {
+    m_pRB_Start.clear();
+    m_pRB_End.clear();
+    m_pRB_CenterX.clear();
+    m_pRB_CenterY.clear();
+    ModalDialog::dispose();
 }
 
 void SteppedPropertiesDialog::StateChanged( StateChangedType nType )
@@ -490,11 +502,11 @@ private:
     SteppedPropertiesDialog& getSteppedPropertiesDialog();
 
 private:
-    FixedText*  m_pFT_LineType;
-    ListBox*    m_pLB_LineType;
-    PushButton* m_pPB_DetailsDialog;
-    boost::scoped_ptr< SplinePropertiesDialog > m_pSplinePropertiesDialog;
-    boost::scoped_ptr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
+    VclPtr<FixedText>  m_pFT_LineType;
+    VclPtr<ListBox>    m_pLB_LineType;
+    VclPtr<PushButton> m_pPB_DetailsDialog;
+    VclPtr< SplinePropertiesDialog > m_pSplinePropertiesDialog;
+    VclPtr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
 };
 
 SplineResourceGroup::SplineResourceGroup(VclBuilderContainer* pWindow)
@@ -510,7 +522,7 @@ SplineResourceGroup::SplineResourceGroup(VclBuilderContainer* pWindow)
 SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
 {
     if( !m_pSplinePropertiesDialog.get() )
-        m_pSplinePropertiesDialog.reset( new SplinePropertiesDialog( m_pPB_DetailsDialog->GetParentDialog() ) );
+        m_pSplinePropertiesDialog.reset( VclPtr<SplinePropertiesDialog>::Create( m_pPB_DetailsDialog->GetParentDialog() ) );
     return *m_pSplinePropertiesDialog;
 }
 
@@ -518,7 +530,7 @@ SteppedPropertiesDialog& SplineResourceGroup::getSteppedPropertiesDialog()
 {
     if( !m_pSteppedPropertiesDialog.get() )
     {
-        m_pSteppedPropertiesDialog.reset( new SteppedPropertiesDialog( m_pPB_DetailsDialog->GetParentDialog() ) );
+        m_pSteppedPropertiesDialog.reset( VclPtr<SteppedPropertiesDialog>::Create( m_pPB_DetailsDialog->GetParentDialog() ) );
     }
     return *m_pSteppedPropertiesDialog;
 }
@@ -774,6 +786,11 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
 
 ChartTypeTabPage::~ChartTypeTabPage()
 {
+    disposeOnce();
+}
+
+void ChartTypeTabPage::dispose()
+{
     //delete all dialog controller
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
@@ -785,12 +802,23 @@ ChartTypeTabPage::~ChartTypeTabPage()
 
     //delete all resource helper
     delete m_pDim3DLookResourceGroup;
+    m_pDim3DLookResourceGroup = NULL;
     delete m_pStackingResourceGroup;
+    m_pStackingResourceGroup = NULL;
     delete m_pSplineResourceGroup;
+    m_pSplineResourceGroup = NULL;
     delete m_pGeometryResourceGroup;
+    m_pGeometryResourceGroup = NULL;
     delete m_pSortByXValuesResourceGroup;
+    m_pSortByXValuesResourceGroup = NULL;
     delete m_pGL3DResourceGroup;
+    m_pGL3DResourceGroup = NULL;
+    m_pFT_ChooseType.clear();
+    m_pMainTypeList.clear();
+    m_pSubTypeList.clear();
+    svt::OWizardPage::dispose();
 }
+
 ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
 {
     ChartTypeParameter aParameter;

@@ -39,17 +39,18 @@ class SdParagraphNumTabPage : public SfxTabPage
 public:
     SdParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SdParagraphNumTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
 private:
-    TriStateBox*     m_pNewStartCB;
-    TriStateBox*     m_pNewStartNumberCB;
-    NumericField*    m_pNewStartNF;
+    VclPtr<TriStateBox>     m_pNewStartCB;
+    VclPtr<TriStateBox>     m_pNewStartNumberCB;
+    VclPtr<NumericField>    m_pNewStartNF;
     bool             mbModified;
 
     DECL_LINK( ImplNewStartHdl, void* );
@@ -72,11 +73,20 @@ SdParagraphNumTabPage::SdParagraphNumTabPage(vcl::Window* pParent, const SfxItem
 
 SdParagraphNumTabPage::~SdParagraphNumTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* SdParagraphNumTabPage::Create(vcl::Window *pParent, const SfxItemSet * rAttrSet)
+void SdParagraphNumTabPage::dispose()
 {
-    return new SdParagraphNumTabPage( pParent, *rAttrSet );
+    m_pNewStartCB.clear();
+    m_pNewStartNumberCB.clear();
+    m_pNewStartNF.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SdParagraphNumTabPage::Create(vcl::Window *pParent, const SfxItemSet * rAttrSet)
+{
+    return VclPtr<SdParagraphNumTabPage>::Create( pParent, *rAttrSet );
 }
 
 const sal_uInt16* SdParagraphNumTabPage::GetRanges()

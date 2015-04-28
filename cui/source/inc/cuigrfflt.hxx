@@ -77,7 +77,7 @@ private:
     DECL_LINK( ImplModifyHdl, void* p );
 
 protected:
-    GraphicPreviewWindow*  mpPreview;
+    VclPtr<GraphicPreviewWindow>  mpPreview;
 
     const Link&     GetModifyHdl() const { return maModifyHdl; }
     const Size&     GetGraphicSizePixel() const { return maSizePixel; }
@@ -85,6 +85,8 @@ protected:
 public:
 
     GraphicFilterDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const Graphic& rGraphic);
+    virtual ~GraphicFilterDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
@@ -97,11 +99,13 @@ public:
 class GraphicFilterSmooth : public GraphicFilterDialog
 {
 private:
-    NumericField*   mpMtrRadius;
+    VclPtr<NumericField>   mpMtrRadius;
 
 public:
 
     GraphicFilterSmooth( vcl::Window* pParent, const Graphic& rGraphic, double nRadius);
+    virtual ~GraphicFilterSmooth();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     double          GetRadius() const { return mpMtrRadius->GetValue() / 10.0; }
@@ -114,14 +118,16 @@ public:
 class GraphicFilterMosaic : public GraphicFilterDialog
 {
 private:
-    MetricField*    mpMtrWidth;
-    MetricField*    mpMtrHeight;
-    CheckBox*       mpCbxEdges;
+    VclPtr<MetricField>    mpMtrWidth;
+    VclPtr<MetricField>    mpMtrHeight;
+    VclPtr<CheckBox>       mpCbxEdges;
 
 public:
 
     GraphicFilterMosaic(vcl::Window* pParent, const Graphic& rGraphic,
         sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges);
+    virtual ~GraphicFilterMosaic();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     long            GetTileWidth() const { return static_cast<long>(mpMtrWidth->GetValue()); }
@@ -136,13 +142,15 @@ public:
 class GraphicFilterSolarize : public GraphicFilterDialog
 {
 private:
-    MetricField*    mpMtrThreshold;
-    CheckBox*       mpCbxInvert;
+    VclPtr<MetricField>    mpMtrThreshold;
+    VclPtr<CheckBox>       mpCbxInvert;
 
 public:
 
     GraphicFilterSolarize( vcl::Window* pParent, const Graphic& rGraphic,
                                            sal_uInt8 nGreyThreshold, bool bInvert );
+    virtual ~GraphicFilterSolarize();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt8           GetGreyThreshold() const { return( (sal_uInt8) FRound( mpMtrThreshold->GetValue() * 2.55 ) ); }
@@ -156,10 +164,12 @@ public:
 class GraphicFilterSepia : public GraphicFilterDialog
 {
 private:
-    MetricField*    mpMtrSepia;
+    VclPtr<MetricField>    mpMtrSepia;
 public:
     GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
                         sal_uInt16 nSepiaPercent );
+    virtual ~GraphicFilterSepia();
+    virtual void dispose() SAL_OVERRIDE;
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt16 GetSepiaPercent() const
     {
@@ -174,10 +184,12 @@ public:
 class GraphicFilterPoster : public GraphicFilterDialog
 {
 private:
-    NumericField*   mpNumPoster;
+    VclPtr<NumericField>   mpNumPoster;
 public:
     GraphicFilterPoster( vcl::Window* pParent, const Graphic& rGraphic,
                          sal_uInt16 nPosterColorCount );
+    virtual ~GraphicFilterPoster();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt16      GetPosterColorCount() const { return( (sal_uInt16) mpNumPoster->GetValue() ); }
@@ -203,10 +215,12 @@ public:
 class GraphicFilterEmboss : public GraphicFilterDialog
 {
 private:
-    EmbossControl*  mpCtlLight;
+    VclPtr<EmbossControl>  mpCtlLight;
 public:
     GraphicFilterEmboss( vcl::Window* pParent, const Graphic& rGraphic,
                          RECT_POINT eLightSource );
+    virtual ~GraphicFilterEmboss();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     RECT_POINT      GetLightSource() const { return mpCtlLight->GetActualRP(); }

@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
-
+#include <vcl/vclptr.hxx>
 
 class StatusBar;
 class VCLExternalSolarLock;
@@ -51,14 +51,14 @@ class VCLXAccessibleStatusBarItem : public AccessibleTextHelper_BASE,
 
 private:
     VCLExternalSolarLock*   m_pExternalLock;
-    StatusBar*              m_pStatusBar;
+    VclPtr<StatusBar>       m_pStatusBar;
     sal_uInt16              m_nItemId;
     OUString                m_sItemName;
     OUString                m_sItemText;
-    bool                m_bShowing;
+    bool                    m_bShowing;
 
 protected:
-    bool                IsShowing();
+    bool                    IsShowing();
     void                    SetShowing( bool bShowing );
     void                    SetItemName( const OUString& sItemName );
     OUString                GetItemName();

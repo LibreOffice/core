@@ -32,6 +32,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/fract.hxx>
 #include <vcl/idle.hxx>
 
@@ -114,7 +115,7 @@ struct DragAndDropInfo
     EditPaM             aDropDest;
     sal_Int32           nOutlinerDropDest;
     ESelection          aDropSel;
-    VirtualDevice*      pBackground;
+    VclPtr<VirtualDevice> pBackground;
     const SvxFieldItem* pField;
     bool            bVisCursor              : 1;
     bool            bDroppedInMe            : 1;
@@ -223,7 +224,7 @@ private:
     LibreOfficeKitCallback mpLibreOfficeKitCallback;
     void* mpLibreOfficeKitData;
     EditEngine*         pEditEngine;
-    vcl::Window*             pOutWin;
+    VclPtr<vcl::Window> pOutWin;
     Pointer*            pPointer;
     DragAndDropInfo*    pDragAndDropInfo;
 
@@ -421,8 +422,8 @@ private:
     SfxStyleSheetPool*  pStylePool;
     SfxItemPool*        pTextObjectPool;
 
-    VirtualDevice*      pVirtDev;
-    OutputDevice*       pRefDev;
+    VclPtr< VirtualDevice> pVirtDev;
+    VclPtr< OutputDevice > pRefDev;
 
     svtools::ColorConfig*   pColorConfig;
     mutable SvtCTLOptions*  pCTLOptions;
@@ -663,7 +664,7 @@ private:
     bool                IsForceAutoColor() const { return bForceAutoColor; }
 
     inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, sal_uLong nDrawMode );
-    inline void             EraseVirtualDevice();
+    inline void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
 
     DECL_LINK(StatusTimerHdl, void *);
     DECL_LINK(IdleFormatHdl, void *);
@@ -874,7 +875,7 @@ public:
     void                UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle );
     void                RemoveStyleFromParagraphs( SfxStyleSheet* pStyle );
 
-    OutputDevice*       GetRefDevice() const { return pRefDev; }
+    OutputDevice*       GetRefDevice() const { return pRefDev.get(); }
     void                SetRefDevice( OutputDevice* pRefDef );
 
     const MapMode&      GetRefMapMode() { return pRefDev->GetMapMode(); }
@@ -1082,12 +1083,6 @@ inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, 
     pVirtDev->SetDrawMode( nDrawMode );
 
     return pVirtDev;
-}
-
-inline void ImpEditEngine::EraseVirtualDevice()
-{
-    delete pVirtDev;
-    pVirtDev = 0;
 }
 
 inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )

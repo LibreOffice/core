@@ -257,7 +257,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXListBox* _pXWindow )
 {
     bool bIsDropDownBox = false;
-    ListBox* pBox = static_cast< ListBox* >( _pXWindow->GetWindow() );
+    VclPtr< ListBox > pBox = _pXWindow->GetAs< ListBox >();
     if ( pBox )
         bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
 
@@ -290,7 +290,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXComboBox* _pXWindow )
 {
     bool bIsDropDownBox = false;
-    ComboBox* pBox = static_cast< ComboBox* >( _pXWindow->GetWindow() );
+    VclPtr< ComboBox > pBox = _pXWindow->GetAs< ComboBox >();
     if ( pBox )
         bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
 

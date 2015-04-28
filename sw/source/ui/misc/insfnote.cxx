@@ -204,10 +204,27 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(vcl::Window *pParent, SwWrtShell &rShell, boo
 
 SwInsFootNoteDlg::~SwInsFootNoteDlg()
 {
+    disposeOnce();
+}
+
+void SwInsFootNoteDlg::dispose()
+{
     SwViewShell::SetCareWin(0);
 
     if (bEdit)
         rSh.ResetSelect(0, false);
+
+    m_pNumberFrame.clear();
+    m_pNumberAutoBtn.clear();
+    m_pNumberCharBtn.clear();
+    m_pNumberCharEdit.clear();
+    m_pNumberExtChar.clear();
+    m_pFtnBtn.clear();
+    m_pEndNoteBtn.clear();
+    m_pOkBtn.clear();
+    m_pPrevBT.clear();
+    m_pNextBT.clear();
+    SvxStandardDialog::dispose();
 }
 
 void SwInsFootNoteDlg::Init()

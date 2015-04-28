@@ -49,7 +49,6 @@ namespace avmedia
         public:
 
                     MediaWindowControl( vcl::Window* pParent );
-                    virtual ~MediaWindowControl();
 
         protected:
 
@@ -67,7 +66,6 @@ namespace avmedia
 
                             MediaChildWindow( vcl::Window* pParent );
                             MediaChildWindow( vcl::Window* pParent, SystemWindowData* pData );
-                            virtual ~MediaChildWindow();
 
         protected:
 
@@ -94,6 +92,7 @@ namespace avmedia
 
                             MediaWindowImpl( vcl::Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl );
             virtual         ~MediaWindowImpl();
+            virtual void dispose() SAL_OVERRIDE;
 
             static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0 );
 
@@ -173,8 +172,8 @@ namespace avmedia
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxEventsIf;
             MediaEventListenersImpl*                                                mpEvents;
             bool                                                                    mbEventTransparent;
-            std::unique_ptr<MediaChildWindow>                                       mpChildWindow;
-            MediaWindowControl*                                                     mpMediaWindowControl;
+            VclPtr<MediaChildWindow>                                                mpChildWindow;
+            VclPtr<MediaWindowControl>                                              mpMediaWindowControl;
             BitmapEx*                                                               mpEmptyBmpEx;
             BitmapEx*                                                               mpAudioBmpEx;
         };

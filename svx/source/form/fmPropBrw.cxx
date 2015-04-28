@@ -83,11 +83,10 @@ FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    pWindow = new FmPropBrw( ::comphelper::getProcessComponentContext(), _pBindings, this, _pParent, _pInfo );
+    pWindow = VclPtr<FmPropBrw>::Create( ::comphelper::getProcessComponentContext(), _pBindings, this, _pParent, _pInfo );
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-    static_cast<SfxFloatingWindow*>(pWindow)->Initialize( _pInfo );
+    static_cast<SfxFloatingWindow*>(pWindow.get())->Initialize( _pInfo );
 }
-
 
 
 const long STD_WIN_SIZE_X = 300;
@@ -207,7 +206,7 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
         // responsibility for this window (as soon as we initialize a frame with a window, the frame
         // is responsible for its life time, but |this| is controlled by the belonging SfxChildWindow)
         // #i34249#
-        vcl::Window* pContainerWindow = new vcl::Window( this );
+        VclPtr<vcl::Window> pContainerWindow = VclPtr<vcl::Window>::Create( this );
         pContainerWindow->Show();
         m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
 
@@ -253,6 +252,11 @@ void FmPropBrw::Resize()
 
 FmPropBrw::~FmPropBrw()
 {
+    disposeOnce();
+}
+
+void FmPropBrw::dispose()
+{
     if (m_xBrowserController.is())
         implDetachController();
     try
@@ -275,6 +279,7 @@ FmPropBrw::~FmPropBrw()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+    SfxFloatingWindow::dispose();
 }
 
 

@@ -43,6 +43,7 @@ private:
 public:
     SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxXMeasurePreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;

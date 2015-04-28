@@ -82,12 +82,12 @@ namespace {
 // Begin initializer and accessor public functions
 
 OutputDevice::OutputDevice() :
+    mnRefCnt(1), // cf. VclPtrInstance and README.lifecycle
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
     mxSettings( new AllSettings(Application::GetSettings()) )
 {
-
     mpGraphics                      = NULL;
     mpUnoGraphicsList               = NULL;
     mpPrevGraphics                  = NULL;
@@ -179,11 +179,32 @@ OutputDevice::OutputDevice() :
     // #i75163#
     mpOutDevData->mpViewTransform   = NULL;
     mpOutDevData->mpInverseViewTransform = NULL;
+
+    mbDisposed = false;
 }
 
 OutputDevice::~OutputDevice()
 {
+    disposeOnce();
+}
 
+void OutputDevice::disposeOnce()
+{
+    if ( mbDisposed )
+        return;
+    mbDisposed = true;
+
+    // catch badness where our OutputDevice sub-class was not
+    // wrapped safely in a VclPtr cosily.
+    // FIXME: as/when we make our destructors all protected,
+    // we should introduce this assert:
+    //    assert( mnRefCnt > 0 );
+
+    dispose();
+}
+
+void OutputDevice::dispose()
+{
     if ( GetUnoGraphicsList() )
     {
         UnoWrapperBase* pWrapper = Application::GetUnoWrapper( false );
@@ -193,12 +214,13 @@ OutputDevice::~OutputDevice()
         mpUnoGraphicsList = NULL;
     }
 
-    delete mpOutDevData->mpRotateDev;
+    mpOutDevData->mpRotateDev.disposeAndClear();
 
     // #i75163#
     ImplInvalidateViewTransform();
 
     delete mpOutDevData;
+    mpOutDevData = NULL;
 
     // for some reason, we haven't removed state from the stack properly
     if ( !mpOutDevStateStack->empty() )
@@ -210,6 +232,7 @@ OutputDevice::~OutputDevice()
         }
     }
     delete mpOutDevStateStack;
+    mpOutDevStateStack = NULL;
 
     // release the active font instance
     if( mpFontEntry )
@@ -218,8 +241,10 @@ OutputDevice::~OutputDevice()
     // remove cached results of GetDevFontList/GetDevSizeList
     // TODO: use smart pointers for them
     delete mpGetDevFontList;
+    mpGetDevFontList = NULL;
 
     delete mpGetDevSizeList;
+    mpGetDevSizeList = NULL;
 
     // release ImplFontCache specific to this OutputDevice
     // TODO: refcount ImplFontCache
@@ -242,7 +267,7 @@ OutputDevice::~OutputDevice()
         mpFontCollection = NULL;
     }
 
-    delete mpAlphaVDev;
+    mpAlphaVDev.disposeAndClear();
 }
 
 SalGraphics* OutputDevice::GetGraphics()

@@ -81,7 +81,8 @@ class DockingWindow : public ::DockingWindow
 public:
     DockingWindow (vcl::Window* pParent);
     DockingWindow (Layout* pParent);
-public:
+    virtual ~DockingWindow();
+    virtual void dispose() SAL_OVERRIDE;
     void ResizeIfDocking (Point const&, Size const&);
     void ResizeIfDocking (Size const&);
     Size GetDockingSize () const { return aDockingRect.GetSize(); }
@@ -103,7 +104,7 @@ private:
     // the position and the size of the docking window
     Rectangle aDockingRect;
     // the parent layout window (only when docking)
-    Layout* pLayout;
+    VclPtr<Layout> pLayout;
     // > 0: shown, <= 0: hidden, ++ by Show() and -- by Hide()
     int nShowCount;
 
@@ -149,8 +150,8 @@ class EntryDescriptor;
 class BaseWindow : public vcl::Window
 {
 private:
-    ScrollBar*      pShellHScrollBar;
-    ScrollBar*      pShellVScrollBar;
+    VclPtr<ScrollBar>      pShellHScrollBar;
+    VclPtr<ScrollBar>      pShellVScrollBar;
 
     DECL_LINK( ScrollHdl, ScrollBar * );
     int nStatus;
@@ -169,6 +170,7 @@ public:
                     TYPEINFO();
     BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName );
     virtual         ~BaseWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            Init();
     virtual void    DoInit();

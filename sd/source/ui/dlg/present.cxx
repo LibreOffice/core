@@ -150,6 +150,39 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     ChangePauseHdl( NULL );
 }
 
+SdStartPresentationDlg::~SdStartPresentationDlg()
+{
+    disposeOnce();
+}
+
+void SdStartPresentationDlg::dispose()
+{
+    aRbtAll.clear();
+    aRbtAtDia.clear();
+    aRbtCustomshow.clear();
+    aLbDias.clear();
+    aLbCustomshow.clear();
+    aRbtStandard.clear();
+    aRbtWindow.clear();
+    aRbtAuto.clear();
+    aTmfPause.clear();
+    aCbxAutoLogo.clear();
+    aCbxManuel.clear();
+    aCbxMousepointer.clear();
+    aCbxPen.clear();
+    aCbxNavigator.clear();
+    aCbxAnimationAllowed.clear();
+    aCbxChangePage.clear();
+    aCbxAlwaysOnTop.clear();
+    maFtMonitor.clear();
+    maLBMonitor.clear();
+    msMonitor.clear();
+    msAllMonitors.clear();
+    msMonitorExternal.clear();
+    msExternal.clear();
+    ModalDialog::dispose();
+}
+
 OUString SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
                                                  DisplayType eType )
 {

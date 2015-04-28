@@ -86,7 +86,7 @@ private:
     static void AddInstance (const SdDrawDocument* pDocument, SlideSorterCacheDisplay* pControl);
     static void RemoveInstance (SlideSorterCacheDisplay* pControl);
 
-    vcl::Window* mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     sal_Int32 mnPageCount;
     sal_Int32 mnColumnCount;
     sal_Int32 mnRowCount;

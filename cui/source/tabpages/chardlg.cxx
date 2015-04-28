@@ -183,12 +183,16 @@ SvxCharBasePage::SvxCharBasePage(vcl::Window* pParent, const OString& rID, const
 {
 }
 
-
-
 SvxCharBasePage::~SvxCharBasePage()
 {
+    disposeOnce();
 }
 
+void SvxCharBasePage::dispose()
+{
+    m_pPreviewWin.clear();
+    SfxTabPage::dispose();
+}
 
 
 void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
@@ -375,10 +379,45 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
 
 SvxCharNamePage::~SvxCharNamePage()
 {
-    delete m_pImpl;
+    disposeOnce();
 }
 
-
+void SvxCharNamePage::dispose()
+{
+    delete m_pImpl;
+    m_pImpl = NULL;
+    m_pWestFrame.clear();
+    m_pWestFontNameFT.clear();
+    m_pWestFontNameLB.clear();
+    m_pWestFontStyleFT.clear();
+    m_pWestFontStyleLB.clear();
+    m_pWestFontSizeFT.clear();
+    m_pWestFontSizeLB.clear();
+    m_pWestFontLanguageFT.clear();
+    m_pWestFontLanguageLB.clear();
+    m_pWestFontTypeFT.clear();
+    m_pEastFrame.clear();
+    m_pEastFontNameFT.clear();
+    m_pEastFontNameLB.clear();
+    m_pEastFontStyleFT.clear();
+    m_pEastFontStyleLB.clear();
+    m_pEastFontSizeFT.clear();
+    m_pEastFontSizeLB.clear();
+    m_pEastFontLanguageFT.clear();
+    m_pEastFontLanguageLB.clear();
+    m_pEastFontTypeFT.clear();
+    m_pCTLFrame.clear();
+    m_pCTLFontNameFT.clear();
+    m_pCTLFontNameLB.clear();
+    m_pCTLFontStyleFT.clear();
+    m_pCTLFontStyleLB.clear();
+    m_pCTLFontSizeFT.clear();
+    m_pCTLFontSizeLB.clear();
+    m_pCTLFontLanguageFT.clear();
+    m_pCTLFontLanguageLB.clear();
+    m_pCTLFontTypeFT.clear();
+    SvxCharBasePage::dispose();
+}
 
 void SvxCharNamePage::Initialize()
 {
@@ -1180,9 +1219,10 @@ SfxTabPage::sfxpg SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-SfxTabPage* SvxCharNamePage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharNamePage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxCharNamePage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new SvxCharNamePage( pParent, *rSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 
@@ -1337,6 +1377,37 @@ SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& 
     Initialize();
 }
 
+SvxCharEffectsPage::~SvxCharEffectsPage()
+{
+    disposeOnce();
+}
+
+void SvxCharEffectsPage::dispose()
+{
+    m_pFontColorFT.clear();
+    m_pFontColorLB.clear();
+    m_pEffectsFT.clear();
+    m_pEffectsLB.clear();
+    m_pReliefFT.clear();
+    m_pReliefLB.clear();
+    m_pOutlineBtn.clear();
+    m_pShadowBtn.clear();
+    m_pBlinkingBtn.clear();
+    m_pHiddenBtn.clear();
+    m_pOverlineLB.clear();
+    m_pOverlineColorFT.clear();
+    m_pOverlineColorLB.clear();
+    m_pStrikeoutLB.clear();
+    m_pUnderlineLB.clear();
+    m_pUnderlineColorFT.clear();
+    m_pUnderlineColorLB.clear();
+    m_pIndividualWordsBtn.clear();
+    m_pEmphasisFT.clear();
+    m_pEmphasisLB.clear();
+    m_pPositionFT.clear();
+    m_pPositionLB.clear();
+    SvxCharBasePage::dispose();
+}
 
 
 void SvxCharEffectsPage::Initialize()
@@ -1439,12 +1510,6 @@ void SvxCharEffectsPage::Initialize()
         m_pPositionLB->Hide();
     }
 }
-
-SvxCharEffectsPage::~SvxCharEffectsPage()
-{
-}
-
-
 
 void SvxCharEffectsPage::UpdatePreview_Impl()
 {
@@ -1643,7 +1708,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
         m_pOutlineBtn->Enable( bEnable );
         m_pShadowBtn->Enable( bEnable );
     }
-    else if ( m_pPositionLB != pBox )
+    else if ( m_pPositionLB.get() != pBox )
     {
         sal_Int32 nUPos = m_pUnderlineLB->GetSelectEntryPos(),
                nOPos = m_pOverlineLB->GetSelectEntryPos(),
@@ -1720,9 +1785,10 @@ SfxTabPage::sfxpg SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-SfxTabPage* SvxCharEffectsPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharEffectsPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxCharEffectsPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new SvxCharEffectsPage( pParent, *rSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 
@@ -2585,6 +2651,35 @@ SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet
     Initialize();
 }
 
+SvxCharPositionPage::~SvxCharPositionPage()
+{
+    disposeOnce();
+}
+
+void SvxCharPositionPage::dispose()
+{
+    m_pHighPosBtn.clear();
+    m_pNormalPosBtn.clear();
+    m_pLowPosBtn.clear();
+    m_pHighLowFT.clear();
+    m_pHighLowMF.clear();
+    m_pHighLowRB.clear();
+    m_pFontSizeFT.clear();
+    m_pFontSizeMF.clear();
+    m_pRotationContainer.clear();
+    m_pScalingFT.clear();
+    m_pScalingAndRotationFT.clear();
+    m_p0degRB.clear();
+    m_p90degRB.clear();
+    m_p270degRB.clear();
+    m_pFitToLineCB.clear();
+    m_pScaleWidthMF.clear();
+    m_pKerningLB.clear();
+    m_pKerningFT.clear();
+    m_pKerningMF.clear();
+    m_pPairKerningBtn.clear();
+    SvxCharBasePage::dispose();
+}
 
 
 void SvxCharPositionPage::Initialize()
@@ -2626,12 +2721,6 @@ void SvxCharPositionPage::Initialize()
     m_pPairKerningBtn->SetClickHdl( LINK( this, SvxCharPositionPage, PairKerningHdl_Impl ) );
     m_pScaleWidthMF->SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
 }
-
-SvxCharPositionPage::~SvxCharPositionPage()
-{
-}
-
-
 
 void SvxCharPositionPage::UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
 {
@@ -2887,9 +2976,10 @@ SfxTabPage::sfxpg SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-SfxTabPage* SvxCharPositionPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharPositionPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxCharPositionPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new SvxCharPositionPage( pParent, *rSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 
@@ -3323,9 +3413,17 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet&
 
 SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
 {
+    disposeOnce();
 }
 
-
+void SvxCharTwoLinesPage::dispose()
+{
+    m_pTwoLinesBtn.clear();
+    m_pEnclosingFrame.clear();
+    m_pStartBracketLB.clear();
+    m_pEndBracketLB.clear();
+    SvxCharBasePage::dispose();
+}
 
 void SvxCharTwoLinesPage::Initialize()
 {
@@ -3351,7 +3449,7 @@ void SvxCharTwoLinesPage::Initialize()
 void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 {
     bool bStart = pBox == m_pStartBracketLB;
-    boost::scoped_ptr<SvxCharacterMap> aDlg(new SvxCharacterMap( this ));
+    VclPtrInstance< SvxCharacterMap > aDlg( this );
     aDlg->DisableFontSelection();
 
     if ( aDlg->Execute() == RET_OK )
@@ -3451,9 +3549,10 @@ SfxTabPage::sfxpg SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-SfxTabPage* SvxCharTwoLinesPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxCharTwoLinesPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>( new SvxCharTwoLinesPage( pParent, *rSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )

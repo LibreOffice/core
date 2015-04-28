@@ -53,6 +53,7 @@ class EditControl : public Edit
     public:
         EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* pEditListener );
         virtual ~EditControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Modify() SAL_OVERRIDE;
         virtual void KeyInput( const ::KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -72,7 +73,13 @@ EditControl::EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* p
 
 EditControl::~EditControl()
 {
+    disposeOnce();
+}
+
+void EditControl::dispose()
+{
     m_pEditListener = 0;
+    Edit::dispose();
 }
 
 void EditControl::Modify()
@@ -124,7 +131,7 @@ EditToolbarController::EditToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pEditControl( 0 )
 {
-    m_pEditControl = new EditControl( m_pToolbar, WB_BORDER, this );
+    m_pEditControl = VclPtr<EditControl>::Create( m_pToolbar, WB_BORDER, this );
     if ( nWidth == 0 )
         nWidth = 100;
 
@@ -145,11 +152,9 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
-    delete m_pEditControl;
+    m_pEditControl.disposeAndClear();
 
     ComplexToolbarController::dispose();
-
-    m_pEditControl = 0;
 }
 
 Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

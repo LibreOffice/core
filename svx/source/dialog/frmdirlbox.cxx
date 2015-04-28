@@ -44,10 +44,6 @@ FrameDirectionListBox::FrameDirectionListBox( vcl::Window* pParent, WinBits nBit
 {
 }
 
-FrameDirectionListBox::~FrameDirectionListBox()
-{
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFrameDirectionListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     FrameDirectionListBox* pListBox = new FrameDirectionListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);

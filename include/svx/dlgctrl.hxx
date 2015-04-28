@@ -100,6 +100,7 @@ public:
     void SetControlSettings(RECT_POINT eRpt = RP_MM, sal_uInt16 nBorder = 200,
         sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT);
     virtual ~SvxRectCtl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -179,6 +180,7 @@ public:
     SvxPixelCtl( vcl::Window* pParent, sal_uInt16 nNumber = 8 );
 
     virtual ~SvxPixelCtl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -322,7 +324,6 @@ private:
 
 public:
     LineLB(vcl::Window* pParent, WinBits aWB);
-    virtual ~LineLB();
 
     void Fill(const XDashListRef &pList);
     bool getAddStandardFields() const { return mbAddStandardFields; }
@@ -341,14 +342,12 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED LineEndLB : public ListBox
 
 public:
     LineEndLB( vcl::Window* pParent, WinBits aWB );
-    virtual ~LineEndLB();
 
     void Fill( const XLineEndListRef &pList, bool bStart = true );
 
     void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart = true );
     void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap, bool bStart = true );
 };
-
 
 
 class SdrObject;
@@ -358,8 +357,8 @@ class SdrModel;
 class SAL_WARN_UNUSED SvxPreviewBase : public Control
 {
 private:
-    SdrModel*                                       mpModel;
-    VirtualDevice*                                  mpBufferDevice;
+    SdrModel*             mpModel;
+    VclPtr<VirtualDevice> mpBufferDevice;
 
 protected:
     void InitSettings(bool bForeground, bool bBackground);
@@ -373,6 +372,7 @@ protected:
 public:
     SvxPreviewBase(vcl::Window* pParent);
     virtual ~SvxPreviewBase();
+    virtual void dispose() SAL_OVERRIDE;
 
     // change support
     virtual void StateChanged(StateChangedType nStateChange) SAL_OVERRIDE;
@@ -403,6 +403,7 @@ private:
 public:
     SvxXLinePreview( vcl::Window* pParent );
     virtual ~SvxXLinePreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
 
@@ -429,6 +430,7 @@ private:
 public:
     SvxXRectPreview(vcl::Window* pParent);
     virtual ~SvxXRectPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
@@ -454,6 +456,7 @@ public:
     SvxXShadowPreview(vcl::Window *pParent);
 
     virtual ~SvxXShadowPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetRectangleAttributes(const SfxItemSet& rItemSet);
     void SetShadowAttributes(const SfxItemSet& rItemSet);

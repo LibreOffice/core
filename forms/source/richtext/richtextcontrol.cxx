@@ -290,7 +290,7 @@ namespace frm
         pPeer->acquire();   // by definition, the returned object is acquired once
 
         // the VCL control for the peer
-        RichTextControl* pRichTextControl = new RichTextControl( pEngine, _pParentWindow, _nStyle, NULL, pPeer );
+        VclPtrInstance<RichTextControl> pRichTextControl( pEngine, _pParentWindow, _nStyle, nullptr, pPeer );
 
         // some knittings
         pRichTextControl->SetComponentInterface( pPeer );
@@ -314,7 +314,7 @@ namespace frm
     {
         {
             SolarMutexGuard aGuard;
-            RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
+            VclPtr< RichTextControl > pRichTextControl = GetAs< RichTextControl >();
 
             if ( pRichTextControl )
             {
@@ -340,7 +340,7 @@ namespace frm
     {
         SolarMutexGuard aGuard;
 
-        RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
+        VclPtr< RichTextControl > pControl = GetAs< RichTextControl >();
         if ( !pControl )
             return;
 
@@ -375,7 +375,7 @@ namespace frm
 
         if ( _rPropertyName == PROPERTY_BACKGROUNDCOLOR )
         {
-            RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
+            VclPtr< RichTextControl > pControl = GetAs< RichTextControl >();
             if ( !_rValue.hasValue() )
             {
                 pControl->SetBackgroundColor( );
@@ -401,7 +401,7 @@ namespace frm
         }
         else if ( _rPropertyName == PROPERTY_READONLY )
         {
-            RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
+            VclPtr< RichTextControl > pControl = GetAs< RichTextControl >();
             bool bReadOnly( pControl->IsReadOnly() );
             OSL_VERIFY( _rValue >>= bReadOnly );
             pControl->SetReadOnly( bReadOnly );
@@ -417,7 +417,7 @@ namespace frm
         }
         else if ( _rPropertyName == PROPERTY_HIDEINACTIVESELECTION )
         {
-            RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
+            VclPtr< RichTextControl > pRichTextControl = GetAs< RichTextControl >();
             bool bHide = pRichTextControl->GetHideInactiveSelection();
             OSL_VERIFY( _rValue >>= bHide );
             pRichTextControl->SetHideInactiveSelection( bHide );
@@ -469,7 +469,7 @@ namespace frm
 
     ORichTextPeer::SingleAttributeDispatcher ORichTextPeer::implCreateDispatcher( SfxSlotId _nSlotId, const ::com::sun::star::util::URL& _rURL )
     {
-        RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
+        VclPtr< RichTextControl > pRichTextControl = GetAs< RichTextControl >();
         OSL_PRECOND( pRichTextControl, "ORichTextPeer::implCreateDispatcher: invalid window!" );
         if ( !pRichTextControl )
             return SingleAttributeDispatcher( NULL );

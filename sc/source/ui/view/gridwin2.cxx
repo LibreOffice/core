@@ -395,7 +395,7 @@ public:
         mpGridWindow->UpdateDPFromFieldPopupMenu();
     }
 private:
-    ScGridWindow* mpGridWindow;
+    VclPtr<ScGridWindow> mpGridWindow;
 };
 
 class PopupSortAction : public ScMenuFloatingWindow::Action
@@ -455,7 +455,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 
     const ScDPLabelData& rLabelData = pDPData->maLabels;
 
-    mpDPFieldPopup.reset(new ScCheckListMenuWindow(this, pViewData->GetDocument()));
+    mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pViewData->GetDocument()));
     mpDPFieldPopup->setName("DataPilot field member popup");
     mpDPFieldPopup->setExtendedData(pDPData.release());
     mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));

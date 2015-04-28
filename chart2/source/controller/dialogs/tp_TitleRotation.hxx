@@ -31,21 +31,22 @@ namespace chart
 class SchAlignmentTabPage : public SfxTabPage
 {
 private:
-    svx::DialControl*        m_pCtrlDial;
-    FixedText*               m_pFtRotate;
-    NumericField*            m_pNfRotate;
-    TriStateBox*             m_pCbStacked;
+    VclPtr<svx::DialControl>        m_pCtrlDial;
+    VclPtr<FixedText>               m_pFtRotate;
+    VclPtr<NumericField>            m_pNfRotate;
+    VclPtr<TriStateBox>             m_pCbStacked;
     svx::OrientationHelper*  m_pOrientHlp;
-    FixedText*               m_pFtTextDirection;
-    TextDirectionListBox*    m_pLbTextDirection;
-    FixedText*               m_pFtABCD;
+    VclPtr<FixedText>               m_pFtTextDirection;
+    VclPtr<TextDirectionListBox>    m_pLbTextDirection;
+    VclPtr<FixedText>               m_pFtABCD;
 
 public:
     SchAlignmentTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bWithRotation = true);
     virtual ~SchAlignmentTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
-    static SfxTabPage* CreateWithoutRotation(vcl::Window* pParent, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
+    static VclPtr<SfxTabPage> CreateWithoutRotation(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
 };

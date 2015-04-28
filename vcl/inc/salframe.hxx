@@ -33,6 +33,8 @@
 #include <vcl/impdel.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/window.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <vcl/window.hxx>
     // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
@@ -100,11 +102,11 @@ class VCL_PLUGIN_PUBLIC SalFrame
     , public SalGeometryProvider
 {
     // the VCL window corresponding to this frame
-    vcl::Window*            m_pWindow;
+    VclPtr<vcl::Window>     m_pWindow;
     SALFRAMEPROC            m_pProc;
 
 public:
-                            SalFrame() : m_pWindow( NULL ), m_pProc( NULL ) {}
+                            SalFrame();
     virtual                 ~SalFrame();
 
     SalFrameGeometry        maGeometry;
@@ -230,8 +232,7 @@ public:
 
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
-    void                    SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc )
-        { m_pWindow = pWindow; m_pProc = pProc; }
+    void                    SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc );
 
     // returns the instance set
     vcl::Window*            GetWindow() const { return m_pWindow; }

@@ -28,7 +28,6 @@ class MenuButton
 {
 public:
     MenuButton (vcl::Window* pParentWindow);
-    virtual ~MenuButton();
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;

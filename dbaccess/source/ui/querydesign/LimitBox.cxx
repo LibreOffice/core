@@ -47,10 +47,6 @@ LimitBox::LimitBox( vcl::Window* pParent, WinBits nStyle )
     SetSizePixel(aSize);
 }
 
-LimitBox::~LimitBox()
-{
-}
-
 OUString LimitBox::CreateFieldText( sal_Int64 nValue ) const
 {
     if( nValue == ALL_INT )
@@ -114,8 +110,7 @@ void LimitBox::LoadDefaultLimits()
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLimitBox( vcl::Window *pParent, VclBuilder::stringmap & )
 {
-    LimitBox* pBox = new LimitBox( pParent, WB_DROPDOWN | WB_VSCROLL );
-    return pBox;
+    return new LimitBox( pParent, WB_DROPDOWN | WB_VSCROLL );
 }
 
 

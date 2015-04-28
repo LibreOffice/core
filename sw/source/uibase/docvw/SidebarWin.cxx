@@ -137,6 +137,14 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
 
 SwSidebarWin::~SwSidebarWin()
 {
+    disposeOnce();
+}
+
+void SwSidebarWin::dispose()
+{
+    if (IsDisposed())
+        return;
+
     mrMgr.DisconnectSidebarWinFromFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
                                        *this );
 
@@ -148,9 +156,8 @@ SwSidebarWin::~SwSidebarWin()
         {
             mpOutlinerView->SetWindow( 0 );
         }
-        delete mpSidebarTxtControl;
-        mpSidebarTxtControl = 0;
     }
+    mpSidebarTxtControl.disposeAndClear();
 
     if ( mpOutlinerView )
     {
@@ -167,23 +174,20 @@ SwSidebarWin::~SwSidebarWin()
     if (mpMetadataAuthor)
     {
         mpMetadataAuthor->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-        delete mpMetadataAuthor;
-        mpMetadataAuthor = 0;
     }
+    mpMetadataAuthor.disposeAndClear();
 
     if (mpMetadataDate)
     {
         mpMetadataDate->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-        delete mpMetadataDate;
-        mpMetadataDate = 0;
     }
+    mpMetadataDate.disposeAndClear();
 
     if (mpVScrollbar)
     {
         mpVScrollbar->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-        delete mpVScrollbar;
-        mpVScrollbar = 0;
     }
+    mpVScrollbar.disposeAndClear();
 
     RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
@@ -196,11 +200,12 @@ SwSidebarWin::~SwSidebarWin()
     delete mpTextRangeOverlay;
     mpTextRangeOverlay = NULL;
 
-    delete mpMenuButton;
-    mpMenuButton = 0;
+    mpMenuButton.disposeAndClear();
 
     if (mnEventId)
         Application::RemoveUserEvent( mnEventId );
+
+    vcl::Window::dispose();
 }
 
 void SwSidebarWin::Paint( const Rectangle& rRect)
@@ -351,13 +356,13 @@ void SwSidebarWin::InitControls()
     AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
     // actual window which holds the user text
-    mpSidebarTxtControl = new SidebarTxtControl( *this,
+    mpSidebarTxtControl = VclPtr<SidebarTxtControl>::Create( *this,
                                                  WB_NODIALOGCONTROL,
                                                  mrView, mrMgr );
     mpSidebarTxtControl->SetPointer(Pointer(POINTER_TEXT));
 
     // window controls for author and date
-    mpMetadataAuthor = new Edit( this, 0 );
+    mpMetadataAuthor = VclPtr<Edit>::Create( this, 0 );
     mpMetadataAuthor->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
     mpMetadataAuthor->EnableRTL(AllSettings::GetLayoutRTL());
     mpMetadataAuthor->SetReadOnly();
@@ -376,7 +381,7 @@ void SwSidebarWin::InitControls()
         mpMetadataAuthor->SetSettings(aSettings);
     }
 
-    mpMetadataDate = new Edit( this, 0 );
+    mpMetadataDate = VclPtr<Edit>::Create( this, 0 );
     mpMetadataDate->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_DATE_NAME ) );
     mpMetadataDate->EnableRTL(AllSettings::GetLayoutRTL());
     mpMetadataDate->SetReadOnly();
@@ -410,7 +415,7 @@ void SwSidebarWin::InitControls()
     mpOutlinerView->SetAttribs(DefaultItem());
 
     //create Scrollbars
-    mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+    mpVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
     mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
     mpVScrollbar->SetScrollHdl(LINK(this, SwSidebarWin, ScrollHdl));
@@ -1370,7 +1375,7 @@ void SwSidebarWin::SetChangeTracking( const SwPostItHelper::SwLayoutStatus aLayo
 
 bool SwSidebarWin::HasScrollbar() const
 {
-    return mpVScrollbar != 0;
+    return mpVScrollbar != nullptr;
 }
 
 bool SwSidebarWin::IsScrollbarVisible() const

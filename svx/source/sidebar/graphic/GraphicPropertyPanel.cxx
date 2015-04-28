@@ -66,12 +66,33 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     Initialize();
 }
 
-
-
 GraphicPropertyPanel::~GraphicPropertyPanel()
 {
+    disposeOnce();
 }
 
+void GraphicPropertyPanel::dispose()
+{
+    mpMtrBrightness.clear();
+    mpMtrContrast.clear();
+    mpLBColorMode.clear();
+    mpMtrTrans.clear();
+    mpMtrRed.clear();
+    mpMtrGreen.clear();
+    mpMtrBlue.clear();
+    mpMtrGamma.clear();
+
+    maBrightControl.dispose();
+    maContrastControl.dispose();
+    maTransparenceControl.dispose();
+    maRedControl.dispose();
+    maGreenControl.dispose();
+    maBlueControl.dispose();
+    maGammaControl.dispose();
+    maModeControl.dispose();
+
+    PanelLayout::dispose();
+}
 
 
 void GraphicPropertyPanel::Initialize()
@@ -221,7 +242,7 @@ void GraphicPropertyPanel::SetupIcons()
 
 
 
-GraphicPropertyPanel* GraphicPropertyPanel::Create (
+VclPtr<vcl::Window> GraphicPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -233,10 +254,10 @@ GraphicPropertyPanel* GraphicPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to GraphicPropertyPanel::Create", NULL, 2);
 
-    return new GraphicPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return VclPtr<GraphicPropertyPanel>::Create(
+                pParent,
+                rxFrame,
+                pBindings);
 }
 
 

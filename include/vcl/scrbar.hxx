@@ -91,6 +91,7 @@ private:
 public:
     explicit        ScrollBar( vcl::Window* pParent, WinBits nStyle = WB_VERT );
     virtual         ~ScrollBar();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
@@ -140,8 +141,6 @@ public:
 
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
-
-typedef rtl::Reference<ScrollBar> ScrollBarPtr;
 
 
 // - ScrollBarBox -

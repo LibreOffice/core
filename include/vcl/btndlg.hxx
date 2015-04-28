@@ -40,6 +40,7 @@ class VCL_DLLPUBLIC ButtonDialog : public Dialog
 public:
                         ButtonDialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
     virtual             ~ButtonDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

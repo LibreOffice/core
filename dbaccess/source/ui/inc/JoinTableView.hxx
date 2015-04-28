@@ -23,6 +23,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/rtti.hxx>
 #include <svtools/transfer.hxx>
 
@@ -51,10 +52,10 @@ namespace dbaui
     class OJoinTableView;
     class OScrollWindowHelper : public vcl::Window
     {
-        ScrollBar           m_aHScrollBar;
-        ScrollBar           m_aVScrollBar;
-        vcl::Window*             m_pCornerWindow;
-        OJoinTableView*     m_pTableView;
+        VclPtr<ScrollBar>          m_aHScrollBar;
+        VclPtr<ScrollBar>          m_aVScrollBar;
+        VclPtr<vcl::Window>        m_pCornerWindow;
+        VclPtr<OJoinTableView>     m_pTableView;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;
@@ -62,14 +63,15 @@ namespace dbaui
     public:
         OScrollWindowHelper( vcl::Window* pParent);
         virtual ~OScrollWindowHelper();
+        virtual void dispose() SAL_OVERRIDE;
 
         void setTableView(OJoinTableView* _pTableView);
 
         void resetRange(const Point& _aSize);
 
         // own methods
-        ScrollBar& GetHScrollBar() { return m_aHScrollBar; }
-        ScrollBar& GetVScrollBar() { return m_aVScrollBar; }
+        ScrollBar& GetHScrollBar() { return *m_aHScrollBar.get(); }
+        ScrollBar& GetVScrollBar() { return *m_aVScrollBar.get(); }
     };
 
 
@@ -80,11 +82,11 @@ namespace dbaui
         friend class OJoinMoveTabWinUndoAct;
 
     public:
-        typedef std::map<OUString, OTableWindow*> OTableWindowMap;
+        typedef std::map<OUString, VclPtr<OTableWindow> > OTableWindowMap;
 
     private:
         OTableWindowMap     m_aTableMap;
-        ::std::vector<OTableConnection*>    m_vTableConnection;
+        ::std::vector<VclPtr<OTableConnection> >    m_vTableConnection;
 
         Idle                m_aDragScrollIdle;
         Rectangle           m_aDragRect;
@@ -95,9 +97,9 @@ namespace dbaui
         Size                m_aOutputSize;
 
 
-        OTableWindow*           m_pDragWin;
-        OTableWindow*           m_pSizingWin;
-        OTableConnection*       m_pSelectedConn;
+        VclPtr<OTableWindow>           m_pDragWin;
+        VclPtr<OTableWindow>           m_pSizingWin;
+        VclPtr<OTableConnection>       m_pSelectedConn;
 
 
         bool                    m_bTrackingInitiallyMoved;
@@ -105,13 +107,14 @@ namespace dbaui
         DECL_LINK(OnDragScrollTimer, void*);
 
     protected:
-        OTableWindow*               m_pLastFocusTabWin;
-        OJoinDesignView*            m_pView;
+        VclPtr<OTableWindow>               m_pLastFocusTabWin;
+        VclPtr<OJoinDesignView>            m_pView;
         OJoinDesignViewAccess*      m_pAccessible;
 
     public:
         OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView );
         virtual ~OJoinTableView();
+        virtual void dispose() SAL_OVERRIDE;
 
         // window override
         virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
@@ -180,7 +183,7 @@ namespace dbaui
 
         /** gives a read only access to the connection vector
         */
-        const ::std::vector<OTableConnection*>& getTableConnections() const { return m_vTableConnection; }
+        const ::std::vector<VclPtr<OTableConnection> >& getTableConnections() const { return m_vTableConnection; }
 
         bool ExistsAConn(const OTableWindow* pFromWin) const;
 
@@ -189,7 +192,7 @@ namespace dbaui
             @param  _pFromWin   the table for which connections should be found
             @return an iterator which can be used to travel all connections of the table
         */
-        ::std::vector<OTableConnection*>::const_iterator getTableConnections(const OTableWindow* _pFromWin) const;
+        ::std::vector<VclPtr<OTableConnection> >::const_iterator getTableConnections(const OTableWindow* _pFromWin) const;
 
         /** how many connection belongs to single table
 
@@ -290,7 +293,7 @@ namespace dbaui
             @param _pData The data corresponding to the window.
             @return The new TableWindow
         */
-        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData) = 0;
+        virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) = 0;
 
         /** determines whether the classes Init method should accept a query
             name, or only table names */

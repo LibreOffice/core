@@ -39,6 +39,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/evntpost.hxx>
+#include <vcl/vclptr.hxx>
 
 class SystemWindow;
 
@@ -105,7 +106,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
         /** @short  holded alive for internally asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 
-        SystemWindow* m_pSysWindow;
+        VclPtr<SystemWindow> m_pSysWindow;
 
     // native interface
 

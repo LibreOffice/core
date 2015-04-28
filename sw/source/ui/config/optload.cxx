@@ -125,10 +125,34 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pShowStandardizedPageCount->SetClickHdl(aLink);
 }
 
-SfxTabPage* SwLoadOptPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+SwLoadOptPage::~SwLoadOptPage()
 {
-    return new SwLoadOptPage(pParent, *rAttrSet );
+    disposeOnce();
+}
+
+void SwLoadOptPage::dispose()
+{
+    m_pAlwaysRB.clear();
+    m_pRequestRB.clear();
+    m_pNeverRB.clear();
+    m_pAutoUpdateFields.clear();
+    m_pAutoUpdateCharts.clear();
+    m_pMetricLB.clear();
+    m_pTabFT.clear();
+    m_pTabMF.clear();
+    m_pUseSquaredPageMode.clear();
+    m_pUseCharUnit.clear();
+    m_pWordCountED.clear();
+    m_pShowStandardizedPageCount.clear();
+    m_pStandardizedPageSizeNF.clear();
+    SfxTabPage::dispose();
+}
+
+
+VclPtr<SfxTabPage> SwLoadOptPage::Create( vcl::Window* pParent,
+                                          const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SwLoadOptPage>::Create(pParent, *rAttrSet );
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl)
@@ -517,17 +541,41 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
 
 SwCaptionOptPage::~SwCaptionOptPage()
 {
+    disposeOnce();
+}
+
+void SwCaptionOptPage::dispose()
+{
     DelUserData();
     delete pMgr;
+    m_pCheckLB.clear();
+    m_pLbCaptionOrder.clear();
+    m_pPreview.clear();
+    m_pSettingsGroup.clear();
+    m_pCategoryBox.clear();
+    m_pFormatText.clear();
+    m_pFormatBox.clear();
+    m_pNumberingSeparatorFT.clear();
+    m_pNumberingSeparatorED.clear();
+    m_pTextText.clear();
+    m_pTextEdit.clear();
+    m_pPosBox.clear();
+    m_pNumCapt.clear();
+    m_pLbLevel.clear();
+    m_pEdDelim.clear();
+    m_pCategory.clear();
+    m_pCharStyleLB.clear();
+    m_pApplyBorderCB.clear();
+    SfxTabPage::dispose();
 }
 
-SfxTabPage* SwCaptionOptPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCaptionOptPage::Create( vcl::Window* pParent,
+                                             const SfxItemSet* rAttrSet )
 {
-    return new SwCaptionOptPage(pParent, *rAttrSet );
+    return VclPtr<SwCaptionOptPage>::Create( pParent, *rAttrSet );
 }
 
-bool SwCaptionOptPage::FillItemSet( SfxItemSet*  )
+bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();

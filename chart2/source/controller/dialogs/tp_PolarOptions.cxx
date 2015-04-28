@@ -46,11 +46,23 @@ PolarOptionsTabPage::PolarOptionsTabPage( vcl::Window* pWindow,const SfxItemSet&
 
 PolarOptionsTabPage::~PolarOptionsTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* PolarOptionsTabPage::Create( vcl::Window* pWindow,const SfxItemSet* rOutAttrs )
+void PolarOptionsTabPage::dispose()
 {
-    return new PolarOptionsTabPage( pWindow, *rOutAttrs );
+    m_pCB_Clockwise.clear();
+    m_pFL_StartingAngle.clear();
+    m_pAngleDial.clear();
+    m_pNF_StartingAngle.clear();
+    m_pFL_PlotOptions.clear();
+    m_pCB_IncludeHiddenCells.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> PolarOptionsTabPage::Create( vcl::Window* pWindow,const SfxItemSet* rOutAttrs )
+{
+    return VclPtr<PolarOptionsTabPage>::Create( pWindow, *rOutAttrs );
 }
 
 bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )

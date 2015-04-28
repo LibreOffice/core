@@ -139,7 +139,7 @@ public:
         the content window.
         It does not include the ViewTabBar.
     */
-    ::boost::scoped_ptr< vcl::Window> mpViewWindow;
+    VclPtr<vcl::Window> mpViewWindow;
     ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
     ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
     ::boost::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
@@ -204,6 +204,7 @@ class FocusForwardingWindow : public vcl::Window
 public:
     FocusForwardingWindow (vcl::Window& rParentWindow, ViewShellBase& rBase);
     virtual ~FocusForwardingWindow();
+    virtual void dispose() SAL_OVERRIDE;
     virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
     virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
 
@@ -239,7 +240,7 @@ ViewShellBase::ViewShellBase (
       mpDocument (NULL)
 {
     mpImpl.reset(new Implementation(*this));
-    mpImpl->mpViewWindow.reset(new FocusForwardingWindow(_pFrame->GetWindow(),*this));
+    mpImpl->mpViewWindow = VclPtr<FocusForwardingWindow>::Create(_pFrame->GetWindow(),*this);
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
 
     _pFrame->GetWindow().SetBackground(Application::GetSettings().GetStyleSettings().GetLightColor());
@@ -532,11 +533,11 @@ sal_uInt16 ViewShellBase::SetPrinter (
         bool bScaleAll = false;
         if ( bIsAPI )
         {
-            WarningBox aWarnBox (
+            ScopedVclPtrInstance<WarningBox> aWarnBox (
                 GetWindow(),
                 (WinBits)(WB_YES_NO | WB_DEF_YES),
                 SD_RESSTR(STR_SCALE_OBJS_TO_PAGE));
-            bScaleAll = (aWarnBox.Execute() == RET_YES);
+            bScaleAll = (aWarnBox->Execute() == RET_YES);
         }
 
         ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
@@ -1027,7 +1028,7 @@ ViewShellBase::Implementation::~Implementation()
 {
     mpController = NULL;
     mpViewTabBar = NULL;
-    mpViewWindow.reset();
+    mpViewWindow.disposeAndClear();
     mpToolBarManager.reset();
 }
 
@@ -1385,7 +1386,13 @@ FocusForwardingWindow::FocusForwardingWindow (
 
 FocusForwardingWindow::~FocusForwardingWindow()
 {
+    disposeOnce();
+}
+
+void FocusForwardingWindow::dispose()
+{
     SAL_INFO("sd.view", "destroyed FocusForwardingWindow at " << this);
+    vcl::Window::dispose();
 }
 
 void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)

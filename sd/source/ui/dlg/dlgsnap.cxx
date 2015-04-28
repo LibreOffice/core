@@ -111,6 +111,25 @@ SdSnapLineDlg::SdSnapLineDlg(
     m_pRbPoint->Check();
 }
 
+SdSnapLineDlg::~SdSnapLineDlg()
+{
+    disposeOnce();
+}
+
+void SdSnapLineDlg::dispose()
+{
+    m_pFtX.clear();
+    m_pMtrFldX.clear();
+    m_pFtY.clear();
+    m_pMtrFldY.clear();
+    m_pRadioGroup.clear();
+    m_pRbPoint.clear();
+    m_pRbVert.clear();
+    m_pRbHorz.clear();
+    m_pBtnDelete.clear();
+    ModalDialog::dispose();
+}
+
 /**
  * fills provided item sets with dialog box attributes
  */

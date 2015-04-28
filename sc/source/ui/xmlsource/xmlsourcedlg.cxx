@@ -115,9 +115,28 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     mpBtnSelectSource->GrabFocus(); // Initial focus is on the select source button.
 }
 
+ScXMLSourceDlg::~ScXMLSourceDlg()
+{
+    disposeOnce();
+}
+
+void ScXMLSourceDlg::dispose()
+{
+    mpBtnSelectSource.clear();
+    mpFtSourceFile.clear();
+    mpMapGrid.clear();
+    mpLbTree.clear();
+    mpRefEdit.clear();
+    mpRefBtn.clear();
+    mpBtnOk.clear();
+    mpBtnCancel.clear();
+    mpActiveEdit.clear();
+    ScAnyRefDlg::dispose();
+}
+
 bool ScXMLSourceDlg::IsRefInputMode() const
 {
-    return mpActiveEdit != NULL && mpActiveEdit->IsEnabled();
+    return mpActiveEdit != nullptr && mpActiveEdit->IsEnabled();
 }
 
 void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)

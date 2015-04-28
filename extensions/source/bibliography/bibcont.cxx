@@ -31,6 +31,7 @@
 
 #include "datman.hxx"
 #include "bibcont.hxx"
+#include "bibview.hxx"
 
 
 BibShortCutHandler::~BibShortCutHandler()
@@ -56,19 +57,10 @@ BibSplitWindow::BibSplitWindow( vcl::Window* pParent, WinBits nStyle ) : SplitWi
 {
 }
 
-BibSplitWindow::~BibSplitWindow()
-{
-}
-
 BibTabPage::BibTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
                         TabPage( pParent, rID, rUIXMLDescription ), BibShortCutHandler( this )
 {
 }
-
-BibTabPage::~BibTabPage()
-{
-}
-
 
 using namespace osl;
 using namespace ::com::sun::star;
@@ -94,12 +86,18 @@ BibWindowContainer::BibWindowContainer( vcl::Window* pParent, BibShortCutHandler
 
 BibWindowContainer::~BibWindowContainer()
 {
+    disposeOnce();
+}
+
+void BibWindowContainer::dispose()
+{
     if( pChild )
     {
-        vcl::Window* pDel = GetChild();
+        VclPtr<vcl::Window> pDel = GetChild();
         pChild = NULL;          // prevents GetFocus for child while deleting!
-        delete pDel;
+        pDel.disposeAndClear();
     }
+    vcl::Window::dispose();
 }
 
 void BibWindowContainer::Resize()
@@ -132,6 +130,11 @@ BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
 
 BibBookContainer::~BibBookContainer()
 {
+    disposeOnce();
+}
+
+void BibBookContainer::dispose()
+{
     if( xTopFrameRef.is() )
         xTopFrameRef->dispose();
     if( xBottomFrameRef.is() )
@@ -139,19 +142,22 @@ BibBookContainer::~BibBookContainer()
 
     if( pTopWin )
     {
-        vcl::Window* pDel = pTopWin;
+        VclPtr<vcl::Window> pDel = pTopWin;
         pTopWin = NULL;         // prevents GetFocus for child while deleting!
-        delete pDel;
+        pDel.disposeAndClear();
     }
 
     if( pBottomWin )
     {
-        vcl::Window* pDel = pBottomWin;
+        VclPtr<vcl::Window> pDel = pBottomWin;
         pBottomWin = NULL;      // prevents GetFocus for child while deleting!
-        delete pDel;
+        pDel.disposeAndClear();
     }
 
     CloseBibModul( pBibMod );
+    pTopWin.clear();
+    pBottomWin.clear();
+    BibSplitWindow::dispose();
 }
 
 void BibBookContainer::Split()
@@ -175,9 +181,9 @@ void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )
     if(pTopWin)
     {
         RemoveItem(TOP_WINDOW);
-        delete pTopWin;
+        pTopWin.disposeAndClear();
     }
-    pTopWin=new BibWindowContainer(this,pWin);
+    pTopWin=VclPtr<BibWindowContainer>::Create(this,pWin);
     pTopWin->Show();
     BibConfig* pConfig = BibModul::GetConfig();
     long nSize = pConfig->getBeamerSize();
@@ -192,10 +198,10 @@ void BibBookContainer::createBottomFrame( BibShortCutHandler* pWin )
     if(pBottomWin)
     {
         RemoveItem(BOTTOM_WINDOW);
-        delete pBottomWin;
+        pBottomWin.disposeAndClear();
     }
 
-    pBottomWin=new BibWindowContainer(this,pWin);
+    pBottomWin=VclPtr<BibWindowContainer>::Create(this,pWin);
 
     BibConfig* pConfig = BibModul::GetConfig();
     long nSize = pConfig->getViewSize();

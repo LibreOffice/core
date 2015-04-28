@@ -98,8 +98,8 @@ TheExtensionManager::TheExtensionManager( vcl::Window *pParent,
 
 TheExtensionManager::~TheExtensionManager()
 {
-    delete m_pUpdReqDialog;
-    delete m_pExtMgrDialog;
+    m_pUpdReqDialog.disposeAndClear();
+    m_pExtMgrDialog.disposeAndClear();
     delete m_pExecuteCmdQueue;
 }
 
@@ -112,7 +112,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     {
         if ( !m_pUpdReqDialog )
         {
-            m_pUpdReqDialog = new UpdateRequiredDialog( NULL, this );
+            m_pUpdReqDialog = VclPtr<UpdateRequiredDialog>::Create( nullptr, this );
             delete m_pExecuteCmdQueue;
             m_pExecuteCmdQueue = new ExtensionCmdQueue( (DialogHelper*) m_pUpdReqDialog, this, m_xContext );
             createPackageList();
@@ -120,7 +120,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     }
     else if ( !m_pExtMgrDialog )
     {
-        m_pExtMgrDialog = new ExtMgrDialog( m_pParent, this );
+        m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( m_pParent, this );
         delete m_pExecuteCmdQueue;
         m_pExecuteCmdQueue = new ExtensionCmdQueue( (DialogHelper*) m_pExtMgrDialog, this, m_xContext );
         m_pExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
@@ -171,8 +171,7 @@ sal_Int16 TheExtensionManager::execute()
     if ( m_pUpdReqDialog )
     {
         nRet = m_pUpdReqDialog->Execute();
-        delete m_pUpdReqDialog;
-        m_pUpdReqDialog = NULL;
+        m_pUpdReqDialog.disposeAndClear();
     }
 
     return nRet;
@@ -259,10 +258,8 @@ void TheExtensionManager::terminateDialog()
     if ( ! dp_misc::office_is_running() )
     {
         const SolarMutexGuard guard;
-        delete m_pExtMgrDialog;
-        m_pExtMgrDialog = NULL;
-        delete m_pUpdReqDialog;
-        m_pUpdReqDialog = NULL;
+        m_pExtMgrDialog.disposeAndClear();
+        m_pUpdReqDialog.disposeAndClear();
         Application::Quit();
     }
 }
@@ -426,10 +423,8 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
         if ( dp_misc::office_is_running() )
         {
             const SolarMutexGuard guard;
-            delete m_pExtMgrDialog;
-            m_pExtMgrDialog = NULL;
-            delete m_pUpdReqDialog;
-            m_pUpdReqDialog = NULL;
+            m_pExtMgrDialog.disposeAndClear();
+            m_pUpdReqDialog.disposeAndClear();
         }
         s_ExtMgr.clear();
     }

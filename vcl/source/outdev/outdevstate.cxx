@@ -641,6 +641,7 @@ void OutputDevice::InitFillColor()
 void OutputDevice::ImplReleaseFonts()
 {
     mpGraphics->ReleaseFonts();
+
     mbNewFont = true;
     mbInitFont = true;
 

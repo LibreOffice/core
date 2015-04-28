@@ -175,7 +175,7 @@ namespace cairocanvas
     class DeviceSettingsGuard
     {
     private:
-        OutputDevice *mpVirtualDevice;
+        VclPtr<OutputDevice> mpVirtualDevice;
         cairo_t *mpCairo;
         bool mbMappingWasEnabled;
     public:
@@ -272,7 +272,7 @@ namespace cairocanvas
             cairo_fill(mpCairo.get());
 #endif
             ::Point aOutpos;
-            if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xFont ) )
+            if( !setupTextOutput( *mpVirtualDevice.get(), pOwner, aOutpos, viewState, renderState, xFont ) )
                 return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
 
                 // change text direction and layout mode

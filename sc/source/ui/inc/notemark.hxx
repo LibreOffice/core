@@ -31,10 +31,10 @@ class SdrObject;
 class ScNoteMarker
 {
 private:
-    vcl::Window*     pWindow;
-    vcl::Window*     pRightWin;
-    vcl::Window*     pBottomWin;
-    vcl::Window*     pDiagWin;
+    VclPtr<vcl::Window>     pWindow;
+    VclPtr<vcl::Window>     pRightWin;
+    VclPtr<vcl::Window>     pBottomWin;
+    VclPtr<vcl::Window>     pDiagWin;
     ScDocument* pDoc;
     ScAddress   aDocPos;
     OUString    aUserText;

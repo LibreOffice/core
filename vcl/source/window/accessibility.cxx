@@ -136,6 +136,8 @@ namespace vcl {
             return pChild->GetAccessible();
     }
     */
+    if ( !mpWindowImpl )
+        return css::uno::Reference< css::accessibility::XAccessible >();
     if ( !mpWindowImpl->mxAccessible.is() && bCreate )
         mpWindowImpl->mxAccessible = CreateAccessible();
 
@@ -647,12 +649,11 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabeledByWindow)
         return mpWindowImpl->mpAccessibleInfos->pLabeledByWindow;
 
-    std::vector<FixedText*> aMnemonicLabels(list_mnemonic_labels());
+    std::vector<VclPtr<FixedText> > aMnemonicLabels(list_mnemonic_labels());
     if (!aMnemonicLabels.empty())
     {
         //if we have multiple labels, then prefer the first that is visible
-        for (std::vector<FixedText*>::iterator
-            aI = aMnemonicLabels.begin(), aEnd = aMnemonicLabels.end(); aI != aEnd; ++aI)
+        for (auto aI = aMnemonicLabels.begin(), aEnd = aMnemonicLabels.end(); aI != aEnd; ++aI)
         {
             vcl::Window *pCandidate = *aI;
             if (pCandidate->IsVisible())

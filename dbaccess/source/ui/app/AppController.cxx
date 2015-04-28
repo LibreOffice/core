@@ -309,9 +309,7 @@ OApplicationController::~OApplicationController()
         osl_atomic_increment( &m_refCount );
         dispose();
     }
-    ::std::unique_ptr< vcl::Window> aTemp( getView() );
     clearView();
-
 }
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
@@ -427,7 +425,7 @@ void SAL_CALL OApplicationController::disposing()
 
 bool OApplicationController::Construct(vcl::Window* _pParent)
 {
-    setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
+    setView( VclPtr<OApplicationView>::Create( _pParent, getORB(), *this, m_ePreviewMode ) );
     getView()->SetUniqueId(UID_APP_VIEW);
 
     // late construction
@@ -447,7 +445,6 @@ bool OApplicationController::Construct(vcl::Window* _pParent)
 
     if ( !bSuccess )
     {
-        ::std::unique_ptr< vcl::Window> aTemp( getView() );
         clearView();
         return false;
     }
@@ -2048,7 +2045,7 @@ void OApplicationController::renameEntry()
         if ( xContainer.is() )
         {
             ::std::unique_ptr< IObjectNameCheck > pNameChecker;
-            ::std::unique_ptr< OSaveAsDlg > aDialog;
+            VclPtr< OSaveAsDlg > aDialog;
 
             Reference<XRename> xRename;
             const ElementType eType = getContainer()->getElementType();
@@ -2081,7 +2078,8 @@ void OApplicationController::renameEntry()
                                     }
                                 }
                                 pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), OUString() ) );
-                                aDialog.reset( new OSaveAsDlg(
+                                aDialog.reset( VclPtr<OSaveAsDlg>::Create(
+
                                     getView(), getORB(), sName, sLabel, *pNameChecker, SAD_TITLE_RENAME ) );
                             }
                         }
@@ -2100,7 +2098,8 @@ void OApplicationController::renameEntry()
 
                         ensureConnection();
                         pNameChecker.reset( new DynamicTableOrQueryNameCheck( getConnection(), nCommandType ) );
-                        aDialog.reset( new OSaveAsDlg(
+                        aDialog.reset( VclPtr<OSaveAsDlg>::Create(
+
                             getView(), nCommandType, getORB(), getConnection(),
                                 *aList.begin(), *pNameChecker, SAD_TITLE_RENAME ) );
                     }

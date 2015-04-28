@@ -220,9 +220,9 @@ void DialControlBmp::DrawBackground()
 
 
 DialControl::DialControl_Impl::DialControl_Impl ( vcl::Window& rParent ) :
-    mxBmpEnabled(new DialControlBmp(rParent)),
-    mxBmpDisabled(new DialControlBmp(rParent)),
-    mxBmpBuffered(new DialControlBmp(rParent)),
+    mxBmpEnabled(VclPtr<DialControlBmp>::Create(rParent)),
+    mxBmpDisabled(VclPtr<DialControlBmp>::Create(rParent)),
+    mxBmpBuffered(VclPtr<DialControlBmp>::Create(rParent)),
     mpLinkField( 0 ),
     mnLinkedFieldValueMultiplyer( 0 ),
     mnAngle( 0 ),
@@ -265,10 +265,6 @@ DialControl::DialControl( vcl::Window* pParent, WinBits nBits ) :
      mpImpl( new DialControl_Impl( *this ) )
 {
     Init( GetOutputSizePixel() );
-}
-
-DialControl::~DialControl()
-{
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDialControl(vcl::Window *pParent, VclBuilder::stringmap &)

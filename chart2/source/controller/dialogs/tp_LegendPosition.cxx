@@ -41,9 +41,21 @@ SchLegendPosTabPage::SchLegendPosTabPage(vcl::Window* pWindow, const SfxItemSet&
     m_pLbTextDirection->SetDropDownLineCount(3);
 }
 
-SfxTabPage* SchLegendPosTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rOutAttrs)
+SchLegendPosTabPage::~SchLegendPosTabPage()
 {
-    return new SchLegendPosTabPage(pWindow, *rOutAttrs);
+    disposeOnce();
+}
+
+void SchLegendPosTabPage::dispose()
+{
+    m_pLbTextDirection.clear();
+    SfxTabPage::dispose();
+}
+
+
+VclPtr<SfxTabPage> SchLegendPosTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rOutAttrs)
+{
+    return VclPtr<SchLegendPosTabPage>::Create(pWindow, *rOutAttrs);
 }
 
 bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)

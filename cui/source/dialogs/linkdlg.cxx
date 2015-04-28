@@ -145,6 +145,22 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
 
 SvBaseLinksDlg::~SvBaseLinksDlg()
 {
+    disposeOnce();
+}
+
+void SvBaseLinksDlg::dispose()
+{
+    m_pTbLinks.clear();
+    m_pFtFullFileName.clear();
+    m_pFtFullSourceName.clear();
+    m_pFtFullTypeName.clear();
+    m_pRbAutomatic.clear();
+    m_pRbManual.clear();
+    m_pPbUpdateNow.clear();
+    m_pPbOpenSource.clear();
+    m_pPbChangeSource.clear();
+    m_pPbBreakLink.clear();
+    ModalDialog::dispose();
 }
 
 /*************************************************************************
@@ -428,9 +444,9 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
         if( !xLink.Is() )
             return 0;
 
-        QueryBox aBox( this, WB_YES_NO | WB_DEF_YES, Closelinkmsg() );
+        ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, Closelinkmsg() );
 
-        if( RET_YES == aBox.Execute() )
+        if( RET_YES == aBox->Execute() )
         {
             m_pTbLinks->GetModel()->Remove( m_pTbLinks->GetEntry( nPos ) );
 
@@ -459,9 +475,9 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
     }
     else
     {
-        QueryBox aBox( this, WB_YES_NO | WB_DEF_YES, CloselinkmsgMulti() );
+        ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, CloselinkmsgMulti() );
 
-        if( RET_YES == aBox.Execute() )
+        if( RET_YES == aBox->Execute() )
         {
 
             SvBaseLinkMemberList aLinkList;

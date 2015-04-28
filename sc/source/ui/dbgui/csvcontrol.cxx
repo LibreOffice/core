@@ -74,8 +74,14 @@ ScCsvControl::ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, 
 
 ScCsvControl::~ScCsvControl()
 {
+    disposeOnce();
+}
+
+void ScCsvControl::dispose()
+{
     if( mpAccessible )
         mpAccessible->dispose();
+    Control::dispose();
 }
 
 // event handling -------------------------------------------------------------

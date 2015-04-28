@@ -82,10 +82,10 @@ namespace dbaui
         {
             // search the position of our table window in the table window map
             nIndex = m_pLine->GetParent()->GetTabWinMap().size();
-            const ::std::vector<OTableConnection*>& rVec = m_pLine->GetParent()->getTableConnections();
-            ::std::vector<OTableConnection*>::const_iterator aIter = rVec.begin();
-            ::std::vector<OTableConnection*>::const_iterator aEnd = rVec.end();
-            for (; aIter != aEnd && (*aIter) != m_pLine; ++nIndex,++aIter)
+            const auto& rVec = m_pLine->GetParent()->getTableConnections();
+            auto aIter = rVec.begin();
+            auto aEnd = rVec.end();
+            for (; aIter != aEnd && (*aIter).get() != m_pLine; ++nIndex,++aIter)
                 ;
             nIndex = ( aIter != aEnd ) ? nIndex : -1;
         }
@@ -169,8 +169,14 @@ namespace dbaui
     }
     OTableConnection::~OTableConnection()
     {
+        disposeOnce();
+    }
+    void OTableConnection::dispose()
+    {
         // clear vector
         clearLineData();
+        m_pParent.clear();
+        vcl::Window::dispose();
     }
     Reference< XAccessibleContext > SAL_CALL OConnectionLineAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {

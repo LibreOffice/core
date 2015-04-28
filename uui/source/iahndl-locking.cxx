@@ -93,8 +93,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            boost::scoped_ptr< OpenLockedQueryBox > xDialog(new OpenLockedQueryBox(
-                            pParent, xManager.get(), aMessage ) );
+            ScopedVclPtrInstance< OpenLockedQueryBox > xDialog(pParent, xManager.get(), aMessage);
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_SAVE_LOCK )
@@ -107,8 +106,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            boost::scoped_ptr< TryLaterQueryBox > xDialog(
-                new TryLaterQueryBox( pParent, xManager.get(), aMessage ) );
+            ScopedVclPtrInstance< TryLaterQueryBox > xDialog( pParent, xManager.get(), aMessage );
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
@@ -122,8 +120,8 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            boost::scoped_ptr< AlreadyOpenQueryBox > xDialog(
-                new AlreadyOpenQueryBox( pParent,
+            VclPtr< AlreadyOpenQueryBox > xDialog(
+                VclPtr<AlreadyOpenQueryBox>::Create( pParent,
                                          xManager.get(),
                                          aMessage,
                                          nMode == UUI_DOC_OWN_SAVE_LOCK ) );
@@ -163,8 +161,8 @@ handleChangedByOthersRequest_(
         if (!xManager.get())
             return;
 
-        boost::scoped_ptr< FileChangedQueryBox > xDialog(
-            new FileChangedQueryBox( pParent, xManager.get() ) );
+        VclPtr< FileChangedQueryBox > xDialog(
+            VclPtr<FileChangedQueryBox>::Create( pParent, xManager.get() ) );
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_YES )
@@ -198,8 +196,8 @@ handleLockFileIgnoreRequest_(
         if (!xManager.get())
             return;
 
-        boost::scoped_ptr< LockFailedQueryBox > xDialog(
-            new LockFailedQueryBox( pParent, xManager.get() ) );
+        VclPtr< LockFailedQueryBox > xDialog(
+            VclPtr<LockFailedQueryBox>::Create( pParent, xManager.get() ) );
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_OK )

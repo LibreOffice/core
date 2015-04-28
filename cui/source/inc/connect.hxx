@@ -34,21 +34,21 @@ class SvxConnectionPage : public SfxTabPage
 {
 private:
     static const sal_uInt16 pRanges[];
-    ListBox*             m_pLbType;
+    VclPtr<ListBox>             m_pLbType;
 
-    FixedText*           m_pFtLine1;
-    MetricField*         m_pMtrFldLine1;
-    FixedText*           m_pFtLine2;
-    MetricField*         m_pMtrFldLine2;
-    FixedText*           m_pFtLine3;
-    MetricField*         m_pMtrFldLine3;
+    VclPtr<FixedText>           m_pFtLine1;
+    VclPtr<MetricField>         m_pMtrFldLine1;
+    VclPtr<FixedText>           m_pFtLine2;
+    VclPtr<MetricField>         m_pMtrFldLine2;
+    VclPtr<FixedText>           m_pFtLine3;
+    VclPtr<MetricField>         m_pMtrFldLine3;
 
-    MetricField*         m_pMtrFldHorz1;
-    MetricField*         m_pMtrFldVert1;
-    MetricField*         m_pMtrFldHorz2;
-    MetricField*         m_pMtrFldVert2;
+    VclPtr<MetricField>         m_pMtrFldHorz1;
+    VclPtr<MetricField>         m_pMtrFldVert1;
+    VclPtr<MetricField>         m_pMtrFldHorz2;
+    VclPtr<MetricField>         m_pMtrFldVert2;
 
-    SvxXConnectionPreview*   m_pCtlPreview;
+    VclPtr<SvxXConnectionPreview>   m_pCtlPreview;
 
     const SfxItemSet&   rOutAttrs;
     SfxItemSet          aAttrSet;
@@ -63,8 +63,9 @@ public:
 
     SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxConnectionPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -82,7 +83,6 @@ class SvxConnectionDialog : public SfxSingleTabDialog
 public:
     SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet& rAttr,
                        const SdrView* pView );
-    virtual ~SvxConnectionDialog();
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CONNECT_HXX

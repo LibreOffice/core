@@ -33,8 +33,8 @@
 //sibling after that is going to fail hard
 class CandidateMgr
 {
-    std::vector<vcl::Window*> m_aCandidates;
-    std::set<vcl::Window*> m_aDeletedCandidates;
+    std::vector<VclPtr<vcl::Window> > m_aCandidates;
+    std::set<VclPtr<vcl::Window> > m_aDeletedCandidates;
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
 public:
     void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
@@ -58,10 +58,9 @@ IMPL_LINK(CandidateMgr, WindowEventListener, VclSimpleEvent*, pEvent)
 
 CandidateMgr::~CandidateMgr()
 {
-    for (std::vector<vcl::Window*>::iterator aI = m_aCandidates.begin();
-         aI != m_aCandidates.end(); ++aI)
+    for (auto aI = m_aCandidates.begin(); aI != m_aCandidates.end(); ++aI)
     {
-        vcl::Window* pCandidate = *aI;
+        VclPtr<vcl::Window> pCandidate = *aI;
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
             continue;
         pCandidate->RemoveEventListener(LINK(this, CandidateMgr, WindowEventListener));
@@ -97,8 +96,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle con
         pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
     }
 
-    for (std::vector<vcl::Window*>::iterator aI = m_aCandidates.begin();
-         aI != m_aCandidates.end(); ++aI)
+    for (auto aI = m_aCandidates.begin(); aI != m_aCandidates.end(); ++aI)
     {
         pCandidate = *aI;
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
@@ -115,31 +113,33 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle con
 }
 
 SdrPreRenderDevice::SdrPreRenderDevice(OutputDevice& rOriginal)
-:   mrOutputDevice(rOriginal)
+:   mrOutputDevice(rOriginal),
+    mpPreRenderDevice(VclPtr<VirtualDevice>::Create())
 {
 }
 
 SdrPreRenderDevice::~SdrPreRenderDevice()
 {
+    mpPreRenderDevice.disposeAndClear();
 }
 
 void SdrPreRenderDevice::PreparePreRenderDevice()
 {
-    // compare size of maPreRenderDevice with size of visible area
-    if(maPreRenderDevice.GetOutputSizePixel() != mrOutputDevice.GetOutputSizePixel())
+    // compare size of mpPreRenderDevice with size of visible area
+    if(mpPreRenderDevice->GetOutputSizePixel() != mrOutputDevice.GetOutputSizePixel())
     {
-        maPreRenderDevice.SetOutputSizePixel(mrOutputDevice.GetOutputSizePixel());
+        mpPreRenderDevice->SetOutputSizePixel(mrOutputDevice.GetOutputSizePixel());
     }
 
     // Also compare the MapModes for zoom/scroll changes
-    if(maPreRenderDevice.GetMapMode() != mrOutputDevice.GetMapMode())
+    if(mpPreRenderDevice->GetMapMode() != mrOutputDevice.GetMapMode())
     {
-        maPreRenderDevice.SetMapMode(mrOutputDevice.GetMapMode());
+        mpPreRenderDevice->SetMapMode(mrOutputDevice.GetMapMode());
     }
 
     // #i29186#
-    maPreRenderDevice.SetDrawMode(mrOutputDevice.GetDrawMode());
-    maPreRenderDevice.SetSettings(mrOutputDevice.GetSettings());
+    mpPreRenderDevice->SetDrawMode(mrOutputDevice.GetDrawMode());
+    mpPreRenderDevice->SetSettings(mrOutputDevice.GetSettings());
 }
 
 void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegion)
@@ -151,9 +151,9 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
 
     // MapModes off
     bool bMapModeWasEnabledDest(mrOutputDevice.IsMapModeEnabled());
-    bool bMapModeWasEnabledSource(maPreRenderDevice.IsMapModeEnabled());
+    bool bMapModeWasEnabledSource(mpPreRenderDevice->IsMapModeEnabled());
     mrOutputDevice.EnableMapMode(false);
-    maPreRenderDevice.EnableMapMode(false);
+    mpPreRenderDevice->EnableMapMode(false);
 
     RectangleVector aRectangles;
     aRegionPixel.GetRegionRectangles(aRectangles);
@@ -167,7 +167,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
         mrOutputDevice.DrawOutDev(
             aTopLeft, aSize,
             aTopLeft, aSize,
-            maPreRenderDevice);
+            *mpPreRenderDevice.get());
 
 #ifdef DBG_UTIL
         // #i74769#
@@ -188,7 +188,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
     }
 
     mrOutputDevice.EnableMapMode(bMapModeWasEnabledDest);
-    maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);
+    mpPreRenderDevice->EnableMapMode(bMapModeWasEnabledSource);
 }
 
 

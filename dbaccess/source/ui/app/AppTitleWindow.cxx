@@ -29,9 +29,9 @@ namespace dbaui
 
 OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
-, m_aSpace1(this)
-, m_aSpace2(this)
-, m_aTitle(this)
+, m_aSpace1(VclPtr<FixedText>::Create(this))
+, m_aSpace2(VclPtr<FixedText>::Create(this))
+, m_aTitle(VclPtr<FixedText>::Create(this))
 , m_pChild(NULL)
 , m_bShift(_bShift)
 {
@@ -40,20 +40,27 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
     SetBorderStyle(WindowBorderStyle::MONO);
     ImplInitSettings( true, true, true );
 
-    vcl::Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };
+    vcl::Window* pWindows [] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get() };
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         pWindows[i]->Show();
 }
 
 OTitleWindow::~OTitleWindow()
 {
+    disposeOnce();
+}
+
+void OTitleWindow::dispose()
+{
     if ( m_pChild )
     {
         m_pChild->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pChild);
-        m_pChild = NULL;
     }
-
+    m_pChild.disposeAndClear();
+    m_aSpace1.disposeAndClear();
+    m_aSpace2.disposeAndClear();
+    m_aTitle.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void OTitleWindow::setChildWindow(vcl::Window* _pChild)
@@ -74,11 +81,11 @@ void OTitleWindow::Resize()
     sal_Int32 nYOffset = aTextSize.Height();
     sal_Int32 nHeight = GetTextHeight() + 2*nYOffset;
 
-    m_aSpace1.SetPosSizePixel(  Point(SPACE_BORDER, SPACE_BORDER ),
+    m_aSpace1->SetPosSizePixel(  Point(SPACE_BORDER, SPACE_BORDER ),
                                 Size(nXOffset , nHeight - SPACE_BORDER) );
-    m_aSpace2.SetPosSizePixel(  Point(nXOffset + SPACE_BORDER, SPACE_BORDER ),
+    m_aSpace2->SetPosSizePixel(  Point(nXOffset + SPACE_BORDER, SPACE_BORDER ),
                                 Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nYOffset) );
-    m_aTitle.SetPosSizePixel(   Point(nXOffset + SPACE_BORDER, nYOffset + SPACE_BORDER),
+    m_aTitle->SetPosSizePixel(   Point(nXOffset + SPACE_BORDER, nYOffset + SPACE_BORDER),
                                 Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nHeight - nYOffset - SPACE_BORDER) );
     if ( m_pChild )
     {
@@ -91,7 +98,7 @@ void OTitleWindow::setTitle(sal_uInt16 _nTitleId)
 {
     if ( _nTitleId != 0 )
     {
-        m_aTitle.SetText(ModuleRes(_nTitleId));
+        m_aTitle->SetText(ModuleRes(_nTitleId));
     }
 }
 
@@ -105,7 +112,7 @@ void OTitleWindow::GetFocus()
 long OTitleWindow::GetWidthPixel() const
 {
     Size aTextSize = LogicToPixel( Size( 12, 0 ), MAP_APPFONT );
-    sal_Int32 nWidth = GetTextWidth(m_aTitle.GetText()) + 2*aTextSize.Width();
+    sal_Int32 nWidth = GetTextWidth(m_aTitle->GetText()) + 2*aTextSize.Width();
 
     return nWidth;
 }
@@ -151,7 +158,7 @@ void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 
-    vcl::Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
+    vcl::Window* pWindows [] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get()};
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
     {
         vcl::Font aFont = pWindows[i]->GetFont();

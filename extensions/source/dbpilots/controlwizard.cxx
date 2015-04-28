@@ -86,6 +86,18 @@ namespace dbp
 
     OControlWizardPage::~OControlWizardPage()
     {
+        disposeOnce();
+    }
+
+    void OControlWizardPage::dispose()
+    {
+        m_pFormDatasourceLabel.clear();
+        m_pFormDatasource.clear();
+        m_pFormContentTypeLabel.clear();
+        m_pFormContentType.clear();
+        m_pFormTableLabel.clear();
+        m_pFormTable.clear();
+        OControlWizardPage_Base::dispose();
     }
 
     OControlWizard* OControlWizardPage::getDialog()

@@ -37,8 +37,13 @@ OMarkableTreeListBox::OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinSt
 
 OMarkableTreeListBox::~OMarkableTreeListBox()
 {
-    delete m_pCheckButton;
+    disposeOnce();
+}
 
+void OMarkableTreeListBox::dispose()
+{
+    delete m_pCheckButton;
+    DBTreeListBox::dispose();
 }
 
 void OMarkableTreeListBox::Paint(const Rectangle& _rRect)

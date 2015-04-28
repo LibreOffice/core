@@ -18,6 +18,7 @@
  */
 
 #include "vcl/vclevent.hxx"
+#include "vcl/window.hxx"
 
 #include "svdata.hxx"
 
@@ -157,5 +158,13 @@ void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
     }
     m_aIterators.pop_back();
 }
+
+
+VclWindowEvent::VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat ) : VclSimpleEvent(n)
+{
+    pWindow = pWin; pData = pDat;
+}
+
+VclWindowEvent::~VclWindowEvent() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

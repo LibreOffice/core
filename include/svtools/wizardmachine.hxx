@@ -100,6 +100,7 @@ namespace svt
          */
         OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
         virtual ~OWizardPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         // IWizardPageController overridables
         virtual void        initializePage() SAL_OVERRIDE;
@@ -154,15 +155,14 @@ namespace svt
         // So use the travelXXX methods if you need to travel
 
     protected:
-        OKButton*       m_pFinish;
-        CancelButton*   m_pCancel;
-        PushButton*     m_pNextPage;
-        PushButton*     m_pPrevPage;
-        HelpButton*     m_pHelp;
+        VclPtr<OKButton>       m_pFinish;
+        VclPtr<CancelButton>   m_pCancel;
+        VclPtr<PushButton>     m_pNextPage;
+        VclPtr<PushButton>     m_pPrevPage;
+        VclPtr<HelpButton>     m_pHelp;
 
     private:
-        WizardMachineImplData*
-                        m_pImpl;
+        WizardMachineImplData*  m_pImpl;
             // hold members in this structure to allow keeping compatible when members are added
 
         SVT_DLLPRIVATE void addButtons(vcl::Window* _pParent, sal_uInt32 _nButtonFlags);
@@ -175,6 +175,7 @@ namespace svt
         OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
         OWizardMachine(vcl::Window* _pParent, sal_uInt32 _nButtonFlags );
         virtual ~OWizardMachine();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// enable (or disable) buttons
         void    enableButtons(sal_uInt32 _nWizardButtonFlags, bool _bEnable);
@@ -205,7 +206,7 @@ namespace svt
         // our own overridables
 
         /// to override to create new pages
-        virtual TabPage*    createPage(WizardState _nState) = 0;
+        virtual VclPtr<TabPage> createPage(WizardState _nState) = 0;
 
         /// will be called when a new page is about to be displayed
         virtual void        enterState(WizardState _nState);

@@ -68,8 +68,7 @@ int UIPreviewApp::Main()
 
     try
     {
-        Dialog *pDialog = new Dialog(DIALOG_NO_PARENT, WB_STDDIALOG | WB_SIZEABLE);
-
+        VclPtrInstance<Dialog> pDialog(DIALOG_NO_PARENT, WB_STDDIALOG | WB_SIZEABLE);
         {
             VclBuilder aBuilder(pDialog, OUString(), uifiles[0]);
             vcl::Window *pRoot = aBuilder.get_widget_root();
@@ -90,7 +89,7 @@ int UIPreviewApp::Main()
             pRealDialog->Execute();
         }
 
-        delete pDialog;
+        pDialog.disposeAndClear();
     }
     catch (const uno::Exception &e)
     {

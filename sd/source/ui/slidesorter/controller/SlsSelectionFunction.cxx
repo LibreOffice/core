@@ -318,7 +318,7 @@ SelectionFunction::SelectionFunction (
     SfxRequest& rRequest)
     : FuPoor (
         rSlideSorter.GetViewShell(),
-        rSlideSorter.GetContentWindow().get(),
+        rSlideSorter.GetContentWindow(),
         &rSlideSorter.GetView(),
         rSlideSorter.GetModel().GetDocument(),
         rRequest),
@@ -1384,7 +1384,7 @@ void MultiSelectionModeHandler::UpdatePosition (
     // Convert window coordinates into model coordinates (we need the
     // window coordinates for auto-scrolling because that remains
     // constant while scrolling.)
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
 
     bool bDoAutoScroll = bAllowAutoScroll && mrSlideSorter.GetController().GetScrollBarManager().AutoScroll(

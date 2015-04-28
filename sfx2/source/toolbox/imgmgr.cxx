@@ -45,7 +45,7 @@ const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
 
 struct ToolBoxInf_Impl
 {
-    ToolBox*        pToolBox;
+    VclPtr<ToolBox> pToolBox;
     SfxToolboxFlags nFlags;
 };
 

@@ -1013,7 +1013,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
 
     vcl::Window *pWin = NULL, *pCtrl = NULL;
     if (mpOutDev->GetOutDevType() == OUTDEV_WINDOW)
-        pWin = static_cast<vcl::Window*>(mpOutDev);
+        pWin = static_cast<vcl::Window*>(mpOutDev.get());
 
     if (pWin)
         pCtrl = mpBorderWindow->GetWindow(WINDOW_CLIENT);
@@ -1193,7 +1193,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
     // control this border belongs to
     vcl::Window *pWin = NULL, *pCtrl = NULL;
     if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
-        pWin = static_cast<vcl::Window*>(mpOutDev);
+        pWin = static_cast<vcl::Window*>(mpOutDev.get());
 
     ControlType aCtrlType = 0;
     ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
@@ -1364,8 +1364,8 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
 
 ImplStdBorderWindowView::~ImplStdBorderWindowView()
 {
-    delete mpATitleVirDev;
-    delete mpDTitleVirDev;
+    mpATitleVirDev.disposeAndClear();
+    mpDTitleVirDev.disposeAndClear();
 }
 
 bool ImplStdBorderWindowView::MouseMove( const MouseEvent& rMEvt )
@@ -1556,7 +1556,7 @@ long ImplStdBorderWindowView::CalcTitleWidth() const
 void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset )
 {
     ImplBorderFrameData*    pData = &maFrameData;
-    OutputDevice*           pDev = pOutDev ? pOutDev : pData->mpOutDev;
+    OutputDevice*           pDev = pOutDev ? pOutDev : pData->mpOutDev.get();
     ImplBorderWindow*       pBorderWindow = pData->mpBorderWindow;
     Point                   aTmpPoint = pOffset ? Point(*pOffset) : Point();
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
@@ -1851,7 +1851,15 @@ ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent, WinBits nStyle ,
 
 ImplBorderWindow::~ImplBorderWindow()
 {
+    disposeOnce();
+}
+
+void ImplBorderWindow::dispose()
+{
     delete mpBorderView;
+    mpBorderView = NULL;
+    mpMenuBarWindow.clear();
+    vcl::Window::dispose();
 }
 
 void ImplBorderWindow::MouseMove( const MouseEvent& rMEvt )

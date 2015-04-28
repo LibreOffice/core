@@ -37,6 +37,7 @@ public:
         vcl::Window* pParentWindow,
         Panel* pPanel );
     virtual ~PanelTitleBar();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetMoreOptionsCommand (
         const ::rtl::OUString& rsCommandName,
@@ -56,7 +57,7 @@ protected:
 
 private:
     bool mbIsLeftButtonDown;
-    Panel* mpPanel;
+    VclPtr<Panel> mpPanel;
     const sal_uInt16 mnMenuItemIndex;
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::rtl::OUString msMoreOptionsCommand;

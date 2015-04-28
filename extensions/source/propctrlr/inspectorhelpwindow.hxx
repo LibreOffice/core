@@ -33,14 +33,16 @@ namespace pcr
     class InspectorHelpWindow : public vcl::Window
     {
     private:
-        FixedLine       m_aSeparator;
-        MultiLineEdit   m_aHelpText;
+        VclPtr<FixedLine>       m_aSeparator;
+        VclPtr<MultiLineEdit>   m_aHelpText;
 
         sal_Int32       m_nMinLines;
         sal_Int32       m_nMaxLines;
 
     public:
         InspectorHelpWindow( vcl::Window* _pParent );
+        virtual ~InspectorHelpWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
 

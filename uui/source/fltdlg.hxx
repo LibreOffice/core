@@ -47,6 +47,8 @@ class FilterDialog : public ModalDialog
     // public interface
     public:
              FilterDialog (       vcl::Window*            pParentWindow  );
+        virtual ~FilterDialog();
+        virtual void dispose() SAL_OVERRIDE;
         void SetURL       ( const OUString&          sURL           );
         void ChangeFilters( const FilterNameList*    pFilterNames   );
         bool AskForFilter (       FilterNameListPtr& pSelectedItem  );
@@ -58,8 +60,8 @@ class FilterDialog : public ModalDialog
 
     // member
     private:
-              FixedText       *m_pFtURL       ;
-              ListBox         *m_pLbFilters   ;
+              VclPtr<FixedText>       m_pFtURL       ;
+              VclPtr<ListBox>         m_pLbFilters   ;
         const FilterNameList* m_pFilterNames;
 
 };  // class FilterDialog

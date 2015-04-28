@@ -30,12 +30,13 @@ typedef std::map<const SwFrm*, SwFrameControlPtr> SwFrameControlPtrMap;
 class SwFrameControlsManager
 {
     private:
-        SwEditWin* m_pEditWin;
+        VclPtr<SwEditWin> m_pEditWin;
         std::map< FrameControlType, SwFrameControlPtrMap > m_aControls;
 
     public:
         SwFrameControlsManager( SwEditWin* pEditWin );
-        ~SwFrameControlsManager( );
+        ~SwFrameControlsManager();
+        void dispose();
 
         SwFrameControlsManager( const SwFrameControlsManager& rCopy );
         const SwFrameControlsManager& operator=( const SwFrameControlsManager& rCopy );

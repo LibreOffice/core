@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
+#include <vcl/vclptr.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 
 class SvtMiscOptions;
@@ -34,7 +35,7 @@ namespace dbaui
     class DBACCESS_DLLPUBLIC OToolBoxHelper
     {
         sal_Int16       m_nSymbolsSize; // shows the toolbox large or small bitmaps
-        ToolBox*        m_pToolBox;     // our toolbox (may be NULL)
+        VclPtr<ToolBox>        m_pToolBox;     // our toolbox (may be NULL)
     public:
         OToolBoxHelper();
         virtual ~OToolBoxHelper();

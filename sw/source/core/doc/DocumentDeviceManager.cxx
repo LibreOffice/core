@@ -55,8 +55,8 @@ DocumentDeviceManager::DocumentDeviceManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwd
 SfxPrinter* DocumentDeviceManager::getPrinter(/*[in]*/ bool bCreate ) const
 {
     SfxPrinter* pRet = 0;
-    if ( !bCreate ||  mpPrt )
-        pRet =  mpPrt;
+    if ( !bCreate || mpPrt )
+        pRet = mpPrt;
     else
         pRet = &CreatePrinter_();
 
@@ -65,10 +65,11 @@ SfxPrinter* DocumentDeviceManager::getPrinter(/*[in]*/ bool bCreate ) const
 
 void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged )
 {
-    if ( pP !=  mpPrt )
+    assert ( !pP || !pP->isDisposed() );
+    if ( pP != mpPrt )
     {
         if ( bDeleteOld )
-            delete  mpPrt;
+            mpPrt.disposeAndClear();
          mpPrt = pP;
 
         // our printer should always use TWIP. Don't rely on this being set in SwViewShell::InitPrt, there
@@ -78,7 +79,7 @@ void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDe
         {
             MapMode aMapMode( mpPrt->GetMapMode() );
             aMapMode.SetMapUnit( MAP_TWIP );
-             mpPrt->SetMapMode( aMapMode );
+            mpPrt->SetMapMode( aMapMode );
         }
 
         if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && !m_rDoc.GetDocumentSettingManager().get( DocumentSettingId::USE_VIRTUAL_DEVICE ) )
@@ -100,15 +101,19 @@ VirtualDevice* DocumentDeviceManager::getVirtualDevice(/*[in]*/ bool bCreate ) c
     else
         pRet = &CreateVirtualDevice_();
 
+    assert ( !pRet || !pRet->isDisposed() );
+
     return pRet;
 }
 
 void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool )
 {
-    if ( mpVirDev != pVd )
+    assert ( !pVd->isDisposed() );
+
+    if ( mpVirDev.get() != pVd )
     {
         if ( bDeleteOld )
-            delete mpVirDev;
+            mpVirDev.disposeAndClear();
         mpVirDev = pVd;
 
         if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && m_rDoc.GetDocumentSettingManager().get( DocumentSettingId::USE_VIRTUAL_DEVICE ) )
@@ -132,6 +137,8 @@ OutputDevice* DocumentDeviceManager::getReferenceDevice(/*[in]*/ bool bCreate ) 
     {
         pRet = getVirtualDevice( bCreate );
     }
+
+    assert ( !pRet || !pRet->isDisposed() );
 
     return pRet;
 }
@@ -193,7 +200,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
             }
         }
         else
-            delete mpPrt, mpPrt = 0;
+            mpPrt.disposeAndClear();
     }
 
     if( !mpPrt )
@@ -205,7 +212,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                         0 );
-        SfxPrinter *p = new SfxPrinter( pSet, rJobSetup );
+        VclPtr<SfxPrinter> p = VclPtr<SfxPrinter>::Create( pSet, rJobSetup );
         if ( bCheckPageDescs )
             setPrinter( p, true, true );
         else
@@ -247,16 +254,16 @@ void DocumentDeviceManager::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
 DocumentDeviceManager::~DocumentDeviceManager()
 {
     delete mpPrtData;
-    delete mpVirDev;
-    DELETEZ( mpPrt );
+    mpVirDev.disposeAndClear();
+    mpPrt.disposeAndClear();
 }
 
 VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
 {
 #ifdef IOS
-    VirtualDevice* pNewVir = new VirtualDevice( 8 );
+    VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create( 8 );
 #else
-    VirtualDevice* pNewVir = new VirtualDevice( 1 );
+    VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create( 1 );
 #endif
 
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
@@ -290,9 +297,9 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
 
-    SfxPrinter* pNewPrt = new SfxPrinter( pSet );
+    VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( pSet );
     const_cast<DocumentDeviceManager*>(this)->setPrinter( pNewPrt, true, true );
-    return *mpPrt;
+    return *mpPrt.get();
 }
 
 void DocumentDeviceManager::PrtDataChanged()

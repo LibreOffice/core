@@ -32,16 +32,16 @@ class OfaMemoryOptionsPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
 private:
-    NumericField*       m_pUndoEdit;
+    VclPtr<NumericField>       m_pUndoEdit;
 
-    NumericField*       m_pNfGraphicCache;
-    NumericField*       m_pNfGraphicObjectCache;
-    TimeField*          m_pTfGraphicObjectTime;
+    VclPtr<NumericField>       m_pNfGraphicCache;
+    VclPtr<NumericField>       m_pNfGraphicObjectCache;
+    VclPtr<TimeField>          m_pTfGraphicObjectTime;
 
-    NumericField*       m_pNfOLECache;
+    VclPtr<NumericField>       m_pNfOLECache;
 
-    VclContainer*       m_pQuickStarterFrame;
-    CheckBox*           m_pQuickLaunchCB;
+    VclPtr<VclContainer>       m_pQuickStarterFrame;
+    VclPtr<CheckBox>           m_pQuickLaunchCB;
 
     DECL_LINK(GraphicCacheConfigHdl, void *);
 
@@ -58,8 +58,9 @@ protected:
 public:
     OfaMemoryOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMemoryOptionsPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

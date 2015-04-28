@@ -26,10 +26,11 @@
 #include <vcl/keycod.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
 
 class AllSettings;
-class OutputDevice;
-namespace vcl { class Window; }
 struct IDataObject;
 
 namespace com { namespace sun { namespace star { namespace awt {
@@ -302,7 +303,7 @@ inline HelpEvent::HelpEvent( HelpEventMode nHelpMode )
 class VCL_DLLPUBLIC UserDrawEvent
 {
 private:
-    OutputDevice*       mpOutDev;
+    VclPtr<OutputDevice> mpOutDev;
     Rectangle           maOutRect;
     sal_uInt16          mnItemId;
     sal_uInt16          mnStyle;
@@ -411,7 +412,7 @@ enum class MouseNotifyEvent
 class VCL_DLLPUBLIC NotifyEvent
 {
 private:
-    vcl::Window*                 mpWindow;
+    VclPtr<vcl::Window>     mpWindow;
     void*                   mpData;
     MouseNotifyEvent        mnEventType;
     long                    mnRetValue;
@@ -434,23 +435,6 @@ public:
     const MouseEvent*       GetMouseEvent() const;
     const CommandEvent*     GetCommandEvent() const;
 };
-
-inline NotifyEvent::NotifyEvent()
-{
-    mpWindow    = NULL;
-    mpData      = NULL;
-    mnEventType = MouseNotifyEvent::NONE;
-    mnRetValue  = 0;
-}
-
-inline NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
-                                 const void* pEvent, long nRet )
-{
-    mpWindow    = pWindow;
-    mpData      = const_cast<void*>(pEvent);
-    mnEventType  = nEventType;
-    mnRetValue  = nRet;
-}
 
 inline const KeyEvent* NotifyEvent::GetKeyEvent() const
 {

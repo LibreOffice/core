@@ -26,6 +26,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class VCLExternalSolarLock;
 class VclSimpleEvent;
@@ -80,7 +81,7 @@ private:
 
     AccessibleChildren      m_aAccessibleChildren;
     VCLExternalSolarLock*   m_pExternalLock;
-    basctl::DialogWindow*   m_pDialogWindow;
+    VclPtr<basctl::DialogWindow>   m_pDialogWindow;
     DlgEditor*              m_pDlgEditor;
     DlgEdModel*             m_pDlgEdModel;
 

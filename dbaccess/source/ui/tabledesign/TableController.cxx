@@ -285,7 +285,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     if (!xTablesSup.is())
     {
         OUString aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
-        OSQLWarningBox( getView(), aMessage ).Execute();
+        ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage )->Execute();
         return false;
     }
 
@@ -318,13 +318,13 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
             }
 
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
-            OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
-            if ( aDlg.Execute() != RET_OK )
+            ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
+            if ( aDlg->Execute() != RET_OK )
                 return false;
 
-            m_sName = aDlg.getName();
-            sCatalog = aDlg.getCatalog();
-            sSchema  = aDlg.getSchema();
+            m_sName = aDlg->getName();
+            sCatalog = aDlg->getCatalog();
+            sSchema  = aDlg->getSchema();
         }
 
         // did we get a name
@@ -415,9 +415,9 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     {
         OUString sText( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
         sText = sText.replaceFirst( "#" , m_sName);
-        OSQLMessageBox aDlg( getView(), OUString( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg( getView(), OUString( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
 
-        aDlg.Execute();
+        aDlg->Execute();
         bError = true;
     }
     catch( const Exception& )
@@ -447,8 +447,8 @@ void OTableController::doEditIndexes()
     // table needs to be saved before editing indexes
     if (m_bNew || isModified())
     {
-        MessageDialog aAsk(getView(), ModuleRes(STR_QUERY_SAVE_TABLE_EDIT_INDEXES), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-        if (RET_YES != aAsk.Execute())
+        ScopedVclPtrInstance< MessageDialog > aAsk(getView(), ModuleRes(STR_QUERY_SAVE_TABLE_EDIT_INDEXES), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        if (RET_YES != aAsk->Execute())
             return;
 
         if (!doSaveDoc(false))
@@ -490,8 +490,8 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB(), isConnected() && getConnection()->getMetaData().is() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : 0);
-    if (RET_OK != aDialog.Execute())
+    ScopedVclPtrInstance< DbaIndexDialog > aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB(), isConnected() && getConnection()->getMetaData().is() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : 0);
+    if (RET_OK != aDialog->Execute())
         return;
 
 }
@@ -522,7 +522,7 @@ void OTableController::impl_initialize()
     }
     catch(const SQLException&)
     {
-        OSQLWarningBox( getView(), ModuleRes( STR_NO_TYPE_INFO_AVAILABLE ) ).Execute();
+        ScopedVclPtrInstance<OSQLWarningBox>(getView(), ModuleRes( STR_NO_TYPE_INFO_AVAILABLE ))->Execute();
         throw;
     }
     try
@@ -540,7 +540,7 @@ void OTableController::impl_initialize()
 
 bool OTableController::Construct(vcl::Window* pParent)
 {
-    setView( * new OTableDesignView( pParent, getORB(), *this ) );
+    setView( VclPtr<OTableDesignView>::Create( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
     return true;
 }
@@ -563,9 +563,9 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
             ::boost::mem_fn(&OTableRow::isValid));
         if ( aIter != m_vRowList.end() )
         {
-            MessageDialog aQry(getView(), "TableDesignSaveModifiedDialog",
-                               "dbaccess/ui/tabledesignsavemodifieddialog.ui");
-            switch (aQry.Execute())
+            ScopedVclPtrInstance<MessageDialog> aQry(getView(), "TableDesignSaveModifiedDialog",
+                                                     "dbaccess/ui/tabledesignsavemodifieddialog.ui");
+            switch (aQry->Execute())
             {
                 case RET_YES:
                     Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
@@ -580,9 +580,9 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
         }
         else if ( !m_bNew )
         {
-            MessageDialog aQry(getView(), "DeleteAllRowsDialog",
-                               "dbaccess/ui/deleteallrowsdialog.ui");
-            switch (aQry.Execute())
+            ScopedVclPtrInstance<MessageDialog> aQry(getView(), "DeleteAllRowsDialog",
+                                                     "dbaccess/ui/deleteallrowsdialog.ui");
+            switch (aQry->Execute())
             {
                 case RET_YES:
                     {
@@ -936,7 +936,7 @@ bool OTableController::checkColumns(bool _bNew)
                 {
                     OUString strMessage = ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME);
                     strMessage = strMessage.replaceFirst("$column$", pFieldDesc->GetName());
-                    OSQLWarningBox( getView(), strMessage ).Execute();
+                    ScopedVclPtrInstance<OSQLWarningBox>(getView(), strMessage)->Execute();
                     return false;
                 }
             }
@@ -946,9 +946,9 @@ bool OTableController::checkColumns(bool _bNew)
     {
         OUString sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
         OUString sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
-        OSQLMessageBox aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
+        ScopedVclPtrInstance< OSQLMessageBox > aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
 
-        switch ( aBox.Execute() )
+        switch ( aBox->Execute() )
         {
         case RET_YES:
         {
@@ -1075,8 +1075,8 @@ void OTableController::alterColumns()
                         aMessage = aMessage.replaceFirst( "$column$", pField->GetName() );
 
                         SQLExceptionInfo aError( ::cppu::getCaughtException() );
-                        OSQLWarningBox aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES , &aError );
-                        bNotOk = aMsg.Execute() == RET_YES;
+                        ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES , &aError );
+                        bNotOk = aMsg->Execute() == RET_YES;
                     }
                     else
                         throw;
@@ -1131,8 +1131,8 @@ void OTableController::alterColumns()
                 {
                     OUString aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
                     aMessage = aMessage.replaceFirst("$column$",pField->GetName());
-                    OSQLWarningBox aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES );
-                    if ( aMsg.Execute() != RET_YES )
+                    ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES );
+                    if ( aMsg->Execute() != RET_YES )
                     {
                         Reference<XPropertySet> xNewColumn(xIdxColumns->getByIndex(nPos),UNO_QUERY_THROW);
                         OUString sName;
@@ -1198,8 +1198,8 @@ void OTableController::alterColumns()
                     OUString aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
                     aMsgT = aMsgT.replaceFirst("$column$",*pIter);
                     OUString aTitle(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
-                    OSQLMessageBox aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
-                    if(aMsg.Execute() == RET_YES)
+                    ScopedVclPtrInstance< OSQLMessageBox > aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
+                    if(aMsg->Execute() == RET_YES)
                     {
                         xKeyColumns = NULL;
                         dropPrimaryKey();

@@ -44,7 +44,7 @@ Reference< view::XRenderable > Shell::GetRenderable()
 
 bool Shell::HasSelection( bool /* bText */ ) const
 {
-    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin.get()))
     {
         TextView* pEditView = pMCurWin->GetEditView();
         if ( pEditView && pEditView->HasSelection() )
@@ -56,7 +56,7 @@ bool Shell::HasSelection( bool /* bText */ ) const
 OUString Shell::GetSelectionText( bool bWholeWord )
 {
     OUString aText;
-    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin.get()))
     {
         if (TextView* pEditView = pMCurWin->GetEditView())
         {
@@ -166,8 +166,8 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
             {
                 // new module window
                 if (!pModulLayout)
-                    pModulLayout.reset(new ModulWindowLayout(&GetViewFrame()->GetWindow(), aObjectCatalog));
-                pWin = new ModulWindow(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
+                    pModulLayout.reset(VclPtr<ModulWindowLayout>::Create(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
+                pWin = VclPtr<ModulWindow>::Create(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
                 nKey = InsertWindowInTable( pWin );
             }
             else // we've gotten called recursively ( via listener from createModule above ), get outta here
@@ -195,7 +195,7 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
     pTabBar->Sort();
     if(pWin)
     {
-        pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
+        pWin->GrabScrollBars( aHScrollBar.get(), aVScrollBar.get() );
         if ( !pCurWin )
             SetCurWindow( pWin, false, false );
     }
@@ -220,14 +220,14 @@ void Shell::Move()
 
 void Shell::ShowCursor( bool bOn )
 {
-    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin.get()))
         pMCurWin->ShowCursor(bOn);
 }
 
 // only if basic window above:
 void Shell::ExecuteBasic( SfxRequest& rReq )
 {
-    if (dynamic_cast<ModulWindow*>(pCurWin))
+    if (dynamic_cast<ModulWindow*>(pCurWin.get()))
     {
         pCurWin->ExecuteCommand( rReq );
         if (nShellCount)

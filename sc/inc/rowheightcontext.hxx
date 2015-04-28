@@ -13,10 +13,10 @@
 #include "scdllapi.h"
 
 #include <tools/fract.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/outdev.hxx>
 
 #include <vector>
-
-class OutputDevice;
 
 namespace sc {
 
@@ -28,7 +28,7 @@ class SC_DLLPUBLIC RowHeightContext
     double mfPPTY;
     Fraction maZoomX;
     Fraction maZoomY;
-    OutputDevice* mpOutDev;
+    VclPtr<OutputDevice> mpOutDev;
 
     sal_uInt16 mnExtraHeight;
     bool mbForceAutoSize; /// whether to set height to optimal even when the manual height flag is set.

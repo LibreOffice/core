@@ -23,8 +23,6 @@ public:
 
     TemplateRemoteView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren);
 
-    virtual ~TemplateRemoteView ();
-
     virtual void showRootRegion () SAL_OVERRIDE;
 
     virtual void showRegion (ThumbnailViewItem *pItem) SAL_OVERRIDE;

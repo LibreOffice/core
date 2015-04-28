@@ -42,6 +42,21 @@ PrintMonitor::PrintMonitor(vcl::Window *pParent, bool modal, PrintMonitorType eT
     m_pPrinting->Show();
 }
 
+PrintMonitor::~PrintMonitor()
+{
+    disposeOnce();
+}
+
+void PrintMonitor::dispose()
+{
+    m_pDocName.clear();
+    m_pPrinting.clear();
+    m_pPrinter.clear();
+    m_pPrintInfo.clear();
+
+    CancelableDialog::dispose();
+}
+
 // Progress Indicator for Creation of personalized Mail Merge documents:
 CreateMonitor::CreateMonitor( vcl::Window *pParent, bool modal )
     : CancelableDialog(pParent, modal, "MMCreatingDialog",
@@ -55,6 +70,19 @@ CreateMonitor::CreateMonitor( vcl::Window *pParent, bool modal )
     get(m_pCounting, "progress");
     m_sCountingPattern = m_pCounting->GetText();
     m_pCounting->SetText("...");
+}
+
+CreateMonitor::~CreateMonitor()
+{
+    disposeOnce();
+}
+
+void CreateMonitor::dispose()
+{
+    m_pCancelButton.clear();
+    m_pCounting.clear();
+
+    CancelableDialog::dispose();
 }
 
 void CreateMonitor::UpdateCountingText()
@@ -88,7 +116,15 @@ CancelableDialog::CancelableDialog( vcl::Window *pParent, bool modal,
 
 CancelableDialog::~CancelableDialog()
 {
+    disposeOnce();
+}
+
+void CancelableDialog::dispose()
+{
     EndDialog( 0 );
+    m_pCancelButton.clear();
+
+    Dialog::dispose();
 }
 
 void CancelableDialog::SetCancelHdl( const Link& rLink )

@@ -33,7 +33,7 @@ class SwDrawBase
 protected:
     SwView*         m_pView;
     SwWrtShell*     m_pSh;
-    SwEditWin*      m_pWin;
+    VclPtr<SwEditWin> m_pWin;
     Point           m_aStartPos;                 // position of BeginCreate
     Point           m_aMDPos;                // position of MouseButtonDown
     sal_uInt16          m_nSlotId;

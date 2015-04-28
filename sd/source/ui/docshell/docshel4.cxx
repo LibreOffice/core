@@ -109,7 +109,7 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aPrintItem.GetOptionsPrint().IsWarningPrinter() ) );
         pSet->Put( aFlagItem );
 
-        mpPrinter = new SfxPrinter(pSet);
+        mpPrinter = VclPtr<SfxPrinter>::Create(pSet);
         mbOwnPrinter = true;
 
         // set output quality
@@ -144,10 +144,8 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
             pView->SdrEndTextEdit();
     }
 
-    if ( mpPrinter && mbOwnPrinter && (mpPrinter != pNewPrinter) )
-    {
-        delete mpPrinter;
-    }
+    if ( mpPrinter && mbOwnPrinter && (mpPrinter.get() != pNewPrinter) )
+        mpPrinter.disposeAndClear();
 
     mpPrinter = pNewPrinter;
     mbOwnPrinter = true;
@@ -204,11 +202,11 @@ void DrawDocShell::UpdateRefDevice()
     if( mpDoc )
     {
         // Determine the device for which the output will be formatted.
-        OutputDevice* pRefDevice = NULL;
+        VclPtr< OutputDevice > pRefDevice;
         switch (mpDoc->GetPrinterIndependentLayout())
         {
             case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
-                pRefDevice = mpPrinter;
+                pRefDevice = mpPrinter.get();
                 break;
 
             case ::com::sun::star::document::PrinterIndependentLayout::ENABLED:
@@ -221,10 +219,10 @@ void DrawDocShell::UpdateRefDevice()
                 // as a fall-back.
                 DBG_ASSERT(false, "DrawDocShell::UpdateRefDevice(): Unexpected printer layout mode");
 
-                pRefDevice = mpPrinter;
+                pRefDevice = mpPrinter.get();
                 break;
         }
-        mpDoc->SetRefDevice( pRefDevice );
+        mpDoc->SetRefDevice( pRefDevice.get() );
 
         ::sd::Outliner* pOutl = mpDoc->GetOutliner( false );
 
@@ -1132,9 +1130,9 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
     ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 
-SfxDocumentInfoDialog* DrawDocShell::CreateDocumentInfoDialog( vcl::Window *pParent, const SfxItemSet &rSet )
+VclPtr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog( vcl::Window *pParent, const SfxItemSet &rSet )
 {
-    SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
+    VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( pParent, rSet );
     DrawDocShell*          pDocSh = PTR_CAST(DrawDocShell,SfxObjectShell::Current());
 
     if( pDocSh == this )

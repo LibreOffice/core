@@ -76,6 +76,23 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
 
 SdPhotoAlbumDialog::~SdPhotoAlbumDialog()
 {
+    disposeOnce();
+}
+
+void SdPhotoAlbumDialog::dispose()
+{
+    pCancelBtn.clear();
+    pCreateBtn.clear();
+    pAddBtn.clear();
+    pUpBtn.clear();
+    pDownBtn.clear();
+    pRemoveBtn.clear();
+    pImagesLst.clear();
+    pImg.clear();
+    pInsTypeCombo.clear();
+    pASRCheck.clear();
+    pCapCheck.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, CancelHdl)
@@ -88,8 +105,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 {
     if (pImagesLst->GetEntryCount() == 0)
     {
-        WarningBox aWarning(this, WB_OK, SD_RESSTR(STR_PHOTO_ALBUM_EMPTY_WARNING));
-        aWarning.Execute();
+        ScopedVclPtrInstance< WarningBox > aWarning(this, WB_OK, SD_RESSTR(STR_PHOTO_ALBUM_EMPTY_WARNING));
+        aWarning->Execute();
     }
     else
     {
@@ -445,8 +462,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         }
         else
         {
-            InfoBox aInfo(this, OUString("Function is not implemented!"));
-            aInfo.Execute();
+            ScopedVclPtrInstance< InfoBox > aInfo(this, OUString("Function is not implemented!"));
+            aInfo->Execute();
         }
         EndDialog();
         return 0;

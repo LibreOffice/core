@@ -81,6 +81,23 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
 
 ScTpFormulaOptions::~ScTpFormulaOptions()
 {
+    disposeOnce();
+}
+
+void ScTpFormulaOptions::dispose()
+{
+    mpLbFormulaSyntax.clear();
+    mpCbEnglishFuncName.clear();
+    mpBtnCustomCalcDefault.clear();
+    mpBtnCustomCalcCustom.clear();
+    mpBtnCustomCalcDetails.clear();
+    mpEdSepFuncArg.clear();
+    mpEdSepArrayCol.clear();
+    mpEdSepArrayRow.clear();
+    mpBtnSepReset.clear();
+    mpLbOOXMLRecalcOptions.clear();
+    mpLbODFRecalcOptions.clear();
+    SfxTabPage::dispose();
 }
 
 void ScTpFormulaOptions::ResetSeparators()
@@ -122,10 +139,10 @@ void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
 
 void ScTpFormulaOptions::LaunchCustomCalcSettings()
 {
-    ScCalcOptionsDialog aDlg(this, maCurrentConfig);
-    if (aDlg.Execute() == RET_OK)
+    ScopedVclPtrInstance< ScCalcOptionsDialog > aDlg(this, maCurrentConfig);
+    if (aDlg->Execute() == RET_OK)
     {
-        maCurrentConfig = aDlg.GetConfig();
+        maCurrentConfig = aDlg->GetConfig();
     }
 }
 
@@ -220,9 +237,9 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Edit*, pEdit )
     return 0;
 }
 
-SfxTabPage* ScTpFormulaOptions::Create(vcl::Window* pParent, const SfxItemSet* rCoreSet)
+VclPtr<SfxTabPage> ScTpFormulaOptions::Create(vcl::Window* pParent, const SfxItemSet* rCoreSet)
 {
-    return new ScTpFormulaOptions(pParent, *rCoreSet);
+    return VclPtr<SfxTabPage>(new ScTpFormulaOptions(pParent, *rCoreSet), SAL_NO_ACQUIRE);
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)

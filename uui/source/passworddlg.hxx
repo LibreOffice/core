@@ -32,11 +32,11 @@
 
 class PasswordDialog : public ModalDialog
 {
-    FixedText*      m_pFTPassword;
-    Edit*           m_pEDPassword;
-    FixedText*      m_pFTConfirmPassword;
-    Edit*           m_pEDConfirmPassword;
-    OKButton*       m_pOKBtn;
+    VclPtr<FixedText>      m_pFTPassword;
+    VclPtr<Edit>           m_pEDPassword;
+    VclPtr<FixedText>      m_pFTConfirmPassword;
+    VclPtr<Edit>           m_pEDConfirmPassword;
+    VclPtr<OKButton>       m_pOKBtn;
     sal_uInt16      nMinLen;
     OUString        aPasswdMismatch;
 
@@ -46,6 +46,8 @@ class PasswordDialog : public ModalDialog
 public:
     PasswordDialog( vcl::Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocURL,
             bool bOpenToModify = false, bool bIsSimplePasswordRequest = false );
+    virtual ~PasswordDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            SetMinLen( sal_uInt16 nMin ) { nMinLen = nMin; }
     OUString        GetPassword() const { return m_pEDPassword->GetText(); }

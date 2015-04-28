@@ -57,6 +57,19 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
     m_pCB_Grid_Z->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
 }
 
+TitlesAndObjectsTabPage::~TitlesAndObjectsTabPage()
+{
+    disposeOnce();
+}
+
+void TitlesAndObjectsTabPage::dispose()
+{
+    m_pCB_Grid_X.clear();
+    m_pCB_Grid_Y.clear();
+    m_pCB_Grid_Z.clear();
+    OWizardPage::dispose();
+}
+
 void TitlesAndObjectsTabPage::initializePage()
 {
     m_bCommitToModel = false;

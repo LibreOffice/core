@@ -34,7 +34,7 @@
 struct ImplWizPageData
 {
     ImplWizPageData*    mpNext;
-    TabPage*            mpPage;
+    VclPtr<TabPage>     mpPage;
 };
 
 
@@ -42,7 +42,7 @@ struct ImplWizPageData
 struct ImplWizButtonData
 {
     ImplWizButtonData*  mpNext;
-    Button*             mpButton;
+    VclPtr<Button>      mpButton;
     long                mnOffset;
 };
 
@@ -363,6 +363,11 @@ WizardDialog::WizardDialog( vcl::Window* pParent, const OUString& rID, const OUS
 
 WizardDialog::~WizardDialog()
 {
+    disposeOnce();
+}
+
+void WizardDialog::dispose()
+{
     maWizardLayoutIdle.Stop();
 
     // Remove all buttons
@@ -372,6 +377,12 @@ WizardDialog::~WizardDialog()
     // Remove all pages
     while ( mpFirstPage )
         RemovePage( mpFirstPage->mpPage );
+
+    mpCurTabPage.clear();
+    mpPrevBtn.clear();
+    mpNextBtn.clear();
+    mpViewWindow.clear();
+    ModalDialog::dispose();
 }
 
 

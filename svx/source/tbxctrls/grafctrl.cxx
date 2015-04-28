@@ -98,9 +98,7 @@ protected:
     virtual void    Modify() SAL_OVERRIDE;
 
 public:
-
                     ImplGrafMetricField( vcl::Window* pParent, const OUString& aCmd, const Reference< XFrame >& rFrame );
-                    virtual ~ImplGrafMetricField();
 
     void            Update( const SfxPoolItem* pItem );
 };
@@ -141,10 +139,6 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
 
     maIdle.SetPriority( SchedulerPriority::LOW );
     maIdle.SetIdleHdl( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
-}
-
-ImplGrafMetricField::~ImplGrafMetricField()
-{
 }
 
 void ImplGrafMetricField::Modify()
@@ -243,8 +237,8 @@ class ImplGrafControl : public Control
 {
     using Window::Update;
 private:
-    FixedImage              maImage;
-    ImplGrafMetricField     maField;
+    VclPtr<FixedImage>          maImage;
+    VclPtr<ImplGrafMetricField> maField;
 
 protected:
 
@@ -254,9 +248,10 @@ public:
 
                             ImplGrafControl( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
                             virtual ~ImplGrafControl();
+    virtual void            dispose() SAL_OVERRIDE;
 
-    void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
-    void                    SetText( const OUString& rStr ) SAL_OVERRIDE { maField.SetText( rStr ); }
+    void                    Update( const SfxPoolItem* pItem ) { maField->Update( pItem ); }
+    void                    SetText( const OUString& rStr ) SAL_OVERRIDE { maField->SetText( rStr ); }
 };
 
 ImplGrafControl::ImplGrafControl(
@@ -264,20 +259,20 @@ ImplGrafControl::ImplGrafControl(
     const OUString& rCmd,
     const Reference< XFrame >& rFrame
 )   : Control( pParent, WB_TABSTOP )
-    , maImage( this )
-    , maField( this, rCmd, rFrame )
+    , maImage( VclPtr<FixedImage>::Create(this) )
+    , maField( VclPtr<ImplGrafMetricField>::Create(this, rCmd, rFrame) )
 {
     ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
 
     Size    aImgSize( aImage.GetSizePixel() );
-    Size    aFldSize( maField.GetSizePixel() );
+    Size    aFldSize( maField->GetSizePixel() );
     long    nFldY, nImgY;
 
-    maImage.SetImage( aImage );
-    maImage.SetSizePixel( aImgSize );
+    maImage->SetImage( aImage );
+    maImage->SetSizePixel( aImgSize );
     // we want to see the backbround of the toolbox, not of the FixedImage or Control
-    maImage.SetBackground( Wallpaper( COL_TRANSPARENT ) );
+    maImage->SetBackground( Wallpaper( COL_TRANSPARENT ) );
     SetBackground( Wallpaper( COL_TRANSPARENT ) );
 
     if( aImgSize.Height() > aFldSize.Height() )
@@ -286,26 +281,34 @@ ImplGrafControl::ImplGrafControl(
         nFldY = 0, nImgY = ( aFldSize.Height() - aImgSize.Height() ) >> 1;
 
     long nOffset = SYMBOL_TO_FIELD_OFFSET / 2;
-    maImage.SetPosPixel( Point( nOffset, nImgY ) );
-    maField.SetPosPixel( Point( aImgSize.Width() + SYMBOL_TO_FIELD_OFFSET, nFldY ) );
+    maImage->SetPosPixel( Point( nOffset, nImgY ) );
+    maField->SetPosPixel( Point( aImgSize.Width() + SYMBOL_TO_FIELD_OFFSET, nFldY ) );
     SetSizePixel( Size( aImgSize.Width() + aFldSize.Width() + SYMBOL_TO_FIELD_OFFSET + nOffset,
                   std::max( aImgSize.Height(), aFldSize.Height() ) ) );
 
     SetBackground( Wallpaper() ); // transparent background
 
-    maImage.Show();
+    maImage->Show();
 
-    maField.SetHelpId( OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
-    maField.Show();
+    maField->SetHelpId( OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
+    maField->Show();
 }
 
 ImplGrafControl::~ImplGrafControl()
 {
+    disposeOnce();
+}
+
+void ImplGrafControl::dispose()
+{
+    maImage.disposeAndClear();
+    maField.disposeAndClear();
+    Control::dispose();
 }
 
 void ImplGrafControl::GetFocus()
 {
-    maField.GrabFocus();
+    maField->GrabFocus();
 }
 
 class ImplGrafModeControl : public ListBox
@@ -321,9 +324,7 @@ private:
     static void     ImplReleaseFocus();
 
 public:
-
                     ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame );
-                    virtual ~ImplGrafModeControl();
 
     void            Update( const SfxPoolItem* pItem );
 };
@@ -341,10 +342,6 @@ ImplGrafModeControl::ImplGrafModeControl( vcl::Window* pParent, const Reference<
     InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_WATERMARK ) );
 
     Show();
-}
-
-ImplGrafModeControl::~ImplGrafModeControl()
-{
 }
 
 void ImplGrafModeControl::Select()
@@ -449,7 +446,7 @@ SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
     return SfxPopupWindowType::ONCLICK;
 }
 
-SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
+VclPtr<SfxPopupWindow> SvxGrafFilterToolBoxControl::CreatePopupWindow()
 {
     OUString aSubTbxResName( "private:resource/toolbar/graffilterbar" );
     createAndPositionSubToolBar( aSubTbxResName );
@@ -490,9 +487,9 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
     }
 }
 
-vcl::Window* SvxGrafToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxGrafToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return( new ImplGrafControl( pParent, m_aCommandURL, m_xFrame ) );
+    return VclPtr<ImplGrafControl>::Create( pParent, m_aCommandURL, m_xFrame ).get();
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafRedToolBoxControl, SfxInt16Item );
@@ -577,9 +574,9 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
     }
 }
 
-vcl::Window* SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
-    return( new ImplGrafModeControl( pParent, m_xFrame ) );
+    return VclPtr<ImplGrafModeControl>::Create( pParent, m_xFrame ).get();
 }
 
 void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
@@ -735,7 +732,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     aCropDlgAttr.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(),
                                                     aRBSize.Width(), aRBSize.Height() ) );
 
-                    SfxSingleTabDialog  aCropDialog(
+                    ScopedVclPtrInstance<SfxSingleTabDialog> aCropDialog(
                         SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
                         aCropDlgAttr);
                     const OUString aCropStr(SVX_RESSTR(RID_SVXSTR_GRAFCROP));
@@ -744,14 +741,14 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     assert(pFact && "Dialog creation failed!");
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
                     assert(fnCreatePage && "Dialog creation failed!");
-                    SfxTabPage* pTabPage = (*fnCreatePage)( aCropDialog.get_content_area(), &aCropDlgAttr );
+                    SfxTabPage* pTabPage = (*fnCreatePage)( aCropDialog->get_content_area(), &aCropDlgAttr );
 
                     pTabPage->SetText( aCropStr );
-                    aCropDialog.SetTabPage( pTabPage );
+                    aCropDialog->SetTabPage( pTabPage );
 
-                    if( aCropDialog.Execute() == RET_OK )
+                    if( aCropDialog->Execute() == RET_OK )
                     {
-                        const SfxItemSet* pOutAttr = aCropDialog.GetOutputItemSet();
+                        const SfxItemSet* pOutAttr = aCropDialog->GetOutputItemSet();
 
                         if( pOutAttr )
                         {

@@ -132,6 +132,7 @@ public:
                     const ::com::sun::star::uno::Reference<
                             ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~SchAttribTabDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes
     //pAutoSymbolGraphic: Graphic to be shown if AutoSymbol gets selected

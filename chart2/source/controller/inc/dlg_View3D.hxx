@@ -41,16 +41,17 @@ public:
                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
                   const XColorListRef &pColorTable );
     virtual ~View3DDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     // from Dialog (base of TabDialog)
     virtual short Execute() SAL_OVERRIDE;
 
 private:
-    TabControl*     m_pTabControl;
+    VclPtr<TabControl>     m_pTabControl;
 
-    ThreeD_SceneGeometry_TabPage*       m_pGeometry;
-    ThreeD_SceneAppearance_TabPage*     m_pAppearance;
-    ThreeD_SceneIllumination_TabPage*   m_pIllumination;
+    VclPtr<ThreeD_SceneGeometry_TabPage>       m_pGeometry;
+    VclPtr<ThreeD_SceneAppearance_TabPage>     m_pAppearance;
+    VclPtr<ThreeD_SceneIllumination_TabPage>   m_pIllumination;
 
     ControllerLockHelper                m_aControllerLocker;
 

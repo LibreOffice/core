@@ -55,7 +55,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
     if ( !pParent )
         throw lang::IllegalArgumentException(); // TODO
 
-    pHatchWindow = new SvResizeWindow( pParent, this );
+    pHatchWindow = VclPtr<SvResizeWindow>::Create( pParent, this );
     pHatchWindow->setPosSizePixel( aBounds.X, aBounds.Y, aBounds.Width, aBounds.Height );
     aHatchBorderSize = aSize;
     pHatchWindow->SetHatchBorderPixel( Size( aSize.Width, aSize.Height ) );
@@ -188,7 +188,7 @@ void SAL_CALL VCLXHatchWindow::setController( const uno::Reference< embed::XHatc
 void SAL_CALL VCLXHatchWindow::dispose()
     throw (uno::RuntimeException, std::exception)
 {
-    pHatchWindow = 0;
+    pHatchWindow.clear();
     VCLXWindow::dispose();
 }
 

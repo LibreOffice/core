@@ -28,6 +28,7 @@
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
 #include <editeng/svxenum.hxx>
 
 #include <set>
@@ -54,7 +55,7 @@ struct ESelection;
 class ScInputHandler : boost::noncopyable
 {
 private:
-    ScInputWindow*          pInputWin;
+    VclPtr<ScInputWindow>          pInputWin;
 
     ScEditEngineDefaulter*  pEngine;                    ///< Edited data in the sheet (when the user clicks into the sheet, and starts writing there).
     EditView*               pTableView;                 // associated active EditView
@@ -66,9 +67,9 @@ private:
     ScTypedCaseStrSet::const_iterator miAutoPosColumn;
     ScTypedCaseStrSet::const_iterator miAutoPosFormula;
 
-    vcl::Window*                 pTipVisibleParent;
+    VclPtr<vcl::Window>     pTipVisibleParent;
     sal_uLong               nTipVisible;
-    vcl::Window*                 pTipVisibleSecParent;
+    VclPtr<vcl::Window>     pTipVisibleSecParent;
     sal_uLong               nTipVisibleSec;
     OUString                aManualTip;
     OUString                aAutoSearch;
@@ -240,7 +241,7 @@ public:
 
     bool            IsFormulaMode() const                   { return bFormulaMode; }
     ScInputWindow*  GetInputWindow()                        { return pInputWin; }
-    void            SetInputWindow( ScInputWindow* pNew )   { pInputWin = pNew; }
+    void            SetInputWindow( ScInputWindow* pNew );
     void            StopInputWinEngine( bool bAll );
 
     bool            IsInEnterHandler() const                { return bInEnterHandler; }

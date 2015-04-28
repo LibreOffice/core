@@ -17,6 +17,7 @@
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
+#include <vcl/vclptr.hxx>
 #include <map>
 #include <set>
 #include <stack>
@@ -45,6 +46,7 @@ class VCL_DLLPUBLIC VclBuilder
 {
 public:
     typedef std::map<OString, OString> stringmap;
+    /// These functions return a vcl::Window with a reference count of one.
     typedef vcl::Window* (*customMakeWidget)(vcl::Window *pParent, stringmap &rVec);
 
 public:
@@ -56,8 +58,11 @@ public:
                             const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
                     ~VclBuilder();
 
+    ///releases references and disposes all children.
+    void disposeBuilder();
+
     //sID must exist and be of type T
-    template <typename T> T* get(T*& ret, const OString& sID);
+    template <typename T> T* get(VclPtr<T>& ret, const OString& sID);
 
     //sID may not exist, but must be of type T if it does
     template <typename T /*= vcl::Window if we had c++11*/> T* get(const OString& sID);
@@ -73,7 +78,7 @@ public:
     short           get_response(const vcl::Window *pWindow) const;
 
     OString         get_by_window(const vcl::Window *pWindow) const;
-    void            delete_by_window(const vcl::Window *pWindow);
+    void            delete_by_window(vcl::Window *pWindow);
 
     //release ownership of pWindow, i.e. don't delete it
     void            drop_ownership(const vcl::Window *pWindow);
@@ -147,7 +152,7 @@ private:
     struct WinAndId
     {
         OString m_sID;
-        vcl::Window *m_pWindow;
+        VclPtr<vcl::Window> m_pWindow;
         short m_nResponseId;
         PackingData m_aPackingData;
         WinAndId(const OString &rId, vcl::Window *pWindow, bool bVertical)
@@ -263,7 +268,7 @@ private:
         }
     };
 
-    typedef std::map< vcl::Window*, stringmap> AtkMap;
+    typedef std::map< VclPtr<vcl::Window>, stringmap> AtkMap;
 
     struct ParserState
     {
@@ -290,7 +295,7 @@ private:
 
         Translations m_aTranslations;
 
-        std::map< vcl::Window*, vcl::Window*> m_aRedundantParentWidgets;
+        std::map< VclPtr<vcl::Window>, VclPtr<vcl::Window> > m_aRedundantParentWidgets;
 
         std::vector<SizeGroup> m_aSizeGroups;
 
@@ -298,13 +303,11 @@ private:
 
         std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
 
-        std::vector<VclExpander*> m_aExpanderWidgets;
+        std::vector< VclPtr<VclExpander> > m_aExpanderWidgets;
 
         sal_uInt16 m_nLastToolbarId;
 
-        ParserState()
-            : m_nLastToolbarId(0)
-        {}
+        ParserState();
     };
 
     void        loadTranslations(const LanguageTag &rLanguageTag, const OUString &rUri);
@@ -313,7 +316,7 @@ private:
     OString     m_sID;
     OString     m_sHelpRoot;
     ResHookProc m_pStringReplace;
-    vcl::Window *m_pParent;
+    VclPtr<vcl::Window> m_pParent;
     bool        m_bToplevelHasDeferredInit;
     bool        m_bToplevelHasDeferredProperties;
     bool        m_bToplevelParentFound;
@@ -339,12 +342,12 @@ private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 private:
-    vcl::Window *insertObject(vcl::Window *pParent,
+    VclPtr<vcl::Window> insertObject(vcl::Window *pParent,
                     const OString &rClass, const OString &rID,
                     stringmap &rProps, stringmap &rPangoAttributes,
                     stringmap &rAtkProps);
 
-    vcl::Window *makeObject(vcl::Window *pParent,
+    VclPtr<vcl::Window> makeObject(vcl::Window *pParent,
                     const OString &rClass, const OString &rID,
                     stringmap &rVec);
 
@@ -363,7 +366,7 @@ private:
     void        handleTranslations(xmlreader::XmlReader &reader);
 
     void        handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
-    vcl::Window* handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader);
+    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
@@ -405,7 +408,7 @@ private:
 };
 
 template <typename T>
-inline T* VclBuilder::get(T*& ret, const OString& sID)
+inline T* VclBuilder::get(VclPtr<T>& ret, const OString& sID)
 {
     vcl::Window *w = get_by_name(sID);
     SAL_WARN_IF(!w, "vcl.layout", "widget \"" << sID.getStr() << "\" not found in .ui");
@@ -414,7 +417,7 @@ inline T* VclBuilder::get(T*& ret, const OString& sID)
     assert(w);
     assert(dynamic_cast<T*>(w));
     ret = static_cast<T*>(w);
-    return ret;
+    return ret.get();
 }
 
 //sID may not exist, but must be of type T if it does
@@ -446,19 +449,24 @@ inline PopupMenu* VclBuilder::get_menu(PopupMenu*& ret, const OString& sID)
 //
 //i.e.  class Dialog : public SystemWindow, public VclBuilderContainer
 //not   class Dialog : public VclBuilderContainer, public SystemWindow
+//
+//With the new 'dispose' framework, it is necessary to force the builder
+//dispose before the Window dispose; so a Dialog::dispose() method would
+//finish: disposeBuilder(); SystemWindow::dispose() to capture this ordering.
 
 class VCL_DLLPUBLIC VclBuilderContainer
 {
 public:
                     VclBuilderContainer();
     virtual         ~VclBuilderContainer();
+    void            disposeBuilder();
 
     static OUString getUIRootDir();
     bool            hasBuilder() const { return m_pUIBuilder != NULL; }
 
     css::uno::Reference<css::frame::XFrame> getFrame() { return m_pUIBuilder->getFrame(); }
 
-    template <typename T> T* get(T*& ret, const OString& sID)
+    template <typename T> T* get(VclPtr<T>& ret, const OString& sID)
     {
         return m_pUIBuilder->get<T>(ret, sID);
     }

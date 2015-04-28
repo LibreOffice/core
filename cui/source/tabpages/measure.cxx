@@ -64,7 +64,7 @@ SvxMeasureDialog::SvxMeasureDialog( vcl::Window* pParent, const SfxItemSet& rInA
                                 const SdrView* pSdrView )
     : SfxSingleTabDialog(pParent, rInAttrs)
 {
-    SvxMeasurePage* _pPage = new SvxMeasurePage( get_content_area(), rInAttrs );
+    VclPtrInstance<SvxMeasurePage> _pPage( get_content_area(), rInAttrs );
 
     _pPage->SetView( pSdrView );
     _pPage->Construct();
@@ -148,14 +148,29 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
     m_pLbUnit->SetSelectHdl( aLink );
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
 SvxMeasurePage::~SvxMeasurePage()
 {
+    disposeOnce();
+}
+
+void SvxMeasurePage::dispose()
+{
+    m_pMtrFldLineDist.clear();
+    m_pMtrFldHelplineOverhang.clear();
+    m_pMtrFldHelplineDist.clear();
+    m_pMtrFldHelpline1Len.clear();
+    m_pMtrFldHelpline2Len.clear();
+    m_pTsbBelowRefEdge.clear();
+    m_pMtrFldDecimalPlaces.clear();
+    m_pCtlPosition.clear();
+    m_pTsbAutoPosV.clear();
+    m_pTsbAutoPosH.clear();
+    m_pTsbShowUnit.clear();
+    m_pLbUnit.clear();
+    m_pTsbParallel.clear();
+    m_pFtAutomatic.clear();
+    m_pCtlPreview.clear();
+    SvxTabPage::dispose();
 }
 
 /*************************************************************************
@@ -587,16 +602,10 @@ void SvxMeasurePage::Construct()
     m_pCtlPreview->Invalidate();
 }
 
-/*************************************************************************
-|*
-|* create the tabpage
-|*
-\************************************************************************/
-
-SfxTabPage* SvxMeasurePage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxMeasurePage::Create( vcl::Window* pWindow,
+                                           const SfxItemSet* rAttrs )
 {
-    return new SvxMeasurePage( pWindow, *rAttrs );
+    return VclPtr<SvxMeasurePage>::Create( pWindow, *rAttrs );
 }
 
 void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RECT_POINT /*eRP*/ )

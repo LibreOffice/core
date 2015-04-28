@@ -44,15 +44,15 @@ private:
     OUString                                 maODFVersion;
     const css::uno::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
 
-    FixedImage*         mpSymbolImg;
-    FixedText*          mpDocNameFI;
-    FixedText*          mpDescr1FI;
-    FixedText*          mpSignsFI;
-    PushButton*         mpViewSignsBtn;
-    FixedText*          mpDescr2FI;
-    CheckBox*           mpAlwaysTrustCB;
-    PushButton*         mpEnableBtn;
-    PushButton*         mpDisableBtn;
+    VclPtr<FixedImage>         mpSymbolImg;
+    VclPtr<FixedText>          mpDocNameFI;
+    VclPtr<FixedText>          mpDescr1FI;
+    VclPtr<FixedText>          mpSignsFI;
+    VclPtr<PushButton>         mpViewSignsBtn;
+    VclPtr<FixedText>          mpDescr2FI;
+    VclPtr<CheckBox>           mpAlwaysTrustCB;
+    VclPtr<PushButton>         mpEnableBtn;
+    VclPtr<PushButton>         mpDisableBtn;
 
     const bool          mbSignedMode;           // modus of dialog (signed / unsigned macros)
     const bool          mbShowSignatures;
@@ -68,6 +68,7 @@ private:
 public:
     MacroWarning( vcl::Window* pParent, bool _bShowSignatures, ResMgr& rResMgr );
     virtual ~MacroWarning();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    SetDocumentURL( const OUString& rDocURL );
 

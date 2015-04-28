@@ -250,12 +250,44 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
 
 AlignmentTabPage::~AlignmentTabPage()
 {
-    delete m_pOrientHlp;
+    disposeOnce();
 }
 
-SfxTabPage* AlignmentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void AlignmentTabPage::dispose()
 {
-    return new AlignmentTabPage( pParent, *rAttrSet );
+    delete m_pOrientHlp;
+    m_pOrientHlp = NULL;
+    m_pLbHorAlign.clear();
+    m_pFtIndent.clear();
+    m_pEdIndent.clear();
+    m_pFtVerAlign.clear();
+    m_pLbVerAlign.clear();
+    m_pCtrlDial.clear();
+    m_pFtRotate.clear();
+    m_pNfRotate.clear();
+    m_pFtRefEdge.clear();
+    m_pVsRefEdge.clear();
+    m_pCbStacked.clear();
+    m_pCbAsianMode.clear();
+    m_pBoxDirection.clear();
+    m_pBtnWrap.clear();
+    m_pBtnHyphen.clear();
+    m_pBtnShrink.clear();
+    m_pLbFrameDir.clear();
+    m_pFtBotLock.clear();
+    m_pFtTopLock.clear();
+    m_pFtCelLock.clear();
+    m_pFtABCD.clear();
+    m_pAlignmentFrame.clear();
+    m_pOrientFrame.clear();
+    m_pPropertiesFrame.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> AlignmentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SfxTabPage>( new AlignmentTabPage( pParent, *rAttrSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )

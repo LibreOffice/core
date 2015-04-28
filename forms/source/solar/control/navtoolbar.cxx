@@ -147,14 +147,16 @@ namespace frm
 
     NavigationToolBar::~NavigationToolBar( )
     {
-        for (   ::std::vector< vcl::Window* >::iterator loopChildWins = m_aChildWins.begin();
-                loopChildWins != m_aChildWins.end();
-                ++loopChildWins
-            )
-        {
-            delete *loopChildWins;
-        }
-        delete m_pToolbar;
+        disposeOnce();
+    }
+
+    void NavigationToolBar::dispose()
+    {
+        for (auto i = m_aChildWins.begin(); i != m_aChildWins.end(); ++i)
+            i->disposeAndClear();
+        m_aChildWins.clear();
+        m_pToolbar.disposeAndClear();
+        vcl::Window::dispose();
     }
 
 
@@ -234,7 +236,7 @@ namespace frm
 
     void NavigationToolBar::implInit( )
     {
-        m_pToolbar = new ImplNavToolBar( this );
+        m_pToolbar = VclPtr<ImplNavToolBar>::Create( this );
         m_pToolbar->SetOutStyle( TOOLBOX_STYLE_FLAT );
         m_pToolbar->Show();
 
@@ -299,17 +301,17 @@ namespace frm
                     vcl::Window* pItemWindow = NULL;
                     if ( FormFeature::MoveAbsolute == pSupportedFeatures->nId )
                     {
-                        pItemWindow = new RecordPositionInput( m_pToolbar );
+                        pItemWindow = VclPtr<RecordPositionInput>::Create( m_pToolbar );
                         static_cast< RecordPositionInput* >( pItemWindow )->setDispatcher( m_pDispatcher );
                     }
                     else if ( LID_RECORD_FILLER == pSupportedFeatures->nId )
                     {
-                        pItemWindow = new FixedText( m_pToolbar, WB_CENTER | WB_VCENTER );
+                        pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_CENTER | WB_VCENTER );
                         pItemWindow->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
                     }
                     else
                     {
-                        pItemWindow = new FixedText( m_pToolbar, WB_VCENTER );
+                        pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_VCENTER );
                         pItemWindow->SetBackground();
                         pItemWindow->SetPaintTransparent(true);
                     }
@@ -655,11 +657,6 @@ namespace frm
         SetDecimalDigits( 0 );
         SetStrictFormat( true );
         SetBorderStyle( WindowBorderStyle::MONO );
-    }
-
-
-    RecordPositionInput::~RecordPositionInput()
-    {
     }
 
 

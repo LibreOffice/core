@@ -218,15 +218,18 @@ SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
 }
 
 
-// unregisteres the item in the bindings
+// unregisters the item in the bindings
 
 SfxControllerItem::~SfxControllerItem()
+{
+    dispose();
+}
+
+void SfxControllerItem::dispose()
 {
     if ( IsBound() )
         pBindings->Release(*this);
 }
-
-
 
 void SfxControllerItem::StateChanged
 (

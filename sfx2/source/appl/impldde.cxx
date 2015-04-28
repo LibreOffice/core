@@ -57,14 +57,16 @@ namespace sfx2
 
 class SvDDELinkEditDialog : public ModalDialog
 {
-    Edit            *m_pEdDdeApp;
-    Edit            *m_pEdDdeTopic;
-    Edit            *m_pEdDdeItem;
-    OKButton        *m_pOKButton;
+    VclPtr<Edit>            m_pEdDdeApp;
+    VclPtr<Edit>            m_pEdDdeTopic;
+    VclPtr<Edit>            m_pEdDdeItem;
+    VclPtr<OKButton>        m_pOKButton;
 
     DECL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit* );
 public:
     SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* );
+    virtual ~SvDDELinkEditDialog();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetCmd() const;
 };
 
@@ -88,6 +90,20 @@ SvDDELinkEditDialog::SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* pLin
     m_pEdDdeItem->SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
 
     m_pOKButton->Enable( !sServer.isEmpty() && !sTopic.isEmpty() && !sItem.isEmpty() );
+}
+
+SvDDELinkEditDialog::~SvDDELinkEditDialog()
+{
+    disposeOnce();
+}
+
+void SvDDELinkEditDialog::dispose()
+{
+    m_pEdDdeApp.clear();
+    m_pEdDdeTopic.clear();
+    m_pEdDdeItem.clear();
+    m_pOKButton.clear();
+    ModalDialog::dispose();
 }
 
 OUString SvDDELinkEditDialog::GetCmd() const
@@ -255,10 +271,10 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 
 void SvDDEObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl )
 {
-    SvDDELinkEditDialog aDlg( pParent, pBaseLink );
-    if ( RET_OK == aDlg.Execute() && rEndEditHdl.IsSet() )
+    ScopedVclPtrInstance< SvDDELinkEditDialog > aDlg(pParent, pBaseLink);
+    if ( RET_OK == aDlg->Execute() && rEndEditHdl.IsSet() )
     {
-        OUString sCommand = aDlg.GetCmd();
+        OUString sCommand = aDlg->GetCmd();
         rEndEditHdl.Call( &sCommand );
     }
 }

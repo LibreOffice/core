@@ -156,28 +156,28 @@ struct ImplEventHook
 struct ImplPostEventData
 {
     sal_uLong           mnEvent;
-    const vcl::Window*   mpWin;
+    VclPtr<vcl::Window> mpWin;
     ImplSVEvent *   mnEventId;
     KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
     ZoomEvent       maZoomEvent;
     ScrollEvent     maScrollEvent;
 
-       ImplPostEventData( sal_uLong nEvent, const vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
+       ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maKeyEvent( rKeyEvent ) {}
-       ImplPostEventData( sal_uLong nEvent, const vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
+       ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maMouseEvent( rMouseEvent ) {}
 #if !HAVE_FEATURE_DESKTOP
-       ImplPostEventData( sal_uLong nEvent, const vcl::Window* pWin, const ZoomEvent& rZoomEvent ) :
+       ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const ZoomEvent& rZoomEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maZoomEvent( rZoomEvent ) {}
-       ImplPostEventData( sal_uLong nEvent, const vcl::Window* pWin, const ScrollEvent& rScrollEvent ) :
+       ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const ScrollEvent& rScrollEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maScrollEvent( rScrollEvent ) {}
 #endif
 
     ~ImplPostEventData() {}
 };
 
-typedef ::std::pair< vcl::Window*, ImplPostEventData* > ImplPostEventPair;
+typedef ::std::pair< VclPtr<vcl::Window>, ImplPostEventData* > ImplPostEventPair;
 
 static ::std::list< ImplPostEventPair > aPostedEventList;
 
@@ -855,8 +855,8 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
         break;
     };
 
-    if( pData->mpWin && pData->mpWin->mpWindowImpl->mpFrameWindow && pEventData )
-        ImplWindowFrameProc( pData->mpWin->mpWindowImpl->mpFrameWindow, NULL, (sal_uInt16) nEvent, pEventData );
+    if( pData->mpWin && pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get() && pEventData )
+        ImplWindowFrameProc( pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get(), NULL, (sal_uInt16) nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -1010,7 +1010,7 @@ long    Application::GetTopWindowCount()
 {
     long nRet = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame : NULL;
+    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : NULL;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1024,7 +1024,7 @@ vcl::Window* Application::GetTopWindow( long nIndex )
 {
     long nIdx = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame : NULL;
+    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : NULL;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1268,7 +1268,7 @@ vcl::Window* Application::GetDefDialogParent()
     // #103442# find some useful dialog parent if there
     // was no default set
     // NOTE: currently even the default is not used
-    if( false && pSVData->maWinData.mpDefDialogParent != NULL )
+    if( false && pSVData->maWinData.mpDefDialogParent.get() != NULL )
         return pSVData->maWinData.mpDefDialogParent;
     else
     {
@@ -1629,11 +1629,24 @@ void Application::setDeInitHook(Link const & hook) {
     pSVData->maAppData.mbInAppMain = true;
 }
 
+ImplDelData::ImplDelData( vcl::Window* pWindow ) :
+                             mpNext( NULL ),
+                             mpWindow( NULL ),
+                             mbDel( false )
+{
+    if( pWindow ) AttachToWindow( pWindow );
+}
+
 // helper method to allow inline constructor even for pWindow!=NULL case
 void ImplDelData::AttachToWindow( const vcl::Window* pWindow )
 {
     if( pWindow )
-        const_cast<vcl::Window*>(pWindow)->ImplAddDel( this );
+    {
+        if( pWindow->IsDisposed() )
+            mbDel = true;
+        else
+            const_cast<vcl::Window*>(pWindow)->ImplAddDel( this );
+    }
 }
 
 // define dtor for ImplDelData
@@ -1644,7 +1657,7 @@ ImplDelData::~ImplDelData()
     if( !mbDel && mpWindow )
     {
         // the window still exists but we were not removed
-        const_cast<vcl::Window*>(mpWindow)->ImplRemoveDel( this );
+        const_cast<vcl::Window*>(mpWindow.get())->ImplRemoveDel( this );
         mpWindow = NULL;
     }
 }

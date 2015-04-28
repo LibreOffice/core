@@ -449,8 +449,8 @@ void AssignmentPersistentData::ImplCommit()
 
     struct AddressBookSourceDialogData
     {
-        FixedText*      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
-        ListBox*        pFields[FIELD_PAIRS_VISIBLE * 2];
+        VclPtr<FixedText>      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
+        VclPtr<ListBox>        pFields[FIELD_PAIRS_VISIBLE * 2];
 
         /// when working transient, we need the data source
         Reference< XDataSource >
@@ -733,7 +733,17 @@ void AssignmentPersistentData::ImplCommit()
 
     AddressBookSourceDialog::~AddressBookSourceDialog()
     {
+        disposeOnce();
+    }
+
+    void AddressBookSourceDialog::dispose()
+    {
         delete m_pImpl;
+        m_pDatasource.clear();
+        m_pAdministrateDatasources.clear();
+        m_pTable.clear();
+        m_pFieldScroller.clear();
+        ModalDialog::dispose();
     }
 
 
@@ -931,34 +941,34 @@ void AssignmentPersistentData::ImplCommit()
 
         std::vector<OUString>::iterator aInitialSelection = m_pImpl->aFieldAssignments.begin() + m_pImpl->nFieldScrollPos;
 
-        ListBox** pListbox = m_pImpl->pFields;
         OUString sSaveSelection;
-        for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++pListbox, ++aInitialSelection)
+        for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++aInitialSelection)
         {
-            sSaveSelection = (*pListbox)->GetSelectEntry();
+            VclPtr<ListBox>& pListbox = m_pImpl->pFields[i];
+            sSaveSelection = pListbox->GetSelectEntry();
 
-            (*pListbox)->Clear();
+            pListbox->Clear();
 
             // the one entry for "no selection"
-            (*pListbox)->InsertEntry(m_sNoFieldSelection, 0);
+            pListbox->InsertEntry(m_sNoFieldSelection, 0);
             // as it's entry data, set the index of the list box in our array
-            (*pListbox)->SetEntryData(0, reinterpret_cast<void*>(i));
+            pListbox->SetEntryData(0, reinterpret_cast<void*>(i));
 
             // the field names
             for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
-                (*pListbox)->InsertEntry(*pColumnNames);
+                pListbox->InsertEntry(*pColumnNames);
 
             if (!aInitialSelection->isEmpty() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))
                 // we can select the entry as specified in our field assignment array
-                (*pListbox)->SelectEntry(*aInitialSelection);
+                pListbox->SelectEntry(*aInitialSelection);
             else
                 // try to restore the selection
                 if (aColumnNameSet.end() != aColumnNameSet.find(sSaveSelection))
                     // the old selection is a valid column name
-                    (*pListbox)->SelectEntry(sSaveSelection);
+                    pListbox->SelectEntry(sSaveSelection);
                 else
                     // select the <none> entry
-                    (*pListbox)->SelectEntryPos(0);
+                    pListbox->SelectEntryPos(0);
         }
 
         // adjust m_pImpl->aFieldAssignments
@@ -999,14 +1009,14 @@ void AssignmentPersistentData::ImplCommit()
 
         // loop through our field control rows and do some adjustments
         // for the new texts
-        FixedText** pLeftLabelControl = m_pImpl->pFieldLabels;
-        FixedText** pRightLabelControl = pLeftLabelControl + 1;
+        VclPtr<FixedText>* pLeftLabelControl = m_pImpl->pFieldLabels;
+        VclPtr<FixedText>* pRightLabelControl = pLeftLabelControl + 1;
         StringArray::const_iterator pLeftColumnLabel = m_pImpl->aFieldLabels.begin() + 2 * _nPos;
         StringArray::const_iterator pRightColumnLabel = pLeftColumnLabel + 1;
 
         // for the focus movement and the selection scroll
-        ListBox** pLeftListControl = m_pImpl->pFields;
-        ListBox** pRightListControl = pLeftListControl + 1;
+        VclPtr<ListBox>* pLeftListControl = m_pImpl->pFields;
+        VclPtr<ListBox>* pRightListControl = pLeftListControl + 1;
 
         // for the focus movement
         sal_Int32 nOldFocusRow = -1;

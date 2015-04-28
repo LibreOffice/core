@@ -31,21 +31,18 @@ class SwLabItem;
 
 class SwLabPrtPage : public SfxTabPage
 {
-    Printer*      pPrinter;             // for the shaft setting - unfortunately
+    VclPtr<Printer>      pPrinter; // for the shaft setting - unfortunately
 
-    RadioButton*  m_pPageButton;
-    RadioButton*  m_pSingleButton;
-    VclContainer* m_pSingleGrid;
-    VclContainer* m_pPrinterFrame;
-    NumericField* m_pColField;
-    NumericField* m_pRowField;
-    CheckBox*     m_pSynchronCB;
+    VclPtr<RadioButton>  m_pPageButton;
+    VclPtr<RadioButton>  m_pSingleButton;
+    VclPtr<VclContainer> m_pSingleGrid;
+    VclPtr<VclContainer> m_pPrinterFrame;
+    VclPtr<NumericField> m_pColField;
+    VclPtr<NumericField> m_pRowField;
+    VclPtr<CheckBox>     m_pSynchronCB;
 
-    FixedText*    m_pPrinterInfo;
-    PushButton*   m_pPrtSetup;
-
-     SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwLabPrtPage();
+    VclPtr<FixedText>    m_pPrinterInfo;
+    VclPtr<PushButton>   m_pPrtSetup;
 
     DECL_LINK( CountHdl, Button * );
 
@@ -55,8 +52,11 @@ class SwLabPrtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    virtual ~SwLabPrtPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

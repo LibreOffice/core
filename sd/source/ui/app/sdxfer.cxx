@@ -141,7 +141,7 @@ SdTransferable::~SdTransferable()
     delete mpBookmark;
     delete mpImageMap;
 
-    delete mpVDev;
+    mpVDev.disposeAndClear();
     delete mpObjDesc;
 
     //call explicitly at end of dtor to be covered by above SolarMutex
@@ -262,7 +262,7 @@ void SdTransferable::CreateData()
         if( 1 == pPage->GetObjCount() )
             CreateObjectReplacement( pPage->GetObj( 0 ) );
 
-        mpVDev = new VirtualDevice( *Application::GetDefaultDevice() );
+        mpVDev = VclPtr<VirtualDevice>::Create( *Application::GetDefaultDevice() );
         mpVDev->SetMapMode( MapMode( mpSdDrawDocumentIntern->GetScaleUnit(), Point(), mpSdDrawDocumentIntern->GetScaleFraction(), mpSdDrawDocumentIntern->GetScaleFraction() ) );
         mpSdViewIntern = new ::sd::View( *mpSdDrawDocumentIntern, mpVDev );
         mpSdViewIntern->EndListening(*mpSdDrawDocumentIntern );

@@ -106,7 +106,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         m_pVclControl = NULL;
         getVclControl();
 
-        OSL_ENSURE(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
+        OSL_ENSURE(m_pVclControl != nullptr, "UnoDataBrowserView::Construct : no real grid control !");
     }
     catch(const Exception&)
     {
@@ -117,17 +117,15 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
 UnoDataBrowserView::~UnoDataBrowserView()
 {
-    {
-        boost::scoped_ptr<Splitter> aTemp(m_pSplitter);
-        m_pSplitter = NULL;
-    }
+    disposeOnce();
+}
+
+void UnoDataBrowserView::dispose()
+{
+    m_pSplitter.disposeAndClear();
     setTreeView(NULL);
 
-    if ( m_pStatus )
-    {
-        delete m_pStatus;
-        m_pStatus = NULL;
-    }
+    m_pStatus.disposeAndClear();
 
     try
     {
@@ -136,7 +134,9 @@ UnoDataBrowserView::~UnoDataBrowserView()
     }
     catch(const Exception&)
     {}
-
+    m_pTreeView.clear();
+    m_pVclControl.clear();
+    ODataView::dispose();
 }
 
 IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, /*NOINTERESTEDIN*/ )
@@ -157,13 +157,9 @@ void UnoDataBrowserView::setSplitter(Splitter* _pSplitter)
 
 void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
 {
-    if (m_pTreeView != _pTreeView)
+    if (m_pTreeView.get() != _pTreeView)
     {
-        if (m_pTreeView)
-        {
-            boost::scoped_ptr<vcl::Window> aTemp(m_pTreeView);
-            m_pTreeView = NULL;
-        }
+        m_pTreeView.disposeAndClear();
         m_pTreeView = _pTreeView;
     }
 }
@@ -175,7 +171,7 @@ void UnoDataBrowserView::showStatus( const OUString& _rStatus )
     else
     {
         if (!m_pStatus)
-            m_pStatus = new FixedText(this);
+            m_pStatus = VclPtr<FixedText>::Create(this);
         m_pStatus->SetText(_rStatus);
         m_pStatus->Show();
         Resize();
@@ -268,7 +264,7 @@ SbaGridControl* UnoDataBrowserView::getVclControl() const
                 UnoDataBrowserView* pTHIS = const_cast<UnoDataBrowserView*>(this);
                 if ( pPeer )
                 {
-                    m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow());
+                    m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow().get());
                     pTHIS->startComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
                 }
             }

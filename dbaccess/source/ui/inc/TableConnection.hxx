@@ -41,7 +41,7 @@ namespace dbaui
         ::std::vector<OConnectionLine*> m_vConnLine;
         TTableConnectionData::value_type
                                         m_pData;
-        OJoinTableView*                 m_pParent;
+        VclPtr<OJoinTableView>          m_pParent;
 
         bool                            m_bSelected;
 
@@ -65,6 +65,7 @@ namespace dbaui
                        eventually.
          */
         virtual ~OTableConnection();
+        virtual void dispose() SAL_OVERRIDE;
 
         OTableConnection& operator=( const OTableConnection& rConn );
 

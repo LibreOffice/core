@@ -71,7 +71,7 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
 {
     NSString * notification = nil;
     id element = m_wrapperObject;
-    Rectangle bounds;
+    ::css::awt::Rectangle bounds;
 
     // TODO: NSAccessibilityValueChanged, NSAccessibilitySelectedRowsChangedNotification
     switch( aEvent.EventId )

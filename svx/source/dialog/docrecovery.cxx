@@ -539,15 +539,21 @@ PluginProgressWindow::PluginProgressWindow(      vcl::Window*                   
 
 PluginProgressWindow::~PluginProgressWindow()
 {
+    disposeOnce();
+}
+
+void PluginProgressWindow::dispose()
+{
     if (m_xProgress.is())
         m_xProgress->dispose();
+    vcl::Window::dispose();
 }
 
 
 PluginProgress::PluginProgress(      vcl::Window*                                             pParent,
                                const css::uno::Reference< css::uno::XComponentContext >& xContext  )
 {
-    m_pPlugProgressWindow = new PluginProgressWindow(pParent, static_cast< css::lang::XComponent* >(this));
+    m_pPlugProgressWindow = VclPtr<PluginProgressWindow>::Create(pParent, static_cast< css::lang::XComponent* >(this));
     css::uno::Reference< css::awt::XWindow > xProgressWindow = VCLUnoHelper::GetInterface(m_pPlugProgressWindow);
     m_xProgressFactory = css::task::StatusIndicatorFactory::createWithWindow(xContext, xProgressWindow, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/);
     m_xProgress = m_xProgressFactory->createStatusIndicator();
@@ -660,10 +666,23 @@ SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
     }
 }
 
+SaveDialog::~SaveDialog()
+{
+    disposeOnce();
+}
+
+void SaveDialog::dispose()
+{
+    m_pTitleFT.clear();
+    m_pFileListLB.clear();
+    m_pOkBtn.clear();
+    Dialog::dispose();
+}
+
 IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
 {
     // start crash-save with progress
-    boost::scoped_ptr<SaveProgressDialog> pProgress(new SaveProgressDialog(this, m_pCore));
+    ScopedVclPtrInstance< SaveProgressDialog > pProgress(this, m_pCore);
     short nResult = pProgress->Execute();
     pProgress.reset();
 
@@ -688,6 +707,17 @@ SaveProgressDialog::SaveProgressDialog(vcl::Window* pParent, RecoveryCore* pCore
 
     PluginProgress* pProgress   = new PluginProgress(m_pProgrParent, pCore->getComponentContext());
     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
+}
+
+SaveProgressDialog::~SaveProgressDialog()
+{
+    disposeOnce();
+}
+
+void SaveProgressDialog::dispose()
+{
+    m_pProgrParent.clear();
+    ModalDialog::dispose();
 }
 
 short SaveProgressDialog::Execute()
@@ -808,10 +838,6 @@ RecovDocList::RecovDocList(SvSimpleTableContainer& rParent, ResMgr &rResMgr)
 {
 }
 
-RecovDocList::~RecovDocList()
-{
-}
-
 void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
                              const OUString& rText,
                              const Image& rImage1,
@@ -829,8 +855,8 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 
 short impl_askUserForWizardCancel(vcl::Window* pParent, sal_Int16 nRes)
 {
-    MessageDialog aQuery(pParent, SVX_RES(nRes), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-    if (aQuery.Execute() == RET_YES)
+    ScopedVclPtrInstance< MessageDialog > aQuery(pParent, SVX_RES(nRes), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    if (aQuery->Execute() == RET_YES)
         return DLG_RET_OK;
     else
         return DLG_RET_CANCEL;
@@ -858,7 +884,7 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     Size aSize(LogicToPixel(Size(RECOV_CONTROLWIDTH, RECOV_FILELISTHEIGHT), MAP_APPFONT));
     pFileListLBContainer->set_width_request(aSize.Width());
     pFileListLBContainer->set_height_request(aSize.Height());
-    m_pFileListLB = new RecovDocList(*pFileListLBContainer, DIALOG_MGR());
+    m_pFileListLB = VclPtr<RecovDocList>::Create(*pFileListLBContainer, DIALOG_MGR());
 
     static long nTabs[] = { 2, 0, 40*RECOV_CONTROLWIDTH/100 };
     m_pFileListLB->SetTabs( &nTabs[0] );
@@ -901,7 +927,18 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
 
 RecoveryDialog::~RecoveryDialog()
 {
-    delete m_pFileListLB;
+    disposeOnce();
+}
+
+void RecoveryDialog::dispose()
+{
+    m_pFileListLB.disposeAndClear();
+    m_pTitleFT.clear();
+    m_pDescrFT.clear();
+    m_pProgrParent.clear();
+    m_pNextBtn.clear();
+    m_pCancelBtn.clear();
+    Dialog::dispose();
 }
 
 short RecoveryDialog::execute()
@@ -951,7 +988,7 @@ short RecoveryDialog::execute()
                  // failed recovery documents. They must be saved to
                  // a user selected directrory.
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 boost::scoped_ptr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
+                 ScopedVclPtrInstance< BrokenRecoveryDialog > pBrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default dir
                  if (pBrokenRecoveryDialog->isExecutionNeeded())
                  {
@@ -1020,7 +1057,7 @@ short RecoveryDialog::execute()
                  // If no temp files exists or user decided to ignore it ...
                  // we have to remove all recovery/session data anyway!
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 boost::scoped_ptr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
+                 ScopedVclPtrInstance< BrokenRecoveryDialog > pBrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default save location
 
                  // dialog itself checks if there is a need to copy files for this mode.
@@ -1231,9 +1268,19 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(vcl::Window*       pParent        ,
     impl_refresh();
 }
 
-
 BrokenRecoveryDialog::~BrokenRecoveryDialog()
 {
+    disposeOnce();
+}
+
+void BrokenRecoveryDialog::dispose()
+{
+    m_pFileListLB.clear();
+    m_pSaveDirED.clear();
+    m_pSaveDirBtn.clear();
+    m_pOkBtn.clear();
+    m_pCancelBtn.clear();
+    ModalDialog::dispose();
 }
 
 

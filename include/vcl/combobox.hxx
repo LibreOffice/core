@@ -32,23 +32,19 @@ class ImplListBoxFloatingWindow;
 class ImplListBox;
 class ImplBtn;
 
-
-// - ComboBox -
-
-
 class VCL_DLLPUBLIC ComboBox : public Edit
 {
 private:
-    Edit*                       mpSubEdit;
-    ImplListBox*                mpImplLB;
-    ImplBtn*                    mpBtn;
-    ImplListBoxFloatingWindow*  mpFloatWin;
+    VclPtr<Edit>                mpSubEdit;
+    VclPtr<ImplListBox>         mpImplLB;
+    VclPtr<ImplBtn>             mpBtn;
+    VclPtr<ImplListBoxFloatingWindow>  mpFloatWin;
     sal_uInt16                  mnDDHeight;
     sal_Unicode                 mcMultiSep;
     bool                        mbDDAutoSize        : 1;
     bool                        mbSyntheticModify   : 1;
     bool                        mbMatchCase         : 1;
-    sal_Int32 m_nMaxWidthChars;
+    sal_Int32                   m_nMaxWidthChars;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
     boost::signals2::scoped_connection mAutocompleteConnection;
@@ -73,7 +69,7 @@ private:
     DECL_DLLPRIVATE_LINK(   ImplDoubleClickHdl, void* );
     DECL_DLLPRIVATE_LINK(   ImplPopupModeEndHdl, void* );
     DECL_DLLPRIVATE_LINK(   ImplSelectionChangedHdl, void* );
-    DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , void* );
+    DECL_DLLPRIVATE_LINK(   ImplListItemSelectHdl , void* );
 
     SAL_DLLPRIVATE void ImplClickButtonHandler( ImplBtn* );
     SAL_DLLPRIVATE void ImplUserDrawHandler( UserDrawEvent* );
@@ -90,11 +86,13 @@ protected:
 protected:
     bool            IsDropDownBox() const { return mpFloatWin != nullptr; }
 
-    virtual void  FillLayoutData() const SAL_OVERRIDE;
+    virtual void    FillLayoutData() const SAL_OVERRIDE;
+
 public:
     explicit        ComboBox( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        ComboBox( vcl::Window* pParent, const ResId& );
     virtual         ~ComboBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -117,12 +115,12 @@ public:
 
     Rectangle       GetDropDownPosSizePixel() const;
 
-    void AdaptDropDownLineCountToMaximum();
+    void            AdaptDropDownLineCountToMaximum();
     void            SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16      GetDropDownLineCount() const;
 
     void            EnableAutoSize( bool bAuto );
-    bool        IsAutoSizeEnabled() const               { return mbDDAutoSize; }
+    bool            IsAutoSizeEnabled() const               { return mbDDAutoSize; }
 
     void            EnableDDAutoWidth( bool b );
 

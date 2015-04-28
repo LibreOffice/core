@@ -52,32 +52,32 @@ private:
     SvxStdParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     // indention
-    SvxRelativeField*       m_pLeftIndent;
+    VclPtr<SvxRelativeField>       m_pLeftIndent;
 
-    FixedText*              m_pRightLabel;
-    SvxRelativeField*       m_pRightIndent;
+    VclPtr<FixedText>              m_pRightLabel;
+    VclPtr<SvxRelativeField>       m_pRightIndent;
 
-    FixedText*              m_pFLineLabel;
-    SvxRelativeField*       m_pFLineIndent;
-    CheckBox*               m_pAutoCB;
+    VclPtr<FixedText>              m_pFLineLabel;
+    VclPtr<SvxRelativeField>       m_pFLineIndent;
+    VclPtr<CheckBox>               m_pAutoCB;
 
     // distance
-    SvxRelativeField*       m_pTopDist;
-    SvxRelativeField*       m_pBottomDist;
-    CheckBox*               m_pContextualCB;
+    VclPtr<SvxRelativeField>       m_pTopDist;
+    VclPtr<SvxRelativeField>       m_pBottomDist;
+    VclPtr<CheckBox>               m_pContextualCB;
 
     // line spacing
-    ListBox*                m_pLineDist;
-    FixedText*              m_pLineDistAtLabel;
-    MetricField*            m_pLineDistAtPercentBox;
-    MetricField*            m_pLineDistAtMetricBox;
-    FixedText*              m_pAbsDist;
+    VclPtr<ListBox>                m_pLineDist;
+    VclPtr<FixedText>              m_pLineDistAtLabel;
+    VclPtr<MetricField>            m_pLineDistAtPercentBox;
+    VclPtr<MetricField>            m_pLineDistAtMetricBox;
+    VclPtr<FixedText>              m_pAbsDist;
     OUString                sAbsDist;
-    SvxParaPrevWindow*      m_pExampleWin;
+    VclPtr<SvxParaPrevWindow>      m_pExampleWin;
 
     // only writer
-    VclFrame*               m_pRegisterFL;
-    CheckBox*               m_pRegisterCB;
+    VclPtr<VclFrame>               m_pRegisterFL;
+    VclPtr<CheckBox>               m_pRegisterCB;
 
     long                    nAbst;
     long                    nWidth;
@@ -98,9 +98,12 @@ protected:
 
 
 public:
+    virtual ~SvxStdParagraphTabPage();
+    virtual void dispose() SAL_OVERRIDE;
+
     DECL_LINK(ELRLoseFocusHdl, void *);
 
-    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pStdRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -115,8 +118,6 @@ public:
     void                    EnableAbsLineDist(long nMinTwip);
     void                    EnableNegativeMode();
     virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
-
-    virtual                ~SvxStdParagraphTabPage();
 };
 
 // class SvxParaAlignTabPage ------------------------------------------------
@@ -127,27 +128,27 @@ class SvxParaAlignTabPage : public SfxTabPage
     static const sal_uInt16 pAlignRanges[];
 
     // alignment
-    RadioButton*             m_pLeft;
-    RadioButton*             m_pRight;
-    RadioButton*             m_pCenter;
-    RadioButton*             m_pJustify;
-    FixedText*               m_pLeftBottom;
-    FixedText*               m_pRightTop;
+    VclPtr<RadioButton>             m_pLeft;
+    VclPtr<RadioButton>             m_pRight;
+    VclPtr<RadioButton>             m_pCenter;
+    VclPtr<RadioButton>             m_pJustify;
+    VclPtr<FixedText>               m_pLeftBottom;
+    VclPtr<FixedText>               m_pRightTop;
 
-    FixedText*               m_pLastLineFT;
-    ListBox*                 m_pLastLineLB;
-    CheckBox*                m_pExpandCB;
+    VclPtr<FixedText>               m_pLastLineFT;
+    VclPtr<ListBox>                 m_pLastLineLB;
+    VclPtr<CheckBox>                m_pExpandCB;
 
-    CheckBox*                m_pSnapToGridCB;
+    VclPtr<CheckBox>                m_pSnapToGridCB;
 
     //preview
-    SvxParaPrevWindow*       m_pExampleWin;
+    VclPtr<SvxParaPrevWindow>       m_pExampleWin;
     //vertical alignment
-    VclFrame*                m_pVertAlignFL;
-    ListBox*                 m_pVertAlignLB;
+    VclPtr<VclFrame>                m_pVertAlignFL;
+    VclPtr<ListBox>                 m_pVertAlignLB;
 
-    VclFrame*                m_pPropertiesFL;
-    svx::FrameDirectionListBox*  m_pTextDirectionLB;
+    VclPtr<VclFrame>                m_pPropertiesFL;
+    VclPtr<svx::FrameDirectionListBox>  m_pTextDirectionLB;
 
     DECL_LINK(AlignHdl_Impl, void *);
     DECL_LINK(LastLineHdl_Impl, void *);
@@ -156,13 +157,15 @@ class SvxParaAlignTabPage : public SfxTabPage
     void                    UpdateExample_Impl( bool bAll = false );
 
                             SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual                 ~SvxParaAlignTabPage();
 
 protected:
     virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    virtual ~SvxParaAlignTabPage();
+    virtual void dispose() SAL_OVERRIDE;
+
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pAlignRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -192,9 +195,10 @@ class SvxExtParagraphTabPage: public SfxTabPage
     static const sal_uInt16 pExtRanges[];
 
 public:
-    virtual             ~SvxExtParagraphTabPage();
+    virtual ~SvxExtParagraphTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pExtRanges; }
 
@@ -210,37 +214,37 @@ private:
                         SvxExtParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     // hyphenation
-    TriStateBox*        m_pHyphenBox;
-    FixedText*          m_pBeforeText;
-    NumericField*       m_pExtHyphenBeforeBox;
-    FixedText*          m_pAfterText;
-    NumericField*       m_pExtHyphenAfterBox;
-    FixedText*          m_pMaxHyphenLabel;
-    NumericField*       m_pMaxHyphenEdit;
+    VclPtr<TriStateBox>        m_pHyphenBox;
+    VclPtr<FixedText>          m_pBeforeText;
+    VclPtr<NumericField>       m_pExtHyphenBeforeBox;
+    VclPtr<FixedText>          m_pAfterText;
+    VclPtr<NumericField>       m_pExtHyphenAfterBox;
+    VclPtr<FixedText>          m_pMaxHyphenLabel;
+    VclPtr<NumericField>       m_pMaxHyphenEdit;
 
     // pagebreak
-    TriStateBox*        m_pPageBreakBox;
-    FixedText*          m_pBreakTypeFT;
-    ListBox*            m_pBreakTypeLB;
-    FixedText*          m_pBreakPositionFT;
-    ListBox*            m_pBreakPositionLB;
-    TriStateBox*        m_pApplyCollBtn;
-    ListBox*            m_pApplyCollBox;
-    FixedText*          m_pPagenumText;
-    NumericField*       m_pPagenumEdit;
+    VclPtr<TriStateBox>        m_pPageBreakBox;
+    VclPtr<FixedText>          m_pBreakTypeFT;
+    VclPtr<ListBox>            m_pBreakTypeLB;
+    VclPtr<FixedText>          m_pBreakPositionFT;
+    VclPtr<ListBox>            m_pBreakPositionLB;
+    VclPtr<TriStateBox>        m_pApplyCollBtn;
+    VclPtr<ListBox>            m_pApplyCollBox;
+    VclPtr<FixedText>          m_pPagenumText;
+    VclPtr<NumericField>       m_pPagenumEdit;
 
     // paragraph division
-    TriStateBox*        m_pKeepTogetherBox;
-    TriStateBox*        m_pKeepParaBox;
+    VclPtr<TriStateBox>        m_pKeepTogetherBox;
+    VclPtr<TriStateBox>        m_pKeepParaBox;
 
     // orphan/widow
-    TriStateBox*        m_pOrphanBox;
-    NumericField*       m_pOrphanRowNo;
-    FixedText*          m_pOrphanRowLabel;
+    VclPtr<TriStateBox>        m_pOrphanBox;
+    VclPtr<NumericField>       m_pOrphanRowNo;
+    VclPtr<FixedText>          m_pOrphanRowLabel;
 
-    TriStateBox*        m_pWidowBox;
-    NumericField*       m_pWidowRowNo;
-    FixedText*          m_pWidowRowLabel;
+    VclPtr<TriStateBox>        m_pWidowBox;
+    VclPtr<NumericField>       m_pWidowRowNo;
+    VclPtr<FixedText>          m_pWidowRowLabel;
 
     bool                bPageBreak;
     bool                bHtmlMode;
@@ -262,9 +266,9 @@ private:
 class SvxAsianTabPage : public SfxTabPage
 {
 
-    CheckBox*     m_pForbiddenRulesCB;
-    CheckBox*     m_pHangingPunctCB;
-    CheckBox*     m_pScriptSpaceCB;
+    VclPtr<CheckBox>     m_pForbiddenRulesCB;
+    VclPtr<CheckBox>     m_pHangingPunctCB;
+    VclPtr<CheckBox>     m_pScriptSpaceCB;
 
     SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
@@ -272,9 +276,9 @@ class SvxAsianTabPage : public SfxTabPage
 
 public:
     virtual ~SvxAsianTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-
-    static SfxTabPage*  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 

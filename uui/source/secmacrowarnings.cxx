@@ -89,6 +89,21 @@ MacroWarning::MacroWarning( vcl::Window* _pParent, bool _bWithSignatures, ResMgr
 
 MacroWarning::~MacroWarning()
 {
+    disposeOnce();
+}
+
+void MacroWarning::dispose()
+{
+    mpSymbolImg.clear();
+    mpDocNameFI.clear();
+    mpDescr1FI.clear();
+    mpSignsFI.clear();
+    mpViewSignsBtn.clear();
+    mpDescr2FI.clear();
+    mpAlwaysTrustCB.clear();
+    mpEnableBtn.clear();
+    mpDisableBtn.clear();
+    ModalDialog::dispose();
 }
 
 void MacroWarning::SetDocumentURL( const OUString& rDocURL )

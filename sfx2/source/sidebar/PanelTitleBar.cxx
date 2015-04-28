@@ -51,7 +51,7 @@ PanelTitleBar::PanelTitleBar (
       msMoreOptionsCommand(),
       msAccessibleNamePrefix(SFX2_RESSTR(SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX))
 {
-    OSL_ASSERT(mpPanel != NULL);
+    OSL_ASSERT(mpPanel != nullptr);
 
 #ifdef DEBUG
     SetText(OUString("PanelTitleBar"));
@@ -60,6 +60,13 @@ PanelTitleBar::PanelTitleBar (
 
 PanelTitleBar::~PanelTitleBar()
 {
+    disposeOnce();
+}
+
+void PanelTitleBar::dispose()
+{
+    mpPanel.clear();
+    TitleBar::dispose();
 }
 
 void PanelTitleBar::SetMoreOptionsCommand (
@@ -69,27 +76,27 @@ void PanelTitleBar::SetMoreOptionsCommand (
     if ( ! rsCommandName.equals(msMoreOptionsCommand))
     {
         if (msMoreOptionsCommand.getLength() > 0)
-            maToolBox.RemoveItem(maToolBox.GetItemPos(mnMenuItemIndex));
+            maToolBox->RemoveItem(maToolBox->GetItemPos(mnMenuItemIndex));
 
         msMoreOptionsCommand = rsCommandName;
         mxFrame = rxFrame;
 
         if (msMoreOptionsCommand.getLength() > 0)
         {
-            maToolBox.InsertItem(
+            maToolBox->InsertItem(
                 mnMenuItemIndex,
                 Theme::GetImage(Theme::Image_PanelMenu));
             Reference<frame::XToolbarController> xController (
                 ControllerFactory::CreateToolBoxController(
-                    &maToolBox,
+                    maToolBox.get(),
                     mnMenuItemIndex,
                     msMoreOptionsCommand,
                     rxFrame,
-                    VCLUnoHelper::GetInterface(&maToolBox),
+                    VCLUnoHelper::GetInterface(maToolBox.get()),
                     0));
-            maToolBox.SetController(mnMenuItemIndex, xController, msMoreOptionsCommand);
-            maToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
-            maToolBox.SetQuickHelpText(
+            maToolBox->SetController(mnMenuItemIndex, xController, msMoreOptionsCommand);
+            maToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
+            maToolBox->SetQuickHelpText(
                 mnMenuItemIndex,
                 SFX2_RESSTR(SFX_STR_SIDEBAR_MORE_OPTIONS));
         }
@@ -98,7 +105,7 @@ void PanelTitleBar::SetMoreOptionsCommand (
 
 Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
 {
-    if (mpPanel != NULL)
+    if (mpPanel != nullptr)
     {
         Image aImage (mpPanel->IsExpanded()
             ? Theme::GetImage(Theme::Image_Expand)
@@ -117,7 +124,7 @@ void PanelTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
 {
     (void)rTitleBarBox;
 
-    if (mpPanel != NULL)
+    if (mpPanel != nullptr)
     {
         Image aImage (mpPanel->IsExpanded()
             ? Theme::GetImage(Theme::Image_Collapse)
@@ -185,7 +192,7 @@ void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
     {
         if (mbIsLeftButtonDown)
         {
-            if (mpPanel != NULL)
+            if (mpPanel != nullptr)
             {
                 mpPanel->SetExpanded( ! mpPanel->IsExpanded());
                 Invalidate();
@@ -198,7 +205,7 @@ void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
 
 void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
-    maToolBox.SetItemImage(
+    maToolBox->SetItemImage(
         mnMenuItemIndex,
         Theme::GetImage(Theme::Image_PanelMenu));
     TitleBar::DataChanged(rEvent);

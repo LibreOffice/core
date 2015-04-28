@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <tools/gen.hxx>
+#include <vcl/vclptr.hxx>
 
 #include "outfont.hxx"
 #include "PhysicalFontFace.hxx"
@@ -164,7 +165,7 @@ namespace basegfx { class B2DHomMatrix; }
 
 struct ImplOutDevData
 {
-    VirtualDevice*              mpRotateDev;
+    VclPtr<VirtualDevice>       mpRotateDev;
     vcl::ControlLayoutData*     mpRecordLayout;
     Rectangle                   maRecordRect;
 

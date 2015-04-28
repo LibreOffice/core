@@ -52,6 +52,7 @@ namespace frm
         );
 
         virtual ~RichTextControl( );
+        virtual void dispose() SAL_OVERRIDE;
 
         /* enables the change notifications for a particular attribute
 

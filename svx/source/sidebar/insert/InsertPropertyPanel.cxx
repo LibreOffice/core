@@ -72,16 +72,21 @@ InsertPropertyPanel::InsertPropertyPanel (
     pTopWindow->AddChildEventListener(LINK(this, InsertPropertyPanel, WindowEventListener));
 }
 
-
-
-
 InsertPropertyPanel::~InsertPropertyPanel()
+{
+    disposeOnce();
+}
+
+void InsertPropertyPanel::dispose()
 {
     // Remove window child listener.
     vcl::Window* pTopWindow = this;
     while (pTopWindow->GetParent() != NULL)
         pTopWindow = pTopWindow->GetParent();
     pTopWindow->RemoveChildEventListener(LINK(this, InsertPropertyPanel, WindowEventListener));
+    mpStandardShapesToolBox.clear();
+    mpCustomShapesToolBox.clear();
+    PanelLayout::dispose();
 }
 
 
@@ -118,13 +123,13 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
     if (nId == 0)
         return 1;
 
-    SidebarToolBox* pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpStandardShapesToolBox);
+    SidebarToolBox* pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpStandardShapesToolBox.get());
     if (pSidebarToolBox == NULL)
         return 1;
     sal_uInt16 nItemId (pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path));
     if (nItemId == 0)
     {
-        pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpCustomShapesToolBox);
+        pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpCustomShapesToolBox.get());
         if (pSidebarToolBox == NULL)
             return 1;
         nItemId = pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path);

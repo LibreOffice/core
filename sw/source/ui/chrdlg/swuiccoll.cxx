@@ -124,9 +124,25 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwCondCollPage::~SwCondCollPage()
 {
+    disposeOnce();
+}
+
+void SwCondCollPage::dispose()
+{
     for(sal_Int32 i = 0; i < m_pFilterLB->GetEntryCount(); ++i)
         delete static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(i));
 
+    m_pConditionCB.clear();
+    m_pContextFT.clear();
+    m_pUsedFT.clear();
+    m_pTbLinks.clear();
+    m_pStyleFT.clear();
+    m_pStyleLB.clear();
+    m_pFilterLB.clear();
+    m_pRemovePB.clear();
+    m_pAssignPB.clear();
+
+    SfxTabPage::dispose();
 }
 
 SfxTabPage::sfxpg SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
@@ -137,9 +153,10 @@ SfxTabPage::sfxpg SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwCondCollPage(pParent, *rSet);
+    return VclPtr<SfxTabPage>(new SwCondCollPage(pParent, *rSet),
+                              SAL_NO_ACQUIRE);
 }
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)

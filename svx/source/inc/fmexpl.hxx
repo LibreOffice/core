@@ -501,6 +501,7 @@ namespace svxform
     public:
         NavigatorTree(vcl::Window* pParent );
         virtual ~NavigatorTree();
+        virtual void dispose() SAL_OVERRIDE;
 
         void Clear();
         void UpdateContent( FmFormShell* pFormShell );
@@ -555,7 +556,7 @@ namespace svxform
     class NavigatorFrame : public SfxDockingWindow, public SfxControllerItem
     {
     private:
-        ::svxform::NavigatorTree* m_pNavigatorTree;
+        VclPtr<::svxform::NavigatorTree> m_pNavigatorTree;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;
@@ -570,6 +571,7 @@ namespace svxform
         NavigatorFrame( SfxBindings *pBindings, SfxChildWindow *pMgr,
                        vcl::Window* pParent );
         virtual ~NavigatorFrame();
+        virtual void dispose() SAL_OVERRIDE;
 
         void UpdateContent( FmFormShell* pFormShell );
         void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;

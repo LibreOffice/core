@@ -67,6 +67,17 @@ IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl)
 
 TSAURLsDialog::~TSAURLsDialog()
 {
+    disposeOnce();
+}
+
+void TSAURLsDialog::dispose()
+{
+    m_pAddBtn.clear();
+    m_pDeleteBtn.clear();
+    m_pOKBtn.clear();
+    m_pURLListBox.clear();
+
+    ModalDialog::dispose();
 }
 
 void TSAURLsDialog::AddTSAURL(const OUString& rURL)

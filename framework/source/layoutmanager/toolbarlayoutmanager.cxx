@@ -1031,14 +1031,14 @@ void ToolbarLayoutManager::setParentWindow(
     if ( xParentWindow.is() )
     {
         SolarMutexGuard aGuard;
-        ::DockingAreaWindow* pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xTopDockWindow ) );
+        VclPtr< ::DockingAreaWindow > pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xTopDockWindow ).get() );
         if( pWindow ) pWindow->SetAlign( WINDOWALIGN_TOP );
-        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xBottomDockWindow ) );
-            if( pWindow ) pWindow->SetAlign( WINDOWALIGN_BOTTOM );
-        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xLeftDockWindow ) );
-            if( pWindow ) pWindow->SetAlign( WINDOWALIGN_LEFT );
-        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xRightDockWindow ) );
-            if( pWindow ) pWindow->SetAlign( WINDOWALIGN_RIGHT );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xBottomDockWindow ).get() );
+        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_BOTTOM );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xLeftDockWindow ).get() );
+        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_LEFT );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xRightDockWindow ).get() );
+        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_RIGHT );
         implts_reparentToolbars();
     }
     else

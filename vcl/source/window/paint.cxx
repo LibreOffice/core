@@ -43,7 +43,7 @@
 class PaintHelper
 {
 private:
-    vcl::Window* m_pWindow;
+    VclPtr<vcl::Window> m_pWindow;
     vcl::Region* m_pChildRegion;
     Rectangle m_aSelectionRect;
     Rectangle m_aPaintRect;
@@ -1094,7 +1094,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     mpWindowImpl->mbReallyVisible = bRVisible;
 
     // paint metafile to VDev
-    VirtualDevice* pMaskedDevice = new VirtualDevice( *i_pTargetOutDev, 0, 0 );
+    VclPtrInstance<VirtualDevice> pMaskedDevice( *i_pTargetOutDev, 0, 0 );
     pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel() );
     pMaskedDevice->EnableRTL( IsRTLEnabled() );
     aMtf.WindStart();
@@ -1102,7 +1102,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     BitmapEx aBmpEx( pMaskedDevice->GetBitmapEx( Point( 0, 0 ), pMaskedDevice->GetOutputSizePixel() ) );
     i_pTargetOutDev->DrawBitmapEx( i_rPos, aBmpEx );
     // get rid of virtual device now so they don't pile up during recursive calls
-    delete pMaskedDevice, pMaskedDevice = NULL;
+    pMaskedDevice.disposeAndClear();
 
     for( vcl::Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext )
     {

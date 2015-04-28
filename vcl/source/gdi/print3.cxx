@@ -140,7 +140,7 @@ public:
     typedef std::unordered_map< OUString, ControlDependency, OUStringHash > ControlDependencyMap;
     typedef std::unordered_map< OUString, Sequence< sal_Bool >, OUStringHash > ChoiceDisableMap;
 
-    std::shared_ptr<Printer>                                    mxPrinter;
+    VclPtr< Printer >                                           mxPrinter;
     Sequence< PropertyValue >                                   maUIOptions;
     std::vector< PropertyValue >                                maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
@@ -156,7 +156,7 @@ public:
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
 
-    vcl::PrintProgressDialog*                                   mpProgress;
+    VclPtr<vcl::PrintProgressDialog>                            mpProgress;
 
     ImplPageCache                                               maPageCache;
 
@@ -191,7 +191,7 @@ public:
         mnDefaultPaperBin( -1 ),
         mnFixedPaperBin( -1 )
     {}
-    ~ImplPrinterControllerData() { delete mpProgress; }
+    ~ImplPrinterControllerData() { mpProgress.disposeAndClear(); }
 
     Size getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {
@@ -207,7 +207,7 @@ public:
     void resetPaperToLastConfigured();
 };
 
-PrinterController::PrinterController(const std::shared_ptr<Printer>& i_xPrinter)
+PrinterController::PrinterController( const VclPtr<Printer>& i_xPrinter )
     : mpImplData( new ImplPrinterControllerData )
 {
     mpImplData->mxPrinter = i_xPrinter;
@@ -305,9 +305,10 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if (xController->isShowDialogs())
         {
-            MessageDialog aBox(NULL, "ErrorNoPrinterDialog",
+            ScopedVclPtrInstance<MessageDialog> aBox(
+                nullptr, "ErrorNoPrinterDialog",
                 "vcl/ui/errornoprinterdialog.ui");
-            aBox.Execute();
+            aBox->Execute();
         }
         xController->setValue( OUString( "IsDirect" ),
                                makeAny( false ) );
@@ -320,7 +321,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     if (!xController->getPrinter())
     {
         OUString aPrinterName( i_rInitSetup.GetPrinterName() );
-        std::shared_ptr<Printer> xPrinter(std::make_shared<Printer>(aPrinterName));
+        VclPtrInstance<Printer> xPrinter( aPrinterName );
         xPrinter->SetJobSetup(i_rInitSetup);
         xController->setPrinter(xPrinter);
     }
@@ -454,9 +455,10 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if( xController->getFilteredPageCount() == 0 )
         {
-            MessageDialog aBox(NULL, "ErrorNoContentDialog",
+            ScopedVclPtrInstance<MessageDialog> aBox(
+                nullptr, "ErrorNoContentDialog",
                 "vcl/ui/errornocontentdialog.ui");
-            aBox.Execute();
+            aBox->Execute();
             return;
         }
     }
@@ -470,13 +472,13 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         try
         {
-            PrintDialog aDlg( NULL, xController );
-            if( ! aDlg.Execute() )
+            ScopedVclPtrInstance< PrintDialog > aDlg( nullptr, xController );
+            if( ! aDlg->Execute() )
             {
                 xController->abortJob();
                 return;
             }
-            if( aDlg.isPrintToFile() )
+            if( aDlg->isPrintToFile() )
             {
                 OUString aFile = queryFile( xController->getPrinter().get() );
                 if( aFile.isEmpty() )
@@ -487,7 +489,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                 xController->setValue( OUString( "LocalFileName" ),
                                        makeAny( aFile ) );
             }
-            else if( aDlg.isSingleJobs() )
+            else if( aDlg->isSingleJobs() )
             {
                 xController->setValue( OUString( "PrintCollateAsSingleJobs" ),
                                        makeAny( true ) );
@@ -771,12 +773,12 @@ void PrinterController::setJobState( view::PrintableState i_eState )
     mpImplData->meJobState = i_eState;
 }
 
-const std::shared_ptr<Printer>& PrinterController::getPrinter() const
+const VclPtr<Printer>& PrinterController::getPrinter() const
 {
     return mpImplData->mxPrinter;
 }
 
-void PrinterController::setPrinter(const std::shared_ptr<Printer>& i_rPrinter)
+void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 {
     mpImplData->mxPrinter = i_rPrinter;
     setValue( OUString( "Name" ),
@@ -1332,8 +1334,7 @@ void PrinterController::abortJob()
     // applications (well, sw) depend on a page request with "IsLastPage" = true
     // to free resources, else they (well, sw) will crash eventually
     setLastPage( true );
-    delete mpImplData->mpProgress;
-    mpImplData->mpProgress = NULL;
+    mpImplData->mpProgress.disposeAndClear();
     GDIMetaFile aMtf;
     getPageFile( 0, aMtf, false );
 }
@@ -1660,7 +1661,7 @@ void PrinterController::createProgressDialog()
 
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
-            mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCountProtected() );
+            mpImplData->mpProgress = VclPtr<PrintProgressDialog>::Create( nullptr, getPageCountProtected() );
             mpImplData->mpProgress->Show();
         }
     }

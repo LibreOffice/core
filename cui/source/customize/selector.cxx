@@ -99,7 +99,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigFunctionListB
 
 SvxConfigFunctionListBox::~SvxConfigFunctionListBox()
 {
+    disposeOnce();
+}
+
+void SvxConfigFunctionListBox::dispose()
+{
     ClearAll();
+    SvTreeListBox::dispose();
 }
 
 SvTreeListEntry* SvxConfigFunctionListBox::GetLastSelectedEntry()
@@ -227,7 +233,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigGroupListBox(
 
 SvxConfigGroupListBox::~SvxConfigGroupListBox()
 {
+    disposeOnce();
+}
+
+void SvxConfigGroupListBox::dispose()
+{
     ClearAll();
+    pFunctionListBox.clear();
+    SvTreeListBox::dispose();
 }
 
 void SvxConfigGroupListBox::ClearAll()
@@ -908,6 +921,18 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
 SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
 {
+    disposeOnce();
+}
+
+void SvxScriptSelectorDialog::dispose()
+{
+    m_pDialogDescription.clear();
+    m_pCategories.clear();
+    m_pCommands.clear();
+    m_pOKButton.clear();
+    m_pCancelButton.clear();
+    m_pDescriptionText.clear();
+    ModelessDialog::dispose();
 }
 
 IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, Control*, pCtrl )

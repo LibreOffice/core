@@ -28,6 +28,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <vcl/bitmapex.hxx>
+#include <vcl/vclptr.hxx>
 #include <avmedia/avmediadllapi.h>
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME -1.0
@@ -115,7 +116,7 @@ namespace avmedia
         MediaWindow& operator =( const MediaWindow& ) SAL_DELETED_FUNCTION;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxIFace;
-        std::unique_ptr<priv::MediaWindowImpl> mpImpl;
+        VclPtr<priv::MediaWindowImpl> mpImpl;
     };
 }
 

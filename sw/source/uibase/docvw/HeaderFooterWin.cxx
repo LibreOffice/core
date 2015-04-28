@@ -143,7 +143,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
     // Create the line control
-    m_pLine = new SwDashedLine( GetEditWin(), &SwViewOption::GetHeaderFooterMarkColor );
+    m_pLine = VclPtr<SwDashedLine>::Create( GetEditWin(), &SwViewOption::GetHeaderFooterMarkColor );
     m_pLine->SetZOrder( this, WINDOW_ZORDER_BEFOR );
 
     // Create and set the PopupMenu
@@ -169,8 +169,14 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
 
 SwHeaderFooterWin::~SwHeaderFooterWin( )
 {
+    disposeOnce();
+}
+
+void SwHeaderFooterWin::dispose()
+{
     delete m_pPopupMenu;
-    delete m_pLine;
+    m_pLine.disposeAndClear();
+    MenuButton::dispose();
 }
 
 const SwPageFrm* SwHeaderFooterWin::GetPageFrame( )

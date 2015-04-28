@@ -57,11 +57,21 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( vcl::Window* pParent,
 
 ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage* ScRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+void ScRedlineOptionsTabPage::dispose()
 {
-    return new ScRedlineOptionsTabPage( pParent, *rSet );
+    m_pContentColorLB.clear();
+    m_pRemoveColorLB.clear();
+    m_pInsertColorLB.clear();
+    m_pMoveColorLB.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> ScRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+{
+    return VclPtr<ScRedlineOptionsTabPage>::Create( pParent, *rSet );
 }
 
 bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )

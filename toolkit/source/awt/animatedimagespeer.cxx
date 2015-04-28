@@ -182,8 +182,8 @@ namespace toolkit
 
         void lcl_updateImageList_nothrow( AnimatedImagesPeer_Data& i_data )
         {
-            Throbber* pThrobber = dynamic_cast< Throbber* >( i_data.rAntiImpl.GetWindow() );
-            if ( pThrobber == NULL )
+            VclPtr<Throbber> pThrobber = i_data.rAntiImpl.GetAsDynamic<Throbber>();
+            if ( !pThrobber )
                 return;
 
             try
@@ -308,40 +308,37 @@ namespace toolkit
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::startAnimation(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesPeer::startAnimation() throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
-        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber != NULL)
+        VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
+        if (pThrobber)
             pThrobber->start();
     }
 
-
-    void SAL_CALL AnimatedImagesPeer::stopAnimation(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesPeer::stopAnimation() throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
-        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber != NULL)
+        VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
+        if (pThrobber)
             pThrobber->stop();
     }
 
-
-    sal_Bool SAL_CALL AnimatedImagesPeer::isAnimationRunning(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL AnimatedImagesPeer::isAnimationRunning() throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
-        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber != NULL)
+        VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
+        if (pThrobber)
             return pThrobber->isRunning();
         return sal_False;
     }
-
 
     void SAL_CALL AnimatedImagesPeer::setProperty( const OUString& i_propertyName, const Any& i_value ) throw(RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
-        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber == NULL )
+        VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
+        if ( pThrobber )
         {
             VCLXWindow::setProperty( i_propertyName, i_value );
             return;
@@ -368,11 +365,9 @@ namespace toolkit
             case BASEPROPERTY_IMAGE_SCALE_MODE:
             {
                 sal_Int16 nScaleMode( ImageScaleMode::ANISOTROPIC );
-                ImageControl* pImageControl = dynamic_cast< ImageControl* >( GetWindow() );
+                VclPtr<ImageControl> pImageControl = GetAsDynamic< ImageControl >();
                 if ( pImageControl && ( i_value >>= nScaleMode ) )
-                {
                     pImageControl->SetScaleMode( nScaleMode );
-                }
             }
             break;
 
@@ -389,8 +384,8 @@ namespace toolkit
 
         Any aReturn;
 
-        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber == NULL )
+        VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
+        if ( !pThrobber )
             return VCLXWindow::getProperty( i_propertyName );
 
         const sal_uInt16 nPropertyId = GetPropertyId( i_propertyName );
@@ -406,7 +401,7 @@ namespace toolkit
 
         case BASEPROPERTY_IMAGE_SCALE_MODE:
             {
-                ImageControl const* pImageControl = dynamic_cast< ImageControl* >( GetWindow() );
+                VclPtr<ImageControl> pImageControl = GetAsDynamic<ImageControl>();
                 aReturn <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::ANISOTROPIC );
             }
             break;

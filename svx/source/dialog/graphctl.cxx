@@ -84,6 +84,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGraphCtrl(vcl::Window 
 
 GraphCtrl::~GraphCtrl()
 {
+    disposeOnce();
+}
+
+void GraphCtrl::dispose()
+{
     if( mpAccContext )
     {
         mpAccContext->disposing();
@@ -92,6 +97,7 @@ GraphCtrl::~GraphCtrl()
     delete pView;
     delete pModel;
     delete pUserCall;
+    Control::dispose();
 }
 
 void GraphCtrl::SetWinStyle( WinBits nWinBits )

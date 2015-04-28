@@ -113,6 +113,19 @@ ODateTimeDialog::ODateTimeDialog( vcl::Window* _pParent
 
 ODateTimeDialog::~ODateTimeDialog()
 {
+    disposeOnce();
+}
+
+void ODateTimeDialog::dispose()
+{
+    m_pDate.clear();
+    m_pFTDateFormat.clear();
+    m_pDateListBox.clear();
+    m_pTime.clear();
+    m_pFTTimeFormat.clear();
+    m_pTimeListBox.clear();
+    m_pPB_OK.clear();
+    ModalDialog::dispose();
 }
 
 short ODateTimeDialog::Execute()

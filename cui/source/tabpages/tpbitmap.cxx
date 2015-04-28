@@ -122,10 +122,28 @@ SvxBitmapTabPage::SvxBitmapTabPage(  vcl::Window* pParent, const SfxItemSet& rIn
 
 SvxBitmapTabPage::~SvxBitmapTabPage()
 {
-    delete m_pBitmapCtl;
+    disposeOnce();
 }
 
-
+void SvxBitmapTabPage::dispose()
+{
+    delete m_pBitmapCtl;
+    m_pBitmapCtl = NULL;
+    m_pBxPixelEditor.clear();
+    m_pCtlPixel.clear();
+    m_pLbColor.clear();
+    m_pLbBackgroundColor.clear();
+    m_pLbBitmapsHidden.clear();
+    m_pLbBitmaps.clear();
+    m_pCtlPreview.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnImport.clear();
+    m_pBtnDelete.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
+    SvxTabPage::dispose();
+}
 
 void SvxBitmapTabPage::Construct()
 {
@@ -292,10 +310,10 @@ void SvxBitmapTabPage::Reset( const SfxItemSet*  )
 
 
 
-SfxTabPage* SvxBitmapTabPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxBitmapTabPage::Create( vcl::Window* pWindow,
+                                             const SfxItemSet* rSet )
 {
-    return new SvxBitmapTabPage( pWindow, *rSet );
+    return VclPtr<SvxBitmapTabPage>::Create( pWindow, *rSet );
 }
 
 
@@ -428,10 +446,10 @@ long SvxBitmapTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
-                                                        SVX_RES( RID_SVXSTR_BITMAP ),
-                                                        CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
-                                                        &aWarningBoxImage  ));
+            ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
+                                                          SVX_RES( RID_SVXSTR_BITMAP ),
+                                                          CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
+                                                          &aWarningBoxImage );
             DBG_ASSERT(aMessDlg, "Dialog creation failed!");
             aMessDlg->SetButtonText( MESS_BTN_1, ResId( RID_SVXSTR_CHANGE, rMgr ) );
             aMessDlg->SetButtonText( MESS_BTN_2, ResId( RID_SVXSTR_ADD, rMgr ) );
@@ -492,7 +510,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
     DBG_ASSERT(pFact, "Dialog creation failed!");
     boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    boost::scoped_ptr<MessageDialog> pWarnBox;
+    ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError(1);
 
     while( pDlg->Execute() == RET_OK )
@@ -512,7 +530,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox.reset(new MessageDialog( GetParentDialog()
+            pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                         ,"DuplicateNameDialog"
                                         ,"cui/ui/queryduplicatedialog.ui"));
         }
@@ -592,7 +610,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
         if( !nError )
         {
             OUString aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
-            boost::scoped_ptr<MessageDialog> pWarnBox;
+            ScopedVclPtr<MessageDialog> pWarnBox;
 
             // convert file URL to UI name
             OUString        aName;
@@ -621,7 +639,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
                 if( !pWarnBox )
                 {
-                    pWarnBox.reset(new MessageDialog( GetParentDialog()
+                    pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                                  ,"DuplicateNameDialog"
                                                  ,"cui/ui/queryduplicatedialog.ui"));
                 }
@@ -710,10 +728,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
+                ScopedVclPtrInstance<MessageDialog> aBox(
+                                   GetParentDialog()
                                    ,"DuplicateNameDialog"
                                    ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                aBox->Execute();
             }
         }
     }
@@ -728,9 +747,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui");
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui" );
 
-        if( aQueryBox.Execute() == RET_YES )
+        if( aQueryBox->Execute() == RET_YES )
         {
             delete pBitmapList->Remove( nPos );
             m_pLbBitmaps->RemoveEntry( nPos );
@@ -969,7 +988,7 @@ void SvxBitmapTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT )
 vcl::Window* SvxBitmapTabPage::GetParentLabeledBy( const vcl::Window* pLabeled ) const
 {
     if (pLabeled == m_pLbBitmaps)
-        return m_pLbBitmapsHidden;
+        return m_pLbBitmapsHidden.get();
     else
         return SvxTabPage::GetParentLabeledBy (pLabeled);
 }

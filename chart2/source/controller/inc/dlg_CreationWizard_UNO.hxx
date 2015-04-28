@@ -119,7 +119,7 @@ private:
     com::sun::star::uno::Reference<
         com::sun::star::awt::XWindow >               m_xParentWindow;
 
-    CreationWizard*     m_pDialog;
+    VclPtr<CreationWizard>     m_pDialog;
     bool            m_bUnlockControllersOnExecute;
 };
 

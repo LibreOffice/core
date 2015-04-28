@@ -726,9 +726,9 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
             {
                 case GRAPHIC_BITMAP:        // Bitmap -> play in Metafile
                     {
-                        VirtualDevice aVirt;
-                        aMeta.Record(&aVirt);
-                        aVirt.DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
+                        ScopedVclPtrInstance< VirtualDevice > pVirt;
+                        aMeta.Record(pVirt.get());
+                        pVirt->DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
                         aMeta.Stop();
                         aMeta.WindStart();
                         aMeta.SetPrefMapMode( rGrf.GetPrefMapMode());
@@ -854,9 +854,9 @@ void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm, const Graphic &rGrf, sal_uIn
         {
             case GRAPHIC_BITMAP:        // Bitmap -> in Metafile abspielen
             {
-                VirtualDevice aVirt;
-                aMeta.Record(&aVirt);
-                aVirt.DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
+                ScopedVclPtrInstance< VirtualDevice > pVirt;
+                aMeta.Record(pVirt.get());
+                pVirt->DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
                 aMeta.Stop();
                 aMeta.WindStart();
                 aMeta.SetPrefMapMode( rGrf.GetPrefMapMode());

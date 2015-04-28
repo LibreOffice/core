@@ -161,15 +161,23 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCheckBox(vcl::Window *
 
 CheckBox::~CheckBox()
 {
+    disposeOnce();
+}
+
+void CheckBox::dispose()
+{
     delete pCheckButton;
+    pCheckButton = NULL;
 
     // delete user data
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
-        delete static_cast<LibUserData*>(pEntry->GetUserData());
+        delete static_cast<LibUserData*>( pEntry->GetUserData() );
+        pEntry->SetUserData( NULL );
         pEntry = Next( pEntry );
     }
+    SvTabListBox::dispose();
 }
 
 void CheckBox::Init()
@@ -384,6 +392,18 @@ NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode::Mode eMode,
         m_pOKButton->SetClickHdl(LINK(this, NewObjectDialog, OkButtonHandler));
 }
 
+NewObjectDialog::~NewObjectDialog()
+{
+    disposeOnce();
+}
+
+void NewObjectDialog::dispose()
+{
+    m_pEdit.clear();
+    m_pOKButton.clear();
+    ModalDialog::dispose();
+}
+
 // GotoLineDialog
 GotoLineDialog::GotoLineDialog(vcl::Window * pParent )
     : ModalDialog(pParent, "GotoLineDialog",
@@ -393,6 +413,18 @@ GotoLineDialog::GotoLineDialog(vcl::Window * pParent )
     get(m_pOKButton, "ok");
     m_pEdit->GrabFocus();
     m_pOKButton->SetClickHdl(LINK(this, GotoLineDialog, OkButtonHandler));
+}
+
+GotoLineDialog::~GotoLineDialog()
+{
+    disposeOnce();
+}
+
+void GotoLineDialog::dispose()
+{
+    m_pEdit.clear();
+    m_pOKButton.clear();
+    ModalDialog::dispose();
 }
 
 sal_Int32 GotoLineDialog::GetLineNumber() const
@@ -427,6 +459,18 @@ ExportDialog::ExportDialog(vcl::Window * pParent)
 
     m_pExportAsPackageButton->Check();
     m_pOKButton->SetClickHdl(LINK(this, ExportDialog, OkButtonHandler));
+}
+
+ExportDialog::~ExportDialog()
+{
+    disposeOnce();
+}
+
+void ExportDialog::dispose()
+{
+    m_pExportAsPackageButton.clear();
+    m_pOKButton.clear();
+    ModalDialog::dispose();
 }
 
 // LibPage
@@ -476,12 +520,30 @@ LibPage::LibPage(vcl::Window * pParent)
 
 LibPage::~LibPage()
 {
-    sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    disposeOnce();
+}
+
+void LibPage::dispose()
+{
+    if (m_pBasicsBox)
     {
-        DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( i ));
-        delete pEntry;
+        sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
+        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        {
+            DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( i ));
+            delete pEntry;
+        }
     }
+    m_pBasicsBox.clear();
+    m_pLibBox.clear();
+    m_pEditButton.clear();
+    m_pPasswordButton.clear();
+    m_pNewLibButton.clear();
+    m_pInsertLibButton.clear();
+    m_pExportButton.clear();
+    m_pDelButton.clear();
+    pTabDlg.clear();
+    TabPage::dispose();
 }
 
 void LibPage::CheckButtons()
@@ -626,7 +688,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
                 bool const bProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 
                 // change password dialog
-                boost::scoped_ptr<SvxPasswordDialog> pDlg(new SvxPasswordDialog( this, true, !bProtected ));
+                VclPtrInstance< SvxPasswordDialog > pDlg( this, true, !bProtected );
                 pDlg->SetCheckPasswordHdl( LINK( this, LibPage, CheckPasswordHdl ) );
 
                 if ( pDlg->Execute() == RET_OK )
@@ -764,7 +826,7 @@ void LibPage::InsertLib()
 
         if ( xModLibContImport.is() || xDlgLibContImport.is() )
         {
-            boost::scoped_ptr<LibDialog> pLibDlg;
+            VclPtr<LibDialog> pLibDlg;
 
             Reference< script::XLibraryContainer > xModLibContImp( xModLibContImport, UNO_QUERY );
             Reference< script::XLibraryContainer > xDlgLibContImp( xDlgLibContImport, UNO_QUERY );
@@ -776,7 +838,7 @@ void LibPage::InsertLib()
                 // library import dialog
                 if ( !pLibDlg )
                 {
-                    pLibDlg.reset(new LibDialog( this ));
+                    pLibDlg.reset(VclPtr<LibDialog>::Create( this ));
                     pLibDlg->SetStorageName( aURLObj.getName() );
                     pLibDlg->GetLibBox().SetMode(ObjectMode::Library);
                 }
@@ -1066,12 +1128,12 @@ void LibPage::Export()
             return;
     }
 
-    ExportDialog aNewDlg(this);
-    if (aNewDlg.Execute() == RET_OK)
+    ScopedVclPtrInstance< ExportDialog > aNewDlg(this);
+    if (aNewDlg->Execute() == RET_OK)
     {
         try
         {
-            if (aNewDlg.isExportAsPackage())
+            if (aNewDlg->isExportAsPackage())
                 ExportAsPackage( aLibName );
             else
                 ExportAsBasic( aLibName );
@@ -1442,13 +1504,13 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         i++;
     }
 
-    NewObjectDialog aNewDlg(pWin, ObjectMode::Library);
-    aNewDlg.SetObjectName(aLibName);
+    ScopedVclPtrInstance< NewObjectDialog > aNewDlg(pWin, ObjectMode::Library);
+    aNewDlg->SetObjectName(aLibName);
 
-    if (aNewDlg.Execute())
+    if (aNewDlg->Execute())
     {
-        if (!aNewDlg.GetObjectName().isEmpty())
-            aLibName = aNewDlg.GetObjectName();
+        if (!aNewDlg->GetObjectName().isEmpty())
+            aLibName = aNewDlg->GetObjectName();
 
         if ( aLibName.getLength() > 30 )
         {

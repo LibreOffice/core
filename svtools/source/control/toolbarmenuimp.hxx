@@ -76,7 +76,7 @@ public:
 
     OUString maText;
     Image maImage;
-    Control* mpControl;
+    VclPtr<Control> mpControl;
     Rectangle maRect;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > mxAccContext;

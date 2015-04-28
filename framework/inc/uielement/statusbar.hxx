@@ -33,7 +33,6 @@ class FrameworkStatusBar : public StatusBar
 
         FrameworkStatusBar( vcl::Window*           pParent,
                             WinBits           nWinBits );
-        virtual ~FrameworkStatusBar();
 
         void         SetStatusBarManager( StatusBarManager* pStatusBarManager );
 

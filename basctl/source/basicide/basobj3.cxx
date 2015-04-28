@@ -155,16 +155,16 @@ bool RenameDialog (
 
     if ( rDocument.hasDialog( rLibName, rNewName ) )
     {
-        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2));
-        aError.Execute();
+        ScopedVclPtrInstance< MessageDialog > aError(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2));
+        aError->Execute();
         return false;
     }
 
     // #i74440
     if ( rNewName.isEmpty() )
     {
-        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME));
-        aError.Execute();
+        ScopedVclPtrInstance< MessageDialog > aError(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME));
+        aError->Execute();
         return false;
     }
 

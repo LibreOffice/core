@@ -54,23 +54,13 @@ SvxConnectionDialog::SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet
                                 const SdrView* pSdrView )
     : SfxSingleTabDialog(pParent, rInAttrs)
 {
-    SvxConnectionPage* _pPage = new SvxConnectionPage( get_content_area(), rInAttrs );
+    VclPtrInstance<SvxConnectionPage> _pPage( get_content_area(), rInAttrs );
 
     _pPage->SetView( pSdrView );
     _pPage->Construct();
 
     SetTabPage( _pPage );
     SetText(CUI_RESSTR( RID_SVXSTR_CONNECTOR ));
-}
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-SvxConnectionDialog::~SvxConnectionDialog()
-{
 }
 
 /*************************************************************************
@@ -141,14 +131,26 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
     m_pLbType->SetSelectHdl( aLink );
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
 SvxConnectionPage::~SvxConnectionPage()
 {
+    disposeOnce();
+}
+
+void SvxConnectionPage::dispose()
+{
+    m_pLbType.clear();
+    m_pFtLine1.clear();
+    m_pMtrFldLine1.clear();
+    m_pFtLine2.clear();
+    m_pMtrFldLine2.clear();
+    m_pFtLine3.clear();
+    m_pMtrFldLine3.clear();
+    m_pMtrFldHorz1.clear();
+    m_pMtrFldVert1.clear();
+    m_pMtrFldHorz2.clear();
+    m_pMtrFldVert2.clear();
+    m_pCtlPreview.clear();
+    SfxTabPage::dispose();
 }
 
 /*************************************************************************
@@ -388,10 +390,10 @@ void SvxConnectionPage::Construct()
 |*
 \************************************************************************/
 
-SfxTabPage* SvxConnectionPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxConnectionPage::Create( vcl::Window* pWindow,
+                                              const SfxItemSet* rAttrs )
 {
-    return new SvxConnectionPage( pWindow, *rAttrs );
+    return VclPtr<SvxConnectionPage>::Create( pWindow, *rAttrs );
 }
 
 IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )

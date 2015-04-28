@@ -115,16 +115,16 @@ namespace svx {
     }
 }
 
-SfxTabPage* SvxHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxHeaderPage( pParent, *rSet );
+    return VclPtr<SvxHeaderPage>::Create( pParent, *rSet );
 }
 
 
 
-SfxTabPage* SvxFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxFooterPage( pParent, *rSet );
+    return VclPtr<SvxFooterPage>::Create( pParent, *rSet );
 }
 
 
@@ -203,7 +203,29 @@ SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 n
 
 SvxHFPage::~SvxHFPage()
 {
+    disposeOnce();
+}
+
+void SvxHFPage::dispose()
+{
     delete pBBSet;
+    m_pPageLbl.clear();
+    m_pTurnOnBox.clear();
+    m_pCntSharedBox.clear();
+    m_pCntSharedFirstBox.clear();
+    m_pLMLbl.clear();
+    m_pLMEdit.clear();
+    m_pRMLbl.clear();
+    m_pRMEdit.clear();
+    m_pDistFT.clear();
+    m_pDistEdit.clear();
+    m_pDynSpacingCB.clear();
+    m_pHeightFT.clear();
+    m_pHeightEdit.clear();
+    m_pHeightDynBtn.clear();
+    m_pBspWin.clear();
+    m_pBackgroundBtn.clear();
+    SfxTabPage::dispose();
 }
 
 

@@ -130,11 +130,6 @@ namespace abp
         SetHelpId(HID_ABSPILOT);
     }
 
-    OAddessBookSourcePilot::~OAddessBookSourcePilot()
-    {
-    }
-
-
     OUString OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
         sal_uInt16 nResId = 0;
@@ -413,24 +408,24 @@ namespace abp
     }
 
 
-    OWizardPage* OAddessBookSourcePilot::createPage(WizardState _nState)
+    VclPtr<TabPage> OAddessBookSourcePilot::createPage(WizardState _nState)
     {
         switch (_nState)
         {
             case STATE_SELECT_ABTYPE:
-                return new TypeSelectionPage( this );
+                return VclPtr<TypeSelectionPage>::Create( this );
 
             case STATE_INVOKE_ADMIN_DIALOG:
-                return new AdminDialogInvokationPage( this );
+                return VclPtr<AdminDialogInvokationPage>::Create( this );
 
             case STATE_TABLE_SELECTION:
-                return new TableSelectionPage( this );
+                return VclPtr<TableSelectionPage>::Create( this );
 
             case STATE_MANUAL_FIELD_MAPPING:
-                return new FieldMappingPage( this );
+                return VclPtr<FieldMappingPage>::Create( this );
 
             case STATE_FINAL_CONFIRM:
-                return new FinalPage( this );
+                return VclPtr<FinalPage>::Create( this );
 
             default:
                 OSL_FAIL("OAddessBookSourcePilot::createPage: invalid state!");

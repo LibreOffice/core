@@ -404,11 +404,11 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
         if (!pRepr->GetTempPasswd().getLength()
             && pRepr->GetSectionData().GetPassword().getLength())
         {
-            SfxPasswordDialog aPasswdDlg(this);
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
             bRet = false;
-            if (aPasswdDlg.Execute())
+            if (aPasswdDlg->Execute())
             {
-                const OUString sNewPasswd( aPasswdDlg.GetPassword() );
+                const OUString sNewPasswd( aPasswdDlg->GetPassword() );
                 ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if (SvPasswordHelper::CompareHashPassword(
@@ -516,6 +516,11 @@ sal_uInt16 SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
 
 SwEditRegionDlg::~SwEditRegionDlg( )
 {
+    disposeOnce();
+}
+
+void SwEditRegionDlg::dispose()
+{
     SvTreeListEntry* pEntry = m_pTree->First();
     while( pEntry )
     {
@@ -524,6 +529,29 @@ SwEditRegionDlg::~SwEditRegionDlg( )
     }
 
     delete m_pDocInserter;
+    m_pCurName.clear();
+    m_pTree.clear();
+    m_pFileCB.clear();
+    m_pDDECB.clear();
+    m_pDDEFrame.clear();
+    m_pFileNameFT.clear();
+    m_pDDECommandFT.clear();
+    m_pFileNameED.clear();
+    m_pFilePB.clear();
+    m_pSubRegionFT.clear();
+    m_pSubRegionED.clear();
+    m_pProtectCB.clear();
+    m_pPasswdCB.clear();
+    m_pPasswdPB.clear();
+    m_pHideCB.clear();
+    m_pConditionFT.clear();
+    m_pConditionED.clear();
+    m_pEditInReadonlyCB.clear();
+    m_pOK.clear();
+    m_pOptionsPB.clear();
+    m_pDismiss.clear();
+    m_pOldDefDlgParent.clear();
+    SfxModalDialog::dispose();
 }
 
 void    SwEditRegionDlg::SelectSection(const OUString& rSectionName)
@@ -1053,10 +1081,10 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
-        SwSectionPropertyTabDialog aTabDlg(this, aSet, rSh);
-        if(RET_OK == aTabDlg.Execute())
+        ScopedVclPtrInstance< SwSectionPropertyTabDialog > aTabDlg(this, aSet, rSh);
+        if(RET_OK == aTabDlg->Execute())
         {
-            const SfxItemSet* pOutSet = aTabDlg.GetOutputItemSet();
+            const SfxItemSet* pOutSet = aTabDlg->GetOutputItemSet();
             if( pOutSet && pOutSet->Count() )
             {
                 const SfxPoolItem *pColItem, *pBrushItem,
@@ -1232,12 +1260,12 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
         {
             if(!pRepr->GetTempPasswd().getLength() || bChange)
             {
-                SfxPasswordDialog aPasswdDlg(this);
-                aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
-                if(RET_OK == aPasswdDlg.Execute())
+                ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
+                aPasswdDlg->ShowExtras(SfxShowExtras::CONFIRM);
+                if(RET_OK == aPasswdDlg->Execute())
                 {
-                    const OUString sNewPasswd( aPasswdDlg.GetPassword() );
-                    if( aPasswdDlg.GetConfirm() == sNewPasswd )
+                    const OUString sNewPasswd( aPasswdDlg->GetPassword() );
+                    if( aPasswdDlg->GetConfirm() == sNewPasswd )
                     {
                         SvPasswordHelper::GetHashPassword( pRepr->GetTempPasswd(), sNewPasswd );
                     }
@@ -1533,7 +1561,30 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
+    disposeOnce();
+}
+
+void SwInsertSectionTabPage::dispose()
+{
     delete m_pDocInserter;
+    m_pCurName.clear();
+    m_pFileCB.clear();
+    m_pDDECB.clear();
+    m_pDDECommandFT.clear();
+    m_pFileNameFT.clear();
+    m_pFileNameED.clear();
+    m_pFilePB.clear();
+    m_pSubRegionFT.clear();
+    m_pSubRegionED.clear();
+    m_pProtectCB.clear();
+    m_pPasswdCB.clear();
+    m_pPasswdPB.clear();
+    m_pHideCB.clear();
+    m_pConditionFT.clear();
+    m_pConditionED.clear();
+    m_pEditInReadonlyCB.clear();
+    m_pOldDefDlgParent.clear();
+    SfxTabPage::dispose();
 }
 
 void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
@@ -1635,10 +1686,10 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 {
 }
 
-SfxTabPage* SwInsertSectionTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwInsertSectionTabPage::Create( vcl::Window* pParent,
+                                                   const SfxItemSet* rAttrSet)
 {
-    return new SwInsertSectionTabPage(pParent, *rAttrSet);
+    return VclPtr<SwInsertSectionTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
@@ -1670,12 +1721,12 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
     {
         if(!m_aNewPasswd.getLength() || bChange)
         {
-            SfxPasswordDialog aPasswdDlg(this);
-            aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
-            if(RET_OK == aPasswdDlg.Execute())
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
+            aPasswdDlg->ShowExtras(SfxShowExtras::CONFIRM);
+            if(RET_OK == aPasswdDlg->Execute())
             {
-                const OUString sNewPasswd( aPasswdDlg.GetPassword() );
-                if( aPasswdDlg.GetConfirm() == sNewPasswd )
+                const OUString sNewPasswd( aPasswdDlg->GetPassword() );
+                if( aPasswdDlg->GetConfirm() == sNewPasswd )
                 {
                     SvPasswordHelper::GetHashPassword( m_aNewPasswd, sNewPasswd );
                 }
@@ -1835,6 +1886,32 @@ SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( vcl::Window *pParent,
 
 SwSectionFtnEndTabPage::~SwSectionFtnEndTabPage()
 {
+    disposeOnce();
+}
+
+void SwSectionFtnEndTabPage::dispose()
+{
+    pFtnNtAtTextEndCB.clear();
+    pFtnNtNumCB.clear();
+    pFtnOffsetLbl.clear();
+    pFtnOffsetFld.clear();
+    pFtnNtNumFmtCB.clear();
+    pFtnPrefixFT.clear();
+    pFtnPrefixED.clear();
+    pFtnNumViewBox.clear();
+    pFtnSuffixFT.clear();
+    pFtnSuffixED.clear();
+    pEndNtAtTextEndCB.clear();
+    pEndNtNumCB.clear();
+    pEndOffsetLbl.clear();
+    pEndOffsetFld.clear();
+    pEndNtNumFmtCB.clear();
+    pEndPrefixFT.clear();
+    pEndPrefixED.clear();
+    pEndNumViewBox.clear();
+    pEndSuffixFT.clear();
+    pEndSuffixED.clear();
+    SfxTabPage::dispose();
 }
 
 bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet* rSet )
@@ -1975,10 +2052,10 @@ void SwSectionFtnEndTabPage::Reset( const SfxItemSet* rSet )
                                     RES_END_AT_TXTEND, false )));
 }
 
-SfxTabPage* SwSectionFtnEndTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwSectionFtnEndTabPage::Create( vcl::Window* pParent,
+                                                   const SfxItemSet* rAttrSet)
 {
-    return new SwSectionFtnEndTabPage(pParent, *rAttrSet);
+    return VclPtr<SwSectionFtnEndTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
@@ -2096,6 +2173,15 @@ SwSectionIndentTabPage::SwSectionIndentTabPage(vcl::Window *pParent, const SfxIt
 
 SwSectionIndentTabPage::~SwSectionIndentTabPage()
 {
+    disposeOnce();
+}
+
+void SwSectionIndentTabPage::dispose()
+{
+    m_pBeforeMF.clear();
+    m_pAfterMF.clear();
+    m_pPreviewWin.clear();
+    SfxTabPage::dispose();
 }
 
 bool SwSectionIndentTabPage::FillItemSet( SfxItemSet* rSet)
@@ -2137,9 +2223,9 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     IndentModifyHdl(0);
 }
 
-SfxTabPage*  SwSectionIndentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwSectionIndentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
-    return new SwSectionIndentTabPage(pParent, *rAttrSet);
+    return VclPtr<SwSectionIndentTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)

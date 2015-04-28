@@ -47,7 +47,6 @@ namespace dbaui
 
     public:
         OTableRowView(vcl::Window* pParent);
-        virtual ~OTableRowView();
 
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData ) = 0;

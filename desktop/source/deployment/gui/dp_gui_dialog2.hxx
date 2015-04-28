@@ -55,7 +55,7 @@ class TheExtensionManager;
 class DialogHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    Dialog*         m_pVCLWindow;
+    VclPtr<Dialog>  m_pVCLWindow;
     ImplSVEvent *   m_nEventID;
     bool            m_bIsBusy;
 
@@ -99,17 +99,17 @@ public:
 class ExtMgrDialog : public ModelessDialog,
                      public DialogHelper
 {
-    ExtBoxWithBtns_Impl *m_pExtensionBox;
-    PushButton          *m_pAddBtn;
-    PushButton          *m_pUpdateBtn;
-    CloseButton         *m_pCloseBtn;
-    CheckBox            *m_pBundledCbx;
-    CheckBox            *m_pSharedCbx;
-    CheckBox            *m_pUserCbx;
-    FixedHyperlink      *m_pGetExtensions;
-    FixedText           *m_pProgressText;
-    ProgressBar         *m_pProgressBar;
-    CancelButton        *m_pCancelBtn;
+    VclPtr<ExtBoxWithBtns_Impl> m_pExtensionBox;
+    VclPtr<PushButton>          m_pAddBtn;
+    VclPtr<PushButton>          m_pUpdateBtn;
+    VclPtr<CloseButton>         m_pCloseBtn;
+    VclPtr<CheckBox>            m_pBundledCbx;
+    VclPtr<CheckBox>            m_pSharedCbx;
+    VclPtr<CheckBox>            m_pUserCbx;
+    VclPtr<FixedHyperlink>      m_pGetExtensions;
+    VclPtr<FixedText>           m_pProgressText;
+    VclPtr<ProgressBar>         m_pProgressBar;
+    VclPtr<CancelButton>        m_pCancelBtn;
     const OUString       m_sAddPackages;
     OUString             m_sProgressText;
     OUString             m_sLastFolderURL;
@@ -141,6 +141,7 @@ class ExtMgrDialog : public ModelessDialog,
 public:
                     ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager );
     virtual        ~ExtMgrDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
@@ -173,13 +174,13 @@ public:
 class UpdateRequiredDialog : public ModalDialog,
                              public DialogHelper
 {
-    ExtensionBox_Impl*   m_pExtensionBox;
-    FixedText*           m_pUpdateNeeded;
-    PushButton*          m_pUpdateBtn;
-    PushButton*          m_pCloseBtn;
-    CancelButton*        m_pCancelBtn;
-    FixedText*           m_pProgressText;
-    ProgressBar*         m_pProgressBar;
+    VclPtr<ExtensionBox_Impl>   m_pExtensionBox;
+    VclPtr<FixedText>           m_pUpdateNeeded;
+    VclPtr<PushButton>          m_pUpdateBtn;
+    VclPtr<PushButton>          m_pCloseBtn;
+    VclPtr<CancelButton>        m_pCancelBtn;
+    VclPtr<FixedText>           m_pProgressText;
+    VclPtr<ProgressBar>         m_pProgressBar;
     const OUString       m_sAddPackages;
     const OUString       m_sCloseText;
     OUString             m_sProgressText;
@@ -212,6 +213,7 @@ class UpdateRequiredDialog : public ModalDialog,
 public:
                     UpdateRequiredDialog( vcl::Window * pParent, TheExtensionManager *pManager );
     virtual        ~UpdateRequiredDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual short   Execute() SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
@@ -240,9 +242,11 @@ public:
 
 class ShowLicenseDialog : public ModalDialog
 {
-    VclMultiLineEdit* m_pLicenseText;
+    VclPtr<VclMultiLineEdit> m_pLicenseText;
 public:
     ShowLicenseDialog(vcl::Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
+    virtual ~ShowLicenseDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 

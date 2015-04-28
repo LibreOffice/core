@@ -59,8 +59,8 @@ class ViewClipboard;
 // SdViewRedrawRec
 struct SdViewRedrawRec
 {
-    OutputDevice* mpOut;
-    Rectangle     aRect;
+    VclPtr<OutputDevice> mpOut;
+    Rectangle            aRect;
 };
 
 //For master view we want to force that master

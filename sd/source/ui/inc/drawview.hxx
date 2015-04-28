@@ -65,7 +65,7 @@ protected:
 private:
     DrawDocShell*   mpDocShell;
     DrawViewShell*  mpDrawViewShell;
-    VirtualDevice*  mpVDev;
+    VclPtr<VirtualDevice> mpVDev;
 
     sal_uInt16          mnPOCHSmph; ///< for blocking PageOrderChangedHint
 };

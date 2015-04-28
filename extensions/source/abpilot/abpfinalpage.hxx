@@ -26,6 +26,7 @@
 #include <svtools/urlcontrol.hxx>
 #include <svx/databaselocationinput.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/vclptr.hxx>
 
 
 namespace abp
@@ -38,12 +39,12 @@ namespace abp
     class FinalPage : public AddressBookSourcePage
     {
     protected:
-        ::svt::OFileURLControl*  m_pLocation;
-        PushButton*     m_pBrowse;
-        CheckBox*       m_pRegisterName;
-        FixedText*      m_pNameLabel;
-        Edit*           m_pName;
-        FixedText*      m_pDuplicateNameError;
+        VclPtr<::svt::OFileURLControl>  m_pLocation;
+        VclPtr<PushButton>       m_pBrowse;
+        VclPtr<CheckBox>         m_pRegisterName;
+        VclPtr<FixedText>        m_pNameLabel;
+        VclPtr<Edit>             m_pName;
+        VclPtr<FixedText>        m_pDuplicateNameError;
 
         ::svx::DatabaseLocationInputController*
                         m_pLocationController;
@@ -53,6 +54,7 @@ namespace abp
     public:
         FinalPage( OAddessBookSourcePilot* _pParent );
         virtual ~FinalPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // OWizardPage overridables

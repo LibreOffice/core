@@ -335,7 +335,7 @@ void SfxObjectShell::CheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        boost::scoped_ptr<MessageDialog> pErrorBox(new MessageDialog( &GetFrame()->GetWindow(), e.Message ));
+        ScopedVclPtrInstance< MessageDialog > pErrorBox( &GetFrame()->GetWindow(), e.Message );
         pErrorBox->Execute( );
     }
 }
@@ -353,7 +353,7 @@ void SfxObjectShell::CancelCheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        boost::scoped_ptr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
+        ScopedVclPtrInstance< MessageDialog > pErrorBox(&GetFrame()->GetWindow(), e.Message);
         pErrorBox->Execute( );
     }
 }
@@ -364,11 +364,11 @@ void SfxObjectShell::CheckIn( )
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
         // Pop up dialog to ask for comment and major
-        SfxCheckinDialog checkinDlg( &GetFrame( )->GetWindow( ) );
-        if ( checkinDlg.Execute( ) == RET_OK )
+        ScopedVclPtrInstance< SfxCheckinDialog > checkinDlg(&GetFrame( )->GetWindow( ));
+        if ( checkinDlg->Execute( ) == RET_OK )
         {
-            OUString sComment = checkinDlg.GetComment( );
-            bool bMajor = checkinDlg.IsMajor( );
+            OUString sComment = checkinDlg->GetComment( );
+            bool bMajor = checkinDlg->IsMajor( );
             xCmisDoc->checkIn( bMajor, sComment );
             uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
             if ( xModifiable.is( ) )
@@ -377,7 +377,7 @@ void SfxObjectShell::CheckIn( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        boost::scoped_ptr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
+        ScopedVclPtrInstance< MessageDialog > pErrorBox(&GetFrame()->GetWindow(), e.Message);
         pErrorBox->Execute( );
     }
 }
@@ -391,7 +391,7 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        boost::scoped_ptr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
+        ScopedVclPtrInstance< MessageDialog > pErrorBox(&GetFrame()->GetWindow(), e.Message);
         pErrorBox->Execute( );
     }
     return uno::Sequence< document::CmisVersion > ( );
@@ -439,7 +439,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !IsOwnStorageFormat_Impl( *GetMedium() ) )
                 return;
 
-            boost::scoped_ptr<SfxVersionDialog> pDlg(new SfxVersionDialog( pFrame, IsSaveVersionOnClose() ));
+            ScopedVclPtrInstance< SfxVersionDialog > pDlg( pFrame, IsSaveVersionOnClose() );
             pDlg->Execute();
             SetSaveVersionOnClose( pDlg->IsSaveVersionOnClose() );
             rReq.Done();
@@ -499,7 +499,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
-                boost::scoped_ptr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(0, aSet));
+                ScopedVclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(0, aSet));
                 if ( RET_OK == pDlg->Execute() )
                 {
                     SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pDocInfoItem, SfxDocumentInfoItem, SID_DOCINFO, false);
@@ -857,10 +857,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            SfxTemplateManagerDlg aDlg;
-            aDlg.setDocumentModel(GetModel());
-            aDlg.setSaveMode();
-            aDlg.Execute();
+            ScopedVclPtrInstance< SfxTemplateManagerDlg > aDlg;
+            aDlg->setDocumentModel(GetModel());
+            aDlg->setSaveMode();
+            aDlg->Execute();
 
             break;
         }

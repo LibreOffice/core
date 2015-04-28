@@ -34,6 +34,7 @@ public:
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~SwCommentRuler ();
+    virtual void dispose() SAL_OVERRIDE;
 
     /**
      * Paint the ruler.
@@ -43,11 +44,11 @@ public:
 
 protected:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
-    SwEditWin * mpSwWin;         //< Used to get SwView to change the SideBar visibility
+    VclPtr<SwEditWin> mpSwWin;         //< Used to get SwView to change the SideBar visibility
     bool        mbIsHighlighted; //< If comment control is highlighted (mouse is over it)
     Timer       maFadeTimer;     //< Timer for high/'low'light fading
     int         mnFadeRate;      //< From 0 to 100. 0 means not highlighted.
-    VirtualDevice maVirDev;      //< VirtualDevice of this window. Just for convenience.
+    ScopedVclPtr<VirtualDevice> maVirDev;      //< VirtualDevice of this window. Just for convenience.
 
     /**
      * Callback function to handle a mouse button down event.

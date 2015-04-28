@@ -68,20 +68,25 @@ ComboBox::ComboBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ComboBox::~ComboBox()
 {
-    SetSubEdit( NULL );
-    delete mpSubEdit;
+    disposeOnce();
+}
 
-    ImplListBox *pImplLB = mpImplLB;
-    mpImplLB = NULL;
-    delete pImplLB;
+void ComboBox::dispose()
+{
+    mpSubEdit.disposeAndClear();
 
-    delete mpFloatWin;
-    delete mpBtn;
+    VclPtr< ImplListBox > pImplLB = mpImplLB;
+    mpImplLB.clear();
+    pImplLB.disposeAndClear();
+
+    mpFloatWin.disposeAndClear();
+    mpBtn.disposeAndClear();
+    Edit::dispose();
 }
 
 void ComboBox::ImplInitComboBoxData()
 {
-    mpSubEdit           = NULL;
+    mpSubEdit.disposeAndClear();
     mpBtn               = NULL;
     mpImplLB            = NULL;
     mpFloatWin          = NULL;
@@ -142,11 +147,11 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     WinBits nListStyle = nStyle;
     if( nStyle & WB_DROPDOWN )
     {
-        mpFloatWin = new ImplListBoxFloatingWindow( this );
+        mpFloatWin = VclPtr<ImplListBoxFloatingWindow>::Create( this );
         mpFloatWin->SetAutoWidth( true );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, ComboBox, ImplPopupModeEndHdl ) );
 
-        mpBtn = new ImplBtn( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
+        mpBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
         mpBtn->buttonDownSignal.connect( boost::bind( &ComboBox::ImplClickButtonHandler, this, _1 ));
         mpBtn->Show();
@@ -165,7 +170,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         }
     }
 
-    mpSubEdit = new Edit( this, nEditStyle );
+    mpSubEdit.set( VclPtr<Edit>::Create( this, nEditStyle ) );
     mpSubEdit->EnableRTL( false );
     SetSubEdit( mpSubEdit );
     mpSubEdit->SetPosPixel( Point() );
@@ -175,7 +180,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     vcl::Window* pLBParent = this;
     if ( mpFloatWin )
         pLBParent = mpFloatWin;
-    mpImplLB = new ImplListBox( pLBParent, nListStyle|WB_SIMPLEMODE|WB_AUTOHSCROLL );
+    mpImplLB = VclPtr<ImplListBox>::Create( pLBParent, nListStyle|WB_SIMPLEMODE|WB_AUTOHSCROLL );
     mpImplLB->SetPosPixel( Point() );
     mpImplLB->SetSelectHdl( LINK( this, ComboBox, ImplSelectHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ComboBox, ImplCancelHdl ) );
@@ -188,7 +193,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( mpFloatWin )
         mpFloatWin->SetImplListBox( mpImplLB );
     else
-        mpImplLB->GetMainWindow().AllowGrabFocus( true );
+        mpImplLB->GetMainWindow()->AllowGrabFocus( true );
 
     ImplCalcEditHeight();
 
@@ -253,7 +258,7 @@ void ComboBox::ImplClickButtonHandler( ImplBtn* )
 
     ImplClearLayoutData();
     if( mpImplLB )
-        mpImplLB->GetMainWindow().ImplClearLayoutData();
+        mpImplLB->GetMainWindow()->ImplClearLayoutData();
 }
 
 IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
@@ -272,7 +277,7 @@ IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
 
     ImplClearLayoutData();
     if( mpImplLB )
-        mpImplLB->GetMainWindow().ImplClearLayoutData();
+        mpImplLB->GetMainWindow()->ImplClearLayoutData();
 
     mpBtn->SetPressed( false );
     CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
@@ -581,20 +586,20 @@ void ComboBox::FillLayoutData() const
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     AppendLayoutData( *mpSubEdit );
     mpSubEdit->SetLayoutDataParent( this );
-    Control& rMainWindow = mpImplLB->GetMainWindow();
+    ImplListBoxWindow* rMainWindow = mpImplLB->GetMainWindow();
     if( mpFloatWin )
     {
         // dropdown mode
         if( mpFloatWin->IsReallyVisible() )
         {
-            AppendLayoutData( rMainWindow );
-            rMainWindow.SetLayoutDataParent( this );
+            AppendLayoutData( *rMainWindow );
+            rMainWindow->SetLayoutDataParent( this );
         }
     }
     else
     {
-        AppendLayoutData( rMainWindow );
-        rMainWindow.SetLayoutDataParent( this );
+        AppendLayoutData( *rMainWindow );
+        rMainWindow->SetLayoutDataParent( this );
     }
 }
 
@@ -647,7 +652,7 @@ void ComboBox::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::STYLE )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
-        mpImplLB->GetMainWindow().EnableSort( ( GetStyle() & WB_SORT ) != 0 );
+        mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) != 0 );
     }
     else if( nType == StateChangedType::MIRRORING )
     {
@@ -765,7 +770,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
             nDone = false;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
     }
-    else if( ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == &mpImplLB->GetMainWindow() ) )
+    else if( ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == mpImplLB->GetMainWindow() ) )
     {
         mpSubEdit->GrabFocus();
     }
@@ -799,6 +804,9 @@ void ComboBox::Modify()
 
 void ComboBox::ImplUpdateFloatSelection()
 {
+    if (!mpImplLB)
+        return;
+
     // move text in the ListBox into the visible region
     mpImplLB->SetCallSelectionChangedHdl( false );
     if ( !IsMultiSelectionEnabled() )
@@ -1106,7 +1114,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     long nCharWidth = GetTextWidth(OUString(static_cast<sal_Unicode>('x')));
     if ( !IsDropDownBox() )
     {
-        Size aOutSz = mpImplLB->GetMainWindow().GetOutputSizePixel();
+        Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();
         rnCols = (nCharWidth > 0) ? (sal_uInt16)(aOutSz.Width()/nCharWidth) : 1;
         rnLines = (sal_uInt16)(aOutSz.Height()/mpImplLB->GetEntryHeight());
     }
@@ -1120,11 +1128,11 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
 
 void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
-    mpImplLB->GetMainWindow().ImplInitSettings( true, true, true );
+    mpImplLB->GetMainWindow()->ImplInitSettings( true, true, true );
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
-    vcl::Font aFont = mpImplLB->GetMainWindow().GetDrawPixelFont( pDev );
+    vcl::Font aFont = mpImplLB->GetMainWindow()->GetDrawPixelFont( pDev );
     OutDevType eOutDevType = pDev->GetOutDevType();
 
     pDev->Push();
@@ -1233,18 +1241,18 @@ void ComboBox::UserDraw( const UserDrawEvent& )
 
 void ComboBox::SetUserItemSize( const Size& rSz )
 {
-    mpImplLB->GetMainWindow().SetUserItemSize( rSz );
+    mpImplLB->GetMainWindow()->SetUserItemSize( rSz );
 }
 
 void ComboBox::EnableUserDraw( bool bUserDraw )
 {
-    mpImplLB->GetMainWindow().EnableUserDraw( bUserDraw );
+    mpImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );
 }
 
 void ComboBox::DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos )
 {
-    DBG_ASSERT( rEvt.GetDevice() == &mpImplLB->GetMainWindow(), "DrawEntry?!" );
-    mpImplLB->GetMainWindow().DrawEntry( rEvt.GetItemId(), bDrawImage, bDrawText, bDrawTextAtImagePos );
+    DBG_ASSERT( rEvt.GetDevice() == mpImplLB->GetMainWindow(), "DrawEntry?!" );
+    mpImplLB->GetMainWindow()->DrawEntry( rEvt.GetItemId(), bDrawImage, bDrawText, bDrawTextAtImagePos );
 }
 
 void ComboBox::SetSeparatorPos( sal_Int32 n )
@@ -1259,7 +1267,7 @@ void ComboBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
 
 OUString ComboBox::GetMRUEntries( sal_Unicode cSep ) const
 {
-    return mpImplLB->GetMRUEntries( cSep );
+    return mpImplLB ? mpImplLB->GetMRUEntries( cSep ) : OUString();
 }
 
 void ComboBox::SetMaxMRUCount( sal_Int32 n )
@@ -1269,12 +1277,12 @@ void ComboBox::SetMaxMRUCount( sal_Int32 n )
 
 sal_Int32 ComboBox::GetMaxMRUCount() const
 {
-    return mpImplLB->GetMaxMRUCount();
+    return mpImplLB ? mpImplLB->GetMaxMRUCount() : 0;
 }
 
 sal_uInt16 ComboBox::GetDisplayLineCount() const
 {
-    return mpImplLB->GetDisplayLineCount();
+    return mpImplLB ? mpImplLB->GetDisplayLineCount() : 0;
 }
 
 void ComboBox::SetEntryData( sal_Int32 nPos, void* pNewData )
@@ -1355,8 +1363,8 @@ void ComboBox::SetNoSelection()
 
 Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
-    Rectangle aRect = mpImplLB->GetMainWindow().GetBoundingRectangle( nItem );
-    Rectangle aOffset = mpImplLB->GetMainWindow().GetWindowExtentsRelative( (vcl::Window*)this );
+    Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
+    Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( (vcl::Window*)this );
     aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
     return aRect;
 }
@@ -1382,16 +1390,16 @@ long ComboBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
     {
         // point must be either in main list window
         // or in impl window (dropdown case)
-        ImplListBoxWindow& rMain = mpImplLB->GetMainWindow();
+        ImplListBoxWindow* rMain = mpImplLB->GetMainWindow();
 
         // convert coordinates to ImplListBoxWindow pixel coordinate space
         Point aConvPoint = LogicToPixel( rPoint );
         aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );
-        aConvPoint = rMain.AbsoluteScreenToOutputPixel( aConvPoint );
-        aConvPoint = rMain.PixelToLogic( aConvPoint );
+        aConvPoint = rMain->AbsoluteScreenToOutputPixel( aConvPoint );
+        aConvPoint = rMain->PixelToLogic( aConvPoint );
 
         // try to find entry
-        sal_Int32 nEntry = rMain.GetEntryPosForPoint( aConvPoint );
+        sal_Int32 nEntry = rMain->GetEntryPosForPoint( aConvPoint );
         if( nEntry == LISTBOX_ENTRY_NOTFOUND )
             nIndex = -1;
         else

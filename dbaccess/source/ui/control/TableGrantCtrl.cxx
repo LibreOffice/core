@@ -71,16 +71,22 @@ OTableGrantControl::OTableGrantControl( vcl::Window* pParent, WinBits nBits)
 
 OTableGrantControl::~OTableGrantControl()
 {
+    disposeOnce();
+}
+
+void OTableGrantControl::dispose()
+{
     if (m_nDeactivateEvent)
     {
         Application::RemoveUserEvent(m_nDeactivateEvent);
         m_nDeactivateEvent = 0;
     }
 
-    delete m_pCheckCell;
-    delete m_pEdit;
+    m_pCheckCell.disposeAndClear();
+    m_pEdit.disposeAndClear();
 
     m_xTables       = NULL;
+    ::svt::EditBrowseBox::dispose();
 }
 
 void OTableGrantControl::setTablesSupplier(const Reference< XTablesSupplier >& _xTablesSup)
@@ -122,10 +128,10 @@ void OTableGrantControl::Init()
     // ComboBox instanzieren
     if(!m_pCheckCell)
     {
-        m_pCheckCell    = new CheckBoxControl( &GetDataWindow() );
+        m_pCheckCell    = VclPtr<CheckBoxControl>::Create( &GetDataWindow() );
         m_pCheckCell->GetBox().EnableTriState(false);
 
-        m_pEdit         = new Edit( &GetDataWindow() );
+        m_pEdit         = VclPtr<Edit>::Create( &GetDataWindow() );
         m_pEdit->SetReadOnly();
         m_pEdit->Enable(false);
     }

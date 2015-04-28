@@ -101,8 +101,8 @@ public:
     void Enable (bool bEnable);
 
 private:
-    PushButton* mpNextButton1;
-    PushButton* mpNextButton2;
+    VclPtr<PushButton> mpNextButton1;
+    VclPtr<PushButton> mpNextButton2;
     bool mbIsFirstButtonActive;
 };
 
@@ -160,7 +160,7 @@ public:
     */
     bool mbPreviewUpdating;
 
-    vcl::Window* mpWindow;
+    VclPtr<vcl::Window> mpWindow;
 
     void SavePassword( SfxObjectShellLock xDoc, const OUString& rPath );
     void RestorePassword( SfxItemSet* pSet, const OUString& rPath );
@@ -247,74 +247,74 @@ public:
 
     // Common
     Assistent           maAssistentFunc;
-    CheckBox*           mpPreviewFlag;
-    CheckBox*           mpStartWithFlag;
-    PushButton*         mpLastPageButton;
-    NextButton*         mpNextPageButton;
-    PushButton*         mpFinishButton;
-    SdDocPreviewWin*    mpPreview;
-    VclContainer*       mpPage1235;
+    VclPtr<CheckBox>           mpPreviewFlag;
+    VclPtr<CheckBox>           mpStartWithFlag;
+    VclPtr<PushButton>         mpLastPageButton;
+    NextButton*                mpNextPageButton;
+    VclPtr<PushButton>         mpFinishButton;
+    VclPtr<SdDocPreviewWin>    mpPreview;
+    VclPtr<VclContainer>       mpPage1235;
 
     // page 1
-    VclContainer*       mpPage1;
-    FixedImage*         mpPage1FB;
-    FixedText*          mpPage1ArtFL;
-    RadioButton*        mpPage1EmptyRB;
-    RadioButton*        mpPage1TemplateRB;
-    ListBox*            mpPage1RegionLB;
-    ListBox*            mpPage1TemplateLB;
-    RadioButton*        mpPage1OpenRB;
-    ListBox*            mpPage1OpenLB;
-    PushButton*         mpPage1OpenPB;
+    VclPtr<VclContainer>       mpPage1;
+    VclPtr<FixedImage>         mpPage1FB;
+    VclPtr<FixedText>          mpPage1ArtFL;
+    VclPtr<RadioButton>        mpPage1EmptyRB;
+    VclPtr<RadioButton>        mpPage1TemplateRB;
+    VclPtr<ListBox>            mpPage1RegionLB;
+    VclPtr<ListBox>            mpPage1TemplateLB;
+    VclPtr<RadioButton>        mpPage1OpenRB;
+    VclPtr<ListBox>            mpPage1OpenLB;
+    VclPtr<PushButton>         mpPage1OpenPB;
 
     // page 2
-    VclContainer*       mpPage2;
-    FixedImage*         mpPage2FB;
-    FixedText*          mpPage2LayoutFL;
-    ListBox*            mpPage2RegionLB;
-    ListBox*            mpPage2LayoutLB;
-    FixedText*          mpPage2OutTypesFL;
-    RadioButton*        mpPage2Medium1RB;
-    RadioButton*        mpPage2Medium2RB;
-    RadioButton*        mpPage2Medium3RB;
-    RadioButton*        mpPage2Medium4RB;
-    RadioButton*        mpPage2Medium5RB;
-    RadioButton*        mpPage2Medium6RB;
+    VclPtr<VclContainer>       mpPage2;
+    VclPtr<FixedImage>         mpPage2FB;
+    VclPtr<FixedText>          mpPage2LayoutFL;
+    VclPtr<ListBox>            mpPage2RegionLB;
+    VclPtr<ListBox>            mpPage2LayoutLB;
+    VclPtr<FixedText>          mpPage2OutTypesFL;
+    VclPtr<RadioButton>        mpPage2Medium1RB;
+    VclPtr<RadioButton>        mpPage2Medium2RB;
+    VclPtr<RadioButton>        mpPage2Medium3RB;
+    VclPtr<RadioButton>        mpPage2Medium4RB;
+    VclPtr<RadioButton>        mpPage2Medium5RB;
+    VclPtr<RadioButton>        mpPage2Medium6RB;
 
     // page 3
-    VclContainer*       mpPage3;
-    FixedImage*         mpPage3FB;
-    FixedText*          mpPage3EffectFL;
-    FixedText*          mpPage3EffectFT;
-    FadeEffectLB*       mpPage3EffectLB;
-    FixedText*          mpPage3SpeedFT;
-    ListBox*            mpPage3SpeedLB;
-    FixedText*          mpPage3PresTypeFL;
-    RadioButton*        mpPage3PresTypeLiveRB;
-    RadioButton*        mpPage3PresTypeKioskRB;
-    FixedText*          mpPage3PresTimeFT;
-    TimeField*          mpPage3PresTimeTMF;
-    FixedText*          mpPage3BreakFT;
-    TimeField*          mpPage3BreakTMF;
-    CheckBox*           mpPage3LogoCB;
+    VclPtr<VclContainer>       mpPage3;
+    VclPtr<FixedImage>         mpPage3FB;
+    VclPtr<FixedText>          mpPage3EffectFL;
+    VclPtr<FixedText>          mpPage3EffectFT;
+    VclPtr<FadeEffectLB>       mpPage3EffectLB;
+    VclPtr<FixedText>          mpPage3SpeedFT;
+    VclPtr<ListBox>            mpPage3SpeedLB;
+    VclPtr<FixedText>          mpPage3PresTypeFL;
+    VclPtr<RadioButton>        mpPage3PresTypeLiveRB;
+    VclPtr<RadioButton>        mpPage3PresTypeKioskRB;
+    VclPtr<FixedText>          mpPage3PresTimeFT;
+    VclPtr<TimeField>          mpPage3PresTimeTMF;
+    VclPtr<FixedText>          mpPage3BreakFT;
+    VclPtr<TimeField>          mpPage3BreakTMF;
+    VclPtr<CheckBox>           mpPage3LogoCB;
 
     // page 4
-    VclContainer*       mpPage4;
-    FixedImage*         mpPage4FB;
-    FixedText*          mpPage4PersonalFL;
-    FixedText*          mpPage4AskNameFT;
-    Edit*               mpPage4AskNameEDT;
-    FixedText*          mpPage4AskTopicFT;
-    Edit*               mpPage4AskTopicEDT;
-    FixedText*          mpPage4AskInfoFT;
-    VclMultiLineEdit*      mpPage4AskInfoEDT;
+    VclPtr<VclContainer>       mpPage4;
+    VclPtr<FixedImage>         mpPage4FB;
+    VclPtr<FixedText>          mpPage4PersonalFL;
+    VclPtr<FixedText>          mpPage4AskNameFT;
+    VclPtr<Edit>               mpPage4AskNameEDT;
+    VclPtr<FixedText>          mpPage4AskTopicFT;
+    VclPtr<Edit>               mpPage4AskTopicEDT;
+    VclPtr<FixedText>          mpPage4AskInfoFT;
+    VclPtr<VclMultiLineEdit>   mpPage4AskInfoEDT;
 
     // page 5
-    VclContainer*       mpPage5;
-    FixedImage*         mpPage5FB;
-    FixedText*          mpPage5PageListFT;
-    SdPageListControl*  mpPage5PageListCT;
-    CheckBox*           mpPage5SummaryCB;
+    VclPtr<VclContainer>       mpPage5;
+    VclPtr<FixedImage>         mpPage5FB;
+    VclPtr<FixedText>          mpPage5PageListFT;
+    VclPtr<SdPageListControl>  mpPage5PageListCT;
+    VclPtr<CheckBox>           mpPage5SummaryCB;
 
 };
 
@@ -1769,7 +1769,13 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
 
 AssistentDlg::~AssistentDlg()
 {
+    disposeOnce();
+}
+
+void AssistentDlg::dispose()
+{
     delete mpImpl;
+    ModalDialog::dispose();
 }
 
 SfxObjectShellLock AssistentDlg::GetDocument()

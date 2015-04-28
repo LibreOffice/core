@@ -51,7 +51,7 @@ Panel::Panel (
     const ::boost::function<Context()>& rContextAccess)
     : Window(pParentWindow),
       msPanelId(rPanelDescriptor.msId),
-      mpTitleBar(new PanelTitleBar(
+      mpTitleBar(VclPtr<PanelTitleBar>::Create(
               rPanelDescriptor.msTitle,
               pParentWindow,
               this)),
@@ -71,10 +71,10 @@ Panel::Panel (
 
 Panel::~Panel()
 {
-    Dispose();
+    disposeOnce();
 }
 
-void Panel::Dispose()
+void Panel::dispose()
 {
     mxPanelComponent = NULL;
 
@@ -91,7 +91,9 @@ void Panel::Dispose()
             xComponent->dispose();
     }
 
-    mpTitleBar.reset();
+    mpTitleBar.disposeAndClear();
+
+    vcl::Window::dispose();
 }
 
 PanelTitleBar* Panel::GetTitleBar() const

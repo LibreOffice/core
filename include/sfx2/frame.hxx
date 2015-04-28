@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace com
 {
@@ -103,7 +104,7 @@ private:
     SfxFrame*           pParentFrame;
     SfxFrameArr_Impl*   pChildArr;
     SfxFrame_Impl*      pImp;
-    vcl::Window*             pWindow;
+    VclPtr<vcl::Window> pWindow;
 
 protected:
     bool                Close();

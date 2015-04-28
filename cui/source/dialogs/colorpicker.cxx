@@ -309,6 +309,7 @@ class ColorFieldControl : public Control
 public:
     ColorFieldControl( vcl::Window* pParent, const WinBits& nStyle );
     virtual ~ColorFieldControl();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -359,7 +360,14 @@ ColorFieldControl::ColorFieldControl( vcl::Window* pParent, const WinBits& nStyl
 
 ColorFieldControl::~ColorFieldControl()
 {
+    disposeOnce();
+}
+
+void ColorFieldControl::dispose()
+{
     delete mpBitmap;
+    mpBitmap = NULL;
+    Control::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorFieldControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
@@ -702,6 +710,7 @@ class ColorSliderControl : public Control
 public:
     ColorSliderControl( vcl::Window* pParent, const WinBits& nStyle );
     virtual ~ColorSliderControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -744,7 +753,14 @@ ColorSliderControl::ColorSliderControl( vcl::Window* pParent, const WinBits& nSt
 
 ColorSliderControl::~ColorSliderControl()
 {
+    disposeOnce();
+}
+
+void ColorSliderControl::dispose()
+{
     delete mpBitmap;
+    mpBitmap = NULL;
+    Control::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorSliderControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
@@ -957,6 +973,8 @@ class ColorPickerDialog : public ModalDialog
 {
 public:
     ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sal_Int16 nMode );
+    virtual ~ColorPickerDialog() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
 
     void update_color( sal_uInt16 n = UPDATE_ALL );
 
@@ -976,35 +994,35 @@ private:
     double mdCyan, mdMagenta, mdYellow, mdKey;
 
 private:
-    ColorFieldControl*    mpColorField;
-    ColorSliderControl*   mpColorSlider;
-    ColorPreviewControl*  mpColorPreview;
-    ColorPreviewControl*  mpColorPrevious;
+    VclPtr<ColorFieldControl>    mpColorField;
+    VclPtr<ColorSliderControl>   mpColorSlider;
+    VclPtr<ColorPreviewControl>  mpColorPreview;
+    VclPtr<ColorPreviewControl>  mpColorPrevious;
 
-    FixedImage*   mpFISliderLeft;
-    FixedImage*   mpFISliderRight;
+    VclPtr<FixedImage>   mpFISliderLeft;
+    VclPtr<FixedImage>   mpFISliderRight;
     Image         maSliderImage;
 
-    RadioButton*    mpRBRed;
-    RadioButton*    mpRBGreen;
-    RadioButton*    mpRBBlue;
-    RadioButton*    mpRBHue;
-    RadioButton*    mpRBSaturation;
-    RadioButton*    mpRBBrightness;
+    VclPtr<RadioButton>    mpRBRed;
+    VclPtr<RadioButton>    mpRBGreen;
+    VclPtr<RadioButton>    mpRBBlue;
+    VclPtr<RadioButton>    mpRBHue;
+    VclPtr<RadioButton>    mpRBSaturation;
+    VclPtr<RadioButton>    mpRBBrightness;
 
-    MetricField*        mpMFRed;
-    MetricField*        mpMFGreen;
-    MetricField*        mpMFBlue;
-    HexColorControl*    mpEDHex;
+    VclPtr<MetricField>        mpMFRed;
+    VclPtr<MetricField>        mpMFGreen;
+    VclPtr<MetricField>        mpMFBlue;
+    VclPtr<HexColorControl>    mpEDHex;
 
-    MetricField*    mpMFHue;
-    MetricField*    mpMFSaturation;
-    MetricField*    mpMFBrightness;
+    VclPtr<MetricField>    mpMFHue;
+    VclPtr<MetricField>    mpMFSaturation;
+    VclPtr<MetricField>    mpMFBrightness;
 
-    MetricField*    mpMFCyan;
-    MetricField*    mpMFMagenta;
-    MetricField*    mpMFYellow;
-    MetricField*    mpMFKey;
+    VclPtr<MetricField>    mpMFCyan;
+    VclPtr<MetricField>    mpMFMagenta;
+    VclPtr<MetricField>    mpMFYellow;
+    VclPtr<MetricField>    mpMFKey;
 };
 
 ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sal_Int16 nMode )
@@ -1108,6 +1126,34 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
     RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
 
     update_color();
+}
+
+void ColorPickerDialog::dispose()
+{
+    mpColorField.clear();
+    mpColorSlider.clear();
+    mpColorPreview.clear();
+    mpColorPrevious.clear();
+    mpFISliderLeft.clear();
+    mpFISliderRight.clear();
+    mpRBRed.clear();
+    mpRBGreen.clear();
+    mpRBBlue.clear();
+    mpRBHue.clear();
+    mpRBSaturation.clear();
+    mpRBBrightness.clear();
+    mpMFRed.clear();
+    mpMFGreen.clear();
+    mpMFBlue.clear();
+    mpEDHex.clear();
+    mpMFHue.clear();
+    mpMFSaturation.clear();
+    mpMFBrightness.clear();
+    mpMFCyan.clear();
+    mpMFMagenta.clear();
+    mpMFYellow.clear();
+    mpMFKey.clear();
+    ModalDialog::dispose();
 }
 
 static int toInt( double dValue, double dRange )
@@ -1495,10 +1541,10 @@ void SAL_CALL ColorPicker::setTitle( const OUString& sTitle ) throw (RuntimeExce
 
 sal_Int16 SAL_CALL ColorPicker::execute(  ) throw (RuntimeException, std::exception)
 {
-    ColorPickerDialog aDlg( VCLUnoHelper::GetWindow( mxParent ), mnColor, mnMode );
-    sal_Int16 ret = aDlg.Execute();
+    ScopedVclPtrInstance< ColorPickerDialog > aDlg( VCLUnoHelper::GetWindow( mxParent ), mnColor, mnMode );
+    sal_Int16 ret = aDlg->Execute();
     if( ret )
-        mnColor = aDlg.GetColor();
+        mnColor = aDlg->GetColor();
 
     return ret;
 }

@@ -58,8 +58,9 @@ class AlignmentTabPage : public SfxTabPage
 
 public:
     virtual             ~AlignmentTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*  GetRanges() { return s_pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -78,36 +79,36 @@ private:
     DECL_LINK( UpdateEnableHdl, void* );
 
 private:
-    ListBox*             m_pLbHorAlign;
-    FixedText*           m_pFtIndent;
-    MetricField*         m_pEdIndent;
-    FixedText*           m_pFtVerAlign;
-    ListBox*             m_pLbVerAlign;
+    VclPtr<ListBox>             m_pLbHorAlign;
+    VclPtr<FixedText>           m_pFtIndent;
+    VclPtr<MetricField>         m_pEdIndent;
+    VclPtr<FixedText>           m_pFtVerAlign;
+    VclPtr<ListBox>             m_pLbVerAlign;
 
-    DialControl*         m_pCtrlDial;
-    FixedText*           m_pFtRotate;
-    NumericField*        m_pNfRotate;
-    FixedText*           m_pFtRefEdge;
-    ValueSet*            m_pVsRefEdge;
-    TriStateBox*         m_pCbStacked;
-    TriStateBox*         m_pCbAsianMode;
+    VclPtr<DialControl>         m_pCtrlDial;
+    VclPtr<FixedText>           m_pFtRotate;
+    VclPtr<NumericField>        m_pNfRotate;
+    VclPtr<FixedText>           m_pFtRefEdge;
+    VclPtr<ValueSet>            m_pVsRefEdge;
+    VclPtr<TriStateBox>         m_pCbStacked;
+    VclPtr<TriStateBox>         m_pCbAsianMode;
     OrientationHelper*   m_pOrientHlp;
 
-    VclHBox*             m_pBoxDirection;
-    TriStateBox*         m_pBtnWrap;
-    TriStateBox*         m_pBtnHyphen;
-    TriStateBox*         m_pBtnShrink;
-    FrameDirListBox*     m_pLbFrameDir;
+    VclPtr<VclHBox>             m_pBoxDirection;
+    VclPtr<TriStateBox>         m_pBtnWrap;
+    VclPtr<TriStateBox>         m_pBtnHyphen;
+    VclPtr<TriStateBox>         m_pBtnShrink;
+    VclPtr<FrameDirListBox>     m_pLbFrameDir;
 
     // hidden labels/string
-    FixedText*           m_pFtBotLock;
-    FixedText*           m_pFtTopLock;
-    FixedText*           m_pFtCelLock;
-    FixedText*           m_pFtABCD;
+    VclPtr<FixedText>           m_pFtBotLock;
+    VclPtr<FixedText>           m_pFtTopLock;
+    VclPtr<FixedText>           m_pFtCelLock;
+    VclPtr<FixedText>           m_pFtABCD;
 
-    VclContainer*        m_pAlignmentFrame;
-    VclContainer*        m_pOrientFrame;
-    VclContainer*        m_pPropertiesFrame;
+    VclPtr<VclContainer>        m_pAlignmentFrame;
+    VclPtr<VclContainer>        m_pOrientFrame;
+    VclPtr<VclContainer>        m_pPropertiesFrame;
 };
 
 

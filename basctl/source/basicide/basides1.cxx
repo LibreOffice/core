@@ -126,7 +126,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                             break;
                     if (it != aWindowTable.end())
                         ++it;
-                    BaseWindow* pWin = it != aWindowTable.end() ? it->second : 0;
+                    BaseWindow* pWin = it != aWindowTable.end() ? it->second.get() : 0;
 
                     bool bSearchedFromStart = false;
                     while ( !nFound && !bCanceled && ( pWin || !bSearchedFromStart ) )
@@ -136,8 +136,8 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                             SfxViewFrame* pViewFrame = GetViewFrame();
                             SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
                             vcl::Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
-                            QueryBox aQuery(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART));
-                            if ( aQuery.Execute() == RET_YES )
+                            ScopedVclPtrInstance< QueryBox > aQuery(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART));
+                            if ( aQuery->Execute() == RET_YES )
                             {
                                 it = aWindowTable.begin();
                                 if ( it != aWindowTable.end() )
@@ -166,7 +166,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         {
                             if ( it != aWindowTable.end() )
                                 ++it;
-                            pWin = it != aWindowTable.end() ? it->second : 0;
+                            pWin = it != aWindowTable.end() ? it->second.get() : 0;
                         }
                         else
                             pWin = 0;
@@ -202,7 +202,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICSTOP:
         {
             // maybe do not simply stop if on breakpoint!
-            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin.get()))
                 pMCurWin->BasicStop();
             StopBasic();
         }
@@ -330,7 +330,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
         case SID_BASICIDE_OBJCAT:
             // toggling object catalog
-            aObjectCatalog.Show(!aObjectCatalog.IsVisible());
+            aObjectCatalog->Show(!aObjectCatalog->IsVisible());
             if (pLayout)
                 pLayout->ArrangeWindows();
             // refresh the button state
@@ -676,8 +676,8 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
         case SID_BASICIDE_MANAGE_LANG:
         {
-            ManageLanguageDialog aDlg(pCurWin, m_pCurLocalizationMgr);
-            aDlg.Execute();
+            ScopedVclPtrInstance< ManageLanguageDialog > aDlg(pCurWin, m_pCurLocalizationMgr);
+            aDlg->Execute();
             rReq.Done();
         }
         break;
@@ -750,7 +750,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_OBJCAT:
                 if (pLayout)
-                    rSet.Put(SfxBoolItem(nWh, aObjectCatalog.IsVisible()));
+                    rSet.Put(SfxBoolItem(nWh, aObjectCatalog->IsVisible()));
                 else
                     rSet.Put(SfxVisibilityItem(nWh, false));
                 break;
@@ -769,7 +769,7 @@ void Shell::GetState(SfxItemSet &rSet)
             case SID_BASICSAVEAS:
             case SID_BASICIDE_MATCHGROUP:
             {
-                if (!dynamic_cast<ModulWindow*>(pCurWin))
+                if (!dynamic_cast<ModulWindow*>(pCurWin.get()))
                     rSet.DisableItem( nWh );
                 else if ( ( nWh == SID_BASICLOAD ) && ( StarBASIC::IsRunning() || ( pCurWin && pCurWin->IsReadOnly() ) ) )
                     rSet.DisableItem( nWh );
@@ -782,7 +782,7 @@ void Shell::GetState(SfxItemSet &rSet)
             case SID_BASICIDE_TOGGLEBRKPNT:
             case SID_BASICIDE_MANAGEBRKPNTS:
             {
-                if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+                if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin.get()))
                 {
                     if (StarBASIC::IsRunning() && !pMCurWin->GetBasicStatus().bIsInReschedule)
                         rSet.DisableItem(nWh);
@@ -793,7 +793,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICCOMPILE:
             {
-                if (StarBASIC::IsRunning() || !dynamic_cast<ModulWindow*>(pCurWin))
+                if (StarBASIC::IsRunning() || !dynamic_cast<ModulWindow*>(pCurWin.get()))
                     rSet.DisableItem( nWh );
             }
             break;
@@ -814,7 +814,7 @@ void Shell::GetState(SfxItemSet &rSet)
             case SID_INSERT_FORM_HSCROLL:
             case SID_INSERT_FORM_SPIN:
             {
-                if (!dynamic_cast<DialogWindow*>(pCurWin))
+                if (!dynamic_cast<DialogWindow*>(pCurWin.get()))
                     rSet.DisableItem( nWh );
             }
             break;
@@ -945,7 +945,7 @@ void Shell::GetState(SfxItemSet &rSet)
                 // if this is not a module window hide the
                 // setting, doesn't make sense for example if the
                 // dialog editor is open
-                if (pCurWin && !dynamic_cast<ModulWindow*>(pCurWin))
+                if (pCurWin && !dynamic_cast<ModulWindow*>(pCurWin.get()))
                 {
                     rSet.DisableItem( nWh );
                     rSet.Put(SfxVisibilityItem(nWh, false));
@@ -968,7 +968,7 @@ bool Shell::HasUIFeature( sal_uInt32 nFeature )
     if ( (nFeature & BASICIDE_UI_FEATURE_SHOW_BROWSER) == BASICIDE_UI_FEATURE_SHOW_BROWSER )
     {
         // fade out (in) property browser in module (dialog) windows
-        if (dynamic_cast<DialogWindow*>(pCurWin) && !pCurWin->IsReadOnly())
+        if (dynamic_cast<DialogWindow*>(pCurWin.get()) && !pCurWin->IsReadOnly())
             bResult = true;
     }
 
@@ -1032,10 +1032,10 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
             GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
             SfxObjectShell::SetCurrentComponent(0);
         }
-        aObjectCatalog.SetCurrentEntry(pCurWin);
+        aObjectCatalog->SetCurrentEntry(pCurWin);
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );
         InvalidateBasicIDESlots();
-        EnableScrollbars(pCurWin != 0);
+        EnableScrollbars(pCurWin != nullptr);
 
         if ( m_pCurLocalizationMgr )
             m_pCurLocalizationMgr->handleTranslationbar();
@@ -1067,7 +1067,7 @@ void Shell::ManageToolbars()
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
-            if (dynamic_cast<DialogWindow*>(pCurWin))
+            if (dynamic_cast<DialogWindow*>(pCurWin.get()))
             {
                 xLayoutManager->destroyElement( aMacroBarResName );
 
@@ -1188,13 +1188,13 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
         return;
 
     Size aSz( rSize );
-    Size aScrollBarBoxSz( aScrollBarBox.GetSizePixel() );
+    Size aScrollBarBoxSz( aScrollBarBox->GetSizePixel() );
     aSz.Height() -= aScrollBarBoxSz.Height();
 
     Size aOutSz( aSz );
     aSz.Width() -= aScrollBarBoxSz.Width();
-    aScrollBarBox.SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );
-    aVScrollBar.SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( aScrollBarBoxSz.Width(), aSz.Height() ) );
+    aScrollBarBox->SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );
+    aVScrollBar->SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( aScrollBarBoxSz.Width(), aSz.Height() ) );
     if ( bTabBarSplitted )
     {
         // SplitSize is 0 at a resize!
@@ -1203,17 +1203,17 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
             nSplitPos = aSz.Width();
         pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( nSplitPos, aScrollBarBoxSz.Height() ) );
         long nScrlStart = rPos.X() + nSplitPos;
-        aHScrollBar.SetPosSizePixel( Point( nScrlStart, rPos.Y()+aSz.Height() ), Size( aSz.Width() - nScrlStart + 1, aScrollBarBoxSz.Height() ) );
-        aHScrollBar.Update();
+        aHScrollBar->SetPosSizePixel( Point( nScrlStart, rPos.Y()+aSz.Height() ), Size( aSz.Width() - nScrlStart + 1, aScrollBarBoxSz.Height() ) );
+        aHScrollBar->Update();
     }
     else
     {
-        aHScrollBar.SetPosSizePixel( Point( rPos.X()+ aSz.Width()/2 - 1, rPos.Y()+aSz.Height() ), Size( aSz.Width()/2 + 2, aScrollBarBoxSz.Height() ) );
+        aHScrollBar->SetPosSizePixel( Point( rPos.X()+ aSz.Width()/2 - 1, rPos.Y()+aSz.Height() ), Size( aSz.Width()/2 + 2, aScrollBarBoxSz.Height() ) );
         pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width()/2, aScrollBarBoxSz.Height() ) );
     }
 
     if (pLayout)
-        pLayout->SetPosSizePixel(rPos, dynamic_cast<DialogWindow*>(pCurWin) ? aSz : aOutSz);
+        pLayout->SetPosSizePixel(rPos, dynamic_cast<DialogWindow*>(pCurWin.get()) ? aSz : aOutSz);
 }
 
 Reference< XModel > Shell::GetCurrentDocument() const
@@ -1230,7 +1230,7 @@ void Shell::Activate( bool bMDI )
 
     if ( bMDI )
     {
-        if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin))
+        if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin.get()))
             pDCurWin->UpdateBrowser();
     }
 }
@@ -1241,7 +1241,7 @@ void Shell::Deactivate( bool bMDI )
     // deactivate due to a MessageBox bMDI is false
     if ( bMDI )
     {
-        if (DialogWindow* pXDlgWin = dynamic_cast<DialogWindow*>(pCurWin))
+        if (DialogWindow* pXDlgWin = dynamic_cast<DialogWindow*>(pCurWin.get()))
         {
             pXDlgWin->DisableBrowser();
             if( pXDlgWin->IsModified() )

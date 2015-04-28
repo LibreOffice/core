@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 
 namespace sd { namespace sidebar {
 
-MasterPagesSelector* CurrentMasterPagesSelector::Create (
+VclPtr<vcl::Window> CurrentMasterPagesSelector::Create (
     vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -53,13 +53,14 @@ MasterPagesSelector* CurrentMasterPagesSelector::Create (
 
     ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
-    MasterPagesSelector* pSelector(
+    VclPtr<MasterPagesSelector> pSelector(
         new CurrentMasterPagesSelector (
             pParent,
             *pDocument,
             rViewShellBase,
             pContainer,
-            rxSidebar));
+            rxSidebar),
+        SAL_NO_ACQUIRE);
     pSelector->LateInit();
     pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_CURRENT );
 
@@ -91,6 +92,11 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
 {
+    disposeOnce();
+}
+
+void CurrentMasterPagesSelector::dispose()
+{
     if (mrDocument.GetDocSh() != NULL)
     {
         EndListening(*mrDocument.GetDocSh());
@@ -102,6 +108,8 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
 
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
+
+    MasterPagesSelector::dispose();
 }
 
 void CurrentMasterPagesSelector::LateInit()

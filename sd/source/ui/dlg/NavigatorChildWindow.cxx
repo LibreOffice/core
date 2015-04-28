@@ -52,7 +52,8 @@ NavigatorChildWindow::NavigatorChildWindow (
     SfxChildWinInfo* )
     : SfxChildWindowContext( nId )
 {
-    SdNavigatorWin* pNavWin = new SdNavigatorWin(
+    VclPtr<SdNavigatorWin> pNavWin = VclPtr<SdNavigatorWin>::Create(
+
         pParent,
         this,
         SdResId( FLT_NAVIGATOR ),

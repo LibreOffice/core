@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
+#include <vcl/vclptr.hxx>
 
 #include <vector>
 
@@ -169,7 +170,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
     size_t mnMenuPos;
-    ScMenuFloatingWindow* mpWindow;
+    VclPtr<ScMenuFloatingWindow> mpWindow;
 
     bool mbEnabled:1;
 };

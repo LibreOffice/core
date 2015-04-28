@@ -22,6 +22,7 @@
 #include <svtools/svtdllapi.h>
 #include <vcl/scrbar.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/multisel.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/transfer.hxx>
@@ -129,9 +130,9 @@ namespace o3tl
 
 class BrowseEvent
 {
-    vcl::Window*             pWin;
-    long                nRow;
-    Rectangle           aRect;
+    VclPtr<vcl::Window>     pWin;
+    long                    nRow;
+    Rectangle               aRect;
     sal_uInt16              nCol;
     sal_uInt16              nColId;
 
@@ -142,10 +143,10 @@ public:
                                      sal_uInt16 nColumn, sal_uInt16 nColumnId,
                                      const Rectangle& rRect );
 
-    vcl::Window*             GetWindow() const { return pWin; }
+    vcl::Window*        GetWindow() const { return pWin; }
     long                GetRow() const { return nRow; }
-    sal_uInt16              GetColumn() const { return nCol; }
-    sal_uInt16              GetColumnId() const { return nColId; }
+    sal_uInt16          GetColumn() const { return nCol; }
+    sal_uInt16          GetColumnId() const { return nColId; }
     const Rectangle&    GetRect() const { return aRect; }
 };
 
@@ -218,9 +219,9 @@ public:
     static const sal_uInt16 HandleColumnId = 0;
 
 private:
-    vcl::Window*         pDataWin;       // window to display data rows
-    ScrollBar*      pVScroll;       // vertical scrollbar
-    ScrollBar       aHScroll;       // horizontal scrollbar
+    VclPtr<vcl::Window> pDataWin;       // window to display data rows
+    VclPtr<ScrollBar>  pVScroll;       // vertical scrollbar
+    VclPtr<ScrollBar>  aHScroll;       // horizontal scrollbar
 
     long            nDataRowHeight; // height of a single data-row
     sal_uInt16      nTitleLines;    // number of lines in title row
@@ -391,7 +392,7 @@ protected:
     void            DoHideCursor( const char *pWhoLog );
     short           GetCursorHideCount() const;
 
-    virtual BrowserHeader*  CreateHeaderBar( BrowseBox* pParent );
+    virtual VclPtr<BrowserHeader> CreateHeaderBar( BrowseBox* pParent );
 
     // HACK(virtual create is not called in Ctor)
     void            SetHeaderBar( BrowserHeader* );
@@ -423,7 +424,8 @@ public:
                                BrowserMode nMode = BrowserMode::NONE );
                     BrowseBox( vcl::Window* pParent, const ResId& rId,
                                BrowserMode nMode = BrowserMode::NONE );
-                    virtual ~BrowseBox();
+    virtual         ~BrowseBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     // override inherited handler
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

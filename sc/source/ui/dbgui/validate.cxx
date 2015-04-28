@@ -168,6 +168,17 @@ void ScTPValidationValue::RefInputDonePostHdl()
         m_pRefEdit->GrabFocus();
 }
 
+ScTPValidationValue::ScRefButtonEx::~ScRefButtonEx()
+{
+    disposeOnce();
+}
+
+void ScTPValidationValue::ScRefButtonEx::dispose()
+{
+    m_pPage.clear();
+    ::formula::RefButton::dispose();
+}
+
 namespace {
 
 /** Converts the passed ScValidationMode to the position in the list box. */
@@ -346,6 +357,33 @@ ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet
     m_pBtnRef->Hide(); // cell range picker
 }
 
+ScTPValidationValue::~ScTPValidationValue()
+{
+    disposeOnce();
+}
+
+void ScTPValidationValue::dispose()
+{
+    m_pLbAllow.clear();
+    m_pCbAllow.clear();
+    m_pCbShow.clear();
+    m_pCbSort.clear();
+    m_pFtValue.clear();
+    m_pLbValue.clear();
+    m_pFtMin.clear();
+    m_pMinGrid.clear();
+    m_pEdMin.clear();
+    m_pEdList.clear();
+    m_pFtMax.clear();
+    m_pEdMax.clear();
+    m_pFtHint.clear();
+    m_pRefEdit.clear();
+    m_pBtnRef.clear();
+    m_pRefGrid.clear();
+    SfxTabPage::dispose();
+}
+
+
 void ScTPValidationValue::Init()
 {
     m_pLbAllow->SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
@@ -366,9 +404,9 @@ void ScTPValidationValue::Init()
     CheckHdl( NULL );
 }
 
-SfxTabPage* ScTPValidationValue::Create( vcl::Window* pParent, const SfxItemSet* rArgSet )
+VclPtr<SfxTabPage> ScTPValidationValue::Create( vcl::Window* pParent, const SfxItemSet* rArgSet )
 {
-    return( new ScTPValidationValue( pParent, *rArgSet ) );
+    return VclPtr<SfxTabPage>(new ScTPValidationValue( pParent, *rArgSet ), SAL_NO_ACQUIRE);
 }
 
 void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
@@ -649,6 +687,15 @@ ScTPValidationHelp::ScTPValidationHelp( vcl::Window*         pParent,
 
 ScTPValidationHelp::~ScTPValidationHelp()
 {
+    disposeOnce();
+}
+
+void ScTPValidationHelp::dispose()
+{
+    pTsbHelp.clear();
+    pEdtTitle.clear();
+    pEdInputHelp.clear();
+    SfxTabPage::dispose();
 }
 
 void ScTPValidationHelp::Init()
@@ -656,10 +703,10 @@ void ScTPValidationHelp::Init()
     pTsbHelp->EnableTriState( false );
 }
 
-SfxTabPage* ScTPValidationHelp::Create( vcl::Window* pParent,
-                                         const SfxItemSet*  rArgSet )
+VclPtr<SfxTabPage> ScTPValidationHelp::Create( vcl::Window* pParent,
+                                               const SfxItemSet*  rArgSet )
 {
-    return ( new ScTPValidationHelp( pParent, *rArgSet ) );
+    return VclPtr<ScTPValidationHelp>::Create( pParent, *rArgSet );
 }
 
 void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
@@ -713,6 +760,18 @@ ScTPValidationError::ScTPValidationError( vcl::Window*           pParent,
 
 ScTPValidationError::~ScTPValidationError()
 {
+    disposeOnce();
+}
+
+void ScTPValidationError::dispose()
+{
+    m_pTsbShow.clear();
+    m_pLbAction.clear();
+    m_pBtnSearch.clear();
+    m_pEdtTitle.clear();
+    m_pFtError.clear();
+    m_pEdError.clear();
+    SfxTabPage::dispose();
 }
 
 void ScTPValidationError::Init()
@@ -726,10 +785,10 @@ void ScTPValidationError::Init()
     SelectActionHdl( NULL );
 }
 
-SfxTabPage* ScTPValidationError::Create( vcl::Window*    pParent,
-                                         const SfxItemSet*  rArgSet )
+VclPtr<SfxTabPage> ScTPValidationError::Create( vcl::Window*    pParent,
+                                                const SfxItemSet*  rArgSet )
 {
-    return ( new ScTPValidationError( pParent, *rArgSet ) );
+    return VclPtr<ScTPValidationError>::Create( pParent, *rArgSet );
 }
 
 void ScTPValidationError::Reset( const SfxItemSet* rArgSet )

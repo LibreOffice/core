@@ -692,14 +692,14 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_nNewPage(USHRT_MAX),
     m_nOldPageNum(0),
     m_pNumRuleNodeFromDoc(0),
-    m_pEditWin( new SwEditWin( &_pFrame->GetWindow(), *this ) ),
+    m_pEditWin( VclPtr<SwEditWin>::Create( &_pFrame->GetWindow(), *this ) ),
     m_pWrtShell(0),
     m_pShell(0),
     m_pFormShell(0),
     m_pHScrollbar(0),
     m_pVScrollbar(0),
-    m_pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
-    m_pVRuler(new SvxRuler(&GetViewFrame()->GetWindow(), m_pEditWin,
+    m_pScrollFill(VclPtr<ScrollBarBox>::Create( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
+    m_pVRuler(VclPtr<SvxRuler>::Create(&GetViewFrame()->GetWindow(), m_pEditWin,
                             SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL|
                                 SVXRULER_SUPPORT_BORDERS | SVXRULER_SUPPORT_REDUCED_METRIC,
                             GetViewFrame()->GetBindings(),
@@ -846,7 +846,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         }
     }
     SAL_INFO( "sw.ui", "after create WrtShell" );
-    m_pHRuler = new SwCommentRuler(m_pWrtShell, &GetViewFrame()->GetWindow(), m_pEditWin,
+    m_pHRuler = VclPtr<SwCommentRuler>::Create(m_pWrtShell, &GetViewFrame()->GetWindow(), m_pEditWin,
                 SVXRULER_SUPPORT_TABS |
                 SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
                 SVXRULER_SUPPORT_BORDERS |
@@ -1050,18 +1050,18 @@ SwView::~SwView()
     m_pViewImpl->Invalidate();
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
-    delete m_pScrollFill;
+    m_pScrollFill.disposeAndClear();
     delete m_pWrtShell;
     m_pWrtShell = 0;      // Set to 0, so that it is not accessible by the following dtors cannot.
     m_pShell = 0;
-    delete m_pHScrollbar;
-    delete m_pVScrollbar;
-    delete m_pHRuler;
-    delete m_pVRuler;
-    delete m_pTogglePageBtn;
+    m_pHScrollbar.disposeAndClear();
+    m_pVScrollbar.disposeAndClear();
+    m_pHRuler.disposeAndClear();
+    m_pVRuler.disposeAndClear();
+    m_pTogglePageBtn.disposeAndClear();
     delete m_pGlosHdl;
     delete m_pViewImpl;
-    delete m_pEditWin;
+    m_pEditWin.disposeAndClear();
     delete m_pFormatClipboard;
 }
 

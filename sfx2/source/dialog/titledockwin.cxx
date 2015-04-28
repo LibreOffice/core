@@ -35,8 +35,8 @@ namespace sfx2
             WinBits i_nStyle )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_nStyle )
         ,m_sTitle()
-        ,m_aToolbox( this )
-        ,m_aContentWindow( this, WB_DIALOGCONTROL )
+        ,m_aToolbox( VclPtr<ToolBox>::Create(this) )
+        ,m_aContentWindow( VclPtr<vcl::Window>::Create(this, WB_DIALOGCONTROL) )
         ,m_aBorder( 3, 1, 3, 3 )
         ,m_bLayoutPending( false )
         ,m_nTitleBarHeight(0)
@@ -48,19 +48,26 @@ namespace sfx2
     {
         SetBackground( Wallpaper() );
 
-        m_aToolbox.SetSelectHdl( LINK( this, TitledDockingWindow, OnToolboxItemSelected ) );
-        m_aToolbox.SetOutStyle( TOOLBOX_STYLE_FLAT );
-        m_aToolbox.SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
-        m_aToolbox.Show();
+        m_aToolbox->SetSelectHdl( LINK( this, TitledDockingWindow, OnToolboxItemSelected ) );
+        m_aToolbox->SetOutStyle( TOOLBOX_STYLE_FLAT );
+        m_aToolbox->SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
+        m_aToolbox->Show();
         impl_resetToolBox();
 
-        m_aContentWindow.Show();
+        m_aContentWindow->Show();
     }
 
     TitledDockingWindow::~TitledDockingWindow()
     {
+        disposeOnce();
     }
 
+    void TitledDockingWindow::dispose()
+    {
+        m_aToolbox.disposeAndClear();
+        m_aContentWindow.disposeAndClear();
+        SfxDockingWindow::dispose();
+    }
 
     void TitledDockingWindow::SetTitle( const OUString& i_rTitle )
     {
@@ -101,16 +108,16 @@ namespace sfx2
     {
         m_bLayoutPending = false;
 
-        m_aToolbox.ShowItem( 1, !IsFloatingMode() );
+        m_aToolbox->ShowItem( 1, !IsFloatingMode() );
 
-        const Size aToolBoxSize( m_aToolbox.CalcWindowSizePixel() );
+        const Size aToolBoxSize( m_aToolbox->CalcWindowSizePixel() );
         Size aWindowSize( GetOutputSizePixel() );
 
         // position the tool box
         m_nTitleBarHeight = GetSettings().GetStyleSettings().GetTitleHeight();
         if ( aToolBoxSize.Height() > m_nTitleBarHeight )
             m_nTitleBarHeight = aToolBoxSize.Height();
-        m_aToolbox.SetPosSizePixel(
+        m_aToolbox->SetPosSizePixel(
             Point(
                 aWindowSize.Width() - aToolBoxSize.Width(),
                 ( m_nTitleBarHeight - aToolBoxSize.Height() ) / 2
@@ -122,7 +129,7 @@ namespace sfx2
         if ( m_nTitleBarHeight < aToolBoxSize.Height() )
             m_nTitleBarHeight = aToolBoxSize.Height();
         aWindowSize.Height() -= m_nTitleBarHeight;
-        m_aContentWindow.SetPosSizePixel(
+        m_aContentWindow->SetPosSizePixel(
             Point( m_aBorder.Left(), m_nTitleBarHeight + m_aBorder.Top() ),
             Size(
                 aWindowSize.Width() - m_aBorder.Left() - m_aBorder.Right(),
@@ -209,24 +216,24 @@ namespace sfx2
 
     void TitledDockingWindow::impl_resetToolBox()
     {
-        m_aToolbox.Clear();
+        m_aToolbox->Clear();
 
         // Get the closer bitmap and set it as right most button.
         Image aImage( SfxResId( SFX_IMG_CLOSE_DOC ) );
-        m_aToolbox.InsertItem( 1, aImage );
-        m_aToolbox.ShowItem( 1 );
+        m_aToolbox->InsertItem( 1, aImage );
+        m_aToolbox->ShowItem( 1 );
     }
 
 
     sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
     {
         // Add the menu before the closer button.
-        const sal_uInt16 nItemCount( m_aToolbox.GetItemCount() );
+        const sal_uInt16 nItemCount( m_aToolbox->GetItemCount() );
         const sal_uInt16 nItemId( nItemCount + 1 );
-        m_aToolbox.InsertItem( nItemId, i_rItemText, ToolBoxItemBits::DROPDOWNONLY, nItemCount > 0 ? nItemCount - 1 : TOOLBOX_APPEND );
-        m_aToolbox.SetHelpId( nItemId, i_nHelpId );
-        m_aToolbox.SetClickHdl( i_rCallback );
-        m_aToolbox.SetDropdownClickHdl( i_rCallback );
+        m_aToolbox->InsertItem( nItemId, i_rItemText, ToolBoxItemBits::DROPDOWNONLY, nItemCount > 0 ? nItemCount - 1 : TOOLBOX_APPEND );
+        m_aToolbox->SetHelpId( nItemId, i_nHelpId );
+        m_aToolbox->SetClickHdl( i_rCallback );
+        m_aToolbox->SetDropdownClickHdl( i_rCallback );
 
         // The tool box has likely changed its size. The title bar has to be
         // resized.

@@ -30,7 +30,7 @@ class SwPaM;
 class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
 {
     SwView *    m_pView;
-    vcl::Window*     m_pWin;
+    VclPtr<vcl::Window>     m_pWin;
     SwWrtShell &m_rWrtShell;
 
     SwConversionArgs *m_pConvArgs;    /**< object for arguments (and results) needed

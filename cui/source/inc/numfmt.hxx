@@ -70,8 +70,9 @@ class SvxNumberFormatTabPage : public SfxTabPage
 
 public:
     virtual ~SvxNumberFormatTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*      Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
     // Returns area information.
     static const sal_uInt16* GetRanges() { return pRanges; }
@@ -91,31 +92,31 @@ public:
 private:
     SvxNumberFormatTabPage( vcl::Window* pParent,
                             const SfxItemSet& rCoreAttrs );
-    FixedText*              m_pFtCategory;
-    ListBox*                m_pLbCategory;
-    FixedText*              m_pFtFormat;
-    ListBox*                m_pLbCurrency;
-    SvxFontListBox*         m_pLbFormat;
-    FixedText*              m_pFtLanguage;
-    SvxLanguageBox*         m_pLbLanguage;
-    CheckBox*               m_pCbSourceFormat;
-    SvxNumberPreview*       m_pWndPreview;
-    FixedText*              m_pFtOptions;
-    FixedText*              m_pFtDecimals;
-    NumericField*           m_pEdDecimals;
-    CheckBox*               m_pBtnNegRed;
-    FixedText*              m_pFtLeadZeroes;
-    NumericField*           m_pEdLeadZeroes;
-    CheckBox*               m_pBtnThousand;
+    VclPtr<FixedText>              m_pFtCategory;
+    VclPtr<ListBox>                m_pLbCategory;
+    VclPtr<FixedText>              m_pFtFormat;
+    VclPtr<ListBox>                m_pLbCurrency;
+    VclPtr<SvxFontListBox>         m_pLbFormat;
+    VclPtr<FixedText>              m_pFtLanguage;
+    VclPtr<SvxLanguageBox>         m_pLbLanguage;
+    VclPtr<CheckBox>               m_pCbSourceFormat;
+    VclPtr<SvxNumberPreview>       m_pWndPreview;
+    VclPtr<FixedText>              m_pFtOptions;
+    VclPtr<FixedText>              m_pFtDecimals;
+    VclPtr<NumericField>           m_pEdDecimals;
+    VclPtr<CheckBox>               m_pBtnNegRed;
+    VclPtr<FixedText>              m_pFtLeadZeroes;
+    VclPtr<NumericField>           m_pEdLeadZeroes;
+    VclPtr<CheckBox>               m_pBtnThousand;
 
-    VclContainer*           m_pFormatCodeFrame;
-    Edit*                   m_pEdFormat;
-    PushButton*             m_pIbAdd;
-    PushButton*             m_pIbInfo;
-    PushButton*             m_pIbRemove;
+    VclPtr<VclContainer>           m_pFormatCodeFrame;
+    VclPtr<Edit>                   m_pEdFormat;
+    VclPtr<PushButton>             m_pIbAdd;
+    VclPtr<PushButton>             m_pIbInfo;
+    VclPtr<PushButton>             m_pIbRemove;
 
-    FixedText*              m_pFtComment;
-    Edit*                   m_pEdComment;
+    VclPtr<FixedText>              m_pFtComment;
+    VclPtr<Edit>                   m_pEdComment;
     Timer                   aResetWinTimer;
 
 
@@ -130,7 +131,7 @@ private:
 
     OUString sAutomaticEntry;
 
-    vcl::Window*                 pLastActivWindow;
+    VclPtr<vcl::Window>            pLastActivWindow;
 
     void    Init_Impl();
     void    FillCurrencyBox();
@@ -145,11 +146,11 @@ private:
     void    ChangePreviewText( sal_uInt16 nPos );
     void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect);
     // Handler
-    DECL_LINK( LostFocusHdl_Impl, Edit* pEd );
-    DECL_LINK( DoubleClickHdl_Impl, SvxFontListBox* pLb );
+    DECL_LINK( LostFocusHdl_Impl, Edit* );
+    DECL_LINK( DoubleClickHdl_Impl, SvxFontListBox* );
     DECL_LINK( SelFormatHdl_Impl, void * );
-    DECL_LINK( ClickHdl_Impl, PushButton* pIB );
-    DECL_LINK( EditHdl_Impl, Edit* pEdFormat );
+    DECL_LINK( ClickHdl_Impl, PushButton* );
+    DECL_LINK( EditHdl_Impl, Edit* );
     DECL_LINK( OptHdl_Impl, void * );
     DECL_LINK(TimeHdl_Impl, void *);
 };

@@ -55,15 +55,38 @@ SvxJSearchOptionsPage::SvxJSearchOptionsPage( vcl::Window* pParent, const SfxIte
     nTransliterationFlags = 0x00000000;
 }
 
-
 SvxJSearchOptionsPage::~SvxJSearchOptionsPage()
 {
+    disposeOnce();
 }
 
-
-SfxTabPage*  SvxJSearchOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+void SvxJSearchOptionsPage::dispose()
 {
-    return new SvxJSearchOptionsPage( pParent, *rSet );
+    m_pMatchCase.clear();
+    m_pMatchFullHalfWidth.clear();
+    m_pMatchHiraganaKatakana.clear();
+    m_pMatchContractions.clear();
+    m_pMatchMinusDashChoon.clear();
+    m_pMatchRepeatCharMarks.clear();
+    m_pMatchVariantFormKanji.clear();
+    m_pMatchOldKanaForms.clear();
+    m_pMatchDiziDuzu.clear();
+    m_pMatchBavaHafa.clear();
+    m_pMatchTsithichiDhizi.clear();
+    m_pMatchHyuiyuByuvyu.clear();
+    m_pMatchSesheZeje.clear();
+    m_pMatchIaiya.clear();
+    m_pMatchKiku.clear();
+    m_pMatchProlongedSoundMark.clear();
+    m_pIgnorePunctuation.clear();
+    m_pIgnoreWhitespace.clear();
+    m_pIgnoreMiddleDot.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxJSearchOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+{
+    return VclPtr<SvxJSearchOptionsPage>::Create( pParent, *rSet );
 }
 
 

@@ -163,7 +163,7 @@ public:
     SvxStyleToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
     virtual ~SvxStyleToolBoxControl();
 
-    virtual vcl::Window* CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
@@ -210,7 +210,7 @@ public:
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
-    virtual vcl::Window* CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
 };
 
 class BorderColorStatus
@@ -242,7 +242,7 @@ public:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
     virtual SfxPopupWindowType GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
 };
 
@@ -253,7 +253,7 @@ public:
     SvxFrameToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
 
     virtual SfxPopupWindowType GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
 };
@@ -265,7 +265,7 @@ public:
     SvxFrameLineStyleToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
 
     virtual SfxPopupWindowType GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
 };

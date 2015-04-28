@@ -74,6 +74,24 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 
 ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 {
+    disposeOnce();
+}
+
+void ScColRowNameRangesDlg::dispose()
+{
+    pLbRange.clear();
+    pEdAssign.clear();
+    pRbAssign.clear();
+    pBtnColHead.clear();
+    pBtnRowHead.clear();
+    pEdAssign2.clear();
+    pRbAssign2.clear();
+    pBtnOk.clear();
+    pBtnCancel.clear();
+    pBtnAdd.clear();
+    pBtnRemove.clear();
+    pEdActive.clear();
+    ScAnyRefDlg::dispose();
 }
 
 // initialises event handlers and start parameters in the dialog
@@ -475,7 +493,7 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, bool bColNam
 
 bool ScColRowNameRangesDlg::IsRefInputMode() const
 {
-    return (pEdActive != NULL);
+    return (pEdActive != nullptr);
 }
 
 // Handler:

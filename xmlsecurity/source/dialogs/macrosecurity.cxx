@@ -69,8 +69,8 @@ MacroSecurity::MacroSecurity( vcl::Window* _pParent,
     get(m_pResetBtn, "reset");
     get(m_pOkBtn, "ok");
 
-    mpLevelTP = new MacroSecurityLevelTP(m_pTabCtrl, this);
-    mpTrustSrcTP = new MacroSecurityTrustedSourcesTP(m_pTabCtrl, this);
+    mpLevelTP.reset(VclPtr<MacroSecurityLevelTP>::Create(m_pTabCtrl, this));
+    mpTrustSrcTP.reset(VclPtr<MacroSecurityTrustedSourcesTP>::Create(m_pTabCtrl, this));
 
     m_nSecLevelId = m_pTabCtrl->GetPageId("SecurityLevelPage");
     m_nSecTrustId = m_pTabCtrl->GetPageId("SecurityTrustPage");
@@ -84,8 +84,19 @@ MacroSecurity::MacroSecurity( vcl::Window* _pParent,
 
 MacroSecurity::~MacroSecurity()
 {
-    delete m_pTabCtrl->GetTabPage(m_nSecTrustId);
-    delete m_pTabCtrl->GetTabPage(m_nSecLevelId);
+    disposeOnce();
+}
+
+void MacroSecurity::dispose()
+{
+    m_pTabCtrl->GetTabPage(m_nSecTrustId)->disposeOnce();
+    m_pTabCtrl->GetTabPage(m_nSecLevelId)->disposeOnce();
+    m_pTabCtrl.clear();
+    m_pOkBtn.clear();
+    m_pResetBtn.clear();
+    mpLevelTP.disposeAndClear();
+    mpTrustSrcTP.disposeAndClear();
+    TabDialog::dispose();
 }
 
 MacroSecurityTP::MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
@@ -93,6 +104,17 @@ MacroSecurityTP::MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
     : TabPage(_pParent, rID, rUIXMLDescription)
     , mpDlg(_pDlg)
 {
+}
+
+MacroSecurityTP::~MacroSecurityTP()
+{
+    disposeOnce();
+}
+
+void MacroSecurityTP::dispose()
+{
+    mpDlg.clear();
+    TabPage::dispose();
 }
 
 MacroSecurityLevelTP::MacroSecurityLevelTP(vcl::Window* _pParent, MacroSecurity* _pDlg)
@@ -146,6 +168,20 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(vcl::Window* _pParent, MacroSecurity*
         m_pMediumRB->Enable(false);
         m_pLowRB->Enable(false);
     }
+}
+
+MacroSecurityLevelTP::~MacroSecurityLevelTP()
+{
+    disposeOnce();
+}
+
+void MacroSecurityLevelTP::dispose()
+{
+    m_pVeryHighRB.clear();
+    m_pHighRB.clear();
+    m_pMediumRB.clear();
+    m_pLowRB.clear();
+    MacroSecurityTP::dispose();
 }
 
 IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl)
@@ -202,8 +238,8 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
 
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert, false );
-            aViewer.Execute();
+            ScopedVclPtrInstance< CertificateViewer > aViewer( this, mpDlg->mxSecurityEnvironment, xCert, false );
+            aViewer->Execute();
         }
     }
     return 0;
@@ -352,7 +388,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
     get(m_pRemoveLocPB, "removefile");
 
     SvSimpleTableContainer *pCertificates = get<SvSimpleTableContainer>("certificates");
-    m_pTrustCertLB = new TrustCertLB(*pCertificates);
+    m_pTrustCertLB.reset(VclPtr<TrustCertLB>::Create(*pCertificates));
     static long aTabs[] = { 3, 0, 0, 0 };
     m_pTrustCertLB->SetTabs( aTabs );
 
@@ -394,7 +430,20 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
 
 MacroSecurityTrustedSourcesTP::~MacroSecurityTrustedSourcesTP()
 {
-    delete m_pTrustCertLB;
+    disposeOnce();
+}
+
+void MacroSecurityTrustedSourcesTP::dispose()
+{
+    m_pTrustCertLB.disposeAndClear();
+    m_pTrustCertROFI.clear();
+    m_pViewCertPB.clear();
+    m_pRemoveCertPB.clear();
+    m_pTrustFileROFI.clear();
+    m_pTrustFileLocLB.clear();
+    m_pAddLocPB.clear();
+    m_pRemoveLocPB.clear();
+    MacroSecurityTP::dispose();
 }
 
 void MacroSecurityTrustedSourcesTP::ActivatePage()

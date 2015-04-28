@@ -205,8 +205,8 @@ void ORelationController::impl_initialize()
         {
             OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
             sTitle = sTitle.copy(3);
-            OSQLMessageBox aDlg(NULL,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
-            aDlg.Execute();
+            ScopedVclPtrInstance< OSQLMessageBox > aDlg(nullptr,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
+            aDlg->Execute();
         }
         disconnect();
         throw SQLException();
@@ -245,7 +245,7 @@ OUString ORelationController::getPrivateTitle( ) const
 
 bool ORelationController::Construct(vcl::Window* pParent)
 {
-    setView( * new ORelationDesignView( pParent, *this, getORB() ) );
+    setView( VclPtr<ORelationDesignView>::Create( pParent, *this, getORB() ) );
     OJoinController::Construct(pParent);
     return true;
 }
@@ -255,9 +255,9 @@ short ORelationController::saveModified()
     short nSaved = RET_YES;
     if(haveDataSource() && isModified())
     {
-        MessageDialog aQry(getView(), "DesignSaveModifiedDialog",
-                                      "dbaccess/ui/designsavemodifieddialog.ui");
-        nSaved = aQry.Execute();
+        ScopedVclPtrInstance<MessageDialog> aQry(getView(), "DesignSaveModifiedDialog",
+                                                 "dbaccess/ui/designsavemodifieddialog.ui");
+        nSaved = aQry->Execute();
         if(nSaved == RET_YES)
             Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
     }

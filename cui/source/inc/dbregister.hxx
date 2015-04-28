@@ -46,12 +46,12 @@ namespace svx
         OUString            aTypeText;
         OUString            aPathText;
 
-        SvSimpleTableContainer* m_pPathCtrl;
-        PushButton*         m_pNew;
-        PushButton*         m_pEdit;
-        PushButton*         m_pDelete;
+        VclPtr<SvSimpleTableContainer> m_pPathCtrl;
+        VclPtr<PushButton>         m_pNew;
+        VclPtr<PushButton>         m_pEdit;
+        VclPtr<PushButton>         m_pDelete;
 
-        ::svx::OptHeaderTabListBox* pPathBox;
+        VclPtr<::svx::OptHeaderTabListBox> pPathBox;
         SvTreeListEntry*        m_pCurEntry;
         sal_uLong               m_nOldCount;
         bool                m_bModified;
@@ -91,8 +91,9 @@ namespace svx
     public:
         DbRegistrationOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
         virtual ~DbRegistrationOptionsPage();
+        virtual void dispose() SAL_OVERRIDE;
 
-        static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+        static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
         static const sal_uInt16*      GetRanges();
 
         virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -129,7 +130,6 @@ namespace svx
     {
     public:
         DatabaseRegistrationDialog( vcl::Window* pParent, const SfxItemSet& rAttr );
-        virtual ~DatabaseRegistrationDialog();
 
         virtual short   Execute() SAL_OVERRIDE;
     };

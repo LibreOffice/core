@@ -149,7 +149,7 @@ private:
     Idle            maLayoutIdle;
 protected:
     bool            mbIsDefferedInit;
-    vcl::Window*         mpDialogParent;
+    VclPtr<vcl::Window> mpDialogParent;
 public:
     using Window::ImplIsInTaskPaneList;
     SAL_DLLPRIVATE bool ImplIsInTaskPaneList( vcl::Window* pWin );
@@ -172,7 +172,9 @@ protected:
 
     SAL_DLLPRIVATE void DoInitialLayout();
 public:
-                    virtual ~SystemWindow();
+    virtual         ~SystemWindow();
+    virtual void    dispose() SAL_OVERRIDE;
+
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 

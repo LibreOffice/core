@@ -192,6 +192,23 @@ DlgFilterCrit::DlgFilterCrit(vcl::Window * pParent,
 
 DlgFilterCrit::~DlgFilterCrit()
 {
+    disposeOnce();
+}
+
+void DlgFilterCrit::dispose()
+{
+    m_pLB_WHEREFIELD1.clear();
+    m_pLB_WHERECOMP1.clear();
+    m_pET_WHEREVALUE1.clear();
+    m_pLB_WHERECOND2.clear();
+    m_pLB_WHEREFIELD2.clear();
+    m_pLB_WHERECOMP2.clear();
+    m_pET_WHEREVALUE2.clear();
+    m_pLB_WHERECOND3.clear();
+    m_pLB_WHEREFIELD3.clear();
+    m_pLB_WHERECOMP3.clear();
+    m_pET_WHEREVALUE3.clear();
+    ModalDialog::dispose();
 }
 
 #define LbText(x)       ((x).GetSelectEntry())

@@ -50,39 +50,36 @@ OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
     , m_eChildFocus(NONE)
 {
     // Header
-    m_pHeader = new FixedText( this, WB_CENTER | WB_INFO ); //  | WB_3DLOOK
+    m_pHeader = VclPtr<FixedText>::Create( this, WB_CENTER | WB_INFO );
     m_pHeader->SetText( OUString(ModuleRes(STR_TAB_PROPERTIES)) );
     m_pHeader->Show();
 
     // HelpBar
-    m_pHelpBar = new OTableDesignHelpBar( this );
+    m_pHelpBar = VclPtr<OTableDesignHelpBar>::Create( this );
     m_pHelpBar->SetHelpId(HID_TAB_DESIGN_HELP_TEXT_FRAME);
     m_pHelpBar->Show();
 
-    m_pGenPage = new OFieldDescGenWin( this, m_pHelpBar );
+    m_pGenPage = VclPtr<OFieldDescGenWin>::Create( this, m_pHelpBar );
     getGenPage()->SetHelpId( HID_TABLE_DESIGN_TABPAGE_GENERAL );
     getGenPage()->Show();
 }
 
 OTableFieldDescWin::~OTableFieldDescWin()
 {
+    disposeOnce();
+}
+
+void OTableFieldDescWin::dispose()
+{
     // destroy children
     m_pHelpBar->Hide();
     getGenPage()->Hide();
     m_pHeader->Hide();
 
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pGenPage);
-        m_pGenPage = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pHeader);
-        m_pHeader = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pHelpBar);
-        m_pHelpBar = NULL;
-    }
+    m_pGenPage.disposeAndClear();
+    m_pHeader.disposeAndClear();
+    m_pHelpBar.disposeAndClear();
+    TabPage::dispose();
 }
 
 void OTableFieldDescWin::Init()

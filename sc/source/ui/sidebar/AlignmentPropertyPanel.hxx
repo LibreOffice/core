@@ -39,7 +39,7 @@ class AlignmentPropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static AlignmentPropertyPanel* Create(
+    static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
@@ -58,16 +58,24 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    // constructor/destuctor
+    AlignmentPropertyPanel(
+        vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        SfxBindings* pBindings);
+    virtual ~AlignmentPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
 private:
     //ui controls
-    FixedText*                                  mpFTLeftIndent;
-    MetricField*                                mpMFLeftIndent;
-    CheckBox*                                   mpCBXWrapText;
-    CheckBox*                                   mpCBXMergeCell;
-    FixedText*                                  mpFtRotate;
-    svx::sidebar::SidebarDialControl*           mpCtrlDial;
-    MetricBox*                                  mpMtrAngle;
-    CheckBox*                                   mpCbStacked;
+    VclPtr<FixedText>                                  mpFTLeftIndent;
+    VclPtr<MetricField>                                mpMFLeftIndent;
+    VclPtr<CheckBox>                                   mpCBXWrapText;
+    VclPtr<CheckBox>                                   mpCBXMergeCell;
+    VclPtr<FixedText>                                  mpFtRotate;
+    VclPtr<svx::sidebar::SidebarDialControl>           mpCtrlDial;
+    VclPtr<MetricBox>                                  mpMtrAngle;
+    VclPtr<CheckBox>                                   mpCbStacked;
 
     ::sfx2::sidebar::ControllerItem             maAlignHorControl;
     ::sfx2::sidebar::ControllerItem             maLeftIndentControl;
@@ -89,13 +97,6 @@ private:
     DECL_LINK( AngleModifiedHdl, void * );
     DECL_LINK( RotationHdl, void * );
     DECL_LINK( ClickStackHdl, void * );
-
-    // constructor/destuctor
-    AlignmentPropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
-    virtual ~AlignmentPropertyPanel();
 
     void Initialize();
     void FormatDegrees(double& dTmp);

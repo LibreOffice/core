@@ -32,15 +32,16 @@ public:
         const OUString& rEditTitle,
         const OUString& rDefault,
         const OString& sHelpId, const OString& sEditHelpId);
-
+    virtual ~ScStringInputDlg();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetInputString() const
     {
         return m_pEdInput->GetText();
     }
 
 private:
-    FixedText* m_pFtEditTitle;
-    Edit*      m_pEdInput;
+    VclPtr<FixedText> m_pFtEditTitle;
+    VclPtr<Edit>      m_pEdInput;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_STRINDLG_HXX

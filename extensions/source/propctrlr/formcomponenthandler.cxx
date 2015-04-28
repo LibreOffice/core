@@ -2608,9 +2608,9 @@ namespace pcr
         OSL_PRECOND( m_pInfoService.get(), "FormComponentPropertyHandler::impl_dialogListSelection_nothrow: no property meta data!" );
 
         OUString sPropertyUIName( m_pInfoService->getPropertyTranslation( m_pInfoService->getPropertyId( _rProperty ) ) );
-        ListSelectionDialog aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, _rProperty, sPropertyUIName );
+        ScopedVclPtrInstance< ListSelectionDialog > aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, _rProperty, sPropertyUIName );
         _rClearBeforeDialog.clear();
-        return ( RET_OK == aDialog.Execute() );
+        return ( RET_OK == aDialog->Execute() );
     }
 
 
@@ -2685,9 +2685,9 @@ namespace pcr
             return false;
 
 
-        FormLinkDialog aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_xContext );
+        ScopedVclPtrInstance< FormLinkDialog > aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_xContext );
         _rClearBeforeDialog.clear();
-        return ( RET_OK == aDialog.Execute() );
+        return ( RET_OK == aDialog->Execute() );
     }
 
 
@@ -2722,9 +2722,8 @@ namespace pcr
             aCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page
-            boost::scoped_ptr< SfxSingleTabDialog > xDialog(new SfxSingleTabDialog(
-                impl_getDefaultDialogParent_nothrow(), aCoreSet,
-                "FormatNumberDialog", "cui/ui/formatnumberdialog.ui"));
+            ScopedVclPtrInstance< SfxSingleTabDialog > xDialog( impl_getDefaultDialogParent_nothrow(), aCoreSet,
+                "FormatNumberDialog", "cui/ui/formatnumberdialog.ui");
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT( pFact, "CreateFactory fail!" );
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
@@ -2871,11 +2870,11 @@ namespace pcr
 
         {   // do this in an own block. The dialog needs to be destroyed before we call
             // destroyItemSet
-            ControlCharacterDialog aDlg( impl_getDefaultDialogParent_nothrow(), *pSet );
+            ScopedVclPtrInstance< ControlCharacterDialog > aDlg( impl_getDefaultDialogParent_nothrow(), *pSet );
             _rClearBeforeDialog.clear();
-            if ( RET_OK == aDlg.Execute() )
+            if ( RET_OK == aDlg->Execute() )
             {
-                const SfxItemSet* pOut = aDlg.GetOutputItemSet();
+                const SfxItemSet* pOut = aDlg->GetOutputItemSet();
                 if ( pOut )
                 {
                     Sequence< NamedValue > aFontPropertyValues;
@@ -2942,11 +2941,11 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_dialogChooseLabelControl_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        OSelectLabelDialog dlgSelectLabel( impl_getDefaultDialogParent_nothrow(), m_xComponent );
+        ScopedVclPtrInstance< OSelectLabelDialog > dlgSelectLabel( impl_getDefaultDialogParent_nothrow(), m_xComponent );
         _rClearBeforeDialog.clear();
-        bool bSuccess = ( RET_OK == dlgSelectLabel.Execute() );
+        bool bSuccess = ( RET_OK == dlgSelectLabel->Execute() );
         if ( bSuccess )
-            _out_rNewValue <<= dlgSelectLabel.GetSelected();
+            _out_rNewValue <<= dlgSelectLabel->GetSelected();
         return bSuccess;
     }
 
@@ -2965,14 +2964,14 @@ namespace pcr
         OSL_PRECOND( impl_getContextControlContainer_nothrow().is(), "FormComponentPropertyHandler::impl_dialogChangeTabOrder_nothrow: invalid control context!" );
 
         Reference< XTabControllerModel > xTabControllerModel( impl_getRowSet_nothrow(), UNO_QUERY );
-        TabOrderDialog aDialog(
+        ScopedVclPtrInstance<TabOrderDialog> aDialog(
             impl_getDefaultDialogParent_nothrow(),
             xTabControllerModel,
             impl_getContextControlContainer_nothrow(),
             m_xContext
         );
         _rClearBeforeDialog.clear();
-        return ( RET_OK == aDialog.Execute() );
+        return ( RET_OK == aDialog->Execute() );
     }
 
 

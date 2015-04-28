@@ -27,6 +27,7 @@
 
 #include <sfx2/styfitem.hxx>
 #include <sfx2/styledlg.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/mgetempl.hxx>
 #include <sfx2/objsh.hxx>
@@ -249,19 +250,30 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
 
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
+{
+    disposeOnce();
+}
 
-/*  [Description]
-
-    Destructor, release of the data
-*/
-
+void SfxManageStyleSheetPage::dispose()
 {
     m_pNameRw->SetGetFocusHdl( Link() );
     m_pNameRw->SetLoseFocusHdl( Link() );
     delete pFamilies;
     pItem = 0;
     pStyle = 0;
-
+    m_pNameRo.clear();
+    m_pNameRw.clear();
+    m_pAutoCB.clear();
+    m_pFollowFt.clear();
+    m_pFollowLb.clear();
+    m_pEditStyleBtn.clear();
+    m_pBaseFt.clear();
+    m_pBaseLb.clear();
+    m_pEditLinkStyleBtn.clear();
+    m_pFilterFt.clear();
+    m_pFilterLb.clear();
+    m_pDescFt.clear();
+    SfxTabPage::dispose();
 }
 
 
@@ -558,20 +570,10 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
 
 
 
-SfxTabPage* SfxManageStyleSheetPage::Create( vcl::Window* pParent,
-                                             const SfxItemSet *rAttrSet )
-
-/*  [Description]
-
-    Factory for the creation of the page.
-
-    [Cross-reference]
-
-    <class SfxTabDialog>
-*/
-
+VclPtr<SfxTabPage> SfxManageStyleSheetPage::Create( vcl::Window* pParent,
+                                                    const SfxItemSet *rAttrSet )
 {
-    return new SfxManageStyleSheetPage( pParent, *rAttrSet );
+    return VclPtr<SfxManageStyleSheetPage>::Create( pParent, *rAttrSet );
 }
 
 
@@ -634,8 +636,8 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
 
         if (!pStyle->SetName(comphelper::string::stripStart(m_pNameRw->GetText(), ' ')))
         {
-            MessageDialog aBox( this, SfxResId( STR_TABPAGE_INVALIDNAME ), VCL_MESSAGE_INFO );
-            aBox.Execute();
+            ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDNAME ), VCL_MESSAGE_INFO);
+            aBox->Execute();
             m_pNameRw->GrabFocus();
             m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             return SfxTabPage::KEEP_PAGE;
@@ -651,8 +653,8 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
         {
             if ( !pStyle->SetFollow( aFollowEntry ) )
             {
-                MessageDialog aBox( this, SfxResId( STR_TABPAGE_INVALIDSTYLE ), VCL_MESSAGE_INFO );
-                aBox.Execute();
+                ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDSTYLE ), VCL_MESSAGE_INFO);
+                aBox->Execute();
                 m_pFollowLb->GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
             }
@@ -671,8 +673,8 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
         {
             if ( !pStyle->SetParent( aParentEntry ) )
             {
-                MessageDialog aBox( this, SfxResId( STR_TABPAGE_INVALIDPARENT ), VCL_MESSAGE_INFO );
-                aBox.Execute();
+                ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDPARENT ), VCL_MESSAGE_INFO);
+                aBox->Execute();
                 m_pBaseLb->GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
             }

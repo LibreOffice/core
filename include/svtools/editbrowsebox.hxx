@@ -85,7 +85,7 @@ namespace svt
         friend class EditBrowseBox;
 
     protected:
-        Control*    pWindow;
+        VclPtr<Control>  pWindow;
         bool        bSuspended;     // <true> if the window is hidden and disabled
 
     public:
@@ -279,13 +279,14 @@ namespace svt
 
     class SVT_DLLPUBLIC CheckBoxControl : public Control
     {
-        CheckBox*   pBox;
+        VclPtr<CheckBox>   pBox;
         Rectangle   aFocusRect;
         Link        m_aClickLink,m_aModifyLink;
 
     public:
         CheckBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
         virtual ~CheckBoxControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void GetFocus() SAL_OVERRIDE;
         virtual bool PreNotify(NotifyEvent& rEvt) SAL_OVERRIDE;
@@ -479,7 +480,7 @@ namespace svt
                                  aOldController;
 
         ImplSVEvent * nStartEvent, * nEndEvent, * nCellModifiedEvent;     // event ids
-        vcl::Window* m_pFocusWhileRequest;
+        VclPtr<vcl::Window> m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchornous event the focus has changed, we won't grab it for ourself.
 
@@ -491,14 +492,14 @@ namespace svt
         mutable bool    bPaintStatus : 1;   // paint a status (image) in the handle column
         bool            bActiveBeforeTracking;
 
-        CheckBoxControl* pCheckBoxPaint;
+        VclPtr<CheckBoxControl> pCheckBoxPaint;
 
         EditBrowseBoxFlags  m_nBrowserFlags;
         ImageList   m_aStatusImages;
         ::std::unique_ptr< EditBrowseBoxImpl> m_aImpl;
 
     protected:
-        BrowserHeader*  pHeader;
+        VclPtr<BrowserHeader>  pHeader;
 
         bool isGetCellFocusPending() const { return nStartEvent != 0; }
         void cancelGetCellFocus() { if (nStartEvent) Application::RemoveUserEvent(nStartEvent); nStartEvent = 0; }
@@ -509,10 +510,10 @@ namespace svt
     protected:
         BrowserHeader*  GetHeaderBar() const {return pHeader;}
 
-        virtual BrowserHeader* CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
+        virtual VclPtr<BrowserHeader> CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
 
         // if you want to have an own header ...
-        virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent);
+        virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent);
 
         virtual void ColumnMoved(sal_uInt16 nId) SAL_OVERRIDE;
         virtual void ColumnResized(sal_uInt16 nColId) SAL_OVERRIDE;
@@ -598,6 +599,7 @@ namespace svt
         EditBrowseBox(vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags = EditBrowseBoxFlags::NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = BrowserMode::NONE );
         EditBrowseBox(vcl::Window* pParent, const ResId& rId, EditBrowseBoxFlags nBrowserFlags = EditBrowseBoxFlags::NONE, BrowserMode nMode = BrowserMode::NONE );
         virtual ~EditBrowseBox();
+        virtual void dispose() SAL_OVERRIDE;
 
         bool IsEditing() const {return aController.Is();}
         void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}

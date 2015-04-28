@@ -93,7 +93,7 @@ void SfxFrame::Construct_Impl()
 SfxFrame::~SfxFrame()
 {
     RemoveTopFrame_Impl( this );
-    DELETEZ( pWindow );
+    pWindow.disposeAndClear();
 
     SfxFrameArr_Impl::iterator it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), this );
     if ( it != pFramesArr_Impl->end() )

@@ -112,8 +112,8 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     bool                mbIsInSharedDocLoading:1;
     bool                mbIsInSharedDocSaving:1;
 
-    std::map<sal_uInt16, std::list<vcl::Window*> > m_mapRefWindow;
-    std::stack<ScAnyRefModalDlg*> maAnyRefDlgStack;
+    std::map<sal_uInt16, std::list<VclPtr<vcl::Window> > > m_mapRefWindow;
+    std::stack<VclPtr<ScAnyRefModalDlg> > maAnyRefDlgStack;
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
@@ -247,7 +247,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     // virtual methods for the options dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual VclPtr<SfxTabPage> CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetInSharedDocLoading( bool bNew )  { mbIsInSharedDocLoading = bNew; }
     bool                IsInSharedDocLoading() const        { return mbIsInSharedDocLoading; }

@@ -120,7 +120,7 @@ namespace accessibility
         AccessibleToolPanelTabBar&                  m_rAntiImpl;
         Reference< XAccessible >                    m_xAccessibleParent;
         ::svt::IToolPanelDeck*                      m_pPanelDeck;
-        ::svt::PanelTabBar*                         m_pTabBar;
+        VclPtr<::svt::PanelTabBar>                  m_pTabBar;
         ::std::vector< Reference< XAccessible > >   m_aChildren;
     };
 
@@ -163,7 +163,7 @@ namespace accessibility
 
         m_pTabBar->GetScrollButton( true ).RemoveEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
         m_pTabBar->GetScrollButton( false ).RemoveEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
-        m_pTabBar = NULL;
+        m_pTabBar.clear();
 
         m_xAccessibleParent.clear();
     }

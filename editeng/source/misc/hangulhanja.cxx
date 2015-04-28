@@ -69,7 +69,7 @@ namespace editeng
         // general
         AbstractHangulHanjaConversionDialog*
                                 m_pConversionDialog;    // the dialog to display for user interaction
-        vcl::Window*                 m_pUIParent;            // the parent window for any UI we raise
+        VclPtr<vcl::Window>     m_pUIParent;            // the parent window for any UI we raise
         Reference< XComponentContext >
                                 m_xContext;             // the service factory to use
         Reference< XExtendedTextConversion >

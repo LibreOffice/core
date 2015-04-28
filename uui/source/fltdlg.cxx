@@ -57,6 +57,18 @@ FilterDialog::FilterDialog( vcl::Window* pParentWindow )
     m_pFtURL->SetSizePixel(Size(aSize.Width(), m_pFtURL->GetOptimalSize().Height()));
 }
 
+FilterDialog::~FilterDialog()
+{
+    disposeOnce();
+}
+
+void FilterDialog::dispose()
+{
+    m_pFtURL.clear();
+    m_pLbFilters.clear();
+    ModalDialog::dispose();
+}
+
 /*-************************************************************************************************************
     @short      set file name on dialog control
     @descr      We convert given URL (it must be an URL!) into valid file name and show it on our dialog.
@@ -157,7 +169,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
 {
     public:
         StringCalculator( const OutputDevice* pDevice )
-            : m_pDevice( pDevice )
+            : m_pDevice( const_cast< OutputDevice * >( pDevice ) )
         {
         }
 
@@ -167,7 +179,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
         }
 
     private:
-        const OutputDevice* m_pDevice;
+        VclPtr<OutputDevice> m_pDevice;
 };
 
 /*-************************************************************************************************************

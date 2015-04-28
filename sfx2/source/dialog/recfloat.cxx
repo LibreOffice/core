@@ -131,10 +131,10 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( vcl::Window* pPare
                     : SfxChildWindow( pParentWnd, nId )
                     , pBindings( pBind )
 {
-    pWindow = new SfxRecordingFloat_Impl( pBindings, this, pParentWnd );
+    pWindow = VclPtr<SfxRecordingFloat_Impl>::Create( pBindings, this, pParentWnd );
     SetWantsFocus( false );
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-    static_cast<SfxFloatingWindow*>(pWindow)->Initialize( pInfo );
+    static_cast<SfxFloatingWindow*>(pWindow.get())->Initialize( pInfo );
 }
 
 SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
@@ -152,9 +152,9 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
-        QueryBox aBox( GetWindow(), WB_YES_NO | WB_DEF_NO , SfxResId(STR_MACRO_LOSS).toString() );
-        aBox.SetText( SfxResId(STR_CANCEL_RECORDING).toString() );
-        bRet = ( aBox.Execute() == RET_YES );
+        ScopedVclPtrInstance< QueryBox > aBox(GetWindow(), WB_YES_NO | WB_DEF_NO , SfxResId(STR_MACRO_LOSS).toString());
+        aBox->SetText( SfxResId(STR_CANCEL_RECORDING).toString() );
+        bRet = ( aBox->Execute() == RET_YES );
     }
 
     return bRet;
@@ -200,6 +200,11 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 
 SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
 {
+    disposeOnce();
+}
+
+void SfxRecordingFloat_Impl::dispose()
+{
     try
     {
         if ( xStopRecTbxCtrl.is() )
@@ -211,6 +216,8 @@ SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
     catch ( uno::Exception& )
     {
     }
+    m_pTbx.clear();
+    SfxFloatingWindow::dispose();
 }
 
 bool SfxRecordingFloat_Impl::Close()

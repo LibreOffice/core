@@ -390,7 +390,8 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )
                     {
-                        SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                        VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
+                        assert (! pNewPrinter->isDisposed() );
                         if( pNewPrinter->IsKnown() )
                         {
                             // set printer only once; in _postSetValues
@@ -398,7 +399,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                         }
                         else
                         {
-                            delete pNewPrinter;
+                            pNewPrinter.disposeAndClear();
                         }
                     }
                 }
@@ -427,10 +428,10 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                         0
                     };
                     SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
-                    SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
-
+                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                    assert (! pPrinter->isDisposed() );
                     // set printer only once; in _postSetValues
-                    delete mpPrinter;
+                    mpPrinter.disposeAndClear();
                     mpPrinter = pPrinter;
                 }
             }
@@ -838,7 +839,7 @@ void SwXDocumentSettings::_postSetValues ()
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     // set printer only once, namely here!
-    if( mpPrinter != NULL )
+    if( mpPrinter != nullptr )
     {
         // #i86352# the printer is also used as container for options by sfx
         // when setting a printer it should have decent default options

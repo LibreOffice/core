@@ -326,12 +326,28 @@ namespace offapp
         m_pDriverList->SetRowChangeHandler( LINK(this, ConnectionPoolOptionsPage, OnDriverRowChanged) );
     }
 
-
-    SfxTabPage* ConnectionPoolOptionsPage::Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet)
+    ConnectionPoolOptionsPage::~ConnectionPoolOptionsPage()
     {
-        return new ConnectionPoolOptionsPage(_pParent, *_rAttrSet);
+        disposeOnce();
     }
 
+    void ConnectionPoolOptionsPage::dispose()
+    {
+        m_pEnablePooling.clear();
+        m_pDriversLabel.clear();
+        m_pDriverList.clear();
+        m_pDriverLabel.clear();
+        m_pDriver.clear();
+        m_pDriverPoolingEnabled.clear();
+        m_pTimeoutLabel.clear();
+        m_pTimeout.clear();
+        SfxTabPage::dispose();
+    }
+
+    VclPtr<SfxTabPage> ConnectionPoolOptionsPage::Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet)
+    {
+        return VclPtr<ConnectionPoolOptionsPage>::Create(_pParent, *_rAttrSet);
+    }
 
     void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet, bool /*_bFromReset*/)
     {

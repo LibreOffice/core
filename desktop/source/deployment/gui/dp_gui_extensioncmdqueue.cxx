@@ -451,12 +451,12 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName());
         {
             SolarMutexGuard guard;
-            MessageDialog box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
-                ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+            ScopedVclPtrInstance<MessageDialog> box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
+                                                    ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
             OUString s;
             if (bEqualNames)
             {
-                s = box.get_primary_text();
+                s = box->get_primary_text();
             }
             else if (id == RID_STR_WARNING_VERSION_EQUAL)
             {
@@ -477,8 +477,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             s = s.replaceAll("$OLDNAME", verExc.Deployed->getDisplayName());
             s = s.replaceAll("$NEW", getVersion(verExc.NewVersion));
             s = s.replaceAll("$DEPLOYED", getVersion(verExc.Deployed));
-            box.set_primary_text(s);
-            approve = box.Execute() == RET_OK;
+            box->set_primary_text(s);
+            approve = box->Execute() == RET_OK;
             abort = !approve;
         }
     }
@@ -506,8 +506,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         SolarMutexGuard guard;
         OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()).toString());
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        MessageDialog box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, sMsg);
-        box.Execute();
+        ScopedVclPtrInstance< MessageDialog > box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, sMsg);
+        box->Execute();
         approve = true;
     }
 
@@ -571,7 +571,7 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const SolarMutexGuard aGuard;
-        const boost::scoped_ptr<MessageDialog> aBox(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, text));
+        ScopedVclPtrInstance< MessageDialog > aBox(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, text);
         aBox->Execute();
     }
     ++m_nCurrentProgress;
@@ -813,8 +813,8 @@ void ExtensionCmdQueue::Thread::execute()
                     msg = ::comphelper::anyToString(exc);
 
                 const SolarMutexGuard guard;
-                boost::scoped_ptr<MessageDialog> box(
-                    new MessageDialog(currentCmdEnv->activeDialog(), msg));
+                ScopedVclPtr<MessageDialog> box(
+                    VclPtr<MessageDialog>::Create(currentCmdEnv->activeDialog(), msg));
                 if ( m_pDialogHelper )
                     box->SetText( m_pDialogHelper->getWindow()->GetText() );
                 box->Execute();
@@ -923,12 +923,10 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 void ExtensionCmdQueue::Thread::_checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
-    UpdateDialog* pUpdateDialog;
-    std::vector< UpdateData > vData;
-
     const SolarMutexGuard guard;
 
-    pUpdateDialog = new UpdateDialog( m_xContext, m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, vExtensionList, &vData );
+    std::vector< UpdateData > vData;
+    ScopedVclPtrInstance<UpdateDialog> pUpdateDialog( m_xContext, m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, vExtensionList, &vData );
 
     pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 
@@ -970,7 +968,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
     else
         pUpdateDialog->notifyMenubar( false, false ); // check if there updates to be notified via menu bar icon
 
-    delete pUpdateDialog;
+    pUpdateDialog.disposeAndClear();
 }
 
 

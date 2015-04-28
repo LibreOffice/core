@@ -610,21 +610,21 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 #ifndef IOS
     InitSvpForLibreOfficeKit();
 
-    VirtualDevice aDevice(0, Size(1, 1), (sal_uInt16)32);
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
-    aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
                 aBuffer, true );
 
-    pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
+    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
     SystemGraphicsData aData;
     aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
     // the Size argument is irrelevant, I hope
-    VirtualDevice aDevice(&aData, Size(1, 1), (sal_uInt16)0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), (sal_uInt16)0);
 
-    pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
+    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #endif
 
@@ -633,12 +633,12 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     {
         // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
         Rectangle aRect(0, 0, 5, 5);
-        aRect = aDevice.PixelToLogic(aRect);
-        aDevice.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-        aDevice.SetFillColor(COL_LIGHTRED);
-        aDevice.SetLineColor();
-        aDevice.DrawRect(aRect);
-        aDevice.Pop();
+        aRect = pDevice->PixelToLogic(aRect);
+        pDevice->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        pDevice->SetFillColor(COL_LIGHTRED);
+        pDevice->SetLineColor();
+        pDevice->DrawRect(aRect);
+        pDevice->Pop();
     }
 
 #else

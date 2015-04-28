@@ -61,8 +61,8 @@ private:
     Point               maPos;
     long                mnPrgsWidth;
     long                mnPrgsHeight;
-    sal_uInt16              mnPercent;
-    sal_uInt16              mnPercentCount;
+    sal_uInt16          mnPercent;
+    sal_uInt16          mnPercentCount;
     bool                mbCalcNew;
 
     using Window::ImplInit;
@@ -72,7 +72,6 @@ private:
 
 public:
                         ProgressBar( vcl::Window* pParent, WinBits nWinBits = WB_STDPROGRESSBAR );
-                        virtual ~ProgressBar();
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;

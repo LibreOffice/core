@@ -531,7 +531,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             }
         }
     }
-    if ( 0 != (pRefDev = rDocShell.GetRefDev()) && pPrinter != pRefDev )
+    if ( !!(pRefDev = rDocShell.GetRefDev()) && pPrinter.get() != pRefDev.get() )
     {
         pRefDev->Push( PushFlags::MAPMODE );
         if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )
@@ -595,7 +595,7 @@ Printer* SmDocShell::GetPrt()
 
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
-        pPrinter = new SfxPrinter(pOptions);
+        pPrinter = VclPtr<SfxPrinter>::Create(pOptions);
         pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     }
     return pPrinter;
@@ -616,7 +616,7 @@ OutputDevice* SmDocShell::GetRefDev()
 
 void SmDocShell::SetPrinter( SfxPrinter *pNew )
 {
-    delete pPrinter;
+    pPrinter.disposeAndClear();
     pPrinter = pNew;    //Transfer ownership
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(false);
@@ -693,7 +693,7 @@ SmDocShell::~SmDocShell()
     delete pEditEngine;
     SfxItemPool::Free(pEditEngineItemPool);
     delete pTree;
-    delete pPrinter;
+    pPrinter.disposeAndClear();
 }
 
 bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
@@ -989,7 +989,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
             OSL_ENSURE (pDev, "device for font list missing" );
 
-            std::unique_ptr<SmFontTypeDialog> xFontTypeDialog(new SmFontTypeDialog( NULL, pDev ));
+            VclPtrInstance< SmFontTypeDialog > xFontTypeDialog( nullptr, pDev );
 
             SmFormat aOldFormat  = GetFormat();
             xFontTypeDialog->ReadFrom( aOldFormat );
@@ -1011,7 +1011,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_FONTSIZE:
         {
-            std::unique_ptr<SmFontSizeDialog> xFontSizeDialog(new SmFontSizeDialog(NULL));
+            VclPtrInstance< SmFontSizeDialog > xFontSizeDialog(nullptr);
 
             SmFormat aOldFormat  = GetFormat();
             xFontSizeDialog->ReadFrom( aOldFormat );
@@ -1034,7 +1034,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_DISTANCE:
         {
-            std::unique_ptr<SmDistanceDialog> xDistanceDialog(new SmDistanceDialog(NULL));
+            VclPtrInstance< SmDistanceDialog > xDistanceDialog(nullptr);
 
             SmFormat aOldFormat  = GetFormat();
             xDistanceDialog->ReadFrom( aOldFormat );
@@ -1057,7 +1057,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_ALIGN:
         {
-            std::unique_ptr<SmAlignDialog> xAlignDialog(new SmAlignDialog(NULL));
+            VclPtrInstance< SmAlignDialog > xAlignDialog(nullptr);
 
             SmFormat aOldFormat  = GetFormat();
             xAlignDialog->ReadFrom( aOldFormat );

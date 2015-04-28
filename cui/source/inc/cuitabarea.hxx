@@ -76,7 +76,6 @@ protected:
 
 public:
     SvxAreaTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
-    virtual ~SvxAreaTabDialog();
 
     void                SetNewColorList( XColorListRef pColTab )
                             { mpNewColorList = pColTab; }
@@ -116,29 +115,29 @@ class SvxTransparenceTabPage : public SvxTabPage
     sal_uInt16             nDlgType;
 
     // main selection
-    RadioButton*        m_pRbtTransOff;
-    RadioButton*        m_pRbtTransLinear;
-    RadioButton*        m_pRbtTransGradient;
+    VclPtr<RadioButton>        m_pRbtTransOff;
+    VclPtr<RadioButton>        m_pRbtTransLinear;
+    VclPtr<RadioButton>        m_pRbtTransGradient;
 
     /// linear transparency
-    MetricField*        m_pMtrTransparent;
+    VclPtr<MetricField>        m_pMtrTransparent;
 
     // gradient transparency
-    VclGrid*            m_pGridGradient;
-    ListBox*            m_pLbTrgrGradientType;
-    FixedText*          m_pFtTrgrCenterX;
-    MetricField*        m_pMtrTrgrCenterX;
-    FixedText*          m_pFtTrgrCenterY;
-    MetricField*        m_pMtrTrgrCenterY;
-    FixedText*          m_pFtTrgrAngle;
-    MetricField*        m_pMtrTrgrAngle;
-    MetricField*        m_pMtrTrgrBorder;
-    MetricField*        m_pMtrTrgrStartValue;
-    MetricField*        m_pMtrTrgrEndValue;
+    VclPtr<VclGrid>            m_pGridGradient;
+    VclPtr<ListBox>            m_pLbTrgrGradientType;
+    VclPtr<FixedText>          m_pFtTrgrCenterX;
+    VclPtr<MetricField>        m_pMtrTrgrCenterX;
+    VclPtr<FixedText>          m_pFtTrgrCenterY;
+    VclPtr<MetricField>        m_pMtrTrgrCenterY;
+    VclPtr<FixedText>          m_pFtTrgrAngle;
+    VclPtr<MetricField>        m_pMtrTrgrAngle;
+    VclPtr<MetricField>        m_pMtrTrgrBorder;
+    VclPtr<MetricField>        m_pMtrTrgrStartValue;
+    VclPtr<MetricField>        m_pMtrTrgrEndValue;
 
     // preview
-    SvxXRectPreview*    m_pCtlBitmapPreview;
-    SvxXRectPreview*    m_pCtlXRectPreview;
+    VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
+    VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
     bool                bBitmap;
 
     XOutdevItemPool*    pXPool;
@@ -161,8 +160,10 @@ class SvxTransparenceTabPage : public SvxTabPage
 
 public:
     SvxTransparenceTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
+    virtual ~SvxTransparenceTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage* Create(vcl::Window*, const SfxItemSet*);
+    static VclPtr<SfxTabPage> Create(vcl::Window*, const SfxItemSet*);
     static const sal_uInt16* GetRanges() { return pTransparenceRanges; }
 
     virtual bool FillItemSet(SfxItemSet*) SAL_OVERRIDE;
@@ -184,48 +185,48 @@ class SvxAreaTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
     static const sal_uInt16 pAreaRanges[];
 private:
-    ListBox*            m_pTypeLB;
+    VclPtr<ListBox>            m_pTypeLB;
 
-    VclBox*             m_pFillLB;
-    ColorLB*            m_pLbColor;
-    GradientLB*         m_pLbGradient;
-    HatchingLB*         m_pLbHatching;
-    BitmapLB*           m_pLbBitmap;
-    SvxXRectPreview*    m_pCtlBitmapPreview;
+    VclPtr<VclBox>             m_pFillLB;
+    VclPtr<ColorLB>            m_pLbColor;
+    VclPtr<GradientLB>         m_pLbGradient;
+    VclPtr<HatchingLB>         m_pLbHatching;
+    VclPtr<BitmapLB>           m_pLbBitmap;
+    VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
 
-    TriStateBox*        m_pTsbStepCount;
-    VclFrame*           m_pFlStepCount;
-    NumericField*       m_pNumFldStepCount;
+    VclPtr<TriStateBox>        m_pTsbStepCount;
+    VclPtr<VclFrame>           m_pFlStepCount;
+    VclPtr<NumericField>       m_pNumFldStepCount;
 
-    VclFrame*           m_pFlHatchBckgrd;
-    CheckBox*           m_pCbxHatchBckgrd;
-    ColorLB*            m_pLbHatchBckgrdColor;
+    VclPtr<VclFrame>           m_pFlHatchBckgrd;
+    VclPtr<CheckBox>           m_pCbxHatchBckgrd;
+    VclPtr<ColorLB>            m_pLbHatchBckgrdColor;
 
-    VclBox*             m_pBxBitmap;
+    VclPtr<VclBox>             m_pBxBitmap;
 
-    VclFrame*           m_pFlSize;
-    TriStateBox*        m_pTsbOriginal;
-    TriStateBox*        m_pTsbScale;
-    VclGrid*            m_pGridX_Y;
-    FixedText*          m_pFtXSize;
-    MetricField*        m_pMtrFldXSize;
-    FixedText*          m_pFtYSize;
-    MetricField*        m_pMtrFldYSize;
+    VclPtr<VclFrame>           m_pFlSize;
+    VclPtr<TriStateBox>        m_pTsbOriginal;
+    VclPtr<TriStateBox>        m_pTsbScale;
+    VclPtr<VclGrid>            m_pGridX_Y;
+    VclPtr<FixedText>          m_pFtXSize;
+    VclPtr<MetricField>        m_pMtrFldXSize;
+    VclPtr<FixedText>          m_pFtYSize;
+    VclPtr<MetricField>        m_pMtrFldYSize;
 
-    VclFrame*           m_pFlPosition;
-    SvxRectCtl*         m_pCtlPosition;
-    VclGrid*            m_pGridOffset;
-    MetricField*        m_pMtrFldXOffset;
-    MetricField*        m_pMtrFldYOffset;
-    VclBox*             m_pBxTile;
-    TriStateBox*        m_pTsbTile;
-    TriStateBox*        m_pTsbStretch;
-    VclFrame*           m_pFlOffset;
-    RadioButton*        m_pRbtRow;
-    RadioButton*        m_pRbtColumn;
-    MetricField*        m_pMtrFldOffset;
+    VclPtr<VclFrame>           m_pFlPosition;
+    VclPtr<SvxRectCtl>         m_pCtlPosition;
+    VclPtr<VclGrid>            m_pGridOffset;
+    VclPtr<MetricField>        m_pMtrFldXOffset;
+    VclPtr<MetricField>        m_pMtrFldYOffset;
+    VclPtr<VclBox>             m_pBxTile;
+    VclPtr<TriStateBox>        m_pTsbTile;
+    VclPtr<TriStateBox>        m_pTsbStretch;
+    VclPtr<VclFrame>           m_pFlOffset;
+    VclPtr<RadioButton>        m_pRbtRow;
+    VclPtr<RadioButton>        m_pRbtColumn;
+    VclPtr<MetricField>        m_pMtrFldOffset;
 
-    SvxXRectPreview*    m_pCtlXRectPreview;
+    VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
@@ -265,7 +266,7 @@ private:
     bool                mbDirectGraphicSet;
     Graphic             maDirectGraphic;
     OUString            maDirectName;
-    PushButton*         m_pBtnImport;
+    VclPtr<PushButton>         m_pBtnImport;
 
     DECL_LINK(SelectDialogTypeHdl_Impl, void *);
     DECL_LINK( ModifyColorHdl_Impl, void * );
@@ -289,10 +290,12 @@ private:
 
 public:
     SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    virtual ~SvxAreaTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pAreaRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -327,13 +330,13 @@ class SvxShadowTabPage : public SvxTabPage
     static const sal_uInt16 pShadowRanges[];
 
 private:
-    TriStateBox*        m_pTsbShowShadow;
-    VclGrid*            m_pGridShadow;
-    SvxRectCtl*         m_pCtlPosition;
-    MetricField*        m_pMtrDistance;
-    ColorLB*            m_pLbShadowColor;
-    MetricField*        m_pMtrTransparent;
-    SvxXShadowPreview*  m_pCtlXRectPreview;
+    VclPtr<TriStateBox>        m_pTsbShowShadow;
+    VclPtr<VclGrid>            m_pGridShadow;
+    VclPtr<SvxRectCtl>         m_pCtlPosition;
+    VclPtr<MetricField>        m_pMtrDistance;
+    VclPtr<ColorLB>            m_pLbShadowColor;
+    VclPtr<MetricField>        m_pMtrTransparent;
+    VclPtr<SvxXShadowPreview>  m_pCtlXRectPreview;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
@@ -356,9 +359,11 @@ private:
 
 public:
     SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    virtual ~SvxShadowTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pShadowRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -384,25 +389,25 @@ class SvxGradientTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    ListBox*            m_pLbGradientType;
-    FixedText*          m_pFtCenterX;
-    MetricField*        m_pMtrCenterX;
-    FixedText*          m_pFtCenterY;
-    MetricField*        m_pMtrCenterY;
-    FixedText*          m_pFtAngle;
-    MetricField*        m_pMtrAngle;
-    MetricField*        m_pMtrBorder;
-    ColorLB*            m_pLbColorFrom;
-    MetricField*        m_pMtrColorFrom;
-    ColorLB*            m_pLbColorTo;
-    MetricField*        m_pMtrColorTo;
-    GradientLB*         m_pLbGradients;
-    SvxXRectPreview*    m_pCtlPreview;
-    PushButton*         m_pBtnAdd;
-    PushButton*         m_pBtnModify;
-    PushButton*         m_pBtnDelete;
-    PushButton*         m_pBtnLoad;
-    PushButton*         m_pBtnSave;
+    VclPtr<ListBox>            m_pLbGradientType;
+    VclPtr<FixedText>          m_pFtCenterX;
+    VclPtr<MetricField>        m_pMtrCenterX;
+    VclPtr<FixedText>          m_pFtCenterY;
+    VclPtr<MetricField>        m_pMtrCenterY;
+    VclPtr<FixedText>          m_pFtAngle;
+    VclPtr<MetricField>        m_pMtrAngle;
+    VclPtr<MetricField>        m_pMtrBorder;
+    VclPtr<ColorLB>            m_pLbColorFrom;
+    VclPtr<MetricField>        m_pMtrColorFrom;
+    VclPtr<ColorLB>            m_pLbColorTo;
+    VclPtr<MetricField>        m_pMtrColorTo;
+    VclPtr<GradientLB>         m_pLbGradients;
+    VclPtr<SvxXRectPreview>    m_pCtlPreview;
+    VclPtr<PushButton>         m_pBtnAdd;
+    VclPtr<PushButton>         m_pBtnModify;
+    VclPtr<PushButton>         m_pBtnDelete;
+    VclPtr<PushButton>         m_pBtnLoad;
+    VclPtr<PushButton>         m_pBtnSave;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -435,10 +440,12 @@ private:
 
 public:
     SvxGradientTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    virtual ~SvxGradientTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -466,18 +473,18 @@ class SvxHatchTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    MetricField*        m_pMtrDistance;
-    MetricField*        m_pMtrAngle;
-    SvxRectCtl*         m_pCtlAngle;
-    ListBox*            m_pLbLineType;
-    ColorLB*            m_pLbLineColor;
-    HatchingLB*         m_pLbHatchings;
-    SvxXRectPreview*    m_pCtlPreview;
-    PushButton*         m_pBtnAdd;
-    PushButton*         m_pBtnModify;
-    PushButton*         m_pBtnDelete;
-    PushButton*         m_pBtnLoad;
-    PushButton*         m_pBtnSave;
+    VclPtr<MetricField>        m_pMtrDistance;
+    VclPtr<MetricField>        m_pMtrAngle;
+    VclPtr<SvxRectCtl>         m_pCtlAngle;
+    VclPtr<ListBox>            m_pLbLineType;
+    VclPtr<ColorLB>            m_pLbLineColor;
+    VclPtr<HatchingLB>         m_pLbHatchings;
+    VclPtr<SvxXRectPreview>    m_pCtlPreview;
+    VclPtr<PushButton>         m_pBtnAdd;
+    VclPtr<PushButton>         m_pBtnModify;
+    VclPtr<PushButton>         m_pBtnDelete;
+    VclPtr<PushButton>         m_pBtnLoad;
+    VclPtr<PushButton>         m_pBtnSave;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -511,10 +518,12 @@ private:
 
 public:
     SvxHatchTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    virtual ~SvxHatchTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -546,19 +555,19 @@ class SvxBitmapTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    VclBox*             m_pBxPixelEditor;
-    SvxPixelCtl*        m_pCtlPixel;
-    ColorLB*            m_pLbColor;
-    ColorLB*            m_pLbBackgroundColor;
-    FixedText*          m_pLbBitmapsHidden;
-    BitmapLB*           m_pLbBitmaps;
-    SvxXRectPreview*    m_pCtlPreview;
-    PushButton*         m_pBtnAdd;
-    PushButton*         m_pBtnModify;
-    PushButton*         m_pBtnImport;
-    PushButton*         m_pBtnDelete;
-    PushButton*         m_pBtnLoad;
-    PushButton*         m_pBtnSave;
+    VclPtr<VclBox>             m_pBxPixelEditor;
+    VclPtr<SvxPixelCtl>        m_pCtlPixel;
+    VclPtr<ColorLB>            m_pLbColor;
+    VclPtr<ColorLB>            m_pLbBackgroundColor;
+    VclPtr<FixedText>          m_pLbBitmapsHidden;
+    VclPtr<BitmapLB>           m_pLbBitmaps;
+    VclPtr<SvxXRectPreview>    m_pCtlPreview;
+    VclPtr<PushButton>         m_pBtnAdd;
+    VclPtr<PushButton>         m_pBtnModify;
+    VclPtr<PushButton>         m_pBtnImport;
+    VclPtr<PushButton>         m_pBtnDelete;
+    VclPtr<PushButton>         m_pBtnLoad;
+    VclPtr<PushButton>         m_pBtnSave;
 
     SvxBitmapCtl*       m_pBitmapCtl;
 
@@ -597,10 +606,11 @@ private:
 public:
     SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxBitmapTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -642,11 +652,11 @@ class SvxColorTabPage : public SfxTabPage
 private:
     XPropertyListType   meType;
 
-    Window             *mpTopDlg;
-    CheckBox           *m_pBoxEmbed;
-    PushButton         *m_pBtnLoad;
-    PushButton         *m_pBtnSave;
-    FixedText          *m_pTableName;
+    VclPtr<Window>             mpTopDlg;
+    VclPtr<CheckBox>           m_pBoxEmbed;
+    VclPtr<PushButton>         m_pBtnLoad;
+    VclPtr<PushButton>         m_pBtnSave;
+    VclPtr<FixedText>          m_pTableName;
 
     DECL_LINK( EmbedToggleHdl_Impl, void * );
     DECL_LINK( ClickLoadHdl_Impl, void * );
@@ -660,31 +670,31 @@ private:
     void EnableSave( bool bCanSave );
 
     SvxColorTabPageShadow *pShadow;
-    Edit*               m_pEdtName;
-    ColorLB*            m_pLbColor;
+    VclPtr<Edit>               m_pEdtName;
+    VclPtr<ColorLB>            m_pLbColor;
 
-    SvxColorValueSet*   m_pValSetColorList;
+    VclPtr<SvxColorValueSet>   m_pValSetColorList;
 
-    SvxXRectPreview*    m_pCtlPreviewOld;
-    SvxXRectPreview*    m_pCtlPreviewNew;
+    VclPtr<SvxXRectPreview>    m_pCtlPreviewOld;
+    VclPtr<SvxXRectPreview>    m_pCtlPreviewNew;
 
-    ListBox*            m_pLbColorModel;
+    VclPtr<ListBox>            m_pLbColorModel;
 
-    VclContainer*       m_pRGB;
-    NumericField*       m_pR;
-    NumericField*       m_pG;
-    NumericField*       m_pB;
+    VclPtr<VclContainer>       m_pRGB;
+    VclPtr<NumericField>       m_pR;
+    VclPtr<NumericField>       m_pG;
+    VclPtr<NumericField>       m_pB;
 
-    VclContainer*       m_pCMYK;
-    MetricField*        m_pC;
-    MetricField*        m_pY;
-    MetricField*        m_pM;
-    MetricField*        m_pK;
+    VclPtr<VclContainer>       m_pCMYK;
+    VclPtr<MetricField>        m_pC;
+    VclPtr<MetricField>        m_pY;
+    VclPtr<MetricField>        m_pM;
+    VclPtr<MetricField>        m_pK;
 
-    PushButton*         m_pBtnAdd;
-    PushButton*         m_pBtnModify;
-    PushButton*         m_pBtnWorkOn;
-    PushButton*         m_pBtnDelete;
+    VclPtr<PushButton>         m_pBtnAdd;
+    VclPtr<PushButton>         m_pBtnModify;
+    VclPtr<PushButton>         m_pBtnWorkOn;
+    VclPtr<PushButton>         m_pBtnDelete;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -731,10 +741,11 @@ private:
 public:
     SvxColorTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxColorTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 

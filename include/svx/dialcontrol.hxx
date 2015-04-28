@@ -80,8 +80,6 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED DialControl : public Control
 public:
     explicit            DialControl( vcl::Window* pParent, WinBits nBits );
 
-    virtual             ~DialControl();
-
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
@@ -126,11 +124,11 @@ public:
 protected:
     struct DialControl_Impl
     {
-        std::unique_ptr<DialControlBmp> mxBmpEnabled;
-        std::unique_ptr<DialControlBmp> mxBmpDisabled;
-        std::unique_ptr<DialControlBmp> mxBmpBuffered;
+        ScopedVclPtr<DialControlBmp> mxBmpEnabled;
+        ScopedVclPtr<DialControlBmp> mxBmpDisabled;
+        ScopedVclPtr<DialControlBmp> mxBmpBuffered;
         Link                maModifyHdl;
-        NumericField*       mpLinkField;
+        VclPtr<NumericField>       mpLinkField;
         sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
         vcl::Font           maWinFont;

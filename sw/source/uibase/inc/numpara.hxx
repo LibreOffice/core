@@ -29,23 +29,23 @@
 // are performed.
 class SwParagraphNumTabPage : public SfxTabPage
 {
-    VclHBox*                 m_pOutlineStartBX;
-    ListBox*                 m_pOutlineLvLB;
-    VclHBox*                 m_pNumberStyleBX;
-    ListBox*                 m_pNumberStyleLB;
-    PushButton*              m_pEditNumStyleBtn;
+    VclPtr<VclHBox>                 m_pOutlineStartBX;
+    VclPtr<ListBox>                 m_pOutlineLvLB;
+    VclPtr<VclHBox>                 m_pNumberStyleBX;
+    VclPtr<ListBox>                 m_pNumberStyleLB;
+    VclPtr<PushButton>              m_pEditNumStyleBtn;
 
-    TriStateBox*             m_pNewStartCB;
-    VclHBox*                 m_pNewStartBX;
-    TriStateBox*             m_pNewStartNumberCB;
-    NumericField*            m_pNewStartNF;
+    VclPtr<TriStateBox>             m_pNewStartCB;
+    VclPtr<VclHBox>                 m_pNewStartBX;
+    VclPtr<TriStateBox>             m_pNewStartNumberCB;
+    VclPtr<NumericField>            m_pNewStartNF;
 
-    VclFrame*                m_pCountParaFram;
-    TriStateBox*             m_pCountParaCB;
-    TriStateBox*             m_pRestartParaCountCB;
+    VclPtr<VclFrame>                m_pCountParaFram;
+    VclPtr<TriStateBox>             m_pCountParaCB;
+    VclPtr<TriStateBox>             m_pRestartParaCountCB;
 
-    VclHBox*                 m_pRestartBX;
-    NumericField*            m_pRestartNF;
+    VclPtr<VclHBox>                 m_pRestartBX;
+    VclPtr<NumericField>            m_pRestartNF;
 
     // --> OD 2008-04-14 #outlinelevel#
     const OUString msOutlineNumbering;
@@ -62,17 +62,18 @@ class SwParagraphNumTabPage : public SfxTabPage
     static const sal_uInt16 aPageRg[];
 
 protected:
-        SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
     void aCountParaFL();
     bool    ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                           sal_uInt16 nFamily, sal_uInt16 nMask = 0,
                           const sal_uInt16* pModifier = NULL );
 
 public:
-        virtual ~SwParagraphNumTabPage();
+    SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~SwParagraphNumTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent,
-                                const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
+                                      const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

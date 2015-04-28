@@ -255,6 +255,12 @@ VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
 VirtualDevice::~VirtualDevice()
 {
     SAL_INFO( "vcl.gdi", "VirtualDevice::~VirtualDevice()" );
+    disposeOnce();
+}
+
+void VirtualDevice::dispose()
+{
+    SAL_INFO( "vcl.gdi", "VirtualDevice::dispose()" );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -272,6 +278,8 @@ VirtualDevice::~VirtualDevice()
         mpNext->mpPrev = mpPrev;
     else
         pSVData->maGDIData.mpLastVirDev = mpPrev;
+
+    OutputDevice::dispose();
 }
 
 bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
@@ -392,13 +400,12 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
             // #110958# Setup alpha bitmap
             if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
             {
-                delete mpAlphaVDev;
-                mpAlphaVDev = 0L;
+                mpAlphaVDev.disposeAndClear();
             }
 
             if( !mpAlphaVDev )
             {
-                mpAlphaVDev = new VirtualDevice( *this, mnAlphaDepth );
+                mpAlphaVDev = VclPtr<VirtualDevice>::Create( *this, mnAlphaDepth );
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase,
                                                          basebmp::RawMemorySharedArray(),
                                                          bTopDown );

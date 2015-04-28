@@ -58,7 +58,13 @@ AnnotationMenuButton::AnnotationMenuButton( sw::sidebarwindows::SwSidebarWin& rS
 
 AnnotationMenuButton::~AnnotationMenuButton()
 {
+    disposeOnce();
+}
+
+void AnnotationMenuButton::dispose()
+{
     RemoveEventListener( LINK( &mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener ) );
+    MenuButton::dispose();
 }
 
 void AnnotationMenuButton::Select()

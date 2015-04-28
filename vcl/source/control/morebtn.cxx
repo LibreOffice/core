@@ -22,7 +22,7 @@
 #include <tools/rc.h>
 #include <vector>
 
-typedef ::std::vector< vcl::Window* > ImplMoreWindowList;
+typedef ::std::vector< VclPtr<vcl::Window> > ImplMoreWindowList;
 
 struct ImplMoreButtonData
 {
@@ -80,8 +80,14 @@ MoreButton::MoreButton( vcl::Window* pParent, WinBits nStyle ) :
 
 MoreButton::~MoreButton()
 {
+    disposeOnce();
+}
+
+void MoreButton::dispose()
+{
     delete mpMBData->mpItemList;
     delete mpMBData;
+    PushButton::dispose();
 }
 
 void MoreButton::Click()

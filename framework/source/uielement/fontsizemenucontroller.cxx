@@ -135,7 +135,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     if ( pVCLPopupMenu )
     {
         boost::scoped_ptr<FontList> pFontList;
-        boost::scoped_ptr<Printer>  pInfoPrinter;
+        ScopedVclPtr<Printer>  pInfoPrinter;
         OUString   aPrinterName;
 
         SolarMutexGuard aSolarMutexGuard;
@@ -144,7 +144,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         aPrinterName = retrievePrinterName( m_xFrame );
         if ( !aPrinterName.isEmpty() )
         {
-            pInfoPrinter.reset(new Printer( aPrinterName ));
+            pInfoPrinter.reset(VclPtr<Printer>::Create( aPrinterName ));
             if ( pInfoPrinter && pInfoPrinter->GetDevFontCount() > 0 )
                 pFontList.reset(new FontList( pInfoPrinter.get() ));
         }

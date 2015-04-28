@@ -77,7 +77,7 @@ public:
     SortedMasterPageDescriptorList() {}
 };
 
-MasterPagesSelector* AllMasterPagesSelector::Create (
+VclPtr<vcl::Window> AllMasterPagesSelector::Create (
     vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -88,13 +88,14 @@ MasterPagesSelector* AllMasterPagesSelector::Create (
 
     ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
-    MasterPagesSelector* pSelector(
+    VclPtr<MasterPagesSelector> pSelector(
         new AllMasterPagesSelector (
             pParent,
             *pDocument,
             rViewShellBase,
             pContainer,
-            rxSidebar));
+            rxSidebar),
+        SAL_NO_ACQUIRE);
     pSelector->LateInit();
     pSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_ALL);
 

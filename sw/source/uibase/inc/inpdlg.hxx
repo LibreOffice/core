@@ -42,17 +42,19 @@ class SwFldInputDlg: public SvxStandardDialog
     SwSetExpField*    pSetFld;
     SwUserFieldType*  pUsrType;
 
-    Edit*             m_pLabelED;
+    VclPtr<Edit>             m_pLabelED;
 
-    VclMultiLineEdit* m_pEditED;
+    VclPtr<VclMultiLineEdit> m_pEditED;
 
-    OKButton*         m_pOKBT;
-    PushButton*       m_pNextBT;
+    VclPtr<OKButton>         m_pOKBT;
+    VclPtr<PushButton>       m_pNextBT;
 
     DECL_LINK(NextHdl, void *);
 public:
     SwFldInputDlg(  vcl::Window *pParent, SwWrtShell &rSh,
                     SwField* pField, bool bNextButton = false );
+    virtual ~SwFldInputDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

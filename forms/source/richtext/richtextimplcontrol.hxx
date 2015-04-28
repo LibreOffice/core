@@ -52,11 +52,11 @@ namespace frm
 
         ESelection              m_aLastKnownSelection;
 
-        Control*                m_pAntiImpl;
-        RichTextViewPort*       m_pViewport;
-        ScrollBar*              m_pHScroll;
-        ScrollBar*              m_pVScroll;
-        ScrollBarBox*           m_pScrollCorner;
+        VclPtr<Control>                m_pAntiImpl;
+        VclPtr<RichTextViewPort>       m_pViewport;
+        VclPtr<ScrollBar>              m_pHScroll;
+        VclPtr<ScrollBar>              m_pVScroll;
+        VclPtr<ScrollBarBox>           m_pScrollCorner;
         RichTextEngine*         m_pEngine;
         EditView*               m_pView;
         ITextAttributeListener* m_pTextAttrListener;
@@ -166,8 +166,8 @@ namespace frm
         /// ensures that our "automatic line break" setting matches the current WinBits of the window
         void    ensureLineBreakSetting();
 
-        inline  bool    hasVScrollBar( ) const { return m_pVScroll != NULL; }
-        inline  bool    hasHScrollBar( ) const { return m_pHScroll != NULL; }
+        inline  bool    hasVScrollBar( ) const { return m_pVScroll != nullptr; }
+        inline  bool    hasHScrollBar( ) const { return m_pHScroll != nullptr; }
 
         // IEngineStatusListener overridables
         virtual void EditEngineStatusChanged( const EditStatus& _rStatus ) SAL_OVERRIDE;

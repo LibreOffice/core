@@ -41,10 +41,10 @@ LineWidthControl::LineWidthControl (
     : svx::sidebar::PopupControl(pParent,SVX_RES(RID_POPUPPANEL_LINEPAGE_WIDTH)),
       mrLinePropertyPanel(rPanel),
       mpBindings(NULL),
-      maVSWidth( this, SVX_RES(VS_WIDTH)),
-      maFTCus( this, SVX_RES(FT_CUSTOME)),
-      maFTWidth( this, SVX_RES(FT_LINE_WIDTH)),
-      maMFWidth( this, SVX_RES(MF_WIDTH)),
+      maVSWidth(VclPtr<LineWidthValueSet>::Create(this, SVX_RES(VS_WIDTH))),
+      maFTCus( VclPtr<FixedText>::Create(this, SVX_RES(FT_CUSTOME))),
+      maFTWidth( VclPtr<FixedText>::Create(this, SVX_RES(FT_LINE_WIDTH))),
+      maMFWidth( VclPtr<MetricField>::Create(this, SVX_RES(MF_WIDTH))),
       meMapUnit(SFX_MAPUNIT_TWIP),
       rStr(NULL),
       mstrPT(SVX_RESSTR(STR_PT)),
@@ -61,12 +61,19 @@ LineWidthControl::LineWidthControl (
     mpBindings = mrLinePropertyPanel.GetBindings();
 }
 
-
-
-
 LineWidthControl::~LineWidthControl()
 {
+    disposeOnce();
+}
+
+void LineWidthControl::dispose()
+{
     delete[] rStr;
+    maVSWidth.disposeAndClear();
+    maFTCus.disposeAndClear();
+    maFTWidth.disposeAndClear();
+    maMFWidth.disposeAndClear();
+    svx::sidebar::PopupControl::dispose();
 }
 
 
@@ -104,33 +111,33 @@ void LineWidthControl::Paint(const Rectangle& rect)
 
 void LineWidthControl::Initialize()
 {
-    maVSWidth.SetStyle( maVSWidth.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );// WB_NAMEFIELD | WB_ITEMBORDER |WB_DOUBLEBORDER | WB_NONEFIELD |
+    maVSWidth->SetStyle( maVSWidth->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );// WB_NAMEFIELD | WB_ITEMBORDER |WB_DOUBLEBORDER | WB_NONEFIELD |
     //for high contrast wj
     if(GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        maVSWidth.SetColor(GetSettings().GetStyleSettings().GetMenuColor());
+        maVSWidth->SetColor(GetSettings().GetStyleSettings().GetMenuColor());
     //  maBorder.SetBackground(GetSettings().GetStyleSettings().GetMenuColor());
-        maFTWidth.SetBackground(GetSettings().GetStyleSettings().GetMenuColor());
+        maFTWidth->SetBackground(GetSettings().GetStyleSettings().GetMenuColor());
     }
     else
     {
-        maVSWidth.SetColor(COL_WHITE);
+        maVSWidth->SetColor(COL_WHITE);
     //  maBorder.SetBackground(Wallpaper(COL_WHITE));
-        maFTWidth.SetBackground(Wallpaper(COL_WHITE));
+        maFTWidth->SetBackground(Wallpaper(COL_WHITE));
     }
 
-    sal_Int64 nFirst= maMFWidth.Denormalize( maMFWidth.GetFirst( FUNIT_TWIP ) );
-    sal_Int64 nLast = maMFWidth.Denormalize( maMFWidth.GetLast( FUNIT_TWIP ) );
-    sal_Int64 nMin = maMFWidth.Denormalize( maMFWidth.GetMin( FUNIT_TWIP ) );
-    sal_Int64 nMax = maMFWidth.Denormalize( maMFWidth.GetMax( FUNIT_TWIP ) );
-    maMFWidth.SetSpinSize( 10 );
-    maMFWidth.SetUnit( FUNIT_POINT );
-    if( maMFWidth.GetDecimalDigits() > 1 )
-         maMFWidth.SetDecimalDigits( 1 );
-    maMFWidth.SetFirst( maMFWidth.Normalize( nFirst ), FUNIT_TWIP );
-    maMFWidth.SetLast( maMFWidth.Normalize( nLast ), FUNIT_TWIP );
-    maMFWidth.SetMin( maMFWidth.Normalize( nMin ), FUNIT_TWIP );
-    maMFWidth.SetMax( maMFWidth.Normalize( nMax ), FUNIT_TWIP );
+    sal_Int64 nFirst= maMFWidth->Denormalize( maMFWidth->GetFirst( FUNIT_TWIP ) );
+    sal_Int64 nLast = maMFWidth->Denormalize( maMFWidth->GetLast( FUNIT_TWIP ) );
+    sal_Int64 nMin = maMFWidth->Denormalize( maMFWidth->GetMin( FUNIT_TWIP ) );
+    sal_Int64 nMax = maMFWidth->Denormalize( maMFWidth->GetMax( FUNIT_TWIP ) );
+    maMFWidth->SetSpinSize( 10 );
+    maMFWidth->SetUnit( FUNIT_POINT );
+    if( maMFWidth->GetDecimalDigits() > 1 )
+         maMFWidth->SetDecimalDigits( 1 );
+    maMFWidth->SetFirst( maMFWidth->Normalize( nFirst ), FUNIT_TWIP );
+    maMFWidth->SetLast( maMFWidth->Normalize( nLast ), FUNIT_TWIP );
+    maMFWidth->SetMin( maMFWidth->Normalize( nMin ), FUNIT_TWIP );
+    maMFWidth->SetMax( maMFWidth->Normalize( nMax ), FUNIT_TWIP );
 
     rStr = new OUString[9];
     //modify,
@@ -157,28 +164,28 @@ void LineWidthControl::Initialize()
 
     for(sal_uInt16 i = 1 ; i <= 9 ; i++)
     {
-        maVSWidth.InsertItem(i);
-        maVSWidth.SetItemText(i, rStr[i-1]);
+        maVSWidth->InsertItem(i);
+        maVSWidth->SetItemText(i, rStr[i-1]);
     }
-    maVSWidth.SetUnit(rStr);
-    maVSWidth.SetItemData(1, reinterpret_cast<void*>(5));
-    maVSWidth.SetItemData(2, reinterpret_cast<void*>(8));
-    maVSWidth.SetItemData(3, reinterpret_cast<void*>(10));
-    maVSWidth.SetItemData(4, reinterpret_cast<void*>(15));
-    maVSWidth.SetItemData(5, reinterpret_cast<void*>(23));
-    maVSWidth.SetItemData(6, reinterpret_cast<void*>(30));
-    maVSWidth.SetItemData(7, reinterpret_cast<void*>(45));
-    maVSWidth.SetItemData(8, reinterpret_cast<void*>(60));
-    maVSWidth.SetImage(maIMGCusGray);
+    maVSWidth->SetUnit(rStr);
+    maVSWidth->SetItemData(1, reinterpret_cast<void*>(5));
+    maVSWidth->SetItemData(2, reinterpret_cast<void*>(8));
+    maVSWidth->SetItemData(3, reinterpret_cast<void*>(10));
+    maVSWidth->SetItemData(4, reinterpret_cast<void*>(15));
+    maVSWidth->SetItemData(5, reinterpret_cast<void*>(23));
+    maVSWidth->SetItemData(6, reinterpret_cast<void*>(30));
+    maVSWidth->SetItemData(7, reinterpret_cast<void*>(45));
+    maVSWidth->SetItemData(8, reinterpret_cast<void*>(60));
+    maVSWidth->SetImage(maIMGCusGray);
 
-    maVSWidth.SetSelItem(0);
+    maVSWidth->SetSelItem(0);
     Link aLink =  LINK( this, LineWidthControl, VSSelectHdl ) ;
-    maVSWidth.SetSelectHdl(aLink);
+    maVSWidth->SetSelectHdl(aLink);
     aLink = LINK(this, LineWidthControl, MFModifyHdl);
-    maMFWidth.SetModifyHdl(aLink);
+    maMFWidth->SetModifyHdl(aLink);
 
-    maVSWidth.StartSelection();
-    maVSWidth.Show();
+    maVSWidth->StartSelection();
+    maVSWidth->Show();
 }
 
 
@@ -187,9 +194,9 @@ void LineWidthControl::Initialize()
 void LineWidthControl::GetFocus()
 {
     if(!mbVSFocus)
-        maMFWidth.GrabFocus();
+        maMFWidth->GrabFocus();
     else
-        maVSWidth.GrabFocus();
+        maVSWidth->GrabFocus();
 }
 
 
@@ -198,7 +205,7 @@ void LineWidthControl::GetFocus()
 void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit)
 {
     mbVSFocus = true;
-    maVSWidth.SetSelItem(0);
+    maVSWidth->SetSelItem(0);
     mbCloseByEdit = false;
     meMapUnit = eMapUnit;
     SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_LINE_WIDTH_GLOBAL_VALUE );
@@ -212,54 +219,54 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
         OUString aWinData( aTmp );
         mnCustomWidth = aWinData.toInt32();
         mbCustom = true;
-        maVSWidth.SetImage(maIMGCus);
-        maVSWidth.SetCusEnable(true);
+        maVSWidth->SetImage(maIMGCus);
+        maVSWidth->SetCusEnable(true);
 
         OUString aStrTip( OUString::number( (double)mnCustomWidth / 10));
         aStrTip += mstrPT;
-        maVSWidth.SetItemText(9, aStrTip);
+        maVSWidth->SetItemText(9, aStrTip);
     }
     else
     {
         mbCustom = false;
-        maVSWidth.SetImage(maIMGCusGray);
-        maVSWidth.SetCusEnable(false);
+        maVSWidth->SetImage(maIMGCusGray);
+        maVSWidth->SetCusEnable(false);
         //modify
         //String aStrTip(String(SVX_RES(STR_WIDTH_LAST_CUSTOM)));
-        //maVSWidth.SetItemText(9, aStrTip);
-        maVSWidth.SetItemText(9, rStr[8]);
+        //maVSWidth->SetItemText(9, aStrTip);
+        maVSWidth->SetItemText(9, rStr[8]);
     }
 
     if(bValuable)
     {
         sal_Int64 nVal = OutputDevice::LogicToLogic( lValue, (MapUnit)eMapUnit, MAP_100TH_MM );
-        nVal = maMFWidth.Normalize( nVal );
-        maMFWidth.SetValue( nVal, FUNIT_100TH_MM );
+        nVal = maMFWidth->Normalize( nVal );
+        maMFWidth->SetValue( nVal, FUNIT_100TH_MM );
     }
     else
     {
-        maMFWidth.SetText( "" );
+        maMFWidth->SetText( "" );
     }
 
     MapUnit eOrgUnit = (MapUnit)eMapUnit;
     MapUnit ePntUnit( MAP_TWIP );
     lValue = LogicToLogic( lValue , eOrgUnit, ePntUnit );
 
-    OUString strCurrValue = maMFWidth.GetText();
+    OUString strCurrValue = maMFWidth->GetText();
     sal_uInt16 i = 0;
     for(; i < 8; i++)
         if(strCurrValue == rStr[i])
         {
-            maVSWidth.SetSelItem(i+1);
+            maVSWidth->SetSelItem(i+1);
             break;
         }
     if (i>=8)
     {
         mbVSFocus = false;
-        maVSWidth.SetSelItem(0);
+        maVSWidth->SetSelItem(0);
     }
-    maVSWidth.Format();
-    maVSWidth.StartSelection();
+    maVSWidth->Format();
+    maVSWidth->StartSelection();
 }
 
 
@@ -269,11 +276,11 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
 {
     if(pControl == &maVSWidth)
     {
-        sal_uInt16 iPos = maVSWidth.GetSelectItemId();
+        sal_uInt16 iPos = maVSWidth->GetSelectItemId();
         if(iPos >= 1 && iPos <= 8)
         {
-            sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(maVSWidth.GetItemData( iPos )), MAP_POINT, (MapUnit)meMapUnit);
-            nVal = maMFWidth.Denormalize(nVal);
+            sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(maVSWidth->GetItemData( iPos )), MAP_POINT, (MapUnit)meMapUnit);
+            nVal = maMFWidth->Denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
             mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
             mrLinePropertyPanel.SetWidthIcon(iPos);
@@ -287,7 +294,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             if(mbCustom)
             {
                 long nVal = LogicToLogic(mnCustomWidth , MAP_POINT, (MapUnit)meMapUnit);
-                nVal = maMFWidth.Denormalize(nVal);
+                nVal = maMFWidth->Denormalize(nVal);
                 XLineWidthItem aWidthItem( nVal );
                 mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
                 mrLinePropertyPanel.SetWidth(nVal);
@@ -296,10 +303,10 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             }
             else
             {
-                maVSWidth.SetNoSelection();     //add , set no selection and keep the last select item
-                maVSWidth.Format();
+                maVSWidth->SetNoSelection();     //add , set no selection and keep the last select item
+                maVSWidth->Format();
                 Invalidate();
-                maVSWidth.StartSelection();
+                maVSWidth->StartSelection();
             }
             //modify end
         }
@@ -316,16 +323,16 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
 {
     if(pControl == &maMFWidth)
     {
-        if(maVSWidth.GetSelItem())
+        if(maVSWidth->GetSelItem())
         {
-            maVSWidth.SetSelItem(0);
-            maVSWidth.Format();
+            maVSWidth->SetSelItem(0);
+            maVSWidth->Format();
             Invalidate();
-            maVSWidth.StartSelection();
+            maVSWidth->StartSelection();
         }
-        long nTmp = static_cast<long>(maMFWidth.GetValue());
+        long nTmp = static_cast<long>(maMFWidth->GetValue());
         long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)meMapUnit );
-        sal_Int32 nNewWidth = (short)maMFWidth.Denormalize( nVal );
+        sal_Int32 nNewWidth = (short)maMFWidth->Denormalize( nVal );
         XLineWidthItem aWidthItem(nNewWidth);
         mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
 

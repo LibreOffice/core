@@ -31,15 +31,15 @@
 
 struct PasswordToOpenModifyDialog_Impl
 {
-    PasswordToOpenModifyDialog *    m_pParent;
+    VclPtr<PasswordToOpenModifyDialog>    m_pParent;
 
-    Edit*                       m_pPasswdToOpenED;
-    Edit*                       m_pReenterPasswdToOpenED;
-    VclExpander*                m_pOptionsExpander;
-    OKButton*                   m_pOk;
-    CheckBox*                   m_pOpenReadonlyCB;
-    Edit*                       m_pPasswdToModifyED;
-    Edit*                       m_pReenterPasswdToModifyED;
+    VclPtr<Edit>                       m_pPasswdToOpenED;
+    VclPtr<Edit>                       m_pReenterPasswdToOpenED;
+    VclPtr<VclExpander>                m_pOptionsExpander;
+    VclPtr<OKButton>                   m_pOk;
+    VclPtr<CheckBox>                   m_pOpenReadonlyCB;
+    VclPtr<Edit>                       m_pPasswdToModifyED;
+    VclPtr<Edit>                       m_pReenterPasswdToModifyED;
 
     OUString                    m_aOneMismatch;
     OUString                    m_aTwoMismatch;
@@ -101,9 +101,9 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
             m_pPasswdToModifyED->GetText().isEmpty();
     if (bInvalidState)
     {
-        MessageDialog aErrorBox(m_pParent,
+        ScopedVclPtrInstance<MessageDialog> aErrorBox(m_pParent,
             m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2);
-        aErrorBox.Execute();
+        aErrorBox->Execute();
     }
     else // check for mismatched passwords...
     {
@@ -112,8 +112,8 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
-            MessageDialog aErrorBox(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch);
-            aErrorBox.Execute();
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch);
+            aErrorBox->Execute();
 
             Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED : m_pPasswdToModifyED;
             Edit* pRepeatEdit = !bToOpenMatch? m_pReenterPasswdToOpenED : m_pReenterPasswdToModifyED;
@@ -153,6 +153,12 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
 
 PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
 {
+    disposeOnce();
+}
+
+void PasswordToOpenModifyDialog::dispose()
+{
+    SfxModalDialog::dispose();
 }
 
 

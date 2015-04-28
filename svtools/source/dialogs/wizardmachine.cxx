@@ -49,7 +49,13 @@ namespace svt
 
     OWizardPage::~OWizardPage()
     {
+        disposeOnce();
+    }
+
+    void OWizardPage::dispose()
+    {
         delete m_pImpl;
+        TabPage::dispose();
     }
 
     void OWizardPage::initializePage()
@@ -133,7 +139,7 @@ namespace svt
         // the help button
         if (_nButtonFlags & WZB_HELP)
         {
-            m_pHelp= new HelpButton(this, WB_TABSTOP);
+            m_pHelp= VclPtr<HelpButton>::Create(this, WB_TABSTOP);
             m_pHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pHelp->Show();
             AddButton( m_pHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X);
@@ -142,7 +148,7 @@ namespace svt
         // the previous button
         if (_nButtonFlags & WZB_PREVIOUS)
         {
-            m_pPrevPage = new PushButton(this, WB_TABSTOP);
+            m_pPrevPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pPrevPage->SetHelpId( HID_WIZARD_PREVIOUS );
             m_pPrevPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pPrevPage->SetText(SVT_RESSTR(STR_WIZDLG_PREVIOUS));
@@ -159,7 +165,7 @@ namespace svt
         // the next button
         if (_nButtonFlags & WZB_NEXT)
         {
-            m_pNextPage = new PushButton(this, WB_TABSTOP);
+            m_pNextPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pNextPage->SetText(OUString(SVT_RESSTR(STR_WIZDLG_NEXT)));
@@ -173,7 +179,7 @@ namespace svt
         // the finish button
         if (_nButtonFlags & WZB_FINISH)
         {
-            m_pFinish = new OKButton(this, WB_TABSTOP);
+            m_pFinish = VclPtr<OKButton>::Create(this, WB_TABSTOP);
             m_pFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pFinish->SetText(SVT_RESSTR(STR_WIZDLG_FINISH));
             m_pFinish->Show();
@@ -185,7 +191,7 @@ namespace svt
         // the cancel button
         if (_nButtonFlags & WZB_CANCEL)
         {
-            m_pCancel = new CancelButton(this, WB_TABSTOP);
+            m_pCancel = VclPtr<CancelButton>::Create(this, WB_TABSTOP);
             m_pCancel->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pCancel->Show();
 
@@ -196,16 +202,22 @@ namespace svt
 
     OWizardMachine::~OWizardMachine()
     {
-        delete m_pFinish;
-        delete m_pCancel;
-        delete m_pNextPage;
-        delete m_pPrevPage;
-        delete m_pHelp;
+        disposeOnce();
+    }
+
+    void OWizardMachine::dispose()
+    {
+        m_pFinish.disposeAndClear();
+        m_pCancel.disposeAndClear();
+        m_pNextPage.disposeAndClear();
+        m_pPrevPage.disposeAndClear();
+        m_pHelp.disposeAndClear();
 
         for (WizardState i=0; i<m_pImpl->nFirstUnknownPage; ++i)
-            delete GetPage(i);
+            GetPage(i)->disposeOnce();
 
         delete m_pImpl;
+        WizardDialog::dispose();
     }
 
 

@@ -42,52 +42,52 @@ struct SwPosition;
 class SwFrmPage: public SfxTabPage
 {
     // size
-    FixedText*       m_pWidthFT;
-    FixedText*       m_pWidthAutoFT;
-    PercentField m_aWidthED;
-    CheckBox*        m_pRelWidthCB;
-    ListBox*         m_pRelWidthRelationLB;
-    CheckBox*        m_pAutoWidthCB;
+    VclPtr<FixedText>       m_pWidthFT;
+    VclPtr<FixedText>       m_pWidthAutoFT;
+    PercentField            m_aWidthED;
+    VclPtr<CheckBox>        m_pRelWidthCB;
+    VclPtr<ListBox>         m_pRelWidthRelationLB;
+    VclPtr<CheckBox>        m_pAutoWidthCB;
 
-    FixedText*       m_pHeightFT;
-    FixedText*       m_pHeightAutoFT;
-    PercentField m_aHeightED;
-    CheckBox*        m_pRelHeightCB;
-    ListBox*         m_pRelHeightRelationLB;
-    CheckBox*        m_pAutoHeightCB;
+    VclPtr<FixedText>       m_pHeightFT;
+    VclPtr<FixedText>       m_pHeightAutoFT;
+    PercentField            m_aHeightED;
+    VclPtr<CheckBox>        m_pRelHeightCB;
+    VclPtr<ListBox>         m_pRelHeightRelationLB;
+    VclPtr<CheckBox>        m_pAutoHeightCB;
 
-    CheckBox*        m_pFixedRatioCB;
-    PushButton*      m_pRealSizeBT;
+    VclPtr<CheckBox>        m_pFixedRatioCB;
+    VclPtr<PushButton>      m_pRealSizeBT;
 
     // anchor
-    VclContainer*    m_pAnchorFrame;
-    RadioButton*     m_pAnchorAtPageRB;
-    RadioButton*     m_pAnchorAtParaRB;
-    RadioButton*     m_pAnchorAtCharRB;
-    RadioButton*     m_pAnchorAsCharRB;
-    RadioButton*     m_pAnchorAtFrameRB;
+    VclPtr<VclContainer>    m_pAnchorFrame;
+    VclPtr<RadioButton>     m_pAnchorAtPageRB;
+    VclPtr<RadioButton>     m_pAnchorAtParaRB;
+    VclPtr<RadioButton>     m_pAnchorAtCharRB;
+    VclPtr<RadioButton>     m_pAnchorAsCharRB;
+    VclPtr<RadioButton>     m_pAnchorAtFrameRB;
 
     // position
-    FixedText*       m_pHorizontalFT;
-    ListBox*         m_pHorizontalDLB;
-    FixedText*       m_pAtHorzPosFT;
-    MetricField*     m_pAtHorzPosED;
-    FixedText*       m_pHoriRelationFT;
-    ListBox*         m_pHoriRelationLB;
+    VclPtr<FixedText>       m_pHorizontalFT;
+    VclPtr<ListBox>         m_pHorizontalDLB;
+    VclPtr<FixedText>       m_pAtHorzPosFT;
+    VclPtr<MetricField>     m_pAtHorzPosED;
+    VclPtr<FixedText>       m_pHoriRelationFT;
+    VclPtr<ListBox>         m_pHoriRelationLB;
 
-    CheckBox*        m_pMirrorPagesCB;
+    VclPtr<CheckBox>        m_pMirrorPagesCB;
 
-    FixedText*       m_pVerticalFT;
-    ListBox*         m_pVerticalDLB;
-    FixedText*       m_pAtVertPosFT;
-    MetricField*     m_pAtVertPosED;
-    FixedText*       m_pVertRelationFT;
-    ListBox*         m_pVertRelationLB;
+    VclPtr<FixedText>       m_pVerticalFT;
+    VclPtr<ListBox>         m_pVerticalDLB;
+    VclPtr<FixedText>       m_pAtVertPosFT;
+    VclPtr<MetricField>     m_pAtVertPosED;
+    VclPtr<FixedText>       m_pVertRelationFT;
+    VclPtr<ListBox>         m_pVertRelationLB;
     // #i18732# - check box for new option 'FollowTextFlow'
-    CheckBox*        m_pFollowTextFlowCB;
+    VclPtr<CheckBox>        m_pFollowTextFlowCB;
 
     // example
-    SvxSwFrameExample*  m_pExampleWN;
+    VclPtr<SvxSwFrameExample>  m_pExampleWN;
 
     //'string provider'
     SvxSwFramePosString aFramePosString;
@@ -174,9 +174,6 @@ class SwFrmPage: public SfxTabPage
 
     void            EnableGraficMode();   // hides auto check boxes and re-org controls for "Real Size" button
 
-    SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFrmPage();
-
     SwWrtShell *getFrmDlgParentShell();
 
     using SfxTabPage::ActivatePage;
@@ -185,8 +182,11 @@ class SwFrmPage: public SfxTabPage
     static const sal_uInt16 aPageRg[];
 
 public:
+    SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    virtual ~SwFrmPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
@@ -202,16 +202,16 @@ public:
 class SwGrfExtPage: public SfxTabPage
 {
     // mirror
-    VclContainer*   m_pMirror;
-    CheckBox*       m_pMirrorVertBox;
-    CheckBox*       m_pMirrorHorzBox;
-    RadioButton*    m_pAllPagesRB;
-    RadioButton*    m_pLeftPagesRB;
-    RadioButton*    m_pRightPagesRB;
-    BmpWindow*      m_pBmpWin;
+    VclPtr<VclContainer>   m_pMirror;
+    VclPtr<CheckBox>       m_pMirrorVertBox;
+    VclPtr<CheckBox>       m_pMirrorHorzBox;
+    VclPtr<RadioButton>    m_pAllPagesRB;
+    VclPtr<RadioButton>    m_pLeftPagesRB;
+    VclPtr<RadioButton>    m_pRightPagesRB;
+    VclPtr<BmpWindow>      m_pBmpWin;
 
-    Edit*           m_pConnectED;
-    PushButton*     m_pBrowseBT;
+    VclPtr<Edit>           m_pConnectED;
+    VclPtr<PushButton>     m_pBrowseBT;
 
     OUString        aFilterName;
     OUString        aGrfName, aNewGrfName;
@@ -225,15 +225,16 @@ class SwGrfExtPage: public SfxTabPage
     DECL_LINK(BrowseHdl, void *);
 
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwGrfExtPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
 public:
+    SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet);
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -243,26 +244,26 @@ public:
 class SwFrmURLPage : public SfxTabPage
 {
     // hyperlink
-    Edit*            pURLED;
-    PushButton*      pSearchPB;
-    Edit*            pNameED;
-    ComboBox*        pFrameCB;
+    VclPtr<Edit>            pURLED;
+    VclPtr<PushButton>      pSearchPB;
+    VclPtr<Edit>            pNameED;
+    VclPtr<ComboBox>        pFrameCB;
 
     // image map
-    CheckBox*        pServerCB;
-    CheckBox*        pClientCB;
+    VclPtr<CheckBox>        pServerCB;
+    VclPtr<CheckBox>        pClientCB;
 
     DECL_LINK(InsertFileHdl, void *);
-
-    SwFrmURLPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFrmURLPage();
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
 public:
+    SwFrmURLPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    virtual ~SwFrmURLPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -270,29 +271,29 @@ public:
 
 class SwFrmAddPage : public SfxTabPage
 {
-    VclContainer* pNameFrame;
-    FixedText*    pNameFT;
-    Edit*         pNameED;
-    FixedText*    pAltNameFT;
-    Edit*         pAltNameED;
-    FixedText*    pPrevFT;
-    ListBox*      pPrevLB;
-    FixedText*    pNextFT;
-    ListBox*      pNextLB;
+    VclPtr<VclContainer> pNameFrame;
+    VclPtr<FixedText>    pNameFT;
+    VclPtr<Edit>         pNameED;
+    VclPtr<FixedText>    pAltNameFT;
+    VclPtr<Edit>         pAltNameED;
+    VclPtr<FixedText>    pPrevFT;
+    VclPtr<ListBox>      pPrevLB;
+    VclPtr<FixedText>    pNextFT;
+    VclPtr<ListBox>      pNextLB;
 
-    VclContainer* pProtectFrame;
-    CheckBox*     pProtectContentCB;
-    CheckBox*     pProtectFrameCB;
-    CheckBox*     pProtectSizeCB;
+    VclPtr<VclContainer> pProtectFrame;
+    VclPtr<CheckBox>     pProtectContentCB;
+    VclPtr<CheckBox>     pProtectFrameCB;
+    VclPtr<CheckBox>     pProtectSizeCB;
 
-    VclContainer* m_pContentAlignFrame;
-    ListBox*      m_pVertAlignLB;
+    VclPtr<VclContainer> m_pContentAlignFrame;
+    VclPtr<ListBox>      m_pVertAlignLB;
 
-    VclContainer* pPropertiesFrame;
-    CheckBox*     pEditInReadonlyCB;
-    CheckBox*     pPrintFrameCB;
-    FixedText*    pTextFlowFT;
-    ListBox*      pTextFlowLB;
+    VclPtr<VclContainer> pPropertiesFrame;
+    VclPtr<CheckBox>     pEditInReadonlyCB;
+    VclPtr<CheckBox>     pPrintFrameCB;
+    VclPtr<FixedText>    pTextFlowFT;
+    VclPtr<ListBox>      pTextFlowLB;
 
     SwWrtShell*   pWrtSh;
 
@@ -304,14 +305,14 @@ class SwFrmAddPage : public SfxTabPage
     DECL_LINK(EditModifyHdl, void *);
     DECL_LINK(ChainModifyHdl, ListBox*);
 
-    SwFrmAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFrmAddPage();
-
     static const sal_uInt16 aAddPgRg[];
 
 public:
+    SwFrmAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    virtual ~SwFrmAddPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create(vcl::Window *pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16*  GetRanges() { return aAddPgRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;

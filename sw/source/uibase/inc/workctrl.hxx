@@ -65,7 +65,7 @@ public:
     virtual ~SwTbxInsertCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -85,7 +85,7 @@ public:
     virtual ~SwTbxAutoTextCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -102,7 +102,7 @@ public:
     virtual ~SwTbxFieldCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -114,7 +114,7 @@ class SwScrollNaviPopup;
 
 class SwScrollNaviToolBox : public ToolBox
 {
-    SwScrollNaviPopup *m_pNaviPopup;
+    VclPtr<SwScrollNaviPopup> m_pNaviPopup;
 
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
@@ -125,12 +125,14 @@ public:
         , m_pNaviPopup(pNaviPopup)
     {
     }
+    virtual ~SwScrollNaviToolBox();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class SwScrollNaviPopup : public SfxPopupWindow
 {
-    SwScrollNaviToolBox* m_pToolBox;
-    FixedText*           m_pInfoField;
+    VclPtr<SwScrollNaviToolBox> m_pToolBox;
+    VclPtr<FixedText>           m_pInfoField;
     ImageList       aIList;
 
     OUString        sQuickHelp[2 * NID_COUNT];
@@ -146,10 +148,11 @@ protected:
 public:
         SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window *pParent );
         virtual ~SwScrollNaviPopup();
+    virtual void dispose() SAL_OVERRIDE;
 
     static OUString         GetQuickHelpText(bool bNext);
 
-    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
     void                GrabFocus() { m_pToolBox->GrabFocus(); }
 };
 
@@ -178,7 +181,7 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    virtual vcl::Window*         CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 #endif
 

@@ -93,6 +93,27 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* p
     m_pEdName->SetSelection( aCurSel );
 }
 
+ScNameDefDlg::~ScNameDefDlg()
+{
+    disposeOnce();
+}
+
+void ScNameDefDlg::dispose()
+{
+    m_pEdName.clear();
+    m_pEdRange.clear();
+    m_pRbRange.clear();
+    m_pLbScope.clear();
+    m_pBtnRowHeader.clear();
+    m_pBtnColHeader.clear();
+    m_pBtnPrintArea.clear();
+    m_pBtnCriteria.clear();
+    m_pBtnAdd.clear();
+    m_pBtnCancel.clear();
+    m_pFtInfo.clear();
+    ScAnyRefDlg::dispose();
+}
+
 void ScNameDefDlg::CancelPushed()
 {
     if (mbUndo)

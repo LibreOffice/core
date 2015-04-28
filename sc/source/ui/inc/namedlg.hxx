@@ -43,24 +43,24 @@ class ScDocument;
 class ScNameDlg : public ScAnyRefDlg, public ScRangeManagerTable::InitListener
 {
 private:
-    Edit*               m_pEdName;
-    formula::RefEdit*   m_pEdAssign;
-    formula::RefButton* m_pRbAssign;
-    ListBox*            m_pLbScope;
+    VclPtr<Edit>               m_pEdName;
+    VclPtr<formula::RefEdit>   m_pEdAssign;
+    VclPtr<formula::RefButton> m_pRbAssign;
+    VclPtr<ListBox>            m_pLbScope;
 
-    CheckBox*           m_pBtnPrintArea;
-    CheckBox*           m_pBtnColHeader;
-    CheckBox*           m_pBtnCriteria;
-    CheckBox*           m_pBtnRowHeader;
+    VclPtr<CheckBox>           m_pBtnPrintArea;
+    VclPtr<CheckBox>           m_pBtnColHeader;
+    VclPtr<CheckBox>           m_pBtnCriteria;
+    VclPtr<CheckBox>           m_pBtnRowHeader;
 
-    PushButton*         m_pBtnAdd;
-    PushButton*         m_pBtnDelete;
-    PushButton*         m_pBtnOk;
-    PushButton*         m_pBtnCancel;
+    VclPtr<PushButton>         m_pBtnAdd;
+    VclPtr<PushButton>         m_pBtnDelete;
+    VclPtr<PushButton>         m_pBtnOk;
+    VclPtr<PushButton>         m_pBtnCancel;
 
-    FixedText*          m_pFtInfo;
+    VclPtr<FixedText>          m_pFtInfo;
 
-    ScRangeManagerTable* m_pRangeManagerTable;
+    VclPtr<ScRangeManagerTable> m_pRangeManagerTable;
 
     const OUString maGlobalNameStr;
     const OUString maErrInvalidNameStr;
@@ -123,6 +123,7 @@ public:
                                ScViewData*      ptrViewData,
                                const ScAddress& aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap = NULL );
     virtual         ~ScNameDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual bool    IsRefInputMode() const SAL_OVERRIDE;

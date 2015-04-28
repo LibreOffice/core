@@ -24,6 +24,7 @@
 #include <sfx2/dockwin.hxx>
 
 #include <vcl/toolbox.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/svborder.hxx>
 
 
@@ -43,6 +44,7 @@ namespace sfx2
         );
 
         virtual ~TitledDockingWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         /** sets a title to be displayed in the docking window
         */
@@ -77,11 +79,11 @@ namespace sfx2
         /** returns the content window, which is to be used as parent window for any content to be displayed
             in the docking window.
         */
-        vcl::Window&       GetContentWindow()          { return m_aContentWindow; }
-        const vcl::Window& GetContentWindow() const    { return m_aContentWindow; }
+        vcl::Window&       GetContentWindow()          { return *m_aContentWindow.get(); }
+        const vcl::Window& GetContentWindow() const    { return *m_aContentWindow.get(); }
 
-        ToolBox&        GetToolBox()        { return m_aToolbox; }
-        const ToolBox&  GetToolBox() const  { return m_aToolbox; }
+        ToolBox&        GetToolBox()        { return *m_aToolbox.get(); }
+        const ToolBox&  GetToolBox() const  { return *m_aToolbox.get(); }
 
         /** Return the border that is painted around the inner window as
             decoration.
@@ -126,8 +128,8 @@ namespace sfx2
 
     private:
         OUString            m_sTitle;
-        ToolBox             m_aToolbox;
-        Window              m_aContentWindow;
+        VclPtr<ToolBox>     m_aToolbox;
+        VclPtr<Window>      m_aContentWindow;
 
         Link                m_aEndDockingHdl;
 

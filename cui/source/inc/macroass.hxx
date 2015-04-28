@@ -57,6 +57,7 @@ protected:
 public:
 
     virtual                     ~_SfxMacroTabPage();
+    virtual void                dispose() SAL_OVERRIDE;
 
     void                        AddEvent( const OUString & rEventName, sal_uInt16 nEventId );
 
@@ -96,7 +97,7 @@ public:
     );
 
     // --------- inherit from the base -------------
-    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 };
 
 class SfxMacroAssignDlg : public SfxSingleTabDialog

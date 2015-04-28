@@ -242,7 +242,7 @@ namespace svt { namespace table
         ,m_nLeftColumn          ( 0                             )
         ,m_nTopRow              ( 0                             )
         ,m_nCursorHidden        ( 1                             )
-        ,m_pDataWindow          ( new TableDataWindow( *this )  )
+        ,m_pDataWindow          ( VclPtr<TableDataWindow>::Create( *this )  )
         ,m_pVScroll             ( NULL                          )
         ,m_pHScroll             ( NULL                          )
         ,m_pScrollCorner        ( NULL                          )
@@ -261,10 +261,10 @@ namespace svt { namespace table
 
     TableControl_Impl::~TableControl_Impl()
     {
-
-        DELETEZ( m_pVScroll );
-        DELETEZ( m_pHScroll );
-        DELETEZ( m_pScrollCorner );
+        m_pVScroll.disposeAndClear();
+        m_pHScroll.disposeAndClear();
+        m_pScrollCorner.disposeAndClear();
+        m_pDataWindow.disposeAndClear();
         DELETEZ( m_pTableFunctionSet );
         DELETEZ( m_pSelEngine );
     }
@@ -632,24 +632,25 @@ namespace svt { namespace table
         }
 
 
-        bool lcl_updateScrollbar( vcl::Window& _rParent, ScrollBar*& _rpBar,
+        bool lcl_updateScrollbar( vcl::Window& _rParent, VclPtr<ScrollBar>& _rpBar,
             bool const i_needBar, long _nVisibleUnits,
             long _nPosition, long _nLineSize, long _nRange,
             bool _bHorizontal, const Link& _rScrollHandler )
         {
             // do we currently have the scrollbar?
-            bool bHaveBar = _rpBar != NULL;
+            bool bHaveBar = _rpBar != nullptr;
 
             // do we need to correct the scrollbar visibility?
             if ( bHaveBar && !i_needBar )
             {
                 if ( _rpBar->IsTracking() )
                     _rpBar->EndTracking();
-                DELETEZ( _rpBar );
+                _rpBar.disposeAndClear();
             }
             else if ( !bHaveBar && i_needBar )
             {
-                _rpBar = new ScrollBar(
+                _rpBar = VclPtr<ScrollBar>::Create(
+
                     &_rParent,
                     WB_DRAG | ( _bHorizontal ? WB_HSCROLL : WB_VSCROLL )
                 );
@@ -1162,15 +1163,15 @@ namespace svt { namespace table
         }
 
         // the corner window connecting the two scrollbars in the lower right corner
-        bool bHaveScrollCorner = NULL != m_pScrollCorner;
-        bool bNeedScrollCorner = ( NULL != m_pHScroll ) && ( NULL != m_pVScroll );
+        bool bHaveScrollCorner = nullptr != m_pScrollCorner;
+        bool bNeedScrollCorner = ( nullptr != m_pHScroll ) && ( nullptr != m_pVScroll );
         if ( bHaveScrollCorner && !bNeedScrollCorner )
         {
-            DELETEZ( m_pScrollCorner );
+            m_pScrollCorner.disposeAndClear();
         }
         else if ( !bHaveScrollCorner && bNeedScrollCorner )
         {
-            m_pScrollCorner = new ScrollBarBox( &m_rAntiImpl );
+            m_pScrollCorner = VclPtr<ScrollBarBox>::Create( &m_rAntiImpl );
             m_pScrollCorner->SetSizePixel( Size( nScrollbarMetrics, nScrollbarMetrics ) );
             m_pScrollCorner->SetPosPixel( Point( i_dataCellPlayground.Right() + 1, i_dataCellPlayground.Bottom() + 1 ) );
             m_pScrollCorner->Show();
@@ -2111,7 +2112,7 @@ namespace svt { namespace table
             }
 
             // update the position at the vertical scrollbar
-            if ( m_pVScroll != NULL )
+            if ( m_pVScroll != nullptr )
                 m_pVScroll->SetThumbPos( m_nTopRow );
         }
 
@@ -2189,7 +2190,7 @@ namespace svt { namespace table
             }
 
             // update the position at the horizontal scrollbar
-            if ( m_pHScroll != NULL )
+            if ( m_pHScroll != nullptr )
                 m_pHScroll->SetThumbPos( m_nLeftColumn );
         }
 

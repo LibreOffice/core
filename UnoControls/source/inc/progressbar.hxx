@@ -23,6 +23,8 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <vcl/vclptr.hxx>
+
 #include "basecontrol.hxx"
 
 //  namespaces

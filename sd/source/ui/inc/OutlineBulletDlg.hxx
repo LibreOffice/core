@@ -38,6 +38,7 @@ public:
         const SfxItemSet* pAttr,
         ::sd::View* pView );
     virtual ~OutlineBulletDlg ();
+    virtual void dispose() SAL_OVERRIDE;
 
     const SfxItemSet* GetOutputItemSet() const;
 

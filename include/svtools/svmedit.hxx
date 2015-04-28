@@ -27,7 +27,6 @@
 #include <svtools/colorcfg.hxx>
 
 
-
 class SVT_DLLPUBLIC MultiLineEdit : public VclMultiLineEdit
 {
 public:

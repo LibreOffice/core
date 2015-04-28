@@ -54,25 +54,15 @@ VCLXAccessibleListBox::~VCLXAccessibleListBox()
 {
 }
 
-
-
-
 bool VCLXAccessibleListBox::IsValid() const
 {
-    return static_cast<ListBox*>(GetWindow()) != NULL;
-
+    return GetWindow().get() != NULL;
 }
-
-
-
 
 void VCLXAccessibleListBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent)
 {
     VCLXAccessibleBox::ProcessWindowEvent( rVclWindowEvent );
 }
-
-
-
 
 //=====  XServiceInfo  ========================================================
 

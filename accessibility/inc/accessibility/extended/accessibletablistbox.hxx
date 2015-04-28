@@ -43,7 +43,7 @@ class AccessibleTabListBox
                 ,public ::svt::IAccessibleTabListBox
 {
 private:
-    SvHeaderTabListBox*         m_pTabListBox;
+    VclPtr<SvHeaderTabListBox>        m_pTabListBox;
 
 public:
     /** ctor()

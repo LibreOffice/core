@@ -75,4 +75,18 @@ UnknownAuthDialog::UnknownAuthDialog(vcl::Window* pParent,
     m_pCommandButtonOK->SetClickHdl(LINK(this, UnknownAuthDialog, OKHdl_Impl));
 }
 
+UnknownAuthDialog::~UnknownAuthDialog()
+{
+    disposeOnce();
+}
+
+void UnknownAuthDialog::dispose()
+{
+    m_pCommandButtonOK.clear();
+    m_pView_Certificate.clear();
+    m_pOptionButtonAccept.clear();
+    m_pOptionButtonDontAccept.clear();
+    MessageDialog::dispose();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

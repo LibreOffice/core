@@ -170,7 +170,7 @@ protected:
     SdrOutliner*    pDrawOutliner;  // an Outliner for outputting text
     SdrOutliner*    pHitTestOutliner;// an Outliner for the HitTest
     sal_uIntPtr           nDefTextHgt;    // Default text heigth in logical units
-    OutputDevice*   pRefOutDev;     // ReferenceDevice for the EditEngine
+    VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
     /// Set if we are doing tiled rendering.
     bool mbTiledRendering;
     LibreOfficeKitCallback mpLibreOfficeKitCallback;
@@ -335,7 +335,7 @@ public:
 
     // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
-    OutputDevice*        GetRefDevice() const                   { return pRefOutDev; }
+    OutputDevice*        GetRefDevice() const                   { return pRefOutDev.get(); }
     /// Set if we are doing tiled rendering.
     void setTiledRendering(bool bTiledRendering);
     /// Are we doing tiled rendering?

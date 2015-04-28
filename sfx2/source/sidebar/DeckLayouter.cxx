@@ -43,7 +43,7 @@ namespace {
     class LayoutItem
     {
     public:
-        SharedPanel mpPanel;
+        VclPtr<Panel> mpPanel;
         css::ui::LayoutSize maLayoutSize;
         sal_Int32 mnDistributedHeight;
         sal_Int32 mnWeight;
@@ -348,7 +348,7 @@ void GetRequestedSizes (
     IterateLayoutItems(iItem,rLayoutItems)
     {
         ui::LayoutSize aLayoutSize (ui::LayoutSize(0,0,0));
-        if (iItem->mpPanel != 0)
+        if (iItem->mpPanel != nullptr)
         {
             if (rLayoutItems.size() == 1
                 && iItem->mpPanel->IsTitleBarOptional())

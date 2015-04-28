@@ -501,7 +501,7 @@ public:
     virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual FmGridControl*  imp_CreateControl(vcl::Window* pParent, WinBits nStyle);
+    virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle);
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::util::URL>&       getSupportedURLs();
     static ::com::sun::star::uno::Sequence<sal_uInt16>& getSupportedGridSlots();

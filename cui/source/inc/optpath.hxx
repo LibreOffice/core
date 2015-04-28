@@ -42,11 +42,11 @@ class SvxPathTabPage;
 class SvxPathTabPage : public SfxTabPage
 {
 private:
-    SvSimpleTableContainer* m_pPathCtrl;
-    PushButton*         m_pStandardBtn;
-    PushButton*         m_pPathBtn;
+    VclPtr<SvSimpleTableContainer> m_pPathCtrl;
+    VclPtr<PushButton>         m_pStandardBtn;
+    VclPtr<PushButton>         m_pPathBtn;
 
-    ::svx::OptHeaderTabListBox* pPathBox;
+    VclPtr<::svx::OptHeaderTabListBox> pPathBox;
     OptPath_Impl*               pImpl;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
@@ -71,8 +71,9 @@ private:
 public:
     SvxPathTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxPathTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

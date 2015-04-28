@@ -51,10 +51,11 @@ public:
                                         const JobSetup &rTheOrigJobSetup );
                             SfxPrinter( const SfxPrinter &rPrinter );
                             virtual ~SfxPrinter();
+    virtual void            dispose() SAL_OVERRIDE;
 
-    SfxPrinter*             Clone() const;
+    VclPtr<SfxPrinter>      Clone() const;
 
-    static SfxPrinter*      Create( SvStream &rStream, SfxItemSet *pOptions );
+    static VclPtr<SfxPrinter> Create( SvStream &rStream, SfxItemSet *pOptions );
     SvStream&               Store( SvStream &rStream ) const;
 
     const JobSetup&         GetOrigJobSetup() const { return aOrigJobSetup; }

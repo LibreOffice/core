@@ -58,6 +58,24 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
     aMoveLink.Call(m_pRecordED);
 }
 
+SwMailMergePrepareMergePage::~SwMailMergePrepareMergePage()
+{
+    disposeOnce();
+}
+
+void SwMailMergePrepareMergePage::dispose()
+{
+    m_pFirstPB.clear();
+    m_pPrevPB.clear();
+    m_pRecordED.clear();
+    m_pNextPB.clear();
+    m_pLastPB.clear();
+    m_pExcludeCB.clear();
+    m_pEditPB.clear();
+    m_pWizard.clear();
+    svt::OWizardPage::dispose();
+}
+
 IMPL_LINK_NOARG(SwMailMergePrepareMergePage, EditDocumentHdl_Impl)
 {
     m_pWizard->SetRestartPage(MM_PREPAREMERGEPAGE);

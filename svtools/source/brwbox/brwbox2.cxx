@@ -30,7 +30,7 @@
 
 using namespace ::com::sun::star::datatransfer;
 
-#define getDataWindow() (static_cast<BrowserDataWin*>(pDataWin))
+#define getDataWindow() (static_cast<BrowserDataWin*>(pDataWin.get()))
 
 
 
@@ -43,7 +43,7 @@ void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel *
 
 sal_Int8 BrowseBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
-    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin);
+    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin.get());
     AcceptDropEvent aTransformed( _rEvt );
     aTransformed.maPosPixel = pDataWindow->ScreenToOutputPixel( OutputToScreenPixel( _rEvt.maPosPixel ) );
     return pDataWindow->AcceptDrop( aTransformed );
@@ -53,7 +53,7 @@ sal_Int8 BrowseBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
 sal_Int8 BrowseBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
-    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin);
+    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin.get());
     ExecuteDropEvent aTransformed( _rEvt );
     aTransformed.maPosPixel = pDataWindow->ScreenToOutputPixel( OutputToScreenPixel( _rEvt.maPosPixel ) );
     return pDataWindow->ExecuteDrop( aTransformed );
@@ -79,8 +79,8 @@ sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& )
 
 void* BrowseBox::implGetDataFlavors() const
 {
-    if (static_cast<BrowserDataWin*>(pDataWin)->bCallingDropCallback)
-        return &static_cast<BrowserDataWin*>(pDataWin)->GetDataFlavorExVector();
+    if (static_cast<BrowserDataWin*>(pDataWin.get())->bCallingDropCallback)
+        return &static_cast<BrowserDataWin*>(pDataWin.get())->GetDataFlavorExVector();
     return &GetDataFlavorExVector();
 }
 
@@ -88,8 +88,8 @@ void* BrowseBox::implGetDataFlavors() const
 
 bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat )
 {
-    if ( static_cast< BrowserDataWin* >( pDataWin )->bCallingDropCallback )
-        return static_cast< BrowserDataWin* >( pDataWin )->IsDropFormatSupported( _nFormat );
+    if ( static_cast< BrowserDataWin* >( pDataWin.get() )->bCallingDropCallback )
+        return static_cast< BrowserDataWin* >( pDataWin.get() )->IsDropFormatSupported( _nFormat );
 
     return DropTargetHelper::IsDropFormatSupported( _nFormat );
 }
@@ -105,8 +105,8 @@ bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat ) const
 
 bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor )
 {
-    if ( static_cast< BrowserDataWin* >( pDataWin )->bCallingDropCallback )
-        return static_cast< BrowserDataWin* >( pDataWin )->IsDropFormatSupported( _rFlavor );
+    if ( static_cast< BrowserDataWin* >( pDataWin.get() )->bCallingDropCallback )
+        return static_cast< BrowserDataWin* >( pDataWin.get() )->IsDropFormatSupported( _rFlavor );
 
     return DropTargetHelper::IsDropFormatSupported( _rFlavor );
 }
@@ -139,7 +139,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
         HeaderBar* pHeaderBar = getDataWindow()->pHeaderBar;
         if ( pHeaderBar )
             pHeaderBar->EnableRTL( IsRTLEnabled() );
-        aHScroll.EnableRTL( IsRTLEnabled() );
+        aHScroll->EnableRTL( IsRTLEnabled() );
         if( pVScroll )
             pVScroll->EnableRTL( IsRTLEnabled() );
         Resize();
@@ -189,7 +189,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
         // do we have a handle column?
         bool bHandleCol = !pCols->empty() && (0 == (*pCols)[ 0 ]->GetId());
         // do we have a header bar?
-        bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar);
+        bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar.get());
 
         if  (   nTitleLines
             &&  (   !bHeaderBar
@@ -407,9 +407,9 @@ void BrowseBox::DrawCursor()
     {
         // on these platforms, the StarView focus works correctly
         if ( bReallyHide )
-            static_cast<Control*>(pDataWin)->HideFocus();
+            static_cast<Control*>(pDataWin.get())->HideFocus();
         else
-            static_cast<Control*>(pDataWin)->ShowFocus( aCursor );
+            static_cast<Control*>(pDataWin.get())->ShowFocus( aCursor );
     }
     else
     {
@@ -561,13 +561,13 @@ void BrowseBox::Resize()
     // did we need a horizontal scroll bar or is there a Control Area?
     if ( !getDataWindow()->bNoHScroll &&
          ( ( pCols->size() - FrozenColCount() ) > 1 ) )
-        aHScroll.Show();
+        aHScroll->Show();
     else
-        aHScroll.Hide();
+        aHScroll->Hide();
 
     // calculate the size of the data window
     long nDataHeight = GetOutputSizePixel().Height() - GetTitleHeight();
-    if ( aHScroll.IsVisible() || ( nControlAreaWidth != USHRT_MAX ) )
+    if ( aHScroll->IsVisible() || ( nControlAreaWidth != USHRT_MAX ) )
         nDataHeight -= nSBSize;
 
     long nDataWidth = GetOutputSizePixel().Width();
@@ -623,13 +623,13 @@ void BrowseBox::Paint( const Rectangle& rRect )
 
     BrowserColumn *pFirstCol = (*pCols)[ 0 ];
     bool bHandleCol = pFirstCol && pFirstCol->GetId() == 0;
-    bool bHeaderBar = getDataWindow()->pHeaderBar != NULL;
+    bool bHeaderBar = getDataWindow()->pHeaderBar.get() != NULL;
 
     // draw delimitational lines
     if ( !getDataWindow()->bNoHScroll )
-        DrawLine( Point( 0, aHScroll.GetPosPixel().Y() ),
+        DrawLine( Point( 0, aHScroll->GetPosPixel().Y() ),
                   Point( GetOutputSizePixel().Width(),
-                         aHScroll.GetPosPixel().Y() ) );
+                         aHScroll->GetPosPixel().Y() ) );
 
     if ( nTitleLines )
     {
@@ -1119,7 +1119,7 @@ void BrowseBox::UpdateScrollbars()
         return;
 
     // protect against recursion
-    BrowserDataWin *pBDW = static_cast<BrowserDataWin*>( pDataWin );
+    BrowserDataWin *pBDW = static_cast<BrowserDataWin*>( pDataWin.get() );
     if ( pBDW->bInUpdateScrollbars )
     {
         pBDW->bHadRecursion = true;
@@ -1169,15 +1169,15 @@ void BrowseBox::UpdateScrollbars()
                         :   !getDataWindow()->bNoHScroll;
     if ( !bNeedsHScroll )
     {
-        if ( aHScroll.IsVisible() )
+        if ( aHScroll->IsVisible() )
         {
-            aHScroll.Hide();
+            aHScroll->Hide();
         }
         aDataWinSize.Height() = GetOutputSizePixel().Height() - GetTitleHeight();
         if ( nControlAreaWidth != USHRT_MAX )
             aDataWinSize.Height() -= nCornerSize;
     }
-    else if ( !aHScroll.IsVisible() )
+    else if ( !aHScroll->IsVisible() )
     {
         Size aNewSize( aDataWinSize );
         aNewSize.Height() = GetOutputSizePixel().Height() - GetTitleHeight() - nCornerSize;
@@ -1189,7 +1189,7 @@ void BrowseBox::UpdateScrollbars()
         ? 0
         : nControlAreaWidth;
 
-    aHScroll.SetPosSizePixel(
+    aHScroll->SetPosSizePixel(
         Point( nHScrX, GetOutputSizePixel().Height() - nCornerSize ),
         Size( aDataWinSize.Width() - nHScrX, nCornerSize ) );
 
@@ -1202,10 +1202,10 @@ void BrowseBox::UpdateScrollbars()
         : (short)( nLastCol - nFirstCol );
 
     short nRange = std::max( nScrollCols, (short)0 );
-    aHScroll.SetVisibleSize( nVisibleHSize );
-    aHScroll.SetRange( Range( 0, nRange ));
-    if ( bNeedsHScroll && !aHScroll.IsVisible() )
-        aHScroll.Show();
+    aHScroll->SetVisibleSize( nVisibleHSize );
+    aHScroll->SetRange( Range( 0, nRange ));
+    if ( bNeedsHScroll && !aHScroll->IsVisible() )
+        aHScroll->Show();
 
     // adjust position and height of vertical scrollbar
     pVScroll->SetPageSize( nMaxRows );
@@ -1237,12 +1237,12 @@ void BrowseBox::UpdateScrollbars()
     // needs corner-window?
     // (do that AFTER positioning BOTH scrollbars)
     sal_uLong nActualCorderWidth = 0;
-    if (aHScroll.IsVisible() && pVScroll && pVScroll->IsVisible() )
+    if (aHScroll->IsVisible() && pVScroll && pVScroll->IsVisible() )
     {
         // if we have both scrollbars, the corner window fills the point of intersection of these two
         nActualCorderWidth = nCornerSize;
     }
-    else if ( !aHScroll.IsVisible() && ( nControlAreaWidth != USHRT_MAX ) )
+    else if ( !aHScroll->IsVisible() && ( nControlAreaWidth != USHRT_MAX ) )
     {
         // if we have no horizontal scrollbar, but a control area, we need the corner window to
         // fill the space between the control are and the right border
@@ -1251,14 +1251,14 @@ void BrowseBox::UpdateScrollbars()
     if ( nActualCorderWidth )
     {
         if ( !getDataWindow()->pCornerWin )
-            getDataWindow()->pCornerWin = new ScrollBarBox( this, 0 );
+            getDataWindow()->pCornerWin = VclPtr<ScrollBarBox>::Create( this, 0 );
         getDataWindow()->pCornerWin->SetPosSizePixel(
-            Point( GetOutputSizePixel().Width() - nActualCorderWidth, aHScroll.GetPosPixel().Y() ),
+            Point( GetOutputSizePixel().Width() - nActualCorderWidth, aHScroll->GetPosPixel().Y() ),
             Size( nActualCorderWidth, nCornerSize ) );
         getDataWindow()->pCornerWin->Show();
     }
     else
-        DELETEZ( getDataWindow()->pCornerWin );
+        getDataWindow()->pCornerWin.disposeAndClear();
 
     // scroll headerbar, if necessary
     if ( getDataWindow()->pHeaderBar )
@@ -1371,8 +1371,8 @@ IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
         return 0;
     }
 
-    if ( pBar == &aHScroll )
-        ScrollColumns( aHScroll.GetDelta() );
+    if ( pBar == aHScroll.get() )
+        ScrollColumns( aHScroll->GetDelta() );
     if ( pBar == pVScroll )
         ScrollRows( pVScroll->GetDelta() );
 
@@ -1539,7 +1539,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
         bResizing = false;
     }
     else
-        MouseButtonUp( BrowserMouseEvent( static_cast<BrowserDataWin*>(pDataWin),
+        MouseButtonUp( BrowserMouseEvent( static_cast<BrowserDataWin*>(pDataWin.get()),
                 MouseEvent( Point( rEvt.GetPosPixel().X(),
                         rEvt.GetPosPixel().Y() - pDataWin->GetPosPixel().Y() ),
                     rEvt.GetClicks(), rEvt.GetMode(), rEvt.GetButtons(),
@@ -2050,7 +2050,7 @@ Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
     long nY = aRowBar.Top() - aRect.Top();
     Size aSize(aRect.GetSize());
 
-    return Rectangle(aRowBar.TopRight(), Size(aSize.A() - nX, aSize.B() - nY - aHScroll.GetSizePixel().Height()) );
+    return Rectangle(aRowBar.TopRight(), Size(aSize.A() - nX, aSize.B() - nY - aHScroll->GetSizePixel().Height()) );
 }
 
 Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )

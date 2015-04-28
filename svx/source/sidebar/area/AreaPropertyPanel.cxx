@@ -113,12 +113,35 @@ AreaPropertyPanel::AreaPropertyPanel(
 }
 
 
-
 AreaPropertyPanel::~AreaPropertyPanel()
 {
+    disposeOnce();
 }
 
+void AreaPropertyPanel::dispose()
+{
+    mpColorTextFT.clear();
+    mpLbFillType.clear();
+    mpLbFillAttr.clear();
+    mpToolBoxColor.clear();
+    mpTrspTextFT.clear();
+    mpLBTransType.clear();
+    mpMTRTransparent.clear();
+    mpBTNGradient.clear();
 
+    maStyleControl.dispose();
+    maColorControl.dispose();
+    maGradientControl.dispose();
+    maHatchControl.dispose();
+    maBitmapControl.dispose();
+    maGradientListControl.dispose();
+    maHatchListControl.dispose();
+    maBitmapListControl.dispose();
+    maFillTransparenceController.dispose();
+    maFillFloatTransparenceController.dispose();
+
+    PanelLayout::dispose();
+}
 
 void AreaPropertyPanel::Initialize()
 {
@@ -482,9 +505,9 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 }
 
 
-PopupControl* AreaPropertyPanel::CreateTransparencyGradientControl (PopupContainer* pParent)
+VclPtr<PopupControl> AreaPropertyPanel::CreateTransparencyGradientControl (PopupContainer* pParent)
 {
-    return new AreaTransparencyGradientControl(pParent, *this);
+    return VclPtrInstance<AreaTransparencyGradientControl>(pParent, *this);
 }
 
 
@@ -504,7 +527,7 @@ void AreaPropertyPanel::SetupIcons()
 
 
 
-AreaPropertyPanel* AreaPropertyPanel::Create (
+VclPtr<vcl::Window> AreaPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -516,10 +539,10 @@ AreaPropertyPanel* AreaPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", NULL, 2);
 
-    return new AreaPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return VclPtr<AreaPropertyPanel>::Create(
+                pParent,
+                rxFrame,
+                pBindings);
 }
 
 

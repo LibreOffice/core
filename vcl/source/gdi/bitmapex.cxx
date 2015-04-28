@@ -706,16 +706,16 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
     Size aStdSize( aStandardSize, aStandardSize );
     Rectangle aRect(aEmptyPoint, aStdSize );
 
-    VirtualDevice aVirDevice( *Application::GetDefaultDevice(), 0, 1 );
-    aVirDevice.SetOutputSizePixel( aStdSize );
-    aVirDevice.SetFillColor( COL_TRANSPARENT );
-    aVirDevice.SetLineColor( COL_TRANSPARENT );
+    ScopedVclPtrInstance< VirtualDevice > aVirDevice( *Application::GetDefaultDevice(), 0, 1 );
+    aVirDevice->SetOutputSizePixel( aStdSize );
+    aVirDevice->SetFillColor( COL_TRANSPARENT );
+    aVirDevice->SetLineColor( COL_TRANSPARENT );
 
     // Draw a rect into virDevice
-    aVirDevice.DrawRect( aRect );
+    aVirDevice->DrawRect( aRect );
     Point aPointPixel( (long)imgposX, (long)imgposY );
-    aVirDevice.DrawBitmapEx( aPointPixel, aRet );
-    aRet = aVirDevice.GetBitmapEx( aEmptyPoint, aStdSize );
+    aVirDevice->DrawBitmapEx( aPointPixel, aRet );
+    aRet = aVirDevice->GetBitmapEx( aEmptyPoint, aStdSize );
 
     return aRet;
 }

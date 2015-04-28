@@ -38,6 +38,7 @@ class LineWidthControl
 public:
     LineWidthControl (vcl::Window* pParent, LinePropertyPanel& rPanel);
     virtual ~LineWidthControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void GetFocus() SAL_OVERRIDE;
     virtual void Paint(const Rectangle& rect) SAL_OVERRIDE;
@@ -47,12 +48,12 @@ public:
     long GetTmpCustomWidth() { return mnTmpCustomWidth;}
 
 private:
-    LinePropertyPanel& mrLinePropertyPanel;
+    LinePropertyPanel&                  mrLinePropertyPanel;
     SfxBindings*                        mpBindings;
-    LineWidthValueSet maVSWidth;
-    FixedText                           maFTCus;
-    FixedText                           maFTWidth;
-    MetricField                         maMFWidth;
+    VclPtr<LineWidthValueSet>           maVSWidth;
+    VclPtr<FixedText>                   maFTCus;
+    VclPtr<FixedText>                   maFTWidth;
+    VclPtr<MetricField>                 maMFWidth;
     SfxMapUnit                          meMapUnit;
     OUString*                           rStr;
     OUString                            mstrPT;

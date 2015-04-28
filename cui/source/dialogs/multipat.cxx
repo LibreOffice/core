@@ -186,7 +186,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
     Size aSize(LogicToPixel(Size(195, 77), MAP_APPFONT));
     pRadioLBContainer->set_width_request(aSize.Width());
     pRadioLBContainer->set_height_request(aSize.Height());
-    m_pRadioLB = new svx::SvxRadioButtonListBox(*pRadioLBContainer, 0);
+    m_pRadioLB = VclPtr<svx::SvxRadioButtonListBox>::Create(*pRadioLBContainer, 0);
 
     static long aStaticTabs[]= { 2, 0, 12 };
     m_pRadioLB->SvSimpleTable::SetTabs( aStaticTabs );
@@ -224,21 +224,44 @@ SvxPathSelectDialog::SvxPathSelectDialog(vcl::Window* pParent)
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
 {
-    sal_uInt16 nPos = (sal_uInt16)m_pRadioLB->GetEntryCount();
-    while ( nPos-- )
+    disposeOnce();
+}
+
+void SvxMultiPathDialog::dispose()
+{
+    if (m_pRadioLB)
     {
-        SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nPos );
-        delete static_cast<OUString*>(pEntry->GetUserData());
+        sal_uInt16 nPos = (sal_uInt16)m_pRadioLB->GetEntryCount();
+        while ( nPos-- )
+        {
+            SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nPos );
+            delete static_cast<OUString*>(pEntry->GetUserData());
+        }
     }
 
-    delete m_pRadioLB;
+    m_pRadioLB.disposeAndClear();
+    m_pAddBtn.clear();
+    m_pDelBtn.clear();
+    ModalDialog::dispose();
 }
 
 SvxPathSelectDialog::~SvxPathSelectDialog()
 {
-    sal_uInt16 nPos = m_pPathLB->GetEntryCount();
-    while ( nPos-- )
-        delete static_cast<OUString*>(m_pPathLB->GetEntryData(nPos));
+    disposeOnce();
+}
+
+void SvxPathSelectDialog::dispose()
+{
+    if (m_pPathLB)
+    {
+        sal_uInt16 nPos = m_pPathLB->GetEntryCount();
+        while ( nPos-- )
+            delete static_cast<OUString*>(m_pPathLB->GetEntryData(nPos));
+    }
+    m_pPathLB.clear();
+    m_pAddBtn.clear();
+    m_pDelBtn.clear();
+    ModalDialog::dispose();
 }
 
 OUString SvxMultiPathDialog::GetPath() const

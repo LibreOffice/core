@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
 struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
     DropTargetHelper&       mrTargetHelper;
-    ::sd::Window* mpTargetWindow;
+    VclPtr<::sd::Window>    mpTargetWindow;
     sal_uInt16                  mnPage;
     sal_uInt16                  mnLayer;
 

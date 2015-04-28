@@ -36,7 +36,7 @@ namespace svt
     public:
         typedef sal_Int16                                   PathId;
         typedef ::std::vector< WizardTypes::WizardState >   WizardPath;
-        typedef TabPage* (* RoadmapPageFactory)( RoadmapWizard& );
+        typedef VclPtr<TabPage> (* RoadmapPageFactory)( RoadmapWizard& );
     };
 
 
@@ -77,6 +77,7 @@ namespace svt
             sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
         );
         virtual ~RoadmapWizard( );
+        virtual void dispose() SAL_OVERRIDE;
 
         void            SetRoadmapHelpId( const OString& _rId );
 
@@ -89,7 +90,7 @@ namespace svt
         virtual bool    canAdvance() const SAL_OVERRIDE;
         virtual void    updateTravelUI() SAL_OVERRIDE;
 
-protected:
+    protected:
         /** declares a valid path in the wizard
 
             The very first path which is declared is automatically activated.
@@ -207,7 +208,7 @@ protected:
             This member is inherited from OWizardMachine, and default-implemented in this class
             for all states which have been described using describeState.
         */
-        virtual TabPage*    createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage> createPage( WizardState _nState ) SAL_OVERRIDE;
 
         /** asks for a new label of the wizard page
 

@@ -185,7 +185,7 @@ DrawDocShell::~DrawDocShell()
     delete mpUndoManager;
 
     if (mbOwnPrinter)
-        delete mpPrinter;
+        mpPrinter.disposeAndClear();
 
     if( mbOwnDocument )
         delete mpDoc;

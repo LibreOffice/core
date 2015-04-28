@@ -96,13 +96,28 @@ SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttr
     m_pTsbFullWidth->SetClickHdl(LINK( this, SvxTextAttrPage, ClickFullWidthHdl_Impl ) );
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 SvxTextAttrPage::~SvxTextAttrPage()
 {
+    disposeOnce();
+}
+
+void SvxTextAttrPage::dispose()
+{
+    m_pTsbAutoGrowWidth.clear();
+    m_pTsbAutoGrowHeight.clear();
+    m_pTsbFitToSize.clear();
+    m_pTsbContour.clear();
+    m_pTsbWordWrapText.clear();
+    m_pTsbAutoGrowSize.clear();
+    m_pFlDistance.clear();
+    m_pMtrFldLeft.clear();
+    m_pMtrFldRight.clear();
+    m_pMtrFldTop.clear();
+    m_pMtrFldBottom.clear();
+    m_pFlPosition.clear();
+    m_pCtlPosition.clear();
+    m_pTsbFullWidth.clear();
+    SvxTabPage::dispose();
 }
 
 /*************************************************************************
@@ -514,16 +529,10 @@ void SvxTextAttrPage::Construct()
     m_pTsbWordWrapText->Enable( bWordWrapTextEnabled );
 }
 
-/*************************************************************************
-|*
-|* creates the page
-|*
-\************************************************************************/
-
-SfxTabPage* SvxTextAttrPage::Create( vcl::Window* pWindow,
-                const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxTextAttrPage::Create( vcl::Window* pWindow,
+                                            const SfxItemSet* rAttrs )
 {
-    return new SvxTextAttrPage( pWindow, *rAttrs );
+    return VclPtr<SvxTextAttrPage>::Create( pWindow, *rAttrs );
 }
 
 /** Check whether we have to uncheck the "Full width" check box.

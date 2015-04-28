@@ -33,10 +33,6 @@ SvxRadioButtonListBox::SvxRadioButtonListBox(SvSimpleTableContainer& rParent, Wi
     EnableCheckButton( new SvLBoxButtonData( this, true ) );
 }
 
-SvxRadioButtonListBox::~SvxRadioButtonListBox()
-{
-}
-
 void SvxRadioButtonListBox::SetTabs()
 {
     SvSimpleTable::SetTabs();

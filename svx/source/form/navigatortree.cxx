@@ -162,6 +162,11 @@ namespace svxform
 
     NavigatorTree::~NavigatorTree()
     {
+        disposeOnce();
+    }
+
+    void NavigatorTree::dispose()
+    {
         if( nEditEvent )
             Application::RemoveUserEvent( nEditEvent );
 
@@ -172,6 +177,7 @@ namespace svxform
         EndListening( *m_pNavModel );
         Clear();
         delete m_pNavModel;
+        SvTreeListBox::dispose();
     }
 
 

@@ -87,7 +87,7 @@ using namespace com::sun::star::accessibility;
 
 class RowSetEventListener : public ::cppu::WeakImplHelper1<XRowsChangeListener>
 {
-    DbGridControl* m_pControl;
+    VclPtr<DbGridControl> m_pControl;
 public:
     RowSetEventListener(DbGridControl* i_pControl) : m_pControl(i_pControl)
     {
@@ -249,10 +249,10 @@ bool CompareBookmark(const Any& aLeft, const Any& aRight)
 
 class FmXGridSourcePropListener : public ::comphelper::OPropertyChangeListener
 {
-    DbGridControl* m_pParent;
+    VclPtr<DbGridControl> m_pParent;
 
     // a DbGridControl has no mutex, so we use our own as the base class expects one
-    osl::Mutex      m_aMutex;
+    osl::Mutex          m_aMutex;
     sal_Int16           m_nSuspended;
 
 public:
@@ -332,72 +332,92 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
 
 DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent, WinBits nStyle)
           :Control(pParent, nStyle)
-          ,m_aRecordText(this, WB_VCENTER)
-          ,m_aAbsolute(this, WB_CENTER | WB_VCENTER)
-          ,m_aRecordOf(this, WB_VCENTER)
-          ,m_aRecordCount(this, WB_VCENTER)
-          ,m_aFirstBtn(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS)
-          ,m_aPrevBtn(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS)
-          ,m_aNextBtn(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS)
-          ,m_aLastBtn(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS)
-          ,m_aNewBtn(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS)
+          ,m_aRecordText(VclPtr<FixedText>::Create(this, WB_VCENTER))
+          ,m_aAbsolute(VclPtr<DbGridControl::NavigationBar::AbsolutePos>::Create(this, WB_CENTER | WB_VCENTER))
+          ,m_aRecordOf(VclPtr<FixedText>::Create(this, WB_VCENTER))
+          ,m_aRecordCount(VclPtr<FixedText>::Create(this, WB_VCENTER))
+          ,m_aFirstBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
+          ,m_aPrevBtn(VclPtr<ImageButton>::Create(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS))
+          ,m_aNextBtn(VclPtr<ImageButton>::Create(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS))
+          ,m_aLastBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
+          ,m_aNewBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
           ,m_nDefaultWidth(0)
           ,m_nCurrentPos(-1)
           ,m_bPositioning(false)
 {
-    m_aFirstBtn.SetSymbol(SymbolType::FIRST);
-    m_aPrevBtn.SetSymbol(SymbolType::PREV);
-    m_aNextBtn.SetSymbol(SymbolType::NEXT);
-    m_aLastBtn.SetSymbol(SymbolType::LAST);
-    m_aNewBtn.SetModeImage(static_cast<DbGridControl*>(pParent)->GetImage(DbGridControl_Base::NEW));
+    m_aFirstBtn->SetSymbol(SymbolType::FIRST);
+    m_aPrevBtn->SetSymbol(SymbolType::PREV);
+    m_aNextBtn->SetSymbol(SymbolType::NEXT);
+    m_aLastBtn->SetSymbol(SymbolType::LAST);
+    m_aNewBtn->SetModeImage(static_cast<DbGridControl*>(pParent)->GetImage(DbGridControl_Base::NEW));
 
-    m_aFirstBtn.SetHelpId(HID_GRID_TRAVEL_FIRST);
-    m_aPrevBtn.SetHelpId(HID_GRID_TRAVEL_PREV);
-    m_aNextBtn.SetHelpId(HID_GRID_TRAVEL_NEXT);
-    m_aLastBtn.SetHelpId(HID_GRID_TRAVEL_LAST);
-    m_aNewBtn.SetHelpId(HID_GRID_TRAVEL_NEW);
-    m_aAbsolute.SetHelpId(HID_GRID_TRAVEL_ABSOLUTE);
-    m_aRecordCount.SetHelpId(HID_GRID_NUMBEROFRECORDS);
+    m_aFirstBtn->SetHelpId(HID_GRID_TRAVEL_FIRST);
+    m_aPrevBtn->SetHelpId(HID_GRID_TRAVEL_PREV);
+    m_aNextBtn->SetHelpId(HID_GRID_TRAVEL_NEXT);
+    m_aLastBtn->SetHelpId(HID_GRID_TRAVEL_LAST);
+    m_aNewBtn->SetHelpId(HID_GRID_TRAVEL_NEW);
+    m_aAbsolute->SetHelpId(HID_GRID_TRAVEL_ABSOLUTE);
+    m_aRecordCount->SetHelpId(HID_GRID_NUMBEROFRECORDS);
 
     // Handler fuer Buttons einrichten
-    m_aFirstBtn.SetClickHdl(LINK(this,NavigationBar,OnClick));
-    m_aPrevBtn.SetClickHdl(LINK(this,NavigationBar,OnClick));
-    m_aNextBtn.SetClickHdl(LINK(this,NavigationBar,OnClick));
-    m_aLastBtn.SetClickHdl(LINK(this,NavigationBar,OnClick));
-    m_aNewBtn.SetClickHdl(LINK(this,NavigationBar,OnClick));
+    m_aFirstBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
+    m_aPrevBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
+    m_aNextBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
+    m_aLastBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
+    m_aNewBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
 
-    m_aRecordText.SetText(SVX_RESSTR(RID_STR_REC_TEXT));
-    m_aRecordOf.SetText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
-    m_aRecordCount.SetText(OUString('?'));
+    m_aRecordText->SetText(SVX_RESSTR(RID_STR_REC_TEXT));
+    m_aRecordOf->SetText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
+    m_aRecordCount->SetText(OUString('?'));
 
     m_nDefaultWidth = ArrangeControls();
 
-    m_aFirstBtn.Disable();
-    m_aPrevBtn.Disable();
-    m_aNextBtn.Disable();
-    m_aLastBtn.Disable();
-    m_aNewBtn.Disable();
-    m_aRecordText.Disable();
-    m_aRecordOf.Disable();
-    m_aRecordCount.Disable();
-    m_aAbsolute.Disable();
+    m_aFirstBtn->Disable();
+    m_aPrevBtn->Disable();
+    m_aNextBtn->Disable();
+    m_aLastBtn->Disable();
+    m_aNewBtn->Disable();
+    m_aRecordText->Disable();
+    m_aRecordOf->Disable();
+    m_aRecordCount->Disable();
+    m_aAbsolute->Disable();
 
-    AllSettings aSettings = m_aNextBtn.GetSettings();
+    AllSettings aSettings = m_aNextBtn->GetSettings();
     MouseSettings aMouseSettings = aSettings.GetMouseSettings();
     aMouseSettings.SetButtonRepeat(aMouseSettings.GetButtonRepeat() / 4);
     aSettings.SetMouseSettings(aMouseSettings);
-    m_aNextBtn.SetSettings(aSettings, true);
-    m_aPrevBtn.SetSettings(aSettings, true);
+    m_aNextBtn->SetSettings(aSettings, true);
+    m_aPrevBtn->SetSettings(aSettings, true);
 
-    m_aFirstBtn.Show();
-    m_aPrevBtn.Show();
-    m_aNextBtn.Show();
-    m_aLastBtn.Show();
-    m_aNewBtn.Show();
-    m_aRecordText.Show();
-    m_aRecordOf.Show();
-    m_aRecordCount.Show();
-    m_aAbsolute.Show();
+    m_aFirstBtn->Show();
+    m_aPrevBtn->Show();
+    m_aNextBtn->Show();
+    m_aLastBtn->Show();
+    m_aNewBtn->Show();
+    m_aRecordText->Show();
+    m_aRecordOf->Show();
+    m_aRecordCount->Show();
+    m_aAbsolute->Show();
+}
+
+
+DbGridControl::NavigationBar::~NavigationBar()
+{
+    disposeOnce();
+}
+
+void DbGridControl::NavigationBar::dispose()
+{
+    m_aRecordText.disposeAndClear();
+    m_aAbsolute.disposeAndClear();
+    m_aRecordOf.disposeAndClear();
+    m_aRecordCount.disposeAndClear();
+    m_aFirstBtn.disposeAndClear();
+    m_aPrevBtn.disposeAndClear();
+    m_aNextBtn.disposeAndClear();
+    m_aLastBtn.disposeAndClear();
+    m_aNewBtn.disposeAndClear();
+    Control::dispose();
 }
 
 namespace
@@ -422,56 +442,56 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     sal_uInt16      nY = 0;
 
     // Is the font of this edit larger than the field?
-    if (m_aAbsolute.GetTextHeight() > nH)
+    if (m_aAbsolute->GetTextHeight() > nH)
     {
-        vcl::Font aApplFont (m_aAbsolute.GetFont());
-        const Size pointAbsoluteSize(m_aAbsolute.PixelToLogic( Size( 0, nH - 2 ), MapMode(MAP_POINT) ));
+        vcl::Font aApplFont (m_aAbsolute->GetFont());
+        const Size pointAbsoluteSize(m_aAbsolute->PixelToLogic( Size( 0, nH - 2 ), MapMode(MAP_POINT) ));
         aApplFont.SetSize( pointAbsoluteSize );
-        m_aAbsolute.SetControlFont( aApplFont );
+        m_aAbsolute->SetControlFont( aApplFont );
 
         aApplFont.SetTransparent( true );
-        m_aRecordText.SetControlFont( aApplFont );
-        m_aRecordOf.SetControlFont( aApplFont );
-        m_aRecordCount.SetControlFont( aApplFont );
+        m_aRecordText->SetControlFont( aApplFont );
+        m_aRecordOf->SetControlFont( aApplFont );
+        m_aRecordCount->SetControlFont( aApplFont );
     }
 
     // set size and position of the control
-    OUString aText = m_aRecordText.GetText();
-    long nTextWidth = m_aRecordText.GetTextWidth(aText);
-    m_aRecordText.SetPosPixel(Point(nX,nY));
-    m_aRecordText.SetSizePixel(Size(nTextWidth,nH));
+    OUString aText = m_aRecordText->GetText();
+    long nTextWidth = m_aRecordText->GetTextWidth(aText);
+    m_aRecordText->SetPosPixel(Point(nX,nY));
+    m_aRecordText->SetSizePixel(Size(nTextWidth,nH));
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     // count an extra hairspace (U+200A) left and right
-    const OUString sevenDigits(m_aAbsolute.CreateFieldText(6000000));
+    const OUString sevenDigits(m_aAbsolute->CreateFieldText(6000000));
     const OUString hairSpace(static_cast<sal_Unicode>(0x200A));
     OUString textPattern(hairSpace);
     textPattern += sevenDigits;
     textPattern += hairSpace;
-    nTextWidth = m_aAbsolute.GetTextWidth( textPattern );
-    m_aAbsolute.SetPosPixel(Point(nX,nY));
-    m_aAbsolute.SetSizePixel(Size(nTextWidth, nH));
+    nTextWidth = m_aAbsolute->GetTextWidth( textPattern );
+    m_aAbsolute->SetPosPixel(Point(nX,nY));
+    m_aAbsolute->SetSizePixel(Size(nTextWidth, nH));
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
-    aText      = m_aRecordOf.GetText();
-    nTextWidth = m_aRecordOf.GetTextWidth(aText);
-    m_aRecordOf.SetPosPixel(Point(nX,nY));
-    m_aRecordOf.SetSizePixel(Size(nTextWidth,nH));
+    aText      = m_aRecordOf->GetText();
+    nTextWidth = m_aRecordOf->GetTextWidth(aText);
+    m_aRecordOf->SetPosPixel(Point(nX,nY));
+    m_aRecordOf->SetSizePixel(Size(nTextWidth,nH));
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     textPattern = sevenDigits + " * (" + sevenDigits + ")";
-    nTextWidth = m_aRecordCount.GetTextWidth( textPattern );
-    m_aRecordCount.SetPosPixel(Point(nX,nY));
-    m_aRecordCount.SetSizePixel(Size(nTextWidth,nH));
+    nTextWidth = m_aRecordCount->GetTextWidth( textPattern );
+    m_aRecordCount->SetPosPixel(Point(nX,nY));
+    m_aRecordCount->SetSizePixel(Size(nTextWidth,nH));
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     Point aButtonPos(nX,nY);
     const Size  aButtonSize(nH,nH);
-    SetPosAndSize(m_aFirstBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(m_aPrevBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(m_aNextBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(m_aLastBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(m_aNewBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aFirstBtn.get(), aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aPrevBtn.get(), aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aNextBtn.get(), aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aLastBtn.get(), aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aNewBtn.get(), aButtonPos, aButtonSize);
 
     nX = sal::static_int_cast< sal_uInt16 >(aButtonPos.X() + 1);
 
@@ -485,15 +505,15 @@ IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
     if (pParent->m_aMasterSlotExecutor.IsSet())
     {
         long lResult = 0;
-        if (pButton == &m_aFirstBtn)
+        if (pButton == m_aFirstBtn.get())
             lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_FIRST));
-        else if( pButton == &m_aPrevBtn )
+        else if( pButton == m_aPrevBtn.get() )
             lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_PREV));
-        else if( pButton == &m_aNextBtn )
+        else if( pButton == m_aNextBtn.get() )
             lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_NEXT));
-        else if( pButton == &m_aLastBtn )
+        else if( pButton == m_aLastBtn.get() )
             lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_LAST));
-        else if( pButton == &m_aNewBtn )
+        else if( pButton == m_aNewBtn.get() )
             lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_NEW));
 
         if (lResult)
@@ -501,15 +521,15 @@ IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
             return 0;
     }
 
-    if (pButton == &m_aFirstBtn)
+    if (pButton == m_aFirstBtn.get())
         pParent->MoveToFirst();
-    else if( pButton == &m_aPrevBtn )
+    else if( pButton == m_aPrevBtn.get() )
         pParent->MoveToPrev();
-    else if( pButton == &m_aNextBtn )
+    else if( pButton == m_aNextBtn.get() )
         pParent->MoveToNext();
-    else if( pButton == &m_aLastBtn )
+    else if( pButton == m_aLastBtn.get() )
         pParent->MoveToLast();
-    else if( pButton == &m_aNewBtn )
+    else if( pButton == m_aNewBtn.get() )
         pParent->AppendNew();
     return 0;
 }
@@ -606,60 +626,60 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
     switch (nWhich)
     {
         case NavigationBar::RECORD_FIRST:
-            pWnd = &m_aFirstBtn;
+            pWnd = m_aFirstBtn.get();
             break;
         case NavigationBar::RECORD_PREV:
-            pWnd = &m_aPrevBtn;
+            pWnd = m_aPrevBtn.get();
             break;
         case NavigationBar::RECORD_NEXT:
-            pWnd = &m_aNextBtn;
+            pWnd = m_aNextBtn.get();
             break;
         case NavigationBar::RECORD_LAST:
-            pWnd = &m_aLastBtn;
+            pWnd = m_aLastBtn.get();
             break;
         case NavigationBar::RECORD_NEW:
-            pWnd = &m_aNewBtn;
+            pWnd = m_aNewBtn.get();
             break;
         case NavigationBar::RECORD_ABSOLUTE:
-            pWnd = &m_aAbsolute;
+            pWnd = m_aAbsolute.get();
             if (bAvailable)
             {
                 if (pParent->m_nTotalCount >= 0)
                 {
                     if (pParent->IsCurrentAppending())
-                        m_aAbsolute.SetMax(pParent->m_nTotalCount + 1);
+                        m_aAbsolute->SetMax(pParent->m_nTotalCount + 1);
                     else
-                        m_aAbsolute.SetMax(pParent->m_nTotalCount);
+                        m_aAbsolute->SetMax(pParent->m_nTotalCount);
                 }
                 else
-                    m_aAbsolute.SetMax(LONG_MAX);
+                    m_aAbsolute->SetMax(LONG_MAX);
 
-                m_aAbsolute.SetValue(m_nCurrentPos + 1);
+                m_aAbsolute->SetValue(m_nCurrentPos + 1);
             }
             else
-                m_aAbsolute.SetText(OUString());
+                m_aAbsolute->SetText(OUString());
             break;
         case NavigationBar::RECORD_TEXT:
-            pWnd = &m_aRecordText;
+            pWnd = m_aRecordText.get();
             break;
         case NavigationBar::RECORD_OF:
-            pWnd = &m_aRecordOf;
+            pWnd = m_aRecordOf.get();
             break;
         case NavigationBar::RECORD_COUNT:
         {
-            pWnd = &m_aRecordCount;
+            pWnd = m_aRecordCount.get();
             OUString aText;
             if (bAvailable)
             {
                 if (pParent->GetOptions() & DbGridControl::OPT_INSERT)
                 {
                     if (pParent->IsCurrentAppending() && !pParent->IsModified())
-                        aText = m_aAbsolute.CreateFieldText(pParent->GetRowCount());
+                        aText = m_aAbsolute->CreateFieldText(pParent->GetRowCount());
                     else
-                        aText = m_aAbsolute.CreateFieldText(pParent->GetRowCount() - 1);
+                        aText = m_aAbsolute->CreateFieldText(pParent->GetRowCount() - 1);
                 }
                 else
-                    aText = m_aAbsolute.CreateFieldText(pParent->GetRowCount());
+                    aText = m_aAbsolute->CreateFieldText(pParent->GetRowCount());
                 if(!pParent->m_bRecordCountFinal)
                     aText += " *";
             }
@@ -671,7 +691,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
             {
                 OUString aExtendedInfo(aText);
                 aExtendedInfo += " (";
-                aExtendedInfo += m_aAbsolute.CreateFieldText(pParent->GetSelectRowCount());
+                aExtendedInfo += m_aAbsolute->CreateFieldText(pParent->GetSelectRowCount());
                 aExtendedInfo += ")";
                 pWnd->SetText(aExtendedInfo);
             }
@@ -699,8 +719,8 @@ void DbGridControl::NavigationBar::Resize()
 void DbGridControl::NavigationBar::Paint(const Rectangle& rRect)
 {
     Control::Paint(rRect);
-    Point aAbsolutePos = m_aAbsolute.GetPosPixel();
-    Size  aAbsoluteSize = m_aAbsolute.GetSizePixel();
+    Point aAbsolutePos = m_aAbsolute->GetPosPixel();
+    Size  aAbsoluteSize = m_aAbsolute->GetSizePixel();
 
     DrawLine(Point(aAbsolutePos.X() - 1, 0 ),
              Point(aAbsolutePos.X() - 1, aAbsolutePos.Y() + aAbsoluteSize.Height()));
@@ -713,15 +733,15 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    vcl::Window* pWindows[] = {  &m_aRecordText,
-                            &m_aAbsolute,
-                            &m_aRecordOf,
-                            &m_aRecordCount,
-                            &m_aFirstBtn,
-                            &m_aPrevBtn,
-                            &m_aNextBtn,
-                            &m_aLastBtn,
-                            &m_aNewBtn
+    vcl::Window* pWindows[] = {  m_aRecordText.get(),
+                            m_aAbsolute.get(),
+                            m_aRecordOf.get(),
+                            m_aRecordCount.get(),
+                            m_aFirstBtn.get(),
+                            m_aPrevBtn.get(),
+                            m_aNextBtn.get(),
+                            m_aLastBtn.get(),
+                            m_aNewBtn.get()
                         };
 
     switch ( nType )
@@ -867,7 +887,7 @@ DbGridControl::DbGridControl(
                 WinBits nBits)
             :DbGridControl_Base(pParent, EditBrowseBoxFlags::NONE, nBits, DEFAULT_BROWSE_MODE )
             ,m_xContext(_rxContext)
-            ,m_aBar(this)
+            ,m_aBar(VclPtr<DbGridControl::NavigationBar>::Create(this))
             ,m_nAsynAdjustEvent(0)
             ,m_pDataSourcePropMultiplexer(NULL)
             ,m_pDataSourcePropListener(NULL)
@@ -902,8 +922,8 @@ DbGridControl::DbGridControl(
 {
 
     OUString sName(SVX_RESSTR(RID_STR_NAVIGATIONBAR));
-    m_aBar.SetAccessibleName(sName);
-    m_aBar.Show();
+    m_aBar->SetAccessibleName(sName);
+    m_aBar->Show();
     ImplInitWindow( InitAll );
 }
 
@@ -930,9 +950,15 @@ void DbGridControl::Init()
 
 DbGridControl::~DbGridControl()
 {
-    RemoveColumns();
+    disposeOnce();
+}
 
+void DbGridControl::dispose()
+{
+    if (!IsDisposed())
     {
+        RemoveColumns();
+
         m_bWantDestruction = true;
         osl::MutexGuard aGuard(m_aDestructionSafety);
         if (m_pFieldListeners)
@@ -958,8 +984,13 @@ DbGridControl::~DbGridControl()
     m_xRowSetListener.clear();
 
     delete m_pDataCursor;
+    m_pDataCursor = NULL;
     delete m_pSeekCursor;
+    m_pSeekCursor = NULL;
 
+    m_aBar.disposeAndClear();
+
+    DbGridControl_Base::dispose();
 }
 
 void DbGridControl::StateChanged( StateChangedType nType )
@@ -1016,7 +1047,7 @@ void DbGridControl::Select()
     DbGridControl_Base::Select();
 
     // as the selected rows may have changed, update the according display in our navigation bar
-    m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
+    m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
 
     if (m_pGridListener)
         m_pGridListener->selectionChanged();
@@ -1035,7 +1066,7 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         if ( m_bNavigationBar )
         {
-            m_aBar.EnableRTL( IsRTLEnabled() );
+            m_aBar->EnableRTL( IsRTLEnabled() );
         }
     }
 
@@ -1043,13 +1074,13 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         if ( m_bNavigationBar )
         {
-            vcl::Font aFont = m_aBar.GetSettings().GetStyleSettings().GetFieldFont();
+            vcl::Font aFont = m_aBar->GetSettings().GetStyleSettings().GetFieldFont();
             if ( IsControlFont() )
-                m_aBar.SetControlFont( GetControlFont() );
+                m_aBar->SetControlFont( GetControlFont() );
             else
-                m_aBar.SetControlFont();
+                m_aBar->SetControlFont();
 
-            m_aBar.SetZoom( GetZoom() );
+            m_aBar->SetZoom( GetZoom() );
         }
     }
 
@@ -1108,7 +1139,7 @@ void DbGridControl::RemoveRows()
 
     // reset number of sentences to zero in the browser
     DbGridControl_Base::RemoveRows();
-    m_aBar.InvalidateAll(m_nCurrentPos, true);
+    m_aBar->InvalidateAll(m_nCurrentPos, true);
 }
 
 void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
@@ -1116,9 +1147,9 @@ void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
     // positioning of the controls
     if (m_bNavigationBar)
     {
-        nX = m_aBar.GetDefaultWidth();
+        nX = m_aBar->GetDefaultWidth();
         Rectangle   aRect(GetControlArea());
-        m_aBar.SetPosSizePixel(Point(0,nY + 1), Size(nX, aRect.GetSize().Height() - 1));
+        m_aBar->SetPosSizePixel(Point(0,nY + 1), Size(nX, aRect.GetSize().Height() - 1));
     }
 }
 
@@ -1176,9 +1207,9 @@ void DbGridControl::EnableNavigationBar(bool bEnable)
 
     if (bEnable)
     {
-        m_aBar.Show();
-        m_aBar.Enable();
-        m_aBar.InvalidateAll(m_nCurrentPos, true);
+        m_aBar->Show();
+        m_aBar->Enable();
+        m_aBar->InvalidateAll(m_nCurrentPos, true);
 
         if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
             SetMode( m_nMode );
@@ -1192,8 +1223,8 @@ void DbGridControl::EnableNavigationBar(bool bEnable)
     }
     else
     {
-        m_aBar.Hide();
-        m_aBar.Disable();
+        m_aBar->Hide();
+        m_aBar->Disable();
 
         if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
             SetMode( m_nMode );
@@ -1559,7 +1590,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     if (!IsResizing() && GetRowCount())
         RecalcRows(GetTopRow(), GetVisibleRows(), true);
 
-    m_aBar.InvalidateAll(m_nCurrentPos, true);
+    m_aBar->InvalidateAll(m_nCurrentPos, true);
     SetUpdateMode(true);
 
     // start listening on the seek cursor
@@ -1845,7 +1876,7 @@ void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint, bool bK
             m_nTotalCount += nNumRows;
 
         DbGridControl_Base::RowInserted(nRow, nNumRows, bDoPaint, bKeepSelection);
-        m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
+        m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
     }
 }
 
@@ -1864,7 +1895,7 @@ void DbGridControl::RowRemoved(long nRow, long nNumRows, bool bDoPaint)
             m_nTotalCount -= nNumRows;
 
         DbGridControl_Base::RowRemoved(nRow, nNumRows, bDoPaint);
-        m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
+        m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
     }
 }
 
@@ -1915,7 +1946,7 @@ void DbGridControl::AdjustRows()
                 GoToRowColumnId(nNewPos, GetColumnId(GetCurColumnId()));
             if (!IsResizing() && GetRowCount())
                 RecalcRows(GetTopRow(), GetVisibleRows(), true);
-            m_aBar.InvalidateAll(m_nCurrentPos, true);
+            m_aBar->InvalidateAll(m_nCurrentPos, true);
         }
         else  // too few
             RowInserted(GetRowCount(), -nDelta, true);
@@ -1928,7 +1959,7 @@ void DbGridControl::AdjustRows()
         else
             m_nTotalCount = GetRowCount();
     }
-    m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
+    m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
 }
 
 DbGridControl_Base::RowStatus DbGridControl::GetRowStatus(long nRow) const
@@ -2095,7 +2126,7 @@ void DbGridControl::CursorMoved()
     }
 
     DbGridControl_Base::CursorMoved();
-    m_aBar.InvalidateAll(m_nCurrentPos);
+    m_aBar->InvalidateAll(m_nCurrentPos);
 
     // select the new column when they moved
     if ( IsDesignMode() && GetSelectedColumnCount() > 0 && GetCurColumnId() )
@@ -2202,7 +2233,7 @@ void DbGridControl::AdjustDataSource(bool bFull)
 
     // if the data cursor was moved from outside, this section is voided
     SetNoSelection();
-    m_aBar.InvalidateAll(m_nCurrentPos, m_xCurrentRow.Is());
+    m_aBar->InvalidateAll(m_nCurrentPos, m_xCurrentRow.Is());
 }
 
 sal_Int32 DbGridControl::AlignSeekCursor()
@@ -2495,7 +2526,7 @@ void DbGridControl::MoveToPosition(sal_uInt32 nPos)
         }
     }
     DbGridControl_Base::GoToRow(nPos);
-    m_aBar.InvalidateAll(m_nCurrentPos);
+    m_aBar->InvalidateAll(m_nCurrentPos);
 }
 
 void DbGridControl::AppendNew()
@@ -2550,7 +2581,7 @@ void DbGridControl::SetDesignMode(bool bMode)
         GetDataWindow().SetMouseTransparent(bMode);
         SetMouseTransparent(bMode);
 
-        m_aBar.InvalidateAll(m_nCurrentPos, true);
+        m_aBar->InvalidateAll(m_nCurrentPos, true);
     }
 }
 
@@ -2685,7 +2716,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
                 {
                     RowInserted(GetRowCount(), 1, true);
                     InvalidateStatusCell(m_nCurrentPos);
-                    m_aBar.InvalidateAll(m_nCurrentPos);
+                    m_aBar->InvalidateAll(m_nCurrentPos);
                 }
             }
             else
@@ -2697,7 +2728,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
                 {
                     RowRemoved(GetRowCount() - 1, 1, true);
                     InvalidateStatusCell(m_nCurrentPos);
-                    m_aBar.InvalidateAll(m_nCurrentPos);
+                    m_aBar->InvalidateAll(m_nCurrentPos);
                 }
             }
         }
@@ -2906,7 +2937,7 @@ void DbGridControl::CellModified()
                 // increment RowCount
                 RowInserted(GetRowCount(), 1, true);
                 InvalidateStatusCell(m_nCurrentPos);
-                m_aBar.InvalidateAll(m_nCurrentPos);
+                m_aBar->InvalidateAll(m_nCurrentPos);
             }
         }
         else if (m_xCurrentRow->GetStatus() != GRS_MODIFIED)
@@ -2989,7 +3020,7 @@ void DbGridControl::Undo()
             {   // maybe we already removed it (in resetCurrentRow, called if the above moveToInsertRow
                 // caused our data source form to be reset - which should be the usual case ....)
                 RowRemoved(GetRowCount() - 1, 1, true);
-                m_aBar.InvalidateAll(m_nCurrentPos);
+                m_aBar->InvalidateAll(m_nCurrentPos);
             }
 
         RowModified(m_nCurrentPos);
@@ -3016,7 +3047,7 @@ void DbGridControl::resetCurrentRow()
                 if (m_nCurrentPos == GetRowCount() - 2)
                 {
                     RowRemoved(GetRowCount() - 1, 1, true);
-                    m_aBar.InvalidateAll(m_nCurrentPos);
+                    m_aBar->InvalidateAll(m_nCurrentPos);
                 }
             }
         }
@@ -3183,7 +3214,7 @@ bool DbGridControl::SaveRow()
 bool DbGridControl::PreNotify(NotifyEvent& rEvt)
 {
     // do not handle events of the Navbar
-    if (m_aBar.IsWindowOrChild(rEvt.GetWindow()))
+    if (m_aBar->IsWindowOrChild(rEvt.GetWindow()))
         return BrowseBox::PreNotify(rEvt);
 
     switch (rEvt.GetType())
@@ -3600,7 +3631,7 @@ Reference<XAccessible > DbGridControl::CreateAccessibleControl( sal_Int32 _nInde
     Reference<XAccessible > xRet;
     if ( _nIndex == DbGridControl_Base::GetAccessibleControlCount() )
     {
-        xRet = m_aBar.GetAccessible();
+        xRet = m_aBar->GetAccessible();
     }
     else
         xRet = DbGridControl_Base::CreateAccessibleControl( _nIndex );

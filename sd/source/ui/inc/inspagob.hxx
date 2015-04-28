@@ -29,9 +29,9 @@ class SdDrawDocument;
 class SdInsertPagesObjsDlg : public ModalDialog
 {
 private:
-    SdPageObjsTLB*          m_pLbTree;
-    CheckBox*               m_pCbxLink;
-    CheckBox*               m_pCbxMasters;
+    VclPtr<SdPageObjsTLB>          m_pLbTree;
+    VclPtr<CheckBox>               m_pCbxLink;
+    VclPtr<CheckBox>               m_pCbxMasters;
 
     SfxMedium*              pMedium;
     const SdDrawDocument*   mpDoc;
@@ -46,6 +46,7 @@ public:
                                 SfxMedium* pSfxMedium,
                                 const OUString& rFileName );
                 virtual ~SdInsertPagesObjsDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** returns the list
           nType == 0 -> pages

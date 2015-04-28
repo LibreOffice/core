@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <vcl/vclptr.hxx>
 
 namespace dbtools
 {
@@ -38,10 +39,10 @@ namespace dbaui
     class ODatasourceConnector
     {
     protected:
-        vcl::Window*         m_pErrorMessageParent;
+        VclPtr<vcl::Window>  m_pErrorMessageParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
-        OUString m_sContextInformation;
+                             m_xContext;
+        OUString             m_sContextInformation;
 
     public:
         ODatasourceConnector(

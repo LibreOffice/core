@@ -29,13 +29,15 @@ class SvSimpleTable;
 class SVT_DLLPUBLIC SvSimpleTableContainer : public Control
 {
 private:
-    SvSimpleTable*     m_pTable;
+    VclPtr<SvSimpleTable>     m_pTable;
 
 protected:
     virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
     SvSimpleTableContainer( vcl::Window* pParent, WinBits nBits = WB_BORDER );
+    virtual ~SvSimpleTableContainer();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetTable(SvSimpleTable* pTable);
 
@@ -53,7 +55,7 @@ private:
     Link                aHeaderBarDblClickLink;
     Link                aCommandLink;
     CommandEvent        aCEvt;
-    HeaderBar           aHeaderBar;
+    VclPtr<HeaderBar>   aHeaderBar;
     long                nOldPos;
     sal_uInt16          nHeaderItemId;
     bool                bPaintFlag;
@@ -89,6 +91,7 @@ public:
 
     SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     virtual ~SvSimpleTable();
+    virtual void dispose() SAL_OVERRIDE;
 
     void UpdateViewSize();
 
@@ -126,9 +129,9 @@ public:
     void            SetHeaderBarDblClickHdl( const Link& rLink ) { aHeaderBarDblClickLink = rLink; }
     const Link&     GetHeaderBarDblClickHdl() const { return aHeaderBarDblClickLink; }
 
-    void            SetHeaderBarHelpId(const OString& rHelpId) {aHeaderBar.SetHelpId(rHelpId);}
+    void            SetHeaderBarHelpId(const OString& rHelpId) { aHeaderBar->SetHelpId(rHelpId); }
 
-    HeaderBar&      GetTheHeaderBar() {return aHeaderBar;}
+    HeaderBar&      GetTheHeaderBar() { return *aHeaderBar.get(); }
 };
 
 

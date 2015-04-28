@@ -502,11 +502,11 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
     }
 }
 
-vcl::Window* SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent)
+VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent)
 {
     if(GetSlotId() == SID_ATTR_FILL_STYLE)
     {
-        mpFillControl = new FillControl(pParent);
+        mpFillControl.reset(VclPtr<FillControl>::Create(pParent));
         // Thus the FillControl is known by SvxFillToolBoxControl
         // (and in order to remain compatible)
         mpFillControl->SetData(this);
@@ -528,15 +528,15 @@ vcl::Window* SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent)
             mpStyleItem = new XFillStyleItem(drawing::FillStyle_SOLID);
         }
 
-        return mpFillControl;
+        return mpFillControl.get();
     }
-    return NULL;
+    return VclPtr<vcl::Window>();
 }
 
 FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
 :   Window(pParent,nStyle | WB_DIALOGCONTROL),
-    mpLbFillType(new SvxFillTypeBox(this)),
-    mpLbFillAttr(new SvxFillAttrBox(this)),
+    mpLbFillType(VclPtr<SvxFillTypeBox>::Create(this)),
+    mpLbFillAttr(VclPtr<SvxFillAttrBox>::Create(this)),
     maLogicalFillSize(40,80),
     maLogicalAttrSize(50,80),
     mnLastFillTypeControlSelectEntryPos(mpLbFillType->GetSelectEntryPos()),
@@ -562,8 +562,14 @@ FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
 
 FillControl::~FillControl()
 {
-    delete mpLbFillType;
-    delete mpLbFillAttr;
+    disposeOnce();
+}
+
+void FillControl::dispose()
+{
+    mpLbFillType.disposeAndClear();
+    mpLbFillAttr.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void FillControl::InitializeFillStyleAccordingToGivenFillType(drawing::FillStyle aFillStyle)

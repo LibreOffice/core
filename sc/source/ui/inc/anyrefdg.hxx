@@ -45,13 +45,13 @@ class ScFormulaReferenceHelper
 {
     IAnyRefDialog*      m_pDlg;
     ::std::unique_ptr<ScCompiler>         pRefComp;
-    formula::RefEdit*    pRefEdit;               // active input field
-    formula::RefButton*  pRefBtn;                // associated button
-    vcl::Window*             m_pWindow;
+    VclPtr<formula::RefEdit>    pRefEdit;               // active input field
+    VclPtr<formula::RefButton>  pRefBtn;                // associated button
+    VclPtr<vcl::Window>         m_pWindow;
     SfxBindings*        m_pBindings;
     ::std::unique_ptr<Accelerator>
                         pAccel;                 // for Enter/Escape
-    ::std::vector<vcl::Window*> m_aHiddenWidgets;    // vector of hidden Controls
+    ::std::vector<VclPtr<vcl::Window> > m_aHiddenWidgets;    // vector of hidden Controls
     sal_Int32           m_nOldBorderWidth;      // border width for expanded dialog
     SCTAB               nRefTab;                // used for ShowReference
 
@@ -61,7 +61,7 @@ class ScFormulaReferenceHelper
     Size                aOldEditSize;           // Original size of the input field
     long                mnOldEditWidthReq;
     Point               aOldButtonPos;          // Original position of the button
-    vcl::Window*             mpOldEditParent;        // Original parent of the edit field and the button
+    VclPtr<vcl::Window> mpOldEditParent;        // Original parent of the edit field and the button
     bool                mbOldDlgLayoutEnabled;  // Original layout state of parent dialog
     bool                mbOldEditParentLayoutEnabled;  // Original layout state of edit widget parent
 
@@ -106,11 +106,11 @@ public:
 class SC_DLLPUBLIC ScRefHandler :
                     public IAnyRefDialog
 {
-    vcl::Window &    m_rWindow;
-    bool        m_bInRefMode;
+    VclPtr<vcl::Window>  m_rWindow;
+    bool                 m_bInRefMode;
 
 public:
-    operator vcl::Window *(){ return &m_rWindow; }
+    operator vcl::Window *(){ return m_rWindow.get(); }
     vcl::Window* operator ->() { return static_cast<vcl::Window *>(*this); }
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
@@ -120,7 +120,7 @@ private:
                         m_aHelper;
     SfxBindings*        pMyBindings;
 
-    vcl::Window*        pActiveWin;
+    VclPtr<vcl::Window> pActiveWin;
     Idle                aIdle;
     OUString            aDocName;               // document on which the dialog was opened
 

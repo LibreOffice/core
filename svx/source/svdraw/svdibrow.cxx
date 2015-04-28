@@ -162,21 +162,17 @@ bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
 
 class ImpItemEdit: public Edit
 {
-    _SdrItemBrowserControl*     pBrowse;
+    VclPtr<_SdrItemBrowserControl>     pBrowse;
 
 public:
     ImpItemEdit(vcl::Window* pParent, _SdrItemBrowserControl* pBrowse_, WinBits nBits=0)
     :   Edit(pParent, nBits),
         pBrowse(pBrowse_)
     {}
-
-    virtual ~ImpItemEdit();
+    virtual ~ImpItemEdit() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { pBrowse.clear(); Edit::dispose(); }
     virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
 };
-
-ImpItemEdit::~ImpItemEdit()
-{
-}
 
 void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 {
@@ -217,11 +213,17 @@ _SdrItemBrowserControl::_SdrItemBrowserControl(vcl::Window* pParent, WinBits nBi
 
 _SdrItemBrowserControl::~_SdrItemBrowserControl()
 {
-    delete pEditControl;
+    disposeOnce();
+}
+
+void _SdrItemBrowserControl::dispose()
+{
+    pEditControl.disposeAndClear();
 
     delete pAktChangeEntry;
 
     Clear();
+    BrowseBox::dispose();
 }
 
 void _SdrItemBrowserControl::ImpCtor()
@@ -493,7 +495,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
     ImpItemListRow* pEntry=ImpGetEntry(nPos);
     if (pEntry!=NULL && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
-        pEditControl=new ImpItemEdit(&GetDataWindow(),this,0);
+        pEditControl=VclPtr<ImpItemEdit>::Create(&GetDataWindow(),this,0);
         Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
         aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
         aRect.Right()--;
@@ -528,10 +530,9 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
 bool _SdrItemBrowserControl::EndChangeEntry()
 {
     bool bRet = false;
-    if (pEditControl!=NULL) {
+    if (pEditControl!=nullptr) {
         aEntryChangedHdl.Call(this);
-        delete pEditControl;
-        pEditControl=NULL;
+        pEditControl.disposeAndClear();
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
         vcl::Window* pParent=GetParent();
@@ -544,9 +545,8 @@ bool _SdrItemBrowserControl::EndChangeEntry()
 
 void _SdrItemBrowserControl::BrkChangeEntry()
 {
-    if (pEditControl!=NULL) {
-        delete pEditControl;
-        pEditControl=NULL;
+    if (pEditControl!=nullptr) {
+        pEditControl.disposeAndClear();
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
         vcl::Window* pParent=GetParent();
@@ -1046,25 +1046,32 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
 
 _SdrItemBrowserWindow::_SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits):
     FloatingWindow(pParent,nBits),
-    aBrowse(this)
+    aBrowse(VclPtr<_SdrItemBrowserControl>::Create(this))
 {
-    SetOutputSizePixel(aBrowse.GetSizePixel());
+    SetOutputSizePixel(aBrowse->GetSizePixel());
     SetText(OUString("Joe's ItemBrowser"));
-    aBrowse.Show();
+    aBrowse->Show();
 }
 
 _SdrItemBrowserWindow::~_SdrItemBrowserWindow()
 {
+    disposeOnce();
+}
+
+void _SdrItemBrowserWindow::dispose()
+{
+    aBrowse.disposeAndClear();
+    FloatingWindow::dispose();
 }
 
 void _SdrItemBrowserWindow::Resize()
 {
-    aBrowse.SetSizePixel(GetOutputSizePixel());
+    aBrowse->SetSizePixel(GetOutputSizePixel());
 }
 
 void _SdrItemBrowserWindow::GetFocus()
 {
-    aBrowse.GrabFocus();
+    aBrowse->GrabFocus();
 }
 
 // - SdrItemBrowser -
@@ -1075,8 +1082,8 @@ SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     bDirty(false)
 {
     aIdle.SetIdleHdl(LINK(this,SdrItemBrowser,IdleHdl));
-    GetBrowserControl().SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
-    GetBrowserControl().SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
+    GetBrowserControl()->SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
+    GetBrowserControl()->SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
     SetDirty();
 }
 

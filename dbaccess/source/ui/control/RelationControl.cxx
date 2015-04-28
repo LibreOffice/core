@@ -59,7 +59,7 @@ namespace dbaui
     {
         friend class OTableListBoxControl;
 
-        ::std::unique_ptr< ::svt::ListBoxControl> m_pListCell;
+        VclPtr< ::svt::ListBoxControl>          m_pListCell;
         TTableConnectionData::value_type        m_pConnData;
         OTableListBoxControl*                   m_pBoxControl;
         long                                    m_nDataPos;
@@ -83,7 +83,6 @@ namespace dbaui
         {
             m_pBoxControl = pController;
         }
-        virtual ~ORelationControl();
 
         /** searches for a connection between these two tables
             @param  _pSource
@@ -102,6 +101,8 @@ namespace dbaui
         void lateInit();
 
     protected:
+        virtual ~ORelationControl() { disposeOnce(); }
+        virtual void dispose() SAL_OVERRIDE { m_pListCell.disposeAndClear(); ORelationControl_Base::dispose(); }
         virtual void Resize() SAL_OVERRIDE;
         virtual Size GetOptimalSize() const SAL_OVERRIDE;
         virtual bool PreNotify(NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -144,10 +145,6 @@ namespace dbaui
         return new ORelationControl(pParent);
     }
 
-    ORelationControl::~ORelationControl()
-    {
-    }
-
     void ORelationControl::Init(const TTableConnectionData::value_type& _pConnData)
     {
 
@@ -170,7 +167,7 @@ namespace dbaui
             InsertDataColumn( DEST_COLUMN, m_pConnData->getReferencedTable()->GetWinName(), 100);
             // If the Defs do not yet exits, we need to set them with SetSource-/-DestDef
 
-            m_pListCell.reset( new ListBoxControl( &GetDataWindow() ) );
+            m_pListCell.reset( VclPtr<ListBoxControl>::Create( &GetDataWindow() ) );
 
             // set browse mode
             SetMode(    BrowserMode::COLUMNSELECTION |

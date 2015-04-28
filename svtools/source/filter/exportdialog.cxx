@@ -979,8 +979,47 @@ void ExportDialog::updateControls()
 
 ExportDialog::~ExportDialog()
 {
+    disposeOnce();
+}
+
+void ExportDialog::dispose()
+{
     delete mpFilterOptionsItem;
     delete mpOptionsItem;
+    mpMfSizeX.clear();
+    mpLbSizeX.clear();
+    mpMfSizeY.clear();
+    mpFtResolution.clear();
+    mpNfResolution.clear();
+    mpLbResolution.clear();
+    mpColorDepth.clear();
+    mpLbColorDepth.clear();
+    mpJPGQuality.clear();
+    mpPNGCompression.clear();
+    mpSbCompression.clear();
+    mpNfCompression.clear();
+    mpMode.clear();
+    mpCbInterlaced.clear();
+    mpBMPCompression.clear();
+    mpCbRLEEncoding.clear();
+    mpDrawingObjects.clear();
+    mpCbSaveTransparency.clear();
+    mpEncoding.clear();
+    mpRbBinary.clear();
+    mpRbText.clear();
+    mpEPSGrid.clear();
+    mpCbEPSPreviewTIFF.clear();
+    mpCbEPSPreviewEPSI.clear();
+    mpRbEPSLevel1.clear();
+    mpRbEPSLevel2.clear();
+    mpRbEPSColorFormat1.clear();
+    mpRbEPSColorFormat2.clear();
+    mpRbEPSCompressionLZW.clear();
+    mpRbEPSCompressionNone.clear();
+    mpInfo.clear();
+    mpFtEstimatedSize.clear();
+    mpBtnOK.clear();
+    ModalDialog::dispose();
 }
 
 

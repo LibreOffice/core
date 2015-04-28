@@ -2665,8 +2665,8 @@ void DocumentRedlineManager::checkRedlining(RedlineMode_t& _rReadlineMode)
     if ( pParent && !mbReadlineChecked && rRedlineTbl.size() > MAX_REDLINE_COUNT
         && !((_rReadlineMode & nsRedlineMode_t::REDLINE_SHOW_DELETE) == nsRedlineMode_t::REDLINE_SHOW_DELETE) )
     {
-        MessageDialog aQuery(pParent, "QueryShowChangesDialog", "modules/swriter/ui/queryshowchangesdialog.ui");
-        sal_uInt16 nResult = aQuery.Execute();
+        ScopedVclPtrInstance< MessageDialog > aQuery(pParent, "QueryShowChangesDialog", "modules/swriter/ui/queryshowchangesdialog.ui");
+        sal_uInt16 nResult = aQuery->Execute();
         mbReadlineChecked = true;
         if ( nResult == RET_YES )
         {

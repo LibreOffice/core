@@ -43,17 +43,10 @@ VCLXAccessibleComboBox::~VCLXAccessibleComboBox()
 {
 }
 
-
-
-
 bool VCLXAccessibleComboBox::IsValid() const
 {
-    return static_cast<ComboBox*>(GetWindow()) != NULL;
-
+    return GetWindow().get() != NULL;
 }
-
-
-
 
 void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent)
 {

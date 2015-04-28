@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_DECOVIEW_HXX
 
 #include <vcl/dllapi.h>
+#include <vcl/vclptr.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
 
 class Rectangle;
@@ -70,7 +71,7 @@ class OutputDevice;
 class VCL_DLLPUBLIC DecorationView
 {
 private:
-    OutputDevice*       mpOutDev;
+    VclPtr<OutputDevice>  mpOutDev;
 
 public:
     DecorationView(OutputDevice* pOutDev);

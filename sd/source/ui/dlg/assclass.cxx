@@ -86,8 +86,8 @@ bool Assistent::GotoPage(const int nPageToGo)
     {
         int nIndex=mnCurrentPage-1;
 
-        std::vector<vcl::Window*>::iterator iter = maPages[nIndex].begin();
-        std::vector<vcl::Window*>::iterator iterEnd = maPages[nIndex].end();
+        auto iter = maPages[nIndex].begin();
+        auto iterEnd = maPages[nIndex].end();
 
         for(; iter != iterEnd; ++iter)
         {

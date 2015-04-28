@@ -270,7 +270,25 @@ IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl)
 
 SwTitlePageDlg::~SwTitlePageDlg()
 {
+    disposeOnce();
+}
+
+void SwTitlePageDlg::dispose()
+{
     delete mpPageFmtDesc;
+    m_pUseExistingPagesRB.clear();
+    m_pPageCountNF.clear();
+    m_pDocumentStartRB.clear();
+    m_pPageStartRB.clear();
+    m_pPageStartNF.clear();
+    m_pRestartNumberingCB.clear();
+    m_pRestartNumberingNF.clear();
+    m_pSetPageNumberCB.clear();
+    m_pSetPageNumberNF.clear();
+    m_pPagePropertiesLB.clear();
+    m_pPagePropertiesPB.clear();
+    m_pOkPB.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl)

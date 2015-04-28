@@ -37,15 +37,16 @@ class ObjectCatalog : public DockingWindow
 public:
     ObjectCatalog (vcl::Window* pParent);
     virtual ~ObjectCatalog ();
+    virtual void dispose() SAL_OVERRIDE;
 public:
-    void UpdateEntries () { aTree.UpdateEntries(); }
+    void UpdateEntries () { aTree->UpdateEntries(); }
     void SetCurrentEntry (BaseWindow* pCurWin);
 
 private:
     // title: "Object Catalog"
-    FixedText aTitle;
+    VclPtr<FixedText> aTitle;
     // the tree-list of the objects
-    TreeListBox aTree;
+    VclPtr<TreeListBox> aTree;
 
 private:
     virtual void Resize () SAL_OVERRIDE; // Window

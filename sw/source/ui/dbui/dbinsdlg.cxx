@@ -413,10 +413,41 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 
 SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
 {
+    disposeOnce();
+}
+
+void SwInsertDBColAutoPilot::dispose()
+{
     delete pTblSet;
     delete pRep;
 
     delete pTAutoFmt;
+    m_pRbAsTable.clear();
+    m_pRbAsField.clear();
+    m_pRbAsText.clear();
+    m_pHeadFrame.clear();
+    m_pLbTblDbColumn.clear();
+    m_pLbTxtDbColumn.clear();
+    m_pFormatFrame.clear();
+    m_pRbDbFmtFromDb.clear();
+    m_pRbDbFmtFromUsr.clear();
+    m_pLbDbFmtFromUsr.clear();
+    m_pIbDbcolToEdit.clear();
+    m_pEdDbText.clear();
+    m_pFtDbParaColl.clear();
+    m_pLbDbParaColl.clear();
+    m_pIbDbcolAllTo.clear();
+    m_pIbDbcolOneTo.clear();
+    m_pIbDbcolOneFrom.clear();
+    m_pIbDbcolAllFrom.clear();
+    m_pFtTableCol.clear();
+    m_pLbTableCol.clear();
+    m_pCbTableHeadon.clear();
+    m_pRbHeadlColnms.clear();
+    m_pRbHeadlEmpty.clear();
+    m_pPbTblFormat.clear();
+    m_pPbTblAutofmt.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
@@ -768,9 +799,9 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
     ListBox* pGetBox = pBox == m_pLbDbFmtFromUsr
                             ? ( m_pRbAsTable->IsChecked()
                                     ? ( 0 == m_pLbTableCol->GetEntryData( 0 )
-                                        ? m_pLbTblDbColumn
-                                        : m_pLbTableCol )
-                                    : m_pLbTxtDbColumn )
+                                        ? m_pLbTblDbColumn.get()
+                                        : m_pLbTableCol.get() )
+                                    : m_pLbTxtDbColumn.get() )
                             : pBox;
 
     SwInsDBColumn aSrch( pGetBox->GetSelectEntry(), 0 );
@@ -818,7 +849,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
 
         // to know later on, what ListBox was the "active", a Flag
         // is remembered in the 1st entry
-        void* pPtr = pBox == m_pLbTableCol ? m_pLbTableCol : 0;
+        void* pPtr = pBox == m_pLbTableCol ? m_pLbTableCol.get() : 0;
         m_pLbTableCol->SetEntryData( 0, pPtr );
     }
     return 0;

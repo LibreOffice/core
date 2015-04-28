@@ -78,10 +78,10 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont 
 
 void SVGFontExport::implCollectGlyphs()
 {
-    VirtualDevice                   aVDev;
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
     ObjectVector::const_iterator    aIter( maObjects.begin() );
 
-    aVDev.EnableOutput( false );
+    pVDev->EnableOutput( false );
 
     while( aIter != maObjects.end() )
     {
@@ -89,7 +89,7 @@ void SVGFontExport::implCollectGlyphs()
         {
             const GDIMetaFile& rMtf = (*aIter).GetRepresentation();
 
-            aVDev.Push();
+            pVDev->Push();
 
             for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; ++i )
             {
@@ -131,13 +131,13 @@ void SVGFontExport::implCollectGlyphs()
                     break;
 
                     default:
-                        pAction->Execute( &aVDev );
+                        pAction->Execute( pVDev );
                     break;
                 }
 
                 if( !aText.isEmpty() )
                 {
-                    GlyphSet& rGlyphSet = implGetGlyphSet( aVDev.GetFont() );
+                    GlyphSet& rGlyphSet = implGetGlyphSet( pVDev->GetFont() );
                     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI(
                         ::vcl::unohelper::CreateBreakIterator() );
 
@@ -168,7 +168,7 @@ void SVGFontExport::implCollectGlyphs()
                 }
             }
 
-            aVDev.Pop();
+            pVDev->Pop();
         }
 
         ++aIter;
@@ -192,14 +192,14 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                 SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", true, true );
                 OUString     aCurIdStr( aEmbeddedFontStr );
                 OUString     aUnitsPerEM( OUString::number( nFontEM ) );
-                VirtualDevice       aVDev;
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
                 vcl::Font           aFont( rFont );
 
                 aFont.SetSize( Size( 0, nFontEM ) );
                 aFont.SetAlign( ALIGN_BASELINE );
 
-                aVDev.SetMapMode( MAP_100TH_MM );
-                aVDev.SetFont( aFont );
+                pVDev->SetMapMode( MAP_100TH_MM );
+                pVDev->SetFont( aFont );
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr += OUString::number( ++mnCurFontId ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", aUnitsPerEM );
@@ -226,8 +226,8 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "units-per-em", aUnitsPerEM );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-weight", aFontWeight );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-style", aFontStyle );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "ascent", OUString::number( aVDev.GetFontMetric().GetAscent() ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", OUString::number( aVDev.GetFontMetric().GetDescent() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "ascent", OUString::number( pVDev->GetFontMetric().GetAscent() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", OUString::number( pVDev->GetFontMetric().GetDescent() ) );
 
                     {
                         SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "font-face", true, true );
@@ -248,7 +248,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 
                     while( aIter != rGlyphSet.end() )
                     {
-                        implEmbedGlyph( aVDev, *aIter );
+                        implEmbedGlyph( *pVDev.get(), *aIter );
                         ++aIter;
                     }
                 }

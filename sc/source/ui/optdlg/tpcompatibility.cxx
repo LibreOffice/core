@@ -23,11 +23,18 @@ ScTpCompatOptions::ScTpCompatOptions(vcl::Window *pParent, const SfxItemSet &rCo
 
 ScTpCompatOptions::~ScTpCompatOptions()
 {
+    disposeOnce();
 }
 
-SfxTabPage* ScTpCompatOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
+void ScTpCompatOptions::dispose()
 {
-    return new ScTpCompatOptions(pParent, *rCoreAttrs);
+    m_pLbKeyBindings.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> ScTpCompatOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
+{
+    return VclPtr<SfxTabPage>(new ScTpCompatOptions(pParent, *rCoreAttrs), SAL_NO_ACQUIRE);
 }
 
 bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)

@@ -117,6 +117,33 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(vcl::Window *pParent, bool bEN,
     get(m_pFtnCharTextTemplBox, "charstylelb");
 }
 
+SwEndNoteOptionPage::~SwEndNoteOptionPage()
+{
+    disposeOnce();
+}
+
+void SwEndNoteOptionPage::dispose()
+{
+    m_pNumViewBox.clear();
+    m_pOffsetLbl.clear();
+    m_pOffsetFld.clear();
+    m_pNumCountBox.clear();
+    m_pPrefixED.clear();
+    m_pSuffixED.clear();
+    m_pPosFT.clear();
+    m_pPosPageBox.clear();
+    m_pPosChapterBox.clear();
+    m_pStylesContainer.clear();
+    m_pParaTemplBox.clear();
+    m_pPageTemplLbl.clear();
+    m_pPageTemplBox.clear();
+    m_pFtnCharAnchorTemplBox.clear();
+    m_pFtnCharTextTemplBox.clear();
+    m_pContEdit.clear();
+    m_pContFromEdit.clear();
+    SfxTabPage::dispose();
+}
+
 void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 {
     boost::scoped_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
@@ -219,13 +246,9 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     m_pPageTemplBox->SelectEntry( pInf->GetPageDesc( *pSh->GetDoc() )->GetName());
 }
 
-SwEndNoteOptionPage::~SwEndNoteOptionPage()
+VclPtr<SfxTabPage> SwEndNoteOptionPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {
-}
-
-SfxTabPage *SwEndNoteOptionPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
-{
-    return new SwEndNoteOptionPage( pParent, true, *rSet );
+    return VclPtr<SwEndNoteOptionPage>::Create( pParent, true, *rSet );
 }
 
 // Different kinds of numbering; because the Listbox has varying numbers of
@@ -399,9 +422,9 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 {
 }
 
-SfxTabPage *SwFootNoteOptionPage::Create(vcl::Window *pParent, const SfxItemSet *rSet )
+VclPtr<SfxTabPage> SwFootNoteOptionPage::Create(vcl::Window *pParent, const SfxItemSet *rSet )
 {
-    return new SwFootNoteOptionPage( pParent, *rSet );
+    return VclPtr<SfxTabPage>(new SwFootNoteOptionPage( pParent, *rSet ), SAL_NO_ACQUIRE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

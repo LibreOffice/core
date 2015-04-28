@@ -53,6 +53,21 @@ SdModifyFieldDlg::SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pI
     FillControls();
 }
 
+SdModifyFieldDlg::~SdModifyFieldDlg()
+{
+    disposeOnce();
+}
+
+void SdModifyFieldDlg::dispose()
+{
+    m_pRbtFix.clear();
+    m_pRbtVar.clear();
+    m_pLbLanguage.clear();
+    m_pLbFormat.clear();
+    ModalDialog::dispose();
+}
+
+
 /**
  * Returns the new field, owned by caller.
  * Returns NULL if nothing has changed.

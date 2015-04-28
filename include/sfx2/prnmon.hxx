@@ -38,13 +38,14 @@ private:
     SfxPrintOptDlg_Impl*    pDlgImpl;
     SfxViewShell*           pViewSh;
     SfxItemSet*             pOptions;
-    SfxTabPage*             pPage;
+    VclPtr<SfxTabPage>      pPage;
 
 public:
                             SfxPrintOptionsDialog( vcl::Window *pParent,
                                                    SfxViewShell *pViewShell,
                                                    const SfxItemSet *rOptions );
     virtual                 ~SfxPrintOptionsDialog();
+    virtual void            dispose() SAL_OVERRIDE;
 
     bool                    Construct();
     virtual short           Execute() SAL_OVERRIDE;

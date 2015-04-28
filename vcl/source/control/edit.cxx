@@ -239,7 +239,14 @@ bool Edit::set_property(const OString &rKey, const OString &rValue)
 
 Edit::~Edit()
 {
+    disposeOnce();
+}
+
+void Edit::dispose()
+{
     delete mpDDInfo;
+    mpDDInfo = NULL;
+
     vcl::Cursor* pCursor = GetCursor();
     if ( pCursor )
     {
@@ -248,8 +255,10 @@ Edit::~Edit()
     }
 
     delete mpIMEInfos;
+    mpIMEInfos = NULL;
 
     delete mpUpdateDataTimer;
+    mpUpdateDataTimer = NULL;
 
     if ( mxDnDListener.is() )
     {
@@ -266,14 +275,18 @@ Edit::~Edit()
 
         uno::Reference< lang::XEventListener> xEL( mxDnDListener, uno::UNO_QUERY );
         xEL->disposing( lang::EventObject() );  // #95154# #96585# Empty Source means it's the Client
+        mxDnDListener.clear();
     }
 
     SetType(WINDOW_WINDOW);
+
+    mpSubEdit.disposeAndClear();
+    Control::dispose();
 }
 
 void Edit::ImplInitEditData()
 {
-    mpSubEdit               = NULL;
+    mpSubEdit               = VclPtr<Edit>();
     mpUpdateDataTimer       = NULL;
     mpFilterText            = NULL;
     mnXOffset               = 0;
@@ -792,8 +805,8 @@ void Edit::ShowTruncationWarning( vcl::Window* pParent )
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
     {
-        MessageDialog aBox(pParent, ResId(SV_EDIT_WARNING_STR, *pResMgr), VCL_MESSAGE_WARNING);
-        aBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aBox( pParent, ResId(SV_EDIT_WARNING_STR, *pResMgr), VCL_MESSAGE_WARNING );
+        aBox->Execute();
     }
 }
 
@@ -2696,7 +2709,8 @@ void Edit::ClearModifyFlag()
 
 void Edit::SetSubEdit( Edit* pEdit )
 {
-    mpSubEdit = pEdit;
+    mpSubEdit.disposeAndClear();
+    mpSubEdit.set( pEdit );
     if ( mpSubEdit )
     {
         SetPointer( POINTER_ARROW );    // Nur das SubEdit hat den BEAM...
@@ -2771,8 +2785,8 @@ Size Edit::CalcMinimumSize() const
 Size Edit::GetMinimumEditSize()
 {
     vcl::Window* pDefWin = ImplGetDefaultWindow();
-    Edit aEdit( pDefWin, WB_BORDER );
-    Size aSize( aEdit.CalcMinimumSize() );
+    ScopedVclPtrInstance< Edit > aEdit(  pDefWin, WB_BORDER  );
+    Size aSize( aEdit->CalcMinimumSize() );
     return aSize;
 }
 

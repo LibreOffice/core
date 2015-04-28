@@ -103,7 +103,24 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     }
 }
 
+XMLFilterSettingsDialog::~XMLFilterSettingsDialog()
+{
+    disposeOnce();
+}
 
+void XMLFilterSettingsDialog::dispose()
+{
+    m_pFilterListBox.clear();
+    m_pCtrlFilterList.clear();
+    m_pPBNew.clear();
+    m_pPBEdit.clear();
+    m_pPBTest.clear();
+    m_pPBDelete.clear();
+    m_pPBSave.clear();
+    m_pPBOpen.clear();
+    m_pPBClose.clear();
+    ModelessDialog::dispose();
+}
 
 IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, PushButton *, pButton )
 {
@@ -225,11 +242,11 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
-    if ( aDlg.Execute() == RET_OK )
+    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
+    if ( aDlg->Execute() == RET_OK )
     {
         // insert the new filter
-        insertOrEdit( aDlg.getNewFilterInfo() );
+        insertOrEdit( aDlg->getNewFilterInfo() );
     }
 }
 
@@ -246,10 +263,10 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         // execute XML Filter Dialog
-        XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
-        if ( aDlg.Execute() == RET_OK )
+        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
+        if ( aDlg->Execute() == RET_OK )
         {
-            filter_info_impl* pNewInfo = aDlg.getNewFilterInfo();
+            filter_info_impl* pNewInfo = aDlg->getNewFilterInfo();
 
             if( !(*pOldInfo == *pNewInfo) )
             {
@@ -771,8 +788,8 @@ void XMLFilterSettingsDialog::onTest()
     {
         filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
-        XMLFilterTestDialog aDlg(this, mxContext);
-        aDlg.test( *pInfo );
+        ScopedVclPtrInstance< XMLFilterTestDialog > aDlg(this, mxContext);
+        aDlg->test( *pInfo );
     }
 }
 
@@ -789,8 +806,8 @@ void XMLFilterSettingsDialog::onDelete()
         OUString aMessage(RESIDSTR(STR_WARN_DELETE));
         aMessage = aMessage.replaceFirst( aPlaceHolder, pInfo->maFilterName );
 
-        WarningBox aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES),    aMessage );
-        if( aWarnBox.Execute() == RET_YES )
+        ScopedVclPtrInstance< WarningBox > aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES), aMessage );
+        if( aWarnBox->Execute() == RET_YES )
         {
             try
             {
@@ -919,8 +936,8 @@ void XMLFilterSettingsDialog::onSave()
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
 
-        InfoBox aBox(this, aMsg );
-        aBox.Execute();
+        ScopedVclPtrInstance< InfoBox > aBox(this, aMsg );
+        aBox->Execute();
     }
 }
 
@@ -985,8 +1002,8 @@ void XMLFilterSettingsDialog::onOpen()
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
         }
 
-        InfoBox aBox(this, aMsg );
-        aBox.Execute();
+        ScopedVclPtrInstance< InfoBox > aBox(this, aMsg );
+        aBox->Execute();
     }
 }
 
@@ -1339,12 +1356,12 @@ SvxPathControl::SvxPathControl(vcl::Window* pParent)
     : Window(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER)
     , bHasBeenShown(false)
 {
-    m_pVBox = new VclVBox(this);
+    m_pVBox = VclPtr<VclVBox>::Create(this);
 
-    m_pHeaderBar = new HeaderBar(m_pVBox, WB_BOTTOMBORDER);
+    m_pHeaderBar = VclPtr<HeaderBar>::Create(m_pVBox, WB_BOTTOMBORDER);
     m_pHeaderBar->set_height_request(GetTextHeight() + 6);
 
-    m_pFocusCtrl = new XMLFilterListBox(m_pVBox, this);
+    m_pFocusCtrl = VclPtr<XMLFilterListBox>::Create(m_pVBox, this);
     m_pFocusCtrl->set_fill(true);
     m_pFocusCtrl->set_expand(true);
 
@@ -1399,8 +1416,15 @@ Size SvxPathControl::GetOptimalSize() const
 
 SvxPathControl::~SvxPathControl()
 {
-    delete m_pFocusCtrl;
-    delete m_pHeaderBar;
+    disposeOnce();
+}
+
+void SvxPathControl::dispose()
+{
+    m_pFocusCtrl.disposeAndClear();
+    m_pHeaderBar.disposeAndClear();
+    m_pVBox.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPathControl(vcl::Window *pParent, VclBuilder::stringmap &)
@@ -1446,7 +1470,16 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
     m_pHeaderBar->Show();
 }
 
+XMLFilterListBox::~XMLFilterListBox()
+{
+    disposeOnce();
+}
 
+void XMLFilterListBox::dispose()
+{
+    m_pHeaderBar.clear();
+    SvTabListBox::dispose();
+}
 
 void XMLFilterListBox::Paint( const Rectangle& rRect )
 {

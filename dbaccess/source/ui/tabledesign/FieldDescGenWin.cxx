@@ -31,15 +31,20 @@ using namespace dbaui;
 OFieldDescGenWin::OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* pHelp ) :
      TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
 {
-    m_pFieldControl = new OTableFieldControl(this,pHelp);
+    m_pFieldControl = VclPtr<OTableFieldControl>::Create(this,pHelp);
     m_pFieldControl->SetHelpId(HID_TAB_DESIGN_FIELDCONTROL);
     m_pFieldControl->Show();
 }
 
 OFieldDescGenWin::~OFieldDescGenWin()
 {
-    boost::scoped_ptr<vcl::Window> aTemp(m_pFieldControl);
-    m_pFieldControl = NULL;
+    disposeOnce();
+}
+
+void OFieldDescGenWin::dispose()
+{
+    m_pFieldControl.disposeAndClear();
+    TabPage::dispose();
 }
 
 void OFieldDescGenWin::Init()
@@ -74,7 +79,6 @@ void OFieldDescGenWin::SetControlText( sal_uInt16 nControlId, const OUString& rT
 
 void OFieldDescGenWin::DisplayData( OFieldDescription* pFieldDescr )
 {
-
     m_pFieldControl->DisplayData(pFieldDescr);
 }
 

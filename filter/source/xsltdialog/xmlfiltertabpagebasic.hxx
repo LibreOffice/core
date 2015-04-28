@@ -34,6 +34,7 @@ class XMLFilterTabPageBasic : public TabPage
 public:
     XMLFilterTabPageBasic(vcl::Window* pParent);
     virtual ~XMLFilterTabPageBasic();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
@@ -41,11 +42,11 @@ public:
     static OUString decodeComment( const OUString& rComment );
     static OUString encodeComment( const OUString& rComment );
 
-    Edit*              m_pEDFilterName;
-    ComboBox*          m_pCBApplication;
-    Edit*              m_pEDInterfaceName;
-    Edit*              m_pEDExtension;
-    VclMultiLineEdit*  m_pEDDescription;
+    VclPtr<Edit>              m_pEDFilterName;
+    VclPtr<ComboBox>          m_pCBApplication;
+    VclPtr<Edit>              m_pEDInterfaceName;
+    VclPtr<Edit>              m_pEDExtension;
+    VclPtr<VclMultiLineEdit>  m_pEDDescription;
 };
 
 #endif

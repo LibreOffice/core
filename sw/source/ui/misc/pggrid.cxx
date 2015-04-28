@@ -151,14 +151,41 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
 
 SwTextGridPage::~SwTextGridPage()
 {
+    disposeOnce();
 }
 
-SfxTabPage *SwTextGridPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+void SwTextGridPage::dispose()
 {
-    return new SwTextGridPage(pParent, *rSet);
+    m_pNoGridRB.clear();
+    m_pLinesGridRB.clear();
+    m_pCharsGridRB.clear();
+    m_pSnapToCharsCB.clear();
+    m_pExampleWN.clear();
+    m_pLayoutFL.clear();
+    m_pLinesPerPageNF.clear();
+    m_pLinesRangeFT.clear();
+    m_pTextSizeMF.clear();
+    m_pCharsPerLineFT.clear();
+    m_pCharsPerLineNF.clear();
+    m_pCharsRangeFT.clear();
+    m_pCharWidthFT.clear();
+    m_pCharWidthMF.clear();
+    m_pRubySizeFT.clear();
+    m_pRubySizeMF.clear();
+    m_pRubyBelowCB.clear();
+    m_pDisplayFL.clear();
+    m_pDisplayCB.clear();
+    m_pPrintCB.clear();
+    m_pColorLB.clear();
+    SfxTabPage::dispose();
 }
 
-bool    SwTextGridPage::FillItemSet(SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwTextGridPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+{
+    return VclPtr<SfxTabPage>(new SwTextGridPage(pParent, *rSet), SAL_NO_ACQUIRE);
+}
+
+bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
     if(m_pNoGridRB->IsValueChangedFromSaved() ||
@@ -460,7 +487,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
 
 IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
 {
-    bool bEnable = m_pNoGridRB != pButton;
+    bool bEnable = m_pNoGridRB.get() != pButton;
     m_pLayoutFL->Enable(bEnable);
     m_pDisplayFL->Enable(bEnable);
 

@@ -158,7 +158,7 @@ namespace vclcanvas
                 }
             }
 
-            OutputDevice*       mpOutDev;
+            VclPtr<OutputDevice> mpOutDev;
             const bool          mbMappingWasEnabled;
             const sal_uInt16    mnAntiAliasing;
         };

@@ -73,6 +73,22 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPa
 
 ScSolverDlg::~ScSolverDlg()
 {
+    disposeOnce();
+}
+
+void ScSolverDlg::dispose()
+{
+    m_pFtFormulaCell.clear();
+    m_pEdFormulaCell.clear();
+    m_pRBFormulaCell.clear();
+    m_pEdTargetVal.clear();
+    m_pFtVariableCell.clear();
+    m_pEdVariableCell.clear();
+    m_pRBVariableCell.clear();
+    m_pBtnOk.clear();
+    m_pBtnCancel.clear();
+    pEdActive.clear();
+    ScAnyRefDlg::dispose();
 }
 
 void ScSolverDlg::Init()
@@ -170,7 +186,7 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
 
 bool ScSolverDlg::IsRefInputMode() const
 {
-    return pEdActive != NULL;
+    return pEdActive != nullptr;
 }
 
 bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )

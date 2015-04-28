@@ -111,7 +111,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
         bHasFilterEntry(false),
         bUseColor(false)
 {
-    m_pAcceptChgCtr = new SvxAcceptChgCtr(get_content_area(), this);
+    m_pAcceptChgCtr = VclPtr<SvxAcceptChgCtr>::Create(get_content_area(), this);
     nAcceptCount=0;
     nRejectCount=0;
     aReOpenIdle.SetPriority(SchedulerPriority::MEDIUM);
@@ -154,6 +154,11 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
 
 ScAcceptChgDlg::~ScAcceptChgDlg()
 {
+    disposeOnce();
+}
+
+void ScAcceptChgDlg::dispose()
+{
     ClearView();
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
@@ -163,7 +168,11 @@ ScAcceptChgDlg::~ScAcceptChgDlg()
         pChanges->SetModifiedLink(aLink);
     }
 
-    delete m_pAcceptChgCtr;
+    m_pAcceptChgCtr.disposeAndClear();
+    pTPFilter.clear();
+    pTPView.clear();
+    pTheView.clear();
+    SfxModelessDialog::dispose();
 }
 
 void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)

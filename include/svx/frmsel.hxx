@@ -84,7 +84,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FrameSelector : public Control
 {
 public:
     FrameSelector(vcl::Window* pParent);
-    virtual             ~FrameSelector();
+    virtual ~FrameSelector();
 
     /** Initializes the control, enables/disables frame borders according to flags. */
     void                Initialize( FrameSelFlags nFlags );

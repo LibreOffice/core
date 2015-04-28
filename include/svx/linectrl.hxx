@@ -52,7 +52,7 @@ public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
     void                Update( const SfxPoolItem* pState );
-    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -69,7 +69,7 @@ public:
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -82,7 +82,7 @@ class SvxLineEndWindow : public SfxPopupWindow
 
 private:
     XLineEndListRef pLineEndList;
-    ValueSet        aLineEndSet;
+    VclPtr<ValueSet> aLineEndSet;
     sal_uInt16      nCols;
     sal_uInt16      nLines;
     sal_uIntPtr     nLineEndWidth;
@@ -118,12 +118,13 @@ public:
                       vcl::Window* pParentWindow,
                       const OUString& rWndTitle );
     virtual ~SvxLineEndWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            StartSelection();
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 };
 
 
@@ -140,7 +141,7 @@ public:
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 };
 
 

@@ -52,7 +52,7 @@ void GraphicViewShell::ConstructGraphicViewShell()
 {
     meShellType = ST_DRAW;
 
-    mpLayerTabBar.reset (new LayerTabBar(this, GetParentWindow()));
+    mpLayerTabBar.reset (VclPtr<LayerTabBar>::Create(this, GetParentWindow()));
 
     // #i67363# no layer tabbar in preview mode
     if ( !GetObjectShell()->IsPreview() )

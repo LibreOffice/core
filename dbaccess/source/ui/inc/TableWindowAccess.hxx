@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
@@ -35,7 +36,7 @@ namespace dbaui
     class OTableWindowAccess    :   public VCLXAccessibleComponent
                                 ,   public OTableWindowAccess_BASE
     {
-        OTableWindow*   m_pTable; // the window which I should give accessibility to
+        VclPtr<OTableWindow>   m_pTable; // the window which I should give accessibility to
 
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getParentChild(sal_Int32 _nIndex);
     protected:

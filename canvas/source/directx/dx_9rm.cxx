@@ -666,7 +666,8 @@ namespace dxcanvas
             maVertexCache.reserve(1024);
 
             mpWindow.reset(
-                new SystemChildWindow(
+                VclPtr<SystemChildWindow>::Create(
+
                 const_cast<vcl::Window *>(&rWindow), 0) );
 
             // system child window must not receive mouse events

@@ -187,42 +187,42 @@ void ScSimpleRefDlgWrapper::SetAutoReOpen(bool bFlag)
 
 void ScSimpleRefDlgWrapper::SetRefString(const OUString& rStr)
 {
-    if(pWindow!=NULL)
+    if(pWindow!=nullptr)
     {
-        static_cast<ScSimpleRefDlg*>(pWindow)->SetRefString(rStr);
+        static_cast<ScSimpleRefDlg*>(pWindow.get())->SetRefString(rStr);
     }
 }
 
 void ScSimpleRefDlgWrapper::SetCloseHdl( const Link& rLink )
 {
-    if(pWindow!=NULL)
+    if(pWindow!=nullptr)
     {
-        static_cast<ScSimpleRefDlg*>(pWindow)->SetCloseHdl( rLink );
+        static_cast<ScSimpleRefDlg*>(pWindow.get())->SetCloseHdl( rLink );
     }
 }
 
 void ScSimpleRefDlgWrapper::SetUnoLinks( const Link& rDone,
                     const Link& rAbort, const Link& rChange )
 {
-    if(pWindow!=NULL)
+    if(pWindow!=nullptr)
     {
-        static_cast<ScSimpleRefDlg*>(pWindow)->SetUnoLinks( rDone, rAbort, rChange );
+        static_cast<ScSimpleRefDlg*>(pWindow.get())->SetUnoLinks( rDone, rAbort, rChange );
     }
 }
 
 void ScSimpleRefDlgWrapper::SetFlags( bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection )
 {
-    if(pWindow!=NULL)
+    if(pWindow!=nullptr)
     {
-        static_cast<ScSimpleRefDlg*>(pWindow)->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
+        static_cast<ScSimpleRefDlg*>(pWindow.get())->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
     }
 }
 
 void ScSimpleRefDlgWrapper::StartRefInput()
 {
-    if(pWindow!=NULL)
+    if(pWindow!=nullptr)
     {
-        static_cast<ScSimpleRefDlg*>(pWindow)->StartRefInput();
+        static_cast<ScSimpleRefDlg*>(pWindow.get())->StartRefInput();
     }
 }
 
@@ -237,12 +237,13 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   vcl::Window* pParentP,
         ScTabViewShell* pViewShell =
             PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
         OSL_ENSURE( pViewShell, "missing view shell :-(" );
-        pWindow = pViewShell ?
-            new ScAcceptChgDlg( pBindings, this, pParentP, &pViewShell->GetViewData() ) :
-            NULL;
-        if(pWindow!=NULL)
+        if (pViewShell)
+            pWindow = VclPtr<ScAcceptChgDlg>::Create( pBindings, this, pParentP, &pViewShell->GetViewData() );
+        else
+            pWindow = NULL;
+        if(pWindow!=nullptr)
         {
-            static_cast<ScAcceptChgDlg*>(pWindow)->Initialize( pInfo );
+            static_cast<ScAcceptChgDlg*>(pWindow.get())->Initialize( pInfo );
         }
         if (pViewShell && !pWindow)
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );
@@ -254,9 +255,9 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
         PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     OSL_ENSURE( pViewShell, "missing view shell :-(" );
 
-    if(pWindow!=NULL && pViewShell)
+    if(pWindow!=nullptr && pViewShell)
     {
-        static_cast<ScAcceptChgDlg*>(pWindow)->ReInit(&pViewShell->GetViewData());
+        static_cast<ScAcceptChgDlg*>(pWindow.get())->ReInit(&pViewShell->GetViewData());
     }
 }
 
@@ -289,7 +290,7 @@ ScValidityRefChildWin::ScValidityRefChildWin( vcl::Window*               pParent
 {
     SetWantsFocus( false );
     ScTabViewShell* pViewShell =
-        NULL != ( pWindow =  ScValidationDlg::Find1AliveObject( pParentP ) ) ? static_cast<ScValidationDlg*>(pWindow)->GetTabViewShell() :
+        nullptr != ( pWindow = ScValidationDlg::Find1AliveObject( pParentP ) ) ? static_cast<ScValidationDlg*>(pWindow.get())->GetTabViewShell() :
         lcl_GetTabViewShell( p );
     if (!pViewShell)
         pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );

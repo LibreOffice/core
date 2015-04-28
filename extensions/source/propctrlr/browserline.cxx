@@ -55,7 +55,7 @@ namespace pcr
 
     OBrowserLine::OBrowserLine( const OUString& _rEntryName, vcl::Window* pParent )
             :m_sEntryName( _rEntryName )
-            ,m_aFtTitle(pParent)
+            ,m_aFtTitle(VclPtr<FixedText>::Create(pParent))
             ,m_pControlWindow( NULL )
             ,m_pBrowseButton(NULL)
             ,m_pAdditionalBrowseButton( NULL )
@@ -66,7 +66,7 @@ namespace pcr
             ,m_bIndentTitle( false )
             ,m_bReadOnly( false )
     {
-        m_aFtTitle.Show();
+        m_aFtTitle->Show();
     }
 
 
@@ -109,7 +109,7 @@ namespace pcr
     void OBrowserLine::setControl( const Reference< XPropertyControl >& _rxControl )
     {
         m_xControl = _rxControl;
-        m_pControlWindow = m_xControl.is() ? VCLUnoHelper::GetWindow( _rxControl->getControlWindow() ) : NULL;
+        m_pControlWindow = m_xControl.is() ? VCLUnoHelper::GetWindow( _rxControl->getControlWindow() ) : VclPtr<vcl::Window>();
         DBG_ASSERT( m_pControlWindow, "OBrowserLine::setControl: setting NULL controls/windows is not allowed!" );
 
         if ( m_pControlWindow )
@@ -123,7 +123,7 @@ namespace pcr
 
     vcl::Window* OBrowserLine::GetRefWindow()
     {
-        vcl::Window* pRefWindow=&m_aFtTitle;
+        vcl::Window* pRefWindow = m_aFtTitle.get();
 
         if(m_pBrowseButton)
         {
@@ -139,9 +139,9 @@ namespace pcr
 
     void OBrowserLine::SetTabOrder(vcl::Window* pRefWindow, sal_uInt16 nFlags )
     {
-        m_aFtTitle.SetZOrder(pRefWindow,nFlags);
+        m_aFtTitle->SetZOrder(pRefWindow,nFlags);
         if ( m_pControlWindow )
-            m_pControlWindow->SetZOrder( (vcl::Window*)&m_aFtTitle, WINDOW_ZORDER_BEHIND );
+            m_pControlWindow->SetZOrder( m_aFtTitle.get(), WINDOW_ZORDER_BEHIND );
 
         if ( m_pBrowseButton && m_pControlWindow )
             m_pBrowseButton->SetZOrder( m_pControlWindow, WINDOW_ZORDER_BEHIND );
@@ -185,7 +185,7 @@ namespace pcr
 
     void OBrowserLine::Show(bool bFlag)
     {
-        m_aFtTitle.Show(bFlag);
+        m_aFtTitle->Show(bFlag);
         if ( m_pControlWindow )
             m_pControlWindow->Show( bFlag );
         if ( m_pBrowseButton )
@@ -203,7 +203,7 @@ namespace pcr
 
     bool OBrowserLine::IsVisible()
     {
-        return m_aFtTitle.IsVisible();
+        return m_aFtTitle->IsVisible();
     }
 
 
@@ -219,7 +219,7 @@ namespace pcr
                 aTitlePos.X() += aIndent.Width();
                 aTitleSize.Width() -= aIndent.Width();
             }
-            m_aFtTitle.SetPosSizePixel( aTitlePos, aTitleSize );
+            m_aFtTitle->SetPosSizePixel( aTitlePos, aTitleSize );
         }
 
         sal_Int32 nBrowseButtonSize = m_aOutputSize.Height() - 4;
@@ -255,7 +255,7 @@ namespace pcr
         if ( GetTitle() == _rNewTtile )
             return;
         // #99102# --------------
-        m_aFtTitle.SetText( _rNewTtile );
+        m_aFtTitle->SetText( _rNewTtile );
         if ( m_pControlWindow )
             m_pControlWindow->SetAccessibleName( _rNewTtile );
         if ( m_pBrowseButton )
@@ -268,7 +268,7 @@ namespace pcr
     {
         if( m_pTheParent )
         {
-            OUStringBuffer aText( m_aFtTitle.GetText() );
+            OUStringBuffer aText( m_aFtTitle->GetText() );
 
             while( m_pTheParent->GetTextWidth( aText.toString() ) < m_nNameWidth )
                         aText.append("...........");
@@ -280,14 +280,14 @@ namespace pcr
                 aText.append( OUString(cRTL_mark) );
             }
 
-            m_aFtTitle.SetText( aText.makeStringAndClear() );
+            m_aFtTitle->SetText( aText.makeStringAndClear() );
         }
     }
 
 
     OUString OBrowserLine::GetTitle() const
     {
-        OUString sDisplayName = m_aFtTitle.GetText();
+        OUString sDisplayName = m_aFtTitle->GetText();
 
         // for Issue 69452
         if (AllSettings::GetLayoutRTL())
@@ -341,7 +341,7 @@ namespace pcr
 
     void OBrowserLine::implUpdateEnabledDisabled()
     {
-        implEnable( &m_aFtTitle,                m_nEnableFlags, PropertyLineElement::CompleteLine );
+        implEnable( m_aFtTitle.get(),           m_nEnableFlags, PropertyLineElement::CompleteLine );
         if ( m_pControlWindow )
             implEnable( m_pControlWindow,       m_nEnableFlags, PropertyLineElement::CompleteLine | PropertyLineElement::InputControl );
 
@@ -376,11 +376,11 @@ namespace pcr
 
     PushButton& OBrowserLine::impl_ensureButton( bool _bPrimary )
     {
-        PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
+        VclPtr<PushButton>& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
 
         if ( !rpButton )
         {
-            rpButton = new PushButton( m_pTheParent, WB_NOPOINTERFOCUS );
+            rpButton = VclPtr<PushButton>::Create( m_pTheParent, WB_NOPOINTERFOCUS );
             rpButton->SetGetFocusHdl( LINK( this, OBrowserLine, OnButtonFocus ) );
             rpButton->SetClickHdl( LINK( this, OBrowserLine, OnButtonClicked ) );
             rpButton->SetText(OUString("..."));
@@ -443,13 +443,12 @@ namespace pcr
 
     void OBrowserLine::implHideBrowseButton( bool _bPrimary, bool _bReLayout )
     {
-        PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
+        VclPtr<PushButton>& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
 
         if ( rpButton )
         {
             rpButton->Hide();
-            delete rpButton;
-            rpButton = NULL;
+            rpButton.disposeAndClear();
         }
 
         if ( _bReLayout )

@@ -58,12 +58,28 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(vcl::Window* pPar
 
 SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 {
-    delete m_pImpl;
+    disposeOnce();
 }
 
-SfxTabPage* SvxAccessibilityOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+void SvxAccessibilityOptionsTabPage::dispose()
 {
-    return new SvxAccessibilityOptionsTabPage(pParent, *rAttrSet);
+    delete m_pImpl;
+    m_pImpl = NULL;
+    m_pAccessibilityTool.clear();
+    m_pTextSelectionInReadonly.clear();
+    m_pAnimatedGraphics.clear();
+    m_pAnimatedTexts.clear();
+    m_pTipHelpCB.clear();
+    m_pTipHelpNF.clear();
+    m_pAutoDetectHC.clear();
+    m_pAutomaticFontColor.clear();
+    m_pPagePreviews.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SvxAccessibilityOptionsTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )

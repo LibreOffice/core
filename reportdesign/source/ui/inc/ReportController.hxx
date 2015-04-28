@@ -93,7 +93,7 @@ namespace rptui
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         TransferableClipboardListener*
                                 m_pClipbordNotifier;    /// notifier for changes in the clipboard
-        OGroupsSortingDialog*   m_pGroupsFloater;
+        VclPtr<OGroupsSortingDialog>   m_pGroupsFloater;
 
         OXReportControllerObserver* m_pReportControllerObserver;
 
@@ -457,7 +457,7 @@ namespace rptui
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+        OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const;
         OUString getColumnLabel_throw(const OUString& i_sColumnName) const;

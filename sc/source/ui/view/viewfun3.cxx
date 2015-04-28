@@ -832,8 +832,8 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
 
     if (!bIsEmpty)
     {
-        ScReplaceWarnBox aBox(pParentWnd);
-        if (aBox.Execute() != RET_YES)
+        ScopedVclPtrInstance< ScReplaceWarnBox > aBox(pParentWnd);
+        if (aBox->Execute() != RET_YES)
         {
             //  changing the configuration is within the ScReplaceWarnBox
             return false;
@@ -1041,9 +1041,9 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         {
             ScWaitCursorOff aWaitOff( GetFrameWin() );
             OUString aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
-            QueryBox aBox( GetViewData().GetDialogParent(),
+            ScopedVclPtrInstance<QueryBox> aBox( GetViewData().GetDialogParent(),
                             WinBits(WB_YES_NO | WB_DEF_NO), aMessage );
-            if ( aBox.Execute() != RET_YES )
+            if ( aBox->Execute() != RET_YES )
             {
                 return false;
             }
@@ -1910,7 +1910,7 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, b
 void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                                   SCROW nStartRow , SCCOL nStartCol ,
                                   SCROW nEndRow , SCCOL nEndCol ,
-                                  boost::ptr_vector<boost::nullable<Edit> >& aEdits,
+                                  std::vector<VclPtr<Edit> >& aEdits,
                                   sal_uInt16 aColLength )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
@@ -1952,9 +1952,9 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
 
         for(sal_uInt16 i = 0; i < aColLength; i++)
         {
-            if (!aEdits.is_null(i))
+            if (aEdits[i] != nullptr)
             {
-                OUString  aFieldName=aEdits[i].GetText();
+                OUString  aFieldName=aEdits[i]->GetText();
                 pDoc->SetString( nStartCol + i, nCurrentRow, nTab, aFieldName );
             }
         }

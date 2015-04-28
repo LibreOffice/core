@@ -56,12 +56,12 @@ namespace dbaui
 
         long                                m_nSeekRow;
         BrowserMode                         m_nMode;                    // remember the BrowseModes
-        Edit*                               m_pTextCell;
-        ::svt::CheckBoxControl*             m_pVisibleCell;
-        ::svt::ComboBoxControl*             m_pFieldCell;
-        ::svt::ListBoxControl*              m_pFunctionCell;
-        ::svt::ListBoxControl*              m_pTableCell;
-        ::svt::ListBoxControl*              m_pOrderCell;
+        VclPtr<Edit>                               m_pTextCell;
+        VclPtr<::svt::CheckBoxControl>             m_pVisibleCell;
+        VclPtr<::svt::ComboBoxControl>             m_pFieldCell;
+        VclPtr<::svt::ListBoxControl>              m_pFunctionCell;
+        VclPtr<::svt::ListBoxControl>              m_pTableCell;
+        VclPtr<::svt::ListBoxControl>              m_pOrderCell;
 
         OTableFieldDescRef                  m_pEmptyEntry;              // default entry in the list may reference more than once
 
@@ -80,6 +80,7 @@ namespace dbaui
         DECL_LINK(OnInvalidateTimer, void*);
     public:                         OSelectionBrowseBox( vcl::Window* pParent );
                                     virtual ~OSelectionBrowseBox();
+        virtual void                dispose() SAL_OVERRIDE;
 
         void                        initialize();
         OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, bool bVis=true, bool bActivate=true );
@@ -205,7 +206,7 @@ namespace dbaui
         virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
 
         // if you want to have an own header ...
-        virtual BrowserHeader*      imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
+        virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
 
         void                        stopTimer();
         void                        startTimer();

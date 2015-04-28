@@ -28,10 +28,6 @@ TemplateDefaultView::TemplateDefaultView( Window* pParent)
     ThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
 }
 
-TemplateDefaultView::~TemplateDefaultView()
-{
-}
-
 void TemplateDefaultView::reload()
 {
     TemplateLocalView::reload();

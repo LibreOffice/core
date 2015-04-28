@@ -423,11 +423,7 @@ void DeInitVCL()
         delete pSVData->maCtrlData.mpDisclosureMinus;
         pSVData->maCtrlData.mpDisclosureMinus = NULL;
     }
-    if ( pSVData->mpDefaultWin )
-    {
-        delete pSVData->mpDefaultWin;
-        pSVData->mpDefaultWin = NULL;
-    }
+    pSVData->mpDefaultWin.disposeAndClear();
 
     DBGGUI_DEINIT_SOLARMUTEXCHECK();
 

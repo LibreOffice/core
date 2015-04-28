@@ -68,8 +68,8 @@ struct TTabPageInfo
     public:
 
         ::sal_Int32                                   m_nIndex;
-        bool                                    m_bCreated;
-        FwkTabPage*                                   m_pPage;
+        bool                                          m_bCreated;
+        VclPtr<FwkTabPage>                            m_pPage;
         css::uno::Sequence< css::beans::NamedValue >  m_lProperties;
 };
 
@@ -159,7 +159,7 @@ private:
     css::uno::Reference< css::awt::XWindow > m_xTabWin;
 
     /// the VCL tab window
-    FwkTabWindow* m_pTabWin;
+    VclPtr<FwkTabWindow> m_pTabWin;
 
     /// container of inserted tab pages
     TTabPageInfoHash m_lTabPageInfos;
@@ -356,7 +356,7 @@ void SAL_CALL TabWindowService::dispose()
     if (m_pTabWin)
         m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
 
-    m_pTabWin = NULL;
+    m_pTabWin.clear();
     m_xTabWin.clear();
 }
 

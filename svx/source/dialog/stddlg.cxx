@@ -35,8 +35,4 @@ SvxStandardDialog::SvxStandardDialog(vcl::Window *pParent, const OUString& rID, 
 {
 }
 
-SvxStandardDialog::~SvxStandardDialog()
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

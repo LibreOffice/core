@@ -33,11 +33,11 @@ class SvxDefaultColorOptPage : public SfxTabPage
 {
 
 private:
-    ColorLB*                m_pLbChartColors;
-    ValueSet*               m_pValSetColorBox;
-    PushButton*             m_pPBDefault;
-    PushButton*             m_pPBAdd;
-    PushButton*             m_pPBRemove;
+    VclPtr<ColorLB>                m_pLbChartColors;
+    VclPtr<ValueSet>               m_pValSetColorBox;
+    VclPtr<PushButton>             m_pPBDefault;
+    VclPtr<PushButton>             m_pPBAdd;
+    VclPtr<PushButton>             m_pPBRemove;
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
@@ -55,10 +55,11 @@ private:
 public:
     SvxDefaultColorOptPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxDefaultColorOptPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
     virtual bool        FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rInAttrs ) SAL_OVERRIDE;
 };

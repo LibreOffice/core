@@ -95,7 +95,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetMapMode(MAP_PIXEL);
 
     // Even RTL languages don't use RTL for math
-    rCmdBox.GetEditWindow().EnableRTL( false );
+    EnableRTL( false );
 
     ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
@@ -119,6 +119,11 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
 
 SmEditWindow::~SmEditWindow()
 {
+    disposeOnce();
+}
+
+void SmEditWindow::dispose()
+{
     aModifyIdle.Stop();
 
     StartCursorMove();
@@ -127,9 +132,13 @@ SmEditWindow::~SmEditWindow()
     // must be done before EditView (and thus EditEngine) is no longer
     // available for those classes.
     if (pAccessible)
+    {
         pAccessible->ClearWin();    // make Accessible defunctional
+        pAccessible = NULL;
+        xAccessible.clear();
+    }
     // Note: memory for pAccessible will be freed when the reference
-    // xAccessible is released.
+    // xAccessible is released. FIXME: horribly redundant lifecycle ! ...
 
     if (pEditView)
     {
@@ -139,7 +148,14 @@ SmEditWindow::~SmEditWindow()
             pEditEngine->SetStatusEventHdl( Link() );
             pEditEngine->RemoveView( pEditView.get() );
         }
+        pEditView.reset();
     }
+
+    pHScrollBar.disposeAndClear();
+    pVScrollBar.disposeAndClear();
+    pScrollBox.disposeAndClear();
+
+    vcl::Window::dispose();
 }
 
 void SmEditWindow::StartCursorMove()
@@ -534,11 +550,11 @@ void SmEditWindow::CreateEditView()
         pEditEngine->InsertView( pEditView.get() );
 
         if (!pVScrollBar)
-            pVScrollBar.reset(new ScrollBar(this, WinBits(WB_VSCROLL)));
+            pVScrollBar = VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL));
         if (!pHScrollBar)
-            pHScrollBar.reset(new ScrollBar(this, WinBits(WB_HSCROLL)));
+            pHScrollBar = VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL));
         if (!pScrollBox)
-            pScrollBox.reset(new ScrollBarBox(this));
+            pScrollBox  = VclPtr<ScrollBarBox>::Create(this);
         pVScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pHScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pVScrollBar->EnableDrag( true );

@@ -36,7 +36,7 @@ using namespace ::comphelper;
 VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
 {
-    m_pTabPage = static_cast< TabPage* >( GetWindow() );
+    m_pTabPage = static_cast< TabPage* >( GetWindow().get() );
     m_pTabControl = 0;
     m_nPageId = 0;
     if ( m_pTabPage )
@@ -50,7 +50,7 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindo
                 for ( sal_uInt16 i = 0, nCount = m_pTabControl->GetPageCount(); i < nCount; ++i )
                 {
                     sal_uInt16 nPageId = m_pTabControl->GetPageId( i );
-                    if ( m_pTabControl->GetTabPage( nPageId ) == m_pTabPage )
+                    if ( m_pTabControl->GetTabPage( nPageId ) == m_pTabPage.get() )
                         m_nPageId = nPageId;
                 }
             }

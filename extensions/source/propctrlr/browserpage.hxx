@@ -34,7 +34,7 @@ namespace pcr
     class OBrowserPage : public TabPage
     {
     private:
-        OBrowserListBox     m_aListBox;
+        VclPtr<OBrowserListBox>     m_aListBox;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;
@@ -43,12 +43,13 @@ namespace pcr
     public:
         OBrowserPage(vcl::Window* pParent, WinBits nWinStyle = 0);
         virtual ~OBrowserPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         sal_Int32 getMinimumWidth();
         sal_Int32 getMinimumHeight();
 
-              OBrowserListBox& getListBox() { return m_aListBox; }
-        const OBrowserListBox& getListBox() const { return m_aListBox; }
+              OBrowserListBox& getListBox() { return *m_aListBox.get(); }
+        const OBrowserListBox& getListBox() const { return *m_aListBox.get(); }
     };
 
 

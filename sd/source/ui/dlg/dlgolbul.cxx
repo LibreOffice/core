@@ -138,7 +138,13 @@ OutlineBulletDlg::OutlineBulletDlg(
 
 OutlineBulletDlg::~OutlineBulletDlg()
 {
+    disposeOnce();
+}
+
+void OutlineBulletDlg::dispose()
+{
     delete pOutputSet;
+    SfxTabDialog::dispose();
 }
 
 void OutlineBulletDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )

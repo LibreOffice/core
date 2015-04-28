@@ -206,15 +206,22 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTreeListBox(vcl::Windo
 
 TreeListBox::~TreeListBox ()
 {
+    disposeOnce();
+}
+
+void TreeListBox::dispose()
+{
     m_aNotifier.dispose();
 
     // destroy user data
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
-        delete static_cast<Entry*>(pEntry->GetUserData());
+        delete static_cast<Entry*>( pEntry->GetUserData() );
+        pEntry->SetUserData( NULL );
         pEntry = Next( pEntry );
     }
+    SvTreeListBox::dispose();
 }
 
 void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )

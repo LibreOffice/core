@@ -81,8 +81,23 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
     maTimer.SetTimeoutHdl           ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
 }
 
-SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
+SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp()
 {
+    disposeOnce();
+}
+
+void SvxHyperlinkInternetTp::dispose()
+{
+    m_pRbtLinktypInternet.clear();
+    m_pRbtLinktypFTP.clear();
+    m_pCbbTarget.clear();
+    m_pBtBrowse.clear();
+    m_pFtLogin.clear();
+    m_pEdLogin.clear();
+    m_pFtPassword.clear();
+    m_pEdPassword.clear();
+    m_pCbAnonymous.clear();
+    SvxHyperlinkTabPageBase::dispose();
 }
 
 /*************************************************************************
@@ -187,9 +202,9 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkInternetTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkInternetTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return new SvxHyperlinkInternetTp( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkInternetTp>::Create( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************
@@ -401,7 +416,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
     const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
-    static_cast<SvxHpLinkDlg*>(mpDialog)->GetBindings()->Execute( SID_OPENDOC, ppItems, 0, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+    static_cast<SvxHpLinkDlg*>(mpDialog.get())->GetBindings()->Execute( SID_OPENDOC, ppItems, 0, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 
     return 0L;
 }

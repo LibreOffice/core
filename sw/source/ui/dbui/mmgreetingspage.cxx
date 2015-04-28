@@ -106,8 +106,8 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
 
 IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
 {
-    boost::scoped_ptr<SwCustomizeAddressBlockDialog> pDlg(
-            new SwCustomizeAddressBlockDialog(pButton, m_pWizard->GetConfigItem(),
+    VclPtr<SwCustomizeAddressBlockDialog> pDlg(
+            VclPtr<SwCustomizeAddressBlockDialog>::Create(pButton, m_pWizard->GetConfigItem(),
                         pButton == m_pMalePB ?
                         SwCustomizeAddressBlockDialog::GREETING_MALE :
                         SwCustomizeAddressBlockDialog::GREETING_FEMALE ));
@@ -133,8 +133,8 @@ void    SwGreetingsHandler::UpdatePreview()
 IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
 {
     const OUString sPreview(m_pFemaleLB->GetSelectEntry() + "\n" + m_pMaleLB->GetSelectEntry());
-    boost::scoped_ptr<SwAssignFieldsDialog> pDlg(
-            new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), sPreview, false));
+    VclPtr<SwAssignFieldsDialog> pDlg(
+            VclPtr<SwAssignFieldsDialog>::Create(pButton, m_pWizard->GetConfigItem(), sPreview, false));
     if(RET_OK == pDlg->Execute())
     {
         UpdatePreview();
@@ -292,6 +292,18 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
 
 SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
 {
+    disposeOnce();
+}
+
+void SwMailMergeGreetingsPage::dispose()
+{
+    m_pPreviewFI.clear();
+    m_pPreviewWIN.clear();
+    m_pAssignPB.clear();
+    m_pDocumentIndexFI.clear();
+    m_pPrevSetIB.clear();
+    m_pNextSetIB.clear();
+    svt::OWizardPage::dispose();
 }
 
 void SwMailMergeGreetingsPage::ActivatePage()
@@ -472,6 +484,15 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* _pWi
 
 SwMailBodyDialog::~SwMailBodyDialog()
 {
+    disposeOnce();
+}
+
+void SwMailBodyDialog::dispose()
+{
+    m_pBodyFT.clear();
+    m_pBodyMLE.clear();
+    m_pOK.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, CheckBox*, pBox)

@@ -60,7 +60,7 @@ struct SfxPrintOptDlg_Impl
 
 // class SfxPrinter ------------------------------------------------------
 
-SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
+VclPtr<SfxPrinter> SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
 /*  [Description]
 
@@ -79,7 +79,7 @@ SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
     ReadJobSetup( rStream, aFileJobSetup );
 
     // Get printers
-    SfxPrinter *pPrinter = new SfxPrinter( pOptions, aFileJobSetup );
+    VclPtr<SfxPrinter> pPrinter = VclPtr<SfxPrinter>::Create( pOptions, aFileJobSetup );
     return pPrinter;
 }
 
@@ -166,12 +166,11 @@ SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
 
 
 
-SfxPrinter* SfxPrinter::Clone() const
+VclPtr<SfxPrinter> SfxPrinter::Clone() const
 {
     if ( IsDefPrinter() )
     {
-        SfxPrinter *pNewPrinter;
-        pNewPrinter = new SfxPrinter( GetOptions().Clone() );
+        VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( GetOptions().Clone() );
         pNewPrinter->SetJobSetup( GetJobSetup() );
         pNewPrinter->SetPrinterProps( this );
         pNewPrinter->SetMapMode( GetMapMode() );
@@ -182,15 +181,21 @@ SfxPrinter* SfxPrinter::Clone() const
         return pNewPrinter;
     }
     else
-        return new SfxPrinter( *this );
+        return VclPtr<SfxPrinter>::Create( *this );
 }
 
 
 
 SfxPrinter::~SfxPrinter()
 {
+    disposeOnce();
+}
+
+void SfxPrinter::dispose()
+{
     delete pOptions;
     delete pImpl;
+    Printer::dispose();
 }
 
 
@@ -215,7 +220,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
     VclContainer *pVBox = get_content_area();
 
     // Insert TabPage
-    pPage = pViewSh->CreatePrintOptionsPage(pVBox, *pOptions);
+    pPage.reset(pViewSh->CreatePrintOptionsPage(pVBox, *pOptions));
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
     {
@@ -229,9 +234,15 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
 
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
+    disposeOnce();
+}
+
+void SfxPrintOptionsDialog::dispose()
+{
     delete pDlgImpl;
-    delete pPage;
+    pPage.disposeAndClear();
     delete pOptions;
+    ModalDialog::dispose();
 }
 
 

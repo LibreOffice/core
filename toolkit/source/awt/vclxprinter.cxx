@@ -71,7 +71,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXPrinterPropertySet, VCLXPrinterPropertySet
 
 VCLXPrinterPropertySet::VCLXPrinterPropertySet( const OUString& rPrinterName )
     : OPropertySetHelper( BrdcstHelper )
-    , mxPrinter(std::make_shared<Printer>(rPrinterName))
+    , mxPrinter(VclPtrInstance< Printer >(rPrinterName))
 {
     SolarMutexGuard aSolarGuard;
 

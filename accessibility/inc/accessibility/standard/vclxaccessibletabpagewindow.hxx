@@ -21,6 +21,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLETABPAGEWINDOW_HXX
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/vclptr.hxx>
 
 
 class TabControl;
@@ -34,8 +35,8 @@ class TabPage;
 class VCLXAccessibleTabPageWindow : public VCLXAccessibleComponent
 {
 private:
-    TabControl*             m_pTabControl;
-    TabPage*                m_pTabPage;
+    VclPtr<TabControl>      m_pTabControl;
+    VclPtr<TabPage>         m_pTabPage;
     sal_uInt16              m_nPageId;
 
 protected:

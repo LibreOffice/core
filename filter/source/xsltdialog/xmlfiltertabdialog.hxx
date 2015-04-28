@@ -36,6 +36,7 @@ class XMLFilterTabDialog: public TabDialog
 public:
     XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
     virtual ~XMLFilterTabDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool onOk();
 
@@ -53,14 +54,14 @@ private:
     const filter_info_impl* mpOldInfo;
     filter_info_impl* mpNewInfo;
 
-    TabControl*     m_pTabCtrl;
-    OKButton*       m_pOKBtn;
+    VclPtr<TabControl>     m_pTabCtrl;
+    VclPtr<OKButton>       m_pOKBtn;
 
     sal_Int16 m_nBasicPageId;
     sal_Int16 m_nXSLTPageId;
 
-    XMLFilterTabPageBasic*  mpBasicPage;
-    XMLFilterTabPageXSLT* mpXSLTPage;
+    VclPtr<XMLFilterTabPageBasic>  mpBasicPage;
+    VclPtr<XMLFilterTabPageXSLT> mpXSLTPage;
 };
 
 

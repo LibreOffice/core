@@ -40,9 +40,16 @@ IntroWindow::IntroWindow( ) :
 
 IntroWindow::~IntroWindow()
 {
+    disposeOnce();
+}
+
+void IntroWindow::dispose()
+{
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->mpIntroWindow == this )
-        pSVData->mpIntroWindow = NULL;
+    if ( pSVData->mpIntroWindow.get() == this )
+        pSVData->mpIntroWindow = nullptr;
+
+    WorkWindow::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

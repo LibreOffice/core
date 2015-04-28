@@ -37,6 +37,18 @@ ScShowTabDlg::ScShowTabDlg(vcl::Window* pParent)
     m_pLb->SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );
 }
 
+ScShowTabDlg::~ScShowTabDlg()
+{
+    disposeOnce();
+}
+
+void ScShowTabDlg::dispose()
+{
+    m_pFrame.clear();
+    m_pLb.clear();
+    ModalDialog::dispose();
+}
+
 void ScShowTabDlg::SetDescription(
         const OUString& rTitle, const OUString& rFixedText,
         const OString& rDlgHelpId, const OString& sLbHelpId )

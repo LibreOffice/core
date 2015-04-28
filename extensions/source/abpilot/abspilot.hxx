@@ -49,8 +49,6 @@ namespace abp
         OAddessBookSourcePilot(
             vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
-        /// dtor
-        virtual ~OAddessBookSourcePilot();
 
         /// get the service factory which was used to create the dialog
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
@@ -69,7 +67,7 @@ namespace abp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage* createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage>     createPage( WizardState _nState ) SAL_OVERRIDE;
         virtual void                enterState( WizardState _nState ) SAL_OVERRIDE;
         virtual bool                prepareLeaveCurrentState( CommitPageReason _eReason ) SAL_OVERRIDE;
         virtual bool                onFinish() SAL_OVERRIDE;

@@ -60,6 +60,7 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xCtx);
 
     virtual ~UpdateInstallDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool Close() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
@@ -104,13 +105,13 @@ private:
     OUString m_sNoInstall;
     OUString m_sThisErrorOccurred;
 
-    FixedText *m_pFt_action;
-    ProgressBar *m_pStatusbar;
-    FixedText *m_pFt_extension_name;
-    VclMultiLineEdit *m_pMle_info;
-    HelpButton *m_pHelp;
-    OKButton *m_pOk;
-    CancelButton *m_pCancel;
+    VclPtr<FixedText>    m_pFt_action;
+    VclPtr<ProgressBar>  m_pStatusbar;
+    VclPtr<FixedText>    m_pFt_extension_name;
+    VclPtr<VclMultiLineEdit> m_pMle_info;
+    VclPtr<HelpButton>   m_pHelp;
+    VclPtr<OKButton>     m_pOk;
+    VclPtr<CancelButton> m_pCancel;
 };
 
 }

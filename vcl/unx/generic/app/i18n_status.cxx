@@ -52,7 +52,6 @@ class StatusWindow : public WorkWindow
 protected:
     StatusWindow( WinBits nWinBits );
 public:
-    virtual ~StatusWindow();
 
     virtual void setPosition( SalFrame* );
     virtual void setText( const OUString & ) = 0;
@@ -67,8 +66,6 @@ StatusWindow::StatusWindow( WinBits nWinBits ) :
 {
 }
 
-StatusWindow::~StatusWindow() {}
-
 void StatusWindow::setPosition( SalFrame* )
 {
 }
@@ -77,7 +74,7 @@ namespace vcl {
 
 class XIMStatusWindow : public StatusWindow
 {
-    FixedText               m_aStatusText;
+    VclPtr<FixedText>       m_aStatusText;
     SalFrame*               m_pLastParent;
     Size                    m_aWindowSize;
     bool                    m_bAnchoredAtRight;
@@ -104,6 +101,7 @@ public:
     virtual void setText( const OUString & ) SAL_OVERRIDE;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
     virtual void toggle( bool bOn ) SAL_OVERRIDE;
+    virtual void dispose() SAL_OVERRIDE;
 
     // override WorkWindow::DataChanged
     virtual void DataChanged( const DataChangedEvent& rEvt ) SAL_OVERRIDE;
@@ -113,7 +111,7 @@ public:
 
 XIMStatusWindow::XIMStatusWindow( bool bOn ) :
         StatusWindow( WB_BORDER | WB_SYSTEMFLOATWIN | WB_TOOLTIPWIN ),
-        m_aStatusText( this, 0 ),
+        m_aStatusText(VclPtr<FixedText>::Create(this, 0)),
         m_pLastParent( NULL ),
         m_bAnchoredAtRight( false ),
         m_bDelayedShow( false ),
@@ -126,8 +124,15 @@ XIMStatusWindow::XIMStatusWindow( bool bOn ) :
 
 XIMStatusWindow::~XIMStatusWindow()
 {
+    disposeOnce();
+}
+
+void XIMStatusWindow::dispose()
+{
     if( m_nDelayedEvent )
         Application::RemoveUserEvent( m_nDelayedEvent );
+    m_aStatusText.disposeAndClear();
+    StatusWindow::dispose();
 }
 
 void XIMStatusWindow::toggle( bool bOn )
@@ -138,8 +143,8 @@ void XIMStatusWindow::toggle( bool bOn )
 
 void XIMStatusWindow::layout()
 {
-    m_aWindowSize.Width() = m_aStatusText.GetTextWidth( m_aStatusText.GetText() )+8;
-    Font aFont( m_aStatusText.GetFont() );
+    m_aWindowSize.Width() = m_aStatusText->GetTextWidth( m_aStatusText->GetText() )+8;
+    Font aFont( m_aStatusText->GetFont() );
     m_aWindowSize.Height() = aFont.GetHeight()+10;
     m_aWindowSize = LogicToPixel( m_aWindowSize );
 
@@ -147,9 +152,9 @@ void XIMStatusWindow::layout()
     aControlSize.Width()  -= 4;
     aControlSize.Height() -= 4;
 
-    m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
-    m_aStatusText.SetFont( aFont );
-    m_aStatusText.Show( true );
+    m_aStatusText->SetPosSizePixel( Point( 1, 1 ), aControlSize );
+    m_aStatusText->SetFont( aFont );
+    m_aStatusText->Show( true );
 
     if (m_bAnchoredAtRight && IsVisible())
     {
@@ -181,7 +186,7 @@ bool XIMStatusWindow::checkLastParent() const
 
 void XIMStatusWindow::DataChanged( const DataChangedEvent& )
 {
-    m_aStatusText.SetSettings( GetSettings() );
+    m_aStatusText->SetSettings( GetSettings() );
     layout();
 }
 
@@ -261,7 +266,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
     if( m_bDelayedShow )
     {
         Size aControlSize( m_aWindowSize.Width()-4, m_aWindowSize.Height()-4 );
-        m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
+        m_aStatusText->SetPosSizePixel( Point( 1, 1 ), aControlSize );
         Point aPoint = updatePosition();
         pStatusFrame->SetPosSize( aPoint.X(), aPoint.Y(), m_aWindowSize.Width(), m_aWindowSize.Height(), SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y | SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
@@ -276,7 +281,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
 
 void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 {
-    if( bShow && m_aStatusText.GetText().isEmpty() )
+    if( bShow && m_aStatusText->GetText().isEmpty() )
         bShow = false;
 
     m_bDelayedShow = bShow;
@@ -287,15 +292,15 @@ void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 
 void XIMStatusWindow::setText( const OUString& rText )
 {
-    m_aStatusText.SetText( rText );
-    m_aWindowSize.Width() = m_aStatusText.GetTextWidth( rText )+8;
+    m_aStatusText->SetText( rText );
+    m_aWindowSize.Width() = m_aStatusText->GetTextWidth( rText )+8;
 }
 
 namespace vcl {
 
 class IIIMPStatusWindow : public StatusWindow
 {
-    MenuButton              m_aStatusBtn;
+    VclPtr<MenuButton>      m_aStatusBtn;
     PopupMenu               m_aMenu;
     SalFrame*               m_pResetFocus;
     bool                    m_bShow;
@@ -307,11 +312,12 @@ class IIIMPStatusWindow : public StatusWindow
 
 public:
     IIIMPStatusWindow( SalFrame* pParent, bool bOn ); // for initial position
-    virtual ~IIIMPStatusWindow();
 
     virtual void setText( const OUString & ) SAL_OVERRIDE;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
     virtual void toggle( bool bOn ) SAL_OVERRIDE;
+    virtual ~IIIMPStatusWindow() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
     void layout();
 
     // override Window focus handler
@@ -324,7 +330,7 @@ public:
 
 IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
         StatusWindow( WB_MOVEABLE ),
-        m_aStatusBtn( this, WB_BORDER ),
+        m_aStatusBtn(VclPtr<MenuButton>::Create(this, WB_BORDER)),
         m_pResetFocus( pParent ),
         m_bShow( true ),
         m_bOn( bOn )
@@ -333,9 +339,9 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
 
     layout();
 
-    m_aStatusBtn.SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
-    m_aStatusBtn.SetPopupMenu( &m_aMenu );
-    m_aStatusBtn.Show( true );
+    m_aStatusBtn->SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
+    m_aStatusBtn->SetPopupMenu( &m_aMenu );
+    m_aStatusBtn->Show( true );
 
     const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
     int i = 1;
@@ -363,17 +369,13 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
     EnableAlwaysOnTop( true );
 }
 
-IIIMPStatusWindow::~IIIMPStatusWindow()
-{
-}
-
 void IIIMPStatusWindow::layout()
 {
-    Font aFont( m_aStatusBtn.GetFont() );
+    Font aFont( m_aStatusBtn->GetFont() );
     Size aSize( 15*aFont.GetHeight(), aFont.GetHeight()+14 );
-    aSize = m_aStatusBtn.LogicToPixel( aSize );
+    aSize = m_aStatusBtn->LogicToPixel( aSize );
 
-    m_aStatusBtn.SetPosSizePixel( Point( 0, 0 ), aSize );
+    m_aStatusBtn->SetPosSizePixel( Point( 0, 0 ), aSize );
     SetOutputSizePixel( aSize );
     if( IsVisible() )
         Invalidate();
@@ -381,13 +383,13 @@ void IIIMPStatusWindow::layout()
 
 void IIIMPStatusWindow::DataChanged( const DataChangedEvent& )
 {
-    m_aStatusBtn.SetSettings( GetSettings() );
+    m_aStatusBtn->SetSettings( GetSettings() );
     layout();
 }
 
 void IIIMPStatusWindow::setText( const OUString& rText )
 {
-    m_aStatusBtn.SetText( rText );
+    m_aStatusBtn->SetText( rText );
 }
 
 void IIIMPStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
@@ -409,6 +411,12 @@ void IIIMPStatusWindow::toggle( bool bOn )
         m_bOn = bOn;
         show();
     }
+}
+
+void IIIMPStatusWindow::dispose()
+{
+    m_aStatusBtn.disposeAndClear();
+    StatusWindow::dispose();
 }
 
 void IIIMPStatusWindow::show()
@@ -454,10 +462,10 @@ void IIIMPStatusWindow::GetFocus()
 
 IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
 {
-    if( pBtn == & m_aStatusBtn )
+    if( pBtn == m_aStatusBtn )
     {
         const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
-        unsigned int nIndex = m_aStatusBtn.GetCurItemId()-1;
+        unsigned int nIndex = m_aStatusBtn->GetCurItemId()-1;
         if( nIndex < rChoices.size() )
         {
             XSetICValues( static_cast<X11SalFrame*>(I18NStatus::get().getParent())->getInputContext()->GetContext(),
@@ -515,8 +523,7 @@ I18NStatus::I18NStatus() :
 
 I18NStatus::~I18NStatus()
 {
-    if( m_pStatusWindow )
-        delete m_pStatusWindow, m_pStatusWindow = NULL;
+    m_pStatusWindow.disposeAndClear();
     if( pInstance == this )
         pInstance = NULL;
 }
@@ -528,10 +535,10 @@ void I18NStatus::setParent( SalFrame* pParent )
     {
         bool bIIIMPmode = m_aChoices.begin() != m_aChoices.end();
         if( bIIIMPmode )
-            m_pStatusWindow = new IIIMPStatusWindow( pParent,
+            m_pStatusWindow = VclPtr<IIIMPStatusWindow>::Create( pParent,
                                                      getStatusWindowMode() );
         else
-            m_pStatusWindow = new XIMStatusWindow( getStatusWindowMode() );
+            m_pStatusWindow = VclPtr<XIMStatusWindow>::Create( getStatusWindowMode() );
         setStatusText( m_aCurrentIM );
     }
     m_pStatusWindow->setPosition( m_pParent );
@@ -599,7 +606,7 @@ SalFrame* I18NStatus::getStatusFrame() const
 
 void I18NStatus::toggleStatusWindow()
 {
-    if (m_pStatusWindow != 0)
+    if (m_pStatusWindow != nullptr)
         m_pStatusWindow->toggle(getStatusWindowMode());
 }
 

@@ -68,7 +68,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new MultiLineEdit( pParent, nWinBits|WB_IGNORETAB);
+            pWindow = VclPtr<MultiLineEdit>::Create( pParent, nWinBits|WB_IGNORETAB);
             static_cast< MultiLineEdit* >( pWindow )->DisableSelectionOnFocus();
             *ppNewComp = new VCLXMultiLineEdit;
         }
@@ -82,7 +82,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new FileControl( pParent, nWinBits );
+            pWindow = VclPtr<FileControl>::Create( pParent, nWinBits );
             *ppNewComp = new VCLXFileControl;
         }
         else
@@ -93,22 +93,22 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     }
     else if (aServiceName.equalsIgnoreAsciiCase("FormattedField") )
     {
-        pWindow = new FormattedField( pParent, nWinBits );
+        pWindow = VclPtr<FormattedField>::Create( pParent, nWinBits );
         *ppNewComp = new SVTXFormattedField;
     }
     else if (aServiceName.equalsIgnoreAsciiCase("NumericField") )
     {
-        pWindow = new DoubleNumericField( pParent, nWinBits );
+        pWindow = VclPtr<DoubleNumericField>::Create( pParent, nWinBits );
         *ppNewComp = new SVTXNumericField;
     }
     else if (aServiceName.equalsIgnoreAsciiCase("LongCurrencyField") )
     {
-        pWindow = new DoubleCurrencyField( pParent, nWinBits );
+        pWindow = VclPtr<DoubleCurrencyField>::Create( pParent, nWinBits );
         *ppNewComp = new SVTXCurrencyField;
     }
     else if (aServiceName.equalsIgnoreAsciiCase("datefield") )
     {
-        pWindow = new CalendarField( pParent, nWinBits);
+        pWindow = VclPtr<CalendarField>::Create( pParent, nWinBits);
         static_cast<CalendarField*>(pWindow)->EnableToday();
         static_cast<CalendarField*>(pWindow)->EnableNone();
         static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( true );
@@ -125,7 +125,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new ProgressBar( pParent, nWinBits );
+            pWindow = VclPtr<ProgressBar>::Create( pParent, nWinBits );
             *ppNewComp = new VCLXProgressBar;
         }
         else
@@ -144,7 +144,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
     {
         if ( pParent )
         {
-            pWindow = new FixedHyperlink( pParent, nWinBits );
+            pWindow = VclPtr<FixedHyperlink>::Create( pParent, nWinBits );
             *ppNewComp = new VCLXFixedHyperlink;
         }
         else
@@ -216,7 +216,7 @@ void VCLXMultiLineEdit::setText( const OUString& aText ) throw(::com::sun::star:
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
     {
         pEdit->SetText( aText );
@@ -233,7 +233,7 @@ void VCLXMultiLineEdit::insertText( const ::com::sun::star::awt::Selection& rSel
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
     {
         setSelection( rSel );
@@ -246,7 +246,7 @@ OUString VCLXMultiLineEdit::getText() throw(::com::sun::star::uno::RuntimeExcept
     SolarMutexGuard aGuard;
 
     OUString aText;
-    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
         aText = pEdit->GetText( meLineEndType );
     return aText;
@@ -257,7 +257,7 @@ OUString VCLXMultiLineEdit::getSelectedText() throw(::com::sun::star::uno::Runti
     SolarMutexGuard aGuard;
 
     OUString aText;
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     if ( pMultiLineEdit)
         aText = pMultiLineEdit->GetSelected( meLineEndType );
     return aText;
@@ -268,7 +268,7 @@ void VCLXMultiLineEdit::setSelection( const ::com::sun::star::awt::Selection& aS
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     if ( pMultiLineEdit )
     {
         pMultiLineEdit->SetSelection( Selection( aSelection.Min, aSelection.Max ) );
@@ -280,7 +280,7 @@ void VCLXMultiLineEdit::setSelection( const ::com::sun::star::awt::Selection& aS
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Selection aSel;
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     if ( pMultiLineEdit )
     {
         aSel.Min = pMultiLineEdit->GetSelection().Min();
@@ -293,7 +293,7 @@ sal_Bool VCLXMultiLineEdit::isEditable() throw(::com::sun::star::uno::RuntimeExc
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     return ( pMultiLineEdit && !pMultiLineEdit->IsReadOnly() && pMultiLineEdit->IsEnabled() ) ? sal_True : sal_False;
 }
 
@@ -301,7 +301,7 @@ void VCLXMultiLineEdit::setEditable( sal_Bool bEditable ) throw(::com::sun::star
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     if ( pMultiLineEdit )
         pMultiLineEdit->SetReadOnly( !bEditable );
 }
@@ -310,7 +310,7 @@ void VCLXMultiLineEdit::setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     if ( pMultiLineEdit )
         pMultiLineEdit->SetMaxTextLen( nLen );
 }
@@ -319,7 +319,7 @@ sal_Int16 VCLXMultiLineEdit::getMaxTextLen() throw(::com::sun::star::uno::Runtim
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     return pMultiLineEdit ? (sal_Int16)pMultiLineEdit->GetMaxTextLen() : (sal_Int16)0;
 }
 
@@ -328,7 +328,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     SolarMutexGuard aGuard;
 
     OUString aText;
-    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
         aText = pEdit->GetTextLines( meLineEndType );
     return aText;
@@ -339,7 +339,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz;
-    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
         aSz = AWTSize(pEdit->CalcMinimumSize());
     return aSz;
@@ -355,7 +355,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz = rNewSize;
-    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
         aSz = AWTSize(pEdit->CalcAdjustedSize( VCLSize(rNewSize )));
     return aSz;
@@ -366,7 +366,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz;
-    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
         aSz = AWTSize(pEdit->CalcBlockSize( nCols, nLines ));
     return aSz;
@@ -377,7 +377,7 @@ void VCLXMultiLineEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines 
     SolarMutexGuard aGuard;
 
     nCols = nLines = 0;
-    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
     {
         sal_uInt16 nC, nL;
@@ -413,7 +413,7 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const ::com::
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     if ( pMultiLineEdit )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -470,7 +470,7 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const ::com::
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     if ( pMultiLineEdit )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -543,7 +543,7 @@ VCLXFileControl::VCLXFileControl() : maTextListeners( *this )
 
 VCLXFileControl::~VCLXFileControl()
 {
-    FileControl* pControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
         pControl->GetEdit().SetModifyHdl( Link() );
 }
@@ -568,7 +568,7 @@ void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const 
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -591,13 +591,13 @@ void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const 
     }
 }
 
-void VCLXFileControl::SetWindow( vcl::Window* pWindow )
+void VCLXFileControl::SetWindow( const VclPtr< vcl::Window > &pWindow )
 {
-    FileControl* pPrevFileControl = dynamic_cast<FileControl*>( GetWindow() );
+    VclPtr< FileControl > pPrevFileControl = GetAsDynamic< FileControl >();
     if ( pPrevFileControl )
         pPrevFileControl->GetEdit().SetModifyHdl( Link() );
 
-    FileControl* pNewFileControl = dynamic_cast<FileControl*>( pWindow );
+    FileControl* pNewFileControl = dynamic_cast<FileControl*>( pWindow.get() );
     if ( pNewFileControl )
         pNewFileControl->GetEdit().SetModifyHdl( LINK( this, VCLXFileControl, ModifyHdl ) );
 
@@ -633,7 +633,7 @@ void VCLXFileControl::insertText( const ::com::sun::star::awt::Selection& rSel, 
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
     if ( pFileControl )
     {
         pFileControl->GetEdit().SetSelection( Selection( rSel.Min, rSel.Max ) );
@@ -657,7 +657,7 @@ OUString VCLXFileControl::getSelectedText() throw(::com::sun::star::uno::Runtime
     SolarMutexGuard aGuard;
 
     OUString aText;
-    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
     if ( pFileControl)
         aText = pFileControl->GetEdit().GetSelected();
     return aText;
@@ -668,7 +668,7 @@ void VCLXFileControl::setSelection( const ::com::sun::star::awt::Selection& aSel
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
     if ( pFileControl )
         pFileControl->GetEdit().SetSelection( Selection( aSelection.Min, aSelection.Max ) );
 }
@@ -678,7 +678,7 @@ void VCLXFileControl::setSelection( const ::com::sun::star::awt::Selection& aSel
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Selection aSel;
-    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
     if ( pFileControl )
     {
         aSel.Min = pFileControl->GetEdit().GetSelection().Min();
@@ -691,7 +691,7 @@ sal_Bool VCLXFileControl::isEditable() throw(::com::sun::star::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
     return ( pFileControl && !pFileControl->GetEdit().IsReadOnly() && pFileControl->GetEdit().IsEnabled() ) ? sal_True : sal_False;
 }
 
@@ -699,7 +699,7 @@ void VCLXFileControl::setEditable( sal_Bool bEditable ) throw(::com::sun::star::
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
     if ( pFileControl )
         pFileControl->GetEdit().SetReadOnly( !bEditable );
 }
@@ -708,7 +708,7 @@ void VCLXFileControl::setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
     if ( pFileControl )
         pFileControl->GetEdit().SetMaxTextLen( nLen );
 }
@@ -717,7 +717,7 @@ sal_Int16 VCLXFileControl::getMaxTextLen() throw(::com::sun::star::uno::RuntimeE
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
     return pFileControl ? pFileControl->GetEdit().GetMaxTextLen() : 0;
 }
 
@@ -736,7 +736,7 @@ IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz;
-    FileControl* pControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
     {
         Size aTmpSize = pControl->GetEdit().CalcMinimumSize();
@@ -758,7 +758,7 @@ IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz =rNewSize;
-    FileControl* pControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
     {
         ::com::sun::star::awt::Size aMinSz = getMinimumSize();
@@ -773,7 +773,7 @@ IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz;
-    FileControl* pControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
     {
         aSz = AWTSize(pControl->GetEdit().CalcSize( nCols ));
@@ -788,7 +788,7 @@ void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) 
 
     nCols = 0;
     nLines = 1;
-    FileControl* pControl = static_cast<FileControl*>(GetWindow());
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
         nCols = pControl->GetEdit().GetMaxVisChars();
 }
@@ -825,11 +825,11 @@ SVTXFormattedField::~SVTXFormattedField()
 }
 
 
-void SVTXFormattedField::SetWindow( vcl::Window* _pWindow )
+void SVTXFormattedField::SetWindow( const VclPtr< vcl::Window > &_pWindow )
 {
     VCLXSpinField::SetWindow(_pWindow);
-    if (GetFormattedField())
-        GetFormattedField()->SetAutoColor(true);
+    if (GetAs< FormattedField >())
+        GetAs< FormattedField >()->SetAutoColor(true);
 }
 
 
@@ -837,7 +837,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -964,7 +964,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
 
     ::com::sun::star::uno::Any aReturn;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1034,7 +1034,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
 {
     ::com::sun::star::uno::Any aReturn;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField)
         return aReturn;
 
@@ -1092,7 +1092,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
 
 void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
@@ -1121,7 +1121,7 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 
 ::com::sun::star::uno::Any SVTXFormattedField::GetMinValue()
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField || !pField->HasMinValue())
         return ::com::sun::star::uno::Any();
 
@@ -1133,7 +1133,7 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 
 void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
@@ -1161,7 +1161,7 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 
 ::com::sun::star::uno::Any SVTXFormattedField::GetMaxValue()
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField || !pField->HasMaxValue())
         return ::com::sun::star::uno::Any();
 
@@ -1173,7 +1173,7 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 
 void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValue)
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
@@ -1206,7 +1206,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
 
 ::com::sun::star::uno::Any SVTXFormattedField::GetDefaultValue()
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField || pField->IsEmptyFieldEnabled())
         return ::com::sun::star::uno::Any();
 
@@ -1221,7 +1221,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
 
 bool SVTXFormattedField::GetTreatAsNumber()
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (pField)
         return pField->TreatingAsNumber();
 
@@ -1231,7 +1231,7 @@ bool SVTXFormattedField::GetTreatAsNumber()
 
 void SVTXFormattedField::SetTreatAsNumber(bool bSet)
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (pField)
         pField->TreatAsNumber(bSet);
 }
@@ -1239,7 +1239,7 @@ void SVTXFormattedField::SetTreatAsNumber(bool bSet)
 
 ::com::sun::star::uno::Any SVTXFormattedField::GetValue()
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField)
         return ::com::sun::star::uno::Any();
 
@@ -1261,7 +1261,7 @@ void SVTXFormattedField::SetTreatAsNumber(bool bSet)
 
 void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
@@ -1297,7 +1297,7 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 
 void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xSupplier)
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
 
     SvNumberFormatsSupplierObj* pNew = NULL;
     if (!xSupplier.is())
@@ -1339,14 +1339,14 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
 
 sal_Int32 SVTXFormattedField::getFormatKey() const
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetFormatKey() : 0;
 }
 
 
 void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
 {
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if (pField)
     {
         if (pField->GetFormatter())
@@ -1401,18 +1401,11 @@ void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 //  class SVTXRoadmap
 
-
 using namespace svt;
-
-::svt::ORoadmap* SVTXRoadmap::GetRoadmap() const
-{
-    return static_cast<svt::ORoadmap*>(GetWindow());
-}
 
 SVTXRoadmap::SVTXRoadmap() : maItemListeners( *this )
 {
 }
-
 
 SVTXRoadmap::~SVTXRoadmap()
 {
@@ -1425,7 +1418,7 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_ROADMAP_ITEMSELECTED:
         {
             SolarMutexGuard aGuard;
-            ::svt::ORoadmap* pField = GetRoadmap();
+            ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
             if ( pField )
             {
                 sal_Int16 CurItemID = pField->GetCurrentRoadmapItemID();
@@ -1447,7 +1440,7 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ::svt::ORoadmap* pField = GetRoadmap();
+    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRoadmapItem;
@@ -1521,7 +1514,7 @@ RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::Contai
 void SVTXRoadmap::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent )throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ::svt::ORoadmap* pField = GetRoadmap();
+    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         RMItemData CurItemData = GetRMItemData(  _rEvent );
@@ -1534,7 +1527,7 @@ void SVTXRoadmap::elementInserted( const ::com::sun::star::container::ContainerE
 void SVTXRoadmap::elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent )throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ::svt::ORoadmap* pField = GetRoadmap();
+    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         sal_Int32 DelIndex = 0;
@@ -1546,7 +1539,7 @@ void SVTXRoadmap::elementRemoved( const ::com::sun::star::container::ContainerEv
 void SVTXRoadmap::elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent )throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ::svt::ORoadmap* pField = GetRoadmap();
+    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         RMItemData CurItemData = GetRMItemData(  _rEvent );
@@ -1563,7 +1556,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 {
     SolarMutexGuard aGuard;
 
-    ::svt::ORoadmap* pField = GetRoadmap();
+    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1620,7 +1613,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 
     ::com::sun::star::uno::Any aReturn;
 
-    ::svt::ORoadmap* pField = GetRoadmap();
+    ::svt::ORoadmap* pField = GetAs< svt::ORoadmap >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1646,7 +1639,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 void SVTXRoadmap::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
-    ::svt::ORoadmap* pButton = static_cast< ::svt::ORoadmap* >( GetWindow() );
+    VclPtr< ::svt::ORoadmap > pButton = GetAs< ::svt::ORoadmap >();
     pButton->SetRoadmapBitmap( GetImage().GetBitmapEx() );
 }
 
@@ -1692,7 +1685,7 @@ void SVTXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetValue( Value );
 }
@@ -1701,7 +1694,7 @@ double SVTXNumericField::getValue() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetValue() : 0;
 }
 
@@ -1709,7 +1702,7 @@ void SVTXNumericField::setMin( double Value ) throw(::com::sun::star::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetMinValue( Value );
 }
@@ -1718,7 +1711,7 @@ double SVTXNumericField::getMin() throw(::com::sun::star::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetMinValue() : 0;
 }
 
@@ -1726,7 +1719,7 @@ void SVTXNumericField::setMax( double Value ) throw(::com::sun::star::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetMaxValue( Value );
 }
@@ -1735,7 +1728,7 @@ double SVTXNumericField::getMax() throw(::com::sun::star::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetMaxValue() : 0;
 }
 
@@ -1743,7 +1736,7 @@ void SVTXNumericField::setFirst( double Value ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinFirst( Value );
 }
@@ -1752,7 +1745,7 @@ double SVTXNumericField::getFirst() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinFirst() : 0;
 }
 
@@ -1760,7 +1753,7 @@ void SVTXNumericField::setLast( double Value ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinLast( Value );
 }
@@ -1769,7 +1762,7 @@ double SVTXNumericField::getLast() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinLast() : 0;
 }
 
@@ -1777,7 +1770,7 @@ void SVTXNumericField::setSpinSize( double Value ) throw(::com::sun::star::uno::
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinSize( Value );
 }
@@ -1786,7 +1779,7 @@ double SVTXNumericField::getSpinSize() throw(::com::sun::star::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinSize() : 0;
 }
 
@@ -1794,7 +1787,7 @@ void SVTXNumericField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::sta
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetDecimalDigits( Value );
 }
@@ -1803,7 +1796,7 @@ sal_Int16 SVTXNumericField::getDecimalDigits() throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetDecimalDigits() : 0;
 }
 
@@ -1811,7 +1804,7 @@ void SVTXNumericField::setStrictFormat( sal_Bool bStrict ) throw(::com::sun::sta
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetStrictFormat( bStrict );
 }
@@ -1820,7 +1813,7 @@ sal_Bool SVTXNumericField::isStrictFormat() throw(::com::sun::star::uno::Runtime
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->IsStrictFormat() : sal_False;
 }
 
@@ -1858,7 +1851,7 @@ void SVTXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::Ru
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetValue( Value );
 }
@@ -1867,7 +1860,7 @@ double SVTXCurrencyField::getValue() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetValue() : 0;
 }
 
@@ -1875,7 +1868,7 @@ void SVTXCurrencyField::setMin( double Value ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetMinValue( Value );
 }
@@ -1884,7 +1877,7 @@ double SVTXCurrencyField::getMin() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetMinValue() : 0;
 }
 
@@ -1892,7 +1885,7 @@ void SVTXCurrencyField::setMax( double Value ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetMaxValue( Value );
 }
@@ -1901,7 +1894,7 @@ double SVTXCurrencyField::getMax() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetMaxValue() : 0;
 }
 
@@ -1909,7 +1902,7 @@ void SVTXCurrencyField::setFirst( double Value ) throw(::com::sun::star::uno::Ru
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinFirst( Value );
 }
@@ -1918,7 +1911,7 @@ double SVTXCurrencyField::getFirst() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinFirst() : 0;
 }
 
@@ -1926,7 +1919,7 @@ void SVTXCurrencyField::setLast( double Value ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinLast( Value );
 }
@@ -1935,7 +1928,7 @@ double SVTXCurrencyField::getLast() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinLast() : 0;
 }
 
@@ -1943,7 +1936,7 @@ void SVTXCurrencyField::setSpinSize( double Value ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetSpinSize( Value );
 }
@@ -1952,7 +1945,7 @@ double SVTXCurrencyField::getSpinSize() throw(::com::sun::star::uno::RuntimeExce
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetSpinSize() : 0;
 }
 
@@ -1960,7 +1953,7 @@ void SVTXCurrencyField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::st
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetDecimalDigits( Value );
 }
@@ -1969,7 +1962,7 @@ sal_Int16 SVTXCurrencyField::getDecimalDigits() throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->GetDecimalDigits() : 0;
 }
 
@@ -1977,7 +1970,7 @@ void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict ) throw(::com::sun::st
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     if ( pField )
         pField->SetStrictFormat( bStrict );
 }
@@ -1986,7 +1979,7 @@ sal_Bool SVTXCurrencyField::isStrictFormat() throw(::com::sun::star::uno::Runtim
 {
     SolarMutexGuard aGuard;
 
-    FormattedField* pField = GetFormattedField();
+    FormattedField* pField = GetAs< FormattedField >();
     return pField ? pField->IsStrictFormat() : sal_False;
 }
 
@@ -1994,7 +1987,7 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
 {
     SolarMutexGuard aGuard;
 
-    DoubleCurrencyField* pField = static_cast<DoubleCurrencyField*>(GetFormattedField());
+    VclPtr< DoubleCurrencyField > pField = GetAs< DoubleCurrencyField >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -2029,7 +2022,7 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
 
     ::com::sun::star::uno::Any aReturn;
 
-    DoubleCurrencyField* pField = static_cast<DoubleCurrencyField*>(GetFormattedField());
+    VclPtr< DoubleCurrencyField > pField = GetAs< DoubleCurrencyField >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -2079,7 +2072,7 @@ VCLXProgressBar::~VCLXProgressBar()
 
 void VCLXProgressBar::ImplUpdateValue()
 {
-    ProgressBar* pProgressBar = static_cast<ProgressBar*>(GetWindow());
+    VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
     if ( pProgressBar )
     {
         sal_Int32 nVal;
@@ -2210,7 +2203,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::su
 {
     SolarMutexGuard aGuard;
 
-    ProgressBar* pProgressBar = static_cast<ProgressBar*>(GetWindow());
+    VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
     if ( pProgressBar )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -2269,7 +2262,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::su
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    ProgressBar* pProgressBar = static_cast<ProgressBar*>(GetWindow());
+    VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
     if ( pProgressBar )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -2327,7 +2320,7 @@ void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const ::
     VCLXDateField::setProperty( PropertyName, Value );
 
     // some properties need to be forwarded to the sub edit, too
-    Edit* pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow() )->GetSubEdit() : NULL;
+    VclPtr< Edit > pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow().get() )->GetSubEdit() : NULL;
     if ( !pSubEdit )
         return;
 

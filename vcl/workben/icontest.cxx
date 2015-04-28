@@ -71,10 +71,11 @@ protected:
 public:
     Graphic maGraphic;
     Bitmap *mpBitmap;
-    FixedBitmap *mpFixedBitmap;
+    VclPtr<FixedBitmap> mpFixedBitmap;
 
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
-
+    virtual ~MyWorkWindow() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { mpFixedBitmap.clear(); WorkWindow::dispose(); }
     void LoadGraphic( const OUString& sImageFile );
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -185,12 +186,12 @@ void IconTestApp::DoItWithVcl( const OUString& sImageFile)
 {
     try
     {
-        MyWorkWindow *pWindow = new MyWorkWindow( NULL, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
+        VclPtrInstance<MyWorkWindow> pWindow( nullptr, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
 
         pWindow->SetText(OUString("VCL Image Test"));
 
         pWindow->LoadGraphic( sImageFile );
-        pWindow->mpFixedBitmap = new FixedBitmap( pWindow );
+        pWindow->mpFixedBitmap = VclPtr<FixedBitmap>::Create( pWindow );
         pWindow->mpFixedBitmap->SetPosPixel( Point( 0, 0 ) );
         pWindow->mpFixedBitmap->Show();
 

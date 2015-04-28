@@ -49,7 +49,7 @@ SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW )
 {
 }
 
-SwRefMarkFldUpdate::SwRefMarkFldUpdate( const OutputDevice* pOutput )
+SwRefMarkFldUpdate::SwRefMarkFldUpdate( OutputDevice* pOutput )
     : SwMsgPoolItem( RES_REFMARKFLD_UPDATE ),
     pOut( pOutput )
 {

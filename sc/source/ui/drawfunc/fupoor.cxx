@@ -53,8 +53,7 @@ FuPoor::~FuPoor()
 {
     aDragTimer.Stop();
     aScrollTimer.Stop();
-
-    delete pDialog;
+    pDialog.disposeAndClear();
 }
 
 void FuPoor::Activate()

@@ -23,6 +23,7 @@
 #include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <vcl/window.hxx>
 
 class ErrorHandler;
 
@@ -185,22 +186,31 @@ static void aDspFunc(const OUString &rErr, const OUString &rAction)
     OSL_FAIL(aErr.getStr());
 }
 
+// FIXME: this is a horrible reverse dependency on VCL
+struct ErrorContextImpl
+{
+    ErrorContext *pNext;
+    vcl::Window  *pWin; // should be VclPtr for strong lifecyle
+};
+
 ErrorContext::ErrorContext(vcl::Window *pWinP)
 {
+    pImpl = new ErrorContextImpl();
     EDcrData *pData=EDcrData::GetData();
-    ErrorContext *&pHdl=pData->pFirstCtx;
-    pWin=pWinP;
-    pNext=pHdl;
-    pHdl=this;
+    ErrorContext *&pHdl = pData->pFirstCtx;
+    pImpl->pWin = pWinP;
+    pImpl->pNext = pHdl;
+    pHdl = this;
 }
 
 ErrorContext::~ErrorContext()
 {
     ErrorContext **ppCtx=&(EDcrData::GetData()->pFirstCtx);
     while(*ppCtx && *ppCtx!=this)
-        ppCtx=&((*ppCtx)->pNext);
+        ppCtx=&((*ppCtx)->pImpl->pNext);
     if(*ppCtx)
-        *ppCtx=(*ppCtx)->pNext;
+        *ppCtx=(*ppCtx)->pImpl->pNext;
+    delete pImpl;
 }
 
 ErrorContext *ErrorContext::GetContext()
@@ -227,6 +237,11 @@ ErrorHandler::~ErrorHandler()
     if(*ppHdl)
         *ppHdl=(*ppHdl)->pImpl->pNext;
     delete pImpl;
+}
+
+vcl::Window* ErrorContext::GetParent()
+{
+    return pImpl ? pImpl->pWin : NULL;
 }
 
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
@@ -275,7 +290,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         pCtx->GetString(pInfo->GetErrorCode(), aAction);
     vcl::Window *pParent=0;
     // Remove parent from context
-    for(;pCtx;pCtx=pCtx->pNext)
+    for(;pCtx;pCtx=pCtx->pImpl->pNext)
         if(pCtx->GetParent())
         {
             pParent=pCtx->GetParent();

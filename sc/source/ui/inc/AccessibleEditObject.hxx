@@ -24,6 +24,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include "global.hxx"
+#include <vcl/window.hxx>
 
 namespace accessibility
 {
@@ -188,7 +189,7 @@ public:
 private:
     accessibility::AccessibleTextHelper* mpTextHelper;
     EditView*      mpEditView;
-    vcl::Window*        mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     EditObjectType meObjectType;
     bool           mbHasFocus;
 

@@ -329,10 +329,10 @@ static inline OUString lcl_GetPropertyName( EID_OPTIONS eEntryId )
 
 class OptionsBreakSet : public ModalDialog
 {
-    VclFrame*       m_pBeforeFrame;
-    VclFrame*       m_pAfterFrame;
-    VclFrame*       m_pMinimalFrame;
-    NumericField*   m_pBreakNF;
+    VclPtr<VclFrame>       m_pBeforeFrame;
+    VclPtr<VclFrame>       m_pAfterFrame;
+    VclPtr<VclFrame>       m_pMinimalFrame;
+    VclPtr<NumericField>   m_pBreakNF;
 
 public:
     OptionsBreakSet(vcl::Window* pParent, sal_uInt16 nRID)
@@ -363,6 +363,15 @@ public:
             m_pMinimalFrame->Show();
             get(m_pBreakNF, "wordlength");
         }
+    }
+    virtual ~OptionsBreakSet() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pBeforeFrame.clear();
+        m_pAfterFrame.clear();
+        m_pMinimalFrame.clear();
+        m_pBreakNF.clear();
+        ModalDialog::dispose();
     }
 
     NumericField&   GetNumericFld()
@@ -1122,14 +1131,32 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
 
 SvxLinguTabPage::~SvxLinguTabPage()
 {
-    if (pLinguData)
-        delete pLinguData;
+    disposeOnce();
 }
 
-SfxTabPage* SvxLinguTabPage::Create( vcl::Window* pParent,
-                                     const SfxItemSet* rAttrSet )
+void SvxLinguTabPage::dispose()
 {
-    return ( new SvxLinguTabPage( pParent, *rAttrSet ) );
+    delete pLinguData;
+    pLinguData = NULL;
+    m_pLinguModulesFT.clear();
+    m_pLinguModulesCLB.clear();
+    m_pLinguModulesEditPB.clear();
+    m_pLinguDicsFT.clear();
+    m_pLinguDicsCLB.clear();
+    m_pLinguDicsNewPB.clear();
+    m_pLinguDicsEditPB.clear();
+    m_pLinguDicsDelPB.clear();
+    m_pLinguOptionsCLB.clear();
+    m_pLinguOptionsEditPB.clear();
+    m_pMoreDictsLink.clear();
+    SfxTabPage::dispose();
+}
+
+VclPtr<SfxTabPage> SvxLinguTabPage::Create( vcl::Window* pParent,
+                                            const SfxItemSet* rAttrSet )
+{
+    return VclPtr<SfxTabPage>( new SvxLinguTabPage( pParent, *rAttrSet ),
+                               SAL_NO_ACQUIRE );
 }
 
 
@@ -1570,8 +1597,8 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             pLinguData = new SvxLinguData_Impl;
 
         SvxLinguData_Impl   aOldLinguData( *pLinguData );
-        SvxEditModulesDlg   aDlg( this, *pLinguData );
-        if (aDlg.Execute() != RET_OK)
+        ScopedVclPtrInstance< SvxEditModulesDlg > aDlg( this, *pLinguData );
+        if (aDlg->Execute() != RET_OK)
             *pLinguData = aOldLinguData;
 
         // evaluate new status of 'bConfigured' flag
@@ -1647,9 +1674,9 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else if (m_pLinguDicsDelPB == pBtn)
     {
-        MessageDialog aQuery(this, "QueryDeleteDictionaryDialog",
-            "cui/ui/querydeletedictionarydialog.ui");
-        if (RET_NO == aQuery.Execute())
+        ScopedVclPtrInstance<MessageDialog> aQuery(this, "QueryDeleteDictionaryDialog",
+                                                   "cui/ui/querydeletedictionarydialog.ui");
+        if (RET_NO == aQuery->Execute())
             return 0;
 
         SvTreeListEntry *pEntry = m_pLinguDicsCLB->GetCurEntry();
@@ -1719,11 +1746,11 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             if(aData.HasNumericValue())
             {
                 sal_uInt16 nRID = aData.GetEntryId();
-                OptionsBreakSet aDlg( this, nRID );
-                aDlg.GetNumericFld().SetValue( aData.GetNumericValue() );
-                if (RET_OK == aDlg.Execute() )
+                ScopedVclPtrInstance< OptionsBreakSet > aDlg(this, nRID);
+                aDlg->GetNumericFld().SetValue( aData.GetNumericValue() );
+                if (RET_OK == aDlg->Execute() )
                 {
-                    long nVal = static_cast<long>(aDlg.GetNumericFld().GetValue());
+                    long nVal = static_cast<long>(aDlg->GetNumericFld().GetValue());
                     if (-1 != nVal && aData.GetNumericValue() != nVal)
                     {
                         aData.SetNumericValue( (sal_uInt8)nVal ); //! sets IsModified !
@@ -1892,9 +1919,22 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
 
 SvxEditModulesDlg::~SvxEditModulesDlg()
 {
-    delete pDefaultLinguData;
+    disposeOnce();
 }
 
+void SvxEditModulesDlg::dispose()
+{
+    delete pDefaultLinguData;
+    pDefaultLinguData = NULL;
+    m_pLanguageLB.clear();
+    m_pModulesCLB.clear();
+    m_pPrioUpPB.clear();
+    m_pPrioDownPB.clear();
+    m_pBackPB.clear();
+    m_pMoreDictsLink.clear();
+    m_pClosePB.clear();
+    ModalDialog::dispose();
+}
 
 SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {

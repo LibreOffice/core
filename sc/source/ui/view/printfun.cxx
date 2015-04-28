@@ -231,7 +231,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         nTotalY(0),
         pPageData           ( pData )
 {
-    pDev = pPrinter;
+    pDev = pPrinter.get();
     aSrcOffset = pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), MAP_100TH_MM );
     Construct( pOptions );
 }

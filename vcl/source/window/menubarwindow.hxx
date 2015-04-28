@@ -39,7 +39,9 @@ class DecoToolBox : public ToolBox
 
     using Window::ImplInit;
 public:
-            DecoToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
+             DecoToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
+    virtual ~DecoToolBox() {}
+
     void    ImplInit();
 
     void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -52,6 +54,7 @@ public:
     Image   maImage;
 };
 
+
 /** Class that implements the actual window of the menu bar.
 */
 class MenuBarWindow : public vcl::Window, public IMenuBarWindow
@@ -62,32 +65,32 @@ class MenuBarWindow : public vcl::Window, public IMenuBarWindow
 private:
     struct AddButtonEntry
     {
-        sal_uInt16      m_nId;
-        Link        m_aSelectLink;
-        Link        m_aHighlightLink;
+        sal_uInt16    m_nId;
+        Link          m_aSelectLink;
+        Link          m_aHighlightLink;
 
         AddButtonEntry() : m_nId( 0 ) {}
     };
 
     Menu*           pMenu;
     PopupMenu*      pActivePopup;
-    sal_uInt16          nHighlightedItem;
-    sal_uInt16          nRolloveredItem;
-    sal_uLong           nSaveFocusId;
+    sal_uInt16      nHighlightedItem;
+    sal_uInt16      nRolloveredItem;
+    sal_uLong       nSaveFocusId;
     bool            mbAutoPopup;
     bool            bIgnoreFirstMove;
     bool            bStayActive;
 
-    DecoToolBox     aCloseBtn;
-    PushButton      aFloatBtn;
-    PushButton      aHideBtn;
+    VclPtr<DecoToolBox>  aCloseBtn;
+    VclPtr<PushButton>   aFloatBtn;
+    VclPtr<PushButton>   aHideBtn;
 
     std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 
     void            HighlightItem( sal_uInt16 nPos, bool bHighlight );
     virtual void    ChangeHighlightItem(sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true) SAL_OVERRIDE;
 
-    sal_uInt16          ImplFindEntry( const Point& rMousePos ) const;
+    sal_uInt16      ImplFindEntry( const Point& rMousePos ) const;
     void            ImplCreatePopup( bool bPreSelectFirst );
     virtual bool    HandleKeyEvent(const KeyEvent& rKEvent, bool bFromMenu = true) SAL_OVERRIDE;
     Rectangle       ImplGetItemRect( sal_uInt16 nPos );
@@ -107,7 +110,8 @@ private:
 
 public:
                     MenuBarWindow( vcl::Window* pParent );
-                    virtual ~MenuBarWindow();
+    virtual         ~MenuBarWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    ShowButtons(bool bClose, bool bFloat, bool bHide) SAL_OVERRIDE;
 

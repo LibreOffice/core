@@ -123,6 +123,30 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     PosSelectHdl(NULL);
 }
 
+ScDataBarSettingsDlg::~ScDataBarSettingsDlg()
+{
+    disposeOnce();
+}
+
+void ScDataBarSettingsDlg::dispose()
+{
+    mpBtnOk.clear();
+    mpBtnCancel.clear();
+    mpLbPos.clear();
+    mpLbNeg.clear();
+    mpLbAxisCol.clear();
+    mpLbTypeMin.clear();
+    mpLbTypeMax.clear();
+    mpLbFillType.clear();
+    mpLbAxisPos.clear();
+    mpEdMin.clear();
+    mpEdMax.clear();
+    mpLenMin.clear();
+    mpLenMax.clear();
+    mpCbOnlyBar.clear();
+    ModalDialog::dispose();
+}
+
 void ScDataBarSettingsDlg::Init()
 {
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
@@ -264,8 +288,8 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     if(bWarn)
     {
         //show warning message and don't close
-        WarningBox aWarn(this, WB_OK, maStrWarnSameValue );
-        aWarn.Execute();
+        ScopedVclPtrInstance< WarningBox > aWarn(this, WB_OK, maStrWarnSameValue );
+        aWarn->Execute();
     }
     else
     {

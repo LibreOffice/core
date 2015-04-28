@@ -64,24 +64,33 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeShowNupOrderWindow(vcl
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
     , maOrigSize( 10, 10 )
-    , maPageVDev( *this )
+    , maPageVDev( VclPtr<VirtualDevice>::Create(*this) )
     , maToolTipString(VclResId( SV_PRINT_PRINTPREVIEW_TXT).toString())
     , mbGreyscale( false )
-    , maHorzDim( this, WB_HORZ | WB_CENTER  )
-    , maVertDim( this, WB_VERT | WB_VCENTER )
+    , maHorzDim(VclPtr<FixedLine>::Create(this, WB_HORZ | WB_CENTER))
+    , maVertDim(VclPtr<FixedLine>::Create(this, WB_VERT | WB_VCENTER))
 {
     SetPaintTransparent( true );
     SetBackground();
-    maPageVDev.SetBackground( Color( COL_WHITE ) );
-    maHorzDim.Show();
-    maVertDim.Show();
+    maPageVDev->SetBackground( Color( COL_WHITE ) );
+    maHorzDim->Show();
+    maVertDim->Show();
 
-    maHorzDim.SetText( OUString( "2.0in" ) );
-    maVertDim.SetText( OUString( "2.0in" ) );
+    maHorzDim->SetText( OUString( "2.0in" ) );
+    maVertDim->SetText( OUString( "2.0in" ) );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
+    disposeOnce();
+}
+
+void PrintDialog::PrintPreviewWindow::dispose()
+{
+    maHorzDim.disposeAndClear();
+    maVertDim.disposeAndClear();
+    maPageVDev.disposeAndClear();
+    Window::dispose();
 }
 
 const sal_Int32 PrintDialog::PrintPreviewWindow::PREVIEW_BITMAP_WIDTH = 1600;
@@ -91,7 +100,7 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
     // react on settings changed
     if( i_rDCEvt.GetType() == DataChangedEventType::SETTINGS )
     {
-        maPageVDev.SetBackground( Color( COL_WHITE ) );
+        maPageVDev->SetBackground( Color( COL_WHITE ) );
     }
     Window::DataChanged( i_rDCEvt );
 }
@@ -99,7 +108,7 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
 void PrintDialog::PrintPreviewWindow::Resize()
 {
     Size aNewSize( GetSizePixel() );
-    long nTextHeight = maHorzDim.GetTextHeight();
+    long nTextHeight = maHorzDim->GetTextHeight();
     // leave small space for decoration
     aNewSize.Width() -= nTextHeight + 2;
     aNewSize.Height() -= nTextHeight + 2;
@@ -140,21 +149,21 @@ void PrintDialog::PrintPreviewWindow::Resize()
     aScaledSize.Width()  = PREVIEW_BITMAP_WIDTH;
     aScaledSize.Height() = PREVIEW_BITMAP_WIDTH * aAspectRatio;
 
-    maPageVDev.SetOutputSizePixel( aScaledSize, false );
+    maPageVDev->SetOutputSizePixel( aScaledSize, false );
 
     // position dimension lines
     Point aRef( nTextHeight + (aNewSize.Width() - maPreviewSize.Width())/2,
                 nTextHeight + (aNewSize.Height() - maPreviewSize.Height())/2 );
-    maHorzDim.SetPosSizePixel( Point( aRef.X(), aRef.Y() - nTextHeight ),
+    maHorzDim->SetPosSizePixel( Point( aRef.X(), aRef.Y() - nTextHeight ),
                                Size( maPreviewSize.Width(), nTextHeight ) );
-    maVertDim.SetPosSizePixel( Point( aRef.X() - nTextHeight, aRef.Y() ),
+    maVertDim->SetPosSizePixel( Point( aRef.X() - nTextHeight, aRef.Y() ),
                                Size( nTextHeight, maPreviewSize.Height() ) );
 
 }
 
 void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 {
-    long nTextHeight = maHorzDim.GetTextHeight();
+    long nTextHeight = maHorzDim->GetTextHeight();
     Size aSize( GetSizePixel() );
     Point aOffset( (aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2 ,
                    (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2 );
@@ -218,8 +227,8 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
     mbGreyscale = i_bGreyscale;
-    maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
-    maPageVDev.EnableOutput( true );
+    maPageVDev->SetReferenceDevice( i_nDPIX, i_nDPIY );
+    maPageVDev->EnableOutput( true );
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
@@ -241,13 +250,13 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
         aBuf.append( i_rPaperName );
         aBuf.append( ')' );
     }
-    maHorzDim.SetText( aBuf.makeStringAndClear() );
+    maHorzDim->SetText( aBuf.makeStringAndClear() );
 
     aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
     aBuf.append( aNumText )
         .append( sal_Unicode( ' ' ) );
     aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
-    maVertDim.SetText( aBuf.makeStringAndClear() );
+    maVertDim->SetText( aBuf.makeStringAndClear() );
 
     Resize();
     preparePreviewBitmap();
@@ -258,8 +267,8 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 {
     GDIMetaFile aMtf( maMtf );
 
-    Size aVDevSize( maPageVDev.GetOutputSizePixel() );
-    const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
+    Size aVDevSize( maPageVDev->GetOutputSizePixel() );
+    const Size aLogicSize( maPageVDev->PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
         aOrigSize.Width() = aLogicSize.Width();
@@ -267,31 +276,31 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         aOrigSize.Height() = aLogicSize.Height();
     double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
 
-    maPageVDev.Erase();
-    maPageVDev.Push();
-    maPageVDev.SetMapMode( MAP_100TH_MM );
-    sal_uLong nOldDrawMode = maPageVDev.GetDrawMode();
+    maPageVDev->Erase();
+    maPageVDev->Push();
+    maPageVDev->SetMapMode( MAP_100TH_MM );
+    sal_uLong nOldDrawMode = maPageVDev->GetDrawMode();
     if( mbGreyscale )
-        maPageVDev.SetDrawMode( maPageVDev.GetDrawMode() |
+        maPageVDev->SetDrawMode( maPageVDev->GetDrawMode() |
                                 ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
                                   DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
     aMtf.WindStart();
     aMtf.Scale( fScale, fScale );
     aMtf.WindStart();
 
-    const sal_uInt16 nOriginalAA(maPageVDev.GetAntialiasing());
-    maPageVDev.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
-    aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
-    maPageVDev.SetAntialiasing(nOriginalAA);
+    const sal_uInt16 nOriginalAA(maPageVDev->GetAntialiasing());
+    maPageVDev->SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+    aMtf.Play( maPageVDev.get(), Point( 0, 0 ), aLogicSize );
+    maPageVDev->SetAntialiasing(nOriginalAA);
 
-    maPageVDev.Pop();
+    maPageVDev->Pop();
 
     SetMapMode( MAP_PIXEL );
-    maPageVDev.SetMapMode( MAP_PIXEL );
+    maPageVDev->SetMapMode( MAP_PIXEL );
 
-    maPreviewBitmap = Bitmap(maPageVDev.GetBitmap(Point(0, 0), aVDevSize));
+    maPreviewBitmap = Bitmap(maPageVDev->GetBitmap(Point(0, 0), aVDevSize));
 
-    maPageVDev.SetDrawMode( nOldDrawMode );
+    maPageVDev->SetDrawMode( nOldDrawMode );
 }
 
 PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( vcl::Window* i_pParent )
@@ -301,10 +310,6 @@ PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( vcl::Window* i_pParent )
     , mnColumns( 1 )
 {
     ImplInitSettings();
-}
-
-PrintDialog::ShowNupOrderWindow::~ShowNupOrderWindow()
-{
 }
 
 void PrintDialog::ShowNupOrderWindow::ImplInitSettings()
@@ -619,13 +624,13 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
         if( maJobPage.mpPrinters->GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
         {
             maJobPage.mpPrinters->SelectEntry( aValue );
-            maPController->setPrinter(std::make_shared<Printer>(aValue));
+            maPController->setPrinter( VclPtrInstance<Printer>( aValue ) );
         }
         else
         {
             // fall back to default printer
             maJobPage.mpPrinters->SelectEntry( Printer::GetDefaultPrinterName() );
-            maPController->setPrinter(std::make_shared<Printer>(Printer::GetDefaultPrinterName()));
+            maPController->setPrinter( VclPtrInstance<Printer>( Printer::GetDefaultPrinterName() ) );
         }
     }
     // not printing to file
@@ -712,7 +717,22 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
 
 PrintDialog::~PrintDialog()
 {
+    disposeOnce();
+}
+
+void PrintDialog::dispose()
+{
     delete mpCustomOptionsUIBuilder;
+    mpTabCtrl.clear();
+    mpPreviewWindow.clear();
+    mpPageEdit.clear();
+    mpNumPagesText.clear();
+    mpBackwardBtn.clear();
+    mpForwardBtn.clear();
+    mpOKButton.clear();
+    mpCancelButton.clear();
+    mpHelpButton.clear();
+    ModalDialog::dispose();
 }
 
 void PrintDialog::readFromSettings()
@@ -1207,7 +1227,7 @@ void PrintDialog::checkControlDependencies()
 
 void PrintDialog::checkOptionalControlDependencies()
 {
-    for( std::map< vcl::Window*, OUString >::iterator it = maControlToPropertyMap.begin();
+    for( auto it = maControlToPropertyMap.begin();
          it != maControlToPropertyMap.end(); ++it )
     {
         bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
@@ -1229,9 +1249,9 @@ void PrintDialog::checkOptionalControlDependencies()
             }
         }
 
-        if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first) )
+        if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first.get()) )
         {
-            std::map< vcl::Window*, sal_Int32 >::const_iterator r_it = maControlToNumValMap.find( it->first );
+            auto r_it = maControlToNumValMap.find( it->first );
             if( r_it != maControlToNumValMap.end() )
             {
                 bShouldbeEnabled = maPController->isUIChoiceEnabled( it->second, r_it->second );
@@ -1308,7 +1328,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     {
         const MapMode aMapMode( MAP_100TH_MM );
         GDIMetaFile aMtf;
-        std::shared_ptr<Printer> aPrt(maPController->getPrinter());
+        VclPtr<Printer> aPrt( maPController->getPrinter() );
         if( nPages > 0 )
         {
             PrinterController::PageSize aPageSize =
@@ -1501,7 +1521,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
     {
         OUString aNewPrinter( pBox->GetSelectEntry() );
         // set new printer
-        maPController->setPrinter(std::make_shared<Printer>(aNewPrinter));
+        maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
         maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
         // update text fields
         updatePrinterText();
@@ -1650,7 +1670,7 @@ IMPL_LINK_NOARG(PrintDialog, UIOptionsChanged)
 PropertyValue* PrintDialog::getValueForWindow( vcl::Window* i_pWindow ) const
 {
     PropertyValue* pVal = NULL;
-    std::map< vcl::Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    auto it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
         pVal = maPController->getValue( it->second );
@@ -1666,10 +1686,10 @@ PropertyValue* PrintDialog::getValueForWindow( vcl::Window* i_pWindow ) const
 void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
 {
     beans::PropertyValue* pValue = maPController->getValue( i_rProperty );
-    std::map< OUString, std::vector< vcl::Window* > >::const_iterator it = maPropertyToWindowMap.find( i_rProperty );
+    auto it = maPropertyToWindowMap.find( i_rProperty );
     if( pValue && it != maPropertyToWindowMap.end() )
     {
-        const std::vector< vcl::Window* >& rWindows( it->second );
+        const std::vector< VclPtr<vcl::Window> >& rWindows( it->second );
         if( ! rWindows.empty() )
         {
             bool bVal = false;
@@ -1677,7 +1697,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
             if( pValue->Value >>= bVal )
             {
                 // we should have a CheckBox for this one
-                CheckBox* pBox = dynamic_cast< CheckBox* >( rWindows.front() );
+                CheckBox* pBox = dynamic_cast< CheckBox* >( rWindows.front().get() );
                 if( pBox )
                 {
                     pBox->Check( bVal );
@@ -1698,14 +1718,14 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
             else if( pValue->Value >>= nVal )
             {
                 // this could be a ListBox or a RadioButtonGroup
-                ListBox* pList = dynamic_cast< ListBox* >( rWindows.front() );
+                ListBox* pList = dynamic_cast< ListBox* >( rWindows.front().get() );
                 if( pList )
                 {
                     pList->SelectEntryPos( static_cast< sal_uInt16 >(nVal) );
                 }
                 else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
                 {
-                    RadioButton* pBtn = dynamic_cast< RadioButton* >( rWindows[nVal] );
+                    RadioButton* pBtn = dynamic_cast< RadioButton* >( rWindows[nVal].get() );
                     DBG_ASSERT( pBtn, "unexpected control for property" );
                     if( pBtn )
                         pBtn->Check();
@@ -1717,7 +1737,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
 
 void PrintDialog::makeEnabled( vcl::Window* i_pWindow )
 {
-    std::map< vcl::Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    auto it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
         OUString aDependency( maPController->makeEnabled( it->second ) );
@@ -1752,7 +1772,7 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
     if( i_pBtn->IsChecked() )
     {
         PropertyValue* pVal = getValueForWindow( i_pBtn );
-        std::map< vcl::Window*, sal_Int32 >::const_iterator it = maControlToNumValMap.find( i_pBtn );
+        auto it = maControlToNumValMap.find( i_pBtn );
         if( pVal && it != maControlToNumValMap.end() )
         {
             makeEnabled( i_pBtn );
@@ -1893,6 +1913,19 @@ PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
 
     mpButton->SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
 
+}
+
+PrintProgressDialog::~PrintProgressDialog()
+{
+    disposeOnce();
+}
+
+void PrintProgressDialog::dispose()
+{
+    mpText.clear();
+    mpProgress.clear();
+    mpButton.clear();
+    ModelessDialog::dispose();
 }
 
 IMPL_LINK( PrintProgressDialog, ClickHdl, Button*, pButton )

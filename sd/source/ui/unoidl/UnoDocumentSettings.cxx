@@ -730,7 +730,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                             SfxPrinter *pTempPrinter = pDocSh->GetPrinter( true );
                             if (pTempPrinter)
                             {
-                                SfxPrinter *pNewPrinter = new SfxPrinter( pTempPrinter->GetOptions().Clone(), aPrinterName );
+                                VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( pTempPrinter->GetOptions().Clone(), aPrinterName );
                                 pDocSh->SetPrinter( pNewPrinter );
                             }
                         }

@@ -80,7 +80,6 @@ private:
 public:
 
                     GalleryToolBox( GalleryBrowser2* pParent );
-                    virtual ~GalleryToolBox();
 };
 
 
@@ -110,14 +109,14 @@ private:
     SvtMiscOptions      maMiscOptions;
     Gallery*            mpGallery;
     GalleryTheme*       mpCurTheme;
-    GalleryIconView*    mpIconView;
-    GalleryListView*    mpListView;
-    GalleryPreview*     mpPreview;
-    GalleryToolBox      maViewBox;
-    FixedLine           maSeparator;
-    FixedText           maInfoBar;
+    VclPtr<GalleryIconView>    mpIconView;
+    VclPtr<GalleryListView>    mpListView;
+    VclPtr<GalleryPreview> mpPreview;
+    VclPtr<GalleryToolBox> maViewBox;
+    VclPtr<FixedLine>   maSeparator;
+    VclPtr<FixedText>   maInfoBar;
     Point               maDragStartPos;
-    sal_uIntPtr             mnCurActionPos;
+    sal_uIntPtr         mnCurActionPos;
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;
 
@@ -154,6 +153,7 @@ public:
 
     GalleryBrowser2(vcl::Window* pParent, Gallery* pGallery);
     virtual ~GalleryBrowser2();
+    virtual void dispose() SAL_OVERRIDE;
 
     void                SelectTheme( const OUString& rThemeName );
 

@@ -140,8 +140,8 @@ typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
 
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
-    Edit                    aCellEdit;
-    ::svt::CheckBoxControl  aCellCheckBox;
+    VclPtr<Edit>                    aCellEdit;
+    VclPtr<::svt::CheckBoxControl>  aCellCheckBox;
 
     OUString  sSearch;
     OUString  sAlternative;
@@ -174,6 +174,8 @@ protected:
 
 public:
     SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder);
+    virtual ~SwEntryBrowseBox();
+    virtual void                    dispose() SAL_OVERRIDE;
     void                            ReadEntries(SvStream& rInStr);
     void                            WriteEntries(SvStream& rOutStr);
 
@@ -186,9 +188,9 @@ public:
 
 class SwAutoMarkDlg_Impl : public ModalDialog
 {
-    OKButton*           m_pOKPB;
+    VclPtr<OKButton>           m_pOKPB;
 
-    SwEntryBrowseBox*   m_pEntriesBB;
+    VclPtr<SwEntryBrowseBox>   m_pEntriesBB;
 
     OUString            sAutoMarkURL;
 
@@ -199,6 +201,7 @@ public:
     SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
                        bool bCreate);
     virtual ~SwAutoMarkDlg_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
 };
 
@@ -319,6 +322,11 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
 
 SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 {
+    disposeOnce();
+}
+
+void SwMultiTOXTabDialog::dispose()
+{
     SW_MOD()->GetModuleConfig()->SetShowIndexPreview(m_pShowExampleCB->IsChecked());
 
     // fdo#38515 Avoid setting focus on deleted controls in the destructors
@@ -336,6 +344,9 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
     delete[] pDescArr;
     delete pMgr;
     delete pExampleFrame;
+    m_pExampleContainerWIN.clear();
+    m_pShowExampleCB.clear();
+    SfxTabDialog::dispose();
 }
 
 void SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
@@ -479,8 +490,8 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
                 OUString sInfo(SW_RESSTR(STR_FILE_NOT_FOUND));
                 sInfo = sInfo.replaceFirst( "%1", sTemplate );
                 sInfo = sInfo.replaceFirst( "%2", aOpt.GetTemplatePath() );
-                InfoBox aInfo(GetParent(), sInfo);
-                aInfo.Execute();
+                ScopedVclPtrInstance< InfoBox > aInfo(GetParent(), sInfo);
+                aInfo->Execute();
             }
             else
             {
@@ -500,7 +511,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
         && pExampleFrame && pExampleFrame->IsServiceAvailable();
 
     m_pExampleContainerWIN->Show( bSetViewWindow );
-    SetViewWindow( bSetViewWindow ? m_pExampleContainerWIN : 0 );
+    SetViewWindow( bSetViewWindow ? m_pExampleContainerWIN.get() : 0 );
 
     setOptimalLayoutSize();
 
@@ -617,11 +628,11 @@ void SwIndexTreeLB::setColSizes()
 
 class SwAddStylesDlg_Impl : public SfxModalDialog
 {
-    OKButton*       m_pOk;
+    VclPtr<OKButton>       m_pOk;
 
-    SwIndexTreeLB*  m_pHeaderTree;
-    PushButton*     m_pLeftPB;
-    PushButton*     m_pRightPB;
+    VclPtr<SwIndexTreeLB>  m_pHeaderTree;
+    VclPtr<PushButton>     m_pLeftPB;
+    VclPtr<PushButton>     m_pRightPB;
 
     OUString*       pStyleArr;
 
@@ -632,6 +643,7 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
 public:
     SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
     virtual ~SwAddStylesDlg_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
@@ -648,7 +660,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
     Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MAP_APPFONT);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
-    m_pHeaderTree = new SwIndexTreeLB(*pHeaderTreeContainer);
+    m_pHeaderTree = VclPtr<SwIndexTreeLB>::Create(*pHeaderTreeContainer);
 
     m_pOk->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     m_pLeftPB->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
@@ -706,7 +718,16 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
 
 SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 {
-    delete m_pHeaderTree;
+    disposeOnce();
+}
+
+void SwAddStylesDlg_Impl::dispose()
+{
+    m_pHeaderTree.disposeAndClear();
+    m_pOk.clear();
+    m_pLeftPB.clear();
+    m_pRightPB.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
@@ -881,8 +902,55 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
 
 SwTOXSelectTabPage::~SwTOXSelectTabPage()
 {
+    disposeOnce();
+}
+
+void SwTOXSelectTabPage::dispose()
+{
     delete pIndexRes;
     delete pIndexEntryWrapper;
+    m_pTitleED.clear();
+    m_pTypeFT.clear();
+    m_pTypeLB.clear();
+    m_pReadOnlyCB.clear();
+    m_pAreaFrame.clear();
+    m_pAreaLB.clear();
+    m_pLevelFT.clear();
+    m_pLevelNF.clear();
+    m_pCreateFrame.clear();
+    m_pFromHeadingsCB.clear();
+    m_pAddStylesCB.clear();
+    m_pAddStylesPB.clear();
+    m_pFromTablesCB.clear();
+    m_pFromFramesCB.clear();
+    m_pFromGraphicsCB.clear();
+    m_pFromOLECB.clear();
+    m_pLevelFromChapterCB.clear();
+    m_pFromCaptionsRB.clear();
+    m_pFromObjectNamesRB.clear();
+    m_pCaptionSequenceFT.clear();
+    m_pCaptionSequenceLB.clear();
+    m_pDisplayTypeFT.clear();
+    m_pDisplayTypeLB.clear();
+    m_pTOXMarksCB.clear();
+    m_pIdxOptionsFrame.clear();
+    m_pCollectSameCB.clear();
+    m_pUseFFCB.clear();
+    m_pUseDashCB.clear();
+    m_pCaseSensitiveCB.clear();
+    m_pInitialCapsCB.clear();
+    m_pKeyAsEntryCB.clear();
+    m_pFromFileCB.clear();
+    m_pAutoMarkPB.clear();
+    m_pFromObjCLB.clear();
+    m_pFromObjFrame.clear();
+    m_pSequenceCB.clear();
+    m_pBracketLB.clear();
+    m_pAuthorityFrame.clear();
+    m_pSortFrame.clear();
+    m_pLanguageLB.clear();
+    m_pSortAlgorithmLB.clear();
+    SfxTabPage::dispose();
 }
 
 void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
@@ -1245,9 +1313,9 @@ SfxTabPage::sfxpg SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
-    return new SwTOXSelectTabPage(pParent, *rAttrSet);
+    return VclPtr<SwTOXSelectTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
@@ -1410,11 +1478,11 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
-    boost::scoped_ptr<SwAddStylesDlg_Impl> pDlg(new SwAddStylesDlg_Impl(pButton,
-        static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
-        aStyleArr));
+    ScopedVclPtrInstance<SwAddStylesDlg_Impl> pDlg(
+        pButton, static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
+        aStyleArr);
     pDlg->Execute();
-    pDlg.reset();
+    pDlg.disposeAndClear();
     ModifyHdl(0);
     return 0;
 }
@@ -1446,8 +1514,8 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
                 return 0;
         }
 
-        boost::scoped_ptr<SwAutoMarkDlg_Impl> pAutoMarkDlg(new SwAutoMarkDlg_Impl(
-                m_pAutoMarkPB, sAutoMarkURL, bNew ));
+        VclPtrInstance<SwAutoMarkDlg_Impl> pAutoMarkDlg(
+                m_pAutoMarkPB, sAutoMarkURL, bNew );
 
         if( RET_OK != pAutoMarkDlg->Execute() && bNew )
             sAutoMarkURL = sSaveAutoMarkURL;
@@ -1460,7 +1528,7 @@ class SwTOXEdit : public Edit
     SwFormToken aFormToken;
     Link        aPrevNextControlLink;
     bool     bNextControl;
-    SwTokenWindow* m_pParent;
+    VclPtr<SwTokenWindow> m_pParent;
 public:
     SwTOXEdit( vcl::Window* pParent, SwTokenWindow* pTokenWin,
                 const SwFormToken& aToken)
@@ -1470,6 +1538,8 @@ public:
         m_pParent( pTokenWin )
     {
     }
+    virtual ~SwTOXEdit() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { m_pParent.clear(); Edit::dispose(); }
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
@@ -1545,7 +1615,7 @@ class SwTOXButton : public PushButton
     SwFormToken aFormToken;
     Link        aPrevNextControlLink;
     bool        bNextControl;
-    SwTokenWindow* m_pParent;
+    VclPtr<SwTokenWindow> m_pParent;
 public:
     SwTOXButton( vcl::Window* pParent, SwTokenWindow* pTokenWin,
                 const SwFormToken& rToken)
@@ -1555,6 +1625,8 @@ public:
         m_pParent(pTokenWin)
     {
     }
+    virtual ~SwTOXButton() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { m_pParent.clear(); PushButton::dispose(); }
 
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
@@ -1673,6 +1745,17 @@ SwIdxTreeListBox::SwIdxTreeListBox(vcl::Window* pPar, WinBits nStyle)
     : SvTreeListBox(pPar, nStyle)
     , pParent(NULL)
 {
+}
+
+SwIdxTreeListBox::~SwIdxTreeListBox()
+{
+    disposeOnce();
+}
+
+void SwIdxTreeListBox::dispose()
+{
+    pParent.clear();
+    SvTreeListBox::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwIdxTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
@@ -1873,6 +1956,63 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAt
     m_pSecondKeyLB->SelectEntryPos(0);
     m_pThirdKeyLB->SelectEntryPos(0);
 }
+
+SwTOXEntryTabPage::~SwTOXEntryTabPage()
+{
+    disposeOnce();
+}
+
+void SwTOXEntryTabPage::dispose()
+{
+    m_pLevelFT.clear();
+    m_pLevelLB.clear();
+    m_pTokenWIN.clear();
+    m_pAllLevelsPB.clear();
+    m_pEntryNoPB.clear();
+    m_pEntryPB.clear();
+    m_pTabPB.clear();
+    m_pChapterInfoPB.clear();
+    m_pPageNoPB.clear();
+    m_pHyperLinkPB.clear();
+    m_pAuthFieldsLB.clear();
+    m_pAuthInsertPB.clear();
+    m_pAuthRemovePB.clear();
+    m_pCharStyleLB.clear();
+    m_pEditStylePB.clear();
+    m_pChapterEntryFT.clear();
+    m_pChapterEntryLB.clear();
+    m_pNumberFormatFT.clear();
+    m_pNumberFormatLB.clear();
+    m_pEntryOutlineLevelFT.clear();
+    m_pEntryOutlineLevelNF.clear();
+    m_pFillCharFT.clear();
+    m_pFillCharCB.clear();
+    m_pTabPosFT.clear();
+    m_pTabPosMF.clear();
+    m_pAutoRightCB.clear();
+    m_pFormatFrame.clear();
+    m_pMainEntryStyleFT.clear();
+    m_pMainEntryStyleLB.clear();
+    m_pAlphaDelimCB.clear();
+    m_pCommaSeparatedCB.clear();
+    m_pRelToStyleCB.clear();
+    m_pSortingFrame.clear();
+    m_pSortDocPosRB.clear();
+    m_pSortContentRB.clear();
+    m_pSortKeyFrame.clear();
+    m_pFirstKeyLB.clear();
+    m_pFirstSortUpRB.clear();
+    m_pFirstSortDownRB.clear();
+    m_pSecondKeyLB.clear();
+    m_pSecondSortUpRB.clear();
+    m_pSecondSortDownRB.clear();
+    m_pThirdKeyLB.clear();
+    m_pThirdSortUpRB.clear();
+    m_pThirdSortDownRB.clear();
+    SfxTabPage::dispose();
+}
+
+
 // pVoid is used as signal to change all levels of the example
 IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
 {
@@ -1888,10 +2028,6 @@ IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
             pTOXDlg->GetCurrentTOXType().eType, TOX_PAGE_ENTRY, nCurLevel);
     }
     return 0;
-}
-
-SwTOXEntryTabPage::~SwTOXEntryTabPage()
-{
 }
 
 bool SwTOXEntryTabPage::FillItemSet( SfxItemSet* )
@@ -2074,9 +2210,9 @@ SfxTabPage::sfxpg SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXEntryTabPage::Create( vcl::Window* pParent,     const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( vcl::Window* pParent,     const SfxItemSet* rAttrSet)
 {
-    return new SwTOXEntryTabPage(pParent, *rAttrSet);
+    return VclPtr<SwTOXEntryTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
@@ -2624,13 +2760,26 @@ void SwTokenWindow::setAllocation(const Size &rAllocation)
 
 SwTokenWindow::~SwTokenWindow()
 {
+    disposeOnce();
+}
+
+void SwTokenWindow::dispose()
+{
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        Control* pControl = (*it);
+        VclPtr<Control> pControl = (*it);
         pControl->SetGetFocusHdl( Link() );
         pControl->SetLoseFocusHdl( Link() );
-        delete pControl;
+        pControl.disposeAndClear();
     }
+    aControlList.clear();
+    disposeBuilder();
+    m_pLeftScrollWin.clear();
+    m_pCtrlParentWin.clear();
+    m_pRightScrollWin.clear();
+    pActiveCtrl.clear();
+    m_pParent.clear();
+    VclHBox::dispose();
 }
 
 void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
@@ -2640,10 +2789,11 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
     if(pForm)
     {
-        //apply current level settings to the form
         for (ctrl_iterator iter = aControlList.begin(); iter != aControlList.end(); ++iter)
-            delete (*iter);
-
+            iter->disposeAndClear();
+        //apply current level settings to the form
+        for (auto it = aControlList.begin(); it != aControlList.end(); ++it)
+             it->disposeAndClear();
         aControlList.clear();
     }
 
@@ -2725,9 +2875,9 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
             //it must be a SwTOXEdit
             const SwFormToken* pFToken;
             if( WINDOW_EDIT == pActiveCtrl->GetType() )
-                pFToken = &static_cast<SwTOXEdit*>(pActiveCtrl)->GetFormToken();
+                pFToken = &static_cast<SwTOXEdit*>(pActiveCtrl.get())->GetFormToken();
             else
-                pFToken = &static_cast<SwTOXButton*>(pActiveCtrl)->GetFormToken();
+                pFToken = &static_cast<SwTOXButton*>(pActiveCtrl.get())->GetFormToken();
 
             SwFormToken aTemp( *pFToken );
             aButtonSelectedHdl.Call( &aTemp );
@@ -2752,7 +2902,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
 
     if(TOKEN_TEXT == rToken.eTokenType)
     {
-        SwTOXEdit* pEdit = new SwTOXEdit(m_pCtrlParentWin, this, rToken);
+        VclPtr<SwTOXEdit> pEdit = VclPtr<SwTOXEdit>::Create(m_pCtrlParentWin, this, rToken);
         pEdit->SetPosPixel(aControlPos);
 
         aControlList.push_back(pEdit);
@@ -2781,7 +2931,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
     }
     else
     {
-        SwTOXButton* pButton = new SwTOXButton(m_pCtrlParentWin, this, rToken);
+        VclPtr<SwTOXButton> pButton = VclPtr<SwTOXButton>::Create(m_pCtrlParentWin, this, rToken);
         pButton->SetPosPixel(aControlPos);
 
         aControlList.push_back(pButton);
@@ -2948,18 +3098,18 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     {
         ++iterActive;
 
-        Selection aSel = static_cast<SwTOXEdit*>(pActiveCtrl)->GetSelection();
+        Selection aSel = static_cast<SwTOXEdit*>(pActiveCtrl.get())->GetSelection();
         aSel.Justify();
 
-        const OUString sEditText = static_cast<SwTOXEdit*>(pActiveCtrl)->GetText();
+        const OUString sEditText = static_cast<SwTOXEdit*>(pActiveCtrl.get())->GetText();
         const OUString sLeft = sEditText.copy( 0, aSel.A() );
         const OUString sRight = sEditText.copy( aSel.B() );
 
-        static_cast<SwTOXEdit*>(pActiveCtrl)->SetText(sLeft);
-        static_cast<SwTOXEdit*>(pActiveCtrl)->AdjustSize();
+        static_cast<SwTOXEdit*>(pActiveCtrl.get())->SetText(sLeft);
+        static_cast<SwTOXEdit*>(pActiveCtrl.get())->AdjustSize();
 
         SwFormToken aTmpToken(TOKEN_TEXT);
-        SwTOXEdit* pEdit = new SwTOXEdit(m_pCtrlParentWin, this, aTmpToken);
+        VclPtr<SwTOXEdit> pEdit = VclPtr<SwTOXEdit>::Create(m_pCtrlParentWin, this, aTmpToken);
 
         iterActive = aControlList.insert(iterActive, pEdit);
 
@@ -2987,11 +3137,11 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     {
         iterActive = aControlList.erase(iterActive);
         pActiveCtrl->Hide();
-        delete pActiveCtrl;
+        pActiveCtrl.disposeAndClear();
     }
 
     //now the new button
-    SwTOXButton* pButton = new SwTOXButton(m_pCtrlParentWin, this, aToInsertToken);
+    VclPtr<SwTOXButton> pButton = VclPtr<SwTOXButton>::Create(m_pCtrlParentWin, this, aToInsertToken);
 
     aControlList.insert(iterActive, pButton);
 
@@ -3040,19 +3190,19 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
     ctrl_iterator itLeft = it, itRight = it;
     --itLeft;
     ++itRight;
-    Control *pLeftEdit = *itLeft;
-    Control *pRightEdit = *itRight;
+    VclPtr<Control> pLeftEdit = *itLeft;
+    VclPtr<Control> pRightEdit = *itRight;
 
-    static_cast<SwTOXEdit*>(pLeftEdit)->SetText(static_cast<SwTOXEdit*>(pLeftEdit)->GetText() +
-                                     static_cast<SwTOXEdit*>(pRightEdit)->GetText());
-    static_cast<SwTOXEdit*>(pLeftEdit)->AdjustSize();
+    static_cast<SwTOXEdit*>(pLeftEdit.get())->SetText(static_cast<SwTOXEdit*>(pLeftEdit.get())->GetText() +
+                                     static_cast<SwTOXEdit*>(pRightEdit.get())->GetText());
+    static_cast<SwTOXEdit*>(pLeftEdit.get())->AdjustSize();
 
     aControlList.erase(itRight);
-    delete pRightEdit;
+    pRightEdit.disposeAndClear();
 
     aControlList.erase(it);
     pActiveCtrl->Hide();
-    delete pActiveCtrl;
+    pActiveCtrl.disposeAndClear();
 
     SetActiveControl(pLeftEdit);
     AdjustPositions();
@@ -3505,7 +3655,18 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& r
 
 SwTOXStylesTabPage::~SwTOXStylesTabPage()
 {
+    disposeOnce();
+}
+
+void SwTOXStylesTabPage::dispose()
+{
     delete m_pCurrentForm;
+    m_pLevelLB.clear();
+    m_pAssignBT.clear();
+    m_pParaLayLB.clear();
+    m_pStdBT.clear();
+    m_pEditStyleBT.clear();
+    SfxTabPage::dispose();
 }
 
 bool SwTOXStylesTabPage::FillItemSet( SfxItemSet* )
@@ -3590,10 +3751,10 @@ SfxTabPage::sfxpg SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXStylesTabPage::Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( vcl::Window* pParent,
+                                               const SfxItemSet* rAttrSet)
 {
-    return new SwTOXStylesTabPage(pParent, *rAttrSet);
+    return VclPtr<SwTOXStylesTabPage>::Create(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
@@ -3705,8 +3866,8 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
                            BrowserMode::VLINES |
                            BrowserMode::AUTO_VSCROLL|
                            BrowserMode::HIDECURSOR   )
-    , aCellEdit(&GetDataWindow(), 0)
-    , aCellCheckBox(&GetDataWindow())
+    , aCellEdit(VclPtr<Edit>::Create(&GetDataWindow(), 0))
+    , aCellCheckBox(new ::svt::CheckBoxControl(&GetDataWindow()))
     , nCurrentRow(0)
     , bModified(false)
 {
@@ -3720,9 +3881,9 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
     sYes = pBuilder->get<vcl::Window>("yes")->GetText();
     sNo = pBuilder->get<vcl::Window>("no")->GetText();
 
-    aCellCheckBox.GetBox().EnableTriState(false);
-    xController = new ::svt::EditCellController(&aCellEdit);
-    xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
+    aCellCheckBox->GetBox().EnableTriState(false);
+    xController = new ::svt::EditCellController(aCellEdit.get());
+    xCheckController = new ::svt::CheckBoxCellController(aCellCheckBox.get());
 
     // HACK: BrowseBox doesn't invalidate its children, how it should be.
     // That's why WB_CLIPCHILDREN is reset in order to enforce the
@@ -3751,6 +3912,18 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
     for(sal_uInt16 i = 1; i < 8; i++)
         InsertDataColumn( i, *aTitles[i - 1], nWidth,
                           HeaderBarItemBits::STDSTYLE, HEADERBAR_APPEND );
+}
+
+SwEntryBrowseBox::~SwEntryBrowseBox()
+{
+    disposeOnce();
+}
+
+void SwEntryBrowseBox::dispose()
+{
+    aCellEdit.disposeAndClear();
+    aCellCheckBox.disposeAndClear();
+    SwEntryBrowseBox_Base::dispose();
 }
 
 void SwEntryBrowseBox::Resize()
@@ -4018,7 +4191,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAu
     , bCreateMode(bCreate)
 {
     get(m_pOKPB, "ok");
-    m_pEntriesBB = new SwEntryBrowseBox(get<VclContainer>("area"), this);
+    m_pEntriesBB = VclPtr<SwEntryBrowseBox>::Create(get<VclContainer>("area"), this);
     m_pEntriesBB->set_expand(true);
     m_pEntriesBB->Show();
     m_pOKPB->SetClickHdl(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
@@ -4042,7 +4215,14 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAu
 
 SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 {
-    delete m_pEntriesBB;
+    disposeOnce();
+}
+
+void SwAutoMarkDlg_Impl::dispose()
+{
+    m_pEntriesBB.disposeAndClear();
+    m_pOKPB.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)

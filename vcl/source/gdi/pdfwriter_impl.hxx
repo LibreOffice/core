@@ -590,7 +590,7 @@ public:
 private:
     static const BuiltinFont m_aBuiltinFonts[14];
 
-    OutputDevice*                       m_pReferenceDevice;
+    VclPtr<OutputDevice>                m_pReferenceDevice;
 
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     std::vector< PDFPage >              m_aPages;

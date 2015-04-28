@@ -56,7 +56,7 @@ namespace dbp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage* createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage>     createPage( WizardState _nState ) SAL_OVERRIDE;
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const SAL_OVERRIDE;
         virtual void                enterState( WizardState _nState ) SAL_OVERRIDE;
         virtual bool                leaveState( WizardState _nState ) SAL_OVERRIDE;
@@ -82,15 +82,17 @@ namespace dbp
     class OGridFieldsSelection : public OGridPage
     {
     protected:
-        ListBox         *m_pExistFields;
-        PushButton      *m_pSelectOne;
-        PushButton      *m_pSelectAll;
-        PushButton      *m_pDeselectOne;
-        PushButton      *m_pDeselectAll;
-        ListBox         *m_pSelFields;
+        VclPtr<ListBox>         m_pExistFields;
+        VclPtr<PushButton>      m_pSelectOne;
+        VclPtr<PushButton>      m_pSelectAll;
+        VclPtr<PushButton>      m_pDeselectOne;
+        VclPtr<PushButton>      m_pDeselectAll;
+        VclPtr<ListBox>         m_pSelFields;
 
     public:
         OGridFieldsSelection( OGridWizard* _pParent );
+        virtual ~OGridFieldsSelection();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // TabPage overridables

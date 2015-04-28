@@ -50,6 +50,17 @@ OWizardPage::OWizardPage(vcl::Window* pParent, const OString& rID, const OUStrin
 {
 }
 
+OWizardPage::~OWizardPage()
+{
+    disposeOnce();
+}
+
+void OWizardPage::dispose()
+{
+    m_pParent.clear();
+    TabPage::dispose();
+}
+
 // OWizColumnSelect
 OWizColumnSelect::OWizColumnSelect( vcl::Window* pParent)
     :OWizardPage( pParent, "ApplyColPage", "dbaccess/ui/applycolpage.ui")
@@ -81,6 +92,11 @@ OWizColumnSelect::OWizColumnSelect( vcl::Window* pParent)
 
 OWizColumnSelect::~OWizColumnSelect()
 {
+    disposeOnce();
+}
+
+void OWizColumnSelect::dispose()
+{
     while ( m_pNewColumnNames->GetEntryCount() )
     {
         void* pData = m_pNewColumnNames->GetEntryData(0);
@@ -90,6 +106,13 @@ OWizColumnSelect::~OWizColumnSelect()
         m_pNewColumnNames->RemoveEntry(0);
     }
     m_pNewColumnNames->Clear();
+    m_pOrgColumnNames.clear();
+    m_pColumn_RH.clear();
+    m_pColumns_RH.clear();
+    m_pColumn_LH.clear();
+    m_pColumns_LH.clear();
+    m_pNewColumnNames.clear();
+    OWizardPage::dispose();
 }
 
 void OWizColumnSelect::Reset()

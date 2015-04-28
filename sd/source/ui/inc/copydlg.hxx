@@ -42,26 +42,27 @@ public:
     CopyDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         const XColorListRef &pColList, ::sd::View* pView );
     virtual ~CopyDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    GetAttr( SfxItemSet& rOutAttrs );
     void Reset();
 
 private:
-    NumericField*       m_pNumFldCopies;
-    Button*             m_pBtnSetViewData;
+    VclPtr<NumericField>       m_pNumFldCopies;
+    VclPtr<Button>             m_pBtnSetViewData;
 
-    MetricField*        m_pMtrFldMoveX;
-    MetricField*        m_pMtrFldMoveY;
-    MetricField*        m_pMtrFldAngle;
+    VclPtr<MetricField>        m_pMtrFldMoveX;
+    VclPtr<MetricField>        m_pMtrFldMoveY;
+    VclPtr<MetricField>        m_pMtrFldAngle;
 
-    MetricField*        m_pMtrFldWidth;
-    MetricField*        m_pMtrFldHeight;
+    VclPtr<MetricField>        m_pMtrFldWidth;
+    VclPtr<MetricField>        m_pMtrFldHeight;
 
-    ColorLB*            m_pLbStartColor;
-    FixedText*          m_pFtEndColor;
-    ColorLB*            m_pLbEndColor;
+    VclPtr<ColorLB>            m_pLbStartColor;
+    VclPtr<FixedText>          m_pFtEndColor;
+    VclPtr<ColorLB>            m_pLbEndColor;
 
-    PushButton*         m_pBtnSetDefault;
+    VclPtr<PushButton>         m_pBtnSetDefault;
 
     const SfxItemSet&   mrOutAttrs;
     XColorListRef       mpColorList;

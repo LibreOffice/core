@@ -471,20 +471,20 @@ namespace slideshow
 #else
                             if( avmedia::IsModel(rMimeType) )
                             {
-                                mpEventHandlerParent.reset(new vcl::Window(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
+                                mpEventHandlerParent.reset(VclPtr<vcl::Window>::Create(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
                                 mpEventHandlerParent->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                                 mpEventHandlerParent->EnablePaint(false);
                                 mpEventHandlerParent->Show();
                                 SystemWindowData aWinData = OpenGLContext::generateWinData(mpEventHandlerParent.get(), false);
-                                mpMediaWindow.reset(new SystemChildWindow(mpEventHandlerParent.get(), 0, &aWinData));
+                                mpMediaWindow.reset(VclPtr<SystemChildWindow>::Create(mpEventHandlerParent.get(), 0, &aWinData));
                                 mpMediaWindow->SetPosSizePixel( Point( 0, 0 ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
                             else
 #endif
                             {
-                                mpMediaWindow.reset( new SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
+                                mpMediaWindow.reset( VclPtr<SystemChildWindow>::Create( pWindow, WB_CLIPCHILDREN ) );
                                 mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             }

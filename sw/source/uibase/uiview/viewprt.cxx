@@ -147,8 +147,8 @@ bool SwView::HasPrintOptionsPage() const
 
 // TabPage for application-specific print options
 
-SfxTabPage* SwView::CreatePrintOptionsPage(vcl::Window* pParent,
-                                                    const SfxItemSet& rSet)
+VclPtr<SfxTabPage> SwView::CreatePrintOptionsPage(vcl::Window* pParent,
+                                                  const SfxItemSet& rSet)
 {
     return ::CreatePrintOptionsPage( pParent, rSet, false );
 }
@@ -175,10 +175,10 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             }
             else
             {
-                MessageDialog aInfoBox(&GetEditWin(), SW_RES(STR_ERR_NO_FAX), VCL_MESSAGE_INFO);
+                ScopedVclPtrInstance< MessageDialog > aInfoBox(&GetEditWin(), SW_RES(STR_ERR_NO_FAX), VCL_MESSAGE_INFO);
                 sal_uInt16 nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
-                aInfoBox.set_primary_text(aInfoBox.get_primary_text().replaceFirst("%1", OUString(SW_RES(nResNo))));
-                aInfoBox.Execute();
+                aInfoBox->set_primary_text(aInfoBox->get_primary_text().replaceFirst("%1", OUString(SW_RES(nResNo))));
+                aInfoBox->Execute();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);
                 GetViewFrame()->GetDispatcher()->Execute(SID_SW_EDITOPTIONS,
                             SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
@@ -201,9 +201,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             if(!bSilent && !bFromMerge &&
                     SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
-                MessageDialog aBox(&GetEditWin(), "PrintMergeDialog",
+                ScopedVclPtrInstance<MessageDialog> aBox(&GetEditWin(), "PrintMergeDialog",
                                    "modules/swriter/ui/printmergedialog.ui");
-                short nRet = aBox.Execute();
+                short nRet = aBox->Execute();
                 if(RET_YES == nRet)
                 {
                     SfxBoolItem aBool(FN_QRY_MERGE, true);
@@ -245,8 +245,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
 
 // Create page printer/additions for SwView and SwPagePreview
 
-SfxTabPage* CreatePrintOptionsPage( vcl::Window *pParent,
-                                const SfxItemSet &rOptions, bool bPreview )
+VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
+                                           const SfxItemSet &rOptions,
+                                           bool bPreview )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "No Print Dialog");
@@ -258,7 +259,9 @@ SfxTabPage* CreatePrintOptionsPage( vcl::Window *pParent,
     if (!fnCreatePage)
         return NULL;
 
-    SfxTabPage* pPage = (*fnCreatePage)(pParent, &rOptions);
+    VclPtr<SfxTabPage> pPage =
+        VclPtr<SfxTabPage>((*fnCreatePage)(pParent, &rOptions),
+                           SAL_NO_ACQUIRE);
     OSL_ENSURE(pPage, "No page");
     if (!pPage)
         return NULL;

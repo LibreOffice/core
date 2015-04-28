@@ -232,9 +232,8 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                     vcl::Window::ImplInitAppFontData( pSVData->maWinData.mpFirstFrame );
                 else
                 {
-                    WorkWindow* pWin = new WorkWindow( NULL, 0 );
+                    ScopedVclPtrInstance<WorkWindow> pWin( nullptr, 0 );
                     vcl::Window::ImplInitAppFontData( pWin );
-                    delete pWin;
                 }
             }
             rMapRes.mnMapScNumX   = pSVData->maGDIData.mnAppFontX;
@@ -343,6 +342,9 @@ inline void ImplCalcMapResolution( const MapMode& rMapMode,
 // #i75163#
 void OutputDevice::ImplInvalidateViewTransform()
 {
+    if(!mpOutDevData)
+        return;
+
     if(mpOutDevData->mpViewTransform)
     {
         delete mpOutDevData->mpViewTransform;

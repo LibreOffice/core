@@ -34,7 +34,6 @@ class TabItem
 {
 public:
     TabItem (vcl::Window* pParentWindow);
-    virtual ~TabItem();
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;

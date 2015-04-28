@@ -902,7 +902,7 @@ MSViewerWorkWindow::MSViewerWorkWindow() :
         mpListBox[nPane]->SetExpandingHdl( LINK( this, MSViewerWorkWindow, implExpandingHdl ) );
         mpListBox[nPane]->SetCollapsingHdl( LINK( this, MSViewerWorkWindow, implCollapsingHdl ) );
 
-        mpEdit[nPane] = new MultiLineEdit(this, WB_3DLOOK | WB_BORDER | WB_LEFT | WB_TOP | WB_READONLY | WB_HSCROLL | WB_VSCROLL );
+        mpEdit[nPane] = VclPtr<MultiLineEdit>::Create(this, WB_3DLOOK | WB_BORDER | WB_LEFT | WB_TOP | WB_READONLY | WB_HSCROLL | WB_VSCROLL );
         mpEdit[nPane]->SetReadOnly( TRUE );
         mpEdit[nPane]->SetReadOnly( TRUE );
         mpEdit[nPane]->SetControlFont( aFont );

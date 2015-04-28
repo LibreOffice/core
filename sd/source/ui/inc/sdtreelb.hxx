@@ -121,7 +121,7 @@ public:
 
 protected:
 
-    vcl::Window*                 mpParent;
+    VclPtr<vcl::Window>     mpParent;
     const SdDrawDocument*   mpDoc;
     SdDrawDocument*         mpBookmarkDoc;
     SfxMedium*              mpMedium;
@@ -131,7 +131,7 @@ protected:
     bool                mbLinkableSelected;
     OUString                maDocName;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks
-    SdNavigatorWin*         mpDropNavWin;
+    VclPtr<SdNavigatorWin>  mpDropNavWin;
     SfxViewFrame*           mpFrame;
     std::vector<OUString>   maTreeItem;
     bool                mbSaveTreeItemState;
@@ -187,6 +187,7 @@ public:
     SdPageObjsTLB( vcl::Window* pParent, const SdResId& rSdResId );
     SdPageObjsTLB( vcl::Window* pParent, WinBits nStyle );
                             virtual ~SdPageObjsTLB();
+    virtual void      dispose() SAL_OVERRIDE;
 
    // helper function for   GetEntryAltText and GetEntryLongDescription
     OUString          getAltLongDescText( SvTreeListEntry* pEntry , bool isAltText) const;

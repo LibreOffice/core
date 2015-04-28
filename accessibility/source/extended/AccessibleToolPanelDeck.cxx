@@ -76,7 +76,7 @@ namespace accessibility
         );
 
         void    checkDisposed();
-        bool    isDisposed() const { return m_pPanelDeck == NULL; }
+        bool    isDisposed() const { return m_pPanelDeck == nullptr; }
         void    dispose();
 
         virtual ~AccessibleToolPanelDeck_Impl();
@@ -95,7 +95,7 @@ namespace accessibility
     public:
         AccessibleToolPanelDeck&    m_rAntiImpl;
         Reference< XAccessible >    m_xAccessibleParent;
-        ::svt::ToolPanelDeck*       m_pPanelDeck;
+        VclPtr<::svt::ToolPanelDeck>    m_pPanelDeck;
 
         Reference< XAccessible >        m_xActivePanelAccessible;
     };
@@ -141,7 +141,7 @@ namespace accessibility
     {
         ENSURE_OR_RETURN_VOID( !isDisposed(), "disposed twice" );
         m_pPanelDeck->RemoveListener( *this );
-        m_pPanelDeck = NULL;
+        m_pPanelDeck.clear();
         m_xAccessibleParent.clear();
     }
 

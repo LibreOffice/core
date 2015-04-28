@@ -83,7 +83,7 @@ ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewD
 
     SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("users");
     pCtrl->set_height_request(pCtrl->GetTextHeight()*9);
-    m_pLbUsers = new ScShareTable(*pCtrl);
+    m_pLbUsers = VclPtr<ScShareTable>::Create(*pCtrl);
 
     m_aStrNoUserData = get<FixedText>("nouserdata")->GetText();
     m_aStrUnknownUser = get<FixedText>("unknownuser")->GetText();
@@ -108,7 +108,15 @@ ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewD
 
 ScShareDocumentDlg::~ScShareDocumentDlg()
 {
-    delete m_pLbUsers;
+    disposeOnce();
+}
+
+void ScShareDocumentDlg::dispose()
+{
+    m_pLbUsers.disposeAndClear();
+    m_pCbShare.clear();
+    m_pFtWarning.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(ScShareDocumentDlg, ToggleHandle)

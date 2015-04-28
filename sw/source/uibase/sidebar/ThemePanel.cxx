@@ -466,7 +466,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
 
 namespace sw { namespace sidebar {
 
-ThemePanel* ThemePanel::Create (vcl::Window* pParent,
+VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
                                         const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                         SfxBindings* pBindings)
 {
@@ -477,7 +477,7 @@ ThemePanel* ThemePanel::Create (vcl::Window* pParent,
     if (pBindings == NULL)
         throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
-    return new ThemePanel(pParent, rxFrame, pBindings);
+    return VclPtr<vcl::Window>(new ThemePanel(pParent, rxFrame, pBindings), SAL_NO_ACQUIRE);
 }
 
 ThemePanel::ThemePanel(vcl::Window* pParent,
@@ -509,6 +509,16 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
 
 ThemePanel::~ThemePanel()
 {
+    disposeOnce();
+}
+
+void ThemePanel::dispose()
+{
+    mpListBoxFonts.clear();
+    mpListBoxColors.clear();
+    mpApplyButton.clear();
+
+    PanelLayout::dispose();
 }
 
 IMPL_LINK_NOARG(ThemePanel, ClickHdl)

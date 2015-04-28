@@ -44,10 +44,6 @@ NumberFormatDialog::NumberFormatDialog(vcl::Window* pParent, SfxItemSet& rSet)
     }
 }
 
-NumberFormatDialog::~NumberFormatDialog()
-{
-}
-
 SfxItemSet NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool )
 {
     static const sal_uInt16 nWhichPairs[] =

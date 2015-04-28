@@ -44,16 +44,26 @@
 namespace svtools {
 
 ODocumentInfoPreview::ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits):
-    Window(pParent, WB_DIALOGCONTROL), m_pEditWin(this, nBits),
+    Window(pParent, WB_DIALOGCONTROL),
+    m_pEditWin( VclPtr<ExtMultiLineEdit>::Create(this, nBits) ),
     m_xInfoTable(new SvtDocInfoTable_Impl),
     m_aLanguageTag(SvtPathOptions().GetLanguageTag()) // detect application language
 {
-    m_pEditWin.SetLeftMargin(10);
-    m_pEditWin.Show();
-    m_pEditWin.EnableCursor(false);
+    m_pEditWin->SetLeftMargin(10);
+    m_pEditWin->Show();
+    m_pEditWin->EnableCursor(false);
 }
 
-ODocumentInfoPreview::~ODocumentInfoPreview() {}
+ODocumentInfoPreview::~ODocumentInfoPreview()
+{
+    disposeOnce();
+}
+
+void ODocumentInfoPreview::dispose()
+{
+    m_pEditWin.disposeAndClear();
+    Window::dispose();
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeODocumentInfoPreview(vcl::Window *pParent, VclBuilder::stringmap&)
 {
@@ -61,11 +71,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeODocumentInfoPreview(v
 }
 
 void ODocumentInfoPreview::Resize() {
-    m_pEditWin.SetPosSizePixel(Point(0, 0), GetOutputSize());
+    m_pEditWin->SetPosSizePixel(Point(0, 0), GetOutputSize());
 }
 
 void ODocumentInfoPreview::clear() {
-    m_pEditWin.SetText(OUString());
+    m_pEditWin->SetText(OUString());
 }
 
 void ODocumentInfoPreview::fill(
@@ -74,7 +84,7 @@ void ODocumentInfoPreview::fill(
 {
     assert(xDocProps.is());
 
-    m_pEditWin.SetAutoScroll(false);
+    m_pEditWin->SetAutoScroll(false);
 
     insertNonempty(DI_TITLE, xDocProps->getTitle());
     insertNonempty(DI_FROM, xDocProps->getAuthor());
@@ -126,22 +136,22 @@ void ODocumentInfoPreview::fill(
         }
     }
 
-    m_pEditWin.SetSelection(Selection(0, 0));
-    m_pEditWin.SetAutoScroll(true);
+    m_pEditWin->SetSelection(Selection(0, 0));
+    m_pEditWin->SetAutoScroll(true);
 }
 
 void ODocumentInfoPreview::insertEntry(
     OUString const & title, OUString const & value)
 {
-    if (!m_pEditWin.GetText().isEmpty()) {
-        m_pEditWin.InsertText(OUString("\n\n"));
+    if (!m_pEditWin->GetText().isEmpty()) {
+        m_pEditWin->InsertText(OUString("\n\n"));
     }
     OUString caption(title + ":\n");
-    m_pEditWin.InsertText(caption);
-    m_pEditWin.SetAttrib(
-        TextAttribFontWeight(WEIGHT_BOLD), m_pEditWin.GetParagraphCount() - 2,
+    m_pEditWin->InsertText(caption);
+    m_pEditWin->SetAttrib(
+        TextAttribFontWeight(WEIGHT_BOLD), m_pEditWin->GetParagraphCount() - 2,
         0, caption.getLength() - 1);
-    m_pEditWin.InsertText(value);
+    m_pEditWin->InsertText(value);
 }
 
 void ODocumentInfoPreview::insertNonempty(long id, OUString const & value)

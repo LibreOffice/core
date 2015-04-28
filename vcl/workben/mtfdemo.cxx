@@ -67,7 +67,7 @@ void DemoMtfWin::Paint( const Rectangle& rRect )
 
 class DemoMtfApp : public Application
 {
-    DemoMtfWin *mpWin;
+    VclPtr<DemoMtfWin> mpWin;
     OUString maFileName;
 
     void showHelp()
@@ -88,7 +88,7 @@ public:
     {
         try
         {
-            mpWin = new DemoMtfWin(maFileName);
+            mpWin = VclPtr<DemoMtfWin>::Create(maFileName);
             mpWin->SetText(OUString("Display metafile"));
 
             mpWin->Show();

@@ -55,6 +55,16 @@ SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
 
 SdPresLayoutDlg::~SdPresLayoutDlg()
 {
+    disposeOnce();
+}
+
+void SdPresLayoutDlg::dispose()
+{
+    m_pVS.clear();
+    m_pCbxMasterPage.clear();
+    m_pCbxCheckMasters.clear();
+    m_pBtnLoad.clear();
+    ModalDialog::dispose();
 }
 
 /**
@@ -169,7 +179,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl)
  */
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 {
-    boost::scoped_ptr<SfxNewFileDialog> pDlg(new SfxNewFileDialog(this, SFXWB_PREVIEW));
+    VclPtrInstance< SfxNewFileDialog > pDlg(this, SFXWB_PREVIEW);
     pDlg->SetText(SD_RESSTR(STR_LOAD_PRESENTATION_LAYOUT));
 
     if(!IsReallyVisible())

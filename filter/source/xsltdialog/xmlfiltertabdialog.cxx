@@ -56,13 +56,13 @@ XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
     m_pTabCtrl->SetActivatePageHdl( LINK( this, XMLFilterTabDialog, ActivatePageHdl ) );
     m_pTabCtrl->SetDeactivatePageHdl( LINK( this, XMLFilterTabDialog, DeactivatePageHdl ) );
 
-    mpBasicPage = new XMLFilterTabPageBasic(m_pTabCtrl);
+    mpBasicPage = VclPtr<XMLFilterTabPageBasic>::Create(m_pTabCtrl);
     mpBasicPage->SetInfo( mpNewInfo );
 
     m_nBasicPageId = m_pTabCtrl->GetPageId("general");
     m_pTabCtrl->SetTabPage(m_nBasicPageId, mpBasicPage);
 
-    mpXSLTPage = new XMLFilterTabPageXSLT(m_pTabCtrl);
+    mpXSLTPage = VclPtr<XMLFilterTabPageXSLT>::Create(m_pTabCtrl);
     mpXSLTPage->SetInfo( mpNewInfo );
 
     m_nXSLTPageId = m_pTabCtrl->GetPageId("transformation");
@@ -75,9 +75,17 @@ XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
 
 XMLFilterTabDialog::~XMLFilterTabDialog()
 {
-    delete mpBasicPage;
-    delete mpXSLTPage;
+    disposeOnce();
+}
+
+void XMLFilterTabDialog::dispose()
+{
+    mpBasicPage.disposeAndClear();
+    mpXSLTPage.disposeAndClear();
     delete mpNewInfo;
+    m_pTabCtrl.clear();
+    m_pOKBtn.clear();
+    TabDialog::dispose();
 }
 
 
@@ -257,8 +265,8 @@ bool XMLFilterTabDialog::onOk()
             aMessage = aMessage.replaceAll( "%s", aReplace1 );
         }
 
-        MessageDialog aBox(this, aMessage);
-        aBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aBox(this, aMessage);
+        aBox->Execute();
 
         if( pFocusWindow )
             pFocusWindow->GrabFocus();

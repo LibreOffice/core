@@ -22,6 +22,7 @@
 
 #include "abspage.hxx"
 #include <vcl/lstbox.hxx>
+#include <vcl/vclptr.hxx>
 
 
 namespace abp
@@ -34,11 +35,12 @@ namespace abp
     class TableSelectionPage : public AddressBookSourcePage
     {
     protected:
-        ListBox*        m_pTableList;
+        VclPtr<ListBox>        m_pTableList;
 
     public:
         TableSelectionPage( OAddessBookSourcePilot* _pParent );
-
+        virtual ~TableSelectionPage();
+        virtual void dispose() SAL_OVERRIDE;
     protected:
         // OWizardPage overridables
         virtual void        initializePage() SAL_OVERRIDE;

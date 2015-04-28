@@ -67,11 +67,11 @@ public:
 class SvxHyperlinkTabPageBase : public IconChoicePage
 {
 private:
-    ComboBox            *mpCbbFrame;
-    ListBox             *mpLbForm;
-    Edit                *mpEdIndication;
-    Edit                *mpEdText;
-    PushButton          *mpBtScript;
+    VclPtr<ComboBox>            mpCbbFrame;
+    VclPtr<ListBox>             mpLbForm;
+    VclPtr<Edit>                mpEdIndication;
+    VclPtr<Edit>                mpEdText;
+    VclPtr<PushButton>          mpBtScript;
 
     bool            mbIsCloseDisabled;
 
@@ -79,7 +79,7 @@ private:
                         mxDocumentFrame;
 
 protected:
-    vcl::Window*             mpDialog;
+    VclPtr<vcl::Window> mpDialog;
 
     bool                mbStdControlsInit;
 
@@ -87,7 +87,7 @@ protected:
 
     Timer               maTimer;
 
-    SvxHlinkDlgMarkWnd* mpMarkWnd;
+    VclPtr<SvxHlinkDlgMarkWnd> mpMarkWnd;
 
     void InitStdControls ();
     void FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem );
@@ -118,6 +118,7 @@ public:
         const SfxItemSet& rItemSet
     );
     virtual ~SvxHyperlinkTabPageBase ();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    SetDocumentFrame(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame )

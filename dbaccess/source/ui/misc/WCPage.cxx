@@ -19,6 +19,8 @@
 
 #include "WCPage.hxx"
 #include "WCopyTable.hxx"
+#include "WColumnSelect.hxx"
+#include "WExtendPages.hxx"
 
 #include "defaultobjectnamecheck.hxx"
 #include <tools/debug.hxx>
@@ -103,6 +105,23 @@ OCopyTable::OCopyTable(vcl::Window * pParent)
 
 OCopyTable::~OCopyTable()
 {
+    disposeOnce();
+}
+
+void OCopyTable::dispose()
+{
+    m_pEdTableName.clear();
+    m_pRB_DefData.clear();
+    m_pRB_Def.clear();
+    m_pRB_View.clear();
+    m_pRB_AppendData.clear();
+    m_pCB_UseHeaderLine.clear();
+    m_pCB_PrimaryColumn.clear();
+    m_pFT_KeyName.clear();
+    m_pEdKeyName.clear();
+    m_pPage2.clear();
+    m_pPage3.clear();
+    OWizardPage::dispose();
 }
 
 IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )

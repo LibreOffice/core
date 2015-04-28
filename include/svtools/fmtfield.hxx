@@ -95,7 +95,6 @@ protected:
 
 public:
     FormattedField(vcl::Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = NULL, sal_Int32 nFormatKey = 0);
-    virtual ~FormattedField();
 
     // Min-/Max-management
     bool    HasMinValue() const         { return m_bHasMin; }
@@ -270,6 +269,7 @@ public:
     }
 
     virtual ~DoubleNumericField();
+    virtual void dispose() SAL_OVERRIDE;
 
 protected:
     virtual bool CheckText(const OUString& sText) const SAL_OVERRIDE;

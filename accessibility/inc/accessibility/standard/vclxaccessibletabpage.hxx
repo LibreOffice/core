@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <vcl/vclptr.hxx>
 
 
 class TabControl;
@@ -51,7 +52,7 @@ class VCLXAccessibleTabPage :   public AccessibleTextHelper_BASE,
 
 private:
     VCLExternalSolarLock*   m_pExternalLock;
-    TabControl*             m_pTabControl;
+    VclPtr<TabControl>      m_pTabControl;
     sal_uInt16              m_nPageId;
     bool                    m_bFocused;
     bool                    m_bSelected;

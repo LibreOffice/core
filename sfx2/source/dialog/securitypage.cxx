@@ -99,13 +99,13 @@ static bool lcl_GetPassword(
     /*out*/OUString &rPassword )
 {
     bool bRes = false;
-    SfxPasswordDialog aPasswdDlg( pParent );
-    aPasswdDlg.SetMinLen( 1 );
+    ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(pParent);
+    aPasswdDlg->SetMinLen( 1 );
     if (bProtect)
-        aPasswdDlg.ShowExtras( SfxShowExtras::CONFIRM );
-    if (RET_OK == aPasswdDlg.Execute() && !aPasswdDlg.GetPassword().isEmpty())
+        aPasswdDlg->ShowExtras( SfxShowExtras::CONFIRM );
+    if (RET_OK == aPasswdDlg->Execute() && !aPasswdDlg->GetPassword().isEmpty())
     {
-        rPassword = aPasswdDlg.GetPassword();
+        rPassword = aPasswdDlg->GetPassword();
         bRes = true;
     }
     return bRes;
@@ -136,10 +136,10 @@ struct SfxSecurityPage_Impl
 {
     SfxSecurityPage &   m_rMyTabPage;
 
-    CheckBox*           m_pOpenReadonlyCB;
-    CheckBox*           m_pRecordChangesCB;         // for record changes
-    PushButton*         m_pProtectPB;               // for record changes
-    PushButton*         m_pUnProtectPB;             // for record changes
+    VclPtr<CheckBox>    m_pOpenReadonlyCB;
+    VclPtr<CheckBox>    m_pRecordChangesCB;         // for record changes
+    VclPtr<PushButton>  m_pProtectPB;               // for record changes
+    VclPtr<PushButton>  m_pUnProtectPB;             // for record changes
     RedliningMode       m_eRedlingMode;             // for record changes
 
     bool                m_bOrigPasswordIsConfirmed;
@@ -335,9 +335,9 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
         {
-            WarningBox aBox( m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
+            ScopedVclPtrInstance<WarningBox> aBox(m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
                     m_aEndRedliningWarning );
-            if (aBox.Execute() != RET_YES)
+            if (aBox->Execute() != RET_YES)
                 bAlreadyDone = true;
             else
                 m_bEndRedliningWarningDone = true;
@@ -420,9 +420,9 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
 }
 
 
-SfxTabPage* SfxSecurityPage::Create( vcl::Window * pParent, const SfxItemSet * rItemSet )
+VclPtr<SfxTabPage> SfxSecurityPage::Create( vcl::Window * pParent, const SfxItemSet * rItemSet )
 {
-    return new SfxSecurityPage( pParent, *rItemSet );
+    return VclPtr<SfxSecurityPage>::Create( pParent, *rItemSet );
 }
 
 
@@ -432,10 +432,6 @@ SfxSecurityPage::SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& rItemS
     m_pImpl.reset(new SfxSecurityPage_Impl( *this, rItemSet ));
 }
 
-
-SfxSecurityPage::~SfxSecurityPage()
-{
-}
 
 
 bool SfxSecurityPage::FillItemSet( SfxItemSet * rItemSet )

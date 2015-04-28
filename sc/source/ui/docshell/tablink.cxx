@@ -47,9 +47,9 @@
 
 struct TableLink_Impl
 {
-    ScDocShell* m_pDocSh;
-    vcl::Window*     m_pOldParent;
-    Link        m_aEndEditLink;
+    ScDocShell*          m_pDocSh;
+    VclPtr<vcl::Window>  m_pOldParent;
+    Link                 m_aEndEditLink;
 
     TableLink_Impl() : m_pDocSh( NULL ), m_pOldParent( NULL ) {}
 };

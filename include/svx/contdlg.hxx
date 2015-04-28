@@ -47,18 +47,19 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxContourDlg : public SfxFloatingWindow
 {
     using Window::Update;
 
-    SvxSuperContourDlg* pSuperClass;
+    VclPtr<SvxSuperContourDlg> pSuperClass;
 
 
 protected:
 
-    void                SetSuperClass( SvxSuperContourDlg& rSuperClass ) { pSuperClass = &rSuperClass; }
+    void                SetSuperClass( SvxSuperContourDlg& rSuperClass );
 
 public:
 
                         SvxContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
                                       vcl::Window* pParent);
-                        virtual ~SvxContourDlg();
+    virtual             ~SvxContourDlg();
+    virtual void        dispose() SAL_OVERRIDE;
 
     const Graphic&      GetGraphic() const;
     bool                IsGraphicChanged() const;

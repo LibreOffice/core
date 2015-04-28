@@ -50,8 +50,8 @@ class SvxTabulatorTabPage : public SfxTabPage
 
 public:
     virtual ~SvxTabulatorTabPage();
-
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    virtual void dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -66,34 +66,34 @@ private:
     SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     // tabulators and positions
-    MetricBox*      m_pTabBox;
+    VclPtr<MetricBox>      m_pTabBox;
     // TabType
-    RadioButton*    m_pLeftTab;
-    RadioButton*    m_pRightTab;
-    RadioButton*    m_pCenterTab;
-    RadioButton*    m_pDezTab;
+    VclPtr<RadioButton>    m_pLeftTab;
+    VclPtr<RadioButton>    m_pRightTab;
+    VclPtr<RadioButton>    m_pCenterTab;
+    VclPtr<RadioButton>    m_pDezTab;
 
-    TabWin_Impl*    m_pLeftWin;
-    TabWin_Impl*    m_pRightWin;
-    TabWin_Impl*    m_pCenterWin;
-    TabWin_Impl*    m_pDezWin;
+    VclPtr<TabWin_Impl>    m_pLeftWin;
+    VclPtr<TabWin_Impl>    m_pRightWin;
+    VclPtr<TabWin_Impl>    m_pCenterWin;
+    VclPtr<TabWin_Impl>    m_pDezWin;
 
-    FixedText*      m_pDezCharLabel;
-    Edit*           m_pDezChar;
+    VclPtr<FixedText>      m_pDezCharLabel;
+    VclPtr<Edit>           m_pDezChar;
 
-    RadioButton*    m_pNoFillChar;
-    RadioButton*    m_pFillPoints;
-    RadioButton*    m_pFillDashLine ;
-    RadioButton*    m_pFillSolidLine;
-    RadioButton*    m_pFillSpecial;
-    Edit*           m_pFillChar;
+    VclPtr<RadioButton>    m_pNoFillChar;
+    VclPtr<RadioButton>    m_pFillPoints;
+    VclPtr<RadioButton>    m_pFillDashLine ;
+    VclPtr<RadioButton>    m_pFillSolidLine;
+    VclPtr<RadioButton>    m_pFillSpecial;
+    VclPtr<Edit>           m_pFillChar;
 
-    PushButton*     m_pNewBtn;
-    PushButton*     m_pDelAllBtn;
-    PushButton*     m_pDelBtn;
+    VclPtr<PushButton>     m_pNewBtn;
+    VclPtr<PushButton>     m_pDelAllBtn;
+    VclPtr<PushButton>     m_pDelBtn;
 
-    VclContainer*   m_pTypeFrame;
-    VclContainer*   m_pFillFrame;
+    VclPtr<VclContainer>   m_pTypeFrame;
+    VclPtr<VclContainer>   m_pFillFrame;
 
     // local variables, internal functions
     SvxTabStop      aAktTab;

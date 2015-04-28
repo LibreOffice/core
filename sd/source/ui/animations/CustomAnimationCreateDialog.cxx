@@ -165,6 +165,7 @@ class CustomAnimationCreateTabPage : public TabPage
 public:
     CustomAnimationCreateTabPage( vcl::Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath = false );
     virtual ~CustomAnimationCreateTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;
@@ -187,12 +188,12 @@ private:
     void clearEffects();
 
 private:
-    CategoryListBox*    mpLBEffects;
-    FixedText*  mpFTSpeed;
-    ListBox*    mpCBSpeed;
-    CheckBox*   mpCBXPReview;
+    VclPtr<CategoryListBox>    mpLBEffects;
+    VclPtr<FixedText>  mpFTSpeed;
+    VclPtr<ListBox>    mpCBSpeed;
+    VclPtr<CheckBox>   mpCBXPReview;
 
-    CustomAnimationCreateDialog*        mpParent;
+    VclPtr<CustomAnimationCreateDialog>        mpParent;
 
     sal_uInt16 mnId;
 
@@ -296,7 +297,18 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( vcl::Window* pParent
 
 CustomAnimationCreateTabPage::~CustomAnimationCreateTabPage()
 {
+    disposeOnce();
+}
+
+void CustomAnimationCreateTabPage::dispose()
+{
     clearEffects();
+    mpLBEffects.clear();
+    mpFTSpeed.clear();
+    mpCBSpeed.clear();
+    mpCBXPReview.clear();
+    mpParent.clear();
+    TabPage::dispose();
 }
 
 IMPL_LINK( CustomAnimationCreateTabPage, implSelectHdl, Control*, pControl )
@@ -497,15 +509,15 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( vcl::Window* pParent, 
     mnMiscId = mpTabControl->GetPageId("misc_effects");
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
-    mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, mnEntranceId, rPresets.getEntrancePresets(), bHasText );
+    mpTabPages[ENTRANCE] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnEntranceId, rPresets.getEntrancePresets(), bHasText );
     mpTabControl->SetTabPage( mnEntranceId, mpTabPages[ENTRANCE] );
-    mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnEmphasisId, rPresets.getEmphasisPresets(), bHasText );
+    mpTabPages[EMPHASIS] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnEmphasisId, rPresets.getEmphasisPresets(), bHasText );
     mpTabControl->SetTabPage( mnEmphasisId, mpTabPages[EMPHASIS] );
-    mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, mnExitId, rPresets.getExitPresets(), bHasText );
+    mpTabPages[EXIT] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnExitId, rPresets.getExitPresets(), bHasText );
     mpTabControl->SetTabPage( mnExitId, mpTabPages[EXIT] );
-    mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMPathId, rPresets.getMotionPathsPresets(), bHasText, true );
+    mpTabPages[MOTIONPATH] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnMPathId, rPresets.getMotionPathsPresets(), bHasText, true );
     mpTabControl->SetTabPage( mnMPathId, mpTabPages[MOTIONPATH] );
-    mpTabPages[MISCEFFECTS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMiscId, rPresets.getMiscPresets(), bHasText );
+    mpTabPages[MISCEFFECTS] = VclPtr<CustomAnimationCreateTabPage>::Create( mpTabControl, this, mnMiscId, rPresets.getMiscPresets(), bHasText );
     mpTabControl->SetTabPage( mnMiscId, mpTabPages[MISCEFFECTS] );
 
     getCurrentPage()->setDuration( mfDuration );
@@ -532,17 +544,25 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( vcl::Window* pParent, 
 
 CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
 {
+    disposeOnce();
+}
+
+void CustomAnimationCreateDialog::dispose()
+{
     storePosition();
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     pOptions->SetPreviewNewEffects( getCurrentPage()->getIsPreview() );
 
-    delete mpTabPages[ENTRANCE];
-    delete mpTabPages[EMPHASIS];
-    delete mpTabPages[EXIT];
-    delete mpTabPages[MOTIONPATH];
-    delete mpTabPages[MISCEFFECTS];
+    mpTabPages[ENTRANCE].disposeAndClear();
+    mpTabPages[EMPHASIS].disposeAndClear();
+    mpTabPages[EXIT].disposeAndClear();
+    mpTabPages[MOTIONPATH].disposeAndClear();
+    mpTabPages[MISCEFFECTS].disposeAndClear();
 
+    mpTabControl.clear();
+    mpPane.clear();
+    TabDialog::dispose();
 }
 
 CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() const

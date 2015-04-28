@@ -52,9 +52,15 @@ IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
 }
 
 
-
 IconChoicePage::~IconChoicePage()
 {
+    disposeOnce();
+}
+
+void IconChoicePage::dispose()
+{
+    pDialog.clear();
+    TabPage::dispose();
 }
 
 /**********************************************************************
@@ -150,8 +156,8 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtIconChoiceCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvtIconChoiceCtrl(pParent, WB_3DLOOK | WB_ICON | WB_BORDER |
-                            WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                            WB_NODRAGSELECTION | WB_TABSTOP);
+                                 WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+                                 WB_NODRAGSELECTION | WB_TABSTOP);
 }
 
 IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
@@ -209,6 +215,11 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
+    disposeOnce();
+}
+
+void IconChoiceDialog::dispose()
+{
     // save configuration at INI-Manager
     // and remove pages
     //SvtViewOptions aTabDlgOpt( E_TABDIALOG, rId );
@@ -231,22 +242,35 @@ IconChoiceDialog ::~IconChoiceDialog ()
 
             if ( pData->bOnDemand )
                 delete &pData->pPage->GetItemSet();
-            delete pData->pPage;
+            pData->pPage.disposeAndClear();
         }
         delete pData;
     }
+    maPageList.clear();
 
-    // remove Userdata from Icons
-    for ( sal_uLong i=0; i < m_pIconCtrl->GetEntryCount(); i++)
+    if (m_pIconCtrl)
     {
-        SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
-        sal_uInt16* pUserData = static_cast<sal_uInt16*>(pEntry->GetUserData());
-        delete pUserData;
+        // remove Userdata from Icons
+        for ( sal_uLong i=0; i < m_pIconCtrl->GetEntryCount(); i++)
+        {
+            SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
+            delete static_cast<sal_uInt16*>(pEntry->GetUserData());
+        }
     }
 
-
     delete pRanges;
+    pRanges = NULL;
     delete pOutSet;
+    pOutSet = NULL;
+
+    m_pIconCtrl.clear();
+    m_pOKBtn.clear();
+    m_pApplyBtn.clear();
+    m_pCancelBtn.clear();
+    m_pHelpBtn.clear();
+    m_pResetBtn.clear();
+    m_pTabContainer.clear();
+    ModalDialog::dispose();
 }
 
 /**********************************************************************
@@ -532,7 +556,7 @@ bool IconChoiceDialog::DeActivatePageImpl ()
             for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
             {
                 IconChoicePageData* pObj = maPageList[ i ];
-                if ( pObj->pPage != pPage )
+                if ( pObj->pPage.get() != pPage )
                     pObj->bRefresh = true;
                 else
                     pObj->bRefresh = false;

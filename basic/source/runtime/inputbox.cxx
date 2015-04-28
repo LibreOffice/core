@@ -30,10 +30,10 @@
 
 class SvRTLInputBox : public ModalDialog
 {
-    Edit aEdit;
-    OKButton aOk;
-    CancelButton aCancel;
-    FixedText aPromptText;
+    VclPtr<Edit> aEdit;
+    VclPtr<OKButton> aOk;
+    VclPtr<CancelButton> aCancel;
+    VclPtr<FixedText> aPromptText;
     OUString aText;
 
     void PositionDialog( long nXTwips, long nYTwips, const Size& rDlgSize );
@@ -46,6 +46,8 @@ class SvRTLInputBox : public ModalDialog
 public:
     SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt, const OUString& rTitle,
         const OUString& rDefault, long nXTwips = -1, long nYTwips = -1 );
+    virtual ~SvRTLInputBox() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetText() const SAL_OVERRIDE { return aText; }
 };
 
@@ -53,8 +55,8 @@ SvRTLInputBox::SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt,
         const OUString& rTitle, const OUString& rDefault,
         long nXTwips, long nYTwips ) :
     ModalDialog( pParent,WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
-    aEdit( this,  WB_LEFT | WB_BORDER ),
-    aOk( this ), aCancel( this ), aPromptText( this, WB_WORDBREAK )
+    aEdit( VclPtr<Edit>::Create(this,  WB_LEFT | WB_BORDER) ),
+    aOk( new OKButton(this) ), aCancel( new CancelButton(this) ), aPromptText( VclPtr<FixedText>::Create(this, WB_WORDBREAK) )
 {
     SetMapMode( MapMode( MAP_APPFONT ) );
     Size aDlgSizeApp( 280, 80 );
@@ -62,29 +64,38 @@ SvRTLInputBox::SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt,
     InitButtons( aDlgSizeApp );
     PositionEdit( aDlgSizeApp );
     PositionPrompt( rPrompt, aDlgSizeApp );
-    aOk.Show();
-    aCancel.Show();
-    aEdit.Show();
-    aPromptText.Show();
+    aOk->Show();
+    aCancel->Show();
+    aEdit->Show();
+    aPromptText->Show();
     SetText( rTitle );
     vcl::Font aFont( GetFont());
     Color aColor( GetBackground().GetColor() );
     aFont.SetFillColor( aColor );
-    aEdit.SetFont( aFont );
-    aEdit.SetText( rDefault );
-    aEdit.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+    aEdit->SetFont( aFont );
+    aEdit->SetText( rDefault );
+    aEdit->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+}
+
+void SvRTLInputBox::dispose()
+{
+    aEdit.disposeAndClear();
+    aOk.disposeAndClear();
+    aCancel.disposeAndClear();
+    aPromptText.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 void SvRTLInputBox::InitButtons( const Size& rDlgSize )
 {
-    aOk.SetSizePixel( LogicToPixel( Size( 45, 15) ));
-    aCancel.SetSizePixel( LogicToPixel( Size( 45, 15) ));
+    aOk->SetSizePixel( LogicToPixel( Size( 45, 15) ));
+    aCancel->SetSizePixel( LogicToPixel( Size( 45, 15) ));
     Point aPos( rDlgSize.Width()-45-10, 5 );
-    aOk.SetPosPixel( LogicToPixel( Point(aPos) ));
+    aOk->SetPosPixel( LogicToPixel( Point(aPos) ));
     aPos.Y() += 16;
-    aCancel.SetPosPixel( LogicToPixel( Point(aPos) ));
-    aOk.SetClickHdl(LINK(this,SvRTLInputBox, OkHdl));
-    aCancel.SetClickHdl(LINK(this,SvRTLInputBox,CancelHdl));
+    aCancel->SetPosPixel( LogicToPixel( Point(aPos) ));
+    aOk->SetClickHdl(LINK(this,SvRTLInputBox, OkHdl));
+    aCancel->SetClickHdl(LINK(this,SvRTLInputBox,CancelHdl));
 }
 
 void SvRTLInputBox::PositionDialog(long nXTwips, long nYTwips, const Size& rDlgSize)
@@ -99,8 +110,8 @@ void SvRTLInputBox::PositionDialog(long nXTwips, long nYTwips, const Size& rDlgS
 
 void SvRTLInputBox::PositionEdit( const Size& rDlgSize )
 {
-    aEdit.SetPosPixel( LogicToPixel( Point( 5,rDlgSize.Height()-35)));
-    aEdit.SetSizePixel( LogicToPixel( Size(rDlgSize.Width()-15,12)));
+    aEdit->SetPosPixel( LogicToPixel( Point( 5,rDlgSize.Height()-35)));
+    aEdit->SetSizePixel( LogicToPixel( Size(rDlgSize.Width()-15,12)));
 }
 
 
@@ -109,12 +120,12 @@ void SvRTLInputBox::PositionPrompt(const OUString& rPrompt,const Size& rDlgSize)
     if ( rPrompt.isEmpty() )
         return;
     OUString aText_(convertLineEnd(rPrompt, LINEEND_CR));
-    aPromptText.SetPosPixel( LogicToPixel(Point(5,5)));
-    aPromptText.SetText( aText_ );
+    aPromptText->SetPosPixel( LogicToPixel(Point(5,5)));
+    aPromptText->SetText( aText_ );
     Size aSize( rDlgSize );
     aSize.Width() -= 70;
     aSize.Height() -= 50;
-    aPromptText.SetSizePixel( LogicToPixel(aSize));
+    aPromptText->SetSizePixel( LogicToPixel(aSize));
 }
 
 
@@ -122,7 +133,7 @@ IMPL_LINK_INLINE_START( SvRTLInputBox, OkHdl, Button *, pButton )
 {
     (void)pButton;
 
-    aText = aEdit.GetText();
+    aText = aEdit->GetText();
     EndDialog( 1 );
     return 0;
 }
@@ -172,8 +183,8 @@ RTLFUNC(InputBox)
             nX = rPar.Get(4)->GetLong();
             nY = rPar.Get(5)->GetLong();
         }
-        boost::scoped_ptr<SvRTLInputBox> pDlg(new SvRTLInputBox(Application::GetDefDialogParent(),
-                    rPrompt,aTitle,aDefault,nX,nY));
+        VclPtrInstance<SvRTLInputBox> pDlg(Application::GetDefDialogParent(),
+                                           rPrompt,aTitle,aDefault,nX,nY);
         pDlg->Execute();
         rPar.Get(0)->PutString( pDlg->GetText() );
     }

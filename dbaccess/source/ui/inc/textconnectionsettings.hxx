@@ -39,6 +39,7 @@ namespace dbaui
     public:
         TextConnectionSettingsDialog( vcl::Window* _pParent, SfxItemSet& _rItems );
         virtual ~TextConnectionSettingsDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         /** initializes a set of PropertyStorage instaces, which are bound to
             the text-connection relevant items in our item sets
@@ -48,8 +49,8 @@ namespace dbaui
         virtual short   Execute() SAL_OVERRIDE;
 
     private:
-        ::std::unique_ptr< OTextConnectionHelper >    m_pTextConnectionHelper;
-        OKButton                                    *m_pOK;
+        VclPtr<OTextConnectionHelper>               m_pTextConnectionHelper;
+        VclPtr<OKButton>                            m_pOK;
         SfxItemSet&                                 m_rItems;
 
     private:

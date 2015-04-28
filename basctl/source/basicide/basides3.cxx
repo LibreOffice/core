@@ -77,8 +77,8 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
 
                 // new dialog window
                 if (!pDialogLayout)
-                    pDialogLayout.reset(new DialogWindowLayout(&GetViewFrame()->GetWindow(), aObjectCatalog));
-                pWin = new DialogWindow(pDialogLayout.get(), rDocument, aLibName, aDlgName, xDialogModel);
+                    pDialogLayout.reset(VclPtr<DialogWindowLayout>::Create(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
+                pWin = VclPtr<DialogWindow>::Create(pDialogLayout.get(), rDocument, aLibName, aDlgName, xDialogModel);
                 nKey = InsertWindowInTable( pWin );
             }
         }
@@ -96,7 +96,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
 
     if( pWin )
     {
-        pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
+        pWin->GrabScrollBars( aHScrollBar.get(), aVScrollBar.get() );
         pTabBar->InsertPage( (sal_uInt16)nKey, aDlgName );
         pTabBar->Sort();
         if ( !pCurWin )
@@ -128,7 +128,7 @@ sal_uInt16 Shell::GetWindowId(const BaseWindow* pWin) const
 
 SdrView* Shell::GetCurDlgView() const
 {
-    if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin))
+    if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin.get()))
         return &pDCurWin->GetView();
     else
         return 0;
@@ -137,7 +137,7 @@ SdrView* Shell::GetCurDlgView() const
 // only if dialogue window above:
 void Shell::ExecuteDialog( SfxRequest& rReq )
 {
-    if (pCurWin && (dynamic_cast<DialogWindow*>(pCurWin) || rReq.GetSlot() == SID_IMPORT_DIALOG))
+    if (pCurWin && (dynamic_cast<DialogWindow*>(pCurWin.get()) || rReq.GetSlot() == SID_IMPORT_DIALOG))
         pCurWin->ExecuteCommand(rReq);
 }
 

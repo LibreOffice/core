@@ -83,7 +83,13 @@ SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
 
 SdDocPreviewWin::~SdDocPreviewWin()
 {
+    disposeOnce();
+}
+
+void SdDocPreviewWin::dispose()
+{
     delete pMetaFile;
+    Control::dispose();
 }
 
 Size SdDocPreviewWin::GetOptimalSize() const
@@ -235,17 +241,17 @@ void SdDocPreviewWin::updateViewSettings()
 
             pMtf = new GDIMetaFile;
 
-            VirtualDevice       aVDev;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
 
             const Fraction      aFrac( pDoc->GetScaleFraction() );
             const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
 
-            aVDev.SetMapMode( aMap );
+            pVDev->SetMapMode( aMap );
 
             // Disable output, as we only want to record a metafile
-            aVDev.EnableOutput( false );
+            pVDev->EnableOutput( false );
 
-            pMtf->Record( &aVDev );
+            pMtf->Record( pVDev );
 
             ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, NULL);
 
@@ -261,18 +267,18 @@ void SdDocPreviewWin::updateViewSettings()
             const Rectangle aClipRect( aNewOrg, aNewSize );
             MapMode         aVMap( aMap );
 
-            aVDev.Push();
+            pVDev->Push();
             aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
-            aVDev.SetRelativeMapMode( aVMap );
-            aVDev.IntersectClipRegion( aClipRect );
+            pVDev->SetRelativeMapMode( aVMap );
+            pVDev->IntersectClipRegion( aClipRect );
 
         // Use new StandardCheckVisisbilityRedirector
         StandardCheckVisisbilityRedirector aRedirector;
         const Rectangle aRedrawRectangle = Rectangle( Point(), aNewSize );
         vcl::Region aRedrawRegion(aRedrawRectangle);
-        pView->SdrPaintView::CompleteRedraw(&aVDev,aRedrawRegion,&aRedirector);
+        pView->SdrPaintView::CompleteRedraw(pVDev,aRedrawRegion,&aRedirector);
 
-            aVDev.Pop();
+            pVDev->Pop();
 
             pMtf->Stop();
             pMtf->WindStart();

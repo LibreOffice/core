@@ -86,7 +86,7 @@ namespace pcr
     class ControlHelper
     {
     private:
-        vcl::Window*                         m_pControlWindow;
+        VclPtr<vcl::Window>             m_pControlWindow;
         sal_Int16                       m_nControlType;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >
                                         m_xContext;

@@ -160,12 +160,50 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
 
 ScFilterDlg::~ScFilterDlg()
 {
+    disposeOnce();
+}
+
+void ScFilterDlg::dispose()
+{
     delete pOptionsMgr;
     delete pOutItem;
 
     // Hack: RefInput control
     pTimer->Stop();
     delete pTimer;
+
+    pLbConnect1.clear();
+    pLbField1.clear();
+    pLbCond1.clear();
+    pEdVal1.clear();
+    pLbConnect2.clear();
+    pLbField2.clear();
+    pLbCond2.clear();
+    pEdVal2.clear();
+    pLbConnect3.clear();
+    pLbField3.clear();
+    pLbCond3.clear();
+    pEdVal3.clear();
+    pLbConnect4.clear();
+    pLbField4.clear();
+    pLbCond4.clear();
+    pEdVal4.clear();
+    pScrollBar.clear();
+    pExpander.clear();
+    pBtnOk.clear();
+    pBtnCancel.clear();
+    pBtnCase.clear();
+    pBtnRegExp.clear();
+    pBtnHeader.clear();
+    pBtnUnique.clear();
+    pBtnCopyResult.clear();
+    pLbCopyArea.clear();
+    pEdCopyArea.clear();
+    pRbCopyArea.clear();
+    pBtnDestPers.clear();
+    pFtDbAreaLabel.clear();
+    pFtDbArea.clear();
+    ScAnyRefDlg::dispose();
 }
 
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )

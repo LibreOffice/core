@@ -71,8 +71,8 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
         bConfirmFailed = true;
     if ( bConfirmFailed )
     {
-        MessageDialog aBox(this, SfxResId(STR_ERROR_WRONG_CONFIRM));
-        aBox.Execute();
+        ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId(STR_ERROR_WRONG_CONFIRM));
+        aBox->Execute();
         mpConfirm1ED->SetText( OUString() );
         mpConfirm1ED->GrabFocus();
     }
@@ -125,7 +125,29 @@ SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGrou
     SetPasswdText();
 }
 
+SfxPasswordDialog::~SfxPasswordDialog()
+{
+    disposeOnce();
+}
 
+void SfxPasswordDialog::dispose()
+{
+    mpPassword1Box.clear();
+    mpUserFT.clear();
+    mpUserED.clear();
+    mpPassword1FT.clear();
+    mpPassword1ED.clear();
+    mpConfirm1FT.clear();
+    mpConfirm1ED.clear();
+    mpPassword2Box.clear();
+    mpPassword2FT.clear();
+    mpPassword2ED.clear();
+    mpConfirm2FT.clear();
+    mpConfirm2ED.clear();
+    mpMinLengthFT.clear();
+    mpOKBtn.clear();
+    ModalDialog::dispose();
+}
 
 void SfxPasswordDialog::SetPasswdText( )
 {

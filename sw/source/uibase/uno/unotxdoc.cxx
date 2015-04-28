@@ -2320,9 +2320,9 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
     return aAny;
 }
 
-static OutputDevice * lcl_GetOutputDevice( const SwPrintUIOptions &rPrintUIOptions )
+static VclPtr< OutputDevice > lcl_GetOutputDevice( const SwPrintUIOptions &rPrintUIOptions )
 {
-    OutputDevice *pOut = 0;
+    VclPtr< OutputDevice > pOut;
 
     uno::Any aAny( rPrintUIOptions.getValue( "RenderDevice" ));
     uno::Reference< awt::XDevice >  xRenderDevice;
@@ -2330,7 +2330,7 @@ static OutputDevice * lcl_GetOutputDevice( const SwPrintUIOptions &rPrintUIOptio
     if (xRenderDevice.is())
     {
         VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
-        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
+        pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
     }
 
     return pOut;
@@ -2519,7 +2519,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if (bIsSwSrcView)
     {
         SwSrcView& rSwSrcView = dynamic_cast<SwSrcView&>(*pView);
-        OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
+        VclPtr< OutputDevice> pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
         nRet = rSwSrcView.PrintSource( pOutDev, 1 /* dummy */, true /* get page count only */ );
     }
     else
@@ -2634,7 +2634,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             const sal_Int16 nPostItMode = (sal_Int16) m_pPrintUIOptions->getIntValue( "PrintAnnotationMode", 0 );
             if (nPostItMode != POSTITS_NONE)
             {
-                OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
+                VclPtr< OutputDevice > pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
                 m_pRenderData->CreatePostItData( pDoc, pViewShell->GetViewOptions(), pOutDev );
             }
 
@@ -2758,7 +2758,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             // Sometimes 'getRenderer' is only called to get "ExtraPrintUIOptions", in this
             // case we won't get an OutputDevice here, but then the caller also has no need
             // for the correct PageSisze right now...
-            Printer *pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ));
+            VclPtr< Printer > pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ).get());
             if (pPrinter)
             {
                 // HTML source view and prospect adapt to the printer's paper size
@@ -2976,7 +2976,7 @@ void SAL_CALL SwXTextDocument::render(
             if (bIsSwSrcView)
             {
                 SwSrcView& rSwSrcView = dynamic_cast<SwSrcView&>(*pView);
-                OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
+                VclPtr< OutputDevice > pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
                 rSwSrcView.PrintSource(pOutDev, nRenderer + 1, false);
             }
             else
@@ -2998,7 +2998,7 @@ void SAL_CALL SwXTextDocument::render(
                 }
 
                 // get output device to use
-                OutputDevice * pOut = lcl_GetOutputDevice( *m_pPrintUIOptions );
+                VclPtr< OutputDevice > pOut = lcl_GetOutputDevice( *m_pPrintUIOptions );
 
                 if(pVwSh && pOut && m_pRenderData->HasSwPrtOptions())
                 {

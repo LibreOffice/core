@@ -147,6 +147,15 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, 
 
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
+    disposeOnce();
+}
+
+void SwInsertBookmarkDlg::dispose()
+{
+    m_pBookmarkBox.clear();
+    m_pOkBtn.clear();
+    m_pDeleteBtn.clear();
+    SvxStandardDialog::dispose();
 }
 
 BookmarkCombo::BookmarkCombo(vcl::Window* pWin, WinBits nStyle)

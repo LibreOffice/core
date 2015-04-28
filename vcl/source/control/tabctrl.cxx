@@ -42,7 +42,7 @@
 struct ImplTabItem
 {
     sal_uInt16          mnId;
-    TabPage*            mpTabPage;
+    VclPtr<TabPage>     mpTabPage;
     OUString            maText;
     OUString            maFormatText;
     OUString            maHelpText;
@@ -67,7 +67,7 @@ struct ImplTabCtrlData
     std::vector< Rectangle >        maTabRectangles;
     Point                           maItemsOffset;       // offset of the tabitems
     std::vector< ImplTabItem >      maItemList;
-    ListBox*                        mpListBox;
+    VclPtr<ListBox>                 mpListBox;
 };
 
 #define TAB_OFFSET          3
@@ -112,7 +112,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     if( (nStyle & WB_DROPDOWN) )
     {
-        mpTabCtrlData->mpListBox = new ListBox( this, WB_DROPDOWN );
+        mpTabCtrlData->mpListBox = VclPtr<ListBox>::Create( this, WB_DROPDOWN );
         mpTabCtrlData->mpListBox->SetPosSizePixel( Point( 0, 0 ), Size( 200, 20 ) );
         mpTabCtrlData->mpListBox->SetSelectHdl( LINK( this, TabControl, ImplListBoxSelectHdl ) );
         mpTabCtrlData->mpListBox->Show();
@@ -192,6 +192,11 @@ TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
 
 TabControl::~TabControl()
 {
+    disposeOnce();
+}
+
+void TabControl::dispose()
+{
     Window *pParent = GetParent();
     if (pParent && pParent->IsDialog())
         GetParent()->RemoveChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
@@ -199,12 +204,11 @@ TabControl::~TabControl()
     ImplFreeLayoutData();
 
     // delete TabCtrl data
-    if ( mpTabCtrlData )
-    {
-        if( mpTabCtrlData->mpListBox )
-            delete mpTabCtrlData->mpListBox;
-        delete mpTabCtrlData;
-    }
+    if (mpTabCtrlData)
+        mpTabCtrlData->mpListBox.disposeAndClear();
+    delete mpTabCtrlData;
+    mpTabCtrlData = NULL;
+    Control::dispose();
 }
 
 ImplTabItem* TabControl::ImplGetItem( sal_uInt16 nId ) const
@@ -574,9 +578,9 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
     ImplTabItem*    pOldItem = ImplGetItem( nOldId );
     ImplTabItem*    pItem = ImplGetItem( nId );
-    TabPage*        pOldPage = (pOldItem) ? pOldItem->mpTabPage : NULL;
-    TabPage*        pPage = (pItem) ? pItem->mpTabPage : NULL;
-    vcl::Window*         pCtrlParent = GetParent();
+    TabPage*        pOldPage = (pOldItem) ? pOldItem->mpTabPage.get() : NULL;
+    TabPage*        pPage = (pItem) ? pItem->mpTabPage.get() : NULL;
+    vcl::Window*    pCtrlParent = GetParent();
 
     if ( IsReallyVisible() && IsUpdateMode() )
     {
@@ -1013,7 +1017,7 @@ IMPL_LINK( TabControl, ImplWindowEventListener, VclSimpleEvent*, pEvent )
 
 void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if( mpTabCtrlData->mpListBox == NULL )
+    if( mpTabCtrlData->mpListBox.get() == NULL )
     {
         if( rMEvt.IsLeft() )
         {
@@ -1083,7 +1087,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     // in this case we're only interested in the top border of the tabpage because the tabitems are used
     // standalone (eg impress)
     bool bNoTabPage = false;
-    TabPage* pCurPage = pCurItem ? pCurItem->mpTabPage : NULL;
+    TabPage* pCurPage = pCurItem ? pCurItem->mpTabPage.get() : NULL;
     if( !pCurPage || !pCurPage->IsVisible() )
     {
         bNoTabPage = true;
@@ -1169,7 +1173,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         }
     }
 
-    if ( !mpTabCtrlData->maItemList.empty() && mpTabCtrlData->mpListBox == NULL )
+    if ( !mpTabCtrlData->maItemList.empty() && mpTabCtrlData->mpListBox == nullptr )
     {
         // Some native toolkits (GTK+) draw tabs right-to-left, with an
         // overlap between adjacent tabs
@@ -1427,7 +1431,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
 
 void TabControl::Command( const CommandEvent& rCEvt )
 {
-    if( (mpTabCtrlData->mpListBox == NULL) && (rCEvt.GetCommand() == COMMAND_CONTEXTMENU) && (GetPageCount() > 1) )
+    if( (mpTabCtrlData->mpListBox == nullptr) && (rCEvt.GetCommand() == COMMAND_CONTEXTMENU) && (GetPageCount() > 1) )
     {
         Point   aMenuPos;
         bool    bMenu;
@@ -1879,7 +1883,7 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
-    if ( pItem && (pItem->mpTabPage != pTabPage) )
+    if ( pItem && (pItem->mpTabPage.get() != pTabPage) )
     {
         if ( pTabPage )
         {

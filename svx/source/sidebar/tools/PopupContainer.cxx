@@ -27,15 +27,10 @@ PopupContainer::PopupContainer (vcl::Window* pParent)
 {
 }
 
-
-
-
 PopupContainer::~PopupContainer()
 {
+    disposeOnce();
 }
-
-
-
 
 bool PopupContainer::Notify (NotifyEvent& rEvent)
 {

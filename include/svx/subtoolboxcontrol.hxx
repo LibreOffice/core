@@ -36,7 +36,7 @@ public:
     virtual ~SvxSubToolBoxControl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 };
 
 

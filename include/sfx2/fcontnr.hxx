@@ -57,14 +57,13 @@ public:
 
 class SfxFrameWindow
 {
-    vcl::Window*     pWindow;
+    ScopedVclPtr<vcl::Window> pWindow;
 public:
                 SfxFrameWindow( vcl::Window *pWin )
                  : pWindow( pWin )
                 {}
 
-    virtual     ~SfxFrameWindow()
-                { delete pWindow; }
+    virtual     ~SfxFrameWindow()  {}
     vcl::Window*     GetWindow() const
                 { return pWindow; }
     void        SetWindow( vcl::Window *pWin )

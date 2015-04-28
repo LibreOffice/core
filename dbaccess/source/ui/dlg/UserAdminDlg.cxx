@@ -73,6 +73,11 @@ namespace dbaui
 
     OUserAdminDlg::~OUserAdminDlg()
     {
+        disposeOnce();
+    }
+
+    void OUserAdminDlg::dispose()
+    {
         if ( m_bOwnConnection )
         {
             try
@@ -86,8 +91,9 @@ namespace dbaui
 
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
-
+        SfxTabDialog::dispose();
     }
+
     short OUserAdminDlg::Execute()
     {
         try

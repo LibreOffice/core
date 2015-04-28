@@ -123,7 +123,7 @@ private:
     SdDrawDocument*                 mpSdDrawDocument;
     SdDrawDocument*                 mpSdDrawDocumentIntern;
     SdDrawDocument*                 mpSourceDoc;
-    VirtualDevice*                  mpVDev;
+    VclPtr<VirtualDevice>           mpVDev;
     INetBookmark*                   mpBookmark;
     Graphic*                        mpGraphic;
     ImageMap*                       mpImageMap;

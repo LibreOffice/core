@@ -85,7 +85,7 @@ class ScTabView : boost::noncopyable
 private:
     enum BlockMode { None = 0, Normal = 1, Own = 2 };
 
-    vcl::Window*             pFrameWin;              // First !!!
+    VclPtr<vcl::Window>             pFrameWin;              // First !!!
     ScViewData          aViewData;              // must be at the front !
 
     ScViewSelectionEngine*  pSelEngine;
@@ -102,23 +102,23 @@ private:
     FuPoor*             pDrawActual;
     FuPoor*             pDrawOld;
 
-    ScGridWindow*       pGridWin[4];
-    ScColBar*           pColBar[2];
-    ScRowBar*           pRowBar[2];
-    ScOutlineWindow*    pColOutline[2];
-    ScOutlineWindow*    pRowOutline[2];
-    ScTabSplitter*      pHSplitter;
-    ScTabSplitter*      pVSplitter;
-    ScTabControl*       pTabControl;
-    ScrollBar           aVScrollTop;
-    ScrollBar           aVScrollBottom;         // initially visible
-    ScrollBar           aHScrollLeft;           // initially visible
-    ScrollBar           aHScrollRight;
-    ScCornerButton      aCornerButton;
-    ScCornerButton      aTopButton;
-    ScrollBarBox        aScrollBarBox;
+    VclPtr<ScGridWindow>        pGridWin[4];
+    VclPtr<ScColBar>            pColBar[2];
+    VclPtr<ScRowBar>            pRowBar[2];
+    VclPtr<ScOutlineWindow>     pColOutline[2];
+    VclPtr<ScOutlineWindow>     pRowOutline[2];
+    VclPtr<ScTabSplitter>       pHSplitter;
+    VclPtr<ScTabSplitter>       pVSplitter;
+    VclPtr<ScTabControl>        pTabControl;
+    VclPtr<ScrollBar>           aVScrollTop;
+    VclPtr<ScrollBar>           aVScrollBottom;         // initially visible
+    VclPtr<ScrollBar>           aHScrollLeft;           // initially visible
+    VclPtr<ScrollBar>           aHScrollRight;
+    VclPtr<ScCornerButton>      aCornerButton;
+    VclPtr<ScCornerButton>      aTopButton;
+    VclPtr<ScrollBarBox>        aScrollBarBox;
 
-    boost::scoped_ptr<ScHintWindow> mpInputHintWindow; // popup window for data validation
+    VclPtr<ScHintWindow>        mpInputHintWindow; // popup window for data validation
 
     ScPageBreakData*    pPageBreakData;
     std::vector<ScHighlightEntry>   maHighlightRanges;
@@ -127,7 +127,7 @@ private:
     SfxItemSet*         pDrawBrushSet;          // drawing object attributes for paint brush
 
     Timer               aScrollTimer;
-    ScGridWindow*       pTimerWindow;
+    VclPtr<ScGridWindow>       pTimerWindow;
     MouseEvent          aTimerMEvt;
 
     sal_uLong               nTipVisible;

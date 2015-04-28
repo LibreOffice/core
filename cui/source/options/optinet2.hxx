@@ -58,26 +58,26 @@ class SvxProxyTabPage : public SfxTabPage
 {
 private:
 
-    ListBox*        m_pProxyModeLB;
+    VclPtr<ListBox>        m_pProxyModeLB;
 
-    FixedText*      m_pHttpProxyFT;
-    SvxNoSpaceEdit* m_pHttpProxyED;
-    FixedText*      m_pHttpPortFT;
-    SvxNoSpaceEdit* m_pHttpPortED;
+    VclPtr<FixedText>      m_pHttpProxyFT;
+    VclPtr<SvxNoSpaceEdit> m_pHttpProxyED;
+    VclPtr<FixedText>      m_pHttpPortFT;
+    VclPtr<SvxNoSpaceEdit> m_pHttpPortED;
 
-    FixedText*      m_pHttpsProxyFT;
-    SvxNoSpaceEdit* m_pHttpsProxyED;
-    FixedText*      m_pHttpsPortFT;
-    SvxNoSpaceEdit* m_pHttpsPortED;
+    VclPtr<FixedText>      m_pHttpsProxyFT;
+    VclPtr<SvxNoSpaceEdit> m_pHttpsProxyED;
+    VclPtr<FixedText>      m_pHttpsPortFT;
+    VclPtr<SvxNoSpaceEdit> m_pHttpsPortED;
 
-    FixedText*      m_pFtpProxyFT;
-    SvxNoSpaceEdit* m_pFtpProxyED;
-    FixedText*      m_pFtpPortFT;
-    SvxNoSpaceEdit* m_pFtpPortED;
+    VclPtr<FixedText>      m_pFtpProxyFT;
+    VclPtr<SvxNoSpaceEdit> m_pFtpProxyED;
+    VclPtr<FixedText>      m_pFtpPortFT;
+    VclPtr<SvxNoSpaceEdit> m_pFtpPortED;
 
-    FixedText*      m_pNoProxyForFT;
-    Edit*           m_pNoProxyForED;
-    FixedText*      m_pNoProxyDescFT;
+    VclPtr<FixedText>      m_pNoProxyForFT;
+    VclPtr<Edit>           m_pNoProxyForED;
+    VclPtr<FixedText>      m_pNoProxyDescFT;
 
     const OUString aProxyModePN;
     const OUString aHttpProxyPN;
@@ -98,11 +98,11 @@ private:
     DECL_LINK( ProxyHdl_Impl, ListBox * );
     DECL_LINK( LoseFocusHdl_Impl, Edit * );
 
+public:
     SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxProxyTabPage();
-
-public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    virtual void dispose() SAL_OVERRIDE;
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
@@ -130,28 +130,28 @@ class SvxSecurityTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    PushButton*         m_pSecurityOptionsPB;
+    VclPtr<PushButton>         m_pSecurityOptionsPB;
 
-    CheckBox*           m_pSavePasswordsCB;
-    PushButton*         m_pShowConnectionsPB;
+    VclPtr<CheckBox>           m_pSavePasswordsCB;
+    VclPtr<PushButton>         m_pShowConnectionsPB;
 
-    CheckBox*           m_pMasterPasswordCB;
-    FixedText*          m_pMasterPasswordFT;
-    PushButton*         m_pMasterPasswordPB;
+    VclPtr<CheckBox>           m_pMasterPasswordCB;
+    VclPtr<FixedText>          m_pMasterPasswordFT;
+    VclPtr<PushButton>         m_pMasterPasswordPB;
 
-    VclContainer*       m_pMacroSecFrame;
-    PushButton*         m_pMacroSecPB;
+    VclPtr<VclContainer>       m_pMacroSecFrame;
+    VclPtr<PushButton>         m_pMacroSecPB;
 
-    VclContainer*       m_pCertFrame;
-    PushButton*         m_pCertPathPB;
+    VclPtr<VclContainer>       m_pCertFrame;
+    VclPtr<PushButton>         m_pCertPathPB;
 
-    VclContainer*       m_pTSAURLsFrame;
-    PushButton*         m_pTSAURLsPB;
+    VclPtr<VclContainer>       m_pTSAURLsFrame;
+    VclPtr<PushButton>         m_pTSAURLsPB;
 
     SvtSecurityOptions*         mpSecOptions;
-    svx::SecurityOptionsDialog* mpSecOptDlg;
+    VclPtr<svx::SecurityOptionsDialog> mpSecOptDlg;
 
-    CertPathDialog* mpCertPathDlg;
+    VclPtr<CertPathDialog> mpCertPathDlg;
 
     OUString            m_sPasswordStoringDeactivateStr;
 
@@ -168,13 +168,14 @@ private:
 
                 SvxSecurityTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual     ~SvxSecurityTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
@@ -182,13 +183,13 @@ public:
 struct SvxEMailTabPage_Impl;
 class SvxEMailTabPage : public SfxTabPage
 {
-    VclContainer* m_pMailContainer;
-    FixedImage*   m_pMailerURLFI;
-    Edit*         m_pMailerURLED;
-    PushButton*   m_pMailerURLPB;
-    VclContainer* m_pSuppressHiddenContainer;
-    FixedImage*   m_pSuppressHiddenFI;
-    CheckBox*     m_pSuppressHidden;
+    VclPtr<VclContainer> m_pMailContainer;
+    VclPtr<FixedImage>   m_pMailerURLFI;
+    VclPtr<Edit>         m_pMailerURLED;
+    VclPtr<PushButton>   m_pMailerURLPB;
+    VclPtr<VclContainer> m_pSuppressHiddenContainer;
+    VclPtr<FixedImage>   m_pSuppressHiddenFI;
+    VclPtr<CheckBox>     m_pSuppressHidden;
 
     OUString      m_sDefaultFilterName;
 
@@ -199,8 +200,9 @@ class SvxEMailTabPage : public SfxTabPage
 public:
     SvxEMailTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxEMailTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

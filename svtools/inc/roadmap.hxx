@@ -58,6 +58,7 @@ namespace svt
     public:
         ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
         virtual ~ORoadmap( );
+        virtual void dispose() SAL_OVERRIDE;
 
         void            SetRoadmapBitmap( const BitmapEx& maBitmap, bool _bInvalidate = true );
 

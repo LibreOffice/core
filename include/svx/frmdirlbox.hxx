@@ -40,7 +40,6 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FrameDirectionListBox : public ListBox
 {
 public:
     explicit            FrameDirectionListBox( vcl::Window* pParent, WinBits nBits );
-    virtual             ~FrameDirectionListBox();
 
     /** Inserts a string with corresponding direction enum into the listbox. */
     void                InsertEntryValue(

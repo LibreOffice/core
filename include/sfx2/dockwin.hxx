@@ -84,6 +84,7 @@ public:
                                           vcl::Window* pParent,
                                           const OString& rID, const OUString& rUIXMLDescription );
                         virtual ~SfxDockingWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                Initialize (SfxChildWinInfo* pInfo);
     virtual void        FillInfo(SfxChildWinInfo&) const;

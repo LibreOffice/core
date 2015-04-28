@@ -21,6 +21,7 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_LAYOUT_HXX
 
 #include <vcl/split.hxx>
+#include <vcl/vclptr.hxx>
 
 
 class DockingWindow;
@@ -49,9 +50,11 @@ public:
     virtual void GetState (SfxItemSet&, unsigned nWhich) = 0;
     virtual void UpdateDebug (bool bBasicStopped ) = 0;
 
+    virtual ~Layout();
+    virtual void dispose() SAL_OVERRIDE;
+
 protected:
     Layout (vcl::Window* pParent);
-    virtual ~Layout ();
 
     void AddToLeft   (DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
     void AddToBottom (DockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
@@ -67,7 +70,7 @@ protected:
 
 private:
     // the main child window (either ModulWindow or DialogWindow)
-    BaseWindow* pChild;
+    VclPtr<BaseWindow> pChild;
 
     // when this window has at first (nonempty) size
     bool bFirstSize;
@@ -96,12 +99,12 @@ private:
         // size (width or height)
         long nSize;
         // the main splitting line
-        Splitter aSplitter;
+        VclPtr<Splitter> aSplitter;
         // the dockable windows (and some data)
         struct Item
         {
             // pointer to the dockable window
-            DockingWindow* pWin;
+            VclPtr<DockingWindow> pWin;
             // starting and ending position in the strip
             // They may be different from the actual window position, because
             // the window may fill the space of the adjacent currently
@@ -110,7 +113,7 @@ private:
             long nStartPos, nEndPos;
             // splitter line window before the window
             // (the first one is always nullptr)
-            boost::shared_ptr<Splitter> pSplit;
+            VclPtr<Splitter> pSplit;
         };
         std::vector<Item> vItems;
     private:

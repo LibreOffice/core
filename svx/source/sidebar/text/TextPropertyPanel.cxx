@@ -43,14 +43,14 @@ const char UNO_UNDERLINE[] = ".uno:Underline";
 
 namespace svx { namespace sidebar {
 
-PopupControl* TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
+VclPtr<PopupControl> TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
 {
-    return new TextCharacterSpacingControl(pParent, *this, mpBindings);
+    return VclPtrInstance<TextCharacterSpacingControl>(pParent, *this, mpBindings);
 }
 
-PopupControl* TextPropertyPanel::CreateUnderlinePopupControl (PopupContainer* pParent)
+VclPtr<PopupControl> TextPropertyPanel::CreateUnderlinePopupControl (PopupContainer* pParent)
 {
-    return new TextUnderlineControl(pParent, *this, mpBindings);
+    return VclPtrInstance<TextUnderlineControl>(pParent, *this, mpBindings);
 }
 
 long TextPropertyPanel::GetSelFontSize()
@@ -62,7 +62,7 @@ long TextPropertyPanel::GetSelFontSize()
     return nH;
 }
 
-TextPropertyPanel* TextPropertyPanel::Create (
+VclPtr<vcl::Window> TextPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -75,11 +75,11 @@ TextPropertyPanel* TextPropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to TextPropertyPanel::Create", NULL, 2);
 
-    return new TextPropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings,
-        rContext);
+    return VclPtr<TextPropertyPanel>::Create(
+                pParent,
+                rxFrame,
+                pBindings,
+                rContext);
 }
 
 
@@ -116,6 +116,22 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
 
 TextPropertyPanel::~TextPropertyPanel()
 {
+    disposeOnce();
+}
+
+void TextPropertyPanel::dispose()
+{
+    mpToolBoxFont.clear();
+    mpToolBoxIncDec.clear();
+    mpToolBoxSpacing.clear();
+    mpToolBoxFontColorSw.clear();
+    mpToolBoxFontColor.clear();
+
+    maFontSizeControl.dispose();
+    maUnderlineControl.dispose();
+    maSpacingControl.dispose();
+
+    PanelLayout::dispose();
 }
 
 void TextPropertyPanel::HandleContextChange (

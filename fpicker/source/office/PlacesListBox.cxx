@@ -24,7 +24,7 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& 
     mpParent( pParent )
 {
     Size aBoxSize = pParent->GetSizePixel( );
-    mpHeaderBar = new HeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
+    mpHeaderBar = VclPtr<HeaderBar>::Create( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( 600, 16 ) );
 
     long pTabs[] = { 2, 20, 600 };
@@ -43,8 +43,14 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& 
 
 PlacesListBox_Impl::~PlacesListBox_Impl( )
 {
-    delete mpHeaderBar;
-    mpParent = NULL;
+    disposeOnce();
+}
+
+void PlacesListBox_Impl::dispose()
+{
+    mpHeaderBar.disposeAndClear();
+    mpParent.clear();
+    SvHeaderTabListBox::dispose();
 }
 
 void PlacesListBox_Impl::MouseButtonUp( const MouseEvent& rMEvt )
@@ -64,17 +70,17 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
     mbUpdated( false ),
     mbSelectionChanged( false )
 {
-    mpImpl = new PlacesListBox_Impl( this, rTitle );
+    mpImpl = VclPtr<PlacesListBox_Impl>::Create( this, rTitle );
 
     mpImpl->SetSelectHdl( LINK( this, PlacesListBox, Selection ) );
     mpImpl->SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClick ) ) ;
 
-    mpAddBtn = new ImageButton( this, 0 );
+    mpAddBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
     mpAddBtn->SetText( OUString( "+" ) );
     mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
     mpAddBtn->Show();
 
-    mpDelBtn = new ImageButton( this, 0 );
+    mpDelBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
     mpDelBtn->SetText( OUString( "-" ) );
     mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
     mpDelBtn->Show();
@@ -82,9 +88,16 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
 
 PlacesListBox::~PlacesListBox( )
 {
-    delete mpImpl;
-    delete mpAddBtn;
-    delete mpDelBtn;
+    disposeOnce();
+}
+
+void PlacesListBox::dispose()
+{
+    mpImpl.disposeAndClear();
+    mpAddBtn.disposeAndClear();
+    mpDelBtn.disposeAndClear();
+    mpDlg.clear();
+    Control::dispose();
 }
 
 void PlacesListBox::AppendPlace( PlacePtr pPlace )
@@ -181,13 +194,13 @@ IMPL_LINK ( PlacesListBox, DoubleClick, void*, EMPTYARG )
     PlacePtr pPlace = maPlaces[nSelected];
     if ( pPlace->IsEditable() && !pPlace->IsLocal( ) )
     {
-        PlaceEditDialog aDlg( mpDlg, pPlace );
-        short aRetCode = aDlg.Execute();
+        ScopedVclPtrInstance< PlaceEditDialog > aDlg(mpDlg, pPlace);
+        short aRetCode = aDlg->Execute();
         switch(aRetCode) {
             case RET_OK :
             {
-                pPlace->SetName ( aDlg.GetServerName() );
-                pPlace->SetUrl( aDlg.GetServerUrl() );
+                pPlace->SetName ( aDlg->GetServerName() );
+                pPlace->SetUrl( aDlg->GetServerUrl() );
                 mbUpdated = true;
                 break;
             }
