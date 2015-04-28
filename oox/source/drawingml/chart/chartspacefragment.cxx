@@ -84,7 +84,6 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( autoTitleDeleted ):
                 {
 
-                    // default value is false for MSO 2007 and true in OOXML
                     mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, !bMSO2007Document );
                     return 0;
                 }
