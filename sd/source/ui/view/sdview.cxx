@@ -422,7 +422,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                 fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
-                            const ::std::vector< double > aDXArray;
+                            const ::std::vector< double > aDXArray{};
 
                             // create locale; this may need some more information in the future
                             const ::com::sun::star::lang::Locale aLocale;

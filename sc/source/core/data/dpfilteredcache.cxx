@@ -301,7 +301,7 @@ const ::std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColu
     if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
     {
         // index out of bound.  Hopefully this code will never be reached.
-        static const ::std::vector<SCROW> emptyEntries;
+        static const ::std::vector<SCROW> emptyEntries{};
         return emptyEntries;
     }
     return maFieldEntries[nColumn];
