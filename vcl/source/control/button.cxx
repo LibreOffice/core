@@ -914,7 +914,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     pDev->Pop();  // restore clipregion
 }
 
-void PushButton::ImplDrawPushButton( bool bLayout )
+void PushButton::ImplDrawPushButton(vcl::RenderContext& /*rRenderContext*/, bool bLayout)
 {
     if( !bLayout )
         HideFocus();
@@ -1190,7 +1190,7 @@ void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
             nTrackFlags |= STARTTRACK_BUTTONREPEAT;
 
         ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-        ImplDrawPushButton();
+        Invalidate();
         StartTracking( nTrackFlags );
 
         if ( nTrackFlags & STARTTRACK_BUTTONREPEAT )
@@ -1224,7 +1224,7 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
             else
                 ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
 
-            ImplDrawPushButton();
+            Invalidate();
 
             // do not call Click handler if aborted
             if ( !rTEvt.IsTrackingCanceled() )
@@ -1248,7 +1248,7 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-                ImplDrawPushButton();
+                Invalidate();
             }
         }
         else
@@ -1256,7 +1256,7 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
             if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )
             {
                 ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
-                ImplDrawPushButton();
+                Invalidate();
             }
         }
     }
@@ -1272,7 +1272,7 @@ void PushButton::KeyInput( const KeyEvent& rKEvt )
         if ( !(ImplGetButtonState() & BUTTON_DRAW_PRESSED) )
         {
             ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-            ImplDrawPushButton();
+            Invalidate();
         }
 
         if ( ( GetStyle() & WB_REPEAT ) &&
@@ -1282,7 +1282,7 @@ void PushButton::KeyInput( const KeyEvent& rKEvt )
     else if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) && (aKeyCode.GetCode() == KEY_ESCAPE) )
     {
         ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
-        ImplDrawPushButton();
+        Invalidate();
     }
     else
         Button::KeyInput( rKEvt );
@@ -1310,7 +1310,7 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
         else
             ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
 
-        ImplDrawPushButton();
+        Invalidate();
 
         if ( !( ( GetStyle() & WB_REPEAT )  &&
                 ! ( GetStyle() & WB_TOGGLE ) ) )
@@ -1323,12 +1323,12 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
 void PushButton::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<PushButton*>(this)->ImplDrawPushButton( true );
+    const_cast<PushButton*>(this)->Invalidate();
 }
 
-void PushButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void PushButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    ImplDrawPushButton();
+    ImplDrawPushButton(rRenderContext);
 }
 
 void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
@@ -1589,7 +1589,7 @@ void PushButton::EndSelection()
     {
         ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
         if ( !mbPressed )
-            ImplDrawPushButton();
+            Invalidate();
     }
 }
 
@@ -2112,7 +2112,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     pDev->Pop();
 }
 
-void RadioButton::ImplDrawRadioButton( bool bLayout )
+void RadioButton::ImplDrawRadioButton(vcl::RenderContext& /*rRenderContext*/, bool bLayout)
 {
     if( !bLayout )
         HideFocus();
@@ -2409,12 +2409,12 @@ void RadioButton::KeyUp( const KeyEvent& rKEvt )
 void RadioButton::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<RadioButton*>(this)->ImplDrawRadioButton( true );
+    const_cast<RadioButton*>(this)->Invalidate();
 }
 
-void RadioButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void RadioButton::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    ImplDrawRadioButton();
+    ImplDrawRadioButton(rRenderContext);
 }
 
 void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
@@ -3136,7 +3136,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     pDev->Pop();
 }
 
-void CheckBox::ImplDrawCheckBox( bool bLayout )
+void CheckBox::ImplDrawCheckBox(vcl::RenderContext& rRenderContext, bool bLayout)
 {
     Size aImageSize = ImplGetCheckImageSize();
     aImageSize.Width()  = CalcZoom( aImageSize.Width() );
@@ -3145,7 +3145,7 @@ void CheckBox::ImplDrawCheckBox( bool bLayout )
     if( !bLayout )
         HideFocus();
 
-    ImplDraw( this, 0, Point(), GetOutputSizePixel(), aImageSize,
+    ImplDraw( &rRenderContext, 0, Point(), GetOutputSizePixel(), aImageSize,
               maStateRect, maMouseRect, bLayout );
 
     if( !bLayout )
@@ -3291,12 +3291,12 @@ void CheckBox::KeyUp( const KeyEvent& rKEvt )
 void CheckBox::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<CheckBox*>(this)->ImplDrawCheckBox( true );
+    const_cast<CheckBox*>(this)->Invalidate();
 }
 
-void CheckBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void CheckBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    ImplDrawCheckBox();
+    ImplDrawCheckBox(rRenderContext);
 }
 
 void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
@@ -3416,7 +3416,7 @@ void CheckBox::GetFocus()
         aSize.Height() += 2;
         aSize.Width() += 2;
         setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
-        ImplDrawCheckBox();
+        Invalidate();
     }
     else
         ShowFocus( ImplGetFocusRect() );
@@ -3446,7 +3446,7 @@ void CheckBox::LoseFocus()
         aSize.Height() -= 2;
         aSize.Width() -= 2;
         setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
-        ImplDrawCheckBox();
+        Invalidate();
     }
 }
 

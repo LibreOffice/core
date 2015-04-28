@@ -123,7 +123,7 @@ protected:
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void            ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawFlags,
                                                const Rectangle& rRect, bool bLayout, bool bMenuBtnSep );
-    SAL_DLLPRIVATE void            ImplDrawPushButton( bool bLayout = false );
+    SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLayout = false);
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE sal_uInt16          ImplGetTextStyle( sal_uLong nDrawFlags ) const;
     SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
@@ -296,7 +296,7 @@ private:
                               const Point& rPos, const Size& rSize,
                               const Size& rImageSize, Rectangle& rStateRect,
                               Rectangle& rMouseRect, bool bLayout = false );
-    SAL_DLLPRIVATE void     ImplDrawRadioButton( bool bLayout = false );
+    SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext, bool bLayout = false );
     SAL_DLLPRIVATE void     ImplInvalidateOrDrawRadioButtonState();
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
@@ -425,7 +425,7 @@ private:
                                     const Point& rPos, const Size& rSize,
                                     const Size& rImageSize, Rectangle& rStateRect,
                                     Rectangle& rMouseRect, bool bLayout );
-    SAL_DLLPRIVATE void         ImplDrawCheckBox( bool bLayout = false );
+    SAL_DLLPRIVATE void         ImplDrawCheckBox(vcl::RenderContext& rRenderContext, bool bLayout = false );
     SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
