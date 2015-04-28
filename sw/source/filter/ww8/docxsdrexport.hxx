@@ -64,7 +64,7 @@ public:
     bool getDMLTextFrameSyntax();
     std::unique_ptr<sax_fastparser::FastAttributeList>& getFlyAttrList();
     /// Attributes of the next v:textbox element.
-    sax_fastparser::FastAttributeList* getTextboxAttrList();
+    std::unique_ptr<sax_fastparser::FastAttributeList>& getTextboxAttrList();
     OStringBuffer& getTextFrameStyle();
     /// Same, as DocxAttributeOutput::m_bBtLr, but for textframe rotation.
     bool getFrameBtLr();

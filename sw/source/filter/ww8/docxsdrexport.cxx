@@ -133,7 +133,7 @@ struct DocxSdrExport::Impl
     bool m_bTextFrameSyntax;
     bool m_bDMLTextFrameSyntax;
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pFlyAttrList;
-    sax_fastparser::FastAttributeList* m_pTextboxAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pTextboxAttrList;
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
     bool m_bDrawingOpen;
@@ -160,7 +160,6 @@ struct DocxSdrExport::Impl
           m_pFlyFrameSize(0),
           m_bTextFrameSyntax(false),
           m_bDMLTextFrameSyntax(false),
-          m_pTextboxAttrList(0),
           m_bFrameBtLr(false),
           m_bDrawingOpen(false),
           m_bParagraphSdtOpen(false),
@@ -178,7 +177,6 @@ struct DocxSdrExport::Impl
 
     ~Impl()
     {
-        delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
     }
 
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
@@ -223,7 +221,7 @@ std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyAttrLis
     return m_pImpl->m_pFlyAttrList;
 }
 
-sax_fastparser::FastAttributeList* DocxSdrExport::getTextboxAttrList()
+std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getTextboxAttrList()
 {
     return m_pImpl->m_pTextboxAttrList;
 }
@@ -1609,7 +1607,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
 
     m_pImpl->m_bTextFrameSyntax = true;
     m_pImpl->m_pFlyAttrList.reset(sax_fastparser::FastSerializerHelper::createAttrList());
-    m_pImpl->m_pTextboxAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+    m_pImpl->m_pTextboxAttrList.reset(sax_fastparser::FastSerializerHelper::createAttrList());
     m_pImpl->m_aTextFrameStyle = "position:absolute";
     if (!bTextBoxOnly)
     {
@@ -1628,8 +1626,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     }
     sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList.release());
     m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], /*bDML=*/false);
-    sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList);
-    m_pImpl->m_pTextboxAttrList = NULL;
+    sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList.release());
     m_pImpl->m_bTextFrameSyntax = false;
     m_pImpl->m_pFlyFrameSize = 0;
     m_pImpl->m_rExport.mpParentFrame = NULL;
