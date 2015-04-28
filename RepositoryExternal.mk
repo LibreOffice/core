@@ -3755,6 +3755,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	)) \
 	$(call gb_Package_get_target_for_build,postprocess_images) \
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
+	$(call gb_Package_get_target_for_build,instsetoo_native_setup_ure) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,offapi) \
