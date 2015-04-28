@@ -914,7 +914,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
     SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
 
     if(!pStyle)
-        return sal_False;
+        return 0;
 
     SwWrtShell *pSh = pShell ? pShell : GetWrtShell();
 
