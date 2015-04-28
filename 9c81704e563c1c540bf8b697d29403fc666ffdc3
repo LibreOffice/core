@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_29460dc0",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-28T00:30:35Z",
+      "side": 1,
+      "message": "This check is too lax, it matches any \u0027E\u0027 anywhere within the format code, which could be some date era code or currency symbol or literal text or ... and then displaying \"Engineering notation\" doesn\u0027t make sense.",
+      "revId": "9c81704e563c1c540bf8b697d29403fc666ffdc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
