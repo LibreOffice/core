@@ -83,7 +83,7 @@ ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, con
             mrModel.mnGapDepth = rAttribs.getInteger( XML_val, 150 );
             return 0;
         case C_TOKEN( grouping ):
-            mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
+            mrModel.mnGrouping = rAttribs.getToken( XML_val, bMSO2007Doc ? XML_standard : XML_clustered );
             return 0;
         case C_TOKEN( ser ):
             return new AreaSeriesContext( *this, mrModel.maSeries.create(bMSO2007Doc) );
@@ -123,8 +123,7 @@ ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnGapWidth = rAttribs.getInteger( XML_val, 150 );
             return 0;
         case C_TOKEN( grouping ):
-            // default is 'standard', not 'clustered' as specified
-            mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
+            mrModel.mnGrouping = rAttribs.getToken( XML_val, bMSO2007Doc ? XML_standard : XML_clustered );
             return 0;
         case C_TOKEN( overlap ):
             mrModel.mnOverlap = rAttribs.getInteger( XML_val, 0 );
@@ -208,7 +207,7 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
             mrModel.mnGapDepth = rAttribs.getInteger( XML_val, 150 );
             return 0;
         case C_TOKEN( grouping ):
-            mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
+            mrModel.mnGrouping = rAttribs.getToken( XML_val, bMSO2007Doc ? XML_standard : XML_clustered );
             return 0;
         case C_TOKEN( hiLowLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxHiLowLines.create() );

@@ -40,7 +40,7 @@ TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mnFirstAngle( 0 ),
     mnGapDepth( 150 ),
     mnGapWidth( 150 ),
-    mnGrouping( XML_standard ),
+    mnGrouping( bMSO2007Doc ? XML_standard : XML_clustered ),
     mnHoleSize( 10 ),
     mnOfPieType( XML_pie ),
     mnOverlap( 0 ),
