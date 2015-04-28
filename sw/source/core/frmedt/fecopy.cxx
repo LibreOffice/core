@@ -636,7 +636,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             bRet = false;
 
         if( bRet )
-            bRet = 0 != SwEditShell::Copy( pDestShell );
+            bRet = SwEditShell::Copy( pDestShell );
     }
 
     pDestShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( eOldRedlMode );

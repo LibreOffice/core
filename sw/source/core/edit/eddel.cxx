@@ -144,7 +144,7 @@ long SwEditShell::Delete()
     return nRet;
 }
 
-long SwEditShell::Copy( SwEditShell* pDestShell )
+bool SwEditShell::Copy( SwEditShell* pDestShell )
 {
     if( !pDestShell )
         pDestShell = this;
@@ -193,7 +193,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             // Check if a selection would be copied into itself
             if( pDestShell->GetDoc() == GetDoc() &&
                 *rPaM.Start() <= *pTmp && *pTmp < *rPaM.End() )
-                return sal_False;
+                return false;
         }
     }
 
@@ -290,7 +290,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 
     pDestShell->SaveTblBoxCntnt( pDestShell->GetCrsr()->GetPoint() );
 
-    return (long)bRet;
+    return bRet;
 }
 
 /** Replace a selected area in a text node with a given string.
