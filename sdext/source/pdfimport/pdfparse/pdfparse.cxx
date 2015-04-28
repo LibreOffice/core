@@ -116,8 +116,8 @@ public:
                 else if( c == '\\' ) // ignore escaped braces
                 {
                     ++len;
-                    ++scan;
-                    if( scan.at_end() )
+                    ++scan.first;                 // tdf#63054: avoid skipping spaces
+                    if( scan.first == scan.last ) // tdf#63054: avoid skipping spaces
                         break;
                 }
                 ++len;
