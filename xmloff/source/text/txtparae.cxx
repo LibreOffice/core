@@ -248,7 +248,7 @@ namespace xmloff
 }
 
 #ifdef DBG_UTIL
-static int txtparae_bContainsIllegalCharacters = sal_False;
+static bool txtparae_bContainsIllegalCharacters = false;
 #endif
 
 // The following map shows which property values are required:
@@ -1336,7 +1336,7 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     delete pListElements;
     delete pListAutoPool;
 #ifdef DBG_UTIL
-    txtparae_bContainsIllegalCharacters = sal_False;
+    txtparae_bContainsIllegalCharacters = false;
 #endif
     PopTextListsHelper();
     DBG_ASSERT( maTextListsHelperStack.empty(),
@@ -3443,7 +3443,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
                 OSL_ENSURE( txtparae_bContainsIllegalCharacters ||
                             cChar >= 0x0020,
                             "illegal character in text content" );
-                txtparae_bContainsIllegalCharacters = sal_True;
+                txtparae_bContainsIllegalCharacters = true;
 #endif
                 bExpCharAsText = false;
             }
