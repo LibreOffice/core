@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_291dadbd",
+        "filename": "include/svx/unoshprp.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2015-04-28T05:46:26Z",
+      "side": 1,
+      "message": "Actually, GradientStops is the only addition to awt::Gradient,  and it is used only here https://gerrit.libreoffice.org/#/c/12056/12/drawinglayer/source/texture/texture.cxx\nIn all other cases awt::Gradient2 is like awt::Gradient.",
+      "parentUuid": "da6ed579_a9ce7db2",
+      "revId": "3bd500b498994f0f7456a21fe85494880a572542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_49c4a191",
         "filename": "include/svx/unoshprp.hxx",
         "patchSetId": 12
