@@ -97,9 +97,9 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
     RegisterHandlers();
 }
 
-void SidebarToolBox::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void SidebarToolBox::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    ToolBox::Paint(rRect);
+    ToolBox::Paint(rRenderContext, rRect);
 
     if (Theme::GetBoolean(Theme::Bool_UseToolBoxItemSeparator))
     {

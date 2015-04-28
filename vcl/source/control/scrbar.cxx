@@ -1306,7 +1306,7 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
                     }
 
                     SetClipRegion( aClipRegion );
-                    Paint( aClipRegion.GetBoundRect() );
+                    Invalidate(aClipRegion.GetBoundRect());
 
                     SetClipRegion( aRgn );
                 }

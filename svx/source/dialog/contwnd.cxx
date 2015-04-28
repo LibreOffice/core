@@ -143,7 +143,7 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
         SetPolyPolygon( tools::PolyPolygon() );
         aWorkRect = Rectangle( aLogPt, aLogPt );
-        Paint( Rectangle( Point(), GetGraphicSize() ) );
+        Invalidate(Rectangle(Point(), GetGraphicSize()));
         SetEditMode( true );
     }
 

@@ -60,9 +60,9 @@ void SwCommentRuler::dispose()
     SvxRuler::dispose();
 }
 
-void SwCommentRuler::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SwCommentRuler::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    SvxRuler::Paint( rRect );
+    SvxRuler::Paint(rRenderContext, rRect);
     // Don't draw if there is not any note
     if ( mpViewShell->GetPostItMgr()
          && mpViewShell->GetPostItMgr()->HasNotes() )

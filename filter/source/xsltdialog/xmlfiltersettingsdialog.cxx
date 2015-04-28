@@ -1481,9 +1481,9 @@ void XMLFilterListBox::dispose()
     SvTabListBox::dispose();
 }
 
-void XMLFilterListBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void XMLFilterListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    SvTabListBox::Paint( rRect );
+    SvTabListBox::Paint(rRenderContext, rRect);
 }
 
 IMPL_LINK( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTabListBox*, /* pList */ )

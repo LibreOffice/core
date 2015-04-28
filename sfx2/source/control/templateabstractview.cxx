@@ -300,9 +300,9 @@ void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
     }
 }
 
-void TemplateAbstractView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void TemplateAbstractView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    ThumbnailView::Paint( rRect );
+    ThumbnailView::Paint(rRenderContext, rRect);
 
     Rectangle aRect(rRect.TopLeft(),
         Point(rRect.BottomRight().X(), mnHeaderHeight));

@@ -880,7 +880,7 @@ void ThumbnailView::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangl
     }
 
     if (mpScrBar && mpScrBar->IsVisible())
-        mpScrBar->Paint(aRect);
+        mpScrBar->Invalidate(aRect);
 }
 
 void ThumbnailView::GetFocus()
@@ -1355,5 +1355,3 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-

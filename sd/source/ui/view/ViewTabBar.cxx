@@ -566,7 +566,7 @@ TabBarControl::TabBarControl (
 {
 }
 
-void TabBarControl::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void TabBarControl::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Color aOriginalFillColor (GetFillColor());
     Color aOriginalLineColor (GetLineColor());
@@ -578,7 +578,7 @@ void TabBarControl::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectang
     SetFillColor (GetSettings().GetStyleSettings().GetDialogColor());
     SetLineColor ();
     DrawRect (rRect);
-    ::TabControl::Paint (rRect);
+    ::TabControl::Paint(rRenderContext, rRect);
 
     SetFillColor (aOriginalFillColor);
     SetLineColor (aOriginalLineColor);

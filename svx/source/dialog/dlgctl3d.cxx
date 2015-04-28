@@ -530,9 +530,9 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
     }
 }
 
-void Svx3DLightControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void Svx3DLightControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Svx3DPreviewControl::Paint(rRect);
+    Svx3DPreviewControl::Paint(rRenderContext, rRect);
 }
 
 void Svx3DLightControl::MouseButtonDown( const MouseEvent& rMEvt )

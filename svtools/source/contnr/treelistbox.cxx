@@ -3837,8 +3837,8 @@ void SvTreeListBox::EnableList( bool _bEnable )
 {
     // call base class method
     Window::Enable(_bEnable);
-    // then paint immediately
-    Paint( Rectangle( Point(), GetSizePixel() ) );
+    // then invalidate
+    Invalidate(Rectangle(Point(), GetSizePixel()));
 }
 
 ::com::sun::star::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()

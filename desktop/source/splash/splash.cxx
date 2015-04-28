@@ -194,7 +194,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
         if ( _eBitmapMode == BM_FULLSCREEN )
             pWindow->ShowFullScreenMode( true );
         pWindow->Show();
-        pWindow->Paint(Rectangle());
+        pWindow->Invalidate();
         pWindow->Flush();
     }
 }
@@ -352,7 +352,7 @@ void SplashScreen::updateStatus()
         return;
     if (!_bPaintProgress)
         _bPaintProgress = true;
-    pWindow->Paint(Rectangle());
+    pWindow->Invalidate();
     pWindow->Flush();
 }
 
@@ -364,7 +364,7 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
         switch ( inEvent->GetId() )
         {
             case VCLEVENT_WINDOW_SHOW:
-                pWindow->Paint( Rectangle() );
+                pWindow->Invalidate();
                 break;
             default:
                 break;

@@ -281,7 +281,7 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
 
     Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
 
-    Paint( aRect );
+    Invalidate(aRect);
     mpImpl->mbOmitPaint = true;
 
     SvxZoomSliderItem   aZoomSliderItem( mpImpl->mnCurrentZoom );
@@ -316,8 +316,8 @@ void ScZoomSliderWnd::MouseMove( const MouseEvent& rMEvt )
         {
             mpImpl->mnCurrentZoom = Offset2Zoom( aPoint.X() );
 
-            Rectangle aRect( Point( 0, 0 ), aSliderWindowSize  );
-            Paint( aRect );
+            Rectangle aRect(Point(0, 0), aSliderWindowSize);
+            Invalidate(aRect);
 
             mpImpl->mbOmitPaint = true; // optimization: paint before executing command,
 
@@ -382,10 +382,10 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
     }
 
     Size aSliderWindowSize = GetOutputSizePixel();
-    Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
+    Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
     if ( !mpImpl->mbOmitPaint )
-       Paint(aRect);
+       Invalidate(aRect);
 }
 
 void ScZoomSliderWnd::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )

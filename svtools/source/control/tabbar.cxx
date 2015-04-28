@@ -2468,7 +2468,7 @@ sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
             Rectangle aRect( mnOffX, 0, mnLastOffX, maWinSize.Height() );
             SetFillColor( GetBackground().GetColor() );
             DrawRect( aRect );
-            Paint( aRect );
+            Invalidate(aRect);
         }
     }
 
@@ -2545,7 +2545,7 @@ void TabBar::HideDropPos()
             Rectangle aRect( nX-1, nY1, nX+3, nY2 );
             vcl::Region aRegion( aRect );
             SetClipRegion( aRegion );
-            Paint( aRect );
+            Invalidate(aRect);
             SetClipRegion();
         }
         if ( (mnDropPos > 0) && (mnDropPos < nItemCount+1) )
@@ -2556,7 +2556,7 @@ void TabBar::HideDropPos()
             Rectangle aRect( nX-2, nY1, nX+1, nY2 );
             vcl::Region aRegion( aRect );
             SetClipRegion( aRegion );
-            Paint( aRect );
+            Invalidate(aRect);
             SetClipRegion();
         }
 

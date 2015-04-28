@@ -458,13 +458,13 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
                     if( pLastRect )
                     {
                         SetClipRegion(vcl::Region(*pLastRect));
-                        Paint( *pLastRect );
+                        Invalidate(*pLastRect);
                         SetClipRegion( aRgn );
                     }
                     if( pRect )
                     {
                         SetClipRegion(vcl::Region(*pRect));
-                        Paint( *pRect );
+                        Invalidate(*pRect);
                         SetClipRegion( aRgn );
                     }
                 }

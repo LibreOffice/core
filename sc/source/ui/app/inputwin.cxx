@@ -556,9 +556,9 @@ void ScInputWindow::Select()
     }
 }
 
-void ScInputWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    ToolBox::Paint( rRect );
+    ToolBox::Paint(rRenderContext, rRect);
 
     // draw a line at the bottom to distinguish that from the grid
     // (we have space for that thanks to ADDITIONAL_BORDER)
@@ -1332,12 +1332,12 @@ static void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
 {
     rSet.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
 
-    //	always using rtl writing direction would break formulas
+    // always using rtl writing direction would break formulas
     //rSet.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
 
-    //	PaperSize width is limited to USHRT_MAX in RTL mode (because of EditEngine's
-    //	sal_uInt16 values in EditLine), so the text may be wrapped and line spacing must be
-    //	increased to not see the beginning of the next line.
+    // PaperSize width is limited to USHRT_MAX in RTL mode (because of EditEngine's
+    // sal_uInt16 values in EditLine), so the text may be wrapped and line spacing must be
+    // increased to not see the beginning of the next line.
     SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES, EE_PARA_SBL );
     aItem.SetPropLineSpace( 200 );
     rSet.Put( aItem );
@@ -1423,8 +1423,8 @@ void ScMultiTextWnd::InitEditEngine()
     if (!maAccTextDatas.empty())
         maAccTextDatas.back()->StartEdit();
 
-    //	as long as EditEngine and DrawText sometimes differ for CTL text,
-    //	repaint now to have the EditEngine's version visible
+    // as long as EditEngine and DrawText sometimes differ for CTL text,
+    // repaint now to have the EditEngine's version visible
     if (pDocSh)
     {
         ScDocument& rDoc = pDocSh->GetDocument(); // any document

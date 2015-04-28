@@ -1944,7 +1944,7 @@ void Ruler::ImplDrag( const Point& rPos )
             Drag();
 
             // and redraw
-            Paint(Rectangle());
+            Invalidate();
 
             // reset the data as before cancel
             *mpDragData = aTempData;
@@ -1965,7 +1965,7 @@ void Ruler::ImplDrag( const Point& rPos )
 
         // redraw
         if ( mbFormat )
-            Paint(Rectangle());
+            Invalidate();
     }
 }
 
@@ -1994,7 +1994,7 @@ void Ruler::ImplEndDrag()
     mnStartDragPos  = 0;
 
     // redraw
-    Paint(Rectangle());
+    Invalidate();
 }
 
 IMPL_LINK_NOARG(Ruler, ImplUpdateHdl)
@@ -2005,7 +2005,7 @@ IMPL_LINK_NOARG(Ruler, ImplUpdateHdl)
     if ( mnUpdateFlags & RULER_UPDATE_DRAW )
     {
         mnUpdateFlags = 0;
-        Paint(Rectangle());
+        Invalidate();
     }
     else if ( mnUpdateFlags & RULER_UPDATE_LINES )
     {
@@ -2027,7 +2027,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
         // update ruler
         if ( mbFormat )
         {
-            Paint(Rectangle());
+            Invalidate();
             mnUpdateFlags &= ~RULER_UPDATE_DRAW;
         }
 
@@ -2135,7 +2135,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 
     if ( mbFormat )
     {
-        Paint(Rectangle());
+        Invalidate();
         mnUpdateFlags &= ~RULER_UPDATE_DRAW;
     }
     mxPreviousHitTest.swap(mxCurrentHitTest);
@@ -2262,7 +2262,7 @@ void Ruler::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::UPDATEMODE )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
-            Paint(Rectangle());
+            Invalidate();
     }
     else if ( (nType == StateChangedType::ZOOM) ||
               (nType == StateChangedType::CONTROLFONT) )
@@ -2364,7 +2364,7 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
         // update ruler
         if ( mbFormat )
         {
-            Paint(Rectangle());
+            Invalidate();
             mnUpdateFlags &= ~RULER_UPDATE_DRAW;
         }
 
@@ -2430,7 +2430,7 @@ RulerType Ruler::GetType( const Point& rPos, sal_uInt16* pAryPos )
     // update ruler
     if ( IsReallyVisible() && mbFormat )
     {
-        Paint(Rectangle());
+        Invalidate();
         mnUpdateFlags &= ~RULER_UPDATE_DRAW;
     }
 
@@ -2855,7 +2855,7 @@ RulerUnitData Ruler::GetCurrentRulerUnit() const
 void Ruler::DrawTicks()
 {
     mbFormat = true;
-    Paint(Rectangle());
+    Invalidate();
 }
 
 uno::Reference< XAccessible > Ruler::CreateAccessible()

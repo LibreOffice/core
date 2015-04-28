@@ -578,8 +578,7 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
         {
             m_nDragIndex = 0xffffffff;
             computeNew();
-            Invalidate( m_aGridArea );
-            Paint( m_aGridArea );
+            Invalidate(m_aGridArea);
         }
     }
 
@@ -629,8 +628,7 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
         }
 
         computeNew();
-        Invalidate( m_aGridArea );
-        Paint( m_aGridArea );
+        Invalidate(m_aGridArea);
     }
 
     Window::MouseButtonDown( rEvt );

@@ -1307,9 +1307,9 @@ bool ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
     return ScMenuFloatingWindow::Notify(rNEvt);
 }
 
-void ScCheckListMenuWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    ScMenuFloatingWindow::Paint(rRect);
+    ScMenuFloatingWindow::Paint(rRenderContext, rRect);
 
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
     Color aMemberBackColor = rStyle.GetFieldColor();

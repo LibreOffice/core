@@ -85,13 +85,13 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     EnableEntryMnemonics();
 }
 
-void OCreationList::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect )
+void OCreationList::Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
 {
     if ( m_pMouseDownEntry )
         m_aOriginalFont = GetFont();
 
     m_aOriginalBackgroundColor = GetBackground().GetColor();
-    SvTreeListBox::Paint( _rRect );
+    SvTreeListBox::Paint(rRenderContext, _rRect);
     SetBackground( m_aOriginalBackgroundColor );
 
     if ( m_pMouseDownEntry )

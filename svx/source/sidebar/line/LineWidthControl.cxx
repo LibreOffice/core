@@ -79,9 +79,9 @@ void LineWidthControl::dispose()
 
 
 
-void LineWidthControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rect)
+void LineWidthControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
 {
-    svx::sidebar::PopupControl::Paint(rect);
+    svx::sidebar::PopupControl::Paint(rRenderContext, rect);
 
     Color aOldLineColor = GetLineColor();
     Color aOldFillColor = GetFillColor();

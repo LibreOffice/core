@@ -46,7 +46,7 @@ void OMarkableTreeListBox::dispose()
     DBTreeListBox::dispose();
 }
 
-void OMarkableTreeListBox::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect)
+void OMarkableTreeListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect)
 {
     if (!IsEnabled())
     {
@@ -57,11 +57,11 @@ void OMarkableTreeListBox::Paint(vcl::RenderContext& /*rRenderContext*/, const R
         aNewFont.SetColor(aSystemStyle.GetDisableColor());
 
         SetFont(aNewFont);
-        DBTreeListBox::Paint(_rRect);
+        DBTreeListBox::Paint(rRenderContext, _rRect);
         SetFont(aOldFont);
     }
     else
-        DBTreeListBox::Paint(_rRect);
+        DBTreeListBox::Paint(rRenderContext, _rRect);
 }
 
 void OMarkableTreeListBox::InitButtonData()

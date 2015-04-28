@@ -921,12 +921,12 @@ void CustomAnimationList::notify_change()
     mpController->onSelect();
 }
 
-void CustomAnimationList::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if( mbIgnorePaint )
         return;
 
-    SvTreeListBox::Paint( rRect );
+    SvTreeListBox::Paint(rRenderContext, rRect);
 
     // draw help text if list box is still empty
     if( First() == 0 )

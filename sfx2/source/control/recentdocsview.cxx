@@ -252,7 +252,7 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
         pRecentItem->OpenDocument();
 }
 
-void RecentDocsView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle &aRect )
+void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const Rectangle &aRect)
 {
     if ( mItemList.size() == 0 )
     {
@@ -282,7 +282,7 @@ void RecentDocsView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectan
         SetFont(aOldFont);
     }
     else
-        ThumbnailView::Paint(aRect);
+        ThumbnailView::Paint(rRenderContext, aRect);
 }
 
 void RecentDocsView::LoseFocus()

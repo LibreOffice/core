@@ -97,11 +97,11 @@ Size SvxHlmarkTreeLBox::GetOptimalSize() const
     return LogicToPixel(Size(103, 162), MAP_APPFONT);
 }
 
-void SvxHlmarkTreeLBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SvxHlmarkTreeLBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     if (!mpParentWnd || mpParentWnd->mnError == LERR_NOERROR)
     {
-        SvTreeListBox::Paint(rRect);
+        SvTreeListBox::Paint(rRenderContext, rRect);
     }
     else
     {

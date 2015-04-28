@@ -415,7 +415,7 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
         {
             // put DropDownButton to the right
             mbInDropDown = ShowDropDown( !mbInDropDown );
-            Paint( Rectangle( Point(), GetOutputSizePixel() ) );
+            Invalidate(Rectangle(Point(), GetOutputSizePixel()));
         }
 
         if ( mbUpperIn || mbLowerIn )
@@ -531,7 +531,7 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
                     else if ( ( nMod == KEY_MOD2 ) && !mbInDropDown && ( GetStyle() & WB_DROPDOWN ) )
                     {
                         mbInDropDown = ShowDropDown( true );
-                        Paint( Rectangle( Point(), GetOutputSizePixel() ) );
+                        Invalidate(Rectangle(Point(), GetOutputSizePixel()));
                         nDone = true;
                     }
                 }
@@ -604,7 +604,7 @@ void SpinField::FillLayoutData() const
         Edit::FillLayoutData();
 }
 
-void SpinField::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SpinField::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     if ( mbSpin )
     {
@@ -630,7 +630,7 @@ void SpinField::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
         aView.DrawSymbol( aInnerRect, eSymbol, GetSettings().GetStyleSettings().GetButtonTextColor(), nStyle );
     }
 
-    Edit::Paint( rRect );
+    Edit::Paint(rRenderContext, rRect);
 }
 
 void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea )
@@ -890,13 +890,13 @@ bool SpinField::PreNotify( NotifyEvent& rNEvt )
                         if( pLastRect )
                         {
                             SetClipRegion(vcl::Region(*pLastRect));
-                            Paint( *pLastRect );
+                            Invalidate(*pLastRect);
                             SetClipRegion( aRgn );
                         }
                         if( pRect )
                         {
                             SetClipRegion(vcl::Region(*pRect));
-                            Paint( *pRect );
+                            Invalidate(*pRect);
                             SetClipRegion( aRgn );
                         }
                     }
@@ -911,7 +911,7 @@ bool SpinField::PreNotify( NotifyEvent& rNEvt )
 void SpinField::EndDropDown()
 {
     mbInDropDown = false;
-    Paint( Rectangle( Point(), GetOutputSizePixel() ) );
+    Invalidate(Rectangle(Point(), GetOutputSizePixel()));
 }
 
 bool SpinField::ShowDropDown( bool )

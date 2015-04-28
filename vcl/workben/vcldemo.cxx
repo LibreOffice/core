@@ -1368,7 +1368,7 @@ class DemoWin : public WorkWindow
 
             SolarMutexGuard aGuard;
             fprintf (stderr, "render from a different thread\n");
-            mrWin.Paint(Rectangle());
+            mrWin.Invalidate();
         }
     };
     rtl::Reference<RenderThread> mxThread;

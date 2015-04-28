@@ -213,7 +213,7 @@ BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
     , nTransparency(0)
 {
     SetBorderStyle(WindowBorderStyle::MONO);
-    Paint(aDrawRect);
+    Invalidate(aDrawRect);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBackgroundPreview(vcl::Window *pParent, VclBuilder::stringmap &)
@@ -250,7 +250,7 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
         nTransparency = lcl_TransparencyToPercent( rColor.GetTransparency() );
 
         SetFillColor( rColor == aTranspCol ? GetSettings().GetStyleSettings().GetFieldColor() : Color(rColor.GetRGBColor()) );
-        Paint( aDrawRect );
+        Invalidate(aDrawRect);
     }
 }
 

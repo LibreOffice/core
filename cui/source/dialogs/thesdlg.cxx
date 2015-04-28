@@ -267,7 +267,7 @@ void ThesaurusAlternativesCtrl::KeyInput( const KeyEvent& rKEvt )
         SvxCheckListBox::KeyInput( rKEvt );
 }
 
-void ThesaurusAlternativesCtrl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ThesaurusAlternativesCtrl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if (!m_pDialog->WordFound())
     {
@@ -281,7 +281,7 @@ void ThesaurusAlternativesCtrl::Paint( vcl::RenderContext& /*rRenderContext*/, c
 
     }
     else
-        SvxCheckListBox::Paint( rRect );
+        SvxCheckListBox::Paint(rRenderContext, rRect);
 }
 
 uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::queryMeanings_Impl(

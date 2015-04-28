@@ -89,14 +89,14 @@ void FixedHyperlink::RequestHelp( const HelpEvent& rHEvt )
 void FixedHyperlink::GetFocus()
 {
     SetTextColor( Color( COL_LIGHTRED ) );
-    Paint( Rectangle( Point(), GetSizePixel() ) );
+    Invalidate(Rectangle(Point(), GetSizePixel()));
     ShowFocus( Rectangle( Point( 1, 1 ), Size( m_nTextLen + 4, GetSizePixel().Height() - 2 ) ) );
 }
 
 void FixedHyperlink::LoseFocus()
 {
     SetTextColor( GetControlForeground() );
-    Paint( Rectangle( Point(), GetSizePixel() ) );
+    Invalidate(Rectangle(Point(), GetSizePixel()));
     HideFocus();
 }
 

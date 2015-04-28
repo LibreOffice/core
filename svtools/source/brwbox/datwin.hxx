@@ -188,7 +188,7 @@ inline void BrowserDataWin::Repaint()
 {
     if ( GetUpdateMode() )
         Update();
-    Paint( Rectangle( Point(), GetOutputSizePixel() ) );
+    Invalidate(Rectangle(Point(), GetOutputSizePixel()));
 }
 
 

@@ -863,7 +863,7 @@ void ScPreview::SetXOffset( long nX )
             Invalidate();
     }
     InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
-    Paint(Rectangle());
+    Invalidate();
 }
 
 void ScPreview::SetYOffset( long nY )
@@ -889,7 +889,7 @@ void ScPreview::SetYOffset( long nY )
             Invalidate();
     }
     InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
-    Paint(Rectangle());
+    Invalidate();
 }
 
 void ScPreview::DoInvalidate()
@@ -1083,17 +1083,17 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 if(( bLeftRulerChange || bRightRulerChange ) && ( aButtonUpPt.X() <= ( 0 - aOffset.X() ) || aButtonUpPt.X() > nWidth * HMM_PER_TWIPS - aOffset.X() ) )
                 {
                     bMoveRulerAction = false;
-                    Paint(Rectangle(0,0,10000,10000));
+                    Invalidate(Rectangle(0, 0, 10000, 10000));
                 }
                 else if( bLeftRulerChange && ( aButtonUpPt.X() / HMM_PER_TWIPS > nWidth - aLRItem.GetRight() - aOffset.X() / HMM_PER_TWIPS ) )
                 {
                     bMoveRulerAction = false;
-                    Paint(Rectangle(0,0,10000,10000));
+                    Invalidate(Rectangle(0, 0, 10000, 10000));
                 }
                 else if( bRightRulerChange && ( aButtonUpPt.X() / HMM_PER_TWIPS < aLRItem.GetLeft() - aOffset.X() / HMM_PER_TWIPS ) )
                 {
                     bMoveRulerAction = false;
-                    Paint(Rectangle(0,0,10000,10000));
+                    Invalidate(Rectangle(0, 0, 10000, 10000));
                 }
                 else if( aButtonDownPt.X() == aButtonUpPt.X() )
                 {
@@ -1132,7 +1132,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     }
 
                     Rectangle aRect(0,0,10000,10000);
-                    Paint( aRect );
+                    Invalidate(aRect);
                     aModificator.SetDocumentModified();
                     bLeftRulerChange = false;
                     bRightRulerChange = false;
@@ -1150,7 +1150,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             if( ( bTopRulerChange || bBottomRulerChange || bHeaderRulerChange || bFooterRulerChange ) && ( aButtonUpPt.Y() <= ( 0 - aOffset.Y() ) || aButtonUpPt.Y() > nHeight * HMM_PER_TWIPS -aOffset.Y() ) )
             {
                 bMoveRulerAction = false;
-                Paint( Rectangle(0,0,10000,10000) );
+                Invalidate(Rectangle(0, 0, 10000, 10000));
             }
             else if( aButtonDownPt.Y() == aButtonUpPt.Y() )
             {
@@ -1233,8 +1233,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         aPrintFunc.UpdatePages();
                     }
 
-                    Rectangle  aRect(0,0,10000,10000);
-                    Paint( aRect );
+                    Rectangle aRect(0, 0, 10000, 10000);
+                    Invalidate(aRect);
                     aModificator.SetDocumentModified();
                     bTopRulerChange = false;
                     bBottomRulerChange = false;
@@ -1290,8 +1290,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     ScPrintFunc aPrintFunc( this, pDocShell, nTab );
                     aPrintFunc.UpdatePages();
                 }
-                Rectangle  nRect(0,0,10000,10000);
-                Paint( nRect );
+                Rectangle aRect(0, 0, 10000, 10000);
+                Invalidate(aRect);
             }
             bColRulerMove = false;
         }

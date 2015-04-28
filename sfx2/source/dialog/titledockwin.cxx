@@ -141,12 +141,12 @@ namespace sfx2
     }
 
 
-    void TitledDockingWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& i_rArea )
+    void TitledDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea )
     {
         if ( m_bLayoutPending )
             impl_layout();
 
-        SfxDockingWindow::Paint( i_rArea );
+        SfxDockingWindow::Paint(rRenderContext, i_rArea);
 
         Push( PushFlags::FONT | PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
 
