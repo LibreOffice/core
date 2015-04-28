@@ -20,7 +20,7 @@
 #include "compiler.hxx"
 #include <sal/macros.h>
 
-// ODFF, English, Programmatical, ODF_11
+// ODFF, English, MapDupToInternal when writing ODFF, Programmatical, ODF_11
 ScCompiler::AddInMap ScCompiler::maAddInMap[] =
 {
     { "ORG.OPENOFFICE.WEEKS", "WEEKS", false, "com.sun.star.sheet.addin.DateFunctions.getDiffWeeks", "COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFWEEKS" },
