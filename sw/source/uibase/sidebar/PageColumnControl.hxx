@@ -48,7 +48,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    VclPtr<::svx::sidebar::ValueSetWithTextControl> mpColumnValueSet;
+    VclPtr< ::svx::sidebar::ValueSetWithTextControl> mpColumnValueSet;
     VclPtr<PushButton> maMoreButton;
 
     sal_uInt16 mnColumnType;

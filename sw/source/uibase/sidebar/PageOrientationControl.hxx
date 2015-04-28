@@ -41,7 +41,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    VclPtr<::svx::sidebar::ValueSetWithTextControl> mpOrientationValueSet;
+    VclPtr< ::svx::sidebar::ValueSetWithTextControl> mpOrientationValueSet;
 
     bool mbLandscape;
 

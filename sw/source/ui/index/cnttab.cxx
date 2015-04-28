@@ -141,7 +141,7 @@ typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
     VclPtr<Edit>                    aCellEdit;
-    VclPtr<::svt::CheckBoxControl>  aCellCheckBox;
+    VclPtr< ::svt::CheckBoxControl>  aCellCheckBox;
 
     OUString  sSearch;
     OUString  sAlternative;
