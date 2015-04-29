@@ -282,7 +282,8 @@ bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
     // here different FillStyles can be excluded for export; it will depend on the
     // quality these fallbacks can reach. That again is done in getSvxBrushItemFromSourceSet,
     // take a look there how the superset of DrawObject FillStyles is mapped to SvxBrushItem.
-    switch (pXFillStyleItem->GetValue())
+    const drawing::FillStyle eFill = pXFillStyleItem->GetValue();
+    switch (eFill)
     {
         case drawing::FillStyle_NONE:
             return false; // ignoring some extremely limited XFillColorItem eval
@@ -294,13 +295,13 @@ bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
             {
                 case MID_BACK_COLOR:
                     // Gradient/Hatch always have emulated color
-                    return (drawing::FillStyle_SOLID != nMID)
+                    return (drawing::FillStyle_SOLID != eFill)
                         || SfxItemState::SET == rSet.GetItemState(XATTR_FILLCOLOR)
                         || SfxItemState::SET == rSet.GetItemState(XATTR_FILLTRANSPARENCE)
                         || SfxItemState::SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE);
                 case MID_BACK_COLOR_R_G_B:
                     // Gradient/Hatch always have emulated color
-                    return (drawing::FillStyle_SOLID != nMID)
+                    return (drawing::FillStyle_SOLID != eFill)
                         || SfxItemState::SET == rSet.GetItemState(XATTR_FILLCOLOR);
                 case MID_BACK_COLOR_TRANSPARENCY:
                     return SfxItemState::SET == rSet.GetItemState(XATTR_FILLTRANSPARENCE)
