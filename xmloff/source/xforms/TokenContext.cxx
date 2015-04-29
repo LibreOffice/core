@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <functional>
-
 #include "TokenContext.hxx"
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -28,6 +26,7 @@
 #include <xmloff/xmlerror.hxx>
 
 #include <tools/debug.hxx>
+#include <algorithm>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XAttributeList;
@@ -134,7 +133,7 @@ void TokenContext::Characters( const OUString& rCharacters )
     const sal_Unicode* pEnd = &( pBegin[ rCharacters.getLength() ] );
 
     // raise error if non-whitespace character is found
-    if( ::std::find_if( pBegin, pEnd, ::std::not1(::std::ptr_fun(lcl_IsWhiteSpace)) ) != pEnd )
+    if( !::std::all_of( pBegin, pEnd, lcl_IsWhiteSpace ) )
         GetImport().SetError( XMLERROR_UNKNOWN_CHARACTERS, rCharacters );
 }
 

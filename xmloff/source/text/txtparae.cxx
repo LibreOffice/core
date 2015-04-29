@@ -108,6 +108,7 @@
 #include <list>
 #include <unordered_map>
 #include <vector>
+#include <algorithm>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -665,7 +666,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             break;
         }
 
-        if( find_if( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) != xPropStates.end() )
+        if( std::any_of( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) )
         {
             GetAutoStylePool().Add( nFamily, sParent, xPropStates );
             if( !sCondParent.isEmpty() && sParent != sCondParent )
@@ -709,7 +710,7 @@ OUString XMLTextParagraphExport::Find(
             ++ppAddStates;
         }
     }
-    if( find_if( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) != xPropStates.end() )
+    if( std::any_of( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) )
         sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
 
     return sName;
