@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_2cc5bb5a",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-29T19:30:26Z",
+      "side": 1,
+      "message": "This needs to start only on aRange.aStart.Row()+1 as pRanges was already obtained for aRange.aStart.Row()",
+      "revId": "618b822e204b34d5b6243962870369cc69582cd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_0cc8f773",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-29T19:30:26Z",
+      "side": 1,
+      "message": "This works when filling down, but not for right/left/top.\nFurthermore, all the checks and iterating should only be done if spell-checking is actually enabled.\n\nProbably it needs to be similar if not identical to the direction handling in FillAuto(), so should be factored out into one method that can be called from both places.",
+      "revId": "618b822e204b34d5b6243962870369cc69582cd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_cca09fa8",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-29T19:30:26Z",
+      "side": 1,
+      "message": "Also here, the entire checking and looping should only be done if spell-checking is enabled.",
+      "revId": "618b822e204b34d5b6243962870369cc69582cd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
