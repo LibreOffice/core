@@ -443,7 +443,7 @@ IMPL_LINK( ErrorBarResources, ChooseRange, PushButton*, pButton )
     OSL_ASSERT( m_apRangeSelectionHelper.get());
     if( ! m_apRangeSelectionHelper.get())
         return 0;
-    OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
+    OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
 
     OUString aUIString;
 
