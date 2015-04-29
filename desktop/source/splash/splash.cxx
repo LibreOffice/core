@@ -64,7 +64,7 @@ public:
 class  SplashScreen
     : public ::cppu::WeakImplHelper3< XStatusIndicator, XInitialization, XServiceInfo >
 {
-    friend SplashScreenWindow;
+    friend class SplashScreenWindow;
 private:
     enum BitmapMode { BM_FULLSCREEN, BM_DEFAULTMODE };
 
