@@ -176,6 +176,7 @@ static const struct {
     { "an_ES",  lcl_DATA_EURO },
     { "myv_RU", lcl_DATA_EURO },
     { "lld_IT", lcl_DATA_EURO },
+    { "cu_RU",  lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },
@@ -299,8 +300,7 @@ static const struct {
     { "bm_ML",  lcl_DATA_OTHERS },
     { "pui_CO", lcl_DATA_OTHERS },
     { "lgr_SB", lcl_DATA_OTHERS },
-    { "mos_BF", lcl_DATA_OTHERS },
-    { "cu_RU",  lcl_DATA_OTHERS }
+    { "mos_BF", lcl_DATA_OTHERS }
 };
 
 #else
