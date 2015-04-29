@@ -520,7 +520,7 @@ private:
     /*
      * The current table helper.
      */
-    SwWriteTable* m_pTableWrt;
+    std::unique_ptr<SwWriteTable> m_pTableWrt;
 
     /*
      * Remember if we are in an open cell, or not.

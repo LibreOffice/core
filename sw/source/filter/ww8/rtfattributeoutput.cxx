@@ -859,15 +859,15 @@ void RtfAttributeOutput::InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t p
 
     const SwHTMLTableLayout* pLayout = pTable->GetHTMLTableLayout();
     if (pLayout && pLayout->IsExportable())
-        m_pTableWrt = new SwWriteTable(pTable, pLayout);
+        m_pTableWrt.reset(new SwWriteTable(pTable, pLayout));
     else
-        m_pTableWrt = new SwWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTblSz, false);
+        m_pTableWrt.reset(new SwWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTblSz, false));
 }
 
 void RtfAttributeOutput::StartTable(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
 {
     // To trigger calling InitTableHelper()
-    delete m_pTableWrt, m_pTableWrt = NULL;
+    m_pTableWrt.reset(0);
 }
 
 void RtfAttributeOutput::StartTableRow(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
@@ -961,7 +961,7 @@ void RtfAttributeOutput::EndTable()
     if (m_nTableDepth > 0)
     {
         m_nTableDepth--;
-        delete m_pTableWrt, m_pTableWrt = NULL;
+        m_pTableWrt.reset(0);
     }
 
     // We closed the table; if it is a nested table, the cell that contains it
@@ -969,7 +969,7 @@ void RtfAttributeOutput::EndTable()
     m_bTableCellOpen = true;
 
     // Cleans the table helper
-    delete m_pTableWrt, m_pTableWrt = NULL;
+    m_pTableWrt.reset(0);
 }
 
 void RtfAttributeOutput::FinishTableRowCell(ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool /*bForceEmptyParagraph*/)
@@ -1650,8 +1650,7 @@ void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
         // Save table state, in case the inner text also contains a table.
         ww8::WW8TableInfo::Pointer_t pTableInfoOrig = m_rExport.mpTableInfo;
         m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
-        SwWriteTable* pTableWrt = m_pTableWrt;
-        m_pTableWrt = 0;
+        std::unique_ptr<SwWriteTable> pTableWrt(m_pTableWrt.release());
         sal_uInt32 nTableDepth = m_nTableDepth;
 
         m_nTableDepth = 0;
@@ -1686,8 +1685,7 @@ void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
 
         // Restore table state.
         m_rExport.mpTableInfo = pTableInfoOrig;
-        delete m_pTableWrt;
-        m_pTableWrt = pTableWrt;
+        m_pTableWrt.reset(pTableWrt.release());
         m_nTableDepth = nTableDepth;
     }
 
@@ -3348,7 +3346,6 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
       m_bStrikeDouble(false),
       m_nNextAnnotationMarkId(0),
       m_nCurrentAnnotationMarkId(-1),
-      m_pTableWrt(NULL),
       m_bTableCellOpen(false),
       m_nTableDepth(0),
       m_bTblAfterCell(false),
