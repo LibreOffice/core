@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_acf76bf4",
+        "filename": "i18nlangtag/source/isolang/isolang.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1001139
+      },
+      "writtenOn": "2015-04-29T08:23:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da6ed579_49afc1e3",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_69ac05ee",
         "filename": "i18npool/source/collator/data/cu_charset.txt",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_8cf2a705",
+        "filename": "i18npool/source/collator/data/cu_charset.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001139
+      },
+      "writtenOn": "2015-04-29T08:23:07Z",
+      "side": 1,
+      "message": "The problem is that the default Cyrillic collation given in DUCET does not make any sense for Church Slavic. Please see our discussion of Church Slavic collation on p. 56 of the Roadmap for Church Slavic Typography ...\n\nhttps://www.academia.edu/7488355/Roadmap_for_Church_Slavonic_Typography_in_the_Unicode_Standard",
+      "parentUuid": "da6ed579_69ac05ee",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_09b9c92e",
         "filename": "i18npool/source/localedata/data/cu_RU.xml",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2015-04-27T09:31:37Z",
       "side": 1,
       "message": "Do we really need to add locale data for a dormant language that is not actively used anywhere?\n\nBtw, as this seems to have been copied from ru_RU.xml, it would had been better to use locale inheritance and the ref\u003d\"...\" mechanisms, at least for the identical number formats, see locale.dtd and other locales using it. Note that the currency formats would have to use the assigned LangID 694 instead of 419.",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_eced6326",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001139
+      },
+      "writtenOn": "2015-04-29T08:23:07Z",
+      "side": 1,
+      "message": "As I wrote in the Bugzilla post, Church Slavic is an actively used (albeit liturgical) language, not a dead language. It is used as a liturgical language in the Russian Orthodox Church and other religious communities. So, there are texts being typeset in this language, and it would be good to allow hyphenation rules and dictionaries to be installed.\n\nI tried the REF approach, but I could not get it to work. I keep getting an error:\n/home/vlad/libreoffice/core/workdir/GenCxxObject/CustomTarget/i18npool/localedata/localedata_cu_RU.o: In function `getAllFormats0_cu_RU\u0027:\n/home/vlad/libreoffice/core/workdir/CustomTarget/i18npool/localedata/localedata_cu_RU.cxx:80: undefined reference to `getAllFormats0_ru_RU\u0027\n/home/vlad/libreoffice/core/workdir/GenCxxObject/CustomTarget/i18npool/localedata/localedata_cu_RU.o: In function `getDateAcceptancePatterns_cu_RU\u0027:\n/home/vlad/libreoffice/core/workdir/CustomTarget/i18npool/localedata/localedata_cu_RU.cxx:85: undefined reference to `getDateAcceptancePatterns_ru_RU\u0027\ncollect2: error: ld returned 1 exit status\nmake[1]: *** [/home/vlad/libreoffice/core/instdir/program/liblocaledata_others.so] Error 1\nmake: *** [build] Error 2\n\nIs there somewhere else I have to define ru_RU as a template?",
+      "parentUuid": "da6ed579_09b9c92e",
       "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -81,6 +135,24 @@
       "writtenOn": "2015-04-27T09:31:37Z",
       "side": 1,
       "message": "Please follow the conventions, the define should be named LANGUAGE_USER_CHURCH_SLAVIC to distinguish it from the MS defined ones, and it should be appended to the end of the file after LANGUAGE_USER_KVEN_FINNISH.\n\nThe value should be 0x0694",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_cce89f19",
+        "filename": "include/i18nlangtag/lang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1001139
+      },
+      "writtenOn": "2015-04-29T08:23:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da6ed579_a980bd47",
       "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
