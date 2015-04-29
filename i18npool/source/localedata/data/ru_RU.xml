@@ -36,8 +36,8 @@
       <TimeSeparator>:</TimeSeparator>
       <Time100SecSeparator>,</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
-      <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator> </LongDateDaySeparator>
+      <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator>, </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
       <LongDateYearSeparator> г.</LongDateYearSeparator>
     </Separators>
