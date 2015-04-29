@@ -2,9 +2,8 @@
 <resources>
     <style name="LibreOfficeTheme" parent="LibreOfficeTheme.Base"/>
 
-    <style name="LibreOfficeTheme.Base" parent="Theme.AppCompat.Light">
+    <style name="LibreOfficeTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
     </style>
 
     <style name="BrowserTheme" parent="Theme.AppCompat.Light.NoActionBar">
