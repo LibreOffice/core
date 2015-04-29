@@ -52,7 +52,7 @@ public:
     void SetOrgRect( SwRect &rRect ) { aOrgRect = rRect; }
     const SwRect& GetOrgRect() const { return aOrgRect; }
 
-    bool IsFlushable() const { return 0 != pOut; }
+    bool IsFlushable() const { return bool(pOut); }
     void _Flush();
     void Flush() { if( pOut ) _Flush(); }
 };
