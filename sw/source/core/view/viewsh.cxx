@@ -1931,7 +1931,7 @@ OutputDevice& SwViewShell::GetRefDev() const
           GetViewOptions()->getBrowseMode() &&
          !GetViewOptions()->IsPrtFormat() )
         pTmpOut = GetWin();
-    else if ( 0 != mpTmpRef )
+    else if ( mpTmpRef )
         pTmpOut = mpTmpRef;
     else
         pTmpOut = GetDoc()->getIDocumentDeviceAccess().getReferenceDevice( true );
