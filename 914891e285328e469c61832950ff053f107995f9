@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ed579_0cb9d72e",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-04-29T07:24:45Z",
+      "side": 1,
+      "message": "Please do not use C-style casts.",
+      "revId": "914891e285328e469c61832950ff053f107995f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
