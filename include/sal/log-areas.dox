@@ -475,6 +475,7 @@ certain functionality.
 @section dbaccess
 
 @li @c dbaccess
+@li @c dbaccess.core
 @li @c dbaccess.ui
 @li @c dbaccess.ui.OGeneralPage
 

@@ -132,7 +132,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     }
     catch(const Exception& ex)
     {
-        (void)ex;
+        SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << ex.Message);
     }
     try
     {
@@ -142,7 +142,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     }
     catch(const SQLException& e)
     {
-        (void)e;
+        SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
     }
 
     // check if all keys of the updateable table are fetched
@@ -187,8 +187,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                     m_aKeyColumns = pCursor->getJoinedKeyColumns();
                     return;
                 }
-                catch(const Exception&)
+                catch (const Exception& e)
                 {
+                    SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
                 }
                 m_pCacheSet = NULL;
                 m_xCacheSet.clear();
@@ -227,8 +228,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
         }
-        catch(Exception&)
+        catch (Exception const& e)
         {
+            SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
         }
     }
 
@@ -255,8 +257,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
         }
-        catch(const SQLException&)
+        catch (const SQLException& e)
         {
+            SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
             bNeedKeySet = true;
         }
 
@@ -336,8 +339,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 if(bNoInsert)
                     m_nPrivileges |= ~Privilege::INSERT; // remove the insert privilege
             }
-            catch(const SQLException&)
+            catch (const SQLException& e)
             {
+                SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
                 // we couldn't create a keyset here so we have to create a static cache
                 if ( m_pCacheSet )
                     m_pCacheSet = NULL;
