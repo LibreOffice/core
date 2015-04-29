@@ -23,9 +23,11 @@
 #include "file/FConnection.hxx"
 #include <com/sun/star/uno/DeploymentException.hpp>
 
-namespace com { namespace sun { namespace star { namespace sheet {
-    class XSpreadsheetDocument;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace sheet { class XSpreadsheetDocument; }
+} } }
+
+namespace utl { class CloseVeto; }
 
 
 namespace connectivity
@@ -37,6 +39,8 @@ namespace connectivity
         {
             // the spreadsheet document:
             ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument > m_xDoc;
+            /// close listener that vetoes so nobody disposes m_xDoc
+            ::std::unique_ptr< ::utl::CloseVeto> m_pCloseListener;
             OUString m_sPassword;
             OUString m_aFileName;
             oslInterlockedCount m_nDocCount;

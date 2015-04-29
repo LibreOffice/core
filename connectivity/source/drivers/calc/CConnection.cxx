@@ -31,6 +31,7 @@
 #include "calc/CPreparedStatement.hxx"
 #include "calc/CStatement.hxx"
 #include <unotools/pathoptions.hxx>
+#include <unotools/closeveto.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -165,13 +166,17 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
         ::dbtools::throwGenericSQLException( sError, *this, aErrorDetails );
     }
     osl_atomic_increment(&m_nDocCount);
+    m_pCloseListener.reset(new utl::CloseVeto(m_xDoc, true));
     return m_xDoc;
 }
 
 void OCalcConnection::releaseDoc()
 {
     if ( osl_atomic_decrement(&m_nDocCount) == 0 )
-        ::comphelper::disposeComponent( m_xDoc );
+    {
+        m_pCloseListener.reset(); // dispose m_xDoc
+        m_xDoc.clear();
+    }
 }
 
 void OCalcConnection::disposing()
@@ -179,7 +184,8 @@ void OCalcConnection::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_nDocCount = 0;
-    ::comphelper::disposeComponent( m_xDoc );
+    m_pCloseListener.reset(); // dispose m_xDoc
+    m_xDoc.clear();
 
     OConnection::disposing();
 }

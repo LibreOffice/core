@@ -38,7 +38,8 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC CloseVeto
     {
     public:
-        CloseVeto( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_closeable );
+        CloseVeto( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_closeable,
+                bool bHasOwnership = false);
         ~CloseVeto();
 
     private:
