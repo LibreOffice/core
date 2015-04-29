@@ -254,6 +254,9 @@ void SwRedlineAcceptDlg::InitAuthors()
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
 
+    if (!aTabPagesCTRL)
+        return;
+
     SvxTPFilter *pFilterPage = aTabPagesCTRL->GetFilterPage();
 
     std::vector<OUString> aStrings;

@@ -1357,7 +1357,7 @@ void TabControl::GetFocus()
 
 void TabControl::LoseFocus()
 {
-    if( ! mpTabCtrlData->mpListBox )
+    if( mpTabCtrlData && ! mpTabCtrlData->mpListBox )
         HideFocus();
     Control::LoseFocus();
 }
