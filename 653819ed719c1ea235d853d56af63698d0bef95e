@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_ec6243ad",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-29T13:04:19Z",
+      "side": 1,
+      "message": "I don\u0027t know what you did ;-) I never got those undefined references. I\u0027ll take care of that and do the necessary changes in a follow-up commit.",
+      "parentUuid": "da6ed579_eced6326",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_4996e195",
         "filename": "i18npool/source/localedata/data/cu_RU.xml",
         "patchSetId": 1
