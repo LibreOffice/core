@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_4cc4af91",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-29T10:38:07Z",
+      "side": 1,
+      "message": "Was for tracing purposes indeed (faster than gdb). removed line and will use SAL_DEBUG in future.",
+      "parentUuid": "da6ed579_29a7ed50",
+      "revId": "02709cd035b5ebefe4c29d6cf18c8dc1c87132b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_a9719de2",
         "filename": "sc/source/core/tool/odffmap.cxx",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2015-04-28T17:07:22Z",
       "side": 1,
       "message": "Better name this _XCL then instead of introducing yet another confusing _ADD.\n\nWith bMapDupToInternal now set to true, is the old Excel NETWORKDAYS directly mappable to ODFF NETWORKDAYS, i.e. the three parameters have identical meanings? I guess so, just want to make sure ;-)",
+      "range": {
+        "startLine": 39,
+        "startChar": 33,
+        "endLine": 39,
+        "endChar": 37
+      },
+      "revId": "02709cd035b5ebefe4c29d6cf18c8dc1c87132b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_6cc17380",
+        "filename": "sc/source/core/tool/odffmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-29T10:38:07Z",
+      "side": 1,
+      "message": "I simply choose _ADD to be consistent woth the other entries in this map, but _XCL is ok for me. Changed it.\n\nExcel NETWORKDAYS is mappable to ODFF NETWORKDAYS. Not necessarily the other way round (ODFF has an optional 4th argument), but that does not matter.",
+      "parentUuid": "da6ed579_a9719de2",
       "range": {
         "startLine": 39,
         "startChar": 33,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_cc365fb4",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-29T10:38:07Z",
+      "side": 1,
+      "message": "One would think so, yes.\nChanged.",
+      "parentUuid": "da6ed579_c962d116",
+      "range": {
+        "startLine": 403,
+        "startChar": 63,
+        "endLine": 403,
+        "endChar": 65
+      },
+      "revId": "02709cd035b5ebefe4c29d6cf18c8dc1c87132b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_e9679523",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 2
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_ec3b239b",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-29T10:38:07Z",
+      "side": 1,
+      "message": "Indeed.\nCorrected.",
+      "parentUuid": "da6ed579_e9679523",
+      "range": {
+        "startLine": 646,
+        "startChar": 97,
+        "endLine": 646,
+        "endChar": 99
+      },
+      "revId": "02709cd035b5ebefe4c29d6cf18c8dc1c87132b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_896cd909",
         "filename": "scaddins/source/analysis/analysis.cxx",
         "patchSetId": 2
@@ -99,6 +189,24 @@
       "writtenOn": "2015-04-28T17:07:22Z",
       "side": 1,
       "message": "Temporary debug, remove.",
+      "revId": "02709cd035b5ebefe4c29d6cf18c8dc1c87132b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_8c406709",
+        "filename": "scaddins/source/analysis/analysis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-29T10:38:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da6ed579_896cd909",
       "revId": "02709cd035b5ebefe4c29d6cf18c8dc1c87132b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
