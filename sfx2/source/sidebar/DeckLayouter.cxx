@@ -256,7 +256,7 @@ sal_Int32 PlacePanels (
     // Assign heights and places.
     IterateLayoutItems(iItem,rLayoutItems)
     {
-        if (iItem->mpPanel == 0)
+        if (!iItem->mpPanel)
             continue;
 
         Panel& rPanel (*iItem->mpPanel);
