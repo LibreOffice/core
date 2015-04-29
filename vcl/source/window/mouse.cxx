@@ -284,7 +284,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     }
 
     if ( ( pSVData->maWinData.mpFocusWin.get() != this &&
-           mpWindowImpl && !mpWindowImpl->mbInDispose ) ||
+           !mpWindowImpl->mbInDispose ) ||
          ( bAsyncFocusWaiting && !bHasFocus && !bMustNotGrabFocus ) )
     {
         // EndExtTextInput if it is not the same window
