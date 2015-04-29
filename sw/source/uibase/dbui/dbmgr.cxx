@@ -124,6 +124,7 @@
 #include <swcrsr.hxx>
 #include <swevent.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <swabstdlg.hxx>
 #include <fmthdft.hxx>
 #include <envelp.hrc>
@@ -402,11 +403,11 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pP
             pImpl->pMergeData->CheckEndOfDB();
         }
     }
-    catch(const Exception&)
+    catch (const Exception& e)
     {
         pImpl->pMergeData->bEndOfDB = true;
         pImpl->pMergeData->CheckEndOfDB();
-        OSL_FAIL("exception in MergeNew()");
+        SAL_WARN("sw.mailmerge", "exception in MergeNew(): " << e.Message);
     }
 
     uno::Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection,aData.sDataSource);
@@ -1592,9 +1593,9 @@ sal_uLong SwDBManager::GetColumnFmt( const OUString& rDBName,
             {
                 xCols = xColsSupp->getColumns();
             }
-            catch(const Exception&)
+            catch (const Exception& e)
             {
-                OSL_FAIL("Exception in getColumns()");
+                SAL_WARN("sw.mailmerge", "Exception in getColumns(): " << e.Message);
             }
             if(!xCols.is() || !xCols->hasByName(rColNm))
                 return nRet;
@@ -1682,16 +1683,16 @@ sal_uLong SwDBManager::GetColumnFmt( uno::Reference< XDataSource> xSource,
                         nRet = nFmt;
                         bUseDefault = false;
                     }
-                    catch(const Exception&)
+                    catch (const Exception& e)
                     {
-                        OSL_FAIL("illegal number format key");
+                        SAL_WARN("sw.mailmerge", "illegal number format key: " << e.Message);
                     }
                 }
             }
         }
         catch(const Exception&)
         {
-            OSL_FAIL("no FormatKey property found");
+            SAL_WARN("sw.mailmerge", "no FormatKey property found");
         }
         if(bUseDefault)
             nRet = getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
@@ -1806,9 +1807,9 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
         xRowSet->execute();
         xRet = Reference<XColumnsSupplier>( xRowSet, UNO_QUERY );
     }
-    catch(const uno::Exception&)
+    catch (const uno::Exception& e)
     {
-        OSL_FAIL("Exception in SwDBManager::GetColumnSupplier");
+        SAL_WARN("sw.mailmerge", "Exception in SwDBManager::GetColumnSupplier: " << e.Message);
     }
 
     return xRet;
@@ -1873,9 +1874,9 @@ OUString SwDBManager::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                     }
                 }
             }
-            catch(const Exception&)
+            catch (const Exception& e)
             {
-                OSL_FAIL("exception caught");
+                SAL_WARN("sw.mailmerge", "exception caught: " << e.Message);
             }
 
         }
@@ -2860,9 +2861,9 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
         {
             pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
         }
-        catch(const Exception&)
+        catch (const Exception& e)
         {
-            OSL_FAIL("exception caught");
+            SAL_WARN("sw.mailmerge", "exception caught: " << e.Message);
         }
     }
 }
@@ -2878,9 +2879,9 @@ uno::Reference<XDataSource> SwDBManager::getDataSourceAsParent(const uno::Refere
         if ( !xSource.is() )
             xSource = getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
     }
-    catch(const Exception&)
+    catch (const Exception& e)
     {
-        OSL_FAIL("exception in getDataSourceAsParent caught");
+        SAL_WARN("sw.mailmerge", "exception caught in getDataSourceAsParent(): " << e.Message);
     }
     return xSource;
 }
@@ -2917,9 +2918,9 @@ uno::Reference<XResultSet> SwDBManager::createCursor(const OUString& _sDataSourc
             }
         }
     }
-    catch(const Exception&)
+    catch (const Exception& e)
     {
-        OSL_FAIL("Caught exception while creating a new RowSet!");
+        SAL_WARN("sw.mailmerge", "Caught exception while creating a new RowSet: " << e.Message);
     }
     return xResultSet;
 }
