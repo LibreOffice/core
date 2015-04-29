@@ -201,7 +201,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 }
 #endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_cu
-            } else if ( rLocale.language == "cu" ) {
+            } else if ( rLocale.Language == "cu" ) {
                 if ( rAlgorithm == "charset" )
                 {
                     func = get_collator_data_cu_charset;
