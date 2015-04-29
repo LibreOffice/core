@@ -63,12 +63,13 @@ private:
     long                mnPrgsHeight;
     sal_uInt16          mnPercent;
     sal_uInt16          mnPercentCount;
+    sal_uInt16          mnPreviousPercent;
     bool                mbCalcNew;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void             ImplInit();
     SAL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void             ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc );
+    SAL_DLLPRIVATE void ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nOldPerc, sal_uInt16 nNewPerc);
 
 public:
                         ProgressBar( vcl::Window* pParent, WinBits nWinBits = WB_STDPROGRESSBAR );

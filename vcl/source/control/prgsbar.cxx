@@ -27,8 +27,9 @@
 
 void ProgressBar::ImplInit()
 {
-    mnPercent   = 0;
-    mbCalcNew   = true;
+    mnPercent = 0;
+    mnPreviousPercent = 0;
+    mbCalcNew = true;
 
     ImplInitSettings( true, true, true );
 }
@@ -116,7 +117,7 @@ void ProgressBar::ImplInitSettings( bool bFont,
     }
 }
 
-void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
+void ProgressBar::ImplDrawProgress(vcl::RenderContext& /*rRenderContext*/, sal_uInt16 nOldPerc, sal_uInt16 nNewPerc)
 {
     if ( mbCalcNew )
     {
@@ -145,9 +146,9 @@ void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
                     Rectangle( Point(), GetSizePixel() ) );
 }
 
-void ProgressBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void ProgressBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    ImplDrawProgress( 0, mnPercent );
+    ImplDrawProgress(rRenderContext, mnPreviousPercent, mnPercent);
 }
 
 void ProgressBar::Resize()
@@ -165,6 +166,7 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
     {
         mbCalcNew = true;
         mnPercent = nNewPercent;
+        mnPreviousPercent = 0;
         if ( IsReallyVisible() )
         {
             Invalidate();
@@ -173,8 +175,9 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
     }
     else
     {
-        ImplDrawProgress( mnPercent, nNewPercent );
+        mnPreviousPercent = mnPercent;
         mnPercent = nNewPercent;
+        Invalidate();
     }
 }
 
