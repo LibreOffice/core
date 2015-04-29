@@ -173,6 +173,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_bClosing( false )
             ,m_bAllowDocumentScripting( false )
             ,m_bHasBeenRecovered( false )
+            ,m_bEmbedded(false)
 {
     OSL_TRACE( "DD: ctor: %p: %p", this, m_pImpl.get() );
 
@@ -593,6 +594,9 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
 
     // note that we do *not* call impl_setInitialized() here: The initialization is only complete
     // when the XModel::attachResource has been called, not sooner.
+    // however, in case of embedding, XModel::attachResource is already called.
+    if (m_bEmbedded)
+        impl_setInitialized();
 
     impl_setModified_nothrow( false, aGuard );
     // <- SYNCHRONIZED
@@ -756,6 +760,12 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
 // XModel
 sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException, std::exception)
 {
+    if (_rURL.isEmpty() && _rArguments.getLength() == 1 && _rArguments[0].Name == "SetEmbedded")
+    {
+        m_bEmbedded = true;
+        return true;
+    }
+
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
     bool bRet = false;
     try
