@@ -706,25 +706,28 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
 
 static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::PropertyValue>& rPropertyValues)
 {
-    boost::property_tree::ptree aTree;
-    std::stringstream aStream(pJSON);
-    boost::property_tree::read_json(aStream, aTree);
-
     std::vector<beans::PropertyValue> aArguments;
-    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+    if (pJSON)
     {
-        const std::string& rType = rPair.second.get<std::string>("type");
-        const std::string& rValue = rPair.second.get<std::string>("value");
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(pJSON);
+        boost::property_tree::read_json(aStream, aTree);
 
-        beans::PropertyValue aValue;
-        aValue.Name = OUString::fromUtf8(rPair.first.c_str());
-        if (rType == "string")
-            aValue.Value <<= OUString::fromUtf8(rValue.c_str());
-        else if (rType == "boolean")
-            aValue.Value <<= OString(rValue.c_str()).toBoolean();
-        else
-            SAL_WARN("desktop.lib", "jsonToPropertyValues: unhandled type '"<<rType<<"'");
-        aArguments.push_back(aValue);
+        for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+        {
+            const std::string& rType = rPair.second.get<std::string>("type");
+            const std::string& rValue = rPair.second.get<std::string>("value");
+
+            beans::PropertyValue aValue;
+            aValue.Name = OUString::fromUtf8(rPair.first.c_str());
+            if (rType == "string")
+                aValue.Value <<= OUString::fromUtf8(rValue.c_str());
+            else if (rType == "boolean")
+                aValue.Value <<= OString(rValue.c_str()).toBoolean();
+            else
+                SAL_WARN("desktop.lib", "jsonToPropertyValues: unhandled type '"<<rType<<"'");
+            aArguments.push_back(aValue);
+        }
     }
     rPropertyValues = comphelper::containerToSequence(aArguments);
 }
