@@ -745,7 +745,7 @@ private:
      *
      * @return range name token array
      */
-    ScExternalRefCache::TokenArrayRef getRangeNameTokensFromSrcDoc(
+    static ScExternalRefCache::TokenArrayRef getRangeNameTokensFromSrcDoc(
         sal_uInt16 nFileId, ScDocument* pSrcDoc, OUString& rName);
 
     ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);

@@ -102,10 +102,10 @@ public:
 protected:
 
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
-    void         SaveLRUEntry(const ScFuncDesc* pFuncDesc);
+    static void  SaveLRUEntry(const ScFuncDesc* pFuncDesc);
 
-    bool         IsInputHdl(ScInputHandler* pHdl);
-    ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
+    static bool  IsInputHdl(ScInputHandler* pHdl);
+    static ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX

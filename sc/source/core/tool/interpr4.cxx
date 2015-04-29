@@ -3120,7 +3120,7 @@ void ScInterpreter::ScMacro()
     OUString aMacro( pCur->GetExternal() );
 
     SfxObjectShell* pDocSh = pDok->GetDocumentShell();
-    if ( !pDocSh || !pDok->CheckMacroWarn() )
+    if ( !pDocSh || !ScDocument::CheckMacroWarn() )
     {
         PushNoValue();      // without DocShell no CallBasic
         return;

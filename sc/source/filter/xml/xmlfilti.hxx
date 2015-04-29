@@ -169,7 +169,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    void GetOperator(const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry) const;
+    static void GetOperator(const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry);
     void AddSetItem(const ScQueryEntry::Item& rItem);
 };
 
@@ -341,8 +341,8 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    void getOperatorXML(
-        const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const;
+    static void getOperatorXML(
+        const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions);
     virtual void EndElement() SAL_OVERRIDE;
 };
 

@@ -171,7 +171,7 @@ public:
 
     bool                IsDocumentEncrypted() const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GenerateEncryptionData( const OUString& aPass ) const;
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GenerateEncryptionData( const OUString& aPass );
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetEncryptionData() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GenerateDefaultEncryptionData() const;
 

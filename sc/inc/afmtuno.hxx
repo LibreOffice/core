@@ -51,8 +51,8 @@ class ScAutoFormatsObj : public ::cppu::WeakImplHelper4<
                             ::com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScAutoFormatObj*        GetObjectByIndex_Impl(sal_uInt16 nIndex);
-    ScAutoFormatObj*        GetObjectByName_Impl(const OUString& aName);
+    static ScAutoFormatObj* GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    static ScAutoFormatObj* GetObjectByName_Impl(const OUString& aName);
 
 public:
                             ScAutoFormatsObj();

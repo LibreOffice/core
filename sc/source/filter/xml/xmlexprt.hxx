@@ -147,7 +147,7 @@ class ScXMLExport : public SvXMLExport
 
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
-    com::sun::star::table::CellRangeAddress GetEndAddress(const com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
+    static com::sun::star::table::CellRangeAddress GetEndAddress(const com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
                                                         const sal_Int32 nTable);
 //  ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks );
@@ -176,7 +176,7 @@ class ScXMLExport : public SvXMLExport
     void GetColumnRowHeader(bool& bHasColumnHeader, com::sun::star::table::CellRangeAddress& aColumnHeaderRange,
         bool& bHasRowHeader, com::sun::star::table::CellRangeAddress& aRowHeaderRange,
         OUString& rPrintRanges) const;
-    void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
+    static void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
     bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
@@ -194,8 +194,8 @@ class ScXMLExport : public SvXMLExport
     void WriteTableShapes();
     void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
 
-    bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
-    bool IsEditCell(ScMyCell& rCell) const;
+    static bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
+    static bool IsEditCell(ScMyCell& rCell);
     bool IsCellEqual(ScMyCell& aCell1, ScMyCell& aCell2);
 
     void WriteCalculationSettings(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);

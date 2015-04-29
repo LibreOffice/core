@@ -188,7 +188,7 @@ public:
 
     /** Writes related records into Workbook stream and creates the pivot cache storage stream. */
     void        Save( XclExpStream& rStrm );
-    void        SaveXml( XclExpXmlStream& rStrm );
+    static void SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Returns read/write access to a pivot cache field. */
@@ -212,7 +212,7 @@ private:
     /** Writes the SXDB record. */
     void                WriteSxdb( XclExpStream& rStrm ) const;
     /** Writes the SXDBEX record. */
-    void                WriteSxdbex( XclExpStream& rStrm ) const;
+    static void         WriteSxdbex( XclExpStream& rStrm );
     /** Writes the SXINDEXLIST record list containing the item index table. */
     void                WriteSxindexlistList( XclExpStream& rStrm ) const;
 
@@ -372,13 +372,13 @@ private:
     /** Writes the SXVIEW record starting the pivot table. */
     void                WriteSxview( XclExpStream& rStrm ) const;
     /** Writes an SXIVD record for row field or column field order. */
-    void                WriteSxivd( XclExpStream& rStrm, const ScfUInt16Vec& rFields ) const;
+    static void         WriteSxivd( XclExpStream& rStrm, const ScfUInt16Vec& rFields );
     /** Writes the SXPI record containing page field info. */
     void                WriteSxpi( XclExpStream& rStrm ) const;
     /** Writes all SXDI records containing info about the data fields. */
     void                WriteSxdiList( XclExpStream& rStrm ) const;
     /** Writes a dummy SXLI records containing item layout info. */
-    void                WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sal_uInt16 nIndexCount ) const;
+    static void         WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sal_uInt16 nIndexCount );
     /** Writes the SXEX records containing additional pivot table info. */
     void                WriteSxex( XclExpStream& rStrm ) const;
 

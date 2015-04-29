@@ -1016,7 +1016,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
     if (pInputHandler && pInputHandler->IsInputMode())
     {
         // we need to switch off the editeng
-        pViewShell->UpdateInputLine();
+        ScTabView::UpdateInputLine();
         pViewShell->UpdateInputHandler();
     }
 

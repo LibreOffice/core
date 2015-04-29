@@ -140,7 +140,7 @@ public:
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
                      const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
-    SCROW getOrder(long nDim, SCROW nIndex) const;
+    static SCROW getOrder(long nDim, SCROW nIndex);
     void clear();
     bool empty() const;
 

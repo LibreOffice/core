@@ -291,8 +291,8 @@ private:
     void CreateSortedMarkedCells();
     void AddMarkedRange(const ScRange& rRange);
 
-    ScDocument* GetDocument(ScTabViewShell* pViewShell);
-    Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
+    static ScDocument* GetDocument(ScTabViewShell* pViewShell);
+    static Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
     Rectangle   GetVisCells(const Rectangle& rVisArea);
     typedef std::vector<ScMyAddress> VEC_MYADDR;
 
@@ -339,8 +339,8 @@ public:
     bool IsScAddrFormulaSel (const ScAddress &addr) const;
     bool IsFormulaMode();
     ScMyAddress CalcScAddressFromRangeList(ScRangeList *pMarkedRanges,sal_Int32 nSelectedChildIndex);
-    bool CalcScRangeDifferenceMax(ScRange *pSrc,ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
-    bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet);
+    static bool CalcScRangeDifferenceMax(ScRange *pSrc,ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
+    static bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet);
 };
 
 #endif

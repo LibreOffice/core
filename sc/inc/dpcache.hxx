@@ -154,7 +154,7 @@ public:
     sal_uLong GetNumberFormat( long nDim ) const;
     bool  IsDateDimension( long nDim ) const ;
     long GetDimMemberCount(long nDim) const;
-    SCROW GetOrder( long nDim, SCROW nIndex ) const;
+    static SCROW GetOrder( long nDim, SCROW nIndex );
 
     const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
     const ItemsType& GetDimMemberValues( SCCOL nDim ) const;

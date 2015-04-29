@@ -333,13 +333,13 @@ public:
         @param nSheet  Sheet index to be inserted into orAddress.
         @return  true = Cell address could be parsed from the passed string.
      */
-    bool                convertToCellAddressUnchecked(
+    static bool        convertToCellAddressUnchecked(
                             ::com::sun::star::table::CellAddress& orAddress,
                             const OUString& rString,
                             sal_Int16 nSheet );
 
-    bool convertToCellAddressUnchecked(
-        com::sun::star::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet ) const;
+    static bool convertToCellAddressUnchecked(
+        com::sun::star::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet );
 
     /** Tries to convert the passed string to a single cell address.
 
@@ -380,7 +380,7 @@ public:
         @param rBinAddress  Binary cell address struct.
         @param nSheet  Sheet index to be inserted into orAddress.
      */
-    void                convertToCellAddressUnchecked(
+    static void        convertToCellAddressUnchecked(
                             ::com::sun::star::table::CellAddress& orAddress,
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet );
@@ -470,7 +470,7 @@ public:
         @param nSheet  Sheet index to be inserted into orRange.
         @return  true = Range address could be parsed from the passed string.
      */
-    bool                convertToCellRangeUnchecked(
+    static bool         convertToCellRangeUnchecked(
                             ::com::sun::star::table::CellRangeAddress& orRange,
                             const OUString& rString,
                             sal_Int16 nSheet );
@@ -512,7 +512,7 @@ public:
         @param rBinRange  Binary cell range struct.
         @param nSheet  Sheet index to be inserted into orRange.
      */
-    void                convertToCellRangeUnchecked(
+    static void         convertToCellRangeUnchecked(
                             ::com::sun::star::table::CellRangeAddress& orRange,
                             const BinRange& rBinRange,
                             sal_Int16 nSheet );

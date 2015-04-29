@@ -307,7 +307,7 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
     }
 }
 
-bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
+bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList)
 {
     bool bSubTotal = false;
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
@@ -2289,9 +2289,9 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
             eRet = SC_NAME_INPUT_RANGE;
         else if ( aAddress.Parse( rText, pDoc, eConv ) & SCA_VALID )
             eRet = SC_NAME_INPUT_CELL;
-        else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_NAMES, eConv ) )
+        else if ( ScRangeUtil::MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_NAMES, eConv ) )
             eRet = SC_NAME_INPUT_NAMEDRANGE;
-        else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
+        else if ( ScRangeUtil::MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
             eRet = SC_NAME_INPUT_DATABASE;
         else if ( comphelper::string::isdigitAsciiString( rText ) &&
                   ( nNumeric = rText.toInt32() ) > 0 && nNumeric <= MAXROW+1 )

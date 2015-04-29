@@ -70,7 +70,7 @@ void Scenario::importScenario( const AttributeList& rAttribs )
 void Scenario::importInputCells( const AttributeList& rAttribs )
 {
     ScenarioCellModel aModel;
-    getAddressConverter().convertToCellAddressUnchecked( aModel.maPos, rAttribs.getString( XML_r, OUString() ), mnSheet );
+    AddressConverter::convertToCellAddressUnchecked( aModel.maPos, rAttribs.getString( XML_r, OUString() ), mnSheet );
     aModel.maValue    = rAttribs.getXString( XML_val, OUString() );
     aModel.mnNumFmtId = rAttribs.getInteger( XML_numFmtId, 0 );
     aModel.mbDeleted  = rAttribs.getBool( XML_deleted, false );
@@ -95,7 +95,7 @@ void Scenario::importInputCells( SequenceInputStream& rStrm )
     rStrm.skip( 8 );
     aModel.mnNumFmtId = rStrm.readuInt16();
     rStrm >> aModel.maValue;
-    getAddressConverter().convertToCellAddressUnchecked( aModel.maPos, aPos, mnSheet );
+    AddressConverter::convertToCellAddressUnchecked( aModel.maPos, aPos, mnSheet );
     maCells.push_back( aModel );
 }
 

@@ -261,7 +261,7 @@ public:
 
 private:
     /** Returns the Excel index of a 0-based color index. */
-    inline sal_uInt16   GetXclIndex( sal_uInt32 nIndex ) const
+    static inline sal_uInt16 GetXclIndex( sal_uInt32 nIndex )
                             { return static_cast< sal_uInt16 >( nIndex + EXC_COLOR_USEROFFSET ); }
 
     /** Returns the original inserted color represented by the color ID nColorId. */

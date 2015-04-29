@@ -350,7 +350,7 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
         if( eSubType == EXC_SBTYPE_ADDIN )
         {
             meType = xlExtAddIn;
-            maName = rStrm.GetRoot().GetScAddInName( maName );
+            maName = XclImpRoot::GetScAddInName( maName );
         }
         else if ( (eSubType == EXC_SBTYPE_EUROTOOL) &&
                 maName.equalsIgnoreAsciiCase( "EUROCONVERT" ) )

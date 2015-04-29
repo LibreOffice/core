@@ -373,7 +373,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     bool bUndo (rDoc.IsUndoEnabled());
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
-    vcl::Window* pWaitWin = rDocShell.GetActiveDialogParent();
+    vcl::Window* pWaitWin = ScDocShell::GetActiveDialogParent();
     if (pWaitWin)
         pWaitWin->EnterWait();
     if (bUndo)
@@ -1755,7 +1755,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         return false;
     }
 
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
 
     ScDocument* pRefUndoDoc = NULL;
     ScRefUndoData* pUndoData = NULL;
@@ -2321,7 +2321,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     //      ausfuehren
 
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
 
     ScDocument* pUndoDoc = NULL;
     ScDocument* pRefUndoDoc = NULL;
@@ -2974,7 +2974,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
 bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi )
 {
     bool bSuccess = false;
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3026,7 +3026,7 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
 
 bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
 {
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3756,7 +3756,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                ScopedVclPtrInstance< InfoBox > aBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                ScopedVclPtrInstance< InfoBox > aBox( ScDocShell::GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
                 aBox->Execute();
             }
             return false;
@@ -3786,7 +3786,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                ScopedVclPtrInstance< InfoBox > aBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                ScopedVclPtrInstance< InfoBox > aBox( ScDocShell::GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
                 aBox->Execute();
             }
             return false;
@@ -3951,7 +3951,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( nFormatNo < pAutoFormat->size() && aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetActiveDialogParent() );
+        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         bool bSize = pAutoFormat->findByIndex(nFormatNo)->GetIncludeWidthHeight();
 
@@ -4055,7 +4055,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetActiveDialogParent() );
+        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         ScDocument* pUndoDoc = NULL;
 
@@ -4142,7 +4142,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetActiveDialogParent() );
+        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
         rDoc.SetDirty( rRange, false );
         if ( bRecord )
         {
@@ -4285,7 +4285,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetActiveDialogParent() );
+        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         ScRange aSourceArea = aRange;
         ScRange aDestArea   = aRange;
@@ -4393,7 +4393,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetActiveDialogParent() );
+        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         ScRange aSourceArea = rRange;
         ScRange aDestArea   = rRange;
@@ -4573,7 +4573,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         return false;
     }
 
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScDocument* pUndoDoc = NULL;
     if ( bRecord )
@@ -4920,7 +4920,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         aMessage += aName;
                         aMessage += aTemplate.getToken( 1, '#' );
 
-                        short nResult = QueryBox( rDocShell.GetActiveDialogParent(),
+                        short nResult = QueryBox( ScDocShell::GetActiveDialogParent(),
                                                     WinBits(WB_YES_NO_CANCEL | WB_DEF_YES),
                                                     aMessage ).Execute();
                         if ( nResult == RET_YES )

@@ -52,7 +52,7 @@ XMLTableShapeImportHelper::~XMLTableShapeImportHelper()
 {
 }
 
-void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape, sal_Int16 nLayerID, const OUString& sType) const
+void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape, sal_Int16 nLayerID, const OUString& sType)
 {
     if ( sType == "com.sun.star.drawing.ControlShape" )
         nLayerID = SC_LAYER_CONTROLS;
@@ -159,7 +159,7 @@ void XMLTableShapeImportHelper::finishShape(
                 // also when anchored to the sheet
                 // -> call AddOLE with invalid cell position (checked in ScMyShapeResizer::ResizeShapes)
 
-                if (rTables.IsOLE(rShape))
+                if (ScMyTables::IsOLE(rShape))
                     rTables.AddOLE(rShape, *pRangeList);
             }
 

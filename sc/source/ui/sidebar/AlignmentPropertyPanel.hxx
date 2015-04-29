@@ -99,7 +99,7 @@ private:
     DECL_LINK( ClickStackHdl, void * );
 
     void Initialize();
-    void FormatDegrees(double& dTmp);
+    static void FormatDegrees(double& dTmp);
 };
 
 } } // end of namespace ::sc::sidebar

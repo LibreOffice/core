@@ -258,7 +258,7 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( SCROW nRow )
 }
 
 void ScColumn::JoinNewFormulaCell(
-    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const
+    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell )
 {
     // Check the previous row position for possible grouping.
     if (aPos.first->type == sc::element_type_formula && aPos.second > 0)
@@ -603,7 +603,7 @@ class EmptyCells
     ScColumn& mrColumn;
     sc::ColumnBlockPosition& mrPos;
 
-    void splitFormulaGrouping(const sc::CellStoreType::position_type& rPos)
+    static void splitFormulaGrouping(const sc::CellStoreType::position_type& rPos)
     {
         if (rPos.first->type == sc::element_type_formula)
         {

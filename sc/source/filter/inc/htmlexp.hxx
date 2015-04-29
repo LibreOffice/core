@@ -160,12 +160,12 @@ class ScHTMLExport : public ScExportBase
                         SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow );
 
-    OString BorderToStyle(const char* pBorderName,
+    static OString BorderToStyle(const char* pBorderName,
                           const editeng::SvxBorderLine* pLine,
                           bool& bInsertSemicolon);
 
-    sal_uInt16  GetFontSizeNumber( sal_uInt16 nHeight );
-    const char* GetFontSizeCss( sal_uInt16 nHeight );
+    static sal_uInt16  GetFontSizeNumber( sal_uInt16 nHeight );
+    static const char* GetFontSizeCss( sal_uInt16 nHeight );
     sal_uInt16  ToPixel( sal_uInt16 nTwips );
     Size        MMToPixel( const Size& r100thMMSize );
     void        IncIndent( short nVal );

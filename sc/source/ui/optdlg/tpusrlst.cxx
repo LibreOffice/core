@@ -669,7 +669,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
 
         if ( !theAreaStr.isEmpty() )
         {
-            bAreaOk = pRangeUtil->IsAbsArea( theAreaStr,
+            bAreaOk = ScRangeUtil::IsAbsArea( theAreaStr,
                                              pDoc,
                                              pViewData->GetTabNo(),
                                              &theAreaStr,
@@ -678,7 +678,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                                              pDoc->GetAddressConvention() );
             if ( !bAreaOk )
             {
-                bAreaOk = pRangeUtil->IsAbsPos(  theAreaStr,
+                bAreaOk = ScRangeUtil::IsAbsPos(  theAreaStr,
                                                  pDoc,
                                                  pViewData->GetTabNo(),
                                                  &theAreaStr,

@@ -154,7 +154,7 @@ private:
         @param rRanges  The cell range list to fill.
         @param xLabelRangesRef  The core range list with all ranges.
         @param nScTab  The current Calc sheet index. */
-    void                FillRangeList( ScRangeList& rScRanges,
+    static void         FillRangeList( ScRangeList& rScRanges,
                             ScRangePairListRef xLabelRangesRef, SCTAB nScTab );
 
 private:

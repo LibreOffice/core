@@ -443,7 +443,7 @@ public:
     /** Converts and writes the contained font settings to the passed property set. */
     void                ConvertFontBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained rotation settings to the passed property set. */
-    void                ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, bool bSupportsStacked ) const;
+    void                ConvertRotationBase( ScfPropertySet& rPropSet, bool bSupportsStacked ) const;
 };
 
 /** The CHFONT record containing a font index for text objects. */

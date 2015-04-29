@@ -280,7 +280,7 @@ void ScUndoInsertCells::Undo()
     if ( pPasteUndo )
         pPasteUndo->Undo();     // undo paste first
 
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginUndo();
     DoChange( true );
     EndUndo();
@@ -292,7 +292,7 @@ void ScUndoInsertCells::Undo()
 
 void ScUndoInsertCells::Redo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginRedo();
     DoChange( false );
     EndRedo();
@@ -511,7 +511,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
 
 void ScUndoDeleteCells::Undo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
     BeginUndo();
     DoChange( true );
     EndUndo();
@@ -534,7 +534,7 @@ void ScUndoDeleteCells::Undo()
 
 void ScUndoDeleteCells::Redo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
     BeginRedo();
     DoChange( false);
     EndRedo();
@@ -658,7 +658,7 @@ void ScUndoDeleteMulti::SetChangeTrack()
 
 void ScUndoDeleteMulti::Undo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
     BeginUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -702,7 +702,7 @@ void ScUndoDeleteMulti::Undo()
 
 void ScUndoDeleteMulti::Redo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
     BeginRedo();
 
     ScDocument& rDoc = pDocShell->GetDocument();

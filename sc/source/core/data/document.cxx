@@ -2065,7 +2065,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     if (!pClipDoc)
     {
         OSL_TRACE("CopyToClip: no ClipDoc");
-        pClipDoc = SC_MOD()->GetClipDoc();
+        pClipDoc = ScModule::GetClipDoc();
     }
 
     if (pShell->GetMedium())
@@ -2174,7 +2174,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         if (!pClipDoc)
         {
             OSL_TRACE("CopyTabToClip: no ClipDoc");
-            pClipDoc = SC_MOD()->GetClipDoc();
+            pClipDoc = ScModule::GetClipDoc();
         }
 
         if (pShell->GetMedium())
@@ -2447,7 +2447,7 @@ void ScDocument::SetClipParam(const ScClipParam& rParam)
 
 bool ScDocument::IsClipboardSource() const
 {
-    ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
+    ScDocument* pClipDoc = ScModule::GetClipDoc();
     return pClipDoc && pClipDoc->xPoolHelper.is() &&
             xPoolHelper->GetDocPool() == pClipDoc->xPoolHelper->GetDocPool();
 }
@@ -2672,7 +2672,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     if (!pClipDoc)
     {
         OSL_FAIL("CopyFromClip: no ClipDoc");
-        pClipDoc = SC_MOD()->GetClipDoc();
+        pClipDoc = ScModule::GetClipDoc();
     }
 
     if (!pClipDoc->bIsClip || !pClipDoc->GetTableCount())

@@ -1052,7 +1052,7 @@ void ScDocument::UpdateReference(
     // After moving, no clipboard move ref-updates are possible
     if (rCxt.meMode != URM_COPY && IsClipboardSource())
     {
-        ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
+        ScDocument* pClipDoc = ScModule::GetClipDoc();
         if (pClipDoc)
             pClipDoc->GetClipParam().mbCutMode = false;
     }

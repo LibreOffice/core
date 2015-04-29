@@ -85,7 +85,7 @@ private:
     void    Init                ();
     size_t  UpdateUserListBox   ();
     void    UpdateEntries       ( size_t nList );
-    void    MakeListStr         ( OUString& rListStr );
+    static void MakeListStr     ( OUString& rListStr );
     void    AddNewList          ( const OUString& rEntriesStr );
     void    RemoveList          ( size_t nList );
     void    ModifyList          ( size_t          nSelList,

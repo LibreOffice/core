@@ -44,43 +44,43 @@ public:
                 ScRangeUtil()  {}
                 ~ScRangeUtil() {}
 
-    bool    MakeArea            ( const OUString&     rAreaStr,
+    static bool MakeArea        ( const OUString&     rAreaStr,
                                   ScArea&           rArea,
                                   ScDocument*       pDoc,
                                   SCTAB         nTab,
-                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
-    void    CutPosString        ( const OUString&     theAreaStr,
-                                  OUString&           thePosStr ) const;
+    static void CutPosString    ( const OUString&     theAreaStr,
+                                  OUString&           thePosStr );
 
-    bool    IsAbsTabArea        ( const OUString&   rAreaStr,
+    static bool IsAbsTabArea    ( const OUString&   rAreaStr,
                                   ScDocument*       pDoc,
                                   ScArea***         pppAreas    = 0,
                                   sal_uInt16*       pAreaCount  = 0,
                                   bool              bAcceptCellRef = false,
-                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
-    bool    IsAbsArea           ( const OUString& rAreaStr,
+    static bool IsAbsArea       ( const OUString& rAreaStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   OUString*     pCompleteStr = 0,
                                   ScRefAddress* pStartPos    = 0,
                                   ScRefAddress* pEndPos      = 0,
-                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
-    bool    IsAbsPos            ( const OUString& rPosStr,
+    static bool IsAbsPos        ( const OUString& rPosStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   OUString*       pCompleteStr = 0,
                                   ScRefAddress* pPosTripel   = 0,
-                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
-    bool    MakeRangeFromName   ( const OUString& rName,
+    static bool MakeRangeFromName( const OUString& rName,
                                     ScDocument*     pDoc,
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
                                   RutlNameScope eScope=RUTL_NAMES,
-                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 };
 
 class SC_DLLPUBLIC ScRangeStringConverter

@@ -808,8 +808,8 @@ private:
     /** Inserts the passed cell style object into the internal maps. */
     void                insertCellStyle( CellStyleRef xCellStyle );
     /** Creates the style sheet described by the passed cell style object. */
-    OUString     createCellStyle( const CellStyleRef& rxCellStyle ) const;
-    ::ScStyleSheet*     getCellStyleSheet( const CellStyleRef& rxCellStyle ) const;
+    static OUString     createCellStyle( const CellStyleRef& rxCellStyle );
+    static ::ScStyleSheet* getCellStyleSheet( const CellStyleRef& rxCellStyle );
 
 private:
     typedef RefVector< CellStyle >          CellStyleVector;

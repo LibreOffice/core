@@ -186,7 +186,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
 {
     ScDocument* pDocument = GetDocument();
     SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
-    if ( !pDocSh || !pDocument->CheckMacroWarn() )
+    if ( !pDocSh || !ScDocument::CheckMacroWarn() )
         return false;
 
     bool bScriptReturnedFalse = false;  // default: do not abort
@@ -272,7 +272,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
 
     ScDocument* pDocument = GetDocument();
     SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
-    if ( !pDocSh || !pDocument->CheckMacroWarn() )
+    if ( !pDocSh || !ScDocument::CheckMacroWarn() )
         return false;
 
     bool bDone = false;

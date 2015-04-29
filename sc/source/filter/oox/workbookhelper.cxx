@@ -663,7 +663,7 @@ void WorkbookGlobals::recalcFormulaCells()
         {
             // Ask the user if full re-calculation is desired.
             ScopedVclPtrInstance<QueryBox> aBox(
-                rDocSh.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
             aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 

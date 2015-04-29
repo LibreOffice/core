@@ -2211,7 +2211,7 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
     }
 }
 
-OUString ScDataPilotFieldObj::getCurrentPage() const
+OUString ScDataPilotFieldObj::getCurrentPage()
 {
     return OUString();
 }

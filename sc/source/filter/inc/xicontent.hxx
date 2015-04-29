@@ -170,7 +170,7 @@ public:
     explicit            XclImpValidationManager( const XclImpRoot& rRoot );
 
     /** Reads a DVAL record and sets marks the dropdown arrow control to be ignored. */
-    void                ReadDval( XclImpStream& rStrm );
+    static void         ReadDval( XclImpStream& rStrm );
     /** Reads a DV record and inserts validation data into the document. */
     void                ReadDV( XclImpStream& rStrm );
 

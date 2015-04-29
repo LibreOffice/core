@@ -996,7 +996,7 @@ void PivotCacheField::importPCItemIndex( BiffInputStream& rStrm, WorksheetHelper
 // private --------------------------------------------------------------------
 
 void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
-        sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
+        sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem )
 {
     if( rItem.getType() != XML_m )
     {
@@ -1094,7 +1094,7 @@ void PivotCache::importWorksheetSource( const AttributeList& rAttribs, const Rel
     // resolve URL of external document
     maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
     // store range address unchecked with sheet index 0, will be resolved/checked later
-    getAddressConverter().convertToCellRangeUnchecked( maSheetSrcModel.maRange, rAttribs.getString( XML_ref, OUString() ), 0 );
+    AddressConverter::convertToCellRangeUnchecked( maSheetSrcModel.maRange, rAttribs.getString( XML_ref, OUString() ), 0 );
 }
 
 void PivotCache::importPCDefinition( SequenceInputStream& rStrm )
@@ -1149,7 +1149,7 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
         BinRange aBinRange;
         rStrm >> aBinRange;
         // store range address unchecked with sheet index 0, will be resolved/checked later
-        getAddressConverter().convertToCellRangeUnchecked( maSheetSrcModel.maRange, aBinRange, 0 );
+        AddressConverter::convertToCellRangeUnchecked( maSheetSrcModel.maRange, aBinRange, 0 );
     }
     else
     {

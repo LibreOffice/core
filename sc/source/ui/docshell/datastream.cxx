@@ -79,10 +79,10 @@ public:
     CSVHandler( DataStream::Line& rLine, size_t nColCount ) :
         mrLine(rLine), mnColCount(nColCount), mnCols(0), mpLineHead(rLine.maLine.getStr()) {}
 
-    void begin_parse() {}
-    void end_parse() {}
-    void begin_row() {}
-    void end_row() {}
+    static void begin_parse() {}
+    static void end_parse() {}
+    static void begin_row() {}
+    static void end_row() {}
 
     void cell(const char* p, size_t n)
     {

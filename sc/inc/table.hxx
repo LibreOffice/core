@@ -1052,7 +1052,7 @@ private:
 
                                 // use the global sort parameter:
     bool        IsSorted(SCCOLROW nStart, SCCOLROW nEnd) const;
-    void        DecoladeRow( ScSortInfoArray*, SCROW nRow1, SCROW nRow2 );
+    static void DecoladeRow( ScSortInfoArray*, SCROW nRow1, SCROW nRow2 );
     short CompareCell(
         sal_uInt16 nSort,
         ScRefCellValue& rCell1, SCCOL nCell1Col, SCROW nCell1Row,

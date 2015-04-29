@@ -936,7 +936,7 @@ public:
     }
 
 private:
-    bool splitRangeToken(const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd) const
+    static bool splitRangeToken(const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd)
     {
         ScComplexRefData aData;
         bool bIsRefToken = ScRefTokenHelper::getDoubleRefDataFromToken(aData, pToken);
@@ -969,7 +969,7 @@ private:
         return true;
     }
 
-    void setRelative(ScSingleRefData& rData) const
+    static void setRelative(ScSingleRefData& rData)
     {
         rData.SetColRel(true);
         rData.SetRowRel(true);

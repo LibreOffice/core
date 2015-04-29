@@ -304,12 +304,12 @@ sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     return nRet;
 }
 
-sal_uInt32 XclImpBiff8Decrypter::GetBlock( sal_Size nStrmPos ) const
+sal_uInt32 XclImpBiff8Decrypter::GetBlock( sal_Size nStrmPos )
 {
     return static_cast< sal_uInt32 >( nStrmPos / EXC_ENCR_BLOCKSIZE );
 }
 
-sal_uInt16 XclImpBiff8Decrypter::GetOffset( sal_Size nStrmPos ) const
+sal_uInt16 XclImpBiff8Decrypter::GetOffset( sal_Size nStrmPos )
 {
     return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
 }

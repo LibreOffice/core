@@ -108,11 +108,11 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     DECL_LINK( OnEdChanged, Edit* );
 
     // Searches the lookup table for the entry position, given condition mode
-    sal_Int32 ConditionModeToEntryPos( ScConditionMode eMode ) const;
+    static sal_Int32 ConditionModeToEntryPos( ScConditionMode eMode );
     // Accesses the lookup table for the condition mode, given entry position
-    ScConditionMode EntryPosToConditionMode( sal_Int32 aEntryPos ) const;
+    static ScConditionMode EntryPosToConditionMode( sal_Int32 aEntryPos );
     // Returns the number of edit fields used for a given condition mode
-    sal_Int32 GetNumberEditFields( ScConditionMode eMode ) const;
+    static sal_Int32 GetNumberEditFields( ScConditionMode eMode );
 
 protected:
     virtual void Select() SAL_OVERRIDE;

@@ -4991,8 +4991,8 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         else
         {
             ScRangeUtil aRangeUtil;
-            if ( aRangeUtil.MakeRangeFromName( aString, &rDoc, nTab, aCellRange, RUTL_NAMES ) ||
-                 aRangeUtil.MakeRangeFromName( aString, &rDoc, nTab, aCellRange, RUTL_DBASE ) )
+            if ( ScRangeUtil::MakeRangeFromName( aString, &rDoc, nTab, aCellRange, RUTL_NAMES ) ||
+                 ScRangeUtil::MakeRangeFromName( aString, &rDoc, nTab, aCellRange, RUTL_DBASE ) )
                 bFound = true;
         }
 

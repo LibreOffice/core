@@ -52,7 +52,7 @@ public:
     ScDrawTextObjectBar(ScViewData* pData);
     virtual ~ScDrawTextObjectBar();
 
-    void StateDisableItems( SfxItemSet &rSet );
+    static void StateDisableItems( SfxItemSet &rSet );
 
     void Execute( SfxRequest &rReq );
     void ExecuteTrans( SfxRequest& rReq );
@@ -73,7 +73,7 @@ public:
 
 private:
     void ExecuteGlobal( SfxRequest &rReq );         // called by Execute for all objects
-    void GetGlobalClipState( SfxItemSet& rSet );
+    static void GetGlobalClipState( SfxItemSet& rSet );
     void ExecutePasteContents( SfxRequest &rReq );
     bool IsNoteEdit();
 };

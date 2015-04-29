@@ -495,7 +495,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                         ScTabViewShell* pScTabViewShell = NULL;
                         ScDrawView* pScDrawView = NULL;
                         if (pScNavigatorDlg!=NULL)
-                              pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
+                              pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
                         if(pScTabViewShell !=NULL)
                               pScDrawView =pScTabViewShell->GetViewData().GetScDrawView();
                         if(pScDrawView!=NULL)
@@ -981,7 +981,7 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                                     if(pWindow)
                                             pScNavigatorDlg = static_cast<ScNavigatorDlg*>(pWindow);
                                     if (pScNavigatorDlg!=NULL)
-                                          pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
+                                          pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
                                     if(pScTabViewShell !=NULL)
                                           pScDrawView =pScTabViewShell->GetViewData().GetScDrawView();
                                     if(pScDrawView!=NULL)
@@ -1623,7 +1623,7 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/
 
 void ScContentTree::ApplySettings()
 {
-    const ScNavigatorSettings* pSettings = pParentWindow->GetNavigatorSettings();
+    const ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();
     if( pSettings )
     {
         sal_uInt16 nRootSel = pSettings->GetRootSelected();
@@ -1658,7 +1658,7 @@ void ScContentTree::ApplySettings()
 
 void ScContentTree::StoreSettings() const
 {
-    ScNavigatorSettings* pSettings = pParentWindow->GetNavigatorSettings();
+    ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();
     if( pSettings )
     {
         for( sal_uInt16 nEntry = 1; nEntry < SC_CONTENT_COUNT; ++nEntry )

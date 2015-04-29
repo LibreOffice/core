@@ -473,7 +473,7 @@ void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > xShape )
     }
 }
 
-void XclExpControlHelper::WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr ) const
+void XclExpControlHelper::WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr )
 {
     sal_uInt16 nFmlaSize = rTokArr.GetSize();
     rStrm << nFmlaSize << sal_uInt32( 0 );
@@ -482,7 +482,7 @@ void XclExpControlHelper::WriteFormula( XclExpStream& rStrm, const XclTokenArray
         rStrm << sal_uInt8( 0 );
 }
 
-void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclTokenArray& rTokArr ) const
+void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclTokenArray& rTokArr )
 {
     rStrm.StartRecord( nSubRecId, (rTokArr.GetSize() + 5) & ~1 );
     WriteFormula( rStrm, rTokArr );

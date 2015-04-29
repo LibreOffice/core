@@ -66,7 +66,7 @@ ScXMLExportDataPilot::~ScXMLExportDataPilot()
 }
 
 OUString ScXMLExportDataPilot::getDPOperatorXML(
-    const ScQueryOp aFilterOperator, const bool bUseRegularExpressions) const
+    const ScQueryOp aFilterOperator, const bool bUseRegularExpressions)
 {
     switch (aFilterOperator)
     {

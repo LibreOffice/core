@@ -962,7 +962,7 @@ void PivotTable::importPivotTableDefinition( const AttributeList& rAttribs )
 
 void PivotTable::importLocation( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
-    getAddressConverter().convertToCellRangeUnchecked( maLocationModel.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet );
+    AddressConverter::convertToCellRangeUnchecked( maLocationModel.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet );
     maLocationModel.mnFirstHeaderRow = rAttribs.getInteger( XML_firstHeaderRow, 0 );
     maLocationModel.mnFirstDataRow   = rAttribs.getInteger( XML_firstDataRow, 0 );
     maLocationModel.mnFirstDataCol   = rAttribs.getInteger( XML_firstDataCol, 0 );
@@ -1087,7 +1087,7 @@ void PivotTable::importPTLocation( SequenceInputStream& rStrm, sal_Int16 nSheet 
     maLocationModel.mnFirstDataCol = rStrm.readInt32();
     maLocationModel.mnRowPageCount = rStrm.readInt32();
     maLocationModel.mnColPageCount = rStrm.readInt32();
-    getAddressConverter().convertToCellRangeUnchecked( maLocationModel.maRange, aBinRange, nSheet );
+    AddressConverter::convertToCellRangeUnchecked( maLocationModel.maRange, aBinRange, nSheet );
 }
 
 void PivotTable::importPTRowFields( SequenceInputStream& rStrm )

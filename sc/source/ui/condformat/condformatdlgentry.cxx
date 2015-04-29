@@ -351,7 +351,7 @@ void ScConditionFrmtEntry::Deselect()
 }
 
 
-sal_Int32 ScConditionFrmtEntry::ConditionModeToEntryPos( ScConditionMode eMode ) const
+sal_Int32 ScConditionFrmtEntry::ConditionModeToEntryPos( ScConditionMode eMode )
 {
     for ( sal_Int32 i = 0; i < NUM_COND_ENTRIES; ++i )
     {
@@ -364,13 +364,13 @@ sal_Int32 ScConditionFrmtEntry::ConditionModeToEntryPos( ScConditionMode eMode )
     return 0;
 }
 
-ScConditionMode ScConditionFrmtEntry::EntryPosToConditionMode( sal_Int32 aEntryPos ) const
+ScConditionMode ScConditionFrmtEntry::EntryPosToConditionMode( sal_Int32 aEntryPos )
 {
     assert( 0 <= aEntryPos && aEntryPos < NUM_COND_ENTRIES );
     return mpEntryToCond[aEntryPos];
 }
 
-sal_Int32 ScConditionFrmtEntry::GetNumberEditFields( ScConditionMode eMode ) const
+sal_Int32 ScConditionFrmtEntry::GetNumberEditFields( ScConditionMode eMode )
 {
     switch(eMode)
     {

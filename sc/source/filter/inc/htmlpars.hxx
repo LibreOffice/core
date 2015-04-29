@@ -181,7 +181,7 @@ private:
 
     DECL_LINK( HTMLImportHdl, ImportInfo* );
     void                NewActEntry( ScEEParseEntry* );
-    void                EntryEnd( ScEEParseEntry*, const ESelection& );
+    static void         EntryEnd( ScEEParseEntry*, const ESelection& );
     void                ProcToken( ImportInfo* );
     void                CloseEntry( ImportInfo* );
     void                NextRow(  ImportInfo*  );
@@ -526,7 +526,7 @@ private:
     void                ImplDataOff();
 
     /** Inserts additional formatting options from import info into the item set. */
-    void                ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& rInfo );
+    static void         ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& rInfo );
 
     /** Updates the document column/row size of the specified column or row.
         @descr  Only increases the present count, never decreases. */

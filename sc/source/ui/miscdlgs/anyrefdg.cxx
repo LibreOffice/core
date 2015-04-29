@@ -165,7 +165,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
             rRanges.Append( aRange );
         }
-        else if ( aRangeUtil.MakeRangeFromName( aRangeStr, pDoc, nRefTab, aRange, RUTL_NAMES, aDetails ) )
+        else if ( ScRangeUtil::MakeRangeFromName( aRangeStr, pDoc, nRefTab, aRange, RUTL_NAMES, aDetails ) )
             rRanges.Append( aRange );
         else
             bError = true;
@@ -812,11 +812,11 @@ bool ScRefHandler::EnterRefMode()
 
     ScFormulaReferenceHelper::enableInput( false );
 
-    m_aHelper.EnableSpreadsheets();
+    ScFormulaReferenceHelper::EnableSpreadsheets();
 
     m_aHelper.Init();
 
-    m_aHelper.SetDispatcherLock( true );
+    ScFormulaReferenceHelper::SetDispatcherLock( true );
 
     return m_bInRefMode = true;
 }
@@ -898,12 +898,12 @@ bool ScRefHandler::DoClose( sal_uInt16 nId )
 
 void ScRefHandler::SetDispatcherLock( bool bLock )
 {
-    m_aHelper.SetDispatcherLock( bLock );
+    ScFormulaReferenceHelper::SetDispatcherLock( bLock );
 }
 
 void ScRefHandler::ViewShellChanged()
 {
-    m_aHelper.ViewShellChanged();
+    ScFormulaReferenceHelper::ViewShellChanged();
 }
 
 void ScRefHandler::AddRefEntry()
@@ -952,14 +952,14 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
         if(m_rWindow->IsVisible())
         {
             ScFormulaReferenceHelper::enableInput( false );
-            m_aHelper.EnableSpreadsheets();
-            m_aHelper.SetDispatcherLock( true );
+            ScFormulaReferenceHelper::EnableSpreadsheets();
+            ScFormulaReferenceHelper::SetDispatcherLock( true );
             aIdle.Start();
         }
         else
         {
             ScFormulaReferenceHelper::enableInput( true );
-            m_aHelper.SetDispatcherLock( false );           /*//! here and in DoClose ?*/
+            ScFormulaReferenceHelper::SetDispatcherLock( false );           /*//! here and in DoClose ?*/
         }
     }
 }

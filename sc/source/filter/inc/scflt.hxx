@@ -789,7 +789,7 @@ public:
     void                    LoadCol(SCCOL Col, SCTAB Tab);
     void                    LoadColAttr(SCCOL Col, SCTAB Tab);
     void                    LoadAttr(Sc10ColAttr& rAttr);
-    void                    ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey);
+    static void             ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey);
     void                    LoadObjects();
 };
 

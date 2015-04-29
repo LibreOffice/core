@@ -97,8 +97,8 @@ private:
     DECL_LINK( ModifyHdl,    formula::RefEdit* );
     DECL_LINK( SelectHdl,    ListBox* );
 
-    ScSubTotalFunc  LbPosToFunc( sal_uInt16 nPos );
-    sal_uInt16          FuncToLbPos( ScSubTotalFunc eFunc );
+    static ScSubTotalFunc  LbPosToFunc( sal_uInt16 nPos );
+    static sal_uInt16      FuncToLbPos( ScSubTotalFunc eFunc );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_CONSDLG_HXX

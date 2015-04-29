@@ -1091,7 +1091,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ScChangeAction* pAct = pThisTrack->GetLast();
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                     {
-                        pThisTrack->MergeActionState( pAct, pSourceAction );
+                        ScChangeTrack::MergeActionState( pAct, pSourceAction );
                     }
                 }
 

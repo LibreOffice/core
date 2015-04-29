@@ -731,7 +731,7 @@ ScRefCellValue ScColumn::GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, 
     return GetCellValue(aPos.first, aPos.second);
 }
 
-ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const
+ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset )
 {
     ScRefCellValue aVal; // Defaults to empty cell.
     switch (itPos->type)
@@ -2436,7 +2436,7 @@ public:
         miPos = aPos.first;
         sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
         pCell->UpdateTranspose(maSource, maDest, mpUndoDoc);
-        mrColumn.JoinNewFormulaCell(aPos, *pCell);
+        ScColumn::JoinNewFormulaCell(aPos, *pCell);
     }
 };
 
@@ -2459,7 +2459,7 @@ public:
         miPos = aPos.first;
         sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
         pCell->UpdateGrow(maArea, mnGrowX, mnGrowY);
-        mrColumn.JoinNewFormulaCell(aPos, *pCell);
+        ScColumn::JoinNewFormulaCell(aPos, *pCell);
     }
 };
 
@@ -2873,7 +2873,7 @@ public:
         pCell->GetCode()->SetCodeError(0);
         OUString aFormula = pCell->GetFormula(mrCxt);
         pCell->Compile(mrCxt, aFormula, false);
-        mrColumn.JoinNewFormulaCell(aPos, *pCell);
+        ScColumn::JoinNewFormulaCell(aPos, *pCell);
 
         mbCompiled = true;
     }

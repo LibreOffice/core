@@ -24,7 +24,7 @@ public:
     {
         mbSortRefUpdate = changeTo(bSortRefUpdate);
     }
-    bool changeTo(bool bSortRefUpdate)
+    static bool changeTo(bool bSortRefUpdate)
     {
         ScInputOptions aInputOptions = SC_MOD()->GetInputOptions();
         bool bRet = aInputOptions.GetSortRefUpdate();

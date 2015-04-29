@@ -107,9 +107,9 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pInputHdl->NotifyChange( NULL );
 
     ScFormulaReferenceHelper::enableInput( false );
-    m_aHelper.EnableSpreadsheets();
+    ScFormulaReferenceHelper::EnableSpreadsheets();
     m_aHelper.Init();
-    m_aHelper.SetDispatcherLock( true );
+    ScFormulaReferenceHelper::SetDispatcherLock( true );
 
     notifyChange();
     fill();
@@ -495,7 +495,7 @@ void ScFormulaDlg::HideReference( bool bDoneRefMode )
 }
 void ScFormulaDlg::ViewShellChanged()
 {
-    m_aHelper.ViewShellChanged();
+    ScFormulaReferenceHelper::ViewShellChanged();
 }
 void ScFormulaDlg::AddRefEntry( )
 {
@@ -525,7 +525,7 @@ void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
     if ( aStrItem.GetValue().isEmpty() )
         aRetItem.SetValue( false );     // sal_False = Cancel
 
-    m_aHelper.SetDispatcherLock( false ); // turn off modal-mode
+    ScFormulaReferenceHelper::SetDispatcherLock( false ); // turn off modal-mode
 
     clear();
 
@@ -535,7 +535,7 @@ void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
 }
 void ScFormulaDlg::setDispatcherLock( bool bLock )
 {
-    m_aHelper.SetDispatcherLock( bLock );
+    ScFormulaReferenceHelper::SetDispatcherLock( bLock );
 }
 void ScFormulaDlg::setReferenceInput(const formula::FormEditData* _pData)
 {

@@ -82,7 +82,7 @@ public:
     /** Imports protection settings from the sheetProtection element. */
     void                importSheetProtection( const AttributeList& rAttribs );
     /** Imports enhanced protection settings from the protectedRanges element. */
-    void                importProtectedRanges( const AttributeList& rAttribs );
+    static void         importProtectedRanges( const AttributeList& rAttribs );
     /** Imports enhanced protection settings from the protectedRange element. */
     void                importProtectedRange( const AttributeList& rAttribs );
     /** Imports protection settings from the sheetProtection element of a chart sheet. */

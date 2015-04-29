@@ -1228,7 +1228,7 @@ public:
 
     void AppendCloned( ScChangeAction* pAppend );
     SC_DLLPUBLIC ScChangeTrack* Clone( ScDocument* pDocument ) const;
-    void MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
+    static void MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
 };
 
 #endif

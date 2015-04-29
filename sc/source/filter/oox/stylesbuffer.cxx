@@ -2839,7 +2839,7 @@ void CellStyleBuffer::insertCellStyle( CellStyleRef xCellStyle )
     }
 }
 
-::ScStyleSheet* CellStyleBuffer::getCellStyleSheet( const CellStyleRef& rxCellStyle ) const
+::ScStyleSheet* CellStyleBuffer::getCellStyleSheet( const CellStyleRef& rxCellStyle )
 {
     ::ScStyleSheet* pStyleSheet = NULL;
     if ( rxCellStyle.get() )
@@ -2847,7 +2847,7 @@ void CellStyleBuffer::insertCellStyle( CellStyleRef xCellStyle )
     return pStyleSheet;
 }
 
-OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle ) const
+OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle )
 {
     if( rxCellStyle.get() )
     {

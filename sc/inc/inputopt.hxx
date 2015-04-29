@@ -79,7 +79,7 @@ public:
 class ScInputCfg : public ScInputOptions,
                   public utl::ConfigItem
 {
-    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 

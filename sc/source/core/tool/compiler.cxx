@@ -763,11 +763,11 @@ struct ConventionOOO_A1 : public Convention_A1
         rBuf.append('.');
     }
 
-    void MakeOneRefStrImpl(
+    static void MakeOneRefStrImpl(
         OUStringBuffer& rBuffer,
         const OUString& rErrRef, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
-        bool bForceTab, bool bODF ) const
+        bool bForceTab, bool bODF )
     {
         if( rRef.IsFlag3D() || bForceTab )
         {
@@ -849,9 +849,9 @@ struct ConventionOOO_A1 : public Convention_A1
         return lcl_makeExternalNameStr( rFile, rName, '#', false);
     }
 
-    bool makeExternalSingleRefStr(
+    static bool makeExternalSingleRefStr(
         OUStringBuffer& rBuffer, const OUString& rFileName, const OUString& rTabName,
-        const ScSingleRefData& rRef, const ScAddress& rPos, bool bDisplayTabName, bool bEncodeUrl ) const
+        const ScSingleRefData& rRef, const ScAddress& rPos, bool bDisplayTabName, bool bEncodeUrl )
     {
         ScAddress aAbsRef = rRef.toAbs(rPos);
         if (bDisplayTabName)
@@ -881,9 +881,9 @@ struct ConventionOOO_A1 : public Convention_A1
         return true;
     }
 
-    void makeExternalRefStrImpl(
+    static void makeExternalRefStrImpl(
         OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
-        const OUString& rTabName, const ScSingleRefData& rRef, bool bODF ) const
+        const OUString& rTabName, const ScSingleRefData& rRef, bool bODF )
     {
         if (bODF)
             rBuffer.append( '[');
@@ -901,10 +901,10 @@ struct ConventionOOO_A1 : public Convention_A1
         makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabName, rRef, false);
     }
 
-    void makeExternalRefStrImpl(
+    static void makeExternalRefStrImpl(
         OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
-        const ScComplexRefData& rRef, bool bODF ) const
+        const ScComplexRefData& rRef, bool bODF )
     {
         ScRange aAbsRange = rRef.toAbs(rPos);
 
@@ -1188,7 +1188,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     ConventionXL_A1() : Convention_A1( FormulaGrammar::CONV_XL_A1 ) { }
     ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
 
-    void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs ) const
+    static void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs )
     {
         if (!rRef.IsColRel())
             rBuf.append('$');

@@ -304,7 +304,7 @@ public:
     void            UpdateDrawTextOutliner();
     void            DigitLanguageChanged();
 
-    void            UpdateInputLine();
+    static void     UpdateInputLine();
 
     void            InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType,
                                  bool bPaint = true );

@@ -356,7 +356,7 @@ public:
         ScDPCache* getExistingCache(
             sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
-        com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
+        static com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
             sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
         void updateCache(

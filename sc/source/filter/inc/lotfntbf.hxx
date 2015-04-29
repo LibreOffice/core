@@ -84,7 +84,7 @@ private:
         inline void         Type( const sal_uInt16 nNew )       { nType = nNew; }
     };
 
-    void                    MakeFont( ENTRY* pEntry );
+    static void             MakeFont( ENTRY* pEntry );
 public:
 	const static sal_uInt16	nSize = 8;
     void                    Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet );

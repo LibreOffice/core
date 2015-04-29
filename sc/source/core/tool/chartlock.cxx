@@ -57,7 +57,7 @@ std::vector< WeakReference< frame::XModel > > lcl_getAllLivingCharts( ScDocument
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if( pDoc->IsChart( pObject ) )
+                if( ScDocument::IsChart( pObject ) )
                 {
                     uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
                     uno::Reference< embed::XComponentSupplier > xCompSupp( xIPObj, uno::UNO_QUERY );

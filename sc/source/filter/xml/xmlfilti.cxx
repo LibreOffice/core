@@ -382,7 +382,7 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( sal_uInt16 nPrefi
 }
 
 void ScXMLConditionContext::GetOperator(
-    const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry) const
+    const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry)
 {
     rParam.bRegExp = false;
     if (IsXMLToken(aOpStr, XML_MATCH))
@@ -822,7 +822,7 @@ SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( sal_uInt16 nPre
 }
 
 void ScXMLDPConditionContext::getOperatorXML(
-    const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const
+    const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions)
 {
     bUseRegularExpressions = false;
     if (IsXMLToken(sTempOperator, XML_MATCH))

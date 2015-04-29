@@ -61,7 +61,7 @@ public:
     void                GetDummy( const ScTokenArray*& );
     const ScTokenArray* GetBoolErr( XclBoolError );
 
-    bool ReadSharedFormulaPosition( XclImpStream& rStrm, SCCOL& rCol, SCROW& rRow );
+    static bool ReadSharedFormulaPosition( XclImpStream& rStrm, SCCOL& rCol, SCROW& rRow );
     const ScTokenArray* GetSharedFormula( const ScAddress& rRefPos ) const;
 
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
@@ -76,7 +76,7 @@ public:
                                         XclImpStream& aIn );
     void                ReadExtensionArray( unsigned int n,
                                             XclImpStream& aIn );
-    void                ReadExtensionNlr( XclImpStream& aIn );
+    static void         ReadExtensionNlr( XclImpStream& aIn );
     void                ReadExtensionMemArea( XclImpStream& aIn );
 };
 

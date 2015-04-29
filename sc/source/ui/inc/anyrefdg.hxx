@@ -89,9 +89,9 @@ public:
 
     inline void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
     bool                DoClose( sal_uInt16 nId );
-    void                SetDispatcherLock( bool bLock );
-    void                EnableSpreadsheets( bool bFlag = true, bool bChildren = true );
-    void                ViewShellChanged();
+    static void         SetDispatcherLock( bool bLock );
+    static void         EnableSpreadsheets( bool bFlag = true, bool bChildren = true );
+    static void         ViewShellChanged();
 
     static              void enableInput(bool _bInput);
 
@@ -99,7 +99,7 @@ protected:
     vcl::Window*        GetWindow(){ return m_pWindow; }
 
 public:
-    bool                CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
+    static bool         CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
     bool                CanInputDone( bool bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
 };
 
@@ -129,7 +129,7 @@ private:
 protected:
     bool                DoClose( sal_uInt16 nId );
 
-    void                SetDispatcherLock( bool bLock );
+    static void         SetDispatcherLock( bool bLock );
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
     virtual void        RefInputDone( bool bForced = false ) SAL_OVERRIDE;
@@ -166,7 +166,7 @@ public:
 public:
     bool                EnterRefMode();
     bool                LeaveRefMode();
-    inline  bool        CanInputStart( const formula::RefEdit *pEdit );
+    static inline bool  CanInputStart( const formula::RefEdit *pEdit );
     inline  bool        CanInputDone( bool bForced );
 };
 
@@ -310,7 +310,7 @@ struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
 
 inline bool ScRefHandler::CanInputStart( const formula::RefEdit *pEdit )
 {
-    return m_aHelper.CanInputStart( pEdit );
+    return ScFormulaReferenceHelper::CanInputStart( pEdit );
 }
 
 inline  bool ScRefHandler::CanInputDone( bool bForced )

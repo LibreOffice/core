@@ -572,7 +572,7 @@ public:
     void setFunction(com::sun::star::sheet::GeneralFunction Function);
     com::sun::star::uno::Sequence< com::sun::star::sheet::GeneralFunction > getSubtotals() const;
     void setSubtotals(const com::sun::star::uno::Sequence< com::sun::star::sheet::GeneralFunction >& rFunctions);
-    OUString getCurrentPage() const;
+    static OUString getCurrentPage();
     void setCurrentPage(const OUString& sPage);
     void setUseCurrentPage(bool bUse);
     const com::sun::star::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo();
@@ -593,7 +593,7 @@ public:
     void setGroupInfo(const com::sun::star::sheet::DataPilotFieldGroupInfo* pInfo);
 
                             // XDataPilotFieldGrouping
-    bool HasString(const com::sun::star::uno::Sequence< OUString >& aItems, const OUString& aString);
+    static bool HasString(const com::sun::star::uno::Sequence< OUString >& aItems, const OUString& aString);
     virtual com::sun::star::uno::Reference < com::sun::star::sheet::XDataPilotField > SAL_CALL
         createNameGroup(const com::sun::star::uno::Sequence< OUString >& aItems)
              throw (::com::sun::star::uno::RuntimeException,

@@ -567,7 +567,7 @@ void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUStr
     else if( rTargetType == CREATE_MSOFFICE_RELATION_TYPE( "xlExternalLinkPath/xlLibrary" ) )
     {
         meLinkType = LINKTYPE_LIBRARY;
-        meFuncLibType = getFormulaParser().getFuncLibTypeFromLibraryName( rTargetUrl );
+        meFuncLibType = FunctionProvider::getFuncLibTypeFromLibraryName( rTargetUrl );
     }
     OSL_ENSURE( meLinkType != LINKTYPE_UNKNOWN, "ExternalLink::setExternalTargetUrl - empty target URL or unknown target type" );
 

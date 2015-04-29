@@ -193,7 +193,7 @@ public:
 
     ScRefCellValue GetCellValue( SCROW nRow ) const;
     ScRefCellValue GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
-    ScRefCellValue GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const;
+    static ScRefCellValue GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset );
 
     const sc::CellTextAttr* GetCellTextAttr( SCROW nRow ) const;
     const sc::CellTextAttr* GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
@@ -610,7 +610,7 @@ public:
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 
-    void JoinNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
+    static void JoinNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell );
 
     /**
      * Detach a formula cell that's about to be deleted, or removed from

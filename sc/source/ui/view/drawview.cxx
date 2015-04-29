@@ -397,7 +397,7 @@ void ScDrawView::MarkListHasChanged()
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
         {
             pOle2Obj = static_cast<SdrOle2Obj*>(pObj);
-            if (!pDoc->IsChart(pObj) )
+            if (!ScDocument::IsChart(pObj) )
                 pViewSh->SetOleObjectShell(true);
             else
                 pViewSh->SetChartShell(true);

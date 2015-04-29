@@ -114,12 +114,12 @@ private:
         return xProps;
     }
 
-    bool getReplaceCellsWarning() throw ( uno::RuntimeException )
+    static bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
         return getGlobalSheetSettings()->getReplaceCellsWarning();
     }
 
-    void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
+    static void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
     {
         getGlobalSheetSettings()->setReplaceCellsWarning( bState );
     }

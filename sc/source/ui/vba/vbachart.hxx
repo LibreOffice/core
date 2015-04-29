@@ -50,7 +50,7 @@ friend class ScVbaAxis;
     css::uno::Reference< css::chart::XTwoAxisXSupplier > xTwoAxisXSupplier;
     css::uno::Reference< css::chart::XTwoAxisYSupplier > xTwoAxisYSupplier;
 
-    css::uno::Sequence< OUString > getDefaultSeriesDescriptions( sal_Int32 nCount );
+    static css::uno::Sequence< OUString > getDefaultSeriesDescriptions( sal_Int32 nCount );
     css::uno::Sequence< css::uno::Sequence< double > > dblValues;
     void setDefaultChartType()throw ( css::script::BasicErrorException ) ;
     void setDiagram( const OUString& _sDiagramType) throw( css::script::BasicErrorException );

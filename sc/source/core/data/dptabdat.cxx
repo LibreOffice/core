@@ -286,8 +286,8 @@ long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
     if ( getIsDataLayoutDimension(nDim) )
         return 0;
 
-    long n1 = GetCacheTable().getOrder(nDim, nDataId1);
-    long n2 = GetCacheTable().getOrder(nDim, nDataId2);
+    long n1 = ScDPFilteredCache::getOrder(nDim, nDataId1);
+    long n2 = ScDPFilteredCache::getOrder(nDim, nDataId2);
     if ( n1 > n2 )
         return 1;
     else if ( n1 == n2 )

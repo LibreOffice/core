@@ -43,13 +43,13 @@ class ScVbaInterior :  public ScVbaInterior_BASE
 
         css::uno::Reference< css::container::XIndexAccess > getPalette();
     css::uno::Reference< css::container::XNameContainer > GetAttributeContainer();
-    css::uno::Any SetAttributeData( sal_Int32 nValue );
-    sal_Int32 GetAttributeData( css::uno::Any aValue );
+    static css::uno::Any SetAttributeData( sal_Int32 nValue );
+    static sal_Int32 GetAttributeData( css::uno::Any aValue );
     Color GetBackColor();
 protected:
-    Color GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt32 nXclPattern );
-    Color GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans );
-    sal_uInt8 GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans ) const;
+    static Color GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt32 nXclPattern );
+    static Color GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans );
+    static sal_uInt8 GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans );
     css::uno::Any GetIndexColor( const sal_Int32& nColorIndex );
     sal_Int32 GetColorIndex( const sal_Int32 nColor );
     css::uno::Any GetUserDefinedAttributes( const OUString& sName );

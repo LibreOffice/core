@@ -31,8 +31,8 @@ class ScVbaWorkbooks : public ScVbaWorkbooks_BASE
 {
 private:
     OUString   getFileFilterType( const OUString& rString );
-    bool    isTextFile( const OUString& rString );
-    bool    isSpreadSheetFile( const OUString& rString );
+    static bool       isTextFile( const OUString& rString );
+    static bool       isSpreadSheetFile( const OUString& rString );
     static sal_Int16& getCurrentDelim(){ static sal_Int16 nDelim = 44; return nDelim; }
 public:
     ScVbaWorkbooks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );

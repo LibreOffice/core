@@ -306,8 +306,8 @@ public:
 
 private:
     /** Tries to write the passed value to the passed sheet position. */
-    void                writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
-                            sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const;
+    static void         writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
+                            sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem );
     /** Tries to write the value of a shared item to the passed sheet position. */
     void                writeSharedItemToSourceDataCell( WorksheetHelper& rSheetHelper,
                             sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nItemIdx ) const;

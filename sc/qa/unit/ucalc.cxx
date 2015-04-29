@@ -125,7 +125,7 @@ public:
         mrDiff = getTimeDiff(aTimeAfter, maTimeBefore);
     }
 
-    double getTimeDiff(const TimeValue& t1, const TimeValue& t2) const
+    static double getTimeDiff(const TimeValue& t1, const TimeValue& t2)
     {
         double tv1 = t1.Seconds;
         double tv2 = t2.Seconds;

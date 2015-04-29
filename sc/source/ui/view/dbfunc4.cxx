@@ -45,7 +45,7 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bo
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart( pObject ) )
             {
                 OUString aName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
                 bool bHit = true;

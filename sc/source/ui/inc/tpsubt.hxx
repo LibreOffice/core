@@ -65,8 +65,8 @@ protected:
 private:
     void            Init            ();
     void            FillListBoxes   ();
-    ScSubTotalFunc  LbPosToFunc     ( sal_uInt16 nPos );
-    sal_uInt16          FuncToLbPos     ( ScSubTotalFunc eFunc );
+    static ScSubTotalFunc  LbPosToFunc     ( sal_uInt16 nPos );
+    static sal_uInt16      FuncToLbPos     ( ScSubTotalFunc eFunc );
     sal_uInt16          GetFieldSelPos  ( SCCOL nField );
 
     // Handler ------------------------

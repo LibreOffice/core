@@ -94,7 +94,7 @@ class ScMyStyleRanges : public SvRefBase
     ::boost::shared_ptr<ScSimpleRangeList> mpUndefinedList;
     ScMyCurrencyStylesSet*  pCurrencyList;
 
-    void SetStylesToRanges(const ::std::list<ScRange>& rList,
+    static void SetStylesToRanges(const ::std::list<ScRange>& rList,
         const OUString* pStyleName, const sal_Int16 nCellType,
         const OUString* pCurrency, ScXMLImport& rImport);
 public:
@@ -147,7 +147,7 @@ class ScMyStylesImportHelper
     void AddDefaultRange(const ScRange& rRange);
     void AddSingleRange(const ScRange& rRange);
     void AddRange();
-    bool IsEqual(const OUString* pFirst, const OUString* pSecond)
+    static bool IsEqual(const OUString* pFirst, const OUString* pSecond)
     {
         return ((pFirst && pSecond && pFirst->equals(*pSecond)) ||
                 (!pFirst && !pSecond) ||

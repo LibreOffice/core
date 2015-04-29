@@ -999,8 +999,8 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, Rec
         rTargetRange = aAddress;
         bRangeValid = true;             // cell reference
     }
-    else if ( aRangeUtil.MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_NAMES ) ||
-              aRangeUtil.MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_DBASE ) )
+    else if ( ScRangeUtil::MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_NAMES ) ||
+              ScRangeUtil::MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_DBASE ) )
     {
         bRangeValid = true;             // named range or database range
     }
@@ -1778,7 +1778,7 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
     aResult.Divergence = DBL_MAX;       // nichts gefunden
     if (pDocShell)
     {
-        WaitObject aWait( pDocShell->GetActiveDialogParent() );
+        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
         OUString aGoalString(aGoalValue);
         ScDocument& rDoc = pDocShell->GetDocument();
         double fValue = 0.0;

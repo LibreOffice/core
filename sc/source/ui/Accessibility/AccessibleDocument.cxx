@@ -133,7 +133,7 @@ struct ScShapeDataLess
         msZOrder( "ZOrder" )
     {
     }
-    void ConvertLayerId(sal_Int16& rLayerID) const // changes the number of the LayerId so it the accessibility order
+    static void ConvertLayerId(sal_Int16& rLayerID) // changes the number of the LayerId so it the accessibility order
     {
         switch (rLayerID)
         {
@@ -330,8 +330,8 @@ private:
 
     bool FindShape(const uno::Reference<drawing::XShape>& xShape, SortedShapes::iterator& rItr) const;
 
-    sal_Int8 Compare(const ScAccessibleShapeData* pData1,
-        const ScAccessibleShapeData* pData2) const;
+    static sal_Int8 Compare(const ScAccessibleShapeData* pData1,
+        const ScAccessibleShapeData* pData2);
 };
 
 ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
@@ -1361,7 +1361,7 @@ bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xShape, 
 }
 
 sal_Int8 ScChildrenShapes::Compare(const ScAccessibleShapeData* pData1,
-        const ScAccessibleShapeData* pData2) const
+        const ScAccessibleShapeData* pData2)
 {
     ScShapeDataLess aLess;
 
@@ -2343,7 +2343,7 @@ OUString ScAccessibleDocument::GetCurrentCellName() const
     return sName;
 }
 
-OUString ScAccessibleDocument::GetCurrentCellDescription() const
+OUString ScAccessibleDocument::GetCurrentCellDescription()
 {
     return OUString();
 }

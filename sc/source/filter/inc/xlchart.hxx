@@ -1336,12 +1336,12 @@ public:
                             const ScfPropertySet& rPropSet,
                             XclChPropertyMode ePropMode );
     /** Reads all marker properties from the passed property set. */
-    void                ReadMarkerProperties(
+    static void         ReadMarkerProperties(
                             XclChMarkerFormat& rMarkerFmt,
                             const ScfPropertySet& rPropSet,
                             sal_uInt16 nFormatIdx );
     /** Reads rotation properties from the passed property set. */
-    sal_uInt16          ReadRotationProperties(
+    static sal_uInt16   ReadRotationProperties(
                             const ScfPropertySet& rPropSet,
                             bool bSupportsStacked );
 
@@ -1367,11 +1367,11 @@ public:
                             sal_uInt32 nDffFillType,
                             XclChPropertyMode ePropMode );
     /** Writes all marker properties to the passed property set. */
-    void                WriteMarkerProperties(
+    static void         WriteMarkerProperties(
                             ScfPropertySet& rPropSet,
                             const XclChMarkerFormat& rMarkerFmt );
     /** Writes rotation properties to the passed property set. */
-    void                WriteRotationProperties(
+    static void         WriteRotationProperties(
                             ScfPropertySet& rPropSet,
                             sal_uInt16 nRotation,
                             bool bSupportsStacked );

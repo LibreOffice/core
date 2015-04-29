@@ -1167,12 +1167,11 @@ sal_Int32 ScDPCache::GetGroupType(long nDim) const
     return 0;
 }
 
-SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex) const
+SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex)
 {
     return nIndex;
 }
 
-;
 
 #if DEBUG_PIVOT_TABLE
 

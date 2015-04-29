@@ -574,12 +574,12 @@ void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
     }
 }
 
-sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( sal_Size nStrmPos ) const
+sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( sal_Size nStrmPos )
 {
     return static_cast< sal_uInt32 >( nStrmPos / EXC_ENCR_BLOCKSIZE );
 }
 
-sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( sal_Size nStrmPos ) const
+sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( sal_Size nStrmPos )
 {
     return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
 }

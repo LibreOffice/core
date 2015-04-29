@@ -59,7 +59,7 @@ public:
                     ScDrawShell(ScViewData* pData);
                     virtual ~ScDrawShell();
 
-    void    StateDisableItems( SfxItemSet &rSet );
+    static void StateDisableItems( SfxItemSet &rSet );
 
     void    ExecDrawAttr(SfxRequest& rReq);
     void    GetDrawAttrState(SfxItemSet &rSet);
@@ -85,7 +85,7 @@ public:
 
     ScDrawView* GetDrawView();
 
-    bool    AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
+    static bool AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
 
     void GetDrawAttrStateForIFBX( SfxItemSet& rSet );
     ::rtl::OUString GetSidebarContextName();

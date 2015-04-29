@@ -1004,7 +1004,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         {
             pAppCfg->SetKeyBindingType(eNew);
             bSaveAppOptions = true;
-            pDocSh->ResetKeyBindings(eNew);
+            ScDocShell::ResetKeyBindings(eNew);
         }
     }
 
@@ -1283,7 +1283,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     if ( pDoc && bCalcAll )
     {
-        WaitObject aWait( pDocSh->GetActiveDialogParent() );
+        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
         pDoc->CalcAll();
         if ( pViewSh )
             pViewSh->UpdateCharts( true );

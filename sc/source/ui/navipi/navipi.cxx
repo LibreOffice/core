@@ -992,7 +992,7 @@ void ScNavigatorDlg::SetCurrentDoc( const OUString& rDocName )        // activat
                               &aDocItem, 0L );
 }
 
-ScTabViewShell* ScNavigatorDlg::GetTabViewShell() const
+ScTabViewShell* ScNavigatorDlg::GetTabViewShell()
 {
     return PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
 }

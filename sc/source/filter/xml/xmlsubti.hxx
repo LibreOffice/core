@@ -79,7 +79,7 @@ public:
     void                                SetRowStyle(const OUString& rCellStyleName);
     void                                AddColumn(bool bIsCovered);
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
-    bool                                IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
+    static bool                         IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape)
                                             { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     ScAddress                           GetCurrentCellPos() const { return maCurrentCellPos; };

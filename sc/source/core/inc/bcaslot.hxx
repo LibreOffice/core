@@ -175,7 +175,7 @@ private:
     /** Finally erase all areas pushed as to-be-erased. */
     void                FinallyEraseAreas();
 
-    bool                isMarkedErased( const ScBroadcastAreas::const_iterator& rIter ) const
+    static bool         isMarkedErased( const ScBroadcastAreas::const_iterator& rIter )
     {
         return rIter->mbErasure;
     }
@@ -301,10 +301,10 @@ private:
     ScBroadcastArea      *pEOUpdateChain;
     sal_uLong             nInBulkBroadcast;
 
-    inline SCSIZE       ComputeSlotOffset( const ScAddress& rAddress ) const;
-    void                ComputeAreaPoints( const ScRange& rRange,
+    static inline SCSIZE ComputeSlotOffset( const ScAddress& rAddress );
+    static void          ComputeAreaPoints( const ScRange& rRange,
                                             SCSIZE& nStart, SCSIZE& nEnd,
-                                            SCSIZE& nRowBreak ) const;
+                                            SCSIZE& nRowBreak );
 
 public:
                         ScBroadcastAreaSlotMachine( ScDocument* pDoc );

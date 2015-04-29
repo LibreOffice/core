@@ -42,7 +42,7 @@ private:
 
     AnovaFactor meFactor;
 
-    void RowColumn(ScRangeList& rRangeList, AddressWalkerWriter& aOutput,
+    static void RowColumn(ScRangeList& rRangeList, AddressWalkerWriter& aOutput,
                    FormulaTemplate& aTemplate, OUString& sFormula,
                    GroupedBy aGroupedBy, ScRange* pResultRange);
 

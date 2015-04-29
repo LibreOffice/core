@@ -278,7 +278,7 @@ public:
     void            GetImageMapState( SfxItemSet& rSet );
 
     void            ExecTbx( SfxRequest& rReq );
-    void            GetTbxState( SfxItemSet& rSet );
+    static void     GetTbxState( SfxItemSet& rSet );
 
     void            ExecuteSave( SfxRequest& rReq );
     void            GetSaveState( SfxItemSet& rSet );
@@ -287,8 +287,8 @@ public:
     void            ExecuteUndo(SfxRequest& rReq);
     void            GetUndoState(SfxItemSet &rSet);
 
-    void            ExecuteSbx( SfxRequest& rReq );
-    void            GetSbxState( SfxItemSet& rSet );
+    static void     ExecuteSbx( SfxRequest& rReq );
+    static void     GetSbxState( SfxItemSet& rSet );
 
     void            ExecuteObject(SfxRequest& rReq);
     void            GetObjectState(SfxItemSet &rSet);
@@ -382,11 +382,11 @@ public:
 
     void    ForceMove()     { Move(); }
 
-    SvxNumberInfoItem* MakeNumberInfoItem( ScDocument* pDoc, ScViewData* pViewData );
+    static SvxNumberInfoItem* MakeNumberInfoItem( ScDocument* pDoc, ScViewData* pViewData );
 
-    void    UpdateNumberFormatter   ( const SvxNumberInfoItem&  rInfoItem );
+    static void UpdateNumberFormatter( const SvxNumberInfoItem&  rInfoItem );
 
-    void    ExecuteCellFormatDlg    ( SfxRequest& rReq, const OString &rTabPage = OString());
+    void    ExecuteCellFormatDlg( SfxRequest& rReq, const OString &rTabPage = OString());
 
     bool    GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode = 0 );
 

@@ -837,7 +837,7 @@ void XclExpPivotCache::WriteSxdb( XclExpStream& rStrm ) const
     rStrm.EndRecord();
 }
 
-void XclExpPivotCache::WriteSxdbex( XclExpStream& rStrm ) const
+void XclExpPivotCache::WriteSxdbex( XclExpStream& rStrm )
 {
     rStrm.StartRecord( EXC_ID_SXDBEX, 12 );
     rStrm   << EXC_SXDBEX_CREATION_DATE
@@ -1452,7 +1452,7 @@ void XclExpPivotTable::WriteSxview( XclExpStream& rStrm ) const
     rStrm.EndRecord();
 }
 
-void XclExpPivotTable::WriteSxivd( XclExpStream& rStrm, const ScfUInt16Vec& rFields ) const
+void XclExpPivotTable::WriteSxivd( XclExpStream& rStrm, const ScfUInt16Vec& rFields )
 {
     if( !rFields.empty() )
     {
@@ -1489,7 +1489,7 @@ void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
     }
 }
 
-void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sal_uInt16 nIndexCount ) const
+void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sal_uInt16 nIndexCount )
 {
     if( nLineCount > 0 )
     {

@@ -3119,7 +3119,7 @@ class CSSHandler
 public:
     CSSHandler(ScHTMLStyles& rStyles) : mrStyles(rStyles) {}
 
-    void at_rule_name(const char* /*p*/, size_t /*n*/)
+    static void at_rule_name(const char* /*p*/, size_t /*n*/)
     {
         // TODO: For now, we ignore at-rule properties.
     }
@@ -3141,18 +3141,18 @@ public:
         maPropValue = MemStr(p, n);
     }
 
-    void begin_parse() {}
+    static void begin_parse() {}
 
-    void end_parse() {}
+    static void end_parse() {}
 
-    void begin_block() {}
+    static void begin_block() {}
 
     void end_block()
     {
         maSelectorNames.clear();
     }
 
-    void begin_property() {}
+    static void begin_property() {}
 
     void end_property()
     {

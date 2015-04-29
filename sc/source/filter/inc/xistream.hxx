@@ -139,9 +139,9 @@ private:
     virtual sal_uInt16  OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes ) SAL_OVERRIDE;
 
     /** Returns the block number corresponding to the passed stream position. */
-    sal_uInt32          GetBlock( sal_Size nStrmPos ) const;
+    static sal_uInt32    GetBlock( sal_Size nStrmPos );
     /** Returns the block offset corresponding to the passed stream position. */
-    sal_uInt16          GetOffset( sal_Size nStrmPos ) const;
+    static sal_uInt16    GetOffset( sal_Size nStrmPos );
 
 private:
     ::msfilter::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.

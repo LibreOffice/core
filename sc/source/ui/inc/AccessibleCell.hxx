@@ -169,7 +169,7 @@ private:
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
     bool IsSelected();
 
-    ScDocument* GetDocument(ScTabViewShell* mpViewShell);
+    static ScDocument* GetDocument(ScTabViewShell* mpViewShell);
 
     ::std::unique_ptr< SvxEditSource > CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos);
 

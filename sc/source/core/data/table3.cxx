@@ -2178,7 +2178,7 @@ class QueryEvaluator
     CollatorWrapper* mpCollator;
     const bool mbMatchWholeCell;
 
-    bool isPartialTextMatchOp(const ScQueryEntry& rEntry) const
+    static bool isPartialTextMatchOp(const ScQueryEntry& rEntry)
     {
         switch (rEntry.eOp)
         {
@@ -2196,7 +2196,7 @@ class QueryEvaluator
         return false;
     }
 
-    bool isTextMatchOp(const ScQueryEntry& rEntry) const
+    static bool isTextMatchOp(const ScQueryEntry& rEntry)
     {
         if (isPartialTextMatchOp(rEntry))
             return true;

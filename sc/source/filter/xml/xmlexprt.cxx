@@ -3656,12 +3656,12 @@ void ScXMLExport::SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgres
     }
 }
 
-bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const
+bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2)
 {
     return (aCell1.nType == aCell2.nType);
 }
 
-bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
+bool ScXMLExport::IsEditCell(ScMyCell& rCell)
 {
     return rCell.maBaseCell.meType == CELLTYPE_EDIT;
 }

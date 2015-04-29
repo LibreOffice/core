@@ -820,7 +820,7 @@ void Test::testSortRefUpdate()
         m_pDoc->SetString(ScAddress(2,1+i,0), "=RC[-2]");
 
     // Turn off reference update on sort.
-    aSortTypeSet.changeTo(false);
+    SortTypeSetter::changeTo(false);
 
     bSorted = aFunc.Sort(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);

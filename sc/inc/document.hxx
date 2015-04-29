@@ -777,7 +777,7 @@ public:
     sal_Int64       GetNewUnoId() { return ++nUnoObjectId; }
     void            AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges );
 
-    bool IsChart( const SdrObject* pObject );
+    static bool IsChart( const SdrObject* pObject );
 
     SC_DLLPUBLIC void           UpdateAllCharts();
     void            UpdateChartRef( UpdateRefMode eUpdateRefMode,
@@ -1793,10 +1793,10 @@ public:
     bool            GetHasMacroFunc() const      { return bHasMacroFunc; }
     void            SetHasMacroFunc(bool bSet)   { bHasMacroFunc = bSet; }
 
-    bool            CheckMacroWarn();
+    static bool     CheckMacroWarn();
 
     void            SetRangeOverflowType(sal_uInt32 nType)  { nRangeOverflowType = nType; }
-    bool        HasRangeOverflow() const                { return nRangeOverflowType != 0; }
+    bool            HasRangeOverflow() const                { return nRangeOverflowType != 0; }
     SC_DLLPUBLIC sal_uInt32      GetRangeOverflowType() const            { return nRangeOverflowType; }
 
     // for broadcasting/listening

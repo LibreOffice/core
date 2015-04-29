@@ -245,7 +245,7 @@ public:
     void            AsciiSave( SvStream& rStream, const ScImportOptions& rOpt );
 
     void            GetSbxState( SfxItemSet &rSet );
-    void            GetDrawObjState( SfxItemSet &rSet );
+    static void     GetDrawObjState( SfxItemSet &rSet );
 
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet &rSet );
@@ -276,7 +276,7 @@ public:
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const OUString& rStyle );
 
-    vcl::Window*         GetActiveDialogParent();
+    static vcl::Window*  GetActiveDialogParent();
     void            ErrorMessage( sal_uInt16 nGlobStrId );
     bool            IsEditable() const;
 
@@ -419,7 +419,7 @@ public:
     void            SetSolverSaveData( const ScOptSolverSave& rData );
     ScSheetSaveData* GetSheetSaveData();
 
-    void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );
+    static void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );
 
     // password protection for Calc (derived from SfxObjectShell)
     // see also:    FID_CHG_RECORD, SID_CHG_PROTECT

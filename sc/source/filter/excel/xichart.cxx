@@ -922,9 +922,9 @@ void XclImpChFontBase::ConvertFontBase( const XclImpChRoot& rRoot, ScfPropertySe
     rRoot.ConvertFont( rPropSet, GetFontIndex(), &aFontColor );
 }
 
-void XclImpChFontBase::ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, bool bSupportsStacked ) const
+void XclImpChFontBase::ConvertRotationBase( ScfPropertySet& rPropSet, bool bSupportsStacked ) const
 {
-    rRoot.GetChartPropSetHelper().WriteRotationProperties( rPropSet, GetRotation(), bSupportsStacked );
+    XclChPropSetHelper::WriteRotationProperties( rPropSet, GetRotation(), bSupportsStacked );
 }
 
 XclImpChFont::XclImpChFont() :
@@ -1061,7 +1061,7 @@ void XclImpChText::ConvertFont( ScfPropertySet& rPropSet ) const
 
 void XclImpChText::ConvertRotation( ScfPropertySet& rPropSet, bool bSupportsStacked ) const
 {
-    ConvertRotationBase( GetChRoot(), rPropSet, bSupportsStacked );
+    ConvertRotationBase( rPropSet, bSupportsStacked );
 }
 
 void XclImpChText::ConvertFrame( ScfPropertySet& rPropSet ) const
@@ -1300,11 +1300,11 @@ void XclImpChMarkerFormat::Convert( const XclImpChRoot& rRoot,
             default:                        aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_SINGLESIZE;
         }
         aMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
-        rRoot.GetChartPropSetHelper().WriteMarkerProperties( rPropSet, aMarkerFmt );
+        XclChPropSetHelper::WriteMarkerProperties( rPropSet, aMarkerFmt );
     }
     else
     {
-        rRoot.GetChartPropSetHelper().WriteMarkerProperties( rPropSet, maData );
+        XclChPropSetHelper::WriteMarkerProperties( rPropSet, maData );
     }
 }
 
@@ -3333,7 +3333,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
             else if( const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISLABEL ) )
                 pDefText->ConvertFont( aAxisProp );
             // label text rotation
-            ConvertRotationBase( GetChRoot(), aAxisProp, true );
+            ConvertRotationBase( aAxisProp, true );
             // number format
             sal_uInt32 nScNumFmt = GetNumFmtBuffer().GetScFormat( mnNumFmtIdx );
             if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )

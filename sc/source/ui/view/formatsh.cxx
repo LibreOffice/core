@@ -818,7 +818,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             }
 
                             boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem(
-                                pTabViewShell->MakeNumberInfoItem(&rDoc, GetViewData()));
+                                ScTabViewShell::MakeNumberInfoItem(&rDoc, GetViewData()));
 
                             pDocSh->PutItem( *pNumberInfoItem );
                             nRsc = RID_SCDLG_STYLES_PAR;
@@ -927,7 +927,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                         if ( SFX_STYLE_FAMILY_PARA == eFam )
                         {
-                            pTabViewShell->UpdateNumberFormatter(
+                            ScTabViewShell::UpdateNumberFormatter(
                                 static_cast<const SvxNumberInfoItem&>(
                                     *(pDocSh->GetItem(SID_ATTR_NUMBERFORMAT_INFO)) ));
 

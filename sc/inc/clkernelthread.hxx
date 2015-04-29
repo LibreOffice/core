@@ -47,8 +47,8 @@ private:
     osl::Mutex maQueueMutex;
     osl::Condition maQueueCondition;
     std::queue<CLBuildKernelWorkItem> maQueue;
-    void produce();
-    void consume();
+    static void produce();
+    static void consume();
 };
 
 }

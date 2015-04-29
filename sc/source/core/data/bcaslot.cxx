@@ -696,7 +696,7 @@ ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 }
 
 inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
-        const ScAddress& rAddress ) const
+        const ScAddress& rAddress )
 {
     SCROW nRow = rAddress.Row();
     SCCOL nCol = rAddress.Col();
@@ -720,7 +720,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
 }
 
 void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
-        SCSIZE& rStart, SCSIZE& rEnd, SCSIZE& rRowBreak ) const
+        SCSIZE& rStart, SCSIZE& rEnd, SCSIZE& rRowBreak )
 {
     rStart = ComputeSlotOffset( rRange.aStart );
     rEnd = ComputeSlotOffset( rRange.aEnd );

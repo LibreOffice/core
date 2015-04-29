@@ -363,7 +363,7 @@ private:
         }
     }
 
-    OUString getOperatorXML(const ScQueryEntry& rEntry, bool bRegExp) const
+    static OUString getOperatorXML(const ScQueryEntry& rEntry, bool bRegExp)
     {
         switch (rEntry.eOp)
         {

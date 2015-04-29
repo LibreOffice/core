@@ -140,9 +140,9 @@ private:
 
     void    EvalText        ();
     void    ExecuteCol      ();
-    SCCOL   AlphaToNum      ( OUString& rStr );
-    SCCOL   NumStrToAlpha   ( OUString& rStr );
-    SCCOL   NumToAlpha      ( SCCOL nColNo, OUString& rStr );
+    static SCCOL AlphaToNum    ( OUString& rStr );
+    static SCCOL NumStrToAlpha ( OUString& rStr );
+    static SCCOL NumToAlpha    ( SCCOL nColNo, OUString& rStr );
 };
 
 //  class RowEdit
@@ -272,8 +272,8 @@ private:
     void    SetCurrentObject( const OUString& rName );
     void    SetCurrentDoc( const OUString& rDocName );
 
-    ScTabViewShell*         GetTabViewShell() const;
-    ScNavigatorSettings*    GetNavigatorSettings();
+    static ScTabViewShell*  GetTabViewShell();
+    static ScNavigatorSettings* GetNavigatorSettings();
     bool                    GetViewData();
 
     void    UpdateColumn    ( const SCCOL* pCol = NULL );

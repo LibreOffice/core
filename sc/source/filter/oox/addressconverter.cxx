@@ -348,7 +348,7 @@ bool AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
 }
 
 bool AddressConverter::convertToCellAddressUnchecked(
-        com::sun::star::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet ) const
+        com::sun::star::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet )
 {
     orAddress.Sheet = nSheet;
     return parseOoxAddress2d(orAddress.Column, orAddress.Row, pStr);

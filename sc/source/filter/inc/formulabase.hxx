@@ -578,7 +578,7 @@ public:
 
     /** Returns the library type associated with the passed URL of a function
         library (function add-in). */
-    FunctionLibraryType getFuncLibTypeFromLibraryName( const OUString& rLibraryName ) const;
+    static FunctionLibraryType getFuncLibTypeFromLibraryName( const OUString& rLibraryName );
 
 protected:
     /** Returns the list of all function infos. */

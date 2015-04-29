@@ -325,15 +325,15 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 
     if ( pEd == pEdDataArea )
     {
-        bEditOk = pRangeUtil->IsAbsArea( pEd->GetText(), pDoc,
+        bEditOk = ScRangeUtil::IsAbsArea( pEd->GetText(), pDoc,
                                          nTab, &theCompleteStr, NULL, NULL, eConv );
     }
     else if ( pEd == pEdDestArea )
     {
         OUString aPosStr;
 
-        pRangeUtil->CutPosString( pEd->GetText(), aPosStr );
-        bEditOk = pRangeUtil->IsAbsPos( aPosStr, pDoc,
+        ScRangeUtil::CutPosString( pEd->GetText(), aPosStr );
+        bEditOk = ScRangeUtil::IsAbsPos( aPosStr, pDoc,
                                         nTab, &theCompleteStr, NULL, eConv );
     }
 
@@ -374,7 +374,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
         OUString    aDestPosStr( pEdDestArea->GetText() );
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-        if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress, eConv ) )
+        if ( ScRangeUtil::IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress, eConv ) )
         {
             ScConsolidateParam  theOutParam( theConsData );
             ScArea**            ppDataAreas = new ScArea*[nDataAreaCount];
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
             for ( i=0; i<nDataAreaCount; i++ )
             {
                 pArea = new ScArea;
-                pRangeUtil->MakeArea( pLbConsAreas->GetEntry( i ),
+                ScRangeUtil::MakeArea( pLbConsAreas->GetEntry( i ),
                                       *pArea, pDoc, nTab, eConv );
                 ppDataAreas[i] = pArea;
             }
@@ -435,7 +435,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
             sal_uInt16      nAreaCount = 0;
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, true, eConv ) )
+            if ( ScRangeUtil::IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, true, eConv ) )
             {
                 // IsAbsTabArea() creates an array of ScArea pointers,
                 // which have been created dynamically as well.
@@ -511,7 +511,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
                 OUString aString( pAreaData[nSelPos-1].aStrArea );
 
                 if ( pLb == pLbDestArea )
-                    pRangeUtil->CutPosString( aString, aString );
+                    ScRangeUtil::CutPosString( aString, aString );
 
                 pEd->SetText( aString );
 

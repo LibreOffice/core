@@ -105,7 +105,7 @@ private:
     ScAccessibleCell* mpAccessibleCell;
 
     using ScAccessibleCellBaseTextData::GetDocShell;
-    ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
+    static ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
 };
 
 class ScAccessibleEditObjectTextData : public ScAccessibleTextData
@@ -179,7 +179,7 @@ private:
     ScPreviewShell* mpViewShell;
 
     using ScAccessibleCellBaseTextData::GetDocShell;
-    ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
+    static ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
 
 class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextData
@@ -205,7 +205,7 @@ private:
     bool            mbRowHeader;
 
     using ScAccessibleCellBaseTextData::GetDocShell;
-    ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
+    static ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
 
 class ScAccessibleHeaderTextData : public ScAccessibleTextData

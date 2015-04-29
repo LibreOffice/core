@@ -530,7 +530,7 @@ private:
     // reference conversion ---------------------------------------------------
 
     void                initReference2d( SingleReference& orApiRef ) const;
-    void                initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet ) const;
+    static void         initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet );
     void                convertReference( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference( ComplexReference& orApiRef, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference2d( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
@@ -1108,7 +1108,7 @@ void FormulaParserImpl::initReference2d( SingleReference& orApiRef ) const
     }
 }
 
-void FormulaParserImpl::initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet ) const
+void FormulaParserImpl::initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet )
 {
     orApiRef.Flags = SHEET_3D;
     if( nSheet < 0 )

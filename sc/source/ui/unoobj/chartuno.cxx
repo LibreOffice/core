@@ -69,7 +69,7 @@ static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OU
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && rDoc.IsChart(pObject) )
+                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject) )
                     {
                         uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
                         if ( xObj.is() )
@@ -131,7 +131,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && rDoc.IsChart(pObject) )
+                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject) )
                     {
                         if ( nPos == nIndex )
                         {
@@ -343,7 +343,7 @@ sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException, std::exc
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && rDoc.IsChart(pObject) )
+                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject) )
                         ++nCount;
                     pObject = aIter.Next();
                 }
@@ -412,7 +412,7 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::Runti
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && rDoc.IsChart(pObject) )
+                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject) )
                     {
                         OUString aName;
                         uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();

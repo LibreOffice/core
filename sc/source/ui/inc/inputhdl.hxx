@@ -134,7 +134,7 @@ private:
     bool            StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated );
     void            RemoveSelection();
     void            UpdateFormulaMode();
-    void            InvalidateAttribs();
+    static void     InvalidateAttribs();
     void            ImplCreateEditEngine();
     DECL_LINK(      DelayTimer, Timer* );
     void            GetColData();

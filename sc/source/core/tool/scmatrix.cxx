@@ -2605,7 +2605,7 @@ public:
         return maCOp(char{}, maOp, 0, mfVal, maString);
     }
 
-    bool useFunctionForEmpty() const
+    static bool useFunctionForEmpty()
     {
         return true;
     }

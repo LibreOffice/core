@@ -91,11 +91,11 @@ public:
             mnTab(nTab),
             meStringType(eType)  {}
 
-    void begin_parse() {}
+    static void begin_parse() {}
 
-    void end_parse() {}
+    static void end_parse() {}
 
-    void begin_row() {}
+    static void begin_row() {}
 
     void end_row()
     {
@@ -190,11 +190,11 @@ public:
         mnRow(0),
         mnTab(nTab) {}
 
-    void begin_parse() {}
+    static void begin_parse() {}
 
-    void end_parse() {}
+    static void end_parse() {}
 
-    void begin_row() {}
+    static void begin_row() {}
 
     void end_row()
     {

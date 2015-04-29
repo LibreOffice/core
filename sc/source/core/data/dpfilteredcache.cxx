@@ -373,9 +373,9 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
         rTabData[i] = tableData[i];
 }
 
-SCROW ScDPFilteredCache::getOrder(long nDim, SCROW nIndex) const
+SCROW ScDPFilteredCache::getOrder(long nDim, SCROW nIndex)
 {
-    return mrCache.GetOrder(nDim, nIndex);
+    return ScDPCache::GetOrder(nDim, nIndex);
 }
 
 void ScDPFilteredCache::clear()

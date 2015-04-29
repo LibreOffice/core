@@ -52,7 +52,7 @@ Table::Table( const WorkbookHelper& rHelper ) :
 
 void Table::importTable( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
-    getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet );
+    AddressConverter::convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet );
     maModel.maProgName    = rAttribs.getXString( XML_name, OUString() );
     maModel.maDisplayName = rAttribs.getXString( XML_displayName, OUString() );
     maModel.mnId          = rAttribs.getInteger( XML_id, -1 );
@@ -73,7 +73,7 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
     rStrm.skip( 32 );
     rStrm >> maModel.maProgName >> maModel.maDisplayName;
 
-    getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, aBinRange, nSheet );
+    AddressConverter::convertToCellRangeUnchecked( maModel.maRange, aBinRange, nSheet );
     static const sal_Int32 spnTypes[] = { XML_worksheet, XML_TOKEN_INVALID, XML_TOKEN_INVALID, XML_queryTable };
     maModel.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }

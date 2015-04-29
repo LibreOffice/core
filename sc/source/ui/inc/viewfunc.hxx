@@ -340,7 +340,7 @@ public:
     void            UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr = NULL );
                                                 // Internal helper functions
 protected:
-    void            UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,
+    static void     UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,
                                      const ::editeng::SvxBorderLine* pDestLine,
                                      const ::editeng::SvxBorderLine* pSrcLine,
                                      bool                 bColor );

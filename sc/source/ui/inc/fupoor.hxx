@@ -100,7 +100,7 @@ public:
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:
-    void ImpForceQuadratic(Rectangle& rRect);
+    static void ImpForceQuadratic(Rectangle& rRect);
 
 public:
     // #i33136#

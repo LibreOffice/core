@@ -137,7 +137,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         }
     }
 
-    vcl::Window* pWaitWin = rDocShell.GetActiveDialogParent();
+    vcl::Window* pWaitWin = ScDocShell::GetActiveDialogParent();
     if (pWaitWin)
         pWaitWin->EnterWait();
     ScDocShellModificator aModificator( rDocShell );
@@ -635,7 +635,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 nErrStringId = STR_MSSG_IMPORTDATA_0;
             aErrorMessage = ScGlobal::GetRscString( nErrStringId );
         }
-        ScopedVclPtrInstance< InfoBox > aInfoBox( rDocShell.GetActiveDialogParent(), aErrorMessage );
+        ScopedVclPtrInstance< InfoBox > aInfoBox( ScDocShell::GetActiveDialogParent(), aErrorMessage );
         aInfoBox->Execute();
     }
 

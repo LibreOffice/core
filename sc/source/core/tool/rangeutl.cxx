@@ -35,7 +35,7 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
                             ScArea&         rArea,
                             ScDocument*     pDoc,
                             SCTAB           nTab,
-                            ScAddress::Details const & rDetails ) const
+                            ScAddress::Details const & rDetails )
 {
     // Input in rAreaStr: "$Tabelle1.$A1:$D17"
 
@@ -66,7 +66,7 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
 }
 
 void ScRangeUtil::CutPosString( const OUString&   theAreaStr,
-                                OUString&         thePosStr ) const
+                                OUString&         thePosStr )
 {
     OUString  aPosStr;
     // BROKEN BROKEN BROKEN
@@ -87,7 +87,7 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
                                 ScArea***       pppAreas,
                                 sal_uInt16*         pAreaCount,
                                 bool            /* bAcceptCellRef */,
-                                ScAddress::Details const & rDetails ) const
+                                ScAddress::Details const & rDetails )
 {
     OSL_ENSURE( pDoc, "No document given!" );
     if ( !pDoc )
@@ -175,7 +175,7 @@ bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
                              OUString*      pCompleteStr,
                              ScRefAddress*  pStartPos,
                              ScRefAddress*  pEndPos,
-                             ScAddress::Details const & rDetails ) const
+                             ScAddress::Details const & rDetails )
 {
     ScRefAddress    startPos;
     ScRefAddress    endPos;
@@ -213,7 +213,7 @@ bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
                             SCTAB           nTab,
                             OUString*       pCompleteStr,
                             ScRefAddress*   pPosTripel,
-                            ScAddress::Details const & rDetails ) const
+                            ScAddress::Details const & rDetails )
 {
     ScRefAddress    thePos;
 
@@ -239,7 +239,7 @@ bool ScRangeUtil::MakeRangeFromName (
     SCTAB           nCurTab,
     ScRange&        rRange,
     RutlNameScope   eScope,
-    ScAddress::Details const & rDetails ) const
+    ScAddress::Details const & rDetails )
 {
     bool bResult = false;
     ScRangeUtil     aRangeUtil;

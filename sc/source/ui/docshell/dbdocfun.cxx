@@ -524,7 +524,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     //      ausfuehren
 
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     // Adjust aLocalParam cols/rows to used data area. Keep sticky top row or
     // column (depending on direction) in any case, not just if it has headers,
@@ -710,7 +710,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
     //      ausfuehren
 
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     bool bKeepSub = false;                          // bestehende Teilergebnisse wiederholen?
     ScSubTotalParam aSubTotalParam;
@@ -987,7 +987,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     if (rParam.bReplace)
         if (rDoc.TestRemoveSubTotals( nTab, rParam ))
         {
-            bOk = ( MessBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            bOk = ( MessBox( ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 // "StarCalc" "Daten loeschen?"
                 ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
                 ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_1 ) ).Execute()
@@ -996,7 +996,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
     if (bOk)
     {
-        WaitObject aWait( rDocShell.GetActiveDialogParent() );
+        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
         ScDocShellModificator aModificator( rDocShell );
 
         ScSubTotalParam aNewParam( rParam );        // Bereichsende wird veraendert
@@ -1229,7 +1229,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     OSL_ASSERT(pOldObj && pNewObj && pOldObj != pNewObj);
 
     ScDocShellModificator aModificator( rDocShell );
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScRangeList aRanges;
     aRanges.Append(pOldObj->GetOutRange());
@@ -1278,7 +1278,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         // OutRange of pOldObj (pDestObj) is still old area
         if (!lcl_EmptyExcept(&rDoc, aNewOut, pOldObj->GetOutRange()))
         {
-            ScopedVclPtrInstance<QueryBox> aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            ScopedVclPtrInstance<QueryBox> aBox( ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                              ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
             if (aBox->Execute() == RET_NO)
             {
@@ -1312,7 +1312,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
 {
     ScDocShellModificator aModificator(rDocShell);
-    WaitObject aWait(rDocShell.GetActiveDialogParent());
+    WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
     if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
         return false;
@@ -1363,7 +1363,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
 bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool bApi)
 {
     ScDocShellModificator aModificator(rDocShell);
-    WaitObject aWait(rDocShell.GetActiveDialogParent());
+    WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
     // At least one cell in the output range should be editable. Check in advance.
     if (!isEditable(rDocShell, ScRange(rDPObj.GetOutRange().aStart), bApi))
@@ -1431,7 +1431,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
         if (!bEmpty)
         {
             ScopedVclPtrInstance<QueryBox> aBox(
-                rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY));
 
             if (aBox->Execute() == RET_NO)
@@ -1464,7 +1464,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
 bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
 {
     ScDocShellModificator aModificator( rDocShell );
-    WaitObject aWait( rDocShell.GetActiveDialogParent() );
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
         return false;
@@ -1504,7 +1504,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         if (!lcl_EmptyExcept(&rDoc, aNewOut, rDPObj.GetOutRange()))
         {
-            ScopedVclPtrInstance<QueryBox> aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            ScopedVclPtrInstance<QueryBox> aBox( ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                                                  ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
             if (aBox->Execute() == RET_NO)
             {
@@ -1602,7 +1602,7 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
     const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rTarget));
     if (!pData)
     {
-        ScopedVclPtrInstance<InfoBox> aInfoBox( rDocShell.GetActiveDialogParent(),
+        ScopedVclPtrInstance<InfoBox> aInfoBox( ScDocShell::GetActiveDialogParent(),
                                                 ScGlobal::GetRscString( STR_TARGETNOTFOUND ) );
         aInfoBox->Execute();
         return;

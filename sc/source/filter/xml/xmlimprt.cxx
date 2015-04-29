@@ -3022,7 +3022,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     UnlockSolarMutex();
 }
 
-sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType) const
+sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType)
 {
     sal_Int32 nRangeType(0);
     OUStringBuffer sBuffer;
@@ -3108,7 +3108,7 @@ public:
         using namespace formula;
 
         const OUString& aType = r.sRangeType;
-        sal_uInt32 nUnoType = mrXmlImport.GetRangeType(aType);
+        sal_uInt32 nUnoType = ScXMLImport::GetRangeType(aType);
 
         sal_uInt16 nNewType = RT_NAME;
         if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= RT_CRITERIA;

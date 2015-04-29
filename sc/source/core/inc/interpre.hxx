@@ -207,7 +207,7 @@ double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
 double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
 double GetValueCellValue( const ScAddress&, double fOrig );
 void GetCellString( svl::SharedString& rStr, ScRefCellValue& rCell );
-sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
+static sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
 
 bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);
@@ -358,7 +358,7 @@ ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 );
 inline ScTokenMatrixMap& GetTokenMatrixMap();
-ScTokenMatrixMap* CreateTokenMatrixMap();
+static ScTokenMatrixMap* CreateTokenMatrixMap();
 ScMatrixRef GetMatrix();
 sc::RangeMatrix GetRangeMatrix();
 
@@ -380,7 +380,7 @@ inline void CurFmtToFuncFmt()
             not sanitized.
             FALSE if not and fVal was adapted.
  */
-inline bool CheckStringPositionArgument( double & fVal );
+static inline bool CheckStringPositionArgument( double & fVal );
 
 /** Obtain a double suitable as string position or length argument.
     Returns -1 if the number is Inf or NaN or less than 0 or greater than some
@@ -613,7 +613,7 @@ void ScGetWeekOfYear();
 void ScEasterSunday();
 sal_uInt16 GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
         ::std::vector<double>& rSortArray, OUString& rWeekendDays, bool bWeekendMask[ 7 ] );
-inline sal_Int16 GetDayOfWeek( sal_Int32 n );
+static inline sal_Int16 GetDayOfWeek( sal_Int32 n );
 void ScNetWorkdays_MS();
 void ScWorkday_MS();
 void ScGetHour();
@@ -664,28 +664,28 @@ void ScIRR();
 void ScMIRR();
 void ScISPMT();
 
-double ScGetBw(double fZins, double fZzr, double fRmz,
+static double ScGetBw(double fZins, double fZzr, double fRmz,
                       double fZw, double fF);
 void ScPV();
 void ScSYD();
-double ScGetGDA(double fWert, double fRest, double fDauer,
+static double ScGetGDA(double fWert, double fRest, double fDauer,
                        double fPeriode, double fFactor);
 void ScDDB();
 void ScDB();
-double ScInterVDB(double fWert,double fRest,double fDauer,double fDauer1,
+static double ScInterVDB(double fWert,double fRest,double fDauer,double fDauer1,
                 double fPeriode,double fFactor);
 void ScVDB();
 void ScDuration();
 void ScSLN();
-double ScGetRmz(double fZins, double fZzr, double fBw,
+static double ScGetRmz(double fZins, double fZzr, double fBw,
                        double fZw, double fF);
 void ScPMT();
 void ScRRI();
-double ScGetZw(double fZins, double fZzr, double fRmz,
+static double ScGetZw(double fZins, double fZzr, double fRmz,
                       double fBw, double fF);
 void ScFV();
 void ScNper();
-bool RateIteration(double fNper, double fPayment, double fPv,
+static bool RateIteration(double fNper, double fPayment, double fPv,
                                 double fFv, double fPayType, double& fGuess);
 void ScRate();
 double ScGetCompoundInterest(double fZins, double fZr, double fZzr, double fBw,
@@ -698,13 +698,13 @@ void ScEffective();
 void ScNominal();
 void ScMod();
 void ScIntercept();
-double ScGetGCD(double fx, double fy);
+static double ScGetGCD(double fx, double fy);
 void ScGCD();
 void ScLCM();
 
 // matrix functions
 void ScMatValue();
-void MEMat(const ScMatrixRef& mM, SCSIZE n);
+static void MEMat(const ScMatrixRef& mM, SCSIZE n);
 void ScMatDet();
 void ScMatInv();
 void ScMatMult();
@@ -740,8 +740,8 @@ void ScForecast();
 void ScNoName();
 void ScBadName();
 // Statistics:
-double taylor(const double* pPolynom, sal_uInt16 nMax, double x);
-double gauss(double x);
+static double taylor(const double* pPolynom, sal_uInt16 nMax, double x);
+static double gauss(double x);
 
 public:
 static SC_DLLPUBLIC double phi(double x);
@@ -753,15 +753,15 @@ double GetBetaDist(double x, double alpha, double beta);  //cumulative distribut
 double GetBetaDistPDF(double fX, double fA, double fB); //probability density function)
 double GetChiDist(double fChi, double fDF);     // for LEGACY.CHIDIST, returns right tail
 double GetChiSqDistCDF(double fX, double fDF);  // for CHISQDIST, returns left tail
-double GetChiSqDistPDF(double fX, double fDF);  // probability density function
+static double GetChiSqDistPDF(double fX, double fDF);  // probability density function
 double GetFDist(double x, double fF1, double fF2);
 double GetTDist( double T, double fDF, int nType );
 double Fakultaet(double x);
-double BinomKoeff(double n, double k);
+static double BinomKoeff(double n, double k);
 double GetGamma(double x);
-double GetLogGamma(double x);
+static double GetLogGamma(double x);
 double GetBeta(double fAlpha, double fBeta);
-double GetLogBeta(double fAlpha, double fBeta);
+static double GetLogBeta(double fAlpha, double fBeta);
 double GetBinomDistPMF(double x, double n, double p); //probability mass function
 double GetHypGeomDist( double x, double n, double M, double N );
 void ScLogGamma();
@@ -820,7 +820,7 @@ double GetPercentile( ::std::vector<double> & rArray, double fPercentile );
 double GetPercentileExclusive( ::std::vector<double> & rArray, double fPercentile );
 void GetNumberSequenceArray( sal_uInt8 nParamCount, ::std::vector<double>& rArray, bool bConvertTextInArray );
 void GetSortArray( sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder, bool bConvertTextInArray );
-void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
+static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
 void ScModalValue();
 void ScModalValue_Multi();
 void ScAveDev();
@@ -833,7 +833,7 @@ void ScChiTest();
 void ScRank( bool bAverage );
 void ScPercentile( bool bInclusive );
 void ScPercentrank( bool bInclusive );
-double GetPercentrank( ::std::vector<double> & rArray, double fVal, bool bInclusive );
+static double GetPercentrank( ::std::vector<double> & rArray, double fVal, bool bInclusive );
 void ScLarge();
 void ScSmall();
 void ScFrequency();

@@ -498,7 +498,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if ( bOptChanged )
             {
                 pScMod->SetAppOptions(aAppOpt);
-                pScMod->RecentFunctionsChanged();
+                ScModule::RecentFunctionsChanged();
             }
         }
 

@@ -137,7 +137,7 @@ public:
 
     void                Execute( SfxRequest& rReq );
     void                GetState( SfxItemSet& rSet );
-    void                HideDisabledSlots( SfxItemSet& rSet );
+    static void         HideDisabledSlots( SfxItemSet& rSet );
 
     void                AnythingChanged();
 
@@ -154,7 +154,7 @@ public:
     const ScClipData&   GetClipData() const { return *mpClipData;}
     void                SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
 
-    ScDocument*         GetClipDoc();       // called from document - should be removed later
+    static ScDocument*  GetClipDoc();       // called from document - should be removed later
 
     //  X selection:
     ScSelectionTransferObj* GetSelectionTransfer() const    { return pSelTransfer; }
@@ -185,7 +185,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     SC_DLLPUBLIC void   SetInputOptions ( const ScInputOptions& rOpt );
     void                    SetPrintOptions ( const ScPrintOptions& rOpt );
     void                    InsertEntryToLRUList(sal_uInt16 nFIndex);
-    void                    RecentFunctionsChanged();
+    static void         RecentFunctionsChanged();
 
     static void         GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
                                         bool& rAutoSpell );

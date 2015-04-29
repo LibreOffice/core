@@ -285,7 +285,7 @@ protected:
     virtual void    SetText( const OUString& rString ) SAL_OVERRIDE;
     virtual OUString  GetText() const SAL_OVERRIDE;
 
-    bool UseSubTotal( ScRangeList* pRangeList ) const;
+    static bool UseSubTotal( ScRangeList* pRangeList );
     bool IsPointerAtResizePos();
 private:
     VclPtr<ScPosWnd>  aWndPos;

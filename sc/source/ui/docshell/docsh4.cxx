@@ -1194,7 +1194,7 @@ void ScDocShell::DoRecalc( bool bApi )
         }
         else
         {
-            pSh->UpdateInputLine();     // InputEnterHandler
+            ScTabView::UpdateInputLine();     // InputEnterHandler
             pSh->UpdateInputHandler();
         }
     }
@@ -1225,7 +1225,7 @@ void ScDocShell::DoHardRecalc( bool /* bApi */ )
     ScTabViewShell* pSh = GetBestViewShell();
     if ( pSh )
     {
-        pSh->UpdateInputLine();     // InputEnterHandler
+        ScTabView::UpdateInputLine();     // InputEnterHandler
         pSh->UpdateInputHandler();
     }
     aDocument.CalcAll();

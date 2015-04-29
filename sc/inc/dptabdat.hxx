@@ -160,7 +160,7 @@ protected:
     };
 
     void            FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFilteredCache& rCacheTable, const CalcInfo& rInfo, CalcRowData& rData);
-    void ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bool bAutoShow);
+    static void     ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bool bAutoShow);
     void            CalcResultsFromCacheTable(const ScDPFilteredCache& rCacheTable, CalcInfo& rInfo, bool bAutoShow);
 
 private:

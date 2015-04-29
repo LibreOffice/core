@@ -295,8 +295,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     ScRangeUtil     aRangeUtil;
                     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-                    if( aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
-                        aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
+                    if( ScRangeUtil::MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
+                        ScRangeUtil::MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
                     {
                         nResult |= SCA_VALID;
                         if( aScRange.aStart.Tab() != nTab )

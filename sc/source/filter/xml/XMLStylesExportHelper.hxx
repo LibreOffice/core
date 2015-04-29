@@ -84,16 +84,16 @@ private:
     const OUString         sMacroName;
 
 public:
-                                ScMyValidationsContainer();
-                                ~ScMyValidationsContainer();
-    bool                        AddValidation(const com::sun::star::uno::Any& aAny,
+                           ScMyValidationsContainer();
+                           ~ScMyValidationsContainer();
+    bool                   AddValidation(const com::sun::star::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
-    OUString               GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
-    OUString               GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
-    void                        WriteMessage(ScXMLExport& rExport,
+    static OUString        GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
+    static OUString        GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
+    static void            WriteMessage(ScXMLExport& rExport,
                                     const OUString& sTitle, const OUString& sMessage,
                                     const bool bShowMessage, const bool bIsHelpMessage);
-    void                        WriteValidations(ScXMLExport& rExport);
+    void                   WriteValidations(ScXMLExport& rExport);
     const OUString&        GetValidationName(const sal_Int32 nIndex);
 };
 
@@ -115,7 +115,7 @@ class ScMyDefaultStyles
 {
     ScMyDefaultStyleList maColDefaults;
 
-    sal_Int32 GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
+    static sal_Int32 GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
         const sal_Int32 nTable, const sal_Int32 nPos,
         const sal_Int32 i, bool& bIsAutoStyle);
 public:

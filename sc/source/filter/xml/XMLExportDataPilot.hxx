@@ -41,7 +41,7 @@ class ScXMLExportDataPilot
     ScXMLExport&        rExport;
     ScDocument*         pDoc;
 
-    OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const bool bUseRegularExpressions) const;
+    static OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const bool bUseRegularExpressions);
     void WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive, bool bUseRegularExpressions);
     void WriteDPFilter(const ScQueryParam& aQueryParam);
 

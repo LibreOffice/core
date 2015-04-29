@@ -1452,7 +1452,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             if ( !mbApi && nStartCol != nEndCol &&
                  !pDoc->IsBlockEmpty( nTab, nStartCol + 1, nStartRow, nEndCol, nRow ) )
             {
-                ScopedVclPtrInstance< ScReplaceWarnBox > aBox( pDocSh->GetActiveDialogParent() );
+                ScopedVclPtrInstance< ScReplaceWarnBox > aBox( ScDocShell::GetActiveDialogParent() );
                 if ( aBox->Execute() != RET_YES )
                 {
                     return false;

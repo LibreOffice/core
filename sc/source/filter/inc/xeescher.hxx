@@ -179,9 +179,9 @@ protected:
     inline sal_uInt16   GetSourceEntryCount() const { return mnEntryCount; }
 
     /** Writes a formula with special style only valid in OBJ records. */
-    void                WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr ) const;
+    static void         WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr );
     /** Writes a formula subrecord with special style only valid in OBJ records. */
-    void                WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclTokenArray& rTokArr ) const;
+    static void         WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclTokenArray& rTokArr );
 
 private:
     XclTokenArrayRef    mxCellLink;     /// Formula for linked cell.

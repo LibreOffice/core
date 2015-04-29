@@ -1149,10 +1149,9 @@ void XclExpChFontBase::ConvertFontBase( const XclExpChRoot& rRoot, const ScfProp
     ConvertFontBase( rRoot, rRoot.ConvertFont( rPropSet, rRoot.GetDefApiScript() ) );
 }
 
-void XclExpChFontBase::ConvertRotationBase(
-        const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet, bool bSupportsStacked )
+void XclExpChFontBase::ConvertRotationBase(const ScfPropertySet& rPropSet, bool bSupportsStacked )
 {
-    sal_uInt16 nRotation = rRoot.GetChartPropSetHelper().ReadRotationProperties( rPropSet, bSupportsStacked );
+    sal_uInt16 nRotation = XclChPropSetHelper::ReadRotationProperties( rPropSet, bSupportsStacked );
     SetRotation( nRotation );
 }
 
@@ -1209,7 +1208,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget,
         ConvertFontBase( GetChRoot(), nFontIdx );
 
         // rotation
-        ConvertRotationBase( GetChRoot(), aTitleProp, true );
+        ConvertRotationBase( aTitleProp, true );
 
         // manual text position - only for main title
         mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_PARENT, EXC_CHFRAMEPOS_PARENT ) );
@@ -1302,7 +1301,7 @@ bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
     {
         // font settings
         ConvertFontBase( GetChRoot(), rPropSet );
-        ConvertRotationBase( GetChRoot(), rPropSet, false );
+        ConvertRotationBase( rPropSet, false );
         // label placement
         sal_Int32 nPlacement = 0;
         sal_uInt16 nLabelPos = EXC_CHTEXT_POS_AUTO;
@@ -1444,7 +1443,7 @@ XclExpChMarkerFormat::XclExpChMarkerFormat( const XclExpChRoot& rRoot ) :
 void XclExpChMarkerFormat::Convert( const XclExpChRoot& rRoot,
         const ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx )
 {
-    rRoot.GetChartPropSetHelper().ReadMarkerProperties( maData, rPropSet, nFormatIdx );
+    XclChPropSetHelper::ReadMarkerProperties( maData, rPropSet, nFormatIdx );
     /*  Set marker line/fill color to series line color.
         TODO: remove this if OOChart supports own colors in markers. */
     Color aLineColor;
@@ -2995,7 +2994,7 @@ void XclExpChAxis::Convert( Reference< XAxis > xAxis, Reference< XAxis > xCrossi
 
     // axis label formatting and rotation
     ConvertFontBase( GetChRoot(), aAxisProp );
-    ConvertRotationBase( GetChRoot(), aAxisProp, true );
+    ConvertRotationBase( aAxisProp, true );
 
     // axis number format
     sal_Int32 nApiNumFmt = 0;

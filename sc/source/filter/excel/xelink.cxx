@@ -171,11 +171,11 @@ public:
 private:
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
-    void                WriteBool( XclExpStream& rStrm, bool bValue );
-    void                WriteDouble( XclExpStream& rStrm, double fValue );
-    void                WriteString( XclExpStream& rStrm, const OUString& rValue );
-    void                WriteError( XclExpStream& rStrm, sal_uInt8 nErrCode );
-    void                WriteEmpty( XclExpStream& rStrm );
+    static void         WriteBool( XclExpStream& rStrm, bool bValue );
+    static void         WriteDouble( XclExpStream& rStrm, double fValue );
+    static void         WriteString( XclExpStream& rStrm, const OUString& rValue );
+    static void         WriteError( XclExpStream& rStrm, sal_uInt8 nErrCode );
+    static void         WriteEmpty( XclExpStream& rStrm );
 
 private:
     typedef ::std::vector< Any > CachedValues;

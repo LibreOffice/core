@@ -104,7 +104,7 @@ public:
     void        ExecutePage( SfxRequest& rReq );
     void        ExecutePageSel( SfxRequest& rReq );
     void        ExecuteMove( SfxRequest& rReq );
-    void        GetStateCursor( SfxItemSet& rSet );
+    static void GetStateCursor( SfxItemSet& rSet );
 };
 
 #endif

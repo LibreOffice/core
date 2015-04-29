@@ -48,14 +48,14 @@ public:
     template<typename _Type2>
     AlignedAllocator(const AlignedAllocator<_Type2,_Alignment>&) {}
 
-    void construct(T* p, const value_type& val) { new(p) value_type(val); }
-    void destroy(T* p)
+    static void construct(T* p, const value_type& val) { new(p) value_type(val); }
+    static void destroy(T* p)
     {
         p->~value_type();
         (void)p; // avoid bogus MSVC '12 "unreferenced formal parameter" warning
     }
 
-    size_type max_size() const
+    static size_type max_size()
     {
         return std::numeric_limits<size_type>::max() / sizeof(value_type);
     }
@@ -63,12 +63,12 @@ public:
     bool operator== (const AlignedAllocator&) const { return true; }
     bool operator!= (const AlignedAllocator&) const { return false; }
 
-    pointer allocate(size_type n)
+    static pointer allocate(size_type n)
     {
         return static_cast<pointer>(rtl_allocateAlignedMemory(_Alignment, n*sizeof(value_type)));
     }
 
-    void deallocate(pointer p, size_type)
+    static void deallocate(pointer p, size_type)
     {
         rtl_freeAlignedMemory(p);
     }

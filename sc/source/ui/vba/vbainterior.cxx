@@ -241,7 +241,7 @@ ScVbaInterior::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 
         GetMixedColorComp( rFore.GetBlue(), rBack.GetBlue(), nTrans ));
 }
 sal_uInt8
-ScVbaInterior::GetMixedColorComp(  sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans ) const
+ScVbaInterior::GetMixedColorComp(  sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans )
 {
     sal_uInt32 nTemp = ((static_cast< sal_Int32 >( nBack ) - nFore) * nTrans) / 0x80 + nFore;
     return static_cast< sal_uInt8 >( nTemp );

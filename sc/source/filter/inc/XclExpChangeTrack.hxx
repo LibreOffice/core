@@ -368,8 +368,8 @@ protected:
                                     const XclExpRoot& rRoot,
                                     ScChangeTrack& rChangeTrack );
 
-    inline void                 Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const;
-    inline void                 Write2DRange( XclExpStream& rStrm, const ScRange& rRange ) const;
+    static inline void          Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress );
+    static inline void          Write2DRange( XclExpStream& rStrm, const ScRange& rRange );
     inline sal_uInt16           GetTabId( SCTAB nTabId ) const;
     inline void                 WriteTabId( XclExpStream& rStrm, SCTAB nTabId ) const;
 
@@ -413,13 +413,13 @@ public:
     inline sal_uInt32           GetActionNumber() const { return nIndex; }
 };
 
-inline void XclExpChTrAction::Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const
+inline void XclExpChTrAction::Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress )
 {
     rStrm   << (sal_uInt16) rAddress.Row()
             << (sal_uInt16) rAddress.Col();
 }
 
-inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& rRange ) const
+inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& rRange )
 {
     rStrm   << (sal_uInt16) rRange.aStart.Row()
             << (sal_uInt16) rRange.aEnd.Row()
@@ -472,7 +472,7 @@ private:
     XclExpChTrData*             pNewData;
     sal_uInt16                  nOldLength;     // this is not the record size
 
-    void                        MakeEmptyChTrData( XclExpChTrData*& rpData );
+    static void                 MakeEmptyChTrData( XclExpChTrData*& rpData );
 
 protected:
     ScAddress                   aPosition;

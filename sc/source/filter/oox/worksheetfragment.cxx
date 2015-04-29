@@ -244,7 +244,7 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 case XLS_TOKEN( dimension ):        importDimension( rAttribs );                                    break;
                 case XLS_TOKEN( sheetFormatPr ):    importSheetFormatPr( rAttribs );                                break;
                 case XLS_TOKEN( sheetProtection ):  getWorksheetSettings().importSheetProtection( rAttribs );       break;
-                case XLS_TOKEN( protectedRanges ):  getWorksheetSettings().importProtectedRanges( rAttribs );       return this;
+                case XLS_TOKEN( protectedRanges ):  WorksheetSettings::importProtectedRanges( rAttribs );       return this;
                 case XLS_TOKEN( phoneticPr ):       getWorksheetSettings().importPhoneticPr( rAttribs );            break;
                 case XLS_TOKEN( printOptions ):     getPageSettings().importPrintOptions( rAttribs );               break;
                 case XLS_TOKEN( pageMargins ):      getPageSettings().importPageMargins( rAttribs );                break;
@@ -499,7 +499,7 @@ void WorksheetFragment::importPageSetUpPr( const AttributeList& rAttribs )
 void WorksheetFragment::importDimension( const AttributeList& rAttribs )
 {
     CellRangeAddress aRange;
-    getAddressConverter().convertToCellRangeUnchecked( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
+    AddressConverter::convertToCellRangeUnchecked( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
     /*  OOXML stores the used area, if existing, or "A1" if the sheet is empty.
         In case of "A1", the dimension at the WorksheetHelper object will not
         be set. If the cell A1 exists, the used area will be updated while
@@ -611,7 +611,7 @@ void WorksheetFragment::importDimension( SequenceInputStream& rStrm )
     BinRange aBinRange;
     aBinRange.read( rStrm );
     CellRangeAddress aRange;
-    getAddressConverter().convertToCellRangeUnchecked( aRange, aBinRange, getSheetIndex() );
+    AddressConverter::convertToCellRangeUnchecked( aRange, aBinRange, getSheetIndex() );
     /*  BIFF12 stores the used area, if existing, or "A1" if the sheet is
         empty. In case of "A1", the dimension at the WorksheetHelper object
         will not be set. If the cell A1 exists, the used area will be updated

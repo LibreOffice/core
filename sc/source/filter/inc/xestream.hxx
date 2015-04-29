@@ -224,8 +224,8 @@ public:
 private:
     void Init( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData );
 
-    sal_uInt32 GetBlockPos( sal_Size nStrmPos ) const;
-    sal_uInt16 GetOffsetInBlock( sal_Size nStrmPos ) const;
+    static sal_uInt32 GetBlockPos( sal_Size nStrmPos );
+    static sal_uInt16 GetOffsetInBlock( sal_Size nStrmPos );
 
 private:
     ::msfilter::MSCodec_Std97 maCodec;      /// Crypto algorithm implementation.

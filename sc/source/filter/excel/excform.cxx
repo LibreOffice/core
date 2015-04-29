@@ -115,7 +115,7 @@ void ImportExcel::Formula(
         // This is a shared formula. Get the token array from the shared formula pool.
         SCCOL nSharedCol;
         SCROW nSharedRow;
-        if (pFormConv->ReadSharedFormulaPosition(maStrm, nSharedCol, nSharedRow))
+        if (ExcelToSc::ReadSharedFormulaPosition(maStrm, nSharedCol, nSharedRow))
         {
             ScAddress aRefPos(nSharedCol, nSharedRow, GetCurrScTab());
             const ScTokenArray* pSharedCode = pFormConv->GetSharedFormula(aRefPos);

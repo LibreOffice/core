@@ -177,7 +177,7 @@ public:
     virtual std::string GetBottom() { return "";};
     virtual std::string Gen2( const std::string&/*lhs*/,
         const std::string&/*rhs*/ ) const { return "";}
-    std::string Gen( ArgVector& /*argVector*/ ) { return "";};
+    static std::string Gen( ArgVector& /*argVector*/ ) { return "";};
     virtual std::string BinFuncName() const { return "";};
     virtual void BinInlineFun( std::set<std::string>&,
         std::set<std::string>& ) { }
@@ -210,15 +210,15 @@ public:
 class CheckVariables : public Normal
 {
 public:
-    void GenTmpVariables( std::stringstream& ss, SubArguments& vSubArguments );
-    void CheckSubArgumentIsNan( std::stringstream& ss,
+    static void GenTmpVariables( std::stringstream& ss, SubArguments& vSubArguments );
+    static void CheckSubArgumentIsNan( std::stringstream& ss,
         SubArguments& vSubArguments, int argumentNum );
-    void CheckAllSubArgumentIsNan( std::stringstream& ss,
+    static void CheckAllSubArgumentIsNan( std::stringstream& ss,
         SubArguments& vSubArguments );
     // only check isNan
-    void CheckSubArgumentIsNan2( std::stringstream& ss,
+    static void CheckSubArgumentIsNan2( std::stringstream& ss,
         SubArguments& vSubArguments, int argumentNum, std::string p );
-    void UnrollDoubleVector( std::stringstream& ss,
+    static void UnrollDoubleVector( std::stringstream& ss,
         std::stringstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
         int nCurWindowSize );
 };

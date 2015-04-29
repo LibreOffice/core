@@ -112,13 +112,13 @@ ScVbaFormatCondition::setFormula1( const uno::Any& _aFormula1) throw ( script::B
 {
     // getA1Formula *SHOULD* detect whether the formula is r1c1 or A1 syntax
     // and if R1C1 convert to A1
-    ScVbaFormatCondition_BASE::setFormula1( uno::makeAny( lcl_getScVbaFormatConditionsPtr( moFormatConditions )->getA1Formula(_aFormula1) ) );
+    ScVbaFormatCondition_BASE::setFormula1( uno::makeAny( ScVbaFormatConditions::getA1Formula(_aFormula1) ) );
 }
 
 void
 ScVbaFormatCondition::setFormula2( const uno::Any& _aFormula2) throw ( script::BasicErrorException )
 {
-    ScVbaFormatCondition_BASE::setFormula1( uno::makeAny( lcl_getScVbaFormatConditionsPtr( moFormatConditions )->getA1Formula(_aFormula2)) );
+    ScVbaFormatCondition_BASE::setFormula1( uno::makeAny( ScVbaFormatConditions::getA1Formula(_aFormula2)) );
 }
 
 ::sal_Int32 SAL_CALL

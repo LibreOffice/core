@@ -312,7 +312,7 @@ private:
     void RemoveChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, bool bFireEvent);
 
     OUString GetCurrentCellName() const;
-    OUString GetCurrentCellDescription() const;
+    static OUString GetCurrentCellDescription();
 
     Rectangle GetVisibleArea_Impl() const;
     com::sun::star::uno::Sequence< com::sun::star::uno::Any > GetScAccFlowToSequence();

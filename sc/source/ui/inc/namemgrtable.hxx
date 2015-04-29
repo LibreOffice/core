@@ -56,7 +56,7 @@ private:
 
     InitListener* mpInitListener;
 
-    void GetLine(ScRangeNameLine& aLine, SvTreeListEntry* pEntry);
+    static void GetLine(ScRangeNameLine& aLine, SvTreeListEntry* pEntry);
     void Init();
     void CheckForFormulaString();
     const ScRangeData* findRangeData(const ScRangeNameLine& rLine);

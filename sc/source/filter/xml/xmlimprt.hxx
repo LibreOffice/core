@@ -1214,7 +1214,7 @@ public:
 
     void SetRangeOverflowType(sal_uInt32 nType);
 
-    sal_Int32   GetRangeType(const OUString& sRangeType) const;
+    static sal_Int32 GetRangeType(const OUString& sRangeType);
     void SetNamedRanges();
     void SetSheetNamedRanges();
     void SetLabelRanges();

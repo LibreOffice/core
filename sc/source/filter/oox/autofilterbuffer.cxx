@@ -534,14 +534,14 @@ AutoFilter::AutoFilter( const WorkbookHelper& rHelper ) :
 void AutoFilter::importAutoFilter( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
     OUString aRangeStr = rAttribs.getString( XML_ref, OUString() );
-    getAddressConverter().convertToCellRangeUnchecked( maRange, aRangeStr, nSheet );
+    AddressConverter::convertToCellRangeUnchecked( maRange, aRangeStr, nSheet );
 }
 
 void AutoFilter::importAutoFilter( SequenceInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
     rStrm >> aBinRange;
-    getAddressConverter().convertToCellRangeUnchecked( maRange, aBinRange, nSheet );
+    AddressConverter::convertToCellRangeUnchecked( maRange, aBinRange, nSheet );
 }
 
 FilterColumn& AutoFilter::createFilterColumn()

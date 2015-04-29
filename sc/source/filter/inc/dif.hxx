@@ -86,11 +86,11 @@ public:
 
     DATASET             GetNextDataset();
 
-    const sal_Unicode*  ScanIntVal( const sal_Unicode* pStart, sal_uInt32& rRet );
+    static const sal_Unicode* ScanIntVal( const sal_Unicode* pStart, sal_uInt32& rRet );
     bool                ScanFloatVal( const sal_Unicode* pStart );
 
-    inline bool         IsNumber( const sal_Unicode cChar );
-    inline bool         IsNumberEnding( const sal_Unicode cChar );
+    static inline bool  IsNumber( const sal_Unicode cChar );
+    static inline bool  IsNumberEnding( const sal_Unicode cChar );
 
     static inline bool  IsV( const sal_Unicode* pRef );
 

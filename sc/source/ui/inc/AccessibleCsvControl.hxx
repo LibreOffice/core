@@ -109,7 +109,7 @@ protected:
     ScCsvControl& implGetControl() const;
 
     /** Returns the first child of rxParentObj, which has the role nRole. */
-    XAccessibleRef implGetChildByRole( const XAccessibleRef& rxParentObj, sal_uInt16 nRole )
+    static XAccessibleRef implGetChildByRole( const XAccessibleRef& rxParentObj, sal_uInt16 nRole )
         throw( ::com::sun::star::uno::RuntimeException );
     /** Creates a StateSetHelper and fills it with DEFUNC, OPAQUE, ENABLED, SHOWING and VISIBLE. */
     ::utl::AccessibleStateSetHelper* implCreateStateSet();

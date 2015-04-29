@@ -482,7 +482,7 @@ public:
     /** Creates a CHFONT record from the passed font index, calls virtual function SetFont(). */
     void                ConvertFontBase( const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet );
     /** Converts rotation settings, calls virtual function SetRotation(). */
-    void                ConvertRotationBase( const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet, bool bSupportsStacked );
+    void                ConvertRotationBase( const ScfPropertySet& rPropSet, bool bSupportsStacked );
 };
 
 /** Represents the CHTEXT record group containing text object properties.

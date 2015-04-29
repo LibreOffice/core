@@ -68,10 +68,10 @@ public:
     void DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString );
     void ReadSRD( ScSingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
     void IncToken( TokenId &aParam );
-    DefTokenId IndexToToken( sal_uInt16 nToken );
-    FUNC_TYPE IndexToType( sal_uInt8 nToken );
-    DefTokenId IndexToDLLId( sal_uInt16 nIndex );
-    const sal_Char* getString( sal_uInt8 nIndex );
+    static DefTokenId IndexToToken( sal_uInt16 nToken );
+    static FUNC_TYPE IndexToType( sal_uInt8 nToken );
+    static DefTokenId IndexToDLLId( sal_uInt16 nIndex );
+    static const sal_Char* getString( sal_uInt8 nIndex );
 };
 #endif
 

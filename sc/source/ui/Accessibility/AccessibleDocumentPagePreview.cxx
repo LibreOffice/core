@@ -106,8 +106,8 @@ private:
     ::accessibility::AccessibleTextHelper* CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, bool bMarkNote, sal_Int32 nChildOffset) const;
     sal_Int32 AddNotes(const ScPreviewLocationData& rData, const Rectangle& rVisRect, bool bMark, ScAccNotes& rNotes);
 
-    sal_Int8 CompareCell(const ScAddress& aCell1, const ScAddress& aCell2);
-    void CollectChildren(const ScAccNote& rNote, ScXAccList& rList);
+    static sal_Int8 CompareCell(const ScAddress& aCell1, const ScAddress& aCell2);
+    static void CollectChildren(const ScAccNote& rNote, ScXAccList& rList);
     sal_Int32 CheckChanges(const ScPreviewLocationData& rData, const Rectangle& rVisRect,
         bool bMark, ScAccNotes& rOldNotes, ScAccNotes& rNewNotes,
         ScXAccList& rOldParas, ScXAccList& rNewParas);

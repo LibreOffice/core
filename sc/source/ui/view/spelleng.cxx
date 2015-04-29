@@ -329,7 +329,7 @@ vcl::Window* ScSpellingEngine::GetDialogParent()
                     return pWin;
 
     // fall back to standard dialog parent
-    return mrDocShell.GetActiveDialogParent();
+    return ScDocShell::GetActiveDialogParent();
 }
 
 ScConversionParam::ScConversionParam( ScConversionType eConvType ) :
