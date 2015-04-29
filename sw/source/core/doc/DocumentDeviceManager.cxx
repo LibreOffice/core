@@ -186,7 +186,7 @@ const JobSetup* DocumentDeviceManager::getJobsetup() const
 
 void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
 {
-    bool bCheckPageDescs = 0 == mpPrt;
+    bool bCheckPageDescs = !mpPrt;
     bool bDataChanged = false;
 
     if ( mpPrt )
