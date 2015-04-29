@@ -365,7 +365,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
 
         if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
         {
-            SdrSwapGraphicsMode nOldSwapMode;
+            SdrSwapGraphicsMode nOldSwapMode(SdrSwapGraphicsMode::DEFAULT);
 
             if( pModel )
             {
