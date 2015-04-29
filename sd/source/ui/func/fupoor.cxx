@@ -177,7 +177,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 /**
  * timer handler for window scrolling
  */
-IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
+IMPL_LINK_NOARG(FuPoor, ScrollHdl)
 {
     Point aPnt(mpWindow->GetPointerPosPixel());
 
@@ -187,7 +187,6 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 
     return 0;
 }
-IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
 /**
  * handle keyboard events
@@ -983,7 +982,7 @@ bool FuPoor::Command(const CommandEvent& rCEvt)
 /**
  * Timer handler for window scrolling
  */
-IMPL_LINK_NOARG_INLINE_START(FuPoor, DelayHdl)
+IMPL_LINK_NOARG(FuPoor, DelayHdl)
 {
     aDelayToScrollTimer.Stop ();
     bScrollable = true;
@@ -996,7 +995,6 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, DelayHdl)
 
     return 0;
 }
-IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
 
 bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 {

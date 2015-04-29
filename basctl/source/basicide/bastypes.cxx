@@ -97,13 +97,11 @@ void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
 
 
 
-IMPL_LINK_INLINE_START( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
+IMPL_LINK( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 {
     DoScroll( pCurScrollBar );
     return 0;
 }
-IMPL_LINK_INLINE_END( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
-
 
 void BaseWindow::ExecuteCommand (SfxRequest&)
 { }
@@ -456,14 +454,11 @@ IMPL_LINK_NOARG(ExtendedEdit, ImplLoseFocusHdl)
 }
 
 
-IMPL_LINK_INLINE_START( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
+IMPL_LINK( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 {
     aAccHdl.Call( pAcc );
     return 0;
 }
-IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
-
-
 
 //  TabBar
 

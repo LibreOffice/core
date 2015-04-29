@@ -191,21 +191,19 @@ void SvxMessDialog::dispose()
 
 /*************************************************************************/
 
-IMPL_LINK_NOARG_INLINE_START(SvxMessDialog, Button1Hdl)
+IMPL_LINK_NOARG(SvxMessDialog, Button1Hdl)
 {
     EndDialog( RET_BTN_1 );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxMessDialog, Button1Hdl)
 
 /*************************************************************************/
 
-IMPL_LINK_NOARG_INLINE_START(SvxMessDialog, Button2Hdl)
+IMPL_LINK_NOARG(SvxMessDialog, Button2Hdl)
 {
     EndDialog( RET_BTN_2 );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxMessDialog, Button2Hdl)
 
 /*************************************************************************/
 

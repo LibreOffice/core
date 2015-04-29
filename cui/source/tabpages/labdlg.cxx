@@ -422,7 +422,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 
 
 
-IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
+IMPL_LINK( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 {
     if (pListBox == m_pLB_ANSATZ)
     {
@@ -430,11 +430,8 @@ IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pLis
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 
-
-
-IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
+IMPL_LINK( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
 {
     if (pListBox == m_pLB_ANSATZ_REL)
     {
@@ -442,9 +439,6 @@ IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, p
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
-
-
 
 IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
 {
@@ -466,14 +460,11 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
 
 
 
-IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
+IMPL_LINK_NOARG(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 {
     SetupType_Impl( m_pCT_CAPTTYPE->GetSelectItemId() );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
-
-
 
 void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
 {

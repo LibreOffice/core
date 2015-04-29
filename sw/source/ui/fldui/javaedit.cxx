@@ -110,7 +110,7 @@ void SwJavaEditDialog::dispose()
     SvxStandardDialog::dispose();
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, PrevHdl)
+IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl)
 {
     pSh->EnterStdMode();
 
@@ -122,9 +122,8 @@ IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, PrevHdl)
 
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwJavaEditDialog, PrevHdl)
 
-IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, NextHdl)
+IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl)
 {
     pSh->EnterStdMode();
 
@@ -136,7 +135,6 @@ IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, NextHdl)
 
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwJavaEditDialog, NextHdl)
 
 IMPL_LINK_NOARG(SwJavaEditDialog, OKHdl)
 {

@@ -702,34 +702,31 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwIndexMarkPane, NextHdl)
+IMPL_LINK_NOARG(SwIndexMarkPane, NextHdl)
 {
     InsertUpdate();
     pTOXMgr->NextTOXMark();
     UpdateDialog();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwIndexMarkPane, NextHdl)
 
-IMPL_LINK_NOARG_INLINE_START(SwIndexMarkPane, NextSameHdl)
+IMPL_LINK_NOARG(SwIndexMarkPane, NextSameHdl)
 {
     InsertUpdate();
     pTOXMgr->NextTOXMark(true);
     UpdateDialog();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwIndexMarkPane, NextSameHdl)
 
-IMPL_LINK_NOARG_INLINE_START(SwIndexMarkPane, PrevHdl)
+IMPL_LINK_NOARG(SwIndexMarkPane, PrevHdl)
 {
     InsertUpdate();
     pTOXMgr->PrevTOXMark();
     UpdateDialog();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwIndexMarkPane, PrevHdl)
 
-IMPL_LINK_NOARG_INLINE_START(SwIndexMarkPane, PrevSameHdl)
+IMPL_LINK_NOARG(SwIndexMarkPane, PrevSameHdl)
 {
     InsertUpdate();
     pTOXMgr->PrevTOXMark(true);
@@ -737,7 +734,6 @@ IMPL_LINK_NOARG_INLINE_START(SwIndexMarkPane, PrevSameHdl)
 
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwIndexMarkPane, PrevSameHdl)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl)
 {

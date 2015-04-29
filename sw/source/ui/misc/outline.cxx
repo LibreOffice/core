@@ -92,13 +92,12 @@ void SwNumNamesDlg::dispose()
 
 
 // remember selected entry
-IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
+IMPL_LINK( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 {
     m_pFormEdit->SetText(pBox->GetSelectEntry());
     m_pFormEdit->SetSelection(Selection(0, SELECTION_MAX));
     return 0;
 }
-IMPL_LINK_INLINE_END( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 
 /** set user defined names
  *
@@ -122,20 +121,18 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
 }
 
 // unlock OK-Button when text is in Edit
-IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
+IMPL_LINK( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 {
     m_pOKBtn->Enable(!pBox->GetText().isEmpty());
     return 0;
 }
-IMPL_LINK_INLINE_END( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 
 // DoubleClickHdl
-IMPL_LINK_NOARG_INLINE_START(SwNumNamesDlg, DoubleClickHdl)
+IMPL_LINK_NOARG(SwNumNamesDlg, DoubleClickHdl)
 {
     EndDialog(RET_OK);
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwNumNamesDlg, DoubleClickHdl)
 
 SwNumNamesDlg::SwNumNamesDlg(vcl::Window *pParent)
     : ModalDialog(pParent, "NumberingNameDialog",

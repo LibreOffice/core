@@ -58,11 +58,10 @@ OUString ScSelEntryDlg::GetSelectEntry() const
     return m_pLb->GetSelectEntry();
 }
 
-IMPL_LINK_NOARG_INLINE_START(ScSelEntryDlg, DblClkHdl)
+IMPL_LINK_NOARG(ScSelEntryDlg, DblClkHdl)
 {
     EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(ScSelEntryDlg, DblClkHdl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

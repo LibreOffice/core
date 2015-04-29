@@ -206,7 +206,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 
 
 
-IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
+IMPL_LINK_NOARG(SvxNewDictionaryDialog, ModifyHdl_Impl)
 {
     if ( !pNameEdit->GetText().isEmpty() )
         pOKBtn->Enable();
@@ -214,9 +214,6 @@ IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
         pOKBtn->Disable();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxNewDictionaryDialog, ModifyHdl_Impl)
-
-
 
 // class SvxEditDictionaryDialog -------------------------------------------
 

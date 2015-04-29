@@ -440,7 +440,7 @@ void Shell::OuterResizePixel( const Point &rPos, const Size &rSize )
 }
 
 
-IMPL_LINK_INLINE_START( Shell, TabBarSplitHdl, TabBar *, pTBar )
+IMPL_LINK( Shell, TabBarSplitHdl, TabBar *, pTBar )
 {
     (void)pTBar;
     bTabBarSplitted = true;
@@ -448,9 +448,6 @@ IMPL_LINK_INLINE_START( Shell, TabBarSplitHdl, TabBar *, pTBar )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( Shell, TabBarSplitHdl, TabBar *, pTBar )
-
-
 
 IMPL_LINK( Shell, TabBarHdl, TabBar *, pCurTabBar )
 {

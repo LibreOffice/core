@@ -29,7 +29,7 @@
 
 
 
-IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
+IMPL_LINK( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
 {
     if (mbAsciiOnly && (pEdit == mpPassword1ED || pEdit == mpPassword2ED))
     {
@@ -59,9 +59,6 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
     mpOKBtn->Enable( bEnable );
     return 0;
 }
-IMPL_LINK_INLINE_END(SfxPasswordDialog, EditModifyHdl, Edit *, pEdit)
-
-
 
 IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 {

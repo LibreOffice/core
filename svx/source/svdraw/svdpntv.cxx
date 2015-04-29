@@ -293,7 +293,7 @@ void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_
 
 
 
-IMPL_LINK_NOARG_INLINE_START(SdrPaintView, ImpComeBackHdl)
+IMPL_LINK_NOARG(SdrPaintView, ImpComeBackHdl)
 {
     if (bSomeObjChgdFlag) {
         bSomeObjChgdFlag=false;
@@ -301,7 +301,6 @@ IMPL_LINK_NOARG_INLINE_START(SdrPaintView, ImpComeBackHdl)
     }
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SdrPaintView,ImpComeBackHdl)
 
 void SdrPaintView::FlushComeBackTimer() const
 {

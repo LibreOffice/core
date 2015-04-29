@@ -175,7 +175,7 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
+IMPL_LINK_NOARG(ScAutoFormatDlg, DblClkHdl)
 {
     if ( bCoreDataChanged )
         ScGlobal::GetOrCreateAutoFormat()->Save();
@@ -183,7 +183,6 @@ IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
     EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(ScAutoFormatDlg, DblClkHdl)
 
 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 {

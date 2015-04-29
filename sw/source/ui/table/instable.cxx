@@ -157,7 +157,7 @@ void SwInsTableDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
+IMPL_LINK( SwInsTableDlg, ModifyName, Edit *, pEdit )
 {
     OUString sTblName = pEdit->GetText();
     if (sTblName.indexOf(' ') != -1)
@@ -169,7 +169,6 @@ IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
     m_pInsertBtn->Enable(pShell->GetTblStyle( sTblName ) == 0);
     return 0;
 }
-IMPL_LINK_INLINE_END( SwInsTableDlg, ModifyName, Edit *, pEdit )
 
 IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 {

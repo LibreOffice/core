@@ -391,16 +391,13 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 
 
 
-IMPL_LINK_NOARG_INLINE_START(SvxLineDefTabPage, ChangePreviewHdl_Impl)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 {
     FillDash_Impl();
     m_pCtlPreview->Invalidate();
 
     return 0L;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxLineDefTabPage, ChangePreviewHdl_Impl)
-
-
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
 {

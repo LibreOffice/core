@@ -2081,7 +2081,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwFrmPage, RealSizeHdl)
+IMPL_LINK_NOARG(SwFrmPage, RealSizeHdl)
 {
     m_aWidthED.SetUserValue( m_aWidthED. NormalizePercent(aGrfSize.Width() ), FUNIT_TWIP);
     m_aHeightED.SetUserValue(m_aHeightED.NormalizePercent(aGrfSize.Height()), FUNIT_TWIP);
@@ -2089,7 +2089,6 @@ IMPL_LINK_NOARG_INLINE_START(SwFrmPage, RealSizeHdl)
     UpdateExample();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwFrmPage, RealSizeHdl)
 
 IMPL_LINK_NOARG(SwFrmPage, AutoWidthClickHdl)
 {

@@ -759,13 +759,12 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwDropCapsPage, SelectHdl)
+IMPL_LINK_NOARG(SwDropCapsPage, SelectHdl)
 {
     m_pPict->UpdatePaintSettings();
     bModified = true;
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwDropCapsPage, SelectHdl)
 
 void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 {

@@ -300,7 +300,7 @@ void SvImpLBox::Clear()
 // Paint, navigate, scroll
 // *********************************************************************
 
-IMPL_LINK_NOARG_INLINE_START(SvImpLBox, EndScrollHdl)
+IMPL_LINK_NOARG(SvImpLBox, EndScrollHdl)
 {
     if( nFlags & F_ENDSCROLL_SET_VIS_SIZE )
     {
@@ -310,8 +310,6 @@ IMPL_LINK_NOARG_INLINE_START(SvImpLBox, EndScrollHdl)
     EndScroll();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvImpLBox, EndScrollHdl)
-
 
 // handler for vertical scrollbar
 
@@ -725,7 +723,7 @@ void SvImpLBox::UpdateAll(
         pView->Invalidate( GetVisibleArea() );
 }
 
-IMPL_LINK_INLINE_START( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar )
+IMPL_LINK( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar )
 {
     long nDelta = pScrollBar->GetDelta();
     if( nDelta )
@@ -740,7 +738,6 @@ IMPL_LINK_INLINE_START( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar )
 
 void SvImpLBox::KeyLeftRight( long nDelta )
 {

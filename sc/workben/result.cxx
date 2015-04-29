@@ -50,13 +50,12 @@ void ScAddInResult::NewValue()
         (*aListeners[n])->modified( aEvent );
 }
 
-IMPL_LINK_INLINE_START( ScAddInResult, TimeoutHdl, Timer*, pT )
+IMPL_LINK( ScAddInResult, TimeoutHdl, Timer*, pT )
 {
     NewValue();
     pT->Start();
     return 0;
 }
-IMPL_LINK_INLINE_END( ScAddInResult, TimeoutHdl, Timer*, pT )
 
 ScAddInResult::~ScAddInResult()
 {

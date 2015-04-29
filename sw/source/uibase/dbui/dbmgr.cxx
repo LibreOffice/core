@@ -1528,13 +1528,12 @@ void SwDBManager::MergeCancel()
     bCancel = true;
 }
 
-IMPL_LINK_INLINE_START( SwDBManager, PrtCancelHdl, Button *, pButton )
+IMPL_LINK( SwDBManager, PrtCancelHdl, Button *, pButton )
 {
     pButton->GetParent()->Hide();
     MergeCancel();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwDBManager, PrtCancelHdl, Button *, pButton )
 
 // determine the column's Numberformat and transfer to the forwarded Formatter,
 // if applicable.

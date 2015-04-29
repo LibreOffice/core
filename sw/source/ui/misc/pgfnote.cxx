@@ -52,20 +52,18 @@ const sal_uInt16 SwFootNotePage::aPageRg[] = {
 
 // handler to switch between the different possibilities how the footnote
 // region's height can be set.
-IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightPage)
+IMPL_LINK_NOARG(SwFootNotePage, HeightPage)
 {
     m_pMaxHeightEdit->Enable(false);
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightPage)
 
-IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightMetric)
+IMPL_LINK_NOARG(SwFootNotePage, HeightMetric)
 {
     m_pMaxHeightEdit->Enable();
     m_pMaxHeightEdit->GrabFocus();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightMetric)
 
 // handler limit values
 IMPL_LINK_NOARG(SwFootNotePage, HeightModify)

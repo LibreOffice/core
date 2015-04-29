@@ -606,22 +606,20 @@ void LibPage::DeactivatePage()
 {
 }
 
-IMPL_LINK_INLINE_START( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
+IMPL_LINK( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
 {
     if ( pBox->IsSelected( pBox->GetHdlEntry() ) )
         CheckButtons();
     return 0;
 }
-IMPL_LINK_INLINE_END( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
 
-IMPL_LINK_INLINE_START( LibPage, BasicSelectHdl, ListBox *, pBox )
+IMPL_LINK( LibPage, BasicSelectHdl, ListBox *, pBox )
 {
     (void)pBox;
     SetCurLib();
     CheckButtons();
     return 0;
 }
-IMPL_LINK_INLINE_END( LibPage, BasicSelectHdl, ListBox *, pBox )
 
 IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 {
@@ -712,7 +710,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
+IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 {
     long nRet = 0;
 
@@ -736,7 +734,6 @@ IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 
     return nRet;
 }
-IMPL_LINK_INLINE_END( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 
 void LibPage::NewLib()
 {

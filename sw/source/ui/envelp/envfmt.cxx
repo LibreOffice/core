@@ -218,7 +218,7 @@ void SwEnvFmtPage::dispose()
 }
 
 
-IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
+IMPL_LINK( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 {
     long lWVal = static_cast< long >(GetFldVal(*m_pSizeWidthField ));
     long lHVal = static_cast< long >(GetFldVal(*m_pSizeHeightField));
@@ -253,7 +253,6 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 
 IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 {

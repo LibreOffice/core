@@ -83,14 +83,13 @@ IMPL_LINK( SvPasteObjectDialog, SelectHdl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
+IMPL_LINK( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
 {
     (void)pListBox;
 
     EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
 
 /*************************************************************************
 |*    SvPasteObjectDialog::Insert()

@@ -3426,13 +3426,12 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
 }
 
 
-IMPL_LINK_INLINE_START( SvxRuler, MenuSelect, Menu *, pMenu )
+IMPL_LINK( SvxRuler, MenuSelect, Menu *, pMenu )
 {
     /* Handler of the context menus for switching the unit of measurement */
     SetUnit(FieldUnit(pMenu->GetCurItemId()));
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxRuler, MenuSelect, Menu *, pMenu )
 
 IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu )
 {

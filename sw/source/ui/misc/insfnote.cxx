@@ -82,29 +82,26 @@ void SwInsFootNoteDlg::Apply()
     bFootnote = m_pFtnBtn->IsChecked();
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberCharHdl)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberCharHdl)
 {
     m_pNumberCharEdit->GrabFocus();
     m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() || bExtCharAvailable );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberCharHdl)
 
-IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberEditHdl)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberEditHdl)
 {
     m_pNumberCharBtn->Check( true );
     m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() );
 
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberEditHdl)
 
-IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberAutoBtnHdl)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberAutoBtnHdl)
 {
     m_pOkBtn->Enable( true );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberAutoBtnHdl)
 
 IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
 {

@@ -1808,18 +1808,15 @@ bool WatchWindow::RemoveSelectedWatch()
 }
 
 
-IMPL_LINK_INLINE_START( WatchWindow, ButtonHdl, ImageButton *, pButton )
+IMPL_LINK( WatchWindow, ButtonHdl, ImageButton *, pButton )
 {
     if (pButton == aRemoveWatchButton.get())
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute(SID_BASICIDE_REMOVEWATCH);
     return 0;
 }
-IMPL_LINK_INLINE_END( WatchWindow, ButtonHdl, ImageButton *, pButton )
 
-
-
-IMPL_LINK_NOARG_INLINE_START(WatchWindow, TreeListHdl)
+IMPL_LINK_NOARG(WatchWindow, TreeListHdl)
 {
     SvTreeListEntry* pCurEntry = aTreeListBox->GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
@@ -1827,10 +1824,8 @@ IMPL_LINK_NOARG_INLINE_START(WatchWindow, TreeListHdl)
 
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(WatchWindow, TreeListHdl)
 
-
-IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
+IMPL_LINK( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
 {
     (void)pBar;
 
@@ -1862,8 +1857,6 @@ IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
-
 
 IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
 {

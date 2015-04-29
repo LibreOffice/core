@@ -174,23 +174,17 @@ void SvxPostItDialog::EnableTravel(bool bNext, bool bPrev)
 
 
 
-IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, PrevHdl)
+IMPL_LINK_NOARG(SvxPostItDialog, PrevHdl)
 {
     aPrevHdlLink.Call( this );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, PrevHdl)
 
-
-
-IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, NextHdl)
+IMPL_LINK_NOARG(SvxPostItDialog, NextHdl)
 {
     aNextHdlLink.Call( this );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, NextHdl)
-
-
 
 IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
 {

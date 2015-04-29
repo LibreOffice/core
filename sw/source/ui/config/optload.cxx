@@ -843,12 +843,11 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwCaptionOptPage, SelectHdl)
+IMPL_LINK_NOARG(SwCaptionOptPage, SelectHdl)
 {
     DrawSample();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwCaptionOptPage, SelectHdl)
 
 IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
 {

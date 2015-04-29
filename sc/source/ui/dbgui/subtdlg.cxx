@@ -47,7 +47,7 @@ void ScSubTotalDlg::dispose()
     SfxTabDialog::dispose();
 }
 
-IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
+IMPL_LINK( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
 {
     if (pBtn == m_pBtnRemove)
     {
@@ -55,6 +55,5 @@ IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -149,13 +149,11 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
 
 /**************************************************************************/
 
-IMPL_LINK_INLINE_START( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, EMPTYARG/*pButton*/ )
+IMPL_LINK( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, EMPTYARG/*pButton*/ )
 {
     m_pZoom->Enable(m_pSizeZoomed->IsChecked());
     return 0;
 }
-IMPL_LINK_INLINE_END( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, pButton )
-
 
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItemSet &rOptions)
     : SfxTabPage(pParent, "SmathSettings", "modules/smath/ui/smathsettings.ui", &rOptions)
@@ -288,14 +286,12 @@ void SmShowFont::SetFont(const vcl::Font& rFont)
     SetTextColor( aTxtColor );
 }
 
-IMPL_LINK_INLINE_START( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
+IMPL_LINK( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
 {
     Face.SetName(pComboBox->GetText());
     m_pShowFont->SetFont(Face);
     return 0;
 }
-IMPL_LINK_INLINE_END( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
-
 
 IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
 {
@@ -557,7 +553,7 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 }
 
 
-IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
 {
     if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
@@ -568,7 +564,6 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTY
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButton )
 
 SmFontTypeDialog::SmFontTypeDialog(vcl::Window * pParent, OutputDevice *pFntListDevice)
     : ModalDialog(pParent, "FontsDialog", "modules/smath/ui/fonttypedialog.ui"),

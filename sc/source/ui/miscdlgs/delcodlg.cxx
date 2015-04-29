@@ -150,12 +150,11 @@ void ScDeleteContentsDlg::DisableObjects()
     aBtnDelObjects->Disable();
 }
 
-IMPL_LINK_NOARG_INLINE_START(ScDeleteContentsDlg, DelAllHdl)
+IMPL_LINK_NOARG(ScDeleteContentsDlg, DelAllHdl)
 {
     DisableChecks( aBtnDelAll->IsChecked() );
 
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(ScDeleteContentsDlg, DelAllHdl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

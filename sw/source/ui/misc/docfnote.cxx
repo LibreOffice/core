@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl)
 
 // Handler behind the button to collect the footnote at the chapter or end of
 // the document. In this case no pagewise numbering can be used.
-IMPL_LINK_NOARG_INLINE_START(SwEndNoteOptionPage, PosChapterHdl)
+IMPL_LINK_NOARG(SwEndNoteOptionPage, PosChapterHdl)
 {
     if ( !bPosDoc )
         SelectNumbering(FTNNUM_DOC);
@@ -340,7 +340,6 @@ IMPL_LINK_NOARG_INLINE_START(SwEndNoteOptionPage, PosChapterHdl)
     m_pPageTemplBox->Enable();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwEndNoteOptionPage, PosChapterHdl)
 
 static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFmtName )
 {

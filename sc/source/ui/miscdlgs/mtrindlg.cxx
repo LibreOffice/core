@@ -108,11 +108,10 @@ IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(ScMetricInputDlg, ModifyHdl)
+IMPL_LINK_NOARG(ScMetricInputDlg, ModifyHdl)
 {
     m_pBtnDefVal->Check( nDefaultValue == m_pEdValue->GetValue() );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(ScMetricInputDlg, ModifyHdl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

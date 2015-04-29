@@ -31,7 +31,7 @@ ScDrawObjFactory::~ScDrawObjFactory()
     SdrObjFactory::RemoveMakeUserDataHdl( LINK ( this, ScDrawObjFactory, MakeUserData ) );
 }
 
-IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
+IMPL_LINK( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 {
     if ( pObjFactory->nInventor == SC_DRAWLAYER )
     {
@@ -48,7 +48,6 @@ IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFac
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 
 ScDrawObjData::ScDrawObjData() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 ),

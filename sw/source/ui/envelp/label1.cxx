@@ -365,12 +365,11 @@ IMPL_LINK_NOARG(SwLabPage, FieldHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwLabPage, PageHdl)
+IMPL_LINK_NOARG(SwLabPage, PageHdl)
 {
     m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwLabPage, PageHdl)
 
 IMPL_LINK_NOARG(SwLabPage, MakeHdl)
 {
@@ -426,13 +425,12 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwLabPage, TypeHdl)
+IMPL_LINK_NOARG(SwLabPage, TypeHdl)
 {
     DisplayFormat();
     aItem.aType = m_pTypeBox->GetSelectEntry();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwLabPage, TypeHdl)
 
 void SwLabPage::DisplayFormat()
 {

@@ -1184,16 +1184,13 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 
 
 
-IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, BorderModify_Impl)
+IMPL_LINK_NOARG(SvxPageDescPage, BorderModify_Impl)
 {
     if ( !bBorderModified )
         bBorderModified = true;
     UpdateExample_Impl();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxPageDescPage, BorderModify_Impl)
-
-
 
 void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
 {
@@ -1652,16 +1649,13 @@ void SvxPageDescPage::CalcMargin_Impl()
 
 
 
-IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, CenterHdl_Impl)
+IMPL_LINK_NOARG(SvxPageDescPage, CenterHdl_Impl)
 {
     m_pBspWin->SetHorz( m_pHorzBox->IsChecked() );
     m_pBspWin->SetVert( m_pVertBox->IsChecked() );
     UpdateExample_Impl();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxPageDescPage, CenterHdl_Impl)
-
-
 
 void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
 {

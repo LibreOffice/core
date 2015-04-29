@@ -129,7 +129,7 @@ void SvRTLInputBox::PositionPrompt(const OUString& rPrompt,const Size& rDlgSize)
 }
 
 
-IMPL_LINK_INLINE_START( SvRTLInputBox, OkHdl, Button *, pButton )
+IMPL_LINK( SvRTLInputBox, OkHdl, Button *, pButton )
 {
     (void)pButton;
 
@@ -137,9 +137,8 @@ IMPL_LINK_INLINE_START( SvRTLInputBox, OkHdl, Button *, pButton )
     EndDialog( 1 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvRTLInputBox, OkHdl, Button *, pButton )
 
-IMPL_LINK_INLINE_START( SvRTLInputBox, CancelHdl, Button *, pButton )
+IMPL_LINK( SvRTLInputBox, CancelHdl, Button *, pButton )
 {
     (void)pButton;
 
@@ -147,7 +146,6 @@ IMPL_LINK_INLINE_START( SvRTLInputBox, CancelHdl, Button *, pButton )
     EndDialog( 0 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvRTLInputBox, CancelHdl, Button *, pButton )
 
 
 // *********************************************************************

@@ -126,7 +126,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
+IMPL_LINK_NOARG(FuPoor, ScrollHdl)
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
 
@@ -136,7 +136,6 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 
     return 0;
 }
-IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
 // moved from inline to *.cxx
 bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)

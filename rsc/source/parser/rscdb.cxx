@@ -383,7 +383,7 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
+IMPL_LINK( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 {
     if( pObjNode->GetFileKey() == lFileKey )
     {
@@ -394,7 +394,6 @@ IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut )
 {
@@ -474,19 +473,17 @@ public:
         }
 };
 
-IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
+IMPL_LINK( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
 {
     aEnumObj.WriteRc( pRef, pRef->GetObjNode() );
     return 0;
 }
-IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
-IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteSrc, RscTop *, pRef )
+
+IMPL_LINK( RscEnumerateRef, CallBackWriteSrc, RscTop *, pRef )
 {
     aEnumObj.WriteSrc( pRef, pRef->GetObjNode() );
     return 0;
 }
-IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteSrc, RscTop *, pRef )
-
 
 ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 {
@@ -576,13 +573,12 @@ inline RscDel::RscDel( RscTop * pRoot, sal_uLong lKey )
     pRoot->EnumNodes( LINK( this, RscDel, Delete ) );
 }
 
-IMPL_LINK_INLINE_START( RscDel, Delete, RscTop *, pNode )
+IMPL_LINK( RscDel, Delete, RscTop *, pNode )
 {
     if( pNode->GetObjNode() )
         pNode->pObjBiTree = pNode->GetObjNode()->DelObjNode( pNode, lFileKey );
     return 0;
 }
-IMPL_LINK_INLINE_END( RscDel, Delete, RscTop *, pNode )
 
 void RscTypCont :: Delete( sal_uLong lFileKey )
 {

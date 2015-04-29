@@ -59,11 +59,10 @@ void ScColOrRowDlg::dispose()
 }
 
 
-IMPL_LINK_NOARG_INLINE_START(ScColOrRowDlg, OkHdl)
+IMPL_LINK_NOARG(ScColOrRowDlg, OkHdl)
 {
     EndDialog( m_pBtnCols->IsChecked() ? SCRET_COLS : SCRET_ROWS );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(ScColOrRowDlg, OkHdl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

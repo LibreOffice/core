@@ -31,7 +31,7 @@
 #include <cmdid.h>
 #include <table.hrc>
 
-IMPL_LINK_NOARG_INLINE_START(SwTableWidthDlg, LoseFocusHdl)
+IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl)
 {
     sal_uInt16 nId = (sal_uInt16)m_pColNF->GetValue()-1;
     const SwTwips lWidth = rFnc.GetColWidth(nId);
@@ -39,7 +39,6 @@ IMPL_LINK_NOARG_INLINE_START(SwTableWidthDlg, LoseFocusHdl)
     m_pWidthMF->SetValue(m_pWidthMF->Normalize(lWidth), FUNIT_TWIP);
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwTableWidthDlg, LoseFocusHdl)
 
 SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
     : SvxStandardDialog( pParent, "ColumnWidthDialog", "modules/swriter/ui/columnwidth.ui" )

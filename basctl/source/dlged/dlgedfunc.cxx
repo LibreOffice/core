@@ -27,7 +27,7 @@
 namespace basctl
 {
 
-IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
+IMPL_LINK( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 {
     (void)pTimer;
     vcl::Window& rWindow = rParent.GetWindow();
@@ -36,7 +36,6 @@ IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
     ForceScroll( aPos );
     return 0;
 }
-IMPL_LINK_INLINE_END( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 
 void DlgEdFunc::ForceScroll( const Point& rPos )
 {

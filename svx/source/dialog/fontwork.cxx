@@ -740,12 +740,11 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SvxFontWorkDialog, ModifyInputHdl_Impl)
+IMPL_LINK_NOARG(SvxFontWorkDialog, ModifyInputHdl_Impl)
 {
     aInputIdle.Start();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxFontWorkDialog, ModifyInputHdl_Impl)
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
 {

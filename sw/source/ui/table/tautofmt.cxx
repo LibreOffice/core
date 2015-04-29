@@ -502,14 +502,13 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwAutoFormatDlg, OkHdl)
+IMPL_LINK_NOARG(SwAutoFormatDlg, OkHdl)
 {
     if( bSetAutoFmt )
         pShell->SetTableAutoFmt( (*pTableTbl)[ nIndex ] );
     EndDialog( RET_OK );
     return sal_True;
 }
-IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
 AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :
         Window          ( pParent, nStyle ),

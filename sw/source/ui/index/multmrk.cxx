@@ -45,7 +45,7 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr& rTOXMgr)
     m_pTextFT->SetText(rMgr.GetTOXMark(0)->GetTOXType()->GetTypeName());
 }
 
-IMPL_LINK_INLINE_START( SwMultiTOXMarkDlg, SelectHdl, ListBox *, pBox )
+IMPL_LINK( SwMultiTOXMarkDlg, SelectHdl, ListBox *, pBox )
 {
     if(pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {   SwTOXMark* pMark = rMgr.GetTOXMark(pBox->GetSelectEntryPos());
@@ -54,7 +54,6 @@ IMPL_LINK_INLINE_START( SwMultiTOXMarkDlg, SelectHdl, ListBox *, pBox )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SwMultiTOXMarkDlg, SelectHdl, ListBox *, pBox )
 
 void SwMultiTOXMarkDlg::Apply()
 {

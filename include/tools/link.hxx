@@ -80,18 +80,6 @@ typedef sal_IntPtr (*PSTUB)( void*, void* );
     IMPL_STUB( Class, Method, void* ) \
     sal_IntPtr Class::Method( SAL_UNUSED_PARAMETER void* )
 
-#define IMPL_LINK_INLINE_START( Class, Method, ArgType, ArgName ) \
-    inline sal_IntPtr Class::Method( ArgType ArgName )
-
-#define IMPL_LINK_INLINE_END( Class, Method, ArgType, ArgName ) \
-    IMPL_STUB( Class, Method, ArgType )
-
-#define IMPL_LINK_NOARG_INLINE_START( Class, Method ) \
-    inline sal_IntPtr Class::Method( SAL_UNUSED_PARAMETER void* )
-
-#define IMPL_LINK_NOARG_INLINE_END( Class, Method ) \
-    IMPL_STUB( Class, Method, void* )
-
 #define EMPTYARG
 
 class TOOLS_DLLPUBLIC Link

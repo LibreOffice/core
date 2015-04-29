@@ -2430,13 +2430,12 @@ bool SfxTemplateDialog_Impl::IsCheckedItem(sal_uInt16 nMesId)
     }
 }
 
-IMPL_LINK_INLINE_START( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
+IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     FamilySelect(nEntry);
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
 
 static OUString lcl_GetLabel(uno::Any& rAny)
 {

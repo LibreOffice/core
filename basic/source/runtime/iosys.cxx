@@ -115,7 +115,7 @@ void SbiInputDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_INLINE_START( SbiInputDialog, Ok, vcl::Window *, pWindow )
+IMPL_LINK( SbiInputDialog, Ok, vcl::Window *, pWindow )
 {
     (void)pWindow;
 
@@ -123,17 +123,14 @@ IMPL_LINK_INLINE_START( SbiInputDialog, Ok, vcl::Window *, pWindow )
     EndDialog( 1 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SbiInputDialog, Ok, vcl::Window *, pWindow )
 
-IMPL_LINK_INLINE_START( SbiInputDialog, Cancel, vcl::Window *, pWindow )
+IMPL_LINK( SbiInputDialog, Cancel, vcl::Window *, pWindow )
 {
     (void)pWindow;
 
     EndDialog( 0 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SbiInputDialog, Cancel, vcl::Window *, pWindow )
-
 
 SbiStream::SbiStream()
     : pStrm(0)

@@ -468,7 +468,7 @@ void MacroChooser::CheckButtons()
 
 
 
-IMPL_LINK_NOARG_INLINE_START(MacroChooser, MacroDoubleClickHdl)
+IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl)
 {
     StoreMacroDescription();
     if (nMode == Recording)
@@ -481,7 +481,6 @@ IMPL_LINK_NOARG_INLINE_START(MacroChooser, MacroDoubleClickHdl)
     EndDialog(Macro_OkRun);
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(MacroChooser, MacroDoubleClickHdl)
 
 IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
 {

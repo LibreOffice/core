@@ -180,22 +180,19 @@ void SvInplaceEdit2::Hide()
 }
 
 
-IMPL_LINK_NOARG_INLINE_START(SvInplaceEdit2, ReturnHdl_Impl)
+IMPL_LINK_NOARG(SvInplaceEdit2, ReturnHdl_Impl)
 {
     bCanceled = false;
     CallCallBackHdl_Impl();
     return 1;
 }
-IMPL_LINK_NOARG_INLINE_END(SvInplaceEdit2, ReturnHdl_Impl)
 
-IMPL_LINK_NOARG_INLINE_START(SvInplaceEdit2, EscapeHdl_Impl)
+IMPL_LINK_NOARG(SvInplaceEdit2, EscapeHdl_Impl)
 {
     bCanceled = true;
     CallCallBackHdl_Impl();
     return 1;
 }
-IMPL_LINK_NOARG_INLINE_END(SvInplaceEdit2, EscapeHdl_Impl)
-
 
 bool SvInplaceEdit2::KeyInput( const KeyEvent& rKEvt )
 {
@@ -239,12 +236,11 @@ void SvInplaceEdit2::LoseFocus()
     }
 }
 
-IMPL_LINK_NOARG_INLINE_START(SvInplaceEdit2, Timeout_Impl)
+IMPL_LINK_NOARG(SvInplaceEdit2, Timeout_Impl)
 {
     CallCallBackHdl_Impl();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvInplaceEdit2, Timeout_Impl)
 
 void SvInplaceEdit2::CallCallBackHdl_Impl()
 {
@@ -461,11 +457,10 @@ bool SvTreeListBox::IsEntryMnemonicsEnabled() const
     return mpImpl->m_bEntryMnemonicsEnabled;
 }
 
-IMPL_LINK_INLINE_START( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
+IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 {
     return reinterpret_cast<sal_IntPtr>(CloneEntry((SvTreeListEntry*)pEntry));
 }
-IMPL_LINK_INLINE_END( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 
 sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uLong nPos )
 {
@@ -1816,13 +1811,12 @@ const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry 
     return pItem->GetBitmap1( );
 }
 
-IMPL_LINK_INLINE_START( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData )
+IMPL_LINK( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData )
 {
     pHdlEntry = pData->GetActEntry();
     CheckButtonHdl();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData )
 
 SvTreeListEntry* SvTreeListBox::InsertEntry(
     const OUString& rText,

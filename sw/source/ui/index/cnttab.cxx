@@ -3812,7 +3812,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwTOXStylesTabPage, DoubleClickHdl)
+IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl)
 {
     const OUString aTmpName( m_pParaLayLB->GetSelectEntry() );
     SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
@@ -3822,7 +3822,6 @@ IMPL_LINK_NOARG_INLINE_START(SwTOXStylesTabPage, DoubleClickHdl)
         AssignHdl(m_pAssignBT);
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwTOXStylesTabPage, DoubleClickHdl)
 
 // enable only when selected
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)

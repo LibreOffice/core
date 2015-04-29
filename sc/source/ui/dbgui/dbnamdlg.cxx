@@ -400,12 +400,11 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(ScDbNameDlg, CancelBtnHdl)
+IMPL_LINK_NOARG(ScDbNameDlg, CancelBtnHdl)
 {
     Close();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
 
 IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {

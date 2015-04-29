@@ -59,15 +59,14 @@ void SwBreakDlg::Apply()
     }
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwBreakDlg, ClickHdl)
+IMPL_LINK_NOARG(SwBreakDlg, ClickHdl)
 {
     CheckEnable();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, ClickHdl)
 
 // Handler for Change Page Number
-IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
+IMPL_LINK( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 {
     if(pBox->IsChecked())
         m_pPageNumEdit->SetValue(1);
@@ -75,15 +74,13 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
         m_pPageNumEdit->SetText(OUString());
     return 0;
 }
-IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 
 // By changing the Page number the checkbox is checked.
-IMPL_LINK_NOARG_INLINE_START(SwBreakDlg, PageNumModifyHdl)
+IMPL_LINK_NOARG(SwBreakDlg, PageNumModifyHdl)
 {
     m_pPageNumBox->Check();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, PageNumModifyHdl)
 
 /*
  * Ok-Handler;

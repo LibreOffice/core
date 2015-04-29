@@ -566,27 +566,24 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SvxHFPage, DistModify)
+IMPL_LINK_NOARG(SvxHFPage, DistModify)
 {
     UpdateExample();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxHFPage, DistModify)
 
-IMPL_LINK_NOARG_INLINE_START(SvxHFPage, HeightModify)
+IMPL_LINK_NOARG(SvxHFPage, HeightModify)
 {
     UpdateExample();
 
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxHFPage, HeightModify)
 
-IMPL_LINK_NOARG_INLINE_START(SvxHFPage, BorderModify)
+IMPL_LINK_NOARG(SvxHFPage, BorderModify)
 {
     UpdateExample();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxHFPage, BorderModify)
 
 IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 {

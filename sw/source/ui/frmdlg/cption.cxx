@@ -280,7 +280,7 @@ void SwCaptionDialog::Apply()
     our_aSepTextSave = m_pSepEdit->GetText();
 }
 
-IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
+IMPL_LINK( SwCaptionDialog, OptionHdl, Button*, pButton )
 {
     OUString sFldTypeName = m_pCategoryBox->GetText();
     if(sFldTypeName == m_sNone)
@@ -302,14 +302,12 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
     DrawSample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwCaptionDialog, OptionHdl, Button*, pButton )
 
-IMPL_LINK_NOARG_INLINE_START(SwCaptionDialog, SelectHdl)
+IMPL_LINK_NOARG(SwCaptionDialog, SelectHdl)
 {
     DrawSample();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwCaptionDialog, SelectHdl)
 
 IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
 {

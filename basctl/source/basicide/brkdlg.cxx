@@ -150,7 +150,7 @@ void BreakPointDialog::CheckButtons()
     }
 }
 
-IMPL_LINK_INLINE_START( BreakPointDialog, CheckBoxHdl, ::CheckBox *, pChkBx )
+IMPL_LINK( BreakPointDialog, CheckBoxHdl, ::CheckBox *, pChkBx )
 {
     BreakPoint* pBrk = GetSelectedBreakPoint();
     if ( pBrk )
@@ -158,9 +158,6 @@ IMPL_LINK_INLINE_START( BreakPointDialog, CheckBoxHdl, ::CheckBox *, pChkBx )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( BreakPointDialog, CheckBoxHdl, ::CheckBox *, pChkBx )
-
-
 
 IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox *, pBox )
 {

@@ -81,11 +81,10 @@ sal_Int32 ScShowTabDlg::GetSelectEntryPos(sal_Int32 nPos) const
     return m_pLb->GetSelectEntryPos(nPos);
 }
 
-IMPL_LINK_NOARG_INLINE_START(ScShowTabDlg, DblClkHdl)
+IMPL_LINK_NOARG(ScShowTabDlg, DblClkHdl)
 {
     EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(ScShowTabDlg, DblClkHdl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

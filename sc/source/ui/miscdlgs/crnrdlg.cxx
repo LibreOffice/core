@@ -517,12 +517,11 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(ScColRowNameRangesDlg, CancelBtnHdl)
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, CancelBtnHdl)
 {
     Close();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(ScColRowNameRangesDlg, CancelBtnHdl)
 
 // handler called when add button clicked: set ranges and add to listbox
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)

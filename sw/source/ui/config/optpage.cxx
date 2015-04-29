@@ -503,7 +503,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         m_pProspectCB_RTL->Enable( false );
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)
+IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl)
 {
     bAttrModified = true;
     bool bIsProspect = m_pProspectCB->IsChecked();
@@ -517,7 +517,6 @@ IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)
     m_pInMarginsRB->Enable( !bIsProspect );
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, AutoClickHdl)
 
 void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
 {
@@ -529,12 +528,11 @@ void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
     m_pFaxLB->SelectEntryPos(0);
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, SelectHdl)
+IMPL_LINK_NOARG(SwAddPrinterTabPage, SelectHdl)
 {
     bAttrModified=true;
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, SelectHdl)
 
 void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
@@ -2603,12 +2601,11 @@ void SwTestTabPage::Init()
     m_pTest10CBox->SetClickHdl( aLk );
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwTestTabPage, AutoClickHdl)
+IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl)
 {
     bAttrModified = true;
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwTestTabPage, AutoClickHdl)
 
 #endif
 

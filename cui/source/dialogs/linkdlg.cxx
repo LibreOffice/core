@@ -250,16 +250,15 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SvBaseLinksDlg, LinksDoubleClickHdl, SvTabListBox *, pSvTabListBox )
+IMPL_LINK( SvBaseLinksDlg, LinksDoubleClickHdl, SvTabListBox *, pSvTabListBox )
 {
     (void)pSvTabListBox;
 
     ChangeSourceClickHdl( 0 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvBaseLinksDlg, LinksDoubleClickHdl, SvTabListBox *, pSvTabListBox )
 
-IMPL_LINK_INLINE_START( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadioButton )
+IMPL_LINK( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadioButton )
 {
     (void)pRadioButton;
 
@@ -270,9 +269,8 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadio
         SetType( *pLink, nPos, SfxLinkUpdateMode::ALWAYS );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadioButton )
 
-IMPL_LINK_INLINE_START( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButton )
+IMPL_LINK( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButton )
 {
     (void)pRadioButton;
 
@@ -283,7 +281,6 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioBut
         SetType( *pLink, nPos, SfxLinkUpdateMode::ONCALL );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButton )
 
 IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
 {

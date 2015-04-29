@@ -268,13 +268,11 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, Expand)
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Expand)
 {
     TemplateSelect(m_pTemplateLb);
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, Expand)
-
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
 {
@@ -290,7 +288,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
+IMPL_LINK( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 {
     (void)pListBox;
     // Still loadning
@@ -298,17 +296,12 @@ IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox 
         pAntiImpl->EndDialog(RET_OK);
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 
-
-
-IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, LoadFile)
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, LoadFile)
 {
     pAntiImpl->EndDialog(RET_TEMPLATE_LOAD);
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, LoadFile)
-
 
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {

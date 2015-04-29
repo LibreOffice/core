@@ -134,11 +134,10 @@ void ViewShell::UpdateScrollBars()
 /**
  * Handling for horizontal Scrollbars
  */
-IMPL_LINK_INLINE_START(ViewShell, HScrollHdl, ScrollBar *, pHScroll )
+IMPL_LINK(ViewShell, HScrollHdl, ScrollBar *, pHScroll )
 {
     return VirtHScrollHdl(pHScroll);
 }
-IMPL_LINK_INLINE_END(ViewShell, HScrollHdl, ScrollBar *, pHScroll )
 
 /**
  * virtual scroll handler for horizontal Scrollbars
@@ -191,11 +190,10 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 /**
  * handling for vertical Scrollbars
  */
-IMPL_LINK_INLINE_START(ViewShell, VScrollHdl, ScrollBar *, pVScroll )
+IMPL_LINK(ViewShell, VScrollHdl, ScrollBar *, pVScroll )
 {
     return VirtVScrollHdl(pVScroll);
 }
-IMPL_LINK_INLINE_END(ViewShell, VScrollHdl, ScrollBar *, pVScroll )
 
 /**
  * handling for vertical Scrollbars

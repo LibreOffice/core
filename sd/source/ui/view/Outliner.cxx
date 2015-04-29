@@ -1314,7 +1314,7 @@ void Outliner::EnterEditMode (bool bGrabFocus)
 /**
  * SpellChecker: Error link handler
  */
-IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
+IMPL_LINK( Outliner, SpellError, void *, nLang )
 {
     mbError = true;
     OUString aError( SvtLanguageTable::GetLanguageString( (LanguageType)reinterpret_cast<sal_uLong>(nLang) ) );
@@ -1322,7 +1322,6 @@ IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;
 }
-IMPL_LINK_INLINE_END( Outliner, SpellError, void *, nLang )
 
 ESelection Outliner::GetSearchStartPosition()
 {

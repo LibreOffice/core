@@ -410,14 +410,13 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
+IMPL_LINK( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
     if(pBox->GetParent(pEntry) && !bIsDocReadOnly)
         EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
 
 IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
 {
@@ -784,7 +783,7 @@ void SwGlossaryDlg::Init()
     m_pInsertTipCB->SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
 }
 
-IMPL_LINK_NOARG_INLINE_START(SwGlossaryDlg, EditHdl)
+IMPL_LINK_NOARG(SwGlossaryDlg, EditHdl)
 {
 // EndDialog must not be called in MenuHdl
     if (m_pEditBtn->GetCurItemIdent() == "edit")
@@ -795,7 +794,6 @@ IMPL_LINK_NOARG_INLINE_START(SwGlossaryDlg, EditHdl)
     }
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwGlossaryDlg, EditHdl)
 
 // KeyInput for ShortName - Edits without Spaces
 IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )

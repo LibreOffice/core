@@ -50,12 +50,11 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
+IMPL_LINK( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 {
     m_pOKBtn->Enable( !comphelper::string::remove(pBox->GetText(), ' ').isEmpty() );
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 
 SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rInPool )
     : ModalDialog(pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui")

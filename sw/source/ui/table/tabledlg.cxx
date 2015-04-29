@@ -285,14 +285,13 @@ void SwFormatTablePage::RightModify()
     }
 }
 
-IMPL_LINK_INLINE_START( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
+IMPL_LINK( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 {
     if( m_aRightMF.get() == pEdit)
         RightModify();
     ModifyHdl( pEdit );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 
 void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
 {
@@ -906,23 +905,21 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, void *, pControl )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, MetricField*, pEdit )
+IMPL_LINK( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 {
     bModified = true;
     ModifyHdl( pEdit );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 
-IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, MetricField*, pEdit )
+IMPL_LINK( SwTableColumnPage, DownHdl, MetricField*, pEdit )
 {
     bModified = true;
     ModifyHdl( pEdit );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwTableColumnPage, DownHdl, MetricField*, pEdit )
 
-IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
+IMPL_LINK( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
 {
     if (pEdit->IsModified())
     {
@@ -931,7 +928,6 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
 
 IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
 {

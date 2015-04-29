@@ -154,7 +154,7 @@ void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const S
 
 
 
-IMPL_LINK_INLINE_START( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
+IMPL_LINK( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
 {
     if ( !mpSmartTagItem )
         return 0;
@@ -187,9 +187,6 @@ IMPL_LINK_INLINE_START( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
-
-
 
 SvxSmartTagsControl::~SvxSmartTagsControl()
 {

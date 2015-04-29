@@ -216,16 +216,13 @@ short SvxAreaTabDialog::Ok()
 
 
 
-IMPL_LINK_NOARG_INLINE_START(SvxAreaTabDialog, CancelHdlImpl)
+IMPL_LINK_NOARG(SvxAreaTabDialog, CancelHdlImpl)
 {
     SavePalettes();
 
     EndDialog( RET_CANCEL );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxAreaTabDialog, CancelHdlImpl, void *, p )
-
-
 
 void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {

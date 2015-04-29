@@ -377,16 +377,15 @@ void SwLabFmtPage::dispose()
 
 
 // Modify-handler of MetricFields. start preview timer
-IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, ModifyHdl)
+IMPL_LINK_NOARG(SwLabFmtPage, ModifyHdl)
 {
     bModified = true;
     aPreviewIdle.Start();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, ModifyHdl)
 
 // Invalidate preview
-IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, PreviewHdl)
+IMPL_LINK_NOARG(SwLabFmtPage, PreviewHdl)
 {
     aPreviewIdle.Stop();
     ChangeMinMax();
@@ -395,16 +394,14 @@ IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, PreviewHdl)
 
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, PreviewHdl)
 
 // LoseFocus-Handler: Update on change
-IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
+IMPL_LINK( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 {
     if (static_cast<Edit*>( pControl)->IsModified())
         PreviewHdl(0);
     return 0;
 }
-IMPL_LINK_INLINE_END( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 
 void SwLabFmtPage::ChangeMinMax()
 {

@@ -403,7 +403,7 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
 }
 
 
-IMPL_LINK_INLINE_START( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
 {
     SmViewShell *pViewSh = rCmdBox.GetView();
     if (pViewSh)
@@ -412,7 +412,6 @@ IMPL_LINK_INLINE_START( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
                 new SfxInt16Item(SID_INSERTCOMMAND, pMenu->GetCurItemId()), 0L);
     return 0;
 }
-IMPL_LINK_INLINE_END( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
 
 void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 {
@@ -587,7 +586,7 @@ IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, EMPTYARG /*pStat*/ )
     }
 }
 
-IMPL_LINK_INLINE_START( SmEditWindow, ScrollHdl, ScrollBar *, EMPTYARG /*pScrollBar*/ )
+IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, EMPTYARG /*pScrollBar*/ )
 {
     OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
@@ -599,7 +598,6 @@ IMPL_LINK_INLINE_START( SmEditWindow, ScrollHdl, ScrollBar *, EMPTYARG /*pScroll
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SmEditWindow, ScrollHdl, ScrollBar *, pScrollBar )
 
 Rectangle SmEditWindow::AdjustScrollBars()
 {

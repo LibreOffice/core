@@ -47,15 +47,12 @@ void SfxHintPoster::Post( SfxHint* pHintToPost )
 
 
 
-IMPL_LINK_INLINE_START( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
+IMPL_LINK( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
 {
     Event( pPostedHint );
     ReleaseRef();
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
-
-
 
 void SfxHintPoster::Event( SfxHint* pPostedHint )
 {

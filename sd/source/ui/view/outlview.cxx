@@ -1209,11 +1209,10 @@ IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
 /**
  * Handler for indenting level 0 paragraphs (pages): Warning
  */
-IMPL_LINK_INLINE_START( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
+IMPL_LINK( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
 {
     return RemovingPagesHdl(pOutlinerView);
 }
-IMPL_LINK_INLINE_END( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
 
 /** returns the first slide that is selected in the outliner or where
     the cursor is located */

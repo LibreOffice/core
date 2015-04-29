@@ -419,7 +419,7 @@ bool SfxManageStyleSheetPage::Execute_Impl(
 
 }
 
-IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
+IMPL_LINK( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
 /*  [Description]
 
@@ -430,10 +430,8 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
     aBuf = comphelper::string::stripStart(pEdit->GetText(), ' ');
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
-
-IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
+IMPL_LINK( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
 /*  [Description]
 
@@ -450,9 +448,6 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
         UpdateName_Impl(m_pFollowLb, aStr);
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
-
-
 
 bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
 

@@ -823,12 +823,11 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG_INLINE_START(SvxStdParagraphTabPage, ModifyHdl_Impl)
+IMPL_LINK_NOARG(SvxStdParagraphTabPage, ModifyHdl_Impl)
 {
     UpdateExample_Impl();
     return 0;
 }
-IMPL_LINK_NOARG_INLINE_END(SvxStdParagraphTabPage, ModifyHdl_Impl)
 
 void SvxStdParagraphTabPage::Init_Impl()
 {

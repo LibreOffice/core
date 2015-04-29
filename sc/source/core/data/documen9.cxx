@@ -232,11 +232,10 @@ bool ScDocument::IsChart( const SdrObject* pObject )
     return false;
 }
 
-IMPL_LINK_INLINE_START( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
+IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
 {
     return reinterpret_cast<sal_IntPtr>( &((GetColorList()->GetColor(*pColorIndex))->GetColor()) );
 }
-IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
 
 void ScDocument::DeleteDrawLayer()
 {
