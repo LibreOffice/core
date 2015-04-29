@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_0c0317ba",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001139
+      },
+      "writtenOn": "2015-04-29T14:01:16Z",
+      "side": 1,
+      "message": "Oh, OK. I would have never figured that out.\nThanks for your help.",
+      "parentUuid": "da6ed579_cc041fc8",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_4996e195",
         "filename": "i18npool/source/localedata/data/cu_RU.xml",
         "patchSetId": 1
