@@ -270,7 +270,7 @@ int control(int counter)
         break;
 #endif
     case L_error:                       /* BP 5.3.92, #error */
-        fprintf( pCppOut, "cpp: line %u, Error directive: ", line );
+        fprintf( pCppOut, "cpp: line %d, Error directive: ", line );
         while ((c = get()) != '\n' && c != EOF_CHAR)
             cput(c);
         fprintf( pCppOut, "\n" );
