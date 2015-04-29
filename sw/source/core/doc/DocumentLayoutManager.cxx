@@ -265,7 +265,7 @@ void DocumentLayoutManager::DelLayoutFmt( SwFrmFmt *pFmt )
                     std::vector<SwFrmFmt*> aToDeleteFrmFmts;
                     const sal_uLong nNodeIdxOfFlyFmt( pCntntIdx->GetIndex() );
 
-                    for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
+                    for ( size_t i = 0; i < pTbl->size(); ++i )
                     {
                         SwFrmFmt* pTmpFmt = (*pTbl)[i];
                         const SwFmtAnchor &rAnch = pTmpFmt->GetAnchor();
