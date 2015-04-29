@@ -2507,21 +2507,18 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
     if (bFound)
     {
         OpCode eOp = iLook->second;
-        if ( eOp != ocOpen && eOp != ocClose )
+        if (bInArray)
         {
-            if (bInArray)
-            {
-                if (rName.equals(mxSymbols->getSymbol(ocArrayColSep)))
-                    eOp = ocArrayColSep;
-                else if (rName.equals(mxSymbols->getSymbol(ocArrayRowSep)))
-                    eOp = ocArrayRowSep;
-            }
-            else if (mxSymbols->isOOXML())
-            {
-                // OOXML names that need to treated differently on import.
-                if ( rName.equalsIgnoreAsciiCaseAscii( "_XLFN.CEILING.MATH" ) )
-                    eOp = ocCeil_Math;
-            }
+            if (rName.equals(mxSymbols->getSymbol(ocArrayColSep)))
+                eOp = ocArrayColSep;
+            else if (rName.equals(mxSymbols->getSymbol(ocArrayRowSep)))
+                eOp = ocArrayRowSep;
+        }
+        else if (eOp == ocCeil && mxSymbols->isOOXML())
+        {
+            // Ensure that _xlfn.CEILING.MATH maps to ocCeil_Math. ocCeil is
+            // unassigned for import.
+            eOp = ocCeil_Math;
         }
         maRawToken.SetOpCode(eOp);
     }
