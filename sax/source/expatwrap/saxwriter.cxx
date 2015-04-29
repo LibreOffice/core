@@ -132,7 +132,7 @@ public:
                         bool bDoNormalization,
                         bool bNormalizeWhitespace) throw( SAXException );
 
-    sal_uInt32 GetLastColumnCount() const
+    sal_uInt32 GetLastColumnCount() const throw()
         { return (sal_uInt32)(nCurrentPos - nLastLineFeedPos); }
 
     inline void startDocument() throw( SAXException );
