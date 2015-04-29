@@ -110,7 +110,7 @@ public:
                    virtual ~BubbleWindow();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     void            Resize() SAL_OVERRIDE;
     void            Show( bool bVisible = true, sal_uInt16 nFlags = SHOW_NOACTIVATE );
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
@@ -820,7 +820,7 @@ void BubbleWindow::SetTitleAndText( const OUString& rTitle,
 }
 
 
-void BubbleWindow::Paint( const Rectangle& )
+void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/)
 {
     SolarMutexGuard aGuard;
 
