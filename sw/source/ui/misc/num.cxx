@@ -754,7 +754,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
         m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nValue), FUNIT_TWIP);
     else
         m_pDistBorderMF->SetText(aEmptyOUStr);
-    m_pDistBorderMF->Enable(bOn || bSingleSelection||0 != pOutlineDlg);
+    m_pDistBorderMF->Enable(bOn || bSingleSelection || pOutlineDlg);
     bLastRelative = bOn;
     return 0;
 }
