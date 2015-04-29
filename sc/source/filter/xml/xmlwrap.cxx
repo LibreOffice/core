@@ -972,8 +972,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "settings export end" );
         }
 
-        if (pSharedData)
-            delete pSharedData;
+        delete pSharedData;
 
         if (xStatusIndicator.is())
             xStatusIndicator->end();
