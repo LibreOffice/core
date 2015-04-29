@@ -243,7 +243,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
 ToolBarManager::~ToolBarManager()
 {
     assert(!m_aAsyncUpdateControllersTimer.IsActive());
-    OSL_ASSERT( m_pToolBar == 0 );
+    OSL_ASSERT( !m_pToolBar );
     OSL_ASSERT( !m_bAddedToTaskPaneList );
 }
 
