@@ -969,18 +969,15 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             mpShowWindow = VclPtr<ShowWindow>::Create( this, mpParentWindow );
             mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
-            if( mpViewShell )
-            {
-                mpViewShell->SetActiveWindow( mpShowWindow );
-                mpShowWindow->SetViewShell (mpViewShell);
-                mpViewShell->GetViewShellBase().ShowUIControls (false);
-                // Hide the side panes for in-place presentations.
-                if ( ! maPresSettings.mbFullScreen)
-                    mpPaneHider.reset(new PaneHider(*mpViewShell,this));
+            mpViewShell->SetActiveWindow( mpShowWindow );
+            mpShowWindow->SetViewShell (mpViewShell);
+            mpViewShell->GetViewShellBase().ShowUIControls (false);
+            // Hide the side panes for in-place presentations.
+            if ( ! maPresSettings.mbFullScreen)
+                mpPaneHider.reset(new PaneHider(*mpViewShell,this));
 
-                if( getViewFrame() )
-                    getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
-            }
+            if( getViewFrame() )
+                getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
 
             // these Slots are forbidden in other views for this document
             if( mpDocSh )
@@ -1003,7 +1000,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             // call resize handler
             maPresSize = mpParentWindow->GetSizePixel();
-            if( !maPresSettings.mbFullScreen && mpViewShell )
+            if (!maPresSettings.mbFullScreen)
             {
                 const Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
                 maPresSize = aClientRect.GetSize();
@@ -1087,7 +1084,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         setActiveXToolbarsVisible( false );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::startShow(), "
