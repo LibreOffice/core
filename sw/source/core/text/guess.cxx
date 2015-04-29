@@ -318,6 +318,10 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                                               rInf.GetIdx() - nFieldDiff - 1:
                                               0;
 
+            if ( nLangIndex > nDoNotStepOver &&
+                    rInf.GetTxt().getLength() == nLangIndex )
+                --nLangIndex;
+
             while ( nLangIndex > nDoNotStepOver &&
                     ! rCC.isLetterNumeric( rInf.GetTxt(), nLangIndex ) )
                 --nLangIndex;
