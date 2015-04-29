@@ -186,7 +186,7 @@ public:
         return m_rInnerRef.get();
     }
 
-    inline operator bool () const
+    inline explicit operator bool () const
     {
         return m_rInnerRef.get() != NULL;
     }
