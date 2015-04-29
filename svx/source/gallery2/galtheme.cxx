@@ -553,7 +553,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 {
                     aGraphic.Clear();
 
-                    if ( GalleryGraphicImport( aURL, aGraphic, aFormat ) != GalleryGraphicImportRet::NONE )
+                    if ( GalleryGraphicImport( aURL, aGraphic, aFormat ) != GalleryGraphicImportRet::IMPORT_NONE )
                     {
                         boost::scoped_ptr<SgaObject> pNewObj;
 
@@ -790,7 +790,7 @@ bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgre
             case( SGA_OBJ_INET ):
             {
                 OUString aFilterDummy;
-                bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, bProgress ) != GalleryGraphicImportRet::NONE );
+                bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, bProgress ) != GalleryGraphicImportRet::IMPORT_NONE );
             }
             break;
 
@@ -1108,9 +1108,9 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
     const GalleryGraphicImportRet nImportRet = GalleryGraphicImport( rURL, aGraphic, aFormat );
     bool            bRet = false;
 
-    if( nImportRet != GalleryGraphicImportRet::NONE )
+    if( nImportRet != GalleryGraphicImportRet::IMPORT_NONE )
     {
-        if ( GalleryGraphicImportRet::INET == nImportRet )
+        if ( GalleryGraphicImportRet::IMPORT_INET == nImportRet )
             pNewObj.reset((SgaObject*) new SgaObjectINet( aGraphic, rURL, aFormat ));
         else if ( aGraphic.IsAnimated() )
             pNewObj.reset((SgaObject*) new SgaObjectAnim( aGraphic, rURL, aFormat ));

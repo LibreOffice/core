@@ -85,7 +85,7 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              OUString& rFilterName, bool bShowProgress )
 {
-    GalleryGraphicImportRet  nRet = GalleryGraphicImportRet::NONE;
+    GalleryGraphicImportRet  nRet = GalleryGraphicImportRet::IMPORT_NONE;
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
 
     aMedium.Download();
@@ -101,7 +101,7 @@ GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic
         if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
             rFilterName = rGraphicFilter.GetImportFormatName( nFormat );
-            nRet = GalleryGraphicImportRet::FILE;
+            nRet = GalleryGraphicImportRet::IMPORT_FILE;
         }
     }
 

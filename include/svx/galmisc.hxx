@@ -71,7 +71,7 @@ enum SgaObjKind
 
 enum class GalleryGraphicImportRet
 {
-    NONE, FILE, INET
+    IMPORT_NONE, IMPORT_FILE, IMPORT_INET
 };
 
 #define GALLERY_PROGRESS_RANGE  10000

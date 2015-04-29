@@ -278,7 +278,7 @@ SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
     Graphic aGraphic;
     OUString  aFilter;
 
-    if ( GalleryGraphicImportRet::NONE != GalleryGraphicImport( rURL, aGraphic, aFilter ) )
+    if ( GalleryGraphicImportRet::IMPORT_NONE != GalleryGraphicImport( rURL, aGraphic, aFilter ) )
         Init( aGraphic, rURL );
 }
 
