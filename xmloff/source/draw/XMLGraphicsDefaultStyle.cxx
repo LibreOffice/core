@@ -32,6 +32,7 @@
 #include <xmloff/maptype.hxx>
 
 #include "XMLShapePropertySetContext.hxx"
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -149,8 +150,8 @@ void XMLGraphicsDefaultStyle::SetDefaults()
                 ->getPropertySetMapper());
         sal_Int32 const nStrokeIndex(
             pImpPrMap->GetEntryIndex(XML_NAMESPACE_SVG, "stroke-color", 0));
-        if (std::find_if(GetProperties().begin(), GetProperties().end(),
-                    XMLPropertyByIndex(nStrokeIndex)) == GetProperties().end())
+        if (std::none_of(GetProperties().begin(), GetProperties().end(),
+                         XMLPropertyByIndex(nStrokeIndex)))
         {
             sal_Int32 const nStroke(
                     (bIsAOO4) ? RGB_COLORDATA(128, 128, 128) : COL_BLACK);
@@ -160,8 +161,8 @@ void XMLGraphicsDefaultStyle::SetDefaults()
             ? RGB_COLORDATA(0xCF, 0xE7, 0xF5) : RGB_COLORDATA(153, 204, 255));
         sal_Int32 const nFillIndex(
             pImpPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "fill-color", 0));
-        if (std::find_if(GetProperties().begin(), GetProperties().end(),
-                    XMLPropertyByIndex(nFillIndex)) == GetProperties().end())
+        if (std::none_of(GetProperties().begin(), GetProperties().end(),
+                         XMLPropertyByIndex(nFillIndex)))
         {
             xDefaults->setPropertyValue("FillColor", makeAny(nFillColor));
         }
@@ -169,8 +170,8 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         {
             sal_Int32 const nFill2Index(pImpPrMap->GetEntryIndex(
                         XML_NAMESPACE_DRAW, "secondary-fill-color", 0));
-            if (std::find_if(GetProperties().begin(), GetProperties().end(),
-                    XMLPropertyByIndex(nFill2Index)) == GetProperties().end())
+            if (std::none_of(GetProperties().begin(), GetProperties().end(),
+                             XMLPropertyByIndex(nFill2Index)))
             {
                 xDefaults->setPropertyValue("FillColor2", makeAny(nFillColor));
             }
