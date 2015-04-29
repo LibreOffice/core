@@ -82,7 +82,8 @@ gz_stream *gz_open(HStream & _stream)
 
     if (err != Z_OK || s->inbuf == Z_NULL)
     {
-        return destroy(s), (gz_stream *) Z_NULL;
+        destroy(s);
+        return Z_NULL;
     }
 
     s->stream.avail_out = Z_BUFSIZE;
