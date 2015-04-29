@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_cc041fc8",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-29T13:49:09Z",
+      "side": 1,
+      "message": "The unresolved was because cu_RU and ru_RU were linked into different libraries, _others and _euro. Moving cu_RU into _euro helped.",
+      "parentUuid": "da6ed579_ec6243ad",
+      "revId": "653819ed719c1ea235d853d56af63698d0bef95e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_4996e195",
         "filename": "i18npool/source/localedata/data/cu_RU.xml",
         "patchSetId": 1
