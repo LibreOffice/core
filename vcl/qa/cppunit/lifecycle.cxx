@@ -16,6 +16,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/tabctrl.hxx>
 
 class LifecycleTest : public test::BootstrapFixture
 {
@@ -31,6 +32,7 @@ public:
     void testParentedWidgets();
     void testChildDispose();
     void testPostDispose();
+    void testFocus();
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
     CPPUNIT_TEST(testCast);
@@ -40,6 +42,7 @@ public:
     CPPUNIT_TEST(testParentedWidgets);
     CPPUNIT_TEST(testChildDispose);
     CPPUNIT_TEST(testPostDispose);
+    CPPUNIT_TEST(testFocus);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -141,6 +144,44 @@ void LifecycleTest::testPostDispose()
     CPPUNIT_ASSERT(!xWin->IsInputEnabled());
     CPPUNIT_ASSERT(!xWin->GetChild(0));
     CPPUNIT_ASSERT(!xWin->GetWindow(0));
+}
+
+class FocusCrashPostDispose : public TabControl
+{
+public:
+    FocusCrashPostDispose(vcl::Window *pParent) :
+        TabControl(pParent, 0)
+    {
+    }
+    virtual bool PreNotify( NotifyEvent& ) SAL_OVERRIDE
+    {
+        return false;
+    }
+    virtual bool Notify( NotifyEvent& ) SAL_OVERRIDE
+    {
+//        CPPUNIT_ASSERT(false && "notify");
+        return false;
+    }
+    virtual void GetFocus() SAL_OVERRIDE
+    {
+        CPPUNIT_ASSERT(false && "get focus");
+    }
+    virtual void LoseFocus() SAL_OVERRIDE
+    {
+        CPPUNIT_ASSERT(false && "this should never be called");
+    }
+};
+
+void LifecycleTest::testFocus()
+{
+    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
+    ScopedVclPtrInstance< FocusCrashPostDispose > xChild(xWin);
+    xWin->Show();
+    xChild->GrabFocus();
+    // process asynchronous ToTop
+    Scheduler::ProcessTaskScheduling(false);
+    // FIXME: really awful to test focus issues without showing windows.
+    // CPPUNIT_ASSERT(xChild->HasFocus());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LifecycleTest);
