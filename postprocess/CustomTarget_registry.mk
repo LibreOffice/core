@@ -41,6 +41,7 @@ postprocess_FILES_base := \
 	$(call gb_XcuFilterOthersTarget_get_target,fcfg_database_others.xcu) \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_database_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-base.xcu \
+	$(postprocess_MOD)/org/openoffice/Office/Embedding-base.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-base.xcu
 
 postprocess_DEPS_calc := main

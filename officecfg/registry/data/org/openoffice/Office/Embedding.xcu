@@ -255,6 +255,18 @@
         <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
       </prop>
     </node>
+    <node oor:name="F203786B-A78D-4E89-9D3D-94A108989E7F" oor:op="replace" install:module="base">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus"/>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
+      </prop>
+    </node>
     <node oor:name="D7896D52-B7AF-4820-9DFE-D404D015960F" oor:op="replace" install:module="reportbuilder">
       <prop oor:name="ObjectFactory">
         <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
