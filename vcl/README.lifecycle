@@ -284,3 +284,19 @@ ways and often both.
 	   In simple cases, if we allocate the widget with VclPtrInstance
 	   or VclPtr<Foo>::Create - then we need to disposeAndClear it too.
 
+** Event / focus / notification ordering
+
+	In the old world, a large amount of work was done in the
+	~Window destructor that is now done in Window::dispose.
+
+	Since those Windows were in the process of being destroyed
+	themselves, their vtables were adjusted to only invoke Window
+	methods. In the new world, sub-classed methods such as
+	PreNotify, GetFocus, LoseFocus and others are invoked all down
+	the inheritance chain from children to parent, during dispose.
+
+	The easiest way to fix these is to just ensure that these
+	cleanup methods, especially LoseFocus continue to work even
+	on disposed Window sub-class instances.
+
+
