@@ -141,8 +141,8 @@ void Window::dispose()
 {
     assert( mpWindowImpl );
     assert( !mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
-    assert( !mpWindowImpl->mpParent ||
-            !mpWindowImpl->mpParent->IsDisposed() ||
+    assert( (!mpWindowImpl->mpParent ||
+            !mpWindowImpl->mpParent->IsDisposed()) &&
             "vcl::Window child should have its parent disposed first" );
 
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
