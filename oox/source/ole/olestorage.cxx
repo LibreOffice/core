@@ -269,7 +269,7 @@ bool OleStorage::implIsStorage() const
         /*  If this is not an OLE storage, hasElements() of the OLESimpleStorage
             implementation throws an exception. But we do not return the result
             of hasElements(), because an empty storage is a valid storage too. */
-        mxStorage->hasElements();
+        (void)mxStorage->hasElements();
         return true;
     }
     catch(const Exception& )
