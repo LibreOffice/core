@@ -564,7 +564,7 @@ bool ImplSdPPTImport::Import()
                 pPage->SetPageKind( ePgKind );
                 pSdrModel->InsertMasterPage( (SdrPage*)pPage );
                 if ( bNotesMaster && bStarDrawFiller )
-                    ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_NOTES, true );
+                    pPage->SetAutoLayout( AUTOLAYOUT_NOTES, true );
                 if ( nMasterNum )
                 {
                     boost::optional< sal_Int16 > oStartNumbering;
@@ -818,7 +818,7 @@ bool ImplSdPPTImport::Import()
                     }
                 }
                 rStCtrl.Seek( nFPosMerk );
-                ImportPageEffect( (SdPage*)pMPage, bNewAnimationsUsed );
+                ImportPageEffect( pMPage, bNewAnimationsUsed );
 
                 // background object
                 pObj = pMPage->GetObj( 0 );
@@ -941,7 +941,7 @@ bool ImplSdPPTImport::Import()
 
                         aHd.SeekToEndOfRecord( rStCtrl );
                     }
-                    ImportPageEffect( (SdPage*)pPage, bNewAnimationsUsed );
+                    ImportPageEffect( pPage, bNewAnimationsUsed );
                 }
 
                 // creating the corresponding note page
@@ -1012,8 +1012,8 @@ bool ImplSdPPTImport::Import()
             }
             if ( pFoundMaster )
             {
-                static_cast<SdPage*>(pPage)->TRG_SetMasterPage( *((SdPage*)pFoundMaster) );
-                static_cast<SdPage*>(pPage)->SetLayoutName( ((SdPage*)pFoundMaster)->GetLayoutName() );
+                static_cast<SdPage*>(pPage)->TRG_SetMasterPage( *pFoundMaster );
+                static_cast<SdPage*>(pPage)->SetLayoutName( pFoundMaster->GetLayoutName() );
             }
             static_cast<SdPage*>(pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
@@ -2604,7 +2604,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 // interactive object
                                 SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj, true);
 
-                                ( (ImplSdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aInteractiveInfoAtom, aMacroName );
+                                FillSdAnimationInfo( pInfo, &aInteractiveInfoAtom, aMacroName );
                                 if ( aInteractiveInfoAtom.nAction == 6 ) // Sj -> media action
                                 {
                                     rHdClientData.SeekToContent( rStCtrl );

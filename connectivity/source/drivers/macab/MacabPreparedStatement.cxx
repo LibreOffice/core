@@ -40,7 +40,7 @@ void MacabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(S
         m_aParameterRow = new OValueVector();
 
     if (nParams < 1)
-        ::dbtools::throwInvalidIndexException(*(MacabPreparedStatement *) this,Any());
+        ::dbtools::throwInvalidIndexException(*this, Any());
 
     if (nParams >= (sal_Int32) (m_aParameterRow->get()).size())
         (m_aParameterRow->get()).resize(nParams);

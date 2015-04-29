@@ -1663,7 +1663,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
 
             if( pEntry->IsFocused() )
             {
-                Rectangle aRect ( CalcFocusRect( (SvxIconChoiceCtrlEntry*)pEntry ) );
+                Rectangle aRect ( CalcFocusRect( pEntry ) );
                 /*pView->*/ShowFocus( aRect );
                 DrawFocusRect( pOut );
             }

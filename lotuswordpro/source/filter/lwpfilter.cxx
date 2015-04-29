@@ -115,7 +115,7 @@ using namespace OpenStormBento;
     if (ulRet != BenErr_OK)
         return false;
 
-    boost::scoped_ptr<LtcUtBenValueStream> aWordProData((LtcUtBenValueStream *)pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
+    boost::scoped_ptr<LtcUtBenValueStream> aWordProData(pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
 
     if (!aWordProData.get())
         return false;

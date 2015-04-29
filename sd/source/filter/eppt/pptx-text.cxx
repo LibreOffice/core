@@ -431,7 +431,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
 
 void PortionObj::ImplClear()
 {
-    delete (FieldEntry*)mpFieldEntry;
+    delete mpFieldEntry;
     delete[] mpText;
 }
 

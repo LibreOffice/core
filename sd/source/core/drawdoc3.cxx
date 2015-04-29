@@ -1204,8 +1204,8 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
 
         if (!pMaster)
         {
-            pMaster = (SdPage*) GetMasterSdPage( (sal_uInt16) nMPage, PK_STANDARD );
-            pNotesMaster = (SdPage*) GetMasterSdPage( (sal_uInt16) nMPage, PK_NOTES );
+            pMaster = GetMasterSdPage( (sal_uInt16) nMPage, PK_STANDARD );
+            pNotesMaster = GetMasterSdPage( (sal_uInt16) nMPage, PK_NOTES );
         }
         else
         {
@@ -1235,7 +1235,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
                 bDeleteMaster = false;
                 for (sal_uInt16 i = 0; i < GetMasterSdPageCount( PK_STANDARD ); i++)
                 {
-                    SdPage* pMPg = (SdPage*) GetMasterSdPage( i, PK_STANDARD );
+                    SdPage* pMPg = GetMasterSdPage( i, PK_STANDARD );
                     if( pMPg != pMaster &&
                         pMPg->GetLayoutName() == aLayoutName )
                     {
@@ -1432,8 +1432,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if (rLayoutName.isEmpty())
         {
             // No LayoutName: take first MasterPage
-            pMaster = (SdPage*) pSourceDoc->GetMasterSdPage(0, PK_STANDARD);
-            pNotesMaster = (SdPage*) pSourceDoc->GetMasterSdPage(0, PK_NOTES);
+            pMaster = pSourceDoc->GetMasterSdPage(0, PK_STANDARD);
+            pNotesMaster = pSourceDoc->GetMasterSdPage(0, PK_NOTES);
         }
         else
         {

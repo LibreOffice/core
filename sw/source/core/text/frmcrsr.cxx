@@ -85,7 +85,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
     {
         pFrm = pFrmAtPos;
         pFrm->GetFormatted();
-        pFrmAtPos = (SwTxtFrm*)pFrm->GetFrmAtPos( rPos );
+        pFrmAtPos = pFrm->GetFrmAtPos( rPos );
     }
 
     if( nOffset && bRightMargin )
@@ -148,7 +148,7 @@ SwTxtFrm& SwTxtFrm::GetFrmAtOfst( const sal_Int32 nWhere )
 
 SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
 {
-    SwTxtFrm *pFoll = (SwTxtFrm*)this;
+    SwTxtFrm *pFoll = this;
     while( pFoll->GetFollow() )
     {
         if( rPos.nContent.GetIndex() > pFoll->GetFollow()->GetOfst() )
@@ -572,7 +572,7 @@ bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         {
             SwTwips nDiff = rPoint.X() - Frm().Left() - Prt().Left();
             if( nDiff > 50 || nDiff < 0 )
-                ((SwCrsrMoveState*)pCMS)->bPosCorr = true;
+                pCMS->bPosCorr = true;
         }
     }
     else
@@ -597,7 +597,7 @@ bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         sal_Int32 nOffset = aLine.GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
 
         if( pCMS && pCMS->eState == MV_NONE && aLine.GetEnd() == nOffset )
-            ((SwCrsrMoveState*)pCMS)->eState = MV_RIGHTMARGIN;
+            pCMS->eState = MV_RIGHTMARGIN;
 
     // pPos is a pure IN parameter and must not be evaluated.
     // pIter->GetCrsrOfst returns from a nesting with COMPLETE_STRING.
@@ -1041,10 +1041,10 @@ void SwTxtFrm::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
     if( IsEmpty() || IsHiddenNow() )
         return;
 
-    ((SwTxtFrm*)this)->GetFormatted();
+    GetFormatted();
 
-    SwTxtSizeInfo aInf( (SwTxtFrm*)this );
-    SwTxtCursor  aLine( ((SwTxtFrm*)this), &aInf );
+    SwTxtSizeInfo aInf(this);
+    SwTxtCursor  aLine(this, &aInf);
 
     if( nPos )
         aLine.CharCrsrToLine( nPos );

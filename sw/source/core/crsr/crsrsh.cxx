@@ -3101,7 +3101,7 @@ bool SwCrsrShell::SelectHiddenRange()
     bool bRet = false;
     if ( !GetViewOptions()->IsShowHiddenChar() && !m_pCurCrsr->HasMark() )
     {
-        SwPosition& rPt = *(SwPosition*)m_pCurCrsr->GetPoint();
+        SwPosition& rPt = *m_pCurCrsr->GetPoint();
         const SwTxtNode* pNode = rPt.nNode.GetNode().GetTxtNode();
         if ( pNode )
         {

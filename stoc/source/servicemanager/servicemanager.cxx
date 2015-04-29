@@ -1588,9 +1588,9 @@ Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(
     throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
-    MutexGuard aGuard( ((ORegistryServiceManager *)this)->m_mutex );
+    MutexGuard aGuard(m_mutex);
     // get all implementation names registered under this service name from the registry
-    Sequence<OUString> aImpls = ((ORegistryServiceManager *)this)->getFromServiceName( aServiceName );
+    Sequence<OUString> aImpls = getFromServiceName( aServiceName );
     // load and insert all factories specified by the registry
     sal_Int32 i;
     OUString aImplName;

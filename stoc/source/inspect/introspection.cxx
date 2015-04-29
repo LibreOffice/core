@@ -1224,9 +1224,8 @@ Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyCo
         nCount += mpStaticImpl->mnMethodPropCount;
 
     // Sequence entsprechend der geforderten Anzahl reallocieren
-    ImplIntrospectionAccess* pThis = (ImplIntrospectionAccess*)this;    // const umgehen
-    pThis->maLastPropertySeq.realloc( nCount );
-    Property* pDestProps = pThis->maLastPropertySeq.getArray();
+    maLastPropertySeq.realloc( nCount );
+    Property* pDestProps = maLastPropertySeq.getArray();
 
     // Alle Properties durchgehen und entsprechend der Concepte uebernehmen
     Sequence<Property> aPropSeq = mpStaticImpl->getProperties();
@@ -1243,7 +1242,7 @@ Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyCo
     }
 
     // PropertyConcept merken, dies entspricht maLastPropertySeq
-    pThis->mnLastPropertyConcept = PropertyConcepts;
+    mnLastPropertyConcept = PropertyConcepts;
 
     // Zusammengebastelte Sequence liefern
     return maLastPropertySeq;
@@ -1286,8 +1285,6 @@ sal_Bool ImplIntrospectionAccess::hasMethod(const OUString& Name, sal_Int32 Meth
 Sequence< Reference<XIdlMethod> > ImplIntrospectionAccess::getMethods(sal_Int32 MethodConcepts)
     throw( RuntimeException, std::exception )
 {
-    ImplIntrospectionAccess* pThis = (ImplIntrospectionAccess*)this;    // const umgehen
-
     // Wenn alle unterstuetzten Konzepte gefordert werden, Sequence einfach durchreichen
     sal_Int32 nAllSupportedMask =     MethodConcept::DANGEROUS |
                                     PROPERTY |
@@ -1317,8 +1314,8 @@ Sequence< Reference<XIdlMethod> > ImplIntrospectionAccess::getMethods(sal_Int32 
     // Anders als bei den Properties kann die Anzahl nicht durch
     // Zaehler in inspect() vorher ermittelt werden, da Methoden
     // mehreren Konzepten angehoeren koennen
-    pThis->maLastMethodSeq.realloc( nLen );
-    Reference<XIdlMethod>* pDestMethods = pThis->maLastMethodSeq.getArray();
+    maLastMethodSeq.realloc( nLen );
+    Reference<XIdlMethod>* pDestMethods = maLastMethodSeq.getArray();
 
     // Alle Methods durchgehen und entsprechend der Concepte uebernehmen
     sal_Int32 iDest = 0;
@@ -1330,10 +1327,10 @@ Sequence< Reference<XIdlMethod> > ImplIntrospectionAccess::getMethods(sal_Int32 
     }
 
     // Auf die richtige Laenge bringen
-    pThis->maLastMethodSeq.realloc( iDest );
+    maLastMethodSeq.realloc( iDest );
 
     // MethodConcept merken, dies entspricht maLastMethodSeq
-    pThis->mnLastMethodConcept = MethodConcepts;
+    mnLastMethodConcept = MethodConcepts;
 
     // Zusammengebastelte Sequence liefern
     return maLastMethodSeq;

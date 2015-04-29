@@ -581,7 +581,7 @@ Any ImplIntroTest::getByName( const OUString& aName )
     Any aRetAny;
 
     if( !pNameAccessTab  )
-        ((ImplIntroTest*)this)->pNameAccessTab  = new Reference< XIntroTest >[ DEFAULT_NAME_ACCESS_COUNT ];
+        pNameAccessTab  = new Reference< XIntroTest >[ DEFAULT_NAME_ACCESS_COUNT ];
 
     sal_Int32 iIndex = getIndexForName( aName );
     if( iIndex != -1 )
@@ -634,7 +634,7 @@ Any ImplIntroTest::getByIndex( sal_Int32 Index )
     Any aRetAny;
 
     if( !pIndexAccessTab )
-        ((ImplIntroTest*)this)->pIndexAccessTab = new Reference< XIntroTest >[ iIndexAccessCount ];
+        pIndexAccessTab = new Reference< XIntroTest >[ iIndexAccessCount ];
 
     if( Index < iIndexAccessCount )
     {

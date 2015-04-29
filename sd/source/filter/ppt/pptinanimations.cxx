@@ -3010,7 +3010,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                 case 2: // sound
                     {
-                        OUString aSoundURL( ((ImplSdPPTImport*)mpPPTImport)->ReadSound( nRefId ) );
+                        OUString aSoundURL( mpPPTImport->ReadSound( nRefId ) );
                         rTarget <<= aSoundURL;
                         dump( " srcRef=\"%s\"", aSoundURL );
                     }

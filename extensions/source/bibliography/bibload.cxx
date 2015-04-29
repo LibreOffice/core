@@ -449,7 +449,7 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
     Any aRet;
     try
     {
-        BibDataManager* pDatMan = ((BibliographyLoader*)this)->GetDataManager();
+        BibDataManager* pDatMan = GetDataManager();
         Reference< XResultSet >  xCursor = GetDataCursor();
         Reference< sdbcx::XColumnsSupplier >  xSupplyCols(xCursor, UNO_QUERY);
         Reference< XNameAccess >  xColumns;

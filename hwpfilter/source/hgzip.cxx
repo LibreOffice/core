@@ -90,7 +90,7 @@ gz_stream *gz_open(HStream & _stream)
     errno = 0;
     s->_inputstream = &_stream;
 
-    return (gz_stream *) s;
+    return s;
 }
 
 
@@ -156,7 +156,7 @@ local int destroy(gz_stream * s)
 int gz_read(gz_stream * file, voidp buf, unsigned len)
 {
 //printf("@@ gz_read : len : %d\t",len);
-    gz_stream *s = (gz_stream *) file;
+    gz_stream *s = file;
     Bytef *start = static_cast<Bytef *>(buf);                 /* starting point for crc computation */
     Byte *next_out;                               /* == stream.next_out but not forced far (for MSDOS) */
     if (s == NULL)
@@ -242,7 +242,7 @@ int gz_flush(gz_stream * file, int flush)
 {
     uInt len;
     bool done = false;
-    gz_stream *s = (gz_stream *) file;
+    gz_stream *s = file;
 
     if (s == NULL || s->mode != 'w')
         return Z_STREAM_ERROR;
@@ -304,7 +304,7 @@ local uLong getLong(gz_stream * s)
 int gz_close(gz_stream * file)
 {
 //  int err;
-    gz_stream *s = (gz_stream *) file;
+    gz_stream *s = file;
 
     if (s == NULL)
         return Z_STREAM_ERROR;
