@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_PTR_HXX
 
 #include <rtl/ref.hxx>
-#include <cstddef>
 #include <utility>
 #include <type_traits>
 
@@ -211,27 +210,6 @@ public:
         }
     }
 
-    /** Returns True if handle points to the same body.
-     */
-    template<class T>
-    inline bool operator== (const VclPtr<T> & handle) const
-    {
-        return (get() == handle.get());
-    }
-
-    /** Needed to place VclPtr's into STL collection.
-     */
-    inline bool operator!= (const VclPtr<reference_type> & handle) const
-    {
-        return (m_rInnerRef != handle.m_rInnerRef);
-    }
-
-    /** Makes comparing against NULL easier, resolves compile-time ambiguity */
-    inline bool operator!= (::std::nullptr_t ) const
-    {
-        return (get() != nullptr);
-    }
-
     /** Needed to place VclPtr's into STL collection.
      */
     inline bool operator< (const VclPtr<reference_type> & handle) const
@@ -246,6 +224,52 @@ public:
         return (m_rInnerRef > handle.m_rInnerRef);
     }
 }; // class VclPtr
+
+template<typename T1, typename T2>
+inline bool operator ==(VclPtr<T1> const & p1, VclPtr<T2> const & p2) {
+    return p1.get() == p2.get();
+}
+
+template<typename T> inline bool operator ==(VclPtr<T> const & p1, T const * p2)
+{
+    return p1.get() == p2;
+}
+
+template<typename T> inline bool operator ==(VclPtr<T> const & p1, T * p2) {
+    return p1.get() == p2;
+}
+
+template<typename T> inline bool operator ==(T const * p1, VclPtr<T> const & p2)
+{
+    return p1 == p2.get();
+}
+
+template<typename T> inline bool operator ==(T * p1, VclPtr<T> const & p2) {
+    return p1 == p2.get();
+}
+
+template<typename T1, typename T2>
+inline bool operator !=(VclPtr<T1> const & p1, VclPtr<T2> const & p2) {
+    return !(p1 == p2);
+}
+
+template<typename T> inline bool operator !=(VclPtr<T> const & p1, T const * p2)
+{
+    return !(p1 == p2);
+}
+
+template<typename T> inline bool operator !=(VclPtr<T> const & p1, T * p2) {
+    return !(p1 == p2);
+}
+
+template<typename T> inline bool operator !=(T const * p1, VclPtr<T> const & p2)
+{
+    return !(p1 == p2);
+}
+
+template<typename T> inline bool operator !=(T * p1, VclPtr<T> const & p2) {
+    return !(p1 == p2);
+}
 
 /**
  * A construction helper for a temporary VclPtr. Since VclPtr types
