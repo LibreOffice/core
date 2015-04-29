@@ -79,7 +79,7 @@ public:
 
 template<typename EA>
 class enumarray_iterator {
-    EA         &m_buf;
+    EA         *m_buf;
     size_t      m_pos;
 public:
     typedef enumarray_iterator<EA>  self_type;
@@ -91,12 +91,12 @@ public:
     typedef typename EA::value_type&   reference;
 
     enumarray_iterator(EA& b, size_t start_pos)
-         : m_buf(b), m_pos(start_pos) {}
-    value_type &operator*()  { return m_buf[static_cast<key_type>(m_pos)]; }
+         : m_buf(&b), m_pos(start_pos) {}
+    value_type &operator*()  { return (*m_buf)[static_cast<key_type>(m_pos)]; }
     value_type *operator->() { return &(operator*()); }
     self_type  &operator++() { ++m_pos; return *this; }
-    bool        operator!=(const self_type& other) { return &m_buf != &other.m_buf || m_pos != other.m_pos; }
-    bool        operator==(const self_type& other) { return &m_buf == &other.m_buf && m_pos == other.m_pos; }
+    bool        operator!=(const self_type& other) { return m_buf != other.m_buf || m_pos != other.m_pos; }
+    bool        operator==(const self_type& other) { return m_buf == other.m_buf && m_pos == other.m_pos; }
 };
 
 }; // namespace o3tl
