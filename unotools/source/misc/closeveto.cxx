@@ -51,8 +51,8 @@ namespace utl
     class CloseListener_Impl : public CloseListener_Base
     {
     public:
-        CloseListener_Impl()
-            :m_bHasOwnership( false )
+        CloseListener_Impl(bool const bHasOwnership)
+            : m_bHasOwnership(bHasOwnership)
         {
         }
 
@@ -107,12 +107,13 @@ namespace utl
     namespace
     {
 
-        void lcl_init( CloseVeto_Data& i_data, const Reference< XInterface >& i_closeable )
+        void lcl_init( CloseVeto_Data& i_data, const Reference< XInterface >& i_closeable,
+                bool const hasOwnership)
         {
             i_data.xCloseable.set( i_closeable, UNO_QUERY );
             ENSURE_OR_RETURN_VOID( i_data.xCloseable.is(), "CloseVeto: the component is not closeable!" );
 
-            i_data.pListener = new CloseListener_Impl;
+            i_data.pListener = new CloseListener_Impl(hasOwnership);
             i_data.xCloseable->addCloseListener( i_data.pListener.get() );
         }
 
@@ -138,11 +139,11 @@ namespace utl
     }
 
     //= CloseVeto
-
-    CloseVeto::CloseVeto( const Reference< XInterface >& i_closeable )
-        :m_pData( new CloseVeto_Data )
+    CloseVeto::CloseVeto(const Reference< XInterface >& i_closeable,
+            bool const hasOwnership)
+        : m_pData(new CloseVeto_Data)
     {
-        lcl_init( *m_pData, i_closeable );
+        lcl_init(*m_pData, i_closeable, hasOwnership);
     }
 
     CloseVeto::~CloseVeto()
