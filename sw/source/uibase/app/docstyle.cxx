@@ -2969,7 +2969,7 @@ void SwStyleSheetIterator::AppendStyleList(const ::std::vector<OUString>& rList,
 {
     SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     bool bUsed = false;
-    for ( sal_uInt16 i=0; i < rList.size(); ++i )
+    for ( size_t i=0; i < rList.size(); ++i )
     {
         bool bHidden = false;
         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rList[i], (SwGetPoolIdFromName)nSection);
