@@ -466,7 +466,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     }
     else if( mpOLEDataHelper && mpOLEDataHelper->HasFormat( rFlavor ) )
     {
-        SdrSwapGraphicsMode nOldSwapMode;
+        SdrSwapGraphicsMode nOldSwapMode(SdrSwapGraphicsMode::DEFAULT);
 
         if( mpSdDrawDocumentIntern )
         {
