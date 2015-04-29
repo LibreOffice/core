@@ -506,7 +506,8 @@ SmCursor& SmDocShell::GetCursor(){
 
 SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
 {
-    if ( 0 != (pPrinter = rDocShell.GetPrt()) )
+    pPrinter = rDocShell.GetPrt();
+    if ( pPrinter )
     {
         pPrinter->Push( PushFlags::MAPMODE );
         if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )
