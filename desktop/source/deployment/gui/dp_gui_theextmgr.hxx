@@ -70,8 +70,18 @@ public:
     void createDialog( const bool bCreateUpdDlg );
     sal_Int16 execute();
 
-    Dialog* getDialog() { return m_pExtMgrDialog ? (Dialog*) m_pExtMgrDialog : (Dialog*) m_pUpdReqDialog; }
-    DialogHelper* getDialogHelper() { return m_pExtMgrDialog ? (DialogHelper*) m_pExtMgrDialog : (DialogHelper*) m_pUpdReqDialog; }
+    Dialog* getDialog()
+    {
+        if (m_pExtMgrDialog)
+            return m_pExtMgrDialog.get();
+        return m_pUpdReqDialog.get();
+    }
+    DialogHelper* getDialogHelper()
+    {
+        if (m_pExtMgrDialog)
+            return m_pExtMgrDialog.get();
+        return m_pUpdReqDialog.get();
+    }
     ExtensionCmdQueue* getCmdQueue() const { return m_pExecuteCmdQueue; }
 
     void SetText( const OUString &rTitle );
