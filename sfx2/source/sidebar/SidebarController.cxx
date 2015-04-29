@@ -290,7 +290,7 @@ void SidebarController::BroadcastPropertyChange()
 
 void SidebarController::NotifyResize()
 {
-    if (mpTabBar == 0)
+    if (!mpTabBar)
     {
         OSL_ASSERT(mpTabBar!=nullptr);
         return;
