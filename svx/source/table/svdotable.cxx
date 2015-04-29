@@ -2219,10 +2219,8 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
 
     const size_t nHdlCount = rHdlList.GetHdlCount();
     for( size_t nHdl = 0; nHdl < nHdlCount; ++nHdl )
-        rHdlList.GetHdl(nHdl)->SetObj((SdrObject*)this);
+        rHdlList.GetHdl(nHdl)->SetObj(const_cast<SdrTableObj*>(this));
 }
-
-
 
 SdrHdl* SdrTableObj::GetHdl(sal_uInt32 nHdlNum) const
 {
