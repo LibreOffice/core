@@ -142,7 +142,7 @@ public:
 
     /** Probably most common used: handle->someBodyOp().
      */
-    inline reference_type * SAL_CALL operator->() const
+    inline reference_type * operator->() const
     {
         return m_rInnerRef.get();
     }
@@ -151,17 +151,17 @@ public:
          I.e. handle->someBodyOp() and handle.get()->someBodyOp()
          are the same.
       */
-    inline reference_type * SAL_CALL get() const
+    inline reference_type * get() const
     {
         return m_rInnerRef.get();
     }
 
-    inline void SAL_CALL set(reference_type *pBody)
+    inline void set(reference_type *pBody)
     {
         m_rInnerRef.set(pBody);
     }
 
-    inline void SAL_CALL reset(reference_type *pBody)
+    inline void reset(reference_type *pBody)
     {
         m_rInnerRef.set(pBody);
     }
@@ -175,28 +175,28 @@ public:
         @param rRef another reference
     */
     template< class derived_type, class = typename std::enable_if< ::vcl::detail::UpCast< reference_type, derived_type >::t >::type >
-    inline VclPtr<reference_type>& SAL_CALL operator= (derived_type * pBody)
+    inline VclPtr<reference_type>& operator= (derived_type * pBody)
     {
         m_rInnerRef.set(pBody);
         return *this;
     }
 
-    inline SAL_CALL operator reference_type * () const
+    inline operator reference_type * () const
     {
         return m_rInnerRef.get();
     }
 
-    inline SAL_CALL operator bool () const
+    inline operator bool () const
     {
         return m_rInnerRef.get() != NULL;
     }
 
-    inline void SAL_CALL clear()
+    inline void clear()
     {
         m_rInnerRef.clear();
     }
 
-    inline void SAL_CALL reset()
+    inline void reset()
     {
         m_rInnerRef.clear();
     }
@@ -214,34 +214,34 @@ public:
     /** Returns True if handle points to the same body.
      */
     template<class T>
-    inline bool SAL_CALL operator== (const VclPtr<T> & handle) const
+    inline bool operator== (const VclPtr<T> & handle) const
     {
         return (get() == handle.get());
     }
 
     /** Needed to place VclPtr's into STL collection.
      */
-    inline bool SAL_CALL operator!= (const VclPtr<reference_type> & handle) const
+    inline bool operator!= (const VclPtr<reference_type> & handle) const
     {
         return (m_rInnerRef != handle.m_rInnerRef);
     }
 
     /** Makes comparing against NULL easier, resolves compile-time ambiguity */
-    inline bool SAL_CALL operator!= (::std::nullptr_t ) const
+    inline bool operator!= (::std::nullptr_t ) const
     {
         return (get() != nullptr);
     }
 
     /** Needed to place VclPtr's into STL collection.
      */
-    inline bool SAL_CALL operator< (const VclPtr<reference_type> & handle) const
+    inline bool operator< (const VclPtr<reference_type> & handle) const
     {
         return (m_rInnerRef < handle.m_rInnerRef);
     }
 
     /** Needed to place VclPtr's into STL collection.
      */
-    inline bool SAL_CALL operator> (const VclPtr<reference_type> & handle) const
+    inline bool operator> (const VclPtr<reference_type> & handle) const
     {
         return (m_rInnerRef > handle.m_rInnerRef);
     }
@@ -292,7 +292,7 @@ public:
     /**
        Assignment that releases the last reference.
      */
-    inline ScopedVclPtr<reference_type>& SAL_CALL operator= (reference_type * pBody)
+    inline ScopedVclPtr<reference_type>& operator= (reference_type * pBody)
     {
         VclPtr<reference_type>::disposeAndClear();
         VclPtr<reference_type>::set(pBody);
@@ -325,7 +325,7 @@ private:
     // Most likely we don't want this default copy-construtor.
     ScopedVclPtr (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
     // And certainly we don't want a default assignment operator.
-    ScopedVclPtr<reference_type>& SAL_CALL operator= (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
+    ScopedVclPtr<reference_type>& operator= (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
 
 protected:
     inline ScopedVclPtr (reference_type * pBody, __sal_NoAcquire)
