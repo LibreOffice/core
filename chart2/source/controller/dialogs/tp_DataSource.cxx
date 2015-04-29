@@ -574,7 +574,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
 
 IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
 {
-    OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
+    OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
     m_pCurrentRangeChoosingField = m_pEDT_RANGE;
     if( !m_pEDT_RANGE->GetText().isEmpty() &&
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
@@ -617,7 +617,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
 
 IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl)
 {
-    OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
+    OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
     m_pCurrentRangeChoosingField = m_pEDT_CATEGORIES;
     if( !m_pEDT_CATEGORIES->GetText().isEmpty() &&
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
