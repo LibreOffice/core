@@ -173,7 +173,7 @@ public:
     //Access for the View. This access is not for the OLE-case!
     //and for the communication with the SFX!
     //All internal printer uses should work with the SmPrinterAccess only
-    bool        HasPrinter()    { return 0 != pPrinter; }
+    bool        HasPrinter()    { return pPrinter != nullptr; }
     SfxPrinter *GetPrinter()    { GetPrt(); return pPrinter; }
     void        SetPrinter( SfxPrinter * );
 
