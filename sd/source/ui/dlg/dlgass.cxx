@@ -896,7 +896,7 @@ OUString AssistentDlgImpl::GetDocFileName()
     {
         const sal_uInt16 nEntry = mpPage1TemplateLB->GetSelectEntryPos();
         TemplateEntry* pEntry = NULL;
-        if(nEntry != (sal_uInt16)-1)
+        if (mpTemplateRegion && nEntry != (sal_uInt16)-1)
             pEntry = mpTemplateRegion->maEntries[nEntry];
 
         if(pEntry)
