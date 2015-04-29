@@ -85,9 +85,9 @@ public:
     */
     const ResourceIdVector& GetC1andC2() const { return maC1andC2;}
 
-    void TraceResourceIdVector (
+    static void TraceResourceIdVector (
         const sal_Char* pMessage,
-        const ResourceIdVector& rResources) const;
+        const ResourceIdVector& rResources);
 
 private:
     ::com::sun::star::uno::Reference<
@@ -138,7 +138,7 @@ private:
         @param rS2
             Another sequence of XResourceId objects.
     */
-    void ClassifyResources (
+    static void ClassifyResources (
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::framework::XResourceId> >& rS1,
@@ -162,7 +162,7 @@ private:
             This list is filled with resources from rSource and the ones
             bound to them.
     */
-    void CopyResources (
+    static void CopyResources (
         const ResourceIdVector& rSource,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,

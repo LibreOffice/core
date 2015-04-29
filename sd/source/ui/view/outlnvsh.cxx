@@ -1590,7 +1590,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         return false;
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
-    SdrTextObj*         pTO  = pOlView->GetTitleTextObject( pPage );
+    SdrTextObj*         pTO  = OutlineView::GetTitleTextObject( pPage );
 
     OUString aTest = rOutliner.GetText(pPara);
     bool    bText = !aTest.isEmpty();
@@ -1602,7 +1602,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         if( !pTO )
         {
             DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateTitleObject(), no undo for model change!?" );
-            pTO = pOlView->CreateTitleTextObject(pPage);
+            pTO = OutlineView::CreateTitleTextObject(pPage);
             bNewObject = true;
         }
 
@@ -1680,7 +1680,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     if( !pTO )
     {
         eOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
-        pTO = pOlView->GetOutlineTextObject( pPage );
+        pTO = OutlineView::GetOutlineTextObject( pPage );
     }
 
     // how many paragraphs in the outline?
@@ -1706,7 +1706,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
         // do we need an outline text object?
         if( !pTO )
         {
-            pTO = pOlView->CreateOutlineTextObject( pPage );
+            pTO = OutlineView::CreateOutlineTextObject( pPage );
             bNewObject = true;
         }
 

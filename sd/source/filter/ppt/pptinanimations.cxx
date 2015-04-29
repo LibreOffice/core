@@ -1449,7 +1449,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 
@@ -1523,7 +1523,7 @@ int AnimationImporter::importAnimationNodeContainer( const Atom* pAtom, const Re
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 
@@ -1602,7 +1602,7 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
 
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 }
@@ -1733,7 +1733,7 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 
@@ -1880,7 +1880,7 @@ void AnimationImporter::importAnimateColorContainer( const Atom* pAtom, const Re
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 }
@@ -1937,7 +1937,7 @@ void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Refe
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 }
@@ -2014,7 +2014,7 @@ void AnimationImporter::importAnimateContainer( const Atom* pAtom, const Referen
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 }
@@ -2094,7 +2094,7 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 }
@@ -2158,7 +2158,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
 
         if( nBits & 3 )
@@ -2281,7 +2281,7 @@ int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference<
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
 
         // TODO: What to do with them?
@@ -2386,7 +2386,7 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 }
@@ -2454,7 +2454,7 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
                 break;
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 }
@@ -2601,13 +2601,13 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                 double fTemp = (double)nTemp / 1000.0;
                 aKeyTimes[nKeyTime] = fTemp;
 
-                const Atom* pValue = pAtom->findNextChildAtom(pIter);
+                const Atom* pValue = Atom::findNextChildAtom(pIter);
                 if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
                 {
                     Any aValue1, aValue2;
                     if( importAttributeValue( pValue, aValue1 ) )
                     {
-                        pValue = pAtom->findNextChildAtom(pValue);
+                        pValue = Atom::findNextChildAtom(pValue);
                         if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
                             (void)importAttributeValue( pValue, aValue2 );
 
@@ -2847,7 +2847,7 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
                 }
                 }
 
-                pChildAtom = pEventAtom->findNextChildAtom( pChildAtom );
+                pChildAtom = Atom::findNextChildAtom( pChildAtom );
             }
 
             *pEvents = addToSequence( *pEvents, (aEvent.Trigger == EventTrigger::NONE) ? aEvent.Offset : makeAny( aEvent ) );
@@ -3042,7 +3042,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                 break;
             }
 
-        pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+        pChildAtom = Atom::findNextChildAtom( pChildAtom );
 
         }
     }
@@ -3070,7 +3070,7 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
                 OSL_FAIL("unknown atom inside ppt::AnimationImporter::importPropertySetContainer()!");
             }
 
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
+            pChildAtom = Atom::findNextChildAtom( pChildAtom );
         }
     }
 }
@@ -3214,7 +3214,7 @@ void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
                     dump_atom_header( pChildAtom, false, pChildAtom->getType() == DFF_msofbtAnimAttributeValue );
                 }
 
-                pChildAtom = pAtom->findNextChildAtom(pChildAtom);
+                pChildAtom = Atom::findNextChildAtom(pChildAtom);
             }
         }
         else if( pAtom->seekToContent() )

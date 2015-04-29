@@ -141,7 +141,7 @@ private:
     */
     //    bool                        mbShowAllShapes;
 
-    sal_uInt16                      GetDragTypeSdResId( NavigatorDragType eDT, bool bImage = false );
+    static sal_uInt16           GetDragTypeSdResId( NavigatorDragType eDT, bool bImage = false );
     NavDocInfo*                 GetDocInfo();
 
                                 DECL_LINK( GetFocusObjectsHdl, void * );
@@ -159,7 +159,7 @@ private:
     void                        ApplyImageList();
 public:
     //when object is marked , fresh the corresponding entry tree .
-    sd::DrawDocShell*             GetDrawDocShell(const SdDrawDocument*);
+    static sd::DrawDocShell*    GetDrawDocShell(const SdDrawDocument*);
     void                        FreshTree ( const  SdDrawDocument* pDoc );
     void                        FreshEntry( );
 };

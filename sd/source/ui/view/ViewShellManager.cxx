@@ -216,7 +216,7 @@ private:
         undo managers.
         Afterwards the Deactivate() of the shell is called.
     */
-    void Deactivate (SfxShell* pShell);
+    static void Deactivate (SfxShell* pShell);
 
     ShellDescriptor CreateSubShell (
         SfxShell* pShell,
@@ -224,7 +224,7 @@ private:
         vcl::Window* pParentWindow,
         FrameView* pFrameView);
     void DestroyViewShell (ShellDescriptor& rDescriptor);
-    void DestroySubShell (
+    static void DestroySubShell (
         const SfxShell& rViewShell,
         const ShellDescriptor& rDescriptor);
 };

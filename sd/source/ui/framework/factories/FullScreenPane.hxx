@@ -82,7 +82,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     VclPtr<WorkWindow> mpWorkWindow;
 
-    void ExtractArguments (
+    static void ExtractArguments (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         sal_Int32& rnScreenNumberReturnValue);
 };

@@ -57,7 +57,7 @@ SdFilter::~SdFilter()
 {
 }
 
-OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName ) const
+OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName )
 {
     OUString aTemp(SVLIBRARY("?"));
     return aTemp.replaceFirst( "?", rLibraryName );
@@ -66,7 +66,7 @@ OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName ) const
 #ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
 
-::osl::Module* SdFilter::OpenLibrary( const OUString& rLibraryName ) const
+::osl::Module* SdFilter::OpenLibrary( const OUString& rLibraryName )
 {
     std::unique_ptr< osl::Module > mod(new osl::Module);
     return mod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName),

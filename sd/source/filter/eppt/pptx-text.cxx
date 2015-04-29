@@ -141,7 +141,7 @@ PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text:
             // Solution: add a Unicode Right-to-Left Mark, following the method described in i18024
             if (bLast && !aString.isEmpty()
                 && aString[aString.getLength() - 1] == ')'
-                && rFontCollection.GetScriptDirection(aString) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT)
+                && FontCollection::GetScriptDirection(aString) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT)
             {
                 mnTextSize++;
                 bRTL_endingParen = true;
@@ -1408,7 +1408,7 @@ FontCollection::FontCollection() :
     xPPTBreakIter = com::sun::star::i18n::BreakIterator::create( xContext );
 }
 
-short FontCollection::GetScriptDirection( const OUString& rString ) const
+short FontCollection::GetScriptDirection( const OUString& rString )
 {
     short nRet = ScriptTypeDetector::getScriptDirection( rString, 0, com::sun::star::i18n::ScriptDirection::NEUTRAL );
     return nRet;

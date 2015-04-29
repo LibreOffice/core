@@ -135,7 +135,7 @@ public:
     sal_uLong GetMarkablePointCount() const;
     bool HasMarkedPoints() const;
     sal_uLong GetMarkedPointCount() const;
-    bool IsPointMarkable(const SdrHdl& rHdl) const;
+    static bool IsPointMarkable(const SdrHdl& rHdl);
     bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false);
     bool MarkPoints(const Rectangle* pRect, bool bUnmark);
 

@@ -123,7 +123,7 @@ class PortionObj : public PropStateValue
 
         void            ImplClear();
         void            ImplConstruct( const PortionObj& rPortionObj );
-        sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
+        static sal_uInt32 ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, OUString& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         void            ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue = false );

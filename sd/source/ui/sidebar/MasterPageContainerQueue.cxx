@@ -147,7 +147,7 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
 }
 
 sal_Int32 MasterPageContainerQueue::CalculatePriority (
-    const SharedMasterPageDescriptor& rpDescriptor) const
+    const SharedMasterPageDescriptor& rpDescriptor)
 {
     sal_Int32 nPriority;
 

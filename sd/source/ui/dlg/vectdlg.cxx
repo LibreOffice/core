@@ -90,7 +90,7 @@ void SdVectorizeDlg::dispose()
     ModalDialog::dispose();
 }
 
-Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize ) const
+Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
 {
     Rectangle aRect;
 

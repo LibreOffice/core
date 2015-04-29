@@ -57,7 +57,7 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     if (pTreeListBoxTransferable!=NULL && !TransferableData::GetFromTransferable(pTransferable))
     {
         pTransferable->AddUserData(
-            rSlideSorter.GetController().GetClipboard().CreateTransferableUserData(pTransferable));
+            sd::slidesorter::controller::Clipboard::CreateTransferableUserData(pTransferable));
     }
 
     rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(pTransferable);

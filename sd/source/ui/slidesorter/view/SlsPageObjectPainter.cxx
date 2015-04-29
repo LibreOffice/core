@@ -158,7 +158,7 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
     const Size& rSize,
     const Bitmap& rPreview,
     const BitmapEx& rOverlay,
-    const OutputDevice* pReferenceDevice) const
+    const OutputDevice* pReferenceDevice)
 {
     ScopedVclPtr<VirtualDevice> pDevice;
     if (pReferenceDevice != NULL)
@@ -270,7 +270,7 @@ void PageObjectPainter::PaintPageNumber (
 void PageObjectPainter::PaintTransitionEffect (
     PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
-    const model::SharedPageDescriptor& rpDescriptor) const
+    const model::SharedPageDescriptor& rpDescriptor)
 {
     const SdPage* pPage = rpDescriptor->GetPage();
     if (pPage!=NULL && pPage->getTransitionType() > 0)
@@ -289,7 +289,7 @@ void PageObjectPainter::PaintTransitionEffect (
 void PageObjectPainter::PaintCustomAnimationEffect (
     PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
-    const model::SharedPageDescriptor& rpDescriptor) const
+    const model::SharedPageDescriptor& rpDescriptor)
 {
     SdPage* pPage = rpDescriptor->GetPage();
     boost::shared_ptr< MainSequence > aMainSequence = pPage->getMainSequence();

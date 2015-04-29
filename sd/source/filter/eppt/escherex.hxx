@@ -40,11 +40,11 @@ class PptEscherEx : public EscherEx
         sal_uInt32  ImplDggContainerSize();
         void        ImplWriteDggContainer( SvStream& rSt );
 
-        sal_uInt32  ImplOptAtomSize();
-        void        ImplWriteOptAtom( SvStream& rSt );
+        static sal_uInt32  ImplOptAtomSize();
+        static void        ImplWriteOptAtom( SvStream& rSt );
 
-        sal_uInt32  ImplSplitMenuColorsAtomSize();
-        void        ImplWriteSplitMenuColorsAtom( SvStream& rSt );
+        static sal_uInt32  ImplSplitMenuColorsAtomSize();
+        static void        ImplWriteSplitMenuColorsAtom( SvStream& rSt );
 
     public:
 

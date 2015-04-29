@@ -186,7 +186,7 @@ public :
 
     ~FontCollection();
 
-    short GetScriptDirection( const OUString& rText ) const;
+    static short GetScriptDirection( const OUString& rText );
 
     sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
 
@@ -404,10 +404,10 @@ public:
 
     bool GetPresObj() { return mbPresObj; }
 
-    PHLayout& GetLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
-    PHLayout& GetLayout( sal_Int32 nOffset ) const;
-    sal_Int32 GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
-    sal_Int32 GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
+    static PHLayout& GetLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet );
+    static PHLayout& GetLayout( sal_Int32 nOffset );
+    static sal_Int32 GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet );
+    static sal_Int32 GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet );
 
     bool CreateSlide( sal_uInt32 nPageNum );
     bool CreateSlideMaster( sal_uInt32 nPageNum );

@@ -209,8 +209,8 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          ImplProgBinaryTag( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplProgBinaryTagContainer( SvStream* pOutStrm = NULL, SvMemoryStream* pBinTag = NULL );
         sal_uInt32          ImplProgTagContainer( SvStream* pOutStrm = NULL, SvMemoryStream* pBinTag = NULL );
-        sal_uInt32          ImplOutlineViewInfoContainer( SvStream* pOutStrm = NULL );
-        sal_uInt32          ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream* pOutStrm = NULL );
+        static sal_uInt32   ImplOutlineViewInfoContainer( SvStream* pOutStrm = NULL );
+        static sal_uInt32   ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream* pOutStrm = NULL );
         sal_uInt32          ImplVBAInfoContainer( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplDocumentListContainer( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplMasterSlideListContainer( SvStream* pOutStrm = NULL );
@@ -222,7 +222,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 
         bool                ImplCreateDocumentSummaryInformation();
         bool                ImplCreateCurrentUserStream();
-        void                ImplCreateHeaderFooterStrings( SvStream& rOut,
+        static void         ImplCreateHeaderFooterStrings( SvStream& rOut,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
         void                ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
         virtual bool        ImplCreateDocument() SAL_OVERRIDE;
@@ -240,7 +240,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         bool                ImplGetText();
         bool                ImplCreatePresentationPlaceholder( const bool bMaster, const PageType PageType,
                                 const sal_uInt32 StyleInstance, const sal_uInt8 PlaceHolderId );
-        bool                ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+        static bool         ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
                                 ::com::sun::star::presentation::AnimationEffect& eTextEffect,
                                 bool& bHasSound );

@@ -112,7 +112,7 @@ private:
     STLPropertySet* createSelectionSet();
     void changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet );
 
-    ::com::sun::star::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
+    static ::com::sun::star::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
     bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const ::com::sun::star::uno::Any& rValue );
     void UpdateLook();
 

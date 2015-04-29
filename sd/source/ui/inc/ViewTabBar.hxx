@@ -177,7 +177,7 @@ private:
             ::com::sun::star::drawing::framework::XResourceId>& rxViewTabBarId,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XController>& rxController);
-    const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 };
 
 } // end of namespace sd

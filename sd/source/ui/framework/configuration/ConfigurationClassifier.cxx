@@ -164,7 +164,7 @@ void ConfigurationClassifier::CopyResources (
 
 void ConfigurationClassifier::TraceResourceIdVector (
     const sal_Char* pMessage,
-    const ResourceIdVector& rResources) const
+    const ResourceIdVector& rResources)
 {
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " << pMessage);

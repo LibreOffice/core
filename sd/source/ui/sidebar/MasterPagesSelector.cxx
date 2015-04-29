@@ -461,7 +461,7 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
 
 MasterPagesSelector::UserData* MasterPagesSelector::CreateUserData (
     int nIndex,
-    MasterPageContainer::Token aToken) const
+    MasterPageContainer::Token aToken)
 {
     return new UserData(nIndex,aToken);
 }

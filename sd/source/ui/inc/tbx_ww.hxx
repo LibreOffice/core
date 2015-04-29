@@ -26,7 +26,7 @@
 class SdTbxControl : public SfxToolBoxControl
 {
 private:
-    bool    IsCheckable( sal_uInt16 nSId );
+    static bool IsCheckable( sal_uInt16 nSId );
 
 public:
             SFX_DECL_TOOLBOX_CONTROL();

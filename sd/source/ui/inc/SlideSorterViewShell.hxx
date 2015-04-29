@@ -84,7 +84,7 @@ public:
     void GetStatusBarState (SfxItemSet& rSet);
     void FuPermanent (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
-    void ExecStatusBar (SfxRequest& rRequest);
+    static void ExecStatusBar (SfxRequest& rRequest);
     virtual void Command (const CommandEvent& rEvent, ::sd::Window* pWindow) SAL_OVERRIDE;
     void GetMenuState (SfxItemSet &rSet);
     void GetClipboardState (SfxItemSet &rSet);

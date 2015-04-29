@@ -114,8 +114,8 @@ private:
 
     SfxMapUnit          ePoolUnit;
 
-    OUString        GetScale( sal_Int32 nX, sal_Int32 nY );
-    bool            SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY );
+    static OUString        GetScale( sal_Int32 nX, sal_Int32 nY );
+    static bool            SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY );
 
     DECL_LINK( SelectMetricHdl_Impl, void * );
 
@@ -148,7 +148,7 @@ public:
         and arrange the visible controls.  Do not call this method or the
         <member>SetDrawMode()</member> method more than once.
     */
-    void SetImpressMode();
+    static void SetImpressMode();
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
     using TabPage::ActivatePage;

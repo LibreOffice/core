@@ -80,9 +80,9 @@ public:
 
     void ExecuteAnnotationContextMenu( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );
 
-    Color GetColorDark(sal_uInt16 aAuthorIndex);
-    Color GetColorLight(sal_uInt16 aAuthorIndex);
-    Color GetColor(sal_uInt16 aAuthorIndex);
+    static Color GetColorDark(sal_uInt16 aAuthorIndex);
+    static Color GetColorLight(sal_uInt16 aAuthorIndex);
+    static Color GetColor(sal_uInt16 aAuthorIndex);
 
     // callbacks
     void onTagSelected( AnnotationTag& rTag );

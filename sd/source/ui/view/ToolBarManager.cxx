@@ -321,7 +321,7 @@ private:
     ImplSVEvent * mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
 
-    OUString GetToolBarResourceName (const OUString& rsBaseName) const;
+    static OUString GetToolBarResourceName (const OUString& rsBaseName);
     bool CheckPlugInMode (const OUString& rsName) const;
 
     DECL_LINK(UpdateCallback, void *);
@@ -896,7 +896,7 @@ IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback)
 }
 
 OUString ToolBarManager::Implementation::GetToolBarResourceName (
-    const OUString& rsBaseName) const
+    const OUString& rsBaseName)
 {
     OUString sToolBarName (msToolBarResourcePrefix);
     sToolBarName += rsBaseName;

@@ -35,7 +35,7 @@ public:
     virtual ~Receiver();
     virtual void Invoke() SAL_OVERRIDE;
     void pushCommand( const std::vector<OString> &rCommand );
-    void executeCommand( const std::vector<OString> &aCommand );
+    static void executeCommand( const std::vector<OString> &aCommand );
 
 private:
     Transmitter *pTransmitter;

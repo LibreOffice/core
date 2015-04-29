@@ -75,7 +75,7 @@ public:
                             when styles are missing.
     */
     SD_DLLPUBLIC void                CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck = false );
-    void                CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList) const;
+    static void         CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList);
     void                CreateLayoutSheetList(const OUString& rLayoutName, SdStyleSheetVector& rLayoutSheets);
     void                CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);

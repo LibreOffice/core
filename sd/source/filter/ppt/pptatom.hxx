@@ -51,7 +51,7 @@ public:
     inline const Atom* findFirstChildAtom() const;
 
     /** @return the next child atom after pLast or NULL */
-    inline const Atom* findNextChildAtom( const Atom* pLast ) const;
+    static inline const Atom* findNextChildAtom( const Atom* pLast );
 
     /** @return true if this atom is a container */
     inline bool isContainer() const;
@@ -97,7 +97,7 @@ inline const Atom* Atom::findFirstChildAtom() const
     return mpFirstChild;
 }
 
-inline const Atom* Atom::findNextChildAtom( const Atom* pLast ) const
+inline const Atom* Atom::findNextChildAtom( const Atom* pLast )
 {
     return pLast ? pLast->mpNextAtom : pLast;
 }

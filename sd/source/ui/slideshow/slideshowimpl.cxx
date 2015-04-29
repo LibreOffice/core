@@ -2381,7 +2381,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
     return 0;
 }
 
-Reference< XSlideShow > SlideshowImpl::createSlideShow() const
+Reference< XSlideShow > SlideshowImpl::createSlideShow()
 {
     Reference< XSlideShow > xShow;
 

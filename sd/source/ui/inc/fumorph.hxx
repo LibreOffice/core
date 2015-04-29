@@ -59,30 +59,30 @@ private:
         const SdrObject* pObj2
     );
 
-    ::basegfx::B2DPolyPolygon* ImpCreateMorphedPolygon(
+    static ::basegfx::B2DPolyPolygon* ImpCreateMorphedPolygon(
         const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
         const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
         double fMorphingFactor
     );
 
-    bool ImpMorphPolygons(
+    static bool ImpMorphPolygons(
         const ::basegfx::B2DPolyPolygon& rPolyPoly1,
         const ::basegfx::B2DPolyPolygon& rPolyPoly2,
         const sal_uInt16 nSteps,
         B2DPolyPolygonList_impl& rPolyPolyList3D
     );
 
-    void ImpAddPolys(
+    static void ImpAddPolys(
         ::basegfx::B2DPolyPolygon& rSmaller,
         const ::basegfx::B2DPolyPolygon& rBigger
     );
 
-    void ImpEqualizePolyPointCount(
+    static void ImpEqualizePolyPointCount(
         ::basegfx::B2DPolygon& rSmall,
         const ::basegfx::B2DPolygon& rBig
     );
 
-    sal_uInt32 ImpGetNearestIndex(
+    static sal_uInt32 ImpGetNearestIndex(
         const ::basegfx::B2DPolygon& rPoly,
         const ::basegfx::B2DPoint& rPos
     );

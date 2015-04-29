@@ -141,11 +141,11 @@ public:
            index of the lower row (nRow+1) or -1 to indicate that the
            position belongs to no row.
         */
-    sal_Int32 ResolvePositionInGap (
+    static sal_Int32 ResolvePositionInGap (
         sal_Int32 nDistanceIntoGap,
         GapMembership eGapMembership,
         sal_Int32 nIndex,
-        sal_Int32 nGap) const;
+        sal_Int32 nGap);
 
     /** Calculate the logical part of the insert position, i.e. the page
         after whicht to insert.
@@ -628,7 +628,7 @@ sal_Int32 Layouter::Implementation::ResolvePositionInGap (
     sal_Int32 nDistanceIntoGap,
     GapMembership eGapMembership,
     sal_Int32 nIndex,
-    sal_Int32 nGap) const
+    sal_Int32 nGap)
 {
     switch (eGapMembership)
     {

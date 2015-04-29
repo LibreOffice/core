@@ -49,7 +49,7 @@ protected:
         bookmark list of the transferable contains at least one non-master
         page then NULL is returned.
     */
-    SdPage* GetFirstMasterPage (const SdTransferable& rTransferable);
+    static SdPage* GetFirstMasterPage (const SdTransferable& rTransferable);
 
     /** Assign the (first) master page of the given transferable to the
         (...) slide.

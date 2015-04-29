@@ -128,7 +128,7 @@ protected:
 
     DECL_LINK( DelayHdl, void * );
 
-    void ImpForceQuadratic(Rectangle& rRect);
+    static void ImpForceQuadratic(Rectangle& rRect);
 
     /** Switch to another layer.  The layer to switch to is specified by an
         offset relative to the active layer.  With respect to the layer bar

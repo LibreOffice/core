@@ -270,7 +270,7 @@ public:
 
     void            SetZoomOnPage( bool bZoom = true ) { mbZoomOnPage = bZoom; }
     bool            IsZoomOnPage() { return mbZoomOnPage; }
-    void            CheckLineTo (SfxRequest& rReq);
+    static void     CheckLineTo (SfxRequest& rReq);
     void            SetChildWindowState( SfxItemSet& rSet );
 
     void            UpdateIMapDlg( SdrObject* pObj );
@@ -412,7 +412,7 @@ protected:
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                bool bSize, bool bMargin, bool bScaleAll );
 
-    sal_uInt16      GetIdBySubId( sal_uInt16 nSId );
+    static sal_uInt16 GetIdBySubId( sal_uInt16 nSId );
     void            MapSlot( sal_uInt16 nSId );
     void            UpdateToolboxImages( SfxItemSet &rSet, bool bPermanent = true );
     sal_uInt16      GetMappedSlot( sal_uInt16 nSId );

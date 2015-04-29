@@ -91,8 +91,8 @@ private:
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
     void                    SetEditText( OUString const & rStr );
     OUString                GetEditText( bool bURL = false );
-    sal_uInt16                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
-    sal_uInt16                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
+    static sal_uInt16       GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
+    sal_uInt16              GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 
 public:
             SdTPAction( vcl::Window* pParent, const SfxItemSet& rInAttrs );

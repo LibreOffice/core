@@ -306,9 +306,9 @@ private:
     void registerShapeEvents( sal_Int32 nSlideNumber );
     void registerShapeEvents( css::uno::Reference< css::drawing::XShapes >& xShapes ) throw (css::uno::Exception);
 
-    css::uno::Reference< css::presentation::XSlideShow > createSlideShow() const;
+    static css::uno::Reference< css::presentation::XSlideShow > createSlideShow();
 
-    void setAutoSaveState( bool bOn );
+    static void setAutoSaveState( bool bOn );
     void gotoPreviousSlide (const bool bSkipAllMainSequenceEffects);
 
     /** Called by PostYieldListener and updateHdl handlers this method is

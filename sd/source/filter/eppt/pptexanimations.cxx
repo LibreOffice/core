@@ -747,7 +747,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
         aTarget = Any();
 }
 
-Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const Reference< XAnimationNode >& xNode ) const
+Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const Reference< XAnimationNode >& xNode )
 {
     try
     {
@@ -2045,7 +2045,7 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
     }
 }
 
-bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC ) const
+bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC )
 {
     bool bIsColor = true;
 

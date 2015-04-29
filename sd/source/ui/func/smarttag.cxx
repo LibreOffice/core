@@ -320,7 +320,7 @@ sal_uLong SmartTagSet::GetMarkedPointCount() const
         return 0;
 }
 
-bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
+bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl)
 {
     const SmartHdl* pSmartHdl = dynamic_cast< const SmartHdl* >( &rHdl );
 

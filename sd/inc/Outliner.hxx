@@ -420,7 +420,7 @@ private:
         @param aPosition
             The object for which to test whether it is a valid text object.
     */
-    bool IsValidTextObject (const ::sd::outliner::IteratorPosition& rPosition);
+    static bool IsValidTextObject (const ::sd::outliner::IteratorPosition& rPosition);
 
     /** Put text of current text object into outliner so that the text can
         be searched/spell checked.

@@ -1051,7 +1051,7 @@ SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
 }
 
 // create HTML text version of impress pages
-OUString HtmlExport::CreateMetaCharset() const
+OUString HtmlExport::CreateMetaCharset()
 {
     OUString aStr;
     const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
@@ -2707,7 +2707,7 @@ OUString HtmlExport::CreateBodyTag() const
 // creates a hyperlink
 OUString HtmlExport::CreateLink( const OUString& aLink,
                                  const OUString& aText,
-                                 const OUString& aTarget ) const
+                                 const OUString& aTarget )
 {
     OUStringBuffer aStr( "<a href=\"" );
     aStr.append(aLink);
@@ -2726,7 +2726,7 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
 // creates a image tag
 OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltText,
                                 sal_Int16 nWidth,
-                                sal_Int16 nHeight ) const
+                                sal_Int16 nHeight )
 {
     OUStringBuffer aStr( "<img src=\"");
     aStr.append(aImage);
@@ -2778,7 +2778,7 @@ OUString HtmlExport::ColorToHTMLString( Color aColor )
 OUString HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
                                          sal_uLong nCenterX,
                                          sal_uLong nCenterY,
-                                         const OUString& rHRef ) const
+                                         const OUString& rHRef )
 {
     OUString aStr(
         "<area shape=\"circle\" alt=\"\" coords=\"" +
@@ -2792,7 +2792,7 @@ OUString HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
 
 // create area for a polygon; we expect pixel coordinates
 OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPolygon,
-    Size aShift, double fFactor, const OUString& rHRef ) const
+    Size aShift, double fFactor, const OUString& rHRef )
 {
     OUStringBuffer aStr;
     const sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
@@ -2827,7 +2827,7 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
 
 // create area for a rectangle; we expect pixel coordinates
 OUString HtmlExport::CreateHTMLRectArea( const Rectangle& rRect,
-                                       const OUString& rHRef ) const
+                                       const OUString& rHRef )
 {
     OUString aStr(
         "<area shape=\"rect\" alt=\"\" coords=\"" +
@@ -3135,7 +3135,7 @@ bool HtmlExport::checkForExistingFiles()
     return bFound;
 }
 
-OUString HtmlExport::GetButtonName( int nButton ) const
+OUString HtmlExport::GetButtonName( int nButton )
 {
     return OUString::createFromAscii(pButtonNames[nButton]);
 }

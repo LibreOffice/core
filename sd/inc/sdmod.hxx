@@ -171,7 +171,7 @@ private:
             The document which will contain the summary page and from which
             the information about the default transition is retrieved.
     */
-    void AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument);
+    static void AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument);
 
     /** Take an outline from a text document and create a new impress
         document according to the structure of the outline.
@@ -179,7 +179,7 @@ private:
             This typically is the unmodified request from a execute()
             function from where this function is called.
     */
-    bool OutlineToImpress(SfxRequest& rRequest);
+    static bool OutlineToImpress(SfxRequest& rRequest);
 
     /** Add an eventlistener as soon as possible in sd, allows to use
         remote devices to start the slideshow elegantly, and respecting

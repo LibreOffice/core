@@ -84,9 +84,9 @@ private:
     Reference< drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
         Reference< drawing::XDrawPages > xDrawPages);
 
-    awt::Size createASRSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
+    static awt::Size createASRSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
     void createCaption(const awt::Size& aPageSize);
-    Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
+    static Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
         Reference< graphic::XGraphicProvider> xProvider);
 
     void EnableDisableButtons();

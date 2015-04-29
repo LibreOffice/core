@@ -121,7 +121,7 @@ private:
     /** Calculate the priority that defines the order in which requests
         are processed.
     */
-    sal_Int32 CalculatePriority (const SharedMasterPageDescriptor& rDescriptor) const;
+    static sal_Int32 CalculatePriority (const SharedMasterPageDescriptor& rDescriptor);
 
     DECL_LINK(DelayedPreviewCreation, Timer *);
 };

@@ -66,7 +66,7 @@ class SdVectorizeDlg : public ModalDialog
     void                InitPreviewBmp();
     void                UpdatePreviewMtf();
 
-    Rectangle           GetRect( const Size& rDispSize, const Size& rBmpSize ) const;
+    static Rectangle    GetRect( const Size& rDispSize, const Size& rBmpSize );
     Bitmap              GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale );
     void                Calculate( Bitmap& rBmp, GDIMetaFile& rMtf );
     void                AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,

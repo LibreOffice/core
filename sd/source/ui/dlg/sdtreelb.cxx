@@ -614,9 +614,9 @@ void SdPageObjsTLB::AddShapeList (
         if(pWindow)
             pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
         if( pSdNavigatorWin )
-            pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+            pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
         if(pSdDrawDocShell)
-            bMarked=pSdDrawDocShell->IsMarked(pShape);
+            bMarked = pSdDrawDocShell->IsMarked(pShape);
         if(pEntry)
         {
             if(bMarked)
@@ -657,9 +657,9 @@ void SdPageObjsTLB::AddShapeList (
                     if(pWindow)
                         pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
-                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                        pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
-                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                        bMarked = pSdDrawDocShell->IsMarked((SdrObject*)pObj);
                     if(pNewEntry)
                     {
                         if(bMarked)
@@ -691,9 +691,9 @@ void SdPageObjsTLB::AddShapeList (
                     if(pWindow)
                         pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
-                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                        pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
-                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                        bMarked = pSdDrawDocShell->IsMarked((SdrObject*)pObj);
                     if(pNewEntry)
                     {
                         if(bMarked)
@@ -740,9 +740,9 @@ void SdPageObjsTLB::AddShapeList (
                     if(pWindow)
                         pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
-                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                        pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
-                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                        bMarked = pSdDrawDocShell->IsMarked((SdrObject*)pObj);
                     if(pNewEntry)
                     {
                         if(bMarked)
@@ -1102,12 +1102,11 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
             if (!pParentEntry)
                 return;
             OUString  aStr(GetSelectEntry());
-            SdNavigatorWin* pSdNavigatorWin = reinterpret_cast<SdNavigatorWin*>(pParentEntry);
-            sd::DrawDocShell* pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+            sd::DrawDocShell* pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
             if (pSdDrawDocShell)
             {
                 pSdDrawDocShell->GotoTreeBookmark(aStr);
-                bMarked=pSdDrawDocShell->GetObjectIsmarked(aStr);
+                bMarked = pSdDrawDocShell->GetObjectIsmarked(aStr);
             }
             pNewEntry->SetMarked(bMarked);
             Invalidate();

@@ -134,7 +134,7 @@ private:
 
     /** Transform the given string into a URL object.
     */
-    ::com::sun::star::util::URL MakeURL (const OUString& rSlotName) const;
+    static ::com::sun::star::util::URL MakeURL (const OUString& rSlotName);
 
     /** Return an XDispatch object for the given URL.
     */

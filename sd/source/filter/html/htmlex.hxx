@@ -144,7 +144,7 @@ class HtmlExport
 
     boost::scoped_ptr< ButtonSet > mpButtonSet;
 
-    SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
+    static SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 
     void SetDocColors( SdPage* pPage = NULL );
 
@@ -170,9 +170,9 @@ class HtmlExport
     OUString getDocumentTitle();
     bool    SavePresentation();
 
-    OUString CreateLink( const OUString& aLink, const OUString& aText,
-                        const OUString& aTarget = OUString()) const;
-    OUString CreateImage( const OUString& aImage, const OUString& aAltText, sal_Int16 nWidth = -1, sal_Int16 nHeight = -1 ) const;
+    static OUString CreateLink( const OUString& aLink, const OUString& aText,
+                        const OUString& aTarget = OUString());
+    static OUString CreateImage( const OUString& aImage, const OUString& aAltText, sal_Int16 nWidth = -1, sal_Int16 nHeight = -1 );
     OUString CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const;
     OUString CreateBodyTag() const;
 
@@ -183,11 +183,11 @@ class HtmlExport
     OUString CreateTextForPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
     OUString CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
 
-    OUString CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
-                                  sal_uLong nCenterY, const OUString& rHRef ) const;
-    OUString CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, const OUString& rHRef ) const;
-    OUString CreateHTMLRectArea( const Rectangle& rRect,
-                                const OUString& rHRef ) const;
+    static OUString CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
+                                  sal_uLong nCenterY, const OUString& rHRef );
+    static OUString CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, const OUString& rHRef );
+    static OUString CreateHTMLRectArea( const Rectangle& rRect,
+                                const OUString& rHRef );
 
     OUString CreatePageURL( sal_uInt16 nPgNum );
 
@@ -199,7 +199,7 @@ class HtmlExport
     void ResetProgress();
 
     /// Output only the charset metadata, title etc. will be handled separately.
-    OUString CreateMetaCharset() const;
+    static OUString CreateMetaCharset();
 
     /// Output document metadata.
     OUString DocumentMetadata() const;
@@ -211,7 +211,7 @@ class HtmlExport
     void ExportSingleDocument();
 
     bool WriteHtml( const OUString& rFileName, bool bAddExtension, const OUString& rHtmlData );
-    OUString GetButtonName( int nButton ) const;
+    static OUString GetButtonName( int nButton );
 
     void WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
                                 OutlinerParaObject* pOutlinerParagraphObject,

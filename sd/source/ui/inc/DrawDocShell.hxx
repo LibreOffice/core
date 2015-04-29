@@ -229,7 +229,7 @@ protected:
     void                    Construct(bool bClipboard);
     virtual void            InPlaceActivate( bool bActive ) SAL_OVERRIDE;
 private:
-    void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
+    static void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
 };
 
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED

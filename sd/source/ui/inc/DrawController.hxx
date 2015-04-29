@@ -239,7 +239,7 @@ protected:
      */
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
-    void FillPropertyTable (
+    static void FillPropertyTable (
         ::std::vector< ::com::sun::star::beans::Property>& rProperties);
 
     /**

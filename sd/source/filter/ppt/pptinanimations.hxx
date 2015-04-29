@@ -75,19 +75,19 @@ private:
     bool importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames );
     sal_Int32 importTargetElementContainer( const Atom* pAtom, ::com::sun::star::uno::Any& rTarget, sal_Int16& nSubType );
 
-    void fillNode( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTiming, const AnimationNode& rNode, const PropertySet& rSet );
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > createNode( const Atom* pAtom, const AnimationNode& rNode );
+    static void fillNode( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTiming, const AnimationNode& rNode, const PropertySet& rSet );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > createNode( const Atom* pAtom, const AnimationNode& rNode );
 
     bool convertAnimationNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xParent );
-    bool convertAnimationValue( MS_AttributeNames eAttribute, com::sun::star::uno::Any& rValue );
+    static bool convertAnimationValue( MS_AttributeNames eAttribute, com::sun::star::uno::Any& rValue );
 
-    void fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    static void fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    static void fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
     void processAfterEffectNodes();
 
     ::com::sun::star::uno::Any  implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
-    sal_Int16                   implGetColorSpace( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
+    static sal_Int16            implGetColorSpace( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxRootNode;
@@ -104,18 +104,18 @@ private:
     void dump( sal_uInt32 nLen, bool bNewLine = true );
 #endif
 
-    void dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend );
-    void dump_atom( const Atom* pAtom, bool bNewLine = true );
-    void dump_target( ::com::sun::star::uno::Any& rAny );
-    void dump( ::com::sun::star::uno::Any& rAny );
-    void dump( const PropertySet& rSet );
-    void dump( const AnimationNode& rNode );
-    void dump( const char * pText );
-    void dump( const char * pText, sal_Int32 nInt );
+    static void dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend );
+    static void dump_atom( const Atom* pAtom, bool bNewLine = true );
+    static void dump_target( ::com::sun::star::uno::Any& rAny );
+    static void dump( ::com::sun::star::uno::Any& rAny );
+    static void dump( const PropertySet& rSet );
+    static void dump( const AnimationNode& rNode );
+    static void dump( const char * pText );
+    static void dump( const char * pText, sal_Int32 nInt );
     void dump( const char * pText, sal_Int64 nInt );
-    void dump( const char * pText, double fDouble );
-    void dump( const char * pText, const char * pText2 );
-    void dump( const char * pText, const OUString& rString );
+    static void dump( const char * pText, double fDouble );
+    static void dump( const char * pText, const char * pText2 );
+    static void dump( const char * pText, const OUString& rString );
 };
 
 } // namespace ppt

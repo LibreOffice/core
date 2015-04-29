@@ -591,9 +591,9 @@ void AnnotationWindow::SetColor()
     }
     else
     {
-        maColor = mrManager.GetColor( nAuthorIdx );
-        maColorDark = mrManager.GetColorDark( nAuthorIdx );
-        maColorLight = mrManager.GetColorLight( nAuthorIdx );
+        maColor = AnnotationManagerImpl::GetColor( nAuthorIdx );
+        maColorDark = AnnotationManagerImpl::GetColorDark( nAuthorIdx );
+        maColorLight = AnnotationManagerImpl::GetColorLight( nAuthorIdx );
     }
 
     mpOutlinerView->SetBackgroundColor(maColor);

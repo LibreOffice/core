@@ -71,11 +71,11 @@ public:
 
     TYPEINFO_OVERRIDE();
 
-    SdrTextObj*     GetTitleTextObject(SdrPage* pPage);
-    SdrTextObj*     GetOutlineTextObject(SdrPage* pPage);
+    static SdrTextObj*     GetTitleTextObject(SdrPage* pPage);
+    static SdrTextObj*     GetOutlineTextObject(SdrPage* pPage);
 
-    SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
-    SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
+    static SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
+    static SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
 
     virtual void AddWindowToPaintView(OutputDevice* pWin) SAL_OVERRIDE;
     virtual void DeleteWindowFromPaintView(OutputDevice* pWin) SAL_OVERRIDE;

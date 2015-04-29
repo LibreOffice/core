@@ -97,14 +97,14 @@ private:
         PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
-    void PaintTransitionEffect (
+    static void PaintTransitionEffect (
         PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor) const;
-    void PaintCustomAnimationEffect (
+        const model::SharedPageDescriptor& rpDescriptor);
+    static void PaintCustomAnimationEffect (
         PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor) const;
+        const model::SharedPageDescriptor& rpDescriptor);
     void PaintBorder (
         OutputDevice& rDevice,
         const Theme::GradientColorType eColorType,
@@ -114,11 +114,11 @@ private:
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
 
-    Bitmap CreateMarkedPreview(
+    static Bitmap CreateMarkedPreview(
         const Size& rSize,
         const Bitmap& rPreview,
         const BitmapEx& rOverlay,
-        const OutputDevice* pReferenceDevice) const;
+        const OutputDevice* pReferenceDevice);
 
     /** Update the local pointer to the page object layouter to the
         one owned by the general layouter.

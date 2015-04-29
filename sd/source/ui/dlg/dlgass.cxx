@@ -207,7 +207,7 @@ public:
     void UpdatePageList();
     void UpdateUserData();
 
-    bool IsOwnFormat( const OUString& rPath );
+    static bool IsOwnFormat( const OUString& rPath );
 
     // dlg status
     void EndDialog( long nResult = 0 );
@@ -222,8 +222,8 @@ public:
     void ChangePage();
     void LeavePage();
 
-    OUString GetUiTextForCommand (const OUString& aCommandURL);
-    Image GetUiIconForCommand (const OUString& aCommandURL);
+    static OUString GetUiTextForCommand (const OUString& aCommandURL);
+    static Image GetUiIconForCommand (const OUString& aCommandURL);
 
     DECL_LINK( SelectFileHdl, void * );
     DECL_LINK( SelectRegionHdl, ListBox * );

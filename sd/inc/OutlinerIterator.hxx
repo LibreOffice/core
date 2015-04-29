@@ -241,7 +241,7 @@ private:
         @param aLocation
             This specifies at which object the iterator points initially.
     */
-    Iterator CreateSelectionIterator (
+    static Iterator CreateSelectionIterator (
         const ::std::vector<SdrObjectWeakRef>& rObjectList,
         SdDrawDocument* pDocument,
         const ::boost::shared_ptr<ViewShell>& rpViewShell,
@@ -259,7 +259,7 @@ private:
         @param aLocation
             This specifies at which object the iterator points initially.
     */
-    Iterator CreateDocumentIterator (
+    static Iterator CreateDocumentIterator (
         SdDrawDocument* pDocument,
         const ::boost::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward=true,
@@ -282,7 +282,7 @@ private:
         @param aLocation
             This specifies at which object the iterator points initially.
     */
-    sal_Int32 GetPageIndex (
+    static sal_Int32 GetPageIndex (
         SdDrawDocument* pDocument,
         const ::boost::shared_ptr<ViewShell>& rpViewShell,
         PageKind ePageKind,

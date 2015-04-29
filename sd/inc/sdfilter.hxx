@@ -55,13 +55,13 @@ protected:
     bool                    mbIsDraw : 1;
     bool                    mbShowProgress : 1;
 #ifndef DISABLE_DYNLOADING
-    ::osl::Module*              OpenLibrary( const OUString& rLibraryName ) const;
+    static ::osl::Module*       OpenLibrary( const OUString& rLibraryName );
 #endif
     void                        CreateStatusIndicator();
 
 private:
 
-    OUString             ImplGetFullLibraryName( const OUString& rLibraryName ) const;
+    static OUString             ImplGetFullLibraryName( const OUString& rLibraryName );
 
 };
 

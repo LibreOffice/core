@@ -51,7 +51,7 @@ private:
     const double mnX2;
     const double mnY2;
 
-    double EvaluateComponent (
+    static double EvaluateComponent (
         const double nT,
         const double nV1,
         const double nV2);

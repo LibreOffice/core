@@ -58,7 +58,7 @@ public:
     bool getBulletState( const SfxItemSet& rSet, SfxStyleSheetBase* pSheet, bool& rState );
     bool getBulletState( const SfxItemSet& rSet, sal_uInt16 nWhich, bool& rState );
 
-    bool transformItemSet( SfxItemSet& rSet, bool bNumbering );
+    static bool transformItemSet( SfxItemSet& rSet, bool bNumbering );
 
     bool removeAlienAttributes( SfxItemSet& rSet );
     bool removeAlienAttributes( SfxItemSet& rSet, sal_uInt16 nWhich );

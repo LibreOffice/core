@@ -626,7 +626,7 @@ namespace {
             maProperties.push_back( aVal );
         }
 
-        Sequence<OUString> CreateChoice (const sal_uInt16 nResourceId) const
+        static Sequence<OUString> CreateChoice (const sal_uInt16 nResourceId)
         {
             SdResId aResourceId (nResourceId);
             ResStringArray aChoiceStrings (aResourceId);

@@ -435,7 +435,7 @@ bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
     return true;
 };
 
-sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
+sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet )
 {
     ::com::sun::star::uno::Any aAny;
     sal_Int32 nLayout = 20;
@@ -447,7 +447,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference
     return nLayout;
 }
 
-sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
+sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet )
 {
     sal_Int32 nLayout = GetLayoutOffset( rXPropSet );
 
@@ -461,12 +461,12 @@ sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const ::com::sun::star::uno::Refe
     return nLayout;
 }
 
-PHLayout& PPTWriterBase::GetLayout(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
+PHLayout& PPTWriterBase::GetLayout(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet )
 {
     return pPHLayout[ GetLayoutOffsetFixed( rXPropSet ) ];
 }
 
-PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
+PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset )
 {
     if( nOffset >= 0 && nOffset < EPP_LAYOUT_SIZE )
         return pPHLayout[ nOffset ];

@@ -1170,7 +1170,7 @@ sal_uLong View::GetMarkedPointCount() const
 
 bool View::IsPointMarkable(const SdrHdl& rHdl) const
 {
-    if( maSmartTags.IsPointMarkable( rHdl ) )
+    if( SmartTagSet::IsPointMarkable( rHdl ) )
         return true;
     else
         return FmFormView::IsPointMarkable( rHdl );

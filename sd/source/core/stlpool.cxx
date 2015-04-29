@@ -801,7 +801,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList) const
+void SdStyleSheetPool::CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList)
 {
     OUString aPrefix(rLayoutName + SD_LT_SEPARATOR);
     OUString aName(SD_RESSTR(STR_LAYOUT_OUTLINE));

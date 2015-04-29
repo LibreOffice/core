@@ -92,7 +92,7 @@ public:
     void GetAttrState(SfxItemSet &rSet);
     void GetState (SfxItemSet& rSet);
 
-    void ExecStatusBar(SfxRequest& rReq);
+    static void ExecStatusBar(SfxRequest& rReq);
     void GetStatusBarState(SfxItemSet& rSet);
 
     void FuTemporary(SfxRequest &rReq);

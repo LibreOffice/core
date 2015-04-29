@@ -93,7 +93,7 @@ void SlotStateListener::disposing()
     maCallback = Link<>();
 }
 
-util::URL SlotStateListener::MakeURL (const OUString& rSlotName) const
+util::URL SlotStateListener::MakeURL (const OUString& rSlotName)
 {
     util::URL aURL;
     aURL.Complete = rSlotName;
