@@ -1003,7 +1003,7 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
                 while ( pFocusWindow && ( pFocusWindow != pFrameWindow ) )
                     pFocusWindow = pFocusWindow->GetParent();
                 if ( pFocusWindow ) // Focus in BasicIDE
-                    pNewWin->GrabFocus();
+                    pCurWin->GrabFocus();
             }
         }
         else
