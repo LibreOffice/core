@@ -130,7 +130,7 @@ endif
 
 gb_CObject_get_source = $(1)/$(2).c
 
-ifneq ($(COMPILER_PLUGIN_TOOL),)
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_CObject__tool_command,$*,$<)
 else
@@ -181,7 +181,7 @@ endif
 endif
 endef
 
-ifneq ($(COMPILER_PLUGIN_TOOL),)
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_CxxObject__tool_command,$*,$<)
 else
@@ -315,7 +315,7 @@ endef
 
 gb_ObjCxxObject_get_source = $(1)/$(2).mm
 
-ifneq ($(COMPILER_PLUGIN_TOOL),)
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_ObjCxxObject__tool_command,$*,$<)
 else
@@ -342,7 +342,7 @@ endif
 
 gb_ObjCObject_get_source = $(1)/$(2).m
 
-ifneq ($(COMPILER_PLUGIN_TOOL),)
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_ObjCObject__tool_command,$*,$<)
 else
