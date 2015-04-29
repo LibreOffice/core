@@ -693,7 +693,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     long j = 1;
 
     // check if name is already existing
-    while (1)
+    while (true)
     {
         bool bDifferent = true;
 
