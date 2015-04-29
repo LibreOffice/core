@@ -454,23 +454,23 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialog creation failed!");
     boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
-    DBG_ASSERT(pDlg, "Dialog creation failed!");
     ScopedVclPtr<MessageDialog> pWarnBox;
-    sal_uInt16         nError   = 1;
+    sal_uInt16 nError   = 1;
 
-    while( pDlg->Execute() == RET_OK )
+    while (pDlg->Execute() == RET_OK)
     {
         pDlg->GetName( aName );
 
         bDifferent = true;
 
-        for( long i = 0; i < nCount && bDifferent; i++ )
+        for (long i = 0; i < nCount && bDifferent; ++i)
+        {
             if( aName == pGradientList->GetGradient( i )->GetName() )
                 bDifferent = false;
+        }
 
-        if( bDifferent )
+        if (bDifferent)
         {
             nError = 0;
             break;

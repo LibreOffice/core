@@ -685,55 +685,68 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 {
-    vcl::Window *pWindow = this;
-    while( pWindow )
-    {
-        pWindow = pWindow->GetParent();
-    }
-
-    ResMgr& rMgr = CUI_MGR();
-    OUString aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
+    OUString aNewName( SVX_RES( RID_SVXSTR_COLOR ) );
+    OUString aDesc( CUI_RES( RID_SVXSTR_DESC_COLOR ) );
     OUString aName( m_pEdtName->GetText() );
+
     long nCount = pColorList->Count();
-    bool bDifferent = true;
+    long j = 1;
 
     // check if name is already existing
-    for ( long i = 0; i < nCount && bDifferent; i++ )
-        if ( aName == pColorList->GetColor( i )->GetName() )
-            bDifferent = false;
-
-    // if yes, it is repeated and a new name is demanded
-    if ( !bDifferent )
+    while (1)
     {
-        ScopedVclPtrInstance<MessageDialog> aWarningBox( GetParentDialog()
-                                                         ,"DuplicateNameDialog"
-                                                         ,"cui/ui/queryduplicatedialog.ui");
-        aWarningBox->Execute();
+        bool bDifferent = true;
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
-        bool bLoop = true;
+        for( long i = 0; i < nCount && bDifferent; i++ )
+            if ( aName == pColorList->GetColor( i )->GetName() )
+                bDifferent = false;
 
-        while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
-        {
-            pDlg->GetName( aName );
-            bDifferent = true;
+        if (bDifferent)
+            break;
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
-            {
-                if( aName == pColorList->GetColor( i )->GetName() )
-                    bDifferent = false;
-            }
-
-            if( bDifferent )
-                bLoop = false;
-            else
-                aWarningBox->Execute();
-        }
+        aName = aNewName;
+        aName += " ";
+        aName += OUString::number( j++ );
     }
 
-    // if not existing the entry is entered
-    if( bDifferent )
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+    ScopedVclPtr<MessageDialog> pWarnBox;
+    sal_uInt16 nError = 1;
+
+    while (pDlg->Execute() == RET_OK)
+    {
+        pDlg->GetName( aName );
+
+        bool bDifferent = true;
+
+        for (long i = 0; i < nCount && bDifferent; ++i)
+        {
+            if( aName == pColorList->GetColor( i )->GetName() )
+                bDifferent = false;
+        }
+
+        if (bDifferent)
+        {
+            nError = 0;
+            break;
+        }
+
+        if( !pWarnBox )
+        {
+            pWarnBox.reset(new MessageDialog( GetParentDialog()
+                                        ,"DuplicateNameDialog"
+                                        ,"cui/ui/queryduplicatedialog.ui"));
+        }
+
+        if( pWarnBox->Execute() != RET_OK )
+            break;
+    }
+
+    pDlg.reset();
+    pWarnBox.reset();
+
+    if (!nError)
     {
         XColorEntry* pEntry = new XColorEntry( aCurrentColor, aName );
 
@@ -749,6 +762,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
         SelectColorLBHdl_Impl( this );
     }
+
     UpdateModified();
 
     return 0;
