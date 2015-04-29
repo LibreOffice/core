@@ -229,7 +229,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
         }
         else
         {
-            while ( !bFound && (nParPos < nStrLen) )
+            while ( !bFound && (0 <= nParPos && nParPos < nStrLen) )
             {
                 if ( rFormula[nParPos] == '"' )
                 {
