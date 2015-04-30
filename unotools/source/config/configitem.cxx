@@ -167,14 +167,14 @@ void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) thro
     pParent->RemoveChangesListener();
 }
 
-ConfigItem::ConfigItem(const OUString &rSubTree, sal_Int16 nSetMode ) :
+ConfigItem::ConfigItem(const OUString &rSubTree, ConfigItemMode nSetMode ) :
     sSubTree(rSubTree),
     m_nMode(nSetMode),
     m_bIsModified(false),
     m_bEnableInternalNotification(false),
     m_nInValueChange(0)
 {
-    if(0 != (nSetMode&CONFIG_MODE_RELEASE_TREE))
+    if(nSetMode & ConfigItemMode::ReleaseTree)
         ConfigManager::getConfigManager().addConfigItem(*this);
     else
         m_xHierarchyAccess = ConfigManager::getConfigManager().addConfigItem(*this);
@@ -201,7 +201,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( ((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
+    OSL_ENSURE( ((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
 
     sal_Int32                   nSourceCounter;      // used to step during input lists
     sal_Int32                   nSourceSize;         // marks end of loop over input lists
@@ -269,7 +269,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( ((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
+    OSL_ENSURE( ((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
 
     sal_Int32                   nSourceCounter;      // used to step during input lists
     sal_Int32                   nSourceSize;         // marks end of loop over input lists
@@ -442,7 +442,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
         }
 
         // In special mode "ALL_LOCALES" we must convert localized values to Sequence< PropertyValue >.
-        if((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES)
+        if((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales)
         {
             Sequence< Any > lValues;
             impl_packLocalizedProperties( rNames, aRet, lValues );
@@ -466,7 +466,7 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         const OUString*         pNames  = NULL;
         const Any*              pValues = NULL;
         sal_Int32               nNameCount;
-        if(( m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES )
+        if(( m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales )
         {
             // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
             // as value of an localized configuration entry!
@@ -536,7 +536,7 @@ bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
                 bool bEnableInternalNotification )
 
 {
-    OSL_ENSURE(0 == (m_nMode&CONFIG_MODE_RELEASE_TREE), "notification in CONFIG_MODE_RELEASE_TREE mode not possible");
+    OSL_ENSURE(bool(m_nMode & ConfigItemMode::ReleaseTree), "notification in ConfigItemMode::ReleaseTree mode not possible");
     m_bEnableInternalNotification = bEnableInternalNotification;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);

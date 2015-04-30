@@ -69,8 +69,8 @@ class FilterCache   :   private TransactionBase
 
         //  constructor / destructor
 
-        FilterCache( sal_Int32 nVersion = DEFAULT_FILTERCACHE_VERSION,
-                     sal_Int16 nMode    = DEFAULT_FILTERCACHE_MODE   );
+        FilterCache( sal_Int32      nVersion = DEFAULT_FILTERCACHE_VERSION,
+                     ConfigItemMode nMode    = DEFAULT_FILTERCACHE_MODE   );
 
         /*-****************************************************************************************************
             @short      standard destructor to delete instance

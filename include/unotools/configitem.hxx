@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com{ namespace sun{ namespace star{
     namespace uno{
@@ -42,12 +43,20 @@ namespace com{ namespace sun{ namespace star{
     }
 }}}
 
+enum class ConfigItemMode
+{
+    ImmediateUpdate    = 0x00,
+    DelayedUpdate      = 0x01,
+    AllLocales         = 0x02,
+    ReleaseTree        = 0x04,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ConfigItemMode> : is_typed_flags<ConfigItemMode, 0x07> {};
+}
+
 namespace utl
 {
-#define CONFIG_MODE_IMMEDIATE_UPDATE    0x00
-#define CONFIG_MODE_DELAYED_UPDATE      0x01
-#define CONFIG_MODE_ALL_LOCALES         0x02
-#define CONFIG_MODE_RELEASE_TREE        0x04
 
     enum  ConfigNameFormat
     {
@@ -72,10 +81,10 @@ namespace utl
                                         m_xHierarchyAccess;
             com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
                                         xChangeLstnr;
-            sal_Int16 m_nMode;
-            bool m_bIsModified;
-            bool m_bEnableInternalNotification;
-            sal_Int16 m_nInValueChange;
+            ConfigItemMode              m_nMode;
+            bool                        m_bIsModified;
+            bool                        m_bEnableInternalNotification;
+            sal_Int16                   m_nInValueChange;
 
             void                    RemoveChangesListener();
             void                    CallNotify(
@@ -107,7 +116,7 @@ namespace utl
 
         protected:
             explicit ConfigItem(const OUString &rSubTree,
-                        sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
+                        ConfigItemMode nMode = ConfigItemMode::DelayedUpdate);
 
             void                    SetModified  (); // mark item as modified
             void                    ClearModified(); // reset state after commit!
@@ -173,7 +182,7 @@ namespace utl
 
             bool IsInValueChange() const { return m_nInValueChange > 0;}
 
-            sal_Int16               GetMode() const { return m_nMode;}
+            ConfigItemMode GetMode() const { return m_nMode;}
     };
 }//namespace utl
 #endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX

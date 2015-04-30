@@ -364,7 +364,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     ScAddInCfg& rAddInConfig = SC_MOD()->GetAddInCfg();
 
     // additional, temporary config item for the compatibility names
-    ScLinkConfigItem aAllLocalesConfig( OUString(CFGPATH_ADDINS), CONFIG_MODE_ALL_LOCALES );
+    ScLinkConfigItem aAllLocalesConfig( OUString(CFGPATH_ADDINS), ConfigItemMode::AllLocales );
     // CommitLink is not used (only reading values)
 
     const OUString sSlash('/');

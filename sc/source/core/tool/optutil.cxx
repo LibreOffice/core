@@ -37,7 +37,7 @@ ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree ) :
 {
 }
 
-ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree, sal_Int16 nMode ) :
+ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree, ConfigItemMode nMode ) :
     ConfigItem( rSubTree, nMode )
 {
 }

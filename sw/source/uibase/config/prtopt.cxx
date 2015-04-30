@@ -64,7 +64,7 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
 
 SwPrintOptions::SwPrintOptions(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Print") : OUString("Office.Writer/Print"),
-        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
+        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
     bIsWeb(bWeb)
 {
     bPrintPageBackground = !bWeb;

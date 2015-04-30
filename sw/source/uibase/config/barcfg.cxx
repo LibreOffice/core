@@ -36,7 +36,7 @@ using namespace com::sun::star::uno;
 
 SwToolbarConfigItem::SwToolbarConfigItem( bool bWeb ) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/ObjectBar") : OUString("Office.Writer/ObjectBar"),
-        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
+        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
 {
     for(sal_uInt16 i = 0; i <= SEL_TYPE_GRAPHIC; i++ )
         aTbxIdArray[i] = -1;

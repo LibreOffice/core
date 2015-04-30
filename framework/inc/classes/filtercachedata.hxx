@@ -46,7 +46,7 @@ namespace framework{
 
 #define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 
-#define DEFAULT_FILTERCACHE_MODE                    CONFIG_MODE_DELAYED_UPDATE | CONFIG_MODE_ALL_LOCALES                                          /// ConfigItems could run in different modes: supported values are ... { CONFIG_MODE_IMMEDIATE_UPDATE, CONFIG_MODE_DELAYED_UPDATE, CONFIG_MODE_ALL_LOCALES }
+#define DEFAULT_FILTERCACHE_MODE                    ConfigItemMode::DelayedUpdate | ConfigItemMode::AllLocales                                          /// ConfigItems could run in different modes: supported values are ... { ConfigItemMode::ImmediateUpdate, ConfigItemMode::DelayedUpdate, ConfigItemMode::AllLocales }
 
 enum EModifyState
 {
@@ -569,7 +569,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
     public:
                                     FilterCFGAccess ( const OUString& sPath                                  ,
                                                             sal_Int32        nVersion = DEFAULT_FILTERCACHE_VERSION ,
-                                                            sal_Int16        nMode    = DEFAULT_FILTERCACHE_MODE    ); // open configuration
+                                                            ConfigItemMode   nMode    = DEFAULT_FILTERCACHE_MODE    ); // open configuration
         virtual                     ~FilterCFGAccess(                                                               );
 
         void                        read            (       DataContainer&   rData                                  ,

@@ -109,7 +109,7 @@ public:
 
 
 GlobalEventConfig_Impl::GlobalEventConfig_Impl()
-    :   ConfigItem( ROOTNODE_EVENTS, CONFIG_MODE_IMMEDIATE_UPDATE )
+    :   ConfigItem( ROOTNODE_EVENTS, ConfigItemMode::ImmediateUpdate )
 {
     // the supported event names
     for (GlobalEventId id : o3tl::enumrange<GlobalEventId>())

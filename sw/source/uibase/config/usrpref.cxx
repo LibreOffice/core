@@ -249,7 +249,7 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
 
 SwLayoutViewConfig::SwLayoutViewConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? OUString("Office.WriterWeb/Layout") :  OUString("Office.Writer/Layout"),
-        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
+        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
     rParent(rPar),
     bWeb(bIsWeb)
 {
@@ -385,7 +385,7 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
 
 SwGridConfig::SwGridConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? OUString("Office.WriterWeb/Grid") :  OUString("Office.Writer/Grid"),
-        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
+        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
     rParent(rPar)
 {
 }
@@ -471,7 +471,7 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
 
 SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
     ConfigItem("Office.Writer/Cursor",
-        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
+        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
     rParent(rPar)
 {
 }
@@ -536,7 +536,7 @@ void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& 
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
     ConfigItem("Office.WriterWeb/Background",
-        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
+        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
     rParent(rPar),
     aPropNames(1)
 {

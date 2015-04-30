@@ -202,7 +202,7 @@ private:
 
 public:
     StorageItem( PasswordContainer* point, const OUString& path ) :
-        ConfigItem( path, CONFIG_MODE_IMMEDIATE_UPDATE ),
+        ConfigItem( path, ConfigItemMode::ImmediateUpdate ),
         mainCont( point ),
         hasEncoded( false )
     {

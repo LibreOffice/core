@@ -67,7 +67,7 @@ sal_Int32 SelectionManager::getSelectionTimeout()
 
 DtransX11ConfigItem::DtransX11ConfigItem() :
     ConfigItem( OUString( SETTINGS_CONFIGNODE ),
-                CONFIG_MODE_DELAYED_UPDATE ),
+                ConfigItemMode::DelayedUpdate ),
     m_nSelectionTimeout( 3 )
 {
     Sequence< OUString > aKeys( 1 );
