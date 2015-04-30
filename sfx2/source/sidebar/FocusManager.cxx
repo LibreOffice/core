@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FocusManager.hxx"
-#include "Panel.hxx"
-#include "DeckTitleBar.hxx"
-#include "PanelTitleBar.hxx"
+#include <sfx2/sidebar/FocusManager.hxx>
+#include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/DeckTitleBar.hxx>
+#include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Tools.hxx>
-#include "TitleBar.hxx"
+#include <sfx2/sidebar/TitleBar.hxx>
 #include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

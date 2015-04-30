@@ -1,0 +1,72 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_ui_XDeck_idl__
+#define __com_sun_star_ui_XDeck_idl__
+
+#include <com/sun/star/ui/XPanels.idl>
+
+
+ module com {  module sun {  module star {  module ui {
+
+/** provides access to Desk */
+
+interface XDeck
+
+{
+    /** The deck identifier
+    */
+    string getId();
+
+    /** Get the deck title string
+    */
+    string getTitle();
+
+    /** Set the deck title string
+
+        @param newTitle
+            The new title string
+    */
+    void setTitle( [in] string newTitle );
+
+    /** Is the deck the active one
+    */
+    boolean isActive();
+
+    /** Activate the deck and isplays its content
+
+        @param bActivate
+            The requested state for the deck
+            <ul>
+            <li>TRUE sets the deck as the active one</li>
+            <li>FALSE hide the deck and defaults to the first deck of the sidebar</li>
+            </ul>
+    */
+    void activate( [in] boolean bActivate );
+
+    /** Panels collection attached to the deck
+    */
+    com::sun::star::ui::XPanels getPanels();
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

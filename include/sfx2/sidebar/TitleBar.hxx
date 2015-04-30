@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TITLEBAR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TITLEBAR_HXX
 
-#include "Paint.hxx"
+#include <sfx2/sidebar/Paint.hxx>
 
 #include <vcl/fixed.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
@@ -51,6 +51,8 @@ public:
     {
         return *maToolBox.get();
     }
+
+    const ::rtl::OUString GetTitle() {return msTitle; }
 
 protected:
     VclPtr<SidebarToolBox> maToolBox;

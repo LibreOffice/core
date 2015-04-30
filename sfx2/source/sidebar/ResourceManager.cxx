@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 
 #include <unotools/confignode.hxx>
@@ -109,6 +109,21 @@ void ResourceManager::SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsE
         if (iDeck->msId.equals(rsDeckId))
         {
             iDeck->mbIsEnabled = bIsEnabled;
+            return;
+        }
+    }
+}
+
+void ResourceManager::SetDeckToDescriptor(const OUString& rsDeckId, VclPtr<Deck> aDeck)
+{
+    DeckContainer::iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iDeck->msId.equals(rsDeckId))
+        {
+            iDeck->mpDeck = aDeck;
             return;
         }
     }
@@ -569,8 +584,11 @@ bool ResourceManager::IsDeckEnabled (
     // Check if any panel that matches the current context can be
     // displayed.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
+
     ResourceManager::Instance().GetMatchingPanels(aPanelContextDescriptors,
                                                   rContext, rsDeckId, rxFrame);
+
+//    maInstance.GetMatchingPanels(aPanelContextDescriptors, rContext, rsDeckId, rxFrame);
 
     ResourceManager::PanelContextDescriptorContainer::const_iterator iPanel;
     for (iPanel = aPanelContextDescriptors.begin(); iPanel != aPanelContextDescriptors.end(); ++iPanel)
