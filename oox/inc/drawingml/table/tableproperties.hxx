@@ -57,7 +57,7 @@ public:
 
 private:
 
-    const TableStyle&                   getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, bool &isCreateTabStyle);
+    const TableStyle&                   getUsedTableStyle(const ::oox::core::XmlFilterBase& rFilterBase, TableStyle*& rTableStyleToDelete);
 
     OUString                            maStyleId;              // either StyleId is available
     boost::shared_ptr< TableStyle >     mpTableStyle;           // or the complete TableStyle
