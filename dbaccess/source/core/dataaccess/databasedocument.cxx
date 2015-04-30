@@ -1233,8 +1233,9 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
         // copy own storage to target storage
         if ( impl_isInitialized() )
         {
-            Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_QUERY_THROW );
-            if ( xCurrentStorage != _rxTargetStorage )
+            Reference< XStorage > xCurrentStorage = m_pImpl->getOrCreateRootStorage();
+            // Root storage may be empty in case of embedding.
+            if ( xCurrentStorage.is() && xCurrentStorage != _rxTargetStorage )
                 xCurrentStorage->copyToStorage( _rxTargetStorage );
         }
 
