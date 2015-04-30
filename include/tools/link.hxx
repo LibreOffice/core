@@ -96,11 +96,11 @@
     } \
     RetType Class::Member(ArgType ArgName)
 
-#define IMPL_LINK_NOARG_TYPED(Class, Member, RetType) \
-    RetType Class::LinkStub##Member(void * instance, void * data) { \
+#define IMPL_LINK_NOARG_TYPED(Class, Member, ArgType, RetType) \
+    RetType Class::LinkStub##Member(void * instance, ArgType data) { \
         return static_cast<Class *>(instance)->Member(data); \
     } \
-    RetType Class::Member(SAL_UNUSED_PARAMETER void *)
+    RetType Class::Member(SAL_UNUSED_PARAMETER ArgType)
 
 #define IMPL_STATIC_LINK_TYPED(Class, Member, ArgType, ArgName, RetType) \
     RetType Class::LinkStub##Member(void * instance, ArgType data) { \
@@ -115,12 +115,13 @@
     } \
     RetType Class::Member(SAL_UNUSED_PARAMETER Class *, ArgType ArgName)
 
-#define IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED(Class, Member, RetType) \
-    RetType Class::LinkStub##Member(void * instance, void * data) { \
+#define IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED( \
+        Class, Member, ArgType, RetType) \
+    RetType Class::LinkStub##Member(void * instance, ArgType data) { \
         return Member(static_cast<Class *>(instance), data); \
     } \
     RetType Class::Member( \
-        SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER void *)
+        SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER ArgType)
 
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     static_cast<Class *>(Instance), &Class::LinkStub##Member)
