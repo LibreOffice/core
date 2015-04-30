@@ -37,8 +37,8 @@ class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
     SwNode* pNd;
 
     // These are not allowed!
-    SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx );
-    SwNodeIndex( SwNodes& rNds, int nIdx );
+    SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx ) SAL_DELETED_FUNCTION;
+    SwNodeIndex( SwNodes& rNds, int nIdx ) SAL_DELETED_FUNCTION;
     void RegisterIndex( SwNodes& rNodes )
     {
         if(!rNodes.vIndices)
