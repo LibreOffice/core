@@ -85,11 +85,10 @@ using namespace ::com::sun::star;
         OConnectionTabPageSetup::dispose();
     }
 
-    IMPL_LINK(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, /*_pTextConnectionHelper*/)
+    IMPL_LINK_NOARG_TYPED(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, void)
     {
         SetRoadmapStateValue(!m_pTextConnectionHelper->GetExtension().isEmpty() && OConnectionTabPageSetup::checkTestConnection());
         callModifiedHdl();
-        return sal_True;
     }
 
     bool OTextConnectionPageSetup::checkTestConnection()

@@ -74,7 +74,7 @@ namespace dbaui
         bool    checkTestConnection() SAL_OVERRIDE;
 
     private:
-        DECL_LINK(ImplGetExtensionHdl, OTextConnectionHelper*);
+        DECL_LINK_TYPED(ImplGetExtensionHdl, OTextConnectionHelper*, void);
     };
 
     // OLDAPConnectionPageSetup
