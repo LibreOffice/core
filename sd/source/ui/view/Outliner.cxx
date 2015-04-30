@@ -390,9 +390,9 @@ bool Outliner::SpellNextDocument()
 /**
  * check next text object
  */
-::svx::SpellPortions Outliner::GetNextSpellSentence()
+svx::SpellPortions Outliner::GetNextSpellSentence()
 {
-    ::svx::SpellPortions aResult;
+    svx::SpellPortions aResult;
 
     DetectChange();
     // Iterate over sentences and text shapes until a sentence with a

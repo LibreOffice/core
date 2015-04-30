@@ -161,7 +161,7 @@ struct SpellInfo
     EditPaM         aCurSentenceStart;
     bool        bSpellToEnd;
     bool        bMultipleDoc;
-    ::svx::SpellPortions    aLastSpellPortions;
+    svx::SpellPortions    aLastSpellPortions;
     SpellContentSelections  aLastSpellContentSelections;
     SpellInfo()
         { bSpellToEnd = true; eState = EE_SPELL_OK; bMultipleDoc = false; }
@@ -951,22 +951,22 @@ public:
     //initialize sentence spelling
     void            StartSpelling(EditView& rEditView, bool bMultipleDoc);
     //spell and return a sentence
-    bool                SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    bool                SpellSentence(EditView& rView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     //put spelling back to start of current sentence - needed after switch of grammar support
     void                PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
-    void                ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
+    void                ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
     //adds one or more portions of text to the SpellPortions depending on language changes
     void            AddPortionIterated(
                         EditView& rEditView,
                         const EditSelection &rSel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xAlt,
-                        ::svx::SpellPortions& rToFill);
+                        svx::SpellPortions& rToFill);
     //adds one portion to the SpellPortions
     void            AddPortion(
                         const EditSelection &rSel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xAlt,
-                        ::svx::SpellPortions& rToFill,
+                        svx::SpellPortions& rToFill,
                         bool bIsField );
 
     bool            Search( const SvxSearchItem& rSearchItem, EditView* pView );

@@ -982,11 +982,11 @@ public:
 
     void            StartSpelling(EditView& rEditView, bool bMultipleDoc);
     // spell and return a sentence
-    bool            SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
     // applies a changed sentence
-    void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
+    void            ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link& rLink );

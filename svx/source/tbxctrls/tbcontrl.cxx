@@ -2580,7 +2580,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     else
         rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 
-    m_xBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
+    m_xBtnUpdater.reset( new svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
     mPaletteManager.SetBtnUpdater( m_xBtnUpdater.get() );
 }
 

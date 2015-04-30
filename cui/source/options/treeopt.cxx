@@ -318,7 +318,7 @@ VclPtr<SfxTabPage> CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, c
         case RID_OFAPAGE_MSFILTEROPT2:              fnCreate = &OfaMSFilterTabPage2::Create; break;
         case RID_SVXPAGE_JSEARCH_OPTIONS:           fnCreate = &SvxJSearchOptionsPage::Create ; break;
         case SID_SB_CONNECTIONPOOLING:              fnCreate = &::offapp::ConnectionPoolOptionsPage::Create; break;
-        case SID_SB_DBREGISTEROPTIONS:              fnCreate = &::svx::DbRegistrationOptionsPage::Create; break;
+        case SID_SB_DBREGISTEROPTIONS:              fnCreate = &svx::DbRegistrationOptionsPage::Create; break;
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
@@ -1306,7 +1306,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER,
             0 );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
-            ::svx::DbRegisteredNamesConfig::GetOptions(*pRet);
+            svx::DbRegisteredNamesConfig::GetOptions(*pRet);
             break;
 
         case SID_SCH_EDITOPTIONS:
@@ -1383,7 +1383,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
         case SID_SB_STARBASEOPTIONS:
             ::offapp::ConnectionPoolConfig::SetOptions( rSet );
-            ::svx::DbRegisteredNamesConfig::SetOptions(rSet);
+            svx::DbRegisteredNamesConfig::SetOptions(rSet);
             break;
 
         case SID_SCH_EDITOPTIONS:

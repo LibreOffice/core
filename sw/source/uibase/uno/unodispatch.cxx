@@ -217,7 +217,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     SwDBManager* pDBManager = rSh.GetDBManager();
     if(aURL.Complete.equalsAscii(cURLInsertContent))
     {
-        ::svx::ODataAccessDescriptor aDescriptor(aArgs);
+        svx::ODataAccessDescriptor aDescriptor(aArgs);
         SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
         pDBManager->MergeNew(aMergeDesc);
     }
@@ -245,10 +245,10 @@ void SwXDispatch::dispatch(const util::URL& aURL,
         aEvent.Source = *(cppu::OWeakObject*)this;
 
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
-        ::svx::ODataAccessDescriptor aDescriptor;
+        svx::ODataAccessDescriptor aDescriptor;
         aDescriptor.setDataSource(rData.sDataSource);
-        aDescriptor[::svx::daCommand]       <<= rData.sCommand;
-        aDescriptor[::svx::daCommandType]   <<= rData.nCommandType;
+        aDescriptor[svx::daCommand]       <<= rData.sCommand;
+        aDescriptor[svx::daCommandType]   <<= rData.nCommandType;
 
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
         aEvent.IsEnabled = !rData.sDataSource.isEmpty();
@@ -291,10 +291,10 @@ void SwXDispatch::addStatusListener(
     {
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
 
-        ::svx::ODataAccessDescriptor aDescriptor;
+        svx::ODataAccessDescriptor aDescriptor;
         aDescriptor.setDataSource(rData.sDataSource);
-        aDescriptor[::svx::daCommand]       <<= rData.sCommand;
-        aDescriptor[::svx::daCommandType]   <<= rData.nCommandType;
+        aDescriptor[svx::daCommand]       <<= rData.sCommand;
+        aDescriptor[svx::daCommandType]   <<= rData.nCommandType;
 
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
         aEvent.IsEnabled = !rData.sDataSource.isEmpty();

@@ -507,7 +507,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
 {
     bool operator()( const Reference< XDispatch >& _rxDispatcher ) const
     {
-        static_cast< ::svx::OSingleFeatureDispatcher* >( _rxDispatcher.get() )->updateAllListeners();
+        static_cast< svx::OSingleFeatureDispatcher* >( _rxDispatcher.get() )->updateAllListeners();
         // the return is a dummy only so we can use this struct in a o3tl::compose1 call
         return true;
     }
@@ -4091,8 +4091,8 @@ FormController::interceptedQueryDispatch( const URL& aURL,
     if ( !xReturn.is() && m_xFormOperations.is() )
     {
         // find the slot id which corresponds to the URL
-        sal_Int32 nFeatureSlotId = ::svx::FeatureSlotTranslation::getControllerFeatureSlotIdForURL( aURL.Main );
-        sal_Int16 nFormFeature = ( nFeatureSlotId != -1 ) ? ::svx::FeatureSlotTranslation::getFormFeatureForSlotId( nFeatureSlotId ) : -1;
+        sal_Int32 nFeatureSlotId = svx::FeatureSlotTranslation::getControllerFeatureSlotIdForURL( aURL.Main );
+        sal_Int16 nFormFeature = ( nFeatureSlotId != -1 ) ? svx::FeatureSlotTranslation::getFormFeatureForSlotId( nFeatureSlotId ) : -1;
         if ( nFormFeature > 0 )
         {
             // get the dispatcher for this feature, create if necessary
@@ -4100,7 +4100,7 @@ FormController::interceptedQueryDispatch( const URL& aURL,
             if ( aDispatcherPos == m_aFeatureDispatchers.end() )
             {
                 aDispatcherPos = m_aFeatureDispatchers.insert(
-                    DispatcherContainer::value_type( nFormFeature, new ::svx::OSingleFeatureDispatcher( aURL, nFormFeature, m_xFormOperations, m_aMutex ) )
+                    DispatcherContainer::value_type( nFormFeature, new svx::OSingleFeatureDispatcher( aURL, nFormFeature, m_xFormOperations, m_aMutex ) )
                 ).first;
             }
 

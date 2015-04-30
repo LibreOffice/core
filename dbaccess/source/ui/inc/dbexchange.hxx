@@ -41,7 +41,7 @@ namespace dbaui
     class ORTFImportExport;
     class OHTMLImportExport;
 
-    class ODataClipboard : public ::svx::ODataAccessObjectTransferable
+    class ODataClipboard : public svx::ODataAccessObjectTransferable
 
     {
         ::rtl::Reference< OHTMLImportExport >   m_pHtml;

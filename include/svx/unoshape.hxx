@@ -191,7 +191,7 @@ public:
     ::com::sun::star::uno::Any GetBitmap( bool bMetaFile = false ) const
         throw (css::uno::RuntimeException, std::exception);
 
-    ::svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
+    svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
 
     void setShapeKind( sal_uInt32 nKind );
     sal_uInt32 getShapeKind() const;

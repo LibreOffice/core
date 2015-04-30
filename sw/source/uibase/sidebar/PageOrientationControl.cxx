@@ -32,8 +32,8 @@ PageOrientationControl::PageOrientationControl(
     vcl::Window* pParent,
     PagePropertyPanel& rPanel,
     const bool bLandscape )
-    : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_ORIENTATION) )
-    , mpOrientationValueSet( new ::svx::sidebar::ValueSetWithTextControl( ::svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_ORIENTATION) ) )
+    : svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_ORIENTATION) )
+    , mpOrientationValueSet( new svx::sidebar::ValueSetWithTextControl( svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_ORIENTATION) ) )
     , mbLandscape( bLandscape )
     , mrPagePropPanel(rPanel)
 {
@@ -69,7 +69,7 @@ PageOrientationControl::~PageOrientationControl()
 void PageOrientationControl::dispose()
 {
     mpOrientationValueSet.disposeAndClear();
-    ::svx::sidebar::PopupControl::dispose();
+    svx::sidebar::PopupControl::dispose();
 }
 
 IMPL_LINK(PageOrientationControl, ImplOrientationHdl, void *, pControl)

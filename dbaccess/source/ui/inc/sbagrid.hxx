@@ -214,7 +214,7 @@ namespace dbaui
 
     // Attributes
     protected:
-        ::svx::ODataAccessDescriptor    m_aDataDescriptor;
+        svx::ODataAccessDescriptor    m_aDataDescriptor;
         SbaGridListener*                m_pMasterListener;
 
         ImplSVEvent *                   m_nAsyncDropEvent;

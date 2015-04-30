@@ -76,11 +76,11 @@ public:
 
     /** create a control pair (label/bound control) for the database field description given.
     */
-    SdrObject*   CreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
+    SdrObject*   CreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor );
 
     /** create a control pair (label/bound control) for the xforms description given.
     */
-    SdrObject*   CreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
+    SdrObject*   CreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
     virtual void MarkListHasChanged() SAL_OVERRIDE;
     virtual void AddWindowToPaintView(OutputDevice* pNewWin) SAL_OVERRIDE;

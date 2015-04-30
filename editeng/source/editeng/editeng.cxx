@@ -2175,7 +2175,7 @@ void EditEngine::StartSpelling(EditView& rEditView, bool bMultipleDoc)
     pImpEditEngine->StartSpelling(rEditView, bMultipleDoc);
 }
 
-bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
+bool EditEngine::SpellSentence(EditView& rView, svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking );
 }
@@ -2185,7 +2185,7 @@ void EditEngine::PutSpellingToSentenceStart( EditView& rEditView )
     pImpEditEngine->PutSpellingToSentenceStart( rEditView );
 }
 
-void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
+void EditEngine::ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck  );
 }

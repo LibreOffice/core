@@ -632,7 +632,7 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         ,m_nInvalidationEvent( 0 )
         ,m_nActivationEvent( 0 )
         ,m_pShell( &_rShell )
-        ,m_pTextShell( new ::svx::FmTextControlShell( _pViewFrame ) )
+        ,m_pTextShell( new svx::FmTextControlShell( _pViewFrame ) )
         ,m_aActiveControllerFeatures( this )
         ,m_aNavControllerFeatures( this )
         ,m_eDocumentType( eUnknownDocumentType )
@@ -1775,7 +1775,7 @@ namespace
 
 bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pCompleteState )
 {
-    const ::svx::ControllerFeatures& rController =
+    const svx::ControllerFeatures& rController =
             lcl_isNavigationRelevant( _nSlot )
         ?   getNavControllerFeatures()
         :   getActiveControllerFeatures();
@@ -1790,7 +1790,7 @@ bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pComplete
 
 void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot )
 {
-    const ::svx::ControllerFeatures& rController =
+    const svx::ControllerFeatures& rController =
             lcl_isNavigationRelevant( _nSlot )
         ?   getNavControllerFeatures()
         :   getActiveControllerFeatures();

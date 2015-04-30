@@ -220,13 +220,13 @@ private:
         OUString sDatabaseName;
         OUString sConRes;
 
-        ::svx::ODataAccessDescriptor aDescriptor;
+        svx::ODataAccessDescriptor aDescriptor;
         aDescriptor.setDataSource(aParam.aDBName);
-        if (aDescriptor.has(::svx::daDataSource))
+        if (aDescriptor.has(svx::daDataSource))
         {
             sDatabaseName = aParam.aDBName;
         }
-        else if (aDescriptor.has(::svx::daConnectionResource))
+        else if (aDescriptor.has(svx::daConnectionResource))
         {
             sConRes = aParam.aDBName;
         }

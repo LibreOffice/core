@@ -46,7 +46,7 @@ private:
     VclPtr<PushButton>         m_pStandardBtn;
     VclPtr<PushButton>         m_pPathBtn;
 
-    VclPtr< ::svx::OptHeaderTabListBox> pPathBox;
+    VclPtr<svx::OptHeaderTabListBox> pPathBox;
     OptPath_Impl*               pImpl;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;

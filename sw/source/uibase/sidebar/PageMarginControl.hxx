@@ -47,7 +47,7 @@ namespace sw { namespace sidebar {
 class PagePropertyPanel;
 
 class PageMarginControl
-    : public ::svx::sidebar::PopupControl
+    : public svx::sidebar::PopupControl
 {
 public:
     PageMarginControl(
@@ -64,7 +64,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    VclPtr< ::svx::sidebar::ValueSetWithTextControl> mpMarginValueSet;
+    VclPtr< svx::sidebar::ValueSetWithTextControl> mpMarginValueSet;
 
     VclPtr<FixedText> maCustom;
     VclPtr<FixedText> maLeft;

@@ -557,7 +557,7 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleCellAt( sal_In
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    ::svx::SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem(
+    svx::SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem(
         sal::static_int_cast<sal_uInt16>(getAccessibleIndex(nRow,nColumn) ));
     if ( !pItem  )
         throw IndexOutOfBoundsException();

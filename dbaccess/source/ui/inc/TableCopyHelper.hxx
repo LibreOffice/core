@@ -70,7 +70,7 @@ namespace dbaui
         // is needed to describe the drop target
         struct DropDescriptor
         {
-            ::svx::ODataAccessDescriptor    aDroppedData;
+            svx::ODataAccessDescriptor    aDroppedData;
 
             //for transfor the tablename
             OUString                 sDefaultTableName;
@@ -168,7 +168,7 @@ namespace dbaui
                 The name of the dest data source.
         */
         void pasteTable(
-            const ::svx::ODataAccessDescriptor& _rPasteData,
+            const svx::ODataAccessDescriptor& _rPasteData,
             const OUString& _sDestDataSourceName,
             const SharedConnection& _xDestConnection
         );

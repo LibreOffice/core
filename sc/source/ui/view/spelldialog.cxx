@@ -41,7 +41,7 @@ SFX_IMPL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
 ScSpellDialogChildWindow::ScSpellDialogChildWindow( vcl::Window* pParentP, sal_uInt16 nId,
         SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
-    ::svx::SpellDialogChildWindow( pParentP, nId, pBindings, pInfo ),
+    svx::SpellDialogChildWindow( pParentP, nId, pBindings, pInfo ),
     mpViewShell( 0 ),
     mpViewData( 0 ),
     mpDocShell( 0 ),
@@ -59,19 +59,19 @@ ScSpellDialogChildWindow::~ScSpellDialogChildWindow()
 
 SfxChildWinInfo ScSpellDialogChildWindow::GetInfo() const
 {
-    return ::svx::SpellDialogChildWindow::GetInfo();
+    return svx::SpellDialogChildWindow::GetInfo();
 }
 
 void ScSpellDialogChildWindow::InvalidateSpellDialog()
 {
-    ::svx::SpellDialogChildWindow::InvalidateSpellDialog();
+    svx::SpellDialogChildWindow::InvalidateSpellDialog();
 }
 
 // protected ------------------------------------------------------------------
 
-::svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
+svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
 {
-    ::svx::SpellPortions aPortions;
+    svx::SpellPortions aPortions;
     if( mxEngine.get() && mpViewData )
     {
         if( EditView* pEditView = mpViewData->GetSpellingView() )
@@ -93,7 +93,7 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
     return aPortions;
 }
 
-void ScSpellDialogChildWindow::ApplyChangedSentence( const ::svx::SpellPortions& rChanged, bool bRecheck )
+void ScSpellDialogChildWindow::ApplyChangedSentence( const svx::SpellPortions& rChanged, bool bRecheck )
 {
     if( mxEngine.get() && mpViewData )
         if( EditView* pEditView = mpViewData->GetSpellingView() )

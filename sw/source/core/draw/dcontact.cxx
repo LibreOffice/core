@@ -1484,7 +1484,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     {
                         // --> #i102752#
                         // assure that a ShapePropertyChangeNotifier exists
-                        maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange( ::svx::eTextShapeAnchorType );
+                        maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange( svx::eTextShapeAnchorType );
                     }
                 }
             }

@@ -176,7 +176,7 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
             eMode = sheet::DataImportMode_TABLE;        // Type ist immer ScDbQuery oder ScDbTable
     }
 
-    ::svx::ODataAccessDescriptor aDescriptor;
+    svx::ODataAccessDescriptor aDescriptor;
     aDescriptor.setDataSource(rParam.aDBName);
     if (aDescriptor.has( svx::daDataSource ))
     {

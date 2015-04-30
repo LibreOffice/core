@@ -133,7 +133,7 @@ private:
     void InitToolBoxSpacing();
 };
 
-} } // end of namespace ::svx::sidebar
+} } // end of namespace svx::sidebar
 
 #endif
 

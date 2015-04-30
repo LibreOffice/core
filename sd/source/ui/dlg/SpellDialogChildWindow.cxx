@@ -42,7 +42,7 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
-    : ::svx::SpellDialogChildWindow (_pParent, nId, pBindings, pInfo),
+    : svx::SpellDialogChildWindow (_pParent, nId, pBindings, pInfo),
       mpSdOutliner (NULL),
       mbOwnOutliner (false)
 {
@@ -60,17 +60,17 @@ SpellDialogChildWindow::~SpellDialogChildWindow()
 
 SfxChildWinInfo SpellDialogChildWindow::GetInfo() const
 {
-    return ::svx::SpellDialogChildWindow::GetInfo();
+    return svx::SpellDialogChildWindow::GetInfo();
 }
 
 void SpellDialogChildWindow::InvalidateSpellDialog()
 {
-    ::svx::SpellDialogChildWindow::InvalidateSpellDialog();
+    svx::SpellDialogChildWindow::InvalidateSpellDialog();
 }
 
-::svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
+svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
 {
-    ::svx::SpellPortions aResult;
+    svx::SpellPortions aResult;
 
     if (mpSdOutliner != NULL)
     {
@@ -94,7 +94,7 @@ void SpellDialogChildWindow::InvalidateSpellDialog()
 }
 
 void SpellDialogChildWindow::ApplyChangedSentence (
-    const ::svx::SpellPortions& rChanged, bool bRecheck )
+    const svx::SpellPortions& rChanged, bool bRecheck )
 {
     if (mpSdOutliner != NULL)
     {

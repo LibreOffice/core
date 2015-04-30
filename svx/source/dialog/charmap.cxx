@@ -620,7 +620,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
         getSelectedChar() = mpFontCharMap->GetCharFromIndex( nSelectedIndex );
         if( m_pAccessible )
         {
-            ::svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
+            svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
             // Don't fire the focus event.
             if ( bFocus )
                 m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
@@ -712,12 +712,12 @@ void SvxShowCharSet::ReleaseAccessible()
 ::com::sun::star::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
     OSL_ENSURE(!m_pAccessible,"Accessible already created!");
-    m_pAccessible = new ::svx::SvxShowCharSetVirtualAcc(this);
+    m_pAccessible = new svx::SvxShowCharSetVirtualAcc(this);
     m_xAccessible = m_pAccessible;
     return m_xAccessible;
 }
 
-::svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
+svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
 {
     ItemsMap::iterator aFind = m_aItems.find(_nPos);
     if ( aFind == m_aItems.end() )

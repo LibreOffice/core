@@ -403,7 +403,7 @@ void ScDrawShell::Activate (const bool bMDI)
 ::rtl::OUString ScDrawShell::GetSidebarContextName()
 {
     return sfx2::sidebar::EnumContext::GetContextName(
-        ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
+        svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
             GetDrawView()->GetMarkedObjectList()));
 }
 

@@ -63,7 +63,7 @@ public:
     void            SetPreSelectHdl( const Link& rHdl ) { aPreSelectHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
 
-    ::svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
+    svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
     int                         FirstInView() const;
     int                         LastInView() const;
     int                         PixelToMapIndex( const Point&) const;
@@ -104,7 +104,7 @@ private:
     Link            aSelectHdl;
     Link            aHighHdl;
     Link            aPreSelectHdl;
-    ::svx::SvxShowCharSetVirtualAcc*    m_pAccessible;
+    svx::SvxShowCharSetVirtualAcc*    m_pAccessible;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccessible;
     long            nX;
     long            nY;

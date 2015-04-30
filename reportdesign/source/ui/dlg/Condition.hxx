@@ -91,8 +91,8 @@ namespace rptui
         VclPtr<PushButton>                 m_pRemoveCondition;
         VclPtr<OColorPopup>                m_pColorFloat;
 
-        ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
-        ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterBackgroundColor;
+        svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
+        svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterBackgroundColor;
 
 
         size_t                          m_nCondIndex;

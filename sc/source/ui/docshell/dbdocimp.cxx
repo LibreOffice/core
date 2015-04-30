@@ -86,7 +86,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
                         ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
                                                         sdb::CommandType::TABLE );
 
-            ::svx::ODataAccessDescriptor aSelection;
+            svx::ODataAccessDescriptor aSelection;
             aSelection.setDataSource(rParam.aDBName);
             aSelection[svx::daCommand]      <<= rParam.aStatement;
             aSelection[svx::daCommandType]  <<= nType;

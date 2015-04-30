@@ -84,8 +84,8 @@ namespace
 {
     void lcl_initializeNotifier( SdrObject& _rSdrObj, ::cppu::OWeakObject& _rShape )
     {
-        ::svx::PPropertyValueProvider pProvider( new ::svx::PropertyValueProvider( _rShape, "Anchor" ) );
-        _rSdrObj.getShapePropertyChangeNotifier().registerProvider( ::svx::eSpreadsheetAnchor, pProvider );
+        svx::PPropertyValueProvider pProvider( new svx::PropertyValueProvider( _rShape, "Anchor" ) );
+        _rSdrObj.getShapePropertyChangeNotifier().registerProvider( svx::eSpreadsheetAnchor, pProvider );
     }
 }
 

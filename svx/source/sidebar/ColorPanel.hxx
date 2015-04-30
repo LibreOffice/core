@@ -51,7 +51,7 @@ private:
     void Fill();
 };
 
-} } // end of namespace ::svx::sidebar
+} } // end of namespace svx::sidebar
 
 #endif
 

@@ -33,11 +33,11 @@ class ScDocument;
 
 /** Specialized spell check dialog child window for Calc.
 
-    This derivation of the ::svx::SpellDialogChildWindow base class provides
+    This derivation of the svx::SpellDialogChildWindow base class provides
     Calc specific implementations of the virtual functions GetNextWrongSentence()
     and ApplyChangedSentence().
  */
-class ScSpellDialogChildWindow : public ::svx::SpellDialogChildWindow
+class ScSpellDialogChildWindow : public svx::SpellDialogChildWindow
 {
 public:
     SFX_DECL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow );
@@ -56,12 +56,12 @@ protected:
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
     */
-    virtual ::svx::SpellPortions GetNextWrongSentence( bool bRecheck ) SAL_OVERRIDE;
+    virtual svx::SpellPortions GetNextWrongSentence( bool bRecheck ) SAL_OVERRIDE;
 
     /** This method is responsible for merging corrections made in the
         spelling dialog back into the document.
     */
-    virtual void        ApplyChangedSentence( const ::svx::SpellPortions& rChanged, bool bRecheck ) SAL_OVERRIDE;
+    virtual void        ApplyChangedSentence( const svx::SpellPortions& rChanged, bool bRecheck ) SAL_OVERRIDE;
     virtual void        GetFocus() SAL_OVERRIDE;
     virtual void        LoseFocus() SAL_OVERRIDE;
 

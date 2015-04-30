@@ -280,9 +280,9 @@ Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction,
     m_nFontColorId = m_pActions->GetItemId(".uno:FontColor");
     m_nFontDialogId = m_pActions->GetItemId(".uno:FontDialog");
 
-    m_pBtnUpdaterBackgroundColor = new ::svx::ToolboxButtonColorUpdater(
+    m_pBtnUpdaterBackgroundColor = new svx::ToolboxButtonColorUpdater(
                                             SID_BACKGROUND_COLOR, m_nBackgroundColorId, m_pActions );
-    m_pBtnUpdaterFontColor = new ::svx::ToolboxButtonColorUpdater(
+    m_pBtnUpdaterFontColor = new svx::ToolboxButtonColorUpdater(
                                             SID_ATTR_CHAR_COLOR2, m_nFontColorId, m_pActions );
 
     Show();

@@ -275,7 +275,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                 if(pPageView)
                 {
-                    ::svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
+                    svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
                     SdrObject* pNewDBField = pFormView->CreateFieldControl(aDescriptor);
 
                     if(pNewDBField)

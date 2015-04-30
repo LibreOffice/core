@@ -273,7 +273,7 @@ namespace dbaui
             @return
                 <TRUE/> if the paste opertions was successful, otherwise <FALSE/>.
         */
-        bool paste( ElementType _eType, const ::svx::ODataAccessDescriptor& _rPasteData, const OUString& _sParentFolder = OUString(), bool _bMove = false);
+        bool paste( ElementType _eType, const svx::ODataAccessDescriptor& _rPasteData, const OUString& _sParentFolder = OUString(), bool _bMove = false);
 
         /// returns the system clipboard.
         const TransferableDataHelper& getViewClipboard() const { return m_aSystemClipboard; }

@@ -145,7 +145,7 @@ class FmFormView;
 class FmFormObj;
 class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
-                                    ,public ::svx::IControllerFeatureInvalidation
+                                    ,public svx::IControllerFeatureInvalidation
 {
     friend class FmFormView;
     friend class FmXFormView;
@@ -187,10 +187,10 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
                     m_aLoadingPages;
 
     FmFormShell*                m_pShell;
-    ::svx::FmTextControlShell*  m_pTextShell;
+    svx::FmTextControlShell*  m_pTextShell;
 
-    ::svx::ControllerFeatures   m_aActiveControllerFeatures;
-    ::svx::ControllerFeatures   m_aNavControllerFeatures;
+    svx::ControllerFeatures   m_aActiveControllerFeatures;
+    svx::ControllerFeatures   m_aNavControllerFeatures;
 
     // aktuelle Form, Controller
     // nur im alive mode verfuegbar
@@ -349,9 +349,9 @@ public:
     SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getActiveForm() const {return m_xActiveForm;}
     SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getNavController() const {return m_xNavigationController;}
 
-    SAL_DLLPRIVATE inline const ::svx::ControllerFeatures& getActiveControllerFeatures() const
+    SAL_DLLPRIVATE inline const svx::ControllerFeatures& getActiveControllerFeatures() const
         { return m_aActiveControllerFeatures; }
-    SAL_DLLPRIVATE inline const ::svx::ControllerFeatures& getNavControllerFeatures() const
+    SAL_DLLPRIVATE inline const svx::ControllerFeatures& getNavControllerFeatures() const
         { return m_aNavControllerFeatures.isAssigned() ? m_aNavControllerFeatures : m_aActiveControllerFeatures; }
 
     /** announces a new "current selection"

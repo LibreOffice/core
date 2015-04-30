@@ -1188,7 +1188,7 @@ static bool lcl_IsControlGroup( const SdrObject *pObj )
 
 namespace
 {
-    class MarkableObjectsOnly : public ::svx::ISdrObjectFilter
+    class MarkableObjectsOnly : public svx::ISdrObjectFilter
     {
     public:
         MarkableObjectsOnly( SdrPageView* i_pPV )
@@ -1206,7 +1206,7 @@ namespace
     };
 }
 
-const SdrObject* SwFEShell::GetBestObject( bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType, bool bFlat, const ::svx::ISdrObjectFilter* pFilter )
+const SdrObject* SwFEShell::GetBestObject( bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType, bool bFlat, const svx::ISdrObjectFilter* pFilter )
 {
     if( !Imp()->HasDrawView() )
         return NULL;

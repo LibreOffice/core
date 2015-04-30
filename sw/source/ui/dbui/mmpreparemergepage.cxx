@@ -135,7 +135,7 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     aArgs[6].Name = "Cursor";
     aArgs[6].Value <<= rConfigItem.GetResultSet();
 
-    ::svx::ODataAccessDescriptor aDescriptor(aArgs);
+    svx::ODataAccessDescriptor aDescriptor(aArgs);
     SwWrtShell& rSh = m_pWizard->GetSwView()->GetWrtShell();
     SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
     rSh.GetDBManager()->MergeNew(aMergeDesc);

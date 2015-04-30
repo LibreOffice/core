@@ -40,7 +40,7 @@ using namespace ::com::sun::star::lang;
 // export data
 ORowSetImportExport::ORowSetImportExport(   vcl::Window* _pParent,
                                             const Reference< XResultSetUpdate >& _xResultSetUpdate,
-                                            const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+                                            const svx::ODataAccessDescriptor& _aDataDescriptor,
                                             const Reference< XComponentContext >& _rM,
                                             const OUString& rExchange
                                             )

@@ -35,7 +35,7 @@ namespace sw { namespace sidebar {
 class PagePropertyPanel;
 
 class PageColumnControl
-    : public ::svx::sidebar::PopupControl
+    : public svx::sidebar::PopupControl
 {
 public:
     PageColumnControl(
@@ -48,7 +48,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    VclPtr< ::svx::sidebar::ValueSetWithTextControl> mpColumnValueSet;
+    VclPtr< svx::sidebar::ValueSetWithTextControl> mpColumnValueSet;
     VclPtr<PushButton> maMoreButton;
 
     sal_uInt16 mnColumnType;

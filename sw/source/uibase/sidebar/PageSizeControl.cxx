@@ -41,8 +41,8 @@ PageSizeControl::PageSizeControl(
     const Paper ePaper,
     const bool bLandscape,
     const FieldUnit eFUnit )
-    : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_SIZE) )
-    , mpSizeValueSet( new ::svx::sidebar::ValueSetWithTextControl( ::svx::sidebar::ValueSetWithTextControl::TEXT_TEXT, this, SW_RES(VS_SIZE) ) )
+    : svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_SIZE) )
+    , mpSizeValueSet( new svx::sidebar::ValueSetWithTextControl( svx::sidebar::ValueSetWithTextControl::TEXT_TEXT, this, SW_RES(VS_SIZE) ) )
     , maMoreButton( VclPtr<PushButton>::Create( this, SW_RES(CB_SIZE_MORE) ) )
     , maWidthHeightField( VclPtr<MetricField>::Create( this, SW_RES(FLD_WIDTH_HEIGHT) ) )
     , mePaper( ePaper )
@@ -151,7 +151,7 @@ void PageSizeControl::dispose()
     mpSizeValueSet.disposeAndClear();
     maMoreButton.disposeAndClear();
     maWidthHeightField.disposeAndClear();
-    ::svx::sidebar::PopupControl::dispose();
+    svx::sidebar::PopupControl::dispose();
 }
 
 IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)

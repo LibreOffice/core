@@ -110,7 +110,7 @@ typedef std::vector<SpellContentPosition>  SpellContentPositions;
 class SwSpellIter : public SwLinguIter
 {
     uno::Reference< XSpellChecker1 >    xSpeller;
-    ::svx::SpellPortions                aLastPortions;
+    svx::SpellPortions                aLastPortions;
 
     SpellContentPositions               aLastPositions;
     bool                                bBackToStartOfSentence;
@@ -131,9 +131,9 @@ public:
 
     uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
-    bool                                SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck);
+    bool                                SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCheck);
     void                                ToSentenceStart();
-    const ::svx::SpellPortions          GetLastPortions() const { return aLastPortions;}
+    const svx::SpellPortions          GetLastPortions() const { return aLastPortions;}
     SpellContentPositions               GetLastPositions() const {return aLastPositions;}
     void                                ContinueAfterThisSentence() { bMoveToEndOfSentence = true; }
 };
@@ -576,7 +576,7 @@ bool SwEditShell::HasLastSentenceGotGrammarChecked() const
     bool bTextWasGrammarChecked = false;
     if (pSpellIter)
     {
-        ::svx::SpellPortions aLastPortions( pSpellIter->GetLastPortions() );
+        svx::SpellPortions aLastPortions( pSpellIter->GetLastPortions() );
         for (size_t i = 0;  i < aLastPortions.size() && !bTextWasGrammarChecked;  ++i)
         {
             // bIsGrammarError is also true if the text was only checked but no
@@ -1052,7 +1052,7 @@ bool SwEditShell::GetGrammarCorrection(
     return bRes;
 }
 
-bool SwEditShell::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck)
+bool SwEditShell::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCheck)
 {
     OSL_ENSURE(  pSpellIter, "SpellIter missing" );
     if(!pSpellIter)
@@ -1075,7 +1075,7 @@ void SwEditShell::PutSpellingToSentenceStart()
     pSpellIter->ToSentenceStart();
 }
 
-static sal_uInt32 lcl_CountRedlines(const ::svx::SpellPortions& rLastPortions)
+static sal_uInt32 lcl_CountRedlines(const svx::SpellPortions& rLastPortions)
 {
     sal_uInt32 nRet = 0;
     SpellPortions::const_iterator aIter = rLastPortions.begin();
@@ -1098,7 +1098,7 @@ void SwEditShell::MoveContinuationPosToEndOfCheckedSentence()
     }
 }
 
-void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bRecheck)
+void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, bool bRecheck)
 {
     // Note: rNewPortions.size() == 0 is valid and happens when the whole
     // sentence got removed in the dialog
@@ -1328,7 +1328,7 @@ static SpellContentPosition  lcl_FindNextDeletedRedline(
     return aRet;
 }
 
-bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck)
+bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCheck)
 {
     bool bRet = false;
     aLastPortions.clear();

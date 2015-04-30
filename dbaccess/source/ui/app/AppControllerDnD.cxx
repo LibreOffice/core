@@ -578,7 +578,7 @@ TransferableHelper* OApplicationController::copyObject()
     return NULL;
 }
 
-bool OApplicationController::paste( ElementType _eType, const ::svx::ODataAccessDescriptor& _rPasteData, const OUString& _sParentFolder, bool _bMove)
+bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDescriptor& _rPasteData, const OUString& _sParentFolder, bool _bMove)
 {
     try
     {

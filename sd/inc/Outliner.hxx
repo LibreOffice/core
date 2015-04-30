@@ -142,7 +142,7 @@ public:
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
     */
-    ::svx::SpellPortions GetNextSpellSentence();
+    svx::SpellPortions GetNextSpellSentence();
 
     /** Release all resources that have been created during the find&replace
         or spell check.

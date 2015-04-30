@@ -732,7 +732,7 @@ public:
 
     /** Spells on a sentence basis - the SpellPortions are needed
      @return false if no error could be found. */
-    bool SpellSentence(::svx::SpellPortions& rToFill, bool bIsGrammarCheck );
+    bool SpellSentence(svx::SpellPortions& rToFill, bool bIsGrammarCheck );
 
     /// Make SpellIter start with the current sentence when called next time.
     void PutSpellingToSentenceStart();
@@ -741,7 +741,7 @@ public:
     void MoveContinuationPosToEndOfCheckedSentence();
 
     /// Applies a changed sentence.
-    void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bRecheck);
+    void ApplyChangedSentence(const svx::SpellPortions& rNewPortions, bool bRecheck);
 
     /// Check SwSpellIter data to see if the last sentence got grammar checked.
     bool HasLastSentenceGotGrammarChecked() const;

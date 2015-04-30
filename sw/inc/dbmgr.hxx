@@ -138,7 +138,7 @@ struct SwMergeDescriptor
 {
     DBManagerOptions                                    nMergeType;
     SwWrtShell&                                         rSh;
-    const ::svx::ODataAccessDescriptor&                 rDescriptor;
+    const svx::ODataAccessDescriptor&                 rDescriptor;
     OUString                                            sSaveToFilter; ///< export filter to save resulting files
     OUString                                            sSaveToFilterOptions;
     css::uno::Sequence< css::beans::PropertyValue >     aSaveToFilterData;
@@ -163,7 +163,7 @@ struct SwMergeDescriptor
 
     ::com::sun::star::uno::Sequence<  ::com::sun::star::beans::PropertyValue >  aPrintOptions;
 
-    SwMergeDescriptor( DBManagerOptions nType, SwWrtShell& rShell, ::svx::ODataAccessDescriptor& rDesc ) :
+    SwMergeDescriptor( DBManagerOptions nType, SwWrtShell& rShell, svx::ODataAccessDescriptor& rDesc ) :
         nMergeType(nType),
         rSh(rShell),
         rDescriptor(rDesc),

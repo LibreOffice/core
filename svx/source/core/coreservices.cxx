@@ -41,53 +41,53 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
     {
         Reference< XSingleServiceFactory > xFactory;
 
-        if( ::svx::ExtrusionDepthController_getImplementationName().equalsAscii( pImplName ) )
+        if( svx::ExtrusionDepthController_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
-                ::svx::ExtrusionDepthController_getImplementationName(),
-                ::svx::ExtrusionDepthController_createInstance,
-                ::svx::ExtrusionDepthController_getSupportedServiceNames() );
+                svx::ExtrusionDepthController_getImplementationName(),
+                svx::ExtrusionDepthController_createInstance,
+                svx::ExtrusionDepthController_getSupportedServiceNames() );
         }
-        else if( ::svx::ExtrusionDirectionControl_getImplementationName().equalsAscii( pImplName ) )
+        else if( svx::ExtrusionDirectionControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
-                ::svx::ExtrusionDirectionControl_getImplementationName(),
-                ::svx::ExtrusionDirectionControl_createInstance,
-                ::svx::ExtrusionDirectionControl_getSupportedServiceNames() );
+                svx::ExtrusionDirectionControl_getImplementationName(),
+                svx::ExtrusionDirectionControl_createInstance,
+                svx::ExtrusionDirectionControl_getSupportedServiceNames() );
         }
-        else if( ::svx::ExtrusionLightingControl_getImplementationName().equalsAscii( pImplName ) )
+        else if( svx::ExtrusionLightingControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
-                ::svx::ExtrusionLightingControl_getImplementationName(),
-                ::svx::ExtrusionLightingControl_createInstance,
-                ::svx::ExtrusionLightingControl_getSupportedServiceNames() );
+                svx::ExtrusionLightingControl_getImplementationName(),
+                svx::ExtrusionLightingControl_createInstance,
+                svx::ExtrusionLightingControl_getSupportedServiceNames() );
         }
-        else if( ::svx::ExtrusionSurfaceControl_getImplementationName().equalsAscii( pImplName ) )
+        else if( svx::ExtrusionSurfaceControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
-                ::svx::ExtrusionSurfaceControl_getImplementationName(),
-                ::svx::ExtrusionSurfaceControl_createInstance,
-                ::svx::ExtrusionSurfaceControl_getSupportedServiceNames() );
+                svx::ExtrusionSurfaceControl_getImplementationName(),
+                svx::ExtrusionSurfaceControl_createInstance,
+                svx::ExtrusionSurfaceControl_getSupportedServiceNames() );
         }
-        else if( ::svx::FontworkAlignmentControl_getImplementationName().equalsAscii( pImplName ) )
+        else if( svx::FontworkAlignmentControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
-                ::svx::FontworkAlignmentControl_getImplementationName(),
-                ::svx::FontworkAlignmentControl_createInstance,
-                ::svx::FontworkAlignmentControl_getSupportedServiceNames() );
+                svx::FontworkAlignmentControl_getImplementationName(),
+                svx::FontworkAlignmentControl_createInstance,
+                svx::FontworkAlignmentControl_getSupportedServiceNames() );
         }
-        else if( ::svx::FontworkCharacterSpacingControl_getImplementationName().equalsAscii( pImplName ) )
+        else if( svx::FontworkCharacterSpacingControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
-                ::svx::FontworkCharacterSpacingControl_getImplementationName(),
-                ::svx::FontworkCharacterSpacingControl_createInstance,
-                ::svx::FontworkCharacterSpacingControl_getSupportedServiceNames() );
+                svx::FontworkCharacterSpacingControl_getImplementationName(),
+                svx::FontworkCharacterSpacingControl_createInstance,
+                svx::FontworkCharacterSpacingControl_getSupportedServiceNames() );
         }       if( xFactory.is())
         {
             xFactory->acquire();

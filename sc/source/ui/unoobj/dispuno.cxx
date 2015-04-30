@@ -241,7 +241,7 @@ static void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImport
 {
     rEvent.IsEnabled = rParam.bImport;
 
-    ::svx::ODataAccessDescriptor aDescriptor;
+    svx::ODataAccessDescriptor aDescriptor;
     if ( rParam.bImport )
     {
         sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :

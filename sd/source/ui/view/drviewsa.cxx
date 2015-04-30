@@ -803,24 +803,24 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 
 ::rtl::OUString DrawViewShell::GetSidebarContextName() const
 {
-    ::svx::sidebar::SelectionAnalyzer::ViewType eViewType (::svx::sidebar::SelectionAnalyzer::VT_Standard);
+    svx::sidebar::SelectionAnalyzer::ViewType eViewType (svx::sidebar::SelectionAnalyzer::VT_Standard);
     switch (mePageKind)
     {
         case PK_HANDOUT:
-            eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Handout;
+            eViewType = svx::sidebar::SelectionAnalyzer::VT_Handout;
             break;
         case PK_NOTES:
-            eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Notes;
+            eViewType = svx::sidebar::SelectionAnalyzer::VT_Notes;
             break;
         case PK_STANDARD:
             if (meEditMode == EM_MASTERPAGE)
-                eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Master;
+                eViewType = svx::sidebar::SelectionAnalyzer::VT_Master;
             else
-                eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Standard;
+                eViewType = svx::sidebar::SelectionAnalyzer::VT_Standard;
             break;
     }
     return EnumContext::GetContextName(
-        ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SD(
+        svx::sidebar::SelectionAnalyzer::GetContextForSelection_SD(
             mpDrawView->GetMarkedObjectList(),
             eViewType));
 }

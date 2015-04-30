@@ -812,7 +812,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     return bNextDoc;
 }
 
-bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, ::svx::SpellPortions& rPortions)
+bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPortions& rPortions)
 {
     bool bRet = false;
     SdrView*     pSdrView = rSh.GetDrawView();

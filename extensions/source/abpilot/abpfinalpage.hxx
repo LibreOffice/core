@@ -46,7 +46,7 @@ namespace abp
         VclPtr<Edit>             m_pName;
         VclPtr<FixedText>        m_pDuplicateNameError;
 
-        ::svx::DatabaseLocationInputController*
+        svx::DatabaseLocationInputController*
                         m_pLocationController;
 
         StringBag       m_aInvalidDataSourceNames;

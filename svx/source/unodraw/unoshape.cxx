@@ -102,8 +102,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
-using ::svx::PropertyValueProvider;
-using ::svx::IPropertyValueProvider;
+using svx::PropertyValueProvider;
+using svx::IPropertyValueProvider;
 
 class GDIMetaFile;
 
@@ -125,7 +125,7 @@ struct SvxShapeImpl
 
     // for xComponent
     ::cppu::OInterfaceContainerHelper   maDisposeListeners;
-    ::svx::PropertyChangeNotifier       maPropertyNotifier;
+    svx::PropertyChangeNotifier       maPropertyNotifier;
 
     SvxShapeImpl( SvxShape& _rAntiImpl, ::osl::Mutex& _rMutex )
         :mrAntiImpl( _rAntiImpl )
@@ -328,7 +328,7 @@ sal_Int64 SAL_CALL SvxShape::getSomething( const ::com::sun::star::uno::Sequence
 }
 
 
-::svx::PropertyChangeNotifier& SvxShape::getShapePropertyChangeNotifier()
+svx::PropertyChangeNotifier& SvxShape::getShapePropertyChangeNotifier()
 {
     return mpImpl->maPropertyNotifier;
 }
@@ -336,10 +336,10 @@ sal_Int64 SAL_CALL SvxShape::getSomething( const ::com::sun::star::uno::Sequence
 
 void SvxShape::impl_construct()
 {
-    mpImpl->maPropertyNotifier.registerProvider( ::svx::eShapePosition,
-        ::svx::PPropertyValueProvider( new ShapePositionProvider( *mpImpl ) ) );
-    mpImpl->maPropertyNotifier.registerProvider( ::svx::eShapeSize,
-        ::svx::PPropertyValueProvider( new ShapeSizeProvider( *mpImpl ) ) );
+    mpImpl->maPropertyNotifier.registerProvider( svx::eShapePosition,
+        svx::PPropertyValueProvider( new ShapePositionProvider( *mpImpl ) ) );
+    mpImpl->maPropertyNotifier.registerProvider( svx::eShapeSize,
+        svx::PPropertyValueProvider( new ShapeSizeProvider( *mpImpl ) ) );
 
     if ( mpObj.is() )
         impl_initFromSdrObject();

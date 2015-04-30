@@ -906,7 +906,7 @@ public:
     //     There already exists an SvxShape instance associated with the SdrObject
     // @throws ::com::sun::star::uno::RuntimeException
     //     if there does nt yet exists an SvxShape instance associated with the SdrObject.
-    ::svx::PropertyChangeNotifier&
+    svx::PropertyChangeNotifier&
         getShapePropertyChangeNotifier();
 
     // notifies a change in the given property, to all applicable listeners registered at the associated SvxShape
@@ -914,7 +914,7 @@ public:
     // This method is equivalent to calling getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty ),
     // exception that it is allowed to be called when there does not yet exist an associated SvxShape - in which
     // case the method will silently return without doing anything.
-    void    notifyShapePropertyChange( const ::svx::ShapeProperty _eProperty ) const;
+    void    notifyShapePropertyChange( const svx::ShapeProperty _eProperty ) const;
 
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the

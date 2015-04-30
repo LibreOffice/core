@@ -387,7 +387,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     SdrPageView* pPageView = pDrView ? pDrView->GetSdrPageView() : NULL;
                     if(pPageView)
                     {
-                        ::svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
+                        svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
                         SdrObject* pNewDBField = pDrView->CreateFieldControl(aDescriptor);
 
                         if(pNewDBField)

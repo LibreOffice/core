@@ -134,7 +134,7 @@ void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const R
     }
 }
 
-void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData, const OUString& i_rDestDataSourceName,
+void OTableCopyHelper::pasteTable( const svx::ODataAccessDescriptor& _rPasteData, const OUString& i_rDestDataSourceName,
                                   const SharedConnection& i_rDestConnection )
 {
     OUString sSrcDataSourceName = _rPasteData.getDataSource();
@@ -186,7 +186,7 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
     {
         if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(_rTransData.GetDataFlavorExVector()) )
         {
-            ::svx::ODataAccessDescriptor aPasteData = ODataAccessObjectTransferable::extractObjectDescriptor(_rTransData);
+            svx::ODataAccessDescriptor aPasteData = ODataAccessObjectTransferable::extractObjectDescriptor(_rTransData);
             pasteTable( aPasteData,i_rDestDataSource,_xConnection);
         }
     }

@@ -1954,7 +1954,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
 }
 
 bool ImpEditEngine::SpellSentence(EditView& rEditView,
-    ::svx::SpellPortions& rToFill,
+    svx::SpellPortions& rToFill,
     bool /*bIsGrammarChecking*/ )
 {
     bool bRet = false;
@@ -2017,7 +2017,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
 void ImpEditEngine::AddPortion(
                             const EditSelection& rSel,
                             uno::Reference< XSpellAlternatives > xAlt,
-                                ::svx::SpellPortions& rToFill,
+                                svx::SpellPortions& rToFill,
                                 bool bIsField)
 {
     if(rSel.HasRange())
@@ -2041,7 +2041,7 @@ void ImpEditEngine::AddPortionIterated(
                             EditView& rEditView,
                             const EditSelection& rSel,
                             Reference< XSpellAlternatives > xAlt,
-                                ::svx::SpellPortions& rToFill)
+                                svx::SpellPortions& rToFill)
 {
     if (rSel.HasRange())
     {
@@ -2106,7 +2106,7 @@ void ImpEditEngine::AddPortionIterated(
 }
 
 void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
-    const ::svx::SpellPortions& rNewPortions,
+    const svx::SpellPortions& rNewPortions,
     bool bRecheck )
 {
     // Note: rNewPortions.size() == 0 is valid and happens when the whole

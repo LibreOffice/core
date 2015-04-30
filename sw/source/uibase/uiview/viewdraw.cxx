@@ -135,7 +135,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             OSL_ENSURE( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
             if( pDescriptorItem )
             {
-                ::svx::ODataAccessDescriptor aDescriptor( pDescriptorItem->GetValue() );
+                svx::ODataAccessDescriptor aDescriptor( pDescriptorItem->GetValue() );
                 SdrObject* pObj = pFormView->CreateFieldControl( aDescriptor );
 
                 if ( pObj )

@@ -2854,10 +2854,10 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
     switch ( eUserCall )
     {
     case SDRUSERCALL_RESIZE:
-        notifyShapePropertyChange( ::svx::eShapeSize );
+        notifyShapePropertyChange( svx::eShapeSize );
         // fall through - RESIZE might also imply a change of the position
     case SDRUSERCALL_MOVEONLY:
-        notifyShapePropertyChange( ::svx::eShapePosition );
+        notifyShapePropertyChange( svx::eShapePosition );
         break;
     default:
         // not interested in
@@ -2966,7 +2966,7 @@ void SdrObject::setUnoShape(const uno::Reference<uno::XInterface >& _rxUnoShape)
     impl_setUnoShape( _rxUnoShape );
 }
 
-::svx::PropertyChangeNotifier& SdrObject::getShapePropertyChangeNotifier()
+svx::PropertyChangeNotifier& SdrObject::getShapePropertyChangeNotifier()
 {
     DBG_TESTSOLARMUTEX();
 
@@ -2975,7 +2975,7 @@ void SdrObject::setUnoShape(const uno::Reference<uno::XInterface >& _rxUnoShape)
     return pSvxShape->getShapePropertyChangeNotifier();
 }
 
-void SdrObject::notifyShapePropertyChange( const ::svx::ShapeProperty _eProperty ) const
+void SdrObject::notifyShapePropertyChange( const svx::ShapeProperty _eProperty ) const
 {
     DBG_TESTSOLARMUTEX();
 

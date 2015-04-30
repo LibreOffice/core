@@ -766,8 +766,8 @@ sal_Int8 OReportSection::AcceptDrop( const AcceptDropEvent& _rEvt )
     else
     {
         const DataFlavorExVector& rFlavors = GetDataFlavorExVector();
-        if (   ::svx::OMultiColumnTransferable::canExtractDescriptor(rFlavors)
-            || ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) )
+        if (   svx::OMultiColumnTransferable::canExtractDescriptor(rFlavors)
+            || svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) )
             return _rEvt.mnAction;
 
         const sal_Int8 nDropOption = ( OReportExchange::canExtract(rFlavors) ) ? DND_ACTION_COPYMOVE : DND_ACTION_NONE;
@@ -789,7 +789,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     sal_Int8 nDropOption = DND_ACTION_NONE;
     const TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
     DataFlavorExVector& rFlavors = aDropped.GetDataFlavorExVector();
-    bool bMultipleFormat = ::svx::OMultiColumnTransferable::canExtractDescriptor(rFlavors);
+    bool bMultipleFormat = svx::OMultiColumnTransferable::canExtractDescriptor(rFlavors);
     if ( OReportExchange::canExtract(rFlavors) )
     {
         OReportExchange::TSectionElements aCopies = OReportExchange::extractCopies(aDropped);
@@ -799,7 +799,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         m_pParent->getViewsWindow()->unmarkAllObjects(m_pView);
     }
     else if ( bMultipleFormat
-        || ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) )
+        || svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) )
     {
         m_pParent->getViewsWindow()->getView()->setMarked(m_pView, true);
         m_pView->UnmarkAll();
@@ -815,13 +815,13 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         uno::Sequence<beans::PropertyValue> aValues;
         if ( !bMultipleFormat )
         {
-            ::svx::ODataAccessDescriptor aDescriptor = ::svx::OColumnTransferable::extractColumnDescriptor(aDropped);
+            svx::ODataAccessDescriptor aDescriptor = svx::OColumnTransferable::extractColumnDescriptor(aDropped);
 
             aValues.realloc(1);
             aValues[0].Value <<= aDescriptor.createPropertyValueSequence();
         }
         else
-            aValues = ::svx::OMultiColumnTransferable::extractDescriptor(aDropped);
+            aValues = svx::OMultiColumnTransferable::extractDescriptor(aDropped);
 
         beans::PropertyValue* pIter = aValues.getArray();
         beans::PropertyValue* pEnd  = pIter + aValues.getLength();

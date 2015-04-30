@@ -228,9 +228,9 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
     {
         uno::Sequence< beans::PropertyValue > aValue;
         aArgs[0].Value >>= aValue;
-        ::svx::ODataAccessDescriptor aDescriptor(aValue);
+        svx::ODataAccessDescriptor aDescriptor(aValue);
         OUString sName;
-        aDescriptor[ ::svx::daColumnName ] >>= sName;
+        aDescriptor[ svx::daColumnName ] >>= sName;
         if ( !sName.isEmpty() )
         {
             sName = "[" + sName + "]";

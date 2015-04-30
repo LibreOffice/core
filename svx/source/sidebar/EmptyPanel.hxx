@@ -44,7 +44,7 @@ private:
     VclPtr<FixedText> maMessageControl;
 };
 
-} } // end of namespace ::svx::sidebar
+} } // end of namespace svx::sidebar
 
 #endif
 

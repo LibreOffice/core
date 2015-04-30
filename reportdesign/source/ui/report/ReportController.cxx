@@ -3364,7 +3364,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 bHandleOnlyOne = true;
                 aValue = aArgs;
             }
-            ::svx::ODataAccessDescriptor aDescriptor(aValue);
+            svx::ODataAccessDescriptor aDescriptor(aValue);
             SequenceAsHashMap aMap(aValue);
             uno::Reference<report::XSection> xSection = aMap.getUnpackedValueOrDefault("Section",xCurrentSection);
             uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
@@ -3394,16 +3394,16 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             // clear all selections
             getDesignView()->unmarkAllObjects(NULL);
 
-            uno::Reference< beans::XPropertySet > xField( aDescriptor[ ::svx::daColumnObject ], uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > xField( aDescriptor[ svx::daColumnObject ], uno::UNO_QUERY );
             uno::Reference< lang::XComponent > xHoldAlive;
             if ( !xField.is() )
             {
                 OUString sCommand;
                 OUString sColumnName;
                 sal_Int32 nCommandType( -1 );
-                OSL_VERIFY( aDescriptor[ ::svx::daCommand ] >>= sCommand );
-                OSL_VERIFY( aDescriptor[ ::svx::daColumnName ] >>= sColumnName );
-                OSL_VERIFY( aDescriptor[ ::svx::daCommandType ] >>= nCommandType );
+                OSL_VERIFY( aDescriptor[ svx::daCommand ] >>= sCommand );
+                OSL_VERIFY( aDescriptor[ svx::daColumnName ] >>= sColumnName );
+                OSL_VERIFY( aDescriptor[ svx::daCommandType ] >>= nCommandType );
 
                 uno::Reference< container::XNameAccess > xColumns;
                 uno::Reference< sdbc::XConnection > xConnection( getConnection() );

@@ -441,11 +441,11 @@ public:
     //initialize sentence spelling
     void            StartSpelling(EditView& rEditView, bool bMultipleDoc);
     //spell and return a sentence
-    bool            SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
-    void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
+    void            ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
 
     // for text conversion (see also HasSpellErrors)
     bool            HasConvertibleTextPortion( LanguageType nLang );

@@ -158,7 +158,7 @@ public:
               OutputDevice& i_rDevice
     ) const;
 
-    static ::std::unique_ptr< ::svx::ISdrObjectFilter >
+    static ::std::unique_ptr< svx::ISdrObjectFilter >
             CreateFocusableControlFilter(
                 const SdrView& i_rView,
                 const OutputDevice& i_rDevice

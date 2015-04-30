@@ -113,7 +113,7 @@ public:
     * \param _pSelected the currently selected
     * \param _rDescriptor the descriptor will be filled
     */
-    void fillDescriptor(SvTreeListEntry* _pSelected,::svx::ODataAccessDescriptor& _rDescriptor);
+    void fillDescriptor(SvTreeListEntry* _pSelected,svx::ODataAccessDescriptor& _rDescriptor);
 
 private:
     // FmXChangeListener

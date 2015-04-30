@@ -295,7 +295,7 @@ void PagePropertyPanel::Initialize()
     mpBindings->Update( SID_ATTR_PAGE_SIZE );
 }
 
-VclPtr< ::svx::sidebar::PopupControl> PagePropertyPanel::CreatePageOrientationControl( ::svx::sidebar::PopupContainer* pParent )
+VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageOrientationControl( svx::sidebar::PopupContainer* pParent )
 {
     return VclPtr<PageOrientationControl>::Create( pParent, *this , mpPageItem->IsLandscape() );
 }
@@ -372,7 +372,7 @@ void PagePropertyPanel::ClosePageOrientationPopup()
     maOrientationPopup.Hide();
 }
 
-VclPtr< ::svx::sidebar::PopupControl> PagePropertyPanel::CreatePageMarginControl( ::svx::sidebar::PopupContainer* pParent )
+VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageMarginControl( svx::sidebar::PopupContainer* pParent )
 {
     return VclPtr<PageMarginControl>::Create(
 
@@ -423,7 +423,7 @@ void PagePropertyPanel::ClosePageMarginPopup()
     maMarginPopup.Hide();
 }
 
-VclPtr< ::svx::sidebar::PopupControl> PagePropertyPanel::CreatePageSizeControl( ::svx::sidebar::PopupContainer* pParent )
+VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageSizeControl( svx::sidebar::PopupContainer* pParent )
 {
     return VclPtr<PageSizeControl>::Create(
 
@@ -458,7 +458,7 @@ void PagePropertyPanel::ClosePageSizePopup()
     maSizePopup.Hide();
 }
 
-VclPtr< ::svx::sidebar::PopupControl> PagePropertyPanel::CreatePageColumnControl( ::svx::sidebar::PopupContainer* pParent )
+VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageColumnControl( svx::sidebar::PopupContainer* pParent )
 {
     return VclPtr<PageColumnControl>::Create(
 

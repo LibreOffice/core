@@ -26,7 +26,7 @@
 class SwWrtShell;
 struct SpellState;
 class SwSpellDialogChildWindow
-    : public ::svx::SpellDialogChildWindow
+    : public svx::SpellDialogChildWindow
 {
     bool            m_bIsGrammarCheckingOn;
     SpellState*     m_pSpellState;
@@ -34,7 +34,7 @@ class SwSpellDialogChildWindow
     SwWrtShell*     GetWrtShell_Impl();
     bool            MakeTextSelection_Impl(SwWrtShell& rSh, ShellModes eSelMode);
     bool            FindNextDrawTextError_Impl(SwWrtShell& rSh);
-    bool            SpellDrawText_Impl(SwWrtShell& rSh, ::svx::SpellPortions& rPortions);
+    bool            SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPortions& rPortions);
     void            LockFocusNotification(bool bLock);
 
 protected:

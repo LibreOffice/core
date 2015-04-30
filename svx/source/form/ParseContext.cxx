@@ -36,7 +36,7 @@ OSystemParseContext::OSystemParseContext() : IParseContext()
 {
     SolarMutexGuard aGuard;
 
-    ::svx::StringListResource aKeywords( SVX_RES( RID_RSC_SQL_INTERNATIONAL ) );
+    svx::StringListResource aKeywords( SVX_RES( RID_RSC_SQL_INTERNATIONAL ) );
     aKeywords.get( m_aLocalizedKeywords );
 }
 

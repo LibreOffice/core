@@ -262,7 +262,7 @@ bool FmFormShell::PrepareClose(bool bUI)
             // Wenn alles glatt gelaufen ist, werden die modifizierten Datensaetze gespeichert
             if ( GetImpl()->getActiveController().is() )
             {
-                const ::svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
+                const svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
                 if ( rController->commitCurrentControl() )
                 {
                     bool bModified = rController->isModifiedRow();
@@ -702,7 +702,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         break;
         case SID_FM_SEARCH:
         {
-            const ::svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
+            const svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
             if ( rController->commitCurrentControl() && rController->commitCurrentRecord() )
                 GetImpl()->ExecuteSearch();
             rReq.Done();
@@ -733,7 +733,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_RECORD_ABSOLUTE:
         {
-            const ::svx::ControllerFeatures& rController = GetImpl()->getNavControllerFeatures();
+            const svx::ControllerFeatures& rController = GetImpl()->getNavControllerFeatures();
             sal_Int32 nRecord = -1;
 
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -1351,7 +1351,7 @@ void FmFormShell::ToggleControlFocus( const SdrUnoObj& i_rUnoObject, const SdrVi
 
 namespace
 {
-    class FocusableControlsFilter : public ::svx::ISdrObjectFilter
+    class FocusableControlsFilter : public svx::ISdrObjectFilter
     {
     public:
         FocusableControlsFilter( const SdrView& i_rView, const OutputDevice& i_rDevice )
@@ -1378,9 +1378,9 @@ namespace
 }
 
 
-::std::unique_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice )
+::std::unique_ptr< svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice )
 {
-    ::std::unique_ptr< ::svx::ISdrObjectFilter > pFilter;
+    ::std::unique_ptr< svx::ISdrObjectFilter > pFilter;
 
     if ( !i_rView.IsDesignMode() )
         pFilter.reset( new FocusableControlsFilter( i_rView, i_rDevice ) );

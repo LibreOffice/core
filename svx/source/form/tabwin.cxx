@@ -153,7 +153,7 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
         // no drag without a field
         return;
 
-    ::svx::ODataAccessDescriptor aDescriptor;
+    svx::ODataAccessDescriptor aDescriptor;
     aDescriptor[ daDataSource ] <<= pTabWin->GetDatabaseName();
     aDescriptor[ daConnection ] <<= pTabWin->GetConnection().getTyped();
     aDescriptor[ daCommand ]    <<= pTabWin->GetObjectName();

@@ -88,7 +88,7 @@ namespace dbaui
         typedef ::std::map< sal_uInt16, ExternalFeature, ::std::less< sal_uInt16 > >  ExternalFeaturesMap;
         ExternalFeaturesMap     m_aExternalFeatures;
 
-        ::svx::ODataAccessDescriptor    m_aDocumentDataSource;
+        svx::ODataAccessDescriptor    m_aDocumentDataSource;
             // if we're part of a document, this is the state of the DocumentDataSource slot
 
         ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
@@ -358,7 +358,7 @@ namespace dbaui
 
         void implRemoveStatusListeners();
 
-        bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor, bool _bSelectDirect = false);
+        bool implSelect(const svx::ODataAccessDescriptor& _rDescriptor, bool _bSelectDirect = false);
         bool implSelect( SvTreeListEntry* _pEntry );
 
         /// selects the entry given and loads the grid control with the object's data
@@ -394,7 +394,7 @@ namespace dbaui
             @param _bExpandAncestors
                 If <TRUE/>, all ancestor on the way to the entry will be expanded
         */
-        SvTreeListEntry* getObjectEntry(const ::svx::ODataAccessDescriptor& _rDescriptor,
+        SvTreeListEntry* getObjectEntry(const svx::ODataAccessDescriptor& _rDescriptor,
             SvTreeListEntry** _ppDataSourceEntry = NULL, SvTreeListEntry** _ppContainerEntry = NULL,
             bool _bExpandAncestors = true
         );
@@ -424,7 +424,7 @@ namespace dbaui
         /// checks if m_aDocumentDataSource describes a known object
         void checkDocumentDataSource();
 
-        void extractDescriptorProps(const ::svx::ODataAccessDescriptor& _rDescriptor,
+        void extractDescriptorProps(const svx::ODataAccessDescriptor& _rDescriptor,
             OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, bool& _rEscapeProcessing);
 
         void transferChangedControlProperty(const OUString& _rProperty, const ::com::sun::star::uno::Any& _rNewValue);

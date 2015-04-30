@@ -90,7 +90,7 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindowListBox::getSelectedFieldDe
     while( pSelected )
     {
         // build a descriptor for the currently selected field
-        ::svx::ODataAccessDescriptor aDescriptor;
+        svx::ODataAccessDescriptor aDescriptor;
         m_pTabWin->fillDescriptor(pSelected,aDescriptor);
         aArgs[i++].Value <<= aDescriptor.createPropertyValueSequence();
         pSelected = NextSelected(pSelected);
@@ -433,7 +433,7 @@ uno::Reference< sdbc::XConnection> OAddFieldWindow::getConnection() const
     return uno::Reference< sdbc::XConnection>(m_xRowSet->getPropertyValue( PROPERTY_ACTIVECONNECTION ),uno::UNO_QUERY);
 }
 
-void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,::svx::ODataAccessDescriptor& _rDescriptor)
+void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,svx::ODataAccessDescriptor& _rDescriptor)
 {
     if ( _pSelected && m_xColumns.is() )
     {
@@ -449,15 +449,15 @@ void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,::svx::ODataAcc
             }
         }
 
-        _rDescriptor[ ::svx::daCommand ]            <<= GetCommand();
-        _rDescriptor[ ::svx::daCommandType ]        <<= GetCommandType();
-        _rDescriptor[ ::svx::daEscapeProcessing ]   <<= GetEscapeProcessing();
-        _rDescriptor[ ::svx::daConnection ]         <<= getConnection();
+        _rDescriptor[ svx::daCommand ]            <<= GetCommand();
+        _rDescriptor[ svx::daCommandType ]        <<= GetCommandType();
+        _rDescriptor[ svx::daEscapeProcessing ]   <<= GetEscapeProcessing();
+        _rDescriptor[ svx::daConnection ]         <<= getConnection();
 
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(_pSelected->GetUserData());
-        _rDescriptor[ ::svx::daColumnName ]         <<= pInfo->sColumnName;
+        _rDescriptor[ svx::daColumnName ]         <<= pInfo->sColumnName;
         if ( m_xColumns->hasByName( pInfo->sColumnName ) )
-            _rDescriptor[ ::svx::daColumnObject ] <<= m_xColumns->getByName(pInfo->sColumnName);
+            _rDescriptor[ svx::daColumnObject ] <<= m_xColumns->getByName(pInfo->sColumnName);
     }
 }
 

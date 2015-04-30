@@ -1596,12 +1596,12 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
                 break;
 
             case RID_SVX_EXTRUSION_BAR:
-                pShell = new ::svx::ExtrusionBar(
+                pShell = new svx::ExtrusionBar(
                     &mrViewShell.GetViewShellBase());
                 break;
 
             case RID_SVX_FONTWORK_BAR:
-                pShell = new ::svx::FontworkBar(
+                pShell = new svx::FontworkBar(
                     &mrViewShell.GetViewShellBase());
                 break;
 

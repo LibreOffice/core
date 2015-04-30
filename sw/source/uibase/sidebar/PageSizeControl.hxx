@@ -38,7 +38,7 @@ namespace sw { namespace sidebar {
 class PagePropertyPanel;
 
 class PageSizeControl
-    : public ::svx::sidebar::PopupControl
+    : public svx::sidebar::PopupControl
 {
 public:
     PageSizeControl(
@@ -51,7 +51,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    VclPtr< ::svx::sidebar::ValueSetWithTextControl> mpSizeValueSet;
+    VclPtr< svx::sidebar::ValueSetWithTextControl> mpSizeValueSet;
     VclPtr<PushButton> maMoreButton;
     // hidden metric field
     VclPtr<MetricField> maWidthHeightField;

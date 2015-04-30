@@ -1070,7 +1070,7 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
     implCheckExternalSlot(ID_BROWSER_DOCUMENT_DATASOURCE);
 }
 
-void SbaTableQueryBrowser::extractDescriptorProps(const ::svx::ODataAccessDescriptor& _rDescriptor, OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, bool& _rEscapeProcessing)
+void SbaTableQueryBrowser::extractDescriptorProps(const svx::ODataAccessDescriptor& _rDescriptor, OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, bool& _rEscapeProcessing)
 {
     _rDataSource = _rDescriptor.getDataSource();
     if ( _rDescriptor.has(daCommand) )
@@ -1253,7 +1253,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
     return pObject;
 }
 
-SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const ::svx::ODataAccessDescriptor& _rDescriptor,
+SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const svx::ODataAccessDescriptor& _rDescriptor,
         SvTreeListEntry** _ppDataSourceEntry, SvTreeListEntry** _ppContainerEntry,
         bool _bExpandAncestors)
 {
@@ -1860,7 +1860,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             break;
 
         case ID_TREE_ADMINISTRATE:
-            ::svx::administrateDatabaseRegistration( getView() );
+            svx::administrateDatabaseRegistration( getView() );
             break;
 
         case ID_BROWSER_REFRESH:
@@ -1911,7 +1911,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             else
             {
                 Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
-                implSelect(::svx::ODataAccessDescriptor(xProp));
+                implSelect(svx::ODataAccessDescriptor(xProp));
             }
         }
         break;
@@ -2350,7 +2350,7 @@ bool SbaTableQueryBrowser::ensureEntryObject( SvTreeListEntry* _pEntry )
     return bSuccess;
 }
 
-bool SbaTableQueryBrowser::implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor, bool _bSelectDirect)
+bool SbaTableQueryBrowser::implSelect(const svx::ODataAccessDescriptor& _rDescriptor, bool _bSelectDirect)
 {
     // extract the props
     OUString sDataSource;
@@ -3675,7 +3675,7 @@ bool SbaTableQueryBrowser::preReloadForm()
         getBrowserView()->getGridControl()->setDesignMode(sal_True);
         // we had an invalid statement so we need to connect the column models
         Reference<XPropertySet> xRowSetProps(getRowSet(),UNO_QUERY);
-        ::svx::ODataAccessDescriptor aDesc(xRowSetProps);
+        svx::ODataAccessDescriptor aDesc(xRowSetProps);
         // extract the props
         OUString sDataSource;
         OUString sCommand;

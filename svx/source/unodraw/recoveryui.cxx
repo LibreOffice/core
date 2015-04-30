@@ -39,7 +39,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <officecfg/Office/Recovery.hxx>
 
-namespace svxdr = ::svx::DocRecovery;
+namespace svxdr = svx::DocRecovery;
 using namespace ::osl;
 
 namespace {

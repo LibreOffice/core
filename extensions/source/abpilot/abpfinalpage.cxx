@@ -53,7 +53,7 @@ namespace abp
         get(m_pNameLabel, "nameft");
         get(m_pName, "name");
         get(m_pDuplicateNameError, "warning");
-        m_pLocationController = new ::svx::DatabaseLocationInputController(_pParent->getORB(),
+        m_pLocationController = new svx::DatabaseLocationInputController(_pParent->getORB(),
             *m_pLocation, *m_pBrowse);
 
         m_pName->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );

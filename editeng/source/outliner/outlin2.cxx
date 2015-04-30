@@ -587,7 +587,7 @@ void Outliner::StartSpelling(EditView& rEditView, bool bMultipleDoc)
     pEditEngine->StartSpelling(rEditView, bMultipleDoc);
 }
 
-bool Outliner::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
+bool Outliner::SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     return pEditEngine->SpellSentence(rEditView, rToFill, bIsGrammarChecking );
 }
@@ -597,7 +597,7 @@ void Outliner::PutSpellingToSentenceStart( EditView& rEditView )
     pEditEngine->PutSpellingToSentenceStart( rEditView );
 }
 
-void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
+void Outliner::ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );
 }

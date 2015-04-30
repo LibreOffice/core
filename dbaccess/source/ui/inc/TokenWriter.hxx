@@ -86,7 +86,7 @@ namespace dbaui
         bool            m_bCheckOnly;
 
         // export data
-        ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+        ODatabaseImportExport(  const svx::ODataAccessDescriptor& _aDataDescriptor,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                 const OUString& rExchange = OUString());
@@ -108,7 +108,7 @@ namespace dbaui
         virtual bool Write(); // Export
         virtual bool Read(); // Import
 
-        void initialize(const ::svx::ODataAccessDescriptor& _aDataDescriptor);
+        void initialize(const svx::ODataAccessDescriptor& _aDataDescriptor);
         void dispose();
 
         void enableCheckOnly() { m_bCheckOnly = true; }
@@ -116,7 +116,7 @@ namespace dbaui
 
     private:
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        void impl_initFromDescriptor( const ::svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
+        void impl_initFromDescriptor( const svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
     };
 
     // RTF Import and Export
@@ -126,7 +126,7 @@ namespace dbaui
         void appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk);
     public:
         // export data
-        ORTFImportExport(   const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+        ORTFImportExport(   const svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const OUString& rExchange = OUString())
@@ -170,7 +170,7 @@ namespace dbaui
 
     public:
         // export data
-        OHTMLImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+        OHTMLImportExport(  const svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const OUString& rExchange = OUString());
@@ -207,7 +207,7 @@ namespace dbaui
         // export data
         ORowSetImportExport(vcl::Window* _pParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >& _xResultSetUpdate,
-                            const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+                            const svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                             const OUString& rExchange = OUString());
 

@@ -493,6 +493,6 @@ bool SelectionAnalyzer::IsTextObjType (const sal_uInt16 nType)
 
 
 
-} } // end of namespace ::svx::sidebar
+} } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
