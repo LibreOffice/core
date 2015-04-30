@@ -1875,10 +1875,13 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                     const FormulaToken* const p = pArr->PeekNext();
                     if (p && p->GetOpCode() == ocTableRefOpen)
                     {
-                        t = pArr->Next();
                         int nLevel = 0;
                         do
                         {
+                            t = pArr->Next();
+                            if (!t)
+                                break;
+
                             // Switch cases correspond with those in
                             // ScCompiler::HandleTableRef()
                             switch (t->GetOpCode())
@@ -1903,7 +1906,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                                     nLevel = 0;
                                     bNext = false;
                             }
-                        } while (nLevel && (t = pArr->Next()));
+                        } while (nLevel);
                     }
                 }
                 break;
