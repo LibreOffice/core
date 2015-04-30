@@ -50,15 +50,17 @@ static DBSaveData* pSaveObj = NULL;
 class DBSaveData
 {
 public:
-    DBSaveData( Edit& rEd, CheckBox& rHdr, CheckBox& rSize, CheckBox& rFmt,
+    DBSaveData( Edit& rEd, CheckBox& rHdr, CheckBox& rTot, CheckBox& rSize, CheckBox& rFmt,
                             CheckBox& rStrip, ScRange& rArea )
         : rEdAssign(rEd)
         , rBtnHeader(rHdr)
+        , rBtnTotals(rTot)
         , rBtnSize(rSize)
         , rBtnFormat(rFmt)
         , rBtnStrip(rStrip)
         , rCurArea(rArea)
         , bHeader(false)
+        , bTotals(false)
         , bSize(false)
         , bFormat(false)
         , bStrip(false)
@@ -71,6 +73,7 @@ public:
 private:
     Edit&       rEdAssign;
     CheckBox&   rBtnHeader;
+    CheckBox&   rBtnTotals;
     CheckBox&   rBtnSize;
     CheckBox&   rBtnFormat;
     CheckBox&   rBtnStrip;
@@ -78,6 +81,7 @@ private:
     OUString    aStr;
     ScRange     aArea;
     bool        bHeader:1;
+    bool        bTotals:1;
     bool        bSize:1;
     bool        bFormat:1;
     bool        bStrip:1;
@@ -89,6 +93,7 @@ void DBSaveData::Save()
     aArea   = rCurArea;
     aStr    = rEdAssign.GetText();
     bHeader = rBtnHeader.IsChecked();
+    bTotals = rBtnTotals.IsChecked();
     bSize   = rBtnSize.IsChecked();
     bFormat = rBtnFormat.IsChecked();
     bStrip  = rBtnStrip.IsChecked();
@@ -102,6 +107,7 @@ void DBSaveData::Restore()
         rCurArea = aArea;
         rEdAssign.SetText( aStr );
         rBtnHeader.Check ( bHeader );
+        rBtnTotals.Check ( bTotals );
         rBtnSize.Check   ( bSize );
         rBtnFormat.Check ( bFormat );
         rBtnStrip.Check  ( bStrip );
@@ -131,6 +137,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     m_pRbAssign->SetReferences(this, m_pEdAssign);
     get(m_pOptions, "Options");
     get(m_pBtnHeader, "ContainsColumnLabels");
+    get(m_pBtnTotals, "ContainsTotalsRow");
     get(m_pBtnDoSize, "InsertOrDeleteCells");
     get(m_pBtnKeepFmt, "KeepFormatting");
     get(m_pBtnStripData, "DontSaveImportedData");
@@ -151,7 +158,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     aStrSource      = m_pFTSource->GetText();
     aStrOperations  = m_pFTOperations->GetText();
 
-    pSaveObj = new DBSaveData( *m_pEdAssign, *m_pBtnHeader,
+    pSaveObj = new DBSaveData( *m_pEdAssign, *m_pBtnHeader, *m_pBtnTotals,
                         *m_pBtnDoSize, *m_pBtnKeepFmt, *m_pBtnStripData, theCurArea );
     Init();
 }
@@ -170,6 +177,7 @@ void ScDbNameDlg::dispose()
     m_pRbAssign.clear();
     m_pOptions.clear();
     m_pBtnHeader.clear();
+    m_pBtnTotals.clear();
     m_pBtnDoSize.clear();
     m_pBtnKeepFmt.clear();
     m_pBtnStripData.clear();
@@ -184,7 +192,8 @@ void ScDbNameDlg::dispose()
 
 void ScDbNameDlg::Init()
 {
-    m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
+    m_pBtnHeader->Check( true );       // Default: with column headers
+    m_pBtnTotals->Check( false );      // Default: without totals row
     m_pBtnDoSize->Check( true );
     m_pBtnKeepFmt->Check( true );
 
@@ -243,6 +252,7 @@ void ScDbNameDlg::Init()
                         m_pEdName->SetText(aDBName);
 
                     m_pBtnHeader->Check( pDBData->HasHeader() );
+                    m_pBtnTotals->Check( pDBData->HasTotals() );
                     m_pBtnDoSize->Check( pDBData->IsDoSize() );
                     m_pBtnKeepFmt->Check( pDBData->IsKeepFmt() );
                     m_pBtnStripData->Check( pDBData->IsStripData() );
@@ -364,6 +374,7 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
         m_pEdAssign->SetText( theArea );
         m_pBtnAdd->SetText( aStrModify );
         m_pBtnHeader->Check( pData->HasHeader() );
+        m_pBtnTotals->Check( pData->HasTotals() );
         m_pBtnDoSize->Check( pData->IsDoSize() );
         m_pBtnKeepFmt->Check( pData->IsKeepFmt() );
         m_pBtnStripData->Check( pData->IsStripData() );
@@ -433,6 +444,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                                                         aEnd.Col(), aEnd.Row() );
                     pOldEntry->SetByRow( true );
                     pOldEntry->SetHeader( m_pBtnHeader->IsChecked() );
+                    pOldEntry->SetTotals( m_pBtnTotals->IsChecked() );
                     pOldEntry->SetDoSize( m_pBtnDoSize->IsChecked() );
                     pOldEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
                     pOldEntry->SetStripData( m_pBtnStripData->IsChecked() );
@@ -445,6 +457,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                                                         aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row(),
                                                         true, m_pBtnHeader->IsChecked() );
+                    pNewEntry->SetTotals( m_pBtnTotals->IsChecked() );
                     pNewEntry->SetDoSize( m_pBtnDoSize->IsChecked() );
                     pNewEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
                     pNewEntry->SetStripData( m_pBtnStripData->IsChecked() );
@@ -461,7 +474,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                 m_pBtnAdd->Disable();
                 m_pBtnRemove->Disable();
                 m_pEdAssign->SetText( EMPTY_OUSTRING );
-                m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
+                m_pBtnHeader->Check( true );       // Default: with column headers
+                m_pBtnTotals->Check( false );      // Default: without totals row
                 m_pBtnDoSize->Check( false );
                 m_pBtnKeepFmt->Check( false );
                 m_pBtnStripData->Check( false );
@@ -541,7 +555,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
             m_pBtnRemove->Disable();
             m_pEdAssign->SetText( EMPTY_OUSTRING );
             theCurArea = ScRange();
-            m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
+            m_pBtnHeader->Check( true );       // Default: with column headers
+            m_pBtnTotals->Check( false );      // Default: without totals row
             m_pBtnDoSize->Check( false );
             m_pBtnKeepFmt->Check( false );
             m_pBtnStripData->Check( false );
@@ -631,6 +646,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
     {
         m_pBtnAdd->Enable();
         m_pBtnHeader->Enable();
+        m_pBtnTotals->Enable();
         m_pBtnDoSize->Enable();
         m_pBtnKeepFmt->Enable();
         m_pBtnStripData->Enable();
@@ -641,6 +657,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
     {
         m_pBtnAdd->Disable();
         m_pBtnHeader->Disable();
+        m_pBtnTotals->Disable();
         m_pBtnDoSize->Disable();
         m_pBtnKeepFmt->Disable();
         m_pBtnStripData->Disable();

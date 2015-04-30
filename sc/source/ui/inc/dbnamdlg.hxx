@@ -55,6 +55,7 @@ private:
 
     VclPtr<VclContainer>       m_pOptions;
     VclPtr<CheckBox>           m_pBtnHeader;
+    VclPtr<CheckBox>           m_pBtnTotals;
     VclPtr<CheckBox>           m_pBtnDoSize;
     VclPtr<CheckBox>           m_pBtnKeepFmt;
     VclPtr<CheckBox>           m_pBtnStripData;
