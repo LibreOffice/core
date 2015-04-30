@@ -732,7 +732,7 @@ void ChartExport::_ExportContent()
     }
 }
 
-void ChartExport::exportChartSpace( Reference< css::chart::XChartDocument > rChartDoc,
+void ChartExport::exportChartSpace( Reference< css::chart::XChartDocument > xChartDoc,
                                       bool bIncludeTable )
 {
     FSHelperPtr pFS = GetFS();
@@ -755,23 +755,23 @@ void ChartExport::exportChartSpace( Reference< css::chart::XChartDocument > rCha
         // TODO:external data
     }
     //XML_chart
-    exportChart(rChartDoc);
+    exportChart(xChartDoc);
 
     // TODO: printSettings
     // TODO: style
     // TODO: text properties
     // TODO: shape properties
-    Reference< XPropertySet > xPropSet( rChartDoc->getArea(), uno::UNO_QUERY );
+    Reference< XPropertySet > xPropSet( xChartDoc->getArea(), uno::UNO_QUERY );
     if( xPropSet.is() )
         exportShapeProps( xPropSet );
 
     //XML_externalData
-    exportExternalData(rChartDoc);
+    exportExternalData(xChartDoc);
 
     pFS->endElement( FSNS( XML_c, XML_chartSpace ) );
 }
 
-void ChartExport::exportExternalData( Reference< css::chart::XChartDocument > rChartDoc )
+void ChartExport::exportExternalData( Reference< css::chart::XChartDocument > xChartDoc )
 {
     // Embedded external data is grab bagged for docx file hence adding export part of
     // external data for docx files only.
@@ -779,7 +779,7 @@ void ChartExport::exportExternalData( Reference< css::chart::XChartDocument > rC
         return;
 
     OUString externalDataPath;
-    Reference< beans::XPropertySet > xDocPropSet( rChartDoc->getDiagram(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xDocPropSet( xChartDoc->getDiagram(), uno::UNO_QUERY );
     if( xDocPropSet.is())
     {
         try
@@ -822,10 +822,10 @@ void ChartExport::exportExternalData( Reference< css::chart::XChartDocument > rC
     }
 }
 
-void ChartExport::exportChart( Reference< css::chart::XChartDocument > rChartDoc )
+void ChartExport::exportChart( Reference< css::chart::XChartDocument > xChartDoc )
 {
-    Reference< chart2::XChartDocument > xNewDoc( rChartDoc, uno::UNO_QUERY );
-    mxDiagram.set( rChartDoc->getDiagram() );
+    Reference< chart2::XChartDocument > xNewDoc( xChartDoc, uno::UNO_QUERY );
+    mxDiagram.set( xChartDoc->getDiagram() );
     if( xNewDoc.is())
         mxNewDiagram.set( xNewDoc->getFirstDiagram());
 
@@ -833,7 +833,7 @@ void ChartExport::exportChart( Reference< css::chart::XChartDocument > rChartDoc
     bool bHasMainTitle = false;
     bool bHasSubTitle = false;
     bool bHasLegend = false;
-    Reference< beans::XPropertySet > xDocPropSet( rChartDoc, uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xDocPropSet( xChartDoc, uno::UNO_QUERY );
     if( xDocPropSet.is())
     {
         try
@@ -863,7 +863,7 @@ void ChartExport::exportChart( Reference< css::chart::XChartDocument > rChartDoc
     // title
     if( bHasMainTitle )
     {
-        Reference< drawing::XShape > xShape = rChartDoc->getTitle();
+        Reference< drawing::XShape > xShape = xChartDoc->getTitle();
         if( xShape.is() )
         {
             exportTitle( xShape );
@@ -904,9 +904,9 @@ void ChartExport::exportChart( Reference< css::chart::XChartDocument > rChartDoc
     exportPlotArea( );
     // legend
     if( bHasLegend )
-        exportLegend( rChartDoc );
+        exportLegend( xChartDoc );
 
-    uno::Reference<beans::XPropertySet> xDiagramPropSet(rChartDoc->getDiagram(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDiagramPropSet(xChartDoc->getDiagram(), uno::UNO_QUERY);
     uno::Any aPlotVisOnly = xDiagramPropSet->getPropertyValue("IncludeHiddenCells");
     bool bIncludeHiddenCells = false;
     aPlotVisOnly >>= bIncludeHiddenCells;
@@ -952,13 +952,13 @@ void ChartExport::exportMissingValueTreatment(uno::Reference<beans::XPropertySet
             FSEND);
 }
 
-void ChartExport::exportLegend( Reference< css::chart::XChartDocument > rChartDoc )
+void ChartExport::exportLegend( Reference< css::chart::XChartDocument > xChartDoc )
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_legend ),
             FSEND );
 
-    Reference< beans::XPropertySet > xProp( rChartDoc->getLegend(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( xChartDoc->getLegend(), uno::UNO_QUERY );
     if( xProp.is() )
     {
         // position
