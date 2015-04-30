@@ -79,6 +79,7 @@ public:
     void testVaryColorDefaultValues2007XLSX();
     void testVaryColorDefaultValues2013XLSX();
     void testPlotVisOnlyDefaultValue2013XLSX();
+    void testRAngAxDefaultValue2013XLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -121,6 +122,7 @@ public:
     CPPUNIT_TEST(testVaryColorDefaultValues2007XLSX);
     CPPUNIT_TEST(testVaryColorDefaultValues2013XLSX);
     CPPUNIT_TEST(testPlotVisOnlyDefaultValue2013XLSX);
+    CPPUNIT_TEST(testRAngAxDefaultValue2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -957,6 +959,19 @@ void Chart2ImportTest::testPlotVisOnlyDefaultValue2013XLSX()
     bool bShowHiddenValues = true;
     CPPUNIT_ASSERT(aAny >>= bShowHiddenValues);
     CPPUNIT_ASSERT(!bShowHiddenValues);
+}
+
+void Chart2ImportTest::testRAngAxDefaultValue2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "rAngAx.xlsx");
+    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChart1Doc.is());
+    Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("RightAngledAxes");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    bool bRightAngleAxes = false;
+    CPPUNIT_ASSERT(aAny >>= bRightAngleAxes);
+    CPPUNIT_ASSERT(bRightAngleAxes);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
