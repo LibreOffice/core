@@ -738,7 +738,9 @@ TextWindow::~TextWindow()
 void TextWindow::dispose()
 {
     delete mpExtTextView;
+    mpExtTextView = NULL;
     delete mpExtTextEngine;
+    mpExtTextEngine = NULL;
     Window::dispose();
 }
 
@@ -927,7 +929,7 @@ void TextWindow::LoseFocus()
 {
     Window::LoseFocus();
 
-    if ( mbFocusSelectionHide && !mbActivePopup )
+    if ( mbFocusSelectionHide && !mbActivePopup && mpExtTextView )
         mpExtTextView->SetPaintSelection( false );
 }
 
