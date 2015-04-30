@@ -768,6 +768,10 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
     {
         OUString aFilterName = GetFilterName( nStorageFormat );
 
+        // No filter found? Try the older format, e.g. Base has only that.
+        if (aFilterName.isEmpty() && nStorageFormat == SOFFICE_FILEFORMAT_CURRENT)
+            aFilterName = GetFilterName( SOFFICE_FILEFORMAT_60 );
+
         SAL_WARN_IF( aFilterName.isEmpty(), "embeddedobj.common", "Wrong document service name!" );
         if ( aFilterName.isEmpty() )
             throw io::IOException(); // TODO:
