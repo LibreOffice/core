@@ -9449,12 +9449,6 @@
     <resource name="background" resource="Properties">
       <element name="background" tokenid="ooxml:background_background"/>
     </resource>
-    <resource name="fill" resource="Properties">
-      <element name="fill" tokenid="ooxml:fill_fill"/>
-    </resource>
-    <resource name="CT_Fill" resource="Properties">
-      <attribute name="type" tokenid="ooxml:CT_Fill_type"/>
-    </resource>
   </namespace>
   <namespace name="vml-officeDrawing">
     <start name="shapedefaults"/>
