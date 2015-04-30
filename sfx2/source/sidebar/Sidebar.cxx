@@ -18,8 +18,8 @@
  */
 
 #include <sfx2/sidebar/Sidebar.hxx>
-#include "SidebarController.hxx"
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/ResourceManager.hxx>
 
 using namespace css;
 
@@ -30,7 +30,9 @@ void Sidebar::ShowPanel (
     const css::uno::Reference<frame::XFrame>& rxFrame)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
-    const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
+//    const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
+    const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+
     if (pController!=NULL && pPanelDescriptor != NULL)
     {
         // This should be a lot more sophisticated:

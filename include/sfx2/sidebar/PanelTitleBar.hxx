@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANELTITLEBAR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_PANELTITLEBAR_HXX
 
-#include "TitleBar.hxx"
+#include <sfx2/sidebar/TitleBar.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <boost/function.hpp>

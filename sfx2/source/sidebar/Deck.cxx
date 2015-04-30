@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Deck.hxx"
-#include "DeckDescriptor.hxx"
-#include "DeckLayouter.hxx"
-#include "DrawHelper.hxx"
-#include "DeckTitleBar.hxx"
-#include "PanelTitleBar.hxx"
-#include "Paint.hxx"
-#include "Panel.hxx"
+#include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/sidebar/DeckDescriptor.hxx>
+#include <sfx2/sidebar/DeckLayouter.hxx>
+#include <sfx2/sidebar/DrawHelper.hxx>
+#include <sfx2/sidebar/DeckTitleBar.hxx>
+#include <sfx2/sidebar/PanelTitleBar.hxx>
+#include <sfx2/sidebar/Paint.hxx>
+#include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
@@ -224,6 +224,22 @@ void Deck::RequestLayout()
 vcl::Window* Deck::GetPanelParentWindow()
 {
     return mpScrollContainer.get();
+}
+
+Panel* Deck::GetPanel(const OUString panelId)
+{
+
+    bool bFound = false;
+    for (size_t i = 0; i < maPanels.size() && !bFound; i++)
+    {
+        if(maPanels[i].get()->GetId() == panelId)
+        {
+            bFound = true;
+            return maPanels[i].get();
+        }
+    }
+    return NULL;
+
 }
 
 void Deck::ShowPanel(const Panel& rPanel)

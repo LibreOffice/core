@@ -4020,6 +4020,11 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui,\
 	XModuleUIConfigurationManagerSupplier \
 	XSidebar \
 	XSidebarPanel \
+	XPanel \
+	XPanels \
+	XDeck \
+	XDecks \
+	XSidebarProvider \
 	XStatusbarItem \
 	XToolPanel \
 	XUIConfiguration \

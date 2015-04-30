@@ -16,35 +16,40 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
-#define INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
+#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_DECKDESCRIPTOR_HXX
+#define INCLUDED_SFX2_SOURCE_SIDEBAR_DECKDESCRIPTOR_HXX
 
 #include <sfx2/sidebar/EnumContext.hxx>
 #include "ContextList.hxx"
 #include <boost/shared_ptr.hpp>
 
+#include <sfx2/sidebar/Deck.hxx>
+
+#include <vcl/menu.hxx>
+
 namespace sfx2 { namespace sidebar {
 
-class PanelDescriptor
+class DeckDescriptor
 {
 public:
     OUString msTitle;
-    bool mbIsTitleBarOptional;
     OUString msId;
-    OUString msDeckId;
+    OUString msIconURL;
+    OUString msHighContrastIconURL;
     OUString msTitleBarIconURL;
     OUString msHighContrastTitleBarIconURL;
     OUString msHelpURL;
+    OUString msHelpText;
     ContextList maContextList;
-    OUString msImplementationURL;
+    bool mbIsEnabled;
     sal_Int32 mnOrderIndex;
-    bool mbShowForReadOnlyDocuments;
-    bool mbWantsCanvas;
     bool mbExperimental;
 
-    PanelDescriptor();
-    PanelDescriptor (const PanelDescriptor& rPanelDescriptor);
-    ~PanelDescriptor();
+    VclPtr<Deck> mpDeck;
+
+    DeckDescriptor();
+    DeckDescriptor (const DeckDescriptor& rOther);
+    ~DeckDescriptor();
 };
 
 } } // end of namespace sfx2::sidebar
