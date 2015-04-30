@@ -1777,10 +1777,9 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
 
 // #58425# Symbols on a list (e.g. StarChart)
 // Handler for menu button
-IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
+IMPL_LINK_TYPED( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
 {
     SymbolSelected(pButton);
-    return 0;
 }
 
 IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)

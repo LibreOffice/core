@@ -42,7 +42,7 @@ private:
     sal_uInt16      mnCurItemId;
     sal_uInt16      mnMenuMode;
     Link<>          maActivateHdl;
-    Link<>          maSelectHdl;
+    Link<MenuButton *, void> maSelectHdl;
 
     SAL_DLLPRIVATE void    ImplInitMenuButtonData();
     DECL_DLLPRIVATE_LINK(  ImplMenuTimeoutHdl, void* );
@@ -79,8 +79,7 @@ public:
 
     void            SetActivateHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
     const Link<>&   GetActivateHdl() const              { return maActivateHdl; }
-    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
-    const Link<>&   GetSelectHdl() const                { return maSelectHdl; }
+    void            SetSelectHdl( const Link<MenuButton *, void>& rLink ) { maSelectHdl = rLink; }
 };
 
 #endif // INCLUDED_VCL_MENUBTN_HXX

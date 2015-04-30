@@ -598,7 +598,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     return 0;
 }
 
-IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
+IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
 {
     initializeLocalView();
 
@@ -637,8 +637,6 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
     mpLocalView->Show();
     mpLocalView->reload();
     mpLocalView->GrabFocus();
-
-    return 0;
 }
 
 

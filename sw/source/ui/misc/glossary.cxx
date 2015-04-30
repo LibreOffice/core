@@ -783,7 +783,7 @@ void SwGlossaryDlg::Init()
     m_pInsertTipCB->SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
 }
 
-IMPL_LINK_NOARG(SwGlossaryDlg, EditHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, EditHdl, MenuButton *, void)
 {
 // EndDialog must not be called in MenuHdl
     if (m_pEditBtn->GetCurItemIdent() == "edit")
@@ -792,7 +792,6 @@ IMPL_LINK_NOARG(SwGlossaryDlg, EditHdl)
         delete pGroup;
         EndDialog(RET_EDIT);
     }
-    return 0;
 }
 
 // KeyInput for ShortName - Edits without Spaces

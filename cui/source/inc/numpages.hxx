@@ -330,7 +330,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
         DECL_LINK( NumberTypeSelectHdl_Impl, ListBox * );
         DECL_LINK( LevelHdl_Impl, ListBox * );
         DECL_LINK(PopupActivateHdl_Impl, void *);
-        DECL_LINK( GraphicHdl_Impl, MenuButton * );
+        DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
         DECL_LINK(BulletHdl_Impl, void *);
         DECL_LINK( SizeHdl_Impl, MetricField * );
         DECL_LINK( RatioHdl_Impl, CheckBox * );

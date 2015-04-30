@@ -327,7 +327,7 @@ public:
     void Resize() SAL_OVERRIDE;
     bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void SetMenuSelectHdl( const Link<>& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
+    void SetMenuSelectHdl( const Link<MenuButton *, void>& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
 
 private:
     VclPtr<Edit> mpSubControl;
@@ -409,7 +409,7 @@ public:
 
     virtual Control* getControl() SAL_OVERRIDE;
 
-    DECL_LINK( implMenuSelectHdl, MenuButton* );
+    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
 
 private:
     VclPtr<DropdownMenuBox> mpControl;
@@ -440,7 +440,7 @@ CharHeightPropertyBox::~CharHeightPropertyBox()
     mpControl.disposeAndClear();
 }
 
-IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
+IMPL_LINK_TYPED( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     long nValue = 100;
     switch( pPb->GetCurItemId() )
@@ -452,7 +452,6 @@ IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
     }
     mpMetric->SetValue( nValue );
     mpMetric->Modify();
-    return 0;
 }
 
 void CharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
@@ -486,7 +485,7 @@ public:
 
     virtual Control* getControl() SAL_OVERRIDE;
 
-    DECL_LINK( implMenuSelectHdl, MenuButton* );
+    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
     DECL_LINK(implModifyHdl, void *);
 
     void updateMenu();
@@ -546,15 +545,13 @@ IMPL_LINK_NOARG(TransparencyPropertyBox, implModifyHdl)
     return 0;
 }
 
-IMPL_LINK( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
+IMPL_LINK_TYPED( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     if( pPb->GetCurItemId() != mpMetric->GetValue() )
     {
         mpMetric->SetValue( pPb->GetCurItemId() );
         mpMetric->Modify();
     }
-
-    return 0;
 }
 
 void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
@@ -590,7 +587,7 @@ public:
 
     virtual Control* getControl() SAL_OVERRIDE;
 
-    DECL_LINK( implMenuSelectHdl, MenuButton* );
+    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
     DECL_LINK(implModifyHdl, void *);
 
     void updateMenu();
@@ -652,7 +649,7 @@ IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl)
     return 0;
 }
 
-IMPL_LINK( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
+IMPL_LINK_TYPED( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     sal_Int64 nValue = mpMetric->GetValue();
     bool bDirection = nValue >= 0;
@@ -678,8 +675,6 @@ IMPL_LINK( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
         mpMetric->SetValue( nValue );
         mpMetric->Modify();
     }
-
-    return 0;
 }
 
 void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
@@ -715,7 +710,7 @@ public:
 
     virtual Control* getControl() SAL_OVERRIDE;
 
-    DECL_LINK( implMenuSelectHdl, MenuButton* );
+    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
     DECL_LINK(implModifyHdl, void *);
 
     void updateMenu();
@@ -776,7 +771,7 @@ IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl)
     return 0;
 }
 
-IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
+IMPL_LINK_TYPED( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     sal_Int64 nValue = mpMetric->GetValue();
 
@@ -811,8 +806,6 @@ IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
         mpMetric->Modify();
         updateMenu();
     }
-
-    return 0;
 }
 
 void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
@@ -878,7 +871,7 @@ public:
 
     virtual Control* getControl() SAL_OVERRIDE;
 
-    DECL_LINK( implMenuSelectHdl, MenuButton* );
+    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
 
     void update();
 
@@ -930,7 +923,7 @@ void FontStylePropertyBox::update()
     mpEdit->Invalidate();
 }
 
-IMPL_LINK( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
+IMPL_LINK_TYPED( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     switch( pPb->GetCurItemId() )
     {
@@ -953,13 +946,11 @@ IMPL_LINK( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
             mnFontUnderline = awt::FontUnderline::SINGLE;
         break;
     default:
-        return 0;
+        return;
     }
 
     update();
     maModifyHdl.Call(mpEdit.get());
-
-    return 0;
 }
 
 void FontStylePropertyBox::setValue( const Any& rValue, const OUString& )

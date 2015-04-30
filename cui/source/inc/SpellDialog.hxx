@@ -180,7 +180,7 @@ private:
     DECL_LINK(CancelHdl, void *);
     DECL_LINK( ModifyHdl, SentenceEditWindow_Impl *);
     DECL_LINK(UndoHdl, void *);
-    DECL_LINK( AddToDictSelectHdl, MenuButton* );
+    DECL_LINK_TYPED( AddToDictSelectHdl, MenuButton*, void );
     DECL_LINK( AddToDictClickHdl, PushButton* );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );

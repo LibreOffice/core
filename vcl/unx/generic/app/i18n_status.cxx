@@ -306,7 +306,7 @@ class IIIMPStatusWindow : public StatusWindow
     bool                    m_bShow;
     bool                    m_bOn;
 
-    DECL_LINK( SelectHdl, MenuButton* );
+    DECL_LINK_TYPED( SelectHdl, MenuButton*, void );
 
     void show();
 
@@ -460,7 +460,7 @@ void IIIMPStatusWindow::GetFocus()
     }
 }
 
-IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
+IMPL_LINK_TYPED( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn, void )
 {
     if( pBtn == m_aStatusBtn )
     {
@@ -488,7 +488,6 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
             }
         }
     }
-    return 0;
 }
 
 /*

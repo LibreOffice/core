@@ -351,7 +351,7 @@ namespace svxform
         XFrameModel_ref             m_xFrameModel;
 
         DECL_LINK(                  ModelSelectHdl, ListBox * );
-        DECL_LINK(                  MenuSelectHdl, MenuButton * );
+        DECL_LINK_TYPED(            MenuSelectHdl, MenuButton *, void );
         DECL_LINK(                  MenuActivateHdl, MenuButton * );
         DECL_LINK(ActivatePageHdl, void *);
         DECL_LINK(UpdateHdl, void *);

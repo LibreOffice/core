@@ -44,7 +44,7 @@ class SwEnvFmtPage : public SfxTabPage
     std::vector<sal_uInt16>  aIDs;
 
     DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK( EditHdl, MenuButton * );
+    DECL_LINK_TYPED( EditHdl, MenuButton *, void );
     DECL_LINK(FormatHdl, void *);
 
     void SetMinMax();

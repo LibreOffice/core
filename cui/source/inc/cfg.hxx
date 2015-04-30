@@ -473,8 +473,8 @@ private:
     DECL_LINK( SelectMenu, ListBox * );
     DECL_LINK( SelectMenuEntry, Control * );
     DECL_LINK( NewMenuHdl, Button * );
-    DECL_LINK( MenuSelectHdl, MenuButton * );
-    DECL_LINK( EntrySelectHdl, MenuButton * );
+    DECL_LINK_TYPED( MenuSelectHdl, MenuButton *, void );
+    DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK( AddCommandsHdl, Button * );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
 
@@ -574,8 +574,8 @@ private:
 
     DECL_LINK( SelectToolbar, ListBox * );
     DECL_LINK( SelectToolbarEntry, Control * );
-    DECL_LINK( ToolbarSelectHdl, MenuButton * );
-    DECL_LINK( EntrySelectHdl, MenuButton * );
+    DECL_LINK_TYPED( ToolbarSelectHdl, MenuButton *, void );
+    DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK( NewToolbarHdl, Button * );
     DECL_LINK( AddCommandsHdl, Button * );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );

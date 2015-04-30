@@ -176,7 +176,7 @@ private:
     sal_Int32           nActLineWidth;
 
     // handler for gallery popup menu button + size
-    DECL_LINK( GraphicHdl_Impl, MenuButton * );
+    DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
     DECL_LINK( MenuCreateHdl_Impl, MenuButton * );
     DECL_STATIC_LINK( SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
     DECL_LINK( SizeHdl_Impl, MetricField * );

@@ -916,9 +916,9 @@ IMPL_LINK(SpellDialog, AddToDictClickHdl, PushButton*, EMPTYARG )
 }
 
 
-IMPL_LINK(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton )
+IMPL_LINK_TYPED(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton, void )
 {
-    return AddToDictionaryExecute(pButton->GetCurItemId(), pButton->GetPopupMenu());
+    AddToDictionaryExecute(pButton->GetCurItemId(), pButton->GetPopupMenu());
 }
 
 

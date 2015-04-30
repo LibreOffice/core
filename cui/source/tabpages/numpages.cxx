@@ -1959,7 +1959,7 @@ IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, MetricField *, pField)
     return 0;
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
+IMPL_LINK_TYPED( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
 {
     sal_uInt16                  nItemId = pButton->GetCurItemId();
     OUString                aGrfName;
@@ -2035,7 +2035,6 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         //needed due to asynchronous loading of graphics in the SvxBrushItem
         aInvalidateTimer.Start();
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)

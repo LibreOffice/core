@@ -2428,7 +2428,7 @@ IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
+IMPL_LINK_TYPED( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
 {
     OString sIdent = pButton->GetCurItemIdent();
 
@@ -2473,12 +2473,9 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
             GetSaveInData()->SetModified( true );
         }
     }
-    else
-        return sal_False;
-    return sal_True;
 }
 
-IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
+IMPL_LINK_TYPED( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
 {
     OString sIdent = pButton->GetCurItemIdent();
     if (sIdent == "addsubmenu")
@@ -2538,15 +2535,13 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
     }
     else
     {
-        return sal_False;
+        return;
     }
 
     if ( GetSaveInData()->IsModified() )
     {
         UpdateButtonStates();
     }
-
-    return sal_True;
 }
 
 IMPL_LINK( SvxMenuConfigPage, AddFunctionHdl,
@@ -3080,7 +3075,7 @@ void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
     }
 }
 
-IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
+IMPL_LINK_TYPED( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
 {
     sal_uInt16 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
 
@@ -3167,10 +3162,9 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
             break;
         }
     }
-    return 1;
 }
 
-IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
+IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
 {
     bool bNeedsApply = false;
 
@@ -3444,8 +3438,6 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
         UpdateButtonStates();
     }
-
-    return 1;
 }
 
 void SvxToolbarConfigPage::Init()

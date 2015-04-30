@@ -164,9 +164,9 @@ SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pSizeWidthField->SetLoseFocusHdl( aLk );
     m_pSizeHeightField->SetLoseFocusHdl( aLk );
 
-    aLk = LINK(this, SwEnvFmtPage, EditHdl );
-    m_pAddrEditButton->SetSelectHdl( aLk );
-    m_pSendEditButton->SetSelectHdl( aLk );
+    Link<MenuButton *, void> aLk2 = LINK(this, SwEnvFmtPage, EditHdl );
+    m_pAddrEditButton->SetSelectHdl( aLk2 );
+    m_pSendEditButton->SetSelectHdl( aLk2 );
 
     m_pPreview->SetBorderStyle( WindowBorderStyle::MONO );
 
@@ -254,7 +254,7 @@ IMPL_LINK( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
+IMPL_LINK_TYPED( SwEnvFmtPage, EditHdl, MenuButton *, pButton, void )
 {
     SwWrtShell* pSh = GetParentSwEnvDlg()->pSh;
     OSL_ENSURE(pSh, "Shell missing");
@@ -342,7 +342,6 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             }
         }
     }
-    return 0;
 }
 
 // A temporary Itemset that gets discarded at abort

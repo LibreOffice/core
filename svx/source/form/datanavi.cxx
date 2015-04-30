@@ -1375,12 +1375,12 @@ namespace svxform
 
         // handler
         m_pModelsBox->SetSelectHdl( LINK( this, DataNavigatorWindow, ModelSelectHdl ) );
-        Link<> aLink = LINK( this, DataNavigatorWindow, MenuSelectHdl );
-        m_pModelBtn->SetSelectHdl( aLink );
-        m_pInstanceBtn->SetSelectHdl( aLink );
-        aLink = LINK( this, DataNavigatorWindow, MenuActivateHdl );
-        m_pModelBtn->SetActivateHdl( aLink );
-        m_pInstanceBtn->SetActivateHdl( aLink );
+        Link<MenuButton *, void> aLink1 = LINK( this, DataNavigatorWindow, MenuSelectHdl );
+        m_pModelBtn->SetSelectHdl( aLink1 );
+        m_pInstanceBtn->SetSelectHdl( aLink1 );
+        Link<> aLink2 = LINK( this, DataNavigatorWindow, MenuActivateHdl );
+        m_pModelBtn->SetActivateHdl( aLink2 );
+        m_pInstanceBtn->SetActivateHdl( aLink2 );
         m_pTabCtrl->SetActivatePageHdl( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
         m_aUpdateTimer.SetTimeout( 2000 );
         m_aUpdateTimer.SetTimeoutHdl( LINK( this, DataNavigatorWindow, UpdateHdl ) );
@@ -1470,7 +1470,7 @@ namespace svxform
         return 0;
     }
 
-    IMPL_LINK( DataNavigatorWindow, MenuSelectHdl, MenuButton *, pBtn )
+    IMPL_LINK_TYPED( DataNavigatorWindow, MenuSelectHdl, MenuButton *, pBtn, void )
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
@@ -1770,7 +1770,6 @@ namespace svxform
 
         if ( bIsDocModified )
             SetDocModified();
-        return 0;
     }
 
     bool DataNavigatorWindow::IsAdditionalPage(sal_uInt16 nId) const
