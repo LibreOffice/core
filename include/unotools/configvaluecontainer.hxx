@@ -16,20 +16,28 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <unotools/unotoolsdllapi.h>
-
 #ifndef INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 #define INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
+
+#include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
+
+enum class CVCFlags
+{
+    LAZY_UPDATE         = 0x0000,
+    UPDATE_ACCESS       = 0x0001,
+    IMMEDIATE_UPDATE    = 0x0002,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<CVCFlags> : is_typed_flags<CVCFlags, 0x03> {};
+}
 
 namespace utl
 {
-
-#define CVC_UPDATE_ACCESS       0x0001
-
-#define CVC_LAZY_UPDATE         0x0000
-#define CVC_IMMEDIATE_UPDATE    0x0002
 
     struct OConfigurationValueContainerImpl;
     struct NodeValueAccessor;
@@ -84,7 +92,7 @@ namespace utl
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             ::osl::Mutex& _rAccessSafety,
             const sal_Char* _pConfigLocation,
-            const sal_uInt16 _nAccessFlags = CVC_UPDATE_ACCESS | CVC_LAZY_UPDATE,
+            const CVCFlags _nAccessFlags = CVCFlags::UPDATE_ACCESS | CVCFlags::LAZY_UPDATE,
             const sal_Int32 _nLevels = -1
         );
 
@@ -162,7 +170,7 @@ namespace utl
         /// implements the ctors
         void implConstruct(
             const OUString& _rConfigLocation,
-            const sal_uInt16 _nAccessFlags,
+            const CVCFlags _nAccessFlags,
             const sal_Int32 _nLevels
         );
 

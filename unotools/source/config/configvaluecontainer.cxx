@@ -212,7 +212,7 @@ namespace utl
 
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rAccessSafety,
-            const sal_Char* _pConfigLocation, const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
+            const sal_Char* _pConfigLocation, const CVCFlags _nAccessFlags, const sal_Int32 _nLevels )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
         implConstruct( OUString::createFromAscii( _pConfigLocation ), _nAccessFlags, _nLevels );
@@ -224,7 +224,7 @@ namespace utl
     }
 
     void OConfigurationValueContainer::implConstruct( const OUString& _rConfigLocation,
-        const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
+        const CVCFlags _nAccessFlags, const sal_Int32 _nLevels )
     {
         SAL_WARN_IF(m_pImpl->aConfigRoot.isValid(), "unotools.config", "OConfigurationValueContainer::implConstruct: already initialized!");
 
@@ -233,8 +233,8 @@ namespace utl
             m_pImpl->xORB,
             _rConfigLocation,
             _nLevels,
-            ( _nAccessFlags & CVC_UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
-            ( _nAccessFlags & CVC_IMMEDIATE_UPDATE ) == 0
+            ( _nAccessFlags & CVCFlags::UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
+            !bool( _nAccessFlags & CVCFlags::IMMEDIATE_UPDATE )
         );
         SAL_WARN_IF(!m_pImpl->aConfigRoot.isValid(), "unotools.config",
             "Could not access the configuration node located at " << _rConfigLocation);
