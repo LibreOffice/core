@@ -95,6 +95,7 @@ public:
     void testLegendManualLayoutXLSX();
     void testAxisCharacterPropertiesXLSX();
     void testTitleCharacterPropertiesXLSX();
+    void testPlotVisOnlyXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -154,6 +155,7 @@ public:
     CPPUNIT_TEST(testLegendManualLayoutXLSX);
     CPPUNIT_TEST(testAxisCharacterPropertiesXLSX);
     CPPUNIT_TEST(testTitleCharacterPropertiesXLSX);
+    CPPUNIT_TEST(testPlotVisOnlyXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1421,6 +1423,15 @@ void Chart2ExportTest::testTitleCharacterPropertiesXLSX()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr", "sz", "2400");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr", "b", "1");
+}
+
+void Chart2ExportTest::testPlotVisOnlyXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "hidden_cells.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotVisOnly", "val", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
