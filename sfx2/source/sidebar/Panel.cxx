@@ -17,16 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Panel.hxx"
-#include "PanelTitleBar.hxx"
-#include "PanelDescriptor.hxx"
+#include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/PanelTitleBar.hxx>
+#include <sfx2/sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include "Paint.hxx"
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/Paint.hxx>
+#include <sfx2/sidebar/ResourceManager.hxx>
+
+#include <sfx2/sidebar/SidebarController.hxx>
+
 
 #ifdef DEBUG
 #include <sfx2/sidebar/Tools.hxx>
-#include "Deck.hxx"
+#include <sfx2/sidebar/Deck.hxx>
 #endif
 
 #include <tools/svborder.hxx>
@@ -47,7 +50,9 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              vcl::Window* pParentWindow,
              const bool bIsInitiallyExpanded,
              const std::function<void()>& rDeckLayoutTrigger,
-             const std::function<Context()>& rContextAccess)
+             const std::function<Context()>& rContextAccess,
+             const css::uno::Reference<css::frame::XFrame>& rxFrame
+            )
     : Window(pParentWindow)
     , msPanelId(rPanelDescriptor.msId)
     , mpTitleBar(VclPtr<PanelTitleBar>::Create(rPanelDescriptor.msTitle, pParentWindow, this))
@@ -57,6 +62,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mbIsExpanded(bIsInitiallyExpanded)
     , maDeckLayoutTrigger(rDeckLayoutTrigger)
     , maContextAccess(rContextAccess)
+    , mxFrame(rxFrame)
 {
 #ifdef DEBUG
     SetText(OUString("Panel"));
@@ -111,6 +117,8 @@ void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
 
 void Panel::SetExpanded (const bool bIsExpanded)
 {
+    SidebarController* pSidebarController= SidebarController::GetSidebarControllerForFrame(mxFrame);
+
     if (mbIsExpanded != bIsExpanded)
     {
         mbIsExpanded = bIsExpanded;
@@ -118,7 +126,8 @@ void Panel::SetExpanded (const bool bIsExpanded)
 
         if (maContextAccess)
         {
-            ResourceManager::Instance().StorePanelExpansionState(
+          //  ResourceManager::Instance().StorePanelExpansionState(
+            pSidebarController->GetResourceManager()->StorePanelExpansionState(
                 msPanelId,
                 bIsExpanded,
                 maContextAccess());

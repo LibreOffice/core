@@ -16,45 +16,39 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
+#define INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
 
-#include <sfx2/sidebar/AccessibleTitleBar.hxx>
-#include <sfx2/sidebar/Accessible.hxx>
-#include <sfx2/sidebar/TitleBar.hxx>
-
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-
-#include <unotools/accessiblestatesethelper.hxx>
-
-using namespace css;
-using namespace css::uno;
+#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/sidebar/ContextList.hxx>
+#include <boost/shared_ptr.hpp>
 
 namespace sfx2 { namespace sidebar {
 
-Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTitleBar)
+class PanelDescriptor
 {
-    rTitleBar.GetComponentInterface(true);
-    VCLXWindow* pWindow = rTitleBar.GetWindowPeer();
-    if (pWindow != NULL)
-        return new Accessible(new AccessibleTitleBar(pWindow));
-    else
-        return NULL;
-}
+public:
+    OUString msTitle;
+    bool mbIsTitleBarOptional;
+    OUString msId;
+    OUString msDeckId;
+    OUString msTitleBarIconURL;
+    OUString msHighContrastTitleBarIconURL;
+    OUString msHelpURL;
+    ContextList maContextList;
+    OUString msImplementationURL;
+    sal_Int32 mnOrderIndex;
+    bool mbShowForReadOnlyDocuments;
+    bool mbWantsCanvas;
+    bool mbExperimental;
 
-AccessibleTitleBar::AccessibleTitleBar (VCLXWindow* pWindow)
-    : VCLXAccessibleComponent(pWindow)
-{
-}
-
-AccessibleTitleBar::~AccessibleTitleBar()
-{
-}
-
-void AccessibleTitleBar::FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet)
-{
-    VCLXAccessibleComponent::FillAccessibleStateSet(rStateSet);
-    rStateSet.AddState(accessibility::AccessibleStateType::FOCUSABLE);
-}
+    PanelDescriptor();
+    PanelDescriptor (const PanelDescriptor& rPanelDescriptor);
+    ~PanelDescriptor();
+};
 
 } } // end of namespace sfx2::sidebar
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,38 +16,36 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef __com_sun_star_ui_XPanel_idl__
+#define __com_sun_star_ui_XPanel_idl__
 
-#include <sfx2/sidebar/Accessible.hxx>
+#include <com/sun/star/ui/XPanel.idl>
+#include <com/sun/star/awt/XWindow.idl>
 
-using namespace css;
-using namespace css::uno;
 
-namespace sfx2 { namespace sidebar {
+ module com {  module sun {  module star {  module ui {
 
-Accessible::Accessible (
-    const Reference<accessibility::XAccessibleContext>& rxContext)
-    : AccessibleInterfaceBase(m_aMutex),
-      mxContext(rxContext)
+/** provides access to Desk */
+
+interface XPanel
+
 {
-}
+    string getId();
 
-Accessible::~Accessible()
-{
-}
+    string getTitle();
+    void setTitle( [in] string newTitle );
 
-void SAL_CALL Accessible::disposing()
-{
-    Reference<XComponent> xComponent (mxContext, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
-}
+    boolean isExpanded();
+    void expand ( [in] boolean bCollapseOther );
+    void collapse ();
 
-Reference<accessibility::XAccessibleContext> SAL_CALL Accessible::getAccessibleContext()
-    throw (css::uno::RuntimeException, std::exception)
-{
-    return mxContext;
-}
+    com::sun::star::awt::XWindow getDialog();
 
-} } // end of namespace sfx2::sidebar
+};
+
+
+}; }; }; };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

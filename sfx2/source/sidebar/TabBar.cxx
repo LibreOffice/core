@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TabBar.hxx"
-#include "TabItem.hxx"
+#include <sfx2/sidebar/TabBar.hxx>
+#include <sfx2/sidebar/TabItem.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include "DeckDescriptor.hxx"
-#include "Paint.hxx"
+#include <sfx2/sidebar/DeckDescriptor.hxx>
+#include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Tools.hxx>
-#include "FocusManager.hxx"
+#include <sfx2/sidebar/FocusManager.hxx>
+
+#include <sfx2/sidebar/SidebarController.hxx>
 
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>
@@ -42,14 +44,19 @@ namespace sfx2 { namespace sidebar {
 TabBar::TabBar(vcl::Window* pParentWindow,
                const Reference<frame::XFrame>& rxFrame,
                const boost::function<void(const OUString&)>& rDeckActivationFunctor,
-               const PopupMenuProvider& rPopupMenuProvider)
+               const PopupMenuProvider& rPopupMenuProvider,
+               SidebarController* rParentSidebarController
+              )
     : Window(pParentWindow, WB_DIALOGCONTROL),
       mxFrame(rxFrame),
       mpMenuButton(ControlFactory::CreateMenuButton(this)),
       maItems(),
       maDeckActivationFunctor(rDeckActivationFunctor),
-      maPopupMenuProvider(rPopupMenuProvider)
+      maPopupMenuProvider(rPopupMenuProvider),
+      pParentSidebarController(rParentSidebarController)
 {
+    //pParentSidebarController = SidebarController::GetSidebarControllerForFrame(rxFrame);
+
     SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
 
     mpMenuButton->SetModeImage(Theme::GetImage(Theme::Image_TabBarMenu));
@@ -110,7 +117,7 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
     for (ResourceManager::DeckContextDescriptorContainer::const_iterator
              iDeck(rDecks.begin()); iDeck != rDecks.end(); ++iDeck)
     {
-        const DeckDescriptor* pDescriptor = ResourceManager::Instance().GetDeckDescriptor(iDeck->msId);
+        const DeckDescriptor* pDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId);
         if (pDescriptor == NULL)
         {
             OSL_ASSERT(pDescriptor!=NULL);
@@ -149,7 +156,8 @@ void TabBar::UpdateButtonIcons()
         iItem!=iEnd;
         ++iItem)
     {
-        const DeckDescriptor* pDeckDescriptor = ResourceManager::Instance().GetDeckDescriptor(iItem->msDeckId);
+        const DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
+
         if (pDeckDescriptor != NULL)
         {
             aImage = GetItemImage(*pDeckDescriptor);
@@ -293,7 +301,8 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
     else
     {
         maItems[nIndex].mbIsHidden = ! maItems[nIndex].mbIsHidden;
-        ResourceManager::Instance().SetIsDeckEnabled(
+
+    pParentSidebarController->GetResourceManager()->SetIsDeckEnabled(
             maItems[nIndex].msDeckId,
             maItems[nIndex].mbIsHidden);
         Layout();
@@ -337,7 +346,8 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked)
 
     for (ItemContainer::const_iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
     {
-        const DeckDescriptor* pDeckDescriptor = ResourceManager::Instance().GetDeckDescriptor(iItem->msDeckId);
+        const DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
+
         if (pDeckDescriptor != NULL)
         {
             DeckMenuData aData;
