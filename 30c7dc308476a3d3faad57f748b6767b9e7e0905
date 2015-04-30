@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_4ca34f9f",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-30T05:53:27Z",
+      "side": 1,
+      "message": "Functionally not necessary, just put there for performance reasons. No need to do all those if statements with function calls in case of ocOpen and ocClose. For each function, IsOpCode is called at least three times (function opcode, ocOpen, ocClose).\nAnd remembering (isn\u0027t that special my case ;-)) your insistence on performance with ScInterpreter::GetNumberSequenceArray() I made this small change.",
+      "parentUuid": "da6ed579_acaf6b93",
+      "revId": "30c7dc308476a3d3faad57f748b6767b9e7e0905",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_4c958f3e",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 11
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "da6ed579_6ca09391",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2510,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-30T05:53:27Z",
+      "side": 1,
+      "message": "You\u0027re right, it is a leftover from the previous patch set where the code was much more elaborate.",
+      "parentUuid": "da6ed579_4c958f3e",
+      "revId": "30c7dc308476a3d3faad57f748b6767b9e7e0905",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_2c9cdb68",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 11
@@ -47,6 +83,24 @@
       "writtenOn": "2015-04-29T23:36:36Z",
       "side": 1,
       "message": "You get \"no opcode mapping for function ODF \u0027CEILING.MATH\u0027 \u003c-\u003e OOXML \u0027_xlfn.CEILING.MATH\u0027\" because the ODFF name is COM.MICROSOFT.CEILING.MATH\n\nI\u0027ll change that in an amended commit.",
+      "revId": "30c7dc308476a3d3faad57f748b6767b9e7e0905",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6ed579_0cad5788",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-04-30T05:53:27Z",
+      "side": 1,
+      "message": "Ahh, I see. Thank you for finding the cause!",
+      "parentUuid": "da6ed579_2c9cdb68",
       "revId": "30c7dc308476a3d3faad57f748b6767b9e7e0905",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
