@@ -78,6 +78,7 @@ public:
     void testTrendlineDefaultValue2013XLSX();
     void testVaryColorDefaultValues2007XLSX();
     void testVaryColorDefaultValues2013XLSX();
+    void testPlotVisOnlyDefaultValue2013XLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -119,6 +120,7 @@ public:
     CPPUNIT_TEST(testTrendlineDefaultValue2013XLSX);
     CPPUNIT_TEST(testVaryColorDefaultValues2007XLSX);
     CPPUNIT_TEST(testVaryColorDefaultValues2013XLSX);
+    CPPUNIT_TEST(testPlotVisOnlyDefaultValue2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -942,6 +944,19 @@ void Chart2ImportTest::testVaryColorDefaultValues2013XLSX()
     bool bVaryColor = false;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
     CPPUNIT_ASSERT(bVaryColor);
+}
+
+void Chart2ImportTest::testPlotVisOnlyDefaultValue2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "plotVisOnly.xlsx");
+    uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChart1Doc.is());
+    Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("IncludeHiddenCells");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    bool bShowHiddenValues = true;
+    CPPUNIT_ASSERT(aAny >>= bShowHiddenValues);
+    CPPUNIT_ASSERT(!bShowHiddenValues);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
