@@ -2834,6 +2834,12 @@ void Window::setPosSizePixel( long nX, long nY,
                               long nWidth, long nHeight, sal_uInt16 nFlags )
 {
 
+    if (!mpWindowImpl)
+    {
+        SAL_WARN("vcl.layout", "WTF no windowimpl in Window::setPosSizePixel");
+        return;
+    }
+
     bool bHasValidSize = !mpWindowImpl->mbDefSize;
 
     if ( nFlags & WINDOW_POSSIZE_POS )

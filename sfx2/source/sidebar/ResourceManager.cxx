@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 
 #include <unotools/confignode.hxx>
@@ -113,6 +113,38 @@ void ResourceManager::SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsE
         }
     }
 }
+
+void ResourceManager::SetDeckToDescriptor(const OUString& rsDeckId, VclPtr<Deck> aDeck)
+{
+    DeckContainer::iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iDeck->msId.equals(rsDeckId))
+        {
+            iDeck->mpDeck = aDeck;
+            return;
+        }
+    }
+}
+
+/*
+void ResourceManager::SetPanelToDescriptor(const OUString& rsPanelId, VclPtr<Panel> aPanel)
+{
+    PanelContainer::iterator iPanel;
+    for (iPanel = maPanels.begin(); ipanel != maPanels.end(); ++ipanel)
+    {
+        if (ipanel->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iPanel->msId.equals(rsPanelId))
+        {
+            iPanel->mpPanel = aPanel;
+            return;
+        }
+    }
+}
+*/
 
 const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatchingDecks (
                                                             DeckContextDescriptorContainer& rDecks,

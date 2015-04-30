@@ -20,7 +20,7 @@
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TABBAR_HXX
 
 #include "DeckDescriptor.hxx"
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/ResourceManager.hxx>
 
 #include <vcl/menu.hxx>
 #include <vcl/window.hxx>

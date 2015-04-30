@@ -48,6 +48,8 @@
 #include <tools/link.hxx>
 #include <vcl/button.hxx>
 
+#include <com/sun/star/ui/XSidebarProvider.hpp>
+
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
 
@@ -100,6 +102,8 @@ public:
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getViewControllerName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual css::uno::Reference< css::ui::XSidebarProvider > SAL_CALL getSidebar() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //  XController

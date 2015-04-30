@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_DECKTITLEBAR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_DECKTITLEBAR_HXX
 
-#include "TitleBar.hxx"
+#include <sfx2/sidebar/TitleBar.hxx>
 
 #include <boost/function.hpp>
 
