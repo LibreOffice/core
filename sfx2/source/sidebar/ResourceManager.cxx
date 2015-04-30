@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 
 #include <unotools/confignode.hxx>
@@ -109,6 +109,51 @@ void ResourceManager::SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsE
         if (iDeck->msId.equals(rsDeckId))
         {
             iDeck->mbIsEnabled = bIsEnabled;
+            return;
+        }
+    }
+}
+
+void ResourceManager::SetDeckToDescriptor(const OUString& rsDeckId, VclPtr<Deck> aDeck)
+{
+    DeckContainer::iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iDeck->msId.equals(rsDeckId))
+        {
+            iDeck->mpDeck = aDeck;
+            return;
+        }
+    }
+}
+
+void ResourceManager::SetDeckOrderIndex(const OUString& rsDeckId, const sal_Int32 orderIndex)
+{
+    DeckContainer::iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iDeck->msId.equals(rsDeckId))
+        {
+            iDeck->mnOrderIndex = orderIndex;
+            return;
+        }
+    }
+}
+
+void ResourceManager::SetPanelOrderIndex(const OUString& rsPanelId, const sal_Int32 orderIndex)
+{
+    PanelContainer::iterator iPanel;
+    for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
+    {
+        if (iPanel->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iPanel->msId.equals(rsPanelId))
+        {
+            iPanel->mnOrderIndex = orderIndex;
             return;
         }
     }
@@ -569,6 +614,7 @@ bool ResourceManager::IsDeckEnabled (
     // Check if any panel that matches the current context can be
     // displayed.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
+
     ResourceManager::Instance().GetMatchingPanels(aPanelContextDescriptors,
                                                   rContext, rsDeckId, rxFrame);
 
