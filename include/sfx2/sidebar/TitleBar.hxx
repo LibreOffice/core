@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TITLEBAR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TITLEBAR_HXX
 
-#include "Paint.hxx"
+#include <sfx2/sidebar/Paint.hxx>
 
 #include <vcl/fixed.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
@@ -35,7 +35,9 @@ public:
     virtual ~TitleBar();
     virtual void dispose() SAL_OVERRIDE;
 
-    void SetTitle (const ::rtl::OUString& rsTitle);
+    void SetTitle (const OUString& rsTitle);
+    const OUString GetTitle() {return msTitle; }
+
     void SetIcon (const Image& rIcon);
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
