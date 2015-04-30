@@ -176,7 +176,7 @@ private:
     bool callSaveAsDialog();
     bool IsConnectionUrlRequired();
     DECL_LINK(OnTypeSelected, OGeneralPage*);
-    DECL_LINK(OnChangeCreationMode, OGeneralPageWizard*);
+    DECL_LINK_TYPED(OnChangeCreationMode, OGeneralPageWizard*, void);
     DECL_LINK(OnRecentDocumentSelected, OGeneralPageWizard*);
     DECL_LINK(OnSingleDocumentChosen, OGeneralPageWizard*);
     DECL_LINK_TYPED(ImplClickHdl, OMySQLIntroPageSetup*, void);

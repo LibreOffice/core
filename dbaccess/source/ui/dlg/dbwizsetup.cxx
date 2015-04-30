@@ -604,10 +604,9 @@ IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMy
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), true);
 }
 
-IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard*, /*_pGeneralPage*/)
+IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard*, void)
 {
     activateDatabasePath();
-    return sal_True;
 }
 
 IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard*, /*_pGeneralPage*/)
