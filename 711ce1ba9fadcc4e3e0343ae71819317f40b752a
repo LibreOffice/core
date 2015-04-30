@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_86a4ca08",
+        "filename": "sc/source/ui/sidebar/CellAppearancePropertyPanel.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-04-30T20:00:59Z",
+      "side": 1,
+      "message": "May be not the best place. Is it better to create a new file only for these 2 strings? Or is there a better place?",
+      "revId": "711ce1ba9fadcc4e3e0343ae71819317f40b752a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_e69fbeb2",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2431,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-04-30T20:00:59Z",
+      "side": 1,
+      "message": "This test is too lax",
+      "revId": "711ce1ba9fadcc4e3e0343ae71819317f40b752a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
