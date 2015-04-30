@@ -45,6 +45,10 @@
 #include "UITools.hxx"
 #include "commontypes.hxx"
 
+#include <com/sun/star/ui/XSidebarProvider.hpp>
+#include <sfx2/sidebar/UnoSidebar.hxx>
+
+
 #include <vcl/waitobj.hxx>
 #include <svl/urihelper.hxx>
 #include "datasourceconnector.hxx"
@@ -72,6 +76,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::ui;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
@@ -364,6 +369,16 @@ void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeEx
 Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow() throw (RuntimeException, std::exception)
 {
     return VCLUnoHelper::GetInterface( getView() );
+}
+
+Reference<XSidebarProvider> SAL_CALL OGenericUnoController::getSidebar() throw (RuntimeException, std::exception)
+{
+    /*
+    Reference< XFrame > xFrame( getFrame() ) ;
+    Reference<XSidebarProvider> rSidebar = new SfxUnoSidebar(xFrame);
+    return rSidebar;
+    */
+    return NULL;
 }
 
 OUString SAL_CALL OGenericUnoController::getViewControllerName() throw (::com::sun::star::uno::RuntimeException, std::exception)
