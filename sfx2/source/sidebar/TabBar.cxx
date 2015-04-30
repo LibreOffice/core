@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TabBar.hxx"
-#include "TabItem.hxx"
+#include <sfx2/sidebar/TabBar.hxx>
+#include <sfx2/sidebar/TabItem.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include "DeckDescriptor.hxx"
-#include "Paint.hxx"
+#include <sfx2/sidebar/DeckDescriptor.hxx>
+#include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Tools.hxx>
-#include "FocusManager.hxx"
+#include <sfx2/sidebar/FocusManager.hxx>
 
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>

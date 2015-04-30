@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PanelDescriptor.hxx"
+#include <sfx2/sidebar/PanelDescriptor.hxx>
 
 namespace sfx2 { namespace sidebar {
 

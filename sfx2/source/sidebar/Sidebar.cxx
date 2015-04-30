@@ -18,8 +18,8 @@
  */
 
 #include <sfx2/sidebar/Sidebar.hxx>
-#include "SidebarController.hxx"
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/ResourceManager.hxx>
 
 using namespace css;
 

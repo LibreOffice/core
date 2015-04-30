@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANEL_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_PANEL_HXX
 
-#include "Context.hxx"
+#include <sfx2/sidebar/Context.hxx>
 #include <vcl/window.hxx>
 
 #include <com/sun/star/ui/XUIElement.hpp>

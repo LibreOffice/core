@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Panel.hxx"
-#include "PanelTitleBar.hxx"
-#include "PanelDescriptor.hxx"
+#include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/PanelTitleBar.hxx>
+#include <sfx2/sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include "Paint.hxx"
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/Paint.hxx>
+#include <sfx2/sidebar/ResourceManager.hxx>
 
 #ifdef DEBUG
 #include <sfx2/sidebar/Tools.hxx>
-#include "Deck.hxx"
+#include <sfx2/sidebar/Deck.hxx>
 #endif
 
 #include <tools/svborder.hxx>
