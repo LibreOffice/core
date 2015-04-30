@@ -16,50 +16,39 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_CONTEXTLIST_HXX
-#define INCLUDED_SFX2_SOURCE_SIDEBAR_CONTEXTLIST_HXX
+#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_DECKLAYOUTER_HXX
+#define INCLUDED_SFX2_SOURCE_SIDEBAR_DECKLAYOUTER_HXX
 
-#include "Context.hxx"
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
+#include <sfx2/sidebar/Panel.hxx>
+
+#include <tools/gen.hxx>
+
+#include <com/sun/star/ui/LayoutSize.hpp>
 
 #include <vector>
 
+class ScrollBar;
+namespace vcl { class Window; }
+
 namespace sfx2 { namespace sidebar {
 
-/** Per context data for deck and panel descriptors.
+class Panel;
+
+/** Helper for layouting the direct and indirect children of a
+    deck like title bars, panels, and scroll bars.
 */
-class ContextList
+namespace DeckLayouter
 {
-public:
-    ContextList();
-    ~ContextList();
-
-    class Entry
-    {
-    public:
-        Context maContext;
-        bool mbIsInitiallyVisible;
-        ::rtl::OUString msMenuCommand;
-    };
-
-    /** Return <TRUE/> when the given context matches any of the stored contexts.
-    */
-    const Entry* GetMatch (
-        const Context& rContext) const;
-    Entry* GetMatch (
-        const Context& rContext);
-
-    void AddContextDescription (
-        const Context& rContext,
-        const bool bIsInitiallyVisible,
-        const ::rtl::OUString& rsMenuCommand);
-
-private:
-    ::std::vector<Entry> maEntries;
-
-    ::std::vector<Entry>::const_iterator FindBestMatch (const Context& rContext) const;
-};
+    void LayoutDeck (
+        const Rectangle& rContentArea,
+        sal_Int32& rMinimalWidth,
+        SharedPanelContainer& rPanels,
+        vcl::Window& pDeckTitleBar,
+        vcl::Window& pScrollClipWindow,
+        vcl::Window& pScrollContainer,
+        vcl::Window& pFiller,
+        ScrollBar& pVerticalScrollBar);
+}
 
 } } // end of namespace sfx2::sidebar
 
