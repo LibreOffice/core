@@ -825,34 +825,33 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         }
     }
 
-    if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) )
-    {
-        Rectangle           aCtrlRegion( pItem->maRect );
-        ControlState        nState = ControlState::NONE;
+    ControlState nState = ControlState::NONE;
 
-        if( pItem->mnId == mnCurPageId )
+    if( pItem->mnId == mnCurPageId )
+    {
+        nState |= ControlState::SELECTED;
+        // only the selected item can be focussed
+        if ( HasFocus() )
+            nState |= ControlState::FOCUSED;
+    }
+    if ( IsEnabled() )
+        nState |= ControlState::ENABLED;
+    if( IsMouseOver() && pItem->maRect.IsInside( GetPointerPosPixel() ) )
+    {
+        nState |= ControlState::ROLLOVER;
+        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+             it != mpTabCtrlData->maItemList.end(); ++it )
         {
-            nState |= ControlState::SELECTED;
-            // only the selected item can be focussed
-            if ( HasFocus() )
-                nState |= ControlState::FOCUSED;
-        }
-        if ( IsEnabled() )
-            nState |= ControlState::ENABLED;
-        if( IsMouseOver() && pItem->maRect.IsInside( GetPointerPosPixel() ) )
-        {
-            nState |= ControlState::ROLLOVER;
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                 it != mpTabCtrlData->maItemList.end(); ++it )
+            if( (&(*it) != pItem) && (it->maRect.IsInside( GetPointerPosPixel() ) ) )
             {
-                if( (&(*it) != pItem) && (it->maRect.IsInside( GetPointerPosPixel() ) ) )
-                {
-                    nState &= ~ControlState::ROLLOVER; // avoid multiple highlighted tabs
-                    break;
-                }
+                nState &= ~ControlState::ROLLOVER; // avoid multiple highlighted tabs
+                break;
             }
         }
+    }
 
+    if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) )
+    {
         TabitemValue tiValue;
         if(pItem->maRect.Left() < 5)
             tiValue.mnAlignment |= TABITEM_LEFTALIGNED;
@@ -863,6 +862,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         if ( bLastInGroup )
             tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
 
+        Rectangle           aCtrlRegion( pItem->maRect );
         bNativeOK = DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                     tiValue, OUString() );
     }
@@ -944,12 +944,26 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC;
         if( ! pItem->mbEnabled )
             nStyle |= TEXT_DRAW_DISABLE;
-        DrawCtrlText( Point( nXPos + aImageSize.Width(), nYPos ),
-                      pItem->maFormatText, 0,
-                      pItem->maFormatText.getLength(), nStyle,
+
+        Color aColor(rStyleSettings.GetTabTextColor());
+        if (nState & ControlState::SELECTED)
+            aColor = rStyleSettings.GetTabHighlightTextColor();
+        else if (nState & ControlState::ROLLOVER)
+            aColor = rStyleSettings.GetTabRolloverTextColor();
+
+        OutputDevice* pDev = GetOutDev();
+        Color aOldColor(pDev->GetTextColor());
+        pDev->SetTextColor(aColor);
+
+        Rectangle aOutRect(nXPos + aImageSize.Width(), nYPos,
+                           nXPos + aImageSize.Width() + nTextWidth, nYPos + nTextHeight);
+        DrawControlText( *pDev, aOutRect,
+                      pItem->maFormatText, nStyle,
                       bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
                       bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL
                       );
+
+        pDev->SetTextColor(aOldColor);
     }
 
     if( !! pItem->maTabImage )
