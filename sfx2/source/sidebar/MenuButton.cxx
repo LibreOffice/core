@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MenuButton.hxx"
+#include <sfx2/sidebar/MenuButton.hxx>
 
-#include "DrawHelper.hxx"
-#include "Paint.hxx"
+#include <sfx2/sidebar/DrawHelper.hxx>
+#include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 

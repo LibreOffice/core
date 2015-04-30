@@ -16,39 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TABITEM_HXX
-#define INCLUDED_SFX2_SOURCE_SIDEBAR_TABITEM_HXX
+#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARRESOURCE_HXX
+#define INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARRESOURCE_HXX
 
-#include <vcl/button.hxx>
+#include <sfx2/sidebar/Sidebar.hrc>
+#include <sfx2/sfxresid.hxx>
+#include <tools/rc.hxx>
 
-#include "DeckDescriptor.hxx"
-
-namespace vcl { class Window; }
-
-namespace sfx2 { namespace sidebar {
-
-/** A single button in the tab bar.
-*/
-class TabItem
-    : public ImageRadioButton
+class SidebarResource : public Resource
 {
 public:
-    TabItem (vcl::Window* pParentWindow);
-
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
-    virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;
-    virtual void MouseButtonDown (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
-    virtual void MouseButtonUp (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
-
-private:
-    bool mbIsLeftButtonDown;
-    enum PaintType {
-        PT_Native,
-        PT_Theme
-    } mePaintType;
+    SidebarResource() : Resource(SfxResId(RID_SIDEBAR_RESOURCE)){}
+    ~SidebarResource() { FreeResource(); }
 };
-
-} } // end of namespace sfx2::sidebar
 
 #endif
 

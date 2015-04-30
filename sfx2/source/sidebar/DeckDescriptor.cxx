@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DeckDescriptor.hxx"
+#include <sfx2/sidebar/DeckDescriptor.hxx>
 
 namespace sfx2 { namespace sidebar {
 
@@ -33,7 +33,8 @@ DeckDescriptor::DeckDescriptor()
       maContextList(),
       mbIsEnabled(true),
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
-      mbExperimental(false)
+      mbExperimental(false),
+      mpDeck()
 {
 }
 
@@ -49,7 +50,8 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
       maContextList(rOther.maContextList),
       mbIsEnabled(rOther.mbIsEnabled),
       mnOrderIndex(rOther.mnOrderIndex),
-      mbExperimental(rOther.mbExperimental)
+      mbExperimental(rOther.mbExperimental),
+      mpDeck(rOther.mpDeck)
 {
 }
 
