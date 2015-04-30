@@ -31,9 +31,6 @@
 
 namespace dbp
 {
-
-
-
     //= IServiceInfo
 
     /** interface for the SERVICEINFO template parameter of the OUnoAutoPilot class
@@ -56,7 +53,11 @@ namespace dbp
             ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE, SERVICEINFO > >
             ,public OModuleResourceClient
     {
-        OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+        OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB)
+            : OUnoAutoPilot_Base(_rxORB)
+        {
+        }
+
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
@@ -64,33 +65,79 @@ namespace dbp
 
     public:
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        {
+            return css::uno::Sequence<sal_Int8>();
+        }
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        {
+            return getImplementationName_Static();
+        }
+
+        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        {
+            return getSupportedServiceNames_Static();
+        }
 
         // XServiceInfo - static methods
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException )
+        {
+            return SERVICEINFO().getServiceNames();
+        }
+
+        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException )
+        {
+            return SERVICEINFO().getImplementationName();
+        }
+
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >&);
+                SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+        {
+            return *(new OUnoAutoPilot<TYPE, SERVICEINFO>( comphelper::getComponentContext(_rxFactory) ));
+        }
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
+            return xInfo;
+        }
+
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE
+        {
+            return *const_cast<OUnoAutoPilot*>(this)->getArrayHelper();
+        }
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE
+        {
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+            describeProperties(aProps);
+            return new ::cppu::OPropertyArrayHelper(aProps);
+        }
 
     protected:
     // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
-        virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE
+        {
+            return VclPtr<TYPE>::Create(_pParent, m_xObjectModel, m_aContext);
+        }
+
+        virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE
+        {
+            ::com::sun::star::beans::PropertyValue aArgument;
+            if (_rValue >>= aArgument)
+                if (aArgument.Name == "ObjectModel")
+                {
+                    aArgument.Value >>= m_xObjectModel;
+                    return;
+                }
+
+            OUnoAutoPilot_Base::implInitialize(_rValue);
+        }
     };
-
-#include "unoautopilot.inl"
-
 
 }   // namespace dbp
 
