@@ -593,7 +593,7 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
  * The purpose is: a SectionFrm (this) won't become a child of another SectionFrm (pParent), but
  * pParent gets split into two siblings (pParent+pSect) and this is inserted between.
  */
-void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
+bool SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 {
     OSL_ENSURE( pParent, "No parent for insert." );
     OSL_ENSURE( (!pBehind || ( (pBehind && (pParent == pBehind->GetUpper()))
@@ -656,6 +656,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         {
             OSL_ENSURE( pSct->IsSctFrm(), "InsertGroup: For SectionFrms only" );
             SwFrm::DestroyFrm(pSct);
+            return false;
         }
     }
     else
@@ -690,6 +691,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
                 mpUpper->m_pLower = this;
         }
     }
+    return true;
 }
 
 void SwFrm::RemoveFromLayout()

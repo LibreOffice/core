@@ -352,9 +352,12 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         if( pSect->GetFollow() )
             pParent->_InvalidateSize();
 
-        InsertGroupBefore( pParent, pSibling, pSect );
-        pSect->Init();
-        (pSect->*fnRect->fnMakePos)( pSect->GetUpper(), pSect->GetPrev(), true);
+        const bool bInserted = InsertGroupBefore( pParent, pSibling, pSect );
+        if (bInserted)
+        {
+            pSect->Init();
+            (pSect->*fnRect->fnMakePos)( pSect->GetUpper(), pSect->GetPrev(), true);
+        }
         if( !static_cast<SwLayoutFrm*>(pParent)->Lower() )
         {
             SwSectionFrm::MoveCntntAndDelete( static_cast<SwSectionFrm*>(pParent), false );
