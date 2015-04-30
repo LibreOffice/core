@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XController.idl>
 #include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/ui/XSidebarProvider.idl>
 
 
 module com {  module sun {  module star {  module frame {
@@ -60,6 +61,10 @@ interface XController2 : XController
     */
     [readonly, attribute] sequence< ::com::sun::star::beans::PropertyValue >
                                                             CreationArguments;
+
+    /** get the sidebar if exists
+    */
+    ::com::sun::star::ui::XSidebarProvider getSidebar();
 };
 
 

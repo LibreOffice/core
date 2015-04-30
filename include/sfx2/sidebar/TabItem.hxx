@@ -21,7 +21,7 @@
 
 #include <vcl/button.hxx>
 
-#include "DeckDescriptor.hxx"
+#include <sfx2/sidebar/DeckDescriptor.hxx>
 
 namespace vcl { class Window; }
 

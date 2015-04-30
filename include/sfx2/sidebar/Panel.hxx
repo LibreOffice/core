@@ -19,11 +19,13 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANEL_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_PANEL_HXX
 
-#include "Context.hxx"
+#include <sfx2/sidebar/Context.hxx>
+
 #include <vcl/window.hxx>
 
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -40,7 +42,9 @@ class Panel : public vcl::Window
 public:
     Panel(const PanelDescriptor& rPanelDescriptor, vcl::Window* pParentWindow,
           const bool bIsInitiallyExpanded, const std::function<void()>& rDeckLayoutTrigger,
-          const std::function<Context()>& rContextAccess);
+          const std::function<Context()>& rContextAccess,
+          const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
     virtual ~Panel();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -69,6 +73,9 @@ private:
     bool mbIsExpanded;
     const std::function<void()> maDeckLayoutTrigger;
     const std::function<Context()> maContextAccess;
+
+    const css::uno::Reference<css::frame::XFrame>& mxFrame;
+
 };
 typedef std::vector<VclPtr<Panel> > SharedPanelContainer;
 
