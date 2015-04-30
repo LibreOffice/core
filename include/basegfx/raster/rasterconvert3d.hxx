@@ -31,15 +31,11 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-
-// predeclarations
-
 namespace basegfx
 {
     class B3DPolygon;
     class B3DPolyPolygon;
 }
-
 
 // interpolators for double precision
 
@@ -445,8 +441,6 @@ namespace basegfx
         void rasterconvertB3DPolygon(const B3DPolygon& rLine, sal_Int32 nStartLine, sal_Int32 nStopLine, sal_uInt16 nLineWidth);
     };
 } // end of namespace basegfx
-
-
 
 #endif // INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 

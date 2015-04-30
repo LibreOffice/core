@@ -35,8 +35,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/gen.hxx>
 
-// forward declarations
-
 class SfxBroadcaster;
 class Pointer;
 class AutoTimer;
@@ -97,14 +95,12 @@ namespace sdr
     {
         class ViewContact;
     } // end of namespace contact
-} // end of namespace sdr
+}
 
 namespace svx
 {
     class PropertyChangeNotifier;
 }
-
-// Defines
 
 enum SdrObjKind {
     OBJ_NONE       = 0,  /// abstract object (SdrObject)

@@ -32,8 +32,6 @@
 #include <memory>
 #include <vector>
 
-// forward declarations
-
 class SwCntntFrm;
 class SwCntntNode;
 class SwDoc;

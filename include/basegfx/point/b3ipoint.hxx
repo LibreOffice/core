@@ -25,7 +25,6 @@
 
 namespace basegfx
 {
-    // predeclaration
     class B3DHomMatrix;
 
     /** Base Point class with three sal_Int32 values

@@ -28,15 +28,7 @@
 #pragma warning(pop)
 #endif
 
-
-// forward declaration
-
-
 class CCustomControl;
-
-
-
-
 
 class CCustomControlFactory
 {

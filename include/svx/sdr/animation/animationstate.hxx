@@ -25,18 +25,13 @@
 #include <svx/sdr/animation/scheduler.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-
-// predeclarations
-
 namespace sdr
 {
     namespace contact
     {
         class ViewObjectContact;
     } // end of namespace contact
-} // end of namespace sdr
-
-
+}
 
 namespace sdr
 {
@@ -67,8 +62,6 @@ namespace sdr
         };
     } // end of namespace animation
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_SDR_ANIMATION_ANIMATIONSTATE_HXX
 

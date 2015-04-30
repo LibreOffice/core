@@ -23,7 +23,6 @@
 
 #include <sal/types.h>
 
-// predeclarations
 class SdrObject;
 
 // #i13033#

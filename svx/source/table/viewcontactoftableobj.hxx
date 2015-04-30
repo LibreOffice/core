@@ -23,11 +23,6 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svdotable.hxx>
 
-
-// predeclarations
-
-
-
 namespace sdr
 {
     namespace contact
@@ -52,8 +47,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 #endif
 

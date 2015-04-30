@@ -28,7 +28,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-// predeclarations
 class ImplB2DPolygon;
 
 namespace basegfx
@@ -38,7 +37,7 @@ namespace basegfx
     class B2DVector;
     class B2DHomMatrix;
     class B2DCubicBezier;
-} // end of namespace basegfx
+}
 
 namespace basegfx
 {

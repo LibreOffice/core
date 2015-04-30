@@ -25,9 +25,6 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 
-
-// predeclarations
-
 namespace basegfx { namespace tools {
     class B2DHomMatrixBufferedOnDemandDecompose;
 }}
@@ -35,8 +32,6 @@ namespace basegfx { namespace tools {
 namespace com { namespace sun { namespace star { namespace i18n {
     struct Boundary;
 }}}}
-
-
 
 namespace drawinglayer
 {
@@ -139,8 +134,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
-
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTDECORATEDPRIMITIVE2D_HXX
 

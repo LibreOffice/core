@@ -75,7 +75,6 @@ namespace
     static const char C_AND[] = " AND ";
     static const char C_OR[] = " OR ";
 
-    // forward declarations
     bool InsertJoin(    const OQueryDesignView* _pView,
                             const ::connectivity::OSQLParseNode *pNode);
 

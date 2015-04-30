@@ -46,8 +46,6 @@
 
 using namespace psp;
 
-// forward declaration
-
 #define nBLOCKSIZE 0x2000
 
 namespace psp

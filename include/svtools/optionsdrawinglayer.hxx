@@ -26,10 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 
-
-//  forward declarations
-
-
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
@@ -46,15 +42,7 @@ class SvtOptionsDrawinglayer_Impl;
 
 class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 {
-
-    //  public methods
-
-
     public:
-
-
-        //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      standard constructor and destructor
@@ -69,10 +57,6 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 
          SvtOptionsDrawinglayer();
         ~SvtOptionsDrawinglayer();
-
-
-        //  interface
-
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Drawinglayer/..."
@@ -149,10 +133,6 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         void        SetTransparentSelection( bool bState );
         void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
 
-
-    //  private methods
-
-
     private:
 
         /*-****************************************************************************************************
@@ -162,12 +142,6 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
             @return     A reference to a static mutex member.
         *//*-*****************************************************************************************************/
         SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-
-    //  private member
-
-
-    private:
 
         /*Attention
 
@@ -180,7 +154,7 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         static SvtOptionsDrawinglayer_Impl*     m_pDataContainer    ;
         static sal_Int32                        m_nRefCount         ;
 
-};      // class SvtOptionsDrawinglayer
+};
 
 #endif  // #ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
 

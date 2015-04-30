@@ -146,9 +146,6 @@ typedef std::vector< ImplXMLShapeExportInfo > ImplXMLShapeExportInfoVector;
 /** a map to store all cache data for already collected XShapes */
 typedef std::map< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes >, ImplXMLShapeExportInfoVector > ShapesInfos;
 
-
-// predeclarations
-
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
 
@@ -156,7 +153,7 @@ namespace basegfx
 {
     class B2DTuple;
     class B2DHomMatrix;
-} // end of namespace basegfx
+}
 
 class XMLOFF_DLLPUBLIC XMLShapeExport : public salhelper::SimpleReferenceObject
 {
@@ -327,7 +324,6 @@ public:
 
     const rtl::Reference< XMLTableExport >&     GetShapeTableExport();
 };
-
 
 #endif
 

@@ -46,14 +46,11 @@
 #include "thesdsp.hxx"
 #include "gciterator.hxx"
 
-
 using namespace com::sun::star;
 using namespace linguistic;
 
-// forward declarations
 uno::Sequence< OUString > static GetLangSvcList( const uno::Any &rVal );
 uno::Sequence< OUString > static GetLangSvc( const uno::Any &rVal );
-
 
 static bool lcl_SeqHasString( const uno::Sequence< OUString > &rSeq, const OUString &rText )
 {
@@ -2132,7 +2129,5 @@ void * SAL_CALL LngSvcMgr_getFactory(
     }
     return pRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

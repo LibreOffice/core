@@ -108,7 +108,6 @@
 #define INITIALIZED       1
 #define FAILTOINITIALIZED 2
 
-// forward declaration
 class XSecParser;
 
 class InternalSignatureInformation
@@ -511,6 +510,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,13 +29,12 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-// predeclarations
 class ImplB2DPolyPolygon;
 
 namespace basegfx
 {
     class B2DHomMatrix;
-} // end of namespace basegfx
+}
 
 namespace basegfx
 {

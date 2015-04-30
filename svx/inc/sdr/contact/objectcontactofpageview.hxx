@@ -23,13 +23,8 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <vcl/idle.hxx>
 
-
-// predeclarations
-
 class SdrPageWindow;
 class SdrPage;
-
-
 
 namespace sdr
 {
@@ -137,8 +132,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
 

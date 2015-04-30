@@ -42,10 +42,6 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 
-
-
-// predeclarations
-
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
 

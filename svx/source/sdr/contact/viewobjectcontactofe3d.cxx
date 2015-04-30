@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sdr/contact/viewobjectcontactofe3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -25,11 +24,6 @@
 #include <sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <drawinglayer/primitive2d/embedded3dprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-
-
-// predeclarations
-
-
 
 namespace sdr
 {

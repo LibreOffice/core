@@ -32,10 +32,7 @@
 
 namespace fileaccess {
 
-    // forward declaration
-
     class shell;
-
 
     class XInputStream_impl
         : public cppu::OWeakObject,
@@ -149,8 +146,6 @@ namespace fileaccess {
         sal_Int32                                          m_nErrorCode;
         sal_Int32                                          m_nMinorErrorCode;
     };
-
-
 } // end namespace XInputStream_impl
 
 #endif

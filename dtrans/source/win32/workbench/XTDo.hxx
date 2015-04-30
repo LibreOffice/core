@@ -32,7 +32,6 @@
 
 #include <vector>
 
-// forward declaration
 class EnumFormatEtc;
 
 /*--------------------------------------------------------------------------

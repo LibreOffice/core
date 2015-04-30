@@ -22,14 +22,9 @@
 
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 
-
-// predeclarations
-
 namespace sdr {
     class MasterPageDescriptor;
 }
-
-
 
 namespace sdr
 {
@@ -49,8 +44,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFMASTERPAGEDESCRIPTOR_HXX
 

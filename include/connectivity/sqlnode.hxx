@@ -31,7 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-// forward declarations
 namespace com
 {
     namespace sun
@@ -107,7 +106,6 @@ namespace connectivity
         );
         ~SQLParseNodeParameter();
     };
-
 
     //= OSQLParseNode
 
@@ -442,7 +440,6 @@ namespace connectivity
         static OUString convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString);
         void parseLeaf(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
     };
-
 
     inline OSQLParseNode* OSQLParseNode::getChild(sal_uInt32 nPos) const
     {

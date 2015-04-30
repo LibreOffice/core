@@ -25,9 +25,6 @@
 #include <svx/svddrgv.hxx>
 #include <svx/svddrgmt.hxx>
 
-
-// predeclarations
-
 class SdrDragView;
 
 class SdrDragMovHdl : public SdrDragMethod
@@ -237,7 +234,6 @@ public:
     virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
     virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;
 };
-
 
 #endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDDRGM1_HXX
 

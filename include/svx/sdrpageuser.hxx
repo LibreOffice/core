@@ -22,10 +22,7 @@
 
 #include <vector>
 
-
-// predeclarations
 class SdrPage;
-
 
 // To make things more safe, allow users of the page to register at it. The users need to be derived
 // from sdr::PageUser to get a call. The users do not need to call RemovePageUser() at the page
@@ -48,8 +45,6 @@ namespace sdr
     // typedef for PageUserVector
     typedef ::std::vector< PageUser* > PageUserVector;
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_SDRPAGEUSER_HXX
 

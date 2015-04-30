@@ -24,13 +24,8 @@
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdograf.hxx>
 
-
-// predeclarations
-
 namespace drawinglayer { namespace attribute { class SdrLineFillShadowTextAttribute; }}
 class GraphicAttr;
-
-
 
 namespace sdr
 {
@@ -81,8 +76,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
 

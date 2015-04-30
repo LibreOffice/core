@@ -240,7 +240,6 @@ namespace sfx2 {
 
 typedef boost::ptr_vector<SwPageDesc> SwPageDescs;
 
-// forward declaration
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
 // global function to start grammar checking in the document

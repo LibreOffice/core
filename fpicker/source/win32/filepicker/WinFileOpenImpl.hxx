@@ -37,7 +37,6 @@
 #include <vector>
 #include <osl/conditn.hxx>
 
-// forward declaration
 class CFilePicker;
 class CFilePickerState;
 class CExecuteFilePickerState;
@@ -55,15 +54,11 @@ public:
 
     virtual ~CWinFileOpenImpl( );
 
-
     // XExecutableDialog
-
 
     virtual sal_Int16 SAL_CALL execute(  ) throw( ::com::sun::star::uno::RuntimeException );
 
-
     // XFilePicker
-
 
     virtual void SAL_CALL setDefaultName( const OUString& aName )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
@@ -76,9 +71,7 @@ public:
 
     virtual OUString SAL_CALL getDisplayDirectory( ) throw ( ::com::sun::star::uno::RuntimeException );
 
-
     // XFilterManager
-
 
     virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
@@ -89,16 +82,12 @@ public:
     virtual OUString  SAL_CALL getCurrentFilter( )
         throw( ::com::sun::star::uno::RuntimeException );
 
-
     // XFilterGroupManager
-
 
     virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-
     // XFilePickerControlAccess
-
 
     virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue )
         throw( ::com::sun::star::uno::RuntimeException );
@@ -115,9 +104,7 @@ public:
     virtual OUString SAL_CALL getLabel( sal_Int16 aControlId )
         throw ( ::com::sun::star::uno::RuntimeException);
 
-
     // XFilePreview
-
 
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  )
         throw (::com::sun::star::uno::RuntimeException);
@@ -140,15 +127,11 @@ public:
     virtual sal_Bool SAL_CALL getShowState( )
         throw (::com::sun::star::uno::RuntimeException);
 
-
     // XCancelable
-
 
     virtual void SAL_CALL cancel( );
 
-
     // Implementation details
-
 
 protected:
     sal_Int16 SAL_CALL getFocused( );
@@ -168,7 +151,6 @@ protected:
     virtual void SAL_CALL onInitDialog( HWND hwndDlg );
 
     virtual sal_uInt32 SAL_CALL onCtrlCommand( HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode );
-
 
     void onWMSize();
     void onWMShow(sal_Bool bShow);
@@ -211,7 +193,6 @@ private:
     CNonExecuteFilePickerState*             m_NonExecuteFilePickerState;
     CResourceProvider                       m_ResProvider;
 };
-
 
 #endif
 

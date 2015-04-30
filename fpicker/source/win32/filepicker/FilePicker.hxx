@@ -34,19 +34,9 @@
 
 #include <memory>
 
-
 // Implementation class for the XFilePicker Interface
 
-
-
-// forward declarations
-
-
 class CWinFileOpenImpl;
-
-
-// class declaration
-
 
 class CFilePickerDummy
 {
@@ -72,18 +62,14 @@ public:
     // ctor
     CFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
 
-
     // XFilePickerNotifier
-
 
     virtual void SAL_CALL addFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
         throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
         throw( ::com::sun::star::uno::RuntimeException );
 
-
     // XExecutableDialog functions
-
 
     virtual void SAL_CALL setTitle( const OUString& aTitle )
         throw( ::com::sun::star::uno::RuntimeException );
@@ -91,9 +77,7 @@ public:
     virtual sal_Int16 SAL_CALL execute(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
-
     // XFilePicker functions
-
 
     virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode )
         throw( ::com::sun::star::uno::RuntimeException );
@@ -110,15 +94,12 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
-
     // XFilePicker2 functions
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-
     // XFilterManager functions
-
 
     virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
@@ -129,16 +110,12 @@ public:
     virtual OUString SAL_CALL getCurrentFilter(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
-
     // XFilterGroupManager functions
-
 
     virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-
     // XFilePickerControlAccess functions
-
 
     virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue )
         throw (::com::sun::star::uno::RuntimeException);
@@ -155,9 +132,7 @@ public:
     virtual OUString SAL_CALL getLabel( sal_Int16 aControlId )
         throw (::com::sun::star::uno::RuntimeException);
 
-
     // XFilePreview
-
 
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -173,30 +148,22 @@ public:
 
     virtual sal_Bool SAL_CALL getShowState(  ) throw (::com::sun::star::uno::RuntimeException);
 
-
     // XInitialization
-
 
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-
     // XCancellable
-
 
     virtual void SAL_CALL cancel( )
         throw(::com::sun::star::uno::RuntimeException);
 
-
     // XEventListener
-
 
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
         throw(::com::sun::star::uno::RuntimeException);
 
-
     // XServiceInfo
-
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
@@ -207,9 +174,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-
     // FilePicker Event functions
-
 
     void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
     void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );

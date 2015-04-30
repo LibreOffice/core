@@ -29,9 +29,6 @@
 
 // #define GRLAYOUT_DEBUG 1
 
-// Header files
-
-// Standard Library
 #include <algorithm>
 #include <cassert>
 #include <functional>
@@ -39,7 +36,6 @@
 #include <numeric>
 #include <deque>
 
-// Platform
 #include <config_global.h>
 
 #include <svsys.h>
@@ -60,10 +56,6 @@
 
 #include <graphite_layout.hxx>
 #include <graphite_features.hxx>
-
-// Module private type definitions and forward declarations.
-
-// Module private names.
 
 #ifdef GRLAYOUT_DEBUG
 static FILE * grLog()

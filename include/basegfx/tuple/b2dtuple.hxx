@@ -27,7 +27,6 @@
 
 namespace basegfx
 {
-    // predeclarations
     class B2ITuple;
 
     /** Base class for all Points/Vectors with two double values

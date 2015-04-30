@@ -25,28 +25,22 @@
 // We need this to enable namespace support in libgrengine headers.
 #define GR_NAMESPACE
 
-// Standard Library
 #include <memory>
 #include <vector>
 #include <map>
 #include <utility>
-// Libraries
+
 #include <graphite_static.hxx>
 #include <graphite2/Font.h>
 #include <graphite2/Segment.h>
-// Platform
+
 #include <vcl/dllapi.h>
 
 #include "sallayout.hxx"
 
-// Module
-
-// Module type definitions and forward declarations.
-// SAL/VCL types
 class ServerFont;
 class PhysicalFontFace;
 
-// Graphite types
 namespace grutils { class GrFeatureParser; }
 
 class GraphiteFaceWrapper

@@ -23,19 +23,14 @@
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 
-
-
-// forward declarations
-
-
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
     namespace xforms { class XModel2; }
 } } }
+
 class SvXMLImport;
 class SvXMLImportContext;
-
 
 /** import the xforms:binding element */
 class XFormsBindContext : public TokenContext
@@ -44,17 +39,13 @@ class XFormsBindContext : public TokenContext
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> mxBinding;
 
 public:
-
     XFormsBindContext( SvXMLImport& rImport,
                        sal_uInt16 nPrefix,
                        const OUString& rLocalName,
                        const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2>& xModel );
     virtual ~XFormsBindContext();
 
-
-
     // implement SvXMLImportContext & TokenContext methods:
-
 
     virtual void StartElement(
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;

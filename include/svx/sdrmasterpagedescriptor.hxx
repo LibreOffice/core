@@ -23,8 +23,6 @@
 #include <svx/sdrpageuser.hxx>
 #include <svx/svdsob.hxx>
 
-
-// predeclarations
 class SdrObject;
 class SfxItemSet;
 class SdrPageProperties;
@@ -35,9 +33,7 @@ namespace sdr
     {
         class ViewContact;
     } // end of namespace contact
-} // end of namespace sdr
-
-
+}
 
 namespace sdr
 {
@@ -85,8 +81,6 @@ namespace sdr
         const SdrPageProperties* getCorrectSdrPageProperties() const;
     };
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_SDRMASTERPAGEDESCRIPTOR_HXX
 

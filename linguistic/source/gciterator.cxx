@@ -71,11 +71,8 @@
 using namespace linguistic;
 using namespace ::com::sun::star;
 
-// forward declarations
 static OUString GrammarCheckingIterator_getImplementationName() throw();
 static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceNames() throw();
-
-
 
 // white space list: obtained from the fonts.config.txt of a Linux system.
 static const sal_Unicode aWhiteSpaces[] =

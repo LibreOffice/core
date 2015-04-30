@@ -26,14 +26,9 @@
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
-
-// predeclarations
-
 namespace com { namespace sun { namespace star { namespace rendering {
     class XGraphicDevice;
 }}}}
-
-
 
 namespace basegfx
 {

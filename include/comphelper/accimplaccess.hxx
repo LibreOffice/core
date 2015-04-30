@@ -24,18 +24,13 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-// forward declaration
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
     class XAccessibleContext;
 }}}}
 
-
 namespace comphelper
 {
-
-
-
     //= OAccessibleImplementationAccess
 
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XUnoTunnel
@@ -109,7 +104,6 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent
         );
 
-
         /** sets the parent for a derived implementation
 
         @param _rxComponent
@@ -125,17 +119,12 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewParent
         );
 
-
     private:
         COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 
-
-}   // namespace comphelper
-
-
+} // namespace comphelper
 
 #endif // INCLUDED_COMPHELPER_ACCIMPLACCESS_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

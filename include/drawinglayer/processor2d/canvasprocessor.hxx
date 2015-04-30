@@ -32,9 +32,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/mapmod.hxx>
 
-
-// forward declaration
-
 namespace basegfx {
     class BColor;
     class B2DPolygon;
@@ -55,8 +52,6 @@ namespace drawinglayer { namespace primitive2d {
     class FillBitmapPrimitive2D;
     class UnifiedTransparencePrimitive2D;
 }}
-
-
 
 namespace drawinglayer
 {
@@ -114,8 +109,6 @@ namespace drawinglayer
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer
-
-
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_CANVASPROCESSOR_HXX
 

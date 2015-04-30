@@ -29,8 +29,6 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-//  forward declarations
-
 class SvtViewOptionsBase_Impl;
 
 /*-************************************************************************************************************

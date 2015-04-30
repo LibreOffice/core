@@ -23,19 +23,14 @@
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 
-
-
-// forward declarations
-
-
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
     namespace xforms { class XModel2; }
 } } }
+
 class SvXMLImport;
 class SvXMLImportContext;
-
 
 /** import the xforms:submission element */
 class XFormsSubmissionContext : public TokenContext
@@ -43,17 +38,13 @@ class XFormsSubmissionContext : public TokenContext
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> mxSubmission;
 
 public:
-
     XFormsSubmissionContext( SvXMLImport& rImport,
                              sal_uInt16 nPrefix,
                              const OUString& rLocalName,
                              const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2>& xModel );
     virtual ~XFormsSubmissionContext();
 
-
-
     // implement TokenContext methods:
-
 
 protected:
     virtual void HandleAttribute( sal_uInt16 nToken,

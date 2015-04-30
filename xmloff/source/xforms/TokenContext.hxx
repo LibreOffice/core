@@ -22,15 +22,11 @@
 
 #include <xmloff/xmlictxt.hxx>
 
-
-
-// forward declarations
-
-
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace uno { template<typename T> class Reference; }
 } } }
+
 class SvXMLImport;
 
 #define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
@@ -45,7 +41,6 @@ protected:
     const SvXMLTokenMapEntry* mpChildren;      /// static token map
 
 public:
-
     TokenContext( SvXMLImport& rImport,
                   sal_uInt16 nPrefix,
                   const OUString& rLocalName,
@@ -54,10 +49,7 @@ public:
 
     virtual ~TokenContext();
 
-
-
     // implement SvXMLImportContext methods:
-
 
     /** call HandleAttribute for each attribute in the token map;
      * create a warning for all others. Classes that wish to override

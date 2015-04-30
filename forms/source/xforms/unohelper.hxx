@@ -21,15 +21,15 @@
 
 #include <sal/types.h>
 
-// forward declarations
 namespace com { namespace sun { namespace star {
     namespace uno {
         class XInterface;
         template<class T> class Reference;
     }
-    namespace beans { class XPropertySet; }
+    namespace beans {
+        class XPropertySet;
+    }
 } } }
-
 
 namespace xforms
 {
@@ -37,7 +37,7 @@ namespace xforms
 /** copy the properties from one PropertySet into the next */
 void copy( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& , com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& );
 
-} // namespace
+}
 
 #endif
 

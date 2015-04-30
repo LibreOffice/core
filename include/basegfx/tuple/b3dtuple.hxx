@@ -27,7 +27,6 @@
 
 namespace basegfx
 {
-    // predeclarations
     class B3ITuple;
 
     /** Base class for all Points/Vectors with three double values

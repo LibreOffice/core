@@ -28,7 +28,6 @@
 
 namespace basegfx
 {
-    // predeclarations
     class B3IRange;
     class B3DHomMatrix;
 

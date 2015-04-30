@@ -40,9 +40,6 @@
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 
-
-// predeclarations
-
 namespace tools { class Time; }
 
 namespace com { namespace sun { namespace star {
@@ -53,7 +50,7 @@ namespace com { namespace sun { namespace star {
 namespace basegfx
 {
     class B3DVector;
-} // end of namespace basegfx
+}
 
 class XMLOFF_DLLPUBLIC SvXMLTokenEnumerator
 {
@@ -224,7 +221,6 @@ public:
     /** convert number (sal_uInt32) to string (hex) */
     static void convertHex( OUStringBuffer& rBuffer,
                                sal_uInt32 nVal );
-
 };
 
 #endif // INCLUDED_XMLOFF_XMLUCONV_HXX

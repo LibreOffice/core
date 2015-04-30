@@ -24,13 +24,9 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
 
-
-// predeclarations
 class SfxItemSet;
 class Bitmap;
 class MapMode;
-
-
 
 namespace sdr
 {
@@ -69,8 +65,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFMASTERPAGEDESCRIPTOR_HXX
 

@@ -42,14 +42,14 @@
  *  friends are PostScript afm style, that is they are 1/1000 font height
  */
 
-// forward declarations
-namespace utl { class MultiAtomProvider; } // see unotools/atom.hxx
+namespace utl { class MultiAtomProvider; }
+
 class FontSubsetInfo;
 class ImplFontOptions;
 class FontSelectPattern;
 
 namespace psp {
-class PPDParser; // see ppdparser.hxx
+class PPDParser;
 
 namespace fonttype
 {

@@ -23,11 +23,6 @@
 #include <basegfx/raster/bpixelraster.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-
-// predeclarations
-
-
-
 namespace basegfx
 {
     class BZPixelRaster : public BPixelRaster

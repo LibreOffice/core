@@ -23,16 +23,12 @@
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 
-
-
-// forward declarations
-
-
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
     namespace xforms { class XDataTypeRepository; }
 } } }
+
 class SvXMLImport;
 class SvXMLImportContext;
 
@@ -45,7 +41,6 @@ class SchemaRestrictionContext : public TokenContext
     OUString msBaseName;
 
 public:
-
     SchemaRestrictionContext( SvXMLImport& rImport,
                               sal_uInt16 nPrfx,
                               const OUString& rLName,
@@ -53,15 +48,11 @@ public:
                               const OUString& sTypeName );
     virtual ~SchemaRestrictionContext();
 
-
 protected:
-
     // create mxDataType (if not already present)
     void CreateDataType();
 
-
     // implement TokenContext methods:
-
 
     virtual void HandleAttribute(
         sal_uInt16 nToken,

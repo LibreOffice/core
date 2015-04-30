@@ -35,9 +35,7 @@
 #endif
 #include <memory>
 
-// forward declaration
 class CPreviewAdapterImpl;
-
 
 // A kind of a facade for the preview class.
 // We want to hide the fact that the preview
@@ -46,7 +44,6 @@ class CPreviewAdapterImpl;
 // is in execution mode. So unless someone sets
 // the preview active with a valid parent
 // window the preview may not be visible
-
 
 class CPreviewAdapter
 {
@@ -94,7 +91,6 @@ private:
     CPreviewAdapter(const CPreviewAdapter&);
     CPreviewAdapter& operator=(const CPreviewAdapter&);
 };
-
 
 #endif
 

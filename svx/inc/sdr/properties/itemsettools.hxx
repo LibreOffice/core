@@ -22,14 +22,10 @@
 
 #include <sal/types.h>
 
-
-// predeclarations
-
 class SdrObject;
 class SfxItemSet;
 class Rectangle;
 class Fraction;
-
 
 // class to remember broadcast start positions
 namespace sdr
@@ -51,8 +47,6 @@ namespace sdr
     } // end of namespace properties
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace properties
@@ -60,8 +54,6 @@ namespace sdr
         void ScaleItemSet(SfxItemSet& rSet, const Fraction& rScale);
     } // end of namespace properties
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
 

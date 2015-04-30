@@ -31,7 +31,6 @@
 
 namespace basegfx
 {
-    // predeclarations
     class B2IRange;
     class B2DHomMatrix;
 

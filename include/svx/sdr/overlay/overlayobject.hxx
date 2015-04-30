@@ -30,9 +30,6 @@
 
 #include <vector>
 
-
-// predeclarations
-
 class OutputDevice;
 
 namespace sdr
@@ -41,16 +38,14 @@ namespace sdr
     {
         class OverlayManager;
     } // end of namespace overlay
-} // end of namespace sdr
+}
 
 namespace basegfx
 {
     class B2DPolygon;
     class B2DPolyPolygon;
     class B2DRange;
-} // end of namespace basegfx
-
-
+}
 
 namespace sdr
 {
@@ -172,8 +167,6 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace overlay
@@ -194,8 +187,6 @@ namespace sdr
         };
     } // end of namespace overlay
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYOBJECT_HXX
 

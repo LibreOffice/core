@@ -23,16 +23,12 @@
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 
-
-
-// forward declarations
-
-
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
     namespace xforms { class XDataTypeRepository; }
 } } }
+
 class SvXMLImport;
 class SvXMLImportContext;
 
@@ -43,7 +39,6 @@ class SchemaSimpleTypeContext : public TokenContext
     OUString msTypeName;
 
 public:
-
     SchemaSimpleTypeContext( SvXMLImport& rImport,
                              sal_uInt16 nPrfx,
                              const OUString& rLName,
@@ -51,13 +46,9 @@ public:
 
     virtual ~SchemaSimpleTypeContext();
 
-
-
     // implement TokenContext methods:
 
-
 protected:
-
     virtual void HandleAttribute(
         sal_uInt16 nToken,
         const OUString& rValue ) SAL_OVERRIDE;

@@ -25,11 +25,6 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-
-// predeclarations
-
-
-
 namespace basegfx
 {
     class BASEGFX_DLLPUBLIC BPixel

@@ -27,8 +27,6 @@
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 
-// predeclarations
-
 namespace vcl { class Region; }
 
 namespace sdr

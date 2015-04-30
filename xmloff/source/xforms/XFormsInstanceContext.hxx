@@ -23,20 +23,15 @@
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 
-
-
-// forward declarations
-
-
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace xml { namespace dom { class XDocument; } }
     namespace beans { class XPropertySet; }
     namespace xforms { class XModel2; }
 } } }
+
 class SvXMLImport;
 class SvXMLImportContext;
-
 
 /** import the xforms:instance element */
 class XFormsInstanceContext : public TokenContext
@@ -47,20 +42,16 @@ class XFormsInstanceContext : public TokenContext
     OUString msURL;
 
 public:
-
     XFormsInstanceContext( SvXMLImport& rImport,
                            sal_uInt16 nPrfx,
                            const OUString& rLName,
                            const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> & xModel );
     virtual ~XFormsInstanceContext();
 
-
-
     // implement SvXMLImportContext & TokenContext methods:
     // We override CreateChildContext, because we want to read
     // arbitrary DOM elements. For the attributes, we use the
     // TokenContext mechanism.
-
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
@@ -70,7 +61,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 
 protected:
-
     virtual void HandleAttribute(
         sal_uInt16 nToken,
         const OUString& rValue ) SAL_OVERRIDE;

@@ -31,15 +31,13 @@
 
 namespace chelp {
 
-    // forward declaration
-
     class XInputStream_impl
         : public cppu::OWeakObject,
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XSeekable
     {
-    public:
 
+    public:
         XInputStream_impl( const OUString& aUncPath );
 
         virtual ~XInputStream_impl();
@@ -125,7 +123,6 @@ namespace chelp {
                    com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-
         bool                                               m_bIsOpen;
         osl::File                                          m_aFile;
     };

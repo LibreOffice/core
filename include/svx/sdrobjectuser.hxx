@@ -22,10 +22,7 @@
 
 #include <vector>
 
-
-// predeclarations
 class SdrObject;
-
 
 // To make things more safe, allow users of an object to register at it. The users need to be derived
 // from sdr::ObjectUser to get a call. The users do not need to call RemoveObjectUser() at the page
@@ -48,8 +45,6 @@ namespace sdr
     // typedef for ObjectUserVector
     typedef ::std::vector< ObjectUser* > ObjectUserVector;
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_SDROBJECTUSER_HXX
 

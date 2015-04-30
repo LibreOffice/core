@@ -28,7 +28,6 @@
 
 namespace basegfx
 {
-    // predeclaration
     class B2DHomMatrix;
 
     /** Base Point class with two sal_Int32 values

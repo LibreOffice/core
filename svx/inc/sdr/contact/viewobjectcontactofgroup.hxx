@@ -22,11 +22,6 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
-
-// predeclarations
-
-
-
 namespace sdr
 {
     namespace contact
@@ -46,8 +41,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFGROUP_HXX
 

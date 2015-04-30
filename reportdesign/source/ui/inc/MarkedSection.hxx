@@ -24,7 +24,7 @@
 
 namespace rptui
 {
-    class OSectionWindow; // forward declaration
+    class OSectionWindow;
 
     enum NearSectionAccess
     {

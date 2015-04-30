@@ -27,18 +27,16 @@
 
 #include <boost/scoped_ptr.hpp>
 
-// predeclarations
 class CanvasSettings;
 class SvtOptionsDrawinglayer;
+
 namespace vcl {
-class IconThemeInfo;
+    class IconThemeInfo;
 }
 
 namespace svt {
     class OpenGLCfg;
 }
-
-// class OfaMiscTabPage --------------------------------------------------
 
 class OfaMiscTabPage : public SfxTabPage
 {
@@ -83,7 +81,6 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
-// class OfaViewTabPage --------------------------------------------------
 class SvtTabAppearanceCfg;
 
 class OfaViewTabPage : public SfxTabPage
@@ -142,6 +139,7 @@ public:
 };
 
 struct LanguageConfig_Impl;
+
 class OfaLanguagesTabPage : public SfxTabPage
 {
     VclPtr<ListBox>        m_pUserInterfaceLB;
@@ -185,7 +183,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
-#endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
 
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

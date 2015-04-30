@@ -30,7 +30,6 @@
 
 namespace psp {
 
-// forwards
 struct JobData;
 
 /*
@@ -114,10 +113,6 @@ public:
         return *this;
     }
 };
-
-/*
- * forward declarations
- */
 
 class Font2;
 class GlyphSet;

@@ -22,12 +22,7 @@
 
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 
-
-// predeclarations
-
 class SdrPage;
-
-
 
 namespace sdr
 {
@@ -48,8 +43,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace contact
@@ -68,8 +61,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace contact
@@ -85,8 +76,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 namespace sdr
 {
@@ -106,8 +95,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace contact
@@ -122,8 +109,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 namespace sdr
 {
@@ -140,8 +125,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace contact
@@ -157,8 +140,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace contact
@@ -173,8 +154,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 namespace sdr
 {
@@ -194,8 +173,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace contact
@@ -214,8 +191,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace contact
@@ -230,8 +205,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDRPAGE_HXX
 

@@ -28,13 +28,11 @@
 
 namespace psp {
 
-// forward declarations
 class PrinterGfx;
 
 class PrinterJob
 {
-private:            // private data
-
+private:
     OUString           maSpoolDirName;
     OUString           maFileName; // empty: spool to command, else spool to named file
     OUString           maJobTitle;
@@ -70,8 +68,7 @@ private:            // private data
 
     bool            m_bQuickJob;
 
-private:            // private methods
-
+private:
     osl::File*      CreateSpoolFile (const OUString& rName,
                                      const OUString& rExtension);
     void            InitPaperSize (const JobData& rJobSetup);
@@ -83,7 +80,6 @@ private:            // private methods
     static bool     writeProlog (osl::File* pFile, const JobData& );
 
 public:             // for usage in PrinterGfx
-
     sal_uInt32      GetResolution () const { return mnResolution; }
     void            GetScale (double &rXScale, double &rYScale) const;
     sal_uInt16      GetDepth () const;
@@ -129,7 +125,7 @@ public:
     bool        EndPage ();
 };
 
-}  /* namespace psp */
+}  // namespace psp
 
 #endif // INCLUDED_VCL_INC_GENERIC_PRINTERJOB_HXX
 

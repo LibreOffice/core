@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-// forward declarations
 namespace com
 {
     namespace sun
@@ -64,11 +63,8 @@ namespace com
     }
 }
 
-
 namespace dbtools
 {
-
-
     namespace DBTypeConversion
     {
         OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Date getStandardDate();
@@ -197,9 +193,7 @@ namespace dbtools
        );
     }
 
-
-}   // namespace dbtools
-
+} // namespace dbtools
 
 #endif // INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 

@@ -26,8 +26,6 @@
 
 #include <vector>
 
-
-
 // masks for the error ID fields
 #define XMLERROR_MASK_FLAG      0xF0000000
 #define XMLERROR_MASK_CLASS     0x00FF0000
@@ -43,7 +41,6 @@
 #define XMLERROR_CLASS_FORMAT   0x00020000
 #define XMLERROR_CLASS_API      0x00040000
 #define XMLERROR_CLASS_OTHER    0x00080000
-
 
 // error numbers, listed by error class
 // Within each class, errors should be numbered consecutively. Please
@@ -76,8 +73,6 @@
 // other errors:
 #define XMLERROR_CANCEL         ( XMLERROR_CLASS_OTHER  | 0x00000001 )
 
-
-
 // 16bit error flag constants for use in the
 // SvXMLExport/SvXMLImport error flags
 enum class SvXMLErrorFlags {
@@ -86,22 +81,19 @@ enum class SvXMLErrorFlags {
     ERROR_OCCURRED    = 0x0002,
     WARNING_OCCURRED  = 0x0004,
 };
+
 namespace o3tl
 {
     template<> struct typed_flags<SvXMLErrorFlags> : is_typed_flags<SvXMLErrorFlags, 0x7> {};
 }
 
-
-
-// forward declarations
 namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Sequence; }
     namespace uno { template<class X> class Reference; }
     namespace xml { namespace sax { class XLocator; } }
 } } }
+
 class ErrorRecord;
-
-
 
 /**
  * The XMLErrors is used to collect all errors and warnings that occur
@@ -145,7 +137,6 @@ public:
     void ThrowErrorAsSAXException( sal_Int32 nIdMask )
         throw( ::com::sun::star::xml::sax::SAXParseException );
 };
-
 
 #endif
 

@@ -24,10 +24,6 @@
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
 
-
-//   forward declaration
-
-
 class ResMgr;
 
 // Get the resource manager for the app
@@ -39,8 +35,6 @@ ResMgr* ImpGetResMgr();
 // are cached.
 // See also SvdStr.Hrc
 SVX_DLLPUBLIC OUString ImpGetResStr(sal_uInt16 nResID);
-
-
 
 #endif // INCLUDED_SVX_INC_SVDGLOB_HXX
 

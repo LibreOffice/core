@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// TestWin32.cpp : Defines the entry point for the application.
-
 #define _WIN32_DCOM
 
 #include "stdafx.h"
@@ -39,7 +37,6 @@
 
 #define MAX_LOADSTRING 100
 
-// Global variables:
 HINSTANCE           g_hInst;                        // current instance
 HWND                g_hwndMain;
 WCHAR               szTitle[MAX_LOADSTRING];            // Text for title
@@ -49,7 +46,6 @@ char*               pTextBuff = NULL;
 DWORD               lData     = 0;
 UINT                g_nCBChanges = 0;
 
-// forward declaration
 ATOM  MyRegisterClass( HINSTANCE hInstance );
 BOOL  InitInstance( HINSTANCE, int );
 HMENU GetSubMenuHandle( HWND hwndParent, UINT uiTopLevelIndex );
@@ -62,8 +58,6 @@ void ClearClipboardContent( HWND hWnd );
 void    CALLBACK OnClipboardContentChange();
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 LRESULT CALLBACK About( HWND, UINT, WPARAM, LPARAM );
-
-// WinMain
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,

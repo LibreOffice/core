@@ -32,9 +32,6 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-
-// predeclarations
-
 class OutputDevice;
 class SdrModel;
 namespace vcl { class Region; }
@@ -46,8 +43,6 @@ namespace sdr { namespace overlay {
 namespace basegfx {
     class B2DRange;
 }
-
-
 
 namespace sdr
 {
@@ -146,8 +141,6 @@ namespace sdr
         };
     } // end of namespace overlay
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGER_HXX
 

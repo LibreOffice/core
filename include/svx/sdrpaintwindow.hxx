@@ -24,8 +24,6 @@
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
 
-
-// predeclarations
 class SdrPaintView;
 
 namespace sdr
@@ -33,19 +31,17 @@ namespace sdr
     namespace overlay
     {
         class OverlayManager;
-    } // end of namespace overlay
-} // end of namespace sdr
+    }
+}
 
 #ifdef _MSC_VER // broken msvc template instantiation
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #endif
 
-
 /// paint the transparent children of rWin that overlap rPixelRect
 /// (for example, transparent form controls like check boxes)
 void SVX_DLLPUBLIC
 PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
-
 
 class SdrPreRenderDevice
 {
@@ -65,8 +61,6 @@ public:
     OutputDevice& GetOriginalOutputDevice() const { return mrOutputDevice; }
     OutputDevice& GetPreRenderDevice() { return *mpPreRenderDevice.get(); }
 };
-
-
 
 class SVX_DLLPUBLIC SdrPaintWindow
 {
@@ -149,8 +143,6 @@ public:
 
 // typedefs for a list of SdrPaintWindows
 typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
-
-
 
 #endif // INCLUDED_SVX_SDRPAINTWINDOW_HXX
 

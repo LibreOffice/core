@@ -23,7 +23,6 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <boost/optional.hpp>
 
-// predeclarations
 class SdrObject;
 class SetOfByte;
 class OutputDevice;
@@ -61,8 +60,6 @@ public:
 };
 
 }}
-
-
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROBJ_HXX
 

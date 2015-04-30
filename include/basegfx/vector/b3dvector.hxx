@@ -23,11 +23,8 @@
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-
-
 namespace basegfx
 {
-    // predeclaration
     class B3DHomMatrix;
 
     /** Base Point class with three double values
@@ -314,8 +311,6 @@ namespace basegfx
         return aVec;
     }
 } // end of namespace basegfx
-
-
 
 #endif // INCLUDED_BASEGFX_VECTOR_B3DVECTOR_HXX
 

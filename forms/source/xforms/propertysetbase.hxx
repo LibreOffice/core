@@ -33,7 +33,6 @@
 
 #include <map>
 
-// forward declarations for method arguments
 namespace com { namespace sun { namespace star { namespace uno {
         class Any;
         class RuntimeException;

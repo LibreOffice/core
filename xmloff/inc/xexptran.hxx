@@ -30,8 +30,6 @@
 
 #include <vector>
 
-// predeclarations
-
 struct ImpSdXMLExpTransObj2DBase;
 struct ImpSdXMLExpTransObj3DBase;
 class SvXMLUnitConverter;
@@ -43,7 +41,7 @@ namespace basegfx
     class B2DTuple;
     class B2DHomMatrix;
     class B3DHomMatrix;
-} // end of namespace basegfx
+}
 
 typedef ::std::vector< ImpSdXMLExpTransObj2DBase* > ImpSdXMLExpTransObj2DBaseList;
 typedef ::std::vector< ImpSdXMLExpTransObj3DBase* > ImpSdXMLExpTransObj3DBaseList;

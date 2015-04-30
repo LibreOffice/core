@@ -24,7 +24,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-// predeclarations
 class ImplB3DPolyPolygon;
 
 namespace basegfx
@@ -32,9 +31,7 @@ namespace basegfx
     class B3DPolygon;
     class B3DHomMatrix;
     class B2DHomMatrix;
-} // end of namespace basegfx
-
-
+}
 
 namespace basegfx
 {

@@ -22,15 +22,11 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
-
-// predeclarations
 class SdrGrafObj;
 
 namespace sdr { namespace event {
     class AsynchGraphicLoadingEvent;
 }}
-
-
 
 namespace sdr
 {
@@ -66,8 +62,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFGRAPHIC_HXX
 

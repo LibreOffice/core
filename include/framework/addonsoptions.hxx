@@ -28,9 +28,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <framework/fwedllapi.h>
 
-//  types, enums, ...
-
-
 /*-************************************************************************************************************
     @descr          The method GetAddonsMenu() returns a list of property values.
                     Use follow defines to separate values by names.
@@ -48,7 +45,6 @@
 
 namespace framework
 {
-
 
 struct FWE_DLLPUBLIC MergeMenuInstruction
 {
@@ -86,10 +82,6 @@ struct FWE_DLLPUBLIC MergeStatusbarInstruction
 
 typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionContainer;
 
-
-//  forward declarations
-
-
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
@@ -106,14 +98,7 @@ class AddonsOptions_Impl;
 
 class FWE_DLLPUBLIC AddonsOptions
 {
-
-    //  public methods
-
-
     public:
-
-        //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      standard constructor and destructor
@@ -128,10 +113,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
          AddonsOptions();
         ~AddonsOptions();
-
-
-        //  interface
-
 
         /*-****************************************************************************************************
             @short      clears completely the addons menu
@@ -261,10 +242,6 @@ class FWE_DLLPUBLIC AddonsOptions
         *//*-*****************************************************************************************************/
         DECL_STATIC_LINK( AddonsOptions, Notify, void* );
 
-
-    //  private member
-
-
     private:
 
         /*Attention
@@ -278,7 +255,7 @@ class FWE_DLLPUBLIC AddonsOptions
         static AddonsOptions_Impl*  m_pDataContainer    ;
         static sal_Int32            m_nRefCount         ;
 
-};      // class SvtMenuOptions
+};
 
 }
 

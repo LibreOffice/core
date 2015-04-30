@@ -34,7 +34,6 @@
 
 #include <map>
 
-// forward declarations
 namespace com
 {
     namespace sun
@@ -56,11 +55,11 @@ namespace com
         }
     }
 }
+
 namespace connectivity
 {
     class OSQLScanner;
     class SQLError;
-
 
     //= OParseContext
 
@@ -88,7 +87,6 @@ namespace connectivity
         virtual ::com::sun::star::lang::Locale getPreferredLocale( ) const SAL_OVERRIDE;
     };
 
-
     // OSQLParseNodesContainer
     // grabage collection of nodes
 
@@ -107,7 +105,6 @@ namespace connectivity
     };
 
     typedef salhelper::SingletonRef<OSQLParseNodesContainer> OSQLParseNodesGarbageCollector;
-
 
     //= OSQLParser
 
@@ -240,11 +237,9 @@ namespace connectivity
 
         sal_Int16 buildLikeRule(OSQLParseNode* pAppend, OSQLParseNode*& pLiteral, const OSQLParseNode* pEscape);
         sal_Int16 buildStringNodes(OSQLParseNode*& pLiteral);
-#else
 #endif
     };
 }
-
 
 #endif // INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 
