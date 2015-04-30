@@ -1182,9 +1182,20 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     const char* cap = NULL;
     sal_Int32 nSize = 1800;
     sal_Int32 nCharEscapement = 0;
+    sal_Int32 nCharKerning = 0;
 
     if( GETA( CharHeight ) )
         nSize = (sal_Int32) (100*(*static_cast<float const *>(mAny.getValue())));
+
+     if( GETA( CharKerning ) )
+        nCharKerning = (sal_Int32)(*static_cast<short const *>(mAny.getValue()));
+    /**  While setting values in propertymap,
+    *    CharKerning converted using GetTextSpacingPoint
+    *    i.e set @ http://opengrok.libreoffice.org/xref/core/oox/source/drawingml/textcharacterproperties.cxx#129
+    *    therefore to get original value CharKerning need to be convert.
+    *    http://opengrok.libreoffice.org/xref/core/oox/source/drawingml/drawingmltypes.cxx#95
+    **/
+    nCharKerning = ((nCharKerning * 720)-360) / 254;
 
     if ( ( bComplex && GETA( CharWeightComplex ) ) || GETA( CharWeight ) )
     {
@@ -1323,6 +1334,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
                           XML_i, italic,
                           XML_lang, usLanguage.isEmpty() ? NULL : USS( usLanguage ),
                           XML_sz, IS( nSize ),
+                          XML_spc, nCharKerning > 0 ? IS(nCharKerning) : NULL,
                           XML_strike, strikeout,
                           XML_u, underline,
                           XML_baseline, nCharEscapement == 0 ? NULL : IS( nCharEscapement*1000 ),
