@@ -21,6 +21,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart2/TickmarkStyle.hpp>
 
 #include <com/sun/star/util/Color.hpp>
 
@@ -80,6 +81,7 @@ public:
     void testVaryColorDefaultValues2013XLSX();
     void testPlotVisOnlyDefaultValue2013XLSX();
     void testRAngAxDefaultValue2013XLSX();
+    void testMajorTickMarksDefaultValue2013XLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -123,6 +125,7 @@ public:
     CPPUNIT_TEST(testVaryColorDefaultValues2013XLSX);
     CPPUNIT_TEST(testPlotVisOnlyDefaultValue2013XLSX);
     CPPUNIT_TEST(testRAngAxDefaultValue2013XLSX);
+    CPPUNIT_TEST(testMajorTickMarksDefaultValue2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -972,6 +975,21 @@ void Chart2ImportTest::testRAngAxDefaultValue2013XLSX()
     bool bRightAngleAxes = false;
     CPPUNIT_ASSERT(aAny >>= bRightAngleAxes);
     CPPUNIT_ASSERT(bRightAngleAxes);
+}
+
+void Chart2ImportTest::testMajorTickMarksDefaultValue2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "majorTickMark.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+    Reference<beans::XPropertySet> xPropSet(xXAxis, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("MajorTickmarks");
+    sal_Int32 nMajorTickmarks = chart2::TickmarkStyle::NONE;
+    CPPUNIT_ASSERT(aAny.hasValue());
+    CPPUNIT_ASSERT(aAny >>= nMajorTickmarks);
+    CPPUNIT_ASSERT_EQUAL(chart2::TickmarkStyle::INNER | chart2::TickmarkStyle::OUTER, nMajorTickmarks);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
