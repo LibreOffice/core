@@ -1345,7 +1345,7 @@ void SwHTMLParser::NewForm( bool bAppend )
 
     if( !aAction.isEmpty() )
     {
-        aAction = URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), aAction, Link<>(), false);
+        aAction = URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), aAction, Link<OUString *, bool>(), false);
     }
     else
     {
@@ -1866,7 +1866,7 @@ void SwHTMLParser::InsertInput()
         // Die URL erst nach dem Einfuegen setzen, weil sich der
         // Download der Grafik erst dann am XModel anmelden kann,
         // wenn das Control eingefuegt ist.
-        aTmp <<= OUString( URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), sImgSrc, Link<>(), false));
+        aTmp <<= OUString( URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), sImgSrc, Link<OUString *, bool>(), false));
         xPropSet->setPropertyValue("ImageURL",
                                     aTmp );
     }

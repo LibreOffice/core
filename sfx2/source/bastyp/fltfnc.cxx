@@ -862,7 +862,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, 
     return NULL;
 }
 
-IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString )
+IMPL_STATIC_LINK_TYPED( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString, bool )
 {
     const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SfxFilterFlags::IMPORT );
     if (pFilter && !pFilter->GetWildcard().Matches( OUString() ) &&
@@ -870,9 +870,9 @@ IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString )
         !pFilter->GetWildcard().Matches(OUString('*'))
        )
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 

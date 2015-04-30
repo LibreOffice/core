@@ -51,7 +51,7 @@ SfxFilterMatcher& SfxApplication::GetFilterMatcher()
     if( !pAppData_Impl->pMatcher )
     {
         pAppData_Impl->pMatcher = new SfxFilterMatcher();
-        URIHelper::SetMaybeFileHdl( LINK(
+        URIHelper::SetMaybeFileHdl( LINK_TYPED(
             pAppData_Impl->pMatcher, SfxFilterMatcher, MaybeFileHdl_Impl ) );
     }
     return *pAppData_Impl->pMatcher;

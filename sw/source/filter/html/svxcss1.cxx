@@ -1573,7 +1573,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
 
         if( !aURL.isEmpty() )
         {
-            aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL, Link<>(), false ) );
+            aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL, Link<OUString *, bool>(), false ) );
             aBrushItem.SetGraphicPos( eRepeat );
         }
 

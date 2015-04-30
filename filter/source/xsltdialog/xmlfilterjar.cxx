@@ -125,7 +125,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference
 
         if( !aFileURL.matchIgnoreAsciiCase( OUString("file://") ) )
         {
-            aFileURL = URIHelper::SmartRel2Abs( INetURLObject(sProgPath), aFileURL, Link<>(), false );
+            aFileURL = URIHelper::SmartRel2Abs( INetURLObject(sProgPath), aFileURL, Link<OUString *, bool>(), false );
         }
 
         INetURLObject aURL( aFileURL );
@@ -343,7 +343,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
 
                 INetURLObject aBaseURL( rTargetURL );
 
-                rURL = URIHelper::SmartRel2Abs( aBaseURL, szPackagePath, Link<>(), false );
+                rURL = URIHelper::SmartRel2Abs( aBaseURL, szPackagePath, Link<OUString *, bool>(), false );
 
                 if( !rURL.isEmpty() )
                 {

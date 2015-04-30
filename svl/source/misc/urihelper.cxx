@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  OUString const & rTheRelURIRef,
-                                 Link<> const & rMaybeFileHdl,
+                                 Link<OUString *, bool> const & rMaybeFileHdl,
                                  bool bCheckFileExists,
                                  bool bIgnoreFragment,
                                  INetURLObject::EncodeMechanism eEncodeMechanism,
@@ -91,7 +91,7 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                 if (rMaybeFileHdl.IsSet())
                 {
                     OUString aFilePath(rTheRelURIRef);
-                    bMaybeFile = rMaybeFileHdl.Call(&aFilePath) != 0;
+                    bMaybeFile = rMaybeFileHdl.Call(&aFilePath);
                 }
                 if (!bMaybeFile)
                     aAbsURIRef = aNonFileURIRef;
@@ -101,14 +101,14 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
     return aAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
 }
 
-namespace { struct MaybeFileHdl : public rtl::Static< Link<>, MaybeFileHdl > {}; }
+namespace { struct MaybeFileHdl : public rtl::Static< Link<OUString *, bool>, MaybeFileHdl > {}; }
 
-void URIHelper::SetMaybeFileHdl(Link<> const & rTheMaybeFileHdl)
+void URIHelper::SetMaybeFileHdl(Link<OUString *, bool> const & rTheMaybeFileHdl)
 {
     MaybeFileHdl::get() = rTheMaybeFileHdl;
 }
 
-Link<> URIHelper::GetMaybeFileHdl()
+Link<OUString *, bool> URIHelper::GetMaybeFileHdl()
 {
     return MaybeFileHdl::get();
 }

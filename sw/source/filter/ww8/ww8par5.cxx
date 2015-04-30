@@ -259,7 +259,7 @@ OUString SwWW8ImplReader::ConvertFFileName(const OUString& rOrg)
     // Need the more sophisticated url converter.
     if (!aName.isEmpty())
         aName = URIHelper::SmartRel2Abs(
-            INetURLObject(sBaseURL), aName, Link<>(), false);
+            INetURLObject(sBaseURL), aName, Link<OUString *, bool>(), false);
 
     return aName;
 }
