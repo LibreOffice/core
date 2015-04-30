@@ -105,12 +105,17 @@ bool containsWindowSubclass(const Type* pType0) {
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
+            bool link = pTemplate->getQualifiedNameAsString() == "Link";
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
                     containsWindowSubclass(rArg.getAsType()))
                 {
-                    return true;
+                    // OK for first template argument of tools/link.hxx Link
+                    // to be a Window-derived pointer:
+                    if (!link || i != 0) {
+                        return true;
+                    }
                 }
             }
         }
