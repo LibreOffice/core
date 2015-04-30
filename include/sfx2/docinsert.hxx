@@ -39,7 +39,7 @@ class SFX2_DLLPUBLIC DocumentInserter
 private:
     OUString                m_sDocFactory;
     OUString                m_sFilter;
-    Link                    m_aDialogClosedLink;
+    Link<>                  m_aDialogClosedLink;
 
     sal_Int64 const         m_nDlgFlags;
     ErrCode                 m_nError;
@@ -55,7 +55,7 @@ public:
                      bool const bEnableMultiSelection = false);
     ~DocumentInserter();
 
-    void                    StartExecuteModal( const Link& _rDialogClosedLink );
+    void                    StartExecuteModal( const Link<>& _rDialogClosedLink );
     SfxMedium*              CreateMedium();
     SfxMediumList*          CreateMediumList();
 

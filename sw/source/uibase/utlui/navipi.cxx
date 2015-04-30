@@ -780,7 +780,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
 //  Handler
 
-    Link aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
+    Link<> aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
     aContentToolBox->SetSelectHdl( aLk );
     aGlobalToolBox->SetSelectHdl( aLk );
     aDocListBox->SetSelectHdl(LINK(this, SwNavigationPI,

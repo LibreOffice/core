@@ -124,17 +124,17 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aFiFuncDesc->SetFont(aFont);
     aFiFuncDesc->SetBackground( GetBackground() );       //! never transparent?
 
-    Link aLink=LINK( this, ScFunctionDockWin, SelHdl);
+    Link<> aLink=LINK( this, ScFunctionDockWin, SelHdl);
     aCatBox->SetSelectHdl(aLink);
     aFuncList->SetSelectHdl(aLink);
     aDDFuncList->SetSelectHdl(aLink);
 
-    Link a2Link=LINK( this, ScFunctionDockWin, SetSelectionHdl);
+    Link<> a2Link=LINK( this, ScFunctionDockWin, SetSelectionHdl);
     aFuncList->SetDoubleClickHdl(a2Link);
     aDDFuncList->SetSelectHdl(aLink);
     aInsertButton->SetClickHdl(a2Link);
 
-    Link a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
+    Link<> a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
     aPrivatSplit->SetCtrModifiedHdl(a3Link);
     StartListening( *pBindingsP, true );
 

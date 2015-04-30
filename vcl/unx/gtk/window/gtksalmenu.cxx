@@ -483,11 +483,11 @@ static long RefreshMenusUnity(void*, void*)
     return 0;
 }
 
-static Link* getRefreshLinkInstance()
+static Link<>* getRefreshLinkInstance()
 {
-    static Link* pLink = NULL;
+    static Link<>* pLink = NULL;
     if(!pLink) {
-        pLink = new Link(NULL, &RefreshMenusUnity);
+        pLink = new Link<>(NULL, &RefreshMenusUnity);
     }
     return pLink;
 }

@@ -922,12 +922,12 @@ bool FrameSelector::GetVisibleColor( Color& rColor ) const
 }
 
 // frame border selection
-const Link& FrameSelector::GetSelectHdl() const
+const Link<>& FrameSelector::GetSelectHdl() const
 {
     return mxImpl->maSelectHdl;
 }
 
-void FrameSelector::SetSelectHdl( const Link& rHdl )
+void FrameSelector::SetSelectHdl( const Link<>& rHdl )
 {
     mxImpl->maSelectHdl = rHdl;
 }

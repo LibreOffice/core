@@ -36,10 +36,10 @@ private:
     ImpVclMEdit*    pImpVclMEdit;
 
     OUString        aSaveValue;
-    Link            aModifyHdlLink;
+    Link<>          aModifyHdlLink;
 
     Timer*          pUpdateDataTimer;
-    Link            aUpdateDataHdlLink;
+    Link<>          aUpdateDataHdlLink;
 
 protected:
 
@@ -109,10 +109,10 @@ public:
     const OUString&    GetSavedValue() const            { return aSaveValue; }
     bool               IsValueChangedFromSaved() const  { return aSaveValue != GetText(); }
 
-    void            SetModifyHdl( const Link& rLink ) SAL_OVERRIDE   { aModifyHdlLink = rLink; }
-    const Link&     GetModifyHdl() const SAL_OVERRIDE                { return aModifyHdlLink; }
+    void            SetModifyHdl( const Link<>& rLink ) SAL_OVERRIDE { aModifyHdlLink = rLink; }
+    const Link<>&   GetModifyHdl() const SAL_OVERRIDE                { return aModifyHdlLink; }
 
-    void            SetUpdateDataHdl( const Link& rLink ) SAL_OVERRIDE { aUpdateDataHdlLink = rLink; }
+    void            SetUpdateDataHdl( const Link<>& rLink ) SAL_OVERRIDE { aUpdateDataHdlLink = rLink; }
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;

@@ -1123,7 +1123,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     if ( mbDeleteMatcher )
         delete mpMatcher;
 
-    maPreviewIdle.SetIdleHdl( Link() );
+    maPreviewIdle.SetIdleHdl( Link<>() );
 
     ::comphelper::disposeComponent( mxFileDlg );
 }
@@ -2338,7 +2338,7 @@ ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
     return nRet;
 }
 
-void FileDialogHelper::StartExecuteModal( const Link& rEndDialogHdl )
+void FileDialogHelper::StartExecuteModal( const Link<>& rEndDialogHdl )
 {
     m_aDialogClosedLink = rEndDialogHdl;
     m_nError = ERRCODE_NONE;

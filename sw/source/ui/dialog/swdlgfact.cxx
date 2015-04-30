@@ -168,7 +168,7 @@ IMPL_LINK_NOARG(AbstractApplyTabDialog_Impl, ApplyHdl)
     return 0;
 }
 
-void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link& rLink )
+void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link<>& rLink )
 {
     m_aHandler = rLink;
     pDlg->SetApplyHandler(LINK(this, AbstractApplyTabDialog_Impl, ApplyHdl));
@@ -598,7 +598,7 @@ AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
     pDlg.disposeAndClear();
 }
 
-void AbstractMailMergeWizard_Impl::StartExecuteModal( const Link& rEndDialogHdl )
+void AbstractMailMergeWizard_Impl::StartExecuteModal( const Link<>& rEndDialogHdl )
 {
     aEndDlgHdl = rEndDialogHdl;
     pDlg->StartExecuteModal(
@@ -616,7 +616,7 @@ IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDial
     (void) pDialog; // unused in non-debug
 
     aEndDlgHdl.Call( this );
-    aEndDlgHdl = Link();
+    aEndDlgHdl = Link<>();
 
     return 0L;
 }

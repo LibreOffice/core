@@ -113,7 +113,7 @@ public:
     void                SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces = 0);
 
     /** The passed handler is called whenever the totation value changes. */
-    void                SetModifyHdl( const Link& rLink );
+    void                SetModifyHdl( const Link<>& rLink );
 
     /** Save value for later comparison */
     void                SaveValue();
@@ -127,7 +127,7 @@ protected:
         ScopedVclPtr<DialControlBmp> mxBmpEnabled;
         ScopedVclPtr<DialControlBmp> mxBmpDisabled;
         ScopedVclPtr<DialControlBmp> mxBmpBuffered;
-        Link                maModifyHdl;
+        Link<>              maModifyHdl;
         VclPtr<NumericField>       mpLinkField;
         sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
@@ -156,7 +156,7 @@ protected:
 private:
     void                InvalidateControl();
 
-    void                ImplSetFieldLink( const Link& rLink );
+    void                ImplSetFieldLink( const Link<>& rLink );
 
 
     DECL_LINK( LinkedFieldModifyHdl, NumericField* );

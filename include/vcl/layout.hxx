@@ -544,15 +544,15 @@ public:
         return m_pDisclosureButton->GetText();
     }
     virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
-    void  SetExpandedHdl( const Link& rLink ) { maExpandedHdl = rLink; }
-    const Link& GetExpandedHdl() const { return maExpandedHdl; }
+    void  SetExpandedHdl( const Link<>& rLink ) { maExpandedHdl = rLink; }
+    const Link<>& GetExpandedHdl() const { return maExpandedHdl; }
 protected:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 private:
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
-    Link maExpandedHdl;
+    Link<> maExpandedHdl;
     DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
 };
 

@@ -2044,25 +2044,25 @@ IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify*, pNotify )
 }
 
 /** sets a link that is called at the beginning of a drag operation at an edit view */
-void Outliner::SetBeginDropHdl( const Link& rLink )
+void Outliner::SetBeginDropHdl( const Link<>& rLink )
 {
     pEditEngine->SetBeginDropHdl( rLink );
 }
 
 /** sets a link that is called at the end of a drag operation at an edit view */
-void Outliner::SetEndDropHdl( const Link& rLink )
+void Outliner::SetEndDropHdl( const Link<>& rLink )
 {
     pEditEngine->SetEndDropHdl( rLink );
 }
 
 /** sets a link that is called before a drop or paste operation. */
-void Outliner::SetBeginPasteOrDropHdl( const Link& rLink )
+void Outliner::SetBeginPasteOrDropHdl( const Link<>& rLink )
 {
     maBeginPasteOrDropHdl = rLink;
 }
 
 /** sets a link that is called after a drop or paste operation. */
-void Outliner::SetEndPasteOrDropHdl( const Link& rLink )
+void Outliner::SetEndPasteOrDropHdl( const Link<>& rLink )
 {
     maEndPasteOrDropHdl = rLink;
 }

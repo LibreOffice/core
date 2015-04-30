@@ -43,7 +43,7 @@ class VCL_DLLPUBLIC FormatterBase
 private:
     VclPtr<Edit>            mpField;
     LocaleDataWrapper*      mpLocaleDataWrapper;
-    Link                    maErrorLink;
+    Link<>                  maErrorLink;
     bool                    mbReformat;
     bool                    mbStrictFormat;
     bool                    mbEmptyFieldValue;
@@ -83,8 +83,8 @@ public:
 
     const AllSettings&      GetFieldSettings() const;
 
-    void                    SetErrorHdl( const Link& rLink )    { maErrorLink = rLink; }
-    const Link&             GetErrorHdl() const                 { return maErrorLink; }
+    void                    SetErrorHdl( const Link<>& rLink )  { maErrorLink = rLink; }
+    const Link<>&           GetErrorHdl() const                 { return maErrorLink; }
 
     void                    SetEmptyFieldValue();
     bool                    IsEmptyFieldValue() const;
@@ -229,7 +229,7 @@ protected:
     OUString                maCurUnitText;
     sal_Int64               mnBaseValue;
     FieldUnit               meUnit;
-    Link                    maCustomConvertLink;
+    Link<>                  maCustomConvertLink;
 
 protected:
                             MetricFormatter();
@@ -270,8 +270,8 @@ public:
     using NumericFormatter::GetCorrectedValue;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
-    void                    SetCustomConvertHdl( const Link& rLink ) { maCustomConvertLink = rLink; }
-    const Link&             GetCustomConvertHdl() const { return maCustomConvertLink; }
+    void                    SetCustomConvertHdl( const Link<>& rLink ) { maCustomConvertLink = rLink; }
+    const Link<>&           GetCustomConvertHdl() const { return maCustomConvertLink; }
 };
 
 

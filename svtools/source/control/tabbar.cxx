@@ -662,7 +662,7 @@ void TabBar::ImplInitControls()
     else
         mpImpl->mpSizer.disposeAndClear();
 
-    Link aLink = LINK( this, TabBar, ImplClickHdl );
+    Link<> aLink = LINK( this, TabBar, ImplClickHdl );
 
     if ( mnWinStyle & (WB_MINSCROLL | WB_SCROLL) )
     {

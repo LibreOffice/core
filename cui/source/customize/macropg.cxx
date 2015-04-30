@@ -723,7 +723,7 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     m_xModifiable = xModifiable;
     SvHeaderTabListBox&    rListBox = mpImpl->pEventLB->GetListBox();
     HeaderBar&            rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link                aLnk(LINK(this, _SvxMacroTabPage, AssignDeleteHdl_Impl ));
+    Link<>              aLnk(LINK(this, _SvxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pDeletePB->SetClickHdl(    aLnk );
     mpImpl->pAssignPB->SetClickHdl(    aLnk );
     if( mpImpl->pAssignComponentPB )

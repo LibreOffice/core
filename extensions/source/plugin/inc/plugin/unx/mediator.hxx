@@ -98,8 +98,8 @@ protected:
     // will be constantly increased with each message sent
     bool                                m_bValid;
 
-    Link                                m_aConnectionLostHdl;
-    Link                                m_aNewMessageHdl;
+    Link<>                              m_aConnectionLostHdl;
+    Link<>                              m_aNewMessageHdl;
 public:
     Mediator( int nSocket );
     virtual ~Mediator();
@@ -132,16 +132,16 @@ public:
     MediatorMessage* GetNextMessage( bool bWait = false );
 
 
-    Link SetConnectionLostHdl( const Link& rLink )
+    Link<> SetConnectionLostHdl( const Link<>& rLink )
         {
-            Link aRet = m_aConnectionLostHdl;
+            Link<> aRet = m_aConnectionLostHdl;
             m_aConnectionLostHdl = rLink;
             return aRet;
         }
 
-    Link SetNewMessageHdl( const Link& rLink )
+    Link<> SetNewMessageHdl( const Link<>& rLink )
         {
-            Link aRet = m_aNewMessageHdl;
+            Link<> aRet = m_aNewMessageHdl;
             m_aNewMessageHdl = rLink;
             return aRet;
         }

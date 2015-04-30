@@ -115,9 +115,9 @@ public:
     // Check if the root region is visible or not.
     bool isNonRootRegionVisible () const { return mnCurRegionId > 0;}
 
-    void setOpenRegionHdl(const Link &rLink);
+    void setOpenRegionHdl(const Link<> &rLink);
 
-    void setOpenTemplateHdl (const Link &rLink);
+    void setOpenTemplateHdl (const Link<> &rLink);
 
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
@@ -141,8 +141,8 @@ protected:
     VclPtr<PushButton> maAllButton;
     VclPtr<FixedText>  maFTName;
 
-    Link maOpenRegionHdl;
-    Link maOpenTemplateHdl;
+    Link<> maOpenRegionHdl;
+    Link<> maOpenTemplateHdl;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEABSTRACTVIEW_HXX

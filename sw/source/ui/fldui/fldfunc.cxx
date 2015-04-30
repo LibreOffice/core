@@ -168,13 +168,13 @@ void SwFldFuncPage::Reset(const SfxItemSet* )
     m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFldFuncPage, InsertMacroHdl));
     m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFldFuncPage, InsertHdl));
     m_pMacroBT->SetClickHdl            (LINK(this, SwFldFuncPage, MacroHdl));
-    Link aListModifyLk( LINK(this, SwFldFuncPage, ListModifyHdl));
+    Link<> aListModifyLk( LINK(this, SwFldFuncPage, ListModifyHdl));
     m_pListAddPB->SetClickHdl(aListModifyLk);
     m_pListRemovePB->SetClickHdl(aListModifyLk);
     m_pListUpPB->SetClickHdl(aListModifyLk);
     m_pListDownPB->SetClickHdl(aListModifyLk);
     m_pListItemED->SetReturnActionLink(aListModifyLk);
-    Link aListEnableLk = LINK(this, SwFldFuncPage, ListEnableHdl);
+    Link<> aListEnableLk = LINK(this, SwFldFuncPage, ListEnableHdl);
     m_pListItemED->SetModifyHdl(aListEnableLk);
     m_pListItemsLB->SetSelectHdl(aListEnableLk);
 

@@ -177,7 +177,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
                 if (pWindow==pDyingWindow && pWindow!=NULL && maWindowLink.IsSet())
                 {
                     pWindow->RemoveChildEventListener (maWindowLink);
-                    maWindowLink = Link();
+                    maWindowLink = Link<>();
                 }
             }
             break;
@@ -484,7 +484,7 @@ void AccessibleDocumentViewBase::impl_dispose()
     {
         if (pWindow)
             pWindow->RemoveChildEventListener (maWindowLink);
-        maWindowLink = Link();
+        maWindowLink = Link<>();
     }
     else
     {

@@ -164,7 +164,7 @@ void ScAcceptChgDlg::dispose()
 
     if(pChanges!=NULL)
     {
-        Link aLink;
+        Link<> aLink;
         pChanges->SetModifiedLink(aLink);
     }
 

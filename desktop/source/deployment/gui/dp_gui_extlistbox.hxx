@@ -132,7 +132,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     Image           m_aLockedImage;
     Image           m_aWarningImage;
     Image           m_aDefaultImage;
-    Link            m_aClickHdl;
+    Link<>          m_aClickHdl;
 
     VclPtr<ScrollBar>      m_pScrollBar;
 
@@ -196,9 +196,9 @@ public:
     Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }
     long            PointToPos( const Point& rPos );
-    void            SetScrollHdl( const Link& rLink );
+    void            SetScrollHdl( const Link<>& rLink );
     void            DoScroll( long nDelta );
-    void            SetHyperlinkHdl( const Link& rLink ){ m_aClickHdl = rLink; }
+    void            SetHyperlinkHdl( const Link<>& rLink ){ m_aClickHdl = rLink; }
     virtual void    RecalcAll();
     void            RemoveUnlocked();
 

@@ -62,9 +62,9 @@ BaseWindow::~BaseWindow()
 void BaseWindow::dispose()
 {
     if ( pShellVScrollBar )
-        pShellVScrollBar->SetScrollHdl( Link() );
+        pShellVScrollBar->SetScrollHdl( Link<>() );
     if ( pShellHScrollBar )
-        pShellHScrollBar->SetScrollHdl( Link() );
+        pShellHScrollBar->SetScrollHdl( Link<>() );
     pShellVScrollBar.clear();
     pShellHScrollBar.clear();
     vcl::Window::dispose();

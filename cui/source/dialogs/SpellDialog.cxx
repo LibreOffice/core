@@ -90,7 +90,7 @@ namespace svx{
 class SpellUndoAction_Impl : public SfxUndoAction
 {
     sal_uInt16          m_nId;
-    const Link&     m_rActionLink;
+    const Link<>&   m_rActionLink;
     //undo of button enabling
     bool            m_bEnableChangePB;
     bool            m_bEnableChangeAllPB;
@@ -107,7 +107,7 @@ class SpellUndoAction_Impl : public SfxUndoAction
     long            m_nOffset;
 
 public:
-    SpellUndoAction_Impl(sal_uInt16 nId, const Link& rActionLink) :
+    SpellUndoAction_Impl(sal_uInt16 nId, const Link<>& rActionLink) :
         m_nId(nId),
         m_rActionLink( rActionLink),
         m_bEnableChangePB(false),

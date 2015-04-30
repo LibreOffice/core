@@ -317,7 +317,7 @@ SvNumberFormatterRegistry_Impl& SvNumberFormatter::GetFormatterRegistry()
     return *pFormatterRegistry;
 }
 
-void SvNumberFormatter::SetColorLink( const Link& rColorTableCallBack )
+void SvNumberFormatter::SetColorLink( const Link<>& rColorTableCallBack )
 {
     aColorLink = rColorTableCallBack;
 }

@@ -243,7 +243,7 @@ void LinePropertyPanel::Initialize()
 
     FillLineStyleList();
     SelectLineStyle();
-    Link aLink = LINK( this, LinePropertyPanel, ChangeLineStyleHdl );
+    Link<> aLink = LINK( this, LinePropertyPanel, ChangeLineStyleHdl );
     mpLBStyle->SetSelectHdl( aLink );
     mpLBStyle->SetAccessibleName(OUString( "Style"));
     mpLBStyle->AdaptDropDownLineCountToMaximum();

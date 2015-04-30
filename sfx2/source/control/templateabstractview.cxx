@@ -218,12 +218,12 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
 
 
 
-void TemplateAbstractView::setOpenRegionHdl(const Link &rLink)
+void TemplateAbstractView::setOpenRegionHdl(const Link<> &rLink)
 {
     maOpenRegionHdl = rLink;
 }
 
-void TemplateAbstractView::setOpenTemplateHdl(const Link &rLink)
+void TemplateAbstractView::setOpenTemplateHdl(const Link<> &rLink)
 {
     maOpenTemplateHdl = rLink;
 }

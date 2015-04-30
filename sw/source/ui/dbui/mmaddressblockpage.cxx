@@ -88,7 +88,7 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
     m_pSettingsWIN->SetSelectHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl));
     m_pHideEmptyParagraphsCB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl));
 
-    Link aLink = LINK(this, SwMailMergeAddressBlockPage, InsertDataHdl_Impl);
+    Link<> aLink = LINK(this, SwMailMergeAddressBlockPage, InsertDataHdl_Impl);
     m_pPrevSetIB->SetClickHdl(aLink);
     m_pNextSetIB->SetClickHdl(aLink);
 }
@@ -340,13 +340,13 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
     get(m_pDependentRB, "dependent");
     get(m_pCountryED, "country");
 
-    Link aCustomizeHdl = LINK(this, SwSelectAddressBlockDialog, NewCustomizeHdl_Impl);
+    Link<> aCustomizeHdl = LINK(this, SwSelectAddressBlockDialog, NewCustomizeHdl_Impl);
     m_pNewPB->SetClickHdl(aCustomizeHdl);
     m_pCustomizePB->SetClickHdl(aCustomizeHdl);
 
     m_pDeletePB->SetClickHdl(LINK(this, SwSelectAddressBlockDialog, DeleteHdl_Impl));
 
-    Link aLk = LINK(this, SwSelectAddressBlockDialog, IncludeHdl_Impl);
+    Link<> aLk = LINK(this, SwSelectAddressBlockDialog, IncludeHdl_Impl);
     m_pNeverRB->SetClickHdl(aLk);
     m_pAlwaysRB->SetClickHdl(aLk);
     m_pDependentRB->SetClickHdl(aLk);
@@ -558,10 +558,10 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     m_pAddressElementsLB->SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl ));
     m_pDragED->SetModifyHdl(LINK(this, SwCustomizeAddressBlockDialog, EditModifyHdl_Impl));
     m_pDragED->SetSelectionChangedHdl( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl));
-    Link aFieldsLink = LINK(this, SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl);
+    Link<> aFieldsLink = LINK(this, SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl);
     m_pFieldCB->SetModifyHdl(aFieldsLink);
     m_pFieldCB->SetSelectHdl(aFieldsLink);
-    Link aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
+    Link<> aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
     m_pInsertFieldIB->SetClickHdl(aImgButtonHdl);
     m_pRemoveFieldIB->SetClickHdl(aImgButtonHdl);
     m_pUpIB->SetClickHdl(aImgButtonHdl);
@@ -816,7 +816,7 @@ class SwAssignFieldsControl : public Control
 
     SwMailMergeConfigItem*      m_rConfigItem;
 
-    Link                        m_aModifyHdl;
+    Link<>                      m_aModifyHdl;
 
     long                        m_nLBStartTopPos;
     long                        m_nYOffset;
@@ -836,7 +836,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void        Init(SwMailMergeConfigItem& rConfigItem);
-    void        SetModifyHdl(const Link& rModifyHdl)
+    void        SetModifyHdl(const Link<>& rModifyHdl)
                 {
                     m_aModifyHdl = rModifyHdl;
                     m_aModifyHdl.Call(this);
@@ -897,8 +897,8 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     //each position in this sequence matches the position in the header array rHeaders
     //if no assignment is available an empty sequence will be returned
     uno::Sequence< OUString> aAssignments = rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-    Link aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
-    Link aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
+    Link<> aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
+    Link<> aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
 
     //fill the controls
     long nControlWidth = aOutputSize.Width() / 3;

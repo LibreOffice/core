@@ -47,7 +47,7 @@ void PreviewValueSet::SetPreviewSize (const Size& rSize)
     maPreviewSize = rSize;
 }
 
-void PreviewValueSet::SetRightMouseClickHandler (const Link& rLink)
+void PreviewValueSet::SetRightMouseClickHandler (const Link<>& rLink)
 {
     maRightMouseClickHandler = rLink;
 }

@@ -137,7 +137,7 @@ void  SwFormatTablePage::Init()
     m_aRightMF.SetMetricFieldMin(-999999);
 
     //handler
-    Link aLk = LINK( this, SwFormatTablePage, AutoClickHdl );
+    Link<> aLk = LINK( this, SwFormatTablePage, AutoClickHdl );
     m_pFullBtn->SetClickHdl( aLk );
     m_pFreeBtn->SetClickHdl( aLk );
     m_pLeftBtn->SetClickHdl( aLk );
@@ -845,9 +845,9 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
 void  SwTableColumnPage::Init(bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
-    Link aLkUp = LINK( this, SwTableColumnPage, UpHdl );
-    Link aLkDown = LINK( this, SwTableColumnPage, DownHdl );
-    Link aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
+    Link<> aLkUp = LINK( this, SwTableColumnPage, UpHdl );
+    Link<> aLkDown = LINK( this, SwTableColumnPage, DownHdl );
+    Link<> aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
         aValueTbl[i] = i;
@@ -858,7 +858,7 @@ void  SwTableColumnPage::Init(bool bWeb)
     }
     SetMetric(*m_pSpaceED, aMetric);
 
-    Link aLk = LINK( this, SwTableColumnPage, AutoClickHdl );
+    Link<> aLk = LINK( this, SwTableColumnPage, AutoClickHdl );
     m_pUpBtn->SetClickHdl( aLk );
     m_pDownBtn->SetClickHdl( aLk );
 

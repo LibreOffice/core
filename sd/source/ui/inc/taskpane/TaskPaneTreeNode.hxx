@@ -155,7 +155,7 @@ public:
         children as well as focus, visibility, and expansion state.
         Multiple calls are ignored.  Each listener is added only once.
     */
-    void AddStateChangeListener (const Link& rListener);
+    void AddStateChangeListener (const Link<>& rListener);
 
     /** Call the state change listeners and pass a state change event with
         the specified event id.  The source field is set to this.
@@ -172,7 +172,7 @@ protected:
 
 private:
     TreeNode* mpParent;
-    typedef ::std::vector<Link> StateChangeListenerContainer;
+    typedef ::std::vector<Link<>> StateChangeListenerContainer;
     StateChangeListenerContainer maStateChangeListeners;
 };
 

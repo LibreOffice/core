@@ -176,7 +176,7 @@ UUIInteractionHelper::handleRequest(
     ) {
         // we are not in the main thread, let it handle that stuff
         HandleData aHD(rRequest);
-        Link aLink(&aHD,handlerequest);
+        Link<> aLink(&aHD,handlerequest);
         Application::PostUserEvent(aLink,this);
         SolarMutexReleaser aReleaser;
         aHD.wait();
@@ -232,7 +232,7 @@ UUIInteractionHelper::getStringFromRequest(
     ) {
         // we are not in the main thread, let it handle that stuff
         HandleData aHD(rRequest);
-        Link aLink(&aHD,getstringfromrequest);
+        Link<> aLink(&aHD,getstringfromrequest);
         Application::PostUserEvent(aLink,this);
         SolarMutexReleaser aReleaser;
         aHD.wait();

@@ -2102,7 +2102,7 @@ void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
     m_pVertScroll->SetRangeMax( 0 );
     m_pVertScroll->SetVisibleSize( 0xFFFF );
 
-    Link aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
+    Link<> aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
     m_pVertScroll->SetScrollHdl( aScrollLink );
 }
 
@@ -2613,7 +2613,7 @@ CmisPropertiesControl::CmisPropertiesControl(SfxTabPage* pParent)
     m_rVertScroll.SetRangeMin(0);
     m_rVertScroll.SetVisibleSize( 0xFFFF );
 
-    Link aScrollLink = LINK( this, CmisPropertiesControl, ScrollHdl );
+    Link<> aScrollLink = LINK( this, CmisPropertiesControl, ScrollHdl );
     m_rVertScroll.SetScrollHdl( aScrollLink );
 }
 

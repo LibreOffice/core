@@ -189,8 +189,8 @@ SvxLineTabPage::SvxLineTabPage
     m_pMtrLineWidth->SetModifyHdl( LINK( this, SvxLineTabPage, ChangePreviewHdl_Impl ) );
     m_pMtrTransparent->SetModifyHdl( LINK( this, SvxLineTabPage, ChangeTransparentHdl_Impl ) );
 
-    Link aStart = LINK( this, SvxLineTabPage, ChangeStartHdl_Impl );
-    Link aEnd = LINK( this, SvxLineTabPage, ChangeEndHdl_Impl );
+    Link<> aStart = LINK( this, SvxLineTabPage, ChangeStartHdl_Impl );
+    Link<> aEnd = LINK( this, SvxLineTabPage, ChangeEndHdl_Impl );
     m_pLbStartStyle->SetSelectHdl( aStart );
     m_pLbEndStyle->SetSelectHdl( aEnd );
     m_pMtrStartWidth->SetModifyHdl( aStart );
@@ -199,11 +199,11 @@ SvxLineTabPage::SvxLineTabPage
     m_pTsbCenterEnd->SetClickHdl( aEnd );
 
     // #116827#
-    Link aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
+    Link<> aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
     m_pLBEdgeStyle->SetSelectHdl( aEdgeStyle );
 
     // LineCaps
-    Link aCapStyle = LINK( this, SvxLineTabPage, ChangeCapStyleHdl_Impl );
+    Link<> aCapStyle = LINK( this, SvxLineTabPage, ChangeCapStyleHdl_Impl );
     m_pLBCapStyle->SetSelectHdl( aCapStyle );
 
     // Symbols on a line (eg star charts), MB-handler set

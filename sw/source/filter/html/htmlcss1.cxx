@@ -1765,7 +1765,7 @@ void SwHTMLParser::InsertLink()
                     sRel = rOption.GetString();
                     break;
                 case HTML_O_HREF:
-                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), rOption.GetString(), Link(), false );
+                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), rOption.GetString(), Link<>(), false );
                     break;
                 case HTML_O_TYPE:
                     sType = rOption.GetString();

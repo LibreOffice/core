@@ -85,7 +85,7 @@ ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
     m_rVertScroll.SetRangeMin( 0 );
     m_rVertScroll.SetVisibleSize( 0xFFFF );
 
-    Link aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
+    Link<> aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
     m_rVertScroll.SetScrollHdl( aScrollLink );
 }
 

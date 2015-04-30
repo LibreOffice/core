@@ -85,7 +85,7 @@ void XMLSignatureHelper::SetStorage(
 }
 
 
-void XMLSignatureHelper::SetStartVerifySignatureHdl( const Link& rLink )
+void XMLSignatureHelper::SetStartVerifySignatureHdl( const Link<>& rLink )
 {
     maStartVerifySignatureHdl = rLink;
 }

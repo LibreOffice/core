@@ -90,7 +90,7 @@ public:
     void                    updateRoadmapItemLabel( WizardState _nState );
 
     virtual short           Execute() SAL_OVERRIDE;
-    virtual void            StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual void            StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
 };
 #endif
 

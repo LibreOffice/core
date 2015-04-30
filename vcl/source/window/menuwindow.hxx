@@ -21,12 +21,12 @@
 #define INCLUDED_VCL_SOURCE_WINDOW_MENUWINDOW_HXX
 
 #include <sal/types.h>
+#include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/event.hxx>
 
 class HelpEvent;
 class Image;
-class Link;
 class Menu;
 class MenuBar;
 class Rectangle;
@@ -84,8 +84,8 @@ public:
     virtual void KillActivePopup() = 0;
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.
-    virtual sal_uInt16 AddMenuBarButton(const Image&, const Link&, const OUString&, sal_uInt16 nPos) = 0;
-    virtual void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link&) = 0;
+    virtual sal_uInt16 AddMenuBarButton(const Image&, const Link<>&, const OUString&, sal_uInt16 nPos) = 0;
+    virtual void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<>&) = 0;
     virtual Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId) = 0;
     virtual void RemoveMenuBarButton(sal_uInt16 nId) = 0;
     virtual bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId) = 0;

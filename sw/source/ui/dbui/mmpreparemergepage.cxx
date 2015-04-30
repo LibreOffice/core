@@ -48,7 +48,7 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
     get(m_pEditPB, "edit");
 
     m_pEditPB->SetClickHdl( LINK( this, SwMailMergePrepareMergePage, EditDocumentHdl_Impl));
-    Link aMoveLink(LINK( this, SwMailMergePrepareMergePage, MoveHdl_Impl));
+    Link<> aMoveLink(LINK( this, SwMailMergePrepareMergePage, MoveHdl_Impl));
     m_pFirstPB->SetClickHdl( aMoveLink );
     m_pPrevPB->SetClickHdl( aMoveLink );
     m_pNextPB->SetClickHdl( aMoveLink );

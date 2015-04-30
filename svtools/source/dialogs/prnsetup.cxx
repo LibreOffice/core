@@ -264,7 +264,7 @@ void PrinterSetupDialog::dispose()
     ModalDialog::dispose();
 }
 
-void PrinterSetupDialog::SetOptionsHdl( const Link& rLink )
+void PrinterSetupDialog::SetOptionsHdl( const Link<>& rLink )
 {
     m_pBtnOptions->SetClickHdl( rLink );
     m_pBtnOptions->Show( rLink.IsSet() );

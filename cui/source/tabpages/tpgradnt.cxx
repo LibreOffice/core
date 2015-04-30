@@ -117,7 +117,7 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pBtnDelete->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickDeleteHdl_Impl ) );
 
-    Link aLink = LINK( this, SvxGradientTabPage, ModifiedHdl_Impl );
+    Link<> aLink = LINK( this, SvxGradientTabPage, ModifiedHdl_Impl );
     m_pLbGradientType->SetSelectHdl( aLink );
     m_pMtrCenterX->SetModifyHdl( aLink );
     m_pMtrCenterY->SetModifyHdl( aLink );

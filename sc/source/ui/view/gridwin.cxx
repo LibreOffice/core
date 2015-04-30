@@ -3193,7 +3193,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 if (pHdl)
                     pHdl->SetModified();
 
-                Link aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
+                Link<> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
                 pEditView->ExecuteSpellPopup( aMenuPos, &aLink );
 
                 bDone = true;

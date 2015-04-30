@@ -206,7 +206,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pPathCtrl, "paths");
 
     m_pStandardBtn->SetClickHdl(LINK(this, SvxPathTabPage, StandardHdl_Impl));
-    Link aLink = LINK( this, SvxPathTabPage, PathHdl_Impl );
+    Link<> aLink = LINK( this, SvxPathTabPage, PathHdl_Impl );
     m_pPathBtn->SetClickHdl( aLink );
 
     Size aControlSize(236 , 147);

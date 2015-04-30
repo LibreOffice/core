@@ -1637,7 +1637,7 @@ const Size& ToolbarMenu::getMenuSize() const
 
 
 
-void ToolbarMenu::SetSelectHdl( const Link& rLink )
+void ToolbarMenu::SetSelectHdl( const Link<>& rLink )
 {
     mpImpl->maSelectHdl = rLink;
 }

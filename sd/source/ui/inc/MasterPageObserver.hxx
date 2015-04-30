@@ -61,7 +61,7 @@ public:
             The event listener to call for future events.  Call
             RemoveEventListener() before the listener is destroyed.
     */
-    void AddEventListener (const Link& rEventListener);
+    void AddEventListener (const Link<>& rEventListener);
 
     /** Remove the given listener from the list of listeners.
         @param rEventListener
@@ -69,7 +69,7 @@ public:
             from this object.  Passing a listener that has not
             been registered before is safe and is silently ignored.
     */
-    void RemoveEventListener (const Link& rEventListener);
+    void RemoveEventListener (const Link<>& rEventListener);
 
 private:
     static ::osl::Mutex maMutex;

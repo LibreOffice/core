@@ -75,7 +75,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 }
 
 FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
-    const Link& lnkContextSupplier)
+    const Link<>& lnkContextSupplier)
     :ModalDialog(pParent, "RecordSearchDialog", "cui/ui/fmsearchdialog.ui")
     ,m_sCancel( Button::GetStandardText( StandardButtonType::Cancel ) )
     ,m_pPreSearchFocus( NULL )

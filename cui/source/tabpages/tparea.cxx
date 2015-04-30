@@ -301,7 +301,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     m_pMtrTrgrEndValue->SetValue( 100 );
     m_pMtrTrgrStartValue->SetValue( 0 );
     m_pLbTrgrGradientType->SetSelectHdl(LINK(this, SvxTransparenceTabPage, ChangeTrgrTypeHdl_Impl));
-    Link aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrHdl_Impl);
+    Link<> aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrHdl_Impl);
     m_pLbTrgrGradientType->SetSelectHdl( aLink );
     m_pMtrTrgrCenterX->SetModifyHdl( aLink );
     m_pMtrTrgrCenterY->SetModifyHdl( aLink );
@@ -755,7 +755,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pTsbStepCount->SetClickHdl( LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
     m_pNumFldStepCount->SetModifyHdl( LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
 
-    Link aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
+    Link<> aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
     m_pTsbTile->SetClickHdl( aLink );
     m_pTsbStretch->SetClickHdl( aLink );
     m_pTsbOriginal->SetClickHdl( aLink );

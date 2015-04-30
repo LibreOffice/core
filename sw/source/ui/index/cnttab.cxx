@@ -495,7 +495,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
             }
             else
             {
-                Link aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
+                Link<> aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
                 pExampleFrame = new SwOneExampleFrame(
                         *m_pExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate);
 
@@ -874,7 +874,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
     pMenu->SetSelectHdl(LINK(this, SwTOXSelectTabPage, MenuExecuteHdl));
 
-    Link aLk =  LINK(this, SwTOXSelectTabPage, CheckBoxHdl);
+    Link<> aLk =  LINK(this, SwTOXSelectTabPage, CheckBoxHdl);
     m_pAddStylesCB->SetClickHdl(aLk);
     m_pFromHeadingsCB->SetClickHdl(aLk);
     m_pTOXMarksCB->SetClickHdl(aLk);
@@ -885,7 +885,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
     m_pInitialCapsCB->SetClickHdl(aLk);
     m_pKeyAsEntryCB->SetClickHdl(aLk);
 
-    Link aModifyLk = LINK(this, SwTOXSelectTabPage, ModifyHdl);
+    Link<> aModifyLk = LINK(this, SwTOXSelectTabPage, ModifyHdl);
     m_pTitleED->SetModifyHdl(aModifyLk);
     m_pLevelNF->SetModifyHdl(aModifyLk);
     m_pSortAlgorithmLB->SetSelectHdl(aModifyLk);
@@ -1526,7 +1526,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
 class SwTOXEdit : public Edit
 {
     SwFormToken aFormToken;
-    Link        aPrevNextControlLink;
+    Link<>      aPrevNextControlLink;
     bool     bNextControl;
     VclPtr<SwTokenWindow> m_pParent;
 public:
@@ -1545,7 +1545,7 @@ public:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     bool    IsNextControl() const {return bNextControl;}
-    void SetPrevNextLink( const Link& rLink )   {aPrevNextControlLink = rLink;}
+    void SetPrevNextLink( const Link<>& rLink ) {aPrevNextControlLink = rLink;}
 
     const SwFormToken& GetFormToken()
         {
@@ -1613,7 +1613,7 @@ void SwTOXEdit::AdjustSize()
 class SwTOXButton : public PushButton
 {
     SwFormToken aFormToken;
-    Link        aPrevNextControlLink;
+    Link<>      aPrevNextControlLink;
     bool        bNextControl;
     VclPtr<SwTokenWindow> m_pParent;
 public:
@@ -1632,7 +1632,7 @@ public:
     virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     bool IsNextControl() const          {return bNextControl;}
-    void SetPrevNextLink(const Link& rLink) {aPrevNextControlLink = rLink;}
+    void SetPrevNextLink(const Link<>& rLink) {aPrevNextControlLink = rLink;}
     const SwFormToken& GetFormToken() const {return aFormToken;}
 
     void SetCharStyleName(const OUString& rSet, sal_uInt16 nPoolId)
@@ -2135,8 +2135,8 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         else
             m_pLevelFT->SetText(sLevelStr);
 
-        Link aLink = m_pLevelLB->GetSelectHdl();
-        m_pLevelLB->SetSelectHdl(Link());
+        Link<> aLink = m_pLevelLB->GetSelectHdl();
+        m_pLevelLB->SetSelectHdl(Link<>());
         m_pLevelLB->Select( m_pLevelLB->GetEntry( bToxIsIndex ? 1 : 0 ) );
         m_pLevelLB->SetSelectHdl(aLink);
 
@@ -2731,7 +2731,7 @@ SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
     sAdditionalAccnameString2 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING2);
     sAdditionalAccnameString3 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING3);
 
-    Link aLink(LINK(this, SwTokenWindow, ScrollHdl));
+    Link<> aLink(LINK(this, SwTokenWindow, ScrollHdl));
     m_pLeftScrollWin->SetClickHdl(aLink);
     m_pRightScrollWin->SetClickHdl(aLink);
 }
@@ -2768,8 +2768,8 @@ void SwTokenWindow::dispose()
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
         VclPtr<Control> pControl = (*it);
-        pControl->SetGetFocusHdl( Link() );
-        pControl->SetLoseFocusHdl( Link() );
+        pControl->SetGetFocusHdl( Link<>() );
+        pControl->SetLoseFocusHdl( Link<>() );
         pControl.disposeAndClear();
     }
     aControlList.clear();

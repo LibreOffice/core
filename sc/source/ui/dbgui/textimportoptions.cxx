@@ -72,7 +72,7 @@ bool ScTextImportOptionsDlg::isDateConversionSet() const
 
 void ScTextImportOptionsDlg::init()
 {
-    Link aLink = LINK( this, ScTextImportOptionsDlg, OKHdl );
+    Link<> aLink = LINK( this, ScTextImportOptionsDlg, OKHdl );
     m_pBtnOk->SetClickHdl(aLink);
     aLink = LINK( this, ScTextImportOptionsDlg, RadioHdl );
     m_pRbAutomatic->SetClickHdl(aLink);

@@ -51,8 +51,8 @@ namespace dp_gui {
 class LicenseView : public MultiLineEdit, public SfxListener
 {
     bool            mbEndReached;
-    Link            maEndReachedHdl;
-    Link            maScrolledHdl;
+    Link<>          maEndReachedHdl;
+    Link<>          maScrolledHdl;
 
 public:
     LicenseView( vcl::Window* pParent, WinBits nStyle );
@@ -64,9 +64,9 @@ public:
     bool IsEndReached() const;
     bool EndReached() const { return mbEndReached; }
 
-    void SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
+    void SetEndReachedHdl( const Link<>& rHdl ) { maEndReachedHdl = rHdl; }
 
-    void SetScrolledHdl( const Link& rHdl )  { maScrolledHdl = rHdl; }
+    void SetScrolledHdl( const Link<>& rHdl ) { maScrolledHdl = rHdl; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
@@ -143,8 +143,8 @@ LicenseView::~LicenseView()
 
 void LicenseView::dispose()
 {
-    maEndReachedHdl = Link();
-    maScrolledHdl   = Link();
+    maEndReachedHdl = Link<>();
+    maScrolledHdl   = Link<>();
     EndListeningAll();
     MultiLineEdit::dispose();
 }

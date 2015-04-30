@@ -435,7 +435,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
                     // remove as listener - outliner might outlive ourselves
                     if( mpView && mpView->GetTextEditOutliner() )
-                        mpView->GetTextEditOutliner()->SetNotifyHdl( Link() );
+                        mpView->GetTextEditOutliner()->SetNotifyHdl( Link<>() );
 
                     // destroy view forwarder, OutlinerView no longer
                     // valid (no need for UpdateData(), it's been

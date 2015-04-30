@@ -119,7 +119,7 @@ SvInplaceEdit2::SvInplaceEdit2
     vcl::Window* pParent, const Point& rPos,
     const Size& rSize,
     const OUString& rData,
-    const Link& rNotifyEditEnd,
+    const Link<>& rNotifyEditEnd,
     const Selection& rSelection,
     bool bMulti
 ) :
@@ -355,7 +355,7 @@ struct SvTreeListBoxImpl
     bool m_bEntryMnemonicsEnabled:1;
     bool m_bDoingQuickSelection:1;
 
-    Link* m_pLink;
+    Link<>* m_pLink;
 
     vcl::MnemonicEngine m_aMnemonicEngine;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
@@ -650,7 +650,7 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
     bool bSuccess = true;
     std::vector<SvTreeListEntry*> aList;
     bool bClone = ( pSource->GetModel() != GetModel() );
-    Link aCloneLink( pModel->GetCloneLink() );
+    Link<> aCloneLink( pModel->GetCloneLink() );
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
 
     // cache selection to simplify iterating over the selection when doing a D&D
@@ -707,7 +707,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     bool bSuccess = true;
     std::vector<SvTreeListEntry*> aList;
     bool bClone = ( pSource->GetModel() != GetModel() );
-    Link aCloneLink( pModel->GetCloneLink() );
+    Link<> aCloneLink( pModel->GetCloneLink() );
     if ( bClone )
         pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
 
@@ -1411,7 +1411,7 @@ IMPL_STATIC_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8*, pAction )
     return 0;
 }
 
-Link SvTreeListBox::GetDragFinishedHdl() const
+Link<> SvTreeListBox::GetDragFinishedHdl() const
 {
     AddBoxToDDList_Impl( *this );
     return LINK( const_cast<SvTreeListBox*>(this), SvTreeListBox, DragFinishHdl_Impl );
@@ -1439,7 +1439,7 @@ void SvTreeListBox::InitTreeView()
     nAllItemAccRoleType = SvTreeAccRoleType::NONE;
     mnCheckboxItemWidth = 0;
 
-    Link* pLink = new Link( LINK(this,SvTreeListBox, DefaultCompare) );
+    Link<>* pLink = new Link<>( LINK(this,SvTreeListBox, DefaultCompare) );
     mpImpl->m_pLink = pLink;
 
     nTreeFlags = SvTreeFlags::RECALCTABS;
@@ -2849,7 +2849,7 @@ void SvTreeListBox::ImplInitStyle()
     else
     {
         GetModel()->SetSortMode( SortNone );
-        GetModel()->SetCompareHdl( Link() );
+        GetModel()->SetCompareHdl( Link<>() );
     }
     pImp->SetStyle( nWindowStyle );
     pImp->Resize();

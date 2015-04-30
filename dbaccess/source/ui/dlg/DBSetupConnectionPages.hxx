@@ -86,7 +86,7 @@ namespace dbaui
         OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup();
         virtual void dispose() SAL_OVERRIDE;
-        virtual Link getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
+        virtual Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
@@ -127,7 +127,7 @@ namespace dbaui
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
-        virtual Link getControlModifiedLink() SAL_OVERRIDE;
+        virtual Link<> getControlModifiedLink() SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnModified, Edit* );
@@ -154,7 +154,7 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual Link getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
+        virtual Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
@@ -217,9 +217,9 @@ namespace dbaui
 
         static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
         ConnectionType      getMySQLMode();
-        Link                maClickHdl;
-        void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
-        const Link&         GetClickHdl() const { return maClickHdl; }
+        Link<>              maClickHdl;
+        void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
+        const Link<>&       GetClickHdl() const { return maClickHdl; }
         DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
 
     protected:
@@ -285,7 +285,7 @@ namespace dbaui
         void enableTableWizardCheckBox( bool _bSupportsTableCreation);
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
-        Link getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGenericAdministrationPage, OnControlModified); }
+        Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGenericAdministrationPage, OnControlModified); }
 
         DECL_LINK(OnOpenSelected, CheckBox*);
     protected:

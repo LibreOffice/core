@@ -48,7 +48,7 @@ PageOrientationControl::PageOrientationControl(
                     SW_RES(STR_LANDSCAPE), 0 );
     }
 
-    Link aLink = LINK(this, PageOrientationControl,ImplOrientationHdl );
+    Link<> aLink = LINK(this, PageOrientationControl,ImplOrientationHdl );
     mpOrientationValueSet->SetSelectHdl(aLink);
     mpOrientationValueSet->SetNoSelection();
     mpOrientationValueSet->StartSelection();

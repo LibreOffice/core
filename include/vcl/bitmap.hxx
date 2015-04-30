@@ -704,7 +704,7 @@ public:
     bool                    Vectorize(
                                 tools::PolyPolygon& rPolyPoly,
                                 sal_uLong nFlags = BMP_VECTORIZE_OUTER,
-                                const Link* pProgress = NULL );
+                                const Link<>* pProgress = NULL );
 
     /** Convert the bitmap to a meta file
 
@@ -731,7 +731,7 @@ public:
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce = 0,
                                 sal_uLong nFlags = BMP_VECTORIZE_INNER,
-                                const Link* pProgress = NULL );
+                                const Link<>* pProgress = NULL );
 
     /** Change various global color characteristics
 
@@ -789,7 +789,7 @@ public:
     bool                    Filter(
                                 BmpFilter eFilter,
                                 const BmpFilterParam* pFilterParam = NULL,
-                                const Link* pProgress = NULL );
+                                const Link<>* pProgress = NULL );
 
 public:
 
@@ -834,15 +834,15 @@ public:
     SAL_DLLPRIVATE bool     ImplConvolute3(
                                 const long* pMatrix, long nDivisor,
                                 const BmpFilterParam* pFilterParam,
-                                const Link* pProgress );
+                                const Link<>* pProgress );
 
-    SAL_DLLPRIVATE bool     ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool     ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool     ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool     ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool     ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool     ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool     ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE bool     ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
+    SAL_DLLPRIVATE bool     ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
+    SAL_DLLPRIVATE bool     ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
+    SAL_DLLPRIVATE bool     ImplSolarize( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
+    SAL_DLLPRIVATE bool     ImplSepia( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
+    SAL_DLLPRIVATE bool     ImplMosaic( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
+    SAL_DLLPRIVATE bool     ImplPopArt( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
 
     SAL_DLLPRIVATE bool     ImplSeparableBlurFilter( const double aRadius = 0.7 );
     SAL_DLLPRIVATE bool     ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );

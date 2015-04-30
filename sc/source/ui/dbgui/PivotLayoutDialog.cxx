@@ -78,7 +78,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     maAddressDetails      (mpDocument->GetAddressConvention(), 0, 0),
     mbDialogLostFocus     (false)
 {
-    Link aLink;
+    Link<> aLink;
 
     get(mpListBoxField,    "listbox-fields");
     get(mpListBoxPage,     "listbox-page");

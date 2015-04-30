@@ -189,7 +189,7 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pNoProxyForED, "noproxy");
     get(m_pNoProxyDescFT, "noproxydesc");
 
-    Link aLink = LINK( this, SvxProxyTabPage, LoseFocusHdl_Impl );
+    Link<> aLink = LINK( this, SvxProxyTabPage, LoseFocusHdl_Impl );
     m_pHttpPortED->SetLoseFocusHdl( aLink );
     m_pHttpsPortED->SetLoseFocusHdl( aLink );
     m_pFtpPortED->SetLoseFocusHdl( aLink );

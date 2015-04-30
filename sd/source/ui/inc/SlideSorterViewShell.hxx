@@ -148,7 +148,7 @@ public:
             the second and all following calls are ignored.  Each listener
             is added only once.
     */
-    void AddSelectionChangeListener (const Link& rListener);
+    void AddSelectionChangeListener (const Link<>& rListener);
 
     /** Remove a listener that was called when the selection of the slide
         sorter changes.
@@ -156,7 +156,7 @@ public:
             It is save to pass a listener that was not added are has been
             removed previously.  Such calls are ignored.
     */
-    void RemoveSelectionChangeListener (const Link& rListener);
+    void RemoveSelectionChangeListener (const Link<>& rListener);
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() SAL_OVERRIDE;
 

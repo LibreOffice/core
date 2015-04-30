@@ -353,12 +353,12 @@ void Menu::ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos )
     }
 }
 
-void Menu::AddEventListener( const Link& rEventListener )
+void Menu::AddEventListener( const Link<>& rEventListener )
 {
     maEventListeners.addListener( rEventListener );
 }
 
-void Menu::RemoveEventListener( const Link& rEventListener )
+void Menu::RemoveEventListener( const Link<>& rEventListener )
 {
     maEventListeners.removeListener( rEventListener );
 }
@@ -2648,13 +2648,13 @@ bool MenuBar::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) 
         return false;
 }
 
-sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, const OUString& i_rToolTip, sal_uInt16 i_nPos )
+sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link<>& i_rLink, const OUString& i_rToolTip, sal_uInt16 i_nPos )
 {
     IMenuBarWindow* pMenuWin = getMenuBarWindow();
     return pMenuWin ? pMenuWin->AddMenuBarButton(i_rImage, i_rLink, i_rToolTip, i_nPos) : 0;
 }
 
-void MenuBar::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& rLink )
+void MenuBar::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<>& rLink )
 {
     IMenuBarWindow* pMenuWin = getMenuBarWindow();
     if (!pMenuWin)

@@ -51,11 +51,11 @@ public:
     static const sal_uInt16*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
-    Link                GetPrevHdl() const { return aPrevHdlLink; }
-    void                SetPrevHdl( const Link& rLink )
+    Link<>              GetPrevHdl() const { return aPrevHdlLink; }
+    void                SetPrevHdl( const Link<>& rLink )
                             { aPrevHdlLink = rLink; }
-    Link                GetNextHdl() const { return aNextHdlLink; }
-    void                SetNextHdl( const Link& rLink )
+    Link<>              GetNextHdl() const { return aNextHdlLink; }
+    void                SetNextHdl( const Link<>& rLink )
                             { aNextHdlLink = rLink; }
 
     void EnableTravel(bool bNext, bool bPrev);
@@ -103,8 +103,8 @@ private:
     const SfxItemSet&   rSet;
     SfxItemSet*         pOutSet;
 
-    Link                aPrevHdlLink;
-    Link                aNextHdlLink;
+    Link<>              aPrevHdlLink;
+    Link<>              aNextHdlLink;
 
     DECL_LINK(Stamp, void *);
     DECL_LINK(OKHdl, void *);

@@ -79,7 +79,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     // left clicks.
     mnDefaultClickAction = SID_TP_APPLY_TO_SELECTED_SLIDES;
 
-    Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
+    Link<> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink,
         sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
@@ -106,7 +106,7 @@ void CurrentMasterPagesSelector::dispose()
         OSL_ASSERT(mrDocument.GetDocSh() != NULL);
     }
 
-    Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
+    Link<> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 
     MasterPagesSelector::dispose();

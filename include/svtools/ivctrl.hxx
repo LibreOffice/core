@@ -227,9 +227,9 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
 
-    Link                    _aClickIconHdl;
-    Link                    _aDocRectChangedHdl;
-    Link                    _aVisRectChangedHdl;
+    Link<>                  _aClickIconHdl;
+    Link<>                  _aDocRectChangedHdl;
+    Link<>                  _aVisRectChangedHdl;
     KeyEvent*               _pCurKeyEvent;
     SvxIconChoiceCtrl_Impl* _pImp;
     bool                    _bAutoFontColor;
@@ -278,8 +278,8 @@ public:
     void                SetFont( const vcl::Font& rFont );
     void                SetPointFont( const vcl::Font& rFont );
 
-    void                SetClickHdl( const Link& rLink ) { _aClickIconHdl = rLink; }
-    const Link&         GetClickHdl() const { return _aClickIconHdl; }
+    void                SetClickHdl( const Link<>& rLink ) { _aClickIconHdl = rLink; }
+    const Link<>&       GetClickHdl() const { return _aClickIconHdl; }
 
     using OutputDevice::SetBackground;
     void                SetBackground( const Wallpaper& rWallpaper );

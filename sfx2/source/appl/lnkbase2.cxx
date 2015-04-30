@@ -44,7 +44,7 @@ class  ImplDdeItem;
 
 struct BaseLink_Impl
 {
-    Link                m_aEndEditLink;
+    Link<>              m_aEndEditLink;
     LinkManager*        m_pLinkMgr;
     VclPtr<vcl::Window> m_pParentWin;
     FileDialogHelper*   m_pFileDlg;
@@ -475,7 +475,7 @@ SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const ::com:
     return SUCCESS;
 }
 
-void SvBaseLink::Edit( vcl::Window* pParent, const Link& rEndEditHdl )
+void SvBaseLink::Edit( vcl::Window* pParent, const Link<>& rEndEditHdl )
 {
     pImpl->m_pParentWin = pParent;
     pImpl->m_aEndEditLink = rEndEditHdl;
@@ -484,7 +484,7 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link& rEndEditHdl )
         _GetRealObject( xObj.Is() );
 
     bool bAsync = false;
-    Link aLink = LINK( this, SvBaseLink, EndEditHdl );
+    Link<> aLink = LINK( this, SvBaseLink, EndEditHdl );
 
     if( OBJECT_CLIENT_SO & nObjType && pImplData->ClientType.bIntrnlLnk )
     {

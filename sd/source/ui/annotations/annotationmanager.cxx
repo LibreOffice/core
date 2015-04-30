@@ -864,7 +864,7 @@ void AnnotationManagerImpl::DisposeTags()
 
 void AnnotationManagerImpl::addListener()
 {
-    Link aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -875,7 +875,7 @@ void AnnotationManagerImpl::addListener()
 
 void AnnotationManagerImpl::removeListener()
 {
-    Link aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 

@@ -271,7 +271,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage(SwMailMergeWizard* _pParent)
     if(!rConfigItem.IsMailAvailable())
         m_pSendMailRB->Hide();
 
-    Link aLink = LINK(this, SwMailMergeOutputPage, OutputTypeHdl_Impl);
+    Link<> aLink = LINK(this, SwMailMergeOutputPage, OutputTypeHdl_Impl);
     m_pSaveStartDocRB->SetClickHdl(aLink);
     m_pSaveMergedDocRB->SetClickHdl(aLink);
     m_pPrintRB->SetClickHdl(aLink);

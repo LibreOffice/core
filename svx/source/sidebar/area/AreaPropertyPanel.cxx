@@ -171,7 +171,7 @@ void AreaPropertyPanel::Initialize()
     mpLbFillType->SetAccessibleName(OUString( "Fill"));    //wj acc
     mpLbFillAttr->SetAccessibleName(OUString( "Fill"));    //wj acc
 
-    Link aLink = LINK( this, AreaPropertyPanel, SelectFillTypeHdl );
+    Link<> aLink = LINK( this, AreaPropertyPanel, SelectFillTypeHdl );
     mpLbFillType->SetSelectHdl( aLink );
 
     aLink = LINK( this, AreaPropertyPanel, SelectFillAttrHdl );

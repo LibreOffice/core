@@ -38,7 +38,7 @@ private:
     Sane&           mrSane;
     bool            mbScanEnabled;
 
-    Link            maOldLink;
+    Link<>          maOldLink;
 
     VclPtr<OKButton>       mpOKButton;
     VclPtr<CancelButton>   mpCancelButton;

@@ -300,7 +300,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                     }
                 }
             }
-            m_pSelectionLB->SetSelectHdl(Link());
+            m_pSelectionLB->SetSelectHdl(Link<>());
         }
         else
         {

@@ -45,14 +45,14 @@ class FmSearchEngine;
 class SAL_WARN_UNUSED FmSearchThread : public ::osl::Thread
 {
     FmSearchEngine*     m_pEngine;
-    Link                m_aTerminationHdl;
+    Link<>              m_aTerminationHdl;
 
     virtual void SAL_CALL run() SAL_OVERRIDE;
     virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
 public:
     FmSearchThread(FmSearchEngine* pEngine) : m_pEngine(pEngine) { }
-    void setTerminationHandler(Link aHdl) { m_aTerminationHdl = aHdl; }
+    void setTerminationHandler(Link<> aHdl) { m_aTerminationHdl = aHdl; }
 };
 
 /**
@@ -84,12 +84,12 @@ struct FmSearchProgress
 class SAL_WARN_UNUSED FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
 {
 // attribute
-    Link            m_lnkWhoWantsToKnow;
+    Link<>          m_lnkWhoWantsToKnow;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xListening;
 
 // attribute access
 public:
-    Link SetPropChangeHandler(const Link& lnk);
+    Link<> SetPropChangeHandler(const Link<>& lnk);
 
 // methods
 public:
@@ -211,7 +211,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchEngine
     SEARCH_RESULT       m_srResult;                         // backward direction
 
     // The link we broadcast the progress and the result to
-    Link                m_aProgressHandler;
+    Link<>              m_aProgressHandler;
     bool                m_bSearchingCurrently : 1;      // is an (asynchronous) search running?
     bool                m_bCancelAsynchRequest : 1;     // should be cancelled?
     ::osl::Mutex        m_aCancelAsynchAccess;          // access to_bCancelAsynchRequest (technically only
@@ -312,7 +312,7 @@ public:
         a FmSearchProgress structure
         the handler should be in any case thread-safe
     */
-    void SetProgressHandler(Link aHdl) { m_aProgressHandler = aHdl; }
+    void SetProgressHandler(Link<> aHdl) { m_aProgressHandler = aHdl; }
 
     /// search for the next appearance (for nDirection values check DIRECTION_*-defines)
     void SearchNext(const OUString& strExpression);

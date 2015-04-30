@@ -1376,7 +1376,7 @@ bool OutlinerView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIf
     return pEditView->IsWrongSpelledWordAtPos( rPosPixel, bMarkIfWrong );
 }
 
-void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link* pStartDlg )
+void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pStartDlg )
 {
     pEditView->ExecuteSpellPopup( rPosPixel, pStartDlg );
 }

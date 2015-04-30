@@ -66,7 +66,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
 
     meLNSpaceUnit = SFX_MAPUNIT_100TH_MM;
 
-    Link aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
+    Link<> aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
     mpSpacing1Button->SetClickHdl(aLink);
     mpSpacing115Button->SetClickHdl(aLink);
     mpSpacing15Button->SetClickHdl(aLink);

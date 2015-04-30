@@ -96,7 +96,7 @@ void ScSolverDlg::Init()
     m_pBtnOk->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
     m_pBtnCancel->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
 
-    Link aLink = LINK( this, ScSolverDlg, GetFocusHdl );
+    Link<> aLink = LINK( this, ScSolverDlg, GetFocusHdl );
     m_pEdFormulaCell->SetGetFocusHdl( aLink );
     m_pRBFormulaCell->SetGetFocusHdl( aLink );
     m_pEdVariableCell->SetGetFocusHdl( aLink );

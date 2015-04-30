@@ -132,7 +132,7 @@ public:
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
-    void            SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
+    void            SetVisibilityListener( const Link<>& aVisListener ) { aVisibilityListener = aVisListener; }
 
     void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
 
@@ -146,7 +146,7 @@ private:
     sal_uInt16                      nCurSel;
     bool                            bRelease;
     Size                            aLogicalSize;
-    Link                            aVisibilityListener;
+    Link<>                          aVisibilityListener;
     bool                            bVisible;
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;

@@ -216,11 +216,11 @@ private:
                     mbSelLeft:1,
                     mbAllSel:1,
                     mbDropPos:1;
-    Link            maSelectionChangingHdl;
-    Link            maDateRangeChangedHdl;
-    Link            maRequestDateInfoHdl;
-    Link            maDoubleClickHdl;
-    Link            maSelectHdl;
+    Link<>          maSelectionChangingHdl;
+    Link<>          maDateRangeChangedHdl;
+    Link<>          maRequestDateInfoHdl;
+    Link<>          maDoubleClickHdl;
+    Link<>          maSelectHdl;
     Timer           maDragScrollTimer;
     sal_uInt16          mnDragScrollHitTest;
 
@@ -320,16 +320,16 @@ public:
     Size            CalcWindowSizePixel( long nCalcMonthPerLine = 1,
                                          long nCalcLines = 1 ) const;
 
-    void            SetSelectionChangingHdl( const Link& rLink ) { maSelectionChangingHdl = rLink; }
-    const Link&     GetSelectionChangingHdl() const { return maSelectionChangingHdl; }
-    void            SetDateRangeChangedHdl( const Link& rLink ) { maDateRangeChangedHdl = rLink; }
-    const Link&     GetDateRangeChangedHdl() const { return maDateRangeChangedHdl; }
-    void            SetRequestDateInfoHdl( const Link& rLink ) { maRequestDateInfoHdl = rLink; }
-    const Link&     GetRequestDateInfoHdl() const { return maRequestDateInfoHdl; }
-    void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
-    const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
+    void            SetSelectionChangingHdl( const Link<>& rLink ) { maSelectionChangingHdl = rLink; }
+    const Link<>&   GetSelectionChangingHdl() const { return maSelectionChangingHdl; }
+    void            SetDateRangeChangedHdl( const Link<>& rLink ) { maDateRangeChangedHdl = rLink; }
+    const Link<>&   GetDateRangeChangedHdl() const { return maDateRangeChangedHdl; }
+    void            SetRequestDateInfoHdl( const Link<>& rLink ) { maRequestDateInfoHdl = rLink; }
+    const Link<>&   GetRequestDateInfoHdl() const { return maRequestDateInfoHdl; }
+    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
+    const Link<>&   GetDoubleClickHdl() const { return maDoubleClickHdl; }
+    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    const Link<>&   GetSelectHdl() const { return maSelectHdl; }
 };
 
 inline const Color& Calendar::GetStandardColor() const
@@ -409,7 +409,7 @@ private:
     Date                maDefaultDate;
     bool                mbToday;
     bool                mbNone;
-    Link                maSelectHdl;
+    Link<>              maSelectHdl;
 
                         DECL_DLLPRIVATE_LINK( ImplSelectHdl, Calendar* );
                         DECL_DLLPRIVATE_LINK( ImplClickHdl, PushButton* );
@@ -437,8 +437,8 @@ public:
     void                SetCalendarStyle( WinBits nStyle ) { mnCalendarStyle = nStyle; }
     WinBits             GetCalendarStyle() const { return mnCalendarStyle; }
 
-    void                SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&         GetSelectHdl() const { return maSelectHdl; }
+    void                SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    const Link<>&       GetSelectHdl() const { return maSelectHdl; }
 
 protected:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

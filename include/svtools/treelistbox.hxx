@@ -246,12 +246,12 @@ class SVT_DLLPUBLIC SvTreeListBox
 
     SvTreeListBoxImpl* mpImpl;
     SvImpLBox*      pImp;
-    Link            aCheckButtonHdl;
-    Link            aScrolledHdl;
-    Link            aExpandedHdl;
-    Link            aExpandingHdl;
-    Link            aSelectHdl;
-    Link            aDeselectHdl;
+    Link<>          aCheckButtonHdl;
+    Link<>          aScrolledHdl;
+    Link<>          aExpandedHdl;
+    Link<>          aExpandingHdl;
+    Link<>          aSelectHdl;
+    Link<>          aDeselectHdl;
 
     Accelerator     aInpEditAcc;
     Image           aPrevInsertedExpBmp;
@@ -284,7 +284,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     SvLBoxItem*             pEdItem;
 
 protected:
-    Link                    aDoubleClickHdl;
+    Link<>                  aDoubleClickHdl;
     SvTreeListEntry*        pTargetEntry;
     SvLBoxButtonData*       pCheckButtonData;
     std::vector<SvLBoxTab*> aTabs;
@@ -350,7 +350,7 @@ protected:
     // The Remove will be called from the handler, which then calls DragFinish.
     // The Remove is also called in the DTOR of the SvTreeListBox -
     // so it can't be called for a deleted object.
-    Link GetDragFinishedHdl() const;
+    Link<> GetDragFinishedHdl() const;
 
     // For asynchronous D'n'D
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox* pSourceView );
@@ -478,15 +478,15 @@ public:
     */
     bool            HandleKeyInput( const KeyEvent& rKEvt );
 
-    void            SetSelectHdl( const Link& rNewHdl ) {aSelectHdl=rNewHdl; }
-    void            SetDeselectHdl( const Link& rNewHdl ) {aDeselectHdl=rNewHdl; }
-    void            SetDoubleClickHdl(const Link& rNewHdl) {aDoubleClickHdl=rNewHdl;}
-    const Link&     GetSelectHdl() const { return aSelectHdl; }
-    const Link&     GetDeselectHdl() const { return aDeselectHdl; }
-    const Link&     GetDoubleClickHdl() const { return aDoubleClickHdl; }
-    void            SetExpandingHdl(const Link& rNewHdl){aExpandingHdl=rNewHdl;}
-    void            SetExpandedHdl(const Link& rNewHdl){aExpandedHdl=rNewHdl;}
-    const Link&     GetExpandingHdl() const { return aExpandingHdl; }
+    void            SetSelectHdl( const Link<>& rNewHdl ) {aSelectHdl=rNewHdl; }
+    void            SetDeselectHdl( const Link<>& rNewHdl ) {aDeselectHdl=rNewHdl; }
+    void            SetDoubleClickHdl(const Link<>& rNewHdl) {aDoubleClickHdl=rNewHdl;}
+    const Link<>&   GetSelectHdl() const { return aSelectHdl; }
+    const Link<>&   GetDeselectHdl() const { return aDeselectHdl; }
+    const Link<>&   GetDoubleClickHdl() const { return aDoubleClickHdl; }
+    void            SetExpandingHdl(const Link<>& rNewHdl){aExpandingHdl=rNewHdl;}
+    void            SetExpandedHdl(const Link<>& rNewHdl){aExpandedHdl=rNewHdl;}
+    const Link<>&   GetExpandingHdl() const { return aExpandingHdl; }
 
     virtual void    ExpandedHdl();
     virtual bool    ExpandingHdl();
@@ -610,8 +610,8 @@ protected:
 
     virtual void    NotifyEndScroll();
     virtual void    NotifyScrolled();
-    void            SetScrolledHdl( const Link& rLink ) { aScrolledHdl = rLink; }
-    const Link&     GetScrolledHdl() const { return aScrolledHdl; }
+    void            SetScrolledHdl( const Link<>& rLink ) { aScrolledHdl = rLink; }
+    const Link<>&   GetScrolledHdl() const { return aScrolledHdl; }
     long            GetXOffset() const { return GetMapMode().GetOrigin().X(); }
 
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
@@ -693,8 +693,8 @@ public:
     static const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry );
     static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
 
-    void            SetCheckButtonHdl( const Link& rLink )  { aCheckButtonHdl=rLink; }
-    Link            GetCheckButtonHdl() const { return aCheckButtonHdl; }
+    void            SetCheckButtonHdl( const Link<>& rLink )  { aCheckButtonHdl=rLink; }
+    Link<>          GetCheckButtonHdl() const { return aCheckButtonHdl; }
     virtual void    CheckButtonHdl();
 
     void            SetSublistOpenWithReturn( bool bMode = true );      // open/close sublist with return/enter
@@ -830,7 +830,7 @@ struct SvLBoxDDInfo
 
 class SvInplaceEdit2
 {
-    Link        aCallBackHdl;
+    Link<>      aCallBackHdl;
     Accelerator aAccReturn;
     Accelerator aAccEscape;
     Idle        aIdle;
@@ -845,7 +845,7 @@ class SvInplaceEdit2
 
 public:
                 SvInplaceEdit2( vcl::Window* pParent, const Point& rPos, const Size& rSize,
-                   const OUString& rData, const Link& rNotifyEditEnd,
+                   const OUString& rData, const Link<>& rNotifyEditEnd,
                    const Selection&, bool bMultiLine = false );
                ~SvInplaceEdit2();
     bool        KeyInput( const KeyEvent& rKEvt );

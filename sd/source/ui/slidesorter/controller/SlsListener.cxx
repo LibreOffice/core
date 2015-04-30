@@ -125,7 +125,7 @@ Listener::Listener (
             StartListening(*pMainViewShell);
         }
 
-        Link aLink (LINK(this, Listener, EventMultiplexerCallback));
+        Link<> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->AddEventListener(
             aLink,
             tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
@@ -185,7 +185,7 @@ void Listener::ReleaseListeners()
 
     if (mpBase != NULL)
     {
-        Link aLink (LINK(this, Listener, EventMultiplexerCallback));
+        Link<> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->RemoveEventListener(
             aLink,
             tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED

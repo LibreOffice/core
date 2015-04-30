@@ -1230,7 +1230,7 @@ ANCHOR_SETEVENT:
     {
         if( !sHRef.isEmpty() )
         {
-            sHRef = URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), sHRef, Link(), false );
+            sHRef = URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), sHRef, Link<>(), false );
         }
         else
         {

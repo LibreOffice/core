@@ -43,8 +43,8 @@ private:
     VclPtr<CheckBox>           m_pBackwardsBox;
     VclPtr<PushButton>         m_pFindBtn;
 
-    Link                m_aFindHdl;
-    Link                m_aCloseHdl;
+    Link<>              m_aFindHdl;
+    Link<>              m_aCloseHdl;
 
     OUString            m_sConfigName;
     OString             m_sWinState;
@@ -61,8 +61,8 @@ public:
     virtual ~SearchDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
-    void         SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }
+    void         SetFindHdl( const Link<>& rLink ) { m_aFindHdl = rLink; }
+    void         SetCloseHdl( const Link<>& rLink ) { m_aCloseHdl = rLink; }
 
     OUString     GetSearchText() const { return m_pSearchEdit->GetText(); }
     void         SetSearchText( const OUString& _rText ) { m_pSearchEdit->SetText( _rText ); }

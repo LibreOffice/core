@@ -106,7 +106,7 @@ void Button::dispose()
 void Button::SetCommandHandler(const OUString& aCommand)
 {
     maCommand = aCommand;
-    SetClickHdl(Link(NULL, dispatchCommandHandler));
+    SetClickHdl(Link<>(NULL, dispatchCommandHandler));
 }
 
 void Button::Click()

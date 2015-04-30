@@ -941,7 +941,7 @@ SmTextForwarder::~SmTextForwarder()
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl( Link() );
+        pEditEngine->SetNotifyHdl( Link<>() );
 }
 
 IMPL_LINK(SmTextForwarder, NotifyHdl, EENotify*, aNotify)
@@ -1640,7 +1640,7 @@ void SmEditAccessible::ClearWin()
     // (avoid handler being called for already dead object)
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl( Link() );
+        pEditEngine->SetNotifyHdl( Link<>() );
 
     pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
 

@@ -69,7 +69,7 @@ class SvtMenuOptions_Impl : public ConfigItem
 
 
     private:
-        ::std::list<Link> aList;
+        ::std::list<Link<>> aList;
         bool        m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         bool        m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
         TriState    m_eMenuIcons                        ;   /// cache "MenuIcons" of Menu section
@@ -87,8 +87,8 @@ class SvtMenuOptions_Impl : public ConfigItem
          SvtMenuOptions_Impl();
         virtual ~SvtMenuOptions_Impl();
 
-        void AddListenerLink( const Link& rLink );
-        void RemoveListenerLink( const Link& rLink );
+        void AddListenerLink( const Link<>& rLink );
+        void RemoveListenerLink( const Link<>& rLink );
 
 
         //  override methods of baseclass
@@ -126,7 +126,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_eMenuIcons = eState;
                         SetModified();
-                        for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+                        for ( ::std::list<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
                             iter->Call( this );
                         Commit();
                     }
@@ -285,7 +285,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     if ( bMenuSettingsChanged )
         m_eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
 
-    for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::list<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
         iter->Call( this );
 }
 
@@ -347,14 +347,14 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-void SvtMenuOptions_Impl::AddListenerLink( const Link& rLink )
+void SvtMenuOptions_Impl::AddListenerLink( const Link<>& rLink )
 {
     aList.push_back( rLink );
 }
 
-void SvtMenuOptions_Impl::RemoveListenerLink( const Link& rLink )
+void SvtMenuOptions_Impl::RemoveListenerLink( const Link<>& rLink )
 {
-    for ( ::std::list<Link>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::list<Link<>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
         if ( *iter == rLink )
         {
@@ -460,12 +460,12 @@ Mutex& SvtMenuOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-void SvtMenuOptions::AddListenerLink( const Link& rLink )
+void SvtMenuOptions::AddListenerLink( const Link<>& rLink )
 {
     m_pDataContainer->AddListenerLink( rLink );
 }
 
-void SvtMenuOptions::RemoveListenerLink( const Link& rLink )
+void SvtMenuOptions::RemoveListenerLink( const Link<>& rLink )
 {
     m_pDataContainer->RemoveListenerLink( rLink );
 }

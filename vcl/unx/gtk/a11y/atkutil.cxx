@@ -676,7 +676,7 @@ sal_IntPtr WindowEventHandler(void *, void * p)
     return 0;
 }
 
-static Link g_aEventListenerLink( NULL, WindowEventHandler );
+static Link<> g_aEventListenerLink( NULL, WindowEventHandler );
 
 /*****************************************************************************/
 

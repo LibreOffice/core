@@ -374,7 +374,7 @@ public:
     bool                Filter(
                             BmpFilter eFilter,
                             const BmpFilterParam* pFilterParam = NULL,
-                            const Link* pProgress = NULL );
+                            const Link<>* pProgress = NULL );
 
     /** Get transparency at given position
 

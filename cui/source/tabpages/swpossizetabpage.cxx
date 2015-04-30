@@ -558,7 +558,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
 
     SetExchangeSupport();
 
-    Link aLk = LINK(this, SvxSwPosSizeTabPage, RangeModifyHdl);
+    Link<> aLk = LINK(this, SvxSwPosSizeTabPage, RangeModifyHdl);
     m_pWidthMF->SetLoseFocusHdl( aLk );
     m_pHeightMF->SetLoseFocusHdl( aLk );
     m_pHoriByMF->SetLoseFocusHdl( aLk );

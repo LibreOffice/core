@@ -86,7 +86,7 @@ void TextUnderlineControl::initial()
         GetSettings().GetStyleSettings().GetMenuColor() :
         sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
 
-    Link aLink = LINK( this, TextUnderlineControl, PBClickHdl ) ;
+    Link<> aLink = LINK( this, TextUnderlineControl, PBClickHdl ) ;
     maPBOptions->SetClickHdl(aLink);
 
     maVSUnderline->SetStyle( maVSUnderline->GetStyle()| WB_3DLOOK | WB_NO_DIRECTSELECT );

@@ -25,13 +25,13 @@ typedef long (*CFuncPtr)(void*);
 
 class GenLink
 {
-    Link        aLink;
+    Link<>      aLink;
     CFuncPtr    pFunc;
 
 public:
     GenLink(): pFunc(0) {}
     GenLink( CFuncPtr pCFunc ): pFunc(pCFunc) {}
-    GenLink( const Link& rLink ): aLink(rLink), pFunc(0) {}
+    GenLink( const Link<>& rLink ): aLink(rLink), pFunc(0) {}
     GenLink( const GenLink& rOrig ):
         aLink(rOrig.aLink), pFunc(rOrig.pFunc) {}
 

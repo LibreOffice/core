@@ -104,7 +104,7 @@ class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusList
 {
     bool                                                                             m_bFloating;
     bool                                                                             m_bCascading;
-    Link                                                                             m_aDeleteLink;
+    Link<>                                                                           m_aDeleteLink;
     sal_uInt16                                                                       m_nId;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
     SfxFrameStatusListener*                                                          m_pStatusListener;
@@ -157,7 +157,7 @@ public:
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void                    StartCascading();
-    SAL_DLLPRIVATE void SetDeleteLink_Impl( const Link& rLink )
+    SAL_DLLPRIVATE void SetDeleteLink_Impl( const Link<>& rLink )
                             {
                                 m_aDeleteLink = rLink;
                             }

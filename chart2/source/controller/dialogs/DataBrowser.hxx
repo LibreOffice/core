@@ -127,9 +127,9 @@ public:
     void SwapRow();
     void SwapColumn();
 
-    void SetCursorMovedHdl( const Link& rLink );
+    void SetCursorMovedHdl( const Link<>& rLink );
 
-    void SetCellModifiedHdl( const Link& rLink );
+    void SetCellModifiedHdl( const Link<>& rLink );
 
     /// confirms all pending changes to be ready to be closed
     bool EndEditing();
@@ -173,8 +173,8 @@ private:
     /// note: m_aTextEditField must precede this member!
     ::svt::CellControllerRef m_rTextEditController;
 
-    Link                m_aCursorMovedHdlLink;
-    Link                m_aCellModifiedLink;
+    Link<>              m_aCursorMovedHdlLink;
+    Link<>              m_aCellModifiedLink;
 
     void clearHeaders();
     void RenewTable();

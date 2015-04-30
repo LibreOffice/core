@@ -142,7 +142,7 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& 
     LanguageHdl(m_pLanguageLB);
     m_pLanguageLB->SetSelectHdl(LINK(this, SvxAsianLayoutPage, LanguageHdl));
     m_pStandardCB->SetClickHdl(LINK(this, SvxAsianLayoutPage, ChangeStandardHdl));
-    Link aLk(LINK(this, SvxAsianLayoutPage, ModifyHdl));
+    Link<> aLk(LINK(this, SvxAsianLayoutPage, ModifyHdl));
     m_pStartED->SetModifyHdl(aLk);
     m_pEndED->SetModifyHdl(aLk);
 

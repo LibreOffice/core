@@ -178,7 +178,7 @@ class AbstractSvxNameDialog :public VclAbstractDialog
 {
 public:
     virtual void    GetName( OUString& rName ) = 0;
-    virtual void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false ) = 0;
+    virtual void    SetCheckNameHdl( const Link<>& rLink, bool bCheckImmediately = false ) = 0;
     virtual void    SetEditHelpId(const OString&) = 0;
     //from class Window
     virtual void    SetHelpId( const OString& ) = 0;
@@ -189,7 +189,7 @@ class AbstractSvxObjectNameDialog :public VclAbstractDialog
 {
 public:
     virtual void GetName(OUString& rName) = 0;
-    virtual void SetCheckNameHdl(const Link& rLink, bool bCheckImmediately = false) = 0;
+    virtual void SetCheckNameHdl(const Link<>& rLink, bool bCheckImmediately = false) = 0;
 };
 
 class AbstractSvxObjectTitleDescDialog :public VclAbstractDialog
@@ -223,8 +223,8 @@ public:
 class AbstractFmSearchDialog :public VclAbstractDialog
 {
 public:
-    virtual void SetFoundHandler(const Link& lnk) = 0;
-    virtual void SetCanceledNotFoundHdl(const Link& lnk)=0;
+    virtual void SetFoundHandler(const Link<>& lnk) = 0;
+    virtual void SetCanceledNotFoundHdl(const Link<>& lnk)=0;
     virtual void SetActiveField(const OUString& strField)=0;
 };
 
@@ -241,13 +241,13 @@ class AbstractSvxAreaTabDialog :public SfxAbstractTabDialog
 class AbstractSvxTransformTabDialog : public SfxAbstractTabDialog
 {
 public:
-    virtual void SetValidateFramePosLink( const Link& rLink ) = 0;
+    virtual void SetValidateFramePosLink( const Link<>& rLink ) = 0;
 };
 
 class AbstractSvxCaptionDialog : public SfxAbstractTabDialog
 {
 public:
-    virtual void SetValidateFramePosLink( const Link& rLink ) = 0;
+    virtual void SetValidateFramePosLink( const Link<>& rLink ) = 0;
 };
 
 class AbstractSvxPostItDialog :public VclAbstractDialog
@@ -255,8 +255,8 @@ class AbstractSvxPostItDialog :public VclAbstractDialog
 public:
     virtual void                SetText( const OUString& rStr ) = 0;  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
-    virtual void                SetPrevHdl( const Link& rLink ) = 0;
-    virtual void                SetNextHdl( const Link& rLink ) = 0;
+    virtual void                SetPrevHdl( const Link<>& rLink ) = 0;
+    virtual void                SetNextHdl( const Link<>& rLink ) = 0;
     virtual void                EnableTravel(bool bNext, bool bPrev) = 0;
     virtual OUString            GetNote()  = 0;
     virtual void                SetNote(const OUString& rTxt)  = 0;
@@ -396,7 +396,7 @@ public:
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link& lnkContextSupplier)=0;
+                                                        const Link<>& lnkContextSupplier)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
                                                 const Graphic& rGraphic,
                                                 RECT_POINT eLightSource)=0;

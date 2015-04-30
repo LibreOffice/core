@@ -276,7 +276,7 @@ void ToolBarManager::Destroy()
         // #i93173# delete toolbar lazily as we can still be in one of its handlers
     m_pToolBar->doLazyDelete();
 
-    Link aEmpty;
+    Link<> aEmpty;
     m_pToolBar->SetSelectHdl( aEmpty );
     m_pToolBar->SetActivateHdl( aEmpty );
     m_pToolBar->SetDeactivateHdl( aEmpty );
@@ -1807,8 +1807,8 @@ IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
         if (pManagerMenu)
         {
             // Unlink our listeners again -- see above for why.
-            pManagerMenu->SetSelectHdl( Link() );
-            pManagerMenu->SetDeactivateHdl( Link() );
+            pManagerMenu->SetSelectHdl( Link<>() );
+            pManagerMenu->SetDeactivateHdl( Link<>() );
         }
     }
 

@@ -535,7 +535,7 @@ short SfxTabDialog::Execute()
 
 
 
-void SfxTabDialog::StartExecuteModal( const Link& rEndDialogHdl )
+void SfxTabDialog::StartExecuteModal( const Link<>& rEndDialogHdl )
 {
     if ( !m_pTabCtrl->GetPageCount() )
         return;
@@ -559,7 +559,7 @@ void SfxTabDialog::Start( bool bShow )
 
 
 
-void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
+void SfxTabDialog::SetApplyHandler(const Link<>& _rHdl)
 {
     DBG_ASSERT( m_pApplyBtn, "SfxTabDialog::GetApplyHandler: no apply button enabled!" );
     if ( m_pApplyBtn )

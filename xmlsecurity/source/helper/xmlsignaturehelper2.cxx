@@ -32,7 +32,7 @@
 
 using namespace com::sun::star;
 
-ImplXMLSignatureListener::ImplXMLSignatureListener(const Link& rCreationResultListenerListener, const Link& rVerifyResultListenerListener, const Link& rStartSignatureElement)
+ImplXMLSignatureListener::ImplXMLSignatureListener(const Link<>& rCreationResultListenerListener, const Link<>& rVerifyResultListenerListener, const Link<>& rStartSignatureElement)
 {
     maCreationResultListenerListener = rCreationResultListenerListener;
     maVerifyResultListenerListener = rVerifyResultListenerListener;

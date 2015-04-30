@@ -260,7 +260,7 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
     maTextEditMaxArea = Rectangle( aPos, aEditSize );
 }
 
-void ThumbnailViewItem::setSelectClickHdl (const Link &link)
+void ThumbnailViewItem::setSelectClickHdl (const Link<> &link)
 {
     maClickHdl = link;
 }

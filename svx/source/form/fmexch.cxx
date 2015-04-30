@@ -391,7 +391,7 @@ namespace svxform
     {
         if (m_pTransferable)
         {
-            m_pTransferable->setClipboardListener( Link() );
+            m_pTransferable->setClipboardListener( Link<>() );
             m_pTransferable->release();
             m_pTransferable = NULL;
         }

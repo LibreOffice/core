@@ -1375,7 +1375,7 @@ namespace svxform
 
         // handler
         m_pModelsBox->SetSelectHdl( LINK( this, DataNavigatorWindow, ModelSelectHdl ) );
-        Link aLink = LINK( this, DataNavigatorWindow, MenuSelectHdl );
+        Link<> aLink = LINK( this, DataNavigatorWindow, MenuSelectHdl );
         m_pModelBtn->SetSelectHdl( aLink );
         m_pInstanceBtn->SetSelectHdl( aLink );
         aLink = LINK( this, DataNavigatorWindow, MenuActivateHdl );
@@ -2534,7 +2534,7 @@ namespace svxform
     void AddDataItemDialog::InitDialog()
     {
         // set handler
-        Link aLink = LINK( this, AddDataItemDialog, CheckHdl );
+        Link<> aLink = LINK( this, AddDataItemDialog, CheckHdl );
         m_pRequiredCB->SetClickHdl( aLink );
         m_pRelevantCB->SetClickHdl( aLink );
         m_pConstraintCB->SetClickHdl( aLink );
@@ -2933,7 +2933,7 @@ namespace svxform
             sHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT /*| HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED*/ );
 
         m_pNamespacesList->SetSelectHdl( LINK( this, NamespaceItemDialog, SelectHdl ) );
-        Link aLink = LINK( this, NamespaceItemDialog, ClickHdl );
+        Link<> aLink = LINK( this, NamespaceItemDialog, ClickHdl );
         m_pAddNamespaceBtn->SetClickHdl( aLink );
         m_pEditNamespaceBtn->SetClickHdl( aLink );
         m_pDeleteNamespaceBtn->SetClickHdl( aLink );

@@ -118,7 +118,7 @@ class GalleryListView : public BrowseBox
 
 private:
 
-    Link                maSelectHdl;
+    Link<>              maSelectHdl;
     GalleryTheme*       mpTheme;
     long                mnCurRow;
 
@@ -144,7 +144,7 @@ public:
 
                         GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme );
 
-    void                SetSelectHdl( const Link& rSelectHdl ) { maSelectHdl = rSelectHdl; }
+    void                SetSelectHdl( const Link<>& rSelectHdl ) { maSelectHdl = rSelectHdl; }
 
     /** GetCellText returns the text at the given position
         @param  _nRow

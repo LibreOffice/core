@@ -1074,7 +1074,7 @@ namespace svt
             aController.Clear();
 
             // reset the modify handler
-            aOldController->SetModifyHdl(Link());
+            aOldController->SetModifyHdl(Link<>());
 
             if (bHasFocus)
                 GrabFocus(); // ensure that we have (and keep) the focus

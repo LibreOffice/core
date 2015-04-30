@@ -1437,7 +1437,7 @@ void ScMultiTextWnd::InitEditEngine()
 void ScMultiTextWnd::StopEditEngine( bool bAll )
 {
     if ( pEditEngine )
-        pEditEngine->SetNotifyHdl(Link());
+        pEditEngine->SetNotifyHdl(Link<>());
     ScTextWnd::StopEditEngine( bAll );
 }
 
@@ -1853,7 +1853,7 @@ void ScTextWnd::StopEditEngine( bool bAll )
         aString = pEditEngine->GetText();
         bIsInsertMode = pEditView->IsInsertMode();
         bool bSelection = pEditView->HasSelection();
-        pEditEngine->SetModifyHdl(Link());
+        pEditEngine->SetModifyHdl(Link<>());
         DELETEZ(pEditView);
         DELETEZ(pEditEngine);
 

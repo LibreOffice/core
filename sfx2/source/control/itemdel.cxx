@@ -31,7 +31,7 @@
 class SfxItemDisruptor_Impl: private boost::noncopyable
 {
     SfxPoolItem *pItem;
-    Link         aLink;
+    Link<>       aLink;
 
 private:
     DECL_LINK( Delete, void* );

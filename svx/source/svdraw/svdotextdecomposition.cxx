@@ -126,8 +126,8 @@ namespace
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeContourTextPrimitive));
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeContourBulletPrimitive));
             mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link());
-            mrOutliner.SetDrawBulletHdl(Link());
+            mrOutliner.SetDrawPortionHdl(Link<>());
+            mrOutliner.SetDrawBulletHdl(Link<>());
         }
 
         void decomposeBlockTextPrimitive(
@@ -141,8 +141,8 @@ namespace
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeBlockTextPrimitive));
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeBlockBulletPrimitive));
             mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link());
-            mrOutliner.SetDrawBulletHdl(Link());
+            mrOutliner.SetDrawPortionHdl(Link<>());
+            mrOutliner.SetDrawBulletHdl(Link<>());
         }
 
         void decomposeStretchTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
@@ -152,8 +152,8 @@ namespace
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeStretchTextPrimitive));
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeStretchBulletPrimitive));
             mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link());
-            mrOutliner.SetDrawBulletHdl(Link());
+            mrOutliner.SetDrawPortionHdl(Link<>());
+            mrOutliner.SetDrawBulletHdl(Link<>());
         }
 
         drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequence();

@@ -510,7 +510,7 @@ bool GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
     return true;
 }
 
-void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProgress )
+void GalleryTheme::Actualize( const Link<>& rActualizeLink, GalleryProgress* pProgress )
 {
     if( !IsReadOnly() )
     {

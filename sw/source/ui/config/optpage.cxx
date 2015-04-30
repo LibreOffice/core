@@ -341,7 +341,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(vcl::Window* pParent,
     get(m_pPaperFromSetupCB, "papertray");
     get(m_pFaxLB, "fax");
 
-    Link aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
+    Link<> aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
     m_pGrfCB->SetClickHdl( aLk );
     m_pRightPageCB->SetClickHdl( aLk );
     m_pLeftPageCB->SetClickHdl( aLk );
@@ -609,14 +609,14 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
     pListBox    ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
     pLabelBox   ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
     pIdxBox     ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
-    Link aFocusLink = LINK( this, SwStdFontTabPage, LoseFocusHdl);
+    Link<> aFocusLink = LINK( this, SwStdFontTabPage, LoseFocusHdl);
     pStandardBox->SetLoseFocusHdl( aFocusLink );
     pTitleBox   ->SetLoseFocusHdl( aFocusLink );
     pListBox    ->SetLoseFocusHdl( aFocusLink );
     pLabelBox   ->SetLoseFocusHdl( aFocusLink );
     pIdxBox     ->SetLoseFocusHdl( aFocusLink );
 
-    Link aModifyHeightLink( LINK( this, SwStdFontTabPage, ModifyHeightHdl));
+    Link<> aModifyHeightLink( LINK( this, SwStdFontTabPage, ModifyHeightHdl));
     pStandardHeightLB->SetModifyHdl( aModifyHeightLink );
     pTitleHeightLB->   SetModifyHdl( aModifyHeightLink );
     pListHeightLB->    SetModifyHdl( aModifyHeightLink );
@@ -1147,7 +1147,7 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxIte
     get(pFixPropRB,"fixprop");
     get(pVarRB,"var");
 
-    Link aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
+    Link<> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
     pNumFormattingCB->SetClickHdl(aLnk);
     pNumFmtFormattingCB->SetClickHdl(aLnk);
     pHeaderCB->SetClickHdl(aLnk);
@@ -1827,7 +1827,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
     pDeletedLB->RemoveEntry(4);
     pDeletedLB->RemoveEntry(3);
 
-    Link aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
+    Link<> aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
     pInsertLB->SetSelectHdl( aLk );
     pDeletedLB->SetSelectHdl( aLk );
     pChangedLB->SetSelectHdl( aLk );
@@ -2359,7 +2359,7 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(  vcl::Window* pParent, const S
     get(m_pLenNF, "ignorelen");
     get(m_pStoreRsidCB, "storeRSID");
 
-    Link aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
+    Link<> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
     m_pAutoRB->SetClickHdl( aLnk );
     m_pWordRB->SetClickHdl( aLnk );
     m_pCharRB->SetClickHdl( aLnk );
@@ -2588,7 +2588,7 @@ void SwTestTabPage::Reset( const SfxItemSet* )
 void SwTestTabPage::Init()
 {
     // handler
-    Link aLk = LINK( this, SwTestTabPage, AutoClickHdl );
+    Link<> aLk = LINK( this, SwTestTabPage, AutoClickHdl );
     m_pTest1CBox->SetClickHdl( aLk );
     m_pTest2CBox->SetClickHdl( aLk );
     m_pTest3CBox->SetClickHdl( aLk );

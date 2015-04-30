@@ -107,7 +107,7 @@ void ScColRowNameRangesDlg::Init()
     pBtnRowHead->SetClickHdl ( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
     pEdAssign2->SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
 
-    Link aLink = LINK( this, ScColRowNameRangesDlg, GetFocusHdl );
+    Link<> aLink = LINK( this, ScColRowNameRangesDlg, GetFocusHdl );
     pEdAssign->SetGetFocusHdl( aLink );
     pRbAssign->SetGetFocusHdl( aLink );
     pEdAssign2->SetGetFocusHdl( aLink );

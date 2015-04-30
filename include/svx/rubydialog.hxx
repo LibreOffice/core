@@ -69,8 +69,8 @@ class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
 class SvxRubyData_Impl;
 class RubyEdit  : public Edit
 {
-    Link    aScrollHdl;
-    Link    aJumpHdl;
+    Link<>  aScrollHdl;
+    Link<>  aJumpHdl;
     virtual void        GetFocus() SAL_OVERRIDE;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
@@ -82,8 +82,8 @@ public:
         : Edit(pParent, WB_BORDER)
     {
     }
-    void    SetScrollHdl(Link& rLink) {aScrollHdl = rLink;}
-    void    SetJumpHdl(Link& rLink) {aJumpHdl = rLink;}
+    void    SetScrollHdl(Link<>& rLink) {aScrollHdl = rLink;}
+    void    SetJumpHdl(Link<>& rLink) {aJumpHdl = rLink;}
 };
 
 

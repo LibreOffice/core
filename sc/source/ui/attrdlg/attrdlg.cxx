@@ -90,7 +90,7 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
 IMPL_LINK_NOARG(ScAttrDlg, OkHandler)
 {
-    ((Link&)GetOKButton().GetClickHdl()).Call( NULL );
+    ((Link<>&)GetOKButton().GetClickHdl()).Call( NULL );
 
     return 0;
 }

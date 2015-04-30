@@ -449,9 +449,9 @@ static sal_uInt32 GetCacheTimeInMs()
     return nSeconds * 1000;
 }
 
-void GraphicObject::SetSwapStreamHdl(const Link& rHdl)
+void GraphicObject::SetSwapStreamHdl(const Link<>& rHdl)
 {
-    delete mpSwapStreamHdl, mpSwapStreamHdl = new Link( rHdl );
+    delete mpSwapStreamHdl, mpSwapStreamHdl = new Link<>( rHdl );
 
     sal_uInt32 const nSwapOutTimeout(GetCacheTimeInMs());
     if( nSwapOutTimeout )

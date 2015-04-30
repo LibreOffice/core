@@ -45,7 +45,7 @@ private:
     VclPtr<PushButton>  mpButtonPicker;
     VclPtr<FixedLine>   mpAutomaticSeparator;
     OUString            maCommand;
-    Link                maSelectedLink;
+    Link<>              maSelectedLink;
 
     PaletteManager&     mrPaletteManager;
     BorderColorStatus&  mrBorderColorStatus;
@@ -75,7 +75,7 @@ public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 
     virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
-    void SetSelectedHdl( const Link& rLink ) { maSelectedLink = rLink; }
+    void SetSelectedHdl( const Link<>& rLink ) { maSelectedLink = rLink; }
 };
 
 #endif

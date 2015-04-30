@@ -38,7 +38,7 @@ class VCL_DLLPUBLIC Button : public Control
 {
 private:
     std::unique_ptr<ImplCommonButtonData> mpButtonData;
-    Link maClickHdl;
+    Link<> maClickHdl;
 
     /// Command URL (like .uno:Save) in case the button should handle it.
     OUString maCommand;
@@ -68,8 +68,8 @@ public:
 
     virtual void        Click();
 
-    void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
-    const Link&         GetClickHdl() const { return maClickHdl; }
+    void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
+    const Link<>&       GetClickHdl() const { return maClickHdl; }
 
     /// Setup handler for UNO commands so that commands like .uno:Something are handled automagically by this button.
     void                SetCommandHandler(const OUString& aCommand);
@@ -116,7 +116,7 @@ protected:
     sal_uInt16      mnDDStyle;
     bool            mbPressed;
     bool            mbInUserDraw;
-    Link            maToggleHdl;
+    Link<>          maToggleHdl;
 
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
@@ -195,8 +195,8 @@ public:
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
-    const Link&     GetToggleHdl() const { return maToggleHdl; }
+    void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
+    const Link<>&   GetToggleHdl() const { return maToggleHdl; }
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
@@ -282,7 +282,7 @@ private:
     bool        mbSaveValue;
     bool        mbRadioCheck;
     bool        mbStateChanged;
-    Link            maToggleHdl;
+    Link<>          maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
     // occurs, otherwise the image ( radiobutton circle ) is placed
@@ -373,8 +373,8 @@ public:
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
-    const Link&     GetToggleHdl() const { return maToggleHdl; }
+    void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
+    const Link<>&   GetToggleHdl() const { return maToggleHdl; }
 
     /** GetRadioButtonGroup returns a list of pointers to <code>RadioButton</code>s in the same group.
 
@@ -411,7 +411,7 @@ private:
     TriState        meState;
     TriState        meSaveValue;
     bool            mbTriState;
-    Link            maToggleHdl;
+    Link<>          maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
     // occurs, otherwise the image ( checkbox box ) is placed
@@ -485,8 +485,8 @@ public:
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
-    const Link&     GetToggleHdl() const { return maToggleHdl; }
+    void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
+    const Link<>&   GetToggleHdl() const { return maToggleHdl; }
     bool            IsLegacyNoTextAlign() { return mbLegacyNoTextAlign; }
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 

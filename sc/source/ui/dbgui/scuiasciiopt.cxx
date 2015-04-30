@@ -370,7 +370,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     lcl_FillCombo( *pCbTextSep, aTextSepList, mcTextSep );
     pCbTextSep->SetText( sTextSeparators );
 
-    Link aSeparatorHdl =LINK( this, ScImportAsciiDlg, SeparatorHdl );
+    Link<> aSeparatorHdl =LINK( this, ScImportAsciiDlg, SeparatorHdl );
     pCbTextSep->SetSelectHdl( aSeparatorHdl );
     pCbTextSep->SetModifyHdl( aSeparatorHdl );
     pCkbTab->SetClickHdl( aSeparatorHdl );
@@ -774,8 +774,8 @@ IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox*, pTableBox )
     pFtType->Enable( bEnable );
     pLbType->Enable( bEnable );
 
-    Link aSelHdl = pLbType->GetSelectHdl();
-    pLbType->SetSelectHdl( Link() );
+    Link<> aSelHdl = pLbType->GetSelectHdl();
+    pLbType->SetSelectHdl( Link<>() );
     if( bEmpty )
         pLbType->SetNoSelection();
     else if( bEnable )

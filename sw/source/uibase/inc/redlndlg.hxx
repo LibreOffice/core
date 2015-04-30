@@ -84,8 +84,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     OUString                sAutoFormat;
     VclPtr<SvxTPView>       pTPView;
     VclPtr<SvxRedlinTable>  pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
-    Link                    aOldSelectHdl;
-    Link                    aOldDeselectHdl;
+    Link<>                  aOldSelectHdl;
+    Link<>                  aOldDeselectHdl;
     bool                    bOnlyFormatedRedlines;
     bool                    bHasReadonlySel;
     bool                    bRedlnAutoFmt;

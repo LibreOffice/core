@@ -1234,7 +1234,7 @@ void ExtensionBox_Impl::checkEntries()
 }
 
 
-void ExtensionBox_Impl::SetScrollHdl( const Link& rLink )
+void ExtensionBox_Impl::SetScrollHdl( const Link<>& rLink )
 {
     if ( m_pScrollBar )
         m_pScrollBar->SetScrollHdl( rLink );

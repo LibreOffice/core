@@ -64,7 +64,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     m_pNextBtn->SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
     m_pOKBtn->SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
 
-    Link aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
+    Link<> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
     m_pUrlRB->SetClickHdl(aLk);
     m_pEditRB->SetClickHdl(aLk);
     m_pUrlPB->SetClickHdl(LINK(this, SwJavaEditDialog, InsertFileHdl));

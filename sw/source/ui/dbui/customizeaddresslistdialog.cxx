@@ -40,11 +40,11 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
     get(m_pDownPB, "down");
 
     m_pFieldsLB->SetSelectHdl(LINK(this, SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl));
-    Link aAddRenameLk = LINK(this, SwCustomizeAddressListDialog, AddRenameHdl_Impl );
+    Link<> aAddRenameLk = LINK(this, SwCustomizeAddressListDialog, AddRenameHdl_Impl );
     m_pAddPB->SetClickHdl(aAddRenameLk);
     m_pRenamePB->SetClickHdl(aAddRenameLk);
     m_pDeletePB->SetClickHdl(LINK(this, SwCustomizeAddressListDialog, DeleteHdl_Impl ));
-    Link aUpDownLk = LINK(this, SwCustomizeAddressListDialog, UpDownHdl_Impl);
+    Link<> aUpDownLk = LINK(this, SwCustomizeAddressListDialog, UpDownHdl_Impl);
     m_pUpPB->SetClickHdl(aUpDownLk);
     m_pDownPB->SetClickHdl(aUpDownLk);
 

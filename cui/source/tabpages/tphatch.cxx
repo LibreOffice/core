@@ -118,7 +118,7 @@ SvxHatchTabPage::SvxHatchTabPage
 
     m_pLbHatchings->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl_Impl ) );
 
-    Link aLink = LINK( this, SvxHatchTabPage, ModifiedHdl_Impl );
+    Link<> aLink = LINK( this, SvxHatchTabPage, ModifiedHdl_Impl );
     m_pMtrDistance->SetModifyHdl( aLink );
     m_pMtrAngle->SetModifyHdl( aLink );
     m_pLbLineType->SetSelectHdl( aLink );

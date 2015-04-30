@@ -35,7 +35,7 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pParent)
     get(m_pLetterHint, "letterft");
     get(m_pMailHint, "emailft");
 
-    Link aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
+    Link<> aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
     m_pLetterRB->SetClickHdl(aLink);
     m_pMailRB->SetClickHdl(aLink);
 

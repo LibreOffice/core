@@ -315,7 +315,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     pMenu = aConf.CreateBookmarkMenu( aXFrame, GetId() == SID_NEWDOCDIRECT ? OUString(BOOKMARK_NEWMENU) : OUString(BOOKMARK_WIZARDMENU) );
     if( pMenu )
     {
-        pMenu->SetSelectHdl( Link( &(this->GetBindings()), Select_Impl ) );
+        pMenu->SetSelectHdl( Link<>( &(this->GetBindings()), Select_Impl ) );
         pMenu->SetActivateHdl( LINK(this, SfxAppMenuControl_Impl, Activate) );
         rMenu.SetPopupMenu( nPos, pMenu );
     }

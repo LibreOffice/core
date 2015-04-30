@@ -44,7 +44,7 @@ public:
 
             BiNode *    Left() const { return pLeft  ; }
             BiNode *    Right() const{ return pRight ; }
-            void        EnumNodes( Link aLink ) const;
+            void        EnumNodes( Link<> aLink ) const;
 };
 
 class NameNode : public BiNode

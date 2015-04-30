@@ -95,7 +95,7 @@ private:
     sal_Int32       mnMRUCount;
     sal_Int32       mnMaxMRUCount;
 
-    Link            maSelectionChangedHdl;
+    Link<>          maSelectionChangedHdl;
     bool            mbCallSelectionChangedHdl;
     boost::ptr_vector<ImplEntryType> maEntries;
 
@@ -154,7 +154,7 @@ public:
     void            SetSelectionAnchor( sal_Int32  nPos )   { mnSelectionAnchor = nPos; }
     sal_Int32       GetSelectionAnchor() const { return mnSelectionAnchor; }
 
-    void            SetSelectionChangedHdl( const Link& rLnk )  { maSelectionChangedHdl = rLnk; }
+    void            SetSelectionChangedHdl( const Link<>& rLnk ) { maSelectionChangedHdl = rLnk; }
     void            SetCallSelectionChangedHdl( bool bCall )    { mbCallSelectionChangedHdl = bCall; }
 
     void            SetMRUCount( sal_Int32  n ) { mnMRUCount = n; }
@@ -229,13 +229,13 @@ private:
     bool mbCenter : 1;           ///< center Text output
     bool mbEdgeBlending : 1;
 
-    Link            maScrollHdl;
-    Link            maSelectHdl;
-    Link            maCancelHdl;
-    Link            maDoubleClickHdl;
-    Link            maMRUChangedHdl;
-    Link            maFocusHdl;
-    Link            maListItemSelectHdl;
+    Link<>          maScrollHdl;
+    Link<>          maSelectHdl;
+    Link<>          maCancelHdl;
+    Link<>          maDoubleClickHdl;
+    Link<>          maMRUChangedHdl;
+    Link<>          maFocusHdl;
+    Link<>          maListItemSelectHdl;
 
     vcl::QuickSelectionEngine maQuickSelectionEngine;
 
@@ -334,23 +334,23 @@ public:
     long            GetEntryHeight() const              { return mnMaxHeight; }
     long            GetMaxEntryWidth() const            { return mnMaxWidth; }
 
-    void            SetScrollHdl( const Link& rLink )   { maScrollHdl = rLink; }
-    const Link&     GetScrollHdl() const                { return maScrollHdl; }
-    void            SetSelectHdl( const Link& rLink )   { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const                { return maSelectHdl; }
-    void            SetCancelHdl( const Link& rLink )   { maCancelHdl = rLink; }
-    const Link&     GetCancelHdl() const                { return maCancelHdl; }
-    void            SetDoubleClickHdl( const Link& rLink )  { maDoubleClickHdl = rLink; }
-    const Link&     GetDoubleClickHdl() const               { return maDoubleClickHdl; }
-    void            SetMRUChangedHdl( const Link& rLink )   { maMRUChangedHdl = rLink; }
-    const Link&     GetMRUChangedHdl() const                { return maMRUChangedHdl; }
-    void            SetFocusHdl( const Link& rLink )    { maFocusHdl = rLink ; }
-    const Link&     GetFocusHdl() const             { return maFocusHdl; }
+    void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
+    const Link<>&   GetScrollHdl() const                { return maScrollHdl; }
+    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    const Link<>&   GetSelectHdl() const                { return maSelectHdl; }
+    void            SetCancelHdl( const Link<>& rLink ) { maCancelHdl = rLink; }
+    const Link<>&   GetCancelHdl() const                { return maCancelHdl; }
+    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
+    const Link<>&   GetDoubleClickHdl() const               { return maDoubleClickHdl; }
+    void            SetMRUChangedHdl( const Link<>& rLink ) { maMRUChangedHdl = rLink; }
+    const Link<>&   GetMRUChangedHdl() const                { return maMRUChangedHdl; }
+    void            SetFocusHdl( const Link<>& rLink )  { maFocusHdl = rLink ; }
+    const Link<>&   GetFocusHdl() const             { return maFocusHdl; }
 
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
-    void            SetListItemSelectHdl( const Link& rLink )   { maListItemSelectHdl = rLink ; }
-    const Link&     GetListItemSelectHdl() const                { return maListItemSelectHdl; }
+    void            SetListItemSelectHdl( const Link<>& rLink ) { maListItemSelectHdl = rLink ; }
+    const Link<>&   GetListItemSelectHdl() const                { return maListItemSelectHdl; }
     bool            IsSelectionChanged() const { return mbSelectionChanged; }
     sal_uInt16      GetSelectModifier() const { return mnSelectModifier; }
 
@@ -392,7 +392,7 @@ private:
     bool mbAutoHScroll : 1; // AutoHScroll an oder aus
     bool mbEdgeBlending : 1;
 
-    Link                maScrollHdl;    // because it is needed by ImplListBoxWindow itself
+    Link<>              maScrollHdl;    // because it is needed by ImplListBoxWindow itself
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 
 protected:
@@ -471,22 +471,22 @@ public:
     long            GetEntryHeight() const          { return maLBWindow->GetEntryHeight(); }
     long            GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
 
-    void            SetScrollHdl( const Link& rLink )   { maScrollHdl = rLink; }
-    const Link&     GetScrollHdl() const                { return maScrollHdl; }
-    void            SetSelectHdl( const Link& rLink )   { maLBWindow->SetSelectHdl( rLink ); }
-    const Link&     GetSelectHdl() const                { return maLBWindow->GetSelectHdl(); }
-    void            SetCancelHdl( const Link& rLink )   { maLBWindow->SetCancelHdl( rLink ); }
-    const Link&     GetCancelHdl() const                { return maLBWindow->GetCancelHdl(); }
-    void            SetDoubleClickHdl( const Link& rLink )  { maLBWindow->SetDoubleClickHdl( rLink ); }
-    const Link&     GetDoubleClickHdl() const               { return maLBWindow->GetDoubleClickHdl(); }
+    void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
+    const Link<>&   GetScrollHdl() const                { return maScrollHdl; }
+    void            SetSelectHdl( const Link<>& rLink ) { maLBWindow->SetSelectHdl( rLink ); }
+    const Link<>&   GetSelectHdl() const                { return maLBWindow->GetSelectHdl(); }
+    void            SetCancelHdl( const Link<>& rLink ) { maLBWindow->SetCancelHdl( rLink ); }
+    const Link<>&   GetCancelHdl() const                { return maLBWindow->GetCancelHdl(); }
+    void            SetDoubleClickHdl( const Link<>& rLink ) { maLBWindow->SetDoubleClickHdl( rLink ); }
+    const Link<>&   GetDoubleClickHdl() const               { return maLBWindow->GetDoubleClickHdl(); }
 
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
-    void            SetFocusHdl( const Link& rLink )    { maLBWindow->SetFocusHdl( rLink ); }
-    const Link&     GetFocusHdl() const             { return maLBWindow->GetFocusHdl(); }
-    void            SetListItemSelectHdl( const Link& rLink )   { maLBWindow->SetListItemSelectHdl( rLink ); }
-    const Link&     GetListItemSelectHdl() const    { return maLBWindow->GetListItemSelectHdl(); }
-    void            SetSelectionChangedHdl( const Link& rLnk )  { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
+    void            SetFocusHdl( const Link<>& rLink )  { maLBWindow->SetFocusHdl( rLink ); }
+    const Link<>&   GetFocusHdl() const             { return maLBWindow->GetFocusHdl(); }
+    void            SetListItemSelectHdl( const Link<>& rLink ) { maLBWindow->SetListItemSelectHdl( rLink ); }
+    const Link<>&   GetListItemSelectHdl() const    { return maLBWindow->GetListItemSelectHdl(); }
+    void            SetSelectionChangedHdl( const Link<>& rLnk ) { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
     void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow->GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
     bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
     sal_uInt16      GetSelectModifier() const                   { return maLBWindow->GetSelectModifier(); }

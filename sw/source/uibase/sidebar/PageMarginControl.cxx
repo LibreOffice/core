@@ -94,7 +94,7 @@ PageMarginControl::PageMarginControl(
     SelectValueSetItem();
 
     SetFieldUnit( *maLeftMarginEdit.get(), eFUnit );
-    Link aLinkLR = LINK( this, PageMarginControl, ModifyLRMarginHdl );
+    Link<> aLinkLR = LINK( this, PageMarginControl, ModifyLRMarginHdl );
     maLeftMarginEdit->SetModifyHdl( aLinkLR );
     SetMetricValue( *maLeftMarginEdit.get(), mnPageLeftMargin, meUnit );
 
@@ -102,7 +102,7 @@ PageMarginControl::PageMarginControl(
     maRightMarginEdit->SetModifyHdl( aLinkLR );
     SetMetricValue( *maRightMarginEdit.get(), mnPageRightMargin, meUnit );
 
-    Link aLinkUL = LINK( this, PageMarginControl, ModifyULMarginHdl );
+    Link<> aLinkUL = LINK( this, PageMarginControl, ModifyULMarginHdl );
     SetFieldUnit( *maTopMarginEdit.get(), eFUnit );
     maTopMarginEdit->SetModifyHdl( aLinkUL );
     SetMetricValue( *maTopMarginEdit.get(), mnPageTopMargin, meUnit );

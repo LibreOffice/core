@@ -321,7 +321,7 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SetMetric(*m_pPHeightField, aMetric);
 
     // Install handlers
-    Link aLk = LINK(this, SwLabFmtPage, ModifyHdl);
+    Link<> aLk = LINK(this, SwLabFmtPage, ModifyHdl);
     m_pHDistField->SetModifyHdl( aLk );
     m_pVDistField->SetModifyHdl( aLk );
     m_pWidthField->SetModifyHdl( aLk );
@@ -606,7 +606,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec)
     get(m_pOKPB, "ok");
 
     m_pOKPB->SetClickHdl(LINK(this, SwSaveLabelDlg, OkHdl));
-    Link aLk(LINK(this, SwSaveLabelDlg, ModifyHdl));
+    Link<> aLk(LINK(this, SwSaveLabelDlg, ModifyHdl));
     m_pMakeCB->SetModifyHdl(aLk);
     m_pTypeED->SetModifyHdl(aLk);
 

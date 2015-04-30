@@ -130,7 +130,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         xNameAccess = xObjs->getEmbeddedObjects();
     }
 
-    Link aLk = LINK( this, SwCaptionDialog, ModifyHdl );
+    Link<> aLk = LINK( this, SwCaptionDialog, ModifyHdl );
     m_pCategoryBox->SetModifyHdl( aLk );
     m_pTextEdit->SetModifyHdl( aLk );
     m_pNumberingSeparatorED->SetModifyHdl ( aLk );

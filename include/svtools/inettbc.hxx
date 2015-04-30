@@ -32,7 +32,7 @@ class SVT_DLLPUBLIC SvtURLBox : public ComboBox
 {
 friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
-    Link                            aOpenHdl;
+    Link<>                          aOpenHdl;
     OUString                        aBaseURL;
     OUString                        aPlaceHolder;
     rtl::Reference< SvtMatchContext_Impl > pCtx;
@@ -67,8 +67,8 @@ public:
 
     void                            SetBaseURL( const OUString& rURL );
     const OUString&                 GetBaseURL() const { return aBaseURL; }
-    void                            SetOpenHdl( const Link& rLink ) { aOpenHdl = rLink; }
-    const Link&                     GetOpenHdl() const { return aOpenHdl; }
+    void                            SetOpenHdl( const Link<>& rLink ) { aOpenHdl = rLink; }
+    const Link<>&                   GetOpenHdl() const { return aOpenHdl; }
     void                            SetOnlyDirectories( bool bDir = true );
     void                            SetNoURLSelection( bool bSet = true );
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }

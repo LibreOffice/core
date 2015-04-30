@@ -196,7 +196,7 @@ void TextPropertyPanel::EndUnderlinePopupMode()
 
 void TextPropertyPanel::InitToolBoxFont()
 {
-    Link aLink = LINK(this, TextPropertyPanel, UnderlineClickHdl);
+    Link<> aLink = LINK(this, TextPropertyPanel, UnderlineClickHdl);
     mpToolBoxFont->SetDropdownClickHdl(aLink);
 }
 
@@ -205,7 +205,7 @@ void TextPropertyPanel::InitToolBoxSpacing()
     const sal_uInt16 nId = mpToolBoxSpacing->GetItemId(UNO_SPACING);
     mpToolBoxSpacing->SetItemBits(nId, mpToolBoxSpacing->GetItemBits(nId) | ToolBoxItemBits::DROPDOWNONLY);
 
-    Link aLink = LINK(this, TextPropertyPanel, SpacingClickHdl);
+    Link<> aLink = LINK(this, TextPropertyPanel, SpacingClickHdl);
     mpToolBoxSpacing->SetDropdownClickHdl ( aLink );
     mpToolBoxSpacing->SetSelectHdl( aLink );
 }

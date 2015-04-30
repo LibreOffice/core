@@ -264,7 +264,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pAllRB->Check(true);
 
     // Install handlers
-    Link aLk = LINK(this, SwMailMergeDlg, ButtonHdl);
+    Link<> aLk = LINK(this, SwMailMergeDlg, ButtonHdl);
     m_pOkBTN->SetClickHdl(aLk);
 
     m_pPathPB->SetClickHdl(LINK(this, SwMailMergeDlg, InsertPathHdl));

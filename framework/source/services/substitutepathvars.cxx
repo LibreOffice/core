@@ -114,7 +114,7 @@ typedef std::vector< SubstituteRule > SubstituteRuleVector;
 class SubstitutePathVariables_Impl : public utl::ConfigItem
 {
     public:
-        SubstitutePathVariables_Impl( const Link& aNotifyLink );
+        SubstitutePathVariables_Impl( const Link<>& aNotifyLink );
         virtual ~SubstitutePathVariables_Impl();
 
         static OperatingSystem GetOperatingSystemFromString( const OUString& );
@@ -153,7 +153,7 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
         bool      m_bHostRetrieved;
         OUString  m_aHost;
 
-        Link              m_aListenerNotify;
+        Link<>            m_aListenerNotify;
         const OUString    m_aSharePointsNodeName;
         const OUString    m_aDirPropertyName;
         const OUString    m_aEnvPropertyName;
@@ -395,7 +395,7 @@ EnvironmentType SubstitutePathVariables_Impl::GetEnvTypeFromString( const OUStri
     return ET_UNKNOWN;
 }
 
-SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link& aNotifyLink ) :
+SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link<>& aNotifyLink ) :
     utl::ConfigItem( OUString( "Office.Substitution" )),
     m_bYPDomainRetrieved( false ),
     m_bDNSDomainRetrieved( false ),

@@ -1694,8 +1694,8 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
 
     if( pStream && pRead )
     {
-        Link aOldLink( rSh.GetChgLnk() );
-        rSh.SetChgLnk( Link() );
+        Link<> aOldLink( rSh.GetChgLnk() );
+        rSh.SetChgLnk( Link<>() );
 
         const SwPosition& rInsPos = *rSh.GetCrsr()->Start();
         SwReader aReader( *pStream, aEmptyOUStr, OUString(), *rSh.GetCrsr() );
@@ -2303,7 +2303,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                 SwTransferable::_CheckForURLOrLNKFile( rData, sTxt, &sDesc );
 
                 aBkmk = INetBookmark(
-                        URIHelper::SmartRel2Abs(INetURLObject(), sTxt, Link(), false ),
+                        URIHelper::SmartRel2Abs(INetURLObject(), sTxt, Link<>(), false ),
                         sDesc );
                 bCheckForGrf = true;
                 bCheckForImageMap = SW_PASTESDR_REPLACE == nAction;
@@ -2573,7 +2573,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 bool bIsURLFile = SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
 
                 //Own FileFormat? --> insert, not for StarWriter/Web
-                OUString sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link(), false );
+                OUString sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link<>(), false );
                 const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
                         ? 0 : SwIoSystem::GetFileFilter(sFileURL);
                 if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
@@ -3768,8 +3768,8 @@ void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         // #i58448#
-        Link aSavedOle2Link( pDoc->GetOle2Link() );
-        pDoc->SetOle2Link( Link() );
+        Link<> aSavedOle2Link( pDoc->GetOle2Link() );
+        pDoc->SetOle2Link( Link<>() );
 
         bool bIsModified = pDoc->getIDocumentState().IsModified();
 

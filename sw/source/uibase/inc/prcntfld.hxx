@@ -48,10 +48,10 @@ public:
     void set(MetricField *pField);
     const MetricField* get() const { return m_pField; }
     MetricField* get() { return m_pField; }
-    void SetUpHdl(const Link& rLink) { m_pField->SetUpHdl(rLink); }
-    void SetDownHdl(const Link& rLink) { m_pField->SetDownHdl(rLink); }
-    void SetModifyHdl(const Link& rLink) { m_pField->SetModifyHdl(rLink); }
-    void SetLoseFocusHdl(const Link& rLink) { m_pField->SetLoseFocusHdl(rLink); }
+    void SetUpHdl(const Link<>& rLink) { m_pField->SetUpHdl(rLink); }
+    void SetDownHdl(const Link<>& rLink) { m_pField->SetDownHdl(rLink); }
+    void SetModifyHdl(const Link<>& rLink) { m_pField->SetModifyHdl(rLink); }
+    void SetLoseFocusHdl(const Link<>& rLink) { m_pField->SetLoseFocusHdl(rLink); }
     void SetMetric(FieldUnit eUnit) { ::SetMetric(*m_pField, eUnit); }
     void Enable(bool bEnable = true, bool bChild = true) { m_pField->Enable(bEnable, bChild); }
     void Disable(bool bChild = true) { m_pField->Disable(bChild); }

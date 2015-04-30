@@ -46,12 +46,12 @@ namespace svt
             The link must have the type:
             DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
         */
-        Link    m_aDialogClosedLink;
+        Link<>  m_aDialogClosedLink;
 
     public:
         DialogClosedListener();
 
-        inline void SetDialogClosedLink( const Link& rLink ) { m_aDialogClosedLink = rLink; }
+        inline void SetDialogClosedLink( const Link<>& rLink ) { m_aDialogClosedLink = rLink; }
 
         // XDialogClosedListener methods
         virtual void SAL_CALL   dialogClosed( const ::com::sun::star::ui::dialogs::DialogClosedEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

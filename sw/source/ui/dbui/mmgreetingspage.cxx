@@ -258,13 +258,13 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_bIsTabPage = true;
 
     m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailMergeGreetingsPage, ContainsHdl_Impl));
-    Link aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
+    Link<> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
     m_pPersonalizedCB->SetClickHdl(aIndividualLink);
-    Link aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
+    Link<> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
     m_pFemalePB->SetClickHdl(aGreetingLink);
     m_pMalePB->SetClickHdl(aGreetingLink);
     m_pAssignPB->SetClickHdl(LINK(this, SwMailMergeGreetingsPage, AssignHdl_Impl));
-    Link aLBoxLink = LINK(this, SwMailMergeGreetingsPage, GreetingSelectHdl_Impl);
+    Link<> aLBoxLink = LINK(this, SwMailMergeGreetingsPage, GreetingSelectHdl_Impl);
     m_pFemaleLB->SetSelectHdl(aLBoxLink);
     m_pMaleLB->SetSelectHdl(aLBoxLink);
     m_pFemaleColumnLB->SetSelectHdl(aLBoxLink);
@@ -273,7 +273,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_pNeutralCB->SetSelectHdl(aLBoxLink);
     m_pNeutralCB->SetModifyHdl(aLBoxLink);
 
-    Link aDataLink = LINK(this, SwMailMergeGreetingsPage, InsertDataHdl_Impl);
+    Link<> aDataLink = LINK(this, SwMailMergeGreetingsPage, InsertDataHdl_Impl);
     m_pPrevSetIB->SetClickHdl(aDataLink);
     m_pNextSetIB->SetClickHdl(aDataLink);
 
@@ -447,9 +447,9 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* _pWi
     m_pNeutralCB->SetHelpId(        HID_MM_BODY_CB_NEUTRAL          );
 
     m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));
-    Link aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
+    Link<> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
     m_pPersonalizedCB->SetClickHdl(aIndividualLink);
-    Link aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
+    Link<> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
     m_pFemalePB->SetClickHdl(aGreetingLink);
     m_pMalePB->SetClickHdl(aGreetingLink);
     m_pOK->SetClickHdl(LINK(this, SwMailBodyDialog, OKHdl));

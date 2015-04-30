@@ -94,15 +94,15 @@ namespace sfx2
 
 class SfxLinkItem : public SfxPoolItem
 {
-    Link aLink;
+    Link<> aLink;
 public:
     virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const SAL_OVERRIDE
     {   return new SfxLinkItem( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const SAL_OVERRIDE
     {   return static_cast<const SfxLinkItem&>(rL).aLink == aLink; }
-    SfxLinkItem( sal_uInt16 nWhichId, const Link& rValue ) : SfxPoolItem( nWhichId )
+    SfxLinkItem( sal_uInt16 nWhichId, const Link<>& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
-    const Link&              GetValue() const { return aLink; }
+    const Link<>&            GetValue() const { return aLink; }
 };
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED

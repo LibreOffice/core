@@ -61,7 +61,7 @@ class  OAddFieldWindow  :public FloatingWindow
     VclPtr<FixedText>                                                           m_aHelpText;
 
     VclPtr<PushButton>                                                          m_aInsertButton;
-    Link                                                                        m_aCreateLink;
+    Link<>                                                                      m_aCreateLink;
     OUString                                                                    m_aCommandName;
     OUString                                                                    m_sFilter;
     sal_Int32                                                                   m_nCommandType;
@@ -88,7 +88,7 @@ public:
     inline const OUString&       GetCommand()            const { return m_aCommandName; }
     inline sal_Int32                    GetCommandType()        const { return m_nCommandType; }
     inline bool                     GetEscapeProcessing()   const { return m_bEscapeProcessing; }
-    inline void SetCreateHdl(const Link& _aCreateLink) { m_aCreateLink = _aCreateLink; }
+    inline void SetCreateHdl(const Link<>& _aCreateLink) { m_aCreateLink = _aCreateLink; }
 
     inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>  getColumns() const { return m_xColumns; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              getConnection() const;

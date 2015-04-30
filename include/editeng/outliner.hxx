@@ -364,7 +364,7 @@ public:
 
     bool        IsCursorAtWrongSpelledWord( bool bMarkIfWrong = false );
     bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void        ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
+    void        ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack = 0 );
 
     void        SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16  GetInvalidateMore() const;
@@ -589,22 +589,22 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     Paragraph*          pHdlParagraph;
     sal_Int32           mnFirstSelPage;
-    Link                aDrawPortionHdl;
-    Link                aDrawBulletHdl;
-    Link                aExpandHdl;
-    Link                aParaInsertedHdl;
-    Link                aParaRemovingHdl;
-    Link                aDepthChangedHdl;
-    Link                aWidthArrReqHdl;
-    Link                aBeginMovingHdl;
-    Link                aEndMovingHdl;
-    Link                aIndentingPagesHdl;
-    Link                aRemovingPagesHdl;
-    Link                aFieldClickedHdl;
-    Link                aCalcFieldValueHdl;
-    Link                maPaintFirstLineHdl;
-    Link                maBeginPasteOrDropHdl;
-    Link                maEndPasteOrDropHdl;
+    Link<>              aDrawPortionHdl;
+    Link<>              aDrawBulletHdl;
+    Link<>              aExpandHdl;
+    Link<>              aParaInsertedHdl;
+    Link<>              aParaRemovingHdl;
+    Link<>              aDepthChangedHdl;
+    Link<>              aWidthArrReqHdl;
+    Link<>              aBeginMovingHdl;
+    Link<>              aEndMovingHdl;
+    Link<>              aIndentingPagesHdl;
+    Link<>              aRemovingPagesHdl;
+    Link<>              aFieldClickedHdl;
+    Link<>              aCalcFieldValueHdl;
+    Link<>              maPaintFirstLineHdl;
+    Link<>              maBeginPasteOrDropHdl;
+    Link<>              maEndPasteOrDropHdl;
 
     sal_Int32           nDepthChangedHdlPrevDepth;
     ParaFlag            mnDepthChangeHdlPrevFlags;
@@ -761,57 +761,57 @@ public:
     bool            IsExpanding() const { return bIsExpanding; }
 
     void            ExpandHdl();
-    void            SetExpandHdl( const Link& rLink ) { aExpandHdl = rLink; }
-    Link            GetExpandHdl() const { return aExpandHdl; }
+    void            SetExpandHdl( const Link<>& rLink ) { aExpandHdl = rLink; }
+    Link<>          GetExpandHdl() const { return aExpandHdl; }
 
     void            ParagraphInsertedHdl();
-    void            SetParaInsertedHdl(const Link& rLink){aParaInsertedHdl=rLink;}
-    Link            GetParaInsertedHdl() const { return aParaInsertedHdl; }
+    void            SetParaInsertedHdl(const Link<>& rLink){aParaInsertedHdl=rLink;}
+    Link<>          GetParaInsertedHdl() const { return aParaInsertedHdl; }
 
     void            ParagraphRemovingHdl();
-    void            SetParaRemovingHdl(const Link& rLink){aParaRemovingHdl=rLink;}
-    Link            GetParaRemovingHdl() const { return aParaRemovingHdl; }
+    void            SetParaRemovingHdl(const Link<>& rLink){aParaRemovingHdl=rLink;}
+    Link<>          GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
     void            DepthChangedHdl();
-    void            SetDepthChangedHdl(const Link& rLink){aDepthChangedHdl=rLink;}
-    Link            GetDepthChangedHdl() const { return aDepthChangedHdl; }
+    void            SetDepthChangedHdl(const Link<>& rLink){aDepthChangedHdl=rLink;}
+    Link<>          GetDepthChangedHdl() const { return aDepthChangedHdl; }
     sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(nDepthChangedHdlPrevDepth); }
     ParaFlag        GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
     bool            RemovingPagesHdl( OutlinerView* );
-    void            SetRemovingPagesHdl(const Link& rLink){aRemovingPagesHdl=rLink;}
-    Link            GetRemovingPagesHdl() const { return aRemovingPagesHdl; }
+    void            SetRemovingPagesHdl(const Link<>& rLink){aRemovingPagesHdl=rLink;}
+    Link<>          GetRemovingPagesHdl() const { return aRemovingPagesHdl; }
     long            IndentingPagesHdl( OutlinerView* );
-    void            SetIndentingPagesHdl(const Link& rLink){aIndentingPagesHdl=rLink;}
-    Link            GetIndentingPagesHdl() const { return aIndentingPagesHdl; }
+    void            SetIndentingPagesHdl(const Link<>& rLink){aIndentingPagesHdl=rLink;}
+    Link<>          GetIndentingPagesHdl() const { return aIndentingPagesHdl; }
     // valid only in the two upper handlers
     sal_Int32       GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
 
     // valid only in the two upper handlers
     sal_Int32       GetFirstSelPage() const { return mnFirstSelPage; }
 
-    void            SetCalcFieldValueHdl(const Link& rLink ) { aCalcFieldValueHdl= rLink; }
-    Link            GetCalcFieldValueHdl() const { return aCalcFieldValueHdl; }
+    void            SetCalcFieldValueHdl(const Link<>& rLink ) { aCalcFieldValueHdl= rLink; }
+    Link<>          GetCalcFieldValueHdl() const { return aCalcFieldValueHdl; }
 
-    void            SetFieldClickedHdl(const Link& rLink ) { aFieldClickedHdl= rLink; }
-    Link            GetFieldClickedHdl() const { return aFieldClickedHdl; }
+    void            SetFieldClickedHdl(const Link<>& rLink ) { aFieldClickedHdl= rLink; }
+    Link<>          GetFieldClickedHdl() const { return aFieldClickedHdl; }
 
-    void            SetDrawPortionHdl(const Link& rLink){aDrawPortionHdl=rLink;}
-    Link            GetDrawPortionHdl() const { return aDrawPortionHdl; }
+    void            SetDrawPortionHdl(const Link<>& rLink){aDrawPortionHdl=rLink;}
+    Link<>          GetDrawPortionHdl() const { return aDrawPortionHdl; }
 
-    void            SetDrawBulletHdl(const Link& rLink){aDrawBulletHdl=rLink;}
-    Link            GetDrawBulletHdl() const { return aDrawBulletHdl; }
+    void            SetDrawBulletHdl(const Link<>& rLink){aDrawBulletHdl=rLink;}
+    Link<>          GetDrawBulletHdl() const { return aDrawBulletHdl; }
 
-    void            SetPaintFirstLineHdl(const Link& rLink) { maPaintFirstLineHdl = rLink; }
-    Link            GetPaintFirstLineHdl() const { return maPaintFirstLineHdl; }
+    void            SetPaintFirstLineHdl(const Link<>& rLink) { maPaintFirstLineHdl = rLink; }
+    Link<>          GetPaintFirstLineHdl() const { return maPaintFirstLineHdl; }
 
-    void            SetModifyHdl( const Link& rLink );
-    Link            GetModifyHdl() const;
+    void            SetModifyHdl( const Link<>& rLink );
+    Link<>          GetModifyHdl() const;
 
-    void            SetNotifyHdl( const Link& rLink );
+    void            SetNotifyHdl( const Link<>& rLink );
 
-    void            SetStatusEventHdl( const Link& rLink );
-    Link            GetStatusEventHdl() const;
+    void            SetStatusEventHdl( const Link<>& rLink );
+    Link<>          GetStatusEventHdl() const;
 
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
@@ -893,16 +893,16 @@ public:
 
     // Returns an array containing the widths of the Bullet Indentations
     // Last value must be -1. Is deleted by the outliner.
-    Link            GetWidthArrReqHdl() const{ return aWidthArrReqHdl; }
-    void            SetWidthArrReqHdl(const Link& rLink){aWidthArrReqHdl=rLink; }
+    Link<>          GetWidthArrReqHdl() const{ return aWidthArrReqHdl; }
+    void            SetWidthArrReqHdl(const Link<>& rLink){aWidthArrReqHdl=rLink; }
 
     void            SetControlWord( EEControlBits nWord );
     EEControlBits   GetControlWord() const;
 
-    Link            GetBeginMovingHdl() const { return aBeginMovingHdl; }
-    void            SetBeginMovingHdl(const Link& rLink) {aBeginMovingHdl=rLink;}
-    Link            GetEndMovingHdl() const {return aEndMovingHdl;}
-    void            SetEndMovingHdl( const Link& rLink){aEndMovingHdl=rLink;}
+    Link<>          GetBeginMovingHdl() const { return aBeginMovingHdl; }
+    void            SetBeginMovingHdl(const Link<>& rLink) {aBeginMovingHdl=rLink;}
+    Link<>          GetEndMovingHdl() const {return aEndMovingHdl;}
+    void            SetEndMovingHdl( const Link<>& rLink){aEndMovingHdl=rLink;}
 
     sal_uLong           GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
@@ -989,18 +989,18 @@ public:
     void            ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
-    void            SetBeginDropHdl( const Link& rLink );
+    void            SetBeginDropHdl( const Link<>& rLink );
 
     /** sets a link that is called at the end of a drag operation at an edit view */
-    void            SetEndDropHdl( const Link& rLink );
+    void            SetEndDropHdl( const Link<>& rLink );
 
     /** sets a link that is called before a drop or paste operation. */
-    void            SetBeginPasteOrDropHdl( const Link& rLink );
-    Link            GetBeginPasteOrDropHdl() const { return maBeginPasteOrDropHdl; }
+    void            SetBeginPasteOrDropHdl( const Link<>& rLink );
+    Link<>          GetBeginPasteOrDropHdl() const { return maBeginPasteOrDropHdl; }
 
     /** sets a link that is called after a drop or paste operation. */
-    void            SetEndPasteOrDropHdl( const Link& rLink );
-    Link            GetEndPasteOrDropHdl() const { return maEndPasteOrDropHdl; }
+    void            SetEndPasteOrDropHdl( const Link<>& rLink );
+    Link<>          GetEndPasteOrDropHdl() const { return maEndPasteOrDropHdl; }
 
     sal_Int16 GetNumberingStartValue( sal_Int32 nPara );
     void SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStartValue );

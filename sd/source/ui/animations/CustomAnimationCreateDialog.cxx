@@ -73,14 +73,14 @@ public:
 
     sal_Int32           InsertCategory( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
 
-    void            SetDoubleClickLink( const Link& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
+    void            SetDoubleClickLink( const Link<>& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
 
     DECL_LINK(implDoubleClickHdl, void *);
 
 private:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
-    Link            maDoubleClickHdl;
+    Link<>          maDoubleClickHdl;
 };
 
 CategoryListBox::CategoryListBox( vcl::Window* pParent )

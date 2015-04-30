@@ -113,7 +113,7 @@ void WrapPropertyPanel::dispose()
 
 void WrapPropertyPanel::Initialize()
 {
-    Link aLink = LINK(this, WrapPropertyPanel, WrapTypeHdl);
+    Link<> aLink = LINK(this, WrapPropertyPanel, WrapTypeHdl);
     mpRBNoWrap->SetClickHdl(aLink);
     mpRBWrapLeft->SetClickHdl(aLink);
     mpRBWrapRight->SetClickHdl(aLink);

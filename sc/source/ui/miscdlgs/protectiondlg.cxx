@@ -89,7 +89,7 @@ void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
 
 void ScTableProtectionDlg::Init()
 {
-    Link aLink = LINK( this, ScTableProtectionDlg, CheckBoxHdl );
+    Link<> aLink = LINK( this, ScTableProtectionDlg, CheckBoxHdl );
     m_pBtnProtect->SetClickHdl(aLink);
 
     aLink = LINK( this, ScTableProtectionDlg, OKHdl );

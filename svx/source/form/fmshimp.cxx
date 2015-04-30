@@ -3618,7 +3618,7 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivate
     // remove callbacks at the page
     if ( pPage )
     {
-        pPage->GetImpl().SetFormsCreationHdl( Link() );
+        pPage->GetImpl().SetFormsCreationHdl( Link<>() );
     }
     UpdateForms( true );
 }
@@ -3938,7 +3938,7 @@ void FmXFormShell::ForgetActiveControl()
 }
 
 
-void FmXFormShell::SetControlActivationHandler( const Link& _rHdl )
+void FmXFormShell::SetControlActivationHandler( const Link<>& _rHdl )
 {
     m_pTextShell->SetControlActivationHandler( _rHdl );
 }

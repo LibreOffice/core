@@ -38,7 +38,7 @@ ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
     maHScroll->SetLineSize( 1 );
     maVScroll->SetLineSize( 1 );
 
-    Link aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
+    Link<> aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
     SetCmdHdl( aLink );
     maRuler->SetCmdHdl( aLink );
     maGrid->SetCmdHdl( aLink );

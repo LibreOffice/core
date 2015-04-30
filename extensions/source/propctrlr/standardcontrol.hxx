@@ -63,7 +63,7 @@ namespace pcr
         {
         }
 
-        void SetModifyHdl( const Link& _rLink ) { ListBoxType::SetSelectHdl( _rLink ); }
+        void SetModifyHdl( const Link<>& _rLink ) { ListBoxType::SetSelectHdl( _rLink ); }
 
     protected:
         bool    PreNotify( NotifyEvent& _rNEvt );
@@ -166,7 +166,7 @@ namespace pcr
     {
     private:
         Point   m_aMouseButtonDownPos;
-        Link    m_aClickHandler;
+        Link<>  m_aClickHandler;
 
     public:
         HyperlinkInput( vcl::Window* _pParent, WinBits _nWinStyle );
@@ -174,8 +174,8 @@ namespace pcr
         /** sets the handler which will (asynchronously, with locked SolarMutex) be called
             when the hyperlink has been clicked by the user
         */
-        void        SetClickHdl( const Link& _rHdl ) { m_aClickHandler = _rHdl; }
-        const Link& GetClickHdl( ) const { return m_aClickHandler; }
+        void        SetClickHdl( const Link<>& _rHdl ) { m_aClickHandler = _rHdl; }
+        const Link<>& GetClickHdl( ) const { return m_aClickHandler; }
 
     protected:
         virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

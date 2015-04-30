@@ -1094,7 +1094,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
     sal_uInt16 nCol = m_pEntriesBox->TabCount() - 1;
     m_pEntriesBox->SetEntryText(sLabel, nPos, nCol);
 
-    ((Link &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
+    ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
     return 0;
 }
 
@@ -1109,7 +1109,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
     m_pEntriesBox->SetEntryText( OUString(), nPos, nCol );
     (pEntry->m_sCommand).clear();
 
-    ((Link &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
+    ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
     return 0;
 }
 
@@ -1230,7 +1230,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
     if ( pEntry )
         m_pGroupLBox->Select( pEntry );
 
-    ((Link &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
+    ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
     return 1L;
 }
 
@@ -1438,7 +1438,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& r
     m_pFileDlg->AddFilter( aFilterCfgStr, OUString("*.cfg") );
     m_pFileDlg->SetCurrentFilter( aFilterCfgStr );
 
-    Link aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )
+    Link<> aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )
                                 : LINK( this, SfxAcceleratorConfigPage, LoadHdl );
     m_pFileDlg->StartExecuteModal( aDlgClosedLink );
 }

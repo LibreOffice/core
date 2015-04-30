@@ -37,7 +37,7 @@ namespace dbaui
         Rectangle aScrollArea( Point(0, _rOutputSize.Height() - LISTBOX_SCROLLING_AREA),
                                      Size(_rOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
 
-        Link aToCall;
+        Link<> aToCall;
         // if pointer in bottom area begin scroll
         if( aScrollArea.IsInside(_rPoint) )
             aToCall = m_aUpScroll;

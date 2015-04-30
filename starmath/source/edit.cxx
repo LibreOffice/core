@@ -145,7 +145,7 @@ void SmEditWindow::dispose()
         EditEngine *pEditEngine = pEditView->GetEditEngine();
         if (pEditEngine)
         {
-            pEditEngine->SetStatusEventHdl( Link() );
+            pEditEngine->SetStatusEventHdl( Link<>() );
             pEditEngine->RemoveView( pEditView.get() );
         }
         pEditView.reset();
@@ -724,7 +724,7 @@ void SmEditWindow::LoseFocus()
 {
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)
-        pEditEngine->SetStatusEventHdl( Link() );
+        pEditEngine->SetStatusEventHdl( Link<>() );
 
     Window::LoseFocus();
 
@@ -1105,7 +1105,7 @@ void SmEditWindow::DeleteEditView( SmViewShell & /*rView*/ )
         std::unique_ptr<EditEngine> xEditEngine(pEditView->GetEditEngine());
         if (xEditEngine)
         {
-            xEditEngine->SetStatusEventHdl( Link() );
+            xEditEngine->SetStatusEventHdl( Link<>() );
             xEditEngine->RemoveView( pEditView.get() );
         }
         pEditView.reset();

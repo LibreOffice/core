@@ -45,7 +45,7 @@ SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 
     // Install handlers
-    Link aLk = LINK(this, SwLabPrtPage, CountHdl);
+    Link<> aLk = LINK(this, SwLabPrtPage, CountHdl);
     m_pPageButton->SetClickHdl( aLk );
     m_pSingleButton->SetClickHdl( aLk );
 

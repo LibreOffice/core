@@ -39,7 +39,7 @@ ScrollableWrapper<T>::ScrollableWrapper( vcl::Window* pParent, WinBits nStyle )
       mbHasVertBar( false ),
       maScrollVis( None )
 {
-    Link aLink( LINK( this, ScrollableWrapper, ScrollBarHdl ) );
+    Link<> aLink( LINK( this, ScrollableWrapper, ScrollBarHdl ) );
     maVScrollBar->SetScrollHdl( aLink );
     maHScrollBar->SetScrollHdl( aLink );
 

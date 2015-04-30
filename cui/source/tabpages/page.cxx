@@ -423,7 +423,7 @@ void SvxPageDescPage::Init_Impl()
     m_pLandscapeBtn->SetClickHdl(     LINK( this, SvxPageDescPage, SwapOrientation_Impl ) );
     m_pPortraitBtn->SetClickHdl(      LINK( this, SvxPageDescPage, SwapOrientation_Impl ) );
 
-    Link aLink = LINK( this, SvxPageDescPage, BorderModify_Impl );
+    Link<> aLink = LINK( this, SvxPageDescPage, BorderModify_Impl );
     m_pLeftMarginEdit->SetModifyHdl( aLink );
     m_pRightMarginEdit->SetModifyHdl( aLink );
     m_pTopMarginEdit->SetModifyHdl( aLink );

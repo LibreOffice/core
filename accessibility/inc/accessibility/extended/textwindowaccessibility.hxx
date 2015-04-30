@@ -86,7 +86,7 @@ private:
 class WindowListenerGuard
 {
 public:
-    inline WindowListenerGuard(::Link const & rListener):
+    inline WindowListenerGuard(::Link<> const & rListener):
         m_aListener(rListener), m_pNotifier(0) {}
 
     inline ~WindowListenerGuard() { endListening(); }
@@ -98,7 +98,7 @@ public:
     void endListening();
 
 private:
-    ::Link m_aListener;
+    ::Link<> m_aListener;
     VclPtr<vcl::Window> m_pNotifier;
 };
 

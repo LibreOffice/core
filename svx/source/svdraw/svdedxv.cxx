@@ -505,7 +505,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
         }
     }
     Outliner& rDrawOutl=pMod->GetDrawOutliner(pTextObj);
-    Link aDrawOutlLink=rDrawOutl.GetCalcFieldValueHdl();
+    Link<> aDrawOutlLink=rDrawOutl.GetCalcFieldValueHdl();
     if (!bOk && aDrawOutlLink.IsSet()) {
         aDrawOutlLink.Call(pFI);
         bOk = !rStr.isEmpty();
@@ -774,8 +774,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
         else
         {
             pTextEditOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
-            pTextEditOutliner->SetBeginPasteOrDropHdl(Link());
-            pTextEditOutliner->SetEndPasteOrDropHdl(Link());
+            pTextEditOutliner->SetBeginPasteOrDropHdl(Link<>());
+            pTextEditOutliner->SetEndPasteOrDropHdl(Link<>());
         }
     }
     if (pTextEditOutliner != NULL)
@@ -856,7 +856,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
                 // reset the callback link and let the undo manager cleanup all text edit
                 // undo actions to get the stack back to the form before the text edit
-                pSdrUndoManager->SetEndTextEditHdl(Link());
+                pSdrUndoManager->SetEndTextEditHdl(Link<>());
             }
             else
             {
@@ -907,8 +907,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             // Set old CalcFieldValue-Handler again, this
             // has to happen before Obj::EndTextEdit(), as this does UpdateFields().
             pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
-            pTEOutliner->SetBeginPasteOrDropHdl(Link());
-            pTEOutliner->SetEndPasteOrDropHdl(Link());
+            pTEOutliner->SetBeginPasteOrDropHdl(Link<>());
+            pTEOutliner->SetEndPasteOrDropHdl(Link<>());
 
             const bool bUndo = IsUndoEnabled();
             if( bUndo )

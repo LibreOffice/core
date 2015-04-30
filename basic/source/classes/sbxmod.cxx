@@ -1725,7 +1725,7 @@ bool SbModule::ExceedsLegacyModuleSize()
 
 class ErrorHdlResetter
 {
-    Link    mErrHandler;
+    Link<>  mErrHandler;
     bool    mbError;
 public:
     ErrorHdlResetter() : mbError( false )

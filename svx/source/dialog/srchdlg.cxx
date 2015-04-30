@@ -632,7 +632,7 @@ void SvxSearchDialog::InitControls_Impl()
     m_pSearchLB->SetModifyHdl( LINK( this, SvxSearchDialog, ModifyHdl_Impl ) );
     m_pReplaceLB->SetModifyHdl( LINK( this, SvxSearchDialog, ModifyHdl_Impl ) );
 
-    Link aLink = LINK( this, SvxSearchDialog, FocusHdl_Impl );
+    Link<> aLink = LINK( this, SvxSearchDialog, FocusHdl_Impl );
     m_pSearchLB->SetGetFocusHdl( aLink );
     m_pReplaceLB->SetGetFocusHdl( aLink );
 
@@ -807,7 +807,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     if ( pSearchItem->GetAppFlag() == SvxSearchApp::CALC )
     {
         m_pCalcGrid->Show();
-        Link aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
+        Link<> aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
         m_pCalcSearchInLB->SetSelectHdl( aLink );
         m_pRowsBtn->SetClickHdl( aLink );
         m_pColumnsBtn->SetClickHdl( aLink );

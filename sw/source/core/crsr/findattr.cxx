@@ -1226,8 +1226,8 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, bool bNoCollections,
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
-    Link aLnk( pDoc->GetOle2Link() );
-    pDoc->SetOle2Link( Link() );
+    Link<> aLnk( pDoc->GetOle2Link() );
+    pDoc->SetOle2Link( Link<>() );
 
     bool bReplace = ( pSearchOpt && ( !pSearchOpt->replaceString.isEmpty() ||
                                     !rSet.Count() ) ) ||

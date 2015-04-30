@@ -87,7 +87,7 @@ SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttr
     SetFieldUnit( *m_pMtrFldTop, eFUnit );
     SetFieldUnit( *m_pMtrFldBottom, eFUnit );
 
-    Link aLink( LINK( this, SvxTextAttrPage, ClickHdl_Impl ) );
+    Link<> aLink( LINK( this, SvxTextAttrPage, ClickHdl_Impl ) );
     m_pTsbAutoGrowWidth->SetClickHdl( aLink );
     m_pTsbAutoGrowHeight->SetClickHdl( aLink );
     m_pTsbFitToSize->SetClickHdl( aLink );

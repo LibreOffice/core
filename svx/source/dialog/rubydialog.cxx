@@ -235,13 +235,13 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings *pBind, SfxChildWindow *pCW,
     m_pPositionLB->SetSelectHdl(LINK(this, SvxRubyDialog, PositionHdl_Impl));
     m_pCharStyleLB->SetSelectHdl(LINK(this, SvxRubyDialog, CharStyleHdl_Impl));
 
-    Link aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
+    Link<> aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
     m_pScrollSB->SetScrollHdl( aScrLk );
     m_pScrollSB->SetEndScrollHdl( aScrLk );
 
-    Link aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
-    Link aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
-    Link aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
+    Link<> aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
+    Link<> aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
+    Link<> aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
     for(sal_uInt16 i = 0; i < 8; i++)
     {
         aEditArr[i]->SetModifyHdl(aEditLk);

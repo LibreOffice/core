@@ -92,7 +92,7 @@ void ScStatisticsTwoVariableDialog::Init()
     mpButtonOk->SetClickHdl( LINK( this, ScStatisticsTwoVariableDialog, OkClicked ) );
     mpButtonOk->Enable(false);
 
-    Link aLink = LINK( this, ScStatisticsTwoVariableDialog, GetFocusHandler );
+    Link<> aLink = LINK( this, ScStatisticsTwoVariableDialog, GetFocusHandler );
     mpVariable1RangeEdit->SetGetFocusHdl( aLink );
     mpVariable1RangeButton->SetGetFocusHdl( aLink );
     mpVariable2RangeEdit->SetGetFocusHdl( aLink );

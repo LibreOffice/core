@@ -69,7 +69,7 @@ TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet&
     pTabPage->get(m_pFI_MovingAverage,"imageMovingAverage");
     FillValueSets();
 
-    Link aLink = LINK(this, TrendlineResources, SelectTrendLine );
+    Link<> aLink = LINK(this, TrendlineResources, SelectTrendLine );
     m_pRB_Linear->SetClickHdl( aLink );
     m_pRB_Logarithmic->SetClickHdl( aLink );
     m_pRB_Exponential->SetClickHdl( aLink );

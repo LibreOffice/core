@@ -72,8 +72,8 @@ class SVT_DLLPUBLIC SvTreeList
     ListViewsType       aViewList;
     sal_uLong           nEntryCount;
 
-    Link                aCloneLink;
-    Link                aCompareLink;
+    Link<>              aCloneLink;
+    Link<>              aCompareLink;
     SvSortMode          eSortMode;
 
     sal_uInt16          nRefCount;
@@ -218,10 +218,10 @@ public:
     // DECL_LINK(CloneHdl,SvTreeListEntry*);
     // The Handler needs to return a SvTreeListEntry*
     SvTreeListEntry*        Clone( SvTreeListEntry* pEntry, sal_uLong& nCloneCount ) const;
-    void                SetCloneLink( const Link& rLink )
+    void                SetCloneLink( const Link<>& rLink )
     { aCloneLink=rLink; }
 
-    const Link&         GetCloneLink() const
+    const Link<>&       GetCloneLink() const
     { return aCloneLink; }
 
     SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // Calls the Clone Link
@@ -233,8 +233,8 @@ public:
     void                SetSortMode( SvSortMode eMode ) { eSortMode = eMode; }
     SvSortMode          GetSortMode() const { return eSortMode; }
     sal_Int32           Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const;
-    void                SetCompareHdl( const Link& rLink ) { aCompareLink = rLink; }
-    const Link&         GetCompareHdl() const { return aCompareLink; }
+    void                SetCompareHdl( const Link<>& rLink ) { aCompareLink = rLink; }
+    const Link<>&       GetCompareHdl() const { return aCompareLink; }
     void                Resort();
     void                Reverse();
 };

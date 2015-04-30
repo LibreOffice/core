@@ -20,11 +20,11 @@
 #define INCLUDED_VCL_ABSTDLG_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
 namespace vcl { class Window; }
 class ResId;
-class Link;
 
 class VCL_DLLPUBLIC VclAbstractDialog
 {
@@ -39,7 +39,7 @@ class VCL_DLLPUBLIC VclAbstractDialog2
 public:
     virtual             ~VclAbstractDialog2();
 
-    virtual void        StartExecuteModal( const Link& rEndDialogHdl ) = 0;
+    virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) = 0;
     virtual long        GetResult() = 0;
 };
 

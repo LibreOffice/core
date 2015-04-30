@@ -22,8 +22,6 @@
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
 
-class Link;
-
 class TOOLS_DLLPUBLIC Line
 {
 private:

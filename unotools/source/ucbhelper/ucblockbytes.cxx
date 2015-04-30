@@ -125,10 +125,10 @@ public:
  */
 class ProgressHandler_Impl: public ::cppu::WeakImplHelper1< XProgressHandler >
 {
-    Link                    m_aProgress;
+    Link<>                  m_aProgress;
 
 public:
-                            ProgressHandler_Impl( const Link& rLink )
+                            ProgressHandler_Impl( const Link<>& rLink )
                                 : m_aProgress( rLink )
                             {}
     // XProgressHandler

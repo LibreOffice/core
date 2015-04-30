@@ -107,9 +107,9 @@ FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::
 }
 
 
-Link FmRecordCountListener::SetPropChangeHandler(const Link& lnk)
+Link<> FmRecordCountListener::SetPropChangeHandler(const Link<>& lnk)
 {
-    Link lnkReturn = m_lnkWhoWantsToKnow;
+    Link<> lnkReturn = m_lnkWhoWantsToKnow;
     m_lnkWhoWantsToKnow = lnk;
 
     if (m_xListening.is())

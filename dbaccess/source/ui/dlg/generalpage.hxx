@@ -49,7 +49,7 @@ namespace dbaui
         };
         SPECIAL_MESSAGE     m_eLastMessage;
 
-        Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
+        Link<>              m_aTypeSelectHandler;   /// to be called if a new type is selected
         bool                m_bDisplayingInvalid : 1;   /// the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
         bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
@@ -69,7 +69,7 @@ namespace dbaui
         virtual void dispose() SAL_OVERRIDE;
 
         /// set a handler which gets called every time the user selects a new type
-        void            SetTypeSelectHandler( const Link& _rHandler ) { m_aTypeSelectHandler = _rHandler; }
+        void            SetTypeSelectHandler( const Link<>& _rHandler ) { m_aTypeSelectHandler = _rHandler; }
 
         /// get the currently selected datasource type
         OUString     GetSelectedType() const { return m_eCurrentSelection; }
@@ -151,9 +151,9 @@ namespace dbaui
         DocumentDescriptor      m_aBrowsedDocument;
         CreationMode            m_eOriginalCreationMode;
 
-        Link                    m_aCreationModeHandler;         /// to be called if a new type is selected
-        Link                    m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
-        Link                    m_aChooseDocumentHandler;       /// to be called when a recent document has been definitely chosen
+        Link<>                  m_aCreationModeHandler;         /// to be called if a new type is selected
+        Link<>                  m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
+        Link<>                  m_aChooseDocumentHandler;       /// to be called when a recent document has been definitely chosen
 
         ::svt::ControlDependencyManager
                                 m_aControlDependencies;
@@ -162,11 +162,11 @@ namespace dbaui
         void                    insertEmbeddedDBTypeEntryData( const OUString& _sType, const OUString& sDisplayName );
 
     public:
-        void                    SetCreationModeHandler( const Link& _rHandler ) { m_aCreationModeHandler = _rHandler; }
+        void                    SetCreationModeHandler( const Link<>& _rHandler ) { m_aCreationModeHandler = _rHandler; }
         CreationMode            GetDatabaseCreationMode() const;
 
-        void                    SetDocumentSelectionHandler( const Link& _rHandler) { m_aDocumentSelectionHandler = _rHandler; }
-        void                    SetChooseDocumentHandler( const Link& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
+        void                    SetDocumentSelectionHandler( const Link<>& _rHandler) { m_aDocumentSelectionHandler = _rHandler; }
+        void                    SetChooseDocumentHandler( const Link<>& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
         DocumentDescriptor      GetSelectedDocument() const;
 
     protected:

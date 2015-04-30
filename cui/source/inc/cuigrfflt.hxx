@@ -36,7 +36,7 @@ class GraphicPreviewWindow : public Control
 {
 private:
     const Graphic* mpOrigGraphic;
-    Link      maModifyHdl;
+    Link<>    maModifyHdl;
     Graphic   maScaledOrig;
     Graphic   maPreview;
     double    mfScaleX;
@@ -51,7 +51,7 @@ private:
 public:
 
     GraphicPreviewWindow(vcl::Window* pParent, WinBits nStyle);
-    void init(const Graphic* pOrigGraphic, const Link& rLink)
+    void init(const Graphic* pOrigGraphic, const Link<>& rLink)
     {
         mpOrigGraphic = pOrigGraphic;
         maModifyHdl = rLink;
@@ -69,7 +69,7 @@ class GraphicFilterDialog : public ModalDialog
 private:
 
     Timer           maTimer;
-    Link            maModifyHdl;
+    Link<>          maModifyHdl;
     Size            maSizePixel;
     bool            bIsBitmap;
 
@@ -79,7 +79,7 @@ private:
 protected:
     VclPtr<GraphicPreviewWindow>  mpPreview;
 
-    const Link&     GetModifyHdl() const { return maModifyHdl; }
+    const Link<>&   GetModifyHdl() const { return maModifyHdl; }
     const Size&     GetGraphicSizePixel() const { return maSizePixel; }
 
 public:
@@ -202,14 +202,14 @@ public:
 class EmbossControl : public SvxRectCtl
 {
 private:
-    Link            maModifyHdl;
+    Link<>          maModifyHdl;
     virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 public:
     EmbossControl(vcl::Window* pParent)
         : SvxRectCtl(pParent) {}
 
-    void            SetModifyHdl( const Link& rHdl ) { maModifyHdl = rHdl; }
+    void            SetModifyHdl( const Link<>& rHdl ) { maModifyHdl = rHdl; }
 };
 
 class GraphicFilterEmboss : public GraphicFilterDialog

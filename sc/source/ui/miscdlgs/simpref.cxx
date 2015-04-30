@@ -149,13 +149,13 @@ bool ScSimpleRefDlg::IsRefInputMode() const
     return true;
 }
 
-void ScSimpleRefDlg::SetCloseHdl( const Link& rLink )
+void ScSimpleRefDlg::SetCloseHdl( const Link<>& rLink )
 {
     aCloseHdl=rLink;
 }
 
-void ScSimpleRefDlg::SetUnoLinks( const Link& rDone, const Link& rAbort,
-                                    const Link& rChange )
+void ScSimpleRefDlg::SetUnoLinks( const Link<>& rDone, const Link<>& rAbort,
+                                    const Link<>& rChange )
 {
     aDoneHdl    = rDone;
     aAbortedHdl = rAbort;
@@ -195,7 +195,7 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
     aCloseHdl.Call(&aResult);
-    Link aUnoLink = aDoneHdl;       // stack var because this is deleted in DoClose
+    Link<> aUnoLink = aDoneHdl;     // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
     aUnoLink.Call( &aResult );
     return 0;
@@ -206,7 +206,7 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
     aCloseHdl.Call(NULL);
-    Link aUnoLink = aAbortedHdl;    // stack var because this is deleted in DoClose
+    Link<> aUnoLink = aAbortedHdl;  // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
     aUnoLink.Call( &aResult );
     return 0;

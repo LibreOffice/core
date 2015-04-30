@@ -2693,7 +2693,7 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
 DbFilterField::~DbFilterField()
 {
     if (m_nControlClass == ::com::sun::star::form::FormComponentType::CHECKBOX)
-        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link() );
+        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<>() );
 
 }
 
@@ -3612,7 +3612,7 @@ void FmXEditCell::disposing()
     m_aTextListeners.disposeAndClear(aEvt);
     m_aChangeListeners.disposeAndClear(aEvt);
 
-    m_pEditImplementation->SetModifyHdl( Link() );
+    m_pEditImplementation->SetModifyHdl( Link<>() );
     if ( m_bOwnEditImplementation )
         delete m_pEditImplementation;
     m_pEditImplementation = NULL;
@@ -3858,7 +3858,7 @@ void FmXCheckBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).SetClickHdl(Link());
+    static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).SetClickHdl(Link<>());
     m_pBox = NULL;
 
     FmXDataCell::disposing();
@@ -4034,8 +4034,8 @@ void FmXListBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    m_pBox->SetSelectHdl( Link() );
-    m_pBox->SetDoubleClickHdl( Link() );
+    m_pBox->SetSelectHdl( Link<>() );
+    m_pBox->SetDoubleClickHdl( Link<>() );
     m_pBox = NULL;
 
     FmXTextCell::disposing();
@@ -4590,7 +4590,7 @@ void FmXFilterCell::disposing()
     ::com::sun::star::lang::EventObject aEvt(*this);
     m_aTextListeners.disposeAndClear(aEvt);
 
-    static_cast<DbFilterField*>(m_pCellControl)->SetCommitHdl(Link());
+    static_cast<DbFilterField*>(m_pCellControl)->SetCommitHdl(Link<>());
 
     FmXGridCell::disposing();
 }

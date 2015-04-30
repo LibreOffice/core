@@ -70,7 +70,7 @@ using namespace ::com::sun::star;
 class SvtMiscOptions_Impl : public ConfigItem
 {
     private:
-    ::std::list<Link> aList;
+    ::std::list<Link<>> aList;
     bool        m_bUseSystemFileDialog;
     bool        m_bIsUseSystemFileDialogRO;
     bool        m_bPluginsEnabled;
@@ -206,8 +206,8 @@ class SvtMiscOptions_Impl : public ConfigItem
         bool IsShowLinkWarningDialogReadOnly() const
         { return m_bIsShowLinkWarningDialogRO; }
 
-        void AddListenerLink( const Link& rLink );
-        void RemoveListenerLink( const Link& rLink );
+        void AddListenerLink( const Link<>& rLink );
+        void RemoveListenerLink( const Link<>& rLink );
         void CallListeners();
 
 
@@ -490,14 +490,14 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
     }
 }
 
-void SvtMiscOptions_Impl::AddListenerLink( const Link& rLink )
+void SvtMiscOptions_Impl::AddListenerLink( const Link<>& rLink )
 {
     aList.push_back( rLink );
 }
 
-void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
+void SvtMiscOptions_Impl::RemoveListenerLink( const Link<>& rLink )
 {
-    for ( ::std::list<Link>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::list<Link<>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
         if ( *iter == rLink )
         {
@@ -509,7 +509,7 @@ void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
 
 void SvtMiscOptions_Impl::CallListeners()
 {
-    for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::list<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
         iter->Call( this );
 }
 
@@ -873,12 +873,12 @@ Mutex & SvtMiscOptions::GetInitMutex()
     return theSvtMiscOptionsMutex::get();
 }
 
-void SvtMiscOptions::AddListenerLink( const Link& rLink )
+void SvtMiscOptions::AddListenerLink( const Link<>& rLink )
 {
     m_pDataContainer->AddListenerLink( rLink );
 }
 
-void SvtMiscOptions::RemoveListenerLink( const Link& rLink )
+void SvtMiscOptions::RemoveListenerLink( const Link<>& rLink )
 {
     m_pDataContainer->RemoveListenerLink( rLink );
 }

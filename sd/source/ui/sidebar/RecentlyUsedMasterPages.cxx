@@ -96,7 +96,7 @@ RecentlyUsedMasterPages::RecentlyUsedMasterPages()
 
 RecentlyUsedMasterPages::~RecentlyUsedMasterPages()
 {
-    Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
+    Link<> aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->RemoveChangeListener(aLink);
 
     MasterPageObserver::Instance().RemoveEventListener(
@@ -105,7 +105,7 @@ RecentlyUsedMasterPages::~RecentlyUsedMasterPages()
 
 void RecentlyUsedMasterPages::LateInit()
 {
-    Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
+    Link<> aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->AddChangeListener(aLink);
 
     LoadPersistentValues ();
@@ -237,7 +237,7 @@ void RecentlyUsedMasterPages::SavePersistentValues()
     }
 }
 
-void RecentlyUsedMasterPages::AddEventListener (const Link& rEventListener)
+void RecentlyUsedMasterPages::AddEventListener (const Link<>& rEventListener)
 {
     if (::std::find (
         maListeners.begin(),
@@ -248,7 +248,7 @@ void RecentlyUsedMasterPages::AddEventListener (const Link& rEventListener)
     }
 }
 
-void RecentlyUsedMasterPages::RemoveEventListener (const Link& rEventListener)
+void RecentlyUsedMasterPages::RemoveEventListener (const Link<>& rEventListener)
 {
     maListeners.erase (
         ::std::find (
@@ -272,8 +272,8 @@ MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32
 
 void RecentlyUsedMasterPages::SendEvent()
 {
-    ::std::vector<Link>::iterator aLink (maListeners.begin());
-    ::std::vector<Link>::iterator aEnd (maListeners.end());
+    ::std::vector<Link<>>::iterator aLink (maListeners.begin());
+    ::std::vector<Link<>>::iterator aEnd (maListeners.end());
     while (aLink!=aEnd)
     {
         aLink->Call (NULL);

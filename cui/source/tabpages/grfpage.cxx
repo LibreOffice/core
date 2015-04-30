@@ -88,7 +88,7 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
     SetFieldUnit( *m_pTopMF , eMetric );
     SetFieldUnit( *m_pBottomMF, eMetric );
 
-    Link aLk = LINK(this, SvxGrfCropPage, SizeHdl);
+    Link<> aLk = LINK(this, SvxGrfCropPage, SizeHdl);
     m_pWidthMF->SetModifyHdl( aLk );
     m_pHeightMF->SetModifyHdl( aLk );
 

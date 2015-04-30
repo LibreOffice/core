@@ -78,7 +78,7 @@ private:
 
     MapMode         aPrefMapMode;
     Size            aPrefSize;
-    Link            aHookHdlLink;
+    Link<>          aHookHdlLink;
     GDIMetaFile*    pPrev;
     GDIMetaFile*    pNext;
     VclPtr<OutputDevice> pOutDev;
@@ -198,8 +198,8 @@ public:
     const MapMode&  GetPrefMapMode() const { return aPrefMapMode; }
     void            SetPrefMapMode( const MapMode& rMapMode ) { aPrefMapMode = rMapMode; }
 
-    void            SetHookHdl( const Link& rLink ) { aHookHdlLink = rLink; }
-    const Link&     GetHookHdl() const { return aHookHdlLink; }
+    void            SetHookHdl( const Link<>& rLink ) { aHookHdlLink = rLink; }
+    const Link<>&   GetHookHdl() const { return aHookHdlLink; }
 
     sal_uLong       GetChecksum() const;
     sal_uLong       GetSizeBytes() const;

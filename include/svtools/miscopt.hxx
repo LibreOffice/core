@@ -21,6 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
+#include <tools/link.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
@@ -34,7 +35,6 @@
 *//*-*************************************************************************************************************/
 
 class SvtMiscOptions_Impl;
-class Link;
 
 /*-************************************************************************************************************
     @short          collect information about misc group
@@ -60,8 +60,8 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
          SvtMiscOptions();
         virtual ~SvtMiscOptions();
 
-        void        AddListenerLink( const Link& rLink );
-        void        RemoveListenerLink( const Link& rLink );
+        void        AddListenerLink( const Link<>& rLink );
+        void        RemoveListenerLink( const Link<>& rLink );
 
         bool        UseSystemFileDialog() const;
         void        SetUseSystemFileDialog( bool bSet );

@@ -244,8 +244,8 @@ private:
     XDrawPageSequence                   mSelectedPages;
     XDrawPageSequence                   mMasterPageTargets;
 
-    Link                                maOldFieldHdl;
-    Link                                maNewFieldHdl;
+    Link<>                              maOldFieldHdl;
+    Link<>                              maNewFieldHdl;
 
     bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 

@@ -22,7 +22,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateSearchView(vcl
     return new TemplateSearchView(pParent);
 }
 
-void TemplateSearchView::setOpenTemplateHdl(const Link &rLink)
+void TemplateSearchView::setOpenTemplateHdl(const Link<> &rLink)
 {
     maOpenTemplateHdl = rLink;
 }

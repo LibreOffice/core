@@ -75,7 +75,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
     m_pUsedDBTLB->SetSpaceBetweenEntries(0);
     m_pUsedDBTLB->SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
 
-    Link aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
+    Link<> aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
     m_pUsedDBTLB->SetSelectHdl(aLink);
     m_pUsedDBTLB->SetDeselectHdl(aLink);

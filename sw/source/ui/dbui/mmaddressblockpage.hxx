@@ -140,7 +140,7 @@ public:
 
 class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
 {
-    Link                            m_aSelectionLink;
+    Link<>                          m_aSelectionLink;
     VclPtr<SwCustomizeAddressBlockDialog>  m_pParentDialog;
 
     using VclMultiLineEdit::Notify;
@@ -160,7 +160,7 @@ public:
 
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
+    void            SetSelectionChangedHdl( const Link<>& rLink ) {m_aSelectionLink = rLink;}
 
     void            SetText( const OUString& rStr ) SAL_OVERRIDE;
     OUString        GetAddress();

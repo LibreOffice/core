@@ -164,9 +164,9 @@ protected:
     void                        EnableInternet( bool bInternet );
 
     // originally from VclFileDialog
-    Link                        _aOKHdl;
-    Link                        _aFileSelectHdl;
-    Link                        _aFilterSelectHdl;
+    Link<>                      _aOKHdl;
+    Link<>                      _aFileSelectHdl;
+    Link<>                      _aFilterSelectHdl;
 
     OUString                    _aPath;
     OUString                    _aDefExt;
@@ -197,7 +197,7 @@ public:
     virtual void                dispose() SAL_OVERRIDE;
 
     virtual short               Execute() SAL_OVERRIDE;
-    virtual void                StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual void                StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
 
             void                FileSelect();
             void                FilterSelect();
@@ -259,12 +259,12 @@ public:
     inline void                 SetDefaultExt( const OUString& rExt );
     inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
-    inline void                 SetOKHdl( const Link& rLink );
-    inline const Link&          GetOKHdl() const;
-    inline void                 SetFileSelectHdl( const Link& rLink );
-    inline const Link&          GetFileSelectHdl() const;
-    inline void                 SetFilterSelectHdl( const Link& rLink );
-    inline const Link&          GetFilterSelectHdl() const;
+    inline void                 SetOKHdl( const Link<>& rLink );
+    inline const Link<>&        GetOKHdl() const;
+    inline void                 SetFileSelectHdl( const Link<>& rLink );
+    inline const Link<>&        GetFileSelectHdl() const;
+    inline void                 SetFilterSelectHdl( const Link<>& rLink );
+    inline const Link<>&        GetFilterSelectHdl() const;
 
     inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
 
@@ -370,7 +370,7 @@ inline const OUString& SvtFileDialog::GetDefaultExt() const
 
 inline void SvtFileDialog::SetOKHdl
 (
-    const Link& rLink
+    const Link<>& rLink
 )
 {
     _aOKHdl = rLink;
@@ -378,7 +378,7 @@ inline void SvtFileDialog::SetOKHdl
 
 
 
-inline const Link& SvtFileDialog::GetOKHdl() const
+inline const Link<>& SvtFileDialog::GetOKHdl() const
 {
     return _aOKHdl;
 }
@@ -387,7 +387,7 @@ inline const Link& SvtFileDialog::GetOKHdl() const
 
 inline void SvtFileDialog::SetFileSelectHdl
 (
-    const Link& rLink
+    const Link<>& rLink
 )
 {
     _aFileSelectHdl = rLink;
@@ -395,7 +395,7 @@ inline void SvtFileDialog::SetFileSelectHdl
 
 
 
-inline const Link& SvtFileDialog::GetFileSelectHdl() const
+inline const Link<>& SvtFileDialog::GetFileSelectHdl() const
 {
     return _aFileSelectHdl;
 }
@@ -404,7 +404,7 @@ inline const Link& SvtFileDialog::GetFileSelectHdl() const
 
 inline void SvtFileDialog::SetFilterSelectHdl
 (
-    const Link& rLink
+    const Link<>& rLink
 )
 {
     _aFilterSelectHdl = rLink;
@@ -412,7 +412,7 @@ inline void SvtFileDialog::SetFilterSelectHdl
 
 
 
-inline const Link& SvtFileDialog::GetFilterSelectHdl() const
+inline const Link<>& SvtFileDialog::GetFilterSelectHdl() const
 {
     return _aFilterSelectHdl;
 }

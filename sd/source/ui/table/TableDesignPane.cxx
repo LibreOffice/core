@@ -428,7 +428,7 @@ void TableDesignWidget::updateControls()
 
 void TableDesignWidget::addListener()
 {
-    Link aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -440,7 +440,7 @@ void TableDesignWidget::addListener()
 
 void TableDesignWidget::removeListener()
 {
-    Link aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 

@@ -352,7 +352,7 @@ OUString SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
     {
         if ( !aBrushItem.GetGraphicLink().isEmpty() )
             sGrfName = aBrushItem.GetGraphicLink();
-        aBrushItem.SetDoneLink( Link() );
+        aBrushItem.SetDoneLink( Link<>() );
         const Graphic *pGrf = aBrushItem.GetGraphic();
         if ( pGrf )
         {

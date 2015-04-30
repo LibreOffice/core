@@ -111,7 +111,7 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const;
-        virtual void SetModifyHdl(const Link& rLink) = 0;
+        virtual void SetModifyHdl(const Link<>& rLink) = 0;
         virtual bool WantMouseEvent() const;
     };
 
@@ -146,7 +146,7 @@ namespace svt
         virtual void                SetModified() = 0;
         virtual bool                IsModified() const = 0;
         virtual void                ClearModified() = 0;
-        virtual void                SetModifyHdl( const Link& _rLink ) = 0;
+        virtual void                SetModifyHdl( const Link<>& _rLink ) = 0;
     };
 
 
@@ -182,7 +182,7 @@ namespace svt
         virtual void                SetModified() SAL_OVERRIDE;
         virtual bool                IsModified() const SAL_OVERRIDE;
         virtual void                ClearModified() SAL_OVERRIDE;
-        virtual void                SetModifyHdl( const Link& _rLink ) SAL_OVERRIDE;
+        virtual void                SetModifyHdl( const Link<>& _rLink ) SAL_OVERRIDE;
     };
 
     #include <svtools/editimplementation.hxx>
@@ -251,7 +251,7 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const SAL_OVERRIDE;
-        virtual void SetModifyHdl(const Link& rLink) SAL_OVERRIDE;
+        virtual void SetModifyHdl(const Link<>& rLink) SAL_OVERRIDE;
     };
 
 
@@ -271,7 +271,7 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const SAL_OVERRIDE;
-        virtual void SetModifyHdl(const Link& rLink) SAL_OVERRIDE;
+        virtual void SetModifyHdl(const Link<>& rLink) SAL_OVERRIDE;
     };
 
 
@@ -281,7 +281,7 @@ namespace svt
     {
         VclPtr<CheckBox>   pBox;
         Rectangle   aFocusRect;
-        Link        m_aClickLink,m_aModifyLink;
+        Link<>      m_aClickLink,m_aModifyLink;
 
     public:
         CheckBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
@@ -296,11 +296,11 @@ namespace svt
         virtual void DataChanged( const DataChangedEvent& _rEvent ) SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;
 
-        void SetClickHdl(const Link& rHdl) {m_aClickLink = rHdl;}
-        const Link& GetClickHdl() const {return m_aClickLink;}
+        void SetClickHdl(const Link<>& rHdl) {m_aClickLink = rHdl;}
+        const Link<>& GetClickHdl() const {return m_aClickLink;}
 
-        void SetModifyHdl(const Link& rHdl) {m_aModifyLink = rHdl;}
-        const Link& GetModifyHdl() const {return m_aModifyLink;}
+        void SetModifyHdl(const Link<>& rHdl) {m_aModifyLink = rHdl;}
+        const Link<>& GetModifyHdl() const {return m_aModifyLink;}
 
         CheckBox&   GetBox() {return *pBox;};
 
@@ -323,7 +323,7 @@ namespace svt
         virtual void ClearModified() SAL_OVERRIDE;
 
     protected:
-        virtual void SetModifyHdl(const Link& rLink) SAL_OVERRIDE;
+        virtual void SetModifyHdl(const Link<>& rLink) SAL_OVERRIDE;
         virtual bool WantMouseEvent() const SAL_OVERRIDE;
     };
 
@@ -357,7 +357,7 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const SAL_OVERRIDE;
-        virtual void SetModifyHdl(const Link& rLink) SAL_OVERRIDE;
+        virtual void SetModifyHdl(const Link<>& rLink) SAL_OVERRIDE;
     };
 
 
@@ -391,7 +391,7 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const SAL_OVERRIDE;
-        virtual void SetModifyHdl(const Link& rLink) SAL_OVERRIDE;
+        virtual void SetModifyHdl(const Link<>& rLink) SAL_OVERRIDE;
     };
 
 

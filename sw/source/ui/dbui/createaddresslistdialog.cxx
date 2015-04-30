@@ -101,7 +101,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits
     m_pWindow->Show();
     m_pScrollBar->Show();
 
-    Link aScrollLink = LINK(this, SwAddressControl_Impl, ScrollHdl_Impl);
+    Link<> aScrollLink = LINK(this, SwAddressControl_Impl, ScrollHdl_Impl);
     m_pScrollBar->SetScrollHdl(aScrollLink);
     m_pScrollBar->SetEndScrollHdl(aScrollLink);
     m_pScrollBar->EnableDrag();
@@ -172,8 +172,8 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     long nEDYPos = m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_DESC_Y, RSC_SP_CTRL_DESC_Y), MAP_APPFONT).Height();
     long nFTYPos = nEDYPos + nEDHeight - nFTHeight;
 
-    Link aFocusLink = LINK(this, SwAddressControl_Impl, GotFocusHdl_Impl);
-    Link aEditModifyLink = LINK(this, SwAddressControl_Impl, EditModifyHdl_Impl);
+    Link<> aFocusLink = LINK(this, SwAddressControl_Impl, GotFocusHdl_Impl);
+    Link<> aEditModifyLink = LINK(this, SwAddressControl_Impl, EditModifyHdl_Impl);
     Edit* pLastEdit = 0;
     sal_Int32 nVisibleLines = 0;
     sal_uIntPtr nLines = 0;
@@ -420,7 +420,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     m_pCustomizePB->SetClickHdl(LINK(this, SwCreateAddressListDialog, CustomizeHdl_Impl));
     m_pOK->SetClickHdl(LINK(this, SwCreateAddressListDialog, OkHdl_Impl));
 
-    Link aLk = LINK(this, SwCreateAddressListDialog, DBCursorHdl_Impl);
+    Link<> aLk = LINK(this, SwCreateAddressListDialog, DBCursorHdl_Impl);
     m_pStartPB->SetClickHdl(aLk);
     m_pPrevPB->SetClickHdl(aLk);
     m_pSetNoNF->SetModifyHdl(LINK(this, SwCreateAddressListDialog, DBNumCursorHdl_Impl));

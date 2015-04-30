@@ -562,7 +562,7 @@ SwDropCapsPage::SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pPict->SetBorderStyle( WindowBorderStyle::MONO );
 
     // Install handler
-    Link aLk = LINK(this, SwDropCapsPage, ModifyHdl);
+    Link<> aLk = LINK(this, SwDropCapsPage, ModifyHdl);
     m_pDropCapsField->SetModifyHdl( aLk );
     m_pLinesField->SetModifyHdl( aLk );
     m_pDistanceField->SetModifyHdl( aLk );

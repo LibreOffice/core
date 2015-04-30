@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
+#include <tools/link.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -49,7 +50,6 @@ class INetBookmark;
 class INetImage;
 class FileList;
 namespace vcl { class Window; }
-class Link;
 
 // Drag&Drop defines
 
@@ -517,7 +517,7 @@ public:
 
     using TransferableHelper::StartDrag;
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-                                   const Link& rCallbck,
+                                   const Link<>& rCallbck,
                                    sal_Int32 nDragPointer = DND_POINTER_NONE,
                                    sal_Int32 nDragImage = DND_IMAGE_NONE );
 };

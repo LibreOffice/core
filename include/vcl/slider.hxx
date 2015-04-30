@@ -50,8 +50,8 @@ private:
     ScrollType      meScrollType;
     bool            mbCalcSize;
     bool            mbFullDrag;
-    Link            maSlideHdl;
-    Link            maEndSlideHdl;
+    Link<>          maSlideHdl;
+    Link<>          maEndSlideHdl;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -107,10 +107,10 @@ public:
 
     Size            CalcWindowSizePixel();
 
-    void            SetSlideHdl( const Link& rLink ) { maSlideHdl = rLink; }
-    const Link&     GetSlideHdl() const { return maSlideHdl;    }
-    void            SetEndSlideHdl( const Link& rLink ) { maEndSlideHdl = rLink; }
-    const Link&     GetEndSlideHdl() const { return maEndSlideHdl; }
+    void            SetSlideHdl( const Link<>& rLink ) { maSlideHdl = rLink; }
+    const Link<>&   GetSlideHdl() const { return maSlideHdl;    }
+    void            SetEndSlideHdl( const Link<>& rLink ) { maEndSlideHdl = rLink; }
+    const Link<>&     GetEndSlideHdl() const { return maEndSlideHdl; }
 };
 
 #endif // INCLUDED_VCL_SLIDER_HXX

@@ -20,6 +20,7 @@
 #define INCLUDED_EDITENG_EDTDLG_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/link.hxx>
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -34,7 +35,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2
 
 namespace vcl { class Window; }
 class ResId;
-class Link;
 class SvxSpellWrapper;
 
 class AbstractThesaurusDialog : public VclAbstractDialog
@@ -60,14 +60,14 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
     virtual void     SetByCharacter( bool _bByCharacter ) = 0;
     virtual void     SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
     virtual void     SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) = 0;
-    virtual void     SetOptionsChangedHdl( const Link& _rHdl ) = 0;
-    virtual void     SetIgnoreHdl( const Link& _rHdl ) = 0;
-    virtual void     SetIgnoreAllHdl( const Link& _rHdl ) = 0;
-    virtual void     SetChangeHdl( const Link& _rHdl ) = 0;
-    virtual void     SetChangeAllHdl( const Link& _rHdl ) = 0;
-    virtual void     SetClickByCharacterHdl( const Link& _rHdl ) = 0;
-    virtual void     SetConversionFormatChangedHdl( const Link& _rHdl ) = 0;
-    virtual void     SetFindHdl( const Link& _rHdl ) = 0;
+    virtual void     SetOptionsChangedHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetIgnoreHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetIgnoreAllHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetChangeHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetChangeAllHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetClickByCharacterHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetConversionFormatChangedHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetFindHdl( const Link<>& _rHdl ) = 0;
     virtual bool     GetUseBothDirections() const= 0;
     virtual editeng::HangulHanjaConversion::ConversionDirection
                      GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;

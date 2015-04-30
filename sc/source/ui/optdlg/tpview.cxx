@@ -69,13 +69,13 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
     get(pOutlineCB,"outline");
 
     SetExchangeSupport();
-    Link aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
+    Link<> aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
     pObjGrfLB->  SetSelectHdl(aSelObjHdl);
     pDiagramLB-> SetSelectHdl(aSelObjHdl);
     pDrawLB->    SetSelectHdl(aSelObjHdl);
     pGridLB->    SetSelectHdl( LINK( this, ScTpContentOptions, GridHdl ) );
 
-    Link aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
+    Link<> aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
     pFormulaCB  ->SetClickHdl(aCBHdl);
     pNilCB      ->SetClickHdl(aCBHdl);
     pAnnotCB    ->SetClickHdl(aCBHdl);

@@ -112,7 +112,7 @@ void ScRandomNumberGeneratorDialog::Init()
     mpButtonClose->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, CloseClicked ) );
     mpButtonApply->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, ApplyClicked ) );
 
-    Link aLink = LINK( this, ScRandomNumberGeneratorDialog, GetFocusHandler );
+    Link<> aLink = LINK( this, ScRandomNumberGeneratorDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
     mpInputRangeButton->SetGetFocusHdl( aLink );
 

@@ -88,11 +88,11 @@ void ScrollBarManager::Disconnect()
 {
     if (mpVerticalScrollBar != nullptr)
     {
-        mpVerticalScrollBar->SetScrollHdl (Link());
+        mpVerticalScrollBar->SetScrollHdl (Link<>());
     }
     if (mpHorizontalScrollBar != nullptr)
     {
-        mpHorizontalScrollBar->SetScrollHdl (Link());
+        mpHorizontalScrollBar->SetScrollHdl (Link<>());
     }
 }
 

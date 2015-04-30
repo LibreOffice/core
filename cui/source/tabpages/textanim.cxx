@@ -115,7 +115,7 @@ SvxTextAnimationPage::SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemS
     m_pTsbAuto->SetClickHdl( LINK( this, SvxTextAnimationPage, ClickAutoHdl_Impl ) );
     m_pTsbPixel->SetClickHdl( LINK( this, SvxTextAnimationPage, ClickPixelHdl_Impl ) );
 
-    Link aLink( LINK( this, SvxTextAnimationPage, ClickDirectionHdl_Impl ) );
+    Link<> aLink( LINK( this, SvxTextAnimationPage, ClickDirectionHdl_Impl ) );
     m_pBtnUp->SetClickHdl( aLink );
     m_pBtnLeft->SetClickHdl( aLink );
     m_pBtnRight->SetClickHdl( aLink );

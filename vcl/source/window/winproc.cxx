@@ -815,7 +815,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                             pEv->pWindow = pChild;
                             pEv->aChildPos = aChildPos;
                             pChild->ImplAddDel( &pEv->aDelData );
-                            Application::PostUserEvent( Link( pEv, ContextMenuEventLink ) );
+                            Application::PostUserEvent( Link<>( pEv, ContextMenuEventLink ) );
                         }
                         else
                             bRet = ! ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, true, &aChildPos );
@@ -1996,7 +1996,7 @@ void ImplHandleClose( vcl::Window* pWindow )
     if (pSysWin)
     {
         // See if the custom close handler is set.
-        const Link& rLink = pSysWin->GetCloseHdl();
+        const Link<>& rLink = pSysWin->GetCloseHdl();
         if (rLink.IsSet())
         {
             rLink.Call(pSysWin);
@@ -2010,7 +2010,7 @@ void ImplHandleClose( vcl::Window* pWindow )
         DelayedCloseEvent* pEv = new DelayedCloseEvent;
         pEv->pWindow = pWin;
         pWin->ImplAddDel( &pEv->aDelData );
-        Application::PostUserEvent( Link( pEv, DelayedCloseEventLink ) );
+        Application::PostUserEvent( Link<>( pEv, DelayedCloseEventLink ) );
     }
 }
 

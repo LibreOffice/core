@@ -1072,7 +1072,7 @@ void SwGlossaryDlg::ShowPreview()
     //create example
     if (!pExampleFrame)
     {
-        Link aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
+        Link<> aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
         pExampleFrame = new SwOneExampleFrame( *m_pExampleWIN,
                         EX_SHOW_ONLINE_LAYOUT, &aLink );
     }

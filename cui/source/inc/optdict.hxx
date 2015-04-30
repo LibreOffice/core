@@ -78,7 +78,7 @@ public:
 
 class SvxDictEdit : public Edit
 {
-    Link    aActionLink;
+    Link<>  aActionLink;
     bool    bSpaces;
 
     public:
@@ -87,7 +87,7 @@ class SvxDictEdit : public Edit
                     SvxDictEdit(vcl::Window* pParent, WinBits aWB) :
                         Edit(pParent, aWB), bSpaces(false){}
 
-    void            SetActionHdl( const Link& rLink )
+    void            SetActionHdl( const Link<>& rLink )
                                 { aActionLink = rLink;}
 
     void            SetSpaces(bool bSet)

@@ -336,7 +336,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pCbSourceFormat->Disable();
     m_pCbSourceFormat->Hide();
 
-    Link aLink = LINK( this, SvxNumberFormatTabPage, SelFormatHdl_Impl );
+    Link<> aLink = LINK( this, SvxNumberFormatTabPage, SelFormatHdl_Impl );
 
     m_pLbCategory->SetSelectHdl( aLink );
     m_pLbFormat->SetSelectHdl( aLink );
@@ -1689,7 +1689,7 @@ bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 #*
 #************************************************************************/
 
-void SvxNumberFormatTabPage::SetOkHdl( const Link& rOkHandler )
+void SvxNumberFormatTabPage::SetOkHdl( const Link<>& rOkHandler )
 {
     fnOkHdl = rOkHandler;
 }

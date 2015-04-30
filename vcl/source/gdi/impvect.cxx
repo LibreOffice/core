@@ -634,7 +634,7 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
 namespace ImplVectorizer {
 
 bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                                    sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
+                                    sal_uInt8 cReduce, sal_uLong nFlags, const Link<>* pProgress )
 {
     bool bRet = false;
 
@@ -737,7 +737,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
 bool ImplVectorize( const Bitmap& rMonoBmp,
                                     tools::PolyPolygon& rPolyPoly,
-                                    sal_uLong nFlags, const Link* pProgress )
+                                    sal_uLong nFlags, const Link<>* pProgress )
 {
     std::unique_ptr<Bitmap> xBmp(new Bitmap( rMonoBmp ));
     BitmapReadAccess*   pRAcc;

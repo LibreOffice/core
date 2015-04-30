@@ -1502,53 +1502,53 @@ void EditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
     pImpEditEngine->ShowParagraph( nParagraph, bShow );
 }
 
-void EditEngine::SetNotifyHdl( const Link& rLink )
+void EditEngine::SetNotifyHdl( const Link<>& rLink )
 {
     pImpEditEngine->SetNotifyHdl( rLink );
 }
 
-Link EditEngine::GetNotifyHdl() const
+Link<> EditEngine::GetNotifyHdl() const
 {
     return pImpEditEngine->GetNotifyHdl();
 }
 
-void EditEngine::SetStatusEventHdl( const Link& rLink )
+void EditEngine::SetStatusEventHdl( const Link<>& rLink )
 {
     pImpEditEngine->SetStatusEventHdl( rLink );
 }
 
-Link EditEngine::GetStatusEventHdl() const
+Link<> EditEngine::GetStatusEventHdl() const
 {
     return pImpEditEngine->GetStatusEventHdl();
 }
 
-void EditEngine::SetImportHdl( const Link& rLink )
+void EditEngine::SetImportHdl( const Link<>& rLink )
 {
     pImpEditEngine->aImportHdl = rLink;
 }
 
-Link EditEngine::GetImportHdl() const
+Link<> EditEngine::GetImportHdl() const
 {
     return pImpEditEngine->aImportHdl;
 }
 
-void EditEngine::SetBeginMovingParagraphsHdl( const Link& rLink )
+void EditEngine::SetBeginMovingParagraphsHdl( const Link<>& rLink )
 {
     pImpEditEngine->aBeginMovingParagraphsHdl = rLink;
 }
 
-void EditEngine::SetEndMovingParagraphsHdl( const Link& rLink )
+void EditEngine::SetEndMovingParagraphsHdl( const Link<>& rLink )
 {
     pImpEditEngine->aEndMovingParagraphsHdl = rLink;
 }
 
-void EditEngine::SetBeginPasteOrDropHdl( const Link& rLink )
+void EditEngine::SetBeginPasteOrDropHdl( const Link<>& rLink )
 {
 
     pImpEditEngine->aBeginPasteOrDropHdl = rLink;
 }
 
-void EditEngine::SetEndPasteOrDropHdl( const Link& rLink )
+void EditEngine::SetEndPasteOrDropHdl( const Link<>& rLink )
 {
     pImpEditEngine->aEndPasteOrDropHdl = rLink;
 }
@@ -1609,12 +1609,12 @@ OUString EditEngine::GetText( sal_Int32 nPara ) const
     return aStr;
 }
 
-void EditEngine::SetModifyHdl( const Link& rLink )
+void EditEngine::SetModifyHdl( const Link<>& rLink )
 {
     pImpEditEngine->SetModifyHdl( rLink );
 }
 
-Link EditEngine::GetModifyHdl() const
+Link<> EditEngine::GetModifyHdl() const
 {
     return pImpEditEngine->GetModifyHdl();
 }
@@ -2703,23 +2703,23 @@ bool EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::su
 }
 
 /** sets a link that is called at the beginning of a drag operation at an edit view */
-void EditEngine::SetBeginDropHdl( const Link& rLink )
+void EditEngine::SetBeginDropHdl( const Link<>& rLink )
 {
     pImpEditEngine->SetBeginDropHdl( rLink );
 }
 
-Link EditEngine::GetBeginDropHdl() const
+Link<> EditEngine::GetBeginDropHdl() const
 {
     return pImpEditEngine->GetBeginDropHdl();
 }
 
 /** sets a link that is called at the end of a drag operation at an edit view */
-void EditEngine::SetEndDropHdl( const Link& rLink )
+void EditEngine::SetEndDropHdl( const Link<>& rLink )
 {
     pImpEditEngine->SetEndDropHdl( rLink );
 }
 
-Link EditEngine::GetEndDropHdl() const
+Link<> EditEngine::GetEndDropHdl() const
 {
     return pImpEditEngine->GetEndDropHdl();
 }

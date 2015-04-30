@@ -64,7 +64,7 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
 {
     initial();
     FreeResource();
-    Link aLink = LINK(this, TextCharacterSpacingControl, KerningSelectHdl);
+    Link<> aLink = LINK(this, TextCharacterSpacingControl, KerningSelectHdl);
     maLBKerning->SetSelectHdl(aLink);
     aLink =LINK(this, TextCharacterSpacingControl, KerningModifyHdl);
     maEditKerning->SetModifyHdl(aLink);
@@ -146,7 +146,7 @@ void TextCharacterSpacingControl::initial()
     maVSSpacing->AddItem( maImgCus, 0, maStrCus, 0 );
 
     maVSSpacing->SetNoSelection();
-    Link aLink = LINK(this, TextCharacterSpacingControl,VSSelHdl );
+    Link<> aLink = LINK(this, TextCharacterSpacingControl,VSSelHdl );
     maVSSpacing->SetSelectHdl(aLink);
     maVSSpacing->StartSelection();
     maVSSpacing->Show();

@@ -27,9 +27,9 @@
 namespace ImplVectorizer
 {
     bool     ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                            sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress );
+                            sal_uInt8 cReduce, sal_uLong nFlags, const Link<>* pProgress );
     bool     ImplVectorize( const Bitmap& rMonoBmp, tools::PolyPolygon& rPolyPoly,
-                            sal_uLong nFlags, const Link* pProgress );
+                            sal_uLong nFlags, const Link<>* pProgress );
 };
 
 #endif

@@ -58,7 +58,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
     mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString());
     mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString());
 
-    Link aLink = LINK( this, ScTpFormulaOptions, ButtonHdl );
+    Link<> aLink = LINK( this, ScTpFormulaOptions, ButtonHdl );
     mpBtnSepReset->SetClickHdl(aLink);
     mpBtnCustomCalcDefault->SetClickHdl(aLink);
     mpBtnCustomCalcCustom->SetClickHdl(aLink);

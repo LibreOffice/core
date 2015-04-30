@@ -137,7 +137,7 @@ SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
 
     m_pPageNumEdit->SetAccessibleName(m_pPageNumBox->GetText());
 
-    Link aLk = LINK(this,SwBreakDlg,ClickHdl);
+    Link<> aLk = LINK(this,SwBreakDlg,ClickHdl);
     m_pPageBtn->SetClickHdl( aLk );
     m_pLineBtn->SetClickHdl( aLk );
     m_pColumnBtn->SetClickHdl( aLk );

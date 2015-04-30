@@ -70,8 +70,8 @@ sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
-    Link aLnk( pDoc->GetOle2Link() );
-    pDoc->SetOle2Link( Link() );
+    Link<> aLnk( pDoc->GetOle2Link() );
+    pDoc->SetOle2Link( Link<>() );
 
     bool const bStartUndo =
         pDoc->GetIDocumentUndoRedo().DoesUndo() && pReplFmtColl;

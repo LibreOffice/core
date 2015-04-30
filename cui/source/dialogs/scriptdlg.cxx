@@ -510,7 +510,7 @@ SvxScriptOrgDialog::~SvxScriptOrgDialog()
 void SvxScriptOrgDialog::dispose()
 {
     // clear the SelectHdl so that it isn't called during the dtor
-    m_pScriptsBox->SetSelectHdl( Link() );
+    m_pScriptsBox->SetSelectHdl( Link<>() );
     m_pScriptsBox.clear();
     m_pRunButton.clear();
     m_pCloseButton.clear();

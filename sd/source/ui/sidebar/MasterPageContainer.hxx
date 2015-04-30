@@ -61,8 +61,8 @@ public:
     MasterPageContainer();
     virtual ~MasterPageContainer();
 
-    void AddChangeListener (const Link& rLink);
-    void RemoveChangeListener (const Link& rLink);
+    void AddChangeListener (const Link<>& rLink);
+    void RemoveChangeListener (const Link<>& rLink);
 
     enum PreviewSize { SMALL, LARGE };
     /** There are two different preview sizes, a small one and a large one.

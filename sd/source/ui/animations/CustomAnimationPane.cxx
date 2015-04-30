@@ -287,7 +287,7 @@ void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
 
 void CustomAnimationPane::addListener()
 {
-    Link aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -300,7 +300,7 @@ void CustomAnimationPane::addListener()
 
 void CustomAnimationPane::removeListener()
 {
-    Link aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 

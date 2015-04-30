@@ -100,7 +100,7 @@ namespace pcr
 
     SQLCommandDesigner::SQLCommandDesigner( const Reference< XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
-            const ::dbtools::SharedConnection& _rConnection, const Link& _rCloseLink )
+            const ::dbtools::SharedConnection& _rConnection, const Link<>& _rCloseLink )
         :m_xContext( _rxContext )
         ,m_xConnection( _rConnection )
         ,m_xObjectAdapter( _rxPropertyAdapter )

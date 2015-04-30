@@ -160,7 +160,7 @@ public:
     void    Invalidate();
 
     // select table cells for editing of formulas in the ribbonbar
-    inline void SelTblCells( const Link &rLink, bool bMark = true );
+    inline void SelTblCells( const Link<> &rLink, bool bMark = true );
     inline void EndSelTblCells();
 
     // leave per word or per line selection mode. Is usually called in MB-Up.
@@ -420,7 +420,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     // call into the dark Basic/JavaScript
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                         bool bCheckPtr = false, SbxArray* pArgs = 0,
-                        const Link* pCallBack = 0 );
+                        const Link<>* pCallBack = 0 );
 
     // a click at the given field. the cursor is on it.
     // execute the predefined actions.
@@ -561,7 +561,7 @@ private:
     bool    m_bRetainSelection :1; // Do not remove selections
 
     Point   m_aStart;
-    Link    m_aSelTblLink;
+    Link<>  m_aSelTblLink;
 
     // resets the cursor stack after movement by PageUp/-Down
     SAL_DLLPRIVATE void  _ResetCursorStack();
@@ -616,7 +616,7 @@ inline void SwWrtShell::ResetCursorStack()
         _ResetCursorStack();
 }
 
-inline void SwWrtShell::SelTblCells(const Link &rLink, bool bMark )
+inline void SwWrtShell::SelTblCells(const Link<> &rLink, bool bMark )
 {
     SetSelTblCells( true );
     m_bClearMark = bMark;

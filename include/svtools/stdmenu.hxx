@@ -101,8 +101,8 @@ class SVT_DLLPUBLIC FontNameMenu : public PopupMenu
 {
 private:
     OUString        maCurName;
-    Link            maSelectHdl;
-    Link            maHighlightHdl;
+    Link<>          maSelectHdl;
+    Link<>          maHighlightHdl;
 
 public:
                     FontNameMenu();
@@ -116,10 +116,10 @@ public:
     void            SetCurName( const OUString& rName );
     const OUString& GetCurName() const { return maCurName; }
 
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
-    void            SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
-    const Link&     GetHighlightHdl() const { return maHighlightHdl; }
+    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    const Link<>&   GetSelectHdl() const { return maSelectHdl; }
+    void            SetHighlightHdl( const Link<>& rLink ) { maHighlightHdl = rLink; }
+    const Link<>&   GetHighlightHdl() const { return maHighlightHdl; }
 };
 
 class SVT_DLLPUBLIC FontSizeMenu : public PopupMenu
@@ -127,8 +127,8 @@ class SVT_DLLPUBLIC FontSizeMenu : public PopupMenu
 private:
     long*           mpHeightAry;
     long            mnCurHeight;
-    Link            maSelectHdl;
-    Link            maHighlightHdl;
+    Link<>          maSelectHdl;
+    Link<>          maHighlightHdl;
 
 public:
                     FontSizeMenu();
@@ -142,10 +142,10 @@ public:
     void            SetCurHeight( long nHeight );
     long            GetCurHeight() const { return mnCurHeight; }
 
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
-    void            SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
-    const Link&     GetHighlightHdl() const { return maHighlightHdl; }
+    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    const Link<>&   GetSelectHdl() const { return maSelectHdl; }
+    void            SetHighlightHdl( const Link<>& rLink ) { maHighlightHdl = rLink; }
+    const Link<>&   GetHighlightHdl() const { return maHighlightHdl; }
 };
 
 #endif // INCLUDED_SVTOOLS_STDMENU_HXX

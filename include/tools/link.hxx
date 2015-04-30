@@ -76,21 +76,73 @@
         SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER void *)
 
 #define LINK(Instance, Class, Member) \
-    Link(static_cast<Class *>(Instance), &Class::LinkStub##Member)
+    Link<>(static_cast<Class *>(Instance), &Class::LinkStub##Member)
+
+#define DECL_LINK_TYPED(Member, ArgType, RetType) \
+    static RetType LinkStub##Member(void *, ArgType); \
+    RetType Member(ArgType)
+
+#define DECL_STATIC_LINK_TYPED(Class, Member, ArgType, RetType) \
+    static RetType LinkStub##Member(void *, ArgType); \
+    static RetType Member(Class *, ArgType)
+
+#define DECL_DLLPRIVATE_LINK_TYPED(Member, ArgType, RetType) \
+    SAL_DLLPRIVATE static RetType LinkStub##Member(void *, ArgType); \
+    SAL_DLLPRIVATE RetType Member(ArgType)
+
+#define DECL_DLLPRIVATE_STATIC_LINK_TYPED(Class, Member, ArgType, RetType) \
+    SAL_DLLPRIVATE static RetType LinkStub##Member(void *, ArgType); \
+    SAL_DLLPRIVATE static RetType Member(Class *, ArgType)
+
+#define IMPL_LINK_TYPED(Class, Member, ArgType, ArgName, RetType) \
+    RetType Class::LinkStub##Member(void * instance, ArgType) { \
+        return static_cast<Class *>(instance)->Member(data); \
+    } \
+    RetType Class::Member(ArgType ArgName)
+
+#define IMPL_LINK_NOARG_TYPED(Class, Member, RetType) \
+    RetType Class::LinkStub##Member(void * instance, void * data) { \
+        return static_cast<Class *>(instance)->Member(data); \
+    } \
+    RetType Class::Member(SAL_UNUSED_PARAMETER void *)
+
+#define IMPL_STATIC_LINK_TYPED(Class, Member, ArgType, ArgName, RetType) \
+    RetType Class::LinkStub##Member(void * instance, ArgType data) { \
+        return Member(static_cast<Class *>(instance), data); \
+    } \
+    RetType Class::Member(Class * pThis, ArgType ArgName)
+
+#define IMPL_STATIC_LINK_NOINSTANCE_TYPED( \
+        Class, Member, ArgType, ArgName, RetType) \
+    RetType Class::LinkStub##Member(void * instance, ArgType data) { \
+        return Member(static_cast<Class *>(instance), data); \
+    } \
+    RetType Class::Member(SAL_UNUSED_PARAMETER Class *, ArgType ArgName)
+
+#define IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED(Class, Member, RetType) \
+    RetType Class::LinkStub##Member(void * instance, void * data) { \
+        return Member(static_cast<Class *>(instance), data); \
+    } \
+    RetType Class::Member( \
+        SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER void *)
+
+#define LINK_TYPED(Instance, Class, Member) tools::detail::makeLink( \
+    static_cast<Class *>(Instance), &Class::LinkStub##Member)
 
 #define EMPTYARG
 
+template<typename Arg = void *, typename Ret = sal_IntPtr>
 class TOOLS_DLLPUBLIC Link {
 public:
-    typedef sal_IntPtr Stub(void *, void *);
+    typedef Ret Stub(void *, Arg);
 
     Link(): function_(nullptr), instance_(nullptr) {}
 
     Link(void * instance, Stub * function):
         function_(function), instance_(instance) {}
 
-    sal_IntPtr Call(void * data) const
-    { return function_ == nullptr ? 0 : (*function_)(instance_, data); }
+    Ret Call(Arg data) const
+    { return function_ == nullptr ? Ret{} : (*function_)(instance_, data); }
 
     bool IsSet() const { return function_ != nullptr; }
 
@@ -110,6 +162,15 @@ private:
     Stub * function_;
     void * instance_;
 };
+
+namespace tools { namespace detail {
+
+template<typename Arg, typename Ret>
+Link<Arg, Ret> makeLink(void * instance, Ret (* function)(void *, Arg)) {
+    return Link<Arg, Ret>(instance, function);
+}
+
+} }
 
 #endif
 

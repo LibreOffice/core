@@ -68,7 +68,7 @@ SvFileObject::~SvFileObject()
 {
     if (xMed.Is())
     {
-        xMed->SetDoneLink( Link() );
+        xMed->SetDoneLink( Link<>() );
         xMed.Clear();
     }
     if (nPostUserEventId)
@@ -392,7 +392,7 @@ OUString impl_getFilter( const OUString& _rURL )
     return sFilter;
 }
 
-void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Link& rEndEditHdl )
+void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Link<>& rEndEditHdl )
 {
     aEndEditLink = rEndEditHdl;
     OUString sFile, sRange, sTmpFilter;
@@ -485,7 +485,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
         pThis->bLoadAgain = true;
         if( pThis->xMed.Is() )
         {
-            pThis->xMed->SetDoneLink( Link() );
+            pThis->xMed->SetDoneLink( Link<>() );
             pThis->pDelMed = new SfxMediumRef(pThis->xMed);
             pThis->nPostUserEventId = Application::PostUserEvent(
                         LINK( pThis, SvFileObject, DelMedium_Impl ),

@@ -72,7 +72,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     get( msMonitor,             "monitor_str"           );
     get( msAllMonitors,         "allmonitors_str"       );
 
-    Link aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
+    Link<> aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
 
     aRbtAll->SetClickHdl( aLink );
     aRbtAtDia->SetClickHdl( aLink );

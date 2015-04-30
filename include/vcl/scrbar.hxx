@@ -65,8 +65,8 @@ private:
     ScrollType      meDDScrollType;
     bool            mbCalcSize;
     bool            mbFullDrag;
-    Link            maScrollHdl;
-    Link            maEndScrollHdl;
+    Link<>          maScrollHdl;
+    Link<>          maEndScrollHdl;
 
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
     using Window::ImplInit;
@@ -134,10 +134,10 @@ public:
     long            GetDelta() const { return mnDelta; }
     ScrollType      GetType() const { return meScrollType; }
 
-    void            SetScrollHdl( const Link& rLink ) { maScrollHdl = rLink; }
-    const Link&     GetScrollHdl() const { return maScrollHdl;    }
-    void            SetEndScrollHdl( const Link& rLink ) { maEndScrollHdl = rLink; }
-    const Link&     GetEndScrollHdl() const { return maEndScrollHdl; }
+    void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
+    const Link<>&   GetScrollHdl() const { return maScrollHdl;    }
+    void            SetEndScrollHdl( const Link<>& rLink ) { maEndScrollHdl = rLink; }
+    const Link<>&   GetEndScrollHdl() const { return maEndScrollHdl; }
 
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };

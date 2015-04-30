@@ -65,7 +65,7 @@ public:
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    inline void     SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }
+    inline void     SetOpenHdl( const Link<>& rLink ) { SetDoubleClickHdl( rLink ); }
     OUString        GetSelectEntry() const;
 };
 
@@ -102,7 +102,7 @@ public:
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
-    void     SetOpenHdl( const Link& rLink ) { m_pContentBox->SetOpenHdl( rLink ); }
+    void     SetOpenHdl( const Link<>& rLink ) { m_pContentBox->SetOpenHdl( rLink ); }
     OUString GetSelectEntry() const { return m_pContentBox->GetSelectEntry(); }
     void     SetFocusOnBox() { m_pContentBox->GrabFocus(); }
 };
@@ -128,7 +128,7 @@ private:
 
     Idle                aFactoryIdle;
     Timer               aKeywordTimer;
-    Link                aKeywordLink;
+    Link<>              aKeywordLink;
 
     OUString            sFactory;
     OUString            sKeyword;
@@ -150,14 +150,14 @@ public:
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
-    void                SetDoubleClickHdl( const Link& rLink );
+    void                SetDoubleClickHdl( const Link<>& rLink );
     void                SetFactory( const OUString& rFactory );
     inline OUString     GetFactory() const { return sFactory; }
     OUString            GetSelectEntry() const;
     inline void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
     inline bool     HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
 
-    inline void         SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
+    inline void         SetKeywordHdl( const Link<>& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const OUString& rKeyword );
     bool            HasKeyword() const;
     bool            HasKeywordIgnoreCase();
@@ -171,7 +171,7 @@ public:
 class SearchBox_Impl : public ComboBox
 {
 private:
-    Link                aSearchLink;
+    Link<>              aSearchLink;
 
 public:
     SearchBox_Impl(vcl::Window* pParent, WinBits nStyle)
@@ -183,7 +183,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        Select() SAL_OVERRIDE;
 
-    inline void         SetSearchLink( const Link& rLink ) { aSearchLink = rLink; }
+    inline void         SetSearchLink( const Link<>& rLink ) { aSearchLink = rLink; }
 };
 
 class SearchResultsBox_Impl : public ListBox
@@ -227,7 +227,7 @@ public:
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
-    void                SetDoubleClickHdl( const Link& rLink );
+    void                SetDoubleClickHdl( const Link<>& rLink );
     inline void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
     OUString            GetSelectEntry() const;
     void                ClearPage();
@@ -269,7 +269,7 @@ public:
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
-    void                SetDoubleClickHdl( const Link& rLink );
+    void                SetDoubleClickHdl( const Link<>& rLink );
     OUString            GetSelectEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     void                SetFocusOnBox() { m_pBookmarksBox->GrabFocus(); }
@@ -287,9 +287,9 @@ private:
 
     Idle                aIdle;
 
-    Link                aSelectFactoryLink;
-    Link                aPageDoubleClickLink;
-    Link                aIndexKeywordLink;
+    Link<>              aSelectFactoryLink;
+    Link<>              aPageDoubleClickLink;
+    Link<>              aIndexKeywordLink;
     OUString            sKeyword;
 
     VclPtr<SfxHelpWindow_Impl>     pParentWin;
@@ -328,8 +328,8 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    void                SetDoubleClickHdl( const Link& rLink );
-    inline void         SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
+    void                SetDoubleClickHdl( const Link<>& rLink );
+    inline void         SetSelectFactoryHdl( const Link<>& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const OUString& rFactory, bool bActive );
     inline OUString     GetFactory() const { return pIPage->GetFactory(); }
     OUString            GetSelectEntry() const;
@@ -470,7 +470,7 @@ public:
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                             getFrame() const { return xFrame; }
 
-    inline void             SetSelectHdl( const Link& rLink ) { aToolBox->SetSelectHdl( rLink ); }
+    inline void             SetSelectHdl( const Link<>& rLink ) { aToolBox->SetSelectHdl( rLink ); }
     void                    ToggleIndex( bool bOn );
     void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;

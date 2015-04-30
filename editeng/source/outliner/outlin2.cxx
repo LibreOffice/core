@@ -108,33 +108,33 @@ sal_uLong Outliner::GetTextHeight() const
     return pEditEngine->GetTextHeight();
 }
 
-void Outliner::SetModifyHdl( const Link& rLink )
+void Outliner::SetModifyHdl( const Link<>& rLink )
 {
     pEditEngine->SetModifyHdl( rLink );
 }
 
-Link Outliner::GetModifyHdl() const
+Link<> Outliner::GetModifyHdl() const
 {
     return pEditEngine->GetModifyHdl();
 }
 
-void Outliner::SetNotifyHdl( const Link& rLink )
+void Outliner::SetNotifyHdl( const Link<>& rLink )
 {
     pEditEngine->aOutlinerNotifyHdl = rLink;
 
     if ( rLink.IsSet() )
         pEditEngine->SetNotifyHdl( LINK( this, Outliner, EditEngineNotifyHdl ) );
     else
-        pEditEngine->SetNotifyHdl( Link() );
+        pEditEngine->SetNotifyHdl( Link<>() );
 
 }
 
-void Outliner::SetStatusEventHdl( const Link& rLink )
+void Outliner::SetStatusEventHdl( const Link<>& rLink )
 {
     pEditEngine->SetStatusEventHdl( rLink );
 }
 
-Link Outliner::GetStatusEventHdl() const
+Link<> Outliner::GetStatusEventHdl() const
 {
     return pEditEngine->GetStatusEventHdl();
 }

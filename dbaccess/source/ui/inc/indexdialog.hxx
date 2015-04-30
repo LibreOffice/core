@@ -43,18 +43,18 @@ namespace dbaui
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
-        Link        m_aSelectHdl;
-        Link        m_aEndEditHdl;
+        Link<>      m_aSelectHdl;
+        Link<>      m_aEndEditHdl;
         bool    m_bSuspendSelectHdl;
 
     public:
         DbaIndexList(vcl::Window* _pParent, WinBits nWinBits);
 
-        void SetSelectHdl(const Link& _rHdl) { m_aSelectHdl = _rHdl; }
-        Link GetSelectHdl() const { return m_aSelectHdl; }
+        void SetSelectHdl(const Link<>& _rHdl) { m_aSelectHdl = _rHdl; }
+        Link<> GetSelectHdl() const { return m_aSelectHdl; }
 
-        void SetEndEditHdl(const Link& _rHdl) { m_aEndEditHdl = _rHdl; }
-        Link GetEndEditHdl() const { return m_aEndEditHdl; }
+        void SetEndEditHdl(const Link<>& _rHdl) { m_aEndEditHdl = _rHdl; }
+        Link<> GetEndEditHdl() const { return m_aEndEditHdl; }
 
         virtual bool Select(SvTreeListEntry* pEntry, bool bSelect) SAL_OVERRIDE;
 

@@ -120,7 +120,7 @@ public:
 
     const Point& getPrev1Pos () const { return maPrev1Pos; }
 
-    void setSelectClickHdl (const Link &link);
+    void setSelectClickHdl (const Link<> &link);
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
@@ -136,7 +136,7 @@ protected:
     Point maTextPos;
     Point maPrev1Pos;
     Rectangle maDrawArea;
-    Link maClickHdl;
+    Link<> maClickHdl;
     bool mbEditTitle;
     VclPtr<VclMultiLineEdit> mpTitleED;
     Rectangle maTextEditMaxArea;

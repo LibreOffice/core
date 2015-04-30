@@ -243,31 +243,31 @@ void Window::FireVclEvent( VclSimpleEvent* pEvent )
     Application::ImplCallEventListeners(pEvent);
 }
 
-void Window::AddEventListener( const Link& rEventListener )
+void Window::AddEventListener( const Link<>& rEventListener )
 {
     mpWindowImpl->maEventListeners.addListener( rEventListener );
 }
 
-void Window::RemoveEventListener( const Link& rEventListener )
+void Window::RemoveEventListener( const Link<>& rEventListener )
 {
     mpWindowImpl->maEventListeners.removeListener( rEventListener );
 }
 
-void Window::AddChildEventListener( const Link& rEventListener )
+void Window::AddChildEventListener( const Link<>& rEventListener )
 {
     mpWindowImpl->maChildEventListeners.addListener( rEventListener );
 }
 
-void Window::RemoveChildEventListener( const Link& rEventListener )
+void Window::RemoveChildEventListener( const Link<>& rEventListener )
 {
     mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
 }
 
-ImplSVEvent * Window::PostUserEvent( const Link& rLink, void* pCaller )
+ImplSVEvent * Window::PostUserEvent( const Link<>& rLink, void* pCaller )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
-    pSVEvent->mpLink    = new Link( rLink );
+    pSVEvent->mpLink    = new Link<>( rLink );
     pSVEvent->mpWindow  = this;
     pSVEvent->mbCall    = true;
     ImplAddDel( &(pSVEvent->maDelData) );

@@ -142,7 +142,7 @@ SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SetMetric(*m_pSizeHeightField, aMetric);
 
     // Install handlers
-    Link aLk = LINK(this, SwEnvFmtPage, ModifyHdl);
+    Link<> aLk = LINK(this, SwEnvFmtPage, ModifyHdl);
     m_pAddrLeftField->SetUpHdl( aLk );
     m_pAddrTopField->SetUpHdl( aLk );
     m_pSendLeftField->SetUpHdl( aLk );

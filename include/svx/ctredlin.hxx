@@ -103,7 +103,7 @@ private:
     Image           maEntryImage;
     OUString        maEntryString;
     utl::TextSearch* pCommentSearcher;
-    Link            aColCompareLink;
+    Link<>          aColCompareLink;
 
 protected:
 
@@ -161,8 +161,8 @@ public:
 
     virtual SvTreeListEntry* CreateEntry() const SAL_OVERRIDE;
 
-    void            SetColCompareHdl(const Link& rLink ) { aColCompareLink = rLink; }
-    const Link&     GetColCompareHdl() const { return aColCompareLink; }
+    void            SetColCompareHdl(const Link<>& rLink ) { aColCompareLink = rLink; }
+    const Link<>&   GetColCompareHdl() const { return aColCompareLink; }
 };
 
 /// Tabpage with the filter text entries etc.
@@ -170,13 +170,13 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxTPFilter: public TabPage
 {
 private:
 
-    Link            aReadyLink;
-    Link            aModifyLink;
-    Link            aModifyDateLink;
-    Link            aModifyAuthorLink;
-    Link            aModifyRefLink;
-    Link            aRefLink;
-    Link            aModifyComLink;
+    Link<>          aReadyLink;
+    Link<>          aModifyLink;
+    Link<>          aModifyDateLink;
+    Link<>          aModifyAuthorLink;
+    Link<>          aModifyRefLink;
+    Link<>          aRefLink;
+    Link<>          aModifyComLink;
 
     VclPtr<SvxRedlinTable> pRedlinTable;
     VclPtr<CheckBox>       m_pCbDate;
@@ -266,28 +266,28 @@ public:
 
     ListBox*        GetLbAction() { return m_pLbAction;}
 
-    void            SetReadyHdl( const Link& rLink ) { aReadyLink= rLink; }
-    const Link&     GetReadyHdl() const { return aReadyLink; }
+    void            SetReadyHdl( const Link<>& rLink ) { aReadyLink= rLink; }
+    const Link<>&   GetReadyHdl() const { return aReadyLink; }
 
-    void            SetModifyHdl( const Link& rLink ) { aModifyLink = rLink; }
-    const Link&     GetModifyHdl() const { return aModifyLink; }
+    void            SetModifyHdl( const Link<>& rLink ) { aModifyLink = rLink; }
+    const Link<>&   GetModifyHdl() const { return aModifyLink; }
 
-    void            SetModifyDateHdl( const Link& rLink ) { aModifyDateLink = rLink; }
-    const Link&     GetModifyDateHdl() const { return aModifyDateLink; }
+    void            SetModifyDateHdl( const Link<>& rLink ) { aModifyDateLink = rLink; }
+    const Link<>&   GetModifyDateHdl() const { return aModifyDateLink; }
 
-    void            SetModifyAuthorHdl( const Link& rLink ) { aModifyAuthorLink = rLink; }
-    const Link&     GetModifyAuthorHdl() const { return aModifyAuthorLink; }
+    void            SetModifyAuthorHdl( const Link<>& rLink ) { aModifyAuthorLink = rLink; }
+    const Link<>&   GetModifyAuthorHdl() const { return aModifyAuthorLink; }
 
-    void            SetModifyCommentHdl(const Link& rLink ) { aModifyComLink = rLink; }
-    const Link&     GetModifyCommentHdl() const { return aModifyComLink; }
+    void            SetModifyCommentHdl(const Link<>& rLink ) { aModifyComLink = rLink; }
+    const Link<>&   GetModifyCommentHdl() const { return aModifyComLink; }
 
 
     // Methods for Calc {
-    void            SetModifyRangeHdl( const Link& rLink ) { aModifyRefLink = rLink; }
-    const Link&     GetModifyRangeHdl() const { return aModifyRefLink; }
+    void            SetModifyRangeHdl( const Link<>& rLink ) { aModifyRefLink = rLink; }
+    const Link<>&   GetModifyRangeHdl() const { return aModifyRefLink; }
 
-    void            SetRefHdl( const Link& rLink ) { aRefLink = rLink; }
-    const Link&     GetRefHdl() const { return aRefLink; }
+    void            SetRefHdl( const Link<>& rLink ) { aRefLink = rLink; }
+    const Link<>&   GetRefHdl() const { return aRefLink; }
 
     void            Enable( bool bEnable = true, bool bChild = true );
     void            Disable( bool bChild = true );
@@ -299,11 +299,11 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxTPView : public TabPage
 {
 private:
 
-    Link            AcceptClickLk;
-    Link            AcceptAllClickLk;
-    Link            RejectClickLk;
-    Link            RejectAllClickLk;
-    Link            UndoClickLk;
+    Link<>          AcceptClickLk;
+    Link<>          AcceptAllClickLk;
+    Link<>          RejectClickLk;
+    Link<>          RejectAllClickLk;
+    Link<>          UndoClickLk;
 
     VclPtr<SvxRedlinTable> m_pViewData;
     VclPtr<PushButton>     m_pAccept;
@@ -345,20 +345,20 @@ public:
     void            HideUndo()          {ShowUndo(false);}
     bool            IsUndoVisible();
 
-    void            SetAcceptClickHdl( const Link& rLink ) { AcceptClickLk = rLink; }
-    const Link&     GetAcceptClickHdl() const { return AcceptClickLk; }
+    void            SetAcceptClickHdl( const Link<>& rLink ) { AcceptClickLk = rLink; }
+    const Link<>&   GetAcceptClickHdl() const { return AcceptClickLk; }
 
-    void            SetAcceptAllClickHdl( const Link& rLink ) { AcceptAllClickLk = rLink; }
-    const Link&     GetAcceptAllClickHdl() const { return AcceptAllClickLk; }
+    void            SetAcceptAllClickHdl( const Link<>& rLink ) { AcceptAllClickLk = rLink; }
+    const Link<>&   GetAcceptAllClickHdl() const { return AcceptAllClickLk; }
 
-    void            SetRejectClickHdl( const Link& rLink ) { RejectClickLk = rLink; }
-    const Link&     GetRejectClickHdl() const { return RejectClickLk; }
+    void            SetRejectClickHdl( const Link<>& rLink ) { RejectClickLk = rLink; }
+    const Link<>&   GetRejectClickHdl() const { return RejectClickLk; }
 
-    void            SetRejectAllClickHdl( const Link& rLink ) { RejectAllClickLk = rLink; }
-    const Link&     GetRejectAllClickHdl() const { return RejectAllClickLk; }
+    void            SetRejectAllClickHdl( const Link<>& rLink ) { RejectAllClickLk = rLink; }
+    const Link<>&   GetRejectAllClickHdl() const { return RejectAllClickLk; }
 
-    void            SetUndoClickHdl( const Link& rLink ) { UndoClickLk = rLink; }
-    const Link&     GetUndoAllClickHdl() const { return UndoClickLk; }
+    void            SetUndoClickHdl( const Link<>& rLink ) { UndoClickLk = rLink; }
+    const Link<>&   GetUndoAllClickHdl() const { return UndoClickLk; }
 
     virtual void    ActivatePage() SAL_OVERRIDE;
     virtual void    DeactivatePage() SAL_OVERRIDE;

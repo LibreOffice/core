@@ -669,7 +669,7 @@ bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
-bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
+bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link<>* pProgress )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 

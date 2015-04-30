@@ -26,7 +26,7 @@
 namespace vcl
 {
 
-EventPoster::EventPoster( const Link& rLink )
+EventPoster::EventPoster( const Link<>& rLink )
     : m_aLink(rLink)
 {
     m_nId = 0;

@@ -545,7 +545,7 @@ VCLXFileControl::~VCLXFileControl()
 {
     VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
-        pControl->GetEdit().SetModifyHdl( Link() );
+        pControl->GetEdit().SetModifyHdl( Link<>() );
 }
 
 ::com::sun::star::uno::Any VCLXFileControl::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -595,7 +595,7 @@ void VCLXFileControl::SetWindow( const VclPtr< vcl::Window > &pWindow )
 {
     VclPtr< FileControl > pPrevFileControl = GetAsDynamic< FileControl >();
     if ( pPrevFileControl )
-        pPrevFileControl->GetEdit().SetModifyHdl( Link() );
+        pPrevFileControl->GetEdit().SetModifyHdl( Link<>() );
 
     FileControl* pNewFileControl = dynamic_cast<FileControl*>( pWindow.get() );
     if ( pNewFileControl )

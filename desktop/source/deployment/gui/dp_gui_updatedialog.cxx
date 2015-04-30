@@ -925,7 +925,7 @@ void UpdateDialog::initDescription()
     m_pReleaseNotesLabel->Hide();
     m_pReleaseNotesLink->Hide();
 
-    Link aLink = LINK( this, UpdateDialog, hyperlink_clicked );
+    Link<> aLink = LINK( this, UpdateDialog, hyperlink_clicked );
     m_pPublisherLink->SetClickHdl( aLink );
     m_pReleaseNotesLink->SetClickHdl( aLink );
 }

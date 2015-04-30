@@ -426,7 +426,7 @@ void SvtFileDialog::dispose()
                              makeAny( sUserData ) );
     }
 
-    _pFileView->SetSelectHdl( Link() );
+    _pFileView->SetSelectHdl( Link<>() );
 
     // Save bookmarked places
     if(_pImp->_pPlaces->IsUpdated()) {
@@ -1752,7 +1752,7 @@ short SvtFileDialog::Execute()
 }
 
 
-void SvtFileDialog::StartExecuteModal( const Link& rEndDialogHdl )
+void SvtFileDialog::StartExecuteModal( const Link<>& rEndDialogHdl )
 {
     PrepareExecute();
 

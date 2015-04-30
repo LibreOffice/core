@@ -249,12 +249,12 @@ private:
     bool                mbOutDrag;
     bool                mbButtonStyle;
     bool                mbItemMode;
-    Link                maStartDragHdl;
-    Link                maDragHdl;
-    Link                maEndDragHdl;
-    Link                maSelectHdl;
-    Link                maDoubleClickHdl;
-    Link                maCreateAccessibleHdl;
+    Link<>              maStartDragHdl;
+    Link<>              maDragHdl;
+    Link<>              maEndDragHdl;
+    Link<>              maSelectHdl;
+    Link<>              maDoubleClickHdl;
+    Link<>              maCreateAccessibleHdl;
 
     VCLXHeaderBar*      m_pVCLXHeaderBar;
 
@@ -348,18 +348,18 @@ public:
     inline void             SetHelpId( const OString& rId )    { Window::SetHelpId( rId ); }
     inline const OString& GetHelpId() const                    { return Window::GetHelpId(); }
 
-    inline void         SetStartDragHdl( const Link& rLink )        { maStartDragHdl = rLink; }
-    inline const Link&  GetStartDragHdl() const                     { return maStartDragHdl; }
-    inline void         SetDragHdl( const Link& rLink )             { maDragHdl = rLink; }
-    inline const Link&  GetDragHdl() const                          { return maDragHdl; }
-    inline void         SetEndDragHdl( const Link& rLink )          { maEndDragHdl = rLink; }
-    inline const Link&  GetEndDragHdl() const                       { return maEndDragHdl; }
-    inline void         SetSelectHdl( const Link& rLink )           { maSelectHdl = rLink; }
-    inline const Link&  GetSelectHdl() const                        { return maSelectHdl; }
-    inline void         SetDoubleClickHdl( const Link& rLink )      { maDoubleClickHdl = rLink; }
-    inline const Link&  GetDoubleClickHdl() const                   { return maDoubleClickHdl; }
-    inline void         SetCreateAccessibleHdl( const Link& rLink ) { maCreateAccessibleHdl = rLink; }
-    inline const Link&  GetCreateAccessibleHdl() const              { return maCreateAccessibleHdl; }
+    inline void         SetStartDragHdl( const Link<>& rLink )      { maStartDragHdl = rLink; }
+    inline const Link<>& GetStartDragHdl() const                    { return maStartDragHdl; }
+    inline void         SetDragHdl( const Link<>& rLink )           { maDragHdl = rLink; }
+    inline const Link<>& GetDragHdl() const                         { return maDragHdl; }
+    inline void         SetEndDragHdl( const Link<>& rLink )        { maEndDragHdl = rLink; }
+    inline const Link<>& GetEndDragHdl() const                      { return maEndDragHdl; }
+    inline void         SetSelectHdl( const Link<>& rLink )         { maSelectHdl = rLink; }
+    inline const Link<>& GetSelectHdl() const                       { return maSelectHdl; }
+    inline void         SetDoubleClickHdl( const Link<>& rLink )    { maDoubleClickHdl = rLink; }
+    inline const Link<>& GetDoubleClickHdl() const                  { return maDoubleClickHdl; }
+    inline void         SetCreateAccessibleHdl( const Link<>& rLink ) { maCreateAccessibleHdl = rLink; }
+    inline const Link<>& GetCreateAccessibleHdl() const             { return maCreateAccessibleHdl; }
 
     inline bool         IsDragable() const                          { return mbDragable; }
 

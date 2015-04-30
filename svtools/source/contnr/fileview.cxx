@@ -421,11 +421,11 @@ class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
 {
 protected:
     VclPtr<SvtFileView>         mpAntiImpl;
-    Link                        m_aSelectHandler;
+    Link<>                      m_aSelectHandler;
 
     ::rtl::Reference< ::svt::FileViewContentEnumerator >
                                         m_pContentEnumerator;
-    Link                                m_aCurrentAsyncActionHandler;
+    Link<>                              m_aCurrentAsyncActionHandler;
     ::osl::Condition                    m_aAsyncActionFinished;
     ::rtl::Reference< ::salhelper::Timer > m_pCancelAsyncTimer;
     ::svt::EnumerationResult            m_eAsyncActionResult;
@@ -453,7 +453,7 @@ public:
     OUString                maAllFilter;
     OUString                maCurrentFilter;
     Image                   maFolderImage;
-    Link                    maOpenDoneLink;
+    Link<>                  maOpenDoneLink;
     Reference< XCommandEnvironment >    mxCmdEnv;
 
     SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv,
@@ -498,7 +498,7 @@ public:
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
 
-    void                    SetSelectHandler( const Link& _rHdl );
+    void                    SetSelectHandler( const Link<>& _rHdl );
 
     void                    InitSelection();
     void                    ResetCursor();
@@ -1328,14 +1328,14 @@ void SvtFileView::GetFocus()
 
 
 
-void SvtFileView::SetSelectHdl( const Link& rHdl )
+void SvtFileView::SetSelectHdl( const Link<>& rHdl )
 {
     mpImp->SetSelectHandler( rHdl );
 }
 
 
 
-void SvtFileView::SetDoubleClickHdl( const Link& rHdl )
+void SvtFileView::SetDoubleClickHdl( const Link<>& rHdl )
 {
     mpImp->mpView->SetDoubleClickHdl( rHdl );
 }
@@ -1371,7 +1371,7 @@ const OUString& SvtFileView::GetViewURL() const
     return mpImp->maViewURL;
 }
 
-void SvtFileView::SetOpenDoneHdl( const Link& rHdl )
+void SvtFileView::SetOpenDoneHdl( const Link<>& rHdl )
 {
     mpImp->maOpenDoneLink = rHdl;
 }
@@ -1676,7 +1676,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     // don't (yet) set m_aCurrentAsyncActionHandler to pTimeout->aFinishHandler.
     // By definition, this handler *only* get's called when the result cannot be obtained
     // during the minimum wait time, so it is only set below, when needed.
-    m_aCurrentAsyncActionHandler = Link();
+    m_aCurrentAsyncActionHandler = Link<>();
 
     // minimum time to wait
     boost::scoped_ptr< TimeValue > pTimeout( new TimeValue );
@@ -1844,11 +1844,11 @@ IMPL_LINK( SvtFileView_Impl, SelectionMultiplexer, void*, _pSource )
 }
 
 
-void SvtFileView_Impl::SetSelectHandler( const Link& _rHdl )
+void SvtFileView_Impl::SetSelectHandler( const Link<>& _rHdl )
 {
     m_aSelectHandler = _rHdl;
 
-    Link aMasterHandler;
+    Link<> aMasterHandler;
     if ( m_aSelectHandler.IsSet() )
         aMasterHandler = LINK( this, SvtFileView_Impl, SelectionMultiplexer );
 
@@ -1942,7 +1942,7 @@ void SvtFileView_Impl::onTimeout( CallbackTimer* )
     if ( m_aCurrentAsyncActionHandler.IsSet() )
     {
         Application::PostUserEvent( m_aCurrentAsyncActionHandler, reinterpret_cast< void* >( eTimeout ) );
-        m_aCurrentAsyncActionHandler = Link();
+        m_aCurrentAsyncActionHandler = Link<>();
     }
 }
 
@@ -1972,7 +1972,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
     if ( m_aCurrentAsyncActionHandler.IsSet() )
     {
         Application::PostUserEvent( m_aCurrentAsyncActionHandler, reinterpret_cast< void* >( m_eAsyncActionResult ) );
-        m_aCurrentAsyncActionHandler = Link();
+        m_aCurrentAsyncActionHandler = Link<>();
     }
 }
 

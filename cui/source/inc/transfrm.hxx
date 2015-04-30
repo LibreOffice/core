@@ -53,7 +53,7 @@ private:
     const SdrView*      pView;
 
     sal_uInt16          nAnchorCtrls;
-    Link                aValidateLink;
+    Link<>              aValidateLink;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
@@ -64,7 +64,7 @@ public:
                             sal_uInt16 nAnchorTypes = 0);
 
             //link for the Writer to validate positions
-            void SetValidateFramePosLink( const Link& rLink );
+            void SetValidateFramePosLink( const Link<>& rLink );
 };
 
 /*************************************************************************

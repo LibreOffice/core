@@ -2974,7 +2974,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
         if( !rImageURL.isEmpty() )
         {
-            pBrushItem->SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), rImageURL, Link(), false) );
+            pBrushItem->SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), rImageURL, Link<>(), false) );
             pBrushItem->SetGraphicPos( GPOS_TILED );
         }
     }

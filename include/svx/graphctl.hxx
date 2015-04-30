@@ -39,10 +39,10 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
 
     Graphic             aGraphic;
     Idle                aUpdateIdle;
-    Link                aMousePosLink;
-    Link                aGraphSizeLink;
-    Link                aMarkObjLink;
-    Link                aUpdateLink;
+    Link<>              aMousePosLink;
+    Link<>              aGraphSizeLink;
+    Link<>              aMarkObjLink;
+    Link<>              aUpdateLink;
     MapMode             aMap100;
     Size                aGraphSize;
     Point               aMousePos;
@@ -107,17 +107,17 @@ public:
     SdrObject*          GetSelectedSdrObject() const;
     bool                IsChanged() const { return bSdrMode && pModel->IsChanged(); }
 
-    void                SetMousePosLink( const Link& rLink ) { aMousePosLink = rLink; }
-    const Link&         GetMousePosLink() const { return aMousePosLink; }
+    void                SetMousePosLink( const Link<>& rLink ) { aMousePosLink = rLink; }
+    const Link<>&       GetMousePosLink() const { return aMousePosLink; }
 
-    void                SetGraphSizeLink( const Link& rLink ) { aGraphSizeLink = rLink; }
-    const Link&         GetGraphSizeLink() const { return aGraphSizeLink; }
+    void                SetGraphSizeLink( const Link<>& rLink ) { aGraphSizeLink = rLink; }
+    const Link<>&       GetGraphSizeLink() const { return aGraphSizeLink; }
 
-    void                SetMarkObjLink( const Link& rLink ) { aMarkObjLink = rLink; }
-    const Link&         GetMarkObjLink() const { return aMarkObjLink; }
+    void                SetMarkObjLink( const Link<>& rLink ) { aMarkObjLink = rLink; }
+    const Link<>&       GetMarkObjLink() const { return aMarkObjLink; }
 
-    void                SetUpdateLink( const Link& rLink ) { aUpdateLink = rLink; }
-    const Link&         GetUpdateLink() const { return aUpdateLink; }
+    void                SetUpdateLink( const Link<>& rLink ) { aUpdateLink = rLink; }
+    const Link<>&       GetUpdateLink() const { return aUpdateLink; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };

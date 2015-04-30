@@ -283,11 +283,11 @@ void SwHTMLParser::NewDivision( int nToken )
             OUString aURL;
             if( nPos == -1 )
             {
-                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef, Link(), false);
+                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef, Link<>(), false);
             }
             else
             {
-                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef.copy( 0, nPos ), Link(), false );
+                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef.copy( 0, nPos ), Link<>(), false );
                 aURL += OUString(sfx2::cTokenSeparator);
                 if( nPos2 == -1 )
                 {

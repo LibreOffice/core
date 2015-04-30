@@ -39,7 +39,7 @@ namespace pcr
     {
         VclPtr<OPropertyEditor>        m_pPropBox;
         sal_uInt16              m_nActivePage;
-        Link                    m_aPageActivationHandler;
+        Link<>                  m_aPageActivationHandler;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;
@@ -58,8 +58,8 @@ namespace pcr
         sal_uInt16  getActivaPage() const { return m_nActivePage; }
         void        activatePage(sal_uInt16 _nPage);
 
-        void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
-        Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
+        void    setPageActivationHandler(const Link<>& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        Link<>  getPageActivationHandler() const { return m_aPageActivationHandler; }
 
         ::com::sun::star::awt::Size getMinimumSize();
 

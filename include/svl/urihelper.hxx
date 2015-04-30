@@ -51,7 +51,7 @@ namespace URIHelper {
 */
 SVL_DLLPUBLIC OUString SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                     OUString const & rTheRelURIRef,
-                                    Link const & rMaybeFileHdl = Link(),
+                                    Link<> const & rMaybeFileHdl = Link<>(),
                                     bool bCheckFileExists = true,
                                     bool bIgnoreFragment = false,
                                     INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::WAS_ENCODED,
@@ -60,9 +60,9 @@ SVL_DLLPUBLIC OUString SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                     bool bRelativeNonURIs = false,
                                     INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
 
-SVL_DLLPUBLIC void SetMaybeFileHdl(Link const & rTheMaybeFileHdl);
+SVL_DLLPUBLIC void SetMaybeFileHdl(Link<> const & rTheMaybeFileHdl);
 
-SVL_DLLPUBLIC Link GetMaybeFileHdl();
+SVL_DLLPUBLIC Link<> GetMaybeFileHdl();
 
 /**
    Converts a URI reference to a relative one, ignoring certain differences (for

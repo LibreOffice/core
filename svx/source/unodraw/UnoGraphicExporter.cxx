@@ -174,7 +174,7 @@ namespace {
 
         SvxDrawPage*        mpUnoPage;
 
-        Link                maOldCalcFieldValueHdl;
+        Link<>              maOldCalcFieldValueHdl;
         sal_Int32           mnPageNumber;
         SdrPage*            mpCurrentPage;
         SdrModel*           mpDoc;

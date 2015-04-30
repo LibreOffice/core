@@ -237,7 +237,7 @@ IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
     return 0;
 }
 
-void LegendPositionResources::SetChangeHdl( const Link& rLink )
+void LegendPositionResources::SetChangeHdl( const Link<>& rLink )
 {
     m_aChangeLink = rLink;
 }

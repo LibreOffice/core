@@ -1838,17 +1838,17 @@ bool StarBASIC::ErrorHdl()
     return aErrorHdl.IsSet() && aErrorHdl.Call( this );
 }
 
-Link StarBASIC::GetGlobalErrorHdl()
+Link<> StarBASIC::GetGlobalErrorHdl()
 {
     return GetSbData()->aErrHdl;
 }
 
-void StarBASIC::SetGlobalErrorHdl( const Link& rLink )
+void StarBASIC::SetGlobalErrorHdl( const Link<>& rLink )
 {
     GetSbData()->aErrHdl = rLink;
 }
 
-void StarBASIC::SetGlobalBreakHdl( const Link& rLink )
+void StarBASIC::SetGlobalBreakHdl( const Link<>& rLink )
 {
     GetSbData()->aBreakHdl = rLink;
 }

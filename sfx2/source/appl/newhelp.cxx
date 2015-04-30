@@ -565,7 +565,7 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
     get(m_pOpenBtn, "display");
 
     m_pOpenBtn->SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
-    Link aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
+    Link<> aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
     aFactoryIdle.SetIdleHdl( LINK(this, IndexTabPage_Impl, IdleHdl ));
     aFactoryIdle.SetPriority(SchedulerPriority::LOWER);
     aKeywordTimer.SetTimeoutHdl( aTimeoutLink );
@@ -774,7 +774,7 @@ Control* IndexTabPage_Impl::GetLastFocusControl()
     return m_pOpenBtn;
 }
 
-void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
+void IndexTabPage_Impl::SetDoubleClickHdl( const Link<>& rLink )
 {
     m_pIndexCB->SetDoubleClickHdl( rLink );
 }
@@ -950,7 +950,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
     m_pResultsLB->set_height_request(aSize.Height());
     get(m_pOpenBtn, "display");
 
-    Link aLink = LINK( this, SearchTabPage_Impl, SearchHdl );
+    Link<> aLink = LINK( this, SearchTabPage_Impl, SearchHdl );
     m_pSearchED->SetSearchLink( aLink );
     m_pSearchBtn->SetClickHdl(aLink);
     m_pSearchED->SetModifyHdl( LINK( this, SearchTabPage_Impl, ModifyHdl ) );
@@ -1110,7 +1110,7 @@ Control* SearchTabPage_Impl::GetLastFocusControl()
     return m_pOpenBtn;
 }
 
-void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
+void SearchTabPage_Impl::SetDoubleClickHdl( const Link<>& rLink )
 {
     m_pResultsLB->SetDoubleClickHdl( rLink );
 }
@@ -1356,7 +1356,7 @@ Control* BookmarksTabPage_Impl::GetLastFocusControl()
     return m_pBookmarksPB;
 }
 
-void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
+void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link<>& rLink )
 {
     m_pBookmarksBox->SetDoubleClickHdl(rLink);
 }
@@ -1734,7 +1734,7 @@ void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
 
 
-void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
+void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link<>& rLink )
 {
     aPageDoubleClickLink = rLink;
     if ( pCPage )

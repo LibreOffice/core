@@ -63,12 +63,12 @@ void DBTreeView::dispose()
     vcl::Window::dispose();
 }
 
-void DBTreeView::SetPreExpandHandler(const Link& _rHdl)
+void DBTreeView::SetPreExpandHandler(const Link<>& _rHdl)
 {
     m_pTreeListBox->SetPreExpandHandler(_rHdl);
 }
 
-void    DBTreeView::setCopyHandler(const Link& _rHdl)
+void    DBTreeView::setCopyHandler(const Link<>& _rHdl)
 {
     m_pTreeListBox->setCopyHandler(_rHdl);
 }
@@ -86,7 +86,7 @@ void DBTreeView::setModel(SvTreeList* _pTreeModel)
     m_pTreeListBox->SetModel(_pTreeModel);
 }
 
-void DBTreeView::setSelChangeHdl( const Link& _rHdl )
+void DBTreeView::setSelChangeHdl( const Link<>& _rHdl )
 {
     m_pTreeListBox->SetSelChangeHdl( _rHdl );
 }

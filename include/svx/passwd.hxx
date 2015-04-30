@@ -43,7 +43,7 @@ private:
     OUString        aOldPasswdErrStr;
     OUString        aRepeatPasswdErrStr;
 
-    Link            aCheckPasswordHdl;
+    Link<>          aCheckPasswordHdl;
 
     bool            bEmpty;
 
@@ -58,7 +58,7 @@ public:
     OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }
     OUString        GetNewPassword() const { return m_pNewPasswdED->GetText(); }
 
-    void            SetCheckPasswordHdl( const Link& rLink ) { aCheckPasswordHdl = rLink; }
+    void            SetCheckPasswordHdl( const Link<>& rLink ) { aCheckPasswordHdl = rLink; }
 };
 
 

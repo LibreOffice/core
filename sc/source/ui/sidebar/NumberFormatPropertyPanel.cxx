@@ -90,7 +90,7 @@ void NumberFormatPropertyPanel::dispose()
 
 void NumberFormatPropertyPanel::Initialize()
 {
-    Link aLink = LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl);
+    Link<> aLink = LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl);
     mpLbCategory->SetSelectHdl ( aLink );
     mpLbCategory->SelectEntryPos(0);
     mpLbCategory->SetAccessibleName(OUString( "Category"));

@@ -425,7 +425,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     get(m_pOKPB,"ok");
 
     m_pAuthenticationCB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
-    Link aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
+    Link<> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
     m_pSeparateAuthenticationRB->SetClickHdl( aRBLink );
     m_pSMTPAfterPOPRB->SetClickHdl( aRBLink );
     m_pOKPB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));

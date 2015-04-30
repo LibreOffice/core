@@ -536,7 +536,7 @@ ToolBarManager::Implementation::Implementation (
       mnPendingSetValidCall(0),
       maToolBarRules(rpToolBarManager,rpViewShellManager)
 {
-    Link aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
+    Link<> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
     mpEventMultiplexer->AddEventListener(
         aLink,
         tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
@@ -551,7 +551,7 @@ ToolBarManager::Implementation::Implementation (
 ToolBarManager::Implementation::~Implementation()
 {
     // Unregister at broadcasters.
-    Link aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
+    Link<> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
     mpEventMultiplexer->RemoveEventListener(aLink);
 
     // Abort pending user calls.

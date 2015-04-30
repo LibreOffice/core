@@ -216,7 +216,7 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     m_pDocumentStartRB->Check();
     m_pPageStartNF->Enable(false);
     m_pPageStartNF->SetValue(lcl_GetCurrentPage(mpSh));
-    Link aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
+    Link<> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
     m_pDocumentStartRB->SetClickHdl(aStartPageHdl);
     m_pPageStartRB->SetClickHdl(aStartPageHdl);
 

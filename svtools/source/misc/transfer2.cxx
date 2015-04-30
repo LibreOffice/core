@@ -377,7 +377,7 @@ typedef ::std::list< TDataCntnrEntry_Impl > TDataCntnrEntryList;
 struct TransferDataContainer_Impl
 {
     TDataCntnrEntryList aFmtList;
-    Link aFinshedLnk;
+    Link<> aFinshedLnk;
     INetBookmark* pBookmk;
     Graphic* pGrf;
 
@@ -598,7 +598,7 @@ bool TransferDataContainer::HasAnyData() const
 
 void TransferDataContainer::StartDrag(
         vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-        const Link& rLnk, sal_Int32 nDragPointer, sal_Int32 nDragImage )
+        const Link<>& rLnk, sal_Int32 nDragPointer, sal_Int32 nDragImage )
 {
     pImpl->aFinshedLnk = rLnk;
     TransferableHelper::StartDrag( pWindow, nDragSourceActions,

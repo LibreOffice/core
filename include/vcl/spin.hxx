@@ -43,8 +43,8 @@ private:
     bool            mbInitialDown    : 1;
     bool            mbHorz           : 1;
     bool            mbUpperIsFocused : 1;
-    Link            maUpHdlLink;
-    Link            maDownHdlLink;
+    Link<>          maUpHdlLink;
+    Link<>          maDownHdlLink;
     long            mnMinRange;
     long            mnMaxRange;
     long            mnValue;
@@ -84,10 +84,10 @@ public:
     long            GetValueStep() const { return mnValueStep; }
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void            SetUpHdl( const Link& rLink ) { maUpHdlLink = rLink; }
-    const Link&     GetUpHdl() const   { return maUpHdlLink;   }
-    void            SetDownHdl( const Link& rLink ) { maDownHdlLink = rLink; }
-    const Link&     GetDownHdl() const { return maDownHdlLink; }
+    void            SetUpHdl( const Link<>& rLink ) { maUpHdlLink = rLink; }
+    const Link<>&   GetUpHdl() const   { return maUpHdlLink;   }
+    void            SetDownHdl( const Link<>& rLink ) { maDownHdlLink = rLink; }
+    const Link<>&   GetDownHdl() const { return maDownHdlLink; }
 
 private:
     // moves the focus to the upper or lower rect. Return sal_True if the focus rect actually changed.

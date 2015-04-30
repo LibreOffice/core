@@ -334,7 +334,7 @@ struct DialogImpl
 {
     long    mnResult;
     bool    mbStartedModal;
-    Link    maEndDialogHdl;
+    Link<>  maEndDialogHdl;
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
 };
@@ -864,7 +864,7 @@ short Dialog::Execute()
 }
 
 // virtual
-void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
+void Dialog::StartExecuteModal( const Link<>& rEndDialogHdl )
 {
     if ( !ImplStartExecuteModal() )
         return;
@@ -921,7 +921,7 @@ void Dialog::EndDialog( long nResult )
             ImplEndExecuteModal();
             mpDialogImpl->maEndDialogHdl.Call( this );
 
-            mpDialogImpl->maEndDialogHdl = Link();
+            mpDialogImpl->maEndDialogHdl = Link<>();
             mpDialogImpl->mbStartedModal = false;
             mpDialogImpl->mnResult = -1;
         }
@@ -945,7 +945,7 @@ void Dialog::EndAllDialogs( vcl::Window* pParent )
      if( !pParent || ( pParent && pParent->IsWindowOrChild( pModDialog, true ) ) )
      {
         pModDialog->EndDialog( RET_CANCEL );
-        pModDialog->PostUserEvent( Link() );
+        pModDialog->PostUserEvent( Link<>() );
      }
      pModDialog = pTempModDialog;
    }

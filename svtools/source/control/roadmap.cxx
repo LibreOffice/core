@@ -71,7 +71,7 @@ namespace svt
         void                    ToggleBackgroundColor( const Color& _rGBColor );
         void                    SetInteractive( bool _bInteractive );
 
-        void                    SetClickHdl( const Link& rLink );
+        void                    SetClickHdl( const Link<>& rLink );
         void                    Enable( bool bEnable = true);
         bool                    IsEnabled() const;
         void                    GrabFocus();
@@ -92,7 +92,7 @@ namespace svt
     {
     protected:
         const ORoadmap&     m_rAntiImpl;
-        Link                m_aSelectHdl;
+        Link<>              m_aSelectHdl;
         BitmapEx            m_aPicture;
         HL_Vector           m_aRoadmapSteps;
         ItemId              m_iCurItemID;
@@ -130,8 +130,8 @@ namespace svt
         void                setPicture( const BitmapEx& _rPic ) { m_aPicture = _rPic; }
         const BitmapEx&     getPicture( ) const { return m_aPicture; }
 
-        void                setSelectHdl( const Link& _rHdl ) { m_aSelectHdl = _rHdl; }
-        const Link&         getSelectHdl( ) const { return m_aSelectHdl; }
+        void                setSelectHdl( const Link<>& _rHdl ) { m_aSelectHdl = _rHdl; }
+        const Link<>&       getSelectHdl( ) const { return m_aSelectHdl; }
 
         void                initItemSize();
         const Size&         getItemSize() const { return m_aItemSizePixel; }
@@ -507,13 +507,13 @@ namespace svt
     }
 
 
-    void ORoadmap::SetItemSelectHdl( const Link& _rHdl )
+    void ORoadmap::SetItemSelectHdl( const Link<>& _rHdl )
     {
         m_pImpl->setSelectHdl( _rHdl );
     }
 
 
-    Link ORoadmap::GetItemSelectHdl( ) const
+    Link<> ORoadmap::GetItemSelectHdl( ) const
     {
         return m_pImpl->getSelectHdl();
     }
@@ -825,7 +825,7 @@ namespace svt
     }
 
 
-    void RoadmapItem::SetClickHdl( const Link& rLink )
+    void RoadmapItem::SetClickHdl( const Link<>& rLink )
     {
         if ( mpDescription )
             mpDescription->SetClickHdl( rLink);

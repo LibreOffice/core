@@ -123,7 +123,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;
 
-    Link            aOldNumFmtLnk;
+    Link<>          aOldNumFmtLnk;
     OUString        sNoTmpl;
 
     SwView*         pView;

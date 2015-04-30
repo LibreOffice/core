@@ -167,11 +167,11 @@ private:
     Point   m_aOldRBPos;          ///< Right/Bottom of last VisArea
                                 // (used in Invalidate by Cursor)
 
-    Link m_aFlyMacroLnk;          /**< Link will be called, if the Crsr is set
+    Link<> m_aFlyMacroLnk;        /**< Link will be called, if the Crsr is set
                                    into a fly. A macro can be then becalled */
-    Link m_aChgLnk;               /**< link will be called by every attribute/
+    Link<> m_aChgLnk;             /**< link will be called by every attribute/
                                    format changes at cursor position.*/
-    Link m_aGrfArrivedLnk;        ///< Link calls to UI if a graphic is arrived
+    Link<> m_aGrfArrivedLnk;      ///< Link calls to UI if a graphic is arrived
 
     SwShellCrsr* m_pCurCrsr;      ///< current cursor
     SwShellCrsr* m_pCrsrStk;      ///< stack for the cursor
@@ -486,16 +486,16 @@ public:
     bool IsOverReadOnlyPos( const Point& rPt ) const;
 
     // Methods for aFlyMacroLnk.
-    void        SetFlyMacroLnk( const Link& rLnk ) { m_aFlyMacroLnk = rLnk; }
-    const Link& GetFlyMacroLnk() const             { return m_aFlyMacroLnk; }
+    void        SetFlyMacroLnk( const Link<>& rLnk ) { m_aFlyMacroLnk = rLnk; }
+    const Link<>& GetFlyMacroLnk() const           { return m_aFlyMacroLnk; }
 
     // Methods returning/altering link for changes of attributes/formates.
-    void        SetChgLnk( const Link &rLnk ) { m_aChgLnk = rLnk; }
-    const Link& GetChgLnk() const             { return m_aChgLnk; }
+    void        SetChgLnk( const Link<> &rLnk ) { m_aChgLnk = rLnk; }
+    const Link<>& GetChgLnk() const           { return m_aChgLnk; }
 
     // Methods returning/altering ling for "graphic completely loaded".
-    void        SetGrfArrivedLnk( const Link &rLnk ) { m_aGrfArrivedLnk = rLnk; }
-    const Link& GetGrfArrivedLnk() const             { return m_aGrfArrivedLnk; }
+    void        SetGrfArrivedLnk( const Link<> &rLnk ) { m_aGrfArrivedLnk = rLnk; }
+    const Link<>& GetGrfArrivedLnk() const           { return m_aGrfArrivedLnk; }
 
     //Call ChgLink. When within an action calling will be delayed.
     void CallChgLnk();

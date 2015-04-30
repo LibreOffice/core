@@ -182,7 +182,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
        !pView->GetWrtShell().HasReadonlySel() )
     {
-        Link aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
+        Link<> aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
 
         pPopup = new PopupMenu;
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();

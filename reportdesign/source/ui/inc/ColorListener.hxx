@@ -33,7 +33,7 @@ namespace rptui
         void operator =(const OColorListener&) SAL_DELETED_FUNCTION;
     protected:
         OModuleClient                       m_aModuleClient;
-        Link                                m_aCollapsedLink;
+        Link<>                              m_aCollapsedLink;
         svtools::ColorConfig                m_aColorConfig;
         svtools::ExtendedColorConfig        m_aExtendedColorConfig;
         OUString                     m_sColorEntry;
@@ -63,7 +63,7 @@ namespace rptui
         */
         inline bool isMarked() const { return m_bMarked; }
 
-        inline void     setCollapsedHdl(const Link& _aLink ){ m_aCollapsedLink = _aLink; }
+        inline void     setCollapsedHdl(const Link<>& _aLink ){ m_aCollapsedLink = _aLink; }
         inline bool isCollapsed() const { return m_bCollapsed; }
 
         /** collapse or expand

@@ -294,7 +294,7 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     m_aStrDateInfo = m_pToYearFT->GetText();
     m_pYearValueField->SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
-    Link aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
+    Link<> aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
     m_pYearValueField->SetDownHdl( aLink );
     m_pYearValueField->SetUpHdl( aLink );
     m_pYearValueField->SetLoseFocusHdl( aLink );
@@ -1225,7 +1225,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pLocaleSettingLB->SetSelectHdl( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
     m_pDatePatternsED->SetModifyHdl( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
 
-    Link aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
+    Link<> aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
     m_pAsianSupportCB->SetClickHdl( aLink );
     m_pCTLSupportCB->SetClickHdl( aLink );
 

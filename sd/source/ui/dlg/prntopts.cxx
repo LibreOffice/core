@@ -52,7 +52,7 @@ SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs
     get( m_pCbxBack , "backcb" );
     get( m_pCbxPaperbin , "papertryfrmprntrcb" );
 
-    Link aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
+    Link<> aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
     m_pRbtDefault->SetClickHdl( aLink );
     m_pRbtPagesize->SetClickHdl( aLink );
     m_pRbtPagetile->SetClickHdl( aLink );

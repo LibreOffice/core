@@ -485,16 +485,16 @@ private:
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
     Timer               aStatusTimer;
-    Link                aStatusHdlLink;
-    Link                aNotifyHdl;
-    Link                aImportHdl;
-    Link                aBeginMovingParagraphsHdl;
-    Link                aEndMovingParagraphsHdl;
-    Link                aBeginPasteOrDropHdl;
-    Link                aEndPasteOrDropHdl;
-    Link                aModifyHdl;
-    Link                maBeginDropHdl;
-    Link                maEndDropHdl;
+    Link<>              aStatusHdlLink;
+    Link<>              aNotifyHdl;
+    Link<>              aImportHdl;
+    Link<>              aBeginMovingParagraphsHdl;
+    Link<>              aEndMovingParagraphsHdl;
+    Link<>              aBeginPasteOrDropHdl;
+    Link<>              aEndPasteOrDropHdl;
+    Link<>              aModifyHdl;
+    Link<>              maBeginDropHdl;
+    Link<>              maEndDropHdl;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
@@ -827,8 +827,8 @@ public:
 
     bool        IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( bool b ) { aEditDoc.SetModified( b ); }
-    void            SetModifyHdl( const Link& rLink ) { aModifyHdl = rLink; }
-    Link            GetModifyHdl() const { return aModifyHdl; }
+    void            SetModifyHdl( const Link<>& rLink ) { aModifyHdl = rLink; }
+    Link<>          GetModifyHdl() const { return aModifyHdl; }
 
 
     bool        IsInSelectionMode() { return bInSelection; }
@@ -844,11 +844,11 @@ public:
     EditPaM         InsertParagraph( sal_Int32 nPara );
     EditSelection*  SelectParagraph( sal_Int32 nPara );
 
-    void            SetStatusEventHdl( const Link& rLink )  { aStatusHdlLink = rLink; }
-    Link            GetStatusEventHdl() const               { return aStatusHdlLink; }
+    void            SetStatusEventHdl( const Link<>& rLink ) { aStatusHdlLink = rLink; }
+    Link<>          GetStatusEventHdl() const               { return aStatusHdlLink; }
 
-    void            SetNotifyHdl( const Link& rLink )       { aNotifyHdl = rLink; }
-    Link            GetNotifyHdl() const            { return aNotifyHdl; }
+    void            SetNotifyHdl( const Link<>& rLink )     { aNotifyHdl = rLink; }
+    Link<>          GetNotifyHdl() const            { return aNotifyHdl; }
 
     void            FormatAndUpdate( EditView* pCurView = 0 );
     inline void     IdleFormatAndUpdate( EditView* pCurView = 0 );
@@ -1016,12 +1016,12 @@ public:
     static void         SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
-    void                SetBeginDropHdl( const Link& rLink ) { maBeginDropHdl = rLink; }
-    Link                GetBeginDropHdl() const { return maBeginDropHdl; }
+    void                SetBeginDropHdl( const Link<>& rLink ) { maBeginDropHdl = rLink; }
+    Link<>              GetBeginDropHdl() const { return maBeginDropHdl; }
 
     /** sets a link that is called at the end of a drag operation at an edit view */
-    void            SetEndDropHdl( const Link& rLink ) { maEndDropHdl = rLink; }
-    Link            GetEndDropHdl() const { return maEndDropHdl; }
+    void            SetEndDropHdl( const Link<>& rLink ) { maEndDropHdl = rLink; }
+    Link<>          GetEndDropHdl() const { return maEndDropHdl; }
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( bool bCapitalize )  { bFirstWordCapitalization = bCapitalize; }

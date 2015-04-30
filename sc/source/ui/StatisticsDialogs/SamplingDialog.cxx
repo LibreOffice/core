@@ -87,7 +87,7 @@ void ScSamplingDialog::Init()
     mpButtonOk->SetClickHdl( LINK( this, ScSamplingDialog, OkClicked ) );
     mpButtonOk->Enable(false);
 
-    Link aLink = LINK( this, ScSamplingDialog, GetFocusHandler );
+    Link<> aLink = LINK( this, ScSamplingDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
     mpInputRangeButton->SetGetFocusHdl( aLink );
     mpOutputRangeEdit->SetGetFocusHdl( aLink );

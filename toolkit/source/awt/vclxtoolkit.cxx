@@ -159,8 +159,8 @@ class VCLXToolkit : public VCLXToolkit_Impl,
     ::cppu::OInterfaceContainerHelper m_aTopWindowListeners;
     ::cppu::OInterfaceContainerHelper m_aKeyHandlers;
     ::cppu::OInterfaceContainerHelper m_aFocusListeners;
-    ::Link m_aEventListenerLink;
-    ::Link m_aKeyListenerLink;
+    ::Link<> m_aEventListenerLink;
+    ::Link<> m_aKeyListenerLink;
     bool m_bEventListener;
     bool m_bKeyListener;
 

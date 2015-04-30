@@ -155,7 +155,7 @@ void ScRetypePassDlg::WriteNewDataToDocument(ScDocument& rDoc) const
 
 void ScRetypePassDlg::Init()
 {
-    Link aLink = LINK( this, ScRetypePassDlg, OKHdl );
+    Link<> aLink = LINK( this, ScRetypePassDlg, OKHdl );
     mpBtnOk->SetClickHdl(aLink);
 
     aLink = LINK( this, ScRetypePassDlg, RetypeBtnHdl );
@@ -365,7 +365,7 @@ OUString ScRetypePassInputDlg::GetNewPassword() const
 
 void ScRetypePassInputDlg::Init()
 {
-    Link aLink = LINK( this, ScRetypePassInputDlg, OKHdl );
+    Link<> aLink = LINK( this, ScRetypePassInputDlg, OKHdl );
     m_pBtnOk->SetClickHdl(aLink);
     aLink = LINK( this, ScRetypePassInputDlg, RadioBtnHdl );
     m_pBtnRetypePassword->SetClickHdl(aLink);

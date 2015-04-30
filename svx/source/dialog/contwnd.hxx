@@ -28,9 +28,9 @@ class ContourWindow : public GraphCtrl
     tools::PolyPolygon         aPolyPoly;
     Color               aPipetteColor;
     Rectangle           aWorkRect;
-    Link                aPipetteLink;
-    Link                aPipetteClickLink;
-    Link                aWorkplaceClickLink;
+    Link<>              aPipetteLink;
+    Link<>              aPipetteClickLink;
+    Link<>              aWorkplaceClickLink;
     bool                bPipetteMode;
     bool                bWorkplaceMode;
     bool                bClickValid;
@@ -65,10 +65,10 @@ public:
     bool                IsWorkplaceMode() const { return bWorkplaceMode; }
     const Rectangle&    GetWorkRect() const { return aWorkRect; }
 
-    void                SetPipetteHdl( const Link& rLink ) { aPipetteLink = rLink; }
-    void                SetPipetteClickHdl( const Link& rLink ) { aPipetteClickLink = rLink; }
+    void                SetPipetteHdl( const Link<>& rLink ) { aPipetteLink = rLink; }
+    void                SetPipetteClickHdl( const Link<>& rLink ) { aPipetteClickLink = rLink; }
 
-    void                SetWorkplaceClickHdl( const Link& rLink ) { aWorkplaceClickLink = rLink; }
+    void                SetWorkplaceClickHdl( const Link<>& rLink ) { aWorkplaceClickLink = rLink; }
 };
 
 

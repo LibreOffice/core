@@ -83,11 +83,11 @@ short Class::Execute()                              \
 class VclAbstractDialog2_Impl : public VclAbstractDialog2
 {
     ScopedVclPtr<Dialog> m_pDlg;
-    Link            m_aEndDlgHdl;
+    Link<>          m_aEndDlgHdl;
 public:
                     VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}
     virtual         ~VclAbstractDialog2_Impl();
-    virtual void    StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual void    StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
     virtual long    GetResult() SAL_OVERRIDE;
 private:
                     DECL_LINK( EndDialogHdl, Dialog* );
@@ -145,14 +145,14 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void      SetByCharacter( bool _bByCharacter ) SAL_OVERRIDE ;
     virtual void      SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) SAL_OVERRIDE;
     virtual void      SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) SAL_OVERRIDE;
-    virtual void      SetOptionsChangedHdl( const Link& _rHdl ) SAL_OVERRIDE;
-    virtual void      SetIgnoreHdl( const Link& _rHdl ) SAL_OVERRIDE;
-    virtual void      SetIgnoreAllHdl( const Link& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetChangeHdl( const Link& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetChangeAllHdl( const Link& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetClickByCharacterHdl( const Link& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetConversionFormatChangedHdl( const Link& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetFindHdl( const Link& _rHdl ) SAL_OVERRIDE;
+    virtual void      SetOptionsChangedHdl( const Link<>& _rHdl ) SAL_OVERRIDE;
+    virtual void      SetIgnoreHdl( const Link<>& _rHdl ) SAL_OVERRIDE;
+    virtual void      SetIgnoreAllHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetChangeHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetChangeAllHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetClickByCharacterHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetConversionFormatChangedHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetFindHdl( const Link<>& _rHdl ) SAL_OVERRIDE;
     virtual bool      GetUseBothDirections( ) const SAL_OVERRIDE;
     virtual editeng::HangulHanjaConversion::ConversionDirection
                       GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const SAL_OVERRIDE;
@@ -311,7 +311,7 @@ class AbstractSvxJSearchOptionsDialog_Impl :public AbstractSvxJSearchOptionsDial
 class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl,SvxTransformTabDialog)
-    virtual void SetValidateFramePosLink( const Link& rLink ) SAL_OVERRIDE;
+    virtual void SetValidateFramePosLink( const Link<>& rLink ) SAL_OVERRIDE;
     virtual void                SetCurPageId( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void                SetCurPageId( const OString& rName ) SAL_OVERRIDE;
     virtual const SfxItemSet*   GetOutputItemSet() const SAL_OVERRIDE;
@@ -324,7 +324,7 @@ class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
 class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl,SvxCaptionTabDialog)
-    virtual void SetValidateFramePosLink( const Link& rLink ) SAL_OVERRIDE;
+    virtual void SetValidateFramePosLink( const Link<>& rLink ) SAL_OVERRIDE;
     virtual void                SetCurPageId( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void                SetCurPageId( const OString& rName ) SAL_OVERRIDE;
     virtual const SfxItemSet*   GetOutputItemSet() const SAL_OVERRIDE;
@@ -354,13 +354,13 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl,SvxNameDialog)
     virtual void    GetName( OUString& rName ) SAL_OVERRIDE ;
-    virtual void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false ) SAL_OVERRIDE ;
+    virtual void    SetCheckNameHdl( const Link<>& rLink, bool bCheckImmediately = false ) SAL_OVERRIDE ;
     virtual void    SetEditHelpId(const OString&) SAL_OVERRIDE ;
     //from class Window
     virtual void    SetHelpId( const OString& ) SAL_OVERRIDE ;
     virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE ;
 private:
-    Link aCheckNameHdl;
+    Link<> aCheckNameHdl;
     DECL_LINK(CheckNameHdl, void *);
 };
 
@@ -371,10 +371,10 @@ class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl, SvxObjectNameDialog)
     virtual void GetName(OUString& rName) SAL_OVERRIDE ;
-    virtual void SetCheckNameHdl(const Link& rLink, bool bCheckImmediately = false) SAL_OVERRIDE;
+    virtual void SetCheckNameHdl(const Link<>& rLink, bool bCheckImmediately = false) SAL_OVERRIDE;
 
 private:
-    Link aCheckNameHdl;
+    Link<> aCheckNameHdl;
     DECL_LINK(CheckNameHdl, void *);
 };
 
@@ -422,8 +422,8 @@ class FmSearchDialog;
 class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
 {
     DECL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl,FmSearchDialog)
-    virtual void SetFoundHandler(const Link& lnk) SAL_OVERRIDE ;
-    virtual void SetCanceledNotFoundHdl(const Link& lnk) SAL_OVERRIDE;
+    virtual void SetFoundHandler(const Link<>& lnk) SAL_OVERRIDE ;
+    virtual void SetCanceledNotFoundHdl(const Link<>& lnk) SAL_OVERRIDE;
     virtual void SetActiveField(const OUString& strField) SAL_OVERRIDE;
 };
 
@@ -478,8 +478,8 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
     DECL_ABSTDLG_BASE( AbstractSvxPostItDialog_Impl, SvxPostItDialog )
     virtual void                SetText( const OUString& rStr ) SAL_OVERRIDE;  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const SAL_OVERRIDE;
-    virtual void                SetPrevHdl( const Link& rLink ) SAL_OVERRIDE ;
-    virtual void                SetNextHdl( const Link& rLink ) SAL_OVERRIDE ;
+    virtual void                SetPrevHdl( const Link<>& rLink ) SAL_OVERRIDE ;
+    virtual void                SetNextHdl( const Link<>& rLink ) SAL_OVERRIDE ;
     virtual void                EnableTravel(bool bNext, bool bPrev) SAL_OVERRIDE ;
     virtual OUString            GetNote() SAL_OVERRIDE ;
     virtual void                SetNote(const OUString& rTxt) SAL_OVERRIDE ;
@@ -490,8 +490,8 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
     virtual bool                IsOkEnabled() const SAL_OVERRIDE;
     virtual vcl::Window *            GetWindow() SAL_OVERRIDE;
 private:
-    Link aNextHdl;
-    Link aPrevHdl;
+    Link<> aNextHdl;
+    Link<> aPrevHdl;
     DECL_LINK(NextHdl, void *);
     DECL_LINK(PrevHdl, void *);
 };
@@ -646,7 +646,7 @@ public:
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link& lnkContextSupplier) SAL_OVERRIDE;
+                                                        const Link<>& lnkContextSupplier) SAL_OVERRIDE;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
                                                 const Graphic& rGraphic, RECT_POINT eLightSource) SAL_OVERRIDE;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(vcl::Window* pParent,

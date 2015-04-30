@@ -209,7 +209,7 @@ void SwAutoFormatDlg::dispose()
 
 void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
 {
-    Link aLk( LINK( this, SwAutoFormatDlg, CheckHdl ) );
+    Link<> aLk( LINK( this, SwAutoFormatDlg, CheckHdl ) );
     m_pBtnBorder->SetClickHdl( aLk );
     m_pBtnFont->SetClickHdl( aLk );
     m_pBtnPattern->SetClickHdl( aLk );

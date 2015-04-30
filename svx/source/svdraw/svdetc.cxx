@@ -97,7 +97,7 @@ OLEObjCache::OLEObjCache()
 {
     nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
     pTimer = new AutoTimer();
-    Link aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
+    Link<> aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
 
     pTimer->SetTimeoutHdl(aLink);
     pTimer->SetTimeout(20000);
@@ -251,7 +251,7 @@ void SdrLinkList::Clear()
     aList.clear();
 }
 
-unsigned SdrLinkList::FindEntry(const Link& rLink) const
+unsigned SdrLinkList::FindEntry(const Link<>& rLink) const
 {
     unsigned nAnz=GetLinkCount();
     for (unsigned i=0; i<nAnz; i++) {
@@ -260,15 +260,15 @@ unsigned SdrLinkList::FindEntry(const Link& rLink) const
     return 0xFFFF;
 }
 
-void SdrLinkList::InsertLink(const Link& rLink, unsigned nPos)
+void SdrLinkList::InsertLink(const Link<>& rLink, unsigned nPos)
 {
     unsigned nFnd=FindEntry(rLink);
     if (nFnd==0xFFFF) {
         if (rLink.IsSet()) {
             if(nPos==0xFFFF)
-                aList.push_back(new Link(rLink));
+                aList.push_back(new Link<>(rLink));
             else
-                aList.insert(aList.begin() + nPos, new Link(rLink));
+                aList.insert(aList.begin() + nPos, new Link<>(rLink));
         } else {
             OSL_FAIL("SdrLinkList::InsertLink(): Tried to insert a link that was not set already.");
         }
@@ -277,11 +277,11 @@ void SdrLinkList::InsertLink(const Link& rLink, unsigned nPos)
     }
 }
 
-void SdrLinkList::RemoveLink(const Link& rLink)
+void SdrLinkList::RemoveLink(const Link<>& rLink)
 {
     unsigned nFnd=FindEntry(rLink);
     if (nFnd!=0xFFFF) {
-        Link* pLink = aList[nFnd];
+        Link<>* pLink = aList[nFnd];
         aList.erase( aList.begin() + nFnd );
         delete pLink;
     } else {
@@ -545,7 +545,7 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
 
 
 
-SvdProgressInfo::SvdProgressInfo( Link *_pLink )
+SvdProgressInfo::SvdProgressInfo( Link<> *_pLink )
 {
     DBG_ASSERT(_pLink!=NULL,"SvdProgressInfo(): No Link stated!");
 

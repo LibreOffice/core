@@ -422,7 +422,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
 , mnUpdateTagsEvent( 0 )
 {
-    Link aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener(aLink, tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
         | tools::EventMultiplexerEvent::EID_VIEW_ADDED
@@ -434,7 +434,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 
 ViewOverlayManager::~ViewOverlayManager()
 {
-    Link aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 
     if( mnUpdateTagsEvent )

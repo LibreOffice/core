@@ -2151,7 +2151,7 @@ ImplListBox::ImplListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     mpHScrollBar    = VclPtr<ScrollBar>::Create( this, WB_HSCROLL | WB_DRAG );
     mpScrollBarBox  = VclPtr<ScrollBarBox>::Create( this );
 
-    Link aLink( LINK( this, ImplListBox, ScrollBarHdl ) );
+    Link<> aLink( LINK( this, ImplListBox, ScrollBarHdl ) );
     mpVScrollBar->SetScrollHdl( aLink );
     mpHScrollBar->SetScrollHdl( aLink );
 

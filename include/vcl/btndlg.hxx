@@ -65,8 +65,8 @@ public:
     void                SetFocusButton( sal_uInt16 nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
     sal_uInt16          GetFocusButton() const { return mnFocusButtonId; }
 
-    void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
-    const Link&         GetClickHdl() const { return maClickHdl; }
+    void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
+    const Link<>&       GetClickHdl() const { return maClickHdl; }
 
 protected:
                         ButtonDialog( WindowType nType );
@@ -84,7 +84,7 @@ private:
     sal_uInt16          mnCurButtonId;
     sal_uInt16          mnFocusButtonId;
     bool                mbFormat;
-    Link                maClickHdl;
+    Link<>              maClickHdl;
 
     SAL_DLLPRIVATE void             ImplInitButtonDialogData();
     SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( sal_uInt16 nBtnFlags );

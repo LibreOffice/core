@@ -293,7 +293,7 @@ void SvxGeneralTabPage::InitControls ()
 void SvxGeneralTabPage::SetLinks ()
 {
     // link for updating the initials
-    Link aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
+    Link<> aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
     Row& rNameRow = *vRows[nNameRow];
     for (unsigned i = rNameRow.nFirstField; i != rNameRow.nLastField - 1; ++i)
         vFields[i]->pEdit->SetModifyHdl(aLink);

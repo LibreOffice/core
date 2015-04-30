@@ -24,14 +24,14 @@
 class DetailsContainer
 {
     private:
-        Link m_aChangeHdl;
+        Link<> m_aChangeHdl;
         VclPtr<VclFrame>       m_pFrame;
 
     public:
         DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame );
         virtual ~DetailsContainer( );
 
-        void setChangeHdl( const Link& rLink ) { m_aChangeHdl = rLink; }
+        void setChangeHdl( const Link<>& rLink ) { m_aChangeHdl = rLink; }
 
         virtual void show( bool bShow = true );
         virtual INetURLObject getUrl( );

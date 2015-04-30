@@ -250,7 +250,7 @@ namespace pcr
         if (pData)
             m_xSelectedControl = Reference< XPropertySet > (*static_cast<Reference< XPropertySet > *>(pData));
 
-        m_pNoAssignment->SetClickHdl(Link());
+        m_pNoAssignment->SetClickHdl(Link<>());
         m_pNoAssignment->Check(pData == NULL);
         m_pNoAssignment->SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
 
@@ -286,8 +286,8 @@ namespace pcr
 
         if (m_pLastSelected)
         {
-            m_pControlTree->SetSelectHdl(Link());
-            m_pControlTree->SetDeselectHdl(Link());
+            m_pControlTree->SetSelectHdl(Link<>());
+            m_pControlTree->SetDeselectHdl(Link<>());
             m_pControlTree->Select(m_pLastSelected, !m_pNoAssignment->IsChecked());
             m_pControlTree->SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
             m_pControlTree->SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));

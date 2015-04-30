@@ -68,7 +68,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
     VclPtr<SvxSwFrameExample> m_pExampleWN;
 
-    Link        m_aValidateLink;
+    Link<>      m_aValidateLink;
 
     //'string provider'
     SvxSwFramePosString m_aFramePosString;
@@ -136,7 +136,7 @@ public:
 
     void    EnableAnchorTypes(sal_uInt16 nAnchorEnable);
 
-    void SetValidateFramePosLink( const Link& rLink )
+    void SetValidateFramePosLink( const Link<>& rLink )
             {m_aValidateLink = rLink;}
 
     void SetView( const SdrView* pSdrView );

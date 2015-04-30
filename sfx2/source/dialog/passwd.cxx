@@ -109,7 +109,7 @@ SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGrou
 
     mpPassword1ED->SetAccessibleName(SFX2_RESSTR(STR_PASSWD));
 
-    Link aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
+    Link<> aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
     mpPassword1ED->SetModifyHdl( aLink );
     mpPassword2ED->SetModifyHdl( aLink );
     aLink = LINK( this, SfxPasswordDialog, OKHdl );

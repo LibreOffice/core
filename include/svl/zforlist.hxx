@@ -338,7 +338,7 @@ public:
     ~SvNumberFormatter();
 
     /// Set CallBack to ColorTable
-    void SetColorLink( const Link& rColorTableCallBack );
+    void SetColorLink( const Link<>& rColorTableCallBack );
     /// Do the CallBack to ColorTable
     Color* GetUserDefColor(sal_uInt16 nIndex);
 
@@ -789,7 +789,7 @@ private:
     OnDemandNativeNumberWrapper xNatNum;    // Native number service loaded on demand
     ImpSvNumberInputScan* pStringScanner;   // Input string scanner
     ImpSvNumberformatScan* pFormatScanner;  // Format code string scanner
-    Link aColorLink;                        // User defined color table CallBack
+    Link<> aColorLink;                      // User defined color table CallBack
     sal_uInt32 MaxCLOffset;                     // Max language/country offset used
     sal_uInt32 nDefaultSystemCurrencyFormat;        // NewCurrency matching SYSTEM locale
     LanguageType IniLnge;                   // Initialized setting language/country

@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  OUString const & rTheRelURIRef,
-                                 Link const & rMaybeFileHdl,
+                                 Link<> const & rMaybeFileHdl,
                                  bool bCheckFileExists,
                                  bool bIgnoreFragment,
                                  INetURLObject::EncodeMechanism eEncodeMechanism,
@@ -101,14 +101,14 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
     return aAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
 }
 
-namespace { struct MaybeFileHdl : public rtl::Static< Link, MaybeFileHdl > {}; }
+namespace { struct MaybeFileHdl : public rtl::Static< Link<>, MaybeFileHdl > {}; }
 
-void URIHelper::SetMaybeFileHdl(Link const & rTheMaybeFileHdl)
+void URIHelper::SetMaybeFileHdl(Link<> const & rTheMaybeFileHdl)
 {
     MaybeFileHdl::get() = rTheMaybeFileHdl;
 }
 
-Link URIHelper::GetMaybeFileHdl()
+Link<> URIHelper::GetMaybeFileHdl()
 {
     return MaybeFileHdl::get();
 }

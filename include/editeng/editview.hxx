@@ -26,6 +26,7 @@
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+#include <tools/link.hxx>
 #include <vcl/cursor.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/languageoptions.hxx>
@@ -44,7 +45,6 @@ class MouseEvent;
 class DropEvent;
 class CommandEvent;
 class Rectangle;
-class Link;
 class Pair;
 class Point;
 class Range;
@@ -213,7 +213,7 @@ public:
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
     bool            IsShapeParaFocusable();
     bool            WrongSpelledBreakPara(sal_Int32 nPara, sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex);
-    void            ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
+    void            ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack = 0 );
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;

@@ -54,8 +54,8 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     SbxArrayRef     xUnoListeners;          // Listener handled by CreateUnoListener
 
    // Handler-Support:
-    Link            aErrorHdl;              // Error handler
-    Link            aBreakHdl;              // Breakpoint handler
+    Link<>          aErrorHdl;              // Error handler
+    Link<>          aBreakHdl;              // Breakpoint handler
     bool            bNoRtl;                 // if true: do not search RTL
     bool            bBreak;                 // if true: Break, otherwise Step
     bool            bDocBasic;
@@ -148,14 +148,14 @@ public:
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
     bool            IsBreak() const             { return bBreak; }
 
-    static Link     GetGlobalErrorHdl();
-    static void     SetGlobalErrorHdl( const Link& rNewHdl );
-    Link            GetErrorHdl() const { return aErrorHdl; }
-    void            SetErrorHdl( const Link& r ) { aErrorHdl = r; }
+    static Link<>   GetGlobalErrorHdl();
+    static void     SetGlobalErrorHdl( const Link<>& rNewHdl );
+    Link<>          GetErrorHdl() const { return aErrorHdl; }
+    void            SetErrorHdl( const Link<>& r ) { aErrorHdl = r; }
 
-    static void     SetGlobalBreakHdl( const Link& rNewHdl );
-    Link            GetBreakHdl() const { return aBreakHdl; }
-    void            SetBreakHdl( const Link& r ) { aBreakHdl = r; }
+    static void     SetGlobalBreakHdl( const Link<>& rNewHdl );
+    Link<>          GetBreakHdl() const { return aBreakHdl; }
+    void            SetBreakHdl( const Link<>& r ) { aBreakHdl = r; }
 
     SbxArrayRef     getUnoListeners();
 

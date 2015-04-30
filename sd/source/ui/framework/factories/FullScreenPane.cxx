@@ -72,7 +72,7 @@ FullScreenPane::FullScreenPane (
     // afterwards may or may not work.
 
     // Add resize listener at the work window.
-    Link aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
+    Link<> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
     mpWorkWindow->AddEventListener(aWindowEventHandler);
 
     // Set title and icon of the new window to those of the current window
@@ -108,7 +108,7 @@ void SAL_CALL FullScreenPane::disposing()
 
     if (mpWorkWindow.get() != NULL)
     {
-        Link aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
+        Link<> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
         mpWorkWindow->RemoveEventListener(aWindowEventHandler);
         mpWorkWindow.reset();
     }

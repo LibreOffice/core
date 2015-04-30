@@ -154,7 +154,7 @@ void SdrTableRTFParser::Read( SvStream& rStream )
 {
     EditEngine& rEdit = const_cast< EditEngine& >( mpOutliner->GetEditEngine() );
 
-    Link aOldLink( rEdit.GetImportHdl() );
+    Link<> aOldLink( rEdit.GetImportHdl() );
     rEdit.SetImportHdl( LINK( this, SdrTableRTFParser, RTFImportHdl ) );
     mpOutliner->Read( rStream, OUString(), EE_FORMAT_RTF );
     rEdit.SetImportHdl( aOldLink );

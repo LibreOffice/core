@@ -168,7 +168,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
     InvalidateContent();
 
-    Link aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
+    Link<> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink,
         ::sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
@@ -181,14 +181,14 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     Window::SetHelpId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
-    Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
+    Link<> aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
         aStateChangeLink,
         Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
         ".uno:VerticalTextState");
 
     SetSizePixel(GetParent()->GetSizePixel());
-    Link aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
+    Link<> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
     GetParent()->AddEventListener(aWindowEventHandlerLink);
 }
 
@@ -218,10 +218,10 @@ void LayoutMenu::Dispose()
         xComponent->dispose();
 
     Clear();
-    Link aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
+    Link<> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
 
-    Link aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
+    Link<> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
     GetParent()->RemoveEventListener(aWindowEventHandlerLink);
 }
 

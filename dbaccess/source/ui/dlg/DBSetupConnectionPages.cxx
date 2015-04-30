@@ -374,7 +374,7 @@ using namespace ::com::sun::star;
         OnModified( NULL );
     }
 
-    Link MySQLNativeSetupPage::getControlModifiedLink()
+    Link<> MySQLNativeSetupPage::getControlModifiedLink()
     {
         return LINK( this, MySQLNativeSetupPage, OnModified );
     }

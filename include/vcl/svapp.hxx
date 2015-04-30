@@ -42,7 +42,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 class BitmapEx;
-class Link;
 class AllSettings;
 class DataChangedEvent;
 class Accelerator;
@@ -591,7 +590,7 @@ public:
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
           EnableNoYieldMode, DisableNoYieldMode, RemovePostYieldListener
     */
-    static void                 AddPostYieldListener( const Link& i_rListener );
+    static void                 AddPostYieldListener( const Link<>& i_rListener );
 
     /** Remove listener for yield events
 
@@ -601,7 +600,7 @@ public:
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
           AddPostYieldListener, EnableNoYieldMode, DisableNoYieldMode
     */
-    static void                 RemovePostYieldListener( const Link& i_rListener );
+    static void                 RemovePostYieldListener( const Link<>& i_rListener );
 
 
     /** Queries whether the application is in "main", i.e. not yet in
@@ -755,7 +754,7 @@ public:
 
      @see RemoveEventListener, AddKeyListener, RemoveKeyListener
     */
-    static void                 AddEventListener( const Link& rEventListener );
+    static void                 AddEventListener( const Link<>& rEventListener );
 
     /** Remove a VCL event listener from the application.
 
@@ -763,7 +762,7 @@ public:
 
      @see AddEventListener, AddKeyListener, RemoveKeyListener
     */
-    static void                 RemoveEventListener( const Link& rEventListener );
+    static void                 RemoveEventListener( const Link<>& rEventListener );
 
     /** Add a keypress listener to the application. If keypress listener exists,
      then initialize the application's keypress event listener with a new one, then
@@ -773,7 +772,7 @@ public:
 
      @see AddEventListener, RemoveEventListener, RemoveKeyListener
     */
-    static void                 AddKeyListener( const Link& rKeyListener );
+    static void                 AddKeyListener( const Link<>& rKeyListener );
 
     /** Remove a keypress listener from the application.
 
@@ -781,7 +780,7 @@ public:
 
      @see AddEventListener, RemoveEventListener, AddKeyListener
     */
-    static void                 RemoveKeyListener( const Link& rKeyListener );
+    static void                 RemoveKeyListener( const Link<>& rKeyListener );
 
     /** Send event to all VCL application event listeners
 
@@ -869,7 +868,7 @@ public:
 
      @return the event ID used to post the event.
     */
-    static ImplSVEvent * PostUserEvent( const Link& rLink, void* pCaller = NULL );
+    static ImplSVEvent * PostUserEvent( const Link<>& rLink, void* pCaller = NULL );
 
     /** Remove user event based on event ID
 
@@ -887,13 +886,13 @@ public:
 
      @return true if the handler was inserted successfully, false if it couldn't be inserted.
     */
-    static bool                 InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
+    static bool                 InsertIdleHdl( const Link<>& rLink, sal_uInt16 nPriority );
 
     /** Remove an idle handler from the application.
 
      @param     rLink           const reference to the idle handler to remove
     */
-    static void                 RemoveIdleHdl( const Link& rLink );
+    static void                 RemoveIdleHdl( const Link<>& rLink );
 
     /*** Get the DisplayConnection.
 
@@ -1359,13 +1358,13 @@ public:
 
      @see GetFilterHdl
     */
-    static void                 SetFilterHdl( const Link& rLink );
+    static void                 SetFilterHdl( const Link<>& rLink );
 
     /*** Get a new graphics filter
 
      @return Const reference to the Link object (the filter)
     */
-    static const Link&          GetFilterHdl();
+    static const Link<>&        GetFilterHdl();
 
     ///@}
 
@@ -1504,7 +1503,7 @@ public:
     ///@}
 
     // For vclbootstrapprotector:
-    static void setDeInitHook(Link const & hook);
+    static void setDeInitHook(Link<> const & hook);
 
 private:
 
@@ -1703,7 +1702,7 @@ VCL_DLLPUBLIC void JoinMainLoopThread();
 
 inline void Application::EndYield()
 {
-    PostUserEvent( Link() );
+    PostUserEvent( Link<>() );
 }
 
 namespace vcl

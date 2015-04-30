@@ -181,7 +181,7 @@ SvInsertOleDlg::SvInsertOleDlg
     get(m_pCbFilelink, "linktofile");
     m_pLbObjecttype->SetDoubleClickHdl( LINK( this, SvInsertOleDlg, DoubleClickHdl ) );
     m_pBtnFilepath->SetClickHdl( LINK( this, SvInsertOleDlg, BrowseHdl ) );
-    Link aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
+    Link<> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
     m_pRbNewObject->SetClickHdl( aLink );
     m_pRbObjectFromfile->SetClickHdl( aLink );
     m_pRbNewObject->Check( true );
@@ -553,7 +553,7 @@ void SfxInsertFloatingFrameDialog::Init()
     get(m_pNMMarginHeight, "height");
     get(m_pCBMarginHeightDefault, "defaultheight");
 
-    Link aLink( LINK( this, SfxInsertFloatingFrameDialog, CheckHdl ) );
+    Link<> aLink( LINK( this, SfxInsertFloatingFrameDialog, CheckHdl ) );
     m_pCBMarginWidthDefault->SetClickHdl( aLink );
     m_pCBMarginHeightDefault->SetClickHdl( aLink );
 

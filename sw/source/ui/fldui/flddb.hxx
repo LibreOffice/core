@@ -52,7 +52,7 @@ class SwFldDBPage : public SwFldPage
     OUString            m_sOldColumnName;
     sal_uLong           m_nOldFormat;
     sal_uInt16          m_nOldSubType;
-    Link                m_aOldNumSelectHdl;
+    Link<>              m_aOldNumSelectHdl;
 
     DECL_LINK( TypeHdl, ListBox* );
     DECL_LINK( NumSelectHdl, NumFormatListBox* pLB = 0);

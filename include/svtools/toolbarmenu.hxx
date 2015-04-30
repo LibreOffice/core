@@ -81,7 +81,7 @@ public:
 
     const Size&     getMenuSize() const;
 
-    void            SetSelectHdl( const Link& rLink );
+    void            SetSelectHdl( const Link<>& rLink );
 
     int             getSelectedEntryId() const;
     int             getHighlightedEntryId() const;

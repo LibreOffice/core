@@ -49,15 +49,15 @@ class ImplXMLSignatureListener : public cppu::WeakImplHelper3
 >
 {
 private:
-    Link        maCreationResultListenerListener;
-    Link        maVerifyResultListenerListener;
-    Link        maStartVerifySignatureElementListener;
+    Link<>      maCreationResultListenerListener;
+    Link<>      maVerifyResultListenerListener;
+    Link<>      maStartVerifySignatureElementListener;
 
     com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler > m_xNextHandler;
 
 public:
-    ImplXMLSignatureListener(const Link& rCreationResultListenerListener, const Link& rVerifyResultListenerListener, const Link& rStartVerifySignatureElement);
+    ImplXMLSignatureListener(const Link<>& rCreationResultListenerListener, const Link<>& rVerifyResultListenerListener, const Link<>& rStartVerifySignatureElement);
     virtual ~ImplXMLSignatureListener();
 
     void setNextHandler(com::sun::star::uno::Reference<

@@ -1927,9 +1927,9 @@ SwBaseShell::~SwBaseShell()
     if( rView.GetCurShell() == this )
         rView.ResetSubShell();
 
-    Link aTmp( LINK( this, SwBaseShell, GraphicArrivedHdl));
+    Link<> aTmp( LINK( this, SwBaseShell, GraphicArrivedHdl));
     if( aTmp == rView.GetWrtShell().GetGrfArrivedLnk() )
-        rView.GetWrtShell().SetGrfArrivedLnk( Link() );
+        rView.GetWrtShell().SetGrfArrivedLnk( Link<>() );
 }
 
 void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )

@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/link.hxx>
 #include <tools/shl.hxx>
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
@@ -119,10 +120,6 @@ bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnl
 // man dann irgendwann mit delete platthauen muss.
 sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd);
 
-
-
-class Link;
-
 // Hilfsklasse zur kommunikation zwischen dem Dialog
 // zum aufbrechen von Metafiles (sd/source/ui/dlg/brkdlg.cxx),
 // SdrEditView::DoImportMarkedMtf() und
@@ -142,10 +139,10 @@ private:
     sal_uIntPtr nObjCount;      // Anzahl der selektierten Objekte
     sal_uIntPtr nCurObj;            // Aktuelles Objekt
 
-    Link *pLink;
+    Link<> *pLink;
 
 public:
-    SvdProgressInfo( Link *_pLink );
+    SvdProgressInfo( Link<> *_pLink );
 
     void Init( sal_uIntPtr _nSumActionCount, sal_uIntPtr _nObjCount );
 
@@ -175,19 +172,19 @@ public:
 
 class SdrLinkList
 {
-    std::vector<Link*> aList;
+    std::vector<Link<>*> aList;
 protected:
-    unsigned FindEntry(const Link& rLink) const;
+    unsigned FindEntry(const Link<>& rLink) const;
 public:
     SdrLinkList(): aList()                   {}
     ~SdrLinkList()                           { Clear(); }
     SVX_DLLPUBLIC void Clear();
     unsigned GetLinkCount() const            { return (unsigned)aList.size(); }
-    Link& GetLink(unsigned nNum)             { return *aList[nNum]; }
-    const Link& GetLink(unsigned nNum) const { return *aList[nNum]; }
-    void InsertLink(const Link& rLink, unsigned nPos=0xFFFF);
-    void RemoveLink(const Link& rLink);
-    bool HasLink(const Link& rLink) const { return FindEntry(rLink)!=0xFFFF; }
+    Link<>& GetLink(unsigned nNum)           { return *aList[nNum]; }
+    const Link<>& GetLink(unsigned nNum) const { return *aList[nNum]; }
+    void InsertLink(const Link<>& rLink, unsigned nPos=0xFFFF);
+    void RemoveLink(const Link<>& rLink);
+    bool HasLink(const Link<>& rLink) const { return FindEntry(rLink)!=0xFFFF; }
 };
 
 SdrLinkList& ImpGetUserMakeObjHdl();

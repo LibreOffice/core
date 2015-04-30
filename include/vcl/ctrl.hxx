@@ -41,8 +41,8 @@ protected:
 
 private:
     bool                    mbHasControlFocus;
-    Link                    maGetFocusHdl;
-    Link                    maLoseFocusHdl;
+    Link<>                  maGetFocusHdl;
+    Link<>                  maLoseFocusHdl;
 
     SAL_DLLPRIVATE void     ImplInitControlData();
 
@@ -79,7 +79,7 @@ protected:
             if the Control instance has been destroyed in any of the call
     */
     bool        ImplCallEventListenersAndHandler(
-                    sal_uLong nEvent, const Link& rHandler, void* pCaller
+                    sal_uLong nEvent, const Link<>& rHandler, void* pCaller
                 );
 
     /** draws the given text onto the given device
@@ -163,10 +163,10 @@ public:
     */
     long ToRelativeLineIndex( long nIndex ) const;
 
-    void            SetGetFocusHdl( const Link& rLink ) { maGetFocusHdl = rLink; }
-    const Link&     GetGetFocusHdl() const   { return maGetFocusHdl; }
-    void            SetLoseFocusHdl( const Link& rLink ) { maLoseFocusHdl = rLink; }
-    const Link&     GetLoseFocusHdl() const { return maLoseFocusHdl; }
+    void            SetGetFocusHdl( const Link<>& rLink ) { maGetFocusHdl = rLink; }
+    const Link<>&   GetGetFocusHdl() const   { return maGetFocusHdl; }
+    void            SetLoseFocusHdl( const Link<>& rLink ) { maLoseFocusHdl = rLink; }
+    const Link<>&   GetLoseFocusHdl() const { return maLoseFocusHdl; }
 
     /** determines whether the control currently has the focus
     */

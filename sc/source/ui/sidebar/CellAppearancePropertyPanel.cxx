@@ -167,7 +167,7 @@ void CellAppearancePropertyPanel::Initialize()
     const sal_uInt16 nIdBorderType  = mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE );
     mpTBCellBorder->SetItemImage( nIdBorderType, maIMGCellBorder );
     mpTBCellBorder->SetItemBits( nIdBorderType, mpTBCellBorder->GetItemBits( nIdBorderType ) | ToolBoxItemBits::DROPDOWNONLY );
-    Link aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
+    Link<> aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
     mpTBCellBorder->SetDropdownClickHdl ( aLink );
     mpTBCellBorder->SetSelectHdl ( aLink );
 

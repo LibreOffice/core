@@ -48,7 +48,7 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( vcl::Window* pParent,
     get(m_pInsertColorLB, "entries");
     get(m_pMoveColorLB, "insertions");
 
-    Link aLk = LINK(this, ScRedlineOptionsTabPage, ColorHdl);
+    Link<> aLk = LINK(this, ScRedlineOptionsTabPage, ColorHdl);
     m_pContentColorLB->SetSelectHdl( aLk );
     m_pMoveColorLB->SetSelectHdl( aLk );
     m_pInsertColorLB->SetSelectHdl( aLk );

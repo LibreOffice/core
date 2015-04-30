@@ -255,7 +255,7 @@ void ScSpecialFilterDlg::SetActive()
         {
             pEdCopyArea->GrabFocus();
             if ( pEdCopyArea->GetModifyHdl().IsSet() )
-                ((Link&)pEdCopyArea->GetModifyHdl()).Call( pEdCopyArea );
+                ((Link<>&)pEdCopyArea->GetModifyHdl()).Call( pEdCopyArea );
         }
         else if ( pRefInputEdit == pEdFilterArea )
         {

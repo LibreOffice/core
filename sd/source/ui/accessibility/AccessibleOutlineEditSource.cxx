@@ -48,7 +48,7 @@ namespace accessibility
     AccessibleOutlineEditSource::~AccessibleOutlineEditSource()
     {
         if( mpOutliner )
-            mpOutliner->SetNotifyHdl( Link() );
+            mpOutliner->SetNotifyHdl( Link<>() );
         Broadcast( TextHint( SFX_HINT_DYING ) );
     }
 
@@ -196,7 +196,7 @@ namespace accessibility
         if( bDispose )
         {
             if( mpOutliner )
-                mpOutliner->SetNotifyHdl( Link() );
+                mpOutliner->SetNotifyHdl( Link<>() );
             mpOutliner = NULL;
             mpOutlinerView = NULL;
             Broadcast( TextHint( SFX_HINT_DYING ) );

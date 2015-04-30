@@ -241,7 +241,7 @@ public:
     void sortItems (const boost::function<bool (const ThumbnailViewItem*,
                                                 const ThumbnailViewItem*) > &func);
 
-    void setItemStateHdl (const Link &aLink) { maItemStateHdl = aLink; }
+    void setItemStateHdl (const Link<> &aLink) { maItemStateHdl = aLink; }
 
     virtual void Resize() SAL_OVERRIDE;
 
@@ -329,7 +329,7 @@ protected:
     bool mbShowTooltips : 1;
     Color maColor;
 
-    Link maItemStateHdl;
+    Link<> maItemStateHdl;
     ThumbnailItemAttributes *mpItemAttrs;
     drawinglayer::processor2d::BaseProcessor2D *mpProcessor;
     boost::function<bool (const ThumbnailViewItem*) > maFilterFunc;

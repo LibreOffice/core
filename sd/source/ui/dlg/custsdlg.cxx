@@ -52,7 +52,7 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
     m_pLbCustomShows->set_width_request(m_pLbCustomShows->approximate_char_width() * 32);
     m_pLbCustomShows->SetDropDownLineCount(8);
 
-    Link aLink( LINK( this, SdCustomShowDlg, ClickButtonHdl ) );
+    Link<> aLink( LINK( this, SdCustomShowDlg, ClickButtonHdl ) );
     m_pBtnNew->SetClickHdl( aLink );
     m_pBtnEdit->SetClickHdl( aLink );
     m_pBtnRemove->SetClickHdl( aLink );
@@ -292,7 +292,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
     get( m_pBtnCancel, "cancel" );
     get( m_pBtnHelp, "help" );
 
-    Link aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
+    Link<> aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
     m_pBtnAdd->SetClickHdl( aLink );
     m_pBtnRemove->SetClickHdl( aLink );
     m_pEdtName->SetModifyHdl( aLink );

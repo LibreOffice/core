@@ -58,7 +58,7 @@ namespace svx
 
         void DisplayListBox( bool bDisplayListBox );
 
-        void SetSelectHdl( const Link& rLink );
+        void SetSelectHdl( const Link<>& rLink );
 
         void Clear();
         void InsertEntry( const OUString& rStr );
@@ -92,7 +92,7 @@ namespace svx
         VclPtr<SuggestionSet> m_aValueSet;
         VclPtr<ListBox>  m_aListBox;
 
-        Link          m_aSelectLink;
+        Link<>        m_aSelectLink;
         bool          m_bInSelectionUpdate;
     };
 
@@ -131,8 +131,8 @@ namespace svx
             the document anymore. Some functionality must be disabled then */
         bool            m_bDocumentMode;
 
-        Link            m_aOptionsChangedLink;
-        Link            m_aClickByCharacterLink;
+        Link<>          m_aOptionsChangedLink;
+        Link<>          m_aClickByCharacterLink;
 
     public:
         HangulHanjaConversionDialog(
@@ -142,15 +142,15 @@ namespace svx
         virtual void dispose() SAL_OVERRIDE;
 
     public:
-        void    SetOptionsChangedHdl( const Link& _rHdl );
-        void    SetIgnoreHdl( const Link& _rHdl );
-        void    SetIgnoreAllHdl( const Link& _rHdl );
-        void    SetChangeHdl( const Link& _rHdl );
-        void    SetChangeAllHdl( const Link& _rHdl );
+        void    SetOptionsChangedHdl( const Link<>& _rHdl );
+        void    SetIgnoreHdl( const Link<>& _rHdl );
+        void    SetIgnoreAllHdl( const Link<>& _rHdl );
+        void    SetChangeHdl( const Link<>& _rHdl );
+        void    SetChangeAllHdl( const Link<>& _rHdl );
 
-        void    SetClickByCharacterHdl( const Link& _rHdl );
-        void    SetConversionFormatChangedHdl( const Link& _rHdl );
-        void    SetFindHdl( const Link& _rHdl );
+        void    SetClickByCharacterHdl( const Link<>& _rHdl );
+        void    SetConversionFormatChangedHdl( const Link<>& _rHdl );
+        void    SetFindHdl( const Link<>& _rHdl );
 
         OUString  GetCurrentString( ) const;
         void    SetCurrentString(

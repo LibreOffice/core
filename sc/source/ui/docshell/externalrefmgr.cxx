@@ -1327,7 +1327,7 @@ void ScExternalRefLink::Closed()
     return SUCCESS;
 }
 
-void ScExternalRefLink::Edit(vcl::Window* pParent, const Link& /*rEndEditHdl*/)
+void ScExternalRefLink::Edit(vcl::Window* pParent, const Link<>& /*rEndEditHdl*/)
 {
     SvBaseLink::Edit(pParent, LINK(this, ScExternalRefLink, ExternalRefEndEditHdl));
 }

@@ -34,10 +34,10 @@ protected:
     Rectangle       maUpperRect;
     Rectangle       maLowerRect;
     Rectangle       maDropDownRect; // noch nicht angebunden...
-    Link            maUpHdlLink;
-    Link            maDownHdlLink;
-    Link            maFirstHdlLink;
-    Link            maLastHdlLink;
+    Link<>          maUpHdlLink;
+    Link<>          maDownHdlLink;
+    Link<>          maFirstHdlLink;
+    Link<>          maLastHdlLink;
     bool            mbRepeat:1,
                     mbSpin:1,
                     mbInitialUp:1,
@@ -89,14 +89,14 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void            SetUpHdl( const Link& rLink ) { maUpHdlLink = rLink; }
-    const Link&     GetUpHdl() const { return maUpHdlLink; }
-    void            SetDownHdl( const Link& rLink ) { maDownHdlLink = rLink; }
-    const Link&     GetDownHdl() const { return maDownHdlLink; }
-    void            SetFirstHdl( const Link& rLink ) { maFirstHdlLink = rLink; }
-    const Link&     GetFirstHdl() const { return maFirstHdlLink; }
-    void            SetLastHdl( const Link& rLink ) { maLastHdlLink = rLink; }
-    const Link&     GetLastHdl() const { return maLastHdlLink; }
+    void            SetUpHdl( const Link<>& rLink ) { maUpHdlLink = rLink; }
+    const Link<>&   GetUpHdl() const { return maUpHdlLink; }
+    void            SetDownHdl( const Link<>& rLink ) { maDownHdlLink = rLink; }
+    const Link<>&   GetDownHdl() const { return maDownHdlLink; }
+    void            SetFirstHdl( const Link<>& rLink ) { maFirstHdlLink = rLink; }
+    const Link<>&   GetFirstHdl() const { return maFirstHdlLink; }
+    void            SetLastHdl( const Link<>& rLink ) { maLastHdlLink = rLink; }
+    const Link<>&   GetLastHdl() const { return maLastHdlLink; }
 
     virtual Size    CalcMinimumSize() const SAL_OVERRIDE;
     virtual Size    CalcMinimumSizeForText(const OUString &rString) const SAL_OVERRIDE;

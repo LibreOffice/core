@@ -220,8 +220,8 @@ public:
 
 private:
     vcl::Font      m_aDefaultFont;
-    Link            m_aMasterStateProvider;
-    Link            m_aMasterSlotExecutor;
+    Link<>          m_aMasterStateProvider;
+    Link<>          m_aMasterSlotExecutor;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
@@ -478,13 +478,13 @@ public:
 
     const DbGridRowRef& GetCurrentRow() const {return m_xCurrentRow;}
 
-    void SetStateProvider(const Link& rProvider) { m_aMasterStateProvider = rProvider; }
+    void SetStateProvider(const Link<>& rProvider) { m_aMasterStateProvider = rProvider; }
         // if this link is set the given provider will be asked for the state of my items.
         // the return values are interpreted as follows :
         // <0 -> not specified (use default mechanism to determine the state)
         // ==0 -> the item is disabled
         // >0 -> the item is enabled
-    void SetSlotExecutor(const Link& rExecutor) { m_aMasterSlotExecutor = rExecutor; }
+    void SetSlotExecutor(const Link<>& rExecutor) { m_aMasterSlotExecutor = rExecutor; }
         // analogous : if this link is set, all nav-bar slots will be routed through it when executed
         // if the handler returns nonzero, no further handling of the slot occurs
 

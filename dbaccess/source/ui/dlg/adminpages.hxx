@@ -93,7 +93,7 @@ namespace dbaui
                                         ,public ::svt::IWizardPageController
     {
     private:
-        Link            m_aModifiedHandler;     /// to be called if something on the page has been modified
+        Link<>          m_aModifiedHandler;     /// to be called if something on the page has been modified
         bool        m_abEnableRoadmap;
     protected:
         IDatabaseSettingsDialog*   m_pAdminDialog;
@@ -104,7 +104,7 @@ namespace dbaui
     public:
         OGenericAdministrationPage(vcl::Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
         /// set a handler which gets called every time something on the page has been modified
-        void SetModifiedHandler(const Link& _rHandler) { m_aModifiedHandler = _rHandler; }
+        void SetModifiedHandler(const Link<>& _rHandler) { m_aModifiedHandler = _rHandler; }
 
         /** Sets the ParentDialog
             @param  _pAdminDialog
@@ -234,7 +234,7 @@ namespace dbaui
         DECL_LINK(OnTestConnectionClickHdl, PushButton*);
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
-        virtual Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
+        virtual Link<> getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
     };
 
     // ControlRelation

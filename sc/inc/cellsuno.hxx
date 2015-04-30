@@ -111,9 +111,9 @@ namespace editeng { class SvxBorderLine; }
 
 class ScLinkListener : public SvtListener
 {
-    Link    aLink;
+    Link<>  aLink;
 public:
-                    ScLinkListener(const Link& rL) : aLink(rL) {}
+                    ScLinkListener(const Link<>& rL) : aLink(rL) {}
     virtual         ~ScLinkListener();
     virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
 };

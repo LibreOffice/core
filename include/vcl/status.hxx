@@ -93,8 +93,8 @@ private:
     bool                mbProgressMode;
     bool                mbInUserDraw;
     bool                mbAdjustHiDPI;
-    Link                maClickHdl;
-    Link                maDoubleClickHdl;
+    Link<>              maClickHdl;
+    Link<>              maDoubleClickHdl;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void      ImplInit( vcl::Window* pParent, WinBits nStyle );
@@ -198,10 +198,10 @@ public:
 
     Size                CalcWindowSizePixel() const;
 
-    void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
-    const Link&         GetClickHdl() const { return maClickHdl; }
-    void                SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
-    const Link&         GetDoubleClickHdl() const { return maDoubleClickHdl; }
+    void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
+    const Link<>&       GetClickHdl() const { return maClickHdl; }
+    void                SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
+    const Link<>&       GetDoubleClickHdl() const { return maDoubleClickHdl; }
 
     using Window::SetAccessibleName;
     void                SetAccessibleName( sal_uInt16 nItemId, const OUString& rName );

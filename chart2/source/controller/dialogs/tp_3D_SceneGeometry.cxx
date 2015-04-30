@@ -100,8 +100,8 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
     m_pMFZRotation->SetValue(m_nZRotation);
 
     const sal_uLong nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
-    Link aAngleChangedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleChanged ));
-    Link aAngleEditedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleEdited ));
+    Link<> aAngleChangedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleChanged ));
+    Link<> aAngleEditedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleEdited ));
 
     m_pMFXRotation->EnableUpdateData( nTimeout );
     m_pMFXRotation->SetUpdateDataHdl( aAngleChangedLink );

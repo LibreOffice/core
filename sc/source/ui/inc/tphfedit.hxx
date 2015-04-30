@@ -71,7 +71,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     ScHeaderEditEngine*  GetEditEngine() const { return pEdEngine; }
-    void SetObjectSelectHdl( const Link& aLink) { aObjectSelectLink = aLink; }
+    void SetObjectSelectHdl( const Link<>& aLink) { aObjectSelectLink = aLink; }
 
     void SetLocation(ScEditWindowLocation eLoc) { eLocation = eLoc; }
 protected:
@@ -94,7 +94,7 @@ private:
     com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAcc;
     ScAccessibleEditObject* pAcc;
 
-    Link                aObjectSelectLink;
+    Link<>              aObjectSelectLink;
 };
 
 class SC_DLLPUBLIC ScExtIButton : public ImageButton
@@ -103,7 +103,7 @@ private:
 
     Idle            aIdle;
     PopupMenu*      pPopupMenu;
-    Link            aMLink;
+    Link<>          aMLink;
     sal_uInt16      nSelected;
     OString         aSelectedIdent;
 
@@ -126,8 +126,8 @@ public:
     sal_uInt16      GetSelected() const { return nSelected;}
     OString         GetSelectedIdent() const { return aSelectedIdent;}
 
-    void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
-    const Link&     GetMenuHdl() const { return aMLink; }
+    void            SetMenuHdl( const Link<>& rLink ) { aMLink = rLink; }
+    const Link<>&   GetMenuHdl() const { return aMLink; }
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };

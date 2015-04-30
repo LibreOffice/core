@@ -140,7 +140,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCursorRefEdit(vcl::W
     return new ScCursorRefEdit(pParent, nullptr);
 }
 
-void ScCursorRefEdit::SetCursorLinks( const Link& rUp, const Link& rDown )
+void ScCursorRefEdit::SetCursorLinks( const Link<>& rUp, const Link<>& rDown )
 {
     maCursorUpLink = rUp;
     maCursorDownLink = rDown;
@@ -381,7 +381,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     m_pBtnCancel->SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
     m_pBtnSolve->SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
 
-    Link aLink = LINK( this, ScOptSolverDlg, GetFocusHdl );
+    Link<> aLink = LINK( this, ScOptSolverDlg, GetFocusHdl );
     m_pEdObjectiveCell->SetGetFocusHdl( aLink );
     m_pRBObjectiveCell->SetGetFocusHdl( aLink );
     m_pEdTargetValue->SetGetFocusHdl( aLink );
@@ -413,9 +413,9 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
         mpRightButton[nRow]->SetLoseFocusHdl( aLink );
     }
 
-    Link aCursorUp = LINK( this, ScOptSolverDlg, CursorUpHdl );
-    Link aCursorDown = LINK( this, ScOptSolverDlg, CursorDownHdl );
-    Link aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
+    Link<> aCursorUp = LINK( this, ScOptSolverDlg, CursorUpHdl );
+    Link<> aCursorDown = LINK( this, ScOptSolverDlg, CursorDownHdl );
+    Link<> aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         mpLeftEdit[nRow]->SetCursorLinks( aCursorUp, aCursorDown );

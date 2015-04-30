@@ -193,7 +193,7 @@ void ScSimpleRefDlgWrapper::SetRefString(const OUString& rStr)
     }
 }
 
-void ScSimpleRefDlgWrapper::SetCloseHdl( const Link& rLink )
+void ScSimpleRefDlgWrapper::SetCloseHdl( const Link<>& rLink )
 {
     if(pWindow!=nullptr)
     {
@@ -201,8 +201,8 @@ void ScSimpleRefDlgWrapper::SetCloseHdl( const Link& rLink )
     }
 }
 
-void ScSimpleRefDlgWrapper::SetUnoLinks( const Link& rDone,
-                    const Link& rAbort, const Link& rChange )
+void ScSimpleRefDlgWrapper::SetUnoLinks( const Link<>& rDone,
+                    const Link<>& rAbort, const Link<>& rChange )
 {
     if(pWindow!=nullptr)
     {

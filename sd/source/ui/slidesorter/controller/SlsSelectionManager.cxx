@@ -236,8 +236,8 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
             pViewShell->UpdatePreview(pDescriptor->GetPage());
 
         // Tell the selection change listeners that the selection has changed.
-        ::std::vector<Link>::iterator iListener (maSelectionChangeListeners.begin());
-        ::std::vector<Link>::iterator iEnd (maSelectionChangeListeners.end());
+        ::std::vector<Link<>>::iterator iListener (maSelectionChangeListeners.begin());
+        ::std::vector<Link<>>::iterator iEnd (maSelectionChangeListeners.end());
         for (; iListener!=iEnd; ++iListener)
         {
             iListener->Call(NULL);
@@ -249,7 +249,7 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
     }
 }
 
-void SelectionManager::AddSelectionChangeListener (const Link& rListener)
+void SelectionManager::AddSelectionChangeListener (const Link<>& rListener)
 {
     if (::std::find (
         maSelectionChangeListeners.begin(),
@@ -260,7 +260,7 @@ void SelectionManager::AddSelectionChangeListener (const Link& rListener)
     }
 }
 
-void SelectionManager::RemoveSelectionChangeListener(const Link&rListener)
+void SelectionManager::RemoveSelectionChangeListener(const Link<>&rListener)
 {
     maSelectionChangeListeners.erase (
         ::std::find (

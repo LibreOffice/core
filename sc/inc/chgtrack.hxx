@@ -913,7 +913,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeTrackMsgStack   aMsgStackFinal;
     std::set<OUString> maUserCollection;
     OUString maUser;
-    Link                aModifiedLink;
+    Link<>              aModifiedLink;
     ScRange             aInDeleteRange;
     DateTime            aFixDateTime;
     ScChangeAction*     pFirst;
@@ -1200,9 +1200,9 @@ public:
 
                         // If ModifiedLink is set, changes go to
                         // ScChangeTrackMsgQueue
-    void                SetModifiedLink( const Link& r )
+    void                SetModifiedLink( const Link<>& r )
                             { aModifiedLink = r; ClearMsgQueue(); }
-    const Link&         GetModifiedLink() const { return aModifiedLink; }
+    const Link<>&       GetModifiedLink() const { return aModifiedLink; }
     ScChangeTrackMsgQueue& GetMsgQueue();
 
     void                NotifyModified( ScChangeTrackMsgType eMsgType,

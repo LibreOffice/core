@@ -241,10 +241,10 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 class ProcessTerminationWait : public ::osl::Thread
 {
     oslProcess  m_hProcessHandle;
-    Link        m_aFinishHdl;
+    Link<>      m_aFinishHdl;
 
 public:
-    ProcessTerminationWait( oslProcess _hProcessHandle, const Link& _rFinishHdl )
+    ProcessTerminationWait( oslProcess _hProcessHandle, const Link<>& _rFinishHdl )
         :m_hProcessHandle( _hProcessHandle )
         ,m_aFinishHdl( _rFinishHdl )
     {
@@ -262,7 +262,7 @@ protected:
 };
 
 // OOdbcManagement
-OOdbcManagement::OOdbcManagement(const Link& rAsyncFinishCallback)
+OOdbcManagement::OOdbcManagement(const Link<>& rAsyncFinishCallback)
     : m_aAsyncFinishCallback(rAsyncFinishCallback)
 {
 }

@@ -760,7 +760,7 @@ bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWron
     return pImpEditView->IsWrongSpelledWord( aPaM , bMarkIfWrong );
 }
 
-void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
+void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
 {
 
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );

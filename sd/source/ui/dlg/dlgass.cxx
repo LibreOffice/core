@@ -96,7 +96,7 @@ public:
     NextButton (vcl::Window* pParent);
 
     void ForceFocusEventBroadcast();
-    void SetClickHdl (const Link& rLink);
+    void SetClickHdl (const Link<>& rLink);
     bool IsEnabled();
     void Enable (bool bEnable);
 
@@ -109,7 +109,7 @@ private:
 class AssistentDlgImpl : public SfxListener
 {
 public:
-    AssistentDlgImpl( vcl::Window* pWindow, const Link& rFinishLink, bool bAutoPilot  );
+    AssistentDlgImpl( vcl::Window* pWindow, const Link<>& rFinishLink, bool bAutoPilot  );
     virtual ~AssistentDlgImpl();
 
     /// Local mutex used to serialize concurrent method calls.
@@ -318,7 +318,7 @@ public:
 
 };
 
-AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link& rFinishLink, bool bAutoPilot ) :
+AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<>& rFinishLink, bool bAutoPilot ) :
     mpTemplateRegion(NULL),
     mpLayoutRegion(NULL),
     mbUserDataDirty(false),
@@ -1724,7 +1724,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 AssistentDlg::AssistentDlg(vcl::Window* pParent, bool bAutoPilot) :
     ModalDialog(pParent, "Assistent", "modules/simpress/ui/assistentdialog.ui")
 {
-    Link aFinishLink = LINK(this,AssistentDlg, FinishHdl);
+    Link<> aFinishLink = LINK(this,AssistentDlg, FinishHdl);
     mpImpl = new AssistentDlgImpl( this, aFinishLink, bAutoPilot );
 
     // button assigmnent
@@ -1861,7 +1861,7 @@ void NextButton::ForceFocusEventBroadcast()
     }
 }
 
-void NextButton::SetClickHdl (const Link& rLink)
+void NextButton::SetClickHdl (const Link<>& rLink)
 {
     // Forward the setting of the click handler to the two buttons
     // regardless of which one is currently visible.

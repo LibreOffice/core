@@ -48,16 +48,16 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
         return;
 
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link> aCopy( m_aListeners );
-    std::list<Link>::iterator aIter( aCopy.begin() );
-    std::list<Link>::const_iterator aEnd( aCopy.end() );
+    std::list<Link<>> aCopy( m_aListeners );
+    std::list<Link<>>::iterator aIter( aCopy.begin() );
+    std::list<Link<>>::const_iterator aEnd( aCopy.end() );
     if( pEvent->IsA( VclWindowEvent::StaticType() ) )
     {
         VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(pEvent);
         ImplDelData aDel( pWinEvent->GetWindow() );
         while ( aIter != aEnd && ! aDel.IsDead() )
         {
-            Link &rLink = *aIter;
+            Link<> &rLink = *aIter;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( pEvent );
@@ -68,7 +68,7 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     {
         while ( aIter != aEnd )
         {
-            Link &rLink = *aIter;
+            Link<> &rLink = *aIter;
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( pEvent );
             ++aIter;
@@ -83,9 +83,9 @@ bool VclEventListeners::Process( VclSimpleEvent* pEvent ) const
 
     bool bProcessed = false;
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link> aCopy( m_aListeners );
-    std::list<Link>::iterator aIter( aCopy.begin() );
-    std::list<Link>::const_iterator aEnd( aCopy.end() );
+    std::list<Link<>> aCopy( m_aListeners );
+    std::list<Link<>>::iterator aIter( aCopy.begin() );
+    std::list<Link<>>::const_iterator aEnd( aCopy.end() );
     while ( aIter != aEnd )
     {
         if( (*aIter).Call( pEvent ) != 0 )
@@ -98,12 +98,12 @@ bool VclEventListeners::Process( VclSimpleEvent* pEvent ) const
     return bProcessed;
 }
 
-void VclEventListeners::addListener( const Link& rListener )
+void VclEventListeners::addListener( const Link<>& rListener )
 {
     m_aListeners.push_back( rListener );
 }
 
-void VclEventListeners::removeListener( const Link& rListener )
+void VclEventListeners::removeListener( const Link<>& rListener )
 {
     m_aListeners.remove( rListener );
 }
@@ -116,10 +116,10 @@ VclEventListeners2::~VclEventListeners2()
 {
 }
 
-void VclEventListeners2::addListener( const Link& i_rLink )
+void VclEventListeners2::addListener( const Link<>& i_rLink )
 {
     // ensure uniqueness
-    for( std::list< Link >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+    for( std::list< Link<> >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
     {
         if( *it == i_rLink )
             return;
@@ -127,7 +127,7 @@ void VclEventListeners2::addListener( const Link& i_rLink )
     m_aListeners.push_back( i_rLink );
 }
 
-void VclEventListeners2::removeListener( const Link& i_rLink )
+void VclEventListeners2::removeListener( const Link<>& i_rLink )
 {
     size_t n = m_aIterators.size();
     for( size_t i = 0; i < n; i++ )

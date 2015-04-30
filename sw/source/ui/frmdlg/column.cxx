@@ -476,9 +476,9 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     m_pDefaultVS->SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
 
-    Link aCLNrLk = LINK(this, SwColumnPage, ColModify);
+    Link<> aCLNrLk = LINK(this, SwColumnPage, ColModify);
     m_pCLNrEdt->SetModifyHdl(aCLNrLk);
-    Link aLk = LINK(this, SwColumnPage, GapModify);
+    Link<> aLk = LINK(this, SwColumnPage, GapModify);
     aDistEd1.SetModifyHdl(aLk);
     aDistEd2.SetModifyHdl(aLk);
 

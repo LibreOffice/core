@@ -143,7 +143,7 @@ struct ImplHotKey
     ImplHotKey*             mpNext;
     void*                   mpUserData;
     vcl::KeyCode            maKeyCode;
-    Link                    maLink;
+    Link<>                  maLink;
 };
 
 struct ImplEventHook
@@ -641,7 +641,7 @@ void Application::ImplCallEventListeners( VclSimpleEvent* pEvent )
         pSVData->maAppData.mpEventListeners->Call( pEvent );
 }
 
-void Application::AddEventListener( const Link& rEventListener )
+void Application::AddEventListener( const Link<>& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( !pSVData->maAppData.mpEventListeners )
@@ -649,14 +649,14 @@ void Application::AddEventListener( const Link& rEventListener )
     pSVData->maAppData.mpEventListeners->addListener( rEventListener );
 }
 
-void Application::RemoveEventListener( const Link& rEventListener )
+void Application::RemoveEventListener( const Link<>& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpEventListeners )
         pSVData->maAppData.mpEventListeners->removeListener( rEventListener );
 }
 
-void Application::AddKeyListener( const Link& rKeyListener )
+void Application::AddKeyListener( const Link<>& rKeyListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( !pSVData->maAppData.mpKeyListeners )
@@ -664,7 +664,7 @@ void Application::AddKeyListener( const Link& rKeyListener )
     pSVData->maAppData.mpKeyListeners->addListener( rKeyListener );
 }
 
-void Application::RemoveKeyListener( const Link& rKeyListener )
+void Application::RemoveKeyListener( const Link<>& rKeyListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpKeyListeners )
@@ -897,11 +897,11 @@ void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
     }
 }
 
-ImplSVEvent * Application::PostUserEvent( const Link& rLink, void* pCaller )
+ImplSVEvent * Application::PostUserEvent( const Link<>& rLink, void* pCaller )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
-    pSVEvent->mpLink    = new Link( rLink );
+    pSVEvent->mpLink    = new Link<>( rLink );
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = true;
     vcl::Window* pDefWindow = ImplGetDefaultWindow();
@@ -934,7 +934,7 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
     }
 }
 
-bool Application::InsertIdleHdl( const Link& rLink, sal_uInt16 nPrio )
+bool Application::InsertIdleHdl( const Link<>& rLink, sal_uInt16 nPrio )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -945,7 +945,7 @@ bool Application::InsertIdleHdl( const Link& rLink, sal_uInt16 nPrio )
     return pSVData->maAppData.mpIdleMgr->InsertIdleHdl( rLink, nPrio );
 }
 
-void Application::RemoveIdleHdl( const Link& rLink )
+void Application::RemoveIdleHdl( const Link<>& rLink )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -965,7 +965,7 @@ void Application::DisableNoYieldMode()
     pSVData->maAppData.mbNoYield = false;
 }
 
-void Application::AddPostYieldListener( const Link& i_rListener )
+void Application::AddPostYieldListener( const Link<>& i_rListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->maAppData.mpPostYieldListeners )
@@ -973,7 +973,7 @@ void Application::AddPostYieldListener( const Link& i_rListener )
     pSVData->maAppData.mpPostYieldListeners->addListener( i_rListener );
 }
 
-void Application::RemovePostYieldListener( const Link& i_rListener )
+void Application::RemovePostYieldListener( const Link<>& i_rListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpPostYieldListeners )
@@ -1416,7 +1416,7 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
     return pSVData->mxDisplayConnection.get();
 }
 
-void Application::SetFilterHdl( const Link& rLink )
+void Application::SetFilterHdl( const Link<>& rLink )
 {
     ImplGetSVData()->maGDIData.mpGrfConverter->SetFilterHdl( rLink );
 }
@@ -1620,7 +1620,7 @@ Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM 
     return pSVData->mpDefInst->createFolderPicker( xSM );
 }
 
-void Application::setDeInitHook(Link const & hook) {
+void Application::setDeInitHook(Link<> const & hook) {
     ImplSVData * pSVData = ImplGetSVData();
     assert(!pSVData->maDeInitHook.IsSet());
     pSVData->maDeInitHook = hook;

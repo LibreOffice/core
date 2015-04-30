@@ -163,8 +163,8 @@ public:
     void            SetCycleMode( CycleMode eMode );
     CycleMode       GetCycleMode() const { return meCycleMode; }
 
-    void            SetNotifyHdl( const Link& rLink ) { maNotifyLink = rLink; }
-    const Link&     GetNotifyHdl() const { return maNotifyLink; }
+    void            SetNotifyHdl( const Link<>& rLink ) { maNotifyLink = rLink; }
+    const Link<>&   GetNotifyHdl() const { return maNotifyLink; }
 
     size_t          Count() const { return maList.size(); }
     bool            Insert( const AnimationBitmap& rAnimationBitmap );
@@ -196,7 +196,7 @@ public:
     bool            Filter(
                         BmpFilter eFilter,
                         const BmpFilterParam* pFilterParam = NULL,
-                        const Link* pProgress = NULL );
+                        const Link<>* pProgress = NULL );
 
     friend VCL_DLLPUBLIC SvStream& ReadAnimation( SvStream& rIStream, Animation& rAnimation );
     friend VCL_DLLPUBLIC SvStream& WriteAnimation( SvStream& rOStream, const Animation& rAnimation );
@@ -216,7 +216,7 @@ private:
     std::vector< AnimationBitmap* > maList;
     std::vector< ImplAnimView* >    maViewList;
 
-    Link            maNotifyLink;
+    Link<>          maNotifyLink;
     BitmapEx        maBitmapEx;
     Timer           maTimer;
     Size            maGlobalSize;

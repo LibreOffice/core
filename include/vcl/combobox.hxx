@@ -45,8 +45,8 @@ private:
     bool                        mbSyntheticModify   : 1;
     bool                        mbMatchCase         : 1;
     sal_Int32                   m_nMaxWidthChars;
-    Link                        maSelectHdl;
-    Link                        maDoubleClickHdl;
+    Link<>                      maSelectHdl;
+    Link<>                      maDoubleClickHdl;
     boost::signals2::scoped_connection mAutocompleteConnection;
 
     struct ComboBoxBounds
@@ -163,10 +163,10 @@ public:
     void            SetMultiSelectionSeparator( sal_Unicode cSep ) { mcMultiSep = cSep; }
     sal_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
 
-    void            SetSelectHdl( const Link& rLink )       { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const                    { return maSelectHdl; }
-    void            SetDoubleClickHdl( const Link& rLink )  { maDoubleClickHdl = rLink; }
-    const Link&     GetDoubleClickHdl() const               { return maDoubleClickHdl; }
+    void            SetSelectHdl( const Link<>& rLink )     { maSelectHdl = rLink; }
+    const Link<>&   GetSelectHdl() const                    { return maSelectHdl; }
+    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
+    const Link<>&   GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 
     Size            CalcMinimumSize() const SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;

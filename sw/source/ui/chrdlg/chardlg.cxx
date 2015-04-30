@@ -254,7 +254,7 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     OUString sURL = m_pURLED->GetText();
     if(!sURL.isEmpty())
     {
-        sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
+        sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link<>(), false );
         // #i100683# file URLs should be normalized in the UI
         if ( sURL.startsWith("file:") )
             sURL = URIHelper::simpleNormalizedMakeRelative(OUString(), sURL);

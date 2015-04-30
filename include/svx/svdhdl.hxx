@@ -258,7 +258,7 @@ private:
     Color                       aMarkerColor;
 
     // callback link when value changed
-    Link                        aColorChangeHdl;
+    Link<>                      aColorChangeHdl;
 
     // use luminance values only
     bool                        bUseLuminance : 1;
@@ -283,8 +283,8 @@ public:
     const Size& GetSize() const { return aMarkerSize; }
     void SetSize(const Size& rNew);
 
-    void SetColorChangeHdl(const Link& rLink) { aColorChangeHdl = rLink; }
-    const Link& GetColorChangeHdl() const { return aColorChangeHdl; }
+    void SetColorChangeHdl(const Link<>& rLink) { aColorChangeHdl = rLink; }
+    const Link<>& GetColorChangeHdl() const { return aColorChangeHdl; }
 };
 
 

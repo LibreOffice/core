@@ -350,9 +350,9 @@ private:
     bool            mbHasInsertTab : 1; // if true, the tab bar has an extra tab at the end.
     bool            mbScrollAlwaysEnabled : 1;
 
-    Link            maSelectHdl;
-    Link            maSplitHdl;
-    Link            maScrollAreaContextHdl;
+    Link<>          maSelectHdl;
+    Link<>          maSplitHdl;
+    Link<>          maScrollAreaContextHdl;
     size_t          maCurrentItemList;
 
     using Window::ImplInit;
@@ -508,9 +508,9 @@ public:
 
     Size            CalcWindowSizePixel() const;
 
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    void            SetSplitHdl( const Link& rLink ) { maSplitHdl = rLink; }
-    void            SetScrollAreaContextHdl( const Link& rLink ) { maScrollAreaContextHdl = rLink; }
+    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    void            SetSplitHdl( const Link<>& rLink ) { maSplitHdl = rLink; }
+    void            SetScrollAreaContextHdl( const Link<>& rLink ) { maScrollAreaContextHdl = rLink; }
 
     // accessibility
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;

@@ -151,22 +151,22 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     get(m_pColumnsEdit, "columnssb");
     get(m_pBookModeChk, "bookmode");
     get(m_pOKBtn, "ok");
-    Link aLink = LINK(this, SvxZoomDialog, UserHdl);
+    Link<> aLink = LINK(this, SvxZoomDialog, UserHdl);
     m_p100Btn->SetClickHdl(aLink);
     m_pOptimalBtn->SetClickHdl(aLink);
     m_pPageWidthBtn->SetClickHdl(aLink);
     m_pWholePageBtn->SetClickHdl(aLink);
     m_pUserBtn->SetClickHdl(aLink);
 
-    Link aViewLayoutLink = LINK(this, SvxZoomDialog, ViewLayoutUserHdl);
+    Link<> aViewLayoutLink = LINK(this, SvxZoomDialog, ViewLayoutUserHdl);
     m_pAutomaticBtn->SetClickHdl(aViewLayoutLink);
     m_pSingleBtn->SetClickHdl(aViewLayoutLink);
     m_pColumnsBtn->SetClickHdl(aViewLayoutLink);
 
-    Link aViewLayoutSpinLink = LINK(this, SvxZoomDialog, ViewLayoutSpinHdl);
+    Link<> aViewLayoutSpinLink = LINK(this, SvxZoomDialog, ViewLayoutSpinHdl);
     m_pColumnsEdit->SetModifyHdl(aViewLayoutSpinLink);
 
-    Link aViewLayoutCheckLink = LINK(this, SvxZoomDialog, ViewLayoutCheckHdl);
+    Link<> aViewLayoutCheckLink = LINK(this, SvxZoomDialog, ViewLayoutCheckHdl);
     m_pBookModeChk->SetClickHdl(aViewLayoutCheckLink);
 
     m_pOKBtn->SetClickHdl(LINK(this, SvxZoomDialog, OKHdl));

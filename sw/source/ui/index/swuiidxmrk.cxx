@@ -992,7 +992,7 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
 
     VclPtr<OKButton>       m_pOKBT;
 
-    Link            aShortNameCheckLink;
+    Link<>          aShortNameCheckLink;
 
     SwWrtShell&     rWrtSh;
 
@@ -1014,7 +1014,7 @@ public:
 
     OUString        GetEntryText(ToxAuthorityField eField) const;
 
-    void            SetCheckNameHdl(const Link& rLink) {aShortNameCheckLink = rLink;}
+    void            SetCheckNameHdl(const Link<>& rLink) {aShortNameCheckLink = rLink;}
 
 };
 
@@ -1347,7 +1347,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
 
 IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)
 {
-    Link aAllowed = LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl);
+    Link<> aAllowed = LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl);
     long nResult = aAllowed.Call(pEdit);
     m_pActionBT->Enable(nResult > 0);
     if(nResult)

@@ -42,7 +42,7 @@ ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree, sal_Int16 nMode ) 
 {
 }
 
-void ScLinkConfigItem::SetCommitLink( const Link& rLink )
+void ScLinkConfigItem::SetCommitLink( const Link<>& rLink )
 {
     aCommitLink = rLink;
 }

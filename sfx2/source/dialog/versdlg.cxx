@@ -215,7 +215,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
 
     m_pVersionBox = VclPtr<SfxVersionsTabListBox_Impl>::Create(*pContainer, WB_TABSTOP);
 
-    Link aClickLink = LINK( this, SfxVersionDialog, ButtonHdl_Impl );
+    Link<> aClickLink = LINK( this, SfxVersionDialog, ButtonHdl_Impl );
     m_pViewButton->SetClickHdl ( aClickLink );
     m_pSaveButton->SetClickHdl ( aClickLink );
     m_pDeleteButton->SetClickHdl ( aClickLink );

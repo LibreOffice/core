@@ -22,6 +22,7 @@
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
 #include <tools/gen.hxx>
+#include <tools/link.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 
@@ -32,7 +33,6 @@
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
 
-class Link;
 class SvtMenuOptions_Impl;
 
 /*-************************************************************************************************************
@@ -58,8 +58,8 @@ class SVT_DLLPUBLIC SAL_WARN_UNUSED SvtMenuOptions: public utl::detail::Options
          SvtMenuOptions();
         virtual ~SvtMenuOptions();
 
-        void AddListenerLink( const Link& rLink );
-        void RemoveListenerLink( const Link& rLink );
+        void AddListenerLink( const Link<>& rLink );
+        void RemoveListenerLink( const Link<>& rLink );
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Menu/..."

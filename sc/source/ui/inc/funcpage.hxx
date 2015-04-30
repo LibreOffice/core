@@ -52,8 +52,8 @@ class ScFuncPage : public TabPage
 {
 private:
 
-    Link            aDoubleClickLink;
-    Link            aSelectionLink;
+    Link<>          aDoubleClickLink;
+    Link<>          aSelectionLink;
     FixedText       aFtCategory;
     ListBox         aLbCategory;
     FixedText       aFtFunction;
@@ -85,11 +85,11 @@ public:
     const ScFuncDesc*   GetFuncDesc( sal_uInt16 nPos ) const;
     OUString        GetSelFunctionName() const;
 
-    void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClickLink = rLink; }
-    const Link&     GetDoubleClickHdl() const { return aDoubleClickLink; }
+    void            SetDoubleClickHdl( const Link<>& rLink ) { aDoubleClickLink = rLink; }
+    const Link<>&   GetDoubleClickHdl() const { return aDoubleClickLink; }
 
-    void            SetSelectHdl( const Link& rLink ) { aSelectionLink = rLink; }
-    const Link&     GetSelectHdl() const { return aSelectionLink; }
+    void            SetSelectHdl( const Link<>& rLink ) { aSelectionLink = rLink; }
+    const Link<>&   GetSelectHdl() const { return aSelectionLink; }
 
 };
 

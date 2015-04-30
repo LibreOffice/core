@@ -258,7 +258,7 @@ class SW_DLLPUBLIC SwDoc :
     ::boost::scoped_ptr<SwNodes> m_pNodes;  //< document content (Nodes Array)
     SwAttrPool* mpAttrPool;             //< the attribute pool
     SwPageDescs maPageDescs;             //< PageDescriptors
-    Link        maOle2Link;              //< OLE 2.0-notification
+    Link<>      maOle2Link;              //< OLE 2.0-notification
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
@@ -1361,8 +1361,8 @@ public:
     ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
 
     // OLE 2.0-notification.
-    inline       void  SetOle2Link(const Link& rLink) {maOle2Link = rLink;}
-    inline const Link& GetOle2Link() const {return maOle2Link;}
+    inline       void  SetOle2Link(const Link<>& rLink) {maOle2Link = rLink;}
+    inline const Link<>& GetOle2Link() const {return maOle2Link;}
 
     // insert section (the ODF kind of section, not the nodesarray kind)
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
@@ -1439,7 +1439,7 @@ public:
     // Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                         bool bChkPtr = false, SbxArray* pArgs = 0,
-                        const Link* pCallBack = 0 );
+                        const Link<>* pCallBack = 0 );
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or subtracting a given

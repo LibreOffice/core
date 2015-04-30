@@ -71,7 +71,7 @@ class StructPage : public TabPage
 {
 private:
     OModuleClient   m_aModuleClient;
-    Link            aSelLink;
+    Link<>          aSelLink;
 
     VclPtr<StructListBox>   m_pTlbStruct;
     Image           maImgEnd;
@@ -100,8 +100,8 @@ public:
     virtual OUString            GetEntryText(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
     virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
 
-    void            SetSelectionHdl( const Link& rLink ) { aSelLink = rLink; }
-    const Link&     GetSelectionHdl() const { return aSelLink; }
+    void            SetSelectionHdl( const Link<>& rLink ) { aSelLink = rLink; }
+    const Link<>&   GetSelectionHdl() const { return aSelLink; }
 };
 
 } // formula

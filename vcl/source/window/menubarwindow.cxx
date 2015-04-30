@@ -1080,7 +1080,7 @@ void MenuBarWindow::GetFocus()
     return xAcc;
 }
 
-sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, const OUString& i_rToolTip, sal_uInt16 i_nPos )
+sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<>& i_rLink, const OUString& i_rToolTip, sal_uInt16 i_nPos )
 {
     // find first free button id
     sal_uInt16 nId = IID_DOCUMENTCLOSE;
@@ -1107,7 +1107,7 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link& i
     return nId;
 }
 
-void MenuBarWindow::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& rLink )
+void MenuBarWindow::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<>& rLink )
 {
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( nId );
     if( it != m_aAddButtons.end() )

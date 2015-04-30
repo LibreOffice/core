@@ -931,7 +931,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
                     //after end execute from !IsModalInputMode, it is safer to delay deleting
                     //delete pDlg;
-                    Application::PostUserEvent( Link( pDlg, &DelayDeleteAbstractDialog ) );
+                    Application::PostUserEvent( Link<>( pDlg, &DelayDeleteAbstractDialog ) );
                 }
             }
             break;

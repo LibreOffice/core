@@ -203,7 +203,7 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
     // windows to be disabled, if stacked text is turned OFF
     m_pOrientHlp->AddDependentWindow( *m_pCbAsianMode,  TRISTATE_FALSE );
 
-    Link aLink = LINK( this, AlignmentTabPage, UpdateEnableHdl );
+    Link<> aLink = LINK( this, AlignmentTabPage, UpdateEnableHdl );
 
     m_pLbHorAlign->SetSelectHdl( aLink );
     m_pBtnWrap->SetClickHdl( aLink );

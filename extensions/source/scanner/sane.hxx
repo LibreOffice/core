@@ -96,7 +96,7 @@ private:
     int                             mnDevice;
     SANE_Handle                     maHandle;
 
-    Link                        maReloadOptionsLink;
+    Link<>                      maReloadOptionsLink;
 
     static inline oslGenericFunction
                     LoadSymbol( const char* );
@@ -168,7 +168,7 @@ public:
 
     bool            Start( BitmapTransporter& );
 
-    inline Link     SetReloadOptionsHdl( const Link& rLink );
+    inline Link<>   SetReloadOptionsHdl( const Link<>& rLink );
 };
 
 inline int Sane::GetOptionElements( int n )
@@ -181,9 +181,9 @@ inline int Sane::GetOptionElements( int n )
     return 1;
 }
 
-inline Link Sane::SetReloadOptionsHdl( const Link& rLink )
+inline Link<> Sane::SetReloadOptionsHdl( const Link<>& rLink )
 {
-    Link aRet = maReloadOptionsLink;
+    Link<> aRet = maReloadOptionsLink;
     maReloadOptionsLink = rLink;
     return aRet;
 }

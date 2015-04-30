@@ -713,7 +713,7 @@ ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
 ScAccessibleCellTextData::~ScAccessibleCellTextData()
 {
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl(Link());
+        pEditEngine->SetNotifyHdl(Link<>());
     if (mpViewForwarder)
         delete mpViewForwarder;
     if (mpEditViewForwarder)
@@ -972,7 +972,7 @@ ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
 {
     // If the object is cloned, do NOT set notify hdl.
     if (mpEditEngine && !mbIsCloned)
-        mpEditEngine->SetNotifyHdl(Link());
+        mpEditEngine->SetNotifyHdl(Link<>());
     if (mpViewForwarder)
         delete mpViewForwarder;
     if (mpEditViewForwarder)
@@ -1088,7 +1088,7 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
         //  the NotifyHdl also has to be removed from the ScTextWnd's EditEngine
         //  (it's set in ScAccessibleEditLineTextData::GetTextForwarder, and mpEditEngine
         //  is reset there)
-        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link());
+        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<>());
     }
 }
 
@@ -1183,7 +1183,7 @@ void ScAccessibleEditLineTextData::ResetEditMode()
     if (mbEditEngineCreated && mpEditEngine)
         delete mpEditEngine;
     else if (pTxtWnd && pTxtWnd->GetEditView() && pTxtWnd->GetEditView()->GetEditEngine())
-        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link());
+        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<>());
     mpEditEngine = NULL;
 
     DELETEZ(mpForwarder);
@@ -1236,7 +1236,7 @@ ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell*
 ScAccessiblePreviewCellTextData::~ScAccessiblePreviewCellTextData()
 {
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl(Link());
+        pEditEngine->SetNotifyHdl(Link<>());
     if (mpViewForwarder)
         delete mpViewForwarder;
 }
@@ -1314,7 +1314,7 @@ ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScP
 ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
 {
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl(Link());
+        pEditEngine->SetNotifyHdl(Link<>());
     if (mpViewForwarder)
         delete mpViewForwarder;
 }
@@ -1432,7 +1432,7 @@ ScAccessibleHeaderTextData::~ScAccessibleHeaderTextData()
     if (mpDocSh)
         mpDocSh->GetDocument().RemoveUnoObject(*this);
     if (mpEditEngine)
-        mpEditEngine->SetNotifyHdl(Link());
+        mpEditEngine->SetNotifyHdl(Link<>());
     delete mpEditEngine;
     delete mpForwarder;
 }
@@ -1547,7 +1547,7 @@ ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
     if (mpDocSh)
         mpDocSh->GetDocument().RemoveUnoObject(*this);
     if (mpEditEngine)
-        mpEditEngine->SetNotifyHdl(Link());
+        mpEditEngine->SetNotifyHdl(Link<>());
     delete mpEditEngine;
     delete mpForwarder;
 }

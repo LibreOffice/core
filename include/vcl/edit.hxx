@@ -94,8 +94,8 @@ private:
                         mbIsSubEdit:1,
                         mbInMBDown:1,
                         mbActivePopup:1;
-    Link                maModifyHdl;
-    Link                maUpdateDataHdl;
+    Link<>              maModifyHdl;
+    Link<>              maUpdateDataHdl;
 
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
 
@@ -233,9 +233,9 @@ public:
     const OUString&     GetSavedValue() const { return maSaveValue; }
     bool                IsValueChangedFromSaved() const { return maSaveValue != GetText(); }
 
-    virtual void        SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
-    virtual const Link& GetModifyHdl() const { return maModifyHdl; }
-    virtual void        SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
+    virtual void        SetModifyHdl( const Link<>& rLink ) { maModifyHdl = rLink; }
+    virtual const Link<>& GetModifyHdl() const { return maModifyHdl; }
+    virtual void        SetUpdateDataHdl( const Link<>& rLink ) { maUpdateDataHdl = rLink; }
 
     void                SetSubEdit( Edit* pEdit );
     Edit*               GetSubEdit() const { return mpSubEdit; }

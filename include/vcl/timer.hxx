@@ -26,7 +26,7 @@
 class VCL_DLLPUBLIC Timer : public Scheduler
 {
 protected:
-    Link            maTimeoutHdl;          // Callback Link
+    Link<>          maTimeoutHdl;          // Callback Link
     sal_uInt64      mnTimeout;
     bool            mbAuto;
 
@@ -43,8 +43,8 @@ public:
 
     /// Make it possible to associate a callback with this timer handler
     /// of course, you can also sub-class and override 'Invoke'
-    void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
-    const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
+    void            SetTimeoutHdl( const Link<>& rLink ) { maTimeoutHdl = rLink; }
+    const Link<>&   GetTimeoutHdl() const { return maTimeoutHdl; }
     void            SetTimeout( sal_uInt64 nTimeoutMs );
     sal_uInt64      GetTimeout() const { return mnTimeout; }
     virtual void    Invoke() SAL_OVERRIDE;

@@ -337,14 +337,14 @@ sal_uLong Validator::FindUnrefedChains()
         return FAT_OK;
 }
 
-namespace { struct ErrorLink : public rtl::Static<Link, ErrorLink > {}; }
+namespace { struct ErrorLink : public rtl::Static<Link<>, ErrorLink > {}; }
 
-void StgIo::SetErrorLink( const Link& rLink )
+void StgIo::SetErrorLink( const Link<>& rLink )
 {
     ErrorLink::get() = rLink;
 }
 
-const Link& StgIo::GetErrorLink()
+const Link<>& StgIo::GetErrorLink()
 {
     return ErrorLink::get();
 }

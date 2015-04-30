@@ -2719,7 +2719,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
     }
     m_pAlign2LB->SetDropDownLineCount( m_pAlign2LB->GetEntryCount() );
 
-    Link aLk = LINK(this, SvxNumPositionTabPage, DistanceHdl_Impl);
+    Link<> aLk = LINK(this, SvxNumPositionTabPage, DistanceHdl_Impl);
 
     m_pDistBorderMF->SetUpHdl(aLk);
     m_pDistBorderMF->SetDownHdl(aLk);

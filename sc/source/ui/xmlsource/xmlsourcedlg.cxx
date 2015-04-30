@@ -94,12 +94,12 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maXMLParam.maImgElementRepeat = Image(ScResId(IMG_ELEMENT_REPEAT));
     maXMLParam.maImgAttribute = Image(ScResId(IMG_ELEMENT_ATTRIBUTE));
 
-    Link aBtnHdl = LINK(this, ScXMLSourceDlg, BtnPressedHdl);
+    Link<> aBtnHdl = LINK(this, ScXMLSourceDlg, BtnPressedHdl);
     mpBtnSelectSource->SetClickHdl(aBtnHdl);
     mpBtnOk->SetClickHdl(aBtnHdl);
     mpBtnCancel->SetClickHdl(aBtnHdl);
 
-    Link aLink = LINK(this, ScXMLSourceDlg, GetFocusHdl);
+    Link<> aLink = LINK(this, ScXMLSourceDlg, GetFocusHdl);
     mpRefEdit->SetGetFocusHdl(aLink);
     mpRefBtn->SetGetFocusHdl(aLink);
 

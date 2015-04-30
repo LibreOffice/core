@@ -36,12 +36,12 @@ namespace com { namespace sun { namespace star {
 
 class ScCursorRefEdit : public formula::RefEdit
 {
-    Link    maCursorUpLink;
-    Link    maCursorDownLink;
+    Link<>  maCursorUpLink;
+    Link<>  maCursorDownLink;
 
 public:
             ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel );
-    void    SetCursorLinks( const Link& rUp, const Link& rDown );
+    void    SetCursorLinks( const Link<>& rUp, const Link<>& rDown );
 
 protected:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

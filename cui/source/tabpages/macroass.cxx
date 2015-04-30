@@ -369,7 +369,7 @@ void _SfxMacroTabPage::InitAndSetHandler()
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     HeaderBar&          rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link                aLnk(LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
+    Link<>              aLnk(LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pMacroLB->SetDoubleClickHdl( aLnk );
     mpImpl->pDeletePB->SetClickHdl( aLnk );
     mpImpl->pAssignPB->SetClickHdl( aLnk );

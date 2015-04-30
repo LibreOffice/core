@@ -41,8 +41,8 @@ private:
     PopupMenu*      mpMenu;
     sal_uInt16      mnCurItemId;
     sal_uInt16      mnMenuMode;
-    Link            maActivateHdl;
-    Link            maSelectHdl;
+    Link<>          maActivateHdl;
+    Link<>          maSelectHdl;
 
     SAL_DLLPRIVATE void    ImplInitMenuButtonData();
     DECL_DLLPRIVATE_LINK(  ImplMenuTimeoutHdl, void* );
@@ -77,10 +77,10 @@ public:
     OString         GetCurItemIdent() const;
     void            SetCurItemId( sal_uInt16 nItemId ) { mnCurItemId = nItemId; }
 
-    void            SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
-    const Link&     GetActivateHdl() const              { return maActivateHdl; }
-    void            SetSelectHdl( const Link& rLink )   { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const                { return maSelectHdl; }
+    void            SetActivateHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
+    const Link<>&   GetActivateHdl() const              { return maActivateHdl; }
+    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    const Link<>&   GetSelectHdl() const                { return maSelectHdl; }
 };
 
 #endif // INCLUDED_VCL_MENUBTN_HXX

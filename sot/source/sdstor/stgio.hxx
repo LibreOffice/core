@@ -64,8 +64,8 @@ public:
     bool Init();                    // set up an empty file
     bool CommitAll();               // commit everything (root commit)
 
-    static void SetErrorLink( const Link& );
-    static const Link& GetErrorLink();
+    static void SetErrorLink( const Link<>& );
+    static const Link<>& GetErrorLink();
     sal_uLong ValidateFATs( );
 };
 

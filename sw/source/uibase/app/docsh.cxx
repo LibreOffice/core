@@ -460,8 +460,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // (for OLE; after Statement from MM)
         bool bIsModified = m_pDoc->getIDocumentState().IsModified();
         m_pDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
-        Link aOldOLELnk( m_pDoc->GetOle2Link() );
-        m_pDoc->SetOle2Link( Link() );
+        Link<> aOldOLELnk( m_pDoc->GetOle2Link() );
+        m_pDoc->SetOle2Link( Link<>() );
 
             // Suppress SfxProgress when we are Embedded
         SW_MOD()->SetEmbeddedLoadSave(

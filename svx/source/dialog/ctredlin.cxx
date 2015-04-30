@@ -387,7 +387,7 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     pTable->set_height_request(aControlSize.Height());
     m_pViewData = VclPtr<SvxRedlinTable>::Create(*pTable, 0);
 
-    Link aLink=LINK( this, SvxTPView, PbClickHdl);
+    Link<> aLink=LINK( this, SvxTPView, PbClickHdl);
 
     m_pAccept->SetClickHdl(aLink);
     m_pAcceptAll->SetClickHdl(aLink);
@@ -566,20 +566,20 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     m_pIbClock2->SetClickHdl( LINK( this, SvxTPFilter,TimeHdl) );
     m_pBtnRange->SetClickHdl( LINK( this, SvxTPFilter, RefHandle));
 
-    Link aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
+    Link<> aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
     m_pCbDate->SetClickHdl(aLink);
     m_pCbAuthor->SetClickHdl(aLink);
     m_pCbRange->SetClickHdl(aLink);
     m_pCbAction->SetClickHdl(aLink);
     m_pCbComment->SetClickHdl(aLink);
 
-    Link a2Link=LINK( this, SvxTPFilter, ModifyDate);
+    Link<> a2Link=LINK( this, SvxTPFilter, ModifyDate);
     m_pDfDate->SetModifyHdl(a2Link);
     m_pTfDate->SetModifyHdl(a2Link);
     m_pDfDate2->SetModifyHdl(a2Link);
     m_pTfDate2->SetModifyHdl(a2Link);
 
-    Link a3Link=LINK( this, SvxTPFilter, ModifyHdl);
+    Link<> a3Link=LINK( this, SvxTPFilter, ModifyHdl);
     m_pEdRange->SetModifyHdl(a3Link);
     m_pEdComment->SetModifyHdl(a3Link);
     m_pLbAction->SetSelectHdl(a3Link);

@@ -496,7 +496,7 @@ namespace svx
         return 0L;
     }
 
-    void SuggestionDisplay::SetSelectHdl( const Link& rLink )
+    void SuggestionDisplay::SetSelectHdl( const Link<>& rLink )
     {
         m_aSelectLink = rLink;
     }
@@ -656,43 +656,43 @@ namespace svx
     }
 
 
-    void HangulHanjaConversionDialog::SetOptionsChangedHdl( const Link& _rHdl )
+    void HangulHanjaConversionDialog::SetOptionsChangedHdl( const Link<>& _rHdl )
     {
         m_aOptionsChangedLink = _rHdl;
     }
 
 
-    void HangulHanjaConversionDialog::SetIgnoreHdl( const Link& _rHdl )
+    void HangulHanjaConversionDialog::SetIgnoreHdl( const Link<>& _rHdl )
     {
         m_pIgnore->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetIgnoreAllHdl( const Link& _rHdl )
+    void HangulHanjaConversionDialog::SetIgnoreAllHdl( const Link<>& _rHdl )
     {
         m_pIgnoreAll->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetChangeHdl( const Link& _rHdl )
+    void HangulHanjaConversionDialog::SetChangeHdl( const Link<>& _rHdl )
     {
         m_pReplace->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetChangeAllHdl( const Link& _rHdl )
+    void HangulHanjaConversionDialog::SetChangeAllHdl( const Link<>& _rHdl )
     {
         m_pReplaceAll->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetFindHdl( const Link& _rHdl )
+    void HangulHanjaConversionDialog::SetFindHdl( const Link<>& _rHdl )
     {
         m_pFind->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link& _rHdl )
+    void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link<>& _rHdl )
     {
         m_pSimpleConversion->SetClickHdl( _rHdl );
         m_pHangulBracketed->SetClickHdl( _rHdl );
@@ -704,7 +704,7 @@ namespace svx
     }
 
 
-    void HangulHanjaConversionDialog::SetClickByCharacterHdl( const Link& _rHdl )
+    void HangulHanjaConversionDialog::SetClickByCharacterHdl( const Link<>& _rHdl )
     {
         m_aClickByCharacterLink = _rHdl;
     }
@@ -1408,7 +1408,7 @@ namespace svx
 
     void SuggestionEdit::DoJump( bool _bUp )
     {
-        const Link&     rLoseFocusHdl = GetLoseFocusHdl();
+        const Link<>&   rLoseFocusHdl = GetLoseFocusHdl();
         if( rLoseFocusHdl.IsSet() )
             rLoseFocusHdl.Call( this );
         m_pScrollBar->SetThumbPos( m_pScrollBar->GetThumbPos() + ( _bUp? -1 : 1 ) );
@@ -1815,7 +1815,7 @@ namespace svx
         #error number of suggestions should not under-run the value of 5
     #endif
 
-        Link    aScrLk( LINK( this, HangulHanjaEditDictDialog, ScrollHdl ) );
+        Link<>  aScrLk( LINK( this, HangulHanjaEditDictDialog, ScrollHdl ) );
         m_aScrollSB->SetScrollHdl( aScrLk );
         m_aScrollSB->SetEndScrollHdl( aScrLk );
         m_aScrollSB->SetRangeMin( 0 );

@@ -208,8 +208,8 @@ private:
     VclPtr<vcl::Window>     mpViewWindow;
     sal_uInt16              mnCurLevel;
     WindowAlign         meViewAlign;
-    Link                maActivateHdl;
-    Link                maDeactivateHdl;
+    Link<>              maActivateHdl;
+    Link<>              maDeactivateHdl;
     sal_Int16           mnLeftAlignCount;
     bool                mbEmptyViewMargin;
 
@@ -280,10 +280,10 @@ public:
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
     const Size&         GetPageSizePixel() const { return maPageSize; }
 
-    void                SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }
-    const Link&         GetActivatePageHdl() const { return maActivateHdl; }
-    void                SetDeactivatePageHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
-    const Link&         GetDeactivatePageHdl() const { return maDeactivateHdl; }
+    void                SetActivatePageHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
+    const Link<>&       GetActivatePageHdl() const { return maActivateHdl; }
+    void                SetDeactivatePageHdl( const Link<>& rLink ) { maDeactivateHdl = rLink; }
+    const Link<>&       GetDeactivatePageHdl() const { return maDeactivateHdl; }
 };
 
 #endif // INCLUDED_SVTOOLS_WIZDLG_HXX

@@ -143,7 +143,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     m_pCbxSynchronize->SetClickHdl(  LINK( this, SvxLineDefTabPage, ChangeMetricHdl_Impl ) );
 
     // preview must be updated when there's something changed
-    Link aLink = LINK( this, SvxLineDefTabPage, SelectTypeHdl_Impl );
+    Link<> aLink = LINK( this, SvxLineDefTabPage, SelectTypeHdl_Impl );
     m_pLbType1->SetSelectHdl( aLink );
     m_pLbType2->SetSelectHdl( aLink );
     aLink = LINK( this, SvxLineDefTabPage, ChangePreviewHdl_Impl );

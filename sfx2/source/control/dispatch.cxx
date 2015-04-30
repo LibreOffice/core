@@ -376,7 +376,7 @@ SfxDispatcher::~SfxDispatcher()
 
     // So that no timer by Reschedule in PlugComm strikes the LeaveRegistrations
     xImp->aIdle.Stop();
-    xImp->xPoster->SetEventHdl( Link() );
+    xImp->xPoster->SetEventHdl( Link<>() );
 
     // Notify the stack varialbles in Call_Impl
     if ( xImp->pInCallAliveFlag )

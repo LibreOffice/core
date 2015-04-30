@@ -97,7 +97,7 @@ void AlignmentPropertyPanel::Initialize()
     mpFTLeftIndent->Disable();
     mpMFLeftIndent->Disable();
     mpMFLeftIndent->SetAccessibleName(OUString( "Left Indent"));    //wj acc
-    Link aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
+    Link<> aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
     mpMFLeftIndent->SetModifyHdl ( aLink );
 
     aLink = LINK(this, AlignmentPropertyPanel, CBOXMergnCellClkHdl);

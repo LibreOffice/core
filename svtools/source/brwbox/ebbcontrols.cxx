@@ -130,7 +130,7 @@ namespace svt
         GetComboBox().SaveValue();
     }
 
-    void ComboBoxCellController::SetModifyHdl(const Link& rLink)
+    void ComboBoxCellController::SetModifyHdl(const Link<>& rLink)
     {
         GetComboBox().SetModifyHdl(rLink);
     }
@@ -215,7 +215,7 @@ namespace svt
     }
 
 
-    void ListBoxCellController::SetModifyHdl(const Link& rLink)
+    void ListBoxCellController::SetModifyHdl(const Link<>& rLink)
     {
         GetListBox().SetSelectHdl(rLink);
     }
@@ -352,7 +352,7 @@ namespace svt
     }
 
 
-    void CheckBoxCellController::SetModifyHdl(const Link& rLink)
+    void CheckBoxCellController::SetModifyHdl(const Link<>& rLink)
     {
         static_cast<CheckBoxControl &>(GetWindow()).SetModifyHdl(rLink);
     }
@@ -441,7 +441,7 @@ namespace svt
     }
 
 
-    void EditCellController::SetModifyHdl(const Link& rLink)
+    void EditCellController::SetModifyHdl(const Link<>& rLink)
     {
         m_pEditImplementation->SetModifyHdl(rLink);
     }
@@ -498,7 +498,7 @@ namespace svt
     }
 
 
-    void SpinCellController::SetModifyHdl(const Link& rLink)
+    void SpinCellController::SetModifyHdl(const Link<>& rLink)
     {
         GetSpinWindow().SetModifyHdl(rLink);
     }

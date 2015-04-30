@@ -184,7 +184,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 ScPreviewShell::~ScPreviewShell()
 {
     if (mpFrameWindow)
-        mpFrameWindow->SetCloseHdl(Link()); // Remove close handler.
+        mpFrameWindow->SetCloseHdl(Link<>()); // Remove close handler.
 
     // #108333#; notify Accessibility that Shell is dying and before destroy all
     BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DYING ) );

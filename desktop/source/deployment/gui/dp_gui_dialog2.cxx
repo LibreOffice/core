@@ -659,7 +659,7 @@ bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
     return true;
 }
 
-void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
+void DialogHelper::PostUserEvent( const Link<>& rLink, void* pCaller )
 {
     if ( m_nEventID )
         Application::RemoveUserEvent( m_nEventID );

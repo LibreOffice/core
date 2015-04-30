@@ -305,7 +305,7 @@ protected:
         ::com::sun::star::accessibility::XAccessible>
         mxAccessibleOLEObject;
 
-    Link maWindowLink;
+    Link<> maWindowLink;
 
     // This method is called from the component helper base class while
     // disposing.

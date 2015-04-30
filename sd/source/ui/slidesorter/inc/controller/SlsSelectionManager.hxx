@@ -24,10 +24,10 @@
 #include "controller/SlsAnimator.hxx"
 #include <sal/types.h>
 #include <tools/gen.hxx>
+#include <tools/link.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <vector>
 
-class Link;
 class SdPage;
 
 namespace sd { namespace slidesorter {
@@ -78,7 +78,7 @@ public:
             the second and all following calls are ignored.  Each listener
             is added only once.
     */
-    void AddSelectionChangeListener (const Link& rListener);
+    void AddSelectionChangeListener (const Link<>& rListener);
 
     /** Remove a listener that was called when the selection of the slide
         sorter changes.
@@ -86,7 +86,7 @@ public:
             It is save to pass a listener that was not added are has been
             removed previously.  Such calls are ignored.
     */
-    void RemoveSelectionChangeListener (const Link& rListener);
+    void RemoveSelectionChangeListener (const Link<>& rListener);
 
     /** Return the position where to insert pasted slides based on the
         current selection.  When there is a selection then the insert
@@ -109,7 +109,7 @@ private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
-    ::std::vector<Link> maSelectionChangeListeners;
+    ::std::vector<Link<>> maSelectionChangeListeners;
 
     /** This array stores the indices of the  selected page descriptors at
         the time when the edit mode is switched to EM_MASTERPAGE.  With this

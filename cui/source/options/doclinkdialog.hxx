@@ -47,7 +47,7 @@ namespace svx
 
         bool                m_bCreatingNew;
 
-        Link                    m_aNameValidator;
+        Link<>                  m_aNameValidator;
 
     public:
         ODocumentLinkDialog( vcl::Window* _pParent, bool _bCreateNew );
@@ -57,8 +57,8 @@ namespace svx
         // name validation has to be done by an external instance
         // the validator link gets a pointer to a String, and should return 0 if the string is not
         // acceptable
-        void    setNameValidator( const Link& _rValidator ) { m_aNameValidator = _rValidator; }
-        Link    getNameValidator( ) const { return m_aNameValidator; }
+        void    setNameValidator( const Link<>& _rValidator ) { m_aNameValidator = _rValidator; }
+        Link<>  getNameValidator( ) const { return m_aNameValidator; }
 
         void    setLink( const  OUString& _rName, const   OUString& _rURL );
         void    getLink(        OUString& _rName,         OUString& _rURL ) const;

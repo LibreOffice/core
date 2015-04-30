@@ -199,7 +199,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             {
                 aBulletSrc = rOption.GetString();
                 if( !InternalImgToPrivateURL(aBulletSrc) )
-                    aBulletSrc = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), aBulletSrc, Link(), false );
+                    aBulletSrc = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), aBulletSrc, Link<>(), false );
             }
             break;
         case HTML_O_WIDTH:

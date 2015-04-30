@@ -178,7 +178,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 public:
-    void SetLinks (Link const&, Link const&, Link const&);
+    void SetLinks (Link<> const&, Link<> const&, Link<> const&);
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ScrollHdl(const ScrollBar&);
@@ -219,7 +219,7 @@ private:
         void SetAppearance(Wallpaper const& aTextWall, ColorListBox const& aSampleList);
         void SetTextColor (Color C) { m_pText->SetTextColor(C); }
     public:
-        void SetLinks (Link const&, Link const&, Link const&);
+        void SetLinks (Link<> const&, Link<> const&, Link<> const&);
         void Update (ColorConfigEntry, ColorConfigValue const&);
         void Update (ExtendedColorConfigValue const&);
         void ColorChanged (ColorConfigEntry, ColorConfigValue&);
@@ -409,8 +409,8 @@ void ColorConfigWindow_Impl::Entry::SetAppearance(
 
 // SetLinks()
 void ColorConfigWindow_Impl::Entry::SetLinks(
-    Link const& aCheckLink, Link const& aColorLink,
-    Link const& aGetFocusLink)
+    Link<> const& aCheckLink, Link<> const& aColorLink,
+    Link<> const& aGetFocusLink)
 {
     m_pColorList->SetSelectHdl(aColorLink);
     m_pColorList->SetGetFocusHdl(aGetFocusLink);
@@ -680,7 +680,7 @@ void ColorConfigWindow_Impl::Init(ScrollBar *pVScroll, HeaderBar *pHeaderHB)
 
 // SetLinks()
 void ColorConfigWindow_Impl::SetLinks (
-    Link const& aCheckLink, Link const& aColorLink, Link const& aGetFocusLink
+    Link<> const& aCheckLink, Link<> const& aColorLink, Link<> const& aGetFocusLink
 ) {
     for (unsigned i = 0; i != vEntries.size(); ++i)
         vEntries[i]->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
@@ -886,13 +886,13 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     m_pScrollWindow->set_expand(true);
     m_pScrollWindow->set_fill(true);
 
-    Link aScrollLink = LINK(this, ColorConfigCtrl_Impl, ScrollHdl);
+    Link<> aScrollLink = LINK(this, ColorConfigCtrl_Impl, ScrollHdl);
     m_pVScroll->SetScrollHdl(aScrollLink);
     m_pVScroll->SetEndScrollHdl(aScrollLink);
 
-    Link aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
-    Link aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
-    Link aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
+    Link<> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
+    Link<> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
+    Link<> aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
     m_pScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
 
     m_pHeaderHB->Show();
@@ -1060,7 +1060,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
         get<vcl::Window>("preview")->GetText());
 
     m_pColorSchemeLB->SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
-    Link aLk = LINK(this, SvxColorOptionsTabPage, SaveDeleteHdl_Impl );
+    Link<> aLk = LINK(this, SvxColorOptionsTabPage, SaveDeleteHdl_Impl );
     m_pSaveSchemePB->SetClickHdl(aLk);
     m_pDeleteSchemePB->SetClickHdl(aLk);
 }

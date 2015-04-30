@@ -48,7 +48,7 @@ public:
     void initFromItemSet( const SfxItemSet& rInAttrs );
     void writeToItemSet( SfxItemSet& rOutAttrs ) const;
 
-    void SetChangeHdl( const Link& rLink );
+    void SetChangeHdl( const Link<>& rLink );
 
     DECL_LINK( PositionEnableHdl, void* );
     DECL_LINK( PositionChangeHdl, RadioButton* );
@@ -67,7 +67,7 @@ private:
     VclPtr<RadioButton>    m_pRbtTop;
     VclPtr<RadioButton>    m_pRbtBottom;
 
-    Link            m_aChangeLink;
+    Link<>          m_aChangeLink;
 };
 
 } //namespace chart

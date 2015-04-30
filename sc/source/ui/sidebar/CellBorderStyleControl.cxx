@@ -100,7 +100,7 @@ void CellBorderStyleControl::Initialize()
     maTBBorder1->SetPaintTransparent(true);
     Size aTbxSize( maTBBorder1->CalcWindowSizePixel() );
     maTBBorder1->SetOutputSizePixel( aTbxSize );
-    Link aLink  = LINK(this, CellBorderStyleControl, TB1SelectHdl);
+    Link<> aLink  = LINK(this, CellBorderStyleControl, TB1SelectHdl);
     maTBBorder1->SetSelectHdl ( aLink );
 
     maTBBorder2->SetLineCount(2);

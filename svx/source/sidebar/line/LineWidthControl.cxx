@@ -179,7 +179,7 @@ void LineWidthControl::Initialize()
     maVSWidth->SetImage(maIMGCusGray);
 
     maVSWidth->SetSelItem(0);
-    Link aLink =  LINK( this, LineWidthControl, VSSelectHdl ) ;
+    Link<> aLink =  LINK( this, LineWidthControl, VSSelectHdl ) ;
     maVSWidth->SetSelectHdl(aLink);
     aLink = LINK(this, LineWidthControl, MFModifyHdl);
     maMFWidth->SetModifyHdl(aLink);

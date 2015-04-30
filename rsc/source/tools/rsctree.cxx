@@ -35,7 +35,7 @@ BiNode::~BiNode()
 {
 }
 
-void BiNode::EnumNodes( Link aLink ) const
+void BiNode::EnumNodes( Link<> aLink ) const
 {
     if( Left() )
         Left()->EnumNodes( aLink );

@@ -133,7 +133,7 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
             if ( bDoScroll )
             {
                 pSlider->SetThumbPos( nThumb );
-                ((Link&)pSlider->GetEndScrollHdl()).Call( pSlider );
+                ((Link<>&)pSlider->GetEndScrollHdl()).Call( pSlider );
             }
             else if ( bChangeFocus )
             {
@@ -503,7 +503,7 @@ RefEdit::~RefEdit()
 
 void RefEdit::dispose()
 {
-    aIdle.SetIdleHdl( Link() );
+    aIdle.SetIdleHdl( Link<>() );
     aIdle.Stop();
     pLabelWidget.clear();
     Edit::dispose();
@@ -551,7 +551,7 @@ void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel
     }
     else
     {
-        aIdle.SetIdleHdl( Link() );
+        aIdle.SetIdleHdl( Link<>() );
         aIdle.Stop();
     }
 }

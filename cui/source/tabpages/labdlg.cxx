@@ -571,7 +571,7 @@ void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-void SvxCaptionTabDialog::SetValidateFramePosLink( const Link& rLink )
+void SvxCaptionTabDialog::SetValidateFramePosLink( const Link<>& rLink )
 {
     aValidateLink = rLink;
 }

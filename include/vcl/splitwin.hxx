@@ -78,12 +78,12 @@ private:
                         mbFadeOutPressed:1,
                         mbFadeNoButtonMode:1,
                         mbNoAlign:1;
-    Link                maStartSplitHdl;
-    Link                maSplitHdl;
-    Link                maSplitResizeHdl;
-    Link                maAutoHideHdl;
-    Link                maFadeInHdl;
-    Link                maFadeOutHdl;
+    Link<>              maStartSplitHdl;
+    Link<>              maSplitHdl;
+    Link<>              maSplitResizeHdl;
+    Link<>              maAutoHideHdl;
+    Link<>              maFadeInHdl;
+    Link<>              maFadeOutHdl;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
@@ -203,18 +203,18 @@ public:
     void                SetAutoHideState( bool bAutoHide );
     bool                GetAutoHideState() const { return mbAutoHideIn; }
 
-    void                SetStartSplitHdl( const Link& rLink ) { maStartSplitHdl = rLink; }
-    const Link&         GetStartSplitHdl() const { return maStartSplitHdl; }
-    void                SetSplitHdl( const Link& rLink ) { maSplitHdl = rLink; }
-    const Link&         GetSplitHdl() const { return maSplitHdl; }
-    void                SetSplitResizeHdl( const Link& rLink ) { maSplitResizeHdl = rLink; }
-    const Link&         GetSplitResizeHdl() const { return maSplitResizeHdl; }
-    void                SetAutoHideHdl( const Link& rLink ) { maAutoHideHdl = rLink; }
-    const Link&         GetAutoHideHdl() const { return maAutoHideHdl; }
-    void                SetFadeInHdl( const Link& rLink ) { maFadeInHdl = rLink; }
-    const Link&         GetFadeInHdl() const { return maFadeInHdl; }
-    void                SetFadeOutHdl( const Link& rLink ) { maFadeOutHdl = rLink; }
-    const Link&         GetFadeOutHdl() const { return maFadeOutHdl; }
+    void                SetStartSplitHdl( const Link<>& rLink ) { maStartSplitHdl = rLink; }
+    const Link<>&       GetStartSplitHdl() const { return maStartSplitHdl; }
+    void                SetSplitHdl( const Link<>& rLink ) { maSplitHdl = rLink; }
+    const Link<>&       GetSplitHdl() const { return maSplitHdl; }
+    void                SetSplitResizeHdl( const Link<>& rLink ) { maSplitResizeHdl = rLink; }
+    const Link<>&       GetSplitResizeHdl() const { return maSplitResizeHdl; }
+    void                SetAutoHideHdl( const Link<>& rLink ) { maAutoHideHdl = rLink; }
+    const Link<>&       GetAutoHideHdl() const { return maAutoHideHdl; }
+    void                SetFadeInHdl( const Link<>& rLink ) { maFadeInHdl = rLink; }
+    const Link<>&       GetFadeInHdl() const { return maFadeInHdl; }
+    void                SetFadeOutHdl( const Link<>& rLink ) { maFadeOutHdl = rLink; }
+    const Link<>&       GetFadeOutHdl() const { return maFadeOutHdl; }
 };
 
 #endif // INCLUDED_VCL_SPLITWIN_HXX

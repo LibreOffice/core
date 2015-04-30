@@ -365,14 +365,14 @@ void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 void ScExtIButton::MouseButtonUp( const MouseEvent& rMEvt)
 {
     aIdle.Stop();
-    aIdle.SetIdleHdl(Link());
+    aIdle.SetIdleHdl(Link<>());
     ImageButton::MouseButtonUp(rMEvt );
 }
 
 void ScExtIButton::Click()
 {
     aIdle.Stop();
-    aIdle.SetIdleHdl(Link());
+    aIdle.SetIdleHdl(Link<>());
     ImageButton::Click();
 }
 

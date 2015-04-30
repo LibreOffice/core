@@ -118,7 +118,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
     aDocTypeLB->SetEntryData(5, reinterpret_cast<void*>(APP_DRAW)         );
     aDocTypeLB->SetEntryData(6, reinterpret_cast<void*>(APP_MATH)         );
 
-    Link aLink = LINK( this, SfxSaveTabPage, AutoClickHdl_Impl );
+    Link<> aLink = LINK( this, SfxSaveTabPage, AutoClickHdl_Impl );
     aAutoSaveCB->SetClickHdl( aLink );
     aAutoSaveEdit->SetMaxTextLen( 2 );
 

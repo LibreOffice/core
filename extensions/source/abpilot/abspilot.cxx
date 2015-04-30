@@ -188,7 +188,7 @@ namespace abp
         implCleanup();
 
         // reset the click hdl
-        m_pCancel->SetClickHdl( Link() );
+        m_pCancel->SetClickHdl( Link<>() );
         // simulate the click again - this time, the default handling of the button will strike ....
         m_pCancel->Click();
 

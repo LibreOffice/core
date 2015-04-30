@@ -42,7 +42,7 @@ void AsynchronousCall::RequestCall()
 {
     if (mnCallId == 0)
     {
-        Link aLink (LINK(this, AsynchronousCall, HandleUserCall));
+        Link<> aLink (LINK(this, AsynchronousCall, HandleUserCall));
         mnCallId = Application::PostUserEvent(aLink);
     }
 }

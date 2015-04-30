@@ -116,7 +116,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(vcl::Window* pParent,
     m_pAlign2LB->SetDropDownLineCount( m_pAlign2LB->GetEntryCount() );
     m_pAlign2FT->SetText( m_pAlignFT->GetText() );
 
-    Link aLk = LINK(this, SwNumPositionTabPage, DistanceHdl);
+    Link<> aLk = LINK(this, SwNumPositionTabPage, DistanceHdl);
     m_pDistBorderMF->SetUpHdl(aLk);
     m_pDistNumMF->SetUpHdl(aLk);
     m_pIndentMF->SetUpHdl(aLk);

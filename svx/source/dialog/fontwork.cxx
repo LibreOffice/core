@@ -253,7 +253,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
     m_pTbxShadow->SetSizePixel(aSize);
     m_pTbxShadow->SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectShadowHdl_Impl) );
 
-    Link aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
+    Link<> aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
     m_pMtrFldDistance->SetModifyHdl( aLink );
     m_pMtrFldTextStart->SetModifyHdl( aLink );
     m_pMtrFldShadowX->SetModifyHdl( aLink );

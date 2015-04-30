@@ -36,12 +36,12 @@ namespace vcl
     class VCL_DLLPUBLIC EventPoster
     {
         ImplSVEvent *   m_nId;
-        Link            m_aLink;
+        Link<>          m_aLink;
 
         DECL_DLLPRIVATE_LINK( DoEvent_Impl, UserEvent* );
 
     public:
-                        EventPoster( const Link& rLink );
+                        EventPoster( const Link<>& rLink );
                         ~EventPoster();
         void            Post( UserEvent* pEvent );
     };

@@ -356,7 +356,7 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
 {
     if(aIdle.IsActive())
     {
-        aIdle.SetIdleHdl(Link());
+        aIdle.SetIdleHdl(Link<>());
         aIdle.Stop();
     }// if(aIdle.IsActive())
     bIsShutDown=true;// Set it in order to PreNotify not to save GetFocus.

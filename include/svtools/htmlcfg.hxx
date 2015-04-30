@@ -32,7 +32,6 @@
 
 #define HTML_CFG_MAX HTML_CFG_NS40
 
-class Link;
 struct HtmlOptions_Impl;
 
 class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem

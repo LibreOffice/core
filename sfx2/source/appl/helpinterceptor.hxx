@@ -120,7 +120,7 @@ class HelpListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::fram
 {
 private:
     HelpInterceptor_Impl*   pInterceptor;
-    Link                    aChangeLink;
+    Link<>                  aChangeLink;
     OUString                aFactory;
 
 public:
@@ -131,7 +131,7 @@ public:
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& obj )
                                 throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    void                    SetChangeHdl( const Link& rLink ) { aChangeLink = rLink; }
+    void                    SetChangeHdl( const Link<>& rLink ) { aChangeLink = rLink; }
     OUString                GetFactory() const { return aFactory; }
 };
 // HelpStatusListener_Impl -----------------------------------------------------

@@ -3336,25 +3336,25 @@ SdrObject* SdrObjFactory::MakeNewObject(
     return pObj;
 }
 
-void SdrObjFactory::InsertMakeObjectHdl(const Link& rLink)
+void SdrObjFactory::InsertMakeObjectHdl(const Link<>& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjHdl();
     rLL.InsertLink(rLink);
 }
 
-void SdrObjFactory::RemoveMakeObjectHdl(const Link& rLink)
+void SdrObjFactory::RemoveMakeObjectHdl(const Link<>& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjHdl();
     rLL.RemoveLink(rLink);
 }
 
-void SdrObjFactory::InsertMakeUserDataHdl(const Link& rLink)
+void SdrObjFactory::InsertMakeUserDataHdl(const Link<>& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
     rLL.InsertLink(rLink);
 }
 
-void SdrObjFactory::RemoveMakeUserDataHdl(const Link& rLink)
+void SdrObjFactory::RemoveMakeUserDataHdl(const Link<>& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
     rLL.RemoveLink(rLink);

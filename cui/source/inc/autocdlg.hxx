@@ -181,7 +181,7 @@ public:
 
 class AutoCorrEdit : public Edit
 {
-    Link    aActionLink;
+    Link<>  aActionLink;
     bool    bSpaces;
 
     public:
@@ -190,7 +190,7 @@ class AutoCorrEdit : public Edit
                     AutoCorrEdit(vcl::Window* pParent) :
                         Edit(pParent), bSpaces(false){}
 
-    void            SetActionHdl( const Link& rLink )
+    void            SetActionHdl( const Link<>& rLink )
                                 { aActionLink = rLink;}
 
     void            SetSpaces(bool bSet)

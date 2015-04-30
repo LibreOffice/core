@@ -45,9 +45,9 @@ class ParaWin : public TabPage
 {
 private:
         OModuleClient   m_aModuleClient;
-        Link            aScrollLink;
-        Link            aFxLink;
-        Link            aArgModifiedLink;
+        Link<>          aScrollLink;
+        Link<>          aFxLink;
+        Link<>          aArgModifiedLink;
 
         ::std::vector<sal_uInt16>   aVisibleArgMapping;
         const IFunctionDescription* pFuncDesc;
@@ -149,14 +149,14 @@ public:
         sal_uInt16      GetSliderPos();
         void            SetSliderPos(sal_uInt16 nSliderPos);
 
-        void            SetScrollHdl( const Link& rLink ) { aScrollLink = rLink; }
-        const Link&     GetScrollHdl() const { return aScrollLink; }
+        void            SetScrollHdl( const Link<>& rLink ) { aScrollLink = rLink; }
+        const Link<>&   GetScrollHdl() const { return aScrollLink; }
 
-        void            SetArgModifiedHdl( const Link& rLink ) { aArgModifiedLink = rLink; }
-        const Link&     GetArgModifiedHdl() const { return aArgModifiedLink; }
+        void            SetArgModifiedHdl( const Link<>& rLink ) { aArgModifiedLink = rLink; }
+        const Link<>&   GetArgModifiedHdl() const { return aArgModifiedLink; }
 
-        void            SetFxHdl( const Link& rLink ) { aFxLink = rLink; }
-        const Link&     GetFxHdl() const { return aFxLink; }
+        void            SetFxHdl( const Link<>& rLink ) { aFxLink = rLink; }
+        const Link<>&   GetFxHdl() const { return aFxLink; }
 };
 
 

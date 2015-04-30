@@ -237,7 +237,7 @@ void PagePropertyPanel::Initialize()
 {
     // popup for page orientation
     const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
-    Link aLink = LINK( this, PagePropertyPanel, ClickOrientationHdl );
+    Link<> aLink = LINK( this, PagePropertyPanel, ClickOrientationHdl );
     mpToolBoxOrientation->SetDropdownClickHdl( aLink );
     mpToolBoxOrientation->SetSelectHdl( aLink );
     mpToolBoxOrientation->SetItemImage( nIdOrientation, mImgPortrait);

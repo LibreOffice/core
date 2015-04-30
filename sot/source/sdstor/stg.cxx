@@ -1019,7 +1019,7 @@ bool Storage::ShouldConvert()
 
 bool Storage::ValidateFAT()
 {
-    Link aLink = StgIo::GetErrorLink();
+    Link<> aLink = StgIo::GetErrorLink();
     ErrCode nErr = pIo->ValidateFATs();
     StgIo::SetErrorLink( aLink );
     return nErr == ERRCODE_NONE;

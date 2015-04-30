@@ -59,7 +59,7 @@ struct SvLBoxButtonData_Impl;
 class SVT_DLLPUBLIC SvLBoxButtonData
 {
 private:
-    Link                    aLink;
+    Link<>                  aLink;
     long                    nWidth;
     long                    nHeight;
     SvLBoxButtonData_Impl*  pImpl;
@@ -80,8 +80,8 @@ public:
     static SvBmp            GetIndex( SvItemStateFlags nItemState );
     long                    Width();
     long                    Height();
-    void                    SetLink( const Link& rLink) { aLink=rLink; }
-    const Link&             GetLink() const { return aLink; }
+    void                    SetLink( const Link<>& rLink) { aLink=rLink; }
+    const Link<>&           GetLink() const { return aLink; }
     bool                    IsRadio();
     // as buttons are not derived from LinkHdl
     void                    CallLink();

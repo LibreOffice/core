@@ -65,7 +65,7 @@ DocumentInserter::~DocumentInserter()
     delete m_pFileDlg;
 }
 
-void DocumentInserter::StartExecuteModal( const Link& _rDialogClosedLink )
+void DocumentInserter::StartExecuteModal( const Link<>& _rDialogClosedLink )
 {
     m_aDialogClosedLink = _rDialogClosedLink;
     m_nError = ERRCODE_NONE;

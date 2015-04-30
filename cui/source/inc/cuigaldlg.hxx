@@ -99,7 +99,7 @@ public:
                         DECL_LINK( CleanUpHdl, void* );
 
     virtual short       Execute() SAL_OVERRIDE;
-    virtual void        StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
     void                SetFileType( const OUString& rType ) { m_pFtSearchType->SetText( rType ); }
     void                SetDirectory( const INetURLObject& rURL ) { m_pFtSearchDir->SetText( GetReducedString( rURL, 30 ) ); }
 };
@@ -146,7 +146,7 @@ public:
 
     void                SetFile( const INetURLObject& rURL ) { m_pFtTakeFile->SetText( GetReducedString( rURL, 30 ) ); }
     virtual short       Execute() SAL_OVERRIDE;
-    virtual void        StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
 };
 
 class ActualizeProgress : public ModalDialog

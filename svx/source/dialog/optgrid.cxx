@@ -157,7 +157,7 @@ SvxGridTabPage::SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
 
     pCbxRotate->SetClickHdl( LINK( this, SvxGridTabPage, ClickRotateHdl_Impl ) );
-    Link aLink = LINK( this, SvxGridTabPage, ChangeGridsnapHdl_Impl );
+    Link<> aLink = LINK( this, SvxGridTabPage, ChangeGridsnapHdl_Impl );
     pCbxUseGridsnap->SetClickHdl( aLink );
     pCbxSynchronize->SetClickHdl( aLink );
     pCbxGridVisible->SetClickHdl( aLink );

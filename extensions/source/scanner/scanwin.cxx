@@ -83,7 +83,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     ScannerManager&                             mrMgr;
     TW_IDENTITY                                 aAppIdent;
     TW_IDENTITY                                 aSrcIdent;
-    Link                                        aNotifyLink;
+    Link<>                                      aNotifyLink;
     DSMENTRYPROC                                pDSM;
     osl::Module*                                pMod;
     ULONG_PTR                                   nCurState;
@@ -116,7 +116,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
 
 public:
 
-                                                ImpTwain( ScannerManager& rMgr, const Link& rNotifyLink );
+                                                ImpTwain( ScannerManager& rMgr, const Link<>& rNotifyLink );
                                                 ~ImpTwain();
 
     void                                        Destroy();
@@ -150,7 +150,7 @@ LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 }
 
 // #107835# hold reference to ScannerManager, to prevent premature death
-ImpTwain::ImpTwain( ScannerManager& rMgr, const Link& rNotifyLink ) :
+ImpTwain::ImpTwain( ScannerManager& rMgr, const Link<>& rNotifyLink ) :
             mxMgr( uno::Reference< scanner::XScannerManager >( static_cast< OWeakObject* >( &rMgr ), uno::UNO_QUERY) ),
             mrMgr( rMgr ),
             aNotifyLink( rNotifyLink ),

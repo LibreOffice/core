@@ -68,14 +68,14 @@ namespace pcr
         VclPtr<ComboBox>   m_pDetailColumn;
         VclPtr<ComboBox>   m_pMasterColumn;
 
-        Link        m_aLinkChangeHandler;
+        Link<>      m_aLinkChangeHandler;
 
     public:
         FieldLinkRow( vcl::Window* _pParent );
         virtual ~FieldLinkRow();
         virtual void dispose() SAL_OVERRIDE;
 
-        inline void         SetLinkChangeHandler( const Link& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
+        inline void         SetLinkChangeHandler( const Link<>& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
 
         enum LinkParticipant
         {

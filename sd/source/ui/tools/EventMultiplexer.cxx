@@ -68,11 +68,11 @@ public:
     virtual ~Implementation();
 
     void AddEventListener (
-        Link& rCallback,
+        Link<>& rCallback,
         EventMultiplexerEvent::EventId aEventTypes);
 
     void RemoveEventListener (
-        Link& rCallback,
+        Link<>& rCallback,
         EventMultiplexerEvent::EventId aEventTypes);
 
     void CallListeners (EventMultiplexerEvent& rEvent);
@@ -120,7 +120,7 @@ protected:
 
 private:
     ViewShellBase& mrBase;
-    typedef ::std::pair<Link,EventMultiplexerEvent::EventId> ListenerDescriptor;
+    typedef ::std::pair<Link<>,EventMultiplexerEvent::EventId> ListenerDescriptor;
     typedef ::std::vector<ListenerDescriptor> ListenerList;
     ListenerList maListeners;
 
@@ -190,14 +190,14 @@ EventMultiplexer::~EventMultiplexer()
 }
 
 void EventMultiplexer::AddEventListener (
-    Link& rCallback,
+    Link<>& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     mpImpl->AddEventListener (rCallback, aEventTypes);
 }
 
 void EventMultiplexer::RemoveEventListener (
-    Link& rCallback,
+    Link<>& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     mpImpl->RemoveEventListener (rCallback, aEventTypes);
@@ -321,7 +321,7 @@ void EventMultiplexer::Implementation::ReleaseListeners()
 }
 
 void EventMultiplexer::Implementation::AddEventListener (
-    Link& rCallback,
+    Link<>& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     ListenerList::iterator iListener (maListeners.begin());
@@ -341,7 +341,7 @@ void EventMultiplexer::Implementation::AddEventListener (
 }
 
 void EventMultiplexer::Implementation::RemoveEventListener (
-    Link& rCallback,
+    Link<>& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     ListenerList::iterator iListener (maListeners.begin());

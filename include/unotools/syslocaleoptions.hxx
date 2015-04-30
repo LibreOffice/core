@@ -164,8 +164,8 @@ public:
         This is needed because the number formatter isn't part of the svl light
         library, otherwise we could call SetDefaultSystemCurrency() directly.
      */
-    static  void                SetCurrencyChangeLink( const Link& rLink );
-    static  const Link&         GetCurrencyChangeLink();
+    static  void                SetCurrencyChangeLink( const Link<>& rLink );
+    static  const Link<>&       GetCurrencyChangeLink();
 
     /** return the readonly state of the queried option. */
             bool                IsReadOnly( EOption eOption ) const;

@@ -256,8 +256,8 @@ SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 
 void SfxManageStyleSheetPage::dispose()
 {
-    m_pNameRw->SetGetFocusHdl( Link() );
-    m_pNameRw->SetLoseFocusHdl( Link() );
+    m_pNameRw->SetGetFocusHdl( Link<>() );
+    m_pNameRw->SetLoseFocusHdl( Link<>() );
     delete pFamilies;
     pItem = 0;
     pStyle = 0;

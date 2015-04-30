@@ -420,7 +420,7 @@ const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
     {
         if( !pImp->pExecuter )
             pImp->pExecuter = new svtools::AsynchronLink(
-                Link( this, ShellCall_Impl ) );
+                Link<>( this, ShellCall_Impl ) );
         pImp->pExecuter->Call( new SfxRequest( rReq ) );
         return 0;
     }
@@ -686,7 +686,7 @@ void SfxShell::UIFeatureChanged()
         // something my get stuck in the bunkered tools. Asynchronous call to
         // prevent recursion.
         if ( !pImp->pUpdater )
-            pImp->pUpdater = new svtools::AsynchronLink( Link( this, DispatcherUpdate_Impl ) );
+            pImp->pUpdater = new svtools::AsynchronLink( Link<>( this, DispatcherUpdate_Impl ) );
 
         // Multiple views allowed
         pImp->pUpdater->Call( pFrame->GetDispatcher(), true );

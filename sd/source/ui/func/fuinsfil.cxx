@@ -694,19 +694,19 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         ::Outliner* pOutliner = pOlView->GetViewByWindow(mpWindow)->GetOutliner();
 
         // cut notification links temporarily
-        Link aOldParagraphInsertedHdl = pOutliner->GetParaInsertedHdl();
-        pOutliner->SetParaInsertedHdl( Link(NULL, NULL));
-        Link aOldParagraphRemovingHdl = pOutliner->GetParaRemovingHdl();
-        pOutliner->SetParaRemovingHdl( Link(NULL, NULL));
-        Link aOldDepthChangedHdl      = pOutliner->GetDepthChangedHdl();
-        pOutliner->SetDepthChangedHdl( Link(NULL, NULL));
-        Link aOldBeginMovingHdl       = pOutliner->GetBeginMovingHdl();
-        pOutliner->SetBeginMovingHdl( Link(NULL, NULL));
-        Link aOldEndMovingHdl         = pOutliner->GetEndMovingHdl();
-        pOutliner->SetEndMovingHdl( Link(NULL, NULL));
+        Link<> aOldParagraphInsertedHdl = pOutliner->GetParaInsertedHdl();
+        pOutliner->SetParaInsertedHdl( Link<>(NULL, NULL));
+        Link<> aOldParagraphRemovingHdl = pOutliner->GetParaRemovingHdl();
+        pOutliner->SetParaRemovingHdl( Link<>(NULL, NULL));
+        Link<> aOldDepthChangedHdl      = pOutliner->GetDepthChangedHdl();
+        pOutliner->SetDepthChangedHdl( Link<>(NULL, NULL));
+        Link<> aOldBeginMovingHdl       = pOutliner->GetBeginMovingHdl();
+        pOutliner->SetBeginMovingHdl( Link<>(NULL, NULL));
+        Link<> aOldEndMovingHdl         = pOutliner->GetEndMovingHdl();
+        pOutliner->SetEndMovingHdl( Link<>(NULL, NULL));
 
-        Link aOldStatusEventHdl       = pOutliner->GetStatusEventHdl();
-        pOutliner->SetStatusEventHdl(Link(NULL, NULL));
+        Link<> aOldStatusEventHdl       = pOutliner->GetStatusEventHdl();
+        pOutliner->SetStatusEventHdl(Link<>(NULL, NULL));
 
         pOutliner->Clear();
         pOlView->FillOutliner();

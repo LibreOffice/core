@@ -253,10 +253,10 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     // handlers, triggering handlers while already processing a handler can
     // ( and does in this case ) corrupt the internal data
 
-    m_pBtnCriteria->SetToggleHdl( Link() );
-    m_pBtnPrintArea->SetToggleHdl( Link() );
-    m_pBtnColHeader->SetToggleHdl( Link() );
-    m_pBtnRowHeader->SetToggleHdl( Link() );
+    m_pBtnCriteria->SetToggleHdl( Link<>() );
+    m_pBtnPrintArea->SetToggleHdl( Link<>() );
+    m_pBtnColHeader->SetToggleHdl( Link<>() );
+    m_pBtnRowHeader->SetToggleHdl( Link<>() );
 
     m_pBtnCriteria->Check( pData->HasType( RT_CRITERIA ) );
     m_pBtnPrintArea->Check( pData->HasType( RT_PRINTAREA ) );
@@ -264,7 +264,7 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     m_pBtnRowHeader->Check( pData->HasType( RT_ROWHEADER ) );
 
     // Restore handlers so user input is processed again
-    Link aToggleHandler = LINK( this, ScNameDlg, EdModifyHdl );
+    Link<> aToggleHandler = LINK( this, ScNameDlg, EdModifyHdl );
     m_pBtnCriteria->SetToggleHdl( aToggleHandler );
     m_pBtnPrintArea->SetToggleHdl( aToggleHandler );
     m_pBtnColHeader->SetToggleHdl( aToggleHandler );

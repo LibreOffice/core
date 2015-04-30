@@ -438,7 +438,7 @@ private:
     SvNumberFormatter                   m_aNumberFormatter;
     Idle                                m_aEditLoseFocusIdle;
     Idle                                m_aBoxLoseFocusIdle;
-    Link                                m_aRemovedHdl;
+    Link<>                              m_aRemovedHdl;
 
     DECL_LINK(  TypeHdl, CustomPropertiesTypeBox* );
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
@@ -470,7 +470,7 @@ public:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         GetCustomProperties() const;
-    void                SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
+    void                SetRemovedHdl( const Link<>& rLink ) { m_aRemovedHdl = rLink; }
 
     void                InitRemoveButton(const ScrollBar &rScrollBar);
     void                updateLineWidth();

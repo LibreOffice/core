@@ -61,13 +61,13 @@ namespace sfx2
             @return
                 the ID of the newly created toolbox item
         */
-        sal_uInt16  AddDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
+        sal_uInt16  AddDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<>& i_rCallback )
         {
             return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
         }
 
-        void        SetEndDockingHdl( const Link& i_rEndDockingHdl ) { m_aEndDockingHdl = i_rEndDockingHdl; }
-        const Link& GetEndDockingHdl() const { return m_aEndDockingHdl; }
+        void        SetEndDockingHdl( const Link<>& i_rEndDockingHdl ) { m_aEndDockingHdl = i_rEndDockingHdl; }
+        const Link<>& GetEndDockingHdl() const { return m_aEndDockingHdl; }
 
         /** resets the toolbox. Upon return, the only item in the toolbox is the closer.
         */
@@ -111,7 +111,7 @@ namespace sfx2
 
         /** internal version of AddDropDownToolBoxItem
         */
-        sal_uInt16  impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback );
+        sal_uInt16  impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<>& i_rCallback );
 
         /** returns the current title.
 
@@ -131,7 +131,7 @@ namespace sfx2
         VclPtr<ToolBox>     m_aToolbox;
         VclPtr<Window>      m_aContentWindow;
 
-        Link                m_aEndDockingHdl;
+        Link<>              m_aEndDockingHdl;
 
         /** The border that is painted around the inner window.  The bevel
             shadow lines are part of the border, so where the border is 0 no

@@ -122,7 +122,7 @@ private:
 
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
 
-    Link m_aOriginalOKClickHdl;
+    Link<> m_aOriginalOKClickHdl;
     DECL_LINK( OKPressed, void * );
 
 public:

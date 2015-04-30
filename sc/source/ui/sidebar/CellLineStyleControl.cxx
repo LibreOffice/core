@@ -59,7 +59,7 @@ void CellLineStyleControl::dispose()
 void CellLineStyleControl::Initialize()
 {
     //maPushButtonMoreOptions->SetIcoPosX(2);
-    Link aLink = LINK(this, CellLineStyleControl, PBClickHdl);
+    Link<> aLink = LINK(this, CellLineStyleControl, PBClickHdl);
     maPushButtonMoreOptions->SetClickHdl(aLink);
 
     maCellLineStyleValueSet->SetStyle(maCellLineStyleValueSet->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);

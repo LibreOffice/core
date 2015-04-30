@@ -348,7 +348,7 @@ MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMa
             aListBoxes[0]->InsertEntry(pNames[nField]);
     }
 
-    Link aLnk = LINK(this, MappingDialog_Impl, ListBoxSelectHdl);
+    Link<> aLnk = LINK(this, MappingDialog_Impl, ListBoxSelectHdl);
 
     aListBoxes[0]->SelectEntryPos(0);
     aListBoxes[0]->SetSelectHdl(aLnk);

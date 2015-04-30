@@ -42,7 +42,7 @@ public:
     virtual ~CancelableDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    void SetCancelHdl( const Link& rLink );
+    void SetCancelHdl( const Link<>& rLink );
     void Show();
 };
 

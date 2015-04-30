@@ -331,10 +331,10 @@ public:
 
     void                KeyMove( int dx, int dy );
 
-    void                SetModifyHdl( Link& rLink ) { maModifyHdl = rLink; }
+    void                SetModifyHdl( Link<>& rLink ) { maModifyHdl = rLink; }
 
 private:
-    Link maModifyHdl;
+    Link<> maModifyHdl;
     ColorMode meMode;
     Color maColor;
     double mdX;
@@ -728,12 +728,12 @@ public:
 
     void                KeyMove( int dy );
 
-    void SetModifyHdl( Link& rLink ) { maModifyHdl = rLink; }
+    void SetModifyHdl( Link<>& rLink ) { maModifyHdl = rLink; }
 
     sal_Int16 GetLevel() const { return mnLevel; }
 
 private:
-    Link maModifyHdl;
+    Link<> maModifyHdl;
     Color maColor;
     ColorMode meMode;
     Bitmap* mpBitmap;
@@ -1059,7 +1059,7 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
     set_width_request(aDialogSize.Width() + 50);
     set_height_request(aDialogSize.Height() + 30);
 
-    Link aLink( LINK( this, ColorPickerDialog, ColorModifyHdl ) );
+    Link<> aLink( LINK( this, ColorPickerDialog, ColorModifyHdl ) );
     mpColorField->SetModifyHdl( aLink );
     mpColorSlider->SetModifyHdl( aLink );
 

@@ -683,7 +683,7 @@ class DbFilterField
 {
     ::com::sun::star::uno::Sequence< OUString >  m_aValueList;
     OUString   m_aText;
-    Link    m_aCommitLink;
+    Link<>  m_aCommitLink;
     sal_Int16   m_nControlClass;
     bool    m_bFilterList : 1;
     bool    m_bFilterListFilled : 1;
@@ -704,8 +704,8 @@ public:
     const OUString& GetText() const {return m_aText;}
     void SetText(const OUString& rText);
 
-    void SetCommitHdl( const Link& rLink ) { m_aCommitLink = rLink; }
-    const Link& GetCommitHdl() const { return m_aCommitLink; }
+    void SetCommitHdl( const Link<>& rLink ) { m_aCommitLink = rLink; }
+    const Link<>& GetCommitHdl() const { return m_aCommitLink; }
 
 protected:
 

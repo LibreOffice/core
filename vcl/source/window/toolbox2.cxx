@@ -1717,12 +1717,12 @@ long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
     return nIndex;
 }
 
-void ToolBox::SetDropdownClickHdl( const Link& rLink )
+void ToolBox::SetDropdownClickHdl( const Link<>& rLink )
 {
     mpData->maDropdownClickHdl = rLink;
 }
 
-const Link& ToolBox::GetDropdownClickHdl() const
+const Link<>& ToolBox::GetDropdownClickHdl() const
 {
     return mpData->maDropdownClickHdl;
 }
@@ -1767,7 +1767,7 @@ PopupMenu* ToolBox::GetMenu() const
     return mpData->mpMenu;
 }
 
-void ToolBox::SetMenuButtonHdl( const Link& rLink )
+void ToolBox::SetMenuButtonHdl( const Link<>& rLink )
 {
     mpData->maMenuButtonHdl = rLink;
 }

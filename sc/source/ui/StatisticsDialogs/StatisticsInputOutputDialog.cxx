@@ -111,7 +111,7 @@ void ScStatisticsInputOutputDialog::Init()
     mpButtonOk->SetClickHdl( LINK( this, ScStatisticsInputOutputDialog, OkClicked ) );
     mpButtonOk->Enable(false);
 
-    Link aLink = LINK( this, ScStatisticsInputOutputDialog, GetFocusHandler );
+    Link<> aLink = LINK( this, ScStatisticsInputOutputDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
     mpInputRangeButton->SetGetFocusHdl( aLink );
     mpOutputRangeEdit->SetGetFocusHdl( aLink );

@@ -98,8 +98,8 @@ class ClientBox:
     long            m_nActiveHeight;
     long            m_nExtraHeight;
     Size            m_aOutputSize;
-    Link            m_aClickHdl;
-    Link            m_aDeauthoriseHdl;
+    Link<>          m_aClickHdl;
+    Link<>          m_aDeauthoriseHdl;
 
     VclPtr<NumericBox>      m_aPinBox;
     VclPtr<PushButton>      m_aDeauthoriseButton;
@@ -153,9 +153,9 @@ public:
     Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }
     long            PointToPos( const Point& rPos );
-    void            SetScrollHdl( const Link& rLink );
+    void            SetScrollHdl( const Link<>& rLink );
     void            DoScroll( long nDelta );
-    void            SetHyperlinkHdl( const Link& rLink ){ m_aClickHdl = rLink; }
+    void            SetHyperlinkHdl( const Link<>& rLink ){ m_aClickHdl = rLink; }
     void    RecalcAll();
     void            RemoveUnlocked();
 

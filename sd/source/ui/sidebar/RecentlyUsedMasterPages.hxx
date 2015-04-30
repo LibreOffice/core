@@ -46,8 +46,8 @@ public:
     */
     static RecentlyUsedMasterPages& Instance();
 
-    void AddEventListener (const Link& rEventListener);
-    void RemoveEventListener (const Link& rEventListener);
+    void AddEventListener (const Link<>& rEventListener);
+    void RemoveEventListener (const Link<>& rEventListener);
 
     int GetMasterPageCount() const;
     MasterPageContainer::Token GetTokenForIndex (sal_uInt32 nIndex) const;
@@ -84,7 +84,7 @@ private:
     */
     static RecentlyUsedMasterPages* mpInstance;
 
-    ::std::vector<Link> maListeners;
+    ::std::vector<Link<>> maListeners;
 
     typedef ::std::vector<Descriptor> MasterPageList;
     MasterPageList mvMasterPages;

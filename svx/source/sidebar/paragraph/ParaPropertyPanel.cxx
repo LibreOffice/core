@@ -199,7 +199,7 @@ void ParaPropertyPanel::ReSize(bool /* bSize */)
 
 void ParaPropertyPanel::InitToolBoxIndent()
 {
-    Link aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
+    Link<> aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
     mpLeftIndent->SetModifyHdl( aLink );
     mpRightIndent->SetModifyHdl( aLink );
     mpFLineIndent->SetModifyHdl( aLink );
@@ -232,7 +232,7 @@ void ParaPropertyPanel::InitToolBoxIndent()
 
 void ParaPropertyPanel::InitToolBoxSpacing()
 {
-    Link aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
+    Link<> aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
     mpTopDist->SetModifyHdl(aLink);
     mpBottomDist->SetModifyHdl( aLink );
 

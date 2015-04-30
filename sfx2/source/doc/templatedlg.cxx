@@ -311,16 +311,16 @@ void SfxTemplateManagerDlg::dispose()
         delete maRepositories[i];
 
     // Ignore view events since we are cleaning the object
-    mpLocalView->setItemStateHdl(Link());
-    mpLocalView->setOpenRegionHdl(Link());
-    mpLocalView->setOpenTemplateHdl(Link());
+    mpLocalView->setItemStateHdl(Link<>());
+    mpLocalView->setOpenRegionHdl(Link<>());
+    mpLocalView->setOpenTemplateHdl(Link<>());
 
-    mpRemoteView->setItemStateHdl(Link());
-    mpRemoteView->setOpenRegionHdl(Link());
-    mpRemoteView->setOpenTemplateHdl(Link());
+    mpRemoteView->setItemStateHdl(Link<>());
+    mpRemoteView->setOpenRegionHdl(Link<>());
+    mpRemoteView->setOpenTemplateHdl(Link<>());
 
-    mpSearchView->setItemStateHdl(Link());
-    mpSearchView->setOpenTemplateHdl(Link());
+    mpSearchView->setItemStateHdl(Link<>());
+    mpSearchView->setOpenTemplateHdl(Link<>());
 
     mpTabControl.clear();
     mpSearchEdit.clear();

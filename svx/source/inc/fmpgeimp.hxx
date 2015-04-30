@@ -54,7 +54,7 @@ class SVX_DLLPRIVATE FmFormPageImpl
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XMap >       m_aControlShapeMap;
 
     FmFormPage&     m_rPage;
-    Link            m_aFormsCreationHdl;
+    Link<>          m_aFormsCreationHdl;
 
     bool        m_bFirstActivation;
     bool            m_bAttemptedFormCreation;
@@ -93,8 +93,8 @@ public:
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& getForms( bool _bForceCreate = true );
 
-    void        SetFormsCreationHdl( const Link& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
-    const Link& GetFormsCreationHdl() const { return m_aFormsCreationHdl; }
+    void        SetFormsCreationHdl( const Link<>& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
+    const Link<>& GetFormsCreationHdl() const { return m_aFormsCreationHdl; }
 
 protected:
     /** finds a form with a given data source signature

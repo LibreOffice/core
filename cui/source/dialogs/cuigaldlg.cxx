@@ -269,7 +269,7 @@ short SearchProgress::Execute()
 
 
 
-void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
+void SearchProgress::StartExecuteModal( const Link<>& rEndDialogHdl )
 {
     assert(!maSearchThread.is());
     maSearchThread = new SearchThread(
@@ -447,7 +447,7 @@ short TakeProgress::Execute()
 
 
 
-void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
+void TakeProgress::StartExecuteModal( const Link<>& rEndDialogHdl )
 {
     assert(!maTakeThread.is());
     maTakeThread = new TakeThread(
@@ -1100,7 +1100,7 @@ void TPGalleryThemeProperties::TakeFiles()
         pTakeProgress->Update();
 
         pTakeProgress->StartExecuteModal(
-            Link() /* no postprocessing needed, pTakeProgress
+            Link<>() /* no postprocessing needed, pTakeProgress
                       will be disposed in TakeProgress::CleanupHdl */ );
     }
 }

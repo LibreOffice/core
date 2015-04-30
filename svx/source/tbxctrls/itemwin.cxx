@@ -452,11 +452,11 @@ bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_RETURN:
                 nHandled = true;
-                ( (Link&)GetSelectHdl() ).Call( this );
+                ( (Link<>&)GetSelectHdl() ).Call( this );
             break;
             case KEY_TAB:
                 bRelease = false;
-                ( (Link&)GetSelectHdl() ).Call( this );
+                ( (Link<>&)GetSelectHdl() ).Call( this );
                 bRelease = true;
                 break;
 
@@ -524,7 +524,7 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
         switch ( pKEvt->GetKeyCode().GetCode() )
         {
             case KEY_RETURN:
-                ( (Link&)GetSelectHdl() ).Call( this );
+                ( (Link<>&)GetSelectHdl() ).Call( this );
                 nHandled = true;
             break;
             case KEY_TAB:

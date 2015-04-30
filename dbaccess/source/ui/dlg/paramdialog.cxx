@@ -213,9 +213,9 @@ namespace dbaui
         if (m_pCancelBtn == pButton)
         {
             // no interpreting of the given values anymore ....
-            m_pParam->SetLoseFocusHdl(Link());   // no direct call from the control anymore ...
+            m_pParam->SetLoseFocusHdl(Link<>()); // no direct call from the control anymore ...
             m_bNeedErrorOnCurrent = false;      // in case of any indirect calls -> no error message
-            m_pCancelBtn->SetClickHdl(Link());
+            m_pCancelBtn->SetClickHdl(Link<>());
             m_pCancelBtn->Click();
         }
         else if (m_pOKBtn == pButton)
@@ -253,7 +253,7 @@ namespace dbaui
 
             }
             // to close the dialog (which is more code than a simple EndDialog)
-            m_pOKBtn->SetClickHdl(Link());
+            m_pOKBtn->SetClickHdl(Link<>());
             m_pOKBtn->Click();
         }
         else if (m_pTravelNext == pButton)
@@ -349,7 +349,7 @@ namespace dbaui
             Selection aSel;
             if (pOldFocus == m_pParam)
             {
-                m_pParam->SetLoseFocusHdl(Link());
+                m_pParam->SetLoseFocusHdl(Link<>());
                 aSel = m_pParam->GetSelection();
             }
             m_pTravelNext->GrabFocus();

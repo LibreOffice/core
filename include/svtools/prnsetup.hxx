@@ -71,7 +71,7 @@ public:
 
     virtual short   Execute() SAL_OVERRIDE;
 
-    void                SetOptionsHdl( const Link& rLink );
+    void                SetOptionsHdl( const Link<>& rLink );
 };
 
 

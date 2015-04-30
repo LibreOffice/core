@@ -63,7 +63,7 @@ NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
     get(m_pBtnRename, "rename");
     get(m_pBtnCancel, "cancel");
 
-    Link aLink( LINK( this, NameClashDialog, ButtonHdl_Impl ) );
+    Link<> aLink( LINK( this, NameClashDialog, ButtonHdl_Impl ) );
     m_pBtnOverwrite->SetClickHdl( aLink );
     m_pBtnRename->SetClickHdl( aLink );
     m_pBtnCancel->SetClickHdl( aLink );

@@ -26,7 +26,7 @@ class SwWrtShell;
 class SwFootNoteOptionDlg :public SfxTabDialog
 {
     SwWrtShell &rSh;
-    Link aOldOkHdl;
+    Link<> aOldOkHdl;
 
     sal_uInt16 m_nFootNoteId;
     sal_uInt16 m_nEndNoteId;

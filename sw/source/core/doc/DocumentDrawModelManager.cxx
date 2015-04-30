@@ -366,7 +366,7 @@ SdrLayerID DocumentDrawModelManager::GetInvisibleLayerIdByVisibleOne( const SdrL
 
 void DocumentDrawModelManager::DrawNotifyUndoHdl()
 {
-    mpDrawModel->SetNotifyUndoActionHdl( Link() );
+    mpDrawModel->SetNotifyUndoActionHdl( Link<>() );
 }
 
 }

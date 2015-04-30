@@ -42,7 +42,7 @@ namespace offapp
         OUString                                m_sYes;
         OUString                                m_sNo;
 
-        Link                                    m_aRowChangeHandler;
+        Link<>                                  m_aRowChangeHandler;
 
     public:
         DriverListControl(vcl::Window* _pParent);
@@ -53,7 +53,7 @@ namespace offapp
 
         // the handler will be called with a DriverPoolingSettings::const_iterator as parameter,
         // or NULL if no valid current row exists
-        void SetRowChangeHandler(const Link& _rHdl) { m_aRowChangeHandler = _rHdl; }
+        void SetRowChangeHandler(const Link<>& _rHdl) { m_aRowChangeHandler = _rHdl; }
 
         DriverPooling* getCurrentRow();
         void                                    updateCurrentRow();

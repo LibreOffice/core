@@ -75,12 +75,12 @@ void SidebarToolBox::dispose()
 
     if (mbAreHandlersRegistered)
     {
-        SetDropdownClickHdl(Link());
-        SetClickHdl(Link());
-        SetDoubleClickHdl(Link());
-        SetSelectHdl(Link());
-        SetActivateHdl(Link());
-        SetDeactivateHdl(Link());
+        SetDropdownClickHdl(Link<>());
+        SetClickHdl(Link<>());
+        SetDoubleClickHdl(Link<>());
+        SetSelectHdl(Link<>());
+        SetActivateHdl(Link<>());
+        SetDeactivateHdl(Link<>());
         mbAreHandlersRegistered = false;
     }
 

@@ -118,7 +118,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( m_sExampleURL, aValues   );
 
-    Link aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
+    Link<> aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
     m_pExampleFrame = new SwOneExampleFrame( *m_pExampleContainerWIN,
                                     EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL );
 
@@ -134,7 +134,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_pZoomLB->SelectEntryPos(0); //page size
     m_pZoomLB->SetSelectHdl(LINK(this, SwMailMergeLayoutPage, ZoomHdl_Impl));
 
-    Link aFrameHdl = LINK(this, SwMailMergeLayoutPage, ChangeAddressHdl_Impl);
+    Link<> aFrameHdl = LINK(this, SwMailMergeLayoutPage, ChangeAddressHdl_Impl);
     m_pLeftMF->SetUpHdl(aFrameHdl);
     m_pLeftMF->SetDownHdl(aFrameHdl);
     m_pLeftMF->SetLoseFocusHdl(aFrameHdl);
@@ -146,7 +146,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     ::SetFieldUnit( *m_pLeftMF, eFieldUnit );
     ::SetFieldUnit( *m_pTopMF, eFieldUnit );
 
-    Link aUpDownHdl = LINK(this, SwMailMergeLayoutPage, GreetingsHdl_Impl );
+    Link<> aUpDownHdl = LINK(this, SwMailMergeLayoutPage, GreetingsHdl_Impl );
     m_pUpPB->SetClickHdl(aUpDownHdl);
     m_pDownPB->SetClickHdl(aUpDownHdl);
     m_pAlignToBodyCB->SetClickHdl(LINK(this, SwMailMergeLayoutPage, AlignToTextHdl_Impl));

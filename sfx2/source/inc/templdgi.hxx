@@ -97,8 +97,8 @@ class StyleTreeListBox_Impl : public DropListBox_Impl
 {
 private:
     SvTreeListEntry* pCurEntry;
-    Link  aDoubleClickLink;
-    Link aDropLink;
+    Link<> aDoubleClickLink;
+    Link<> aDropLink;
     OUString  aParent;
     OUString aStyle;
 
@@ -116,11 +116,11 @@ public:
 
     void Recalc();
 
-    void SetDoubleClickHdl(const Link &rLink)
+    void SetDoubleClickHdl(const Link<> &rLink)
     {
         aDoubleClickLink = rLink;
     }
-    void SetDropHdl(const Link &rLink)
+    void SetDropHdl(const Link<> &rLink)
     {
         aDropLink = rLink;
     }

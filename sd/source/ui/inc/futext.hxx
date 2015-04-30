@@ -81,7 +81,7 @@ protected:
     virtual void disposing() SAL_OVERRIDE;
 
     SdrObjectWeakRef    mxTextObj;
-    Link                aOldLink;
+    Link<>              aOldLink;
     bool                bFirstObjCreated;
     bool                bJustEndedEdit;
 

@@ -160,7 +160,7 @@ void SwWrtShell::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pA
 
 sal_uInt16 SwWrtShell::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                                 bool bChkPtr, SbxArray* pArgs,
-                                const Link* pCallBack )
+                                const Link<>* pCallBack )
 {
     return GetDoc()->CallEvent( nEvent, rCallEvent, bChkPtr, pArgs, pCallBack );
 }

@@ -44,8 +44,8 @@ private:
     sal_uInt16                  mnDDHeight;
     sal_Int32                   mnSaveValue;
     sal_Int32                   m_nMaxWidthChars;
-    Link                        maSelectHdl;
-    Link                        maDoubleClickHdl;
+    Link<>                      maSelectHdl;
+    Link<>                      maDoubleClickHdl;
     sal_uInt16                  mnLineCount;
 
     /// bitfield
@@ -190,10 +190,10 @@ public:
 
     void                DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false );
 
-    void                SetSelectHdl( const Link& rLink )       { maSelectHdl = rLink; }
-    const Link&         GetSelectHdl() const                    { return maSelectHdl; }
-    void                SetDoubleClickHdl( const Link& rLink )  { maDoubleClickHdl = rLink; }
-    const Link&         GetDoubleClickHdl() const               { return maDoubleClickHdl; }
+    void                SetSelectHdl( const Link<>& rLink )     { maSelectHdl = rLink; }
+    const Link<>&       GetSelectHdl() const                    { return maSelectHdl; }
+    void                SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
+    const Link<>&       GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 
     Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown

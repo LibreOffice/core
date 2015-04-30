@@ -26,7 +26,7 @@
 class VCL_DLLPUBLIC Idle : public Scheduler
 {
 protected:
-    Link            maIdleHdl;          // Callback Link
+    Link<>          maIdleHdl;          // Callback Link
 
 public:
     Idle();
@@ -34,8 +34,8 @@ public:
 
     /// Make it possible to associate a callback with this idle handler
     /// of course, you can also sub-class and override 'Invoke'
-    void            SetIdleHdl( const Link& rLink ) { maIdleHdl = rLink; }
-    const Link&     GetIdleHdl() const { return maIdleHdl; }
+    void            SetIdleHdl( const Link<>& rLink ) { maIdleHdl = rLink; }
+    const Link<>&   GetIdleHdl() const { return maIdleHdl; }
     virtual void    Invoke() SAL_OVERRIDE;
     Idle&           operator=( const Idle& rIdle );
 };

@@ -62,8 +62,8 @@ class FuncPage : public TabPage
 {
 private:
     OModuleClient   m_aModuleClient;
-    Link            aDoubleClickLink;
-    Link            aSelectionLink;
+    Link<>          aDoubleClickLink;
+    Link<>          aSelectionLink;
     VclPtr<ListBox> m_pLbCategory;
     VclPtr<FormulaListBox> m_pLbFunction;
     const IFunctionManager*
@@ -100,11 +100,11 @@ public:
     const IFunctionDescription* GetFuncDesc( sal_Int32  nPos ) const;
     OUString        GetSelFunctionName() const;
 
-    void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClickLink = rLink; }
-    const Link&     GetDoubleClickHdl() const { return aDoubleClickLink; }
+    void            SetDoubleClickHdl( const Link<>& rLink ) { aDoubleClickLink = rLink; }
+    const Link<>&   GetDoubleClickHdl() const { return aDoubleClickLink; }
 
-    void            SetSelectHdl( const Link& rLink ) { aSelectionLink = rLink; }
-    const Link&     GetSelectHdl() const { return aSelectionLink; }
+    void            SetSelectHdl( const Link<>& rLink ) { aSelectionLink = rLink; }
+    const Link<>&   GetSelectHdl() const { return aSelectionLink; }
 
 };
 

@@ -95,7 +95,7 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    Link aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
+    Link<> aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
     m_pLeftMarginED->SetUpHdl(aLk);
     m_pLeftMarginED->SetDownHdl(aLk);
     m_pLeftMarginED->SetFirstHdl(aLk);

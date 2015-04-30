@@ -66,7 +66,7 @@ private:
     sal_uInt16          m_nErrorEnd;
     bool            m_bIsUndoEditMode;
 
-    Link            m_aModifyLink;
+    Link<>          m_aModifyLink;
 
     void            CallModifyLink() {m_aModifyLink.Call(this);}
 
@@ -77,7 +77,7 @@ protected:
 public:
     SentenceEditWindow_Impl(vcl::Window* pParent, WinBits nBits);
 
-    void            SetModifyHdl(const Link& rLink) SAL_OVERRIDE { m_aModifyLink = rLink;}
+    void            SetModifyHdl(const Link<>& rLink) SAL_OVERRIDE { m_aModifyLink = rLink;}
 
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            SetText( const OUString& rStr ) SAL_OVERRIDE;
@@ -159,7 +159,7 @@ private:
     OUString        m_sTitleSpelling;
     OUString        m_sTitleSpellingGrammar;
 
-    Link            aDialogUndoLink;
+    Link<>          aDialogUndoLink;
 
     bool            bModified;
     bool            bFocusLocked;

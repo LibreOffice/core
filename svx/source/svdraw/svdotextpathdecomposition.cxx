@@ -791,7 +791,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     }
 
     // clean up outliner
-    rOutliner.SetDrawPortionHdl(Link());
+    rOutliner.SetDrawPortionHdl(Link<>());
     rOutliner.Clear();
     rOutliner.setVisualizedPage(0);
 

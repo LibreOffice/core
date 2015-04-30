@@ -31,6 +31,7 @@
 #include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
+#include <tools/link.hxx>
 #include <tools/weakbase.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/gen.hxx>
@@ -69,7 +70,6 @@ class SdrGluePointList;
 class SetOfByte;
 class OutputDevice;
 class Fraction;
-class Link;
 
 namespace basegfx {
 
@@ -1016,10 +1016,10 @@ private:
 public:
     static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=NULL);
     static SdrObject* MakeNewObject( sal_uInt32 nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage );
-    static void InsertMakeObjectHdl(const Link& rLink);
-    static void RemoveMakeObjectHdl(const Link& rLink);
-    static void InsertMakeUserDataHdl(const Link& rLink);
-    static void RemoveMakeUserDataHdl(const Link& rLink);
+    static void InsertMakeObjectHdl(const Link<>& rLink);
+    static void RemoveMakeObjectHdl(const Link<>& rLink);
+    static void InsertMakeUserDataHdl(const Link<>& rLink);
+    static void RemoveMakeUserDataHdl(const Link<>& rLink);
 };
 
 typedef tools::WeakReference< SdrObject > SdrObjectWeakRef;

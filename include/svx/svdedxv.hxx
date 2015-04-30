@@ -74,7 +74,7 @@ protected:
 
     Rectangle                   aTextEditArea;
     Rectangle                   aMinTextEditArea;
-    Link                        aOldCalcFieldValueLink; // for call the old handler
+    Link<>                      aOldCalcFieldValueLink; // for call the old handler
     Point                       aMacroDownPos;
 
     sal_uInt16                  nMacroTol;

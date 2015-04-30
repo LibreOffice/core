@@ -61,14 +61,14 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pParent)
     m_pCurrentDocRB->Check();
     DocSelectHdl(m_pNewDocRB);
 
-    Link aDocSelectLink = LINK(this, SwMailMergeDocSelectPage, DocSelectHdl);
+    Link<> aDocSelectLink = LINK(this, SwMailMergeDocSelectPage, DocSelectHdl);
     m_pCurrentDocRB->SetClickHdl(aDocSelectLink);
     m_pNewDocRB->SetClickHdl(aDocSelectLink);
     m_pLoadDocRB->SetClickHdl(aDocSelectLink);
     m_pLoadTemplateRB->SetClickHdl(aDocSelectLink);
     m_pRecentDocRB->SetClickHdl(aDocSelectLink);
 
-    Link aFileSelectHdl = LINK(this, SwMailMergeDocSelectPage, FileSelectHdl);
+    Link<> aFileSelectHdl = LINK(this, SwMailMergeDocSelectPage, FileSelectHdl);
     m_pBrowseDocPB->SetClickHdl(aFileSelectHdl);
     m_pBrowseTemplatePB->SetClickHdl(aFileSelectHdl);
 

@@ -34,7 +34,6 @@
     is faster and smaller then a complete implementation!
 */
 class SvtToolPanelOptions_Impl;
-class Link;
 
 /** collect information about sidebar group
 

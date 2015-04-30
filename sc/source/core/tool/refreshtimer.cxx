@@ -89,7 +89,7 @@ void ScRefreshTimer::SetRefreshControl( ScRefreshTimerControl * const * pp )
     ppControl = pp;
 }
 
-void ScRefreshTimer::SetRefreshHandler( const Link& rLink )
+void ScRefreshTimer::SetRefreshHandler( const Link<>& rLink )
 {
     SetTimeoutHdl( rLink );
 }

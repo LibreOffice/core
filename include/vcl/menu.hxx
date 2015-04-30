@@ -126,10 +126,10 @@ private:
     Menu*               pStartedFrom;
     VclPtr<vcl::Window> pWindow;
 
-    Link                aActivateHdl;       // Active-Handler
-    Link                aDeactivateHdl;     // Deactivate-Handler
-    Link                aHighlightHdl;      // Highlight-Handler
-    Link                aSelectHdl;         // Highlight-Handler
+    Link<>              aActivateHdl;       // Active-Handler
+    Link<>              aDeactivateHdl;     // Deactivate-Handler
+    Link<>              aHighlightHdl;      // Highlight-Handler
+    Link<>              aSelectHdl;         // Highlight-Handler
 
     VclEventListeners   maEventListeners;
     VclEventListeners   maChildEventListeners;
@@ -320,24 +320,24 @@ public:
     void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
     OString             GetHelpId( sal_uInt16 nItemId ) const;
 
-    void                SetActivateHdl( const Link& rLink )     { aActivateHdl = rLink; }
-    const Link&         GetActivateHdl() const                  { return aActivateHdl; }
+    void                SetActivateHdl( const Link<>& rLink )   { aActivateHdl = rLink; }
+    const Link<>&       GetActivateHdl() const                  { return aActivateHdl; }
 
-    void                SetDeactivateHdl( const Link& rLink )   { aDeactivateHdl = rLink; }
-    const Link&         GetDeactivateHdl() const                { return aDeactivateHdl; }
+    void                SetDeactivateHdl( const Link<>& rLink ) { aDeactivateHdl = rLink; }
+    const Link<>&       GetDeactivateHdl() const                { return aDeactivateHdl; }
 
-    void                SetHighlightHdl( const Link& rLink )    { aHighlightHdl = rLink; }
-    const Link&         GetHighlightHdl() const                 { return aHighlightHdl; }
+    void                SetHighlightHdl( const Link<>& rLink )  { aHighlightHdl = rLink; }
+    const Link<>&       GetHighlightHdl() const                 { return aHighlightHdl; }
 
-    void                SetSelectHdl( const Link& rLink )       { aSelectHdl = rLink; }
-    const Link&         GetSelectHdl() const                    { return aSelectHdl; }
+    void                SetSelectHdl( const Link<>& rLink )     { aSelectHdl = rLink; }
+    const Link<>&       GetSelectHdl() const                    { return aSelectHdl; }
 
     bool                HasLogo() const { return pLogo != nullptr; }
 
-    void                AddEventListener( const Link& rEventListener );
-    void                RemoveEventListener( const Link& rEventListener );
-    void                AddChildEventListener( const Link& rEventListener );
-    void                RemoveChildEventListener( const Link& rEventListener );
+    void                AddEventListener( const Link<>& rEventListener );
+    void                RemoveEventListener( const Link<>& rEventListener );
+    void                AddChildEventListener( const Link<>& rEventListener );
+    void                RemoveChildEventListener( const Link<>& rEventListener );
 
     Menu&               operator =( const Menu& rMenu );
 
@@ -393,9 +393,9 @@ namespace vcl
 
 class VCL_DLLPUBLIC MenuBar : public Menu
 {
-    Link                maCloseHdl;
-    Link                maFloatHdl;
-    Link                maHideHdl;
+    Link<>              maCloseHdl;
+    Link<>              maFloatHdl;
+    Link<>              maHideHdl;
     bool                mbCloseBtnVisible;
     bool                mbFloatBtnVisible;
     bool                mbHideBtnVisible;
@@ -447,12 +447,12 @@ public:
     bool                HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
     bool                HandleMenuButtonEvent(Menu *pMenu, sal_uInt16 nEventId);
 
-    void                SetCloseButtonClickHdl( const Link& rLink ) { maCloseHdl = rLink; }
-    const Link&         GetCloseButtonClickHdl() const              { return maCloseHdl; }
-    void                SetFloatButtonClickHdl( const Link& rLink ) { maFloatHdl = rLink; }
-    const Link&         GetFloatButtonClickHdl() const              { return maFloatHdl; }
-    void                SetHideButtonClickHdl( const Link& rLink )  { maHideHdl = rLink; }
-    const Link&         GetHideButtonClickHdl() const               { return maHideHdl; }
+    void                SetCloseButtonClickHdl( const Link<>& rLink ) { maCloseHdl = rLink; }
+    const Link<>&       GetCloseButtonClickHdl() const              { return maCloseHdl; }
+    void                SetFloatButtonClickHdl( const Link<>& rLink ) { maFloatHdl = rLink; }
+    const Link<>&       GetFloatButtonClickHdl() const              { return maFloatHdl; }
+    void                SetHideButtonClickHdl( const Link<>& rLink ) { maHideHdl = rLink; }
+    const Link<>&       GetHideButtonClickHdl() const               { return maHideHdl; }
 
     //  - by default a menubar is displayable
     //  - if a menubar is not displayable, its MenuBarWindow will never be shown
@@ -470,11 +470,11 @@ public:
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     // passed string will be set as tooltip
-    sal_uInt16          AddMenuBarButton( const Image&, const Link&, const OUString&, sal_uInt16 nPos = 0 );
+    sal_uInt16          AddMenuBarButton( const Image&, const Link<>&, const OUString&, sal_uInt16 nPos = 0 );
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state
-    void                SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& );
+    void                SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<>& );
     // returns the rectangle occupied by the additional button named nId
     // coordinates are relative to the systemwindiow the menubar is attached to
     // if the menubar is unattached an empty rectangle is returned

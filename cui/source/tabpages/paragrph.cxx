@@ -834,7 +834,7 @@ void SvxStdParagraphTabPage::Init_Impl()
     m_pLineDist->SetSelectHdl(
         LINK( this, SvxStdParagraphTabPage, LineDistHdl_Impl ) );
 
-    Link aLink = LINK( this, SvxStdParagraphTabPage, ELRLoseFocusHdl );
+    Link<> aLink = LINK( this, SvxStdParagraphTabPage, ELRLoseFocusHdl );
     m_pFLineIndent->SetLoseFocusHdl( aLink );
     m_pLeftIndent->SetLoseFocusHdl( aLink );
     m_pRightIndent->SetLoseFocusHdl( aLink );
@@ -1018,7 +1018,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
     if ( m_pLastLineLB->GetEntryCount() == LASTLINECOUNT_NEW )
         m_pLastLineLB->RemoveEntry( nLastLinePos );
 
-    Link aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
+    Link<> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     m_pLeft->SetClickHdl( aLink );
     m_pRight->SetClickHdl( aLink );
     m_pCenter->SetClickHdl( aLink );
@@ -2171,7 +2171,7 @@ SvxAsianTabPage::SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     get(m_pHangingPunctCB,"checkHangPunct");
     get(m_pScriptSpaceCB,"checkApplySpacing");
 
-    Link aLink = LINK( this, SvxAsianTabPage, ClickHdl_Impl );
+    Link<> aLink = LINK( this, SvxAsianTabPage, ClickHdl_Impl );
     m_pHangingPunctCB->SetClickHdl( aLink );
     m_pScriptSpaceCB->SetClickHdl( aLink );
     m_pForbiddenRulesCB->SetClickHdl( aLink );

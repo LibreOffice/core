@@ -135,8 +135,8 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
     ResMgr*             mpSfxResMgr;
     Idle                maWaitIdle;
     Timer               maTimeoutTimer;
-    Link                maWindowEventHdl;
-    Link                maApplicationEventHdl;
+    Link<>              maWindowEventHdl;
+    Link<>              maApplicationEventHdl;
     bool                mbShowBubble;
     bool                mbShowMenuIcon;
     bool                mbBubbleChanged;

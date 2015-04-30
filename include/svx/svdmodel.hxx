@@ -157,8 +157,8 @@ protected:
     DateTime       aReadDate;  // date of the incoming stream
     std::vector<SdrPage*> maMaPag;     // master pages
     std::vector<SdrPage*> maPages;
-    Link           aUndoLink;  // link to a NotifyUndo-Handler
-    Link           aIOProgressLink;
+    Link<>         aUndoLink;  // link to a NotifyUndo-Handler
+    Link<>         aIOProgressLink;
     OUString       aTablePath;
     Size           aMaxObjSize; // e.g. for auto-growing text
     Fraction       aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
@@ -578,8 +578,8 @@ public:
     //   void NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
     // When calling the handler ownership is transferred;
     // The UndoAction belongs to the Handler, not the SdrModel.
-    void        SetNotifyUndoActionHdl(const Link& rLink)    { aUndoLink=rLink; }
-    const Link& GetNotifyUndoActionHdl() const               { return aUndoLink; }
+    void        SetNotifyUndoActionHdl(const Link<>& rLink)  { aUndoLink=rLink; }
+    const Link<>& GetNotifyUndoActionHdl() const             { return aUndoLink; }
 
     /** application can set its own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routet to this interface if given */
@@ -605,8 +605,8 @@ public:
     // Mind that the handler will also be called if the App serves Draw data in the
     // office wide Draw-Exchange-Format because that happens through streaming into
     // a MemoryStream.
-    void        SetIOProgressHdl(const Link& rLink)          { aIOProgressLink=rLink; }
-    const Link& GetIOProgressHdl() const                     { return aIOProgressLink; }
+    void        SetIOProgressHdl(const Link<>& rLink)        { aIOProgressLink=rLink; }
+    const Link<>& GetIOProgressHdl() const                   { return aIOProgressLink; }
 
     // Accessor methods for Palettes, Lists and Tabeles
     // FIXME: this badly needs re-factoring ...

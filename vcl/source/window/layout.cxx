@@ -1633,7 +1633,7 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
 {
     SetType(WINDOW_SCROLLWINDOW);
 
-    Link aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
+    Link<> aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
     m_pVScroll->SetScrollHdl(aLink);
     m_pHScroll->SetScrollHdl(aLink);
 }

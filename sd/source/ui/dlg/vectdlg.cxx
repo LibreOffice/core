@@ -158,7 +158,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 
     if( !!aTmp )
     {
-        const Link aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
+        const Link<> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
         aTmp.Vectorize( rMtf, (sal_uInt8) m_pMtReduce->GetValue(), BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES, &aPrgsHdl );
 
         if( m_pCbFillHoles->IsChecked() )

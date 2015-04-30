@@ -38,7 +38,7 @@ namespace dbaui
         IndexFields                 m_aFields;          // !! order matters !!
         IndexFields::const_iterator m_aSeekRow;         // !!
 
-        Link                        m_aModifyHdl;
+        Link<>                      m_aModifyHdl;
 
         VclPtr< ::svt::ListBoxControl>      m_pSortingCell;
         VclPtr< ::svt::ListBoxControl>      m_pFieldNameCell;
@@ -65,8 +65,8 @@ namespace dbaui
         const IndexFields&  GetSavedValue() const { return m_aSavedValue; }
         void                SaveValue() { m_aSavedValue = m_aFields; }
 
-        void SetModifyHdl(const Link& _rHdl) { m_aModifyHdl = _rHdl; }
-        Link GetModifyHdl() const { return m_aModifyHdl; }
+        void SetModifyHdl(const Link<>& _rHdl) { m_aModifyHdl = _rHdl; }
+        Link<> GetModifyHdl() const { return m_aModifyHdl; }
         virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const SAL_OVERRIDE;
 
     protected:

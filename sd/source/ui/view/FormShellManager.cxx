@@ -57,7 +57,7 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
 {
     // Register at the EventMultiplexer to be informed about changes in the
     // center pane.
-    Link aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
+    Link<> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
     mrBase.GetEventMultiplexer()->AddEventListener(
         aLink,
         sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
@@ -73,7 +73,7 @@ FormShellManager::~FormShellManager()
     UnregisterAtCenterPane();
 
     // Unregister from the EventMultiplexer.
-    Link aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
+    Link<> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 
     if (mpSubShellFactory.get() != NULL)
@@ -91,7 +91,7 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
         // Disconnect from the old form shell.
         if (mpFormShell != NULL)
         {
-            mpFormShell->SetControlActivationHandler(Link());
+            mpFormShell->SetControlActivationHandler(Link<>());
             EndListening(*mpFormShell);
             mpFormShell->SetView(NULL);
         }

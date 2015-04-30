@@ -121,7 +121,7 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
         m_pUseCharUnit->Hide();
     }
 
-    Link aLink = LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl);
+    Link<> aLink = LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl);
     m_pShowStandardizedPageCount->SetClickHdl(aLink);
 }
 
@@ -523,7 +523,7 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
     m_pLbLevel->SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
     m_pEdDelim->SetText( sDelim );
 
-    Link aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
+    Link<> aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
     m_pCategoryBox->SetModifyHdl( aLk );
     m_pNumberingSeparatorED->SetModifyHdl( aLk );
     m_pTextEdit->SetModifyHdl( aLk );

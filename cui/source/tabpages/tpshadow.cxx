@@ -159,7 +159,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     //aCtlXRectPreview.SetFillAttr( aXFillAttr );
 
     m_pTsbShowShadow->SetClickHdl( LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl ) );
-    Link aLink = LINK( this, SvxShadowTabPage, ModifyShadowHdl_Impl );
+    Link<> aLink = LINK( this, SvxShadowTabPage, ModifyShadowHdl_Impl );
     m_pLbShadowColor->SetSelectHdl( aLink );
     m_pMtrTransparent->SetModifyHdl( aLink );
     m_pMtrDistance->SetModifyHdl( aLink );

@@ -88,7 +88,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
     m_pCheckLB->setColSizes();
 
     aTextColor = m_pCheckLB->GetTextColor();
-    Link aLink(LINK(this, SvxFontSubstTabPage, SelectHdl));
+    Link<> aLink(LINK(this, SvxFontSubstTabPage, SelectHdl));
 
     m_pCheckLB->SetSelectHdl(aLink);
     m_pUseTableCB->SetClickHdl(aLink);

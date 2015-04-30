@@ -137,8 +137,8 @@ public:
     }
     DECL_LINK(ApplyHdl, void*);
 private:
-    Link m_aHandler;
-    virtual void                SetApplyHdl( const Link& rLink ) SAL_OVERRIDE;
+    Link<> m_aHandler;
+    virtual void                SetApplyHdl( const Link<>& rLink ) SAL_OVERRIDE;
 };
 
 class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg
@@ -350,7 +350,7 @@ class SwMailMergeWizard;
 class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
 {
     VclPtr<SwMailMergeWizard> pDlg;
-    Link               aEndDlgHdl;
+    Link<>             aEndDlgHdl;
 
     DECL_LINK( EndDialogHdl, SwMailMergeWizard* );
 public:
@@ -358,7 +358,7 @@ public:
                      : pDlg(p)
                      {}
     virtual         ~AbstractMailMergeWizard_Impl();
-    virtual void    StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual void    StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
     virtual long    GetResult() SAL_OVERRIDE;
 
     virtual void                SetReloadDocument(const OUString& rURL) SAL_OVERRIDE;

@@ -218,7 +218,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     m_pBtnAssign->SetClickHdl( LINK( this, Svx3DWin, ClickAssignHdl ) );
     m_pBtnUpdate->SetClickHdl( LINK( this, Svx3DWin, ClickUpdateHdl ) );
 
-    Link aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
+    Link<> aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
     m_pBtnGeo->SetClickHdl( aLink );
     m_pBtnRepresentation->SetClickHdl( aLink );
     m_pBtnLight->SetClickHdl( aLink );
@@ -357,7 +357,7 @@ void Svx3DWin::dispose()
 void Svx3DWin::Construct()
 {
     m_pBtnGeo->Check();
-    Link aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
+    Link<> aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
     aLink.Call(m_pBtnGeo);
     m_pCtlLightPreview->Hide();
 }

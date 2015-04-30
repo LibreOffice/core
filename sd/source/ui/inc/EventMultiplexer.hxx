@@ -21,11 +21,10 @@
 #define INCLUDED_SD_SOURCE_UI_INC_EVENTMULTIPLEXER_HXX
 
 #include <svl/lstner.hxx>
+#include <tools/link.hxx>
 
 #include <set>
 #include <memory>
-
-class Link;
 
 namespace sd {
 class ViewShellBase;
@@ -177,7 +176,7 @@ public:
             be informed about.
     */
     void AddEventListener (
-        Link& rCallback,
+        Link<>& rCallback,
         EventMultiplexerEvent::EventId aEventTypeSet);
 
     /** Remove an event listener for the specified event types.
@@ -188,7 +187,7 @@ public:
             for.
     */
     void RemoveEventListener (
-        Link& rCallback,
+        Link<>& rCallback,
         EventMultiplexerEvent::EventId aEventTypeSet = EID_FULL_SET);
 
     /** This method is used for out-of-line events.  An event of the

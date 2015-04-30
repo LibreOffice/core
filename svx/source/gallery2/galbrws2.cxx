@@ -433,7 +433,7 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
                     css::uno::UNO_QUERY );
 
     Image       aDummyImage;
-    const Link  aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
+    const Link<> aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
     vcl::Font   aInfoFont( maInfoBar->GetControlFont() );
 
     maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
@@ -757,7 +757,7 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
     mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
     mpPreview->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_PREVIEW));
 
-    const Link aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
+    const Link<> aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
 
     mpIconView->SetSelectHdl( aSelectHdl );
     mpListView->SetSelectHdl( aSelectHdl );

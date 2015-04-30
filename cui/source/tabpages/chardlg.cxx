@@ -424,7 +424,7 @@ void SvxCharNamePage::Initialize()
     // to handle the changes of the other pages
     SetExchangeSupport();
 
-    Link aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
+    Link<> aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
     m_pWestFontNameLB->SetModifyHdl( aLink );
     m_pWestFontStyleLB->SetModifyHdl( aLink );
     m_pWestFontSizeLB->SetModifyHdl( aLink );
@@ -1474,7 +1474,7 @@ void SvxCharEffectsPage::Initialize()
     m_pFontColorLB->SetSelectHdl( LINK( this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl ) );
 
     // handler
-    Link aLink = LINK( this, SvxCharEffectsPage, SelectHdl_Impl );
+    Link<> aLink = LINK( this, SvxCharEffectsPage, SelectHdl_Impl );
     m_pUnderlineLB->SetSelectHdl( aLink );
     m_pUnderlineColorLB->SetSelectHdl( aLink );
     m_pOverlineLB->SetSelectHdl( aLink );
@@ -2696,7 +2696,7 @@ void SvxCharPositionPage::Initialize()
     m_pKerningLB->SelectEntryPos( 0 );
     KerningSelectHdl_Impl( NULL );
 
-    Link aLink = LINK( this, SvxCharPositionPage, PositionHdl_Impl );
+    Link<> aLink = LINK( this, SvxCharPositionPage, PositionHdl_Impl );
     m_pHighPosBtn->SetClickHdl( aLink );
     m_pNormalPosBtn->SetClickHdl( aLink );
     m_pLowPosBtn->SetClickHdl( aLink );
@@ -3182,8 +3182,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         m_pScalingAndRotationFT->Show();
         m_pScalingFT->Hide();
 
-        Link aOldLink( m_pFitToLineCB->GetClickHdl() );
-        m_pFitToLineCB->SetClickHdl( Link() );
+        Link<> aOldLink( m_pFitToLineCB->GetClickHdl() );
+        m_pFitToLineCB->SetClickHdl( Link<>() );
         if( eState >= SfxItemState::DEFAULT )
         {
             const SvxCharRotateItem& rItem =
@@ -3432,7 +3432,7 @@ void SvxCharTwoLinesPage::Initialize()
 
     m_pTwoLinesBtn->SetClickHdl( LINK( this, SvxCharTwoLinesPage, TwoLinesHdl_Impl ) );
 
-    Link aLink = LINK( this, SvxCharTwoLinesPage, CharacterMapHdl_Impl );
+    Link<> aLink = LINK( this, SvxCharTwoLinesPage, CharacterMapHdl_Impl );
     m_pStartBracketLB->SetSelectHdl( aLink );
     m_pEndBracketLB->SetSelectHdl( aLink );
 

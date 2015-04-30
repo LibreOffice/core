@@ -125,7 +125,7 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
         appendEntry( 1, SVX_RESSTR( RID_SVXSTR_MORENUMBERING ), ::GetImage( rFrame, ".uno:OutlineBullet", false ) );
 
     SetOutputSizePixel( getMenuSize() );
-    Link aLink =  LINK( this, NumberingPopup, VSSelectHdl );
+    Link<> aLink =  LINK( this, NumberingPopup, VSSelectHdl );
     mpValueSet->SetSelectHdl( aLink );
     SetSelectHdl( aLink );
 

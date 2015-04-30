@@ -60,7 +60,7 @@ private:
     OUString        maButtonText;
     bool            mbOpenDlg;
 
-    Link            maDialogCreatedHdl;
+    Link<>          maDialogCreatedHdl;
 
     FileControlMode             mnFlags;
     FileControlMode_Internal    mnInternalFlags;
@@ -100,8 +100,8 @@ public:
 
 
     //use this to manipulate the dialog bevore executing it:
-    void            SetDialogCreatedHdl( const Link& rLink ) { maDialogCreatedHdl = rLink; }
-    const Link&     GetDialogCreatedHdl() const { return maDialogCreatedHdl; }
+    void            SetDialogCreatedHdl( const Link<>& rLink ) { maDialogCreatedHdl = rLink; }
+    const Link<>&   GetDialogCreatedHdl() const { return maDialogCreatedHdl; }
 };
 
 #endif

@@ -159,7 +159,7 @@ VclAbstractDialog2_Impl::~VclAbstractDialog2_Impl()
 }
 
 // virtual
-void  VclAbstractDialog2_Impl::StartExecuteModal( const Link& rEndDialogHdl )
+void  VclAbstractDialog2_Impl::StartExecuteModal( const Link<>& rEndDialogHdl )
 {
     m_aEndDlgHdl = rEndDialogHdl;
     m_pDlg->StartExecuteModal(
@@ -180,7 +180,7 @@ IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog*, pDlg )
     }
 
     m_aEndDlgHdl.Call( this );
-    m_aEndDlgHdl = Link();
+    m_aEndDlgHdl = Link<>();
 
     return 0L;
 }
@@ -271,41 +271,41 @@ void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormat( editeng::Han
      pDlg->SetConversionFormat(_eType);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetOptionsChangedHdl( const Link& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetOptionsChangedHdl( const Link<>& _rHdl )
 {
      pDlg->SetOptionsChangedHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreHdl( const Link& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreHdl( const Link<>& _rHdl )
 {
      pDlg->SetIgnoreHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreAllHdl( const Link& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreAllHdl( const Link<>& _rHdl )
 {
      pDlg->SetIgnoreAllHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetChangeHdl( const Link& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetChangeHdl( const Link<>& _rHdl )
 {
     pDlg->SetChangeHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetChangeAllHdl( const Link& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetChangeAllHdl( const Link<>& _rHdl )
 {
     pDlg->SetChangeAllHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Link& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Link<>& _rHdl )
 {
      pDlg->SetClickByCharacterHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl( const Link& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl( const Link<>& _rHdl )
 {
     pDlg->SetConversionFormatChangedHdl(_rHdl );
 }
-void AbstractHangulHanjaConversionDialog_Impl::SetFindHdl( const Link& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetFindHdl( const Link<>& _rHdl )
 {
      pDlg->SetFindHdl(_rHdl );
 }
@@ -647,7 +647,7 @@ OUString AbstractSvxTransformTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
-void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link& rLink )
+void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link<>& rLink )
 {
     pDlg->SetValidateFramePosLink( rLink );
 }
@@ -686,7 +686,7 @@ OUString AbstractSvxCaptionDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
-void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link& rLink )
+void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link<>& rLink )
 {
     pDlg->SetValidateFramePosLink( rLink );
 }
@@ -717,13 +717,13 @@ void AbstractSvxNameDialog_Impl::GetName(OUString& rName)
     pDlg->GetName( rName );
 }
 
-void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link& rLink, bool bCheckImmediately )
+void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<>& rLink, bool bCheckImmediately )
 {
     aCheckNameHdl = rLink;
     if( rLink.IsSet() )
         pDlg->SetCheckNameHdl( LINK(this, AbstractSvxNameDialog_Impl, CheckNameHdl), bCheckImmediately );
     else
-        pDlg->SetCheckNameHdl( Link(), bCheckImmediately );
+        pDlg->SetCheckNameHdl( Link<>(), bCheckImmediately );
 }
 void AbstractSvxNameDialog_Impl::SetEditHelpId(const OString& aHelpId)
 {
@@ -749,7 +749,7 @@ void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
     pDlg->GetName(rName);
 }
 
-void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link& rLink, bool bCheckImmediately)
+void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<>& rLink, bool bCheckImmediately)
 {
     aCheckNameHdl = rLink;
 
@@ -759,7 +759,7 @@ void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link& rLink, bool b
     }
     else
     {
-        pDlg->SetCheckNameHdl(Link(), bCheckImmediately);
+        pDlg->SetCheckNameHdl(Link<>(), bCheckImmediately);
     }
 }
 
@@ -829,11 +829,11 @@ bool AbstractSvxHpLinkDlg_Impl::QueryClose()
 }
 
 
-void AbstractFmSearchDialog_Impl::SetFoundHandler(const Link& lnk)
+void AbstractFmSearchDialog_Impl::SetFoundHandler(const Link<>& lnk)
 {
     pDlg->SetFoundHandler(lnk);
 }
-void AbstractFmSearchDialog_Impl::SetCanceledNotFoundHdl(const Link& lnk)
+void AbstractFmSearchDialog_Impl::SetCanceledNotFoundHdl(const Link<>& lnk)
 {
     pDlg->SetCanceledNotFoundHdl(lnk);
 }
@@ -922,21 +922,21 @@ bool AbstractSvxPostItDialog_Impl::IsOkEnabled() const
 {
     return pDlg->IsOkEnabled();
 }
-void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link& rLink )
+void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link<>& rLink )
 {
     aNextHdl = rLink;
     if( rLink.IsSet() )
         pDlg->SetNextHdl( LINK(this, AbstractSvxPostItDialog_Impl, NextHdl ) );
     else
-        pDlg->SetNextHdl( Link() );
+        pDlg->SetNextHdl( Link<>() );
 }
-void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link& rLink )
+void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<>& rLink )
 {
     aPrevHdl = rLink;
     if( rLink.IsSet() )
         pDlg->SetPrevHdl( LINK(this, AbstractSvxPostItDialog_Impl, PrevHdl ) );
     else
-        pDlg->SetPrevHdl( Link() );
+        pDlg->SetPrevHdl( Link<>() );
 }
 IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, NextHdl)
 {
@@ -1452,7 +1452,7 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::W
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link& lnkContextSupplier)
+                                                        const Link<>& lnkContextSupplier)
 {
     VclPtrInstance<FmSearchDialog> pDlg( pParent, strInitialText, _rContexts,
                                          nInitialContext, lnkContextSupplier );

@@ -64,7 +64,7 @@ bool SwOneExampleFrame::bShowServiceNotAvailableMessage = true;
 
 SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         sal_uInt32 nFlags,
-                                        const Link* pInitializedLink,
+                                        const Link<>* pInitializedLink,
                                         const OUString* pURL ) :
     aTopWindow(VclPtr<SwFrmCtrlWindow>::Create(&rWin, this)),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
@@ -457,7 +457,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
     aPop.InsertItem(ITEM_UP,   rArr.GetString(rArr.FindIndex(ST_MENU_UP )));
     aPop.InsertItem(ITEM_DOWN, rArr.GetString(rArr.FindIndex(ST_MENU_DOWN )));
 
-    Link aSelLk = LINK(this, SwOneExampleFrame, PopupHdl );
+    Link<> aSelLk = LINK(this, SwOneExampleFrame, PopupHdl );
     aPop.SetSelectHdl(aSelLk);
     if(EX_SHOW_ONLINE_LAYOUT == nStyleFlags)
     {

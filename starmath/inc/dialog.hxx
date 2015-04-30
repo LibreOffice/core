@@ -269,8 +269,8 @@ class SmShowSymbolSetWindow : public Control
 {
     VclPtr<ScrollBar>  m_pVScrollBar;
     SymbolPtrVec_t aSymbolSet;
-    Link        aSelectHdlLink;
-    Link        aDblClickHdlLink;
+    Link<>      aSelectHdlLink;
+    Link<>      aDblClickHdlLink;
     long        nLen;
     long        nRows, nColumns;
     long        nXOffset, nYOffset;
@@ -295,8 +295,8 @@ public:
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
     void SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
-    void SetSelectHdl(const Link& rLink)   { aSelectHdlLink = rLink; }
-    void SetDblClickHdl(const Link& rLink) { aDblClickHdlLink = rLink; }
+    void SetSelectHdl(const Link<>& rLink) { aSelectHdlLink = rLink; }
+    void SetDblClickHdl(const Link<>& rLink) { aDblClickHdlLink = rLink; }
 };
 
 class SmShowSymbolSet : public VclHBox
@@ -314,15 +314,15 @@ public:
     void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow->SelectSymbol(nSymbol); }
     sal_uInt16  GetSelectSymbol() const { return aSymbolWindow->GetSelectSymbol(); }
 
-    void SetSelectHdl(const Link& rLink)   { aSymbolWindow->SetSelectHdl(rLink); }
-    void SetDblClickHdl(const Link& rLink) { aSymbolWindow->SetDblClickHdl(rLink); }
+    void SetSelectHdl(const Link<>& rLink) { aSymbolWindow->SetSelectHdl(rLink); }
+    void SetDblClickHdl(const Link<>& rLink) { aSymbolWindow->SetDblClickHdl(rLink); }
 };
 
 
 
 class SmShowSymbol : public Control
 {
-    Link  aDblClickHdlLink;
+    Link<> aDblClickHdlLink;
 
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
@@ -337,7 +337,7 @@ public:
     }
 
     void    SetSymbol(const SmSym *pSymbol);
-    void    SetDblClickHdl(const Link &rLink) { aDblClickHdlLink = rLink; }
+    void    SetDblClickHdl(const Link<> &rLink) { aDblClickHdlLink = rLink; }
 };
 
 

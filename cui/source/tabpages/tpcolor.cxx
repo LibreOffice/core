@@ -376,7 +376,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     m_pLbColorModel->SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectColorModelHdl_Impl ) );
 
-    Link aLink = LINK( this, SvxColorTabPage, ModifiedHdl_Impl );
+    Link<> aLink = LINK( this, SvxColorTabPage, ModifiedHdl_Impl );
     m_pR->SetModifyHdl( aLink );
     m_pG->SetModifyHdl( aLink );
     m_pB->SetModifyHdl( aLink );

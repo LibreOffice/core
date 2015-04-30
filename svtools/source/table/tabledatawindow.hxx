@@ -43,7 +43,7 @@ namespace svt { namespace table
         friend class TableFunctionSet;
     private:
         TableControl_Impl&  m_rTableControl;
-        Link                m_aSelectHdl;
+        Link<>              m_aSelectHdl;
         sal_uLong           m_nTipWindowHandle;
 
     public:
@@ -51,8 +51,8 @@ namespace svt { namespace table
         virtual ~TableDataWindow();
         virtual void dispose() SAL_OVERRIDE;
 
-        inline void         SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
-        inline const Link&  GetSelectHdl() const                { return m_aSelectHdl; }
+        inline void         SetSelectHdl( const Link<>& rLink ) { m_aSelectHdl = rLink; }
+        inline const Link<>& GetSelectHdl() const               { return m_aSelectHdl; }
 
         // Window overridables
         virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;

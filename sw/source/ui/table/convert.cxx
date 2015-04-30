@@ -147,7 +147,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     }
     mpKeepColumn->SaveValue();
 
-    Link aLk( LINK(this, SwConvertTableDlg, BtnHdl) );
+    Link<> aLk( LINK(this, SwConvertTableDlg, BtnHdl) );
     mpTabBtn->SetClickHdl( aLk );
     mpSemiBtn->SetClickHdl( aLk );
     mpParaBtn->SetClickHdl( aLk );

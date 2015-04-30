@@ -187,7 +187,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     }
     m_pMaxHeightPageBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightPage));
     m_pMaxHeightBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightMetric));
-    Link aLk = LINK(this, SwFootNotePage, HeightModify);
+    Link<> aLk = LINK(this, SwFootNotePage, HeightModify);
     m_pMaxHeightEdit->SetLoseFocusHdl( aLk );
     m_pDistEdit->SetLoseFocusHdl( aLk );
     m_pLineDistEdit->SetLoseFocusHdl( aLk );

@@ -28,15 +28,15 @@ class SdrObjFactory;
 class SdObjectFactory
 {
 protected:
-    Link aOldMakeObjLink;
-    Link aOldMakeUserDataLink;
+    Link<> aOldMakeObjLink;
+    Link<> aOldMakeUserDataLink;
 
 public:
     SdObjectFactory() {}
 
-    void SetOldMakeUserDataHdl( const Link& rLink )
+    void SetOldMakeUserDataHdl( const Link<>& rLink )
                                 { aOldMakeUserDataLink = rLink; }
-    Link GetOldMakeUserDataHdl() const { return aOldMakeUserDataLink; }
+    Link<> GetOldMakeUserDataHdl() const { return aOldMakeUserDataLink; }
 
     DECL_LINK( MakeUserData, SdrObjFactory * );
 };

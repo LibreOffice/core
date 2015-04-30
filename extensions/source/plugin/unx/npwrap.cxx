@@ -399,7 +399,7 @@ int main( int argc, char **argv)
     #endif
 
      pConnector = new PluginConnector( nSocket );
-     pConnector->SetConnectionLostHdl( Link( NULL, GlobalConnectionLostHdl ) );
+     pConnector->SetConnectionLostHdl( Link<>( NULL, GlobalConnectionLostHdl ) );
 
     XtSetLanguageProc( NULL, NULL, NULL );
 

@@ -460,7 +460,7 @@ namespace dbaui
 
         lateUIInit();
 
-        Link aLink(LINK(this, OTableListBoxControl, OnTableChanged));
+        Link<> aLink(LINK(this, OTableListBoxControl, OnTableChanged));
         m_pLeftTable->SetSelectHdl(aLink);
         m_pRightTable->SetSelectHdl(aLink);
     }

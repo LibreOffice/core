@@ -160,7 +160,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet
     m_pDelBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, DelHdl_Impl ) );
     m_pDelAllBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, DelAllHdl_Impl ) );
 
-    Link aLink = LINK( this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl );
+    Link<> aLink = LINK( this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl );
     m_pLeftTab->SetClickHdl( aLink );
     m_pRightTab->SetClickHdl( aLink );
     m_pDezTab->SetClickHdl( aLink );

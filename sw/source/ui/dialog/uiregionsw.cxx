@@ -1874,7 +1874,7 @@ SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( vcl::Window *pParent,
     get(pEndSuffixFT,"endsuffix_label");
     get(pEndSuffixED,"endsuffix");
 
-    Link aLk( LINK( this, SwSectionFtnEndTabPage, FootEndHdl));
+    Link<> aLk( LINK( this, SwSectionFtnEndTabPage, FootEndHdl));
     pFtnNtAtTextEndCB->SetClickHdl( aLk );
     pFtnNtNumCB->SetClickHdl( aLk );
     pEndNtAtTextEndCB->SetClickHdl( aLk );
@@ -2165,7 +2165,7 @@ SwSectionIndentTabPage::SwSectionIndentTabPage(vcl::Window *pParent, const SfxIt
     get(m_pBeforeMF, "before");
     get(m_pAfterMF, "after");
     get(m_pPreviewWin, "preview");
-    Link aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
+    Link<> aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
     m_pBeforeMF->SetModifyHdl(aLk);
     m_pAfterMF->SetModifyHdl(aLk);
 }

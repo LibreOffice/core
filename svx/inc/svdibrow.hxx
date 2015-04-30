@@ -36,8 +36,8 @@ friend class ImpItemEdit;
     long nAktPaintRow;
     VclPtr<Edit> pEditControl;
     OUString aWNamMerk;
-    Link aEntryChangedHdl;
-    Link aSetDirtyHdl;
+    Link<> aEntryChangedHdl;
+    Link<> aSetDirtyHdl;
     ImpItemListRow* pAktChangeEntry;
     long   nLastWhichOfs;
     sal_uInt16 nLastWhich;
@@ -90,10 +90,10 @@ public:
 
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     OUString GetNewEntryValue() const                 { return pEditControl->GetText(); }
-    void SetEntryChangedHdl(const Link& rLink)      { aEntryChangedHdl=rLink; }
-    const Link& GetEntryChangedHdl() const          { return aEntryChangedHdl; }
-    void SetSetDirtyHdl(const Link& rLink)          { aSetDirtyHdl=rLink; }
-    const Link& GetSetDirtyHdl() const              { return aSetDirtyHdl; }
+    void SetEntryChangedHdl(const Link<>& rLink)    { aEntryChangedHdl=rLink; }
+    const Link<>& GetEntryChangedHdl() const        { return aEntryChangedHdl; }
+    void SetSetDirtyHdl(const Link<>& rLink)        { aSetDirtyHdl=rLink; }
+    const Link<>& GetSetDirtyHdl() const            { return aSetDirtyHdl; }
 };
 
 #define WB_STDSIZEABLEDOCKWIN  (WB_STDDOCKWIN|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEMOVE)

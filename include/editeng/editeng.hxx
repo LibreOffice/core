@@ -33,6 +33,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <tools/lineend.hxx>
+#include <tools/link.hxx>
 #include <tools/rtti.hxx>
 
 #include <editeng/eedata.hxx>
@@ -84,7 +85,6 @@ class Size;
 class Point;
 class Rectangle;
 class SvStream;
-class Link;
 class OutputDevice;
 namespace vcl { class Window; }
 class SfxPoolItem;
@@ -345,8 +345,8 @@ public:
     void            SetModified();
     bool            IsModified() const;
 
-    void            SetModifyHdl( const Link& rLink );
-    Link            GetModifyHdl() const;
+    void            SetModifyHdl( const Link<>& rLink );
+    Link<>          GetModifyHdl() const;
 
     bool            IsInSelectionMode() const;
 
@@ -368,14 +368,14 @@ public:
     sal_uLong       Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     sal_uLong       Write( SvStream& rOutput, EETextFormat );
 
-    void            SetStatusEventHdl( const Link& rLink );
-    Link            GetStatusEventHdl() const;
+    void            SetStatusEventHdl( const Link<>& rLink );
+    Link<>          GetStatusEventHdl() const;
 
-    void            SetNotifyHdl( const Link& rLink );
-    Link            GetNotifyHdl() const;
+    void            SetNotifyHdl( const Link<>& rLink );
+    Link<>          GetNotifyHdl() const;
 
-    void            SetImportHdl( const Link& rLink );
-    Link            GetImportHdl() const;
+    void            SetImportHdl( const Link<>& rLink );
+    Link<>          GetImportHdl() const;
 
     // Do not evaluate font formatting => For Outliner
     bool            IsFlatMode() const;
@@ -464,10 +464,10 @@ public:
                     CreateTransferable( const ESelection& rSelection ) const;
 
     // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, musst be compatible in SRC638, change later...
-    void            SetBeginMovingParagraphsHdl( const Link& rLink );
-    void            SetEndMovingParagraphsHdl( const Link& rLink );
-    void            SetBeginPasteOrDropHdl( const Link& rLink );
-    void            SetEndPasteOrDropHdl( const Link& rLink );
+    void            SetBeginMovingParagraphsHdl( const Link<>& rLink );
+    void            SetEndMovingParagraphsHdl( const Link<>& rLink );
+    void            SetBeginPasteOrDropHdl( const Link<>& rLink );
+    void            SetEndPasteOrDropHdl( const Link<>& rLink );
 
     virtual void    PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
     virtual void    ParagraphInserted( sal_Int32 nNewParagraph );
@@ -519,12 +519,12 @@ public:
     static bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
     static bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
     /** sets a link that is called at the beginning of a drag operation at an edit view */
-    void            SetBeginDropHdl( const Link& rLink );
-    Link            GetBeginDropHdl() const;
+    void            SetBeginDropHdl( const Link<>& rLink );
+    Link<>          GetBeginDropHdl() const;
 
     /** sets a link that is called at the end of a drag operation at an edit view */
-    void            SetEndDropHdl( const Link& rLink );
-    Link            GetEndDropHdl() const;
+    void            SetEndDropHdl( const Link<>& rLink );
+    Link<>          GetEndDropHdl() const;
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( bool bCapitalize );

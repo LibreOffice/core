@@ -103,7 +103,7 @@ void ScTabOpDlg::Init()
     m_pBtnOk->SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
     m_pBtnCancel->SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
 
-    Link aLink = LINK( this, ScTabOpDlg, GetFocusHdl );
+    Link<> aLink = LINK( this, ScTabOpDlg, GetFocusHdl );
     m_pEdFormulaRange->SetGetFocusHdl( aLink );
     m_pRBFormulaRange->SetGetFocusHdl( aLink );
     m_pEdRowCell->SetGetFocusHdl( aLink );

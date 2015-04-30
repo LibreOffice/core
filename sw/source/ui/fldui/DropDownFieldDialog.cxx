@@ -44,7 +44,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &r
     get(m_pNextPB, "next");
     get(m_pEditPB, "edit");
 
-    Link aButtonLk = LINK(this, DropDownFieldDialog, ButtonHdl);
+    Link<> aButtonLk = LINK(this, DropDownFieldDialog, ButtonHdl);
     m_pEditPB->SetClickHdl(aButtonLk);
     if( bNextButton )
     {

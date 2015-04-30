@@ -261,22 +261,22 @@ public:
     // and returns true in that case
     // a handler must return true to signal that it has processed the event
     bool Process( VclSimpleEvent* pEvent ) const;
-    void addListener( const Link& rListener );
-    void removeListener( const Link& rListener );
+    void addListener( const Link<>& rListener );
+    void removeListener( const Link<>& rListener );
 private:
-    std::list<Link> m_aListeners;
+    std::list<Link<>> m_aListeners;
 };
 
 class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
 {
-    std::list< Link >                               m_aListeners;
+    std::list< Link<> >                             m_aListeners;
 
     struct ListenerIt
     {
-        std::list< Link >::iterator     m_aIt;
+        std::list< Link<> >::iterator   m_aIt;
         bool                            m_bWasInvalidated;
 
-        ListenerIt(const std::list<Link>::iterator& rIt)
+        ListenerIt(const std::list<Link<>>::iterator& rIt)
             : m_aIt(rIt)
             , m_bWasInvalidated( false )
         {}
@@ -289,8 +289,8 @@ public:
     VclEventListeners2();
     ~VclEventListeners2();
 
-    void addListener( const Link& );
-    void removeListener( const Link& );
+    void addListener( const Link<>& );
+    void removeListener( const Link<>& );
 
     void callListeners( VclSimpleEvent* );
 };

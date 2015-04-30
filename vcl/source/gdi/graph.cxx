@@ -476,12 +476,12 @@ void Graphic::StopAnimation( OutputDevice* pOutDev, long nExtraData )
     mpImpGraphic->ImplStopAnimation( pOutDev, nExtraData );
 }
 
-void Graphic::SetAnimationNotifyHdl( const Link& rLink )
+void Graphic::SetAnimationNotifyHdl( const Link<>& rLink )
 {
     mpImpGraphic->ImplSetAnimationNotifyHdl( rLink );
 }
 
-Link Graphic::GetAnimationNotifyHdl() const
+Link<> Graphic::GetAnimationNotifyHdl() const
 {
     return mpImpGraphic->ImplGetAnimationNotifyHdl();
 }

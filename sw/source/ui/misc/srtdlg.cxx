@@ -178,7 +178,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     }
 
     // initialise
-    Link aLk = LINK(this,SwSortDlg, CheckHdl);
+    Link<> aLk = LINK(this,SwSortDlg, CheckHdl);
     m_pKeyCB1->SetClickHdl( aLk );
     m_pKeyCB2->SetClickHdl( aLk );
     m_pKeyCB3->SetClickHdl( aLk );

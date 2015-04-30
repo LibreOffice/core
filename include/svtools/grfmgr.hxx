@@ -184,7 +184,7 @@ private:
     GraphicType             meType;
     GraphicManager*         mpMgr;
     OUString                maLink;
-    Link*                   mpSwapStreamHdl;
+    Link<>*                 mpSwapStreamHdl;
     OUString                maUserData;
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
@@ -349,7 +349,7 @@ public:
 
     bool                    HasSwapStreamHdl() const { return( mpSwapStreamHdl != NULL && mpSwapStreamHdl->IsSet() ); }
     void                    SetSwapStreamHdl();
-    void                    SetSwapStreamHdl(const Link& rHdl);
+    void                    SetSwapStreamHdl(const Link<>& rHdl);
     sal_uLong               GetSwapOutTimeout() const { return( mpSwapOutTimer ? mpSwapOutTimer->GetTimeout() : 0 ); }
 
     void                    FireSwapInRequest();
@@ -425,7 +425,7 @@ public:
     bool                    IsAnimated() const { return mbAnimated; }
     bool                    IsEPS() const { return mbEPS; }
 
-    Link                    GetAnimationNotifyHdl() const { return GetGraphic().GetAnimationNotifyHdl(); }
+    Link<>                  GetAnimationNotifyHdl() const { return GetGraphic().GetAnimationNotifyHdl(); }
 
     bool                    SwapOut();
     bool                    SwapOut( SvStream* pOStm );

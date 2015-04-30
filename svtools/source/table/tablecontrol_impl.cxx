@@ -635,7 +635,7 @@ namespace svt { namespace table
         bool lcl_updateScrollbar( vcl::Window& _rParent, VclPtr<ScrollBar>& _rpBar,
             bool const i_needBar, long _nVisibleUnits,
             long _nPosition, long _nLineSize, long _nRange,
-            bool _bHorizontal, const Link& _rScrollHandler )
+            bool _bHorizontal, const Link<>& _rScrollHandler )
         {
             // do we currently have the scrollbar?
             bool bHaveBar = _rpBar != nullptr;

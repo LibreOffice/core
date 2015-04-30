@@ -649,7 +649,7 @@ bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,
                                         fGamma, bInvert, msoBrightness );
 }
 
-bool BitmapEx::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
+bool BitmapEx::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link<>* pProgress )
 {
     return !!aBitmap && aBitmap.Filter( eFilter, pFilterParam, pProgress );
 }

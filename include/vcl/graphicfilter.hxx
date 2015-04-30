@@ -315,7 +315,7 @@ public:
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();
 
-    const Link      GetFilterCallback() const;
+    const Link<>    GetFilterCallback() const;
     static GraphicFilter& GetGraphicFilter();
     static int      LoadGraphic( const OUString& rPath, const OUString& rFilter,
                      Graphic& rGraphic,

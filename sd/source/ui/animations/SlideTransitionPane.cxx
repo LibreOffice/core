@@ -910,7 +910,7 @@ void SlideTransitionPane::stopEffects()
 
 void SlideTransitionPane::addListener()
 {
-    Link aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -923,7 +923,7 @@ void SlideTransitionPane::addListener()
 
 void SlideTransitionPane::removeListener()
 {
-    Link aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
+    Link<> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 

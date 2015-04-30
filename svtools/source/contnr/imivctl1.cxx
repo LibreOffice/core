@@ -55,7 +55,7 @@ static bool bEndScrollInvalidate = true;
 
 class IcnViewEdit_Impl : public MultiLineEdit
 {
-    Link            aCallBackHdl;
+    Link<>          aCallBackHdl;
     Accelerator     aAccReturn;
     Accelerator     aAccEscape;
     Idle            aIdle;
@@ -75,7 +75,7 @@ public:
                         const Point& rPos,
                         const Size& rSize,
                         const OUString& rData,
-                        const Link& rNotifyEditEnd );
+                        const Link<>& rNotifyEditEnd );
 
     virtual         ~IcnViewEdit_Impl();
     virtual void    dispose() SAL_OVERRIDE;
@@ -130,7 +130,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
     aVerSBar->SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollUpDownHdl ) );
     aHorSBar->SetScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl ) );
-    Link aEndScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, EndScrollHdl ) );
+    Link<> aEndScrollHdl( LINK( this, SvxIconChoiceCtrl_Impl, EndScrollHdl ) );
     aVerSBar->SetEndScrollHdl( aEndScrollHdl );
     aHorSBar->SetEndScrollHdl( aEndScrollHdl );
 
@@ -3250,7 +3250,7 @@ void SvxIconChoiceCtrl_Impl::SelectAll( bool bSelect, bool bPaint )
 }
 
 IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPos,
-    const Size& rSize, const OUString& rData, const Link& rNotifyEditEnd ) :
+    const Size& rSize, const OUString& rData, const Link<>& rNotifyEditEnd ) :
     MultiLineEdit( pParent, (pParent->GetStyle() & WB_ICON) ? WB_CENTER : WB_LEFT),
     aCallBackHdl( rNotifyEditEnd ),
     bCanceled( false ),

@@ -676,7 +676,7 @@ SwFrmPage::SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    Link aLk = LINK(this, SwFrmPage, RangeModifyHdl);
+    Link<> aLk = LINK(this, SwFrmPage, RangeModifyHdl);
     m_aWidthED.SetLoseFocusHdl( aLk );
     m_aHeightED.SetLoseFocusHdl( aLk );
     m_pAtHorzPosED->SetLoseFocusHdl( aLk );
@@ -3063,7 +3063,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
             }
             else
                 pNextLB->SelectEntryPos(0);
-            Link aLink(LINK(this, SwFrmAddPage, ChainModifyHdl));
+            Link<> aLink(LINK(this, SwFrmAddPage, ChainModifyHdl));
             pPrevLB->SetSelectHdl(aLink);
             pNextLB->SetSelectHdl(aLink);
         }

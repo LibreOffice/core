@@ -258,9 +258,9 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     OUString        aButtonTexts[TOKEN_END]; // Text of the buttons
     OUString        aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
     OUString        sCharStyle;
-    Link            aButtonSelectedHdl;
+    Link<>          aButtonSelectedHdl;
     VclPtr<Control>        pActiveCtrl;
-    Link            aModifyHdl;
+    Link<>          aModifyHdl;
     OUString        accessibleName;
     OUString        sAdditionalAccnameString1;
     OUString        sAdditionalAccnameString2;
@@ -298,10 +298,10 @@ public:
 
     OUString    GetPattern() const;
 
-    void        SetButtonSelectedHdl(const Link& rLink)
+    void        SetButtonSelectedHdl(const Link<>& rLink)
                 { aButtonSelectedHdl = rLink;}
 
-    void        SetModifyHdl(const Link& rLink){aModifyHdl = rLink;}
+    void        SetModifyHdl(const Link<>& rLink){aModifyHdl = rLink;}
 
     Control*    GetActiveControl()
                     { return pActiveCtrl;}

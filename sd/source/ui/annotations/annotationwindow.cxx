@@ -355,7 +355,7 @@ void AnnotationWindow::InitControls()
     nCntrl |= EEControlBits::PASTESPECIAL | EEControlBits::AUTOCORRECT | EEControlBits::USECHARATTRIBS | EEControlBits::NOCOLORS;
     mpOutliner->SetControlWord(nCntrl);
 
-    Engine()->SetModifyHdl( Link() );
+    Engine()->SetModifyHdl( Link<>() );
     Engine()->EnableUndo( false );
 
     Engine()->ClearModifyFlag();
@@ -476,7 +476,7 @@ void AnnotationWindow::ResizeIfNecessary(long aOldHeight, long aNewHeight)
 
 void AnnotationWindow::SetLanguage(const SvxLanguageItem &aNewItem)
 {
-    Engine()->SetModifyHdl( Link() );
+    Engine()->SetModifyHdl( Link<>() );
     ESelection aOld = getView()->GetSelection();
 
     ESelection aNewSelection( 0, 0, Engine()->GetParagraphCount()-1, EE_TEXTPOS_ALL );

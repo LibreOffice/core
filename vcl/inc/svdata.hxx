@@ -340,7 +340,7 @@ struct ImplSVData
     std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList;
     std::unordered_map< int, OUString >* mpPaperNames;
 
-    Link maDeInitHook;
+    Link<> maDeInitHook;
 };
 
 void        ImplDeInitSVData();
@@ -399,7 +399,7 @@ struct ImplFocusDelData : public ImplDelData
 struct ImplSVEvent
 {
     void*               mpData;
-    Link*               mpLink;
+    Link<>*             mpLink;
     VclPtr<vcl::Window> mpWindow;
     ImplDelData         maDelData;
     bool                mbCall;

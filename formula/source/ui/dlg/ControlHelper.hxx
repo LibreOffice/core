@@ -30,7 +30,7 @@ class EditBox : public Control
 private:
 
     VclPtr<MultiLineEdit>  pMEdit;
-    Link            aSelChangedLink;
+    Link<>          aSelChangedLink;
     Selection       aOldSel;
     bool            bMouseFlag;
 
@@ -52,8 +52,8 @@ public:
 
     MultiLineEdit*  GetEdit() {return pMEdit;}
 
-    void            SetSelChangedHdl( const Link& rLink ) { aSelChangedLink = rLink; }
-    const Link&     GetSelChangedHdl() const { return aSelChangedLink; }
+    void            SetSelChangedHdl( const Link<>& rLink ) { aSelChangedLink = rLink; }
+    const Link<>&   GetSelChangedHdl() const { return aSelChangedLink; }
 
     void            UpdateOldSel();
 };
@@ -89,12 +89,12 @@ class ArgInput
 {
 private:
 
-    Link            aFxClickLink;
-    Link            aRefClickLink;
-    Link            aFxFocusLink;
-    Link            aRefFocusLink;
-    Link            aEdFocusLink;
-    Link            aEdModifyLink;
+    Link<>          aFxClickLink;
+    Link<>          aRefClickLink;
+    Link<>          aFxFocusLink;
+    Link<>          aRefFocusLink;
+    Link<>          aEdFocusLink;
+    Link<>          aEdModifyLink;
 
     VclPtr<FixedText>      pFtArg;
     VclPtr<PushButton>     pBtnFx;
@@ -141,23 +141,23 @@ public:
     ArgEdit*    GetArgEdPtr() {return pEdArg;}
 
 
-    void            SetFxClickHdl( const Link& rLink ) { aFxClickLink = rLink; }
-    const Link&     GetFxClickHdl() const { return aFxClickLink; }
+    void            SetFxClickHdl( const Link<>& rLink ) { aFxClickLink = rLink; }
+    const Link<>&   GetFxClickHdl() const { return aFxClickLink; }
 
-    void            SetRefClickHdl( const Link& rLink ) { aRefClickLink = rLink; }
-    const Link&     GetRefClickHdl() const { return aRefClickLink; }
+    void            SetRefClickHdl( const Link<>& rLink ) { aRefClickLink = rLink; }
+    const Link<>&   GetRefClickHdl() const { return aRefClickLink; }
 
-    void            SetFxFocusHdl( const Link& rLink ) { aFxFocusLink = rLink; }
-    const Link&     GetFxFocusHdl() const { return aFxFocusLink; }
+    void            SetFxFocusHdl( const Link<>& rLink ) { aFxFocusLink = rLink; }
+    const Link<>&   GetFxFocusHdl() const { return aFxFocusLink; }
 
-    void            SetRefFocusHdl( const Link& rLink ) { aRefFocusLink = rLink; }
-    const Link&     GetRefFocusHdl() const { return aRefFocusLink; }
+    void            SetRefFocusHdl( const Link<>& rLink ) { aRefFocusLink = rLink; }
+    const Link<>&   GetRefFocusHdl() const { return aRefFocusLink; }
 
-    void            SetEdFocusHdl( const Link& rLink ) { aEdFocusLink = rLink; }
-    const Link&     GetEdFocusHdl() const { return aEdFocusLink; }
+    void            SetEdFocusHdl( const Link<>& rLink ) { aEdFocusLink = rLink; }
+    const Link<>&   GetEdFocusHdl() const { return aEdFocusLink; }
 
-    void            SetEdModifyHdl( const Link& rLink ) { aEdModifyLink = rLink; }
-    const Link&     GetEdModifyHdl() const { return aEdModifyLink; }
+    void            SetEdModifyHdl( const Link<>& rLink ) { aEdModifyLink = rLink; }
+    const Link<>&   GetEdModifyHdl() const { return aEdModifyLink; }
 
     void Hide();
     void Show();

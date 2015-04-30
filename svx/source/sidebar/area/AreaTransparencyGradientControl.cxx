@@ -75,7 +75,7 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
       mrAreaPropertyPanel(rPanel),
       mpBindings(NULL)
 {
-    Link aLink = LINK( this, AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl);
+    Link<> aLink = LINK( this, AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl);
     maMtrTrgrCenterX->SetModifyHdl( aLink );
     maMtrTrgrCenterY->SetModifyHdl( aLink );
     maMtrTrgrAngle->SetModifyHdl( aLink );

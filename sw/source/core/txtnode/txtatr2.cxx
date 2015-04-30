@@ -141,11 +141,11 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //      correct charstyle.
         bool bResetMod = !pDoc->getIDocumentState().IsModified();
-        Link aOle2Lnk;
+        Link<> aOle2Lnk;
         if ( bResetMod )
         {
             aOle2Lnk = pDoc->GetOle2Link();
-            ( (SwDoc*) pDoc )->SetOle2Link( Link() );
+            ( (SwDoc*) pDoc )->SetOle2Link( Link<>() );
         }
 
         pRet = IsPoolUserFmt( nId )
@@ -263,11 +263,11 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
         const bool bResetMod = !pDoc->getIDocumentState().IsModified();
-        Link aOle2Lnk;
+        Link<> aOle2Lnk;
         if( bResetMod )
         {
             aOle2Lnk = pDoc->GetOle2Link();
-            const_cast<SwDoc*>(pDoc)->SetOle2Link( Link() );
+            const_cast<SwDoc*>(pDoc)->SetOle2Link( Link<>() );
         }
 
         pRet = IsPoolUserFmt( nId )

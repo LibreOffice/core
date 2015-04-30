@@ -76,7 +76,7 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     get(m_pPrintCB,"checkCB_PRINT");
     get(m_pColorLB,"listLB_COLOR");
 
-    Link aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
+    Link<> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
     m_pCharsPerLineNF->SetUpHdl(aLink);
     m_pCharsPerLineNF->SetDownHdl(aLink);
     m_pCharsPerLineNF->SetLoseFocusHdl(aLink);
@@ -84,7 +84,7 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     m_pLinesPerPageNF->SetDownHdl(aLink);
     m_pLinesPerPageNF->SetLoseFocusHdl(aLink);
 
-    Link aSizeLink = LINK(this, SwTextGridPage, TextSizeChangedHdl);
+    Link<> aSizeLink = LINK(this, SwTextGridPage, TextSizeChangedHdl);
     m_pTextSizeMF->SetUpHdl(aSizeLink);
     m_pTextSizeMF->SetDownHdl(aSizeLink);
     m_pTextSizeMF->SetLoseFocusHdl(aSizeLink);
@@ -95,12 +95,12 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     m_pCharWidthMF->SetDownHdl(aSizeLink);
     m_pCharWidthMF->SetLoseFocusHdl(aSizeLink);
 
-    Link aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
+    Link<> aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
     m_pNoGridRB->SetClickHdl(aGridTypeHdl);
     m_pLinesGridRB->SetClickHdl(aGridTypeHdl);
     m_pCharsGridRB->SetClickHdl(aGridTypeHdl);
 
-    Link aModifyLk = LINK(this, SwTextGridPage, GridModifyHdl);
+    Link<> aModifyLk = LINK(this, SwTextGridPage, GridModifyHdl);
     m_pColorLB->SetSelectHdl(aModifyLk);
     m_pPrintCB->SetClickHdl(aModifyLk);
     m_pRubyBelowCB->SetClickHdl(aModifyLk);

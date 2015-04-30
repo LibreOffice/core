@@ -53,14 +53,14 @@ public:
     void            SelectCharacter( sal_uInt32 cNew, bool bFocus = false );
     sal_UCS4        GetSelectCharacter() const;
 
-    Link            GetDoubleClickHdl() const { return aDoubleClkHdl; }
-    void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClkHdl = rLink; }
-    Link            GetSelectHdl() const { return aSelectHdl; }
-    void            SetSelectHdl( const Link& rHdl ) { aSelectHdl = rHdl; }
-    Link            GetHighlightHdl() const { return aHighHdl; }
-    void            SetHighlightHdl( const Link& rHdl ) { aHighHdl = rHdl; }
-    Link            GetPreSelectHdl() const { return aHighHdl; }
-    void            SetPreSelectHdl( const Link& rHdl ) { aPreSelectHdl = rHdl; }
+    Link<>          GetDoubleClickHdl() const { return aDoubleClkHdl; }
+    void            SetDoubleClickHdl( const Link<>& rLink ) { aDoubleClkHdl = rLink; }
+    Link<>          GetSelectHdl() const { return aSelectHdl; }
+    void            SetSelectHdl( const Link<>& rHdl ) { aSelectHdl = rHdl; }
+    Link<>          GetHighlightHdl() const { return aHighHdl; }
+    void            SetHighlightHdl( const Link<>& rHdl ) { aHighHdl = rHdl; }
+    Link<>          GetPreSelectHdl() const { return aHighHdl; }
+    void            SetPreSelectHdl( const Link<>& rHdl ) { aPreSelectHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
 
     svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
@@ -100,10 +100,10 @@ protected:
 private:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
     ItemsMap        m_aItems;
-    Link            aDoubleClkHdl;
-    Link            aSelectHdl;
-    Link            aHighHdl;
-    Link            aPreSelectHdl;
+    Link<>          aDoubleClkHdl;
+    Link<>          aSelectHdl;
+    Link<>          aHighHdl;
+    Link<>          aPreSelectHdl;
     svx::SvxShowCharSetVirtualAcc*    m_pAccessible;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccessible;
     long            nX;

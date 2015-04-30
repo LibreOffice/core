@@ -46,13 +46,13 @@ namespace dbaui
             <p>When calling the link, the parameter is an SvTreeListEntry marking the entry to be expanded.
             </p>
         */
-        void    SetPreExpandHandler(const Link& _rHdl);
+        void    SetPreExpandHandler(const Link<>& _rHdl);
         /// gets the currently set NodeExpansionHandler
 
-        void    setCopyHandler(const Link& _rHdl);
+        void    setCopyHandler(const Link<>& _rHdl);
 
         void                setModel(SvTreeList* _pTreeModel);
-        void                setSelChangeHdl(const Link& _rHdl);
+        void                setSelChangeHdl(const Link<>& _rHdl);
 
         DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }
 

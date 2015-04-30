@@ -515,11 +515,11 @@ public:
     void SetRootAtom( const Atom* pAtom );
 
 
-    void            SetCollapsingHdl(const Link& rNewHdl){maCollapsingHdl=rNewHdl;}
-    const Link&     GetCollapsingHdl() const { return maCollapsingHdl; }
+    void            SetCollapsingHdl(const Link<>& rNewHdl){maCollapsingHdl=rNewHdl;}
+    const Link<>&   GetCollapsingHdl() const { return maCollapsingHdl; }
 
-    void            SetExpandingHdl(const Link& rNewHdl){maExpandingHdl=rNewHdl;}
-    const Link&     GetExpandingHdl() const { return maExpandingHdl; }
+    void            SetExpandingHdl(const Link<>& rNewHdl){maExpandingHdl=rNewHdl;}
+    const Link<>&   GetExpandingHdl() const { return maExpandingHdl; }
 
     virtual BOOL    Expand( SvTreeListEntry* pParent );
     virtual BOOL    Collapse( SvTreeListEntry* pParent );
@@ -538,8 +538,8 @@ private:
     Image maImgExpanded;
     Image maImgCollapsed;
     bool mbRecursiveGuard;
-    Link maCollapsingHdl;
-    Link maExpandingHdl;
+    Link<> maCollapsingHdl;
+    Link<> maExpandingHdl;
 };
 
 typedef std::pair< AtomContainerTreeListBox*, SvTreeListEntry* > AtomContainerEntryPair;

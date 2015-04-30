@@ -79,7 +79,7 @@ SidebarTextEditSource::~SidebarTextEditSource()
 {
     if ( mrSidebarTxtControl.GetTextView() )
     {
-        mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link() );
+        mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link<>() );
     }
 }
 

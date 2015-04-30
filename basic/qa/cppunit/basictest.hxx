@@ -139,7 +139,7 @@ class MacroSnippet
 
     void ResetError()
     {
-        StarBASIC::SetGlobalErrorHdl( Link() );
+        StarBASIC::SetGlobalErrorHdl( Link<>() );
         mbError = false;
     }
 };

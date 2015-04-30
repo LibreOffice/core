@@ -651,12 +651,12 @@ private:
 
     RulerSelection  maHoverSelection;
 
-    Link            maStartDragHdl;
-    Link            maDragHdl;
-    Link            maEndDragHdl;
-    Link            maClickHdl;
-    Link            maDoubleClickHdl;
-    Link            maExtraDownHdl;
+    Link<>          maStartDragHdl;
+    Link<>          maDragHdl;
+    Link<>          maEndDragHdl;
+    Link<>          maClickHdl;
+    Link<>          maDoubleClickHdl;
+    Link<>          maExtraDownHdl;
 
     std::unique_ptr<RulerSelection> mxCurrentHitTest;
     std::unique_ptr<RulerSelection> mxPreviousHitTest;
@@ -797,18 +797,18 @@ public:
     void            SetStyle( WinBits nStyle );
     WinBits         GetStyle() const { return mnWinStyle; }
 
-    void            SetStartDragHdl( const Link& rLink ) { maStartDragHdl = rLink; }
-    const Link&     GetStartDragHdl() const { return maStartDragHdl; }
-    void            SetDragHdl( const Link& rLink ) { maDragHdl = rLink; }
-    const Link&     GetDragHdl() const { return maDragHdl; }
-    void            SetEndDragHdl( const Link& rLink ) { maEndDragHdl = rLink; }
-    const Link&     GetEndDragHdl() const { return maEndDragHdl; }
-    void            SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
-    const Link&     GetClickHdl() const { return maClickHdl; }
-    void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
-    const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
-    void            SetExtraDownHdl( const Link& rLink ) { maExtraDownHdl = rLink; }
-    const Link&     GetExtraDownHdl() const { return maExtraDownHdl; }
+    void            SetStartDragHdl( const Link<>& rLink ) { maStartDragHdl = rLink; }
+    const Link<>&   GetStartDragHdl() const { return maStartDragHdl; }
+    void            SetDragHdl( const Link<>& rLink ) { maDragHdl = rLink; }
+    const Link<>&   GetDragHdl() const { return maDragHdl; }
+    void            SetEndDragHdl( const Link<>& rLink ) { maEndDragHdl = rLink; }
+    const Link<>&   GetEndDragHdl() const { return maEndDragHdl; }
+    void            SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
+    const Link<>&   GetClickHdl() const { return maClickHdl; }
+    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
+    const Link<>&   GetDoubleClickHdl() const { return maDoubleClickHdl; }
+    void            SetExtraDownHdl( const Link<>& rLink ) { maExtraDownHdl = rLink; }
+    const Link<>&   GetExtraDownHdl() const { return maExtraDownHdl; }
 
     void            SetTextRTL(bool bRTL);
     bool            GetTextRTL();

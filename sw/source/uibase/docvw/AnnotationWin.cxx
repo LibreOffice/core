@@ -94,7 +94,7 @@ void SwAnnotationWin::SetPostItText()
     ESelection aOrigSelection(GetOutlinerView()->GetEditView().GetSelection());
 
     // get text from SwPostItField and insert into our textview
-    Engine()->SetModifyHdl( Link() );
+    Engine()->SetModifyHdl( Link<>() );
     Engine()->EnableUndo( false );
     if( mpFld->GetTextObject() )
         Engine()->SetText( *mpFld->GetTextObject() );
@@ -261,7 +261,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     GetOutlinerView()->SetAttribs(DefaultItem());
     // lets insert an undo step so the initial text can be easily deleted
     // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
-    Engine()->SetModifyHdl( Link() );
+    Engine()->SetModifyHdl( Link<>() );
     IDocumentUndoRedo & rUndoRedo(
         DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
     boost::scoped_ptr<SwField> pOldField;

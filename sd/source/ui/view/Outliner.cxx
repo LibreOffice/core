@@ -311,7 +311,7 @@ void Outliner::EndSpelling()
     bool bViewIsDrawViewShell(pViewShell && pViewShell->ISA(DrawViewShell));
     if (bViewIsDrawViewShell)
     {
-        SetStatusEventHdl(Link());
+        SetStatusEventHdl(Link<>());
         mpView = pViewShell->GetView();
         mpView->UnmarkAllObj (mpView->GetSdrPageView());
         mpView->SdrEndTextEdit();
@@ -736,7 +736,7 @@ void Outliner::DetectChange()
             || aPosition.mePageKind != pDrawViewShell->GetPageKind()))
     {
         // Either the edit mode or the page kind has changed.
-        SetStatusEventHdl(Link());
+        SetStatusEventHdl(Link<>());
 
         SdrPageView* pPageView = mpView->GetSdrPageView();
         if (pPageView != NULL)
@@ -1207,7 +1207,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
         // Restore old edit mode.
         pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, false);
 
-        SetStatusEventHdl(Link());
+        SetStatusEventHdl(Link<>());
         OUString sViewURL;
         switch (ePageKind)
         {
