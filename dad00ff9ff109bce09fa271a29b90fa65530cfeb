@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_c6fe4205",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-30T13:26:50Z",
+      "side": 1,
+      "message": "Probably the parameter definitions are the problem, use the same as for the other functions, 1,MX,R,{RO_E,RO}",
+      "revId": "dad00ff9ff109bce09fa271a29b90fa65530cfeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
