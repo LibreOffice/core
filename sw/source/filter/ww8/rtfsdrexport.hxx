@@ -47,7 +47,7 @@ class RtfSdrExport : public EscherEx
     sal_uInt32 m_nShapeFlags;
 
     /// Remember style, the most important shape attribute ;-)
-    OStringBuffer* m_pShapeStyle;
+    OStringBuffer m_aShapeStyle;
 
     std::map<OString,OString> m_aShapeProps;
 

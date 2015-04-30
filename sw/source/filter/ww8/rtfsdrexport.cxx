@@ -38,7 +38,7 @@ RtfSdrExport::RtfSdrExport(RtfExport& rExport)
       m_pSdrObject(NULL),
       m_nShapeType(ESCHER_ShpInst_Nil),
       m_nShapeFlags(0) ,
-      m_pShapeStyle(new OStringBuffer(200)),
+      m_aShapeStyle(200),
       m_pShapeTypeWritten(new bool[ ESCHER_ShpInst_COUNT ]),
       m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.pDoc))
 {
@@ -49,7 +49,6 @@ RtfSdrExport::RtfSdrExport(RtfExport& rExport)
 RtfSdrExport::~RtfSdrExport()
 {
     delete mpOutStrm, mpOutStrm = NULL;
-    delete m_pShapeStyle, m_pShapeStyle = NULL;
     delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = NULL;
 }
 
@@ -60,9 +59,9 @@ void RtfSdrExport::OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance)
     if (nEscherContainer == ESCHER_SpContainer)
     {
         m_nShapeType = ESCHER_ShpInst_Nil;
-        if (!m_pShapeStyle->isEmpty())
-            m_pShapeStyle->makeStringAndClear();
-        m_pShapeStyle->ensureCapacity(200);
+        if (!m_aShapeStyle.isEmpty())
+            m_aShapeStyle.makeStringAndClear();
+        m_aShapeStyle.ensureCapacity(200);
         m_aShapeProps.clear();
     }
 }
@@ -138,7 +137,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRec
     if (m_nShapeType == ESCHER_ShpInst_Line)
         AddLineDimensions(rRect);
     else
-        AddRectangleDimensions(*m_pShapeStyle, rRect);
+        AddRectangleDimensions(m_aShapeStyle, rRect);
 
     // properties
     const EscherProperties& rOpts = rProps.GetOpts();
@@ -170,7 +169,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRec
                 break;
             }
             if (nWrapType)
-                m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPWR).append((sal_Int32)nWrapType);
+                m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPWR).append((sal_Int32)nWrapType);
         }
         break;
         case ESCHER_Prop_fillColor:
@@ -407,10 +406,10 @@ void RtfSdrExport::AddLineDimensions(const Rectangle& rRectangle)
     }
 
     // the actual dimensions
-    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
-    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(rRectangle.Top());
-    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(rRectangle.Right());
-    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
+    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
+    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(rRectangle.Top());
+    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(rRectangle.Right());
+    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
 }
 
 void RtfSdrExport::AddRectangleDimensions(OStringBuffer& rBuffer, const Rectangle& rRectangle)
@@ -484,7 +483,7 @@ sal_Int32 RtfSdrExport::StartShape()
     m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHP);
     m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_IGNORE).append(OOO_STRING_SVTOOLS_RTF_SHPINST);
 
-    m_rAttrOutput.RunText().append(m_pShapeStyle->makeStringAndClear());
+    m_rAttrOutput.RunText().append(m_aShapeStyle.makeStringAndClear());
     // Ignore \shpbxpage, \shpbxmargin, and \shpbxcolumn, in favor of the posrelh property.
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBXIGNORE);
     // Ignore \shpbypage, \shpbymargin, and \shpbycolumn, in favor of the posrelh property.
