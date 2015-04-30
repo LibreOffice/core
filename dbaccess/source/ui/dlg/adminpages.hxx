@@ -93,7 +93,7 @@ namespace dbaui
                                         ,public ::svt::IWizardPageController
     {
     private:
-        Link<>          m_aModifiedHandler;     /// to be called if something on the page has been modified
+        Link<OGenericAdministrationPage const *, void> m_aModifiedHandler; /// to be called if something on the page has been modified
         bool        m_abEnableRoadmap;
     protected:
         IDatabaseSettingsDialog*   m_pAdminDialog;
@@ -104,7 +104,7 @@ namespace dbaui
     public:
         OGenericAdministrationPage(vcl::Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
         /// set a handler which gets called every time something on the page has been modified
-        void SetModifiedHandler(const Link<>& _rHandler) { m_aModifiedHandler = _rHandler; }
+        void SetModifiedHandler(const Link<OGenericAdministrationPage const *, void>& _rHandler) { m_aModifiedHandler = _rHandler; }
 
         /** Sets the ParentDialog
             @param  _pAdminDialog
@@ -160,7 +160,7 @@ namespace dbaui
         virtual void    ActivatePage() SAL_OVERRIDE;
 
     protected:
-        void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call((void*)this); }
+        void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call(this); }
 
         /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns sal_True
         virtual bool prepareLeave() { return true; }

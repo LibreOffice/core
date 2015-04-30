@@ -180,7 +180,7 @@ private:
     DECL_LINK(OnRecentDocumentSelected, OGeneralPageWizard*);
     DECL_LINK(OnSingleDocumentChosen, OGeneralPageWizard*);
     DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
-    DECL_LINK(ImplModifiedHdl, OGenericAdministrationPage*);
+    DECL_LINK_TYPED(ImplModifiedHdl, OGenericAdministrationPage const *, void);
 };
 
 }   // namespace dbaui

@@ -574,7 +574,7 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
     return pPage;
 }
 
-IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _pConnectionPageSetup)
+IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage const *, _pConnectionPageSetup, void)
 {
     m_bIsConnectable = _pConnectionPageSetup->GetRoadmapStateValue( );
     enableState(PAGE_DBSETUPWIZARD_FINAL, m_bIsConnectable);
@@ -584,7 +584,6 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
     else
         enableButtons( WizardButtonFlags::FINISH, m_bIsConnectable);
     enableButtons( WizardButtonFlags::NEXT, m_bIsConnectable  && (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL));
-    return sal_True;
 }
 
 IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup)
