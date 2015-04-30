@@ -74,9 +74,6 @@
     sal_IntPtr Class::Member( \
         SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER void *)
 
-#define LINK(Instance, Class, Member) \
-    Link<>(static_cast<Class *>(Instance), &Class::LinkStub##Member)
-
 #define DECL_LINK_TYPED(Member, ArgType, RetType) \
     static RetType LinkStub##Member(void *, ArgType); \
     RetType Member(ArgType)
@@ -125,7 +122,7 @@
     RetType Class::Member( \
         SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER void *)
 
-#define LINK_TYPED(Instance, Class, Member) tools::detail::makeLink( \
+#define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     static_cast<Class *>(Instance), &Class::LinkStub##Member)
 
 #define EMPTYARG
