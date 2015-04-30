@@ -37,41 +37,41 @@ function copy_packages {
   cd $OUTFOLDER
   pwd
 
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice/deb/install/LibreOffice_4.1.6.?.?_Linux_x86_deb_download/LibreOffice_4.1.6.?.?_Linux_x86_deb.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_download/LibreOffice_4.1.6.*.?_Linux_x86_deb.tar.gz .
 
   # Die Sprachpakete
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_en-US_download/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_en-US.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_de_download/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_de.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_fr_download/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_fr.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_es_download/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_es.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_pt_download/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_pt.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_it_download/LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_it.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_en-US_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_en-US.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_de_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_de.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_fr_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_fr.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_es_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_es.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_pt_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_pt.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_languagepack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_it_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_it.tar.gz .
 
   # Die Hilfepakete
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_fr_download/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_fr.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_it_download/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_it.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_de_download/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_de.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_es_download/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_es.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_en-US_download/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_en-US.tar.gz .
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_pt_download/LibreOffice_4.1.6.2.0_Linux_x86_deb_helppack_pt.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_fr_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_fr.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_it_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_it.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_de_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_de.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_es_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_es.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_en-US_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_en-US.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_helppack/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_pt_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_pt.tar.gz .
 
   # Das SDK
-  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_SDK/deb/install/LibreOffice_4.1.6.?.?_Linux_x86_deb_sdk_download/LibreOffice_4.1.6.?.?_Linux_x86_deb_sdk.tar.gz .
+  cp $WORKSPACE/workdir/unxlngi6.pro/installation/LibreOffice_SDK/deb/install/LibreOffice_4.1.6.*.?_Linux_x86_deb_sdk_download/LibreOffice_4.1.6.*.?_Linux_x86_deb_sdk.tar.gz .
 
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_de.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_en-US.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_es.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_fr.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_it.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_pt.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_fr.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_it.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_de.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_es.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_en-US.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_pt.tar.gz
-  tar -xvzf LibreOffice_4.1.6.?.?_Linux_x86_deb_sdk.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_de.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_en-US.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_es.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_fr.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_it.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_pt.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_fr.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_it.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_de.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_es.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_en-US.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_pt.tar.gz
+  tar -xvzf LibreOffice_4.1.6.*.?_Linux_x86_deb_sdk.tar.gz
   rm LibreOffice*.tar.gz
 
   rm -rf release
@@ -79,35 +79,35 @@ function copy_packages {
   mkdir release/sdk
   mkdir release/main
 
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_de/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_en-US/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_es/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_fr/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_it/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_pt/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_fr/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_it/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_de/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_es/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_pt/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_en-US/DEBS/*.deb release/main
-  mv LibreOffice_4.1.6.?.?_Linux_x86_deb_sdk/DEBS/*.deb release/sdk
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_de/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_en-US/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_es/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_fr/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_it/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_pt/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_fr/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_it/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_de/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_es/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_pt/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_en-US/DEBS/*.deb release/main
+  mv LibreOffice_4.1.6.*.?_Linux_x86_deb_sdk/DEBS/*.deb release/sdk
 
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_de
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_en-US
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_es
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_fr
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_it
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_langpack_pt
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_de
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_fr
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_es
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_it
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_pt
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_helppack_en-US
-  rm -rf LibreOffice_4.1.6.?.?_Linux_x86_deb_sdk
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_de
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_en-US
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_es
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_fr
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_it
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_langpack_pt
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_de
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_fr
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_es
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_it
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_pt
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_helppack_en-US
+  rm -rf LibreOffice_4.1.6.*.?_Linux_x86_deb_sdk
 
   rm -rf patched
 
