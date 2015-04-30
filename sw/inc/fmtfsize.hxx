@@ -105,7 +105,7 @@ inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(bool bInP) const
     { return static_cast<const SwFmtFrmSize&>(Get( RES_FRM_SIZE,bInP)); }
 
 inline const SwFmtFrmSize &SwFmt::GetFrmSize(bool bInP) const
-    { return aSet.GetFrmSize(bInP); }
+    { return m_aSet.GetFrmSize(bInP); }
 
 #endif
 

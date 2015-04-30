@@ -43,22 +43,22 @@ namespace drawinglayer { namespace attribute {
 /// Base class for various Writer styles.
 class SW_DLLPUBLIC SwFmt : public SwModify
 {
-    OUString aFmtName;
-    SwAttrSet aSet;
+    OUString m_aFmtName;
+    SwAttrSet m_aSet;
 
-    sal_uInt16 nWhichId;
-    sal_uInt16 nPoolFmtId;        /**< Id for "automatically" created formats.
+    sal_uInt16 m_nWhichId;
+    sal_uInt16 m_nPoolFmtId;        /**< Id for "automatically" created formats.
                                        (is not hard attribution!!!) */
-    sal_uInt16 nPoolHelpId;       ///< HelpId for this Pool-style.
-    sal_uInt8 nPoolHlpFileId;     ///< FilePos to Doc to these style helps.
-    bool   bWritten : 1;      ///< TRUE: already written.
-    bool   bAutoFmt : 1;      /**< FALSE: it is a template.
+    sal_uInt16 m_nPoolHelpId;       ///< HelpId for this Pool-style.
+    sal_uInt8 m_nPoolHlpFileId;     ///< FilePos to Doc to these style helps.
+    bool   m_bWritten : 1;      ///< TRUE: already written.
+    bool   m_bAutoFmt : 1;      /**< FALSE: it is a template.
                                        default is true! */
-    bool   bFmtInDTOR : 1;    /**< TRUE: Format becomes deleted. In order to be able
+    bool   m_bFmtInDTOR : 1;    /**< TRUE: Format becomes deleted. In order to be able
                                        to recognize this in FmtChg-message!! */
-    bool   bAutoUpdateFmt : 1;/**< TRUE: Set attributes of a whole paragraph
+    bool   m_bAutoUpdateFmt : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
-    bool bHidden : 1;
+    bool m_bHidden : 1;
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
 
 protected:
@@ -76,7 +76,7 @@ public:
     SwFmt &operator=(const SwFmt&);
 
     /// for Querying of Writer-functions.
-    sal_uInt16 Which() const { return nWhichId; }
+    sal_uInt16 Which() const { return m_nWhichId; }
 
     /// Query format information.
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
@@ -111,18 +111,18 @@ public:
     inline SwFmt* DerivedFrom() const { return const_cast<SwFmt*>(static_cast<const SwFmt*>(GetRegisteredIn())); }
     inline bool IsDefault() const { return DerivedFrom() == 0; }
 
-    inline OUString GetName() const   { return aFmtName; }
+    inline OUString GetName() const   { return m_aFmtName; }
     void SetName( const OUString& rNewName, bool bBroadcast=false );
     inline void SetName( const sal_Char* pNewName,
                          bool bBroadcast=false);
 
     /// For querying the attribute array.
-    inline const SwAttrSet& GetAttrSet() const { return aSet; }
+    inline const SwAttrSet& GetAttrSet() const { return m_aSet; }
 
     /** Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
        im Zugriff. */
-    const SwDoc *GetDoc() const         { return aSet.GetDoc(); }
-          SwDoc *GetDoc()               { return aSet.GetDoc(); }
+    const SwDoc *GetDoc() const         { return m_aSet.GetDoc(); }
+          SwDoc *GetDoc()               { return m_aSet.GetDoc(); }
 
     /// Provides access to the document settings interface.
     const IDocumentSettingAccess* getIDocumentSettingAccess() const;
@@ -145,38 +145,38 @@ public:
     IDocumentChartDataProviderAccess* getIDocumentChartDataProviderAccess();
 
     /// Get and set Pool style IDs.
-    sal_uInt16 GetPoolFmtId() const { return nPoolFmtId; }
-    void SetPoolFmtId( sal_uInt16 nId ) { nPoolFmtId = nId; }
+    sal_uInt16 GetPoolFmtId() const { return m_nPoolFmtId; }
+    void SetPoolFmtId( sal_uInt16 nId ) { m_nPoolFmtId = nId; }
 
     /// Get and set Help-IDs for document templates.
-    sal_uInt16 GetPoolHelpId() const { return nPoolHelpId; }
-    void SetPoolHelpId( sal_uInt16 nId ) { nPoolHelpId = nId; }
-    sal_uInt8 GetPoolHlpFileId() const { return nPoolHlpFileId; }
-    void SetPoolHlpFileId( sal_uInt8 nId ) { nPoolHlpFileId = nId; }
+    sal_uInt16 GetPoolHelpId() const { return m_nPoolHelpId; }
+    void SetPoolHelpId( sal_uInt16 nId ) { m_nPoolHelpId = nId; }
+    sal_uInt8 GetPoolHlpFileId() const { return m_nPoolHlpFileId; }
+    void SetPoolHlpFileId( sal_uInt8 nId ) { m_nPoolHlpFileId = nId; }
 
     /// Get attribute-description. Returns passed string.
     void GetPresentation( SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString &rText ) const
-        { aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
+        { m_aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
 
     /// Format-ID for reading/writing:
-    void   ResetWritten()    { bWritten = false; }
+    void   ResetWritten()    { m_bWritten = false; }
 
     /// Query / set AutoFmt-flag.
-    bool IsAuto() const                 { return bAutoFmt; }
-    void SetAuto( bool bNew = false )   { bAutoFmt = bNew; }
+    bool IsAuto() const                 { return m_bAutoFmt; }
+    void SetAuto( bool bNew = false )   { m_bAutoFmt = bNew; }
 
-    bool IsHidden() const                 { return bHidden; }
-    void SetHidden( bool bValue = false ) { bHidden = bValue; }
+    bool IsHidden() const                 { return m_bHidden; }
+    void SetHidden( bool bValue = false ) { m_bHidden = bValue; }
 
     void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
     void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
 
     /// Query / set bAutoUpdateFmt-flag.
-    bool IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }
-    void SetAutoUpdateFmt( bool bNew = true )   { bAutoUpdateFmt = bNew; }
+    bool IsAutoUpdateFmt() const                { return m_bAutoUpdateFmt; }
+    void SetAutoUpdateFmt( bool bNew = true )   { m_bAutoUpdateFmt = bNew; }
 
-    bool IsFmtInDTOR() const { return bFmtInDTOR; }
+    bool IsFmtInDTOR() const { return m_bFmtInDTOR; }
 
     /** GetMethods: Bool indicates whether to search only in Set (FALSE)
      or also in Parents.

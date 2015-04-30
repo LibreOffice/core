@@ -79,7 +79,7 @@ inline const SwFmtAnchor &SwAttrSet::GetAnchor(bool bInP) const
     { return static_cast<const SwFmtAnchor&>(Get(RES_ANCHOR, bInP)); }
 
  inline const SwFmtAnchor &SwFmt::GetAnchor(bool bInP) const
-     { return aSet.GetAnchor(bInP); }
+     { return m_aSet.GetAnchor(bInP); }
 
 #endif
 
