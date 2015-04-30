@@ -49,6 +49,9 @@
 
 #include "boost/noncopyable.hpp"
 #include <boost/scoped_array.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include <algorithm>
 
 namespace {
 
@@ -161,6 +164,21 @@ private:
     }
 };
 
+namespace {
+
+void addRecursiveTests(const std::vector<std::string>& test_names, CppUnit::Test* pTest, CppUnit::TestRunner& rRunner)
+{
+    for (int i = 0; i < pTest->getChildTestCount(); ++i)
+    {
+        CppUnit::Test* pNewTest = pTest->getChildTestAt(i);
+        addRecursiveTests(test_names, pNewTest, rRunner);
+        if (std::find(test_names.begin(), test_names.end(), pNewTest->getName()) != test_names.end())
+            rRunner.addTest(pNewTest);
+    }
+}
+
+}
+
 //Allow the whole uniting testing framework to be run inside a "Protector"
 //which knows about uno exceptions, so it can print the content of the
 //exception before falling over and dying
@@ -241,9 +259,20 @@ public:
             setenv("LO_TESTNAME", lib.c_str(), true);
 #endif
 
+            const char* pVal = getenv("CPPUNIT_TEST_NAME");
+
             CppUnit::TestRunner runner;
-            runner.addTest(
-                CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+            if (pVal)
+            {
+                std::vector<std::string> test_names;
+                boost::split(test_names, pVal, boost::is_any_of("\t "));
+                CppUnit::Test* pTest = CppUnit::TestFactoryRegistry::getRegistry().makeTest();
+                addRecursiveTests(test_names, pTest, runner);
+            }
+            else
+            {
+                runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+            }
             runner.run(result);
 
             CppUnit::CompilerOutputter outputter(&collector, CppUnit::stdCErr());
