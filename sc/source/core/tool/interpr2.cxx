@@ -806,7 +806,7 @@ void ScInterpreter::ScCeil( bool bODFF )
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
-        bool bAbs = ( nParamCount == 3 ? GetBool() : false );
+        bool bAbs = nParamCount == 3 && GetBool();
         double fDec, fVal;
         if ( nParamCount == 1 )
         {
