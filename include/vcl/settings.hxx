@@ -334,6 +334,15 @@ public:
     void                            SetMenuHighlightTextColor( const Color& rColor );
     const Color&                    GetMenuHighlightTextColor() const;
 
+    void                            SetTabTextColor( const Color& rColor );
+    const Color&                    GetTabTextColor() const;
+
+    void                            SetTabRolloverTextColor( const Color& rColor );
+    const Color&                    GetTabRolloverTextColor() const;
+
+    void                            SetTabHighlightTextColor( const Color& rColor );
+    const Color&                    GetTabHighlightTextColor() const;
+
     void                            SetLinkColor( const Color& rColor );
     const Color&                    GetLinkColor() const;
 

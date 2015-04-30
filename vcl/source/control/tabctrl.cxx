@@ -134,7 +134,7 @@ const vcl::Font& TabControl::GetCanonicalFont( const StyleSettings& _rStyle ) co
 
 const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
-    return _rStyle.GetButtonTextColor();
+    return _rStyle.GetTabTextColor();
 }
 
 void TabControl::ImplInitSettings( bool bFont,

@@ -134,6 +134,9 @@ struct ImplStyleData
     Color                           maWorkspaceColor;
     Color                           maActiveTabColor;
     Color                           maInactiveTabColor;
+    Color                           maTabTextColor;
+    Color                           maTabRolloverTextColor;
+    Color                           maTabHighlightTextColor;
     vcl::Font                       maAppFont;
     vcl::Font                       maHelpFont;
     vcl::Font                       maTitleFont;
@@ -606,6 +609,9 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maWorkspaceColor( rData.maWorkspaceColor ),
     maActiveTabColor( rData.maActiveTabColor ),
     maInactiveTabColor( rData.maInactiveTabColor ),
+    maTabTextColor( rData.maTabTextColor ),
+    maTabRolloverTextColor( rData.maTabRolloverTextColor ),
+    maTabHighlightTextColor( rData.maTabHighlightTextColor ),
     maAppFont( rData.maAppFont ),
     maHelpFont( rData.maAppFont ),
     maTitleFont( rData.maTitleFont ),
@@ -734,6 +740,9 @@ void ImplStyleData::SetStandardStyles()
     maHighlightTextColor        = Color( COL_WHITE );
     maActiveTabColor            = Color( COL_WHITE );
     maInactiveTabColor          = Color( COL_LIGHTGRAY );
+    maTabTextColor              = Color( COL_BLACK );
+    maTabRolloverTextColor      = Color( COL_BLACK );
+    maTabHighlightTextColor     = Color( COL_BLACK );
     maDisableColor              = Color( COL_GRAY );
     maHelpColor                 = Color( 0xFF, 0xFF, 0xE0 );
     maHelpTextColor             = Color( COL_BLACK );
@@ -1285,6 +1294,45 @@ const Color&
 StyleSettings::GetMenuHighlightTextColor() const
 {
     return mxData->maMenuHighlightTextColor;
+}
+
+void
+StyleSettings::SetTabTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maTabTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetTabTextColor() const
+{
+    return mxData->maTabTextColor;
+}
+
+void
+StyleSettings::SetTabRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maTabRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetTabRolloverTextColor() const
+{
+    return mxData->maTabRolloverTextColor;
+}
+
+void
+StyleSettings::SetTabHighlightTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maTabHighlightTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetTabHighlightTextColor() const
+{
+    return mxData->maTabHighlightTextColor;
 }
 
 void
@@ -2307,6 +2355,9 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maMenuHighlightTextColor  == rSet.mxData->maMenuHighlightTextColor)   &&
          (mxData->maHighlightColor          == rSet.mxData->maHighlightColor)           &&
          (mxData->maHighlightTextColor      == rSet.mxData->maHighlightTextColor)       &&
+         (mxData->maTabTextColor            == rSet.mxData->maTabTextColor)             &&
+         (mxData->maTabRolloverTextColor    == rSet.mxData->maTabRolloverTextColor)     &&
+         (mxData->maTabHighlightTextColor   == rSet.mxData->maTabHighlightTextColor)    &&
          (mxData->maActiveTabColor          == rSet.mxData->maActiveTabColor)           &&
          (mxData->maInactiveTabColor        == rSet.mxData->maInactiveTabColor)         &&
          (mxData->maDisableColor            == rSet.mxData->maDisableColor)             &&

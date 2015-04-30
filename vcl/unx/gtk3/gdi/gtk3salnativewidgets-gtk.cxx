@@ -1233,34 +1233,34 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
     aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
 
-{ // FIXME: turn me into a helper function ...
-    // construct style context for text view
-    GtkStyleContext *pCStyle = gtk_style_context_new();
-    gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
-    GtkWidgetPath *pCPath = gtk_widget_path_new();
-    gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
-    gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
-    gtk_style_context_set_path( pCStyle, pCPath );
-    gtk_widget_path_free( pCPath );
+    {
+        // construct style context for text view
+        GtkStyleContext *pCStyle = gtk_style_context_new();
+        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+        GtkWidgetPath *pCPath = gtk_widget_path_new();
+        gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
+        gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
+        gtk_style_context_set_path( pCStyle, pCPath );
+        gtk_widget_path_free( pCPath );
 
-    // highlighting colors
-    gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_SELECTED, &text_color);
-    ::Color aHighlightColor = getColor( text_color );
-    gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_SELECTED, &text_color);
-    ::Color aHighlightTextColor = getColor( text_color );
-    aStyleSet.SetHighlightColor( aHighlightColor );
-    aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+        // highlighting colors
+        gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_SELECTED, &text_color);
+        ::Color aHighlightColor = getColor( text_color );
+        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_SELECTED, &text_color);
+        ::Color aHighlightTextColor = getColor( text_color );
+        aStyleSet.SetHighlightColor( aHighlightColor );
+        aStyleSet.SetHighlightTextColor( aHighlightTextColor );
 
-    // field background color
-    GdkRGBA field_background_color;
-    gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_NORMAL, &field_background_color);
-    g_object_unref( pCStyle );
+        // field background color
+        GdkRGBA field_background_color;
+        gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_NORMAL, &field_background_color);
+        g_object_unref( pCStyle );
 
-    ::Color aBackFieldColor = getColor( field_background_color );
-    aStyleSet.SetFieldColor( aBackFieldColor );
-    // This baby is the default page/paper color
-    aStyleSet.SetWindowColor( aBackFieldColor );
-}
+        ::Color aBackFieldColor = getColor( field_background_color );
+        aStyleSet.SetFieldColor( aBackFieldColor );
+        // This baby is the default page/paper color
+        aStyleSet.SetWindowColor( aBackFieldColor );
+    }
 
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( true );
@@ -1331,14 +1331,39 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         gdk_color_free(link_color);
     }
 
-#if 0
+    {
+        GtkStyleContext *pCStyle = gtk_style_context_new();
+        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+        GtkWidgetPath *pCPath = gtk_widget_path_new();
+        guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_NOTEBOOK);
+        gtk_widget_path_iter_add_class(pCPath, 0, GTK_STYLE_CLASS_NOTEBOOK);
+        gtk_widget_path_iter_add_region(pCPath, pos, "tab", static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
+        pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
+        gtk_widget_path_iter_set_name(pCPath, pos, "first tab label");
+        pCStyle = gtk_style_context_new();
+        gtk_style_context_set_path(pCStyle, pCPath);
+        gtk_widget_path_free(pCPath);
 
-    // Tab colors
-    aStyleSet.SetActiveTabColor( aBackFieldColor ); // same as the window color.
-    Color aSelectedBackColor = getColor( pStyle->bg[GTK_STATE_ACTIVE] );
-    aStyleSet.SetInactiveTabColor( aSelectedBackColor );
+        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_NORMAL, &text_color);
+        aTextColor = getColor( text_color );
+        aStyleSet.SetTabTextColor(aTextColor);
 
-#endif
+        // mouse over text colors
+        gtk_style_context_add_class(pCStyle, "prelight-page");
+        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_PRELIGHT, &text_color);
+        gtk_style_context_remove_class(pCStyle, "prelight-page");
+        aTextColor = getColor( text_color );
+        aStyleSet.SetTabRolloverTextColor(aTextColor);
+
+        gtk_style_context_add_class(pCStyle, "active-page");
+        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_ACTIVE, &text_color);
+        gtk_style_context_remove_class(pCStyle, "active-page");
+        aTextColor = getColor( text_color );
+        aStyleSet.SetTabHighlightTextColor(aTextColor);
+
+        g_object_unref( pCStyle );
+    }
+
     // UI font
     const PangoFontDescription* font = gtk_style_context_get_font(pStyle, GTK_STATE_FLAG_NORMAL);
     OString    aFamily        = pango_font_description_get_family( font );

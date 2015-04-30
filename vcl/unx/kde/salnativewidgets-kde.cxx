@@ -1914,6 +1914,11 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetButtonTextColor( toColor( qColorGroup.buttonText() ) );
     aStyleSettings.SetButtonRolloverTextColor( toColor( qColorGroup.buttonText() ) );
 
+    // Tabs
+    aStyleSettings.SetTabTextColor( toColor( qColorGroup.buttonText() ) );
+    aStyleSettings.SetTabRolloverTextColor( toColor( qColorGroup.buttonText() ) );
+    aStyleSettings.SetTabHighlightTextColor( toColor( qColorGroup.buttonText() ) );
+
     // Disable color
     aStyleSettings.SetDisableColor( toColor( qColorGroup.mid() ) );
 

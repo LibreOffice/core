@@ -233,6 +233,11 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetButtonTextColor( aButn );
     style.SetButtonRolloverTextColor( aButn );
 
+    // Tabs
+    style.SetTabTextColor( aButn );
+    style.SetTabRolloverTextColor( aButn );
+    style.SetTabHighlightTextColor( aButn );
+
     // Disable color
     style.SetDisableColor( aMid );
 

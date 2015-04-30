@@ -2678,6 +2678,9 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetDialogTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetButtonTextColor( ImplWinColorToSal( GetSysColor( COLOR_BTNTEXT ) ) );
     aStyleSettings.SetButtonRolloverTextColor( aStyleSettings.GetButtonTextColor() );
+    aStyleSettings.SetTabTextColor( aStyleSettings.GetButtonTextColor() );
+    aStyleSettings.SetTabRolloverTextColor( aStyleSettings.GetButtonTextColor() );
+    aStyleSettings.SetTabHighlightTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
     aStyleSettings.SetGroupTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetLabelTextColor( aStyleSettings.GetRadioCheckTextColor() );

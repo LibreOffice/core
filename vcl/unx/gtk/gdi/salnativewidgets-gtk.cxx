@@ -3927,6 +3927,9 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetGroupTextColor( aTextColor );
     aStyleSet.SetLabelTextColor( aTextColor );
     aStyleSet.SetInfoTextColor( aTextColor );
+    aStyleSet.SetTabTextColor( aTextColor );
+    aStyleSet.SetTabRolloverTextColor( aTextColor );
+    aStyleSet.SetTabHighlightTextColor( aTextColor );
 
     // Tooltip colors
     GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nXScreen].gTooltipPopup );
