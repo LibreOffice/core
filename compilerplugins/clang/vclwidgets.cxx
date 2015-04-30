@@ -80,20 +80,18 @@ bool isDerivedFromWindow(const CXXRecordDecl *decl) {
 bool containsWindowSubclass(const Type* pType0);
 
 bool containsWindowSubclass(const QualType& qType) {
-    if (startsWith(qType.getAsString(), "VclPtr"))
-        return false;
-    if (startsWith(qType.getAsString(), "const VclPtr"))
-        return false;
-    if (startsWith(qType.getAsString(), "class VclPtr"))
-        return false;
-    if (startsWith(qType.getAsString(), "const class VclPtr"))
-        return false;
-    if (startsWith(qType.getAsString(), "ScopedVclPtr"))
-        return false;
-    if (startsWith(qType.getAsString(), "class ScopedVclPtr"))
-        return false;
-    if (startsWith(qType.getAsString(), "const class ScopedVclPtr"))
-        return false;
+    auto t = qType->getAs<RecordType>();
+    if (t != nullptr) {
+        auto d = dyn_cast<ClassTemplateSpecializationDecl>(t->getDecl());
+        if (d != nullptr) {
+            std::string name(d->getQualifiedNameAsString());
+            if (name == "ScopedVclPtr" || name == "ScopedVclPtrInstance"
+                || name == "VclPtr" || name == "VclPtrInstance")
+            {
+                return false;
+            }
+        }
+    }
     return containsWindowSubclass(qType.getTypePtr());
 }
 
