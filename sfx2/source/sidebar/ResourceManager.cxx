@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 
 #include <unotools/confignode.hxx>
@@ -113,6 +113,112 @@ void ResourceManager::SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsE
         }
     }
 }
+
+void ResourceManager::SetDeckToDescriptor(const OUString& rsDeckId, VclPtr<Deck> aDeck)
+{
+    DeckContainer::iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iDeck->msId.equals(rsDeckId))
+        {
+            iDeck->mpDeck = aDeck;
+            return;
+        }
+    }
+}
+
+void ResourceManager::SetDeckOrderIndex(const OUString& rsDeckId, const sal_Int32 orderIndex)
+{
+    DeckContainer::iterator iDeck;
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iDeck->msId.equals(rsDeckId))
+        {
+            iDeck->mnOrderIndex = orderIndex;
+            return;
+        }
+    }
+}
+
+sal_Int32 ResourceManager::GetDecksMinOrderIndex()
+{
+    DeckContainer::iterator iDeck;
+
+    iDeck = maDecks.begin();
+    sal_Int32 minIndex = iDeck->mnOrderIndex;
+
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if(minIndex > iDeck->mnOrderIndex)
+            minIndex = iDeck->mnOrderIndex;
+    }
+    return minIndex;
+}
+
+sal_Int32 ResourceManager::GetDecksMaxOrderIndex()
+{
+    DeckContainer::iterator iDeck;
+
+    iDeck = maDecks.begin();
+    sal_Int32 maxIndex = iDeck->mnOrderIndex;
+
+    for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
+    {
+        if(maxIndex < iDeck->mnOrderIndex)
+            maxIndex = iDeck->mnOrderIndex;
+    }
+    return maxIndex;
+}
+
+void ResourceManager::SetPanelOrderIndex(const OUString& rsPanelId, const sal_Int32 orderIndex)
+{
+    PanelContainer::iterator iPanel;
+    for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
+    {
+        if (iPanel->mbExperimental && !maMiscOptions.IsExperimentalMode())
+            continue;
+        if (iPanel->msId.equals(rsPanelId))
+        {
+            iPanel->mnOrderIndex = orderIndex;
+            return;
+        }
+    }
+}
+
+sal_Int32 ResourceManager::GetPanelsMinOrderIndex()
+{
+    PanelContainer::iterator iPanel;
+
+    iPanel = maPanels.begin();
+    sal_Int32 minIndex = iPanel->mnOrderIndex;
+
+    for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
+    {
+        if(minIndex > iPanel->mnOrderIndex)
+            minIndex = iPanel->mnOrderIndex;
+    }
+    return minIndex;
+}
+
+sal_Int32 ResourceManager::GetPanelsMaxOrderIndex()
+{
+    PanelContainer::iterator iPanel;
+
+    iPanel = maPanels.begin();
+    sal_Int32 maxIndex = iPanel->mnOrderIndex;
+
+    for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
+    {
+        if(maxIndex < iPanel->mnOrderIndex)
+            maxIndex = iPanel->mnOrderIndex;
+    }
+    return maxIndex;
+}
+
 
 const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatchingDecks (
                                                             DeckContextDescriptorContainer& rDecks,
@@ -569,8 +675,11 @@ bool ResourceManager::IsDeckEnabled (
     // Check if any panel that matches the current context can be
     // displayed.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
+
     ResourceManager::Instance().GetMatchingPanels(aPanelContextDescriptors,
                                                   rContext, rsDeckId, rxFrame);
+
+//    maInstance.GetMatchingPanels(aPanelContextDescriptors, rContext, rsDeckId, rxFrame);
 
     ResourceManager::PanelContextDescriptorContainer::const_iterator iPanel;
     for (iPanel = aPanelContextDescriptors.begin(); iPanel != aPanelContextDescriptors.end(); ++iPanel)

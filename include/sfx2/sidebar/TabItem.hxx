@@ -16,45 +16,40 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TABITEM_HXX
+#define INCLUDED_SFX2_SOURCE_SIDEBAR_TABITEM_HXX
 
-#include <sfx2/sidebar/AccessibleTitleBar.hxx>
-#include <sfx2/sidebar/Accessible.hxx>
-#include <sfx2/sidebar/TitleBar.hxx>
+#include <vcl/button.hxx>
 
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <sfx2/sidebar/DeckDescriptor.hxx>
 
-#include <unotools/accessiblestatesethelper.hxx>
-
-using namespace css;
-using namespace css::uno;
+namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
 
-Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTitleBar)
+/** A single button in the tab bar.
+*/
+class TabItem
+    : public ImageRadioButton
 {
-    rTitleBar.GetComponentInterface(true);
-    VCLXWindow* pWindow = rTitleBar.GetWindowPeer();
-    if (pWindow != NULL)
-        return new Accessible(new AccessibleTitleBar(pWindow));
-    else
-        return NULL;
-}
+public:
+    TabItem (vcl::Window* pParentWindow);
 
-AccessibleTitleBar::AccessibleTitleBar (VCLXWindow* pWindow)
-    : VCLXAccessibleComponent(pWindow)
-{
-}
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;
+    virtual void MouseButtonDown (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+    virtual void MouseButtonUp (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
 
-AccessibleTitleBar::~AccessibleTitleBar()
-{
-}
-
-void AccessibleTitleBar::FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet)
-{
-    VCLXAccessibleComponent::FillAccessibleStateSet(rStateSet);
-    rStateSet.AddState(accessibility::AccessibleStateType::FOCUSABLE);
-}
+private:
+    bool mbIsLeftButtonDown;
+    enum PaintType {
+        PT_Native,
+        PT_Theme
+    } mePaintType;
+};
 
 } } // end of namespace sfx2::sidebar
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

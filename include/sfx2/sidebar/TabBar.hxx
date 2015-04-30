@@ -20,7 +20,8 @@
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TABBAR_HXX
 
 #include "DeckDescriptor.hxx"
-#include "ResourceManager.hxx"
+#include <sfx2/sidebar/ResourceManager.hxx>
+
 
 #include <vcl/menu.hxx>
 #include <vcl/window.hxx>
@@ -39,6 +40,7 @@ namespace sfx2 { namespace sidebar {
 class FocusManager;
 class TabBarConfiguration;
 class TabItem;
+class SidebarController;
 
 /** The tab bar is the container for the individual tabs.
 */
@@ -66,7 +68,9 @@ public:
         vcl::Window* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const ::boost::function<void(const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
-        const PopupMenuProvider& rPopupMenuProvider);
+        const PopupMenuProvider& rPopupMenuProvider,
+        SidebarController* rParentSidebarController);
+
     virtual ~TabBar();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -119,6 +123,8 @@ private:
     ::boost::shared_ptr<PopupMenu> CreatePopupMenu() const;
     void ShowPopupMenu() const;
     DECL_LINK(OnToolboxClicked, void*);
+
+    SidebarController* pParentSidebarController;
 
 };
 

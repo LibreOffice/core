@@ -21,7 +21,7 @@
 
 #include "DeckDescriptor.hxx"
 #include "PanelDescriptor.hxx"
-#include "Context.hxx"
+#include <sfx2/sidebar/Context.hxx>
 #include <unotools/confignode.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <set>
@@ -40,6 +40,10 @@ class ContextList;
 class ResourceManager
 {
 public:
+
+     ResourceManager();
+    ~ResourceManager();
+
     static ResourceManager& Instance();
 
     const DeckDescriptor* GetDeckDescriptor(const OUString& rsDeckId) const;
@@ -53,6 +57,16 @@ public:
         read-only.
     */
     void SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsEnabled);
+
+    void SetDeckToDescriptor(const OUString& rsDeckId, VclPtr<Deck> aDeck);
+
+    void SetDeckOrderIndex(const OUString& rsDeckId, const sal_Int32 orderIndex);
+    sal_Int32 GetDecksMinOrderIndex();
+    sal_Int32 GetDecksMaxOrderIndex();
+
+    void SetPanelOrderIndex(const OUString& rsPanelId, const sal_Int32 orderIndex);
+    sal_Int32 GetPanelsMinOrderIndex();
+    sal_Int32 GetPanelsMaxOrderIndex();
 
     class DeckContextDescriptor
     {
@@ -92,8 +106,7 @@ public:
                                   const Context& rContext);
 
 private:
-    ResourceManager();
-    ~ResourceManager();
+
 
     typedef std::vector<DeckDescriptor> DeckContainer;
     DeckContainer maDecks;

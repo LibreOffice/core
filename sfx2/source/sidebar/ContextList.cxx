@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "ContextList.hxx"
-#include "Context.hxx"
+#include <sfx2/sidebar/ContextList.hxx>
+#include <sfx2/sidebar/Context.hxx>
 
 using ::rtl::OUString;
 
@@ -83,6 +83,11 @@ void ContextList::AddContextDescription (
     maEntries.back().maContext = rContext;
     maEntries.back().mbIsInitiallyVisible = bIsInitiallyVisible;
     maEntries.back().msMenuCommand = rsMenuCommand;
+}
+
+sal_Int32 ContextList::GetCount()
+{
+    return maEntries.size();
 }
 
 } } // end of namespace sfx2::sidebar
