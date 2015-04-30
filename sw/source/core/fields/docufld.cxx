@@ -2150,7 +2150,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                 const SwCntntFrm* pFrm = pTxtNode->getLayoutFrm( pTxtNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
                 const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pRefTxtFld->GetTxtNode().GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
                 const SwPageFrm* pPgFrm = 0;
-                sal_uInt16 nDiff = ( pFrm && pRefFrm )
+                const short nDiff = ( pFrm && pRefFrm )
                         ?   (pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1
                         : 1;
@@ -2160,7 +2160,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                                 ? (sal_uInt32)SVX_NUM_ARABIC
                                 : pPgFrm->GetPageDesc()->GetNumType().GetNumberingType() )
                         : pGetFld->GetFormat();
-                short nPageNum = static_cast<short>(std::max(0, pSetFld->GetOffset() + (short)nDiff));
+                const short nPageNum = std::max<short>(0, pSetFld->GetOffset() + nDiff);
                 pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
             }
         }
@@ -2235,14 +2235,14 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     {
         // determine the correct offset
         const SwPageFrm* pPgFrm = pFrm->FindPageFrm();
-        sal_uInt16 nDiff = pPgFrm->GetPhyPageNum() -
+        const short nDiff = pPgFrm->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1;
 
         SwRefPageGetField* pGetFld = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pFld->GetFmtFld().GetField()));
         sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
                             ? pPgFrm->GetPageDesc()->GetNumType().GetNumberingType()
                             : pGetFld->GetFormat();
-        short nPageNum = static_cast<short>(std::max(0, pSetFld->GetOffset() + (short)nDiff ));
+        const short nPageNum = std::max<short>(0, pSetFld->GetOffset() + nDiff);
         pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
     }
 }
