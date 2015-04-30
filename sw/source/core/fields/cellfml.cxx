@@ -701,7 +701,7 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm ) con
 {
     const SwFrmFmts& rTblFmts = *rDoc.GetTblFrmFmts();
     const SwTable* pTmpTbl = 0, *pRet = 0;
-    for( sal_uInt16 nFmtCnt = rTblFmts.size(); nFmtCnt; )
+    for( auto nFmtCnt = rTblFmts.size(); nFmtCnt; )
     {
         SwFrmFmt* pFmt = rTblFmts[ --nFmtCnt ];
         // if we are called from Sw3Writer, a number is dependent on the format name

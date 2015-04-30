@@ -605,7 +605,7 @@ protected:
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
-    sal_uInt16 MakeSetList( _SetGetExpFlds& rTmpLst );
+    bool MakeSetList( _SetGetExpFlds& rTmpLst );
     SwDoc*  GetDoc() const                  { return pDoc; }
 };
 

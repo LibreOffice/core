@@ -2075,7 +2075,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     NotifyClients( pOld, pNew );
 }
 
-sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
+bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 {
     SwIterator<SwFmtFld,SwFieldType> aIter(*pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_REFPAGESETFLD));
     for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
@@ -2118,7 +2118,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
             }
     }
 
-    return rTmpLst.size();
+    return !rTmpLst.empty();
 }
 
 void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
