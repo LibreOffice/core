@@ -82,6 +82,7 @@ public:
     void testPlotVisOnlyDefaultValue2013XLSX();
     void testRAngAxDefaultValue2013XLSX();
     void testMajorTickMarksDefaultValue2013XLSX();
+    void testMinorTickMarksDefaultValue2013XLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -126,6 +127,7 @@ public:
     CPPUNIT_TEST(testPlotVisOnlyDefaultValue2013XLSX);
     CPPUNIT_TEST(testRAngAxDefaultValue2013XLSX);
     CPPUNIT_TEST(testMajorTickMarksDefaultValue2013XLSX);
+    CPPUNIT_TEST(testMinorTickMarksDefaultValue2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -986,6 +988,21 @@ void Chart2ImportTest::testMajorTickMarksDefaultValue2013XLSX()
     CPPUNIT_ASSERT(xXAxis.is());
     Reference<beans::XPropertySet> xPropSet(xXAxis, uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("MajorTickmarks");
+    sal_Int32 nMajorTickmarks = chart2::TickmarkStyle::NONE;
+    CPPUNIT_ASSERT(aAny.hasValue());
+    CPPUNIT_ASSERT(aAny >>= nMajorTickmarks);
+    CPPUNIT_ASSERT_EQUAL(chart2::TickmarkStyle::INNER | chart2::TickmarkStyle::OUTER, nMajorTickmarks);
+}
+
+void Chart2ImportTest::testMinorTickMarksDefaultValue2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "minorTickMark.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+    Reference<beans::XPropertySet> xPropSet(xXAxis, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("MinorTickmarks");
     sal_Int32 nMajorTickmarks = chart2::TickmarkStyle::NONE;
     CPPUNIT_ASSERT(aAny.hasValue());
     CPPUNIT_ASSERT(aAny >>= nMajorTickmarks);
