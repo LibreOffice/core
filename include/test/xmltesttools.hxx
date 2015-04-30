@@ -35,7 +35,7 @@ protected:
     XmlTestTools();
     virtual ~XmlTestTools();
 
-    xmlDocPtr parseXml(utl::TempFile& aTempFile);
+    static xmlDocPtr parseXml(utl::TempFile& aTempFile);
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx);
 

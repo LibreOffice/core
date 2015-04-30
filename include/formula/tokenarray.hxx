@@ -95,7 +95,7 @@ class FORMULA_DLLPUBLIC MissingConventionOOXML : public MissingConvention
 public:
     explicit    MissingConventionOOXML() : MissingConvention( MissingConvention::FORMULA_MISSING_CONVENTION_OOXML) {}
     // Implementation and usage only in token.cxx
-    inline  bool    isRewriteNeeded( OpCode eOp ) const;
+    static inline bool isRewriteNeeded( OpCode eOp );
 };
 
 typedef std::unordered_set<OpCode, std::hash<o3tl::underlying_type<OpCode>::type> > unordered_opcode_set;
@@ -281,7 +281,7 @@ public:
     bool                NeedsPodfRewrite( const MissingConventionODF & rConv );
 
     /** Determines if this formula needs any changes to convert it to OOXML. */
-    bool                NeedsOoxmlRewrite( const MissingConventionOOXML & rConv );
+    bool                NeedsOoxmlRewrite();
 
     /** Rewrites to Plain Old Formula or OOXML, substituting missing parameters. The
         FormulaTokenArray* returned is new'ed. */

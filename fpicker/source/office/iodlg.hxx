@@ -155,7 +155,7 @@ private:
 
 
     // removes a filter with wildcards from the path and returns it
-    bool IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter );
+    static bool IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter );
 
     void    implUpdateImages( );
 
@@ -250,7 +250,7 @@ public:
 
     void                        RemovablePlaceSelected(bool enable = true);
 
-    void                        displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
+    static void                 displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
 
     // inline
     inline void                 SetPath( const OUString& rNewURL );

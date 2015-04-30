@@ -829,7 +829,7 @@ void ConfigItemBase::readConfigBlockContents( TextInputStream& rStrm )
 }
 
 ConfigItemBase::LineType ConfigItemBase::readConfigLine(
-        TextInputStream& rStrm, OUString& orKey, OUString& orData ) const
+        TextInputStream& rStrm, OUString& orKey, OUString& orData )
 {
     OUString aLine;
     while( !rStrm.isEof() && aLine.isEmpty() )

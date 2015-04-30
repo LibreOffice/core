@@ -114,7 +114,7 @@ protected:
     const char* GetComponentDir();
     const char* GetRelationCompPrefix();
 
-    bool EqualGradients( ::com::sun::star::awt::Gradient aGradient1, ::com::sun::star::awt::Gradient aGradient2 );
+    static bool EqualGradients( ::com::sun::star::awt::Gradient aGradient1, ::com::sun::star::awt::Gradient aGradient2 );
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 )
@@ -188,11 +188,11 @@ public:
 
     static void ResetCounters();
 
-    void GetUUID( OStringBuffer& rBuffer );
+    static void GetUUID( OStringBuffer& rBuffer );
 
     static sal_Unicode SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star::awt::FontDescriptor& rFontDesc );
 
-    sal_uInt32 ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
+    static sal_uInt32 ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
     static const char* GetAlignment( sal_Int32 nAlignment );
 

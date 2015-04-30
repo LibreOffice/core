@@ -168,7 +168,7 @@ void AxisConverter::convertFromModel(
         // axis line and tick label formatting
         rFormatter.convertFormatting( aAxisProp, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_AXIS );
         // tick label rotation
-        rFormatter.convertTextRotation( aAxisProp, mrModel.mxTextProp, true );
+        ObjectFormatter::convertTextRotation( aAxisProp, mrModel.mxTextProp, true );
 
         // tick mark style
         aAxisProp.setProperty( PROP_MajorTickmarks, lclGetTickMark( mrModel.mnMajorTickMark ) );

@@ -70,7 +70,7 @@ public:
 private:
     void                parseRelationship( const AttributeList& rAttribs );
 
-    OUString     getFilterNameFromContentType( const OUString& rContentType ) const;
+    static OUString     getFilterNameFromContentType( const OUString& rContentType );
     void                parseContentTypesDefault( const AttributeList& rAttribs );
     void                parseContentTypesOverride( const AttributeList& rAttribs );
 

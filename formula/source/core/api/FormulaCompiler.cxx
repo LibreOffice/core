@@ -1752,7 +1752,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     {
         // Scan token array for missing args and rewrite if present.
         MissingConventionOOXML aConv;
-        if (pArr->NeedsOoxmlRewrite( aConv))
+        if (pArr->NeedsOoxmlRewrite())
             pArr = pArr->RewriteMissing( aConv );
     }
 
@@ -1979,7 +1979,7 @@ void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const
     rBuffer.append( mxSymbols->getSymbol( static_cast<OpCode>(bVal ? ocTrue : ocFalse)) );
 }
 
-void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rStr ) const
+void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rStr )
 {
     rBuffer.append( '"');
     if ( lcl_UnicodeStrChr( rStr.getStr(), '"' ) == NULL )

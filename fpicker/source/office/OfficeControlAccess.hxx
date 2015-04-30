@@ -58,8 +58,8 @@ namespace svt
         // XControlInformation implementation
         ::com::sun::star::uno::Sequence< OUString >  getSupportedControls(  );
         ::com::sun::star::uno::Sequence< OUString >  getSupportedControlProperties( const OUString& _rControlName );
-        bool                                            isControlSupported( const OUString& _rControlName );
-        bool                                            isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty );
+        static bool                                  isControlSupported( const OUString& _rControlName );
+        bool                                         isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty );
 
         // XFilePickerControlAccess
         void                        setValue( sal_Int16 _nId, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
@@ -105,7 +105,7 @@ namespace svt
         */
         ::com::sun::star::uno::Any  implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const;
 
-        void implDoListboxAction( ListBox* _pListbox, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
+        static void implDoListboxAction( ListBox* _pListbox, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
 
     };
 

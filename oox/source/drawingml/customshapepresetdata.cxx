@@ -733,7 +733,7 @@ void CustomShapeProperties::initializePresetDataMap()
             if (bFirst)
                 bFirst = false;
             else
-                maPresetDataMap[StaticTokenMap::get().getTokenFromUnicode(aName)] = aPropertyMap;
+                maPresetDataMap[TokenMap::getTokenFromUnicode(aName)] = aPropertyMap;
             aName = OUString::fromUtf8(aLine.copy(strlen(aCommentPrefix), aLine.getLength() - strlen(aCommentPrefix) - strlen(" */")));
         }
         else
@@ -837,7 +837,7 @@ void CustomShapeProperties::initializePresetDataMap()
         }
         bNotDone = aStream.ReadLine(aLine);
     }
-    maPresetDataMap[StaticTokenMap::get().getTokenFromUnicode(aName)] = aPropertyMap;
+    maPresetDataMap[TokenMap::getTokenFromUnicode(aName)] = aPropertyMap;
 }
 
 }

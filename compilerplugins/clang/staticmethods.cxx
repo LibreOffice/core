@@ -171,6 +171,10 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (startsWith(fqn, "SbiRuntime::Step")) {
         return true;
     }
+    // have no idea why this can't be static, but 'make check' fails with it so...
+    if (fqn == "oox::drawingml::Shape::resolveRelationshipsOfTypeFromOfficeDoc") {
+        return true;
+    }
 
     bVisitedThis = false;
     TraverseStmt(pCXXMethodDecl->getBody());
@@ -186,7 +190,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false  );
+loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false );
 
 }
 

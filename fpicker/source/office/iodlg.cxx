@@ -921,7 +921,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
     // if a path with wildcards is given, divide the string into path and wildcards
     OUString aFilter;
-    if ( !pThis->IsolateFilterFromPath_Impl( aFileName, aFilter ) )
+    if ( !SvtFileDialog::IsolateFilterFromPath_Impl( aFileName, aFilter ) )
         return 0;
 
     // if a filter was retrieved, there were wildcards !

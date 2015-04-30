@@ -73,18 +73,18 @@ struct Shape3DProperties
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const Shape3DProperties& rSourceProps );
 
-    OUString            getCameraPrstName( sal_Int32 nElement );
-    OUString            getLightRigName( sal_Int32 nElement );
-    OUString            getLightRigDirName( sal_Int32 nElement );
-    OUString            getBevelPresetTypeString( sal_Int32 nType );
-    OUString            getPresetMaterialTypeString( sal_Int32 nType );
+    static OUString     getCameraPrstName( sal_Int32 nElement );
+    static OUString     getLightRigName( sal_Int32 nElement );
+    static OUString     getLightRigDirName( sal_Int32 nElement );
+    static OUString     getBevelPresetTypeString( sal_Int32 nType );
+    static OUString     getPresetMaterialTypeString( sal_Int32 nType );
 
     css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getShape3DAttributes(
             const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr = API_RGB_TRANSPARENT );
-    css::uno::Sequence< css::beans::PropertyValue > getBevelAttributes( BevelProperties rProps );
-    css::uno::Sequence< css::beans::PropertyValue > getColorAttributes(
+    static css::uno::Sequence< css::beans::PropertyValue > getBevelAttributes( BevelProperties rProps );
+    static css::uno::Sequence< css::beans::PropertyValue > getColorAttributes(
             const Color& rColor, const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr );
 };
 

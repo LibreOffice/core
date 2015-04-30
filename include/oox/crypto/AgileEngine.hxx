@@ -51,7 +51,7 @@ class AgileEngine : public CryptoEngine
             std::vector<sal_uInt8>& rInput,
             std::vector<sal_uInt8>& rOutput);
 
-    Crypto::CryptoType cryptoType(const AgileEncryptionInfo& rInfo);
+    static Crypto::CryptoType cryptoType(const AgileEncryptionInfo& rInfo);
 
 public:
     AgileEngine();

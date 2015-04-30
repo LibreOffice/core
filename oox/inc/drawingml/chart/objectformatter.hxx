@@ -122,7 +122,7 @@ public:
                             ObjectType eObjType );
 
     /** Sets text rotation properties to the passed property set. */
-    void                convertTextRotation(
+    static void         convertTextRotation(
                             PropertySet& rPropSet,
                             const ModelRef< TextBody >& rxTextProp,
                             bool bSupportsStacked );

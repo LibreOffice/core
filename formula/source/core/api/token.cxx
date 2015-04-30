@@ -1037,7 +1037,7 @@ To be implemented yet:
   ocMacro:       ?
   ocIndex:       INDEX() ?
 */
-inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp ) const
+inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
 {
     switch (eOp)
     {
@@ -1332,11 +1332,11 @@ bool FormulaTokenArray::NeedsPodfRewrite( const MissingConventionODF & rConv )
     return false;
 }
 
-bool FormulaTokenArray::NeedsOoxmlRewrite( const MissingConventionOOXML & rConv )
+bool FormulaTokenArray::NeedsOoxmlRewrite()
 {
     for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
     {
-        if ( rConv.isRewriteNeeded( pCur->GetOpCode()))
+        if ( MissingConventionOOXML::isRewriteNeeded( pCur->GetOpCode()))
             return true;
     }
     return false;
