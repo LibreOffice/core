@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_261ab66f",
+        "filename": "sc/source/core/tool/odffmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-30T14:01:07Z",
+      "side": 0,
+      "message": "Removing this would lead to the programmatic be stored in ODFF.",
+      "revId": "b024e36ddb3b53163d7a01f6f7b5aadb7a858cd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
