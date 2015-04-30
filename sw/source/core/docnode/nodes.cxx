@@ -622,7 +622,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                     rNodes))
                         {
                             // use placeholder in UndoNodes array
-                            new SwDummySectionNode( aIdx );
+                            new SwPlaceholderNode(aIdx);
                         }
                         else
                         {
@@ -694,7 +694,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     aIdx -= nInsPos;
                     nInsPos = 0;
                 }
-                new SwDummySectionNode( aIdx );
+                new SwPlaceholderNode(aIdx);
                 --aRg.aEnd;
                 --aIdx;
                 break;
@@ -814,7 +814,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             }
             break;
 
-        case ND_SECTIONDUMMY:
+        case ND_PLACEHOLDER:
             if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
                 if( &rNodes == this ) // inside UndoNodesArray
@@ -1753,7 +1753,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
 
                 // insert a DummyNode for a TableNode
                 if( bTblInsDummyNode )
-                    new SwDummySectionNode( aInsPos );
+                    new SwPlaceholderNode(aInsPos);
 
                 // copy all of the table's nodes into the current cell
                 for( ++aRg.aStart; aRg.aStart.GetIndex() <
@@ -1762,7 +1762,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 {
                     // insert a DummyNode for the box-StartNode?
                     if( bTblInsDummyNode )
-                        new SwDummySectionNode( aInsPos );
+                        new SwPlaceholderNode(aInsPos);
 
                     SwStartNode* pSttNd = aRg.aStart.GetNode().GetStartNode();
                     _CopyNodes( SwNodeRange( *pSttNd, + 1,
@@ -1771,12 +1771,12 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
 
                     // insert a DummyNode for the box-EndNode?
                     if( bTblInsDummyNode )
-                        new SwDummySectionNode( aInsPos );
+                        new SwPlaceholderNode(aInsPos);
                     aRg.aStart = *pSttNd->EndOfSectionNode();
                 }
                 // insert a DummyNode for the table-EndNode
                 if( bTblInsDummyNode )
-                    new SwDummySectionNode( aInsPos );
+                    new SwPlaceholderNode(aInsPos);
                 aRg.aStart = *pAktNode->EndOfSectionNode();
             }
             else
@@ -1862,7 +1862,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             }
             break;
 
-        case ND_SECTIONDUMMY:
+        case ND_PLACEHOLDER:
             if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
                 // than a SectionNode (start/end) is needed at the current
@@ -1889,7 +1889,7 @@ void SwNodes::_DelDummyNodes( const SwNodeRange& rRg )
     SwNodeIndex aIdx( rRg.aStart );
     while( aIdx.GetIndex() < rRg.aEnd.GetIndex() )
     {
-        if( ND_SECTIONDUMMY == aIdx.GetNode().GetNodeType() )
+        if (ND_PLACEHOLDER == aIdx.GetNode().GetNodeType())
             RemoveNode( aIdx.GetIndex(), 1, true );
         else
             ++aIdx;

@@ -942,7 +942,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 #endif
         pTargetShell->StartAllAction();
 
-        // Otherwise we have to handle SwDummySectionNodes as first node
+        // Otherwise we have to handle SwPlaceholderNodes as first node
         if ( pTargetPageDesc ) {
             OUString name = pTargetPageDesc->GetName();
             pTargetShell->InsertPageBreak( &name, nStartPageNumber );

@@ -567,15 +567,16 @@ public:
 
 };
 
-/** This class is internal. And quite frankly I don't know what ND_SECTIONDUMMY is for,
-   the class has been merely created to replace "SwNode( ND_SECTIONDUMMY )", the only case
-   of instantiating SwNode directly. Now SwNode can be an abstract base class. */
-class SwDummySectionNode
-    : private SwNode
+/** This class is internal, used only during DocumentContentOperationsManager::CopyWithFlyInFly(), and for undo.
+
+Some of the nodes are then replaced with SwPlaceholderNode, and at the end of the operation, removed again.
+FIXME find out if this is really necessary, and if we can avoid creation of the SwPlaceholderNodes in the first place.
+*/
+class SwPlaceholderNode : private SwNode
 {
 private:
     friend class SwNodes;
-    SwDummySectionNode( const SwNodeIndex &rWhere );
+    SwPlaceholderNode(const SwNodeIndex &rWhere);
 };
 
 inline       SwEndNode   *SwNode::GetEndNode()
@@ -731,8 +732,8 @@ inline const SfxPoolItem& SwCntntNode::GetAttr( sal_uInt16 nWhich,
     return GetSwAttrSet().Get( nWhich, bInParents );
 }
 
-inline SwDummySectionNode::SwDummySectionNode( const SwNodeIndex &rWhere )
-    : SwNode( rWhere, ND_SECTIONDUMMY )
+inline SwPlaceholderNode::SwPlaceholderNode(const SwNodeIndex &rWhere)
+    : SwNode(rWhere, ND_PLACEHOLDER)
 {
 }
 
