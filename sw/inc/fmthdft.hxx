@@ -100,9 +100,9 @@ inline const SwFmtFooter &SwAttrSet::GetFooter(bool bInP) const
     { return static_cast<const SwFmtFooter&>(Get( RES_FOOTER,bInP)); }
 
 inline const SwFmtHeader &SwFmt::GetHeader(bool bInP) const
-    { return aSet.GetHeader(bInP); }
+    { return m_aSet.GetHeader(bInP); }
 inline const SwFmtFooter &SwFmt::GetFooter(bool bInP) const
-    { return aSet.GetFooter(bInP); }
+    { return m_aSet.GetFooter(bInP); }
 
 #endif
 

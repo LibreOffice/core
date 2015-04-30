@@ -49,7 +49,7 @@ inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(bool bInP) const
     { return static_cast<const SwFmtFollowTextFlow&>(Get( RES_FOLLOW_TEXT_FLOW, bInP )); }
 
 inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(bool bInP) const
-    { return aSet.GetFollowTextFlow( bInP ); }
+    { return m_aSet.GetFollowTextFlow( bInP ); }
 
 #endif
 

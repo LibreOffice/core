@@ -44,66 +44,66 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
               const sal_uInt16* pWhichRanges, SwFmt *pDrvdFrm,
               sal_uInt16 nFmtWhich )
     : SwModify( pDrvdFrm ),
-    aFmtName( OUString::createFromAscii(pFmtNm) ),
-    aSet( rPool, pWhichRanges ),
-    nWhichId( nFmtWhich ),
-    nPoolFmtId( USHRT_MAX ),
-    nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX )
+    m_aFmtName( OUString::createFromAscii(pFmtNm) ),
+    m_aSet( rPool, pWhichRanges ),
+    m_nWhichId( nFmtWhich ),
+    m_nPoolFmtId( USHRT_MAX ),
+    m_nPoolHelpId( USHRT_MAX ),
+    m_nPoolHlpFileId( UCHAR_MAX )
 {
-    bAutoUpdateFmt = false; // LAYER_IMPL
-    bAutoFmt = true;
-    bWritten = bFmtInDTOR = bHidden = false;
+    m_bAutoUpdateFmt = false; // LAYER_IMPL
+    m_bAutoFmt = true;
+    m_bWritten = m_bFmtInDTOR = m_bHidden = false;
 
     if( pDrvdFrm )
-        aSet.SetParent( &pDrvdFrm->aSet );
+        m_aSet.SetParent( &pDrvdFrm->m_aSet );
 }
 
 SwFmt::SwFmt( SwAttrPool& rPool, const OUString& rFmtNm,
               const sal_uInt16* pWhichRanges, SwFmt* pDrvdFrm,
               sal_uInt16 nFmtWhich )
     : SwModify( pDrvdFrm ),
-    aFmtName( rFmtNm ),
-    aSet( rPool, pWhichRanges ),
-    nWhichId( nFmtWhich ),
-    nPoolFmtId( USHRT_MAX ),
-    nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX )
+    m_aFmtName( rFmtNm ),
+    m_aSet( rPool, pWhichRanges ),
+    m_nWhichId( nFmtWhich ),
+    m_nPoolFmtId( USHRT_MAX ),
+    m_nPoolHelpId( USHRT_MAX ),
+    m_nPoolHlpFileId( UCHAR_MAX )
 {
-    bAutoUpdateFmt = false; // LAYER_IMPL
-    bAutoFmt = true;
-    bWritten = bFmtInDTOR = bHidden = false;
+    m_bAutoUpdateFmt = false; // LAYER_IMPL
+    m_bAutoFmt = true;
+    m_bWritten = m_bFmtInDTOR = m_bHidden = false;
 
     if( pDrvdFrm )
-        aSet.SetParent( &pDrvdFrm->aSet );
+        m_aSet.SetParent( &pDrvdFrm->m_aSet );
 }
 
 SwFmt::SwFmt( const SwFmt& rFmt )
     : SwModify( rFmt.DerivedFrom() ),
-    aFmtName( rFmt.aFmtName ),
-    aSet( rFmt.aSet ),
-    nWhichId( rFmt.nWhichId ),
-    nPoolFmtId( rFmt.GetPoolFmtId() ),
-    nPoolHelpId( rFmt.GetPoolHelpId() ),
-    nPoolHlpFileId( rFmt.GetPoolHlpFileId() )
+    m_aFmtName( rFmt.m_aFmtName ),
+    m_aSet( rFmt.m_aSet ),
+    m_nWhichId( rFmt.m_nWhichId ),
+    m_nPoolFmtId( rFmt.GetPoolFmtId() ),
+    m_nPoolHelpId( rFmt.GetPoolHelpId() ),
+    m_nPoolHlpFileId( rFmt.GetPoolHlpFileId() )
 {
-    bWritten = bFmtInDTOR = false; // LAYER_IMPL
-    bAutoFmt = rFmt.bAutoFmt;
-    bHidden = rFmt.bHidden;
-    bAutoUpdateFmt = rFmt.bAutoUpdateFmt;
+    m_bWritten = m_bFmtInDTOR = false; // LAYER_IMPL
+    m_bAutoFmt = rFmt.m_bAutoFmt;
+    m_bHidden = rFmt.m_bHidden;
+    m_bAutoUpdateFmt = rFmt.m_bAutoUpdateFmt;
 
     if( rFmt.DerivedFrom() )
-        aSet.SetParent( &rFmt.DerivedFrom()->aSet );
+        m_aSet.SetParent( &rFmt.DerivedFrom()->m_aSet );
     // a few special treatments for attributes
-    aSet.SetModifyAtAttr( this );
+    m_aSet.SetModifyAtAttr( this );
 }
 
 SwFmt &SwFmt::operator=(const SwFmt& rFmt)
 {
-    nWhichId = rFmt.nWhichId;
-    nPoolFmtId = rFmt.GetPoolFmtId();
-    nPoolHelpId = rFmt.GetPoolHelpId();
-    nPoolHlpFileId = rFmt.GetPoolHlpFileId();
+    m_nWhichId = rFmt.m_nWhichId;
+    m_nPoolFmtId = rFmt.GetPoolFmtId();
+    m_nPoolHelpId = rFmt.GetPoolHelpId();
+    m_nPoolHlpFileId = rFmt.GetPoolHlpFileId();
 
     if ( IsInCache() )
     {
@@ -113,19 +113,19 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     SetInSwFntCache( false );
 
     // copy only array with attributes delta
-    SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
-              aNew( *aSet.GetPool(), aSet.GetRanges() );
-    aSet.Intersect_BC( rFmt.aSet, &aOld, &aNew );
-    (void)aSet.Put_BC( rFmt.aSet, &aOld, &aNew );
+    SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
+              aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
+    m_aSet.Intersect_BC( rFmt.m_aSet, &aOld, &aNew );
+    (void)m_aSet.Put_BC( rFmt.m_aSet, &aOld, &aNew );
 
     // a few special treatments for attributes
-    aSet.SetModifyAtAttr( this );
+    m_aSet.SetModifyAtAttr( this );
 
     // create PoolItem attribute for Modify
     if( aOld.Count() )
     {
-        SwAttrSetChg aChgOld( aSet, aOld );
-        SwAttrSetChg aChgNew( aSet, aNew );
+        SwAttrSetChg aChgOld( m_aSet, aOld );
+        SwAttrSetChg aChgNew( m_aSet, aNew );
         ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
     }
 
@@ -136,16 +136,16 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
         if( rFmt.GetRegisteredIn() )
         {
             const_cast<SwFmt&>(rFmt).GetRegisteredInNonConst()->Add(this);
-            aSet.SetParent( &rFmt.aSet );
+            m_aSet.SetParent( &rFmt.m_aSet );
         }
         else
         {
-            aSet.SetParent( 0 );
+            m_aSet.SetParent( 0 );
         }
     }
-    bAutoFmt = rFmt.bAutoFmt;
-    bHidden = rFmt.bHidden;
-    bAutoUpdateFmt = rFmt.bAutoUpdateFmt;
+    m_bAutoFmt = rFmt.m_bAutoFmt;
+    m_bHidden = rFmt.m_bHidden;
+    m_bAutoUpdateFmt = rFmt.m_bAutoUpdateFmt;
     return *this;
 }
 
@@ -154,14 +154,14 @@ void SwFmt::SetName( const OUString& rNewName, bool bBroadcast )
     OSL_ENSURE( !IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )
     {
-        SwStringMsgPoolItem aOld( RES_NAME_CHANGED, aFmtName );
+        SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFmtName );
         SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
-        aFmtName = rNewName;
+        m_aFmtName = rNewName;
         ModifyNotification( &aOld, &aNew );
     }
     else
     {
-        aFmtName = rNewName;
+        m_aFmtName = rNewName;
     }
 }
 
@@ -187,35 +187,35 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, bool bReplace )
     SetInSwFntCache( false );
 
     // special treatments for some attributes
-    SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFmt.aSet);
+    SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFmt.m_aSet);
 
     if( !bReplace )     // refresh only those that are not set?
     {
-        if( pChgSet == &rFmt.aSet )
-            pChgSet = new SwAttrSet( rFmt.aSet );
-        pChgSet->Differentiate( aSet );
+        if( pChgSet == &rFmt.m_aSet )
+            pChgSet = new SwAttrSet( rFmt.m_aSet );
+        pChgSet->Differentiate( m_aSet );
     }
 
     // copy only array with attributes delta
-    if( pChgSet->GetPool() != aSet.GetPool() )
+    if( pChgSet->GetPool() != m_aSet.GetPool() )
         pChgSet->CopyToModify( *this );
     else
     {
-        SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
-                  aNew( *aSet.GetPool(), aSet.GetRanges() );
+        SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
+                  aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
 
-        if ( aSet.Put_BC( *pChgSet, &aOld, &aNew ) )
+        if ( m_aSet.Put_BC( *pChgSet, &aOld, &aNew ) )
         {
             // a few special treatments for attributes
-            aSet.SetModifyAtAttr( this );
+            m_aSet.SetModifyAtAttr( this );
 
-            SwAttrSetChg aChgOld( aSet, aOld );
-            SwAttrSetChg aChgNew( aSet, aNew );
+            SwAttrSetChg aChgOld( m_aSet, aOld );
+            SwAttrSetChg aChgNew( m_aSet, aNew );
             ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
         }
     }
 
-    if( pChgSet != &rFmt.aSet ) // was a Set created?
+    if( pChgSet != &rFmt.m_aSet ) // was a Set created?
         delete pChgSet;
 }
 
@@ -227,7 +227,7 @@ SwFmt::~SwFmt()
     {
         OSL_ENSURE( DerivedFrom(), "SwFmt::~SwFmt: Def dependents!" );
 
-        bFmtInDTOR = true;
+        m_bFmtInDTOR = true;
 
         SwFmt* pParentFmt = DerivedFrom();
         if( !pParentFmt )
@@ -274,26 +274,26 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
                 {
                     // if parent so register in new parent
                     pFmt->DerivedFrom()->Add( this );
-                    aSet.SetParent( &DerivedFrom()->aSet );
+                    m_aSet.SetParent( &DerivedFrom()->m_aSet );
                 }
                 else
                 {
                     // otherwise de-register at least from dying one
                     DerivedFrom()->Remove( this );
-                    aSet.SetParent( 0 );
+                    m_aSet.SetParent( 0 );
                 }
             }
         }
         break;
     case RES_ATTRSET_CHG:
-        if (pOldValue && pNewValue && static_cast<const SwAttrSetChg*>(pOldValue)->GetTheChgdSet() != &aSet)
+        if (pOldValue && pNewValue && static_cast<const SwAttrSetChg*>(pOldValue)->GetTheChgdSet() != &m_aSet)
         {
             // pass only those that are not set
             SwAttrSetChg aOld( *static_cast<const SwAttrSetChg*>(pOldValue) );
             SwAttrSetChg aNew( *static_cast<const SwAttrSetChg*>(pNewValue) );
 
-            aOld.GetChgSet()->Differentiate( aSet );
-            aNew.GetChgSet()->Differentiate( aSet );
+            aOld.GetChgSet()->Differentiate( m_aSet );
+            aNew.GetChgSet()->Differentiate( m_aSet );
 
             if( aNew.Count() )
                 NotifyClients( &aOld, &aNew );
@@ -310,7 +310,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
             static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt == GetRegisteredIn() )
         {
             // attach Set to new parent
-            aSet.SetParent( DerivedFrom() ? &DerivedFrom()->aSet : 0 );
+            m_aSet.SetParent( DerivedFrom() ? &DerivedFrom()->m_aSet : 0 );
         }
         break;
     case RES_RESET_FMTWRITTEN:
@@ -329,7 +329,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
     default:
         {
             // attribute is defined in this format
-            if( SfxItemState::SET == aSet.GetItemState( nWhich, false ))
+            if( SfxItemState::SET == m_aSet.GetItemState( nWhich, false ))
             {
                 // DropCaps might come into this block
                 OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify was sent without sender" );
@@ -382,7 +382,7 @@ bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     SetInSwFntCache( false );
 
     pDerFrom->Add( this );
-    aSet.SetParent( &pDerFrom->aSet );
+    m_aSet.SetParent( &pDerFrom->m_aSet );
 
     SwFmtChg aOldFmt( this );
     SwFmtChg aNewFmt( this );
@@ -407,12 +407,12 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
         // as good as possible to create a fallback representation and return that
-        aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bInParents);
+        aSvxBrushItem = getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bInParents);
 
         return aSvxBrushItem;
     }
 
-    return aSet.Get( nWhich, bInParents );
+    return m_aSet.Get( nWhich, bInParents );
 }
 
 SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
@@ -432,7 +432,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
 
             static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
-            aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bSrchInParent);
+            aSvxBrushItem = getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bSrchInParent);
             if( ppItem )
                 *ppItem = &aSvxBrushItem;
 
@@ -447,7 +447,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
         return SfxItemState::DEFAULT;
     }
 
-    return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
+    return m_aSet.GetItemState( nWhich, bSrchInParent, ppItem );
 }
 
 SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) const
@@ -463,7 +463,7 @@ SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) 
             // if yes, fill the local SvxBrushItem using the new fill attributes
             // as good as possible to have an instance for the pointer to point
             // to and return as state that it is set
-            rItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bSrchInParent);
+            rItem = getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bSrchInParent);
             return SfxItemState::SET;
         }
 
@@ -472,7 +472,7 @@ SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) 
     }
 
     const SfxPoolItem* pItem = 0;
-    SfxItemState eRet = aSet.GetItemState(RES_BACKGROUND, bSrchInParent, &pItem);
+    SfxItemState eRet = m_aSet.GetItemState(RES_BACKGROUND, bSrchInParent, &pItem);
     if (pItem)
         rItem = *static_cast<const SvxBrushItem*>(pItem);
     return eRet;
@@ -493,7 +493,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        SfxItemSet aTempSet(*aSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
+        SfxItemSet aTempSet(*m_aSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
         const SvxBrushItem& rSource = static_cast< const SvxBrushItem& >(rAttr);
 
         // fill a local ItemSet with the attributes corresponding as good as possible
@@ -503,23 +503,23 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
 
         if(IsModifyLocked())
         {
-            if( ( bRet = aSet.Put( aTempSet ) ) )
+            if( ( bRet = m_aSet.Put( aTempSet ) ) )
             {
-                aSet.SetModifyAtAttr( this );
+                m_aSet.SetModifyAtAttr( this );
             }
         }
         else
         {
-            SwAttrSet aOld(*aSet.GetPool(), aSet.GetRanges()), aNew(*aSet.GetPool(), aSet.GetRanges());
+            SwAttrSet aOld(*m_aSet.GetPool(), m_aSet.GetRanges()), aNew(*m_aSet.GetPool(), m_aSet.GetRanges());
 
-            bRet = aSet.Put_BC(aTempSet, &aOld, &aNew);
+            bRet = m_aSet.Put_BC(aTempSet, &aOld, &aNew);
 
             if(bRet)
             {
-                aSet.SetModifyAtAttr(this);
+                m_aSet.SetModifyAtAttr(this);
 
-                SwAttrSetChg aChgOld(aSet, aOld);
-                SwAttrSetChg aChgNew(aSet, aNew);
+                SwAttrSetChg aChgOld(m_aSet, aOld);
+                SwAttrSetChg aChgNew(m_aSet, aNew);
 
                 ModifyNotification(&aChgOld, &aChgNew);
             }
@@ -536,8 +536,8 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
           (RES_GRFFMTCOLL == nFmtWhich  ||
            RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
-        if( ( bRet = (0 != aSet.Put( rAttr ))) )
-            aSet.SetModifyAtAttr( this );
+        if( ( bRet = (0 != m_aSet.Put( rAttr ))) )
+            m_aSet.SetModifyAtAttr( this );
         // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
         {
@@ -547,17 +547,17 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     else
     {
         // copy only array with attributes delta
-        SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
-                  aNew( *aSet.GetPool(), aSet.GetRanges() );
+        SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
+                  aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
 
-        bRet = aSet.Put_BC( rAttr, &aOld, &aNew );
+        bRet = m_aSet.Put_BC( rAttr, &aOld, &aNew );
         if( bRet )
         {
             // some special treatments for attributes
-            aSet.SetModifyAtAttr( this );
+            m_aSet.SetModifyAtAttr( this );
 
-            SwAttrSetChg aChgOld( aSet, aOld );
-            SwAttrSetChg aChgNew( aSet, aNew );
+            SwAttrSetChg aChgOld( m_aSet, aOld );
+            SwAttrSetChg aChgNew( m_aSet, aNew );
             ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
         }
     }
@@ -607,23 +607,23 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 
             if(IsModifyLocked())
             {
-                if( ( bRet = aSet.Put( aTempSet ) ) )
+                if( ( bRet = m_aSet.Put( aTempSet ) ) )
                 {
-                    aSet.SetModifyAtAttr( this );
+                    m_aSet.SetModifyAtAttr( this );
                 }
             }
             else
             {
-                SwAttrSet aOld(*aSet.GetPool(), aSet.GetRanges()), aNew(*aSet.GetPool(), aSet.GetRanges());
+                SwAttrSet aOld(*m_aSet.GetPool(), m_aSet.GetRanges()), aNew(*m_aSet.GetPool(), m_aSet.GetRanges());
 
-                bRet = aSet.Put_BC(aTempSet, &aOld, &aNew);
+                bRet = m_aSet.Put_BC(aTempSet, &aOld, &aNew);
 
                 if(bRet)
                 {
-                    aSet.SetModifyAtAttr(this);
+                    m_aSet.SetModifyAtAttr(this);
 
-                    SwAttrSetChg aChgOld(aSet, aOld);
-                    SwAttrSetChg aChgNew(aSet, aNew);
+                    SwAttrSetChg aChgOld(m_aSet, aOld);
+                    SwAttrSetChg aChgNew(m_aSet, aNew);
 
                     ModifyNotification(&aChgOld, &aChgNew);
                 }
@@ -641,8 +641,8 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
            ( RES_GRFFMTCOLL == nFmtWhich ||
              RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
-        if( ( bRet = aSet.Put( aTempSet )) )
-            aSet.SetModifyAtAttr( this );
+        if( ( bRet = m_aSet.Put( aTempSet )) )
+            m_aSet.SetModifyAtAttr( this );
         // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )
         {
@@ -651,15 +651,15 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     }
     else
     {
-        SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
-                  aNew( *aSet.GetPool(), aSet.GetRanges() );
-        bRet = aSet.Put_BC( aTempSet, &aOld, &aNew );
+        SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
+                  aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
+        bRet = m_aSet.Put_BC( aTempSet, &aOld, &aNew );
         if( bRet )
         {
             // some special treatments for attributes
-            aSet.SetModifyAtAttr( this );
-            SwAttrSetChg aChgOld( aSet, aOld );
-            SwAttrSetChg aChgNew( aSet, aNew );
+            m_aSet.SetModifyAtAttr( this );
+            SwAttrSetChg aChgOld( m_aSet, aOld );
+            SwAttrSetChg aChgNew( m_aSet, aNew );
             ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
         }
     }
@@ -669,7 +669,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 // remove Hint using nWhich from array with delta
 bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
-    if( !aSet.Count() )
+    if( !m_aSet.Count() )
         return false;
 
     if( !nWhich2 || nWhich2 < nWhich1 )
@@ -684,16 +684,16 @@ bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
         return 0 != (( nWhich2 == nWhich1 )
-                     ? aSet.ClearItem( nWhich1 )
-                     : aSet.ClearItem_BC( nWhich1, nWhich2 ));
+                     ? m_aSet.ClearItem( nWhich1 )
+                     : m_aSet.ClearItem_BC( nWhich1, nWhich2 ));
 
-    SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
-              aNew( *aSet.GetPool(), aSet.GetRanges() );
-    bool bRet = 0 != aSet.ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
+    SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
+              aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
+    bool bRet = 0 != m_aSet.ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
     if( bRet )
     {
-        SwAttrSetChg aChgOld( aSet, aOld );
-        SwAttrSetChg aChgNew( aSet, aNew );
+        SwAttrSetChg aChgOld( m_aSet, aOld );
+        SwAttrSetChg aChgNew( m_aSet, aNew );
         ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
     }
     return bRet;
@@ -702,7 +702,7 @@ bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 // #i73790#
 sal_uInt16 SwFmt::ResetAllFmtAttr()
 {
-    if( !aSet.Count() )
+    if( !m_aSet.Count() )
         return 0;
 
     if ( IsInCache() )
@@ -714,15 +714,15 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
-        return aSet.ClearItem( 0 );
+        return m_aSet.ClearItem( 0 );
 
-    SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
-              aNew( *aSet.GetPool(), aSet.GetRanges() );
-    bool bRet = 0 != aSet.ClearItem_BC( 0, &aOld, &aNew );
+    SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
+              aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
+    bool bRet = 0 != m_aSet.ClearItem_BC( 0, &aOld, &aNew );
     if( bRet )
     {
-        SwAttrSetChg aChgOld( aSet, aOld );
-        SwAttrSetChg aChgNew( aSet, aNew );
+        SwAttrSetChg aChgOld( m_aSet, aOld );
+        SwAttrSetChg aChgNew( m_aSet, aNew );
         ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
     }
     return aNew.Count();
@@ -735,7 +735,7 @@ bool SwFmt::GetInfo( SfxPoolItem& rInfo ) const
 
 void SwFmt::DelDiffs( const SfxItemSet& rSet )
 {
-    if( !aSet.Count() )
+    if( !m_aSet.Count() )
         return;
 
     if ( IsInCache() )
@@ -748,17 +748,17 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
     {
-        aSet.Intersect( rSet );
+        m_aSet.Intersect( rSet );
         return;
     }
 
-    SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
-              aNew( *aSet.GetPool(), aSet.GetRanges() );
-    bool bRet = 0 != aSet.Intersect_BC( rSet, &aOld, &aNew );
+    SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
+              aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
+    bool bRet = 0 != m_aSet.Intersect_BC( rSet, &aOld, &aNew );
     if( bRet )
     {
-        SwAttrSetChg aChgOld( aSet, aOld );
-        SwAttrSetChg aChgNew( aSet, aNew );
+        SwAttrSetChg aChgOld( m_aSet, aOld );
+        SwAttrSetChg aChgNew( m_aSet, aNew );
         ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
     }
 }
@@ -818,10 +818,10 @@ SvxBrushItem SwFmt::makeBackgroundBrushItem(bool bInP) const
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
         // as good as possible to create a fallback representation and return that
-        return getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bInP);
+        return getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bInP);
     }
 
-    return aSet.GetBackground(bInP);
+    return m_aSet.GetBackground(bInP);
 }
 
 //UUUU

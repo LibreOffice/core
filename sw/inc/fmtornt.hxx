@@ -125,9 +125,9 @@ inline const SwFmtHoriOrient &SwAttrSet::GetHoriOrient(bool bInP) const
     { return static_cast<const SwFmtHoriOrient&>(Get( RES_HORI_ORIENT,bInP)); }
 
 inline const SwFmtVertOrient &SwFmt::GetVertOrient(bool bInP) const
-    { return aSet.GetVertOrient(bInP); }
+    { return m_aSet.GetVertOrient(bInP); }
 inline const SwFmtHoriOrient &SwFmt::GetHoriOrient(bool bInP) const
-    { return aSet.GetHoriOrient(bInP); }
+    { return m_aSet.GetHoriOrient(bInP); }
 
 #endif
 

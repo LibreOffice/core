@@ -56,7 +56,7 @@ inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(bool bInP) const
     { return static_cast<const SwFmtFillOrder&>(Get( RES_FILL_ORDER,bInP)); }
 
 inline const SwFmtFillOrder &SwFmt::GetFillOrder(bool bInP) const
-    { return aSet.GetFillOrder(bInP); }
+    { return m_aSet.GetFillOrder(bInP); }
 
 #endif
 

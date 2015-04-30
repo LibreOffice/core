@@ -238,37 +238,37 @@ inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(bool bInP)
 
 // Implementation of paragraph-attributes methods of SwFmt
 inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(bool bInP) const
-    {   return aSet.GetLineSpacing(bInP); }
+    {   return m_aSet.GetLineSpacing(bInP); }
 inline const SvxAdjustItem &SwFmt::GetAdjust(bool bInP) const
-    {   return aSet.GetAdjust(bInP); }
+    {   return m_aSet.GetAdjust(bInP); }
 inline const SvxFmtSplitItem &SwFmt::GetSplit(bool bInP) const
-    {   return aSet.GetSplit(bInP); }
+    {   return m_aSet.GetSplit(bInP); }
 inline const SwRegisterItem &SwFmt::GetRegister(bool bInP) const
-    {   return aSet.GetRegister(bInP); }
+    {   return m_aSet.GetRegister(bInP); }
 inline const SvxWidowsItem &SwFmt::GetWidows(bool bInP) const
-    {   return aSet.GetWidows(bInP); }
+    {   return m_aSet.GetWidows(bInP); }
 inline const SvxOrphansItem &SwFmt::GetOrphans(bool bInP) const
-    {   return aSet.GetOrphans(bInP); }
+    {   return m_aSet.GetOrphans(bInP); }
 inline const SvxTabStopItem &SwFmt::GetTabStops(bool bInP) const
-    {   return aSet.GetTabStops(bInP); }
+    {   return m_aSet.GetTabStops(bInP); }
 inline const SvxHyphenZoneItem &SwFmt::GetHyphenZone(bool bInP) const
-    {   return aSet.GetHyphenZone(bInP); }
+    {   return m_aSet.GetHyphenZone(bInP); }
 inline const SwFmtDrop &SwFmt::GetDrop(bool bInP) const
-    {   return aSet.GetDrop(bInP); }
+    {   return m_aSet.GetDrop(bInP); }
 inline const SwNumRuleItem &SwFmt::GetNumRule(bool bInP) const
-    {   return aSet.GetNumRule(bInP); }
+    {   return m_aSet.GetNumRule(bInP); }
 inline const SvxScriptSpaceItem& SwFmt::GetScriptSpace(bool bInP) const
-    {   return aSet.GetScriptSpace(bInP) ; }
+    {   return m_aSet.GetScriptSpace(bInP) ; }
 inline const SvxHangingPunctuationItem &SwFmt::GetHangingPunctuation(bool bInP) const
-    {   return aSet.GetHangingPunctuation(bInP) ; }
+    {   return m_aSet.GetHangingPunctuation(bInP) ; }
 inline const SvxForbiddenRuleItem &SwFmt::GetForbiddenRule(bool bInP) const
-    {   return static_cast<const SvxForbiddenRuleItem&>(aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP)); }
+    {   return static_cast<const SvxForbiddenRuleItem&>(m_aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP)); }
 inline const SvxParaVertAlignItem &SwFmt::GetParaVertAlign(bool bInP) const
-    {   return static_cast<const SvxParaVertAlignItem&>(aSet.Get( RES_PARATR_VERTALIGN, bInP )); }
+    {   return static_cast<const SvxParaVertAlignItem&>(m_aSet.Get( RES_PARATR_VERTALIGN, bInP )); }
 inline const SvxParaGridItem &SwFmt::GetParaGrid(bool bInP) const
-    {   return static_cast<const SvxParaGridItem&>(aSet.Get( RES_PARATR_SNAPTOGRID, bInP )); }
+    {   return static_cast<const SvxParaGridItem&>(m_aSet.Get( RES_PARATR_SNAPTOGRID, bInP )); }
 inline const SwParaConnectBorderItem &SwFmt::GetParaConnectBorder(bool bInP) const
-    {   return static_cast<const SwParaConnectBorderItem&>(aSet.Get( RES_PARATR_CONNECT_BORDER, bInP )); }
+    {   return static_cast<const SwParaConnectBorderItem&>(m_aSet.Get( RES_PARATR_CONNECT_BORDER, bInP )); }
 
 #endif
 
