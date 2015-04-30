@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TabBar.hxx"
+#include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include "SidebarDockingWindow.hxx"
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sfxsids.hrc>
 #include "helpid.hrc"
 #include <sfx2/dockwin.hxx>

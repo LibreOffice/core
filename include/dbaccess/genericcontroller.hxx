@@ -61,6 +61,8 @@
 #include <sfx2/userinputinterception.hxx>
 #include <vcl/vclptr.hxx>
 
+#include <com/sun/star/ui/XSidebarProvider.hpp>
+
 namespace dbtools
 {
     class SQLExceptionInfo;
@@ -464,6 +466,9 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getComponentWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCreationArguments() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XSidebarProvider > SAL_CALL getSidebar() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
 
         // ::com::sun::star::frame::XController
         virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

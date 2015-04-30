@@ -16,18 +16,20 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "SidebarController.hxx"
-#include "Deck.hxx"
-#include "DeckTitleBar.hxx"
-#include "Panel.hxx"
-#include "PanelTitleBar.hxx"
-#include "SidebarResource.hxx"
-#include "TabBar.hxx"
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/sidebar/DeckTitleBar.hxx>
+#include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/PanelTitleBar.hxx>
+#include <sfx2/sidebar/SidebarResource.hxx>
+#include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/Tools.hxx>
-#include "SidebarDockingWindow.hxx"
-#include "Context.hxx"
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
+#include <sfx2/sidebar/Context.hxx>
+#include <sfx2/sidebar/ContextList.hxx>
+
 
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -98,7 +100,8 @@ SidebarController::SidebarController (
               mpParentWindow,
               rxFrame,
               ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, _1),
-              ::boost::bind(&SidebarController::ShowPopupMenu, this, _1,_2))),
+              ::boost::bind(&SidebarController::ShowPopupMenu, this, _1,_2),
+              this)),
       mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
@@ -116,8 +119,12 @@ SidebarController::SidebarController (
       mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(NULL),
-      mnWidthOnSplitterButtonDown(0)
+      mnWidthOnSplitterButtonDown(0),
+      mpResourceManager()
 {
+    // Decks and panel collections for this sidebar
+    mpResourceManager = std::unique_ptr<ResourceManager>(new ResourceManager());
+
     // Listen for context change events.
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
@@ -173,11 +180,32 @@ void SAL_CALL SidebarController::disposing()
 {
     mpCloseIndicator.disposeAndClear();
 
+    maFocusManager.Clear();
+    mpTabBar.disposeAndClear();
+
+
+        // clear decks
+    ResourceManager::DeckContextDescriptorContainer aDecks;
+
+        mpResourceManager->GetMatchingDecks (
+            aDecks,
+            GetCurrentContext(),
+            IsDocumentReadOnly(),
+            mxFrame);
+
+        for (ResourceManager::DeckContextDescriptorContainer::const_iterator
+            iDeck(aDecks.begin()), iEnd(aDecks.end());
+            iDeck!=iEnd; ++iDeck)
+            {
+                const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
+                VclPtr<Deck> aDeck = deckDesc->mpDeck;
+                if (aDeck)
+                    aDeck.disposeAndClear();
+            }
+
     SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame));
     if (iEntry != maSidebarControllerContainer.end())
         maSidebarControllerContainer.erase(iEntry);
-
-    maFocusManager.Clear();
 
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
@@ -200,19 +228,13 @@ void SAL_CALL SidebarController::disposing()
         mpParentWindow = NULL;
     }
 
-    if (mpCurrentDeck)
-    {
-        mpCurrentDeck.disposeAndClear();
-    }
-
-    mpTabBar.disposeAndClear();
-
     Theme::GetPropertySet()->removePropertyChangeListener(
         OUString(""),
         static_cast<css::beans::XPropertyChangeListener*>(this));
 
     maContextChangeUpdate.CancelRequest();
     maAsynchronousDeckSwitch.CancelRequest();
+
 }
 
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
@@ -397,7 +419,8 @@ void SidebarController::UpdateConfigurations()
 
         // Find the set of decks that could be displayed for the new context.
         ResourceManager::DeckContextDescriptorContainer aDecks;
-        ResourceManager::Instance().GetMatchingDecks (
+
+        mpResourceManager->GetMatchingDecks (
             aDecks,
             maCurrentContext,
             mbIsDocumentReadOnly,
@@ -439,8 +462,7 @@ void SidebarController::UpdateConfigurations()
         // with the deck.
         mpTabBar->HighlightDeck(sNewDeckId);
 
-        const DeckDescriptor* pDescriptor =
-            ResourceManager::Instance().GetDeckDescriptor(sNewDeckId);
+        const DeckDescriptor* pDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
 
         if (pDescriptor)
         {
@@ -475,6 +497,11 @@ void SidebarController::OpenThenSwitchToDeck (
     mpTabBar->HighlightDeck(rsDeckId);
 }
 
+void SidebarController::SwitchToDefaultDeck()
+{
+    SwitchToDeck(gsDefaultDeckId);
+}
+
 void SidebarController::SwitchToDeck (
     const ::rtl::OUString& rsDeckId)
 {
@@ -482,27 +509,48 @@ void SidebarController::SwitchToDeck (
         || ! mbIsDeckOpen
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
-        const DeckDescriptor* pDeckDescriptor = ResourceManager::Instance().GetDeckDescriptor(rsDeckId);
+        const DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rsDeckId);
+
         if (pDeckDescriptor != NULL)
             SwitchToDeck(*pDeckDescriptor, maCurrentContext);
     }
 }
 
+
+void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId)
+{
+    const DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
+
+    if (pDeckDescriptor->mpDeck.get()==nullptr)
+    {
+        VclPtr<Deck> aDeck = VclPtr<Deck>::Create(
+                *pDeckDescriptor,
+                mpParentWindow,
+                ::boost::bind(&SidebarController::RequestCloseDeck, this));
+
+        mpResourceManager->SetDeckToDescriptor(rDeckId, aDeck);
+
+    }
+
+}
+
+
 void SidebarController::SwitchToDeck (
     const DeckDescriptor& rDeckDescriptor,
     const Context& rContext)
 {
+
     maFocusManager.Clear();
 
     const bool bForceNewDeck ((mnRequestedForceFlags&SwitchFlag_ForceNewDeck)!=0);
     const bool bForceNewPanels ((mnRequestedForceFlags&SwitchFlag_ForceNewPanels)!=0);
+    mnRequestedForceFlags = SwitchFlag_NoForce;
 
     if ( ! msCurrentDeckId.equals(rDeckDescriptor.msId)
         || bForceNewDeck)
     {
-        // When the deck changes then destroy the deck and all panels
-        // and create everything new.
-        mpCurrentDeck.disposeAndClear();
+        if (mpCurrentDeck)
+            mpCurrentDeck->Hide();
 
         msCurrentDeckId = rDeckDescriptor.msId;
     }
@@ -510,7 +558,8 @@ void SidebarController::SwitchToDeck (
 
     // Determine the panels to display in the deck.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
-    ResourceManager::Instance().GetMatchingPanels(
+
+    mpResourceManager->GetMatchingPanels(
         aPanelContextDescriptors,
         rContext,
         rDeckDescriptor.msId,
@@ -537,16 +586,10 @@ void SidebarController::SwitchToDeck (
     }
 
     // Provide a configuration and Deck object.
-    if ( ! mpCurrentDeck)
-    {
-        mpCurrentDeck.reset(
-            VclPtr<Deck>::Create(
-                rDeckDescriptor,
-                mpParentWindow,
-                ::boost::bind(&SidebarController::RequestCloseDeck, this)));
-        msCurrentDeckTitle = rDeckDescriptor.msTitle;
 
-    }
+    CreateDeck(rDeckDescriptor.msId);
+    mpCurrentDeck.reset(rDeckDescriptor.mpDeck);
+
     if ( ! mpCurrentDeck)
         return;
 
@@ -556,6 +599,7 @@ void SidebarController::SwitchToDeck (
     if (pDebugTitleBar != NULL)
         pDebugTitleBar->SetTitle(rDeckDescriptor.msTitle + " (" + maCurrentContext.msContext + ")");
 #endif
+
 
     // Update the panel list.
     const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
@@ -608,6 +652,7 @@ void SidebarController::SwitchToDeck (
                 rContext);
             bHasPanelSetChanged = true;
         }
+
         if (aNewPanels[nWriteIndex] != nullptr)
         {
             // Depending on the context we have to change the command
@@ -627,6 +672,7 @@ void SidebarController::SwitchToDeck (
     // mpCurrentPanels - may miss stuff (?)
     aNewPanels.resize(nWriteIndex);
 
+
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
     sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
     WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WINDOWALIGN_RIGHT;
@@ -639,6 +685,7 @@ void SidebarController::SwitchToDeck (
     {
         nDeckX = 0;
     }
+
 
     // Activate the deck and the new set of panels.
     mpCurrentDeck->setPosSizePixel(
@@ -658,7 +705,8 @@ void SidebarController::SwitchToDeck (
     // Tell the focus manager about the new panels and tab bar
     // buttons.
     maFocusManager.SetDeckTitle(mpCurrentDeck->GetTitleBar());
-    maFocusManager.SetPanels(aNewPanels);
+    maFocusManager.SetPanels(mpCurrentDeck->GetPanels());
+
     mpTabBar->UpdateFocusManager(maFocusManager);
     UpdateTitleBarIcons();
 }
@@ -669,7 +717,8 @@ VclPtr<Panel> SidebarController::CreatePanel (
     const bool bIsInitiallyExpanded,
     const Context& rContext)
 {
-    const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
+    const PanelDescriptor* pPanelDescriptor = mpResourceManager->GetPanelDescriptor(rsPanelId);
+
     if (pPanelDescriptor == NULL)
         return NULL;
 
@@ -679,7 +728,8 @@ VclPtr<Panel> SidebarController::CreatePanel (
         pParentWindow,
         bIsInitiallyExpanded,
         ::boost::bind(&Deck::RequestLayout, mpCurrentDeck.get()),
-        ::boost::bind(&SidebarController::GetCurrentContext, this));
+        ::boost::bind(&SidebarController::GetCurrentContext, this),
+        mxFrame);
 
     // Create the XUIElement.
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
@@ -1110,7 +1160,8 @@ void SidebarController::UpdateTitleBarIcons()
         return;
 
     const bool bIsHighContrastModeActive (Theme::IsHighContrastMode());
-    const ResourceManager& rResourceManager (ResourceManager::Instance());
+
+    const ResourceManager& rResourceManager = *mpResourceManager;
 
     // Update the deck icon.
     const DeckDescriptor* pDeckDescriptor = rResourceManager.GetDeckDescriptor(mpCurrentDeck->GetId());
@@ -1150,6 +1201,28 @@ void SidebarController::ShowPanel (const Panel& rPanel)
     if (mpCurrentDeck)
         mpCurrentDeck->ShowPanel(rPanel);
 }
+
+ResourceManager::DeckContextDescriptorContainer SidebarController::GetMatchingDecks()
+{
+    ResourceManager::DeckContextDescriptorContainer aDecks;
+    mpResourceManager->GetMatchingDecks (aDecks,
+                                        GetCurrentContext(),
+                                        IsDocumentReadOnly(),
+                                        mxFrame);
+    return aDecks;
+}
+
+ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingPanels(const ::rtl::OUString& rDeckId)
+{
+    ResourceManager::PanelContextDescriptorContainer aPanels;
+
+    mpResourceManager->GetMatchingPanels(aPanels,
+                                        GetCurrentContext(),
+                                        rDeckId,
+                                        mxFrame);
+    return aPanels;
+}
+
 
 } } // end of namespace sfx2::sidebar
 

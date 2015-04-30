@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_DECK_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_DECK_HXX
 
-#include "Panel.hxx"
+#include <sfx2/sidebar/Panel.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/image.hxx>
@@ -44,17 +44,15 @@ public:
     virtual ~Deck();
     virtual void dispose() SAL_OVERRIDE;
 
-    const OUString& GetId() const
-    {
-        return msId;
-    }
+    const OUString& GetId() const { return msId; }
+
     DeckTitleBar* GetTitleBar() const;
     Rectangle GetContentArea() const;
     void ResetPanels (const SharedPanelContainer& rPanels);
-    const SharedPanelContainer& GetPanels() const
-    {
-        return maPanels;
-    }
+    const SharedPanelContainer& GetPanels() const  { return maPanels; }
+
+    Panel* GetPanel(OUString panelId);
+
     void RequestLayout();
     vcl::Window* GetPanelParentWindow();
 

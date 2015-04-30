@@ -2830,7 +2830,6 @@ void Window::SetActivateMode( ActivateModeFlags nMode )
 void Window::setPosSizePixel( long nX, long nY,
                               long nWidth, long nHeight, PosSizeFlags nFlags )
 {
-
     bool bHasValidSize = !mpWindowImpl->mbDefSize;
 
     if ( nFlags & PosSizeFlags::Pos )

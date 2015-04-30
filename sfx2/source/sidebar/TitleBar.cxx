@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TitleBar.hxx"
-#include "Paint.hxx"
-#include "Accessible.hxx"
-#include "AccessibleTitleBar.hxx"
+#include <sfx2/sidebar/TitleBar.hxx>
+#include <sfx2/sidebar/Paint.hxx>
+#include <sfx2/sidebar/Accessible.hxx>
+#include <sfx2/sidebar/AccessibleTitleBar.hxx>
 
 #include <tools/svborder.hxx>
 #include <vcl/gradient.hxx>

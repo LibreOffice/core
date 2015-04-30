@@ -16,49 +16,38 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_CONTEXTLIST_HXX
-#define INCLUDED_SFX2_SOURCE_SIDEBAR_CONTEXTLIST_HXX
+#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_DECKDESCRIPTOR_HXX
+#define INCLUDED_SFX2_SOURCE_SIDEBAR_DECKDESCRIPTOR_HXX
 
-#include "Context.hxx"
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
+#include "ContextList.hxx"
+#include <boost/shared_ptr.hpp>
 
-#include <vector>
+#include <sfx2/sidebar/Deck.hxx>
 
 namespace sfx2 { namespace sidebar {
 
-/** Per context data for deck and panel descriptors.
-*/
-class ContextList
+class DeckDescriptor
 {
 public:
-    ContextList();
-    ~ContextList();
+    OUString msTitle;
+    OUString msId;
+    OUString msIconURL;
+    OUString msHighContrastIconURL;
+    OUString msTitleBarIconURL;
+    OUString msHighContrastTitleBarIconURL;
+    OUString msHelpURL;
+    OUString msHelpText;
+    ContextList maContextList;
+    bool mbIsEnabled;
+    sal_Int32 mnOrderIndex;
+    bool mbExperimental;
 
-    class Entry
-    {
-    public:
-        Context maContext;
-        bool mbIsInitiallyVisible;
-        ::rtl::OUString msMenuCommand;
-    };
+    VclPtr<Deck> mpDeck;
 
-    /** Return <TRUE/> when the given context matches any of the stored contexts.
-    */
-    const Entry* GetMatch (
-        const Context& rContext) const;
-    Entry* GetMatch (
-        const Context& rContext);
-
-    void AddContextDescription (
-        const Context& rContext,
-        const bool bIsInitiallyVisible,
-        const ::rtl::OUString& rsMenuCommand);
-
-private:
-    ::std::vector<Entry> maEntries;
-
-    ::std::vector<Entry>::const_iterator FindBestMatch (const Context& rContext) const;
+    DeckDescriptor();
+    DeckDescriptor (const DeckDescriptor& rOther);
+    ~DeckDescriptor();
 };
 
 } } // end of namespace sfx2::sidebar

@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PanelTitleBar.hxx"
+#include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "Sidebar.hrc"
 
-#include "Paint.hxx"
-#include "Panel.hxx"
+#include <sfx2/sidebar/Sidebar.hrc>
+
+#include <sfx2/sidebar/Paint.hxx>
+#include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/sidebar/Tools.hxx>
