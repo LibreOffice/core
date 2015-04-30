@@ -137,7 +137,7 @@ public:
         function_(function), instance_(instance) {}
 
     Ret Call(Arg data) const
-    { return function_ == nullptr ? Ret{} : (*function_)(instance_, data); }
+    { return function_ == nullptr ? Ret() : (*function_)(instance_, data); }
 
     bool IsSet() const { return function_ != nullptr; }
 
