@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7a5de9d1_4641f238",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-04-30T15:57:18Z",
+      "side": 1,
+      "message": "But, actually it added a performance penalty. All other opcodes are different from ocOpen and ocClose, names, all other operators, separators, ... so this check excluded just a specific case for the penalty of all other cases.\n\nAnyway, with the current check for ocCeil this is now moot.",
+      "parentUuid": "da6ed579_4ca34f9f",
+      "revId": "30c7dc308476a3d3faad57f748b6767b9e7e0905",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_4c958f3e",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 11
