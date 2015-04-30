@@ -170,7 +170,7 @@ inline const SwFmtCol &SwAttrSet::GetCol(bool bInP) const
     { return static_cast<const SwFmtCol&>(Get( RES_COL,bInP)); }
 
 inline const SwFmtCol &SwFmt::GetCol(bool bInP) const
-    { return aSet.GetCol(bInP); }
+    { return m_aSet.GetCol(bInP); }
 
 #endif
 

@@ -112,9 +112,9 @@ inline const SwFmtEndAtTxtEnd &SwAttrSet::GetEndAtTxtEnd(bool bInP) const
     { return static_cast<const SwFmtEndAtTxtEnd&>(Get( RES_END_AT_TXTEND, bInP)); }
 
 inline const SwFmtFtnAtTxtEnd &SwFmt::GetFtnAtTxtEnd(bool bInP) const
-    { return aSet.GetFtnAtTxtEnd(bInP); }
+    { return m_aSet.GetFtnAtTxtEnd(bInP); }
 inline const SwFmtEndAtTxtEnd &SwFmt::GetEndAtTxtEnd(bool bInP) const
-    { return aSet.GetEndAtTxtEnd(bInP); }
+    { return m_aSet.GetEndAtTxtEnd(bInP); }
 
 #endif
 

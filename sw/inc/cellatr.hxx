@@ -105,11 +105,11 @@ inline const SwTblBoxValue          &SwAttrSet::GetTblBoxValue(bool bInP) const
     {   return static_cast<const SwTblBoxValue&>(Get( RES_BOXATR_VALUE, bInP)); }
 
 inline const SwTblBoxNumFormat      &SwFmt::GetTblBoxNumFmt(bool bInP) const
-    {   return aSet.GetTblBoxNumFmt(bInP); }
+    {   return m_aSet.GetTblBoxNumFmt(bInP); }
 inline const SwTblBoxFormula        &SwFmt::GetTblBoxFormula(bool bInP) const
-    {   return aSet.GetTblBoxFormula(bInP); }
+    {   return m_aSet.GetTblBoxFormula(bInP); }
 inline const SwTblBoxValue          &SwFmt::GetTblBoxValue(bool bInP) const
-    {   return aSet.GetTblBoxValue(bInP); }
+    {   return m_aSet.GetTblBoxValue(bInP); }
 
 #endif
 

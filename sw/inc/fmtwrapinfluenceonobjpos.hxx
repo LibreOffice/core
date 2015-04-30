@@ -64,7 +64,7 @@ inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(boo
     { return static_cast<const SwFmtWrapInfluenceOnObjPos&>(Get( RES_WRAP_INFLUENCE_ON_OBJPOS,bInP)); }
 
  inline const SwFmtWrapInfluenceOnObjPos& SwFmt::GetWrapInfluenceOnObjPos(bool bInP) const
-    { return aSet.GetWrapInfluenceOnObjPos(bInP); }
+    { return m_aSet.GetWrapInfluenceOnObjPos(bInP); }
 
 #endif
 

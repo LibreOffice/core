@@ -70,31 +70,31 @@ inline const SdrTextVertAdjustItem &SwAttrSet::GetTextVertAdjust(bool bInP) cons
 
 // Implementation of FrameAttribute methods of SwFmt.
 inline const SvxPaperBinItem &SwFmt::GetPaperBin(bool bInP) const
-    { return aSet.GetPaperBin(bInP); }
+    { return m_aSet.GetPaperBin(bInP); }
 inline const SvxLRSpaceItem &SwFmt::GetLRSpace(bool bInP) const
-    { return aSet.GetLRSpace(bInP); }
+    { return m_aSet.GetLRSpace(bInP); }
 inline const SvxULSpaceItem &SwFmt::GetULSpace(bool bInP) const
-    { return aSet.GetULSpace(bInP); }
+    { return m_aSet.GetULSpace(bInP); }
 inline const SvxPrintItem &SwFmt::GetPrint(bool bInP) const
-    { return aSet.GetPrint(bInP); }
+    { return m_aSet.GetPrint(bInP); }
 inline const SvxOpaqueItem &SwFmt::GetOpaque(bool bInP) const
-    { return aSet.GetOpaque(bInP); }
+    { return m_aSet.GetOpaque(bInP); }
 inline const SvxProtectItem &SwFmt::GetProtect(bool bInP) const
-    { return aSet.GetProtect(bInP); }
+    { return m_aSet.GetProtect(bInP); }
 inline const SvxBoxItem &SwFmt::GetBox(bool bInP) const
-    { return aSet.GetBox(bInP); }
+    { return m_aSet.GetBox(bInP); }
 inline const SvxFmtKeepItem &SwFmt::GetKeep(bool bInP) const
-    { return aSet.GetKeep(bInP); }
+    { return m_aSet.GetKeep(bInP); }
 inline const SvxShadowItem &SwFmt::GetShadow(bool bInP) const
-    { return aSet.GetShadow(bInP); }
+    { return m_aSet.GetShadow(bInP); }
 inline const SvxFmtBreakItem &SwFmt::GetBreak(bool bInP) const
-    { return aSet.GetBreak(bInP); }
+    { return m_aSet.GetBreak(bInP); }
 inline const SvxMacroItem &SwFmt::GetMacro(bool bInP) const
-    { return aSet.GetMacro(bInP); }
+    { return m_aSet.GetMacro(bInP); }
 inline const SvxFrameDirectionItem  &SwFmt::GetFrmDir(bool bInP) const
-    { return aSet.GetFrmDir(bInP); }
+    { return m_aSet.GetFrmDir(bInP); }
 inline const SdrTextVertAdjustItem &SwFmt::GetTextVertAdjust(bool bInP) const
-    { return aSet.GetTextVertAdjust(bInP); }
+    { return m_aSet.GetTextVertAdjust(bInP); }
 
 #endif // INCLUDED_SW_INC_FRMATR_HXX
 

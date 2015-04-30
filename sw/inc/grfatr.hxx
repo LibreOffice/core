@@ -316,29 +316,29 @@ inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(bool bInP) const
 
 // Implementation of graphics attributes methods of SwFmt
 inline const SwMirrorGrf &SwFmt::GetMirrorGrf(bool bInP) const
-    { return aSet.GetMirrorGrf(bInP); }
+    { return m_aSet.GetMirrorGrf(bInP); }
 inline const SwCropGrf   &SwFmt::GetCropGrf(bool bInP) const
-    { return aSet.GetCropGrf(bInP); }
+    { return m_aSet.GetCropGrf(bInP); }
 inline const SwRotationGrf &SwFmt::GetRotationGrf(bool bInP) const
-    { return aSet.GetRotationGrf(bInP); }
+    { return m_aSet.GetRotationGrf(bInP); }
 inline const SwLuminanceGrf &SwFmt::GetLuminanceGrf(bool bInP) const
-    { return aSet.GetLuminanceGrf( bInP); }
+    { return m_aSet.GetLuminanceGrf( bInP); }
 inline const SwContrastGrf &SwFmt::GetContrastGrf(bool bInP) const
-    { return aSet.GetContrastGrf( bInP); }
+    { return m_aSet.GetContrastGrf( bInP); }
 inline const SwChannelRGrf &SwFmt::GetChannelRGrf(bool bInP) const
-    { return aSet.GetChannelRGrf( bInP); }
+    { return m_aSet.GetChannelRGrf( bInP); }
 inline const SwChannelGGrf &SwFmt::GetChannelGGrf(bool bInP) const
-    { return aSet.GetChannelGGrf( bInP); }
+    { return m_aSet.GetChannelGGrf( bInP); }
 inline const SwChannelBGrf &SwFmt::GetChannelBGrf(bool bInP) const
-    { return aSet.GetChannelBGrf( bInP); }
+    { return m_aSet.GetChannelBGrf( bInP); }
 inline const SwGammaGrf &SwFmt::GetGammaGrf(bool bInP) const
-    { return aSet.GetGammaGrf( bInP); }
+    { return m_aSet.GetGammaGrf( bInP); }
 inline const SwInvertGrf &SwFmt::GetInvertGrf(bool bInP) const
-    { return aSet.GetInvertGrf( bInP); }
+    { return m_aSet.GetInvertGrf( bInP); }
 inline const SwTransparencyGrf &SwFmt::GetTransparencyGrf(bool bInP) const
-    { return aSet.GetTransparencyGrf( bInP); }
+    { return m_aSet.GetTransparencyGrf( bInP); }
 inline const SwDrawModeGrf &SwFmt::GetDrawModeGrf(bool bInP) const
-    { return aSet.GetDrawModeGrf(bInP); }
+    { return m_aSet.GetDrawModeGrf(bInP); }
 
 #endif // INCLUDED_SW_INC_GRFATR_HXX
 

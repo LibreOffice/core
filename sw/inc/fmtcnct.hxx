@@ -68,7 +68,7 @@ inline const SwFmtChain &SwAttrSet::GetChain(bool bInP) const
     { return static_cast<const SwFmtChain&>(Get( RES_CHAIN,bInP)); }
 
 inline const SwFmtChain &SwFmt::GetChain(bool bInP) const
-    { return aSet.GetChain(bInP); }
+    { return m_aSet.GetChain(bInP); }
 
 #endif
 

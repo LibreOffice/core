@@ -46,7 +46,7 @@ inline const SwFmtEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const
     { return static_cast<const SwFmtEditInReadonly&>(Get( RES_EDIT_IN_READONLY,bInP)); }
 
 inline const SwFmtEditInReadonly &SwFmt::GetEditInReadonly(bool bInP) const
-    { return aSet.GetEditInReadonly(bInP); }
+    { return m_aSet.GetEditInReadonly(bInP); }
 
 #endif
 

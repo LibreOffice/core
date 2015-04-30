@@ -135,69 +135,69 @@ inline const SvxShadowItem       &SwAttrSet::GetCharShadow( bool bInP ) const
 // implementation of the character attribute methods of SwFmt
 
 inline const SvxPostureItem          &SwFmt::GetPosture(bool bInP) const
-    {   return aSet.GetPosture(bInP); }
+    {   return m_aSet.GetPosture(bInP); }
 inline const SvxWeightItem           &SwFmt::GetWeight(bool bInP) const
-    {   return aSet.GetWeight(bInP); }
+    {   return m_aSet.GetWeight(bInP); }
 inline const SvxShadowedItem         &SwFmt::GetShadowed(bool bInP) const
-    {   return aSet.GetShadowed(bInP); }
+    {   return m_aSet.GetShadowed(bInP); }
 inline const SvxAutoKernItem         &SwFmt::GetAutoKern(bool bInP) const
-    {   return aSet.GetAutoKern(bInP); }
+    {   return m_aSet.GetAutoKern(bInP); }
 inline const SvxWordLineModeItem     &SwFmt::GetWordLineMode(bool bInP) const
-    {   return aSet.GetWordLineMode(bInP); }
+    {   return m_aSet.GetWordLineMode(bInP); }
 inline const SvxContourItem          &SwFmt::GetContour(bool bInP) const
-    {   return aSet.GetContour(bInP); }
+    {   return m_aSet.GetContour(bInP); }
 inline const SvxKerningItem          &SwFmt::GetKerning(bool bInP) const
-    {   return aSet.GetKerning(bInP); }
+    {   return m_aSet.GetKerning(bInP); }
 inline const SvxUnderlineItem        &SwFmt::GetUnderline(bool bInP) const
-    {   return aSet.GetUnderline(bInP); }
+    {   return m_aSet.GetUnderline(bInP); }
 inline const SvxOverlineItem         &SwFmt::GetOverline(bool bInP) const
-    {   return aSet.GetOverline(bInP); }
+    {   return m_aSet.GetOverline(bInP); }
 inline const SvxCrossedOutItem       &SwFmt::GetCrossedOut(bool bInP) const
-    {   return aSet.GetCrossedOut(bInP); }
+    {   return m_aSet.GetCrossedOut(bInP); }
 inline const SvxFontHeightItem             &SwFmt::GetSize(bool bInP) const
-    {   return aSet.GetSize(bInP); }
+    {   return m_aSet.GetSize(bInP); }
 inline const SvxPropSizeItem         &SwFmt::GetPropSize(bool bInP) const
-    {   return aSet.GetPropSize(bInP); }
+    {   return m_aSet.GetPropSize(bInP); }
 inline const SvxFontItem             &SwFmt::GetFont(bool bInP) const
-    {   return aSet.GetFont(bInP); }
+    {   return m_aSet.GetFont(bInP); }
 inline const SvxFontItem         &SwFmt::GetCJKFont(bool bInP) const
-    {   return aSet.GetCJKFont(bInP); }
+    {   return m_aSet.GetCJKFont(bInP); }
 inline const SvxFontItem         &SwFmt::GetCTLFont(bool bInP) const
-    {   return aSet.GetCTLFont(bInP); }
+    {   return m_aSet.GetCTLFont(bInP); }
 inline const SvxColorItem            &SwFmt::GetColor(bool bInP) const
-    {   return aSet.GetColor(bInP); }
+    {   return m_aSet.GetColor(bInP); }
     inline const SvxCharSetColorItem    &SwFmt::GetCharSetColor(bool bInP) const
-    {   return aSet.GetCharSetColor(bInP); }
+    {   return m_aSet.GetCharSetColor(bInP); }
 inline const SvxLanguageItem         &SwFmt::GetLanguage(bool bInP) const
-    {   return aSet.GetLanguage(bInP); }
+    {   return m_aSet.GetLanguage(bInP); }
 inline const SvxEscapementItem       &SwFmt::GetEscapement(bool bInP) const
-    {   return aSet.GetEscapement(bInP); }
+    {   return m_aSet.GetEscapement(bInP); }
 inline const SvxCaseMapItem          &SwFmt::GetCaseMap(bool bInP) const
-    {   return aSet.GetCaseMap(bInP); }
+    {   return m_aSet.GetCaseMap(bInP); }
 inline const SvxNoHyphenItem        &SwFmt::GetNoHyphenHere(bool bInP) const
-    {   return aSet.GetNoHyphenHere(bInP); }
+    {   return m_aSet.GetNoHyphenHere(bInP); }
 inline const SvxBlinkItem           &SwFmt::GetBlink(bool bInP) const
-    {   return aSet.GetBlink(bInP); }
+    {   return m_aSet.GetBlink(bInP); }
 inline const SvxBrushItem           &SwFmt::GetChrBackground(bool bInP) const
-    {   return aSet.GetChrBackground(bInP); }
+    {   return m_aSet.GetChrBackground(bInP); }
 inline const SvxBrushItem &SwFmt::GetChrHighlight(bool bInP) const
-    {   return aSet.GetChrHighlight(bInP); }
+    {   return m_aSet.GetChrHighlight(bInP); }
 inline const SvxEmphasisMarkItem   &SwFmt::GetEmphasisMark( bool bInP ) const
-    {   return aSet.GetEmphasisMark(bInP); }
+    {   return m_aSet.GetEmphasisMark(bInP); }
 inline const SvxTwoLinesItem       &SwFmt::Get2Lines( bool bInP ) const
-    {   return aSet.Get2Lines(bInP); }
+    {   return m_aSet.Get2Lines(bInP); }
 inline const SvxCharScaleWidthItem &SwFmt::GetCharScaleW( bool bInP ) const
-    {   return aSet.GetCharScaleW(bInP); }
+    {   return m_aSet.GetCharScaleW(bInP); }
 inline const SvxCharRotateItem     &SwFmt::GetCharRotate( bool bInP ) const
-    {   return aSet.GetCharRotate(bInP); }
+    {   return m_aSet.GetCharRotate(bInP); }
 inline const SvxCharReliefItem     &SwFmt::GetCharRelief( bool bInP ) const
-    {   return aSet.GetCharRelief(bInP); }
+    {   return m_aSet.GetCharRelief(bInP); }
 inline const SvxCharHiddenItem      &SwFmt::GetCharHidden( bool bInP ) const
-    {   return aSet.GetCharHidden(bInP); }
+    {   return m_aSet.GetCharHidden(bInP); }
 inline const SvxBoxItem     &SwFmt::GetCharBorder( bool bInP ) const
-    {   return aSet.GetCharBorder(bInP); }
+    {   return m_aSet.GetCharBorder(bInP); }
 inline const SvxShadowItem  &SwFmt::GetCharShadow( bool bInP ) const
-    {   return aSet.GetCharShadow(bInP); }
+    {   return m_aSet.GetCharShadow(bInP); }
 
 #endif
 
