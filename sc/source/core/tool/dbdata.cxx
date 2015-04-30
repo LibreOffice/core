@@ -51,7 +51,7 @@ bool ScDBData::less::operator() (const ScDBData& left, const ScDBData& right) co
 ScDBData::ScDBData( const OUString& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    bool bByR, bool bHasH) :
+                    bool bByR, bool bHasH, bool bTotals) :
     mpSortParam(new ScSortParam),
     mpQueryParam(new ScQueryParam),
     mpSubTotal(new ScSubTotalParam),
@@ -65,7 +65,7 @@ ScDBData::ScDBData( const OUString& rName,
     nEndRow     (nRow2),
     bByRow      (bByR),
     bHasHeader  (bHasH),
-    bHasTotals  (false),
+    bHasTotals  (bTotals),
     bDoSize     (false),
     bKeepFmt    (false),
     bStripData  (false),
@@ -783,7 +783,7 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
         OUString aName(STR_DB_GLOBAL_NONAME);
         ::std::unique_ptr<ScDBData> pNew(new ScDBData(
             aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
-            rRange.aEnd.Col(), rRange.aEnd.Row(), true, false));
+            rRange.aEnd.Col(), rRange.aEnd.Row(), true, false, false));
         pData = pNew.get();
         o3tl::ptr_container::push_back(maDBs, std::move(pNew));
     }

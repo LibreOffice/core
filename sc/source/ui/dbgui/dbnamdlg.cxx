@@ -456,8 +456,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                     ScDBData* pNewEntry = new ScDBData( aNewName, aStart.Tab(),
                                                         aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row(),
-                                                        true, m_pBtnHeader->IsChecked() );
-                    pNewEntry->SetTotals( m_pBtnTotals->IsChecked() );
+                                                        true, m_pBtnHeader->IsChecked(),
+                                                        m_pBtnTotals->IsChecked() );
                     pNewEntry->SetDoSize( m_pBtnDoSize->IsChecked() );
                     pNewEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
                     pNewEntry->SetStripData( m_pBtnStripData->IsChecked() );

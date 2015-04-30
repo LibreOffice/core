@@ -79,7 +79,7 @@ public:
     SC_DLLPUBLIC ScDBData(const OUString& rName,
              SCTAB nTab,
              SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-             bool bByR = true, bool bHasH = true);
+             bool bByR = true, bool bHasH = true, bool bTotals = false);
     ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
     virtual ~ScDBData();
