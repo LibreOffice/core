@@ -159,16 +159,16 @@ public:
     }
     virtual bool Notify( NotifyEvent& ) SAL_OVERRIDE
     {
-//        CPPUNIT_ASSERT(false && "notify");
+//        CPPUNIT_FAIL("notify");
         return false;
     }
     virtual void GetFocus() SAL_OVERRIDE
     {
-        CPPUNIT_ASSERT(false && "get focus");
+        CPPUNIT_FAIL("get focus");
     }
     virtual void LoseFocus() SAL_OVERRIDE
     {
-        CPPUNIT_ASSERT(false && "this should never be called");
+        CPPUNIT_FAIL("this should never be called");
     }
 };
 
