@@ -905,9 +905,13 @@ void ChartExport::exportChart( Reference< css::chart::XChartDocument > rChartDoc
     // legend
     if( bHasLegend )
         exportLegend( rChartDoc );
-    // only visible cells should be plotted on the chart
+
+    uno::Reference<beans::XPropertySet> xDiagramPropSet(rChartDoc->getDiagram(), uno::UNO_QUERY);
+    uno::Any aPlotVisOnly = xDiagramPropSet->getPropertyValue("IncludeHiddenCells");
+    bool bIncludeHiddenCells = false;
+    aPlotVisOnly >>= bIncludeHiddenCells;
     pFS->singleElement( FSNS( XML_c, XML_plotVisOnly ),
-            XML_val, "1",
+            XML_val, BS(!bIncludeHiddenCells),
             FSEND );
 
     exportMissingValueTreatment(Reference<beans::XPropertySet>(mxDiagram, uno::UNO_QUERY));
