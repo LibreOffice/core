@@ -179,7 +179,7 @@ private:
     DECL_LINK(OnChangeCreationMode, OGeneralPageWizard*);
     DECL_LINK(OnRecentDocumentSelected, OGeneralPageWizard*);
     DECL_LINK(OnSingleDocumentChosen, OGeneralPageWizard*);
-    DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
+    DECL_LINK_TYPED(ImplClickHdl, OMySQLIntroPageSetup*, void);
     DECL_LINK_TYPED(ImplModifiedHdl, OGenericAdministrationPage const *, void);
 };
 

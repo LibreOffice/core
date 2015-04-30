@@ -217,9 +217,7 @@ namespace dbaui
 
         static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
         ConnectionType      getMySQLMode();
-        Link<>              maClickHdl;
-        void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
-        const Link<>&       GetClickHdl() const { return maClickHdl; }
+        void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
         DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
 
     protected:
@@ -232,6 +230,7 @@ namespace dbaui
         VclPtr<RadioButton>         m_pODBCDatabase;
         VclPtr<RadioButton>         m_pJDBCDatabase;
         VclPtr<RadioButton>         m_pNATIVEDatabase;
+        Link<OMySQLIntroPageSetup *, void> maClickHdl;
 
         DECL_LINK(OnSetupModeSelected, RadioButton*);
 

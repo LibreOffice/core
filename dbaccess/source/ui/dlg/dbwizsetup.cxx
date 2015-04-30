@@ -586,7 +586,7 @@ IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPa
     enableButtons( WizardButtonFlags::NEXT, m_bIsConnectable  && (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL));
 }
 
-IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup)
+IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup, void)
 {
     OUString sURLPrefix;
     switch( _pMySQLIntroPageSetup->getMySQLMode() )
@@ -602,7 +602,6 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
             break;
     }
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), true);
-    return sal_True;
 }
 
 IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard*, /*_pGeneralPage*/)
