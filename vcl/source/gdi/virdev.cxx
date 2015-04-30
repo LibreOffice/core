@@ -21,6 +21,7 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 
@@ -251,6 +252,26 @@ VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
     ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(),
                    nBitCount, pData);
 }
+
+VirtualDevice::VirtualDevice(const ::css::uno::Any& Parent,
+                             const Size &rSize, sal_uInt16 nBitCount)
+    : mpVirDev( NULL ),
+    meRefDevMode( REFDEV_NONE )
+{
+    SystemGraphicsData aData;
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
+    aData.nSize = sizeof(SystemGraphicsData);
+    #if defined WNT
+    sal_Int64 nWindowHandle;
+    Parent >>= nWindowHandle;
+    aData.hWnd = (HWND) nWindowHandle;
+    #else
+    // TODO: support other platforms
+    #endif
+    ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(),
+                   nBitCount, &aData);
+}
+
 
 VirtualDevice::~VirtualDevice()
 {

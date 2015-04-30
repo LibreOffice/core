@@ -20,7 +20,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -3284,17 +3283,8 @@ void SwXTextDocument::resetSelection()
 
 void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) throw (::css::uno::RuntimeException, ::std::exception)
 {
-    SystemGraphicsData aData;
-    aData.nSize = sizeof(SystemGraphicsData);
-    #if defined WNT
-    sal_Int64 nWindowHandle;
-    Parent >>= nWindowHandle;
-    aData.hWnd = (HWND) nWindowHandle;
-    VirtualDevice aDevice(&aData, Size(1, 1), (sal_uInt16)32);
+    VirtualDevice aDevice(Parent, Size(1, 1), (sal_uInt16)32);
     paintTile( aDevice, nOutputWidth, nOutputHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight );
-    #else
-    // TODO: support other platforms
-    #endif
 }
 
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()

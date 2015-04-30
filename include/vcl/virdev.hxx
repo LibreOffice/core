@@ -117,6 +117,9 @@ public:
     explicit            VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
                                       sal_uInt16 nBitCount);
 
+    explicit            VirtualDevice(const ::css::uno::Any& Parent, const Size &rSize,
+                                      sal_uInt16 nBitCount);
+
     virtual             ~VirtualDevice();
 
     virtual void        EnableRTL( bool bEnable = true ) SAL_OVERRIDE;
