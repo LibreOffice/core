@@ -79,6 +79,7 @@ public:
     void testVba();
 #endif
     void testBookmarkDeleteAndJoin();
+    void testBookmarkDeleteTdf90816();
 #if 0
     void testControlShapeGrouping();
 #endif
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testVba);
 #endif
     CPPUNIT_TEST(testBookmarkDeleteAndJoin);
+    CPPUNIT_TEST(testBookmarkDeleteTdf90816);
 #if 0
     CPPUNIT_TEST(testControlShapeGrouping);
 #endif
@@ -220,6 +222,35 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
         CPPUNIT_ASSERT((*i)->GetMarkStart().nNode.GetNode().GetCntntNode() ==
             static_cast<const SwCntntNode*>((*i)->GetMarkStart().nContent.GetIdxReg()));
     }
+}
+
+void SwMacrosTest::testBookmarkDeleteTdf90816()
+{
+    SwDoc *const pDoc = new SwDoc;
+    pDoc->GetIDocumentUndoRedo().DoUndo(true); // bug is in SwUndoDelete
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    rIDCO.AppendTxtNode(*aPaM.GetPoint());
+    rIDCO.InsertString(aPaM, OUString("ABC"));
+    aPaM.Move(fnMoveBackward, fnGoCntnt);
+    aPaM.SetMark();
+    aPaM.Move(fnMoveBackward, fnGoCntnt);
+    IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
+    sw::mark::IMark *pMark =
+        rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK);
+    CPPUNIT_ASSERT(pMark);
+
+    // delete the same selection as the bookmark
+    rIDCO.DeleteAndJoin(aPaM, false);
+
+    // bookmark still there?
+    auto iter = rIDMA.getAllMarksBegin();
+    CPPUNIT_ASSERT_MESSAGE("the bookmark was deleted",
+            iter != rIDMA.getAllMarksEnd());
+    CPPUNIT_ASSERT(*aPaM.Start() == (*iter)->GetMarkPos());
+    CPPUNIT_ASSERT(*aPaM.End() == (*iter)->GetOtherMarkPos());
 }
 
 #if 0

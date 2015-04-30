@@ -154,7 +154,11 @@ SwUndoDelete::SwUndoDelete(
     {
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint() );
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-        _DelBookmarks(pStt->nNode, pEnd->nNode, nullptr, &pStt->nContent, &pEnd->nContent);
+        if (nEndNode - nSttNode > 1) // check for fully selected nodes
+        {
+            SwNodeIndex const start(pStt->nNode, +1);
+            _DelBookmarks(start, pEnd->nNode);
+        }
     }
 
     nSetPos = pHistory ? pHistory->Count() : 0;
