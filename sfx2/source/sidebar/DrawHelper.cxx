@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawHelper.hxx"
-#include "Paint.hxx"
+#include <sfx2/sidebar/DrawHelper.hxx>
+#include <sfx2/sidebar/Paint.hxx>
 
 #include <vcl/lineinfo.hxx>
 

@@ -23,12 +23,12 @@
 
 #include <map>
 
-#include "AsynchronousCall.hxx"
-#include "Context.hxx"
-#include "FocusManager.hxx"
-#include "Panel.hxx"
-#include "ResourceManager.hxx"
-#include "TabBar.hxx"
+#include <sfx2/sidebar/AsynchronousCall.hxx>
+#include <sfx2/sidebar/Context.hxx>
+#include <sfx2/sidebar/FocusManager.hxx>
+#include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/sidebar/TabBar.hxx>
 
 #include <vcl/menu.hxx>
 
@@ -44,6 +44,8 @@
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
+
+
 
 namespace
 {
@@ -137,6 +139,21 @@ public:
 
     FocusManager& GetFocusManager() { return maFocusManager;}
 
+    ResourceManager* GetResourceManager() { return mpResourceManager.get();}
+
+   // std::unique_ptr<ResourceManager> GetResourceManager() { return mpResourceManager;}
+
+    Context GetCurrentContext() const { return maCurrentContext;}
+    bool IsDocumentReadOnly (void) const { return mbIsDocumentReadOnly;}
+
+    void SwitchToDeck ( const ::rtl::OUString& rsDeckId);
+    void SwitchToDefaultDeck();
+
+    void CreateDeck(const ::rtl::OUString& rDeckId);
+
+    ResourceManager::DeckContextDescriptorContainer GetMatchingDecks();
+    ResourceManager::PanelContextDescriptorContainer GetMatchingPanels( const ::rtl::OUString& rDeckId);
+
 private:
     typedef ::std::map<
         const css::uno::Reference<css::frame::XFrame>,
@@ -198,13 +215,13 @@ private:
         const ::rtl::OUString& rsImplementationURL,
         const bool bWantsCanvas,
         const Context& rContext);
+
     VclPtr<Panel> CreatePanel (
         const ::rtl::OUString& rsPanelId,
         vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext);
-    void SwitchToDeck (
-        const ::rtl::OUString& rsDeckId);
+
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,
         const Context& rContext);
@@ -245,9 +262,10 @@ private:
     */
     void ShowPanel (const Panel& rPanel);
 
-    Context GetCurrentContext() const { return maCurrentContext;}
-
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
+
+    std::unique_ptr<ResourceManager> mpResourceManager;
+
 };
 
 } } // end of namespace sfx2::sidebar

@@ -80,6 +80,9 @@
 
 #include <unordered_map>
 
+#include <com/sun/star/ui/XSidebarProvider.hpp>
+#include <sfx2/sidebar/UnoSidebar.hxx>
+
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 
 using namespace ::com::sun::star;
@@ -102,6 +105,8 @@ using ::com::sun::star::frame::XFrameActionListener;
 using ::com::sun::star::util::XCloseListener;
 using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::frame::XTitle;
+using ::com::sun::star::ui::XSidebarProvider;
+
 
 struct GroupIDToCommandGroup
 {
@@ -537,6 +542,16 @@ SfxViewFrame& SfxBaseController::GetViewFrame_Impl() const
     SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame();
     ENSURE_OR_THROW( pActFrame, "a view shell without a view frame is pretty pathological" );
     return *pActFrame;
+}
+
+
+Reference<XSidebarProvider> SAL_CALL SfxBaseController::getSidebar() throw (RuntimeException, std::exception)
+{
+        SfxViewFrame& rViewFrame = GetViewFrame_Impl();
+        SfxFrame& rFrame = rViewFrame.GetFrame();
+
+        Reference<XSidebarProvider> rSidebar = new SfxUnoSidebar(rFrame.GetFrameInterface());
+        return rSidebar;
 }
 
 
