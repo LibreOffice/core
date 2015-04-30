@@ -94,7 +94,7 @@
     SAL_DLLPRIVATE static RetType Member(Class *, ArgType)
 
 #define IMPL_LINK_TYPED(Class, Member, ArgType, ArgName, RetType) \
-    RetType Class::LinkStub##Member(void * instance, ArgType) { \
+    RetType Class::LinkStub##Member(void * instance, ArgType data) { \
         return static_cast<Class *>(instance)->Member(data); \
     } \
     RetType Class::Member(ArgType ArgName)
