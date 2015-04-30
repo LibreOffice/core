@@ -29,8 +29,8 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <officecfg/Office/Common.hxx>
 
-using ::sdr::overlay::OverlayObject;
-using ::sdr::overlay::OverlayManager;
+using sdr::overlay::OverlayObject;
+using sdr::overlay::OverlayManager;
 using ::drawinglayer::primitive2d::Primitive2DSequence;
 
 #define DASH_UPDATE_INTERVAL 180    // in msec

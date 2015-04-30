@@ -60,7 +60,7 @@ using namespace com::sun::star;
 class ImplMarkingOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    sdr::overlay::OverlayObjectList               maObjects;
 
     // The remembered second position in logical coordinates
     basegfx::B2DPoint                               maSecondPosition;
@@ -84,11 +84,11 @@ ImplMarkingOverlay::ImplMarkingOverlay(const SdrPaintView& rView, const basegfx:
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
         if (xTargetOverlay.is())
         {
-            ::sdr::overlay::OverlayRollingRectangleStriped* pNew = new ::sdr::overlay::OverlayRollingRectangleStriped(
+            sdr::overlay::OverlayRollingRectangleStriped* pNew = new sdr::overlay::OverlayRollingRectangleStriped(
                 rStartPos, rStartPos, false);
             xTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
@@ -110,7 +110,7 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
         // apply to OverlayObjects
         for(sal_uInt32 a(0L); a < maObjects.count(); a++)
         {
-            ::sdr::overlay::OverlayRollingRectangleStriped& rCandidate = static_cast< ::sdr::overlay::OverlayRollingRectangleStriped&>(maObjects.getOverlayObject(a));
+            sdr::overlay::OverlayRollingRectangleStriped& rCandidate = static_cast< sdr::overlay::OverlayRollingRectangleStriped&>(maObjects.getOverlayObject(a));
             rCandidate.setSecondPosition(rNewPosition);
         }
 

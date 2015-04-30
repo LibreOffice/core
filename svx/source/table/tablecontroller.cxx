@@ -72,7 +72,7 @@
 #include <o3tl/enumrange.hxx>
 
 using ::editeng::SvxBorderLine;
-using namespace ::sdr::table;
+using namespace sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
@@ -297,7 +297,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         }
         else
         {
-            ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+            sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
 
             if( !pWindow || !pTableObj || eHit  == SDRTABLEHIT_NONE)
             {
@@ -518,7 +518,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
 
 void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 {
-    ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
         return;
 
@@ -795,7 +795,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 
 void SvxTableController::onDelete( sal_uInt16 nSId )
 {
-    ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
         return;
 
@@ -901,7 +901,7 @@ namespace
 
 void SvxTableController::onFormatTable( SfxRequest& rReq )
 {
-    ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
         return;
 
@@ -1041,7 +1041,7 @@ void SvxTableController::Execute( SfxRequest& rReq )
 
 void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 {
-    SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
 
     if( !pTableObj || !pModel || !pArgs || (SfxItemState::SET != pArgs->GetItemState(SID_TABLE_STYLE, false)) )
@@ -1119,7 +1119,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 
 void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
 {
-    SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
 
     if( !pTableObj || !pModel )
@@ -1166,7 +1166,7 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
 
 void SvxTableController::SetVertical( sal_uInt16 nSId )
 {
-    SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( mxTable.is() && pTableObj )
     {
         TableModelNotifyGuard aGuard( mxTable.get() );
@@ -1209,7 +1209,7 @@ void SvxTableController::MergeMarkedCells()
 {
     CellPos aStart, aEnd;
     getSelectedCells( aStart, aEnd );
-    SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( pTableObj )
     {
         if( pTableObj->IsTextEditActive() )
@@ -1433,7 +1433,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
 
     sal_uInt16 nAction = ACTION_HANDLED_BY_VIEW;
 
-    ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
         return nAction;
 
@@ -1613,7 +1613,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
 
 bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::Window* pWindow )
 {
-    ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
         return false;
 
@@ -1845,7 +1845,7 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
 {
     SdrPageView* pPV = mpView->GetSdrPageView();
 
-    ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( pTableObj && pTableObj->GetPage() == pPV->GetPage() )
     {
         bool bEmptyOutliner = false;
@@ -2107,7 +2107,7 @@ void SvxTableController::updateSelectionOverlay()
     destroySelectionOverlay();
     if( mbCellSelectionMode )
     {
-        ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+        sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
         if( pTableObj )
         {
             sdr::overlay::OverlayObjectCell::RangeVector aRanges;
@@ -2137,7 +2137,7 @@ void SvxTableController::updateSelectionOverlay()
                 SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(nIndex);
                 if( pPaintWindow )
                 {
-                    rtl::Reference < ::sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
+                    rtl::Reference < sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
                     if( xOverlayManager.is() )
                     {
                         // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_INVERT;
@@ -2146,7 +2146,7 @@ void SvxTableController::updateSelectionOverlay()
                         sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
 
                         xOverlayManager->add(*pOverlay);
-                        mpSelectionOverlay = new ::sdr::overlay::OverlayObjectList;
+                        mpSelectionOverlay = new sdr::overlay::OverlayObjectList;
                         mpSelectionOverlay->append(*pOverlay);
                     }
                 }
@@ -2606,7 +2606,7 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
 {
     if( mxTableObj.is() && mbCellSelectionMode && pNewPage ) try
     {
-        ::sdr::table::SdrTableObj& rTableObj = *static_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+        sdr::table::SdrTableObj& rTableObj = *static_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
 
         CellPos aStart, aEnd;
         getSelectedCells( aStart, aEnd );
@@ -3128,7 +3128,7 @@ bool SvxTableController::isColumnSelected( sal_Int32 nColumn )
 
 bool SvxTableController::isRowHeader()
 {
-    SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
 
     if( !pTableObj || !pModel )
@@ -3141,7 +3141,7 @@ bool SvxTableController::isRowHeader()
 
 bool SvxTableController::isColumnHeader()
 {
-    SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+    SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
 
     if( !pTableObj || !pModel )

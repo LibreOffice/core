@@ -135,7 +135,7 @@ public:
 
 protected:
     // SdrObject overridables
-    virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 private:
     /** retrieves the typed ViewContact for the object
@@ -146,7 +146,7 @@ private:
             ->_out_rpContact contains a pointer to this contact.
             A failure to retrieve the contact object fires an assertion in non-product builds.
     */
-    SVX_DLLPRIVATE  bool    impl_getViewContact( ::sdr::contact::ViewContactOfUnoControl*& _out_rpContact ) const;
+    SVX_DLLPRIVATE  bool    impl_getViewContact( sdr::contact::ViewContactOfUnoControl*& _out_rpContact ) const;
 };
 
 

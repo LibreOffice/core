@@ -131,10 +131,10 @@ public:
     CellPos getPreviousRow( const CellPos& rPos, bool bEdgeTravel ) const;
     CellPos getNextRow( const CellPos& rPos, bool bEdgeTravel ) const;
 
-    void createCell( ::sdr::table::CellRef& xCell );
+    void createCell( sdr::table::CellRef& xCell );
 
-    const ::sdr::table::TableStyleSettings& getTableStyleSettings() const;
-    void setTableStyleSettings( const ::sdr::table::TableStyleSettings& rStyle );
+    const sdr::table::TableStyleSettings& getTableStyleSettings() const;
+    void setTableStyleSettings( const sdr::table::TableStyleSettings& rStyle );
 
     TableHitKind CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY, int nTol ) const;
 
@@ -142,7 +142,7 @@ public:
     void uno_unlock();
 
     /** the active table has the focus or is currently edited */
-    const ::sdr::table::CellRef& getActiveCell() const;
+    const sdr::table::CellRef& getActiveCell() const;
 
     void setActiveCell( const sdr::table::CellPos& rPos );
     void getActiveCellPos( sdr::table::CellPos& rPos ) const;
@@ -305,7 +305,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 
 private:
-    SdrOutliner* GetCellTextEditOutliner( const ::sdr::table::Cell& rCell ) const;
+    SdrOutliner* GetCellTextEditOutliner( const sdr::table::Cell& rCell ) const;
 
 private:
     // for the ViewContactOfTableObj to build the primitive representation, it is necessary to access the

@@ -241,7 +241,7 @@ ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
         SdrPaintWindow* pPaintWindow = rDocView.GetDrawView()->GetPaintWindow(0);
         if( pPaintWindow )
         {
-            rtl::Reference< ::sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
+            rtl::Reference< sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
 
             if ( xOverlayManager.is() )
             {

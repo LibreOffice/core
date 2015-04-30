@@ -574,7 +574,7 @@ void SdrHdl::CreateB2dIAObject()
                             aMoveOutsideOffset.X() += aOffset.Height();
                     }
 
-                    rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                    rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                     if (xManager.is())
                     {
                         basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
@@ -681,11 +681,11 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     return aModernSet.get()->GetBitmapEx(eKindOfMarker, nInd);
 }
 
-::sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
+sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
     const basegfx::B2DPoint& rPos,
     BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, OutputDevice& rOutDev, Point aMoveOutsideOffset)
 {
-    ::sdr::overlay::OverlayObject* pRetval = 0L;
+    sdr::overlay::OverlayObject* pRetval = 0L;
 
     // support bigger sizes
     bool bForceBiggerSize(false);
@@ -764,19 +764,19 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // when anchor is used take upper left as reference point inside the handle
-            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime);
+            pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
+            pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
                 (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
                 (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
         }
         else
         {
             // create centered handle as default
-            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
+            pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
                 (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
                 (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                 (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
@@ -808,12 +808,12 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // upper left as reference point inside the handle for AnchorPressed, too
-            pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx);
+            pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
+            pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
                 (sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1), 0);
         }
         else
@@ -840,7 +840,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
             }
 
             // create centered handle as default
-            pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx, nCenX, nCenY);
+            pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx, nCenX, nCenY);
         }
     }
 
@@ -1014,13 +1014,13 @@ void SdrHdlColor::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if (xManager.is())
                         {
                             Bitmap aBmpCol(CreateColorDropper(aMarkerColor));
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
-                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                ::sdr::overlay::OverlayBitmapEx(
+                            sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                sdr::overlay::OverlayBitmapEx(
                                     aPosition,
                                     BitmapEx(aBmpCol),
                                     (sal_uInt16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
@@ -1174,7 +1174,7 @@ void SdrHdlGradient::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if (xManager.is())
                         {
                             // striped line in between
@@ -1191,8 +1191,8 @@ void SdrHdlGradient::CreateB2dIAObject()
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
                             basegfx::B2DPoint aMidPos(aMidPoint.X(), aMidPoint.Y());
 
-                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                ::sdr::overlay::OverlayLineStriped(
+                            sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                sdr::overlay::OverlayLineStriped(
                                     aPosition, aMidPos
                                 );
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
@@ -1212,7 +1212,7 @@ void SdrHdlGradient::CreateB2dIAObject()
                             basegfx::B2DPoint aPosition2(a2ndPos.X(), a2ndPos.Y());
 
                             pNewOverlayObject = new
-                                ::sdr::overlay::OverlayTriangle(
+                                sdr::overlay::OverlayTriangle(
                                     aPositionLeft,
                                     aPosition2,
                                     aPositionRight,
@@ -1334,14 +1334,14 @@ void SdrHdlLine::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if (xManager.is())
                         {
                             basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
                             basegfx::B2DPoint aPosition2(pHdl2->GetPos().X(), pHdl2->GetPos().Y());
 
-                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                ::sdr::overlay::OverlayLineStriped(
+                            sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                sdr::overlay::OverlayLineStriped(
                                     aPosition1,
                                     aPosition2
                                 );
@@ -1391,7 +1391,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if (xManager.is())
                         {
                             basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
@@ -1399,8 +1399,8 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 
                             if(!aPosition1.equal(aPosition2))
                             {
-                                ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                    ::sdr::overlay::OverlayLineStriped(
+                                sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                    sdr::overlay::OverlayLineStriped(
                                         aPosition1,
                                         aPosition2
                                     );
@@ -1448,11 +1448,11 @@ void E3dVolumeMarker::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if (xManager.is() && aWireframePoly.count())
                         {
-                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                            ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                            sdr::overlay::OverlayObject* pNewOverlayObject = new
+                            sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                                 aWireframePoly);
 
                             // OVERLAYMANAGER
@@ -1511,7 +1511,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
 
                         if(rPageWindow.GetPaintWindow().OutputToWindow())
                         {
-                            rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                            rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                             if (xManager.is())
                             {
                                 basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
@@ -1633,7 +1633,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if (xManager.is())
                         {
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
@@ -1698,7 +1698,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if (xManager.is())
                         {
                             const basegfx::B2DPoint aTopLeft(maRect.Left(), maRect.Top());
@@ -1707,7 +1707,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                             const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
                             const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
 
-                            ::sdr::overlay::OverlayRectangle* pNewOverlayObject = new ::sdr::overlay::OverlayRectangle(
+                            sdr::overlay::OverlayRectangle* pNewOverlayObject = new sdr::overlay::OverlayRectangle(
                                 aTopLeft,
                                 aBottomRight,
                                 aHilightColor,
@@ -2324,12 +2324,12 @@ void SdrCropHdl::CreateB2dIAObject()
 
             if(rPageWindow.GetPaintWindow().OutputToWindow())
             {
-                rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                 if (xManager.is())
                 {
                     basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
 
-                    ::sdr::overlay::OverlayObject* pOverlayObject = 0L;
+                    sdr::overlay::OverlayObject* pOverlayObject = 0L;
 
                     // animate focused handles
                     if(IsFocusHdl() && (pHdlList->GetFocusHdl() == this))
@@ -2341,7 +2341,7 @@ void SdrCropHdl::CreateB2dIAObject()
 
                         const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
 
-                        pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(
+                        pOverlayObject = new sdr::overlay::OverlayAnimatedBitmapEx(
                             aPosition,
                             aBmpEx1,
                             aBmpEx2,
@@ -2356,7 +2356,7 @@ void SdrCropHdl::CreateB2dIAObject()
                     else
                     {
                         // create centered handle as default
-                        pOverlayObject = new ::sdr::overlay::OverlayBitmapEx(
+                        pOverlayObject = new sdr::overlay::OverlayBitmapEx(
                             aPosition,
                             aBmpEx1,
                             (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
@@ -2565,10 +2565,10 @@ void SdrCropViewHdl::CreateB2dIAObject()
 
         if(rPageWindow.GetPaintWindow().OutputToWindow())
         {
-            rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+            rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
             if(xManager.is())
             {
-                ::sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
+                sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
                 // only informative object, no hit
                 pNew->setHittable(false);

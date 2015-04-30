@@ -172,7 +172,7 @@ View::~View()
     }
 }
 
-class ViewRedirector : public ::sdr::contact::ViewObjectContactRedirector
+class ViewRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 public:
     ViewRedirector();

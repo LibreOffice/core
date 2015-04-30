@@ -37,7 +37,7 @@
 class ImplPageOriginOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    sdr::overlay::OverlayObjectList               maObjects;
 
     // The current position in logical coodinates
     basegfx::B2DPoint                               maPosition;
@@ -55,11 +55,11 @@ ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const ba
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
         if (xTargetOverlay.is())
         {
-            ::sdr::overlay::OverlayCrosshairStriped* aNew = new ::sdr::overlay::OverlayCrosshairStriped(
+            sdr::overlay::OverlayCrosshairStriped* aNew = new sdr::overlay::OverlayCrosshairStriped(
                 maPosition);
             xTargetOverlay->add(*aNew);
             maObjects.append(*aNew);
@@ -99,7 +99,7 @@ void ImplPageOriginOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 class ImplHelpLineOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    sdr::overlay::OverlayObjectList               maObjects;
 
     // The current position in logical coodinates
     basegfx::B2DPoint                               maPosition;
@@ -133,11 +133,11 @@ ImplHelpLineOverlay::ImplHelpLineOverlay(
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
         if (xTargetOverlay.is())
         {
-            ::sdr::overlay::OverlayHelplineStriped* aNew = new ::sdr::overlay::OverlayHelplineStriped(
+            sdr::overlay::OverlayHelplineStriped* aNew = new sdr::overlay::OverlayHelplineStriped(
                 maPosition, meHelpLineKind);
             xTargetOverlay->add(*aNew);
             maObjects.append(*aNew);

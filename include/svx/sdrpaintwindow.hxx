@@ -73,7 +73,7 @@ private:
 
     // the new OverlayManager for the new OverlayObjects. Test add here, will
     // replace the IAOManager as soon as it works.
-    rtl::Reference< ::sdr::overlay::OverlayManager >    mxOverlayManager;
+    rtl::Reference< sdr::overlay::OverlayManager >    mxOverlayManager;
 
     // The PreRenderDevice for PreRendering
     SdrPreRenderDevice*                                 mpPreRenderDevice;
@@ -103,7 +103,7 @@ public:
     OutputDevice& GetOutputDevice() const { return mrOutputDevice; }
 
     // OVERLAYMANAGER
-    rtl::Reference< ::sdr::overlay::OverlayManager > GetOverlayManager() const;
+    rtl::Reference< sdr::overlay::OverlayManager > GetOverlayManager() const;
 
     // #i73602# add flag if buffer shall be used
     void DrawOverlay(const vcl::Region& rRegion);

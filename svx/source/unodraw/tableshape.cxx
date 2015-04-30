@@ -30,7 +30,7 @@
 
 using namespace ::osl;
 using namespace ::cppu;
-using namespace ::sdr::table;
+using namespace sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

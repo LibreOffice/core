@@ -138,7 +138,7 @@ public:
 class SVX_DLLPUBLIC SdrDropMarkerOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    sdr::overlay::OverlayObjectList               maObjects;
 
     void ImplCreateOverlays(
         const SdrView& rView,

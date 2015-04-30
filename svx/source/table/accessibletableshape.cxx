@@ -38,7 +38,7 @@
 
 
 using namespace ::accessibility;
-using namespace ::sdr::table;
+using namespace sdr::table;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -928,7 +928,7 @@ void SAL_CALL
 void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent)
         throw (RuntimeException, std::exception)
 {
-    //::sdr::table::CellRef xCellRef = static_cast< ::sdr::table::CellRef > (rEvent.Source);
+    //sdr::table::CellRef xCellRef = static_cast< sdr::table::CellRef > (rEvent.Source);
     Reference< XCell > xCell(rEvent.Source, UNO_QUERY);
     if (xCell.is())
     {
@@ -965,10 +965,10 @@ AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
     SvxTableController* pController = getTableController();
     if (pController)
     {
-        ::sdr::table::SdrTableObj* pTableObj = pController->GetTableObj();
+        sdr::table::SdrTableObj* pTableObj = pController->GetTableObj();
         if ( pTableObj )
         {
-            ::sdr::table::CellRef xCellRef (pTableObj->getActiveCell());
+            sdr::table::CellRef xCellRef (pTableObj->getActiveCell());
             if ( xCellRef.is() )
             {
                 const bool bCellEditing = xCellRef->IsTextEditActive();

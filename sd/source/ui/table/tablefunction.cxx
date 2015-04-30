@@ -67,7 +67,7 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::sd;
-using namespace ::sdr::table;
+using namespace sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -159,7 +159,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             aRect = Rectangle(aPos, aSize);
         }
 
-        ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( GetDoc(), aRect, nColumns, nRows );
+        sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj( GetDoc(), aRect, nColumns, nRows );
         pObj->NbcSetStyleSheet( GetDoc()->GetDefaultStyleSheet(), true );
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
@@ -256,7 +256,7 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
             Size aSize( 200, 200 );
             Point aPos;
             Rectangle aRect (aPos, aSize);
-            ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( pModel, aRect, 1, 1 );
+            sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj( pModel, aRect, 1, 1 );
             pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), true );
             OUString sTableStyle;
             apply_table_style( pObj, pModel, sTableStyle );

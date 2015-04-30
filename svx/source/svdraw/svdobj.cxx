@@ -350,7 +350,7 @@ SdrObject::~SdrObject()
 {
     // tell all the registered ObjectUsers that the page is in destruction
     sdr::ObjectUserVector aListCopy(mpImpl->maObjectUsers.begin(), mpImpl->maObjectUsers.end());
-    for(::sdr::ObjectUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
+    for(sdr::ObjectUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
     {
         sdr::ObjectUser* pObjectUser = *aIterator;
         DBG_ASSERT(pObjectUser, "SdrObject::~SdrObject: corrupt ObjectUser list (!)");
@@ -3225,7 +3225,7 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
 #if HAVE_FEATURE_AVMEDIA
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
-            case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
+            case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(pModel);   break;
             case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
         }
     }
@@ -3313,7 +3313,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
 #if HAVE_FEATURE_AVMEDIA
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
-            case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
+            case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(pModel);   break;
             case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
         }
     }

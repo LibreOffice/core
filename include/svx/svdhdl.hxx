@@ -146,7 +146,7 @@ protected:
     SdrHdlList*                 pHdlList;  // Zum Feststelen der Handlegroesse
 
     // OVERLAYMANAGER
-    ::sdr::overlay::OverlayObjectList           maOverlayGroup;
+    sdr::overlay::OverlayObjectList           maOverlayGroup;
 
     Point                       aPos;
 
@@ -174,7 +174,7 @@ private:
     bool                        mbMouseOver;    // is true if the mouse is over this handle
 
 protected:
-    ::sdr::overlay::OverlayObject* CreateOverlayObject(
+    sdr::overlay::OverlayObject* CreateOverlayObject(
         const basegfx::B2DPoint& rPos,
         BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker,
         OutputDevice& rOutDev, Point aMoveOutsideOffset = Point());
@@ -185,7 +185,7 @@ public:
     explicit SdrHdl(const Point& rPnt, SdrHdlKind eNewKind=HDL_MOVE);
     virtual ~SdrHdl();
 
-    const ::sdr::overlay::OverlayObjectList& getOverlayObjectList() const { return maOverlayGroup; }
+    const sdr::overlay::OverlayObjectList& getOverlayObjectList() const { return maOverlayGroup; }
 
     void SetHdlList(SdrHdlList* pList);
     SdrHdlKind GetKind() const { return eKind; }

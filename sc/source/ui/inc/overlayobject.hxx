@@ -22,7 +22,7 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
-class ScOverlayDashedBorder : public ::sdr::overlay::OverlayObject
+class ScOverlayDashedBorder : public sdr::overlay::OverlayObject
 {
 public:
     ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, const Color& rColor);

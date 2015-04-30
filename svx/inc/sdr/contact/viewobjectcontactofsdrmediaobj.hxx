@@ -53,7 +53,7 @@ namespace sdr
 
         private:
 
-            ::sdr::contact::SdrMediaWindow* mpMediaWindow;
+            sdr::contact::SdrMediaWindow* mpMediaWindow;
 
         };
     } // end of namespace contact

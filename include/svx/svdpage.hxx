@@ -462,7 +462,7 @@ public:
 
 protected:
     // new MasterPageDescriptorVector
-    ::sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
+    sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
 
     SetOfByte  aPrefVisiLayers;
     sal_uInt16     nPageNum;
@@ -582,7 +582,7 @@ typedef tools::WeakReference< SdrPage > SdrPageWeakRef;
 
 // use new redirector instead of pPaintProc
 
-class SVX_DLLPUBLIC StandardCheckVisisbilityRedirector : public ::sdr::contact::ViewObjectContactRedirector
+class SVX_DLLPUBLIC StandardCheckVisisbilityRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 public:
     StandardCheckVisisbilityRedirector();

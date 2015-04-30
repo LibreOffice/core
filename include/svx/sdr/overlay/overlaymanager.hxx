@@ -49,7 +49,7 @@ namespace sdr
     namespace overlay
     {
         class SVX_DLLPUBLIC OverlayManager
-            : protected ::sdr::animation::Scheduler
+            : protected sdr::animation::Scheduler
             , public salhelper::SimpleReferenceObject
         {
         private:

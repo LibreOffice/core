@@ -98,11 +98,11 @@ void SdrDropMarkerOverlay::ImplCreateOverlays(
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
         if (xTargetOverlay.is())
         {
-            ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                 rLinePolyPolygon);
 
             xTargetOverlay->add(*pNew);
@@ -367,7 +367,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SdrSearchOptions::DEEP|SdrSearchOptions::MARKED,&pObj,&bHitPassDirect))
     {
         eHit=SDRHIT_MARKEDOBJECT;
-        ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( pObj );
+        sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( pObj );
         if( pTableObj )
         {
             sal_Int32 nX = 0, nY = 0;
@@ -388,7 +388,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     {
         // MasterPages and WholePage for Macro and URL
         eHit=SDRHIT_UNMARKEDOBJECT;
-        ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( pObj );
+        sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( pObj );
         if( pTableObj )
         {
             sal_Int32 nX = 0, nY = 0;
@@ -1342,7 +1342,7 @@ SdrViewContext SdrView::GetContext() const
             if( !pMarkObj->ISA( SdrMediaObj ) )
                 bMedia = false;
 
-            if( !pMarkObj->ISA( ::sdr::table::SdrTableObj ) )
+            if( !pMarkObj->ISA( sdr::table::SdrTableObj ) )
                 bTable = false;
         }
 

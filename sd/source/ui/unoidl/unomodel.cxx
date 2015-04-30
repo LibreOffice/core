@@ -1534,7 +1534,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     return aRenderer;
 }
 
-class ImplRenderPaintProc : public ::sdr::contact::ViewObjectContactRedirector
+class ImplRenderPaintProc : public sdr::contact::ViewObjectContactRedirector
 {
     const SdrLayerAdmin&    rLayerAdmin;
     SdrPageView*            pSdrPageView;
@@ -1802,7 +1802,7 @@ drawinglayer::primitive2d::Primitive2DSequence ImplRenderPaintProc::createRedire
                     const vcl::PDFWriter::StructElement eElement(ImplBegStructureTag( *pObject ));
                     const bool bTagUsed(vcl::PDFWriter::NonStructElement != eElement);
 
-                    xRetval = ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+                    xRetval = sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
 
                     if(xRetval.hasElements() && bTagUsed)
                     {

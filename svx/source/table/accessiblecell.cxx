@@ -37,7 +37,7 @@
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
 
-using namespace ::sdr::table;
+using namespace sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;

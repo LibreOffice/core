@@ -63,7 +63,7 @@ public:
     css::uno::Reference<css::awt::XControlContainer> GetControlContainer( bool _bCreateIfNecessary = true ) const;
 
     // OVERLAYMANAGER
-    rtl::Reference< ::sdr::overlay::OverlayManager > GetOverlayManager() const;
+    rtl::Reference< sdr::overlay::OverlayManager > GetOverlayManager() const;
 
     // #i72752# allow patcing SdrPaintWindow from SdrPageView::DrawLayer if needed
     void patchPaintWindow(SdrPaintWindow& rPaintWindow);

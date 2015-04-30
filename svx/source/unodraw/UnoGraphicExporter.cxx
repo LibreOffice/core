@@ -281,7 +281,7 @@ namespace {
         return &aOutSize;
     }
 
-class ImplExportCheckVisisbilityRedirector : public ::sdr::contact::ViewObjectContactRedirector
+class ImplExportCheckVisisbilityRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 public:
     ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage );
@@ -318,7 +318,7 @@ drawinglayer::primitive2d::Primitive2DSequence ImplExportCheckVisisbilityRedirec
 
         if( (pPage == 0) || pPage->checkVisibility(rOriginal, rDisplayInfo, false) )
         {
-            return ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+            return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
         }
 
         return drawinglayer::primitive2d::Primitive2DSequence();
@@ -326,7 +326,7 @@ drawinglayer::primitive2d::Primitive2DSequence ImplExportCheckVisisbilityRedirec
     else
     {
         // not an object, maybe a page
-        return ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+        return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
     }
 }
 

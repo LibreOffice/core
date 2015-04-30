@@ -3125,7 +3125,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
  */
 namespace
 {
-    class SwViewObjectContactRedirector : public ::sdr::contact::ViewObjectContactRedirector
+    class SwViewObjectContactRedirector : public sdr::contact::ViewObjectContactRedirector
     {
         private:
             const SwViewShell& mrViewShell;

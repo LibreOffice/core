@@ -65,7 +65,7 @@ namespace sdr
             double getDiscreteShrink() const { return mfDiscreteShrink; }
             double getRotation() const { return mfRotation; }
 
-            // execute event from base class ::sdr::animation::Event. Default
+            // execute event from base class sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;
         };

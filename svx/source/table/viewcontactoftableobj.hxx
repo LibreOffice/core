@@ -31,9 +31,9 @@ namespace sdr
         {
         protected:
             // internal access to SdrTextObj
-            const ::sdr::table::SdrTableObj& GetTableObj() const
+            const sdr::table::SdrTableObj& GetTableObj() const
             {
-                return static_cast<const ::sdr::table::SdrTableObj&>(GetSdrObject());
+                return static_cast<const sdr::table::SdrTableObj&>(GetSdrObject());
             }
 
             // This method is responsible for creating the graphical visualisation data derived ONLY from
@@ -42,7 +42,7 @@ namespace sdr
 
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfTableObj(::sdr::table::SdrTableObj& rTextObj);
+            ViewContactOfTableObj(sdr::table::SdrTableObj& rTextObj);
             virtual ~ViewContactOfTableObj();
         };
     } // end of namespace contact

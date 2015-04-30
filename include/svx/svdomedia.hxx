@@ -34,7 +34,7 @@ namespace sdr { namespace contact { class ViewContactOfSdrMediaObj; } }
 
 class SVX_DLLPUBLIC SdrMediaObj : public SdrRectObj
 {
-    friend class ::sdr::contact::ViewContactOfSdrMediaObj;
+    friend class sdr::contact::ViewContactOfSdrMediaObj;
 
 public:
 
@@ -77,7 +77,7 @@ public:
 protected:
 
         void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
-        virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 private:
         struct Impl;

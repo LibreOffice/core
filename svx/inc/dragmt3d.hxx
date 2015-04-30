@@ -79,7 +79,7 @@ public:
     E3dView& Get3DView()  { return static_cast<E3dView&>(getSdrDragView());  }
 
     // for migration from XOR to overlay
-    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager) SAL_OVERRIDE;
+    virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager) SAL_OVERRIDE;
 };
 
 // Derivative of SdrDragMethod for spinning 3D objects

@@ -51,7 +51,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayObject : public ::sdr::animation::Event
+        class SVX_DLLPUBLIC OverlayObject : public sdr::animation::Event
         {
         private:
             OverlayObject(const OverlayObject&) SAL_DELETED_FUNCTION;
@@ -147,7 +147,7 @@ namespace sdr
             Color getBaseColor() const { return maBaseColor; }
             void setBaseColor(Color aNew);
 
-            // execute event from base class ::sdr::animation::Event. Default
+            // execute event from base class sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;
 

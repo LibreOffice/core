@@ -47,7 +47,7 @@ namespace sdr
 
             for(; aStart != maVector.end(); ++aStart)
             {
-                ::sdr::overlay::OverlayObject* pCandidate = *aStart;
+                sdr::overlay::OverlayObject* pCandidate = *aStart;
 
                 if(pCandidate->getOverlayManager())
                 {
@@ -159,7 +159,7 @@ namespace sdr
 
                 for(; aStart != maVector.end(); ++aStart)
                 {
-                    ::sdr::overlay::OverlayObject* pCandidate = *aStart;
+                    sdr::overlay::OverlayObject* pCandidate = *aStart;
                     aRetval.expand(pCandidate->getBaseRange());
                 }
             }

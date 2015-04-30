@@ -1047,7 +1047,7 @@ void SdrPage::AddPageUser(sdr::PageUser& rNewUser)
 
 void SdrPage::RemovePageUser(sdr::PageUser& rOldUser)
 {
-    const ::sdr::PageUserVector::iterator aFindResult = ::std::find(maPageUsers.begin(), maPageUsers.end(), &rOldUser);
+    const sdr::PageUserVector::iterator aFindResult = ::std::find(maPageUsers.begin(), maPageUsers.end(), &rOldUser);
     if(aFindResult != maPageUsers.end())
     {
         maPageUsers.erase(aFindResult);
@@ -1259,8 +1259,8 @@ SdrPage::~SdrPage()
     // This causes some (all?) PageUsers to remove themselves from the list
     // of page users.  Therefore we have to use a copy of the list for the
     // iteration.
-    ::sdr::PageUserVector aListCopy (maPageUsers.begin(), maPageUsers.end());
-    for(::sdr::PageUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
+    sdr::PageUserVector aListCopy (maPageUsers.begin(), maPageUsers.end());
+    for(sdr::PageUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
     {
         sdr::PageUser* pPageUser = *aIterator;
         DBG_ASSERT(pPageUser, "SdrPage::~SdrPage: corrupt PageUser list (!)");
@@ -1604,7 +1604,7 @@ void SdrPage::TRG_SetMasterPage(SdrPage& rNew)
     if(mpMasterPageDescriptor)
         TRG_ClearMasterPage();
 
-    mpMasterPageDescriptor = new ::sdr::MasterPageDescriptor(*this, rNew);
+    mpMasterPageDescriptor = new sdr::MasterPageDescriptor(*this, rNew);
     GetViewContact().ActionChanged();
 }
 
@@ -1822,7 +1822,7 @@ drawinglayer::primitive2d::Primitive2DSequence StandardCheckVisisbilityRedirecto
         {
             if(pObject->GetPage()->checkVisibility(rOriginal, rDisplayInfo, false))
             {
-                return ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+                return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
             }
         }
 
@@ -1831,7 +1831,7 @@ drawinglayer::primitive2d::Primitive2DSequence StandardCheckVisisbilityRedirecto
     else
     {
         // not an object, maybe a page
-        return ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+        return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
     }
 }
 

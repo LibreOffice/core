@@ -836,7 +836,7 @@ Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
 
         if(pText && pText->IsClosedObj())
         {
-            ::sdr::table::SdrTableObj* pTable = dynamic_cast< ::sdr::table::SdrTableObj * >( pText );
+            sdr::table::SdrTableObj* pTable = dynamic_cast< sdr::table::SdrTableObj * >( pText );
 
             if( pTable )
                 bFound = GetDraftFillColor(pTable->GetActiveCellItemSet(), aBackground );

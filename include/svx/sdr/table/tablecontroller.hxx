@@ -111,7 +111,7 @@ public:
     bool isColumnSelected( sal_Int32 nColumn );
     bool isRowHeader();
     bool isColumnHeader();
-    ::sdr::table::SdrTableObj* GetTableObj() { return dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() ); }
+    sdr::table::SdrTableObj* GetTableObj() { return dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() ); }
     //declare event notification method
     void NotifySelection( const CellPos& firstPos, const CellPos& lastPos, const CellPos& newPos );
 private:
@@ -161,7 +161,7 @@ private:
     bool mbCellSelectionMode;
     CellPos maMouseDownPos;
     bool mbLeftButtonDown;
-    ::sdr::overlay::OverlayObjectList*  mpSelectionOverlay;
+    sdr::overlay::OverlayObjectList*  mpSelectionOverlay;
 
     SdrView* mpView;
     SdrObjectWeakRef mxTableObj;

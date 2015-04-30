@@ -209,7 +209,7 @@ void SdrPaintWindow::impCreateOverlayManager()
                 // whether that refresh itself will use a 2nd vdev to avoid flickering.
                 // Also hand over the old OverlayManager if existent; this means to take over
                 // the registered OverlayObjects from it
-                mxOverlayManager = ::sdr::overlay::OverlayManagerBuffered::create(GetOutputDevice(), GetPaintView().GetModel(), true);
+                mxOverlayManager = sdr::overlay::OverlayManagerBuffered::create(GetOutputDevice(), GetPaintView().GetModel(), true);
             }
             else
             {
@@ -217,7 +217,7 @@ void SdrPaintWindow::impCreateOverlayManager()
                 // take place
                 // Also hand over the old OverlayManager if existent; this means to take over
                 // the registered OverlayObjects from it
-                mxOverlayManager = ::sdr::overlay::OverlayManager::create(GetOutputDevice(), GetPaintView().GetModel());
+                mxOverlayManager = sdr::overlay::OverlayManager::create(GetOutputDevice(), GetPaintView().GetModel());
             }
 
             OSL_ENSURE(mxOverlayManager.is(), "SdrPaintWindow::SdrPaintWindow: Could not allocate an overlayManager (!)");
@@ -261,7 +261,7 @@ SdrPaintWindow::~SdrPaintWindow()
     DestroyPreRenderDevice();
 }
 
-rtl::Reference< ::sdr::overlay::OverlayManager > SdrPaintWindow::GetOverlayManager() const
+rtl::Reference< sdr::overlay::OverlayManager > SdrPaintWindow::GetOverlayManager() const
 {
     if(!mxOverlayManager.is())
     {

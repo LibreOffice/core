@@ -319,7 +319,7 @@ void SwSelPaintRects::Show()
         else if(!empty())
         {
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
-            rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+            rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
             if (xTargetOverlay.is())
             {

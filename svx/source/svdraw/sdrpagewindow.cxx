@@ -170,7 +170,7 @@ const SdrPaintWindow* SdrPageWindow::GetOriginalPaintWindow() const
 }
 
 // OVERLAY MANAGER
-rtl::Reference< ::sdr::overlay::OverlayManager > SdrPageWindow::GetOverlayManager() const
+rtl::Reference< sdr::overlay::OverlayManager > SdrPageWindow::GetOverlayManager() const
 {
     return GetPaintWindow().GetOverlayManager();
 }
@@ -471,7 +471,7 @@ void SdrPageWindow::ResetObjectContact()
 
 void SdrPageWindow::SetDesignMode( bool _bDesignMode ) const
 {
-    const ::sdr::contact::ObjectContactOfPageView* pOC = dynamic_cast< const ::sdr::contact::ObjectContactOfPageView* >( &GetObjectContact() );
+    const sdr::contact::ObjectContactOfPageView* pOC = dynamic_cast< const sdr::contact::ObjectContactOfPageView* >( &GetObjectContact() );
     DBG_ASSERT( pOC, "SdrPageWindow::SetDesignMode: invalid object contact!" );
     if ( pOC )
         pOC->SetUNOControlsDesignMode( _bDesignMode );

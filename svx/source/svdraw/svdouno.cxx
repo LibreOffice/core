@@ -51,7 +51,7 @@
 #include <svx/svdograf.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::sdr::contact;
+using namespace sdr::contact;
 
 
 //   Defines
@@ -576,9 +576,9 @@ bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) 
 }
 
 
-::sdr::contact::ViewContact* SdrUnoObj::CreateObjectSpecificViewContact()
+sdr::contact::ViewContact* SdrUnoObj::CreateObjectSpecificViewContact()
 {
-  return new ::sdr::contact::ViewContactOfUnoControl( *this );
+  return new sdr::contact::ViewContactOfUnoControl( *this );
 }
 
 

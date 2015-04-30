@@ -104,7 +104,7 @@ bool SdrMediaObj::HasTextEdit() const
 
 sdr::contact::ViewContact* SdrMediaObj::CreateObjectSpecificViewContact()
 {
-    return new ::sdr::contact::ViewContactOfSdrMediaObj( *this );
+    return new sdr::contact::ViewContactOfSdrMediaObj( *this );
 }
 
 void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
@@ -248,7 +248,7 @@ const OUString& SdrMediaObj::getURL() const
 void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
 {
     mediaPropertiesChanged( rState );
-    static_cast< ::sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).executeMediaItem( getMediaProperties() );
+    static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).executeMediaItem( getMediaProperties() );
 }
 
 const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
@@ -258,7 +258,7 @@ const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
 
 Size SdrMediaObj::getPreferredSize() const
 {
-    return static_cast< ::sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).getPreferredSize();
+    return static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).getPreferredSize();
 }
 
 uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()

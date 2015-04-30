@@ -726,7 +726,7 @@ namespace sdr
             }
         }
 
-        ViewContactOfTableObj::ViewContactOfTableObj(::sdr::table::SdrTableObj& rTableObj)
+        ViewContactOfTableObj::ViewContactOfTableObj(sdr::table::SdrTableObj& rTableObj)
         :   ViewContactOfSdrObj(rTableObj)
         {
         }

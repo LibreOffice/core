@@ -48,7 +48,7 @@ namespace {
     /** This incarnation of the ViewObjectContactRedirector filters away all
         PageObj objects, unconditionally.
     */
-    class ViewRedirector : public ::sdr::contact::ViewObjectContactRedirector
+    class ViewRedirector : public sdr::contact::ViewObjectContactRedirector
     {
     public:
         ViewRedirector();

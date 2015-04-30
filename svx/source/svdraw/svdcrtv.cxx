@@ -46,7 +46,7 @@ using namespace com::sun::star;
 class ImplConnectMarkerOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    sdr::overlay::OverlayObjectList               maObjects;
 
     // The remembered target object
     const SdrObject&                                mrObject;
@@ -66,7 +66,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
         if(xTargetOverlay.is())
         {
@@ -74,7 +74,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             Size aHalfLogicSize(xTargetOverlay->getOutputDevice().PixelToLogic(Size(4 * nScalingFactor, 4 * nScalingFactor)));
 
             // object
-            ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                 aB2DPolyPolygon);
             xTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
@@ -100,7 +100,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
                     basegfx::B2DPolyPolygon aTempPolyPoly;
                     aTempPolyPoly.append(aTempPoly);
 
-                    pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                    pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                         aTempPolyPoly);
                     xTargetOverlay->add(*pNew);
                     maObjects.append(*pNew);
@@ -122,7 +122,7 @@ ImplConnectMarkerOverlay::~ImplConnectMarkerOverlay()
 class ImpSdrCreateViewExtraData
 {
     // The OverlayObjects for XOR replacement
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    sdr::overlay::OverlayObjectList               maObjects;
 
 public:
     ImpSdrCreateViewExtraData();
@@ -162,7 +162,7 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
 
             if(rPolyPoly.count())
             {
-                ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                     rPolyPoly);
                 xOverlayManager->add(*pNew);
                 maObjects.append(*pNew);
