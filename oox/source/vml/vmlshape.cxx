@@ -332,7 +332,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     if (propertySet->getPropertyValue("FillStyle") == FillStyle_NONE &&
                         propertySet->getPropertyValue("BackColorTransparency") == makeAny(100)) {
                         // If there is no fill, the Word default is 100% transparency.
-                        propertySet->setPropertyValue("FillTransparence", makeAny(100));
+                        propertySet->setPropertyValue("FillTransparence", makeAny(sal_Int16(100)));
                     }
                 }
                 else
