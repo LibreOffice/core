@@ -139,6 +139,7 @@ public:
     void testSheetLocalRangeNameXLS();
     void testSheetTextBoxHyperlink();
     void testFontSize();
+    void testSheetCharacterKerningSpace();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -188,6 +189,7 @@ public:
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
     CPPUNIT_TEST(testSheetTextBoxHyperlink);
     CPPUNIT_TEST(testFontSize);
+    CPPUNIT_TEST(testSheetCharacterKerningSpace);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2550,6 +2552,27 @@ void ScExportTest::testFontSize()
     // make sure that the font size is 18
     CPPUNIT_ASSERT_EQUAL(OUString("1800"), fontSize);
 }
+
+void ScExportTest::testSheetCharacterKerningSpace()
+{
+    ScDocShellRef xShell = loadDoc("textbox-CharKerningSpace.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    OUString CharKerningSpace = getXPath(pDoc,
+        "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]","spc");
+
+    // make sure that the CharKerning is 1997.
+    CPPUNIT_ASSERT_EQUAL(OUString("1997"), CharKerningSpace);
+
+    xDocSh->DoClose();
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
