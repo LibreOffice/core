@@ -26,13 +26,12 @@
 // in base class.
 const sal_uInt8 ND_ENDNODE      = 0x01;
 const sal_uInt8 ND_STARTNODE    = 0x02;
-const sal_uInt8 ND_TABLEDUMMY   = 0x04; //(ND_TABLENODE & ~ND_STARTNODE);
+const sal_uInt8 ND_TABLENODE    = 0x04 | ND_STARTNODE; // SwTableNode is derived from SwStartNode
 const sal_uInt8 ND_TEXTNODE     = 0x08;
 const sal_uInt8 ND_GRFNODE      = 0x10;
 const sal_uInt8 ND_OLENODE      = 0x20;
 const sal_uInt8 ND_SECTIONDUMMY = 0x40; //(ND_SECTIONNODE & ~ND_STARTNODE);
 
-const sal_uInt8 ND_TABLENODE    = ND_TABLEDUMMY | ND_STARTNODE;
 const sal_uInt8 ND_SECTIONNODE  = ND_SECTIONDUMMY | ND_STARTNODE;
 
 // NoTxtNode (if any of the 2 bits are set).
