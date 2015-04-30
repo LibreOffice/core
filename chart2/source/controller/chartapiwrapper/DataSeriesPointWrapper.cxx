@@ -55,6 +55,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;
@@ -640,38 +642,63 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
                                     throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
-    if (rPropertyName == "SymbolBitmapURL")
+    try
     {
-        uno::Any aAny = WrappedPropertySet::getPropertyValue("SymbolType");
-        sal_Int32 nVal = com::sun::star::chart::ChartSymbolType::NONE;
-        if (aAny >>= nVal)
+        if (rPropertyName == "SymbolBitmapURL")
         {
-            if (nVal != com::sun::star::chart::ChartSymbolType::BITMAPURL)
-                return beans::PropertyState::PropertyState_DEFAULT_VALUE;
+            uno::Any aAny = WrappedPropertySet::getPropertyValue("SymbolType");
+            sal_Int32 nVal = com::sun::star::chart::ChartSymbolType::NONE;
+            if (aAny >>= nVal)
+            {
+                if (nVal != com::sun::star::chart::ChartSymbolType::BITMAPURL)
+                    return beans::PropertyState::PropertyState_DEFAULT_VALUE;
+            }
+        }
+
+        if( m_eType == DATA_SERIES )
+            aState = WrappedPropertySet::getPropertyState( rPropertyName );
+        else
+        {
+            if( rPropertyName == "FillColor")
+            {
+                Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
+                bool bVaryColorsByPoint = false;
+                if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
+                    && bVaryColorsByPoint )
+                    return beans::PropertyState_DIRECT_VALUE;
+            }
+            else if( rPropertyName == "Lines"
+                ||  rPropertyName == "SymbolType"
+                ||  rPropertyName == "SymbolSize" )
+                return WrappedPropertySet::getPropertyState( rPropertyName );
+
+            uno::Any aDefault( getPropertyDefault( rPropertyName ) );
+            uno::Any aValue( getPropertyValue( rPropertyName ) );
+            if( aDefault==aValue )
+                aState = beans::PropertyState_DEFAULT_VALUE;
         }
     }
-
-    if( m_eType == DATA_SERIES )
-        aState = WrappedPropertySet::getPropertyState( rPropertyName );
-    else
+    catch( const beans::UnknownPropertyException& )
     {
-        if( rPropertyName == "FillColor")
-        {
-            Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
-            bool bVaryColorsByPoint = false;
-            if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
-                && bVaryColorsByPoint )
-                return beans::PropertyState_DIRECT_VALUE;
-        }
-        else if( rPropertyName == "Lines"
-            ||  rPropertyName == "SymbolType"
-            ||  rPropertyName == "SymbolSize" )
-            return WrappedPropertySet::getPropertyState( rPropertyName );
-
-        uno::Any aDefault( getPropertyDefault( rPropertyName ) );
-        uno::Any aValue( getPropertyValue( rPropertyName ) );
-        if( aDefault==aValue )
-            aState = beans::PropertyState_DEFAULT_VALUE;
+        throw;
+    }
+    catch( const uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( const lang::WrappedTargetException& e )
+    {
+        css::uno::Any a(e.TargetException);
+        throw css::lang::WrappedTargetRuntimeException(
+            "wrapped Exception " + e.Message,
+            css::uno::Reference<css::uno::XInterface>(), a);
+    }
+    catch( const uno::Exception& e )
+    {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::lang::WrappedTargetRuntimeException(
+            "wrapped Exception " + e.Message,
+            css::uno::Reference<css::uno::XInterface>(), a);
     }
     return aState;
 }
