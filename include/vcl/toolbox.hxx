@@ -194,9 +194,11 @@ private:
     Link<StateChangedType const *, void> maStateChangedHandler;
     Link<DataChangedEvent const *, void> maDataChangedHandler;
 
-    public:
+public:
     using Window::ImplInit;
-    private:
+private:
+    SAL_DLLPRIVATE void InvalidateItem(sal_uInt16 nPosition, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false);
+
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
@@ -207,7 +209,7 @@ private:
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin( bool bUpperIn, bool bLowerIn );
     SAL_DLLPRIVATE void            ImplDrawSeparator(sal_uInt16 nPos, const Rectangle& rRect);
-    SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false );
+    SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
@@ -251,14 +253,17 @@ public:
     static SAL_DLLPRIVATE void ImplUpdateDragArea( ToolBox *pThis );
     static SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
                                                long& rRight, long& rBottom, const ToolBox *pThis );
-    static SAL_DLLPRIVATE void ImplDrawGrip( ToolBox* pThis );
-    static SAL_DLLPRIVATE void ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper *pWrapper );
-    static SAL_DLLPRIVATE bool ImplDrawNativeBackground( ToolBox* pThis, const vcl::Region &rRegion );
-    static SAL_DLLPRIVATE void ImplDrawTransparentBackground( ToolBox* pThis, const vcl::Region &rRegion );
-    static SAL_DLLPRIVATE void ImplDrawConstantBackground( ToolBox* pThis, const vcl::Region &rRegion, bool bIsInPopupMode );
-    static SAL_DLLPRIVATE void ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect );
-    static SAL_DLLPRIVATE void ImplErase( ToolBox* pThis, const Rectangle &rRect, bool bHighlight = false, bool bHasOpenPopup = false );
-    static SAL_DLLPRIVATE void ImplDrawBorder( ToolBox* pWin );
+
+    SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawGradientBackground(vcl::RenderContext& rRenderContext, ImplDockingWindowWrapper *pWrapper);
+    SAL_DLLPRIVATE bool ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion);
+    SAL_DLLPRIVATE void ImplDrawTransparentBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion);
+    SAL_DLLPRIVATE void ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
+    SAL_DLLPRIVATE void ImplDrawBackground(vcl::RenderContext& rRenderContext, const Rectangle &rRect);
+
+    SAL_DLLPRIVATE void ImplErase(vcl::RenderContext& rRenderContext, const Rectangle &rRect, bool bHighlight = false, bool bHasOpenPopup = false );
+
+    SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
     static SAL_DLLPRIVATE const ImplToolItem *ImplGetFirstClippedItem( const ToolBox* pThis );
     static SAL_DLLPRIVATE Size ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uInt16 nCalcMode = 0 );
     static SAL_DLLPRIVATE void ImplCalcFloatSizes( ToolBox* pThis );
@@ -270,7 +275,8 @@ public:
     static SAL_DLLPRIVATE void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( ToolBox* pBox, const Point& rPos );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList );
-    static SAL_DLLPRIVATE void ImplDrawMenubutton( ToolBox *pThis, bool bHighlight );
+    SAL_DLLPRIVATE void ImplDrawMenubutton(vcl::RenderContext& rRenderContext, bool bHighlight);
+    SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
     static SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks( const ToolBox *pThis );
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
 

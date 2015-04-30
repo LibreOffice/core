@@ -82,8 +82,6 @@
 #define DOCK_LINETOP            ((sal_uInt16)0x8000)
 #define DOCK_LINEOFFSET         3
 
-static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow );
-
 typedef ::std::vector< VclPtr<ToolBox> > ImplTBList;
 
 class ImplTBDragMgr
@@ -247,7 +245,7 @@ void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
     }
 }
 
-static void ImplCheckUpdate( ToolBox *pThis )
+static void ImplCheckUpdate(ToolBox* pThis)
 {
     // remove any pending invalidates to avoid
     // have them triggered when paint is locked (see mpData->mbIsPaintLocked)
@@ -259,53 +257,53 @@ static void ImplCheckUpdate( ToolBox *pThis )
         pThis->Update();
 }
 
-void ToolBox::ImplDrawGrip( ToolBox* pThis )
+void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
 {
-    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper(this);
     if( pWrapper && !pWrapper->GetDragArea().IsEmpty() )
     {
         // execute pending paint requests
-        ImplCheckUpdate( pThis );
+        ImplCheckUpdate(this);
 
         bool bNativeOk = false;
-        if( pThis->IsNativeControlSupported( CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_HORZ : PART_THUMB_VERT ) )
+        if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, mbHorz ? PART_THUMB_HORZ : PART_THUMB_VERT))
         {
             ToolbarValue        aToolbarValue;
             aToolbarValue.maGripRect = pWrapper->GetDragArea();
             Point aPt;
-            Rectangle           aCtrlRegion( aPt, pThis->GetOutputSizePixel() );
+            Rectangle           aCtrlRegion( aPt, rRenderContext.GetOutputSizePixel() );
             ControlState        nState = ControlState::ENABLED;
 
-            bNativeOk = pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
+            bNativeOk = rRenderContext.DrawNativeControl( CTRL_TOOLBAR, mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
                                             aCtrlRegion, nState, aToolbarValue, OUString() );
         }
 
         if( bNativeOk )
             return;
 
-        const StyleSettings&    rStyleSettings = pThis->GetSettings().GetStyleSettings();
-        pThis->SetLineColor( rStyleSettings.GetShadowColor() );
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
 
-        Size aSz ( pThis->GetOutputSizePixel() );
+        Size aSz (rRenderContext.GetOutputSizePixel());
 
-        if ( pThis->meAlign == WINDOWALIGN_TOP || pThis->meAlign == WINDOWALIGN_BOTTOM )
+        if (meAlign == WINDOWALIGN_TOP || meAlign == WINDOWALIGN_BOTTOM)
         {
             int height = (int) (0.6 * aSz.Height() + 0.5);
             int i = (aSz.Height() - height) / 2;
             height += i;
             while( i <= height )
             {
-                int x = ImplGetDragWidth( pThis ) / 2;
+                int x = ImplGetDragWidth(this) / 2;
 
-                pThis->DrawPixel( Point(x, i), rStyleSettings.GetDarkShadowColor() );
-                pThis->DrawPixel( Point(x+1, i), rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawPixel( Point(x, i), rStyleSettings.GetDarkShadowColor() );
+                rRenderContext.DrawPixel( Point(x+1, i), rStyleSettings.GetShadowColor() );
 
-                pThis->DrawPixel( Point(x, i+1), rStyleSettings.GetShadowColor() );
-                pThis->DrawPixel( Point(x+1, i+1), rStyleSettings.GetFaceColor() );
-                pThis->DrawPixel( Point(x+2, i+1), Color(COL_WHITE) );
+                rRenderContext.DrawPixel( Point(x, i+1), rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawPixel( Point(x+1, i+1), rStyleSettings.GetFaceColor() );
+                rRenderContext.DrawPixel( Point(x+2, i+1), Color(COL_WHITE) );
 
-                pThis->DrawPixel( Point(x+1, i+2), Color(COL_WHITE) );
-                pThis->DrawPixel( Point(x+2, i+2), Color(COL_WHITE) );
+                rRenderContext.DrawPixel( Point(x+1, i+2), Color(COL_WHITE) );
+                rRenderContext.DrawPixel( Point(x+2, i+2), Color(COL_WHITE) );
                 i+=4;
             }
         }
@@ -316,82 +314,84 @@ void ToolBox::ImplDrawGrip( ToolBox* pThis )
             width += i;
             while( i <= width )
             {
-                int y = ImplGetDragWidth(pThis) / 2;
+                int y = ImplGetDragWidth(this) / 2;
 
-                pThis->DrawPixel( Point(i, y), rStyleSettings.GetDarkShadowColor() );
-                pThis->DrawPixel( Point(i+1, y), rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawPixel( Point(i, y), rStyleSettings.GetDarkShadowColor() );
+                rRenderContext.DrawPixel( Point(i+1, y), rStyleSettings.GetShadowColor() );
 
-                pThis->DrawPixel( Point(i, y+1), rStyleSettings.GetShadowColor() );
-                pThis->DrawPixel( Point(i+1, y+1), rStyleSettings.GetFaceColor() );
-                pThis->DrawPixel( Point(i+2, y+1), Color(COL_WHITE) );
+                rRenderContext.DrawPixel( Point(i, y+1), rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawPixel( Point(i+1, y+1), rStyleSettings.GetFaceColor() );
+                rRenderContext.DrawPixel( Point(i+2, y+1), Color(COL_WHITE) );
 
-                pThis->DrawPixel( Point(i+1, y+2), Color(COL_WHITE) );
-                pThis->DrawPixel( Point(i+2, y+2), Color(COL_WHITE) );
+                rRenderContext.DrawPixel( Point(i+1, y+2), Color(COL_WHITE) );
+                rRenderContext.DrawPixel( Point(i+2, y+2), Color(COL_WHITE) );
                 i+=4;
             }
         }
     }
 }
 
-void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper * )
+void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext, ImplDockingWindowWrapper*)
 {
     // draw a nice gradient
 
     Color startCol, endCol;
-    startCol = pThis->GetSettings().GetStyleSettings().GetFaceGradientColor();
-    endCol = pThis->GetSettings().GetStyleSettings().GetFaceColor();
-    if( pThis->GetSettings().GetStyleSettings().GetHighContrastMode() )
+    const StyleSettings rSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    startCol = rSettings.GetFaceGradientColor();
+    endCol = rSettings.GetFaceColor();
+    if (rSettings.GetHighContrastMode())
         // no 'extreme' gradient when high contrast
         startCol = endCol;
 
     Gradient g;
-    g.SetAngle( pThis->mbHorz ? 0 : 900 );
-    g.SetStyle( GradientStyle_LINEAR );
+    g.SetAngle(mbHorz ? 0 : 900);
+    g.SetStyle(GradientStyle_LINEAR);
 
-    g.SetStartColor( startCol );
-    g.SetEndColor( endCol );
+    g.SetStartColor(startCol);
+    g.SetEndColor(endCol);
 
-    bool bLineColor = pThis->IsLineColor();
-    Color aOldCol = pThis->GetLineColor();
-    pThis->SetLineColor( pThis->GetSettings().GetStyleSettings().GetShadowColor() );
+    bool bLineColor = rRenderContext.IsLineColor();
+    Color aOldCol = rRenderContext.GetLineColor();
+    rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
 
-    Size aFullSz( pThis->GetOutputSizePixel() );
-    Size aLineSz( aFullSz );
+    Size aFullSz(rRenderContext.GetOutputSizePixel());
+    Size aLineSz(aFullSz);
 
     // use the linesize only when floating
     // full window height is used when docked (single line)
-    if( pThis->ImplIsFloatingMode() )
+    if (ImplIsFloatingMode())
     {
         long nLineSize;
-        if( pThis->mbHorz )
+        if (mbHorz)
         {
-            nLineSize = pThis->mnMaxItemHeight;
-            if ( pThis->mnWinHeight > pThis->mnMaxItemHeight )
-                nLineSize = pThis->mnWinHeight;
+            nLineSize = mnMaxItemHeight;
+            if (mnWinHeight > mnMaxItemHeight)
+                nLineSize = mnWinHeight;
 
             aLineSz.Height() = nLineSize;
         }
         else
         {
-            nLineSize = pThis->mnMaxItemWidth;
+            nLineSize = mnMaxItemWidth;
             aLineSz.Width() = nLineSize;
         }
     }
 
     long nLeft, nTop, nRight, nBottom;
-    ImplCalcBorder( pThis->meAlign, nLeft, nTop, nRight, nBottom, pThis );
+    ImplCalcBorder(meAlign, nLeft, nTop, nRight, nBottom, this);
 
-    Size aTopLineSz( aLineSz );
-    Size aBottomLineSz( aLineSz );
+    Size aTopLineSz(aLineSz);
+    Size aBottomLineSz(aLineSz);
 
-    if ( pThis->mnWinStyle & WB_BORDER )
+    if (mnWinStyle & WB_BORDER)
     {
-        if( pThis->mbHorz )
+        if (mbHorz)
         {
             aTopLineSz.Height() += TB_BORDER_OFFSET2 + nTop;
             aBottomLineSz.Height() += TB_BORDER_OFFSET2 + nBottom;
 
-            if( pThis->mnCurLines == 1 )
+            if (mnCurLines == 1)
                 aTopLineSz.Height() += TB_BORDER_OFFSET2 + nBottom;
         }
         else
@@ -399,125 +399,127 @@ void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapp
             aTopLineSz.Width() += TB_BORDER_OFFSET1 + nLeft;
             aBottomLineSz.Width() += TB_BORDER_OFFSET1 + nRight;
 
-            if( pThis->mnCurLines == 1 )
+            if (mnCurLines == 1)
                 aTopLineSz.Width() += TB_BORDER_OFFSET1 + nLeft;
         }
     }
 
-    if ( pThis->mnWinStyle & WB_LINESPACING )
+    if (mnWinStyle & WB_LINESPACING)
     {
-        if( pThis->mbHorz )
+        if (mbHorz)
         {
             aLineSz.Height() += TB_LINESPACING;
-            if( pThis->mnCurLines > 1 )
+            if (mnCurLines > 1)
                 aTopLineSz.Height() += TB_LINESPACING;
         }
         else
         {
             aLineSz.Width() += TB_LINESPACING;
-            if( pThis->mnCurLines > 1 )
+            if (mnCurLines > 1)
                 aTopLineSz.Width() += TB_LINESPACING;
         }
     }
 
-    if( pThis->mbHorz )
+    if (mbHorz)
     {
         long y = 0;
 
-        pThis->DrawGradient( Rectangle( 0, y, aTopLineSz.Width(), y+aTopLineSz.Height()), g );
+        rRenderContext.DrawGradient(Rectangle(0, y, aTopLineSz.Width(), y + aTopLineSz.Height()), g);
         y += aTopLineSz.Height();
 
-        while( y < (pThis->mnDY - aBottomLineSz.Height()) )
+        while (y < (mnDY - aBottomLineSz.Height()))
         {
-            pThis->DrawGradient( Rectangle( 0, y, aLineSz.Width(), y+aLineSz.Height()), g);
+            rRenderContext.DrawGradient(Rectangle(0, y, aLineSz.Width(), y + aLineSz.Height()), g);
             y += aLineSz.Height();
         }
 
-        pThis->DrawGradient( Rectangle( 0, y, aBottomLineSz.Width(), y+aBottomLineSz.Height()), g );
+        rRenderContext.DrawGradient(Rectangle(0, y, aBottomLineSz.Width(), y + aBottomLineSz.Height()), g);
     }
     else
     {
         long x = 0;
 
-        pThis->DrawGradient( Rectangle( x, 0, x+aTopLineSz.Width(), aTopLineSz.Height()), g );
+        rRenderContext.DrawGradient(Rectangle(x, 0, x + aTopLineSz.Width(), aTopLineSz.Height()), g);
         x += aTopLineSz.Width();
 
-        while( x < (pThis->mnDX - aBottomLineSz.Width()) )
+        while (x < (mnDX - aBottomLineSz.Width()))
         {
-            pThis->DrawGradient( Rectangle( x, 0, x+aLineSz.Width(), aLineSz.Height()), g);
+            rRenderContext.DrawGradient(Rectangle(x, 0, x + aLineSz.Width(), aLineSz.Height()), g);
             x += aLineSz.Width();
         }
 
-        pThis->DrawGradient( Rectangle( x, 0, x+aBottomLineSz.Width(), aBottomLineSz.Height()), g );
+        rRenderContext.DrawGradient(Rectangle( x, 0, x + aBottomLineSz.Width(), aBottomLineSz.Height()), g);
     }
 
     if( bLineColor )
-        pThis->SetLineColor( aOldCol );
+        rRenderContext.SetLineColor( aOldCol );
 
 }
 
-bool ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const vcl::Region & )
+bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const vcl::Region& /*rRegion*/)
 {
     // use NWF
     Point aPt;
-    Rectangle aCtrlRegion( aPt, pThis->GetOutputSizePixel() );
+    Rectangle aCtrlRegion(aPt, rRenderContext.GetOutputSizePixel());
     ControlState  nState = ControlState::ENABLED;
 
-    return pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
+    return rRenderContext.DrawNativeControl( CTRL_TOOLBAR, mbHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                     aCtrlRegion, nState, ImplControlValue(), OUString() );
 }
 
-void ToolBox::ImplDrawTransparentBackground( ToolBox* pThis, const vcl::Region &rRegion )
+void ToolBox::ImplDrawTransparentBackground(vcl::RenderContext& /*rRenderContext*/, const vcl::Region &rRegion)
 {
     // just invalidate to trigger paint of the parent
-
-    const bool        bOldPaintLock = pThis->mpData->mbIsPaintLocked;
-    pThis->mpData->mbIsPaintLocked = true;
+    const bool bOldPaintLock = mpData->mbIsPaintLocked;
+    mpData->mbIsPaintLocked = true;
 
     // send an invalidate to the first opaque parent and invalidate the whole hierarchy from there (noclipchildren)
-    pThis->Invalidate( rRegion, INVALIDATE_UPDATE|INVALIDATE_NOCLIPCHILDREN );
+    Invalidate(rRegion, INVALIDATE_UPDATE | INVALIDATE_NOCLIPCHILDREN);
 
-    pThis->mpData->mbIsPaintLocked = bOldPaintLock;
+    mpData->mbIsPaintLocked = bOldPaintLock;
 }
 
-void ToolBox::ImplDrawConstantBackground( ToolBox* pThis, const vcl::Region &rRegion, bool bIsInPopupMode )
+void ToolBox::ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode)
 {
     // draw a constant color
-    if( !bIsInPopupMode )
+    if (!bIsInPopupMode)
+    {
         // default background
-        pThis->Erase( rRegion.GetBoundRect() );
+        rRenderContext.Erase(rRegion.GetBoundRect());
+    }
     else
     {
         // use different color in popupmode
-        pThis->DrawWallpaper( rRegion.GetBoundRect(),
-            Wallpaper( pThis->GetSettings().GetStyleSettings().GetFaceGradientColor() ) );
+        const StyleSettings rSettings = rRenderContext.GetSettings().GetStyleSettings();
+        Wallpaper aWallpaper(rSettings.GetFaceGradientColor());
+        rRenderContext.DrawWallpaper(rRegion.GetBoundRect(), aWallpaper);
     }
 }
 
-void ToolBox::ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
+void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     // execute pending paint requests
-    ImplCheckUpdate( pThis );
+    ImplCheckUpdate(this);
 
-    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
-    bool bIsInPopupMode = pThis->ImplIsInPopupMode();
+    ImplDockingWindowWrapper* pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper(this);
+    bool bIsInPopupMode = ImplIsInPopupMode();
 
-    vcl::Region aPaintRegion( rRect );
+    vcl::Region aPaintRegion(rRect);
 
     // make sure we do not invalidate/erase too much
-    if( pThis->IsInPaint() )
-        aPaintRegion.Intersect( pThis->GetActiveClipRegion() );
+    if (IsInPaint())
+        aPaintRegion.Intersect(GetActiveClipRegion());
 
-    pThis->Push( PushFlags::CLIPREGION );
-    pThis->IntersectClipRegion( aPaintRegion );
+    rRenderContext.Push(PushFlags::CLIPREGION);
+    rRenderContext.IntersectClipRegion( aPaintRegion );
 
-    if( !pWrapper /*|| bIsInPopupMode*/ )
+    if (!pWrapper)
     {
         // no gradient for ordinary toolbars (not dockable)
-        if( !pThis->IsBackground() && !pThis->IsInPaint() )
-            ImplDrawTransparentBackground( pThis, aPaintRegion );
+        if( !IsBackground() && !IsInPaint() )
+            ImplDrawTransparentBackground(rRenderContext, aPaintRegion);
         else
-            ImplDrawConstantBackground( pThis, aPaintRegion, bIsInPopupMode );
+            ImplDrawConstantBackground(rRenderContext,  aPaintRegion, bIsInPopupMode);
     }
     else
     {
@@ -525,115 +527,115 @@ void ToolBox::ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
         // docked toolbars are transparent and NWF is already used in the docking area which is their common background
         // so NWF is used here for floating toolbars only
         bool bNativeOk = false;
-        if( pThis->ImplIsFloatingMode() && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL) )
-            bNativeOk = ImplDrawNativeBackground( pThis, aPaintRegion );
+        if( ImplIsFloatingMode() && rRenderContext.IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL) )
+            bNativeOk = ImplDrawNativeBackground(rRenderContext, aPaintRegion);
         const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
-        if( !bNativeOk )
+        if (!bNativeOk)
         {
-            const bool isFooter = pThis->GetAlign() == WINDOWALIGN_BOTTOM && !rSetting.GetPersonaFooter().IsEmpty();
-            if( !pThis->IsBackground() ||
-                (( pThis->GetAlign() == WINDOWALIGN_TOP && ! rSetting.GetPersonaHeader().IsEmpty() ) || isFooter ) )
+            const bool isFooter = GetAlign() == WINDOWALIGN_BOTTOM && !rSetting.GetPersonaFooter().IsEmpty();
+            if (!IsBackground() ||
+                ((GetAlign() == WINDOWALIGN_TOP && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter))
             {
-                if( !pThis->IsInPaint() )
-                    ImplDrawTransparentBackground( pThis, aPaintRegion );
+                if (!IsInPaint())
+                    ImplDrawTransparentBackground(rRenderContext, aPaintRegion);
             }
             else
-                ImplDrawGradientBackground( pThis, pWrapper );
+                ImplDrawGradientBackground(rRenderContext, pWrapper);
         }
     }
 
     // restore clip region
-    pThis->Pop();
+    rRenderContext.Pop();
 }
 
-void ToolBox::ImplErase( ToolBox* pThis, const Rectangle &rRect, bool bHighlight, bool bHasOpenPopup )
+void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const Rectangle &rRect, bool bHighlight, bool bHasOpenPopup)
 {
     // the background of non NWF buttons is painted in a constant color
     // to have the same highlight color (transparency in DrawSelectionBackground())
     // items with open popups will also painted using a constant color
-    if( !pThis->mpData->mbNativeButtons &&
-        (bHighlight || ! (((vcl::Window*) pThis)->GetStyle() & WB_3DLOOK ) ) )
+    if (!mpData->mbNativeButtons &&
+        (bHighlight || !(GetStyle() & WB_3DLOOK)))
     {
-        if( (((vcl::Window*) pThis)->GetStyle() & WB_3DLOOK ) )
+        if (GetStyle() & WB_3DLOOK)
         {
-            pThis->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-            pThis->SetLineColor();
-            if( bHasOpenPopup )
+            rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+            rRenderContext.SetLineColor();
+            if (bHasOpenPopup)
                 // choose the same color as the popup will use
-                pThis->SetFillColor( pThis->GetSettings().GetStyleSettings().GetFaceGradientColor() );
+                rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetFaceGradientColor());
             else
-                pThis->SetFillColor( Color( COL_WHITE ) );
+                rRenderContext.SetFillColor(Color(COL_WHITE));
 
-            pThis->DrawRect( rRect );
-            pThis->Pop();
+            rRenderContext.DrawRect(rRect);
+            rRenderContext.Pop();
         }
         else
-            ImplDrawBackground( pThis, rRect );
+            ImplDrawBackground(rRenderContext, rRect);
     }
     else
-        ImplDrawBackground( pThis, rRect );
+        ImplDrawBackground(rRenderContext, rRect);
 }
 
-void ToolBox::ImplDrawBorder( ToolBox* pWin )
+void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
 {
-    const StyleSettings&    rStyleSettings = pWin->GetSettings().GetStyleSettings();
-    long                    nDX = pWin->mnDX;
-    long                    nDY = pWin->mnDY;
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    long nDX = mnDX;
+    long nDY = mnDY;
 
-    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pWin );
+    ImplDockingWindowWrapper* pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper(this);
 
     // draw borders for ordinary toolbars only (not dockable)
     if( pWrapper )
         return;
 
-    if ( pWin->meAlign == WINDOWALIGN_BOTTOM )
+    if (meAlign == WINDOWALIGN_BOTTOM)
     {
         // draw bottom border
-        pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-        pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-        pWin->SetLineColor( rStyleSettings.GetLightColor() );
-        pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+        rRenderContext.DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+        rRenderContext.DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
     }
     else
     {
         // draw top border
-        pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-        pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
-        pWin->SetLineColor( rStyleSettings.GetLightColor() );
-        pWin->DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+        rRenderContext.DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+        rRenderContext.DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
 
-        if ( (pWin->meAlign == WINDOWALIGN_LEFT) || (pWin->meAlign == WINDOWALIGN_RIGHT) )
+        if (meAlign == WINDOWALIGN_LEFT || meAlign == WINDOWALIGN_RIGHT)
         {
-            if ( pWin->meAlign == WINDOWALIGN_LEFT )
+            if (meAlign == WINDOWALIGN_LEFT)
             {
                 // draw left-bottom border
-                pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-                pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
-                pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-                pWin->SetLineColor( rStyleSettings.GetLightColor() );
-                pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
-                pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
+                rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
+                rRenderContext.DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
+                rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+                rRenderContext.DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
+                rRenderContext.DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
             }
             else
             {
                 // draw right-bottom border
-                pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-                pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-3 ) );
-                pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-2, nDY-2 ) );
-                pWin->SetLineColor( rStyleSettings.GetLightColor() );
-                pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
-                pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
+                rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-3 ) );
+                rRenderContext.DrawLine( Point( 0, nDY-2 ), Point( nDX-2, nDY-2 ) );
+                rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+                rRenderContext.DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
+                rRenderContext.DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
             }
         }
     }
 
-    if ( pWin->meAlign == WINDOWALIGN_BOTTOM || pWin->meAlign == WINDOWALIGN_TOP )
+    if ( meAlign == WINDOWALIGN_BOTTOM || meAlign == WINDOWALIGN_TOP )
     {
         // draw right border
-        pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-        pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-1 ) );
-        pWin->SetLineColor( rStyleSettings.GetLightColor() );
-        pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+        rRenderContext.DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-1 ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+        rRenderContext.DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
     }
 }
 
@@ -2634,9 +2636,8 @@ void ToolBox::ImplFormat( bool bResize )
 
 IMPL_LINK_NOARG_TYPED(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
 {
-    if( mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
-        (mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN)
-        )
+    if (mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
+        (mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN))
     {
         mpData->mbDropDownByKeyboard = false;
         mpData->maDropdownClickHdl.Call( this );
@@ -2647,7 +2648,7 @@ IMPL_LINK_NOARG_TYPED(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
         {
             // no floater was opened
             Deactivate();
-            ImplDrawItem( mnCurPos, 0 );
+            InvalidateItem(mnCurPos);
 
             mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
             mnCurItemId      = 0;
@@ -2666,27 +2667,26 @@ IMPL_LINK_NOARG_TYPED(ToolBox, ImplUpdateHdl, Idle *, void)
         ImplFormat();
 }
 
-static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, bool bSetColor, bool bRotate )
+static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bSetColor, bool bRotate )
 {
-    Color aOldFillColor = pBox->GetFillColor();
-    Color aOldLineColor = pBox->GetLineColor();
-    pBox->SetLineColor();
+    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    rRenderContext.SetLineColor();
 
-    if ( bSetColor )
+    if (bSetColor)
     {
-        if ( pBox->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
-            pBox->SetFillColor( Color( COL_WHITE ) );
+        if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
+            rRenderContext.SetFillColor(Color(COL_WHITE));
         else
-            pBox->SetFillColor( Color( COL_BLACK ) );
+            rRenderContext.SetFillColor(Color(COL_BLACK));
     }
 
-    int linewidth = 1 * pBox->GetDPIScaleFactor();
-    int space = 4 * pBox->GetDPIScaleFactor();
+    int linewidth = 1 * rRenderContext.GetDPIScaleFactor();
+    int space = 4 * rRenderContext.GetDPIScaleFactor();
 
     if( !bRotate )
     {
-        long width = 8 * pBox->GetDPIScaleFactor();
-        long height = 5 * pBox->GetDPIScaleFactor();
+        long width = 8 * rRenderContext.GetDPIScaleFactor();
+        long height = 5 * rRenderContext.GetDPIScaleFactor();
 
         //Keep odd b/c drawing code works better
         if ( height % 2 == 0 )
@@ -2698,9 +2698,9 @@ static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, bool b
         long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
         while( height >= 1)
         {
-            pBox->DrawRect( Rectangle( x, y, x + linewidth, y ) );
+            rRenderContext.DrawRect( Rectangle( x, y, x + linewidth, y ) );
             x += space;
-            pBox->DrawRect( Rectangle( x, y, x + linewidth, y ) );
+            rRenderContext.DrawRect( Rectangle( x, y, x + linewidth, y ) );
             x -= space;
             y++;
             if( height <= heightOrig / 2 + 1) x--;
@@ -2710,8 +2710,8 @@ static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, bool b
     }
     else
     {
-        long width = 5 * pBox->GetDPIScaleFactor();
-        long height = 8 * pBox->GetDPIScaleFactor();
+        long width = 5 * rRenderContext.GetDPIScaleFactor();
+        long height = 8 * rRenderContext.GetDPIScaleFactor();
 
         //Keep odd b/c drawing code works better
         if (width % 2 == 0)
@@ -2723,9 +2723,9 @@ static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, bool b
         long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
         while( width >= 1)
         {
-            pBox->DrawRect( Rectangle( x, y, x, y + linewidth ) );
+            rRenderContext.DrawRect( Rectangle( x, y, x, y + linewidth ) );
             y += space;
-            pBox->DrawRect( Rectangle( x, y, x, y + linewidth ) );
+            rRenderContext.DrawRect( Rectangle( x, y, x, y + linewidth ) );
             y -= space;
             x++;
             if( width <= widthOrig / 2 + 1) y--;
@@ -2734,108 +2734,98 @@ static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, bool b
         }
     }
 
-    pBox->SetFillColor( aOldFillColor );
-    pBox->SetLineColor( aOldLineColor );
+    rRenderContext.Pop();
 }
 
-static void ImplDrawDropdownArrow( ToolBox *pBox, const Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
+static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
 {
-    bool bLineColor = pBox->IsLineColor();
-    bool bFillColor = pBox->IsFillColor();
-    Color aOldFillColor = pBox->GetFillColor();
-    Color aOldLineColor = pBox->GetLineColor();
-    pBox->SetLineColor();
+    bool bLineColor = rRenderContext.IsLineColor();
+    bool bFillColor = rRenderContext.IsFillColor();
+    Color aOldFillColor = rRenderContext.GetFillColor();
+    Color aOldLineColor = rRenderContext.GetLineColor();
+    rRenderContext.SetLineColor();
 
     if ( bSetColor )
     {
-        if ( pBox->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
-            pBox->SetFillColor( Color( COL_WHITE ) );
+        if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
+            rRenderContext.SetFillColor(Color(COL_WHITE));
         else
-            pBox->SetFillColor( Color( COL_BLACK ) );
+            rRenderContext.SetFillColor(Color(COL_BLACK));
     }
 
     if( !bRotate )
     {
-        long width = 5 * pBox->GetDPIScaleFactor();
-        long height = 3 * pBox->GetDPIScaleFactor();
+        long width = 5 * rRenderContext.GetDPIScaleFactor();
+        long height = 3 * rRenderContext.GetDPIScaleFactor();
 
         long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2;
         long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2;
         while( width >= 1)
         {
-            pBox->DrawRect( Rectangle( x, y, x+width-1, y ) );
-            y++; x++;
+            rRenderContext.DrawRect( Rectangle( x, y, x+width-1, y ) );
+            y++;
+            x++;
             width -= 2;
         }
     }
     else
     {
-        long width = 3 * pBox->GetDPIScaleFactor();
-        long height = 5 * pBox->GetDPIScaleFactor();
+        long width = 3 * rRenderContext.GetDPIScaleFactor();
+        long height = 5 * rRenderContext.GetDPIScaleFactor();
 
         long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2;
         long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2;
         while( height >= 1)
         {
-            pBox->DrawRect( Rectangle( x, y, x, y+height-1 ) );
-            y++; x++;
+            rRenderContext.DrawRect( Rectangle( x, y, x, y+height-1 ) );
+            y++;
+            x++;
             height -= 2;
         }
     }
 
     if( bFillColor )
-        pBox->SetFillColor( aOldFillColor );
+        rRenderContext.SetFillColor(aOldFillColor);
     else
-        pBox->SetFillColor();
+        rRenderContext.SetFillColor();
     if( bLineColor )
-        pBox->SetLineColor( aOldLineColor );
+        rRenderContext.SetLineColor(aOldLineColor);
     else
-        pBox->SetLineColor( );
+        rRenderContext.SetLineColor();
 }
 
-void ToolBox::ImplDrawMenubutton( ToolBox *pThis, bool bHighlight )
+void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight)
 {
-    if( !pThis->mpData->maMenubuttonItem.maRect.IsEmpty() )
+    if (!mpData->maMenubuttonItem.maRect.IsEmpty())
     {
         // #i53937# paint menu button only if necessary
-        if( !pThis->ImplHasClippedItems() )
+        if (!ImplHasClippedItems())
             return;
 
         // execute pending paint requests
-        ImplCheckUpdate( pThis );
+        ImplCheckUpdate(this);
 
-        bool bFillColor = pThis->IsFillColor();
-        bool bLineColor = pThis->IsLineColor();
-        Color aOldFillCol = pThis->GetFillColor();
-        Color aOldLineCol = pThis->GetLineColor();
+        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 
         // draw the 'more' indicator / button (>>)
-        ImplErase( pThis, pThis->mpData->maMenubuttonItem.maRect, bHighlight );
+        ImplErase(rRenderContext, mpData->maMenubuttonItem.maRect, bHighlight);
 
-        if( bHighlight )
-            ImplDrawButton( pThis, pThis->mpData->maMenubuttonItem.maRect, 2, false, true, false );
+        if (bHighlight)
+            ImplDrawButton(rRenderContext, mpData->maMenubuttonItem.maRect, 2, false, true, false );
 
-        if( pThis->ImplHasClippedItems() )
-            ImplDrawMoreIndicator( pThis, pThis->mpData->maMenubuttonItem.maRect, true, !pThis->mbHorz );
+        if (ImplHasClippedItems())
+            ImplDrawMoreIndicator(rRenderContext, mpData->maMenubuttonItem.maRect, true, !mbHorz);
 
         // store highlight state
-        pThis->mpData->mbMenubuttonSelected = bHighlight;
+        mpData->mbMenubuttonSelected = bHighlight;
 
         // restore colors
-        if( bFillColor )
-            pThis->SetFillColor( aOldFillCol );
-        else
-            pThis->SetFillColor();
-        if( bLineColor )
-            pThis->SetLineColor( aOldLineCol );
-        else
-            pThis->SetLineColor();
+        rRenderContext.Pop();
     }
 }
 
-void ToolBox::ImplDrawSpin( bool bUpperIn, bool bLowerIn )
+void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bool bLowerIn)
 {
-
     bool    bTmpUpper;
     bool    bTmpLower;
 
@@ -2858,64 +2848,63 @@ void ToolBox::ImplDrawSpin( bool bUpperIn, bool bLowerIn )
         bTmpLower = false;
     }
 
-    ImplDrawSpinButton( this, maUpperRect, maLowerRect,
-                        bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz );
+    ImplDrawSpinButton(&rRenderContext, maUpperRect, maLowerRect,
+                       bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz);
 }
 
-void ToolBox::ImplDrawSeparator(sal_uInt16 nPos, const Rectangle& rRect)
+void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect)
 {
     bool bNativeOk = false;
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
 
     ControlPart nPart = IsHorizontal() ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ;
-    if( IsNativeControlSupported( CTRL_TOOLBAR, nPart ) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, nPart))
     {
-        ImplControlValue    aControlValue;
-        ControlState        nState = ControlState::NONE;
-        bNativeOk = DrawNativeControl( CTRL_TOOLBAR, nPart,
-                                       rRect, nState, aControlValue, OUString() );
+        ImplControlValue aControlValue;
+        ControlState     nState = ControlState::NONE;
+        bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, nPart, rRect, nState, aControlValue, OUString());
     }
 
     /* Draw the widget only if it can't be drawn natively. */
-    if( !bNativeOk )
+    if(!bNativeOk)
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
 
         // no separator before or after windows or at breaks
-        if ( pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size()-1 )
+        if (pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size() - 1)
         {
             pTempItem = &mpData->m_aItems[nPos+1];
             if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
             {
                 long nCenterPos, nSlim;
-                SetLineColor( rStyleSettings.GetSeparatorColor() );
-                if ( IsHorizontal() )
+                rRenderContext.SetLineColor(rStyleSettings.GetSeparatorColor());
+                if (IsHorizontal())
                 {
                     nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
                     nCenterPos = pItem->maRect.Center().X();
-                    DrawLine( Point( nCenterPos, pItem->maRect.Top() + nSlim ),
-                              Point( nCenterPos, pItem->maRect.Bottom() - nSlim ) );
+                    rRenderContext.DrawLine(Point(nCenterPos, pItem->maRect.Top() + nSlim),
+                                            Point(nCenterPos, pItem->maRect.Bottom() - nSlim));
                 }
                 else
                 {
                     nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
                     nCenterPos = pItem->maRect.Center().Y();
-                    DrawLine( Point( pItem->maRect.Left() + nSlim, nCenterPos ),
-                              Point( pItem->maRect.Right() - nSlim, nCenterPos ) );
+                    rRenderContext.DrawLine(Point(pItem->maRect.Left() + nSlim, nCenterPos),
+                                            Point(pItem->maRect.Right() - nSlim, nCenterPos));
                 }
             }
         }
     }
 }
 
-static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow )
+void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow )
 {
     // draws toolbar button background either native or using a coloured selection
     // if bIsWindow is true, the corresponding item is a control and only a selection border will be drawn
 
     bool bNativeOk = false;
-    if( !bIsWindow && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
+    if( !bIsWindow && rRenderContext.IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;
         ControlState        nState = ControlState::NONE;
@@ -2926,39 +2915,39 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 h
 
         aControlValue.setTristateVal( bChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
 
-        bNativeOk = pThis->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
+        bNativeOk = rRenderContext.DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
                                               rRect, nState, aControlValue, OUString() );
     }
 
-    if( !bNativeOk )
-        pThis->DrawSelectionBackground( rRect, bIsWindow ? 3 : highlight, bChecked, true, bIsWindow, 2, NULL, NULL );
+    if (!bNativeOk)
+        DrawSelectionBackground(rRect, bIsWindow ? 3 : highlight, bChecked, true, bIsWindow, 2, NULL, NULL);
 }
 
-void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint, bool bLayout )
+void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint, bool bLayout)
 {
 
     if( nPos >= mpData->m_aItems.size() )
         return;
 
     // execute pending paint requests
-    ImplCheckUpdate( this );
+    ImplCheckUpdate(this);
 
     ImplDisableFlatButtons();
 
-    SetFillColor();
+    rRenderContext.SetFillColor();
 
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : NULL;
     OUString* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
 
-    if(!pItem->mbEnabled)
+    if (!pItem->mbEnabled)
         nHighlight = 0;
 
     // if the rectangle is outside visible area
-    if ( pItem->maRect.IsEmpty() )
+    if (pItem->maRect.IsEmpty())
         return;
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     // no gradient background for items that have a popup open
     bool bHasOpenPopup = mpFloatWin && (mnDownItemId==pItem->mnId);
@@ -2966,7 +2955,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     bool bHighContrastWhite = false;
     // check the face color as highcontrast indicator
     // because the toolbox itself might have a gradient
-    if( rStyleSettings.GetFaceColor() == Color( COL_WHITE ) )
+    if (rStyleSettings.GetFaceColor() == Color(COL_WHITE))
         bHighContrastWhite = true;
 
     // Compute buttons area.
@@ -3001,7 +2990,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
          nPos > 0
          )
     {
-        ImplDrawSeparator( nPos, aButtonRect );
+        ImplDrawSeparator(*this, nPos, aButtonRect); // FIXME
     }
 
     // do nothing if item is no button or will be displayed as window
@@ -3022,15 +3011,15 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     // during configuration mode visible windows will be drawn in a special way
     if ( mbCustomizeMode && pItem->mbShowWindow )
     {
-        vcl::Font aOldFont = GetFont();
-        Color     aOldTextColor = GetTextColor();
+        vcl::Font aOldFont = rRenderContext.GetFont();
+        Color     aOldTextColor = rRenderContext.GetTextColor();
 
         SetZoomedPointFont( rStyleSettings.GetAppFont() );
-        SetLineColor( Color( COL_BLACK ) );
-        SetFillColor( rStyleSettings.GetFieldColor() );
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
-        if( !bLayout )
-            DrawRect( pItem->maRect );
+        rRenderContext.SetLineColor(Color(COL_BLACK));
+        rRenderContext.SetFillColor(rStyleSettings.GetFieldColor());
+        rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
+        if (!bLayout)
+            rRenderContext.DrawRect(pItem->maRect);
 
         Size aSize( GetCtrlTextWidth( pItem->maText ), GetTextHeight() );
         Point aPos( pItem->maRect.Left()+2, pItem->maRect.Top() );
@@ -3040,27 +3029,27 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
              (aSize.Height() > pItem->maRect.GetHeight()-2) )
         {
             bClip = true;
-            Rectangle aTempRect( pItem->maRect.Left()+1, pItem->maRect.Top()+1,
-                                 pItem->maRect.Right()-1, pItem->maRect.Bottom()-1 );
-            vcl::Region aTempRegion( aTempRect );
-            SetClipRegion( aTempRegion );
+            Rectangle aTempRect(pItem->maRect.Left() + 1, pItem->maRect.Top() + 1,
+                                pItem->maRect.Right() - 1, pItem->maRect.Bottom() - 1);
+            vcl::Region aTempRegion(aTempRect);
+            rRenderContext.SetClipRegion(aTempRegion);
         }
         else
             bClip = false;
-        if( bLayout )
+        if (bLayout)
         {
             mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.getLength() );
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
         DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
-        if ( bClip )
-            SetClipRegion();
-        SetFont( aOldFont );
-        SetTextColor( aOldTextColor );
+        if (bClip)
+            rRenderContext.SetClipRegion();
+        rRenderContext.SetFont(aOldFont);
+        rRenderContext.SetTextColor(aOldTextColor);
 
         // draw Config-Frame if required
-        if ( pMgr && !bLayout)
+        if (pMgr && !bLayout)
             pMgr->UpdateDragRect();
         return;
     }
@@ -3084,13 +3073,13 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         {
             if ( (pItem->meState != TRISTATE_FALSE) || !bPaint )
             {
-                ImplErase( this, pItem->maRect, nHighlight != 0, bHasOpenPopup );
+                ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
             }
         }
         else
         {
-            DecorationView aDecoView( this );
-            aDecoView.DrawButton( aButtonRect, nStyle );
+            DecorationView aDecoView(&rRenderContext);
+            aDecoView.DrawButton(aButtonRect, nStyle);
         }
     }
 
@@ -3148,9 +3137,9 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         if ( nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) )
         {
             if( bHasOpenPopup )
-                ImplDrawFloatwinBorder( pItem );
+                ImplDrawFloatwinBorder(rRenderContext, pItem);
             else
-                ImplDrawButton( this, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow );
+                ImplDrawButton(rRenderContext, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow);
 
             if( nHighlight != 0 )
             {
@@ -3158,7 +3147,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
                     nImageStyle |= IMAGE_DRAW_COLORTRANSFORM;
             }
         }
-        DrawImage( Point( nImageOffX, nImageOffY ), *pImage, nImageStyle );
+        rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), *pImage, nImageStyle);
     }
 
     // draw the text
@@ -3169,7 +3158,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         long nTextOffY = nOffY;
 
         // rotate text when vertically docked
-        vcl::Font aOldFont = GetFont();
+        vcl::Font aOldFont = rRenderContext.GetFont();
         if( pItem->mbVisibleText && !ImplIsFloatingMode() &&
             ((meAlign == WINDOWALIGN_LEFT) || (meAlign == WINDOWALIGN_RIGHT)) )
         {
@@ -3186,7 +3175,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
             if( bImage )
                 nTextOffY = nImageOffY + aImageSize.Height() + TB_IMAGETEXTOFFSET;
 
-            SetFont( aRotateFont );
+            rRenderContext.SetFont(aRotateFont);
         }
         else
         {
@@ -3202,9 +3191,9 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         if ( !bLayout && !bImage && (nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) ) )
         {
             if( bHasOpenPopup )
-                ImplDrawFloatwinBorder( pItem );
+                ImplDrawFloatwinBorder(rRenderContext, pItem);
             else
-                ImplDrawButton( this, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow );
+                ImplDrawButton(rRenderContext, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow );
         }
 
         sal_uInt16 nTextStyle = 0;
@@ -3233,62 +3222,60 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         if ( !pItem->mbEnabled || !IsEnabled() )
         {
             bSetColor = false;
-            SetFillColor( rStyleSettings.GetShadowColor() );
+            rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
         }
 
         // dropdown only will be painted without inner border
         if( (pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY )
         {
-            ImplErase( this, aDropDownRect, nHighlight != 0, bHasOpenPopup );
+            ImplErase(rRenderContext, aDropDownRect, nHighlight != 0, bHasOpenPopup);
 
             if( nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) )
             {
                 if( bHasOpenPopup )
-                    ImplDrawFloatwinBorder( pItem );
+                    ImplDrawFloatwinBorder(rRenderContext, pItem);
                 else
-                    ImplDrawButton( this, aDropDownRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), false );
+                    ImplDrawButton(rRenderContext, aDropDownRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), false);
             }
         }
-        ImplDrawDropdownArrow( this, aDropDownRect, bSetColor, bRotate );
+        ImplDrawDropdownArrow(rRenderContext, aDropDownRect, bSetColor, bRotate);
     }
 
     // draw config-frame if required
-    if ( pMgr )
+    if (pMgr)
         pMgr->UpdateDragRect();
 }
 
-void ToolBox::ImplDrawFloatwinBorder( ImplToolItem* pItem )
+void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem)
 {
     if ( !pItem->maRect.IsEmpty() )
     {
         Rectangle aRect( mpFloatWin->ImplGetItemEdgeClipRect() );
         aRect.SetPos( AbsoluteScreenToOutputPixel( aRect.TopLeft() ) );
-        SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
+        rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
         Point p1, p2;
 
         p1 = pItem->maRect.TopLeft();
         p1.X()++;
         p2 = pItem->maRect.TopRight();
         p2.X()--;
-        DrawLine( p1, p2);
+        rRenderContext.DrawLine( p1, p2);
         p1 = pItem->maRect.BottomLeft();
         p1.X()++;
         p2 = pItem->maRect.BottomRight();
         p2.X()--;
-        DrawLine( p1, p2);
+        rRenderContext.DrawLine( p1, p2);
 
         p1 = pItem->maRect.TopLeft();
         p1.Y()++;
         p2 = pItem->maRect.BottomLeft();
         p2.Y()--;
-        DrawLine( p1, p2);
+        rRenderContext.DrawLine( p1, p2);
         p1 = pItem->maRect.TopRight();
         p1.Y()++;
         p2 = pItem->maRect.BottomRight();
         p2.Y()--;
-        DrawLine( p1, p2);
-
-        //DrawRect( pItem->maRect );
+        rRenderContext.DrawLine( p1, p2);
     }
 }
 
@@ -3300,7 +3287,7 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
         mpFloatWin = pFloatWindow;
 
         // redraw item, to trigger drawing of a special border
-        ImplDrawItem( mnCurPos, 1 );
+        InvalidateItem(mnCurPos, 1);
 
         mbDrag = false;
         EndTracking();
@@ -3315,7 +3302,7 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
         bool bWasKeyboardActivate = mpData->mbDropDownByKeyboard;
 
         if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
-            ImplDrawItem( mnCurPos, bWasKeyboardActivate ? 2 : 0 );
+            InvalidateItem(mnCurPos, bWasKeyboardActivate ? 2 : 0);
         Deactivate();
 
         if( !bWasKeyboardActivate )
@@ -3375,7 +3362,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         {
             if ( !mnCurItemId )
             {
-                ImplDrawItem( mnCurPos, 1 );
+                InvalidateItem(mnCurPos, 1);
                 mnCurItemId = pItem->mnId;
                 Highlight();
             }
@@ -3387,9 +3374,9 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         {
             if ( mnCurItemId )
             {
-                ImplDrawItem( mnCurPos );
+                InvalidateItem(mnCurPos);
                 mnCurItemId = 0;
-                ImplDrawItem( mnCurPos );
+                InvalidateItem(mnCurPos);
                 Highlight();
             }
         }
@@ -3403,7 +3390,8 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
-            ImplDrawSpin( mbIn, false );
+            Invalidate();
+            InvalidateSpin(mbIn, false);
         }
         return true;
     }
@@ -3414,7 +3402,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
-            ImplDrawSpin( false, mbIn );
+            InvalidateSpin(false, mbIn);
         }
         return true;
     }
@@ -3510,7 +3498,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
                     mnCurPos = GetItemPos( mnCurItemId );
                     if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
                     {
-                        ImplDrawItem( mnCurPos, nHighlight );
+                        InvalidateItem(mnCurPos, nHighlight);
                         Flush();
                     }
                 }
@@ -3531,7 +3519,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         mbUpper = false;
         mbLower = false;
         mbIn    = false;
-        ImplDrawSpin( false, false );
+        InvalidateSpin(false, false);
         return true;
     }
 
@@ -3598,7 +3586,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         {
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
-                ImplDrawItem( mnCurPos );
+                InvalidateItem(mnCurPos);
                 CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( mnCurPos ) );
             }
 
@@ -3606,7 +3594,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
                 mnCurItemId = mnHighItemId = it->mnId;
-                ImplDrawItem( mnCurPos, 2 ); // always use shadow effect (2)
+                InvalidateItem(mnCurPos, 2); // always use shadow effect (2)
             }
             else
                 mnCurItemId = mnHighItemId = 0;
@@ -3695,16 +3683,16 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                 {
                                     ImplHideFocus();
                                     sal_uInt16 nPos = GetItemPos( mnHighItemId );
-                                    ImplDrawItem( nPos );
+                                    InvalidateItem(nPos);
                                     CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
                                 }
                                 if ( mpData->mbMenubuttonSelected )
                                 {
                                     // remove highlight from menubutton
-                                    ImplDrawMenubutton( this, false );
+                                    InvalidateMenuButton(false);
                                 }
                                 mnHighItemId = it->mnId;
-                                ImplDrawItem( nTempPos, 2 );
+                                InvalidateItem(nTempPos, 2);
                                 ImplShowFocus();
                                 CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
                             }
@@ -3724,7 +3712,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( !bMenuButtonHit && mpData->mbMenubuttonSelected )
             {
                 // remove highlight from menubutton
-                ImplDrawMenubutton( this, false );
+                InvalidateMenuButton(false);
             }
 
             if( mnHighItemId )
@@ -3732,7 +3720,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 sal_uInt16 nClearPos = GetItemPos( mnHighItemId );
                 if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
                 {
-                    ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? 1 : 0 );
+                    InvalidateItem(nClearPos, (nClearPos == mnCurPos) ? 1 : 0);
                     if( nClearPos != mnCurPos )
                         CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
                 }
@@ -3742,7 +3730,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
             if( bMenuButtonHit )
             {
-                ImplDrawMenubutton( this, true );
+                InvalidateMenuButton(true);
             }
         }
     }
@@ -3840,7 +3828,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
             if ( mbSelection )
             {
-                ImplDrawItem( mnCurPos, 1 );
+                InvalidateItem(mnCurPos, 1);
                 Highlight();
             }
             else
@@ -3856,7 +3844,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                 if ( mbDrag )
                 {
-                    ImplDrawItem( mnCurPos, 1 );
+                    InvalidateItem(mnCurPos, 1);
                     Highlight();
                 }
 
@@ -3877,7 +3865,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                         {
                             // no floater was opened
                             Deactivate();
-                            ImplDrawItem( mnCurPos, 0 );
+                            InvalidateItem(mnCurPos, 0);
 
                             mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
                             mnCurItemId      = 0;
@@ -3927,7 +3915,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 StartTracking();
                 mbUpper = true;
                 mbIn    = true;
-                ImplDrawSpin( true, false );
+                InvalidateSpin(true, false);
             }
             return;
         }
@@ -3938,7 +3926,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 StartTracking();
                 mbLower = true;
                 mbIn    = true;
-                ImplDrawSpin( false, true );
+                InvalidateSpin(false, true);
             }
             return;
         }
@@ -4010,30 +3998,48 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
     DockingWindow::Tracking( rTEvt );
 }
 
-void ToolBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rPaintRect )
+void ToolBox::InvalidateItem(sal_uInt16 nPosition, sal_uInt16 nHighlight, bool bPaint, bool bLayout)
+{
+    //ImplToolItem* pItem = &mpData->m_aItems[nPosition];
+    //Invalidate(pItem->maRect);
+    ImplDrawItem(*this, nPosition, nHighlight, bPaint, bLayout);
+}
+
+void ToolBox::InvalidateMenuButton(bool bHighlight)
+{
+    ImplDrawMenuButton(*this, bHighlight);
+}
+
+void ToolBox::InvalidateSpin(bool bUpperIn, bool bLowerIn)
+{
+    ImplDrawSpin(*this, bUpperIn, bLowerIn);
+}
+
+void ToolBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect)
 {
     if( mpData->mbIsPaintLocked )
         return;
-    if ( rPaintRect == Rectangle( 0, 0, mnDX-1, mnDY-1 ) )
+
+    if (rPaintRect == Rectangle(0, 0, mnDX-1, mnDY-1))
         mbFullPaint = true;
     ImplFormat();
     mbFullPaint = false;
 
-    ImplDrawBackground( this, rPaintRect );
+    ImplDrawBackground(rRenderContext, rPaintRect);
 
     if ( (mnWinStyle & WB_BORDER) && !ImplIsFloatingMode() )
-        ImplDrawBorder( this );
+        ImplDrawBorder(rRenderContext);
 
     if( !ImplIsFloatingMode() )
-        ImplDrawGrip( this );
+        ImplDrawGrip(rRenderContext);
 
-    ImplDrawMenubutton( this, mpData->mbMenubuttonSelected );
+    ImplDrawMenuButton(rRenderContext, mpData->mbMenubuttonSelected);
 
     // draw SpinButtons
-    if ( mnWinStyle & WB_SCROLL )
+    if (mnWinStyle & WB_SCROLL)
     {
-        if ( mnCurLines > mnLines )
-            ImplDrawSpin( false, false );
+        if (mnCurLines > mnLines)
+            ImplDrawSpin(rRenderContext, false, false);
     }
 
     // draw buttons
@@ -4056,7 +4062,7 @@ void ToolBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rP
                 nHighlight = 1;
             else if ( i == nHighPos )
                 nHighlight = 2;
-            ImplDrawItem( i, nHighlight );
+            ImplDrawItem(rRenderContext, i, nHighlight);
         }
     }
     ImplShowFocus();
@@ -4409,7 +4415,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
                     ShowLine( false );
                 else if ( (mnCurLine+mnVisLines-1 < mnCurLines) && (pData->GetDelta() < 0) )
                     ShowLine( true );
-                ImplDrawSpin( false, false );
+                InvalidateSpin(false, false);
                 return;
             }
         }
@@ -5105,7 +5111,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                     mnCurLine = 1;
                 mbFormat = true;
                 ImplFormat();
-                ImplDrawSpin( false, false );
+                InvalidateSpin(false, false);
                 ImplChangeHighlight( ImplGetFirstValidItem( mnCurLine ) );
             }
         break;
@@ -5118,7 +5124,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                     mnCurLine = mnCurLines;
                 mbFormat = true;
                 ImplFormat();
-                ImplDrawSpin( false, false );
+                InvalidateSpin(false, false);
                 ImplChangeHighlight( ImplGetFirstValidItem( mnCurLine ) );
             }
         break;
@@ -5311,7 +5317,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
         // which will in turn ImplShowFocus again
         // set mnHighItemId to 0 already to prevent this hen/egg problem
         mnHighItemId = 0;
-        ImplDrawItem( nPos, 0 );
+        InvalidateItem(nPos, 0);
         CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
     }
 
@@ -5346,7 +5352,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
             }
 
             mnHighItemId = pItem->mnId;
-            ImplDrawItem( aPos, 2 );    // always use shadow effect (2)
+            InvalidateItem(aPos, 2); // always use shadow effect (2)
 
             if( mbSelection )
                 mnCurPos = aPos;
@@ -5400,7 +5406,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                         break;
                     }
                 }
-                ImplDrawMenubutton( this, false );
+                InvalidateMenuButton(false);
                 ImplChangeHighlight( pItem );
             }
             else
@@ -5415,7 +5421,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                 }
                 if( it != mpData->m_aItems.end() )
                 {
-                    ImplDrawMenubutton( this, false );
+                    InvalidateMenuButton(false);
                     ImplChangeHighlight( &(*it) );
                 }
             }
@@ -5437,7 +5443,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             if( (it != mpData->m_aItems.end() && &(*it) == ImplGetFirstClippedItem( this )) && IsMenuEnabled() )
             {
                 ImplChangeHighlight( NULL );
-                ImplDrawMenubutton( this, true );
+                InvalidateMenuButton(true);
             }
             else
                 ImplChangeHighlight( (it != mpData->m_aItems.end()) ? &(*it) : NULL );
@@ -5451,7 +5457,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             if( IsMenuEnabled() && !ImplIsFloatingMode() )
             {
                 ImplChangeHighlight( NULL );
-                ImplDrawMenubutton( this, true );
+                InvalidateMenuButton(true);
             }
             else
             {
@@ -5491,7 +5497,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                     if( IsMenuEnabled() && !ImplIsFloatingMode() )
                     {
                         ImplChangeHighlight( NULL );
-                        ImplDrawMenubutton( this, true );
+                        InvalidateMenuButton(true);
                         return true;
                     }
                     else
@@ -5509,7 +5515,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                     if( IsMenuEnabled() && !ImplIsFloatingMode() )
                     {
                         ImplChangeHighlight( NULL );
-                        ImplDrawMenubutton( this, true );
+                        InvalidateMenuButton(true);
                         return true;
                     }
                     else
@@ -5528,7 +5534,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
         {
             // select the menu button if a clipped item would be selected
             ImplChangeHighlight( NULL );
-            ImplDrawMenubutton( this, true );
+            InvalidateMenuButton(true);
         }
         else if( i != nCount )
             ImplChangeHighlight( pToolItem );
@@ -5568,7 +5574,7 @@ void ToolBox::ImplHideFocus()
     if ( mpData->mbMenubuttonSelected )
     {
         // remove highlight from menubutton
-        ImplDrawMenubutton( this, false );
+        InvalidateMenuButton(false);
     }
 }
 
