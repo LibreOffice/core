@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7a5de9d1_c69ac2c5",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-04-30T20:30:41Z",
+      "side": 1,
+      "message": "This test is also too lax. \"#.00E+00\" starts also with \u0027#\u0027 but is not engineering notation",
+      "range": {
+        "startLine": 950,
+        "startChar": 12,
+        "endLine": 950,
+        "endChar": 44
+      },
+      "revId": "9c81704e563c1c540bf8b697d29403fc666ffdc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6ed579_29460dc0",
         "filename": "cui/source/tabpages/numfmt.cxx",
         "patchSetId": 2
@@ -31,6 +54,41 @@
       "side": 1,
       "message": "Idea: can\u0027t this simply depend on the current category, if CAT_SCIENTIFIC?",
       "parentUuid": "da6ed579_29460dc0",
+      "revId": "9c81704e563c1c540bf8b697d29403fc666ffdc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_06b9ba2e",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-04-30T20:30:41Z",
+      "side": 1,
+      "message": "Better idea than what I was trying to build ;)\nWorks fine for this test:\nif ( m_pLbCategory-\u003eGetSelectEntryPos() \u003d\u003d CAT_SCIENTIFIC )",
+      "parentUuid": "7a5de9d1_a60d4639",
+      "revId": "9c81704e563c1c540bf8b697d29403fc666ffdc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_66ac2eee",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-04-30T20:30:41Z",
+      "side": 1,
+      "message": "Also too lax: \"[BLUE]0.00E+00;[RED]-0.00E+00\" would detect the wrong \u0027E\u0027",
       "revId": "9c81704e563c1c540bf8b697d29403fc666ffdc3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
