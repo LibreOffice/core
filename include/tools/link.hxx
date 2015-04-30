@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <sal/types.h>
-#include <tools/toolsdllapi.h>
 
 #define DECL_LINK(Member, ArgType) \
     static sal_IntPtr LinkStub##Member(void *, void *); \
@@ -131,8 +130,7 @@
 
 #define EMPTYARG
 
-template<typename Arg = void *, typename Ret = sal_IntPtr>
-class TOOLS_DLLPUBLIC Link {
+template<typename Arg = void *, typename Ret = sal_IntPtr> class Link {
 public:
     typedef Ret Stub(void *, Arg);
 
