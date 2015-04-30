@@ -281,7 +281,7 @@ OUString AboutDialog::GetVersionString()
 
     OUString sBuildId = GetBuildId();
 
-    OUString aLocaleStr = GetLocaleString();
+    OUString aLocaleStr = LanguageTag( LANGUAGE_SYSTEM).getBcp47() + " (" + GetLocaleString() + ")";
 
     if (!sBuildId.trim().isEmpty())
     {
