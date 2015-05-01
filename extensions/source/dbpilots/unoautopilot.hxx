@@ -84,12 +84,14 @@ namespace dbp
         // XServiceInfo - static methods
         static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException )
         {
-            return SERVICEINFO().getServiceNames();
+            SERVICEINFO aInfo;
+            return aInfo.getServiceNames();
         }
 
         static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException )
         {
-            return SERVICEINFO().getImplementationName();
+            SERVICEINFO aInfo;
+            return aInfo.getImplementationName();
         }
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
