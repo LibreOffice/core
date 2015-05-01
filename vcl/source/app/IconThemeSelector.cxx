@@ -40,9 +40,8 @@ namespace {
 bool icon_theme_is_in_installed_themes(const OUString& theme,
         const std::vector<IconThemeInfo>& installedThemes)
 {
-    return std::find_if(installedThemes.begin(), installedThemes.end(),
-               SameTheme(theme)
-           ) != installedThemes.end();
+    return std::any_of(installedThemes.begin(), installedThemes.end(),
+                       SameTheme(theme));
 }
 
 } // end anonymous namespace

@@ -155,14 +155,7 @@ IconThemeInfo::FindIconThemeById(const std::vector<vcl::IconThemeInfo>& themes, 
 /*static*/ bool
 IconThemeInfo::IconThemeIsInVector(const std::vector<vcl::IconThemeInfo>& themes, const OUString& themeId)
 {
-    std::vector<vcl::IconThemeInfo>::const_iterator it = std::find_if(themes.begin(), themes.end(),
-               SameTheme(themeId));
-    if (it != themes.end()) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return std::any_of(themes.begin(), themes.end(), SameTheme(themeId));
 }
 
 } // end namespace vcl

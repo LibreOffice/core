@@ -41,6 +41,7 @@
 #include "vcl/bitmapex.hxx"
 
 #include "canvasbitmap.hxx"
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace vcl::unotools;
@@ -152,7 +153,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             aRes.first == pRGBEnd);
 
     CPPUNIT_ASSERT_MESSAGE( "rgb colors are not within [0,1] range",
-                            std::find_if(pRGBStart,pRGBEnd,&rangeCheck) == pRGBEnd);
+                            std::none_of(pRGBStart,pRGBEnd,&rangeCheck));
 
     CPPUNIT_ASSERT_MESSAGE( "First pixel is not white",
                             pRGBStart[0].Red == 1.0 && pRGBStart[0].Green == 1.0 && pRGBStart[0].Blue == 1.0);
