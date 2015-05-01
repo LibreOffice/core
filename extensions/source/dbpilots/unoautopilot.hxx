@@ -31,19 +31,6 @@
 
 namespace dbp
 {
-    //= IServiceInfo
-
-    /** interface for the SERVICEINFO template parameter of the OUnoAutoPilot class
-    */
-    struct IServiceInfo
-    {
-    public:
-        OUString     getImplementationName() const;
-        ::com::sun::star::uno::Sequence< OUString >
-                            getServiceNames() const;
-    };
-
-
     //= OUnoAutoPilot
 
     typedef ::svt::OGenericUnoDialog    OUnoAutoPilot_Base;
@@ -84,14 +71,12 @@ namespace dbp
         // XServiceInfo - static methods
         static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException )
         {
-            SERVICEINFO aInfo;
-            return aInfo.getServiceNames();
+            return SERVICEINFO::getServiceNames();
         }
 
         static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException )
         {
-            SERVICEINFO aInfo;
-            return aInfo.getImplementationName();
+            return SERVICEINFO::getImplementationName();
         }
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
