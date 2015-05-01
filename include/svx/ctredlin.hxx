@@ -26,6 +26,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/treelistentry.hxx>
 #include <tools/datetime.hxx>
+#include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
