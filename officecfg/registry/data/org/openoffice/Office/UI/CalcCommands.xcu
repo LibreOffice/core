@@ -1914,9 +1914,9 @@
           <value xml:lang="en-US">Pri~nt Ranges</value>
         </prop>
       </node>
-      <node oor:name=".uno:DrawGraphicMenu" oor:op="replace">
+      <node oor:name=".uno:FormatObjectMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Graph~ic</value>
+          <value xml:lang="en-US">O~bject</value>
         </prop>
       </node>
       <node oor:name=".uno:ToggleFormula" oor:op="replace">
@@ -1992,6 +1992,30 @@
       <node oor:name=".uno:PasteOnlyValue" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Paste Only Value</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CompressGraphic" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Co~mpress Image...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SaveGraphic" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Save Image...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ChangePicture" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Change Image...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
         </prop>
       </node>
     </node>
