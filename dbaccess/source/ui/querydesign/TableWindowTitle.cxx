@@ -68,11 +68,16 @@ void OTableWindowTitle::GetFocus()
 {
     if(m_pTabWin)
         m_pTabWin->GetFocus();
+    else
+        FixedText::GetFocus();
 }
 
 void OTableWindowTitle::LoseFocus()
 {
-    m_pTabWin->LoseFocus();
+    if (m_pTabWin)
+        m_pTabWin->LoseFocus();
+    else
+        FixedText::LoseFocus();
 }
 
 void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )

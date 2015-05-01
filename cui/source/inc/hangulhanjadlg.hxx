@@ -85,6 +85,7 @@ namespace svx
 
     private:
         void implUpdateDisplay();
+        bool hasCurrentControl();
         Control& implGetCurrentControl();
 
     private:

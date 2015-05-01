@@ -1594,7 +1594,6 @@ void OFieldDescControl::implFocusLost(vcl::Window* _pWhich)
 
 void OFieldDescControl::LoseFocus()
 {
-
     implFocusLost(NULL);
 
     TabPage::LoseFocus();

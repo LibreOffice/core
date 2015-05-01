@@ -420,6 +420,11 @@ namespace svx
             implUpdateDisplay();
     }
 
+    bool SuggestionDisplay::hasCurrentControl()
+    {
+        return m_bDisplayListBox || m_aValueSet;
+    }
+
     Control& SuggestionDisplay::implGetCurrentControl()
     {
         if( m_bDisplayListBox )
@@ -445,11 +450,17 @@ namespace svx
     }
     void SuggestionDisplay::GetFocus()
     {
-        implGetCurrentControl().GetFocus();
+        if (hasCurrentControl())
+            implGetCurrentControl().GetFocus();
+        else
+            Control::LoseFocus();
     }
     void SuggestionDisplay::LoseFocus()
     {
-        implGetCurrentControl().LoseFocus();
+        if (hasCurrentControl())
+            implGetCurrentControl().LoseFocus();
+        else
+            Control::LoseFocus();
     }
     void SuggestionDisplay::Command( const CommandEvent& rCEvt )
     {

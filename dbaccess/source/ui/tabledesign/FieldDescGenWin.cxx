@@ -106,7 +106,8 @@ void OFieldDescGenWin::GetFocus()
 
 void OFieldDescGenWin::LoseFocus()
 {
-    m_pFieldControl->LoseFocus();
+    if (m_pFieldControl)
+        m_pFieldControl->LoseFocus();
     TabPage::LoseFocus();
 }
 

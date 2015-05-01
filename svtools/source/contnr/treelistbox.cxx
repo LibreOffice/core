@@ -2832,7 +2832,7 @@ SvTreeListEntry* SvTreeListBox::GetEntry( const Point& rPos, bool bHit ) const
 
 SvTreeListEntry* SvTreeListBox::GetCurEntry() const
 {
-    return pImp->GetCurEntry();
+    return pImp ? pImp->GetCurEntry() : NULL;
 }
 
 void SvTreeListBox::ImplInitStyle()
