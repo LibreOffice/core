@@ -1176,6 +1176,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
             {
+                rWrtSh.StartUndo( UNDO_INSATTR );
                 SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
                 aBrushItem.SetColor(aSet);
                 rWrtSh.SetAttrItem( aBrushItem );
@@ -1199,6 +1200,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
                     rWrtSh.SetAttrItem( aGrabBag );
                 }
+                rWrtSh.EndUndo( UNDO_INSATTR );
             }
             else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
@@ -1229,6 +1231,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 if(nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
                 {
+                    rWrtSh.StartUndo( UNDO_INSATTR );
                     rWrtSh.SetAttrItem(
                         SvxBrushItem( rEdtWin.GetTextBackColor(), RES_CHRATR_BACKGROUND) );
 
@@ -1251,6 +1254,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         }
                         rWrtSh.SetAttrItem( aGrabBag );
                     }
+                    rWrtSh.EndUndo( UNDO_INSATTR );
                 }
                 else
                     rWrtSh.SetAttrItem(
