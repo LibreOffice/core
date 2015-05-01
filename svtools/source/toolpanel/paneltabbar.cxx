@@ -1199,12 +1199,13 @@ namespace svt
     {
         Control::LoseFocus();
 
-        if ( !!m_pImpl->m_aFocusedItem )
+        if ( m_pImpl )
         {
-            m_pImpl->InvalidateItem( *m_pImpl->m_aFocusedItem );
-        }
+            if ( !!m_pImpl->m_aFocusedItem )
+                m_pImpl->InvalidateItem( *m_pImpl->m_aFocusedItem );
 
-        m_pImpl->m_aFocusedItem.reset();
+            m_pImpl->m_aFocusedItem.reset();
+        }
     }
 
 

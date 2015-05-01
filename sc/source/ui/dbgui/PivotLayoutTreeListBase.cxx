@@ -144,6 +144,7 @@ void ScPivotLayoutTreeListBase::GetFocus()
 void ScPivotLayoutTreeListBase::LoseFocus()
 {
     SvTreeListBox::LoseFocus();
-    mpParent->mpPreviouslyFocusedListBox = this;
+    if (mpParent)
+        mpParent->mpPreviouslyFocusedListBox = this;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

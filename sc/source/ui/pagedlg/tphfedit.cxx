@@ -291,6 +291,8 @@ void ScEditWindow::GetFocus()
     }
     else
         pAcc = NULL;
+
+    Control::GetFocus();
 }
 
 void ScEditWindow::LoseFocus()
@@ -302,6 +304,7 @@ void ScEditWindow::LoseFocus()
     }
     else
         pAcc = NULL;
+    Control::LoseFocus();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()

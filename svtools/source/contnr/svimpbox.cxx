@@ -2623,7 +2623,7 @@ void SvImpLBox::LoseFocus()
 
     if( m_nStyle & WB_HIDESELECTION )
     {
-        SvTreeListEntry* pEntry = pView->FirstSelected();
+        SvTreeListEntry* pEntry = pView ?  pView->FirstSelected() : NULL;
         while( pEntry )
         {
             InvalidateEntry( pEntry );

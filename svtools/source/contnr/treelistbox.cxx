@@ -62,6 +62,8 @@ class MyEdit_Impl : public Edit
     SvInplaceEdit2* pOwner;
 public:
                  MyEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* pOwner );
+    virtual     ~MyEdit_Impl() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { pOwner = NULL; Edit::dispose(); }
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void LoseFocus() SAL_OVERRIDE;
 };
@@ -71,6 +73,8 @@ class MyMultiEdit_Impl : public MultiLineEdit
     SvInplaceEdit2* pOwner;
 public:
                  MyMultiEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* pOwner );
+    virtual     ~MyMultiEdit_Impl() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE { pOwner = NULL; MultiLineEdit::dispose(); }
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void LoseFocus() SAL_OVERRIDE;
 };
@@ -92,7 +96,8 @@ void MyEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 
 void MyEdit_Impl::LoseFocus()
 {
-    pOwner->LoseFocus();
+    if (pOwner)
+        pOwner->LoseFocus();
 }
 
 MyMultiEdit_Impl::MyMultiEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* _pOwner )
@@ -110,7 +115,8 @@ void MyMultiEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 
 void MyMultiEdit_Impl::LoseFocus()
 {
-    pOwner->LoseFocus();
+    if (pOwner)
+        pOwner->LoseFocus();
 }
 
 

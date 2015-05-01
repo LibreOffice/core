@@ -286,6 +286,7 @@ void ScFilterListBox::LoseFocus()
 #ifndef UNX
     Hide();
 #endif
+    vcl::Window::LoseFocus();
 }
 
 bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
@@ -4871,7 +4872,7 @@ void ScGridWindow::LoseFocus()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
-    if (pViewShell->HasAccessibilityObjects())
+    if (pViewShell && pViewShell->HasAccessibilityObjects())
         pViewShell->BroadcastAccessibility(ScAccGridWinFocusLostHint(eWhich, GetAccessible()));
 
     Window::LoseFocus();

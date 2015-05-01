@@ -268,8 +268,9 @@ void SmGraphicWindow::LoseFocus()
 
 void SmGraphicWindow::RepaintViewShellDoc()
 {
-    SmDocShell &rDoc = *pViewShell->GetDoc();
-    rDoc.Repaint();
+    SmDocShell *pDoc = pViewShell->GetDoc();
+    if (pDoc)
+        pDoc->Repaint();
 }
 
 IMPL_LINK_NOARG(SmGraphicWindow, CaretBlinkTimerHdl)

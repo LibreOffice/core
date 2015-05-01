@@ -80,14 +80,14 @@ namespace svt { namespace table
 
     void TableControl::GetFocus()
     {
-        if ( !m_pImpl->getInputHandler()->GetFocus( *m_pImpl ) )
+        if ( !m_pImpl || !m_pImpl->getInputHandler()->GetFocus( *m_pImpl ) )
             Control::GetFocus();
     }
 
 
     void TableControl::LoseFocus()
     {
-        if ( !m_pImpl->getInputHandler()->LoseFocus( *m_pImpl ) )
+        if ( !m_pImpl || !m_pImpl->getInputHandler()->LoseFocus( *m_pImpl ) )
             Control::LoseFocus();
     }
 

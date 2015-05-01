@@ -48,15 +48,21 @@ namespace frm
     void RichTextViewPort::GetFocus()
     {
         Control::GetFocus();
-        m_pView->SetSelectionMode( EE_SELMODE_STD );
-        m_pView->ShowCursor( true );
+        if (m_pView)
+        {
+            m_pView->SetSelectionMode( EE_SELMODE_STD );
+            m_pView->ShowCursor( true );
+        }
     }
 
 
     void RichTextViewPort::LoseFocus()
     {
-        m_pView->HideCursor();
-        m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
+        if (m_pView)
+        {
+            m_pView->HideCursor();
+            m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
+        }
         Control::LoseFocus();
     }
 

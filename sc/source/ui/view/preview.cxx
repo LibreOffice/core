@@ -1506,14 +1506,16 @@ void ScPreview::InvalidateLocationData(sal_uLong nId)
 
 void ScPreview::GetFocus()
 {
-    if (pViewShell->HasAccessibilityObjects())
+    Window::GetFocus();
+    if (pViewShell && pViewShell->HasAccessibilityObjects())
         pViewShell->BroadcastAccessibility( ScAccWinFocusGotHint(GetAccessible()) );
 }
 
 void ScPreview::LoseFocus()
 {
-    if (pViewShell->HasAccessibilityObjects())
+    if (pViewShell && pViewShell->HasAccessibilityObjects())
         pViewShell->BroadcastAccessibility( ScAccWinFocusLostHint(GetAccessible()) );
+    Window::LoseFocus();
 }
 
 com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()

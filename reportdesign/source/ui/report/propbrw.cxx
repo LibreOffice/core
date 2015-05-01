@@ -579,7 +579,8 @@ IMPL_LINK( PropBrw, OnAsyncGetFocus, void*,  )
 void PropBrw::LoseFocus()
 {
     DockingWindow::LoseFocus();
-    m_pDesignView->getController().InvalidateAll();
+    if (m_pDesignView)
+        m_pDesignView->getController().InvalidateAll();
 }
 
 }

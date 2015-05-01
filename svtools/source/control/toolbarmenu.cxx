@@ -483,6 +483,8 @@ void ToolbarMenu::dispose()
     }
 
     delete mpImpl;
+    mpImpl = NULL;
+
     DockingWindow::dispose();
 }
 
@@ -774,7 +776,7 @@ void ToolbarMenu::GetFocus()
 
 void ToolbarMenu::LoseFocus()
 {
-    if( mpImpl->mnHighlightedEntry != -1 )
+    if( mpImpl && mpImpl->mnHighlightedEntry != -1 )
         implChangeHighlightEntry( -1 );
 
     DockingWindow::LoseFocus();
