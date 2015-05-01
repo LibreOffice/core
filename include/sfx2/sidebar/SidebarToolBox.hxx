@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 
 #include <sfx2/dllapi.h>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
