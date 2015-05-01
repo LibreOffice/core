@@ -59,7 +59,7 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
 ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
     Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
     mrData( rParent.GetLayoutData() ),
-    mpAccessible( NULL ),
+    mxAccessible( NULL ),
     mbValidGfx( false )
 {
 }
@@ -67,7 +67,7 @@ ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
 ScCsvControl::ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits ) :
     Control( pParent, nBits ),
     mrData( rData ),
-    mpAccessible( NULL ),
+    mxAccessible( NULL ),
     mbValidGfx( false )
 {
 }
@@ -79,8 +79,8 @@ ScCsvControl::~ScCsvControl()
 
 void ScCsvControl::dispose()
 {
-    if( mpAccessible )
-        mpAccessible->dispose();
+    if( mxAccessible.is() )
+        mxAccessible->dispose();
     Control::dispose();
 }
 
@@ -100,44 +100,44 @@ void ScCsvControl::LoseFocus()
 
 void ScCsvControl::AccSendFocusEvent( bool bFocused )
 {
-    if( mpAccessible )
-        mpAccessible->SendFocusEvent( bFocused );
+    if( mxAccessible.is() )
+        mxAccessible->SendFocusEvent( bFocused );
 }
 
 void ScCsvControl::AccSendCaretEvent()
 {
-    if( mpAccessible )
-        mpAccessible->SendCaretEvent();
+    if( mxAccessible.is() )
+        mxAccessible->SendCaretEvent();
 }
 
 void ScCsvControl::AccSendVisibleEvent()
 {
-    if( mpAccessible )
-        mpAccessible->SendVisibleEvent();
+    if( mxAccessible.is() )
+        mxAccessible->SendVisibleEvent();
 }
 
 void ScCsvControl::AccSendSelectionEvent()
 {
-    if( mpAccessible )
-        mpAccessible->SendSelectionEvent();
+    if( mxAccessible.is() )
+        mxAccessible->SendSelectionEvent();
 }
 
 void ScCsvControl::AccSendTableUpdateEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn, bool bAllRows )
 {
-    if( mpAccessible )
-        mpAccessible->SendTableUpdateEvent( nFirstColumn, nLastColumn, bAllRows );
+    if( mxAccessible.is() )
+        mxAccessible->SendTableUpdateEvent( nFirstColumn, nLastColumn, bAllRows );
 }
 
 void ScCsvControl::AccSendInsertColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn )
 {
-    if( mpAccessible )
-        mpAccessible->SendInsertColumnEvent( nFirstColumn, nLastColumn );
+    if( mxAccessible.is() )
+        mxAccessible->SendInsertColumnEvent( nFirstColumn, nLastColumn );
 }
 
 void ScCsvControl::AccSendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn )
 {
-    if( mpAccessible )
-        mpAccessible->SendRemoveColumnEvent( nFirstColumn, nLastColumn );
+    if( mxAccessible.is() )
+        mxAccessible->SendRemoveColumnEvent( nFirstColumn, nLastColumn );
 }
 
 // repaint helpers ------------------------------------------------------------
@@ -300,9 +300,8 @@ ScMoveMode ScCsvControl::GetVertDirection( sal_uInt16 nCode, bool bHomeEnd )
 
 ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
 {
-    mpAccessible = ImplCreateAccessible();
-    mxAccessible = mpAccessible;
-    return mxAccessible;
+    mxAccessible = ImplCreateAccessible();
+    return XAccessibleRef(mxAccessible.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

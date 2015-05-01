@@ -225,16 +225,15 @@ protected:
     typedef ::std::vector< OUString >   StringVec;
     typedef ::std::vector< StringVec >  StringVecVec;
 
-    typedef ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > XAccessibleRef;
+    typedef ::css::uno::Reference<
+        ::css::accessibility::XAccessible > XAccessibleRef;
 
 private:
     Link<>                      maCmdHdl;           /// External command handler.
     ScCsvCmd                    maCmd;              /// Data of last command.
     const ScCsvLayoutData&      mrData;             /// Shared layout data.
 
-    XAccessibleRef              mxAccessible;       /// The accessible object of the control.
-    ScAccessibleCsvControl*     mpAccessible;       /// Pointer to the accessible implementation object.
+    rtl::Reference<ScAccessibleCsvControl> mxAccessible; /// Reference to the accessible implementation object.
     bool                        mbValidGfx;         /// Content of virtual devices valid?
 
 public:
