@@ -40,7 +40,6 @@ Module gid_Module_Prg_Wrt_Bin
     Styles = (HIDDEN_ROOT);
     Files = (gid_File_Bin_Cde_Sagenda,gid_File_Bin_Cde_Sfax,gid_File_Bin_Cde_Slabel,
     gid_File_Bin_Cde_Sletter,gid_File_Bin_Cde_Smemo,gid_File_Bin_Cde_Svcard,
-    gid_File_Lib_Hwpreader,
     gid_File_Lib_Swd,
     gid_File_Lib_Swui,
     gid_File_Lib_Msword,

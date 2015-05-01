@@ -121,7 +121,6 @@ my_components = \
     fps_office \
     frm \
     guesslang \
-    hwp \
     i18npool \
     i18nsearch \
     lng \
