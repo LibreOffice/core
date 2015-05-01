@@ -1157,6 +1157,9 @@ Menu MN_GRF_POPUPMENU
         MenuItem { ITEM_SAVE_GRAPHIC };
         SEPARATOR ;
 
+        MenuItem { ITEM_OBJECT_CROP };
+        SEPARATOR ;
+
         MN_ANCHOR
         MN_MOUSE_FRAME_WITH_CONTOUR
         MN_ALIGNMENT_FRAME

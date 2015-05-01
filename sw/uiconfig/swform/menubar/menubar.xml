@@ -278,6 +278,18 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+      <menu:menu menu:id=".uno:FormatImageMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:Crop"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:ExternalEdit"/>
+          <menu:menuitem menu:id=".uno:ChangePicture"/>
+          <menu:menuitem menu:id=".uno:CompressGraphic"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:SaveGraphic"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menuseparator/>
       <menu:menu menu:id=".uno:AnchorMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
