@@ -65,7 +65,7 @@ oslMutex SAL_CALL osl_createMutex()
 
     pthread_mutexattr_destroy(&aMutexAttr);
 
-    SAL_INFO("sal.osl.mutex", "osl_createMutex(): " << pMutex);
+//    SAL_INFO("sal.osl.mutex", "osl_createMutex(): " << pMutex);
 
     return pMutex;
 }
@@ -74,7 +74,7 @@ void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
-    SAL_INFO("sal.osl.mutex", "osl_destroyMutex(" << pMutex << ")");
+//    SAL_INFO("sal.osl.mutex", "osl_destroyMutex(" << pMutex << ")");
 
     if ( pMutex != 0 )
     {
