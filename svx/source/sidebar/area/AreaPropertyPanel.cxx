@@ -202,9 +202,7 @@ void AreaPropertyPanel::Initialize()
     SetupIcons();
 }
 
-
-
-IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
+IMPL_LINK(AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
 
@@ -379,9 +377,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
     return 0;
 }
 
-
-
-IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
+IMPL_LINK(AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
     const XFillStyleItem aXFillStyleItem(eXFS);

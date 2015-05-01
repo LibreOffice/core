@@ -24,6 +24,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class XFillStyleItem;
 class XFillColorItem;
@@ -44,20 +45,24 @@ class ListBox;
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFillToolBoxControl : public SfxToolBoxControl
 {
 private:
-    XFillStyleItem*     mpStyleItem;
-    XFillColorItem*     mpColorItem;
-    XFillGradientItem*  mpGradientItem;
-    XFillHatchItem*     mpHatchItem;
-    XFillBitmapItem*    mpBitmapItem;
+    boost::scoped_ptr< XFillStyleItem >    mpStyleItem;
+    boost::scoped_ptr< XFillColorItem >    mpColorItem;
+    boost::scoped_ptr< XFillGradientItem > mpFillGradientItem;
+    boost::scoped_ptr< XFillHatchItem >    mpHatchItem;
+    boost::scoped_ptr< XFillBitmapItem >   mpBitmapItem;
 
     VclPtr<FillControl>        mpFillControl;
-    VclPtr<SvxFillTypeBox>     mpFillTypeLB;
-    VclPtr<SvxFillAttrBox>     mpFillAttrLB;
+    VclPtr<SvxFillTypeBox>     mpLbFillType;
+    VclPtr<ToolBox>            mpToolBoxColor;
+    VclPtr<SvxFillAttrBox>     mpLbFillAttr;
 
-    css::drawing::FillStyle          meLastXFS;
+    sal_uInt16          meLastXFS;
+    sal_Int32           mnLastPosGradient;
+    sal_Int32           mnLastPosHatch;
+    sal_Int32           mnLastPosBitmap;
 
-    /// bitfield
-    bool                mbUpdate:1;
+    DECL_LINK(SelectFillTypeHdl,ListBox *);
+    DECL_LINK(SelectFillAttrHdl,ListBox *);
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -66,11 +71,9 @@ public:
     virtual ~SvxFillToolBoxControl();
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
-    void Update(const SfxPoolItem* pState);
+    void Update();
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
 };
-
-
 
 class SAL_WARN_UNUSED FillControl : public vcl::Window
 {
@@ -78,25 +81,12 @@ private:
     friend class SvxFillToolBoxControl;
 
     VclPtr<SvxFillTypeBox>     mpLbFillType;
+    VclPtr<ToolBox>            mpToolBoxColor;
     VclPtr<SvxFillAttrBox>     mpLbFillAttr;
     Size                maLogicalFillSize;
     Size                maLogicalAttrSize;
 
-    //
-    sal_uInt16          mnLastFillTypeControlSelectEntryPos;
-    sal_uInt16          mnLastFillAttrControlSelectEntryPos;
-
-    /// bitfield
-    bool                mbFillTypeChanged : 1;
-
-    DECL_LINK(SelectFillTypeHdl,ListBox *);
-    DECL_LINK(SelectFillAttrHdl,ListBox *);
-
     virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
-
-    void InitializeFillStyleAccordingToGivenFillType(css::drawing::FillStyle eFillStyle);
-    void updateLastFillTypeControlSelectEntryPos();
-    void updateLastFillAttrControlSelectEntryPos();
 
 public:
     FillControl(vcl::Window* pParent, WinBits nStyle = 0);
