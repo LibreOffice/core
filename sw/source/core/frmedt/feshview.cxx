@@ -179,6 +179,11 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                 {
                     GetWin()->Invalidate( pOldSelFly->Frm().SVRect() );
                 }
+
+                // Cancel crop mode
+                if ( SDRDRAG_CROP == GetDragMode() )
+                    SetDragMode( SDRDRAG_MOVE );
+
                 bUnmark = true;
             }
         }
@@ -602,6 +607,52 @@ void SwFEShell::SetDragMode( sal_uInt16 eDragMode )
         Imp()->GetDrawView()->SetDragMode( (SdrDragMode)eDragMode );
 }
 
+SdrDragMode SwFEShell::GetDragMode() const
+{
+    SdrDragMode nRet = (SdrDragMode)0;
+    if ( Imp()->HasDrawView() )
+    {
+        nRet = Imp()->GetDrawView()->GetDragMode();
+    }
+    return nRet;
+}
+
+void SwFEShell::StartCropImage()
+{
+    if ( !Imp()->HasDrawView() )
+    {
+        return;
+    }
+    SdrView *pView = Imp()->GetDrawView();
+    if (!pView) return;
+
+    const SdrMarkList &rMarkList = pView->GetMarkedObjectList();
+    if( 0 == rMarkList.GetMarkCount() ) {
+        // No object selected
+        return;
+    }
+
+    // If more than a single SwVirtFlyDrawObj is selected, select only the first SwVirtFlyDrawObj
+    if ( rMarkList.GetMarkCount() > 1 )
+    {
+        for ( sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); ++i )
+        {
+            SdrObject *pTmpObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
+            sal_Bool bForget = pTmpObj->ISA(SwVirtFlyDrawObj);
+            if( bForget )
+            {
+                pView->UnmarkAll();
+                pView->MarkObj( pTmpObj, Imp()->GetPageView(), sal_False, sal_False );
+                break;
+            }
+        }
+    }
+
+    // Activate CROP mode
+    pView->SetEditMode( SDREDITMODE_EDIT );
+    SetDragMode( SDRDRAG_CROP );
+}
+
 long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
 {
     SdrView *pView = Imp()->GetDrawView();
@@ -669,6 +720,7 @@ long SwFEShell::EndDrag( const Point *, bool )
 
         GetDoc()->getIDocumentState().SetModified();
         ::FrameNotify( this, FLY_DRAG );
+
         return 1;
     }
     return 0;
