@@ -1780,8 +1780,15 @@ bool SwFlowFrm::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 {
 //!!!!MoveFtnCntFwd might need to be updated as well.
     SwFtnBossFrm *pOldBoss = m_rThis.FindFtnBossFrm();
-    if ( m_rThis.IsInFtn() )
+    if (m_rThis.IsInFtn())
+    {
+        if (!m_rThis.IsCntntFrm())
+        {
+            SAL_WARN("sw.core", "Tables in footnotes are not truly supported");
+            return false;
+        }
         return static_cast<SwCntntFrm&>(m_rThis).MoveFtnCntFwd( bMakePage, pOldBoss );
+    }
 
     if( !IsFwdMoveAllowed() && !bMoveAlways )
     {
