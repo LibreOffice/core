@@ -1258,16 +1258,15 @@ SwRedlineAcceptPanel::~SwRedlineAcceptPanel()
 void SwRedlineAcceptPanel::dispose()
 {
     delete mpImplDlg;
+    mpImplDlg = NULL;
     PanelLayout::dispose();
 }
 
 void SwRedlineAcceptPanel::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     const SfxSimpleHint *pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pHint && pHint->GetId() == SFX_HINT_DOCCHANGED)
-    {
+    if (mpImplDlg && pHint && pHint->GetId() == SFX_HINT_DOCCHANGED)
         mpImplDlg->Activate();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
