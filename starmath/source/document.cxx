@@ -24,6 +24,7 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/eventcfg.hxx>
 #include <sfx2/event.hxx>
@@ -1226,12 +1227,15 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                     }
                     if( nCount )
                     {
-                        OUString sList;
+                        OUStringBuffer aBuf;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            sList += (pTmpUndoMgr->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) + "\n";
+                        {
+                            aBuf.append((pTmpUndoMgr->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ));
+                            aBuf.append('\n');
+                        }
 
                         SfxStringListItem aItem( nWh );
-                        aItem.SetString( sList );
+                        aItem.SetString( aBuf.makeStringAndClear() );
                         rSet.Put( aItem );
                     }
                 }
