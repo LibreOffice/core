@@ -36,6 +36,7 @@ Module gid_Module_Langpack_Basis_Template
              gid_File_Share_Config_Sofficecfg_uiconfig_fps_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_sabpilot_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_scalc_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_scanner_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_schart_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_sdraw_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_sfx_Lang,
