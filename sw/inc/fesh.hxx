@@ -473,6 +473,12 @@ public:
     /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
     void SetDragMode( sal_uInt16 eSdrDragMode );
 
+    // Get the current drag mode
+    SdrDragMode GetDragMode() const;
+
+    // Start cropping the selected image
+    void StartCropImage();
+
     size_t IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
     bool IsObjSelected( const SdrObject& rObj ) const;
     bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;

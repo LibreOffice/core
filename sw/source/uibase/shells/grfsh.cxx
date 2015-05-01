@@ -475,6 +475,15 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         }
         break;
 
+        case SID_OBJECT_CROP:
+        {
+            GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
+            if (0 != pGraphicObject  && SDRDRAG_CROP != rSh.GetDragMode()) {
+                rSh.StartCropImage();
+            }
+        }
+        break;
+
         default:
             OSL_ENSURE(false, "wrong dispatcher");
             return;
@@ -800,6 +809,14 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                         bDisable = eGraphicType != GRAPHIC_BITMAP;
                     }
                 }
+            }
+            break;
+
+        case SID_OBJECT_CROP:
+            {
+                bDisable = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+                if( rSh.GetGraphicType() == GRAPHIC_NONE )
+                    bDisable = true;
             }
             break;
 
