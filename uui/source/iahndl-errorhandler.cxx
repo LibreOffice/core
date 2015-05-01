@@ -101,6 +101,9 @@ executeErrorDialog(
     }
 
     sal_uInt16 aResult = xBox->Execute();
+
+    xBox.disposeAndClear();
+
     switch( aResult )
     {
     case RET_OK:
