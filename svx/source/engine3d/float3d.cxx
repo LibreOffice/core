@@ -98,6 +98,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , pConvertTo3DItem(0)
     , pConvertTo3DLatheItem(0)
     , mpImpl(new Svx3DWinImpl())
+    , ePoolUnit(SFX_MAPUNIT_MM)
     , mpRemember2DAttributes(NULL)
     , bOnly3DChanged(false)
 {
