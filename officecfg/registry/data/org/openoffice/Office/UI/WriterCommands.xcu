@@ -765,6 +765,22 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ChangePicture" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Change Image...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CompressGraphic" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Co~mpress Image...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:NewHtmlDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Create ~HTML Document</value>
