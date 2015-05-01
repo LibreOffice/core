@@ -20,12 +20,9 @@
 #define INCLUDED_SC_INC_CHGVISET_HXX
 
 #include <tools/datetime.hxx>
+#include <svx/ctredlin.hxx>
 #include "rangelst.hxx"
 #include "scdllapi.h"
-
-enum ScChgsDateMode{    SCDM_DATE_BEFORE=0,SCDM_DATE_SINCE=1,SCDM_DATE_EQUAL=2,
-                        SCDM_DATE_NOTEQUAL=3,SCDM_DATE_BETWEEN=4, SCDM_DATE_SAVE=5,
-                        SCDM_NO_DATEMODE=6};
 
 namespace utl {
     class TextSearch;
@@ -43,7 +40,7 @@ private:
     OUString            aAuthorToShow;
     OUString            aComment;
     ScRangeList         aRangeList;
-    ScChgsDateMode      eDateMode;
+    SvxRedlinDateMode   eDateMode;
     bool                bShowIt;
     bool                bIsDate;
     bool                bIsAuthor;
@@ -62,7 +59,7 @@ public:
         : pCommentSearcher(NULL)
         , aFirstDateTime(DateTime::EMPTY)
         , aLastDateTime(DateTime::EMPTY)
-        , eDateMode(SCDM_DATE_BEFORE)
+        , eDateMode(SvxRedlinDateMode::BEFORE)
         , bShowIt(false)
         , bIsDate(false)
         , bIsAuthor(false)
@@ -87,8 +84,8 @@ public:
     bool                HasDate() const {return bIsDate;}
     void                SetHasDate(bool nFlag) {bIsDate=nFlag;}
 
-    void                SetTheDateMode(ScChgsDateMode eDatMod){ eDateMode=eDatMod; }
-    ScChgsDateMode      GetTheDateMode() const { return eDateMode; }
+    void                SetTheDateMode(SvxRedlinDateMode eDatMod){ eDateMode=eDatMod; }
+    SvxRedlinDateMode   GetTheDateMode() const { return eDateMode; }
 
     void                SetTheFirstDateTime(const DateTime& aDateTime) {aFirstDateTime=aDateTime;}
     const DateTime&     GetTheFirstDateTime()const {return aFirstDateTime;}

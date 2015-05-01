@@ -223,7 +223,7 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
     {
         aChangeViewSet.SetShowChanges(m_pHighlightBox->IsChecked());
         aChangeViewSet.SetHasDate(m_pFilterCtr->IsDate());
-        ScChgsDateMode eMode = (ScChgsDateMode) m_pFilterCtr->GetDateMode();
+        SvxRedlinDateMode eMode = m_pFilterCtr->GetDateMode();
         aChangeViewSet.SetTheDateMode( eMode );
         Date aFirstDate( m_pFilterCtr->GetFirstDate() );
         tools::Time aFirstTime( m_pFilterCtr->GetFirstTime() );

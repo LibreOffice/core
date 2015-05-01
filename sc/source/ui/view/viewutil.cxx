@@ -178,35 +178,35 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         if ( !rSettings.GetTheRangeList().Intersects( rAction.GetBigRange().MakeRange() ) )
             return false;
 
-    if ( rSettings.HasDate() && rSettings.GetTheDateMode() != SCDM_NO_DATEMODE )
+    if (rSettings.HasDate() && rSettings.GetTheDateMode() != SvxRedlinDateMode::NONE)
     {
         DateTime aDateTime = rAction.GetDateTime();
         const DateTime& rFirst = rSettings.GetTheFirstDateTime();
         const DateTime& rLast  = rSettings.GetTheLastDateTime();
         switch ( rSettings.GetTheDateMode() )
         {   // corresponds with ScHighlightChgDlg::OKBtnHdl
-            case SCDM_DATE_BEFORE:
+            case SvxRedlinDateMode::BEFORE:
                 if ( aDateTime > rFirst )
                     return false;
                 break;
 
-            case SCDM_DATE_SINCE:
+            case SvxRedlinDateMode::SINCE:
                 if ( aDateTime < rFirst )
                     return false;
                 break;
 
-            case SCDM_DATE_EQUAL:
-            case SCDM_DATE_BETWEEN:
+            case SvxRedlinDateMode::EQUAL:
+            case SvxRedlinDateMode::BETWEEN:
                 if ( aDateTime < rFirst || aDateTime > rLast )
                     return false;
                 break;
 
-            case SCDM_DATE_NOTEQUAL:
+            case SvxRedlinDateMode::NOTEQUAL:
                 if ( aDateTime >= rFirst && aDateTime <= rLast )
                     return false;
                 break;
 
-            case SCDM_DATE_SAVE:
+            case SvxRedlinDateMode::SAVE:
                 {
                 ScChangeTrack* pTrack = rDocument.GetChangeTrack();
                 if ( !pTrack || pTrack->GetLastSavedActionNumber() >=

@@ -2476,7 +2476,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                 else if (sName == "ShowChangesByDatetimeMode")
                 {
                     if (rChangeProps[i].Value >>= nTemp16)
-                        pViewSettings->SetTheDateMode(ScChgsDateMode(nTemp16));
+                        pViewSettings->SetTheDateMode(static_cast<SvxRedlinDateMode>(nTemp16));
                 }
                 else if (sName == "ShowChangesByDatetimeFirstDatetime")
                 {

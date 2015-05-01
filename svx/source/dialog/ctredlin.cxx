@@ -215,6 +215,8 @@ void SvxRedlinTable::UpdateFilterTest()
                                 aDaTiFilterFirst=aDaTiFirst;
                                 aDaTiFilterLast=aDaTiLast;
                                 break;
+        case SvxRedlinDateMode::NONE:
+                                break;
     }
 }
 
@@ -667,6 +669,8 @@ void SvxTPFilter::ShowDateFields(SvxRedlinDateMode nKind)
         case SvxRedlinDateMode::SAVE:
                 EnableDateLine1(false);
                 EnableDateLine2(false);
+                break;
+        case SvxRedlinDateMode::NONE:
                 break;
     }
 }

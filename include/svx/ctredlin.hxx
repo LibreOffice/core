@@ -38,7 +38,7 @@
 
 enum class SvxRedlinDateMode
 {
-    BEFORE, SINCE, EQUAL, NOTEQUAL, BETWEEN, SAVE
+    BEFORE, SINCE, EQUAL, NOTEQUAL, BETWEEN, SAVE, NONE
 };
 
 /// Struct for sorting data.
