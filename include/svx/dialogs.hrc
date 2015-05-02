@@ -227,6 +227,7 @@
 #define RID_SVXSTR_CALC_STYLES              (RID_SVX_START +  85)
 #define RID_SVXSTR_SEARCH_NOT_FOUND         (RID_SVX_START +  88)
 #define RID_SVXSTR_QUERY_EXIT_RECOVERY      (RID_SVX_START +  89)
+#define RID_SVXSTR_SEARCH_START             (RID_SVX_START +  90)
 // ResIds for the PageDialog
 
 // Strings of the ToolBox-Controls from tbcontrl.cxx

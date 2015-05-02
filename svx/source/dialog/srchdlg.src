@@ -54,5 +54,9 @@ String RID_SVXSTR_SEARCH_NOT_FOUND
 {
     Text [ en-US ] = "Search key not found" ;
 };
+String RID_SVXSTR_SEARCH_START
+{
+    Text [ en-US ] = "Reached the beginning of the document" ;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

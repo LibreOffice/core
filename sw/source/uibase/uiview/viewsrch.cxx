@@ -544,7 +544,12 @@ bool SwView::SearchAndWrap(bool bApi)
     pWait.reset();
 #if HAVE_FEATURE_DESKTOP
     if (m_bFound)
-        SvxSearchDialogWrapper::SetSearchLabel(SL_End);
+    {
+        if (!bSrchBkwrd)
+            SvxSearchDialogWrapper::SetSearchLabel(SL_End);
+        else
+            SvxSearchDialogWrapper::SetSearchLabel(SL_Start);
+    }
     else if(!bApi)
         SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
 #endif
