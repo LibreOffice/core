@@ -239,6 +239,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
     }
     if (constructor.isEmpty()) {
         rtl::OUString sym;
+        SAL_INFO("cppuhelper.shlib", "prefix=" << prefix << " implementation=" << implementation << " uri=" << uri);
         if (prefix == "direct") {
             sym = implementation.replace('.', '_') + "_" COMPONENT_GETFACTORY;
         } else if (!prefix.isEmpty()) {
@@ -262,6 +263,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             reinterpret_cast<component_getFactoryFunc>(fp), uri, implementation,
             serviceManager);
     } else {
+        SAL_INFO("cppuhelper.shlib", "constructor=" << constructor);
         oslGenericFunction fp = mod.getFunctionSymbol(constructor);
         if (fp == 0) {
             throw css::loader::CannotActivateFactoryException(
