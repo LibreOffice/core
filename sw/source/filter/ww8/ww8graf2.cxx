@@ -257,10 +257,10 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
         case 99: // TIFF-File ( nicht embeddet )
             pSt->Seek(nPosFc);
             // Name als P-String einlesen
-            rFileName = read_uInt8_PascalString(*pSt, eStructCharSet);
+            rFileName = read_uInt8_PascalString(*pSt, m_eStructCharSet);
             if (!rFileName.isEmpty())
                 rFileName = URIHelper::SmartRel2Abs(
-                    INetURLObject(sBaseURL), rFileName,
+                    INetURLObject(m_sBaseURL), rFileName,
                     URIHelper::GetMaybeFileHdl());
             *pbInDoc = false;       // Datei anschliessend nicht loeschen
             return !rFileName.isEmpty();        // Einlesen OK
@@ -273,7 +273,7 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
     if (!bOk || pSt->GetError() || !aWMF.GetActionSize())
         return false;
 
-    if (pWwFib->envr != 1) // !MAC als Creator
+    if (m_pWwFib->envr != 1) // !MAC als Creator
     {
         rpGraphic = new Graphic( aWMF );
         return true;
@@ -355,23 +355,23 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
 
     // Vertikale Verschiebung durch Zeilenabstand
     sal_Int32 nNetHeight = nHeight + rPD.nCT + rPD.nCB;
-    if( pSFlyPara->nLineSpace && pSFlyPara->nLineSpace > nNetHeight )
-        pSFlyPara->nYPos =
-            (sal_uInt16)( pSFlyPara->nYPos + pSFlyPara->nLineSpace - nNetHeight );
+    if( m_pSFlyPara->nLineSpace && m_pSFlyPara->nLineSpace > nNetHeight )
+        m_pSFlyPara->nYPos =
+            (sal_uInt16)( m_pSFlyPara->nYPos + m_pSFlyPara->nLineSpace - nNetHeight );
 
-    WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, true);
+    WW8FlySet aFlySet(*this, m_pWFlyPara, m_pSFlyPara, true);
 
-    SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
-    aAnchor.SetAnchor(pPaM->GetPoint());
+    SwFmtAnchor aAnchor(m_pSFlyPara->eAnchor);
+    aAnchor.SetAnchor(m_pPaM->GetPoint());
     aFlySet.Put(aAnchor);
 
     aFlySet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
 
-    SwFlyFrmFmt* pFlyFmt = rDoc.getIDocumentContentOperations().Insert(*pPaM, rFileName, OUString(), pGraph,
+    SwFlyFrmFmt* pFlyFmt = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, rFileName, OUString(), pGraph,
         &aFlySet, &rGrfSet, NULL);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
-    if (rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
+    if (m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
         (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()))
     {
         pFlyFmt->MakeFrms();
@@ -384,24 +384,24 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     const WW8PicDesc& rPD, const Graphic* pGraph, const OUString& rFileName,
     const SfxItemSet& rGrfSet)
 {
-    WW8FlySet aFlySet(*this, pPaM, rPic, rPD.nWidth, rPD.nHeight);
+    WW8FlySet aFlySet(*this, m_pPaM, rPic, rPD.nWidth, rPD.nHeight);
 
     SwFrmFmt* pFlyFmt = 0;
 
-    if (rFileName.isEmpty() && nObjLocFc)      // dann sollte ists ein OLE-Object
+    if (rFileName.isEmpty() && m_nObjLocFc)      // dann sollte ists ein OLE-Object
         pFlyFmt = ImportOle(pGraph, &aFlySet, &rGrfSet);
 
     if( !pFlyFmt )                          // dann eben als Graphic
     {
 
-        pFlyFmt = rDoc.getIDocumentContentOperations().Insert( *pPaM, rFileName, OUString(), pGraph, &aFlySet,
+        pFlyFmt = m_rDoc.getIDocumentContentOperations().Insert( *m_pPaM, rFileName, OUString(), pGraph, &aFlySet,
             &rGrfSet, NULL);
     }
 
     // Grafik im Rahmen ? ok, Rahmen auf Bildgroesse vergroessern
     //  ( nur wenn Auto-Breite )
-    if( pSFlyPara )
-        pSFlyPara->BoxUpWidth( rPD.nWidth );
+    if( m_pSFlyPara )
+        m_pSFlyPara->BoxUpWidth( rPD.nWidth );
     return pFlyFmt;
 }
 
@@ -425,14 +425,14 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
 
     WW8PicDesc aPD( rPic );
 
-    SwAttrSet aGrfSet( rDoc.GetAttrPool(), RES_GRFATR_BEGIN, RES_GRFATR_END-1);
+    SwAttrSet aGrfSet( m_rDoc.GetAttrPool(), RES_GRFATR_BEGIN, RES_GRFATR_END-1);
     if( aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB )
     {
         SwCropGrf aCrop( aPD.nCL, aPD.nCR, aPD.nCT, aPD.nCB) ;
         aGrfSet.Put( aCrop );
     }
 
-    if( pWFlyPara && pWFlyPara->bGrafApo )
+    if( m_pWFlyPara && m_pWFlyPara->bGrafApo )
         pRet = MakeGrafNotInCntnt(aPD,pGraph,aFileName,aGrfSet);
     else
         pRet = MakeGrafInCntnt(rPic,aPD,pGraph,aFileName,aGrfSet);
@@ -460,14 +460,14 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 {
     SwFrmFmt* pRet = 0;
     if (
-        ((pStrm == pDataStream ) && !nPicLocFc) ||
-        (nIniFlags & WW8FL_NO_GRAF)
+        ((m_pStrm == m_pDataStream ) && !m_nPicLocFc) ||
+        (m_nIniFlags & WW8FL_NO_GRAF)
        )
     {
         return 0;
     }
 
-    ::SetProgressState(nProgress, mpDocShell);         // Update
+    ::SetProgressState(m_nProgress, m_pDocShell);         // Update
 
     GrafikCtor();
 
@@ -477,36 +477,36 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
         Wir mappen ansonsten die Variable pDataStream auf pStream.
     */
 
-    sal_uLong nOldPos = pDataStream->Tell();
+    sal_uLong nOldPos = m_pDataStream->Tell();
     WW8_PIC aPic;
-    pDataStream->Seek( nPicLocFc );
-    PicRead( pDataStream, &aPic, bVer67);
+    m_pDataStream->Seek( m_nPicLocFc );
+    PicRead( m_pDataStream, &aPic, m_bVer67);
 
         // Plausibilitaetstest ist noetig, da z.B. bei CheckBoxen im
         // Feld-Result ein WMF-aehnliches Struct vorkommt.
-    if ((aPic.lcb >= 58) && !pDataStream->GetError())
+    if ((aPic.lcb >= 58) && !m_pDataStream->GetError())
     {
-        if( pFlyFmtOfJustInsertedGraphic )
+        if( m_pFlyFmtOfJustInsertedGraphic )
         {
             // Soeben haben wir einen Grafik-Link ins Doc inserted.
             // Wir muessen ihn jetzt noch Positioniern und Skalieren.
 
             WW8PicDesc aPD( aPic );
 
-            WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth, aPD.nHeight );
+            WW8FlySet aFlySet( *this, m_pPaM, aPic, aPD.nWidth, aPD.nHeight );
 
             // the correct anchor is set in Read_F_IncludePicture and the current PaM point
             // is after the position if it is anchored in content; because this anchor add
             // a character into the textnode. #i2806#
             if (FLY_AS_CHAR ==
-                pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
+                m_pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
             {
                 aFlySet.ClearItem( RES_ANCHOR );
             }
 
-            pFlyFmtOfJustInsertedGraphic->SetFmtAttr( aFlySet );
+            m_pFlyFmtOfJustInsertedGraphic->SetFmtAttr( aFlySet );
 
-            pFlyFmtOfJustInsertedGraphic = 0;
+            m_pFlyFmtOfJustInsertedGraphic = 0;
         }
         else if((0x64 == aPic.MFP.mm) || (0x66 == aPic.MFP.mm))
         {
@@ -514,8 +514,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             SdrObject* pObject = 0;
 
             WW8PicDesc aPD( aPic );
-            if (!pMSDffManager)
-                pMSDffManager = new SwMSDffManager(*this, mbSkipImages);
+            if (!m_pMSDffManager)
+                m_pMSDffManager = new SwMSDffManager(*this, m_bSkipImages);
             /*
             ##835##
             Disable use of main stream as fallback stream for inline direct
@@ -524,26 +524,26 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             incorrect fallback graphic being found if other escher graphics
             have been inserted in the document
             */
-            pMSDffManager->DisableFallbackStream();
-            if( !pMSDffManager->GetModel() )
-                pMSDffManager->SetModel(pDrawModel, 1440);
+            m_pMSDffManager->DisableFallbackStream();
+            if( !m_pMSDffManager->GetModel() )
+                m_pMSDffManager->SetModel(m_pDrawModel, 1440);
 
             if (0x66 == aPic.MFP.mm)
             {
                 //These ones have names prepended
                 sal_uInt8 nNameLen=0;
-                pDataStream->ReadUChar( nNameLen );
-                pDataStream->SeekRel( nNameLen );
+                m_pDataStream->ReadUChar( nNameLen );
+                m_pDataStream->SeekRel( nNameLen );
             }
 
             Rectangle aChildRect;
             Rectangle aClientRect( 0,0, aPD.nWidth,  aPD.nHeight);
             SvxMSDffImportData aData( aClientRect );
-            pObject = pMSDffManager->ImportObj(*pDataStream, &aData, aClientRect, aChildRect );
+            pObject = m_pMSDffManager->ImportObj(*m_pDataStream, &aData, aClientRect, aChildRect );
             if (pObject)
             {
                 // fuer den Rahmen
-                SfxItemSet aAttrSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
+                SfxItemSet aAttrSet( m_rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
                     RES_FRMATR_END-1 );
 
                 SvxMSDffImportRec const*const pRecord = (1 == aData.size())
@@ -562,9 +562,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     if( relativeWidth != 0 )
                     {
                         aPic.mx = msword_cast<sal_uInt16>(
-                            maSectionManager.GetPageWidth() -
-                            maSectionManager.GetPageRight() -
-                            maSectionManager.GetPageLeft()) * relativeWidth / 1000;
+                            m_aSectionManager.GetPageWidth() -
+                            m_aSectionManager.GetPageRight() -
+                            m_aSectionManager.GetPageLeft()) * relativeWidth / 1000;
                         aPD = WW8PicDesc( aPic );
                         // This SetSnapRect() call adjusts the size of the object itself,
                         // no idea why it's this call (or even what the call actually does),
@@ -575,19 +575,19 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     //A graphic of this type in this location is always
                     //inline, and uses the pic in the same mould as ww6
                     //graphics.
-                    if (pWFlyPara && pWFlyPara->bGrafApo)
+                    if (m_pWFlyPara && m_pWFlyPara->bGrafApo)
                     {
-                        WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, true);
+                        WW8FlySet aFlySet(*this, m_pWFlyPara, m_pSFlyPara, true);
 
-                        SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
-                        aAnchor.SetAnchor(pPaM->GetPoint());
+                        SwFmtAnchor aAnchor(m_pSFlyPara->eAnchor);
+                        aAnchor.SetAnchor(m_pPaM->GetPoint());
                         aFlySet.Put(aAnchor);
 
                         aAttrSet.Put(aFlySet);
                     }
                     else
                     {
-                        WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth,
+                        WW8FlySet aFlySet( *this, m_pPaM, aPic, aPD.nWidth,
                             aPD.nHeight );
 
                         aAttrSet.Put(aFlySet);
@@ -606,7 +606,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 }
 
                 // for the Grafik
-                SfxItemSet aGrSet( rDoc.GetAttrPool(), RES_GRFATR_BEGIN,
+                SfxItemSet aGrSet( m_rDoc.GetAttrPool(), RES_GRFATR_BEGIN,
                     RES_GRFATR_END-1 );
 
                 if( aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB )
@@ -651,17 +651,17 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                             // Nun den Link bzw. die Grafik ins Doc stopfen
                             const Graphic& rGraph = pGraphObject->GetGraphic();
 
-                            if (nObjLocFc)  // is it a OLE-Object?
+                            if (m_nObjLocFc)  // is it a OLE-Object?
                                 pRet = ImportOle(&rGraph, &aAttrSet, &aGrSet, pObject->GetBLIPSizeRectangle());
 
                             if (!pRet)
                             {
-                                pRet = rDoc.getIDocumentContentOperations().Insert(*pPaM, OUString(), OUString(),
+                                pRet = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, OUString(), OUString(),
                                     &rGraph, &aAttrSet, &aGrSet, NULL );
                             }
                         }
                         else
-                            pRet = rDoc.getIDocumentContentOperations().InsertDrawObj(*pPaM, *pObject, aAttrSet );
+                            pRet = m_rDoc.getIDocumentContentOperations().InsertDrawObj(*m_pPaM, *pObject, aAttrSet );
                     }
                 }
 
@@ -683,37 +683,37 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     {
                         if (pOurNewObject != pObject)
                         {
-                            pMSDffManager->ExchangeInShapeOrder( pObject, 0, 0,
+                            m_pMSDffManager->ExchangeInShapeOrder( pObject, 0, 0,
                                 pOurNewObject );
 
                             // altes SdrGrafObj aus der Page loeschen und
                             // zerstoeren
                             if (pObject->GetPage())
-                                pDrawPg->RemoveObject(pObject->GetOrdNum());
+                                m_pDrawPg->RemoveObject(pObject->GetOrdNum());
                             SdrObject::Free( pObject );
                         }
                     }
                     else
-                        pMSDffManager->RemoveFromShapeOrder( pObject );
+                        m_pMSDffManager->RemoveFromShapeOrder( pObject );
                 }
                 else
-                    pMSDffManager->RemoveFromShapeOrder( pObject );
+                    m_pMSDffManager->RemoveFromShapeOrder( pObject );
 
                 // auch das ggfs.  Page loeschen, falls nicht gruppiert,
                 if (pTextObj && !bTextObjWasGrouped && pTextObj->GetPage())
-                    pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
+                    m_pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
             }
-            pMSDffManager->EnableFallbackStream();
+            m_pMSDffManager->EnableFallbackStream();
         }
         else if (aPic.lcb >= 58)
-            pRet = ImportGraf1(aPic, pDataStream, nPicLocFc);
+            pRet = ImportGraf1(aPic, m_pDataStream, m_nPicLocFc);
     }
-    pDataStream->Seek( nOldPos );
+    m_pDataStream->Seek( nOldPos );
 
     if (pRet)
     {
         SdrObject* pOurNewObject = CreateContactObject(pRet);
-        pWWZOrder->InsertTextLayerObject(pOurNewObject);
+        m_pWWZOrder->InsertTextLayerObject(pOurNewObject);
     }
 
     return AddAutoAnchor(pRet);

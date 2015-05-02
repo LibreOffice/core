@@ -94,9 +94,9 @@ using namespace sw::mark;
 //cmc, OCX i.e. word 97 form controls
 eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, OUString& )
 {
-    if( bObj && nPicLocFc )
-        nObjLocFc = nPicLocFc;
-    bEmbeddObj = true;
+    if( m_bObj && m_nPicLocFc )
+        m_nObjLocFc = m_nPicLocFc;
+    m_bEmbeddObj = true;
     return FLD_TEXT;
 }
 
@@ -127,7 +127,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         aFormula.msDefault = GetFieldResult(pF);
 
         SwInputField aFld(
-            static_cast<SwInputFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_INPUTFLD )),
+            static_cast<SwInputFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_INPUTFLD )),
             aFormula.msDefault,
             aFormula.msTitle,
             INP_TXT,
@@ -135,12 +135,12 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         aFld.SetHelp(aFormula.msHelp);
         aFld.SetToolTip(aFormula.msToolTip);
 
-        rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld));
+        m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFmtFld(aFld));
         return FLD_OK;
     }
     else
     {
-        WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+        WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
         OUString aBookmarkName;
         if (pB!=NULL) {
             WW8_CP currentCP=pF->nSCode;
@@ -162,12 +162,12 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         }
 
         if (!aBookmarkName.isEmpty()) {
-            maFieldStack.back().SetBookmarkName(aBookmarkName);
-            maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
-            maFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.msToolTip));
-            maFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.msTitle));
+            m_aFieldStack.back().SetBookmarkName(aBookmarkName);
+            m_aFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
+            m_aFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.msToolTip));
+            m_aFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.msTitle));
             if (aFormula.mnMaxLen)
-                maFieldStack.back().getParameters()["MaxLength"] = uno::makeAny(OUString::number(aFormula.mnMaxLen));
+                m_aFieldStack.back().getParameters()["MaxLength"] = uno::makeAny(OUString::number(aFormula.mnMaxLen));
         }
         return FLD_TEXT;
     }
@@ -177,8 +177,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
 {
     WW8FormulaCheckBox aFormula(*this);
 
-    if (!pFormImpl)
-        pFormImpl = new SwMSConvertControls(mpDocShell, pPaM);
+    if (!m_pFormImpl)
+        m_pFormImpl = new SwMSConvertControls(m_pDocShell, m_pPaM);
 
     if (rStr[pF->nLCode-1]==0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
@@ -187,12 +187,12 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
 
     if (!bUseEnhFields)
     {
-        pFormImpl->InsertFormula(aFormula);
+        m_pFormImpl->InsertFormula(aFormula);
         return FLD_OK;
     }
 
     OUString aBookmarkName;
-    WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+    WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
     if (pB!=NULL) {
         WW8_CP currentCP=pF->nSCode;
         WW8_CP currentLen=pF->nLen;
@@ -214,9 +214,9 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
 
     if (!aBookmarkName.isEmpty())
     {
-        IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+        IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
         IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
-                *pPaM, aBookmarkName, ODF_FORMCHECKBOX ) );
+                *m_pPaM, aBookmarkName, ODF_FORMCHECKBOX ) );
         OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
         if (pFieldmark!=NULL) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
@@ -244,7 +244,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 
     if (!bUseEnhFields)
     {
-        SwDropDownField aFld(static_cast<SwDropDownFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_DROPDOWN)));
+        SwDropDownField aFld(static_cast<SwDropDownFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_DROPDOWN)));
 
         aFld.SetName(aFormula.msTitle);
         aFld.SetHelp(aFormula.msHelp);
@@ -257,14 +257,14 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
         }
 
-        rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld));
+        m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFmtFld(aFld));
         return FLD_OK;
     }
     else
     {
         // TODO: review me
         OUString aBookmarkName;
-        WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+        WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
         if (pB!=NULL)
         {
             WW8_CP currentCP=pF->nSCode;
@@ -286,9 +286,9 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 
         if (!aBookmarkName.isEmpty())
         {
-            IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+            IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
-                    pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName, ODF_FORMDROPDOWN ) );
+                    pMarksAccess->makeNoTextFieldBookmark( *m_pPaM, aBookmarkName, ODF_FORMDROPDOWN ) );
             OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != NULL )
             {
@@ -307,15 +307,15 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 
 eF_ResT SwWW8ImplReader::Read_F_HTMLControl(WW8FieldDesc*, OUString&)
 {
-    if( bObj && nPicLocFc )
-        nObjLocFc = nPicLocFc;
-    bEmbeddObj = true;
+    if( m_bObj && m_nPicLocFc )
+        m_nObjLocFc = m_nPicLocFc;
+    m_bEmbeddObj = true;
     return FLD_TEXT;
 }
 
 void SwWW8ImplReader::DeleteFormImpl()
 {
-    delete pFormImpl, pFormImpl = 0;
+    delete m_pFormImpl, m_pFormImpl = 0;
 }
 
 // Hilfs-Deklarationen
@@ -1683,8 +1683,8 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     bool bRes = true;
     if( rStyleInfo.pFmt && rStyleInfo.bColl )
     {
-        bRes = rDoc.SetTxtFmtColl(rRg, static_cast<SwTxtFmtColl*>(rStyleInfo.pFmt));
-        SwTxtNode* pTxtNode = pPaM->GetNode().GetTxtNode();
+        bRes = m_rDoc.SetTxtFmtColl(rRg, static_cast<SwTxtFmtColl*>(rStyleInfo.pFmt));
+        SwTxtNode* pTxtNode = m_pPaM->GetNode().GetTxtNode();
         OSL_ENSURE( pTxtNode, "No Text-Node at PaM-Position" );
         if ( !pTxtNode )
         {
@@ -1748,15 +1748,15 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
     sal_uInt8 nActLevel)
 {
-    if (nStyle >= vColl.size())
+    if (nStyle >= m_vColl.size())
         return;
 
-    SwWW8StyInf &rStyleInf = vColl[nStyle];
+    SwWW8StyInf &rStyleInf = m_vColl[nStyle];
     if (rStyleInf.bValid)
     {
-        OSL_ENSURE(pAktColl, "Cannot be called outside of style import");
+        OSL_ENSURE(m_pAktColl, "Cannot be called outside of style import");
         // Phase 1: Nummerierungsattribute beim Einlesen einer StyleDef
-        if( pAktColl )
+        if( m_pAktColl )
         {
             // jetzt nur die Parameter vermerken: die tatsaechliche Liste wird
             // spaeter drangehaengt, wenn die Listendefinitionen gelesen sind...
@@ -1775,7 +1775,7 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
                 {
                     std::vector<sal_uInt8> aParaSprms;
                     SwNumRule *pNmRule =
-                        pLstManager->GetNumRuleForActivation(nActLFO,
+                        m_pLstManager->GetNumRuleForActivation(nActLFO,
                             nActLevel, aParaSprms);
                     if (pNmRule)
                         UseListIndent(rStyleInf, pNmRule->Get(nActLevel));
@@ -1788,10 +1788,10 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
 void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
 {
 
-    if (nStyle >= vColl.size())
+    if (nStyle >= m_vColl.size())
         return;
 
-    SwWW8StyInf &rStyleInf = vColl[nStyle];
+    SwWW8StyInf &rStyleInf = m_vColl[nStyle];
     if (rStyleInf.bValid && rStyleInf.pFmt)
     {
         //Save old pre-list modified indent, which are the word indent values
@@ -1808,7 +1808,7 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
            )
         {
             std::vector<sal_uInt8> aParaSprms;
-            pNmRule = pLstManager->GetNumRuleForActivation(nLFO, nLevel,
+            pNmRule = m_pLstManager->GetNumRuleForActivation(nLFO, nLevel,
                 aParaSprms);
 
             if (pNmRule != NULL)
@@ -1841,22 +1841,22 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
     // stellt sie NUR den Level ein, im Vertrauen darauf, dass am STYLE eine
     // NumRule haengt - dies wird NICHT ueberprueft !!!
 
-    if (pLstManager) // sind die Listendeklarationen gelesen?
+    if (m_pLstManager) // sind die Listendeklarationen gelesen?
     {
-        SwTxtNode* pTxtNd = pPaM->GetNode().GetTxtNode();
+        SwTxtNode* pTxtNd = m_pPaM->GetNode().GetTxtNode();
         OSL_ENSURE(pTxtNd, "No Text-Node at PaM-Position");
         if (!pTxtNd)
             return;
 
         std::vector<sal_uInt8> aParaSprms;
         const SwNumRule* pRule = bSetAttr ?
-            pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
+            m_pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
                 aParaSprms, pTxtNd) : 0;
 
         if (pRule != NULL || !bSetAttr)
         {
             if (bSetAttr && pTxtNd->GetNumRule() != pRule
-                && pTxtNd->GetNumRule() != rDoc.GetOutlineNumRule())
+                && pTxtNd->GetNumRule() != m_rDoc.GetOutlineNumRule())
             {
                 pTxtNd->SetAttr(SwNumRuleItem(pRule->GetName()));
             }
@@ -1886,7 +1886,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
             if (bApplyListLevelIndentDirectlyAtPara)
             {
-                SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
+                SfxItemSet aListIndent(m_rDoc.GetAttrPool(), RES_LR_SPACE,
                         RES_LR_SPACE);
                 const SvxLRSpaceItem *pItem = static_cast<const SvxLRSpaceItem*>(
                     GetFmtAttr(RES_LR_SPACE));
@@ -1901,7 +1901,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                 */
                 if (short nLen = static_cast< short >(aParaSprms.size()))
                 {
-                    SfxItemSet* pOldAktItemSet = pAktItemSet;
+                    SfxItemSet* pOldAktItemSet = m_pAktItemSet;
                     SetAktItemSet(&aListIndent);
 
                     sal_uInt8* pSprms1  = &aParaSprms[0];
@@ -1920,8 +1920,8 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                 OSL_ENSURE(pLR, "Impossible");
                 if (pLR)
                 {
-                    pCtrlStck->NewAttr(*pPaM->GetPoint(), *pLR);
-                    pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
+                    m_pCtrlStck->NewAttr(*m_pPaM->GetPoint(), *pLR);
+                    m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
                 }
             }
         }
@@ -1931,8 +1931,8 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 void SwWW8ImplReader::RegisterNumFmt(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
 {
     // sind wir erst beim Einlesen der StyleDef ?
-    if (pAktColl)
-        SetStylesList( nAktColl , nActLFO, nActLevel);
+    if (m_pAktColl)
+        SetStylesList( m_nAktColl , nActLFO, nActLevel);
     else
         RegisterNumFmtOnTxtNode(nActLFO, nActLevel);
 }
@@ -1940,15 +1940,15 @@ void SwWW8ImplReader::RegisterNumFmt(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
 void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
     short nLen)
 {
-    if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+    if (m_pPlcxMan && m_pPlcxMan->GetDoingDrawTextBox())
         return;
 
     if( nLen < 0 )
     {
         // the actual level is finished, what should we do ?
-        nListLevel = WW8ListManager::nMaxLevel;
-        if (pStyles && !bVer67)
-            pStyles->nWwNumLevel = 0;
+        m_nListLevel = WW8ListManager::nMaxLevel;
+        if (m_pStyles && !m_bVer67)
+            m_pStyles->nWwNumLevel = 0;
     }
     else
     {
@@ -1957,9 +1957,9 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
             return;
 
         // die Streamdaten sind hier Null basiert, so wie wir es brauchen
-        nListLevel = *pData;
+        m_nListLevel = *pData;
 
-        if (pStyles && !bVer67)
+        if (m_pStyles && !m_bVer67)
         {
             /*
             if this is the case, then if the numbering is actually stored in
@@ -1967,20 +1967,20 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
             to set the ww6 list level information which we will need when we
             reach the true ww6 list def.  So set it now
             */
-            pStyles->nWwNumLevel = nListLevel;
+            m_pStyles->nWwNumLevel = m_nListLevel;
         }
 
-        if (WW8ListManager::nMaxLevel <= nListLevel )
-            nListLevel = WW8ListManager::nMaxLevel;
+        if (WW8ListManager::nMaxLevel <= m_nListLevel )
+            m_nListLevel = WW8ListManager::nMaxLevel;
         else if
            (
-             (USHRT_MAX > nLFOPosition) &&
-             (WW8ListManager::nMaxLevel > nListLevel)
+             (USHRT_MAX > m_nLFOPosition) &&
+             (WW8ListManager::nMaxLevel > m_nListLevel)
            )
         {
-            RegisterNumFmt(nLFOPosition, nListLevel);
-            nLFOPosition = USHRT_MAX;
-            nListLevel  = WW8ListManager::nMaxLevel;
+            RegisterNumFmt(m_nLFOPosition, m_nListLevel);
+            m_nLFOPosition = USHRT_MAX;
+            m_nListLevel  = WW8ListManager::nMaxLevel;
         }
     }
 }
@@ -1988,14 +1988,14 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
 void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
     short nLen)
 {
-    if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+    if (m_pPlcxMan && m_pPlcxMan->GetDoingDrawTextBox())
         return;
 
     if( nLen < 0 )
     {
         // the actual level is finished, what should we do ?
-        nLFOPosition = USHRT_MAX;
-        nListLevel = WW8ListManager::nMaxLevel;
+        m_nLFOPosition = USHRT_MAX;
+        m_nListLevel = WW8ListManager::nMaxLevel;
     }
     else
     {
@@ -2018,17 +2018,17 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             ww8par6.cxx#SwWW8ImplReader::Read_LR
             */
 
-            if (pAktColl)
+            if (m_pAktColl)
             {
                 // here a "named" style is being configured
 
                 // disable the numbering/list in the style currently configured
-                pAktColl->SetFmtAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
+                m_pAktColl->SetFmtAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
 
                 // reset/blank the indent
-                pAktColl->SetFmtAttr(SvxLRSpaceItem(RES_LR_SPACE));
+                m_pAktColl->SetFmtAttr(SvxLRSpaceItem(RES_LR_SPACE));
             }
-            else if (SwTxtNode* pTxtNode = pPaM->GetNode().GetTxtNode())
+            else if (SwTxtNode* pTxtNode = m_pPaM->GetNode().GetTxtNode())
             {
                 // here a paragraph is being directly formatted
 
@@ -2052,11 +2052,11 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 pTxtNode->SetAttr( aLR );
             }
 
-            nLFOPosition = USHRT_MAX;
+            m_nLFOPosition = USHRT_MAX;
         }
         else
         {
-            nLFOPosition = (sal_uInt16)nData-1;
+            m_nLFOPosition = (sal_uInt16)nData-1;
             /*
             If we are a ww8+ style with ww7- style lists then there is a
             bizarre broken word bug where when the list is removed from a para
@@ -2064,30 +2064,30 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             indentation.  Setting this flag will allow us to recover from this
             braindeadness
             */
-            if (pAktColl && (nLFOPosition == 2047-1) && nAktColl < vColl.size())
-                vColl[nAktColl].bHasBrokenWW6List = true;
+            if (m_pAktColl && (m_nLFOPosition == 2047-1) && m_nAktColl < m_vColl.size())
+                m_vColl[m_nAktColl].bHasBrokenWW6List = true;
 
             // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
-            if (USHRT_MAX > nLFOPosition)
+            if (USHRT_MAX > m_nLFOPosition)
             {
-                if (nLFOPosition != 2047-1) //Normal ww8+ list behaviour
+                if (m_nLFOPosition != 2047-1) //Normal ww8+ list behaviour
                 {
-                    if (WW8ListManager::nMaxLevel == nListLevel)
-                        nListLevel = 0;
-                    if (WW8ListManager::nMaxLevel > nListLevel)
+                    if (WW8ListManager::nMaxLevel == m_nListLevel)
+                        m_nListLevel = 0;
+                    if (WW8ListManager::nMaxLevel > m_nListLevel)
                     {
-                        RegisterNumFmt(nLFOPosition, nListLevel);
-                        nLFOPosition = USHRT_MAX;
-                        nListLevel = WW8ListManager::nMaxLevel;
+                        RegisterNumFmt(m_nLFOPosition, m_nListLevel);
+                        m_nLFOPosition = USHRT_MAX;
+                        m_nListLevel = WW8ListManager::nMaxLevel;
                     }
                 }
-                else if (pPlcxMan && pPlcxMan->HasParaSprm(0xC63E))
+                else if (m_pPlcxMan && m_pPlcxMan->HasParaSprm(0xC63E))
                 {
                     /*
                      #i8114# Horrific backwards compatible ww7- lists in ww8+
                      docs
                     */
-                    Read_ANLevelNo(13 /*equiv ww7- sprm no*/, &nListLevel, 1);
+                    Read_ANLevelNo(13 /*equiv ww7- sprm no*/, &m_nListLevel, 1);
                 }
             }
         }
@@ -2110,34 +2110,34 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     WW8ReaderSave aSave(this,nStart);
 
     WW8PLCFManResult aRes;
-    nStart = pPlcxMan->Where();
+    nStart = m_pPlcxMan->Where();
     while(nStart <= nEndCp)
     {
-        if ( pPlcxMan->Get(&aRes)
+        if ( m_pPlcxMan->Get(&aRes)
             && aRes.pMemPos && aRes.nSprmId )
         {
             //only interested in sprms which would set nPicLocFc
             if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
             {
                 Read_PicLoc( aRes.nSprmId, aRes.pMemPos +
-                    mpSprmParser->DistanceToData(aRes.nSprmId), 4);
+                    m_pSprmParser->DistanceToData(aRes.nSprmId), 4);
                 break;
             }
         }
-        pPlcxMan->advance();
-        nStart = pPlcxMan->Where();
+        m_pPlcxMan->advance();
+        nStart = m_pPlcxMan->Where();
     }
-    sal_uLong nOffset = nPicLocFc;
+    sal_uLong nOffset = m_nPicLocFc;
     aSave.Restore(this);
 
-    sal_uLong nOldPos = pDataStream->Tell();
+    sal_uLong nOldPos = m_pDataStream->Tell();
     WW8_PIC aPic;
-    pDataStream->Seek( nOffset);
-    PicRead( pDataStream, &aPic, bVer67);
+    m_pDataStream->Seek( nOffset);
+    PicRead( m_pDataStream, &aPic, m_bVer67);
 
-    if((aPic.lcb > 0x3A) && !pDataStream->GetError() )
+    if((aPic.lcb > 0x3A) && !m_pDataStream->GetError() )
     {
-        aFormula.FormulaRead(nWhich,pDataStream);
+        aFormula.FormulaRead(nWhich,m_pDataStream);
         bRet = true;
     }
 
@@ -2146,7 +2146,7 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
      is too big for the WW95 files, it needs to be modified to check the
      version C.
      */
-    pDataStream->Seek( nOldPos );
+    m_pDataStream->Seek( nOldPos );
     return bRet;
 }
 
