@@ -531,9 +531,6 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
                  nChgLen = 0;
         OUString aRplc;
         bool bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
-#if OSL_DEBUG_LEVEL > 1
-        OUString aWord( rxHyphWord->getWord() );
-#endif
 
         OUString aOrigHyphenatedWord;
         sal_Int16 nOrigHyphenPos        = -1;
