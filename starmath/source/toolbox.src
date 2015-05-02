@@ -1411,35 +1411,6 @@
         };
     };
 
-#define UNBINOPS_IDLIST         \
-    IdList =                \
-    {                       \
-        RID_PLUSX ;         \
-        RID_MINUSX ;        \
-        RID_PLUSMINUSX ;    \
-        RID_MINUSPLUSX ;    \
-        RID_XPLUSY ;        \
-        RID_XCDOTY ;        \
-        RID_XTIMESY ;       \
-        RID_XSYMTIMESY ;    \
-        RID_XMINUSY ;       \
-        RID_XOVERY ;        \
-        RID_XDIVY ;         \
-        RID_XSYMDIVIDEY ;   \
-        RID_NEGX ;          \
-        RID_XANDY ;         \
-        RID_XORY ;          \
-        RID_XCIRCY ;        \
-    };                      \
-    IdCount = { 16 ; };
-
-    ImageList RID_IL_UNBINOPS
-    {
-        Prefix = "un";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        UNBINOPS_IDLIST
-    };
-
 #define RELATIONS_IDLIST         \
     IdList =                \
     {                       \
@@ -1708,28 +1679,6 @@
         Prefix = "mi";
         MaskColor = IMAGE_STDBTN_COLOR ;
         MISC_IDLIST
-    };
-
-#define CATALOG_IDLIST                  \
-    IdList =                        \
-    {                               \
-        RID_UNBINOPS_CAT ;          \
-        RID_RELATIONS_CAT ;         \
-        RID_SETOPERATIONS_CAT ;     \
-        RID_FUNCTIONS_CAT ;         \
-        RID_OPERATORS_CAT ;         \
-        RID_ATTRIBUTES_CAT ;        \
-        RID_MISC_CAT ;              \
-        RID_BRACKETS_CAT ;          \
-        RID_FORMAT_CAT ;            \
-    };                              \
-    IdCount = { 9 ; };
-
-    ImageList RID_IL_CATALOG
-    {
-        Prefix = "im";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        CATALOG_IDLIST
     };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

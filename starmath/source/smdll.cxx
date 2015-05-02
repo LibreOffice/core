@@ -31,7 +31,6 @@
 
 #include <smdll.hxx>
 #include <document.hxx>
-#include <toolbox.hxx>
 #include <view.hxx>
 
 #include <ElementsDockingWindow.hxx>
@@ -74,7 +73,6 @@ namespace
         SvxUndoRedoControl::RegisterControl(SID_REDO, pModule);
         XmlSecStatusBarControl::RegisterControl(SID_SIGNATURE, pModule);
 
-        SmToolBoxWrapper::RegisterChildWindow(true);
         SmCmdBoxWrapper::RegisterChildWindow(true);
         SmElementsDockingWindowWrapper::RegisterChildWindow(true);
 
