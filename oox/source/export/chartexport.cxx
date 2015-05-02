@@ -1319,6 +1319,9 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos, 
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_layout), FSEND);
     pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_layoutTarget),
+            XML_val, "inner",
+            FSEND);
     pFS->singleElement(FSNS(XML_c, XML_xMode),
             XML_val, "edge",
             FSEND);
