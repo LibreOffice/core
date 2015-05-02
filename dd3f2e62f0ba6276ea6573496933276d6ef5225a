@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_e6f25e6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-02T19:23:06Z",
+      "side": 1,
+      "message": "Since the migration to our own Bugzilla, the bug notation is “tdf”, not “fdo”.",
+      "revId": "dd3f2e62f0ba6276ea6573496933276d6ef5225a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
