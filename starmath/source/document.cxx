@@ -79,7 +79,6 @@
 #include <smdll.hxx>
 #include <starmath.hrc>
 #include <symbol.hxx>
-#include <toolbox.hxx>
 #include <unomodel.hxx>
 #include <utility.hxx>
 #include <view.hxx>
