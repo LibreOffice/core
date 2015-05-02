@@ -38,7 +38,6 @@ core_factory_list = [
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libooxlo.a", "oox_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
-    ("libslideshowlo.a", "slideshow_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libsotlo.a", "sot_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory"),
@@ -64,6 +63,7 @@ core_constructor_list = [
 # canvas/source/factory/canvasfactory.component
     "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
 # chart2/source/chartcore.component
+    "com_sun_star_chart2_LinearScaling_get_implementation",
     "com_sun_star_comp_chart_AreaChartType_get_implementation",
     "com_sun_star_comp_chart_BarChartType_get_implementation",
     "com_sun_star_comp_chart_BubbleChartType_get_implementation",
@@ -71,6 +71,7 @@ core_constructor_list = [
     "com_sun_star_comp_chart_ChartTypeManager_get_implementation",
     "com_sun_star_comp_chart_ColumnChartType_get_implementation",
     "com_sun_star_comp_chart_DataSeries_get_implementation",
+    "com_sun_star_comp_chart_DataSource_get_implementation",
     "com_sun_star_comp_chart_FilledNetChartType_get_implementation",
     "com_sun_star_comp_chart_GL3DBarChartType_get_implementation",
     "com_sun_star_comp_chart_FormattedString_get_implementation",
@@ -79,15 +80,24 @@ core_constructor_list = [
     "com_sun_star_comp_chart_PieChartType_get_implementation",
     "com_sun_star_comp_chart_ScatterChartType_get_implementation",
     "com_sun_star_comp_chart2_Axis_get_implementation",
+    "com_sun_star_comp_chart2_ChartController_get_implementation",
+    "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
     "com_sun_star_comp_chart2_ChartModel_get_implementation",
     "com_sun_star_comp_chart2_Diagram_get_implementation",
+    "com_sun_star_comp_chart2_ErrorBar_get_implementation",
     "com_sun_star_comp_chart2_LabeledDataSequence_get_implementation",
     "com_sun_star_comp_chart2_Legend_get_implementation",
     "com_sun_star_comp_chart2_LinearRegressionCurve_get_implementation",
+    "com_sun_star_comp_chart2_PolarCoordinateSystem2d_get_implementation",
+    "com_sun_star_comp_chart2_PolarCoordinateSystem3d_get_implementation",
+    "com_sun_star_comp_chart2_PolynomialRegressionCurve_get_implementation",
+    "com_sun_star_comp_chart2_PotentialRegressionCurve_get_implementation",
+    "com_sun_star_comp_chart2_RegressionEquation_get_implementation",
     "com_sun_star_comp_chart2_Title_get_implementation",
     "com_sun_star_comp_chart2_XMLFilter_get_implementation",
 # chart2/source/controller/chartcontroller.component
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
+    "com_sun_star_comp_chart2_ChartFrameLoader_get_implementation",
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # forms/util/frm.component
@@ -95,6 +105,11 @@ core_constructor_list = [
     "com_sun_star_comp_forms_ODatabaseForm_get_implementation",
     "com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation",
     "com_sun_star_comp_forms_ORichTextModel_get_implementation",
+    "com_sun_star_comp_forms_OScrollBarModel_get_implementation",
+    "com_sun_star_comp_forms_OSpinButtonModel_get_implementation",
+    "com_sun_star_form_Model_get_implementation",
+    "com_sun_star_form_OButtonControl_get_implementation",
+    "com_sun_star_form_OButtonModel_get_implementation",
     "com_sun_star_form_OCheckBoxControl_get_implementation",
     "com_sun_star_form_OCheckBoxModel_get_implementation",
     "com_sun_star_form_OComboBoxControl_get_implementation",
@@ -103,11 +118,20 @@ core_constructor_list = [
     "com_sun_star_form_ODateModel_get_implementation",
     "com_sun_star_form_OEditControl_get_implementation",
     "com_sun_star_form_OEditModel_get_implementation",
+    "com_sun_star_form_OFixedTextModel_get_implementation",
     "com_sun_star_form_OFormsCollection_get_implementation",
+    "com_sun_star_form_OGridControlModel_get_implementation",
+    "com_sun_star_form_OGroupBoxModel_get_implementation",
+    "com_sun_star_form_OListBoxModel_get_implementation",
+    "com_sun_star_form_ONumericModel_get_implementation",
+    "com_sun_star_form_ORadioButtonModel_get_implementation",
+    "com_sun_star_form_XForms_get_implementation",
 # framework/util/fwk.component
     "com_sun_star_comp_framework_AutoRecovery_get_implementation",
     "com_sun_star_comp_framework_Desktop_get_implementation",
+    "com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation",
     "com_sun_star_comp_framework_Frame_get_implementation",
+    "com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation",
     "com_sun_star_comp_framework_JobExecutor_get_implementation",
     "com_sun_star_comp_framework_LayoutManager_get_implementation",
     "com_sun_star_comp_framework_ModuleManager_get_implementation",
@@ -131,6 +155,7 @@ core_constructor_list = [
     "com_sun_star_i18n_CharacterClassification_Unicode_get_implementation",
     "com_sun_star_i18n_Collator_get_implementation",
     "com_sun_star_i18n_LocaleDataImpl_get_implementation",
+    "com_sun_star_i18n_NativeNumberSupplier_get_implementation",
     "com_sun_star_i18n_NumberFormatCodeMapper_get_implementation",
     "com_sun_star_i18n_Transliteration_get_implementation",
     "com_sun_star_i18n_Transliteration_IGNORE_CASE_get_implementation",
@@ -147,18 +172,23 @@ core_constructor_list = [
     "com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation",
     "com_sun_star_comp_sfx2_DocumentTemplates_get_implementation",
     "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
+# starmath/util/sm.component
+    "com_sun_star_comp_Math_MathTypeFilter_get_implementation",
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
 # stoc/util/stocservices.component
+    "com_sun_star_comp_stoc_OServiceManagerWrapper_get_implementation",
     "com_sun_star_comp_stoc_TypeConverter_get_implementation",
     "com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation",
     "com_sun_star_comp_uri_UriReferenceFactory_get_implementation",
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
+    "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation",
 # svtools/util/svt.component
     "com_sun_star_graphic_GraphicObject_get_implementation",
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
+    "com_sun_star_drawing_SvxShapeCollection_get_implementation",
 # svx/util/svxcore.component
     "com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation",
     "com_sun_star_comp_Draw_GraphicExporter_get_implementation",
@@ -166,14 +196,25 @@ core_constructor_list = [
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_StdTabController_get_implementation",
+    "stardiv_Toolkit_UnoButtonControl_get_implementation",
     "stardiv_Toolkit_UnoCheckBoxControl_get_implementation",
     "stardiv_Toolkit_UnoComboBoxControl_get_implementation",
+    "stardiv_Toolkit_UnoControlButtonModel_get_implementation",
     "stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation",
     "stardiv_Toolkit_UnoControlComboBoxModel_get_implementation",
     "stardiv_Toolkit_UnoControlContainer_get_implementation",
     "stardiv_Toolkit_UnoControlContainerModel_get_implementation",
-    "stardiv_Toolkit_UnoDateFieldControl_get_implementation",
     "stardiv_Toolkit_UnoControlDateFieldModel_get_implementation",
+    "stardiv_Toolkit_UnoControlDialogModel_get_implementation",
+    "stardiv_Toolkit_UnoControlFixedTextModel_get_implementation",
+    "stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation",
+    "stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation",
+    "stardiv_Toolkit_UnoControlListBoxModel_get_implementation",
+    "stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation",
+    "stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation",
+    "stardiv_Toolkit_UnoControlScrollBarModel_get_implementation",
+    "stardiv_Toolkit_UnoDateFieldControl_get_implementation",
+    "stardiv_Toolkit_UnoSpinButtonModel_get_implementation",
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
@@ -202,17 +243,15 @@ calc_factory_list = [
 calc_constructor_list = [
 # avmedia/util/avmedia.component
     "com_sun_star_comp_framework_SoundHandler_get_implementation",
-# sc/util/scd.component -- TODO check if all of these are necessary, probably yes
-    "com_sun_star_comp_calc_FormatDetector_get_implementation",
+# sc/util/scd.component
     "com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation",
+    "com_sun_star_comp_calc_FormatDetector_get_implementation",
 # sc/util/scfilt.component
     "com_sun_star_comp_oox_xls_ExcelFilter_get_implementation",
     "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
-# scripting/source/vbaevents/vbaevents.component -- TODO check if all of these are necessary
-    ("ooo_vba_EventListener_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+# scripting/source/vbaevents/vbaevents.component
     ("ooo_vba_VBAToOOEventDesc_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
-# svl/util/svl.component -- TODO check if all of these are necessary
-    "com_sun_star_comp_svl_PathService_get_implementation",
+# svl/util/svl.component
     "com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation",
     "com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation",
     ]
@@ -225,37 +264,27 @@ draw_factory_list = [
     ]
 
 draw_constructor_list = [
-# animations/source/animcore/animcore.component -- TODO check if all of these are necessary
-    "com_sun_star_animations_Animate_get_implementation",
+# animations/source/animcore/animcore.component
     "com_sun_star_animations_AnimateColor_get_implementation",
     "com_sun_star_animations_AnimateMotion_get_implementation",
     "com_sun_star_animations_AnimateSet_get_implementation",
     "com_sun_star_animations_AnimateTransform_get_implementation",
+    "com_sun_star_animations_Animate_get_implementation",
     "com_sun_star_animations_Audio_get_implementation",
     "com_sun_star_animations_Command_get_implementation",
     "com_sun_star_animations_IterateContainer_get_implementation",
     "com_sun_star_animations_ParallelTimeContainer_get_implementation",
     "com_sun_star_animations_SequenceTimeContainer_get_implementation",
     "com_sun_star_animations_TransitionFilter_get_implementation",
-# sd/util/sd.component -- TODO check if all of these are necessary
-    "com_sun_star_comp_Draw_DrawingModule_get_implementation",
-    "com_sun_star_comp_Draw_PresenterCanvasFactory_get_implementation",
-    "com_sun_star_comp_Draw_PresenterHelper_get_implementation",
-    "com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation",
-    "com_sun_star_comp_Draw_PresenterTextView_get_implementation",
-    "com_sun_star_comp_Draw_SlideRenderer_get_implementation",
-    "com_sun_star_comp_Draw_SlideSorter_get_implementation",
+# sd/util/sd.component
+    "RandomAnimationNode_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation",
     "com_sun_star_comp_Draw_framework_PresentationFactoryProvider_get_implementation",
     "com_sun_star_comp_Draw_framework_ResourceID_get_implementation",
-    "com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation",
     "com_sun_star_comp_Draw_framework_configuration_ConfigurationController_get_implementation",
     "com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation",
-    "com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation",
-    "com_sun_star_comp_sd_InsertSlideController_get_implementation",
-    "com_sun_star_comp_sd_SlideLayoutController_get_implementation",
 # sd/util/sdd.component
     "com_sun_star_comp_draw_FormatDetector_get_implementation",
     ]
@@ -270,21 +299,20 @@ writer_constructor_list = [
 # filter/source/textfilterdetect/textfd.component 
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
 # sw/util/sw.component
-    "com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation",
-    "com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation",
-    "com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation",
-    "com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation",
+    "com_sun_star_util_comp_FinalThreadManager_get_implementation",
 # sw/util/swd.component
     "com_sun_star_comp_writer_FormatDetector_get_implementation",
 # writerfilter/util/writerfilter.component
     "com_sun_star_comp_Writer_RtfFilter_get_implementation",
     "com_sun_star_comp_Writer_WriterFilter_get_implementation",
-    "com_sun_star_comp_Writer_WriterFilterDetector_get_implementation",
     ]
 
 factory_map = {
