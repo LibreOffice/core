@@ -332,7 +332,7 @@
           process.</desc>
           <label>Spell uppercase words</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="IsSpellWithDigits" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: MiscOptions / SpellOptions -->
