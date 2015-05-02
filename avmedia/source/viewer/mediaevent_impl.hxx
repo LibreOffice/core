@@ -42,8 +42,8 @@ namespace avmedia
         {
         public:
 
-                    MediaEventListenersImpl( vcl::Window& rNotifyWindow );
-                    virtual ~MediaEventListenersImpl();
+        explicit MediaEventListenersImpl( vcl::Window& rNotifyWindow );
+        virtual ~MediaEventListenersImpl();
 
         void        cleanUp();
 

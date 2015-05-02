@@ -54,8 +54,8 @@ class Player : public cppu::BaseMutex,
 {
 public:
 
-                        Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
-                        ~Player();
+    explicit Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+    ~Player();
 
     bool                create( const OUString& rURL );
 

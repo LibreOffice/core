@@ -22,7 +22,7 @@ class OGLManager : public ::cppu::WeakImplHelper2 < com::sun::star::media::XMana
 {
 public:
 
-    OGLManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rMgr );
+    explicit OGLManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rMgr );
     virtual ~OGLManager();
 
     // XManager

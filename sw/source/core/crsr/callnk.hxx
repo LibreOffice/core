@@ -36,7 +36,7 @@ public:
     long nLeftFrmPos;
     bool bHasSelection;
 
-    SwCallLink( SwCrsrShell & rSh );
+    explicit SwCallLink( SwCrsrShell & rSh );
     SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktCntnt,
                                     sal_uInt8 nAktNdTyp, long nLRPos,
                                     bool bAktSelection );

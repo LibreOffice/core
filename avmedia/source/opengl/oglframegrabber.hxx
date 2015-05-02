@@ -25,7 +25,7 @@ class OGLFrameGrabber : public FrameGrabber_BASE
 {
 public:
 
-    OGLFrameGrabber( libgltf::glTFHandle& rHandle );
+    explicit OGLFrameGrabber( libgltf::glTFHandle& rHandle );
     virtual ~OGLFrameGrabber();
 
     // XFrameGrabber

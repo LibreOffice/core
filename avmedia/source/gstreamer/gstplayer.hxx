@@ -43,7 +43,7 @@ class Player : public ::cppu::BaseMutex,
 {
 public:
 
-    Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+    explicit Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
     virtual ~Player();
 
     void preparePlaybin( const OUString& rURL, GstElement *pSink );

@@ -61,7 +61,7 @@ struct MediaItem::Impl
     bool                    m_bMute;
     ::com::sun::star::media::ZoomLevel m_eZoom;
 
-    Impl(AVMediaSetMask nMaskSet)
+    explicit Impl(AVMediaSetMask nMaskSet)
         : m_nMaskSet( nMaskSet )
         , m_eState( MEDIASTATE_STOP )
         , m_fTime( 0.0 )

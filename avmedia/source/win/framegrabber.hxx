@@ -37,8 +37,8 @@ class FrameGrabber : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::X
 {
 public:
 
-            FrameGrabber( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
-            ~FrameGrabber();
+    explicit FrameGrabber( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+    ~FrameGrabber();
 
     bool    create( const OUString& rURL );
 

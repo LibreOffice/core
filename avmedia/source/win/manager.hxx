@@ -35,7 +35,7 @@ class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManag
 {
 public:
 
-    Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+    explicit Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
     ~Manager();
 
     // XManager

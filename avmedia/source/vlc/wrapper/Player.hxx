@@ -31,7 +31,7 @@ namespace wrapper
     {
     public:
         static bool LoadSymbols();
-        Player( Media& media );
+        explicit Player( Media& media );
         Player( const Player& other );
         Player& operator=( const Player& other );
         virtual ~Player();

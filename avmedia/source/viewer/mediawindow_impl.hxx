@@ -48,7 +48,7 @@ namespace avmedia
         {
         public:
 
-                    MediaWindowControl( vcl::Window* pParent );
+            explicit MediaWindowControl( vcl::Window* pParent );
 
         protected:
 
@@ -64,8 +64,8 @@ namespace avmedia
         {
         public:
 
-                            MediaChildWindow( vcl::Window* pParent );
-                            MediaChildWindow( vcl::Window* pParent, SystemWindowData* pData );
+            explicit MediaChildWindow( vcl::Window* pParent );
+            MediaChildWindow( vcl::Window* pParent, SystemWindowData* pData );
 
         protected:
 
