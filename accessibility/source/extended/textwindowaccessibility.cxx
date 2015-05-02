@@ -982,7 +982,10 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
 struct IndexCompare
 {
     const css::beans::PropertyValue* pValues;
-    IndexCompare( const css::beans::PropertyValue* pVals ) : pValues(pVals) {}
+    explicit IndexCompare(const css::beans::PropertyValue* pVals)
+        : pValues(pVals)
+    {
+    }
     bool operator() ( const sal_Int32& a, const sal_Int32& b ) const
     {
         return pValues[a].Name < pValues[b].Name;

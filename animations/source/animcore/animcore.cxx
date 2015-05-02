@@ -129,8 +129,8 @@ public:
 class AnimationNode : public AnimationNodeBase
 {
 public:
-    AnimationNode( sal_Int16 nNodeType );
-    AnimationNode( const AnimationNode& rNode );
+    explicit AnimationNode(sal_Int16 nNodeType);
+    explicit AnimationNode(const AnimationNode& rNode);
     virtual ~AnimationNode();
 
     // XInterface

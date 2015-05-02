@@ -106,7 +106,7 @@ namespace accessibility
         class MethodGuard
         {
         public:
-            MethodGuard( AccessibleToolPanelDeck_Impl& i_rImpl )
+            explicit MethodGuard( AccessibleToolPanelDeck_Impl& i_rImpl )
                 :m_aGuard()
             {
                 i_rImpl.checkDisposed();

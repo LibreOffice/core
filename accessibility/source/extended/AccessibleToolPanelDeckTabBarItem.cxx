@@ -221,7 +221,7 @@ namespace accessibility
     class ItemMethodGuard
     {
     public:
-        ItemMethodGuard( AccessibleToolPanelDeckTabBarItem_Impl& i_rImpl )
+        explicit ItemMethodGuard( AccessibleToolPanelDeckTabBarItem_Impl& i_rImpl )
             :m_aGuard()
         {
             i_rImpl.checkDisposed();

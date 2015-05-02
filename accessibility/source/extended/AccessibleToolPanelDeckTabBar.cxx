@@ -68,7 +68,7 @@ namespace accessibility
     class AccessibleWrapper : public AccessibleWrapper_Base
     {
     public:
-        AccessibleWrapper( const Reference< XAccessibleContext >& i_rContext )
+        explicit AccessibleWrapper( const Reference< XAccessibleContext >& i_rContext )
             :m_xContext( i_rContext )
         {
         }
@@ -258,7 +258,7 @@ namespace accessibility
         class MethodGuard
         {
         public:
-            MethodGuard( AccessibleToolPanelTabBar_Impl& i_rImpl )
+            explicit MethodGuard( AccessibleToolPanelTabBar_Impl& i_rImpl )
                 :m_aGuard()
             {
                 i_rImpl.checkDisposed();
