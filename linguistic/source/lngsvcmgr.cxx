@@ -1824,14 +1824,6 @@ bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
             uno::Sequence< OUString > aSvcImplNames;
             aSvcImplNames = pDsp->GetServiceList( pLocale[i] );
 
-#if OSL_DEBUG_LEVEL > 1
-            sal_Int32 nSvcs = aSvcImplNames.getLength();
-            const OUString *pSvcImplName = aSvcImplNames.getConstArray();
-            for (sal_Int32 j = 0;  j < nSvcs;  ++j)
-            {
-                OUString aImplName( pSvcImplName[j] );
-            }
-#endif
             // build value to be written back to configuration
             uno::Any aCfgAny;
             if ((pDsp == pHyphDsp || pDsp == pGrammarDsp) && aSvcImplNames.getLength() > 1)
