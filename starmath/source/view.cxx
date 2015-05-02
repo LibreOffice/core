@@ -68,7 +68,6 @@
 #include "dialog.hxx"
 #include "document.hxx"
 #include "starmath.hrc"
-#include "toolbox.hxx"
 #include "mathmlimport.hxx"
 #include "cursor.hxx"
 #include "accessibility.hxx"
@@ -936,7 +935,6 @@ void SmViewShell::InitInterface_Impl()
     //Dummy-Objectbar, to avoid quiver while activating
 
     GetStaticInterface()->RegisterChildWindow(SID_TASKPANE);
-    GetStaticInterface()->RegisterChildWindow(SmToolBoxWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SmCmdBoxWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SmElementsDockingWindowWrapper::GetChildWindowId());
 }
@@ -1802,12 +1800,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
         }
         break;
 
-        case SID_TOOLBOX:
-        {
-            GetViewFrame()->ToggleChildWindow( SmToolBoxWrapper::GetChildWindowId() );
-        }
-        break;
-
         case SID_ELEMENTSDOCKINGWINDOW:
         {
             GetViewFrame()->ToggleChildWindow( SmElementsDockingWindowWrapper::GetChildWindowId() );
@@ -1920,17 +1912,6 @@ void SmViewShell::GetState(SfxItemSet &rSet)
                 rSet.Put(SfxBoolItem(SID_ELEMENTSDOCKINGWINDOW, bState));
             }
             break;
-        case SID_TOOLBOX:
-            {
-                bool bState = false;
-                SfxChildWindow *pChildWnd = GetViewFrame()->
-                        GetChildWindow( SmToolBoxWrapper::GetChildWindowId() );
-                if (pChildWnd  &&  pChildWnd->GetWindow()->IsVisible())
-                    bState = true;
-                rSet.Put(SfxBoolItem(SID_TOOLBOX, bState));
-            }
-            break;
-
         }
     }
 }

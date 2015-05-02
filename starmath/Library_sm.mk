@@ -84,7 +84,6 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/smdll \
         starmath/source/smmod \
         starmath/source/symbol \
-        starmath/source/toolbox \
         starmath/source/tmpdevice \
         starmath/source/typemap \
         starmath/source/unodoc \
