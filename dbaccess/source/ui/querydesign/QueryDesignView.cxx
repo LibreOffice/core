@@ -719,9 +719,6 @@ namespace
                                 OTableFields& _rFieldList,
                                 bool bMulti )
     {
-        // * must not contain a filter : have I already shown the correct warning ?
-        bool bCritsOnAsterikWarning = false;        // ** TMFS **
-
         OUString aFieldName,aCriteria,aWhereStr,aHavingStr,aWork/*,aOrderStr*/;
         // print line by line joined with AND
         sal_uInt16 nMaxCriteria = 0;
@@ -739,6 +736,8 @@ namespace
             const Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             const OUString aQuote = xMetaData->getIdentifierQuoteString();
             const IParseContext& rContext = static_cast<OQueryController&>(_pView->getController()).getParser().getContext();
+            // * must not contain a filter : have I already shown the correct warning ?
+            bool bCritsOnAsterikWarning = false;        // ** TMFS **
 
             for (sal_uInt16 i=0 ; i < nMaxCriteria ; i++)
             {
