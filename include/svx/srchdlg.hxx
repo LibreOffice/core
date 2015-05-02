@@ -82,6 +82,7 @@ enum SearchLabel
 {
     SL_Empty,
     SL_End,
+    SL_Start,
     SL_EndSheet,
     SL_NotFound
 };
