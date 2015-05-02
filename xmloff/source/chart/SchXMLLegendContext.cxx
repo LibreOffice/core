@@ -188,13 +188,13 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         }
     }
 
-    if( bHasXPosition && bHasYPosition )
-        xLegendShape->setPosition( aLegendPos );
-
     if( bHasExpansion && nLegendExpansion!= chart::ChartLegendExpansion_CUSTOM )
         xLegendProps->setPropertyValue("Expansion", uno::makeAny(nLegendExpansion) );
     else if( bHasHeight && bHasWidth )
         xLegendShape->setSize( aLegendSize );
+
+    if( bHasXPosition && bHasYPosition )
+        xLegendShape->setPosition( aLegendPos );
 
     // the fill style has the default "none" in XML, but "solid" in the model.
     xLegendProps->setPropertyValue("FillStyle", uno::makeAny( drawing::FillStyle_NONE ));
