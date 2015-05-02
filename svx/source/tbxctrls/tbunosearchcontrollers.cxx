@@ -42,6 +42,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/instance.hxx>
+#include <svx/srchdlg.hxx>
 
 #include <vcl/fixed.hxx>
 
@@ -195,6 +196,11 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
     {
         case MouseNotifyEvent::KEYINPUT:
         {
+            // Clear SearchLabel when altering the search string
+            #if HAVE_FEATURE_DESKTOP
+                SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
+            #endif
+
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             bool bShift = pKeyEvent->GetKeyCode().IsShift();
             bool bMod1 = pKeyEvent->GetKeyCode().IsMod1();
