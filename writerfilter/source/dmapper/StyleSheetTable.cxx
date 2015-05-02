@@ -1222,19 +1222,13 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
             {
                 // If we had any table styles, add a new document-level InteropGrabBag entry for them.
                 uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
-                uno::Sequence<beans::PropertyValue> aGrabBag;
-                xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                sal_Int32 nLength = aGrabBag.getLength();
-                aGrabBag.realloc(nLength + 1);
-                aGrabBag[nLength].Name = "tableStyles";
-
-                uno::Sequence<beans::PropertyValue> aTableStyles(aTableStylesVec.size());
-                beans::PropertyValue* pTableStyles = aTableStyles.getArray();
-                for (std::vector<beans::PropertyValue>::iterator i = aTableStylesVec.begin(); i != aTableStylesVec.end(); ++i)
-                    *pTableStyles++ = *i;
-
-                aGrabBag[nLength].Value = uno::makeAny(aTableStyles);
-                xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+                uno::Any aAny = xPropertySet->getPropertyValue("InteropGrabBag");
+                auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
+                beans::PropertyValue aValue;
+                aValue.Name = "tableStyles";
+                aValue.Value = uno::makeAny(comphelper::containerToSequence(aTableStylesVec));
+                aGrabBag.push_back(aValue);
+                xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(comphelper::containerToSequence(aGrabBag)));
             }
         }
     }
