@@ -37,12 +37,13 @@ struct RandomNumberGenerator
     STD_RNG_ALGO global_rng;
     RandomNumberGenerator()
     {
+        std::random_device rd;
         // initialises the state of the global random number generator
         // should only be called once.
         // (note, a few std::variate_generator<> (like normal) have their
         // own state which would need a reset as well to guarantee identical
         // sequence of numbers, e.g. via myrand.distribution().reset())
-        global_rng.seed(time(NULL));
+        global_rng.seed(rd() ^ time(nullptr));
     }
 };
 
