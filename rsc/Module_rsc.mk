@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Module_Module,rsc))
 
-$(eval $(call gb_Module_add_targets,rsc,\
-))
-
 $(eval $(call gb_Module_add_targets_for_build,rsc,\
 	Executable_rsc \
 ))
