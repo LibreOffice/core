@@ -58,6 +58,7 @@ public:
     void testFdo78080();
     void testFdo54361();
     void testFdo54361_1();
+    void testTdf86624(); // manualy placed legends
     void testAutoBackgroundXLSX();
     void testChartAreaStyleBackgroundXLSX();
     void testAxisTextRotationXLSX();
@@ -109,6 +110,7 @@ public:
     CPPUNIT_TEST(testFdo78080);
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testFdo54361_1);
+    CPPUNIT_TEST(testTdf86624);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
     CPPUNIT_TEST(testAxisTextRotationXLSX);
@@ -632,6 +634,17 @@ void Chart2ImportTest::testFdo78080()
     Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(!xTitle.is());
+}
+
+void Chart2ImportTest::testTdf86624()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf86624.ods");
+    uno::Reference< chart2::XChartDocument > xChart2Doc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference< chart::XChartDocument > xChartDoc (xChart2Doc, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xLegend = xChartDoc->getLegend();
+    awt::Point aPos = xLegend->getPosition();
+    CPPUNIT_ASSERT(aPos.X > 5000); // real value for me is above 8000 but before bug fix is below 1000
+    CPPUNIT_ASSERT(aPos.Y > 4000); // real value for ms is above 7000
 }
 
 void Chart2ImportTest::testTransparentBackground(OUString const & filename)
