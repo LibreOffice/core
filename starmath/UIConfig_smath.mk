@@ -27,7 +27,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
 	starmath/uiconfig/smath/ui/alignmentdialog \
 	starmath/uiconfig/smath/ui/catalogdialog \
 	starmath/uiconfig/smath/ui/dockingelements \
-	starmath/uiconfig/smath/ui/floatingelements \
 	starmath/uiconfig/smath/ui/fontdialog \
 	starmath/uiconfig/smath/ui/fontsizedialog \
 	starmath/uiconfig/smath/ui/fonttypedialog \
