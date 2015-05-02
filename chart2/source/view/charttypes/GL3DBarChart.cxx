@@ -589,7 +589,7 @@ GL3DBarChart::~GL3DBarChart()
 {
     if (mbBenchMarkMode)
     {
-        SharedResourceAccess(maCond1, maCond2);
+        SharedResourceAccess aResGuard(maCond1, maCond2);
         osl::MutexGuard aGuard(maMutex);
         mbRenderDie = true;
     }
@@ -603,7 +603,7 @@ GL3DBarChart::~GL3DBarChart()
 void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer,
         ExplicitCategoriesProvider& rCatProvider)
 {
-    SharedResourceAccess(maCond1, maCond2);
+    SharedResourceAccess aResGuard(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
     if(mnSelectBarId)
     {
@@ -897,7 +897,7 @@ void GL3DBarChart::moveToDefault()
             return;
 
         {
-            SharedResourceAccess(maCond1, maCond2);
+            SharedResourceAccess aResGuard(maCond1, maCond2);
             osl::MutexGuard aGuard(maMutex);
             maRenderEvent = EVENT_MOVE_TO_DEFAULT;
         }
@@ -947,7 +947,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
             return;
 
         {
-            SharedResourceAccess(maCond1, maCond2);
+            SharedResourceAccess aResGuard(maCond1, maCond2);
             osl::MutexGuard aGuard(maMutex);
             maClickPos = rPos;
             mnPreSelectBarId = mnSelectBarId;
@@ -1032,7 +1032,7 @@ void GL3DBarChart::renderFrame()
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 )
 {
     long nDirection = rEndPos.X() - rStartPos.X();
-    SharedResourceAccess(maCond1, maCond2);
+    SharedResourceAccess aResGuard(maCond1, maCond2);
     osl::ClearableGuard<osl::Mutex> aGuard(maMutex);
     if ((maRenderEvent == EVENT_NONE) || (maRenderEvent == EVENT_SHOW_SCROLL) ||
         (maRenderEvent == EVENT_AUTO_FLY) || (maRenderEvent == EVENT_SHOW_SELECT))
@@ -1107,7 +1107,7 @@ void GL3DBarChart::moveToCorner()
 void GL3DBarChart::scroll(long nDelta)
 {
     {
-        SharedResourceAccess(maCond1, maCond2);
+        SharedResourceAccess aResGuard(maCond1, maCond2);
         osl::MutexGuard aGuard(maMutex);
         if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL) &&
             (maRenderEvent != EVENT_AUTO_FLY) && (maRenderEvent != EVENT_SHOW_SELECT))
@@ -1128,7 +1128,7 @@ void GL3DBarChart::scroll(long nDelta)
 
 void GL3DBarChart::contextDestroyed()
 {
-    SharedResourceAccess(maCond1, maCond2);
+    SharedResourceAccess aResGuard(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
     mbValidContext = false;
 }
@@ -1178,7 +1178,7 @@ int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
 
 void GL3DBarChart::updateScreenText()
 {
-    SharedResourceAccess(maCond1, maCond2);
+    SharedResourceAccess aResGuard(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
     maScreenTextShapes.clear();
     mpRenderer->ReleaseScreenTextShapes();
