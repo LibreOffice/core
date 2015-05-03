@@ -1562,6 +1562,9 @@ ScIconSetFrmtEntry::~ScIconSetFrmtEntry()
 
 void ScIconSetFrmtEntry::dispose()
 {
+    for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
+        it->disposeAndClear();
+    maEntries.clear();
     maLbColorFormat.disposeAndClear();
     maLbIconSetType.disposeAndClear();
     ScCondFrmtEntry::dispose();
@@ -1582,6 +1585,9 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
 
     sal_Int32 nPos = maLbIconSetType->GetSelectEntryPos();
     sal_uInt32 nElements = pMap[nPos].nElements;
+
+    for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
+        it->disposeAndClear();
     maEntries.clear();
 
     for(size_t i = 0; i < nElements; ++i)
