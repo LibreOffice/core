@@ -559,12 +559,10 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
     if( USHRT_MAX != nNum )
     {
         for( n = 0; n < aArr.size(); ++n )
-            if( aArr[ n ] > nNum )
-                return nNum;            // no -> use it
-            else if( aArr[ n ] == nNum )
-                break;                  // yes -> create new
+            if( aArr[ n ] >= nNum )
+                break;
 
-        if( n == aArr.size() )
+        if( n == aArr.size() || aArr[ n ] > nNum )
             return nNum;            // no -> use it
     }
 
