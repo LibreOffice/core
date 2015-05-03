@@ -567,9 +567,13 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
     }
 
     // flagged all numbers, so determine the right number
-    for( n = 0; n < aArr.size(); ++n )
-        if( n != aArr[ n ] )
-            break;
+    n = aArr.size();
+    if ( n > 0 && aArr[ n-1 ] != n-1 )
+    {
+        for( n = 0; n < aArr.size(); ++n )
+            if( n != aArr[ n ] )
+                break;
+    }
 
     rFld.SetSeqNumber( n );
     return n;
