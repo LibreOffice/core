@@ -680,7 +680,7 @@ void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
 }
 
 SwMailTransferable::SwMailTransferable(const OUString& rBody, const OUString& rMimeType) :
-    cppu::WeakComponentImplHelper2< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
+    cppu::WeakComponentImplHelper< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType( rMimeType ),
     m_sBody( rBody ),
     m_bIsBody( true )
@@ -689,7 +689,7 @@ SwMailTransferable::SwMailTransferable(const OUString& rBody, const OUString& rM
 
 SwMailTransferable::SwMailTransferable(const OUString& rURL,
                 const OUString& rName, const OUString& rMimeType) :
-    cppu::WeakComponentImplHelper2< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
+    cppu::WeakComponentImplHelper< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType( rMimeType ),
     m_aURL(rURL),
     m_aName( rName ),
@@ -798,7 +798,7 @@ void SwMailTransferable::removeVetoableChangeListener(
 }
 
 SwMailMessage::SwMailMessage() :
-        cppu::WeakComponentImplHelper1< mail::XMailMessage>(m_aMutex)
+        cppu::WeakComponentImplHelper< mail::XMailMessage>(m_aMutex)
 {
 }
 
