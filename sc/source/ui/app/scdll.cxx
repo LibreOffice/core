@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
+#include <config_features.h>
 
+#include <editeng/eeitem.hxx>
 #include <svx/fmobjfac.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/tbxcolor.hxx>
@@ -152,6 +153,7 @@ void ScDLL::Init()
     ScMediaShell        ::RegisterInterface(pMod);
     ScPageBreakShell    ::RegisterInterface(pMod);
 
+#if HAVE_FEATURE_DESKTOP
     SfxRecentFilesToolBoxControl::RegisterControl(SID_OPEN_CALC, pMod);
 
     // Own Controller
@@ -278,6 +280,7 @@ void ScDLL::Init()
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
     sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
+#endif
 
     // EditEngine Field; insofar not already defined in OfficeApplication::Init
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
