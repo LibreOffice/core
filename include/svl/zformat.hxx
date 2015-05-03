@@ -231,6 +231,9 @@ public:
     /// Count of decimal precision
     sal_uInt16 GetFormatPrecision() const   { return NumFor[0].Info().nCntPost; }
 
+    /// Count of integer digits
+    sal_uInt16 GetFormatIntegerDigits() const { return NumFor[0].Info().nCntPre; }
+
     //! Read/write access on a special sal_uInt16 component, may only be used on the
     //! standard format 0, 5000, ... and only by the number formatter!
     sal_uInt16 GetLastInsertKey() const

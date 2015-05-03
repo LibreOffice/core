@@ -374,6 +374,13 @@ void SvxNumberFormatShell::MakeFormat( OUString& rFormat,
 }
 
 
+sal_uInt16 SvxNumberFormatShell::GetFormatIntegerDigits( const OUString&  rFormat ) const
+{
+    sal_uInt32 nFmtKey = pFormatter->GetEntryKey( rFormat, eCurLanguage );
+
+    return pFormatter->GetFormatIntegerDigits(nFmtKey);
+}
+
 
 void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
                                        bool&            rThousand,
