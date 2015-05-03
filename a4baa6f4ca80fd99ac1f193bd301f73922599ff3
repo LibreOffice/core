@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_493a65cf",
+        "filename": "sw/source/uibase/config/modcfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2015-05-03T17:53:11Z",
+      "side": 1,
+      "message": "The compilation is failing no with this error:\n\"Invalid cast fropm type \u0027boost::optional\u003cshort int\u003e to type sal_Int16 {aka short int}\u0027\"\n\nCan somebody give me some hint?",
+      "revId": "a4baa6f4ca80fd99ac1f193bd301f73922599ff3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_693721e4",
+        "filename": "sw/source/uibase/config/modcfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2015-05-03T17:53:11Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "a4baa6f4ca80fd99ac1f193bd301f73922599ff3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
