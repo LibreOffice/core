@@ -907,9 +907,8 @@ void SwFEShell::GetPageObjs( std::vector<SwFrmFmt*>& rFillArr )
 {
     rFillArr.clear();
 
-    for( sal_uInt16 n = 0; n < mpDoc->GetSpzFrmFmts()->size(); ++n )
+    for( auto pFmt : *mpDoc->GetSpzFrmFmts() )
     {
-        SwFrmFmt* pFmt = (*mpDoc->GetSpzFrmFmts())[n];
         if (FLY_AT_PAGE == pFmt->GetAnchor().GetAnchorId())
         {
             rFillArr.push_back( pFmt );
@@ -929,9 +928,8 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffse
     SwRootFrm* pTmpRootFrm = GetLayout();
     sal_uInt16 nMaxPage = pTmpRootFrm->GetPageNum();
     bool bTmpAssert = false;
-    for( sal_uInt16 n = 0; n < rFillArr.size(); ++n )
+    for( auto pFmt : rFillArr )
     {
-        SwFrmFmt* pFmt = rFillArr[n];
         if( mpDoc->GetSpzFrmFmts()->Contains( pFmt ))
         {
             // FlyFmt is still valid, therefore process
@@ -1394,17 +1392,15 @@ SwFrmFmt* SwFEShell::WizzardGetFly()
     // do not search the Fly via the layout. Now we can delete a frame
     // without a valid layout. ( e.g. for the wizards )
     SwFrmFmts& rSpzArr = *mpDoc->GetSpzFrmFmts();
-    sal_uInt16 nCnt = rSpzArr.size();
-    if( nCnt )
+    if( !rSpzArr.empty() )
     {
         SwNodeIndex& rCrsrNd = GetCrsr()->GetPoint()->nNode;
         if( rCrsrNd.GetIndex() > mpDoc->GetNodes().GetEndOfExtras().GetIndex() )
             // Cursor is in the body area!
             return 0;
 
-        for( sal_uInt16 n = 0; n < nCnt; ++n )
+        for( auto pFmt : rSpzArr )
         {
-            SwFrmFmt* pFmt = rSpzArr[ n ];
             const SwNodeIndex* pIdx = pFmt->GetCntnt( false ).GetCntntIdx();
             SwStartNode* pSttNd;
             if( pIdx &&
@@ -1470,7 +1466,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     const SwFrmFmt* pRet = 0;
     SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
-    sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+    const auto nOld = pDView->GetHitTolerancePixel();
     pDView->SetHitTolerancePixel( 2 );
 
     if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV,SdrSearchOptions::PICKMACRO ) &&
@@ -1579,7 +1575,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromObj( const Point& rPt, SwRect** pRectToFill
 
         SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
-        sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+        const auto nOld = pDView->GetHitTolerancePixel();
         // tolerance for Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
@@ -1703,7 +1699,7 @@ ObjCntType SwFEShell::GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const
 
         SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
-        sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+        const auto nOld = pDView->GetHitTolerancePixel();
         // tolerance for Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
