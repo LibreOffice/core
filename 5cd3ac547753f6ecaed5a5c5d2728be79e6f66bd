@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_6965e1df",
+        "filename": "sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-03T20:40:24Z",
+      "side": 1,
+      "message": "To avoid warning/error of problem of order of initialization:\nerror: field \u0027maFormatControl\u0027 will be initialized after field \u0027msThousandSeparator\u0027 [-Werror,-Wreorder]",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 58
+      },
+      "revId": "5cd3ac547753f6ecaed5a5c5d2728be79e6f66bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
