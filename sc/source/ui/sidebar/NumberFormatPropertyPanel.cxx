@@ -54,6 +54,8 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     maFormatControl(SID_NUMBER_FORMAT, *pBindings, *this),
 
     mnCategorySelected(0),
+/*    msThousandSeparator(ScResId(RID_SFX_STR_THOUSAND_SEP)),
+    msEngineeringNotation(ScResId(RID_SFX_STR_ENGINEERING)),*/
     mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings)
@@ -64,6 +66,9 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     get(mpEdLeadZeroes, "leadingzeroes");
     get(mpBtnNegRed,    "negativenumbersred");
     get(mpBtnThousand,  "thousandseparator");
+
+    msThousandSeparator=ScResId(RID_SFX_STR_THOUSAND_SEP);
+    msEngineeringNotation=ScResId(RID_SFX_STR_ENGINEERING);
 
     Initialize();
 }
@@ -249,6 +254,10 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     mpEdDecimals->Disable();
                     mpEdLeadZeroes->Disable();
                 }
+                if( nVal == 6 ) // For scientific, Thousand separator is replaced by Engineering notation
+                    mpBtnThousand->SetText( msEngineeringNotation );
+                else
+                    mpBtnThousand->SetText( msThousandSeparator );
             }
             else
             {
