@@ -76,60 +76,6 @@ OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 
-// Calc XML export
-css::uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOOoExport_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOOoExport_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw (css::uno::Exception, std::exception);
-css::uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Meta_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOOoExport_Meta_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOOoExport_Meta_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw (css::uno::Exception, std::exception);
-css::uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Styles_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOOoExport_Styles_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOOoExport_Styles_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw (css::uno::Exception, std::exception);
-css::uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Content_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOOoExport_Content_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOOoExport_Content_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw (css::uno::Exception, std::exception);
-css::uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Settings_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOOoExport_Settings_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOOoExport_Settings_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw( css::uno::Exception, std::exception );
-
-// Calc XML Oasis export
-css::uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOasisExport_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOasisExport_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw (css::uno::Exception, std::exception);
-css::uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Meta_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOasisExport_Meta_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOasisExport_Meta_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw (css::uno::Exception, std::exception);
-css::uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Styles_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOasisExport_Styles_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOasisExport_Styles_createInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-        throw( css::uno::Exception, std::exception );
-css::uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Content_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOasisExport_Content_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOasisExport_Content_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw (css::uno::Exception, std::exception);
-css::uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Settings_getSupportedServiceNames() throw();
-OUString SAL_CALL ScXMLOasisExport_Settings_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
-                throw (css::uno::Exception, std::exception);
-
 class ScSpreadsheetSettings : public cppu::WeakImplHelper3<
                                         com::sun::star::sheet::XGlobalSheetSettings,
                                         com::sun::star::beans::XPropertySet,

@@ -42,11 +42,6 @@ class ScPanelFactory
       public PanelFactoryInterfaceBase
 {
 public:
-    static ::rtl::OUString SAL_CALL getImplementationName_static();
-    static css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance(
-        const css::uno::Reference<css::lang::XMultiServiceFactory>& rxFactory);
-    static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames_static();
-
     ScPanelFactory(void);
     virtual ~ScPanelFactory(void);
 
