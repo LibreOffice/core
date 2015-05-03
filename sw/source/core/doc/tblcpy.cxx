@@ -91,7 +91,7 @@ namespace
                      sal_uLong &rnB, sal_uInt16 &rnC, ColumnStructure::iterator& rpCl,
                      BoxStructure::iterator& rpSel, bool &rbSel, bool bCover );
         void incColSpan( sal_uInt16 nLine, sal_uInt16 nCol );
-        TableStructure( const SwTable& rTable );
+        explicit TableStructure( const SwTable& rTable );
         TableStructure( const SwTable& rTable, _FndBox &rFndBox,
                         const SwSelBoxes& rSelBoxes,
                         LineStructure::size_type nMinSize );

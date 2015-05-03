@@ -44,7 +44,7 @@ namespace
         std::vector<SwViewShell*> m_aViewWasUnLocked;
         SwViewShell* m_pViewShell;
     public:
-        LockAllViews(SwViewShell *pViewShell)
+        explicit LockAllViews(SwViewShell *pViewShell)
             : m_pViewShell(pViewShell)
         {
             if (!m_pViewShell)

@@ -64,7 +64,7 @@ class SwStyleManager : public IStyleAccess
 
 public:
     // accept empty item set for ignorable paragraph items.
-    SwStyleManager( SfxItemSet* pIgnorableParagraphItems )
+    explicit SwStyleManager( SfxItemSet* pIgnorableParagraphItems )
         : aAutoCharPool(),
           aAutoParaPool( pIgnorableParagraphItems ),
           mpCharCache(0),

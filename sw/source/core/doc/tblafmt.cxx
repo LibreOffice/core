@@ -128,7 +128,7 @@ namespace
     class WriterSpecificAutoFormatBlock : ::boost::noncopyable
     {
     public:
-        WriterSpecificAutoFormatBlock(SvStream &rStream) : _rStream(rStream)
+        explicit WriterSpecificAutoFormatBlock(SvStream &rStream) : _rStream(rStream)
         {
             _whereToWriteEndOfBlock = BeginSwBlock(rStream);
         }
