@@ -537,7 +537,7 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( pOldFmt ) )
+    if( rDoc.GetFrmFmts()->Contains( pOldFmt ) )
     {
         if( bAnchorChgd )
             pFrmFmt->DelFrms();
@@ -610,7 +610,7 @@ void SwUndoSetFlyFmt::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( pNewFmt ) )
+    if( rDoc.GetFrmFmts()->Contains( pNewFmt ) )
     {
 
         if( bAnchorChgd )

@@ -54,7 +54,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
 
-    virtual void RemoveFldType(sal_uInt16 nFld) = 0;
+    virtual void RemoveFldType(size_t nFld) = 0;
 
     virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB) = 0;
 

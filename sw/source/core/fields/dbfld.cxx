@@ -89,9 +89,9 @@ void SwDBFieldType::ReleaseRef()
 
     if (--nRefCnt <= 0)
     {
-        sal_uInt16 nPos = GetDoc()->getIDocumentFieldsAccess().GetFldTypes()->GetPos(this);
+        size_t nPos = GetDoc()->getIDocumentFieldsAccess().GetFldTypes()->GetPos(this);
 
-        if (nPos != USHRT_MAX)
+        if (nPos != SIZE_MAX)
         {
             GetDoc()->getIDocumentFieldsAccess().RemoveFldType(nPos);
             delete this;

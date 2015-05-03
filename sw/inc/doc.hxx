@@ -826,7 +826,7 @@ public:
     SwCharFmt *MakeCharFmt(const OUString &rFmtName, SwCharFmt *pDerivedFrom,
                            bool bBroadcast = false,
                            bool bAuto = true );
-    void       DelCharFmt(sal_uInt16 nFmt, bool bBroadcast = false);
+    void       DelCharFmt(size_t nFmt, bool bBroadcast = false);
     void       DelCharFmt(SwCharFmt* pFmt, bool bBroadcast = false);
     SwCharFmt* FindCharFmtByName( const OUString& rName ) const
         {   return static_cast<SwCharFmt*>(FindFmtByName( (SwFmtsBase&)*mpCharFmtTbl, rName )); }
@@ -844,7 +844,7 @@ public:
     SwConditionTxtFmtColl* MakeCondTxtFmtColl( const OUString &rFmtName,
                                                SwTxtFmtColl *pDerivedFrom,
                                                bool bBroadcast = false);
-    void DelTxtFmtColl(sal_uInt16 nFmt, bool bBroadcast = false);
+    void DelTxtFmtColl(size_t nFmt, bool bBroadcast = false);
     void DelTxtFmtColl( SwTxtFmtColl* pColl, bool bBroadcast = false );
     /** Add 4th optional parameter <bResetListAttrs>.
      'side effect' of <SetTxtFmtColl> with <bReset = true> is that the hard

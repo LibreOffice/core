@@ -522,14 +522,12 @@ void SwHistoryChangeFmtColl::SetInDoc( SwDoc* pDoc, bool )
     {
         if ( ND_TEXTNODE == m_nNodeType )
         {
-            if ( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos(
-                            static_cast<SwTxtFmtColl * const>(m_pColl) ))
+            if (pDoc->GetTxtFmtColls()->Contains( static_cast<SwTxtFmtColl * const>(m_pColl) ))
             {
                 pCntntNd->ChgFmtColl( m_pColl );
             }
         }
-        else if ( USHRT_MAX != pDoc->GetGrfFmtColls()->GetPos(
-                            static_cast<SwGrfFmtColl * const>(m_pColl) ))
+        else if (pDoc->GetGrfFmtColls()->Contains( static_cast<SwGrfFmtColl * const>(m_pColl) ))
         {
             pCntntNd->ChgFmtColl( m_pColl );
         }
@@ -873,8 +871,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-    const sal_uInt16 nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
-    if ( USHRT_MAX != nPos )    // Format does still exist
+    if ( pDoc->GetSpzFrmFmts()->Contains( &m_rFmt ) )    // Format does still exist
     {
         SwFmtAnchor aTmp( m_rFmt.GetAnchor() );
 
@@ -912,12 +909,12 @@ SwHistoryChangeFlyChain::SwHistoryChangeFlyChain( SwFlyFrmFmt& rFmt,
 
 void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
 {
-    if ( USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( m_pFlyFmt ) )
+    if (pDoc->GetSpzFrmFmts()->Contains( m_pFlyFmt ) )
     {
         SwFmtChain aChain;
 
         if ( m_pPrevFmt &&
-             USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( m_pPrevFmt ) )
+             pDoc->GetSpzFrmFmts()->Contains( m_pPrevFmt ) )
         {
             aChain.SetPrev( m_pPrevFmt );
             SwFmtChain aTmp( m_pPrevFmt->GetChain() );
@@ -926,7 +923,7 @@ void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
         }
 
         if ( m_pNextFmt &&
-             USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( m_pNextFmt ) )
+             pDoc->GetSpzFrmFmts()->Contains( m_pNextFmt ) )
         {
             aChain.SetNext( m_pNextFmt );
             SwFmtChain aTmp( m_pNextFmt->GetChain() );

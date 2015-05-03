@@ -290,13 +290,13 @@ SwFieldType* DocumentFieldsManager::GetFldType(
 }
 
 /// Remove field type
-void DocumentFieldsManager::RemoveFldType(sal_uInt16 nFld)
+void DocumentFieldsManager::RemoveFldType(size_t nFld)
 {
     OSL_ENSURE( INIT_FLDTYPES <= nFld,  "don't remove InitFlds" );
     /*
      * Dependent fields present -> ErrRaise
      */
-    sal_uInt16 nSize = mpFldTypes->size();
+    size_t nSize = mpFldTypes->size();
     if(nFld < nSize)
     {
         SwFieldType* pTmp = (*mpFldTypes)[nFld];

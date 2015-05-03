@@ -1007,7 +1007,7 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
     {
         // no Layout for this format, then recalc the ordnum
         SwFrmFmt* pFmt = const_cast<SwFrmFmt*>(&rFmt);
-        nOrdNum = m_pDoc->GetSpzFrmFmts()->GetPos( pFmt );
+        nOrdNum = static_cast<sal_uInt32>(m_pDoc->GetSpzFrmFmts()->GetPos( pFmt ));
 
         const SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if( pModel )

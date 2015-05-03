@@ -40,7 +40,7 @@ public:
     virtual SwFieldType *InsertFldType(const SwFieldType &) SAL_OVERRIDE;
     virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const SAL_OVERRIDE;
     virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const SAL_OVERRIDE;
-    virtual void RemoveFldType(sal_uInt16 nFld) SAL_OVERRIDE;
+    virtual void RemoveFldType(size_t nFld) SAL_OVERRIDE;
     virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB) SAL_OVERRIDE;
     virtual void InsDeletedFldType(SwFieldType &) SAL_OVERRIDE;
     virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) SAL_OVERRIDE;

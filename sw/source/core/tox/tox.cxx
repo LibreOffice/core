@@ -461,7 +461,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 {
     maMSTOCExpression = rSource.maMSTOCExpression;
     SwTOXType* pType = const_cast<SwTOXType*>(rSource.GetTOXType());
-    if( pDoc && USHRT_MAX == pDoc->GetTOXTypes().GetPos( pType ))
+    if( pDoc && !pDoc->GetTOXTypes().Contains( pType ))
     {
         // type not in pDoc, so create it now
         const SwTOXTypes& rTypes = pDoc->GetTOXTypes();

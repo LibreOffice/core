@@ -667,7 +667,7 @@ const SfxPoolItem& SwDoc::GetDefault( sal_uInt16 nFmtHint ) const
 }
 
 /// Delete the formats
-void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
+void SwDoc::DelCharFmt(size_t nFmt, bool bBroadcast)
 {
     SwCharFmt * pDel = (*mpCharFmtTbl)[nFmt];
 
@@ -691,8 +691,8 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
 
 void SwDoc::DelCharFmt( SwCharFmt *pFmt, bool bBroadcast )
 {
-    sal_uInt16 nFmt = mpCharFmtTbl->GetPos( pFmt );
-    OSL_ENSURE( USHRT_MAX != nFmt, "Fmt not found," );
+    size_t nFmt = mpCharFmtTbl->GetPos( pFmt );
+    OSL_ENSURE( SIZE_MAX != nFmt, "Fmt not found," );
     DelCharFmt( nFmt, bBroadcast );
 }
 
@@ -952,7 +952,7 @@ SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const OUString &rFmtName,
     return pFmtColl;
 }
 
-void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
+void SwDoc::DelTxtFmtColl(size_t nFmtColl, bool bBroadcast)
 {
     OSL_ENSURE( nFmtColl, "Remove fuer Coll 0." );
 
@@ -991,8 +991,8 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
 
 void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, bool bBroadcast )
 {
-    sal_uInt16 nFmt = mpTxtFmtCollTbl->GetPos( pColl );
-    OSL_ENSURE( USHRT_MAX != nFmt, "Collection not found," );
+    size_t nFmt = mpTxtFmtCollTbl->GetPos( pColl );
+    OSL_ENSURE( SIZE_MAX != nFmt, "Collection not found," );
     DelTxtFmtColl( nFmt, bBroadcast );
 }
 

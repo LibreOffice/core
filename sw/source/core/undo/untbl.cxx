@@ -889,8 +889,8 @@ _SaveTable::~_SaveTable()
 
 sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
 {
-    sal_uInt16 nRet = aFrmFmts.GetPos( pFmt );
-    if( USHRT_MAX == nRet )
+    size_t nRet = aFrmFmts.GetPos( pFmt );
+    if( SIZE_MAX == nRet )
     {
         // Create copy of ItemSet
         std::shared_ptr<SfxItemSet> pSet( new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
@@ -917,7 +917,7 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
         aSets.push_back( pSet );
         aFrmFmts.insert( aFrmFmts.begin() + nRet, pFmt );
     }
-    return nRet;
+    return static_cast<sal_uInt16>(nRet);
 }
 
 void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )

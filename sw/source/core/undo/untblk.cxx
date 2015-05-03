@@ -229,7 +229,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 
             pTxtNode->ResetAllAttr();
 
-            if( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( pTxtFmtColl ))
+            if( pDoc->GetTxtFmtColls()->Contains( pTxtFmtColl ))
                 pTxtFmtColl = static_cast<SwTxtFmtColl*>(pTxtNode->ChgFmtColl( pTxtFmtColl )) ;
 
             pHistory->SetTmpEnd( nSetPos );
@@ -268,7 +268,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         pPam->Exchange();
     }
 
-    if( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( pTxtFmtColl ))
+    if( pDoc->GetTxtFmtColls()->Contains( pTxtFmtColl ))
     {
         SwTxtNode* pTxtNd = pPam->GetMark()->nNode.GetNode().GetTxtNode();
         if( pTxtNd )
@@ -276,7 +276,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     pTxtFmtColl = pSavTxtFmtColl;
 
-    if( pLastNdColl && USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( pLastNdColl ) &&
+    if( pLastNdColl && pDoc->GetTxtFmtColls()->Contains( pLastNdColl ) &&
         pPam->GetPoint()->nNode != pPam->GetMark()->nNode )
     {
         SwTxtNode* pTxtNd = pPam->GetPoint()->nNode.GetNode().GetTxtNode();
