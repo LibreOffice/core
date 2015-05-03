@@ -40,7 +40,6 @@ core_factory_list = [
     ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libsotlo.a", "sot_component_getFactory"),
-    ("libspelllo.a", "spell_component_getFactory"),
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
     ("libstoragefdlo.a", "storagefd_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
@@ -172,8 +171,6 @@ core_constructor_list = [
     "com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation",
     "com_sun_star_comp_sfx2_DocumentTemplates_get_implementation",
     "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
-# starmath/util/sm.component
-    "com_sun_star_comp_Math_MathTypeFilter_get_implementation",
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
 # stoc/util/stocservices.component
@@ -299,13 +296,10 @@ writer_constructor_list = [
 # filter/source/textfilterdetect/textfd.component 
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
 # sw/util/sw.component
-    "com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation",
-    "com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation",
-    "com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation",
     "com_sun_star_util_comp_FinalThreadManager_get_implementation",
 # sw/util/swd.component
