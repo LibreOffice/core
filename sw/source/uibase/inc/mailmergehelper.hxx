@@ -29,8 +29,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <vcl/scrbar.hxx>
 #include <rtl/ustring.hxx>
 #include "swdllapi.h"
@@ -180,13 +179,13 @@ public:
 
 class SW_DLLPUBLIC SwConnectionListener :
         public SwMutexBase,
-        public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XConnectionListener >
+        public cppu::WeakComponentImplHelper< ::com::sun::star::mail::XConnectionListener >
 {
     using cppu::WeakComponentImplHelperBase::disposing;
 
 public:
     SwConnectionListener() :
-        cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XConnectionListener>(m_aMutex)
+        cppu::WeakComponentImplHelper< ::com::sun::star::mail::XConnectionListener>(m_aMutex)
     {}
     virtual ~SwConnectionListener();
 
@@ -202,7 +201,7 @@ public:
 
 class SW_DLLPUBLIC SwMailTransferable :
         public SwMutexBase,
-        public cppu::WeakComponentImplHelper2
+        public cppu::WeakComponentImplHelper
         <
             ::com::sun::star::datatransfer::XTransferable,
             ::com::sun::star::beans::XPropertySet
@@ -241,7 +240,7 @@ class SW_DLLPUBLIC SwMailTransferable :
 
 class SW_DLLPUBLIC SwMailMessage :
         public SwMutexBase,
-        public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XMailMessage >
+        public cppu::WeakComponentImplHelper< ::com::sun::star::mail::XMailMessage >
 {
     OUString                                                                         m_sSenderName;
     OUString                                                                         m_sSenderAddress;
