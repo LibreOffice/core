@@ -171,27 +171,12 @@ ScAutoFormatsObj::~ScAutoFormatsObj()
 {
 }
 
-// stuff for exService_...
-
-uno::Reference<uno::XInterface> SAL_CALL ScAutoFormatsObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+ScAutoFormatsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return (::cppu::OWeakObject*) new ScAutoFormatsObj;
-}
-
-OUString ScAutoFormatsObj::getImplementationName_Static()
-{
-    return OUString( "stardiv.StarCalc.ScAutoFormatsObj" );
-}
-
-uno::Sequence<OUString> ScAutoFormatsObj::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCAUTOFORMATSOBJ_SERVICE;
-    return aRet;
+    return cppu::acquire(new ScAutoFormatsObj);
 }
 
 // XTableAutoFormats

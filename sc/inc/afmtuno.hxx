@@ -44,11 +44,6 @@ class ScAutoFormatObj;
 
 #define SC_AFMTOBJ_INVALID  USHRT_MAX
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-    ScAutoFormatsObj_CreateInstance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >& );
-
 class ScAutoFormatsObj : public ::cppu::WeakImplHelper4<
                             ::com::sun::star::container::XNameContainer,
                             ::com::sun::star::container::XEnumerationAccess,
@@ -62,9 +57,6 @@ private:
 public:
                             ScAutoFormatsObj();
     virtual                 ~ScAutoFormatsObj();
-
-    static OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_Static();
 
                             // XNameContainer
     virtual void SAL_CALL   insertByName( const OUString& aName,

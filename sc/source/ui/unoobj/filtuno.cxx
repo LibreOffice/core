@@ -111,27 +111,12 @@ ScFilterOptionsObj::~ScFilterOptionsObj()
 {
 }
 
-// stuff for exService_...
-
-uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return (::cppu::OWeakObject*) new ScFilterOptionsObj;
-}
-
-OUString ScFilterOptionsObj::getImplementationName_Static()
-{
-    return OUString( SCFILTEROPTIONSOBJ_IMPLNAME );
-}
-
-uno::Sequence<OUString> ScFilterOptionsObj::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCFILTEROPTIONSOBJ_SERVICE;
-    return aRet;
+    return cppu::acquire(new ScFilterOptionsObj);
 }
 
 // XPropertyAccess

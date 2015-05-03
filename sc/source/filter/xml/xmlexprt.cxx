@@ -244,191 +244,64 @@ OUString lcl_GetFormattedString( ScDocument* pDoc, const ScAddress& rPos )
 
 } // anonymous namespace
 
-OUString SAL_CALL ScXMLOOoExport_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return OUString( "com.sun.star.comp.Calc.XMLExporter" );
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLExporter", SvXMLExportFlags::ALL));
 }
 
-uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    const OUString aServiceName( ScXMLOOoExport_getImplementationName() );
-    return uno::Sequence< OUString >( &aServiceName, 1 );
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLMetaExporter", SvXMLExportFlags::META));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw(uno::Exception, std::exception)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLStylesExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new ScXMLExport( comphelper::getComponentContext(rSMgr), ScXMLOOoExport_getImplementationName(), SvXMLExportFlags::ALL );
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLStylesExporter", SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS));
 }
 
-OUString SAL_CALL ScXMLOOoExport_Meta_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLContentExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return OUString( "com.sun.star.comp.Calc.XMLMetaExporter" );
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLContentExporter", SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS));
 }
 
-uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Meta_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    const OUString aServiceName( ScXMLOOoExport_Meta_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLSettingsExporter", SvXMLExportFlags::SETTINGS));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Meta_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw (uno::Exception, std::exception)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLOasisExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new ScXMLExport( comphelper::getComponentContext(rSMgr), ScXMLOOoExport_Meta_getImplementationName(), SvXMLExportFlags::META );
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisExporter", SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS));
 }
 
-OUString SAL_CALL ScXMLOOoExport_Styles_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return OUString( "com.sun.star.comp.Calc.XMLStylesExporter" );
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisMetaExporter", SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
-uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Styles_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLOasisStylesExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    const OUString aServiceName( ScXMLOOoExport_Styles_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisStylesExporter", SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Styles_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw (uno::Exception, std::exception)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLOasisContentExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new ScXMLExport( comphelper::getComponentContext(rSMgr), ScXMLOOoExport_Styles_getImplementationName(), SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS);
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisContentExporter", SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
 }
 
-OUString SAL_CALL ScXMLOOoExport_Content_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Calc_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return OUString( "com.sun.star.comp.Calc.XMLContentExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Content_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( ScXMLOOoExport_Content_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Content_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw (uno::Exception, std::exception)
-{
-    return (cppu::OWeakObject*)new ScXMLExport( comphelper::getComponentContext(rSMgr), ScXMLOOoExport_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS);
-}
-
-OUString SAL_CALL ScXMLOOoExport_Settings_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Calc.XMLSettingsExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Settings_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( ScXMLOOoExport_Settings_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Settings_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw( uno::Exception, std::exception )
-{
-    return (cppu::OWeakObject*)new ScXMLExport( comphelper::getComponentContext(rSMgr), ScXMLOOoExport_Settings_getImplementationName(), SvXMLExportFlags::SETTINGS );
-}
-
-// Oasis Filter
-
-OUString SAL_CALL ScXMLOasisExport_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Calc.XMLOasisExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( ScXMLOasisExport_getImplementationName() );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw (uno::Exception, std::exception)
-{
-    return (cppu::OWeakObject*)new ScXMLExport(comphelper::getComponentContext(rSMgr), ScXMLOasisExport_getImplementationName(), SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS);
-}
-
-OUString SAL_CALL ScXMLOasisExport_Meta_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Calc.XMLOasisMetaExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Meta_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( ScXMLOasisExport_Meta_getImplementationName() );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Meta_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw (uno::Exception, std::exception)
-{
-    return (cppu::OWeakObject*)new ScXMLExport(comphelper::getComponentContext(rSMgr), ScXMLOasisExport_Meta_getImplementationName(), SvXMLExportFlags::META|SvXMLExportFlags::OASIS);
-}
-
-OUString SAL_CALL ScXMLOasisExport_Styles_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Calc.XMLOasisStylesExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Styles_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( ScXMLOasisExport_Styles_getImplementationName() );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Styles_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-        throw( uno::Exception, std::exception )
-{
-    return (cppu::OWeakObject*)new ScXMLExport(comphelper::getComponentContext(rSMgr), ScXMLOasisExport_Styles_getImplementationName(), SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS);
-}
-
-OUString SAL_CALL ScXMLOasisExport_Content_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Calc.XMLOasisContentExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Content_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( ScXMLOasisExport_Content_getImplementationName() );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Content_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw (uno::Exception, std::exception)
-{
-    return (cppu::OWeakObject*)new ScXMLExport(comphelper::getComponentContext(rSMgr), ScXMLOasisExport_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS);
-}
-
-OUString SAL_CALL ScXMLOasisExport_Settings_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Calc.XMLOasisSettingsExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_Settings_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( ScXMLOasisExport_Settings_getImplementationName() );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-    throw (uno::Exception, std::exception)
-{
-    return (cppu::OWeakObject*)new ScXMLExport(comphelper::getComponentContext(rSMgr), ScXMLOasisExport_Settings_getImplementationName(), SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS);
+    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisSettingsExporter", SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS));
 }
 
 class ScXMLShapeExport : public XMLShapeExport
