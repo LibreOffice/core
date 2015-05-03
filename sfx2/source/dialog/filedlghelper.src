@@ -45,79 +45,9 @@ String STR_SFX_IMPORT_ALL
     Text [ en-US ] = "<All formats>" ;
 };
 
-String STR_CB_AUTO_EXTENSION
-{
-    Text [ en-US ] = "~Automatic file name extension" ;
-};
-
-String STR_CB_SELECTION
-{
-    Text [ en-US ] = "~Selection" ;
-};
-
-String STR_CB_INSERT_AS_LINK
-{
-    Text [ en-US ] = "~Link" ;
-};
-
-String STR_CB_SHOW_PREVIEW
-{
-    Text [ en-US ] = "Pr~eview" ;
-};
-
-String STR_CB_READONLY
-{
-    Text [ en-US ] = "~Read-only" ;
-};
-
-String STR_CB_PASSWORD
-{
-    Text [ en-US ] = "Save with ~password" ;
-};
-
-String STR_CB_FILTER_OPTIONS
-{
-    Text [ en-US ] = "Edit ~filter settings";
-};
-
-String STR_PB_PLAY
-{
-    Text [ en-US ] = "~Play" ;
-};
-
-String STR_PB_STOP
-{
-    Text [ en-US ] = "Sto~p" ;
-};
-
-String STR_PB_OPEN
-{
-    Text [ en-US ] = "~Open" ;
-};
-
-String STR_PB_SAVE
-{
-    Text [ en-US ] = "~Save" ;
-};
-
 String STR_PB_SAVEACOPY
 {
     Text [ en-US ] = "Save a Copy" ;
-};
-
-String STR_LB_IMAGE_TEMPLATE
-{
-    Text [ en-US ] = "Style:" ;
-};
-
-String STR_LB_TEMPLATES
-{
-    Text [ en-US ] = "~Templates:" ;
-};
-
-String STR_LB_VERSION
-{
-    Text [ en-US ] = "~Version:";
 };
 
 //******************************************************************** EOF
