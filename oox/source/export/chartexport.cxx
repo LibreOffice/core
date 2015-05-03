@@ -1626,6 +1626,11 @@ void ChartExport::exportBubbleChart( Reference< chart2::XChartType > xChartType 
     pFS->startElement( FSNS( XML_c, XML_bubbleChart ),
             FSEND );
 
+    const char* varyColors = "0";
+    pFS->singleElement( FSNS( XML_c, XML_varyColors ),
+            XML_val, varyColors,
+            FSEND );
+
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
     exportSeries( xChartType, nAttachedAxis );
 
