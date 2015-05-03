@@ -32,7 +32,7 @@ namespace
 {
     struct CrsrStateHelper
     {
-        CrsrStateHelper(SwCrsrShell& rShell)
+        explicit CrsrStateHelper(SwCrsrShell& rShell)
             : m_aLink(rShell)
             , m_pCrsr(rShell.GetSwCrsr())
             , m_aSaveState(*m_pCrsr)
