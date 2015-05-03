@@ -202,18 +202,18 @@ static bool IsExportNumRule(const SwNumRule& rRule, sal_uInt8* pEnd = 0)
 
 void RtfExport::BuildNumbering()
 {
-    const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
+    const SwNumRuleTbl& rListTbl = m_pDoc->GetNumRuleTbl();
 
     for (sal_uInt16 n = rListTbl.size()+1; n;)
     {
         SwNumRule* pRule;
         --n;
         if (n == rListTbl.size())
-            pRule = (SwNumRule*)pDoc->GetOutlineNumRule();
+            pRule = (SwNumRule*)m_pDoc->GetOutlineNumRule();
         else
         {
             pRule = rListTbl[ n ];
-            if (!pDoc->IsUsed(*pRule))
+            if (!m_pDoc->IsUsed(*pRule))
                 continue;
         }
 
@@ -226,7 +226,7 @@ void RtfExport::WriteNumbering()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
-    if (!pUsedNumTbl)
+    if (!m_pUsedNumTbl)
         return; // no numbering is used
 
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LISTTABLE);
@@ -250,7 +250,7 @@ void RtfExport::WriteNumbering()
 
 void RtfExport::WriteRevTab()
 {
-    int nRevAuthors = pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size();
+    int nRevAuthors = m_pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size();
 
     if (nRevAuthors < 1)
         return;
@@ -258,9 +258,9 @@ void RtfExport::WriteRevTab()
     // RTF always seems to use Unknown as the default first entry
     GetRedline(OUString("Unknown"));
 
-    for (sal_uInt16 i = 0; i < pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); ++i)
+    for (sal_uInt16 i = 0; i < m_pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); ++i)
     {
-        const SwRangeRedline* pRedl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ i ];
+        const SwRangeRedline* pRedl = m_pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ i ];
 
         GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
     }
@@ -362,20 +362,20 @@ sal_uLong RtfExport::ReplaceCr(sal_uInt8)
 void RtfExport::WriteFonts()
 {
     Strm().WriteCharPtr(SAL_NEWLINE_STRING).WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FONTTBL);
-    maFontHelper.WriteFontTable(*m_pAttrOutput);
+    m_aFontHelper.WriteFontTable(*m_pAttrOutput);
     Strm().WriteChar('}');
 }
 
 void RtfExport::WriteStyles()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
-    pStyles->OutputStylesTable();
+    m_pStyles->OutputStylesTable();
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
 void RtfExport::WriteFootnoteSettings()
 {
-    const SwPageFtnInfo& rFtnInfo = pDoc->GetPageDesc(0).GetFtnInfo();
+    const SwPageFtnInfo& rFtnInfo = m_pDoc->GetPageDesc(0).GetFtnInfo();
     // Request a separator only in case the width is larger than zero.
     bool bSeparator = double(rFtnInfo.GetWidth()) > 0;
 
@@ -389,16 +389,16 @@ void RtfExport::WriteMainText()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
-    SwTableNode* pTableNode = pCurPam->GetNode().FindTableNode();
+    SwTableNode* pTableNode = m_pCurPam->GetNode().FindTableNode();
     if (m_pWriter && m_pWriter->bWriteOnlyFirstTable
             && pTableNode != 0)
     {
-        pCurPam->GetPoint()->nNode = *pTableNode;
-        pCurPam->GetMark()->nNode = *(pTableNode->EndOfSectionNode());
+        m_pCurPam->GetPoint()->nNode = *pTableNode;
+        m_pCurPam->GetMark()->nNode = *(pTableNode->EndOfSectionNode());
     }
     else
     {
-        pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+        m_pCurPam->GetPoint()->nNode = m_pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
     }
 
     WriteText();
@@ -412,7 +412,7 @@ void RtfExport::WriteInfo()
     Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE LO_STRING_SVTOOLS_RTF_GENERATOR " ").WriteCharPtr(aGenerator.getStr()).WriteChar('}');
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_INFO);
 
-    SwDocShell* pDocShell(pDoc->GetDocShell());
+    SwDocShell* pDocShell(m_pDoc->GetDocShell());
     uno::Reference<document::XDocumentProperties> xDocProps;
     if (pDocShell)
     {
@@ -444,16 +444,16 @@ void RtfExport::WriteInfo()
 void RtfExport::WritePageDescTable()
 {
     // Write page descriptions (page styles)
-    sal_uInt16 nSize = pDoc->GetPageDescCnt();
+    sal_uInt16 nSize = m_pDoc->GetPageDescCnt();
     if (!nSize)
         return;
 
     Strm().WriteCharPtr(SAL_NEWLINE_STRING);
-    bOutPageDescs = true;
+    m_bOutPageDescs = true;
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCTBL);
     for (sal_uInt16 n = 0; n < nSize; ++n)
     {
-        const SwPageDesc& rPageDesc = pDoc->GetPageDesc(n);
+        const SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(n);
 
         Strm().WriteCharPtr(SAL_NEWLINE_STRING).WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSC);
         OutULong(n).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCUSE);
@@ -464,18 +464,18 @@ void RtfExport::WritePageDescTable()
         // search for the next page description
         sal_uInt16 i = nSize;
         while (i)
-            if (rPageDesc.GetFollow() == &pDoc->GetPageDesc(--i))
+            if (rPageDesc.GetFollow() == &m_pDoc->GetPageDesc(--i))
                 break;
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCNXT);
         OutULong(i).WriteChar(' ');
         Strm().WriteCharPtr(msfilter::rtfutil::OutString(rPageDesc.GetName(), eDefaultEncoding).getStr()).WriteCharPtr(";}");
     }
     Strm().WriteChar('}').WriteCharPtr(SAL_NEWLINE_STRING);
-    bOutPageDescs = false;
+    m_bOutPageDescs = false;
 
     // reset table infos, otherwise the depth of the cells will be incorrect,
     // in case the page style (header or footer) had tables
-    mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+    m_pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 }
 
 void RtfExport::ExportDocument_Impl()
@@ -484,14 +484,14 @@ void RtfExport::ExportDocument_Impl()
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_RTF).WriteChar('1')
     .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_ANSI);
     Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_DEFF);
-    OutULong(maFontHelper.GetId(static_cast<const SvxFontItem&>(pDoc->GetAttrPool().GetDefaultItem(RES_CHRATR_FONT))));
+    OutULong(m_aFontHelper.GetId(static_cast<const SvxFontItem&>(m_pDoc->GetAttrPool().GetDefaultItem(RES_CHRATR_FONT))));
     // If this not exist, MS don't understand our ansi characters (0x80-0xff).
     Strm().WriteCharPtr("\\adeflang1025");
 
     // Font table
     WriteFonts();
 
-    pStyles = new MSWordStyles(*this);
+    m_pStyles = new MSWordStyles(*this);
     // Color and stylesheet table
     WriteStyles();
 
@@ -507,7 +507,7 @@ void RtfExport::ExportDocument_Impl()
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Use the setting from the default style.
-    SwTxtFmtColl* pTxtFmtColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    SwTxtFmtColl* pTxtFmtColl = m_pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
     const SfxPoolItem* pItem;
     if (pTxtFmtColl && pTxtFmtColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem) == SfxItemState::SET)
     {
@@ -516,17 +516,17 @@ void RtfExport::ExportDocument_Impl()
     }
 
     // Zoom
-    SwViewShell* pViewShell(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
+    SwViewShell* pViewShell(m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SvxZoomType::PERCENT)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_VIEWSCALE);
         OutULong(pViewShell->GetViewOptions()->GetZoom());
     }
     // Record changes?
-    if (nsRedlineMode_t::REDLINE_ON & mnOrigRedlineMode)
+    if (nsRedlineMode_t::REDLINE_ON & m_nOrigRedlineMode)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_REVISIONS);
     // Mirror margins?
-    if ((nsUseOnPage::PD_MIRROR & pDoc->GetPageDesc(0).ReadUseOn()) == nsUseOnPage::PD_MIRROR)
+    if ((nsUseOnPage::PD_MIRROR & m_pDoc->GetPageDesc(0).ReadUseOn()) == nsUseOnPage::PD_MIRROR)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_MARGMIRROR);
     // Init sections
     m_pSections = new MSWordSections(*this);
@@ -539,7 +539,7 @@ void RtfExport::ExportDocument_Impl()
     // breaks moving of drawings - so write it only in case there is really a
     // protected section in the document.
     {
-        const SfxItemPool& rPool = pDoc->GetAttrPool();
+        const SfxItemPool& rPool = m_pDoc->GetAttrPool();
         sal_uInt32 const nMaxItem = rPool.GetItemCount2(RES_PROTECT);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
@@ -556,13 +556,13 @@ void RtfExport::ExportDocument_Impl()
     Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FORMSHADE);
 
     // size and empty margins of the page
-    if (pDoc->GetPageDescCnt())
+    if (m_pDoc->GetPageDescCnt())
     {
         // Seeking the first SwFmtPageDesc. If no set, the default is valid
         const SwFmtPageDesc* pSttPgDsc = 0;
         {
-            const SwNode& rSttNd = *pDoc->GetNodes()[
-                                       pDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 ];
+            const SwNode& rSttNd = *m_pDoc->GetNodes()[
+                                       m_pDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 ];
             const SfxItemSet* pSet = 0;
 
             if (rSttNd.IsCntntNode())
@@ -580,7 +580,7 @@ void RtfExport::ExportDocument_Impl()
                 pSttPgDsc = static_cast<const SwFmtPageDesc*>(&pSet->Get(RES_PAGEDESC));
                 if (!pSttPgDsc->GetPageDesc())
                     pSttPgDsc = 0;
-                else if (pDoc->FindPageDesc(pSttPgDsc->GetPageDesc()->GetName(), &nPosInDoc))
+                else if (m_pDoc->FindPageDesc(pSttPgDsc->GetPageDesc()->GetName(), &nPosInDoc))
                 {
                     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCNO);
                     OutULong(nPosInDoc).WriteChar('}');
@@ -588,7 +588,7 @@ void RtfExport::ExportDocument_Impl()
             }
         }
         const SwPageDesc& rPageDesc = pSttPgDsc ? *pSttPgDsc->GetPageDesc()
-                                      : pDoc->GetPageDesc(0);
+                                      : m_pDoc->GetPageDesc(0);
         const SwFrmFmt& rFmtPage = rPageDesc.GetMaster();
 
         {
@@ -635,18 +635,18 @@ void RtfExport::ExportDocument_Impl()
         // following title page are correctly added - i13107
         if (pSttPgDsc)
         {
-            pAktPageDesc = &rPageDesc;
+            m_pAktPageDesc = &rPageDesc;
         }
     }
 
     // line numbering
-    const SwLineNumberInfo& rLnNumInfo = pDoc->GetLineNumberInfo();
+    const SwLineNumberInfo& rLnNumInfo = m_pDoc->GetLineNumberInfo();
     if (rLnNumInfo.IsPaintLineNumbers())
         AttrOutput().SectionLineNumbering(0, rLnNumInfo);
 
     {
         // write the footnotes and endnotes-out Info
-        const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
+        const SwFtnInfo& rFtnInfo = m_pDoc->GetFtnInfo();
 
         const char* pOut = FTNPOS_CHAPTER == rFtnInfo.ePos
                            ? OOO_STRING_SVTOOLS_RTF_ENDDOC
@@ -693,7 +693,7 @@ void RtfExport::ExportDocument_Impl()
         }
         Strm().WriteCharPtr(pOut);
 
-        const SwEndNoteInfo& rEndNoteInfo = pDoc->GetEndNoteInfo();
+        const SwEndNoteInfo& rEndNoteInfo = m_pDoc->GetEndNoteInfo();
 
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_AENDDOC).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_AFTNRSTCONT)
         .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_AFTNSTART);
@@ -815,13 +815,13 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrent
       bRTFFlySyntax(false),
       m_nCurrentNodeIndex(0)
 {
-    mbExportModeRTF = true;
+    m_bExportModeRTF = true;
     // the attribute output for the document
     m_pAttrOutput.reset(new RtfAttributeOutput(*this));
     // that just causes problems for RTF
-    bSubstituteBullets = false;
+    m_bSubstituteBullets = false;
     // needed to have a complete font table
-    maFontHelper.bLoadAllFonts = true;
+    m_aFontHelper.bLoadAllFonts = true;
     // the related SdrExport
     m_pSdrExport.reset(new RtfSdrExport(*this));
 
@@ -950,7 +950,7 @@ void RtfExport::OutColorTable()
     // Build the table from rPool since the colors provided to
     // RtfAttributeOutput callbacks are too late.
     sal_uInt32 nMaxItem;
-    const SfxItemPool& rPool = pDoc->GetAttrPool();
+    const SfxItemPool& rPool = m_pDoc->GetAttrPool();
 
     // MSO Word uses a default color table with 16 colors (which is used e.g. for highlighting)
     InsColor(COL_BLACK);
@@ -1131,55 +1131,55 @@ const OUString* RtfExport::GetRedline(sal_uInt16 nId)
 void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bWriteReset, bool bCheckForFirstPage)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
-    const SwPageDesc* pSave = pAktPageDesc;
+    const SwPageDesc* pSave = m_pAktPageDesc;
 
-    pAktPageDesc = &rPgDsc;
-    if (bCheckForFirstPage && pAktPageDesc->GetFollow() &&
-            pAktPageDesc->GetFollow() != pAktPageDesc)
-        pAktPageDesc = pAktPageDesc->GetFollow();
+    m_pAktPageDesc = &rPgDsc;
+    if (bCheckForFirstPage && m_pAktPageDesc->GetFollow() &&
+            m_pAktPageDesc->GetFollow() != m_pAktPageDesc)
+        m_pAktPageDesc = m_pAktPageDesc->GetFollow();
 
     if (bWriteReset)
     {
-        if (pCurPam->GetPoint()->nNode == pOrigPam->Start()->nNode)
+        if (m_pCurPam->GetPoint()->nNode == m_pOrigPam->Start()->nNode)
             Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECTD).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SBKNONE);
         else
             Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECT).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECTD);
     }
 
-    if (pAktPageDesc->GetLandscape())
+    if (m_pAktPageDesc->GetLandscape())
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LNDSCPSXN);
 
-    const SwFmt* pFmt = &pAktPageDesc->GetMaster(); //GetLeft();
-    bOutPageDescs = true;
+    const SwFmt* pFmt = &m_pAktPageDesc->GetMaster(); //GetLeft();
+    m_bOutPageDescs = true;
     OutputFormat(*pFmt, true, false);
-    bOutPageDescs = false;
+    m_bOutPageDescs = false;
 
     // normal header / footer (without a style)
     const SfxPoolItem* pItem;
-    if (pAktPageDesc->GetLeft().GetAttrSet().GetItemState(RES_HEADER, false,
+    if (m_pAktPageDesc->GetLeft().GetAttrSet().GetItemState(RES_HEADER, false,
             &pItem) == SfxItemState::SET)
         WriteHeaderFooter(*pItem, true);
-    if (pAktPageDesc->GetLeft().GetAttrSet().GetItemState(RES_FOOTER, false,
+    if (m_pAktPageDesc->GetLeft().GetAttrSet().GetItemState(RES_FOOTER, false,
             &pItem) == SfxItemState::SET)
         WriteHeaderFooter(*pItem, false);
 
     // title page
-    if (pAktPageDesc != &rPgDsc)
+    if (m_pAktPageDesc != &rPgDsc)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_TITLEPG);
-        pAktPageDesc = &rPgDsc;
-        if (pAktPageDesc->GetMaster().GetAttrSet().GetItemState(RES_HEADER,
+        m_pAktPageDesc = &rPgDsc;
+        if (m_pAktPageDesc->GetMaster().GetAttrSet().GetItemState(RES_HEADER,
                 false, &pItem) == SfxItemState::SET)
             WriteHeaderFooter(*pItem, true);
-        if (pAktPageDesc->GetMaster().GetAttrSet().GetItemState(RES_FOOTER,
+        if (m_pAktPageDesc->GetMaster().GetAttrSet().GetItemState(RES_FOOTER,
                 false, &pItem) == SfxItemState::SET)
             WriteHeaderFooter(*pItem, false);
     }
 
     // numbering type
-    AttrOutput().SectionPageNumbering(pAktPageDesc->GetNumType().GetNumberingType(), boost::none);
+    AttrOutput().SectionPageNumbering(m_pAktPageDesc->GetNumType().GetNumberingType(), boost::none);
 
-    pAktPageDesc = pSave;
+    m_pAktPageDesc = pSave;
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
@@ -1202,13 +1202,13 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
 
     const sal_Char* pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
     /* is this a title page? */
-    if (pAktPageDesc->GetFollow() && pAktPageDesc->GetFollow() != pAktPageDesc)
+    if (m_pAktPageDesc->GetFollow() && m_pAktPageDesc->GetFollow() != m_pAktPageDesc)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_TITLEPG);
         pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERF : OOO_STRING_SVTOOLS_RTF_FOOTERF);
     }
     Strm().WriteChar('{').WriteCharPtr(pStr);
-    WriteHeaderFooterText(pAktPageDesc->GetMaster(), bHeader);
+    WriteHeaderFooterText(m_pAktPageDesc->GetMaster(), bHeader);
     Strm().WriteChar('}');
 
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");

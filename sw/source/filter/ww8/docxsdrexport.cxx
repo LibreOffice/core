@@ -114,7 +114,7 @@ ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt
     : m_rExport(rExport)
 {
     m_rExport.SaveData(nStt, nEnd);
-    m_rExport.mpParentFrame = pParentFrame;
+    m_rExport.m_pParentFrame = pParentFrame;
 }
 
 ExportDataSaveRestore::~ExportDataSaveRestore()
@@ -170,7 +170,7 @@ struct DocxSdrExport::Impl
           m_nId(0),
           m_nSeq(0),
           m_bDMLAndVMLDrawingOpen(false),
-          m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.pDoc)),
+          m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.m_pDoc)),
           m_nDMLandVMLTextFrameRotation(0)
     {
     }
@@ -748,7 +748,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFr
     bool bSwapInPage = false;
     if (!(sdrObj)->GetPage())
     {
-        if (SdrModel* pModel = m_pImpl->m_rExport.pDoc->getIDocumentDrawModelAccess().GetDrawModel())
+        if (SdrModel* pModel = m_pImpl->m_rExport.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         {
             if (SdrPage* pPage = pModel->GetPage(0))
             {
@@ -1296,7 +1296,7 @@ void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
     ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
 
     m_pImpl->m_pBodyPrAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-    m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], /*bDML=*/true);
+    m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.m_pDoc->GetNodes()[nStt], /*bDML=*/true);
     m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
     m_pImpl->m_bFlyFrameGraphic = false;
@@ -1476,7 +1476,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
         pFS->endElementNS(XML_wps, XML_spPr);
     }
 
-    m_pImpl->m_rExport.mpParentFrame = NULL;
+    m_pImpl->m_rExport.m_pParentFrame = NULL;
     bool skipTxBxContent = false ;
     bool isTxbxLinked = false ;
 
@@ -1530,7 +1530,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
 
         pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
 
-        m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], /*bDML=*/true);
+        m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.m_pDoc->GetNodes()[nStt], /*bDML=*/true);
         m_pImpl->m_bFlyFrameGraphic = true;
         m_pImpl->m_rExport.WriteText();
         if (m_pImpl->m_bParagraphSdtOpen)
@@ -1625,11 +1625,11 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
             m_pImpl->m_pFlyAttrList->addNS(XML_w14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
     }
     sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList.release());
-    m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], /*bDML=*/false);
+    m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.m_pDoc->GetNodes()[nStt], /*bDML=*/false);
     sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList.release());
     m_pImpl->m_bTextFrameSyntax = false;
     m_pImpl->m_pFlyFrameSize = 0;
-    m_pImpl->m_rExport.mpParentFrame = NULL;
+    m_pImpl->m_rExport.m_pParentFrame = NULL;
 
     if (!bTextBoxOnly)
     {

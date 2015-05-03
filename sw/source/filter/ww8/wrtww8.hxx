@@ -454,110 +454,110 @@ struct MSWordSaveData
 class MSWordExportBase
 {
 public:
-    wwFontHelper maFontHelper;
-    std::vector<sal_uLong> maChapterFieldLocs;
+    wwFontHelper m_aFontHelper;
+    std::vector<sal_uLong> m_aChapterFieldLocs;
     typedef std::vector<sal_uLong>::const_iterator mycCFIter;
-    OUString aMainStg;
-    std::vector<const SwTOXType*> aTOXArr;
-    const SfxItemSet* pISet;    // fuer Doppel-Attribute
-    WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
-    SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules
-    const SwTxtNode *mpTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
-    std::map< sal_uInt16, sal_uInt16 > aRuleDuplicates; //map to Duplicated numrules
+    OUString m_aMainStg;
+    std::vector<const SwTOXType*> m_aTOXArr;
+    const SfxItemSet* m_pISet;    // fuer Doppel-Attribute
+    WW8_WrPct*  m_pPiece;         // Pointer auf Piece-Table
+    SwNumRuleTbl* m_pUsedNumTbl;  // alle used NumRules
+    const SwTxtNode *m_pTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
+    std::map< sal_uInt16, sal_uInt16 > m_aRuleDuplicates; //map to Duplicated numrules
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
-    WW8_WrtBookmarks* pBkmks;
-    WW8_WrtRedlineAuthor* pRedlAuthors;
-    boost::shared_ptr<NfKeywordTable> pKeyMap;
-    SvxMSExportOLEObjects* pOLEExp;
-    SwMSConvertControls* pOCXExp;
+    WW8_WrtBookmarks* m_pBkmks;
+    WW8_WrtRedlineAuthor* m_pRedlAuthors;
+    boost::shared_ptr<NfKeywordTable> m_pKeyMap;
+    SvxMSExportOLEObjects* m_pOLEExp;
+    SwMSConvertControls* m_pOCXExp;
     WW8OleMap m_aOleMap;    // To remember all already exported ole objects
-    ww8::WW8TableInfo::Pointer_t mpTableInfo;
+    ww8::WW8TableInfo::Pointer_t m_pTableInfo;
 
-    sal_uInt16 nCharFmtStart;
-    sal_uInt16 nFmtCollStart;
-    sal_uInt16 nStyleBeforeFly;     ///< Style-Nummer des Nodes,
+    sal_uInt16 m_nCharFmtStart;
+    sal_uInt16 m_nFmtCollStart;
+    sal_uInt16 m_nStyleBeforeFly;     ///< Style-Nummer des Nodes,
                                 ///<       in/an dem ein Fly verankert ist
-    sal_uInt16 nLastFmtId;          ///< Style of last TxtNode in normal range
-    sal_uInt16 nUniqueList;         ///< current number for creating unique list names
-    unsigned int mnHdFtIndex;
+    sal_uInt16 m_nLastFmtId;          ///< Style of last TxtNode in normal range
+    sal_uInt16 m_nUniqueList;         ///< current number for creating unique list names
+    unsigned int m_nHdFtIndex;
 
-    RedlineMode_t mnOrigRedlineMode;   ///< Remember the original redline mode
+    RedlineMode_t m_nOrigRedlineMode;   ///< Remember the original redline mode
 
 public:
     /* implicit bookmark vector containing pairs of node indexes and bookmark names */
-    SwImplBookmarks maImplicitBookmarks;
-    sw::Frames maFrames;             // The floating frames in this document
-    const SwPageDesc *pAktPageDesc;
-    bool bPrevTextNodeIsEmpty;
-    WW8_WrPlcPn* pPapPlc;
-    WW8_WrPlcPn* pChpPlc;
-    MSWordAttrIter* pChpIter;
-    MSWordStyles* pStyles;
-    WW8_WrPlcAnnotations* pAtn;
-    WW8_WrPlcTxtBoxes *pTxtBxs, *pHFTxtBxs;
+    SwImplBookmarks m_aImplicitBookmarks;
+    sw::Frames m_aFrames;             // The floating frames in this document
+    const SwPageDesc *m_pAktPageDesc;
+    bool m_bPrevTextNodeIsEmpty;
+    WW8_WrPlcPn* m_pPapPlc;
+    WW8_WrPlcPn* m_pChpPlc;
+    MSWordAttrIter* m_pChpIter;
+    MSWordStyles* m_pStyles;
+    WW8_WrPlcAnnotations* m_pAtn;
+    WW8_WrPlcTxtBoxes *m_pTxtBxs, *m_pHFTxtBxs;
 
-    const sw::Frame *mpParentFrame; // If set we are exporting content inside
+    const sw::Frame *m_pParentFrame; // If set we are exporting content inside
                                     // a frame, e.g. a graphic node
 
-    Point* pFlyOffset;              // zur Justierung eines im Writer als
-    RndStdIds eNewAnchorType;       // Zeichen gebundenen Flys, der im WW
+    Point* m_pFlyOffset;              // zur Justierung eines im Writer als
+    RndStdIds m_eNewAnchorType;       // Zeichen gebundenen Flys, der im WW
                                     // Absatzgebunden wird.
 
-    WW8_WrPlcFld* pFldMain;         // fields in MainText
-    WW8_WrPlcFld* pFldHdFt;         // fields in Header/Footer
-    WW8_WrPlcFld* pFldFtn;          // fields in FootNotes
-    WW8_WrPlcFld* pFldEdn;          // fields in EndNotes
-    WW8_WrPlcFld* pFldAtn;          // fields in Annotations
-    WW8_WrPlcFld* pFldTxtBxs;       // fields in textboxes
-    WW8_WrPlcFld* pFldHFTxtBxs;     // fields in header/footer textboxes
-    WW8_WrMagicTable *pMagicTable;  // keeps track of table cell positions, and
+    WW8_WrPlcFld* m_pFldMain;         // fields in MainText
+    WW8_WrPlcFld* m_pFldHdFt;         // fields in Header/Footer
+    WW8_WrPlcFld* m_pFldFtn;          // fields in FootNotes
+    WW8_WrPlcFld* m_pFldEdn;          // fields in EndNotes
+    WW8_WrPlcFld* m_pFldAtn;          // fields in Annotations
+    WW8_WrPlcFld* m_pFldTxtBxs;       // fields in textboxes
+    WW8_WrPlcFld* m_pFldHFTxtBxs;     // fields in header/footer textboxes
+    WW8_WrMagicTable *m_pMagicTable;  // keeps track of table cell positions, and
                                     // marks those that contain graphics,
                                     // which is required to make word display
                                     // graphics inside tables
-    SwWW8WrGrf* pGrf;
-    const SwAttrSet* pStyAttr;      // StyleAttr for Tabs
-    const SwModify* pOutFmtNode;    // write Format or Node
-    const SwFmt *pCurrentStyle;     // iff bStyDef=true, then this store the current style
+    SwWW8WrGrf* m_pGrf;
+    const SwAttrSet* m_pStyAttr;      // StyleAttr for Tabs
+    const SwModify* m_pOutFmtNode;    // write Format or Node
+    const SwFmt *m_pCurrentStyle;     // iff bStyDef=true, then this store the current style
 
-    MainTxtPlcDrawObj *pSdrObjs;   // Draw-/Fly-Objects
-    HdFtPlcDrawObj *pHFSdrObjs;     // Draw-/Fly-Objects in header or footer
+    MainTxtPlcDrawObj *m_pSdrObjs;   // Draw-/Fly-Objects
+    HdFtPlcDrawObj *m_pHFSdrObjs;     // Draw-/Fly-Objects in header or footer
 
-    SwEscherEx* pEscher;            // escher export class
+    SwEscherEx* m_pEscher;            // escher export class
     // #i43447# - removed
 //    SwTwips nFlyWidth, nFlyHeight;  // Fuer Anpassung Graphic
 
-    sal_uInt8 nTxtTyp;
+    sal_uInt8 m_nTxtTyp;
 
-    bool bStyDef : 1;           // should Style be written?
-    bool bBreakBefore : 1;      // Breaks are being written 2 times
-    bool bOutKF : 1;            // Header/Footer texts are being written
-    bool bOutFlyFrmAttrs : 1;   // Frame-attr of Flys are being written
-    bool bOutPageDescs : 1;     ///< PageDescs (section properties) are being written
-    bool bOutFirstPage : 1;     // write Attrset of FirstPageDesc
-    bool bOutTable : 1;         // table is being written
+    bool m_bStyDef : 1;           // should Style be written?
+    bool m_bBreakBefore : 1;      // Breaks are being written 2 times
+    bool m_bOutKF : 1;            // Header/Footer texts are being written
+    bool m_bOutFlyFrmAttrs : 1;   // Frame-attr of Flys are being written
+    bool m_bOutPageDescs : 1;     ///< PageDescs (section properties) are being written
+    bool m_bOutFirstPage : 1;     // write Attrset of FirstPageDesc
+    bool m_bOutTable : 1;         // table is being written
                                      // ( wird zB bei Flys in Tabelle zurueckgesetzt )
-    bool bOutGrf : 1;           // graphics are being written
-    bool bInWriteEscher : 1;    // in write textboxes
-    bool bStartTOX : 1;         // true: a TOX is startet
-    bool bInWriteTOX : 1;       // true: all content are in a TOX
-    bool bFtnAtTxtEnd : 1;      // true: all FTN at Textend
-    bool bEndAtTxtEnd : 1;      // true: all END at Textend
-    bool bHasHdr : 1;
-    bool bHasFtr : 1;
-    bool bSubstituteBullets : 1; // true: SubstituteBullet() gets called
-    bool bTabInTOC : 1; //true for TOC field flag 'w'
+    bool m_bOutGrf : 1;           // graphics are being written
+    bool m_bInWriteEscher : 1;    // in write textboxes
+    bool m_bStartTOX : 1;         // true: a TOX is startet
+    bool m_bInWriteTOX : 1;       // true: all content are in a TOX
+    bool m_bFtnAtTxtEnd : 1;      // true: all FTN at Textend
+    bool m_bEndAtTxtEnd : 1;      // true: all END at Textend
+    bool m_bHasHdr : 1;
+    bool m_bHasFtr : 1;
+    bool m_bSubstituteBullets : 1; // true: SubstituteBullet() gets called
+    bool m_bTabInTOC : 1; //true for TOC field flag 'w'
 
-    bool bHideTabLeaderAndPageNumbers : 1 ; // true: the 'z' field of TOC is set.
-    bool mbExportModeRTF;
-    bool mbOutOutlineOnly;   // export outline nodes, only (send outline to clipboard/presentation)
+    bool m_bHideTabLeaderAndPageNumbers : 1 ; // true: the 'z' field of TOC is set.
+    bool m_bExportModeRTF;
+    bool m_bOutOutlineOnly;   // export outline nodes, only (send outline to clipboard/presentation)
     /// Is font size written already as part of the current character properties?
-    bool mbFontSizeWritten;
+    bool m_bFontSizeWritten;
 
-    SwDoc *pDoc;
-    SwPaM *pCurPam, *pOrigPam;
+    SwDoc *m_pDoc;
+    SwPaM *m_pCurPam, *m_pOrigPam;
 
     /// Stack to remember the nesting (see MSWordSaveData for more)
-    ::std::stack< MSWordSaveData > maSaveData;
+    ::std::stack< MSWordSaveData > m_aSaveData;
 
     /// Used to split the runs according to the bookmarks start and ends
     typedef std::vector< ::sw::mark::IMark* > IMarkVector;
@@ -598,12 +598,12 @@ public:
     /// Return the numeric id of the font (and add it to the font list if needed)
     sal_uInt16 GetId( const SvxFontItem& rFont)
     {
-        return maFontHelper.GetId(rFont);
+        return m_aFontHelper.GetId(rFont);
     }
     /// @overload
     sal_uInt16 GetId( const wwFont& rFont)
     {
-        return maFontHelper.GetId(rFont);
+        return m_aFontHelper.GetId(rFont);
     }
 
     const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
@@ -691,10 +691,10 @@ public:
     void OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpFmt, bool bFlyFmt = false );
 
     /// Getter for pISet.
-    const SfxItemSet* GetCurItemSet() const { return pISet; }
+    const SfxItemSet* GetCurItemSet() const { return m_pISet; }
 
     /// Setter for pISet.
-    void SetCurItemSet( const SfxItemSet* pS ) { pISet = pS; }
+    void SetCurItemSet( const SfxItemSet* pS ) { m_pISet = pS; }
 
     /// Remember some of the memebers so that we can recurse in WriteText().
     virtual void SaveData( sal_uLong nStt, sal_uLong nEnd );
@@ -743,10 +743,10 @@ public:
     virtual void SetupSectionPositions( WW8_PdAttrDesc* /*pA*/ ) {}
 
     /// Top node of host page when in header/footer.
-    void SetHdFtPageRoot( const SwTxtNode *pNd ) { mpTopNodeOfHdFtPage = pNd; }
+    void SetHdFtPageRoot( const SwTxtNode *pNd ) { m_pTopNodeOfHdFtPage = pNd; }
 
     /// Top node of host page when in header/footer.
-    const SwTxtNode *GetHdFtPageRoot() const { return mpTopNodeOfHdFtPage; }
+    const SwTxtNode *GetHdFtPageRoot() const { return m_pTopNodeOfHdFtPage; }
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
@@ -1017,8 +1017,8 @@ public:
 
     bool MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt);
 
-    SvxMSExportOLEObjects& GetOLEExp()      { return *pOLEExp; }
-    SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
+    SvxMSExportOLEObjects& GetOLEExp()      { return *m_pOLEExp; }
+    SwMSConvertControls& GetOCXExp()        { return *m_pOCXExp; }
     WW8OleMap& GetOLEMap()                  { return m_aOleMap; }
     void ExportDopTypography(WW8DopTypography &rTypo);
 
@@ -1073,14 +1073,14 @@ public:
     void OutSwString(const OUString&, sal_Int32 nStt, sal_Int32 nLen,
         bool bUnicode, rtl_TextEncoding eChrSet);
 
-    WW8_CP Fc2Cp( sal_uLong nFc ) const          { return pPiece->Fc2Cp( nFc ); }
+    WW8_CP Fc2Cp( sal_uLong nFc ) const          { return m_pPiece->Fc2Cp( nFc ); }
 
             // some partly static semi-internal function declarations
 
     void OutSprmBytes( sal_uInt8* pBytes, sal_uInt16 nSiz )
                                 { pO->insert( pO->end(), pBytes, pBytes+nSiz ); }
 
-    inline bool IsUnicode() const           { return pPiece->IsUnicode(); }
+    inline bool IsUnicode() const           { return m_pPiece->IsUnicode(); }
 
     virtual void SectionBreaksAndFrames( const SwTxtNode& rNode ) SAL_OVERRIDE;
 
@@ -1106,9 +1106,9 @@ public:
     // #i77805# - new return value indicates, if an inherited outline numbering is suppressed
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt) SAL_OVERRIDE;
 
-    unsigned int GetHdFtIndex() const { return mnHdFtIndex; }
-    void SetHdFtIndex(unsigned int nHdFtIndex) { mnHdFtIndex = nHdFtIndex; }
-    void IncrementHdFtIndex() { ++mnHdFtIndex; }
+    unsigned int GetHdFtIndex() const { return m_nHdFtIndex; }
+    void SetHdFtIndex(unsigned int nHdFtIndex) { m_nHdFtIndex = nHdFtIndex; }
+    void IncrementHdFtIndex() { ++m_nHdFtIndex; }
 
     static long GetDTTM( const DateTime& rDT );
 
