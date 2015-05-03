@@ -86,6 +86,7 @@ struct _CmpLPt
 
 typedef o3tl::sorted_vector<_CmpLPt> _MergePos;
 
+
 struct _Sort_CellFrm
 {
     const SwCellFrm* pFrm;
@@ -206,7 +207,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
             for( ; nSttPos <= nEndPos; ++nSttPos )
             {
                 pLine = rLines[ nSttPos ];
-                for( sal_uInt16 n = pLine->GetTabBoxes().size(); n ; )
+                for( auto n = pLine->GetTabBoxes().size(); n ; )
                 {
                     SwTableBox* pBox = pLine->GetTabBoxes()[ --n ];
                     // check for cell protection??
@@ -466,10 +467,12 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
         ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTblSearchType::TBLSEARCH_NO_UNION_CORRECT );
 
         // find boxes for each entry and emit
-        for( i = 0; i < aUnions.size() && bTblIsValid &&
-                                    bValidChartSel; ++i )
+        for( auto & rSelUnion : aUnions )
         {
-            SwSelUnion *pUnion = &aUnions[i];
+            if (!bTblIsValid || !bValidChartSel)
+                break;
+
+            SwSelUnion *pUnion = &rSelUnion;
             const SwTabFrm *pTable = pUnion->GetTable();
 
             SWRECTFN( pTable )
@@ -879,9 +882,9 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
               nEndIdx = rBox.GetSttNd()->EndOfSectionIndex(),
               nIdx;
 
-        for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+        for( auto pFmt : rFmts )
         {
-            const SwFmtAnchor& rAnchor = rFmts[n]->GetAnchor();
+            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
             const SwPosition* pAPos = rAnchor.GetCntntAnchor();
             if (pAPos &&
                 ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -934,11 +937,11 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
     SWRECTFN( pStart->GetUpper() )
 
-    for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
+    for ( auto & rSelUnion : aUnions )
     {
-        const SwTabFrm *pTabFrm = aUnions[i].GetTable();
+        const SwTabFrm *pTabFrm = rSelUnion.GetTable();
 
-        SwRect &rUnion = aUnions[i].GetUnion();
+        SwRect &rUnion = rSelUnion.GetUnion();
 
         // Skip any repeated headlines in the follow:
         const SwLayoutFrm* pRow = pTabFrm->IsFollow() ?
@@ -1272,7 +1275,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                       aPosArr[ 0 ].Y() ) :
                   0;
 
-        for( sal_uInt16 n = 0; n < aPosArr.size(); ++n )
+        for( _MergePos::size_type n = 0; n < aPosArr.size(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
             if( bCalcWidth )
@@ -1329,9 +1332,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         SwPaM aPam( aInsPos );
 
-        for( sal_uInt16 n = 0; n < aPosArr.size(); ++n )
+        for( const auto &rPt : aPosArr )
         {
-            const _CmpLPt& rPt = aPosArr[ n ];
             aPam.GetPoint()->nNode.Assign( *rPt.pSelBox->GetSttNd()->
                                             EndOfSectionNode(), -1 );
             SwCntntNode* pCNd = aPam.GetCntntNode();
@@ -1537,7 +1539,7 @@ static void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
         aEndArr.push_front( pTmp );
     }
 
-    for( sal_uInt16 n = 0; n < aEndArr.size() && n < aSttArr.size(); ++n )
+    for( std::deque<const SwLayoutFrm *>::size_type n = 0; n < aEndArr.size() && n < aSttArr.size(); ++n )
         if( aSttArr[ n ] != aEndArr[ n ] )
         {
             // first unequal line or box - all odds are
@@ -1973,10 +1975,9 @@ bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
     ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
     // now search boxes for each entry and emit
-    for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
+    for ( auto rSelUnion : aUnions )
     {
-        SwSelUnion *pUnion = &aUnions[i];
-        const SwTabFrm *pTable = pUnion->GetTable();
+        const SwTabFrm *pTable = rSelUnion.GetTable();
 
         // Skip any repeated headlines in the follow:
         const SwLayoutFrm* pRow = pTable->IsFollow() ?
@@ -1985,14 +1986,14 @@ bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 
         while ( pRow )
         {
-            if ( pRow->Frm().IsOver( pUnion->GetUnion() ) )
+            if ( pRow->Frm().IsOver( rSelUnion.GetUnion() ) )
             {
                 const SwLayoutFrm *pCell = pRow->FirstCell();
 
                 while ( pCell && pRow->IsAnLower( pCell ) )
                 {
                     OSL_ENSURE( pCell->IsCellFrm(), "Frame without cell" );
-                    if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
+                    if( ::IsFrmInTblSel( rSelUnion.GetUnion(), pCell ) )
                     {
                         if( (pCell->Frm().*fnRect->fnGetWidth)() < nMinValue )
                             return false;
@@ -2369,8 +2370,8 @@ void _FndBox::MakeFrms( SwTable &rTable )
 // ???? or is this the last Follow of the table ????
                 pUpperFrm = pTable;
 
-            for ( i = nStPos; (sal_uInt16)i <= nEndPos; ++i )
-                ::lcl_InsertRow( *rTable.GetTabLines()[static_cast<sal_uInt16>(i)],
+            for ( sal_uInt16 j = nStPos; j <= nEndPos; ++j )
+                ::lcl_InsertRow( *rTable.GetTabLines()[j],
                                 static_cast<SwLayoutFrm*>(pUpperFrm), pSibling );
             if ( pUpperFrm->IsTabFrm() )
                 static_cast<SwTabFrm*>(pUpperFrm)->SetCalcLowers();
