@@ -22,20 +22,6 @@
 
 #include <sfx2/sfx.hrc>
 
-#define STR_CB_AUTO_EXTENSION       (RID_SFX_EXPLORER_START + 51)
-#define STR_CB_SELECTION            (RID_SFX_EXPLORER_START + 52)
-#define STR_CB_INSERT_AS_LINK       (RID_SFX_EXPLORER_START + 53)
-#define STR_CB_SHOW_PREVIEW         (RID_SFX_EXPLORER_START + 54)
-#define STR_CB_READONLY             (RID_SFX_EXPLORER_START + 55)
-#define STR_CB_PASSWORD             (RID_SFX_EXPLORER_START + 56)
-#define STR_CB_FILTER_OPTIONS       (RID_SFX_EXPLORER_START + 57)
-#define STR_PB_PLAY                 (RID_SFX_EXPLORER_START + 58)
-#define STR_PB_STOP                 (RID_SFX_EXPLORER_START + 59)
-#define STR_PB_OPEN                 (RID_SFX_EXPLORER_START + 60)
-#define STR_PB_SAVE                 (RID_SFX_EXPLORER_START + 61)
-#define STR_LB_IMAGE_TEMPLATE       (RID_SFX_EXPLORER_START + 62)
-#define STR_LB_TEMPLATES            (RID_SFX_EXPLORER_START + 63)
-#define STR_LB_VERSION              (RID_SFX_EXPLORER_START + 64)
 #define STR_PB_SAVEACOPY            (RID_SFX_EXPLORER_START + 65)
 
 #endif
