@@ -81,8 +81,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-#define EXPORT_SVC_NAME "com.sun.star.xml.XMLExportFilter"
-
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
 {
     sal_Unicode cRes = cChar;
@@ -393,117 +391,40 @@ const uno::Sequence< sal_Int8 > & SmXMLExport::getUnoTunnelId() throw()
     return theSmXMLExportUnoTunnelId::get().getSeq();
 }
 
-OUString SAL_CALL SmXMLExport_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Math_XMLExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return OUString( "com.sun.star.comp.Math.XMLExporter" );
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::ALL));
 }
 
-uno::Sequence< OUString > SAL_CALL SmXMLExport_getSupportedServiceNames()
-        throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Math_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLMetaExporter", SvXMLExportFlags::META));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Math_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    // EXPORT_OASIS is required here although there is no difference between
-    // OOo and OASIS, because without the flag, a transformation to OOo would
-    // be chained in.
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExport_getImplementationName(), SvXMLExportFlags::OASIS|SvXMLExportFlags::ALL );
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::META));
 }
 
-OUString SAL_CALL SmXMLExportMetaOOO_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Math_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return OUString( "com.sun.star.comp.Math.XMLMetaExporter" );
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLSettingsExporter", SvXMLExportFlags::SETTINGS));
 }
 
-uno::Sequence< OUString > SAL_CALL SmXMLExportMetaOOO_getSupportedServiceNames()
-    throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Math_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLOasisSettingsExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::SETTINGS));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMetaOOO_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+Math_XMLContentExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportMetaOOO_getImplementationName(), SvXMLExportFlags::META );
-}
-
-OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Math.XMLOasisMetaExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL SmXMLExportMeta_getSupportedServiceNames()
-throw()
-{
-    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-throw( uno::Exception )
-{
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportMeta_getImplementationName(), SvXMLExportFlags::OASIS|SvXMLExportFlags::META );
-}
-
-OUString SAL_CALL SmXMLExportSettingsOOO_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Math.XMLSettingsExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL SmXMLExportSettingsOOO_getSupportedServiceNames()
-throw()
-{
-    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettingsOOO_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-throw( uno::Exception )
-{
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportSettingsOOO_getImplementationName(), SvXMLExportFlags::SETTINGS );
-}
-
-OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Math.XMLOasisSettingsExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL SmXMLExportSettings_getSupportedServiceNames()
-throw()
-{
-    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-throw( uno::Exception )
-{
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportSettings_getImplementationName(), SvXMLExportFlags::OASIS|SvXMLExportFlags::SETTINGS );
-}
-
-OUString SAL_CALL SmXMLExportContent_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Math.XMLContentExporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL SmXMLExportContent_getSupportedServiceNames()
-        throw()
-{
-    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-throw( uno::Exception )
-{
-    // The EXPORT_OASIS flag is only required to avoid that a transformer is
-    // chanied in
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportContent_getImplementationName(), SvXMLExportFlags::OASIS|SvXMLExportFlags::CONTENT );
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLContentExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::CONTENT));
 }
 
 sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)

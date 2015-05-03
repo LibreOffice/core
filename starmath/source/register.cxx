@@ -58,33 +58,12 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
             SmXMLImport_createInstance,
             SmXMLImport_getSupportedServiceNames() );
         }
-        else if( SmXMLExport_getImplementationName().equalsAscii( pImplementationName ))
-        {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
-            SmXMLExport_getImplementationName(),
-            SmXMLExport_createInstance,
-            SmXMLExport_getSupportedServiceNames() );
-        }
         else if( SmXMLImportMeta_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLImportMeta_getImplementationName(),
             SmXMLImportMeta_createInstance,
             SmXMLImportMeta_getSupportedServiceNames() );
-        }
-        else if( SmXMLExportMetaOOO_getImplementationName().equalsAscii( pImplementationName ))
-        {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
-            SmXMLExportMetaOOO_getImplementationName(),
-            SmXMLExportMetaOOO_createInstance,
-            SmXMLExportMetaOOO_getSupportedServiceNames() );
-        }
-        else if( SmXMLExportMeta_getImplementationName().equalsAscii( pImplementationName ))
-        {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
-            SmXMLExportMeta_getImplementationName(),
-            SmXMLExportMeta_createInstance,
-            SmXMLExportMeta_getSupportedServiceNames() );
         }
         else if( SmXMLImportSettings_getImplementationName().equalsAscii( pImplementationName ))
         {
@@ -93,27 +72,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
             SmXMLImportSettings_createInstance,
             SmXMLImportSettings_getSupportedServiceNames() );
         }
-        else if( SmXMLExportSettingsOOO_getImplementationName().equalsAscii( pImplementationName ))
-        {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
-            SmXMLExportSettingsOOO_getImplementationName(),
-            SmXMLExportSettingsOOO_createInstance,
-            SmXMLExportSettingsOOO_getSupportedServiceNames() );
-        }
-        else if( SmXMLExportSettings_getImplementationName().equalsAscii( pImplementationName ))
-        {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
-            SmXMLExportSettings_getImplementationName(),
-            SmXMLExportSettings_createInstance,
-            SmXMLExportSettings_getSupportedServiceNames() );
-        }
-        else if( SmXMLExportContent_getImplementationName().equalsAscii( pImplementationName ))
-        {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
-            SmXMLExportContent_getImplementationName(),
-            SmXMLExportContent_createInstance,
-            SmXMLExportContent_getSupportedServiceNames() );
-        }
         else if( SmDocument_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::sfx2::createSfxModelFactory( xServiceManager,
@@ -121,7 +79,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
             SmDocument_createInstance,
             SmDocument_getSupportedServiceNames() );
         }
-
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
