@@ -896,10 +896,8 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
     case REF_FOOTNOTE:
     case REF_ENDNOTE:
         {
-            sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().size();
-            SwTxtFtn* pFtnIdx;
-            for( n = 0; n < nFtnCnt; ++n )
-                if( nSeqNo == (pFtnIdx = pDoc->GetFtnIdxs()[ n ])->GetSeqRefNo() )
+            for( auto pFtnIdx : pDoc->GetFtnIdxs() )
+                if( nSeqNo == pFtnIdx->GetSeqRefNo() )
                 {
                     SwNodeIndex* pIdx = pFtnIdx->GetStartNode();
                     if( pIdx )
@@ -975,7 +973,7 @@ void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 /// @param[in,out] rIds The list of IDs found in the document.
 void _RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
-    for( sal_uInt16 n = rDoc.GetFtnIdxs().size(); n; )
+    for( auto n = rDoc.GetFtnIdxs().size(); n; )
         rIds.insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
 }
 
@@ -1021,9 +1019,8 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
             AddId( GetFirstUnusedId(aIds), *pIt );
 
         // Change the footnotes/endnotes in the source doc to the new ID
-        for (sal_uInt16 i = 0, nCnt = rDoc.GetFtnIdxs().size(); i < nCnt; ++i)
+        for ( const auto pFtnIdx : rDoc.GetFtnIdxs() )
         {
-            SwTxtFtn *const pFtnIdx = rDoc.GetFtnIdxs()[i];
             sal_uInt16 const n = pFtnIdx->GetSeqRefNo();
             pFtnIdx->SetSeqNo(sequencedIds[n]);
         }
@@ -1110,7 +1107,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
             case REF_SEQUENCEFLD:
                 {
                     _RefIdsMap* pMap = 0;
-                    for( sal_uInt16 n = aFldMap.size(); n; )
+                    for( auto n = aFldMap.size(); n; )
                     {
                         if( aFldMap[ --n ].GetName()==rRefFld.GetSetRefName() )
                         {
