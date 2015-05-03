@@ -305,9 +305,9 @@ IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 
 
-IMPL_LINK( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, /* pTabCtrl */ )
+IMPL_LINK_NOARG_TYPED( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, bool )
 {
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1193,7 +1193,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 
 
-IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
+IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
 
 /*  [Description]
 
@@ -1210,7 +1210,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
     SfxTabPage *pPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     DBG_ASSERT( pPage, "no active Page" );
     if (!pPage)
-        return sal_False;
+        return false;
 #ifdef DBG_UTIL
     Data_Impl* pDataObject = Find( pImpl->aData, pTabCtrl->GetCurPageId() );
     DBG_ASSERT( pDataObject, "no Data structure for current page" );
@@ -1272,9 +1272,9 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
         }
     }
     if ( nRet & SfxTabPage::LEAVE_PAGE )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 

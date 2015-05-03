@@ -243,7 +243,7 @@ IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
     return 1;
 }
 
-IMPL_LINK( TabWindow, Deactivate, TabControl*, pTabControl )
+IMPL_LINK_TYPED( TabWindow, Deactivate, TabControl*, pTabControl, bool )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -253,7 +253,7 @@ IMPL_LINK( TabWindow, Deactivate, TabControl*, pTabControl )
 
     implts_SendNotification( NOTIFY_DEACTIVATED, nPageId );
 
-    return 1;
+    return true;
 }
 
 // XInitilization

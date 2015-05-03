@@ -46,7 +46,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
 
     DECL_LINK( ActivatePageHdl, TabControl * );
-    DECL_LINK( DeactivatePageHdl, TabControl * );
+    DECL_LINK_TYPED( DeactivatePageHdl, TabControl *, bool );
     DECL_LINK(OkHdl, void *);
 
     ResMgr& mrResMgr;

@@ -599,11 +599,11 @@ IMPL_LINK_NOARG(CustomAnimationCreateDialog, implActivatePagekHdl)
     return 1;
 }
 
-IMPL_LINK_NOARG(CustomAnimationCreateDialog, implDeactivatePagekHdl)
+IMPL_LINK_NOARG_TYPED(CustomAnimationCreateDialog, implDeactivatePagekHdl, TabControl *, bool)
 {
     mfDuration = getCurrentPage()->getDuration();
     mbIsPreview = getCurrentPage()->getIsPreview();
-    return 1;
+    return true;
 }
 
 void CustomAnimationCreateDialog::preview( const CustomAnimationPresetPtr& pPreset ) const

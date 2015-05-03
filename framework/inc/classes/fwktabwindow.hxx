@@ -105,7 +105,7 @@ private:
     bool            RemoveEntry( sal_Int32 nIndex );
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, void *);
-    DECL_DLLPRIVATE_LINK(DeactivatePageHdl, void *);
+    DECL_DLLPRIVATE_LINK_TYPED(DeactivatePageHdl, TabControl *, bool);
 
 public:
     FwkTabWindow( vcl::Window* pParent );

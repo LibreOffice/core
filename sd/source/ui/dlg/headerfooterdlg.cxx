@@ -266,9 +266,9 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-IMPL_LINK_NOARG(HeaderFooterDialog, DeactivatePageHdl)
+IMPL_LINK_NOARG_TYPED(HeaderFooterDialog, DeactivatePageHdl, TabControl *, bool)
 {
-    return sal_True;
+    return true;
 }
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)

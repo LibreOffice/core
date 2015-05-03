@@ -110,7 +110,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
     protected:
         DECL_LINK( Activate, TabControl* );
-        DECL_LINK( Deactivate, TabControl* );
+        DECL_LINK_TYPED( Deactivate, TabControl*, bool );
 
     private:
 

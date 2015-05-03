@@ -50,7 +50,7 @@ private:
     bool                mbSmallInvalidate;
     bool                mbLayoutDirty;
     Link<>              maActivateHdl;
-    Link<>              maDeactivateHdl;
+    Link<TabControl *, bool> maDeactivateHdl;
 
     using Control::ImplInitSettings;
     SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
@@ -162,8 +162,7 @@ public:
 
     void                SetActivatePageHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
     const Link<>&       GetActivatePageHdl() const { return maActivateHdl; }
-    void                SetDeactivatePageHdl( const Link<>& rLink ) { maDeactivateHdl = rLink; }
-    const Link<>&       GetDeactivatePageHdl() const { return maDeactivateHdl; }
+    void                SetDeactivatePageHdl( const Link<TabControl *, bool>& rLink ) { maDeactivateHdl = rLink; }
 
     // returns (control relative) bounding rectangle for the
     // character at index nIndex relative to the text of page nPageId

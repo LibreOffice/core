@@ -278,10 +278,10 @@ IMPL_LINK_NOARG(FwkTabWindow, ActivatePageHdl)
     return 1;
 }
 
-IMPL_LINK_NOARG(FwkTabWindow, DeactivatePageHdl)
+IMPL_LINK_NOARG_TYPED(FwkTabWindow, DeactivatePageHdl, TabControl *, bool)
 {
     m_aTabCtrl->BroadcastEvent( VCLEVENT_TABPAGE_DEACTIVATE );
-    return 1;
+    return true;
 }
 
 void FwkTabWindow::AddEventListener( const Link<>& rEventListener )
