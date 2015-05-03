@@ -1028,7 +1028,7 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
     {
         SdrObject* pObj;
         SdrPageView* pPV;
-        sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+        const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
         bRet = pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMARKABLE );
@@ -1045,7 +1045,7 @@ SdrObject* SwFEShell::GetObjAt( const Point& rPt )
     if( pDView )
     {
         SdrPageView* pPV;
-        sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+        const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
         pDView->PickObj( rPt, pDView->getHitTolLog(), pRet, pPV, SdrSearchOptions::PICKMARKABLE );
@@ -1065,7 +1065,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
     {
         SdrObject* pObj;
         SdrPageView* pPV;
-        sal_uInt16 nOld(pDrawView->GetHitTolerancePixel());
+        const auto nOld(pDrawView->GetHitTolerancePixel());
 
         pDrawView->SetHitTolerancePixel(pDrawView->GetMarkHdlSizePixel()/2);
         bRet = pDrawView->PickObj(rPt, pDrawView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMARKABLE);
@@ -2513,7 +2513,7 @@ SwChainRet SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
         SdrObject* pObj;
         SdrPageView* pPView;
         SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
-        const sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+        const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
         if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE ) &&
             pObj->ISA(SwVirtFlyDrawObj) )
@@ -2546,7 +2546,7 @@ SwChainRet SwFEShell::Chain( SwFrmFmt &rSource, const Point &rPt )
         SdrObject* pObj;
         SdrPageView* pPView;
         SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
-        const sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+        const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
         pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE );
         pDView->SetHitTolerancePixel( nOld );
