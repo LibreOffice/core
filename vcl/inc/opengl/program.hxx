@@ -39,7 +39,7 @@ private:
     TextureList     maTextures;
     bool            mbBlending;
 
-    OpenGLProgram(const OpenGLProgram &notImplemented);
+    OpenGLProgram(const OpenGLProgram &) SAL_DELETED_FUNCTION;
 public:
     OpenGLProgram();
     ~OpenGLProgram();
