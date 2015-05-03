@@ -29,57 +29,18 @@
 #define STR_ERROR_PRINTER_BUSY              (RID_SFX_DOC_START+ 1)
 #define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 2)
 
-#define STR_DELETE_REGION                   (RID_SFX_DOC_START+14)
-#define STR_DELETE_TEMPLATE                 (RID_SFX_DOC_START+15)
-
-#define BMP_STYLES_CLOSED                   (RID_SFX_DOC_START+ 0)
-#define BMP_STYLES_OPENED                   (RID_SFX_DOC_START+ 1)
-
-#define BMP_STYLES_FAMILY1                  (RID_SFX_DOC_START+ 2)
-#define BMP_STYLES_FAMILY2                  (RID_SFX_DOC_START+ 3)
-#define BMP_STYLES_FAMILY3                  (RID_SFX_DOC_START+ 4)
-#define BMP_STYLES_FAMILY4                  (RID_SFX_DOC_START+ 5)
-
-#define STR_STYLES                          (RID_SFX_DOC_START+ 18)
-#define STR_MACROS                          (RID_SFX_DOC_START+ 19)
-
-#define STR_PRINT_STYLES                    (RID_SFX_DOC_START+ 20)
-#define STR_PRINT_STYLES_HEADER             (RID_SFX_DOC_START+ 21)
 #define STR_BACKUP_COPY                     (RID_SFX_DOC_START+ 23)
 #define STR_ERROR_SAVE                      (RID_SFX_DOC_START+ 27)
 #define STR_TEMPLATE_FILTER                 (RID_SFX_DOC_START+ 28)
-#define STR_ERROR_COPY_TEMPLATE             (RID_SFX_DOC_START+ 29)
 
-#define STR_ERROR_DELETE_TEMPLATE           (RID_SFX_DOC_START+ 30)
-#define STR_ERROR_MOVE_TEMPLATE             (RID_SFX_DOC_START+ 32)
-#define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_DOC_START+ 34)
-#define STR_CONFIG                          (RID_SFX_DOC_START+ 37)
-#define STR_QUERY_DEFAULT_TEMPLATE          (RID_SFX_DOC_START+ 39)
-#define STR_ERROR_NOSTORAGE                 (RID_SFX_DOC_START+ 42)
-#define STR_QUERY_MUSTOWNFORMAT             (RID_SFX_DOC_START+ 44)
 #define STR_SAVEDOC                         (RID_SFX_DOC_START+ 45)
 #define STR_UPDATEDOC                       (RID_SFX_DOC_START+ 46)
 #define STR_SAVEASDOC                       (RID_SFX_DOC_START+ 47)
 
 #define STR_CLOSEDOC                        (RID_SFX_DOC_START+ 49)
 #define STR_CLOSEDOC_ANDRETURN              (RID_SFX_DOC_START+ 50)
-#define STR_WIZARD                          (RID_SFX_DOC_START+ 51)
-#define RID_STR_FILTCONFIG                  (RID_SFX_DOC_START+ 52)
-#define RID_STR_FILTBASIC                   (RID_SFX_DOC_START+ 53)
-#define RID_STR_WARNSTYLEOVERWRITE          (RID_SFX_DOC_START+ 54)
 #define STR_SAVEACOPY                       (RID_SFX_DOC_START+ 55)
 
-#define RID_OFFICEFILTER                    (RID_SFX_DOC_START+ 59)
-#define RID_OFFICEFILTER_WILDCARD           (RID_SFX_DOC_START+ 60)
-#define RID_OFFICEFILTER_MACTYPE            (RID_SFX_DOC_START+ 61)
-#define RID_OFFICEFILTER_OS2TYPE            (RID_SFX_DOC_START+ 62)
-#define STR_FRAMEOBJECT_PROPERTIES          (RID_SFX_DOC_START+ 63)
-
-#define STR_FSET_FILTERNAME0                (RID_SFX_DOC_START+ 64)
-#define STR_FSET_FILTERNAME1                (RID_SFX_DOC_START+ 65)
-
-#define STR_TEMPL_MOVED                     (RID_SFX_DOC_START+ 66)
-#define STR_TEMPL_RESET                     (RID_SFX_DOC_START+ 67)
 #define STR_AUTOMATICVERSION                (RID_SFX_DOC_START+ 68)
 
 #define STR_DOCTYPENAME_SW                  (RID_SFX_DOC_START+ 69)
@@ -91,25 +52,11 @@
 #define STR_DOCTYPENAME_MESSAGE             (RID_SFX_DOC_START+ 75)
 #define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)
 
-#define STR_PACKNGO_NOACCESS                (RID_SFX_DOC_START+ 79)
-#define STR_PACKNGO_NEWMEDIUM               (RID_SFX_DOC_START+ 80)
-
 #define TEMPLATE_LONG_NAMES_ARY             (RID_SFX_DOC_START+ 81)
 #define TEMPLATE_SHORT_NAMES_ARY            (RID_SFX_DOC_START+ 82)
 #define RID_CNT_STR_WAITING                 (RID_SFX_DOC_START+ 83)
 
-#define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
-
-#define BTN_OK                              (RID_SFX_DOC_START+88)
-#define BTN_CANCEL                          (RID_SFX_DOC_START+89)
-#define FT_OK                               (RID_SFX_DOC_START+90)
-#define FT_CANCEL                           (RID_SFX_DOC_START+91)
-
-#define STR_EXPORTASPDF_TITLE               (RID_SFX_DOC_START+92)
 #define STR_EXPORTBUTTON                    (RID_SFX_DOC_START+93)
-#define STR_EXPORTWITHCFGBUTTON             (RID_SFX_DOC_START+94)
-
-#define RID_SVXSTR_SECURITY_ADDPATH         (RID_SFX_DOC_START+95)
 
 #define STR_LABEL_FILEFORMAT                (RID_SFX_DOC_START+96)
 

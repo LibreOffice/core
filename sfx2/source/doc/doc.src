@@ -20,82 +20,9 @@
 #include "doc.hrc"
 #define __RSC
 
-String STR_DELETE_REGION
-{
-    Text [ en-US ] = "Are you sure you want to delete the region \"$1\"?" ;
-};
-String STR_DELETE_TEMPLATE
-{
-    Text [ en-US ] = "Are you sure you want to delete the entry \"$1\"?" ;
-};
-
-Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
-Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
-
-String STR_STYLES
-{
-    Text [ en-US ] = "Styles" ;
-};
-String STR_MACROS
-{
-    Text [ en-US ] = "Macros" ;
-};
-String STR_CONFIG
-{
-    Text [ en-US ] = "Configuration" ;
-};
-String STR_PRINT_STYLES_HEADER
-{
-    Text [ en-US ] = "Styles in " ;
-};
-String STR_PRINT_STYLES
-{
-    Text [ en-US ] = "Printing Styles" ;
-};
-Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
-Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
-Bitmap BMP_STYLES_FAMILY3 { File = "styfam3.bmp" ; };
-Bitmap BMP_STYLES_FAMILY4 { File = "styfam4.bmp" ; };
-
-String STR_BACKUP_COPY
-{
-    Text [ en-US ] = "Copy" ;
-};
-String STR_ERROR_SAVE
-{
-    Text [ en-US ] = "Error recording document " ;
-};
 String STR_TEMPLATE_FILTER
 {
     Text [ en-US ] = "Templates" ;
-};
-String STR_ERROR_COPY_TEMPLATE
-{
-    Text [ en-US ] = "Error copying template \"$1\". \nA template with this name may already exist." ;
-};
-String STR_ERROR_DELETE_TEMPLATE
-{
-    Text [ en-US ] = "The template \"$1\" can not be deleted." ;
-};
-String STR_ERROR_MOVE_TEMPLATE
-{
-    Text [ en-US ] = "Error moving template \"$1\"." ;
-};
-String STR_ERROR_SAVE_TEMPLATE
-{
-    Text [ en-US ] = "Error saving template " ;
-};
-String STR_QUERY_DEFAULT_TEMPLATE
-{
-    Text [ en-US ] = "Should the template \"$(TEXT)\" become the default template?" ;
-};
-String STR_ERROR_NOSTORAGE
-{
-    Text [ en-US ] = "The selected file has an incorrect format." ;
-};
-String STR_QUERY_MUSTOWNFORMAT
-{
-    Text [ en-US ] = "Documents cannot be saved in $(FORMAT) format. Do you\nwant to save your changes using the $(OWNFORMAT) format?" ;
 };
 String STR_SAVEDOC
 {
@@ -121,62 +48,9 @@ String STR_CLOSEDOC_ANDRETURN
 {
     Text [ en-US ] = "~Close & Return to " ;
 };
-String STR_WIZARD
-{
-    Text [ en-US ] = " AutoPilot" ;
-};
-String RID_STR_FILTCONFIG
-{
-    Text [ en-US ] = "Configurations" ;
-};
-String RID_STR_FILTBASIC
-{
-    Text [ en-US ] = "%PRODUCTNAME Basic libraries" ;
-};
-String RID_STR_WARNSTYLEOVERWRITE
-{
-    Text [ en-US ] = "Should the \"$(ARG1)\" Style be replaced?" ;
-};
 String STR_EDIT
 {
     Text [ en-US ] = "Edit" ;
-};
-String RID_OFFICEFILTER
-{
-    Text [ en-US ] = "%PRODUCTNAME Documents" ;
-};
-String RID_OFFICEFILTER_WILDCARD
-{
-    Text = "*.sdw;*.sdd;*.sda;*.sdc;*.smf;*.sds;*.sd;*.sdm;*.smd" ;
-};
-String RID_OFFICEFILTER_MACTYPE
-{
-    Text = "SVsd0;SW/\2510;SVsc0;SVsm0;SVsh0;SVsd1;SW/\2511;SVsc1;SVsm1;SVsh1;MAIL" ;
-};
-String RID_OFFICEFILTER_OS2TYPE
-{
-    Text = "StarWriter 4.0;StarWriter 3.0;StarDraw 4.0;StarDraw 3.0;StarCalc 4.0;StarCalc 3.0;StarMath 4.0;StarMath 3.0;StarChart 4.0;StarChart 3.0;StarFrameSet;StarMessage" ;
-};
-String STR_FRAMEOBJECT_PROPERTIES
-{
-    Text [ en-US ] = "Propert~ies..." ;
-};
-String STR_FSET_FILTERNAME0
-{
-    Text [ en-US ] = "HTML (FrameSet)" ;
-};
-String STR_FSET_FILTERNAME1
-{
-    // only translate 'Document'
-    Text [ en-US ] = "%PRODUCTNAME Frame Document" ;
-};
-String STR_TEMPL_MOVED
-{
-    Text [ en-US ] = "The template \"$(TEMPLATE)\" was not found at the original location. A template with the same name exists at \"$(FOUND)\". Should this template be used in the future when comparing?" ;
-};
-String STR_TEMPL_RESET
-{
-    Text [ en-US ] = "The template \"$(TEMPLATE)\" has not been found. Should the template be looked for the next time the document is opened ?" ;
 };
 String STR_AUTOMATICVERSION
 {
@@ -218,56 +92,9 @@ String STR_DOCTYPENAME_MESSAGE
     Text [ en-US ] = "Message";
 };
 
-String STR_PACKNGO_NOACCESS
-{
-    Text [ en-US ] = "Access to the current data medium not possible." ;
-};
-
-String STR_PACKNGO_NEWMEDIUM
-{
-    Text [ en-US ] = "Insert the next data carrier and click OK." ;
-};
-
-String STR_OBJECT
-{
-    Text [ en-US ] = "Object" ;
-};
-
-String BTN_OK
-{
-    Text [ en-US ] = "Run" ;
-};
-String BTN_CANCEL
-{
-    Text [ en-US ] = "Do Not Run" ;
-};
-String FT_CANCEL
-{
-    Text [ en-US ] = "According to the security settings, the macros in this document should not be run. Do you want to run them anyway?";
-};
-String FT_OK
-{
-    Text [ en-US ] = "Do you want to allow these macros to be run?";
-};
-
-String STR_EXPORTASPDF_TITLE
-{
-    Text [ en-US ] = "Export as PDF";
-};
-
-String STR_EXPORTWITHCFGBUTTON
-{
-    Text [ en-US ] = "Export...";
-};
-
 String STR_EXPORTBUTTON
 {
     Text [ en-US ] = "Export" ;
-};
-
-String RID_SVXSTR_SECURITY_ADDPATH
-{
-    Text [ en-US ] = "Add this directory to the list of secure paths: " ;
 };
 
 String STR_LABEL_FILEFORMAT
