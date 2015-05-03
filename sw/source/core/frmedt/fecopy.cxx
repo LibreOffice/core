@@ -102,9 +102,9 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
     }
 
     // also delete surrounding FlyFrames if any
-    for( sal_uInt16 n = 0; n < pClpDoc->GetSpzFrmFmts()->size(); ++n )
+    for( auto pFmt : *pClpDoc->GetSpzFrmFmts() )
     {
-        SwFlyFrmFmt* pFly = static_cast<SwFlyFrmFmt*>((*pClpDoc->GetSpzFrmFmts())[n]);
+        SwFlyFrmFmt* pFly = static_cast<SwFlyFrmFmt*>(pFmt);
         pClpDoc->getIDocumentLayoutAccess().DelLayoutFmt( pFly );
     }
     pClpDoc->GetDocumentFieldsManager().GCFieldTypes();        // delete the FieldTypes
@@ -891,16 +891,15 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                     MakeDrawView();
 
                 std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pClpDoc);
-                for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
+                for ( auto pCpyFmt : *pClpDoc->GetSpzFrmFmts() )
                 {
                     bool bInsWithFmt = true;
-                    const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
 
                     if( Imp()->GetDrawView()->IsGroupEntered() &&
-                        RES_DRAWFRMFMT == rCpyFmt.Which() &&
-                        (FLY_AS_CHAR != rCpyFmt.GetAnchor().GetAnchorId()) )
+                        RES_DRAWFRMFMT == pCpyFmt->Which() &&
+                        (FLY_AS_CHAR != pCpyFmt->GetAnchor().GetAnchorId()) )
                     {
-                        const SdrObject* pSdrObj = rCpyFmt.FindSdrObject();
+                        const SdrObject* pSdrObj = pCpyFmt->FindSdrObject();
                         if( pSdrObj )
                         {
                             SdrObject* pNew = GetDoc()->CloneSdrObj( *pSdrObj,
@@ -945,23 +944,23 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
 
                     if( bInsWithFmt  )
                     {
-                        SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+                        SwFmtAnchor aAnchor( pCpyFmt->GetAnchor() );
                         if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
                             (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
                             (FLY_AS_CHAR == aAnchor.GetAnchorId()))
                         {
                             SwPosition* pPos = rPaM.GetPoint();
                             // allow shapes (no controls) in header/footer
-                            if( RES_DRAWFRMFMT == rCpyFmt.Which() &&
+                            if( RES_DRAWFRMFMT == pCpyFmt->Which() &&
                                 GetDoc()->IsInHeaderFooter( pPos->nNode ) )
                             {
-                                const SdrObject *pCpyObj = rCpyFmt.FindSdrObject();
+                                const SdrObject *pCpyObj = pCpyFmt->FindSdrObject();
                                 if (pCpyObj && CheckControlLayer(pCpyObj))
                                     continue;
                             }
 
                             // Ignore TextBoxes, they are already handled in sw::DocumentLayoutManager::CopyLayoutFmt().
-                            if (aTextBoxes.find(&rCpyFmt) != aTextBoxes.end())
+                            if (aTextBoxes.find(pCpyFmt) != aTextBoxes.end())
                                 continue;
 
                             aAnchor.SetAnchor( pPos );
@@ -977,7 +976,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                                         0, aPt, *this, aAnchor, aPt, false );
                         }
 
-                        SwFrmFmt * pNew = GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+                        SwFrmFmt * pNew = GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( *pCpyFmt, aAnchor, true, true );
 
                         if( pNew )
                         {
@@ -1087,14 +1086,13 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                     if( !Imp()->GetDrawView() )
                         MakeDrawView();
 
-                    for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
+                    for ( auto pCpyFmt : *pClpDoc->GetSpzFrmFmts() )
                     {
-                        const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
-                        SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+                        SwFmtAnchor aAnchor( pCpyFmt->GetAnchor() );
                         if ( FLY_AT_PAGE != aAnchor.GetAnchorId() )
                             continue;
                         aAnchor.SetPageNum( aAnchor.GetPageNum() + nStartPageNumber - 1 );
-                        GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+                        GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( *pCpyFmt, aAnchor, true, true );
                     }
                 }
             }
@@ -1187,10 +1185,9 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         if( !rToFill.Imp()->GetDrawView() )
             rToFill.MakeDrawView();
 
-        for ( sal_uInt16 i = 0; i < GetDoc()->GetSpzFrmFmts()->size(); ++i )
+        for ( auto pCpyFmt : *GetDoc()->GetSpzFrmFmts() )
         {
-            const SwFrmFmt& rCpyFmt = *(*GetDoc()->GetSpzFrmFmts())[i];
-            SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+            SwFmtAnchor aAnchor( pCpyFmt->GetAnchor() );
             if ((FLY_AT_PAGE == aAnchor.GetAnchorId()) &&
                     aAnchor.GetPageNum() >= nStartPage && aAnchor.GetPageNum() <= nEndPage)
             {
@@ -1198,7 +1195,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
             }
             else
                 continue;
-            rToFill.GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+            rToFill.GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( *pCpyFmt, aAnchor, true, true );
         }
     }
     GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();
