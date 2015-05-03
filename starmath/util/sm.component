@@ -22,31 +22,37 @@
   <implementation name="com.sun.star.comp.Math.FormulaDocument">
     <service name="com.sun.star.formula.FormulaProperties"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLContentExporter">
+  <implementation name="com.sun.star.comp.Math.XMLContentExporter"
+      constructor="Math_XMLContentExporter_get_implementation">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLExporter">
+  <implementation name="com.sun.star.comp.Math.XMLExporter"
+      constructor="Math_XMLExporter_get_implementation">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Math.XMLImporter">
     <service name="com.sun.star.xml.XMLImportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLMetaExporter">
+  <implementation name="com.sun.star.comp.Math.XMLMetaExporter"
+      constructor="Math_XMLMetaExporter_get_implementation">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLOasisMetaExporter">
+  <implementation name="com.sun.star.comp.Math.XMLOasisMetaExporter"
+      constructor="Math_XMLOasisMetaExporter_get_implementation">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Math.XMLOasisMetaImporter">
     <service name="com.sun.star.xml.XMLImportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLOasisSettingsExporter">
+  <implementation name="com.sun.star.comp.Math.XMLOasisSettingsExporter"
+      constructor="Math_XMLOasisSettingsExporter_get_implementation">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Math.XMLOasisSettingsImporter">
     <service name="com.sun.star.xml.XMLImportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLSettingsExporter">
+  <implementation name="com.sun.star.comp.Math.XMLSettingsExporter"
+      constructor="Math_XMLSettingsExporter_get_implementation">
     <service name="com.sun.star.xml.XMLExportFilter"/>
   </implementation>
 </component>

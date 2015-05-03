@@ -50,44 +50,6 @@ OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > SAL_CALL
         SmXMLImportSettings_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
 
-//MathML export
-css::uno::Sequence< OUString > SAL_CALL
-        SmXMLExport_getSupportedServiceNames() throw();
-OUString SAL_CALL
-        SmXMLExport_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-        SmXMLExport_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL
-        SmXMLExportMetaOOO_getSupportedServiceNames() throw();
-OUString SAL_CALL
-        SmXMLExportMetaOOO_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-        SmXMLExportMetaOOO_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL
-        SmXMLExportMeta_getSupportedServiceNames() throw();
-OUString SAL_CALL
-        SmXMLExportMeta_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-        SmXMLExportMeta_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL
-        SmXMLExportSettingsOOO_getSupportedServiceNames() throw();
-OUString SAL_CALL
-        SmXMLExportSettingsOOO_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-        SmXMLExportSettingsOOO_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL
-        SmXMLExportSettings_getSupportedServiceNames() throw();
-OUString SAL_CALL
-        SmXMLExportSettings_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-        SmXMLExportSettings_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL
-        SmXMLExportContent_getSupportedServiceNames() throw();
-OUString SAL_CALL
-        SmXMLExportContent_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-        SmXMLExportContent_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
