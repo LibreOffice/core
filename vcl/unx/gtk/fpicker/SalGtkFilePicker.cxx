@@ -758,9 +758,12 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
             GtkTreeModel *model;
             if (gtk_tree_selection_get_selected (selection, &model, &iter))
             {
-                gchar *title;
+                gchar *title = NULL;
                 gtk_tree_model_get (model, &iter, 2, &title, -1);
-                sFilterName = OUString( title, strlen( title), RTL_TEXTENCODING_UTF8 );
+                if (title)
+                    sFilterName = OUString( title, strlen( title ), RTL_TEXTENCODING_UTF8 );
+                else
+                    sFilterName = OUString();
                 g_free (title);
             }
             else
