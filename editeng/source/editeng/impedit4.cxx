@@ -2802,9 +2802,6 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 nCurrentEnd   = aCurWordBndry.endPos;
                 sal_Int32 nLen = nCurrentEnd - nCurrentStart;
                 DBG_ASSERT( nLen > 0, "invalid word length of 0" );
-#if OSL_DEBUG_LEVEL > 1
-                OUString aText(aNodeStr.copy(nCurrentStart, nLen) );
-#endif
 
                 Sequence< sal_Int32 > aOffsets;
                 OUString aNewText( aTransliterationWrapper.transliterate(aNodeStr,
@@ -2890,9 +2887,6 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             {
                 const sal_Int32 nLen = nCurrentEnd - nCurrentStart;
                 DBG_ASSERT( nLen > 0, "invalid word length of 0" );
-#if OSL_DEBUG_LEVEL > 1
-                OUString aText( aNodeStr.copy( nCurrentStart, nLen ) );
-#endif
 
                 Sequence< sal_Int32 > aOffsets;
                 OUString aNewText( aTransliterationWrapper.transliterate( aNodeStr,
