@@ -363,7 +363,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             LoadDocInFrame( sal_True );
 
             uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
-            xDesktop->getFrames()->append( uno::Reference<frame::XFrame>(m_xFrame, uno::UNO_QUERY_THROW) );
+            xDesktop->getFrames()->append( uno::Reference<frame::XFrame>(m_xFrame, uno::UNO_QUERY) );
 
             // determine the menuhandle to get menutitems.
             if(m_xLayoutManager.is()) {
@@ -694,7 +694,9 @@ void DocumentHolder::CloseFrame()
         catch( const uno::Exception& ) {
         }
     else {
-        m_xFrame->dispose();
+        uno::Reference<lang::XComponent> xComp(m_xFrame, uno::UNO_QUERY);
+        if (xComp.is())
+            xComp->dispose();
     }
 
     m_xFrame = uno::Reference< frame::XFrame2 >();
@@ -770,13 +772,13 @@ uno::Reference< frame::XFrame2 > DocumentHolder::DocumentFrame()
     {
         uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
 
-        uno::Reference<frame::XFrame2> xFrame(xDesktop,uno::UNO_QUERY);
+        uno::Reference<frame::XFrame> xFrame(xDesktop,uno::UNO_QUERY);
 
         // the frame will be registered on desktop here, later when the document
         // is loaded into the frame in ::show() method the terminate listener will be removed
         // this is so only for outplace activation
         if( xFrame.is() )
-            m_xFrame.set( xFrame->findFrame( OUString("_blank"), 0 ), uno::UNO_QUERY_THROW );
+            m_xFrame.set( xFrame->findFrame( OUString("_blank"), 0 ), uno::UNO_QUERY );
 
         uno::Reference< util::XCloseBroadcaster > xBroadcaster(
             m_xFrame, uno::UNO_QUERY );
