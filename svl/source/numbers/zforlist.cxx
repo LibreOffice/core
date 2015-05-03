@@ -1797,6 +1797,15 @@ sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
         return pFormatScanner->GetStandardPrec();
 }
 
+sal_uInt16 SvNumberFormatter::GetFormatIntegerDigits( sal_uInt32 nFormat ) const
+{
+    const SvNumberformat* pFormat = GetFormatEntry( nFormat );
+    if ( pFormat )
+        return pFormat->GetFormatIntegerDigits();
+    else
+        return 1;
+}
+
 sal_Unicode SvNumberFormatter::GetDecSep() const
 {
     return GetNumDecimalSep()[0];
@@ -2590,12 +2599,54 @@ void SvNumberFormatter::ImpGetNegCurrFormat(OUStringBuffer& sNegStr, const OUStr
         rCurrSymbol, xLocaleData->getCurrNegativeFormat() );
 }
 
+sal_Int32 SvNumberFormatter::ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos /* = 0*/ )
+{
+    sal_Int32 nLength = sFormat.getLength();
+    for ( sal_Int32 i=nStartPos; i<nLength && i>=0 ; i++ )
+    {
+        switch(sFormat[i])
+        {
+            case '\"' : // skip text
+                i = sFormat.indexOf('\"',i+1);
+                break;
+            case '['  : // skip condition
+                i = sFormat.indexOf(']',i+1);
+                break;
+            case ';'  :
+                if (token == ';')
+                    return i;
+                break;
+            case 'e'  :
+            case 'E'  :
+                if (token == 'E')
+                {
+                    sal_Int32 j = i+1;
+                    if ( j < nLength && (sFormat[j] == '-' || sFormat[j] == '+') )
+                        j++;
+                    if ( j < nLength && sFormat[j] != '#' && sFormat[j] < '0' && sFormat[j] > '9' )
+                        return -2;
+                    j = i-1;
+                    if ( j > 0 && sFormat[j] == GetNumDecimalSep()[0] )
+                        j--;
+                    if ( j >= 0 )
+                        if ( sFormat[j] == '#' || ( sFormat[j] >= '0' && sFormat[j] <= '9' ) )
+                            return i; // at least a part of sFormat looks like scientific format
+                }
+                break;
+            default : break;
+        }
+        if ( i<0 )
+            i--;
+    }
+    return -2;
+}
+
 OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
                                            LanguageType eLnge,
                                            bool bThousand,
                                            bool IsRed,
                                            sal_uInt16 nPrecision,
-                                           sal_uInt16 nAnzLeading)
+                                           sal_uInt16 nLeadingZeros)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
     {
@@ -2606,7 +2657,8 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     ImpGenerateCL(eLnge);           // create new standard formats if necessary
 
     utl::DigitGroupingIterator aGrouping( xLocaleData->getDigitGrouping());
-    const sal_Int32 nDigitsInFirstGroup = aGrouping.get();
+    // always group of 3 for Engineering notation
+    const sal_Int32 nDigitsInFirstGroup = ( bThousand && (eType == css::util::NumberFormat::SCIENTIFIC) ) ? 3 : aGrouping.get();
     const OUString& rThSep = GetNumThousandSep();
 
     SvNumberformat* pFormat = GetFormatEntry( nIndex );
@@ -2614,20 +2666,27 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     OUStringBuffer sString;
     using comphelper::string::padToLength;
 
-    if (nAnzLeading == 0)
+    if (nLeadingZeros == 0)
     {
         if (!bThousand)
             sString.append('#');
         else
         {
-            sString.append('#');
-            sString.append(rThSep);
-            padToLength(sString, sString.getLength() + nDigitsInFirstGroup, '#');
+            if (eType == css::util::NumberFormat::SCIENTIFIC)
+            {  // for scientific, bThousand is used for Engineering notation
+                sString.append("###");
+            }
+            else
+            {
+                sString.append('#');
+                sString.append(rThSep);
+                padToLength(sString, sString.getLength() + nDigitsInFirstGroup, '#');
+            }
         }
     }
     else
     {
-        for (i = 0; i < nAnzLeading; i++)
+        for (i = 0; i < nLeadingZeros; i++)
         {
             if (bThousand && i > 0 && i == aGrouping.getPos())
             {
@@ -2636,11 +2695,12 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             }
             sString.insert(0, '0');
         }
-        if (bThousand && nAnzLeading < nDigitsInFirstGroup + 1)
+        if ( bThousand )
         {
-            for (i = nAnzLeading; i < nDigitsInFirstGroup + 1; i++)
+            sal_Int32 nDigits = (eType == css::util::NumberFormat::SCIENTIFIC) ?  3*((nLeadingZeros-1)/3 + 1) : nDigitsInFirstGroup + 1;
+            for (i = nLeadingZeros; i < nDigits; i++)
             {
-                if (bThousand && i % nDigitsInFirstGroup == 0)
+                if ( i % nDigitsInFirstGroup == 0 )
                     sString.insert(0, rThSep);
                 sString.insert(0, '#');
             }
@@ -2658,11 +2718,11 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     else if (eType == css::util::NumberFormat::SCIENTIFIC)
     {
       OUStringBuffer sOldFormatString = pFormat->GetFormatstring();
-      sal_Int32 nIndexE = sOldFormatString.indexOf('E');
+      sal_Int32 nIndexE = ImpPosToken( sOldFormatString, 'E' );
       if (nIndexE > -1)
       {
-        sal_Int32 nIndexSep = sOldFormatString.indexOf(';');
-        if (nIndexSep > -1)
+        sal_Int32 nIndexSep = ImpPosToken( sOldFormatString, ';', nIndexE );
+        if (nIndexSep > nIndexE)
             sString.append( sOldFormatString.copy(nIndexE, nIndexSep - nIndexE) );
         else
             sString.append( sOldFormatString.copy(nIndexE) );

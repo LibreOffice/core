@@ -529,6 +529,9 @@ public:
     /// Count of decimals
     sal_uInt16 GetFormatPrecision( sal_uInt32 nFormat ) const;
 
+    /// Count of integer digits
+    sal_uInt16 GetFormatIntegerDigits( sal_uInt32 nFormat ) const;
+
     /** Get additional info of a format code string, e.g. for dialog box.
         Uses a temporary parse, if possible use only if format code is not
         present in container yet, otherwise ineffective.
@@ -884,6 +887,9 @@ private:
 
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
     DECL_DLLPRIVATE_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void* );
+
+    // return position of a special character
+    sal_Int32 ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos = 0 );
 
 public:
 
