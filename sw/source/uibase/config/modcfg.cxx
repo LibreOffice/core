@@ -25,6 +25,7 @@
 #include <svx/svxids.hrc>
 #include <editeng/svxenum.hxx>
 #include <osl/diagnose.h>
+#include <officecfg/Office/Writer.hxx>
 
 #include <tools/globname.hxx>
 #include <swtypes.hxx>
@@ -218,31 +219,6 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
     return sReturn;
 }
 
-const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
-{
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
-    {
-        const int nCount = 8;
-        aNames.realloc(nCount);
-        static const char* aPropNames[] =
-        {
-            "TextDisplay/Insert/Attribute",             // 0
-            "TextDisplay/Insert/Color",                 // 1
-            "TextDisplay/Delete/Attribute",             // 2
-            "TextDisplay/Delete/Color",                 // 3
-            "TextDisplay/ChangedAttribute/Attribute",   // 4
-            "TextDisplay/ChangedAttribute/Color",       // 5
-            "LinesChanged/Mark",                        // 6
-            "LinesChanged/Color"                        // 7
-        };
-        OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
-    return aNames;
-}
-
 SwRevisionConfig::SwRevisionConfig() :
     ConfigItem("Office.Writer/Revision",
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
@@ -293,27 +269,19 @@ void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >
 
 void SwRevisionConfig::ImplCommit()
 {
-    const Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues(aNames.getLength());
-    Any* pValues = aValues.getArray();
 
-    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-    {
-        sal_Int32 nVal = -1;
-        switch(nProp)
-        {
-            case 0 : nVal = lcl_ConvertAttrToCfg(aInsertAttr); break;
-            case 1 : nVal = aInsertAttr.nColor  ; break;
-            case 2 : nVal = lcl_ConvertAttrToCfg(aDeletedAttr); break;
-            case 3 : nVal = aDeletedAttr.nColor ; break;
-            case 4 : nVal = lcl_ConvertAttrToCfg(aFormatAttr); break;
-            case 5 : nVal = aFormatAttr.nColor  ; break;
-            case 6 : nVal = nMarkAlign          ; break;
-            case 7 : nVal = aMarkColor.GetColor(); break;
-        }
-        pValues[nProp] <<= nVal;
-    }
-    PutProperties(aNames, aValues);
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+
+    officecfg::Office::Writer::Revision::TextDisplay::Insert::Attribute::set(lcl_ConvertAttrToCfg(aInsertAttr), batch);
+    officecfg::Office::Writer::Revision::TextDisplay::Insert::Color::set(aInsertAttr.nColor, batch);
+    officecfg::Office::Writer::Revision::TextDisplay::Delete::Attribute::set(lcl_ConvertAttrToCfg(aDeletedAttr), batch);
+    officecfg::Office::Writer::Revision::TextDisplay::Delete::Color::set(aDeletedAttr.nColor, batch);
+    officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Attribute::set(lcl_ConvertAttrToCfg(aFormatAttr), batch);
+    officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Color::set(aFormatAttr.nColor, batch);
+    officecfg::Office::Writer::Revision::LinesChanged::Mark::set(nMarkAlign, batch);
+    officecfg::Office::Writer::Revision::LinesChanged::Color::set(aMarkColor.GetColor(), batch);
+
+    batch->commit();
 }
 
 static void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, bool bDelete = false)
@@ -344,32 +312,14 @@ static void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, bool bDe
 }
 void SwRevisionConfig::Load()
 {
-    const Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues = GetProperties(aNames);
-    const Any* pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            if(pValues[nProp].hasValue())
-            {
-                sal_Int32 nVal = 0;
-                pValues[nProp] >>= nVal;
-                switch(nProp)
-                {
-                    case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
-                    case 1 : aInsertAttr.nColor     = nVal; break;
-                    case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, true); break;
-                    case 3 : aDeletedAttr.nColor    = nVal; break;
-                    case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
-                    case 5 : aFormatAttr.nColor     = nVal; break;
-                    case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
-                    case 7 : aMarkColor.SetColor(nVal); break;
-                }
-            }
-        }
-    }
+    lcl_ConvertCfgToAttr(officecfg::Office::Writer::Revision::TextDisplay::Insert::Attribute::get(), aInsertAttr);
+    aInsertAttr.nColor = officecfg::Office::Writer::Revision::TextDisplay::Insert::Color::get();
+    lcl_ConvertCfgToAttr(officecfg::Office::Writer::Revision::TextDisplay::Delete::Attribute::get(), aDeletedAttr, true);
+    aDeletedAttr.nColor = officecfg::Office::Writer::Revision::TextDisplay::Delete::Color::get();
+    lcl_ConvertCfgToAttr(officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Attribute::get(), aFormatAttr);
+    aFormatAttr.nColor = officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Color::get();
+    nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(officecfg::Office::Writer::Revision::LinesChanged::Mark::get());
+    aMarkColor.SetColor(officecfg::Office::Writer::Revision::LinesChanged::Color::get());
 }
 
 enum InsertConfigProp
@@ -1100,27 +1050,6 @@ void SwInsertConfig::Load()
     }
 }
 
-const Sequence<OUString>& SwTableConfig::GetPropertyNames()
-{
-    const int nCount = 8;
-    static Sequence<OUString> aNames(nCount);
-    static const char* aPropNames[] =
-    {
-        "Shift/Row",                    //  0
-        "Shift/Column",                 //  1
-        "Insert/Row",                   //  2
-        "Insert/Column",                //  3
-        "Change/Effect",                //  4
-        "Input/NumberRecognition",      //  5
-        "Input/NumberFormatRecognition",//  6
-        "Input/Alignment"               //  7
-    };
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < nCount; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    return aNames;
-}
-
 SwTableConfig::SwTableConfig(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Table") : OUString("Office.Writer/Table"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
@@ -1136,54 +1065,30 @@ void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& )
 
 void SwTableConfig::ImplCommit()
 {
-    const Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues(aNames.getLength());
-    Any* pValues = aValues.getArray();
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-    {
-        switch(nProp)
-        {
-            case 0 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblHMove); break;   //"Shift/Row",
-            case 1 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblVMove); break;     //"Shift/Column",
-            case 2 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblHInsert); break;   //"Insert/Row",
-            case 3 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblVInsert); break;   //"Insert/Column",
-            case 4 : pValues[nProp] <<= (sal_Int32)eTblChgMode; break;   //"Change/Effect",
-            case 5 : pValues[nProp] <<= bInsTblFormatNum; break;  //"Input/NumberRecognition",
-            case 6 : pValues[nProp] <<= bInsTblChangeNumFormat; break;  //"Input/NumberFormatRecognition",
-            case 7 : pValues[nProp] <<= bInsTblAlignNum; break;  //"Input/Alignment"
-        }
-    }
-    PutProperties(aNames, aValues);
+    officecfg::Office::Writer::Table::Shift::Row::set((sal_Int32)convertTwipToMm100(nTblHMove), batch);
+    officecfg::Office::Writer::Table::Shift::Column::set((sal_Int32)convertTwipToMm100(nTblVMove), batch);
+    officecfg::Office::Writer::Table::Insert::Row::set((sal_Int32)convertTwipToMm100(nTblHInsert), batch);
+    officecfg::Office::Writer::Table::Insert::Column::set((sal_Int32)convertTwipToMm100(nTblVInsert), batch);
+    officecfg::Office::Writer::Table::Change::Effect::set((sal_Int32)eTblChgMode, batch);
+    officecfg::Office::Writer::Table::Input::NumberRecognition::set(bInsTblFormatNum, batch);
+    officecfg::Office::Writer::Table::Input::NumberFormatRecognition::set(bInsTblChangeNumFormat, batch);
+    officecfg::Office::Writer::Table::Input::Alignment::set(bInsTblAlignNum, batch);
+
+    batch->commit();
 }
 
 void SwTableConfig::Load()
 {
-    const Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues = GetProperties(aNames);
-    const Any* pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            if(pValues[nProp].hasValue())
-            {
-                sal_Int32 nTemp = 0;
-                switch(nProp)
-                {
-                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;  //"Shift/Row",
-                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;     //"Shift/Column",
-                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Row",
-                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Column",
-                    case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
-                    case 5 : bInsTblFormatNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;  //"Input/NumberRecognition",
-                    case 6 : bInsTblChangeNumFormat = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/NumberFormatRecognition",
-                    case 7 : bInsTblAlignNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/Alignment"
-                }
-            }
-        }
-    }
+    nTblHMove = (sal_uInt16)convertMm100ToTwip(officecfg::Office::Writer::Table::Shift::Row::get());
+    nTblVMove = (sal_uInt16)convertMm100ToTwip(officecfg::Office::Writer::Table::Shift::Column::get());
+    nTblHInsert = (sal_uInt16)convertMm100ToTwip(officecfg::Office::Writer::Table::Insert::Row::get());
+    nTblVInsert = (sal_uInt16)convertMm100ToTwip(officecfg::Office::Writer::Table::Insert::Column::get());
+    eTblChgMode = (TblChgMode)officecfg::Office::Writer::Table::Change::Effect::get();
+    bInsTblFormatNum = officecfg::Office::Writer::Table::Input::NumberRecognition::get();
+    bInsTblChangeNumFormat = officecfg::Office::Writer::Table::Input::NumberFormatRecognition::get();
+    bInsTblAlignNum = officecfg::Office::Writer::Table::Input::Alignment::get();
 }
 
 SwMiscConfig::SwMiscConfig() :
@@ -1301,28 +1206,6 @@ void SwMiscConfig::Load()
     }
 }
 
-const Sequence<OUString>& SwCompareConfig::GetPropertyNames()
-{
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
-    {
-        const int nCount = 5;
-        aNames.realloc(nCount);
-        static const char* aPropNames[] =
-        {
-            "Mode",							// 0
-            "UseRSID",						// 1
-            "IgnorePieces",				// 2
-            "IgnoreLength", // 3
-            "StoreRSID" // 4
-        };
-        OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
-    return aNames;
-}
-
 SwCompareConfig::SwCompareConfig() :
     ConfigItem("Office.Writer/Comparison",
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
@@ -1342,45 +1225,24 @@ SwCompareConfig::~SwCompareConfig()
 
 void SwCompareConfig::ImplCommit()
 {
-    const Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues(aNames.getLength());
-    Any* pValues = aValues.getArray();
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    pValues[0] <<= (sal_Int32) eCmpMode;
-    pValues[1] <<= bUseRsid;
-    pValues[2] <<= bIgnorePieces;
-    pValues[3] <<= (sal_Int32) nPieceLen;
-    pValues[4] <<= m_bStoreRsid;
+    officecfg::Office::Writer::Comparison::Mode::set((sal_Int32)eCmpMode, batch);
+    officecfg::Office::Writer::Comparison::UseRSID::set(bUseRsid, batch);
+    officecfg::Office::Writer::Comparison::IgnorePieces::set(bIgnorePieces, batch);
+    officecfg::Office::Writer::Comparison::IgnoreLength::set((sal_Int32)nPieceLen, batch);
+    officecfg::Office::Writer::Comparison::StoreRSID::set(m_bStoreRsid, batch);
 
-    PutProperties(aNames, aValues);
+    batch->commit();
 }
 
 void SwCompareConfig::Load()
 {
-    const Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues = GetProperties(aNames);
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            if(pValues[nProp].hasValue())
-            {
-                sal_Int32 nVal = 0;
-                pValues[nProp] >>= nVal;
-
-                switch(nProp)
-                {
-                    case 0 : eCmpMode = (SvxCompareMode) nVal; break;;
-                    case 1 : bUseRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 2 : bIgnorePieces = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 3 : nPieceLen = nVal; break;
-                    case 4 : m_bStoreRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                }
-            }
-        }
-    }
+    eCmpMode = (SvxCompareMode)(sal_Int16)officecfg::Office::Writer::Comparison::Mode::get();
+    bUseRsid = officecfg::Office::Writer::Comparison::UseRSID::get();
+    bIgnorePieces = officecfg::Office::Writer::Comparison::IgnorePieces::get();
+    nPieceLen = (sal_Int16)officecfg::Office::Writer::Comparison::IgnoreLength::get();
+    m_bStoreRsid = officecfg::Office::Writer::Comparison::StoreRSID::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

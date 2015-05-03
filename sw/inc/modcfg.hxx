@@ -73,8 +73,6 @@ class SwRevisionConfig : public utl::ConfigItem
     sal_uInt16          nMarkAlign;     //Revision/LinesChanged/Mark
     Color           aMarkColor;     //Revision/LinesChanged/Color
 
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
-
     virtual void            ImplCommit() SAL_OVERRIDE;
 
 public:
@@ -96,8 +94,6 @@ class SwCompareConfig : public utl::ConfigItem
     bool            m_bStoreRsid;
     bool            bIgnorePieces;  //Compare/Settings/Ignore pieces of length
     sal_uInt16      nPieceLen;		//Compare/Settings/Ignore pieces of length
-
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
@@ -151,8 +147,6 @@ class SwTableConfig : public utl::ConfigItem
     bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
     bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
     bool    bInsTblAlignNum;        // Table/Input/Alignment                // Align numbers.
-
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
