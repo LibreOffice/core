@@ -2422,6 +2422,17 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         sal_uInt16 nLeadZeroes(0);
 
                         pFormatter->GetFormatSpecialInfo(nNumberFormat,bThousand, bNegRed, nPrecision, nLeadZeroes);
+
+                        const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
+                        if (pFormatEntry && (pFormatEntry->GetType() & css::util::NumberFormat::SCIENTIFIC))
+                        {
+                            // if scientific, bThousand is used for engineering notation
+                            const sal_uInt16 nIntegerDigits = pFormatEntry->GetFormatIntegerDigits();
+                            if (nIntegerDigits > 0 && ((nIntegerDigits % 3) == 0))
+                                bThousand = true;
+                            else
+                                bThousand = false;
+                        }
                         OUString aFormat;
                         static OUString sBreak = ",";
                         const OUString sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
