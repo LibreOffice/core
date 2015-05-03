@@ -539,8 +539,6 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
 
     std::vector<sal_uInt16> aArr;
 
-    sal_uInt16 n;
-
     // check if number is already used and if a new one needs to be created
     SwIterator<SwFmtFld,SwFieldType> aIter( *this );
     for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
@@ -558,6 +556,8 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
     sal_uInt16 nNum = rFld.GetSeqNumber();
     if( USHRT_MAX != nNum )
     {
+        std::vector<sal_uInt16>::size_type n {0};
+
         for( n = 0; n < aArr.size(); ++n )
             if( aArr[ n ] >= nNum )
                 break;
@@ -567,7 +567,9 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
     }
 
     // flagged all numbers, so determine the right number
-    n = aArr.size();
+    sal_uInt16 n = aArr.size();
+    OSL_ENSURE( n == aArr.size(), "Array is too big for using a sal_uInt16 index" );
+
     if ( n > 0 && aArr[ n-1 ] != n-1 )
     {
         for( n = 0; n < aArr.size(); ++n )
