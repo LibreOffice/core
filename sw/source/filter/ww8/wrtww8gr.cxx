@@ -85,10 +85,10 @@ using namespace nsFieldFlags;
 void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 {
     OSL_TRACE("WW8Export::OutputGrfNode( const SwGrfNode& )" );
-    OSL_ENSURE( mpParentFrame, "frame not set!" );
-    if ( mpParentFrame )
+    OSL_ENSURE( m_pParentFrame, "frame not set!" );
+    if ( m_pParentFrame )
     {
-        OutGrf( *mpParentFrame );
+        OutGrf( *m_pParentFrame );
         pFib->fHasPic = true;
     }
 }
@@ -145,7 +145,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            rStorageName,xObjStg,pDoc->GetDocStorage(),aGraph,aRect,aVisArea,0,nErr,0,nAspect);
+            rStorageName,xObjStg,m_pDoc->GetDocStorage(),aGraph,aRect,aVisArea,0,nErr,0,nAspect);
 
         if (pRet)
         {
@@ -153,7 +153,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
             if ( xObj.is() )
             {
                 SvStream* pGraphicStream = NULL;
-                comphelper::EmbeddedObjectContainer aCnt( pDoc->GetDocStorage() );
+                comphelper::EmbeddedObjectContainer aCnt( m_pDoc->GetDocStorage() );
                 try
                 {
                     uno::Reference< embed::XEmbedPersist > xPersist(
@@ -286,7 +286,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 OutputField(0, ww::eEMBED, sServer, WRITEFIELD_START |
                     WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
 
-                pChpPlc->AppendFkpEntry( Strm().Tell(),
+                m_pChpPlc->AppendFkpEntry( Strm().Tell(),
                         nSize, pSpecOLE );
 
                 bool bEndCR = true;
@@ -301,14 +301,14 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 */
                 bool bGraphicNeeded = false;
 
-                if (mpParentFrame)
+                if (m_pParentFrame)
                 {
                     bGraphicNeeded = true;
 
-                    if (mpParentFrame->IsInline())
+                    if (m_pParentFrame->IsInline())
                     {
                         const SwAttrSet& rSet =
-                            mpParentFrame->GetFrmFmt().GetAttrSet();
+                            m_pParentFrame->GetFrmFmt().GetAttrSet();
                         bEndCR = false;
                         bGraphicNeeded = TestOleNeedsGraphic(rSet,
                             xOleStg, xObjStg, sStorageName, const_cast<SwOLENode*>(&rOLENode));
@@ -326,7 +326,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                     has no place to find the dimensions of the ole
                     object, and will not be able to draw it
                     */
-                    OutGrf(*mpParentFrame);
+                    OutGrf(*m_pParentFrame);
                 }
 
                 OutputField(0, ww::eEMBED, OUString(),
@@ -341,7 +341,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 
 void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 {
-    uno::Reference< embed::XStorage > xDocStg = pDoc->GetDocStorage();
+    uno::Reference< embed::XStorage > xDocStg = m_pDoc->GetDocStorage();
     uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( "OLELinks", embed::ElementModes::READ );
     SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
 
@@ -374,7 +374,7 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
             SwWW8Writer::InsUInt16( *pBuf, NS_sprm::LN_CFObj );
             pBuf->push_back( 1 );
 
-            pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->size(), pBuf->data() );
+            m_pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->size(), pBuf->data() );
             delete pBuf;
         }
     }
@@ -393,9 +393,9 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     }
 
     // Store the graphic settings in GrfNode so they may be written-out later
-    pGrf->Insert(rFrame);
+    m_pGrf->Insert(rFrame);
 
-    pChpPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
+    m_pChpPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
     pO->clear();
 
     // #i29408#
@@ -435,11 +435,11 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
             bool bVert = false;
             //The default for word in vertical text mode is to center,
             //otherwise a sub/super script hack is employed
-            if (pOutFmtNode && pOutFmtNode->ISA(SwCntntNode) )
+            if (m_pOutFmtNode && m_pOutFmtNode->ISA(SwCntntNode) )
             {
-                const SwTxtNode* pTxtNd = static_cast<const SwTxtNode*>(pOutFmtNode);
+                const SwTxtNode* pTxtNd = static_cast<const SwTxtNode*>(m_pOutFmtNode);
                 SwPosition aPos(*pTxtNd);
-                bVert = pDoc->IsInVerticalText(aPos);
+                bVert = m_pDoc->IsInVerticalText(aPos);
             }
             if (!bVert)
             {
@@ -480,7 +480,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     static sal_uInt8 nAttrMagicIdx = 0;
     --pArr;
     Set_UInt8( pArr, nAttrMagicIdx++ );
-    pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
+    m_pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
 
     // #i75464#
     // Check, if graphic isn't exported as-character anchored.
@@ -494,13 +494,13 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
 
         static sal_uInt8 nSty[2] = { 0, 0 };
         pO->insert( pO->end(), nSty, nSty+2 );     // Style #0
-        bool bOldGrf = bOutGrf;
-        bOutGrf = true;
+        bool bOldGrf = m_bOutGrf;
+        m_bOutGrf = true;
 
         OutputFormat( rFrame.GetFrmFmt(), false, false, true ); // Fly-Attrs
 
-        bOutGrf = bOldGrf;
-        pPapPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
+        m_bOutGrf = bOldGrf;
+        m_pPapPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
         pO->clear();
     }
     // #i29408#

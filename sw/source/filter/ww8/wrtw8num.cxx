@@ -46,11 +46,11 @@ using namespace sw::util;
 sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8 nLevel, sal_uInt16 nVal )
 {
     sal_uInt16 nNumId = USHRT_MAX;
-    const OUString sPrefix("WW8TempExport" + OUString::number( nUniqueList++ ));
+    const OUString sPrefix("WW8TempExport" + OUString::number( m_nUniqueList++ ));
     SwNumRule* pMyNumRule =
-            new SwNumRule( pDoc->GetUniqueNumRuleName( &sPrefix ),
+            new SwNumRule( m_pDoc->GetUniqueNumRuleName( &sPrefix ),
                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    pUsedNumTbl->push_back( pMyNumRule );
+    m_pUsedNumTbl->push_back( pMyNumRule );
 
     for ( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
     {
@@ -65,28 +65,28 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
     nNumId = GetId( *pMyNumRule );
 
     // Map the old list to our new list
-    aRuleDuplicates[GetId( *pRule )] = nNumId;
+    m_aRuleDuplicates[GetId( *pRule )] = nNumId;
 
     return nNumId;
 }
 
 sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
 {
-    if ( !pUsedNumTbl )
+    if ( !m_pUsedNumTbl )
     {
-        pUsedNumTbl = new SwNumRuleTbl;
-        pUsedNumTbl->insert( pUsedNumTbl->begin(), pDoc->GetNumRuleTbl().begin(), pDoc->GetNumRuleTbl().end() );
+        m_pUsedNumTbl = new SwNumRuleTbl;
+        m_pUsedNumTbl->insert( m_pUsedNumTbl->begin(), m_pDoc->GetNumRuleTbl().begin(), m_pDoc->GetNumRuleTbl().end() );
         // Check, if the outline rule is already inserted into <pUsedNumTbl>.
         // If yes, do not insert it again.
         bool bOutlineRuleAdded( false );
-        for ( sal_uInt16 n = pUsedNumTbl->size(); n; )
+        for ( sal_uInt16 n = m_pUsedNumTbl->size(); n; )
         {
-            const SwNumRule& rRule = *(*pUsedNumTbl)[ --n ];
-            if ( !pDoc->IsUsed( rRule ) )
+            const SwNumRule& rRule = *(*m_pUsedNumTbl)[ --n ];
+            if ( !m_pDoc->IsUsed( rRule ) )
             {
-                pUsedNumTbl->erase( pUsedNumTbl->begin() + n );
+                m_pUsedNumTbl->erase( m_pUsedNumTbl->begin() + n );
             }
-            else if ( &rRule == pDoc->GetOutlineNumRule() )
+            else if ( &rRule == m_pDoc->GetOutlineNumRule() )
             {
                 bOutlineRuleAdded = true;
             }
@@ -95,23 +95,23 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
         if ( !bOutlineRuleAdded )
         {
             // still need to paste the OutlineRule
-            SwNumRule* pR = (SwNumRule*)pDoc->GetOutlineNumRule();
-            pUsedNumTbl->push_back( pR );
+            SwNumRule* pR = (SwNumRule*)m_pDoc->GetOutlineNumRule();
+            m_pUsedNumTbl->push_back( pR );
         }
     }
     SwNumRule* p = const_cast<SwNumRule*>(&rNumRule);
-    sal_uInt16 nRet = pUsedNumTbl->GetPos(p);
+    sal_uInt16 nRet = m_pUsedNumTbl->GetPos(p);
 
     // Is this list now duplicated into a new list which we should use
     // #i77812# - perform 'deep' search in duplication map
-    ::std::map<sal_uInt16,sal_uInt16>::const_iterator aResult = aRuleDuplicates.end();
+    ::std::map<sal_uInt16,sal_uInt16>::const_iterator aResult = m_aRuleDuplicates.end();
     do {
-        aResult = aRuleDuplicates.find(nRet);
-        if ( aResult != aRuleDuplicates.end() )
+        aResult = m_aRuleDuplicates.find(nRet);
+        if ( aResult != m_aRuleDuplicates.end() )
         {
             nRet = (*aResult).second;
         }
-    } while ( aResult != aRuleDuplicates.end() );
+    } while ( aResult != m_aRuleDuplicates.end() );
 
     return nRet;
 }
@@ -133,12 +133,12 @@ sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
 
 void WW8Export::WriteNumbering()
 {
-    if ( !pUsedNumTbl )
+    if ( !m_pUsedNumTbl )
         return; // no numbering is used
 
     // list formats - LSTF
     pFib->fcPlcfLst = pTableStrm->Tell();
-    SwWW8Writer::WriteShort( *pTableStrm, pUsedNumTbl->size() );
+    SwWW8Writer::WriteShort( *pTableStrm, m_pUsedNumTbl->size() );
     NumberingDefinitions();
     // set len to FIB
     pFib->lcbPlcfLst = pTableStrm->Tell() - pFib->fcPlcfLst;
@@ -171,15 +171,15 @@ void WW8AttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &r
 
 void MSWordExportBase::NumberingDefinitions()
 {
-    if ( !pUsedNumTbl )
+    if ( !m_pUsedNumTbl )
         return; // no numbering is used
 
-    sal_uInt16 nCount = pUsedNumTbl->size();
+    sal_uInt16 nCount = m_pUsedNumTbl->size();
 
     // Write static data of SwNumRule - LSTF
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
-        const SwNumRule& rRule = *(*pUsedNumTbl)[ n ];
+        const SwNumRule& rRule = *(*m_pUsedNumTbl)[ n ];
 
         AttrOutput().NumberingDefinition( n + 1, rRule );
     }
@@ -288,7 +288,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         m_rWW8Export.pO = &aCharAtrs;
         if ( pFont )
         {
-            sal_uInt16 nFontID = m_rWW8Export.maFontHelper.GetId( *pFont );
+            sal_uInt16 nFontID = m_rWW8Export.m_aFontHelper.GetId( *pFont );
 
             if ( m_rWW8Export.bWrtWW8 )
             {
@@ -301,7 +301,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
             m_rWW8Export.InsUInt16( nFontID );
         }
 
-        m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rWW8Export.mbExportModeRTF );
+        m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rWW8Export.m_bExportModeRTF );
         //For i120928,achieve graphic's index of bullet from the bullet bookmark
         if (SVX_NUM_BITMAP == nNumberingType && pBrush)
         {
@@ -351,7 +351,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
 
 void MSWordExportBase::AbstractNumberingDefinitions()
 {
-    sal_uInt16 nCount = pUsedNumTbl->size();
+    sal_uInt16 nCount = m_pUsedNumTbl->size();
     sal_uInt16 n;
 
     // prepare the NodeNum to generate the NumString
@@ -363,7 +363,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
     {
         AttrOutput().StartAbstractNumbering( n + 1 );
 
-        const SwNumRule& rRule = *(*pUsedNumTbl)[ n ];
+        const SwNumRule& rRule = *(*m_pUsedNumTbl)[ n ];
         sal_uInt8 nLvl;
         sal_uInt8 nLevels = static_cast< sal_uInt8 >(rRule.IsContinusNum() ?
             WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
@@ -489,7 +489,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             const SfxItemSet* pOutSet = NULL;
 
             // cbGrpprlChpx
-            SfxItemSet aSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
+            SfxItemSet aSet( m_pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
                                                   RES_CHRATR_END );
             if ( rFmt.GetCharFmt() || bWriteBullet )
             {
@@ -549,11 +549,11 @@ void MSWordExportBase::AbstractNumberingDefinitions()
 
 void WW8Export::OutOverrideListTab()
 {
-    if( !pUsedNumTbl )
+    if( !m_pUsedNumTbl )
         return ;            // no numbering is used
 
     // write the "list format override" - LFO
-    sal_uInt16 nCount = pUsedNumTbl->size();
+    sal_uInt16 nCount = m_pUsedNumTbl->size();
     sal_uInt16 n;
 
     pFib->fcPlfLfo = pTableStrm->Tell();
@@ -573,11 +573,11 @@ void WW8Export::OutOverrideListTab()
 
 void WW8Export::OutListNamesTab()
 {
-    if( !pUsedNumTbl )
+    if( !m_pUsedNumTbl )
         return ;            // no numbering is used
 
     // write the "list format override" - LFO
-    sal_uInt16 nNms = 0, nCount = pUsedNumTbl->size();
+    sal_uInt16 nNms = 0, nCount = m_pUsedNumTbl->size();
 
     pFib->fcSttbListNames = pTableStrm->Tell();
     SwWW8Writer::WriteShort( *pTableStrm, -1 );
@@ -585,7 +585,7 @@ void WW8Export::OutListNamesTab()
 
     for( ; nNms < nCount; ++nNms )
     {
-        const SwNumRule& rRule = *(*pUsedNumTbl)[ nNms ];
+        const SwNumRule& rRule = *(*m_pUsedNumTbl)[ nNms ];
         OUString sNm;
         if( !rRule.IsAutoRule() )
             sNm = rRule.GetName();
@@ -697,7 +697,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
             SubstituteBullet(sNumStr, eChrSet, sFontName);
             wwFont aPseudoFont(sFontName, rFont.GetPitch(), rFont.GetFamily(),
                 eChrSet, bWrtWW8);
-            nFontId = maFontHelper.GetId(aPseudoFont);
+            nFontId = m_aFontHelper.GetId(aPseudoFont);
             *rpCh = static_cast<sal_uInt8>(sNumStr[0]);
         }
         else
@@ -710,7 +710,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
             the equivalent 8bit location, otherwise we have to convert from
             true unicode to an 8bit charset
             */
-            nFontId = maFontHelper.GetId(rFont);
+            nFontId = m_aFontHelper.GetId(rFont);
             sal_Unicode cChar = sNumStr[0];
             if ( (eChrSet == RTL_TEXTENCODING_SYMBOL) && (cChar >= 0xF000) && (
                 cChar <= 0xF0FF) )
@@ -741,7 +741,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
 void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
     rtl_TextEncoding& rChrSet, OUString& rFontName ) const
 {
-    if (!bSubstituteBullets)
+    if (!m_bSubstituteBullets)
         return;
     OUString sFontName = rFontName;
 

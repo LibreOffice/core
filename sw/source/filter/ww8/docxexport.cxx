@@ -421,7 +421,7 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
 void DocxExport::ExportDocument_Impl()
 {
     // Set the 'Track Revisions' flag in the settings structure
-    m_aSettings.trackRevisions = 0 != ( nsRedlineMode_t::REDLINE_ON & mnOrigRedlineMode );
+    m_aSettings.trackRevisions = 0 != ( nsRedlineMode_t::REDLINE_ON & m_nOrigRedlineMode );
 
     InitStyles();
 
@@ -453,7 +453,7 @@ void DocxExport::ExportDocument_Impl()
 
     WriteEmbeddings();
 
-    delete pStyles, pStyles = NULL;
+    delete m_pStyles, m_pStyles = NULL;
     delete m_pSections, m_pSections = NULL;
 }
 
@@ -467,14 +467,14 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
 {
     MSWordExportBase::OutputEndNode( rEndNode );
 
-    if ( TXT_MAINTEXT == nTxtTyp && rEndNode.StartOfSectionNode()->IsSectionNode() )
+    if ( TXT_MAINTEXT == m_nTxtTyp && rEndNode.StartOfSectionNode()->IsSectionNode() )
     {
         // this originally comes from WW8Export::WriteText(), and looks like it
         // could have some code common with SectionNode()...
 
         const SwSection& rSect = rEndNode.StartOfSectionNode()->GetSectionNode()->GetSection();
-        if ( bStartTOX && TOX_CONTENT_SECTION == rSect.GetType() )
-            bStartTOX = false;
+        if ( m_bStartTOX && TOX_CONTENT_SECTION == rSect.GetType() )
+            m_bStartTOX = false;
 
         SwNodeIndex aIdx( rEndNode, 1 );
         const SwNode& rNd = aIdx.GetNode();
@@ -495,7 +495,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
                 nRstLnNum = 0;
 
             AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo( ) );
-            m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
+            m_pSections->AppendSection( m_pAktPageDesc, pParentFmt, nRstLnNum );
         }
     }
 }
@@ -548,7 +548,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
 
 void DocxExport::InitStyles()
 {
-    pStyles = new MSWordStyles( *this, /*bListStyles =*/ true );
+    m_pStyles = new MSWordStyles( *this, /*bListStyles =*/ true );
 
     // setup word/styles.xml and the relations + content type
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
@@ -563,7 +563,7 @@ void DocxExport::InitStyles()
     m_pAttrOutput->SetSerializer( pStylesFS );
 
     // do the work
-    pStyles->OutputStylesTable();
+    m_pStyles->OutputStylesTable();
 
     // switch the serializer back
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
@@ -636,7 +636,7 @@ void DocxExport::WritePostitFields()
 
 void DocxExport::WriteNumbering()
 {
-    if ( !pUsedNumTbl )
+    if ( !m_pUsedNumTbl )
         return; // no numbering is used
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
@@ -765,7 +765,7 @@ void DocxExport::WriteFonts()
     m_pAttrOutput->SetSerializer( pFS );
 
     // do the work
-    maFontHelper.WriteFontTable( *m_pAttrOutput );
+    m_aFontHelper.WriteFontTable( *m_pAttrOutput );
 
     // switch the serializer back
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
@@ -776,7 +776,7 @@ void DocxExport::WriteFonts()
 void DocxExport::WriteProperties( )
 {
     // Write the core properties
-    SwDocShell* pDocShell( pDoc->GetDocShell( ) );
+    SwDocShell* pDocShell( m_pDoc->GetDocShell( ) );
     uno::Reference<document::XDocumentProperties> xDocProps;
     if ( pDocShell )
     {
@@ -790,7 +790,7 @@ void DocxExport::WriteProperties( )
 
 void DocxExport::WriteSettings()
 {
-    SwViewShell *pViewShell(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
+    SwViewShell *pViewShell(m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
     if( !pViewShell && !m_aSettings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
         return;
 
@@ -829,11 +829,11 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_mirrorMargins, FSEND );
 
     // Embed Fonts
-    if( pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
+    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts, FSEND );
 
     // Embed System Fonts
-    if( pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_SYSTEM_FONTS ))
+    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_SYSTEM_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedSystemFonts, FSEND );
 
     // Default Tab Stop
@@ -843,7 +843,7 @@ void DocxExport::WriteSettings()
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Use the setting from the default style.
-    SwTxtFmtColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    SwTxtFmtColl* pColl = m_pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
     const SfxPoolItem* pItem;
     if (pColl && SfxItemState::SET == pColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem))
     {
@@ -858,14 +858,14 @@ void DocxExport::WriteSettings()
 
     // Has Footnotes
     if( m_pAttrOutput->HasFootnotes())
-        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo(), XML_footnote );
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, m_pDoc->GetFtnInfo(), XML_footnote );
 
     // Has Endnotes
     if( m_pAttrOutput->HasEndnotes())
-        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo(), XML_endnote );
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_pDoc->GetEndNoteInfo(), XML_endnote );
 
     // Has themeFontLang information
-    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -944,7 +944,7 @@ void DocxExport::WriteSettings()
 
 void DocxExport::WriteTheme()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -982,7 +982,7 @@ void DocxExport::WriteTheme()
 
 void DocxExport::WriteGlossary()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -1053,7 +1053,7 @@ void DocxExport::WriteGlossary()
 
 void DocxExport::WriteCustomXml()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -1124,7 +1124,7 @@ void DocxExport::WriteCustomXml()
 
 void DocxExport::WriteActiveX()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -1218,7 +1218,7 @@ void DocxExport::WriteActiveX()
 
 void DocxExport::WriteEmbeddings()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -1286,7 +1286,7 @@ void DocxExport::WriteEmbeddings()
 bool DocxExport::isMirroredMargin()
 {
     bool bMirroredMargins = false;
-    if ( nsUseOnPage::PD_MIRROR == (nsUseOnPage::PD_MIRROR & pDoc->GetPageDesc(0).ReadUseOn()) )
+    if ( nsUseOnPage::PD_MIRROR == (nsUseOnPage::PD_MIRROR & m_pDoc->GetPageDesc(0).ReadUseOn()) )
     {
         bMirroredMargins = true;
     }
@@ -1296,7 +1296,7 @@ bool DocxExport::isMirroredMargin()
 boost::optional<SvxBrushItem> DocxExport::getBackground()
 {
     boost::optional<SvxBrushItem> oRet;
-    const SwFrmFmt &rFmt = pDoc->GetPageDesc(0).GetMaster();
+    const SwFrmFmt &rFmt = m_pDoc->GetPageDesc(0).GetMaster();
     SvxBrushItem aBrush(RES_BACKGROUND);
     SfxItemState eState = rFmt.GetBackgroundState(aBrush);
 
@@ -1326,7 +1326,7 @@ void DocxExport::WriteMainText()
     // body
     m_pDocumentFS->startElementNS( XML_w, XML_body, FSEND );
 
-    pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+    m_pCurPam->GetPoint()->nNode = m_pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
 
     // the text
     WriteText();

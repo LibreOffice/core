@@ -269,10 +269,10 @@ void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNo
 void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner)
 {
     bool bLastPara = false;
-    if (m_rExport.nTxtTyp == TXT_FTN || m_rExport.nTxtTyp == TXT_EDN)
+    if (m_rExport.m_nTxtTyp == TXT_FTN || m_rExport.m_nTxtTyp == TXT_EDN)
     {
         // We're ending a paragraph that is the last paragraph of a footnote or endnote.
-        bLastPara = m_rExport.m_nCurrentNodeIndex && m_rExport.m_nCurrentNodeIndex == m_rExport.pCurPam->End()->nNode.GetIndex();
+        bLastPara = m_rExport.m_nCurrentNodeIndex && m_rExport.m_nCurrentNodeIndex == m_rExport.m_pCurPam->End()->nNode.GetIndex();
     }
 
     FinishTableRowCell(pTextNodeInfoInner);
@@ -592,8 +592,8 @@ void RtfAttributeOutput::TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t p
     if (0 == nPageSize)
     {
         const SwNode* pNode = pTableTextNodeInfoInner->getNode();
-        const SwFrmFmt* pFrmFmt = GetExport().mpParentFrame ? &GetExport().mpParentFrame->GetFrmFmt() :
-                                  GetExport().pDoc->GetPageDesc(0).GetPageFmtOfNode(*pNode, false);
+        const SwFrmFmt* pFrmFmt = GetExport().m_pParentFrame ? &GetExport().m_pParentFrame->GetFrmFmt() :
+                                  GetExport().m_pDoc->GetPageDesc(0).GetPageFmtOfNode(*pNode, false);
 
         const SvxLRSpaceItem& rLR = pFrmFmt->GetLRSpace();
         nPageSize = pFrmFmt->GetFrmSize().GetWidth() -
@@ -1436,9 +1436,9 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel,
         if (pFont)
         {
             m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_F);
-            m_rExport.OutULong(m_rExport.maFontHelper.GetId(*pFont));
+            m_rExport.OutULong(m_rExport.m_aFontHelper.GetId(*pFont));
         }
-        m_rExport.OutputItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF);
+        m_rExport.OutputItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF);
         m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
     }
 
@@ -1537,7 +1537,7 @@ void RtfAttributeOutput::WriteHeaderFooter_Impl(const SwFrmFmt& rFmt, bool bHead
     m_aRun.clear();
 
     m_aSectionHeaders.append(bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERY : OOO_STRING_SVTOOLS_RTF_FOOTERY);
-    m_aSectionHeaders.append((sal_Int32)m_rExport.pAktPageDesc->GetMaster().GetULSpace().GetUpper());
+    m_aSectionHeaders.append((sal_Int32)m_rExport.m_pAktPageDesc->GetMaster().GetULSpace().GetUpper());
     if (bTitlepg)
         m_aSectionHeaders.append(OOO_STRING_SVTOOLS_RTF_TITLEPG);
     m_aSectionHeaders.append('{');
@@ -1648,8 +1648,8 @@ void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
 
     {
         // Save table state, in case the inner text also contains a table.
-        ww8::WW8TableInfo::Pointer_t pTableInfoOrig = m_rExport.mpTableInfo;
-        m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+        ww8::WW8TableInfo::Pointer_t pTableInfoOrig = m_rExport.m_pTableInfo;
+        m_rExport.m_pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
         std::unique_ptr<SwWriteTable> pTableWrt(m_pTableWrt.release());
         sal_uInt32 nTableDepth = m_nTableDepth;
 
@@ -1672,7 +1672,7 @@ void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
         sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
         sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
         m_rExport.SaveData(nStt, nEnd);
-        m_rExport.mpParentFrame = &rFrame;
+        m_rExport.m_pParentFrame = &rFrame;
         m_rExport.WriteText();
         m_rExport.RestoreData();
 
@@ -1684,12 +1684,12 @@ void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
         m_bSingleEmptyRun = bSingleEmptyRunOrig;
 
         // Restore table state.
-        m_rExport.mpTableInfo = pTableInfoOrig;
+        m_rExport.m_pTableInfo = pTableInfoOrig;
         m_pTableWrt.reset(pTableWrt.release());
         m_nTableDepth = nTableDepth;
     }
 
-    m_rExport.mpParentFrame = NULL;
+    m_rExport.m_pParentFrame = NULL;
 
     m_rExport.Strm().WriteChar('}');   // shptxt
 
@@ -1715,7 +1715,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
             break;
 
         OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
-        m_rExport.mpParentFrame = &rFrame;
+        m_rExport.m_pParentFrame = &rFrame;
 
         m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP);
         m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
@@ -1728,11 +1728,11 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
         const Size aSize = rFrame.GetSize();
         m_pFlyFrameSize = &aSize;
 
-        m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
+        m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
         m_rExport.OutputFormat(rFrame.GetFrmFmt(), false, false, true);
         m_rExport.Strm().WriteCharPtr(m_aRunText.makeStringAndClear().getStr());
         m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
-        m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
+        m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
         m_pFlyFrameSize = 0;
 
         const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
@@ -1761,14 +1761,14 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
     case sw::Frame::eGraphic:
         if (!rFrame.IsInline())
         {
-            m_rExport.mpParentFrame = &rFrame;
+            m_rExport.m_pParentFrame = &rFrame;
             m_rExport.bRTFFlySyntax = true;
             m_rExport.OutputFormat(rFrame.GetFrmFmt(), false, false, true);
             m_rExport.bRTFFlySyntax = false;
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE);
             m_rExport.OutputFormat(rFrame.GetFrmFmt(), false, false, true);
             m_aRunText->append('}');
-            m_rExport.mpParentFrame = NULL;
+            m_rExport.m_pParentFrame = NULL;
         }
 
         if (pGrfNode)
@@ -1782,7 +1782,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
             bool bSwapInPage = false;
             if (!pSdrObj->GetPage())
             {
-                if (SwDrawModel* pModel = m_rExport.pDoc->getIDocumentDrawModelAccess().GetDrawModel())
+                if (SwDrawModel* pModel = m_rExport.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
                 {
                     if (SdrPage* pPage = pModel->GetPage(0))
                     {
@@ -2139,7 +2139,7 @@ void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
 {
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LOCH);
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_F);
-    m_aStylesEnd.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
+    m_aStylesEnd.append((sal_Int32)m_rExport.m_aFontHelper.GetId(rFont));
     // FIXME: this may be a tad expensive... but the charset needs to be
     // consistent with what wwFont::WriteRtf() does
     sw::util::FontMapExport aTmp(rFont.GetFamilyName());
@@ -2316,7 +2316,7 @@ void RtfAttributeOutput::CharFontCJK(const SvxFontItem& rFont)
 {
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_DBCH);
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_AF);
-    m_aStyles.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
+    m_aStyles.append((sal_Int32)m_rExport.m_aFontHelper.GetId(rFont));
 }
 
 void RtfAttributeOutput::CharFontSizeCJK(const SvxFontHeightItem& rFontSize)
@@ -2347,7 +2347,7 @@ void RtfAttributeOutput::CharFontCTL(const SvxFontItem& rFont)
 {
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_DBCH);
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_AF);
-    m_aStyles.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
+    m_aStyles.append((sal_Int32)m_rExport.m_aFontHelper.GetId(rFont));
 }
 
 void RtfAttributeOutput::CharFontSizeCTL(const SvxFontHeightItem& rFontSize)
@@ -2788,7 +2788,7 @@ void RtfAttributeOutput::ParaSnapToGrid(const SvxParaGridItem& /*rGrid*/)
 
 void RtfAttributeOutput::FormatFrameSize(const SwFmtFrmSize& rSize)
 {
-    if (m_rExport.bOutPageDescs)
+    if (m_rExport.m_bOutPageDescs)
     {
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGWSXN);
         m_aSectionBreaks.append((sal_Int32)rSize.GetWidth());
@@ -2806,9 +2806,9 @@ void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem&)
 
 void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
 {
-    if (!m_rExport.bOutFlyFrmAttrs)
+    if (!m_rExport.m_bOutFlyFrmAttrs)
     {
-        if (m_rExport.bOutPageDescs)
+        if (m_rExport.m_bOutPageDescs)
         {
             if (rLRSpace.GetLeft())
             {
@@ -2847,9 +2847,9 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
 
 void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
 {
-    if (!m_rExport.bOutFlyFrmAttrs)
+    if (!m_rExport.m_bOutFlyFrmAttrs)
     {
-        if (m_rExport.bOutPageDescs)
+        if (m_rExport.m_bOutPageDescs)
         {
             OSL_ENSURE(m_rExport.GetCurItemSet(), "Impossible");
             if (!m_rExport.GetCurItemSet())
@@ -2901,7 +2901,7 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
 
 void RtfAttributeOutput::FormatSurround(const SwFmtSurround& rSurround)
 {
-    if (m_rExport.bOutFlyFrmAttrs && !m_rExport.bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrmAttrs && !m_rExport.bRTFFlySyntax)
     {
         SwSurround eSurround = rSurround.GetSurround();
         bool bGold = SURROUND_IDEAL == eSurround;
@@ -2911,7 +2911,7 @@ void RtfAttributeOutput::FormatSurround(const SwFmtSurround& rSurround)
         m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYMAINCNT);
         m_aRunText->append((sal_Int32) aMC.GetValue());
     }
-    else if (m_rExport.bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
+    else if (m_rExport.m_bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
     {
         // See DocxSdrExport::startDMLAnchorInline() for SwFmtSurround -> WR / WRK mappings.
         sal_Int32 nWr = -1;
@@ -2950,7 +2950,7 @@ void RtfAttributeOutput::FormatSurround(const SwFmtSurround& rSurround)
 
 void RtfAttributeOutput::FormatVertOrientation(const SwFmtVertOrient& rFlyVert)
 {
-    if (m_rExport.bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
     {
         switch (rFlyVert.GetRelationOrient())
         {
@@ -2993,7 +2993,7 @@ void RtfAttributeOutput::FormatVertOrientation(const SwFmtVertOrient& rFlyVert)
 
 void RtfAttributeOutput::FormatHorizOrientation(const SwFmtHoriOrient& rFlyHori)
 {
-    if (m_rExport.bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
     {
         switch (rFlyHori.GetRelationOrient())
         {
@@ -3233,7 +3233,7 @@ void RtfAttributeOutput::FormatLineNumbering(const SwFmtLineNumber& rNumbering)
 
 void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDirection)
 {
-    if (!m_rExport.bOutPageDescs)
+    if (!m_rExport.m_bOutPageDescs)
     {
         if (rDirection.GetValue() == FRMDIR_HORI_RIGHT_TOP)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RTLPAR);
@@ -3435,7 +3435,7 @@ void RtfAttributeOutput::FontFamilyType(FontFamily eFamily, const wwFont& rFont)
     default:
         break;
     }
-    m_rExport.OutULong(m_rExport.maFontHelper.GetId(rFont)).WriteCharPtr(pStr);
+    m_rExport.OutULong(m_rExport.m_aFontHelper.GetId(rFont)).WriteCharPtr(pStr);
 }
 
 /// Font pitch.
@@ -3759,7 +3759,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     aRendered.Height() = rS.GetHeight();
 
     sw::Frame* pFrame = 0;
-    for (sw::FrameIter it = m_rExport.maFrames.begin(); it != m_rExport.maFrames.end(); ++it)
+    for (sw::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
     {
         if (pFlyFrmFmt == &it->GetFrmFmt())
         {
@@ -3784,11 +3784,11 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     {
         m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
         m_pFlyFrameSize = &aRendered;
-        m_rExport.mpParentFrame = pFrame;
-        m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
+        m_rExport.m_pParentFrame = pFrame;
+        m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
         m_rExport.OutputFormat(pFrame->GetFrmFmt(), false, false, true);
-        m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
-        m_rExport.mpParentFrame = NULL;
+        m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
+        m_rExport.m_pParentFrame = NULL;
         m_pFlyFrameSize = 0;
 
         std::vector< std::pair<OString, OString> > aFlyProperties;

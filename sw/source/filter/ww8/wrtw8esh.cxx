@@ -458,7 +458,7 @@ void WW8Export::DoComboBox(const OUString &rName,
              WRITEFIELD_START | WRITEFIELD_CMD_START);
     // write the refence to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
-    pChpPlc->AppendFkpEntry( Strm().Tell() );
+    m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
     WriteChar( 0x01 );
 
@@ -472,7 +472,7 @@ void WW8Export::DoComboBox(const OUString &rName,
     sal_uInt8* pDataAdr = aArr1 + 2;
     Set_UInt32( pDataAdr, nDataStt );
 
-    pChpPlc->AppendFkpEntry(Strm().Tell(), sizeof(aArr1), aArr1);
+    m_pChpPlc->AppendFkpEntry(Strm().Tell(), sizeof(aArr1), aArr1);
 
     OutputField(0, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
              WRITEFIELD_CLOSE);
@@ -505,7 +505,7 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
         WRITEFIELD_START | WRITEFIELD_CMD_START);
     // write the refence to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
-    pChpPlc->AppendFkpEntry( Strm().Tell() );
+    m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
     WriteChar( 0x01 );
     static sal_uInt8 aArr1[] = {
@@ -518,7 +518,7 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     sal_uInt8* pDataAdr = aArr1 + 2;
     Set_UInt32( pDataAdr, nDataStt );
 
-    pChpPlc->AppendFkpEntry(Strm().Tell(),
+    m_pChpPlc->AppendFkpEntry(Strm().Tell(),
                 sizeof( aArr1 ), aArr1 );
 
     ::sw::WW8FFData aFFData;
@@ -565,7 +565,7 @@ void WW8Export::DoFormText(const SwInputField * pFld)
         WRITEFIELD_START | WRITEFIELD_CMD_START);
     // write the refence to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
-    pChpPlc->AppendFkpEntry( Strm().Tell() );
+    m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
     WriteChar( 0x01 );
     static sal_uInt8 aArr1[] = {
@@ -578,7 +578,7 @@ void WW8Export::DoFormText(const SwInputField * pFld)
     sal_uInt8* pDataAdr = aArr1 + 5;
     Set_UInt32( pDataAdr, nDataStt );
 
-    pChpPlc->AppendFkpEntry(Strm().Tell(),
+    m_pChpPlc->AppendFkpEntry(Strm().Tell(),
                 sizeof( aArr1 ), aArr1 );
 
     ::sw::WW8FFData aFFData;
@@ -601,7 +601,7 @@ void WW8Export::DoFormText(const SwInputField * pFld)
 
     pDataAdr = aArr2 + 2;
     Set_UInt32( pDataAdr, nDataStt );
-    pChpPlc->AppendFkpEntry(Strm().Tell(),
+    m_pChpPlc->AppendFkpEntry(Strm().Tell(),
                 sizeof( aArr2 ), aArr2 );
 
     OutputField(0, ww::eFORMTEXT, OUString(), WRITEFIELD_CLOSE);
@@ -671,7 +671,7 @@ bool WW8Export::MiserableRTLFrmFmtHack(SwTwips &rLeft, SwTwips &rRight,
     const sw::Frame &rFrmFmt)
 {
     //Require nasty bidi swap
-    if (FRMDIR_HORI_RIGHT_TOP != pDoc->GetTextDirection(rFrmFmt.GetPosition()))
+    if (FRMDIR_HORI_RIGHT_TOP != m_pDoc->GetTextDirection(rFrmFmt.GetPosition()))
         return false;
 
     SwTwips nWidth = rRight - rLeft;
@@ -866,8 +866,8 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     OSL_ENSURE(false, "Unsupported surround type for export");
                     break;
             }
-            if (pObj && (pObj->GetLayer() == rWrt.pDoc->getIDocumentDrawModelAccess().GetHellId() ||
-                    pObj->GetLayer() == rWrt.pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId()))
+            if (pObj && (pObj->GetLayer() == rWrt.m_pDoc->getIDocumentDrawModelAccess().GetHellId() ||
+                    pObj->GetLayer() == rWrt.m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId()))
             {
                 nFlags |= 0x4000;
             }
@@ -930,7 +930,7 @@ bool PlcDrawObj::Append( WW8Export& rWrt, WW8_CP nCp, const sw::Frame& rFmt,
 {
     bool bRet = false;
     const SwFrmFmt &rFormat = rFmt.GetFrmFmt();
-    if (TXT_HDFT == rWrt.nTxtTyp || TXT_MAINTEXT == rWrt.nTxtTyp)
+    if (TXT_HDFT == rWrt.m_nTxtTyp || TXT_MAINTEXT == rWrt.m_nTxtTyp)
     {
         if (RES_FLYFRMFMT == rFormat.Which())
         {
@@ -959,7 +959,7 @@ void DrawObj::SetShapeDetails(sal_uInt32 nId, sal_Int32 nThick)
 
 bool WW8_WrPlcTxtBoxes::WriteTxt( WW8Export& rWrt )
 {
-    rWrt.bInWriteEscher = true;
+    rWrt.m_bInWriteEscher = true;
     WW8_CP& rccp=TXT_TXTBOX == nTyp ? rWrt.pFib->ccpTxbx : rWrt.pFib->ccpHdrTxbx;
 
     bool bRet = WriteGenericTxt( rWrt, nTyp, rccp );
@@ -969,10 +969,10 @@ bool WW8_WrPlcTxtBoxes::WriteTxt( WW8Export& rWrt )
     WW8_CP nMyOffset = rFib.ccpText + rFib.ccpFtn + rFib.ccpHdr + rFib.ccpAtn
                             + rFib.ccpEdn;
     if( TXT_TXTBOX == nTyp )
-        rWrt.pFldTxtBxs->Finish( nCP, nMyOffset );
+        rWrt.m_pFldTxtBxs->Finish( nCP, nMyOffset );
     else
-        rWrt.pFldHFTxtBxs->Finish( nCP, nMyOffset + rFib.ccpTxbx );
-    rWrt.bInWriteEscher = false;
+        rWrt.m_pFldHFTxtBxs->Finish( nCP, nMyOffset + rFib.ccpTxbx );
+    rWrt.m_bInWriteEscher = false;
     return bRet;
 }
 
@@ -1007,9 +1007,9 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
     {
         // no Layout for this format, then recalc the ordnum
         SwFrmFmt* pFmt = const_cast<SwFrmFmt*>(&rFmt);
-        nOrdNum = pDoc->GetSpzFrmFmts()->GetPos( pFmt );
+        nOrdNum = m_pDoc->GetSpzFrmFmts()->GetPos( pFmt );
 
-        const SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+        const SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if( pModel )
             nOrdNum += pModel->GetPage( 0 )->GetObjCount();
     }
@@ -1020,14 +1020,14 @@ void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
     const Point& rNdTopLeft)
 {
     OSL_ENSURE(bWrtWW8, "this has gone horribly wrong");
-    OSL_ENSURE(!pEscher, "der EscherStream wurde schon geschrieben!");
-    if (pEscher)
+    OSL_ENSURE(!m_pEscher, "der EscherStream wurde schon geschrieben!");
+    if (m_pEscher)
         return ;
     PlcDrawObj *pDrwO;
-    if (TXT_HDFT == nTxtTyp)
-        pDrwO = pHFSdrObjs;
+    if (TXT_HDFT == m_nTxtTyp)
+        pDrwO = m_pHFSdrObjs;
     else
-        pDrwO = pSdrObjs;
+        pDrwO = m_pSdrObjs;
 
     if (rFrmFmt.IsInline())
     {
@@ -1049,9 +1049,9 @@ void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
                                                 // fSpec-Attribut true
                             // Fuer DrawObjets muss ein Spezial-Zeichen
                             // in den Text und darum ein fSpec-Attribut
-        pChpPlc->AppendFkpEntry( Strm().Tell() );
+        m_pChpPlc->AppendFkpEntry( Strm().Tell() );
         WriteChar( 0x8 );
-        pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
+        m_pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
 
         //Need dummy picture frame
         if (rFrmFmt.IsInline())
@@ -1154,8 +1154,8 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
     const SvxFieldData *pFld = rField.GetField();
     if (pFld && pFld->ISA(SvxURLField))
     {
-        sal_uInt8 nOldTxtTyp = m_rExport.nTxtTyp;
-        m_rExport.nTxtTyp = mnTyp;
+        sal_uInt8 nOldTxtTyp = m_rExport.m_nTxtTyp;
+        m_rExport.m_nTxtTyp = mnTyp;
         const SvxURLField *pURL = static_cast<const SvxURLField *>(pFld);
         m_rExport.AttrOutput().StartURL( pURL->GetURL(), pURL->GetTargetFrame() );
 
@@ -1163,7 +1163,7 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
         m_rExport.AttrOutput().RawText( rStr, true, GetNodeCharSet() ); // FIXME kendy: is the 'true' actually correct here?  It was here before, but... ;-)
 
         m_rExport.AttrOutput().EndURL(false);
-        m_rExport.nTxtTyp = nOldTxtTyp;
+        m_rExport.m_nTxtTyp = nOldTxtTyp;
     }
 }
 
@@ -1194,15 +1194,15 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
 
     if (!aTxtAtrArr.empty())
     {
-        const SwModify* pOldMod = m_rExport.pOutFmtNode;
-        m_rExport.pOutFmtNode = 0;
+        const SwModify* pOldMod = m_rExport.m_pOutFmtNode;
+        m_rExport.m_pOutFmtNode = 0;
 
         const SfxItemPool* pSrcPool = pEditPool;
-        const SfxItemPool& rDstPool = m_rExport.pDoc->GetAttrPool();
+        const SfxItemPool& rDstPool = m_rExport.m_pDoc->GetAttrPool();
 
         nTmpSwPos = nSwPos;
         // Did we already produce a <w:sz> element?
-        m_rExport.mbFontSizeWritten = false;
+        m_rExport.m_bFontSizeWritten = false;
         for(std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
         {
             if (nSwPos >= i->nStart && nSwPos < i->nEnd)
@@ -1232,10 +1232,10 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
                         pI->SetWhich( nWhich );
                         // Will this item produce a <w:sz> element?
                         bool bFontSizeItem = nWhich == RES_CHRATR_FONTSIZE || nWhich == RES_CHRATR_CJK_FONTSIZE;
-                        if (!m_rExport.mbFontSizeWritten || !bFontSizeItem)
+                        if (!m_rExport.m_bFontSizeWritten || !bFontSizeItem)
                             m_rExport.AttrOutput().OutputItem( *pI );
                         if (bFontSizeItem)
-                            m_rExport.mbFontSizeWritten = true;
+                            m_rExport.m_bFontSizeWritten = true;
                         delete pI;
                     }
                 }
@@ -1244,10 +1244,10 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
             if( nSwPos < i->nStart )
                 break;
         }
-        m_rExport.mbFontSizeWritten = false;
+        m_rExport.m_bFontSizeWritten = false;
 
         nTmpSwPos = 0;      // HasTextItem nur in dem obigen Bereich erlaubt
-        m_rExport.pOutFmtNode = pOldMod;
+        m_rExport.m_pOutFmtNode = pOldMod;
     }
 }
 
@@ -1274,7 +1274,7 @@ bool MSWord_SdrAttrIter::IsTxtAttr(sal_Int32 nSwPos)
 const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(sal_uInt16 nWhich) const
 {
     nWhich = sw::hack::TransformWhichBetweenPools(*pEditPool,
-        m_rExport.pDoc->GetAttrPool(), nWhich);
+        m_rExport.m_pDoc->GetAttrPool(), nWhich);
     if (nWhich)
     {
         for (std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
@@ -1295,7 +1295,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
     if (!pRet)
     {
         SfxItemSet aSet(pEditObj->GetParaAttribs(nPara));
-        nWhich = GetSetWhichFromSwDocWhich(aSet, *m_rExport.pDoc, nWhich);
+        nWhich = GetSetWhichFromSwDocWhich(aSet, *m_rExport.m_pDoc, nWhich);
         OSL_ENSURE(nWhich, "Impossible, catastrophic failure imminent");
         pRet = &aSet.Get(nWhich);
     }
@@ -1314,7 +1314,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
         const SfxPoolItem* pItem = aIter.GetCurItem();
 
         const SfxItemPool* pSrcPool = pEditPool,
-                         * pDstPool = &m_rExport.pDoc->GetAttrPool();
+                         * pDstPool = &m_rExport.m_pDoc->GetAttrPool();
 
         do
         {
@@ -1407,7 +1407,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
                                             // Ausgabe der Zeichenattribute
             aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
-            pChpPlc->AppendFkpEntry( Strm().Tell(),
+            m_pChpPlc->AppendFkpEntry( Strm().Tell(),
                                             pO->size(), pO->data() );
             pO->clear();
 
@@ -1428,10 +1428,10 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         aAttrIter.OutParaAttr(false);
 
         sal_uLong nPos = Strm().Tell();
-        pPapPlc->AppendFkpEntry( Strm().Tell(),
+        m_pPapPlc->AppendFkpEntry( Strm().Tell(),
                                         pO->size(), pO->data() );
         pO->clear();
-        pChpPlc->AppendFkpEntry( nPos );
+        m_pChpPlc->AppendFkpEntry( nPos );
     }
 
     bAnyWrite = 0 != nPara;
@@ -1469,29 +1469,29 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 
 void WW8Export::CreateEscher()
 {
-    SfxItemState eBackSet = pDoc->GetPageDesc(0).GetMaster().
+    SfxItemState eBackSet = m_pDoc->GetPageDesc(0).GetMaster().
         GetItemState(RES_BACKGROUND);
-    if (pHFSdrObjs->size() || pSdrObjs->size() || SfxItemState::SET == eBackSet)
+    if (m_pHFSdrObjs->size() || m_pSdrObjs->size() || SfxItemState::SET == eBackSet)
     {
-        OSL_ENSURE( !pEscher, "wer hat den Pointer nicht geloescht?" );
+        OSL_ENSURE( !m_pEscher, "wer hat den Pointer nicht geloescht?" );
         SvMemoryStream* pEscherStrm = new SvMemoryStream;
         pEscherStrm->SetEndian(SvStreamEndian::LITTLE);
-        pEscher = new SwEscherEx(pEscherStrm, *this);
+        m_pEscher = new SwEscherEx(pEscherStrm, *this);
     }
 }
 
 void WW8Export::WriteEscher()
 {
-    if (pEscher)
+    if (m_pEscher)
     {
         sal_uLong nStart = pTableStrm->Tell();
 
-        pEscher->WritePictures();
-        pEscher->FinishEscher();
+        m_pEscher->WritePictures();
+        m_pEscher->FinishEscher();
 
         pFib->fcDggInfo = nStart;
         pFib->lcbDggInfo = pTableStrm->Tell() - nStart;
-        delete pEscher, pEscher = 0;
+        delete m_pEscher, m_pEscher = 0;
     }
 }
 
@@ -2171,7 +2171,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
 void SwBasicEscherEx::Init()
 {
     MapUnit eMap = MAP_TWIP;
-    if (SwDrawModel *pModel = rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel())
+    if (SwDrawModel *pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
     {
         // PPT arbeitet nur mit Einheiten zu 576DPI
         // WW hingegen verwendet twips, dh. 1440DPI.
@@ -2187,7 +2187,7 @@ void SwBasicEscherEx::Init()
     mnEmuMul = aFact.GetNumerator();
     mnEmuDiv = aFact.GetDenominator();
 
-    SetHellLayerId(rWrt.pDoc->getIDocumentDrawModelAccess().GetHellId());
+    SetHellLayerId(rWrt.m_pDoc->getIDocumentDrawModelAccess().GetHellId());
 }
 
 sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax) const
@@ -2213,7 +2213,7 @@ sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax) const
 
 SdrLayerID SwBasicEscherEx::GetInvisibleHellId() const
 {
-    return rWrt.pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId();
+    return rWrt.m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId();
 }
 
 void SwBasicEscherEx::WritePictures()
@@ -2248,18 +2248,18 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     CloseContainer();   // ESCHER_DggContainer
 
     sal_uInt8 i = 2;     // for header/footer and the other
-    PlcDrawObj *pSdrObjs = rWrt.pHFSdrObjs;
-    pTxtBxs = rWrt.pHFTxtBxs;
+    PlcDrawObj *pSdrObjs = rWrt.m_pHFSdrObjs;
+    pTxtBxs = rWrt.m_pHFTxtBxs;
 
     // if no header/footer -> skip over
     if (!pSdrObjs->size())
     {
         --i;
-        pSdrObjs = rWrt.pSdrObjs;
-        pTxtBxs = rWrt.pTxtBxs;
+        pSdrObjs = rWrt.m_pSdrObjs;
+        pTxtBxs = rWrt.m_pTxtBxs;
     }
 
-    for( ; i--; pSdrObjs = rWrt.pSdrObjs, pTxtBxs = rWrt.pTxtBxs )
+    for( ; i--; pSdrObjs = rWrt.m_pSdrObjs, pTxtBxs = rWrt.m_pTxtBxs )
     {
         // "dummy char" (or any Count ?) - why? Only Microsoft knows it.
         GetStream().WriteChar( i );
@@ -2268,7 +2268,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
 
         EnterGroup( 0 );
 
-        sal_uLong nSecondShapeId = pSdrObjs == rWrt.pSdrObjs ? GenerateShapeId() : 0;
+        sal_uLong nSecondShapeId = pSdrObjs == rWrt.m_pSdrObjs ? GenerateShapeId() : 0;
 
         // write now all Writer-/DrawObjects
         DrawObjPointerVector aSorted;
@@ -2305,7 +2305,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         bool bSwapInPage = false;
                         if (!pSdrObj->GetPage())
                         {
-                            if (SwDrawModel* pModel = rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel())
+                            if (SwDrawModel* pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
                             {
                                 if (SdrPage *pPage = pModel->GetPage(0))
                                 {
@@ -2347,7 +2347,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             AddShape( ESCHER_ShpInst_Rectangle, 0xe00, nSecondShapeId );
 
             EscherPropertyContainer aPropOpt;
-            const SwFrmFmt &rFmt = rWrt.pDoc->GetPageDesc(0).GetMaster();
+            const SwFrmFmt &rFmt = rWrt.m_pDoc->GetPageDesc(0).GetMaster();
             const SfxPoolItem* pItem = 0;
             SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true,
                 &pItem);
@@ -3037,7 +3037,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, sal_uInt32 nShapeId )
     {
         OpenContainer( ESCHER_SpContainer );
 
-        SwDrawModel *pModel = rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+        SwDrawModel *pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OSL_ENSURE(pModel && pDevice, "no model or device");
 
@@ -3193,7 +3193,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     rWW8Wrt.OutputField(0, ww::eCONTROL, sFld,
         WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);
 
-    rWW8Wrt.pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(),sizeof(aSpecOLE),
+    rWW8Wrt.m_pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(),sizeof(aSpecOLE),
         aSpecOLE);
     rWW8Wrt.WriteChar( 0x1 );
     rWW8Wrt.OutputField(0, ww::eCONTROL, OUString(), WRITEFIELD_END | WRITEFIELD_CLOSE);
