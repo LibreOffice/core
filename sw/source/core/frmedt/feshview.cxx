@@ -90,9 +90,6 @@
 
 using namespace com::sun::star;
 
-// tolerance limit of Drawing-SS
-#define MINMOVE ((sal_uInt16)GetOut()->PixelToLogic(Size(Imp()->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width())
-
 SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
 {
     if ( !pLst )
@@ -201,7 +198,10 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     }
     else
     {
-        pDView->MarkObj( rPt, MINMOVE, bAddSelect, bEnterGroup );
+        // tolerance limit of Drawing-SS
+        const auto nHdlSizePixel = Imp()->GetDrawView()->GetMarkHdlSizePixel();
+        const short nMinMove = static_cast<short>(GetOut()->PixelToLogic(Size(nHdlSizePixel/2, 0)).Width());
+        pDView->MarkObj( rPt, nMinMove, bAddSelect, bEnterGroup );
     }
 
     const bool bRet = 0 != rMrkList.GetMarkCount();
