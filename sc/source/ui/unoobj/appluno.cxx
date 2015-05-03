@@ -112,30 +112,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sc_component_getFactory(
                 ScSpreadsheetSettings_CreateInstance,
                 ScSpreadsheetSettings::getSupportedServiceNames_Static() ));
     }
-    else if ( aImpl == ScRecentFunctionsObj::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScRecentFunctionsObj::getImplementationName_Static(),
-                ScRecentFunctionsObj_CreateInstance,
-                ScRecentFunctionsObj::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScFunctionListObj::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScFunctionListObj::getImplementationName_Static(),
-                ScFunctionListObj_CreateInstance,
-                ScFunctionListObj::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScFunctionAccess::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScFunctionAccess::getImplementationName_Static(),
-                ScFunctionAccess_CreateInstance,
-                ScFunctionAccess::getSupportedServiceNames_Static() ));
-    }
     else if ( aImpl == ScXMLImport_getImplementationName() )
     {
         xFactory.set(cppu::createSingleFactory(
@@ -490,27 +466,12 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 {
 }
 
-// stuff for exService_...
-
-uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+ScRecentFunctionsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return (cppu::OWeakObject*)new ScRecentFunctionsObj();
-}
-
-OUString ScRecentFunctionsObj::getImplementationName_Static()
-{
-    return OUString( "stardiv.StarCalc.ScRecentFunctionsObj" );
-}
-
-uno::Sequence<OUString> ScRecentFunctionsObj::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCRECENTFUNCTIONSOBJ_SERVICE;
-    return aRet;
+    return cppu::acquire(new ScRecentFunctionsObj());
 }
 
 // XRecentFunctions
@@ -566,27 +527,12 @@ ScFunctionListObj::~ScFunctionListObj()
 {
 }
 
-// stuff for exService_...
-
-uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+ScFunctionListObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return (cppu::OWeakObject*)new ScFunctionListObj();
-}
-
-OUString ScFunctionListObj::getImplementationName_Static()
-{
-    return OUString( "stardiv.StarCalc.ScFunctionListObj" );
-}
-
-uno::Sequence<OUString> ScFunctionListObj::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCFUNCTIONLISTOBJ_SERVICE;
-    return aRet;
+    return cppu::acquire(new ScFunctionListObj());
 }
 
 static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, const ScFuncDesc& rDesc )

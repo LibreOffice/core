@@ -85,13 +85,16 @@
       constructor="ScAutoFormatsObj_get_implementation">
     <service name="com.sun.star.sheet.TableAutoFormats"/>
   </implementation>
-  <implementation name="stardiv.StarCalc.ScFunctionAccess">
+  <implementation name="stardiv.StarCalc.ScFunctionAccess"
+      constructor="ScFunctionAcceess_get_implementation">
     <service name="com.sun.star.sheet.FunctionAccess"/>
   </implementation>
-  <implementation name="stardiv.StarCalc.ScFunctionListObj">
+  <implementation name="stardiv.StarCalc.ScFunctionListObj"
+      constructor="ScFunctionListObj_get_implementation">
     <service name="com.sun.star.sheet.FunctionDescriptions"/>
   </implementation>
-  <implementation name="stardiv.StarCalc.ScRecentFunctionsObj">
+  <implementation name="stardiv.StarCalc.ScRecentFunctionsObj"
+      constructor="ScRecentFunctionsObj_get_implementation">
     <service name="com.sun.star.sheet.RecentFunctions"/>
   </implementation>
   <implementation name="stardiv.StarCalc.ScSpreadsheetSettings">
