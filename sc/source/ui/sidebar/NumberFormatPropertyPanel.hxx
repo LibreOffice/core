@@ -72,6 +72,9 @@ private:
     VclPtr<CheckBox>                               mpBtnNegRed;
     VclPtr<CheckBox>                               mpBtnThousand;
 
+    OUString                                maThousandSeparator;
+    OUString                                maEngineeringNotation;
+
     ::sfx2::sidebar::ControllerItem         maNumFormatControl;
     ::sfx2::sidebar::ControllerItem         maFormatControl;
 

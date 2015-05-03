@@ -50,6 +50,8 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
   : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame),
+    maThousandSeparator(ScResId(RID_SFX_STR_THOUSAND_SEP)),
+    maEngineeringNotation(ScResId(RID_SFX_STR_ENGINEERING)),
     maNumFormatControl(SID_NUMBER_TYPE_FORMAT, *pBindings, *this),
     maFormatControl(SID_NUMBER_FORMAT, *pBindings, *this),
 
@@ -249,6 +251,10 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     mpEdDecimals->Disable();
                     mpEdLeadZeroes->Disable();
                 }
+                if( nVal == 6 ) // For scientific, Thousand separator is replaced by Engineering notation
+                    mpBtnThousand->SetText( maEngineeringNotation );
+                else
+                    mpBtnThousand->SetText( maThousandSeparator );
             }
             else
             {
