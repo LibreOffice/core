@@ -56,6 +56,9 @@ void ScCondFormatList::dispose()
 {
     mpDialogParent.clear();
     mpScrollBar.disposeAndClear();
+    for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
+        it->disposeAndClear();
+    maEntries.clear();
     Control::dispose();
 }
 
@@ -250,24 +253,28 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
             if((*itr)->GetType() == condformat::entry::COLORSCALE2)
                 return 0;
 
+            itr->disposeAndClear();
             *itr = VclPtr<ScColorScale2FrmtEntry>::Create( this, mpDoc, maPos );
             break;
         case 1:
             if((*itr)->GetType() == condformat::entry::COLORSCALE3)
                 return 0;
 
+            itr->disposeAndClear();
             *itr = VclPtr<ScColorScale3FrmtEntry>::Create( this, mpDoc, maPos );
             break;
         case 2:
             if((*itr)->GetType() == condformat::entry::DATABAR)
                 return 0;
 
+            itr->disposeAndClear();
             *itr = VclPtr<ScDataBarFrmtEntry>::Create( this, mpDoc, maPos );
             break;
         case 3:
             if((*itr)->GetType() == condformat::entry::ICONSET)
                 return 0;
 
+            itr->disposeAndClear();
             *itr = VclPtr<ScIconSetFrmtEntry>::Create( this, mpDoc, maPos );
             break;
         default:
@@ -370,6 +377,7 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl )
     {
         if((*itr)->IsSelected())
         {
+            itr->disposeAndClear();
             maEntries.erase(itr);
             break;
         }
@@ -461,6 +469,7 @@ void ScCondFormatDlg::dispose()
     mpRbRange.clear();
     mpCondFormList.clear();
     mpLastEdit.clear();
+
     ScAnyRefModalDlg::dispose();
 }
 
