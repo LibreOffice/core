@@ -477,9 +477,6 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
                 {
                     const sal_Int32 nChgLen = nIndex - nChgPos;
                     const sal_Int32 nConvChgLen = nPos - nConvChgPos;
-#ifdef DEBUG
-                    OUString aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
-#endif
                     OUString aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
 
                     // set selection to sub string to be replaced in original text
@@ -488,9 +485,6 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
                     aSel.nStartPos = nChgInNodeStartIndex;
                     aSel.nEndPos   = nChgInNodeStartIndex + nChgLen;
                     m_pEditView->SetSelection( aSel );
-#ifdef DEBUG
-                    OUString aSelTxt1( m_pEditView->GetSelected() );
-#endif
 
                     // replace selected sub string with the corresponding
                     // sub string from the new text while keeping as
@@ -536,14 +530,8 @@ void TextConvWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttri
         // save attributes to be restored
         SfxItemSet aSet( m_pEditView->GetAttribs() );
 
-#ifdef DEBUG
-        OUString aSelTxt1( m_pEditView->GetSelected() );
-#endif
         // replace old text and select new text
         m_pEditView->InsertText( rNewText, true );
-#ifdef DEBUG
-        OUString aSelTxt2( m_pEditView->GetSelected() );
-#endif
 
         // since 'SetAttribs' below function like merging with the attributes
         // from the itemset with any existing ones we have to get rid of all
