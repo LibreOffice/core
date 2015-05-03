@@ -130,7 +130,7 @@ copy-stuff:
 # android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
 # extent).
 #
-	mkdir -p assets/lib assets/program/services assets/ComponentTarget/i18npool/util assets/gz.unpack/program
+	mkdir -p assets/lib assets/program/services assets/gz.unpack/program
 	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/offapi.rdb >assets/gz.unpack/program/offapi.rdb
 	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
 	gzip -9 <$(INSTDIR)/$(LIBO_URE_MISC_FOLDER)/types.rdb >assets/gz.unpack/program/udkapi.rdb
@@ -141,7 +141,6 @@ copy-stuff:
 	cp $(if $(exampleDocument),$(exampleDocument),$(SRC_ROOT)/android/default-document/example.odt) assets/example.odt
 	cp $(SRC_ROOT)/readlicense_oo/license/LICENSE assets/license.txt
 	cp $(SRC_ROOT)/readlicense_oo/license/NOTICE assets/notice.txt
-	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
 #
 	rm -Rf assets/share # pre-clean it
 	mkdir -p assets/share/config
