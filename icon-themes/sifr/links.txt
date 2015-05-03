@@ -64,3 +64,8 @@ cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 # Writer - Table toolbar
 cmd/lc_tablesort.png cmd/lc_datasort.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
+
+# calc autofilter
+cmd/lc_datafilterautofilter.png cmd/lc_autofilter.png
+cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
+
