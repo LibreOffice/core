@@ -128,6 +128,8 @@ public:
                                     sal_uInt16&     rLeadingZeroes,
                                     sal_uInt16&     rCatLbPos );
 
+    sal_uInt16          GetFormatIntegerDigits( const OUString&  rFormat ) const;
+
     void                MakePreviewString( const OUString& rFormatStr,
                                            OUString&       rPreviewStr,
                                            Color*&         rpFontColor );

@@ -440,6 +440,9 @@
 #define RID_SVXSTR_PERSONA_MUSIC                            (RID_SVX_START + 1288)
 #define RID_SVXSTR_PERSONA_NATURE                           (RID_SVX_START + 1289)
 
+#define RID_SVXSTR_THOUSAND_SEP                             (RID_SVX_START + 1290)
+#define RID_SVXSTR_ENGINEERING                              (RID_SVX_START + 1291)
+
 #define RID_SVXPAGE_OPENCL                                  (RID_SVX_START + 254)
 
 #endif
