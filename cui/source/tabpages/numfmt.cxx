@@ -243,6 +243,8 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     , pNumFmtShell(NULL)
     , nInitFormat(ULONG_MAX)
     , sAutomaticEntry(CUI_RES(RID_SVXSTR_AUTO_ENTRY))
+    , sThousandSeparator(CUI_RES(RID_SVXSTR_THOUSAND_SEP))
+    , sEngineeringNotation(CUI_RES(RID_SVXSTR_ENGINEERING))
     , pLastActivWindow(NULL)
 {
     get(m_pFtCategory, "categoryft");
@@ -355,6 +357,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pIbAdd->SetClickHdl( HDL( ClickHdl_Impl ) );
     m_pIbRemove->SetClickHdl( HDL( ClickHdl_Impl ) );
     m_pIbInfo->SetClickHdl( HDL( ClickHdl_Impl ) );
+    UpdateThousandEngineeringText();
 
     aLink = LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl);
 
@@ -907,7 +910,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 
 void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_False*/ )
 {
-    OUString  theFormat           = m_pEdFormat->GetText();
+    OUString    theFormat           = m_pEdFormat->GetText();
     sal_Int32   nCurCategory        = m_pLbCategory->GetSelectEntryPos();
     sal_uInt16  nCategory           = static_cast<sal_uInt16>(nCurCategory);
     sal_uInt16  nDecimals           = 0;
@@ -963,12 +966,18 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         nCategory=nFixedCategory;
     }
 
+    sal_uInt16 nIntDigits;
     switch ( nCategory )
     {
+        case CAT_SCIENTIFIC: // bThousand is for Engineering notation
+            nIntDigits = pNumFmtShell->GetFormatIntegerDigits(theFormat);
+            if ( (nIntDigits > 0) && (nIntDigits % 3 == 0) )
+                bThousand = true;
+            else
+                bThousand = false;
         case CAT_NUMBER:
         case CAT_PERCENT:
         case CAT_CURRENCY:
-        case CAT_SCIENTIFIC:
             m_pFtOptions->Enable();
             m_pFtDecimals->Enable();
             m_pEdDecimals->Enable();
@@ -1002,6 +1011,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_pBtnNegRed->Check( false );
             m_pBtnThousand->Check( false );
     }
+    UpdateThousandEngineeringText();
 }
 
 
@@ -1109,6 +1119,28 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
     }
 
     aEntryList.clear();
+}
+
+
+/*************************************************************************
+#*  Method:        UpdateThousandEngineeringText
+#*------------------------------------------------------------------------
+#*
+#*  Class:      SvxNumberFormatTabPage
+#*  Function:   Updates the text of Thousands seprator checkbox
+#*              if scientific format "Engineering notation"
+#*              else "Thousands separator"
+#*  Input:      ---
+#*  Output:     ---
+#*
+#************************************************************************/
+
+void SvxNumberFormatTabPage::UpdateThousandEngineeringText()
+{
+    if ( m_pLbCategory->GetSelectEntryPos() == CAT_SCIENTIFIC )
+        m_pBtnThousand->SetText(sEngineeringNotation);
+    else
+        m_pBtnThousand->SetText(sThousandSeparator);
 }
 
 
