@@ -81,3 +81,7 @@ cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
 cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 
+# calc autofilter
+cmd/lc_datafilterautofilter.png cmd/lc_autofilter.png
+cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
+
