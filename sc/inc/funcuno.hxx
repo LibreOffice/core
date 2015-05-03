@@ -69,9 +69,6 @@ public:
                             ScFunctionAccess();
     virtual                 ~ScFunctionAccess();
 
-    static OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
                             // XFunctionAccess

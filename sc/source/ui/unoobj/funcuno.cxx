@@ -198,33 +198,18 @@ void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// stuff for exService_...
-
-uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+ScFunctionAcceess_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return (::cppu::OWeakObject*) new ScFunctionAccess;
-}
-
-OUString ScFunctionAccess::getImplementationName_Static()
-{
-    return OUString( "stardiv.StarCalc.ScFunctionAccess" );
-}
-
-uno::Sequence<OUString> ScFunctionAccess::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCFUNCTIONACCESS_SERVICE;
-    return aRet;
+    return cppu::acquire(new ScFunctionAccess);
 }
 
 // XServiceInfo
 OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
-    return getImplementationName_Static();
+    return OUString("stardiv.StarCalc.ScFunctionAccess");
 }
 
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )

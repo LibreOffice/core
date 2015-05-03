@@ -236,9 +236,6 @@ public:
                             ScRecentFunctionsObj();
     virtual                 ~ScRecentFunctionsObj();
 
-    static OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
                             // XRecentFunctions
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getRecentFunctionIds()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -266,9 +263,6 @@ class ScFunctionListObj : public cppu::WeakImplHelper4<
 public:
                             ScFunctionListObj();
     virtual                 ~ScFunctionListObj();
-
-    static OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
                             // XFunctionDescriptions
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
