@@ -96,6 +96,7 @@ public:
     void testAxisCharacterPropertiesXLSX();
     void testTitleCharacterPropertiesXLSX();
     void testPlotVisOnlyXLSX();
+    void testBarChartVaryColorsXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST(testAxisCharacterPropertiesXLSX);
     CPPUNIT_TEST(testTitleCharacterPropertiesXLSX);
     CPPUNIT_TEST(testPlotVisOnlyXLSX);
+    CPPUNIT_TEST(testBarChartVaryColorsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1432,6 +1434,15 @@ void Chart2ExportTest::testPlotVisOnlyXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotVisOnly", "val", "0");
+}
+
+void Chart2ExportTest::testBarChartVaryColorsXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf90876.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:varyColors", "val", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
