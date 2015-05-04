@@ -42,13 +42,21 @@ class CheckConfigMacros
         virtual void Defined( const Token& macroToken ) override;
 #else
         virtual void MacroDefined( const Token& macroToken, const MacroDirective* info ) override;
+#if __clang_major__ == 3 && __clang_minor__ < 7
         virtual void MacroUndefined( const Token& macroToken, const MacroDirective* info ) override;
         virtual void Ifdef( SourceLocation location, const Token& macroToken, const MacroDirective* info ) override;
         virtual void Ifndef( SourceLocation location, const Token& macroToken, const MacroDirective* info ) override;
+#else
+        virtual void MacroUndefined( const Token& macroToken, const MacroDefinition& info ) override;
+        virtual void Ifdef( SourceLocation location, const Token& macroToken, const MacroDefinition& info ) override;
+        virtual void Ifndef( SourceLocation location, const Token& macroToken, const MacroDefinition& info ) override;
+#endif
 #if __clang_major__ == 3 && __clang_minor__ < 4
         virtual void Defined( const Token& macroToken, const MacroDirective* info ) override;
-#else
+#elif __clang_major__ == 3 && __clang_minor__ < 7
         virtual void Defined( const Token& macroToken, const MacroDirective* info, SourceRange Range ) override;
+#else
+        virtual void Defined( const Token& macroToken, const MacroDefinition& info, SourceRange Range ) override;
 #endif
 #endif
         enum { isPPCallback = true };
@@ -89,8 +97,10 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroInfo* )
-#else
+#elif __clang_major__ == 3 && __clang_minor__ < 7
 void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDirective* )
+#else
+void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDefinition& )
 #endif
     {
     configMacros.erase( macroToken.getIdentifierInfo()->getName());
@@ -98,8 +108,10 @@ void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDire
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken )
-#else
+#elif __clang_major__ == 3 && __clang_minor__ < 7
 void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, const MacroDirective* )
+#else
+void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, const MacroDefinition& )
 #endif
     {
     checkMacro( macroToken, location );
@@ -107,8 +119,10 @@ void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken,
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken )
-#else
+#elif __clang_major__ == 3 && __clang_minor__ < 7
 void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken, const MacroDirective* )
+#else
+void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken, const MacroDefinition& )
 #endif
     {
     checkMacro( macroToken, location );
@@ -118,8 +132,10 @@ void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken
 void CheckConfigMacros::Defined( const Token& macroToken )
 #elif __clang_major__ == 3 && __clang_minor__ < 4
 void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* )
-#else
+#elif __clang_major__ == 3 && __clang_minor__ < 7
 void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* , SourceRange )
+#else
+void CheckConfigMacros::Defined( const Token& macroToken, const MacroDefinition& , SourceRange )
 #endif
     {
     checkMacro( macroToken, macroToken.getLocation());
