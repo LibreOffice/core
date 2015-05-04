@@ -272,7 +272,7 @@ namespace xmlscript
     class XMLBasicImporter : public XMLBasicImporterBase
     {
     public:
-        XMLBasicImporter(
+        explicit XMLBasicImporter(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~XMLBasicImporter();
 
@@ -288,7 +288,7 @@ namespace xmlscript
     class XMLOasisBasicImporter : public XMLBasicImporterBase
     {
     public:
-        XMLOasisBasicImporter(
+        explicit XMLOasisBasicImporter(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~XMLOasisBasicImporter();
 

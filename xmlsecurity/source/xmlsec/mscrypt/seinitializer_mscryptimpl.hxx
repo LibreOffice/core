@@ -55,7 +55,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
 
 public:
-    SEInitializer_MSCryptImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > &rxContext);
+    explicit SEInitializer_MSCryptImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > &rxContext);
     virtual ~SEInitializer_MSCryptImpl();
 
     /* XSEInitializer */

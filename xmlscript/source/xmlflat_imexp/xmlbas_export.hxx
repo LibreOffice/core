@@ -77,7 +77,7 @@ namespace xmlscript
     class XMLBasicExporter : public XMLBasicExporterBase
     {
     public:
-        XMLBasicExporter(
+        explicit XMLBasicExporter(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~XMLBasicExporter();
 
@@ -93,7 +93,7 @@ namespace xmlscript
     class XMLOasisBasicExporter : public XMLBasicExporterBase
     {
     public:
-        XMLOasisBasicExporter(
+        explicit XMLOasisBasicExporter(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~XMLOasisBasicExporter();
 

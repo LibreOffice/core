@@ -388,7 +388,7 @@ private:
         sal_Int32 nSecurityId );
 
 public:
-    XSecController(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rxCtx);
+    explicit XSecController(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rxCtx);
     virtual ~XSecController();
 
     sal_Int32 getNewSecurityId(  );

@@ -354,7 +354,7 @@ private:
 class TimeContainerEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
 public:
-    TimeContainerEnumeration( const ChildList_t &rChildren );
+    explicit TimeContainerEnumeration( const ChildList_t &rChildren );
     virtual ~TimeContainerEnumeration();
 
     // Methods

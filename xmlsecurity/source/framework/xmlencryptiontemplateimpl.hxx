@@ -45,7 +45,7 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper2<
         ::com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
     public :
-        XMLEncryptionTemplateImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
+        explicit XMLEncryptionTemplateImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
         virtual ~XMLEncryptionTemplateImpl() ;
 
         //Methods from XXMLEncryptionTemplate

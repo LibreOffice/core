@@ -91,7 +91,7 @@ protected:
         com::sun::star::io::XInputStream > > m_vXInputStreams;
 
 protected:
-    SignatureEngine( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext);
+    explicit SignatureEngine( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext);
     virtual ~SignatureEngine() {};
 
     virtual void tryToPerform( )

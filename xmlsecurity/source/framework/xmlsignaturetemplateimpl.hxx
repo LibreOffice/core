@@ -47,7 +47,7 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper2<
         ::com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
     public :
-        XMLSignatureTemplateImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
+        explicit XMLSignatureTemplateImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
         virtual ~XMLSignatureTemplateImpl() ;
 
         //Methods from XXMLSignatureTemplate

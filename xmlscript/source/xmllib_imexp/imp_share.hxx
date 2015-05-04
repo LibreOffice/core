@@ -114,7 +114,7 @@ struct LibraryImport
     sal_Int32 XMLNS_XLINK_UID;
 
 public:
-    LibraryImport( LibDescriptorArray* pLibArray )
+    explicit LibraryImport( LibDescriptorArray* pLibArray )
         : mpLibArray(pLibArray)
         , mpLibDesc(NULL)
         , XMLNS_LIBRARY_UID(0)
@@ -123,7 +123,7 @@ public:
     }
 
     // Single library mode
-    LibraryImport(LibDescriptor* pLibDesc)
+    explicit LibraryImport(LibDescriptor* pLibDesc)
         : mpLibArray(NULL)
         , mpLibDesc(pLibDesc)
         , XMLNS_LIBRARY_UID(0)
