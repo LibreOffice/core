@@ -222,6 +222,9 @@ SvxProxyTabPage::~SvxProxyTabPage()
 
 void SvxProxyTabPage::dispose()
 {
+    m_pHttpPortED->SetLoseFocusHdl( Link<>() );
+    m_pHttpsPortED->SetLoseFocusHdl( Link<>() );
+    m_pFtpPortED->SetLoseFocusHdl( Link<>() );
     m_pProxyModeLB.clear();
     m_pHttpProxyFT.clear();
     m_pHttpProxyED.clear();

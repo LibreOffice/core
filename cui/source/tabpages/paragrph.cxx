@@ -661,6 +661,10 @@ SvxStdParagraphTabPage::~SvxStdParagraphTabPage()
 
 void SvxStdParagraphTabPage::dispose()
 {
+    m_pFLineIndent->SetLoseFocusHdl( Link<>() );
+    m_pLeftIndent->SetLoseFocusHdl( Link<>() );
+    m_pRightIndent->SetLoseFocusHdl( Link<>() );
+
     m_pLeftIndent.clear();
     m_pRightLabel.clear();
     m_pRightIndent.clear();

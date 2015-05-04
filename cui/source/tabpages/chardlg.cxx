@@ -2658,6 +2658,8 @@ SvxCharPositionPage::~SvxCharPositionPage()
 
 void SvxCharPositionPage::dispose()
 {
+    m_pHighLowMF->SetLoseFocusHdl( Link<>() );
+    m_pFontSizeMF->SetLoseFocusHdl( Link<>() );
     m_pHighPosBtn.clear();
     m_pNormalPosBtn.clear();
     m_pLowPosBtn.clear();

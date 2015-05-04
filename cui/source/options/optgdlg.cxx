@@ -314,6 +314,7 @@ OfaMiscTabPage::~OfaMiscTabPage()
 
 void OfaMiscTabPage::dispose()
 {
+    m_pYearValueField->SetLoseFocusHdl(Link<>());
     m_pToolTipsCB.clear();
     m_pExtHelpCB.clear();
     m_pFileDlgROImage.clear();

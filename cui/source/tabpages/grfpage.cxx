@@ -132,6 +132,10 @@ SvxGrfCropPage::~SvxGrfCropPage()
 
 void SvxGrfCropPage::dispose()
 {
+    m_pLeftMF->SetLoseFocusHdl( Link<>() );
+    m_pRightMF->SetLoseFocusHdl( Link<>() );
+    m_pTopMF->SetLoseFocusHdl( Link<>() );
+    m_pBottomMF->SetLoseFocusHdl( Link<>() );
     aTimer.Stop();
     m_pCropFrame.clear();
     m_pZoomConstRB.clear();

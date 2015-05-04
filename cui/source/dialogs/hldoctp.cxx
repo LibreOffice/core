@@ -78,6 +78,7 @@ SvxHyperlinkDocTp::~SvxHyperlinkDocTp()
 
 void SvxHyperlinkDocTp::dispose()
 {
+    m_pCbbPath->SetLoseFocusHdl(Link<>());
     m_pCbbPath.clear();
     m_pBtFileopen.clear();
     m_pEdTarget.clear();

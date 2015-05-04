@@ -2768,6 +2768,13 @@ SvxNumPositionTabPage::~SvxNumPositionTabPage()
 
 void SvxNumPositionTabPage::dispose()
 {
+    m_pDistBorderMF->SetLoseFocusHdl( Link<>() );
+    m_pDistNumMF->SetLoseFocusHdl( Link<>() );
+    m_pIndentMF->SetLoseFocusHdl( Link<>() );
+    m_pListtabMF->SetLoseFocusHdl( Link<>() );
+    m_pAlignedAtMF->SetLoseFocusHdl( Link<>() );
+    m_pIndentAtMF->SetLoseFocusHdl( Link<>() );
+
     delete pActNum;
     pActNum = NULL;
     delete pSaveNum;

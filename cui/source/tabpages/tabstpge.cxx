@@ -194,6 +194,9 @@ SvxTabulatorTabPage::~SvxTabulatorTabPage()
 
 void SvxTabulatorTabPage::dispose()
 {
+    m_pDezChar->SetLoseFocusHdl( Link<>() );
+    m_pFillChar->SetLoseFocusHdl( Link<>() );
+
     m_pTabBox.clear();
     m_pLeftTab.clear();
     m_pRightTab.clear();

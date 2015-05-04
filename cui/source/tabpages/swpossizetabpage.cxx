@@ -595,6 +595,11 @@ SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
 
 void SvxSwPosSizeTabPage::dispose()
 {
+    m_pWidthMF->SetLoseFocusHdl( Link<>() );
+    m_pHeightMF->SetLoseFocusHdl( Link<>() );
+    m_pHoriByMF->SetLoseFocusHdl( Link<>() );
+    m_pVertByMF->SetLoseFocusHdl( Link<>() );
+
     m_pWidthMF.clear();
     m_pHeightMF.clear();
     m_pKeepRatioCB.clear();

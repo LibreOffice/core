@@ -371,6 +371,13 @@ SvxPageDescPage::~SvxPageDescPage()
 
 void SvxPageDescPage::dispose()
 {
+    m_pPaperWidthEdit->SetLoseFocusHdl( Link<>() );
+    m_pPaperHeightEdit->SetLoseFocusHdl( Link<>() );
+    m_pLeftMarginEdit->SetLoseFocusHdl( Link<>() );
+    m_pRightMarginEdit->SetLoseFocusHdl( Link<>() );
+    m_pTopMarginEdit->SetLoseFocusHdl( Link<>() );
+    m_pBottomMarginEdit->SetLoseFocusHdl( Link<>() );
+
     if(mbDelPrinter)
     {
         mpDefPrinter.disposeAndClear();

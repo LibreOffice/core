@@ -288,6 +288,7 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 
 void SvxNumberFormatTabPage::dispose()
 {
+    m_pEdComment->SetLoseFocusHdl( Link<>() );
     delete pNumFmtShell;
     pNumFmtShell = NULL;
     delete pNumItem;
