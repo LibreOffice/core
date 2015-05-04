@@ -185,6 +185,11 @@ ScFunctionAccess::ScFunctionAccess() :
 ScFunctionAccess::~ScFunctionAccess()
 {
     delete pOptions;
+    {
+        // SfxBroadcaster::RemoveListener checks DBG_TESTSOLARMUTEX():
+        SolarMutexGuard g;
+        EndListeningAll();
+    }
 }
 
 void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
