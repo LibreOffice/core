@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a5de9d1_e96231ad",
+        "filename": "sw/source/uibase/config/modcfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-05-04T08:10:14Z",
+      "side": 1,
+      "message": "The old code defaults to 0, so you need something like this:\n\n if (officecfg::Office::Writer::Comparision::Mode::get().has())\n     eCmpMode \u003d *officecfg::Office::Writer::Comparision::Mode::get();",
+      "parentUuid": "7a5de9d1_493a65cf",
+      "revId": "a4baa6f4ca80fd99ac1f193bd301f73922599ff3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_693721e4",
         "filename": "sw/source/uibase/config/modcfg.cxx",
         "patchSetId": 1
