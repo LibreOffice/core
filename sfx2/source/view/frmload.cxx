@@ -108,7 +108,7 @@ class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< css::frame::XSynchro
     css::uno::Reference < css::uno::XComponentContext >  m_aContext;
 
 public:
-    SfxFrameLoader_Impl( const css::uno::Reference < css::uno::XComponentContext >& _rxContext );
+    explicit SfxFrameLoader_Impl( const css::uno::Reference < css::uno::XComponentContext >& _rxContext );
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

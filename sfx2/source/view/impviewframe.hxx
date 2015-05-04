@@ -53,7 +53,7 @@ struct SfxViewFrame_Impl
     ::boost::optional< bool >
                         aHasToolPanels;
 
-    SfxViewFrame_Impl(SfxFrame& i_rFrame)
+    explicit SfxViewFrame_Impl(SfxFrame& i_rFrame)
         : rFrame(i_rFrame)
         , pReloader(0)
         , pWindow(0)

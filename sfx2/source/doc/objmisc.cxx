@@ -146,7 +146,7 @@ private:
     bool bAlert;
 
 public:
-    SfxHeaderAttributes_Impl( SfxObjectShell* pSh ) :
+    explicit SfxHeaderAttributes_Impl( SfxObjectShell* pSh ) :
         SvKeyValueIterator(), pDoc( pSh ),
         xIter( pSh->GetMedium()->GetHeaderAttributes_Impl() ),
         bAlert( false ) {}

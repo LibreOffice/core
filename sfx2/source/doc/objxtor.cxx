@@ -151,7 +151,7 @@ class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::
 {
     SfxObjectShell* mpDoc;
 public:
-    SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
+    explicit SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
     virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
         throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException, std::exception) SAL_OVERRIDE ;
     virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
@@ -569,7 +569,7 @@ bool SfxObjectShell::IsInPrepareClose() const
 struct BoolEnv_Impl
 {
     SfxObjectShell_Impl* pImp;
-    BoolEnv_Impl( SfxObjectShell_Impl* pImpP) : pImp( pImpP )
+    explicit BoolEnv_Impl( SfxObjectShell_Impl* pImpP) : pImp( pImpP )
     { pImpP->bInPrepareClose = true; }
     ~BoolEnv_Impl() { pImp->bInPrepareClose = false; }
 };

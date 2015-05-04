@@ -56,7 +56,7 @@ public:
     bool                      bLockResize;
     bool                      bMenuBarOn;
 
-    SfxFrame_Impl( SfxFrame* pAntiImplP )
+    explicit SfxFrame_Impl( SfxFrame* pAntiImplP )
         :nType( 0L )
         ,pCurrentViewFrame( NULL )
         ,pDescr( NULL )
