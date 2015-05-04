@@ -313,7 +313,7 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
         Read( nFlags );
         Skip( 1 );
 
-        if( nFlags & 0x02 )     // Fixed / Strech to fit fonts
+        if( nFlags & 0x02 )     // Fixed / Stretch to fit fonts
         {   // fixed
             // Height in Lotus in 1/32 Points
             nHeight *= 20;  // -> 32 * TWIPS

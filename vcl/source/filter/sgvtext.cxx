@@ -820,7 +820,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
                 }
             }
 
-            if (j==0) {                        // only one word ?  -> strech !
+            if (j==0) {                        // only one word ?  -> stretch !
                 for (i=li+1;i<=re;i++) {       // from left to right
                   Line[i]=Line[i]+MulDiv(i-li,BoxRest,re-li+1-1);
                 }
@@ -843,7 +843,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
             li=1;
             while (li<=re && (cLine[li]==' ' || cLine[li]==TextEnd || cLine[li]==AbsatzEnd)) li++;
             BoxRest=AdjWdt-Line[re+1];
-            for (i=li+1;i<=re;i++) {         // strech from left to right
+            for (i=li+1;i<=re;i++) {         // stretch from left to right
                 Line[i]=Line[i]+MulDiv(i-li,BoxRest,re-li+1-1);
             }
             for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // adapt the rest
@@ -910,7 +910,7 @@ void TextType::Draw(OutputDevice& rOut)
     cLine.reset(new UCHAR[CharLineSize]);
 
     TextFit=(Flags & TextFitBits)!=0;
-    bool LineFit=((Flags & TextFitZBit)!=0);  // FitSize.x=0? or flags -> strech each line
+    bool LineFit=((Flags & TextFitZBit)!=0);  // FitSize.x=0? or flags -> stretch each line
     if (TextFit && FitSize.x==0) LineFit=true;
 
     if (RotationAngle==0) {

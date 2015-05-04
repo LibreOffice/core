@@ -213,7 +213,7 @@ namespace drawinglayer
             basegfx::B2DPoint aBitmapSize(1.0, 1.0);
             basegfx::B2DVector aBitmapTopLeft(0.0, 0.0);
 
-            //UUUU are changes needed? When streched we are already done, all other values will have no influence
+            //UUUU are changes needed? When stretched we are already done, all other values will have no influence
             if(getTiling() || !getStretch())
             {
                 // init values with range sizes

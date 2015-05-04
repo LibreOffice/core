@@ -222,7 +222,7 @@ public:
     //   - object-specific Dragging
     //     - rectangle corner radius: nothing
     //     - circle object angle: nothing
-    //     - line keeps while Dragging the angle and is only streched/ contracted
+    //     - line keeps while Dragging the angle and is only stretched/ contracted
     // Default value for Ortho is off. persistent.
     void SetOrtho(bool bOn) { bOrtho=bOn; } // unvollstaendig
     bool IsOrtho() const { return bOrtho; }
