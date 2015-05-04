@@ -167,7 +167,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
         OSL_ENSURE( rCntnt.GetCntntIdx(), "Fly ohne Inhalt" );
 
-        SaveSection( pDoc, *rCntnt.GetCntntIdx() );
+        SaveSection( *rCntnt.GetCntntIdx() );
         const_cast<SwFmtCntnt&>(rCntnt).SetNewCntntIdx( (const SwNodeIndex*)0 );
     }
     // OD 02.07.2003 #108784# - remove 'master' drawing object from drawing page
@@ -276,7 +276,7 @@ void SwUndoInsLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
                         aIdx.GetNode().EndOfSectionIndex() );
                 SwIndex aIndex( pNode, mnCrsrSaveIndexPos );
                 SwPosition aPos( *pNode, aIndex );
-                rDoc.CorrAbs( aIdx, aEndIdx, aPos, true );
+                SwDoc::CorrAbs( aIdx, aEndIdx, aPos, true );
                 bRemoveIdx = false;
             }
         }

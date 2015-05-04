@@ -69,7 +69,7 @@ private:
     typedef std::deque<SwOLEObj *> OleObjects_t;
     OleObjects_t m_OleObjects;
     sal_Int32 m_nLRU_InitSize;
-    uno::Sequence< OUString > GetPropertyNames();
+    static uno::Sequence< OUString > GetPropertyNames();
 
     virtual void ImplCommit() SAL_OVERRIDE;
 

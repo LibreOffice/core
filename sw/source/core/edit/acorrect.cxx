@@ -44,7 +44,7 @@ class _PaMIntoCrsrShellRing
     SwPaM* pPrevDelPam;
     SwPaM* pPrevCrsr;
 
-    void RemoveFromRing( SwPaM& rPam, SwPaM* pPrev );
+    static void RemoveFromRing( SwPaM& rPam, SwPaM* pPrev );
 public:
     _PaMIntoCrsrShellRing( SwCrsrShell& rSh, SwPaM& rCrsr, SwPaM& rPam );
     ~_PaMIntoCrsrShellRing();

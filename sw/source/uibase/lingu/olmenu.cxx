@@ -725,7 +725,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     {
         SwPaM *pPaM = m_pSh->GetCrsr();
         if (pPaM)
-            m_pSh->IgnoreGrammarErrorAt( *pPaM );
+            SwEditShell::IgnoreGrammarErrorAt( *pPaM );
     }
     else if (nId == MN_IGNORE_WORD)
     {
@@ -739,7 +739,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                 // refresh the layout of the actual paragraph (faster)
                 SwPaM *pPaM = m_pSh->GetCrsr();
                 if (pPaM)
-                    m_pSh->IgnoreGrammarErrorAt( *pPaM );
+                    SwEditShell::IgnoreGrammarErrorAt( *pPaM );
                 // refresh the layout of all paragraphs (workaround to launch a dictionary event)
                 xDictionary->setActive(sal_False);
                 xDictionary->setActive(sal_True);

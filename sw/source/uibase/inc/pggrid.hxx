@@ -69,7 +69,7 @@ class SwTextGridPage: public SfxTabPage
 
     void UpdatePageSize(const SfxItemSet& rSet);
     void PutGridItem(SfxItemSet& rSet);
-    void SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue );
+    static void SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue );
 
     DECL_LINK(GridTypeHdl, RadioButton*);
     DECL_LINK(CharorLineChangedHdl, SpinField*);

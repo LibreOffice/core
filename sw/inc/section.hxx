@@ -236,7 +236,7 @@ public:
 
     void CreateLink( LinkCreateType eType );
 
-    void MakeChildLinksVisible( const SwSectionNode& rSectNd );
+    static void MakeChildLinksVisible( const SwSectionNode& rSectNd );
 
     bool IsLinkType() const { return m_Data.IsLinkType(); }
 

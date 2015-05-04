@@ -2245,7 +2245,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                               pFntObj->GetPropWidth() ==
                               static_cast<SwSubFont const *>(pOwn)->GetPropWidth() &&
                               ( !pFntObj->pPrinter || pFntObj->pPrinter == pOut ) ) )
-            pFntObj = pFntCache->Next( pFntObj );
+            pFntObj = SwFntCache::Next( pFntObj );
 
         if( pFntObj && pFntObj->pPrinter.get() != pOut )
         {
@@ -2256,7 +2256,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                    pTmpObj->GetZoom()==nZoom && pTmpObj->pPrinter==pOut &&
                    pTmpObj->GetPropWidth() ==
                         static_cast<SwSubFont const *>(pOwn)->GetPropWidth() ) )
-                pTmpObj = pFntCache->Next( pTmpObj );
+                pTmpObj = SwFntCache::Next( pTmpObj );
             if( pTmpObj )
                 pFntObj = pTmpObj;
         }

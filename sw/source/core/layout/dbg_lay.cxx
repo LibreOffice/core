@@ -133,7 +133,7 @@ class SwImplProtocol
     void _Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam );
     bool NewStream();
     void CheckLine( OString& rLine );
-    void SectFunc( OStringBuffer& rOut, const SwFrm* pFrm, sal_uLong nAct, void* pParam );
+    static void SectFunc( OStringBuffer& rOut, const SwFrm* pFrm, sal_uLong nAct, void* pParam );
 public:
     SwImplProtocol();
     ~SwImplProtocol();

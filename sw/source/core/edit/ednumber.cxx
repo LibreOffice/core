@@ -332,7 +332,7 @@ bool SwEditShell::NumUpDown( bool bDown )
 
 bool SwEditShell::IsFirstOfNumRuleAtCrsrPos() const
 {
-    return GetDoc()->IsFirstOfNumRuleAtPos( *GetCrsr()->GetPoint() );
+    return SwDoc::IsFirstOfNumRuleAtPos( *GetCrsr()->GetPoint() );
 }
 
 // -> #i23725#, #i90078#
@@ -362,7 +362,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 {
     StartAllAction();
 
-    SwNumRule *pCurNumRule = GetDoc()->GetNumRuleAtPos(rPos);
+    SwNumRule *pCurNumRule = SwDoc::GetNumRuleAtPos(rPos);
 
     if (pCurNumRule)
     {
@@ -426,7 +426,7 @@ void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower 
     aCrsr.SetMark();
     if( pCrsr->HasMark() )
         *aCrsr.GetPoint() = *pCrsr->End();
-    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false, &rUpper, &rLower );
+    SwDoc::GotoNextNum( *aCrsr.GetPoint(), false, &rUpper, &rLower );
 }
 
 bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
@@ -443,7 +443,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 
     bool bRet = false;
     sal_uInt8 nUpperLevel, nLowerLevel;
-    if( GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false,
+    if( SwDoc::GotoNextNum( *aCrsr.GetPoint(), false,
                                 &nUpperLevel, &nLowerLevel ))
     {
         if( bUpperLower )
@@ -455,7 +455,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
             if( bUpperLeft ) // move up
             {
                 SwPosition aPos( *aCrsr.GetMark() );
-                if( GetDoc()->GotoPrevNum( aPos, false ) )
+                if( SwDoc::GotoPrevNum( aPos, false ) )
                     nOffset = aPos.nNode.GetIndex() -
                             aCrsr.GetMark()->nNode.GetIndex();
                 else
@@ -690,7 +690,7 @@ sal_uInt8 SwEditShell::GetNumLevel() const
 
 const SwNumRule* SwEditShell::GetNumRuleAtCurrCrsrPos() const
 {
-    return GetDoc()->GetNumRuleAtPos( *GetCrsr()->GetPoint() );
+    return SwDoc::GetNumRuleAtPos( *GetCrsr()->GetPoint() );
 }
 
 const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
@@ -704,7 +704,7 @@ const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
 
         for ( SwNodeIndex aNode = rCurrentCrsr.Start()->nNode; aNode <= aEndNode; ++aNode )
         {
-            const SwNumRule* pNumRule = GetDoc()->GetNumRuleAtPos( SwPosition( aNode ) );
+            const SwNumRule* pNumRule = SwDoc::GetNumRuleAtPos( SwPosition( aNode ) );
             if ( pNumRule == NULL )
             {
                 continue;

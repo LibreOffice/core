@@ -1005,7 +1005,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
         Size aSize;
         Point aTmp;
 
-        const sal_uInt16 nPostItsWidth = m_pOpt->GetPostItsWidth( GetOut() );
+        const sal_uInt16 nPostItsWidth = SwViewOption::GetPostItsWidth( GetOut() );
         const sal_uInt16 nFontHeight = m_pFnt->GetHeight( m_pVsh, *GetOut() );
         const sal_uInt16 nFontAscent = m_pFnt->GetAscent( m_pVsh, *GetOut() );
 
@@ -1041,7 +1041,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
             GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
 
         const Rectangle aRect( aTmpRect.SVRect() );
-        m_pOpt->PaintPostIts( const_cast<OutputDevice*>(GetOut()), aRect, bScript );
+        SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aRect, bScript );
     }
 }
 

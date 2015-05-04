@@ -76,7 +76,7 @@ private:
 
     // write a single output stream
     // (to be called either directly or by WriteThroughComponent(...))
-    bool WriteThroughComponent(
+    static bool WriteThroughComponent(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XOutputStream> & xOutputStream,
         const ::com::sun::star::uno::Reference<

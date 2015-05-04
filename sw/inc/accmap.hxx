@@ -166,7 +166,7 @@ public:
     {
         return mpVSh;
     }
-    bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
+    static bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
     void AddShapeContext(const SdrObject *pObj,
                              ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccShape);
 

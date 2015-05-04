@@ -111,7 +111,7 @@ bool SwHyphWrapper::SpellMore()
 void SwHyphWrapper::InsertHyphen( const sal_uInt16 nPos )
 {
     if( nPos)
-        PSH->InsertSoftHyph( nPos + 1); // does nPos == 1 really mean
+        SwEditShell::InsertSoftHyph( nPos + 1); // does nPos == 1 really mean
                                         // insert hyphen after first char?
                                         // (instead of nPos == 0)
     else

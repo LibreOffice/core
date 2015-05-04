@@ -150,7 +150,7 @@ class SwChartDataProvider :
                ::com::sun::star::uno::RuntimeException,
                std::exception);
 
-    OUString GetBrokenCellRangeForExport( const OUString &rCellRangeRepresentation );
+    static OUString GetBrokenCellRangeForExport( const OUString &rCellRangeRepresentation );
 
 protected:
     //SwClient

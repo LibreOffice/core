@@ -131,7 +131,7 @@ namespace
         if ( pNode == NULL )
         {
             SwNodeIndex aStt = SwNodeIndex(rStt);
-            pNode = rStt.GetNodes().GoPrevious(&aStt);
+            pNode = SwNodes::GoPrevious(&aStt);
             bPosAtEndOfNode = true;
         }
         if ( pNode != NULL )
@@ -1344,7 +1344,7 @@ void _DelBookmarks(
                 {
                     bStt = false;
                     pRStt->nNode = rStt;
-                    if( 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &pRStt->nNode )) )
+                    if( 0 == ( pCNd = SwNodes::GoPrevious( &pRStt->nNode )) )
                     {
                         pRStt->nNode = pREnd->nNode;
                         pCNd = pRStt->nNode.GetNode().GetCntntNode();
@@ -1362,7 +1362,7 @@ void _DelBookmarks(
             {
                 bool bStt = false;
                 SwCntntNode* pCNd = pREnd->nNode.GetNode().GetCntntNode();
-                if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &pREnd->nNode )) )
+                if( !pCNd && 0 == ( pCNd = SwNodes::GoPrevious( &pREnd->nNode )) )
                 {
                     bStt = true;
                     pREnd->nNode = rEnd;

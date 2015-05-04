@@ -332,7 +332,7 @@ void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& /*rAttrList*/,
                                const SvXMLItemMapEntry& /*rEntry*/,
                                const SvXMLUnitConverter& /*rUnitConverter*/,
                                const SvXMLNamespaceMap& /*rNamespaceMap*/,
-                               const SfxItemSet& /*rSet*/ ) const
+                               const SfxItemSet& /*rSet*/ )
 {
     OSL_FAIL( "no item not handled in xml export" );
 }

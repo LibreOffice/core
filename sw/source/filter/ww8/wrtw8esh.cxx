@@ -2190,7 +2190,7 @@ void SwBasicEscherEx::Init()
     SetHellLayerId(rWrt.m_pDoc->getIDocumentDrawModelAccess().GetHellId());
 }
 
-sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax) const
+sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax)
 {
     if (nMax)
     {

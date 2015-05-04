@@ -66,7 +66,7 @@ enum SvEmbeddedObjectTypes
 };
 
 SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
-    const Reference < XPropertySet >& rPropSet ) const
+    const Reference < XPropertySet >& rPropSet )
 {
     Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for embedded");

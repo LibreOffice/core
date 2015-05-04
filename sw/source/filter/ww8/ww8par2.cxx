@@ -2939,8 +2939,8 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
     if (pActBand->pTCs)     // neither Cell Border nor Default Border defined ?
     {
         WW8_TCell* pT = &pActBand->pTCs[nWwIdx];
-        if (pIo->IsBorder(pT->rgbrc))
-            pIo->SetBorder(aFmtBox, pT->rgbrc);
+        if (SwWW8ImplReader::IsBorder(pT->rgbrc))
+            SwWW8ImplReader::SetBorder(aFmtBox, pT->rgbrc);
     }
 
     if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwTOP))
@@ -3225,7 +3225,7 @@ void WW8TabDesc::TableCellEnd()
             {
                 SwTableBox* pBox = (*pTabBoxes)[0];
                 SwSelBoxes aBoxes;
-                pIo->m_rDoc.InsertRow( pTable->SelLineFromBox( pBox, aBoxes ) );
+                pIo->m_rDoc.InsertRow( SwTable::SelLineFromBox( pBox, aBoxes ) );
             }
         }
     }

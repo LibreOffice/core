@@ -86,11 +86,11 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_EXPORT flag set */
-    void handleNoItem( SvXMLAttributeList& rAttrList,
+    static void handleNoItem( SvXMLAttributeList& rAttrList,
                                const SvXMLItemMapEntry& rEntry,
                                const SvXMLUnitConverter& rUnitConverter,
                                const SvXMLNamespaceMap& rNamespaceMap,
-                               const SfxItemSet& rSet ) const;
+                               const SfxItemSet& rSet );
 
     /** this method is called for every item that has the
         MID_SW_FLAG_ELEMENT_EXPORT flag set */

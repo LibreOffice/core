@@ -375,7 +375,7 @@ class SwDrawContact : public SwContact
 
         /// method for adding/removing 'virtual' drawing object.
         SwDrawVirtObj* CreateVirtObj();
-        void DestroyVirtObj( SwDrawVirtObj* pVirtObj );
+        static void DestroyVirtObj( SwDrawVirtObj* pVirtObj );
         void RemoveAllVirtObjs();
 
         void _InvalidateObjs( const bool _bUpdateSortedObjsList = false );

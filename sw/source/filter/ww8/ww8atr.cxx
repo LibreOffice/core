@@ -585,7 +585,7 @@ bool MSWordExportBase::OutputFollowPageDesc( const SfxItemSet* pSet, const SwTxt
     return bRet;
 }
 
-const SwSectionFmt* MSWordExportBase::GetSectionFormat( const SwNode& rNd ) const
+const SwSectionFmt* MSWordExportBase::GetSectionFormat( const SwNode& rNd )
 {
     const SwSectionFmt* pFmt = NULL;
     const SwSectionNode* pSect = rNd.FindSectionNode();
@@ -598,7 +598,7 @@ const SwSectionFmt* MSWordExportBase::GetSectionFormat( const SwNode& rNd ) cons
     return pFmt;
 }
 
-sal_uLong MSWordExportBase::GetSectionLineNo( const SfxItemSet* pSet, const SwNode& rNd ) const
+sal_uLong MSWordExportBase::GetSectionLineNo( const SfxItemSet* pSet, const SwNode& rNd )
 {
     const SwFmtLineNumber* pNItem = 0;
     if ( pSet )
@@ -2950,7 +2950,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                     {
                         const OUString aRefName(rRFld.GetSetRefName());
                         sStr = FieldString(eFld)
-                            + GetExport().GetBookmarkName(nSubType, &aRefName, 0);
+                            + MSWordExportBase::GetBookmarkName(nSubType, &aRefName, 0);
                     }
                     switch (pFld->GetFormat())
                     {
@@ -2982,7 +2982,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                             break;
                     }
                     sStr = FieldString(eFld)
-                        + GetExport().GetBookmarkName(nSubType, 0, rRFld.GetSeqNo());
+                        + MSWordExportBase::GetBookmarkName(nSubType, 0, rRFld.GetSeqNo());
                     break;
             }
 
@@ -3346,7 +3346,7 @@ void AttributeOutputBase::TextFootnote( const SwFmtFtn& rFtn )
     OUString sBkmkNm;
     if ( GetExport().HasRefToObject( nTyp, 0, rFtn.GetTxtFtn()->GetSeqRefNo() ))
     {
-        sBkmkNm = GetExport().GetBookmarkName( nTyp, 0,
+        sBkmkNm = MSWordExportBase::GetBookmarkName( nTyp, 0,
                                     rFtn.GetTxtFtn()->GetSeqRefNo() );
         GetExport().AppendBookmark( sBkmkNm );
     }

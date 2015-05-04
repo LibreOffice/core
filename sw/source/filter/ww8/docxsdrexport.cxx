@@ -182,7 +182,7 @@ struct DocxSdrExport::Impl
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
 
     void textFrameShadow(const SwFrmFmt& rFrmFmt);
-    bool isSupportedDMLShape(uno::Reference<drawing::XShape> xShape);
+    static bool isSupportedDMLShape(uno::Reference<drawing::XShape> xShape);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
     bool checkFrameBtlr(SwNode* pStartNode, bool bDML);
 };
@@ -798,7 +798,7 @@ bool lcl_isLockedCanvas(uno::Reference<drawing::XShape> xShape)
 void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt, int nAnchorId)
 {
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
-    if (!m_pImpl->isSupportedDMLShape(xShape))
+    if (!Impl::isSupportedDMLShape(xShape))
         return;
 
     m_pImpl->m_rExport.DocxAttrOutput().GetSdtEndBefore(pSdrObject);
@@ -935,7 +935,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
 
     // In case we are already inside a DML block, then write the shape only as VML, turn out that's allowed to do.
     // A common service created in util to check for VML shapes which are allowed to have textbox in content
-    if ((msfilter::util::HasTextBoxContent(eShapeType)) && m_pImpl->isSupportedDMLShape(xShape) && !bDMLAndVMLDrawingOpen)
+    if ((msfilter::util::HasTextBoxContent(eShapeType)) && Impl::isSupportedDMLShape(xShape) && !bDMLAndVMLDrawingOpen)
     {
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 

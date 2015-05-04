@@ -176,7 +176,7 @@ void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
     rSet.Put(SfxBoolItem(SID_FORMATPAINTBRUSH, bHasContent));
     if(!bHasContent)
     {
-        if( !m_pFormatClipboard->CanCopyThisType( GetWrtShell().GetSelectionType() ) )
+        if( !SwFormatClipboard::CanCopyThisType( GetWrtShell().GetSelectionType() ) )
             rSet.DisableItem( SID_FORMATPAINTBRUSH );
     }
 }

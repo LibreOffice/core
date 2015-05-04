@@ -31,7 +31,7 @@ class SwTxtFrmInfo
     const SwTxtFrm *pFrm;
 
     // Where does the text (w/o whitespaces) start (document is global!)?
-    SwTwips GetLineStart( const SwTxtCursor &rLine ) const;
+    static SwTwips GetLineStart( const SwTxtCursor &rLine );
 
 public:
     inline SwTxtFrmInfo( const SwTxtFrm *pTxtFrm ) : pFrm(pTxtFrm) { }

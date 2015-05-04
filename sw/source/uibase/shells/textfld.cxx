@@ -195,8 +195,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     {
                         rSh.SttSelect();
                         rSh.SelectTxt(
-                            rSh.StartOfInputFldAtPos( *(rSh.GetCrsr()->Start()) ) + 1,
-                            rSh.EndOfInputFldAtPos( *(rSh.GetCrsr()->Start()) ) - 1 );
+                            SwCrsrShell::StartOfInputFldAtPos( *(rSh.GetCrsr()->Start()) ) + 1,
+                            SwCrsrShell::EndOfInputFldAtPos( *(rSh.GetCrsr()->Start()) ) - 1 );
                     }
                     else
                     {

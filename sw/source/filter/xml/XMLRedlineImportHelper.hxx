@@ -133,7 +133,7 @@ public:
 
 private:
 
-    inline bool IsReady(RedlineInfo* pRedline);
+    static inline bool IsReady(RedlineInfo* pRedline);
 
     void InsertIntoDocument(RedlineInfo* pRedline);
 

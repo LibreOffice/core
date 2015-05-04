@@ -24,7 +24,7 @@ class SwToolbarConfigItem : public utl::ConfigItem
 {
     sal_Int32            aTbxIdArray[5];
 
-    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() SAL_OVERRIDE;
 

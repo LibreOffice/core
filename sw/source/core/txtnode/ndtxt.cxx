@@ -4076,7 +4076,7 @@ void SwTxtNode::RemoveFromList()
 {
     if ( IsInList() )
     {
-        mpList->RemoveListItem( *mpNodeNum );
+        SwList::RemoveListItem( *mpNodeNum );
         mpList = 0;
         delete mpNodeNum;
         mpNodeNum = 0L;

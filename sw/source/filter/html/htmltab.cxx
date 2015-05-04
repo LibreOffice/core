@@ -328,8 +328,8 @@ class HTMLTableColumn
 
     SwFrmFmt *aFrmFmts[6];
 
-    inline sal_uInt16 GetFrmFmtIdx( bool bBorderLine,
-                                sal_Int16 eVertOri ) const;
+    static inline sal_uInt16 GetFrmFmtIdx( bool bBorderLine,
+                                sal_Int16 eVertOri );
 
 public:
 
@@ -894,7 +894,7 @@ inline SwHTMLTableLayoutColumn *HTMLTableColumn::CreateLayoutInfo()
 }
 
 inline sal_uInt16 HTMLTableColumn::GetFrmFmtIdx( bool bBorderLine,
-                                             sal_Int16 eVertOrient ) const
+                                             sal_Int16 eVertOrient )
 {
     OSL_ENSURE( text::VertOrientation::TOP != eVertOrient, "Top ist nicht erlaubt" );
     sal_uInt16 n = bBorderLine ? 3 : 0;
@@ -1013,7 +1013,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
             nCellPadding = MIN_BORDER_DIST; // default
         else
         {
-            nCellPadding = pParser->ToTwips( nCellPadding );
+            nCellPadding = SwHTMLParser::ToTwips( nCellPadding );
             if( nCellPadding<MIN_BORDER_DIST  )
                 nCellPadding = MIN_BORDER_DIST;
         }
@@ -1022,7 +1022,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     {
         if( nCellSpacing==USHRT_MAX )
             nCellSpacing = NETSCAPE_DFLT_CELLSPACING;
-        nCellSpacing = pParser->ToTwips( nCellSpacing );
+        nCellSpacing = SwHTMLParser::ToTwips( nCellSpacing );
     }
 
     nPWidth = pOptions->nHSpace;
@@ -1098,7 +1098,7 @@ HTMLTable::~HTMLTable()
 
 SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
 {
-    sal_uInt16 nW = bPrcWidth ? nWidth : pParser->ToTwips( nWidth );
+    sal_uInt16 nW = bPrcWidth ? nWidth : SwHTMLParser::ToTwips( nWidth );
 
     sal_uInt16 nBorderWidth = GetBorderWidth( aBorderLine, true );
     sal_uInt16 nLeftBorderWidth =
@@ -2623,7 +2623,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             // Zeile setzen. (War mal fixe Hoehe, aber das gibt manchmal
             // Probleme (fix #34972#) und ist auch nicht Netscape 4.0
             // konform
-            nHeight = pParser->ToTwips( nHeight );
+            nHeight = SwHTMLParser::ToTwips( nHeight );
             if( nHeight < MINLAY )
                 nHeight = MINLAY;
 
@@ -2710,7 +2710,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
                 nWidth2 = nWidth2 - pLayoutInfo->GetRightCellSpace( nCol, nColSpan );
                 nWidth2 = static_cast< sal_uInt16 >(((long)nWidth * nPrcWidth) / 100);
 
-                pParser->ResizeDrawObject( pObj, nWidth2 );
+                SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );
             }
         }
     }
@@ -3241,7 +3241,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         rParser.InsertAttr( &rParser.aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST),
                             pCntxt );
 
-    if( rParser.HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
+    if( SwHTMLParser::HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( rParser.pDoc->GetAttrPool(),
                              rParser.pCSS1Parser->GetWhichMap() );

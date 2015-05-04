@@ -86,7 +86,7 @@ class TblWait
     const ::std::unique_ptr<SwWait> m_pWait;
     // this seems really fishy: do some locking, if an arbitrary number of lines is exceeded
     static const size_t our_kLineLimit = 20;
-    bool ShouldWait(size_t nCnt, SwFrm *pFrm, size_t nCnt2)
+    static bool ShouldWait(size_t nCnt, SwFrm *pFrm, size_t nCnt2)
         { return our_kLineLimit < nCnt || our_kLineLimit < nCnt2 || (pFrm && our_kLineLimit < pFrm->ImplFindTabFrm()->GetTable()->GetTabLines().size()); }
 public:
     TblWait(size_t nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t nCnt2 = 0)
@@ -571,7 +571,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
     }
     if ( !pLastCols )
     {
-        GetDoc()->GetTabCols( rToFill, 0, static_cast<const SwCellFrm*>(pBox) );
+        SwDoc::GetTabCols( rToFill, 0, static_cast<const SwCellFrm*>(pBox) );
 
         pLastCols   = new SwTabCols( rToFill );
         pColumnCacheLastTable  = pTab->GetTable();
@@ -627,7 +627,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
     }
     if ( !pLastRows )
     {
-        GetDoc()->GetTabRows( rToFill, 0, static_cast<const SwCellFrm*>(pBox) );
+        SwDoc::GetTabRows( rToFill, 0, static_cast<const SwCellFrm*>(pBox) );
 
         pLastRows   = new SwTabCols( rToFill );
         pRowCacheLastTable  = pTab->GetTable();
@@ -723,7 +723,7 @@ void SwFEShell::SetRowSplit( const SwFmtRowSplit& rNew )
 
 void SwFEShell::GetRowSplit( SwFmtRowSplit*& rpSz ) const
 {
-    GetDoc()->GetRowSplit( *getShellCrsr( false ), rpSz );
+    SwDoc::GetRowSplit( *getShellCrsr( false ), rpSz );
 }
 
 void SwFEShell::SetRowHeight( const SwFmtFrmSize &rNew )
@@ -736,7 +736,7 @@ void SwFEShell::SetRowHeight( const SwFmtFrmSize &rNew )
 
 void SwFEShell::GetRowHeight( SwFmtFrmSize *& rpSz ) const
 {
-    GetDoc()->GetRowHeight( *getShellCrsr( false ), rpSz );
+    SwDoc::GetRowHeight( *getShellCrsr( false ), rpSz );
 }
 
 bool SwFEShell::BalanceRowHeight( bool bTstOnly )
@@ -760,7 +760,7 @@ void SwFEShell::SetRowBackground( const SvxBrushItem &rNew )
 
 bool SwFEShell::GetRowBackground( SvxBrushItem &rToFill ) const
 {
-    return GetDoc()->GetRowBackground( *getShellCrsr( false ), rToFill );
+    return SwDoc::GetRowBackground( *getShellCrsr( false ), rToFill );
 }
 
 void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
@@ -783,7 +783,7 @@ void SwFEShell::SetTabLineStyle( const Color* pColor, bool bSetLine,
 
 void SwFEShell::GetTabBorders( SfxItemSet& rSet ) const
 {
-    GetDoc()->GetTabBorders( *getShellCrsr( false ), rSet );
+    SwDoc::GetTabBorders( *getShellCrsr( false ), rSet );
 }
 
 void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
@@ -796,7 +796,7 @@ void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
 
 bool SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
 {
-    return GetDoc()->GetBoxAttr( *getShellCrsr( false ), rToFill );
+    return SwDoc::GetBoxAttr( *getShellCrsr( false ), rToFill );
 }
 
 void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
@@ -809,7 +809,7 @@ void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
 
 bool SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
 {
-    return GetDoc()->GetBoxAttr( *getShellCrsr( false ), rToFill );
+    return SwDoc::GetBoxAttr( *getShellCrsr( false ), rToFill );
 }
 
 void SwFEShell::SetBoxAlign( sal_uInt16 nAlign )
@@ -822,7 +822,7 @@ void SwFEShell::SetBoxAlign( sal_uInt16 nAlign )
 
 sal_uInt16 SwFEShell::GetBoxAlign() const
 {
-    return GetDoc()->GetBoxAlign( *getShellCrsr( false ) );
+    return SwDoc::GetBoxAlign( *getShellCrsr( false ) );
 }
 
 void SwFEShell::SetTabBackground( const SvxBrushItem &rNew )
@@ -889,7 +889,7 @@ bool SwFEShell::HasBoxSelection() const
             SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
             if( !pCNd )
             {
-                pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
+                pCNd = SwNodes::GoPrevious( &aIdx );
                 OSL_ENSURE( pCNd, "no ContentNode in box ??" );
             }
             if( pPam->GetMark()->nContent == pCNd->Len() )
@@ -1957,7 +1957,7 @@ bool SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
 
 // #i42921#
 bool SwFEShell::IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
-                                          const Point& _rDocPos ) const
+                                          const Point& _rDocPos )
 {
     bool bRet( false );
 

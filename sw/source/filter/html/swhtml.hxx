@@ -680,7 +680,7 @@ private:
                                  const SvxCSS1PropertyInfo &rPropInfo,
                                  SfxItemSet &rFrmItemSet );
 
-    void SetFrmFmtAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
+    static void SetFrmFmtAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
                          sal_uInt16 nFlags, SfxItemSet &rFrmItemSet );
 
     // Frames anlegen und Auto-gebundene Rahmen registrieren
@@ -688,14 +688,14 @@ private:
 
     // Die Groesse des Fly-Frames an die Vorgaben und Gegebenheiten anpassen
     // (nicht fuer Grafiken, deshalb htmlplug.cxx)
-    void SetFixSize( const Size& rPixSize, const Size& rTwipDfltSize,
+    static void SetFixSize( const Size& rPixSize, const Size& rTwipDfltSize,
                      bool bPrcWidth, bool bPrcHeight,
                      SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
                      SfxItemSet& rFlyItemSet );
-    void SetVarSize( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
+    static void SetVarSize( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
                      SfxItemSet& rFlyItemSet, SwTwips nDfltWidth=MINLAY,
                      sal_uInt8 nDltPrcWidth=0 );
-    void SetSpace( const Size& rPixSpace, SfxItemSet &rItemSet,
+    static void SetSpace( const Size& rPixSpace, SfxItemSet &rItemSet,
                    SvxCSS1PropertyInfo &rPropInfo, SfxItemSet& rFlyItemSet );
 
     sal_uInt16 IncGrfsThatResizeTable();
@@ -760,7 +760,7 @@ private:
     void NewStyle();
     void EndStyle();
 
-    inline bool HasStyleOptions( const OUString &rStyle, const OUString &rId,
+    static inline bool HasStyleOptions( const OUString &rStyle, const OUString &rId,
                                  const OUString &rClass, const OUString *pLang=0,
                                  const OUString *pDir=0 );
     bool ParseStyleOptions( const OUString &rStyle, const OUString &rId,
@@ -793,9 +793,9 @@ private:
                          bool bMinWidth, bool bMinHeight );
 
 public:
-    void ResizeDrawObject( SdrObject* pObj, SwTwips nWidth );
+    static void ResizeDrawObject( SdrObject* pObj, SwTwips nWidth );
 private:
-    void RegisterDrawObjectToTable( HTMLTable *pCurTable, SdrObject* pObj,
+    static void RegisterDrawObjectToTable( HTMLTable *pCurTable, SdrObject* pObj,
                                     sal_uInt8 nWidth );
 
     void NewForm( bool bAppend=true );
@@ -899,7 +899,7 @@ public:
 
     virtual SvParserState CallParser() SAL_OVERRIDE;
 
-    sal_uInt16 ToTwips( sal_uInt16 nPixel ) const;
+    static sal_uInt16 ToTwips( sal_uInt16 nPixel );
 
     // for reading asynchronously from SvStream
     virtual void Continue( int nToken ) SAL_OVERRIDE;

@@ -3365,7 +3365,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 pPieceIter->SetIdx( nOldPos );
             }
             else
-                pPcd->AktPieceFc2Cp( p->nStartPos, p->nEndPos,&rSBase );
+                WW8PLCFx_PCD::AktPieceFc2Cp( p->nStartPos, p->nEndPos,&rSBase );
         }
         else
         {
@@ -3399,7 +3399,7 @@ void WW8PLCFx_Cp_FKP::advance()
     // get Fkp entry
     WW8PLCFx_Fc_FKP::GetSprmsAndPos(nAttrStart, nAttrEnd, nFkpLen);
 
-    pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
+    WW8PLCFx_PCD::AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
     bLineEnd = (ePLCF == PAP);
 }
 

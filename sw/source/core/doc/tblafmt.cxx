@@ -878,7 +878,7 @@ void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
 
     SwEditShell *pShell = pDoc->GetEditShell();
     SwFmtRowSplit *pRowSplit = 0;
-    pDoc->GetRowSplit(*pShell->getShellCrsr(false), pRowSplit);
+    SwDoc::GetRowSplit(*pShell->getShellCrsr(false), pRowSplit);
     m_bRowSplit = pRowSplit && pRowSplit->GetValue();
     delete pRowSplit;
     pRowSplit = 0;

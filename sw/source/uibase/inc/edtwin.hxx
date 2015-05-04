@@ -76,7 +76,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     /*
      * timer and handler for scrolling on when the mousepointer
-     * stopps outside of EditWin during a drag-operation.
+     * stops outside of EditWin during a drag-operation.
      * The selection is increased towards the mouse position
      * regularly.
      */
@@ -243,7 +243,7 @@ public:
     bool            IsChainMode() const             { return m_bChainMode; }
 
     void            FlushInBuffer();
-    bool            IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr ) const;
+    static bool     IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr );
 
     void             SetApplyTemplate(const SwApplyTemplate &);
     SwApplyTemplate* GetApplyTemplate() const { return m_pApplyTempl; }
@@ -253,13 +253,13 @@ public:
     sal_uInt16           GetDropAction() const { return m_nDropAction; }
     SotClipboardFormatId GetDropFormat() const { return m_nDropFormat; }
 
-    Color           GetTextColor() { return m_aTextColor; }
+    static Color    GetTextColor() { return m_aTextColor; }
 
-    void            SetTextColor(const Color& rCol ) { m_aTextColor = rCol; }
+    static void     SetTextColor(const Color& rCol ) { m_aTextColor = rCol; }
 
-    Color           GetTextBackColor()
+    static Color    GetTextBackColor()
                                             { return m_aTextBackColor; }
-    void            SetTextBackColor(const Color& rCol )
+    static void     SetTextBackColor(const Color& rCol )
                                             { m_aTextBackColor = rCol; }
     void            LockKeyInput(bool bSet){m_bLockInput = bSet;}
 

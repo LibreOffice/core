@@ -355,7 +355,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     DECL_LINK(ChangedMaskPrevHdl, void * = 0);
     DECL_LINK( ColorHdl, ColorListBox *pColorLB );
 
-    void                InitFontStyle(SvxFontPrevWindow& rExampleWin);
+    static void         InitFontStyle(SvxFontPrevWindow& rExampleWin);
 
 public:
     SwRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

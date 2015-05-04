@@ -203,7 +203,7 @@ sal_uInt16 MSWordStyles::BuildGetSlot( const SwFmt& rFmt )
 }
 
 
-sal_uInt16 MSWordStyles::GetWWId( const SwFmt& rFmt ) const
+sal_uInt16 MSWordStyles::GetWWId( const SwFmt& rFmt )
 {
     sal_uInt16 nRet = ww::stiUser;    // User-Style als default
     sal_uInt16 nPoolId = rFmt.GetPoolFmtId();
@@ -1123,7 +1123,7 @@ sal_uInt16 MSWordSections::CurrentNumberOfColumns( const SwDoc &rDoc ) const
     return NumberOfColumns( rDoc, aSects.back() );
 }
 
-sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo& rInfo ) const
+sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo& rInfo )
 {
     const SwPageDesc* pPd = rInfo.pPageDesc;
     if ( !pPd )

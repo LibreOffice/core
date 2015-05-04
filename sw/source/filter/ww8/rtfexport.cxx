@@ -213,7 +213,7 @@ void RtfExport::BuildNumbering()
         else
         {
             pRule = rListTbl[ n ];
-            if (!m_pDoc->IsUsed(*pRule))
+            if (!SwDoc::IsUsed(*pRule))
                 continue;
         }
 
@@ -863,12 +863,12 @@ void RtfExport::resetStream()
 
 SvStream& RtfExport::OutULong(sal_uLong nVal)
 {
-    return m_pWriter->OutULong(Strm(), nVal);
+    return Writer::OutULong(Strm(), nVal);
 }
 
 SvStream& RtfExport::OutLong(long nVal)
 {
-    return m_pWriter->OutLong(Strm(), nVal);
+    return Writer::OutLong(Strm(), nVal);
 }
 
 void RtfExport::OutUnicode(const sal_Char* pToken, const OUString& rContent, bool bUpr)

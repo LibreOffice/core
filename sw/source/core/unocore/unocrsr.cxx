@@ -157,7 +157,7 @@ bool SwUnoCrsr::IsSelOvr( int eFlags )
                             rPtIdx.Assign( *pInvalidNode, -1 );
 
                             if( !rPtIdx.GetNode().IsCntntNode() &&
-                                ( !pDoc->GetNodes().GoPrevSection( &rPtIdx ) ||
+                                ( !SwNodes::GoPrevSection( &rPtIdx ) ||
                                   rPtIdx < *pOldSttNd ) )
                                 break;
                         }

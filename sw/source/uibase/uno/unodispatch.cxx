@@ -223,7 +223,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     }
     else if(aURL.Complete.equalsAscii(cURLInsertColumns))
     {
-        pDBManager->InsertText(rSh, aArgs);
+        SwDBManager::InsertText(rSh, aArgs);
     }
     else if(aURL.Complete.equalsAscii(cURLFormLetter))
     {

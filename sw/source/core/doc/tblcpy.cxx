@@ -551,9 +551,9 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         // Move Bookmarks
         {
             SwPosition aMvPos( aInsIdx );
-            SwCntntNode* pCNd = pDoc->GetNodes().GoPrevious( &aMvPos.nNode );
+            SwCntntNode* pCNd = SwNodes::GoPrevious( &aMvPos.nNode );
             aMvPos.nContent.Assign( pCNd, pCNd->Len() );
-            pDoc->CorrAbs( aInsIdx, aEndNdIdx, aMvPos, false );
+            SwDoc::CorrAbs( aInsIdx, aEndNdIdx, aMvPos, false );
         }
 
         // If we still have FlyFrames hanging around, delete them too
@@ -1041,7 +1041,7 @@ static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara )
 
 // Find all Boxes with content in this Box
 SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
-                                    SwSelBoxes& rBoxes, bool bToTop ) const
+                                    SwSelBoxes& rBoxes, bool bToTop )
 {
     SwTableLine* pLine = const_cast<SwTableLine*>(pBox->GetUpper());
     if( bToTop )

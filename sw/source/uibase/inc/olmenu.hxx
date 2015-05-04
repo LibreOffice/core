@@ -60,7 +60,7 @@ class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
 
     Image     m_aInfo16;
 
-    void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
+    static void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
             const ::com::sun::star::uno::Sequence< OUString >& aSeq, SwWrtShell* pWrtSh,
             std::map< sal_Int16, OUString > &rLangTable );
 

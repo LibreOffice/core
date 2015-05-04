@@ -107,7 +107,7 @@ void SwCrsrShell::MoveCrsrToNum()
 /// go to next/previous point on the same level
 bool SwCrsrShell::GotoNextNum()
 {
-    if (!GetDoc()->GotoNextNum( *m_pCurCrsr->GetPoint() ))
+    if (!SwDoc::GotoNextNum( *m_pCurCrsr->GetPoint() ))
         return false;
     MoveCrsrToNum();
     return true;
@@ -115,7 +115,7 @@ bool SwCrsrShell::GotoNextNum()
 
 bool SwCrsrShell::GotoPrevNum()
 {
-    if (!GetDoc()->GotoPrevNum( *m_pCurCrsr->GetPoint() ))
+    if (!SwDoc::GotoPrevNum( *m_pCurCrsr->GetPoint() ))
         return false;
     MoveCrsrToNum();
     return true;
@@ -364,7 +364,7 @@ bool SwCrsrShell::GotoTOXMarkBase()
     bool bRet = false;
 
     SwTOXMarks aMarks;
-    sal_uInt16 nCnt = GetDoc()->GetCurTOXMark( *m_pCurCrsr->GetPoint(), aMarks );
+    sal_uInt16 nCnt = SwDoc::GetCurTOXMark( *m_pCurCrsr->GetPoint(), aMarks );
     if( nCnt )
     {
         // Take the 1. and get the index type. Search in its dependency list
@@ -802,7 +802,7 @@ bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
 
 SwTxtFld * SwCrsrShell::GetTxtFldAtPos(
     const SwPosition* pPos,
-    const bool bIncludeInputFldAtStart ) const
+    const bool bIncludeInputFldAtStart )
 {
     SwTxtFld* pTxtFld = NULL;
 
@@ -817,7 +817,7 @@ SwTxtFld * SwCrsrShell::GetTxtFldAtPos(
 
 SwField* SwCrsrShell::GetFieldAtCrsr(
     const SwPaM* pCrsr,
-    const bool bIncludeInputFldAtStart ) const
+    const bool bIncludeInputFldAtStart )
 {
     SwField* pFieldAtCrsr = NULL;
 
@@ -869,7 +869,7 @@ bool SwCrsrShell::CrsrInsideInputFld() const
     return false;
 }
 
-bool SwCrsrShell::PosInsideInputFld( const SwPosition& rPos ) const
+bool SwCrsrShell::PosInsideInputFld( const SwPosition& rPos )
 {
     return dynamic_cast<const SwTxtInputFld*>(GetTxtFldAtPos( &rPos, false )) != NULL;
 }
@@ -885,7 +885,7 @@ bool SwCrsrShell::DocPtInsideInputFld( const Point& rDocPt ) const
     return false;
 }
 
-sal_Int32 SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos ) const
+sal_Int32 SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos )
 {
     const SwTxtInputFld* pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtFldAtPos( &rPos, true ));
     if ( pTxtInputFld == NULL )
@@ -896,7 +896,7 @@ sal_Int32 SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos ) const
     return pTxtInputFld->GetStart();
 }
 
-sal_Int32 SwCrsrShell::EndOfInputFldAtPos( const SwPosition& rPos ) const
+sal_Int32 SwCrsrShell::EndOfInputFldAtPos( const SwPosition& rPos )
 {
     const SwTxtInputFld* pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtFldAtPos( &rPos, true ));
     if ( pTxtInputFld == NULL )
@@ -2034,7 +2034,7 @@ const SwRangeRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, bool bSelec
 
             pIdx = &m_pCurCrsr->GetPoint()->nNode;
             if( !pIdx->GetNode().IsCntntNode() &&
-                0 != ( pCNd = GetDoc()->GetNodes().GoPrevSection( pIdx,
+                0 != ( pCNd = SwNodes::GoPrevSection( pIdx,
                                             true, IsReadOnlyAvailable() )) )
             {
                 if( *pIdx >= m_pCurCrsr->GetMark()->nNode )

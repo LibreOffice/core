@@ -84,7 +84,7 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
         bIsSpellWrong = bIsSpellAll = true;     // have all spelling and grammar checked...
     if (bIsSpellWrong || bIsSpellAll)
     {
-        SW_MOD()->CheckSpellChanges( false, bIsSpellWrong, bIsSpellAll, false );
+        SwModule::CheckSpellChanges( false, bIsSpellWrong, bIsSpellAll, false );
     }
     if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
     {

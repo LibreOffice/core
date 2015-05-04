@@ -299,7 +299,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
     SwDBManager* pDBManager = rSh.GetDBManager();
     if(_xConnection.is())
-        pDBManager->GetColumnNames(m_pAddressFldLB, _xConnection, rTblName);
+        SwDBManager::GetColumnNames(m_pAddressFldLB, _xConnection, rTblName);
     else
         pDBManager->GetColumnNames(m_pAddressFldLB, rSourceName, rTblName);
     for(sal_Int32 nEntry = 0; nEntry < m_pAddressFldLB->GetEntryCount(); ++nEntry)

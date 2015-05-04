@@ -114,7 +114,7 @@ void SwUndo::RemoveIdxFromSection( SwDoc& rDoc, sal_uLong nSttIdx,
     SwNodeIndex aEndIdx( rDoc.GetNodes(), pEndIdx ? *pEndIdx
                                     : aIdx.GetNode().EndOfSectionIndex() );
     SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-    rDoc.CorrAbs( aIdx, aEndIdx, aPos, true );
+    SwDoc::CorrAbs( aIdx, aEndIdx, aPos, true );
 }
 
 void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
@@ -138,10 +138,10 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
             }
         }
 
-        rPam.GetDoc()->CorrAbs( aStt, aEnd, *rPam.GetPoint(), true );
+        SwDoc::CorrAbs( aStt, aEnd, *rPam.GetPoint(), true );
     }
     else
-        rPam.GetDoc()->CorrAbs( rPam, *pEnd, true );
+        SwDoc::CorrAbs( rPam, *pEnd, true );
 }
 
 void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
@@ -801,14 +801,13 @@ SwUndoSaveSection::~SwUndoSaveSection()
     delete pRedlSaveData;
 }
 
-void SwUndoSaveSection::SaveSection( SwDoc* pDoc, const SwNodeIndex& rSttIdx )
+void SwUndoSaveSection::SaveSection( const SwNodeIndex& rSttIdx )
 {
     SwNodeRange aRg( rSttIdx.GetNode(), *rSttIdx.GetNode().EndOfSectionNode() );
-    SaveSection( pDoc, aRg );
+    SaveSection( aRg );
 }
 
 void SwUndoSaveSection::SaveSection(
-    SwDoc* pDoc,
     const SwNodeRange& rRange )
 {
     SwPaM aPam( rRange.aStart, rRange.aEnd );
@@ -820,7 +819,7 @@ void SwUndoSaveSection::SaveSection(
         SwNodeIndex aSttIdx( aPam.Start()->nNode.GetNode() );
         SwNodeIndex aEndIdx( aPam.End()->nNode.GetNode() );
         SwNodeIndex aMvStt( aEndIdx, 1 );
-        pDoc->CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), true );
+        SwDoc::CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), true );
     }
 
     pRedlSaveData = new SwRedlineSaveDatas;
@@ -854,7 +853,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
         SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
 
         // move the content from UndoNodes array into Fly
-        SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection( aSttIdx,
+        SwStartNode* pSttNd = SwNodes::MakeEmptySection( aSttIdx,
                                                 (SwStartNodeType)nSectType );
 
         RestoreSection( pDoc, SwNodeIndex( *pSttNd->EndOfSectionNode() ));
@@ -920,7 +919,7 @@ SwRedlineSaveData::SwRedlineSaveData(
         if ( rRedl.GetContentIdx() )
         {
             // than move section into UndoArray and memorize it
-            SaveSection( rRedl.GetDoc(), *rRedl.GetContentIdx() );
+            SaveSection( *rRedl.GetContentIdx() );
             rRedl.SetContentIdx( 0 );
         }
         break;
@@ -1132,7 +1131,7 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         else
         {
             SwNodeIndex idx( nodes.GetEndOfContent());
-         if( SwCntntNode* last = nodes.GoPrevious( &idx ))
+         if( SwCntntNode* last = SwNodes::GoPrevious( &idx ))
             inSelection = rEnd == SwPosition( *last, last->Len());
         }
     }

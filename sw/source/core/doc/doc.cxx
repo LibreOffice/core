@@ -1406,7 +1406,7 @@ bool SwDoc::RemoveInvisibleContent()
                         aPam.GetPoint()->nContent.Assign( pCNd, 0 );
                         aPam.SetMark();
                         aPam.GetPoint()->nNode = *pSectNd->EndOfSectionNode();
-                        pCNd = GetNodes().GoPrevious(
+                        pCNd = SwNodes::GoPrevious(
                                                 &aPam.GetPoint()->nNode );
                         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
@@ -1539,7 +1539,7 @@ bool SwDoc::ConvertFieldsToText()
                     if (pTxtField && pTxtField->Which() == RES_TXTATR_INPUTFIELD)
                     {
                         SwPosition &rEndPos = *aInsertPam.GetPoint();
-                        rEndPos.nContent = GetDocShell()->GetWrtShell()->EndOfInputFldAtPos( *aInsertPam.End() );
+                        rEndPos.nContent = SwCrsrShell::EndOfInputFldAtPos( *aInsertPam.End() );
                     }
                     else
                     {
@@ -1637,7 +1637,7 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
     }
 }
 
-OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
+OUString SwDoc::GetPaMDescr(const SwPaM & rPam)
 {
     if (&rPam.GetNode(true) == &rPam.GetNode(false))
     {

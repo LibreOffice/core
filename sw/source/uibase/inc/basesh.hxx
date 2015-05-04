@@ -103,7 +103,7 @@ public:
     void        ExecBckCol(SfxRequest& rReq);
     void        SetWrapMode( sal_uInt16 nSlot );
 
-    void        StateDisableItems(SfxItemSet &);
+    static void StateDisableItems(SfxItemSet &);
 
     void        EditRegionDialog(SfxRequest& rReq);
     void        InsertRegionDialog(SfxRequest& rReq);

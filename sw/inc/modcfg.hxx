@@ -73,7 +73,7 @@ class SwRevisionConfig : public utl::ConfigItem
     sal_uInt16          nMarkAlign;     //Revision/LinesChanged/Mark
     Color           aMarkColor;     //Revision/LinesChanged/Color
 
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void            ImplCommit() SAL_OVERRIDE;
 
@@ -97,7 +97,7 @@ class SwCompareConfig : public utl::ConfigItem
     bool            bIgnorePieces;  //Compare/Settings/Ignore pieces of length
     sal_uInt16      nPieceLen;		//Compare/Settings/Ignore pieces of length
 
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
@@ -152,7 +152,7 @@ class SwTableConfig : public utl::ConfigItem
     bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
     bool    bInsTblAlignNum;        // Table/Input/Alignment                // Align numbers.
 
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
@@ -182,7 +182,7 @@ class SwMiscConfig : public utl::ConfigItem
     OUString    sMailingPath;               // FormLetter/FileOutput/Path
     OUString    sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
 
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 

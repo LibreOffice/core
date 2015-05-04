@@ -182,7 +182,7 @@ class SwAuthorFieldType : public SwFieldType
 public:
     SwAuthorFieldType();
 
-    OUString                Expand(sal_uLong) const;
+    static OUString         Expand(sal_uLong);
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
@@ -331,8 +331,8 @@ public:
     void                Evaluate(SwDoc*);
 
     inline void         SetValue(bool bHidden)  { bIsHidden = bHidden; }
-    OUString            GetColumnName(const OUString& rName);
-    OUString            GetDBName(const OUString& rName, SwDoc *pDoc);
+    static OUString     GetColumnName(const OUString& rName);
+    static OUString     GetDBName(const OUString& rName, SwDoc *pDoc);
 
     /// Condition
     virtual void        SetPar1(const OUString& rStr) SAL_OVERRIDE;
@@ -531,7 +531,7 @@ public:
 
     inline void             SetData(const OUString& rStr)     { aData = rStr; }
 
-    OUString                Expand(sal_uInt16 nSubType, sal_uInt32 nFormat) const;
+    static OUString         Expand(sal_uInt16 nSubType, sal_uInt32 nFormat);
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 

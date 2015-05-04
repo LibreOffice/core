@@ -416,7 +416,7 @@ private:
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* rFlyFrmFmt );
 
     /// checks whether the current component is a diagram
-    bool IsDiagram (const SdrObject* sdrObject);
+    static bool IsDiagram (const SdrObject* sdrObject);
 
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
@@ -428,7 +428,7 @@ private:
     void EndTable();
     void SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t pInner, sal_Int32 nCell, sal_uInt32 nRow);
     void PopulateFrameProperties(const SwFrmFmt* pFrmFmt, const Size& rSize);
-    bool TextBoxIsFramePr(const SwFrmFmt& rFrmFmt);
+    static bool TextBoxIsFramePr(const SwFrmFmt& rFrmFmt);
     /// End cell, row, and even the entire table if necessary.
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
 
@@ -716,8 +716,8 @@ private:
     void CmdField_Impl( FieldInfos& rInfos );
     void EndField_Impl( FieldInfos& rInfos );
 
-    void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
-    void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
+    static void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
+    static void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
 
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pFontsAttrList;
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pEastAsianLayoutAttrList;
@@ -953,7 +953,7 @@ public:
     void FootnotesEndnotes( bool bFootnotes );
 
     /// writes the footnotePr/endnotePr (depending on tag) section
-    void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info, int listtag );
+    static void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info, int listtag );
 
     bool HasPostitFields() const;
     void WritePostitFields();

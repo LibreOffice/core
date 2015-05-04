@@ -423,7 +423,7 @@ public:
     const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate = false );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
-    bool                IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const;
+    static bool         IsTOXBaseReadonly(const SwTOXBase& rTOXBase);
     void                SetTOXBaseReadonly(const SwTOXBase& rTOXBase, bool bReadonly);
 
     sal_uInt16              GetTOXCount() const;
@@ -673,7 +673,7 @@ public:
     void HyphIgnore();
 
     /// For Inserting SoftHyphen. Position is offset within the syllabificated word.
-    void InsertSoftHyph( const sal_Int32 nHyphPos );
+    static void InsertSoftHyph( const sal_Int32 nHyphPos );
 
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTblOpts,  ///< ALL_TBL_INS_ATTR
                                 sal_uInt16 nRows, sal_uInt16 nCols,
@@ -735,22 +735,22 @@ public:
     bool SpellSentence(svx::SpellPortions& rToFill, bool bIsGrammarCheck );
 
     /// Make SpellIter start with the current sentence when called next time.
-    void PutSpellingToSentenceStart();
+    static void PutSpellingToSentenceStart();
 
     /// Moves the continuation position to the end of the currently checked sentence.
-    void MoveContinuationPosToEndOfCheckedSentence();
+    static void MoveContinuationPosToEndOfCheckedSentence();
 
     /// Applies a changed sentence.
     void ApplyChangedSentence(const svx::SpellPortions& rNewPortions, bool bRecheck);
 
     /// Check SwSpellIter data to see if the last sentence got grammar checked.
-    bool HasLastSentenceGotGrammarChecked() const;
+    static bool HasLastSentenceGotGrammarChecked();
 
     /// Is text conversion active somewhere else?
-    bool HasConvIter() const;
+    static bool HasConvIter();
 
     /// Is hyphenation active somewhere else?
-    bool HasHyphIter() const;
+    static bool HasHyphIter();
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
@@ -762,7 +762,7 @@ public:
             ::com::sun::star::uno::Sequence< OUString > /*out*/ &rSuggestions,
             const Point* pPt, SwRect& rSelectRect );
 
-    void IgnoreGrammarErrorAt( SwPaM& rErrorPosition );
+    static void IgnoreGrammarErrorAt( SwPaM& rErrorPosition );
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd );
 
     /// @return reference set in document according to given name.

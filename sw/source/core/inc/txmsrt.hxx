@@ -138,7 +138,7 @@ struct SwTOXSortTabBase
     virtual ~SwTOXSortTabBase() {}
 
     sal_uInt16  GetType() const         { return nType; }
-    sal_uInt16  GetOptions() const      { return nOpt; }
+    static sal_uInt16  GetOptions()     { return nOpt; }
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0) const;
     virtual sal_uInt16  GetLevel()  const = 0;

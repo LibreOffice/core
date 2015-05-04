@@ -715,7 +715,7 @@ void SwEditWin::StopInsFrm()
     m_nInsFrmColCount = 1;
 }
 
-bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr ) const
+bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr )
 {
     const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
     if ( !rCTLOptions.IsCTLFontEnabled() ||
@@ -2967,7 +2967,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         rBind.Update();
 
         if ( RulerMarginDrag( rMEvt,
-                        rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPos ) ) )
+                        SwFEShell::IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPos ) ) )
         {
             m_rView.SetNumRuleNodeFromDoc( NULL );
             m_rView.InvalidateRulerPos();
@@ -3847,7 +3847,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             // i#42921 - consider vertical mode
             SwTxtNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPt );
             const sal_uInt16 nPointer =
-                    rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPt )
+                    SwFEShell::IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPt )
                     ? POINTER_VSIZEBAR
                     : POINTER_HSIZEBAR;
             SetPointer( nPointer );

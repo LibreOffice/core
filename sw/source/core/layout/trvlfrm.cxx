@@ -2584,7 +2584,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
                     else
                     {
                         SwNodeIndex idx( nodes.GetEndOfContent());
-                     if( SwCntntNode* last = nodes.GoPrevious( &idx ))
+                     if( SwCntntNode* last = SwNodes::GoPrevious( &idx ))
                         inSelection = *pEndPos == SwPosition( *last, last->Len());
                     }
                 }

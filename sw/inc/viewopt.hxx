@@ -178,9 +178,9 @@ public:
             SwViewOption(const SwViewOption&);
             ~SwViewOption();
 
-    void   Init( vcl::Window *pWin );        // Initializing of static data.
+    static void Init( vcl::Window *pWin );        // Initializing of static data.
 
-    sal_uInt16 GetPixelTwips() const { return nPixelTwips; }
+    static sal_uInt16 GetPixelTwips() { return nPixelTwips; }
 
     inline sal_uInt32   GetCoreOptions() const {return nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );
@@ -244,9 +244,9 @@ public:
         { return (nCoreOptions & VIEWOPT_1_POSTITS) != 0; }
     inline void SetPostIts( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_POSTITS ) : ( nCoreOptions &= ~VIEWOPT_1_POSTITS); }
-           void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
-                              bool bIsScript ) const;
-           sal_uInt16 GetPostItsWidth( const OutputDevice *pOut = 0 ) const;
+    static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
+                              bool bIsScript );
+    static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut = 0 );
 
     inline bool IsShowHiddenChar(bool bHard = false) const
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_CHAR_HIDDEN) &&
@@ -388,7 +388,7 @@ public:
     inline bool  IsPagePrevBookview() const { return mbBookView; }
     inline void  SetPagePrevBookview(bool bSet) { mbBookView = bSet; }
 
-    bool IsAutoCompleteWords() const;
+    static bool IsAutoCompleteWords();
 
     bool   IsViewLayoutBookMode() const { return mbViewLayoutBookMode; }
     void   SetViewLayoutBookMode( bool bNew ) { mbViewLayoutBookMode = bNew; }
@@ -422,8 +422,8 @@ public:
     inline sal_uInt16 GetZoom() const    { return nZoom; }
     inline void   SetZoom( sal_uInt16 n ){ nZoom = n; }
 
-    void DrawRect( OutputDevice* pOut, const SwRect &rRect, long nCol ) const;
-    void DrawRectPrinter( OutputDevice* pOut, const SwRect& rRect ) const;
+    static void DrawRect( OutputDevice* pOut, const SwRect &rRect, long nCol );
+    static void DrawRectPrinter( OutputDevice* pOut, const SwRect& rRect );
 
     SwViewOption& operator=( const SwViewOption &rOpt );
 
@@ -584,7 +584,7 @@ public:
 
     static void     SetAppearanceFlag(sal_Int32 nFlag, bool bSet, bool bSaveInConfig = false);
 
-    void    SetDocBoundaries(bool bSet)   {SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bSet);}
+    static void     SetDocBoundaries(bool bSet)   {SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bSet);}
 
     static void     ApplyColorConfigValues(const svtools::ColorConfig& rConfig);
 };

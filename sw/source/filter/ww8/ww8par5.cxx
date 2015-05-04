@@ -3322,8 +3322,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     (*m_pPaM).Move(fnMoveBackward);
     SwPaM aRegion(*m_pPaM, m_pPaM);
 
-    OSL_ENSURE(m_rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
-    if (SwTOXBase* pBase2 = (SwTOXBase*)m_rDoc.GetCurTOX(*aRegion.GetPoint()))
+    OSL_ENSURE(SwDoc::GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
+    if (SwTOXBase* pBase2 = (SwTOXBase*)SwDoc::GetCurTOX(*aRegion.GetPoint()))
     {
         pBase2->SetMSTOCExpression(rStr);
 

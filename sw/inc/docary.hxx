@@ -108,7 +108,7 @@ public:
     bool Contains(Value const& p) const
         { return std::find(begin(), end(), p) != end(); }
 
-    void dumpAsXml(struct _xmlTextWriter* /*pWriter*/) const {};
+    static void dumpAsXml(struct _xmlTextWriter* /*pWriter*/) {};
 };
 
 template<typename Value>

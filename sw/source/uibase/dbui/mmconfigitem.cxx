@@ -149,7 +149,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     bool                                bIsGreetingLineInMail_LastUserSetting;
     bool                                bIsGreetingLine_LastUserSetting;
 
-    const Sequence< OUString>&       GetPropertyNames();
+    static const Sequence< OUString>&       GetPropertyNames();
 
     virtual void ImplCommit() SAL_OVERRIDE;
 

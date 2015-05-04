@@ -316,7 +316,7 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
     }
 }
 
-void SwDoc::GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz ) const
+void SwDoc::GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz )
 {
     rpSz = 0;
 
@@ -388,7 +388,7 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
     }
 }
 
-void SwDoc::GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const
+void SwDoc::GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz )
 {
     rpSz = 0;
 
@@ -493,7 +493,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
     }
 }
 
-bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) const
+bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill )
 {
     bool bRet = false;
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -905,7 +905,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
     }
 }
 
-void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
+void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
 {
     SwCntntNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetCntntNode();
     SwTableNode* pTblNd = pCntNd ? pCntNd->FindTableNode() : 0;
@@ -1170,7 +1170,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
     }
 }
 
-bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
+bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill )
 {
     bool bRet = false;
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -1228,7 +1228,7 @@ void SwDoc::SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign )
     SetBoxAttr( rCursor, aVertOri );
 }
 
-sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
+sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor )
 {
     sal_uInt16 nAlign = USHRT_MAX;
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();

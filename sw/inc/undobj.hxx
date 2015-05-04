@@ -56,9 +56,9 @@ protected:
     bool bCacheComment;
     mutable OUString * pComment;
 
-    void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = 0 );
-    void RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext );
-    void RemoveIdxRel( sal_uLong, const SwPosition& );
+    static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = 0 );
+    static void RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext );
+    static void RemoveIdxRel( sal_uLong, const SwPosition& );
 
     static bool CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                                 const SwRedlineSaveDatas& rCheck,
@@ -150,10 +150,10 @@ protected:
     // content. So the attributes do not get expanded.
     // MoveTo:      moves from the NodesArray into the UndoNodesArray.
     // MoveFrom:    moves from the UndoNodesArray into the NodesArray.
-    void MoveToUndoNds( SwPaM& rPam,
+    static void MoveToUndoNds( SwPaM& rPam,
                         SwNodeIndex* pNodeIdx = 0,
                         sal_uLong* pEndNdIdx = 0, sal_Int32 * pEndCntIdx = 0 );
-    void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
+    static void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                           SwPosition& rInsPos,
                           sal_uLong* pEndNdIdx = 0, sal_Int32 * pEndCntIdx = 0 );
 
@@ -161,8 +161,8 @@ protected:
     // a range can be spanned for Undo/Redo. (In this case the SPoint
     // is before the manipulated range!!)
     // The flag indicates if there is content before the SPoint.
-    bool MovePtBackward( SwPaM& rPam );
-    void MovePtForward( SwPaM& rPam, bool bMvBkwrd );
+    static bool MovePtBackward( SwPaM& rPam );
+    static void MovePtForward( SwPaM& rPam, bool bMvBkwrd );
 
     // Before moving stuff into UndoNodes-Array care has to be taken that
     // the content-bearing attributes are removed from the nodes-array.
@@ -190,8 +190,8 @@ public:
     SwUndoSaveSection();
     ~SwUndoSaveSection();
 
-    void SaveSection( SwDoc* pDoc, const SwNodeIndex& rSttIdx );
-    void SaveSection( SwDoc* pDoc, const SwNodeRange& rRange );
+    void SaveSection( const SwNodeIndex& rSttIdx );
+    void SaveSection( const SwNodeRange& rRange );
     void RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx, sal_uInt16 nSectType );
     void RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos );
 

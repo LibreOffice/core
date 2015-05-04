@@ -396,7 +396,7 @@ const SwDBData& SwDoc::GetDBDesc()
         }
     }
     if(maDBData.sDataSource.isEmpty())
-        maDBData = GetDBManager()->GetAddressDBName();
+        maDBData = SwDBManager::GetAddressDBName();
 #endif
     return maDBData;
 }

@@ -447,8 +447,8 @@ public:
     // Stream-specific routines. Do not use in storage-writer!
 
     // Optimizing output on stream.
-    SvStream& OutLong( SvStream& rStrm, long nVal );
-    SvStream& OutULong( SvStream& rStrm, sal_uLong nVal );
+    static SvStream& OutLong( SvStream& rStrm, long nVal );
+    static SvStream& OutULong( SvStream& rStrm, sal_uLong nVal );
 
     inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
     inline SvStream& OutULong( sal_uLong nVal )     { return OutULong( Strm(), nVal ); }

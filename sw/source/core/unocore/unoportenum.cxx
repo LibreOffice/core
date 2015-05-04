@@ -701,7 +701,7 @@ typedef boost::shared_ptr < SwXRedlinePortion_Impl >
 
 struct RedlineCompareStruct
 {
-    const SwPosition& getPosition ( const SwXRedlinePortion_ImplSharedPtr &r )
+    static const SwPosition& getPosition ( const SwXRedlinePortion_ImplSharedPtr &r )
     {
         return *(r->m_bStart ? r->m_pRedline->Start() : r->m_pRedline->End());
     }

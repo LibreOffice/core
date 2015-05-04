@@ -1882,7 +1882,7 @@ bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
         const SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
         if( pClass )
         {
-            pCSS1Parser->MergeStyles( pClass->GetItemSet(),
+            SvxCSS1Parser::MergeStyles( pClass->GetItemSet(),
                                       pClass->GetPropertyInfo(),
                                       rItemSet, rPropInfo, false );
             bRet = true;
@@ -1893,7 +1893,7 @@ bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
     {
         const SvxCSS1MapEntry *pId = pCSS1Parser->GetId( rId );
         if( pId )
-            pCSS1Parser->MergeStyles( pId->GetItemSet(),
+            SvxCSS1Parser::MergeStyles( pId->GetItemSet(),
                                       pId->GetPropertyInfo(),
                                       rItemSet, rPropInfo, !rClass.isEmpty() );
         rPropInfo.aId = rId;

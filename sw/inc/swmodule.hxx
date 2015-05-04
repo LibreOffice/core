@@ -181,7 +181,7 @@ public:
     bool IsEmbeddedLoadSave() const         { return bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( bool bFlag )  { bEmbeddedLoadSave = bFlag; }
 
-    void ShowDBObj( SwView& rView, const SwDBData& rData, bool bOnlyIfAvailable = false);
+    static void ShowDBObj( SwView& rView, const SwDBData& rData, bool bOnlyIfAvailable = false);
 
     // Table modi.
     bool            IsInsTblFormatNum(bool bHTML) const;
@@ -227,7 +227,7 @@ public:
     void    RemoveAttrPool();
 
     // Invalidates online spell-wrong-lists if necessary.
-    void    CheckSpellChanges( bool bOnlineSpelling,
+    static void  CheckSpellChanges( bool bOnlineSpelling,
                     bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags );
 
     inline ::com::sun::star::uno::Reference<

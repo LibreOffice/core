@@ -42,7 +42,7 @@ class SwList
 
         void InsertListItem( SwNodeNum& rNodeNum,
                              const int nLevel );
-        void RemoveListItem( SwNodeNum& rNodeNum );
+        static void RemoveListItem( SwNodeNum& rNodeNum );
 
         void InvalidateListTree();
         void ValidateListTree();

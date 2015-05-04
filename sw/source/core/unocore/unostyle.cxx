@@ -1039,7 +1039,7 @@ public:
     bool    GetProperty(const OUString& rName, uno::Any*& rpAny);
     bool    ClearProperty( const OUString& rPropertyName );
     void    ClearAllProperties( );
-    void        GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny );
+    static void GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny );
 
     const PropertyEntryVector_t& GetPropertyVector() const {return aPropertyEntries; }
 
@@ -2680,7 +2680,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                     break;
                     case SFX_STYLE_FAMILY_PARA:
                     case SFX_STYLE_FAMILY_PAGE:
-                        pPropImpl->GetProperty ( pNames[nProp], mxStyleData, pRet[ nProp ] );
+                        SwStyleProperties_Impl::GetProperty ( pNames[nProp], mxStyleData, pRet[ nProp ] );
                     break;
                     case SFX_STYLE_FAMILY_CHAR:
                     case SFX_STYLE_FAMILY_FRAME :
@@ -3917,7 +3917,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
 
             if ( !pAny )
             {
-                GetPropImpl()->GetProperty(rPropName, mxStyleData, pRet[nProp]);
+                SwStyleProperties_Impl::GetProperty(rPropName, mxStyleData, pRet[nProp]);
             }
             else
             {

@@ -183,7 +183,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         {
             --aEndPos;
             pCNd = aEndPos.GetNode().GetCntntNode();
-            if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &aEndPos ) ))
+            if( !pCNd && 0 == ( pCNd = SwNodes::GoPrevious( &aEndPos ) ))
                 pCNd = pDoc->GetNodes().GoNext( &aEndPos );
 
             pPam->GetPoint()->nNode = aEndPos;

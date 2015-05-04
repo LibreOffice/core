@@ -238,7 +238,7 @@ public:
 
     /// Merging of data records into fields.
     bool            MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent = NULL );
-    bool            Merge(SwWrtShell* pSh);
+    static bool     Merge(SwWrtShell* pSh);
     void            MergeCancel();
 
     /// Initialize data fields that lack name of database.
@@ -260,11 +260,11 @@ public:
     /// Fill listbox with all column names of a database table.
     void            GetColumnNames(ListBox* pListBox,
                             const OUString& rDBName, const OUString& rTableName, bool bAppend = false);
-    void            GetColumnNames(ListBox* pListBox,
+    static void GetColumnNames(ListBox* pListBox,
                             css::uno::Reference< css::sdbc::XConnection> xConnection,
                             const OUString& rTableName, bool bAppend = false);
 
-    sal_uLong GetColumnFmt( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,
+    static sal_uLong GetColumnFmt( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
                             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xColumn,
                             SvNumberFormatter* pNFmtr,
@@ -285,7 +285,7 @@ public:
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties,
                         bool bWithDataSourceBrowser = false);
 
-    void            InsertText(SwWrtShell& rSh,
+    static void     InsertText(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
 
     /// check if a data source is open
@@ -322,7 +322,7 @@ public:
     sal_uInt32      GetSelectedRecordId();
     bool            ToRecordId(sal_Int32 nSet);
 
-    const SwDBData& GetAddressDBName();
+    static const SwDBData& GetAddressDBName();
 
     static OUString GetDBField(
                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xColumnProp,

@@ -570,7 +570,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         // The UsrPref must be marked as modified.
         // call for initialization
         pModule->GetUsrPref(bWebView);
-        pModule->CheckSpellChanges( pOpt->IsOnlineSpell(), false, false, false );
+        SwModule::CheckSpellChanges( pOpt->IsOnlineSpell(), false, false, false );
     }
     //OS: Set back modified again, because view/fields sets the Doc modified.
     if( !bModified )

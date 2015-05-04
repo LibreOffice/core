@@ -126,7 +126,7 @@ void SwFldVarPage::Reset(const SfxItemSet* )
     if (!IsFldEdit())
     {
         // initialise TypeListBox
-        const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
+        const SwFldGroupRgn& rRg = SwFldMgr::GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
         for (short i = rRg.nStart; i < rRg.nEnd; ++i)
         {

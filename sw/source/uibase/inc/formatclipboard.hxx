@@ -38,7 +38,7 @@ public:
      */
     bool HasContent() const;
     bool HasContentForThisType( int nSelectionType ) const;
-    bool CanCopyThisType( int nSelectionType ) const;
+    static bool CanCopyThisType( int nSelectionType );
 
     /**
      * Store/Backup the text and paragraph attribute of the current selection.

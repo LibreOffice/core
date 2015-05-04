@@ -2758,7 +2758,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                     pCNd = pAttr->nEndPara.GetNode().GetCntntNode();
                     if( !pCNd )
                     {
-                        pCNd = pDoc->GetNodes().GoPrevious( &(pAttr->nEndPara) );
+                        pCNd = SwNodes::GoPrevious( &(pAttr->nEndPara) );
                         if( pCNd )
                             pAttr->nEndCntnt = pCNd->Len();
                         else
@@ -3278,7 +3278,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
         {
             nTmpIdx = pDoc->GetNodes().GetEndOfInserts().GetIndex();
         }
-        SwCntntNode* pCNd = pDoc->GetNodes().GoPrevious(&nEndIdx);
+        SwCntntNode* pCNd = SwNodes::GoPrevious(&nEndIdx);
 
         // keine Attribute setzen, wenn der PaM aus dem Content-Bereich
         // herausgeschoben wurde.
@@ -4997,7 +4997,7 @@ void SwHTMLParser::InsertSpacer()
     }
 }
 
-sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel ) const
+sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
 {
     if( nPixel && Application::GetDefaultDevice() )
     {

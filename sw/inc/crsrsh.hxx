@@ -703,18 +703,18 @@ public:
 
     bool GotoFld( const SwFmtFld& rFld );
 
-    SwTxtFld* GetTxtFldAtPos(
+    static SwTxtFld* GetTxtFldAtPos(
         const SwPosition* pPos,
-        const bool bIncludeInputFldAtStart ) const;
-    SwField* GetFieldAtCrsr(
+        const bool bIncludeInputFldAtStart );
+    static SwField* GetFieldAtCrsr(
         const SwPaM* pCrsr,
-        const bool bIncludeInputFldAtStart ) const;
+        const bool bIncludeInputFldAtStart );
     SwField* GetCurFld( const bool bIncludeInputFldAtStart = false ) const;
     bool CrsrInsideInputFld() const;
-    bool PosInsideInputFld( const SwPosition& rPos ) const;
+    static bool PosInsideInputFld( const SwPosition& rPos );
     bool DocPtInsideInputFld( const Point& rDocPt ) const;
-    sal_Int32 StartOfInputFldAtPos( const SwPosition& rPos ) const;
-    sal_Int32 EndOfInputFldAtPos( const SwPosition& rPos ) const;
+    static sal_Int32 StartOfInputFldAtPos( const SwPosition& rPos );
+    static sal_Int32 EndOfInputFldAtPos( const SwPosition& rPos );
 
     // Return number of cursors in ring (The flag indicates whether
     // only cursors containing selections are requested).
@@ -822,10 +822,10 @@ public:
     // is cursor or the point in/over a right to left formatted text?
     bool IsInRightToLeftText( const Point* pPt = 0 ) const;
 
-    void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
+    static void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
     bool   bColumnChange();
-    void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
-    void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
+    static void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
+    static void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
     // If the current cursor position is inside a hidden range, the hidden range
     // is selected and true is returned:
     bool SelectHiddenRange();

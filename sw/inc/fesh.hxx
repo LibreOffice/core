@@ -772,8 +772,8 @@ public:
     SwTxtNode * GetNumRuleNodeAtPos(const Point &rPot);
     bool IsNumLabel( const Point &rPt, int nMaxOffset = -1 );
 
-    bool IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
-                                   const Point& _rDocPos ) const;
+    static bool IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
+                                   const Point& _rDocPos );
 
     void ToggleHeaderFooterEdit( );
 };

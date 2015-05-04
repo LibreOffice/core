@@ -169,11 +169,19 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // used in a function-pointer-table
-    if (startsWith(fqn, "SbiRuntime::Step")) {
+    if (startsWith(fqn, "SbiRuntime::Step") || startsWith(fqn, "oox::xls::OoxFormulaParserImpl::")
+        || startsWith(fqn, "SwTableFormula::")
+        || startsWith(fqn, "oox::xls::BiffFormulaParserImpl::")
+        || fqn == "SwWW8ImplReader::Read_F_Shape"
+        || fqn == "SwWW8ImplReader::Read_Majority") {
         return true;
     }
     // have no idea why this can't be static, but 'make check' fails with it so...
     if (fqn == "oox::drawingml::Shape::resolveRelationshipsOfTypeFromOfficeDoc") {
+        return true;
+    }
+    // template magic
+    if (fqn == "ColumnBatch::getValue") {
         return true;
     }
 

@@ -1104,7 +1104,7 @@ void SwView::Execute(SfxRequest &rReq)
             if(pVFrame->HasChildWindow(SID_BROWSER))
             {
                 const SwDBData& rData = GetWrtShell().GetDBDesc();
-                SW_MOD()->ShowDBObj(*this, rData, false);
+                SwModule::ShowDBObj(*this, rData, false);
             }
         }
         break;
@@ -1322,19 +1322,19 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
         OUString sCurrentSectionName = CurrSect->GetSectionName();
         if(sCurrentSectionName != m_sOldSectionName)
         {
-            rShell.FireSectionChangeEvent(2, 1);
+            SwCrsrShell::FireSectionChangeEvent(2, 1);
         }
         m_sOldSectionName = sCurrentSectionName;
     }
     else if (!m_sOldSectionName.isEmpty())
     {
-        rShell.FireSectionChangeEvent(2, 1);
+        SwCrsrShell::FireSectionChangeEvent(2, 1);
         m_sOldSectionName= OUString();
     }
     //get column change event
     if(rShell.bColumnChange())
     {
-        rShell.FireColumnChangeEvent(2, 1);
+        SwCrsrShell::FireColumnChangeEvent(2, 1);
     }
 
     while( nWhich )
@@ -1352,7 +1352,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (m_nOldPageNum != nLogPage )
                 {
                     if (m_nOldPageNum != 0)
-                        rShell.FirePageChangeEvent(m_nOldPageNum, nLogPage);
+                        SwCrsrShell::FirePageChangeEvent(m_nOldPageNum, nLogPage);
                     m_nOldPageNum = nLogPage;
                 }
                 const sal_uInt16 nCnt = GetWrtShell().GetPageCnt();

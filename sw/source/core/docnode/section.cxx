@@ -651,7 +651,7 @@ SwSectionFmt::~SwSectionFmt()
             // If it was a linked Section, we need to make all Child Links
             // visible again
             if( rSect.IsConnected() )
-                rSect.MakeChildLinksVisible( *pSectNd );
+                SwSection::MakeChildLinksVisible( *pSectNd );
 
             // Check whether we need to be visible, before deleting the Nodes
             if( rSect.IsHiddenFlag() )
@@ -1228,7 +1228,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
         SwPosition aPos( aIdx, SwIndex( pNewNd, 0 ));
         --aPos.nNode;
-        pDoc->CorrAbs( aIdx, aEndIdx, aPos, true );
+        SwDoc::CorrAbs( aIdx, aEndIdx, aPos, true );
 
         pPam = new SwPaM( aPos );
 
@@ -1485,7 +1485,7 @@ void SwIntrnlSectRefLink::Closed()
                 // Make all Links within the Section visible again
                 SwSectionNode* pSectNd = rSectFmt.GetSectionNode( false );
                 if( pSectNd )
-                    pSectNd->GetSection().MakeChildLinksVisible( *pSectNd );
+                    SwSection::MakeChildLinksVisible( *pSectNd );
 
                 if( pESh )
                     pESh->EndAllAction();

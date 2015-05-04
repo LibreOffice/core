@@ -1220,7 +1220,7 @@ bool SwTxtNode::Convert( SwConversionArgs &rArgs )
 
 // Die Aehnlichkeiten zu SwTxtNode::Spell sind beabsichtigt ...
 // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
-SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rViewOpt, sal_Int32 nActPos )
+SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, sal_Int32 nActPos )
 {
     SwRect aRect;
 #if OSL_DEBUG_LEVEL > 1
@@ -1258,7 +1258,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     sal_Int32 nInvEnd = 0;
 
     const bool bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
-                                  rViewOpt.IsAutoCompleteWords();
+                                  SwViewOption::IsAutoCompleteWords();
 
     if( pNode->GetWrong() )
     {

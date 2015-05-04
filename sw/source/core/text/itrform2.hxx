@@ -231,7 +231,7 @@ public:
      * the portions' part. Removing left or right border.
      * @param   rPortion    drop portion for merge
     **/
-    void MergeCharacterBorder( SwDropPortion& rPortion );
+    static void MergeCharacterBorder( SwDropPortion& rPortion );
 
     /**
      * Merge border of the line portion with setting the portion's

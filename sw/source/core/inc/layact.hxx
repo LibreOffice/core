@@ -111,7 +111,7 @@ class SwLayAction
     bool _TurboAction( const SwCntntFrm * );
     void InternalAction();
 
-    SwPageFrm *CheckFirstVisPage( SwPageFrm *pPage );
+    static SwPageFrm *CheckFirstVisPage( SwPageFrm *pPage );
 
     bool RemoveEmptyBrowserPages();
 

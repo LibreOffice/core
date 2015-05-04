@@ -56,7 +56,7 @@ public:
     virtual ::svl::IUndoManager*
                 GetUndoManager() SAL_OVERRIDE;
 
-    void        StateDisableItems(SfxItemSet &);
+    static void StateDisableItems(SfxItemSet &);
 
     void        Execute(SfxRequest &);
     void        ExecDraw(SfxRequest &);

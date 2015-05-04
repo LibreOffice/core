@@ -34,13 +34,13 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxParaProps;
 
 private:
-    css::style::LineSpacing getOOoLineSpacing( float _lineSpace, sal_Int16 mode );
+    static css::style::LineSpacing getOOoLineSpacing( float _lineSpace, sal_Int16 mode );
     css::style::LineSpacing getOOoLineSpacingFromRule( sal_Int32 _linespacingrule );
-    float getMSWordLineSpacing( css::style::LineSpacing& rLineSpacing );
-    sal_Int32 getMSWordLineSpacingRule( css::style::LineSpacing& rLineSpacing );
+    static float getMSWordLineSpacing( css::style::LineSpacing& rLineSpacing );
+    static sal_Int32 getMSWordLineSpacingRule( css::style::LineSpacing& rLineSpacing );
     sal_Int16 getCharHeight() throw (css::uno::RuntimeException);
-    sal_Int32 getOOoAlignment( sal_Int32 _alignment );
-    sal_Int32 getMSWordAlignment( sal_Int32 _alignment );
+    static sal_Int32 getOOoAlignment( sal_Int32 _alignment );
+    static sal_Int32 getMSWordAlignment( sal_Int32 _alignment );
 
 public:
     SwVbaParagraphFormat( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::beans::XPropertySet >& rParaProps );

@@ -113,7 +113,7 @@ public:
     sal_uInt16 GetCurMax() const { return nCurMax; }
     inline SwCacheObj *First() { return pRealFirst; }
     inline SwCacheObj *Last()  { return pLast; }
-    inline SwCacheObj *Next( SwCacheObj *pCacheObj);
+    static inline SwCacheObj *Next( SwCacheObj *pCacheObj);
     inline SwCacheObj* operator[](sal_uInt16 nIndex) { return m_aCacheObjects[nIndex]; }
     inline sal_uInt16 size() { return m_aCacheObjects.size(); }
 };

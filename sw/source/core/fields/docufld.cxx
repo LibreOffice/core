@@ -321,7 +321,7 @@ SwAuthorFieldType::SwAuthorFieldType()
 {
 }
 
-OUString SwAuthorFieldType::Expand(sal_uLong nFmt) const
+OUString SwAuthorFieldType::Expand(sal_uLong nFmt)
 {
     SvtUserOptions&  rOpt = SW_MOD()->GetUserOptions();
     if((nFmt & 0xff) == AF_NAME)
@@ -338,14 +338,14 @@ SwFieldType* SwAuthorFieldType::Copy() const
 SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
 {
-    aContent = static_cast<SwAuthorFieldType*>(GetTyp())->Expand(GetFormat());
+    aContent = SwAuthorFieldType::Expand(GetFormat());
 }
 
 OUString SwAuthorField::Expand() const
 {
     if (!IsFixed())
         const_cast<SwAuthorField*>(this)->aContent =
-                    static_cast<SwAuthorFieldType*>(GetTyp())->Expand(GetFormat());
+                    SwAuthorFieldType::Expand(GetFormat());
 
     return aContent;
 }
@@ -1846,7 +1846,7 @@ SwFieldType* SwExtUserFieldType::Copy() const
     return pTyp;
 }
 
-OUString SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
+OUString SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 )
 {
     sal_uInt16 nRet = USHRT_MAX;
     switch(nSub)
@@ -1884,13 +1884,13 @@ OUString SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
 SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFmt) :
     SwField(pTyp, nFmt), nType(nSubTyp)
 {
-    aContent = static_cast<SwExtUserFieldType*>(GetTyp())->Expand(nType, GetFormat());
+    aContent = SwExtUserFieldType::Expand(nType, GetFormat());
 }
 
 OUString SwExtUserField::Expand() const
 {
     if (!IsFixed())
-        const_cast<SwExtUserField*>(this)->aContent = static_cast<SwExtUserFieldType*>(GetTyp())->Expand(nType, GetFormat());
+        const_cast<SwExtUserField*>(this)->aContent = SwExtUserFieldType::Expand(nType, GetFormat());
 
     return aContent;
 }

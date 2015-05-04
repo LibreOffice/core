@@ -53,7 +53,7 @@ void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeExcep
     SolarMutexGuard aGuard;
 
     // Installed recognizers have changed. We remove all existing smart tags:
-    SW_MOD()->CheckSpellChanges( false, true, true, true );
+    SwModule::CheckSpellChanges( false, true, true, true );
 
     SmartTagMgr::modified( rEO );
 }
@@ -63,7 +63,7 @@ void SwSmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( R
     SolarMutexGuard aGuard;
 
     // Configuration has changed. We remove all existing smart tags:
-    SW_MOD()->CheckSpellChanges( false, true, true, true );
+    SwModule::CheckSpellChanges( false, true, true, true );
 
     SmartTagMgr::changesOccurred( rEvent );
 }

@@ -1495,7 +1495,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     // If we have just one single inline graphic then
                     // don't insert a field for the single frame, set
                     // the frames hyperlink field attribute directly.
-                    if (0 != (pFrm = rReader.ContainsSingleInlineGraphic(aRegion)))
+                    if (0 != (pFrm = SwWW8ImplReader::ContainsSingleInlineGraphic(aRegion)))
                     {
                         const SwFmtINetFmt *pAttr = static_cast<const SwFmtINetFmt *>(
                             rEntry.pAttr);
@@ -4298,9 +4298,9 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
     SetPage(rPage, rFmt, rSection, bIgnoreCols);
 
     if (!(rSection.maSep.pgbApplyTo & 1))
-        mrReader.SetPageBorder(rFmt, rSection);
+        SwWW8ImplReader::SetPageBorder(rFmt, rSection);
     if (!(rSection.maSep.pgbApplyTo & 2))
-        mrReader.SetPageBorder(rPage.GetFirstMaster(), rSection);
+        SwWW8ImplReader::SetPageBorder(rPage.GetFirstMaster(), rSection);
 
     mrReader.SetDocumentGrid(rFmt, rSection);
 }

@@ -52,7 +52,7 @@ class SwGlossaryList : public AutoTimer
     bool            bFilled;
 
     AutoTextGroup*  FindGroup(const OUString& rGroupName);
-    void            FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGloss);
+    static void     FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGloss);
 
 public:
         SwGlossaryList();

@@ -1207,7 +1207,7 @@ PopupMenu* SwContentTree::CreateContextMenu()
                     pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
                 pSubPop4->InsertItem(405, sReadonlyIdx);
 
-                pSubPop4->CheckItem( 405, pActiveShell->IsTOXBaseReadonly(*pBase));
+                pSubPop4->CheckItem( 405, SwEditShell::IsTOXBaseReadonly(*pBase));
                 pSubPop4->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
             }
             else if(CONTENT_TYPE_TABLE == nContentType && !bReadonly)
@@ -2944,7 +2944,7 @@ void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry
         {
             const SwTOXBase* pBase = static_cast<SwTOXBaseContent*>(pFirst->GetUserData())
                                                                 ->GetTOXBase();
-            pActiveShell->SetTOXBaseReadonly(*pBase, !pActiveShell->IsTOXBaseReadonly(*pBase));
+            pActiveShell->SetTOXBaseReadonly(*pBase, !SwEditShell::IsTOXBaseReadonly(*pBase));
         }
         break;
         case 4:

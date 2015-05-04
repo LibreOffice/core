@@ -209,7 +209,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     aStt = nEndIdx;
     pCNode = aStt.GetNode().GetCntntNode();
     if (!pCNode)
-        pCNode = pNds->GoPrevious(&aStt);
+        pCNode = SwNodes::GoPrevious(&aStt);
     assert(pCNode && "No more ContentNode at StartPos");
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
@@ -314,7 +314,7 @@ void Writer::PutNumFmtFontsInAttrPool()
     bool bCheck = false;
 
     for( size_t nGet = rListTbl.size(); nGet; )
-        if( pDoc->IsUsed( *(pRule = rListTbl[ --nGet ] )))
+        if( SwDoc::IsUsed( *(pRule = rListTbl[ --nGet ] )))
             for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
                 if( SVX_NUM_CHAR_SPECIAL == (pFmt = &pRule->Get( nLvl ))->GetNumberingType() ||
                     SVX_NUM_BITMAP == pFmt->GetNumberingType() )

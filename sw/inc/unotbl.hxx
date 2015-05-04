@@ -428,7 +428,7 @@ public:
 
     sal_uInt16          getRowCount();
     sal_uInt16          getColumnCount();
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >     GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
+    static ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >     GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
                         const OUString& sTLName, const OUString& sBRName,
                         SwRangeDescriptor& rDesc);
 

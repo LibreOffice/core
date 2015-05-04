@@ -45,7 +45,7 @@ public:
     ) {}
 
     inline SwFntObj *First( );
-    inline SwFntObj *Next( SwFntObj *pFntObj);
+    static inline SwFntObj *Next( SwFntObj *pFntObj);
     void Flush();
 };
 

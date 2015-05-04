@@ -82,7 +82,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
         for ( sal_uInt16 n = m_pUsedNumTbl->size(); n; )
         {
             const SwNumRule& rRule = *(*m_pUsedNumTbl)[ --n ];
-            if ( !m_pDoc->IsUsed( rRule ) )
+            if ( !SwDoc::IsUsed( rRule ) )
             {
                 m_pUsedNumTbl->erase( m_pUsedNumTbl->begin() + n );
             }

@@ -844,7 +844,7 @@ public:
 
     // #i65250#
     inline sal_uInt32 GetFrmId() const { return mnFrmId; }
-    inline sal_uInt32 GetLastFrmId() const { return mnLastFrmId; }
+    static inline sal_uInt32 GetLastFrmId() { return mnLastFrmId; }
 
     // NEW TABELS
     // Some functions for covered/covering table cells. This way unnessessary

@@ -147,7 +147,7 @@ class SwAutoFormat
         return *m_pCharClass;
     }
 
-    bool IsSpace( const sal_Unicode c ) const
+    static bool IsSpace( const sal_Unicode c )
         { return (' ' == c || '\t' == c || 0x0a == c|| 0x3000 == c /* Jap. space */); }
 
     void SetColl( sal_uInt16 nId, bool bHdLineOrText = false );
@@ -156,7 +156,7 @@ class SwAutoFormat
 
     // TxtNode methods
     const SwTxtNode* GetNextNode() const;
-    bool IsEmptyLine( const SwTxtNode& rNd ) const
+    static bool IsEmptyLine( const SwTxtNode& rNd )
         {   return rNd.GetTxt().isEmpty() ||
                 rNd.GetTxt().getLength() == GetLeadingBlanks( rNd.GetTxt() ); }
 
@@ -164,14 +164,14 @@ class SwAutoFormat
     bool IsFastFullLine( const SwTxtNode& ) const;
     bool IsNoAlphaLine( const SwTxtNode&) const;
     bool IsEnumericChar( const SwTxtNode&) const;
-    bool IsBlanksInString( const SwTxtNode&) const;
+    static bool IsBlanksInString( const SwTxtNode&);
     sal_uInt16 CalcLevel( const SwTxtNode&, sal_uInt16 *pDigitLvl = 0 ) const;
     sal_Int32 GetBigIndent( sal_Int32& rAktSpacePos ) const;
 
-    OUString DelLeadingBlanks(const OUString& rStr) const;
-    OUString DelTrailingBlanks( const OUString& rStr ) const;
-    sal_Int32 GetLeadingBlanks( const OUString& rStr ) const;
-    sal_Int32 GetTrailingBlanks( const OUString& rStr ) const;
+    static OUString DelLeadingBlanks(const OUString& rStr);
+    static OUString DelTrailingBlanks( const OUString& rStr );
+    static sal_Int32 GetLeadingBlanks( const OUString& rStr );
+    static sal_Int32 GetTrailingBlanks( const OUString& rStr );
 
     bool IsFirstCharCapital( const SwTxtNode& rNd ) const;
     sal_uInt16 GetDigitLevel( const SwTxtNode& rTxtNd, sal_Int32& rPos,
@@ -187,8 +187,8 @@ class SwAutoFormat
     void BuildNegIndent( SwTwips nSpaces );
     void BuildHeadLine( sal_uInt16 nLvl );
 
-    bool HasSelBlanks( SwPaM& rPam ) const;
-    bool HasBreakAttr( const SwTxtNode& ) const;
+    static bool HasSelBlanks( SwPaM& rPam );
+    static bool HasBreakAttr( const SwTxtNode& );
     void DeleteSel( SwPaM& rPam );
     bool DeleteCurNxtPara( const OUString& rNxtPara );
     /// delete in the node start and/or end
@@ -214,7 +214,7 @@ class SwAutoFormat
     }
 
     /// is a dot at the end ??
-    bool IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const;
+    static bool IsSentenceAtEnd( const SwTxtNode& rTxtNd );
 
     bool DoUnderline();
     bool DoTable();
@@ -404,7 +404,7 @@ bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
     return USHRT_MAX != GetDigitLevel( rNd, nBlnks );
 }
 
-bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
+bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd )
 {
     // Search more than 5 consecutive blanks/tabs in the string.
     OUString sTmp( DelLeadingBlanks(rNd.GetTxt()) );
@@ -661,7 +661,7 @@ bool SwAutoFormat::DoTable()
     return 1 < aPosArr.size();
 }
 
-OUString SwAutoFormat::DelLeadingBlanks( const OUString& rStr ) const
+OUString SwAutoFormat::DelLeadingBlanks( const OUString& rStr )
 {
     sal_Int32 nL, n;
     for( nL = rStr.getLength(), n = 0; n < nL && IsSpace( rStr[n] ); ++n )
@@ -671,7 +671,7 @@ OUString SwAutoFormat::DelLeadingBlanks( const OUString& rStr ) const
     return rStr;
 }
 
-OUString SwAutoFormat::DelTrailingBlanks( const OUString& rStr ) const
+OUString SwAutoFormat::DelTrailingBlanks( const OUString& rStr )
 {
     sal_Int32 nL = rStr.getLength(), n = nL;
     if( !nL )
@@ -684,7 +684,7 @@ OUString SwAutoFormat::DelTrailingBlanks( const OUString& rStr ) const
     return rStr;
 }
 
-sal_Int32 SwAutoFormat::GetLeadingBlanks( const OUString& rStr ) const
+sal_Int32 SwAutoFormat::GetLeadingBlanks( const OUString& rStr )
 {
     sal_Int32 nL;
     sal_Int32 n;
@@ -694,7 +694,7 @@ sal_Int32 SwAutoFormat::GetLeadingBlanks( const OUString& rStr ) const
     return n;
 }
 
-sal_Int32 SwAutoFormat::GetTrailingBlanks( const OUString& rStr ) const
+sal_Int32 SwAutoFormat::GetTrailingBlanks( const OUString& rStr )
 {
     sal_Int32 nL = rStr.getLength(), n = nL;
     if( !nL )
@@ -991,7 +991,7 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
     m_pDoc->SetTxtFmtCollByAutoFmt( *m_aDelPam.GetPoint(), nId, &aSet );
 }
 
-bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
+bool SwAutoFormat::HasSelBlanks( SwPaM& rPam )
 {
     // Is there a Blank at the beginning or end?
     // Do not delete it, it will be inserted again.
@@ -1015,7 +1015,7 @@ bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
     return true;
 }
 
-bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
+bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd )
 {
     const SfxItemSet* pSet = rTxtNd.GetpSwAttrSet();
     if( !pSet )
@@ -1034,7 +1034,7 @@ bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
 }
 
 /// Is there a dot at the end?
-bool SwAutoFormat::IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const
+bool SwAutoFormat::IsSentenceAtEnd( const SwTxtNode& rTxtNd )
 {
     const OUString& rStr = rTxtNd.GetTxt();
     sal_Int32 n = rStr.getLength();

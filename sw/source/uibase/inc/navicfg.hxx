@@ -31,7 +31,7 @@ class SwNavigationConfig : public utl::ConfigItem
     bool    bIsSmall;       //ShowListBox
     bool    bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
 
-    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() SAL_OVERRIDE;
 

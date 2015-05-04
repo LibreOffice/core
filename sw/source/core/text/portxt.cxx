@@ -420,8 +420,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
             aGuess.BreakPos() != rInf.GetLineStart() &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
-            ( !rInf.GetLast()->IsBlankPortion() ||  static_cast<SwBlankPortion*>(
-              rInf.GetLast())->MayUnderflow( rInf, rInf.GetIdx()-1, true )))
+            ( !rInf.GetLast()->IsBlankPortion() || SwBlankPortion::MayUnderflow( rInf, rInf.GetIdx()-1, true )))
         {       // case C1 (former BreakUnderflow())
             BreakUnderflow( rInf );
         }

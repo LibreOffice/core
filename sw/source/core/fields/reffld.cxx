@@ -497,7 +497,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 // #i81002#
 OUString SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                                      const SwTxtNode& rTxtNodeOfReferencedItem,
-                                     const sal_uInt32 nRefNumFormat ) const
+                                     const sal_uInt32 nRefNumFormat )
 {
     if ( rTxtNodeOfReferencedItem.HasNumber() &&
          rTxtNodeOfReferencedItem.IsCountedInList() )
@@ -928,10 +928,10 @@ private:
     bool bInit;
 
     void       Init(SwDoc& rDoc, SwDoc& rDestDoc, bool bField );
-    void       GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
+    static void GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
     void       GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
     void       AddId( sal_uInt16 id, sal_uInt16 seqNum );
-    sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
+    static sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
     _RefIdsMap( const OUString& rName ) : aName( rName ), bInit( false ) {}

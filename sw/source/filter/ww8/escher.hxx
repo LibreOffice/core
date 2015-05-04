@@ -103,12 +103,12 @@ protected:
     void WriteOLEPicture(EscherPropertyContainer &rPropOpt,
         sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
         sal_uInt32 nShapeId, const com::sun::star::awt::Rectangle* pVisArea );
-    void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
+    static void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
 
     sal_Int32 DrawModelToEmu(sal_Int32 nVal) const
         { return BigMulDiv(nVal, mnEmuMul, mnEmuDiv); }
 
-    sal_Int32 ToFract16(sal_Int32 nVal, sal_uInt32 nMax) const;
+    static sal_Int32 ToFract16(sal_Int32 nVal, sal_uInt32 nMax);
 
     virtual void SetPicId(const SdrObject &, sal_uInt32, EscherPropertyContainer &);
     SdrLayerID GetInvisibleHellId() const;

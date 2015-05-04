@@ -795,7 +795,7 @@ void SwDoc::DeleteAutoCorrExceptWord()
     mpACEWord = 0;
 }
 
-void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
+void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
 {
     // This is a modified version of SwDoc::TransliterateText
     const SwPosition* pStt = rPaM.Start();

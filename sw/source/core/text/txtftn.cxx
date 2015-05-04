@@ -647,7 +647,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                 GetNode()->getIDocumentLayoutAccess()->GetLayouter()->CollectEndnote( pNew );
             }
             else if( pSrcFrm != this )
-                pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
+                SwFtnBossFrm::ChangeFtnRef( pSrcFrm, pFtn, this );
             bInFtnConnect = false;
             return;
         }
@@ -668,7 +668,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         if( !pSrcFrm )
             pBoss->AppendFtn( this, pFtn );
         else if( pSrcFrm != this )
-            pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
+            SwFtnBossFrm::ChangeFtnRef( pSrcFrm, pFtn, this );
         bInFtnConnect = false;
         return;
     }
@@ -697,7 +697,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                 // If the Footnote has been registered to a Follow, we need to
                 // rewire it now too
                 if ( pSrcFrm != this )
-                    pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
+                    SwFtnBossFrm::ChangeFtnRef( pSrcFrm, pFtn, this );
 
                 // We have some room left, so the Footnote can grow
                 if ( pFtnFrm->GetFollow() && nDiff > 0 )
@@ -739,7 +739,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                     pSrcBoss->MoveFtns( pSrcFrm, this, pFtn );
                 }
                 else
-                    pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
+                    SwFtnBossFrm::ChangeFtnRef( pSrcFrm, pFtn, this );
             }
         }
 

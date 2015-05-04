@@ -286,7 +286,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
                 // is copied, and the Index to the StartNode is set to
                 // the left or first header attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwHeaderStartNode );
+                SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwHeaderStartNode );
                 SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
                             *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
@@ -358,7 +358,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
                 // is copied, and the Index to the StartNode is set to
                 // the left footer attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwFooterStartNode );
+                SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwFooterStartNode );
                 SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
                             *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();

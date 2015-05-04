@@ -295,8 +295,8 @@ public:
 
 protected:
     long GetLineHeight( const SwTableLine *pLine );
-    long GetLineHeight( const SwTableBox *pBox ) const;
-    const SvxBrushItem *GetLineBrush( const SwTableBox *pBox,
+    static long GetLineHeight( const SwTableBox *pBox );
+    static const SvxBrushItem *GetLineBrush( const SwTableBox *pBox,
                                       SwWriteTableRow *pRow );
 
     sal_uInt16 GetLeftSpace( sal_uInt16 nCol ) const;

@@ -103,7 +103,7 @@ SwSortElement::~SwSortElement()
 {
 }
 
-double SwSortElement::StrToDouble( const OUString& rStr ) const
+double SwSortElement::StrToDouble( const OUString& rStr )
 {
     if( !pLclData )
         pLclData = new LocaleDataWrapper( LanguageTag( *pLocale ));

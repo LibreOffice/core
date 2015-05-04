@@ -2626,7 +2626,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
         if (bPrintProspect)
         {
-            pDoc->CalculatePagePairsForProspectPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, nPageCount );
+            SwDoc::CalculatePagePairsForProspectPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, nPageCount );
             nRet = m_pRenderData->GetPagePairsForProspectPrinting().size();
         }
         else
@@ -2640,11 +2640,11 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
             // get set of valid document pages (according to the current settings)
             // and their start frames
-            pDoc->CalculatePagesForPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
+            SwDoc::CalculatePagesForPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
 
             if (nPostItMode != POSTITS_NONE)
             {
-                pDoc->UpdatePagesForPrintingWithPostItData( *m_pRenderData,
+                SwDoc::UpdatePagesForPrintingWithPostItData( *m_pRenderData,
                         *m_pPrintUIOptions, bIsPDFExport, nPageCount );
             }
 

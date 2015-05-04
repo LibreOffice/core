@@ -177,7 +177,7 @@ class SwCalc
 
     bool        ParseTime( sal_uInt16*, sal_uInt16*, sal_uInt16* );
 
-    OUString  GetColumnName( const OUString& rName );
+    static OUString  GetColumnName( const OUString& rName );
     OUString  GetDBName( const OUString& rName );
 
     SwCalc( const SwCalc& ) SAL_DELETED_FUNCTION;

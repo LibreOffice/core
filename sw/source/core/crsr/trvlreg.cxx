@@ -65,7 +65,7 @@ bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             else
             {
                 aIdx = *pNd->EndOfSectionNode();
-                SwCntntNode* pCNd = pNd->GetNodes().GoPrevSection( &aIdx,
+                SwCntntNode* pCNd = SwNodes::GoPrevSection( &aIdx,
                                                 true, !bInReadOnly );
                 if( !pCNd )
                 {
@@ -119,7 +119,7 @@ bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             else
             {
                 aIdx = *pNd->EndOfSectionNode();
-                SwCntntNode* pCNd = pNd->GetNodes().GoPrevSection( &aIdx,
+                SwCntntNode* pCNd = SwNodes::GoPrevSection( &aIdx,
                                                 true, !bInReadOnly );
                 if( !pCNd )
                 {
@@ -149,7 +149,7 @@ bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     if( bMoveBackward )
     {
         SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
-        pCNd = pNd->GetNodes().GoPrevSection( &aIdx, true, !bInReadOnly );
+        pCNd = SwNodes::GoPrevSection( &aIdx, true, !bInReadOnly );
     }
     else
     {
@@ -182,7 +182,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
         if( bMoveBackward ) // to the end of the section
         {
             SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
-            pCNd = pNd->GetNodes().GoPrevSection( &aIdx, true, !bInReadOnly );
+            pCNd = SwNodes::GoPrevSection( &aIdx, true, !bInReadOnly );
             if( !pCNd )
                 return false;
             pPos->nNode = aIdx;

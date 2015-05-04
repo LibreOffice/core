@@ -83,7 +83,7 @@ public:
            const SwFtnFrm     *FindFirstFtn( SwCntntFrm* ) const;
                  SwFtnContFrm *FindNearestFtnCont( bool bDontLeave = false );
 
-    void ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *,
+    static void ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *,
                        SwCntntFrm *pNew );
     void RearrangeFtns( const SwTwips nDeadLine, const bool bLock = false,
                         const SwTxtFtn *pAttr = 0 );

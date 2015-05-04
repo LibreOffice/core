@@ -308,7 +308,7 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 
 /// determine maximal order number for a 'child' object of given 'parent' object
 sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
-                                           const SdrObject* _pExclChildObj ) const
+                                           const SdrObject* _pExclChildObj )
 {
     sal_uInt32 nMaxChildOrdNum = _rParentObj.GetDrawObj()->GetOrdNum();
 

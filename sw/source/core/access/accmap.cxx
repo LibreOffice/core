@@ -673,7 +673,7 @@ class SwAccPreviewData
         input parameter - constant reference to the preview window size in TWIP;
         needed to determine the visible part of the logic page rectangle
     */
-    void AdjustLogicPgRectToVisibleArea( SwRect&         _iorLogicPgSwRect,
+    static void AdjustLogicPgRectToVisibleArea( SwRect&         _iorLogicPgSwRect,
                                          const SwRect&   _rPreviewPgSwRect,
                                          const Size&     _rPreviewWinSize );
 

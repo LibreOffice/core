@@ -99,7 +99,6 @@ static bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
 }
 
 static bool lcl_FindAnchorPos(
-    SwEditShell& rEditShell,
     SwDoc& rDoc,
     const Point& rPt,
     const SwFrm& rFrm,
@@ -146,9 +145,9 @@ static bool lcl_FindAnchorPos(
                 }
                 else
                 {
-                    if ( rEditShell.PosInsideInputFld( aPos ) )
+                    if ( SwCrsrShell::PosInsideInputFld( aPos ) )
                     {
-                        aPos.nContent = rEditShell.StartOfInputFldAtPos( aPos );
+                        aPos.nContent = SwCrsrShell::StartOfInputFldAtPos( aPos );
                     }
                 }
             }
@@ -196,7 +195,6 @@ static bool lcl_FindAnchorPos(
 //! also used in unoframe.cxx
 
 bool sw_ChkAndSetNewAnchor(
-    SwEditShell& rEditShell,
     const SwFlyFrm& rFly,
     SfxItemSet& rSet )
 {
@@ -218,7 +216,7 @@ bool sw_ChkAndSetNewAnchor(
             "forbidden anchor change in Head/Foot." );
 #endif
 
-    return ::lcl_FindAnchorPos( rEditShell, *pDoc, rFly.Frm().Pos(), rFly, rSet );
+    return ::lcl_FindAnchorPos( *pDoc, rFly.Frm().Pos(), rFly, rSet );
 }
 
 void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, bool bNew )
@@ -879,7 +877,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         const Point aRelPos( rInsertPosition.X() - pFrm->Frm().Left(),
                              rInsertPosition.Y() - pFrm->Frm().Top() );
         rDrawObj.SetRelativePos( aRelPos );
-        ::lcl_FindAnchorPos( *this, *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
+        ::lcl_FindAnchorPos( *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
     }
     // insert drawing object into the document creating a new <SwDrawFrmFmt> instance
     SwDrawFrmFmt* pFmt = GetDoc()->getIDocumentContentOperations().InsertDrawObj( aPam, rDrawObj, rFlyAttrSet );
@@ -1041,7 +1039,7 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
             const Point aPt( pFly->Frm().Pos() );
 
             if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false ))
-                sw_ChkAndSetNewAnchor( *this, *pFly, rSet );
+                sw_ChkAndSetNewAnchor( *pFly, rSet );
             SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)pFly->GetFmt();
 
             if( GetDoc()->SetFlyFrmAttr( *pFlyFmt, rSet ))
@@ -1182,7 +1180,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
         {
             pSet = new SfxItemSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
             pSet->Put( *pItem );
-            if( !sw_ChkAndSetNewAnchor( *this, *pFly, *pSet ))
+            if( !sw_ChkAndSetNewAnchor( *pFly, *pSet ))
                 delete pSet, pSet = 0;
         }
 

@@ -642,7 +642,7 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
     ++aSaveIdx;
     SwCntntNode* pCNd = aSaveIdx.GetNode().GetCntntNode();
     if( !pCNd && 0 == ( pCNd = rDoc.GetNodes().GoNext( &aSaveIdx ) ) &&
-        0 == ( pCNd = rDoc.GetNodes().GoPrevious( &aSaveIdx )) )
+        0 == ( pCNd = SwNodes::GoPrevious( &aSaveIdx )) )
     {
         OSL_FAIL( "Where is the TextNode now?" );
     }
@@ -1663,7 +1663,7 @@ void SwUndoTblNdsChg::SaveSection( SwStartNode* pSttNd )
 
     SwTableNode* pTblNd = pSttNd->FindTableNode();
     SwUndoSaveSection* pSave = new SwUndoSaveSection;
-    pSave->SaveSection( pSttNd->GetDoc(), SwNodeIndex( *pSttNd ));
+    pSave->SaveSection( SwNodeIndex( *pSttNd ));
 
     pDelSects->push_back( pSave );
     nSttNode = pTblNd->GetIndex();
@@ -2050,7 +2050,7 @@ CHECKTABLE(pTblNd->GetTable())
             // delete indices from section
             {
                 SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
-                rDoc.CorrAbs( SwNodeIndex( aTmpIdx, 1 ),
+                SwDoc::CorrAbs( SwNodeIndex( aTmpIdx, 1 ),
                             SwNodeIndex( *aTmpIdx.GetNode().EndOfSectionNode() ),
                             SwPosition( aTmpIdx, SwIndex( 0, 0 )), true );
             }
@@ -2923,7 +2923,7 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwSelBoxes aSelBoxes;
             SwTableBox* pBox = rTbl.GetTblBox( nTblNode + nOffset + 1 );
-            rTbl.SelLineFromBox( pBox, aSelBoxes, true );
+            SwTable::SelLineFromBox( pBox, aSelBoxes, true );
             _FndBox aTmpBox( 0, 0 );
             aTmpBox.SetTableLines( aSelBoxes, rTbl );
             aTmpBox.DelFrms( rTbl );

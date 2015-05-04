@@ -151,8 +151,8 @@ class SwTxtFrm: public SwCntntFrm
     bool CalcFollow(  const sal_Int32 nTxtOfst );
 
     // Corrects the position from which we need to format
-    sal_Int32 FindBrk(const OUString &rTxt, const sal_Int32 nStart,
-                                       const sal_Int32 nEnd) const;
+    static sal_Int32 FindBrk(const OUString &rTxt, const sal_Int32 nStart,
+                                       const sal_Int32 nEnd);
 
     // inline branch
     SwTwips _GetFtnFrmHeight() const;
@@ -222,7 +222,7 @@ public:
     void Init();
 
     /// Is called by FormatSpelling()
-    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, sal_Int32 );
+    SwRect _AutoSpell( const SwCntntNode*, sal_Int32 );
 
     /// Is called by FormatSpelling()
     SwRect SmartTagScan( SwCntntNode* , sal_Int32 );

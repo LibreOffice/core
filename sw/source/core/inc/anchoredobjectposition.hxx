@@ -126,9 +126,9 @@ namespace objectpositioning
 
             #i11860#
         */
-        SwTwips _GetTopForObjPos( const SwFrm& _rFrm,
+        static SwTwips _GetTopForObjPos( const SwFrm& _rFrm,
                                   const SwRectFn& _fnRect,
-                                  const bool _bVert ) const;
+                                  const bool _bVert );
 
         void _GetVertAlignmentValues( const SwFrm& _rVertOrientFrm,
                                       const SwFrm& _rPageAlignLayFrm,
@@ -287,10 +287,10 @@ namespace objectpositioning
             optional input/output parameter (default value NULL)
             - if set, relative alignment, that is toggled, if needed.
         */
-        void _ToggleHoriOrientAndAlign( const bool _bToggleLeftRight,
+        static void _ToggleHoriOrientAndAlign( const bool _bToggleLeftRight,
                                         sal_Int16& _ioeHoriOrient,
                                         sal_Int16& _iopeRelOrient
-                                      ) const;
+                                      );
 
         /** determine alignment values for horizontal position of object
 
@@ -438,9 +438,9 @@ namespace objectpositioning
             <_eRelOrient1> has to be drawn aside an object with an
             alignment <_eRelOrient2>
         */
-        bool _Minor( sal_Int16 _eRelOrient1,
+        static bool _Minor( sal_Int16 _eRelOrient1,
                      sal_Int16 _eRelOrient2,
-                     bool             _bLeft ) const;
+                     bool             _bLeft );
 
     public:
         virtual void CalcPosition() = 0;

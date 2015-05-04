@@ -55,8 +55,8 @@ public:
     virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    sal_uInt16 MayUnderflow( const SwTxtFormatInfo &rInf, sal_Int32 nIdx,
-        bool bUnderflow ) const;
+    static sal_uInt16 MayUnderflow( const SwTxtFormatInfo &rInf, sal_Int32 nIdx,
+        bool bUnderflow );
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;

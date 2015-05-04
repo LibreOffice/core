@@ -296,8 +296,8 @@ public:
     // rBoxes as a return value for immediate use.
     // steht. rBoxes auch als Return-Wert, um es gleich weiter zu benutzen
     // bToTop = true -> up to base line, false-> else only line of box.
-    SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
-                            SwSelBoxes& rBoxes, bool bToTop = true ) const;
+    static SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
+                            SwSelBoxes& rBoxes, bool bToTop = true );
 
     // Get information from client.
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
@@ -392,7 +392,7 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrmFmt.
 
     // In case Format contains formulas/values already,
     // a new one must be created for the new box.
-    SwTableBoxFmt* CheckBoxFmt( SwTableBoxFmt* );
+    static SwTableBoxFmt* CheckBoxFmt( SwTableBoxFmt* );
 
 public:
     TYPEINFO_OVERRIDE();

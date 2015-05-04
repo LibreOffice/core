@@ -83,7 +83,7 @@ bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 }
 
 // Where does the text start (without whitespace)? (document global)
-SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
+SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine )
 {
     const sal_Int32 nTxtStart = rLine.GetTxtStart();
     if( rLine.GetStart() == nTxtStart )

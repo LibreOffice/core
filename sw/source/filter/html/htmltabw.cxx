@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 
 class SwHTMLWrtTable : public SwWriteTable
 {
-    void Pixelize( sal_uInt16& rValue );
+    static void Pixelize( sal_uInt16& rValue );
     void PixelizeBorders();
 
     void OutTableCell( SwHTMLWriter& rWrt, const SwWriteTableCell *pCell,
@@ -702,11 +702,11 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     // CELLPADDING ausgeben: Stammt aus Layout oder ist berechnet
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellpadding).
-        append("=\"").append(static_cast<sal_Int32>(rWrt.ToPixel(nCellPadding,false))).append("\"");
+        append("=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(nCellPadding,false))).append("\"");
 
     // CELLSPACING ausgeben: Stammt aus Layout oder ist berechnet
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
-        append("=\"").append(static_cast<sal_Int32>(rWrt.ToPixel(nCellSpacing,false))).append("\"");
+        append("=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(nCellSpacing,false))).append("\"");
 
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
@@ -779,7 +779,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             if( bRel )
                 sOutStr.append(static_cast<sal_Int32>(nWidth)).append('*');
             else
-                sOutStr.append(static_cast<sal_Int32>(rWrt.ToPixel(nWidth,false)));
+                sOutStr.append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(nWidth,false)));
             sOutStr.append("\">");
             rWrt.Strm().WriteCharPtr( sOutStr.makeStringAndClear().getStr() );
 

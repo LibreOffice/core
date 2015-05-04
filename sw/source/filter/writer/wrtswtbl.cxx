@@ -141,7 +141,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
     return nHeight;
 }
 
-long SwWriteTable::GetLineHeight( const SwTableBox *pBox ) const
+long SwWriteTable::GetLineHeight( const SwTableBox *pBox )
 {
     const SwTableLine *pLine = pBox->GetUpper();
 

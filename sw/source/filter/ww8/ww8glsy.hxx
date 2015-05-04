@@ -40,7 +40,7 @@ public:
     // fGlsy will indicate whether this has AutoText or not
     bool IsGlossaryFib() { return fGlsy; }
 private:
-    sal_uInt32 FindGlossaryFibOffset(SvStream &rTableStrm,SvStream &rStrm,
+    static sal_uInt32 FindGlossaryFibOffset(SvStream &rTableStrm,SvStream &rStrm,
         const WW8Fib &rFib);
 };
 
@@ -70,10 +70,10 @@ private:
     SvStorageRef xStg;
     sal_uInt16 nStrings;
 
-    bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
+    static bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
         const ::std::vector<OUString>& rStrings,
         const ::std::vector<ww::bytes>& rExtra);
-    bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
+    static bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
 
     WW8Glossary(const WW8Glossary&) SAL_DELETED_FUNCTION;
     WW8Glossary& operator=(const WW8Glossary&) SAL_DELETED_FUNCTION;

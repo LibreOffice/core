@@ -40,7 +40,7 @@ class SwExtend
     sal_Int32 nEnd;
     bool _Leave( SwFont& rFnt, sal_Int32 nNew );
     bool Inside() const { return ( nPos >= nStart && nPos < nEnd ); }
-    void ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr );
+    static void ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr );
 public:
     SwExtend( const std::vector<sal_uInt16> &rA, sal_Int32 nSt ) : pFnt(0), rArr( rA ),
         nStart( nSt ), nPos( COMPLETE_STRING ), nEnd( nStart + rA.size() ) {}

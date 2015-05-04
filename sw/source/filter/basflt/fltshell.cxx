@@ -71,9 +71,9 @@ static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, bool bNext)
 {
     SwCntntNode * pCNd = rIdx.GetNode().GetCntntNode();
     if(!pCNd && 0 == (pCNd = bNext ? pDoc->GetNodes().GoNext(&rIdx)
-                                     : pDoc->GetNodes().GoPrevious(&rIdx)))
+                                     : SwNodes::GoPrevious(&rIdx)))
     {
-        pCNd = bNext ? pDoc->GetNodes().GoPrevious(&rIdx)
+        pCNd = bNext ? SwNodes::GoPrevious(&rIdx)
                      : pDoc->GetNodes().GoNext(&rIdx);
         OSL_ENSURE(pCNd, "no ContentNode found");
     }

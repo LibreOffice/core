@@ -278,7 +278,7 @@ class SwUndoTblCpyTbl : public SwUndo
 
     //b6341295: When redlining is active, PrepareRedline has to create the
     //redlining attributes for the new and the old table cell content
-    SwUndo* PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
+    static SwUndo* PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
                 const SwPosition& rPos, bool& rJoin, bool bRedo );
 
 public:

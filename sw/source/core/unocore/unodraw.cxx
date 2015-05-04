@@ -806,7 +806,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     pPage->GetDrawView()->UnmarkAll();
                     if(pContact)
                     {
-                        uno::Reference< uno::XInterface >  xInt = pPage->GetInterface( pContact->GetMaster() );
+                        uno::Reference< uno::XInterface >  xInt = SwFmDrawPage::GetInterface( pContact->GetMaster() );
                         xRet = uno::Reference< drawing::XShapeGroup >(xInt, uno::UNO_QUERY);
                     }
                     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );

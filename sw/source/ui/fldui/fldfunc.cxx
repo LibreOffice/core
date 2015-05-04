@@ -137,7 +137,7 @@ void SwFldFuncPage::Reset(const SfxItemSet* )
     if (!IsFldEdit())
     {
         // initialise TypeListBox
-        const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
+        const SwFldGroupRgn& rRg = SwFldMgr::GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
         // fill Typ-Listbox
         for(sal_uInt16 i = rRg.nStart; i < rRg.nEnd; ++i)

@@ -1544,7 +1544,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                             pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrmFmtSetRange );
                             pSet->Put( *pItem );
                             if ( pFmt->GetDoc()->GetEditShell() != NULL
-                                 && !sw_ChkAndSetNewAnchor( *(pFmt->GetDoc()->GetEditShell()), *pFly, *pSet ) )
+                                 && !sw_ChkAndSetNewAnchor( *pFly, *pSet ) )
                                 delete pSet, pSet = 0;
                         }
                     }
@@ -1562,7 +1562,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             OUString sGrfName;
             OUString sFltName;
             GraphicObject *pGrfObj = 0;
-            pFmt->GetDoc()->GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), &sGrfName, &sFltName );
+            SwDoc::GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), &sGrfName, &sFltName );
             OUString sTmp;
             aValue >>= sTmp;
             UnoActionContext aAction(pFmt->GetDoc());
@@ -1930,7 +1930,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                             aSet.Put( *pItem );
                             if ( pFmt->GetDoc()->GetEditShell() != NULL )
                             {
-                                sw_ChkAndSetNewAnchor( *(pFmt->GetDoc()->GetEditShell()), *pFly, aSet );
+                                sw_ChkAndSetNewAnchor( *pFly, aSet );
                             }
                         }
                     }
@@ -2061,7 +2061,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     throw uno::RuntimeException();
                 if( pGrfNode->IsGrfLink() )
                 {
-                    pFmt->GetDoc()->GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), &sGrfName, 0 );
+                    SwDoc::GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), &sGrfName, 0 );
                 }
                 else
                 {
@@ -2099,7 +2099,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         else if( FN_UNO_GRAPHIC_FILTER == pEntry->nWID )
         {
             OUString sFltName;
-            pFmt->GetDoc()->GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), 0, &sFltName );
+            SwDoc::GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), 0, &sFltName );
                 aAny <<= sFltName;
         }
         else if( FN_UNO_GRAPHIC == pEntry->nWID )

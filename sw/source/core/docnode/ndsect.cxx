@@ -84,7 +84,7 @@ static bool lcl_IsInSameTblBox( SwNodes& _rNds,
         do
         {
             if ( _bPrev
-                 ? !_rNds.GoPrevSection( &aChkIdx, false, false )
+                 ? !SwNodes::GoPrevSection( &aChkIdx, false, false )
                  : !_rNds.GoNextSection( &aChkIdx, false, false ) )
             {
                 OSL_FAIL( "<lcl_IsInSameTblBox(..)> - no previous/next!" );
@@ -134,7 +134,7 @@ static void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );
-    if( !rNds.GoPrevSection( &aIdx, true, false ) ||
+    if( !SwNodes::GoPrevSection( &aIdx, true, false ) ||
         !CheckNodesRange( rStt, aIdx, true ) ||
         // #i21457#
         !lcl_IsInSameTblBox( rNds, rStt, true ))
@@ -386,7 +386,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 }
 
 sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
-                                const SwNode** ppSttNd ) const
+                                const SwNode** ppSttNd )
 {
     sal_uInt16 nRet = 1;
     if( rRange.HasMark() )
@@ -498,7 +498,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
     return nRet;
 }
 
-SwSection* SwDoc::GetCurrSection( const SwPosition& rPos ) const
+SwSection* SwDoc::GetCurrSection( const SwPosition& rPos )
 {
     const SwSectionNode* pSectNd = rPos.nNode.GetNode().FindSectionNode();
     if( pSectNd )
@@ -1067,7 +1067,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
             if( !pCNd )
             {
                 aIdx = *this;
-                pCNd = rNds.GoPrevSection(&aIdx, true, false);
+                pCNd = SwNodes::GoPrevSection(&aIdx, true, false);
                 if (!pCNd)
                     return;
             }
@@ -1203,7 +1203,7 @@ void SwSectionNode::DelFrms()
     // Or else the Fly/TblBox Frame does not have a Lower!
     {
         SwNodeIndex aIdx( *this );
-        if( !rNds.GoPrevSection( &aIdx, true, false ) ||
+        if( !SwNodes::GoPrevSection( &aIdx, true, false ) ||
             !CheckNodesRange( *this, aIdx, true ) ||
             // #i21457#
             !lcl_IsInSameTblBox( rNds, *this, true ))

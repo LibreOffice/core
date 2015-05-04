@@ -459,7 +459,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 getNumberingProperty(rPam, eNewState, pAny);
             else
             {
-                if( !rPam.GetDoc()->GetNumRuleAtPos( *rPam.GetPoint() ) )
+                if( !SwDoc::GetNumRuleAtPos( *rPam.GetPoint() ) )
                     eNewState = PropertyState_DEFAULT_VALUE;
             }
             break;
@@ -490,7 +490,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_DOCUMENT_INDEX:
         {
-            SwTOXBase* pBase = rPam.GetDoc()->GetCurTOX(
+            SwTOXBase* pBase = SwDoc::GetCurTOX(
                                                     *rPam.Start() );
             if( pBase )
             {
@@ -578,7 +578,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_TEXT_SECTION:
         {
-            SwSection* pSect = rPam.GetDoc()->GetCurrSection(*rPam.GetPoint());
+            SwSection* pSect = SwDoc::GetCurrSection(*rPam.GetPoint());
             if(pSect)
             {
                 if( pAny )
@@ -880,7 +880,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
 void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 {
-    const SwNumRule* pNumRule = rPam.GetDoc()->GetNumRuleAtPos( *rPam.GetPoint() );
+    const SwNumRule* pNumRule = SwDoc::GetNumRuleAtPos( *rPam.GetPoint() );
     if(pNumRule)
     {
         uno::Reference< XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);

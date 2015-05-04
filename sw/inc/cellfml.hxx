@@ -75,12 +75,12 @@ typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
     void _SplitMergeBoxNm( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
 
-    void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,
-                    SwSelBoxes& rBoxes ) const;
+    static void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,
+                    SwSelBoxes& rBoxes );
     OUString ScanString( FnScanFormula fnFormula, const SwTable& rTbl,
                         void* = 0 ) const;
 
-    const SwTable* FindTable( SwDoc& rDoc, const OUString& rNm ) const;
+    static const SwTable* FindTable( SwDoc& rDoc, const OUString& rNm );
 
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };

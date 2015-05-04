@@ -299,7 +299,7 @@ void SwEditShell::GetGrfNms( OUString* pGrfName, OUString* pFltName,
 {
     OSL_ENSURE( pGrfName || pFltName, "No parameters" );
     if( pFmt )
-        GetDoc()->GetGrfNms( *pFmt, pGrfName, pFltName );
+        SwDoc::GetGrfNms( *pFmt, pGrfName, pFltName );
     else
     {
         SwGrfNode *pGrfNode = _GetGrfNode();
@@ -1044,7 +1044,7 @@ void SwEditShell::CountWords( SwDocStat& rStat ) const
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
     {
         if( rPaM.HasMark() )
-            GetDoc()->CountWords( rPaM, rStat );
+            SwDoc::CountWords( rPaM, rStat );
 
     }
 }

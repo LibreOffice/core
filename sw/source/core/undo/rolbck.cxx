@@ -432,7 +432,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNodePo
     SwNodeIndex aSttIdx( *pTxtFtn->GetStartNode() );
     pTxtFtn->SetStartNode( 0, false );
 
-    m_pUndo->SaveSection( pDoc, aSttIdx );
+    m_pUndo->SaveSection( aSttIdx );
     m_nNodeIndex = pSaveNd->GetIndex();
 }
 

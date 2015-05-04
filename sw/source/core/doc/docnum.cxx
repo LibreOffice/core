@@ -1919,7 +1919,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             {
                 // We need to remove the last empty Node again
                 aIdx = aInsPos.nNode;
-                SwCntntNode* pCNd = GetNodes().GoPrevious( &aInsPos.nNode );
+                SwCntntNode* pCNd = SwNodes::GoPrevious( &aInsPos.nNode );
                 aInsPos.nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
 
                 // All, that are in the to-be-deleted Node, need to be
@@ -2074,7 +2074,7 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
     return bResult;
 }
 
-SwNumRule* SwDoc::GetNumRuleAtPos( const SwPosition& rPos ) const
+SwNumRule* SwDoc::GetNumRuleAtPos( const SwPosition& rPos )
 {
     SwNumRule* pRet = NULL;
     SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();

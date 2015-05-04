@@ -1645,7 +1645,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
         case FN_UNO_TABLE_CELL_BACKGROUND:
         {
             SvxBrushItem aBrush(RES_BACKGROUND);
-            pDoc->GetBoxAttr(*pUnoCrsr, aBrush);
+            SwDoc::GetBoxAttr(*pUnoCrsr, aBrush);
             aBrush.PutValue(aValue, pEntry->nMemberId);
             pDoc->SetBoxAttr(*pUnoCrsr, aBrush);
 
@@ -1704,7 +1704,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         case FN_UNO_TABLE_CELL_BACKGROUND:
         {
             SvxBrushItem aBrush(RES_BACKGROUND);
-            if (rTblCrsr.GetDoc()->GetBoxAttr(*pUnoCrsr, aBrush))
+            if (SwDoc::GetBoxAttr(*pUnoCrsr, aBrush))
                 aBrush.QueryValue(aResult, pEntry->nMemberId);
         }
         break;
@@ -1759,7 +1759,7 @@ public:
     Impl() : m_Listeners(m_Mutex) { }
 
     // note: lock mutex before calling this to avoid concurrent update
-    std::pair<sal_uInt16, sal_uInt16> ThrowIfComplex(SwXTextTable &rThis)
+    static std::pair<sal_uInt16, sal_uInt16> ThrowIfComplex(SwXTextTable &rThis)
     {
         sal_uInt16 const nRowCount(rThis.getRowCount());
         sal_uInt16 const nColCount(rThis.getColumnCount());
@@ -2274,7 +2274,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<sheet::XCellRangeData> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
@@ -2285,7 +2285,7 @@ void SAL_CALL SwXTextTable::setDataArray(const uno::Sequence< uno::Sequence< uno
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<sheet::XCellRangeData> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
@@ -2296,7 +2296,7 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData()
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
@@ -2308,7 +2308,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
                                         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
@@ -2322,7 +2322,7 @@ uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
@@ -2334,7 +2334,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
@@ -2346,7 +2346,7 @@ uno::Sequence<OUString> SwXTextTable::getColumnDescriptions()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
@@ -2358,7 +2358,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence<OUString>& rColumnD
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(m_pImpl->ThrowIfComplex(*this));
+    std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
@@ -2788,7 +2788,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                     0);
                     aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
-                    pDoc->GetTabBorders(rCrsr, aSet);
+                    SwDoc::GetTabBorders(rCrsr, aSet);
                     const SvxBoxInfoItem& rBoxInfoItem =
                         static_cast<const SvxBoxInfoItem&>(aSet.Get(SID_ATTR_BORDER_INNER));
                     const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
@@ -3308,7 +3308,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush( RES_BACKGROUND );
-                    pDoc->GetBoxAttr( *pTblCrsr, aBrush );
+                    SwDoc::GetBoxAttr( *pTblCrsr, aBrush );
                     ((SfxPoolItem&)aBrush).PutValue(aValue, pEntry->nMemberId);
                     pDoc->SetBoxAttr( *pTblCrsr, aBrush );
 
@@ -3339,7 +3339,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                     aBoxInfo.SetValid(nValid, true);
 
                     aSet.Put(aBoxInfo);
-                    pDoc->GetTabBorders(rCrsr, aSet);
+                    SwDoc::GetTabBorders(rCrsr, aSet);
 
                     aSet.Put(aBoxInfo);
                     SvxBoxItem aBoxItem(static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX)));
@@ -3416,7 +3416,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush( RES_BACKGROUND );
-                    if(pTblCrsr->GetDoc()->GetBoxAttr( *pTblCrsr, aBrush ))
+                    if(SwDoc::GetBoxAttr( *pTblCrsr, aBrush ))
                         aBrush.QueryValue(aRet, pEntry->nMemberId);
 
                 }
@@ -3429,7 +3429,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                     0);
                     aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
-                    pDoc->GetTabBorders(*pTblCrsr, aSet);
+                    SwDoc::GetTabBorders(*pTblCrsr, aSet);
                     const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
                     rBoxItem.QueryValue(aRet, pEntry->nMemberId);
                 }

@@ -1330,9 +1330,7 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
                     {
                         bChgd = true;
                         SwAuthorField* pAuthorFld = static_cast<SwAuthorField*>(pFmtFld->GetField());
-                        pAuthorFld->SetExpansion( static_cast<SwAuthorFieldType*>(
-                                    pAuthorFld->GetTyp())->Expand(
-                                                pAuthorFld->GetFormat() ) );
+                        pAuthorFld->SetExpansion( SwAuthorFieldType::Expand( pAuthorFld->GetFormat() ) );
                     }
                     break;
 
@@ -1341,8 +1339,7 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
                     {
                         bChgd = true;
                         SwExtUserField* pExtUserFld = static_cast<SwExtUserField*>(pFmtFld->GetField());
-                        pExtUserFld->SetExpansion( static_cast<SwExtUserFieldType*>(
-                                    pExtUserFld->GetTyp())->Expand(
+                        pExtUserFld->SetExpansion( SwExtUserFieldType::Expand(
                                             pExtUserFld->GetSubType(),
                                             pExtUserFld->GetFormat()));
                     }

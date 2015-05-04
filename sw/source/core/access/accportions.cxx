@@ -397,7 +397,7 @@ sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
 void SwAccessiblePortionData::FillBoundary(
     Boundary& rBound,
     const Positions_t& rPositions,
-    size_t nPos ) const
+    size_t nPos )
 {
     rBound.startPos = rPositions[nPos];
     rBound.endPos = rPositions[nPos+1];
@@ -405,7 +405,7 @@ void SwAccessiblePortionData::FillBoundary(
 
 size_t SwAccessiblePortionData::FindBreak(
     const Positions_t& rPositions,
-    sal_Int32 nValue ) const
+    sal_Int32 nValue )
 {
     OSL_ENSURE( rPositions.size() >= 2, "need min + max value" );
     OSL_ENSURE( rPositions[0] <= nValue, "need min value" );
@@ -462,7 +462,7 @@ size_t SwAccessiblePortionData::FindBreak(
 
 size_t SwAccessiblePortionData::FindLastBreak(
     const Positions_t& rPositions,
-    sal_Int32 nValue ) const
+    sal_Int32 nValue )
 {
     size_t nResult = FindBreak( rPositions, nValue );
 

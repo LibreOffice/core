@@ -399,7 +399,7 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
         SwNodeRange aRg( rCSttNd, 1, *rCSttNd.EndOfSectionNode() );
 
         SwNodeIndex aIdx( m_rDoc.GetNodes().GetEndOfAutotext() );
-        SwStartNode* pSttNd = m_rDoc.GetNodes().MakeEmptySection( aIdx, SwFlyStartNode );
+        SwStartNode* pSttNd = SwNodes::MakeEmptySection( aIdx, SwFlyStartNode );
 
         // Set the Anchor/CntntIndex first.
         // Within the copying part, we can access the values (DrawFmt in Headers and Footers)

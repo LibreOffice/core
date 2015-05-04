@@ -858,11 +858,11 @@ void DocxExport::WriteSettings()
 
     // Has Footnotes
     if( m_pAttrOutput->HasFootnotes())
-        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, m_pDoc->GetFtnInfo(), XML_footnote );
+        DocxAttributeOutput::WriteFootnoteEndnotePr( pFS, XML_footnotePr, m_pDoc->GetFtnInfo(), XML_footnote );
 
     // Has Endnotes
     if( m_pAttrOutput->HasEndnotes())
-        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_pDoc->GetEndNoteInfo(), XML_endnote );
+        DocxAttributeOutput::WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_pDoc->GetEndNoteInfo(), XML_endnote );
 
     // Has themeFontLang information
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );

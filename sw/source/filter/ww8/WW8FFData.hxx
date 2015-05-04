@@ -63,7 +63,7 @@ private:
     ::std::vector< OUString > msListEntries;
 
 protected:
-    void WriteOUString(SvStream * pStream, const OUString & rStr, bool bAddZero);
+    static void WriteOUString(SvStream * pStream, const OUString & rStr, bool bAddZero);
 
 public:
     WW8FFData();

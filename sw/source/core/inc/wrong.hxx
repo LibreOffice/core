@@ -77,7 +77,7 @@ private:
 
     SwWrongArea() : mnPos(0), mnLen(0), mpSubList(NULL), mColor(0,0,0), mLineType(WRONGAREA_WAVE) {}
 
-    Color getSmartColor ( com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag)
+    static Color getSmartColor ( com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag)
     {
         try
         {
@@ -103,7 +103,7 @@ private:
         return SwViewOption::GetSmarttagColor( );
     }
 
-    WrongAreaLineType getSmartLineType( com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
+    static WrongAreaLineType getSmartLineType( com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
     {
         try
         {
@@ -137,7 +137,7 @@ private:
         return WRONGAREA_DASHED;
     }
 
-    Color getWrongAreaColor(WrongListType listType,
+    static Color getWrongAreaColor(WrongListType listType,
                             com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
     {
         if (WRONGLIST_SPELL == listType)
@@ -156,7 +156,7 @@ private:
         return SwViewOption::GetSpellColor();
     }
 
-    WrongAreaLineType getWrongAreaLineType(WrongListType listType,
+    static WrongAreaLineType getWrongAreaLineType(WrongListType listType,
                                            com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
     {
         if (WRONGLIST_SPELL == listType)
@@ -185,7 +185,7 @@ class SwWrongList
     sal_Int32 nBeginInvalid;   // Start of the invalid range
     sal_Int32 nEndInvalid;     // End of the invalid range
 
-    void ShiftLeft( sal_Int32 &rPos, sal_Int32 nStart, sal_Int32 nEnd )
+    static void ShiftLeft( sal_Int32 &rPos, sal_Int32 nStart, sal_Int32 nEnd )
     { if( rPos > nStart ) rPos = rPos > nEnd ? rPos - nEnd + nStart : nStart; }
     void _Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
 

@@ -1117,7 +1117,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields, SwPageFrm** p
     }
 
     pRoot->SetAssertFlyPages();
-    pRoot->AssertPageFlys( pStart );
+    SwRootFrm::AssertPageFlys( pStart );
 
     if ( bNotifyFields && (!pImp || !pImp->IsUpdateExpFlds()) )
     {
@@ -1242,7 +1242,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFtn )
             }
         }
         else
-            pRoot->AssertPageFlys( pSibling );
+            SwRootFrm::AssertPageFlys( pSibling );
     }
 
     // For the update of page numbering fields, nDocPos provides

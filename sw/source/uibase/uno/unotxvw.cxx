@@ -395,10 +395,7 @@ uno::Any SwXTextView::getSelection()
                 uno::Reference< drawing::XDrawPageSupplier >  xPageSupp;
                 uno::Reference< frame::XModel > xModel = m_pView->GetDocShell()->GetBaseModel();
                 uno::Reference< lang::XUnoTunnel > xModelTunnel(xModel, uno::UNO_QUERY);
-                SwXTextDocument* pTextDoc = reinterpret_cast<SwXTextDocument*>(xModelTunnel->
-                                getSomething(SwXTextDocument::getUnoTunnelId()));
 
-                SwFmDrawPage* pSvxDrawPage =    pTextDoc->GetDrawPage()->GetSvxPage();
                 uno::Reference< drawing::XShapes >  xShCol = drawing::ShapeCollection::create(
                         comphelper::getProcessComponentContext());
 
@@ -406,7 +403,7 @@ uno::Any SwXTextView::getSelection()
                 for(size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                    uno::Reference< uno::XInterface >  xInt = pSvxDrawPage->GetInterface( pObj );
+                    uno::Reference< uno::XInterface >  xInt = SwFmDrawPage::GetInterface( pObj );
                     uno::Reference< drawing::XShape >  xShape(xInt, uno::UNO_QUERY);
                     xShCol->add(xShape);
                 }
@@ -542,10 +539,9 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         eSelMode != SHELL_MODE_TEXT           )
         return Sequence< Sequence< PropertyValue > > ();
 
-    SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
     SwRubyList aList;
 
-    const sal_uInt16 nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
+    const sal_uInt16 nCount = SwDoc::FillRubyList( *rSh.GetCrsr(), aList, 0 );
     Sequence< Sequence< PropertyValue > > aRet(nCount);
     Sequence< PropertyValue >* pRet = aRet.getArray();
     OUString aString;

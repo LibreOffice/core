@@ -1148,7 +1148,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 SwEditWin& rEditWin = GetView().GetEditWin();
-                rEditWin.SetTextColor(aSet);
+                SwEditWin::SetTextColor(aSet);
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
 
                 // If there is a selection, then set the color on it
@@ -1171,7 +1171,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aSet = COL_TRANSPARENT;
 
             SwEditWin& rEdtWin = GetView().GetEditWin();
-            rEdtWin.SetTextBackColor(aSet);
+            SwEditWin::SetTextBackColor(aSet);
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
 
             if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
@@ -1220,9 +1220,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // and reopened, its color resets, while SwEditWin still holds the old one.
                 Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 if( nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
-                    rEdtWin.SetTextBackColor(aSet);
+                    SwEditWin::SetTextBackColor(aSet);
                 else
-                    rEdtWin.SetTextColor(aSet);
+                    SwEditWin::SetTextColor(aSet);
             }
 
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
@@ -1233,7 +1233,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     rWrtSh.StartUndo( UNDO_INSATTR );
                     rWrtSh.SetAttrItem(
-                        SvxBrushItem( rEdtWin.GetTextBackColor(), RES_CHRATR_BACKGROUND) );
+                        SvxBrushItem( SwEditWin::GetTextBackColor(), RES_CHRATR_BACKGROUND) );
 
                     // Remove MS specific highlight when background is set
                     rWrtSh.SetAttrItem( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
@@ -1258,7 +1258,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
                 else
                     rWrtSh.SetAttrItem(
-                        SvxColorItem( rEdtWin.GetTextColor(), RES_CHRATR_COLOR) );
+                        SvxColorItem( SwEditWin::GetTextColor(), RES_CHRATR_COLOR) );
             }
             else
             {

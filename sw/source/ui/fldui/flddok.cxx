@@ -109,7 +109,7 @@ void SwFldDokPage::Reset(const SfxItemSet* )
     Init(); // general initialisation
 
     // initialise TypeListBox
-    const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
+    const SwFldGroupRgn& rRg = SwFldMgr::GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
     m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();

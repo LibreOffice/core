@@ -309,7 +309,7 @@ SwCntntNode* GoNextNds( SwNodeIndex* pIdx, bool bChk )
 SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
 {
     SwNodeIndex aIdx( *pIdx );
-    SwCntntNode* pNd = aIdx.GetNodes().GoPrevious( &aIdx );
+    SwCntntNode* pNd = SwNodes::GoPrevious( &aIdx );
     if( pNd )
     {
         if( bChk && 1 != pIdx->GetIndex() - aIdx.GetIndex() &&
@@ -790,7 +790,7 @@ SwCntntNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
             {
                 pNd = bSrchForward
                         ? rNodes.GoNextSection( &aPos.nNode, true, !bInReadOnly )
-                        : rNodes.GoPrevSection( &aPos.nNode, true, !bInReadOnly );
+                        : SwNodes::GoPrevSection( &aPos.nNode, true, !bInReadOnly );
                 if( pNd )
                 {
                     aPos.nContent.Assign( pNd, ::GetSttOrEnd( bSrchForward,*pNd ));
@@ -842,10 +842,10 @@ void GoStartSection( SwPosition * pPos )
 {
     // jump to section's beginning
     SwNodes& rNodes = pPos->nNode.GetNodes();
-    sal_uInt16 nLevel = rNodes.GetSectionLevel( pPos->nNode );
+    sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->nNode );
     if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
         nLevel--;
-    do { rNodes.GoStartOfSection( &pPos->nNode ); } while( nLevel-- );
+    do { SwNodes::GoStartOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // already on a CntntNode
     pPos->nNode.GetNode().GetCntntNode()->MakeStartIndex( &pPos->nContent );
@@ -856,10 +856,10 @@ void GoEndSection( SwPosition * pPos )
 {
     // jump to section's beginning/end
     SwNodes& rNodes = pPos->nNode.GetNodes();
-    sal_uInt16 nLevel = rNodes.GetSectionLevel( pPos->nNode );
+    sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->nNode );
     if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
         nLevel--;
-    do { rNodes.GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
+    do { SwNodes::GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // now on a EndNode, thus to the previous CntntNode
     if( GoPreviousNds( &pPos->nNode, true ) )
@@ -979,8 +979,7 @@ bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos ); // position for comparison
-    SwNodes& rNds = aSavePos.nNode.GetNodes();
-    (rNds.*fnMove->fnSection)( &rPos.nNode );
+    (fnMove->fnSection)( &rPos.nNode );
     SwCntntNode *pNd;
     if( 0 == ( pNd = rPos.nNode.GetNode().GetCntntNode()) &&
         0 == ( pNd = (*fnMove->fnNds)( &rPos.nNode, true )) )
@@ -998,8 +997,7 @@ bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos ); // position for comparison
-    SwNodes& rNds = aSavePos.nNode.GetNodes();
-    rNds.GoEndOfSection( &rPos.nNode );
+    SwNodes::GoEndOfSection( &rPos.nNode );
 
     // no other CntntNode existent?
     if( !GoInCntnt( rPam, fnMoveForward ) )
@@ -1007,7 +1005,7 @@ bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
         rPos = aSavePos; // do not change cursor
         return false;
     }
-    (rNds.*fnMove->fnSection)( &rPos.nNode );
+    (fnMove->fnSection)( &rPos.nNode );
     SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
     rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
@@ -1018,8 +1016,7 @@ bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos ); // position for comparison
-    SwNodes& rNds = aSavePos.nNode.GetNodes();
-    rNds.GoStartOfSection( &rPos.nNode );
+    SwNodes::GoStartOfSection( &rPos.nNode );
 
     // no further CntntNode existent?
     if( !GoInCntnt( rPam, fnMoveBackward ))
@@ -1027,7 +1024,7 @@ bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
         rPos = aSavePos; // do not change cursor
         return false;
     }
-    (rNds.*fnMove->fnSection)( &rPos.nNode );
+    (fnMove->fnSection)( &rPos.nNode );
     SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
     rPos.nContent.Assign( pNd,
                             ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ));

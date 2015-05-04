@@ -92,8 +92,7 @@ bool SwCrsrShell::GoNextCell( bool bAppendLine )
 
                 // the document might change; w/o Action views would not be notified
                 static_cast<SwEditShell*>(this)->StartAllAction();
-                bRet = mpDoc->InsertRow( pTblNd->GetTable().
-                                    SelLineFromBox( pTableBox, aBoxes, false ));
+                bRet = mpDoc->InsertRow( SwTable::SelLineFromBox( pTableBox, aBoxes, false ));
                 static_cast<SwEditShell*>(this)->EndAllAction();
             }
         }
@@ -434,11 +433,10 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
         return false;
     }
 
-    SwNodes& rNds = aTmp.GetNode().GetNodes();
     SwCntntNode* pCNd = aTmp.GetNode().GetCntntNode();
 
     if( !pCNd )
-        pCNd = rNds.GoPrevious( &aTmp );
+        pCNd = SwNodes::GoPrevious( &aTmp );
 
     if ( !pCNd )
         return false;
@@ -459,7 +457,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
 
             pCNd = aTmp.GetNode().GetCntntNode();
             if( 0 == pCNd )
-                pCNd = rNds.GoPrevious( &aTmp );
+                pCNd = SwNodes::GoPrevious( &aTmp );
 
             if ( !pCNd )
                 return false;

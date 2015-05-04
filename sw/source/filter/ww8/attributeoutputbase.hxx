@@ -363,7 +363,7 @@ public:
 
 protected:
 
-    void GetNumberPara( OUString& rStr, const SwField& rFld );
+    static void GetNumberPara( OUString& rStr, const SwField& rFld );
 
     /// Output frames - the implementation.
     virtual void OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point& rNdTopLeft ) = 0;

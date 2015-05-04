@@ -657,7 +657,7 @@ void SwTxtFrm::HideAndShowObjects()
  */
 sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
                               const sal_Int32 nStart,
-                              const sal_Int32 nEnd ) const
+                              const sal_Int32 nEnd )
 {
     sal_Int32 nFound = nStart;
     const sal_Int32 nEndLine = std::min( nEnd, rTxt.getLength() - 1 );

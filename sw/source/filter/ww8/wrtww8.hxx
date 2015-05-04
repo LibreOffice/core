@@ -217,7 +217,7 @@ public:
     sal_uInt16 CurrentNumberOfColumns( const SwDoc &rDoc ) const;
 
     /// Number of columns of the provided WW8_SepInfo.
-    sal_uInt16 NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo& rInfo ) const;
+    static sal_uInt16 NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo& rInfo );
 
     bool DocumentIsProtected() const { return mbDocumentIsProtected; }
 
@@ -612,7 +612,7 @@ public:
     bool HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
     /// Find the bookmark name.
-    OUString GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
+    static OUString GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
     /// Add a bookmark converted to a Word name.
     void AppendWordBookmark( const OUString& rName );
@@ -710,10 +710,10 @@ public:
     void WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader);
 
     /// Format of the section.
-    const SwSectionFmt* GetSectionFormat( const SwNode& rNd ) const;
+    static const SwSectionFmt* GetSectionFormat( const SwNode& rNd );
 
     /// Line number of the section start.
-    sal_uLong GetSectionLineNo( const SfxItemSet* pSet, const SwNode& rNd ) const;
+    static sal_uLong GetSectionLineNo( const SfxItemSet* pSet, const SwNode& rNd );
 
     /// Start new section.
     void OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen = false, bool isTextNodeEmpty = false);
@@ -1567,7 +1567,7 @@ class MSWordStyles
     /// Outputs attributes of one style.
     void WriteProperties( const SwFmt* pFmt, bool bPap, sal_uInt16 nPos, bool bInsDefCharSiz );
 
-    sal_uInt16 GetWWId( const SwFmt& rFmt ) const;
+    static sal_uInt16 GetWWId( const SwFmt& rFmt );
 
     void SetStyleDefaults( const SwFmt& rFmt, bool bPap );
 

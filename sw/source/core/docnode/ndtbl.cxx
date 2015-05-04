@@ -381,7 +381,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         pCntntNd (aka the node the table is inserted at) thus causing
         SwNodes::InsertTable to propagate an adjust item if
         necessary. */
-    SwTableNode *pTblNd = GetNodes().InsertTable(
+    SwTableNode *pTblNd = SwNodes::InsertTable(
         rPos.nNode,
         nCols,
         pBodyColl,
@@ -2457,7 +2457,7 @@ void SwTableNode::RemoveRedlines()
 }
 
 void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
-                        const SwCellFrm* pBoxFrm ) const
+                        const SwCellFrm* pBoxFrm )
 {
     const SwTableBox* pBox = 0;
     SwTabFrm *pTab = 0;
@@ -2535,7 +2535,7 @@ static bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
 }
 
 void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
-                        const SwCellFrm* pBoxFrm ) const
+                        const SwCellFrm* pBoxFrm )
 {
     OSL_ENSURE( pBoxFrm, "GetTabRows called without pBoxFrm" );
 

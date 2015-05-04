@@ -50,8 +50,8 @@ class SwDrawView : public FmFormView
         optional input parameter - 'child' object, which will not be considered
         on the calculation of the maximal order number
     */
-    sal_uInt32 _GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
-                                   const SdrObject* _pExclChildObj = 0L ) const;
+    static sal_uInt32 _GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
+                                   const SdrObject* _pExclChildObj = 0L );
 
     /** method to move 'repeated' objects of the given moved object to the
         according level

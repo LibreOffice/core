@@ -62,7 +62,7 @@ class FormatLevel
 public:
     inline FormatLevel()  { ++nLevel; }
     inline ~FormatLevel() { --nLevel; }
-    inline sal_uInt16 GetLevel() const { return nLevel; }
+    static inline sal_uInt16 GetLevel() { return nLevel; }
     static bool LastLevel() { return 10 < nLevel; }
 };
 sal_uInt16 FormatLevel::nLevel = 0;
@@ -624,13 +624,13 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
                     {
                         if( !pEndBoss )
                             pEndBoss = pFoll->FindFtnBossFrm();
-                        pEndBoss->ChangeFtnRef( pFoll, static_cast<const SwTxtFtn*>(pHt), this );
+                        SwFtnBossFrm::ChangeFtnRef( pFoll, static_cast<const SwTxtFtn*>(pHt), this );
                     }
                     else
                     {
                         if( !pFtnBoss )
                             pFtnBoss = pFoll->FindFtnBossFrm( true );
-                        pFtnBoss->ChangeFtnRef( pFoll, static_cast<const SwTxtFtn*>(pHt), this );
+                        SwFtnBossFrm::ChangeFtnRef( pFoll, static_cast<const SwTxtFtn*>(pHt), this );
                     }
                     SetFtn( true );
                 }
@@ -717,13 +717,13 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const sal_Int32 nTxtPos )
                     {
                         if( !pEndBoss )
                             pEndBoss = FindFtnBossFrm();
-                        pEndBoss->ChangeFtnRef( this, static_cast<const SwTxtFtn*>(pHt), pNew );
+                        SwFtnBossFrm::ChangeFtnRef( this, static_cast<const SwTxtFtn*>(pHt), pNew );
                     }
                     else
                     {
                         if( !pFtnBoss )
                             pFtnBoss = FindFtnBossFrm( true );
-                        pFtnBoss->ChangeFtnRef( this, static_cast<const SwTxtFtn*>(pHt), pNew );
+                        SwFtnBossFrm::ChangeFtnRef( this, static_cast<const SwTxtFtn*>(pHt), pNew );
                     }
                     pNew->SetFtn( true );
                 }
@@ -1739,7 +1739,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         SetEmpty( false );
         // In order to not get confused by nested Formats
         FormatLevel aLevel;
-        if( 12 == aLevel.GetLevel() )
+        if( 12 == FormatLevel::GetLevel() )
             return;
 
         // We could be possibly not allowed to alter the format information

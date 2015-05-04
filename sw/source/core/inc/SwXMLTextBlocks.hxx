@@ -54,7 +54,7 @@ public:
     SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString& rFile );
     void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyTxt = false );
     virtual void   AddName( const OUString&, const OUString&, bool bOnlyTxt = false ) SAL_OVERRIDE;
-    OUString GeneratePackageName ( const OUString& rShort );
+    static OUString GeneratePackageName ( const OUString& rShort );
     virtual ~SwXMLTextBlocks();
     virtual sal_uLong Delete( sal_uInt16 ) SAL_OVERRIDE;
     virtual sal_uLong Rename( sal_uInt16, const OUString&, const OUString& ) SAL_OVERRIDE;

@@ -996,7 +996,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if(xBeamerFrame.is())
     {
         SwDBData aData = m_pWrtShell->GetDBData();
-        SW_MOD()->ShowDBObj( *this, aData );
+        SwModule::ShowDBObj( *this, aData );
     }
 
     // has anybody calls the attrchanged handler in the constructor?

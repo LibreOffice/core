@@ -292,7 +292,7 @@ public:
 
     const sal_uInt16 *GetWhichMap() const { return &aWhichMap[0]; }
 
-    void InsertMapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
+    static void InsertMapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                          const SvxCSS1PropertyInfo& rProp, CSS1Map& rMap );
 
     void InsertId( const OUString& rId, const SfxItemSet& rItemSet,
@@ -316,7 +316,7 @@ public:
 
     SvxCSS1MapEntry* GetTag( const OUString& rTag );
 
-    void MergeStyles( const SfxItemSet& rSrcSet,
+    static void MergeStyles( const SfxItemSet& rSrcSet,
                       const SvxCSS1PropertyInfo& rSrcInfo,
                       SfxItemSet& rTargetSet,
                       SvxCSS1PropertyInfo& rTargetInfo,

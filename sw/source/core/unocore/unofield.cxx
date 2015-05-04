@@ -2536,7 +2536,7 @@ void SAL_CALL SwXTextField::update() throw (uno::RuntimeException, std::exceptio
             case RES_EXTUSERFLD:
             {
                 SwExtUserField* pExtUserFld = static_cast<SwExtUserField*>(pFld);
-                pExtUserFld->SetExpansion( static_cast<SwExtUserFieldType*>(pFld->GetTyp())->Expand(
+                pExtUserFld->SetExpansion( SwExtUserFieldType::Expand(
                                             pExtUserFld->GetSubType(),
                                             pExtUserFld->GetFormat() ) );
             }
@@ -2545,7 +2545,7 @@ void SAL_CALL SwXTextField::update() throw (uno::RuntimeException, std::exceptio
             case RES_AUTHORFLD:
             {
                 SwAuthorField* pAuthorFld = static_cast<SwAuthorField*>(pFld);
-                pAuthorFld->SetExpansion( static_cast<SwAuthorFieldType*>(pFld->GetTyp())->Expand(
+                pAuthorFld->SetExpansion( SwAuthorFieldType::Expand(
                                             pAuthorFld->GetFormat() ) );
             }
             break;

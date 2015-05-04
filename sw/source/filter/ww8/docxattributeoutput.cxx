@@ -6718,7 +6718,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     sal_Int32 nBody = bFootnotes? XML_footnotes: XML_endnotes;
     sal_Int32 nItem = bFootnotes? XML_footnote:  XML_endnote;
 
-    m_pSerializer->startElementNS( XML_w, nBody, m_rExport.MainXmlNamespaces() );
+    m_pSerializer->startElementNS( XML_w, nBody, DocxExport::MainXmlNamespaces() );
 
     sal_Int32 nIndex = 0;
 

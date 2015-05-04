@@ -99,7 +99,7 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 }
 
 void SwViewOption::DrawRect( OutputDevice *pOut,
-                             const SwRect &rRect, long nCol ) const
+                             const SwRect &rRect, long nCol )
 {
     if ( pOut->GetOutDevType() != OUTDEV_PRINTER )
     {
@@ -114,7 +114,7 @@ void SwViewOption::DrawRect( OutputDevice *pOut,
 }
 
 void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
-                                    const SwRect &rRect ) const
+                                    const SwRect &rRect )
 {
     Color aOldColor(pOut->GetLineColor());
     Color aOldFillColor( pOut->GetFillColor() );
@@ -125,13 +125,13 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
     pOut->SetLineColor( aOldColor );
 }
 
-sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
+sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut )
 {
     assert(pOut && "no Outdev");
     return sal_uInt16(pOut->GetTextWidth( OUString(aPostItStr )));
 }
 
-void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript ) const
+void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript )
 {
     if( pOut && bIsScript )
     {
@@ -303,7 +303,7 @@ void SwViewOption::Init( vcl::Window *pWin )
     }
 }
 
-bool SwViewOption::IsAutoCompleteWords() const
+bool SwViewOption::IsAutoCompleteWords()
 {
     const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
     return rFlags.bAutoCmpltCollectWords;

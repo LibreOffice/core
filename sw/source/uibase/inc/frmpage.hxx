@@ -165,8 +165,8 @@ class SwFrmPage: public SfxTabPage
                                ListBox& _rLB,
                                FixedText& _rFT );
     sal_Int32       GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
-    sal_Int16       GetAlignment(FrmMap *pMap, sal_Int32 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
-    sal_Int16       GetRelation(FrmMap *pMap, ListBox &rRelationLB);
+    static sal_Int16 GetAlignment(FrmMap *pMap, sal_Int32 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
+    static sal_Int16 GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     RndStdIds       GetAnchor();
 
     void setOptimalFrmWidth();

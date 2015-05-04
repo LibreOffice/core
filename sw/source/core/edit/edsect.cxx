@@ -63,7 +63,7 @@ bool SwEditShell::IsInsRegionAvailable() const
     if( pCrsr->GetNext() != pCrsr )
         return false;
     if( pCrsr->HasMark() )
-        return 0 != GetDoc()->IsInsRegionAvailable( *pCrsr );
+        return 0 != SwDoc::IsInsRegionAvailable( *pCrsr );
 
     return true;
 }
@@ -73,7 +73,7 @@ const SwSection* SwEditShell::GetCurrSection() const
     if( IsTableMode() )
         return 0;
 
-    return GetDoc()->GetCurrSection( *GetCrsr()->GetPoint() );
+    return SwDoc::GetCurrSection( *GetCrsr()->GetPoint() );
 }
 
 /** Deliver the responsible area of the columns.

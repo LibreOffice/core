@@ -174,7 +174,7 @@ public:
     /// Returns the relationd id
     OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr m_pSerializer );
     OString WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaType, const OUString& sRelationType, const OUString& sFileExtension );
-    bool lcl_CopyStream( css::uno::Reference< css::io::XInputStream> xIn, css::uno::Reference< css::io::XOutputStream > xOut );
+    static bool lcl_CopyStream( css::uno::Reference< css::io::XInputStream> xIn, css::uno::Reference< css::io::XOutputStream > xOut );
 
     /// Writes the shape using drawingML syntax.
     void OutputDML( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
@@ -253,7 +253,7 @@ private:
 
 public:
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
-    sax_fastparser::XFastAttributeListRef MainXmlNamespaces();
+    static sax_fastparser::XFastAttributeListRef MainXmlNamespaces();
 
     /// FIXME this is temporary, remotely reminding the method of the same
     /// name in WW8Export.

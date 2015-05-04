@@ -29,7 +29,7 @@ class XmlPortionDumper:public SwPortionHandler
     xmlTextWriterPtr writer;
     sal_Int32 ofs;
 
-    const char* getTypeName( sal_uInt16 nType )
+    static const char* getTypeName( sal_uInt16 nType )
     {
         switch ( nType )
         {

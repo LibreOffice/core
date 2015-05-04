@@ -859,21 +859,20 @@ private:
 
     void GetPageULData(const wwSection &rNewSection,
         wwULSpaceData& rData) const;
-    void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData,
-        const wwSection &rSection) const;
+    static void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData,
+        const wwSection &rSection);
 
-    void SetPage(SwPageDesc &rPageDesc, SwFrmFmt &rFmt,
-        const wwSection &rSection, bool bIgnoreCols) const;
+    static void SetPage(SwPageDesc &rPageDesc, SwFrmFmt &rFmt,
+        const wwSection &rSection, bool bIgnoreCols);
 
-    void SetNumberingType(const wwSection &rNewSection, SwPageDesc &rPageDesc)
-        const;
+    static void SetNumberingType(const wwSection &rNewSection, SwPageDesc &rPageDesc);
 
     void SetUseOn(wwSection &rSection);
     void SetHdFt(wwSection &rSection, int nSect, const wwSection *pPrevious);
 
     SwSectionFmt *InsertSection(SwPaM& rMyPaM, wwSection &rSection);
-    bool SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
-        sal_uInt32 nNetWidth) const;
+    static bool SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
+        sal_uInt32 nNetWidth);
     bool SectionIsProtected(const wwSection &rSection) const;
     void SetLeftRight(wwSection &rSection);
     bool IsNewDoc() const;
@@ -1414,8 +1413,8 @@ private:
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCpOfs);
     bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd, long nCpOfs);
-    bool LangUsesHindiNumbers(sal_uInt16 nLang);
-    sal_Unicode TranslateToHindiNumbers(sal_Unicode);
+    static bool LangUsesHindiNumbers(sal_uInt16 nLang);
+    static sal_Unicode TranslateToHindiNumbers(sal_Unicode);
 
     void SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection);
 
@@ -1450,7 +1449,7 @@ private:
     const SfxPoolItem* GetFmtAttr( sal_uInt16 nWhich );
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
 
-    bool IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn = false) const;
+    static bool IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn = false);
 
     //Set closest writer border equivalent into rBox from pbrc, optionally
     //recording true winword dimensions in pSizeArray. nSetBorders to mark a
@@ -1460,27 +1459,27 @@ private:
 
     // Note #i20672# we can't properly support between lines so best to ignore
     // them for now
-    bool SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
-        short *pSizeArray=0, sal_uInt8 nSetBorders=0xFF) const;
-    void GetBorderDistance(const WW8_BRCVer9* pbrc, Rectangle& rInnerDist) const;
-    sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
-    bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
-        const WW8_BRCVer9& aRightBrc) const;
+    static bool SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
+        short *pSizeArray=0, sal_uInt8 nSetBorders=0xFF);
+    static void GetBorderDistance(const WW8_BRCVer9* pbrc, Rectangle& rInnerDist);
+    static sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
+    static bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
+        const WW8_BRCVer9& aRightBrc);
     //returns true is a shadow was set
-    bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRCVer9 *pbrc,
-        short *SizeArray=0) const;
-    void SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const;
+    static bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRCVer9 *pbrc,
+        short *SizeArray=0);
+    static void SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection);
 
-    sal_Int32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
+    static sal_Int32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
         MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, sal_Int32 &rLineWidth,
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
         MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, Rectangle &rInnerDist );
-    void AdjustLRWrapForWordMargins(const SvxMSDffImportRec &rRecord,
+    static void AdjustLRWrapForWordMargins(const SvxMSDffImportRec &rRecord,
         SvxLRSpaceItem &rLR);
-    void AdjustULWrapForWordMargins(const SvxMSDffImportRec &rRecord,
+    static void AdjustULWrapForWordMargins(const SvxMSDffImportRec &rRecord,
         SvxULSpaceItem &rUL);
-    void MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord, SwFrmFmt* pFlyFmt);
+    static void MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord, SwFrmFmt* pFlyFmt);
 
     void SetAttributesAtGrfNode(SvxMSDffImportRec const* pRecord,
             SwFrmFmt *pFlyFmt, WW8_FSPA *pF);
@@ -1496,7 +1495,7 @@ private:
     bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
         const WW8_TablePos *pTabPos);
-    void StripNegativeAfterIndent(SwFrmFmt *pFlyFmt) const;
+    static void StripNegativeAfterIndent(SwFrmFmt *pFlyFmt);
 
     void EndSpecial();
     bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);
@@ -1505,7 +1504,7 @@ private:
     bool ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
        const WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos, bool* pDelIt);
 
-    void ReplaceObj(const SdrObject &rReplaceTextObj,
+    static void ReplaceObj(const SdrObject &rReplaceTextObj,
         SdrObject &rSubObj);
 
     SwFlyFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD,
@@ -1726,7 +1725,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8*, short nLen);
     void Read_SubSuper(         sal_uInt16, const sal_uInt8*, short nLen );
     bool ConvertSubToGraphicPlacement();
-    SwFrmFmt *ContainsSingleInlineGraphic(const SwPaM &rRegion);
+    static SwFrmFmt *ContainsSingleInlineGraphic(const SwPaM &rRegion);
     void Read_SubSuperProp(     sal_uInt16, const sal_uInt8*, short nLen );
     void Read_Underline(        sal_uInt16, const sal_uInt8*, short nLen );
     void Read_TxtColor(         sal_uInt16, const sal_uInt8*, short nLen );
@@ -1871,7 +1870,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     eF_ResT Read_F_OCX(WW8FieldDesc*, OUString&);
     eF_ResT Read_F_Hyperlink(WW8FieldDesc*, OUString& rStr);
-        eF_ResT Read_F_Shape(WW8FieldDesc* pF, OUString& rStr);
+    eF_ResT Read_F_Shape(WW8FieldDesc* pF, OUString& rStr);
     eF_ResT Read_F_HTMLControl( WW8FieldDesc* pF, OUString& rStr);
 
     void DeleteFormImpl();

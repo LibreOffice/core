@@ -123,7 +123,7 @@ bool SwDoc::IsUsed( const SwModify& rModify ) const
 }
 
 // See if the NumRule is used
-bool SwDoc::IsUsed( const SwNumRule& rRule ) const
+bool SwDoc::IsUsed( const SwNumRule& rRule )
 {
     bool bUsed = rRule.GetTxtNodeListSize() > 0 ||
                      rRule.GetParagraphStyleListSize() > 0;

@@ -92,10 +92,10 @@ void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
 /// Collect all listing markers
 sal_uInt16 SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
 {
-    return GetDoc()->GetCurTOXMark( *GetCrsr()->Start(), rMarks );
+    return SwDoc::GetCurTOXMark( *GetCrsr()->Start(), rMarks );
 }
 
-bool SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
+bool SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
@@ -199,7 +199,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 /// Get current listing before or at the Cursor
 const SwTOXBase* SwEditShell::GetCurTOX() const
 {
-    return GetDoc()->GetCurTOX( *GetCrsr()->GetPoint() );
+    return SwDoc::GetCurTOX( *GetCrsr()->GetPoint() );
 }
 
 bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )

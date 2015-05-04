@@ -102,7 +102,7 @@ SwLinePortion *SwBlankPortion::Compress() { return this; }
  * Causes problems with Fly
  */
 sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
-    sal_Int32 nIdx, bool bUnderflow ) const
+    sal_Int32 nIdx, bool bUnderflow )
 {
     if( rInf.StopUnderflow() )
         return 0;
@@ -220,7 +220,7 @@ void SwPostItsPortion::Paint( const SwTxtPaintInfo &rInf ) const
 sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // Unbelievable: PostIts are always visible
-    return rInf.OnWin() ? rInf.GetOpt().GetPostItsWidth( rInf.GetOut() ) : 0;
+    return rInf.OnWin() ? SwViewOption::GetPostItsWidth( rInf.GetOut() ) : 0;
 }
 
 bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )

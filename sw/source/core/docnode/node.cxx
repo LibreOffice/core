@@ -370,7 +370,7 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
     else if( ND_ENDNODE & nNodeType )
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
-        pNd = GetNodes().GoPrevious( &aIdx );
+        pNd = SwNodes::GoPrevious( &aIdx );
     }
     else
         pNd = GetCntntNode();
@@ -472,7 +472,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
     else if( ND_ENDNODE & nNodeType )
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
-        pNode = GetNodes().GoPrevious( &aIdx );
+        pNode = SwNodes::GoPrevious( &aIdx );
     }
     else
     {

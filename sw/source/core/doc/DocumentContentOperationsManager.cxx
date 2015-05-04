@@ -1653,7 +1653,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
 
         {
             ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-            SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection(
+            SwStartNode* pSttNd = SwNodes::MakeEmptySection(
                                 SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ));
             aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
             // copy without Frames
@@ -1661,8 +1661,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
 
             aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
             aPam.SetMark();
-            SwCntntNode* pNode =
-                pDoc->GetNodes().GoPrevious( &aPam.GetMark()->nNode );
+            SwCntntNode* pNode = SwNodes::GoPrevious( &aPam.GetMark()->nNode );
             pNode->MakeEndIndex( &aPam.GetMark()->nContent );
 
             aPam.GetPoint()->nNode = *aPam.GetNode().StartOfSectionNode();
@@ -1727,7 +1726,7 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
     {
         // move all Crsr/StkCrsr/UnoCrsr out of the to-be-deleted area
         SwNodeIndex aMvStt( aSttIdx, 1 );
-        m_rDoc.CorrAbs( aMvStt, aEndIdx, SwPosition( aSttIdx ), true );
+        SwDoc::CorrAbs( aMvStt, aEndIdx, SwPosition( aSttIdx ), true );
     }
 
     m_rDoc.GetNodes().DelNodes( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() + 1 );
@@ -1841,7 +1840,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         }
         else
         {
-            m_rDoc.CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), true );
+            SwDoc::CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), true );
         }
 
             // What's with Flys?
@@ -2571,7 +2570,7 @@ SwFlyFrmFmt* DocumentContentOperationsManager::Insert( const SwPaM &rRg,
 {
     if( !pFrmFmt )
         pFrmFmt = m_rDoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
-    SwGrfNode* pSwGrfNode = m_rDoc.GetNodes().MakeGrfNode(
+    SwGrfNode* pSwGrfNode = SwNodes::MakeGrfNode(
                             SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
                             rGrfName, rFltName, pGraphic,
                             m_rDoc.GetDfltGrfFmtColl() );
@@ -2587,7 +2586,7 @@ SwFlyFrmFmt* DocumentContentOperationsManager::Insert( const SwPaM &rRg, const G
 {
     if( !pFrmFmt )
         pFrmFmt = m_rDoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
-    SwGrfNode* pSwGrfNode = m_rDoc.GetNodes().MakeGrfNode(
+    SwGrfNode* pSwGrfNode = SwNodes::MakeGrfNode(
                             SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
                             rGrfObj, m_rDoc.GetDfltGrfFmtColl() );
     SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,

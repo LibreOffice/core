@@ -155,7 +155,7 @@ public:
 class SwHyphIter : public SwLinguIter
 {
     bool bOldIdle;
-    void DelSoftHyph( SwPaM &rPam );
+    static void DelSoftHyph( SwPaM &rPam );
 
 public:
     SwHyphIter() : bOldIdle(false) {}
@@ -167,7 +167,7 @@ public:
 
     uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
-    bool IsAuto();
+    static bool IsAuto();
     void InsertSoftHyph( const sal_Int32 nHyphPos );
     void ShowSelection();
 };
@@ -490,7 +490,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 
             if( bAuto && xHyphWord.is() )
             {
-                pMySh->InsertSoftHyph( xHyphWord->getHyphenationPos() + 1);
+                SwEditShell::InsertSoftHyph( xHyphWord->getHyphenationPos() + 1);
             }
         } while( bAuto && xHyphWord.is() ); //end of do-while
         bGoOn = !xHyphWord.is() && GetCrsrCnt() > 1;
@@ -571,7 +571,7 @@ void SwHyphIter::InsertSoftHyph( const sal_Int32 nHyphPos )
     pCrsr->SetMark();
 }
 
-bool SwEditShell::HasLastSentenceGotGrammarChecked() const
+bool SwEditShell::HasLastSentenceGotGrammarChecked()
 {
     bool bTextWasGrammarChecked = false;
     if (pSpellIter)
@@ -589,12 +589,12 @@ bool SwEditShell::HasLastSentenceGotGrammarChecked() const
     return bTextWasGrammarChecked;
 }
 
-bool SwEditShell::HasConvIter() const
+bool SwEditShell::HasConvIter()
 {
     return 0 != pConvIter;
 }
 
-bool SwEditShell::HasHyphIter() const
+bool SwEditShell::HasHyphIter()
 {
     return 0 != pHyphIter;
 }

@@ -121,7 +121,7 @@ class SwNoteProps: public utl::ConfigItem
         {
             return bIsShowAnchor;
         }
-        ::com::sun::star::uno::Sequence< OUString >& GetPropertyNames()
+        static ::com::sun::star::uno::Sequence< OUString >& GetPropertyNames()
         {
             static ::com::sun::star::uno::Sequence< OUString > aNames;
             if(!aNames.getLength())

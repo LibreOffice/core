@@ -697,7 +697,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTb
     return aStr;
 }
 
-const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm ) const
+const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm )
 {
     const SwFrmFmts& rTblFmts = *rDoc.GetTblFrmFmts();
     const SwTable* pTmpTbl = 0, *pRet = 0;
@@ -916,7 +916,7 @@ void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, OUString& ,
 
 void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                                 const SwTableBox& rEndBox,
-                                SwSelBoxes& rBoxes ) const
+                                SwSelBoxes& rBoxes )
 {
     // get all selected boxes via layout
     const SwLayoutFrm *pStt, *pEnd;

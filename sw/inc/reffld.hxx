@@ -91,9 +91,9 @@ private:
     virtual SwField*    Copy() const SAL_OVERRIDE;
 
     // #i81002#
-    OUString MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
+    static OUString MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                           const SwTxtNode& rTxtNodeOfReferencedItem,
-                          const sal_uInt32 nRefNumFormat ) const;
+                          const sal_uInt32 nRefNumFormat );
 
 public:
     SwGetRefField( SwGetRefFieldType*, const OUString& rSetRef,

@@ -2127,7 +2127,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                         nPageWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
                 }
 
-                OString sWidth = OString::number(rHTMLWrt.ToPixel(nPageWidth - nLeft - nRight, false));
+                OString sWidth = OString::number(SwHTMLWriter::ToPixel(nPageWidth - nLeft - nRight, false));
                 aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_width, sWidth);
 
                 if( !nLeft )
@@ -2146,7 +2146,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( pBorderLine )
             {
                 sal_uInt16 nWidth = pBorderLine->GetScaledWidth();
-                OString sWidth = OString::number(rHTMLWrt.ToPixel(nWidth, false));
+                OString sWidth = OString::number(SwHTMLWriter::ToPixel(nWidth, false));
                 aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_size, sWidth);
 
                 const Color& rBorderColor = pBorderLine->GetColor();
@@ -2667,7 +2667,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     return rHTMLWrt;
 }
 
-sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal, const bool bVert ) const
+sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal, const bool bVert )
 {
     if( Application::GetDefaultDevice() && nVal )
     {

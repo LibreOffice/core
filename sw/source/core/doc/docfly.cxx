@@ -671,7 +671,7 @@ bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
 }
 
 void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, OUString* pGrfName,
-                       OUString* pFltName ) const
+                       OUString* pFltName )
 {
     SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
     const SwGrfNode* pGrfNd = aIdx.GetNode().GetGrfNode();

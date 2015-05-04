@@ -74,8 +74,8 @@ private:
 
     SwPaM *pInsRing, *pDelRing;
 
-    sal_uLong PrevIdx( const SwNode* pNd );
-    sal_uLong NextIdx( const SwNode* pNd );
+    static sal_uLong PrevIdx( const SwNode* pNd );
+    static sal_uLong NextIdx( const SwNode* pNd );
 
     vector< CompareLine* > aLines;
     bool m_bRecordDiff;
@@ -265,7 +265,7 @@ private:
     int *pPos1, *pPos2;
     int nCnt1, nCnt2;		// number of words
 
-    void CalcPositions( int *pPos, const SwTxtNode *pTxtNd, int &nCnt );
+    static void CalcPositions( int *pPos, const SwTxtNode *pTxtNd, int &nCnt );
 
 public:
     WordArrayComparator( const SwTxtNode *pNode1, const SwTxtNode *pNode2 );
@@ -326,7 +326,7 @@ protected:
                     int nEnd1 = 0, int nStt2 = 0, int nEnd2 = 0 );
 
 public:
-    int IgnoreIsolatedPieces( int *pLcs1, int *pLcs2, int nLen1, int nLen2,
+    static int IgnoreIsolatedPieces( int *pLcs1, int *pLcs2, int nLen1, int nLen2,
                                 int nLcsLen, int nPieceLen );
 };
 
@@ -1319,7 +1319,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 
             if( CmpOptions.nIgnoreLen )
             {
-                nLcsLen = aSeq.IgnoreIsolatedPieces( &aTmpLcsDst[0], &aTmpLcsSrc[0],
+                nLcsLen = CommonSubseq::IgnoreIsolatedPieces( &aTmpLcsDst[0], &aTmpLcsSrc[0],
                                                 aCmp.GetLen1(), aCmp.GetLen2(),
                                                 nLcsLen, CmpOptions.nIgnoreLen );
             }
@@ -1336,7 +1336,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 
             if( CmpOptions.nIgnoreLen )
             {
-                nLcsLen = aSeq.IgnoreIsolatedPieces( &aLcsDst[0], &aLcsSrc[0], nDstLen,
+                nLcsLen = CommonSubseq::IgnoreIsolatedPieces( &aLcsDst[0], &aLcsSrc[0], nDstLen,
                                                     nSrcLen, nLcsLen,
                                                     CmpOptions.nIgnoreLen );
             }

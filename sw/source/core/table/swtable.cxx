@@ -86,7 +86,7 @@ class SwTableBox_Impl
     long mnRowSpan;
     bool mbDummyFlag;
 
-    void SetNewCol( Color** ppCol, const Color* pNewCol );
+    static void SetNewCol( Color** ppCol, const Color* pNewCol );
 public:
     SwTableBox_Impl() : mpUserColor(0), mpNumFmtColor(0), mnRowSpan(1),
         mbDummyFlag( false ) {}

@@ -364,7 +364,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
         {
             OSL_ENSURE( false, "here, something wrong happened" );
             aFrmNdIdx = rNds.GetEndOfContent();
-            pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, true, false );
+            pFrmNd = SwNodes::GoPrevSection( &aFrmNdIdx, true, false );
             if( pFrmNd && !static_cast<SwCntntNode*>(pFrmNd)->HasWriterListeners() )
                 pFrmNd = 0;
             OSL_ENSURE( pFrmNd, "ChgNode() - no FrameNode found" );
@@ -1248,14 +1248,15 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
  * @param rIdx position of the node
  * @return section level at the given position
  */
-sal_uInt16 SwNodes::GetSectionLevel(const SwNodeIndex &rIdx) const {
+sal_uInt16 SwNodes::GetSectionLevel(const SwNodeIndex &rIdx)
+{
     // special treatment for 1st Node
     if(rIdx == 0) return 1;
     // no recursion! This calles a SwNode::GetSectionLevel (missing "s")
     return rIdx.GetNode().GetSectionLevel();
 }
 
-void SwNodes::GoStartOfSection(SwNodeIndex *pIdx) const
+void SwNodes::GoStartOfSection(SwNodeIndex *pIdx)
 {
     // after the next start node
     SwNodeIndex aTmp( *pIdx->GetNode().StartOfSectionNode(), +1 );
@@ -1273,7 +1274,7 @@ void SwNodes::GoStartOfSection(SwNodeIndex *pIdx) const
     (*pIdx) = aTmp;     // is on a ContentNode
 }
 
-void SwNodes::GoEndOfSection(SwNodeIndex *pIdx) const
+void SwNodes::GoEndOfSection(SwNodeIndex *pIdx)
 {
     if( !pIdx->GetNode().IsEndNode() )
         (*pIdx) = *pIdx->GetNode().EndOfSectionNode();
@@ -1296,7 +1297,7 @@ SwCntntNode* SwNodes::GoNext(SwNodeIndex *pIdx) const
     return static_cast<SwCntntNode*>(pNd);
 }
 
-SwCntntNode* SwNodes::GoPrevious(SwNodeIndex *pIdx) const
+SwCntntNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
 {
     if( !pIdx->GetIndex() )
         return 0;
@@ -1434,7 +1435,7 @@ static bool lcl_HighestLevel( const SwNodePtr& rpNode, void * pPara )
  */
 sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
 {
-    HighLevel aPara( rNodes.GetSectionLevel( rRange.aStart ));
+    HighLevel aPara( SwNodes::GetSectionLevel( rRange.aStart ));
     rNodes.ForEach( rRange.aStart, rRange.aEnd, lcl_HighestLevel, &aPara );
     return aPara.nTop;
 
@@ -1981,7 +1982,7 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
 
 ///@see SwNodes::GoNextSection (TODO: seems to be C&P programming here)
 SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
-                            bool bSkipHidden, bool bSkipProtect ) const
+                            bool bSkipHidden, bool bSkipProtect )
 {
     bool bFirst = true;
     SwNodeIndex aTmp( *pIdx );

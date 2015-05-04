@@ -261,7 +261,7 @@ public:
     // Handler
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);
-    void            StateUndo(SfxItemSet&);
+    static void     StateUndo(SfxItemSet&);
 
     SwDocShell*     GetDocShell();
 

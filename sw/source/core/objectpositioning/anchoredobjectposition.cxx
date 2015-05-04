@@ -154,7 +154,7 @@ SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
 */
 SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrm& _rFrm,
                                                     const SwRectFn& _fnRect,
-                                                    const bool _bVert ) const
+                                                    const bool _bVert )
 {
     SwTwips nTopOfFrmForObjPos = (_rFrm.Frm().*_fnRect->fnGetTop)();
 
@@ -684,7 +684,7 @@ void SwAnchoredObjectPosition::_ToggleHoriOrientAndAlign(
                                         const bool _bToggleLeftRight,
                                         sal_Int16& _ioeHoriOrient,
                                         sal_Int16& _iopeRelOrient
-                                      ) const
+                                      )
 {
     if( _bToggleLeftRight )
     {
@@ -1036,7 +1036,7 @@ bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
 */
 bool SwAnchoredObjectPosition::_Minor( sal_Int16 _eRelOrient1,
                                        sal_Int16 _eRelOrient2,
-                                       bool             _bLeft ) const
+                                       bool             _bLeft )
 {
     bool bRetVal;
 

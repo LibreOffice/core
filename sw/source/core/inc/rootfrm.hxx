@@ -251,7 +251,7 @@ public:
      * Makes sure that, starting from the passed Page, all page-bound Frames
      * are on the right Page (pagenumber).
      */
-    void AssertPageFlys( SwPageFrm * );
+    static void AssertPageFlys( SwPageFrm * );
 
     /// Invalidate all Cntnt, Size or PrtArea
     void InvalidateAllCntnt( sal_uInt8 nInvalidate = INV_SIZE );

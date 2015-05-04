@@ -111,7 +111,7 @@ sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) c
 
 /// Get current table of contents Mark.
 sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
-                                SwTOXMarks& rArr ) const
+                                SwTOXMarks& rArr )
 {
     // search on Position rPos for all SwTOXMarks
     SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
@@ -434,7 +434,7 @@ SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos )
     return 0;
 }
 
-const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
+const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
@@ -740,7 +740,7 @@ bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, bool bAtStart ) const
         else
         {
             rPos.nNode = *pSectNd->EndOfSectionNode();
-            pCNd = pSectNd->GetDoc()->GetNodes().GoPrevious( &rPos.nNode );
+            pCNd = SwNodes::GoPrevious( &rPos.nNode );
             if( pCNd ) nC = pCNd->Len();
         }
         rPos.nContent.Assign( pCNd, nC );
@@ -818,7 +818,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // determine page description of content before table-of-content
             SwNodeIndex aIdx( *pSectNd );
             pDefaultPageDesc =
-                pSectNd->GetNodes().GoPrevious( &aIdx )->FindPageDesc( false );
+                SwNodes::GoPrevious( &aIdx )->FindPageDesc( false );
 
         }
         if ( !pDefaultPageDesc )
@@ -875,7 +875,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         }
         --aEndIdx;
         SwPosition aPos( aEndIdx, SwIndex( pFirstEmptyNd, 0 ));
-        pDoc->CorrAbs( aSttIdx, aEndIdx, aPos, true );
+        SwDoc::CorrAbs( aSttIdx, aEndIdx, aPos, true );
 
         // delete flys in whole range including start node which requires
         // giving the node before start node as Mark parameter, hence -1.
@@ -1005,7 +1005,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         if( !aCorPam.Move( fnMoveForward ) )
             aCorPam.Move( fnMoveBackward );
         SwNodeIndex aEndIdx( aInsPos, 1 );
-        pDoc->CorrAbs( aInsPos, aEndIdx, *aCorPam.GetPoint(), true );
+        SwDoc::CorrAbs( aInsPos, aEndIdx, *aCorPam.GetPoint(), true );
 
         // Task 70995 - save and restore PageDesc and Break Attributes
         if( pFirstEmptyNd->HasSwAttrSet() )
@@ -1886,10 +1886,10 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
             {
                 // Own entry for double entries or keywords
                 if( pOld->GetType() == TOX_SORT_CUSTOM &&
-                    pNew->GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY)
+                    SwTOXSortTabBase::GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY)
                     continue;
 
-                if(!(pNew->GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
+                if(!(SwTOXSortTabBase::GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
                 {   // Own entry
                     aSortArr.insert(aSortArr.begin() + i, pNew);
                     return;

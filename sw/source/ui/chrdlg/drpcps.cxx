@@ -96,7 +96,7 @@ class SwDropCapsPict : public Control
     Size            CalcTextSize();
     inline void     InitPrinter();
     void            _InitPrinter();
-    void            GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich );
+    static void     GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich );
     void            GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
     bool            GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
 

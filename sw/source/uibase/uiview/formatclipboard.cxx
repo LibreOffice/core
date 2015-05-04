@@ -260,7 +260,7 @@ bool SwFormatClipboard::HasContentForThisType( int nSelectionType ) const
     return false;
 }
 
-bool SwFormatClipboard::CanCopyThisType( int nSelectionType ) const
+bool SwFormatClipboard::CanCopyThisType( int nSelectionType )
 {
     if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF
          | nsSelectionType::SEL_TXT | nsSelectionType::SEL_DRW | nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS ) )

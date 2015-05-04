@@ -605,7 +605,7 @@ void SwCrsrShell::ExtendedSelectAll(bool bFootnotes)
     pPos->nContent.Assign( rNodes.GoNext( &pPos->nNode ), 0 );
     pPos = m_pCurCrsr->GetMark();
     pPos->nNode = rNodes.GetEndOfContent();
-    SwCntntNode* pCNd = rNodes.GoPrevious( &pPos->nNode );
+    SwCntntNode* pCNd = SwNodes::GoPrevious( &pPos->nNode );
     pPos->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
 }
 
@@ -616,7 +616,7 @@ bool SwCrsrShell::ExtendedSelectedAll(bool bFootnotes)
     SwCntntNode* pStart = rNodes.GoNext(&nNode);
 
     nNode = rNodes.GetEndOfContent();
-    SwCntntNode* pEnd = rNodes.GoPrevious(&nNode);
+    SwCntntNode* pEnd = SwNodes::GoPrevious(&nNode);
 
     if (!pStart || !pEnd)
         return false;
@@ -2435,7 +2435,7 @@ bool SwCrsrShell::IsEndOfDoc() const
     SwNodeIndex aIdx( GetDoc()->GetNodes().GetEndOfContent(), -1 );
     SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
-        pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
+        pCNd = SwNodes::GoPrevious( &aIdx );
 
     return aIdx == m_pCurCrsr->GetPoint()->nNode &&
             pCNd->Len() == m_pCurCrsr->GetPoint()->nContent.GetIndex();
@@ -2883,19 +2883,22 @@ bool SwCrsrShell::FindValidCntntNode( bool bOnlyText )
         ( !IsReadOnlyAvailable() &&
            pSectNd->GetSection().IsProtectFlag() )) )
     {
-        typedef SwCntntNode* (SwNodes:: *FNGoSection)( SwNodeIndex *, bool, bool ) const;
-        FNGoSection funcGoSection = &SwNodes::GoNextSection;
-
         bOk = false;
-
+        bool bGoNextSection = true;
         for( int nLoopCnt = 0; !bOk && nLoopCnt < 2; ++nLoopCnt )
         {
             bool bContinue;
             do {
                 bContinue = false;
-                while( 0 != ( pCNd = (rNds.*funcGoSection)( &rNdIdx,
-                                            true, !IsReadOnlyAvailable() )) )
+                for (;;)
                 {
+                    if (bGoNextSection)
+                        pCNd = rNds.GoNextSection( &rNdIdx,
+                                            true, !IsReadOnlyAvailable() );
+                    else
+                        pCNd = SwNodes::GoPrevSection( &rNdIdx,
+                                            true, !IsReadOnlyAvailable() );
+                    if ( pCNd == 0) break;
                     // moved inside a table -> check if it is protected
                     if( pCNd->FindTableNode() )
                     {
@@ -2939,7 +2942,7 @@ bool SwCrsrShell::FindValidCntntNode( bool bOnlyText )
             if( !bOk )
             {
                 if( !nLoopCnt )
-                    funcGoSection = &SwNodes::GoPrevSection;
+                    bGoNextSection = false;
                 rNdIdx = nNdIdx;
             }
         }
@@ -3272,7 +3275,7 @@ void SwCrsrShell::ClearUpCrsrs()
         SwNodes & aNodes = GetDoc()->GetNodes();
         const SwNode* pStart = lcl_NodeContext( pStartCrsr->GetPoint()->nNode.GetNode() );
         SwNodeIndex aIdx( pStartCrsr->GetPoint()->nNode );
-        SwNode * pNode = aNodes.GoPrevious(&aIdx);
+        SwNode * pNode = SwNodes::GoPrevious(&aIdx);
         if( pNode == NULL || lcl_NodeContext( *pNode ) != pStart )
             aNodes.GoNext( &aIdx );
         if( pNode == NULL || lcl_NodeContext( *pNode ) != pStart )
@@ -3309,7 +3312,7 @@ OUString SwCrsrShell::GetCrsrDescr() const
     if (IsMultiSelection())
         aResult += SW_RES(STR_MULTISEL);
     else
-        aResult = GetDoc()->GetPaMDescr(*GetCrsr());
+        aResult = SwDoc::GetPaMDescr(*GetCrsr());
 
     return aResult;
 }

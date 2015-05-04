@@ -322,7 +322,7 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
 }
 
 bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
-    sal_uInt32 nNetWidth) const
+    sal_uInt32 nNetWidth)
 {
     //sprmSCcolumns - number of columns - 1
     const sal_Int16 nCols = rSection.NoCols();
@@ -412,7 +412,7 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
 }
 
 void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
-    const wwSection &rSection, bool bIgnoreCols) const
+    const wwSection &rSection, bool bIgnoreCols)
 {
     // 1. Orientierung
     rInPageDesc.SetLandscape(rSection.IsLandScape());
@@ -437,7 +437,7 @@ static sal_uInt16 lcl_MakeSafeNegativeSpacing(sal_uInt16 nIn)
     return nIn;
 }
 
-void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const
+void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection)
 {
     if (!IsBorder(rSection.brc))
         return;
@@ -579,7 +579,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
 }
 
 void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
-    wwSectionManager::wwULSpaceData& rData, const wwSection &rSection) const
+    wwSectionManager::wwULSpaceData& rData, const wwSection &rSection)
 {
     if (rData.bHasHeader)               // ... und Header-Lower setzen
     {
@@ -762,7 +762,7 @@ wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode),
 }
 
 void wwSectionManager::SetNumberingType(const wwSection &rNewSection,
-    SwPageDesc &rPageDesc) const
+    SwPageDesc &rPageDesc)
 {
     // Seitennummernformat speichern
     static const SvxExtNumType aNumTyp[5] =
@@ -1372,13 +1372,13 @@ static bool lcl_IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn = false)
            (bChkBtwn && pbrc[WW8_BETW ].brcType());
 }
 
-bool SwWW8ImplReader::IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn) const
+bool SwWW8ImplReader::IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn)
 {
     return lcl_IsBorder(pbrc, bChkBtwn);
 }
 
 bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
-    short *pSizeArray, sal_uInt8 nSetBorders) const
+    short *pSizeArray, sal_uInt8 nSetBorders)
 {
     bool bChange = false;
     static const std::pair<sal_uInt16, SvxBoxItemLine> aIdArr[] =
@@ -1419,7 +1419,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
 }
 
 bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
-    const WW8_BRCVer9& aRightBrc) const
+    const WW8_BRCVer9& aRightBrc)
 {
     bool bRet = aRightBrc.fShadow() && pSizeArray && pSizeArray[WW8_RIGHT];
     if (bRet)
@@ -1438,7 +1438,7 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
 }
 
 void SwWW8ImplReader::GetBorderDistance(const WW8_BRCVer9* pbrc,
-    Rectangle& rInnerDist) const
+    Rectangle& rInnerDist)
 {
     rInnerDist = Rectangle( pbrc[ 1 ].dptSpace() * 20,
                             pbrc[ 0 ].dptSpace() * 20,
@@ -1447,7 +1447,7 @@ void SwWW8ImplReader::GetBorderDistance(const WW8_BRCVer9* pbrc,
 }
 
 bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
-    const WW8_BRCVer9 *pbrc, short *pSizeArray) const
+    const WW8_BRCVer9 *pbrc, short *pSizeArray)
 {
     bool bShadowed = false;
     if (IsBorder(pbrc))
@@ -2037,7 +2037,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( aSurround );
 
     short aSizeArray[5]={0};
-    rReader.SetFlyBordersShadow(*this,pFW->brc,&aSizeArray[0]);
+    SwWW8ImplReader::SetFlyBordersShadow(*this,pFW->brc,&aSizeArray[0]);
 
     // der 5. Parameter ist immer 0, daher geht beim Cast nix verloren
 
@@ -2084,7 +2084,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     WW8_BRCVer9 brcVer9[4];
     for (int i = 0; i < 4; i++)
         brcVer9[i] = rPic.rgbrc[i];
-    if (rReader.SetFlyBordersShadow( *this, brcVer9, &aSizeArray[0]))
+    if (SwWW8ImplReader::SetFlyBordersShadow( *this, brcVer9, &aSizeArray[0]))
     {
         Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0, 0, 0, RES_LR_SPACE ) );
         Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0, RES_UL_SPACE ));
@@ -2431,7 +2431,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 }
 
 //In auto-width word frames negative after-indent values are ignored
-void SwWW8ImplReader::StripNegativeAfterIndent(SwFrmFmt *pFlyFmt) const
+void SwWW8ImplReader::StripNegativeAfterIndent(SwFrmFmt *pFlyFmt)
 {
     const SwNodeIndex* pSttNd = pFlyFmt->GetCntnt().GetCntntIdx();
     if (!pSttNd)

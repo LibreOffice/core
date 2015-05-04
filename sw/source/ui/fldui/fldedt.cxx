@@ -107,7 +107,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
 
     EnsureSelection(pCurFld, aMgr);
 
-    sal_uInt16 nGroup = aMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
+    sal_uInt16 nGroup = SwFldMgr::GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     CreatePage(nGroup);
 
@@ -284,7 +284,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 
     EnsureSelection(pCurFld, rMgr);
 
-    sal_uInt16 nGroup = rMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
+    sal_uInt16 nGroup = SwFldMgr::GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     if (nGroup != pTabPage->GetGroup())
         pTabPage = static_cast<SwFldPage*>(CreatePage(nGroup).get());

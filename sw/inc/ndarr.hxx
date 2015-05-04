@@ -117,7 +117,7 @@ class SW_DLLPUBLIC SwNodes
     bool bInDelUpdNum : 1;          ///< Flag for updating of Outline.
 
     // Actions on the nodes.
-    void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
+    static void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
     void DelNodes( const SwNodeIndex& rStart, sal_uLong nCnt = 1 );
 
     void ChgNode( SwNodeIndex& rDelPos, sal_uLong nSize,
@@ -167,7 +167,7 @@ public:
        Implementation in doc.hxx (because one needs to know Doc for it) ! */
     bool IsDocNodes() const;
 
-    sal_uInt16 GetSectionLevel(const SwNodeIndex &rIndex) const;
+    static sal_uInt16 GetSectionLevel(const SwNodeIndex &rIndex);
     void Delete(const SwNodeIndex &rPos, sal_uLong nNodes = 1);
 
     bool _MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,
@@ -183,11 +183,11 @@ public:
 
     bool CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd ) const;
 
-    void GoStartOfSection(SwNodeIndex *) const;
-    void GoEndOfSection(SwNodeIndex *) const;
+    static void GoStartOfSection(SwNodeIndex *);
+    static void GoEndOfSection(SwNodeIndex *);
 
     SwCntntNode* GoNext(SwNodeIndex *) const;
-    SwCntntNode* GoPrevious(SwNodeIndex *) const;
+    static SwCntntNode* GoPrevious(SwNodeIndex *);
 
     /** Go to next/previous Cntnt/Table-node for which LayoutFrames exist.
      While doing this do not leave Header/Footer/Frame etc. */
@@ -198,13 +198,13 @@ public:
        (Both set FALSE ==> GoNext/GoPrevious!!!). */
     SwCntntNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true ) const;
-    SwCntntNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
-                                           bool bSkipProtect = true ) const;
+    static SwCntntNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
+                                           bool bSkipProtect = true );
 
     /** Create an empty section of Start- and EndNote. It may be called
        only if a new section with content is to be created,
        e.g. at filters/Undo/... */
-    SwStartNode* MakeEmptySection( const SwNodeIndex& rIdx,
+    static SwStartNode* MakeEmptySection( const SwNodeIndex& rIdx,
                                     SwStartNodeType = SwNormalStartNode );
 
     /// Implementations of "Make...Node" are in the given .cxx-files.
@@ -216,7 +216,7 @@ public:
                             SwTxtFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 );
 
-    SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
+    static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const OUString& rGrfName,
                             const OUString& rFltName,
                             const Graphic* pGraphic,
@@ -224,7 +224,7 @@ public:
                             SwAttrSet* pAutoAttr = 0,
                             bool bDelayed = false );    ///< in ndgrf.cxx
 
-    SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
+    static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const GraphicObject& rGrfObj,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); ///< in ndgrf.cxx
@@ -253,7 +253,7 @@ public:
        adjust in pCntntTxtColl or pHeadlineTxtColl this adjust item
        overrides the item in pAttrSet. */
 
-    SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
+    static SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
                         sal_uInt16 nBoxes, SwTxtFmtColl* pCntntTxtColl,
                         sal_uInt16 nLines = 0, sal_uInt16 nRepeat = 0,
                         SwTxtFmtColl* pHeadlineTxtColl = 0,
@@ -267,7 +267,7 @@ public:
                                 SwTxtFmtColl* pTxtColl,
                                 SwUndoTxtToTbl* pUndo = 0 );
 
-    SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
+    static SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
 
     /// create a table from a vector of NodeRanges - API support
     SwTableNode* TextToTable( const TableRanges_t& rTableNodes,

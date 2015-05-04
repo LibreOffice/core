@@ -391,7 +391,7 @@ void SwSelPaintRects::HighlightInputFld()
     if (m_bShowTxtInputFldOverlay)
     {
         SwTxtInputFld* pCurTxtInputFldAtCrsr =
-            dynamic_cast<SwTxtInputFld*>(GetShell()->GetTxtFldAtPos( GetShell()->GetCrsr()->Start(), false ));
+            dynamic_cast<SwTxtInputFld*>(SwCrsrShell::GetTxtFldAtPos( GetShell()->GetCrsr()->Start(), false ));
         if ( pCurTxtInputFldAtCrsr != NULL )
         {
             SwTxtNode* pTxtNode = pCurTxtInputFldAtCrsr->GetpTxtNode();

@@ -1104,7 +1104,7 @@ namespace numfunc
             void SetToDefault();
 
             /** returns sequence of default bullet configuration property names */
-            uno::Sequence<OUString> GetPropNames() const;
+            static uno::Sequence<OUString> GetPropNames();
 
             /** loads default bullet configuration properties and applies
                 values to internal data */
@@ -1180,7 +1180,7 @@ namespace numfunc
         mnLevelChars[9] = 0x2022;
     }
 
-    uno::Sequence<OUString> SwDefBulletConfig::GetPropNames() const
+    uno::Sequence<OUString> SwDefBulletConfig::GetPropNames()
     {
         uno::Sequence<OUString> aPropNames(13);
         OUString* pNames = aPropNames.getArray();
@@ -1323,7 +1323,7 @@ namespace numfunc
             void SetToDefault();
 
             /** returns sequence of configuration property names */
-            com::sun::star::uno::Sequence<OUString> GetPropNames() const;
+            static com::sun::star::uno::Sequence<OUString> GetPropNames();
 
             /** loads configuration properties and applies values to internal data */
             void LoadConfig();
@@ -1362,7 +1362,7 @@ namespace numfunc
         mbChangeIndentOnTabAtFirstPosOfFirstListItem = true;
     }
 
-    com::sun::star::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames() const
+    com::sun::star::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames()
     {
         com::sun::star::uno::Sequence<OUString> aPropNames(1);
         OUString* pNames = aPropNames.getArray();

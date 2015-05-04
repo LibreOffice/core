@@ -4400,7 +4400,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         aTabRect.Pos() += Frm().Pos();
         SwRect aTabOutRect( rRect );
         aTabOutRect.Intersection( aTabRect );
-        pViewOption->DrawRect( gProp.pSGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
+        SwViewOption::DrawRect( gProp.pSGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
     }
     const_cast<SwTabFrm*>(this)->ResetComplete();
 }

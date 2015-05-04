@@ -85,7 +85,7 @@ struct SwSortElement
     bool operator==(const SwSortElement& ) const;
     bool operator<(const SwSortElement& ) const;
 
-    double StrToDouble(const OUString& rStr) const;
+    static double StrToDouble(const OUString& rStr);
 private:
     int keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const;
 };

@@ -41,7 +41,7 @@ class SwListImpl
 
         void InsertListItem( SwNodeNum& rNodeNum,
                              const int nLevel );
-        void RemoveListItem( SwNodeNum& rNodeNum );
+        static void RemoveListItem( SwNodeNum& rNodeNum );
 
         void InvalidateListTree();
         void ValidateListTree();
@@ -241,7 +241,7 @@ void SwList::InsertListItem( SwNodeNum& rNodeNum,
 
 void SwList::RemoveListItem( SwNodeNum& rNodeNum )
 {
-    mpListImpl->RemoveListItem( rNodeNum );
+    SwListImpl::RemoveListItem( rNodeNum );
 }
 
 void SwList::InvalidateListTree()

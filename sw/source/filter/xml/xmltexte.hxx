@@ -41,9 +41,9 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
     const SvGlobalName aIFrameClassId;
     const SvGlobalName aOutplaceClassId;
 
-    SwNoTxtNode *GetNoTxtNode(
+    static SwNoTxtNode *GetNoTxtNode(
         const ::com::sun::star::uno::Reference <
-                ::com::sun::star::beans::XPropertySet >& rPropSet ) const;
+                ::com::sun::star::beans::XPropertySet >& rPropSet );
 
 protected:
     virtual void exportStyleContent(

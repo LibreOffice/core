@@ -71,15 +71,15 @@ class SwAccessiblePortionData : public SwPortionHandler
 
     /// returns the index of the first position whose value is smaller
     /// or equal, and whose following value is equal or larger
-    size_t FindBreak( const Positions_t& rPositions, sal_Int32 nValue ) const;
+    static size_t FindBreak( const Positions_t& rPositions, sal_Int32 nValue );
 
     /// like FindBreak, but finds the last equal or larger position
-    size_t FindLastBreak( const Positions_t& rPositions, sal_Int32 nValue ) const;
+    static size_t FindLastBreak( const Positions_t& rPositions, sal_Int32 nValue );
 
     /// fill the boundary with the values from rPositions[nPos]
-    void FillBoundary(com::sun::star::i18n::Boundary& rBound,
+    static void FillBoundary(com::sun::star::i18n::Boundary& rBound,
                       const Positions_t& rPositions,
-                      size_t nPos ) const;
+                      size_t nPos );
 
     /// Access to portion attributes
     bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;

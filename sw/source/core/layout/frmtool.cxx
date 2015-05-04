@@ -2706,7 +2706,7 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     pRet->Paste( pUpper, pSibling );
     pRet->PreparePage( bFtn );
     if ( pRet->GetNext() )
-        static_cast<SwRootFrm*>(pRet->GetUpper())->AssertPageFlys( pRet );
+        SwRootFrm::AssertPageFlys( pRet );
     return pRet;
 }
 

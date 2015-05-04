@@ -1371,7 +1371,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
             {
                 SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );
                 const SwNodes& rSrcNds = rSrcFmt.GetDoc()->GetNodes();
-                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmpIdx,
+                SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmpIdx,
                                                 bCpyHeader
                                                     ? SwHeaderStartNode
                                                     : SwFooterStartNode );
@@ -1598,7 +1598,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
 }
 
 SwFmt* SwDoc::FindFmtByName( const SwFmtsBase& rFmtArr,
-                             const OUString& rName ) const
+                             const OUString& rName )
 {
     SwFmt* pFnd = 0;
     for( size_t n = 0; n < rFmtArr.GetFmtCount(); ++n )

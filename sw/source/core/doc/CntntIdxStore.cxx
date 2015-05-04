@@ -183,9 +183,9 @@ namespace
             inline void RestoreUnoCrsrs(updater_t& rUpdater);
             inline void SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreShellCrsrs(updater_t& rUpdater);
-            inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
+            static inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
-            inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
+            static inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
     static inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nCntnt, SwPaM& rPaM, const bool bPoint)

@@ -1099,7 +1099,7 @@ OUString BookmarkToWriter(const OUString &rBookmark)
 void SwWW8AttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
 {
     if ( m_rExport.HasRefToObject( REF_SETREFATTR, &rAttr.GetRefName(), 0 ) )
-        m_rExport.AppendBookmark( m_rExport.GetBookmarkName( REF_SETREFATTR,
+        m_rExport.AppendBookmark( MSWordExportBase::GetBookmarkName( REF_SETREFATTR,
                                             &rAttr.GetRefName(), 0 ));
 }
 

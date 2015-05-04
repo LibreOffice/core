@@ -57,10 +57,10 @@ protected:
 
     sal_uInt32 nAbsWidth;
 
-    void AddAttribute( sal_uInt16 nPrefix, enum XMLTokenEnum eLName,
+    static void AddAttribute( sal_uInt16 nPrefix, enum XMLTokenEnum eLName,
                        const OUString& rValue,
                        const SvXMLNamespaceMap& rNamespaceMap,
-                       SvXMLAttributeList& rAttrList ) const;
+                       SvXMLAttributeList& rAttrList );
 
 public:
 
@@ -105,7 +105,7 @@ void SwXMLTableItemMapper_Impl::AddAttribute( sal_uInt16 nPrefix,
         enum XMLTokenEnum eLName,
         const OUString& rValue,
         const SvXMLNamespaceMap& rNamespaceMap,
-        SvXMLAttributeList& rAttrList ) const
+        SvXMLAttributeList& rAttrList )
 {
     OUString sName( rNamespaceMap.GetQNameByKey( nPrefix,
                                                  GetXMLToken(eLName) ) );

@@ -72,7 +72,7 @@ class SwEnvCfgItem : public utl::ConfigItem
 private:
     SwEnvItem aEnvItem;
 
-    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() SAL_OVERRIDE;
 

@@ -853,7 +853,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             if (WID_PRIMARY_KEY > pEntry->nWID)
             {
                 const SwAttrSet& rSet =
-                    m_pImpl->m_pDoc->GetTOXBaseAttrSet(rTOXBase);
+                    SwDoc::GetTOXBaseAttrSet(rTOXBase);
                 SfxItemSet aAttrSet(rSet);
                 m_pImpl->m_rPropSet.setPropertyValue(
                         rPropertyName, rValue, aAttrSet);
@@ -1207,7 +1207,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 if(WID_PRIMARY_KEY > pEntry->nWID)
                 {
                     const SwAttrSet& rSet =
-                        m_pImpl->m_pDoc->GetTOXBaseAttrSet(*pTOXBase);
+                        SwDoc::GetTOXBaseAttrSet(*pTOXBase);
                     aRet = m_pImpl->m_rPropSet.getPropertyValue(
                             rPropertyName, rSet);
                 }
@@ -1355,7 +1355,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     // this now needs to return TRUE
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
-    const SwTOXBase* pOld = pDoc->GetCurTOX( *aPam.Start() );
+    const SwTOXBase* pOld = SwDoc::GetCurTOX( *aPam.Start() );
     if (pOld)
     {
         throw lang::IllegalArgumentException();

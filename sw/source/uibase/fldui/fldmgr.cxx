@@ -318,7 +318,7 @@ SwField* SwFldMgr::GetCurFld()
 }
 
 // provide group range
-const SwFldGroupRgn& SwFldMgr::GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId) const
+const SwFldGroupRgn& SwFldMgr::GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId)
 {
 static SwFldGroupRgn const aRanges[] =
 {
@@ -346,7 +346,7 @@ static SwFldGroupRgn const aWebRanges[] =
 }
 
 // determine GroupId
-sal_uInt16 SwFldMgr::GetGroup(bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType) const
+sal_uInt16 SwFldMgr::GetGroup(bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType)
 {
     if (nTypeId == TYP_SETINPFLD)
         nTypeId = TYP_SETFLD;
@@ -1044,7 +1044,7 @@ bool SwFldMgr::InsertFld(
                 rData.aDBColumn >>= xColumn;
                 if(xColumn.is())
                 {
-                    nFormatId = pCurShell->GetDBManager()->GetColumnFmt(xSource, xConnection, xColumn,
+                    nFormatId = SwDBManager::GetColumnFmt(xSource, xConnection, xColumn,
                         pCurShell->GetNumberFormatter(), GetCurrLanguage() );
                 }
                 else

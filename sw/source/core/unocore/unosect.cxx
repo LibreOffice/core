@@ -312,7 +312,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         // caller wants an index header section, but will only
         // give him one if a) we are inside an index, and b) said
         // index doesn't yet have a header section.
-        const SwTOXBase* pBase = aPam.GetDoc()->GetCurTOX(*aPam.Start());
+        const SwTOXBase* pBase = SwDoc::GetCurTOX(*aPam.Start());
 
         // are we inside an index?
         if (pBase)

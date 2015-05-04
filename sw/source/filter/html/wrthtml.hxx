@@ -471,7 +471,7 @@ public:
     sal_uInt16 GetHTMLDirection( sal_uInt16 nDir ) const;
     sal_uInt16 GetHTMLDirection( const SfxItemSet& rItemSet ) const;
     void OutDirection( sal_uInt16 nDir );
-    OString convertDirection(sal_uInt16 nDirection);
+    static OString convertDirection(sal_uInt16 nDirection);
 
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
@@ -511,11 +511,11 @@ public:
     SwPaM* GetEndPaM() { return pOrigPam; }
     void SetEndPaM( SwPaM* pPam ) { pOrigPam = pPam; }
 
-    sal_uInt32 ToPixel( sal_uInt32 nVal, const bool bVert ) const;
+    static sal_uInt32 ToPixel( sal_uInt32 nVal, const bool bVert );
 
     sal_uInt16 GuessFrmType( const SwFrmFmt& rFrmFmt,
                          const SdrObject*& rpStrObj );
-    sal_uInt16 GuessOLENodeFrmType( const SwNode& rNd );
+    static sal_uInt16 GuessOLENodeFrmType( const SwNode& rNd );
 
     void CollectFlyFrms();
 

@@ -1934,7 +1934,7 @@ bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
         {
             case ONLINE_SPELLING :
             {
-                SwRect aRepaint( const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pCnt))->_AutoSpell( pCntntNode,  *pSh->GetViewOptions(), nTxtPos ) );
+                SwRect aRepaint( const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pCnt))->_AutoSpell( pCntntNode, nTxtPos ) );
                 bPageValid = bPageValid && !pTxtNode->IsWrongDirty();
                 if( !bPageValid )
                     bAllValid = false;
@@ -2022,7 +2022,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
                 return false;
             break;
         case AUTOCOMPLETE_WORDS :
-            if( !pViewOptions->IsAutoCompleteWords() ||
+            if( !SwViewOption::IsAutoCompleteWords() ||
                  SwDoc::GetAutoCompleteWords().IsLockWordLstLocked())
                 return false;
             break;
@@ -2273,7 +2273,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
         const SwViewShell* pViewShell = pImp->GetShell();
         // See conditions in DoIdleJob()
         const bool bSpell     = rVOpt.IsOnlineSpell();
-        const bool bACmplWrd  = rVOpt.IsAutoCompleteWords();
+        const bool bACmplWrd  = SwViewOption::IsAutoCompleteWords();
         const bool bWordCount = pViewShell->getIDocumentStatistics()->GetDocStat().bModified;
         const bool bSmartTags = !pViewShell->GetDoc()->GetDocShell()->IsHelpDocument() &&
                                 !pViewShell->GetDoc()->isXForms() &&

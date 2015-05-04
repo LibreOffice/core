@@ -412,7 +412,7 @@ private:
                         FNCopyFmt fnCopyFmt, SwFmt& rDfltFmt );
     void CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt );
-    SwFmt* FindFmtByName( const SwFmtsBase& rFmtArr, const OUString& rName ) const;
+    static SwFmt* FindFmtByName( const SwFmtsBase& rFmtArr, const OUString& rName );
 
     SwDoc( const SwDoc &) SAL_DELETED_FUNCTION;
 
@@ -420,11 +420,11 @@ private:
     void AddUsedDBToList( std::vector<OUString>& rDBNameList,
                           const std::vector<OUString>& rUsedDBNames );
     void AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString& rDBName );
-    bool IsNameInArray( const std::vector<OUString>& rOldNames, const OUString& rName );
+    static bool IsNameInArray( const std::vector<OUString>& rOldNames, const OUString& rName );
     void GetAllDBNames( std::vector<OUString>& rAllDBNames );
-    OUString ReplaceUsedDBs( const std::vector<OUString>& rUsedDBNames,
+    static OUString ReplaceUsedDBs( const std::vector<OUString>& rUsedDBNames,
                              const OUString& rNewName, const OUString& rFormula );
-    std::vector<OUString>& FindUsedDBs( const std::vector<OUString>& rAllDBNames,
+    static std::vector<OUString>& FindUsedDBs( const std::vector<OUString>& rAllDBNames,
                                 const OUString& rFormula,
                                 std::vector<OUString>& rUsedDBNames );
 
@@ -440,7 +440,7 @@ private:
     // Update charts of given table.
     void _UpdateCharts( const SwTable& rTbl, SwViewShell const & rVSh ) const;
 
-    bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
+    static bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 sal_uInt16 nMode );
 
     // CharTimer calls this method.
@@ -710,7 +710,7 @@ public:
                          sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     // count words in pam
-    void CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const;
+    static void CountWords( const SwPaM& rPaM, SwDocStat& rStat );
 
     // Glossary Document
     void SetGlossDoc( bool bGlssDc = true ) { mbGlossDoc = bGlssDc; }
@@ -752,7 +752,7 @@ public:
     void SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName );
     const SwFlyFrmFmt* FindFlyByName( const OUString& rName, sal_Int8 nNdTyp = 0 ) const;
 
-    void GetGrfNms( const SwFlyFrmFmt& rFmt, OUString* pGrfName, OUString* pFltName ) const;
+    static void GetGrfNms( const SwFlyFrmFmt& rFmt, OUString* pGrfName, OUString* pFltName );
 
     // Set a valid name for all Flys that have none (Called by Readers after reading).
     void SetAllUniqueFlyNames();
@@ -912,7 +912,7 @@ public:
 
     // Query if style (paragraph- / character- / frame- / page-) is used.
     bool IsUsed( const SwModify& ) const;
-    bool IsUsed( const SwNumRule& ) const;
+    static bool IsUsed( const SwNumRule& );
 
     // Set name of newly loaded document template.
     sal_uInt16 SetDocPattern( const OUString& rPatternName );
@@ -936,11 +936,11 @@ public:
 
     /** get the set of printable pages for the XRenderable API by
      evaluating the respective settings (see implementation) */
-    void CalculatePagesForPrinting( const SwRootFrm& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+    static void CalculatePagesForPrinting( const SwRootFrm& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
-    void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+    static void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
-    void CalculatePagePairsForProspectPrinting( const SwRootFrm& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions,
+    static void CalculatePagePairsForProspectPrinting( const SwRootFrm& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
 
     // PageDescriptor interface.
@@ -985,7 +985,7 @@ public:
     void CheckDefaultPageFmt();
 
     // Methods for tables/indices
-    sal_uInt16 GetCurTOXMark( const SwPosition& rPos, SwTOXMarks& ) const;
+    static sal_uInt16 GetCurTOXMark( const SwPosition& rPos, SwTOXMarks& );
     void DeleteTOXMark( const SwTOXMark* pTOXMark );
     const SwTOXMark& GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                 SwTOXSearch eDir, bool bInReadOnly );
@@ -998,8 +998,8 @@ public:
     const SwTOXBaseSection* InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0 );
-    SwTOXBase* GetCurTOX( const SwPosition& rPos );
-    const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX) const;
+    static SwTOXBase* GetCurTOX( const SwPosition& rPos );
+    static const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX);
 
     bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
     OUString GetUniqueTOXBaseName( const SwTOXType& rType,
@@ -1061,14 +1061,14 @@ public:
         bool bMoveCrsr = false );
 
     // Set everything in the range of [rStartNode, rEndNode] to rNewPos.
-    void CorrAbs(
+    static void CorrAbs(
         const SwNodeIndex& rStartNode,
         const SwNodeIndex& rEndNode,
         const SwPosition& rNewPos,
         bool bMoveCrsr = false );
 
     // Set everything in this range from rRange to rNewPos.
-    void CorrAbs(
+    static void CorrAbs(
         const SwPaM& rRange,
         const SwPosition& rNewPos,
         bool bMoveCrsr = false );
@@ -1121,7 +1121,7 @@ public:
     void SetNumRuleStart( const SwPosition& rPos, bool bFlag = true );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt );
 
-    SwNumRule* GetNumRuleAtPos( const SwPosition& rPos ) const;
+    static SwNumRule* GetNumRuleAtPos( const SwPosition& rPos );
 
     const SwNumRuleTbl& GetNumRuleTbl() const { return *mpNumRuleTbl; }
 
@@ -1153,9 +1153,9 @@ public:
                         const OUString& rNewRule );
 
     // Goto next/previous on same level.
-    bool GotoNextNum( SwPosition&, bool bOverUpper = true,
+    static bool GotoNextNum( SwPosition&, bool bOverUpper = true,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
-    bool GotoPrevNum( SwPosition&, bool bOverUpper = true,
+    static bool GotoPrevNum( SwPosition&, bool bOverUpper = true,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
 
     /** Searches for a text node with a numbering rule.
@@ -1268,12 +1268,12 @@ public:
     bool IsInsTblAlignNum() const;
 
     // From FEShell (for Undo and BModified).
-    void GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
-                    const SwCellFrm* pBoxFrm = 0 ) const;
+    static void GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
+                    const SwCellFrm* pBoxFrm = 0 );
     void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
                     const SwCursor* pCrsr, const SwCellFrm* pBoxFrm = 0 );
-    void GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
-                    const SwCellFrm* pBoxFrm = 0 ) const;
+    static void GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
+                    const SwCellFrm* pBoxFrm = 0 );
     void SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor* pCrsr,
                      const SwCellFrm* pBoxFrm = 0 );
 
@@ -1368,9 +1368,9 @@ public:
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
             SwTOXBase const*const pTOXBase = 0,
             SfxItemSet const*const pAttr = 0, bool const bUpdate = true);
-    sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
-                                const SwNode** ppSttNd = 0 ) const;
-    SwSection* GetCurrSection( const SwPosition& rPos ) const;
+    static sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
+                                const SwNode** ppSttNd = 0 );
+    static SwSection* GetCurrSection( const SwPosition& rPos );
     SwSectionFmts& GetSections() { return *mpSectionFmtTbl; }
     const SwSectionFmts& GetSections() const { return *mpSectionFmtTbl; }
     SwSectionFmt *MakeSectionFmt( SwSectionFmt *pDerivedFrom );
@@ -1509,17 +1509,17 @@ public:
                         const bool _bPosCorr );
 
     void SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew );
-    void GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const;
+    static void GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz );
     void SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew );
-    void GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz ) const;
+    static void GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz );
     bool BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly = true );
     void SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew );
-    bool GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) const;
+    static bool GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill );
     void SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet );
     void SetTabLineStyle( const SwCursor& rCursor,
                           const Color* pColor, bool bSetLine,
                           const editeng::SvxBorderLine* pBorderLine );
-    void GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const;
+    static void GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet );
     void SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew );
     /**
     Retrieves a box attribute from the given cursor.
@@ -1531,9 +1531,9 @@ public:
     the values of the same property over any other boxes in the selection; if any value is different from
     that of the first box, the property is unset (and false is returned).
     */
-    bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill ) const;
+    static bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill );
     void SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign );
-    sal_uInt16 GetBoxAlign( const SwCursor& rCursor ) const;
+    static sal_uInt16 GetBoxAlign( const SwCursor& rCursor );
     void AdjustCellWidth( const SwCursor& rCursor, bool bBalance = false );
 
     SwChainRet Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest );
@@ -1560,7 +1560,7 @@ public:
     void SetContainsMSVBasic( bool bFlag )  { mbContains_MSVBasic = bFlag; }
 
     // Interface for the list of Ruby - texts/attributes
-    sal_uInt16 FillRubyList( const SwPaM& rPam, SwRubyList& rList,
+    static sal_uInt16 FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                         sal_uInt16 nMode );
     sal_uInt16 SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         sal_uInt16 nMode );
@@ -1599,7 +1599,7 @@ public:
         @param bValue     - true  mark the level
                           - false unmark the level
      */
-    void MarkListLevel( SwList& rList,
+    static void MarkListLevel( SwList& rList,
                         const int nListLevel,
                         const bool bValue );
 
@@ -1629,9 +1629,9 @@ public:
 
        @return the textual description of rPaM
      */
-    OUString GetPaMDescr(const SwPaM & rPaM) const;
+    static OUString GetPaMDescr(const SwPaM & rPaM);
 
-    bool IsFirstOfNumRuleAtPos( const SwPosition & rPos );
+    static bool IsFirstOfNumRuleAtPos( const SwPosition & rPos );
 
     // access methods for XForms model(s)
 

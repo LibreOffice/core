@@ -42,7 +42,7 @@ public:
                 SwAnnotationShell(SwView&);
     virtual     ~SwAnnotationShell();
 
-    void        StateDisableItems(SfxItemSet &);
+    static void StateDisableItems(SfxItemSet &);
     void        Exec(SfxRequest &);
 
     void        GetState(SfxItemSet &);
@@ -58,17 +58,17 @@ public:
     void        StateClpbrd(SfxItemSet &rSet);
 
     void        ExecTransliteration(SfxRequest &);
-    void                ExecRotateTransliteration(SfxRequest &);
+    void        ExecRotateTransliteration(SfxRequest &);
 
     void        ExecUndo(SfxRequest &rReq);
     void        StateUndo(SfxItemSet &rSet);
 
-    void        StateStatusLine(SfxItemSet &rSet);
+    static void StateStatusLine(SfxItemSet &rSet);
 
     void        InsertSymbol(SfxRequest& rReq);
 
     void        ExecSearch(SfxRequest&, bool bNoMessage = false);
-    void            StateSearch(SfxItemSet &);
+    void        StateSearch(SfxItemSet &);
 
     virtual ::svl::IUndoManager*
                 GetUndoManager() SAL_OVERRIDE;

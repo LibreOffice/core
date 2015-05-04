@@ -944,7 +944,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         sFilter = "DDE";
     }
 
-    SwGrfNode* pGrfNd = pDoc->GetNodes().MakeGrfNode( rIdx, sFile, sFilter,
+    SwGrfNode* pGrfNd = SwNodes::MakeGrfNode( rIdx, sFile, sFilter,
                                                     &aTmpGrf, pColl,
                                             const_cast<SwAttrSet*>(GetpSwAttrSet()) );
     pGrfNd->SetTitle( GetTitle() );

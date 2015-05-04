@@ -1848,7 +1848,7 @@ void SwXText::Impl::ConvertCell(
     SwNodeRange aTmpRange(aStartCellPam.Start()->nNode,
                           aEndCellPam.End()->nNode);
     SwNodeRange * pCorrectedRange =
-        m_pDoc->GetNodes().ExpandRangeForTableBox(aTmpRange);
+        SwNodes::ExpandRangeForTableBox(aTmpRange);
 
     if (pCorrectedRange != NULL)
     {

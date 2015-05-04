@@ -187,7 +187,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
         {
             // first set continuation point for spell/grammar check to the
             // end of the current sentence
-            pWrtShell->MoveContinuationPosToEndOfCheckedSentence();
+            SwEditShell::MoveContinuationPosToEndOfCheckedSentence();
         }
 
         ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
@@ -452,7 +452,7 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
         // evaluate if the same sentence should be rechecked or not.
         // Sentences that got grammar checked should always be rechecked in order
         // to detect possible errors that get introduced with the changes
-        bRecheck |= pWrtShell->HasLastSentenceGotGrammarChecked();
+        bRecheck |= SwEditShell::HasLastSentenceGotGrammarChecked();
 
         if(bNormalText)
             pWrtShell->ApplyChangedSentence(rChanged, bRecheck);
@@ -507,7 +507,7 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
             SHELL_MODE_TABLE_LIST_TEXT == eSelMode ||
             SHELL_MODE_TEXT == eSelMode;
         if( bNormalText )
-            pWrtShell->PutSpellingToSentenceStart();
+            SwEditShell::PutSpellingToSentenceStart();
         else if( bDrawText )
         {
             SdrView*     pSdrView = pWrtShell->GetDrawView();

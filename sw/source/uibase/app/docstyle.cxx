@@ -2049,7 +2049,7 @@ bool  SwDocStyleSheet::IsUsed() const
     case SFX_STYLE_FAMILY_PAGE : pMod = pDesc;      break;
 
     case SFX_STYLE_FAMILY_PSEUDO:
-            return pNumRule && rDoc.IsUsed( *pNumRule );
+            return pNumRule && SwDoc::IsUsed( *pNumRule );
 
     default:
         OSL_ENSURE(false, "unknown style family");
@@ -2896,7 +2896,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !rRule.IsHidden( ) )
                     continue;
 
-                bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(rRule) );
+                bool bUsed = bIsSearchUsed && ( bOrganizer || SwDoc::IsUsed(rRule) );
                 if( !bUsed )
                 {
                     if( ( !bSearchHidden && rRule.IsHidden() ) ||
@@ -3006,7 +3006,7 @@ void SwStyleSheetIterator::AppendStyleList(const ::std::vector<OUString>& rList,
             case nsSwGetPoolIdFromName::GET_POOLID_NUMRULE:
                 {
                     SwNumRule* pRule = rDoc.FindNumRulePtr( rList[i] );
-                    bUsed = pRule && rDoc.IsUsed( *pRule );
+                    bUsed = pRule && SwDoc::IsUsed( *pRule );
                     bHidden = pRule && pRule->IsHidden( );
                 }
                 break;

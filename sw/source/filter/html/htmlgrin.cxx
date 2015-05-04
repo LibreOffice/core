@@ -1396,7 +1396,7 @@ void SwHTMLParser::StripTrailingPara()
                 if(nBookNdIdx==nNodeIdx)
                 {
                     SwNodeIndex nNewNdIdx(pPam->GetPoint()->nNode);
-                    SwCntntNode* pNd = pDoc->GetNodes().GoPrevious(&nNewNdIdx);
+                    SwCntntNode* pNd = SwNodes::GoPrevious(&nNewNdIdx);
                     if(!pNd)
                     {
                         OSL_ENSURE(false, "Hoppla, wo ist mein Vorgaenger-Node");

@@ -96,7 +96,7 @@ class SwAccessibleParagraph :
     /// get the (accessible) text string (requires frame; check before)
     OUString GetString();
 
-    OUString GetDescription();
+    static OUString GetDescription();
 
     // get the current care position
     sal_Int32 GetCaretPos();
@@ -121,16 +121,16 @@ class SwAccessibleParagraph :
     // methods for checking the parameter range:
 
     // does nPos point to a char?
-    bool IsValidChar(sal_Int32 nPos, sal_Int32 nLength);
+    static bool IsValidChar(sal_Int32 nPos, sal_Int32 nLength);
 
     // does nPos point to a position? (may be behind the last character)
-    bool IsValidPosition(sal_Int32 nPos, sal_Int32 nLength);
+    static bool IsValidPosition(sal_Int32 nPos, sal_Int32 nLength);
 
     // is nBegin...nEnd a valid range? (nEnd points past the last character)
-    bool IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength);
+    static bool IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength);
 
     // Ensure ordered range (i.e. nBegin is smaller then nEnd)
-    void OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
+    static void OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
     {
         if( nBegin > nEnd )
         {
@@ -214,7 +214,7 @@ protected:
     bool GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
                               const OUString& rText,
                               sal_Int32 nPos );
-    bool GetParagraphBoundary( com::sun::star::i18n::Boundary& rBound,
+    static bool GetParagraphBoundary( com::sun::star::i18n::Boundary& rBound,
                                    const OUString& rText,
                                    sal_Int32 nPos );
     bool GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,

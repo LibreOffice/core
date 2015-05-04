@@ -456,7 +456,7 @@ public:
     virtual void advance() SAL_OVERRIDE;
     WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
-    void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
+    static void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
         const WW8ScannerBase *pSBase);
     WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI; }
     void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
@@ -902,7 +902,7 @@ private:
     sal_uInt16 WhereIdx(bool* pbStart=0, long* pPos=0) const;
     void AdjustEnds(WW8PLCFxDesc& rDesc);
     void GetNewSprms(WW8PLCFxDesc& rDesc);
-    void GetNewNoSprms(WW8PLCFxDesc& rDesc);
+    static void GetNewNoSprms(WW8PLCFxDesc& rDesc);
     void GetSprmStart(short nIdx, WW8PLCFManResult* pRes) const;
     void GetSprmEnd(short nIdx, WW8PLCFManResult* pRes) const;
     void GetNoSprmStart(short nIdx, WW8PLCFManResult* pRes) const;
