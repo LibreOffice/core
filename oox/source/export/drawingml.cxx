@@ -1335,7 +1335,8 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
                           XML_i, italic,
                           XML_lang, usLanguage.isEmpty() ? NULL : USS( usLanguage ),
                           XML_sz, IS( nSize ),
-                          XML_spc, nCharKerning > 0 ? IS(nCharKerning) : NULL,
+            // For Condensed character spacing spc value is negative.
+                          XML_spc, nCharKerning ? IS(nCharKerning) : NULL,
                           XML_strike, strikeout,
                           XML_u, underline,
                           XML_baseline, nCharEscapement == 0 ? NULL : IS( nCharEscapement*1000 ),
