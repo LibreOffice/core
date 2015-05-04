@@ -569,10 +569,13 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     pDBData->SetSortParam(rSortParam);
 
-    ScRange aDirtyRange(
-        aLocalParam.nCol1, nStartRow, nTab,
-        aLocalParam.nCol2, aLocalParam.nRow2, nTab);
-    rDoc.SetDirty( aDirtyRange, true );
+    if (nStartRow <= aLocalParam.nRow2)
+    {
+        ScRange aDirtyRange(
+                aLocalParam.nCol1, nStartRow, nTab,
+                aLocalParam.nCol2, aLocalParam.nRow2, nTab);
+        rDoc.SetDirty( aDirtyRange, true );
+    }
 
     if (bPaint)
     {
@@ -590,7 +593,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         rDocShell.PostPaint(ScRange(nStartX, nStartY, nTab, nEndX, nEndY, nTab), nPaint);
     }
 
-    if (!bUniformRowHeight)
+    if (!bUniformRowHeight && nStartRow <= aLocalParam.nRow2)
         rDocShell.AdjustRowHeight(nStartRow, aLocalParam.nRow2, nTab);
 
     aModificator.SetDocumentModified();
