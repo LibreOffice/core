@@ -3159,12 +3159,12 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
 std::vector< uno::Reference< table::XCell > > SwXCellRange::getCells()
 {
     SwFrmFmt* const pFmt = GetFrmFmt();
-    const size_t nRowCount(getRowCount());
-    const size_t nColCount(getColumnCount());
+    const sal_Int32 nRowCount(getRowCount());
+    const sal_Int32 nColCount(getColumnCount());
     std::vector< uno::Reference< table::XCell > > vResult;
-    vResult.reserve(nRowCount*nColCount);
-    for(sal_uInt16 nRow = 0; nRow < nRowCount; ++nRow)
-        for(sal_uInt16 nCol = 0; nCol < nColCount; ++nCol)
+    vResult.reserve(static_cast<size_t>(nRowCount)*static_cast<size_t>(nColCount));
+    for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
+        for(sal_Int32 nCol = 0; nCol < nColCount; ++nCol)
             vResult.push_back(uno::Reference< table::XCell >(lcl_CreateXCell(pFmt, aRgDesc.nLeft + nCol, aRgDesc.nTop + nRow)));
     return vResult;
 }
@@ -3498,8 +3498,8 @@ void SwXCellRange::GetDataSequence(
 
     // compare to SwXCellRange::getDataArray (note different return types though)
 
-    const sal_uInt16 nRowCount = getRowCount();
-    const sal_uInt16 nColCount = getColumnCount();
+    const sal_Int32 nRowCount = getRowCount();
+    const sal_Int32 nColCount = getColumnCount();
 
     if(!nRowCount || !nColCount)
     {
@@ -3508,7 +3508,7 @@ void SwXCellRange::GetDataSequence(
         throw aRuntime;
     }
 
-    sal_Int32 nSize = nRowCount * nColCount;
+    const size_t nSize = static_cast<size_t>(nRowCount) * static_cast<size_t>(nColCount);
     if (pAnySeq)
         pAnySeq->realloc( nSize );
     else if (pTxtSeq)
@@ -3524,7 +3524,7 @@ void SwXCellRange::GetDataSequence(
     OUString   *pTxtData = pTxtSeq ? pTxtSeq->getArray() : 0;
     double     *pDblData = pDblSeq ? pDblSeq->getArray() : 0;
 
-    sal_Int32 nDtaCnt = 0;
+    size_t nDtaCnt = 0;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
@@ -3532,9 +3532,9 @@ void SwXCellRange::GetDataSequence(
         ::rtl::math::setNan( & fNan );
 
         uno::Reference< table::XCell > xCellRef;
-        for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
+        for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
         {
-            for(sal_uInt16 nCol = 0; nCol < nColCount; nCol++)
+            for(sal_Int32 nCol = 0; nCol < nColCount; ++nCol)
             {
                 SwXCell * pXCell = lcl_CreateXCell(pFmt,
                                     aRgDesc.nLeft + nCol,
@@ -3633,8 +3633,8 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    const sal_uInt16 nRowCount = getRowCount();
-    const sal_uInt16 nColCount = getColumnCount();
+    const sal_Int32 nRowCount = getRowCount();
+    const sal_Int32 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     lcl_EnsureCoreConnected(GetFrmFmt(), static_cast<cppu::OWeakObject*>(this));
@@ -3664,8 +3664,8 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
 void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno::Any > >& rArray) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    const sal_uInt16 nRowCount = getRowCount();
-    const sal_uInt16 nColCount = getColumnCount();
+    const sal_Int32 nRowCount = getRowCount();
+    const sal_Int32 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -3698,8 +3698,8 @@ void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno
 uno::Sequence< uno::Sequence< double > > SwXCellRange::getData() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    const sal_uInt16 nRowCount = getRowCount();
-    const sal_uInt16 nColCount = getColumnCount();
+    const sal_Int32 nRowCount = getRowCount();
+    const sal_Int32 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     if(m_bFirstColumnAsLabel || m_bFirstRowAsLabel)
@@ -3727,8 +3727,8 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    const sal_uInt16 nRowCount = getRowCount();
-    const sal_uInt16 nColCount = getColumnCount();
+    const sal_Int32 nRowCount = getRowCount();
+    const sal_Int32 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     if(m_bFirstColumnAsLabel || m_bFirstRowAsLabel)
