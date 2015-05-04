@@ -363,7 +363,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             LoadDocInFrame( sal_True );
 
             uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
-            xDesktop->getFrames()->append( uno::Reference<frame::XFrame>(m_xFrame, uno::UNO_QUERY) );
+            xDesktop->getFrames()->append(m_xFrame);
 
             // determine the menuhandle to get menutitems.
             if(m_xLayoutManager.is()) {
