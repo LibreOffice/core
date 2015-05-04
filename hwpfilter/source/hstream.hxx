@@ -20,6 +20,8 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HSTREAM_H
 #define INCLUDED_HWPFILTER_SOURCE_HSTREAM_H
 
+#include <vector>
+
 typedef unsigned char byte;
 /**
  * Stream class
@@ -28,7 +30,6 @@ class HStream
 {
     public:
         HStream();
-        virtual ~HStream();
 
 /**
  *
@@ -49,7 +50,7 @@ class HStream
 
     private:
         int size;
-        byte *seq;
+        std::vector<byte> seq;
         int pos;
 };
 #endif
