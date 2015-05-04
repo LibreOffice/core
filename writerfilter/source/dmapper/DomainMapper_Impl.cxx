@@ -2032,7 +2032,8 @@ void DomainMapper_Impl::PopShapeContext()
         }
 
         // Remove the shape if required (most likely replacement shape for OLE object)
-        if ( m_aAnchoredStack.top().bToRemove )
+        // or anchored to a discarded header or footer
+        if ( m_aAnchoredStack.top().bToRemove || m_bDiscardHeaderFooter )
         {
             try
             {
