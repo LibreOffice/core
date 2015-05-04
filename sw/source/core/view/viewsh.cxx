@@ -926,7 +926,7 @@ void SwViewShell::CalcLayout()
     const bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == 0;
     if ( bEndProgress )
     {
-        sal_uInt16 nEndPage = GetLayout()->GetPageNum();
+        long nEndPage = GetLayout()->GetPageNum();
         nEndPage += nEndPage * 10 / 100;
         ::StartProgress( STR_STATSTR_REFORMAT, 0, nEndPage, GetDoc()->GetDocShell() );
     }
@@ -1492,9 +1492,9 @@ void SwViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     GetOut()->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
     GetOut()->SetLineColor();
 
-    for ( sal_uInt16 i = 0; i < rRegion.size(); ++i )
+    for ( auto &rRgn : rRegion )
     {
-        const Rectangle aRectangle(rRegion[i].SVRect());
+        const Rectangle aRectangle(rRgn.SVRect());
 
         // #i93170#
         // Here we have a real Problem. On the one hand we have the buffering for paint
