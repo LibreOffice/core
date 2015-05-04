@@ -32,7 +32,7 @@
 #include "hgzip.h"
 #include "hiodev.h"
 #include "hwpfile.h"
-#include "hstream.h"
+#include "hstream.hxx"
 
 const int BUFSIZE = 1024;
 static uchar rBuf[BUFSIZE];

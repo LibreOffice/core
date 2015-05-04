@@ -19,7 +19,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "hstream.h"
+#include "hstream.hxx"
 
 HStream::HStream() : size(0), pos(0)
 {

@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "hgzip.h"
-#include "hstream.h"
+#include "hstream.hxx"
 
 #ifndef local
 #  define local static

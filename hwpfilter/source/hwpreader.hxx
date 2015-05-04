@@ -60,7 +60,7 @@ using namespace ::com::sun::star::xml::sax;
 #include "hcode.h"
 #include "hbox.h"
 #include "htags.h"
-#include "hstream.h"
+#include "hstream.hxx"
 #include "drawdef.h"
 #include "attributes.hxx"
 

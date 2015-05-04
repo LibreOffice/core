@@ -32,7 +32,7 @@
 #include "hpara.h"
 #include "htags.h"
 #include "hcode.h"
-#include "hstream.h"
+#include "hstream.hxx"
 
 #include <osl/diagnose.h>
 
