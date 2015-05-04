@@ -53,13 +53,13 @@ void DXFBlock::Read(DXFGroupReader & rDGR)
     {
         switch (rDGR.GetG())
         {
-            case  2: m_sName = OString(rDGR.GetS()); break;
-            case  3: m_sAlsoName = OString(rDGR.GetS()); break;
+            case  2: m_sName = rDGR.GetS(); break;
+            case  3: m_sAlsoName = rDGR.GetS(); break;
             case 70: nFlags=rDGR.GetI(); break;
             case 10: aBasePoint.fx=rDGR.GetF(); break;
             case 20: aBasePoint.fy=rDGR.GetF(); break;
             case 30: aBasePoint.fz=rDGR.GetF(); break;
-            case  1: m_sXRef = OString(rDGR.GetS()); break;
+            case  1: m_sXRef = rDGR.GetS(); break;
         }
     }
     DXFEntities::Read(rDGR);
@@ -92,9 +92,9 @@ void DXFBlocks::Read(DXFGroupReader & rDGR)
 
     for (;;) {
         while (rDGR.GetG()!=0) rDGR.Read();
-        if (strcmp(rDGR.GetS(),"ENDSEC")==0 ||
-            strcmp(rDGR.GetS(),"EOF")==0) break;
-        if (strcmp(rDGR.GetS(),"BLOCK")==0) {
+        if (rDGR.GetS() == "ENDSEC" ||
+            rDGR.GetS() == "EOF") break;
+        if (rDGR.GetS() == "BLOCK") {
             pB=new DXFBlock;
             pB->Read(rDGR);
             *ppSucc=pB;

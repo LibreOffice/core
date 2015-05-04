@@ -20,7 +20,7 @@
 
 #include <string.h>
 #include <dxfreprd.hxx>
-#include <boost/scoped_ptr.hpp>
+#include "osl/nlsupport.h"
 
 //------------------DXFBoundingBox--------------------------------------------
 
@@ -128,9 +128,10 @@ void DXFPalette::SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sa
 
 
 DXFRepresentation::DXFRepresentation()
+    : bUseUTF8(false)
 {
-    setTextEncoding(RTL_TEXTENCODING_IBM_437);
-        setGlobalLineTypeScale(1.0);
+    setTextEncoding(osl_getTextEncodingFromLocale(nullptr)); // Use default encoding if none specified
+    setGlobalLineTypeScale(1.0);
 }
 
 
@@ -139,7 +140,7 @@ DXFRepresentation::~DXFRepresentation()
 }
 
 
-bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent)
+bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 /*nMinPercent*/, sal_uInt16 /*nMaxPercent*/)
 {
     bool bRes;
 
@@ -147,27 +148,25 @@ bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_u
     aBlocks.Clear();
     aEntities.Clear();
 
-    boost::scoped_ptr<DXFGroupReader> pDGR(new DXFGroupReader( rIStream, nMinPercent, nMaxPercent ));
+    DXFGroupReader DGR( rIStream );
 
-    pDGR->Read();
-    while (pDGR->GetG()!=0 || strcmp(pDGR->GetS(),"EOF")!=0) {
-        if (pDGR->GetG()==0 && strcmp(pDGR->GetS(),"SECTION")==0) {
-            if (pDGR->Read()!=2) {
-                pDGR->SetError();
+    DGR.Read();
+    while (DGR.GetG()!=0 || (DGR.GetS() != "EOF")) {
+        if (DGR.GetG()==0 && DGR.GetS() == "SECTION") {
+            if (DGR.Read()!=2) {
+                DGR.SetError();
                 break;
             }
-            if      (strcmp(pDGR->GetS(),"HEADER"  )==0) ReadHeader(*pDGR);
-            else if (strcmp(pDGR->GetS(),"TABLES"  )==0) aTables.Read(*pDGR);
-            else if (strcmp(pDGR->GetS(),"BLOCKS"  )==0) aBlocks.Read(*pDGR);
-            else if (strcmp(pDGR->GetS(),"ENTITIES")==0) aEntities.Read(*pDGR);
-            else pDGR->Read();
+            if      (DGR.GetS() == "HEADER")   ReadHeader(DGR);
+            else if (DGR.GetS() == "TABLES")   aTables.Read(DGR);
+            else if (DGR.GetS() == "BLOCKS")   aBlocks.Read(DGR);
+            else if (DGR.GetS() == "ENTITIES") aEntities.Read(DGR);
+            else DGR.Read();
         }
-        else pDGR->Read();
+        else DGR.Read();
     }
 
-    bRes=pDGR->GetStatus();
-
-    pDGR.reset();
+    bRes=DGR.GetStatus();
 
     if (bRes && aBoundingBox.bEmpty)
         CalcBoundingBox(aEntities,aBoundingBox);
@@ -175,54 +174,71 @@ bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_u
     return bRes;
 }
 
-
 void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
 {
+    while (rDGR.GetG()!=0 || (rDGR.GetS() != "EOF" && rDGR.GetS() != "ENDSEC") )
+    {
+        if (rDGR.GetG()==9) {
+            if (rDGR.GetS() == "$EXTMIN" ||
+                rDGR.GetS() == "$EXTMAX")
+            {
+                DXFVector aVector;
+                while (rDGR.Read()!=9 && rDGR.GetG()!=0) {
+                    switch (rDGR.GetG()) {
+                    case 10: aVector.fx = rDGR.GetF(); break;
+                    case 20: aVector.fy = rDGR.GetF(); break;
+                    case 30: aVector.fz = rDGR.GetF(); break;
+                    }
+                }
+                aBoundingBox.Union(aVector);
+            }
+            else if (rDGR.GetS() == "$ACADVER")
+            {
+                if (!rDGR.Read(1))
+                    continue;
+                if (rDGR.GetS() >= "AC1021")
+                    bUseUTF8 = true;
+            }
+            else if (rDGR.GetS() == "$DWGCODEPAGE")
+            {
+                if (!rDGR.Read(3))
+                    continue;
 
-         while (rDGR.GetG()!=0 || (strcmp(rDGR.GetS(),"EOF")!=0 &&  strcmp(rDGR.GetS(),"ENDSEC")!=0) )
-         {
-                 if (rDGR.GetG()==9) {
-                         if (strcmp(rDGR.GetS(),"$EXTMIN")==0 ||
-                                 strcmp(rDGR.GetS(),"$EXTMAX")==0)
-                         {
-                                 DXFVector aVector;
-                                 rDGR.SetF(10,0.0);
-                                 rDGR.SetF(20,0.0);
-                                 rDGR.SetF(30,0.0);
-                                 do {
-                                         rDGR.Read();
-                                 } while (rDGR.GetG()!=9 && rDGR.GetG()!=0);
-                                 aVector.fx=rDGR.GetF(10);
-                                 aVector.fy=rDGR.GetF(20);
-                                 aVector.fz=rDGR.GetF(30);
-                                 aBoundingBox.Union(aVector);
-                         } else {
-                                 if (strcmp(rDGR.GetS(),"$DWGCODEPAGE")==0)
-                                 {
-                                         rDGR.Read();
-
-                                         // FIXME: we really need a whole table of
-                                         // $DWGCODEPAGE to encodings mappings
-                                         if ( (strcmp(rDGR.GetS(),"ANSI_932")==0) ||
-                          (strcmp(rDGR.GetS(),"ansi_932")==0) ||
-                                              (strcmp(rDGR.GetS(),"DOS932")==0) ||
-                                              (strcmp(rDGR.GetS(),"dos932")==0) )
-                                         {
-                                                 setTextEncoding(RTL_TEXTENCODING_MS_932);
-                                         }
-                                 }
-                 else if (strcmp(rDGR.GetS(),"$LTSCALE")==0)
-                                 {
-                                         rDGR.Read();
-                                         setGlobalLineTypeScale(getGlobalLineTypeScale() * rDGR.GetF());
-                                 }
-                                 else rDGR.Read();
-                         }
-                 }
-                 else rDGR.Read();
-         }
+                // FIXME: we really need a whole table of
+                // $DWGCODEPAGE to encodings mappings
+                if ( (rDGR.GetS().equalsIgnoreAsciiCase("ANSI_932")) ||
+                     (rDGR.GetS().equalsIgnoreAsciiCase("DOS932")) )
+                {
+                    setTextEncoding(RTL_TEXTENCODING_MS_932);
+                }
+                else if (rDGR.GetS().equalsIgnoreAsciiCase("ANSI_936"))
+                {
+                    setTextEncoding(RTL_TEXTENCODING_MS_936);
+                }
+                else if (rDGR.GetS().equalsIgnoreAsciiCase("ANSI_949"))
+                {
+                    setTextEncoding(RTL_TEXTENCODING_MS_949);
+                }
+                else if (rDGR.GetS().equalsIgnoreAsciiCase("ANSI_950"))
+                {
+                    setTextEncoding(RTL_TEXTENCODING_MS_950);
+                }
+                else if (rDGR.GetS().equalsIgnoreAsciiCase("ANSI_1251"))
+                {
+                    setTextEncoding(RTL_TEXTENCODING_MS_1251);
+                }
+            }
+            else if (rDGR.GetS() == "$LTSCALE")
+            {
+                if (!rDGR.Read(40))
+                    continue;
+                setGlobalLineTypeScale(getGlobalLineTypeScale() * rDGR.GetF());
+            }
+            else rDGR.Read();
+        }
+        else rDGR.Read();
+    }
 }
-
 
 void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                                         DXFBoundingBox & rBox)
@@ -371,6 +387,61 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
         }
         pBE=pBE->pSucc;
     }
+}
+
+namespace {
+    inline bool lcl_isDec(sal_Unicode ch)
+    {
+        return ch >= L'0' && ch <= L'9';
+    }
+    inline bool lcl_isHex(sal_Unicode ch)
+    {
+        return lcl_isDec(ch) || (ch >= L'A' && ch <= L'F') || (ch >= L'a' && ch <= L'f');
+    }
+}
+
+#define OUS(S) OUString(RTL_CONSTASCII_USTRINGPARAM(S))
+
+OUString DXFRepresentation::ToOUString(const OString& s, bool bSpecials) const
+{
+    OUString result = OStringToOUString(s, getTextEncoding());
+    if (bSpecials) {
+        result = result.replaceAll(OUS("%%o"), OUS(""))       // Overscore - simply remove
+                       .replaceAll(OUS("%%u"), OUS(""))       // Underscore - simply remove
+                       .replaceAll(OUS("%%d"), OUS("\u00B0")) // Degrees symbol (°)
+                       .replaceAll(OUS("%%p"), OUS("\u00B1")) // Tolerance symbol (±)
+                       .replaceAll(OUS("%%c"), OUS("\u2205")) // Diameter symbol
+                       .replaceAll(OUS("%%%"), OUS("%"));     // Percent symbol
+
+        sal_Int32 pos = result.indexOf(OUS("%%")); // %%nnn, where nnn - 3-digit decimal ASCII code
+        while (pos != -1 && pos <= result.getLength() - 5) {
+            OUString asciiNum = result.copy(pos + 2, 3);
+            if (lcl_isDec(asciiNum[0]) &&
+                lcl_isDec(asciiNum[1]) &&
+                lcl_isDec(asciiNum[2]))
+            {
+                char ch = static_cast<char>(asciiNum.toUInt32());
+                OUString codePt(&ch, 1, mEnc);
+                result = result.replaceAll(result.copy(pos, 5), codePt, pos);
+            }
+            pos = result.indexOf(OUS("%%"), pos + 1);
+        }
+
+        pos = result.indexOf(OUS("\\U+")); // \U+XXXX, where XXXX - 4-digit hex unicode
+        while (pos != -1 && pos <= result.getLength() - 7) {
+            OUString codePtNum = result.copy(pos + 3, 4);
+            if (lcl_isHex(codePtNum[0]) &&
+                lcl_isHex(codePtNum[1]) &&
+                lcl_isHex(codePtNum[2]) &&
+                lcl_isHex(codePtNum[3]))
+            {
+                OUString codePt(static_cast<sal_Unicode>(codePtNum.toUInt32(16)));
+                result = result.replaceAll(result.copy(pos, 7), codePt, pos);
+            }
+            pos = result.indexOf(OUS("\\U+"), pos + 1);
+        }
+    }
+    return result;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
