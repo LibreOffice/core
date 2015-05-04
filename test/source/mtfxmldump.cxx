@@ -169,7 +169,7 @@ OString convertLineStyleToString(const sal_uInt16 nActionType)
         case META_POLYPOLYGON_ACTION:           return "polypolygon";
         case META_TEXT_ACTION:                  return "text";
         case META_TEXTARRAY_ACTION:             return "textarray";
-        case META_STRETCHTEXT_ACTION:           return "strechtext";
+        case META_STRETCHTEXT_ACTION:           return "stretchtext";
         case META_TEXTRECT_ACTION:              return "textrect";
         case META_TEXTLINE_ACTION:              return "textline";
         case META_BMP_ACTION:                   return "bmp";

@@ -1559,7 +1559,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
         ::RegistFlys( pNew->FindPageFrm(), pNew );
         SwSectionFrm* pSect = FindSctFrm();
         // The content of a FtnContainer in a (column) section only need to be calculated
-        // if the section streches already to the bottom edge of the Upper.
+        // if the section stretches already to the bottom edge of the Upper.
         if( pSect && !pSect->IsJoinLocked() && ( bEnd ? !pSect->IsEndnAtEnd() :
             !pSect->IsFtnAtEnd() ) && pSect->Growable() )
             pSect->InvalidateSize();

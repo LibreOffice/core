@@ -150,7 +150,7 @@ private: //member
     //add this vector to go from the axis line to the label line (border of the diagram)
     ::basegfx::B2DVector    m_aAxisLineToLabelLineShift;
 
-    double      m_fStrech_LogicToScreen;
+    double      m_fStretch_LogicToScreen;
     double      m_fOffset_LogicToScreen;
 };
 

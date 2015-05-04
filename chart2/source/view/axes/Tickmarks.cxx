@@ -139,20 +139,20 @@ void TickFactory::updateScreenValues( TickInfoArraysType& /*rAllTickInfos*/ ) co
 // ___TickFactory_2D___
 TickFactory2D::TickFactory2D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement
-          //, double fStrech_SceneToScreen, double fOffset_SceneToScreen )
+          //, double fStretch_SceneToScreen, double fOffset_SceneToScreen )
           , const B2DVector& rStartScreenPos, const B2DVector& rEndScreenPos
           , const B2DVector& rAxisLineToLabelLineShift )
           : TickFactory( rScale, rIncrement )
           , m_aAxisStartScreenPosition2D(rStartScreenPos)
           , m_aAxisEndScreenPosition2D(rEndScreenPos)
           , m_aAxisLineToLabelLineShift(rAxisLineToLabelLineShift)
-          , m_fStrech_LogicToScreen(1.0)
+          , m_fStretch_LogicToScreen(1.0)
           , m_fOffset_LogicToScreen(0.0)
 {
     double fWidthY = m_fScaledVisibleMax - m_fScaledVisibleMin;
     if (chart2::AxisOrientation_MATHEMATICAL == m_rScale.Orientation)
     {
-        m_fStrech_LogicToScreen = 1.0/fWidthY;
+        m_fStretch_LogicToScreen = 1.0/fWidthY;
         m_fOffset_LogicToScreen = -m_fScaledVisibleMin;
     }
     else
@@ -161,7 +161,7 @@ TickFactory2D::TickFactory2D(
         m_aAxisStartScreenPosition2D = m_aAxisEndScreenPosition2D;
         m_aAxisEndScreenPosition2D = aSwap;
 
-        m_fStrech_LogicToScreen = -1.0/fWidthY;
+        m_fStretch_LogicToScreen = -1.0/fWidthY;
         m_fOffset_LogicToScreen = -m_fScaledVisibleMax;
     }
 }
@@ -197,7 +197,7 @@ B2DVector TickFactory2D::getTickScreenPosition2D( double fScaledLogicTickValue )
 {
     B2DVector aRet(m_aAxisStartScreenPosition2D);
     aRet += (m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D)
-                *((fScaledLogicTickValue+m_fOffset_LogicToScreen)*m_fStrech_LogicToScreen);
+                *((fScaledLogicTickValue+m_fOffset_LogicToScreen)*m_fStretch_LogicToScreen);
     return aRet;
 }
 

@@ -1079,7 +1079,7 @@ void WinOpenGLDeviceInfo::FillBlacklist()
     IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_XP, wgl::IntelGMAX3000, wgl::V(6,14,10,5218));
     IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_XP, wgl::IntelGMAX4500HD, wgl::V(6,14,10,4969));
 
-    // StrechRect seems to suffer from precision issues which leads to artifacting
+    // StretchRect seems to suffer from precision issues which leads to artifacting
     // during content drawing starting with at least version 6.14.10.5082
     // and going until 6.14.10.5218. See bug 919454 and bug 949275 for more info.
     APPEND_TO_DRIVER_BLOCKLIST_RANGE(wgl::DRIVER_OS_WINDOWS_XP,

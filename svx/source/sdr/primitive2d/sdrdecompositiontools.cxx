@@ -297,7 +297,7 @@ namespace drawinglayer
 
                 if(rText.isFitToSize())
                 {
-                    // streched text in range
+                    // stretched text in range
                     pNew = new SdrStretchTextPrimitive2D(
                         &rText.getSdrText(),
                         rText.getOutlinerParaObject(),

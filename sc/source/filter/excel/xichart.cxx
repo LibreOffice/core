@@ -1520,9 +1520,9 @@ void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeIn
     /*  Line and area format.
         #i71810# If the data points are filled with bitmaps, textures, or
         patterns, then only bar charts will use the CHPICFORMAT record to
-        determine stacking/streching mode. All other chart types ignore this
+        determine stacking/stretching mode. All other chart types ignore this
         record and always use the property 'fill-type' from the DFF property
-        set (streched for bitmaps, and stacked for textures and patterns). */
+        set (stretched for bitmaps, and stacked for textures and patterns). */
     bool bUsePicFmt = rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR;
     ConvertFrameBase( GetChRoot(), rPropSet, rTypeInfo.GetSeriesObjectType(), maData.mnFormatIdx, bUsePicFmt );
 

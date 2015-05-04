@@ -74,7 +74,7 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
             rToSet.Put(XFillBmpStretchItem(true));
             rToSet.Put(XFillBmpTileItem(false));
 
-            // default for strech is also top-left, but this will not be visible
+            // default for stretch is also top-left, but this will not be visible
             rToSet.Put(XFillBmpPosItem(RP_LT));
         }
         else if(GPOS_TILED == rBrush.GetGraphicPos())

@@ -129,7 +129,7 @@ public class ObjectViewContainer
     }
 
     /** Update the layout manager by setting the vertical weight of the
-        bottom entry to 1 and so make it strech to over the available
+        bottom entry to 1 and so make it stretch to over the available
         space.
 
     */
