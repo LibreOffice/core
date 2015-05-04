@@ -26,6 +26,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/documentconstants.hxx>
 
 #include "xfactory.hxx"
 #include "commonembobj.hxx"
@@ -114,6 +115,11 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         xSubStorage = uno::Reference< embed::XStorage >();
 
         uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByMediaType( aMediaType );
+
+        // If the sequence is empty, fall back to the FileFormatVersion=6200 filter, Base only has that.
+        if (!aObject.hasElements() && aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII)
+            aObject = m_aConfigHelper.GetObjectPropsByMediaType(MIMETYPE_VND_SUN_XML_BASE_ASCII);
+
         if ( !aObject.getLength() )
             throw io::IOException(); // unexpected mimetype of the storage
 

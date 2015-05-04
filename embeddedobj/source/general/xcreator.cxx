@@ -31,6 +31,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/documentconstants.hxx>
 
 #include <xcreator.hxx>
 #include <dummyobject.hxx>
@@ -200,7 +201,13 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
     OSL_ENSURE( !aMediaType.isEmpty(), "No media type is specified for the object!" );
     if ( !aMediaType.isEmpty() && aEmbedFactory.isEmpty() )
+    {
         aEmbedFactory = m_aConfigHelper.GetFactoryNameByMediaType( aMediaType );
+
+        // If no factory is found, fall back to the FileFormatVersion=6200 filter, Base only has that.
+        if (aEmbedFactory.isEmpty() && aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII)
+            aEmbedFactory = m_aConfigHelper.GetFactoryNameByMediaType(MIMETYPE_VND_SUN_XML_BASE_ASCII);
+    }
 
     if ( !aEmbedFactory.isEmpty() )
     {

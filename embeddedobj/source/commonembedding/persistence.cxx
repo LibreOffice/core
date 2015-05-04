@@ -447,6 +447,10 @@ OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
         try {
             ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
             aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(), nVersion );
+
+            // If no filter is found, fall back to the FileFormatVersion=6200 filter, Base only has that.
+            if (aFilterName.isEmpty() && nVersion == SOFFICE_FILEFORMAT_CURRENT)
+                aFilterName = aHelper.GetDefaultFilterFromServiceName(GetDocumentServiceName(), SOFFICE_FILEFORMAT_60);
         } catch( const uno::Exception& )
         {}
     }
