@@ -2689,15 +2689,13 @@ void FmXFormShell::selectionChanged(const lang::EventObject& rEvent) throw(::com
 }
 
 
-IMPL_LINK(FmXFormShell, OnTimeOut, void*, /*EMPTYTAG*/)
+IMPL_LINK_NOARG_TYPED(FmXFormShell, OnTimeOut, Timer*, void)
 {
     if ( impl_checkDisposed() )
-        return 0;
+        return;
 
     if (m_pShell->IsDesignMode() && m_pShell->GetFormView())
         SetSelection(m_pShell->GetFormView()->GetMarkedObjectList());
-
-    return 0;
 }
 
 

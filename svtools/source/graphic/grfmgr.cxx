@@ -1055,7 +1055,7 @@ void GraphicObject::SetSwapState()
     }
 }
 
-IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
+IMPL_LINK_NOARG_TYPED(GraphicObject, ImplAutoSwapOutHdl, Timer *, void)
 {
     if( !IsSwappedOut() )
     {
@@ -1084,8 +1084,6 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
 
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();
-
-    return 0L;
 }
 
 SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )

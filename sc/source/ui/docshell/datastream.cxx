@@ -586,12 +586,10 @@ bool DataStream::ImportData()
     return mbRunning;
 }
 
-IMPL_LINK_NOARG(DataStream, ImportTimerHdl)
+IMPL_LINK_NOARG_TYPED(DataStream, ImportTimerHdl, Timer *, void)
 {
     if (ImportData())
         maImportTimer.Start();
-
-    return 0;
 }
 
 } // namespace sc

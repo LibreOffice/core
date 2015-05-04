@@ -88,12 +88,11 @@ OTableEditorCtrl::ClipboardInvalidator::~ClipboardInvalidator()
 
 }
 
-IMPL_LINK_NOARG(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate)
+IMPL_LINK_NOARG_TYPED(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate, Timer *, void)
 {
     m_pOwner->GetView()->getController().InvalidateFeature(SID_CUT);
     m_pOwner->GetView()->getController().InvalidateFeature(SID_COPY);
     m_pOwner->GetView()->getController().InvalidateFeature(SID_PASTE);
-    return 0L;
 }
 
 void OTableEditorCtrl::Init()

@@ -510,7 +510,7 @@ void SwHeaderFooterWin::Select( )
     ExecuteCommand( GetCurItemId() );
 }
 
-IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler)
+IMPL_LINK_NOARG_TYPED(SwHeaderFooterWin, FadeHandler, Timer *, void)
 {
     if ( m_bIsAppearing && m_nFadeRate > 0 )
         m_nFadeRate -= 25;
@@ -532,8 +532,6 @@ IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler)
 
     if ( IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100 )
         m_aFadeTimer.Start();
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,7 +43,7 @@ private:
 
 protected:
 
-    DECL_LINK(      ImpUpdateDataHdl, void* );
+    DECL_LINK_TYPED( ImpUpdateDataHdl, Timer*, void );
     void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

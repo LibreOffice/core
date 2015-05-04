@@ -1816,10 +1816,9 @@ namespace svxform
         return 0;
     }
 
-    IMPL_LINK_NOARG(DataNavigatorWindow, UpdateHdl)
+    IMPL_LINK_NOARG_TYPED(DataNavigatorWindow, UpdateHdl, Timer *, void)
     {
         ModelSelectHdl( NULL );
-        return 0;
     }
 
     XFormsPage* DataNavigatorWindow::GetCurrentPage( sal_uInt16& rCurId )

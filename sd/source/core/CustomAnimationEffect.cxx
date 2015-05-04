@@ -3416,7 +3416,7 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::
 
 }
 
-IMPL_LINK_NOARG(MainSequence, onTimerHdl)
+IMPL_LINK_NOARG_TYPED(MainSequence, onTimerHdl, Timer *, void)
 {
     if( mbTimerMode )
     {
@@ -3427,8 +3427,6 @@ IMPL_LINK_NOARG(MainSequence, onTimerHdl)
         reset();
         createMainSequence();
     }
-
-    return 0;
 }
 
 /** starts a timer that recreates the internal structure from the API core after 1 second */

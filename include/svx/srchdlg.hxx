@@ -243,7 +243,7 @@ private:
     DECL_LINK(FormatHdl_Impl, void *);
     DECL_LINK(NoFormatHdl_Impl, void *);
     DECL_LINK(AttributeHdl_Impl, void *);
-    DECL_LINK( TimeoutHdl_Impl, Timer* );
+    DECL_LINK_TYPED( TimeoutHdl_Impl, Timer*, void );
 
     void            Construct_Impl();
     void            InitControls_Impl();

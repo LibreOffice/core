@@ -475,7 +475,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     return DND_ACTION_NONE;
 }
 
-IMPL_LINK_NOARG(SwEditWin, DDHandler)
+IMPL_LINK_NOARG_TYPED(SwEditWin, DDHandler, Timer *, void)
 {
     g_bDDTimerStarted = false;
     m_aTimer.Stop();
@@ -489,7 +489,6 @@ IMPL_LINK_NOARG(SwEditWin, DDHandler)
         g_bExecuteDrag = true;
         StartExecuteDrag();
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

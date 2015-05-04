@@ -365,7 +365,7 @@ void ConfigurationUpdater::SetUpdateBeingProcessed (bool bValue)
     mbUpdateBeingProcessed = bValue;
 }
 
-IMPL_LINK_NOARG(ConfigurationUpdater, TimeoutHandler)
+IMPL_LINK_NOARG_TYPED(ConfigurationUpdater, TimeoutHandler, Timer *, void)
 {
     OSL_TRACE("configuration update timer");
     if ( ! mbUpdateBeingProcessed
@@ -378,7 +378,6 @@ IMPL_LINK_NOARG(ConfigurationUpdater, TimeoutHandler)
             RequestUpdate(mxRequestedConfiguration);
         }
     }
-    return 0;
 }
 
 } } // end of namespace sd::framework

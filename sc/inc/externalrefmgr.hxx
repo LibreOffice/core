@@ -839,7 +839,7 @@ private:
     bool mbDocTimerEnabled:1;
 
     AutoTimer maSrcDocTimer;
-    DECL_LINK(TimeOutHdl, AutoTimer*);
+    DECL_LINK_TYPED(TimeOutHdl, Timer*, void);
 };
 
 #endif

@@ -736,12 +736,11 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
     m_pZoomConstRB->Enable(bFound);
 }
 
-IMPL_LINK_NOARG(SvxGrfCropPage, Timeout)
+IMPL_LINK_NOARG_TYPED(SvxGrfCropPage, Timeout, Timer *, void)
 {
     DBG_ASSERT(pLastCropField,"Timeout ohne Feld?");
     CropHdl(pLastCropField);
     pLastCropField = 0;
-    return 0;
 }
 
 

@@ -135,14 +135,13 @@ void SvxConfigFunctionListBox::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-IMPL_LINK_NOARG(SvxConfigFunctionListBox, TimerHdl)
+IMPL_LINK_NOARG_TYPED(SvxConfigFunctionListBox, TimerHdl, Timer *, void)
 {
     aTimer.Stop();
     Point aMousePos = GetPointerPosPixel();
     SvTreeListEntry *pEntry = GetCurEntry();
     if ( pEntry && GetEntry( aMousePos ) == pEntry && pCurEntry == pEntry )
         Help::ShowBalloon( this, OutputToScreenPixel( aMousePos ), GetHelpText( pEntry ) );
-    return 0L;
 }
 
 void SvxConfigFunctionListBox::ClearAll()

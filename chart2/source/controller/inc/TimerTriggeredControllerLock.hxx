@@ -43,7 +43,7 @@ private:
     boost::scoped_ptr< ControllerLockGuardUNO > m_apControllerLockGuard;
     AutoTimer       m_aTimer;
 
-    DECL_LINK( TimerTimeout, void* );
+    DECL_LINK_TYPED( TimerTimeout, Timer*, void );
 };
 
 } //namespace chart

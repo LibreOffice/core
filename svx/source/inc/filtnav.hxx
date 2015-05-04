@@ -284,7 +284,7 @@ protected:
 
     DECL_LINK(OnRemove, SvTreeListEntry*);
     DECL_LINK(OnEdited, SvTreeListEntry*);
-    DECL_LINK(OnDropActionTimer, void*);
+    DECL_LINK_TYPED(OnDropActionTimer, Timer*, void);
 
 private:
     /** returns the first form item and the selected FilterItems in the vector

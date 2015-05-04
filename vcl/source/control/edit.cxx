@@ -2419,10 +2419,9 @@ void Edit::UpdateData()
     maUpdateDataHdl.Call( this );
 }
 
-IMPL_LINK_NOARG(Edit, ImplUpdateDataHdl)
+IMPL_LINK_NOARG_TYPED(Edit, ImplUpdateDataHdl, Timer *, void)
 {
     UpdateData();
-    return 0;
 }
 
 void Edit::EnableUpdateData( sal_uLong nTimeout )

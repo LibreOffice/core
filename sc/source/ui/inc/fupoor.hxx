@@ -50,11 +50,11 @@ protected:
     VclPtr<Dialog>          pDialog;
 
     Timer           aScrollTimer;           // for Autoscrolling
-    DECL_LINK( ScrollHdl, void * );
+    DECL_LINK_TYPED( ScrollHdl, Timer *, void );
     void ForceScroll(const Point& aPixPos);
 
     Timer           aDragTimer;             // for Drag&Drop
-    DECL_LINK( DragTimerHdl, void * );
+    DECL_LINK_TYPED( DragTimerHdl, Timer *, void );
     DECL_LINK( DragHdl, void * );
     bool            bIsInDragMode;
     Point           aMDPos;                 // Position of MouseButtonDown

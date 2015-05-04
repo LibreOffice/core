@@ -160,10 +160,9 @@ void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
     bIsLocked = bLock;
 }
 
-IMPL_LINK( SwChartLockController_Helper, DoUnlockAllCharts, Timer *, /*pTimer*/ )
+IMPL_LINK_NOARG_TYPED( SwChartLockController_Helper, DoUnlockAllCharts, Timer *, void )
 {
     UnlockAllCharts();
-    return 0;
 }
 
 static osl::Mutex &    GetChartMutex()

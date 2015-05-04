@@ -137,12 +137,11 @@ Any CacheConfiguration::GetValue (const OUString& rName)
     return aResult;
 }
 
-IMPL_LINK_NOARG(CacheConfiguration, TimerCallback)
+IMPL_LINK_NOARG_TYPED(CacheConfiguration, TimerCallback, Timer *, void)
 {
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
     // Release out reference to the instance.
     rInstancePtr.reset();
-    return 0;
 }
 
 } } } // end of namespace ::sd::slidesorter::cache

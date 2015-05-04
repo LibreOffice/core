@@ -268,7 +268,7 @@ private:
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
-    DECL_DLLPRIVATE_LINK( ImplTimerHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplTimerHdl, Timer*, void );
 
     ValueSet (const ValueSet &) SAL_DELETED_FUNCTION;
     ValueSet & operator= (const ValueSet &) SAL_DELETED_FUNCTION;

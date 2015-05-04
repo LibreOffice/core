@@ -123,7 +123,7 @@ private:
     */
     sal_Int32 CalculatePriority (const SharedMasterPageDescriptor& rDescriptor) const;
 
-    DECL_LINK(DelayedPreviewCreation, Timer *);
+    DECL_LINK_TYPED(DelayedPreviewCreation, Timer *, void);
 };
 
 } } // end of namespace sd::sidebar

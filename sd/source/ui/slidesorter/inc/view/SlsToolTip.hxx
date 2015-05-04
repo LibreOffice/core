@@ -68,7 +68,7 @@ private:
     void Show (const bool bForce);
     void DoShow();
 
-    DECL_LINK(DelayTrigger, void*);
+    DECL_LINK_TYPED(DelayTrigger, Timer*, void);
 };
 
 } } } // end of namespace ::sd::slidesorter::view

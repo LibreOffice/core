@@ -939,7 +939,7 @@ IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
     return 1;
 }
 
-IMPL_LINK( MenuBarManager, AsyncSettingsHdl, Timer*,)
+IMPL_LINK_NOARG_TYPED( MenuBarManager, AsyncSettingsHdl, Timer*, void)
 {
     SolarMutexGuard g;
     Reference< XInterface > xSelfHold(
@@ -951,8 +951,6 @@ IMPL_LINK( MenuBarManager, AsyncSettingsHdl, Timer*,)
         SetItemContainer( m_xDeferedItemContainer );
         m_xDeferedItemContainer.clear();
     }
-
-    return 0;
 }
 
 IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )

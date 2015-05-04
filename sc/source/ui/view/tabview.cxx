@@ -269,12 +269,10 @@ void ScTabView::ResetTimer()
     pTimerWindow = NULL;
 }
 
-IMPL_LINK_NOARG(ScTabView, TimerHdl)
+IMPL_LINK_NOARG_TYPED(ScTabView, TimerHdl, Timer *, void)
 {
     if (pTimerWindow)
         pTimerWindow->MouseMove( aTimerMEvt );
-
-    return 0;
 }
 
 // --- Resize ---------------------------------------------------------------------

@@ -73,7 +73,7 @@ private:
     Size            maSizePixel;
     bool            bIsBitmap;
 
-    DECL_LINK(ImplPreviewTimeoutHdl, void *);
+    DECL_LINK_TYPED(ImplPreviewTimeoutHdl, Timer *, void);
     DECL_LINK( ImplModifyHdl, void* p );
 
 protected:

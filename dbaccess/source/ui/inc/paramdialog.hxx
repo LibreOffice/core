@@ -95,7 +95,7 @@ namespace dbaui
         ::connectivity::OSQLParseNode* implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField);
 
     private:
-        DECL_LINK(OnVisitedTimeout, Timer*);
+        DECL_LINK_TYPED(OnVisitedTimeout, Timer*, void);
         DECL_LINK(OnValueModified, Control*);
         DECL_LINK(OnEntrySelected, ListBox*);
         DECL_LINK(OnButtonClicked, PushButton*);

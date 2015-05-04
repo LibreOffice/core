@@ -548,7 +548,7 @@ namespace svx
     }
 
 
-    IMPL_LINK( FmTextControlShell, OnInvalidateClipboard, void*, /*_pNotInterestedIn*/ )
+    IMPL_LINK_NOARG_TYPED( FmTextControlShell, OnInvalidateClipboard, Timer*, void )
     {
         if ( m_bNeedClipboardInvalidation )
         {
@@ -558,7 +558,6 @@ namespace svx
             m_rBindings.Invalidate( SID_PASTE );
             m_bNeedClipboardInvalidation = false;
         }
-        return 0L;
     }
 
 

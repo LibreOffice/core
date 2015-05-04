@@ -330,7 +330,7 @@ namespace dbaui
         void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
 
         // time to check the CUT/COPY/PASTE-slot-states
-        DECL_LINK( OnInvalidateClipboard, AutoTimer* );
+        DECL_LINK_TYPED( OnInvalidateClipboard, Timer*, void );
         DECL_LINK( OnClipboardChanged, void* );
 
         // search callbacks

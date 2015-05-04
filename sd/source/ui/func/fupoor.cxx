@@ -177,15 +177,13 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 /**
  * timer handler for window scrolling
  */
-IMPL_LINK_NOARG(FuPoor, ScrollHdl)
+IMPL_LINK_NOARG_TYPED(FuPoor, ScrollHdl, Timer *, void)
 {
     Point aPnt(mpWindow->GetPointerPosPixel());
 
     // use remembered MouseButton state to create correct
     // MouseEvents for this artificial MouseMove.
     MouseMove(MouseEvent(aPnt, 1, MouseEventModifiers::NONE, GetMouseButtonCode()));
-
-    return 0;
 }
 
 /**
@@ -956,7 +954,7 @@ void FuPoor::DoPasteUnformatted()
 /**
  * Timer handler for Drag&Drop
  */
-IMPL_LINK_NOARG(FuPoor, DragHdl)
+IMPL_LINK_NOARG_TYPED(FuPoor, DragHdl, Timer *, void)
 {
     if( mpView )
     {
@@ -971,7 +969,6 @@ IMPL_LINK_NOARG(FuPoor, DragHdl)
             mpView->StartDrag( aMDPos, mpWindow );
         }
     }
-    return 0;
 }
 
 bool FuPoor::Command(const CommandEvent& rCEvt)
@@ -982,7 +979,7 @@ bool FuPoor::Command(const CommandEvent& rCEvt)
 /**
  * Timer handler for window scrolling
  */
-IMPL_LINK_NOARG(FuPoor, DelayHdl)
+IMPL_LINK_NOARG_TYPED(FuPoor, DelayHdl, Timer *, void)
 {
     aDelayToScrollTimer.Stop ();
     bScrollable = true;
@@ -992,8 +989,6 @@ IMPL_LINK_NOARG(FuPoor, DelayHdl)
     // use remembered MouseButton state to create correct
     // MouseEvents for this artificial MouseMove.
     MouseMove(MouseEvent(aPnt, 1, MouseEventModifiers::NONE, GetMouseButtonCode()));
-
-    return 0;
 }
 
 bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)

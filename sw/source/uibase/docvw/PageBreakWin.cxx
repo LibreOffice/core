@@ -441,14 +441,14 @@ IMPL_LINK_NOARG(SwPageBreakWin, HideHandler)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler)
+IMPL_LINK_NOARG_TYPED(SwPageBreakWin, FadeHandler, Timer *, void)
 {
     const int TICKS_BEFORE_WE_APPEAR = 10;
     if ( m_bIsAppearing && m_nDelayAppearing < TICKS_BEFORE_WE_APPEAR )
     {
         ++m_nDelayAppearing;
         m_aFadeTimer.Start();
-        return 0;
+        return;
     }
 
     if ( m_bIsAppearing && m_nFadeRate > 0 )
@@ -468,8 +468,6 @@ IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler)
 
     if ( IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100 )
         m_aFadeTimer.Start();
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -533,7 +533,7 @@ void ChartController::stopDoubleClickWaiting()
     m_bWaitingForDoubleClick = false;
 }
 
-IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl)
+IMPL_LINK_NOARG_TYPED(ChartController, DoubleClickWaitingHdl, Timer *, void)
 {
     m_bWaitingForDoubleClick = false;
 
@@ -553,8 +553,6 @@ IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl)
             impl_SetMousePointer( aMouseEvent );
         }
     }
-
-    return 0;
 }
 
 void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )

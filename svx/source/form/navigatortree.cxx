@@ -1489,10 +1489,10 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
+    IMPL_LINK_NOARG_TYPED(NavigatorTree, OnDropActionTimer, Timer *, void)
     {
         if (--m_aTimerCounter > 0)
-            return 0L;
+            return;
 
         switch ( m_aDropActionType )
         {
@@ -1521,8 +1521,6 @@ namespace svxform
             break;
 
         }
-
-        return 0L;
     }
 
 
@@ -1543,10 +1541,9 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG(NavigatorTree, OnSynchronizeTimer)
+    IMPL_LINK_NOARG_TYPED(NavigatorTree, OnSynchronizeTimer, Timer *, void)
     {
         SynchronizeMarkList();
-        return 0L;
     }
 
 

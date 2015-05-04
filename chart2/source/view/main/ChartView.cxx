@@ -3151,12 +3151,10 @@ void ChartView::setViewDirty()
     m_bViewDirty = true;
 }
 
-IMPL_LINK_NOARG(ChartView, UpdateTimeBased)
+IMPL_LINK_NOARG_TYPED(ChartView, UpdateTimeBased, Timer *, void)
 {
     setViewDirty();
     update();
-
-    return 0;
 }
 
 void ChartView::createShapes2D( const awt::Size& rPageSize )

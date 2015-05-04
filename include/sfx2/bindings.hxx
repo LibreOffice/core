@@ -131,7 +131,8 @@ private:
                             const SfxPoolItem *pItem,
                             SfxItemState eItemState );
     SAL_DLLPRIVATE SfxStateCache* GetStateCache( sal_uInt16 nId, sal_uInt16 *pPos);
-    DECL_DLLPRIVATE_LINK( NextJob_Impl, Timer * );
+    DECL_DLLPRIVATE_LINK_TYPED( NextJob, Timer *, void );
+    SAL_DLLPRIVATE bool NextJob_Impl(Timer * pTimer);
 
 public:
                      SfxBindings();

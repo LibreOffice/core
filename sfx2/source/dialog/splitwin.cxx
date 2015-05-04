@@ -962,7 +962,7 @@ void SfxSplitWindow::Command( const CommandEvent& rCEvt )
 
 
 
-IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer)
+IMPL_LINK_TYPED( SfxSplitWindow, TimerHdl, Timer*, pTimer, void)
 {
     if ( pTimer )
         pTimer->Stop();
@@ -986,7 +986,7 @@ IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer)
             // do nothing
             pEmptyWin->aLastPos = GetPointerPosPixel();
             pEmptyWin->aTimer.Start();
-            return 0L;
+            return;
         }
 
         // Especially for TF_AUTOSHOW_ON_MOUSEMOVE :
@@ -1029,8 +1029,6 @@ IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer)
             }
         }
     }
-
-    return 0L;
 }
 
 

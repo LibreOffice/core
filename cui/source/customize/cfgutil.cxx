@@ -289,7 +289,7 @@ void SfxConfigFunctionListBox::MouseMove( const MouseEvent& )
 {
 }
 
-IMPL_LINK( SfxConfigFunctionListBox, TimerHdl, Timer*, pTimer)
+IMPL_LINK_TYPED( SfxConfigFunctionListBox, TimerHdl, Timer*, pTimer, void)
 /*  Description
     Timer-handler for showing a help-text. If the mouse pointer is
     still on the currently selected entry after the timer has run out,
@@ -297,7 +297,6 @@ IMPL_LINK( SfxConfigFunctionListBox, TimerHdl, Timer*, pTimer)
 */
 {
     (void)pTimer; // unused
-    return 0L;
 }
 
 void SfxConfigFunctionListBox::ClearAll()

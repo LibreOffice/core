@@ -225,7 +225,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     return nChars < 0;
 }
 
-IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer )
+IMPL_LINK_TYPED( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer, void )
 {
     (void)pTimer;
     if (IncrementalDocStatCalculate(32000))
@@ -234,7 +234,6 @@ IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer )
     SwView* pView = m_rDoc.GetDocShell() ? m_rDoc.GetDocShell()->GetView() : NULL;
     if( pView )
         pView->UpdateDocStats();
-    return 0;
 }
 
 DocumentStatisticsManager::~DocumentStatisticsManager()

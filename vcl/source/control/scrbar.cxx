@@ -1134,12 +1134,11 @@ void ScrollBar::Resize()
     Invalidate();
 }
 
-IMPL_LINK_NOARG(ScrollBar, ImplAutoTimerHdl)
+IMPL_LINK_NOARG_TYPED(ScrollBar, ImplAutoTimerHdl, Timer *, void)
 {
     if( mpData && mpData->mbHide )
-        return 0;
+        return;
     ImplInvert();
-    return 0;
 }
 
 void ScrollBar::ImplInvert()

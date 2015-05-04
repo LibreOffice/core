@@ -317,11 +317,10 @@ IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, BrowseTimeoutHdl)
+IMPL_LINK_NOARG_TYPED(ScInsertTableDlg, BrowseTimeoutHdl, Timer *, void)
 {
     bMustClose = true;
     BrowseHdl_Impl(m_pBtnBrowse);
-    return 0;
 }
 
 IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )

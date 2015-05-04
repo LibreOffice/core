@@ -80,7 +80,7 @@ private:
     */
     Timer maCompactionTimer;
     bool mbIsCompactionRunning;
-    DECL_LINK(CompactionCallback, void *);
+    DECL_LINK_TYPED(CompactionCallback, Timer *, void);
 };
 
 } } } // end of namespace ::sd::slidesorter::cache

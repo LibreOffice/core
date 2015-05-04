@@ -155,7 +155,7 @@ private:
     DECL_LINK( MoreExpandedHdl, void* );
 
     // Hack: RefInput control
-    DECL_LINK( TimeOutHdl,   Timer* );
+    DECL_LINK_TYPED( TimeOutHdl, Timer*, void );
 };
 
 class ScSpecialFilterDlg : public ScAnyRefDlg

@@ -136,7 +136,7 @@ private:
     void            UpdateFormulaMode();
     void            InvalidateAttribs();
     void            ImplCreateEditEngine();
-    DECL_LINK(      DelayTimer, Timer* );
+    DECL_LINK_TYPED( DelayTimer, Timer*, void );
     void            GetColData();
     void            UseColData();
     void            NextAutoEntry( bool bBack );

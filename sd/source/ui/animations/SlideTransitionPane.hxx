@@ -99,7 +99,7 @@ private:
     DECL_LINK( SoundListBoxSelected, void * );
     DECL_LINK( LoopSoundBoxChecked, void * );
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
-    DECL_LINK(LateInitCallback, void *);
+    DECL_LINK_TYPED(LateInitCallback, Timer *, void);
 
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;

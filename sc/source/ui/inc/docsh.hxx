@@ -408,7 +408,7 @@ public:
     static OUString   GetDifFilterName();
     static bool       HasAutomaticTableName( const OUString& rFilter );
 
-    DECL_LINK( RefreshDBDataHdl, ScRefreshTimer* );
+    DECL_LINK_TYPED( RefreshDBDataHdl, Timer*, void );
 
     void            BeforeXMLLoading();
     void            AfterXMLLoading(bool bRet);

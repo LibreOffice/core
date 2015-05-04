@@ -308,14 +308,12 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
     CallStatusHdl();
 }
 
-IMPL_LINK_NOARG(ImpEditEngine, OnlineSpellHdl)
+IMPL_LINK_NOARG_TYPED(ImpEditEngine, OnlineSpellHdl, Timer *, void)
 {
     if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) && GetUpdateMode() && IsFormatted() )
         DoOnlineSpelling();
     else
         aOnlineSpellTimer.Start();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ImpEditEngine, IdleFormatHdl)
@@ -4016,10 +4014,9 @@ void ImpEditEngine::InvalidateFromParagraph( sal_Int32 nFirstInvPara )
     pTmpPortion->ResetHeight();
 }
 
-IMPL_LINK_NOARG(ImpEditEngine, StatusTimerHdl)
+IMPL_LINK_NOARG_TYPED(ImpEditEngine, StatusTimerHdl, Timer *, void)
 {
     CallStatusHdl();
-    return 0;
 }
 
 void ImpEditEngine::CallStatusHdl()

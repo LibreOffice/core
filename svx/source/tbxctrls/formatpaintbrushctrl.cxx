@@ -80,11 +80,10 @@ void FormatPaintBrushToolBoxControl::Click()
 }
 
 
-IMPL_LINK_NOARG(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl, Timer *, void)
 {
     //there was no second click during waiting
     this->impl_executePaintBrush();
-    return 0;
 }
 
 

@@ -1247,11 +1247,10 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl)
 
 
 
-IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl)
+IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, PreviewTimerHdl, Timer *, void)
 {
     aPreviewTimer.Stop();
     DoPreview();
-    return 0L;
 }
 
 

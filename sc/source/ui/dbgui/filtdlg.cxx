@@ -758,7 +758,7 @@ IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
     return 0;
 }
 
-IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
+IMPL_LINK_TYPED( ScFilterDlg, TimeOutHdl, Timer*, _pTimer, void )
 {
     // Check if RefInputMode is still true every 50ms
 
@@ -767,8 +767,6 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 
     if ( pExpander->get_expanded() )
         pTimer->Start();
-
-    return 0;
 }
 
 IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )

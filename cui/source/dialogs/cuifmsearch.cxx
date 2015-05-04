@@ -690,10 +690,9 @@ void FmSearchDialog::EnableControlPaint(bool bEnable)
         }
 }
 
-IMPL_LINK_NOARG(FmSearchDialog, OnDelayedPaint)
+IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnDelayedPaint, Timer *, void)
 {
     EnableControlPaint(true);
-    return 0L;
 }
 
 void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_Int16 nFieldPos)

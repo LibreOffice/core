@@ -191,7 +191,7 @@ public:
     SwWrtShell*         GetHiddenWrtShell() {return pHiddenShell;}
 
     DECL_LINK( ContentDoubleClickHdl, void * );
-    DECL_LINK( TimerUpdate, void * );
+    DECL_LINK_TYPED( TimerUpdate, Timer *, void );
 
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) SAL_OVERRIDE;
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
@@ -294,7 +294,7 @@ protected:
     void            Clear();
 
     DECL_LINK(      PopupHdl, Menu* );
-    DECL_LINK(      Timeout, void* );
+    DECL_LINK_TYPED( Timeout, Timer*, void );
     DECL_LINK(      DoubleClickHdl, void* );
 
     bool            IsInternalDrag() const {return bIsInternalDrag;}

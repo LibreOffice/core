@@ -69,14 +69,13 @@ SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame,
 
 
 
-IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineBox, DelayHdl_Impl, Timer *, void)
 {
     if ( GetEntryCount() == 0 )
     {
         mpSh = SfxObjectShell::Current();
         FillControl();
     }
-    return 0;
 }
 
 

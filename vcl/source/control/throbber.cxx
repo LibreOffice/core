@@ -239,11 +239,11 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     return aImageURLs;
 }
 
-IMPL_LINK_NOARG(Throbber, TimeOutHdl)
+IMPL_LINK_NOARG_TYPED(Throbber, TimeOutHdl, Timer *, void)
 {
     SolarMutexGuard aGuard;
     if ( maImageList.empty() )
-        return 0;
+        return;
 
     if ( mnCurStep < mnStepCount - 1 )
         mnCurStep += 1;
@@ -261,8 +261,6 @@ IMPL_LINK_NOARG(Throbber, TimeOutHdl)
     }
 
     SetImage( maImageList[ mnCurStep ] );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

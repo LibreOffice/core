@@ -517,12 +517,12 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwView, TimeoutHdl)
+IMPL_LINK_NOARG_TYPED(SwView, TimeoutHdl, Timer *, void)
 {
     if( m_pWrtShell->BasicActionPend() || g_bNoInterrupt )
     {
         m_aTimer.Start();
-        return 0;
+        return;
     }
 
     if ( m_bAttrChgNotifiedWithRegistrations )
@@ -540,8 +540,6 @@ IMPL_LINK_NOARG(SwView, TimeoutHdl)
     m_pWrtShell->DoUndo( bOldUndo );
     m_bAttrChgNotified = false;
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
-
-    return 0;
 }
 
 void SwView::_CheckReadonlyState()

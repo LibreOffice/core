@@ -179,10 +179,10 @@ public:
         aTimer.Start();
     }
 
-    DECL_LINK( TimerHdl, Timer*);
+    DECL_LINK_TYPED( TimerHdl, Timer*, void);
 };
 
-IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
+IMPL_LINK_TYPED(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer, void)
 {
     (void)pTimer; // unused
     aTimer.Stop();
@@ -191,7 +191,6 @@ IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
     xDisp->dispatch( aCommand, aSeq );
 
     delete this;
-    return 0L;
 }
 
 enum class SfxPopupAction
@@ -257,7 +256,7 @@ SfxBindings::SfxBindings()
     // all caches are valid (no pending invalidate-job)
     // create the list of caches
     pImp->pCaches = new SfxStateCacheArr_Impl;
-    pImp->aTimer.SetTimeoutHdl( LINK(this, SfxBindings, NextJob_Impl) );
+    pImp->aTimer.SetTimeoutHdl( LINK(this, SfxBindings, NextJob) );
 }
 
 
@@ -1554,10 +1553,12 @@ void SfxBindings::UpdateControllers_Impl
     }
 }
 
+IMPL_LINK_TYPED( SfxBindings, NextJob, Timer *, pTimer, void )
+{
+    NextJob_Impl(pTimer);
+}
 
-
-
-IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
+bool SfxBindings::NextJob_Impl(Timer * pTimer)
 {
 #ifdef DBG_UTIL
     // on Windows very often C++ Exceptions (GPF etc.) are caught by MSVCRT
@@ -1572,7 +1573,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     if ( Application::GetLastInputInterval() < MAX_INPUT_DELAY && pTimer )
     {
         pImp->aTimer.SetTimeout(TIMEOUT_UPDATING);
-        return sal_True;
+        return true;
     }
 
     SfxApplication *pSfxApp = SfxGetpApp();
@@ -1584,18 +1585,18 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     SfxViewFrame* pFrame = pDispatcher ? pDispatcher->GetFrame() : NULL;
     if ( (pFrame && !pFrame->GetObjectShell()->AcceptStateUpdate()) || pSfxApp->IsDowning() || pImp->pCaches->empty() )
     {
-        return sal_True;
+        return true;
     }
     if ( !pDispatcher || !pDispatcher->IsFlushed() )
     {
-        return sal_True;
+        return true;
     }
 
     // if possible Update all server / happens in its own time slice
     if ( pImp->bMsgDirty )
     {
         UpdateSlotServer_Impl();
-        return sal_False;
+        return false;
     }
 
     pImp->bAllDirty = false;
@@ -1640,7 +1641,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
             if ( bWasDirty && !bJobDone && bPreEmptive && (--nLoops == 0) )
             {
                 pImp->bInNextJob = false;
-                return sal_False;
+                return false;
             }
         }
     }
@@ -1668,7 +1669,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     // Update round is finished
     pImp->bInNextJob = false;
     Broadcast(SfxSimpleHint(SFX_HINT_UPDATEDONE));
-    return sal_True;
+    return true;
 #ifdef DBG_UTIL
     }
     catch (...)
@@ -1677,7 +1678,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
         pImp->bInNextJob = false;
     }
 
-    return sal_False;
+    return false;
 #endif
 }
 

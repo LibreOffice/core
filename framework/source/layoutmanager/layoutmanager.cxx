@@ -2677,7 +2677,7 @@ throw( uno::RuntimeException, std::exception )
         m_bMustDoLayout = true;
         if ( !m_aAsyncLayoutTimer.IsActive() )
         {
-            const Link<>& aLink = m_aAsyncLayoutTimer.GetTimeoutHdl();
+            const Link<Timer *, void>& aLink = m_aAsyncLayoutTimer.GetTimeoutHdl();
             if ( aLink.IsSet() )
                 aLink.Call( &m_aAsyncLayoutTimer );
         }
@@ -2749,13 +2749,13 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
     }
 }
 
-IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
+IMPL_LINK_NOARG_TYPED(LayoutManager, AsyncLayoutHdl, Timer *, void)
 {
     SolarMutexClearableGuard aReadLock;
     m_aAsyncLayoutTimer.Stop();
 
     if( !m_xContainerWindow.is() )
-        return 0;
+        return;
 
     awt::Rectangle aDockingArea( m_aDockingArea );
     ::Size         aStatusBarSize( implts_getStatusBarSize() );
@@ -2766,8 +2766,6 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
 
     implts_setDockingAreaWindowSizes( aDockingArea );
     implts_doLayout( true, false );
-
-    return 0;
 }
 
 //      XFrameActionListener

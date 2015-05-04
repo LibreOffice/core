@@ -27,7 +27,7 @@ AsynchronousCall::AsynchronousCall()
     : maTimer(),
       mpFunction()
 {
-    Link<> aCallback (LINK(this,AsynchronousCall,TimerCallback));
+    Link<Timer *, void> aCallback (LINK(this,AsynchronousCall,TimerCallback));
     maTimer.SetTimeoutHdl(aCallback);
 }
 
@@ -46,7 +46,7 @@ void AsynchronousCall::Post (
     maTimer.Start();
 }
 
-IMPL_LINK(AsynchronousCall,TimerCallback,Timer*,pTimer)
+IMPL_LINK_TYPED(AsynchronousCall,TimerCallback,Timer*,pTimer,void)
 {
     if (pTimer == &maTimer)
     {
@@ -54,7 +54,6 @@ IMPL_LINK(AsynchronousCall,TimerCallback,Timer*,pTimer)
         pFunction.swap(mpFunction);
         (*pFunction)();
     }
-    return 0;
 }
 
 } } // end of namespace ::sd::tools

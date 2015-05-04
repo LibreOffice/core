@@ -1251,10 +1251,10 @@ IMPL_LINK( FmFilterNavigator, OnRemove, SvTreeListEntry*, pEntry )
 }
 
 
-IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer)
+IMPL_LINK_NOARG_TYPED(FmFilterNavigator, OnDropActionTimer, Timer *, void)
 {
     if (--m_aTimerCounter > 0)
-        return 0L;
+        return;
 
     switch (m_aDropActionType)
     {
@@ -1275,7 +1275,6 @@ IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer)
         }
         break;
     }
-    return 0L;
 }
 
 

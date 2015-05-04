@@ -54,7 +54,7 @@ public:
     bool operator!=( const ScRefreshTimer& r ) const;
 
     void SetRefreshControl( ScRefreshTimerControl * const * pp );
-    void SetRefreshHandler( const Link<>& rLink );
+    void SetRefreshHandler( const Link<Timer *, void>& rLink );
     sal_uLong GetRefreshDelay() const;
     void StopRefreshTimer();
 

@@ -162,7 +162,7 @@ private:
         VclPtr<ScMenuFloatingWindow>   mpSubMenu;
         size_t                  mnMenuPos;
 
-        DECL_LINK( TimeoutHdl, void* );
+        DECL_LINK_TYPED( TimeoutHdl, Timer*, void );
 
         SubMenuItemData(ScMenuFloatingWindow* pParent);
         void reset();

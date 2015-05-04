@@ -214,7 +214,7 @@ public:
     };
 
 private:
-    Link<>      aRefreshHandler;
+    Link<Timer *, void> aRefreshHandler;
     ScDocument* pDoc;
     sal_uInt16 nEntryIndex;         ///< counter for unique indices
     NamedDBs maNamedDBs;
@@ -246,9 +246,9 @@ public:
     sal_uInt16  GetEntryIndex()                 { return nEntryIndex; }
     void    SetEntryIndex(sal_uInt16 nInd)      { nEntryIndex = nInd; }
 
-    void            SetRefreshHandler( const Link<>& rLink )
+    void            SetRefreshHandler( const Link<Timer *, void>& rLink )
                         { aRefreshHandler = rLink; }
-    const Link<>&   GetRefreshHandler() const   { return aRefreshHandler; }
+    const Link<Timer *, void>& GetRefreshHandler() const { return aRefreshHandler; }
 
     bool empty() const;
     bool operator== (const ScDBCollection& r) const;

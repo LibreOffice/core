@@ -1009,11 +1009,10 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         delete pContCopy;
 }
 
-IMPL_LINK_NOARG(SwGlobalTree, Timeout)
+IMPL_LINK_NOARG_TYPED(SwGlobalTree, Timeout, Timer *, void)
 {
     if(!IsDisposed() && !HasFocus() && Update( false ))
         Display();
-    return 0;
 }
 
 void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)

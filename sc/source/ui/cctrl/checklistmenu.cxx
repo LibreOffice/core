@@ -64,10 +64,9 @@ void ScMenuFloatingWindow::SubMenuItemData::reset()
     maTimer.Stop();
 }
 
-IMPL_LINK_NOARG(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl)
+IMPL_LINK_NOARG_TYPED(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, Timer *, void)
 {
     mpParent->handleMenuTimeout(this);
-    return 0;
 }
 
 size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;

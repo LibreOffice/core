@@ -3732,11 +3732,10 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     return 1;
 }
 
-IMPL_LINK_NOARG(X11SalFrame, HandleAlwaysOnTopRaise)
+IMPL_LINK_NOARG_TYPED(X11SalFrame, HandleAlwaysOnTopRaise, Timer *, void)
 {
     if( bMapped_ )
         ToTop( 0 );
-    return 0;
 }
 
 long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )

@@ -353,7 +353,7 @@ void Animation::ImplRestartTimer( sal_uLong nTimeout )
 
 typedef ::std::vector< AInfo* > AInfoList_impl;
 
-IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
+IMPL_LINK_NOARG_TYPED(Animation, ImplTimeoutHdl, Timer *, void)
 {
     const size_t nAnimCount = maList.size();
     AInfoList_impl aAInfoList;
@@ -432,7 +432,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
                     mbLoopTerminated = true;
                     mnPos = nAnimCount - 1UL;
                     maBitmapEx = maList[ mnPos ]->aBmpEx;
-                    return 0L;
+                    return;
                 }
                 else
                 {
@@ -471,8 +471,6 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
     }
     else
         Stop();
-
-    return 0L;
 }
 
 bool Animation::Insert( const AnimationBitmap& rStepBmp )

@@ -167,11 +167,11 @@ bool OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
     return true;
 }
 
-IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
+IMPL_LINK_NOARG_TYPED( OTableWindowListBox, ScrollUpHdl, Timer*, void )
 {
     SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
-        return 0;
+        return;
 
     if( pEntry != Last() )
     {
@@ -179,15 +179,13 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry, true );
     }
-
-    return 0;
 }
 
-IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
+IMPL_LINK_NOARG_TYPED( OTableWindowListBox, ScrollDownHdl, Timer*, void )
 {
     SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
-        return 0;
+        return;
 
     if( pEntry != Last() )
     {
@@ -195,8 +193,6 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry, true );
     }
-
-    return 0;
 }
 
 void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
@@ -247,7 +243,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                 if( !m_aScrollTimer.IsActive() )
                 {
                     m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollUpHdl) );
-                    ScrollUpHdl( this );
+                    ScrollUpHdl( nullptr );
                 }
             }
 
@@ -257,7 +253,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                 if( !m_aScrollTimer.IsActive() )
                 {
                     m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollDownHdl) );
-                    ScrollDownHdl( this );
+                    ScrollDownHdl( nullptr );
                 }
             }
             else

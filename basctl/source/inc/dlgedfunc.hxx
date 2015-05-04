@@ -35,7 +35,7 @@ protected:
     DlgEditor& rParent;
     Timer      aScrollTimer;
 
-    DECL_LINK( ScrollTimeout, Timer * );
+    DECL_LINK_TYPED( ScrollTimeout, Timer *, void );
     void    ForceScroll( const Point& rPos );
 
 public:

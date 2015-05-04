@@ -86,7 +86,7 @@ private:
     AutoTimer   maWaitTimer;
     ImageSet    meImageSet;
 
-    DECL_LINK( TimeOutHdl, void* );
+    DECL_LINK_TYPED( TimeOutHdl, Timer*, void );
 };
 
 #endif // INCLUDED_VCL_THROBBER_HXX

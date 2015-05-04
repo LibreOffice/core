@@ -41,7 +41,7 @@ class SvxLineBox : public LineLB
     SfxObjectShell* mpSh;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-                    DECL_LINK(DelayHdl_Impl, void *);
+                    DECL_LINK_TYPED(DelayHdl_Impl, Timer *, void);
 
     void            ReleaseFocus_Impl();
 

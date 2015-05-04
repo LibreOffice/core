@@ -229,7 +229,7 @@ private:
     bool            mbIsWaiting;
 
     SAL_DLLPRIVATE void ImplRestartTimer( sal_uLong nTimeout );
-    DECL_DLLPRIVATE_LINK( ImplTimeoutHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplTimeoutHdl, Timer*, void );
 
 };
 

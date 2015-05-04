@@ -100,7 +100,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SAL_DLLPRIVATE DECL_LINK( UndoHdl,           void* );
     SAL_DLLPRIVATE DECL_LINK( DeselectHdl,       void* );
     SAL_DLLPRIVATE DECL_LINK( SelectHdl,     void* );
-    SAL_DLLPRIVATE DECL_LINK( GotoHdl,           void* );
+    SAL_DLLPRIVATE DECL_LINK_TYPED( SelectTimerHdl, Timer*, void );
+    SAL_DLLPRIVATE DECL_LINK_TYPED( GotoHdl, Timer*, void );
     SAL_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
 
     SAL_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, bool bChild);

@@ -659,12 +659,11 @@ void DBTreeListBox::ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
         m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );
 }
 
-IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
+IMPL_LINK_NOARG_TYPED(DBTreeListBox, OnTimeOut, Timer*, void)
 {
     implStopSelectionTimer();
 
     m_aSelChangeHdl.Call( NULL );
-    return 0L;
 }
 
 void DBTreeListBox::StateChanged( StateChangedType nStateChange )

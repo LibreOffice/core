@@ -165,13 +165,11 @@ void GraphicFilterDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl)
+IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer *, void)
 {
     maTimer.Stop();
     mpPreview->SetPreview(GetFilteredGraphic(mpPreview->GetScaledOriginal(),
         mpPreview->GetScaleX(), mpPreview->GetScaleY()));
-
-    return 0;
 }
 
 

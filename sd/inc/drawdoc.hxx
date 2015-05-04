@@ -190,7 +190,7 @@ private:
     SAL_DLLPRIVATE void                FillOnlineSpellingList(SdPage* pPage);
     SAL_DLLPRIVATE void                SpellObject(SdrTextObj* pObj);
 
-                        DECL_DLLPRIVATE_LINK(WorkStartupHdl, void *);
+                        DECL_DLLPRIVATE_LINK_TYPED(WorkStartupHdl, Timer *, void);
                         DECL_DLLPRIVATE_LINK(OnlineSpellingHdl, void *);
                         DECL_DLLPRIVATE_LINK(OnlineSpellEventHdl, EditStatus*);
 

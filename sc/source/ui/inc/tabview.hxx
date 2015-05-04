@@ -177,7 +177,7 @@ private:
     void            DoHSplit(long nSplitPos);
     void            DoVSplit(long nSplitPos);
 
-    DECL_LINK(      TimerHdl, void* );
+    DECL_LINK_TYPED( TimerHdl, Timer*, void );
 
     void            UpdateVarZoom();
 

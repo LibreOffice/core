@@ -2055,7 +2055,7 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     return 0;
 }
 
-IMPL_LINK_NOARG(CustomAnimationPane, lateInitCallback)
+IMPL_LINK_NOARG_TYPED(CustomAnimationPane, lateInitCallback, Timer *, void)
 {
     // Call getPresets() to initiate the (expensive) construction of the
     // presets list.
@@ -2063,8 +2063,6 @@ IMPL_LINK_NOARG(CustomAnimationPane, lateInitCallback)
 
     // update selection and control states
     onSelectionChanged();
-
-    return 0;
 }
 
 void CustomAnimationPane::moveSelection( bool bUp )

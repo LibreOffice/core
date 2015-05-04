@@ -2446,10 +2446,10 @@ void    SwContentTree::HideTree()
 
 // No idle with focus or while dragging.
 
-IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
+IMPL_LINK_NOARG_TYPED(SwContentTree, TimerUpdate, Timer *, void)
 {
     if (IsDisposed())
-        return 0;
+        return;
 
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
@@ -2490,7 +2490,6 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
         Clear();
         bIsIdleClear = true;
     }
-    return 0;
 }
 
 DragDropMode SwContentTree::NotifyStartDrag(

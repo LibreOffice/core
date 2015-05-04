@@ -132,7 +132,7 @@ CacheCompactor::CacheCompactor(
 
 }
 
-IMPL_LINK_NOARG(CacheCompactor, CompactionCallback)
+IMPL_LINK_NOARG_TYPED(CacheCompactor, CompactionCallback, Timer *, void)
 {
     mbIsCompactionRunning = true;
 
@@ -148,7 +148,6 @@ IMPL_LINK_NOARG(CacheCompactor, CompactionCallback)
     }
 
     mbIsCompactionRunning = false;
-    return 1;
 }
 
 } } } // end of namespace ::sd::slidesorter::cache

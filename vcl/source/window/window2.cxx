@@ -345,7 +345,7 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
     pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
 }
 
-IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
+IMPL_LINK_TYPED( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -367,8 +367,6 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
                            mpWindowImpl->mpFrameData->mnMouseCode );
     TrackingEvent   aTEvt( aMEvt, TRACKING_REPEAT );
     Tracking( aTEvt );
-
-    return 0;
 }
 
 void Window::StartTracking( sal_uInt16 nFlags )

@@ -149,7 +149,7 @@ void OSqlEdit::GetFocus()
     MultiLineEditSyntaxHighlight::GetFocus();
 }
 
-IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer)
+IMPL_LINK_NOARG_TYPED(OSqlEdit, OnUndoActionTimer, Timer *, void)
 {
     OUString aText = GetText();
     if(aText != m_strOrigText)
@@ -166,18 +166,15 @@ IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer)
 
         m_strOrigText  =aText;
     }
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(OSqlEdit, OnInvalidateTimer)
+IMPL_LINK_NOARG_TYPED(OSqlEdit, OnInvalidateTimer, Timer *, void)
 {
     OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
     rController.InvalidateFeature(SID_CUT);
     rController.InvalidateFeature(SID_COPY);
     if(!m_bStopTimer)
         m_timerInvalidate.Start();
-    return 0L;
 }
 
 IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)

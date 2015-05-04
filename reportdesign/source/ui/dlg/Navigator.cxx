@@ -185,7 +185,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK(OnEntrySelDesel, NavigatorTree*);
-    DECL_LINK( OnDropActionTimer, void* );
+    DECL_LINK_TYPED( OnDropActionTimer, Timer*, void );
 
     virtual void _selectionChanged( const lang::EventObject& aEvent ) throw (uno::RuntimeException) SAL_OVERRIDE;
 
@@ -423,10 +423,10 @@ void NavigatorTree::StartDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
     }
 }
 
-IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
+IMPL_LINK_NOARG_TYPED(NavigatorTree, OnDropActionTimer, Timer *, void)
 {
     if (--m_nTimerCounter > 0)
-        return 0L;
+        return;
 
     switch ( m_aDropActionType )
     {
@@ -450,8 +450,6 @@ IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
             break;
 
     }
-
-    return 0L;
 }
 
 

@@ -173,7 +173,7 @@ private:
 
     DECL_LINK( OnSearchProgress, FmSearchProgress* );
 
-    DECL_LINK( OnDelayedPaint, void* ); ///< see EnableSearchUI
+    DECL_LINK_TYPED( OnDelayedPaint, Timer*, void ); ///< see EnableSearchUI
 
     void initCommon( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _rxCursor );
 };

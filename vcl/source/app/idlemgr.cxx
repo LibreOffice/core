@@ -104,7 +104,7 @@ void ImplIdleMgr::RemoveIdleHdl( const Link<>& rLink )
         maTimer.Stop();
 }
 
-IMPL_LINK_NOARG(ImplIdleMgr, TimeoutHdl)
+IMPL_LINK_NOARG_TYPED(ImplIdleMgr, TimeoutHdl, Timer *, void)
 {
     for ( size_t i = 0; i < mpIdleList->size(); ++i ) {
         ImplIdleData* pIdleData = (*mpIdleList)[ i ];
@@ -120,8 +120,6 @@ IMPL_LINK_NOARG(ImplIdleMgr, TimeoutHdl)
             }
         }
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -976,11 +976,10 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
     return true;
 }
 
-IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
+IMPL_LINK_TYPED( ScDocShell, RefreshDBDataHdl, Timer*, pRefreshTimer, void )
 {
     ScDBDocFunc aFunc(*this);
 
-    bool bContinue = true;
     ScDBData* pDBData = static_cast<ScDBData*>(pRefreshTimer);
     ScImportParam aImportParam;
     pDBData->GetImportParam( aImportParam );
@@ -988,7 +987,7 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
     {
         ScRange aRange;
         pDBData->GetArea( aRange );
-        bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, NULL, true, false ); //! Api-Flag as parameter
+        bool bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, NULL, true, false ); //! Api-Flag as parameter
         // internal operations (sort, query, subtotal) only if no error
         if (bContinue)
         {
@@ -996,8 +995,6 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
             RefreshPivotTables(aRange);
         }
     }
-
-    return long(bContinue);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
