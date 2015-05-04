@@ -140,6 +140,7 @@ public:
     void testSheetTextBoxHyperlink();
     void testFontSize();
     void testSheetCharacterKerningSpace();
+    void testSheetCondensedCharacterSpace();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -190,6 +191,7 @@ public:
     CPPUNIT_TEST(testSheetTextBoxHyperlink);
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testSheetCharacterKerningSpace);
+    CPPUNIT_TEST(testSheetCondensedCharacterSpace);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2573,6 +2575,25 @@ void ScExportTest::testSheetCharacterKerningSpace()
     xDocSh->DoClose();
 }
 
+void ScExportTest::testSheetCondensedCharacterSpace()
+{
+    ScDocShellRef xShell = loadDoc("textbox-CondensedCharacterSpace.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    OUString CondensedCharSpace = getXPath(pDoc,
+        "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]","spc");
+
+    // make sure that the CondensedCharSpace is -996.
+    CPPUNIT_ASSERT_EQUAL(OUString("-996"), CondensedCharSpace);
+
+    xDocSh->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
