@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_09c8ed73",
+        "filename": "i18npool/source/localedata/data/es_CR.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-04T11:16:29Z",
+      "side": 1,
+      "message": "This doesn\u0027t work properly. The separators used in the format codes have to match those defined in the LC_CTYPE section. Changing them requires to not inherit LC_CTYPE from es_ES in this case but place a changed definition here.",
+      "revId": "b3c56474980c2754bf6f36103f068a97633694bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_29c5a95a",
+        "filename": "i18npool/source/localedata/data/es_CR.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-04T11:16:29Z",
+      "side": 1,
+      "message": "Please don\u0027t use a normal space U+0032 but a no-break space U+00A0 instead.",
+      "revId": "b3c56474980c2754bf6f36103f068a97633694bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
