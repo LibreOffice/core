@@ -216,12 +216,18 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 
     DeviceCoordinate nPixelWidth = 0;
+    DeviceCoordinate nOrigWidth = lrint( GetTextWidth() );
 
     if(rArgs.mpDXArray && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
     {
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
-        if( nPixelWidth <= 0)
+
+        // justification requests which change the width by just one pixel are probably
+        // introduced by lossy conversions between integer based coordinate system
+        if( (nPixelWidth <= 0) || ((nOrigWidth >= nPixelWidth - 1) && (nOrigWidth <= nPixelWidth + 1)) )
+        {
             return;
+        }
         ApplyDXArray( rArgs );
         if( mnTrailingSpaceCount )
         {
@@ -230,7 +236,9 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
             mfTrailingSpaceWidth = nFullPixelWidth - nPixelWidth;
             if( nPixelWidth <= 0)
+            {
                 return;
+            }
         }
         mfCachedWidth = nPixelWidth;
     }
@@ -244,7 +252,9 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
 
         if( nPixelWidth <= 0)
+        {
             return;
+        }
 
         // if the text to be justified has whitespace in it then
         // - Writer goes crazy with its HalfSpace magic
