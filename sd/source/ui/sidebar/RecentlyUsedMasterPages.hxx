@@ -69,7 +69,7 @@ private:
         class TokenComparator
         {
         public:
-            TokenComparator(::sd::sidebar::MasterPageContainer::Token aToken)
+            explicit TokenComparator(::sd::sidebar::MasterPageContainer::Token aToken)
                 : maToken(aToken) {}
             bool operator () (const Descriptor& rDescriptor)
             { return maToken==rDescriptor.maToken; }

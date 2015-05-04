@@ -57,7 +57,7 @@ public:
         const css::uno::Reference<css::lang::XMultiServiceFactory>& rxFactory);
     static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames();
 
-    PanelFactory (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit PanelFactory (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PanelFactory();
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;

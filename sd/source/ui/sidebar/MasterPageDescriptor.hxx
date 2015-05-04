@@ -204,21 +204,21 @@ public:
 
     class URLComparator { public:
         OUString msURL;
-        URLComparator (const OUString& sURL);
+        explicit URLComparator (const OUString& sURL);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class StyleNameComparator { public:
         OUString msStyleName;
-        StyleNameComparator (const OUString& sStyleName);
+        explicit StyleNameComparator (const OUString& sStyleName);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class PageObjectComparator { public:
         const SdPage* mpMasterPage;
-        PageObjectComparator (const SdPage* pPageObject);
+        explicit PageObjectComparator (const SdPage* pPageObject);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class AllComparator { public:
-        AllComparator(const SharedMasterPageDescriptor& rDescriptor);
+        explicit AllComparator(const SharedMasterPageDescriptor& rDescriptor);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     private:
         SharedMasterPageDescriptor mpDescriptor;
