@@ -22,6 +22,30 @@
       "revId": "5cd3ac547753f6ecaed5a5c5d2728be79e6f66bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_89b37d0a",
+        "filename": "sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-04T11:04:10Z",
+      "side": 1,
+      "message": "Why not simply place them before maNumFormatControl in the initializer list then? That, or move the declaration in the header file after mnCategorySelected.\n\nBtw, please rather stick with our prefix conventions and use ma... instead of ms...",
+      "parentUuid": "7a5de9d1_6965e1df",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 58
+      },
+      "revId": "5cd3ac547753f6ecaed5a5c5d2728be79e6f66bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
