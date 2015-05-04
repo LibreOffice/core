@@ -47,8 +47,8 @@ void DXFBasicEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
     switch (rDGR.GetG())
     {
-        case   8: m_sLayer = OString(rDGR.GetS()); break;
-        case   6: m_sLineType = OString(rDGR.GetS()); break;
+        case   8: m_sLayer = rDGR.GetS(); break;
+        case   6: m_sLineType = rDGR.GetS(); break;
         case  38: fElevation=rDGR.GetF(); break;
         case  39: fThickness=rDGR.GetF(); break;
         case  62: nColor=rDGR.GetI(); break;
@@ -210,11 +210,11 @@ void DXFTextEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
         case 40: fHeight=rDGR.GetF(); break;
-        case  1: m_sText = OString(rDGR.GetS()); break;
+        case  1: m_sText = rDGR.GetS(); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
         case 42: fOblAngle=rDGR.GetF(); break;
-        case  7: m_sStyle = OString(rDGR.GetS()); break;
+        case  7: m_sStyle = rDGR.GetS(); break;
         case 71: nGenFlags=rDGR.GetI(); break;
         case 72: nHorzJust=rDGR.GetI(); break;
         case 73: nVertJust=rDGR.GetI(); break;
@@ -242,7 +242,7 @@ void DXFShapeEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
         case 40: fSize=rDGR.GetF(); break;
-        case  2: m_sName = OString(rDGR.GetS()); break;
+        case  2: m_sName = rDGR.GetS(); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
         case 51: fOblAngle=rDGR.GetF(); break;
@@ -269,7 +269,7 @@ void DXFInsertEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
     switch (rDGR.GetG()) {
         case 66: nAttrFlag=rDGR.GetI(); break;
-        case  2: m_sName = OString(rDGR.GetS()); break;
+        case  2: m_sName = rDGR.GetS(); break;
         case 10: aP0.fx=rDGR.GetF(); break;
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
@@ -309,15 +309,15 @@ void DXFAttDefEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
         case 40: fHeight=rDGR.GetF(); break;
-        case  1: m_sDefVal = OString(rDGR.GetS()); break;
-        case  3: m_sPrompt = OString(rDGR.GetS()); break;
-        case  2: m_sTagStr = OString(rDGR.GetS()); break;
+        case  1: m_sDefVal = rDGR.GetS(); break;
+        case  3: m_sPrompt = rDGR.GetS(); break;
+        case  2: m_sTagStr = rDGR.GetS(); break;
         case 70: nAttrFlags=rDGR.GetI(); break;
         case 73: nFieldLen=rDGR.GetI(); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
         case 51: fOblAngle=rDGR.GetF(); break;
-        case  7: m_sStyle = OString(rDGR.GetS()); break;
+        case  7: m_sStyle = rDGR.GetS(); break;
         case 71: nGenFlags=rDGR.GetI(); break;
         case 72: nHorzJust=rDGR.GetI(); break;
         case 74: nVertJust=rDGR.GetI(); break;
@@ -352,14 +352,14 @@ void DXFAttribEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
         case 40: fHeight=rDGR.GetF(); break;
-        case  1: m_sText = OString(rDGR.GetS()); break;
-        case  2: m_sTagStr = OString(rDGR.GetS()); break;
+        case  1: m_sText = rDGR.GetS(); break;
+        case  2: m_sTagStr = rDGR.GetS(); break;
         case 70: nAttrFlags=rDGR.GetI(); break;
         case 73: nFieldLen=rDGR.GetI(); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
         case 51: fOblAngle=rDGR.GetF(); break;
-        case  7: m_sStyle = OString(rDGR.GetS()); break;
+        case  7: m_sStyle = rDGR.GetS(); break;
         case 71: nGenFlags=rDGR.GetI(); break;
         case 72: nHorzJust=rDGR.GetI(); break;
         case 74: nVertJust=rDGR.GetI(); break;
@@ -791,7 +791,7 @@ DXFDimensionEntity::DXFDimensionEntity() : DXFBasicEntity(DXF_DIMENSION)
 void DXFDimensionEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
     switch (rDGR.GetG()) {
-        case  2: m_sPseudoBlock = OString(rDGR.GetS()); break;
+        case  2: m_sPseudoBlock = rDGR.GetS(); break;
         default: DXFBasicEntity::EvaluateGroup(rDGR);
     }
 }
@@ -807,29 +807,29 @@ void DXFEntities::Read(DXFGroupReader & rDGR)
 
     while (rDGR.GetG()!=0) rDGR.Read();
 
-    while (strcmp(rDGR.GetS(),"ENDBLK")!=0 &&
-           strcmp(rDGR.GetS(),"ENDSEC")!=0 &&
-           strcmp(rDGR.GetS(),"EOF")!=0 )
+    while (rDGR.GetS()!="ENDBLK" &&
+           rDGR.GetS()!="ENDSEC" &&
+           rDGR.GetS()!="EOF" )
     {
 
-        if      (strcmp(rDGR.GetS(),"LINE"      )==0) pE=new DXFLineEntity;
-        else if (strcmp(rDGR.GetS(),"POINT"     )==0) pE=new DXFPointEntity;
-        else if (strcmp(rDGR.GetS(),"CIRCLE"    )==0) pE=new DXFCircleEntity;
-        else if (strcmp(rDGR.GetS(),"ARC"       )==0) pE=new DXFArcEntity;
-        else if (strcmp(rDGR.GetS(),"TRACE"     )==0) pE=new DXFTraceEntity;
-        else if (strcmp(rDGR.GetS(),"SOLID"     )==0) pE=new DXFSolidEntity;
-        else if (strcmp(rDGR.GetS(),"TEXT"      )==0) pE=new DXFTextEntity;
-        else if (strcmp(rDGR.GetS(),"SHAPE"     )==0) pE=new DXFShapeEntity;
-        else if (strcmp(rDGR.GetS(),"INSERT"    )==0) pE=new DXFInsertEntity;
-        else if (strcmp(rDGR.GetS(),"ATTDEF"    )==0) pE=new DXFAttDefEntity;
-        else if (strcmp(rDGR.GetS(),"ATTRIB"    )==0) pE=new DXFAttribEntity;
-        else if (strcmp(rDGR.GetS(),"POLYLINE"  )==0) pE=new DXFPolyLineEntity;
-        else if (strcmp(rDGR.GetS(),"LWPOLYLINE")==0) pE=new DXFLWPolyLineEntity;
-        else if (strcmp(rDGR.GetS(),"VERTEX"    )==0) pE=new DXFVertexEntity;
-        else if (strcmp(rDGR.GetS(),"SEQEND"    )==0) pE=new DXFSeqEndEntity;
-        else if (strcmp(rDGR.GetS(),"3DFACE"    )==0) pE=new DXF3DFaceEntity;
-        else if (strcmp(rDGR.GetS(),"DIMENSION" )==0) pE=new DXFDimensionEntity;
-        else if (strcmp(rDGR.GetS(),"HATCH"     )==0) pE=new DXFHatchEntity;
+        if      (rDGR.GetS() == "LINE"      ) pE=new DXFLineEntity;
+        else if (rDGR.GetS() == "POINT"     ) pE=new DXFPointEntity;
+        else if (rDGR.GetS() == "CIRCLE"    ) pE=new DXFCircleEntity;
+        else if (rDGR.GetS() == "ARC"       ) pE=new DXFArcEntity;
+        else if (rDGR.GetS() == "TRACE"     ) pE=new DXFTraceEntity;
+        else if (rDGR.GetS() == "SOLID"     ) pE=new DXFSolidEntity;
+        else if (rDGR.GetS() == "TEXT"      ) pE=new DXFTextEntity;
+        else if (rDGR.GetS() == "SHAPE"     ) pE=new DXFShapeEntity;
+        else if (rDGR.GetS() == "INSERT"    ) pE=new DXFInsertEntity;
+        else if (rDGR.GetS() == "ATTDEF"    ) pE=new DXFAttDefEntity;
+        else if (rDGR.GetS() == "ATTRIB"    ) pE=new DXFAttribEntity;
+        else if (rDGR.GetS() == "POLYLINE"  ) pE=new DXFPolyLineEntity;
+        else if (rDGR.GetS() == "LWPOLYLINE") pE=new DXFLWPolyLineEntity;
+        else if (rDGR.GetS() == "VERTEX"    ) pE=new DXFVertexEntity;
+        else if (rDGR.GetS() == "SEQEND"    ) pE=new DXFSeqEndEntity;
+        else if (rDGR.GetS() == "3DFACE"    ) pE=new DXF3DFaceEntity;
+        else if (rDGR.GetS() == "DIMENSION" ) pE=new DXFDimensionEntity;
+        else if (rDGR.GetS() == "HATCH"     ) pE=new DXFHatchEntity;
         else
         {
             do {
