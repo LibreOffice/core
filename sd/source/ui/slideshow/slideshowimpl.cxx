@@ -941,17 +941,6 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                 {
                     maPresSettings.mbAll = false;
                 }
-                else
-                {
-                    bStartWithActualSlide = false;
-                }
-            }
-        }
-        else
-        {
-            if( !pStartPage || pStartPage->GetPageKind() != PK_STANDARD )
-            {
-                bStartWithActualSlide = false;
             }
         }
 
