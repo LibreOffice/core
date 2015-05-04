@@ -1763,9 +1763,9 @@ void SwTabFrm::MakeAll()
     const bool bKeep = IsKeep( pAttrs->GetAttrSet() );
 
     // All rows should keep together
-    // OD 2004-05-25 #i21478# - don't split table, if it has to keep with next
+    // tdf#34957 removed this old hack/fixed properly long ago: OD 2004-05-25 #i21478# - don't split table, if it has to keep with next
     const bool bDontSplit = !IsFollow() &&
-                            ( !GetFmt()->GetLayoutSplit().GetValue() || bKeep );
+                            ( !GetFmt()->GetLayoutSplit().GetValue() );
 
     // The number of repeated headlines
     const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
