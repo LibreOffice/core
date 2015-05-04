@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <stdlib.h>
 #include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include "dxfgrprd.hxx"
-
-
 
 // we use an own ReadLine function, because Stream::ReadLine stops if
 // a 0-sign occurs; this function converts 0-signs to blanks and reads
@@ -87,41 +84,41 @@ OString DXFReadLine(SvStream& rIStm)
     return aBuf.makeStringAndClear();
 }
 
-
-
-DXFGroupReader::DXFGroupReader(SvStream & rIStream, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent ) :
-    rIS(rIStream)
+void DXFSkipLine(SvStream& rIStm)
 {
-    sal_uInt16 i;
+    while (!rIStm.GetError())   // !!! do not check for EOF
+                                // !!! because we read blockwise
+    {
+        char  buf[256 + 1];
+        sal_uInt16 nLen = (sal_uInt16)rIStm.Read(buf, sizeof(buf) - 1);
+        for (sal_uInt16 n = 0; n < nLen; n++)
+        {
+            char c = buf[n];
+            if ((c == '\n') || (c == '\r'))
+            {
+                rIStm.SeekRel(n-nLen+1); // return stream to next to current position
+                char c1 = 0;
+                rIStm.Read(&c1, 1);
+                if (c1 == c || (c1 != '\n' && c1!= '\r'))
+                    rIStm.SeekRel(-1);
+                return;
+            }
+        }
+    }
+}
 
-    nIBuffPos=0;
-    nIBuffSize=0;
-    bStatus=true;
-    nLastG=0;
-    nGCount=0;
-
-    nMinPercent=(sal_uLong)nminpercent;
-    nMaxPercent=(sal_uLong)nmaxpercent;
-    nLastPercent=nMinPercent;
-
+DXFGroupReader::DXFGroupReader(SvStream & rIStream)
+  : rIS(rIStream)
+  , bStatus(true)
+  , nLastG(0)
+  , nGCount(0)
+  , S()
+  , I(0)
+{
     rIS.Seek(STREAM_SEEK_TO_END);
     nFileSize=rIS.Tell();
     rIS.Seek(0);
-
-    for (i=0; i<10; i++) S0_9[i][0]=0;
-    S100[ 0 ] = S102[ 0 ] = 0;
-    for (i=0; i<50; i++) F10_59[i]=0.0;
-    for (i=0; i<20; i++) I60_79[i]=0;
-    for (i=0; i<10; i++) I90_99[i]=0;
-    for (i=0; i< 8; i++) F140_147[i]=0.0;
-    for (i=0; i< 6; i++) I170_175[i]=0;
-    for (i=0; i<30; i++) F210_239[i]=0.0;
-    for (i=0; i<11; i++) S999_1009[i][0]=0;
-    for (i=0; i<50; i++) F1010_1059[i]=0.0;
-    for (i=0; i<20; i++) I1060_1079[i]=0;
-
 }
-
 
 sal_uInt16 DXFGroupReader::Read()
 {
@@ -132,40 +129,36 @@ sal_uInt16 DXFGroupReader::Read()
         nG = (sal_uInt16)ReadI();
         if ( bStatus )
         {
-            char aTmp[ DXF_MAX_STRING_LEN + 1 ];
-
-            if      (nG<  10) ReadS(S0_9[nG]);
-            else if (nG<  60) F10_59[nG-10]=ReadF();
-            else if (nG<  80) I60_79[nG-60]=ReadI();
-            else if (nG<  90) ReadS( aTmp );
-            else if (nG<  99) I90_99[nG-90]=ReadI();
-            else if (nG==100) ReadS(S100);
-            else if (nG==102) ReadS(S102);
-            else if (nG==105) ReadS( aTmp );
-            else if (nG< 140) ReadS( aTmp );
-            else if (nG< 148) F140_147[nG-140]=ReadF();
-            else if (nG< 170) ReadS( aTmp );
-            else if (nG< 176) I170_175[nG-175]=ReadI();
-            else if (nG< 180) ReadI();
-            else if (nG< 210) ReadS( aTmp );
-            else if (nG< 240) F210_239[nG-210]=ReadF();
-            else if (nG<=369) ReadS( aTmp );
-            else if (nG< 999) ReadS( aTmp );
-            else if (nG<1010) ReadS(S999_1009[nG-999]);
-            else if (nG<1060) F1010_1059[nG-1010]=ReadF();
-            else if (nG<1080) I1060_1079[nG-1060]=ReadI();
+            if      (nG<  10) ReadS();
+            else if (nG<  60) F = ReadF();
+            else if (nG<  80) I = ReadI();
+            else if (nG<  90) DXFSkipLine(rIS);
+            else if (nG<  99) I = ReadI();
+            else if (nG==100) ReadS();
+            else if (nG==102) ReadS();
+            else if (nG==105) DXFSkipLine(rIS);
+            else if (nG< 140) DXFSkipLine(rIS);
+            else if (nG< 148) F = ReadF();
+            else if (nG< 170) DXFSkipLine(rIS);
+            else if (nG< 176) I = ReadI();
+            else if (nG< 180) DXFSkipLine(rIS); // ReadI();
+            else if (nG< 210) DXFSkipLine(rIS);
+            else if (nG< 240) F = ReadF();
+            else if (nG<=369) DXFSkipLine(rIS);
+            else if (nG< 999) DXFSkipLine(rIS);
+            else if (nG<1010) ReadS();
+            else if (nG<1060) F = ReadF();
+            else if (nG<1072) I = ReadI();
             else bStatus = false;
         }
     }
-    if ( bStatus )
-        nLastG = nG;
-    else
+    if ( !bStatus )
     {
         nG = 0;
         SetS();
         if ( nGCount != 0xffffffff )
         {
-            // InfoBox(NULL,String("Fehler ab Gruppe Nr ")+String(nGCount)).Execute();
+            // InfoBox(NULL,String("Error in group # ")+String(nGCount)).Execute();
             nGCount=0xffffffff;
         }
     }
@@ -173,124 +166,37 @@ sal_uInt16 DXFGroupReader::Read()
     return nG;
 }
 
-
-long DXFGroupReader::GetI(sal_uInt16 nG) const
-{
-    sal_Int32 nRetValue = 0;
-    if ( ( nG >= 60 ) && ( nG <= 79 ) )
-        nRetValue = I60_79[ nG - 60 ];
-    else if ( ( nG >= 90 ) && ( nG <= 99 ) )
-        nRetValue = I90_99[ nG - 90 ];
-    else if ( ( nG >= 170 ) && ( nG <= 175 ) )
-        nRetValue = I170_175[ nG - 170 ];
-    else if ( ( nG >= 1060 ) && ( nG <= 1079 ) )
-        nRetValue = I1060_1079[ nG - 1060 ];
-    return nRetValue;
-}
-
-double DXFGroupReader::GetF(sal_uInt16 nG) const
-{
-    nG-=10;
-    if (nG<50) return F10_59[nG];
-    else {
-        nG-=130;
-        if (nG<8) return F140_147[nG];
-        else {
-            nG-=70;
-            if (nG<30) return F210_239[nG];
-            else {
-                nG-=800;
-                if (nG<50) return F1010_1059[nG];
-                else return 0;
-            }
-        }
-    }
-}
-
-const char * DXFGroupReader::GetS(sal_uInt16 nG) const
-{
-    if (nG<10) return S0_9[nG];
-    else if ( nG == 100 )
-        return S100;
-    else if ( nG == 102 )
-        return S102;
-    else
-    {
-        nG-=999;
-        if (nG<11) return S999_1009[nG];
-        else return NULL;
-    }
-}
-
-void DXFGroupReader::SetF(sal_uInt16 nG, double fF)
-{
-    nG-=10;
-    if (nG<50) F10_59[nG]=fF;
-    else {
-        nG-=130;
-        if (nG<8) F140_147[nG]=fF;
-        else {
-            nG-=70;
-            if (nG<30) F210_239[nG]=fF;
-            else {
-                nG-=800;
-                if (nG<50) F1010_1059[nG]=fF;
-            }
-        }
-    }
-}
-
-
 void DXFGroupReader::SetS()
 {
-    strncpy(S0_9[0], "EOF", DXF_MAX_STRING_LEN);
-    S0_9[0][DXF_MAX_STRING_LEN] = 0;
+    S = "EOF";
 }
-
-
-void DXFGroupReader::ReadLine(char * ptgt)
-{
-    OString aStr = DXFReadLine(rIS);
-
-    size_t nLen = aStr.getLength();
-    if ( nLen > DXF_MAX_STRING_LEN )
-        nLen = DXF_MAX_STRING_LEN;
-
-    memcpy( ptgt, aStr.getStr(), nLen );
-    ptgt[ nLen ] = 0x00;
-}
-
 
 long DXFGroupReader::ReadI()
 {
-    char sl[DXF_MAX_STRING_LEN+1],*p;
-    long res,nv;
+    OString s = DXFReadLine(rIS);
+    char *p=s.pData->buffer;
+    const char *end = s.pData->buffer + s.pData->length;
 
-    ReadLine(sl);
+    while((p != end) && (*p==0x20)) p++;
 
-    p=sl;
-
-    while(*p==0x20) p++;
-
-    if ((*p<'0' || *p>'9') && *p!='-') {
+    if ((p == end) || ((*p<'0' || *p>'9') && *p!='-')) {
         bStatus=false;
         return 0;
     }
 
-    if (*p=='-') {
+    long res = 0, nv = 1;
+    if (*p == '-') {
         nv=-1;
         p++;
     }
-    else nv=1;
 
-    res=0;
-    do {
-        res=res*10+(long)(*p-'0');
+    while ((p != end) && *p >= '0' && *p <= '9') {
+        res=res*10+static_cast<long>(*p-'0');
         p++;
-    } while (*p>='0' && *p<='9');
+    }
 
-    while (*p==0x20) p++;
-    if (*p!=0) {
+    while ((p != end) && (*p==0x20)) p++;
+    if (p != end) {
         bStatus=false;
         return 0;
     }
@@ -298,25 +204,23 @@ long DXFGroupReader::ReadI()
     return res*nv;
 }
 
-
 double DXFGroupReader::ReadF()
 {
-    char sl[DXF_MAX_STRING_LEN+1],*p;
+    OString s = DXFReadLine(rIS);
+    char *p = s.pData->buffer;
+    const char *end = s.pData->buffer + s.pData->length;
 
-    ReadLine(sl);
-    p=sl;
-    while(*p==0x20) p++;
-    if ((*p<'0' || *p>'9') && *p!='.' && *p!='-') {
+    while((p != end) && (*p==0x20)) p++;
+    if ((p == end) || ((*p<'0' || *p>'9') && *p!='.' && *p!='-')) {
         bStatus=false;
         return 0.0;
     }
     return atof(p);
 }
 
-
-void DXFGroupReader::ReadS(char * ptgt)
+void DXFGroupReader::ReadS()
 {
-    ReadLine(ptgt);
+    S = DXFReadLine(rIS);
 }
 
 
