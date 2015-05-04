@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,desktop))
 
 $(eval $(call gb_Module_add_targets,desktop,\
-    CppunitTest_desktop_version \
     CustomTarget_desktop_unopackages_install \
     GeneratedPackage_desktop_unopackages_install \
     Library_deployment \
@@ -126,5 +125,9 @@ $(eval $(call gb_Module_add_targets,desktop, \
     Rdb_passive_platform \
 ))
 endif
+
+$(eval $(call gb_Module_add_check_targets,desktop, \
+    CppunitTest_desktop_version \
+))
 
 # vim: set ts=4 sw=4 et:
