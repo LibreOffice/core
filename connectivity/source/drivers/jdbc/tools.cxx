@@ -194,18 +194,7 @@ bool connectivity::isExceptionOccurred(JNIEnv *pEnv,bool _bClear)
     {
         if ( _bClear )
             pEnv->ExceptionClear();
-#if OSL_DEBUG_LEVEL > 1
-        if(pEnv->IsInstanceOf(pThrowable,java_sql_SQLException_BASE::st_getMyClass()))
-        {
-
-            java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE(pEnv,pThrowable);
-            OUString sError = pException->getMessage();
-            delete pException;
-        }
-#else
         pEnv->DeleteLocalRef(pThrowable);
-#endif
-
     }
 
     return bRet;
