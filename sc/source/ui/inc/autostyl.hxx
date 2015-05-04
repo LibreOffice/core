@@ -44,7 +44,7 @@ private:
     void    ExecuteEntries();
     void    AdjustEntries(sal_uLong nDiff);
     void    StartTimer(sal_uLong nNow);
-    DECL_LINK( TimerHdl, void* );
+    DECL_LINK_TYPED( TimerHdl, Timer*, void );
     DECL_LINK( InitHdl, void* );
 
 public:

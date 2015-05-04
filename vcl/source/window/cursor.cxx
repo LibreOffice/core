@@ -246,13 +246,12 @@ void vcl::Cursor::ImplNew()
     }
 }
 
-IMPL_LINK_NOARG(vcl::Cursor, ImplTimerHdl)
+IMPL_LINK_NOARG_TYPED(vcl::Cursor, ImplTimerHdl, Timer *, void)
 {
     if ( mpData->mbCurVisible )
         ImplRestore();
     else
         ImplDraw();
-    return 0;
 }
 
 vcl::Cursor::Cursor()

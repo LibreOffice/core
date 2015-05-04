@@ -1114,10 +1114,9 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-IMPL_LINK_NOARG(ValueSet, ImplTimerHdl)
+IMPL_LINK_NOARG_TYPED(ValueSet, ImplTimerHdl, Timer *, void)
 {
     ImplTracking( GetPointerPosPixel(), true );
-    return 0;
 }
 
 void ValueSet::ImplTracking( const Point& rPos, bool bRepeat )

@@ -126,15 +126,13 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG(FuPoor, ScrollHdl)
+IMPL_LINK_NOARG_TYPED(FuPoor, ScrollHdl, Timer *, void)
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
 
     // use remembered MouseButton state to create correct
     // MouseEvents for this artificial MouseMove.
     MouseMove(MouseEvent(aPosPixel, 1, MouseEventModifiers::NONE, GetMouseButtonCode()));
-
-    return 0;
 }
 
 // moved from inline to *.cxx
@@ -201,7 +199,7 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
 |* Timer-Handler fuer Drag&Drop
 |*
 \************************************************************************/
-IMPL_LINK_NOARG(FuPoor, DragTimerHdl)
+IMPL_LINK_NOARG_TYPED(FuPoor, DragTimerHdl, Timer *, void)
 {
     //  ExecuteDrag (und das damit verbundene Reschedule) direkt aus dem Timer
     //  aufzurufen, bringt die VCL-Timer-Verwaltung durcheinander, wenn dabei
@@ -211,7 +209,6 @@ IMPL_LINK_NOARG(FuPoor, DragTimerHdl)
     //  Darum Drag&Drop aus eigenem Event:
 
     Application::PostUserEvent( LINK( this, FuPoor, DragHdl ) );
-    return 0;
 }
 
 IMPL_LINK_NOARG(FuPoor, DragHdl)

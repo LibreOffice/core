@@ -1567,10 +1567,9 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxNumberFormatTabPage, TimeHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxNumberFormatTabPage, TimeHdl_Impl, Timer *, void)
 {
     pLastActivWindow=NULL;
-    return 0;
 }
 
 

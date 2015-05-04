@@ -2281,10 +2281,11 @@ void SbaXDataBrowserController::CellDeactivated()
 IMPL_LINK_NOARG(SbaXDataBrowserController, OnClipboardChanged)
 {
     SolarMutexGuard aGuard;
-    return OnInvalidateClipboard( NULL );
+    OnInvalidateClipboard( NULL );
+    return 0;
 }
 
-IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, AutoTimer*, _pTimer)
+IMPL_LINK_TYPED(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTimer, void)
 {
     InvalidateFeature(ID_BROWSER_CUT);
     InvalidateFeature(ID_BROWSER_COPY);
@@ -2296,8 +2297,6 @@ IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, AutoTimer*, _pTimer)
     // changes. This would be much better than this cycle-eating polling mechanism here ....
     if ( _pTimer != &m_aInvalidateClipboard )
         InvalidateFeature(ID_BROWSER_PASTE);
-
-    return 0L;
 }
 
 Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 nViewPos) const

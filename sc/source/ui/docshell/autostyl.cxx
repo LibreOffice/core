@@ -205,14 +205,12 @@ void ScAutoStyleList::StartTimer( sal_uLong nNow )      // Sekunden
     nTimerStart = nNow;
 }
 
-IMPL_LINK_NOARG(ScAutoStyleList, TimerHdl)
+IMPL_LINK_NOARG_TYPED(ScAutoStyleList, TimerHdl, Timer *, void)
 {
     sal_uLong nNow = TimeNow();
     AdjustEntries(aTimer.GetTimeout());             // eingestellte Wartezeit
     ExecuteEntries();
     StartTimer(nNow);
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

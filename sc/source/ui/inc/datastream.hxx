@@ -100,7 +100,7 @@ private:
     void Text2Doc();
     void Refresh();
 
-    DECL_LINK( ImportTimerHdl, void* );
+    DECL_LINK_TYPED( ImportTimerHdl, Timer*, void );
 
 private:
     ScDocShell* mpDocShell;

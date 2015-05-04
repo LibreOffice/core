@@ -107,7 +107,7 @@ class SfxConfigFunctionListBox : public SvTreeListBox
     SfxGroupInfoArr_Impl aArr;
     SfxStylesInfo_Impl*  pStylesInfo;
 
-    DECL_LINK( TimerHdl, Timer* );
+    DECL_LINK_TYPED( TimerHdl, Timer*, void );
     virtual void  MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 public:

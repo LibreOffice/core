@@ -1775,19 +1775,18 @@ void SlideshowImpl::startUpdateTimer()
     This is used to unfreeze user input that was disabled after
     slide change to skip input that was buffered during slide
     transition preparation */
-IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl)
+IMPL_LINK_NOARG_TYPED(SlideshowImpl, ReadyForNextInputHdl, Timer *, void)
 {
     mbInputFreeze = false;
-    return 0;
 }
 
 /** if I catch someone someday who calls this method by hand
     and not by using the timer, I will personaly punish this
     person seriously, even if this person is me.
 */
-IMPL_LINK_NOARG(SlideshowImpl, updateHdl)
+IMPL_LINK_NOARG_TYPED(SlideshowImpl, updateHdl, Timer *, void)
 {
-    return updateSlideShow();
+    updateSlideShow();
 }
 
 IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
@@ -2676,7 +2675,7 @@ void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException, std::exceptio
     }
 }
 
-IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
+IMPL_LINK_NOARG_TYPED(SlideshowImpl, deactivateHdl, Timer *, void)
 {
     if( mbActive && mxShow.is() )
     {
@@ -2695,7 +2694,6 @@ IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
             }
         }
     }
-    return 0;
 }
 
 sal_Bool SAL_CALL SlideshowImpl::isActive() throw (RuntimeException, std::exception)

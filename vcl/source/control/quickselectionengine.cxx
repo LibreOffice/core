@@ -51,7 +51,7 @@ namespace vcl
             aSearchTimeout.Stop();
         }
 
-        DECL_LINK( SearchStringTimeout, Timer* );
+        DECL_LINK_TYPED( SearchStringTimeout, Timer*, void );
     };
 
     namespace
@@ -64,10 +64,9 @@ namespace vcl
         }
     }
 
-    IMPL_LINK( QuickSelectionEngine_Data, SearchStringTimeout, Timer*, /*EMPTYARG*/ )
+    IMPL_LINK_NOARG_TYPED( QuickSelectionEngine_Data, SearchStringTimeout, Timer*, void )
     {
         lcl_reset( *this );
-        return 1;
     }
 
     static StringEntryIdentifier findMatchingEntry( const OUString& _searchString, QuickSelectionEngine_Data& _engineData )

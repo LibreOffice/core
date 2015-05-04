@@ -27,14 +27,13 @@
 namespace basctl
 {
 
-IMPL_LINK( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
+IMPL_LINK_TYPED( DlgEdFunc, ScrollTimeout, Timer *, pTimer, void )
 {
     (void)pTimer;
     vcl::Window& rWindow = rParent.GetWindow();
     Point aPos = rWindow.ScreenToOutputPixel( rWindow.GetPointerPosPixel() );
     aPos = rWindow.PixelToLogic( aPos );
     ForceScroll( aPos );
-    return 0;
 }
 
 void DlgEdFunc::ForceScroll( const Point& rPos )

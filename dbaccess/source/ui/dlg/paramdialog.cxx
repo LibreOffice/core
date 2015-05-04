@@ -319,7 +319,7 @@ namespace dbaui
         return 0L;
     }
 
-    IMPL_LINK(OParameterDialog, OnVisitedTimeout, Timer*, /*pTimer*/)
+    IMPL_LINK_NOARG_TYPED(OParameterDialog, OnVisitedTimeout, Timer*, void)
     {
         OSL_ENSURE(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
 
@@ -363,8 +363,6 @@ namespace dbaui
                 m_pParam->SetSelection(aSel);
             }
         }
-
-        return 0L;
     }
 
     IMPL_LINK(OParameterDialog, OnValueModified, Control*, /*pBox*/)

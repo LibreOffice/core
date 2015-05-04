@@ -103,7 +103,7 @@ class SvxGrfCropPage : public SfxTabPage
     DECL_LINK( CropLoseFocusHdl, MetricField * );
     DECL_LINK( CropModifyHdl, MetricField * );
     DECL_LINK(OrigSizeHdl, void *);
-    DECL_LINK(Timeout, void *);
+    DECL_LINK_TYPED(Timeout, Timer *, void);
 
     void            CalcZoom();
     void            CalcMinMaxBorder();

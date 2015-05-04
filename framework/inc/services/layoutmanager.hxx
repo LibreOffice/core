@@ -182,7 +182,7 @@ namespace framework
                     const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
 
         protected:
-            DECL_LINK(AsyncLayoutHdl, void *);
+            DECL_LINK_TYPED(AsyncLayoutHdl, Timer *, void);
 
         private:
 

@@ -44,7 +44,7 @@ class SwGrammarContact : public IGrammarContact, public SwClient
     SwGrammarMarkUp *mpProxyList;
     bool mbFinished;
     SwTxtNode* getMyTxtNode() { return static_cast<SwTxtNode*>(GetRegisteredIn()); }
-      DECL_LINK( TimerRepaint, Timer * );
+      DECL_LINK_TYPED( TimerRepaint, Timer *, void );
 
 public:
     SwGrammarContact();
@@ -65,7 +65,7 @@ SwGrammarContact::SwGrammarContact() : mpProxyList(0), mbFinished( false )
     aTimer.SetTimeoutHdl( LINK(this, SwGrammarContact, TimerRepaint) );
 }
 
-IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer )
+IMPL_LINK_TYPED( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
 {
     if( pTimer )
     {
@@ -77,7 +77,6 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer )
             SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
         }
     }
-    return 0;
 }
 
 /* I'm always a client of the current paragraph */

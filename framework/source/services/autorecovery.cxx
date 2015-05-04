@@ -634,7 +634,7 @@ private:
 
     /** @short  callback of our internal timer.
      */
-    DECL_LINK(implts_timerExpired, void*);
+    DECL_LINK_TYPED(implts_timerExpired, Timer*, void);
 
     /** @short  makes our dispatch() method asynchronous!
      */
@@ -2326,7 +2326,7 @@ void AutoRecovery::implts_stopTimer()
     m_aTimer.Stop();
 }
 
-IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
+IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_timerExpired, Timer *, void)
 {
     try
     {
@@ -2346,7 +2346,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
         /* SAFE */ {
         osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
-           return 0;
+           return;
         } /* SAFE */
 
         // check some "states", where its not allowed (better: not a good idea) to
@@ -2360,7 +2360,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
             m_eTimerType = AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED;
             } /* SAFE */
             implts_updateTimer();
-            return 0;
+            return;
         }
 
         // analyze timer type.
@@ -2375,7 +2375,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
             if (!bUserIdle)
             {
                 implts_updateTimer();
-                return 0;
+                return;
             }
         }
 
@@ -2418,8 +2418,6 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
     catch(const css::uno::Exception&)
     {
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch)

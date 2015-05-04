@@ -60,7 +60,7 @@ private:
     bool IncrementalDocStatCalculate(long nChars, bool bFields = true);
 
     // Our own 'StatsUpdateTimer' calls the following method
-    DECL_LINK( DoIdleStatsUpdate, Timer * );
+    DECL_LINK_TYPED( DoIdleStatsUpdate, Timer *, void );
 
 
     SwDocStat       *mpDocStat;          //< Statistics information.

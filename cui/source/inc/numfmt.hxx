@@ -152,7 +152,7 @@ private:
     DECL_LINK( ClickHdl_Impl, PushButton* );
     DECL_LINK( EditHdl_Impl, Edit* );
     DECL_LINK( OptHdl_Impl, void * );
-    DECL_LINK(TimeHdl_Impl, void *);
+    DECL_LINK_TYPED(TimeHdl_Impl, Timer *, void);
 };
 
 #endif

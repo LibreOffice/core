@@ -141,7 +141,7 @@ class ToolBarManager : public ToolbarManager_Base
         DECL_LINK( MenuButton, ToolBox * );
         DECL_LINK( MenuSelect, Menu * );
         DECL_LINK( MenuDeactivate, Menu * );
-        DECL_LINK(AsyncUpdateControllersHdl, void *);
+        DECL_LINK_TYPED(AsyncUpdateControllersHdl, Timer *, void);
         DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo* );
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const;

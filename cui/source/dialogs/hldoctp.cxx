@@ -279,7 +279,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
 {
     if ( IsMarkWndVisible() && ( GetPathType( maStrURL )==Type_ExistsFile ||
                                   maStrURL.isEmpty() ||
@@ -294,8 +294,6 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl)
 
         LeaveWait();
     }
-
-    return 0L;
 }
 
 /*************************************************************************

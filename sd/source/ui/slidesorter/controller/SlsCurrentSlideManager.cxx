@@ -239,7 +239,7 @@ void CurrentSlideManager::HandleModelChange()
     }
 }
 
-IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback)
+IMPL_LINK_NOARG_TYPED(CurrentSlideManager, SwitchPageCallback, Timer *, void)
 {
     if (mpCurrentSlide)
     {
@@ -253,8 +253,6 @@ IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback)
             SetCurrentSlideAtViewShellBase(mpCurrentSlide);
         SetCurrentSlideAtXController(mpCurrentSlide);
     }
-
-    return 1;
 }
 
 } } } // end of namespace ::sd::slidesorter::controller

@@ -1871,12 +1871,12 @@ static void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
     }
 }
 
-IMPL_LINK_NOARG(ScModule, IdleHandler)
+IMPL_LINK_NOARG_TYPED(ScModule, IdleHandler, Timer *, void)
 {
     if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD ) )
     {
         aIdleTimer.Start(); // Timeout unchanged
-        return 0;
+        return;
     }
 
     bool bMore = false;
@@ -1940,7 +1940,6 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
 
 
     aIdleTimer.Start();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScModule, SpellTimerHdl)

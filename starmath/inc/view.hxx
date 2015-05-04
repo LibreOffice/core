@@ -88,7 +88,7 @@ protected:
 
 private:
     void RepaintViewShellDoc();
-    DECL_LINK(CaretBlinkTimerHdl, void *);
+    DECL_LINK_TYPED(CaretBlinkTimerHdl, Timer *, void);
     void CaretBlinkInit();
     void CaretBlinkStart();
     void CaretBlinkStop();
@@ -166,7 +166,7 @@ class SmCmdBoxWindow : public SfxDockingWindow
 
     Timer               aInitialFocusTimer;
 
-    DECL_LINK(InitialFocusTimerHdl, Timer *);
+    DECL_LINK_TYPED(InitialFocusTimerHdl, Timer *, void);
 
 protected :
 

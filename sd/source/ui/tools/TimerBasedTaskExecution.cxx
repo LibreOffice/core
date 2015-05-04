@@ -88,7 +88,7 @@ TimerBasedTaskExecution::TimerBasedTaskExecution (
       mpSelf(),
       mnMaxTimePerStep(nMaxTimePerStep)
 {
-    Link<> aLink(LINK(this,TimerBasedTaskExecution,TimerCallback));
+    Link<Timer *, void> aLink(LINK(this,TimerBasedTaskExecution,TimerCallback));
     maTimer.SetTimeoutHdl(aLink);
     maTimer.SetTimeout(nMillisecondsBetweenSteps);
     maTimer.Start();
@@ -106,7 +106,7 @@ void TimerBasedTaskExecution::SetSelf (
         mpSelf = rpSelf;
 }
 
-IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
+IMPL_LINK_NOARG_TYPED(TimerBasedTaskExecution, TimerCallback, Timer *, void)
 {
     if (mpTask.get() != NULL)
     {
@@ -132,8 +132,6 @@ IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
         else
             mpSelf.reset();
     }
-
-    return 0;
 }
 
 } } // end of namespace ::sd::tools

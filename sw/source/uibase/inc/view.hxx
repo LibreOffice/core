@@ -281,7 +281,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          CreateBtns();
     SAL_DLLPRIVATE DECL_LINK( BtnPage, Button * );
 
-    SAL_DLLPRIVATE DECL_LINK( TimeoutHdl, void* );
+    SAL_DLLPRIVATE DECL_LINK_TYPED( TimeoutHdl, Timer*, void );
     SAL_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
     SAL_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, void* );

@@ -62,7 +62,7 @@ public:
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    DECL_LINK( TimerHandler, Timer* );
+    DECL_LINK_TYPED( TimerHandler, Timer*, void );
 
     OUString m_sURL;
 

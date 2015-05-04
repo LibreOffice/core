@@ -154,11 +154,9 @@ bool ToolTip::Hide()
         return false;
 }
 
-IMPL_LINK_NOARG(ToolTip, DelayTrigger)
+IMPL_LINK_NOARG_TYPED(ToolTip, DelayTrigger, Timer *, void)
 {
     DoShow();
-
-    return 0;
 }
 
 } } } // end of namespace ::sd::slidesorter::view

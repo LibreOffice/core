@@ -351,7 +351,7 @@ ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
     maTimer.Start();
 }
 
-IMPL_LINK_NOARG(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback)
+IMPL_LINK_NOARG_TYPED(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback, Timer *, void)
 {
     // If possible then release the lock now.  Otherwise start the timer
     // and try again later.
@@ -363,7 +363,6 @@ IMPL_LINK_NOARG(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback)
     {
         mpSelf.reset();
     }
-    return 0;
 }
 
 void ViewShell::Implementation::ToolBarManagerLock::Release (bool bForce)

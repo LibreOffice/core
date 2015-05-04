@@ -1236,7 +1236,7 @@ GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
     return pRet;
 }
 
-IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
+IMPL_LINK_TYPED( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer, void )
 {
     pTimer->Stop();
 
@@ -1261,8 +1261,6 @@ IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
     }
 
     pTimer->Start();
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

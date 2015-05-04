@@ -78,7 +78,7 @@ namespace dbaui
             ~ClipboardInvalidator();
 
         protected:
-            DECL_LINK(OnInvalidate, void*);
+            DECL_LINK_TYPED(OnInvalidate, Timer*, void);
         };
 
         friend class OTableEditorCtrl::ClipboardInvalidator;

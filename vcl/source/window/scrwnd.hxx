@@ -59,7 +59,7 @@ private:
     void                ImplDrawWheel();
     void                ImplRecalcScrollValues();
 
-                        DECL_LINK(ImplScrollHdl, void *);
+                        DECL_LINK_TYPED(ImplScrollHdl, Timer *, void);
 
 protected:
 

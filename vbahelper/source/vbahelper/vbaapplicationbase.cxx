@@ -107,10 +107,10 @@ public:
         m_aTimer.Start();
     }
 
-    DECL_LINK( MacroCallHdl, void* );
+    DECL_LINK_TYPED( MacroCallHdl, Timer*, void );
 };
 
-IMPL_LINK_NOARG(VbaTimer, MacroCallHdl)
+IMPL_LINK_NOARG_TYPED(VbaTimer, MacroCallHdl, Timer *, void)
 {
     if ( m_aTimerInfo.second.second == 0 || GetNow() < m_aTimerInfo.second.second )
     {
@@ -129,8 +129,6 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl)
         m_xBase->OnTime( uno::makeAny( m_aTimerInfo.second.first ), m_aTimerInfo.first, uno::makeAny( m_aTimerInfo.second.second ), uno::makeAny( sal_False ) );
     } catch( uno::Exception& )
     {}
-
-    return 0;
 }
 
 // ====VbaTimerInfoHash==================================

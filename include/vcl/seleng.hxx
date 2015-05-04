@@ -91,7 +91,7 @@ private:
     sal_uLong               nUpdateInterval;
     sal_uInt16              nLockedMods;
     SelectionEngineFlags    nFlags;
-    DECL_DLLPRIVATE_LINK( ImpWatchDog, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImpWatchDog, Timer*, void );
 
     inline bool         ShouldDeselect( bool bModifierKey1 ) const;
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging

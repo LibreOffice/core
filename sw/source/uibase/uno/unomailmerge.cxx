@@ -211,7 +211,7 @@ namespace
 
     private:
         void implTakeOwnership( );
-        DECL_LINK( OnTryDeleteFile, void* );
+        DECL_LINK_TYPED( OnTryDeleteFile, Timer*, void );
     };
 
     DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const OUString& _rTemporaryFile )
@@ -240,7 +240,7 @@ namespace
         osl_atomic_decrement( &m_refCount );
     }
 
-    IMPL_LINK_NOARG(DelayedFileDeletion, OnTryDeleteFile)
+    IMPL_LINK_NOARG_TYPED(DelayedFileDeletion, OnTryDeleteFile, Timer *, void)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -278,7 +278,6 @@ namespace
             aGuard.clear();
             release();  // this should be our last reference, we should be dead after this
         }
-        return 0L;
     }
 
     void DelayedFileDeletion::implTakeOwnership( )

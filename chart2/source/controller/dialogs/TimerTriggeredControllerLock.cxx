@@ -45,10 +45,9 @@ void TimerTriggeredControllerLock::startTimer()
         m_apControllerLockGuard.reset( new  ControllerLockGuardUNO(m_xModel) );
     m_aTimer.Start();
 }
-IMPL_LINK_NOARG(TimerTriggeredControllerLock, TimerTimeout)
+IMPL_LINK_NOARG_TYPED(TimerTriggeredControllerLock, TimerTimeout, Timer *, void)
 {
     m_apControllerLockGuard.reset();
-    return 0;
 }
 
 } //namespace chart

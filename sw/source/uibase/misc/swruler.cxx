@@ -289,7 +289,7 @@ Color SwCommentRuler::GetFadedColor(const Color &rHighColor, const Color &rLowCo
     return aColor;
 }
 
-IMPL_LINK_NOARG(SwCommentRuler, FadeHandler)
+IMPL_LINK_NOARG_TYPED(SwCommentRuler, FadeHandler, Timer *, void)
 {
     const int nStep = 25;
     if ( mbIsHighlighted && mnFadeRate < 100 )
@@ -297,13 +297,12 @@ IMPL_LINK_NOARG(SwCommentRuler, FadeHandler)
     else if ( !mbIsHighlighted && mnFadeRate > 0 )
         mnFadeRate -= nStep;
     else
-        return 0;
+        return;
 
     Invalidate();
 
     if ( mnFadeRate != 0 && mnFadeRate != 100)
         maFadeTimer.Start();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

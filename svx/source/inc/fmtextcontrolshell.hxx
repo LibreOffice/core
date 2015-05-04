@@ -199,7 +199,7 @@ namespace svx
         */
         void    impl_parseURL_nothrow( ::com::sun::star::util::URL& _rURL );
 
-        DECL_LINK( OnInvalidateClipboard, void* );
+        DECL_LINK_TYPED( OnInvalidateClipboard, Timer*, void );
     };
 
 

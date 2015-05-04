@@ -243,10 +243,9 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, void)
 {
     RefreshMarkWindow();
-    return 0L;
 }
 
 /*************************************************************************

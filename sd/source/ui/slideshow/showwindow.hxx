@@ -107,8 +107,8 @@ private:
     bool            mbMouseCursorHidden;
     sal_uInt64      mnFirstMouseMove;
 
-                    DECL_LINK( PauseTimeoutHdl, Timer* pTimer );
-                    DECL_LINK(MouseTimeoutHdl, void *);
+                    DECL_LINK_TYPED( PauseTimeoutHdl, Timer*, void );
+                    DECL_LINK_TYPED(MouseTimeoutHdl, Timer *, void);
                     DECL_LINK( EventHdl, VclWindowEvent* pEvent );
 
     ::rtl::Reference< SlideshowImpl > mxController;

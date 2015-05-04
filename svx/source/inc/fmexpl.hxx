@@ -484,10 +484,10 @@ namespace svxform
         static bool IsHiddenControl(FmEntryData* pEntryData);
 
         DECL_LINK( OnEdit, void* );
-        DECL_LINK( OnDropActionTimer, void* );
+        DECL_LINK_TYPED( OnDropActionTimer, Timer*, void );
 
         DECL_LINK(OnEntrySelDesel, NavigatorTree*);
-        DECL_LINK(OnSynchronizeTimer, void*);
+        DECL_LINK_TYPED(OnSynchronizeTimer, Timer*, void);
 
         DECL_LINK( OnClipboardAction, void* );
 

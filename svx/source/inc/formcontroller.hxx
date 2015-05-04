@@ -563,7 +563,7 @@ namespace svxform
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> isInList(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& xPeer) const;
 
         DECL_LINK( OnActivateTabOrder, void* );
-        DECL_LINK( OnInvalidateFeatures, void* );
+        DECL_LINK_TYPED( OnInvalidateFeatures, Timer*, void );
         DECL_LINK( OnLoad, void* );
         DECL_LINK( OnToggleAutoFields, void* );
         DECL_LINK( OnActivated, void* );

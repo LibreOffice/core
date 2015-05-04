@@ -357,7 +357,7 @@ uno::Sequence< OUString > SAL_CALL OGLPlayer::getSupportedServiceNames()
     return aRet;
 }
 
-IMPL_LINK(OGLPlayer,TimerHandler,Timer*,pTimer)
+IMPL_LINK_TYPED(OGLPlayer,TimerHandler,Timer*,pTimer,void)
 {
     if (pTimer == &m_aTimer)
     {
@@ -365,8 +365,6 @@ IMPL_LINK(OGLPlayer,TimerHandler,Timer*,pTimer)
         assert(m_pOGLWindow);
         m_pOGLWindow->update();
     }
-
-    return 0;
 }
 
 } // namespace ogl

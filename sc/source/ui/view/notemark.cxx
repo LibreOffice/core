@@ -71,7 +71,7 @@ ScNoteMarker::~ScNoteMarker()
     delete pModel;
 }
 
-IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
+IMPL_LINK_NOARG_TYPED(ScNoteMarker, TimeHdl, Timer *, void)
 {
     if (!bVisible)
     {
@@ -109,7 +109,6 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
     }
 
     Draw();
-    return 0;
 }
 
 static void lcl_DrawWin( SdrObject* pObject, vcl::Window* pWindow, const MapMode& rMap )

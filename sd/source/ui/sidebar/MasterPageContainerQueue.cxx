@@ -109,7 +109,7 @@ void MasterPageContainerQueue::LateInit()
 {
     // Set up the timer for the delayed creation of preview bitmaps.
     maDelayedPreviewCreationTimer.SetTimeout (snDelayedCreationTimeout);
-    Link<> aLink (LINK(this,MasterPageContainerQueue,DelayedPreviewCreation));
+    Link<Timer *, void> aLink (LINK(this,MasterPageContainerQueue,DelayedPreviewCreation));
     maDelayedPreviewCreationTimer.SetTimeoutHdl(aLink);
 }
 
@@ -176,7 +176,7 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
     return nPriority;
 }
 
-IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
+IMPL_LINK_TYPED(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void)
 {
     bool bIsShowingFullScreenShow (false);
     bool bWaitForMoreRequests (false);
@@ -235,8 +235,6 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
         maDelayedPreviewCreationTimer.SetTimeout(nTimeout);
         pTimer->Start();
     }
-
-    return 0;
 }
 
 bool MasterPageContainerQueue::HasRequest (MasterPageContainer::Token aToken) const

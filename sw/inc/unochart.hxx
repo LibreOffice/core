@@ -72,7 +72,7 @@ class SwChartLockController_Helper
 {
     SwDoc   *pDoc;
 
-    DECL_LINK( DoUnlockAllCharts, Timer * );
+    DECL_LINK_TYPED( DoUnlockAllCharts, Timer *, void );
     Timer   aUnlockTimer;   // timer to unlock chart controllers
     bool    bIsLocked;
 

@@ -74,7 +74,7 @@ namespace dbaui
 
     private:
         void init();
-        DECL_LINK( OnTimeOut, void* );
+        DECL_LINK_TYPED( OnTimeOut, Timer*, void );
         DECL_LINK( OnResetEntry, SvTreeListEntry* );
         DECL_LINK( ScrollUpHdl, SvTreeListBox* );
         DECL_LINK( ScrollDownHdl, SvTreeListBox* );

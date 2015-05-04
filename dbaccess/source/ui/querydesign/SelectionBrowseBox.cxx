@@ -2487,14 +2487,13 @@ void OSelectionBrowseBox::appendUndoAction(const OUString& _rOldValue,const OUSt
     }
 }
 
-IMPL_LINK_NOARG(OSelectionBrowseBox, OnInvalidateTimer)
+IMPL_LINK_NOARG_TYPED(OSelectionBrowseBox, OnInvalidateTimer, Timer *, void)
 {
     static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature(SID_CUT);
     static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature(SID_COPY);
     static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature(SID_PASTE);
     if(!m_bStopTimer)
         m_timerInvalidate.Start();
-    return 0L;
 }
 
 void OSelectionBrowseBox::stopTimer()

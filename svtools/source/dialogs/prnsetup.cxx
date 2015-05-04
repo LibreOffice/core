@@ -292,13 +292,11 @@ void PrinterSetupDialog::ImplSetInfo()
 
 
 
-IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
+IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplStatusHdl, Timer *, void)
 {
     QueueInfo aInfo;
     ImplPrnDlgUpdateQueueInfo(m_pLbName, aInfo);
     m_pFiStatus->SetText( ImplPrnDlgGetStatusText( aInfo ) );
-
-    return 0;
 }
 
 

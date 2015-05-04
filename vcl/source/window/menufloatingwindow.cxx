@@ -267,16 +267,15 @@ IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd)
     return 0;
 }
 
-IMPL_LINK_NOARG(MenuFloatingWindow, AutoScroll)
+IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, AutoScroll, Timer *, void)
 {
     ImplScroll( GetPointerPosPixel() );
-    return 1;
 }
 
-IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
+IMPL_LINK_TYPED( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
 {
     if( ! pMenu )
-        return 0;
+        return;
 
     MenuItemData* pItemData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
     if ( pItemData )
@@ -332,11 +331,9 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
                 pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose)
+IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, SubmenuClose, Timer *, void)
 {
     if( pMenu && pMenu->pStartedFrom )
     {
@@ -344,7 +341,6 @@ IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose)
         if( pWin )
             pWin->KillActivePopup();
     }
-    return 0;
 }
 
 IMPL_LINK( MenuFloatingWindow, ShowHideListener, VclWindowEvent*, pEvent )

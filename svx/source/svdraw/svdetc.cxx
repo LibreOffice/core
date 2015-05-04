@@ -97,7 +97,7 @@ OLEObjCache::OLEObjCache()
 {
     nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
     pTimer = new AutoTimer();
-    Link<> aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
+    Link<Timer *, void> aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
 
     pTimer->SetTimeoutHdl(aLink);
     pTimer->SetTimeout(20000);
@@ -234,10 +234,9 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
     return bUnloaded;
 }
 
-IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, /*pTim*/)
+IMPL_LINK_NOARG_TYPED(OLEObjCache, UnloadCheckHdl, Timer*, void)
 {
     UnloadOnDemand();
-    return 0;
 }
 
 

@@ -131,7 +131,7 @@ public:
 
                         // moved by the application
 
-    DECL_LINK( IdleHandler, void* );   // Timer instead of idle
+    DECL_LINK_TYPED( IdleHandler, Timer*, void ); // Timer instead of idle
     DECL_LINK( SpellTimerHdl, void* );
     DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 

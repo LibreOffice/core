@@ -119,7 +119,7 @@ private:
     DECL_LINK( implControlHdl, Control* );
     DECL_LINK(implPropertyHdl, void *);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
-    DECL_LINK(lateInitCallback, void *);
+    DECL_LINK_TYPED(lateInitCallback, Timer *, void);
 
 private:
     ViewShellBase& mrBase;

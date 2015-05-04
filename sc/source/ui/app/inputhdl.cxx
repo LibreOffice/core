@@ -3605,7 +3605,7 @@ void ScInputHandler::ResetDelayTimer()
     }
 }
 
-IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
+IMPL_LINK_TYPED( ScInputHandler, DelayTimer, Timer*, pTimer, void )
 {
     if ( pTimer == pDelayTimer )
     {
@@ -3640,7 +3640,6 @@ IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
             }
         }
     }
-    return 0;
 }
 
 void ScInputHandler::InputSelection( EditView* pView )

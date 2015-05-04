@@ -2100,7 +2100,7 @@ IMPL_LINK_NOARG(ToolBarManager, MiscOptionsChanged)
     return 0;
 }
 
-IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl)
+IMPL_LINK_NOARG_TYPED(ToolBarManager, AsyncUpdateControllersHdl, Timer *, void)
 {
     // The guard must be in its own context as the we can get destroyed when our
     // own xInterface reference get destroyed!
@@ -2109,13 +2109,11 @@ IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl)
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return 1;
+        return;
 
     // Request to update our controllers
     m_aAsyncUpdateControllersTimer.Stop();
     UpdateControllers();
-
-    return 0;
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )

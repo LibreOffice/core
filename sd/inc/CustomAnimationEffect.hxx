@@ -425,7 +425,7 @@ protected:
     void lockRebuilds();
     void unlockRebuilds();
 
-    DECL_LINK(onTimerHdl, void *);
+    DECL_LINK_TYPED(onTimerHdl, Timer *, void);
 
     virtual void implRebuild() SAL_OVERRIDE;
 

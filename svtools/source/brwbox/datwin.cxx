@@ -520,10 +520,9 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 
 
 
-IMPL_LINK_NOARG(BrowserDataWin, RepeatedMouseMove)
+IMPL_LINK_NOARG_TYPED(BrowserDataWin, RepeatedMouseMove, Timer *, void)
 {
     GetParent()->MouseMove( BrowserMouseEvent( this, aRepeatEvt ) );
-    return 0;
 }
 
 void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )

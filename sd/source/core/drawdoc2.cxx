@@ -848,7 +848,7 @@ LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 }
 
 // Initiate WorkStartup
-IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
+IMPL_LINK_NOARG_TYPED(SdDrawDocument, WorkStartupHdl, Timer *, void)
 {
     if( mpDocSh )
         mpDocSh->SetWaitCursor( true );
@@ -884,7 +884,6 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
 
     if( mpDocSh )
         mpDocSh->SetWaitCursor( false );
-    return 0;
 }
 
 // When the WorkStartupTimer has been created (this only happens in

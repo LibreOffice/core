@@ -55,7 +55,7 @@ SwBlink::~SwBlink( )
  * Toggle visibility flag
  * Determine the repaint rectangle and invalidate them in their OleShells.
  */
-IMPL_LINK_NOARG(SwBlink, Blinker)
+IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
 {
     bVisible = !bVisible;
     if( bVisible )
@@ -113,7 +113,6 @@ IMPL_LINK_NOARG(SwBlink, Blinker)
     }
     else // If the list is empty, the timer can be stopped
         aTimer.Stop();
-    return 1;
 }
 
 void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,

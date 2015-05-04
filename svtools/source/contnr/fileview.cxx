@@ -221,7 +221,7 @@ public:
 
     Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
 
-    DECL_LINK(ResetQuickSearch_Impl, void *);
+    DECL_LINK_TYPED(ResetQuickSearch_Impl, Timer *, void);
 
     virtual PopupMenu*  CreateContextMenu() SAL_OVERRIDE;
     virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) SAL_OVERRIDE;
@@ -662,14 +662,12 @@ void ViewTabListBox_Impl::dispose()
 
 
 
-IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl)
+IMPL_LINK_NOARG_TYPED(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
 {
     ::osl::MutexGuard aGuard( maMutex );
 
     maQuickSearchText.clear();
     mnSearchIndex = 0;
-
-    return 0;
 }
 
 

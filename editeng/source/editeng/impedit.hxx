@@ -666,9 +666,9 @@ private:
     inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, sal_uLong nDrawMode );
     inline void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
 
-    DECL_LINK(StatusTimerHdl, void *);
+    DECL_LINK_TYPED(StatusTimerHdl, Timer *, void);
     DECL_LINK(IdleFormatHdl, void *);
-    DECL_LINK(OnlineSpellHdl, void *);
+    DECL_LINK_TYPED(OnlineSpellHdl, Timer *, void);
     DECL_LINK( DocModified, void* );
 
     void                CheckIdleFormatter();

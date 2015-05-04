@@ -113,6 +113,7 @@ private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
     DECL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, void* );
+    DECL_STATIC_LINK_TYPED( SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, void );
     DECL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton* );
     DECL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void* );
     DECL_LINK       (                CancelHdl_Impl, void* );

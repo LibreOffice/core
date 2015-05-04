@@ -62,10 +62,9 @@ using namespace ::com::sun::star;
 
 
 
-IMPL_LINK( DlgEdFunc, ScrollTimeout, Timer *,  )
+IMPL_LINK_NOARG_TYPED( DlgEdFunc, ScrollTimeout, Timer *, void )
 {
     ForceScroll( m_pParent->PixelToLogic( m_pParent->GetPointerPosPixel() ) );
-    return 0;
 }
 
 

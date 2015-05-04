@@ -92,7 +92,7 @@ void MenuButton::dispose()
     PushButton::dispose();
 }
 
-IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
+IMPL_LINK_NOARG_TYPED(MenuButton, ImplMenuTimeoutHdl, Timer *, void)
 {
     // See if Button Tracking is still active, as it could've been cancelled earler
     if ( IsTracking() )
@@ -101,8 +101,6 @@ IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
             GrabFocus();
         ExecuteMenu();
     }
-
-    return 0;
 }
 
 void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )

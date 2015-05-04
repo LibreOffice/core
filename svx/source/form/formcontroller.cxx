@@ -513,7 +513,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
     }
 };
 
-IMPL_LINK( FormController, OnInvalidateFeatures, void*, /*_pNotInterestedInThisParam*/ )
+IMPL_LINK_NOARG_TYPED( FormController, OnInvalidateFeatures, Timer*, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     for ( ::std::set< sal_Int16 >::const_iterator aLoop = m_aInvalidFeatures.begin();
@@ -529,7 +529,6 @@ IMPL_LINK( FormController, OnInvalidateFeatures, void*, /*_pNotInterestedInThisP
             UpdateAllListeners( )( aDispatcherPos->second );
         }
     }
-    return 1;
 }
 
 FormController::FormController(const Reference< css::uno::XComponentContext > & _rxORB )

@@ -1755,10 +1755,9 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl, Timer *, void)
 {
     m_pPreviewWIN->Invalidate();
-    return 0;
 }
 
 IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )

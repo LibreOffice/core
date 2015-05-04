@@ -426,7 +426,7 @@ public:
 
     DECL_DLLPRIVATE_LINK(      ImplHandlePaintHdl, void* );
     DECL_DLLPRIVATE_LINK(      ImplGenerateMouseMoveHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplTrackTimerHdl, Timer* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplTrackTimerHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK(      ImplAsyncFocusHdl, void* );
     DECL_DLLPRIVATE_LINK(      ImplHandleResizeTimerHdl, void* );
     DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );

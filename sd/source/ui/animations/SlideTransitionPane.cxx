@@ -1067,7 +1067,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked)
     return 0;
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
 {
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
     TransitionPresetList::const_iterator aIter( rPresetList.begin() );
@@ -1089,8 +1089,6 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
 
     updateSoundList();
     updateControls();
-
-    return 0;
 }
 
 vcl::Window * createSlideTransitionPanel( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )

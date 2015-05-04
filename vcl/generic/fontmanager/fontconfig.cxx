@@ -885,13 +885,13 @@ namespace
 #endif
 }
 
-IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
+IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
 {
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     guint xid = get_xid_for_dbus();
 
     if (!xid)
-        return -1;
+        return;
 
     GError *error = NULL;
     /* get the DBUS session connection */
@@ -900,7 +900,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
     {
         g_debug ("DBUS cannot connect : %s", error->message);
         g_error_free (error);
-        return -1;
+        return;
     }
 
     /* get the proxy with gnome-session-manager */
@@ -911,7 +911,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
     if (proxy == NULL)
     {
         g_debug("Could not get DBUS proxy: org.freedesktop.PackageKit");
-        return -1;
+        return;
     }
 
     gchar **fonts = static_cast<gchar**>(g_malloc((m_aCurrentRequests.size() + 1) * sizeof(gchar*)));
@@ -940,7 +940,6 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
     g_object_unref(G_OBJECT (proxy));
     m_aCurrentRequests.clear();
 #endif
-    return 0;
 }
 
 bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes )

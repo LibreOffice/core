@@ -56,7 +56,7 @@ public:
 private:
     /// Hide the button (used when the popup menu is closed by clicking outside)
     DECL_LINK( HideHandler, void * );
-    DECL_LINK( FadeHandler, void * );
+    DECL_LINK_TYPED( FadeHandler, Timer *, void );
 };
 
 #endif

@@ -424,7 +424,7 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
     maShowTimer.Start();
 }
 
-IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
+IMPL_LINK_TYPED( HelpTextWindow, TimerHdl, Timer*, pTimer, void)
 {
     if ( pTimer == &maShowTimer )
     {
@@ -442,8 +442,6 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
         DBG_ASSERT( pTimer == &maHideTimer, "HelpTextWindow::TimerHdl with bad Timer" );
           ImplDestroyHelpWindow( true );
     }
-
-    return 1;
 }
 
 Size HelpTextWindow::CalcOutSize() const

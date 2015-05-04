@@ -2633,10 +2633,9 @@ void SAL_CALL ODatabaseForm::reloaded(const EventObject& /*aEvent*/) throw( Runt
 }
 
 
-IMPL_LINK_NOARG(ODatabaseForm, OnTimeout)
+IMPL_LINK_NOARG_TYPED(ODatabaseForm, OnTimeout, Timer *, void)
 {
     reload_impl(true);
-    return 1;
 }
 
 

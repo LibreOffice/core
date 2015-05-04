@@ -49,7 +49,7 @@ private:
     SdrObject*      pObject;
     bool            bVisible;
     Point           aGridOff;
-    DECL_LINK( TimeHdl, void* );
+    DECL_LINK_TYPED( TimeHdl, Timer*, void );
 
 public:
                 ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,

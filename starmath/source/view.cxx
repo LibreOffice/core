@@ -273,7 +273,7 @@ void SmGraphicWindow::RepaintViewShellDoc()
         pDoc->Repaint();
 }
 
-IMPL_LINK_NOARG(SmGraphicWindow, CaretBlinkTimerHdl)
+IMPL_LINK_NOARG_TYPED(SmGraphicWindow, CaretBlinkTimerHdl, Timer *, void)
 {
     if (IsCursorVisible())
         SetIsCursorVisible(false);
@@ -281,8 +281,6 @@ IMPL_LINK_NOARG(SmGraphicWindow, CaretBlinkTimerHdl)
         SetIsCursorVisible(true);
 
     RepaintViewShellDoc();
-
-    return 0;
 }
 
 void SmGraphicWindow::CaretBlinkInit()
@@ -820,7 +818,7 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 }
 
 
-IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
+IMPL_LINK_NOARG_TYPED( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 {
     // We want to have the focus in the edit window once Math has been opened
     // to allow for immediate typing.
@@ -857,7 +855,6 @@ IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
     {
         SAL_WARN( "starmath", "failed to properly set initial focus to edit window" );
     }
-    return 0;
 }
 
 

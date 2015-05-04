@@ -630,7 +630,7 @@ void SvtFileDialog::Init_Impl
 
     // set timer for the filterbox travel
     _pImp->_aFilterTimer.SetTimeout( TRAVELFILTER_TIMEOUT );
-    _pImp->_aFilterTimer.SetTimeoutHdl( LINK( this, SvtFileDialog, FilterSelectHdl_Impl ) );
+    _pImp->_aFilterTimer.SetTimeoutHdl( LINK( this, SvtFileDialog, FilterSelectTimerHdl_Impl ) );
 
     if ( WB_SAVEAS & nStyle )
     {
@@ -1147,18 +1147,8 @@ void SvtFileDialog::EnableAutocompletion( bool _bEnable )
 
 
 
-IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, void*, pInstance )
+IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, void*, EMPTYARG )
 {
-    DBG_ASSERT( pInstance, "SvtFileDialog:keine Instanz" );
-
-    // was the handler executed by the travel timer?
-    if ( pInstance == &pThis->_pImp->_aFilterTimer )
-    {
-        // filter the view again
-        pThis->ExecuteFilter();
-        return 0;
-    }
-
     OUString sSelectedFilterDisplayName;
     SvtFileDialogFilter_Impl* pSelectedFilter = pThis->_pImp->GetSelectedFilterEntry( sSelectedFilterDisplayName );
     if ( !pSelectedFilter )
@@ -1231,7 +1221,12 @@ IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, void*, pInstance )
     return 0;
 }
 
-
+IMPL_STATIC_LINK_TYPED(
+    SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, EMPTYARG, void)
+{
+    // filter the view again
+    pThis->ExecuteFilter();
+}
 
 IMPL_STATIC_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void*, EMPTYARG )
 {

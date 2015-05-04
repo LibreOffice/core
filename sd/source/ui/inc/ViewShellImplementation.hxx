@@ -74,7 +74,7 @@ public:
                 when IsUICaptured() returns <TRUE/>.
         */
         void Release (bool bForce = false);
-        DECL_LINK(TimeoutCallback, void *);
+        DECL_LINK_TYPED(TimeoutCallback, Timer *, void);
     private:
         ::std::unique_ptr<ToolBarManager::UpdateLock> mpLock;
         /** The timer is used both as a safe guard to unlock the update lock

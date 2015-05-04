@@ -212,7 +212,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
 
     // avoid flickering of buttons:
     aDeselectTimer.SetTimeout(100);
-    aDeselectTimer.SetTimeoutHdl(LINK(this, SwRedlineAcceptDlg, SelectHdl));
+    aDeselectTimer.SetTimeoutHdl(LINK(this, SwRedlineAcceptDlg, SelectTimerHdl));
 
     // avoid multiple selection of the same texts:
     aSelectTimer.SetTimeout(100);
@@ -943,13 +943,17 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, DeselectHdl)
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectHdl)
 {
-    aDeselectTimer.Stop();
-    aSelectTimer.Start();
-
+    SelectTimerHdl(nullptr);
     return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, SelectTimerHdl, Timer *, void)
+{
+    aDeselectTimer.Stop();
+    aSelectTimer.Start();
+}
+
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     aSelectTimer.Stop();
@@ -1014,8 +1018,6 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
     pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
     pTPView->EnableReject( bEnable && bSel && bIsNotFormated /*&& !bReadonlySel*/ );
     pTPView->EnableRejectAll( bEnable && !bOnlyFormatedRedlines && !bHasReadonlySel );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)

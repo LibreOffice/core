@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 
+class Timer;
 struct ImplCursorData;
 namespace vcl { class Window; }
 
@@ -53,7 +54,7 @@ private:
 public:
     SAL_DLLPRIVATE void         ImplDraw();
     SAL_DLLPRIVATE void         ImplRestore();
-    DECL_DLLPRIVATE_LINK(       ImplTimerHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplTimerHdl, Timer*, void );
     SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true );
     SAL_DLLPRIVATE void         ImplHide( bool bStopTimer );
     SAL_DLLPRIVATE void         ImplResume( bool bRestore = false );

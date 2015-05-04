@@ -53,8 +53,8 @@ namespace dbaui
         com::sun::star::uno::Reference<
             com::sun::star::beans::XMultiPropertySet > m_notifier;
 
-        DECL_LINK(OnUndoActionTimer, void*);
-        DECL_LINK(OnInvalidateTimer, void*);
+        DECL_LINK_TYPED(OnUndoActionTimer, Timer*, void);
+        DECL_LINK_TYPED(OnInvalidateTimer, Timer*, void);
 
     private:
         void            ImplSetFont();

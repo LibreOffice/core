@@ -58,7 +58,7 @@ private:
                             sal_uInt16 nPos,
                             bool bNewLine=false );
 
-    DECL_LINK(          TimerHdl, Timer* );
+    DECL_LINK_TYPED(    TimerHdl, Timer*, void );
     bool                CursorIsOverRect( bool bForceAdding = false ) const;
     void                SetPinned_Impl( bool );
     void                SetFadeIn_Impl( bool );

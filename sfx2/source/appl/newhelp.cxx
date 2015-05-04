@@ -565,7 +565,7 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
     get(m_pOpenBtn, "display");
 
     m_pOpenBtn->SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
-    Link<> aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
+    Link<Timer *, void> aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
     aFactoryIdle.SetIdleHdl( LINK(this, IndexTabPage_Impl, IdleHdl ));
     aFactoryIdle.SetPriority(SchedulerPriority::LOWER);
     aKeywordTimer.SetTimeoutHdl( aTimeoutLink );
@@ -750,11 +750,10 @@ IMPL_LINK( IndexTabPage_Impl, IdleHdl, Idle*, pIdle )
     return 0;
 }
 
-IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer)
+IMPL_LINK_TYPED( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer, void)
 {
     if(&aKeywordTimer == pTimer && !sKeyword.isEmpty())
         aKeywordLink.Call(this);
-    return 0;
 }
 
 void IndexTabPage_Impl::ActivatePage()

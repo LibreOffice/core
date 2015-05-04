@@ -126,7 +126,7 @@ protected:
         SfxRequest& rReq);
     virtual ~FuPoor();
 
-    DECL_LINK( DelayHdl, void * );
+    DECL_LINK_TYPED( DelayHdl, Timer *, void );
 
     static void ImpForceQuadratic(Rectangle& rRect);
 
@@ -160,11 +160,11 @@ protected:
     VclPtr<Dialog>             pDialog;
 
     Timer               aScrollTimer;           ///< for auto-scrolling
-    DECL_LINK( ScrollHdl, void * );
+    DECL_LINK_TYPED( ScrollHdl, Timer *, void );
     void ForceScroll(const Point& aPixPos);
 
     Timer               aDragTimer;             ///< for Drag&Drop
-    DECL_LINK(DragHdl, void *);
+    DECL_LINK_TYPED(DragHdl, Timer *, void);
     bool            bIsInDragMode;
     Point               aMDPos;                 ///< position of MouseButtonDown
 

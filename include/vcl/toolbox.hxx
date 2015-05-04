@@ -239,7 +239,7 @@ private:
     DECL_DLLPRIVATE_LINK(          ImplUpdateHdl, void* );
     DECL_DLLPRIVATE_LINK(          ImplResetAutoSizeTriesHdl, void* );
     DECL_DLLPRIVATE_LINK(          ImplCustomMenuListener, VclMenuEvent* );
-    DECL_DLLPRIVATE_LINK(          ImplDropdownLongClickHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED(    ImplDropdownLongClickHdl, Timer*, void );
 
                                    ToolBox (const ToolBox &) SAL_DELETED_FUNCTION;
                           ToolBox& operator= (const ToolBox &) SAL_DELETED_FUNCTION;

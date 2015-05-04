@@ -341,7 +341,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
         DECL_LINK( SameLevelHdl_Impl, CheckBox * );
         DECL_LINK( BulColorHdl_Impl, ColorListBox* );
         DECL_LINK( BulRelSizeHdl_Impl, MetricField *);
-        DECL_LINK(PreviewInvalidateHdl_Impl, void *);
+        DECL_LINK_TYPED(PreviewInvalidateHdl_Impl, Timer *, void);
 
         DECL_STATIC_LINK( SvxNumOptionsTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
 

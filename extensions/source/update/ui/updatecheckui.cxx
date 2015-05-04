@@ -146,7 +146,7 @@ private:
                     DECL_LINK(ClickHdl, void *);
                     DECL_LINK( HighlightHdl, MenuBar::MenuBarButtonCallbackArg* );
                     DECL_LINK(WaitTimeOutHdl, void *);
-                    DECL_LINK(TimeOutHdl, void *);
+                    DECL_LINK_TYPED(TimeOutHdl, Timer *, void);
                     DECL_LINK(UserEventHdl, void *);
                     DECL_LINK( WindowEventHdl, VclWindowEvent* );
                     DECL_LINK( ApplicationEventHdl, VclSimpleEvent* );
@@ -627,11 +627,9 @@ IMPL_LINK_NOARG(UpdateCheckUI, WaitTimeOutHdl)
 }
 
 
-IMPL_LINK_NOARG(UpdateCheckUI, TimeOutHdl)
+IMPL_LINK_NOARG_TYPED(UpdateCheckUI, TimeOutHdl, Timer *, void)
 {
     RemoveBubbleWindow( false );
-
-    return 0;
 }
 
 

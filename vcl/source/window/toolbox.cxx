@@ -2632,7 +2632,7 @@ void ToolBox::ImplFormat( bool bResize )
     mbFormat = false;
 }
 
-IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
+IMPL_LINK_NOARG_TYPED(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
 {
     if( mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
         (mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN)
@@ -2657,8 +2657,6 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
             mnHighItemId     = 0;
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)

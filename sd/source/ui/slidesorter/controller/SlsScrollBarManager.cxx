@@ -549,11 +549,9 @@ void ScrollBarManager::clearAutoScrollFunctor()
     maAutoScrollFunctor = ::boost::function<void()>();
 }
 
-IMPL_LINK_NOARG(ScrollBarManager, AutoScrollTimeoutHandler)
+IMPL_LINK_NOARG_TYPED(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, void)
 {
     RepeatAutoScroll();
-
-    return 0;
 }
 
 void ScrollBarManager::Scroll(

@@ -1046,10 +1046,9 @@ void VclMultiLineEdit::CaretChanged()
     CallEventListeners(VCLEVENT_EDIT_CARETCHANGED);
 }
 
-IMPL_LINK_NOARG(VclMultiLineEdit, ImpUpdateDataHdl)
+IMPL_LINK_NOARG_TYPED(VclMultiLineEdit, ImpUpdateDataHdl, Timer *, void)
 {
     UpdateData();
-    return 0;
 }
 
 void VclMultiLineEdit::UpdateData()

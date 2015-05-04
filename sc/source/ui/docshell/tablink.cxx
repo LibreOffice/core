@@ -414,9 +414,9 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     return true;
 }
 
-IMPL_LINK_NOARG(ScTableLink, RefreshHdl)
+IMPL_LINK_NOARG_TYPED(ScTableLink, RefreshHdl, Timer *, void)
 {
-    return long(Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() ));
+    Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() );
 }
 
 IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink*, pLink )

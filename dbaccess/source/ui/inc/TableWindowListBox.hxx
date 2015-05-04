@@ -48,8 +48,8 @@ namespace dbaui
             ,public IDragTransferableListener
     {
         DECL_LINK( OnDoubleClick, SvTreeListBox* );
-        DECL_LINK( ScrollUpHdl, SvTreeListBox* );
-        DECL_LINK( ScrollDownHdl, SvTreeListBox* );
+        DECL_LINK_TYPED( ScrollUpHdl, Timer*, void );
+        DECL_LINK_TYPED( ScrollDownHdl, Timer*, void );
         DECL_LINK( DropHdl, void* );
         DECL_LINK( LookForUiHdl, void* );
 

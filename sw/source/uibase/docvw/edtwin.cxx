@@ -593,7 +593,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 /**
  * Increase timer for selection
  */
-IMPL_LINK_NOARG(SwEditWin, TimerHandler)
+IMPL_LINK_NOARG_TYPED(SwEditWin, TimerHandler, Timer *, void)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
     Point aModPt( m_aMovePos );
@@ -642,7 +642,6 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler)
 
     m_aMovePos += rSh.VisArea().Pos() - aOldVis.Pos();
     JustifyAreaTimer();
-    return 0;
 }
 
 void SwEditWin::JustifyAreaTimer()
@@ -5729,16 +5728,14 @@ static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
     return pShell;
 }
 
-IMPL_LINK_NOARG(SwEditWin, KeyInputFlushHandler)
+IMPL_LINK_NOARG_TYPED(SwEditWin, KeyInputFlushHandler, Timer *, void)
 {
     FlushInBuffer();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwEditWin, KeyInputTimerHandler)
+IMPL_LINK_NOARG_TYPED(SwEditWin, KeyInputTimerHandler, Timer *, void)
 {
     m_bTblInsDelMode = false;
-    return 0;
 }
 
 void SwEditWin::_InitStaticData()

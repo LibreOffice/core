@@ -2035,7 +2035,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl)
 
 
 
-IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
+IMPL_LINK_TYPED( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer, void )
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
@@ -2051,7 +2051,6 @@ IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
     }
 
     pTimer->Start();
-    return 0;
 }
 
 

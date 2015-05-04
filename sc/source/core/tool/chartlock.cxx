@@ -174,10 +174,9 @@ void ScTemporaryChartLock::AlsoLockThisChart( const Reference< frame::XModel >& 
         mapScChartLockGuard->AlsoLockThisChart( xModel );
 }
 
-IMPL_LINK_NOARG(ScTemporaryChartLock, TimeoutHdl)
+IMPL_LINK_NOARG_TYPED(ScTemporaryChartLock, TimeoutHdl, Timer *, void)
 {
     mapScChartLockGuard.reset();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

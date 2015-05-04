@@ -115,7 +115,7 @@ protected:
     Color GetFadedColor(const Color &rHighColor, const Color &rLowColor);
 
     /// Fade timer callback.
-    DECL_LINK(FadeHandler, void *);
+    DECL_LINK_TYPED(FadeHandler, Timer *, void);
 };
 
 #endif

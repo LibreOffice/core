@@ -970,7 +970,7 @@ Size SpinField::CalcSize(sal_Int32 nChars) const
     return aSz;
 }
 
-IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
+IMPL_LINK_TYPED( SpinField, ImplTimeout, Timer*, pTimer, void )
 {
     if ( pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat() )
     {
@@ -984,7 +984,6 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
         else
             Down();
     }
-    return 0;
 }
 
 void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
