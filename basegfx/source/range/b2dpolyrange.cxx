@@ -80,11 +80,11 @@ namespace basegfx
                 return false;
 
             const std::vector<B2DRange>::const_iterator aEnd( maRanges.end() );
-            return std::find_if( maRanges.begin(),
+            return std::any_of( maRanges.begin(),
                                  aEnd,
                                  boost::bind<bool>( boost::mem_fn( &B2DRange::overlaps ),
                                                     _1,
-                                                    boost::cref(rRange) ) ) != aEnd;
+                                                    boost::cref(rRange) ) );
         }
 
         B2DPolyPolygon solveCrossovers() const
