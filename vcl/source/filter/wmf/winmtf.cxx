@@ -1639,6 +1639,15 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                                 bDrawn = true;
                                 i++;
                             }
+                            // tdf#90539
+                            else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCINVERT ) )
+                            {
+                                Bitmap aMask( pSave->aBmp );
+                                BitmapEx aBmpEx( pSave2->aBmp, aMask );
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
+                                bDrawn = true;
+                                i++;
+                            }
                         }
                     }
                 }
