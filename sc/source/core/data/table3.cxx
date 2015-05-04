@@ -1702,11 +1702,10 @@ void ScTable::Sort(
         SCROW nLastRow = 0;
         for (SCCOL nCol = rSortParam.nCol1; nCol <= rSortParam.nCol2; nCol++)
             nLastRow = std::max(nLastRow, aCol[nCol].GetLastDataPos());
-        rSortParam.nRow2 = nLastRow = std::min(nLastRow, rSortParam.nRow2);
-        SCROW nRow1 = (rSortParam.bHasHeader ?
-            rSortParam.nRow1 + 1 : rSortParam.nRow1);
+        rSortParam.nRow2 = nLastRow = std::max( std::min(nLastRow, rSortParam.nRow2), rSortParam.nRow1);
+        SCROW nRow1 = (rSortParam.bHasHeader ? rSortParam.nRow1 + 1 : rSortParam.nRow1);
         aSortParam = rSortParam;    // must be assigned before calling IsSorted()
-        if (!IsSorted(nRow1, nLastRow))
+        if (nRow1 < nLastRow && !IsSorted(nRow1, nLastRow))
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastRow-nRow1 );
@@ -1735,7 +1734,7 @@ void ScTable::Sort(
         SCCOL nCol1 = (rSortParam.bHasHeader ?
             rSortParam.nCol1 + 1 : rSortParam.nCol1);
         aSortParam = rSortParam;    // must be assigned before calling IsSorted()
-        if (!IsSorted(nCol1, nLastCol))
+        if (nCol1 < nLastCol && !IsSorted(nCol1, nLastCol))
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastCol-nCol1 );
