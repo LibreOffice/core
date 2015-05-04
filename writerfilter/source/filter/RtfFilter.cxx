@@ -53,7 +53,7 @@ class RtfFilter : public cppu::WeakImplHelper
     uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
 
 public:
-    RtfFilter(const uno::Reference<uno::XComponentContext>& xContext);
+    explicit RtfFilter(const uno::Reference<uno::XComponentContext>& xContext);
     virtual ~RtfFilter();
 
     // XFilter

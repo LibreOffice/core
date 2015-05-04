@@ -32,7 +32,7 @@ class TrackChangesHandler : public LoggedProperties
     virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
 public:
-    TrackChangesHandler( sal_Int32 nToken );
+    explicit TrackChangesHandler( sal_Int32 nToken );
     virtual ~TrackChangesHandler();
 
     /// Compute the UNO properties for the track changes object based on the received tokens.

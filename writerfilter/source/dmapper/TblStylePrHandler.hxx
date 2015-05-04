@@ -65,7 +65,7 @@ private:
     virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
 public:
-    TblStylePrHandler( DomainMapper & rDMapper );
+    explicit TblStylePrHandler( DomainMapper & rDMapper );
     virtual ~TblStylePrHandler( );
 
     inline PropertyMapPtr       getProperties() { return m_pProperties; };

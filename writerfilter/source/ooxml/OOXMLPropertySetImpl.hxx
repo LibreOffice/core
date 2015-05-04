@@ -189,7 +189,7 @@ class OOXMLPropertySetValue : public OOXMLValue
 {
     OOXMLPropertySet::Pointer_t mpPropertySet;
 public:
-    OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t pPropertySet);
+    explicit OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual ~OOXMLPropertySetValue();
 
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
@@ -301,7 +301,7 @@ class OOXMLPropertySetEntryToString : public Properties
     OUString mStr;
 
 public:
-    OOXMLPropertySetEntryToString(Id nId);
+    explicit OOXMLPropertySetEntryToString(Id nId);
     virtual ~OOXMLPropertySetEntryToString();
 
     virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;
@@ -315,7 +315,7 @@ class OOXMLPropertySetEntryToInteger : public Properties
     Id mnId;
     int mnValue;
 public:
-    OOXMLPropertySetEntryToInteger(Id nId);
+    explicit OOXMLPropertySetEntryToInteger(Id nId);
     virtual ~OOXMLPropertySetEntryToInteger();
 
     virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;
@@ -329,7 +329,7 @@ class OOXMLPropertySetEntryToBool : public Properties
     Id mnId;
     bool mValue;
 public:
-    OOXMLPropertySetEntryToBool(Id nId);
+    explicit OOXMLPropertySetEntryToBool(Id nId);
     virtual ~OOXMLPropertySetEntryToBool();
 
     virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;

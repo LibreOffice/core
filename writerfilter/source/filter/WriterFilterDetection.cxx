@@ -36,7 +36,7 @@ class WriterFilterDetection : public cppu::WeakImplHelper
     uno::Reference<uno::XComponentContext> m_xContext;
 
 public:
-    WriterFilterDetection(const uno::Reference<uno::XComponentContext>& rxContext);
+    explicit WriterFilterDetection(const uno::Reference<uno::XComponentContext>& rxContext);
     virtual ~WriterFilterDetection();
 
     //XExtendedFilterDetection

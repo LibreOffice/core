@@ -39,7 +39,7 @@ namespace writerfilter
         xmlTextWriterPtr pWriter;
         const char* pName;
 
-        TagLogger(const char* name);
+        explicit TagLogger(const char* name);
 
     public:
         ~TagLogger();
