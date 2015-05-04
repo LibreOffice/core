@@ -1677,7 +1677,7 @@ void ScTable::DecoladeRow( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2 )
 }
 
 void ScTable::Sort(
-    ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+    const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
     ScProgress* pProgress, sc::ReorderParam* pUndo )
 {
     InitSortCollator( rSortParam );
@@ -1693,20 +1693,13 @@ void ScTable::Sort(
         pUndo->mbHasHeaders = rSortParam.bHasHeader;
     }
 
-    // Trim empty leading and trailing column ranges.
-    while (rSortParam.nCol1 < rSortParam.nCol2 && aCol[rSortParam.nCol1].IsEmptyBlock(rSortParam.nRow1, rSortParam.nRow2))
-        ++rSortParam.nCol1;
-    while (rSortParam.nCol1 < rSortParam.nCol2 && aCol[rSortParam.nCol2].IsEmptyBlock(rSortParam.nRow1, rSortParam.nRow2))
-        --rSortParam.nCol2;
+    // It is assumed that the data area has already been trimmed as necessary.
 
+    aSortParam = rSortParam;    // must be assigned before calling IsSorted()
     if (rSortParam.bByRow)
     {
-        SCROW nLastRow = 0;
-        for (SCCOL nCol = rSortParam.nCol1; nCol <= rSortParam.nCol2; nCol++)
-            nLastRow = std::max(nLastRow, aCol[nCol].GetLastDataPos());
-        rSortParam.nRow2 = nLastRow = std::max( std::min(nLastRow, rSortParam.nRow2), rSortParam.nRow1);
+        SCROW nLastRow = rSortParam.nRow2;
         SCROW nRow1 = (rSortParam.bHasHeader ? rSortParam.nRow1 + 1 : rSortParam.nRow1);
-        aSortParam = rSortParam;    // must be assigned before calling IsSorted()
         if (nRow1 < nLastRow && !IsSorted(nRow1, nLastRow))
         {
             if(pProgress)
@@ -1733,9 +1726,7 @@ void ScTable::Sort(
     else
     {
         SCCOL nLastCol = rSortParam.nCol2;
-        SCCOL nCol1 = (rSortParam.bHasHeader ?
-            rSortParam.nCol1 + 1 : rSortParam.nCol1);
-        aSortParam = rSortParam;    // must be assigned before calling IsSorted()
+        SCCOL nCol1 = (rSortParam.bHasHeader ? rSortParam.nCol1 + 1 : rSortParam.nCol1);
         if (nCol1 < nLastCol && !IsSorted(nCol1, nLastCol))
         {
             if(pProgress)

@@ -1096,12 +1096,17 @@ public:
 
                         @param o_bShrunk
                                Out parameter, true if area was shrunk, false if not.
+                        @param  bStickyTopRow
+                                If TRUE, do not adjust the top row.
+                        @param  bStickyLeftCol
+                                If TRUE, do not adjust the left column.
 
                         @returns true if there is any data, false if not.
                      */
     bool            ShrinkToUsedDataArea( bool& o_bShrunk,
                                           SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                          SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
+                                          SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
+                                          bool bStickyTopRow = false, bool bStickyLeftCol = false ) const;
 
     /**
      * Return the last non-empty row position in given columns that's no
@@ -1718,12 +1723,9 @@ public:
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
     SC_DLLPUBLIC SvNumberFormatter* CreateFormatTable() const;
 
-    /** Sort a range of data.
-        @param  rSortParam may get adjusted to the actual range used if it did
-                encompass leading or trailing empty blocks
-     */
+    /** Sort a range of data. */
     void Sort(
-        SCTAB nTab, ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+        SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
         ScProgress* pProgress, sc::ReorderParam* pUndo );
 
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );

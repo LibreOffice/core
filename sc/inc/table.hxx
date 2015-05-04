@@ -505,7 +505,8 @@ public:
                              bool bIncludeOld, bool bOnlyDown ) const;
 
     bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
-                                      SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
+                                      SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
+                                      bool bStickyTopRow, bool bStickyLeftCol ) const;
 
     SCROW GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
 
@@ -844,12 +845,9 @@ public:
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 
-    /** Sort a range of data.
-        @param  rSortParam may get adjusted to the actual range used if it did
-                encompass leading or trailing empty blocks
-     */
+    /** Sort a range of data. */
     void Sort(
-        ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+        const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
         ScProgress* pProgress, sc::ReorderParam* pUndo );
 
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );

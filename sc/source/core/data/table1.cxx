@@ -912,7 +912,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 }
 
 bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
-        SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const
+        SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol ) const
 {
     o_bShrunk = false;
 
@@ -943,20 +943,23 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
                 break;  // while
         }
 
-        while (rStartCol < rEndCol)
+        if (!bStickyLeftCol)
         {
-            if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
+            while (rStartCol < rEndCol)
             {
-                ++rStartCol;
-                bChanged = true;
+                if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
+                {
+                    ++rStartCol;
+                    bChanged = true;
+                }
+                else
+                    break;  // while
             }
-            else
-                break;  // while
         }
 
         if (!bColumnsOnly)
         {
-            if (rStartRow < rEndRow)
+            if (!bStickyTopRow && rStartRow < rEndRow)
             {
                 bool bFound = false;
                 for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
