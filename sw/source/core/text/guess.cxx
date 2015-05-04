@@ -391,19 +391,6 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             xHyphWord = aResult.rHyphenatedWord;
             nBreakPos += xHyphWord->getHyphenationPos() + 1;
 
-#if OSL_DEBUG_LEVEL > 1
-            // e.g., Schif-fahrt, referes to our string
-            const OUString aWord = xHyphWord->getWord();
-            // e.g., Schiff-fahrt, referes to the word after hyphenation
-            const OUString aHyphenatedWord = xHyphWord->getHyphenatedWord();
-            // e.g., Schif-fahrt: 5, referes to our string
-            const sal_uInt16 nHyphenationPos = xHyphWord->getHyphenationPos();
-            (void)nHyphenationPos;
-            // e.g., Schiff-fahrt: 6, referes to the word after hyphenation
-            const sal_uInt16 nHyphenPos = xHyphWord->getHyphenPos();
-            (void)nHyphenPos;
-#endif
-
             // if not in interactive mode, we have to break behind a soft hyphen
             if ( ! rInf.IsInterHyph() && rInf.GetIdx() )
             {
