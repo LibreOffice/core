@@ -215,13 +215,17 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         return;
     }
 
-    DeviceCoordinate nPixelWidth = 0;
-
     if(rArgs.mpDXArray && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
     {
-        nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
-        if( nPixelWidth <= 0)
+        DeviceCoordinate nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
+
+        // justification requests which change the width by just one pixel are probably
+        // introduced by lossy conversions between integer based coordinate system
+        DeviceCoordinate nOrigWidth = lrint( GetTextWidth() );
+        if( (nPixelWidth <= 0) || ((nOrigWidth >= rint( nPixelWidth - 1 )) && (nOrigWidth <= rint( nPixelWidth + 1 ))) )
+        {
             return;
+        }
         ApplyDXArray( rArgs );
         if( mnTrailingSpaceCount )
         {
@@ -230,13 +234,15 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
             mfTrailingSpaceWidth = nFullPixelWidth - nPixelWidth;
             if( nPixelWidth <= 0)
+            {
                 return;
+            }
         }
         mfCachedWidth = nPixelWidth;
     }
     else
     {
-        nPixelWidth = rArgs.mnLayoutWidth;
+        DeviceCoordinate nPixelWidth = rArgs.mnLayoutWidth;
 
         if( nPixelWidth <= 0 && rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
         {
@@ -244,7 +250,9 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
 
         if( nPixelWidth <= 0)
+        {
             return;
+        }
 
         // if the text to be justified has whitespace in it then
         // - Writer goes crazy with its HalfSpace magic
@@ -721,21 +729,27 @@ DeviceCoordinate CTLayout::GetTextWidth() const
 
 DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
 {
-    DeviceCoordinate nPixWidth = GetTextWidth();
+    DeviceCoordinate nPixelWidth = GetTextWidth();
+
     // short circuit requests which don't need full details
     if( !pDXArray )
-        return nPixWidth;
+    {
+        return nPixelWidth;
+    }
 
     for(int i = 0; i < mnCharCount; i++)
     {
         pDXArray[i] = 0.0;
     }
+
+    // prepare the sub-pixel accurate logical-width array
+    ::std::vector<float> aWidthVector( mnCharCount );
     if( mnTrailingSpaceCount && (mfTrailingSpaceWidth > 0.0) )
     {
         const double fOneWidth = mfTrailingSpaceWidth / mnTrailingSpaceCount;
         for(int i = mnCharCount - mnTrailingSpaceCount; i < mnCharCount; i++)
         {
-            pDXArray[i] = fOneWidth;
+            aWidthVector[i] = fOneWidth;
         }
     }
 
@@ -743,9 +757,9 @@ DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
     CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
     const int nRunCount = CFArrayGetCount( aGlyphRuns );
     typedef std::vector<CGSize> CGSizeVector;
-    CGSizeVector aSizeVec;
+    CGSizeVector aSizeVector;
     typedef std::vector<CFIndex> CFIndexVector;
-    CFIndexVector aIndexVec;
+    CFIndexVector aIndexVector;
 
     for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex )
     {
@@ -753,19 +767,29 @@ DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
         const CFIndex nGlyphCount = CTRunGetGlyphCount( pGlyphRun );
         const CFRange aFullRange = CFRangeMake( 0, nGlyphCount );
 
-        aSizeVec.resize( nGlyphCount );
-        aIndexVec.resize( nGlyphCount );
-        CTRunGetAdvances( pGlyphRun, aFullRange, &aSizeVec[0] );
-        CTRunGetStringIndices( pGlyphRun, aFullRange, &aIndexVec[0] );
+        aSizeVector.resize( nGlyphCount );
+        aIndexVector.resize( nGlyphCount );
+        CTRunGetAdvances( pGlyphRun, aFullRange, &aSizeVector[0] );
+        CTRunGetStringIndices( pGlyphRun, aFullRange, &aIndexVector[0] );
 
         for( int i = 0; i != nGlyphCount; ++i )
         {
-            const int nRelIdx = aIndexVec[i];
-            SAL_INFO( "vcl.ct", "pDXArray[ g:" << i << "-> c:" << nRelIdx << " ] = " << pDXArray[nRelIdx] << " + " << aSizeVec[i].width << " = " << pDXArray[nRelIdx] + aSizeVec[i].width);
-            pDXArray[nRelIdx] += aSizeVec[i].width;
+            const int nRelIndex = aIndexVector[i];
+            SAL_INFO( "vcl.ct", "aWidthVector[ g:" << i << "-> c:" << nRelIndex << " ] = " << aWidthVector[nRelIndex] << " + " << aSizeVector[i].width << " = " << aWidthVector[nRelIndex] + aSizeVector[i].width);
+            aWidthVector[nRelIndex] += aSizeVector[i].width;
         }
     }
-    return nPixWidth;
+
+    // convert the sub-pixel accurate array into classic pDXArray integers
+    float fWidthSum = 0.0;
+    sal_Int32 nOldDX = 0;
+    for( int i = 0; i < mnCharCount; ++i)
+    {
+        const sal_Int32 nNewDX = rint( fWidthSum += aWidthVector[i]);
+        pDXArray[i] = nNewDX - nOldDX;
+        nOldDX = nNewDX;
+    }
+    return nPixelWidth;
 }
 
 sal_Int32 CTLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
