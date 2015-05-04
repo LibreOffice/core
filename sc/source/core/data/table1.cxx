@@ -84,6 +84,8 @@ void GetOptimalHeightsInColumn(
     sc::RowHeightContext& rCxt, ScColumn* pCol, SCROW nStartRow, SCROW nEndRow,
     ScProgress* pProgress, sal_uInt32 nProgressStart )
 {
+    assert(nStartRow <= nEndRow);
+
     SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
 
     //  first, one time over the whole range
@@ -460,6 +462,8 @@ bool ScTable::SetOptimalHeight(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
     ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
+    assert(nStartRow <= nEndRow);
+
     OSL_ENSURE( rCxt.getExtraHeight() == 0 || rCxt.isForceAutoSize(),
         "automatic OptimalHeight with Extra" );
 
