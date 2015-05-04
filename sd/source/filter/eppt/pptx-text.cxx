@@ -1381,7 +1381,7 @@ FontCollectionEntry::~FontCollectionEntry()
 
 void FontCollectionEntry::ImplInit( const OUString& rName )
 {
-    OUString aSubstName( GetSubsFontName( rName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
+    OUString aSubstName( GetSubsFontName( rName, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
     if ( !aSubstName.isEmpty() )
     {
         Name = aSubstName;

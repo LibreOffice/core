@@ -317,7 +317,7 @@ namespace myImplHelpers
     {
         if (IsStarSymbol(rFont))
             return OUString("Arial Unicode MS");
-        return GetSubsFontName(rFont, SUBSFONT_ONLYONE | SUBSFONT_MS);
+        return GetSubsFontName(rFont, SubsFontFlags::ONLYONE | SubsFontFlags::MS);
     }
 
     //Utility to remove entries before a given starting position

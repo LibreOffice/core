@@ -1368,7 +1368,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         OUString usTypeface;
 
         mAny >>= usTypeface;
-        OUString aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
+        OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
 
         mpFS->singleElementNS( XML_a, XML_latin,
                                XML_typeface, USS(aSubstName.getLength() ? aSubstName : usTypeface),
@@ -1384,7 +1384,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         OUString usTypeface;
 
         mAny >>= usTypeface;
-        OUString aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
+        OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
 
         mpFS->singleElementNS( XML_a, bComplex ? XML_cs : XML_ea,
                                XML_typeface, USS(aSubstName.getLength() ? aSubstName : usTypeface),

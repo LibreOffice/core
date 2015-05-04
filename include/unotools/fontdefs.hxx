@@ -24,6 +24,7 @@
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace utl {
   class FontSubstConfiguration;
@@ -32,12 +33,19 @@ namespace utl {
 
 // - SubsFontName -
 
-#define SUBSFONT_ONLYONE    ((sal_uLong)0x00000001)
-#define SUBSFONT_MS         ((sal_uLong)0x00000002)
-#define SUBSFONT_PS         ((sal_uLong)0x00000004)
-#define SUBSFONT_HTML       ((sal_uLong)0x00000008)
+enum class SubsFontFlags
+{
+    ONLYONE    = 0x01,
+    MS         = 0x02,
+    PS         = 0x04,
+    HTML       = 0x08,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SubsFontFlags> : is_typed_flags<SubsFontFlags, 0x0f> {};
+}
 
-UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags );
+UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags );
 
 UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewToken );
 

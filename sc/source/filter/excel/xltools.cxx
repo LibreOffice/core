@@ -444,7 +444,7 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
 OUString XclTools::GetXclFontName( const OUString& rFontName )
 {
     // substitute with MS fonts
-    OUString aNewName = GetSubsFontName(rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS);
+    OUString aNewName = GetSubsFontName(rFontName, SubsFontFlags::ONLYONE | SubsFontFlags::MS);
     return aNewName.isEmpty() ? rFontName : aNewName;
 }
 

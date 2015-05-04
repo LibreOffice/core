@@ -512,7 +512,7 @@ void AddTokenFontName( OUString& rName, const OUString& rNewToken )
         ImplAppendFontToken( rName, rNewToken );
 }
 
-OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
+OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
 {
     OUString aName;
 
@@ -521,7 +521,7 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
                                 GetNextFontToken( rName, nIndex ) );
 
     // #93662# do not try to replace StarSymbol with MS only font
-    if( nFlags == (SUBSFONT_MS|SUBSFONT_ONLYONE)
+    if( nFlags == (SubsFontFlags::MS|SubsFontFlags::ONLYONE)
     &&  ( aOrgName == "starsymbol"
       ||  aOrgName == "opensymbol" ) )
         return aName;
@@ -535,15 +535,15 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
             switch( i )
             {
                 case 0:
-                    if( nFlags & SUBSFONT_MS  &&  pAttr->MSSubstitutions.size() )
+                    if( nFlags & SubsFontFlags::MS  &&  pAttr->MSSubstitutions.size() )
                         pVector = &pAttr->MSSubstitutions;
                     break;
                 case 1:
-                    if( nFlags & SUBSFONT_PS  &&  pAttr->PSSubstitutions.size() )
+                    if( nFlags & SubsFontFlags::PS  &&  pAttr->PSSubstitutions.size() )
                         pVector = &pAttr->PSSubstitutions;
                     break;
                 case 2:
-                    if( nFlags & SUBSFONT_HTML  &&  pAttr->HTMLSubstitutions.size() )
+                    if( nFlags & SubsFontFlags::HTML  &&  pAttr->HTMLSubstitutions.size() )
                         pVector = &pAttr->HTMLSubstitutions;
                     break;
             }
@@ -553,7 +553,7 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
                 if( ! ImplIsFontToken( rName, *it ) )
                 {
                     ImplAppendFontToken( aName, *it );
-                    if( nFlags & SUBSFONT_ONLYONE )
+                    if( nFlags & SubsFontFlags::ONLYONE )
                     {
                         i = 4;
                         break;
