@@ -543,7 +543,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     }
 
     // are the missing characters symbols?
-    pFontFamily = pFontCollection->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
+    pFontFamily = pFontCollection->ImplFindByAttributes( ImplFontAttrs::Symbol,
                                                          rFontSelData.GetWeight(),
                                                          rFontSelData.GetWidthType(),
                                                          rFontSelData.GetSlant(),

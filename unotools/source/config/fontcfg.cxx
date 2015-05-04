@@ -554,71 +554,71 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 struct ImplFontAttrTypeSearchData
 {
     const char*             mpStr;
-    sal_uLong                   mnType;
+    ImplFontAttrs           mnType;
 };
 
 static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {
-{   "monotype",             0 },
-{   "linotype",             0 },
-{   "titling",              IMPL_FONT_ATTR_TITLING },
-{   "captitals",            IMPL_FONT_ATTR_CAPITALS },
-{   "captital",             IMPL_FONT_ATTR_CAPITALS },
-{   "caps",                 IMPL_FONT_ATTR_CAPITALS },
-{   "italic",               IMPL_FONT_ATTR_ITALIC },
-{   "oblique",              IMPL_FONT_ATTR_ITALIC },
-{   "rounded",              IMPL_FONT_ATTR_ROUNDED },
-{   "outline",              IMPL_FONT_ATTR_OUTLINE },
-{   "shadow",               IMPL_FONT_ATTR_SHADOW },
-{   "handwriting",          IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_SCRIPT },
-{   "hand",                 IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_SCRIPT },
-{   "signet",               IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_SCRIPT },
-{   "script",               IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_SCRIPT },
-{   "calligraphy",          IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
-{   "chancery",             IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
-{   "corsiva",              IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
-{   "gothic",               IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_GOTHIC },
-{   "schoolbook",           IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
-{   "schlbk",               IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
-{   "typewriter",           IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
-{   "lineprinter",          IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
-{   "monospaced",           IMPL_FONT_ATTR_FIXED },
-{   "monospace",            IMPL_FONT_ATTR_FIXED },
-{   "mono",                 IMPL_FONT_ATTR_FIXED },
-{   "fixed",                IMPL_FONT_ATTR_FIXED },
-{   "sansserif",            IMPL_FONT_ATTR_SANSSERIF },
-{   "sans",                 IMPL_FONT_ATTR_SANSSERIF },
-{   "swiss",                IMPL_FONT_ATTR_SANSSERIF },
-{   "serif",                IMPL_FONT_ATTR_SERIF },
-{   "bright",               IMPL_FONT_ATTR_SERIF },
-{   "symbols",              IMPL_FONT_ATTR_SYMBOL },
-{   "symbol",               IMPL_FONT_ATTR_SYMBOL },
-{   "dingbats",             IMPL_FONT_ATTR_SYMBOL },
-{   "dings",                IMPL_FONT_ATTR_SYMBOL },
-{   "ding",                 IMPL_FONT_ATTR_SYMBOL },
-{   "bats",                 IMPL_FONT_ATTR_SYMBOL },
-{   "math",                 IMPL_FONT_ATTR_SYMBOL },
-{   "oldstyle",             IMPL_FONT_ATTR_OTHERSTYLE },
-{   "oldface",              IMPL_FONT_ATTR_OTHERSTYLE },
-{   "old",                  IMPL_FONT_ATTR_OTHERSTYLE },
-{   "new",                  0 },
-{   "modern",               0 },
-{   "lucida",               0 },
-{   "regular",              0 },
-{   "extended",             0 },
-{   "extra",                IMPL_FONT_ATTR_OTHERSTYLE },
-{   "ext",                  0 },
-{   "scalable",             0 },
-{   "scale",                0 },
-{   "nimbus",               0 },
-{   "adobe",                0 },
-{   "itc",                  0 },
-{   "amt",                  0 },
-{   "mt",                   0 },
-{   "ms",                   0 },
-{   "cpi",                  0 },
-{   "no",                   0 },
-{   NULL,                   0 },
+{   "monotype",             ImplFontAttrs::None },
+{   "linotype",             ImplFontAttrs::None },
+{   "titling",              ImplFontAttrs::Titling },
+{   "captitals",            ImplFontAttrs::Capitals },
+{   "captital",             ImplFontAttrs::Capitals },
+{   "caps",                 ImplFontAttrs::Capitals },
+{   "italic",               ImplFontAttrs::Italic },
+{   "oblique",              ImplFontAttrs::Italic },
+{   "rounded",              ImplFontAttrs::Rounded },
+{   "outline",              ImplFontAttrs::Outline },
+{   "shadow",               ImplFontAttrs::Shadow },
+{   "handwriting",          ImplFontAttrs::Handwriting | ImplFontAttrs::Script },
+{   "hand",                 ImplFontAttrs::Handwriting | ImplFontAttrs::Script },
+{   "signet",               ImplFontAttrs::Handwriting | ImplFontAttrs::Script },
+{   "script",               ImplFontAttrs::BrushScript | ImplFontAttrs::Script },
+{   "calligraphy",          ImplFontAttrs::Chancery | ImplFontAttrs::Script },
+{   "chancery",             ImplFontAttrs::Chancery | ImplFontAttrs::Script },
+{   "corsiva",              ImplFontAttrs::Chancery | ImplFontAttrs::Script },
+{   "gothic",               ImplFontAttrs::SansSerif | ImplFontAttrs::Gothic },
+{   "schoolbook",           ImplFontAttrs::Serif | ImplFontAttrs::Schoolbook },
+{   "schlbk",               ImplFontAttrs::Serif | ImplFontAttrs::Schoolbook },
+{   "typewriter",           ImplFontAttrs::Typewriter | ImplFontAttrs::Fixed },
+{   "lineprinter",          ImplFontAttrs::Typewriter | ImplFontAttrs::Fixed },
+{   "monospaced",           ImplFontAttrs::Fixed },
+{   "monospace",            ImplFontAttrs::Fixed },
+{   "mono",                 ImplFontAttrs::Fixed },
+{   "fixed",                ImplFontAttrs::Fixed },
+{   "sansserif",            ImplFontAttrs::SansSerif },
+{   "sans",                 ImplFontAttrs::SansSerif },
+{   "swiss",                ImplFontAttrs::SansSerif },
+{   "serif",                ImplFontAttrs::Serif },
+{   "bright",               ImplFontAttrs::Serif },
+{   "symbols",              ImplFontAttrs::Symbol },
+{   "symbol",               ImplFontAttrs::Symbol },
+{   "dingbats",             ImplFontAttrs::Symbol },
+{   "dings",                ImplFontAttrs::Symbol },
+{   "ding",                 ImplFontAttrs::Symbol },
+{   "bats",                 ImplFontAttrs::Symbol },
+{   "math",                 ImplFontAttrs::Symbol },
+{   "oldstyle",             ImplFontAttrs::OtherStyle },
+{   "oldface",              ImplFontAttrs::OtherStyle },
+{   "old",                  ImplFontAttrs::OtherStyle },
+{   "new",                  ImplFontAttrs::None },
+{   "modern",               ImplFontAttrs::None },
+{   "lucida",               ImplFontAttrs::None },
+{   "regular",              ImplFontAttrs::None },
+{   "extended",             ImplFontAttrs::None },
+{   "extra",                ImplFontAttrs::OtherStyle },
+{   "ext",                  ImplFontAttrs::None },
+{   "scalable",             ImplFontAttrs::None },
+{   "scale",                ImplFontAttrs::None },
+{   "nimbus",               ImplFontAttrs::None },
+{   "adobe",                ImplFontAttrs::None },
+{   "itc",                  ImplFontAttrs::None },
+{   "amt",                  ImplFontAttrs::None },
+{   "mt",                   ImplFontAttrs::None },
+{   "ms",                   ImplFontAttrs::None },
+{   "cpi",                  ImplFontAttrs::None },
+{   "no",                   ImplFontAttrs::None },
+{   NULL,                   ImplFontAttrs::None },
 };
 
 static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
@@ -723,7 +723,7 @@ static bool ImplFindAndErase( OUString& rName, const char* pStr )
 
 void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rShortName,
                                          OUString& rFamilyName, FontWeight& rWeight,
-                                         FontWidth& rWidth, sal_uLong& rType )
+                                         FontWidth& rWidth, ImplFontAttrs& rType )
 {
     rShortName = rOrgName;
 
@@ -767,7 +767,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
     }
 
     // Type
-    rType = 0;
+    rType = ImplFontAttrs::None;
     const ImplFontAttrTypeSearchData* pTypeList = aImplTypeAttrSearchList;
     while ( pTypeList->mpStr )
     {
@@ -983,10 +983,10 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
     return (FontWidth)( width >= 0 ? pWidthNames[width].nEnum : WIDTH_DONTKNOW );
 }
 
-unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::Reference< XNameAccess >& rFont,
+ImplFontAttrs FontSubstConfiguration::getSubstType( const com::sun::star::uno::Reference< XNameAccess >& rFont,
                                                     const OUString& rType ) const
 {
-    unsigned long type = 0;
+    sal_uLong type = 0;
     try
     {
         Any aAny = rFont->getByName( rType );
@@ -1016,7 +1016,7 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
     {
     }
 
-    return type;
+    return static_cast<ImplFontAttrs>(type);
 }
 
 void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const

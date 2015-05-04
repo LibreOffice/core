@@ -80,7 +80,7 @@ protected:
     PhysicalFontFamily*    ImplFindByAliasName(const OUString& rSearchName,
         const OUString& rShortName) const;
     PhysicalFontFamily*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
-    PhysicalFontFamily*    ImplFindByAttributes(sal_uLong nSearchType, FontWeight, FontWidth,
+    PhysicalFontFamily*    ImplFindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                                  FontItalic, const OUString& rSearchFamily) const;
     PhysicalFontFamily*    FindDefaultFont() const;
 

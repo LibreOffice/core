@@ -152,7 +152,7 @@ void Impl_Font::AskConfig()
 
     OUString      aShortName;
     OUString      aFamilyName;
-    sal_uLong       nType = 0;
+    ImplFontAttrs nType = ImplFontAttrs::None;
     FontWeight  eWeight = WEIGHT_DONTKNOW;
     FontWidth   eWidthType = WIDTH_DONTKNOW;
     OUString    aMapName = GetEnglishSearchFontName( maFamilyName );
@@ -172,21 +172,21 @@ void Impl_Font::AskConfig()
         // the font was found in the configuration
         if( meFamily == FAMILY_DONTKNOW )
         {
-            if ( pFontAttr->Type & IMPL_FONT_ATTR_SERIF )
+            if ( pFontAttr->Type & ImplFontAttrs::Serif )
                 meFamily = FAMILY_ROMAN;
-            else if ( pFontAttr->Type & IMPL_FONT_ATTR_SANSSERIF )
+            else if ( pFontAttr->Type & ImplFontAttrs::SansSerif )
                 meFamily = FAMILY_SWISS;
-            else if ( pFontAttr->Type & IMPL_FONT_ATTR_TYPEWRITER )
+            else if ( pFontAttr->Type & ImplFontAttrs::Typewriter )
                 meFamily = FAMILY_MODERN;
-            else if ( pFontAttr->Type & IMPL_FONT_ATTR_ITALIC )
+            else if ( pFontAttr->Type & ImplFontAttrs::Italic )
                 meFamily = FAMILY_SCRIPT;
-            else if ( pFontAttr->Type & IMPL_FONT_ATTR_DECORATIVE )
+            else if ( pFontAttr->Type & ImplFontAttrs::Decorative )
                 meFamily = FAMILY_DECORATIVE;
         }
 
         if( mePitch == PITCH_DONTKNOW )
         {
-            if ( pFontAttr->Type & IMPL_FONT_ATTR_FIXED )
+            if ( pFontAttr->Type & ImplFontAttrs::Fixed )
                 mePitch = PITCH_FIXED;
         }
     }
@@ -194,15 +194,15 @@ void Impl_Font::AskConfig()
     // if some attributes are still unknown then use the FontSubst magic
     if( meFamily == FAMILY_DONTKNOW )
     {
-        if( nType & IMPL_FONT_ATTR_SERIF )
+        if( nType & ImplFontAttrs::Serif )
             meFamily = FAMILY_ROMAN;
-        else if( nType & IMPL_FONT_ATTR_SANSSERIF )
+        else if( nType & ImplFontAttrs::SansSerif )
             meFamily = FAMILY_SWISS;
-        else if( nType & IMPL_FONT_ATTR_TYPEWRITER )
+        else if( nType & ImplFontAttrs::Typewriter )
             meFamily = FAMILY_MODERN;
-        else if( nType & IMPL_FONT_ATTR_ITALIC )
+        else if( nType & ImplFontAttrs::Italic )
             meFamily = FAMILY_SCRIPT;
-        else if( nType & IMPL_FONT_ATTR_DECORATIVE )
+        else if( nType & ImplFontAttrs::Decorative )
             meFamily = FAMILY_DECORATIVE;
     }
 

@@ -26,10 +26,73 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+// DEFAULT       - Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
+// STANDARD      - Standard-Font like Arial, Times, Courier, ...
+// NORMAL        - normal Font for writing text like Arial, Verdana, Arial Narrow, Trebuchet, Times, Courier, ...
+// SYMBOL        - Font with symbols
+// DECORATIVE    - Readable and normally used for drawings
+// SPECIAL       - very special design
+// TITLING       - only uppercase characters
+// FONT_ATTR_FULL          - Font with normally all characters
+// CAPITALS     - only uppercase characters, but lowercase characters smaller as the uppercase characters
+// TYPEWRITER    - like a typewriter: Courier, ...
+// SCRIPT        - Handwriting or Script
+// HANDWRITING   - More Handwriting with normal letters
+// CHANCERY      - Like Zapf Chancery
+// COMIC         - Like Comic Sans MS
+// BRUSHSCRIPT   - More Script
+// OTHERSTYLE    - OldStyle, ... so negativ points
+enum class ImplFontAttrs : sal_uLong
+{
+    None          = 0x00000000,
+    Default       = 0x00000001,
+    Standard      = 0x00000002,
+    Normal        = 0x00000004,
+    Symbol        = 0x00000008,
+    Fixed         = 0x00000010,
+    SansSerif     = 0x00000020,
+    Serif         = 0x00000040,
+    Decorative    = 0x00000080,
+    Special       = 0x00000100,
+    Italic        = 0x00000200,
+    Titling       = 0x00000400,
+    Capitals      = 0x00000800,
+    CJK           = 0x00001000,
+    CJK_JP        = 0x00002000,
+    CJK_SC        = 0x00004000,
+    CJK_TC        = 0x00008000,
+    CJK_KR        = 0x00010000,
+    CTL           = 0x00020000,
+    NoneLatin     = 0x00040000,
+    Full          = 0x00080000,
+    Outline       = 0x00100000,
+    Shadow        = 0x00200000,
+    Rounded       = 0x00400000,
+    Typewriter    = 0x00800000,
+    Script        = 0x01000000,
+    Handwriting   = 0x02000000,
+    Chancery      = 0x04000000,
+    Comic         = 0x08000000,
+    BrushScript   = 0x10000000,
+    Gothic        = 0x20000000,
+    Schoolbook    = 0x40000000,
+    OtherStyle    = 0x80000000,
+    CJK_AllLang   = CJK_JP | CJK_SC | CJK_TC | CJK_KR,
+    AllScript     = Script | Handwriting | Chancery | Comic | BrushScript,
+    AllSubscript  = Handwriting | Chancery | Comic | BrushScript,
+    AllSerifStyle = AllScript | SansSerif | Serif | Fixed | Italic | Gothic | Schoolbook | Shadow | Outline,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ImplFontAttrs> : is_typed_flags<ImplFontAttrs, 0xffffffff> {};
+}
+
 
 namespace utl
 {
@@ -64,74 +127,16 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
     OUString getUserInterfaceFont( const LanguageTag& rLanguageTag ) const;
 };
 
-// IMPL_FONT_ATTR_DEFAULT       - Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
-// IMPL_FONT_ATTR_STANDARD      - Standard-Font like Arial, Times, Courier, ...
-// IMPL_FONT_ATTR_NORMAL        - normal Font for writing text like Arial, Verdana, Arial Narrow, Trebuchet, Times, Courier, ...
-// IMPL_FONT_ATTR_SYMBOL        - Font with symbols
-// IMPL_FONT_ATTR_DECORATIVE    - Readable and normally used for drawings
-// IMPL_FONT_ATTR_SPECIAL       - very special design
-// IMPL_FONT_ATTR_TITLING       - only uppercase characters
-// IMPL_FONT_ATTR_FULL          - Font with normally all characters
-// IMPL_FONT_ATTR_CAPITALS     - only uppercase characters, but lowercase characters smaller as the uppercase characters
-// IMPL_FONT_ATTR_TYPEWRITER    - like a typewriter: Courier, ...
-// IMPL_FONT_ATTR_SCRIPT        - Handwriting or Script
-// IMPL_FONT_ATTR_HANDWRITING   - More Handwriting with normal letters
-// IMPL_FONT_ATTR_CHANCERY      - Like Zapf Chancery
-// IMPL_FONT_ATTR_COMIC         - Like Comic Sans MS
-// IMPL_FONT_ATTR_BRUSHSCRIPT   - More Script
-// IMPL_FONT_ATTR_OTHERSTYLE    - OldStyle, ... so negativ points
-#define IMPL_FONT_ATTR_DEFAULT       ((sal_uLong)0x00000001)
-#define IMPL_FONT_ATTR_STANDARD      ((sal_uLong)0x00000002)
-#define IMPL_FONT_ATTR_NORMAL        ((sal_uLong)0x00000004)
-#define IMPL_FONT_ATTR_SYMBOL        ((sal_uLong)0x00000008)
-#define IMPL_FONT_ATTR_FIXED         ((sal_uLong)0x00000010)
-#define IMPL_FONT_ATTR_SANSSERIF     ((sal_uLong)0x00000020)
-#define IMPL_FONT_ATTR_SERIF         ((sal_uLong)0x00000040)
-#define IMPL_FONT_ATTR_DECORATIVE    ((sal_uLong)0x00000080)
-#define IMPL_FONT_ATTR_SPECIAL       ((sal_uLong)0x00000100)
-#define IMPL_FONT_ATTR_ITALIC        ((sal_uLong)0x00000200)
-#define IMPL_FONT_ATTR_TITLING       ((sal_uLong)0x00000400)
-#define IMPL_FONT_ATTR_CAPITALS      ((sal_uLong)0x00000800)
-#define IMPL_FONT_ATTR_CJK           ((sal_uLong)0x00001000)
-#define IMPL_FONT_ATTR_CJK_JP        ((sal_uLong)0x00002000)
-#define IMPL_FONT_ATTR_CJK_SC        ((sal_uLong)0x00004000)
-#define IMPL_FONT_ATTR_CJK_TC        ((sal_uLong)0x00008000)
-#define IMPL_FONT_ATTR_CJK_KR        ((sal_uLong)0x00010000)
-#define IMPL_FONT_ATTR_CTL           ((sal_uLong)0x00020000)
-#define IMPL_FONT_ATTR_NONELATIN     ((sal_uLong)0x00040000)
-#define IMPL_FONT_ATTR_FULL          ((sal_uLong)0x00080000)
-#define IMPL_FONT_ATTR_OUTLINE       ((sal_uLong)0x00100000)
-#define IMPL_FONT_ATTR_SHADOW        ((sal_uLong)0x00200000)
-#define IMPL_FONT_ATTR_ROUNDED       ((sal_uLong)0x00400000)
-#define IMPL_FONT_ATTR_TYPEWRITER    ((sal_uLong)0x00800000)
-#define IMPL_FONT_ATTR_SCRIPT        ((sal_uLong)0x01000000)
-#define IMPL_FONT_ATTR_HANDWRITING   ((sal_uLong)0x02000000)
-#define IMPL_FONT_ATTR_CHANCERY      ((sal_uLong)0x04000000)
-#define IMPL_FONT_ATTR_COMIC         ((sal_uLong)0x08000000)
-#define IMPL_FONT_ATTR_BRUSHSCRIPT   ((sal_uLong)0x10000000)
-#define IMPL_FONT_ATTR_GOTHIC        ((sal_uLong)0x20000000)
-#define IMPL_FONT_ATTR_SCHOOLBOOK    ((sal_uLong)0x40000000)
-#define IMPL_FONT_ATTR_OTHERSTYLE    ((sal_uLong)0x80000000)
-
-#define IMPL_FONT_ATTR_CJK_ALLLANG   (IMPL_FONT_ATTR_CJK_JP | IMPL_FONT_ATTR_CJK_SC | IMPL_FONT_ATTR_CJK_TC | IMPL_FONT_ATTR_CJK_KR)
-#define IMPL_FONT_ATTR_ALLSCRIPT     (IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_BRUSHSCRIPT)
-#define IMPL_FONT_ATTR_ALLSUBSCRIPT  (IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_BRUSHSCRIPT)
-#define IMPL_FONT_ATTR_ALLSERIFSTYLE (IMPL_FONT_ATTR_ALLSCRIPT |\
-                                      IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_SERIF |\
-                                      IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_ITALIC |\
-                                      IMPL_FONT_ATTR_GOTHIC | IMPL_FONT_ATTR_SCHOOLBOOK |\
-                                      IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_OUTLINE)
-
 struct UNOTOOLS_DLLPUBLIC FontNameAttr
 {
     OUString                            Name;
-    ::std::vector< OUString >             Substitutions;
-    ::std::vector< OUString >             MSSubstitutions;
-    ::std::vector< OUString >             PSSubstitutions;
-    ::std::vector< OUString >             HTMLSubstitutions;
+    ::std::vector< OUString >           Substitutions;
+    ::std::vector< OUString >           MSSubstitutions;
+    ::std::vector< OUString >           PSSubstitutions;
+    ::std::vector< OUString >           HTMLSubstitutions;
     FontWeight                          Weight;
     FontWidth                           Width;
-    unsigned long                       Type; // bitfield of IMPL_FONT_ATTR_*
+    ImplFontAttrs                       Type;
 };
 
 class UNOTOOLS_DLLPUBLIC FontSubstConfiguration
@@ -164,7 +169,7 @@ private:
                           const OUString& rType ) const;
     FontWidth getSubstWidth( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
                              const OUString& rType ) const;
-    unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
+    ImplFontAttrs getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
                                 const OUString& rType ) const;
     void readLocaleSubst( const OUString& rBcp47 ) const;
 public:
@@ -177,7 +182,7 @@ public:
                                      const OUString& rFontName,
                                      const LanguageTag& rLanguageTag = LanguageTag( OUString( "en"))
                                      ) const;
-    static void getMapName( const OUString& rOrgName, OUString& rShortName, OUString& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType );
+    static void getMapName( const OUString& rOrgName, OUString& rShortName, OUString& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, ImplFontAttrs& rType );
 };
 
 } // namespace utl

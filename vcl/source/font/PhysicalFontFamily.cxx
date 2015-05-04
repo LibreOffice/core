@@ -27,21 +27,21 @@
 
 #include "PhysicalFontFamily.hxx"
 
-void PhysicalFontFamily::CalcType( sal_uLong& rType, FontWeight& rWeight, FontWidth& rWidth,
+void PhysicalFontFamily::CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
                                    FontFamily eFamily, const utl::FontNameAttr* pFontAttr )
 {
     if ( eFamily != FAMILY_DONTKNOW )
     {
         if ( eFamily == FAMILY_SWISS )
-            rType |= IMPL_FONT_ATTR_SANSSERIF;
+            rType |= ImplFontAttrs::SansSerif;
         else if ( eFamily == FAMILY_ROMAN )
-            rType |= IMPL_FONT_ATTR_SERIF;
+            rType |= ImplFontAttrs::Serif;
         else if ( eFamily == FAMILY_SCRIPT )
-            rType |= IMPL_FONT_ATTR_SCRIPT;
+            rType |= ImplFontAttrs::Script;
         else if ( eFamily == FAMILY_MODERN )
-            rType |= IMPL_FONT_ATTR_FIXED;
+            rType |= ImplFontAttrs::Fixed;
         else if ( eFamily == FAMILY_DECORATIVE )
-            rType |= IMPL_FONT_ATTR_DECORATIVE;
+            rType |= ImplFontAttrs::Decorative;
     }
 
     if ( pFontAttr )
@@ -57,7 +57,7 @@ void PhysicalFontFamily::CalcType( sal_uLong& rType, FontWeight& rWeight, FontWi
     }
 }
 
-static unsigned lcl_IsCJKFont( const OUString& rFontName )
+static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
     // Test, if Fontname includes CJK characters --> In this case we
     // mention that it is a CJK font
@@ -67,33 +67,33 @@ static unsigned lcl_IsCJKFont( const OUString& rFontName )
         // japanese
         if ( ((ch >= 0x3040) && (ch <= 0x30FF)) ||
              ((ch >= 0x3190) && (ch <= 0x319F)) )
-            return IMPL_FONT_ATTR_CJK|IMPL_FONT_ATTR_CJK_JP;
+            return ImplFontAttrs::CJK|ImplFontAttrs::CJK_JP;
 
         // korean
         if ( ((ch >= 0xAC00) && (ch <= 0xD7AF)) ||
              ((ch >= 0x3130) && (ch <= 0x318F)) ||
              ((ch >= 0x1100) && (ch <= 0x11FF)) )
-            return IMPL_FONT_ATTR_CJK|IMPL_FONT_ATTR_CJK_KR;
+            return ImplFontAttrs::CJK|ImplFontAttrs::CJK_KR;
 
         // chinese
         if ( ((ch >= 0x3400) && (ch <= 0x9FFF)) )
-            return IMPL_FONT_ATTR_CJK|IMPL_FONT_ATTR_CJK_TC|IMPL_FONT_ATTR_CJK_SC;
+            return ImplFontAttrs::CJK|ImplFontAttrs::CJK_TC|ImplFontAttrs::CJK_SC;
 
         // cjk
         if ( ((ch >= 0x3000) && (ch <= 0xD7AF)) ||
              ((ch >= 0xFF00) && (ch <= 0xFFEE)) )
-            return IMPL_FONT_ATTR_CJK;
+            return ImplFontAttrs::CJK;
 
     }
 
-    return 0;
+    return ImplFontAttrs::None;
 }
 
 PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
 :   mpFirst( NULL ),
     maSearchName( rSearchName ),
     mnTypeFaces( 0 ),
-    mnMatchType( 0 ),
+    mnMatchType( ImplFontAttrs::None ),
     meMatchWeight( WEIGHT_DONTKNOW ),
     meMatchWidth( WIDTH_DONTKNOW ),
     meFamily( FAMILY_DONTKNOW ),
@@ -161,7 +161,7 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewData )
 
     if( (meMatchWeight == WEIGHT_DONTKNOW)
     ||  (meMatchWidth  == WIDTH_DONTKNOW)
-    ||  (mnMatchType   == 0) )
+    ||  (mnMatchType   == ImplFontAttrs::None) )
     {
         // TODO: is it cheaper to calc matching attributes now or on demand?
         // calc matching attributes if other entries are already initialized

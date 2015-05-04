@@ -29,7 +29,7 @@
 class PhysicalFontFace;
 class PhysicalFontCollection;
 
-// flags for mnMatchType member
+// flags for mnTypeFaces member
 #define FONT_FAMILY_SCALABLE      (1<<0)
 #define FONT_FAMILY_SYMBOL        (1<<1)
 #define FONT_FAMILY_NONESYMBOL    (1<<2)
@@ -49,7 +49,7 @@ public:
     const OUString&     GetSearchName() const    { return maSearchName; }
     const OUString&     GetAliasNames() const    { return maMapNames; }
     const OUString&     GetMatchFamilyName() const { return maMatchFamilyName; }
-    sal_uLong           GetMatchType() const     { return mnMatchType ; }
+    ImplFontAttrs       GetMatchType() const     { return mnMatchType ; }
     FontWeight          GetMatchWeight() const   { return meMatchWeight ; }
     FontWidth           GetMatchWidth() const    { return meMatchWidth ; }
     bool                IsScalable() const       { return mpFirst->IsScalable(); }
@@ -65,7 +65,7 @@ public:
     void                UpdateCloneFontList( PhysicalFontCollection&,
                                              bool bScalable, bool bEmbeddable ) const;
 
-static void             CalcType( sal_uLong& rType, FontWeight& rWeight, FontWidth& rWidth,
+static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
                                   FontFamily eFamily, const utl::FontNameAttr* pFontAttr );
 
 private:
@@ -74,7 +74,7 @@ private:
     OUString            maSearchName;       // normalized font family name
     OUString            maMapNames;         // fontname aliases
     int                 mnTypeFaces;        // Typeface Flags
-    sal_uLong           mnMatchType;        // MATCH - Type
+    ImplFontAttrs       mnMatchType;        // MATCH - Type
     OUString            maMatchFamilyName;  // MATCH - FamilyName
     FontWeight          meMatchWeight;      // MATCH - Weight
     FontWidth           meMatchWidth;       // MATCH - Width
