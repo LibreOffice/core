@@ -28,7 +28,29 @@
       <DefaultName>Costa Rica</DefaultName>
     </Country>
   </LC_INFO>
-  <LC_CTYPE ref="es_ES"/>
+  <LC_CTYPE>
+    <Separators>
+      <DateSeparator>/</DateSeparator>
+      <ThousandSeparator> </ThousandSeparator>
+      <DecimalSeparator>,</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>,</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator> de </LongDateDaySeparator>
+      <LongDateMonthSeparator> de </LongDateMonthSeparator>
+      <LongDateYearSeparator> </LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>“</DoubleQuotationStart>
+      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>AM</TimeAM>
+    <TimePM>PM</TimePM>
+    <MeasurementSystem>metric</MeasurementSystem>
+  </LC_CTYPE>
   <LC_FORMAT>
     <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
@@ -134,31 +156,31 @@
       <FormatCode>0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER"  formatindex="3">
-      <FormatCode># ##0</FormatCode>
+      <FormatCode># ##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="4">
-      <FormatCode># ##0,00</FormatCode>
+      <FormatCode># ##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
-      <FormatCode># ###,00</FormatCode>
+      <FormatCode># ###,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-      <FormatCode>[$₡-140A] # ##0;-[$₡-140A] #.##0</FormatCode>
+      <FormatCode>[$₡-140A] # ##0;-[$₡-140A] # ##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-      <FormatCode>[$₡-140A] # ##0,00;-[$₡-140A] #.##0,00</FormatCode>
+      <FormatCode>[$₡-140A] # ##0,00;-[$₡-140A] # ##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-      <FormatCode>[$₡-140A] # ##0;[RED]-[$₡-140A] #.##0</FormatCode>
+      <FormatCode>[$₡-140A] # ##0;[RED]-[$₡-140A] # ##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-      <FormatCode>[$₡-140A] # ##0,00;[RED]-[$₡-140A] #.##0,00</FormatCode>
+      <FormatCode>[$₡-140A] # ##0,00;[RED]-[$₡-140A] # ##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
-      <FormatCode># ##0,00 CCC</FormatCode>
+      <FormatCode># ##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-      <FormatCode>[$₡-140A] # ##0,--;[RED]-[$₡-140A] #.##0,--</FormatCode>
+      <FormatCode>[$₡-140A] # ##0,--;[RED]-[$₡-140A] # ##0,--</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
       <FormatCode>0%</FormatCode>
