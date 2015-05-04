@@ -839,8 +839,20 @@ DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
             sal_Int32(0), nLeftMargin);
 
     /*
-     * Another problem tested with this document is that the roundrect is
-     * centered vertically and horizontally.
+     * Another problem tested with this document is the unnecessary loading of the shapes
+     * anchored to a discarded header or footer
+     */
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), drawPage->getCount());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testN779627b, "n779627b.docx")
+{
+    /*
+     * Another problem tested with the original n779627.docx document (before removing its unnecessary
+     * shape loading) is that the roundrect is centered vertically and horizontally.
      */
     uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
