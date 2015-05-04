@@ -197,18 +197,16 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = impl_isModified();
             if ( aReturn.bEnabled )
             {
-                ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),
-                    ::boost::mem_fn(&OTableRow::isValid));
-                aReturn.bEnabled = aIter != m_vRowList.end();
+                aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
+                                                 ::boost::mem_fn(&OTableRow::isValid));
             }
             break;
         case ID_BROWSER_SAVEASDOC:
             aReturn.bEnabled = isConnected() && isEditable();
             if ( aReturn.bEnabled )
             {
-                ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),
-                    ::boost::mem_fn(&OTableRow::isValid));
-                aReturn.bEnabled = aIter != m_vRowList.end();
+                aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
+                                                 ::boost::mem_fn(&OTableRow::isValid));
             }
             break;
 
@@ -230,9 +228,8 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
                 );
             if ( aReturn.bEnabled )
             {
-                ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),
-                    ::boost::mem_fn(&OTableRow::isValid));
-                aReturn.bEnabled = aIter != m_vRowList.end();
+                aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
+                                                 ::boost::mem_fn(&OTableRow::isValid));
             }
             break;
         default:
@@ -559,9 +556,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
     bool bCheck = true;
     if ( isModified() )
     {
-        ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),
-            ::boost::mem_fn(&OTableRow::isValid));
-        if ( aIter != m_vRowList.end() )
+        if ( ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
+                           ::boost::mem_fn(&OTableRow::isValid)) )
         {
             ScopedVclPtrInstance<MessageDialog> aQry(getView(), "TableDesignSaveModifiedDialog",
                                                      "dbaccess/ui/tabledesignsavemodifieddialog.ui");

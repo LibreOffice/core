@@ -151,10 +151,9 @@ namespace dbaui
     bool OTableConnection::CheckHit( const Point& rMousePos ) const
     {
         // check if the point hit our line
-        ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(m_vConnLine.begin(),
-                                                                         m_vConnLine.end(),
-                                                                         ::std::bind2nd(TConnectionLineCheckHitFunctor(),rMousePos));
-        return aIter != m_vConnLine.end();
+        return ::std::any_of(m_vConnLine.begin(),
+                             m_vConnLine.end(),
+                             ::std::bind2nd(TConnectionLineCheckHitFunctor(),rMousePos));
     }
 
     bool OTableConnection::InvalidateConnection()

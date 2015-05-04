@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 #include "svtools/treelistentry.hxx"
 
+#include <algorithm>
 #include <functional>
 namespace dbaui
 {
@@ -107,7 +108,7 @@ namespace dbaui
                 Reference<XStorable> xStore;
                 xStore = Reference<XStorable>( xChild.is() ? getDataSourceOrModel(xChild->getParent()) : Reference<XInterface>(),UNO_QUERY );
                 // check for the concrete type
-                if ( xStore.is() && !xStore->isReadonly() && ::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE,true)) != _rFlavors.end())
+                if ( xStore.is() && !xStore->isReadonly() && ::std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE,true)) )
                     return DND_ACTION_COPY;
             }
         }

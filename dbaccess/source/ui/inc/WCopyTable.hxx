@@ -40,6 +40,7 @@
 #include <vcl/lstbox.hxx>
 #include <functional>
 #include <map>
+#include <algorithm>
 
 namespace dbaui
 {
@@ -87,8 +88,8 @@ namespace dbaui
 
         bool operator()(const OUString& _sColumnName) const SAL_OVERRIDE
         {
-            return ::std::find_if(m_pVector->begin(),m_pVector->end(),
-                ::std::bind2nd(m_aCase, _sColumnName)) != m_pVector->end();
+            return ::std::any_of(m_pVector->begin(),m_pVector->end(),
+                ::std::bind2nd(m_aCase, _sColumnName));
         }
     };
 

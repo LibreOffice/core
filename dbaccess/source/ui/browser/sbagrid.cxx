@@ -81,6 +81,7 @@
 #include "UITools.hxx"
 #include "TokenWriter.hxx"
 #include <osl/diagnose.h>
+#include <algorithm>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -1355,7 +1356,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     if(nAction != DND_ACTION_COPY && GetEmptyRow().Is())
     {
         const DataFlavorExVector& _rFlavors = GetDataFlavors();
-        if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(true)) != _rFlavors.end())
+        if(::std::any_of(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(true)))
             nAction = DND_ACTION_COPY;
     }
 
@@ -1416,8 +1417,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     if(GetEmptyRow().Is())
     {
         const DataFlavorExVector& _rFlavors = GetDataFlavors();
-        DataFlavorExVector::const_iterator aFind = ::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(true));
-        if( aFind != _rFlavors.end())
+        if( ::std::any_of(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(true)) )
         {
             TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
             m_aDataDescriptor = ODataAccessObjectTransferable::extractObjectDescriptor(aDropped);

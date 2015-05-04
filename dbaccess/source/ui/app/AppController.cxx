@@ -2412,7 +2412,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
         if ( eType != E_NONE && (eType != E_TABLE || !isConnectionReadOnly()) )
         {
             // check for the concrete type
-            if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType,true)) != _rFlavors.end())
+            if(::std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType,true)))
                 return DND_ACTION_COPY;
             if ( eType == E_FORM || eType == E_REPORT )
             {
