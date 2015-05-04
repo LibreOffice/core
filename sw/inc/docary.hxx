@@ -23,6 +23,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <sal/types.h>
 #include <o3tl/sorted_vector.hxx>
 
 class SwRangeRedline;
@@ -102,7 +103,7 @@ public:
     size_t GetPos(Value const& p) const
     {
         const_iterator const it = std::find(begin(), end(), p);
-        return it == end() ? SIZE_MAX : it - begin();
+        return it == end() ? SAL_MAX_SIZE : it - begin();
     }
 
     bool Contains(Value const& p) const
