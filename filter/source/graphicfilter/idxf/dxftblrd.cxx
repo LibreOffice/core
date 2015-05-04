@@ -40,10 +40,10 @@ void DXFLType::Read(DXFGroupReader & rDGR)
         switch (rDGR.GetG())
         {
         case  2:
-            m_sName = OString(rDGR.GetS());
+            m_sName = rDGR.GetS();
             break;
         case  3:
-            m_sDescription = OString(rDGR.GetS());
+            m_sDescription = rDGR.GetS();
             break;
         case 70:
             nFlags=rDGR.GetI();
@@ -93,10 +93,10 @@ void DXFLayer::Read(DXFGroupReader & rDGR)
         switch(rDGR.GetG())
         {
         case  2:
-            m_sName = OString(rDGR.GetS());
+            m_sName = rDGR.GetS();
             break;
         case  6:
-            m_sLineType = OString(rDGR.GetS());
+            m_sLineType = rDGR.GetS();
             break;
         case 70:
             nFlags=rDGR.GetI();
@@ -128,13 +128,13 @@ void DXFStyle::Read(DXFGroupReader & rDGR)
         switch(rDGR.GetG())
         {
         case  2:
-            m_sName = OString(rDGR.GetS());
+            m_sName = rDGR.GetS();
             break;
         case  3:
-            m_sPrimFontFile = OString(rDGR.GetS());
+            m_sPrimFontFile = rDGR.GetS();
             break;
         case  4:
-            m_sBigFontFile = OString(rDGR.GetS());
+            m_sBigFontFile = rDGR.GetS();
             break;
         case 70:
             nFlags=rDGR.GetI();
@@ -204,7 +204,7 @@ void DXFVPort::Read(DXFGroupReader & rDGR)
         switch(rDGR.GetG())
         {
         case  2:
-            m_sName = OString(rDGR.GetS());
+            m_sName = rDGR.GetS();
             break;
         case 10: fMinX=rDGR.GetF(); break;
         case 11: fMaxX=rDGR.GetF(); break;
@@ -284,27 +284,27 @@ void DXFTables::Read(DXFGroupReader & rDGR)
 
     for (;;) {
         while (rDGR.GetG()!=0) rDGR.Read();
-        if (strcmp(rDGR.GetS(),"EOF")==0 ||
-            strcmp(rDGR.GetS(),"ENDSEC")==0) break;
-        else if (strcmp(rDGR.GetS(),"LTYPE")==0) {
+        if (rDGR.GetS() == "EOF" ||
+            rDGR.GetS() == "ENDSEC") break;
+        else if (rDGR.GetS() == "LTYPE") {
             pLT=new DXFLType;
             pLT->Read(rDGR);
             *ppLT=pLT;
             ppLT=&(pLT->pSucc);
         }
-        else if (strcmp(rDGR.GetS(),"LAYER")==0) {
+        else if (rDGR.GetS() == "LAYER") {
             pLa=new DXFLayer;
             pLa->Read(rDGR);
             *ppLa=pLa;
             ppLa=&(pLa->pSucc);
         }
-        else if (strcmp(rDGR.GetS(),"STYLE")==0) {
+        else if (rDGR.GetS() == "STYLE") {
             pSt=new DXFStyle;
             pSt->Read(rDGR);
             *ppSt=pSt;
             ppSt=&(pSt->pSucc);
         }
-        else if (strcmp(rDGR.GetS(),"VPORT")==0) {
+        else if (rDGR.GetS() == "VPORT") {
             pVP=new DXFVPort;
             pVP->Read(rDGR);
             *ppVP=pVP;
