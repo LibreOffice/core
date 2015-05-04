@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cstdint>
+
 #include "column.hxx"
 
 #include "hintids.hxx"
