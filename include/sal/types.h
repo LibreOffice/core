@@ -227,10 +227,10 @@ typedef void *                   sal_Handle;
 #define SAL_MAX_INT64         ((sal_Int64)  SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF))
 #define SAL_MAX_UINT64        ((sal_uInt64) SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF))
 
-#if SAL_TYPES_SIZEOFLONG == 4
+#if SAL_TYPES_SIZEOFPOINTER == 4
 #define SAL_MAX_SSIZE       SAL_MAX_INT32
 #define SAL_MAX_SIZE        SAL_MAX_UINT32
-#elif SAL_TYPES_SIZEOFLONG == 8
+#elif SAL_TYPES_SIZEOFPOINTER == 8
 #define SAL_MAX_SSIZE       SAL_MAX_INT64
 #define SAL_MAX_SIZE        SAL_MAX_UINT64
 #endif
