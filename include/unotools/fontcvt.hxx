@@ -23,15 +23,23 @@
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <o3tl/typed_flags_set.hxx>
 
 // - FontToSubsFont -
 
-#define FONTTOSUBSFONT_IMPORT                   ((sal_uLong)0x00000001)
-#define FONTTOSUBSFONT_EXPORT                   ((sal_uLong)0x00000002)
-#define FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS     ((sal_uLong)0x00000004)
+enum class FontToSubsFontFlags
+{
+    IMPORT                   = 0x01,
+    EXPORT                   = 0x02,
+    ONLYOLDSOSYMBOLFONTS     = 0x04,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FontToSubsFontFlags> : is_typed_flags<FontToSubsFontFlags, 0x07> {};
+}
 
 typedef void* FontToSubsFontConverter;
-UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const OUString& rFontName, sal_uLong nFlags );
+UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const OUString& rFontName, FontToSubsFontFlags nFlags );
 UNOTOOLS_DLLPUBLIC void                        DestroyFontToSubsFontConverter( FontToSubsFontConverter hConverter );
 UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
 UNOTOOLS_DLLPUBLIC OUString                    GetFontToSubsFontName( FontToSubsFontConverter hConverter );
@@ -65,6 +73,7 @@ public:
 //The users of this might want to make a distinction between failed characters
 //which were inside and those outside the unicode private area.
 UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly=false);
+
 #endif // INCLUDED_UNOTOOLS_FONTCVT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1739,7 +1739,7 @@ sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
     {
         OUString sStarBats( "StarBats" );
         mpImpl->hBatsFontConv = CreateFontToSubsFontConverter( sStarBats,
-                 FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+                 FontToSubsFontFlags::IMPORT|FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );
         SAL_WARN_IF( !mpImpl->hBatsFontConv, "xmloff.core", "Got no symbol font converter" );
     }
     if( mpImpl->hBatsFontConv )
@@ -1757,7 +1757,7 @@ sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
     {
         OUString sStarMath( "StarMath" );
         mpImpl->hMathFontConv = CreateFontToSubsFontConverter( sStarMath,
-                 FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+                 FontToSubsFontFlags::IMPORT|FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );
         SAL_WARN_IF( !mpImpl->hMathFontConv, "xmloff.core", "Got no symbol font converter" );
     }
     if( mpImpl->hMathFontConv )

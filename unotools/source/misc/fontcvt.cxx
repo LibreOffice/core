@@ -1455,29 +1455,34 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
     return pCvt;
 }
 
-FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName, sal_uLong nFlags )
+FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName, FontToSubsFontFlags nFlags )
 {
     const ConvertChar* pCvt = NULL;
 
     OUString aName = GetEnglishSearchFontName( rOrgName );
 
-    if ( nFlags & FONTTOSUBSFONT_IMPORT )
+    if ( nFlags & FontToSubsFontFlags::IMPORT )
     {
         int nEntries = SAL_N_ELEMENTS(aStarSymbolRecodeTable);
-        if ( nFlags & FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS ) // only StarMath+StarBats
+        if ( nFlags & FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS ) // only StarMath+StarBats
             nEntries = 2;
         for( int i = 0; i < nEntries; ++i )
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aName.equalsAscii( r.pOrgName ) )
-                { pCvt = &r.aCvt; break; }
+            {
+                pCvt = &r.aCvt;
+                break;
+            }
         }
     }
     else
     {
-        // TODO: FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
-        if( aName == "starsymbol" )       pCvt = &aImplStarSymbolCvt;
-        else if( aName == "opensymbol" )  pCvt = &aImplStarSymbolCvt;
+        // TODO: FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS
+        if( aName == "starsymbol" )
+            pCvt = &aImplStarSymbolCvt;
+        else if( aName == "opensymbol" )
+            pCvt = &aImplStarSymbolCvt;
     }
 
     return (FontToSubsFontConverter)pCvt;

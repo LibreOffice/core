@@ -1160,7 +1160,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                 }
 
                 // Convert StarSymbol back to StarBats
-                FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+                FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FontToSubsFontFlags::EXPORT | FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );
                 if ( hConv )
                 {
                     // Don't create a new Attrib with StarBats font, MBR changed the
@@ -1184,7 +1184,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         FontToSubsFontConverter hConv = NULL;
         if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SfxItemState::SET)
         {
-            hConv = CreateFontToSubsFontConverter( static_cast<const SvxFontItem&>(rC.GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+            hConv = CreateFontToSubsFontConverter( static_cast<const SvxFontItem&>(rC.GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FontToSubsFontFlags::EXPORT | FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );
         }
         if ( hConv )
         {
@@ -1411,7 +1411,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 }
 
                 // Convert StarMath and StarBats to StarSymbol
-                FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+                FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FontToSubsFontFlags::IMPORT | FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );
                 if ( hConv )
                 {
                     SvxFontItem aNewFontItem( rFontItem );
@@ -1444,7 +1444,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SfxItemState::SET )
         {
             const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pC->GetParaAttribs().Get( EE_CHAR_FONTINFO ));
-            FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+            FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FontToSubsFontFlags::IMPORT | FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );
             if ( hConv )
             {
                 SvxFontItem aNewFontItem( rFontItem );
