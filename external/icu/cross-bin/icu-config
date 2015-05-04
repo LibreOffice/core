@@ -1,0 +1,12 @@
+#!/bin/sh
+
+case $1 in
+--version)
+    echo whatever
+    ;;
+--cppflags)
+    echo ${ICU_CFLAGS}
+    ;;
+--ldflags-searchpath)
+    echo ${ICU_LIBS}
+esac
