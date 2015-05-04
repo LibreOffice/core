@@ -164,7 +164,7 @@ Reader* GetReader( ReaderWriterEnum eReader )
 
 void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
-    for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+    for( int n = 0; n < MAXFILTER; ++n )
         if ( aFilterDetect[n].IsFilter( rFltName ) )
         {
             aReaderWriter[n].GetWriter( rFltName, rBaseURL, xRet );
@@ -175,7 +175,7 @@ void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& x
 SwRead GetReader( const OUString& rFltName )
 {
     SwRead pRead = 0;
-    for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+    for( int n = 0; n < MAXFILTER; ++n )
     {
         if ( aFilterDetect[n].IsFilter( rFltName ) )
         {
@@ -573,7 +573,7 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 void SwAsciiOptions::ReadUserData( const OUString& rStr )
 {
     sal_Int32 nToken = 0;
-    sal_uInt16 nCnt = 0;
+    int nCnt = 0;
     do {
         const OUString sToken = rStr.getToken( 0, ',', nToken );
         if (!sToken.isEmpty())

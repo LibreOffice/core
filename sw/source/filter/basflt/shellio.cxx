@@ -220,7 +220,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                    rNd.FindFooterStartNode();
 
             // search all new Fly's, and store them as individual Undo Objects
-            for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
+            for( SwFrmFmts::size_type n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
             {
                 SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ n ];
                 const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
@@ -628,7 +628,7 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
     sal_uInt16 const s_ids[3] = {
         RES_POOLFRM_FRAME, RES_POOLFRM_GRAPHIC, RES_POOLFRM_OLE
     };
-    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(s_ids); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(s_ids); ++i)
     {
         SwFrmFmt *const pFrmFmt = rDoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( s_ids[i] );
 
