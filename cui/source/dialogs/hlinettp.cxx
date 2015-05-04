@@ -21,6 +21,9 @@
 #include <unotools/useroptions.hxx>
 #include <svl/adrparse.hxx>
 
+#include <svx/hyperdlg.hxx>
+#include "cuihyperdlg.hxx"
+
 #include "hlinettp.hxx"
 #include "hlmarkwn_def.hxx"
 
@@ -88,6 +91,8 @@ SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp()
 
 void SvxHyperlinkInternetTp::dispose()
 {
+    m_pCbbTarget->SetLoseFocusHdl(Link<>());
+
     m_pRbtLinktypInternet.clear();
     m_pRbtLinktypFTP.clear();
     m_pCbbTarget.clear();
@@ -423,7 +428,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
 
 void SvxHyperlinkInternetTp::RefreshMarkWindow()
 {
-    if ( m_pRbtLinktypInternet->IsChecked() && IsMarkWndVisible() )
+    if ( m_pRbtLinktypInternet && m_pRbtLinktypInternet->IsChecked() && IsMarkWndVisible() )
     {
         EnterWait();
         OUString aStrURL( CreateAbsoluteURL() );
