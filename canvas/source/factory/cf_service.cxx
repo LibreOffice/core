@@ -401,24 +401,24 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         // check whether given canvas service is listed in the
         // sequence of "accelerated canvas implementations"
         const bool bIsAcceleratedImpl(
-            std::find_if(pFirstAccelImpl,
+            std::any_of(pFirstAccelImpl,
                          pEndAccelImpl,
                          boost::bind(&OUString::equals,
                                      boost::cref(aCurrName),
                                      boost::bind(
                                          &OUString::trim,
-                                         _1))) != pEndAccelImpl );
+                                         _1))) );
 
         // check whether given canvas service is listed in the
         // sequence of "antialiasing canvas implementations"
         const bool bIsAAImpl(
-            std::find_if(pFirstAAImpl,
+            std::any_of(pFirstAAImpl,
                          pEndAAImpl,
                          boost::bind(&OUString::equals,
                                      boost::cref(aCurrName),
                                      boost::bind(
                                          &OUString::trim,
-                                         _1))) != pEndAAImpl );
+                                         _1))) );
 
         // try to instantiate canvas *only* if either accel and AA
         // property match preference, *or*, if there's a mismatch, only

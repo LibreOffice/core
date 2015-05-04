@@ -423,12 +423,12 @@ namespace canvas
 
         // and check whether _any_ of the sprites tells that its area
         // update will not be opaque.
-        return (::std::find_if( rUpdateArea.maComponentList.begin(),
+        return ::std::none_of( rUpdateArea.maComponentList.begin(),
                                 aEnd,
                                 ::boost::bind( &SpriteRedrawManager::isAreaUpdateNotOpaque,
                                                this,
                                                ::boost::cref(aTrueArea),
-                                               _1 ) ) == aEnd );
+                                               _1 ) );
     }
 
     bool SpriteRedrawManager::areSpritesChanged( const UpdateArea& rUpdateArea ) const
@@ -440,12 +440,12 @@ namespace canvas
         // component (return false)
         const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
             rUpdateArea.maComponentList.end() );
-        return (::std::find_if( rUpdateArea.maComponentList.begin(),
+        return ::std::any_of( rUpdateArea.maComponentList.begin(),
                                 aEnd,
                                 ::boost::bind( &SpriteInfo::needsUpdate,
                                                ::boost::bind(
                                                    ::o3tl::select2nd<SpriteConnectedRanges::ComponentType>(),
-                                                   _1 ) ) ) != aEnd );
+                                                   _1 ) ) );
     }
 
     SpriteRedrawManager::SpriteRedrawManager() :
