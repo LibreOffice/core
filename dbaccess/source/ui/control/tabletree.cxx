@@ -199,7 +199,7 @@ namespace
             aRet.first = lhs;
             const OUString* pIter = m_aViews.getConstArray();
             const OUString* pEnd = m_aViews.getConstArray() + m_aViews.getLength();
-            aRet.second = (::std::find_if(pIter,pEnd,::std::bind2nd(m_aEqualFunctor,lhs)) != pEnd);
+            aRet.second = ::std::any_of(pIter,pEnd,::std::bind2nd(m_aEqualFunctor,lhs));
 
             return aRet;
         }
@@ -260,14 +260,11 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
         if (haveVirtualRoot())
         {
             OUString sRootEntryText;
-            TNames::const_iterator aViews = ::std::find_if(_rTables.begin(),_rTables.end(),
-            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::o3tl::select2nd<TNames::value_type>()));
-            TNames::const_iterator aTables = ::std::find_if(_rTables.begin(),_rTables.end(),
-            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::o3tl::select2nd<TNames::value_type>()));
-
-            if ( aViews == _rTables.end() )
+            if ( ::std::none_of(_rTables.begin(),_rTables.end(),
+                                ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::o3tl::select2nd<TNames::value_type>())) )
                 sRootEntryText  = ModuleRes(STR_ALL_TABLES);
-            else if ( aTables == _rTables.end() )
+            else if ( ::std::none_of(_rTables.begin(),_rTables.end(),
+                                     ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::o3tl::select2nd<TNames::value_type>())) )
                 sRootEntryText  = ModuleRes(STR_ALL_VIEWS);
             else
                 sRootEntryText  = ModuleRes(STR_ALL_TABLES_AND_VIEWS);
