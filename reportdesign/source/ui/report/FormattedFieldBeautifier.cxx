@@ -23,7 +23,6 @@
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/awt/InvalidateStyle.hpp>
 
 #include <RptObject.hxx>
 #include <RptModel.hxx>

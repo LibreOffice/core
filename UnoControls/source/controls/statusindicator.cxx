@@ -19,7 +19,6 @@
 
 #include "statusindicator.hxx"
 
-#include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/queryinterface.hxx>

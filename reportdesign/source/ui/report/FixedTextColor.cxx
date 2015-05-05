@@ -21,7 +21,6 @@
 #include <FixedTextColor.hxx>
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/awt/InvalidateStyle.hpp>
 
 #include <RptObject.hxx>
 #include <RptModel.hxx>

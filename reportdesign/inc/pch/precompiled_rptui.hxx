@@ -26,7 +26,6 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
