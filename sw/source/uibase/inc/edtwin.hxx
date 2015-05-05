@@ -179,8 +179,6 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
     DECL_LINK_TYPED( TemplateTimerHdl, Idle *, void );
 
-    using OutputDevice::GetTextColor;
-
     void            MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                                 const bool bOnlyText, bool bLockView );
 
