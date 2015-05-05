@@ -1923,6 +1923,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     m_pNodes->dumpAsXml(pWriter);
+    maDBData.dumpAsXml(pWriter);
     mpMarkManager->dumpAsXml(pWriter);
     m_pUndoManager->dumpAsXml(pWriter);
     getIDocumentFieldsAccess().GetFldTypes()->dumpAsXml(pWriter);
@@ -1947,6 +1948,17 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterEndDocument(pWriter);
         xmlFreeTextWriter(pWriter);
     }
+}
+
+void SwDBData::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swDBData"));
+
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sDataSource"), BAD_CAST(sDataSource.toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sCommand"), BAD_CAST(sCommand.toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nCommandType"), BAD_CAST(OString::number(nCommandType).getStr()));
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 std::set<Color> SwDoc::GetDocColors()

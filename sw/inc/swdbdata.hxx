@@ -30,6 +30,7 @@ struct SwDBData
     sal_Int32           nCommandType; //com::sun::star::sdb::CommandType
     SwDBData() :
         nCommandType(0){}
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
     bool operator !=(const SwDBData& rCmp) const
         {return rCmp.sDataSource != sDataSource || rCmp.sCommand != sCommand || rCmp.nCommandType != nCommandType;}
