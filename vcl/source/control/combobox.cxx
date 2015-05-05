@@ -607,13 +607,13 @@ void ComboBox::StateChanged( StateChangedType nType )
 {
     Edit::StateChanged( nType );
 
-    if ( nType == StateChangedType::READONLY )
+    if ( nType == StateChangedType::ReadOnly )
     {
         mpImplLB->SetReadOnly( IsReadOnly() );
         if ( mpBtn )
             mpBtn->Enable( IsEnabled() && !IsReadOnly() );
     }
-    else if ( nType == StateChangedType::ENABLE )
+    else if ( nType == StateChangedType::Enable )
     {
         mpSubEdit->Enable( IsEnabled() );
         mpImplLB->Enable( IsEnabled() && !IsReadOnly() );
@@ -621,47 +621,47 @@ void ComboBox::StateChanged( StateChangedType nType )
             mpBtn->Enable( IsEnabled() && !IsReadOnly() );
         Invalidate();
     }
-    else if( nType == StateChangedType::UPDATEMODE )
+    else if( nType == StateChangedType::UpdateMode )
     {
         mpImplLB->SetUpdateMode( IsUpdateMode() );
     }
-    else if ( nType == StateChangedType::ZOOM )
+    else if ( nType == StateChangedType::Zoom )
     {
         mpImplLB->SetZoom( GetZoom() );
         mpSubEdit->SetZoom( GetZoom() );
         ImplCalcEditHeight();
         Resize();
     }
-    else if ( nType == StateChangedType::CONTROLFONT )
+    else if ( nType == StateChangedType::ControlFont )
     {
         mpImplLB->SetControlFont( GetControlFont() );
         mpSubEdit->SetControlFont( GetControlFont() );
         ImplCalcEditHeight();
         Resize();
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         mpImplLB->SetControlForeground( GetControlForeground() );
         mpSubEdit->SetControlForeground( GetControlForeground() );
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         mpImplLB->SetControlBackground( GetControlBackground() );
         mpSubEdit->SetControlBackground( GetControlBackground() );
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) != 0 );
     }
-    else if( nType == StateChangedType::MIRRORING )
+    else if( nType == StateChangedType::Mirroring )
     {
         if( mpBtn )
         {
             mpBtn->EnableRTL( IsRTLEnabled() );
             ImplInitDropDownButton( mpBtn );
         }
-        mpSubEdit->StateChanged( StateChangedType::MIRRORING );
+        mpSubEdit->StateChanged( StateChangedType::Mirroring );
         mpImplLB->EnableRTL( IsRTLEnabled() );
         Resize();
     }

@@ -234,7 +234,7 @@ void ButtonDialog::Resize()
 
 void ButtonDialog::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
     {
         ImplPosControls();
         for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)

@@ -70,7 +70,7 @@ namespace pcr
     void OBrowserPage::StateChanged(StateChangedType nType)
     {
         Window::StateChanged( nType);
-        if (StateChangedType::VISIBLE == nType)
+        if (StateChangedType::Visible == nType)
             m_aListBox->ActivateListBox(IsVisible());
     }
 

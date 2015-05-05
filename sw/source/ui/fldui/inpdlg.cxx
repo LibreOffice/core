@@ -122,7 +122,7 @@ void SwFldInputDlg::dispose()
 
 void SwFldInputDlg::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
         m_pEditED->GrabFocus();
     SvxStandardDialog::StateChanged( nType );
 }

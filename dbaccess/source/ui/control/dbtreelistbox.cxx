@@ -668,7 +668,7 @@ IMPL_LINK_NOARG_TYPED(DBTreeListBox, OnTimeOut, Timer*, void)
 
 void DBTreeListBox::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::VISIBLE )
+    if ( nStateChange == StateChangedType::Visible )
         implStopSelectionTimer();
 }
 

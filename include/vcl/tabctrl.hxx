@@ -189,7 +189,7 @@ public:
         mbLayoutDirty = true;
     }
 
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX

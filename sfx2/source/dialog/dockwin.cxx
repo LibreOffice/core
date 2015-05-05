@@ -280,7 +280,7 @@ bool SfxTitleDockingWindow::Notify( NotifyEvent& rNEvt )
 
 void SfxTitleDockingWindow::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
     {
         vcl::Window* pWindow = GetWrappedWindow();
         if ( pWindow )
@@ -1915,7 +1915,7 @@ void SfxDockingWindow::AutoShow_Impl( bool bShow )
 
 void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::INITSHOW )
+    if ( nStateChange == StateChangedType::InitShow )
         Initialize_Impl();
 
     DockingWindow::StateChanged( nStateChange );

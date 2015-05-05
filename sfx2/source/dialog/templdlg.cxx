@@ -390,7 +390,7 @@ void SfxTemplatePanelControl::FreeResource()
 
 void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
 {
-    if (nStateChange == StateChangedType::INITSHOW)
+    if (nStateChange == StateChangedType::InitShow)
     {
         SfxViewFrame* pFrame = mpBindings->GetDispatcher_Impl()->GetFrame();
         vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();

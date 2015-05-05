@@ -100,14 +100,14 @@ void TabPage::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
     {
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
         // FIXME: no layouting, workaround some clipping issues
         ImplAdjustNWFSizes();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings();
         Invalidate();

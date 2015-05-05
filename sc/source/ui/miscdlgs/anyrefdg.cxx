@@ -947,7 +947,7 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
 {
     if( !bBindRef && !m_bInRefMode ) return;
 
-    if(nStateChange == StateChangedType::VISIBLE)
+    if(nStateChange == StateChangedType::Visible)
     {
         if(m_rWindow->IsVisible())
         {

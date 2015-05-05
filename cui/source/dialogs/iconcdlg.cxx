@@ -120,7 +120,7 @@ void IconChoicePage::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( nType == StateChangedType::CONTROLBACKGROUND )
+    if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings();
         Invalidate();

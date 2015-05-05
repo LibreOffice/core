@@ -418,7 +418,7 @@ void Window::ImplCallInitShow()
 {
     mpWindowImpl->mbReallyShown   = true;
     mpWindowImpl->mbInInitShow    = true;
-    StateChanged( StateChangedType::INITSHOW );
+    StateChanged( StateChangedType::InitShow );
     mpWindowImpl->mbInInitShow    = false;
 
     vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;

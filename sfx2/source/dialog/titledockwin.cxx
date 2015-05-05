@@ -270,7 +270,7 @@ namespace sfx2
     {
         switch ( i_nType )
         {
-            case StateChangedType::INITSHOW:
+            case StateChangedType::InitShow:
                 impl_scheduleLayout();
                 break;
             default:;

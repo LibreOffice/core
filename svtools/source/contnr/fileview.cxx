@@ -1512,7 +1512,7 @@ void SvtFileView::SetConfigString( const OUString& rCfgStr )
 
 void SvtFileView::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::ENABLE )
+    if ( nStateChange == StateChangedType::Enable )
         Invalidate();
     Control::StateChanged( nStateChange );
 }

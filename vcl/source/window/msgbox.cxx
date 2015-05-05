@@ -354,7 +354,7 @@ void MessBox::ImplPosControls()
 
 void MessBox::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
     {
         ImplPosControls();
     }

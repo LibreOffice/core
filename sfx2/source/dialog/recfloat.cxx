@@ -234,7 +234,7 @@ void SfxRecordingFloat_Impl::FillInfo( SfxChildWinInfo& rInfo ) const
 
 void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::INITSHOW )
+    if ( nStateChange == StateChangedType::InitShow )
     {
         SfxViewFrame *pFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
         vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();

@@ -75,7 +75,7 @@ void ScRangeManagerTable::StateChanged( StateChangedType nStateChange )
 {
     SvSimpleTable::StateChanged(nStateChange);
 
-    if (nStateChange == StateChangedType::INITSHOW)
+    if (nStateChange == StateChangedType::InitShow)
     {
         if (GetEntryCount())
         {

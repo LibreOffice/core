@@ -929,36 +929,36 @@ void ThumbnailView::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == StateChangedType::UPDATEMODE )
+    else if ( nType == StateChangedType::UpdateMode )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == StateChangedType::TEXT )
+    else if ( nType == StateChangedType::Text )
     {
     }
-    else if ( (nType == StateChangedType::ZOOM) ||
-              (nType == StateChangedType::CONTROLFONT) )
+    else if ( (nType == StateChangedType::Zoom) ||
+              (nType == StateChangedType::ControlFont) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
     }
-    else if ( (nType == StateChangedType::STYLE) || (nType == StateChangedType::ENABLE) )
+    else if ( (nType == StateChangedType::Style) || (nType == StateChangedType::Enable) )
     {
         ImplInitSettings( false, false, true );
         Invalidate();

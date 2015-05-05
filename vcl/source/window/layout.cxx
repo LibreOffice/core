@@ -1601,7 +1601,7 @@ void VclExpander::StateChanged(StateChangedType nType)
 {
     VclBin::StateChanged( nType );
 
-    if (nType == StateChangedType::INITSHOW)
+    if (nType == StateChangedType::InitShow)
     {
         vcl::Window *pChild = get_child();
         if (pChild)

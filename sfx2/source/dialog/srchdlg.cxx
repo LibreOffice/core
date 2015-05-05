@@ -160,7 +160,7 @@ bool SearchDialog::Close()
 
 void SearchDialog::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::INITSHOW )
+    if ( nStateChange == StateChangedType::InitShow )
     {
         if (!m_sWinState.isEmpty())
             SetWindowState( m_sWinState );

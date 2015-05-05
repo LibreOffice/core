@@ -2607,15 +2607,15 @@ void SplitWindow::StateChanged( StateChangedType nType )
 {
     switch ( nType )
     {
-    case StateChangedType::INITSHOW:
+    case StateChangedType::InitShow:
         if ( IsUpdateMode() )
             ImplCalcLayout();
         break;
-    case StateChangedType::UPDATEMODE:
+    case StateChangedType::UpdateMode:
         if ( IsUpdateMode() && IsReallyShown() )
             ImplCalcLayout();
         break;
-    case StateChangedType::CONTROLBACKGROUND:
+    case StateChangedType::ControlBackground:
         ImplInitSettings();
         Invalidate();
         break;

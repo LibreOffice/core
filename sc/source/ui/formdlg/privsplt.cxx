@@ -369,18 +369,18 @@ void ScPrivatSplit::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
 
 void ScPrivatSplit::StateChanged( StateChangedType nType )
 {
-    if ( (nType == StateChangedType::ZOOM) ||
-         (nType == StateChangedType::CONTROLFONT) )
+    if ( (nType == StateChangedType::Zoom) ||
+         (nType == StateChangedType::ControlFont) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    if ( nType == StateChangedType::CONTROLFOREGROUND )
+    if ( nType == StateChangedType::ControlForeground )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings( false, false, true );
         Invalidate();

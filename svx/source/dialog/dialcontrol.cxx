@@ -286,7 +286,7 @@ void DialControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle
 
 void DialControl::StateChanged( StateChangedType nStateChange )
 {
-    if( nStateChange == StateChangedType::ENABLE )
+    if( nStateChange == StateChangedType::Enable )
         InvalidateControl();
 
     // update the linked edit field
@@ -295,8 +295,8 @@ void DialControl::StateChanged( StateChangedType nStateChange )
         NumericField& rField = *mpImpl->mpLinkField;
         switch( nStateChange )
         {
-            case StateChangedType::VISIBLE:  rField.Show( IsVisible() );     break;
-            case StateChangedType::ENABLE:   rField.Enable( IsEnabled() );   break;
+            case StateChangedType::Visible:  rField.Show( IsVisible() );     break;
+            case StateChangedType::Enable:   rField.Enable( IsEnabled() );   break;
             default:;
         }
     }

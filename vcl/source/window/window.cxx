@@ -2023,16 +2023,16 @@ void Window::StateChanged(StateChangedType eType)
     switch (eType)
     {
         //stuff that doesn't invalidate the layout
-        case StateChangedType::CONTROLFOREGROUND:
-        case StateChangedType::CONTROLBACKGROUND:
+        case StateChangedType::ControlForeground:
+        case StateChangedType::ControlBackground:
         case StateChangedType::Transparent:
-        case StateChangedType::UPDATEMODE:
-        case StateChangedType::READONLY:
-        case StateChangedType::ENABLE:
-        case StateChangedType::STATE:
-        case StateChangedType::DATA:
-        case StateChangedType::INITSHOW:
-        case StateChangedType::CONTROL_FOCUS:
+        case StateChangedType::UpdateMode:
+        case StateChangedType::ReadOnly:
+        case StateChangedType::Enable:
+        case StateChangedType::State:
+        case StateChangedType::Data:
+        case StateChangedType::InitShow:
+        case StateChangedType::ControlFocus:
             break;
         //stuff that does invalidate the layout
         default:
@@ -2067,7 +2067,7 @@ void Window::SetStyle( WinBits nStyle )
     {
         mpWindowImpl->mnPrevStyle = mpWindowImpl->mnStyle;
         mpWindowImpl->mnStyle = nStyle;
-        StateChanged( StateChangedType::STYLE );
+        StateChanged( StateChangedType::Style );
     }
 }
 
@@ -2091,7 +2091,7 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
         }
         mpWindowImpl->mnPrevExtendedStyle = mpWindowImpl->mnExtendedStyle;
         mpWindowImpl->mnExtendedStyle = nExtendedStyle;
-        StateChanged( StateChangedType::EXTENDEDSTYLE );
+        StateChanged( StateChangedType::ExtendedStyle );
     }
 }
 
@@ -2303,7 +2303,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             mpWindowImpl->mpFrame->Show( false, false );
         }
 
-        StateChanged( StateChangedType::VISIBLE );
+        StateChanged( StateChangedType::Visible );
 
         if ( mpWindowImpl->mbReallyVisible )
         {
@@ -2391,7 +2391,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             ImplCallResize();
         }
 
-        StateChanged( StateChangedType::VISIBLE );
+        StateChanged( StateChangedType::Visible );
 
         vcl::Window* pTestParent;
         if ( ImplIsOverlapWindow() )
@@ -2578,7 +2578,7 @@ void Window::Enable( bool bEnable, bool bChild )
         mpWindowImpl->mbDisabled = !bEnable;
         if ( mpWindowImpl->mpSysObj )
             mpWindowImpl->mpSysObj->Enable( bEnable && !mpWindowImpl->mbInputDisabled );
-        StateChanged( StateChangedType::ENABLE );
+        StateChanged( StateChangedType::Enable );
 
         CallEventListeners( bEnable ? VCLEVENT_WINDOW_ENABLED : VCLEVENT_WINDOW_DISABLED );
     }
@@ -3132,7 +3132,7 @@ void Window::SetUpdateMode( bool bUpdate )
 {
 
     mpWindowImpl->mbNoUpdate = !bUpdate;
-    StateChanged( StateChangedType::UPDATEMODE );
+    StateChanged( StateChangedType::UpdateMode );
 }
 
 void Window::GrabFocus()
@@ -3203,7 +3203,7 @@ void Window::SetText( const OUString& rStr )
             pWindow->CallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
     }
 
-    StateChanged( StateChangedType::TEXT );
+    StateChanged( StateChangedType::Text );
 }
 
 OUString Window::GetText() const

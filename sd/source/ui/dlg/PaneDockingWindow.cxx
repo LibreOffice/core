@@ -54,12 +54,12 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
 {
     switch (nType)
     {
-        case StateChangedType::INITSHOW:
+        case StateChangedType::InitShow:
             Resize();
             GetContentWindow().SetStyle(GetContentWindow().GetStyle() | WB_DIALOGCONTROL);
             break;
 
-        case StateChangedType::VISIBLE:
+        case StateChangedType::Visible:
         {
             // The visibility of the docking window has changed.  Tell the
             // ConfigurationController so that it can activate or deactivate

@@ -41,7 +41,7 @@ public:
         m_bLayoutDirty = true;
     }
 
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
 protected:
     //these are the two that need to be implemented by
     //containers, figure out how much space you want...

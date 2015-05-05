@@ -174,16 +174,16 @@ namespace frm
 
     void RichTextControl::StateChanged( StateChangedType _nStateChange )
     {
-        if ( _nStateChange == StateChangedType::STYLE )
+        if ( _nStateChange == StateChangedType::Style )
         {
             SetStyle( implInitStyle( GetStyle() ) );
             m_pImpl->notifyStyleChanged();
         }
-        else if ( _nStateChange == StateChangedType::ZOOM )
+        else if ( _nStateChange == StateChangedType::Zoom )
         {
             m_pImpl->notifyZoomChanged();
         }
-        else if ( _nStateChange == StateChangedType::INITSHOW )
+        else if ( _nStateChange == StateChangedType::InitShow )
         {
             m_pImpl->notifyInitShow();
         }

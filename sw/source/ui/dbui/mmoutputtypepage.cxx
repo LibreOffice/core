@@ -547,7 +547,7 @@ void SwSendMailDialog::ShowDialog()
 void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
 {
     ModelessDialog::StateChanged( nStateChange );
-    if(StateChangedType::VISIBLE == nStateChange && !IsVisible())
+    if(StateChangedType::Visible == nStateChange && !IsVisible())
     {
         m_pImpl->aRemoveIdle.SetIdleHdl( LINK( this, SwSendMailDialog,
                                                     RemoveThis ) );

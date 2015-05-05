@@ -359,7 +359,7 @@ public:
     virtual void SetText( const OUString& rStr ) SAL_OVERRIDE;
     virtual OUString GetText() const SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
 };
 
 inline void DockingWindow::SetPin( bool bPin )

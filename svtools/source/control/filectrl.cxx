@@ -114,21 +114,21 @@ OUString FileControl::GetText() const
 
 void FileControl::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::ENABLE )
+    if ( nType == StateChangedType::Enable )
     {
         maEdit->Enable( IsEnabled() );
         maButton->Enable( IsEnabled() );
     }
-    else if ( nType == StateChangedType::ZOOM )
+    else if ( nType == StateChangedType::Zoom )
     {
         GetEdit().SetZoom( GetZoom() );
         GetButton().SetZoom( GetZoom() );
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
     }
-    else if ( nType == StateChangedType::CONTROLFONT )
+    else if ( nType == StateChangedType::ControlFont )
     {
         GetEdit().SetControlFont( GetControlFont() );
         // Only use height of the button, as in HTML
@@ -137,12 +137,12 @@ void FileControl::StateChanged( StateChangedType nType )
         aFont.SetSize( GetControlFont().GetSize() );
         GetButton().SetControlFont( aFont );
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         GetEdit().SetControlForeground( GetControlForeground() );
         GetButton().SetControlForeground( GetControlForeground() );
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         GetEdit().SetControlBackground( GetControlBackground() );
         GetButton().SetControlBackground( GetControlBackground() );

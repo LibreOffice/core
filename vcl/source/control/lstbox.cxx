@@ -777,14 +777,14 @@ long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
 
 void ListBox::StateChanged( StateChangedType nType )
 {
-    if( nType == StateChangedType::READONLY )
+    if( nType == StateChangedType::ReadOnly )
     {
         if( mpImplWin )
             mpImplWin->Enable( !IsReadOnly() );
         if( mpBtn )
             mpBtn->Enable( !IsReadOnly() );
     }
-    else if( nType == StateChangedType::ENABLE )
+    else if( nType == StateChangedType::Enable )
     {
         mpImplLB->Enable( IsEnabled() );
         if( mpImplWin )
@@ -801,11 +801,11 @@ void ListBox::StateChanged( StateChangedType nType )
         if( mpBtn )
             mpBtn->Enable( IsEnabled() );
     }
-    else if( nType == StateChangedType::UPDATEMODE )
+    else if( nType == StateChangedType::UpdateMode )
     {
         mpImplLB->SetUpdateMode( IsUpdateMode() );
     }
-    else if ( nType == StateChangedType::ZOOM )
+    else if ( nType == StateChangedType::Zoom )
     {
         mpImplLB->SetZoom( GetZoom() );
         if ( mpImplWin )
@@ -816,7 +816,7 @@ void ListBox::StateChanged( StateChangedType nType )
         }
         Resize();
     }
-    else if ( nType == StateChangedType::CONTROLFONT )
+    else if ( nType == StateChangedType::ControlFont )
     {
         mpImplLB->SetControlFont( GetControlFont() );
         if ( mpImplWin )
@@ -827,7 +827,7 @@ void ListBox::StateChanged( StateChangedType nType )
         }
         Resize();
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         mpImplLB->SetControlForeground( GetControlForeground() );
         if ( mpImplWin )
@@ -838,7 +838,7 @@ void ListBox::StateChanged( StateChangedType nType )
             mpImplWin->Invalidate();
         }
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         mpImplLB->SetControlBackground( GetControlBackground() );
         if ( mpImplWin )
@@ -858,14 +858,14 @@ void ListBox::StateChanged( StateChangedType nType )
             mpImplWin->Invalidate();
         }
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) != 0 );
         bool bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) != 0;
         mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
     }
-    else if( nType == StateChangedType::MIRRORING )
+    else if( nType == StateChangedType::Mirroring )
     {
         if( mpBtn )
         {
@@ -1404,7 +1404,7 @@ void ListBox::SetReadOnly( bool bReadOnly )
     if ( mpImplLB->IsReadOnly() != bReadOnly )
     {
         mpImplLB->SetReadOnly( bReadOnly );
-        StateChanged( StateChangedType::READONLY );
+        StateChanged( StateChangedType::ReadOnly );
     }
 }
 

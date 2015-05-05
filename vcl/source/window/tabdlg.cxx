@@ -233,7 +233,7 @@ void TabDialog::dispose()
 
 void TabDialog::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
     {
         // Calculate the Layout only for the initialized state
         if ( mbPosControls )

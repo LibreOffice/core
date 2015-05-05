@@ -205,9 +205,9 @@ void SvxNumberPreview::InitSettings( bool bForeground, bool bBackground )
 
 void SvxNumberPreview::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::CONTROLFOREGROUND )
+    if ( nType == StateChangedType::ControlForeground )
         InitSettings( true, false );
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
         InitSettings( false, true );
 
     Window::StateChanged( nType );

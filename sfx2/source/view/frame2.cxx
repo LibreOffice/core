@@ -182,7 +182,7 @@ void SfxFrameWindow_Impl::Resize()
 
 void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::INITSHOW )
+    if ( nStateChange == StateChangedType::InitShow )
     {
         pFrame->pImp->bHidden = false;
         if ( pFrame->IsInPlace() )

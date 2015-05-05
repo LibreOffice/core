@@ -635,7 +635,7 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
 
 void Dialog::StateChanged( StateChangedType nType )
 {
-    if (nType == StateChangedType::INITSHOW)
+    if (nType == StateChangedType::InitShow)
     {
         DoInitialLayout();
 
@@ -655,7 +655,7 @@ void Dialog::StateChanged( StateChangedType nType )
 
     SystemWindow::StateChanged( nType );
 
-    if (nType == StateChangedType::CONTROLBACKGROUND)
+    if (nType == StateChangedType::ControlBackground)
     {
         ImplInitSettings();
         Invalidate();

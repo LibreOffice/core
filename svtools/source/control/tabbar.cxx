@@ -1534,25 +1534,25 @@ void TabBar::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
     {
         if ( (mbSizeFormat || mbFormat) && !mpImpl->mpItemList.empty() )
             ImplFormat();
     }
-    else if ( (nType == StateChangedType::ZOOM) ||
-              (nType == StateChangedType::CONTROLFONT) )
+    else if ( (nType == StateChangedType::Zoom) ||
+              (nType == StateChangedType::ControlFont) )
     {
         ImplInitSettings( true, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
         Invalidate();
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings( false, true );
         Invalidate();
     }
-    else if ( nType == StateChangedType::MIRRORING )
+    else if ( nType == StateChangedType::Mirroring )
     {
         // reacts on calls of EnableRTL, have to mirror all child controls
         if (mpImpl->mpFirstButton)

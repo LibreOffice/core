@@ -920,7 +920,7 @@ void OfaAutocorrReplacePage::StateChanged(StateChangedType nStateChange)
 {
     SfxTabPage::StateChanged(nStateChange);
 
-    if (nStateChange == StateChangedType::INITSHOW)
+    if (nStateChange == StateChangedType::InitShow)
     {
         setTabs();
     }

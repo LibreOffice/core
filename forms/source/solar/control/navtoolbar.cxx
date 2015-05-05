@@ -478,23 +478,23 @@ namespace frm
 
         switch ( nType )
         {
-            case StateChangedType::ZOOM:
+            case StateChangedType::Zoom:
 //                m_pToolbar->SetZoom( GetZoom() );
 //                forEachItemWindow( setItemWindowZoom, NULL );
                 // the ToolBox class is not zoomable at the moment, so
                 // we better have no zoom at all instead of only half a zoom ...
                 break;
 
-            case StateChangedType::CONTROLFONT:
+            case StateChangedType::ControlFont:
                 forEachItemWindow( &NavigationToolBar::setItemControlFont, NULL );
                 forEachItemWindow( &NavigationToolBar::adjustItemWindowWidth, NULL );
                 break;
 
-            case StateChangedType::CONTROLFOREGROUND:
+            case StateChangedType::ControlForeground:
                 forEachItemWindow( &NavigationToolBar::setItemControlForeground, NULL );
                 break;
 
-            case StateChangedType::MIRRORING:
+            case StateChangedType::Mirroring:
             {
                 sal_Bool bIsRTLEnabled( IsRTLEnabled() );
                 m_pToolbar->EnableRTL( bIsRTLEnabled );

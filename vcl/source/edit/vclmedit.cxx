@@ -1248,43 +1248,43 @@ void VclMultiLineEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16&
 
 void VclMultiLineEdit::StateChanged( StateChangedType nType )
 {
-    if( nType == StateChangedType::ENABLE )
+    if( nType == StateChangedType::Enable )
     {
         pImpVclMEdit->Enable( IsEnabled() );
         ImplInitSettings( true, false, false );
     }
-    else if( nType == StateChangedType::READONLY )
+    else if( nType == StateChangedType::ReadOnly )
     {
         pImpVclMEdit->SetReadOnly( IsReadOnly() );
     }
-    else if ( nType == StateChangedType::ZOOM )
+    else if ( nType == StateChangedType::Zoom )
     {
         pImpVclMEdit->GetTextWindow()->SetZoom( GetZoom() );
         ImplInitSettings( true, false, false );
         Resize();
     }
-    else if ( nType == StateChangedType::CONTROLFONT )
+    else if ( nType == StateChangedType::ControlFont )
     {
         ImplInitSettings( true, false, false );
         Resize();
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         pImpVclMEdit->InitFromStyle( GetStyle() );
         SetStyle( ImplInitStyle( GetStyle() ) );
     }
-    else if ( nType == StateChangedType::INITSHOW )
+    else if ( nType == StateChangedType::InitShow )
     {
         if( IsPaintTransparent() )
         {

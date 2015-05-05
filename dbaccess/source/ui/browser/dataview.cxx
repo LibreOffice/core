@@ -151,13 +151,13 @@ namespace dbaui
     {
         Window::StateChanged( nType );
 
-        if ( nType == StateChangedType::CONTROLBACKGROUND )
+        if ( nType == StateChangedType::ControlBackground )
         {
             // Check if we need to get new images for normal/high contrast mode
             m_xController->notifyHiContrastChanged();
         }
 
-        if ( nType == StateChangedType::INITSHOW )
+        if ( nType == StateChangedType::InitShow )
         {
             // now that there's a view which is finally visible, remove the "Hidden" value from the
             // model's arguments.

@@ -2071,34 +2071,34 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( nType == StateChangedType::ZOOM )
+    if ( nType == StateChangedType::Zoom )
     {
         ImplInitSettings( true, false, false );
         ImplCalcMetrics();
         Invalidate();
     }
-    else if ( nType == StateChangedType::UPDATEMODE )
+    else if ( nType == StateChangedType::UpdateMode )
     {
         if ( IsUpdateMode() && IsReallyVisible() )
             Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLFONT )
+    else if ( nType == StateChangedType::ControlFont )
     {
         ImplInitSettings( true, false, false );
         ImplCalcMetrics();
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
     }
-    else if( nType == StateChangedType::ENABLE )
+    else if( nType == StateChangedType::Enable )
     {
         Invalidate();
     }
@@ -2190,7 +2190,7 @@ void ImplListBox::Clear()
     }
     mpVScrollBar->SetThumbPos( 0 );
     mpHScrollBar->SetThumbPos( 0 );
-    StateChanged( StateChangedType::DATA );
+    StateChanged( StateChangedType::Data );
 }
 
 sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr )
@@ -2202,7 +2202,7 @@ sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr )
         delete pNewEntry;
         return nNewPos;
     }
-    StateChanged( StateChangedType::DATA );
+    StateChanged( StateChangedType::Data );
     return nNewPos;
 }
 
@@ -2215,14 +2215,14 @@ sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr, const 
         delete pNewEntry;
         return nNewPos;
     }
-    StateChanged( StateChangedType::DATA );
+    StateChanged( StateChangedType::Data );
     return nNewPos;
 }
 
 void ImplListBox::RemoveEntry( sal_Int32 nPos )
 {
     maLBWindow->RemoveEntry( nPos );
-    StateChanged( StateChangedType::DATA );
+    StateChanged( StateChangedType::Data );
 }
 
 void ImplListBox::SetEntryFlags( sal_Int32 nPos, long nFlags )
@@ -2259,7 +2259,7 @@ void ImplListBox::Resize()
 
 IMPL_LINK_NOARG(ImplListBox, MRUChanged)
 {
-    StateChanged( StateChangedType::DATA );
+    StateChanged( StateChangedType::Data );
     return 1;
 }
 
@@ -2455,18 +2455,18 @@ void ImplListBox::ImplResizeControls()
 
 void ImplListBox::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
     {
         ImplCheckScrollBars();
     }
-    else if ( ( nType == StateChangedType::UPDATEMODE ) || ( nType == StateChangedType::DATA ) )
+    else if ( ( nType == StateChangedType::UpdateMode ) || ( nType == StateChangedType::Data ) )
     {
         bool bUpdate = IsUpdateMode();
         maLBWindow->SetUpdateMode( bUpdate );
         if ( bUpdate && IsReallyVisible() )
             ImplCheckScrollBars();
     }
-    else if( nType == StateChangedType::ENABLE )
+    else if( nType == StateChangedType::Enable )
     {
         mpHScrollBar->Enable( IsEnabled() );
         mpVScrollBar->Enable( IsEnabled() );
@@ -2475,24 +2475,24 @@ void ImplListBox::StateChanged( StateChangedType nType )
 
         Invalidate();
     }
-    else if ( nType == StateChangedType::ZOOM )
+    else if ( nType == StateChangedType::Zoom )
     {
         maLBWindow->SetZoom( GetZoom() );
         Resize();
     }
-    else if ( nType == StateChangedType::CONTROLFONT )
+    else if ( nType == StateChangedType::ControlFont )
     {
         maLBWindow->SetControlFont( GetControlFont() );
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         maLBWindow->SetControlForeground( GetControlForeground() );
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         maLBWindow->SetControlBackground( GetControlBackground() );
     }
-    else if( nType == StateChangedType::MIRRORING )
+    else if( nType == StateChangedType::Mirroring )
     {
         maLBWindow->EnableRTL( IsRTLEnabled() );
         mpHScrollBar->EnableRTL( IsRTLEnabled() );
@@ -2575,7 +2575,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
     {
         maLBWindow->GetEntryList()->SetMRUCount( nMRUCount );
         SetSeparatorPos( nMRUCount ? nMRUCount-1 : 0 );
-        StateChanged( StateChangedType::DATA );
+        StateChanged( StateChangedType::Data );
     }
 }
 

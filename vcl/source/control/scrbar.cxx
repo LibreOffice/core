@@ -1185,14 +1185,14 @@ void ScrollBar::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( nType == StateChangedType::INITSHOW )
+    if ( nType == StateChangedType::InitShow )
         ImplCalc( false );
-    else if ( nType == StateChangedType::DATA )
+    else if ( nType == StateChangedType::Data )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             ImplCalc( true );
     }
-    else if ( nType == StateChangedType::UPDATEMODE )
+    else if ( nType == StateChangedType::UpdateMode )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
         {
@@ -1200,12 +1200,12 @@ void ScrollBar::StateChanged( StateChangedType nType )
             Invalidate();
         }
     }
-    else if ( nType == StateChangedType::ENABLE )
+    else if ( nType == StateChangedType::Enable )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         ImplInitStyle( GetStyle() );
         if ( IsReallyVisible() && IsUpdateMode() )
@@ -1382,7 +1382,7 @@ void ScrollBar::SetRange( const Range& rRange )
         if ( mnThumbPos < mnMinRange )
             mnThumbPos = mnMinRange;
 
-        StateChanged( StateChangedType::DATA );
+        StateChanged( StateChangedType::Data );
     }
 }
 
@@ -1396,7 +1396,7 @@ void ScrollBar::SetThumbPos( long nNewThumbPos )
     if ( mnThumbPos != nNewThumbPos )
     {
         mnThumbPos = nNewThumbPos;
-        StateChanged( StateChangedType::DATA );
+        StateChanged( StateChangedType::Data );
     }
 }
 
@@ -1411,7 +1411,7 @@ void ScrollBar::SetVisibleSize( long nNewSize )
             mnThumbPos = mnMaxRange-mnVisibleSize;
         if ( mnThumbPos < mnMinRange )
             mnThumbPos = mnMinRange;
-        StateChanged( StateChangedType::DATA );
+        StateChanged( StateChangedType::Data );
     }
 }
 
@@ -1482,7 +1482,7 @@ void ScrollBarBox::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( nType == StateChangedType::CONTROLBACKGROUND )
+    if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings();
         Invalidate();

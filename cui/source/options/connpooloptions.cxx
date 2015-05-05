@@ -221,7 +221,7 @@ namespace offapp
 
     void DriverListControl::StateChanged( StateChangedType nStateChange )
     {
-        if (StateChangedType::ENABLE == nStateChange)
+        if (StateChangedType::Enable == nStateChange)
             Window::Invalidate(INVALIDATE_UPDATE);
         EditBrowseBox::StateChanged( nStateChange );
     }

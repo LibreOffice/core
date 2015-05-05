@@ -202,7 +202,7 @@ void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
 
 void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::INITSHOW )
+    if ( nStateChange == StateChangedType::InitShow )
     {
         if ( !pImp->aWinState.isEmpty() )
         {
@@ -573,7 +573,7 @@ IMPL_LINK_NOARG_TYPED(SfxFloatingWindow, TimerHdl, Idle *, void)
 
 void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == StateChangedType::INITSHOW )
+    if ( nStateChange == StateChangedType::InitShow )
     {
         // FloatingWindows are not centered by default
         if ( !pImp->aWinState.isEmpty() )

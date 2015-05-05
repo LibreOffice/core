@@ -234,27 +234,27 @@ template<class T> class VclPtr;
 // Flags for StateChanged()
 enum class StateChangedType : sal_uInt16
 {
-    INITSHOW           = 1,
-    VISIBLE            = 2,
-    UPDATEMODE         = 3,
-    ENABLE             = 4,
-    TEXT               = 5,
-    IMAGE              = 6,
-    DATA               = 7,
-    STATE              = 8,
-    STYLE              = 9,
-    ZOOM               = 10,
-    BORDER             = 11,
+    InitShow           = 1,
+    Visible            = 2,
+    UpdateMode         = 3,
+    Enable             = 4,
+    Text               = 5,
+    Image              = 6,
+    Data               = 7,
+    State              = 8,
+    Style              = 9,
+    Zoom               = 10,
+    Border             = 11,
     Transparent        = 12,
-    CONTROLFONT        = 13,
-    CONTROLFOREGROUND  = 14,
-    CONTROLBACKGROUND  = 15,
-    READONLY           = 16,
-    EXTENDEDSTYLE      = 17,
-    MIRRORING          = 18,
-    LAYOUT             = 19,
-    CONTROL_FOCUS      = 20,
-    USER               = 10000
+    ControlFont        = 13,
+    ControlForeground  = 14,
+    ControlBackground  = 15,
+    ReadOnly           = 16,
+    ExtendedStyle      = 17,
+    Mirroring          = 18,
+    Layout             = 19,
+    ControlFocus       = 20,
+    User               = 10000
 };
 
 // GetFocusFlags
@@ -1246,7 +1246,7 @@ public:
      *
      * akin to gtk_widget_queue_resize
      */
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT);
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout);
 
     /*
      * Sets the "width-request" property

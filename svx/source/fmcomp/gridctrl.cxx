@@ -746,7 +746,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
 
     switch ( nType )
     {
-        case StateChangedType::MIRRORING:
+        case StateChangedType::Mirroring:
         {
             bool bIsRTLEnabled = IsRTLEnabled();
             for ( size_t i=0; i < (sizeof (pWindows) / sizeof(pWindows[0])); ++i )
@@ -754,7 +754,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
         }
         break;
 
-        case StateChangedType::ZOOM:
+        case StateChangedType::Zoom:
         {
             Fraction aZoom = GetZoom();
 
@@ -999,12 +999,12 @@ void DbGridControl::StateChanged( StateChangedType nType )
 
     switch (nType)
     {
-        case StateChangedType::MIRRORING:
+        case StateChangedType::Mirroring:
             ImplInitWindow( InitWritingMode );
             Invalidate();
             break;
 
-        case StateChangedType::ZOOM:
+        case StateChangedType::Zoom:
         {
             ImplInitWindow( InitFontFacet );
 
@@ -1015,15 +1015,15 @@ void DbGridControl::StateChanged( StateChangedType nType )
             ReserveControlArea((sal_uInt16)nX);
         }
         break;
-        case StateChangedType::CONTROLFONT:
+        case StateChangedType::ControlFont:
             ImplInitWindow( InitFontFacet );
             Invalidate();
             break;
-        case StateChangedType::CONTROLFOREGROUND:
+        case StateChangedType::ControlForeground:
             ImplInitWindow( InitForeground );
             Invalidate();
             break;
-        case StateChangedType::CONTROLBACKGROUND:
+        case StateChangedType::ControlBackground:
             ImplInitWindow( InitBackground );
             Invalidate();
             break;

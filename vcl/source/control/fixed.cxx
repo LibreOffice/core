@@ -287,14 +287,14 @@ void FixedText::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( (nType == StateChangedType::ENABLE) ||
-         (nType == StateChangedType::TEXT) ||
-         (nType == StateChangedType::UPDATEMODE) )
+    if ( (nType == StateChangedType::Enable) ||
+         (nType == StateChangedType::Text) ||
+         (nType == StateChangedType::UpdateMode) )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         if ( (GetPrevStyle() & FIXEDTEXT_VIEW_STYLE) !=
@@ -304,18 +304,18 @@ void FixedText::StateChanged( StateChangedType nType )
             Invalidate();
         }
     }
-    else if ( (nType == StateChangedType::ZOOM)  ||
-              (nType == StateChangedType::CONTROLFONT) )
+    else if ( (nType == StateChangedType::Zoom)  ||
+              (nType == StateChangedType::ControlFont) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
@@ -660,33 +660,33 @@ void FixedLine::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( (nType == StateChangedType::ENABLE) ||
-         (nType == StateChangedType::TEXT) ||
-         (nType == StateChangedType::UPDATEMODE) )
+    if ( (nType == StateChangedType::Enable) ||
+         (nType == StateChangedType::Text) ||
+         (nType == StateChangedType::UpdateMode) )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         if ( (GetPrevStyle() & FIXEDLINE_VIEW_STYLE) !=
              (GetStyle() & FIXEDLINE_VIEW_STYLE) )
             Invalidate();
     }
-    else if ( (nType == StateChangedType::ZOOM)  ||
-              (nType == StateChangedType::STYLE) ||
-              (nType == StateChangedType::CONTROLFONT) )
+    else if ( (nType == StateChangedType::Zoom)  ||
+              (nType == StateChangedType::Style) ||
+              (nType == StateChangedType::ControlFont) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::ControlForeground )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
@@ -810,20 +810,20 @@ void FixedBitmap::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( (nType == StateChangedType::DATA) ||
-         (nType == StateChangedType::UPDATEMODE) )
+    if ( (nType == StateChangedType::Data) ||
+         (nType == StateChangedType::UpdateMode) )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         if ( (GetPrevStyle() & FIXEDBITMAP_VIEW_STYLE) !=
              (GetStyle() & FIXEDBITMAP_VIEW_STYLE) )
             Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings();
         Invalidate();
@@ -845,7 +845,7 @@ void FixedBitmap::DataChanged( const DataChangedEvent& rDCEvt )
 void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 {
     maBitmap = rBitmap;
-    StateChanged( StateChangedType::DATA );
+    StateChanged( StateChangedType::Data );
     queue_resize();
 }
 
@@ -984,21 +984,21 @@ void FixedImage::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( (nType == StateChangedType::ENABLE) ||
-         (nType == StateChangedType::DATA) ||
-         (nType == StateChangedType::UPDATEMODE) )
+    if ( (nType == StateChangedType::Enable) ||
+         (nType == StateChangedType::Data) ||
+         (nType == StateChangedType::UpdateMode) )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == StateChangedType::STYLE )
+    else if ( nType == StateChangedType::Style )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         if ( (GetPrevStyle() & FIXEDIMAGE_VIEW_STYLE) !=
              (GetStyle() & FIXEDIMAGE_VIEW_STYLE) )
             Invalidate();
     }
-    else if ( nType == StateChangedType::CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings();
         Invalidate();
@@ -1022,7 +1022,7 @@ void FixedImage::SetImage( const Image& rImage )
     if ( rImage != maImage )
     {
         maImage = rImage;
-        StateChanged( StateChangedType::DATA );
+        StateChanged( StateChangedType::Data );
         queue_resize();
     }
 }

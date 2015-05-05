@@ -594,7 +594,7 @@ void ScFunctionDockWin::SetDescription()
         aBuf.append(*pDesc->pFuncDesc);
 
         aFiFuncDesc->SetText(aBuf.makeStringAndClear());
-        aFiFuncDesc->StateChanged(StateChangedType::TEXT);
+        aFiFuncDesc->StateChanged(StateChangedType::Text);
         aFiFuncDesc->Invalidate();
         aFiFuncDesc->Update();
 
@@ -1089,7 +1089,7 @@ void ScFunctionDockWin::StateChanged( StateChangedType nStateChange )
 {
     SfxDockingWindow::StateChanged( nStateChange );
 
-    if (nStateChange == StateChangedType::INITSHOW)
+    if (nStateChange == StateChangedType::InitShow)
     {
         UseSplitterInitPos();           //  set initial splitter position if necessary
     }

@@ -39,7 +39,7 @@ public:
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
 
 };
 

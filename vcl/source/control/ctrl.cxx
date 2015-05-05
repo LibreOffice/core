@@ -81,7 +81,7 @@ void Control::EnableRTL( bool bEnable )
     // convenience: for controls also switch layout mode
     SetLayoutMode( bEnable ? TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT :
                                 TEXT_LAYOUT_TEXTORIGIN_LEFT );
-    StateChanged( StateChangedType::MIRRORING );
+    StateChanged( StateChangedType::Mirroring );
     OutputDevice::EnableRTL(bEnable);
 }
 
@@ -261,7 +261,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
             if ( !mbHasControlFocus )
             {
                 mbHasControlFocus = true;
-                StateChanged( StateChangedType::CONTROL_FOCUS );
+                StateChanged( StateChangedType::ControlFocus );
                 if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
                     // been destroyed within the handler
                     return true;
@@ -275,7 +275,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
                 if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
                 {
                     mbHasControlFocus = false;
-                    StateChanged( StateChangedType::CONTROL_FOCUS );
+                    StateChanged( StateChangedType::ControlFocus );
                     if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
                         // been destroyed within the handler
                         return true;
@@ -288,11 +288,11 @@ bool Control::Notify( NotifyEvent& rNEvt )
 
 void Control::StateChanged( StateChangedType nStateChange )
 {
-    if( nStateChange == StateChangedType::INITSHOW   ||
-        nStateChange == StateChangedType::VISIBLE    ||
-        nStateChange == StateChangedType::ZOOM       ||
-        nStateChange == StateChangedType::BORDER     ||
-        nStateChange == StateChangedType::CONTROLFONT
+    if( nStateChange == StateChangedType::InitShow   ||
+        nStateChange == StateChangedType::Visible    ||
+        nStateChange == StateChangedType::Zoom       ||
+        nStateChange == StateChangedType::Border     ||
+        nStateChange == StateChangedType::ControlFont
         )
     {
         ImplClearLayoutData();
