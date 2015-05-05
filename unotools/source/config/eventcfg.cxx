@@ -102,7 +102,7 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
     bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
     bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
     OUString GetEventName( GlobalEventId nID );
 };
@@ -367,7 +367,7 @@ sal_Bool SAL_CALL GlobalEventConfig::hasByName( const OUString& aName ) throw (R
 Type SAL_CALL GlobalEventConfig::getElementType(  ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->getElementType( );
+    return GlobalEventConfig_Impl::getElementType( );
 }
 sal_Bool SAL_CALL GlobalEventConfig::hasElements(  ) throw (RuntimeException, std::exception)
 {

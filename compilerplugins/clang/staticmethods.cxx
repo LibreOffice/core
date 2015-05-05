@@ -184,6 +184,10 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (fqn == "ColumnBatch::getValue") {
         return true;
     }
+    // depends on config options
+    if (fqn == "psp::PrintFontManager::autoInstallFontLangSupport") {
+        return true;
+    }
 
     bVisitedThis = false;
     TraverseStmt(pCXXMethodDecl->getBody());
@@ -199,7 +203,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false);
+loplugin::Plugin::Registration<StaticMethods> X("staticmethods", true);
 
 }
 
