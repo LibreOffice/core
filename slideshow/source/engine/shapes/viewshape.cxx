@@ -63,7 +63,7 @@ namespace slideshow
         bool ViewShape::prefetch( RendererCacheEntry&                   io_rCacheEntry,
                                   const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
                                   const GDIMetaFileSharedPtr&           rMtf,
-                                  const ShapeAttributeLayerSharedPtr&   rAttr ) const
+                                  const ShapeAttributeLayerSharedPtr&   rAttr )
         {
             ENSURE_OR_RETURN_FALSE( rMtf,
                                "ViewShape::prefetch(): no valid metafile!" );

@@ -636,7 +636,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
                         0
                     };
-                    SfxItemSet *pItemSet = new SfxItemSet( pDocSh->GetPool(), nRange );
+                    SfxItemSet *pItemSet = new SfxItemSet( SmDocShell::GetPool(), nRange );
                     SmModule *pp = SM_MOD();
                     pp->GetConfig()->ConfigToItemSet(*pItemSet);
                     VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, pItemSet );

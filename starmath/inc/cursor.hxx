@@ -460,7 +460,7 @@ private:
     SmNode* Product();
     SmNode* Factor();
     SmNode* Postfix();
-    SmNode* Error();
+    static SmNode* Error();
 };
 
 

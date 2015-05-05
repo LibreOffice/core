@@ -137,10 +137,10 @@ Any CacheConfiguration::GetValue (const OUString& rName)
     return aResult;
 }
 
-IMPL_LINK_NOARG_TYPED(CacheConfiguration, TimerCallback, Timer *, void)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED(CacheConfiguration, TimerCallback, Timer *, void)
 {
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
-    // Release out reference to the instance.
+    // Release our reference to the instance.
     rInstancePtr.reset();
 }
 

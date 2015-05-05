@@ -93,21 +93,15 @@ struct SfxGroupInfo_Impl
                     nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(false) {}
 };
 
-struct CuiMacroInfo
-{
-};
-
 typedef boost::ptr_vector<SfxGroupInfo_Impl> SfxGroupInfoArr_Impl;
 
 class SfxConfigFunctionListBox : public SvTreeListBox
 {
     friend class SfxConfigGroupListBox;
-    Timer                aTimer;
-    SvTreeListEntry*         pCurEntry;
+    SvTreeListEntry*     pCurEntry;
     SfxGroupInfoArr_Impl aArr;
     SfxStylesInfo_Impl*  pStylesInfo;
 
-    DECL_LINK_TYPED( TimerHdl, Timer*, void );
     virtual void  MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 public:

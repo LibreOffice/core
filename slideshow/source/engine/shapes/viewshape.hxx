@@ -236,10 +236,10 @@ namespace slideshow
 
             /** Prefetch Renderer for given canvas
              */
-            bool prefetch( RendererCacheEntry&                  io_rCacheEntry,
+            static bool prefetch( RendererCacheEntry&                  io_rCacheEntry,
                            const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
                            const GDIMetaFileSharedPtr&          rMtf,
-                           const ShapeAttributeLayerSharedPtr&  rAttr ) const;
+                           const ShapeAttributeLayerSharedPtr&  rAttr );
 
             /** Draw with prefetched Renderer to stored canvas
 

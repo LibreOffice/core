@@ -256,11 +256,6 @@ SfxConfigFunctionListBox::SfxConfigFunctionListBox(vcl::Window* pParent, WinBits
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
-
-    // Timer for the BallonHelp
-    aTimer.SetTimeout( 200 );
-    aTimer.SetTimeoutHdl(
-        LINK( this, SfxConfigFunctionListBox, TimerHdl ) );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigFunctionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
@@ -287,16 +282,6 @@ void SfxConfigFunctionListBox::dispose()
 
 void SfxConfigFunctionListBox::MouseMove( const MouseEvent& )
 {
-}
-
-IMPL_LINK_TYPED( SfxConfigFunctionListBox, TimerHdl, Timer*, pTimer, void)
-/*  Description
-    Timer-handler for showing a help-text. If the mouse pointer is
-    still on the currently selected entry after the timer has run out,
-    the entry's help-text is shown as a balloon-help.
-*/
-{
-    (void)pTimer; // unused
 }
 
 void SfxConfigFunctionListBox::ClearAll()

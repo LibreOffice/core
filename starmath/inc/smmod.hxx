@@ -76,13 +76,13 @@ public:
 
     const ResStringArray& GetUiSymbolNamesArray() const     { return aUiSymbolNamesAry; }
     const ResStringArray& GetExportSymbolNamesArray() const { return aExportSymbolNamesAry; }
-    const OUString        GetUiSymbolName( const OUString &rExportName ) const;
-    const OUString        GetExportSymbolName( const OUString &rUiName ) const;
+    static const OUString GetUiSymbolName( const OUString &rExportName );
+    static const OUString GetExportSymbolName( const OUString &rUiName );
 
     const ResStringArray& GetUiSymbolSetNamesArray() const     { return aUiSymbolSetNamesAry; }
     const ResStringArray& GetExportSymbolSetNamesArray() const { return aExportSymbolSetNamesAry; }
-    const OUString        GetUiSymbolSetName( const OUString &rExportName ) const;
-    const OUString        GetExportSymbolSetName( const OUString &rUiName ) const;
+    static const OUString GetUiSymbolSetName( const OUString &rExportName );
+    static const OUString GetExportSymbolSetName( const OUString &rUiName );
 };
 
 class SmModule : public SfxModule, utl::ConfigurationListener
@@ -93,7 +93,7 @@ class SmModule : public SfxModule, utl::ConfigurationListener
     std::unique_ptr<SvtSysLocale> mpSysLocale;
     VclPtr<VirtualDevice>    mpVirtualDev;
 
-    void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
+    static void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
 public:
     TYPEINFO_OVERRIDE();
@@ -116,7 +116,7 @@ public:
 
     SmLocalizedSymbolData &   GetLocSymbolData();
 
-    void GetState(SfxItemSet&);
+    static void GetState(SfxItemSet&);
 
     const SvtSysLocale& GetSysLocale();
 

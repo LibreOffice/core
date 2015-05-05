@@ -249,15 +249,15 @@ class SmViewShell: public SfxViewShell
     bool bInsertIntoEditWindow;
 protected:
 
-    Size GetTextLineSize(OutputDevice& rDevice,
+    static Size GetTextLineSize(OutputDevice& rDevice,
                          const OUString& rLine);
-    Size GetTextSize(OutputDevice& rDevice,
+    static Size GetTextSize(OutputDevice& rDevice,
                      const OUString& rText,
                      long          MaxWidth);
-    void DrawTextLine(OutputDevice& rDevice,
+    static void DrawTextLine(OutputDevice& rDevice,
                       const Point&  rPosition,
                       const OUString& rLine);
-    void DrawText(OutputDevice& rDevice,
+    static void DrawText(OutputDevice& rDevice,
                   const Point&  rPosition,
                   const OUString& rText,
                   sal_uInt16        MaxWidth);

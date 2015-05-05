@@ -909,7 +909,7 @@ void SmEditWindow::SelPrevMark()
     }
 }
 
-bool SmEditWindow::HasMark(const OUString& rText) const
+bool SmEditWindow::HasMark(const OUString& rText)
     // returns true iff 'rText' contains a mark
 {
     return rText.indexOf("<?>") != -1;

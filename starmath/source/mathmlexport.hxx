@@ -50,7 +50,7 @@ public:
     bool Export(SfxMedium &rMedium);
     void SetFlat(bool bIn) {bFlat = bIn;}
 
-    bool WriteThroughComponent(
+    static bool WriteThroughComponent(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
             xOutputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
@@ -61,7 +61,7 @@ public:
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
 
-    bool WriteThroughComponent(
+    static bool WriteThroughComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent,
         const sal_Char* pStreamName,

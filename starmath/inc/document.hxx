@@ -165,8 +165,8 @@ public:
                 SmDocShell( SfxModelFlags i_nSfxCreationFlags );
     virtual     ~SmDocShell();
 
-    void        LoadSymbols();
-    void        SaveSymbols();
+    static void LoadSymbols();
+    static void SaveSymbols();
 
     void        ArrangeFormula();
 
@@ -207,7 +207,7 @@ public:
 
     virtual ::svl::IUndoManager *GetUndoManager () SAL_OVERRIDE;
 
-    SfxItemPool& GetPool() const;
+    static SfxItemPool& GetPool();
 
     void        Execute( SfxRequest& rReq );
     void        GetState(SfxItemSet &);

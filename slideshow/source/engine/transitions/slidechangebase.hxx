@@ -123,7 +123,7 @@ protected:
 
     ::basegfx::B2ISize getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const;
 
-    void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
+    static void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
                        boost::shared_ptr<cppcanvas::Canvas> const& pCanvas );
 
     /** Called on derived classes to perform actions before first run.
@@ -182,7 +182,7 @@ private:
         double                     nPrio ) const;
 
     void addSprites( ViewEntry& rEntry );
-    void clearViewEntry( ViewEntry& rEntry );
+    static void clearViewEntry( ViewEntry& rEntry );
 
     ViewsVecT::iterator lookupView( UnoViewSharedPtr const & pView );
     ViewsVecT::const_iterator lookupView( UnoViewSharedPtr const & pView ) const;

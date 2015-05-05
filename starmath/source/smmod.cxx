@@ -72,7 +72,7 @@ SmLocalizedSymbolData::~SmLocalizedSymbolData()
 }
 
 
-const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName ) const
+const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
 {
     OUString aRes;
 
@@ -93,7 +93,7 @@ const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportNa
 }
 
 
-const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName ) const
+const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName )
 {
     OUString aRes;
 
@@ -114,7 +114,7 @@ const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiNa
 }
 
 
-const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName ) const
+const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName )
 {
     OUString aRes;
 
@@ -135,7 +135,7 @@ const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExpor
 }
 
 
-const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rUiName ) const
+const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rUiName )
 {
     OUString aRes;
 

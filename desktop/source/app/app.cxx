@@ -1864,7 +1864,7 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
 }
 
 
-IMPL_LINK_NOARG_TYPED(Desktop, AsyncInitFirstRun, Timer *, void)
+IMPL_STATIC_LINK_NOINSTANCE_TYPED(Desktop, AsyncInitFirstRun, Timer *, /*unused*/, void)
 {
     DoFirstRunInitializations();
 }

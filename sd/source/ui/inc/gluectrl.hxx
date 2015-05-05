@@ -33,7 +33,7 @@ class GlueEscDirLB : public ListBox
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 public:
-                GlueEscDirLB( vcl::Window* pParent,
+                 GlueEscDirLB( vcl::Window* pParent,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                  virtual ~GlueEscDirLB();
 
@@ -48,7 +48,7 @@ public:
 class SdTbxCtlGlueEscDir: public SfxToolBoxControl
 {
 private:
-    sal_uInt16  GetEscDirPos( SdrEscapeDirection nEscDir );
+    static sal_uInt16  GetEscDirPos( SdrEscapeDirection nEscDir );
 
 public:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,

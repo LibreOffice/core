@@ -262,7 +262,7 @@ struct EventMultiplexerImpl
                           double                            nPriority,
                           RegisterFunction                  pRegisterListener );
 
-    bool notifyAllAnimationHandlers( ImplAnimationHandlers const& rContainer,
+    static bool notifyAllAnimationHandlers( ImplAnimationHandlers const& rContainer,
                                      AnimationNodeSharedPtr const& rNode );
 
     bool notifyMouseHandlers(
@@ -1110,14 +1110,14 @@ bool EventMultiplexer::notifySlideEndEvent()
 bool EventMultiplexer::notifyAnimationStart(
     const AnimationNodeSharedPtr& rNode )
 {
-    return mpImpl->notifyAllAnimationHandlers( mpImpl->maAnimationStartHandlers,
+    return EventMultiplexerImpl::notifyAllAnimationHandlers( mpImpl->maAnimationStartHandlers,
                                                rNode );
 }
 
 bool EventMultiplexer::notifyAnimationEnd(
     const AnimationNodeSharedPtr& rNode )
 {
-    return mpImpl->notifyAllAnimationHandlers( mpImpl->maAnimationEndHandlers,
+    return EventMultiplexerImpl::notifyAllAnimationHandlers( mpImpl->maAnimationEndHandlers,
                                                rNode );
 }
 
@@ -1130,7 +1130,7 @@ bool EventMultiplexer::notifySlideAnimationsEnd()
 bool EventMultiplexer::notifyAudioStopped(
     const AnimationNodeSharedPtr& rNode )
 {
-    return mpImpl->notifyAllAnimationHandlers(
+    return EventMultiplexerImpl::notifyAllAnimationHandlers(
         mpImpl->maAudioStoppedHandlers,
         rNode );
 }
@@ -1138,7 +1138,7 @@ bool EventMultiplexer::notifyAudioStopped(
 bool EventMultiplexer::notifyCommandStopAudio(
     const AnimationNodeSharedPtr& rNode )
 {
-    return mpImpl->notifyAllAnimationHandlers(
+    return EventMultiplexerImpl::notifyAllAnimationHandlers(
         mpImpl->maCommandStopAudioHandlers,
         rNode );
 }

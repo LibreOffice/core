@@ -1272,7 +1272,7 @@ void SmDocShell::Draw(OutputDevice *pDevice,
     DrawFormula(*pDevice, atmppoint);
 }
 
-SfxItemPool& SmDocShell::GetPool() const
+SfxItemPool& SmDocShell::GetPool()
 {
     return SfxGetpApp()->GetPool();
 }

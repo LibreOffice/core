@@ -2324,14 +2324,12 @@ void SmParser::Special()
     {
         if (IsImportSymbolNames())
         {
-            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-            aNewName = rLSD.GetUiSymbolName(rName.copy(1));
+            aNewName = SmLocalizedSymbolData::GetUiSymbolName(rName.copy(1));
             bReplace = true;
         }
         else if (IsExportSymbolNames())
         {
-            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-            aNewName = rLSD.GetExportSymbolName(rName.copy(1));
+            aNewName = SmLocalizedSymbolData::GetExportSymbolName(rName.copy(1));
             bReplace = true;
         }
     }

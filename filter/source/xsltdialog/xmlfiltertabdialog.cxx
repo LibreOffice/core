@@ -305,7 +305,7 @@ IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 
 
-IMPL_LINK_NOARG_TYPED( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, bool )
+IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, bool )
 {
     return true;
 }

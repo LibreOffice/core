@@ -41,24 +41,24 @@
 
 inline const OUString GetExportSymbolName( const OUString &rUiSymbolName )
 {
-    return SM_MOD()->GetLocSymbolData().GetExportSymbolName( rUiSymbolName );
+    return SmLocalizedSymbolData::GetExportSymbolName( rUiSymbolName );
 }
 
 
 inline const OUString GetUiSymbolName( const OUString &rExportSymbolName )
 {
-    return SM_MOD()->GetLocSymbolData().GetUiSymbolName( rExportSymbolName );
+    return SmLocalizedSymbolData::GetUiSymbolName( rExportSymbolName );
 }
 
 inline const OUString GetExportSymbolSetName( const OUString &rUiSymbolSetName )
 {
-    return SM_MOD()->GetLocSymbolData().GetExportSymbolSetName( rUiSymbolSetName );
+    return SmLocalizedSymbolData::GetExportSymbolSetName( rUiSymbolSetName );
 }
 
 
 inline const OUString GetUiSymbolSetName( const OUString &rExportSymbolSetName )
 {
-    return SM_MOD()->GetLocSymbolData().GetUiSymbolSetName( rExportSymbolSetName );
+    return SmLocalizedSymbolData::GetUiSymbolSetName( rExportSymbolSetName );
 }
 
 

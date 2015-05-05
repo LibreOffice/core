@@ -128,8 +128,8 @@ protected:
     sal_uInt16 nMaxItems;
     std::deque<vcl::Font> aFontVec;
 
-    bool     CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont) const;
-    OUString GetStringItem(const vcl::Font &rItem);
+    static bool     CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont);
+    static OUString GetStringItem(const vcl::Font &rItem);
 
 public:
     SmFontPickList(sal_uInt16 nMax = 5) : nMaxItems(nMax) {}

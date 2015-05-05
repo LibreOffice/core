@@ -672,7 +672,7 @@ namespace slideshow
 
         sal_Int32 DrawShapeSubsetting::implGetNumberOfTreeNodes( const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
                                                                  const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd,
-                                                                 DocTreeNode::NodeType                                                eNodeType ) const
+                                                                 DocTreeNode::NodeType                                                eNodeType )
         {
             const IndexClassificator eRequestedClass(
                 mapDocTreeNode( eNodeType ) );

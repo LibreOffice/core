@@ -204,9 +204,9 @@ namespace slideshow
             void initCurrentSubsets();
             void reset();
 
-            sal_Int32   implGetNumberOfTreeNodes( const IndexClassificatorVector::const_iterator&   rBegin,
+            static sal_Int32   implGetNumberOfTreeNodes( const IndexClassificatorVector::const_iterator&   rBegin,
                                                   const IndexClassificatorVector::const_iterator&   rEnd,
-                                                  DocTreeNode::NodeType                             eNodeType ) const;
+                                                  DocTreeNode::NodeType                             eNodeType );
             DocTreeNode implGetTreeNode( const IndexClassificatorVector::const_iterator&    rBegin,
                                          const IndexClassificatorVector::const_iterator&    rEnd,
                                          sal_Int32                                          nNodeIndex,

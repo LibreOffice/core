@@ -181,11 +181,14 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // template magic
-    if (fqn == "ColumnBatch::getValue") {
+    if (fqn == "ColumnBatch::getValue" || startsWith(fqn, "TitleImpl::")
+        || fqn == "ooo::vba::DefaultReturnHelper::getDefaultPropertyName") {
         return true;
     }
     // depends on config options
-    if (fqn == "psp::PrintFontManager::autoInstallFontLangSupport") {
+    if (fqn == "psp::PrintFontManager::autoInstallFontLangSupport"
+        || fqn == "GtkSalFrame::AllocateFrame"
+        || fqn == "GtkSalFrame::TriggerPaintEvent") {
         return true;
     }
 
@@ -203,7 +206,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods", true);
+loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false);
 
 }
 

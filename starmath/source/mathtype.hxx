@@ -141,12 +141,12 @@ private:
         sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation,
         bool bSilent);
     void HandleNudge();
-    int xfLMOVE(sal_uInt8 nTest) const {return nTest&0x80;}
-    int xfAUTO(sal_uInt8 nTest) const {return nTest&0x10;}
-    int xfEMBELL(sal_uInt8 nTest) const {return nTest&0x20;}
-    int xfNULL(sal_uInt8 nTest) const {return nTest&0x10;}
-    int xfLSPACE(sal_uInt8 nTest) const {return nTest&0x40;}
-    int xfRULER(sal_uInt8 nTest) const {return nTest&0x20;}
+    static int xfLMOVE(sal_uInt8 nTest) {return nTest&0x80;}
+    static int xfAUTO(sal_uInt8 nTest) {return nTest&0x10;}
+    static int xfEMBELL(sal_uInt8 nTest) {return nTest&0x20;}
+    static int xfNULL(sal_uInt8 nTest) {return nTest&0x10;}
+    static int xfLSPACE(sal_uInt8 nTest) {return nTest&0x40;}
+    static int xfRULER(sal_uInt8 nTest) {return nTest&0x20;}
 
     void HandleNodes(SmNode *pNode,int nLevel=0);
     int StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation=0);

@@ -48,7 +48,7 @@ public:
 
     sal_uLong Import(SfxMedium &rMedium);
 
-    sal_uLong ReadThroughComponent(
+    static sal_uLong ReadThroughComponent(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
@@ -57,7 +57,7 @@ public:
         const sal_Char* pFilterName,
         bool bEncrypted );
 
-    sal_uLong ReadThroughComponent(
+    static sal_uLong ReadThroughComponent(
          const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         const sal_Char* pStreamName,

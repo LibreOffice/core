@@ -819,9 +819,9 @@ public:
 class SmRootNode : public SmStructureNode
 {
 protected:
-    void   GetHeightVerOffset(const SmRect &rRect,
-                              long &rHeight, long &rVerOffset) const;
-    Point  GetExtraPos(const SmRect &rRootSymbol, const SmRect &rExtra) const;
+    static void  GetHeightVerOffset(const SmRect &rRect,
+                              long &rHeight, long &rVerOffset);
+    static Point GetExtraPos(const SmRect &rRootSymbol, const SmRect &rExtra);
 
 public:
     SmRootNode(const SmToken &rNodeToken)

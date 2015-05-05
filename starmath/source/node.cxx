@@ -935,7 +935,7 @@ void SmUnHorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
 
 void SmRootNode::GetHeightVerOffset(const SmRect &rRect,
-                                    long &rHeight, long &rVerOffset) const
+                                    long &rHeight, long &rVerOffset)
     // calculate height and vertical offset of root sign suitable for 'rRect'
 {
     rVerOffset = (rRect.GetBottom() - rRect.GetAlignB()) / 2;
@@ -947,7 +947,7 @@ void SmRootNode::GetHeightVerOffset(const SmRect &rRect,
 
 
 Point SmRootNode::GetExtraPos(const SmRect &rRootSymbol,
-                              const SmRect &rExtra) const
+                              const SmRect &rExtra)
 {
     const Size &rSymSize = rRootSymbol.GetSize();
 

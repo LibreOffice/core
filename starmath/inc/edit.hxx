@@ -122,7 +122,7 @@ public:
     void                MarkError(const Point &rPos);
     void                SelNextMark();
     void                SelPrevMark();
-    bool                HasMark(const OUString &rText) const;
+    static bool         HasMark(const OUString &rText);
 
     void                Flush();
     void                DeleteEditView( SmViewShell &rView );

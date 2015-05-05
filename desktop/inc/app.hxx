@@ -154,7 +154,7 @@ class Desktop : public Application
 
         static void             EnableOleAutomation();
                                 DECL_LINK( ImplInitFilterHdl, ConvertData* );
-        DECL_LINK_TYPED( AsyncInitFirstRun, Timer*, void );
+        DECL_STATIC_LINK_TYPED( Desktop, AsyncInitFirstRun, Timer*, void );
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the
             respective flag in the configuration is reset.</p>
