@@ -56,7 +56,7 @@ namespace basegfx
             B2DPolygon aCurrPoly;
 
             // skip initial whitespace
-            ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+            basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
             while(nPos < nLen)
             {
@@ -78,7 +78,7 @@ namespace basegfx
                     {
                         // consume CurrChar and whitespace
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
                         // create closed polygon and reset import values
                         if(aCurrPoly.count())
@@ -122,14 +122,14 @@ namespace basegfx
 
                         // consume CurrChar and whitespace
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && basegfx::internal::isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
 
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -155,13 +155,13 @@ namespace basegfx
                     case 'H' :
                     {
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && basegfx::internal::isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY(nLastY);
 
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -185,13 +185,13 @@ namespace basegfx
                     case 'V' :
                     {
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && basegfx::internal::isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX(nLastX), nY;
 
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -215,17 +215,17 @@ namespace basegfx
                     case 'S' :
                     {
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && basegfx::internal::isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
                             double nX2, nY2;
 
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -274,20 +274,20 @@ namespace basegfx
                     case 'C' :
                     {
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && basegfx::internal::isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
                             double nX1, nY1;
                             double nX2, nY2;
 
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -324,17 +324,17 @@ namespace basegfx
                     case 'Q' :
                     {
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && basegfx::internal::isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
                             double nX1, nY1;
 
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -375,14 +375,14 @@ namespace basegfx
                     case 'T' :
                     {
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && basegfx::internal::isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
 
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -449,21 +449,21 @@ namespace basegfx
                     case 'A' :
                     {
                         nPos++;
-                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        basegfx::internal::skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && basegfx::internal::isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
                             double fRX, fRY, fPhi;
                             sal_Int32 bLargeArcFlag, bSweepFlag;
 
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(fRX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(fRY, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(fPhi, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importFlagAndSpaces(bLargeArcFlag, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importFlagAndSpaces(bSweepFlag, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(fRX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(fRY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(fPhi, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importFlagAndSpaces(bLargeArcFlag, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importFlagAndSpaces(bSweepFlag, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -647,18 +647,18 @@ namespace basegfx
             double nX, nY;
 
             // skip initial whitespace
-            ::basegfx::internal::lcl_skipSpaces(nPos, rSvgPointsAttribute, nLen);
+            basegfx::internal::skipSpaces(nPos, rSvgPointsAttribute, nLen);
 
             while(nPos < nLen)
             {
-                if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgPointsAttribute, nLen)) return false;
-                if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgPointsAttribute, nLen)) return false;
+                if(!basegfx::internal::importDoubleAndSpaces(nX, nPos, rSvgPointsAttribute, nLen)) return false;
+                if(!basegfx::internal::importDoubleAndSpaces(nY, nPos, rSvgPointsAttribute, nLen)) return false;
 
                 // add point
                 o_rPoly.append(B2DPoint(nX, nY));
 
                 // skip to next number, or finish
-                ::basegfx::internal::lcl_skipSpaces(nPos, rSvgPointsAttribute, nLen);
+                basegfx::internal::skipSpaces(nPos, rSvgPointsAttribute, nLen);
             }
 
             return true;
@@ -722,10 +722,10 @@ namespace basegfx
                     }
 
                     // Write 'moveto' and the 1st coordinates, set aLastSVGCommand to 'lineto'
-                    aResult.append(::basegfx::internal::lcl_getCommand('M', 'm', bUseRelativeCoordinatesForFirstPoint));
-                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint);
-                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint);
-                    aLastSVGCommand =  ::basegfx::internal::lcl_getCommand('L', 'l', bUseRelativeCoordinatesForFirstPoint);
+                    aResult.append(basegfx::internal::getCommand('M', 'm', bUseRelativeCoordinatesForFirstPoint));
+                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint);
+                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint);
+                    aLastSVGCommand =  basegfx::internal::getCommand('L', 'l', bUseRelativeCoordinatesForFirstPoint);
                     aCurrentSVGPosition = aEdgeStart;
 
                     for(sal_uInt32 nIndex(0); nIndex < nEdgeCount; nIndex++)
@@ -779,7 +779,7 @@ namespace basegfx
                                 // approximately equal, export as quadratic bezier
                                 if(bSymmetricAtEdgeStart)
                                 {
-                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('T', 't', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(basegfx::internal::getCommand('T', 't', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -787,14 +787,14 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
-                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('Q', 'q', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(basegfx::internal::getCommand('Q', 'q', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -802,10 +802,10 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
@@ -815,7 +815,7 @@ namespace basegfx
                                 // export as cubic bezier
                                 if(bSymmetricAtEdgeStart)
                                 {
-                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('S', 's', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(basegfx::internal::getCommand('S', 's', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -823,16 +823,16 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
-                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('C', 'c', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(basegfx::internal::getCommand('C', 'c', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -840,12 +840,12 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
@@ -871,7 +871,7 @@ namespace basegfx
                                 else if(bXEqual)
                                 {
                                     // export as vertical line
-                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('V', 'v', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(basegfx::internal::getCommand('V', 'v', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -879,13 +879,13 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else if(bYEqual)
                                 {
                                     // export as horizontal line
-                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('H', 'h', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(basegfx::internal::getCommand('H', 'h', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -893,13 +893,13 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
                                     // export as line
-                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('L', 'l', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(basegfx::internal::getCommand('L', 'l', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -907,8 +907,8 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -921,7 +921,7 @@ namespace basegfx
                     // close path if closed poly (Z and z are equivalent here, but looks nicer when case is matched)
                     if(aPolygon.isClosed())
                     {
-                        aResult.append(::basegfx::internal::lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
+                        aResult.append(basegfx::internal::getCommand('Z', 'z', bUseRelativeCoordinates));
                     }
 
                     if(!bHandleRelativeNextPointCompatible)

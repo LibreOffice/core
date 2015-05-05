@@ -24,9 +24,9 @@ namespace basegfx
 {
     namespace internal
     {
-        void lcl_skipSpaces(sal_Int32&              io_rPos,
-                            const OUString&  rStr,
-                            const sal_Int32         nLen)
+        void skipSpaces(sal_Int32&      io_rPos,
+                        const OUString& rStr,
+                        const sal_Int32 nLen)
         {
             while( io_rPos < nLen &&
                     ' ' == rStr[io_rPos] )
@@ -35,9 +35,9 @@ namespace basegfx
             }
         }
 
-        void lcl_skipSpacesAndCommas(sal_Int32&             io_rPos,
-                                        const OUString& rStr,
-                                        const sal_Int32         nLen)
+        void skipSpacesAndCommas(sal_Int32&      io_rPos,
+                                 const OUString& rStr,
+                                 const sal_Int32 nLen)
         {
             while(io_rPos < nLen
                     && (' ' == rStr[io_rPos] || ',' == rStr[io_rPos]))
@@ -46,7 +46,9 @@ namespace basegfx
             }
         }
 
-        bool lcl_getDoubleChar(double& o_fRetval, sal_Int32& io_rPos, const OUString& rStr)
+        bool getDoubleChar(double&         o_fRetval,
+                           sal_Int32&      io_rPos,
+                           const OUString& rStr)
         {
             sal_Unicode aChar( rStr[io_rPos] );
             OUStringBuffer sNumberString;
@@ -120,23 +122,23 @@ namespace basegfx
             return false;
         }
 
-        bool lcl_importDoubleAndSpaces( double&                 o_fRetval,
-                                        sal_Int32&              io_rPos,
-                                        const OUString&  rStr,
-                                        const sal_Int32         nLen )
+        bool importDoubleAndSpaces(double&         o_fRetval,
+                                   sal_Int32&      io_rPos,
+                                   const OUString& rStr,
+                                   const sal_Int32 nLen )
         {
-            if( !lcl_getDoubleChar(o_fRetval, io_rPos, rStr) )
+            if( !getDoubleChar(o_fRetval, io_rPos, rStr) )
                 return false;
 
-            lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
+            skipSpacesAndCommas(io_rPos, rStr, nLen);
 
             return true;
         }
 
-        bool lcl_importFlagAndSpaces(sal_Int32&         o_nRetval,
-                                     sal_Int32&         io_rPos,
-                                     const OUString&    rStr,
-                                     const sal_Int32    nLen)
+        bool importFlagAndSpaces(sal_Int32&      o_nRetval,
+                                 sal_Int32&      io_rPos,
+                                 const OUString& rStr,
+                                 const sal_Int32 nLen)
         {
             sal_Unicode aChar( rStr[io_rPos] );
 
@@ -153,15 +155,15 @@ namespace basegfx
             else
                 return false;
 
-            lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
+            skipSpacesAndCommas(io_rPos, rStr, nLen);
 
             return true;
         }
 
-        void lcl_putNumberCharWithSpace( OUStringBuffer& rStr,
-                                            double              fValue,
-                                            double              fOldValue,
-                                            bool                    bUseRelativeCoordinates )
+        void putNumberCharWithSpace(OUStringBuffer& rStr,
+                                    double          fValue,
+                                    double          fOldValue,
+                                    bool            bUseRelativeCoordinates )
         {
             if( bUseRelativeCoordinates )
                 fValue -= fOldValue;
@@ -169,7 +171,7 @@ namespace basegfx
             const sal_Int32 aLen( rStr.getLength() );
             if(aLen)
             {
-                if( lcl_isOnNumberChar(rStr[aLen - 1], false, true) &&
+                if( isOnNumberChar(rStr[aLen - 1], false, true) &&
                     fValue >= 0.0 )
                 {
                     rStr.append( ' ' );
@@ -178,7 +180,6 @@ namespace basegfx
 
             rStr.append(fValue);
         }
-
     } // namespace internal
 }
 

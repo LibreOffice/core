@@ -27,15 +27,17 @@ namespace basegfx
 {
     namespace internal
     {
-        void lcl_skipSpaces(sal_Int32&              io_rPos,
-                            const OUString&  rStr,
-                            const sal_Int32         nLen);
+        void skipSpaces(sal_Int32&      io_rPos,
+                        const OUString& rStr,
+                        const sal_Int32 nLen);
 
-        void lcl_skipSpacesAndCommas(sal_Int32&             io_rPos,
-                                        const OUString& rStr,
-                                        const sal_Int32         nLen);
+        void skipSpacesAndCommas(sal_Int32&      io_rPos,
+                                 const OUString& rStr,
+                                 const sal_Int32 nLen);
 
-        inline bool lcl_isOnNumberChar(const sal_Unicode aChar, bool bSignAllowed = true, bool bDotAllowed = true)
+        inline bool isOnNumberChar(const sal_Unicode aChar,
+                                   bool              bSignAllowed = true,
+                                   bool              bDotAllowed = true)
         {
             const bool bPredicate( (sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
                                     || (bSignAllowed && sal_Unicode('+') == aChar)
@@ -45,40 +47,43 @@ namespace basegfx
             return bPredicate;
         }
 
-        inline bool lcl_isOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true, bool bDotAllowed = true)
+        inline bool isOnNumberChar(const OUString& rStr,
+                                   const sal_Int32 nPos,
+                                   bool            bSignAllowed = true,
+                                   bool            bDotAllowed = true)
         {
-            return lcl_isOnNumberChar(rStr[nPos], bSignAllowed, bDotAllowed);
+            return isOnNumberChar(rStr[nPos], bSignAllowed, bDotAllowed);
         }
 
-        bool lcl_getDoubleChar(double&                  o_fRetval,
-                                sal_Int32&              io_rPos,
-                                const OUString&  rStr);
+        bool getDoubleChar(double&          o_fRetval,
+                           sal_Int32&       io_rPos,
+                           const OUString&  rStr);
 
-        bool lcl_importDoubleAndSpaces( double&                 o_fRetval,
-                                        sal_Int32&              io_rPos,
-                                        const OUString&  rStr,
-                                        const sal_Int32         nLen );
+        bool importDoubleAndSpaces(double&          o_fRetval,
+                                   sal_Int32&       io_rPos,
+                                   const OUString&  rStr,
+                                   const sal_Int32  nLen );
 
-        bool lcl_importFlagAndSpaces(sal_Int32&         o_nRetval,
-                                     sal_Int32&         io_rPos,
-                                     const OUString&    rStr,
-                                     const sal_Int32    nLen);
+        bool importFlagAndSpaces(sal_Int32&      o_nRetval,
+                                 sal_Int32&      io_rPos,
+                                 const OUString& rStr,
+                                 const sal_Int32 nLen);
 
-        void lcl_skipNumber(sal_Int32&              io_rPos,
-                            const OUString&  rStr,
-                            const sal_Int32         nLen);
+        void skipNumber(sal_Int32&       io_rPos,
+                        const OUString&  rStr,
+                        const sal_Int32  nLen);
 
-        void lcl_skipDouble(sal_Int32&              io_rPos,
-                            const OUString&  rStr);
+        void skipDouble(sal_Int32&       io_rPos,
+                        const OUString&  rStr);
 
-        void lcl_putNumberCharWithSpace( OUStringBuffer& rStr,
-                                            double              fValue,
-                                            double              fOldValue,
-                                            bool                    bUseRelativeCoordinates );
+        void putNumberCharWithSpace(OUStringBuffer& rStr,
+                                    double          fValue,
+                                    double          fOldValue,
+                                    bool            bUseRelativeCoordinates);
 
-        inline sal_Unicode lcl_getCommand( sal_Char cUpperCaseCommand,
-                                            sal_Char cLowerCaseCommand,
-                                            bool    bUseRelativeCoordinates )
+        inline sal_Unicode getCommand(sal_Char cUpperCaseCommand,
+                                      sal_Char cLowerCaseCommand,
+                                      bool     bUseRelativeCoordinates)
         {
             return bUseRelativeCoordinates ? cLowerCaseCommand : cUpperCaseCommand;
         }
