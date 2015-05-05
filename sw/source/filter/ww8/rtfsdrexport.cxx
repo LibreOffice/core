@@ -521,7 +521,7 @@ sal_Int32 RtfSdrExport::StartShape()
     if (pTxtObj)
     {
         const OutlinerParaObject* pParaObj = 0;
-        bool bOwnParaObj = false;
+        std::unique_ptr<const OutlinerParaObject> pOwnedParaObj;
 
         /*
         #i13885#
@@ -530,8 +530,8 @@ sal_Int32 RtfSdrExport::StartShape()
         */
         if (pTxtObj->IsTextEditActive())
         {
-            pParaObj = pTxtObj->GetEditOutlinerParaObject();
-            bOwnParaObj = true;
+            pOwnedParaObj.reset(pTxtObj->GetEditOutlinerParaObject());
+            pParaObj = pOwnedParaObj.get();
         }
         else
         {
@@ -542,8 +542,6 @@ sal_Int32 RtfSdrExport::StartShape()
         {
             // this is reached only in case some text is attached to the shape
             WriteOutliner(*pParaObj);
-            if (bOwnParaObj)
-                delete pParaObj;
         }
     }
 
