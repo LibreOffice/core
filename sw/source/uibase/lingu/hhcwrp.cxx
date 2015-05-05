@@ -270,9 +270,6 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
                 {
                     nChgLen = nIndex - nChgPos;
                     nConvChgLen = nPos - nConvChgPos;
-#if OSL_DEBUG_LEVEL > 1
-                    OUString aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
-#endif
                     OUString aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
 
                     // set selection to sub string to be replaced in original text
@@ -280,9 +277,6 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
                     OSL_ENSURE( m_rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
                     m_rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex );
                     m_rWrtShell.GetCrsr()->GetPoint()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex + nChgLen );
-#if OSL_DEBUG_LEVEL > 1
-                    OUString aSelTxt1( m_rWrtShell.GetSelTxt() );
-#endif
 
                     // replace selected sub string with the corresponding
                     // sub string from the new text while keeping as
@@ -334,9 +328,6 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         // restore those for the new text
         m_rWrtShell.GetCurAttr( aItemSet );
 
-#if OSL_DEBUG_LEVEL > 1
-        OUString aSelTxt1( m_rWrtShell.GetSelTxt() );
-#endif
         m_rWrtShell.Delete();
         m_rWrtShell.Insert( rNewText );
 
@@ -345,9 +336,6 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
             m_rWrtShell.GetCrsr()->SetMark();
         SwPosition *pMark = m_rWrtShell.GetCrsr()->GetMark();
         pMark->nContent = pMark->nContent.GetIndex() - rNewText.getLength();
-#if OSL_DEBUG_LEVEL > 1
-        OUString aSelTxt2( m_rWrtShell.GetSelTxt() );
-#endif
 
         // since 'SetAttr' below functions like merging with the attributes
         // from the itemset with any existing ones we have to get rid of all
