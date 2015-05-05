@@ -622,15 +622,14 @@ void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
 
 TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
 {
-    sal_uInt16              nTempLevel = 0;
-    ImplWizPageData*    pPageData = mpFirstPage;
-    while ( pPageData )
+    sal_uInt16 nTempLevel = 0;
+
+    for (ImplWizPageData* pPageData = mpFirstPage; pPageData;
+         pPageData = pPageData->mpNext)
     {
         if ( nTempLevel == nLevel )
             return pPageData->mpPage;
-
         nTempLevel++;
-        pPageData = pPageData->mpNext;
     }
 
     return NULL;

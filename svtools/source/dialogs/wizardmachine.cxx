@@ -213,10 +213,18 @@ namespace svt
         m_pPrevPage.disposeAndClear();
         m_pHelp.disposeAndClear();
 
-        for (WizardState i=0; i<m_pImpl->nFirstUnknownPage; ++i)
-            GetPage(i)->disposeOnce();
+        if (m_pImpl)
+        {
+            for (WizardState i = 0; i < m_pImpl->nFirstUnknownPage; ++i)
+            {
+                TabPage *pPage = GetPage(i);
+                if (pPage)
+                    pPage->disposeOnce();
+            }
+            delete m_pImpl;
+            m_pImpl = NULL;
+        }
 
-        delete m_pImpl;
         WizardDialog::dispose();
     }
 

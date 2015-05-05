@@ -33,16 +33,14 @@
 
 namespace svt
 {
-
-
     namespace
     {
-        typedef ::std::set< WizardTypes::WizardState >          StateSet;
+        typedef ::std::set< WizardTypes::WizardState > StateSet;
 
         typedef ::std::map<
                     RoadmapWizardTypes::PathId,
                     RoadmapWizardTypes::WizardPath
-                >                                               Paths;
+                > Paths;
 
         typedef ::std::map<
                     WizardTypes::WizardState,
@@ -50,7 +48,7 @@ namespace svt
                         OUString,
                         RoadmapWizardTypes::RoadmapPageFactory
                     >
-                >                                               StateDescriptions;
+                > StateDescriptions;
     }
 
     struct RoadmapWizardImpl : public RoadmapWizardTypes
@@ -155,9 +153,9 @@ namespace svt
     void RoadmapWizard::dispose()
     {
         delete m_pImpl;
+        m_pImpl = NULL;
         OWizardMachine::dispose();
     }
-
 
     void RoadmapWizard::SetRoadmapHelpId( const OString& _rId )
     {

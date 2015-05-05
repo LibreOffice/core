@@ -270,6 +270,7 @@ ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 void ODbTypeWizDialogSetup::dispose()
 {
     delete m_pOutSet;
+    m_pOutSet = NULL;
     m_pGeneralPage.clear();
     m_pMySQLIntroPage.clear();
     m_pFinalPage.clear();
