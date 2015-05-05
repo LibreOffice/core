@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_8cc94baf",
+        "filename": "sc/source/ui/sidebar/CellAppearancePropertyPanel.src",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-05T19:48:31Z",
+      "side": 1,
+      "message": "May be not the best place. Is it better to create a new file only for these 2 strings? Or is there a better place?",
+      "revId": "2f211b5be651355a865b06ceba9249aa128aedf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
