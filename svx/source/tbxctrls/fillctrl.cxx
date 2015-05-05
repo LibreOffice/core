@@ -445,6 +445,7 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
         mpLbFillType = mpFillControl->mpLbFillType;
         mpLbFillAttr = mpFillControl->mpLbFillAttr;
         mpToolBoxColor = mpFillControl->mpToolBoxColor;
+        mpFillControl->Resize();
         mpToolBoxColor->InsertItem(".uno:FillColor", m_xFrame, ToolBoxItemBits::DROPDOWNONLY, Size(mpToolBoxColor->GetSizePixel().Width(), 0));
 
         mpLbFillAttr->SetUniqueId(HID_FILL_ATTR_LISTBOX);
@@ -460,26 +461,12 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
 }
 
 FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
-:   Window(pParent,nStyle | WB_DIALOGCONTROL),
-    mpLbFillType(VclPtr<SvxFillTypeBox>::Create(this)),
-    mpToolBoxColor(VclPtr<sfx2::sidebar::SidebarToolBox>::Create(this)),
-    mpLbFillAttr(VclPtr<SvxFillAttrBox>::Create(this)),
-    maLogicalFillSize(40,80),
-    maLogicalAttrSize(50,80)
+    : Window(pParent,nStyle | WB_DIALOGCONTROL)
+    , mpLbFillType(VclPtr<SvxFillTypeBox>::Create(this))
+    , mpToolBoxColor(VclPtr<sfx2::sidebar::SidebarToolBox>::Create(this))
+    , mpLbFillAttr(VclPtr<SvxFillAttrBox>::Create(this))
 {
-    Size aTypeSize(LogicToPixel(maLogicalFillSize,MAP_APPFONT));
-    Size aAttrSize(LogicToPixel(maLogicalAttrSize,MAP_APPFONT));
-    mpLbFillType->SetSizePixel(aTypeSize);
-    mpToolBoxColor->SetSizePixel(aAttrSize);
-    mpLbFillAttr->SetSizePixel(aAttrSize);
-
-    //to get the base height
-    aTypeSize = mpLbFillType->GetSizePixel();
-    aAttrSize = mpLbFillAttr->GetSizePixel();
-    Point aAttrPnt = mpLbFillAttr->GetPosPixel();
-    SetSizePixel(
-        Size(aAttrPnt.X() + aAttrSize.Width(),
-            std::max(aAttrSize.Height(),aTypeSize.Height())));
+    SetOptimalSize();
 }
 
 FillControl::~FillControl()
@@ -795,14 +782,36 @@ IMPL_LINK(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox *, pToolBox)
 
 void FillControl::Resize()
 {
-    // Width of the two list boxes not 1/2 : 1/2, but 2/5 : 3/5
-    long nW = GetOutputSizePixel().Width() / 5;
-    long nH = 180;
-    long nSep = 0; // was previously 4
+    // Relative width of the two list boxes is 2/5 : 3/5
+    Size aSize(GetOutputSizePixel());
+    long nW = aSize.Width() / 5;
+    long nH = aSize.Height();
 
-    mpLbFillType->SetSizePixel(Size(nW * 2 - nSep,nH));
-    mpToolBoxColor->SetPosSizePixel(Point(nW * 2 + nSep,0),Size(nW * 3 - nSep,nH));
-    mpLbFillAttr->SetPosSizePixel(Point(nW * 2 + nSep,0),Size(nW * 3 - nSep,nH));
+    long nPrefHeight = mpLbFillType->get_preferred_size().Height();
+    long nOffset = (nH - nPrefHeight)/2;
+    mpLbFillType->SetPosSizePixel(Point(0, nOffset), Size(nW * 2, nPrefHeight));
+    nPrefHeight = mpToolBoxColor->get_preferred_size().Height();
+    nOffset = (nH - nPrefHeight)/2;
+    mpToolBoxColor->SetPosSizePixel(Point(nW * 2, nOffset),Size(nW * 3, nPrefHeight));
+    nPrefHeight = mpLbFillType->get_preferred_size().Height();
+    nOffset = (nH - nPrefHeight)/2;
+    mpLbFillAttr->SetPosSizePixel(Point(nW * 2, nOffset),Size(nW * 3, nPrefHeight));
+}
+
+void FillControl::SetOptimalSize()
+{
+    const Size aLogicalAttrSize(50,0);
+    Size aSize(LogicToPixel(aLogicalAttrSize,MAP_APPFONT));
+
+    Point aAttrPnt = mpLbFillAttr->GetPosPixel();
+
+    aSize.Height() = std::max(aSize.Height(), mpLbFillType->get_preferred_size().Height());
+    aSize.Height() = std::max(aSize.Height(), mpToolBoxColor->get_preferred_size().Height());
+    aSize.Height() = std::max(aSize.Height(), mpLbFillAttr->get_preferred_size().Height());
+
+    aSize.Width() = aAttrPnt.X() + aSize.Width();
+
+    SetSizePixel(aSize);
 }
 
 void FillControl::DataChanged(const DataChangedEvent& rDCEvt)
@@ -810,20 +819,7 @@ void FillControl::DataChanged(const DataChangedEvent& rDCEvt)
     if((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
     {
-        Size aTypeSize(LogicToPixel(maLogicalFillSize,MAP_APPFONT));
-        Size aAttrSize(LogicToPixel(maLogicalAttrSize,MAP_APPFONT));
-        mpLbFillType->SetSizePixel(aTypeSize);
-        mpToolBoxColor->SetSizePixel(aAttrSize);
-        mpLbFillAttr->SetSizePixel(aAttrSize);
-
-        //to get the base height
-        aTypeSize = mpLbFillType->GetSizePixel();
-        aAttrSize = mpLbFillAttr->GetSizePixel();
-        Point aAttrPnt = mpLbFillAttr->GetPosPixel();
-
-        SetSizePixel(
-            Size(aAttrPnt.X() + aAttrSize.Width(),
-                std::max(aAttrSize.Height(), aTypeSize.Height())));
+        SetOptimalSize();
     }
     Window::DataChanged(rDCEvt);
 }

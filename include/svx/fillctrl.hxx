@@ -83,8 +83,8 @@ private:
     VclPtr<SvxFillTypeBox>     mpLbFillType;
     VclPtr<ToolBox>            mpToolBoxColor;
     VclPtr<SvxFillAttrBox>     mpLbFillAttr;
-    Size                maLogicalFillSize;
-    Size                maLogicalAttrSize;
+
+    void SetOptimalSize();
 
     virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
 
