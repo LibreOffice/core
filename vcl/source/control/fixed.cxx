@@ -188,16 +188,15 @@ sal_uInt16 FixedText::ImplGetTextStyle( WinBits nWinStyle )
     return nTextStyle;
 }
 
-void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
-                          const Point& rPos, const Size& rSize,
-                          bool bFillLayout
-                          ) const
+void FixedText::ImplDraw(OutputDevice* pDev, sal_uLong nDrawFlags,
+                         const Point& rPos, const Size& rSize,
+                         bool bFillLayout) const
 {
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    WinBits                 nWinStyle = GetStyle();
-    OUString           aText( GetText() );
-    sal_uInt16              nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
-    Point                   aPos = rPos;
+    const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();
+    WinBits nWinStyle = GetStyle();
+    OUString aText(GetText());
+    sal_uInt16 nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+    Point aPos = rPos;
 
     if ( nWinStyle & WB_EXTRAOFFSET )
         aPos.X() += 2;
@@ -228,10 +227,9 @@ void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         (mpControlData->mpLayoutData->m_aDisplayText).clear();
 
     Rectangle aRect( Rectangle( aPos, rSize ) );
-    DrawControlText( *pDev, aRect, aText, nTextStyle,
+    DrawControlText(*pDev, aRect, aText, nTextStyle,
         bFillLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
-        bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL
-    );
+        bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL);
 }
 
 void FixedText::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
@@ -543,75 +541,75 @@ void FixedLine::ImplInitSettings( bool bFont,
     }
 }
 
-void FixedLine::ImplDraw(vcl::RenderContext& /*rRenderContext*/, bool bLayout)
+void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 {
-    Size                    aOutSize = GetOutputSizePixel();
-    OUString                aText = GetText();
-    WinBits                 nWinStyle = GetStyle();
-    MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    Size aOutSize = rRenderContext.GetOutputSizePixel();
+    OUString aText = GetText();
+    WinBits nWinStyle = GetStyle();
+    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
-    DecorationView aDecoView( this );
-    if ( aText.isEmpty() )
+    DecorationView aDecoView(&rRenderContext);
+    if (aText.isEmpty())
     {
-        if( !pVector )
+        if (!pVector)
         {
-            if ( nWinStyle & WB_VERT )
+            if (nWinStyle & WB_VERT)
             {
-                long nX = (aOutSize.Width()-1)/2;
-                aDecoView.DrawSeparator( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
+                long nX = (aOutSize.Width() - 1) / 2;
+                aDecoView.DrawSeparator(Point(nX, 0), Point(nX, aOutSize.Height() - 1));
             }
             else
             {
-                long nY = (aOutSize.Height()-1)/2;
-                aDecoView.DrawSeparator( Point( 0, nY ), Point( aOutSize.Width()-1, nY ), false );
+                long nY = (aOutSize.Height() - 1) / 2;
+                aDecoView.DrawSeparator(Point(0, nY), Point(aOutSize.Width() - 1, nY), false);
             }
         }
     }
-    else if( (nWinStyle & WB_VERT) )
+    else if (nWinStyle & WB_VERT)
     {
-        long nWidth = GetTextWidth( aText );
-        Push( PushFlags::FONT );
-        vcl::Font aFont( GetFont() );
-        aFont.SetOrientation( 900 );
-        SetFont( aFont );
-        Point aStartPt( aOutSize.Width()/2, aOutSize.Height()-1 );
-        if( (nWinStyle & WB_VCENTER) )
-            aStartPt.Y() -= (aOutSize.Height() - nWidth)/2;
-        Point aTextPt( aStartPt );
-        aTextPt.X() -= GetTextHeight()/2;
-        DrawText( aTextPt, aText, 0, aText.getLength(), pVector, pDisplayText );
-        Pop();
-        if( aOutSize.Height() - aStartPt.Y() > FIXEDLINE_TEXT_BORDER )
-            aDecoView.DrawSeparator( Point( aStartPt.X(), aOutSize.Height()-1 ),
-                                     Point( aStartPt.X(), aStartPt.Y() + FIXEDLINE_TEXT_BORDER ) );
-        if( aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER > 0 )
-            aDecoView.DrawSeparator( Point( aStartPt.X(), aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER ),
-                                     Point( aStartPt.X(), 0 ) );
+        long nWidth = rRenderContext.GetTextWidth(aText);
+        rRenderContext.Push(PushFlags::FONT);
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetOrientation(00);
+        SetFont(aFont);
+        Point aStartPt(aOutSize.Width() / 2, aOutSize.Height() - 1);
+        if (nWinStyle & WB_VCENTER)
+            aStartPt.Y() -= (aOutSize.Height() - nWidth) / 2;
+        Point aTextPt(aStartPt);
+        aTextPt.X() -= GetTextHeight() / 2;
+        rRenderContext.DrawText(aTextPt, aText, 0, aText.getLength(), pVector, pDisplayText);
+        rRenderContext.Pop();
+        if (aOutSize.Height() - aStartPt.Y() > FIXEDLINE_TEXT_BORDER)
+            aDecoView.DrawSeparator(Point(aStartPt.X(), aOutSize.Height() - 1),
+                                    Point(aStartPt.X(), aStartPt.Y() + FIXEDLINE_TEXT_BORDER));
+        if (aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER > 0)
+            aDecoView.DrawSeparator(Point(aStartPt.X(), aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER),
+                                    Point(aStartPt.X(), 0));
     }
     else
     {
-        sal_uInt16      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
-        Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        if( (nWinStyle & WB_CENTER) )
+        sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
+        Rectangle aRect(0, 0, aOutSize.Width(), aOutSize.Height());
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        if (nWinStyle & WB_CENTER)
             nStyle |= TEXT_DRAW_CENTER;
 
-        if ( !IsEnabled() )
+        if (!IsEnabled())
             nStyle |= TEXT_DRAW_DISABLE;
-        if ( GetStyle() & WB_NOLABEL )
+        if (GetStyle() & WB_NOLABEL)
             nStyle &= ~TEXT_DRAW_MNEMONIC;
-        if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+        if (rStyleSettings.GetOptions() & STYLE_OPTION_MONO)
             nStyle |= TEXT_DRAW_MONO;
 
-        DrawControlText( *this, aRect, aText, nStyle, pVector, pDisplayText );
+        DrawControlText(*this, aRect, aText, nStyle, pVector, pDisplayText);
 
-        if( !pVector )
+        if (!pVector)
         {
-            long nTop = aRect.Top() + ((aRect.GetHeight()-1)/2);
-            aDecoView.DrawSeparator( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ), false );
-            if( aRect.Left() > FIXEDLINE_TEXT_BORDER )
-                aDecoView.DrawSeparator( Point( 0, nTop ), Point( aRect.Left()-FIXEDLINE_TEXT_BORDER, nTop ), false );
+            long nTop = aRect.Top() + ((aRect.GetHeight() - 1) / 2);
+            aDecoView.DrawSeparator(Point(aRect.Right() + FIXEDLINE_TEXT_BORDER, nTop), Point(aOutSize.Width() - 1, nTop), false);
+            if (aRect.Left() > FIXEDLINE_TEXT_BORDER)
+                aDecoView.DrawSeparator(Point(0, nTop), Point(aRect.Left() - FIXEDLINE_TEXT_BORDER, nTop), false);
         }
     }
 }
