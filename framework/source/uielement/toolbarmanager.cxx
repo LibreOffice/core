@@ -278,7 +278,7 @@ void ToolBarManager::Destroy()
 
     Link<> aEmpty;
     m_pToolBar->SetSelectHdl( Link<ToolBox *, void>() );
-    m_pToolBar->SetActivateHdl( aEmpty );
+    m_pToolBar->SetActivateHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetDeactivateHdl( aEmpty );
     m_pToolBar->SetClickHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetDropdownClickHdl( Link<ToolBox *, void>() );
@@ -2026,10 +2026,8 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, Select, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG(ToolBarManager, Activate)
-{
-    return 1;
-}
+IMPL_LINK_NOARG_TYPED(ToolBarManager, Activate, ToolBox *, void)
+{}
 
 IMPL_LINK_NOARG(ToolBarManager, Deactivate)
 {

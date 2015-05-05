@@ -440,10 +440,8 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Select, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG(AddonsToolBarManager, Activate)
-{
-    return 1;
-}
+IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Activate, ToolBox *, void)
+{}
 
 IMPL_LINK_NOARG(AddonsToolBarManager, Deactivate)
 {

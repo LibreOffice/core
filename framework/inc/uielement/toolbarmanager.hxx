@@ -132,7 +132,7 @@ class ToolBarManager : public ToolbarManager_Base
         DECL_LINK_TYPED(DropdownClick, ToolBox *, void);
         DECL_LINK_TYPED(DoubleClick, ToolBox *, void);
         DECL_LINK_TYPED(Select, ToolBox *, void);
-        DECL_LINK(Activate, void *);
+        DECL_LINK_TYPED(Activate, ToolBox *, void);
         DECL_LINK(Deactivate, void *);
         DECL_LINK( StateChanged, StateChangedType* );
         DECL_LINK( DataChanged, DataChangedEvent* );

@@ -82,7 +82,7 @@ private:
     DECL_LINK_TYPED(ClickHandler, ToolBox*, void);
     DECL_LINK_TYPED(DoubleClickHandler, ToolBox*, void);
     DECL_LINK_TYPED(SelectHandler, ToolBox*, void);
-    DECL_LINK(ActivateToolBox, ToolBox*);
+    DECL_LINK_TYPED(ActivateToolBox, ToolBox*, void);
     DECL_LINK(DeactivateToolBox, ToolBox*);
 
     void CreateController (

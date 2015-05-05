@@ -79,7 +79,7 @@ void SidebarToolBox::dispose()
         SetClickHdl(Link<ToolBox *, void>());
         SetDoubleClickHdl(Link<ToolBox *, void>());
         SetSelectHdl(Link<ToolBox *, void>());
-        SetActivateHdl(Link<>());
+        SetActivateHdl(Link<ToolBox *, void>());
         SetDeactivateHdl(Link<>());
         mbAreHandlersRegistered = false;
     }
@@ -273,10 +273,8 @@ IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
         xController->execute((sal_Int16)pToolBox->GetModifier());
 }
 
-IMPL_LINK(SidebarToolBox, ActivateToolBox, ToolBox*, EMPTYARG)
-{
-    return 1;
-}
+IMPL_LINK_NOARG_TYPED(SidebarToolBox, ActivateToolBox, ToolBox*, void)
+{}
 
 IMPL_LINK(SidebarToolBox, DeactivateToolBox, ToolBox*, EMPTYARG)
 {
