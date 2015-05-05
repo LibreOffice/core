@@ -4091,7 +4091,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwUndoCpyDoc* pUndo = 0;
     // lcl_DeleteRedlines may delete the start or end node of the cursor when
     // removing the redlines so use cursor that is corrected by PaMCorrAbs
-    std::unique_ptr<SwUnoCrsr> const pCopyPam(pDoc->CreateUnoCrsr(rPos));
+    std::shared_ptr<SwUnoCrsr> const pCopyPam(pDoc->CreateUnoCrsr2(rPos));
 
     SwTableNumFormatMerge aTNFM( m_rDoc, *pDoc );
 
