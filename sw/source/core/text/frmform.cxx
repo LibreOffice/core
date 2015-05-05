@@ -1873,19 +1873,6 @@ bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::FormatQuick with swapped frame" );
 
-#if OSL_DEBUG_LEVEL > 1
-    const OUString aXXX = GetTxtNode()->GetTxt();
-    const SwTwips nDbgY = Frm().Top();
-    (void)nDbgY;
-    // nStopAt allows CV to alter it
-    static sal_uInt16 nStopAt = 0;
-    if( nStopAt == GetFrmId() )
-    {
-        int i = GetFrmId();
-        (void)i;
-    }
-#endif
-
     if( IsEmpty() && FormatEmpty() )
         return true;
 
