@@ -48,8 +48,7 @@ PanelTitleBar::PanelTitleBar (
       mpPanel(pPanel),
       mnMenuItemIndex(1),
       mxFrame(),
-      msMoreOptionsCommand(),
-      msAccessibleNamePrefix(SFX2_RESSTR(SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX))
+      msMoreOptionsCommand()
 {
     OSL_ASSERT(mpPanel != nullptr);
 
@@ -168,9 +167,8 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 
 Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible()
 {
-    const ::rtl::OUString sAccessibleName(msAccessibleNamePrefix + msTitle);
-    SetAccessibleName(sAccessibleName);
-    SetAccessibleDescription(sAccessibleName);
+    SetAccessibleName(msTitle);
+    SetAccessibleDescription(msTitle);
     return TitleBar::CreateAccessible();
 }
 

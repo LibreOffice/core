@@ -61,7 +61,6 @@ private:
     const sal_uInt16 mnMenuItemIndex;
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::rtl::OUString msMoreOptionsCommand;
-    ::rtl::OUString msAccessibleNamePrefix;
 };
 
 } } // end of namespace sfx2::sidebar
