@@ -95,7 +95,7 @@ private:
     using OutputDevice::SetFont;
     void            SetFont();
 
-    DECL_LINK( SyntaxTimerHdl, Timer * );
+    DECL_LINK( SyntaxTimerHdl, Idle * );
     DECL_LINK( TimeoutHdl, Timer * );
 
     using Window::Notify;

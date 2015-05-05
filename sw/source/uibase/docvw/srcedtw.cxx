@@ -56,7 +56,6 @@ struct SwTextPortion
 
 #define MAX_SYNTAX_HIGHLIGHT 20
 #define MAX_HIGHLIGHTTIME 200
-#define SYNTAX_HIGHLIGHT_TIMEOUT 200
 
 typedef std::deque<SwTextPortion> SwTextPortions;
 
@@ -579,7 +578,7 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
+IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle )
 {
     tools::Time aSyntaxCheckStart( tools::Time::SYSTEM );
     SAL_WARN_IF(pTextView == 0, "sw", "No View yet, but syntax highlighting?!");
@@ -605,7 +604,6 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
                     break;
                 if((tools::Time( tools::Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime()) > MAX_HIGHLIGHTTIME )
                 {
-                    pTimer->SetTimeout( 2 * SYNTAX_HIGHLIGHT_TIMEOUT );
                     break;
                 }
             }
@@ -620,13 +618,12 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
         nCount ++;
         if(tools::Time( tools::Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
         {
-            pTimer->SetTimeout( 2 * SYNTAX_HIGHLIGHT_TIMEOUT );
             break;
         }
     }
 
-    if(!aSyntaxLineTable.empty() && !pTimer->IsActive())
-        pTimer->Start();
+    if(!aSyntaxLineTable.empty() && !pIdle->IsActive())
+        pIdle->Start();
     // SyntaxTimerHdl is called when text changed
     // => good opportunity to determine text width!
     long nPrevTextWidth = nCurTextWidth;
