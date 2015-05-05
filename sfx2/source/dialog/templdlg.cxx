@@ -2428,11 +2428,10 @@ bool SfxTemplateDialog_Impl::IsCheckedItem(sal_uInt16 nMesId)
     }
 }
 
-IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
+IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox, void )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     FamilySelect(nEntry);
-    return 0;
 }
 
 static OUString lcl_GetLabel(uno::Any& rAny)
@@ -2453,16 +2452,15 @@ static OUString lcl_GetLabel(uno::Any& rAny)
     return sRet;
 }
 
-IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox )
+IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox, void )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     if(nEntry != SID_STYLE_NEW_BY_EXAMPLE ||
             ToolBoxItemBits::DROPDOWN != (pBox->GetItemBits(nEntry)&ToolBoxItemBits::DROPDOWN))
         ActionSelect(nEntry);
-    return 0;
 }
 
-IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
+IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     if(nEntry == SID_STYLE_NEW_BY_EXAMPLE &&
@@ -2481,7 +2479,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
             a >>= xUICommands;
         }
         if(!xUICommands.is())
-            return 0;
+            return;
         try
         {
             uno::Any aCommand = xUICommands->getByName(".uno:StyleNewByExample");
@@ -2511,7 +2509,6 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         }
         pBox->Invalidate();
     }
-    return 0;
 }
 
 IMPL_LINK( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu)

@@ -200,10 +200,10 @@ namespace sw { namespace sidebar {
         bool mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify;
 
         // handler for popup toolboxes to show the popups
-        DECL_LINK(ClickOrientationHdl, ToolBox* );
-        DECL_LINK(ClickMarginHdl, ToolBox* );
-        DECL_LINK(ClickSizeHdl, ToolBox* );
-        DECL_LINK(ClickColumnHdl, ToolBox* );
+        DECL_LINK_TYPED(ClickOrientationHdl, ToolBox*, void);
+        DECL_LINK_TYPED(ClickMarginHdl, ToolBox*, void);
+        DECL_LINK_TYPED(ClickSizeHdl, ToolBox*, void);
+        DECL_LINK_TYPED(ClickColumnHdl, ToolBox*, void);
 
         void Initialize();
 

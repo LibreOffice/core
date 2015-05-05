@@ -26,7 +26,7 @@
 class SwMailMergeChildWin : public SfxFloatingWindow
 {
     VclPtr<ToolBox> m_pBackTB;
-    DECL_LINK( BackHdl, void* );
+    DECL_LINK_TYPED( BackHdl, ToolBox*, void );
 
 public:
     SwMailMergeChildWin(SfxBindings*, SfxChildWindow*, vcl::Window *pParent);

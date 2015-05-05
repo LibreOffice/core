@@ -78,10 +78,10 @@ private:
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
 
-    DECL_LINK(DropDownClickHandler, ToolBox*);
-    DECL_LINK(ClickHandler, ToolBox*);
-    DECL_LINK(DoubleClickHandler, ToolBox*);
-    DECL_LINK(SelectHandler, ToolBox*);
+    DECL_LINK_TYPED(DropDownClickHandler, ToolBox*, void);
+    DECL_LINK_TYPED(ClickHandler, ToolBox*, void);
+    DECL_LINK_TYPED(DoubleClickHandler, ToolBox*, void);
+    DECL_LINK_TYPED(SelectHandler, ToolBox*, void);
     DECL_LINK(ActivateToolBox, ToolBox*);
     DECL_LINK(DeactivateToolBox, ToolBox*);
 

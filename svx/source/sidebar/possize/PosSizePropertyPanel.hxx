@@ -156,7 +156,7 @@ private:
     DECL_LINK( ClickAutoHdl, void * );
     DECL_LINK( AngleModifiedHdl, void * );
     DECL_LINK( RotationHdl, void * );
-    DECL_LINK( FlipHdl, ToolBox * );
+    DECL_LINK_TYPED( FlipHdl, ToolBox *, void );
 
     static void SetupIcons();
     void Initialize();

@@ -383,7 +383,7 @@ void CommandToolBox::Click()
 {
 }
 
-IMPL_LINK_NOARG(CommandToolBox, ToolBoxDropdownClickHdl)
+IMPL_LINK_NOARG_TYPED(CommandToolBox, ToolBoxDropdownClickHdl, ToolBox *, void)
 {
     // the popup menue of the drop modus has to be called in the
     // click (button down) and not in the select (button up)
@@ -405,8 +405,6 @@ IMPL_LINK_NOARG(CommandToolBox, ToolBoxDropdownClickHdl)
         MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
         MouseMove( aLeave );
     }
-
-    return 1;
 }
 
 void CommandToolBox::UpdateButtons()

@@ -272,7 +272,7 @@ namespace svxform
         OUString                    m_sInstanceURL;
         bool                        m_bLinkOnce;
 
-        DECL_LINK(TbxSelectHdl, void *);
+        DECL_LINK_TYPED(TbxSelectHdl, ToolBox *, void);
         DECL_LINK(ItemSelectHdl, void *);
 
         void                        AddChildren( SvTreeListEntry* _pParent,

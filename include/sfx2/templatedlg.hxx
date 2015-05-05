@@ -65,10 +65,10 @@ private:
 
     void writeSettings ();
 
-    DECL_LINK(TBXViewHdl, void*);
-    DECL_LINK(TBXActionHdl, void*);
-    DECL_LINK(TBXTemplateHdl, void*);
-    DECL_LINK(TBXDropdownHdl, ToolBox*);
+    DECL_LINK_TYPED(TBXViewHdl, ToolBox*, void);
+    DECL_LINK_TYPED(TBXActionHdl, ToolBox*, void);
+    DECL_LINK_TYPED(TBXTemplateHdl, ToolBox*, void);
+    DECL_LINK_TYPED(TBXDropdownHdl, ToolBox*, void);
 
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*);
 

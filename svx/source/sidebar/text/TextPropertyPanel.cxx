@@ -196,7 +196,7 @@ void TextPropertyPanel::EndUnderlinePopupMode()
 
 void TextPropertyPanel::InitToolBoxFont()
 {
-    Link<> aLink = LINK(this, TextPropertyPanel, UnderlineClickHdl);
+    Link<ToolBox *, void> aLink = LINK(this, TextPropertyPanel, UnderlineClickHdl);
     mpToolBoxFont->SetDropdownClickHdl(aLink);
 }
 
@@ -205,7 +205,7 @@ void TextPropertyPanel::InitToolBoxSpacing()
     const sal_uInt16 nId = mpToolBoxSpacing->GetItemId(UNO_SPACING);
     mpToolBoxSpacing->SetItemBits(nId, mpToolBoxSpacing->GetItemBits(nId) | ToolBoxItemBits::DROPDOWNONLY);
 
-    Link<> aLink = LINK(this, TextPropertyPanel, SpacingClickHdl);
+    Link<ToolBox *, void> aLink = LINK(this, TextPropertyPanel, SpacingClickHdl);
     mpToolBoxSpacing->SetDropdownClickHdl ( aLink );
     mpToolBoxSpacing->SetSelectHdl( aLink );
 }
@@ -216,7 +216,7 @@ void TextPropertyPanel::SetupToolboxItems()
     maSpacingControl.SetupToolBoxItem(*mpToolBoxSpacing, mpToolBoxSpacing->GetItemId(UNO_SPACING));
 }
 
-IMPL_LINK(TextPropertyPanel, UnderlineClickHdl, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(TextPropertyPanel, UnderlineClickHdl, ToolBox*, pToolBox, void)
 {
     const sal_uInt16 nId = pToolBox->GetCurItemId();
     const OUString aCommand(pToolBox->GetItemCommand(nId));
@@ -227,11 +227,9 @@ IMPL_LINK(TextPropertyPanel, UnderlineClickHdl, ToolBox*, pToolBox)
         maUnderlinePopup.Rearrange(meUnderline);
         maUnderlinePopup.Show(*pToolBox);
     }
-
-    return 0L;
 }
 
-IMPL_LINK(TextPropertyPanel, SpacingClickHdl, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(TextPropertyPanel, SpacingClickHdl, ToolBox*, pToolBox, void)
 {
     const sal_uInt16 nId = pToolBox->GetCurItemId();
     const OUString aCommand(pToolBox->GetItemCommand(nId));
@@ -242,8 +240,6 @@ IMPL_LINK(TextPropertyPanel, SpacingClickHdl, ToolBox*, pToolBox)
         maCharSpacePopup.Rearrange(mbKernLBAvailable,mbKernAvailable,mlKerning);
         maCharSpacePopup.Show(*pToolBox);
     }
-
-    return 0L;
 }
 
 void TextPropertyPanel::NotifyItemUpdate (

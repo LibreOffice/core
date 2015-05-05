@@ -84,10 +84,9 @@ void SwMailMergeChildWin::dispose()
     SfxFloatingWindow::dispose();
 }
 
-IMPL_LINK_NOARG(SwMailMergeChildWin, BackHdl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeChildWin, BackHdl, ToolBox *, void)
 {
     GetBindings().GetDispatcher()->Execute(FN_MAILMERGE_WIZARD, SfxCallMode::ASYNCHRON);
-    return 0;
 }
 
 void SwMailMergeChildWin::FillInfo(SfxChildWinInfo& rInfo) const

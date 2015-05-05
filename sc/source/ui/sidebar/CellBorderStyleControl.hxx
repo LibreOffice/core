@@ -41,9 +41,9 @@ private:
 
     void Initialize();
 
-    DECL_LINK(TB1SelectHdl, ToolBox *);
-    DECL_LINK(TB2SelectHdl, ToolBox *);
-    DECL_LINK(TB3SelectHdl, ToolBox *);
+    DECL_LINK_TYPED(TB1SelectHdl, ToolBox *, void);
+    DECL_LINK_TYPED(TB2SelectHdl, ToolBox *, void);
+    DECL_LINK_TYPED(TB3SelectHdl, ToolBox *, void);
 
 public:
     CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);

@@ -249,14 +249,12 @@ void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
     SfxFloatingWindow::StateChanged( nStateChange );
 }
 
-IMPL_LINK( SfxRecordingFloat_Impl, Select, ToolBox*, pToolBar )
+IMPL_LINK_TYPED( SfxRecordingFloat_Impl, Select, ToolBox*, pToolBar, void )
 {
     (void)pToolBar;
     sal_Int16   nKeyModifier( (sal_Int16)m_pTbx->GetModifier() );
     if ( xStopRecTbxCtrl.is() )
         xStopRecTbxCtrl->execute( nKeyModifier );
-
-    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

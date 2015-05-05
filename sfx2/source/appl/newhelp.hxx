@@ -470,7 +470,7 @@ public:
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                             getFrame() const { return xFrame; }
 
-    inline void             SetSelectHdl( const Link<>& rLink ) { aToolBox->SetSelectHdl( rLink ); }
+    inline void             SetSelectHdl( const Link<ToolBox *, void>& rLink ) { aToolBox->SetSelectHdl( rLink ); }
     void                    ToggleIndex( bool bOn );
     void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
@@ -520,7 +520,7 @@ friend class SfxHelpIndexWindow_Impl;
     void                SaveConfig();
     void                ShowStartPage();
 
-    DECL_LINK(          SelectHdl, ToolBox* );
+    DECL_LINK_TYPED(    SelectHdl, ToolBox*, void );
     DECL_LINK(OpenHdl, void *);
     DECL_LINK(          SelectFactoryHdl, SfxHelpIndexWindow_Impl* );
     DECL_LINK(          ChangeHdl, HelpListener_Impl* );

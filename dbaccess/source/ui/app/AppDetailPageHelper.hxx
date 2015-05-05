@@ -161,7 +161,7 @@ namespace dbaui
 
         DECL_LINK(PreviewChangeHdl, void*);
         // click a TB slot
-        DECL_LINK(OnDropdownClickHdl, ToolBox*);
+        DECL_LINK_TYPED(OnDropdownClickHdl, ToolBox*, void);
 
         inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         void ImplInitSettings();

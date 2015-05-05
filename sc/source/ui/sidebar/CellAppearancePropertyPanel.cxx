@@ -167,7 +167,7 @@ void CellAppearancePropertyPanel::Initialize()
     const sal_uInt16 nIdBorderType  = mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE );
     mpTBCellBorder->SetItemImage( nIdBorderType, maIMGCellBorder );
     mpTBCellBorder->SetItemBits( nIdBorderType, mpTBCellBorder->GetItemBits( nIdBorderType ) | ToolBoxItemBits::DROPDOWNONLY );
-    Link<> aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
+    Link<ToolBox *, void> aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
     mpTBCellBorder->SetDropdownClickHdl ( aLink );
     mpTBCellBorder->SetSelectHdl ( aLink );
 
@@ -181,14 +181,13 @@ void CellAppearancePropertyPanel::Initialize()
 
     mpTBLineColor->Disable();
 
-    aLink = LINK(this, CellAppearancePropertyPanel, CBOXGridShowClkHdl);
-    mpCBXShowGrid->SetClickHdl ( aLink );
+    mpCBXShowGrid->SetClickHdl ( LINK(this, CellAppearancePropertyPanel, CBOXGridShowClkHdl) );
 
     mpTBLineColor->SetAccessibleRelationLabeledBy(mpTBLineColor);
     mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle);
 }
 
-IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox, void)
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
@@ -208,10 +207,9 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBo
             mpCellBorderStylePopup->Show(*pToolBox);
         }
     }
-    return 0;
 }
 
-IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox, void)
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
@@ -232,7 +230,6 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox
             mpCellLineStylePopup->Show(*pToolBox);
         }
     }
-    return 0;
 }
 
 IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)

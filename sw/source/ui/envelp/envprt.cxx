@@ -127,7 +127,7 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
+IMPL_LINK_NOARG_TYPED(SwEnvPrtPage, AlignHdl, ToolBox *, void)
 {
     if (m_pAlignBox->GetCurItemId())
     {
@@ -141,7 +141,6 @@ IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
         const SwEnvItem& rItem = static_cast<const SwEnvItem&>( GetItemSet().Get(FN_ENVELOP) );
         m_pAlignBox->CheckItem(m_aIds[rItem.eAlign], true);
     }
-    return 0;
 }
 
 VclPtr<SfxTabPage> SwEnvPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)

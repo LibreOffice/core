@@ -954,7 +954,7 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
     return 0;
 }
 
-IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
+IMPL_LINK_TYPED( SwFldVarPage, TBClickHdl, ToolBox *, pBox, void )
 {
     const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
@@ -1096,8 +1096,6 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
 
         UpdateSubType();
     }
-
-    return sal_True;
 }
 
 IMPL_LINK_NOARG(SwFldVarPage, ChapterHdl)

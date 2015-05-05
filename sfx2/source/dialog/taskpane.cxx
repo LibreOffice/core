@@ -839,7 +839,7 @@ namespace sfx2
         virtual void Dying() SAL_OVERRIDE;
 
     private:
-        DECL_LINK( OnToolboxClicked, ToolBox* );
+        DECL_LINK_TYPED( OnToolboxClicked, ToolBox*, void );
         DECL_LINK( OnMenuItemSelected, Menu* );
         DECL_LINK( DockingChanged, TitledDockingWindow* );
         ::std::unique_ptr< PopupMenu > impl_createPopupMenu() const;
@@ -963,7 +963,7 @@ namespace sfx2
     }
 
 
-    IMPL_LINK( TaskPaneController_Impl, OnToolboxClicked, ToolBox*, i_pToolBox )
+    IMPL_LINK_TYPED( TaskPaneController_Impl, OnToolboxClicked, ToolBox*, i_pToolBox, void )
     {
         if ( i_pToolBox->GetCurItemId() == m_nViewMenuID )
         {
@@ -977,8 +977,6 @@ namespace sfx2
             aMenuRect.SetPos( i_pToolBox->GetPosPixel() );
             pMenu->Execute( &m_rDockingWindow, aMenuRect, POPUPMENU_EXECUTE_DOWN );
         }
-
-        return 0;
     }
 
 

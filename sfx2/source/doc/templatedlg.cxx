@@ -453,7 +453,7 @@ void SfxTemplateManagerDlg::writeSettings ()
     aViewSettings.SetUserData(aSettings);
 }
 
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg,TBXViewHdl, ToolBox *, void)
 {
     const sal_uInt16 nCurItemId = mpViewBar->GetCurItemId();
 
@@ -470,11 +470,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
         OnFolderNew();
     else if (nCurItemId == mpViewBar->GetItemId(VIEWBAR_SAVE))
         OnTemplateSaveAs();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXActionHdl)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, TBXActionHdl, ToolBox *, void)
 {
     const sal_uInt16 nCurItemId = mpActionBar->GetCurItemId();
 
@@ -482,11 +480,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXActionHdl)
         OnTemplateSearch();
     else if (nCurItemId == mpActionBar->GetItemId(ACTIONBAR_TEMPLATE))
         OnTemplateLink();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, TBXTemplateHdl, ToolBox *, void)
 {
     const sal_uInt16 nCurItemId = mpTemplateBar->GetCurItemId();
 
@@ -502,11 +498,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
         OnTemplateAsDefault();
     else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_EXPORT))
         OnTemplateExport();
-
-    return 0;
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
 {
     const sal_uInt16 nCurItemId = pBox->GetCurItemId();
 
@@ -557,8 +551,6 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
         pBox->EndSelection();
         pBox->Invalidate();
     }
-
-    return 0;
 }
 
 IMPL_LINK(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem)

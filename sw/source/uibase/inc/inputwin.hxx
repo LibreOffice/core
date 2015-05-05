@@ -75,7 +75,7 @@ protected:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Click() SAL_OVERRIDE;
     DECL_LINK( MenuHdl, Menu * );
-    DECL_LINK( DropdownClickHdl, void* );
+    DECL_LINK_TYPED( DropdownClickHdl, ToolBox*, void );
     void            ApplyFormula();
     void            CancelFormula();
 

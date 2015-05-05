@@ -112,7 +112,7 @@ void DataEditor::dispose()
 }
 
 // react on click (or keypress) on toolbar icon
-IMPL_LINK_NOARG(DataEditor, ToolboxHdl)
+IMPL_LINK_NOARG_TYPED(DataEditor, ToolboxHdl, ToolBox *, void)
 {
     sal_uInt16 nId = m_pTbxData->GetCurItemId();
 
@@ -130,8 +130,6 @@ IMPL_LINK_NOARG(DataEditor, ToolboxHdl)
         m_xBrwData->SwapColumn();
     else if (nId == TBI_DATA_SWAP_ROW)
         m_xBrwData->SwapRow();
-
-    return 0;
 }
 
 // refresh toolbar icons according to currently selected cell in brwose box

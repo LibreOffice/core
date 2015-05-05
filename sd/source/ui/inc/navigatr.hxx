@@ -145,9 +145,9 @@ private:
     NavDocInfo*                 GetDocInfo();
 
                                 DECL_LINK( GetFocusObjectsHdl, void * );
-                                DECL_LINK( SelectToolboxHdl, void * );
-                                DECL_LINK(ClickToolboxHdl, void *);
-                                DECL_LINK( DropdownClickToolBoxHdl, ToolBox * );
+                                DECL_LINK_TYPED( SelectToolboxHdl, ToolBox *, void );
+                                DECL_LINK_TYPED(ClickToolboxHdl, ToolBox *, void);
+                                DECL_LINK_TYPED( DropdownClickToolBoxHdl, ToolBox *, void );
                                 DECL_LINK( ClickPageHdl, void * );
                                 DECL_LINK( ClickObjectHdl, void * );
                                 DECL_LINK( SelectDocumentHdl, void * );

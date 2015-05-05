@@ -70,8 +70,8 @@ private:
     AreaPropertyPanel& mrAreaPropertyPanel;
     SfxBindings*        mpBindings;
     DECL_LINK( ModifiedTrgrHdl_Impl, void* );
-    DECL_LINK( Left_Click45_Impl, void* );
-    DECL_LINK( Right_Click45_Impl, void* );
+    DECL_LINK_TYPED( Left_Click45_Impl, ToolBox*, void );
+    DECL_LINK_TYPED( Right_Click45_Impl, ToolBox*, void );
 };
 
 

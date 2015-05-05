@@ -172,7 +172,7 @@ public:
     void        SetExecState( bool bState ) { bExecState = bState; }
     bool        IsExecReady() const { return bExecState; }
 
-                DECL_LINK( PipetteHdl, ToolBox* pTbx );
+                DECL_LINK_TYPED( PipetteHdl, ToolBox*, void );
                 DECL_LINK( CbxHdl, CheckBox* pCbx );
                 DECL_LINK( CbxTransHdl, CheckBox* pCbx );
                 DECL_LINK( FocusLbHdl, ColorLB* pLb );
@@ -191,14 +191,12 @@ MaskData::MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind ) :
 {
 }
 
-IMPL_LINK( MaskData, PipetteHdl, ToolBox*, pTbx )
+IMPL_LINK_TYPED( MaskData, PipetteHdl, ToolBox*, pTbx, void )
 {
     SfxBoolItem aBItem( SID_BMPMASK_PIPETTE,
                         pTbx->IsItemChecked( pTbx->GetItemId(0) ) );
 
     rBindings.GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aBItem, 0L );
-
-    return 0;
 }
 
 IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )

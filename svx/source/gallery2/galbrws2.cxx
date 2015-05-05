@@ -1329,14 +1329,12 @@ IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectHdl)
     return 0L;
 }
 
-IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
+IMPL_LINK_TYPED( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox, void )
 {
     if( pBox->GetCurItemId() == TBX_ID_ICON )
         SetMode( GALLERYBROWSERMODE_ICON );
     else if( pBox->GetCurItemId() == TBX_ID_LIST )
         SetMode( GALLERYBROWSERMODE_LIST );
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)

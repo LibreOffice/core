@@ -143,9 +143,9 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontWorkDialog : public SfxDockingWindow
  friend class SvxFontWorkChildWindow;
  friend class SvxFontWorkControllerItem;
 
-    DECL_LINK( SelectStyleHdl_Impl, void * );
-    DECL_LINK( SelectAdjustHdl_Impl, void * );
-    DECL_LINK( SelectShadowHdl_Impl, void * );
+    DECL_LINK_TYPED( SelectStyleHdl_Impl, ToolBox *, void );
+    DECL_LINK_TYPED( SelectAdjustHdl_Impl, ToolBox *, void );
+    DECL_LINK_TYPED( SelectShadowHdl_Impl, ToolBox *, void );
 
     DECL_LINK( ModifyInputHdl_Impl, void * );
     DECL_LINK_TYPED( InputTimoutHdl_Impl, Idle *, void );

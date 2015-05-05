@@ -71,7 +71,7 @@ class  OAddFieldWindow  :public FloatingWindow
 
     DECL_LINK( OnDoubleClickHdl, void* );
     DECL_LINK( OnSelectHdl,      void* );
-    DECL_LINK( OnSortAction,     ToolBox* );
+    DECL_LINK_TYPED( OnSortAction, ToolBox*, void );
 
     OAddFieldWindow(const OAddFieldWindow&) SAL_DELETED_FUNCTION;
     void operator =(const OAddFieldWindow&) SAL_DELETED_FUNCTION;

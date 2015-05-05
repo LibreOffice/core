@@ -142,7 +142,7 @@ class SwScrollNaviPopup : public SfxPopupWindow
     using Window::GetQuickHelpText;
 
 protected:
-        DECL_LINK(SelectHdl, ToolBox*);
+        DECL_LINK_TYPED(SelectHdl, ToolBox*, void);
         virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:

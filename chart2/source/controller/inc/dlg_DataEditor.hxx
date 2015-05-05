@@ -74,7 +74,7 @@ private:
         m_xContext;
 
     /// handles actions of the toolbox
-    DECL_LINK( ToolboxHdl, void* );
+    DECL_LINK_TYPED( ToolboxHdl, ToolBox*, void );
     /// is called, if the cursor of the table has moved
     DECL_LINK( BrowserCursorMovedHdl, void*);
     /// this is called if MiscOptions change, esp. High-Contrast mode

@@ -482,7 +482,7 @@ VclPtr<SfxPopupWindow> SwScrollNaviPopup::Clone() const
     return VclPtr<SwScrollNaviPopup>::Create( GetId(), GetFrame(), GetParent() );
 }
 
-IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
+IMPL_LINK_TYPED(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)
 {
     sal_uInt16 nSet = pSet->GetCurItemId();
     if( nSet != NID_PREV && nSet != NID_NEXT )
@@ -507,7 +507,6 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                      cmd, aArgs );
     }
-    return 0;
 }
 
 SwScrollNaviToolBox::~SwScrollNaviToolBox()

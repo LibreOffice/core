@@ -68,7 +68,7 @@ private:
     Image maIcon;
 
     void PaintTitle (const Rectangle& rTitleBox);
-    DECL_LINK(SelectionHandler, ToolBox*);
+    DECL_LINK_TYPED(SelectionHandler, ToolBox*, void);
 };
 
 } } // end of namespace sfx2::sidebar

@@ -52,8 +52,8 @@ protected:
 
     void            ApplyImageLists( sal_uInt16 nCategoryRID );
 
-    DECL_LINK( CategoryClickHdl, ToolBox* );
-    DECL_LINK( CmdSelectHdl, ToolBox* );
+    DECL_LINK_TYPED( CategoryClickHdl, ToolBox*, void );
+    DECL_LINK_TYPED( CmdSelectHdl, ToolBox*, void );
 
     SmViewShell * GetView();
     const ImageList * GetImageList( sal_uInt16 nResId );

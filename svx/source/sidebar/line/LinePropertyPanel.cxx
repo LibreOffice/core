@@ -251,9 +251,9 @@ void LinePropertyPanel::Initialize()
     const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
     mpTBWidth->SetItemImage(nIdWidth, mpIMGWidthIcon[0]);
     mpTBWidth->SetItemBits( nIdWidth, mpTBWidth->GetItemBits( nIdWidth ) | ToolBoxItemBits::DROPDOWNONLY );
-    aLink = LINK(this, LinePropertyPanel, ToolboxWidthSelectHdl);
-    mpTBWidth->SetDropdownClickHdl ( aLink );
-    mpTBWidth->SetSelectHdl ( aLink );
+    Link<ToolBox *, void> aLink2 = LINK(this, LinePropertyPanel, ToolboxWidthSelectHdl);
+    mpTBWidth->SetDropdownClickHdl ( aLink2 );
+    mpTBWidth->SetSelectHdl ( aLink2 );
 
     FillLineEndList();
     SelectEndStyle(true);
@@ -762,14 +762,13 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(LinePropertyPanel, ToolboxWidthSelectHdl,ToolBox*, pToolBox)
+IMPL_LINK_TYPED(LinePropertyPanel, ToolboxWidthSelectHdl,ToolBox*, pToolBox, void)
 {
     if (pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SELECTWIDTH)
     {
         maLineWidthPopup.SetWidthSelect(mnWidthCoreValue, mbWidthValuable, meMapUnit);
         maLineWidthPopup.Show(*pToolBox);
     }
-    return 0;
 }
 
 IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )

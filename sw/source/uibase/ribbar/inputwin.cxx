@@ -340,7 +340,7 @@ static const char * const aStrArr[] = {
     return 0;
 }
 
-IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl)
+IMPL_LINK_NOARG_TYPED(SwInputWindow, DropdownClickHdl, ToolBox *, void)
 {
     sal_uInt16 nCurID = GetCurItemId();
     EndSelection(); // reset back CurItemId !
@@ -354,8 +354,6 @@ IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl)
             break;
         }
     }
-
-    return sal_True;
 }
 
 void SwInputWindow::Click( )

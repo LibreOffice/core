@@ -61,7 +61,7 @@ namespace sfx2
             @return
                 the ID of the newly created toolbox item
         */
-        sal_uInt16  AddDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<>& i_rCallback )
+        sal_uInt16  AddDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<ToolBox *, void>& i_rCallback )
         {
             return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
         }
@@ -111,7 +111,7 @@ namespace sfx2
 
         /** internal version of AddDropDownToolBoxItem
         */
-        sal_uInt16  impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<>& i_rCallback );
+        sal_uInt16  impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<ToolBox *, void>& i_rCallback );
 
         /** returns the current title.
 
@@ -120,7 +120,7 @@ namespace sfx2
         OUString  impl_getTitle() const;
 
     private:
-        DECL_LINK( OnToolboxItemSelected, ToolBox* );
+        DECL_LINK_TYPED( OnToolboxItemSelected, ToolBox*, void );
 
         void    impl_construct();
         void    impl_layout();

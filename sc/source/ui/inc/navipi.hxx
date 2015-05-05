@@ -195,7 +195,7 @@ public:
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    DECL_LINK( ToolBoxDropdownClickHdl, void* );
+    DECL_LINK_TYPED( ToolBoxDropdownClickHdl, ToolBox*, void );
 
 protected:
     virtual void    Select() SAL_OVERRIDE;

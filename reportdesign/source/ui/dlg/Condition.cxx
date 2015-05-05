@@ -334,7 +334,7 @@ void Condition::dispose()
     VclHBox::dispose();
 }
 
-IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
+IMPL_LINK_NOARG_TYPED( Condition, DropdownClick, ToolBox*, void )
 {
     sal_uInt16 nId( m_pActions->GetCurItemId() );
     if ( !m_pColorFloat )
@@ -355,15 +355,12 @@ IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
     m_pColorFloat->SetPosPixel(m_pActions->GetItemPopupPosition(nId,m_pColorFloat->GetSizePixel()));
     m_pColorFloat->StartPopupMode(m_pActions);
     m_pColorFloat->StartSelection();
-
-    return 1;
 }
 
-IMPL_LINK( Condition, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG_TYPED( Condition, OnFormatAction, ToolBox*, void )
 {
     Color aCol(COL_AUTO);
     ApplyCommand(mapToolbarItemToSlotId(m_pActions->GetCurItemId()),aCol);
-    return 0L;
 }
 
 IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )

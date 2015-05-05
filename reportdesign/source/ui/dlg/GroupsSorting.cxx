@@ -1152,7 +1152,7 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control*, pControl )
     return 0L;
 }
 
-IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG_TYPED( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
 {
 
     sal_uInt16 nCommand = m_pToolBox->GetCurItemId();
@@ -1192,7 +1192,6 @@ IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
             }
         }
     }
-    return 1L;
 }
 
 IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )

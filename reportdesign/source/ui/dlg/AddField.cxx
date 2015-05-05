@@ -526,7 +526,7 @@ void OAddFieldWindow::resizeControls(const Size& _rDiff)
     }
 }
 
-IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnSortAction, ToolBox*, void )
 {
     const sal_uInt16 nCurItem = m_aActions->GetCurItemId();
     if ( SID_ADD_CONTROL_PAIR == nCurItem )
@@ -559,7 +559,6 @@ IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
             m_pListBox->GetModel()->Resort();
         }
     }
-    return 0L;
 }
 
 

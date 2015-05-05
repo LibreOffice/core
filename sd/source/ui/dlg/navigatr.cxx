@@ -259,7 +259,7 @@ sd::DrawDocShell* SdNavigatorWin::GetDrawDocShell( const SdDrawDocument* pDoc )
     return pDocShell;
 }
 
-IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl)
+IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
 {
     sal_uInt16 nId = maToolbox->GetCurItemId();
     sal_uInt16 nSId = 0;
@@ -306,15 +306,12 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl)
         }
         break;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdNavigatorWin, ClickToolboxHdl)
-{
-    return 0;
-}
+IMPL_LINK_NOARG_TYPED(SdNavigatorWin, ClickToolboxHdl, ToolBox *, void)
+{}
 
-IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
+IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 {
     sal_uInt16 nId = maToolbox->GetCurItemId();
 
@@ -387,7 +384,6 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
         }
         break;
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)

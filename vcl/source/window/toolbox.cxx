@@ -2639,7 +2639,7 @@ IMPL_LINK_NOARG_TYPED(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
         )
     {
         mpData->mbDropDownByKeyboard = false;
-        GetDropdownClickHdl().Call( this );
+        mpData->maDropdownClickHdl.Call( this );
 
         // do not reset data if the dropdown handler opened a floating window
         // see ImplFloatControl()
@@ -3869,7 +3869,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                         // the drop down arrow should not trigger the item action
                         mpData->mbDropDownByKeyboard = false;
-                        GetDropdownClickHdl().Call( this );
+                        mpData->maDropdownClickHdl.Call( this );
 
                         // do not reset data if the dropdown handler opened a floating window
                         // see ImplFloatControl()
@@ -5024,7 +5024,7 @@ bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
         Activate();
 
         mpData->mbDropDownByKeyboard = true;
-        GetDropdownClickHdl().Call( this );
+        mpData->maDropdownClickHdl.Call( this );
 
         mbIsKeyEvent = false;
         mbIsShift = false;

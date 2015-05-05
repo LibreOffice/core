@@ -131,7 +131,7 @@ namespace dbaui
 
     protected:
         DECL_LINK( OnIndexSelected, DbaIndexList* );
-        DECL_LINK( OnIndexAction, ToolBox* );
+        DECL_LINK_TYPED( OnIndexAction, ToolBox*, void );
         DECL_LINK( OnEntryEdited, SvTreeListEntry* );
         DECL_LINK( OnModified, void* );
         DECL_LINK( OnCloseDialog, void* );

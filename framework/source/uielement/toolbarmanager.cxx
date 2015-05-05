@@ -277,12 +277,12 @@ void ToolBarManager::Destroy()
     m_pToolBar->doLazyDelete();
 
     Link<> aEmpty;
-    m_pToolBar->SetSelectHdl( aEmpty );
+    m_pToolBar->SetSelectHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetActivateHdl( aEmpty );
     m_pToolBar->SetDeactivateHdl( aEmpty );
-    m_pToolBar->SetClickHdl( aEmpty );
-    m_pToolBar->SetDropdownClickHdl( aEmpty );
-    m_pToolBar->SetDoubleClickHdl( aEmpty );
+    m_pToolBar->SetClickHdl( Link<ToolBox *, void>() );
+    m_pToolBar->SetDropdownClickHdl( Link<ToolBox *, void>() );
+    m_pToolBar->SetDoubleClickHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetStateChangedHdl( aEmpty );
     m_pToolBar->SetDataChangedHdl( aEmpty );
     m_pToolBar->SetCommandHdl( aEmpty );
@@ -1545,17 +1545,17 @@ long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )(
     return 1;
 }
 
-IMPL_LINK_NOARG(ToolBarManager, Click)
+IMPL_LINK_NOARG_TYPED(ToolBarManager, Click, ToolBox *, void)
 {
-    return HandleClick(&XToolbarController::click);
+    HandleClick(&XToolbarController::click);
 }
 
-IMPL_LINK_NOARG(ToolBarManager, DropdownClick)
+IMPL_LINK_NOARG_TYPED(ToolBarManager, DropdownClick, ToolBox *, void)
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return 1;
+        return;
 
     sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
@@ -1570,12 +1570,11 @@ IMPL_LINK_NOARG(ToolBarManager, DropdownClick)
                 xWin->setFocus();
         }
     }
-    return 1;
 }
 
-IMPL_LINK_NOARG(ToolBarManager, DoubleClick)
+IMPL_LINK_NOARG_TYPED(ToolBarManager, DoubleClick, ToolBox *, void)
 {
-    return HandleClick(&XToolbarController::doubleClick);
+    HandleClick(&XToolbarController::doubleClick);
 }
 
 void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
@@ -2009,10 +2008,10 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
     return 1;
 }
 
-IMPL_LINK_NOARG(ToolBarManager, Select)
+IMPL_LINK_NOARG_TYPED(ToolBarManager, Select, ToolBox *, void)
 {
     if ( m_bDisposed )
-        return 1;
+        return;
 
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
     sal_uInt16      nId( m_pToolBar->GetCurItemId() );
@@ -2025,8 +2024,6 @@ IMPL_LINK_NOARG(ToolBarManager, Select)
         if ( xController.is() )
             xController->execute( nKeyModifier );
     }
-
-    return 1;
 }
 
 IMPL_LINK_NOARG(ToolBarManager, Activate)

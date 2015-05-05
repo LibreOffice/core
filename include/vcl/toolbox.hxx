@@ -185,12 +185,12 @@ private:
     PointerStyle        meLastStyle;
     WinBits             mnWinStyle;
     ToolBoxLayoutMode   meLayoutMode;
-    Link<>              maClickHdl;
-    Link<>              maDoubleClickHdl;
+    Link<ToolBox *, void> maClickHdl;
+    Link<ToolBox *, void> maDoubleClickHdl;
     Link<>              maActivateHdl;
     Link<>              maDeactivateHdl;
     Link<>              maHighlightHdl;
-    Link<>              maSelectHdl;
+    Link<ToolBox *, void> maSelectHdl;
     Link<>              maCommandHandler;
     Link<>              maStateChangedHandler;
     Link<>              maDataChangedHandler;
@@ -495,20 +495,17 @@ public:
     using DockingWindow::SetHelpId;
     using DockingWindow::GetHelpId;
 
-    void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
-    const Link<>&       GetClickHdl() const { return maClickHdl; }
-    void                SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<>&       GetDoubleClickHdl() const { return maDoubleClickHdl; }
-    void                SetDropdownClickHdl( const Link<>& rLink );
-    const Link<>&       GetDropdownClickHdl() const;
+    void                SetClickHdl( const Link<ToolBox *, void>& rLink ) { maClickHdl = rLink; }
+    void                SetDoubleClickHdl( const Link<ToolBox *, void>& rLink ) { maDoubleClickHdl = rLink; }
+    void                SetDropdownClickHdl( const Link<ToolBox *, void>& rLink );
     void                SetActivateHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
     const Link<>&       GetActivateHdl() const { return maActivateHdl; }
     void                SetDeactivateHdl( const Link<>& rLink ) { maDeactivateHdl = rLink; }
     const Link<>&       GetDeactivateHdl() const { return maDeactivateHdl; }
     void                SetHighlightHdl( const Link<>& rLink ) { maHighlightHdl = rLink; }
     const Link<>&       GetHighlightHdl() const { return maHighlightHdl; }
-    void                SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
-    const Link<>&       GetSelectHdl() const { return maSelectHdl; }
+    void                SetSelectHdl( const Link<ToolBox *, void>& rLink ) { maSelectHdl = rLink; }
+    const Link<ToolBox *, void>& GetSelectHdl() const { return maSelectHdl; }
     void                SetCommandHdl( const Link<>& aLink ) { maCommandHandler = aLink; }
     const Link<>&       GetCommandHdl() const { return maCommandHandler; }
     void                SetStateChangedHdl( const Link<>& aLink ) { maStateChangedHandler = aLink; }

@@ -154,7 +154,7 @@ private:
 
     // for transparency gradient
     VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
-    DECL_LINK( ClickTrGrHdl_Impl, ToolBox* );
+    DECL_LINK_TYPED( ClickTrGrHdl_Impl, ToolBox*, void );
 
     static void SetupIcons();
     void Initialize();

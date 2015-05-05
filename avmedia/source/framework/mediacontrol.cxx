@@ -486,7 +486,7 @@ IMPL_LINK_NOARG(MediaControl, implVolumeEndHdl)
 
 
 
-IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
+IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
 {
     if( p )
     {
@@ -570,8 +570,6 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
     {
         p->Invalidate( INVALIDATE_UPDATE );
     }
-
-    return 0;
 }
 
 

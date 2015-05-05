@@ -196,12 +196,12 @@ void SwNavigationPI::UsePage(SwWrtShell *pSh)
 
 // Select handler of the toolboxes
 
-IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
+IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
 {
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     SwView *pView = GetCreateView();
     if (!pView)
-        return 1;
+        return;
     SwWrtShell &rSh = pView->GetWrtShell();
     // Get MouseModifier for Outline-Move
 
@@ -238,7 +238,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
                     _ZoomIn();
                 }
             }
-            return sal_True;
+            return;
         // Functions that will trigger a direct action.
 
         case FN_SELECT_FOOTER:
@@ -330,12 +330,11 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     }
     if(bFocusToDoc)
         pView->GetEditWin().GrabFocus();
-    return sal_True;
 }
 
 // Click handler of the toolboxes
 
-IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
+IMPL_LINK_TYPED( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox, void )
 {
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     switch (nCurrItemId)
@@ -347,11 +346,9 @@ IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
         }
         break;
     }
-
-    return sal_True;
 }
 
-IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
+IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
 {
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     switch (nCurrItemId)
@@ -409,7 +406,6 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
         }
         break;
     }
-    return sal_True;
 }
 
 SwNavHelpToolBox::SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId) :
@@ -780,7 +776,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
 //  Handler
 
-    Link<> aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
+    Link<ToolBox *, void> aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
     aContentToolBox->SetSelectHdl( aLk );
     aGlobalToolBox->SetSelectHdl( aLk );
     aDocListBox->SetSelectHdl(LINK(this, SwNavigationPI,

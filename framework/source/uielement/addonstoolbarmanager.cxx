@@ -381,10 +381,10 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     AddFrameActionListener();
 }
 
-IMPL_LINK_NOARG(AddonsToolBarManager, Click)
+IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Click, ToolBox *, void)
 {
     if ( m_bDisposed )
-        return 1;
+        return;
 
     sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
@@ -395,14 +395,12 @@ IMPL_LINK_NOARG(AddonsToolBarManager, Click)
         if ( xController.is() )
             xController->click();
     }
-
-    return 1;
 }
 
-IMPL_LINK_NOARG(AddonsToolBarManager, DoubleClick)
+IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, DoubleClick, ToolBox *, void)
 {
     if ( m_bDisposed )
-        return 1;
+        return;
 
     sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
@@ -413,8 +411,6 @@ IMPL_LINK_NOARG(AddonsToolBarManager, DoubleClick)
         if ( xController.is() )
             xController->doubleClick();
     }
-
-    return 1;
 }
 
 IMPL_LINK_NOARG(AddonsToolBarManager, Command)
@@ -427,10 +423,10 @@ IMPL_LINK_NOARG(AddonsToolBarManager, Command)
     return 0;
 }
 
-IMPL_LINK_NOARG(AddonsToolBarManager, Select)
+IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Select, ToolBox *, void)
 {
     if ( m_bDisposed )
-        return 1;
+        return;
 
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
     sal_uInt16      nId( m_pToolBar->GetCurItemId() );
@@ -442,8 +438,6 @@ IMPL_LINK_NOARG(AddonsToolBarManager, Select)
         if ( xController.is() )
             xController->execute( nKeyModifier );
     }
-
-    return 1;
 }
 
 IMPL_LINK_NOARG(AddonsToolBarManager, Activate)

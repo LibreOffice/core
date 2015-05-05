@@ -100,8 +100,7 @@ void CellBorderStyleControl::Initialize()
     maTBBorder1->SetPaintTransparent(true);
     Size aTbxSize( maTBBorder1->CalcWindowSizePixel() );
     maTBBorder1->SetOutputSizePixel( aTbxSize );
-    Link<> aLink  = LINK(this, CellBorderStyleControl, TB1SelectHdl);
-    maTBBorder1->SetSelectHdl ( aLink );
+    maTBBorder1->SetSelectHdl ( LINK(this, CellBorderStyleControl, TB1SelectHdl) );
 
     maTBBorder2->SetLineCount(2);
     maTBBorder2->InsertItem(TBI_BORDER2_LEFT, mpImageList[4]);
@@ -133,8 +132,7 @@ void CellBorderStyleControl::Initialize()
     maTBBorder2->SetItemText(TBI_BORDER2_TLBR, ScResId(STR_BORDER_6));
     maTBBorder2->SetItemText(TBI_BORDER2_TOPBOT, ScResId(STR_BORDER_7));
     maTBBorder2->SetItemText(TBI_BORDER2_LEFTRIGHT, ScResId(STR_BORDER_8));
-    aLink  = LINK(this, CellBorderStyleControl, TB2SelectHdl);
-    maTBBorder2->SetSelectHdl ( aLink );
+    maTBBorder2->SetSelectHdl ( LINK(this, CellBorderStyleControl, TB2SelectHdl) );
 
     maTBBorder3->SetItemImage(TBI_BORDER3_S1, mpImageList[12]);
     maTBBorder3->SetItemImage(TBI_BORDER3_S2, mpImageList[13]);
@@ -144,11 +142,10 @@ void CellBorderStyleControl::Initialize()
     maTBBorder3->SetPaintTransparent(true);
     aTbxSize = maTBBorder3->CalcWindowSizePixel() ;
     maTBBorder3->SetOutputSizePixel( aTbxSize );
-    aLink  = LINK(this, CellBorderStyleControl, TB3SelectHdl);
-    maTBBorder3->SetSelectHdl ( aLink );
+    maTBBorder3->SetSelectHdl ( LINK(this, CellBorderStyleControl, TB3SelectHdl) );
 }
 
-IMPL_LINK(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
 {
     sal_uInt16 nId = pToolBox->GetCurItemId();
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
@@ -202,10 +199,9 @@ IMPL_LINK(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox)
 
     mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
     mrCellAppearancePropertyPanel.EndCellBorderStylePopupMode();
-    return 0;
 }
 
-IMPL_LINK(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox)
+IMPL_LINK_TYPED(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
 {
     sal_uInt16 nId = pToolBox->GetCurItemId();
 
@@ -287,10 +283,9 @@ IMPL_LINK(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox)
     }
 
     mrCellAppearancePropertyPanel.EndCellBorderStylePopupMode();
-    return 0;
 }
 
-IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
+IMPL_LINK_TYPED(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox, void)
 {
     sal_uInt16 nId = pToolBox->GetCurItemId();
 
@@ -347,7 +342,6 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
     pBottom.reset();
 
     mrCellAppearancePropertyPanel.EndCellBorderStylePopupMode();
-    return 0;
 }
 
 } } // end of namespace svx::sidebar

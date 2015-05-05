@@ -108,8 +108,8 @@ private:
 
     VclPtr<PopupControl> CreateCharacterSpacingControl (PopupContainer* pParent);
     VclPtr<PopupControl> CreateUnderlinePopupControl (PopupContainer* pParent);
-    DECL_LINK(SpacingClickHdl, ToolBox*);
-    DECL_LINK(UnderlineClickHdl, ToolBox* );
+    DECL_LINK_TYPED(SpacingClickHdl, ToolBox*, void);
+    DECL_LINK_TYPED(UnderlineClickHdl, ToolBox*, void);
 
     void SetupToolboxItems();
     void InitToolBoxFont();

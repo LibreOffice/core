@@ -82,10 +82,8 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     maMtrTrgrBorder->SetModifyHdl( aLink );
     maMtrTrgrStartValue->SetModifyHdl( aLink );
     maMtrTrgrEndValue->SetModifyHdl( aLink );
-    aLink = LINK( this, AreaTransparencyGradientControl, Left_Click45_Impl);
-    maBtnLeft45->SetSelectHdl( aLink );
-    aLink = LINK( this, AreaTransparencyGradientControl, Right_Click45_Impl);
-    maBtnRight45->SetSelectHdl( aLink );
+    maBtnLeft45->SetSelectHdl( LINK( this, AreaTransparencyGradientControl, Left_Click45_Impl) );
+    maBtnRight45->SetSelectHdl( LINK( this, AreaTransparencyGradientControl, Right_Click45_Impl) );
     maBtnLeft45->SetItemImage(1,maRotLeft);
     Size aTbxSize = maBtnLeft45->CalcWindowSizePixel();
     maBtnLeft45->SetOutputSizePixel( aTbxSize );
@@ -319,7 +317,7 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(AreaTransparencyGradientControl, Left_Click45_Impl)
+IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Left_Click45_Impl, ToolBox *, void)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
@@ -329,13 +327,12 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, Left_Click45_Impl)
     aTemp += 45;
     maMtrTrgrAngle->SetValue(aTemp);
     ExecuteValueModify( nStartCol, nEndCol );
-    return 0L;
 }
 
 
 
 
-IMPL_LINK_NOARG(AreaTransparencyGradientControl, Right_Click45_Impl)
+IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Right_Click45_Impl, ToolBox *, void)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
@@ -345,7 +342,6 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, Right_Click45_Impl)
     aTemp -= 45;
     maMtrTrgrAngle->SetValue(aTemp);
     ExecuteValueModify( nStartCol, nEndCol );
-    return 0L;
 }
 
 } } // end of namespace svx::sidebar

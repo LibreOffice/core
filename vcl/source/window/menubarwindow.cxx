@@ -226,10 +226,10 @@ Size MenuBarWindow::MinCloseButtonSize()
     return aCloseBtn->getMinSize();
 }
 
-IMPL_LINK_NOARG(MenuBarWindow, CloseHdl)
+IMPL_LINK_NOARG_TYPED(MenuBarWindow, CloseHdl, ToolBox *, void)
 {
     if( ! pMenu )
-        return 0;
+        return;
 
     if( aCloseBtn->GetCurItemId() == IID_DOCUMENTCLOSE )
     {
@@ -247,10 +247,9 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl)
             aArg.nId = it->first;
             aArg.bHighlight = (aCloseBtn->GetHighlightItemId() == it->first);
             aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
-            return it->second.m_aSelectLink.Call( &aArg );
+            it->second.m_aSelectLink.Call( &aArg );
         }
     }
-    return 0;
 }
 
 IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent*, pEvent )

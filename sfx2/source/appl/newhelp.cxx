@@ -2886,15 +2886,13 @@ void SfxHelpWindow_Impl::ShowStartPage()
 
 
 
-IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
+IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
 {
     if ( pToolBox )
     {
         bGrabFocusToToolBox = pToolBox->HasChildPathFocus();
         DoAction( pToolBox->GetCurItemId() );
     }
-
-    return 1;
 }
 
 

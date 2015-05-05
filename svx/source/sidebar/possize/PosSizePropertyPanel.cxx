@@ -574,7 +574,7 @@ IMPL_LINK( PosSizePropertyPanel, RotationHdl, void *, EMPTYARG )
 
 
 
-IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox )
+IMPL_LINK_TYPED( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
 {
     const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
 
@@ -590,8 +590,6 @@ IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox )
         GetBindings()->GetDispatcher()->Execute(
                 SID_FLIP_VERTICAL, SfxCallMode::RECORD, &aVertItem, 0L );
     }
-
-    return 0;
 }
 
 

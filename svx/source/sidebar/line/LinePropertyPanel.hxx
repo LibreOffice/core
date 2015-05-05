@@ -154,7 +154,7 @@ private:
 
     DECL_LINK(ImplWidthPopupModeEndHdl, FloatingWindow* );
     DECL_LINK(ChangeLineStyleHdl, void*);
-    DECL_LINK(ToolboxWidthSelectHdl, ToolBox*);
+    DECL_LINK_TYPED(ToolboxWidthSelectHdl, ToolBox*, void);
     DECL_LINK(ChangeTransparentHdl , void *);
     DECL_LINK(ChangeStartHdl, void *);
     DECL_LINK(ChangeEndHdl, void *);

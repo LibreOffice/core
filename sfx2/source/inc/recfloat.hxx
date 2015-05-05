@@ -51,7 +51,7 @@ public:
     virtual void        FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-    DECL_LINK( Select, ToolBox * );
+    DECL_LINK_TYPED( Select, ToolBox *, void );
 };
 
 #endif

@@ -129,7 +129,7 @@ struct ImplToolBoxPrivateData
     void ImplClearLayoutData() { delete m_pLayoutData; m_pLayoutData = NULL; }
 
     // called when dropdown items are clicked
-    Link<>  maDropdownClickHdl;
+    Link<ToolBox *, void> maDropdownClickHdl;
     Timer   maDropdownTimer; // for opening dropdown items on "long click"
 
     // large or small buttons ?

@@ -100,8 +100,8 @@ namespace rptui
 
         ConditionalExpressions          m_aConditionalExpressions;
 
-        DECL_LINK( OnFormatAction,      ToolBox* );
-        DECL_LINK( DropdownClick,       ToolBox* );
+        DECL_LINK_TYPED( OnFormatAction, ToolBox*, void );
+        DECL_LINK_TYPED( DropdownClick, ToolBox*, void );
         DECL_LINK( OnConditionAction,   Button* );
 
     public:

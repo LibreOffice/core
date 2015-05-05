@@ -381,9 +381,9 @@ private:
     VclPtr<DropToolBox_Impl>    m_aActionTbL;
     VclPtr<ToolBox>             m_aActionTbR;
 
-    DECL_LINK( ToolBoxLSelect, ToolBox* );
-    DECL_LINK( ToolBoxRSelect, ToolBox* );
-    DECL_LINK( ToolBoxRClick, ToolBox* );
+    DECL_LINK_TYPED( ToolBoxLSelect, ToolBox*, void );
+    DECL_LINK_TYPED( ToolBoxRSelect, ToolBox*, void );
+    DECL_LINK_TYPED( ToolBoxRClick, ToolBox*, void );
     DECL_LINK( MenuSelectHdl, Menu* );
 
 protected:

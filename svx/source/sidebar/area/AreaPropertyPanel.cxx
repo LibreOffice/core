@@ -186,9 +186,9 @@ void AreaPropertyPanel::Initialize()
 
     const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
     mpBTNGradient->SetItemBits( nIdGradient, mpBTNGradient->GetItemBits( nIdGradient ) | ToolBoxItemBits::DROPDOWNONLY );
-    aLink = LINK( this, AreaPropertyPanel, ClickTrGrHdl_Impl );
-    mpBTNGradient->SetDropdownClickHdl( aLink );
-    mpBTNGradient->SetSelectHdl( aLink );
+    Link<ToolBox *, void> aLink2 = LINK( this, AreaPropertyPanel, ClickTrGrHdl_Impl );
+    mpBTNGradient->SetDropdownClickHdl( aLink2 );
+    mpBTNGradient->SetSelectHdl( aLink2 );
     mpBTNGradient->SetItemImage(nIdGradient,maImgLinear);
     mpBTNGradient->Hide();
 
@@ -1098,13 +1098,11 @@ void AreaPropertyPanel::Update()
 
 
 
-IMPL_LINK( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox )
+IMPL_LINK_TYPED( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
 {
     maTrGrPopup.Rearrange(mpFloatTransparenceItem.get());
     OSL_ASSERT( pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SIDEBARGRADIENT);
     maTrGrPopup.Show(*pToolBox);
-
-    return 0L;
 }
 
 

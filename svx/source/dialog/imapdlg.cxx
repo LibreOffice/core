@@ -340,7 +340,7 @@ void SvxIMapDlg::KeyInput( const KeyEvent& rKEvt )
 
 // Click-handler for ToolBox
 
-IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
+IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
 {
     sal_uInt16 nNewItemId = pTbx->GetCurItemId();
 
@@ -440,8 +440,6 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         URLLoseFocusHdl( NULL );
         pIMapWnd->GetSdrModel()->Redo();
     }
-
-    return 0;
 }
 
 void SvxIMapDlg::DoOpen()

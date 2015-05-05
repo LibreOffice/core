@@ -141,8 +141,8 @@ private:
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
-    DECL_LINK(TbxCellBorderSelectHdl, ToolBox*);
-    DECL_LINK(TbxLineStyleSelectHdl, ToolBox*);
+    DECL_LINK_TYPED(TbxCellBorderSelectHdl, ToolBox*, void);
+    DECL_LINK_TYPED(TbxLineStyleSelectHdl, ToolBox*, void);
     DECL_LINK(CBOXGridShowClkHdl, void*);
 
     // for CellLineStyle popup

@@ -755,7 +755,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
         GetSelectedIcon();
 
-    DECL_LINK( SelectHdl, ToolBox * );
+    DECL_LINK_TYPED( SelectHdl, ToolBox *, void );
     DECL_LINK( ImportHdl, PushButton * );
     DECL_LINK( DeleteHdl, PushButton * );
 };

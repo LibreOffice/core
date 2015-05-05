@@ -97,7 +97,7 @@ private:
 
     void            ImplInitStyleSettings();
 
-                    DECL_LINK(CloseHdl, void *);
+                    DECL_LINK_TYPED(CloseHdl, ToolBox *, void);
                     DECL_LINK(FloatHdl, void *);
                     DECL_LINK(HideHdl, void *);
                     DECL_LINK( ToolboxEventHdl, VclWindowEvent* );

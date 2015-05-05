@@ -75,10 +75,10 @@ void SidebarToolBox::dispose()
 
     if (mbAreHandlersRegistered)
     {
-        SetDropdownClickHdl(Link<>());
-        SetClickHdl(Link<>());
-        SetDoubleClickHdl(Link<>());
-        SetSelectHdl(Link<>());
+        SetDropdownClickHdl(Link<ToolBox *, void>());
+        SetClickHdl(Link<ToolBox *, void>());
+        SetDoubleClickHdl(Link<ToolBox *, void>());
+        SetSelectHdl(Link<ToolBox *, void>());
         SetActivateHdl(Link<>());
         SetDeactivateHdl(Link<>());
         mbAreHandlersRegistered = false;
@@ -229,7 +229,7 @@ void SidebarToolBox::RegisterHandlers()
     }
 }
 
-IMPL_LINK(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox, void)
 {
     if (pToolBox != NULL)
     {
@@ -241,43 +241,36 @@ IMPL_LINK(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox)
                 xWindow->setFocus();
         }
     }
-    return 1;
 }
 
-IMPL_LINK(SidebarToolBox, ClickHandler, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(SidebarToolBox, ClickHandler, ToolBox*, pToolBox, void)
 {
     if (pToolBox == NULL)
-        return 0;
+        return;
 
     Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
     if (xController.is())
         xController->click();
-
-    return 1;
 }
 
-IMPL_LINK(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox, void)
 {
     if (pToolBox == NULL)
-        return 0;
+        return;
 
     Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
     if (xController.is())
         xController->doubleClick();
-
-    return 1;
 }
 
-IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
 {
     if (pToolBox == NULL)
-        return 0;
+        return;
 
     Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
     if (xController.is())
         xController->execute((sal_Int16)pToolBox->GetModifier());
-
-    return 1;
 }
 
 IMPL_LINK(SidebarToolBox, ActivateToolBox, ToolBox*, EMPTYARG)

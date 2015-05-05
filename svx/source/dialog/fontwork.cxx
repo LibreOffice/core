@@ -642,7 +642,7 @@ void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
     }
 }
 
-IMPL_LINK_NOARG(SvxFontWorkDialog, SelectStyleHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectStyleHdl_Impl, ToolBox *, void)
 {
     sal_uInt16 nId = m_pTbxStyle->GetCurItemId();
 
@@ -669,10 +669,9 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectStyleHdl_Impl)
         SetStyle_Impl( &aItem );
         nLastStyleTbxId = nId;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxFontWorkDialog, SelectAdjustHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectAdjustHdl_Impl, ToolBox *, void)
 {
     sal_uInt16 nId = m_pTbxAdjust->GetCurItemId();
 
@@ -697,10 +696,9 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectAdjustHdl_Impl)
         SetAdjust_Impl(&aItem);
         nLastAdjustTbxId = nId;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectShadowHdl_Impl, ToolBox *, void)
 {
     sal_uInt16 nId = m_pTbxShadow->GetCurItemId();
 
@@ -737,7 +735,6 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHADOW, SfxCallMode::RECORD, &aItem, 0L );
         SetShadow_Impl(&aItem, true);
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, ModifyInputHdl_Impl)

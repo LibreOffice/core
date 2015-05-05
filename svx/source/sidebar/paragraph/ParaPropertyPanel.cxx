@@ -215,8 +215,7 @@ void ParaPropertyPanel::InitToolBoxIndent()
     mpTbxIndent_IncDec->SetItemImage(nIdDecrement, maDecIndentControl.GetIcon());
     mpTbxIndent_IncDec->SetItemImage(nIdHanging, maIndHang);
 
-    aLink = LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl );
-    mpTbxIndent_IncDec->SetSelectHdl(aLink);
+    mpTbxIndent_IncDec->SetSelectHdl(LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl ));
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 
     const sal_uInt16 nIdPromote  = mpTbxProDemote->GetItemId(UNO_PROMOTE);
@@ -225,8 +224,7 @@ void ParaPropertyPanel::InitToolBoxIndent()
     mpTbxProDemote->SetItemImage(nIdPromote, maOutLineLeftControl.GetIcon());
     mpTbxProDemote->SetItemImage(nIdDemote, maOutLineRightControl.GetIcon());
     mpTbxProDemote->SetItemImage(nIdHanging2, maIndHang);
-    aLink = LINK( this, ParaPropertyPanel, ClickProDemote_Hdl_Impl );
-    mpTbxProDemote->SetSelectHdl(aLink);
+    mpTbxProDemote->SetSelectHdl(LINK( this, ParaPropertyPanel, ClickProDemote_Hdl_Impl ));
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 }
 
@@ -261,7 +259,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
     return 0;
 }
 
-IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
+IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl, void)
 {
     const OUString aCommand(pControl->GetItemCommand(pControl->GetCurItemId()));
 
@@ -338,11 +336,9 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
             GetBindings()->GetDispatcher()->Execute(
                 SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
         }
-
-    return 0L;
 }
 
-IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
+IMPL_LINK_TYPED(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl, void)
 {
     const OUString aCommand(pControl->GetItemCommand(pControl->GetCurItemId()));
 
@@ -363,8 +359,6 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
 
             GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
         }
-
-    return 0L;
 }
 
 // for Paragraph Spacing

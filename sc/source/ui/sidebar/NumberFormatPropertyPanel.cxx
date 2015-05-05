@@ -96,8 +96,7 @@ void NumberFormatPropertyPanel::Initialize()
     mpLbCategory->SetAccessibleName(OUString( "Category"));
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
-    aLink = LINK(this, NumberFormatPropertyPanel, NumFormatHdl);
-    mpTBCategory->SetSelectHdl ( aLink );
+    mpTBCategory->SetSelectHdl ( LINK(this, NumberFormatPropertyPanel, NumFormatHdl) );
 
     aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
 
@@ -112,7 +111,7 @@ void NumberFormatPropertyPanel::Initialize()
     mpTBCategory->SetAccessibleRelationLabeledBy(mpTBCategory);
 }
 
-IMPL_LINK( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox )
+IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox, void )
 {
     const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
     sal_uInt16 nId = 0;
@@ -133,7 +132,6 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox )
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nId );
         GetBindings()->GetDispatcher()->Execute(SID_NUMBER_TYPE_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
     }
-    return 0L;
 }
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )

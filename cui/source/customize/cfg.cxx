@@ -5019,7 +5019,7 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
     return result;
 }
 
-IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
+IMPL_LINK_TYPED( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
 {
     (void)pToolBox;
 
@@ -5047,8 +5047,6 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
     {
         pBtnDelete->Enable( false );
     }
-
-    return 0;
 }
 
 IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )

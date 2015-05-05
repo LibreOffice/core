@@ -431,7 +431,7 @@ bool SvxSuperContourDlg::IsRedoPossible() const
 
 // Click handler for ToolBox
 
-IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
+IMPL_LINK_TYPED( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
 {
     sal_uInt16 nNewItemId = pTbx->GetCurItemId();
 
@@ -532,8 +532,6 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 
         m_pContourWnd->SetPipetteMode( bPipette );
     }
-
-    return 0L;
 }
 
 IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )

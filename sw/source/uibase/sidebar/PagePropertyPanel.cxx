@@ -237,7 +237,7 @@ void PagePropertyPanel::Initialize()
 {
     // popup for page orientation
     const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
-    Link<> aLink = LINK( this, PagePropertyPanel, ClickOrientationHdl );
+    Link<ToolBox *, void> aLink = LINK( this, PagePropertyPanel, ClickOrientationHdl );
     mpToolBoxOrientation->SetDropdownClickHdl( aLink );
     mpToolBoxOrientation->SetSelectHdl( aLink );
     mpToolBoxOrientation->SetItemImage( nIdOrientation, mImgPortrait);
@@ -300,11 +300,9 @@ VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageOrientationCont
     return VclPtr<PageOrientationControl>::Create( pParent, *this , mpPageItem->IsLandscape() );
 }
 
-IMPL_LINK( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox )
+IMPL_LINK_TYPED( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox, void )
 {
     maOrientationPopup.Show( *pToolBox );
-
-    return 0L;
 }
 
 void PagePropertyPanel::ExecuteOrientationChange( const bool bLandscape )
@@ -411,11 +409,9 @@ void PagePropertyPanel::ExecutePageLayoutChange( const bool bMirrored )
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE, SfxCallMode::RECORD, mpPageItem.get(),  0L );
 }
 
-IMPL_LINK( PagePropertyPanel, ClickMarginHdl, ToolBox*, pToolBox )
+IMPL_LINK_TYPED( PagePropertyPanel, ClickMarginHdl, ToolBox*, pToolBox, void )
 {
     maMarginPopup.Show( *pToolBox );
-
-    return 0L;
 }
 
 void PagePropertyPanel::ClosePageMarginPopup()
@@ -446,11 +442,9 @@ void PagePropertyPanel::ExecuteSizeChange( const Paper ePaper )
     mpBindings->GetDispatcher()->Execute(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, mpPageSizeItem.get(),  0L );
 }
 
-IMPL_LINK( PagePropertyPanel, ClickSizeHdl, ToolBox*, pToolBox )
+IMPL_LINK_TYPED( PagePropertyPanel, ClickSizeHdl, ToolBox*, pToolBox, void )
 {
     maSizePopup.Show( *pToolBox );
-
-    return 0L;
 }
 
 void PagePropertyPanel::ClosePageSizePopup()
@@ -474,11 +468,9 @@ void PagePropertyPanel::ExecuteColumnChange( const sal_uInt16 nColumnType )
     mpBindings->GetDispatcher()->Execute(SID_ATTR_PAGE_COLUMN, SfxCallMode::RECORD, mpPageColumnTypeItem.get(),  0L );
 }
 
-IMPL_LINK( PagePropertyPanel, ClickColumnHdl, ToolBox*, pToolBox )
+IMPL_LINK_TYPED( PagePropertyPanel, ClickColumnHdl, ToolBox*, pToolBox, void )
 {
     maColumnPopup.Show( *pToolBox );
-
-    return 0L;
 }
 
 void PagePropertyPanel::ClosePageColumnPopup()

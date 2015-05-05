@@ -479,7 +479,7 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Idle*, void )
     SendDispatch(TBC_LB_SOURCE,aPropVal);
 }
 
-IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
+IMPL_LINK_NOARG_TYPED( BibToolBar, MenuHdl, ToolBox*, void)
 {
     sal_uInt16  nId=GetCurItemId();
     if(nId==TBC_BT_AUTOFILTER)
@@ -513,7 +513,6 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
 
 
     }
-    return 0;
 }
 
 void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)

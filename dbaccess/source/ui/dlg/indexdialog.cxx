@@ -544,7 +544,7 @@ namespace dbaui
         updateToolbox();
     }
 
-    IMPL_LINK( DbaIndexDialog, OnIndexAction, ToolBox*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnIndexAction, ToolBox*, void )
     {
         sal_uInt16 nClicked = m_pActions->GetCurItemId();
         if (nClicked == mnNewCmdId)
@@ -557,8 +557,6 @@ namespace dbaui
             OnSaveIndex();
         else if (nClicked == mnResetCmdId)
             OnResetIndex();
-
-        return 0L;
     }
 
     IMPL_LINK( DbaIndexDialog, OnCloseDialog, void*, /*NOTINTERESTEDIN*/ )

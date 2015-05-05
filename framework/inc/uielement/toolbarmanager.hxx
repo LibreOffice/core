@@ -128,10 +128,10 @@ class ToolBarManager : public ToolbarManager_Base
     protected:
         DECL_LINK( Command, CommandEvent * );
         PopupMenu * GetToolBarCustomMenu(ToolBox* pToolBar);
-        DECL_LINK(Click, void *);
-        DECL_LINK(DropdownClick, void *);
-        DECL_LINK(DoubleClick, void *);
-        DECL_LINK(Select, void *);
+        DECL_LINK_TYPED(Click, ToolBox *, void);
+        DECL_LINK_TYPED(DropdownClick, ToolBox *, void);
+        DECL_LINK_TYPED(DoubleClick, ToolBox *, void);
+        DECL_LINK_TYPED(Select, ToolBox *, void);
         DECL_LINK(Activate, void *);
         DECL_LINK(Deactivate, void *);
         DECL_LINK( StateChanged, StateChangedType* );

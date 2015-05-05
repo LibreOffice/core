@@ -117,7 +117,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 
     virtual bool    Close() SAL_OVERRIDE;
 
-    DECL_LINK( TbxClickHdl, ToolBox* );
+    DECL_LINK_TYPED( TbxClickHdl, ToolBox*, void );
     DECL_LINK( InfoHdl, IMapWindow* );
     DECL_LINK( MousePosHdl, IMapWindow* );
     DECL_LINK( GraphSizeHdl, IMapWindow* );

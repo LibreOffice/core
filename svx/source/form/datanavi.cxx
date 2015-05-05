@@ -388,10 +388,9 @@ namespace svxform
         TabPage::dispose();
     }
 
-    IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl)
+    IMPL_LINK_NOARG_TYPED(XFormsPage, TbxSelectHdl, ToolBox *, void)
     {
         DoToolBoxAction( m_pToolBox->GetCurItemId() );
-        return 0;
     }
 
     IMPL_LINK_NOARG(XFormsPage, ItemSelectHdl)

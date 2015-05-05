@@ -79,7 +79,7 @@ class SwFldVarPage : public SwFldPage
     DECL_LINK(TypeHdl, void *);
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
     DECL_LINK(ModifyHdl, void * = 0);
-    DECL_LINK( TBClickHdl, ToolBox *pTB = 0);
+    DECL_LINK_TYPED( TBClickHdl, ToolBox *, void );
     DECL_LINK(ChapterHdl, void * = 0);
     DECL_LINK(SeparatorHdl, void * = 0);
 

@@ -185,15 +185,13 @@ void TitleBar::PaintFocus (const Rectangle& rFocusBox)
     Pop();
 }
 
-IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox)
+IMPL_LINK_TYPED(TitleBar, SelectionHandler, ToolBox*, pToolBox, void)
 {
     (void)pToolBox;
     OSL_ASSERT(maToolBox.get()==pToolBox);
     const sal_uInt16 nItemId (maToolBox->GetHighlightItemId());
 
     HandleToolBoxItemClick(nItemId);
-
-    return sal_True;
 }
 
 } } // end of namespace sfx2::sidebar

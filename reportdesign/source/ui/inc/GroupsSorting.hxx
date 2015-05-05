@@ -85,7 +85,7 @@ private:
     DECL_LINK( OnControlFocusLost, Control* );
     DECL_LINK( OnControlFocusGot, Control* );
     DECL_LINK( LBChangeHdl, ListBox* );
-    DECL_LINK( OnFormatAction,      ToolBox* );
+    DECL_LINK_TYPED( OnFormatAction, ToolBox*, void );
 
     /** returns the groups
         @return the groups which now have to check which one changes

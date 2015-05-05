@@ -1150,7 +1150,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
     }
 }
 
-IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
+IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
 {
     m_aTBPreview->EndSelection();
 
@@ -1192,7 +1192,6 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
         Resize();
         getBorderWin().getView()->getAppController().executeChecked(nSelectedAction,Sequence<PropertyValue>());
     }
-    return 0L;
 }
 
 void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )

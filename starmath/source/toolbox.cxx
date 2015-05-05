@@ -329,24 +329,22 @@ sal_uInt16 SmToolBoxWindow::MapToolbarIdToCategory(sal_uInt16 nId) const
     return RID_MISC_CAT;
 }
 
-IMPL_LINK( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox)
+IMPL_LINK_TYPED( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox, void)
 {
     sal_uInt16 nItemId = pToolBox->GetCurItemId();
     if (nItemId != 0)
     {
         SetCategory(MapToolbarIdToCategory(nItemId));
     }
-    return 0;
 }
 
-IMPL_LINK( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
+IMPL_LINK_TYPED( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox, void)
 {
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTCOMMAND, SfxCallMode::RECORD,
                 new SfxInt16Item(SID_INSERTCOMMAND, pToolBox->GetCurItemId()), 0L);
-    return 0;
 }
 
 

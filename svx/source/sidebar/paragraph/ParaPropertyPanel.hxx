@@ -118,8 +118,8 @@ private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     DECL_LINK(ModifyIndentHdl_Impl, void*);
-    DECL_LINK(ClickIndent_IncDec_Hdl_Impl, ToolBox*);
-    DECL_LINK(ClickProDemote_Hdl_Impl, ToolBox*);
+    DECL_LINK_TYPED(ClickIndent_IncDec_Hdl_Impl, ToolBox*, void);
+    DECL_LINK_TYPED(ClickProDemote_Hdl_Impl, ToolBox*, void);
     DECL_LINK(ULSpaceHdl_Impl, void*);
 
     void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
