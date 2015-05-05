@@ -83,7 +83,7 @@ public:
     AlphaMask           GetAlpha() const;
 
     const Size&         GetSizePixel() const { return aBitmapSize; }
-    void                SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+    void                SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     const Size&         GetPrefSize() const { return aBitmap.GetPrefSize(); }
     void                SetPrefSize( const Size& rPrefSize ) { aBitmap.SetPrefSize( rPrefSize ); }
@@ -237,7 +237,7 @@ public:
      */
     bool                Scale(
                             const Size& rNewSize,
-                            sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+                            BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     /** Scale the bitmap
 
@@ -255,7 +255,7 @@ public:
     bool                Scale(
                             const double& rScaleX,
                             const double& rScaleY,
-                            sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+                            BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     /** Rotate bitmap by the specified angle
 

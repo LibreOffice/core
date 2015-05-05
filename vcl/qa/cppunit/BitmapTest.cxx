@@ -112,7 +112,7 @@ void BitmapTest::testScale()
         rFilter.compressAsPNG(aBitmap24Bit, aStream, 9);
     }
 
-    aBitmap24Bit.Scale(2, 2, BMP_SCALE_FAST);
+    aBitmap24Bit.Scale(2, 2, BmpScaleFlag::Fast);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<long>(20), aBitmap24Bit.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(static_cast<long>(20), aBitmap24Bit.GetSizePixel().Height());

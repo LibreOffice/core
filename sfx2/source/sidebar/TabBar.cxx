@@ -148,7 +148,7 @@ void TabBar::UpdateButtonIcons()
     if ( mpMenuButton->GetDPIScaleFactor() > 1 )
     {
         BitmapEx b = aImage.GetBitmapEx();
-        b.Scale(mpMenuButton->GetDPIScaleFactor(), mpMenuButton->GetDPIScaleFactor(), BMP_SCALE_FAST);
+        b.Scale(mpMenuButton->GetDPIScaleFactor(), mpMenuButton->GetDPIScaleFactor(), BmpScaleFlag::Fast);
         aImage = Image(b);
     }
     mpMenuButton->SetModeImage(aImage);
@@ -165,7 +165,7 @@ void TabBar::UpdateButtonIcons()
             if ( mpMenuButton->GetDPIScaleFactor() > 1 )
             {
                 BitmapEx b = aImage.GetBitmapEx();
-                b.Scale(mpMenuButton->GetDPIScaleFactor(), mpMenuButton->GetDPIScaleFactor(), BMP_SCALE_FAST);
+                b.Scale(mpMenuButton->GetDPIScaleFactor(), mpMenuButton->GetDPIScaleFactor(), BmpScaleFlag::Fast);
                 aImage = Image(b);
             }
 

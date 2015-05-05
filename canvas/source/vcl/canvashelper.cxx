@@ -926,7 +926,7 @@ namespace vclcanvas
         Bitmap aBitmap( rOutDev.GetBitmap(aEmptyPoint, aBmpSize) );
 
         aBitmap.Scale( vcl::unotools::sizeFromRealSize2D(newSize),
-                       beFast ? BMP_SCALE_DEFAULT : BMP_SCALE_BESTQUALITY );
+                       beFast ? BmpScaleFlag::Default : BmpScaleFlag::BestQuality );
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( aBitmap, *mpDevice, mpOutDev ) );

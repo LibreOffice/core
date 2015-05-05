@@ -2887,7 +2887,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     return rOStm;
 }
 
-bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, sal_uInt32 nMaximumExtent, BmpConversion eColorConversion, long nScaleFlag) const
+bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, sal_uInt32 nMaximumExtent, BmpConversion eColorConversion, BmpScaleFlag nScaleFlag) const
 {
     // initialization seems to be complicated but is used to avoid rounding errors
     ScopedVclPtrInstance< VirtualDevice > aVDev;

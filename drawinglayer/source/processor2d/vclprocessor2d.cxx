@@ -519,7 +519,7 @@ namespace drawinglayer
                                         aBitmapEx.Convert(BMP_CONVERSION_24BIT);
                                     }
 
-                                    aBitmapEx.Scale(aNeededBitmapSizePixel, BMP_SCALE_INTERPOLATE);
+                                    aBitmapEx.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
                                 }
 
                                 bool bPainted(false);

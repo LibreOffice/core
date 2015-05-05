@@ -78,7 +78,7 @@ private:
     double GetViewWidthInch();
     double GetViewHeightInch();
 
-    sal_uLong GetSelectedInterpolationType();
+    BmpScaleFlag GetSelectedInterpolationType();
 
 public:
     CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );

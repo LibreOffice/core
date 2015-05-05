@@ -843,7 +843,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                         {
                             BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
                             // export: use highest quality
-                            aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ), BMP_SCALE_LANCZOS );
+                            aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ), BmpScaleFlag::Lanczos );
                             aGraphic = aBmpEx;
                         }
 

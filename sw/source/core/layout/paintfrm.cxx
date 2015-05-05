@@ -6193,7 +6193,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
             const long nWidth = aPageRightShadow.GetSizePixel().Width();
             const long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
             if (aPageRightShadow.GetSizePixel().Height() < nHeight)
-                aPageRightShadow.Scale(Size(nWidth, nHeight), BMP_SCALE_FAST);
+                aPageRightShadow.Scale(Size(nWidth, nHeight), BmpScaleFlag::Fast);
 
             lcl_paintBitmapExToRect(pOut,
                     Point(aPaintRect.Right() + mnShadowPxWidth, aPagePxRect.Top() + mnShadowPxWidth - 1),
@@ -6214,7 +6214,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
             const long nWidth = aPageLeftShadow.GetSizePixel().Width();
             const long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
             if (aPageLeftShadow.GetSizePixel().Height() < nHeight)
-                aPageLeftShadow.Scale(Size(nWidth, nHeight), BMP_SCALE_FAST);
+                aPageLeftShadow.Scale(Size(nWidth, nHeight), BmpScaleFlag::Fast);
 
             lcl_paintBitmapExToRect(pOut,
                     Point(lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1),
@@ -6226,7 +6226,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
     // Bottom shadow
     const long nBottomHeight = aPageBottomShadow.GetSizePixel().Height();
     if (aPageBottomShadow.GetSizePixel().Width() < aPaintRect.Width())
-        aPageBottomShadow.Scale(Size(aPaintRect.Width(), nBottomHeight), BMP_SCALE_FAST);
+        aPageBottomShadow.Scale(Size(aPaintRect.Width(), nBottomHeight), BmpScaleFlag::Fast);
 
     lcl_paintBitmapExToRect(pOut,
             Point(aPaintRect.Left(), aPagePxRect.Bottom() + 2),
@@ -6236,7 +6236,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
     // Top shadow
     const long nTopHeight = aPageTopShadow.GetSizePixel().Height();
     if (aPageTopShadow.GetSizePixel().Width() < aPaintRect.Width())
-        aPageTopShadow.Scale(Size(aPaintRect.Width(), nTopHeight), BMP_SCALE_FAST);
+        aPageTopShadow.Scale(Size(aPaintRect.Width(), nTopHeight), BmpScaleFlag::Fast);
 
     lcl_paintBitmapExToRect(pOut,
             Point(aPaintRect.Left(), aPagePxRect.Top() - mnShadowPxWidth),

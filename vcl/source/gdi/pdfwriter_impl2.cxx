@@ -128,7 +128,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 if( aNewBmpSize.Width() && aNewBmpSize.Height() )
                 {
                     // #i121233# Use best quality for PDF exports
-                    aBitmapEx.Scale( aNewBmpSize, BMP_SCALE_BESTQUALITY );
+                    aBitmapEx.Scale( aNewBmpSize, BmpScaleFlag::BestQuality );
                 }
                 else
                 {

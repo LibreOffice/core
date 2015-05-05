@@ -145,7 +145,7 @@ bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUStr
         {
             ::Size aNoScaleSize( aBmpSize.Width(), aSize.Height() );
             if ( aBmpSize != aNoScaleSize )
-                aBitmapEx.Scale( aNoScaleSize, BMP_SCALE_BESTQUALITY );
+                aBitmapEx.Scale( aNoScaleSize, BmpScaleFlag::BestQuality );
             aImage = Image( aBitmapEx );
             return true;
         }

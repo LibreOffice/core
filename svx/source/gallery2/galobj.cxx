@@ -81,9 +81,7 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
             // prevent scaling close to 1.0 which is not needed for pixel graphics
             if(fScale < 1.0 && fabs(1.0 - fScale) > 0.005)
             {
-                static sal_uInt32 nScaleFlag = BMP_SCALE_BESTQUALITY;
-
-                aRetval.Scale(fScale, fScale, nScaleFlag);
+                aRetval.Scale(fScale, fScale, BmpScaleFlag::BestQuality);
             }
         }
     }
@@ -118,7 +116,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     else
                         aBmpSize.Height() = FRound( aBmpSize.Width() / fFactorLog );
 
-                    aBmpEx.SetSizePixel( aBmpSize, BMP_SCALE_BESTQUALITY );
+                    aBmpEx.SetSizePixel( aBmpSize, BmpScaleFlag::BestQuality );
                 }
             }
 
@@ -138,7 +136,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                 if(aThumbBmp.Scale(
                     (double) aNewSize.Width() / aBmpSize.Width(),
                     (double) aNewSize.Height() / aBmpSize.Height(),
-                    BMP_SCALE_BESTQUALITY ) )
+                    BmpScaleFlag::BestQuality ) )
                 {
                     aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
                     bRet = true;
@@ -509,7 +507,7 @@ bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 
                     if(!!aThumbBmp)
                     {
-                        aThumbBmp.Scale(Size(nTargetSizeX, nTargetSizeY), BMP_SCALE_BESTQUALITY);
+                        aThumbBmp.Scale(Size(nTargetSizeX, nTargetSizeY), BmpScaleFlag::BestQuality);
                         aThumbBmp.Convert(BMP_CONVERSION_8BIT_COLORS);
                         bRet = true;
                     }

@@ -480,7 +480,7 @@ static Image ScaleImage( const Image &rImage, bool bBig )
     BitmapEx aScaleBmp(rImage.GetBitmapEx());
     SAL_INFO("fwk", "Addons: expensive scale image from "
              << aScaleBmp.GetSizePixel() << " to " << aSize);
-    aScaleBmp.Scale(aSize, BMP_SCALE_BESTQUALITY);
+    aScaleBmp.Scale(aSize, BmpScaleFlag::BestQuality);
     return Image(aScaleBmp);
 }
 

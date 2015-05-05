@@ -336,7 +336,7 @@ sal_uLong BitmapEx::GetChecksum() const
     return nCrc;
 }
 
-void BitmapEx::SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag )
+void BitmapEx::SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 {
     if(GetSizePixel() != rNewSize)
     {
@@ -374,7 +374,7 @@ bool BitmapEx::Mirror( sal_uLong nMirrorFlags )
     return bRet;
 }
 
-bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
     bool bRet = false;
 
@@ -396,7 +396,7 @@ bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 n
     return bRet;
 }
 
-bool BitmapEx::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
+bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 {
     bool bRet;
 
@@ -695,7 +695,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
         }
 
         aScaledSize = Size( imgNewWidth, imgNewHeight );
-        aRet.Scale( aScaledSize, BMP_SCALE_BESTQUALITY );
+        aRet.Scale( aScaledSize, BmpScaleFlag::BestQuality );
     }
     else
     {

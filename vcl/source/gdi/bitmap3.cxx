@@ -864,7 +864,7 @@ bool Bitmap::ImplConvertGhosted()
     return bRet;
 }
 
-bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
     bool bRetval(false);
 
@@ -904,7 +904,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
     //fdo#33455
     //
     //If we start with a 1 bit image, then after scaling it in any mode except
-    //BMP_SCALE_FAST we have a 24bit image which is perfectly correct, but we
+    //BmpScaleFlag::Fast we have a 24bit image which is perfectly correct, but we
     //are going to down-shift it to mono again and Bitmap::ImplMakeMono just
     //has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
     //will default to black/white and the colors mapped to which ever is closer
@@ -914,28 +914,28 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
     //just use the fast scale rather than attempting to count unique colors in
     //the other converters and pass all the info down through
     //Bitmap::ImplMakeMono
-    if (nStartCount == 1 && nScaleFlag != BMP_SCALE_NONE)
-        nScaleFlag = BMP_SCALE_FAST;
+    if (nStartCount == 1 && nScaleFlag != BmpScaleFlag::NONE)
+        nScaleFlag = BmpScaleFlag::Fast;
 
     switch(nScaleFlag)
     {
-        case BMP_SCALE_NONE :
+        case BmpScaleFlag::NONE :
         {
             bRetval = false;
             break;
         }
-        case BMP_SCALE_FAST :
+        case BmpScaleFlag::Fast :
         {
             bRetval = ImplScaleFast( rScaleX, rScaleY );
             break;
         }
-        case BMP_SCALE_INTERPOLATE :
+        case BmpScaleFlag::Interpolate :
         {
             bRetval = ImplScaleInterpolate( rScaleX, rScaleY );
             break;
         }
-        case BMP_SCALE_SUPER:
-        case BMP_SCALE_DEFAULT:
+        case BmpScaleFlag::Super:
+        case BmpScaleFlag::Default:
         {
             if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
             {
@@ -949,29 +949,29 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
             }
             break;
         }
-        case BMP_SCALE_LANCZOS :
-        case BMP_SCALE_BESTQUALITY:
+        case BmpScaleFlag::Lanczos :
+        case BmpScaleFlag::BestQuality:
         {
             const Lanczos3Kernel kernel;
 
             bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
             break;
         }
-        case BMP_SCALE_BICUBIC :
+        case BmpScaleFlag::BiCubic :
         {
             const BicubicKernel kernel;
 
             bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
             break;
         }
-        case BMP_SCALE_BILINEAR :
+        case BmpScaleFlag::BiLinear :
         {
             const BilinearKernel kernel;
 
             bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
             break;
         }
-        case BMP_SCALE_BOX :
+        case BmpScaleFlag::Box :
         {
             const BoxKernel kernel;
 
@@ -984,7 +984,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
     return bRetval;
 }
 
-bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
+bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 {
     const Size aSize( GetSizePixel() );
     bool bRet;
@@ -1556,8 +1556,8 @@ namespace
     }
 }
 
-// #i121233# Added BMP_SCALE_LANCZOS, BMP_SCALE_BICUBIC, BMP_SCALE_BILINEAR and
-// BMP_SCALE_BOX derived from the original commit from Tomas Vajngerl (see
+// #i121233# Added BmpScaleFlag::Lanczos, BmpScaleFlag::BiCubic, BmpScaleFlag::BiLinear and
+// BmpScaleFlag::Box derived from the original commit from Tomas Vajngerl (see
 // bugzilla task for deitails) Thanks!
 bool Bitmap::ImplScaleConvolution(
     const double& rScaleX,

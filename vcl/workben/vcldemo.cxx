@@ -660,7 +660,7 @@ public:
             for (size_t i = 0; i < SAL_N_ELEMENTS(aSizes); i++)
             {
                 aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), aSizes[i]),
-                                     BMP_SCALE_FAST);
+                                     BmpScaleFlag::Fast);
 
                 rDev.DrawBitmapEx(aRenderPt, aShadowStretch);
                 aRenderPt.Move(aShadowStretch.GetSizePixel().Width() + 4, 0);
@@ -685,7 +685,7 @@ public:
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
             Bitmap aBitmap(rCtx.mpDemoRenderer->maIntroBW);
-            aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+            aBitmap.Scale(r.GetSize(), BmpScaleFlag::BestQuality);
             rDev.DrawBitmap(r.TopLeft(), aBitmap);
 
             SimulateBorderStretch(rDev, r);
@@ -702,7 +702,7 @@ public:
             maCheckered.RenderRegion(rDev, r, rCtx);
 
             BitmapEx aBitmap(rCtx.mpDemoRenderer->maIntro);
-            aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+            aBitmap.Scale(r.GetSize(), BmpScaleFlag::BestQuality);
             AlphaMask aSemiTransp(aBitmap.GetSizePixel());
             aSemiTransp.Erase(64);
             rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
@@ -1069,7 +1069,7 @@ public:
                                   const RenderContext &) SAL_OVERRIDE
         {
             Bitmap aBitmap(rDev.GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
-            aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+            aBitmap.Scale(r.GetSize(), BmpScaleFlag::BestQuality);
             rDev.DrawBitmap(r.TopLeft(), aBitmap);
         }
     };

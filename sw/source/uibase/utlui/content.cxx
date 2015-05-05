@@ -1560,7 +1560,7 @@ void SwContentTree::Display( bool bActive )
                 OUString rImageName = aEntryImages.GetImageName(i);
                 BitmapEx b = aEntryImages.GetImage(rImageName).GetBitmapEx();
                 //Use Lanczos because it looks better with circles / diagonals
-                b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_LANCZOS);
+                b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Lanczos);
                 aEntryImages.ReplaceImage(rImageName, Image(b));
             }
         }

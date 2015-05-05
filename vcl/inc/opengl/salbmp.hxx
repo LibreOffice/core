@@ -81,7 +81,7 @@ public:
 
     bool            Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
     bool            Erase( const Color& rFillColor ) SAL_OVERRIDE;
-    bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) SAL_OVERRIDE;
+    bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) SAL_OVERRIDE;
     bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) SAL_OVERRIDE;
 
 public:
@@ -108,7 +108,7 @@ private:
 
 public:
 
-    bool ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
+    bool ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H

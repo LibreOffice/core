@@ -189,7 +189,7 @@ bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile* pMetaFile, const
 
     BitmapEx aResultBitmap;
 
-    bResult = pMetaFile->CreateThumbnail(aResultBitmap, 256, BMP_CONVERSION_8BIT_COLORS, BMP_SCALE_DEFAULT);
+    bResult = pMetaFile->CreateThumbnail(aResultBitmap, 256, BMP_CONVERSION_8BIT_COLORS, BmpScaleFlag::Default);
 
     if (!bResult || aResultBitmap.IsEmpty())
         return false;

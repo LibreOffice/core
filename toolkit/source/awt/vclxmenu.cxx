@@ -623,7 +623,7 @@ namespace
 
                 bool bModified( false );
                 BitmapEx aBitmapEx = aImage.GetBitmapEx();
-                bModified = aBitmapEx.Scale( aNewSize, BMP_SCALE_BESTQUALITY );
+                bModified = aBitmapEx.Scale( aNewSize, BmpScaleFlag::BestQuality );
 
                 if ( bModified )
                     aImage = Image( aBitmapEx );

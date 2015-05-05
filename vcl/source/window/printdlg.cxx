@@ -184,7 +184,7 @@ void PrintDialog::PrintPreviewWindow::Paint( vcl::RenderContext& /*rRenderContex
     else
     {
         Bitmap aPreviewBitmap(maPreviewBitmap);
-        aPreviewBitmap.Scale(maPreviewSize, BMP_SCALE_BESTQUALITY);
+        aPreviewBitmap.Scale(maPreviewSize, BmpScaleFlag::BestQuality);
         DrawBitmap(aOffset, aPreviewBitmap);
     }
 

@@ -34,18 +34,21 @@
 #define BMP_MIRROR_VERT             0x00000002UL
 
 
-#define BMP_SCALE_NONE              0x00000000UL
+enum class BmpScaleFlag
+{
+    NONE              = 0,
 // Try to preferably use these.
-#define BMP_SCALE_DEFAULT           0x00000001UL
-#define BMP_SCALE_FAST              0x00000002UL
-#define BMP_SCALE_BESTQUALITY       0x00000003UL
+    Default           = 1,
+    Fast              = 2,
+    BestQuality       = 3,
 // Specific algorithms,  use only if you really need to.
-#define BMP_SCALE_INTERPOLATE       0x00000004UL
-#define BMP_SCALE_SUPER             0x00000005UL
-#define BMP_SCALE_LANCZOS           0x00000006UL
-#define BMP_SCALE_BICUBIC           0x00000007UL
-#define BMP_SCALE_BILINEAR          0x00000008UL
-#define BMP_SCALE_BOX               0x00000009UL
+    Interpolate       = 4,
+    Super             = 5,
+    Lanczos           = 6,
+    BiCubic           = 7,
+    BiLinear          = 8,
+    Box               = 9,
+};
 
 
 #define BMP_DITHER_NONE             0x00000000UL
@@ -543,7 +546,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+    bool                    Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     /** Scale the bitmap
 
@@ -554,11 +557,11 @@ public:
         The scale factor in y direction.
 
         @param nScaleFlag
-        Method of scaling - it is recommended that either BMP_SCALE_DEFAULT or BMP_SCALE_BESTQUALITY be used.
+        Method of scaling - it is recommended that either BmpScaleFlag::Default or BmpScaleFlag::BestQuality be used.
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+    bool                    Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     /**
       Returns true if bitmap scaling is considered to be fast.

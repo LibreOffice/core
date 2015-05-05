@@ -569,7 +569,7 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     if ( bBig && aImage.GetSizePixel() != aBigSize )
     {
         BitmapEx aScaleBmpEx( aImage.GetBitmapEx() );
-        aScaleBmpEx.Scale( aBigSize, BMP_SCALE_INTERPOLATE );
+        aScaleBmpEx.Scale( aBigSize, BmpScaleFlag::Interpolate );
         pToolBox->SetItemImage( m_nToolBoxId, Image( aScaleBmpEx ) );
     }
     else

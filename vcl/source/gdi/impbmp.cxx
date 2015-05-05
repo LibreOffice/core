@@ -88,7 +88,7 @@ void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode
         mnChecksum = 0;
 }
 
-bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
     return mpSalBitmap->Scale( rScaleX, rScaleY, nScaleFlag );
 }

@@ -1947,7 +1947,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                     if (nScaleFactor != 1)
                     {
                         BitmapEx aBitmap = aImage.GetBitmapEx();
-                        aBitmap.Scale(nScaleFactor, nScaleFactor, BMP_SCALE_FAST);
+                        aBitmap.Scale(nScaleFactor, nScaleFactor, BmpScaleFlag::Fast);
                         aImage = Image(aBitmap);
                     }
                     aTmpPos = aOuterCheckRect.TopLeft();

@@ -218,7 +218,7 @@ public:
     bool            CreateThumbnail(BitmapEx& rBitmapEx,
                                     sal_uInt32 nMaximumExtent = 256,
                                     BmpConversion nColorConversion = BMP_CONVERSION_24BIT,
-                                    long nScaleFlag = BMP_SCALE_BESTQUALITY) const;
+                                    BmpScaleFlag nScaleFlag = BmpScaleFlag::BestQuality) const;
 
     void            UseCanvas( bool _bUseCanvas );
     bool            GetUseCanvas() const { return bUseCanvas; }

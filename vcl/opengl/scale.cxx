@@ -34,10 +34,10 @@ private:
     OpenGLSalBitmap*    mpBitmap;
     double              mfScaleX;
     double              mfScaleY;
-    sal_uInt32          mnScaleFlag;
+    BmpScaleFlag        mnScaleFlag;
 
 public:
-    ScaleOp( OpenGLSalBitmap* pBitmap, const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
+    ScaleOp( OpenGLSalBitmap* pBitmap, const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
 
     bool Execute() SAL_OVERRIDE;
     void GetSize( Size& rSize ) const SAL_OVERRIDE;
@@ -261,32 +261,32 @@ bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
     return true;
 }
 
-bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
     SAL_INFO( "vcl.opengl", "::ImplScale" );
 
     maUserBuffer.reset();
     makeCurrent();
 
-    if( nScaleFlag == BMP_SCALE_FAST )
+    if( nScaleFlag == BmpScaleFlag::Fast )
     {
         return ImplScaleFilter( rScaleX, rScaleY, GL_NEAREST );
     }
-    if( nScaleFlag == BMP_SCALE_BILINEAR )
+    if( nScaleFlag == BmpScaleFlag::BiLinear )
     {
         return ImplScaleFilter( rScaleX, rScaleY, GL_LINEAR );
     }
-    else if( nScaleFlag == BMP_SCALE_SUPER || nScaleFlag == BMP_SCALE_DEFAULT )
+    else if( nScaleFlag == BmpScaleFlag::Super || nScaleFlag == BmpScaleFlag::Default )
     {
         const Lanczos3Kernel aKernel;
 
         return ImplScaleConvolution( rScaleX, rScaleY, aKernel );
     }
-    else if( nScaleFlag == BMP_SCALE_BESTQUALITY && rScaleX <= 1 && rScaleY <= 1 )
+    else if( nScaleFlag == BmpScaleFlag::BestQuality && rScaleX <= 1 && rScaleY <= 1 )
     { // Use are scaling for best quality, but only if downscaling.
         return ImplScaleArea( rScaleX, rScaleY );
     }
-    else if( nScaleFlag == BMP_SCALE_LANCZOS || nScaleFlag == BMP_SCALE_BESTQUALITY  )
+    else if( nScaleFlag == BmpScaleFlag::Lanczos || nScaleFlag == BmpScaleFlag::BestQuality  )
     {
         const Lanczos3Kernel aKernel;
 
@@ -301,7 +301,7 @@ ScaleOp::ScaleOp(
     OpenGLSalBitmap* pBitmap,
     const double& rScaleX,
     const double& rScaleY,
-    sal_uInt32 nScaleFlag )
+    BmpScaleFlag nScaleFlag )
 : mpBitmap( pBitmap )
 , mfScaleX( rScaleX )
 , mfScaleY( rScaleY )
@@ -322,16 +322,16 @@ void ScaleOp::GetSize( Size& rSize ) const
     rSize.setHeight( rSize.Height() * mfScaleY );
 }
 
-bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
-    SAL_INFO( "vcl.opengl", "::Scale " << nScaleFlag );
+    SAL_INFO( "vcl.opengl", "::Scale " << static_cast<int>(nScaleFlag) );
 
-    if( nScaleFlag == BMP_SCALE_FAST ||
-        nScaleFlag == BMP_SCALE_BILINEAR ||
-        nScaleFlag == BMP_SCALE_SUPER ||
-        nScaleFlag == BMP_SCALE_LANCZOS ||
-        nScaleFlag == BMP_SCALE_DEFAULT ||
-        nScaleFlag == BMP_SCALE_BESTQUALITY )
+    if( nScaleFlag == BmpScaleFlag::Fast ||
+        nScaleFlag == BmpScaleFlag::BiLinear ||
+        nScaleFlag == BmpScaleFlag::Super ||
+        nScaleFlag == BmpScaleFlag::Lanczos ||
+        nScaleFlag == BmpScaleFlag::Default ||
+        nScaleFlag == BmpScaleFlag::BestQuality )
     {
         makeCurrent();
         if( mpContext == NULL )

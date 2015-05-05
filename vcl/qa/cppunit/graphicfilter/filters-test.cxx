@@ -62,7 +62,7 @@ bool VclFiltersTest::load(const OUString &,
 
 void VclFiltersTest::testScaling()
 {
-    for (unsigned int i = BMP_SCALE_NONE + 1; i <= BMP_SCALE_BOX; i++)
+    for (BmpScaleFlag i = BmpScaleFlag::Default; i <= BmpScaleFlag::Box; i = (BmpScaleFlag)((int)i + 1))
     {
         Bitmap aBitmap( Size( 413, 409 ), 24 );
         BitmapEx aBitmapEx( aBitmap );

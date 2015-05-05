@@ -172,7 +172,7 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
         {
             BitmapEx aBitmap = arr[i].GetBitmapEx();
             //Use Lanczos scaling for the slider button because it does a better job with circles
-            aBitmap.Scale(nScaleFactor, nScaleFactor, i == 0 ? BMP_SCALE_LANCZOS : BMP_SCALE_FAST);
+            aBitmap.Scale(nScaleFactor, nScaleFactor, i == 0 ? BmpScaleFlag::Lanczos : BmpScaleFlag::Fast);
             arr[i] = Image(aBitmap);
         }
         mxImpl->maSliderButton = arr[0];

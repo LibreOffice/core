@@ -238,20 +238,20 @@ double CompressGraphicsDialog::GetViewHeightInch()
     return (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0;
 }
 
-sal_uLong CompressGraphicsDialog::GetSelectedInterpolationType()
+BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType()
 {
     OUString aSelectionText = OUString( m_pInterpolationCombo->GetSelectEntry() );
 
     if( aSelectionText == "Lanczos" ) {
-        return BMP_SCALE_LANCZOS;
+        return BmpScaleFlag::Lanczos;
     } else if( aSelectionText == "Bilinear" ) {
-        return BMP_SCALE_BILINEAR;
+        return BmpScaleFlag::BiLinear;
     } else if( aSelectionText == "Bicubic" ) {
-        return BMP_SCALE_BICUBIC;
+        return BmpScaleFlag::BiCubic;
     } else if ( aSelectionText == "None" ) {
-        return BMP_SCALE_FAST;
+        return BmpScaleFlag::Fast;
     }
-    return BMP_SCALE_BESTQUALITY;
+    return BmpScaleFlag::BestQuality;
 }
 
 void CompressGraphicsDialog::Compress(SvStream& aStream)

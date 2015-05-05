@@ -1097,7 +1097,7 @@ void ScCheckListMenuWindow::packWindow()
     if (nScaleFactor != 1)
     {
         BitmapEx aBitmap = aSingleSelect.GetBitmapEx();
-        aBitmap.Scale(nScaleFactor, nScaleFactor, BMP_SCALE_FAST);
+        aBitmap.Scale(nScaleFactor, nScaleFactor, BmpScaleFlag::Fast);
         aSingleSelect = Image(aBitmap);
     }
 
@@ -1112,7 +1112,7 @@ void ScCheckListMenuWindow::packWindow()
     if (nScaleFactor != 1)
     {
         BitmapEx aBitmap = aSingleUnselect.GetBitmapEx();
-        aBitmap.Scale(nScaleFactor, nScaleFactor, BMP_SCALE_FAST);
+        aBitmap.Scale(nScaleFactor, nScaleFactor, BmpScaleFlag::Fast);
         aSingleUnselect = Image(aBitmap);
     }
 

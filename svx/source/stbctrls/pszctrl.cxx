@@ -174,11 +174,11 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     if ( rStb.GetDPIScaleFactor() > 1)
     {
         BitmapEx b = pImp->aPosImage.GetBitmapEx();
-        b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
+        b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BmpScaleFlag::Fast);
         pImp->aPosImage = Image(b);
 
         b = pImp->aSizeImage.GetBitmapEx();
-        b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
+        b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BmpScaleFlag::Fast);
         pImp->aSizeImage = Image(b);
     }
 
