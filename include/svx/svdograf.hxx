@@ -210,7 +210,7 @@ public:
     virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
 
     // add handles for crop mode when selected
-    virtual void addCropHandles(SdrHdlList& rTarget) const;
+    virtual void addCropHandles(SdrHdlList& rTarget) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX
