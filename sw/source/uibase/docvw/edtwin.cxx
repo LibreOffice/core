@@ -189,8 +189,8 @@ long    SwEditWin::m_nDDStartPosX = 0;
  * and in case of writer for text(background)color also in /core/sw/source/uibase/docvw/edtwin.cxx
  * (SwEditWin::m_aTextBackColor and SwEditWin::m_aTextColor)
  */
-Color   SwEditWin::m_aTextBackColor(COL_YELLOW);
-Color   SwEditWin::m_aTextColor(COL_RED);
+Color   SwEditWin::m_aWaterCanTextBackColor(COL_YELLOW);
+Color   SwEditWin::m_aWaterCanTextColor(COL_RED);
 
 extern bool     g_bExecuteDrag;
 
@@ -4701,9 +4701,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 if( rSh.IsSelection() && !rSh.HasReadonlySel() )
                 {
                     if(nId == RES_CHRATR_BACKGROUND)
-                        rSh.SetAttrItem( SvxBrushItem( SwEditWin::m_aTextBackColor, nId ) );
+                        rSh.SetAttrItem( SvxBrushItem( SwEditWin::m_aWaterCanTextBackColor, nId ) );
                     else
-                        rSh.SetAttrItem( SvxColorItem( SwEditWin::m_aTextColor, nId ) );
+                        rSh.SetAttrItem( SvxColorItem( SwEditWin::m_aWaterCanTextColor, nId ) );
                     rSh.UnSetVisCrsr();
                     rSh.EnterStdMode();
                     rSh.SetVisCrsr(aDocPt);
