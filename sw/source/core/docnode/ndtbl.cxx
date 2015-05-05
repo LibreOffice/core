@@ -1172,10 +1172,38 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             ++aRg.aEnd;
     }
 
+    assert(aRg.aEnd == pEnd->nNode);
+    assert(aRg.aStart == pStt->nNode);
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
         OSL_FAIL( "empty range" );
         ++aRg.aEnd;
+    }
+
+
+    {
+        // TODO: this is not Undo-able - only good enough for file import
+        IDocumentRedlineAccess & rIDRA(getIDocumentRedlineAccess());
+        SwNodeIndex const prev(rTableNodes.begin()->begin()->aStart, -1);
+        SwNodeIndex const* pPrev(&prev);
+        // pPrev could point to non-textnode now
+        for (auto row = rTableNodes.begin(); row != rTableNodes.end(); ++row)
+        {
+            for (auto cell = row->begin(); cell != row->end(); ++cell)
+            {
+                assert(SwNodeIndex(*pPrev, +1) == cell->aStart);
+                SwPaM pam(cell->aStart, 0, *pPrev,
+                        (pPrev->GetNode().IsCntntNode())
+                            ? pPrev->GetNode().GetCntntNode()->Len() : 0);
+                rIDRA.SplitRedline(pam);
+                pPrev = &cell->aEnd;
+            }
+        }
+        // another one to break between last cell and node after table
+        SwPaM pam(SwNodeIndex(*pPrev, +1), 0, *pPrev,
+                    (pPrev->GetNode().IsCntntNode())
+                        ? pPrev->GetNode().GetCntntNode()->Len() : 0);
+        rIDRA.SplitRedline(pam);
     }
 
     // We always use Upper to insert the Table

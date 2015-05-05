@@ -2218,6 +2218,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         throw  uno::RuntimeException();
     }
 
+    IDocumentRedlineAccess & rIDRA(m_pImpl->m_pDoc->getIDocumentRedlineAccess());
+    if (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineMode()))
+    {
+        throw uno::RuntimeException(
+            "cannot convertToTable if tracked changes are hidden!");
+    }
+
     //at first collect the text ranges as SwPaMs
     const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >*
         pTableRanges = rTableRanges.getConstArray();
