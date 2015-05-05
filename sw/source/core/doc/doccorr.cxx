@@ -162,6 +162,47 @@ void PaMCorrAbs( const SwPaM& rRange,
                 pUnoCursor->ModifyNotification( &aHint, NULL );
             }
         }
+        for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl2)
+        {
+            auto pUnoCursor(pWeakUnoCrsr.lock());
+            if(!pUnoCursor)
+                continue;
+
+            bool bChange = false; // has the UNO cursor been corrected?
+
+            // determine whether the UNO cursor will leave it's designated
+            // section
+            bool const bLeaveSection =
+                pUnoCursor->IsRemainInSection() &&
+                ( lcl_FindUnoCrsrSection( aNewPos.nNode.GetNode() ) !=
+                  lcl_FindUnoCrsrSection(
+                      pUnoCursor->GetPoint()->nNode.GetNode() ) );
+
+            for(SwPaM& rPaM : pUnoCursor->GetRingContainer())
+            {
+                bChange |= lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
+            }
+
+            SwUnoTableCrsr *const pUnoTblCrsr =
+                dynamic_cast<SwUnoTableCrsr *>(pUnoCursor.get());
+            if( pUnoTblCrsr )
+            {
+                for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
+                {
+                    bChange |=
+                        lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
+                }
+            }
+
+            // if a UNO cursor leaves its designated section, we must inform
+            // (and invalidate) said cursor
+            if (bChange && bLeaveSection)
+            {
+                // the UNO cursor has left its section. We need to notify it!
+                SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
+                pUnoCursor->ModifyNotification( &aHint, NULL );
+            }
+        }
     }
 }
 
@@ -288,6 +329,26 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
             if( pUnoTableCrsr )
             {
                 for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
+                {
+                    lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
+                }
+            }
+        }
+        for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl2)
+        {
+            auto pUnoCrsr(pWeakUnoCrsr.lock());
+            if(!pUnoCrsr)
+                continue;
+            for(SwPaM& rPaM : pUnoCrsr->GetRingContainer())
+            {
+                lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
+            }
+
+            SwUnoTableCrsr* pUnoTblCrsr =
+                dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+            if( pUnoTblCrsr )
+            {
+                for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
                 {
                     lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
                 }
