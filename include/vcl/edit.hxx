@@ -111,8 +111,8 @@ private:
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection = 0 );
     SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = 0, bool bIsUserInput = false );
     SAL_DLLPRIVATE OUString    ImplGetValidString( const OUString& rString ) const;
-    SAL_DLLPRIVATE void        ImplClearBackground( long nXStart, long nXEnd );
-    SAL_DLLPRIVATE void        ImplPaintBorder( long nXStart, long nXEnd );
+    SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd);
+    SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd);
     SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
     SAL_DLLPRIVATE void        ImplAlign();
     SAL_DLLPRIVATE void        ImplAlignAndPaint();

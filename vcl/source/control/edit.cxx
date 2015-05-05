@@ -487,220 +487,223 @@ long Edit::ImplGetTextYPosition() const
     return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
 }
 
-void Edit::ImplRepaint(vcl::RenderContext& /*rRenderContext*/, bool bLayout)
+void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
 {
-    if ( !IsReallyVisible() )
+    if (!IsReallyVisible())
         return;
 
     OUString aText = ImplGetText();
     sal_Int32 nLen = aText.getLength();
 
-    long   nDXBuffer[256];
+    long nDXBuffer[256];
     boost::scoped_array<long> pDXBuffer;
-    long*  pDX = nDXBuffer;
+    long* pDX = nDXBuffer;
 
-    if( !aText.isEmpty() )
+    if (!aText.isEmpty())
     {
-        if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+        if ((size_t) (2 * aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer))
         {
-            pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
+            pDXBuffer.reset(new long[2 * (aText.getLength() + 1)]);
             pDX = pDXBuffer.get();
         }
 
-        GetCaretPositions( aText, pDX, 0, nLen );
+        GetCaretPositions(aText, pDX, 0, nLen);
     }
 
-    long    nTH = GetTextHeight();
-    Point   aPos( mnXOffset, ImplGetTextYPosition() );
+    long nTH = GetTextHeight();
+    Point aPos(mnXOffset, ImplGetTextYPosition());
 
-    if( bLayout )
+    if (bLayout)
     {
         aPos.X() = mnXOffset + ImplGetExtraOffset();
 
         MetricVector* pVector = &mpControlData->mpLayoutData->m_aUnicodeBoundRects;
         OUString* pDisplayText = &mpControlData->mpLayoutData->m_aDisplayText;
 
-        DrawText( aPos, aText, 0, nLen, pVector, pDisplayText );
-
+        rRenderContext.DrawText(aPos, aText, 0, nLen, pVector, pDisplayText);
         return;
     }
 
     vcl::Cursor* pCursor = GetCursor();
     bool bVisCursor = pCursor && pCursor->IsVisible();
-    if ( pCursor )
+    if (pCursor)
         pCursor->Hide();
 
-    ImplClearBackground( 0, GetOutputSizePixel().Width() );
+    ImplClearBackground(rRenderContext, 0, GetOutputSizePixel().Width());
 
     bool bPaintPlaceholderText = aText.isEmpty() && !maPlaceholderText.isEmpty();
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if ( IsEnabled() )
-        ImplInitSettings( false, true, false );
-    if ( !IsEnabled() || bPaintPlaceholderText )
-        SetTextColor( rStyleSettings.GetDisableColor() );
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    if (IsEnabled())
+        ImplInitSettings(false, true, false);
+    if (!IsEnabled() || bPaintPlaceholderText)
+        rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
 
     // Set background color of the normal text
-    if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
+    if ((GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground())
     {
         // check if we need to set ControlBackground even in NWF case
-        Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
-        SetLineColor();
-        SetFillColor( GetControlBackground() );
-        DrawRect( Rectangle( aPos, Size( GetOutputSizePixel().Width() - 2*mnXOffset, GetOutputSizePixel().Height() ) ) );
-        Pop();
+        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(GetControlBackground());
+        rRenderContext.DrawRect(Rectangle(aPos, Size(GetOutputSizePixel().Width() - 2 * mnXOffset, GetOutputSizePixel().Height())));
+        rRenderContext.Pop();
 
-        SetTextFillColor( GetControlBackground() );
+        SetTextFillColor(GetControlBackground());
     }
-    else if( IsPaintTransparent() || ImplUseNativeBorder( GetStyle() ) )
-        SetTextFillColor();
+    else if (IsPaintTransparent() || ImplUseNativeBorder(GetStyle()))
+        rRenderContext.SetTextFillColor();
     else
-        SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+        rRenderContext.SetTextFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
 
-    ImplPaintBorder( 0, GetOutputSizePixel().Width() );
+    ImplPaintBorder(rRenderContext, 0, GetOutputSizePixel().Width());
 
-    bool bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
+    bool bDrawSelection = maSelection.Len() && (HasFocus() || (GetStyle() & WB_NOHIDESELECTION) || mbActivePopup);
 
     aPos.X() = mnXOffset + ImplGetExtraOffset();
-    if ( bPaintPlaceholderText )
+    if (bPaintPlaceholderText)
     {
-        DrawText( aPos, maPlaceholderText );
+        rRenderContext.DrawText(aPos, maPlaceholderText);
     }
-    else if ( !bDrawSelection && !mpIMEInfos )
+    else if (!bDrawSelection && !mpIMEInfos)
     {
-        DrawText( aPos, aText, 0, nLen );
+        rRenderContext.DrawText(aPos, aText, 0, nLen);
     }
     else
     {
         // save graphics state
-        Push();
+        rRenderContext.Push();
         // first calculate higlighted and non highlighted clip regions
         vcl::Region aHiglightClipRegion;
         vcl::Region aNormalClipRegion;
-        Selection aTmpSel( maSelection );
+        Selection aTmpSel(maSelection);
         aTmpSel.Justify();
         // selection is highlighted
         int i;
-        for( i = 0; i < aText.getLength(); i++ )
+        for(i = 0; i < aText.getLength(); i++)
         {
-            Rectangle aRect( aPos, Size( 10, nTH ) );
-            aRect.Left() = pDX[2*i] + mnXOffset + ImplGetExtraOffset();
-            aRect.Right() = pDX[2*i+1] + mnXOffset + ImplGetExtraOffset();
+            Rectangle aRect(aPos, Size(10, nTH));
+            aRect.Left() = pDX[2 * i] + mnXOffset + ImplGetExtraOffset();
+            aRect.Right() = pDX[2 * i + 1] + mnXOffset + ImplGetExtraOffset();
             aRect.Justify();
             bool bHighlight = false;
-            if( i >= aTmpSel.Min() && i < aTmpSel.Max() )
+            if (i >= aTmpSel.Min() && i < aTmpSel.Max())
                 bHighlight = true;
 
-            if( mpIMEInfos && mpIMEInfos->pAttribs &&
-                i >= mpIMEInfos->nPos && i < (mpIMEInfos->nPos+mpIMEInfos->nLen ) &&
-                ( mpIMEInfos->pAttribs[i-mpIMEInfos->nPos] & EXTTEXTINPUT_ATTR_HIGHLIGHT) )
+            if (mpIMEInfos && mpIMEInfos->pAttribs &&
+                i >= mpIMEInfos->nPos && i < (mpIMEInfos->nPos+mpIMEInfos->nLen) &&
+                (mpIMEInfos->pAttribs[i - mpIMEInfos->nPos] & EXTTEXTINPUT_ATTR_HIGHLIGHT))
+            {
                 bHighlight = true;
+            }
 
-            if( bHighlight )
-                aHiglightClipRegion.Union( aRect );
+            if (bHighlight)
+                aHiglightClipRegion.Union(aRect);
             else
-                aNormalClipRegion.Union( aRect );
+                aNormalClipRegion.Union(aRect);
         }
         // draw normal text
-        Color aNormalTextColor = GetTextColor();
-        SetClipRegion( aNormalClipRegion );
+        Color aNormalTextColor = rRenderContext.GetTextColor();
+        SetClipRegion(aNormalClipRegion);
 
-        if( IsPaintTransparent() )
-            SetTextFillColor();
+        if (IsPaintTransparent())
+            rRenderContext.SetTextFillColor();
         else
         {
             // Set background color when part of the text is selected
-            if ( ImplUseNativeBorder( GetStyle() ) )
+            if (ImplUseNativeBorder(GetStyle()))
             {
                 if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
-                    SetTextFillColor( GetControlBackground() );
+                    rRenderContext.SetTextFillColor(GetControlBackground());
                 else
-                    SetTextFillColor();
+                    rRenderContext.SetTextFillColor();
             }
             else
-                SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+            {
+                rRenderContext.SetTextFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
+            }
         }
-        DrawText( aPos, aText, 0, nLen );
+        rRenderContext.DrawText(aPos, aText, 0, nLen);
 
         // draw highlighted text
-        SetClipRegion( aHiglightClipRegion );
-        SetTextColor( rStyleSettings.GetHighlightTextColor() );
-        SetTextFillColor( rStyleSettings.GetHighlightColor() );
-        DrawText( aPos, aText, 0, nLen );
+        rRenderContext.SetClipRegion(aHiglightClipRegion);
+        rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
+        rRenderContext.SetTextFillColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.DrawText(aPos, aText, 0, nLen);
 
         // if IME info exists loop over portions and output different font attributes
-        if( mpIMEInfos && mpIMEInfos->pAttribs )
+        if (mpIMEInfos && mpIMEInfos->pAttribs)
         {
-            for( int n = 0; n < 2; n++ )
+            for(int n = 0; n < 2; n++)
             {
                 vcl::Region aRegion;
-                if( n == 0 )
+                if (n == 0)
                 {
-                    SetTextColor( aNormalTextColor );
-                    if( IsPaintTransparent() )
-                        SetTextFillColor();
+                    rRenderContext.SetTextColor(aNormalTextColor);
+                    if (IsPaintTransparent())
+                        rRenderContext.SetTextFillColor();
                     else
-                        SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+                        rRenderContext.SetTextFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
                     aRegion = aNormalClipRegion;
                 }
                 else
                 {
-                    SetTextColor( rStyleSettings.GetHighlightTextColor() );
-                    SetTextFillColor( rStyleSettings.GetHighlightColor() );
+                    rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
+                    rRenderContext.SetTextFillColor(rStyleSettings.GetHighlightColor());
                     aRegion = aHiglightClipRegion;
                 }
 
-                for( i = 0; i < mpIMEInfos->nLen; )
+                for(i = 0; i < mpIMEInfos->nLen; )
                 {
                     sal_uInt16 nAttr = mpIMEInfos->pAttribs[i];
                     vcl::Region aClip;
                     int nIndex = i;
-                    while( nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
+                    while (nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
                     {
                         Rectangle aRect( aPos, Size( 10, nTH ) );
-                        aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
-                        aRect.Right() = pDX[2*(nIndex+mpIMEInfos->nPos)+1] + mnXOffset + ImplGetExtraOffset();
+                        aRect.Left() = pDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
+                        aRect.Right() = pDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraOffset();
                         aRect.Justify();
-                        aClip.Union( aRect );
+                        aClip.Union(aRect);
                         nIndex++;
                     }
                     i = nIndex;
                     aClip.Intersect(aRegion);
-                    if( !aClip.IsEmpty() && nAttr )
+                    if (!aClip.IsEmpty() && nAttr)
                     {
-                        vcl::Font aFont = GetFont();
-                        if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
-                            aFont.SetUnderline( UNDERLINE_SINGLE );
-                        else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
-                            aFont.SetUnderline( UNDERLINE_BOLD );
-                        else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
-                            aFont.SetUnderline( UNDERLINE_DOTTED );
-                        else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
-                            aFont.SetUnderline( UNDERLINE_DASHDOT );
-                        else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
+                        vcl::Font aFont = rRenderContext.GetFont();
+                        if (nAttr & EXTTEXTINPUT_ATTR_UNDERLINE)
+                            aFont.SetUnderline(UNDERLINE_SINGLE);
+                        else if (nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE)
+                            aFont.SetUnderline( UNDERLINE_BOLD);
+                        else if (nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE)
+                            aFont.SetUnderline( UNDERLINE_DOTTED);
+                        else if (nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE)
+                            aFont.SetUnderline( UNDERLINE_DASHDOT);
+                        else if (nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE)
                         {
-                            aFont.SetUnderline( UNDERLINE_WAVE );
-                            SetTextLineColor( Color( COL_LIGHTGRAY ) );
+                            aFont.SetUnderline(UNDERLINE_WAVE);
+                            rRenderContext.SetTextLineColor(Color(COL_LIGHTGRAY));
                         }
-                        SetFont( aFont );
+                        rRenderContext.SetFont(aFont);
 
-                        if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
-                            SetTextColor( Color( COL_RED ) );
-                        else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
-                            SetTextColor( Color( COL_LIGHTGRAY ) );
+                        if (nAttr & EXTTEXTINPUT_ATTR_REDTEXT)
+                            rRenderContext.SetTextColor(Color(COL_RED));
+                        else if (nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT)
+                            rRenderContext.SetTextColor(Color(COL_LIGHTGRAY));
 
-                        SetClipRegion( aClip );
-                        DrawText( aPos, aText, 0, nLen );
+                        rRenderContext.SetClipRegion(aClip);
+                        rRenderContext.DrawText(aPos, aText, 0, nLen);
                     }
                 }
             }
         }
 
         // restore graphics state
-        Pop();
+        rRenderContext.Pop();
     }
 
-    if ( bVisCursor && ( !mpIMEInfos || mpIMEInfos->bCursor ) )
+    if (bVisCursor && (!mpIMEInfos || mpIMEInfos->bCursor))
         pCursor->Show();
 }
 
@@ -1006,79 +1009,80 @@ int Edit::ImplGetNativeControlType() const
     return nCtrl;
 }
 
-void Edit::ImplClearBackground( long nXStart, long nXEnd )
+void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd )
 {
     /*
     * note: at this point the cursor must be switched off already
     */
     Point aTmpPoint;
-    Rectangle aRect( aTmpPoint, GetOutputSizePixel() );
+    Rectangle aRect(aTmpPoint, GetOutputSizePixel());
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
 
-    if( !(ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent()) )
-        Erase( aRect );
+    if( !(ImplUseNativeBorder(GetStyle() ) || IsPaintTransparent()))
+        rRenderContext.Erase(aRect);
 }
 
-void Edit::ImplPaintBorder( long nXStart, long nXEnd )
+void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd)
 {
     Point aTmpPoint;
-    Rectangle aRect( aTmpPoint, GetOutputSizePixel() );
+    Rectangle aRect(aTmpPoint, GetOutputSizePixel());
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
 
-    if( ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent() )
+    if (ImplUseNativeBorder(GetStyle()) || IsPaintTransparent())
     {
         // draw the inner part by painting the whole control using its border window
-        vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
-        if( pBorder == this )
+        vcl::Window* pBorder = GetWindow(WINDOW_BORDER);
+        if (pBorder == this)
         {
             // we have no border, use parent
-            vcl::Window *pControl = mbIsSubEdit ? GetParent() : this;
-            pBorder = pControl->GetWindow( WINDOW_BORDER );
-            if( pBorder == this )
+            vcl::Window* pControl = mbIsSubEdit ? GetParent() : this;
+            pBorder = pControl->GetWindow(WINDOW_BORDER);
+            if (pBorder == this)
                 pBorder = GetParent();
         }
 
-        if( pBorder )
+        if (pBorder)
         {
             // set proper clipping region to not overdraw the whole control
             vcl::Region aClipRgn = GetPaintRegion();
-            if( !aClipRgn.IsNull() )
+            if (!aClipRgn.IsNull())
             {
                 // transform clipping region to border window's coordinate system
-                if( IsRTLEnabled() != pBorder->IsRTLEnabled() && AllSettings::GetLayoutRTL() )
+                if (IsRTLEnabled() != pBorder->IsRTLEnabled() && AllSettings::GetLayoutRTL())
                 {
                     // need to mirror in case border is not RTL but edit is (or vice versa)
 
                     // mirror
-                    Rectangle aBounds( aClipRgn.GetBoundRect() );
-                    int xNew = GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
-                    aClipRgn.Move( xNew - aBounds.Left(), 0 );
+                    Rectangle aBounds(aClipRgn.GetBoundRect());
+                    int xNew = rRenderContext.GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
+                    aClipRgn.Move(xNew - aBounds.Left(), 0);
 
                     // move offset of border window
                     Point aBorderOffs;
-                    aBorderOffs = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aBorderOffs ) );
-                    aClipRgn.Move( aBorderOffs.X(), aBorderOffs.Y() );
+                    aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aBorderOffs));
+                    aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
                 }
                 else
                 {
                     // normal case
                     Point aBorderOffs;
-                    aBorderOffs = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aBorderOffs ) );
-                    aClipRgn.Move( aBorderOffs.X(), aBorderOffs.Y() );
+                    aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aBorderOffs));
+                    aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
                 }
 
-                vcl::Region oldRgn( pBorder->GetClipRegion() );
-                pBorder->SetClipRegion( aClipRgn );
+                vcl::Region oldRgn(pBorder->GetClipRegion());
+                pBorder->SetClipRegion(aClipRgn);
 
-                pBorder->Paint(*pBorder, Rectangle());
+                pBorder->Paint(*pBorder, Rectangle()); // FIXME
 
-                pBorder->SetClipRegion( oldRgn );
+                pBorder->SetClipRegion(oldRgn);
             }
             else
-                pBorder->Paint(*pBorder, Rectangle());
-
+            {
+                pBorder->Paint(*pBorder, Rectangle()); // FIXME
+            }
         }
     }
 }
