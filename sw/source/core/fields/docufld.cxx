@@ -1848,30 +1848,30 @@ SwFieldType* SwExtUserFieldType::Copy() const
 
 OUString SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 )
 {
-    sal_uInt16 nRet = USHRT_MAX;
+    UserOptToken nRet = static_cast<UserOptToken>(USHRT_MAX);
     switch(nSub)
     {
-    case EU_FIRSTNAME:      nRet = USER_OPT_FIRSTNAME; break;
-    case EU_NAME:           nRet = USER_OPT_LASTNAME;  break;
-    case EU_SHORTCUT:       nRet = USER_OPT_ID; break;
+    case EU_FIRSTNAME:      nRet = UserOptToken::FirstName; break;
+    case EU_NAME:           nRet = UserOptToken::LastName;  break;
+    case EU_SHORTCUT:       nRet = UserOptToken::ID; break;
 
-    case EU_COMPANY:        nRet = USER_OPT_COMPANY;        break;
-    case EU_STREET:         nRet = USER_OPT_STREET;         break;
-    case EU_TITLE:          nRet = USER_OPT_TITLE;          break;
-    case EU_POSITION:       nRet = USER_OPT_POSITION;       break;
-    case EU_PHONE_PRIVATE:  nRet = USER_OPT_TELEPHONEHOME;    break;
-    case EU_PHONE_COMPANY:  nRet = USER_OPT_TELEPHONEWORK;    break;
-    case EU_FAX:            nRet = USER_OPT_FAX;            break;
-    case EU_EMAIL:          nRet = USER_OPT_EMAIL;          break;
-    case EU_COUNTRY:        nRet = USER_OPT_COUNTRY;        break;
-    case EU_ZIP:            nRet = USER_OPT_ZIP;            break;
-    case EU_CITY:           nRet = USER_OPT_CITY;           break;
-    case EU_STATE:          nRet = USER_OPT_STATE;          break;
-    case EU_FATHERSNAME:    nRet = USER_OPT_FATHERSNAME;    break;
-    case EU_APARTMENT:      nRet = USER_OPT_APARTMENT;      break;
+    case EU_COMPANY:        nRet = UserOptToken::Company;        break;
+    case EU_STREET:         nRet = UserOptToken::Street;         break;
+    case EU_TITLE:          nRet = UserOptToken::Title;          break;
+    case EU_POSITION:       nRet = UserOptToken::Position;       break;
+    case EU_PHONE_PRIVATE:  nRet = UserOptToken::TelephoneHome;    break;
+    case EU_PHONE_COMPANY:  nRet = UserOptToken::TelephoneWork;    break;
+    case EU_FAX:            nRet = UserOptToken::Fax;            break;
+    case EU_EMAIL:          nRet = UserOptToken::Email;          break;
+    case EU_COUNTRY:        nRet = UserOptToken::Country;        break;
+    case EU_ZIP:            nRet = UserOptToken::Zip;            break;
+    case EU_CITY:           nRet = UserOptToken::City;           break;
+    case EU_STATE:          nRet = UserOptToken::State;          break;
+    case EU_FATHERSNAME:    nRet = UserOptToken::FathersName;    break;
+    case EU_APARTMENT:      nRet = UserOptToken::Apartment;      break;
     default:             OSL_ENSURE( false, "Field unknown");
     }
-    if( USHRT_MAX != nRet )
+    if( static_cast<UserOptToken>(USHRT_MAX) != nRet )
     {
         SvtUserOptions&  rUserOpt = SW_MOD()->GetUserOptions();
         return rUserOpt.GetToken( nRet );

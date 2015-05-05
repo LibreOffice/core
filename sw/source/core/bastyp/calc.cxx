@@ -303,11 +303,11 @@ SwCalc::SwCalc( SwDoc& rD )
         // those have two HashIds
         11, 38
     };
-    static sal_uInt16 const aAdrToken[ 12 ] =
+    static UserOptToken const aAdrToken[ 12 ] =
     {
-        USER_OPT_COMPANY, USER_OPT_STREET, USER_OPT_COUNTRY, USER_OPT_ZIP,
-        USER_OPT_CITY, USER_OPT_TITLE, USER_OPT_POSITION, USER_OPT_TELEPHONEWORK,
-        USER_OPT_TELEPHONEHOME, USER_OPT_FAX, USER_OPT_EMAIL, USER_OPT_STATE
+        UserOptToken::Company, UserOptToken::Street, UserOptToken::Country, UserOptToken::Zip,
+        UserOptToken::City, UserOptToken::Title, UserOptToken::Position, UserOptToken::TelephoneWork,
+        UserOptToken::TelephoneHome, UserOptToken::Fax, UserOptToken::Email, UserOptToken::State
     };
 
     static sal_uInt16 SwDocStat::* const aDocStat1[ 3 ] =

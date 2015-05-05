@@ -1569,8 +1569,8 @@ void ScExportTest::testTrackChangesSimpleXLSX()
     } aTest;
 
     SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
-    rUserOpt.SetToken(USER_OPT_FIRSTNAME, "Export");
-    rUserOpt.SetToken(USER_OPT_LASTNAME, "Test");
+    rUserOpt.SetToken(UserOptToken::FirstName, "Export");
+    rUserOpt.SetToken(UserOptToken::LastName, "Test");
 
     OUString aOwnerName = rUserOpt.GetFirstName() + " " + rUserOpt.GetLastName();
 

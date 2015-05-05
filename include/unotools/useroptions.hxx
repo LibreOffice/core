@@ -26,24 +26,27 @@
 #include <memory>
 
 // define ----------------------------------------------------------------
-
-#define USER_OPT_CITY               ((sal_uInt16)0)
-#define USER_OPT_COMPANY            ((sal_uInt16)1)
-#define USER_OPT_COUNTRY            ((sal_uInt16)2)
-#define USER_OPT_EMAIL              ((sal_uInt16)3)
-#define USER_OPT_FAX                ((sal_uInt16)4)
-#define USER_OPT_FIRSTNAME          ((sal_uInt16)5)
-#define USER_OPT_LASTNAME           ((sal_uInt16)6)
-#define USER_OPT_POSITION           ((sal_uInt16)7)
-#define USER_OPT_STATE              ((sal_uInt16)8)
-#define USER_OPT_STREET             ((sal_uInt16)9)
-#define USER_OPT_TELEPHONEHOME      ((sal_uInt16)10)
-#define USER_OPT_TELEPHONEWORK      ((sal_uInt16)11)
-#define USER_OPT_TITLE              ((sal_uInt16)12)
-#define USER_OPT_ID                 ((sal_uInt16)13)
-#define USER_OPT_ZIP                ((sal_uInt16)14)
-#define USER_OPT_FATHERSNAME        ((sal_uInt16)15)
-#define USER_OPT_APARTMENT          ((sal_uInt16)16)
+enum class UserOptToken
+{
+    City               = 0,
+    Company            = 1,
+    Country            = 2,
+    Email              = 3,
+    Fax                = 4,
+    FirstName          = 5,
+    LastName           = 6,
+    Position           = 7,
+    State              = 8,
+    Street             = 9,
+    TelephoneHome      = 10,
+    TelephoneWork      = 11,
+    Title              = 12,
+    ID                 = 13,
+    Zip                = 14,
+    FathersName        = 15,
+    Apartment          = 16,
+    LAST               = Apartment,
+};
 
 // class SvtUserOptions --------------------------------------------------
 
@@ -74,9 +77,9 @@ public:
 
     OUString GetFullName       () const;
 
-    bool      IsTokenReadonly (sal_uInt16 nToken) const;
-    OUString GetToken (sal_uInt16 nToken) const;
-    void          SetToken (sal_uInt16 nToken, OUString const& rNewToken);
+    bool      IsTokenReadonly (UserOptToken nToken) const;
+    OUString  GetToken (UserOptToken nToken) const;
+    void      SetToken (UserOptToken nToken, OUString const& rNewToken);
 
 private:
     class Impl;

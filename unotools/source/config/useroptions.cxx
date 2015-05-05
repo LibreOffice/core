@@ -41,37 +41,32 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <o3tl/enumarray.hxx>
 
 using namespace utl;
 using namespace com::sun::star;
 
-namespace
-{
-
 // vOptionNames[] -- names of the user option entries
 // The order corresponds to the #define USER_OPT_* list in useroptions.hxx.
-char const * const vOptionNames[] = {
-    "l",                         // USER_OPT_CITY
-    "o",                         // USER_OPT_COMPANY
-    "c",                         // USER_OPT_COUNTRY
-    "mail",                      // USER_OPT_EMAIL
-    "facsimiletelephonenumber",  // USER_OPT_FAX
-    "givenname",                 // USER_OPT_FIRSTNAME
-    "sn",                        // USER_OPT_LASTNAME
-    "position",                  // USER_OPT_POSITION
-    "st",                        // USER_OPT_STATE
-    "street",                    // USER_OPT_STREET
-    "homephone",                 // USER_OPT_TELEPHONEHOME
-    "telephonenumber",           // USER_OPT_TELEPHONEWORK
-    "title",                     // USER_OPT_TITLE
-    "initials",                  // USER_OPT_ID
-    "postalcode",                // USER_OPT_ZIP
-    "fathersname",               // USER_OPT_FATHERSNAME
-    "apartment"                  // USER_OPT_APARTMENT
+static o3tl::enumarray<UserOptToken, char const *> vOptionNames = {
+    "l",                         // UserOptToken::City
+    "o",                         // UserOptToken::Company
+    "c",                         // UserOptToken::Country
+    "mail",                      // UserOptToken::Email
+    "facsimiletelephonenumber",  // UserOptToken::Fax
+    "givenname",                 // UserOptToken::FirstName
+    "sn",                        // UserOptToken::LastName
+    "position",                  // UserOptToken::Position
+    "st",                        // UserOptToken::State
+    "street",                    // UserOptToken::Street
+    "homephone",                 // UserOptToken::TelephoneHome
+    "telephonenumber",           // UserOptToken::TelephoneWork
+    "title",                     // UserOptToken::Title
+    "initials",                  // UserOptToken::ID
+    "postalcode",                // UserOptToken::Zip
+    "fathersname",               // UserOptToken::FathersName
+    "apartment"                  // UserOptToken::Apartment
 };
-const sal_uInt16 nOptionNameCount = SAL_N_ELEMENTS(vOptionNames);
-
-} // namespace
 
 std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
 
@@ -96,9 +91,9 @@ public:
 
     OUString GetFullName () const;
 
-    bool IsTokenReadonly (sal_uInt16 nToken) const;
-    OUString GetToken (sal_uInt16 nToken) const;
-    void     SetToken (sal_uInt16 nToken, OUString const& rNewToken);
+    bool IsTokenReadonly (UserOptToken nToken) const;
+    OUString GetToken (UserOptToken nToken) const;
+    void     SetToken (UserOptToken nToken, OUString const& rNewToken);
     void     Notify ();
 
 private:
@@ -156,43 +151,33 @@ SvtUserOptions::Impl::Impl() :
     }
 }
 
-OUString SvtUserOptions::Impl::GetToken (sal_uInt16 nToken) const
+OUString SvtUserOptions::Impl::GetToken (UserOptToken nToken) const
 {
     OUString sToken;
-    if (nToken < nOptionNameCount)
+    try
     {
-        try
-        {
-            if (m_xData.is())
-                m_xData->getPropertyValue(OUString::createFromAscii(vOptionNames[nToken])) >>= sToken;
-        }
-        catch (uno::Exception const& ex)
-        {
-            SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
-        }
+        if (m_xData.is())
+            m_xData->getPropertyValue(OUString::createFromAscii(vOptionNames[nToken])) >>= sToken;
     }
-    else
-        SAL_WARN("unotools.config", "SvtUserOptions::Impl::GetToken(): invalid token");
+    catch (uno::Exception const& ex)
+    {
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
+    }
     return sToken;
 }
 
-void SvtUserOptions::Impl::SetToken (sal_uInt16 nToken, OUString const& sToken)
+void SvtUserOptions::Impl::SetToken (UserOptToken nToken, OUString const& sToken)
 {
-    if (nToken < nOptionNameCount)
+    try
     {
-        try
-        {
-            if (m_xData.is())
-                m_xData->setPropertyValue(OUString::createFromAscii(vOptionNames[nToken]), uno::makeAny(sToken));
-            comphelper::ConfigurationHelper::flush(m_xCfg);
-        }
-        catch (uno::Exception const& ex)
-        {
-            SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
-        }
+        if (m_xData.is())
+             m_xData->setPropertyValue(OUString::createFromAscii(vOptionNames[nToken]), uno::makeAny(sToken));
+        comphelper::ConfigurationHelper::flush(m_xCfg);
     }
-    else
-        SAL_WARN("unotools.config", "SvtUserOptions::Impl::GetToken(): invalid token");
+    catch (uno::Exception const& ex)
+    {
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
+    }
 }
 
 OUString SvtUserOptions::Impl::GetFullName () const
@@ -201,28 +186,28 @@ OUString SvtUserOptions::Impl::GetFullName () const
     switch (LanguageType const eLang = SvtSysLocale().GetUILanguageTag().getLanguageType())
     {
         case LANGUAGE_RUSSIAN:
-            sFullName = GetToken(USER_OPT_FIRSTNAME).trim();
+            sFullName = GetToken(UserOptToken::FirstName).trim();
             if (!sFullName.isEmpty())
                 sFullName += " ";
-            sFullName += GetToken(USER_OPT_FATHERSNAME).trim();
+            sFullName += GetToken(UserOptToken::FathersName).trim();
             if (!sFullName.isEmpty())
                 sFullName += " ";
-            sFullName += GetToken(USER_OPT_LASTNAME).trim();
+            sFullName += GetToken(UserOptToken::LastName).trim();
             break;
         default:
             if (MsLangId::isFamilyNameFirst(eLang))
             {
-                sFullName = GetToken(USER_OPT_LASTNAME).trim();
+                sFullName = GetToken(UserOptToken::LastName).trim();
                 if (!sFullName.isEmpty())
                     sFullName += " ";
-                sFullName += GetToken(USER_OPT_FIRSTNAME).trim();
+                sFullName += GetToken(UserOptToken::FirstName).trim();
             }
             else
             {
-                sFullName = GetToken(USER_OPT_FIRSTNAME).trim();
+                sFullName = GetToken(UserOptToken::FirstName).trim();
                 if (!sFullName.isEmpty())
                     sFullName += " ";
-                sFullName += GetToken(USER_OPT_LASTNAME).trim();
+                sFullName += GetToken(UserOptToken::LastName).trim();
             }
             break;
     }
@@ -235,21 +220,13 @@ void SvtUserOptions::Impl::Notify ()
     NotifyListeners(0);
 }
 
-bool SvtUserOptions::Impl::IsTokenReadonly (sal_uInt16 nToken) const
+bool SvtUserOptions::Impl::IsTokenReadonly (UserOptToken nToken) const
 {
-    if (nToken < nOptionNameCount)
-    {
-        uno::Reference<beans::XPropertySet> xData(m_xCfg, uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySetInfo> xInfo = xData->getPropertySetInfo();
-        beans::Property aProp = xInfo->getPropertyByName(OUString::createFromAscii(vOptionNames[nToken]));
-        return ((aProp.Attributes & beans::PropertyAttribute::READONLY) ==
+    uno::Reference<beans::XPropertySet> xData(m_xCfg, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySetInfo> xInfo = xData->getPropertySetInfo();
+    beans::Property aProp = xInfo->getPropertyByName(OUString::createFromAscii(vOptionNames[nToken]));
+    return ((aProp.Attributes & beans::PropertyAttribute::READONLY) ==
             beans::PropertyAttribute::READONLY);
-    }
-    else
-    {
-        SAL_WARN("unotools.config", "SvtUserOptions::Impl::IsTokenReadonly(): invalid token");
-        return false;
-    }
 }
 
 SvtUserOptions::SvtUserOptions ()
@@ -284,35 +261,35 @@ osl::Mutex& SvtUserOptions::GetInitMutex()
     return theUserOptionsMutex::get();
 }
 
-OUString SvtUserOptions::GetCompany        () const { return GetToken(USER_OPT_COMPANY); }
-OUString SvtUserOptions::GetFirstName      () const { return GetToken(USER_OPT_FIRSTNAME); }
-OUString SvtUserOptions::GetLastName       () const { return GetToken(USER_OPT_LASTNAME); }
-OUString SvtUserOptions::GetID             () const { return GetToken(USER_OPT_ID); }
-OUString SvtUserOptions::GetStreet         () const { return GetToken(USER_OPT_STREET); }
-OUString SvtUserOptions::GetCity           () const { return GetToken(USER_OPT_CITY); }
-OUString SvtUserOptions::GetState          () const { return GetToken(USER_OPT_STATE); }
-OUString SvtUserOptions::GetZip            () const { return GetToken(USER_OPT_ZIP); }
-OUString SvtUserOptions::GetCountry        () const { return GetToken(USER_OPT_COUNTRY); }
-OUString SvtUserOptions::GetPosition       () const { return GetToken(USER_OPT_POSITION); }
-OUString SvtUserOptions::GetTitle          () const { return GetToken(USER_OPT_TITLE); }
-OUString SvtUserOptions::GetTelephoneHome  () const { return GetToken(USER_OPT_TELEPHONEHOME); }
-OUString SvtUserOptions::GetTelephoneWork  () const { return GetToken(USER_OPT_TELEPHONEWORK); }
-OUString SvtUserOptions::GetFax            () const { return GetToken(USER_OPT_FAX); }
-OUString SvtUserOptions::GetEmail          () const { return GetToken(USER_OPT_EMAIL); }
+OUString SvtUserOptions::GetCompany        () const { return GetToken(UserOptToken::Company); }
+OUString SvtUserOptions::GetFirstName      () const { return GetToken(UserOptToken::FirstName); }
+OUString SvtUserOptions::GetLastName       () const { return GetToken(UserOptToken::LastName); }
+OUString SvtUserOptions::GetID             () const { return GetToken(UserOptToken::ID); }
+OUString SvtUserOptions::GetStreet         () const { return GetToken(UserOptToken::Street); }
+OUString SvtUserOptions::GetCity           () const { return GetToken(UserOptToken::City); }
+OUString SvtUserOptions::GetState          () const { return GetToken(UserOptToken::State); }
+OUString SvtUserOptions::GetZip            () const { return GetToken(UserOptToken::Zip); }
+OUString SvtUserOptions::GetCountry        () const { return GetToken(UserOptToken::Country); }
+OUString SvtUserOptions::GetPosition       () const { return GetToken(UserOptToken::Position); }
+OUString SvtUserOptions::GetTitle          () const { return GetToken(UserOptToken::Title); }
+OUString SvtUserOptions::GetTelephoneHome  () const { return GetToken(UserOptToken::TelephoneHome); }
+OUString SvtUserOptions::GetTelephoneWork  () const { return GetToken(UserOptToken::TelephoneWork); }
+OUString SvtUserOptions::GetFax            () const { return GetToken(UserOptToken::Fax); }
+OUString SvtUserOptions::GetEmail          () const { return GetToken(UserOptToken::Email); }
 
-bool SvtUserOptions::IsTokenReadonly (sal_uInt16 nToken) const
+bool SvtUserOptions::IsTokenReadonly (UserOptToken nToken) const
 {
     osl::MutexGuard aGuard(GetInitMutex());
     return xImpl->IsTokenReadonly(nToken);
 }
 
-OUString SvtUserOptions::GetToken (sal_uInt16 nToken) const
+OUString SvtUserOptions::GetToken (UserOptToken nToken) const
 {
     osl::MutexGuard aGuard(GetInitMutex());
     return xImpl->GetToken(nToken);
 }
 
-void SvtUserOptions::SetToken (sal_uInt16 nToken, OUString const& rNewToken)
+void SvtUserOptions::SetToken (UserOptToken nToken, OUString const& rNewToken)
 {
     osl::MutexGuard aGuard(GetInitMutex());
     xImpl->SetToken(nToken, rNewToken);

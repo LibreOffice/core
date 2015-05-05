@@ -107,50 +107,50 @@ struct
     // id of the edit box
     const char *pEditId;
     // id for SvtUserOptions in unotools/useroptions.hxx
-    int nUserOptionsId;
+    UserOptToken nUserOptionsId;
     // id for settings the focus (defined in svx/optgenrl.hxx)
     EditPosition nGrabFocusId;
 }
 const vFieldInfo[] =
 {
     // Company
-    { Row_Company, "company", USER_OPT_COMPANY, EditPosition::COMPANY },
+    { Row_Company, "company", UserOptToken::Company, EditPosition::COMPANY },
     // Name
-    { Row_Name, "firstname", USER_OPT_FIRSTNAME, EditPosition::FIRSTNAME },
-    { Row_Name, "lastname", USER_OPT_LASTNAME, EditPosition::LASTNAME  },
-    { Row_Name, "shortname", USER_OPT_ID, EditPosition::SHORTNAME },
+    { Row_Name, "firstname", UserOptToken::FirstName, EditPosition::FIRSTNAME },
+    { Row_Name, "lastname", UserOptToken::LastName, EditPosition::LASTNAME  },
+    { Row_Name, "shortname", UserOptToken::ID, EditPosition::SHORTNAME },
     // Name (russian)
-    { Row_Name_Russian, "ruslastname", USER_OPT_LASTNAME, EditPosition::LASTNAME  },
-    { Row_Name_Russian, "rusfirstname", USER_OPT_FIRSTNAME, EditPosition::FIRSTNAME },
-    { Row_Name_Russian, "rusfathersname", USER_OPT_FATHERSNAME, EditPosition::UNKNOWN },
-    { Row_Name_Russian, "russhortname", USER_OPT_ID, EditPosition::SHORTNAME },
+    { Row_Name_Russian, "ruslastname", UserOptToken::LastName, EditPosition::LASTNAME  },
+    { Row_Name_Russian, "rusfirstname", UserOptToken::FirstName, EditPosition::FIRSTNAME },
+    { Row_Name_Russian, "rusfathersname", UserOptToken::FathersName, EditPosition::UNKNOWN },
+    { Row_Name_Russian, "russhortname", UserOptToken::ID, EditPosition::SHORTNAME },
     // Name (eastern: reversed name ord
-    { Row_Name_Eastern, "eastlastname", USER_OPT_LASTNAME, EditPosition::LASTNAME  },
-    { Row_Name_Eastern, "eastfirstname", USER_OPT_FIRSTNAME, EditPosition::FIRSTNAME },
-    { Row_Name_Eastern, "eastshortname", USER_OPT_ID, EditPosition::SHORTNAME },
+    { Row_Name_Eastern, "eastlastname", UserOptToken::LastName, EditPosition::LASTNAME  },
+    { Row_Name_Eastern, "eastfirstname", UserOptToken::FirstName, EditPosition::FIRSTNAME },
+    { Row_Name_Eastern, "eastshortname", UserOptToken::ID, EditPosition::SHORTNAME },
     // Street
-    { Row_Street, "street", USER_OPT_STREET, EditPosition::STREET },
+    { Row_Street, "street", UserOptToken::Street, EditPosition::STREET },
     // Street (russian)
-    { Row_Street_Russian, "russtreet", USER_OPT_STREET, EditPosition::STREET },
-    { Row_Street_Russian, "apartnum", USER_OPT_APARTMENT, EditPosition::UNKNOWN },
+    { Row_Street_Russian, "russtreet", UserOptToken::Street, EditPosition::STREET },
+    { Row_Street_Russian, "apartnum", UserOptToken::Apartment, EditPosition::UNKNOWN },
     // City
-    { Row_City, "izip", USER_OPT_ZIP, EditPosition::PLZ },
-    { Row_City, "icity", USER_OPT_CITY, EditPosition::CITY },
+    { Row_City, "izip", UserOptToken::Zip, EditPosition::PLZ },
+    { Row_City, "icity", UserOptToken::City, EditPosition::CITY },
     // City (US)
-    { Row_City_US, "city", USER_OPT_CITY, EditPosition::CITY },
-    { Row_City_US, "state", USER_OPT_STATE, EditPosition::STATE },
-    { Row_City_US, "zip", USER_OPT_ZIP, EditPosition::PLZ },
+    { Row_City_US, "city", UserOptToken::City, EditPosition::CITY },
+    { Row_City_US, "state", UserOptToken::State, EditPosition::STATE },
+    { Row_City_US, "zip", UserOptToken::Zip, EditPosition::PLZ },
     // Country
-    { Row_Country, "country", USER_OPT_COUNTRY, EditPosition::COUNTRY },
+    { Row_Country, "country", UserOptToken::Country, EditPosition::COUNTRY },
     // Title/Position
-    { Row_TitlePos, "title", USER_OPT_TITLE,    EditPosition::TITLE },
-    { Row_TitlePos, "position", USER_OPT_POSITION, EditPosition::POSITION },
+    { Row_TitlePos, "title", UserOptToken::Title,    EditPosition::TITLE },
+    { Row_TitlePos, "position", UserOptToken::Position, EditPosition::POSITION },
     // Phone
-    { Row_Phone, "home", USER_OPT_TELEPHONEHOME, EditPosition::TELPRIV },
-    { Row_Phone, "work", USER_OPT_TELEPHONEWORK, EditPosition::TELCOMPANY },
+    { Row_Phone, "home", UserOptToken::TelephoneHome, EditPosition::TELPRIV },
+    { Row_Phone, "work", UserOptToken::TelephoneWork, EditPosition::TELCOMPANY },
     // Fax/Mail
-    { Row_FaxMail, "fax", USER_OPT_FAX, EditPosition::FAX },
-    { Row_FaxMail, "email", USER_OPT_EMAIL, EditPosition::EMAIL },
+    { Row_FaxMail, "fax", UserOptToken::Fax, EditPosition::FAX },
+    { Row_FaxMail, "email", UserOptToken::Email, EditPosition::EMAIL },
 };
 
 
@@ -278,7 +278,7 @@ void SvxGeneralTabPage::InitControls ()
             vFields.push_back(boost::make_shared<Field>(
                 get<Edit>(vFieldInfo[iField].pEditId), iField));
             // "short name" field?
-            if (vFieldInfo[iField].nUserOptionsId == USER_OPT_ID)
+            if (vFieldInfo[iField].nUserOptionsId == UserOptToken::ID)
             {
                 nNameRow = vRows.size() - 1;
                 nShortNameField = vFields.size() - 1;
@@ -420,7 +420,7 @@ void SvxGeneralTabPage::SetAddress_Impl()
         {
             Field& rField = *vFields[iField];
             // updating content
-            unsigned const nToken = vFieldInfo[rField.iField].nUserOptionsId;
+            UserOptToken const nToken = vFieldInfo[rField.iField].nUserOptionsId;
             rField.pEdit->SetText(aUserOpt.GetToken(nToken));
             // is enabled?
             bool const bEnableEdit = !aUserOpt.IsTokenReadonly(nToken);
