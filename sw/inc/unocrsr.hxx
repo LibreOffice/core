@@ -22,6 +22,14 @@
 #include <swcrsr.hxx>
 #include <calbck.hxx>
 
+namespace sw
+{
+    struct DocDisposingHint SAL_FINAL : public SfxHint
+    {
+        DocDisposingHint() {};
+    };
+}
+
 class SwUnoCrsr : public virtual SwCursor, public SwModify
 {
 private:

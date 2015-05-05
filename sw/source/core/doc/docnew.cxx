@@ -107,6 +107,7 @@
 #include <unochart.hxx>
 #include <fldbas.hxx>
 #include <wrtsh.hxx>
+#include <unocrsr.hxx>
 
 #include <cmdid.h>
 
@@ -424,6 +425,14 @@ SwDoc::~SwDoc()
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
 
     delete mpUnoCrsrTable;
+    const sw::DocDisposingHint aHint;
+    std::vector< std::weak_ptr<SwUnoCrsr> > vCursorsToKill(mvUnoCrsrTbl2.begin(), mvUnoCrsrTbl2.end());
+    for(auto& pWeakCursor : vCursorsToKill)
+    {
+        auto pCursor(pWeakCursor.lock());
+        if(pCursor)
+            pCursor->CallSwClientNotify(aHint);
+    }
     delete mpACEWord;
 
     // Release the BaseLinks
