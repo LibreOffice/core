@@ -90,7 +90,7 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
 
@@ -109,7 +109,7 @@ public:
     PopupMenu*      GetActivePopup() const  { return pActivePopup; }
     void            KillActivePopup( PopupMenu* pThisOnly = NULL );
 
-    void            HighlightItem( sal_uInt16 nPos, bool bHighlight );
+    void            HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight);
     void            ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTimer );
     sal_uInt16          GetHighlightedItem() const { return nHighlightedItem; }
 

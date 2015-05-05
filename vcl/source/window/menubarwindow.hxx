@@ -87,7 +87,7 @@ private:
 
     std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 
-    void            HighlightItem( sal_uInt16 nPos, bool bHighlight );
+    void            HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight);
     virtual void    ChangeHighlightItem(sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true) SAL_OVERRIDE;
 
     sal_uInt16      ImplFindEntry( const Point& rMousePos ) const;

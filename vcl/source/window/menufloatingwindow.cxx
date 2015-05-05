@@ -61,7 +61,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
 
 void MenuFloatingWindow::doShutdown()
 {
-    if( pMenu )
+    if (pMenu)
     {
         // #105373# notify toolkit that highlight was removed
         // otherwise the entry will not be read when the menu is opened again
@@ -77,11 +77,11 @@ void MenuFloatingWindow::doShutdown()
                 if( pData && ( pData->pSubMenu == pMenu ) )
                     break;
             }
-            if( i < nCount )
+            if (i < nCount)
             {
                 MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
-                if( pPWin )
-                    pPWin->HighlightItem( i, false );
+                if (pPWin)
+                    pPWin->Invalidate();
             }
         }
 
@@ -162,7 +162,7 @@ void MenuFloatingWindow::InitMenuClipRegion()
 
 void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown )
 {
-    if( ! pMenu )
+    if (!pMenu)
         return;
 
     long nY = nScrollerHeight + ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
@@ -558,7 +558,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
     if( ! pMenu )
         return;
 
-    HighlightItem( nHighlightedItem, false );
+    Invalidate();
 
     pMenu->ImplKillLayoutData();
 
@@ -608,7 +608,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
         Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), SCROLL_CLIP );
     }
 
-    HighlightItem( nHighlightedItem, true );
+    Invalidate();
 }
 
 void MenuFloatingWindow::ImplScroll( const Point& rMousePos )
@@ -663,7 +663,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
 
     if ( nHighlightedItem != ITEMPOS_INVALID )
     {
-        HighlightItem( nHighlightedItem, false );
+        Invalidate();
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
     }
 
@@ -686,12 +686,12 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
                 MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
                 if( pPWin && pPWin->nHighlightedItem != i )
                 {
-                    pPWin->HighlightItem( i, true );
+                    pPWin->Invalidate();
                     pPWin->nHighlightedItem = i;
                 }
             }
         }
-        HighlightItem( nHighlightedItem, true );
+        Invalidate();
         pMenu->ImplCallHighlight( nHighlightedItem );
     }
     else
@@ -710,26 +710,26 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
     }
 }
 
-void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
+void MenuFloatingWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight)
 {
-    if( ! pMenu )
+    if (!pMenu)
         return;
 
-    Size    aSz = GetOutputSizePixel();
-    long    nStartY = ImplGetStartY();
-    long    nY = nScrollerHeight + nStartY + ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
-    long    nX = 0;
+    Size aSz = GetOutputSizePixel();
+    long nStartY = ImplGetStartY();
+    long nY = nScrollerHeight + nStartY + ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
+    long nX = 0;
 
-    if ( pMenu->pLogo )
+    if (pMenu->pLogo)
         nX = pMenu->pLogo->aBitmap.GetSizePixel().Width();
 
     int nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
 
     size_t nCount = pMenu->pItemList->size();
-    for ( size_t n = 0; n < nCount; n++ )
+    for (size_t n = 0; n < nCount; n++)
     {
-        MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
-        if ( n == nPos )
+        MenuItemData* pData = pMenu->pItemList->GetDataFromPos(n);
+        if (n == nPos)
         {
             DBG_ASSERT( pMenu->ImplIsVisible( n ), "Highlight: Item not visible!" );
             if ( pData->eType != MenuItemType::SEPARATOR )
@@ -738,64 +738,65 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                 Color oldLineColor;
                 bool bDrawItemRect = true;
 
-                Rectangle aItemRect( Point( nX+nOuterSpaceX, nY ), Size( aSz.Width()-2*nOuterSpaceX, pData->aSz.Height() ) );
-                if ( pData->nBits & MenuItemBits::POPUPSELECT )
+                Rectangle aItemRect(Point(nX + nOuterSpaceX, nY), Size(aSz.Width() - 2 * nOuterSpaceX, pData->aSz.Height()));
+                if (pData->nBits & MenuItemBits::POPUPSELECT)
                 {
-                    long nFontHeight = GetTextHeight();
-                    aItemRect.Right() -= nFontHeight + nFontHeight/4;
+                    long nFontHeight = rRenderContext.GetTextHeight();
+                    aItemRect.Right() -= nFontHeight + nFontHeight / 4;
                 }
 
-                if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
+                if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
                 {
-                    Size aPxSize( GetOutputSizePixel() );
-                    Push( PushFlags::CLIPREGION );
-                    IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) ) );
-                    Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
-                    MenupopupValue aVal( pMenu->nTextPos-GUTTERBORDER, aItemRect );
-                    DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                                       aCtrlRect,
-                                       ControlState::ENABLED,
-                                       aVal,
-                                       OUString() );
-                    if( bHighlight &&
-                        IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
+                    Size aPxSize(rRenderContext.GetOutputSizePixel());
+                    rRenderContext.Push(PushFlags::CLIPREGION);
+                    rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(aSz.Width(), pData->aSz.Height())));
+                    Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width() - nX, aPxSize.Height()));
+                    MenupopupValue aVal(pMenu->nTextPos - GUTTERBORDER, aItemRect);
+                    rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect,
+                                                     ControlState::ENABLED, aVal, OUString());
+                    if (bHighlight &&
+                        rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
                     {
                         bDrawItemRect = false;
-                        if( !DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
+                        if (!rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_ITEM,
                                                         aItemRect,
                                                         ControlState::SELECTED | ( pData->bEnabled? ControlState::ENABLED: ControlState::NONE ),
-                                                        aVal,
-                                                        OUString() ) )
+                                                        aVal, OUString()))
                         {
                             bDrawItemRect = bHighlight;
                         }
                     }
                     else
-                        bDrawItemRect = bHighlight;
-                    Pop();
-                }
-                if( bDrawItemRect )
-                {
-                    if ( bHighlight )
                     {
-                        if( pData->bEnabled )
-                            SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                        bDrawItemRect = bHighlight;
+                    }
+                    rRenderContext.Pop();
+                }
+                if (bDrawItemRect)
+                {
+                    if (bHighlight)
+                    {
+                        if (pData->bEnabled)
+                        {
+                            rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
+                        }
                         else
                         {
-                            SetFillColor();
-                            oldLineColor = GetLineColor();
-                            SetLineColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                            rRenderContext.SetFillColor();
+                            oldLineColor = rRenderContext.GetLineColor();
+                            rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
                             bRestoreLineColor = true;
                         }
                     }
                     else
-                        SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
-
-                    DrawRect( aItemRect );
+                    {
+                        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
+                    }
+                    rRenderContext.DrawRect(aItemRect);
                 }
-                pMenu->ImplPaint( this, nScrollerHeight, nStartY, pData, bHighlight );
-                if( bRestoreLineColor )
-                    SetLineColor( oldLineColor );
+                pMenu->ImplPaint(rRenderContext, nScrollerHeight, nStartY, pData, bHighlight);
+                if (bRestoreLineColor)
+                    rRenderContext.SetLineColor(oldLineColor);
             }
             return;
         }
@@ -1082,34 +1083,32 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
     }
 }
 
-void MenuFloatingWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void MenuFloatingWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    if( ! pMenu )
+    if (!pMenu)
         return;
 
-    if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
-        SetClipRegion();
+        rRenderContext.SetClipRegion();
         long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
-        Size aPxSize( GetOutputSizePixel() );
+        Size aPxSize(rRenderContext.GetOutputSizePixel());
         aPxSize.Width() -= nX;
-        ImplControlValue aVal( pMenu->nTextPos-GUTTERBORDER );
-        DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                           Rectangle( Point( nX, 0 ), aPxSize ),
-                           ControlState::ENABLED,
-                           aVal,
-                           OUString() );
+        ImplControlValue aVal(pMenu->nTextPos - GUTTERBORDER);
+        DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
+                          Rectangle(Point(nX, 0), aPxSize),
+                          ControlState::ENABLED, aVal, OUString());
         InitMenuClipRegion();
     }
-    if ( IsScrollMenu() )
+    if (IsScrollMenu())
     {
-        ImplDrawScroller( true );
-        ImplDrawScroller( false );
+        ImplDrawScroller(true);
+        ImplDrawScroller(false);
     }
-    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
-    pMenu->ImplPaint( this, nScrollerHeight, ImplGetStartY() );
-    if ( nHighlightedItem != ITEMPOS_INVALID )
-        HighlightItem( nHighlightedItem, true );
+    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
+    pMenu->ImplPaint(rRenderContext, nScrollerHeight, ImplGetStartY());
+    if (nHighlightedItem != ITEMPOS_INVALID)
+        HighlightItem(rRenderContext, nHighlightedItem, true);
 }
 
 void MenuFloatingWindow::ImplDrawScroller( bool bUp )
