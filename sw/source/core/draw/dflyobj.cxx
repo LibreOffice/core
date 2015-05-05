@@ -748,7 +748,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     ResizeRect( aNewRect, rRef, xFact, yFact );
 
     // Get graphic object size in 100th of mm
-    GraphicObject *pGraphicObject = (GraphicObject *) pSh->GetGraphicObj();
+    GraphicObject const *pGraphicObject = pSh->GetGraphicObj();
     if (!pGraphicObject)
         return;
     const MapMode aMapMode100thmm(MAP_100TH_MM);
@@ -756,14 +756,14 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     if( MAP_PIXEL == pGraphicObject->GetPrefMapMode().GetMapUnit() )
         aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
     else
-        aGraphicSize = Application::GetDefaultDevice()->LogicToLogic( aGraphicSize, pGraphicObject->GetPrefMapMode(), aMapMode100thmm);
+        aGraphicSize = OutputDevice::LogicToLogic( aGraphicSize, pGraphicObject->GetPrefMapMode(), aMapMode100thmm);
     if( aGraphicSize.A() == 0 || aGraphicSize.B() == 0 )
         return ;
 
     // Get old values for crop in 10th of mm
     SfxItemSet aSet( pSh->GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
     pSh->GetCurAttr( aSet );
-    SwCropGrf aCrop( (const SwCropGrf&) aSet.Get(RES_GRFATR_CROPGRF) );
+    SwCropGrf aCrop( static_cast<const SwCropGrf&>(aSet.Get(RES_GRFATR_CROPGRF)) );
 
     Rectangle aCropRectangle(
         convertTwipToMm100(aCrop.GetLeft()),

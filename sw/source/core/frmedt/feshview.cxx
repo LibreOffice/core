@@ -638,11 +638,11 @@ void SwFEShell::StartCropImage()
         for ( sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); ++i )
         {
             SdrObject *pTmpObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-            sal_Bool bForget = pTmpObj->ISA(SwVirtFlyDrawObj);
+            bool bForget = pTmpObj->ISA(SwVirtFlyDrawObj);
             if( bForget )
             {
                 pView->UnmarkAll();
-                pView->MarkObj( pTmpObj, Imp()->GetPageView(), sal_False, sal_False );
+                pView->MarkObj( pTmpObj, Imp()->GetPageView(), false, false );
                 break;
             }
         }
