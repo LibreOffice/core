@@ -41,7 +41,7 @@
 enum class BkMode
 {
     NONE         = 0,
-    TRANSPARENT  = 1,
+    Transparent  = 1,
     OPAQUE       = 2,
     LAST         = 2
 };

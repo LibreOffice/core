@@ -28,7 +28,6 @@
 #undef GradientStyle_RECT
 
 // so it doesn't conflict with enum values
-#undef TRANSPARENT
 #undef OPAQUE
 #define WIN32_TRANSPARENT 1
 

@@ -2025,7 +2025,7 @@ void Window::StateChanged(StateChangedType eType)
         //stuff that doesn't invalidate the layout
         case StateChangedType::CONTROLFOREGROUND:
         case StateChangedType::CONTROLBACKGROUND:
-        case StateChangedType::TRANSPARENT:
+        case StateChangedType::Transparent:
         case StateChangedType::UPDATEMODE:
         case StateChangedType::READONLY:
         case StateChangedType::ENABLE:

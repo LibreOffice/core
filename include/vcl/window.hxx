@@ -231,9 +231,6 @@ template<class T> class VclPtr;
 #define AUTOSCROLL_VERT                 ((sal_uInt16)0x0001)
 #define AUTOSCROLL_HORZ                 ((sal_uInt16)0x0002)
 
-#ifdef TRANSPARENT
-#undef TRANSPARENT
-#endif
 // Flags for StateChanged()
 enum class StateChangedType : sal_uInt16
 {
@@ -248,7 +245,7 @@ enum class StateChangedType : sal_uInt16
     STYLE              = 9,
     ZOOM               = 10,
     BORDER             = 11,
-    TRANSPARENT        = 12,
+    Transparent        = 12,
     CONTROLFONT        = 13,
     CONTROLFOREGROUND  = 14,
     CONTROLBACKGROUND  = 15,

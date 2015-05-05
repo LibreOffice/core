@@ -919,7 +919,7 @@ void WinMtfOutput::UpdateLineStyle()
 void WinMtfOutput::UpdateFillStyle()
 {
     if ( !mbFillStyleSelected )     // SJ: #i57205# taking care of bkcolor if no brush is selected
-        maFillStyle = WinMtfFillStyle( maBkColor, mnBkMode == BkMode::TRANSPARENT );
+        maFillStyle = WinMtfFillStyle( maBkColor, mnBkMode == BkMode::Transparent );
     if (!( maLatestFillStyle == maFillStyle ) )
     {
         maLatestFillStyle = maFillStyle;
@@ -1410,7 +1410,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
     aTmp.SetColor( maTextColor );
     aTmp.SetFillColor( maBkColor );
 
-    if( mnBkMode == BkMode::TRANSPARENT )
+    if( mnBkMode == BkMode::Transparent )
         aTmp.SetTransparent( true );
     else
         aTmp.SetTransparent( false );
