@@ -3653,7 +3653,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 #endif
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
-    TriggerPaintEvent();
+    pThis->TriggerPaintEvent();
 
     return false;
 }
@@ -3739,7 +3739,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
 
     pThis->updateScreenNumber();
     if( bSized )
-        AllocateFrame();
+        pThis->AllocateFrame();
 
     if( bMoved && bSized )
         pThis->CallCallback( SALEVENT_MOVERESIZE, NULL );
@@ -3749,7 +3749,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
         pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
     if (bSized)
-        TriggerPaintEvent();
+        pThis->TriggerPaintEvent();
     return false;
 }
 
@@ -3925,7 +3925,7 @@ gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame 
     if( (pThis->m_nState & GDK_WINDOW_STATE_ICONIFIED) != (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_ICONIFIED ) )
     {
         GtkSalFrame::getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_RESIZE );
-        TriggerPaintEvent();
+        pThis->TriggerPaintEvent();
     }
 
     if(   (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_MAXIMIZED) &&

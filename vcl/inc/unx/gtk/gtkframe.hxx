@@ -304,8 +304,8 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     void createNewWindow( ::Window aParent, bool bXEmbed, SalX11Screen nXScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
 
-    static void AllocateFrame();
-    static void TriggerPaintEvent();
+    void AllocateFrame();
+    void TriggerPaintEvent();
 
     void updateWMClass();
     void SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize = NULL );
