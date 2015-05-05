@@ -927,65 +927,65 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     if (rEndRow > MAXROW)
         rEndRow = MAXROW, o_bShrunk = true;
 
-    bool bChanged;
-    do
+    while (rStartCol < rEndCol)
     {
-        bChanged = false;
+        if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
+        {
+            --rEndCol;
+            o_bShrunk = true;
+        }
+        else
+            break;  // while
+    }
 
+    if (!bStickyLeftCol)
+    {
         while (rStartCol < rEndCol)
         {
-            if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
+            if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
             {
-                --rEndCol;
-                bChanged = true;
+                ++rStartCol;
+                o_bShrunk = true;
             }
             else
                 break;  // while
         }
+    }
 
-        if (!bStickyLeftCol)
+    if (!bColumnsOnly)
+    {
+        if (!bStickyTopRow)
         {
-            while (rStartCol < rEndCol)
+            while (rStartRow < rEndRow)
             {
-                if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
+                bool bFound = false;
+                for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
                 {
-                    ++rStartCol;
-                    bChanged = true;
+                    if (aCol[i].HasDataAt( rStartRow))
+                        bFound = true;
+                }
+                if (!bFound)
+                {
+                    ++rStartRow;
+                    o_bShrunk = true;
                 }
                 else
                     break;  // while
             }
         }
 
-        if (!bColumnsOnly)
+        while (rStartRow < rEndRow)
         {
-            if (!bStickyTopRow && rStartRow < rEndRow)
+            SCROW nLastDataRow = GetLastDataRow( rStartCol, rEndCol, rEndRow);
+            if (0 <= nLastDataRow && nLastDataRow < rEndRow)
             {
-                bool bFound = false;
-                for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
-                    if (aCol[i].HasDataAt( rStartRow))
-                        bFound = true;
-                if (!bFound)
-                {
-                    ++rStartRow;
-                    bChanged = true;
-                }
+                rEndRow = std::max( rStartRow, nLastDataRow);
+                o_bShrunk = true;
             }
-
-            if (rStartRow < rEndRow)
-            {
-                SCROW nLastDataRow = GetLastDataRow( rStartCol, rEndCol, rEndRow);
-                if (0 <= nLastDataRow && nLastDataRow < rEndRow)
-                {
-                    rEndRow = std::max( rStartRow, nLastDataRow);
-                    bChanged = true;
-                }
-            }
+            else
+                break;  // while
         }
-
-        if (bChanged)
-            o_bShrunk = true;
-    } while( bChanged );
+    }
 
     return rStartCol != rEndCol || (bColumnsOnly ?
             !aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow) :
