@@ -4498,6 +4498,9 @@ void ToolBox::ToggleFloatingMode()
 {
     DockingWindow::ToggleFloatingMode();
 
+    if (!mpData)
+        return;
+
     bool mbOldHorz = mbHorz;
 
     if ( ImplIsFloatingMode() )
