@@ -49,7 +49,7 @@ public:
     SAL_DLLPRIVATE sal_uInt16       ImplGetButtonState() const;
     SAL_DLLPRIVATE sal_uInt16&      ImplGetButtonState();
     SAL_DLLPRIVATE sal_uInt16       ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
-    SAL_DLLPRIVATE void             ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos, Size& rSize,
+    SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
                                               bool bLayout, sal_uLong nImageSep, sal_uLong nDrawFlags,
                                               sal_uInt16 nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
@@ -121,8 +121,8 @@ protected:
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void            ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawFlags,
-                                               const Rectangle& rRect, bool bLayout, bool bMenuBtnSep );
+    SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, sal_uLong nDrawFlags,
+                                                             const Rectangle& rRect, bool bLayout, bool bMenuBtnSep);
     SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLayout = false);
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE sal_uInt16          ImplGetTextStyle( sal_uLong nDrawFlags ) const;
@@ -139,8 +139,8 @@ protected:
     using Window::ImplInit;
 public:
     SAL_DLLPRIVATE void            ImplSetDefButton( bool bSet );
-    SAL_DLLPRIVATE static void     ImplDrawPushButtonFrame( vcl::Window* pDev, Rectangle& rRect, sal_uInt16 nStyle );
-    SAL_DLLPRIVATE static bool     ImplHitTestPushButton( vcl::Window* pDev, const Point& rPos );
+    SAL_DLLPRIVATE void            ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext, Rectangle& rRect, sal_uInt16 nStyle);
+    SAL_DLLPRIVATE static bool     ImplHitTestPushButton(vcl::Window* pDev, const Point& rPos);
     SAL_DLLPRIVATE bool            ImplIsDefButton() const;
 
 protected:
@@ -291,13 +291,12 @@ private:
     SAL_DLLPRIVATE void     ImplInitRadioButtonData();
     SAL_DLLPRIVATE WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void     ImplDrawRadioButtonState();
+    SAL_DLLPRIVATE void     ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize,
                               const Size& rImageSize, Rectangle& rStateRect,
                               Rectangle& rMouseRect, bool bLayout = false );
     SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext, bool bLayout = false );
-    SAL_DLLPRIVATE void     ImplInvalidateOrDrawRadioButtonState();
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
     SAL_DLLPRIVATE long     ImplGetImageToTextDistance() const;
@@ -329,7 +328,7 @@ protected:
 
     // draws the radio button (the knob image), in its current state (pressed/checked)
     // at the usual location, which can be overridden with SetStateRect
-    void            DrawRadioButtonState( );
+    void            DrawRadioButtonState(vcl::RenderContext& rRenderContext);
 
 public:
     explicit        RadioButton( vcl::Window* pParent, WinBits nWinStyle = 0 );
@@ -420,7 +419,6 @@ private:
     SAL_DLLPRIVATE void         ImplInitCheckBoxData();
     SAL_DLLPRIVATE WinBits      ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void         ImplInvalidateOrDrawCheckBoxState();
     SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                                     const Point& rPos, const Size& rSize,
                                     const Size& rImageSize, Rectangle& rStateRect,
@@ -441,7 +439,7 @@ protected:
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
 
-    virtual void ImplDrawCheckBoxState();
+    virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
     SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
 
@@ -543,7 +541,7 @@ public:
 class VCL_DLLPUBLIC DisclosureButton : public CheckBox
 {
 protected:
-    SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 public:
     explicit DisclosureButton( vcl::Window* pParent, WinBits nStyle = 0 );
 

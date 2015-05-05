@@ -234,7 +234,7 @@ namespace svx
     }
 
 
-    void RubyRadioButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+    void RubyRadioButton::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
     {
         HideFocus();
 
@@ -289,7 +289,7 @@ namespace svx
         aImageLocation.Top() = aPrimaryTextLocation.Top() + ( nTextHeight - aImageSize.Height() ) / 2;
         aImageLocation.Bottom() = aImageLocation.Top() + aImageSize.Height();
         SetStateRect( aImageLocation );
-        DrawRadioButtonState( );
+        DrawRadioButtonState(rRenderContext);
 
         // mouse clicks should be recognized in a rect which is one pixel larger in each direction, plus
         // includes the image
