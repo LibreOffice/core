@@ -42,6 +42,48 @@
     },
     {
       "key": {
+        "uuid": "7a5de9d1_4c72737e",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-05T21:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5de9d1_0c623bd9",
+      "range": {
+        "startLine": 972,
+        "startChar": 121,
+        "endLine": 972,
+        "endChar": 124
+      },
+      "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_6c6f2f93",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-05T21:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5de9d1_6c65efdf",
+      "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_6c3e4fba",
         "filename": "svl/source/numbers/zforlist.cxx",
         "patchSetId": 2
@@ -76,6 +118,24 @@
     },
     {
       "key": {
+        "uuid": "7a5de9d1_ec3b1f9b",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-05T21:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5de9d1_0c4b1b5b",
+      "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_ec78ff91",
         "filename": "svl/source/numbers/zforlist.cxx",
         "patchSetId": 2
@@ -87,6 +147,24 @@
       "writtenOn": "2015-05-05T16:12:46Z",
       "side": 1,
       "message": "Why the following checks at all? The original format of which the code was copied from already identified it as scientific, so if we find an unescaped \u0027E\u0027 it is the one we\u0027re looking for.",
+      "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_0cbebbff",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2622,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-05T21:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5de9d1_ec78ff91",
       "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -110,6 +188,24 @@
     },
     {
       "key": {
+        "uuid": "7a5de9d1_2cbb7710",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2626,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-05T21:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5de9d1_2c48575b",
+      "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_cc73c3b3",
         "filename": "svl/source/numbers/zforlist.cxx",
         "patchSetId": 2
@@ -127,6 +223,24 @@
     },
     {
       "key": {
+        "uuid": "7a5de9d1_cc3663b4",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2632,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-05T21:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5de9d1_cc73c3b3",
+      "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_8c6dcbce",
         "filename": "svl/source/numbers/zforlist.cxx",
         "patchSetId": 2
@@ -138,6 +252,24 @@
       "writtenOn": "2015-05-05T16:12:46Z",
       "side": 1,
       "message": "I\u0027d rather leave that to maybe a follow-up change, it is not necessary for the engineering vs group change. So far the simple indexOf() didn\u0027t hurt and having an escaped \u0027E\u0027 or \u0027;\u0027 within a scientific format is quite unlikely..",
+      "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_ac5c47ee",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2721,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-05T21:09:35Z",
+      "side": 1,
+      "message": "I think that indexOf() is too lax. With a recent master, test the following format: [BLUE]0.00E+00\nValidate and reopen Format \u003e Cells. Format is now recognized as scientific. Check \"Negative in red\"\n\u003d\u003e format get mixed\nThis bug did not appear before, because checkboxes were disable in case of scientific format.\n\nOr do you prefer I propose a different commit for these tests?",
+      "parentUuid": "7a5de9d1_8c6dcbce",
       "revId": "70f5c45b45ea2649174d817f661810522eaa0773",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
