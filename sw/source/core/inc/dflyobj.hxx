@@ -106,7 +106,7 @@ public:
     virtual       void       Resize(const Point& rRef, const Fraction& xFact,
                                     const Fraction& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
     virtual       void       Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual       void       addCropHandles(SdrHdlList& rTarget) const;
+    virtual       void       addCropHandles(SdrHdlList& rTarget) const SAL_OVERRIDE;
 
     const SwFrmFmt *GetFmt() const;
           SwFrmFmt *GetFmt();
