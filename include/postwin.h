@@ -29,7 +29,6 @@
 
 // so it doesn't conflict with enum values
 #undef OPAQUE
-#define WIN32_TRANSPARENT 1
 
 #undef WB_LEFT
 #undef WB_RIGHT

@@ -3402,7 +3402,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     // as some tools such as RichWin may have changed it
     if ( pFrame->mpGraphics &&
          pFrame->mpGraphics->getHDC() )
-        SetBkMode( pFrame->mpGraphics->getHDC(), WIN32_TRANSPARENT );
+        SetBkMode( pFrame->mpGraphics->getHDC(), TRANSPARENT );
 
     // determine modifiers
     if ( GetKeyState( VK_SHIFT ) & 0x8000 )
@@ -5135,7 +5135,7 @@ static bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
         // as some tools such as RichWin may have changed it
         if ( pFrame->mpGraphics &&
              pFrame->mpGraphics->getHDC() )
-            SetBkMode( pFrame->mpGraphics->getHDC(), WIN32_TRANSPARENT );
+            SetBkMode( pFrame->mpGraphics->getHDC(), TRANSPARENT );
     }
 
     if ( pFrame && pFrame->mbHandleIME )
