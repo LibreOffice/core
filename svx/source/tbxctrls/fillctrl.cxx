@@ -28,6 +28,9 @@
 #include <vcl/toolbox.hxx>
 #include <svx/dialogs.hrc>
 
+#define TMP_STR_BEGIN   "["
+#define TMP_STR_END     "]"
+
 #include "svx/drawitem.hxx"
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
@@ -355,6 +358,39 @@ void SvxFillToolBoxControl::Update()
                         const OUString aString(mpFillGradientItem->GetName());
 
                         mpLbFillAttr->SelectEntry(aString);
+
+                        // Check if the entry is not in the list
+                        if (mpLbFillAttr->GetSelectEntry() != aString)
+                        {
+                            sal_Int32 nCount = mpLbFillAttr->GetEntryCount();
+                            OUString aTmpStr;
+                            if( nCount > 0 )
+                            {
+                                // Last entry gets tested against temporary entry
+                                aTmpStr = mpLbFillAttr->GetEntry( nCount - 1 );
+                                if( aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                    aTmpStr.endsWith(TMP_STR_END) )
+                                {
+                                    mpLbFillAttr->RemoveEntry(nCount - 1);
+                                }
+                            }
+                            aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
+
+                            boost::scoped_ptr<XGradientEntry> pEntry(new XGradientEntry(mpFillGradientItem->GetGradientValue(), aTmpStr));
+                            XGradientList aGradientList( "", ""/*TODO?*/ );
+                            aGradientList.Insert( pEntry.get() );
+                            aGradientList.SetDirty( false );
+                            const Bitmap aBmp = aGradientList.GetUiBitmap( 0 );
+
+                            if(!aBmp.IsEmpty())
+                            {
+                                mpLbFillAttr->InsertEntry(pEntry->GetName(), Image(aBmp));
+                                mpLbFillAttr->SelectEntryPos(mpLbFillAttr->GetEntryCount() - 1);
+                            }
+
+                            aGradientList.Remove( 0 );
+                        }
+
                     }
                     else
                     {
@@ -384,6 +420,40 @@ void SvxFillToolBoxControl::Update()
                         const OUString aString(mpHatchItem->GetName());
 
                         mpLbFillAttr->SelectEntry( aString );
+
+                        // Check if the entry is not in the list
+                        if( mpLbFillAttr->GetSelectEntry() != aString )
+                        {
+                            sal_uInt16 nCount = mpLbFillAttr->GetEntryCount();
+                            OUString aTmpStr;
+                            if( nCount > 0 )
+                            {
+                                // Last entry gets tested against temporary entry
+                                aTmpStr = mpLbFillAttr->GetEntry( nCount - 1 );
+                                if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                     aTmpStr.endsWith(TMP_STR_END) )
+                                {
+                                    mpLbFillAttr->RemoveEntry( nCount - 1 );
+                                }
+                            }
+                            aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
+
+                            XHatchEntry* pEntry = new XHatchEntry(mpHatchItem->GetHatchValue(), aTmpStr);
+                            XHatchList aHatchList( "", ""/*TODO?*/ );
+                            aHatchList.Insert( pEntry );
+                            aHatchList.SetDirty( sal_False );
+                            const Bitmap aBmp = aHatchList.GetUiBitmap( 0 );
+
+                            if( !aBmp.IsEmpty() )
+                            {
+                                mpLbFillAttr->InsertEntry(pEntry->GetName(), Image(aBmp));
+                                mpLbFillAttr->SelectEntryPos( mpLbFillAttr->GetEntryCount() - 1 );
+                                //delete pBmp;
+                            }
+
+                            aHatchList.Remove( 0 );
+                            delete pEntry;
+                        }
                     }
                     else
                     {
@@ -413,6 +483,36 @@ void SvxFillToolBoxControl::Update()
                         const OUString aString(mpBitmapItem->GetName());
 
                         mpLbFillAttr->SelectEntry(aString);
+
+                        // Check if the entry is not in the list
+                        if (mpLbFillAttr->GetSelectEntry() != aString)
+                        {
+                            sal_Int32 nCount = mpLbFillAttr->GetEntryCount();
+                            OUString aTmpStr;
+                            if( nCount > 0 )
+                            {
+                                // Last entry gets tested against temporary entry
+                                aTmpStr = mpLbFillAttr->GetEntry(nCount - 1);
+                                if( aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                    aTmpStr.endsWith(TMP_STR_END) )
+                                {
+                                    mpLbFillAttr->RemoveEntry(nCount - 1);
+                                }
+                            }
+                            aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
+
+                            boost::scoped_ptr<XBitmapEntry> pEntry(new XBitmapEntry(mpBitmapItem->GetGraphicObject(), aTmpStr));
+                            XBitmapListRef xBitmapList =
+                                XPropertyList::AsBitmapList(
+                                    XPropertyList::CreatePropertyList(
+                                        XBITMAP_LIST, "TmpList", ""/*TODO?*/));
+                            xBitmapList->Insert( pEntry.get() );
+                            xBitmapList->SetDirty( false );
+                            mpLbFillAttr->Fill( xBitmapList );
+                            mpLbFillAttr->SelectEntryPos(mpLbFillAttr->GetEntryCount() - 1);
+                            xBitmapList->Remove( 0 );
+                        }
+
                     }
                     else
                     {
