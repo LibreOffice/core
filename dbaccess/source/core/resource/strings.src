@@ -345,11 +345,6 @@ String RID_STR_NO_BOOKMARK_DELETED
     Text [ en-US ] = "The current row is deleted, and thus doesn't have a bookmark.";
 };
 
-String RID_STR_NO_EMBEDDING
-{
-    Text [ en-US ] = "Embedding of database documents is not supported.";
-};
-
 String RID_STR_CONNECTION_REQUEST
 {
     Text [ en-US ] = "A connection for the following URL was requested \"$name$\".";

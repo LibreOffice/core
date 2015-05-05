@@ -1914,14 +1914,45 @@ Reference< XDataSource > SAL_CALL ODatabaseDocument::getDataSource() throw (Runt
     return m_pImpl->getOrCreateDataSource();
 }
 
-void SAL_CALL ODatabaseDocument::loadFromStorage( const Reference< XStorage >& /*xStorage*/, const Sequence< PropertyValue >& /*aMediaDescriptor*/ ) throw (IllegalArgumentException, DoubleInitializationException, IOException, Exception, RuntimeException, std::exception)
+namespace
 {
-    DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
+/// Property map for embedded import info set.
+comphelper::PropertyMapEntry const aEmbeddedImportInfoMap[] =
+{
+    {OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+    {OUString("StreamName"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+    {OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+    {OUString(), 0, css::uno::Type(), 0, 0}
+};
+}
 
-    throw Exception(
-        DBACORE_RESSTRING( RID_STR_NO_EMBEDDING ),
-        *this
-    );
+void SAL_CALL ODatabaseDocument::loadFromStorage(const Reference<XStorage>& xStorage, const Sequence<PropertyValue>& rMediaDescriptor) throw (IllegalArgumentException, DoubleInitializationException, IOException, Exception, RuntimeException, std::exception)
+{
+    DocumentGuard aGuard(*this, DocumentGuard::InitMethod);
+
+    uno::Reference<beans::XPropertySet> xInfoSet(comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aEmbeddedImportInfoMap)));
+    comphelper::NamedValueCollection aDescriptor(rMediaDescriptor);
+    xInfoSet->setPropertyValue("StreamRelPath", uno::makeAny(aDescriptor.getOrDefault("HierarchicalDocumentName", OUString())));
+    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
+    xInfoSet->setPropertyValue("SourceStorage", uno::makeAny(xStorage));
+
+    uno::Sequence<uno::Any> aFilterCreationArgs(1);
+    aFilterCreationArgs[0] <<= xInfoSet;
+
+    uno::Reference<document::XImporter> xImporter(m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs, m_pImpl->m_aContext), uno::UNO_QUERY_THROW);
+
+    uno::Reference<lang::XComponent> xComponent(*this, uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(xComponent);
+
+    uno::Reference<document::XFilter> xFilter(xImporter, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aFilterArgs;
+    xFilter->filter(aFilterArgs);
+
+    // In case of embedding, XModel::attachResource is already called.
+    if (m_bEmbedded)
+        impl_setInitialized();
+
+    impl_setModified_nothrow(false, aGuard);
 }
 
 void SAL_CALL ODatabaseDocument::storeToStorage( const Reference< XStorage >& _rxStorage, const Sequence< PropertyValue >& _rMediaDescriptor ) throw (IllegalArgumentException, IOException, Exception, RuntimeException, std::exception)
