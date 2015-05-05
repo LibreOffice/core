@@ -431,7 +431,7 @@ SwXFootnote::createTextCursor() throw (uno::RuntimeException, std::exception)
     SwPosition aPos( *pTextFootnote->GetStartNode() );
     SwXTextCursor *const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE, aPos);
-    SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
+    auto pUnoCrsr(pXCursor->GetCursor());
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     const uno::Reference< text::XTextCursor > xRet =
         static_cast<text::XWordCursor*>(pXCursor);
@@ -478,12 +478,9 @@ SwXFootnote::createEnumeration() throw (uno::RuntimeException, std::exception)
 
     SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
     SwPosition aPos( *pTextFootnote->GetStartNode() );
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-        GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
-    const uno::Reference< container::XEnumeration >  xRet =
-        new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_FOOTNOTE);
-    return xRet;
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FOOTNOTE);
 }
 
 uno::Type SAL_CALL SwXFootnote::getElementType() throw (uno::RuntimeException, std::exception)

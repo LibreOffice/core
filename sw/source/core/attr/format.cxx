@@ -243,6 +243,7 @@ SwFormat::~SwFormat()
             SwIterator<SwClient,SwFormat> aIter(*this);
             for(SwClient* pClient = aIter.First(); pClient && pParentFormat; pClient = aIter.Next())
             {
+                SAL_INFO("sw.core", "reparenting " << typeid(*pClient).name() << " at " << pClient << " from " << typeid(*this).name() << " at " << this << " to "  << typeid(*pParentFormat).name() << " at " << pParentFormat);
                 pParentFormat->Add( pClient );
                 pClient->ModifyNotification( &aOldFormat, &aNewFormat );
             }

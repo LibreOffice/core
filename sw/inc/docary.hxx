@@ -262,12 +262,6 @@ public:
     bool DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete );
 };
 
-class SwUnoCrsrTable : public std::set<SwUnoCrsr*> {
-public:
-    /// the destructor will free all objects still in the set
-    ~SwUnoCrsrTable();
-};
-
 typedef std::vector<SwOLENode*> SwOLENodes;
 
 #endif // INCLUDED_SW_INC_DOCARY_HXX

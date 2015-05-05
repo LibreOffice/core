@@ -379,16 +379,19 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAu
 
 void ContentIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    for (const SwUnoCrsr* pUnoCrsr : pDoc->GetUnoCrsrTable())
+    for (auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl)
     {
-        for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pUnoCrsr))->GetRingContainer())
+        auto pUnoCrsr(pWeakUnoCrsr.lock());
+        if(!pUnoCrsr)
+            continue;
+        for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pUnoCrsr.get()))->GetRingContainer())
         {
             lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nContent, rPaM);
         }
-        const SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
-        if( pUnoTableCrsr )
+        const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr.get());
+        if( pUnoTblCrsr )
         {
-            for(SwPaM& rPaM : (&(const_cast<SwUnoTableCrsr*>(pUnoTableCrsr))->GetSelRing())->GetRingContainer())
+            for(SwPaM& rPaM : (&(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing())->GetRingContainer())
             {
                 lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nContent, rPaM);
             }

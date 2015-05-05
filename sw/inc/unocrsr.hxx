@@ -22,6 +22,11 @@
 #include <swcrsr.hxx>
 #include <calbck.hxx>
 
+namespace sw
+{
+    struct DocDisposingHint SAL_FINAL : public SfxHint {};
+}
+
 class SwUnoCrsr : public virtual SwCursor, public SwModify
 {
 private:
@@ -63,9 +68,6 @@ public:
     void SetSkipOverHiddenSections( bool bFlag )
                                     { m_bSkipOverHiddenSections = bFlag; }
 
-    // make copy of cursor
-    virtual SwUnoCrsr * Clone() const;
-
     DECL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 };
 
@@ -89,7 +91,7 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;
 
-    virtual SwUnoTableCrsr * Clone() const SAL_OVERRIDE;
+    std::shared_ptr<SwUnoCrsr> Clone() const;
 
     void MakeBoxSels();
 

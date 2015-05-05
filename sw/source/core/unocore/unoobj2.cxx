@@ -425,12 +425,13 @@ public:
     sal_Int32               m_nLastParaEnd;
     bool                    m_bFirstParagraph;
     uno::Reference< text::XTextContent >    m_xNextPara;
+    std::shared_ptr<SwUnoCrsr> m_pCrsr;
 
     Impl(   uno::Reference< text::XText > const& xParent,
-            ::std::unique_ptr<SwUnoCrsr> && pCursor,
+            ::std::shared_ptr<SwUnoCrsr> pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
-        : SwClient( pCursor.release() )
+        : SwClient( nullptr )
         , m_xParentText( xParent )
         , m_eCursorType( eType )
         // remember table and start node for later travelling
@@ -439,11 +440,13 @@ public:
         // for import of tables in tables we have to remember the actual
         // table and start node of the current position in the enumeration.
         , m_pOwnTable( pTable )
-        , m_nEndIndex( GetCursor()->End()->nNode.GetIndex() )
+        , m_nEndIndex( pCursor->End()->nNode.GetIndex() )
         , m_nFirstParaStart( -1 )
         , m_nLastParaEnd( -1 )
         , m_bFirstParagraph( true )
+        , m_pCrsr(pCursor)
     {
+        m_pCrsr->Add(this);
         OSL_ENSURE(m_xParentText.is(), "SwXParagraphEnumeration: no parent?");
         OSL_ENSURE(GetRegisteredIn(),  "SwXParagraphEnumeration: no cursor?");
         OSL_ENSURE(   !((CURSOR_SELECTION_IN_TABLE == eType) ||
@@ -463,8 +466,8 @@ public:
     }
 
     virtual ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
-        delete GetRegisteredIn();
+        if(m_pCrsr)
+            m_pCrsr->Remove(this);
     }
 
     SwUnoCrsr * GetCursor() {
@@ -478,6 +481,7 @@ public:
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -485,12 +489,22 @@ void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPo
     ClientModify(this, pOld, pNew);
 }
 
+void SwXParagraphEnumeration::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    SwClient::SwClientNotify(rModify, rHint);
+    if(m_pCrsr && typeid(rHint) == typeid(sw::DocDisposingHint))
+    {
+        m_pCrsr->Remove(this);
+        m_pCrsr.reset();
+    }
+}
+
 SwXParagraphEnumeration::SwXParagraphEnumeration(
         uno::Reference< text::XText > const& xParent,
-        ::std::unique_ptr<SwUnoCrsr> && pCursor,
+        ::std::shared_ptr<SwUnoCrsr> pCursor,
         const CursorType eType,
         SwStartNode const*const pStartNode, SwTable const*const pTable)
-    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, std::move(pCursor), eType,
+    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, pCursor, eType,
                     pStartNode, pTable) )
 {
 }
@@ -587,8 +601,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
          (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
     {
         SwPosition* pStart = pUnoCrsr->Start();
-        const ::std::unique_ptr<SwUnoCrsr> aNewCrsr(
-            pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false) );
+        auto aNewCrsr(pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false));
         // one may also go into tables here
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
@@ -1133,8 +1146,7 @@ SwXTextRange::CreateXTextRange(
 {
     const uno::Reference<text::XText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
-    const ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            rDoc.CreateUnoCrsr(rPos, false));
+    const auto pNewCrsr(rDoc.CreateUnoCrsr(rPos, false));
     if(pMark)
     {
         pNewCrsr->SetMark();
@@ -1268,8 +1280,7 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    const ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
+    const auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1290,8 +1301,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
+    auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1303,9 +1313,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
 
     const CursorType eSetType = (RANGE_IN_CELL == m_pImpl->m_eRangePosition)
             ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    const uno::Reference< container::XEnumeration > xRet =
-        new SwXParagraphEnumeration(m_pImpl->m_xParentText, std::move(pNewCrsr), eSetType);
-    return xRet;
+    return new SwXParagraphEnumeration(m_pImpl->m_xParentText, pNewCrsr, eSetType);
 }
 
 uno::Type SAL_CALL SwXTextRange::getElementType() throw (uno::RuntimeException, std::exception)
@@ -1499,22 +1507,22 @@ class SwXTextRanges::Impl
 {
 public:
     ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
+    std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
 
     Impl(SwPaM *const pPaM)
-        : SwClient( (pPaM)
-            ? pPaM->GetDoc()->CreateUnoCrsr(*pPaM->GetPoint())
-            : 0 )
     {
         if (pPaM)
         {
+            m_pUnoCursor = pPaM->GetDoc()->CreateUnoCrsr(*pPaM->GetPoint());
+            m_pUnoCursor->Add(this);
             ::sw::DeepCopyPaM(*pPaM, *GetCursor());
         }
         MakeRanges();
     }
 
     virtual ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
-        delete GetRegisteredIn();
+        if(m_pUnoCursor)
+            m_pUnoCursor->Remove(this);
     }
 
     SwUnoCrsr * GetCursor() {
@@ -1527,11 +1535,22 @@ public:
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
 
 void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
+}
+
+void SwXTextRanges::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    SwClient::SwClientNotify(rModify, rHint);
+    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
+    {
+        m_pUnoCursor->Remove(this);
+        m_pUnoCursor.reset();
+    }
 }
 
 void SwXTextRanges::Impl::MakeRanges()
@@ -1679,10 +1698,12 @@ public:
     // created by hasMoreElements
     uno::Reference< text::XTextContent > m_xNextObject;
     FrameDependList_t m_Frames;
+    ::std::shared_ptr<SwUnoCrsr> m_pUnoCursor;
 
     Impl(SwPaM const & rPaM)
-        : SwClient(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
+        : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
     {
+        m_pUnoCursor->Add(this);
         if (rPaM.HasMark())
         {
             GetCursor()->SetMark();
@@ -1692,7 +1713,6 @@ public:
 
     virtual ~Impl() {
         // Impl owns the cursor; delete it here: SolarMutex is locked
-        delete GetRegisteredIn();
     }
 
     SwUnoCrsr * GetCursor() {
@@ -1703,6 +1723,7 @@ public:
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
 
 struct InvalidFrameDepend {
@@ -1725,6 +1746,16 @@ void SwXParaFrameEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPo
             ::std::remove_if(m_Frames.begin(), m_Frames.end(),
                     InvalidFrameDepend());
         m_Frames.erase(iter, m_Frames.end());
+    }
+}
+
+void SwXParaFrameEnumeration::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    SwClient::SwClientNotify(rModify, rHint);
+    if(m_pUnoCursor && typeid(rHint) == typeid(sw::DocDisposingHint))
+    {
+        m_pUnoCursor->Remove(this);
+        m_pUnoCursor.reset();
     }
 }
 

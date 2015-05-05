@@ -110,7 +110,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
     SwPosition aPos(aNodeIndex);
     SwXTextCursor *const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CURSOR_REDLINE, aPos);
-    SwUnoCrsr *const pUnoCursor = pXCursor->GetCursor();
+    auto pUnoCursor(pXCursor->GetCursor());
     pUnoCursor->Move(fnMoveForward, fnGoNode);
 
     // #101929# prevent a newly created text cursor from running inside a table
@@ -161,9 +161,8 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
     SolarMutexGuard aGuard;
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-        GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-    return new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_REDLINE);
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
 }
 
 uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException, std::exception)
@@ -535,15 +534,12 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration() throw
         throw uno::RuntimeException();
 
     SwNodeIndex* pNodeIndex = pRedline->GetContentIdx();
-    if(pNodeIndex)
-    {
-        SwPaM aPam(*pNodeIndex);
-        aPam.Move(fnMoveForward, fnGoNode);
-        ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-            GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-        xRet = new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_REDLINE);
-    }
-    return xRet;
+    if(!pNodeIndex)
+        return nullptr;
+    SwPaM aPam(*pNodeIndex);
+    aPam.Move(fnMoveForward, fnGoNode);
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
 }
 
 uno::Type SwXRedline::getElementType(  ) throw(uno::RuntimeException, std::exception)
@@ -571,7 +567,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor() throw( uno::
         SwPosition aPos(*pNodeIndex);
         SwXTextCursor *const pXCursor =
             new SwXTextCursor(*pDoc, this, CURSOR_REDLINE, aPos);
-        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
+        auto pUnoCrsr(pXCursor->GetCursor());
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
         // is here a table?

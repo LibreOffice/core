@@ -1181,8 +1181,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
             // to paragraph boundaries
             SwPosition aStart( *aCursor.Start() );
             SwPosition aEnd  ( *aCursor.End()   );
-            boost::scoped_ptr<SwUnoCrsr> pTemp(
-                aCursor.GetDoc()->CreateUnoCrsr(aStart, false) );
+            auto pTemp( aCursor.GetDoc()->CreateUnoCrsr(aStart, false) );
             if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
             {
                 pTemp->MovePara(fnParaCurr, fnParaStart);

@@ -1094,6 +1094,7 @@ private:
 
 // allgemeines
     SwDoc& m_rDoc;
+    std::shared_ptr<SwUnoCrsr> mpCrsr;
     SwPaM* m_pPaM;
 
     SwWW8FltControlStack* m_pCtrlStck;    // Stack fuer die Attribute

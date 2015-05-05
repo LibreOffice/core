@@ -121,11 +121,11 @@ void PaMCorrAbs( const SwPaM& rRange,
         }
     }
     {
-        SwUnoCrsrTable& rTable = const_cast<SwUnoCrsrTable&>(pDoc->GetUnoCrsrTable());
-
-        for( SwUnoCrsrTable::iterator it = rTable.begin(); it != rTable.end(); ++it )
+        for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl)
         {
-            SwUnoCrsr *const pUnoCursor = *it;
+            auto pUnoCursor(pWeakUnoCrsr.lock());
+            if(!pUnoCursor)
+                continue;
 
             bool bChange = false; // has the UNO cursor been corrected?
 
@@ -142,11 +142,11 @@ void PaMCorrAbs( const SwPaM& rRange,
                 bChange |= lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
             }
 
-            SwUnoTableCrsr *const pUnoTableCrsr =
-                dynamic_cast<SwUnoTableCrsr *>(*it);
-            if( pUnoTableCrsr )
+            SwUnoTableCrsr *const pUnoTblCrsr =
+                dynamic_cast<SwUnoTableCrsr *>(pUnoCursor.get());
+            if( pUnoTblCrsr )
             {
-                for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
+                for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
                 {
                     bChange |=
                         lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
@@ -275,19 +275,21 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
        }
     }
     {
-        SwUnoCrsrTable& rTable = (SwUnoCrsrTable&)pDoc->GetUnoCrsrTable();
-        for( SwUnoCrsrTable::iterator it = rTable.begin(); it != rTable.end(); ++it )
+        for(auto pWeakUnoCrsr : pDoc->mvUnoCrsrTbl)
         {
-            for(SwPaM& rPaM : (*it)->GetRingContainer())
+            auto pUnoCrsr(pWeakUnoCrsr.lock());
+            if(!pUnoCrsr)
+                continue;
+            for(SwPaM& rPaM : pUnoCrsr->GetRingContainer())
             {
                 lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
             }
 
-            SwUnoTableCrsr* pUnoTableCrsr =
-                dynamic_cast<SwUnoTableCrsr*>(*it);
-            if( pUnoTableCrsr )
+            SwUnoTableCrsr* pUnoTblCrsr =
+                dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+            if( pUnoTblCrsr )
             {
-                for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
+                for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
                 {
                     lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
                 }
