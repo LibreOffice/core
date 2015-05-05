@@ -319,7 +319,7 @@ public:
     SwXParagraphEnumeration(
             ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
                 const & xParent,
-            ::std::unique_ptr<SwUnoCrsr> && pCursor,
+            std::shared_ptr<SwUnoCrsr> pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode = 0,
             SwTable const*const pTable = 0);

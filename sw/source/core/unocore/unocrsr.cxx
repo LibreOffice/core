@@ -23,6 +23,7 @@
 #include <swtable.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
+#include <calbck.hxx>
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 
@@ -39,12 +40,13 @@ SwUnoCrsr::~SwUnoCrsr()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-        // then remove cursor from array
-        SwUnoCrsrTable& rTable = (SwUnoCrsrTable&)pDoc->GetUnoCrsrTable();
-        if( !rTable.erase( this ) )
-        {
-            OSL_ENSURE( false, "UNO Cursor nicht mehr im Array" );
-        }
+#ifdef DBG_UTIL
+        SwIterator<SwClient, SwUnoCrsr> pClient(*this);
+        assert(!pClient.First());
+#endif
+        // remove the weak_ptr the document keeps to notify about document death
+        pDoc->mvUnoCrsrTbl.remove_if(
+            [this](const std::weak_ptr<SwUnoCrsr>& pWeakPtr) -> bool { return pWeakPtr.lock().get() == this; });
     }
 
     // delete the whole ring
@@ -56,24 +58,10 @@ SwUnoCrsr::~SwUnoCrsr()
     }
 }
 
-SwUnoCrsr * SwUnoCrsr::Clone() const
+std::shared_ptr<SwUnoCrsr> SwUnoTableCrsr::Clone() const
 {
-    SwUnoCrsr * pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint() );
-    if (HasMark())
-    {
-        pNewCrsr->SetMark();
-        *pNewCrsr->GetMark() = *GetMark();
-    }
-    return pNewCrsr;
-}
-
-SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
-{
-    SwUnoTableCrsr * pNewCrsr = dynamic_cast<SwUnoTableCrsr*>(
-        GetDoc()->CreateUnoCrsr(
-            *GetPoint(), true /* create SwUnoTableCrsr */ ) );
-    OSL_ENSURE(pNewCrsr, "Clone: cannot create SwUnoTableCrsr?");
-    if (pNewCrsr && HasMark())
+    auto pNewCrsr(GetDoc()->CreateUnoCrsr(*GetPoint(), true));
+    if(HasMark())
     {
         pNewCrsr->SetMark();
         *pNewCrsr->GetMark() = *GetMark();
@@ -240,15 +228,6 @@ void SwUnoTableCrsr::MakeBoxSels()
             if( pTableNd && 0 != ( pBox = pTableNd->GetTable().GetTableBox( pBoxNd->GetIndex() )) )
                 InsertBox( *pBox );
         }
-    }
-}
-
-SwUnoCrsrTable::~SwUnoCrsrTable()
-{
-    while (!empty())
-    {
-        delete *begin();
-        erase( begin() );
     }
 }
 

@@ -10,16 +10,16 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVMGR_HXX
 
 #include <vector>
-
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "swtypes.hxx"
+#include "calbck.hxx"
 
 class   SwWrtShell;
 struct  SwPosition;
 class SwUnoCrsr;
 
-class SwNavigationMgr
+class SwNavigationMgr : SwClient
 {
 private:
     /*
@@ -31,7 +31,7 @@ private:
      * (e.g. click a link, or double click an entry from the navigator).
      * Every use of the back/forward buttons results in moving the stack pointer within the navigation history
      */
-    typedef ::std::vector< ::boost::shared_ptr<SwUnoCrsr> > Stack_t;
+    typedef ::std::vector< std::shared_ptr<SwUnoCrsr> > Stack_t;
     Stack_t m_entries;
     Stack_t::size_type m_nCurrent; /* Current position within the navigation history */
     SwWrtShell & m_rMyShell; /* The active shell within which the navigation occurs */
@@ -51,6 +51,7 @@ public:
     void goForward() ;
     /* The method that adds the position pPos to the navigation history */
     bool addEntry(const SwPosition& rPos);
+    void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE;
 };
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

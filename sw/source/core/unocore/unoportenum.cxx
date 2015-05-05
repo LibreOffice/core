@@ -363,18 +363,17 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         const sal_Int32 nEnd )
     : m_Portions()
 {
-    SwUnoCrsr* pUnoCrsr =
-       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
-    pUnoCrsr->Add(this);
+    m_pUnoCrsr = rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
+    m_pUnoCrsr->Add(this);
 
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
-        nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTextNode()->GetText().getLength()),
+        nEnd <= m_pUnoCrsr->Start()->nNode.GetNode().GetTextNode()->GetText().getLength()),
             "start or end value invalid!");
 
     // find all frames, graphics and OLEs that are bound AT character in para
     FrameDependSortList_t frames;
-    ::CollectFrameAtNode(*this, pUnoCrsr->GetPoint()->nNode, frames, true);
-    lcl_CreatePortions(m_Portions, xParentText, pUnoCrsr, frames, nStart, nEnd);
+    ::CollectFrameAtNode(*this, m_pUnoCrsr->GetPoint()->nNode, frames, true);
+    lcl_CreatePortions(m_Portions, xParentText, m_pUnoCrsr.get(), frames, nStart, nEnd);
 }
 
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(
@@ -382,17 +381,14 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         TextRangeList_t const & rPortions )
     : m_Portions( rPortions )
 {
-    SwUnoCrsr* const pUnoCrsr =
-       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
-    pUnoCrsr->Add(this);
+    m_pUnoCrsr = rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
+    m_pUnoCrsr->Add(this);
 }
 
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
 {
-    SolarMutexGuard aGuard;
-
-    SwUnoCrsr* pUnoCrsr = GetCursor();
-    delete pUnoCrsr;
+    if(m_pUnoCrsr)
+        m_pUnoCrsr->Remove(this);
 }
 
 sal_Bool SwXTextPortionEnumeration::hasMoreElements()
@@ -1405,9 +1401,19 @@ static void lcl_CreatePortions(
             "CreatePortions: stack error" );
 }
 
-void    SwXTextPortionEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTextPortionEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
+}
+
+void SwXTextPortionEnumeration::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    SwClient::SwClientNotify(rModify, rHint);
+    if(!GetRegisteredIn() || typeid(rHint) == typeid(sw::DocDisposingHint))
+    {
+        m_pUnoCrsr->Remove(this);
+        m_pUnoCrsr.reset();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

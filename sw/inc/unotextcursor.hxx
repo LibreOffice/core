@@ -91,8 +91,8 @@ public:
             SwPaM const& rSourceCursor,
             const enum CursorType eType = CURSOR_ALL);
 
-          SwUnoCrsr *   GetCursor();
-    const SwUnoCrsr *   GetCursor() const;
+    std::shared_ptr<SwUnoCrsr> GetCursor();
+    //const SwUnoCrsr* GetConstCursor() const;
 
     bool IsAtEndOfMeta() const;
 
