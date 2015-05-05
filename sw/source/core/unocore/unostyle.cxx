@@ -438,14 +438,15 @@ static bool lcl_GetHeaderFooterItem(
 }
 
 static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
-    SfxStyleFamily eFamily, OUString *pString, sal_uInt16 nIndex = USHRT_MAX)
+    SfxStyleFamily eFamily, OUString *pString, sal_Int32 nIndex = SAL_MAX_INT32)
 {
     sal_Int32 nCount = 0;
     switch( eFamily )
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
-            sal_uInt16 nBaseCount =  RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN  +
+            const sal_Int32 nBaseCount =
+                                     RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN  +
                                      RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
             nIndex = nIndex - nBaseCount;
             const size_t nArrLen = rDoc.GetCharFmts()->size();
@@ -474,7 +475,8 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
-            sal_uInt16 nBaseCount = RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
+            const sal_Int32 nBaseCount =
+                                    RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
                                     RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
                                     RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
                                     RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
@@ -502,7 +504,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
         break;
         case SFX_STYLE_FAMILY_FRAME:
         {
-            sal_uInt16 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
+            const sal_Int32 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
             nIndex = nIndex - nBaseCount;
             const size_t nArrLen = rDoc.GetFrmFmts()->size();
             for( size_t i = 0; i < nArrLen; ++i )
@@ -525,7 +527,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
         break;
         case SFX_STYLE_FAMILY_PAGE:
         {
-            sal_uInt16 nBaseCount = RES_POOLPAGE_END - RES_POOLPAGE_BEGIN;
+            const sal_Int32 nBaseCount = RES_POOLPAGE_END - RES_POOLPAGE_BEGIN;
             nIndex = nIndex - nBaseCount;
             const sal_uInt16 nArrLen = rDoc.GetPageDescCnt();
             for(sal_uInt16 i = 0; i < nArrLen; ++i)
@@ -547,7 +549,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
         break;
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            sal_uInt16 nBaseCount = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
+            const sal_Int32 nBaseCount = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
             nIndex = nIndex - nBaseCount;
             const SwNumRuleTbl& rNumTbl = rDoc.GetNumRuleTbl();
             for(size_t i = 0; i < rNumTbl.size(); ++i)
@@ -581,14 +583,13 @@ sal_Int32 SwXStyleFamily::getCount() throw( uno::RuntimeException, std::exceptio
     return lcl_GetCountOrName ( *pDocShell->GetDoc(), eFamily, NULL );
 }
 
-uno::Any SwXStyleFamily::getByIndex(sal_Int32 nTempIndex)
+uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    if ( nTempIndex >= 0 && nTempIndex < USHRT_MAX )
+    if ( nIndex >= 0 )
     {
-        sal_uInt16 nIndex = static_cast < sal_uInt16 > ( nTempIndex );
         if(pBasePool)
         {
             OUString sStyleName;
@@ -1065,7 +1066,7 @@ SwStyleProperties_Impl::~SwStyleProperties_Impl()
 
 bool SwStyleProperties_Impl::SetProperty(const OUString& rName, const uno::Any& rVal)
 {
-    sal_uInt16 nPos = 0;
+    sal_uInt32 nPos = 0;
     bool bRet = false;
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     while( aIt != aPropertyEntries.end() )
@@ -2250,7 +2251,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
             throw uno::RuntimeException();
     }
 
-    for(sal_Int16 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
     {
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pNames[nProp]);
 
