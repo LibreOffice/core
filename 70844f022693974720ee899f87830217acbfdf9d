@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_0ce79b41",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-05T21:22:30Z",
+      "side": 1,
+      "message": "nCount is of type sal_uLong, which is unsigned. Some compilers may also warn about this, i.e. with g++ and --enable-werror configured the build breaks with \"error: comparison between signed and unsigned integer expressions [-Werror\u003dsign-compare]\".\n\nInstead of relying on an implicit conversion to/from -1 use an explicit value of that type instead, i.e. the maximum value ::std::numeric_limits\u003csal_uLong\u003e::max()",
+      "revId": "70844f022693974720ee899f87830217acbfdf9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_4c4b532c",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-05T21:22:30Z",
+      "side": 1,
+      "message": "break; is missing here",
+      "revId": "70844f022693974720ee899f87830217acbfdf9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_6c488f2e",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-05T21:22:30Z",
+      "side": 1,
+      "message": "break; is missing here",
+      "revId": "70844f022693974720ee899f87830217acbfdf9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_0c555bc5",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-05T21:22:30Z",
+      "side": 1,
+      "message": "break; is missing here",
+      "revId": "70844f022693974720ee899f87830217acbfdf9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_2c5297de",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-05T21:22:30Z",
+      "side": 1,
+      "message": "There is no default left, all enum cases are handled.",
+      "revId": "70844f022693974720ee899f87830217acbfdf9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
