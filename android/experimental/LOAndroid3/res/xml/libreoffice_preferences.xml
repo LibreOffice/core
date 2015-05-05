@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <ListPreference
-        android:title="Default File Filter"
-        android:summary="Set which files to show by default"
-        android:entries="@array/FilterTypeNames"
-        android:entryValues="@array/FilterTypeStringValues"
-        android:key="FILTER_MODE"/>
-    <ListPreference
-        android:summary="Select how to order files; A-Z, by size, etc."
-        android:key="SORT_MODE"
-        android:title="File Order" android:entries="@array/SortModeNames" android:entryValues="@array/SortModeStringValues"/>
-    <ListPreference
-        android:entries="@array/ViewModeNames"
-        android:entryValues="@array/ViewModeStringValues"
-        android:title="Default File Explorer View"
-        android:key="EXPLORER_VIEW_TYPE"
-        android:summary="View files as a grid or in a list. #not functional, yet."/>
-
-
+    <PreferenceCategory
+        android:title="@string/pref_category_explorer"
+        android:key="PREF_CATEGORY_EXPLORER">
+        <ListPreference
+            android:title="Default File Filter"
+            android:summary="Set which files to show by default"
+            android:entries="@array/FilterTypeNames"
+            android:entryValues="@array/FilterTypeStringValues"
+            android:key="FILTER_MODE"/>
+        <ListPreference
+            android:summary="Select how to order files; A-Z, by size, etc."
+            android:key="SORT_MODE"
+            android:title="File Order" android:entries="@array/SortModeNames" android:entryValues="@array/SortModeStringValues"/>
+        <ListPreference
+            android:entries="@array/ViewModeNames"
+            android:entryValues="@array/ViewModeStringValues"
+            android:title="Default File Explorer View"
+            android:key="EXPLORER_VIEW_TYPE"
+            android:summary="View files as a grid or in a list. #not functional, yet."/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_category_general"
+        android:key="PREF_CATEGORY_GENERAL">
+        <CheckBoxPreference
+            android:title="@string/pref_experimental_editing"
+            android:key="ENABLE_EXPERIMENTAL"
+            android:summary="@string/pref_experimental_editing_summary"
+            android:defaultValue="false" />
+    </PreferenceCategory>
 </PreferenceScreen>
