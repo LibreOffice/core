@@ -18,13 +18,6 @@
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-/**
- *  If SMART is defined, the navigation history has recency with temporal ordering enhancement,
- *  as described on http://zing.ncsl.nist.gov/hfweb/proceedings/greenberg/
- */
-
-#define SMART 1
-
 // This method positions the cursor to the position rPos.
 
 void SwNavigationMgr::GotoSwPosition(const SwPosition &rPos) {
@@ -154,7 +147,8 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
     bool bRet = false; // return value of the function.
                        // Indicates whether the index should be decremented before
                        // jumping back or not
-#if SMART
+    // The navigation history has recency with temporal ordering enhancement,
+    //  as described on http://zing.ncsl.nist.gov/hfweb/proceedings/greenberg/
     // If any forward history exists, twist the tail of the
     // list from the current position to the end
     if (bForwardWasEnabled) {
@@ -184,12 +178,6 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
         if (m_entries.size() == 1 && *m_entries.back()->GetPoint() == rPos)
             bRet = false;
     }
-#else
-    m_entries.erase(m_entries.begin() + m_nCurrent, m_entries.end());
-    SwUnoCrsr *const pCursor = m_rMyShell.GetDoc()->CreateUnoCrsr(rPos);
-    m_entries.push_back(::boost::shared_ptr<SwUnoCrsr>(pCursor));
-    bRet = true;
-#endif
     m_nCurrent = m_entries.size();
 
     // Refresh buttons
