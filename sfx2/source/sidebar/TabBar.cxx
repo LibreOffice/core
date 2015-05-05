@@ -262,6 +262,8 @@ bool TabBar::Notify (NotifyEvent&)
 VclPtr<RadioButton> TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
 {
     VclPtr<RadioButton> pItem = ControlFactory::CreateTabItem(this);
+    pItem->SetAccessibleName(rDeckDescriptor.msTitle);
+    pItem->SetAccessibleDescription(rDeckDescriptor.msHelpText);
     pItem->SetHelpText(rDeckDescriptor.msHelpText);
     pItem->SetQuickHelpText(rDeckDescriptor.msHelpText);
     return pItem;
