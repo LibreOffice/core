@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_ac80c747",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-05T19:12:31Z",
+      "side": 1,
+      "message": "As the callers evaluate the error return to bail out early, nGlobalError should be returned here, which may have been set by GetSortArray() and below.",
+      "revId": "2c1a9db859318baeaf2f64ba5654e645e5e6add4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_0c90fb94",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-05T19:12:31Z",
+      "side": 1,
+      "message": "The descriptions are displayed in the order of the IDs, not of occurrence. This should be 6 instead, and following 7,8,9 instead of 9,6,7.",
+      "range": {
+        "startLine": 720,
+        "startChar": 15,
+        "endLine": 720,
+        "endChar": 16
+      },
+      "revId": "2c1a9db859318baeaf2f64ba5654e645e5e6add4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
