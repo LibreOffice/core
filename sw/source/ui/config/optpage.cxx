@@ -2311,11 +2311,11 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     SvxFont&            rCJKFont = rExampleWin.GetCJKFont();
     SvxFont&            rCTLFont = rExampleWin.GetCTLFont();
 
-    vcl::Font           aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, eLangType,
+    vcl::Font           aFont( OutputDevice::GetDefaultFont( DefaultFontType::SERIF, eLangType,
                                                         DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
-    vcl::Font           aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT, eLangType,
+    vcl::Font           aCJKFont( OutputDevice::GetDefaultFont( DefaultFontType::CJK_TEXT, eLangType,
                                                         DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
-    vcl::Font           aCTLFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_TEXT, eLangType,
+    vcl::Font           aCTLFont( OutputDevice::GetDefaultFont( DefaultFontType::CTL_TEXT, eLangType,
                                                         DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
     const Size          aDefSize( 0, 12 );
     aFont.SetSize( aDefSize );

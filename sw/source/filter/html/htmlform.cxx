@@ -610,7 +610,7 @@ static void lcl_html_setFixedFontProperty(
         const uno::Reference< beans::XPropertySet >& rPropSet )
 {
     vcl::Font aFixedFont( OutputDevice::GetDefaultFont(
-                                    DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
+                                    DefaultFontType::FIXED, LANGUAGE_ENGLISH_US,
                                     DEFAULTFONT_FLAGS_ONLYONE )  );
     Any aTmp;
     aTmp <<= OUString( aFixedFont.GetName() );

@@ -404,7 +404,7 @@ DbgInfoDialog::DbgInfoDialog( vcl::Window* pParent, bool bHelpText ) :
 
     if ( !bHelpText )
     {
-        vcl::Font aFont = GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US, 0 );
+        vcl::Font aFont = GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_ENGLISH_US, 0 );
         aFont.SetHeight( 8 );
         aFont.SetPitch( PITCH_FIXED );
         maListBox->SetControlFont( aFont );

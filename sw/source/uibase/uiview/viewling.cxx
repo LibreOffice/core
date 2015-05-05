@@ -164,7 +164,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             if( !bCommonTerms )
                                 nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                            vcl::Font aTargetFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT,
+                            vcl::Font aTargetFont = OutputDevice::GetDefaultFont( DefaultFontType::CJK_TEXT,
                                                     nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
                             // disallow formatting, updating the view, ... while

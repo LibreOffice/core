@@ -102,7 +102,7 @@ namespace
         return nWidth - nLeft - nRight;
     }
 
-    static void lcl_SetDfltFont( sal_uInt16 nFntType, SfxItemSet& rSet )
+    static void lcl_SetDfltFont( DefaultFontType nFntType, SfxItemSet& rSet )
     {
         static struct {
             sal_uInt16 nResLngId;
@@ -125,17 +125,17 @@ namespace
         }
     }
 
-    static void lcl_SetDfltFont( sal_uInt16 nLatinFntType, sal_uInt16 nCJKFntType,
-                            sal_uInt16 nCTLFntType, SfxItemSet& rSet )
+    static void lcl_SetDfltFont( DefaultFontType nLatinFntType, DefaultFontType nCJKFntType,
+                            DefaultFontType nCTLFntType, SfxItemSet& rSet )
     {
         static struct {
             sal_uInt16 nResLngId;
             sal_uInt16 nResFntId;
-            sal_uInt16 nFntType;
+            DefaultFontType nFntType;
         } aArr[ 3 ] = {
-            { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT, 0 },
-            { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT, 0 },
-            { RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_FONT, 0 }
+            { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT, static_cast<DefaultFontType>(0) },
+            { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT, static_cast<DefaultFontType>(0) },
+            { RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_FONT, static_cast<DefaultFontType>(0) }
         };
         aArr[0].nFntType = nLatinFntType;
         aArr[1].nFntType = nCJKFntType;
@@ -172,8 +172,8 @@ namespace
 
         if( bHTMLMode )
         {
-            lcl_SetDfltFont( DEFAULTFONT_LATIN_TEXT, DEFAULTFONT_CJK_TEXT,
-                                DEFAULTFONT_CTL_TEXT, rSet );
+            lcl_SetDfltFont( DefaultFontType::LATIN_TEXT, DefaultFontType::CJK_TEXT,
+                                DefaultFontType::CTL_TEXT, rSet );
         }
 
         if( pColl )
@@ -424,28 +424,42 @@ SwTxtFmtColl* DocumentStylePoolManager::GetTxtCollFromPool( sal_uInt16 nId, bool
 
         case RES_POOLCOLL_HEADLINE_BASE:            // Base headline
             {
-                static const sal_uInt16 aFntInit[] = {
-                    DEFAULTFONT_LATIN_HEADING,  RES_CHRATR_FONT,
-                                    RES_CHRATR_LANGUAGE, LANGUAGE_ENGLISH_US,
-                    DEFAULTFONT_CJK_HEADING,    RES_CHRATR_CJK_FONT,
-                                    RES_CHRATR_CJK_LANGUAGE, LANGUAGE_ENGLISH_US,
-                    DEFAULTFONT_CTL_HEADING,    RES_CHRATR_CTL_FONT,
-                                    RES_CHRATR_CTL_LANGUAGE, LANGUAGE_ARABIC_SAUDI_ARABIA,
-                    0
+                static const sal_uInt16 aFontWhich[] =
+                {   RES_CHRATR_FONT,
+                    RES_CHRATR_CJK_FONT,
+                    RES_CHRATR_CTL_FONT
+                };
+                static const sal_uInt16 aLangTypes[] =
+                {
+                    RES_CHRATR_LANGUAGE,
+                    RES_CHRATR_CJK_LANGUAGE,
+                    RES_CHRATR_CTL_LANGUAGE
+                };
+                static const sal_uInt16 aLangs[] =
+                {
+                    LANGUAGE_ENGLISH_US,
+                    LANGUAGE_ENGLISH_US,
+                    LANGUAGE_ARABIC_SAUDI_ARABIA
+                };
+                static const DefaultFontType nFontTypes[] =
+                {
+                    DefaultFontType::LATIN_HEADING,
+                    DefaultFontType::CJK_HEADING,
+                    DefaultFontType::CTL_HEADING
                 };
 
-                for( const sal_uInt16* pArr = aFntInit; *pArr; pArr += 4 )
+                for( int i = 0; i < 3; ++i )
                 {
-                    sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(m_rDoc.GetDefault( *(pArr+2) )).GetLanguage();
+                    sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(m_rDoc.GetDefault( aLangTypes[i] )).GetLanguage();
                     if( LANGUAGE_DONTKNOW == nLng )
-                        nLng = *(pArr+3);
+                        nLng = aLangs[i];
 
-                    vcl::Font aFnt( OutputDevice::GetDefaultFont( *pArr,
+                    vcl::Font aFnt( OutputDevice::GetDefaultFont( nFontTypes[i],
                                             nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
 
                     aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
                                             OUString(), aFnt.GetPitch(),
-                                            aFnt.GetCharSet(), *(pArr+1) ));
+                                            aFnt.GetCharSet(), aFontWhich[i] ));
                 }
 
                 SvxFontHeightItem aFntSize( PT_14, 100, RES_CHRATR_FONTSIZE );
@@ -978,7 +992,7 @@ SwTxtFmtColl* DocumentStylePoolManager::GetTxtCollFromPool( sal_uInt16 nId, bool
 
         case RES_POOLCOLL_HTML_PRE:
             {
-                ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
+                ::lcl_SetDfltFont( DefaultFontType::FIXED, aSet );
 
                 // WORKAROUND: Set PRE to 10pt
                 SetAllScriptItem( aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE) );
@@ -1233,7 +1247,7 @@ SwFmt* DocumentStylePoolManager::GetFmtFromPool( sal_uInt16 nId )
     case RES_POOLCHR_HTML_KEYBOARD:
     case RES_POOLCHR_HTML_TELETYPE:
         {
-            ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
+            ::lcl_SetDfltFont( DefaultFontType::FIXED, aSet );
         }
         break;
    case RES_POOLCHR_VERT_NUM:

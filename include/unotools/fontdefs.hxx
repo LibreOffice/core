@@ -63,29 +63,32 @@ public:
 };
 
 // Default-Font
-#define DEFAULTFONT_SANS_UNICODE        ((sal_uInt16)1)
-#define DEFAULTFONT_SANS                ((sal_uInt16)2)
-#define DEFAULTFONT_SERIF               ((sal_uInt16)3)
-#define DEFAULTFONT_FIXED               ((sal_uInt16)4)
-#define DEFAULTFONT_SYMBOL              ((sal_uInt16)5)
-#define DEFAULTFONT_UI_SANS             ((sal_uInt16)1000)
-#define DEFAULTFONT_UI_FIXED            ((sal_uInt16)1001)
-#define DEFAULTFONT_LATIN_TEXT          ((sal_uInt16)2000)
-#define DEFAULTFONT_LATIN_PRESENTATION  ((sal_uInt16)2001)
-#define DEFAULTFONT_LATIN_SPREADSHEET   ((sal_uInt16)2002)
-#define DEFAULTFONT_LATIN_HEADING       ((sal_uInt16)2003)
-#define DEFAULTFONT_LATIN_DISPLAY       ((sal_uInt16)2004)
-#define DEFAULTFONT_LATIN_FIXED         ((sal_uInt16)2005)
-#define DEFAULTFONT_CJK_TEXT            ((sal_uInt16)3000)
-#define DEFAULTFONT_CJK_PRESENTATION    ((sal_uInt16)3001)
-#define DEFAULTFONT_CJK_SPREADSHEET     ((sal_uInt16)3002)
-#define DEFAULTFONT_CJK_HEADING         ((sal_uInt16)3003)
-#define DEFAULTFONT_CJK_DISPLAY         ((sal_uInt16)3004)
-#define DEFAULTFONT_CTL_TEXT            ((sal_uInt16)4000)
-#define DEFAULTFONT_CTL_PRESENTATION    ((sal_uInt16)4001)
-#define DEFAULTFONT_CTL_SPREADSHEET     ((sal_uInt16)4002)
-#define DEFAULTFONT_CTL_HEADING         ((sal_uInt16)4003)
-#define DEFAULTFONT_CTL_DISPLAY         ((sal_uInt16)4004)
+enum class DefaultFontType
+{
+    SANS_UNICODE        = 1,
+    SANS                = 2,
+    SERIF               = 3,
+    FIXED               = 4,
+    SYMBOL              = 5,
+    UI_SANS             = 1000,
+    UI_FIXED            = 1001,
+    LATIN_TEXT          = 2000,
+    LATIN_PRESENTATION  = 2001,
+    LATIN_SPREADSHEET   = 2002,
+    LATIN_HEADING       = 2003,
+    LATIN_DISPLAY       = 2004,
+    LATIN_FIXED         = 2005,
+    CJK_TEXT            = 3000,
+    CJK_PRESENTATION    = 3001,
+    CJK_SPREADSHEET     = 3002,
+    CJK_HEADING         = 3003,
+    CJK_DISPLAY         = 3004,
+    CTL_TEXT            = 4000,
+    CTL_PRESENTATION    = 4001,
+    CTL_SPREADSHEET     = 4002,
+    CTL_HEADING         = 4003,
+    CTL_DISPLAY         = 4004,
+};
 
 UNOTOOLS_DLLPUBLIC OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex );
 

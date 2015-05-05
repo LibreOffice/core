@@ -1221,7 +1221,7 @@ public:
     static void                 RemoveFontSubstitute( sal_uInt16 n );
     static sal_uInt16           GetFontSubstituteCount();
 
-    static vcl::Font            GetDefaultFont( sal_uInt16 nType,
+    static vcl::Font            GetDefaultFont( DefaultFontType nType,
                                                 LanguageType eLang,
                                                 sal_uLong nFlags,
                                                 const OutputDevice* pOutDev = NULL );

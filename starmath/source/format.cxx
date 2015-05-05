@@ -25,15 +25,15 @@
 
 
 // Latin default-fonts
-static const sal_uInt16 aLatinDefFnts[FNT_END] =
+static const DefaultFontType aLatinDefFnts[FNT_END] =
 {
-    DEFAULTFONT_SERIF,  // FNT_VARIABLE
-    DEFAULTFONT_SERIF,  // FNT_FUNCTION
-    DEFAULTFONT_SERIF,  // FNT_NUMBER
-    DEFAULTFONT_SERIF,  // FNT_TEXT
-    DEFAULTFONT_SERIF,  // FNT_SERIF
-    DEFAULTFONT_SANS,   // FNT_SANS
-    DEFAULTFONT_FIXED   // FNT_FIXED
+    DefaultFontType::SERIF,  // FNT_VARIABLE
+    DefaultFontType::SERIF,  // FNT_FUNCTION
+    DefaultFontType::SERIF,  // FNT_NUMBER
+    DefaultFontType::SERIF,  // FNT_TEXT
+    DefaultFontType::SERIF,  // FNT_SERIF
+    DefaultFontType::SANS,   // FNT_SANS
+    DefaultFontType::FIXED   // FNT_FIXED
     //OpenSymbol,    // FNT_MATH
 };
 
@@ -41,28 +41,28 @@ static const sal_uInt16 aLatinDefFnts[FNT_END] =
 //! we use non-asian fonts for variables, functions and numbers since they
 //! look better and even in asia only latin letters will be used for those.
 //! At least that's what I was told...
-static const sal_uInt16 aCJKDefFnts[FNT_END] =
+static const DefaultFontType aCJKDefFnts[FNT_END] =
 {
-    DEFAULTFONT_SERIF,          // FNT_VARIABLE
-    DEFAULTFONT_SERIF,          // FNT_FUNCTION
-    DEFAULTFONT_SERIF,          // FNT_NUMBER
-    DEFAULTFONT_CJK_TEXT,       // FNT_TEXT
-    DEFAULTFONT_CJK_TEXT,       // FNT_SERIF
-    DEFAULTFONT_CJK_DISPLAY,    // FNT_SANS
-    DEFAULTFONT_CJK_TEXT        // FNT_FIXED
+    DefaultFontType::SERIF,          // FNT_VARIABLE
+    DefaultFontType::SERIF,          // FNT_FUNCTION
+    DefaultFontType::SERIF,          // FNT_NUMBER
+    DefaultFontType::CJK_TEXT,       // FNT_TEXT
+    DefaultFontType::CJK_TEXT,       // FNT_SERIF
+    DefaultFontType::CJK_DISPLAY,    // FNT_SANS
+    DefaultFontType::CJK_TEXT        // FNT_FIXED
     //OpenSymbol,    // FNT_MATH
 };
 
 // CTL default-fonts
-static const sal_uInt16 aCTLDefFnts[FNT_END] =
+static const DefaultFontType aCTLDefFnts[FNT_END] =
 {
-    DEFAULTFONT_CTL_TEXT,    // FNT_VARIABLE
-    DEFAULTFONT_CTL_TEXT,    // FNT_FUNCTION
-    DEFAULTFONT_CTL_TEXT,    // FNT_NUMBER
-    DEFAULTFONT_CTL_TEXT,    // FNT_TEXT
-    DEFAULTFONT_CTL_TEXT,    // FNT_SERIF
-    DEFAULTFONT_CTL_TEXT,    // FNT_SANS
-    DEFAULTFONT_CTL_TEXT     // FNT_FIXED
+    DefaultFontType::CTL_TEXT,    // FNT_VARIABLE
+    DefaultFontType::CTL_TEXT,    // FNT_FUNCTION
+    DefaultFontType::CTL_TEXT,    // FNT_NUMBER
+    DefaultFontType::CTL_TEXT,    // FNT_TEXT
+    DefaultFontType::CTL_TEXT,    // FNT_SERIF
+    DefaultFontType::CTL_TEXT,    // FNT_SANS
+    DefaultFontType::CTL_TEXT     // FNT_FIXED
     //OpenSymbol,    // FNT_MATH
 };
 
@@ -76,7 +76,7 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
         return OUString(FNTNAME_MATH);
     else
     {
-        const sal_uInt16 *pTable;
+        const DefaultFontType *pTable;
         switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
         {
             case SvtScriptType::LATIN :     pTable = aLatinDefFnts; break;

@@ -197,7 +197,7 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SFX_STYLE_FAMILY_PAGE );
 }
 
-static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFontType, sal_uInt16 nItemId )
+static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, DefaultFontType nFontType, sal_uInt16 nItemId )
 {
     if ( eLang != LANGUAGE_NONE && eLang != LANGUAGE_DONTKNOW && eLang != LANGUAGE_SYSTEM )
     {
@@ -260,9 +260,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     if (MsLangId::isKorean(eUiLanguage))
         eLatin = eUiLanguage;
 
-    lcl_CheckFont( *pSet, eLatin, DEFAULTFONT_LATIN_SPREADSHEET, ATTR_FONT );
-    lcl_CheckFont( *pSet, eCjk, DEFAULTFONT_CJK_SPREADSHEET, ATTR_CJK_FONT );
-    lcl_CheckFont( *pSet, eCtl, DEFAULTFONT_CTL_SPREADSHEET, ATTR_CTL_FONT );
+    lcl_CheckFont( *pSet, eLatin, DefaultFontType::LATIN_SPREADSHEET, ATTR_FONT );
+    lcl_CheckFont( *pSet, eCjk, DefaultFontType::CJK_SPREADSHEET, ATTR_CJK_FONT );
+    lcl_CheckFont( *pSet, eCtl, DefaultFontType::CTL_SPREADSHEET, ATTR_CTL_FONT );
 
     // #i55300# default CTL font size for Thai has to be larger
     // #i59408# The 15 point size causes problems with row heights, so no different

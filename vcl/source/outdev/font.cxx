@@ -772,7 +772,7 @@ void ImplFontSubstitute( OUString& rFontName )
 }
 
 //hidpi TODO: This routine has hard-coded font-sizes that break places such as DialControl
-vcl::Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
+vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLang,
                                         sal_uLong nFlags, const OutputDevice* pOutDev )
 {
     if (!pOutDev) // default is NULL
@@ -797,48 +797,48 @@ vcl::Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
 
     switch ( nType )
     {
-        case DEFAULTFONT_SANS_UNICODE:
-        case DEFAULTFONT_UI_SANS:
+        case DefaultFontType::SANS_UNICODE:
+        case DefaultFontType::UI_SANS:
             aFont.SetFamily( FAMILY_SWISS );
             break;
 
-        case DEFAULTFONT_SANS:
-        case DEFAULTFONT_LATIN_HEADING:
-        case DEFAULTFONT_LATIN_SPREADSHEET:
-        case DEFAULTFONT_LATIN_DISPLAY:
+        case DefaultFontType::SANS:
+        case DefaultFontType::LATIN_HEADING:
+        case DefaultFontType::LATIN_SPREADSHEET:
+        case DefaultFontType::LATIN_DISPLAY:
             aFont.SetFamily( FAMILY_SWISS );
             break;
 
-        case DEFAULTFONT_SERIF:
-        case DEFAULTFONT_LATIN_TEXT:
-        case DEFAULTFONT_LATIN_PRESENTATION:
+        case DefaultFontType::SERIF:
+        case DefaultFontType::LATIN_TEXT:
+        case DefaultFontType::LATIN_PRESENTATION:
             aFont.SetFamily( FAMILY_ROMAN );
             break;
 
-        case DEFAULTFONT_FIXED:
-        case DEFAULTFONT_LATIN_FIXED:
-        case DEFAULTFONT_UI_FIXED:
+        case DefaultFontType::FIXED:
+        case DefaultFontType::LATIN_FIXED:
+        case DefaultFontType::UI_FIXED:
             aFont.SetPitch( PITCH_FIXED );
             aFont.SetFamily( FAMILY_MODERN );
             break;
 
-        case DEFAULTFONT_SYMBOL:
+        case DefaultFontType::SYMBOL:
             aFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
             break;
 
-        case DEFAULTFONT_CJK_TEXT:
-        case DEFAULTFONT_CJK_PRESENTATION:
-        case DEFAULTFONT_CJK_SPREADSHEET:
-        case DEFAULTFONT_CJK_HEADING:
-        case DEFAULTFONT_CJK_DISPLAY:
+        case DefaultFontType::CJK_TEXT:
+        case DefaultFontType::CJK_PRESENTATION:
+        case DefaultFontType::CJK_SPREADSHEET:
+        case DefaultFontType::CJK_HEADING:
+        case DefaultFontType::CJK_DISPLAY:
             aFont.SetFamily( FAMILY_SYSTEM ); // don't care, but don't use font subst config later...
             break;
 
-        case DEFAULTFONT_CTL_TEXT:
-        case DEFAULTFONT_CTL_PRESENTATION:
-        case DEFAULTFONT_CTL_SPREADSHEET:
-        case DEFAULTFONT_CTL_HEADING:
-        case DEFAULTFONT_CTL_DISPLAY:
+        case DefaultFontType::CTL_TEXT:
+        case DefaultFontType::CTL_PRESENTATION:
+        case DefaultFontType::CTL_SPREADSHEET:
+        case DefaultFontType::CTL_HEADING:
+        case DefaultFontType::CTL_DISPLAY:
             aFont.SetFamily( FAMILY_SYSTEM ); // don't care, but don't use font subst config later...
             break;
     }
@@ -927,38 +927,38 @@ vcl::Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
     }
 
 #if OSL_DEBUG_LEVEL > 2
-    const char* s = "DEFAULTFONT_SANS_UNKNOWN";
+    const char* s = "DefaultFontType::SANS_UNKNOWN";
     switch ( nType )
     {
-    case DEFAULTFONT_SANS_UNICODE:  s = "DEFAULTFONT_SANS_UNICODE"; break;
-    case DEFAULTFONT_UI_SANS:   s = "DEFAULTFONT_UI_SANS"; break;
+    case DefaultFontType::SANS_UNICODE:  s = "DefaultFontType::SANS_UNICODE"; break;
+    case DefaultFontType::UI_SANS:   s = "DefaultFontType::UI_SANS"; break;
 
-    case DEFAULTFONT_SANS:  s = "DEFAULTFONT_SANS"; break;
-    case DEFAULTFONT_LATIN_HEADING: s = "DEFAULTFONT_LATIN_HEADING"; break;
-    case DEFAULTFONT_LATIN_SPREADSHEET: s = "DEFAULTFONT_LATIN_SPREADSHEET"; break;
-    case DEFAULTFONT_LATIN_DISPLAY: s = "DEFAULTFONT_LATIN_DISPLAY"; break;
+    case DefaultFontType::SANS:  s = "DefaultFontType::SANS"; break;
+    case DefaultFontType::LATIN_HEADING: s = "DefaultFontType::LATIN_HEADING"; break;
+    case DefaultFontType::LATIN_SPREADSHEET: s = "DefaultFontType::LATIN_SPREADSHEET"; break;
+    case DefaultFontType::LATIN_DISPLAY: s = "DefaultFontType::LATIN_DISPLAY"; break;
 
-    case DEFAULTFONT_SERIF: s = "DEFAULTFONT_SERIF"; break;
-    case DEFAULTFONT_LATIN_TEXT:    s = "DEFAULTFONT_LATIN_TEXT"; break;
-    case DEFAULTFONT_LATIN_PRESENTATION:    s = "DEFAULTFONT_LATIN_PRESENTATION"; break;
+    case DefaultFontType::SERIF: s = "DefaultFontType::SERIF"; break;
+    case DefaultFontType::LATIN_TEXT:    s = "DefaultFontType::LATIN_TEXT"; break;
+    case DefaultFontType::LATIN_PRESENTATION:    s = "DefaultFontType::LATIN_PRESENTATION"; break;
 
-    case DEFAULTFONT_FIXED: s = "DEFAULTFONT_FIXED"; break;
-    case DEFAULTFONT_LATIN_FIXED:   s = "DEFAULTFONT_LATIN_FIXED"; break;
-    case DEFAULTFONT_UI_FIXED:  s = "DEFAULTFONT_UI_FIXED"; break;
+    case DefaultFontType::FIXED: s = "DefaultFontType::FIXED"; break;
+    case DefaultFontType::LATIN_FIXED:   s = "DefaultFontType::LATIN_FIXED"; break;
+    case DefaultFontType::UI_FIXED:  s = "DefaultFontType::UI_FIXED"; break;
 
-    case DEFAULTFONT_SYMBOL:    s = "DEFAULTFONT_SYMBOL"; break;
+    case DefaultFontType::SYMBOL:    s = "DefaultFontType::SYMBOL"; break;
 
-    case DEFAULTFONT_CJK_TEXT:  s = "DEFAULTFONT_CJK_TEXT"; break;
-    case DEFAULTFONT_CJK_PRESENTATION:  s = "DEFAULTFONT_CJK_PRESENTATION"; break;
-    case DEFAULTFONT_CJK_SPREADSHEET:   s = "DEFAULTFONT_CJK_SPREADSHEET"; break;
-    case DEFAULTFONT_CJK_HEADING:   s = "DEFAULTFONT_CJK_HEADING"; break;
-    case DEFAULTFONT_CJK_DISPLAY:   s = "DEFAULTFONT_CJK_DISPLAY"; break;
+    case DefaultFontType::CJK_TEXT:  s = "DefaultFontType::CJK_TEXT"; break;
+    case DefaultFontType::CJK_PRESENTATION:  s = "DefaultFontType::CJK_PRESENTATION"; break;
+    case DefaultFontType::CJK_SPREADSHEET:   s = "DefaultFontType::CJK_SPREADSHEET"; break;
+    case DefaultFontType::CJK_HEADING:   s = "DefaultFontType::CJK_HEADING"; break;
+    case DefaultFontType::CJK_DISPLAY:   s = "DefaultFontType::CJK_DISPLAY"; break;
 
-    case DEFAULTFONT_CTL_TEXT:  s = "DEFAULTFONT_CTL_TEXT"; break;
-    case DEFAULTFONT_CTL_PRESENTATION:  s = "DEFAULTFONT_CTL_PRESENTATION"; break;
-    case DEFAULTFONT_CTL_SPREADSHEET:   s = "DEFAULTFONT_CTL_SPREADSHEET"; break;
-    case DEFAULTFONT_CTL_HEADING:   s = "DEFAULTFONT_CTL_HEADING"; break;
-    case DEFAULTFONT_CTL_DISPLAY:   s = "DEFAULTFONT_CTL_DISPLAY"; break;
+    case DefaultFontType::CTL_TEXT:  s = "DefaultFontType::CTL_TEXT"; break;
+    case DefaultFontType::CTL_PRESENTATION:  s = "DefaultFontType::CTL_PRESENTATION"; break;
+    case DefaultFontType::CTL_SPREADSHEET:   s = "DefaultFontType::CTL_SPREADSHEET"; break;
+    case DefaultFontType::CTL_HEADING:   s = "DefaultFontType::CTL_HEADING"; break;
+    case DefaultFontType::CTL_DISPLAY:   s = "DefaultFontType::CTL_DISPLAY"; break;
     }
     fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" lang=%d flags=%ld FontName=\"%s\"\n",
          s, eLang, nFlags,

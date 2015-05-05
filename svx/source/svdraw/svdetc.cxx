@@ -386,7 +386,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 }
 
 SdrEngineDefaults::SdrEngineDefaults():
-    aFontName( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ).GetName() ),
+    aFontName( OutputDevice::GetDefaultFont( DefaultFontType::SERIF, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ).GetName() ),
     eFontFamily(FAMILY_ROMAN),
     aFontColor(COL_AUTO),
     nFontHeight(847),             // 847/100mm = ca. 24 Point

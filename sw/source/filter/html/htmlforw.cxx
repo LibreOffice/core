@@ -1076,7 +1076,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 !static_cast<const OUString*>(aTmp.getValue())->isEmpty() )
             {
                 vcl::Font aFixedFont( OutputDevice::GetDefaultFont(
-                                    DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
+                                    DefaultFontType::FIXED, LANGUAGE_ENGLISH_US,
                                     DEFAULTFONT_FLAGS_ONLYONE ) );
                 OUString aFName( *static_cast<OUString const *>(aTmp.getValue()) );
                 if( !bEdit || aFName != aFixedFont.GetName() )

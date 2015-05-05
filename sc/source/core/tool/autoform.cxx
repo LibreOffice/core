@@ -822,19 +822,19 @@ ScAutoFormat::ScAutoFormat() :
 
     //  default font, default height
     vcl::Font aStdFont = OutputDevice::GetDefaultFont(
-        DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
+        DefaultFontType::LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aFontItem(
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
         aStdFont.GetPitch(), aStdFont.GetCharSet(), ATTR_FONT );
 
     aStdFont = OutputDevice::GetDefaultFont(
-        DEFAULTFONT_CJK_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
+        DefaultFontType::CJK_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aCJKFontItem(
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
         aStdFont.GetPitch(), aStdFont.GetCharSet(), ATTR_CJK_FONT );
 
     aStdFont = OutputDevice::GetDefaultFont(
-        DEFAULTFONT_CTL_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
+        DefaultFontType::CTL_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aCTLFontItem(
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
         aStdFont.GetPitch(), aStdFont.GetCharSet(), ATTR_CTL_FONT );

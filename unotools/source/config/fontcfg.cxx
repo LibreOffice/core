@@ -51,33 +51,33 @@ using namespace com::sun::star::configuration;
  * DefaultFontConfiguration
  */
 
-static const char* getKeyType( int nKeyType )
+static const char* getKeyType( DefaultFontType nKeyType )
 {
     switch( nKeyType )
     {
-    case DEFAULTFONT_CJK_DISPLAY: return "CJK_DISPLAY";
-    case DEFAULTFONT_CJK_HEADING: return "CJK_HEADING";
-    case DEFAULTFONT_CJK_PRESENTATION: return "CJK_PRESENTATION";
-    case DEFAULTFONT_CJK_SPREADSHEET: return "CJK_SPREADSHEET";
-    case DEFAULTFONT_CJK_TEXT: return "CJK_TEXT";
-    case DEFAULTFONT_CTL_DISPLAY: return "CTL_DISPLAY";
-    case DEFAULTFONT_CTL_HEADING: return "CTL_HEADING";
-    case DEFAULTFONT_CTL_PRESENTATION: return "CTL_PRESENTATION";
-    case DEFAULTFONT_CTL_SPREADSHEET: return "CTL_SPREADSHEET";
-    case DEFAULTFONT_CTL_TEXT: return "CTL_TEXT";
-    case DEFAULTFONT_FIXED: return "FIXED";
-    case DEFAULTFONT_LATIN_DISPLAY: return "LATIN_DISPLAY";
-    case DEFAULTFONT_LATIN_FIXED: return "LATIN_FIXED";
-    case DEFAULTFONT_LATIN_HEADING: return "LATIN_HEADING";
-    case DEFAULTFONT_LATIN_PRESENTATION: return "LATIN_PRESENTATION";
-    case DEFAULTFONT_LATIN_SPREADSHEET: return "LATIN_SPREADSHEET";
-    case DEFAULTFONT_LATIN_TEXT: return "LATIN_TEXT";
-    case DEFAULTFONT_SANS: return "SANS";
-    case DEFAULTFONT_SANS_UNICODE: return "SANS_UNICODE";
-    case DEFAULTFONT_SERIF: return "SERIF";
-    case DEFAULTFONT_SYMBOL: return "SYMBOL";
-    case DEFAULTFONT_UI_FIXED: return "UI_FIXED";
-    case DEFAULTFONT_UI_SANS: return "UI_SANS";
+    case DefaultFontType::CJK_DISPLAY: return "CJK_DISPLAY";
+    case DefaultFontType::CJK_HEADING: return "CJK_HEADING";
+    case DefaultFontType::CJK_PRESENTATION: return "CJK_PRESENTATION";
+    case DefaultFontType::CJK_SPREADSHEET: return "CJK_SPREADSHEET";
+    case DefaultFontType::CJK_TEXT: return "CJK_TEXT";
+    case DefaultFontType::CTL_DISPLAY: return "CTL_DISPLAY";
+    case DefaultFontType::CTL_HEADING: return "CTL_HEADING";
+    case DefaultFontType::CTL_PRESENTATION: return "CTL_PRESENTATION";
+    case DefaultFontType::CTL_SPREADSHEET: return "CTL_SPREADSHEET";
+    case DefaultFontType::CTL_TEXT: return "CTL_TEXT";
+    case DefaultFontType::FIXED: return "FIXED";
+    case DefaultFontType::LATIN_DISPLAY: return "LATIN_DISPLAY";
+    case DefaultFontType::LATIN_FIXED: return "LATIN_FIXED";
+    case DefaultFontType::LATIN_HEADING: return "LATIN_HEADING";
+    case DefaultFontType::LATIN_PRESENTATION: return "LATIN_PRESENTATION";
+    case DefaultFontType::LATIN_SPREADSHEET: return "LATIN_SPREADSHEET";
+    case DefaultFontType::LATIN_TEXT: return "LATIN_TEXT";
+    case DefaultFontType::SANS: return "SANS";
+    case DefaultFontType::SANS_UNICODE: return "SANS_UNICODE";
+    case DefaultFontType::SERIF: return "SERIF";
+    case DefaultFontType::SYMBOL: return "SYMBOL";
+    case DefaultFontType::UI_FIXED: return "UI_FIXED";
+    case DefaultFontType::UI_SANS: return "UI_SANS";
     default:
         OSL_FAIL( "unmatched type" );
         return "";
@@ -209,7 +209,7 @@ OUString DefaultFontConfiguration::tryLocale( const OUString& rBcp47, const OUSt
     return aRet;
 }
 
-OUString DefaultFontConfiguration::getDefaultFont( const LanguageTag& rLanguageTag, int nType ) const
+OUString DefaultFontConfiguration::getDefaultFont( const LanguageTag& rLanguageTag, DefaultFontType nType ) const
 {
     OUString aType = OUString::createFromAscii( getKeyType( nType ) );
     // Try the simple cases first without constructing fallbacks.
@@ -246,7 +246,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     if( aLanguageTag.isSystemLocale() )
         aLanguageTag = SvtSysLocale().GetUILanguageTag();
 
-    OUString aUIFont = getDefaultFont( aLanguageTag, DEFAULTFONT_UI_SANS );
+    OUString aUIFont = getDefaultFont( aLanguageTag, DefaultFontType::UI_SANS );
 
     if( !aUIFont.isEmpty() )
         return aUIFont;

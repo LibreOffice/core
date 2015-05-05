@@ -900,23 +900,23 @@ PhysicalFontFamily* PhysicalFontCollection::FindDefaultFont() const
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
     const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
     LanguageTag aLanguageTag( OUString( "en"));
-    OUString aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_SANS_UNICODE );
+    OUString aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS_UNICODE );
     PhysicalFontFamily* pFoundData = ImplFindByTokenNames( aFontname );
 
     if( pFoundData )
         return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_SANS );
+    aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS );
     pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
         return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_SERIF );
+    aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SERIF );
     pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
         return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_FIXED );
+    aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::FIXED );
     pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
         return pFoundData;
@@ -1199,7 +1199,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
     if( rFSD.IsSymbolFont() )
     {
         LanguageTag aDefaultLanguageTag( OUString( "en"));
-        aSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DEFAULTFONT_SYMBOL );
+        aSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
         PhysicalFontFamily* pFoundData = ImplFindByTokenNames( aSearchName );
         if( pFoundData )
             return pFoundData;

@@ -49,7 +49,7 @@ void VclComplexTextTest::testArabic()
     OutputDevice *pOutDev = static_cast< OutputDevice * >( pWin.get() );
 
     vcl::Font aFont = OutputDevice::GetDefaultFont(
-                        DEFAULTFONT_CTL_SPREADSHEET,
+                        DefaultFontType::CTL_SPREADSHEET,
                         LANGUAGE_ARABIC_SAUDI_ARABIA,
                         DEFAULTFONT_FLAGS_ONLYONE, 0 );
     pOutDev->SetFont( aFont );

@@ -237,7 +237,7 @@ void OSqlEdit::ImplSetFont()
         get_value_or( OUString() ) );
     if ( sFontName.isEmpty() )
     {
-        vcl::Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
+        vcl::Font aTmpFont( OutputDevice::GetDefaultFont( DefaultFontType::FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(

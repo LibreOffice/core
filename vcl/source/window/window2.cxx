@@ -545,11 +545,11 @@ void Window::SetZoomedPointFont( const vcl::Font& rFont )
         long       nFontDiff = std::abs( GetFont().GetSize().Height()-aMetric.GetSize().Height() );
         if ( (aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2) )
         {
-            sal_uInt16 nType;
+            DefaultFontType nType;
             if ( aMetric.GetPitch() == PITCH_FIXED )
-                nType = DEFAULTFONT_FIXED;
+                nType = DefaultFontType::FIXED;
             else
-                nType = DEFAULTFONT_UI_SANS;
+                nType = DefaultFontType::UI_SANS;
             vcl::Font aTempFont = GetDefaultFont( nType, GetSettings().GetLanguageTag().getLanguageType(), 0 );
             aFont.SetName( aTempFont.GetName() );
             SetPointFont( aFont );

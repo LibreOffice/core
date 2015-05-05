@@ -143,30 +143,30 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         SfxPrinter* pPrt = m_pDoc->getIDocumentDeviceAccess().getPrinter( false );
 
         OUString sEntry;
-        sal_uInt16 aFontWhich[] =
+        static const sal_uInt16 aFontWhich[] =
         {   RES_CHRATR_FONT,
             RES_CHRATR_CJK_FONT,
             RES_CHRATR_CTL_FONT
         };
-        sal_uInt16 aFontHeightWhich[] =
+        static const sal_uInt16 aFontHeightWhich[] =
         {
             RES_CHRATR_FONTSIZE,
             RES_CHRATR_CJK_FONTSIZE,
             RES_CHRATR_CTL_FONTSIZE
         };
-        sal_uInt16 aFontIds[] =
+        static const sal_uInt16 aFontIds[] =
         {
             FONT_STANDARD,
             FONT_STANDARD_CJK,
             FONT_STANDARD_CTL
         };
-        sal_uInt16 nFontTypes[] =
+        static const DefaultFontType nFontTypes[] =
         {
-            DEFAULTFONT_LATIN_TEXT,
-            DEFAULTFONT_CJK_TEXT,
-            DEFAULTFONT_CTL_TEXT
+            DefaultFontType::LATIN_TEXT,
+            DefaultFontType::CJK_TEXT,
+            DefaultFontType::CTL_TEXT
         };
-        sal_uInt16 aLangTypes[] =
+        static const sal_uInt16 aLangTypes[] =
         {
             RES_CHRATR_LANGUAGE,
             RES_CHRATR_CJK_LANGUAGE,

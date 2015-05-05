@@ -2063,7 +2063,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
         nMode = DBL_END;
     // start character selection dialog
     ScopedVclPtrInstance< SvxCharacterMap > pMap( this, true );
-    pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
+    pMap->SetCharFont( OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? m_sStartQuoteDlg  : m_sEndQuoteDlg );
     sal_UCS4 cDlg;

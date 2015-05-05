@@ -321,7 +321,7 @@ void ODatabaseImportExport::initialize()
     if ( m_aFont.Name.isEmpty() )
     {
         vcl::Font aApplicationFont = OutputDevice::GetDefaultFont(
-            DEFAULTFONT_SANS_UNICODE,
+            DefaultFontType::SANS_UNICODE,
             Application::GetSettings().GetUILanguageTag().getLanguageType(),
             DEFAULTFONT_FLAGS_ONLYONE
         );

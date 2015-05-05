@@ -55,9 +55,9 @@ void lcl_getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font&
         if (MsLangId::isKorean(eUiLanguage))
             eLatin = eUiLanguage;
 
-        rLatinFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, eLatin, DEFAULTFONT_FLAGS_ONLYONE );
-        rCJKFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, _eCJK, DEFAULTFONT_FLAGS_ONLYONE );
-        rCTLFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, _eCTL, DEFAULTFONT_FLAGS_ONLYONE ) ;
+        rLatinFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_PRESENTATION, eLatin, DEFAULTFONT_FLAGS_ONLYONE );
+        rCJKFont = OutputDevice::GetDefaultFont( DefaultFontType::CJK_PRESENTATION, _eCJK, DEFAULTFONT_FLAGS_ONLYONE );
+        rCTLFont = OutputDevice::GetDefaultFont( DefaultFontType::CTL_PRESENTATION, _eCTL, DEFAULTFONT_FLAGS_ONLYONE ) ;
 }
 OFormatProperties::OFormatProperties()
     :nAlign(style::ParagraphAdjust_LEFT)

@@ -3505,14 +3505,14 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
 
     static struct
     {
-        sal_uInt16 nFontType;
+        DefaultFontType nFontType;
         sal_uInt16 nLanguage;
     }
     aOutTypeArr[ nItemCnt ] =
     {
-        {  DEFAULTFONT_LATIN_TEXT, LANGUAGE_ENGLISH_US },
-        {  DEFAULTFONT_CJK_TEXT, LANGUAGE_ENGLISH_US },
-        {  DEFAULTFONT_CTL_TEXT, LANGUAGE_ARABIC_SAUDI_ARABIA }
+        {  DefaultFontType::LATIN_TEXT, LANGUAGE_ENGLISH_US },
+        {  DefaultFontType::CJK_TEXT, LANGUAGE_ENGLISH_US },
+        {  DefaultFontType::CTL_TEXT, LANGUAGE_ARABIC_SAUDI_ARABIA }
     };
 
     SvxFontItem* aItemArr[ nItemCnt ] = { &rLatin, &rAsian, &rComplex };

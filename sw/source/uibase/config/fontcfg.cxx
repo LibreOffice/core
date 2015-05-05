@@ -226,32 +226,32 @@ bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
 
 OUString  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
 {
-    sal_uInt16 nFontId;
+    DefaultFontType nFontId;
     switch( nFontType )
     {
         case FONT_OUTLINE :
-            nFontId = DEFAULTFONT_LATIN_HEADING;
+            nFontId = DefaultFontType::LATIN_HEADING;
         break;
         case FONT_OUTLINE_CJK :
-            nFontId = DEFAULTFONT_CJK_HEADING;
+            nFontId = DefaultFontType::CJK_HEADING;
         break;
         case FONT_OUTLINE_CTL :
-            nFontId = DEFAULTFONT_CTL_HEADING;
+            nFontId = DefaultFontType::CTL_HEADING;
         break;
         case FONT_STANDARD_CJK:
         case FONT_LIST_CJK    :
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
-            nFontId = DEFAULTFONT_CJK_TEXT;
+            nFontId = DefaultFontType::CJK_TEXT;
         break;
         case FONT_STANDARD_CTL:
         case FONT_LIST_CTL    :
         case FONT_CAPTION_CTL :
         case FONT_INDEX_CTL   :
-            nFontId = DEFAULTFONT_CTL_TEXT;
+            nFontId = DefaultFontType::CTL_TEXT;
         break;
         default:
-            nFontId = DEFAULTFONT_LATIN_TEXT;
+            nFontId = DefaultFontType::LATIN_TEXT;
     }
     vcl::Font aFont = OutputDevice::GetDefaultFont(nFontId, eLang, DEFAULTFONT_FLAGS_ONLYONE);
     return  aFont.GetName();

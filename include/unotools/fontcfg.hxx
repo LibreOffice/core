@@ -32,6 +32,8 @@
 #include <unordered_set>
 #include <vector>
 
+enum class DefaultFontType;
+
 // DEFAULT       - Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
 // STANDARD      - Standard-Font like Arial, Times, Courier, ...
 // NORMAL        - normal Font for writing text like Arial, Verdana, Arial Narrow, Trebuchet, Times, Courier, ...
@@ -123,7 +125,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 
     static DefaultFontConfiguration& get();
 
-    OUString getDefaultFont( const LanguageTag& rLanguageTag, int nType ) const;
+    OUString getDefaultFont( const LanguageTag& rLanguageTag, DefaultFontType nType ) const;
     OUString getUserInterfaceFont( const LanguageTag& rLanguageTag ) const;
 };
 

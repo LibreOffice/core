@@ -285,19 +285,19 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
         struct FontDta {
             sal_Int16       nFallbackLang;
             sal_Int16       nLang;
-            sal_uInt16      nFontType;
+            DefaultFontType nFontType;
             sal_uInt16      nFontInfoId;
             } aTable[3] =
         {
             // info to get western font to be used
             {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
-                DEFAULTFONT_SERIF,      EE_CHAR_FONTINFO },
+                DefaultFontType::SERIF,      EE_CHAR_FONTINFO },
             // info to get CJK font to be used
             {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
-                DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
+                DefaultFontType::CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
             // info to get CTL font to be used
             {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
-                DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
+                DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
         aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
         aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
