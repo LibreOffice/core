@@ -63,7 +63,7 @@ class AddonsToolBarManager : public ToolBarManager
         DECL_LINK(Command, void *);
         DECL_LINK_TYPED(Select, ToolBox *, void);
         DECL_LINK_TYPED(Activate, ToolBox *, void);
-        DECL_LINK(Deactivate, void *);
+        DECL_LINK_TYPED(Deactivate, ToolBox *, void);
         DECL_LINK( StateChanged, StateChangedType* );
         DECL_LINK( DataChanged, DataChangedEvent* );
 

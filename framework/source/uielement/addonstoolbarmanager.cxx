@@ -443,10 +443,8 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Select, ToolBox *, void)
 IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Activate, ToolBox *, void)
 {}
 
-IMPL_LINK_NOARG(AddonsToolBarManager, Deactivate)
-{
-    return 1;
-}
+IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Deactivate, ToolBox *, void)
+{}
 
 IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
 {

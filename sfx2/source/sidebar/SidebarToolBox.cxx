@@ -80,7 +80,7 @@ void SidebarToolBox::dispose()
         SetDoubleClickHdl(Link<ToolBox *, void>());
         SetSelectHdl(Link<ToolBox *, void>());
         SetActivateHdl(Link<ToolBox *, void>());
-        SetDeactivateHdl(Link<>());
+        SetDeactivateHdl(Link<ToolBox *, void>());
         mbAreHandlersRegistered = false;
     }
 
@@ -276,10 +276,8 @@ IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
 IMPL_LINK_NOARG_TYPED(SidebarToolBox, ActivateToolBox, ToolBox*, void)
 {}
 
-IMPL_LINK(SidebarToolBox, DeactivateToolBox, ToolBox*, EMPTYARG)
-{
-    return 1;
-}
+IMPL_LINK_NOARG_TYPED(SidebarToolBox, DeactivateToolBox, ToolBox*, void)
+{}
 
 } } // end of namespace sfx2::sidebar
 
