@@ -253,33 +253,35 @@ OUString Control::GetDisplayText() const
 
 bool Control::Notify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
-    {
-        if ( !mbHasControlFocus )
+    // tdf#91081 if control is not valid, skip the emission - chaining to the parent
+    if (mpControlData) {
+        if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {
-            mbHasControlFocus = true;
-            StateChanged( StateChangedType::CONTROL_FOCUS );
-            if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
-                // been destroyed within the handler
-                return true;
-        }
-    }
-    else
-    {
-        if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
-        {
-            vcl::Window* pFocusWin = Application::GetFocusWindow();
-            if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
+            if ( !mbHasControlFocus )
             {
-                mbHasControlFocus = false;
+                mbHasControlFocus = true;
                 StateChanged( StateChangedType::CONTROL_FOCUS );
-                if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
+                if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
                     // been destroyed within the handler
                     return true;
             }
         }
+        else
+        {
+            if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+            {
+                vcl::Window* pFocusWin = Application::GetFocusWindow();
+                if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
+                {
+                    mbHasControlFocus = false;
+                    StateChanged( StateChangedType::CONTROL_FOCUS );
+                    if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
+                        // been destroyed within the handler
+                        return true;
+                }
+            }
+        }
     }
-
     return Window::Notify( rNEvt );
 }
 
