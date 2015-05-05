@@ -431,31 +431,40 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 {
     OUString sFileName;
     ::comphelper::NamedValueCollection aMediaDescriptor( rDescriptor );
-    if ( aMediaDescriptor.has( "URL" ) )
-        sFileName = aMediaDescriptor.getOrDefault( "URL", OUString() );
-    if ( sFileName.isEmpty() && aMediaDescriptor.has( "FileName" ) )
-        sFileName = aMediaDescriptor.getOrDefault( "FileName", sFileName );
 
-    OSL_ENSURE( !sFileName.isEmpty(), "ODBFilter::implImport: no URL given!" );
-    bool bRet = !sFileName.isEmpty();
+    uno::Reference<embed::XStorage> xStorage = GetSourceStorage();
+
+    bool bRet = true;
+    if (!xStorage.is())
+    {
+        if (aMediaDescriptor.has("URL"))
+            sFileName = aMediaDescriptor.getOrDefault("URL", OUString());
+        if (sFileName.isEmpty() && aMediaDescriptor.has("FileName"))
+            sFileName = aMediaDescriptor.getOrDefault("FileName", sFileName);
+
+        OSL_ENSURE(!sFileName.isEmpty(), "ODBFilter::implImport: no URL given!");
+        bRet = !sFileName.isEmpty();
+    }
 
     if ( bRet )
     {
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
-        SfxMediumRef pMedium = new SfxMedium(
-                sFileName, ( StreamMode::READ | StreamMode::NOCREATE ) );
-        uno::Reference< embed::XStorage > xStorage;
-        try
+        SfxMediumRef pMedium(0);
+        if (!xStorage.is())
         {
-            xStorage.set( pMedium->GetStorage( false ), UNO_QUERY_THROW );
-        }
-        catch (const Exception&)
-        {
-            Any aError = ::cppu::getCaughtException();
-            if  ( aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() ) )
-                throw;
-            throw lang::WrappedTargetRuntimeException( OUString(), *this, aError );
+            pMedium = new SfxMedium(sFileName, (StreamMode::READ | StreamMode::NOCREATE));
+            try
+            {
+                xStorage.set(pMedium->GetStorage(false), UNO_QUERY_THROW);
+            }
+            catch (const Exception&)
+            {
+                Any aError = ::cppu::getCaughtException();
+                if  (aError.isExtractableTo(::cppu::UnoType<RuntimeException>::get()))
+                    throw;
+                throw lang::WrappedTargetRuntimeException(OUString(), *this, aError);
+            }
         }
 
         uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
