@@ -68,7 +68,7 @@ private:
     ImplSVEvent *   mnLastUserEvent;
 
     DECL_LINK(DockingHdl, void *);
-    DECL_LINK(DockTimerHdl, void *);
+    DECL_LINK_TYPED(DockTimerHdl, Idle *, void);
 public:
     ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
@@ -126,7 +126,7 @@ void ImplDockFloatWin::dispose()
     FloatingWindow::dispose();
 }
 
-IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
+IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockTimerHdl, Idle *, void)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -151,8 +151,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
         mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
         maDockIdle.Start();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
@@ -179,7 +177,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
         if( ! bFloatMode )
         {
             mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW );
-            DockTimerHdl( this );
+            DockTimerHdl( nullptr );
         }
         else
         {
@@ -1139,18 +1137,17 @@ void DockingWindow::queue_resize(StateChangedType /*eReason*/)
     maLayoutIdle.Start();
 }
 
-IMPL_LINK(DockingWindow, ImplHandleLayoutTimerHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG_TYPED(DockingWindow, ImplHandleLayoutTimerHdl, Idle*, void)
 {
     if (!isLayoutEnabled())
     {
         SAL_WARN("vcl.layout", "DockingWindow has become non-layout because extra children have been added directly to it.");
-        return 0;
+        return;
     }
 
     Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
     assert(pBox);
     setPosSizeOnContainee(GetSizePixel(), *pBox);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

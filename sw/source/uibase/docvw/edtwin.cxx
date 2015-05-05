@@ -5761,10 +5761,9 @@ void SwEditWin::StopQuickHelp()
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
 }
 
-IMPL_LINK_NOARG(SwEditWin, TemplateTimerHdl)
+IMPL_LINK_NOARG_TYPED(SwEditWin, TemplateTimerHdl, Idle *, void)
 {
     SetApplyTemplate(SwApplyTemplate());
-    return 0;
 }
 
 void SwEditWin::SetChainMode( bool bOn )

@@ -2882,7 +2882,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG(AddConditionDialog, ResultHdl)
+    IMPL_LINK_NOARG_TYPED(AddConditionDialog, ResultHdl, Idle *, void)
     {
         OUString sCondition = comphelper::string::strip(m_pConditionED->GetText(), ' ');
         OUString sResult;
@@ -2898,7 +2898,6 @@ namespace svxform
             }
         }
         m_pResultWin->SetText( sResult );
-        return 0;
     }
 
     NamespaceItemDialog::NamespaceItemDialog(

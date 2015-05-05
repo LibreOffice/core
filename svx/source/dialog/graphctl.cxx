@@ -739,14 +739,12 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
         eObjKind = OBJ_NONE;
 }
 
-IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
+IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle*, pTimer, void )
 {
     if ( aUpdateLink.IsSet() )
         aUpdateLink.Call( this );
 
     pTimer->Start();
-
-    return 0L;
 }
 
 

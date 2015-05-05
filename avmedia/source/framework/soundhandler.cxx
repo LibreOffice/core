@@ -299,7 +299,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
     @return     0 every time... it doesn't matter for us.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)
+IMPL_LINK_NOARG_TYPED(SoundHandler, implts_PlayerNotify, Idle *, void)
 {
     // SAFE {
     ::osl::ClearableMutexGuard aLock( m_aLock );
@@ -307,7 +307,7 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)
     if (m_xPlayer.is() && m_xPlayer->isPlaying() && m_xPlayer->getMediaTime() < m_xPlayer->getDuration())
     {
         m_aUpdateIdle.Start();
-        return 0L;
+        return;
     }
     m_xPlayer.clear();
 
@@ -333,7 +333,6 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)
     // } SAFE
     //release aLock before end of method at which point xOperationHold goes out of scope and pThis dies
     aLock.clear();
-    return 0;
 }
 
 } // namespace framework

@@ -219,10 +219,10 @@ void Animator::RequestNextFrame (const double nFrameStart)
     }
 }
 
-IMPL_LINK_NOARG(Animator, TimeoutHandler)
+IMPL_LINK_NOARG_TYPED(Animator, TimeoutHandler, Idle *, void)
 {
     if (mbIsDisposed)
-        return 0;
+        return;
 
     if (ProcessAnimations(maElapsedTime.getElapsedTime()))
         CleanUpAnimationList();
@@ -232,8 +232,6 @@ IMPL_LINK_NOARG(Animator, TimeoutHandler)
 
     if (!maAnimations.empty())
         RequestNextFrame();
-
-    return 0;
 }
 
 //===== Animator::Animation ===================================================

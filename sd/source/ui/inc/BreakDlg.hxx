@@ -74,7 +74,7 @@ private:
 
     DECL_LINK( CancelButtonHdl, void* );
     DECL_LINK( UpDate, void* );
-    DECL_LINK( InitialUpdate, void* );
+    DECL_LINK_TYPED( InitialUpdate, Idle*, void );
 };
 
 } // end of namespace sd

@@ -51,8 +51,8 @@ private:
     ImplSVEvent *   mnLastUserEvent;
 
     DECL_LINK(DockingHdl, void *);
-    DECL_LINK(DockTimerHdl, void *);
-    DECL_LINK(EndDockTimerHdl, void *);
+    DECL_LINK_TYPED(DockTimerHdl, Idle *, void);
+    DECL_LINK_TYPED(EndDockTimerHdl, Idle *, void);
 public:
     ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
@@ -108,7 +108,7 @@ void ImplDockFloatWin2::dispose()
     FloatingWindow::dispose();
 }
 
-IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
+IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -132,11 +132,9 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
         maDockIdle.Start();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl)
+IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, EndDockTimerHdl, Idle *, void)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "enddocktimer called but not floating" );
 
@@ -151,8 +149,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl)
     {
         maEndDockIdle.Start();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
@@ -215,13 +211,13 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
                  maDockRect.TopLeft() ) );
             mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
             maEndDockIdle.Stop();
-            DockTimerHdl( this );
+            DockTimerHdl( nullptr );
         }
         else
         {
             mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
             maDockIdle.Stop();
-            EndDockTimerHdl( this );
+            EndDockTimerHdl( nullptr );
         }
     }
     mbInMove = false;

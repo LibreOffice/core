@@ -92,11 +92,10 @@ void LookUpComboBox::Modify()
     m_aModifyIdle.Start();
 }
 
-IMPL_LINK( LookUpComboBox, ModifyTimer_Hdl, Timer *, EMPTYARG /*pTimer*/ )
+IMPL_LINK_NOARG_TYPED( LookUpComboBox, ModifyTimer_Hdl, Idle *, void )
 {
     m_pDialog->LookUp( GetText() );
     m_aModifyIdle.Stop();
-    return 0;
 }
 
 // class ReplaceEdit --------------------------------------------------

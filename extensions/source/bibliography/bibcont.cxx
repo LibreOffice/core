@@ -164,14 +164,13 @@ void BibBookContainer::Split()
 {
     aIdle.Start();
 }
-IMPL_LINK( BibBookContainer, SplitHdl, Timer*,/*pT*/)
+IMPL_LINK_NOARG_TYPED( BibBookContainer, SplitHdl, Idle*, void)
 {
     long nSize= GetItemSize( TOP_WINDOW);
     BibConfig* pConfig = BibModul::GetConfig();
     pConfig->setBeamerSize(nSize);
     nSize = GetItemSize( BOTTOM_WINDOW);
     pConfig->setViewSize(nSize);
-    return 0;
 }
 
 void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )

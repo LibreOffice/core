@@ -520,10 +520,8 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
     return 0;
 }
 
-IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
+IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, UpdateWaitingHdl, Idle*, void )
 {
-    (void)pTimer;
-
     m_pTbLinks->SetUpdateMode(false);
     for( sal_uLong nPos = m_pTbLinks->GetEntryCount(); nPos; )
     {
@@ -538,7 +536,6 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
         }
     }
     m_pTbLinks->SetUpdateMode(true);
-    return 0;
 }
 
 IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )

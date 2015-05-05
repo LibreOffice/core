@@ -139,7 +139,7 @@ private:
     void                ClearIndex();
 
     DECL_LINK(OpenHdl, void *);
-    DECL_LINK(IdleHdl, Idle* );
+    DECL_LINK_TYPED(IdleHdl, Idle*, void);
     DECL_LINK_TYPED(TimeoutHdl, Timer*, void);
 
 public:
@@ -314,8 +314,8 @@ private:
 
     DECL_LINK(          ActivatePageHdl, TabControl* );
     DECL_LINK(SelectHdl, void *);
-    DECL_LINK(InitHdl, void *);
-    DECL_LINK(SelectFactoryHdl, void *);
+    DECL_LINK_TYPED(InitHdl, Idle *, void);
+    DECL_LINK_TYPED(SelectFactoryHdl, Idle *, void);
     DECL_LINK(KeywordHdl, void *);
 
 public:
@@ -451,7 +451,7 @@ private:
                             getCursor() const;
     bool                    isHandledKey( const vcl::KeyCode& _rKeyCode );
 
-    DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectHdl, Idle *, void);
     DECL_LINK(              NotifyHdl, SvtMiscOptions* );
     DECL_LINK(              FindHdl, sfx2::SearchDialog* );
     DECL_LINK(              CloseHdl, sfx2::SearchDialog* );

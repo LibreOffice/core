@@ -1927,7 +1927,7 @@ void SfxDockingWindow::Move()
         pImp->aMoveIdle.Start();
 }
 
-IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl)
+IMPL_LINK_NOARG_TYPED(SfxDockingWindow, TimerHdl, Idle *, void)
 {
     pImp->aMoveIdle.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )
@@ -1941,7 +1941,6 @@ IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl)
         SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
         pWorkWin->ConfigChild_Impl( eIdent, SfxDockingConfig::ALIGNDOCKINGWINDOW, pMgr->GetType() );
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

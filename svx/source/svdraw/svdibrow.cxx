@@ -1140,10 +1140,9 @@ void SdrItemBrowser::Undirty()
     }
 }
 
-IMPL_LINK_NOARG(SdrItemBrowser, IdleHdl)
+IMPL_LINK_NOARG_TYPED(SdrItemBrowser, IdleHdl, Idle *, void)
 {
     Undirty();
-    return 0;
 }
 
 IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)

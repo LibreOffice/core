@@ -1074,10 +1074,9 @@ bool OJoinTableView::ScrollWhileDragging()
     return bScrolling;
 }
 
-IMPL_LINK_NOARG(OJoinTableView, OnDragScrollTimer)
+IMPL_LINK_NOARG_TYPED(OJoinTableView, OnDragScrollTimer, Idle *, void)
 {
     ScrollWhileDragging();
-    return 0L;
 }
 
 void OJoinTableView::invalidateAndModify(SfxUndoAction *_pAction)

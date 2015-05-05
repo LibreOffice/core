@@ -91,7 +91,7 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     SfxEventAsyncer_Impl( const SfxEventHint& rHint );
     virtual ~SfxEventAsyncer_Impl();
-    DECL_LINK( IdleHdl, Idle*);
+    DECL_LINK_TYPED( IdleHdl, Idle*, void );
 };
 
 
@@ -128,7 +128,7 @@ SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 
 
 
-IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle)
+IMPL_LINK_TYPED(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)
 {
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncIdle->Stop();
@@ -144,7 +144,6 @@ IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle)
     if ( xRef.Is() )
         xRef->Broadcast( aHint );
     delete this;
-    return 0L;
 }
 
 

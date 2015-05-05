@@ -256,20 +256,19 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
     Resize();
 }
 
-IMPL_LINK( SmEditWindow, ModifyTimerHdl, Idle *, EMPTYARG /*pTimer*/ )
+IMPL_LINK_NOARG_TYPED( SmEditWindow, ModifyTimerHdl, Idle *, void )
 {
     UpdateStatus();
     aModifyIdle.Stop();
-    return 0;
 }
 
-IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Idle *, EMPTYARG /*pTimer*/)
+IMPL_LINK_NOARG_TYPED(SmEditWindow, CursorMoveTimerHdl, Idle *, void)
     // every once in a while check cursor position (selection) of edit
     // window and if it has changed (try to) set the formula-cursor
     // according to that.
 {
     if (IsInlineEditEnabled())
-        return 0;
+        return;
 
     ESelection aNewSelection(GetSelection());
 
@@ -289,8 +288,6 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Idle *, EMPTYARG /*pTimer*/)
         }
     }
     aCursorMoveIdle.Stop();
-
-    return 0;
 }
 
 void SmEditWindow::Resize()

@@ -219,7 +219,7 @@ protected:
     DECL_LINK( FmtSelectHdl, SvTreeListBox* );
     DECL_LINK( ApplyHdl, Control* );
     DECL_LINK( DropHdl, StyleTreeListBox_Impl* );
-    DECL_LINK( TimeOut, Timer* );
+    DECL_LINK_TYPED( TimeOut, Idle*, void );
 
     virtual void EnableItem(sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true)
     {}

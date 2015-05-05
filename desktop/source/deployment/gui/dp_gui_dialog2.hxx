@@ -135,7 +135,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK( HandleCloseBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleExtTypeCbx, void * );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
-    DECL_DLLPRIVATE_LINK(TimeOutHdl, void *);
+    DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
     DECL_DLLPRIVATE_LINK( startProgress, void * );
 
 public:
@@ -201,7 +201,7 @@ class UpdateRequiredDialog : public ModalDialog,
     DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleCloseBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
-    DECL_DLLPRIVATE_LINK(TimeOutHdl, void *);
+    DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
     DECL_DLLPRIVATE_LINK( startProgress, void * );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
 

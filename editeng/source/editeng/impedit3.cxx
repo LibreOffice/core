@@ -316,7 +316,7 @@ IMPL_LINK_NOARG_TYPED(ImpEditEngine, OnlineSpellHdl, Timer *, void)
         aOnlineSpellTimer.Start();
 }
 
-IMPL_LINK_NOARG(ImpEditEngine, IdleFormatHdl)
+IMPL_LINK_NOARG_TYPED(ImpEditEngine, IdleFormatHdl, Idle *, void)
 {
     aIdleFormatter.ResetRestarts();
 
@@ -332,7 +332,6 @@ IMPL_LINK_NOARG(ImpEditEngine, IdleFormatHdl)
             break;
         }
     }
-    return 0;
 }
 
 void ImpEditEngine::CheckIdleFormatter()

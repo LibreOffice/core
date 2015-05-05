@@ -227,14 +227,15 @@ public:
 
     DECL_LINK( SelectFileHdl, void * );
     DECL_LINK( SelectRegionHdl, ListBox * );
-    DECL_LINK( UpdatePreviewHdl, void * );
-    DECL_LINK( UpdatePageListHdl, void * );
+    DECL_LINK_TYPED( UpdatePreviewHdl, Idle *, void );
+    DECL_LINK_TYPED( UpdatePageListHdl, Idle *, void );
     DECL_LINK( StartTypeHdl, RadioButton * );
     DECL_LINK( SelectTemplateHdl, void * );
     DECL_LINK( NextPageHdl, void * );
     DECL_LINK( LastPageHdl, void * );
     DECL_LINK( PreviewFlagHdl, void * );
-    DECL_LINK( EffectPreviewHdl, void * );
+    DECL_LINK_TYPED( EffectPreviewIdleHdl, Idle *, void );
+    DECL_LINK( EffectPreviewClickHdl, void * );
     DECL_LINK( SelectLayoutHdl, void * );
     DECL_LINK( PageSelectHdl, void * );
     DECL_LINK( PresTypeHdl, void * );
@@ -579,7 +580,7 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<>& rFinishL
 
     mpPreviewFlag->Check( mbPreview );
     mpPreviewFlag->SetClickHdl(LINK(this, AssistentDlgImpl, PreviewFlagHdl ));
-    mpPreview->SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewHdl ));
+    mpPreview->SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewClickHdl ));
 
     // sets the exit page
     maAssistentFunc.GotoPage(1);
@@ -589,7 +590,7 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<>& rFinishL
     maPrevIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
 
     maEffectPrevIdle.SetPriority( SchedulerPriority::MEDIUM );
-    maEffectPrevIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, EffectPreviewHdl ));
+    maEffectPrevIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, EffectPreviewIdleHdl ));
 
     maUpdatePageListIdle.SetPriority( SchedulerPriority::MEDIUM );
     maUpdatePageListIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, UpdatePageListHdl));
@@ -1107,7 +1108,7 @@ IMPL_LINK( AssistentDlgImpl, OpenButtonHdl, Button*, pButton )
     return mpPage1OpenLB->GetDoubleClickHdl().Call(pButton);
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, EffectPreviewHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, EffectPreviewIdleHdl, Idle *, void)
 {
     if(mbPreview && xDocShell.Is() )
     {
@@ -1125,6 +1126,11 @@ IMPL_LINK_NOARG(AssistentDlgImpl, EffectPreviewHdl)
         }
         mpPreview->startPreview();
     }
+}
+
+IMPL_LINK_NOARG(AssistentDlgImpl, EffectPreviewClickHdl)
+{
+    EffectPreviewIdleHdl(nullptr);
     return 0;
 }
 
@@ -1173,16 +1179,14 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PageSelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, UpdatePageListHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdatePageListHdl, Idle *, void)
 {
     UpdatePageList();
-    return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, UpdatePreviewHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdatePreviewHdl, Idle *, void)
 {
     UpdatePreview( true );
-    return 0;
 }
 
 IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )

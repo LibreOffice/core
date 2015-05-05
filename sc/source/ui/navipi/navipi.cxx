@@ -893,13 +893,12 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK( ScNavigatorDlg, TimeHdl, Idle*, pIdle )
+IMPL_LINK_TYPED( ScNavigatorDlg, TimeHdl, Idle*, pIdle, void )
 {
     if ( pIdle != &aContentIdle )
-        return 0;
+        return;
 
     aLbEntries->Refresh( SC_CONTENT_NOTE );
-    return 0;
 }
 
 void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)

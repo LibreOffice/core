@@ -177,7 +177,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     DECL_LINK_TYPED( KeyInputTimerHandler, Timer *, void );
 
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
-    DECL_LINK( TemplateTimerHdl, void * );
+    DECL_LINK_TYPED( TemplateTimerHdl, Idle *, void );
 
     using OutputDevice::GetTextColor;
 

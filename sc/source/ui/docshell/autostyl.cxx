@@ -100,7 +100,7 @@ void ScAutoStyleList::AddInitial( const ScRange& rRange, const OUString& rStyle1
     aInitIdle.Start();
 }
 
-IMPL_LINK_NOARG(ScAutoStyleList, InitHdl)
+IMPL_LINK_NOARG_TYPED(ScAutoStyleList, InitHdl, Idle *, void)
 {
     boost::ptr_vector<ScAutoStyleInitData>::iterator iter;
     for (iter = aInitials.begin(); iter != aInitials.end(); ++iter)
@@ -114,8 +114,6 @@ IMPL_LINK_NOARG(ScAutoStyleList, InitHdl)
     }
 
     aInitials.clear();
-
-    return 0;
 }
 
 void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const OUString& rStyle )

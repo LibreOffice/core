@@ -292,7 +292,7 @@ void SfxModelessDialog::Move()
     Implements a timer event that is triggered by a move or resize of the window
     This will save config information to Views.xcu with a small delay
 */
-IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
+IMPL_LINK_NOARG_TYPED(SfxModelessDialog, TimerHdl, Idle *, void)
 {
     pImp->aMoveIdle.Stop();
     if ( pImp->bConstructed && pImp->pMgr )
@@ -305,7 +305,6 @@ IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
         pImp->aWinState = GetWindowState( nMask );
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
     }
-    return 0;
 }
 
 SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
@@ -556,7 +555,7 @@ void SfxFloatingWindow::Move()
     Implements a timer event that is triggered by a move or resize of the window
     This will save config information to Views.xcu with a small delay
 */
-IMPL_LINK_NOARG(SfxFloatingWindow, TimerHdl)
+IMPL_LINK_NOARG_TYPED(SfxFloatingWindow, TimerHdl, Idle *, void)
 {
     pImp->aMoveIdle.Stop();
     if ( pImp->bConstructed && pImp->pMgr )
@@ -569,7 +568,6 @@ IMPL_LINK_NOARG(SfxFloatingWindow, TimerHdl)
         pImp->aWinState = GetWindowState( nMask );
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
     }
-    return 0;
 }
 
 

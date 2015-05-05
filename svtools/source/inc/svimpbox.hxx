@@ -161,9 +161,9 @@ private:
     // #97680# --------------------
     std::vector< short > aContextBmpWidthVector;
 
-    DECL_LINK(EditTimerCall, void *);
+    DECL_LINK_TYPED(EditTimerCall, Idle *, void);
 
-    DECL_LINK( BeginDragHdl, void* );
+    DECL_LINK_TYPED( BeginDragHdl, Idle*, void );
     DECL_LINK( MyUserEvent,void*);
     void                StopUserEvent();
 

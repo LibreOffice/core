@@ -236,7 +236,7 @@ private:
     bool            mbPostEvt;
 
                     DECL_LINK( ImplEndEditHdl, void* );
-                    DECL_LINK( ImplEndTimerHdl, void* );
+                    DECL_LINK_TYPED( ImplEndTimerHdl, Idle*, void );
 
 public:
                     TabBarEdit( TabBar* pParent, WinBits nWinStyle = 0 );
@@ -317,10 +317,10 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
     return 0;
 }
 
-IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
+IMPL_LINK_NOARG_TYPED(TabBarEdit, ImplEndTimerHdl, Idle *, void)
 {
     if ( HasFocus() )
-        return 0;
+        return;
 
     // We need this query, because the edit gets a losefocus event,
     // when it shows the context menu or the insert symbol dialog
@@ -328,8 +328,6 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
         maLoseFocusIdle.Start();
     else
         GetParent()->EndEditMode( true );
-
-    return 0;
 }
 
 struct TabBar_Impl

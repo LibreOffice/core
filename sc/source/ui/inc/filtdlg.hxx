@@ -222,7 +222,7 @@ private:
     DECL_LINK( ScrollHdl, ScrollBar* );
 
     // Hack: RefInput control
-    DECL_LINK( TimeOutHdl,       Idle* );
+    DECL_LINK_TYPED( TimeOutHdl, Idle*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILTDLG_HXX

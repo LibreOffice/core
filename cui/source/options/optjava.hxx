@@ -90,7 +90,7 @@ private:
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(ParameterHdl_Impl, void *);
     DECL_LINK(ClassPathHdl_Impl, void *);
-    DECL_LINK(ResetHdl_Impl, void *);
+    DECL_LINK_TYPED(ResetHdl_Impl, Idle *, void);
 
     DECL_LINK(              StartFolderPickerHdl, void * );
     DECL_LINK(              DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );

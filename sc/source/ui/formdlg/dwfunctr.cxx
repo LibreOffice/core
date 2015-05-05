@@ -1014,11 +1014,10 @@ void ScFunctionDockWin::ToggleFloatingMode()
     aIdle.Start();
 }
 
-IMPL_LINK_NOARG(ScFunctionDockWin, TimerHdl)
+IMPL_LINK_NOARG_TYPED(ScFunctionDockWin, TimerHdl, Idle *, void)
 {
     CheckAlignment(eSfxOldAlignment,eSfxNewAlignment);
     SetSize();
-    return 0;
 }
 
 void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)

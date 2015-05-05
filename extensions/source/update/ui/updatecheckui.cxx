@@ -145,7 +145,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
 private:
                     DECL_LINK(ClickHdl, void *);
                     DECL_LINK( HighlightHdl, MenuBar::MenuBarButtonCallbackArg* );
-                    DECL_LINK(WaitTimeOutHdl, void *);
+                    DECL_LINK_TYPED(WaitTimeOutHdl, Idle *, void);
                     DECL_LINK_TYPED(TimeOutHdl, Timer *, void);
                     DECL_LINK(UserEventHdl, void *);
                     DECL_LINK( WindowEventHdl, VclWindowEvent* );
@@ -612,7 +612,7 @@ IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg*, pDat
 }
 
 
-IMPL_LINK_NOARG(UpdateCheckUI, WaitTimeOutHdl)
+IMPL_LINK_NOARG_TYPED(UpdateCheckUI, WaitTimeOutHdl, Idle *, void)
 {
     SolarMutexGuard aGuard;
 
@@ -622,8 +622,6 @@ IMPL_LINK_NOARG(UpdateCheckUI, WaitTimeOutHdl)
     {
         mpBubbleWin->Show();
     }
-
-    return 0;
 }
 
 

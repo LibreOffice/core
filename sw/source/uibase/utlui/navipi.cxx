@@ -1250,14 +1250,13 @@ bool    SwNavigationPI::IsGlobalDoc() const
     return bRet;
 }
 
-IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl)
+IMPL_LINK_NOARG_TYPED(SwNavigationPI, ChangePageHdl, Idle *, void)
 {
     if (!IsDisposed())
     {
         EditAction(&GetPageEdit());
         GetPageEdit().GrabFocus();
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl)

@@ -385,14 +385,12 @@ IMPL_LINK_NOARG(SwLabFmtPage, ModifyHdl)
 }
 
 // Invalidate preview
-IMPL_LINK_NOARG(SwLabFmtPage, PreviewHdl)
+IMPL_LINK_NOARG_TYPED(SwLabFmtPage, PreviewHdl, Idle *, void)
 {
     aPreviewIdle.Stop();
     ChangeMinMax();
     FillItem( aItem );
     m_pPreview->UpdateItem( aItem );
-
-    return 0;
 }
 
 // LoseFocus-Handler: Update on change

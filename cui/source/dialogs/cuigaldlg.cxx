@@ -507,7 +507,7 @@ IMPL_LINK_NOARG(ActualizeProgress, ClickCancelBtn)
 
 
 
-IMPL_LINK( ActualizeProgress, TimeoutHdl, Timer*, _pTimer )
+IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
 {
     if ( _pTimer )
     {
@@ -517,8 +517,6 @@ IMPL_LINK( ActualizeProgress, TimeoutHdl, Timer*, _pTimer )
 
     pTheme->Actualize( LINK( this, ActualizeProgress, ActualizeHdl ), &aStatusProgress );
     ClickCancelBtn( NULL );
-
-    return 0;
 }
 
 

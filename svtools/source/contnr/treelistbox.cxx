@@ -242,10 +242,9 @@ void SvInplaceEdit2::LoseFocus()
     }
 }
 
-IMPL_LINK_NOARG(SvInplaceEdit2, Timeout_Impl)
+IMPL_LINK_NOARG_TYPED(SvInplaceEdit2, Timeout_Impl, Idle *, void)
 {
     CallCallBackHdl_Impl();
-    return 0;
 }
 
 void SvInplaceEdit2::CallCallBackHdl_Impl()

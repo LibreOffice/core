@@ -1637,16 +1637,14 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 
     return 0;
 }
-IMPL_LINK_NOARG(ScAcceptChgDlg, ReOpenTimerHdl)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, ReOpenTimerHdl, Idle *, void)
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
     m_pAcceptChgCtr->ShowFilterPage();
     RefHandle(NULL);
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, UpdateSelectionHdl, Idle *, void)
 {
     ScTabView* pTabView = pViewData->GetView();
 
@@ -1692,8 +1690,6 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl)
     bool bEnable = pDoc->IsDocEditable() && pChanges && !pChanges->IsProtected();
     pTPView->EnableAccept( bAcceptFlag && bEnable );
     pTPView->EnableReject( bRejectFlag && bEnable );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)

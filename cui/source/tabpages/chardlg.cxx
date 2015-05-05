@@ -1179,10 +1179,9 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
 
 
-IMPL_LINK_NOARG(SvxCharNamePage, UpdateHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharNamePage, UpdateHdl_Impl, Idle *, void)
 {
     UpdatePreview_Impl();
-    return 0;
 }
 
 

@@ -503,7 +503,7 @@ RefEdit::~RefEdit()
 
 void RefEdit::dispose()
 {
-    aIdle.SetIdleHdl( Link<>() );
+    aIdle.SetIdleHdl( Link<Idle *, void>() );
     aIdle.Stop();
     pLabelWidget.clear();
     Edit::dispose();
@@ -551,7 +551,7 @@ void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel
     }
     else
     {
-        aIdle.SetIdleHdl( Link<>() );
+        aIdle.SetIdleHdl( Link<Idle *, void>() );
         aIdle.Stop();
     }
 }
@@ -585,11 +585,10 @@ void RefEdit::LoseFocus()
         pAnyRefDlg->HideReference();
 }
 
-IMPL_LINK_NOARG(RefEdit, UpdateHdl)
+IMPL_LINK_NOARG_TYPED(RefEdit, UpdateHdl, Idle *, void)
 {
     if( pAnyRefDlg )
         pAnyRefDlg->ShowReference( GetText() );
-    return 0;
 }
 
 //class RefButton

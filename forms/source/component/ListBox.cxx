@@ -1972,10 +1972,9 @@ namespace frm
     }
 
 
-    IMPL_LINK(OListBoxControl, OnTimeout, void*, /*EMPTYTAG*/)
+    IMPL_LINK_NOARG_TYPED(OListBoxControl, OnTimeout, Idle*, void)
     {
         m_aChangeListeners.notifyEach( &XChangeListener::changed, EventObject( *this ) );
-        return 0L;
     }
 
 

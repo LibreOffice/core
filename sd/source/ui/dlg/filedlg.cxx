@@ -62,7 +62,7 @@ private:
 
     Idle                        maUpdateIdle;
 
-                                DECL_LINK( IsMusicStoppedHdl, void * );
+                                DECL_LINK_TYPED( IsMusicStoppedHdl, Idle *, void );
 
 public:
                                 SdFileDialog_Imp( const short nDialogType, bool bUsableSelection );
@@ -163,7 +163,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
+IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, IsMusicStoppedHdl, Idle *, void)
 {
     SolarMutexGuard aGuard;
 
@@ -173,7 +173,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
        )
     {
         maUpdateIdle.Start();
-        return 0L;
+        return;
     }
 
     if( mxControlAccess.is() )
@@ -191,8 +191,6 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
 #endif
         }
     }
-
-    return 0L;
 }
 
 // check whether to disable the "selection" checkbox

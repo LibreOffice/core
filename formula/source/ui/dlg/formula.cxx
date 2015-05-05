@@ -356,7 +356,7 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
 {
     if(aIdle.IsActive())
     {
-        aIdle.SetIdleHdl(Link<>());
+        aIdle.SetIdleHdl(Link<Idle *, void>());
         aIdle.Stop();
     }// if(aIdle.IsActive())
     bIsShutDown=true;// Set it in order to PreNotify not to save GetFocus.
@@ -1863,7 +1863,7 @@ void FormulaDlg::SetEdSelection()
 {
     m_pImpl->SetEdSelection();
 }
-IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl)
+IMPL_LINK_NOARG_TYPED(FormulaDlg, UpdateFocusHdl, Idle *, void)
 {
     FormEditData* pData = m_pImpl->m_pHelper->getFormEditData();
 
@@ -1873,7 +1873,6 @@ IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl)
         OString nUniqueId(pData->GetUniqueId());
         SetFocusWin(this,nUniqueId);
     }
-    return 0;
 }
 
 

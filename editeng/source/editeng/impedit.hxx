@@ -667,7 +667,7 @@ private:
     inline void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
 
     DECL_LINK_TYPED(StatusTimerHdl, Timer *, void);
-    DECL_LINK(IdleFormatHdl, void *);
+    DECL_LINK_TYPED(IdleFormatHdl, Idle *, void);
     DECL_LINK_TYPED(OnlineSpellHdl, Timer *, void);
     DECL_LINK( DocModified, void* );
 

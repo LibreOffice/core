@@ -743,11 +743,10 @@ IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl)
     return 0;
 }
 
-IMPL_LINK( IndexTabPage_Impl, IdleHdl, Idle*, pIdle )
+IMPL_LINK_TYPED( IndexTabPage_Impl, IdleHdl, Idle*, pIdle, void )
 {
     if ( &aFactoryIdle == pIdle )
         InitializeIndex();
-    return 0;
 }
 
 IMPL_LINK_TYPED( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer, void)
@@ -1602,7 +1601,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
+IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, InitHdl, Idle *, void)
 {
     bIsInitDone = true;
     Initialize();
@@ -1610,11 +1609,9 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
     // now use the timer for selection
     aIdle.SetIdleHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectFactoryHdl ) );
     aIdle.SetPriority( SchedulerPriority::LOWEST );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
+IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Idle *, void)
 {
     OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetSelectEntryData());
     if ( pFactory )
@@ -1622,8 +1619,6 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
         SetFactory( OUString( *pFactory ).toAsciiLowerCase(), false );
         aSelectFactoryLink.Call( this );
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
@@ -2215,7 +2210,7 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const vcl::KeyCode& _rKeyCode )
 
 
 
-IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
 {
     try
     {
@@ -2252,8 +2247,6 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
     {
         OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
-
-    return 1;
 }
 
 

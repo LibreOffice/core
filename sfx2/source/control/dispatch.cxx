@@ -495,16 +495,13 @@ void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
     It flushes the Stack, if it is dirty, thus it actually executes the
     pending Push and Pop commands.
 */
-IMPL_LINK( SfxDispatcher, EventHdl_Impl, void *, pvoid )
+IMPL_LINK_NOARG_TYPED( SfxDispatcher, EventHdl_Impl, Idle *, void )
 {
-    (void)pvoid; // unused
-
     Flush();
     Update_Impl();
     SfxBindings* pBindings = GetBindings();
     if ( pBindings )
         pBindings->StartUpdate_Impl(false);
-    return 0;
 }
 
 /** With this method it can be tested whether the <SfxShell> rShell is on the

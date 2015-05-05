@@ -206,7 +206,7 @@ namespace sdr
             mpBufferDevice->EnableMapMode(bMapModeWasEnabledSource);
         }
 
-        IMPL_LINK(OverlayManagerBuffered, ImpBufferTimerHandler, AutoTimer*, /*pTimer*/)
+        IMPL_LINK_NOARG_TYPED(OverlayManagerBuffered, ImpBufferTimerHandler, Idle*, void)
         {
             //Resolves: fdo#46728 ensure this exists until end of scope
             rtl::Reference<OverlayManager> xRef(this);
@@ -372,8 +372,6 @@ namespace sdr
                 // forget remembered Region
                 maBufferRememberedRangePixel.reset();
             }
-
-            return 0;
         }
 
         OverlayManagerBuffered::OverlayManagerBuffered(

@@ -1418,9 +1418,8 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      EnableNew( bCanNew );
 }
 
-IMPL_LINK( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, pTim )
+IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TimeOut, Idle *, void )
 {
-    (void)pTim; // unused
     if(!bDontUpdate)
     {
         bDontUpdate=true;
@@ -1442,7 +1441,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, pTim )
     }
     else
         pIdle->Start();
-    return 0;
 }
 
 void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)

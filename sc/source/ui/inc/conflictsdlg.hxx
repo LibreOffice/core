@@ -151,7 +151,7 @@ private:
 
     DECL_LINK( SelectHandle, void* );
     DECL_LINK( DeselectHandle, void* );
-    DECL_LINK( UpdateSelectionHdl, void* );
+    DECL_LINK_TYPED( UpdateSelectionHdl, Idle*, void );
     DECL_LINK( KeepMineHandle, void* );
     DECL_LINK( KeepOtherHandle, void* );
     DECL_LINK( KeepAllMineHandle, void* );

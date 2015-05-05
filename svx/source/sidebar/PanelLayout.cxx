@@ -62,12 +62,11 @@ void PanelLayout::queue_resize(StateChangedType /*eReason*/)
     m_aPanelLayoutIdle.Start();
 }
 
-IMPL_LINK( PanelLayout, ImplHandlePanelLayoutTimerHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG_TYPED( PanelLayout, ImplHandlePanelLayoutTimerHdl, Idle*, void )
 {
     vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
     assert(pChild);
     VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
-    return 0;
 }
 
 void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)

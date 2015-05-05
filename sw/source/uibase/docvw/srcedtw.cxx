@@ -578,7 +578,7 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle )
+IMPL_LINK_TYPED( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )
 {
     tools::Time aSyntaxCheckStart( tools::Time::SYSTEM );
     SAL_WARN_IF(pTextView == 0, "sw", "No View yet, but syntax highlighting?!");
@@ -631,8 +631,6 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle )
     if ( nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
     bHighlighting = false;
-
-    return 0;
 }
 
 void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )

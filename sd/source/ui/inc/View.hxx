@@ -284,8 +284,8 @@ protected:
     boost::ptr_vector<SdViewRedrawRec> maLockedRedraws;
     bool                    mbIsDropAllowed;
 
-                            DECL_LINK( DropErrorHdl, void* );
-                            DECL_LINK( DropInsertFileHdl, void* );
+                            DECL_LINK_TYPED( DropErrorHdl, Idle*, void );
+                            DECL_LINK_TYPED( DropInsertFileHdl, Idle*, void );
                             DECL_LINK( ExecuteNavigatorDrop, SdNavigatorDropEvent* pSdNavigatorDropEvent );
 
     void ImplClearDrawDropMarker();

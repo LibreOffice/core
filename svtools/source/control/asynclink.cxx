@@ -57,14 +57,14 @@ bAllowDoubles
                 _pIdle = new Idle;
                 _pIdle->SetPriority( SchedulerPriority::HIGHEST );
                 _pIdle->SetIdleHdl( LINK(
-                    this, AsynchronLink, HandleCall) );
+                    this, AsynchronLink, HandleCall_Idle) );
             }
             _pIdle->Start();
         }
         else
         {
             if( _pMutex ) _pMutex->acquire();
-            _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall), 0 );
+            _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent), 0 );
             if( _pMutex ) _pMutex->release();
         }
     }
@@ -81,12 +81,17 @@ AsynchronLink::~AsynchronLink()
     delete _pMutex;
 }
 
-IMPL_STATIC_LINK( AsynchronLink, HandleCall, void*, EMPTYARG )
+IMPL_STATIC_LINK_TYPED( AsynchronLink, HandleCall_Idle, Idle*, EMPTYARG, void )
 {
     if( pThis->_pMutex ) pThis->_pMutex->acquire();
     pThis->_nEventId = 0;
     if( pThis->_pMutex ) pThis->_pMutex->release();
     pThis->Call_Impl( pThis->_pArg );
+}
+
+IMPL_STATIC_LINK( AsynchronLink, HandleCall_PostUserEvent, void*, EMPTYARG )
+{
+    HandleCall_Idle(pThis, nullptr);
     return 0;
 }
 

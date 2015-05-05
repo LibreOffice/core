@@ -124,7 +124,7 @@ private:
     Idle                aIdle;
     OUString            aDocName;               // document on which the dialog was opened
 
-    DECL_LINK( UpdateFocusHdl, void* );
+    DECL_LINK_TYPED( UpdateFocusHdl, Idle*, void );
 
 protected:
     bool                DoClose( sal_uInt16 nId );

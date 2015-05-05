@@ -293,13 +293,12 @@ void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_
 
 
 
-IMPL_LINK_NOARG(SdrPaintView, ImpComeBackHdl)
+IMPL_LINK_NOARG_TYPED(SdrPaintView, ImpComeBackHdl, Idle *, void)
 {
     if (bSomeObjChgdFlag) {
         bSomeObjChgdFlag=false;
         ModelHasChanged();
     }
-    return 0;
 }
 
 void SdrPaintView::FlushComeBackTimer() const

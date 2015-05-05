@@ -292,13 +292,13 @@ void Window::ImplPostPaint()
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
 }
 
-IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
+IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
 {
     // save paint events until layout is done
     if (!ImplDoTiledRendering() && IsSystemWindow() && static_cast<const SystemWindow*>(this)->hasPendingLayout())
     {
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
-        return 0;
+        return;
     }
 
     // save paint events until resizing is done
@@ -307,10 +307,9 @@ IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
     else if ( mpWindowImpl->mbReallyVisible )
         ImplCallOverlapPaint();
-    return 0;
 }
 
-IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl)
+IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
 {
     if( mpWindowImpl->mbReallyVisible )
     {
@@ -325,8 +324,6 @@ IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl)
             mpWindowImpl->mpFrameData->maPaintIdle.GetIdleHdl().Call( NULL );
         }
     }
-
-    return 0;
 }
 
 void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, sal_uInt16 nFlags )

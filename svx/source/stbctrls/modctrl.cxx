@@ -108,17 +108,15 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 
 
-IMPL_LINK( SvxModifyControl, OnTimer, Timer *, pTimer )
+IMPL_LINK_TYPED( SvxModifyControl, OnTimer, Idle *, pTimer, void )
 {
     if (pTimer == 0)
-        return 0;
+        return;
 
     pTimer->Stop();
     mxImpl->mnModState = ImplData::MODIFICATION_STATE_NO;
 
     _repaint();
-
-    return 0;
 }
 
 

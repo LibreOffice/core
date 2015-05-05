@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, ModifyInputHdl_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
 {
     // Possibly set the Metric system again. This should be done with a
     // listen, this is however not possible at the moment due to compabillity
@@ -797,7 +797,6 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
     // Slot-ID does not matter, the Exec method evaluates the entire item set
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_DISTANCE, SfxCallMode::RECORD, &aDistItem,
                                             &aStartItem, &aShadowXItem, &aShadowYItem, 0L );
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl)

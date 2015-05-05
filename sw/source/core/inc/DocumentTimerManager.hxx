@@ -50,7 +50,7 @@ public:
     void StartBackgroundJobs() SAL_OVERRIDE;
 
     // Our own 'IdleTimer' calls the following method
-    DECL_LINK( DoIdleJobs, Idle * );
+    DECL_LINK_TYPED( DoIdleJobs, Idle *, void );
 
     virtual ~DocumentTimerManager();
 

@@ -402,7 +402,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle )
+IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
 {
     // alle 50ms nachschauen, ob RefInputMode noch stimmt
 
@@ -426,8 +426,6 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle )
     }
 
     pIdle->Start();
-
-    return 0;
 }
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )

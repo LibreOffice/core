@@ -71,7 +71,7 @@ class ThreadManager : public IThreadListenerOwner
         void RemoveThread( const oslInterlockedCount nThreadID,
                            const bool bThreadFinished = false );
 
-        DECL_LINK( TryToStartNewThread, void* );
+        DECL_LINK_TYPED( TryToStartNewThread, Idle*, void );
 
         /** suspend the starting of threads
 

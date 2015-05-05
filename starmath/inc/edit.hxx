@@ -65,8 +65,8 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
     DECL_LINK(MenuSelectHdl, Menu *);
-    DECL_LINK(ModifyTimerHdl, Idle *);
-    DECL_LINK(CursorMoveTimerHdl, Idle *);
+    DECL_LINK_TYPED(ModifyTimerHdl, Idle *, void);
+    DECL_LINK_TYPED(CursorMoveTimerHdl, Idle *, void);
 
     virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;

@@ -696,7 +696,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
+IMPL_LINK_NOARG_TYPED(SvxIMapDlg, UpdateHdl, Idle *, void)
 {
     pOwnData->aIdle.Stop();
 
@@ -723,8 +723,6 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
     pOwnData->aUpdateTargetList.clear();
 
     GetBindings().Invalidate( SID_IMAP_EXEC );
-
-    return 0L;
 }
 
 IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )

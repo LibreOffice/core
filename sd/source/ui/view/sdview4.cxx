@@ -398,11 +398,11 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 /**
  * Timer handler for InsertFile at Drop()
  */
-IMPL_LINK_NOARG(View, DropInsertFileHdl)
+IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
 {
     DBG_ASSERT( mpViewSh, "sd::View::DropInsertFileHdl(), I need a view shell to work!" );
     if( !mpViewSh )
-        return 0;
+        return;
 
     SfxErrorContext aEc( ERRCTX_ERROR, mpViewSh->GetActiveWindow(), RID_SO_ERRCTX );
     ErrCode nError = 0;
@@ -584,17 +584,14 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
 
     if( nError )
         ErrorHandler::HandleError( nError );
-
-    return nError;
 }
 
 /**
  * Timer handler for Errorhandling at Drop()
  */
-IMPL_LINK_NOARG(View, DropErrorHdl)
+IMPL_LINK_NOARG_TYPED(View, DropErrorHdl, Idle *, void)
 {
     InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
-    return 0;
 }
 
 /**

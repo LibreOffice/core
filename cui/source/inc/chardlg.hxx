@@ -141,7 +141,7 @@ private:
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
     bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
-    DECL_LINK(UpdateHdl_Impl, void *);
+    DECL_LINK_TYPED(UpdateHdl_Impl, Idle *, void);
     DECL_LINK(          FontModifyHdl_Impl, void* );
 
 public:

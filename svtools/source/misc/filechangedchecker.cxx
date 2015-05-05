@@ -75,7 +75,7 @@ bool FileChangedChecker::hasFileChanged()
         return false;
 }
 
-IMPL_LINK_NOARG(FileChangedChecker, TimerHandler)
+IMPL_LINK_NOARG_TYPED(FileChangedChecker, TimerHandler, Idle *, void)
 {
     // If the file has changed, then update the graphic in the doc
     OSL_TRACE("Timeout Called");
@@ -87,7 +87,6 @@ IMPL_LINK_NOARG(FileChangedChecker, TimerHandler)
 
     // Reset the Idle in any case
     resetTimer();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

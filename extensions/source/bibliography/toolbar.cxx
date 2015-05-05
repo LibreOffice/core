@@ -468,7 +468,7 @@ IMPL_LINK( BibToolBar, SelHdl, ListBox*, /*pLb*/ )
     return 0;
 }
 
-IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
+IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Idle*, void )
 {
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
@@ -477,8 +477,6 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
     OUString aSelection = aEntry;
     pPropertyVal[0].Value <<= aSelection;
     SendDispatch(TBC_LB_SOURCE,aPropVal);
-
-    return 0;
 }
 
 IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)

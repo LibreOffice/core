@@ -90,7 +90,7 @@ class SwLabFmtPage : public SfxTabPage
     SwLabItem    aItem;
 
     DECL_LINK(ModifyHdl, void *);
-    DECL_LINK(PreviewHdl, void *);
+    DECL_LINK_TYPED(PreviewHdl, Idle *, void);
     DECL_LINK( LoseFocusHdl, Control * );
     DECL_LINK(SaveHdl, void *);
 

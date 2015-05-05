@@ -116,7 +116,7 @@ public:
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
-    DECL_LINK(TimerHdl, void *);
+    DECL_LINK_TYPED(TimerHdl, Idle *, void);
 
 };
 
@@ -156,7 +156,7 @@ public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo* pInfo);
 
-    DECL_LINK(TimerHdl, void *);
+    DECL_LINK_TYPED(TimerHdl, Idle *, void);
 
 };
 

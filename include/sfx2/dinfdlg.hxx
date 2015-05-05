@@ -446,8 +446,8 @@ private:
     DECL_LINK(  BoxLoseFocusHdl, CustomPropertiesTypeBox* );
     //add lose focus handlers of Date/TimeField?
 
-    DECL_LINK(EditTimeoutHdl, void *);
-    DECL_LINK(BoxTimeoutHdl, void *);
+    DECL_LINK_TYPED(EditTimeoutHdl, Idle *, void);
+    DECL_LINK_TYPED(BoxTimeoutHdl, Idle *, void);
 
     bool        IsLineValid( CustomPropertyLine* pLine ) const;
     void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );

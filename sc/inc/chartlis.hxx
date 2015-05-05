@@ -152,7 +152,7 @@ private:
     Idle            aIdle;
     ScDocument*     pDoc;
 
-                    DECL_LINK(TimerHdl, void *);
+                    DECL_LINK_TYPED(TimerHdl, Idle *, void);
 
     ScChartListenerCollection& operator=( const ScChartListenerCollection& ) SAL_DELETED_FUNCTION;
 

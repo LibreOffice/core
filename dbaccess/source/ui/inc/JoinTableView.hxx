@@ -104,7 +104,7 @@ namespace dbaui
 
         bool                    m_bTrackingInitiallyMoved;
 
-        DECL_LINK(OnDragScrollTimer, void*);
+        DECL_LINK_TYPED(OnDragScrollTimer, Idle*, void);
 
     protected:
         VclPtr<OTableWindow>               m_pLastFocusTabWin;

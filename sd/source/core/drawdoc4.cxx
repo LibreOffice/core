@@ -823,7 +823,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 }
 
 // OnlineSpelling in the background
-IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
+IMPL_LINK_NOARG_TYPED(SdDrawDocument, OnlineSpellingHdl, Idle *, void)
 {
     if (mpOnlineSpellingList!=NULL
         && ( !mbOnlineSpell || mpOnlineSpellingList->hasMore()))
@@ -872,8 +872,6 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
         delete mpOnlineSearchItem;
         mpOnlineSearchItem = NULL;
     }
-
-    return 0;
 }
 
 // Spell object (for OnlineSpelling)

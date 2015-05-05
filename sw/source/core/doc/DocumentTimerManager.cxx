@@ -78,7 +78,7 @@ void DocumentTimerManager::StartBackgroundJobs()
         maIdle.Start();
 }
 
-IMPL_LINK( DocumentTimerManager, DoIdleJobs, Idle*, pIdle )
+IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
 {
 #ifdef TIMELOG
     static ::rtl::Logfile* pModLogFile = 0;
@@ -96,7 +96,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Idle*, pIdle )
             if( rSh.ActionPend() )
             {
                 pIdle->Start();
-                return 0;
+                return;
             }
         }
 
@@ -120,7 +120,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Idle*, pIdle )
 
                 // Defer the remaining work.
                 pIdle->Start();
-                return 0;
+                return;
             }
         }
 
@@ -136,7 +136,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Idle*, pIdle )
                  m_rDoc.getIDocumentFieldsAccess().IsExpFldsLocked() )
             {
                 pIdle->Start();
-                return 0;
+                return;
             }
 
             //  Action brackets!
@@ -165,7 +165,6 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Idle*, pIdle )
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, static_cast<long&>(pModLogFile) = 1;
 #endif
-    return 0;
 }
 
 DocumentTimerManager::~DocumentTimerManager() {}

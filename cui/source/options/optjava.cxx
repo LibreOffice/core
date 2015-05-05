@@ -394,10 +394,9 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, ResetHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ResetHdl_Impl, Idle *, void)
 {
     LoadJREs();
-    return 0;
 }
 
 

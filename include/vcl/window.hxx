@@ -49,6 +49,7 @@ struct ImplCalcToTopData;
 struct SystemEnvData;
 struct SystemParentData;
 class ImplBorderWindow;
+class Idle;
 class Timer;
 class DockingManager;
 class ScrollBar;
@@ -424,11 +425,11 @@ private:
 
 public:
 
-    DECL_DLLPRIVATE_LINK(      ImplHandlePaintHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplHandlePaintHdl, Idle*, void );
     DECL_DLLPRIVATE_LINK(      ImplGenerateMouseMoveHdl, void* );
     DECL_DLLPRIVATE_LINK_TYPED( ImplTrackTimerHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK(      ImplAsyncFocusHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplHandleResizeTimerHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplHandleResizeTimerHdl, Idle*, void );
     DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );
 
 

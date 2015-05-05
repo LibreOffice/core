@@ -533,7 +533,7 @@ void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-IMPL_LINK_NOARG(SvxBmpNumValueSet, FormatHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBmpNumValueSet, FormatHdl_Impl, Idle *, void)
 {
     // only when a graphics was not there, it needs to be formatted
     if(bGrfNotFound)
@@ -542,7 +542,6 @@ IMPL_LINK_NOARG(SvxBmpNumValueSet, FormatHdl_Impl)
         Format();
     }
     Invalidate();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

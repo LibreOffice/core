@@ -1089,7 +1089,7 @@ IMPL_LINK( ExtMgrDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
 }
 
 
-IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
+IMPL_LINK_NOARG_TYPED(ExtMgrDialog, TimeOutHdl, Idle *, void)
 {
     if ( m_bStopProgress )
     {
@@ -1122,8 +1122,6 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
 
         m_aIdle.Start();
     }
-
-    return 1;
 }
 
 
@@ -1433,7 +1431,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
 }
 
 
-IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl)
+IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, TimeOutHdl, Idle *, void)
 {
     if ( m_bStopProgress )
     {
@@ -1466,8 +1464,6 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl)
 
         m_aIdle.Start();
     }
-
-    return 1;
 }
 
 // VCL::Dialog

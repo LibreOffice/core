@@ -192,10 +192,10 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
     }
 }
 
-IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
+IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
 {
     if(!_xControl.is())
-        return 0;
+        return;
 
     // now get the model
     uno::Reference< beans::XPropertySet >  xPrSet(_xControl, uno::UNO_QUERY);
@@ -397,7 +397,6 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
     }
     else
         pTimer->Start();
-    return 0;
 }
 
 void SwOneExampleFrame::ClearDocument( bool bStartUpdateTimer )

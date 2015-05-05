@@ -495,7 +495,7 @@ namespace svxform
         XPropertySet_ref        m_xBinding;
 
         DECL_LINK(ModifyHdl, void *);
-        DECL_LINK(ResultHdl, void *);
+        DECL_LINK_TYPED(ResultHdl, Idle *, void);
         DECL_LINK(EditHdl, void *);
         DECL_LINK(OKHdl, void *);
 

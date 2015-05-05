@@ -570,7 +570,7 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     return 0L;
 }
 
-IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
+IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, UpdateHdl, Idle *, void)
 {
     aUpdateIdle.Stop();
 
@@ -592,11 +592,9 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
     }
 
     GetBindings().Invalidate( SID_CONTOUR_EXEC );
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl)
+IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, CreateHdl, Idle *, void)
 {
     aCreateIdle.Stop();
 
@@ -607,8 +605,6 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl)
     EnterWait();
     SetPolyPolygon( CreateAutoContour( rGraphic, bValid ? &aWorkRect : NULL ) );
     LeaveWait();
-
-    return 0L;
 }
 
 IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )

@@ -148,10 +148,10 @@ private:
     DECL_LINK( SelectHandle, void*);
     DECL_LINK( RefInfoHandle, OUString*);
 
-    DECL_LINK( UpdateSelectionHdl, void*);
+    DECL_LINK_TYPED( UpdateSelectionHdl, Idle*, void );
     DECL_LINK( ChgTrackModHdl, ScChangeTrack*);
     DECL_LINK( CommandHdl, void*);
-    DECL_LINK( ReOpenTimerHdl, void*);
+    DECL_LINK_TYPED( ReOpenTimerHdl, Idle*, void );
     DECL_LINK( ColCompareHdl, SvSortData*);
 
 protected:

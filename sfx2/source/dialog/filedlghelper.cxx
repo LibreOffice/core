@@ -663,10 +663,10 @@ void FileDialogHelper_Impl::updateVersions()
     }
 }
 
-IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
+IMPL_LINK_NOARG_TYPED(FileDialogHelper_Impl, TimeOutHdl_Impl, Idle *, void)
 {
     if ( !mbHasPreview )
-        return 0;
+        return;
 
     maGraphic.Clear();
 
@@ -674,7 +674,7 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
     uno::Reference < XFilePreview > xFilePicker( mxFileDlg, UNO_QUERY );
 
     if ( ! xFilePicker.is() )
-        return 0;
+        return;
 
     Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
 
@@ -735,8 +735,6 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
     catch( const IllegalArgumentException& )
     {
     }
-
-    return 0;
 }
 
 ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
@@ -1123,7 +1121,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     if ( mbDeleteMatcher )
         delete mpMatcher;
 
-    maPreviewIdle.SetIdleHdl( Link<>() );
+    maPreviewIdle.SetIdleHdl( Link<Idle *, void>() );
 
     ::comphelper::disposeComponent( mxFileDlg );
 }

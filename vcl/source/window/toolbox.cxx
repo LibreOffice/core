@@ -2659,13 +2659,11 @@ IMPL_LINK_NOARG_TYPED(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
     }
 }
 
-IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
+IMPL_LINK_NOARG_TYPED(ToolBox, ImplUpdateHdl, Idle *, void)
 {
 
     if( mbFormat && mpData )
         ImplFormat();
-
-    return 0;
 }
 
 static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, bool bSetColor, bool bRotate )

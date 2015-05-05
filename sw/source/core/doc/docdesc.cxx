@@ -772,7 +772,7 @@ void SwDoc::PrtOLENotify( bool bAll )
     }
 }
 
-IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
+IMPL_LINK_NOARG_TYPED( SwDoc, DoUpdateModifiedOLE, Idle *, void )
 {
     SwFEShell* pSh = static_cast<SwFEShell*>(GetEditShell());
     if( pSh )
@@ -806,7 +806,6 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
             delete pNodes;
         }
     }
-    return 0;
 }
 
 struct CompareSwPageDescName {

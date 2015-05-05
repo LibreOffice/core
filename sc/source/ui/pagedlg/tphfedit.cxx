@@ -368,14 +368,14 @@ void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 void ScExtIButton::MouseButtonUp( const MouseEvent& rMEvt)
 {
     aIdle.Stop();
-    aIdle.SetIdleHdl(Link<>());
+    aIdle.SetIdleHdl(Link<Idle *, void>());
     ImageButton::MouseButtonUp(rMEvt );
 }
 
 void ScExtIButton::Click()
 {
     aIdle.Stop();
-    aIdle.SetIdleHdl(Link<>());
+    aIdle.SetIdleHdl(Link<Idle *, void>());
     ImageButton::Click();
 }
 
@@ -414,10 +414,9 @@ bool ScExtIButton::PreNotify( NotifyEvent& rNEvt )
     return ImageButton::PreNotify(rNEvt );
 }
 
-IMPL_LINK_NOARG(ScExtIButton, TimerHdl)
+IMPL_LINK_NOARG_TYPED(ScExtIButton, TimerHdl, Idle *, void)
 {
     StartPopup();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

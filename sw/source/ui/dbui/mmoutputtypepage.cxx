@@ -397,7 +397,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SwSendMailDialog, StartSendMails, SwSendMailDialog*
     return 0;
 }
 
-IMPL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer )
+IMPL_STATIC_LINK_TYPED( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
 {
     if( pThis->m_pImpl->xMailDispatcher.is() )
     {
@@ -417,7 +417,6 @@ IMPL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer )
     {
         pTimer->Start();
     }
-    return 0;
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( SwSendMailDialog, StopSendMails, SwSendMailDialog*, pDialog )

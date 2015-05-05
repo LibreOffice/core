@@ -496,10 +496,9 @@ void FmXAutoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& 
 }
 
 
-IMPL_LINK( FormController, OnActivateTabOrder, void*, /*EMPTYTAG*/ )
+IMPL_LINK_NOARG_TYPED( FormController, OnActivateTabOrder, Idle*, void )
 {
     activateTabOrder();
-    return 1;
 }
 
 

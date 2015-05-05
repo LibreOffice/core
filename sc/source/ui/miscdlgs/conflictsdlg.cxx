@@ -566,11 +566,11 @@ IMPL_LINK_NOARG(ScConflictsDlg, DeselectHandle)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
+IMPL_LINK_NOARG_TYPED(ScConflictsDlg, UpdateSelectionHdl, Idle *, void)
 {
     if ( !mpViewData || !mpOwnDoc )
     {
-        return 0;
+        return;
     }
 
     ScTabView* pTabView = mpViewData->GetView();
@@ -600,8 +600,6 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
         }
         pEntry = m_pLbConflicts->NextSelected( pEntry );
     }
-
-    return 0;
 }
 
 void ScConflictsDlg::SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction )

@@ -346,7 +346,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     return 0;
 }
 
-IMPL_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer*, EMPTYARG )
+IMPL_STATIC_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*, EMPTYARG, void )
 {
     // FillMacroList() can take a long time -> show wait cursor and disable input
     SfxTabDialog* pTabDlg = pThis->GetTabDialog();
@@ -362,7 +362,6 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer*, EMPTYARG )
         pTabDlg->EnableInput( true );
         pTabDlg->LeaveWait();
     }
-    return 0;
 }
 
 void _SfxMacroTabPage::InitAndSetHandler()

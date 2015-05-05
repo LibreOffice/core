@@ -32,6 +32,7 @@ class TextCharAttrib;
 class TextUndo;
 class TextUndoManager;
 class EditSelFunctionSet;
+class Idle;
 class IdleFormatter;
 class TextNode;
 class OutputDevice;
@@ -173,7 +174,7 @@ protected:
     void                ImpTextHeightChanged();
     void                ImpTextFormatted();
 
-    DECL_LINK(          IdleFormatHdl, void * );
+    DECL_LINK_TYPED(    IdleFormatHdl, Idle *, void );
     void                CheckIdleFormatter();
     void                IdleFormatAndUpdate( TextView* pCurView = 0, sal_uInt16 nMaxTimerRestarts = 5 );
 

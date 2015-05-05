@@ -108,7 +108,7 @@ class SwNavigationPI : public vcl::Window,
     DECL_LINK( EditGetFocus, NumEditAction * );
     DECL_LINK( DoneLink, SfxPoolItem * );
     DECL_LINK( MenuSelectHdl, Menu * );
-    DECL_LINK( ChangePageHdl, void* );
+    DECL_LINK_TYPED( ChangePageHdl, Idle*, void );
     DECL_LINK( PageEditModifyHdl, void* );
     DECL_LINK( PopupModeEndHdl, void * );
     DECL_LINK( ClosePopupWindow, SfxPopupWindow * );

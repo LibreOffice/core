@@ -1289,7 +1289,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
     }
 }
 
-IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
+IMPL_LINK_NOARG_TYPED(EditorWindow, SyntaxTimerHdl, Idle *, void)
 {
     DBG_ASSERT( pEditView, "Noch keine View, aber Syntax-Highlight ?!" );
 
@@ -1312,8 +1312,6 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
 
     aSyntaxLineTable.clear();
     bHighlightning = false;
-
-    return 0;
 }
 
 void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )

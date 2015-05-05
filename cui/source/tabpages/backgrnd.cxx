@@ -1482,7 +1482,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 
 
 
-IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle )
+IMPL_LINK_TYPED( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle, void )
 
 /*  [Description]
 
@@ -1538,7 +1538,6 @@ IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle )
             DELETEZ( pImportDlg );
         }
     }
-    return 0;
 }
 
 

@@ -145,7 +145,7 @@ class SfxNewFileDialog_Impl
     SfxObjectShellLock xDocShell;
     VclPtr<SfxNewFileDialog> pAntiImpl;
 
-    DECL_LINK( Update, void * );
+    DECL_LINK_TYPED( Update, Idle *, void );
 
     DECL_LINK( RegionSelect, ListBox * );
     DECL_LINK(TemplateSelect, void *);
@@ -169,12 +169,12 @@ public:
     void             SetTemplateFlags(SfxTemplateFlags nSet);
 };
 
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
+IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle *, void)
 {
     if ( xDocShell.Is() )
     {
         if ( xDocShell->GetProgress() )
-            return sal_False;
+            return;
         xDocShell.Clear();
     }
 
@@ -183,7 +183,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
     {
         m_pPreviewWin->Invalidate();
         m_pPreviewWin->SetObjectShell( 0);
-        return 0;
+        return;
     }
 
     if ( m_pMoreBt->get_expanded() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
@@ -232,13 +232,12 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
             if ( !xDocShell.Is() )
             {
                 m_pPreviewWin->SetObjectShell( 0 );
-                return sal_False;
+                return;
             }
         }
 
         m_pPreviewWin->SetObjectShell( xDocShell );
     }
-    return sal_True;
 }
 
 

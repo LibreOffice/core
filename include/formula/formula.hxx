@@ -99,7 +99,7 @@ public:
 private:
     ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
 
-    DECL_LINK( UpdateFocusHdl, void*);
+    DECL_LINK_TYPED( UpdateFocusHdl, Idle*, void );
 protected:
     void            disableOk();
 

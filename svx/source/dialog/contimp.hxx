@@ -86,8 +86,8 @@ class SvxSuperContourDlg : public SvxContourDlg
                         DECL_LINK( Tbx1ClickHdl, ToolBox* );
                         DECL_LINK( MousePosHdl, ContourWindow* );
                         DECL_LINK( GraphSizeHdl, ContourWindow* );
-                        DECL_LINK(UpdateHdl, void *);
-                        DECL_LINK(CreateHdl, void *);
+                        DECL_LINK_TYPED(UpdateHdl, Idle *, void);
+                        DECL_LINK_TYPED(CreateHdl, Idle *, void);
                         DECL_LINK( StateHdl, ContourWindow* );
                         DECL_LINK( PipetteHdl, ContourWindow* );
                         DECL_LINK( PipetteClickHdl, ContourWindow* );

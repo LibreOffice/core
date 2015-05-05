@@ -1942,12 +1942,12 @@ IMPL_LINK_NOARG_TYPED(ScModule, IdleHandler, Timer *, void)
     aIdleTimer.Start();
 }
 
-IMPL_LINK_NOARG(ScModule, SpellTimerHdl)
+IMPL_LINK_NOARG_TYPED(ScModule, SpellTimerHdl, Idle *, void)
 {
     if ( Application::AnyInput( VclInputFlags::KEYBOARD ) )
     {
         aSpellIdle.Start();
-        return 0; // Later again ...
+        return; // Later again ...
     }
 
     ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -1956,7 +1956,6 @@ IMPL_LINK_NOARG(ScModule, SpellTimerHdl)
         if (pViewSh->ContinueOnlineSpelling())
             aSpellIdle.Start();
     }
-    return 0;
 }
 
 /**

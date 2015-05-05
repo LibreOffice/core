@@ -120,7 +120,7 @@ class SdrItemBrowser: public _SdrItemBrowserWindow {
     bool bDirty;
 private:
     static vcl::Window* ImpGetViewWin(SdrView& rView);
-    DECL_LINK(IdleHdl, void *);
+    DECL_LINK_TYPED(IdleHdl, Idle *, void);
     DECL_LINK(ChangedHdl,_SdrItemBrowserControl*);
     DECL_LINK(SetDirtyHdl, void *);
 public:

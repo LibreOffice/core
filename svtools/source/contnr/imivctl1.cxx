@@ -64,7 +64,7 @@ class IcnViewEdit_Impl : public MultiLineEdit
     bool            bGrabFocus;
 
     void            CallCallBackHdl_Impl();
-                    DECL_LINK(Timeout_Impl, void *);
+                    DECL_LINK_TYPED(Timeout_Impl, Idle *, void);
                     DECL_LINK( ReturnHdl_Impl, Accelerator * );
                     DECL_LINK( EscapeHdl_Impl, Accelerator * );
 
@@ -2854,25 +2854,22 @@ void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
     aSelectedRectList.clear();
 }
 
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Idle *, void)
 {
     aAutoArrangeIdle.Stop();
     Arrange( IsAutoArrange() );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, VisRectChangedHdl)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Idle *, void)
 {
     aVisRectChangedIdle.Stop();
     pView->VisibleRectChanged();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Idle *, void)
 {
     aDocRectChangedIdle.Stop();
     pView->DocumentRectChanged();
-    return 0;
 }
 
 bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos )
@@ -2883,7 +2880,7 @@ bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Po
     return false;
 }
 
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Idle *, void)
 {
     SvxIconChoiceCtrlEntry* pEntry = GetCurEntry();
     if( bEntryEditingEnabled && pEntry &&
@@ -2891,7 +2888,6 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl)
     {
         EditEntry( pEntry );
     }
-    return 0;
 }
 
 
@@ -3306,10 +3302,9 @@ void IcnViewEdit_Impl::CallCallBackHdl_Impl()
     }
 }
 
-IMPL_LINK_NOARG(IcnViewEdit_Impl, Timeout_Impl)
+IMPL_LINK_NOARG_TYPED(IcnViewEdit_Impl, Timeout_Impl, Idle *, void)
 {
     CallCallBackHdl_Impl();
-    return 0;
 }
 
 IMPL_LINK( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator*, EMPTYARG  )
@@ -3738,12 +3733,11 @@ void SvxIconChoiceCtrl_Impl::CallSelectHandler( SvxIconChoiceCtrlEntry* )
         aCallSelectHdlIdle.Start();
 }
 
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl, Idle *, void)
 {
     pHdlEntry = 0;
     pView->ClickIcon();
     //pView->Select();
-    return 0;
 }
 
 void SvxIconChoiceCtrl_Impl::SetOrigin( const Point& rPos )

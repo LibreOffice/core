@@ -118,7 +118,7 @@ void SAL_CALL ShellStackGuard::disposing (
         }
 }
 
-IMPL_LINK(ShellStackGuard, TimeoutHandler, Idle*, pIdle)
+IMPL_LINK_TYPED(ShellStackGuard, TimeoutHandler, Idle*, pIdle, void)
 {
 #ifdef DEBUG
     OSL_ASSERT(pIdle==&maPrinterPollingIdle);
@@ -138,8 +138,6 @@ IMPL_LINK(ShellStackGuard, TimeoutHandler, Idle*, pIdle)
             maPrinterPollingIdle.Start();
         }
     }
-
-    return 0;
 }
 
 bool ShellStackGuard::IsPrinting() const

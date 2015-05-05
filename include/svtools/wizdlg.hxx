@@ -213,7 +213,7 @@ private:
     sal_Int16           mnLeftAlignCount;
     bool                mbEmptyViewMargin;
 
-    DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplHandleWizardLayoutTimerHdl, Idle*, void );
     bool hasWizardPendingLayout() const;
 
 protected:

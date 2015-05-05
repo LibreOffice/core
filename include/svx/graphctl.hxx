@@ -54,7 +54,7 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     bool                bSdrMode;
     bool                bAnim;
 
-                        DECL_LINK( UpdateHdl, Timer* );
+                        DECL_LINK_TYPED( UpdateHdl, Idle*, void );
 
     SvxGraphCtrlAccessibleContext* mpAccContext;
 

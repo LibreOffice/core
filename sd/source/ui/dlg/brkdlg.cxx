@@ -166,11 +166,10 @@ short BreakDlg::Execute()
 /**
  * link-method which starts the working function
  */
-IMPL_LINK_NOARG(BreakDlg, InitialUpdate)
+IMPL_LINK_NOARG_TYPED(BreakDlg, InitialUpdate, Idle *, void)
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
     EndDialog(RET_OK);
-    return 0L;
 }
 
 } // end of namespace sd

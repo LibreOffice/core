@@ -2931,10 +2931,9 @@ void SvImpLBox::BeginDrag()
     }
 }
 
-IMPL_LINK_NOARG(SvImpLBox, BeginDragHdl)
+IMPL_LINK_NOARG_TYPED(SvImpLBox, BeginDragHdl, Idle *, void)
 {
     pView->StartDrag( 0, aAsyncBeginDragPos );
-    return 0;
 }
 
 void SvImpLBox::PaintDDCursor( SvTreeListEntry* pInsertionPos )
@@ -3145,7 +3144,7 @@ void SvImpLBox::SetCurEntry( SvTreeListEntry* pEntry )
         pView->Select( pEntry, true );
 }
 
-IMPL_LINK_NOARG(SvImpLBox, EditTimerCall)
+IMPL_LINK_NOARG_TYPED(SvImpLBox, EditTimerCall, Idle *, void)
 {
     if( pView->IsInplaceEditingEnabled() )
     {
@@ -3157,7 +3156,7 @@ IMPL_LINK_NOARG(SvImpLBox, EditTimerCall)
                 ||  ( std::abs( aCurrentMousePos.Y() - aEditClickPos.Y() ) > 5 )
                 )
             {
-                return 0L;
+                return;
             }
         }
 
@@ -3169,7 +3168,6 @@ IMPL_LINK_NOARG(SvImpLBox, EditTimerCall)
             ShowCursor( true );
         }
     }
-    return 0;
 }
 
 bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )

@@ -91,7 +91,7 @@ private:
     OUString            maCommand;
     Reference< XFrame > mxFrame;
 
-                    DECL_LINK(ImplModifyHdl, void *);
+                    DECL_LINK_TYPED(ImplModifyHdl, Idle *, void);
 
 protected:
 
@@ -146,7 +146,7 @@ void ImplGrafMetricField::Modify()
     maIdle.Start();
 }
 
-IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)
+IMPL_LINK_NOARG_TYPED(ImplGrafMetricField, ImplModifyHdl, Idle *, void)
 {
     const sal_Int64 nVal = GetValue();
 
@@ -175,7 +175,6 @@ IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)
             maCommand,
             aArgs );
     }
-    return 0L;
 }
 
 void ImplGrafMetricField::Update( const SfxPoolItem* pItem )

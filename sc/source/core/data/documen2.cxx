@@ -329,7 +329,7 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
     pChangeTrack = pTrack;
 }
 
-IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
+IMPL_LINK_NOARG_TYPED(ScDocument, TrackTimeHdl, Idle *, void)
 {
     if ( ScDdeLink::IsInUpdate() )      // do not nest
     {
@@ -353,8 +353,6 @@ IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
             }
         }
     }
-
-    return 0;
 }
 
 void ScDocument::SetExpandRefs( bool bVal )

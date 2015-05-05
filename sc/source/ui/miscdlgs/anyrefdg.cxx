@@ -964,13 +964,12 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
     }
 }
 
-IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl)
+IMPL_LINK_NOARG_TYPED(ScRefHandler, UpdateFocusHdl, Idle *, void)
 {
     if (pActiveWin)
     {
         pActiveWin->GrabFocus();
     }
-    return 0;
 }
 
 bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc )

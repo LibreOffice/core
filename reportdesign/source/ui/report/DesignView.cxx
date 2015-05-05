@@ -269,7 +269,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
 
 }
 
-IMPL_LINK_NOARG(ODesignView, MarkTimeout)
+IMPL_LINK_NOARG_TYPED(ODesignView, MarkTimeout, Idle *, void)
 {
     if ( m_pPropWin && m_pPropWin->IsVisible() )
     {
@@ -282,8 +282,6 @@ IMPL_LINK_NOARG(ODesignView, MarkTimeout)
         }
         Resize();
     }
-
-    return 0;
 }
 
 

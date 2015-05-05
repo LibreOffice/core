@@ -335,7 +335,7 @@ protected:
     virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) SAL_OVERRIDE;
 
 private:
-    DECL_LINK( OnTimeout, void* );
+    DECL_LINK_TYPED( OnTimeout, Idle*, void );
 };
 
 

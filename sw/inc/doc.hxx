@@ -445,7 +445,7 @@ private:
 
     // CharTimer calls this method.
     void DoUpdateAllCharts();
-    DECL_LINK( DoUpdateModifiedOLE, Timer * );
+    DECL_LINK_TYPED( DoUpdateModifiedOLE, Idle *, void );
 
 public:
     SwFmt *_MakeCharFmt(const OUString &, SwFmt *, bool, bool );

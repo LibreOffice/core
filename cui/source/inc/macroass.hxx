@@ -42,7 +42,7 @@ class _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, DoubleClickHdl_Impl, Control* );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton * );
 
-    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer* );
+    DECL_DLLPRIVATE_STATIC_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*, void );
 
 protected:
     _SfxMacroTabPage_Impl*      mpImpl;

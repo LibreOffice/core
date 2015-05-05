@@ -1051,18 +1051,17 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
     VclContainer::setLayoutAllocation(rBox, aPos, aSize);
 }
 
-IMPL_LINK( SystemWindow, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG_TYPED( SystemWindow, ImplHandleLayoutTimerHdl, Idle*, void )
 {
     if (!isLayoutEnabled())
     {
         SAL_WARN("vcl.layout", "SystemWindow has become non-layout because extra children have been added directly to it.");
-        return 0;
+        return;
     }
 
     Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
     assert(pBox);
     setPosSizeOnContainee(GetSizePixel(), *pBox);
-    return 0;
 }
 
 void SystemWindow::SetText(const OUString& rStr)

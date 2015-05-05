@@ -574,10 +574,9 @@ void DlgEditor::Paint( const Rectangle& rRect )
 }
 
 
-IMPL_LINK_NOARG(DlgEditor, MarkTimeout)
+IMPL_LINK_NOARG_TYPED(DlgEditor, MarkTimeout, Idle *, void)
 {
     rLayout.UpdatePropertyBrowser();
-    return 1;
 }
 
 

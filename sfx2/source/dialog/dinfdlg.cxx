@@ -1601,16 +1601,14 @@ IMPL_LINK( CustomPropertiesWindow, BoxLoseFocusHdl, CustomPropertiesTypeBox*, pB
     return 0;
 }
 
-IMPL_LINK_NOARG(CustomPropertiesWindow, EditTimeoutHdl)
+IMPL_LINK_NOARG_TYPED(CustomPropertiesWindow, EditTimeoutHdl, Idle *, void)
 {
     ValidateLine( m_pCurrentLine, false );
-    return 0;
 }
 
-IMPL_LINK_NOARG(CustomPropertiesWindow, BoxTimeoutHdl)
+IMPL_LINK_NOARG_TYPED(CustomPropertiesWindow, BoxTimeoutHdl, Idle *, void)
 {
     ValidateLine( m_pCurrentLine, true );
-    return 0;
 }
 
 bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
