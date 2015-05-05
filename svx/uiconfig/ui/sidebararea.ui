@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="AreaPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -36,8 +37,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -53,8 +52,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -64,7 +61,6 @@
                 <property name="hexpand">True</property>
                 <child>
                   <object class="sfxlo-SidebarToolBox" id="selectcolor">
-                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkMenuToolButton" id="color">
@@ -91,7 +87,6 @@
                 </child>
                 <child>
                   <object class="svxlo-SvxFillAttrBox" id="fillattr">
-                    <property name="visible">False</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup" translatable="yes">Select the effect to apply.</property>
@@ -107,8 +102,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -126,8 +119,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -137,8 +128,6 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_markup" translatable="yes">Select the type of transparency to apply.</property>
                 <property name="tooltip_text" translatable="yes">Select the type of transparency to apply.</property>
-                <property name="entry_text_column">0</property>
-                <property name="id_column">1</property>
                 <items>
                   <item translatable="yes">None</item>
                   <item translatable="yes">Solid</item>
@@ -153,8 +142,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -198,7 +185,6 @@
                     <property name="hexpand">True</property>
                     <property name="max_length">100</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="climb_rate">5</property>
                     <property name="numeric">True</property>
@@ -213,8 +199,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -234,9 +218,14 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="mode">both</property>
+    <widgets>
+      <widget name="selectcolor"/>
+      <widget name="fillattr"/>
+    </widgets>
   </object>
 </interface>
