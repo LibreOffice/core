@@ -1823,59 +1823,57 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
 {
     bool bChg = false;
     sal_uInt16 n = 0;
-    const SwPosition* pStt = rRange.Start(),
-                  * pEnd = pStt == rRange.GetPoint() ? rRange.GetMark()
-                                                     : rRange.GetPoint();
+    const SwPosition* pStt = rRange.Start();
+    const SwPosition* pEnd = rRange.End();
     GetRedline( *pStt, &n );
-    for( ; n < mpRedlineTbl->size() ; ++n )
+    for ( ; n < mpRedlineTbl->size(); ++n)
     {
-        SwRangeRedline* pTmp = (*mpRedlineTbl)[ n ];
-        SwPosition* pTStt = pTmp->Start(),
-                  * pTEnd = pTStt == pTmp->GetPoint() ? pTmp->GetMark()
-                                                      : pTmp->GetPoint();
-        if( *pTStt <= *pStt && *pStt <= *pTEnd &&
-            *pTStt <= *pEnd && *pEnd <= *pTEnd )
+        SwRangeRedline * pRedline = (*mpRedlineTbl)[ n ];
+        SwPosition *const pRedlineStart = pRedline->Start();
+        SwPosition *const pRedlineEnd = pRedline->End();
+        if (*pRedlineStart <= *pStt && *pStt <= *pRedlineEnd &&
+            *pRedlineStart <= *pEnd && *pEnd <= *pRedlineEnd)
         {
             bChg = true;
             int nn = 0;
-            if( *pStt == *pTStt )
+            if (*pStt == *pRedlineStart)
                 nn += 1;
-            if( *pEnd == *pTEnd )
+            if (*pEnd == *pRedlineEnd)
                 nn += 2;
 
             SwRangeRedline* pNew = 0;
             switch( nn )
             {
             case 0:
-                pNew = new SwRangeRedline( *pTmp );
-                pTmp->SetEnd( *pStt, pTEnd );
+                pNew = new SwRangeRedline( *pRedline );
+                pRedline->SetEnd( *pStt, pRedlineEnd );
                 pNew->SetStart( *pEnd );
                 break;
 
             case 1:
-                *pTStt = *pEnd;
+                *pRedlineStart = *pEnd;
                 break;
 
             case 2:
-                *pTEnd = *pStt;
+                *pRedlineEnd = *pStt;
                 break;
 
             case 3:
-                pTmp->InvalidateRange();
+                pRedline->InvalidateRange();
                 mpRedlineTbl->DeleteAndDestroy( n-- );
-                pTmp = 0;
+                pRedline = nullptr;
                 break;
             }
-            if( pTmp && !pTmp->HasValidRange() )
+            if (pRedline && !pRedline->HasValidRange())
             {
                 // re-insert
                 mpRedlineTbl->Remove( n );
-                mpRedlineTbl->Insert( pTmp, n );
+                mpRedlineTbl->Insert( pRedline, n );
             }
             if( pNew )
                 mpRedlineTbl->Insert( pNew, n );
         }
-        else if( *pEnd < *pTStt )
+        else if (*pEnd < *pRedlineStart)
             break;
     }
     return bChg;
