@@ -102,6 +102,9 @@ public class ToolbarController {
      * Change the toolbar to edit mode.
      */
     void switchToEditMode() {
+        if (!LOKitShell.isEditingEnabled())
+            return;
+
         // Ensure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
@@ -118,6 +121,9 @@ public class ToolbarController {
      * Change the toolbar to view mode.
      */
     void switchToViewMode() {
+        if (!LOKitShell.isEditingEnabled())
+            return;
+
         // Ensure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override

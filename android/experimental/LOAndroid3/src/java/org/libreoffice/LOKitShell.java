@@ -74,7 +74,7 @@ public class LOKitShell {
     }
 
     public static boolean isEditingEnabled() {
-        return true;
+        return LibreOfficeMainActivity.isExperimentalMode();
     }
 
     public static LayerView getLayerView() {

@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -39,11 +41,14 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
+    private static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
 
     public static LibreOfficeMainActivity mAppContext;
 
     private static GeckoLayerClient mLayerClient;
     private static LOKitThread sLOKitThread;
+
+    private static boolean mEnableEditing;
 
     public Handler mMainHandler;
 
@@ -63,6 +68,10 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
     public static GeckoLayerClient getLayerClient() {
         return mLayerClient;
+    }
+
+    public static boolean isExperimentalMode() {
+        return mEnableEditing;
     }
 
     @Override
@@ -107,6 +116,9 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
             case R.id.action_parts:
                 mDrawerLayout.openDrawer(mDrawerList);
                 return true;
+            case R.id.action_settings:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -118,6 +130,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         // Do the same in case the drawer is locked.
         boolean isDrawerLocked = mDrawerLayout.getDrawerLockMode(mDrawerList) != DrawerLayout.LOCK_MODE_UNLOCKED;
         menu.findItem(R.id.action_parts).setVisible(!isDrawerOpen && !isDrawerLocked);
+        menu.setGroupVisible(R.id.group_edit_actions, mEnableEditing);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -126,6 +139,9 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         Log.w(LOGTAG, "onCreate..");
         mAppContext = this;
         super.onCreate(savedInstanceState);
+
+        mEnableEditing = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                          .getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
 
         mMainHandler = new Handler();
 
@@ -226,6 +242,12 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         Log.i(LOGTAG, "onResume..");
+        // check for config change
+        boolean bEnableExperimental = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
+        if (bEnableExperimental != mEnableEditing) {
+            mEnableEditing = bEnableExperimental;
+            invalidateOptionsMenu();
+        }
     }
 
     @Override

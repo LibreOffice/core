@@ -51,6 +51,7 @@ import android.widget.Toast;
 import org.libreoffice.LOAbout;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
+import org.libreoffice.SettingsActivity;
 import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
@@ -453,6 +454,9 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
                 break;
             case R.id.action_about:
                 mAbout.showAbout();
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

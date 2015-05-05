@@ -3,46 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.libreoffice.MainActivity">
 
+    <group android:id="@+id/group_edit_actions"
+           android:visible="false">
+        <item android:id="@+id/action_bold"
+              android:title="@string/action_bold"
+              android:icon="@drawable/action_bold"
+              android:orderInCategory="100"
+              app:showAsAction="always"/>
 
-    <item android:id="@+id/action_bold"
-          android:title="@string/action_bold"
-          android:icon="@drawable/action_bold"
-          android:orderInCategory="100"
-          app:showAsAction="always"/>
+        <item android:id="@+id/action_italic"
+              android:title="@string/action_italic"
+              android:icon="@drawable/action_italic"
+              android:orderInCategory="100"
+              app:showAsAction="always"/>
 
-    <item android:id="@+id/action_italic"
-          android:title="@string/action_italic"
-          android:icon="@drawable/action_italic"
-          android:orderInCategory="100"
-          app:showAsAction="always"/>
+        <item android:id="@+id/action_underline"
+              android:title="@string/action_underline"
+              android:icon="@drawable/action_underline"
+              android:orderInCategory="100"
+              app:showAsAction="always"/>
 
-    <item android:id="@+id/action_underline"
-          android:title="@string/action_underline"
-          android:icon="@drawable/action_underline"
-          android:orderInCategory="100"
-          app:showAsAction="always"/>
+        <item android:id="@+id/action_strikeout"
+              android:title="@string/action_strikeout"
+              android:icon="@drawable/action_strikeout"
+              android:orderInCategory="100"
+              app:showAsAction="always"/>
 
-    <item android:id="@+id/action_strikeout"
-          android:title="@string/action_strikeout"
-          android:icon="@drawable/action_strikeout"
-          android:orderInCategory="100"
-          app:showAsAction="always"/>
+        <item android:id="@+id/action_keyboard"
+              android:title="@string/action_keyboard"
+              android:icon="@drawable/ic_format_keyboard_grey600_24dp"
+              android:orderInCategory="100"
+              app:showAsAction="always"/>
 
-    <item android:id="@+id/action_keyboard"
-          android:title="@string/action_keyboard"
-          android:icon="@drawable/ic_format_keyboard_grey600_24dp"
-          android:orderInCategory="100"
-          app:showAsAction="always"/>
-
-    <item android:id="@+id/action_save"
-        android:title="@string/action_save"
-        android:orderInCategory="100" />
+        <item android:id="@+id/action_save"
+            android:title="@string/action_save"
+            android:orderInCategory="100" />
+    </group>
 
     <item android:id="@+id/action_parts"
           android:title="@string/action_parts"
           android:orderInCategory="100" />
 
     <item android:id="@+id/action_about"
-        android:title="@string/action_about"
-        android:orderInCategory="100" />
+          android:title="@string/action_about"
+          android:orderInCategory="100" />
+
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:orderInCategory="100" />
 </menu>
