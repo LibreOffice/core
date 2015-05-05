@@ -362,11 +362,10 @@ void KDEXLib::timeoutActivated()
     while( SalKDEDisplay::self()->HasUserEvents() )
         SalKDEDisplay::self()->DispatchInternalEvent();
 
-    X11SalData *pData = static_cast<X11SalData*>(ImplGetSVData()->mpSalData);
     // QGuiEventDispatcherGlib makes glib watch also X11 fd, but its hasPendingEvents()
     // doesn't check X11, so explicitly check XPending() here.
     bool idle = QApplication::hasPendingEvents() && !blockIdleTimeout && !XPending( QX11Info::display());
-    pData->Timeout( idle );
+    X11SalData::Timeout( idle );
     // QTimer is not single shot, so will be restarted immediatelly
 }
 
