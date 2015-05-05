@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_092f8da2",
+        "filename": "i18npool/source/localedata/data/es_CR.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-05T11:55:43Z",
+      "side": 1,
+      "message": "Separators in negative subformat codes also need to be replaced. You can also visually spot in the number formatter dialog if you select the Spanish (Costa Rica) locale and then category Currency, there are four almost duplicate formats but with different group separator.\n\nI\u0027ll just submit an amended patch.",
+      "range": {
+        "startLine": 168,
+        "startChar": 46,
+        "endLine": 168,
+        "endChar": 47
+      },
+      "revId": "9abd308b81f6bca7f2d53a23398183b3ea9b4337",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
