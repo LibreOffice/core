@@ -39,11 +39,8 @@
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 
 
-
 class SfxToolBoxControl;
-class SfxBindings;
 class SfxModule;
-class SfxUnoControllerItem;
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL );
 
