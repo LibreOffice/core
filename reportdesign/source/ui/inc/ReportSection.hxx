@@ -151,7 +151,7 @@ namespace rptui
         * \param _sType
         * \param _pObj
         */
-        void createDefault(const OUString& _sType,SdrObject* _pObj);
+        static void createDefault(const OUString& _sType,SdrObject* _pObj);
         void stopScrollTimer();
 
         /** deactivate the current active ole object if any

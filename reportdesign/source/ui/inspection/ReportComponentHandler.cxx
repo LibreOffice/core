@@ -191,7 +191,7 @@ uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getActuatingPropertie
 
 sal_Bool SAL_CALL ReportComponentHandler::isComposable( const OUString& _rPropertyName ) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
-    return m_pInfoService->isComposable( _rPropertyName, m_xFormComponentHandler );
+    return OPropertyInfoService::isComposable( _rPropertyName, m_xFormComponentHandler );
 }
 
 inspection::InteractiveSelectionResult SAL_CALL ReportComponentHandler::onInteractivePropertySelection(const OUString & PropertyName, sal_Bool Primary, uno::Any & out_Data, const uno::Reference< inspection::XObjectInspectorUI > & InspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException, std::exception)

@@ -518,7 +518,7 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
         for (sal_uInt16 j = 0; j< nItemCount; ++j)
         {
             sal_uInt16 nItemId = m_pActions->GetItemId(j);
-            m_pActions->CheckItem( nItemId, m_rController.isFormatCommandEnabled(mapToolbarItemToSlotId(nItemId),
+            m_pActions->CheckItem( nItemId, OReportController::isFormatCommandEnabled(mapToolbarItemToSlotId(nItemId),
                 _xReportControlFormat ) );
         }
 

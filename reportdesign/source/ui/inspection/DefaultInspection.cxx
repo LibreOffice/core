@@ -234,7 +234,7 @@ namespace rptui
     ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        const sal_Int32 nPropertyId( m_pInfoService->getPropertyId( _rPropertyName ) );
+        const sal_Int32 nPropertyId( OPropertyInfoService::getPropertyId( _rPropertyName ) );
         if ( nPropertyId != -1 )
             return nPropertyId;
 

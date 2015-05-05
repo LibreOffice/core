@@ -75,7 +75,7 @@ protected:
     void implSetNewObject(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >& _aObjects = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >());
 
-    OUString GetHeadlineName(
+    static OUString GetHeadlineName(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >& _aObjects);
 
     void implDetachController();

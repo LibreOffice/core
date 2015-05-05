@@ -216,8 +216,8 @@ namespace rptui
         @param _nUndoStrId the string id of the string which is shown in undo menu
         @param _nShrinkId  ID of what you would like to shrink.
         */
-        void shrinkSectionBottom(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
-        void shrinkSectionTop(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
+        static void shrinkSectionBottom(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
+        static void shrinkSectionTop(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
 
     public:
         void shrinkSection(sal_uInt16 _nUndoStrId, ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection, sal_Int32 _nShrinkId);
@@ -347,8 +347,8 @@ namespace rptui
             @param  _nCommand   the command id
             @param  _xControlFormat the report control format
         */
-        bool                                isFormatCommandEnabled(sal_uInt16 _nCommand
-                                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xControlFormat) const;
+        static bool                         isFormatCommandEnabled(sal_uInt16 _nCommand
+                                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xControlFormat);
 
         virtual bool                        Construct(vcl::Window* pParent) SAL_OVERRIDE;
         // XEventListener

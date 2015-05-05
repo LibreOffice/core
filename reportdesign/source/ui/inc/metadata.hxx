@@ -48,13 +48,13 @@ namespace rptui
         OPropertyInfoService(){}
         virtual ~OPropertyInfoService(){}
         // IPropertyInfoService
-        sal_Int32                           getPropertyId(const OUString& _rName) const;
-        OUString                            getPropertyTranslation(sal_Int32 _nId) const;
-        OString                             getPropertyHelpId(sal_Int32 _nId) const;
-        sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
+        static sal_Int32                    getPropertyId(const OUString& _rName);
+        static OUString                     getPropertyTranslation(sal_Int32 _nId);
+        static OString                      getPropertyHelpId(sal_Int32 _nId);
+        static sal_uInt32                   getPropertyUIFlags(sal_Int32 _nId);
         static void                         getExcludeProperties(::std::vector< com::sun::star::beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler);
 
-        bool                                isComposable(
+        static bool                         isComposable(
                                                 const OUString& _rPropertyName,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler
                                             );

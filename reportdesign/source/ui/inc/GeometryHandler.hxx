@@ -92,14 +92,14 @@ namespace rptui
 
         ::com::sun::star::uno::Any getConstantValue(bool bToControlValue,sal_uInt16 nResId,const ::com::sun::star::uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName );
         ::com::sun::star::beans::Property getProperty(const OUString & PropertyName);
-        void implCreateListLikeControl(
+        static void implCreateListLikeControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,::com::sun::star::inspection::LineDescriptor & out_Descriptor
                 ,sal_uInt16 _nResId
                 ,bool _bReadOnlyControl
                 ,bool _bTrueIfListBoxFalseIfComboBox
             );
-        void implCreateListLikeControl(
+        static void implCreateListLikeControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,::com::sun::star::inspection::LineDescriptor & out_Descriptor
                 ,const ::std::vector< OUString>& _aEntries

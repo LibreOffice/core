@@ -156,28 +156,28 @@ namespace rptui
     }
 
 
-    sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName) const
+    sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
     }
 
 
-    OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
+    OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sTranslation : OUString();
     }
 
 
-    OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
+    OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sHelpId : OString();
     }
 
 
-    sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
+    sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nUIFlags : 0;

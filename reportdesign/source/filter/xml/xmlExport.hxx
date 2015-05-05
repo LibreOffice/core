@@ -163,9 +163,9 @@ private:
     void                    exportParagraph(const Reference< XReportControlModel >& _xReportElement);
     bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula);
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
-    OUString         convertFormula(const OUString& _sFormula);
+    static OUString  convertFormula(const OUString& _sFormula);
 
-    OUString         implConvertNumber(sal_Int32 _nValue);
+    static OUString         implConvertNumber(sal_Int32 _nValue);
 
 private:
                                     ORptExport();

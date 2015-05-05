@@ -39,7 +39,7 @@ namespace rptxml
         bool m_bIsList;
 
         ORptFilter& GetOwnImport();
-        ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
+        static ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
         OXMLControlProperty(const OXMLControlProperty&) SAL_DELETED_FUNCTION;
         void operator =(const OXMLControlProperty&) SAL_DELETED_FUNCTION;
     public:

@@ -3181,7 +3181,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         OUString sCustomShapeType = getDesignView()->GetInsertObjString();
         if ( sCustomShapeType.isEmpty() )
             sCustomShapeType = "diamond";
-        pSectionWindow->getReportSection().createDefault(sCustomShapeType,pNewControl);
+        OReportSection::createDefault(sCustomShapeType,pNewControl);
         pNewControl->SetLogicRect(Rectangle(3000,500,6000,3500)); // switch height and width
     }
     else if ( _nObjectId == OBJ_OLE2 || OBJ_DLG_SUBREPORT == _nObjectId  )
@@ -4161,7 +4161,7 @@ void OReportController::impl_zoom_nothrow()
     InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(), true);
 }
 
-bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat) const
+bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat)
 {
     bool bRet = false;
     if ( _xReportControlFormat.is() && !uno::Reference< report::XFixedLine>(_xReportControlFormat,uno::UNO_QUERY).is() ) // this command is really often called so we nedd a short cut here

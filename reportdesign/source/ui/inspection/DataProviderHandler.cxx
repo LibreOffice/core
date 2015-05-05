@@ -169,7 +169,7 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const OUString & Propert
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     uno::Any aPropertyValue;
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
@@ -214,7 +214,7 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const OUString & Propert
 void SAL_CALL DataProviderHandler::setPropertyValue(const OUString & PropertyName, const uno::Any & Value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
@@ -260,7 +260,7 @@ beans::PropertyState SAL_CALL DataProviderHandler::getPropertyState(const OUStri
 inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(const OUString & PropertyName,  const uno::Reference< inspection::XPropertyControlFactory > & _xControlFactory) throw (beans::UnknownPropertyException, lang::NullPointerException,uno::RuntimeException, std::exception)
 {
     inspection::LineDescriptor aOut;
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
@@ -282,12 +282,12 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     }
     if ( nId != -1 )
     {
-        aOut.Category = ((m_pInfoService->getPropertyUIFlags(nId ) & PROP_FLAG_DATA_PROPERTY) != 0) ?
+        aOut.Category = ((OPropertyInfoService::getPropertyUIFlags(nId ) & PROP_FLAG_DATA_PROPERTY) != 0) ?
                                     OUString("Data")
                                                         :
                                     OUString("General");
-        aOut.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nId ) );
-        aOut.DisplayName = m_pInfoService->getPropertyTranslation(nId);
+        aOut.HelpURL = HelpIdUrl::getHelpURL( OPropertyInfoService::getPropertyHelpId( nId ) );
+        aOut.DisplayName = OPropertyInfoService::getPropertyTranslation(nId);
     }
     return aOut;
 }
@@ -296,7 +296,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToPropertyValue(const OUString & _
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     uno::Any aPropertyValue( _rControlValue );
-    const sal_Int32 nId = m_pInfoService->getPropertyId(_rPropertyValue);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(_rPropertyValue);
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
@@ -328,7 +328,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToControlValue(const OUString & _r
         return aControlValue;
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    const sal_Int32 nId = m_pInfoService->getPropertyId(_rPropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(_rPropertyName);
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
@@ -403,7 +403,7 @@ uno::Sequence< OUString > SAL_CALL DataProviderHandler::getActuatingProperties()
 
 sal_Bool SAL_CALL DataProviderHandler::isComposable( const OUString& _rPropertyName ) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
-    return m_pInfoService->isComposable( _rPropertyName, m_xFormComponentHandler );
+    return OPropertyInfoService::isComposable( _rPropertyName, m_xFormComponentHandler );
 }
 
 inspection::InteractiveSelectionResult SAL_CALL DataProviderHandler::onInteractivePropertySelection(const OUString & PropertyName, sal_Bool Primary, uno::Any & out_Data, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException, std::exception)
@@ -414,7 +414,7 @@ inspection::InteractiveSelectionResult SAL_CALL DataProviderHandler::onInteracti
     inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
@@ -467,7 +467,7 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & Act
     }
     else
     {
-        const sal_Int32 nId = m_pInfoService->getPropertyId(ActuatingPropertyName);
+        const sal_Int32 nId = OPropertyInfoService::getPropertyId(ActuatingPropertyName);
         switch(nId)
         {
 

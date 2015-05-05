@@ -185,7 +185,7 @@ DECLARE_WW8IMPORT_TEST(testN757905, "n757905.doc")
 DECLARE_WW8IMPORT_TEST(testAllGapsWord, "all_gaps_word.doc")
 {
     BorderTest borderTest;
-    borderTest.testTheBorders(mxComponent, true);
+    BorderTest::testTheBorders(mxComponent, true);
 }
 
 DECLARE_WW8IMPORT_TEST(testI120158, "i120158.doc")

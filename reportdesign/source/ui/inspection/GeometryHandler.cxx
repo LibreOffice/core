@@ -364,7 +364,7 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const OUString & PropertyNam
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     uno::Any aPropertyValue;
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
@@ -458,7 +458,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     uno::Any aNewValue = Value;
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     bool bHandled = false;
     switch(nId)
     {
@@ -716,7 +716,7 @@ void GeometryHandler::implCreateListLikeControl(
 inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const OUString & PropertyName, const uno::Reference< inspection::XPropertyControlFactory > & _xControlFactory) throw (beans::UnknownPropertyException, lang::NullPointerException,uno::RuntimeException, std::exception)
 {
     inspection::LineDescriptor aOut;
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_FORCENEWPAGE:
@@ -847,12 +847,12 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
 
     if ( nId != -1 )
     {
-        aOut.Category = ((m_pInfoService->getPropertyUIFlags(nId ) & PROP_FLAG_DATA_PROPERTY) != 0) ?
+        aOut.Category = ((OPropertyInfoService::getPropertyUIFlags(nId ) & PROP_FLAG_DATA_PROPERTY) != 0) ?
                                     OUString("Data")
                                                         :
                                     OUString("General");
-        aOut.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nId ) );
-        aOut.DisplayName = m_pInfoService->getPropertyTranslation(nId);
+        aOut.HelpURL = HelpIdUrl::getHelpURL( OPropertyInfoService::getPropertyHelpId( nId ) );
+        aOut.DisplayName = OPropertyInfoService::getPropertyTranslation(nId);
     }
 
     if  (  ( nId == PROPERTY_ID_POSITIONX )
@@ -955,7 +955,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     uno::Any aPropertyValue( _rControlValue );
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_FORCENEWPAGE:
@@ -1118,7 +1118,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
     uno::Any aPropertyValue(_rPropertyValue);
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_AREA:
@@ -1378,7 +1378,7 @@ uno::Sequence< OUString > SAL_CALL GeometryHandler::getActuatingProperties() thr
 
 sal_Bool SAL_CALL GeometryHandler::isComposable(const OUString & _rPropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
-    return m_pInfoService->isComposable( _rPropertyName, m_xFormComponentHandler );
+    return OPropertyInfoService::isComposable( _rPropertyName, m_xFormComponentHandler );
 }
 
 inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePropertySelection(const OUString & PropertyName, sal_Bool Primary, uno::Any & _rData, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException, std::exception)
@@ -1468,7 +1468,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const OUString & Actuati
         throw lang::NullPointerException();
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    const sal_Int32 nId = m_pInfoService->getPropertyId(ActuatingPropertyName);
+    const sal_Int32 nId = OPropertyInfoService::getPropertyId(ActuatingPropertyName);
     switch(nId)
     {
         case PROPERTY_ID_TYPE:
