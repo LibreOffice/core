@@ -150,7 +150,9 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         return true;
     }
     bool foundVclPtrField = false;
-    for(auto fieldDecl : pRecordDecl->fields()) {
+    for(auto fieldDecl = pRecordDecl->field_begin();
+        fieldDecl != pRecordDecl->field_end(); ++fieldDecl)
+    {
         const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
         if (pFieldRecordType) {
             const CXXRecordDecl *pFieldRecordTypeDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
@@ -161,7 +163,9 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
        }
     }
     bool foundDispose = false;
-    for(auto methodDecl : pRecordDecl->methods()) {
+    for(auto methodDecl = pRecordDecl->method_begin();
+        methodDecl != pRecordDecl->method_end(); ++methodDecl)
+    {
         if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
            foundDispose = true;
            break;
@@ -303,7 +307,9 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
         && startsWith(recordDecl->getQualifiedNameAsString(), "VclPtr"))
     {
         bool foundDispose = false;
-        for(auto methodDecl : pParentRecordDecl->methods()) {
+        for(auto methodDecl = pParentRecordDecl->method_begin();
+            methodDecl != pParentRecordDecl->method_end(); ++methodDecl)
+        {
             if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
                foundDispose = true;
                break;
