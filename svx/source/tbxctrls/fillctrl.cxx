@@ -441,7 +441,7 @@ void SvxFillToolBoxControl::Update()
                             XHatchEntry* pEntry = new XHatchEntry(mpHatchItem->GetHatchValue(), aTmpStr);
                             XHatchList aHatchList( "", ""/*TODO?*/ );
                             aHatchList.Insert( pEntry );
-                            aHatchList.SetDirty( sal_False );
+                            aHatchList.SetDirty( false );
                             const Bitmap aBmp = aHatchList.GetUiBitmap( 0 );
 
                             if( !aBmp.IsEmpty() )
