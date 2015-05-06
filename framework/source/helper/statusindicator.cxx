@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <comphelper/lok.hxx>
 #include <helper/statusindicator.hxx>
 
 namespace framework{
@@ -33,76 +34,91 @@ StatusIndicator::~StatusIndicator()
 }
 
 void SAL_CALL StatusIndicator::start(const OUString& sText ,
-                                           sal_Int32        nRange)
+                                     sal_Int32       nRange)
     throw(css::uno::RuntimeException, std::exception)
 {
-#if !HAVE_FEATURE_DESKTOP
-    (void) sText;
-    (void) nRange;
-#else
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_nRange = nRange;
+        m_nLastCallbackPercent = -1;
+
+        comphelper::LibreOfficeKit::statusIndicatorStart();
+        return;
+    }
+
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->start(this, sText, nRange);
     }
-#endif
 }
 
 void SAL_CALL StatusIndicator::end()
     throw(css::uno::RuntimeException, std::exception)
 {
-#if HAVE_FEATURE_DESKTOP
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        comphelper::LibreOfficeKit::statusIndicatorFinish();
+        return;
+    }
+
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->end(this);
     }
-#endif
 }
 
 void SAL_CALL StatusIndicator::reset()
     throw(css::uno::RuntimeException, std::exception)
 {
-#if HAVE_FEATURE_DESKTOP
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->reset(this);
     }
-#endif
 }
 
 void SAL_CALL StatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException, std::exception)
 {
-#if !HAVE_FEATURE_DESKTOP
-    (void) sText;
-#else
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->setText(this, sText);
     }
-#endif
 }
 
 void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
     throw(css::uno::RuntimeException, std::exception)
 {
-#if !HAVE_FEATURE_DESKTOP
-    (void) nValue;
-#else
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        int nPercent = (100*nValue)/m_nRange;
+        if (nPercent > m_nLastCallbackPercent)
+        {
+            comphelper::LibreOfficeKit::statusIndicatorSetValue(nPercent);
+            m_nLastCallbackPercent = nPercent;
+        }
+        return;
+    }
+
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->setValue(this, nValue);
     }
-#endif
 }
 
 } // namespace framework

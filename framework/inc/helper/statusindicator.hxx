@@ -68,6 +68,10 @@ class StatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIndic
          */
         css::uno::WeakReference< css::task::XStatusIndicatorFactory > m_xFactory;
 
+        sal_Int32 m_nRange;
+        // We want the callback percentages to increase monotonically
+        int m_nLastCallbackPercent;
+
     // c++ interface
     public:
 
