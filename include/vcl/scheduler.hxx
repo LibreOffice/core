@@ -76,6 +76,7 @@ public:
     virtual void    Stop();
 
     bool            IsActive() const { return mbActive; }
+    void            SetInActive() { mbActive = false; }
 
     Scheduler&          operator=( const Scheduler& rScheduler );
     static void ImplDeInitScheduler();
