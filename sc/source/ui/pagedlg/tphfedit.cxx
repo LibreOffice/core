@@ -341,7 +341,7 @@ ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
 {
     nSelected=0;
     aIdle.SetPriority(SchedulerPriority::LOWEST);
-    SetDropDown(PUSHBUTTON_DROPDOWN_TOOLBOX);
+    SetDropDown(PushButtonDropdownStyle::Toolbox);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScExtIButton(vcl::Window *pParent, VclBuilder::stringmap &)

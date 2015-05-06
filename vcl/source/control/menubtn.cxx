@@ -28,7 +28,7 @@
 
 void MenuButton::ImplInitMenuButtonData()
 {
-    mnDDStyle       = PUSHBUTTON_DROPDOWN_MENUBUTTON;
+    mnDDStyle       = PushButtonDropdownStyle::MenuButton;
 
     mpMenuTimer     = NULL;
     mpMenu          = NULL;
@@ -109,7 +109,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     if ( mnMenuMode & MENUBUTTON_MENUMODE_TIMED )
     {
         // If the separated dropdown symbol is not hit, delay the popup execution
-        if( mnDDStyle != PUSHBUTTON_DROPDOWN_MENUBUTTON || // no separator at all
+        if( mnDDStyle != PushButtonDropdownStyle::MenuButton || // no separator at all
             rMEvt.GetPosPixel().X() <= ImplGetSeparatorX() )
         {
             if ( !mpMenuTimer )
