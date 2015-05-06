@@ -988,7 +988,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
 ImplFontAttrs FontSubstConfiguration::getSubstType( const com::sun::star::uno::Reference< XNameAccess >& rFont,
                                                     const OUString& rType ) const
 {
-    sal_uLong type = 0;
+    unsigned long type = 0;
     try
     {
         Any aAny = rFont->getByName( rType );
