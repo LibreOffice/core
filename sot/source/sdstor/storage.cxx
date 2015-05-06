@@ -89,7 +89,7 @@ SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode,
     else
         bIsWritable = false;
 
-    DBG_ASSERT( !nStorageMode,"StorageModes ignored" );
+    DBG_ASSERT( nStorageMode == StorageMode::Default, "StorageModes ignored" );
 }
 
 SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
@@ -368,7 +368,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
         }
 
         // a new unpacked storage should be created
-        if ( nStorageMode == STORAGE_CREATE_UNPACKED )
+        if ( nStorageMode == StorageMode::CreateUnpacked )
         {
             // don't open stream readwrite, content provider may not support this !
             OUString aURL = UCBStorage::CreateLinkFile( m_aName );
@@ -403,35 +403,35 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
                     if ( !(UCBStorage::GetLinkedFile( *m_pStorStm ).isEmpty()) )
                     {
                         // detect special unpacked storages
-                        m_pOwnStg = new UCBStorage( *m_pStorStm, (nStorageMode & STORAGE_TRANSACTED) == 0 );
+                        m_pOwnStg = new UCBStorage( *m_pStorStm, !(nStorageMode & StorageMode::Transacted) );
                         m_bDelStm = true;
                     }
                     else
                     {
                         // detect special disk spanned storages
                         if ( UCBStorage::IsDiskSpannedFile( m_pStorStm ) )
-                            nStorageMode |= STORAGE_DISKSPANNED_MODE;
+                            nStorageMode |= StorageMode::DiskspannedMode;
 
                         // UCBStorage always works directly on the UCB content, so discard the stream first
                         DELETEZ( m_pStorStm );
-                        m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
+                        m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
                     }
                 }
                 else
                 {
                     // OLEStorage can be opened with a stream
-                    m_pOwnStg = new Storage( *m_pStorStm, (nStorageMode & STORAGE_TRANSACTED) == 0 );
+                    m_pOwnStg = new Storage( *m_pStorStm, !(nStorageMode & StorageMode::Transacted) );
                     m_bDelStm = true;
                 }
             }
             else if ( bForceUCBStorage )
             {
-                m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
+                m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
                 SetError( ERRCODE_IO_NOTSUPPORTED );
             }
             else
             {
-                m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
+                m_pOwnStg = new Storage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
                 SetError( ERRCODE_IO_NOTSUPPORTED );
             }
         }
@@ -440,9 +440,9 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
     {
         // temporary storage
         if ( bForceUCBStorage )
-            m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
+            m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
         else
-            m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) == 0 );
+            m_pOwnStg = new Storage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
         m_aName = m_pOwnStg->GetName();
     }
 
@@ -691,7 +691,7 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
                                               StreamMode nMode,
                                               StorageMode nStorageMode )
 {
-    DBG_ASSERT( !nStorageMode, "StorageModes ignored" );
+    DBG_ASSERT( nStorageMode == StorageMode::Default, "StorageModes ignored" );
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
@@ -701,7 +701,7 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
         nMode |= StreamMode::SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
         BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode,
-                            (nStorageMode & STORAGE_TRANSACTED) == 0 );
+                            !(nStorageMode & StorageMode::Transacted) );
         pStm = new SotStorageStream( p );
 
         if( !nE )

@@ -25,6 +25,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <o3tl/typed_flags_set.hxx>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
 #include <tools/stream.hxx>
@@ -32,10 +33,19 @@
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 
-#define STORAGE_TRANSACTED      0x04
-#define STORAGE_DISKSPANNED_MODE   0x80
-#define STORAGE_CREATE_UNPACKED 0x44
-typedef short StorageMode;
+enum class StorageMode {
+    Default = 0,
+    Transacted = 0x04,
+    DiskspannedMode = 0x80,
+    CreateUnpacked = 0x44
+};
+
+namespace o3tl {
+
+template<> struct typed_flags<StorageMode>: is_typed_flags<StorageMode, 0xC4>
+{};
+
+}
 
 class SvStorage;
 
@@ -58,7 +68,7 @@ protected:
 public:
                         SotStorageStream( const OUString &,
                                           StreamMode = STREAM_STD_READWRITE,
-                                          StorageMode = 0 );
+                                          StorageMode = StorageMode::Default );
                         SotStorageStream( BaseStorageStream *pStm );
                         SotStorageStream();
 
@@ -113,10 +123,10 @@ protected:
 public:
                         SotStorage( const OUString &,
                                     StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = 0 );
+                                    StorageMode = StorageMode::Default );
                         SotStorage( bool bUCBStorage, const OUString &,
                                     StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = 0 );
+                                    StorageMode = StorageMode::Default );
                         SotStorage( BaseStorage * );
                         SotStorage( SvStream & rStm );
                         SotStorage( bool bUCBStorage, SvStream & rStm );
@@ -181,7 +191,7 @@ public:
                         // more or less a Parent-Child relationship
     SotStorageStream *  OpenSotStream( const OUString & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
-                                       StorageMode = 0 );
+                                       StorageMode = StorageMode::Default );
     SotStorage *        OpenSotStorage( const OUString & rEleName,
                                         StreamMode = STREAM_STD_READWRITE,
                                         bool transacted = true );
