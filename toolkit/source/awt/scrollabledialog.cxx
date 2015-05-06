@@ -31,8 +31,8 @@ namespace toolkit
 // in the same bitmap :-( WB_VSCROLL & WB_HSCROLL apparently are only for
 // child classes ( whole thing is a mess if you ask me )
 template< class T>
-ScrollableWrapper<T>::ScrollableWrapper( vcl::Window* pParent, WinBits nStyle )
-    : T( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) ),
+ScrollableWrapper<T>::ScrollableWrapper( vcl::Window* pParent, WinBits nStyle, Dialog::InitFlag eFlag )
+    : T( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ), eFlag ),
       maHScrollBar( VclPtr<ScrollBar>::Create(this, WB_HSCROLL | WB_DRAG) ),
       maVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG) ),
       mbHasHoriBar( false ),

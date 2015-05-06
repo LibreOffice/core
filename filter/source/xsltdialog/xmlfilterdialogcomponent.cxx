@@ -326,12 +326,11 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException,
 
     if( nullptr == mpDialog )
     {
-        vcl::Window* pParent = DIALOG_NO_PARENT;
-        if (mxParent.is())
-            pParent = VCLUnoHelper::GetWindow(mxParent);
-
         Reference< XComponent > xComp( this );
-        mpDialog = VclPtr<XMLFilterSettingsDialog>::Create(pParent, mxContext);
+        if (mxParent.is())
+            mpDialog = VclPtr<XMLFilterSettingsDialog>::Create(VCLUnoHelper::GetWindow(mxParent), mxContext);
+        else
+            mpDialog = VclPtr<XMLFilterSettingsDialog>::Create(nullptr, mxContext, Dialog::InitFlag::NoParent);
         mpDialog->Execute();
     }
     else if( !mpDialog->IsVisible() )

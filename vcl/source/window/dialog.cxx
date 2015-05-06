@@ -353,7 +353,7 @@ void Dialog::ImplInitDialogData()
     mpDialogImpl            = new DialogImpl;
 }
 
-void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
 {
     SystemWindowFlags nSysWinMode = Application::GetSystemWindowMode();
 
@@ -392,8 +392,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle )
             }
         }
     }
-    // DIALOG_NO_PARENT: explicitly don't have a parent for this Dialog
-    else if( pParent == DIALOG_NO_PARENT )
+    else if( eFlag == InitFlag::Default )
         pParent = NULL;
 
     if ( !pParent || (nStyle & WB_SYSTEMWINDOW) ||
@@ -490,7 +489,7 @@ void Dialog::doDeferredInit(WinBits nBits)
 {
     VclPtr<vcl::Window> pParent = mpDialogParent;
     mpDialogParent = NULL;
-    ImplInit(pParent, nBits);
+    ImplInit(pParent, nBits, mnInitFlag);
     mbIsDefferedInit = false;
 }
 
@@ -501,18 +500,19 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType)
+Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag)
     : SystemWindow(nType)
 {
     ImplInitDialogData();
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
+    mnInitFlag = eFlag;
 }
 
-Dialog::Dialog(vcl::Window* pParent, WinBits nStyle)
+Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
     : SystemWindow(WINDOW_DIALOG)
 {
     ImplInitDialogData();
-    ImplInit( pParent, nStyle );
+    ImplInit( pParent, nStyle, eFlag );
 }
 
 void Dialog::set_action_area(VclButtonBox* pBox)
@@ -1130,8 +1130,8 @@ VclBuilderContainer::~VclBuilderContainer()
     delete m_pUIBuilder;
 }
 
-ModelessDialog::ModelessDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
-    : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
+ModelessDialog::ModelessDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, InitFlag eFlag)
+    : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG, eFlag)
 {
 }
 

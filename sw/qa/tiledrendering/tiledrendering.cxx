@@ -68,7 +68,7 @@ private:
 
 public:
     TiledRenderingDialog(TiledRenderingApp * app) :
-        ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui"),
+        ModalDialog(nullptr, "TiledRendering", "qa/sw/ui/tiledrendering.ui", Dialog::InitFlag::NoParent),
         mpApp(app)
     {
         VclPtr<PushButton> renderButton;

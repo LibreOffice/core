@@ -26,11 +26,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/vclptr.hxx>
 
-// parameter to pass to the dialog constructor if really no parent is wanted
-// whereas NULL chooses the default dialog parent
-#define DIALOG_NO_PARENT (reinterpret_cast<vcl::Window*>(sal_IntPtr(-1)))
-
-
 // - Dialog -
 
 struct DialogImpl;
@@ -39,6 +34,9 @@ class VclButtonBox;
 
 class VCL_DLLPUBLIC Dialog : public SystemWindow
 {
+public:
+    enum class InitFlag { Default, NoParent };
+
 private:
     VclPtr<Dialog>  mpPrevExecuteDlg;
     DialogImpl*     mpDialogImpl;
@@ -47,6 +45,7 @@ private:
     bool            mbOldSaveBack;
     bool            mbInClose;
     bool            mbModalMode;
+    InitFlag        mnInitFlag; // used for deferred init
 
     VclPtr<VclButtonBox> mpActionArea;
     VclPtr<VclBox>       mpContentArea;
@@ -61,7 +60,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
@@ -69,7 +68,7 @@ public:
 
 protected:
     explicit        Dialog( WindowType nType );
-    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType );
+    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag = InitFlag::Default );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void    settingOptimalLayoutSize(Window *pBox) SAL_OVERRIDE;
 
@@ -79,7 +78,7 @@ protected:
     void set_content_area(VclBox* pBox);
 
 public:
-    explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
+    explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, InitFlag eFlag = InitFlag::Default );
     explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
     virtual void    dispose() SAL_OVERRIDE;
@@ -131,7 +130,7 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
                     ModelessDialog & operator= (const ModelessDialog &) SAL_DELETED_FUNCTION;
 
 public:
-    explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
+    explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
 };
 
 // - ModalDialog -
