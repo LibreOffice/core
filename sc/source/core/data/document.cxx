@@ -492,7 +492,7 @@ bool ScDocument::InsertTab(
         {
             if (ValidTab(nPos) && (nPos < nTabCount))
             {
-                sc::RefUpdateInsertTabContext aCxt(nPos, 1);
+                sc::RefUpdateInsertTabContext aCxt( *this, nPos, 1);
 
                 ScRange aRange( 0,0,nPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
@@ -582,7 +582,7 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
         {
             if (ValidTab(nPos) && (nPos < nTabCount))
             {
-                sc::RefUpdateInsertTabContext aCxt(nPos, nNewSheets);
+                sc::RefUpdateInsertTabContext aCxt( *this, nPos, nNewSheets);
                 ScRange aRange( 0,0,nPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
@@ -657,7 +657,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
             if (nTabCount > 1)
             {
                 sc::AutoCalcSwitch aACSwitch(*this, false);
-                sc::RefUpdateDeleteTabContext aCxt(nTab, 1);
+                sc::RefUpdateDeleteTabContext aCxt( *this, nTab, 1);
 
                 ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
                 DelBroadcastAreasInRange( aRange );
@@ -739,7 +739,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
             if (nTabCount > nSheets)
             {
                 sc::AutoCalcSwitch aACSwitch(*this, false);
-                sc::RefUpdateDeleteTabContext aCxt(nTab, nSheets);
+                sc::RefUpdateDeleteTabContext aCxt( *this, nTab, nSheets);
 
                 for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
                 {
