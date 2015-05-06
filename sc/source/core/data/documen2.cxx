@@ -731,7 +731,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             // Update Reference
             // TODO: combine with UpdateReference!
 
-            sc::RefUpdateMoveTabContext aCxt(nOldPos, nNewPos);
+            sc::RefUpdateMoveTabContext aCxt( *this, nOldPos, nNewPos);
 
             SCsTAB nDz = ((SCsTAB)nNewPos) - (SCsTAB)nOldPos;
             ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
@@ -804,7 +804,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         bValid = !GetTable( aName, nDummy );
 
     sc::AutoCalcSwitch aACSwitch(*this, false);
-    sc::RefUpdateInsertTabContext aCxt(nNewPos, 1);
+    sc::RefUpdateInsertTabContext aCxt( *this, nNewPos, 1);
     sc::StartListeningContext aSLCxt(*this);
 
     if (bValid)

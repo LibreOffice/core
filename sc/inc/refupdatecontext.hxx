@@ -103,29 +103,32 @@ struct RefUpdateResult
 
 struct RefUpdateInsertTabContext
 {
+    ScDocument& mrDoc;
     SCTAB mnInsertPos;
     SCTAB mnSheets;
     UpdatedRangeNames maUpdatedNames;
 
-    RefUpdateInsertTabContext(SCTAB nInsertPos, SCTAB nSheets);
+    RefUpdateInsertTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets);
 };
 
 struct RefUpdateDeleteTabContext
 {
+    ScDocument& mrDoc;
     SCTAB mnDeletePos;
     SCTAB mnSheets;
     UpdatedRangeNames maUpdatedNames;
 
-    RefUpdateDeleteTabContext(SCTAB nInsertPos, SCTAB nSheets);
+    RefUpdateDeleteTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets);
 };
 
 struct RefUpdateMoveTabContext
 {
+    ScDocument& mrDoc;
     SCTAB mnOldPos;
     SCTAB mnNewPos;
     UpdatedRangeNames maUpdatedNames;
 
-    RefUpdateMoveTabContext(SCTAB nOldPos, SCTAB nNewPos);
+    RefUpdateMoveTabContext(ScDocument& rDoc, SCTAB nOldPos, SCTAB nNewPos);
 
     SCTAB getNewTab(SCTAB nOldTab) const;
 };
