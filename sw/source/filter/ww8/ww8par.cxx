@@ -4900,7 +4900,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             pDocShell->SetReadOnlyUI(true);
     }
 
-    m_pPaM = m_rDoc.CreateUnoCrsr(rPos);
+    mpCrsr = m_rDoc.CreateUnoCrsr2(rPos);
+    m_pPaM = mpCrsr.get();
 
     m_pCtrlStck = new SwWW8FltControlStack( &m_rDoc, m_nFieldFlags, *this );
 
@@ -5344,7 +5345,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     SAL_WARN_IF(m_pTableEndPaM, "sw.ww8", "document ended without table ending");
     m_pTableEndPaM.reset();  //ensure this is deleted before pPaM
-    delete m_pPaM, m_pPaM = 0;
+    mpCrsr.reset();
+    m_pPaM = nullptr;
     m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
 
     UpdatePageDescs(m_rDoc, nPageDescOffset);
