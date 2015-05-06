@@ -100,7 +100,7 @@ SvtFileDialogURLSelector::SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFi
     SetStyle( GetStyle() | WB_NOPOINTERFOCUS | WB_RECTSTYLE | WB_SMALLSTYLE );
     SetModeImage( _pDlg->GetButtonImage( _nButtonId ) );
     SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
-    SetDropDown( PUSHBUTTON_DROPDOWN_TOOLBOX );
+    SetDropDown( PushButtonDropdownStyle::Toolbox );
 }
 
 
