@@ -619,7 +619,7 @@ bool DitherBitmap( Bitmap& rBitmap )
     bool bRet = false;
 
     if( ( rBitmap.GetBitCount() >= 8 ) && ( Application::GetDefaultDevice()->GetColorCount() < 257 ) )
-        bRet = rBitmap.Dither( BMP_DITHER_FLOYD );
+        bRet = rBitmap.Dither( BmpDitherFlags::Floyd );
     else
         bRet = false;
 

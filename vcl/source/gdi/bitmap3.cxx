@@ -1668,7 +1668,7 @@ bool Bitmap::ImplScaleConvolution(
     return bResult;
 }
 
-bool Bitmap::Dither( sal_uLong nDitherFlags )
+bool Bitmap::Dither( BmpDitherFlags nDitherFlags )
 {
     bool bRet = false;
 
@@ -1676,11 +1676,11 @@ bool Bitmap::Dither( sal_uLong nDitherFlags )
 
     if( aSizePix.Width() == 1 || aSizePix.Height() == 1 )
         bRet = true;
-    else if( nDitherFlags & BMP_DITHER_MATRIX )
+    else if( nDitherFlags & BmpDitherFlags::Matrix )
         bRet = ImplDitherMatrix();
-    else if( nDitherFlags & BMP_DITHER_FLOYD )
+    else if( nDitherFlags & BmpDitherFlags::Floyd )
         bRet = ImplDitherFloyd();
-    else if( ( nDitherFlags & BMP_DITHER_FLOYD_16 ) && ( GetBitCount() == 24 ) )
+    else if( ( nDitherFlags & BmpDitherFlags::Floyd16 ) && ( GetBitCount() == 24 ) )
         bRet = ImplDitherFloyd16();
 
     return bRet;
