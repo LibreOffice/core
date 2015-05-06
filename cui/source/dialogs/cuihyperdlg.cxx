@@ -36,8 +36,8 @@ using ::com::sun::star::frame::XFrame;
 
 
 SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
-: SfxControllerItem ( _nId, rBindings )
-  ,aRdOnlyForwarder  ( SID_READONLY_MODE, *this )
+    : SfxControllerItem ( _nId, rBindings )
+    , aRdOnlyForwarder  ( SID_READONLY_MODE, *this )
 {
     pParent = pDlg;
 }
@@ -45,7 +45,7 @@ SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkD
 void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
-    if ( eState == SfxItemState::DEFAULT )
+    if ( eState == SfxItemState::DEFAULT && !pParent->IsDisposed() )
     {
         switch ( nSID )
         {
@@ -168,6 +168,8 @@ void SvxHpLinkDlg::dispose()
 
     delete mpItemSet;
     mpItemSet = NULL;
+
+    maCtrl.dispose();
 
     IconChoiceDialog::dispose();
 }
