@@ -31,7 +31,7 @@
 #include <vcl/field.hxx>
 #include <editeng/numdef.hxx>
 #include <svtools/ctrlbox.hxx>
-
+#include <vcl/dialog.hxx>
 
 class SvxNumRule;
 class SvxBmpNumValueSet;
@@ -231,6 +231,8 @@ protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
         DECL_LINK(LinkBmpHdl_Impl, void *);
+        DECL_LINK(ClickAddBrowseHdl_Impl, void * );
+
 
 public:
         SvxBitmapPickTabPage(vcl::Window* pParent,
