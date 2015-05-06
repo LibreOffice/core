@@ -333,7 +333,7 @@ namespace svt
         if ( bNeedMirror )
         {
             BitmapEx aBitmap( aImage.GetBitmapEx() );
-            aBitmap.Mirror( BMP_MIRROR_HORZ );
+            aBitmap.Mirror( BmpMirrorFlags::Horizontal );
             aImage = Image( aBitmap );
         }
         return aImage;

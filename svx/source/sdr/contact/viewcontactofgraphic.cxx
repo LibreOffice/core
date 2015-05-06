@@ -355,7 +355,7 @@ namespace sdr
 
             if(bHMirr || bVMirr)
             {
-                aLocalGrafInfo.SetMirrorFlags((bHMirr ? BMP_MIRROR_HORZ : 0)|(bVMirr ? BMP_MIRROR_VERT : 0));
+                aLocalGrafInfo.SetMirrorFlags((bHMirr ? BmpMirrorFlags::Horizontal : BmpMirrorFlags::NONE)|(bVMirr ? BmpMirrorFlags::Vertical : BmpMirrorFlags::NONE));
             }
 
             // fill object matrix

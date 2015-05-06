@@ -133,7 +133,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
     if( !rBmp.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
     {
         Bitmap  aPaint( rBmp ), aMask( rMask );
-        sal_uLong   nMirrFlags = 0UL;
+        BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
 
         if( aMask.GetBitCount() > 1 )
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
@@ -143,7 +143,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         {
             aDestSz.Width() = -aDestSz.Width();
             aDestPt.X() -= ( aDestSz.Width() - 1L );
-            nMirrFlags |= BMP_MIRROR_HORZ;
+            nMirrFlags |= BmpMirrorFlags::Horizontal;
         }
 
         // mirrored vertically
@@ -151,7 +151,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         {
             aDestSz.Height() = -aDestSz.Height();
             aDestPt.Y() -= ( aDestSz.Height() - 1L );
-            nMirrFlags |= BMP_MIRROR_VERT;
+            nMirrFlags |= BmpMirrorFlags::Vertical;
         }
 
         // source cropped?
@@ -162,7 +162,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         }
 
         // destination mirrored
-        if( nMirrFlags )
+        if( nMirrFlags != BmpMirrorFlags::NONE )
         {
             aPaint.Mirror( nMirrFlags );
             aMask.Mirror( nMirrFlags );

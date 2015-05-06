@@ -689,19 +689,19 @@ void GDIMetaFile::RemoveAction( size_t nPos )
         pPrev->RemoveAction( nPos );
 }
 
-bool GDIMetaFile::Mirror( sal_uLong nMirrorFlags )
+bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 {
     const Size  aOldPrefSize( GetPrefSize() );
     long        nMoveX, nMoveY;
     double      fScaleX, fScaleY;
     bool        bRet;
 
-    if( nMirrorFlags & MTF_MIRROR_HORZ )
+    if( nMirrorFlags & BmpMirrorFlags::Horizontal )
         nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1, fScaleX = -1.0;
     else
         nMoveX = 0, fScaleX = 1.0;
 
-    if( nMirrorFlags & MTF_MIRROR_VERT )
+    if( nMirrorFlags & BmpMirrorFlags::Vertical )
         nMoveY = SAL_ABS( aOldPrefSize.Height() ) - 1, fScaleY = -1.0;
     else
         nMoveY = 0, fScaleY = 1.0;

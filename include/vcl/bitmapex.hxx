@@ -223,7 +223,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Mirror( sal_uLong nMirrorFlags );
+    bool                Mirror( BmpMirrorFlags nMirrorFlags );
 
     /** Scale the bitmap
 

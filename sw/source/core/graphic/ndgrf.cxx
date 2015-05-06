@@ -997,22 +997,22 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     rGA.SetDrawMode( (GraphicDrawMode)rSet.GetDrawModeGrf().GetValue() );
 
     const SwMirrorGrf & rMirror = rSet.GetMirrorGrf();
-    sal_uLong nMirror = BMP_MIRROR_NONE;
+    BmpMirrorFlags nMirror = BmpMirrorFlags::NONE;
     if( rMirror.IsGrfToggle() && pFrm && !pFrm->FindPageFrm()->OnRightPage() )
     {
         switch( rMirror.GetValue() )
         {
         case RES_MIRROR_GRAPH_DONT:
-            nMirror = BMP_MIRROR_HORZ;
+            nMirror = BmpMirrorFlags::Horizontal;
             break;
         case RES_MIRROR_GRAPH_VERT:
-            nMirror = BMP_MIRROR_NONE;
+            nMirror = BmpMirrorFlags::NONE;
             break;
         case RES_MIRROR_GRAPH_HOR:
-            nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
+            nMirror = BmpMirrorFlags::Horizontal|BmpMirrorFlags::Vertical;
             break;
         default:
-            nMirror = BMP_MIRROR_VERT;
+            nMirror = BmpMirrorFlags::Vertical;
             break;
         }
     }
@@ -1020,13 +1020,13 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
         switch( rMirror.GetValue() )
         {
         case RES_MIRROR_GRAPH_BOTH:
-            nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
+            nMirror = BmpMirrorFlags::Horizontal|BmpMirrorFlags::Vertical;
             break;
         case RES_MIRROR_GRAPH_VERT:
-            nMirror = BMP_MIRROR_HORZ;
+            nMirror = BmpMirrorFlags::Horizontal;
             break;
         case RES_MIRROR_GRAPH_HOR:
-            nMirror = BMP_MIRROR_VERT;
+            nMirror = BmpMirrorFlags::Vertical;
             break;
         }
 

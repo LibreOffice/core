@@ -852,8 +852,8 @@ namespace vclcanvas
 
                         // setup GraphicAttr
                         aGrfAttr.SetMirrorFlags(
-                            ( aScale.getX() < 0.0 ? BMP_MIRROR_HORZ : 0 ) |
-                            ( aScale.getY() < 0.0 ? BMP_MIRROR_VERT : 0 ) );
+                            ( aScale.getX() < 0.0 ? BmpMirrorFlags::Horizontal : BmpMirrorFlags::NONE ) |
+                            ( aScale.getY() < 0.0 ? BmpMirrorFlags::Vertical : BmpMirrorFlags::NONE ) );
                         aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround( nRotate*10.0 )) );
 
                         pGrfObj.reset( new GraphicObject( aBmpEx ) );

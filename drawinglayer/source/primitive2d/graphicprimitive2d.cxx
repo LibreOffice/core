@@ -53,8 +53,8 @@ namespace drawinglayer
             if(getGraphicAttr().IsMirrored())
             {
                 // content needs mirroring
-                const bool bHMirr(getGraphicAttr().GetMirrorFlags() & BMP_MIRROR_HORZ);
-                const bool bVMirr(getGraphicAttr().GetMirrorFlags() & BMP_MIRROR_VERT);
+                const bool bHMirr(getGraphicAttr().GetMirrorFlags() & BmpMirrorFlags::Horizontal);
+                const bool bVMirr(getGraphicAttr().GetMirrorFlags() & BmpMirrorFlags::Vertical);
 
                 // mirror by applying negative scale to the unit primitive and
                 // applying the object transformation on it.
@@ -76,7 +76,7 @@ namespace drawinglayer
 
             aSuppressGraphicAttr.SetCrop(0, 0, 0, 0);
             aSuppressGraphicAttr.SetRotation(0);
-            aSuppressGraphicAttr.SetMirrorFlags(0);
+            aSuppressGraphicAttr.SetMirrorFlags(BmpMirrorFlags::NONE);
             aSuppressGraphicAttr.SetTransparency(0);
 
             const GraphicObject& rGraphicObject = getGraphicObject();

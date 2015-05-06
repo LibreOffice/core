@@ -1099,7 +1099,7 @@ static inline Image ImplMirrorImage( const Image& rImage )
     Image       aRet;
     BitmapEx    aBmpEx( rImage.GetBitmapEx() );
 
-    aBmpEx.Mirror( BMP_MIRROR_HORZ );
+    aBmpEx.Mirror( BmpMirrorFlags::Horizontal );
 
     return Image( aBmpEx );
 }

@@ -49,7 +49,7 @@ public:
 
     static GraphicFilter* pGrfFilter;
 
-    static Graphic      MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nMirrorFlags );
+    static Graphic      MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags nMirrorFlags );
     static Animation    MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr );
     static sal_uInt16   WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                       const OUString& rFilterName, const sal_uIntPtr nFlags = 0L,

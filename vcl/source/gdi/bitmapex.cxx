@@ -359,7 +359,7 @@ bool BitmapEx::Invert()
     return bRet;
 }
 
-bool BitmapEx::Mirror( sal_uLong nMirrorFlags )
+bool BitmapEx::Mirror( BmpMirrorFlags nMirrorFlags )
 {
     bool bRet = false;
 

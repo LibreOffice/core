@@ -1202,7 +1202,7 @@ static Image ImplMirrorImage( const Image& rImage )
     Image       aRet;
     BitmapEx    aMirrBitmapEx( rImage.GetBitmapEx() );
 
-    aMirrBitmapEx.Mirror( BMP_MIRROR_HORZ );
+    aMirrBitmapEx.Mirror( BmpMirrorFlags::Horizontal );
 
     return Image( aMirrBitmapEx );
 }

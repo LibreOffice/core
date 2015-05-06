@@ -303,7 +303,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
         if( aSize100.Width() > 0 && aSize100.Height() > 0 && nTotalWidth > 0 && nTotalHeight > 0 )
         {
             double fScale = (double) aSize100.Width() / nTotalWidth;
-            const long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_HORZ ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
+            const long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
             const long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
 
             fScale = (double) rSz.Width() / aSize100.Width();
@@ -311,7 +311,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
             rSz.Width() = FRound( ( nNewRight - nNewLeft + 1 ) * fScale );
 
             fScale = (double) aSize100.Height() / nTotalHeight;
-            const long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_VERT ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
+            const long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
             const long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
 
             fScale = (double) rSz.Height() / aSize100.Height();
@@ -531,7 +531,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     {
         aPt.X() += aSz.Width() + 1;
         aSz.Width() = -aSz.Width();
-        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_HORZ );
+        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BmpMirrorFlags::Horizontal );
     }
 
     // mirrored vertically
@@ -539,7 +539,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     {
         aPt.Y() += aSz.Height() + 1;
         aSz.Height() = -aSz.Height();
-        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_VERT );
+        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BmpMirrorFlags::Vertical );
     }
 
     if( bCropped )

@@ -815,7 +815,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     if( !rMask.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
     {
         Bitmap  aMask( rMask );
-        sal_uLong   nMirrFlags = 0UL;
+        BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
 
         if( aMask.GetBitCount() > 1 )
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
@@ -825,7 +825,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
         {
             aDestSz.Width() = -aDestSz.Width();
             aDestPt.X() -= ( aDestSz.Width() - 1L );
-            nMirrFlags |= BMP_MIRROR_HORZ;
+            nMirrFlags |= BmpMirrorFlags::Horizontal;
         }
 
         // mirrored vertically
@@ -833,7 +833,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
         {
             aDestSz.Height() = -aDestSz.Height();
             aDestPt.Y() -= ( aDestSz.Height() - 1L );
-            nMirrFlags |= BMP_MIRROR_VERT;
+            nMirrFlags |= BmpMirrorFlags::Vertical;
         }
 
         // source cropped?
@@ -841,7 +841,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
             aMask.Crop( aSrcRect );
 
         // destination mirrored
-        if( nMirrFlags )
+        if( nMirrFlags != BmpMirrorFlags::NONE)
             aMask.Mirror( nMirrFlags );
 
         // do painting

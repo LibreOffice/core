@@ -135,9 +135,9 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
-            const sal_uLong nMirrFlags = AdjustTwoRect( aPosAry, aBmp.GetSizePixel() );
+            const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, aBmp.GetSizePixel() );
 
-            if ( nMirrFlags )
+            if ( nMirrFlags != BmpMirrorFlags::NONE )
                 aBmp.Mirror( nMirrFlags );
 
             if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
@@ -487,12 +487,12 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                            ImplLogicWidthToDevicePixel(rDestSize.Width()),
                            ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
-        const sal_uLong nMirrFlags = AdjustTwoRect(aPosAry, rBitmapEx.GetSizePixel());
+        const BmpMirrorFlags nMirrFlags = AdjustTwoRect(aPosAry, rBitmapEx.GetSizePixel());
 
         if (aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight)
         {
 
-            if (nMirrFlags)
+            if (nMirrFlags != BmpMirrorFlags::NONE)
                 rBitmapEx.Mirror(nMirrFlags);
 
             const SalBitmap* pSalSrcBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();

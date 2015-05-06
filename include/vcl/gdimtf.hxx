@@ -53,9 +53,6 @@ class Gradient;
 #define METAFILE_LABEL_NOTFOUND         GDI_METAFILE_LABEL_NOTFOUND
 #endif
 
-#define MTF_MIRROR_HORZ             0x00000001UL
-#define MTF_MIRROR_VERT             0x00000002UL
-
 enum MtfConversion
 {
     MTF_CONVERSION_NONE = 0,
@@ -132,7 +129,7 @@ public:
     bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
-    bool            Mirror( sal_uLong nMirrorFlags );
+    bool            Mirror( BmpMirrorFlags nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );

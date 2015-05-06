@@ -183,7 +183,7 @@ public:
                         BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     bool            Invert();
-    bool            Mirror( sal_uLong nMirrorFlags );
+    bool            Mirror( BmpMirrorFlags nMirrorFlags );
     bool            Adjust(
                         short nLuminancePercent = 0,
                         short nContrastPercent = 0,

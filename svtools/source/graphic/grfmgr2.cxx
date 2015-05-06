@@ -331,8 +331,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     long    nX, nY, nTmpX, nTmpY, nTmpFX, nTmpFY, nTmp;
     double  fTmp;
 
-    bool    bHMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
-    bool    bVMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
+    bool    bHMirr( rAttributes.GetMirrorFlags() & BmpMirrorFlags::Horizontal );
+    bool    bVMirr( rAttributes.GetMirrorFlags() & BmpMirrorFlags::Vertical );
 
     boost::scoped_array<long> pMapIX(new long[ aUnrotatedWidth ]);
     boost::scoped_array<long> pMapFX(new long[ aUnrotatedWidth ]);
@@ -905,8 +905,8 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
         const long      nW = rBmpSzPix.Width();
         const long      nH = rBmpSzPix.Height();
         long            nStartX = -1, nStartY = -1, nEndX = -1, nEndY = -1;
-        bool            bHMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
-        bool            bVMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
+        bool            bHMirr( rAttributes.GetMirrorFlags() & BmpMirrorFlags::Horizontal );
+        bool            bVMirr( rAttributes.GetMirrorFlags() & BmpMirrorFlags::Vertical );
 
         // calculate output sizes
         if( !pBmpEx )

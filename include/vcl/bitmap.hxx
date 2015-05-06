@@ -28,10 +28,18 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
-#define BMP_MIRROR_NONE             0x00000000UL
-#define BMP_MIRROR_HORZ             0x00000001UL
-#define BMP_MIRROR_VERT             0x00000002UL
+enum class BmpMirrorFlags
+{
+    NONE             = 0x00,
+    Horizontal       = 0x01,
+    Vertical         = 0x02,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<BmpMirrorFlags> : is_typed_flags<BmpMirrorFlags, 0x03> {};
+}
 
 
 enum class BmpScaleFlag
@@ -534,7 +542,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Mirror( sal_uLong nMirrorFlags );
+    bool                    Mirror( BmpMirrorFlags nMirrorFlags );
 
     /** Scale the bitmap
 

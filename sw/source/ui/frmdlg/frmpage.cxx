@@ -2702,11 +2702,11 @@ void BmpWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
     if (bHorz || bVert)
     {
         BitmapEx aTmpBmp(bGraphic ? aGraphic.GetBitmapEx() : aBmp);
-        sal_uLong nMirrorFlags(BMP_MIRROR_NONE);
+        BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
         if (bHorz)
-            nMirrorFlags |= BMP_MIRROR_VERT;
+            nMirrorFlags |= BmpMirrorFlags::Vertical;
         if (bVert)
-            nMirrorFlags |= BMP_MIRROR_HORZ;
+            nMirrorFlags |= BmpMirrorFlags::Horizontal;
         aTmpBmp.Mirror(nMirrorFlags);
         DrawBitmapEx( aPntPos, aPntSz, aTmpBmp );
     }

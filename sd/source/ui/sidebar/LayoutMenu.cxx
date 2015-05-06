@@ -554,7 +554,7 @@ void LayoutMenu::Fill()
                 aBmp.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
 
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
-                aBmp.Mirror (BMP_MIRROR_HORZ);
+                aBmp.Mirror (BmpMirrorFlags::Horizontal);
 
             InsertItem(i, Image(aBmp), SdResId (pInfo->mnStrResId));
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));

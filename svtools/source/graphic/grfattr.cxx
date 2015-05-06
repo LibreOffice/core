@@ -27,7 +27,7 @@
 
 GraphicAttr::GraphicAttr() :
     mfGamma         ( 1.0 ),
-    mnMirrFlags     ( 0 ),
+    mnMirrFlags     ( BmpMirrorFlags::NONE ),
     mnLeftCrop      ( 0 ),
     mnTopCrop       ( 0 ),
     mnRightCrop     ( 0 ),
@@ -76,10 +76,11 @@ bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
-    sal_uInt32      nTmp32;
-    sal_uInt16          nTmp16;
+    sal_uInt32      nTmp32, nTmpMirrFlags;
+    sal_uInt16      nTmp16;
 
-    rIStm.ReadUInt32( nTmp32 ).ReadUInt32( nTmp32 ).ReadDouble( rAttr.mfGamma ).ReadUInt32( rAttr.mnMirrFlags ).ReadUInt16( rAttr.mnRotate10 );
+    rIStm.ReadUInt32( nTmp32 ).ReadUInt32( nTmp32 ).ReadDouble( rAttr.mfGamma ).ReadUInt32( nTmpMirrFlags ).ReadUInt16( rAttr.mnRotate10 );
+    rAttr.mnMirrFlags = static_cast<BmpMirrorFlags>(nTmpMirrFlags);
     rIStm.ReadInt16( rAttr.mnContPercent ).ReadInt16( rAttr.mnLumPercent ).ReadInt16( rAttr.mnRPercent ).ReadInt16( rAttr.mnGPercent ).ReadInt16( rAttr.mnBPercent );
     rIStm.ReadCharAsBool( rAttr.mbInvert ).ReadUChar( rAttr.mcTransparency ).ReadUInt16( nTmp16 );
     rAttr.meDrawMode = (GraphicDrawMode) nTmp16;
@@ -106,7 +107,7 @@ SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
 
     rOStm.WriteUInt32( nTmp32 ).WriteUInt32( nTmp32 );
     rOStm.WriteDouble( rAttr.mfGamma );
-    rOStm.WriteUInt32( rAttr.mnMirrFlags ).WriteUInt16( rAttr.mnRotate10 );
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(rAttr.mnMirrFlags) ).WriteUInt16( rAttr.mnRotate10 );
     rOStm.WriteInt16( rAttr.mnContPercent ).WriteInt16( rAttr.mnLumPercent ).WriteInt16( rAttr.mnRPercent ).WriteInt16( rAttr.mnGPercent ).WriteInt16( rAttr.mnBPercent );
     rOStm.WriteBool( rAttr.mbInvert ).WriteUChar( rAttr.mcTransparency ).WriteUInt16( rAttr.meDrawMode );
     rOStm.WriteInt32( rAttr.mnLeftCrop )

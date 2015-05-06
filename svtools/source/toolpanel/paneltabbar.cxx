@@ -721,11 +721,11 @@ namespace svt
         {
             aBitmap.Rotate( 2700, COL_BLACK );
             if ( m_eTabAlignment == TABS_LEFT )
-                aBitmap.Mirror( BMP_MIRROR_HORZ );
+                aBitmap.Mirror( BmpMirrorFlags::Horizontal );
         }
         else if ( m_eTabAlignment == TABS_BOTTOM )
         {
-            aBitmap.Mirror( BMP_MIRROR_VERT );
+            aBitmap.Mirror( BmpMirrorFlags::Vertical );
         }
 
         const Rectangle aActualRect( m_aNormalizer.getTransformed( i_rLogicalRect, m_eTabAlignment ) );

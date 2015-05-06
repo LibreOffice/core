@@ -82,7 +82,7 @@ class SVT_DLLPUBLIC GraphicAttr
 private:
 
     double          mfGamma;
-    sal_uInt32      mnMirrFlags;
+    BmpMirrorFlags  mnMirrFlags;
     long            mnLeftCrop;
     long            mnTopCrop;
     long            mnRightCrop;
@@ -108,8 +108,8 @@ public:
     void            SetDrawMode( GraphicDrawMode eDrawMode ) { meDrawMode = eDrawMode; }
     GraphicDrawMode GetDrawMode() const { return meDrawMode; }
 
-    void            SetMirrorFlags( sal_uLong nMirrFlags ) { mnMirrFlags = nMirrFlags; }
-    sal_uLong       GetMirrorFlags() const { return mnMirrFlags; }
+    void            SetMirrorFlags( BmpMirrorFlags nMirrFlags ) { mnMirrFlags = nMirrFlags; }
+    BmpMirrorFlags  GetMirrorFlags() const { return mnMirrFlags; }
 
     void            SetCrop( long nLeft_100TH_MM, long nTop_100TH_MM, long nRight_100TH_MM, long nBottom_100TH_MM )
                     {
@@ -149,7 +149,7 @@ public:
     sal_uInt8       GetTransparency() const { return mcTransparency; }
 
     bool            IsSpecialDrawMode() const { return( meDrawMode != GRAPHICDRAWMODE_STANDARD ); }
-    bool            IsMirrored() const { return( mnMirrFlags != 0UL ); }
+    bool            IsMirrored() const { return mnMirrFlags != BmpMirrorFlags::NONE; }
     bool            IsCropped() const
                     {
                         return( mnLeftCrop != 0 || mnTopCrop != 0 ||

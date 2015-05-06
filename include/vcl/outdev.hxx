@@ -245,7 +245,7 @@ namespace vcl {
     class FontInfo;
 }
 
-sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
+BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
 
 extern const sal_uLong nVCLRLut[ 6 ];

@@ -600,7 +600,7 @@ bool Animation::Invert()
     return bRet;
 }
 
-bool Animation::Mirror( sal_uLong nMirrorFlags )
+bool Animation::Mirror( BmpMirrorFlags nMirrorFlags )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
@@ -610,17 +610,17 @@ bool Animation::Mirror( sal_uLong nMirrorFlags )
     {
         bRet = true;
 
-        if( nMirrorFlags )
+        if( nMirrorFlags != BmpMirrorFlags::NONE )
         {
             for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
             {
                 AnimationBitmap* pStepBmp = maList[ i ];
                 if( ( bRet = pStepBmp->aBmpEx.Mirror( nMirrorFlags ) ) )
                 {
-                    if( nMirrorFlags & BMP_MIRROR_HORZ )
+                    if( nMirrorFlags & BmpMirrorFlags::Horizontal )
                         pStepBmp->aPosPix.X() = maGlobalSize.Width() - pStepBmp->aPosPix.X() - pStepBmp->aSizePix.Width();
 
-                    if( nMirrorFlags & BMP_MIRROR_VERT )
+                    if( nMirrorFlags & BmpMirrorFlags::Vertical )
                         pStepBmp->aPosPix.Y() = maGlobalSize.Height() - pStepBmp->aPosPix.Y() - pStepBmp->aSizePix.Height();
                 }
             }

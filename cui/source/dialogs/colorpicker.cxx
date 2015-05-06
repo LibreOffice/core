@@ -1092,7 +1092,7 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
     mpFISliderLeft->Show(true);
 
     BitmapEx aTmpBmp( maSliderImage.GetBitmapEx() );
-    aTmpBmp.Mirror( BMP_MIRROR_HORZ );
+    aTmpBmp.Mirror( BmpMirrorFlags::Horizontal );
     mpFISliderRight->SetImage( Image( aTmpBmp  ) );
 
     Size aSize( maSliderImage.GetSizePixel() );

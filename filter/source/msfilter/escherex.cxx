@@ -1640,7 +1640,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
 
                 if(bMirrored)
                 {
-                    pGraphicAttr->SetMirrorFlags(BMP_MIRROR_HORZ);
+                    pGraphicAttr->SetMirrorFlags(BmpMirrorFlags::Horizontal);
                 }
 
                 // #121074#
@@ -4122,7 +4122,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
             {
                 SvMemoryStream aSt( sizeof( GraphicAttr ) );
                 aSt.WriteUInt16( pGraphicAttr->GetDrawMode() )
-                   .WriteUInt32( pGraphicAttr->GetMirrorFlags() )
+                   .WriteUInt32( static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags()) )
                    .WriteInt32( pGraphicAttr->GetLeftCrop() )
                    .WriteInt32( pGraphicAttr->GetTopCrop() )
                    .WriteInt32( pGraphicAttr->GetRightCrop() )

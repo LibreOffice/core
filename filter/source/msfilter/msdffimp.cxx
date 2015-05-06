@@ -1224,12 +1224,12 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                 {
                     aBitmap.Rotate( nFix16Angle / 10, rShadeColors[ 0 ].aColor );
 
-                    sal_uLong nMirrorFlags = BMP_MIRROR_NONE;
+                    BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
                     if ( rObjData.nSpFlags & SP_FFLIPV )
-                        nMirrorFlags |= BMP_MIRROR_VERT;
+                        nMirrorFlags |= BmpMirrorFlags::Vertical;
                     if ( rObjData.nSpFlags & SP_FFLIPH )
-                        nMirrorFlags |= BMP_MIRROR_HORZ;
-                    if ( nMirrorFlags != BMP_MIRROR_NONE )
+                        nMirrorFlags |= BmpMirrorFlags::Horizontal;
+                    if ( nMirrorFlags != BmpMirrorFlags::NONE )
                         aBitmap.Mirror( nMirrorFlags );
                 }
             }

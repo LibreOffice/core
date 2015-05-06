@@ -47,13 +47,13 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr,
     if( bHMirr || bVMirr )
     {
         const Size& rGlobalSize = aNewAnim.GetDisplaySizePixel();
-        sal_uIntPtr     nMirrorFlags = 0L;
+        BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
 
         if( bHMirr )
-            nMirrorFlags |= BMP_MIRROR_HORZ;
+            nMirrorFlags |= BmpMirrorFlags::Horizontal;
 
         if( bVMirr )
-            nMirrorFlags |= BMP_MIRROR_VERT;
+            nMirrorFlags |= BmpMirrorFlags::Vertical;
 
         for( sal_uInt16 i = 0, nCount = aNewAnim.Count(); i < nCount; i++ )
         {
@@ -78,17 +78,17 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr,
     return aNewAnim;
 }
 
-Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nMirrorFlags )
+Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags nMirrorFlags )
 {
     Graphic aRetGraphic;
 
-    if( nMirrorFlags )
+    if( nMirrorFlags != BmpMirrorFlags::NONE )
     {
         if( rGraphic.IsAnimated() )
         {
             aRetGraphic = MirrorAnimation( rGraphic.GetAnimation(),
-                                           ( nMirrorFlags & BMP_MIRROR_HORZ ) == BMP_MIRROR_HORZ,
-                                           ( nMirrorFlags & BMP_MIRROR_VERT ) == BMP_MIRROR_VERT );
+                                           bool( nMirrorFlags & BmpMirrorFlags::Horizontal ),
+                                           bool( nMirrorFlags & BmpMirrorFlags::Vertical ) );
         }
         else
         {
@@ -300,7 +300,14 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
                 // mirror?
                 if( ( nFlags & XOUTBMP_MIRROR_HORZ ) || ( nFlags & XOUTBMP_MIRROR_VERT ) )
-                    aGraphic = MirrorGraphic( aGraphic, nFlags );
+                {
+                    BmpMirrorFlags nBmpMirrorFlags = BmpMirrorFlags::NONE;
+                    if( nFlags & XOUTBMP_MIRROR_HORZ )
+                      nBmpMirrorFlags |= BmpMirrorFlags::Horizontal;
+                    if( nFlags & XOUTBMP_MIRROR_VERT )
+                      nBmpMirrorFlags |= BmpMirrorFlags::Vertical;
+                    aGraphic = MirrorGraphic( aGraphic, nBmpMirrorFlags );
+                }
 
                 if( ( GRFILTER_FORMAT_NOTFOUND != nFilter ) && ( aGraphic.GetType() != GRAPHIC_NONE ) )
                 {

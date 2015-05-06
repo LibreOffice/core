@@ -76,21 +76,21 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         // #i19065# Negative sizes have mirror semantics on
         // OutputDevice. BitmapEx and co. have no idea about that, so
         // perform that _before_ doing anything with aBitmapEx.
-        sal_uLong nMirrorFlags(BMP_MIRROR_NONE);
+        BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
         if( aSize.Width() < 0 )
         {
             aSize.Width() *= -1;
             aPoint.X() -= aSize.Width();
-            nMirrorFlags |= BMP_MIRROR_HORZ;
+            nMirrorFlags |= BmpMirrorFlags::Horizontal;
         }
         if( aSize.Height() < 0 )
         {
             aSize.Height() *= -1;
             aPoint.Y() -= aSize.Height();
-            nMirrorFlags |= BMP_MIRROR_VERT;
+            nMirrorFlags |= BmpMirrorFlags::Vertical;
         }
 
-        if( nMirrorFlags != BMP_MIRROR_NONE )
+        if( nMirrorFlags != BmpMirrorFlags::NONE )
         {
             aBitmapEx.Mirror( nMirrorFlags );
         }

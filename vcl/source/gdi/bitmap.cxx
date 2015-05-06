@@ -556,10 +556,10 @@ bool Bitmap::Invert()
     return bRet;
 }
 
-bool Bitmap::Mirror( sal_uLong nMirrorFlags )
+bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
 {
-    bool bHorz = ( ( nMirrorFlags & BMP_MIRROR_HORZ ) == BMP_MIRROR_HORZ );
-    bool bVert = ( ( nMirrorFlags & BMP_MIRROR_VERT ) == BMP_MIRROR_VERT );
+    bool bHorz( nMirrorFlags & BmpMirrorFlags::Horizontal );
+    bool bVert( nMirrorFlags & BmpMirrorFlags::Vertical );
     bool bRet = false;
 
     if( bHorz && !bVert )
@@ -664,7 +664,7 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
     if( !nAngle10    )
         bRet = true;
     else if( 1800L == nAngle10 )
-        bRet = Mirror( BMP_MIRROR_HORZ | BMP_MIRROR_VERT );
+        bRet = Mirror( BmpMirrorFlags::Horizontal | BmpMirrorFlags::Vertical );
     else
     {
         BitmapReadAccess*   pReadAcc = AcquireReadAccess();

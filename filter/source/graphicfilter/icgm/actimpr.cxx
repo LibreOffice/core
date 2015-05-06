@@ -562,12 +562,12 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
         double fdx = pBmpDesc->mndx;
         double fdy = pBmpDesc->mndy;
 
-        sal_uInt32  nMirr = BMP_MIRROR_NONE;
+        BmpMirrorFlags nMirr = BmpMirrorFlags::NONE;
         if ( pBmpDesc->mbVMirror )
-            nMirr |= BMP_MIRROR_VERT;
+            nMirr |= BmpMirrorFlags::Vertical;
         if ( pBmpDesc->mbHMirror )
-            nMirr |= BMP_MIRROR_HORZ;
-        if ( nMirr != BMP_MIRROR_NONE )
+            nMirr |= BmpMirrorFlags::Horizontal;
+        if ( nMirr != BmpMirrorFlags::NONE )
             pBmpDesc->mpBitmap->Mirror( nMirr );
 
         mpCGM->ImplMapPoint( aOrigin );

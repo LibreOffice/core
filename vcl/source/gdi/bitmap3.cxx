@@ -1582,19 +1582,19 @@ bool Bitmap::ImplScaleConvolution(
     }
 
     bool bResult(true);
-    sal_uInt32 nMirrorFlags(BMP_MIRROR_NONE);
+    BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
     bool bMirrorAfter(false);
 
     if(bMirror)
     {
         if(bMirrorHor)
         {
-            nMirrorFlags |= BMP_MIRROR_HORZ;
+            nMirrorFlags |= BmpMirrorFlags::Horizontal;
         }
 
         if(bMirrorVer)
         {
-            nMirrorFlags |= BMP_MIRROR_VERT;
+            nMirrorFlags |= BmpMirrorFlags::Vertical;
         }
 
         const sal_uInt32 nStartSize(nWidth * nHeight);

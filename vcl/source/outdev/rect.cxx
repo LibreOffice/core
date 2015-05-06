@@ -244,16 +244,16 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
         mpAlphaVDev->DrawGrid( rRect, rDist, nFlags );
 }
 
-sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
+BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
 {
-    sal_uLong nMirrFlags = 0;
+    BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
 
     if ( rTwoRect.mnDestWidth < 0 )
     {
         rTwoRect.mnSrcX = rSizePix.Width() - rTwoRect.mnSrcX - rTwoRect.mnSrcWidth;
         rTwoRect.mnDestWidth = -rTwoRect.mnDestWidth;
         rTwoRect.mnDestX -= rTwoRect.mnDestWidth-1;
-        nMirrFlags |= BMP_MIRROR_HORZ;
+        nMirrFlags |= BmpMirrorFlags::Horizontal;
     }
 
     if ( rTwoRect.mnDestHeight < 0 )
@@ -261,7 +261,7 @@ sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
         rTwoRect.mnSrcY = rSizePix.Height() - rTwoRect.mnSrcY - rTwoRect.mnSrcHeight;
         rTwoRect.mnDestHeight = -rTwoRect.mnDestHeight;
         rTwoRect.mnDestY -= rTwoRect.mnDestHeight-1;
-        nMirrFlags |= BMP_MIRROR_VERT;
+        nMirrFlags |= BmpMirrorFlags::Vertical;
     }
 
     if( ( rTwoRect.mnSrcX < 0 ) || ( rTwoRect.mnSrcX >= rSizePix.Width() ) ||
