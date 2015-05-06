@@ -120,12 +120,10 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     }
     else if ( !m_pExtMgrDialog )
     {
-        // FIXME: horrible ...
-        vcl::Window* pParent = DIALOG_NO_PARENT;
         if (m_xParent.is())
-            pParent = VCLUnoHelper::GetWindow(m_xParent);
-
-        m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( pParent, this );
+            m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( VCLUnoHelper::GetWindow(m_xParent), this );
+        else
+            m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( nullptr, this, Dialog::InitFlag::NoParent );
         delete m_pExecuteCmdQueue;
         m_pExecuteCmdQueue = new ExtensionCmdQueue( m_pExtMgrDialog.get(), this, m_xContext );
         m_pExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );

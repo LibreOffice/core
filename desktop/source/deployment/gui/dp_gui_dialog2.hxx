@@ -139,7 +139,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK( startProgress, void * );
 
 public:
-                    ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager );
+                    ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
     virtual        ~ExtMgrDialog();
     virtual void    dispose() SAL_OVERRIDE;
 

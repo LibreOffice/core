@@ -86,7 +86,8 @@ class XMLFilterSettingsDialog : public ModelessDialog
 {
 public:
     XMLFilterSettingsDialog(vcl::Window* pParent,
-        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext);
+        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+        Dialog::InitFlag eFlag = Dialog::InitFlag::Default);
     virtual ~XMLFilterSettingsDialog();
     virtual void dispose() SAL_OVERRIDE;
 

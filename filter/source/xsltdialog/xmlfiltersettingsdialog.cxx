@@ -56,8 +56,9 @@ using namespace com::sun::star::util;
 using ::rtl::Uri;
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext)
-    : ModelessDialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui")
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+    Dialog::InitFlag eFlag)
+    : ModelessDialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui", eFlag)
     , mxContext( rxContext )
     , m_bIsClosable(true)
     , m_sTemplatePath("$(user)/template/")

@@ -57,7 +57,7 @@ namespace toolkit
         ScrollBarVisibility maScrollVis;
         void    lcl_Scroll( long nX, long nY );
     public:
-        ScrollableWrapper( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
+        ScrollableWrapper( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
         virtual ~ScrollableWrapper();
         virtual void dispose() SAL_OVERRIDE;
         virtual void    SetScrollWidth( long nWidth ) SAL_OVERRIDE;

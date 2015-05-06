@@ -68,7 +68,7 @@ int UIPreviewApp::Main()
 
     try
     {
-        VclPtrInstance<Dialog> pDialog(DIALOG_NO_PARENT, WB_STDDIALOG | WB_SIZEABLE);
+        VclPtrInstance<Dialog> pDialog(nullptr, WB_STDDIALOG | WB_SIZEABLE, Dialog::InitFlag::NoParent);
         {
             VclBuilder aBuilder(pDialog, OUString(), uifiles[0]);
             vcl::Window *pRoot = aBuilder.get_widget_root();
