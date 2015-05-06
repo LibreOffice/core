@@ -1076,8 +1076,13 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
-        return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
-
+    {
+        Reference< XShape > xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
+        // AS_CHARACTER shape: vertical orientation default is bottom, MSO default is top.
+        if ( maTypeModel.maPosition != "absolute" && maTypeModel.maPosition != "relative" )
+            PropertySet( xShape ).setAnyProperty( PROP_VertOrient, makeAny(text::VertOrientation::TOP));
+        return xShape;
+    }
     // default: try to create a custom shape
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
 }
