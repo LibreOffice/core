@@ -663,7 +663,7 @@ void GalleryTheme::Actualize( const Link<>& rActualizeLink, GalleryProgress* pPr
 
         try
         {
-            SvStorageRef aTempStorageRef( new SvStorage( false, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE ) );
+            SotStorageRef aTempStorageRef( new SvStorage( false, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE ) );
             aSvDrawStorageRef->CopyTo( aTempStorageRef );
             nStorErr = aSvDrawStorageRef->GetError();
         }
@@ -937,7 +937,7 @@ bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool )
     if( pObject && ( SGA_OBJ_SVDRAW == pObject->eObjKind ) )
     {
         const INetURLObject aURL( ImplGetURL( pObject ) );
-        SvStorageRef        xStor( GetSvDrawStorage() );
+        SotStorageRef        xStor( GetSvDrawStorage() );
 
         if( xStor.Is() )
         {
@@ -959,7 +959,7 @@ bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool )
 bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos )
 {
     INetURLObject   aURL( ImplCreateUniqueURL( SGA_OBJ_SVDRAW ) );
-    SvStorageRef    xStor( GetSvDrawStorage() );
+    SotStorageRef    xStor( GetSvDrawStorage() );
     bool            bRet = false;
 
     if( xStor.Is() )
@@ -1009,7 +1009,7 @@ bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rxMode
     if( pObject && ( SGA_OBJ_SVDRAW == pObject->eObjKind ) )
     {
         const INetURLObject aURL( ImplGetURL( pObject ) );
-        SvStorageRef        xStor( GetSvDrawStorage() );
+        SotStorageRef        xStor( GetSvDrawStorage() );
 
         if( xStor.Is() )
         {
@@ -1055,7 +1055,7 @@ bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rxMode
 bool GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStream, sal_uIntPtr nInsertPos )
 {
     INetURLObject   aURL( ImplCreateUniqueURL( SGA_OBJ_SVDRAW ) );
-    SvStorageRef    xStor( GetSvDrawStorage() );
+    SotStorageRef    xStor( GetSvDrawStorage() );
     bool            bRet = false;
 
     if( xStor.Is() )

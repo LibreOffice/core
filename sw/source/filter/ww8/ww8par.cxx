@@ -578,7 +578,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
     {
-        SvStorageRef xSrc = xSrcStg->OpenSotStorage( sStorageName,
+        SotStorageRef xSrc = xSrcStg->OpenSotStorage( sStorageName,
             STREAM_READWRITE| StreamMode::SHARE_DENYALL );
         OSL_ENSURE(rReader.m_pFormImpl, "No Form Implementation!");
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
@@ -6149,7 +6149,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
 }
 
 bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
-    SvStorageRef& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
+    SotStorageRef& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
 {
     bool bRet = false;
 

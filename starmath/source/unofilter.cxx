@@ -75,7 +75,7 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
         {
             if (SotStorage::IsStorageFile(pStream.get()))
             {
-                SvStorageRef aStorage(new SotStorage(pStream.get(), false));
+                SotStorageRef aStorage(new SotStorage(pStream.get(), false));
                 // Is this a MathType Storage?
                 if (aStorage->IsStream(OUString("Equation Native")))
                 {

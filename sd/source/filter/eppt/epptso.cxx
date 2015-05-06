@@ -2505,7 +2505,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 ::com::sun::star::awt::Size     aSize;
                 OUString          aControlName;
-                SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), true ) );
+                SotStorageRef    xTemp( new SvStorage( new SvMemoryStream(), true ) );
                 if ( oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xTemp, aXControlModel, aSize, aControlName ) )
                 {
                     OUString aUserName( xTemp->GetUserName() );

@@ -3159,7 +3159,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     aSize.Height = TWIPS_TO_MM(aRect.Bottom());
 
     //Open the ObjectPool
-    SvStorageRef xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(
+    SotStorageRef xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(
         OUString(SL::aObjectPool), STREAM_READWRITE |
         StreamMode::SHARE_DENYALL);
 
@@ -3167,7 +3167,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     OUStringBuffer sStorageName;
     sal_uInt32 nObjId = GenerateObjectID();
     sStorageName.append('_').append( static_cast<sal_Int64>( nObjId ));
-    SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear(),
+    SotStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear(),
                  STREAM_READWRITE|StreamMode::SHARE_DENYALL);
 
     if (!xOleStg.Is())

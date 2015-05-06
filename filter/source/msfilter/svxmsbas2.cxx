@@ -64,7 +64,7 @@ sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
 sal_uLong SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
 {
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
-    SvStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),
+    SotStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),
                     StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL ));
     return ( xVBAStg.Is() && !xVBAStg->GetError() )
                     ? ERRCODE_SVX_VBASIC_STORAGE_EXIST

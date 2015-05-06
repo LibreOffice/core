@@ -761,7 +761,7 @@ private:
     std::map<sal_uInt32,OString> aOldEscherBlipCache;
 
     virtual bool GetOLEStorageName( long nOLEId, OUString& rStorageName,
-        SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const SAL_OVERRIDE;
+        SotStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const SAL_OVERRIDE;
     virtual bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const SAL_OVERRIDE;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
@@ -1889,7 +1889,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
-    static bool ImportOleWMF( SvStorageRef xSrc1, GDIMetaFile &rWMF,
+    static bool ImportOleWMF( SotStorageRef xSrc1, GDIMetaFile &rWMF,
         long &rX, long &rY);
     static ColorData GetCol(sal_uInt8 nIco);
 

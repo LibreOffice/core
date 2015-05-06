@@ -6501,7 +6501,7 @@ void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader
     return;  // will be overridden by SJ in Draw
 }
 
-bool SvxMSDffManager::GetOLEStorageName( long /* nOLEId */, OUString&, SvStorageRef&, uno::Reference < embed::XStorage >& ) const
+bool SvxMSDffManager::GetOLEStorageName( long /* nOLEId */, OUString&, SotStorageRef&, uno::Reference < embed::XStorage >& ) const
 {
     return false;
 }
@@ -6521,7 +6521,7 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
 {
     SdrObject* pRet = 0;
     OUString sStorageName;
-    SvStorageRef xSrcStg;
+    SotStorageRef xSrcStg;
     ErrCode nError = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
@@ -7054,7 +7054,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         aDstStgName += OUString::number( ++nMSOleObjCntr );
 
         {
-            SvStorageRef xObjStg = rSrcStorage->OpenSotStorage( rStorageName,
+            SotStorageRef xObjStg = rSrcStorage->OpenSotStorage( rStorageName,
                                 STREAM_READWRITE| StreamMode::SHARE_DENYALL );
             if( xObjStg.Is()  )
             {
@@ -7144,7 +7144,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             else
             {
                 // or is it an OLE-1 Stream in the DataStream?
-                SvStorageRef xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName );
+                SotStorageRef xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName );
                 //TODO/MBA: remove metafile conversion from ConvertToOle2
                 //when is this code used?!
                 GDIMetaFile aMtf;

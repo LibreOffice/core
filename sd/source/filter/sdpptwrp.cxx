@@ -39,7 +39,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( SAL_CALL *ExportPPTPointer )( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
+typedef sal_Bool ( SAL_CALL *ExportPPTPointer )( const std::vector< com::sun::star::beans::PropertyValue >&, SotStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
@@ -50,7 +50,7 @@ typedef sal_Bool ( SAL_CALL *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*&
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" sal_Bool ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
+extern "C" sal_Bool ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >&, SotStorageRef&,
                                Reference< XModel > &,
                                Reference< XStatusIndicator > &,
                                SvMemoryStream*, sal_uInt32 nCnvrtFlags );
@@ -82,7 +82,7 @@ bool SdPPTFilter::Import()
     {
         /* check if there is a dualstorage, then the
         document is probably a PPT95 containing PPT97 */
-        SvStorageRef xDualStorage;
+        SotStorageRef xDualStorage;
         OUString sDualStorage( "PP97_DUALSTORAGE"  );
         if ( pStorage->IsContained( sDualStorage ) )
         {

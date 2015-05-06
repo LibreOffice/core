@@ -94,7 +94,7 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 }
 
 bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
-    SvStorageRef xOleStg, SvStorageRef xObjStg, OUString &rStorageName,
+    SotStorageRef xOleStg, SotStorageRef xObjStg, OUString &rStorageName,
     SwOLENode *pOLENd)
 {
     bool bGraphicNeeded = false;
@@ -227,7 +227,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     }
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
 
-    SvStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
+    SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
         OUString(SL::aObjectPool), STREAM_READWRITE |
         StreamMode::SHARE_DENYALL );
 
@@ -250,7 +250,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             Set_UInt32(pDataAdr, nPictureId);
             OUString sStorageName('_');
             sStorageName += OUString::number( nPictureId );
-            SvStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
+            SotStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
                                 STREAM_READWRITE| StreamMode::SHARE_DENYALL );
             if( xOleStg.Is() )
             {

@@ -724,7 +724,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
         {
             if ( SotStorage::IsStorageFile( pStream ) )
             {
-                SvStorageRef aStorage = new SotStorage( pStream, false );
+                SotStorageRef aStorage = new SotStorage( pStream, false );
                 if ( aStorage->IsStream(OUString("Equation Native")) )
                 {
                     // is this a MathType Storage?

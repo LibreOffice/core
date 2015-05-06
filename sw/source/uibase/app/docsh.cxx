@@ -545,7 +545,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
         if ( bSave )
         {
-            SvStorageRef xStg = new SotStorage( rMedium.GetOutStream(), false );
+            SotStorageRef xStg = new SotStorage( rMedium.GetOutStream(), false );
             OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {

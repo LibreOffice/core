@@ -959,7 +959,7 @@ protected:
     WW8AttributeOutput *m_pAttrOutput;  ///< Converting attributes to stream data
 
 private:
-    SvStorageRef       xEscherStg;      /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj
+    SotStorageRef       xEscherStg;      /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj
 
 public:
     /// Access to the attribute output class.
@@ -1049,8 +1049,8 @@ public:
     void StartCommentOutput( const OUString& rName );
     void EndCommentOutput(   const OUString& rName );
     void OutGrf(const sw::Frame &rFrame);
-    bool TestOleNeedsGraphic(const SwAttrSet& rSet, SvStorageRef xOleStg,
-        SvStorageRef xObjStg, OUString &rStorageName, SwOLENode *pOLENd);
+    bool TestOleNeedsGraphic(const SwAttrSet& rSet, SotStorageRef xOleStg,
+        SotStorageRef xObjStg, OUString &rStorageName, SwOLENode *pOLENd);
 
     virtual void AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) SAL_OVERRIDE;
