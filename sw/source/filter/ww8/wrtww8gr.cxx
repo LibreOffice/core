@@ -269,7 +269,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                         if ( !xOleStg->IsStream( aObjInfo ) )
                         {
                             const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
-                            SotStorageStreamRef rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
+                            tools::SvRef<SotStorageStream> rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
                             if ( rObjInfoStream.Is() && !rObjInfoStream->GetError() )
                             {
                                 rObjInfoStream->Write( pObjInfoData, sizeof( pObjInfoData ) );

@@ -207,8 +207,8 @@ public:
     bool                        GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool bProgress = false );
     bool                        InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
-    SAL_DLLPRIVATE bool         GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rModelStreamRef, bool bProgress = false );
-    SAL_DLLPRIVATE bool         InsertModelStream( const SotStorageStreamRef& rModelStream, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    SAL_DLLPRIVATE bool         GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream>& rModelStreamRef, bool bProgress = false );
+    SAL_DLLPRIVATE bool         InsertModelStream( const tools::SvRef<SotStorageStream>& rModelStream, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
     SAL_DLLPRIVATE bool         GetURL( sal_uIntPtr nPos, INetURLObject& rURL, bool bProgress = false );
     bool                        InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );

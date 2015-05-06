@@ -686,7 +686,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                     {
                         if(pIAOHandle->getOverlayObjectList().isHitPixel(rEvt.maPosPixel))
                         {
-                            SotStorageStreamRef xStm;
+                            ::tools::SvRef<SotStorageStream> xStm;
 
                             if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::XFA, xStm ) && xStm.Is() )
                             {

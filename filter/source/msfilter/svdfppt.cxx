@@ -1840,7 +1840,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                         {
                             xObjStor->SetClass( SvGlobalName( pObjStor->GetClassId() ), pObjStor->GetFormat(), pObjStor->GetUserName() );
                         }
-                        SotStorageStreamRef xSrcTst = xObjStor->OpenSotStream( "\1Ole" );
+                        tools::SvRef<SotStorageStream> xSrcTst = xObjStor->OpenSotStream( "\1Ole" );
                         if ( xSrcTst.Is() )
                         {
                             sal_uInt8 aTestA[ 10 ];
@@ -2031,7 +2031,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                     tools::SvRef<SotStorage> xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
                                                     if ( xSubVBA.Is() && ( xSubVBA->GetError() == SVSTREAM_OK ) )
                                                     {
-                                                        SotStorageStreamRef xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
+                                                        tools::SvRef<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
                                                         if ( xOriginal.Is() && ( xOriginal->GetError() == SVSTREAM_OK ) )
                                                         {
                                                             if ( nPersistPtr && ( nPersistPtr < nPersistPtrAnz ) )

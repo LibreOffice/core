@@ -55,7 +55,7 @@ private:
     OUString                    sOldUsername;
 
     ScChangeTrack*              pChangeTrack;
-    SotStorageStreamRef          xInStrm;        // input stream
+    tools::SvRef<SotStorageStream>          xInStrm;        // input stream
     XclImpStream*               pStrm;          // stream import class
     sal_uInt16                  nTabIdCount;
     bool                        bGlobExit;      // global exit loop

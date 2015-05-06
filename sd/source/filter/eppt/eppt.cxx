@@ -1288,7 +1288,7 @@ void PPTWriter::ImplWriteOLE( )
                         xTempStorage->CopyTo( xCleanStorage );
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
-                        SotStorageStreamRef xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
+                        tools::SvRef<SotStorageStream> xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
                         xStm->WriteUInt32( 0 )        // no ClipboardId
                                .WriteUInt32( 4 )        // no target device
                                .WriteUInt32( 1 )        // aspect ratio
@@ -1472,7 +1472,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocS
         tools::SvRef<SotStorage> xOverhead2 = xOverhead->OpenSotStorage( OUString( "_MS_VBA_Overhead") );
         if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
         {
-            SotStorageStreamRef xTemp = xOverhead2->OpenSotStream( OUString( "_MS_VBA_Overhead2") );
+            tools::SvRef<SotStorageStream> xTemp = xOverhead2->OpenSotStream( OUString( "_MS_VBA_Overhead2") );
             if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
             {
                 sal_uInt32 nLen = xTemp->GetSize();

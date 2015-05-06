@@ -554,7 +554,7 @@ void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
 
 int MathType::Parse(SotStorage *pStor)
 {
-    SotStorageStreamRef xSrc = pStor->OpenSotStream(
+    tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
         OUString("Equation Native"),
         STREAM_STD_READ | StreamMode::NOCREATE);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
@@ -1906,7 +1906,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
-        SotStorageStreamRef xStor( pStor->OpenSotStream(OUString("\1CompObj")));
+        tools::SvRef<SotStorageStream> xStor( pStor->OpenSotStream(OUString("\1CompObj")));
         xStor->Write(aCompObj,sizeof(aCompObj));
 
         static sal_uInt8 const aOle[] = {
@@ -1914,12 +1914,12 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00
             };
-        SotStorageStreamRef xStor2( pStor->OpenSotStream(OUString("\1Ole")));
+        tools::SvRef<SotStorageStream> xStor2( pStor->OpenSotStream(OUString("\1Ole")));
         xStor2->Write(aOle,sizeof(aOle));
         xStor.Clear();
         xStor2.Clear();
 
-        SotStorageStreamRef xSrc = pStor->OpenSotStream(OUString("Equation Native"));
+        tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(OUString("Equation Native"));
         if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
             return 0;
 

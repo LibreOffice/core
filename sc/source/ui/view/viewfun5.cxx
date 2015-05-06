@@ -296,7 +296,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             aObj.SetOverwriting( true );
 
             OUString aStr;
-            SotStorageStreamRef xStream;
+            tools::SvRef<SotStorageStream> xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
             {
                 if (nFormatId == SotClipboardFormatId::HTML)
@@ -471,7 +471,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     }
     else if (nFormatId == SotClipboardFormatId::SVXB)
     {
-        SotStorageStreamRef xStm;
+        tools::SvRef<SotStorageStream> xStm;
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
         {
             Graphic aGraphic;
@@ -481,7 +481,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     }
     else if ( nFormatId == SotClipboardFormatId::DRAWING )
     {
-        SotStorageStreamRef xStm;
+        tools::SvRef<SotStorageStream> xStm;
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
         {
             MakeDrawLayer();    // before loading model, so 3D factory has been created

@@ -4849,10 +4849,10 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         aBasicImporter.import( m_pDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
-        SotStorageStreamRef refMainStream = rRoot->OpenSotStream( OUString( "WordDocument" ));
+        tools::SvRef<SotStorageStream> refMainStream = rRoot->OpenSotStream( OUString( "WordDocument" ));
         refMainStream->SetEndian(SvStreamEndian::LITTLE);
         WW8Fib aWwFib( *refMainStream, 8 );
-        SotStorageStreamRef xTableStream = rRoot->OpenSotStream(OUString::createFromAscii( aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
+        tools::SvRef<SotStorageStream> xTableStream = rRoot->OpenSotStream(OUString::createFromAscii( aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
@@ -5352,8 +5352,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     return nErrRet;
 }
 
-sal_uLong SwWW8ImplReader::SetSubStreams(SotStorageStreamRef &rTableStream,
-    SotStorageStreamRef &rDataStream)
+sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream,
+    tools::SvRef<SotStorageStream> &rDataStream)
 {
     sal_uLong nErrRet = 0;
     // 6 stands for "6 OR 7", 7 stands for "ONLY 7"
@@ -5584,7 +5584,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGlos
     if (m_pWwFib->nFibError)
         nErrRet = ERR_SWG_READ_ERROR;
 
-    SotStorageStreamRef xTableStream, xDataStream;
+    tools::SvRef<SotStorageStream> xTableStream, xDataStream;
 
     if (!nErrRet)
         nErrRet = SetSubStreams(xTableStream, xDataStream);
@@ -6027,7 +6027,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
     return new WW8Reader();
 }
 
-sal_uLong WW8Reader::OpenMainStream( SotStorageStreamRef& rRef, sal_uInt16& rBuffSize )
+sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE( pStg, "Where is my Storage?" );
@@ -6053,7 +6053,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
     sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !bInsertMode; // New Doc (no inserting)
 
-    SotStorageStreamRef refStrm; // So that no one else can steal the Stream
+    tools::SvRef<SotStorageStream> refStrm; // So that no one else can steal the Stream
     SvStream* pIn = pStrm;
 
     sal_uLong nRet = 0;
@@ -6139,7 +6139,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
     WW8Reader *pThis = const_cast<WW8Reader *>(this);
 
     sal_uInt16 nOldBuffSize = 32768;
-    SotStorageStreamRef refStrm;
+    tools::SvRef<SotStorageStream> refStrm;
     if (!pThis->OpenMainStream(refStrm, nOldBuffSize))
     {
         WW8Glossary aGloss( refStrm, 8, pStg );

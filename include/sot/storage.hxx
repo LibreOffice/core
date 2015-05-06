@@ -91,11 +91,6 @@ public:
     virtual sal_uInt64 remainingSize() SAL_OVERRIDE;
 };
 
-#ifndef SOT_DECL_SOTSTORAGESTREAM_DEFINED
-#define SOT_DECL_SOTSTORAGESTREAM_DEFINED
-typedef tools::SvRef<SotStorageStream> SotStorageStreamRef;
-#endif
-
 namespace ucbhelper
 {
     class Content;

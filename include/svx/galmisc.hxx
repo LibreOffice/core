@@ -163,7 +163,7 @@ private:
     GalleryTheme*                   mpTheme;
     SgaObjKind                      meObjectKind;
     sal_uInt32                      mnObjectPos;
-    SotStorageStreamRef             mxModelStream;
+    tools::SvRef<SotStorageStream>             mxModelStream;
     GraphicObject*                  mpGraphicObject;
     ImageMap*                       mpImageMap;
     INetURLObject*                  mpURL;
@@ -178,7 +178,7 @@ protected:
     // TransferableHelper
     virtual void                    AddSupportedFormats() SAL_OVERRIDE;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-    virtual bool                    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual bool                    WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
     virtual void                    DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
     virtual void                    ObjectReleased() SAL_OVERRIDE;
 

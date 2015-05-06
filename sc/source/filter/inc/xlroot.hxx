@@ -199,9 +199,9 @@ public:
     /** Tries to open a storage as child of the root storage for reading or writing. */
     tools::SvRef<SotStorage>       OpenStorage( const OUString& rStrgName ) const;
     /** Tries to open a new stream in the specified storage for reading or writing. */
-    SotStorageStreamRef OpenStream( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName ) const;
+    tools::SvRef<SotStorageStream> OpenStream( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName ) const;
     /** Tries to open a new stream in the root storage for reading or writing. */
-    SotStorageStreamRef OpenStream( const OUString& rStrmName ) const;
+    tools::SvRef<SotStorageStream> OpenStream( const OUString& rStrmName ) const;
 
     /** Returns the destination document (import) or source document (export). */
     ScDocument& GetDoc() const;

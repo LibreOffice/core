@@ -546,7 +546,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
 
         // #91626 Save all stream data to save it unmodified if basic isn't modified
         // in an 6.0+ office. So also the old basic dialogs can be saved.
-        SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( OUString(szManagerStream), eStreamReadMode );
+        tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( OUString(szManagerStream), eStreamReadMode );
         mpImpl->mpManagerStream = new SvMemoryStream();
         static_cast<SvStream*>(&xManagerStream)->ReadStream( *mpImpl->mpManagerStream );
 
@@ -558,7 +558,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
             for( sal_uInt16 nL = 0; nL < nLibs; nL++ )
             {
                 BasicLibInfo& rInfo = mpImpl->aLibs[nL];
-                SotStorageStreamRef xBasicStream = xBasicStorage->OpenSotStream( rInfo.GetLibName(), eStreamReadMode );
+                tools::SvRef<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( rInfo.GetLibName(), eStreamReadMode );
                 mpImpl->mppLibStreams[nL] = new SvMemoryStream();
                 static_cast<SvStream*>(&xBasicStream)->ReadStream( *( mpImpl->mppLibStreams[nL] ) );
             }
@@ -733,7 +733,7 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
 
 void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadLibs )
 {
-    SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( OUString(szManagerStream), eStreamReadMode );
+    tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( OUString(szManagerStream), eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
     // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -825,7 +825,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
 
 void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 {
-    SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( OUString(szOldManagerStream), eStreamReadMode );
+    tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( OUString(szOldManagerStream), eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.getLength(), "No Storage Name!" );
@@ -993,7 +993,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     else
     {
         // In the Basic-Storage every lib is in a Stream...
-        SotStorageStreamRef xBasicStream = xBasicStorage->OpenSotStream( pLibInfo->GetLibName(), eStreamReadMode );
+        tools::SvRef<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( pLibInfo->GetLibName(), eStreamReadMode );
         if ( !xBasicStream.Is() || xBasicStream->GetError() )
         {
             StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD , pLibInfo->GetLibName(), ERRCODE_BUTTON_OK );

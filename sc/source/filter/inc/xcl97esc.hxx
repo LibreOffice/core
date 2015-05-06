@@ -106,7 +106,7 @@ public:
                             const Rectangle* pChildAnchor );
 
 private:
-    SotStorageStreamRef  mxCtlsStrm;         /// The 'Ctls' stream.
+    tools::SvRef<SotStorageStream>  mxCtlsStrm;         /// The 'Ctls' stream.
     /** Creates a TBX form control OBJ record from the passed form control. */
     XclExpTbxControlObj* CreateTBXCtrlObj(
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,

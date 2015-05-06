@@ -2007,7 +2007,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 
         if( rStg.Is() && rStg->IsStream( sStrmName ) )
         {
-            SotStorageStreamRef xStrm = rStg->OpenSotStream( sTmp,
+            tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sTmp,
                 ( StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE ) );
             if( SVSTREAM_OK != xStrm->GetError())
             {
@@ -2081,7 +2081,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
         }
         else
         {
-            SotStorageStreamRef xStrm = rStg->OpenSotStream( sStrmName,
+            tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
                     ( StreamMode::READ | StreamMode::WRITE | StreamMode::SHARE_DENYWRITE ) );
             if( xStrm.Is() )
             {
@@ -2452,7 +2452,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
     bool bRet = true, bRemove = !pAutocorr_List || pAutocorr_List->empty();
     if( !bRemove )
     {
-        SotStorageStreamRef refList = rStg.OpenSotStream( sStrmName,
+        tools::SvRef<SotStorageStream> refList = rStg.OpenSotStream( sStrmName,
                     ( StreamMode::READ | StreamMode::WRITE | StreamMode::SHARE_DENYWRITE ) );
         if( refList.Is() )
         {

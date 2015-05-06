@@ -944,7 +944,7 @@ bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
 bool TransferableHelper::SetObject( void* pUserObject, SotClipboardFormatId nUserObjectId, const DataFlavor& rFlavor )
 {
-    SotStorageStreamRef xStm( new SotStorageStream( OUString() ) );
+    tools::SvRef<SotStorageStream> xStm( new SotStorageStream( OUString() ) );
 
     xStm->SetVersion( SOFFICE_FILEFORMAT_50 );
 
@@ -973,7 +973,7 @@ bool TransferableHelper::SetObject( void* pUserObject, SotClipboardFormatId nUse
 
 
 
-bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, SotClipboardFormatId, const DataFlavor& )
+bool TransferableHelper::WriteObject( tools::SvRef<SotStorageStream>&, void*, SotClipboardFormatId, const DataFlavor& )
 {
     OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
     return false;
@@ -1663,7 +1663,7 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx
 
 bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx )
 {
-    SotStorageStreamRef xStm;
+    tools::SvRef<SotStorageStream> xStm;
     DataFlavor aSubstFlavor;
     bool bRet(GetSotStorageStream(rFlavor, xStm));
     bool bSuppressPNG(false); // #122982# If PNG stream not accessed, but BMP one, suppress trying to load PNG
@@ -1760,7 +1760,7 @@ bool TransferableDataHelper::GetGDIMetaFile(SotClipboardFormatId nFormat, GDIMet
 
 bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf )
 {
-    SotStorageStreamRef xStm;
+    tools::SvRef<SotStorageStream> xStm;
     DataFlavor          aSubstFlavor;
     bool                bRet = false;
 
@@ -1857,7 +1857,7 @@ bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::D
     }
     else
     {
-        SotStorageStreamRef xStm;
+        tools::SvRef<SotStorageStream> xStm;
 
         if( GetSotStorageStream( rFlavor, xStm ) )
         {
@@ -1881,7 +1881,7 @@ bool TransferableDataHelper::GetImageMap( SotClipboardFormatId nFormat, ImageMap
 
 bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap )
 {
-    SotStorageStreamRef xStm;
+    tools::SvRef<SotStorageStream> xStm;
     bool                bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
@@ -2068,7 +2068,7 @@ bool TransferableDataHelper::GetINetImage(
         const ::com::sun::star::datatransfer::DataFlavor& rFlavor,
         INetImage& rINtImg )
 {
-    SotStorageStreamRef xStm;
+    tools::SvRef<SotStorageStream> xStm;
     bool bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
@@ -2091,7 +2091,7 @@ bool TransferableDataHelper::GetFileList(
             const ::com::sun::star::datatransfer::DataFlavor&,
             FileList& rFileList )
 {
-    SotStorageStreamRef xStm;
+    tools::SvRef<SotStorageStream> xStm;
     bool                bRet = false;
 
     for( sal_uInt32 i = 0, nFormatCount = GetFormatCount(); ( i < nFormatCount ) && !bRet; ++i )
@@ -2148,7 +2148,7 @@ Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavo
 
 
 
-bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, SotStorageStreamRef& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotStorageStream>& rxStream )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSotStorageStream( aFlavor, rxStream ) );
@@ -2156,7 +2156,7 @@ bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, 
 
 
 
-bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, SotStorageStreamRef& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, tools::SvRef<SotStorageStream>& rxStream )
 {
     Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 

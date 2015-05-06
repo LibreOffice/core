@@ -450,7 +450,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bOK;
 }
 
-bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
+bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream

@@ -67,7 +67,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
 
     // try to open an OLE storage
     tools::SvRef<SotStorage> xRootStrg;
-    SotStorageStreamRef xStrgStrm;
+    tools::SvRef<SotStorageStream> xStrgStrm;
     if( SotStorage::IsStorageFile( pMedStrm ) )
     {
         xRootStrg = new SotStorage( pMedStrm, false );
@@ -79,11 +79,11 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     if( xRootStrg.Is() )
     {
         // try to open the "Book" stream
-        SotStorageStreamRef xBookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
+        tools::SvRef<SotStorageStream> xBookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
         XclBiff eBookBiff = xBookStrm.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm ) : EXC_BIFF_UNKNOWN;
 
         // try to open the "Workbook" stream
-        SotStorageStreamRef xWorkbookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
+        tools::SvRef<SotStorageStream> xWorkbookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
         XclBiff eWorkbookBiff = xWorkbookStrm.Is() ?  XclImpStream::DetectBiffVersion( *xWorkbookStrm ) : EXC_BIFF_UNKNOWN;
 
         // decide which stream to use
@@ -164,7 +164,7 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     }
 
     // open the "Book"/"Workbook" stream
-    SotStorageStreamRef xStrgStrm = ScfTools::OpenStorageStreamWrite( xRootStrg, aStrmName );
+    tools::SvRef<SotStorageStream> xStrgStrm = ScfTools::OpenStorageStreamWrite( xRootStrg, aStrmName );
     if( !xStrgStrm.Is() || xStrgStrm->GetError() ) return eERR_OPEN;
 
     xStrgStrm->SetBufferSize( 0x8000 );     // still needed?

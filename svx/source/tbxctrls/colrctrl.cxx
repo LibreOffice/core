@@ -52,7 +52,7 @@ protected:
 
     virtual void            AddSupportedFormats() SAL_OVERRIDE;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-    virtual bool            WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual bool            WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
 
 public:
 
@@ -82,7 +82,7 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
     return bRet;
 }
 
-bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, SotClipboardFormatId, const ::com::sun::star::datatransfer::DataFlavor&  )
+bool SvxColorValueSetData::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void*, SotClipboardFormatId, const ::com::sun::star::datatransfer::DataFlavor&  )
 {
     WriteXFillExchangeData( *rxOStm, maData );
     return( rxOStm->GetError() == ERRCODE_NONE );

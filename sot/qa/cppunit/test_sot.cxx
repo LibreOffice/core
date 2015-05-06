@@ -54,7 +54,7 @@ namespace
             return true;
 
         {   // Read the data in one block
-            SotStorageStreamRef xStream( xObjStor->OpenSotStream( rStreamName ) );
+            tools::SvRef<SotStorageStream> xStream( xObjStor->OpenSotStream( rStreamName ) );
             xStream->Seek(0);
             sal_uLong nRemaining = xStream->GetSize() - xStream->Tell();
 
@@ -66,7 +66,7 @@ namespace
 //            fprintf(stderr, "readable size %d vs size %d remaining %d\n", nReadableSize, nSize, nReadableSize);
         }
         {   // Read the data backwards as well
-            SotStorageStreamRef xStream( xObjStor->OpenSotStream( rStreamName ) );
+            tools::SvRef<SotStorageStream> xStream( xObjStor->OpenSotStream( rStreamName ) );
             for( sal_uLong i = nReadableSize; i > 0; i-- )
             {
                 CPPUNIT_ASSERT_MESSAGE( "sot reading error", !xStream->GetError() );
@@ -129,7 +129,7 @@ namespace
         tools::SvRef<SotStorage> xObjStor = new SotStorage(aStream);
         CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",
                                xObjStor.Is() && !xObjStor->GetError());
-        SotStorageStreamRef xStream = xObjStor->OpenSotStream("Book");
+        tools::SvRef<SotStorageStream> xStream = xObjStor->OpenSotStream("Book");
         CPPUNIT_ASSERT_MESSAGE("stream failed to open",
                                xStream.Is() && !xObjStor->GetError());
         CPPUNIT_ASSERT_MESSAGE("error in opened stream", !xStream->GetError());

@@ -33,7 +33,7 @@
 #include "ww8glsy.hxx"
 #include "ww8par.hxx"
 
-WW8Glossary::WW8Glossary(SotStorageStreamRef &refStrm, sal_uInt8 nVersion,
+WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion,
     SotStorage *pStg)
     : pGlossary(0), rStrm(refStrm), xStg(pStg), nStrings(0)
 {

@@ -254,14 +254,14 @@ tools::SvRef<SotStorage> XclRoot::OpenStorage( const OUString& rStrgName ) const
     return OpenStorage( GetRootStorage(), rStrgName );
 }
 
-SotStorageStreamRef XclRoot::OpenStream( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName ) const
+tools::SvRef<SotStorageStream> XclRoot::OpenStream( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageStreamWrite( xStrg, rStrmName ) :
         ScfTools::OpenStorageStreamRead( xStrg, rStrmName );
 }
 
-SotStorageStreamRef XclRoot::OpenStream( const OUString& rStrmName ) const
+tools::SvRef<SotStorageStream> XclRoot::OpenStream( const OUString& rStrmName ) const
 {
     return OpenStream( GetRootStorage(), rStrmName );
 }

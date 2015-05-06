@@ -77,7 +77,7 @@ typedef struct
 
 typedef struct
 {
-    SotStorageStreamRef ref;
+    tools::SvRef<SotStorageStream> ref;
 } SotStorageStreamRefWrapper;
 
 namespace
@@ -143,13 +143,13 @@ struct OLEStorageImpl
 
     void initialize(SvStream *pStream);
 
-    SotStorageStreamRef getStream(const rtl::OUString &rPath);
-    SotStorageStreamRef getStream(std::size_t nId);
+    tools::SvRef<SotStorageStream> getStream(const rtl::OUString &rPath);
+    tools::SvRef<SotStorageStream> getStream(std::size_t nId);
 
 private:
     void traverse(const tools::SvRef<SotStorage> &rStorage, const rtl::OUString &rPath);
 
-    SotStorageStreamRef createStream(const rtl::OUString &rPath);
+    tools::SvRef<SotStorageStream> createStream(const rtl::OUString &rPath);
 
 public:
     SotStorageRefWrapper mxRootStorage; //< root storage of the OLE2
@@ -186,7 +186,7 @@ void OLEStorageImpl::initialize(SvStream *const pStream)
     mbInitialized = true;
 }
 
-SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
+tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const rtl::OUString &rPath)
 {
     const rtl::OUString aPath(lcl_normalizeSubStreamPath(rPath));
     NameMap_t::iterator aIt = maNameMap.find(aPath);
@@ -195,7 +195,7 @@ SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
     // Later, given how libcdr's zip stream implementation behaves,
     // return the first stream in the storage if there is one.
     if (maNameMap.end() == aIt)
-        return SotStorageStreamRef();
+        return tools::SvRef<SotStorageStream>();
 
     if (!maStreams[aIt->second].stream.ref.Is())
         maStreams[aIt->second].stream.ref = createStream(aPath);
@@ -203,7 +203,7 @@ SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
     return maStreams[aIt->second].stream.ref;
 }
 
-SotStorageStreamRef OLEStorageImpl::getStream(const std::size_t nId)
+tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const std::size_t nId)
 {
     if (!maStreams[nId].stream.ref.Is())
         maStreams[nId].stream.ref = createStream(rtl::OStringToOUString(maStreams[nId].name, RTL_TEXTENCODING_UTF8));
@@ -241,7 +241,7 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage> &rStorage, const rt
     }
 }
 
-SotStorageStreamRef OLEStorageImpl::createStream(const rtl::OUString &rPath)
+tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const rtl::OUString &rPath)
 {
     const sal_Int32 nDelim = rPath.lastIndexOf(sal_Unicode('/'));
 
@@ -425,7 +425,7 @@ private:
     bool isZip();
     void ensureZipIsInitialized();
 
-    static librevenge::RVNGInputStream *createWPXStream(const SotStorageStreamRef &rxStorage);
+    static librevenge::RVNGInputStream *createWPXStream(const tools::SvRef<SotStorageStream> &rxStorage);
     static librevenge::RVNGInputStream *createWPXStream(const Reference<XInputStream> &rxStream);
 
 private:
@@ -732,7 +732,7 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
     }
 }
 
-librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStorageStreamRef &rxStorage)
+librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const tools::SvRef<SotStorageStream> &rxStorage)
 {
     if (rxStorage.Is())
     {

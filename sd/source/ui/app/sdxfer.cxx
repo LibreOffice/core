@@ -571,7 +571,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     return bOK;
 }
 
-bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, SotClipboardFormatId nObjectType, const DataFlavor& )
+bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pObject, SotClipboardFormatId nObjectType, const DataFlavor& )
 {
     bool bRet = false;
 

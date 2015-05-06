@@ -281,7 +281,7 @@ class SW_DLLPUBLIC StgReader : public Reader
     OUString aFltName;
 
 protected:
-    sal_uLong OpenMainStream( SotStorageStreamRef& rRef, sal_uInt16& rBuffSize );
+    sal_uLong OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize );
 public:
     virtual int GetReaderType() SAL_OVERRIDE;
     OUString GetFltName() { return aFltName; }

@@ -262,7 +262,7 @@ void ChartController::executeDispatch_Paste()
         {
             if ( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
             {
-                SotStorageStreamRef xStm;
+                tools::SvRef<SotStorageStream> xStm;
                 if ( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
                 {
                     xStm->Seek( 0 );
@@ -277,7 +277,7 @@ void ChartController::executeDispatch_Paste()
             else if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
             {
                 // graphic exchange format (graphic manager bitmap format?)
-                SotStorageStreamRef xStm;
+                tools::SvRef<SotStorageStream> xStm;
                 if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ))
                     ReadGraphic( *xStm, aGraphic );
             }

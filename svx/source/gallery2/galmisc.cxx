@@ -541,7 +541,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     return bRet;
 }
 
-bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
+bool GalleryTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject,
                                            SotClipboardFormatId, const datatransfer::DataFlavor& )
 {
     bool bRet = false;

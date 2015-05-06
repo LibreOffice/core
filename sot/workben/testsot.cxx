@@ -31,7 +31,7 @@ int main (int argc, sal_Char **argv)
     tools::SvRef<SotStorage> xStor = new SotStorage( "c:\\temp\\video.sdb" );
     tools::SvRef<SotStorage> x2Stor = xStor->OpenSotStorage( "1117" );
 
-    SotStorageStreamRef xStm = x2Stor->OpenSotStream( "Genres", STREAM_STD_READWRITE | StreamMode::TRUNC);
+    tools::SvRef<SotStorageStream> xStm = x2Stor->OpenSotStream( "Genres", STREAM_STD_READWRITE | StreamMode::TRUNC);
     //BYTE szData[100];
     //xStm->Write( szData, 100 );
     UINT32 nSize = xStm->GetSize();

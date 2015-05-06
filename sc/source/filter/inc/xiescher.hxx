@@ -1034,7 +1034,7 @@ private:
     typedef ::std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
     const OUString maStdFormName;    /// Standard name of control forms.
-    SotStorageStreamRef mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
+    tools::SvRef<SotStorageStream> mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
     XclImpDffConvDataStack maDataStack;     /// Stack for registered drawing managers.
     sal_uInt32          mnOleImpFlags;      /// Application OLE import settings.

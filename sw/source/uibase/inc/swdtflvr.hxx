@@ -136,7 +136,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 protected:
     virtual void        AddSupportedFormats() SAL_OVERRIDE;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-    virtual bool        WriteObject( SotStorageStreamRef& rxOStm,
+    virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm,
                                         void* pUserObject,
                                         SotClipboardFormatId nUserObjectId,
                                         const css::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;

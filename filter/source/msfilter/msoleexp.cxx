@@ -224,7 +224,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
             rDestStg.SetClass( aEmbName,
                                 SotClipboardFormatId::EMBEDDED_OBJ_OLE,
                                 GetStorageType( aEmbName ) );
-            SotStorageStreamRef xExtStm = rDestStg.OpenSotStream(
+            tools::SvRef<SotStorageStream> xExtStm = rDestStg.OpenSotStream(
                                             OUString( "properties_stream" ),
                                             STREAM_STD_READWRITE);
 
@@ -279,7 +279,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
 
             if ( bExtentSuccess )
             {
-                SotStorageStreamRef xEmbStm = rDestStg.OpenSotStream(
+                tools::SvRef<SotStorageStream> xEmbStm = rDestStg.OpenSotStream(
                                                 OUString( "package_stream" ),
                                                 STREAM_STD_READWRITE);
                 if( !xEmbStm->GetError() )

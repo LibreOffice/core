@@ -76,7 +76,7 @@ namespace dbaui
             OUString                 sDefaultTableName;
 
             OUString                        aUrl;
-            SotStorageStreamRef             aHtmlRtfStorage;
+            tools::SvRef<SotStorageStream>             aHtmlRtfStorage;
             ElementType                     nType;
             SvTreeListEntry*                    pDroppedAt;
             sal_Int8                        nAction;

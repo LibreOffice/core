@@ -286,7 +286,7 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
             // now we need to copy the stream
             ::utl::TempFile aTmp;
             _rAsyncDrop.aUrl = aTmp.GetURL();
-            SotStorageStreamRef aNew = new SotStorageStream( aTmp.GetFileName() );
+            tools::SvRef<SotStorageStream> aNew = new SotStorageStream( aTmp.GetFileName() );
             _rAsyncDrop.aHtmlRtfStorage->Seek(STREAM_SEEK_TO_BEGIN);
             _rAsyncDrop.aHtmlRtfStorage->CopyTo( aNew );
             aNew->Commit();

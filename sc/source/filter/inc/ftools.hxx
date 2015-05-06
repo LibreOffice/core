@@ -163,9 +163,9 @@ public:
     static tools::SvRef<SotStorage> OpenStorageWrite( tools::SvRef<SotStorage> xStrg, const OUString& rStrgName );
 
     /** Tries to open an existing stream with the specified name in the passed storage (read-only). */
-    static SotStorageStreamRef OpenStorageStreamRead( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName );
+    static tools::SvRef<SotStorageStream> OpenStorageStreamRead( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName );
     /** Creates and opens a stream with the specified name in the passed storage (read/write). */
-    static SotStorageStreamRef OpenStorageStreamWrite( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName );
+    static tools::SvRef<SotStorageStream> OpenStorageStreamWrite( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName );
 
 // *** item handling *** ------------------------------------------------------
 

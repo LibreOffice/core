@@ -125,7 +125,7 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
                 == (rFilter.GetUserData() == FILTER_WW8);
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
-                SotStorageStreamRef xRef =
+                tools::SvRef<SotStorageStream> xRef =
                     rStg.OpenSotStream(OUString("WordDocument"),
                             STREAM_STD_READ | StreamMode::NOCREATE );
                 xRef->Seek(10);

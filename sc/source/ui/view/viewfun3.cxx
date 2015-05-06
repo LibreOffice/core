@@ -744,7 +744,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
     if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
     {
-        SotStorageStreamRef xStm;
+        tools::SvRef<SotStorageStream> xStm;
         ScDrawView* pScDrawView = GetScDrawView();
 
         if( pScDrawView && aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
