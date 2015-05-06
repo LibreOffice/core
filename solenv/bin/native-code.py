@@ -225,9 +225,20 @@ edit_factory_list = [
     ]
 
 edit_constructor_list = [
+# framework/util/fwk.component
     "com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation",
+# i18npool/util/i18npool.component
     "com_sun_star_i18n_InputSequenceChecker_get_implementation",
     "com_sun_star_i18n_OrdinalSuffix_get_implementation",
+# sc/util/sc.component
+    "Calc_XMLOasisContentExporter_get_implementation",
+    "Calc_XMLOasisExporter_get_implementation",
+    "Calc_XMLOasisMetaExporter_get_implementation",
+    "Calc_XMLOasisSettingsExporter_get_implementation",
+    "Calc_XMLOasisStylesExporter_get_implementation",
+# starmath/util/sm.component
+    "Math_XMLOasisMetaExporter_get_implementation",
+    "Math_XMLOasisSettingsExporter_get_implementation",
 # sw/util/sw.component
     "com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation",
