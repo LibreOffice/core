@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_6ca08f91",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-06T10:42:38Z",
+      "side": 1,
+      "message": "Move the declaration to where the variable is actually used.\n\nI\u0027ll do in an amended patch.",
+      "revId": "781aa815926f3b571375067bcc18e18a321a79d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_8c986b6c",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-06T10:42:38Z",
+      "side": 1,
+      "message": "Falling through, this needs a line of comment before the next case, otherwise some code checkers like Coverity assume that the missing break was not on purpose.\n\nI\u0027ll add it in an amended patch.",
+      "revId": "781aa815926f3b571375067bcc18e18a321a79d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
