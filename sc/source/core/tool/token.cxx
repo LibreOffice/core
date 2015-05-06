@@ -2684,7 +2684,7 @@ bool isDBDataModified( const ScDocument& rDoc, const formula::FormulaToken& rTok
     // Check if this DBData has been modified.
     const ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex( rToken.GetIndex());
     if (!pDBData)
-        return false;
+        return true;
 
     return pDBData->IsModified();
 }
