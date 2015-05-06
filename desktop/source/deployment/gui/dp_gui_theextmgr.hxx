@@ -53,18 +53,19 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xNameAccessNodes;
 
-    VclPtr<vcl::Window>             m_pParent;
-    VclPtr<ExtMgrDialog>            m_pExtMgrDialog;
-    VclPtr<UpdateRequiredDialog>    m_pUpdReqDialog;
-    ExtensionCmdQueue       *m_pExecuteCmdQueue;
+    css::uno::Reference<
+         css::awt::XWindow >     m_xParent;
+    VclPtr<ExtMgrDialog>         m_pExtMgrDialog;
+    VclPtr<UpdateRequiredDialog> m_pUpdReqDialog;
+    ExtensionCmdQueue           *m_pExecuteCmdQueue;
 
     OUString          m_sGetExtensionsURL;
 
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
 
-         TheExtensionManager( vcl::Window * pParent,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &xContext );
+         TheExtensionManager( const css::uno::Reference< css::awt::XWindow > &xParent,
+                              const css::uno::Reference< css::uno::XComponentContext > &xContext );
         virtual ~TheExtensionManager();
 
     void createDialog( const bool bCreateUpdDlg );

@@ -49,10 +49,10 @@ namespace dp_gui {
 //                             TheExtensionManager
 
 
-TheExtensionManager::TheExtensionManager( vcl::Window *pParent,
+TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &xParent,
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
     m_xContext( xContext ),
-    m_pParent( pParent ),
+    m_xParent( xParent ),
     m_pExtMgrDialog( NULL ),
     m_pUpdReqDialog( NULL ),
     m_pExecuteCmdQueue( NULL )
@@ -120,7 +120,12 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     }
     else if ( !m_pExtMgrDialog )
     {
-        m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( m_pParent, this );
+        // FIXME: horrible ...
+        vcl::Window* pParent = DIALOG_NO_PARENT;
+        if (m_xParent.is())
+            pParent = VCLUnoHelper::GetWindow(m_xParent);
+
+        m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( pParent, this );
         delete m_pExecuteCmdQueue;
         m_pExecuteCmdQueue = new ExtensionCmdQueue( m_pExtMgrDialog.get(), this, m_xContext );
         m_pExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
@@ -483,11 +488,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
         return s_ExtMgr;
     }
 
-    vcl::Window* pParent = DIALOG_NO_PARENT;
-    if (xParent.is())
-        pParent = VCLUnoHelper::GetWindow(xParent);
-
-    ::rtl::Reference<TheExtensionManager> that( new TheExtensionManager( pParent, xContext ) );
+    ::rtl::Reference<TheExtensionManager> that( new TheExtensionManager( xParent, xContext ) );
 
     const SolarMutexGuard guard;
     if ( ! s_ExtMgr.is() )
