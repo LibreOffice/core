@@ -187,7 +187,8 @@ void SwViewShellImp::SetFirstVisPage()
 
         SwPageFrm *pPage = static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
         SwRect aPageRect = pPage->GetBoundRect();
-        while ( pPage && !aPageRect.IsOver( pSh->VisArea() ) )
+        float fAmount = pSh->VisArea().Height() * 0.43;
+        while ( pPage && aPageRect.Bottom() < pSh->VisArea().Top() + fAmount )
         {
             pPage = static_cast<SwPageFrm*>(pPage->GetNext());
             if ( pPage )
