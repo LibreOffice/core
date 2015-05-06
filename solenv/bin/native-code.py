@@ -228,6 +228,11 @@ edit_constructor_list = [
     "com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation",
     "com_sun_star_i18n_InputSequenceChecker_get_implementation",
     "com_sun_star_i18n_OrdinalSuffix_get_implementation",
+# sw/util/sw.component
+    "com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation",
     ]
 
 calc_factory_list = [
