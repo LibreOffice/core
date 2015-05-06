@@ -506,37 +506,19 @@ namespace {
             aWidgetIds[1] = "fittoprintable";
             aWidgetIds[2] = "distributeonmultiple";
             aWidgetIds[3] = "tilesheet";
-            if( mbImpress )
-            {
-                // FIXME: additional dependency on PrintProspect = false
-                vcl::PrinterOptionsHelper::UIControlOptions aPageOptionsOpt( "PageContentType" , 0 );
-                AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(
-                                    aWidgetIds,
-                                    "",
-                                    aHelpIds,
-                                    "PageOptions" ,
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
-                                    0,
-                                    Sequence< sal_Bool >(),
-                                    aPageOptionsOpt
-                                    )
-                                );
-            }
-            else
-            {
-                vcl::PrinterOptionsHelper::UIControlOptions aPageOptionsOpt( "PrintProspect" , sal_False );
-                AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(
-                                    aWidgetIds,
-                                    "",
-                                    aHelpIds,
-                                    "PageOptions" ,
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
-                                    0,
-                                    Sequence< sal_Bool >(),
-                                    aPageOptionsOpt
-                                    )
-                                );
-            }
+
+            vcl::PrinterOptionsHelper::UIControlOptions aPageOptionsOpt("PrintProspect", 0);
+            AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(
+                                aWidgetIds,
+                                "",
+                                aHelpIds,
+                                "PageOptions" ,
+                                CreateChoice(mbImpress ? _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES : _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
+                                0,
+                                Sequence< sal_Bool >(),
+                                aPageOptionsOpt
+                                )
+                            );
 
             vcl::PrinterOptionsHelper::UIControlOptions aBrochureOpt;
             aBrochureOpt.maGroupHint = "LayoutPage" ;
