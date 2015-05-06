@@ -12,9 +12,11 @@
 
 #include <comphelper/random.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/ustring.hxx>
 #include <assert.h>
 #include <time.h>
 #include <random>
+#include <stdexcept>
 
 // this is nothing but a simple wrapper around
 // the std::random generators
@@ -37,13 +39,21 @@ struct RandomNumberGenerator
     STD_RNG_ALGO global_rng;
     RandomNumberGenerator()
     {
-        std::random_device rd;
-        // initialises the state of the global random number generator
-        // should only be called once.
-        // (note, a few std::variate_generator<> (like normal) have their
-        // own state which would need a reset as well to guarantee identical
-        // sequence of numbers, e.g. via myrand.distribution().reset())
-        global_rng.seed(rd() ^ time(nullptr));
+        try
+        {
+            std::random_device rd;
+            // initialises the state of the global random number generator
+            // should only be called once.
+            // (note, a few std::variate_generator<> (like normal) have their
+            // own state which would need a reset as well to guarantee identical
+            // sequence of numbers, e.g. via myrand.distribution().reset())
+            global_rng.seed(rd() ^ time(nullptr));
+        }
+        catch (std::runtime_error& e)
+        {
+            SAL_WARN("comphelper.random", OUString("Using std::random_device failed: ") << e.what());
+            global_rng.seed(time(nullptr));
+        }
     }
 };
 
