@@ -352,49 +352,49 @@ void HelpTextWindow::ImplShow()
     Update();
 }
 
-void HelpTextWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
     // paint native background
     bool bNativeOK = false;
-    if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLTIP, PART_ENTIRE_CONTROL))
     {
         // #i46472# workaround gcc3.3 temporary problem
-        Rectangle aCtrlRegion( Point( 0, 0 ), GetOutputSizePixel() );
-        ImplControlValue    aControlValue;
-        bNativeOK = DrawNativeControl( CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                        ControlState::NONE, aControlValue, OUString() );
+        Rectangle aCtrlRegion(Point(0, 0), GetOutputSizePixel());
+        ImplControlValue aControlValue;
+        bNativeOK = rRenderContext.DrawNativeControl(CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                                     ControlState::NONE, aControlValue, OUString());
     }
 
     // paint text
-    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN)
+    if (mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN)
     {
         if ( mnStyle & QUICKHELP_CTRLTEXT )
-            DrawCtrlText( maTextRect.TopLeft(), maHelpText );
+            rRenderContext.DrawCtrlText(maTextRect.TopLeft(), maHelpText);
         else
-            DrawText( maTextRect.TopLeft(), maHelpText );
+            rRenderContext.DrawText(maTextRect.TopLeft(), maHelpText);
     }
     else // HELPWINSTYLE_BALLOON
     {
         sal_uInt16 nDrawFlags = TEXT_DRAW_MULTILINE|TEXT_DRAW_WORDBREAK|
                                 TEXT_DRAW_LEFT|TEXT_DRAW_TOP;
-        if ( mnStyle & QUICKHELP_CTRLTEXT )
+        if (mnStyle & QUICKHELP_CTRLTEXT)
             nDrawFlags |= TEXT_DRAW_MNEMONIC;
-        DrawText( maTextRect, maHelpText, nDrawFlags );
+        rRenderContext.DrawText(maTextRect, maHelpText, nDrawFlags);
     }
 
     // border
-    if( ! bNativeOK )
+    if (!bNativeOK)
     {
         Size aSz = GetOutputSizePixel();
-        DrawRect( Rectangle( Point(), aSz ) );
-        if ( mnHelpWinStyle == HELPWINSTYLE_BALLOON )
+        rRenderContext.DrawRect(Rectangle(Point(), aSz));
+        if (mnHelpWinStyle == HELPWINSTYLE_BALLOON)
         {
             aSz.Width() -= 2;
             aSz.Height() -= 2;
-            Color aColor( GetLineColor() );
-            SetLineColor( ( COL_GRAY ) );
-            DrawRect( Rectangle( Point( 1, 1 ), aSz ) );
-            SetLineColor( aColor );
+            Color aColor(rRenderContext.GetLineColor());
+            rRenderContext.SetLineColor(COL_GRAY);
+            rRenderContext.DrawRect(Rectangle(Point(1, 1), aSz));
+            rRenderContext.SetLineColor(aColor);
         }
     }
 }
