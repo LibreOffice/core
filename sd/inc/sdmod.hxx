@@ -31,6 +31,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/module.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/virdev.hxx>
 #include <sal/types.h>
 #include <map>
 #include <memory>
@@ -41,7 +42,6 @@ class EditFieldInfo;
 class SdTransferable;
 class SvNumberFormatter;
 class SfxErrorHandler;
-class OutputDevice;
 class SdDrawDocument;
 class SfxFrame;
 
@@ -144,7 +144,7 @@ protected:
         in the sense that it does not represent a printer.  The pointer may
         be NULL when the virtual device could not be created.
     */
-    VclPtr< OutputDevice >  mpVirtualRefDevice;
+    VclPtr< VirtualDevice >  mpVirtualRefDevice;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
