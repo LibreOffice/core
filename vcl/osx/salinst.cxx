@@ -473,7 +473,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 #if !HAVE_FEATURE_MACOSX_SANDBOX
     case AppleRemoteControlEvent: // Defined in <apple_remote/RemoteMainController.h>
     {
-        sal_Int16 nCommand = 0;
+        MediaCommand nCommand;
         SalData* pSalData = GetSalData();
         bool bIsFullScreenMode = false;
 
@@ -488,27 +488,27 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         switch ([pEvent data1])
         {
             case kRemoteButtonPlay:
-                nCommand = bIsFullScreenMode ? MEDIA_COMMAND_PLAY_PAUSE : MEDIA_COMMAND_PLAY;
+                nCommand = bIsFullScreenMode ? MediaCommand::PlayPause : MediaCommand::Play;
                 break;
 
             // kept for experimentation purpose (scheduled for future implementation)
-            // case kRemoteButtonMenu:         nCommand = MEDIA_COMMAND_MENU; break;
+            // case kRemoteButtonMenu:         nCommand = MediaCommand::Menu; break;
 
-            case kRemoteButtonPlus:         nCommand = MEDIA_COMMAND_VOLUME_UP; break;
+            case kRemoteButtonPlus:         nCommand = MediaCommand::VolumeUp; break;
 
-            case kRemoteButtonMinus:        nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
+            case kRemoteButtonMinus:        nCommand = MediaCommand::VolumeDown; break;
 
-            case kRemoteButtonRight:        nCommand = MEDIA_COMMAND_NEXTTRACK; break;
+            case kRemoteButtonRight:        nCommand = MediaCommand::NextTrack; break;
 
-            case kRemoteButtonRight_Hold:   nCommand = MEDIA_COMMAND_NEXTTRACK_HOLD; break;
+            case kRemoteButtonRight_Hold:   nCommand = MediaCommand::NextTrackHold; break;
 
-            case kRemoteButtonLeft:         nCommand = MEDIA_COMMAND_PREVIOUSTRACK; break;
+            case kRemoteButtonLeft:         nCommand = MediaCommand::PreviousTrack; break;
 
-            case kRemoteButtonLeft_Hold:    nCommand = MEDIA_COMMAND_REWIND; break;
+            case kRemoteButtonLeft_Hold:    nCommand = MediaCommand::Rewind; break;
 
-            case kRemoteButtonPlay_Hold:    nCommand = MEDIA_COMMAND_PLAY_HOLD; break;
+            case kRemoteButtonPlay_Hold:    nCommand = MediaCommand::PlayHold; break;
 
-            case kRemoteButtonMenu_Hold:    nCommand = MEDIA_COMMAND_STOP; break;
+            case kRemoteButtonMenu_Hold:    nCommand = MediaCommand::Stop; break;
 
             // FIXME : not detected
             case kRemoteButtonPlus_Hold:
