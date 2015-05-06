@@ -9,8 +9,6 @@
 
 #include <config_folders.h>
 
-#include <string>
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -905,7 +903,7 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, 0, pLib->mpCallbackData);
         break;
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::SetValue:
-        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, std::to_string(percent).c_str(), pLib->mpCallbackData);
+        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, OUString::number(percent).toUtf8().getStr(), pLib->mpCallbackData);
         break;
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Finish:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_FINISH, 0, pLib->mpCallbackData);
