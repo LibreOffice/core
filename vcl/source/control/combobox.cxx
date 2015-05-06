@@ -559,20 +559,23 @@ void ComboBox::Resize()
 {
     Control::Resize();
 
-    Size aOutSz = GetOutputSizePixel();
-    if( IsDropDownBox() )
+    if (mpSubEdit)
     {
-        ComboBoxBounds aBounds(calcComboBoxDropDownComponentBounds(aOutSz,
-            GetWindow(WINDOW_BORDER)->GetOutputSizePixel()));
-        mpSubEdit->SetPosSizePixel(aBounds.aSubEditPos, aBounds.aSubEditSize);
-        mpBtn->SetPosSizePixel(aBounds.aButtonPos, aBounds.aButtonSize);
-    }
-    else
-    {
-        mpSubEdit->SetSizePixel( Size( aOutSz.Width(), mnDDHeight ) );
-        mpImplLB->setPosSizePixel( 0, mnDDHeight, aOutSz.Width(), aOutSz.Height() - mnDDHeight );
-        if ( !GetText().isEmpty() )
-            ImplUpdateFloatSelection();
+        Size aOutSz = GetOutputSizePixel();
+        if( IsDropDownBox() )
+        {
+            ComboBoxBounds aBounds(calcComboBoxDropDownComponentBounds(aOutSz,
+                GetWindow(WINDOW_BORDER)->GetOutputSizePixel()));
+            mpSubEdit->SetPosSizePixel(aBounds.aSubEditPos, aBounds.aSubEditSize);
+            mpBtn->SetPosSizePixel(aBounds.aButtonPos, aBounds.aButtonSize);
+        }
+        else
+        {
+            mpSubEdit->SetSizePixel( Size( aOutSz.Width(), mnDDHeight ) );
+            mpImplLB->setPosSizePixel( 0, mnDDHeight, aOutSz.Width(), aOutSz.Height() - mnDDHeight );
+            if ( !GetText().isEmpty() )
+                ImplUpdateFloatSelection();
+        }
     }
 
     // adjust the size of the FloatingWindow even when invisible
