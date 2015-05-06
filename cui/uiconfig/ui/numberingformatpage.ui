@@ -355,6 +355,7 @@
                       <object class="GtkTreeView" id="categorylb:border">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="has_focus">True</property>
                         <property name="model">liststore1</property>
                         <property name="search_column">0</property>
                         <child internal-child="selection">
