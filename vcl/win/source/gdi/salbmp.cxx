@@ -1066,7 +1066,7 @@ bool WinSalBitmap::Erase( const ::Color& /*rFillColor*/ )
     return false;
 }
 
-bool WinSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
+bool WinSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, BmpScaleFlag /*nScaleFlag*/ )
 {
     return false;
 }

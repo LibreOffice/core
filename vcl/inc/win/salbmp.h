@@ -99,7 +99,7 @@ public:
 
     virtual bool                Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
     virtual bool                Erase( const Color& rFillColor ) SAL_OVERRIDE;
-    virtual bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) SAL_OVERRIDE;
+    virtual bool                Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) SAL_OVERRIDE;
     virtual bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) SAL_OVERRIDE;
 };
 
