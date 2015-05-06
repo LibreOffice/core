@@ -186,6 +186,7 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
 FloatingWindow::~FloatingWindow()
 {
     disposeOnce();
+    assert (!mnPostId);
 }
 
 void FloatingWindow::dispose()

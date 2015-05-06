@@ -622,7 +622,7 @@ void SAL_CALL SfxToolBoxControl::doubleClick() throw (::com::sun::star::uno::Run
 Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    vcl::Window* pWindow = CreatePopupWindow();
+    VclPtr<vcl::Window> pWindow = CreatePopupWindow();
     if ( pWindow )
         return VCLUnoHelper::GetInterface( pWindow );
     else
