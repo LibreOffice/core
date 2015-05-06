@@ -915,12 +915,12 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     pEditView->GetWindow()->GrabFocus();
 }
 
-void EditorWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void EditorWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    if ( !pEditEngine )     // We need it now at latest
+    if (!pEditEngine)     // We need it now at latest
         CreateEditEngine();
 
-    pEditView->Paint( rRect );
+    pEditView->Paint(rRenderContext, rRect);
 }
 
 void EditorWindow::LoseFocus()

@@ -1499,10 +1499,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
                 aNewPos.X() -= aOutSz.Width() - 1;
             aClipRect.SetPos( aNewPos );
 
-            if ( pView == pCurView )
-                pView->ImpPaint( aClipRect, !pView->GetWindow()->IsPaintTransparent() );
-            else
-                pView->GetWindow()->Invalidate( aClipRect );
+            pView->GetWindow()->Invalidate( aClipRect );
         }
     }
 

@@ -478,9 +478,9 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void  TextViewOutWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void TextViewOutWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    pTextView->Paint( rRect );
+    pTextView->Paint(rRenderContext, rRect);
 }
 
 void SwSrcEditWindow::CreateTextEngine()

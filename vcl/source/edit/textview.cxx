@@ -293,99 +293,97 @@ void TextView::DeleteSelected()
     ShowCursor();
 }
 
-void TextView::ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange, TextSelection const* pSelection )
+void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange, TextSelection const* pSelection)
 {
-    if ( !mpImpl->mbPaintSelection )
+    if (!mpImpl->mbPaintSelection)
+    {
         pSelection = NULL;
+    }
     else
     {
         // set correct background color;
         // unfortunately we cannot detect if it has changed
         vcl::Font aFont = mpImpl->mpTextEngine->GetFont();
-        Color aColor = pOut->GetBackground().GetColor();
-        aColor.SetTransparency( 0 );
-        if ( aColor != aFont.GetFillColor() )
+        Color aColor = rRenderContext.GetBackground().GetColor();
+        aColor.SetTransparency(0);
+        if (aColor != aFont.GetFillColor())
         {
-            if( aFont.IsTransparent() )
-                aColor = Color( COL_TRANSPARENT );
-            aFont.SetFillColor( aColor );
+            if (aFont.IsTransparent())
+                aColor = Color(COL_TRANSPARENT);
+            aFont.SetFillColor(aColor);
             mpImpl->mpTextEngine->maFont = aFont;
         }
     }
 
-    mpImpl->mpTextEngine->ImpPaint( pOut, rStartPos, pPaintArea, pPaintRange, pSelection );
+    mpImpl->mpTextEngine->ImpPaint(&rRenderContext, rStartPos, pPaintArea, pPaintRange, pSelection);
 }
 
-void TextView::Paint( const Rectangle& rRect )
+void TextView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    ImpPaint( rRect, false );
+    ImpPaint(rRenderContext, rRect, false);
 }
 
-void TextView::ImpPaint( const Rectangle& rRect, bool bUseVirtDev )
+void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bUseVirtDev)
 {
     if ( !mpImpl->mpTextEngine->GetUpdateMode() || mpImpl->mpTextEngine->IsInUndo() )
         return;
 
     TextSelection *pDrawSelection = NULL;
-    if ( !mpImpl->mbHighlightSelection && mpImpl->maSelection.HasRange() )
+    if (!mpImpl->mbHighlightSelection && mpImpl->maSelection.HasRange())
         pDrawSelection = &mpImpl->maSelection;
 
-    if ( bUseVirtDev )
+    if (bUseVirtDev)
     {
         VirtualDevice* pVDev = GetVirtualDevice();
 
         const Color& rBackgroundColor = mpImpl->mpWindow->GetBackground().GetColor();
-        if ( pVDev->GetFillColor() != rBackgroundColor )
+        if (pVDev->GetFillColor() != rBackgroundColor)
             pVDev->SetFillColor( rBackgroundColor );
-        if ( pVDev->GetBackground().GetColor() != rBackgroundColor )
+        if (pVDev->GetBackground().GetColor() != rBackgroundColor)
             pVDev->SetBackground( rBackgroundColor );
 
         bool bVDevValid = true;
-        Size aOutSz( pVDev->GetOutputSizePixel() );
-        if ( (  aOutSz.Width() < rRect.GetWidth() ) ||
-             (  aOutSz.Height() < rRect.GetHeight() ) )
+        Size aOutSz(pVDev->GetOutputSizePixel());
+        if ((aOutSz.Width() < rRect.GetWidth()) ||
+            (aOutSz.Height() < rRect.GetHeight()))
         {
-            bVDevValid = pVDev->SetOutputSizePixel( rRect.GetSize() );
+            bVDevValid = pVDev->SetOutputSizePixel(rRect.GetSize());
         }
         else
         {
             // the VirtDev can get very large on Resize =>
             // shrink now and then
-            if ( ( aOutSz.Height() > ( rRect.GetHeight() + 20 ) ) ||
-                 ( aOutSz.Width() > ( rRect.GetWidth() + 20 ) ) )
+            if ((aOutSz.Height() > (rRect.GetHeight() + 20)) ||
+                (aOutSz.Width() > (rRect.GetWidth() + 20)))
             {
-                bVDevValid = pVDev->SetOutputSizePixel( rRect.GetSize() );
+                bVDevValid = pVDev->SetOutputSizePixel(rRect.GetSize());
             }
             else
             {
                 pVDev->Erase();
             }
         }
-        if ( !bVDevValid )
+        if (!bVDevValid)
         {
-            ImpPaint( rRect, false /* without VDev */ );
+            ImpPaint(rRenderContext, rRect, false);
             return;
         }
 
-        Rectangle aTmpRect( Point( 0, 0 ), rRect.GetSize() );
+        Rectangle aTmpRect(Point(0, 0), rRect.GetSize());
 
-        Point aDocPos( mpImpl->maStartDocPos.X(), mpImpl->maStartDocPos.Y() + rRect.Top() );
-        Point aStartPos = ImpGetOutputStartPos( aDocPos );
-        ImpPaint( pVDev, aStartPos, &aTmpRect, NULL, pDrawSelection );
-        mpImpl->mpWindow->DrawOutDev( rRect.TopLeft(), rRect.GetSize(),
-                                Point(0,0), rRect.GetSize(), *pVDev );
-//      ShowSelection();
-        if ( mpImpl->mbHighlightSelection )
-            ImpHighlight( mpImpl->maSelection );
+        Point aDocPos(mpImpl->maStartDocPos.X(), mpImpl->maStartDocPos.Y() + rRect.Top());
+        Point aStartPos = ImpGetOutputStartPos(aDocPos);
+        ImpPaint(*pVDev, aStartPos, &aTmpRect, NULL, pDrawSelection);
+        rRenderContext.DrawOutDev(rRect.TopLeft(), rRect.GetSize(), Point(0,0), rRect.GetSize(), *pVDev);
+        if (mpImpl->mbHighlightSelection)
+            ImpHighlight(mpImpl->maSelection);
     }
     else
     {
-        Point aStartPos = ImpGetOutputStartPos( mpImpl->maStartDocPos );
-        ImpPaint( mpImpl->mpWindow, aStartPos, &rRect, NULL, pDrawSelection );
-
-//      ShowSelection();
-        if ( mpImpl->mbHighlightSelection )
-            ImpHighlight( mpImpl->maSelection );
+        Point aStartPos = ImpGetOutputStartPos(mpImpl->maStartDocPos);
+        ImpPaint(rRenderContext, aStartPos, &rRect, NULL, pDrawSelection);
+        if (mpImpl->mbHighlightSelection)
+            ImpHighlight(mpImpl->maSelection);
     }
 }
 
@@ -499,7 +497,7 @@ void TextView::ShowSelection( const TextSelection& rRange )
     ImpShowHideSelection( true, &rRange );
 }
 
-void TextView::ImpShowHideSelection( bool bShow, const TextSelection* pRange )
+void TextView::ImpShowHideSelection(bool /*bShow*/, const TextSelection* pRange)
 {
     const TextSelection* pRangeOrSelection = pRange ? pRange : &mpImpl->maSelection;
 
@@ -515,14 +513,12 @@ void TextView::ImpShowHideSelection( bool bShow, const TextSelection* pRange )
                 mpImpl->mpWindow->Invalidate();
             else
             {
-                Rectangle aOutArea( Point( 0, 0 ), mpImpl->mpWindow->GetOutputSizePixel() );
-                Point aStartPos( ImpGetOutputStartPos( mpImpl->maStartDocPos ) );
                 TextSelection aRange( *pRangeOrSelection );
                 aRange.Justify();
                 bool bVisCursor = mpImpl->mpCursor->IsVisible();
                 mpImpl->mpCursor->Hide();
-                ImpPaint( mpImpl->mpWindow, aStartPos, &aOutArea, &aRange, bShow ? &mpImpl->maSelection : NULL );
-                if ( bVisCursor )
+                Invalidate();
+                if (bVisCursor)
                     mpImpl->mpCursor->Show();
             }
         }

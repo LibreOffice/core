@@ -25,10 +25,11 @@
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/textdata.hxx>
+#include <vcl/window.hxx>
 
 class TextEngine;
 class OutputDevice;
-namespace vcl { class Window; }
+
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
@@ -37,11 +38,7 @@ class SelectionEngine;
 class VirtualDevice;
 struct TextDDInfo;
 
-namespace com {
-namespace sun {
-namespace star {
-namespace datatransfer {
-namespace clipboard {
+namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
     class XClipboard;
 }}}}}
 
@@ -72,8 +69,8 @@ protected:
     void                ImpSetSelection( const TextSelection& rNewSel, bool bUI );
     bool                IsInSelection( const TextPaM& rPaM );
 
-    void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
-    void                ImpPaint( const Rectangle& rRect, bool bUseVirtDev );
+    void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0);
+    void                ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bUseVirtDev);
     void                ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bEndKey );
     void                ImpHighlight( const TextSelection& rSel );
     void                ImpSetSelection( const TextSelection& rSelection );
@@ -127,8 +124,8 @@ public:
 
     void                InsertText( const OUString& rNew, bool bSelect = false );
 
-    bool            KeyInput( const KeyEvent& rKeyEvent );
-    void                Paint( const Rectangle& rRect );
+    bool                KeyInput( const KeyEvent& rKeyEvent );
+    void                Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     void                MouseButtonUp( const MouseEvent& rMouseEvent );
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
     void                MouseMove( const MouseEvent& rMouseEvent );
