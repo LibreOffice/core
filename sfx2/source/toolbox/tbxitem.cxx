@@ -982,19 +982,10 @@ VclPtr<SfxPopupWindow> SfxToolBoxControl::CreatePopupWindow()
     return 0;
 }
 
-SfxPopupWindow* SfxToolBoxControl::CreatePopupWindowCascading()
-{
-    return 0;
-}
-
-
-
 VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )
 {
     return VclPtr<vcl::Window>();
 }
-
-
 
 SfxFrameStatusListener::SfxFrameStatusListener(
     const Reference< XComponentContext >& rxContext,
