@@ -62,6 +62,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnPageSize          = 1;
     mnDelta             = 0;
     mnDragDraw          = 0;
+    mnDrawFlags         = SLIDER_DRAW_ALL;
     mnStateFlags        = 0;
     meScrollType        = SCROLL_DONTKNOW;
     mbCalcSize          = true;
@@ -189,6 +190,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
     {
         if ( aOldThumbRect != maThumbRect )
         {
+            mnDrawFlags = SLIDER_DRAW_ALL;
             if( bInvalidateAll )
                 Invalidate();
             else
@@ -296,145 +298,146 @@ void Slider::ImplCalc( bool bUpdate )
 
     if ( bUpdate && bInvalidateAll )
     {
+        mnDrawFlags = SLIDER_DRAW_ALL;
         Invalidate();
         bUpdate = false;
     }
     ImplUpdateRects( bUpdate );
 }
 
-void Slider::ImplDraw( sal_uInt16 nDrawFlags )
+void Slider::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags)
 {
-    DecorationView          aDecoView( this );
-    sal_uInt16                  nStyle;
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    bool                    bEnabled = IsEnabled();
+    DecorationView aDecoView(&rRenderContext);
+    sal_uInt16 nStyle;
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    bool bEnabled = IsEnabled();
 
     // do missing calculations
-    if ( mbCalcSize )
-        ImplCalc( false );
+    if (mbCalcSize)
+        ImplCalc(false);
 
     ControlPart nPart = (GetStyle() & WB_HORZ) ? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA;
-    ControlState   nState = ( IsEnabled() ? ControlState::ENABLED : ControlState::NONE ) | ( HasFocus() ? ControlState::FOCUSED : ControlState::NONE );
-    SliderValue    sldValue;
+    ControlState nState = (IsEnabled() ? ControlState::ENABLED : ControlState::NONE);
+    nState |= (HasFocus() ? ControlState::FOCUSED : ControlState::NONE);
+    SliderValue sldValue;
 
-    sldValue.mnMin       = mnMinRange;
-    sldValue.mnMax       = mnMaxRange;
-    sldValue.mnCur       = mnThumbPos;
+    sldValue.mnMin = mnMinRange;
+    sldValue.mnMax = mnMaxRange;
+    sldValue.mnCur = mnThumbPos;
     sldValue.maThumbRect = maThumbRect;
 
-    if( IsMouseOver() )
+    if (IsMouseOver())
     {
-        if( maThumbRect.IsInside( GetPointerPosPixel() ) )
+        if (maThumbRect.IsInside(GetPointerPosPixel()))
             sldValue.mnThumbState |= ControlState::ROLLOVER;
     }
 
-    const Rectangle aCtrlRegion( Point(0,0), GetOutputSizePixel() );
-    bool bNativeOK = DrawNativeControl( CTRL_SLIDER, nPart,
-                                        aCtrlRegion, nState, sldValue, OUString() );
-    if( bNativeOK )
+    const Rectangle aCtrlRegion(Point(0,0), rRenderContext.GetOutputSizePixel());
+    bool bNativeOK = rRenderContext.DrawNativeControl(CTRL_SLIDER, nPart, aCtrlRegion, nState, sldValue, OUString());
+    if (bNativeOK)
         return;
 
-    if ( (nDrawFlags & SLIDER_DRAW_CHANNEL1) && !maChannel1Rect.IsEmpty() )
+    if ((nDrawFlags & SLIDER_DRAW_CHANNEL1) && !maChannel1Rect.IsEmpty())
     {
         long        nRectSize;
         Rectangle   aRect = maChannel1Rect;
-        SetLineColor( rStyleSettings.GetShadowColor() );
-        if ( GetStyle() & WB_HORZ )
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        if (GetStyle() & WB_HORZ)
         {
-            DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom()-1 ) );
-            DrawLine( aRect.TopLeft(), aRect.TopRight() );
+            rRenderContext.DrawLine(aRect.TopLeft(), Point(aRect.Left(), aRect.Bottom() - 1));
+            rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight());
         }
         else
         {
-            DrawLine( aRect.TopLeft(), Point( aRect.Right()-1, aRect.Top() ) );
-            DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+            rRenderContext.DrawLine(aRect.TopLeft(), Point(aRect.Right() - 1, aRect.Top()));
+            rRenderContext.DrawLine(aRect.TopLeft(), aRect.BottomLeft());
         }
-        SetLineColor( rStyleSettings.GetLightColor() );
-        if ( GetStyle() & WB_HORZ )
+        rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+        if (GetStyle() & WB_HORZ)
         {
-            DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+            rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
             nRectSize = aRect.GetWidth();
         }
         else
         {
-            DrawLine( aRect.TopRight(), aRect.BottomRight() );
+            rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
             nRectSize = aRect.GetHeight();
         }
 
-        if ( nRectSize > 1 )
+        if (nRectSize > 1)
         {
             aRect.Left()++;
             aRect.Top()++;
-            if ( GetStyle() & WB_HORZ )
+            if (GetStyle() & WB_HORZ)
                 aRect.Bottom()--;
             else
                 aRect.Right()--;
-            SetLineColor();
-            if ( mnStateFlags & SLIDER_STATE_CHANNEL1_DOWN )
-                SetFillColor( rStyleSettings.GetShadowColor() );
+            rRenderContext.SetLineColor();
+            if (mnStateFlags & SLIDER_STATE_CHANNEL1_DOWN)
+                rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
             else
-                SetFillColor( rStyleSettings.GetCheckedColor() );
-            DrawRect( aRect );
+                rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
+            rRenderContext.DrawRect(aRect);
         }
     }
 
-    if ( (nDrawFlags & SLIDER_DRAW_CHANNEL2) && !maChannel2Rect.IsEmpty() )
+    if ((nDrawFlags & SLIDER_DRAW_CHANNEL2) && !maChannel2Rect.IsEmpty())
     {
-        long        nRectSize;
-        Rectangle   aRect = maChannel2Rect;
-        SetLineColor( rStyleSettings.GetLightColor() );
-        if ( GetStyle() & WB_HORZ )
+        long nRectSize;
+        Rectangle aRect = maChannel2Rect;
+        rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+        if (GetStyle() & WB_HORZ)
         {
-            DrawLine( aRect.TopRight(), aRect.BottomRight() );
-            DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+            rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
+            rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
             nRectSize = aRect.GetWidth();
         }
         else
         {
-            DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
-            DrawLine( aRect.TopRight(), aRect.BottomRight() );
+            rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
+            rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
             nRectSize = aRect.GetHeight();
         }
 
-        if ( nRectSize > 1 )
+        if (nRectSize > 1)
         {
-            SetLineColor( rStyleSettings.GetShadowColor() );
-            if ( GetStyle() & WB_HORZ )
-                DrawLine( aRect.TopLeft(), Point( aRect.Right()-1, aRect.Top() ) );
+            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+            if (GetStyle() & WB_HORZ)
+                rRenderContext.DrawLine(aRect.TopLeft(), Point(aRect.Right() - 1, aRect.Top()));
             else
-                DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom()-1 ) );
+                rRenderContext.DrawLine(aRect.TopLeft(), Point(aRect.Left(), aRect.Bottom() - 1));
 
             aRect.Right()--;
             aRect.Bottom()--;
-            if ( GetStyle() & WB_HORZ )
+            if (GetStyle() & WB_HORZ)
                 aRect.Top()++;
             else
                 aRect.Left()++;
-            SetLineColor();
-            if ( mnStateFlags & SLIDER_STATE_CHANNEL2_DOWN )
-                SetFillColor( rStyleSettings.GetShadowColor() );
+            rRenderContext.SetLineColor();
+            if (mnStateFlags & SLIDER_STATE_CHANNEL2_DOWN)
+                rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
             else
-                SetFillColor( rStyleSettings.GetCheckedColor() );
-            DrawRect( aRect );
+                rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
+            rRenderContext.DrawRect(aRect);
         }
     }
 
-    if ( nDrawFlags & SLIDER_DRAW_THUMB )
+    if (nDrawFlags & SLIDER_DRAW_THUMB)
     {
-        if ( !maThumbRect.IsEmpty() )
+        if (!maThumbRect.IsEmpty())
         {
-            if ( bEnabled )
+            if (bEnabled)
             {
                 nStyle = 0;
-                if ( mnStateFlags & SLIDER_STATE_THUMB_DOWN )
+                if (mnStateFlags & SLIDER_STATE_THUMB_DOWN)
                     nStyle |= BUTTON_DRAW_PRESSED;
-                aDecoView.DrawButton( maThumbRect, nStyle );
+                aDecoView.DrawButton(maThumbRect, nStyle);
             }
             else
             {
-                SetLineColor( rStyleSettings.GetShadowColor() );
-                SetFillColor( rStyleSettings.GetCheckedColor() );
-                DrawRect( maThumbRect );
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
+                rRenderContext.DrawRect(maThumbRect);
             }
         }
     }
@@ -574,12 +577,16 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             if ( mnDragDraw & SLIDER_DRAW_CHANNEL )
             {
                 Update();
-                ImplDraw( mnDragDraw );
+                mnDrawFlags = mnDragDraw;
+                Invalidate();
             }
         }
     }
     else if ( nOldStateFlags != mnStateFlags )
-        ImplDraw( mnDragDraw );
+    {
+        mnDrawFlags = mnDragDraw;
+        Invalidate();
+    }
 }
 
 long Slider::ImplDoSlide( long nNewPos )
@@ -675,8 +682,10 @@ void Slider::MouseButtonUp( const MouseEvent& )
         mnStateFlags &= ~( SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN | SLIDER_STATE_THUMB_DOWN );
 
         if ( nOldStateFlags != mnStateFlags )
-            ImplDraw( mnDragDraw );
-
+        {
+            mnDrawFlags = mnDragDraw;
+            Invalidate();
+        }
         mnDragDraw = 0;
         ImplDoAction( true );
         meScrollType = SCROLL_DONTKNOW;
@@ -692,7 +701,10 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
         mnStateFlags &= ~(SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN |
                           SLIDER_STATE_THUMB_DOWN);
         if ( nOldStateFlags != mnStateFlags )
-            ImplDraw( mnDragDraw );
+        {
+            mnDrawFlags = mnDragDraw;
+            Invalidate();
+        }
         mnDragDraw = 0;
 
         // on cancel, reset the previous Thumb position
@@ -808,9 +820,13 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-void Slider::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void Slider::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    ImplDraw( SLIDER_DRAW_ALL );
+    if (mnDrawFlags)
+    {
+        ImplDraw(rRenderContext, mnDrawFlags);
+        mnDrawFlags = 0;
+    }
 }
 
 void Slider::Resize()
@@ -819,6 +835,7 @@ void Slider::Resize()
     mbCalcSize = true;
     if ( IsReallyVisible() )
         ImplCalc( false );
+    mnDrawFlags = SLIDER_DRAW_ALL;
     Invalidate();
 }
 
@@ -843,13 +860,17 @@ void Slider::StateChanged( StateChangedType nType )
         if ( IsReallyVisible() && IsUpdateMode() )
         {
             ImplCalc( false );
+            mnDrawFlags = SLIDER_DRAW_ALL;
             Invalidate();
         }
     }
     else if ( nType == StateChangedType::Enable )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
+        {
+            mnDrawFlags = SLIDER_DRAW_ALL;
             Invalidate();
+        }
     }
     else if ( nType == StateChangedType::Style )
     {
@@ -860,6 +881,7 @@ void Slider::StateChanged( StateChangedType nType )
             {
                 mbCalcSize = true;
                 ImplCalc( false );
+                mnDrawFlags = SLIDER_DRAW_ALL;
                 Invalidate();
             }
         }
@@ -867,6 +889,7 @@ void Slider::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings();
+        mnDrawFlags = SLIDER_DRAW_ALL;
         Invalidate();
     }
 }
@@ -879,6 +902,7 @@ void Slider::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings();
+        mnDrawFlags = SLIDER_DRAW_ALL;
         Invalidate();
     }
 }

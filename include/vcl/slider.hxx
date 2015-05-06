@@ -45,8 +45,9 @@ private:
     long            mnLineSize;
     long            mnPageSize;
     long            mnDelta;
-    sal_uInt16          mnDragDraw;
-    sal_uInt16          mnStateFlags;
+    sal_uInt16      mnDragDraw;
+    sal_uInt16      mnDrawFlags;
+    sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
     bool            mbCalcSize;
     bool            mbFullDrag;
@@ -61,7 +62,7 @@ private:
     SAL_DLLPRIVATE long ImplCalcThumbPos( long nPixPos );
     SAL_DLLPRIVATE long ImplCalcThumbPosPix( long nPos );
     SAL_DLLPRIVATE void ImplCalc( bool bUpdate = true );
-    SAL_DLLPRIVATE void ImplDraw( sal_uInt16 nDrawFlags );
+    SAL_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags);
     SAL_DLLPRIVATE bool ImplIsPageUp( const Point& rPos );
     SAL_DLLPRIVATE bool ImplIsPageDown( const Point& rPos );
     SAL_DLLPRIVATE long ImplSlide( long nNewPos, bool bCallEndSlide );
@@ -77,7 +78,7 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
