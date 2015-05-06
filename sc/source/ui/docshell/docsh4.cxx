@@ -1898,7 +1898,13 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 
     if( nAspect == ASPECT_THUMBNAIL )
     {
-        Size aSize = aDocument.GetPageSize(aDocument.GetVisibleTab());
+        SCTAB nVisTab = aDocument.GetVisibleTab();
+        if (!aDocument.HasTable(nVisTab))
+        {
+            nVisTab = 0;
+            const_cast<ScDocShell*>(this)->aDocument.SetVisibleTab(nVisTab);
+        }
+        Size aSize = aDocument.GetPageSize(nVisTab);
         const long SC_PREVIEW_SIZE_X = 10000;
         const long SC_PREVIEW_SIZE_Y = 12400;
         Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X, SC_PREVIEW_SIZE_Y);
