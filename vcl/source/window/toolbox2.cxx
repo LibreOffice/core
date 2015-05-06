@@ -935,6 +935,18 @@ sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
     return 0;
 }
 
+Size ToolBox::GetItemContentSize( sal_uInt16 nItemId ) const
+{
+    if ( mbCalc || mbFormat )
+        ((ToolBox*)this)->ImplFormat();
+
+    sal_uInt16 nPos = GetItemPos( nItemId );
+    if ( nPos < mpData->m_aItems.size() )
+        return mpData->m_aItems[nPos].maContentSize;
+    else
+        return Size();
+}
+
 sal_uInt16 ToolBox::GetItemId(const OUString &rCommand) const
 {
     if (!mpData)
