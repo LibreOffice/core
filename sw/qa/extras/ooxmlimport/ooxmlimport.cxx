@@ -869,6 +869,19 @@ DECLARE_OOXMLIMPORT_TEST(testN779627b, "n779627b.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically relatively to page", text::RelOrientation::PAGE_FRAME, nValue);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTDF91122, "tdf91122.docx")
+{
+    /*
+     * OLE object shape: default vertical position is top in MSO, not bottom
+     */
+    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), xShapeDescriptor->getShapeType());
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("VertOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::TOP, nValue);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo74357, "fdo74357.docx")
 {
     // Floating table wasn't converted to a textframe.
