@@ -61,14 +61,14 @@ RefUpdateResult::RefUpdateResult(const RefUpdateResult& r) :
     mbReferenceModified(r.mbReferenceModified),
     mbNameModified(r.mbNameModified) {}
 
-RefUpdateInsertTabContext::RefUpdateInsertTabContext(SCTAB nInsertPos, SCTAB nSheets) :
-    mnInsertPos(nInsertPos), mnSheets(nSheets) {}
+RefUpdateInsertTabContext::RefUpdateInsertTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets) :
+    mrDoc(rDoc), mnInsertPos(nInsertPos), mnSheets(nSheets) {}
 
-RefUpdateDeleteTabContext::RefUpdateDeleteTabContext(SCTAB nDeletePos, SCTAB nSheets) :
-    mnDeletePos(nDeletePos), mnSheets(nSheets) {}
+RefUpdateDeleteTabContext::RefUpdateDeleteTabContext(ScDocument& rDoc, SCTAB nDeletePos, SCTAB nSheets) :
+    mrDoc(rDoc), mnDeletePos(nDeletePos), mnSheets(nSheets) {}
 
-RefUpdateMoveTabContext::RefUpdateMoveTabContext(SCTAB nOldPos, SCTAB nNewPos) :
-    mnOldPos(nOldPos), mnNewPos(nNewPos) {}
+RefUpdateMoveTabContext::RefUpdateMoveTabContext(ScDocument& rDoc, SCTAB nOldPos, SCTAB nNewPos) :
+    mrDoc(rDoc), mnOldPos(nOldPos), mnNewPos(nNewPos) {}
 
 SCTAB RefUpdateMoveTabContext::getNewTab(SCTAB nOldTab) const
 {
