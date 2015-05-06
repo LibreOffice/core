@@ -154,7 +154,7 @@ public class DocumentView extends    JFrame
         maCustomizeView = new CustomizeView();
 
         paCommands.setBorder     ( new TitledBorder(BorderFactory.createEtchedBorder(),"Commands")                );
-        maStatusView.setBorder   ( new TitledBorder(BorderFactory.createEtchedBorder(),"Status Informations")     );
+        maStatusView.setBorder   ( new TitledBorder(BorderFactory.createEtchedBorder(),"Status Information")      );
         maCustomizeView.setBorder( new TitledBorder(BorderFactory.createEtchedBorder(),"Customize Document View") );
 
         // layout the whole UI
