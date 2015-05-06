@@ -191,7 +191,7 @@ void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
 
     if ( !pRef )
     {
-        pRefDev = new VirtualDevice;
+        pRefDev = VclPtr<VirtualDevice>::Create();
         pRefDev->SetMapMode( MAP_TWIP );
         bOwnerOfRefDev = true;
     } else
@@ -216,7 +216,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
 
     if ( !bOwnerOfRefDev )
     {
-        pRefDev = new VirtualDevice;
+        pRefDev = VclPtr<VirtualDevice>::Create();
         pRefDev->SetMapMode( MAP_TWIP );
         SetRefDevice( pRefDev );
         bOwnerOfRefDev = true;
