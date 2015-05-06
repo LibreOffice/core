@@ -39,6 +39,13 @@ void ImplSalStopTimer(SalData* pSalData)
     HANDLE hTimer = pSalData->mnTimerId;
     pSalData->mnTimerId = 0;
     DeleteTimerQueueTimer(NULL, hTimer, INVALID_HANDLE_VALUE);
+    MSG aMsg;
+    while (PeekMessageW(&aMsg, 0, SAL_MSG_TIMER_CALLBACK, SAL_MSG_TIMER_CALLBACK, PM_REMOVE))
+    {
+        // just remove all the SAL_MSG_TIMER_CALLBACKs
+        // when the application end, this SAL_MSG_TIMER_CALLBACK start the timer again
+        // and then crashed in "SalTimerProc" when the object "SalData" was deleted
+    }
 }
 
 void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
