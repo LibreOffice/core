@@ -34,8 +34,8 @@ QueryTemplateBox::QueryTemplateBox( vcl::Window* pParent, const OUString& rMessa
     SetHelpId( HID_QUERY_LOAD_TEMPLATE );
 
     AddButton( SfxResId( STR_QRYTEMPL_UPDATE_BTN ).toString(), RET_YES,
-            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-    AddButton( SfxResId(STR_QRYTEMPL_KEEP_BTN).toString(), RET_NO, BUTTONDIALOG_CANCELBUTTON );
+            ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus );
+    AddButton( SfxResId(STR_QRYTEMPL_KEEP_BTN).toString(), RET_NO, ButtonDialogFlags::Cancel );
 }
 
 } // end of namespace sfx2

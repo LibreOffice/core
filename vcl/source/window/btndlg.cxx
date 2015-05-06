@@ -73,23 +73,23 @@ void ButtonDialog::dispose()
     Dialog::dispose();
 }
 
-PushButton* ButtonDialog::ImplCreatePushButton( sal_uInt16 nBtnFlags )
+PushButton* ButtonDialog::ImplCreatePushButton( ButtonDialogFlags nBtnFlags )
 {
     PushButton* pBtn;
     WinBits     nStyle = 0;
 
-    if ( nBtnFlags & BUTTONDIALOG_DEFBUTTON )
+    if ( nBtnFlags & ButtonDialogFlags::Default )
         nStyle |= WB_DEFBUTTON;
-    if ( nBtnFlags & BUTTONDIALOG_CANCELBUTTON )
+    if ( nBtnFlags & ButtonDialogFlags::Cancel )
         pBtn = VclPtr<CancelButton>::Create( this, nStyle );
-    else if ( nBtnFlags & BUTTONDIALOG_OKBUTTON )
+    else if ( nBtnFlags & ButtonDialogFlags::OK )
         pBtn = VclPtr<OKButton>::Create( this, nStyle );
-    else if ( nBtnFlags & BUTTONDIALOG_HELPBUTTON )
+    else if ( nBtnFlags & ButtonDialogFlags::Help )
         pBtn = VclPtr<HelpButton>::Create( this, nStyle );
     else
         pBtn = VclPtr<PushButton>::Create( this, nStyle );
 
-    if ( !(nBtnFlags & BUTTONDIALOG_HELPBUTTON) )
+    if ( !(nBtnFlags & ButtonDialogFlags::Help) )
         pBtn->SetClickHdl( LINK( this, ButtonDialog, ImplClickHdl ) );
 
     return pBtn;
@@ -274,7 +274,7 @@ void ButtonDialog::Click()
 }
 
 void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
-                              sal_uInt16 nBtnFlags, long nSepPixel )
+                              ButtonDialogFlags nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
@@ -288,14 +288,14 @@ void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
 
     maItemList.push_back(pItem);
 
-    if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
+    if ( nBtnFlags & ButtonDialogFlags::Focus )
         mnFocusButtonId = nId;
 
     mbFormat = true;
 }
 
 void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
-                              sal_uInt16 nBtnFlags, long nSepPixel )
+                              ButtonDialogFlags nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
@@ -304,11 +304,11 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
     pItem->mnSepSize        = nSepPixel;
 
     if ( eType == StandardButtonType::OK )
-        nBtnFlags |= BUTTONDIALOG_OKBUTTON;
+        nBtnFlags |= ButtonDialogFlags::OK;
     else if ( eType == StandardButtonType::Help )
-        nBtnFlags |= BUTTONDIALOG_HELPBUTTON;
+        nBtnFlags |= ButtonDialogFlags::Help;
     else if ( (eType == StandardButtonType::Cancel) || (eType == StandardButtonType::Close) )
-        nBtnFlags |= BUTTONDIALOG_CANCELBUTTON;
+        nBtnFlags |= ButtonDialogFlags::Cancel;
     pItem->mpPushButton = ImplCreatePushButton( nBtnFlags );
 
     // Standard-Buttons have the right text already
@@ -319,7 +319,7 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
         pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
     }
 
-    if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
+    if ( nBtnFlags & ButtonDialogFlags::Focus )
         mnFocusButtonId = nId;
 
     maItemList.push_back(pItem);

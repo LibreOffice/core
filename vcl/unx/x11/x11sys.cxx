@@ -141,7 +141,7 @@ int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMes
     sal_uInt16 nButton = 0;
     for( std::list< OUString >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
-            aWarn->AddButton( *it, nButton+1, nButton == (sal_uInt16)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
+            aWarn->AddButton( *it, nButton+1, nButton == (sal_uInt16)nDefButton ? ButtonDialogFlags::Default : ButtonDialogFlags::NONE );
             nButton++;
     }
     aWarn->SetFocusButton( (sal_uInt16)nDefButton+1 );

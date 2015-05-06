@@ -28,8 +28,8 @@ FileChangedQueryBox::FileChangedQueryBox( vcl::Window* pParent, ResMgr* pResMgr 
     SetImage( QueryBox::GetStandardImage() );
 
     AddButton(ResId(STR_FILECHANGED_SAVEANYWAY_BTN, *pResMgr).toString(), RET_YES,
-            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+            ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
     SetButtonHelpText( RET_YES, OUString() );
     SetMessText(ResId(STR_FILECHANGED_MSG, *pResMgr).toString());

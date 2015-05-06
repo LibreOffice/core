@@ -28,9 +28,9 @@ TryLaterQueryBox::TryLaterQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const
     SetImage( QueryBox::GetStandardImage() );
 
     AddButton(ResId(STR_TRYLATER_RETRYSAVING_BTN, *pResMgr).toString(), RET_YES,
-            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-    AddButton(ResId(STR_TRYLATER_SAVEAS_BTN, *pResMgr).toString(), RET_NO, 0);
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+            ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+    AddButton(ResId(STR_TRYLATER_SAVEAS_BTN, *pResMgr).toString(), RET_NO);
+    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
     SetButtonHelpText( RET_YES, OUString() );
     SetButtonHelpText( RET_NO, OUString() );

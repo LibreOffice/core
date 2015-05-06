@@ -261,15 +261,15 @@ static short lcl_AskRedlineMode(vcl::Window *pWin)
                     OUString( SW_RES( STR_REDLINE_TITLE ) ),
                     OUString( SW_RES( STR_REDLINE_MSG ) ) );
     aQBox->SetImage( QueryBox::GetStandardImage() );
-    const sal_uInt16 nBtnFlags = BUTTONDIALOG_DEFBUTTON |
-                        BUTTONDIALOG_OKBUTTON |
-                        BUTTONDIALOG_FOCUSBUTTON;
+    const ButtonDialogFlags nBtnFlags = ButtonDialogFlags::Default |
+                        ButtonDialogFlags::OK |
+                        ButtonDialogFlags::Focus;
 
     aQBox->AddButton(OUString(SW_RES(STR_REDLINE_ACCEPT_ALL)), RET_OK, nBtnFlags);
     aQBox->GetPushButton( RET_OK )->SetHelpId(HID_AUTOFORMAT_ACCEPT);
-    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_REJECT_ALL)), RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
+    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_REJECT_ALL)), RET_CANCEL, ButtonDialogFlags::Cancel);
     aQBox->GetPushButton( RET_CANCEL )->SetHelpId(HID_AUTOFORMAT_REJECT  );
-    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_EDIT)), 2, 0);
+    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_EDIT)), 2);
     aQBox->GetPushButton( 2 )->SetHelpId(HID_AUTOFORMAT_EDIT_CHG);
     aQBox->SetButtonHelpText( RET_OK, OUString() );
 
