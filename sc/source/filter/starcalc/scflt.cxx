@@ -1189,7 +1189,7 @@ void Sc10Import::LoadPatternCollection()
                     }
 
                 if( ( OJustify & ojWordBreak ) == ojWordBreak )
-                    rItemSet.Put( SfxBoolItem( sal_True ) );
+                    rItemSet.Put( SfxBoolItem( ATTR_LINEBREAK, true ) );
                 if( ( OJustify & ojBottomTop ) == ojBottomTop )
                     rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
                 else if( ( OJustify & ojTopBottom ) == ojTopBottom )
@@ -1830,7 +1830,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             }
 
             if (OJustify & ojWordBreak)
-                aScPattern.GetItemSet().Put(SfxBoolItem(sal_True));
+                aScPattern.GetItemSet().Put(SfxBoolItem(ATTR_LINEBREAK, true));
             if (OJustify & ojBottomTop)
                 aScPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,9000));
             else if (OJustify & ojTopBottom)
