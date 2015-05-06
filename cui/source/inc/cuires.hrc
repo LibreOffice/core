@@ -208,6 +208,7 @@
 #define RID_SVXSTR_ARCHIVE_TITLE            (RID_SVX_START + 484)
 #define RID_SVXSTR_ARCHIVE_HEADLINE         (RID_SVX_START + 485)
 #define RID_SVXSTR_MULTIFILE_DBL_ERR        (RID_SVX_START + 486)
+#define RID_SVXSTR_ADD_IMAGE                (RID_SVX_START + 487)
 
 // script organizer
 #define RID_SVXSTR_DELQUERY                 (RID_SVX_START + 1027)

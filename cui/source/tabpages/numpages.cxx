@@ -72,6 +72,15 @@
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <sfx2/filedlghelper.hxx>
+#include "svx/gallery1.hxx"
+#include "svx/galtheme.hxx"
+#include <unotools/ucbstreamhelper.hxx>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <rtl/ustring.h>
+#include <comphelper/string.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <vcl/graphicfilter.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -92,6 +101,8 @@ using namespace css::style;
 
 #define MAX_BMP_WIDTH               16
 #define MAX_BMP_HEIGHT              16
+#define SEARCHPATH_DELIMITER        ((sal_Unicode)';')
+#define SEARCHFILENAME_DELIMITER    ((sal_Unicode)'/')
 
 static bool bLastRelative =         false;
 static const sal_Char cNumberingType[] = "NumberingType";
@@ -813,8 +824,11 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
     SetExchangeSupport();
     get(m_pErrorText, "errorft");
     get(m_pExamplesVS, "valueset");
+    get(m_pBtBrowseFile, "browseBtn");
+
     m_pExamplesVS->SetSelectHdl(LINK(this, SvxBitmapPickTabPage, NumSelectHdl_Impl));
     m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
+    m_pBtBrowseFile->SetClickHdl(LINK(this, SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl));
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
@@ -856,6 +870,7 @@ void SvxBitmapPickTabPage::dispose()
     pActNum = NULL;
     delete pSaveNum;
     pSaveNum = NULL;
+    m_pBtBrowseFile.clear();
     m_pErrorText.clear();
     m_pExamplesVS.clear();
     SfxTabPage::dispose();
@@ -999,6 +1014,100 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl)
     PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;
+}
+
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl)
+{
+
+    sfx2::FileDialogHelper aFileDialog(0, 0);
+    aFileDialog.SetTitle(CUI_RES(RID_SVXSTR_ADD_IMAGE));
+    if ( aFileDialog.Execute() != ERRCODE_NONE )
+        return 0;
+
+    OUString aPath = SvtPathOptions().GetGalleryPath();
+    OUString aPathToken = aPath.getToken( 1 , SEARCHPATH_DELIMITER );
+
+    OUString aUserImageURL = aFileDialog.GetPath();
+
+    sal_Int32 nSub = comphelper::string::getTokenCount( aUserImageURL, '/');
+    OUString aFileName = aUserImageURL.getToken( nSub-1 , SEARCHFILENAME_DELIMITER );
+
+    OUString aUserGalleryURL = aPathToken + "/" + aFileName;
+    INetURLObject aURL( aUserImageURL );
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+
+    GraphicDescriptor aDescriptor(aURL);
+    if (aDescriptor.Detect())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
+                     ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
+        if ( xSimpleFileAccess->exists( aUserImageURL ))
+        {
+            xSimpleFileAccess->copy( aUserImageURL, aUserGalleryURL );
+            INetURLObject gURL( aUserGalleryURL );
+                 boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
+                          gURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+            if ( pIn )
+            {
+                Graphic aGraphic;
+                GraphicConverter::Import( *pIn, aGraphic );
+
+                BitmapEx aBitmap = aGraphic.GetBitmapEx();
+                long nPixelX = (long)(aBitmap.GetSizePixel().Width());
+                long nPixelY = (long)(aBitmap.GetSizePixel().Height());
+                double ratio = nPixelY/(double)nPixelX;
+                if(nPixelX > 30)
+                {
+                    nPixelX = 30;
+                    nPixelY = (long) (nPixelX*ratio);
+                }
+                if(nPixelY > 30)
+                {
+                    nPixelY = 30;
+                    nPixelX = (long) (nPixelY/ratio);
+                }
+
+                aBitmap.Scale( Size( nPixelX, nPixelY ), BmpScaleFlag::Fast );
+                Graphic aScaledGraphic( aBitmap );
+                GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+                Sequence< PropertyValue > aFilterData( 2 );
+                aFilterData[ 0 ].Name = "Compression";
+                aFilterData[ 0 ].Value <<= (sal_Int32) -1 ;
+                aFilterData[ 1 ].Name = "Quality";
+                aFilterData[ 1 ].Value <<= (sal_Int32) 1;
+
+                sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( gURL.GetFileExtension() );
+                rFilter.ExportGraphic( aScaledGraphic, gURL , nFilterFormat, &aFilterData );
+                GalleryExplorer::InsertURL( GALLERY_THEME_BULLETS, aUserGalleryURL );
+
+                aGrfNames.push_back(aUserGalleryURL);
+                size_t i = 0;
+                for(std::vector<OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
+                {
+                    m_pExamplesVS->InsertItem( i + 1, i);
+                    INetURLObject aObj(*it);
+                    if(aObj.GetProtocol() == INetProtocol::File)
+                        *it = aObj.PathToFileName();
+                    m_pExamplesVS->SetItemText( i + 1, *it );
+                }
+
+                if(aGrfNames.empty())
+                {
+                    m_pErrorText->Show();
+                }
+                else
+                {
+                    m_pExamplesVS->Show();
+                    m_pExamplesVS->SetFormat();
+                }
+
+            }
+        }
+
+    }
+      return 0;
 }
 
 // static

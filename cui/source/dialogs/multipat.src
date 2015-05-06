@@ -39,4 +39,9 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text [ en-US ] = "The file %1 already exists." ;
 };
 
+String RID_SVXSTR_ADD_IMAGE
+{
+    Text [ en-US ] = "Add Image" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
