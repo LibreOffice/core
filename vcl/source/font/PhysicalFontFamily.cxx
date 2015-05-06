@@ -159,19 +159,6 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewData )
          ||  (pNewData->GetSlant() == ITALIC_OBLIQUE) )
         mnTypeFaces |= FONT_FAMILY_ITALIC;
 
-    if( (meMatchWeight == WEIGHT_DONTKNOW)
-    ||  (meMatchWidth  == WIDTH_DONTKNOW)
-    ||  (mnMatchType   == ImplFontAttrs::None) )
-    {
-        // TODO: is it cheaper to calc matching attributes now or on demand?
-        // calc matching attributes if other entries are already initialized
-
-        // Do lazy, quite expensive, not needed in start-up!
-        // const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
-        // InitMatchData( rFontSubst, maSearchName );
-        // mbMatchData=true; // Somewhere else???
-    }
-
     // reassign name (sharing saves memory)
     if( pNewData->GetFamilyName() == GetFamilyName() )
         pNewData->SetFamilyName( GetFamilyName() );
