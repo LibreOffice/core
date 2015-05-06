@@ -177,7 +177,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         bool            mbFontIndependentLineSpacing;
         sal_uInt32          mnTextSize;
 
-        SotStorageRef        mrStg;
+        tools::SvRef<SotStorage>        mrStg;
         SvStream*           mpCurUserStrm;
         SvStream*           mpStrm;
         SvStream*           mpPicStrm;
@@ -274,7 +274,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
 
     public:
-                                PPTWriter( SotStorageRef& rSvStorage,
+                                PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rStatInd,
                                                 SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );

@@ -62,7 +62,7 @@ FltError ExportBiff5::Write()
     SfxObjectShell* pDocShell = GetDocShell();
     OSL_ENSURE( pDocShell, "ExportBiff5::Write - no document shell" );
 
-    SotStorageRef xRootStrg = GetRootStorage();
+    tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     OSL_ENSURE( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
 
     bool bWriteBasicStrg = false;

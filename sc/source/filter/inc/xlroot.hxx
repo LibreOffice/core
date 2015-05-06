@@ -79,7 +79,7 @@ struct XclRootData
     XclBiff             meBiff;             /// Current BIFF version.
     XclOutput           meOutput;           /// Current Output format.
     SfxMedium&          mrMedium;           /// The medium to import from.
-    SotStorageRef       mxRootStrg;         /// The root OLE storage of imported/exported file.
+    tools::SvRef<SotStorage>       mxRootStrg;         /// The root OLE storage of imported/exported file.
     ScDocument&         mrDoc;              /// The source or destination document.
     ScDocumentImport    maDocImport;
     OUString            maDocUrl;           /// Document URL of imported/exported file.
@@ -113,7 +113,7 @@ struct XclRootData
     const bool          mbExport;           /// false = Import, true = Export.
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            SotStorageRef xRootStrg, ScDocument& rDoc,
+                            tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc,
                             rtl_TextEncoding eTextEnc, bool bExport );
     virtual             ~XclRootData();
 };
@@ -190,16 +190,16 @@ public:
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
-    inline SotStorageRef GetRootStorage() const { return mrData.mxRootStrg; }
+    inline tools::SvRef<SotStorage> GetRootStorage() const { return mrData.mxRootStrg; }
     /** Returns true, if the document contains a VBA storage. */
     bool                HasVbaStorage() const;
 
     /** Tries to open a storage as child of the specified storage for reading or writing. */
-    SotStorageRef       OpenStorage( SotStorageRef xStrg, const OUString& rStrgName ) const;
+    tools::SvRef<SotStorage>       OpenStorage( tools::SvRef<SotStorage> xStrg, const OUString& rStrgName ) const;
     /** Tries to open a storage as child of the root storage for reading or writing. */
-    SotStorageRef       OpenStorage( const OUString& rStrgName ) const;
+    tools::SvRef<SotStorage>       OpenStorage( const OUString& rStrgName ) const;
     /** Tries to open a new stream in the specified storage for reading or writing. */
-    SotStorageStreamRef OpenStream( SotStorageRef xStrg, const OUString& rStrmName ) const;
+    SotStorageStreamRef OpenStream( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName ) const;
     /** Tries to open a new stream in the root storage for reading or writing. */
     SotStorageStreamRef OpenStream( const OUString& rStrmName ) const;
 

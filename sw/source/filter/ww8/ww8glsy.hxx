@@ -67,7 +67,7 @@ private:
     WW8GlossaryFib *pGlossary;
     SotStorageStreamRef xTableStream;
     SotStorageStreamRef &rStrm;
-    SotStorageRef xStg;
+    tools::SvRef<SotStorage> xStg;
     sal_uInt16 nStrings;
 
     static bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,

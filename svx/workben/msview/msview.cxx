@@ -722,7 +722,7 @@ private:
 
     Atom* mpAtom;
     SvStream* mpDocStream;
-    SotStorageRef maStorage;
+    tools::SvRef<SotStorage> maStorage;
 };
 
 typedef boost::shared_ptr< PPTDocument > PPTDocumentPtr;

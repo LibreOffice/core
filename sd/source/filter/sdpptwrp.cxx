@@ -39,7 +39,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( SAL_CALL *ExportPPTPointer )( const std::vector< com::sun::star::beans::PropertyValue >&, SotStorageRef&,
+typedef sal_Bool ( SAL_CALL *ExportPPTPointer )( const std::vector< com::sun::star::beans::PropertyValue >&, tools::SvRef<SotStorage>&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
@@ -50,7 +50,7 @@ typedef sal_Bool ( SAL_CALL *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*&
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" sal_Bool ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >&, SotStorageRef&,
+extern "C" sal_Bool ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >&, tools::SvRef<SotStorage>&,
                                Reference< XModel > &,
                                Reference< XStatusIndicator > &,
                                SvMemoryStream*, sal_uInt32 nCnvrtFlags );
@@ -77,12 +77,12 @@ SdPPTFilter::~SdPPTFilter()
 bool SdPPTFilter::Import()
 {
     bool    bRet = false;
-    SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), false );
+    tools::SvRef<SotStorage> pStorage = new SotStorage( mrMedium.GetInStream(), false );
     if( !pStorage->GetError() )
     {
         /* check if there is a dualstorage, then the
         document is probably a PPT95 containing PPT97 */
-        SotStorageRef xDualStorage;
+        tools::SvRef<SotStorage> xDualStorage;
         OUString sDualStorage( "PP97_DUALSTORAGE"  );
         if ( pStorage->IsContained( sDualStorage ) )
         {
@@ -137,7 +137,7 @@ bool SdPPTFilter::Export()
     {
         if( mxModel.is() )
         {
-            SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), false );
+            tools::SvRef<SotStorage>    xStorRef = new SotStorage( mrMedium.GetOutStream(), false );
 #ifndef DISABLE_DYNLOADING
             ExportPPTPointer PPTExport = reinterpret_cast<ExportPPTPointer>(pLibrary->getFunctionSymbol( "ExportPPT" ));
 #else

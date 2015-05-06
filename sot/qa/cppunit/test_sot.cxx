@@ -26,10 +26,10 @@ namespace
     public:
         SotTest() {}
 
-        bool checkStream( const SotStorageRef &xObjStor,
+        bool checkStream( const tools::SvRef<SotStorage> &xObjStor,
                           const OUString &rStreamName,
                           sal_uLong nSize );
-        bool checkStorage( const SotStorageRef &xObjStor );
+        bool checkStorage( const tools::SvRef<SotStorage> &xObjStor );
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
@@ -44,7 +44,7 @@ namespace
         CPPUNIT_TEST_SUITE_END();
     };
 
-    bool SotTest::checkStream( const SotStorageRef &xObjStor,
+    bool SotTest::checkStream( const tools::SvRef<SotStorage> &xObjStor,
                                const OUString &rStreamName,
                                sal_uLong nSize )
     {
@@ -82,7 +82,7 @@ namespace
         return true;
     }
 
-    bool SotTest::checkStorage( const SotStorageRef &xObjStor )
+    bool SotTest::checkStorage( const tools::SvRef<SotStorage> &xObjStor )
     {
         SvStorageInfoList aInfoList;
         xObjStor->FillInfoList( &aInfoList );
@@ -92,7 +92,7 @@ namespace
         {
             if( aIt->IsStorage() )
             {
-                SotStorageRef xChild( xObjStor->OpenSotStorage( aIt->GetName() ) );
+                tools::SvRef<SotStorage> xChild( xObjStor->OpenSotStorage( aIt->GetName() ) );
                 checkStorage( xChild );
             }
             else if( aIt->IsStream() )
@@ -107,7 +107,7 @@ namespace
         SfxFilterFlags, SotClipboardFormatId, unsigned int)
     {
         SvFileStream aStream(rURL, StreamMode::READ);
-        SotStorageRef xObjStor = new SotStorage(aStream);
+        tools::SvRef<SotStorage> xObjStor = new SotStorage(aStream);
         if (!xObjStor.Is() || xObjStor->GetError())
             return false;
 
@@ -126,7 +126,7 @@ namespace
     {
         OUString aURL(getURLFromSrc("/sot/qa/cppunit/data/pass/fdo84229-1.compound"));
         SvFileStream aStream(aURL, StreamMode::READ);
-        SotStorageRef xObjStor = new SotStorage(aStream);
+        tools::SvRef<SotStorage> xObjStor = new SotStorage(aStream);
         CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",
                                xObjStor.Is() && !xObjStor->GetError());
         SotStorageStreamRef xStream = xObjStor->OpenSotStream("Book");

@@ -203,7 +203,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
         }
         catch( const uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
 
-            SotStorageRef xOLEStor = new SotStorage( pStream, true );
+            tools::SvRef<SotStorage> xOLEStor = new SotStorage( pStream, true );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
         }
@@ -328,7 +328,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
             catch ( const uno::Exception& )
             {}
 
-            SotStorageRef xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, STREAM_STD_READ );
+            tools::SvRef<SotStorage> xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, STREAM_STD_READ );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
         }

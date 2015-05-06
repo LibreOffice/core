@@ -214,11 +214,6 @@ public:
     static sal_Int32    GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
 };
 
-#ifndef SOT_DECL_SOTSTORAGE_DEFINED
-#define SOT_DECL_SOTSTORAGE_DEFINED
-typedef tools::SvRef<SotStorage> SotStorageRef;
-#endif
-
 #endif // _SVSTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

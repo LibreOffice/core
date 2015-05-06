@@ -1885,7 +1885,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
     SvStream *pStream = rMedium.GetOutStream();
     if ( pStream )
     {
-        SotStorageRef pStor = new SotStorage( pStream, false );
+        tools::SvRef<SotStorage> pStor = new SotStorage( pStream, false );
 
         SvGlobalName aGName(0x0002ce02L, 0x0000, 0x0000,0xc0,0x00,
             0x00,0x00,0x00,0x00,0x00,0x46 );

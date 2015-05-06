@@ -90,7 +90,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
         try
         {
-            SotStorageRef aStorage = new SotStorage ( pInStrm, false );
+            tools::SvRef<SotStorage> aStorage = new SotStorage ( pInStrm, false );
             if ( !aStorage->GetError() )
             {
                 bIsDetected = aStorage->IsContained( "WordDocument" );

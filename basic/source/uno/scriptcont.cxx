@@ -362,7 +362,7 @@ SfxLibraryContainer* SfxScriptLibraryContainer::createInstanceImpl()
 void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
 {
     // TODO: move loading from old storage to binary filters?
-    SotStorageRef xStorage = new SotStorage( false, aFile );
+    tools::SvRef<SotStorage> xStorage = new SotStorage( false, aFile );
     if( xStorage.Is() && xStorage->GetError() == ERRCODE_NONE )
     {
         BasicManager* pBasicManager = new BasicManager( *(SotStorage*)xStorage, aFile );

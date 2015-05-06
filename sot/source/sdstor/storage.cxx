@@ -547,7 +547,7 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
 {
     SvMemoryStream * pStm = NULL;
     pStm = new SvMemoryStream( 0x8000, 0x8000 );
-    SotStorageRef aStg = new SotStorage( *pStm );
+    tools::SvRef<SotStorage> aStg = new SotStorage( *pStm );
     if( CopyTo( aStg ) )
     {
         aStg->Commit();

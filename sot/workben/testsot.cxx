@@ -25,11 +25,11 @@
  */
 int main (int argc, sal_Char **argv)
 {
-     SotStorageRef xStor = new SotStorage( "c:\\temp\\65254.ppt" );
+     tools::SvRef<SotStorage> xStor = new SotStorage( "c:\\temp\\65254.ppt" );
 /*
-    SotStorageRef xStor = new SotStorage( "c:\\temp\\video.sdb" );
-    SotStorageRef xStor = new SotStorage( "c:\\temp\\video.sdb" );
-    SotStorageRef x2Stor = xStor->OpenSotStorage( "1117" );
+    tools::SvRef<SotStorage> xStor = new SotStorage( "c:\\temp\\video.sdb" );
+    tools::SvRef<SotStorage> xStor = new SotStorage( "c:\\temp\\video.sdb" );
+    tools::SvRef<SotStorage> x2Stor = xStor->OpenSotStorage( "1117" );
 
     SotStorageStreamRef xStm = x2Stor->OpenSotStream( "Genres", STREAM_STD_READWRITE | StreamMode::TRUNC);
     //BYTE szData[100];

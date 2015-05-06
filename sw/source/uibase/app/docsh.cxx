@@ -225,7 +225,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SwRead pRead = StartConvertFrom(rMedium, &pRdr);
     if (!pRead)
       return false; // #129881# return if no reader is found
-    SotStorageRef pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
+    tools::SvRef<SotStorage> pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
 
     m_pDoc->setDocAccTitle(OUString());
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
@@ -545,7 +545,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
         if ( bSave )
         {
-            SotStorageRef xStg = new SotStorage( rMedium.GetOutStream(), false );
+            tools::SvRef<SotStorage> xStg = new SotStorage( rMedium.GetOutStream(), false );
             OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {

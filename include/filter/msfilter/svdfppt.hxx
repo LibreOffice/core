@@ -632,7 +632,7 @@ public:
                                 sal_uInt32* pTableArry,
                                 SvxMSDffSolverContainer*
                             );
-    virtual bool ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const = 0;
+    virtual bool ReadFormControl( tools::SvRef<SotStorage>& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const = 0;
 };
 
 struct PPTTextCharacterStyleAtomInterpreter
@@ -1305,7 +1305,7 @@ public :
         mpPPTImporter           ( pPPTImporter ),
         mxInStrm                ( rxInStrm )
     {};
-    bool ReadOCXStream( SotStorageRef& rSrc1,
+    bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,
         bool bFloatingCtrl=false );

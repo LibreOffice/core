@@ -64,7 +64,7 @@ public:
 
     static OUString GetMSBasicStorageName();
 private:
-    SotStorageRef xRoot;
+    tools::SvRef<SotStorage> xRoot;
     SfxObjectShell &rDocSh;
 };
 

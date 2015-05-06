@@ -40,7 +40,7 @@
 // Global data ================================================================
 
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
-        SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
+        tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
     mxDocImport(new ScDocumentImport(rDoc)),
     mbHasCodePage( false ),

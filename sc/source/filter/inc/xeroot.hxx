@@ -102,7 +102,7 @@ struct XclExpRootData : public XclRootData
     OStringBuffer       maStringBuf;        /// buffer to avoid massive OUString allocations
 
     explicit            XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
+                            tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
     virtual             ~XclExpRootData();
 };
 

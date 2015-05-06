@@ -66,7 +66,7 @@ using ::com::sun::star::beans::XPropertySet;
 
 //============================ PPTWriter ==================================
 
-PPTWriter::PPTWriter( SotStorageRef& rSvStorage,
+PPTWriter::PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
@@ -1278,13 +1278,13 @@ void PPTWriter::ImplWriteOLE( )
                     ::uno::Reference < embed::XEmbeddedObject > xObj( static_cast<SdrOle2Obj*>(pSdrObj)->GetObjRef() );
                     if( xObj.is() )
                     {
-                        SotStorageRef xTempStorage( new SotStorage( new SvMemoryStream(), true ) );
+                        tools::SvRef<SotStorage> xTempStorage( new SotStorage( new SvMemoryStream(), true ) );
                         aOleExport.ExportOLEObject( xObj, *xTempStorage );
 
                         //TODO/MBA: testing
                         OUString aPersistStream( SVEXT_PERSIST_STREAM );
                         SvMemoryStream aStream;
-                        SotStorageRef xCleanStorage( new SotStorage( false, aStream ) );
+                        tools::SvRef<SotStorage> xCleanStorage( new SotStorage( false, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
@@ -1311,7 +1311,7 @@ void PPTWriter::ImplWriteOLE( )
                     OUString aName;
                     //Initialize the graphic size which will be used on export
                     ::com::sun::star::awt::Size  aSize( pPtr->xShape->getSize() );
-                    SotStorageRef xDest( new SotStorage( new SvMemoryStream(), true ) );
+                    tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
                     bool bOk = oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xDest, pPtr->xControlModel, aSize, aName );
                     if ( bOk )
                         pStrm = xDest->CreateMemoryStream();
@@ -1448,7 +1448,7 @@ bool PPTWriter::ImplWriteAtomEnding()
 
 // - exported function -
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SotStorageRef& rSvStorage,
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, tools::SvRef<SotStorage>& rSvStorage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
@@ -1462,14 +1462,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< 
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
 {
-    SotStorageRef xDest( new SotStorage( new SvMemoryStream(), true ) );
+    tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
     SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
     aMSVBas.SaveOrDelMSVBAStorage( true, OUString( "_MS_VBA_Overhead" ) );
 
-    SotStorageRef xOverhead = xDest->OpenSotStorage( OUString( "_MS_VBA_Overhead") );
+    tools::SvRef<SotStorage> xOverhead = xDest->OpenSotStorage( OUString( "_MS_VBA_Overhead") );
     if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
     {
-        SotStorageRef xOverhead2 = xOverhead->OpenSotStorage( OUString( "_MS_VBA_Overhead") );
+        tools::SvRef<SotStorage> xOverhead2 = xOverhead->OpenSotStorage( OUString( "_MS_VBA_Overhead") );
         if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
         {
             SotStorageStreamRef xTemp = xOverhead2->OpenSotStream( OUString( "_MS_VBA_Overhead2") );

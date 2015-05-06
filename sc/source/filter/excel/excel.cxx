@@ -66,7 +66,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.
 
     // try to open an OLE storage
-    SotStorageRef xRootStrg;
+    tools::SvRef<SotStorage> xRootStrg;
     SotStorageStreamRef xStrgStrm;
     if( SotStorage::IsStorageFile( pMedStrm ) )
     {
@@ -145,7 +145,7 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         SvStream* pMedStrm, bool bBiff8, rtl_TextEncoding eNach )
 {
     // try to open an OLE storage
-    SotStorageRef xRootStrg = new SotStorage( pMedStrm, false );
+    tools::SvRef<SotStorage> xRootStrg = new SotStorage( pMedStrm, false );
     if( xRootStrg->GetError() ) return eERR_OPEN;
 
     // create BIFF dependent strings

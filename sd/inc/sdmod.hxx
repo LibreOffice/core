@@ -137,7 +137,7 @@ protected:
     SdOptions*              pDrawOptions;
     SvxSearchItem*          pSearchItem;
     SvNumberFormatter*      pNumberFormatter;
-    SotStorageRef            xOptionStorage;
+    tools::SvRef<SotStorage>            xOptionStorage;
     bool                    bWaterCan;
     SfxErrorHandler*        mpErrorHdl;
     /** This device is used for printer independent layout.  It is virtual

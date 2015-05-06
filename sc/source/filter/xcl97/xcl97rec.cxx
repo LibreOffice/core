@@ -891,7 +891,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     sal_uInt32          nPictureId = sal_uInt32(sal_uIntPtr(this) >> 2);
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
     aStorageName += OUString::createFromAscii(aBuf);
-    SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
+    tools::SvRef<SotStorage>    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
                             STREAM_READWRITE| StreamMode::SHARE_DENYALL );
     if( xOleStg.Is() )
     {

@@ -76,7 +76,7 @@ XclDebugObjCounter::~XclDebugObjCounter()
 #endif
 
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-        SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
+        tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
     meBiff( eBiff ),
     meOutput( EXC_OUTPUT_BINARY ),
     mrMedium( rMedium ),
@@ -238,23 +238,23 @@ uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper:
 
 bool XclRoot::HasVbaStorage() const
 {
-    SotStorageRef xRootStrg = GetRootStorage();
+    tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     return xRootStrg.Is() && xRootStrg->IsContained( EXC_STORAGE_VBA_PROJECT );
 }
 
-SotStorageRef XclRoot::OpenStorage( SotStorageRef xStrg, const OUString& rStrgName ) const
+tools::SvRef<SotStorage> XclRoot::OpenStorage( tools::SvRef<SotStorage> xStrg, const OUString& rStrgName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageWrite( xStrg, rStrgName ) :
         ScfTools::OpenStorageRead( xStrg, rStrgName );
 }
 
-SotStorageRef XclRoot::OpenStorage( const OUString& rStrgName ) const
+tools::SvRef<SotStorage> XclRoot::OpenStorage( const OUString& rStrgName ) const
 {
     return OpenStorage( GetRootStorage(), rStrgName );
 }
 
-SotStorageStreamRef XclRoot::OpenStream( SotStorageRef xStrg, const OUString& rStrmName ) const
+SotStorageStreamRef XclRoot::OpenStream( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageStreamWrite( xStrg, rStrmName ) :

@@ -3444,7 +3444,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicObj,
         else
         {
             SfxObjectShell* pDocShell = GetDocShell();
-            SotStorageRef xSrcStrg = GetRootStorage();
+            tools::SvRef<SotStorage> xSrcStrg = GetRootStorage();
             OUString aStrgName = rPicObj.GetOleStorageName();
             if( pDocShell && xSrcStrg.Is() && (!aStrgName.isEmpty()) )
             {

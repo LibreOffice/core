@@ -94,7 +94,7 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 }
 
 bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
-    SotStorageRef xOleStg, SotStorageRef xObjStg, OUString &rStorageName,
+    tools::SvRef<SotStorage> xOleStg, tools::SvRef<SotStorage> xObjStg, OUString &rStorageName,
     SwOLENode *pOLENd)
 {
     bool bGraphicNeeded = false;
@@ -227,7 +227,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     }
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
 
-    SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
+    tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(
         OUString(SL::aObjectPool), STREAM_READWRITE |
         StreamMode::SHARE_DENYALL );
 
@@ -250,7 +250,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             Set_UInt32(pDataAdr, nPictureId);
             OUString sStorageName('_');
             sStorageName += OUString::number( nPictureId );
-            SotStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
+            tools::SvRef<SotStorage> xOleStg = xObjStg->OpenSotStorage( sStorageName,
                                 STREAM_READWRITE| StreamMode::SHARE_DENYALL );
             if( xOleStg.Is() )
             {
@@ -343,15 +343,15 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 {
     uno::Reference< embed::XStorage > xDocStg = m_pDoc->GetDocStorage();
     uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( "OLELinks", embed::ElementModes::READ );
-    SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
+    tools::SvRef<SotStorage> xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
 
-    SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
+    tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(
         OUString(SL::aObjectPool), STREAM_READWRITE |
         StreamMode::SHARE_DENYALL );
 
     if( xObjStg.Is() && xObjSrc.Is() )
     {
-        SotStorageRef xOleDst = xObjStg->OpenSotStorage( rOleId,
+        tools::SvRef<SotStorage> xOleDst = xObjStg->OpenSotStorage( rOleId,
                 STREAM_READWRITE | StreamMode::SHARE_DENYALL );
         if ( xOleDst.Is() )
             xObjSrc->CopyTo( xOleDst );

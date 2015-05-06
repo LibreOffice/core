@@ -373,7 +373,7 @@ void ImportExcel8::Feat()
 void ImportExcel8::ReadBasic()
 {
     SfxObjectShell* pShell = GetDocShell();
-    SotStorageRef xRootStrg = GetRootStorage();
+    tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
     if( pShell && xRootStrg.Is() ) try
     {
@@ -468,7 +468,7 @@ void ImportExcel8::LoadDocumentProperties()
     if( SfxObjectShell* pShell = GetDocShell() )
     {
         // BIFF5+ without storage is possible
-        SotStorageRef xRootStrg = GetRootStorage();
+        tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
         if( xRootStrg.Is() ) try
         {
             uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );

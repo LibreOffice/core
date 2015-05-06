@@ -743,7 +743,7 @@ public:
         com::sun::star::uno::Reference <
         com::sun::star::drawing::XShape > *pShape, bool bFloatingCtrl) SAL_OVERRIDE;
     bool ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
-    bool ReadOCXStream( SotStorageRef& rSrc1,
+    bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,
         bool bFloatingCtrl=false );
@@ -761,7 +761,7 @@ private:
     std::map<sal_uInt32,OString> aOldEscherBlipCache;
 
     virtual bool GetOLEStorageName( long nOLEId, OUString& rStorageName,
-        SotStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const SAL_OVERRIDE;
+        tools::SvRef<SotStorage>& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const SAL_OVERRIDE;
     virtual bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const SAL_OVERRIDE;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
@@ -1889,7 +1889,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
-    static bool ImportOleWMF( SotStorageRef xSrc1, GDIMetaFile &rWMF,
+    static bool ImportOleWMF( tools::SvRef<SotStorage> xSrc1, GDIMetaFile &rWMF,
         long &rX, long &rY);
     static ColorData GetCol(sal_uInt8 nIco);
 

@@ -574,11 +574,11 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
 
     SdrObject* pRet = 0;
     OUString sStorageName;
-    SotStorageRef xSrcStg;
+    tools::SvRef<SotStorage> xSrcStg;
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
     {
-        SotStorageRef xSrc = xSrcStg->OpenSotStorage( sStorageName,
+        tools::SvRef<SotStorage> xSrc = xSrcStg->OpenSotStorage( sStorageName,
             STREAM_READWRITE| StreamMode::SHARE_DENYALL );
         OSL_ENSURE(rReader.m_pFormImpl, "No Form Implementation!");
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
@@ -4842,7 +4842,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
             continue; // don't try and read the same document as ourselves
 
-        SotStorageRef rRoot = new SotStorage( aURL, STREAM_STD_READWRITE, StorageMode::Transacted );
+        tools::SvRef<SotStorage> rRoot = new SotStorage( aURL, STREAM_STD_READWRITE, StorageMode::Transacted );
 
         BasicProjImportHelper aBasicImporter( *m_pDocShell );
         // Import vba via oox filter
@@ -6149,7 +6149,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
 }
 
 bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
-    SotStorageRef& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
+    tools::SvRef<SotStorage>& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
 {
     bool bRet = false;
 

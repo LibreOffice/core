@@ -2664,7 +2664,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 }
 
 bool
-ImplSdPPTImport::ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const
+ImplSdPPTImport::ReadFormControl( tools::SvRef<SotStorage>& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const
 {
     uno::Reference< frame::XModel > xModel;
     if (  mpDoc->GetDocSh() )

@@ -1070,7 +1070,7 @@ bool XclExpXmlStream::exportDocument()
     // NOTE: Don't use SotStorage or SvStream any more, and never call
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
     // Instead, write via XOutputStream instance.
-    SotStorageRef rStorage = static_cast<SotStorage*>(NULL);
+    tools::SvRef<SotStorage> rStorage = static_cast<SotStorage*>(NULL);
     XclExpObjList::ResetCounters();
 
     XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, rDoc, RTL_TEXTENCODING_DONTKNOW );

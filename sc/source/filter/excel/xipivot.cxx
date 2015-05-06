@@ -715,7 +715,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
     }
 
     // open pivot cache storage stream
-    SotStorageRef xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
+    tools::SvRef<SotStorage> xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
     SotStorageStreamRef xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( mnStrmId ) );
     if( !xSvStrm.Is() )
         return;

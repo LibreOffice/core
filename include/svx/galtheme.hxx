@@ -98,7 +98,7 @@ private:
     GalleryObjectList           aObjectList;
     OUString                    m_aDestDir;
     bool                        m_bDestDirRelative;
-    SotStorageRef               aSvDrawStorageRef;
+    tools::SvRef<SotStorage>               aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
     sal_uIntPtr                 mnThemeLockCount;
@@ -182,7 +182,7 @@ public:
     SAL_DLLPRIVATE void         AbortActualize() { bAbortActualize = true; }
 
     SAL_DLLPRIVATE Gallery*     GetParent() const { return pParent; }
-    SAL_DLLPRIVATE SotStorageRef GetSvDrawStorage() const { return aSvDrawStorageRef; }
+    SAL_DLLPRIVATE tools::SvRef<SotStorage> GetSvDrawStorage() const { return aSvDrawStorageRef; }
 
 public:
 

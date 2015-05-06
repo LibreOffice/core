@@ -3126,7 +3126,7 @@ SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : oox
 
 // in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
 // filter/source/msocximex.cxx, so.. we need an implementation here
-bool  SwMSConvertControls::ReadOCXStream( SotStorageRef& rSrc1,
+bool  SwMSConvertControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl )
 {
@@ -3159,7 +3159,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     aSize.Height = TWIPS_TO_MM(aRect.Bottom());
 
     //Open the ObjectPool
-    SotStorageRef xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(
+    tools::SvRef<SotStorage> xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(
         OUString(SL::aObjectPool), STREAM_READWRITE |
         StreamMode::SHARE_DENYALL);
 
@@ -3167,7 +3167,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     OUStringBuffer sStorageName;
     sal_uInt32 nObjId = GenerateObjectID();
     sStorageName.append('_').append( static_cast<sal_Int64>( nObjId ));
-    SotStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear(),
+    tools::SvRef<SotStorage> xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear(),
                  STREAM_READWRITE|StreamMode::SHARE_DENYALL);
 
     if (!xOleStg.Is())

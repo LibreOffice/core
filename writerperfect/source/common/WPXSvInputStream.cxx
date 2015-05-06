@@ -72,7 +72,7 @@ catch (...)
 
 typedef struct
 {
-    SotStorageRef ref;
+    tools::SvRef<SotStorage> ref;
 } SotStorageRefWrapper;
 
 typedef struct
@@ -147,7 +147,7 @@ struct OLEStorageImpl
     SotStorageStreamRef getStream(std::size_t nId);
 
 private:
-    void traverse(const SotStorageRef &rStorage, const rtl::OUString &rPath);
+    void traverse(const tools::SvRef<SotStorage> &rStorage, const rtl::OUString &rPath);
 
     SotStorageStreamRef createStream(const rtl::OUString &rPath);
 
@@ -211,7 +211,7 @@ SotStorageStreamRef OLEStorageImpl::getStream(const std::size_t nId)
     return maStreams[nId].stream.ref;
 }
 
-void OLEStorageImpl::traverse(const SotStorageRef &rStorage, const rtl::OUString &rPath)
+void OLEStorageImpl::traverse(const tools::SvRef<SotStorage> &rStorage, const rtl::OUString &rPath)
 {
     SvStorageInfoList infos;
 

@@ -249,7 +249,7 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
         sal_uLong nResult = ERRCODE_ABORT;
         try
         {
-            SotStorageRef aRef = new SotStorage( rStrm );
+            tools::SvRef<SotStorage> aRef = new SotStorage( rStrm );
             nResult = Write( rPaM, *aRef, pFName );
             if ( nResult == ERRCODE_NONE )
                 aRef->Commit();

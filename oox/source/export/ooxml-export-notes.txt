@@ -150,7 +150,7 @@ Old binary filters (export)
 		- So why's CheckPackageSignature_Impl() fail?  Because
 			lcl_ExportExcel2007Xml() had the code:
 
-				SotStorageRef xRootStrg = new SotStorage( pMedStrm, FALSE );
+				tools::SvRef<SotStorage> xRootStrg = new SotStorage( pMedStrm, FALSE );
 
 			That is, it was creating an OLE Structured Storage document over the
 			SvStream, and then (later) used the *same* SvStream and passed it to

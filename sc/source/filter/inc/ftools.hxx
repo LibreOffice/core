@@ -158,14 +158,14 @@ public:
 // *** streams and storages *** -----------------------------------------------
 
     /** Tries to open an existing storage with the specified name in the passed storage (read-only). */
-    static SotStorageRef OpenStorageRead( SotStorageRef xStrg, const OUString& rStrgName );
+    static tools::SvRef<SotStorage> OpenStorageRead( tools::SvRef<SotStorage> xStrg, const OUString& rStrgName );
     /** Creates and opens a storage with the specified name in the passed storage (read/write). */
-    static SotStorageRef OpenStorageWrite( SotStorageRef xStrg, const OUString& rStrgName );
+    static tools::SvRef<SotStorage> OpenStorageWrite( tools::SvRef<SotStorage> xStrg, const OUString& rStrgName );
 
     /** Tries to open an existing stream with the specified name in the passed storage (read-only). */
-    static SotStorageStreamRef OpenStorageStreamRead( SotStorageRef xStrg, const OUString& rStrmName );
+    static SotStorageStreamRef OpenStorageStreamRead( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName );
     /** Creates and opens a stream with the specified name in the passed storage (read/write). */
-    static SotStorageStreamRef OpenStorageStreamWrite( SotStorageRef xStrg, const OUString& rStrmName );
+    static SotStorageStreamRef OpenStorageStreamWrite( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName );
 
 // *** item handling *** ------------------------------------------------------
 

@@ -522,7 +522,7 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
     return rxFormComp.is();
 }
 
-bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
+bool MSConvertOCXControls::ReadOCXStorage( tools::SvRef<SotStorage>& xOleStg,
                                   Reference< XFormComponent > & rxFormComp )
 {
     if ( xOleStg.Is() )
@@ -570,7 +570,7 @@ bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const ::com::sun::star::un
     return true;
 }
 
-bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, SotStorageRef &xOleStg,
+bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, tools::SvRef<SotStorage> &xOleStg,
     const Reference< XControlModel > &rxControlModel,
     const com::sun::star::awt::Size& rSize, OUString &rName)
 {

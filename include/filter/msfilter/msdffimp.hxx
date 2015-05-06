@@ -507,7 +507,7 @@ protected :
 // the following method needs to be overridden for the import of OLE objects
     virtual bool GetOLEStorageName( long nOLEId,
                                         OUString& rStorageName,
-                                        SotStorageRef& rSrcStorage,
+                                        tools::SvRef<SotStorage>& rSrcStorage,
                       com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg
                                     ) const;
 
@@ -606,7 +606,7 @@ public:
     static bool         ConvertToOle2( SvStream& rStm,
                                        sal_uInt32 nLen,
                                        const GDIMetaFile*,
-                                       const SotStorageRef & rDest );
+                                       const tools::SvRef<SotStorage> & rDest );
 
     void SetModel(SdrModel* pModel, long nApplicationScale);
     SdrModel*  GetModel() const { return pSdrModel; }
@@ -705,7 +705,7 @@ public:
     sal_uInt32  GetConvertFlags() const { return nSvxMSDffOLEConvFlags; }
 
     static SdrOle2Obj* CreateSdrOLEFromStorage( const OUString& rStorageName,
-                                                SotStorageRef& rSrcStorage,
+                                                tools::SvRef<SotStorage>& rSrcStorage,
                                                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
                                                 const Graphic& rGraf,
                                                 const Rectangle& rBoundRect,

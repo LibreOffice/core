@@ -550,7 +550,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         mpImpl->mpManagerStream = new SvMemoryStream();
         static_cast<SvStream*>(&xManagerStream)->ReadStream( *mpImpl->mpManagerStream );
 
-        SotStorageRef xBasicStorage = rStorage.OpenSotStorage( OUString(szBasicStorage), eStorageReadMode, false );
+        tools::SvRef<SotStorage> xBasicStorage = rStorage.OpenSotStorage( OUString(szBasicStorage), eStorageReadMode, false );
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
         {
             sal_uInt16 nLibs = GetLibCount();
@@ -877,7 +877,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             aLibRelStorage = aLibRelStorage.smartRel2Abs( aLibRelStorageName, bWasAbsolute);
             DBG_ASSERT(!bWasAbsolute, "RelStorageName was absolute!" );
 
-            SotStorageRef xStorageRef;
+            tools::SvRef<SotStorage> xStorageRef;
             if ( aLibAbsStorage == aCurStorage || aLibRelStorageName == szImbedded )
             {
                 xStorageRef = &rStorage;
@@ -960,7 +960,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     {
         aStorageName = GetStorageName();
     }
-    SotStorageRef xStorage;
+    tools::SvRef<SotStorage> xStorage;
     // The current must not be opened again...
     if ( pCurStorage )
     {
@@ -983,7 +983,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     {
         xStorage = new SotStorage( false, aStorageName, eStorageReadMode );
     }
-    SotStorageRef xBasicStorage = xStorage->OpenSotStorage( OUString(szBasicStorage), eStorageReadMode, false );
+    tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage( OUString(szBasicStorage), eStorageReadMode, false );
 
     if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
     {
@@ -1228,7 +1228,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
     if ( bDelBasicFromStorage && !itLibInfo->IsReference() &&
             ( !itLibInfo->IsExtern() || SotStorage::IsStorageFile( itLibInfo->GetStorageName() ) ) )
     {
-        SotStorageRef xStorage;
+        tools::SvRef<SotStorage> xStorage;
         try
         {
             if (!itLibInfo->IsExtern())
@@ -1247,7 +1247,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 
         if (xStorage.Is() && xStorage->IsStorage(OUString(szBasicStorage)))
         {
-            SotStorageRef xBasicStorage = xStorage->OpenSotStorage
+            tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage
                             ( OUString(szBasicStorage), STREAM_STD_READWRITE, false );
 
             if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
@@ -1421,7 +1421,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
         {
             try
             {
-                SotStorageRef xStorage = new SotStorage(false, LinkTargetURL, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
+                tools::SvRef<SotStorage> xStorage = new SotStorage(false, LinkTargetURL, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
                 if (!xStorage->GetError())
                 {
                     pLib = AddLib(*xStorage, rLibName, true);

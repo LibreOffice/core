@@ -1646,7 +1646,7 @@ SdrPowerPointImport::~SdrPowerPointImport()
     delete[] pPersistPtr;
 }
 
-bool PPTConvertOCXControls::ReadOCXStream( SotStorageRef& rSrc,
+bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl )
@@ -1833,7 +1833,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                 Storage* pObjStor = pDest ? new Storage( *pDest, true ) : NULL;
                 if ( pObjStor )
                 {
-                    SotStorageRef xObjStor( new SotStorage( pObjStor ) );
+                    tools::SvRef<SotStorage> xObjStor( new SotStorage( pObjStor ) );
                     if ( xObjStor.Is() && !xObjStor->GetError() )
                     {
                         if ( xObjStor->GetClassName() == SvGlobalName() )
@@ -1884,7 +1884,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     aNm = pOe->pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
 
                                     // object is not an own object
-                                    SotStorageRef xTarget = SotStorage::OpenOLEStorage( pOe->pShell->GetStorage(), aNm, STREAM_READWRITE );
+                                    tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage( pOe->pShell->GetStorage(), aNm, STREAM_READWRITE );
                                     if ( xObjStor.Is() && xTarget.Is() )
                                     {
                                         xObjStor->CopyTo( xTarget );
@@ -1997,16 +1997,16 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                         SvMemoryStream* pBas = ImportExOleObjStg( nPersistPtr, nOleId );
                         if ( pBas )
                         {
-                            SotStorageRef xSource( new SotStorage( pBas, true ) );
-                            SotStorageRef xDest( new SotStorage( new SvMemoryStream(), true ) );
+                            tools::SvRef<SotStorage> xSource( new SotStorage( pBas, true ) );
+                            tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
                             if ( xSource.Is() && xDest.Is() )
                             {
                                 // is this a visual basic storage ?
-                                SotStorageRef xSubStorage = xSource->OpenSotStorage( "VBA",
+                                tools::SvRef<SotStorage> xSubStorage = xSource->OpenSotStorage( "VBA",
                                     STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                                 if( xSubStorage.Is() && ( SVSTREAM_OK == xSubStorage->GetError() ) )
                                 {
-                                    SotStorageRef xMacros = xDest->OpenSotStorage( "MACROS" );
+                                    tools::SvRef<SotStorage> xMacros = xDest->OpenSotStorage( "MACROS" );
                                     if ( xMacros.Is() )
                                     {
                                         SvStorageInfoList aList;
@@ -2025,10 +2025,10 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                             uno::Reference < embed::XStorage > xDoc( pShell->GetStorage() );
                                             if ( xDoc.is() )
                                             {
-                                                SotStorageRef xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
+                                                tools::SvRef<SotStorage> xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
                                                 if ( xVBA.Is() && ( xVBA->GetError() == SVSTREAM_OK ) )
                                                 {
-                                                    SotStorageRef xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
+                                                    tools::SvRef<SotStorage> xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
                                                     if ( xSubVBA.Is() && ( xSubVBA->GetError() == SVSTREAM_OK ) )
                                                     {
                                                         SotStorageStreamRef xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );

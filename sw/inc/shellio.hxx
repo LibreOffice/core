@@ -147,7 +147,7 @@ public:
 class SW_DLLPUBLIC SwReader: public SwDocFac
 {
     SvStream* pStrm;
-    SotStorageRef pStg;
+    tools::SvRef<SotStorage> pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;     // Who wants to obtain a Medium (W4W).
 
@@ -199,7 +199,7 @@ class SW_DLLPUBLIC Reader
 
 protected:
     SvStream* pStrm;
-    SotStorageRef pStg;
+    tools::SvRef<SotStorage> pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;     // Who wants to obtain a Medium (W4W).
 
@@ -257,8 +257,8 @@ public:
     virtual size_t GetSectionList( SfxMedium& rMedium,
                                    std::vector<OUString*>& rStrings ) const;
 
-    SotStorageRef getSotStorageRef() { return pStg; };
-    void setSotStorageRef(SotStorageRef pStgRef) { pStg = pStgRef; };
+    tools::SvRef<SotStorage> getSotStorageRef() { return pStg; };
+    void setSotStorageRef(tools::SvRef<SotStorage> pStgRef) { pStg = pStgRef; };
 
 private:
     virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &)=0;
@@ -466,7 +466,7 @@ class SW_DLLPUBLIC StgWriter : public Writer
 {
 protected:
     OUString aFltName;
-    SotStorageRef pStg;
+    tools::SvRef<SotStorage> pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
 
     // Create error at call.
@@ -492,7 +492,7 @@ public:
 class SW_DLLPUBLIC SwWriter
 {
     SvStream* pStrm;
-    SotStorageRef pStg;
+    tools::SvRef<SotStorage> pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;
 
