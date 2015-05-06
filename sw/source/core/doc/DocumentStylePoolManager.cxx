@@ -1318,7 +1318,7 @@ SwFmt* DocumentStylePoolManager::GetFmtFromPool( sal_uInt16 nId )
             aSet.Put( SwFmtAnchor( FLY_AT_PAGE ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
-            aSet.Put( SvxOpaqueItem( sal_False ));
+            aSet.Put( SvxOpaqueItem( RES_OPAQUE, false ));
             aSet.Put( SwFmtSurround( SURROUND_THROUGHT ));
         }
         break;
