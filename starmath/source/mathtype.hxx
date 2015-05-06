@@ -120,7 +120,7 @@ private:
     sal_uInt8 nProdVersion;
     sal_uInt8 nProdSubVersion;
 
-    SvStorageStream *pS;
+    SotStorageStream *pS;
 
     void Init();
 

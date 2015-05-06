@@ -133,7 +133,7 @@ class Section
         bool                GetProperty( sal_uInt32 nId, PropItem& rPropItem );
         bool                GetDictionary( Dictionary& rDict );
         const sal_uInt8*        GetFMTID() const { return aFMTID; };
-        void                    Read( SvStorageStream* pStrm );
+        void                    Read( SotStorageStream* pStrm );
 };
 
 class PropRead

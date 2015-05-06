@@ -304,7 +304,7 @@ bool Section::GetDictionary( Dictionary& rDict )
     return bRetValue;
 }
 
-void Section::Read( SvStorageStream *pStrm )
+void Section::Read( SotStorageStream *pStrm )
 {
     sal_uInt32 i, nSecOfs, nSecSize, nPropCount, nPropId, nPropOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp, nStrmSize;
     nSecOfs = pStrm->Tell();
