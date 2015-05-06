@@ -12,7 +12,7 @@
 
 #include <comphelper/random.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <assert.h>
 #include <time.h>
 #include <random>
@@ -51,7 +51,7 @@ struct RandomNumberGenerator
         }
         catch (std::runtime_error& e)
         {
-            SAL_WARN("comphelper.random", OUString("Using std::random_device failed: ") << e.what());
+            SAL_WARN("comphelper.random", "Using std::random_device failed: " << e.what());
             global_rng.seed(time(nullptr));
         }
     }
