@@ -48,8 +48,8 @@ using namespace ::com::sun::star::uno;
 SingleTabDlgImpl::SingleTabDlgImpl()
         : m_pSfxPage(NULL)
         , m_pLine(NULL)
-    {
-    }
+{
+}
 
 class SfxModelessDialog_Impl : public SfxListener
 {
@@ -335,29 +335,30 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
 */
 bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
 {
-    if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( pImp )
     {
-        pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
-        pImp->pMgr->Activate_Impl();
-    }
-    else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
-    {
-        pBindings->SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
-        pImp->pMgr->Deactivate_Impl();
-    }
-    else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        // First, allow KeyInput for Dialog functions ( TAB etc. )
-        if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current() )
-            // then also for valid global accelerators.
-            return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
-        return true;
+        if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+        {
+            pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
+            pImp->pMgr->Activate_Impl();
+        }
+        else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
+        {
+            pBindings->SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
+            pImp->pMgr->Deactivate_Impl();
+        }
+        else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        {
+            // First, allow KeyInput for Dialog functions ( TAB etc. )
+            if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current() )
+                // then also for valid global accelerators.
+                return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
+            return true;
+        }
     }
 
     return ModelessDialog::Notify( rEvt );
 }
-
-
 
 SfxModelessDialog::~SfxModelessDialog()
 {
@@ -369,6 +370,7 @@ void SfxModelessDialog::dispose()
     if ( pImp->pMgr->GetFrame().is() && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( NULL );
     delete pImp;
+    pImp = NULL;
     ModelessDialog::dispose();
 }
 
@@ -423,32 +425,33 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 */
 
 {
-    if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( pImp )
     {
-        pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
-        pImp->pMgr->Activate_Impl();
-    }
-    else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
-    {
-        if ( !HasChildPathFocus() )
+        if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {
-            pBindings->SetActiveFrame( NULL );
-            pImp->pMgr->Deactivate_Impl();
+            pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
+            pImp->pMgr->Activate_Impl();
         }
-    }
-    else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        // First, allow KeyInput for Dialog functions
-        if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current() )
-            // then also for valid global accelerators.
-            return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
-        return true;
+        else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+        {
+            if ( !HasChildPathFocus() )
+            {
+                pBindings->SetActiveFrame( NULL );
+                pImp->pMgr->Deactivate_Impl();
+            }
+        }
+        else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        {
+            // First, allow KeyInput for Dialog functions
+            if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current() )
+                // then also for valid global accelerators.
+                return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
+            return true;
+        }
     }
 
     return FloatingWindow::Notify( rEvt );
 }
-
-
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
