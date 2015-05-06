@@ -763,7 +763,8 @@ void TabControl::ImplShowFocus()
     ShowFocus( aRect );
 }
 
-void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout, bool bFirstInGroup, bool bLastInGroup, bool /* bIsCurrentItem */ )
+void TabControl::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, ImplTabItem* pItem, const Rectangle& rCurRect,
+                              bool bLayout, bool bFirstInGroup, bool bLastInGroup, bool /* bIsCurrentItem */ )
 {
     if ( pItem->maRect.IsEmpty() )
         return;
@@ -1062,26 +1063,26 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
     Control::KeyInput( rKEvt );
 }
 
-void TabControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void TabControl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    if (  !( GetStyle() & WB_NOBORDER ) )
-        ImplPaint( rRect, false );
+    if (!(GetStyle() & WB_NOBORDER))
+        ImplPaint(rRenderContext, rRect, false);
 }
 
-void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
+void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bLayout)
 {
-    if( ! bLayout )
+    if (!bLayout)
         HideFocus();
 
     // reformat if needed
-    Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
+    Rectangle aRect = ImplGetTabRect(TAB_PAGERECT);
 
     // find current item
     ImplTabItem* pCurItem = NULL;
-    for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+    for (std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
-        if ( it->mnId == mnCurPageId )
+        if (it->mnId == mnCurPageId)
         {
             pCurItem = &(*it);
             break;
@@ -1089,8 +1090,8 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     }
 
     // Draw the TabPage border
-    const StyleSettings&    rStyleSettings  = GetSettings().GetStyleSettings();
-    Rectangle               aCurRect;
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    Rectangle aCurRect;
     aRect.Left()   -= TAB_OFFSET;
     aRect.Top()    -= TAB_OFFSET;
     aRect.Right()  += TAB_OFFSET;
@@ -1102,123 +1103,121 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     // standalone (eg impress)
     bool bNoTabPage = false;
     TabPage* pCurPage = pCurItem ? pCurItem->mpTabPage.get() : NULL;
-    if( !pCurPage || !pCurPage->IsVisible() )
+    if (!pCurPage || !pCurPage->IsVisible())
     {
         bNoTabPage = true;
-        aRect.Left()-=10;
-        aRect.Right()+=10;
+        aRect.Left() -= 10;
+        aRect.Right() += 10;
     }
 
-    if (!bLayout && IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL))
+    if (!bLayout && rRenderContext.IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL))
     {
         const ImplControlValue aControlValue;
 
         ControlState nState = ControlState::ENABLED;
-        if ( !IsEnabled() )
+        if (!IsEnabled())
             nState &= ~ControlState::ENABLED;
-        if ( HasFocus() )
+        if (HasFocus())
             nState |= ControlState::FOCUSED;
 
-        vcl::Region aClipRgn( GetActiveClipRegion() );
-        aClipRgn.Intersect( aRect );
-        if( !rRect.IsEmpty() )
-            aClipRgn.Intersect( rRect );
+        vcl::Region aClipRgn(rRenderContext.GetActiveClipRegion());
+        aClipRgn.Intersect(aRect);
+        if (!rRect.IsEmpty())
+            aClipRgn.Intersect(rRect);
 
-        if( !aClipRgn.IsEmpty() )
+        if (!aClipRgn.IsEmpty())
         {
-            DrawNativeControl(CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aRect, nState,
-                aControlValue, OUString());
+            rRenderContext.DrawNativeControl(CTRL_TAB_PANE, PART_ENTIRE_CONTROL,
+                                             aRect, nState, aControlValue, OUString());
         }
 
-        if (IsNativeControlSupported(CTRL_TAB_HEADER, PART_ENTIRE_CONTROL))
+        if (rRenderContext.IsNativeControlSupported(CTRL_TAB_HEADER, PART_ENTIRE_CONTROL))
         {
             Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
 
-            aClipRgn = GetActiveClipRegion();
-            aClipRgn.Intersect( aHeaderRect );
-            if( !rRect.IsEmpty() )
-                aClipRgn.Intersect( rRect );
+            aClipRgn = rRenderContext.GetActiveClipRegion();
+            aClipRgn.Intersect(aHeaderRect);
+            if (!rRect.IsEmpty())
+                aClipRgn.Intersect(rRect);
 
-            if( !aClipRgn.IsEmpty() )
+            if (!aClipRgn.IsEmpty())
             {
-                DrawNativeControl(CTRL_TAB_HEADER, PART_ENTIRE_CONTROL, aHeaderRect, nState,
-                    aControlValue, OUString());
+                rRenderContext.DrawNativeControl(CTRL_TAB_HEADER, PART_ENTIRE_CONTROL,
+                                                 aHeaderRect, nState, aControlValue, OUString());
             }
         }
     }
     else
     {
         long nTopOff = 1;
-        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-            SetLineColor( rStyleSettings.GetLightColor() );
+        if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
+            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         else
-            SetLineColor( Color( COL_BLACK ) );
-        if ( pCurItem && !pCurItem->maRect.IsEmpty() )
+            rRenderContext.SetLineColor(Color(COL_BLACK));
+        if (pCurItem && !pCurItem->maRect.IsEmpty())
         {
             aCurRect = pCurItem->maRect;
-            if( ! bLayout )
-                DrawLine( aRect.TopLeft(), Point( aCurRect.Left()-2, aRect.Top() ) );
-            if ( aCurRect.Right()+1 < aRect.Right() )
+            if (!bLayout)
+                rRenderContext.DrawLine(aRect.TopLeft(), Point(aCurRect.Left() - 2, aRect.Top()));
+            if (aCurRect.Right() + 1 < aRect.Right())
             {
-                if( ! bLayout )
-                    DrawLine( Point( aCurRect.Right(), aRect.Top() ), aRect.TopRight() );
+                if (!bLayout)
+                    rRenderContext.DrawLine(Point(aCurRect.Right(), aRect.Top()), aRect.TopRight());
             }
             else
+            {
                 nTopOff = 0;
+            }
         }
         else
-            if( ! bLayout )
-                DrawLine( aRect.TopLeft(), aRect.TopRight() );
+            if (!bLayout)
+                rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight());
 
-        if( ! bLayout )
+        if (!bLayout)
         {
-            DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+            rRenderContext.DrawLine(aRect.TopLeft(), aRect.BottomLeft());
 
-            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+            if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
             {
                 // if we have not tab page the bottom line of the tab page
                 // directly touches the tab items, so choose a color that fits seamlessly
-                if( bNoTabPage )
-                    SetLineColor( rStyleSettings.GetDialogColor() );
+                if (bNoTabPage)
+                    rRenderContext.SetLineColor(rStyleSettings.GetDialogColor());
                 else
-                    SetLineColor( rStyleSettings.GetShadowColor() );
-                DrawLine( Point( 1, aRect.Bottom()-1 ),
-                        Point( aRect.Right()-1, aRect.Bottom()-1 ) );
-                DrawLine( Point( aRect.Right()-1, aRect.Top()+nTopOff ),
-                        Point( aRect.Right()-1, aRect.Bottom()-1 ) );
-                if( bNoTabPage )
-                    SetLineColor( rStyleSettings.GetDialogColor() );
+                    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.DrawLine(Point(1, aRect.Bottom() - 1), Point(aRect.Right() - 1, aRect.Bottom() - 1));
+                rRenderContext.DrawLine(Point(aRect.Right() - 1, aRect.Top() + nTopOff), Point(aRect.Right() - 1, aRect.Bottom() - 1));
+                if (bNoTabPage)
+                    rRenderContext.SetLineColor(rStyleSettings.GetDialogColor());
                 else
-                    SetLineColor( rStyleSettings.GetDarkShadowColor() );
-                DrawLine( Point( 0, aRect.Bottom() ),
-                        Point( aRect.Right(), aRect.Bottom() ) );
-                DrawLine( Point( aRect.Right(), aRect.Top()+nTopOff ),
-                        Point( aRect.Right(), aRect.Bottom() ) );
+                    rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+                rRenderContext.DrawLine(Point(0, aRect.Bottom()), Point(aRect.Right(), aRect.Bottom()));
+                rRenderContext.DrawLine(Point(aRect.Right(), aRect.Top() + nTopOff), Point(aRect.Right(), aRect.Bottom()));
             }
             else
             {
-                DrawLine( aRect.TopRight(), aRect.BottomRight() );
-                DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+                rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
+                rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
             }
         }
     }
 
-    if ( !mpTabCtrlData->maItemList.empty() && mpTabCtrlData->mpListBox == nullptr )
+    if (!mpTabCtrlData->maItemList.empty() && mpTabCtrlData->mpListBox == nullptr)
     {
         // Some native toolkits (GTK+) draw tabs right-to-left, with an
         // overlap between adjacent tabs
-        bool            bDrawTabsRTL = IsNativeControlSupported( CTRL_TAB_ITEM, PART_TABS_DRAW_RTL );
-        ImplTabItem *   pFirstTab = NULL;
-        ImplTabItem *   pLastTab = NULL;
+        bool bDrawTabsRTL = rRenderContext.IsNativeControlSupported(CTRL_TAB_ITEM, PART_TABS_DRAW_RTL);
+        ImplTabItem* pFirstTab = NULL;
+        ImplTabItem* pLastTab = NULL;
         size_t idx;
 
         // Event though there is a tab overlap with GTK+, the first tab is not
         // overlapped on the left side.  Other tookits ignore this option.
-        if ( bDrawTabsRTL )
+        if (bDrawTabsRTL)
         {
             pFirstTab = &mpTabCtrlData->maItemList.front();
             pLastTab = &mpTabCtrlData->maItemList.back();
-            idx = mpTabCtrlData->maItemList.size()-1;
+            idx = mpTabCtrlData->maItemList.size() - 1;
         }
         else
         {
@@ -1227,40 +1226,46 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
             idx = 0;
         }
 
-        while ( idx < mpTabCtrlData->maItemList.size() )
+        while (idx < mpTabCtrlData->maItemList.size())
         {
             ImplTabItem* pItem = &mpTabCtrlData->maItemList[idx];
-            if ( pItem != pCurItem )
+            if (pItem != pCurItem)
             {
-                vcl::Region aClipRgn( GetActiveClipRegion() );
-                aClipRgn.Intersect( pItem->maRect );
-                if( !rRect.IsEmpty() )
-                    aClipRgn.Intersect( rRect );
-                if( bLayout || !aClipRgn.IsEmpty() )
-                    ImplDrawItem( pItem, aCurRect, bLayout, (pItem==pFirstTab), (pItem==pLastTab), false );
+                vcl::Region aClipRgn(rRenderContext.GetActiveClipRegion());
+                aClipRgn.Intersect(pItem->maRect);
+                if (!rRect.IsEmpty())
+                    aClipRgn.Intersect(rRect);
+                if (bLayout || !aClipRgn.IsEmpty())
+                {
+                    ImplDrawItem(rRenderContext, pItem, aCurRect, bLayout,
+                                 pItem == pFirstTab, pItem == pLastTab, false);
+                }
             }
 
-            if ( bDrawTabsRTL )
+            if (bDrawTabsRTL)
                 idx--;
             else
                 idx++;
         }
 
-        if ( pCurItem )
+        if (pCurItem)
         {
-            vcl::Region aClipRgn( GetActiveClipRegion() );
-            aClipRgn.Intersect( pCurItem->maRect );
-            if( !rRect.IsEmpty() )
-                aClipRgn.Intersect( rRect );
-            if( bLayout || !aClipRgn.IsEmpty() )
-                ImplDrawItem( pCurItem, aCurRect, bLayout, (pCurItem==pFirstTab), (pCurItem==pLastTab), true );
+            vcl::Region aClipRgn(rRenderContext.GetActiveClipRegion());
+            aClipRgn.Intersect(pCurItem->maRect);
+            if (!rRect.IsEmpty())
+                aClipRgn.Intersect(rRect);
+            if (bLayout || !aClipRgn.IsEmpty())
+            {
+                ImplDrawItem(rRenderContext, pCurItem, aCurRect, bLayout,
+                             pCurItem == pFirstTab, pCurItem == pLastTab, true);
+            }
         }
     }
 
-    if ( !bLayout && HasFocus() )
+    if (!bLayout && HasFocus())
         ImplShowFocus();
 
-    if( ! bLayout )
+    if (!bLayout)
         mbSmallInvalidate = true;
 }
 
@@ -2106,7 +2111,7 @@ void TabControl::FillLayoutData() const
 {
     mpTabCtrlData->maLayoutLineToPageId.clear();
     mpTabCtrlData->maLayoutPageIdToLine.clear();
-    const_cast<TabControl*>(this)->ImplPaint( Rectangle(), true );
+    const_cast<TabControl*>(this)->Invalidate();
 }
 
 Rectangle TabControl::GetTabBounds( sal_uInt16 nPageId ) const
