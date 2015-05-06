@@ -1773,7 +1773,7 @@ PopupMenu* ToolBox::GetMenu() const
     return mpData->mpMenu;
 }
 
-void ToolBox::SetMenuButtonHdl( const Link<>& rLink )
+void ToolBox::SetMenuButtonHdl( const Link<ToolBox *, void>& rLink )
 {
     mpData->maMenuButtonHdl = rLink;
 }

@@ -1811,18 +1811,16 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
     }
 }
 
-IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
+IMPL_LINK_TYPED( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return 1;
+        return;
 
     pToolBar->UpdateCustomMenu();
     // remove all entries that do not come from the toolbar itself (fdo#38276)
     ImplClearPopupMenu( pToolBar );
-
-    return 0;
  }
 
 IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )

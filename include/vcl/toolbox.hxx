@@ -520,7 +520,7 @@ public:
     bool                IsMenuEnabled() const;
     PopupMenu*          GetMenu() const;
     void                UpdateCustomMenu();
-    void                SetMenuButtonHdl( const Link<>& rLink );
+    void                SetMenuButtonHdl( const Link<ToolBox *, void>& rLink );
 
     // open custommenu
     void                ExecuteCustomMenu();
