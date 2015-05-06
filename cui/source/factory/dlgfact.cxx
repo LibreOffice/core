@@ -104,17 +104,7 @@ IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl)
 IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
-
-AbstractSvxZoomDialog_Impl::~AbstractSvxZoomDialog_Impl()
-{
-    pDlg.disposeAndClear();
-}
-
-short AbstractSvxZoomDialog_Impl::Execute()
-{
-    return pDlg->Execute();
-}
-
+IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl)
 IMPL_ABSTDLG_BASE(AbstractSearchProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTakeProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);

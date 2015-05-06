@@ -62,19 +62,14 @@ class HangulHanjaConversionDialog;
 using namespace svx;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-    VclPtr<DialogClass> pDlg;                       \
+    ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
                     Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
-    virtual         ~Class();                       \
     virtual short   Execute() SAL_OVERRIDE ;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
-Class::~Class()                                     \
-{                                                   \
-     pDlg.disposeAndClear();                        \
-}                                                   \
 short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
