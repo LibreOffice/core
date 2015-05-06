@@ -86,6 +86,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     bImportOnly( rMapEntry.mbImportOnly),
     pHdl( rFactory->GetPropertyHandler( rMapEntry.mnType & MID_FLAG_MASK ) )
 {
+    assert(pHdl);
 }
 
 XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
@@ -99,7 +100,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     bImportOnly( rEntry.bImportOnly),
     pHdl( rEntry.pHdl)
 {
-    DBG_ASSERT( pHdl, "Unknown XML property type handler!" );
+    assert(pHdl);
 }
 
 struct XMLPropertySetMapper::Impl
@@ -239,7 +240,7 @@ bool XMLPropertySetMapper::exportXML(
 
     const XMLPropertyHandler* pHdl = GetPropertyHandler( rProperty.mnIndex );
 
-    DBG_ASSERT( pHdl, "Unknown XML Type!" );
+    assert(pHdl);
     if( pHdl )
         bRet = pHdl->exportXML( rStrExpValue, rProperty.maValue,
                                 rUnitConverter );
