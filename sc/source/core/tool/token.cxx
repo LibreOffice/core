@@ -2827,9 +2827,20 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
             break;
             case svIndex:
             {
-                if (((*p)->GetOpCode() == ocName && isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p)) ||
-                        ((*p)->GetOpCode() == ocDBArea && isDBDataModified(rCxt.mrDoc, **p)))
-                    aRes.mbNameModified = true;
+                switch ((*p)->GetOpCode())
+                {
+                    case ocName:
+                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    case ocDBArea:
+                    case ocTableRef:
+                        if (isDBDataModified(rCxt.mrDoc, **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    default:
+                        ;   // nothing
+                }
             }
             break;
             default:
@@ -2896,9 +2907,20 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
             break;
             case svIndex:
             {
-                if (((*p)->GetOpCode() == ocName && isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p)) ||
-                        ((*p)->GetOpCode() == ocDBArea && isDBDataModified(rCxt.mrDoc, **p)))
-                    aRes.mbNameModified = true;
+                switch ((*p)->GetOpCode())
+                {
+                    case ocName:
+                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    case ocDBArea:
+                    case ocTableRef:
+                        if (isDBDataModified(rCxt.mrDoc, **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    default:
+                        ;   // nothing
+                }
             }
             break;
             default:
@@ -2952,9 +2974,20 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
             break;
             case svIndex:
             {
-                if (((*p)->GetOpCode() == ocName && isNameModified(rCxt.maUpdatedNames, aOldRange.aStart.Tab(), **p)) ||
-                        ((*p)->GetOpCode() == ocDBArea && isDBDataModified(rCxt.mrDoc, **p)))
-                    aRes.mbNameModified = true;
+                switch ((*p)->GetOpCode())
+                {
+                    case ocName:
+                        if (isNameModified(rCxt.maUpdatedNames, aOldRange.aStart.Tab(), **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    case ocDBArea:
+                    case ocTableRef:
+                        if (isDBDataModified(rCxt.mrDoc, **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    default:
+                        ;   // nothing
+                }
             }
             break;
             default:
@@ -3469,9 +3502,20 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDele
             break;
             case svIndex:
             {
-                if (((*p)->GetOpCode() == ocName && isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p)) ||
-                        ((*p)->GetOpCode() == ocDBArea && isDBDataModified(rCxt.mrDoc, **p)))
-                    aRes.mbNameModified = true;
+                switch ((*p)->GetOpCode())
+                {
+                    case ocName:
+                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    case ocDBArea:
+                    case ocTableRef:
+                        if (isDBDataModified(rCxt.mrDoc, **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    default:
+                        ;   // nothing
+                }
             }
             break;
             default:
@@ -3514,9 +3558,20 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateIns
             break;
             case svIndex:
             {
-                if (((*p)->GetOpCode() == ocName && isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p)) ||
-                        ((*p)->GetOpCode() == ocDBArea && isDBDataModified(rCxt.mrDoc, **p)))
-                    aRes.mbNameModified = true;
+                switch ((*p)->GetOpCode())
+                {
+                    case ocName:
+                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    case ocDBArea:
+                    case ocTableRef:
+                        if (isDBDataModified(rCxt.mrDoc, **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    default:
+                        ;   // nothing
+                }
             }
             break;
             default:
@@ -3580,9 +3635,20 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
             break;
             case svIndex:
             {
-                if (((*p)->GetOpCode() == ocName && isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p)) ||
-                        ((*p)->GetOpCode() == ocDBArea && isDBDataModified(rCxt.mrDoc, **p)))
-                    aRes.mbNameModified = true;
+                switch ((*p)->GetOpCode())
+                {
+                    case ocName:
+                        if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    case ocDBArea:
+                    case ocTableRef:
+                        if (isDBDataModified(rCxt.mrDoc, **p))
+                            aRes.mbNameModified = true;
+                        break;
+                    default:
+                        ;   // nothing
+                }
             }
             break;
             default:
