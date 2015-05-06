@@ -1002,7 +1002,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
 
                 // OutDev adjustment if necessary
                 if( pOutputDevice->GetOutDevType() != OUTDEV_PRINTER && pOutputDevice->GetBitCount() <= 8 && aOutBmpEx.GetBitCount() >= 8 )
-                    aOutBmpEx.Dither( BMP_DITHER_MATRIX );
+                    aOutBmpEx.Dither( BmpDitherFlags::Matrix );
             }
         }
 

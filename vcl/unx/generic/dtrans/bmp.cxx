@@ -739,7 +739,7 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
     Bitmap bm;
     ReadDIB(bm, in, true);
     if (bm.GetBitCount() == 24 && depth <= 8) {
-        bm.Dither(BMP_DITHER_FLOYD);
+        bm.Dither(BmpDitherFlags::Floyd);
     }
     if (bm.GetBitCount() != depth) {
         switch (depth) {

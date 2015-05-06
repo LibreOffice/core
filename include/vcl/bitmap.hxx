@@ -59,10 +59,17 @@ enum class BmpScaleFlag
 };
 
 
-#define BMP_DITHER_NONE             0x00000000UL
-#define BMP_DITHER_MATRIX           0x00000001UL
-#define BMP_DITHER_FLOYD            0x00000002UL
-#define BMP_DITHER_FLOYD_16         0x00000004UL
+enum class BmpDitherFlags
+{
+    NONE             = 0x0000,
+    Matrix           = 0x0001,
+    Floyd            = 0x0002,
+    Floyd16          = 0x0004,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x07> {};
+}
 
 #define BMP_VECTORIZE_INNER         0x00000001UL
 #define BMP_VECTORIZE_OUTER         0x00000002UL
@@ -417,7 +424,7 @@ public:
         @param nDitherFlags
         The algorithm to be used for dithering
      */
-    bool                    Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
+    bool                    Dither( BmpDitherFlags nDitherFlags = BmpDitherFlags::Matrix );
 
     /** Crop the bitmap
 
