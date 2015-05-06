@@ -1452,20 +1452,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 else if( pTargetView ) // must be available!
                 {
                     //print the target document
-        #if OSL_DEBUG_LEVEL > 1
-                    bool  _bVal;
-                    sal_Int16 _nVal;
-                    OUString  _sVal;
-                    const beans::PropertyValue* pDbgPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
-                    for( sal_Int32 nOption = 0; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
-                    {
-                        OUString aName( pDbgPrintOptions[nOption].Name );
-                        uno::Any aVal( pDbgPrintOptions[nOption].Value );
-                        aVal >>= _bVal;
-                        aVal >>= _nVal;
-                        aVal >>= _sVal;
-                    }
-        #endif
                     // printing should be done synchronously otherwise the document
                     // might already become invalid during the process
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
