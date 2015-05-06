@@ -25,7 +25,6 @@
 #include <svl/poolitem.hxx>
 #include <svtools/simptabl.hxx>
 #include "optpath.hxx"
-#include "ControlFocusHelper.hxx"
 
 class SvTreeListEntry;
 namespace svx

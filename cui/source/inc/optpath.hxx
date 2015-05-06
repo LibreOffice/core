@@ -23,7 +23,6 @@
 #include <svtools/simptabl.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
-#include "ControlFocusHelper.hxx"
 
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>

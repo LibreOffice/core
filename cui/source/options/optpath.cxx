@@ -161,17 +161,6 @@ OUString Convert_Impl( const OUString& rValue )
     return aReturn;
 }
 
-// class SvxControlFocusHelper ---------------------------------------------
-
-bool SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
-{
-    bool nRet = Control::Notify( rNEvt );
-
-    if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
-        m_pFocusCtrl->GrabFocus();
-    return nRet;
-}
-
 // functions -------------------------------------------------------------
 
 bool IsMultiPath_Impl( const sal_uInt16 nIndex )
