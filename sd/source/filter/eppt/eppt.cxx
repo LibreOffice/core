@@ -1472,7 +1472,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocS
         SvStorageRef xOverhead2 = xOverhead->OpenSotStorage( OUString( "_MS_VBA_Overhead") );
         if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
         {
-            SvStorageStreamRef xTemp = xOverhead2->OpenSotStream( OUString( "_MS_VBA_Overhead2") );
+            SotStorageStreamRef xTemp = xOverhead2->OpenSotStream( OUString( "_MS_VBA_Overhead2") );
             if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
             {
                 sal_uInt32 nLen = xTemp->GetSize();

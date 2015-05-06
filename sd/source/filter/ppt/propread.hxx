@@ -139,7 +139,7 @@ class Section
 class PropRead
 {
         bool                mbStatus;
-        SvStorageStreamRef      mpSvStream;
+        SotStorageStreamRef      mpSvStream;
 
         sal_uInt16              mnByteOrder;
         sal_uInt16              mnFormat;

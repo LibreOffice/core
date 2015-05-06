@@ -7060,7 +7060,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             {
                 {
                     sal_uInt8 aTestA[10];   // exist the \1CompObj-Stream ?
-                    SvStorageStreamRef xSrcTst = xObjStg->OpenSotStream( OUString( "\1CompObj" ) );
+                    SotStorageStreamRef xSrcTst = xObjStg->OpenSotStream( OUString( "\1CompObj" ) );
                     bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
                                     xSrcTst->Read( aTestA, sizeof( aTestA ) );
                     if( !bValidStorage )
@@ -7081,7 +7081,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         // is a kind of embedded objects in Word documents
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
-                        SvStorageStreamRef xObjInfoSrc = xObjStg->OpenSotStream(
+                        SotStorageStreamRef xObjInfoSrc = xObjStg->OpenSotStream(
                             OUString( "\3ObjInfo" ), STREAM_STD_READ | StreamMode::NOCREATE );
                         if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                         {

@@ -98,7 +98,7 @@ public:
     void                    GetState(SfxItemSet&);
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
-    SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
+    SD_DLLPUBLIC SotStorageStreamRef     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
 
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }

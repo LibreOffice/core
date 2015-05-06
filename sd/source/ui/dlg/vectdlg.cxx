@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl)
 
 void SdVectorizeDlg::LoadSettings()
 {
-    SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream(
+    SotStorageStreamRef  xIStm( SD_MOD()->GetOptionStream(
                                OUString( SD_OPTION_VECTORIZE ) ,
                                SD_OPTION_LOAD ) );
     sal_uInt16              nLayers;
@@ -343,7 +343,7 @@ void SdVectorizeDlg::LoadSettings()
 
 void SdVectorizeDlg::SaveSettings() const
 {
-    SvStorageStreamRef xOStm( SD_MOD()->GetOptionStream(
+    SotStorageStreamRef xOStm( SD_MOD()->GetOptionStream(
                               OUString(SD_OPTION_VECTORIZE)  ,
                               SD_OPTION_STORE ) );
 

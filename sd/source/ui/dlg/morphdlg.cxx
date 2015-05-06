@@ -79,7 +79,7 @@ void MorphDlg::dispose()
 
 void MorphDlg::LoadSettings()
 {
-    SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream( OUString(SD_OPTION_MORPHING) ,
+    SotStorageStreamRef  xIStm( SD_MOD()->GetOptionStream( OUString(SD_OPTION_MORPHING) ,
                                SD_OPTION_LOAD ) );
     sal_uInt16              nSteps;
     bool                bOrient, bAttrib;
@@ -103,7 +103,7 @@ void MorphDlg::LoadSettings()
 
 void MorphDlg::SaveSettings() const
 {
-    SvStorageStreamRef xOStm( SD_MOD()->GetOptionStream( OUString(SD_OPTION_MORPHING) ,
+    SotStorageStreamRef xOStm( SD_MOD()->GetOptionStream( OUString(SD_OPTION_MORPHING) ,
                                SD_OPTION_STORE ) );
 
     if( xOStm.Is() )

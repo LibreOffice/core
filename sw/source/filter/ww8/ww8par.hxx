@@ -130,7 +130,7 @@ struct WW8LFOInfo;
 class WW8Reader : public StgReader
 {
     virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
-    sal_uLong OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuffSize );
+    sal_uLong OpenMainStream( SotStorageStreamRef& rRef, sal_uInt16& rBuffSize );
 public:
     virtual int GetReaderType() SAL_OVERRIDE;
 
@@ -1536,7 +1536,7 @@ private:
     void ImportDopTypography(const WW8DopTypography &rTypo);
 
     sal_uLong LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss);
-    sal_uLong SetSubStreams(SvStorageStreamRef &rTableStream, SvStorageStreamRef &rDataStream);
+    sal_uLong SetSubStreams(SotStorageStreamRef &rTableStream, SotStorageStreamRef &rDataStream);
     sal_uLong CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos);
 
     void ReadDocVars();

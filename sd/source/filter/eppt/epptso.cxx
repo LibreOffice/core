@@ -2512,7 +2512,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     OUString aOleIdentifier;
                     if ( !aUserName.isEmpty() )
                     {
-                        SvStorageStreamRef xCompObj = xTemp->OpenSotStream(
+                        SotStorageStreamRef xCompObj = xTemp->OpenSotStream(
                             OUString( "\1CompObj" ),
                                 StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                         sal_uInt32 const nStreamLen = xCompObj->remainingSize();

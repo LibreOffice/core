@@ -79,7 +79,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
 
     // Get data sink ...
     uno::Reference< io::XOutputStream > xOut;
-    SvStorageStreamRef xDocStream;
+    SotStorageStreamRef xDocStream;
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = 0;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;

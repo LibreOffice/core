@@ -586,7 +586,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     // get the input stream (storage or stream)
 
-    SvStorageStreamRef xDocStream;
+    SotStorageStreamRef xDocStream;
     Reference<io::XInputStream> xInputStream;
     uno::Reference < embed::XStorage > xStorage = mrMedium.GetStorage();
 

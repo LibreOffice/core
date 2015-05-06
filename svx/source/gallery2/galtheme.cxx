@@ -576,7 +576,7 @@ void GalleryTheme::Actualize( const Link<>& rActualizeLink, GalleryProgress* pPr
                 if ( aSvDrawStorageRef.Is() )
                 {
                     const OUString        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
-                    SvStorageStreamRef  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, StreamMode::READ );
+                    SotStorageStreamRef  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, StreamMode::READ );
 
                     if( pIStm && !pIStm->GetError() )
                     {
@@ -942,7 +942,7 @@ bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool )
         if( xStor.Is() )
         {
             const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
+            SotStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
 
             if( xIStm.Is() && !xIStm->GetError() )
             {
@@ -965,7 +965,7 @@ bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPo
     if( xStor.Is() )
     {
         const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-        SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
+        SotStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
 
         if( xOStm.Is() && !xOStm->GetError() )
         {
@@ -1014,7 +1014,7 @@ bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rxMode
         if( xStor.Is() )
         {
             const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
+            SotStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
 
             if( xIStm.Is() && !xIStm->GetError() )
             {
@@ -1061,7 +1061,7 @@ bool GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStream, 
     if( xStor.Is() )
     {
         const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-        SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
+        SotStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
 
         if( xOStm.Is() && !xOStm->GetError() )
         {

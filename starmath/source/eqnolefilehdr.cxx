@@ -32,7 +32,7 @@ bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
 
     // code snippet copied from MathType::Parse
 
-    SvStorageStreamRef xSrc = pStor->OpenSotStream(
+    SotStorageStreamRef xSrc = pStor->OpenSotStream(
         OUString("Equation Native"),
         STREAM_STD_READ | StreamMode::NOCREATE);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))

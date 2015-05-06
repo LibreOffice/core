@@ -222,7 +222,6 @@ typedef tools::SvRef<SotStorage> SotStorageRef;
 #define SvStorage SotStorage
 #define SvStorageRef SotStorageRef
 #define SvStorageStream SotStorageStream
-#define SvStorageStreamRef SotStorageStreamRef
 
 #endif // _SVSTOR_HXX
 

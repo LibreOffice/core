@@ -3130,8 +3130,8 @@ void WW8Export::ExportDocument_Impl()
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6, m_bDot );
 
-    SvStorageStreamRef xWwStrm( GetWriter().GetStorage().OpenSotStream( m_aMainStg ) );
-    SvStorageStreamRef xTableStrm( xWwStrm ), xDataStrm( xWwStrm );
+    SotStorageStreamRef xWwStrm( GetWriter().GetStorage().OpenSotStream( m_aMainStg ) );
+    SotStorageStreamRef xTableStrm( xWwStrm ), xDataStrm( xWwStrm );
     xWwStrm->SetBufferSize( 32768 );
 
     if( bWrtWW8 )
@@ -3381,7 +3381,7 @@ void WW8Export::PrepareStorage()
     SvGlobalName aGName( nId1, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x46 );
     GetWriter().GetStorage().SetClass( aGName, SotClipboardFormatId::NONE, OUString::createFromAscii( pName ));
-    SvStorageStreamRef xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
+    SotStorageStreamRef xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
     xStor->Write( pData, nLen );
 
     SwDocShell* pDocShell = m_pDoc->GetDocShell ();
