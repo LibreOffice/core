@@ -297,7 +297,7 @@ void Printer::PrintJob(const std::shared_ptr<PrinterController>& i_xController,
     }
 }
 
-void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
+bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                            const JobSetup& i_rInitSetup)
 {
     // check if there is a default printer; if not, show an error box (if appropriate)
@@ -459,7 +459,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                 nullptr, "ErrorNoContentDialog",
                 "vcl/ui/errornocontentdialog.ui");
             aBox->Execute();
-            return;
+            return false;
         }
     }
 
@@ -476,7 +476,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             if( ! aDlg->Execute() )
             {
                 xController->abortJob();
-                return;
+                return false;
             }
             if( aDlg->isPrintToFile() )
             {
@@ -484,7 +484,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                 if( aFile.isEmpty() )
                 {
                     xController->abortJob();
-                    return;
+                    return false;
                 }
                 xController->setValue( OUString( "LocalFileName" ),
                                        makeAny( aFile ) );
@@ -501,6 +501,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     }
 
     xController->pushPropertiesToPrinter();
+    return true;
 }
 
 bool Printer::ExecutePrintJob(std::shared_ptr<PrinterController> xController)
@@ -522,9 +523,11 @@ void Printer::FinishPrintJob(std::shared_ptr<PrinterController> xController)
 void Printer::ImplPrintJob(std::shared_ptr<PrinterController> xController,
                            const JobSetup& i_rInitSetup)
 {
-    PreparePrintJob( xController, i_rInitSetup );
-    ExecutePrintJob( xController );
-    FinishPrintJob( xController );
+    if (PreparePrintJob(xController, i_rInitSetup))
+    {
+        ExecutePrintJob( xController );
+        FinishPrintJob( xController );
+    }
 }
 
 bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::PrinterController>& i_xController)
