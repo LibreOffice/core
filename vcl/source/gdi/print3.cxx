@@ -525,9 +525,9 @@ void Printer::ImplPrintJob(std::shared_ptr<PrinterController> xController,
 {
     if (PreparePrintJob(xController, i_rInitSetup))
     {
-        ExecutePrintJob( xController );
-        FinishPrintJob( xController );
+        ExecutePrintJob(xController);
     }
+    FinishPrintJob(xController);
 }
 
 bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::PrinterController>& i_xController)
