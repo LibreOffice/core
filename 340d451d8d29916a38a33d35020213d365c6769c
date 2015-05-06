@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "7a5de9d1_6c864fbb",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-06T20:20:11Z",
+      "side": 1,
+      "message": "OK. I add it to my autogen.input",
+      "parentUuid": "7a5de9d1_2c4b77b2",
+      "range": {
+        "startLine": 2430,
+        "startChar": 41,
+        "endLine": 2430,
+        "endChar": 54
+      },
+      "revId": "340d451d8d29916a38a33d35020213d365c6769c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_eccb1f1d",
         "filename": "sc/source/ui/view/formatsh.cxx",
         "patchSetId": 4
@@ -76,6 +100,30 @@
       "writtenOn": "2015-05-06T17:51:28Z",
       "side": 1,
       "message": "Better remember the result than calling a function twice.",
+      "revId": "340d451d8d29916a38a33d35020213d365c6769c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_4c8913ca",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2431,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-05-06T20:20:11Z",
+      "side": 1,
+      "message": "Yes you did it for the previous commit. Sorry for forgetting those lines",
+      "parentUuid": "7a5de9d1_eccb1f1d",
+      "range": {
+        "startLine": 2431,
+        "startChar": 121,
+        "endLine": 2431,
+        "endChar": 124
+      },
       "revId": "340d451d8d29916a38a33d35020213d365c6769c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
