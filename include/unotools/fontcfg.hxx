@@ -34,37 +34,21 @@
 
 enum class DefaultFontType;
 
-// DEFAULT       - Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
-// STANDARD      - Standard-Font like Arial, Times, Courier, ...
-// NORMAL        - normal Font for writing text like Arial, Verdana, Arial Narrow, Trebuchet, Times, Courier, ...
-// SYMBOL        - Font with symbols
-// DECORATIVE    - Readable and normally used for drawings
-// SPECIAL       - very special design
-// TITLING       - only uppercase characters
-// FONT_ATTR_FULL          - Font with normally all characters
-// CAPITALS     - only uppercase characters, but lowercase characters smaller as the uppercase characters
-// TYPEWRITER    - like a typewriter: Courier, ...
-// SCRIPT        - Handwriting or Script
-// HANDWRITING   - More Handwriting with normal letters
-// CHANCERY      - Like Zapf Chancery
-// COMIC         - Like Comic Sans MS
-// BRUSHSCRIPT   - More Script
-// OTHERSTYLE    - OldStyle, ... so negativ points
 enum class ImplFontAttrs : sal_uLong
 {
     None          = 0x00000000,
-    Default       = 0x00000001,
-    Standard      = 0x00000002,
-    Normal        = 0x00000004,
-    Symbol        = 0x00000008,
+    Default       = 0x00000001, ///< Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
+    Standard      = 0x00000002, ///< Standard-Font like Arial, Times, Courier, ...
+    Normal        = 0x00000004, ///< Normal Font for writing text like Arial, Verdana, Arial Narrow, Trebuchet, Times, Courier, ...
+    Symbol        = 0x00000008, ///< Font with symbols
     Fixed         = 0x00000010,
     SansSerif     = 0x00000020,
     Serif         = 0x00000040,
-    Decorative    = 0x00000080,
-    Special       = 0x00000100,
+    Decorative    = 0x00000080, ///< Readable and normally used for drawings
+    Special       = 0x00000100, ///< Very special design
     Italic        = 0x00000200,
-    Titling       = 0x00000400,
-    Capitals      = 0x00000800,
+    Titling       = 0x00000400, ///< Only uppercase characters
+    Capitals      = 0x00000800, ///< Only uppercase characters, but lowercase characters smaller as the uppercase characters
     CJK           = 0x00001000,
     CJK_JP        = 0x00002000,
     CJK_SC        = 0x00004000,
@@ -72,19 +56,19 @@ enum class ImplFontAttrs : sal_uLong
     CJK_KR        = 0x00010000,
     CTL           = 0x00020000,
     NoneLatin     = 0x00040000,
-    Full          = 0x00080000,
+    Full          = 0x00080000, ///< Font with normally all characters
     Outline       = 0x00100000,
     Shadow        = 0x00200000,
     Rounded       = 0x00400000,
-    Typewriter    = 0x00800000,
-    Script        = 0x01000000,
-    Handwriting   = 0x02000000,
-    Chancery      = 0x04000000,
-    Comic         = 0x08000000,
-    BrushScript   = 0x10000000,
+    Typewriter    = 0x00800000, ///< Like a typewriter: Courier, ...
+    Script        = 0x01000000, ///< Handwriting or Script
+    Handwriting   = 0x02000000, ///< More Handwriting with normal letters
+    Chancery      = 0x04000000, ///< Like Zapf Chancery
+    Comic         = 0x08000000, ///< Like Comic Sans MS
+    BrushScript   = 0x10000000, ///< More Script
     Gothic        = 0x20000000,
     Schoolbook    = 0x40000000,
-    OtherStyle    = 0x80000000,
+    OtherStyle    = 0x80000000, ///< OldStyle, ... so negativ points
     CJK_AllLang   = CJK_JP | CJK_SC | CJK_TC | CJK_KR,
     AllScript     = Script | Handwriting | Chancery | Comic | BrushScript,
     AllSubscript  = Handwriting | Chancery | Comic | BrushScript,
