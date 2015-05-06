@@ -182,7 +182,7 @@ public:
     virtual void SetDocumentSpecificSettings(const OUString& _rSettingsGroupName,
                     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings) SAL_OVERRIDE;
 
-    SvStorage *GetPackage() { return &xPackage; }
+    SotStorage *GetPackage() { return &xPackage; }
 
     void SetProgressValue( sal_Int32 nValue );
 

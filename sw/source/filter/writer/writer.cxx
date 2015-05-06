@@ -288,7 +288,7 @@ sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileN
     return Write( rPam, *rMedium.GetOutStream(), pFileName );
 }
 
-sal_uLong Writer::Write( SwPaM& /*rPam*/, SvStorage&, const OUString* )
+sal_uLong Writer::Write( SwPaM& /*rPam*/, SotStorage&, const OUString* )
 {
     OSL_ENSURE( false, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
@@ -445,7 +445,7 @@ sal_uLong StgWriter::WriteStream()
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const OUString* pFName )
+sal_uLong StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName )
 {
     SetStream(0);
     pStg = &rStg;

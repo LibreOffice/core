@@ -80,7 +80,7 @@ short SwImpBlocks::GetFileType( const OUString& rFile )
         return SWBLK_NO_FILE;
     if( SwXMLTextBlocks::IsFileUCBStorage( rFile ) )
         return SWBLK_XML;
-    if( SvStorage::IsStorageFile( rFile ) )
+    if( SotStorage::IsStorageFile( rFile ) )
         return SWBLK_SW3;
     //otherwise return NONE
     return SWBLK_NONE;

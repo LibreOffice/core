@@ -34,7 +34,7 @@
 #include "ww8par.hxx"
 
 WW8Glossary::WW8Glossary(SotStorageStreamRef &refStrm, sal_uInt8 nVersion,
-    SvStorage *pStg)
+    SotStorage *pStg)
     : pGlossary(0), rStrm(refStrm), xStg(pStg), nStrings(0)
 {
     refStrm->SetEndian(SvStreamEndian::LITTLE);

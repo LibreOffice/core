@@ -151,7 +151,7 @@ class PropRead
         void                    AddSection( Section& rSection );
 
     public:
-                                PropRead( SvStorage& rSvStorage, const OUString& rName );
+                                PropRead( SotStorage& rSvStorage, const OUString& rName );
 
         PropRead&               operator=( const PropRead& rPropRead );
         const Section*          GetSection( const sal_uInt8* pFMTID );

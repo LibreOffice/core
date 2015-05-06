@@ -44,7 +44,7 @@ typedef sal_Bool ( SAL_CALL *ExportPPTPointer )( const std::vector< com::sun::st
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
 
-typedef sal_Bool ( SAL_CALL *ImportPPTPointer )( SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
+typedef sal_Bool ( SAL_CALL *ImportPPTPointer )( SdDrawDocument*, SvStream&, SotStorage&, SfxMedium& );
 
 typedef sal_Bool ( SAL_CALL *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*& );
 
@@ -55,7 +55,7 @@ extern "C" sal_Bool ExportPPT( const std::vector< com::sun::star::beans::Propert
                                Reference< XStatusIndicator > &,
                                SvMemoryStream*, sal_uInt32 nCnvrtFlags );
 
-extern "C" sal_Bool ImportPPT( SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
+extern "C" sal_Bool ImportPPT( SdDrawDocument*, SvStream&, SotStorage&, SfxMedium& );
 
 extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 

@@ -495,7 +495,7 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
     InitNew(SvStorate *) from the SfxObjectShell-Subclass is implemented.
 
     For pStore == 0 the SfxObjectShell-instance is connected to an empty
-    SfxMedium, otherwise a SfxMedium, which refers to the SvStorage
+    SfxMedium, otherwise a SfxMedium, which refers to the SotStorage
     passed as a parameter.
 
     The object is only initialized correctly after InitNew() or Load().

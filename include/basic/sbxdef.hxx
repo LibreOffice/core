@@ -87,7 +87,7 @@ enum SbxDataType {
 
     SbxSV1 = 128,        // first defined data type for StarView
     SbxMEMORYSTREAM,     // SvMemoryStream
-    SbxSTORAGE,          // SvStorage
+    SbxSTORAGE,          // SotStorage
 
     SbxUSER1  = 256,     // first user defined data type
     SbxUSERn  = 2047     // last user defined data type

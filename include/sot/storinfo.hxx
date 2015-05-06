@@ -29,14 +29,14 @@
 class StgDirEntry;
 class SvStorageInfo
 {
-friend class SvStorage;
+friend class SotStorage;
     OUString        aName;
     SvGlobalName    aClassName;
     sal_uLong       nSize;
     bool            bStream;
     bool            bStorage;
 
-                            SvStorageInfo(){}; // Fuer SvStorage
+                            SvStorageInfo(){}; // Fuer SotStorage
 public:
                             SvStorageInfo( const StgDirEntry& );
                             SvStorageInfo( const OUString& rName, sal_uLong nSz, bool bIsStorage )

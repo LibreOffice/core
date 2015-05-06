@@ -500,7 +500,7 @@ Section& Section::operator=( const Section& rSection )
     return *this;
 }
 
-PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
+PropRead::PropRead( SotStorage& rStorage, const OUString& rName ) :
         mbStatus            ( false ),
         mnByteOrder         ( 0xfffe ),
         mnFormat            ( 0 ),

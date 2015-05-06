@@ -117,7 +117,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( const com::sun::star::uno::Referenc
     ExportOLEObject( aObj, rDestStg );
 }
 
-void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvStorage& rDestStg )
+void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotStorage& rDestStg )
 {
     SvGlobalName aOwnGlobalName;
     SvGlobalName aObjName( rObj->getClassID() );

@@ -47,7 +47,7 @@ template<> struct typed_flags<StorageMode>: is_typed_flags<StorageMode, 0xC4>
 
 }
 
-class SvStorage;
+class SotStorage;
 
 enum class SotClipboardFormatId : sal_uLong;
 
@@ -106,7 +106,7 @@ class  UNOStorageHolder;
 class SOT_DLLPUBLIC SotStorage : virtual public SotObject
 {
 friend class SotStorageStream;
-friend class SvStorage;
+friend class SotStorage;
 
     BaseStorage *   m_pOwnStg;   // target storage
     SvStream *      m_pStorStm;  // only for SDSTORAGES
@@ -218,8 +218,6 @@ public:
 #define SOT_DECL_SOTSTORAGE_DEFINED
 typedef tools::SvRef<SotStorage> SotStorageRef;
 #endif
-
-#define SvStorage SotStorage
 
 #endif // _SVSTOR_HXX
 

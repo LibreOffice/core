@@ -30,7 +30,7 @@ class SwAsyncRetrieveInputStreamThreadConsumer;
 class SwGrfFmtColl;
 class SwDoc;
 class GraphicAttr;
-class SvStorage;
+class SotStorage;
 
 // SwGrfNode
 class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode

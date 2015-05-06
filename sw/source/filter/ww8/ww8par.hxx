@@ -97,7 +97,7 @@ class WW8ReaderSave;
 struct WW8PicDesc;
 class Graphic;
 class SwFieldType;
-class SvStorage;
+class SotStorage;
 class SwAttrSet;
 class GDIMetaFile;
 struct ESelection;
@@ -1087,7 +1087,7 @@ friend class wwSectionManager;
 
 private:
 
-    SvStorage* m_pStg;                // Input-Storage
+    SotStorage* m_pStg;                // Input-Storage
     SvStream* m_pStrm;                // Input-(Storage)Stream
     SvStream* m_pTableStream;         // Input-(Storage)Stream
     SvStream* m_pDataStream;          // Input-(Storage)Stream
@@ -1893,7 +1893,7 @@ public:     // eigentlich private, geht aber leider nur public
         long &rX, long &rY);
     static ColorData GetCol(sal_uInt8 nIco);
 
-    SwWW8ImplReader( sal_uInt8 nVersionPara, SvStorage* pStorage, SvStream* pSt,
+    SwWW8ImplReader( sal_uInt8 nVersionPara, SotStorage* pStorage, SvStream* pSt,
         SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages );
 
     const OUString& GetBaseURL() const { return m_sBaseURL; }

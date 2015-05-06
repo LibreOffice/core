@@ -48,7 +48,7 @@ typedef std::vector< std::pair< SdrObject*, Ppt97AnimationPtr > > tAnimationVect
 class ImplSdPPTImport : public SdrPowerPointImport
 {
     SfxMedium&      mrMed;
-    SvStorage&      mrStorage;
+    SotStorage&      mrStorage;
 //  SvStream*       mpPicStream;
     DffRecordHeader maDocHd;
     std::vector<OUString> maSlideNameList;
@@ -74,7 +74,7 @@ public:
     OUString        ReadSound( sal_uInt32 nSoundRef ) const;
     OUString        ReadMedia( sal_uInt32 nMediaRef ) const;
 
-    ImplSdPPTImport( SdDrawDocument* pDoc, SvStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
+    ImplSdPPTImport( SdDrawDocument* pDoc, SotStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
     virtual ~ImplSdPPTImport();
 
     bool         Import();
@@ -87,7 +87,7 @@ class SdPPTImport
 
     public:
 
-        SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMed );
+        SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMed );
         ~SdPPTImport();
 
         bool Import();

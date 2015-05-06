@@ -458,7 +458,7 @@ cssu::Reference< com::sun::star::io::XInputStream >
 /****** XSecController/getObjectInputStream ************************************
  *
  *   NAME
- *  getObjectInputStream -- get a XInputStream interface from a SvStorage
+ *  getObjectInputStream -- get a XInputStream interface from a SotStorage
  *
  *   SYNOPSIS
  *  xInputStream = getObjectInputStream( objectURL );

@@ -1278,13 +1278,13 @@ void PPTWriter::ImplWriteOLE( )
                     ::uno::Reference < embed::XEmbeddedObject > xObj( static_cast<SdrOle2Obj*>(pSdrObj)->GetObjRef() );
                     if( xObj.is() )
                     {
-                        SotStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), true ) );
+                        SotStorageRef xTempStorage( new SotStorage( new SvMemoryStream(), true ) );
                         aOleExport.ExportOLEObject( xObj, *xTempStorage );
 
                         //TODO/MBA: testing
                         OUString aPersistStream( SVEXT_PERSIST_STREAM );
                         SvMemoryStream aStream;
-                        SotStorageRef xCleanStorage( new SvStorage( false, aStream ) );
+                        SotStorageRef xCleanStorage( new SotStorage( false, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
@@ -1311,7 +1311,7 @@ void PPTWriter::ImplWriteOLE( )
                     OUString aName;
                     //Initialize the graphic size which will be used on export
                     ::com::sun::star::awt::Size  aSize( pPtr->xShape->getSize() );
-                    SotStorageRef xDest( new SvStorage( new SvMemoryStream(), true ) );
+                    SotStorageRef xDest( new SotStorage( new SvMemoryStream(), true ) );
                     bool bOk = oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xDest, pPtr->xControlModel, aSize, aName );
                     if ( bOk )
                         pStrm = xDest->CreateMemoryStream();
@@ -1462,7 +1462,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< 
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
 {
-    SotStorageRef xDest( new SvStorage( new SvMemoryStream(), true ) );
+    SotStorageRef xDest( new SotStorage( new SvMemoryStream(), true ) );
     SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
     aMSVBas.SaveOrDelMSVBAStorage( true, OUString( "_MS_VBA_Overhead" ) );
 

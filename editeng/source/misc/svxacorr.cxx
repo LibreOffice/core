@@ -2446,7 +2446,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         sShareAutoCorrFile = sUserAutoCorrFile;
 }
 
-bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
+bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
 {
     OUString sStrmName( pXMLImplAutocorr_ListStr, strlen(pXMLImplAutocorr_ListStr), RTL_TEXTENCODING_MS_1252 );
     bool bRet = true, bRemove = !pAutocorr_List || pAutocorr_List->empty();

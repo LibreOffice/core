@@ -96,7 +96,7 @@
 
 using namespace ::com::sun::star;
 
-SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
+SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium )
 {
 
     sal_uInt32 nImportFlags = 0;
@@ -165,7 +165,7 @@ SdPPTImport::~SdPPTImport()
     delete pFilter;
 }
 
-ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage_, SfxMedium& rMedium, PowerPointImportParam& rParam )
+ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorage_, SfxMedium& rMedium, PowerPointImportParam& rParam )
     : SdrPowerPointImport(rParam, rMedium.GetBaseURL())
     , mrMed(rMedium)
     , mrStorage(rStorage_)
@@ -2678,7 +2678,7 @@ ImplSdPPTImport::ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Ref
 
 // exported function
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT(
-        SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
+        SdDrawDocument* pDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium )
 {
     SdPPTImport* pImport = new SdPPTImport( pDocument, rDocStream, rStorage, rMedium );
     bool bRet = pImport->Import();
