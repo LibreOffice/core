@@ -286,7 +286,7 @@ void SvXMLMetaExport::_MExport()
                         XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
                 else
                 {
-                    DBG_ASSERT( false, "Unknown statistic value!\n" );
+                    SAL_WARN("xmloff", "Unknown statistic value!");
                 }
             }
         }
@@ -308,7 +308,7 @@ SvXMLMetaExport::SvXMLMetaExport(
     m_level( 0 ),
     m_preservedNSs()
 {
-    DBG_ASSERT( mxDocProps.is(), "no document properties" );
+    assert(mxDocProps.is());
 }
 
 SvXMLMetaExport::~SvXMLMetaExport()
@@ -331,7 +331,7 @@ void SvXMLMetaExport::Export()
             } else if (attrname.equalsAsciiL(s_xmlns, strlen(s_xmlns))) {
                 // default initialized empty string
             } else {
-            OSL_FAIL("namespace attribute not starting with xmlns unexpected");
+                assert(!"namespace attribute not starting with xmlns unexpected");
             }
             ns.Second = rNsMap.GetNameByKey(key);
             namespaces.push_back(ns);
@@ -352,7 +352,7 @@ SvXMLMetaExport::startDocument()
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     // ignore: has already been done by SvXMLExport::exportDoc
-    DBG_ASSERT( m_level == 0, "SvXMLMetaExport: level error" );
+    assert(m_level == 0 && "SvXMLMetaExport: level error");
 }
 
 void SAL_CALL
@@ -360,7 +360,7 @@ SvXMLMetaExport::endDocument()
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     // ignore: will be done by SvXMLExport::exportDoc
-    DBG_ASSERT( m_level == 0, "SvXMLMetaExport: level error" );
+    assert(m_level == 0 && "SvXMLMetaExport: level error");
 }
 
 // unfortunately, this method contains far too much ugly namespace mangling.
@@ -456,7 +456,7 @@ SvXMLMetaExport::endElement(const OUString & i_rName)
         // ignore the root; see startElement
         return;
     }
-    DBG_ASSERT( m_level >= 0, "SvXMLMetaExport: level error" );
+    assert(m_level >= 0 && "SvXMLMetaExport: level error");
     mrExport.EndElement(i_rName, false);
 }
 
