@@ -13,10 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,harfbuzz,$(HARFBUZZ_TARBALL),,harfb
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 
-$(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
-    external/harfbuzz/ubsan.patch \
-))
-
 ifneq ($(ENABLE_RUNTIME_OPTIMIZATIONS),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/harfbuzz-rtti.patch \
