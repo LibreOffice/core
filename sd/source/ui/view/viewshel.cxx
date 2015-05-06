@@ -197,7 +197,7 @@ void ViewShell::construct()
 
     mpZoomList = new ZoomList( this );
 
-    mpContentWindow.reset(new ::sd::Window(GetParentWindow()));
+    mpContentWindow.reset(VclPtr< ::sd::Window >::Create(GetParentWindow()));
     SetActiveWindow (mpContentWindow.get());
 
     GetParentWindow()->SetBackground (Wallpaper());
