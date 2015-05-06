@@ -105,7 +105,7 @@ private:
     FrameView* mpFrameView;
 
     class ViewCache;
-    VclPtr<vcl::Window> mpWindow;
+    ScopedVclPtr<vcl::Window> mpWindow;
     ::boost::shared_ptr<ViewCache> mpViewCache;
 
     css::uno::Reference<css::drawing::framework::XPane> mxLocalPane;
