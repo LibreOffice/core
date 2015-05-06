@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <comphelper/lok.hxx>
 #include <helper/statusindicator.hxx>
 
