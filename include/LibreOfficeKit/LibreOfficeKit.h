@@ -50,6 +50,11 @@ struct _LibreOfficeKitClass
     LibreOfficeKitDocument* (*documentLoadWithOptions) (LibreOfficeKit* pThis,
                                                         const char* pURL,
                                                         const char* pOptions);
+#ifdef LOK_USE_UNSTABLE_API
+    void (*registerCallback) (LibreOfficeKit* pThis,
+                              LibreOfficeKitCallback pCallback,
+                              void* pData);
+#endif
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

@@ -278,16 +278,21 @@ static char *                  lo_getError      (LibreOfficeKit* pThis);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
-
+static void                    lo_registerCallback (LibreOfficeKit* pThis,
+                                                    LibreOfficeKitCallback pCallback,
+                                                    void* pData);
 
 struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
     OUString maLastExceptionMsg;
     shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
     oslThread maThread;
+    LibreOfficeKitCallback mpCallback;
+    void *mpCallbackData;
 
     LibLibreOffice_Impl()
-        : maThread(0)
+        : maThread(0),
+          mpCallback(nullptr)
     {
         if(!(m_pOfficeClass = gOfficeClass.lock())) {
             m_pOfficeClass.reset(new LibreOfficeKitClass);
@@ -297,6 +302,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->documentLoad = lo_documentLoad;
             m_pOfficeClass->getError = lo_getError;
             m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
+            m_pOfficeClass->registerCallback = lo_registerCallback;
 
             gOfficeClass = m_pOfficeClass;
         }
@@ -382,6 +388,17 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     return NULL;
 }
+
+static void lo_registerCallback (LibreOfficeKit* pThis,
+                                 LibreOfficeKitCallback pCallback,
+                                 void* pData)
+{
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+
+    pLib->mpCallback = pCallback;
+    pLib->mpCallbackData = pData;
+}
+
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -873,6 +890,27 @@ static void lo_startmain(void*)
 
 static bool bInitialized = false;
 
+static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit::statusIndicatorCallbackType type, int percent)
+{
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(data);
+
+    if (!pLib->mpCallback)
+        return;
+
+    switch (type)
+    {
+    case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Start:
+        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, 0, pLib->mpCallbackData);
+        break;
+    case comphelper::LibreOfficeKit::statusIndicatorCallbackType::SetValue:
+        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, std::to_string(percent).c_str(), pLib->mpCallbackData);
+        break;
+    case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Finish:
+        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_FINISH, 0, pLib->mpCallbackData);
+        break;
+    }
+}
+
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfilePath)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
@@ -881,6 +919,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         return 1;
 
     comphelper::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
     if (pUserProfilePath)
         rtl::Bootstrap::set(OUString("UserInstallation"), OUString(pUserProfilePath, strlen(pUserProfilePath), RTL_TEXTENCODING_UTF8));
@@ -1015,6 +1054,8 @@ static void lo_destroy(LibreOfficeKit* pThis)
     gImpl = NULL;
 
     SAL_INFO("lok", "LO Destroy");
+
+    comphelper::LibreOfficeKit::setStatusIndicatorCallback(0, 0);
 
     Application::Quit();
     osl_joinWithThread(pLib->maThread);

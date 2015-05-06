@@ -109,7 +109,36 @@ typedef enum
      * For example, when cursor is on bold text, this callback is triggered
      * with payload: ".uno:Bold=true"
      */
-    LOK_CALLBACK_STATE_CHANGED
+    LOK_CALLBACK_STATE_CHANGED,
+
+    /**
+     * Start a "status indicator" (here restricted to a progress bar type
+     * indicator). The payload is the descriptive text (or empty). Even if
+     * there is no documentation that would promise so, we assume that de facto
+     * for a document being viewed or edited, there will be at most one status
+     * indicator, and its descriptive text will not change.
+     *
+     * Note that for the case of the progress indication during loading of a
+     * document, the status indicator callbacks will arrive to the callback
+     * registered for the LibreOfficeKit (singleton) object, not a
+     * LibreOfficeKitDocument one, because we are in the very progress of
+     * loading a docuemnt and then constructing a LibreOfficeKitDocument
+     * object.
+     */
+    LOK_CALLBACK_STATUS_INDICATOR_START,
+
+    /**
+     * Sets the numeric value of the status indicator.
+     * The payload should be a percentage, an integer between 0 and 100.
+     */
+    LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE,
+
+    /**
+     * Ends the status indicator.
+     *
+     * Not necessarily ever emitted.
+     */
+    LOK_CALLBACK_STATUS_INDICATOR_FINISH
 }
 LibreOfficeKitCallbackType;
 
