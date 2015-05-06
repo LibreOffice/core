@@ -428,7 +428,7 @@ IMPL_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
             pMediaData->SetPassThroughToOS(false);
             switch (pMediaData->GetMediaId())
             {
-                case MEDIA_COMMAND_PLAY:
+                case MediaCommand::Play:
                 {
                     ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                     if( pDocShell )  // Impress or Draw ?
