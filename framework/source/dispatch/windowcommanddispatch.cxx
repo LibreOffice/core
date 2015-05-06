@@ -114,16 +114,16 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     if ( ! pData)
         return 0L;
 
-    const int nCommand = pData->GetDialogId();
+    const ShowDialogId nCommand = pData->GetDialogId();
     OUString sCommand;
 
     switch (nCommand)
     {
-        case SHOWDIALOG_ID_PREFERENCES :
+        case ShowDialogId::Preferences :
                 sCommand = ".uno:OptionsTreeDialog";
                 break;
 
-        case SHOWDIALOG_ID_ABOUT :
+        case ShowDialogId::About :
                 sCommand = ".uno:About";
                 break;
 

@@ -253,21 +253,24 @@ inline CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
 }
 
 
-// - CommanDialogData -
+// - CommandDialogData -
 
 
-#define SHOWDIALOG_ID_PREFERENCES       1
-#define SHOWDIALOG_ID_ABOUT             2
+enum class ShowDialogId
+{
+    Preferences       = 1,
+    About             = 2,
+};
 
 class VCL_DLLPUBLIC CommandDialogData
 {
-    int             m_nDialogId;
-    public:
-    CommandDialogData( int nDialogId = SHOWDIALOG_ID_PREFERENCES )
+    ShowDialogId   m_nDialogId;
+public:
+    CommandDialogData( ShowDialogId nDialogId = ShowDialogId::Preferences )
     : m_nDialogId( nDialogId )
     {}
 
-    int GetDialogId() const { return m_nDialogId; }
+    ShowDialogId GetDialogId() const { return m_nDialogId; }
 };
 
 // Media Commands
