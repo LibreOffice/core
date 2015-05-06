@@ -198,6 +198,8 @@ public:
     using Window::ImplInit;
 private:
     SAL_DLLPRIVATE void InvalidateItem(sal_uInt16 nPosition, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false);
+    SAL_DLLPRIVATE void InvalidateSpin(bool bUpperIn, bool bLowerIn);
+    SAL_DLLPRIVATE void InvalidateMenuButton(bool bHighlight);
 
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
@@ -207,8 +209,8 @@ private:
     SAL_DLLPRIVATE bool            ImplCalcItem();
     SAL_DLLPRIVATE sal_uInt16          ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
-    SAL_DLLPRIVATE void            ImplDrawSpin( bool bUpperIn, bool bLowerIn );
-    SAL_DLLPRIVATE void            ImplDrawSeparator(sal_uInt16 nPos, const Rectangle& rRect);
+    SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bool bLowerIn);
+    SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect);
     SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
@@ -234,7 +236,7 @@ private:
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
     SAL_DLLPRIVATE bool            ImplHasExternalMenubutton();
-    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder( ImplToolItem* pItem );
+    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem );
 
     DECL_DLLPRIVATE_LINK(          ImplCallExecuteCustomMenu, void* );
     DECL_DLLPRIVATE_LINK_TYPED(    ImplUpdateHdl, Idle*, void );
@@ -275,7 +277,7 @@ public:
     static SAL_DLLPRIVATE void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( ToolBox* pBox, const Point& rPos );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList );
-    SAL_DLLPRIVATE void ImplDrawMenubutton(vcl::RenderContext& rRenderContext, bool bHighlight);
+    SAL_DLLPRIVATE void ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight);
     SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
     static SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks( const ToolBox *pThis );
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
