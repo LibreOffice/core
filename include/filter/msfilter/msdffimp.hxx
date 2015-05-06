@@ -38,8 +38,6 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 
-#include <sot/storage.hxx>
-
 #include <vcl/graph.hxx>
 
 #include <svx/msdffdef.hxx>
@@ -49,6 +47,7 @@
 #include <filter/msfilter/msfilterdllapi.h>
 
 class Graphic;
+class SotStorage;
 class SvStream;
 class SdrObject;
 class SdrOle2Obj;
@@ -67,6 +66,10 @@ class SfxItemSet;
 class SdrObject;
 class SdrTextObj;
 struct DffObjData;
+
+namespace com { namespace sun { namespace star { namespace embed {
+    class XStorage;
+} } } }
 
 class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 {

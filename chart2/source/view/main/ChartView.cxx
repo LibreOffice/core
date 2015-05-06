@@ -54,6 +54,7 @@
 
 #include <editeng/frmdiritem.hxx>
 #include <rtl/uuid.h>
+#include <tools/globname.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

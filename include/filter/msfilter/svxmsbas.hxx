@@ -23,11 +23,11 @@
 #include <tools/solar.h>
 #include <filter/msfilter/msfilterdllapi.h>
 
-#include <sot/storage.hxx>
 #include <map>
 #include <unordered_map>
 
 class SfxObjectShell;
+class SotStorage;
 
 /* Construct with the root storage of the MS document, with bImportCode
  * set the visual basic code will be imported into the stardocument when Import

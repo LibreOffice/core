@@ -21,6 +21,7 @@
 
 #include <FrameControlsManager.hxx>
 
+#include <sot/exchange.hxx>
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>

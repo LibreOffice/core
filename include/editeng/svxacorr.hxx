@@ -23,7 +23,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <o3tl/sorted_vector.hxx>
-#include <sot/storage.hxx>
+#include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/time.hxx>
@@ -36,6 +36,7 @@
 
 class CharClass;
 class SfxPoolItem;
+class SotStorage;
 class SvxAutoCorrect;
 class SfxObjectShell;
 namespace vcl { class Window; }

@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_OLE_OLEHELPER_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/ref.hxx>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <oox/helper/graphichelper.hxx>
@@ -37,8 +38,9 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <filter/msfilter/msocximex.hxx>
 #include <oox/dllapi.h>
-#include <sot/storage.hxx>
 
+class SotStorage;
+class SotStorageStream;
 class SvGlobalName;
 
 namespace oox {

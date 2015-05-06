@@ -24,6 +24,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
+#include <sot/storage.hxx>
 #include <svx/hlnkitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/svxerr.hxx>

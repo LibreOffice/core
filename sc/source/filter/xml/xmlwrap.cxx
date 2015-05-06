@@ -20,6 +20,7 @@
 #include <rsc/rscsfx.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
+#include <sot/storage.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>

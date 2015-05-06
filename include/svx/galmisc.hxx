@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_GALMISC_HXX
 #define INCLUDED_SVX_GALMISC_HXX
 
-#include <sot/storage.hxx>
+#include <sot/formats.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/imap.hxx>
 #include <svl/hint.hxx>
@@ -33,6 +33,7 @@
 #include <tools/time.hxx>
 
 class GalleryTheme;
+class SotStorageStream;
 
 struct ExchangeData
 {

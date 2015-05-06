@@ -59,6 +59,7 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
 #include <unicode/ubidi.h>

@@ -28,14 +28,12 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
-#include <sot/storage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/galmisc.hxx>
 #include <vector>
 
-
-// - GalleryObject -
-
+class SotStorage;
+class SotStorageStream;
 
 // - SgaObjKind -
 
@@ -182,7 +180,7 @@ public:
     SAL_DLLPRIVATE void         AbortActualize() { bAbortActualize = true; }
 
     SAL_DLLPRIVATE Gallery*     GetParent() const { return pParent; }
-    SAL_DLLPRIVATE tools::SvRef<SotStorage> GetSvDrawStorage() const { return aSvDrawStorageRef; }
+    SAL_DLLPRIVATE tools::SvRef<SotStorage> GetSvDrawStorage() const;
 
 public:
 

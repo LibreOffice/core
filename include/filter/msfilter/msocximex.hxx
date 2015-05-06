@@ -19,8 +19,6 @@
 #ifndef INCLUDED_FILTER_MSFILTER_MSOCXIMEX_HXX
 #define INCLUDED_FILTER_MSFILTER_MSOCXIMEX_HXX
 
-#include <sot/storage.hxx>
-
 #include <filter/msfilter/msfilterdllapi.h>
 
 namespace com{namespace sun{namespace star{

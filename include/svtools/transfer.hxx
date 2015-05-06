@@ -24,8 +24,8 @@
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/ref.hxx>
 #include <sot/formats.hxx>
-#include <sot/storage.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -49,6 +49,8 @@ class ImageMap;
 class INetBookmark;
 class INetImage;
 class FileList;
+class SotStorageStream;
+struct DataFlavorExVector;
 namespace vcl { class Window; }
 
 // Drag&Drop defines

@@ -9,7 +9,6 @@
 #ifndef INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
 #define INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
 #include <filter/msfilter/msfilterdllapi.h>
-#include <sot/storage.hxx>
 #include <ostream>
 #include <memory>
 #include <vector>
@@ -19,6 +18,7 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
 #include <cppuhelper/implbase1.hxx>
 

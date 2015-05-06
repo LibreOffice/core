@@ -41,6 +41,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
+#include <sot/exchange.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/visitem.hxx>

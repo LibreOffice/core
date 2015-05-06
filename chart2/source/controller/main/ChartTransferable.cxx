@@ -19,6 +19,8 @@
 
 #include "ChartTransferable.hxx"
 
+#include <sot/exchange.hxx>
+#include <sot/storage.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itempool.hxx>

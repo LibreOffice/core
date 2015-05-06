@@ -1533,6 +1533,12 @@ bool GalleryTheme::IsThemeNameFromResource() const { return pThm->IsNameFromReso
 bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
 bool GalleryTheme::IsModified() const { return pThm->IsModified(); }
+
+tools::SvRef<SotStorage> GalleryTheme::GetSvDrawStorage() const
+{
+    return aSvDrawStorageRef;
+}
+
 const OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
 
 void GalleryTheme::InsertAllThemes( ListBox& rListBox )

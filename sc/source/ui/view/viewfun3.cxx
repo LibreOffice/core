@@ -29,6 +29,7 @@
 #include <svl/urlbmk.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
+#include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>

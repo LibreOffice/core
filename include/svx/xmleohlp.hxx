@@ -22,7 +22,6 @@
 
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>
-#include <sot/storage.hxx>
 #include <map>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>

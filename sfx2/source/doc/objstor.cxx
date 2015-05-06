@@ -87,6 +87,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/docinfohelper.hxx>
 #include <ucbhelper/content.hxx>
+#include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>

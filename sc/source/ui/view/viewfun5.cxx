@@ -37,6 +37,7 @@
 #include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
+#include <sot/storage.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>

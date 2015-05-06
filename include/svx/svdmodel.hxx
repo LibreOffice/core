@@ -24,7 +24,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <rtl/ustring.hxx>
-#include <sot/storage.hxx>
 #include <tools/link.hxx>
 #include <tools/weakbase.hxx>
 #include <vcl/mapmod.hxx>
@@ -74,7 +73,6 @@ class XHatchList;
 class XLineEndList;
 class SvxForbiddenCharactersTable;
 class SvNumberFormatter;
-class SotStorage;
 class SdrOutlinerCache;
 class SdrUndoFactory;
 class ImageMap;

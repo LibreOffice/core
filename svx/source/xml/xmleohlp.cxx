@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <sot/storage.hxx>
 #include <tools/debug.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>

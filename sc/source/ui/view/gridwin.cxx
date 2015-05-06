@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <editeng/adjustitem.hxx>
+#include <sot/storage.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>

@@ -20,6 +20,7 @@
 #include "sbagrid.hrc"
 #include "uiservices.hxx"
 
+#include <sot/exchange.hxx>
 #include <svx/svxids.hrc>
 
 #include <svx/numinf.hxx>

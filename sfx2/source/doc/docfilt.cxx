@@ -23,6 +23,7 @@
 
 #include <string>
 #include <sot/exchange.hxx>
+#include <sot/storage.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

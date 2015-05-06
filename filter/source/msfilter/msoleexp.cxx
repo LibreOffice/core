@@ -36,6 +36,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sot/formats.hxx>
+#include <sot/storage.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>

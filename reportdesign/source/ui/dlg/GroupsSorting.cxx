@@ -18,6 +18,7 @@
  */
 #include "GroupsSorting.hxx"
 #include <connectivity/dbtools.hxx>
+#include <sot/exchange.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <svtools/imgdef.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

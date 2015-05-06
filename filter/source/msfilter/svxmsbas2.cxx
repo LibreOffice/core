@@ -21,6 +21,7 @@
 
 #include <basic/basmgr.hxx>
 #include <sfx2/objsh.hxx>
+#include <sot/storage.hxx>
 #include <svx/svxerr.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 

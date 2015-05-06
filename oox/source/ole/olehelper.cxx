@@ -20,6 +20,7 @@
 #include "oox/ole/olehelper.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <sot/storage.hxx>
 #include <osl/diagnose.h>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/graphichelper.hxx"

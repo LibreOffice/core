@@ -17,7 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <sot/exchange.hxx>
+#include <sot/storage.hxx>
 #include <svx/dialogs.hrc>
 
 #include <sfx2/viewsh.hxx>

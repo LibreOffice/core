@@ -23,6 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/signaturestate.hxx>
 #include <sal/types.h>
+#include <tools/errcode.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -40,7 +41,8 @@
 #include <vcl/vclptr.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/bitmap.hxx>
-#include <sot/storage.hxx>
+#include <sot/formats.hxx>
+#include <sot/object.hxx>
 #include <rsc/rscsfx.hxx>
 
 #include <sfx2/XmlIdRegistry.hxx>
