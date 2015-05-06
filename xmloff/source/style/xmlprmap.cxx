@@ -181,13 +181,13 @@ sal_Int32 XMLPropertySetMapper::GetEntryCount() const
 
 sal_uInt32 XMLPropertySetMapper::GetEntryFlags( sal_Int32 nIndex ) const
 {
-    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     return mpImpl->maMapEntries[nIndex].nType & ~MID_FLAG_MASK;
 }
 
 sal_uInt32 XMLPropertySetMapper::GetEntryType( sal_Int32 nIndex, bool bWithFlags ) const
 {
-    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     sal_uInt32 nType = mpImpl->maMapEntries[nIndex].nType;
     if( !bWithFlags )
         nType = nType & MID_FLAG_MASK;
@@ -196,37 +196,37 @@ sal_uInt32 XMLPropertySetMapper::GetEntryType( sal_Int32 nIndex, bool bWithFlags
 
 sal_uInt16 XMLPropertySetMapper::GetEntryNameSpace( sal_Int32 nIndex ) const
 {
-    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     return mpImpl->maMapEntries[nIndex].nXMLNameSpace;
 }
 
 const OUString& XMLPropertySetMapper::GetEntryXMLName( sal_Int32 nIndex ) const
 {
-    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     return mpImpl->maMapEntries[nIndex].sXMLAttributeName;
 }
 
 const OUString& XMLPropertySetMapper::GetEntryAPIName( sal_Int32 nIndex ) const
 {
-    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     return mpImpl->maMapEntries[nIndex].sAPIPropertyName;
 }
 
 sal_Int16 XMLPropertySetMapper::GetEntryContextId( sal_Int32 nIndex ) const
 {
-    DBG_ASSERT( (nIndex >= -1) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    assert((-1 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     return nIndex == -1 ? 0 : mpImpl->maMapEntries[nIndex].nContextId;
 }
 
 SvtSaveOptions::ODFDefaultVersion XMLPropertySetMapper::GetEarliestODFVersionForExport( sal_Int32 nIndex ) const
 {
-    DBG_ASSERT( (nIndex >= -1) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    assert((-1 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     return nIndex == -1 ? SvtSaveOptions::ODFVER_UNKNOWN : mpImpl->maMapEntries[nIndex].nEarliestODFVersionForExport;
 }
 
 const XMLPropertyHandler* XMLPropertySetMapper::GetPropertyHandler( sal_Int32 nIndex ) const
 {
-    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     return mpImpl->maMapEntries[nIndex].pHdl;
 }
 
