@@ -439,13 +439,12 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Activate, ToolBox *, void)
 IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Deactivate, ToolBox *, void)
 {}
 
-IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
+IMPL_LINK_TYPED( AddonsToolBarManager, StateChanged, StateChangedType const *, pStateChangedType, void )
 {
     if ( *pStateChangedType == StateChangedType::ControlBackground )
     {
         CheckAndUpdateImages();
     }
-    return 1;
 }
 
 IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )

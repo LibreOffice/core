@@ -276,15 +276,14 @@ void ToolBarManager::Destroy()
         // #i93173# delete toolbar lazily as we can still be in one of its handlers
     m_pToolBar->doLazyDelete();
 
-    Link<> aEmpty;
     m_pToolBar->SetSelectHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetActivateHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetDeactivateHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetClickHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetDropdownClickHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetDoubleClickHdl( Link<ToolBox *, void>() );
-    m_pToolBar->SetStateChangedHdl( aEmpty );
-    m_pToolBar->SetDataChangedHdl( aEmpty );
+    m_pToolBar->SetStateChangedHdl( Link<StateChangedType const *, void>() );
+    m_pToolBar->SetDataChangedHdl( Link<>() );
     m_pToolBar->SetCommandHdl( Link<CommandEvent const *, void>() );
 
     m_pToolBar.clear();
@@ -2030,10 +2029,10 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, Activate, ToolBox *, void)
 IMPL_LINK_NOARG_TYPED(ToolBarManager, Deactivate, ToolBox *, void)
 {}
 
-IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
+IMPL_LINK_TYPED( ToolBarManager, StateChanged, StateChangedType const *, pStateChangedType, void )
 {
     if ( m_bDisposed )
-        return 1;
+        return;
 
     if ( *pStateChangedType == StateChangedType::ControlBackground )
     {
@@ -2050,7 +2049,6 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
     {
         m_aAsyncUpdateControllersTimer.Start();
     }
-    return 1;
 }
 
 IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )

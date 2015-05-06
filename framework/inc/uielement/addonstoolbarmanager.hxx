@@ -64,7 +64,7 @@ class AddonsToolBarManager : public ToolBarManager
         DECL_LINK_TYPED(Select, ToolBox *, void);
         DECL_LINK_TYPED(Activate, ToolBox *, void);
         DECL_LINK_TYPED(Deactivate, ToolBox *, void);
-        DECL_LINK( StateChanged, StateChangedType* );
+        DECL_LINK_TYPED( StateChanged, StateChangedType const *, void );
         DECL_LINK( DataChanged, DataChangedEvent* );
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const SAL_OVERRIDE;
