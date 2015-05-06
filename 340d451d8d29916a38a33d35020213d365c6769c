@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_4cdb53ee",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-06T17:51:28Z",
+      "side": 1,
+      "message": "Slightly weird folding of if() statements, this can be concatenated into one\n\n if (pFormatEntry \u0026\u0026 (pFormatEntry-\u003eGetType() \u0026 css::util::NumberFormat::SCIENTIFIC))",
+      "revId": "340d451d8d29916a38a33d35020213d365c6769c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_2c4b77b2",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-06T17:51:28Z",
+      "side": 1,
+      "message": "sFormatString is unused. With --enable-werror configured breaks the build with \"error: unused variable ‘sFormatString’ [-Werror\u003dunused-variable]\"",
+      "range": {
+        "startLine": 2430,
+        "startChar": 41,
+        "endLine": 2430,
+        "endChar": 54
+      },
+      "revId": "340d451d8d29916a38a33d35020213d365c6769c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_eccb1f1d",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2431,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-06T17:51:28Z",
+      "side": 1,
+      "message": "Some space for readability is nice to the reader ;-)\n\nDidn\u0027t I mention these already? anyway..",
+      "range": {
+        "startLine": 2431,
+        "startChar": 121,
+        "endLine": 2431,
+        "endChar": 124
+      },
+      "revId": "340d451d8d29916a38a33d35020213d365c6769c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_ccc66316",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2431,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-06T17:51:28Z",
+      "side": 1,
+      "message": "Better remember the result than calling a function twice.",
+      "revId": "340d451d8d29916a38a33d35020213d365c6769c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
