@@ -71,10 +71,17 @@ namespace o3tl
     template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x07> {};
 }
 
-#define BMP_VECTORIZE_INNER         0x00000001UL
-#define BMP_VECTORIZE_OUTER         0x00000002UL
-#define BMP_VECTORIZE_BOUND_ONLY    0x00000004UL
-#define BMP_VECTORIZE_REDUCE_EDGES  0x00000008UL
+enum class BmpVectorizeFlags
+{
+    Inner         = 0x0001,
+    Outer         = 0x0002,
+    BoundOnly     = 0x0004,
+    ReduceEdges   = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<BmpVectorizeFlags> : is_typed_flags<BmpVectorizeFlags, 0x0f> {};
+}
 
 #define BMP_COL_TRANS               Color( 252, 3, 251 )
 
@@ -721,7 +728,7 @@ public:
      */
     bool                    Vectorize(
                                 tools::PolyPolygon& rPolyPoly,
-                                sal_uLong nFlags = BMP_VECTORIZE_OUTER,
+                                BmpVectorizeFlags nFlags = BmpVectorizeFlags::Outer,
                                 const Link<>* pProgress = NULL );
 
     /** Convert the bitmap to a meta file
@@ -748,7 +755,7 @@ public:
     bool                    Vectorize(
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce = 0,
-                                sal_uLong nFlags = BMP_VECTORIZE_INNER,
+                                BmpVectorizeFlags nFlags = BmpVectorizeFlags::Inner,
                                 const Link<>* pProgress = NULL );
 
     /** Change various global color characteristics
