@@ -2028,25 +2028,24 @@ AC_ARG_WITH(
     [with_doxygen=yes])
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=2013],
+    AS_HELP_STRING([--with-visual-studio=<2013/2015>],
         [Specify which Visual Studio version to use in case several are
-         installed. If not specified, the order of preference is 2013 (including
-         Express editions). Not very useful at the moment, as currently only
-         2013 is supported, anyway.])
+         installed. If not specified, only 2013 is detected automatically
+         because 2015 support is currently experimental.])
     [
-                          Usage:     --with-visual-studio=2013
+                          Usage:     --with-visual-studio=<2013/2015>
     ],
 ,)
 
 AC_ARG_WITH(windows-sdk,
-    AS_HELP_STRING([--with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)>],
+    AS_HELP_STRING([--with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)/10>],
         [Specify which Windows SDK, or "Windows Kit", version to use
          in case the one that came with the selected Visual Studio
          is not what you want for some reason. Note that not all compiler/SDK
          combinations are supported. The intent is that this option should not
          be needed.])
     [
-                          Usage:     --with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)>
+                          Usage:     --with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)/10>
     ],
 ,)
 
@@ -3392,6 +3391,8 @@ map_vs_year_to_version()
     case $1 in
     2013)
         vsversion=12.0;;
+    2015)
+        vsversion=14.0;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -3415,7 +3416,7 @@ vs_versions_to_check()
 
 find_msvs()
 {
-    # Find Visual Studio 2013
+    # Find Visual Studio 2013/2015
     # Args: $1 (optional) : versions to check, in the order of preference
     # Return value: $vstest
 
@@ -3439,7 +3440,7 @@ find_msvs()
 
 find_msvc()
 {
-    # Find Visual C++ 2013
+    # Find Visual C++ 2013/2015
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
@@ -3466,6 +3467,10 @@ find_msvc()
             vcyear=2013
             vcnum=120
             ;;
+        14.0)
+            vcyear=2015
+            vcnum=140
+            ;;
         esac
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$vcnumwithdot/Setup/VC/ProductDir
         if test -n "$regvalue" -a "$regvalue" = "$vctest" ; then
@@ -3486,7 +3491,7 @@ if test "$_os" = "WINNT"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                AC_MSG_ERROR([No Visual Studio 2013 installation found])
+                AC_MSG_ERROR([No Visual Studio 2013/2015 installation found])
             fi
         fi
 
@@ -3614,6 +3619,10 @@ if test "$_os" = "WINNT"; then
             120)
                 COMEX=15
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0 7.1A"
+                ;;
+            140)
+                COMEX=19
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 8.1A 8.1 8.0 7.1A"
                 ;;
             esac
 
@@ -5160,6 +5169,14 @@ find_winsdk_version()
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             winsdklibsubdir=win8
+            return
+        fi
+        ;;
+    10)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot10"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            winsdklibsubdir=10.0.10056.0
             return
         fi
         ;;
