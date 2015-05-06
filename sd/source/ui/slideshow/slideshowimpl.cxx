@@ -2020,7 +2020,7 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
             switch (pMediaData->GetMediaId())
             {
 #if defined( MACOSX )
-            case MEDIA_COMMAND_MENU:
+            case MediaCommand::Menu:
                 if( !mnContextMenuEvent )
                 {
                 if( mpShowWindow )
@@ -2028,42 +2028,42 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
                 mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
                 }
                 break;
-            case MEDIA_COMMAND_VOLUME_DOWN:
+            case MediaCommand::VolumeDown:
                 gotoPreviousSlide();
                 break;
-            case MEDIA_COMMAND_VOLUME_UP:
+            case MediaCommand::VolumeUp:
                 gotoNextEffect();
                 break;
 #endif
-            case MEDIA_COMMAND_NEXTTRACK:
+            case MediaCommand::NextTrack:
                 gotoNextEffect();
                 break;
-            case MEDIA_COMMAND_PAUSE:
+            case MediaCommand::Pause:
                 if( !mbIsPaused )
                     blankScreen(0);
                 break;
-            case MEDIA_COMMAND_PLAY:
+            case MediaCommand::Play:
                 if( mbIsPaused )
                     resume();
                 break;
 
-            case MEDIA_COMMAND_PLAY_PAUSE:
+            case MediaCommand::PlayPause:
                 if( mbIsPaused )
                     resume();
                 else
                     blankScreen(0);
                 break;
-            case MEDIA_COMMAND_PREVIOUSTRACK:
+            case MediaCommand::PreviousTrack:
                 gotoPreviousSlide();
                 break;
-            case MEDIA_COMMAND_NEXTTRACK_HOLD:
+            case MediaCommand::NextTrackHold:
                 gotoLastSlide();
                 break;
 
-            case MEDIA_COMMAND_REWIND:
+            case MediaCommand::Rewind:
                 gotoFirstSlide();
                 break;
-            case MEDIA_COMMAND_STOP:
+            case MediaCommand::Stop:
                 // in case the user cancels the presentation, switch to current slide
                 // in edit mode
                 if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
