@@ -5188,26 +5188,26 @@ static bool ImplHandleIMEEndComposition( HWND hWnd )
 
 static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam, LRESULT & nRet )
 {
-    sal_Int16 nCommand = 0;
+    MediaCommand nCommand;
     switch( GET_APPCOMMAND_LPARAM(lParam) )
     {
-    case APPCOMMAND_MEDIA_CHANNEL_DOWN:         nCommand = MEDIA_COMMAND_CHANNEL_DOWN; break;
-    case APPCOMMAND_MEDIA_CHANNEL_UP:           nCommand = MEDIA_COMMAND_CHANNEL_UP; break;
-    case APPCOMMAND_MEDIA_NEXTTRACK:            nCommand = MEDIA_COMMAND_NEXTTRACK; break;
-    case APPCOMMAND_MEDIA_PAUSE:                nCommand = MEDIA_COMMAND_PAUSE; break;
-    case APPCOMMAND_MEDIA_PLAY:                 nCommand = MEDIA_COMMAND_PLAY; break;
-    case APPCOMMAND_MEDIA_PLAY_PAUSE:           nCommand = MEDIA_COMMAND_PLAY_PAUSE; break;
-    case APPCOMMAND_MEDIA_PREVIOUSTRACK:        nCommand = MEDIA_COMMAND_PREVIOUSTRACK; break;
-    case APPCOMMAND_MEDIA_RECORD:               nCommand = MEDIA_COMMAND_RECORD; break;
-    case APPCOMMAND_MEDIA_REWIND:               nCommand = MEDIA_COMMAND_REWIND; break;
-    case APPCOMMAND_MEDIA_STOP:                 nCommand = MEDIA_COMMAND_STOP; break;
-    case APPCOMMAND_MIC_ON_OFF_TOGGLE:          nCommand = MEDIA_COMMAND_MIC_ON_OFF_TOGGLE; break;
-    case APPCOMMAND_MICROPHONE_VOLUME_DOWN:     nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_DOWN; break;
-    case APPCOMMAND_MICROPHONE_VOLUME_MUTE:     nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_MUTE; break;
-    case APPCOMMAND_MICROPHONE_VOLUME_UP:       nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_UP; break;
-    case APPCOMMAND_VOLUME_DOWN:                nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
-    case APPCOMMAND_VOLUME_MUTE:                nCommand = MEDIA_COMMAND_VOLUME_MUTE; break;
-    case APPCOMMAND_VOLUME_UP:                  nCommand = MEDIA_COMMAND_VOLUME_UP; break;
+    case APPCOMMAND_MEDIA_CHANNEL_DOWN:         nCommand = MediaCommand::ChannelDown; break;
+    case APPCOMMAND_MEDIA_CHANNEL_UP:           nCommand = MediaCommand::ChannelUp; break;
+    case APPCOMMAND_MEDIA_NEXTTRACK:            nCommand = MediaCommand::NextTrack; break;
+    case APPCOMMAND_MEDIA_PAUSE:                nCommand = MediaCommand::Pause; break;
+    case APPCOMMAND_MEDIA_PLAY:                 nCommand = MediaCommand::Play; break;
+    case APPCOMMAND_MEDIA_PLAY_PAUSE:           nCommand = MediaCommand::PlayPause; break;
+    case APPCOMMAND_MEDIA_PREVIOUSTRACK:        nCommand = MediaCommand::PreviousTrack; break;
+    case APPCOMMAND_MEDIA_RECORD:               nCommand = MediaCommand::Record; break;
+    case APPCOMMAND_MEDIA_REWIND:               nCommand = MediaCommand::Rewind; break;
+    case APPCOMMAND_MEDIA_STOP:                 nCommand = MediaCommand::Stop; break;
+    case APPCOMMAND_MIC_ON_OFF_TOGGLE:          nCommand = MediaCommand::MicOnOffToggle; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_DOWN:     nCommand = MediaCommand::MicrophoneVolumeDown; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_MUTE:     nCommand = MediaCommand::MicrophoneVolumeMute; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_UP:       nCommand = MediaCommand::MicrophoneVolumeUp; break;
+    case APPCOMMAND_VOLUME_DOWN:                nCommand = MediaCommand::VolumeDown; break;
+    case APPCOMMAND_VOLUME_MUTE:                nCommand = MediaCommand::VolumeMute; break;
+    case APPCOMMAND_VOLUME_UP:                  nCommand = MediaCommand::VolumeUp; break;
     default:
         return false;
     }

@@ -274,40 +274,43 @@ public:
 };
 
 // Media Commands
-#define MEDIA_COMMAND_CHANNEL_DOWN           ((sal_Int16)1) // Decrement the channel value, for example, for a TV or radio tuner.
-#define MEDIA_COMMAND_CHANNEL_UP             ((sal_Int16)2) // Increment the channel value, for example, for a TV or radio tuner.
-#define MEDIA_COMMAND_NEXTTRACK              ((sal_Int16)3) // Go to next media track/slide.
-#define MEDIA_COMMAND_PAUSE                  ((sal_Int16)4) // Pause. If already paused, take no further action. This is a direct PAUSE command that has no state.
-#define MEDIA_COMMAND_PLAY                   ((sal_Int16)5) // Begin playing at the current position. If already paused, it will resume. This is a direct PLAY command that has no state.
-#define MEDIA_COMMAND_PLAY_PAUSE             ((sal_Int16)6) // Play or pause playback.
-#define MEDIA_COMMAND_PREVIOUSTRACK          ((sal_Int16)7) // Go to previous media track/slide.
-#define MEDIA_COMMAND_RECORD                 ((sal_Int16)8) // Begin recording the current stream.
-#define MEDIA_COMMAND_REWIND                 ((sal_Int16)9)// Go backward in a stream at a higher rate of speed.
-#define MEDIA_COMMAND_STOP                   ((sal_Int16)10)// Stop playback.
-#define MEDIA_COMMAND_MIC_ON_OFF_TOGGLE      ((sal_Int16)11)// Toggle the microphone.
-#define MEDIA_COMMAND_MICROPHONE_VOLUME_DOWN ((sal_Int16)12)// Increase microphone volume.
-#define MEDIA_COMMAND_MICROPHONE_VOLUME_MUTE ((sal_Int16)13)// Mute the microphone.
-#define MEDIA_COMMAND_MICROPHONE_VOLUME_UP   ((sal_Int16)14)// Decrease microphone volume.
-#define MEDIA_COMMAND_VOLUME_DOWN            ((sal_Int16)15)// Lower the volume.
-#define MEDIA_COMMAND_VOLUME_MUTE            ((sal_Int16)16)// Mute the volume.
-#define MEDIA_COMMAND_VOLUME_UP              ((sal_Int16)17)// Raise the volume.
-#define MEDIA_COMMAND_MENU                   ((sal_Int16)18)// Button Menu pressed.
-#define MEDIA_COMMAND_MENU_HOLD              ((sal_Int16)19)// Button Menu (long) pressed.
-#define MEDIA_COMMAND_PLAY_HOLD              ((sal_Int16)20)// Button Play (long) pressed.
-#define MEDIA_COMMAND_NEXTTRACK_HOLD         ((sal_Int16)21)// Button Right holding pressed.
-#define MEDIA_COMMAND_PREVIOUSTRACK_HOLD     ((sal_Int16)22)// Button Left holding pressed.
+enum class MediaCommand
+{
+    ChannelDown           = 1, // Decrement the channel value, for example, for a TV or radio tuner.
+    ChannelUp             = 2, // Increment the channel value, for example, for a TV or radio tuner.
+    NextTrack             = 3, // Go to next media track/slide.
+    Pause                 = 4, // Pause. If already paused, take no further action. This is a direct PAUSE command that has no state.
+    Play                  = 5, // Begin playing at the current position. If already paused, it will resume. This is a direct PLAY command that has no state.
+    PlayPause             = 6, // Play or pause playback.
+    PreviousTrack         = 7, // Go to previous media track/slide.
+    Record                = 8, // Begin recording the current stream.
+    Rewind                = 9,// Go backward in a stream at a higher rate of speed.
+    Stop                  = 10,// Stop playback.
+    MicOnOffToggle        = 11,// Toggle the microphone.
+    MicrophoneVolumeDown  = 12,// Increase microphone volume.
+    MicrophoneVolumeMute  = 13,// Mute the microphone.
+    MicrophoneVolumeUp    = 14,// Decrease microphone volume.
+    VolumeDown            = 15,// Lower the volume.
+    VolumeMute            = 16,// Mute the volume.
+    VolumeUp              = 17,// Raise the volume.
+    Menu                  = 18,// Button Menu pressed.
+    MenuHold              = 19,// Button Menu (long) pressed.
+    PlayHold              = 20,// Button Play (long) pressed.
+    NextTrackHold         = 21,// Button Right holding pressed.
+    PreviousTrackHold     = 22,// Button Left holding pressed.
+};
 
 class VCL_DLLPUBLIC CommandMediaData
 {
-    sal_Int16 m_nMediaId;
+    MediaCommand m_nMediaId;
     bool m_bPassThroughToOS;
 public:
-    CommandMediaData(sal_Int16 nMediaId)
+    CommandMediaData(MediaCommand nMediaId)
         : m_nMediaId(nMediaId)
         , m_bPassThroughToOS(true)
     {
     }
-    sal_Int16 GetMediaId() const { return m_nMediaId; }
+    MediaCommand GetMediaId() const { return m_nMediaId; }
     void SetPassThroughToOS(bool bPassThroughToOS) { m_bPassThroughToOS = bPassThroughToOS; }
     bool GetPassThroughToOS() const { return m_bPassThroughToOS; }
 };
