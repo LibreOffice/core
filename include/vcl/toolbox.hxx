@@ -190,7 +190,7 @@ private:
     Link<ToolBox *, void> maActivateHdl;
     Link<ToolBox *, void> maDeactivateHdl;
     Link<ToolBox *, void> maSelectHdl;
-    Link<>              maCommandHandler;
+    Link<CommandEvent const *, void> maCommandHandler;
     Link<>              maStateChangedHandler;
     Link<>              maDataChangedHandler;
 
@@ -504,8 +504,7 @@ public:
     void                SetDeactivateHdl( const Link<ToolBox *, void>& rLink ) { maDeactivateHdl = rLink; }
     void                SetSelectHdl( const Link<ToolBox *, void>& rLink ) { maSelectHdl = rLink; }
     const Link<ToolBox *, void>& GetSelectHdl() const { return maSelectHdl; }
-    void                SetCommandHdl( const Link<>& aLink ) { maCommandHandler = aLink; }
-    const Link<>&       GetCommandHdl() const { return maCommandHandler; }
+    void                SetCommandHdl( const Link<CommandEvent const *, void>& aLink ) { maCommandHandler = aLink; }
     void                SetStateChangedHdl( const Link<>& aLink ) { maStateChangedHandler = aLink; }
     const Link<>&       GetStateChangedHdl() const { return maStateChangedHandler; }
     void                SetDataChangedHdl( const Link<>& aLink ) { maDataChangedHandler = aLink; }

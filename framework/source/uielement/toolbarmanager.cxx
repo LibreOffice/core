@@ -285,7 +285,7 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetDoubleClickHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetStateChangedHdl( aEmpty );
     m_pToolBar->SetDataChangedHdl( aEmpty );
-    m_pToolBar->SetCommandHdl( aEmpty );
+    m_pToolBar->SetCommandHdl( Link<CommandEvent const *, void>() );
 
     m_pToolBar.clear();
 
@@ -1772,14 +1772,14 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     return pMenu;
 }
 
-IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
+IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return 1;
+        return;
     if ( pCmdEvt->GetCommand() != COMMAND_CONTEXTMENU )
-        return 0;
+        return;
 
     ::PopupMenu * pMenu = GetToolBarCustomMenu(m_pToolBar);
     if (pMenu)
@@ -1810,8 +1810,6 @@ IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
             pManagerMenu->SetDeactivateHdl( Link<>() );
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )

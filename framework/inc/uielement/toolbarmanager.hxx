@@ -126,7 +126,7 @@ class ToolBarManager : public ToolbarManager_Base
         typedef std::vector< ControllerParams > ControllerParamsVector;
 
     protected:
-        DECL_LINK( Command, CommandEvent * );
+        DECL_LINK_TYPED( Command, CommandEvent const *, void );
         PopupMenu * GetToolBarCustomMenu(ToolBox* pToolBar);
         DECL_LINK_TYPED(Click, ToolBox *, void);
         DECL_LINK_TYPED(DropdownClick, ToolBox *, void);

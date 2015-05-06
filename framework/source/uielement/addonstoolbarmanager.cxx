@@ -413,15 +413,8 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, DoubleClick, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG(AddonsToolBarManager, Command)
-{
-    SolarMutexGuard g;
-
-    if ( m_bDisposed )
-        return 1;
-
-    return 0;
-}
+IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Command, CommandEvent const *, void)
+{}
 
 IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Select, ToolBox *, void)
 {

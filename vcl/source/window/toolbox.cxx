@@ -4357,7 +4357,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
 void ToolBox::Command( const CommandEvent& rCEvt )
 {
     if ( maCommandHandler.IsSet() )
-        maCommandHandler.Call( (void *)( &rCEvt ));
+        maCommandHandler.Call( &rCEvt );
 
     // depict StartDrag on MouseButton/Left/Alt
     if ( (rCEvt.GetCommand() == COMMAND_STARTDRAG) && rCEvt.IsMouseEvent() &&

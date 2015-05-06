@@ -60,7 +60,7 @@ class AddonsToolBarManager : public ToolBarManager
     protected:
         DECL_LINK_TYPED(Click, ToolBox *, void);
         DECL_LINK_TYPED(DoubleClick, ToolBox *, void);
-        DECL_LINK(Command, void *);
+        DECL_LINK_TYPED(Command, CommandEvent const *, void);
         DECL_LINK_TYPED(Select, ToolBox *, void);
         DECL_LINK_TYPED(Activate, ToolBox *, void);
         DECL_LINK_TYPED(Deactivate, ToolBox *, void);
