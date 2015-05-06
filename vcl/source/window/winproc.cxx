@@ -2256,7 +2256,7 @@ static void ImplHandleSalExtTextInputPos( vcl::Window* pWindow, SalExtTextInputP
     }
 }
 
-static bool ImplHandleShowDialog( vcl::Window* pWindow, int nDialogId )
+static bool ImplHandleShowDialog( vcl::Window* pWindow, ShowDialogId nDialogId )
 {
     if( ! pWindow )
         return false;
@@ -2602,7 +2602,7 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
             break;
         case SALEVENT_SHOWDIALOG:
             {
-                int nDialogID = static_cast<int>(reinterpret_cast<sal_IntPtr>(pEvent));
+                ShowDialogId nDialogID = static_cast<ShowDialogId>(reinterpret_cast<sal_IntPtr>(pEvent));
                 nRet = ImplHandleShowDialog( pWindow, nDialogID );
             }
             break;

@@ -63,9 +63,9 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
     else
     {
         OUString aDialog;
-        if( nDialog == SHOWDIALOG_ID_ABOUT )
+        if( nDialog == ShowDialogId::About )
             aDialog = "ABOUT";
-        else if( nDialog == SHOWDIALOG_ID_PREFERENCES )
+        else if( nDialog == ShowDialogId::Preferences )
             aDialog = "PREFERENCES";
         const ApplicationEvent* pAppEvent = new ApplicationEvent(
             ApplicationEvent::TYPE_SHOWDIALOG, aDialog);
@@ -78,14 +78,14 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
     (void)sender;
     YIELD_GUARD;
 
-    [self showDialog: SHOWDIALOG_ID_PREFERENCES];
+    [self showDialog: ShowDialogId::Preferences];
 }
 -(void)showAbout: (id) sender
 {
     (void)sender;
     YIELD_GUARD;
 
-    [self showDialog: SHOWDIALOG_ID_ABOUT];
+    [self showDialog: ShowDialogId::About];
 }
 @end
 
