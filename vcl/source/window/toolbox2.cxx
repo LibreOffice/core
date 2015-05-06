@@ -434,7 +434,6 @@ void ToolBox::Deactivate()
 void ToolBox::Highlight()
 {
     CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
-    maHighlightHdl.Call( this );
 }
 
 void ToolBox::Select()

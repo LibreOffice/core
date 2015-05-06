@@ -189,7 +189,6 @@ private:
     Link<ToolBox *, void> maDoubleClickHdl;
     Link<ToolBox *, void> maActivateHdl;
     Link<ToolBox *, void> maDeactivateHdl;
-    Link<>              maHighlightHdl;
     Link<ToolBox *, void> maSelectHdl;
     Link<>              maCommandHandler;
     Link<>              maStateChangedHandler;
@@ -503,8 +502,6 @@ public:
     void                SetDropdownClickHdl( const Link<ToolBox *, void>& rLink );
     void                SetActivateHdl( const Link<ToolBox *, void>& rLink ) { maActivateHdl = rLink; }
     void                SetDeactivateHdl( const Link<ToolBox *, void>& rLink ) { maDeactivateHdl = rLink; }
-    void                SetHighlightHdl( const Link<>& rLink ) { maHighlightHdl = rLink; }
-    const Link<>&       GetHighlightHdl() const { return maHighlightHdl; }
     void                SetSelectHdl( const Link<ToolBox *, void>& rLink ) { maSelectHdl = rLink; }
     const Link<ToolBox *, void>& GetSelectHdl() const { return maSelectHdl; }
     void                SetCommandHdl( const Link<>& aLink ) { maCommandHandler = aLink; }
