@@ -2362,7 +2362,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                         }
                         SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
 
-                        // Commented text ranges additional informations (Plcfbkf.aFBKF)
+                        // Commented text ranges additional information (Plcfbkf.aFBKF)
                         for ( i = 0; i < aRangeStartPos.size(); ++i )
                         {
                             SwWW8Writer::WriteShort( *rWrt.pTableStrm, aStartEndMap[i] ); // FBKF.ibkl
