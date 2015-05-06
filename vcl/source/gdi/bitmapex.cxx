@@ -625,7 +625,7 @@ bool BitmapEx::Erase( const Color& rFillColor )
     return bRet;
 }
 
-bool BitmapEx::Dither( sal_uLong nDitherFlags )
+bool BitmapEx::Dither( BmpDitherFlags nDitherFlags )
 {
     return !!aBitmap && aBitmap.Dither( nDitherFlags );
 }

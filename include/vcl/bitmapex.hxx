@@ -132,7 +132,7 @@ public:
         @param nDitherFlags
         The algorithm to be used for dithering
      */
-    bool                Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
+    bool                Dither( BmpDitherFlags nDitherFlags = BmpDitherFlags::Matrix );
 
     /** Crop the bitmap
 
