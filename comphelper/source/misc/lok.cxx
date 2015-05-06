@@ -27,6 +27,33 @@ bool isActive()
     return bActive;
 }
 
+static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent)(nullptr);
+static void *pStatusIndicatorCallbackData(nullptr);
+
+void setStatusIndicatorCallback(void (*callback)(void *data, statusIndicatorCallbackType type, int percent), void *data)
+{
+    pStatusIndicatorCallback = callback;
+    pStatusIndicatorCallbackData = data;
+}
+
+void statusIndicatorStart()
+{
+    if (pStatusIndicatorCallback)
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Start, 0);
+}
+
+void statusIndicatorSetValue(int percent)
+{
+    if (pStatusIndicatorCallback)
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::SetValue, percent);
+}
+
+void statusIndicatorFinish()
+{
+    if (pStatusIndicatorCallback)
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0);
+}
+
 } // namespace LibreOfficeKit
 
 } // namespace comphelper

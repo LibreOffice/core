@@ -22,6 +22,16 @@ COMPHELPER_DLLPUBLIC void setActive();
 
 COMPHELPER_DLLPUBLIC bool isActive();
 
+enum class statusIndicatorCallbackType { Start, SetValue, Finish };
+
+COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(void (*callback)(void *data, statusIndicatorCallbackType type, int percent), void *data);
+
+COMPHELPER_DLLPUBLIC void statusIndicatorStart();
+
+COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
+
+COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
+
 }
 }
 
