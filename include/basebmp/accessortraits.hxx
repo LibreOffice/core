@@ -24,6 +24,8 @@
 #include <basebmp/accessoradapters.hxx>
 #include <basebmp/metafunctions.hxx>
 
+#include <o3tl/compat_functional.hxx>
+
 #include <functional>
 
 namespace basebmp
@@ -82,7 +84,7 @@ template< class Accessor > struct AccessorTraits
     typedef typename Accessor::value_type           value_type;
 
     /// Retrieve stand-alone color lookup function for given Accessor type
-    typedef project2nd< Accessor, value_type > color_lookup;
+    typedef o3tl::project2nd< Accessor, value_type > color_lookup;
 
     /// Retrieve raw pixel data accessor for given Accessor type
     typedef Accessor                                raw_accessor;

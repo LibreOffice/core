@@ -210,15 +210,6 @@ template< typename T > inline T shiftRight( T v, int shift )
     return shift > 0 ? v >> shift : v << (-shift);
 }
 
-
-
-/// Replace non-std project2nd from SGI extensions
-template< typename T1, typename T2 >
-struct project2nd : public std::binary_function<T1, T2, T2>
-{
-    T2 operator() (const T1&, const T2& v) const { return v; }
-};
-
 } // namespace basebmp
 
 #endif /* INCLUDED_BASEBMP_METAFUNCTIONS_HXX */
