@@ -76,9 +76,9 @@ public:
 
     static OUString     GetStandardText( StandardButtonType eButton );
 
-    bool            SetModeImage( const Image& rImage );
+    bool                SetModeImage( const Image& rImage );
     const Image         GetModeImage( ) const;
-    bool            HasImage() const;
+    bool                HasImage() const;
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;
 
@@ -100,8 +100,12 @@ protected:
 // - PushButton-Types -
 
 
-#define PUSHBUTTON_DROPDOWN_TOOLBOX         ((sal_uInt16)0x0001)
-#define PUSHBUTTON_DROPDOWN_MENUBUTTON      ((sal_uInt16)0x0002)
+enum class PushButtonDropdownStyle
+{
+    NONE            = 0x0000,
+    Toolbox         = 0x0001,
+    MenuButton      = 0x0002,
+};
 
 
 // - PushButton -
@@ -113,7 +117,7 @@ protected:
     SymbolType      meSymbol;
     TriState        meState;
     TriState        meSaveValue;
-    sal_uInt16      mnDDStyle;
+    PushButtonDropdownStyle mnDDStyle;
     bool            mbPressed;
     bool            mbInUserDraw;
     Link<>          maToggleHdl;
@@ -125,7 +129,7 @@ protected:
                                                const Rectangle& rRect, bool bLayout, bool bMenuBtnSep );
     SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLayout = false);
     using Button::ImplGetTextStyle;
-    SAL_DLLPRIVATE sal_uInt16          ImplGetTextStyle( sal_uLong nDrawFlags ) const;
+    SAL_DLLPRIVATE sal_uInt16      ImplGetTextStyle( sal_uLong nDrawFlags ) const;
     SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
     SAL_DLLPRIVATE bool            IsImage() const { return Button::HasImage(); }
 
@@ -174,8 +178,8 @@ public:
     SymbolType      GetSymbol() const { return meSymbol; }
     void            SetSymbolAlign( SymbolAlign eAlign );
 
-    void            SetDropDown( sal_uInt16 nStyle );
-    sal_uInt16      GetDropDown() const { return mnDDStyle; }
+    void            SetDropDown( PushButtonDropdownStyle nStyle );
+    PushButtonDropdownStyle GetDropDown() const { return mnDDStyle; }
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }
@@ -197,7 +201,7 @@ public:
 
     void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
     const Link<>&   GetToggleHdl() const { return maToggleHdl; }
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool    set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
 inline void PushButton::Check( bool bCheck )
@@ -278,10 +282,10 @@ private:
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
-    bool        mbChecked;
-    bool        mbSaveValue;
-    bool        mbRadioCheck;
-    bool        mbStateChanged;
+    bool            mbChecked;
+    bool            mbSaveValue;
+    bool            mbRadioCheck;
+    bool            mbStateChanged;
     Link<>          maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
@@ -316,7 +320,7 @@ public:
     SAL_DLLPRIVATE void     ImplSetMinimumNWFSize();
 
 protected:
-    virtual void FillLayoutData() const SAL_OVERRIDE;
+    virtual void    FillLayoutData() const SAL_OVERRIDE;
     virtual const vcl::Font&
                     GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&
@@ -350,7 +354,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void    Toggle();
+    void            Toggle();
 
     bool            IsStateChanged() const { return mbStateChanged; }
 
@@ -437,7 +441,7 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
-    virtual void FillLayoutData() const SAL_OVERRIDE;
+    virtual void                FillLayoutData() const SAL_OVERRIDE;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
 
@@ -465,7 +469,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void    Toggle();
+    void            Toggle();
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }

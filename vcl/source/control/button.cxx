@@ -617,7 +617,7 @@ void PushButton::ImplInitPushButtonData()
     meSymbol        = SymbolType::DONTKNOW;
     meState         = TRISTATE_FALSE;
     meSaveValue     = TRISTATE_FALSE;
-    mnDDStyle       = 0;
+    mnDDStyle       = PushButtonDropdownStyle::NONE;
     mbPressed       = false;
     mbInUserDraw    = false;
 }
@@ -840,7 +840,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     sal_uLong nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
     if( nImageSep < 1 )
         nImageSep = 1;
-    if ( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
+    if ( mnDDStyle == PushButtonDropdownStyle::MenuButton )
     {
         long nSeparatorX = 0;
         Rectangle aSymbolRect = aInRect;
@@ -890,7 +890,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
             aDecoView.DrawSymbol( aSymbolRect, meSymbol, aColor, nStyle );
         }
 
-        if ( mnDDStyle == PUSHBUTTON_DROPDOWN_TOOLBOX && !bLayout )
+        if ( mnDDStyle == PushButtonDropdownStyle::Toolbox && !bLayout )
         {
             bool bBlack = false;
             Color   aArrowColor( COL_BLACK );
@@ -1540,7 +1540,7 @@ void PushButton::SetSymbolAlign( SymbolAlign eAlign )
     ImplSetSymbolAlign( eAlign );
 }
 
-void PushButton::SetDropDown( sal_uInt16 nStyle )
+void PushButton::SetDropDown( PushButtonDropdownStyle nStyle )
 {
     if ( mnDDStyle != nStyle )
     {
@@ -1606,7 +1606,7 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
     }
     else if ( IsImage() && ! (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) )
         aSize = GetModeImage().GetSizePixel();
-    if( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
+    if( mnDDStyle == PushButtonDropdownStyle::MenuButton )
     {
         long nSymbolSize = GetTextHeight() / 2 + 1;
         aSize.Width() += 2*nSymbolSize;
