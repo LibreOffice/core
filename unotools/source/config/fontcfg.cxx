@@ -796,6 +796,8 @@ struct StrictStringSort : public ::std::binary_function< const FontNameAttr&, co
     { return rLeft.Name.compareTo( rRight.Name ) < 0; }
 };
 
+// The entries in this table must match the bits in the ImplFontAttrs enum.
+
 static const char* const pAttribNames[] =
 {
     "default",

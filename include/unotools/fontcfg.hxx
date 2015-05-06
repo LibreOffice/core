@@ -34,6 +34,15 @@
 
 enum class DefaultFontType;
 
+// If you think the below concept of classifying a font (typeface) as possibly being one or several
+// of "Default", "Standard", and "Normal", etc, is madness, you are probably right. On the other
+// hand we have in officecfg/registry/data/org/openoffice/VCL.xcu carefully (or not) assigned to
+// each font mentioned in that file what its attributes are, so it is quite possible that touching
+// this would cause a regression that nobody would notice until after many years.
+
+// Note that the bit flags must match the entries in the pAttribNames array in
+// unotools/source/config/fontcfg.cxx.
+
 enum class ImplFontAttrs : sal_uLong
 {
     None          = 0x00000000,
