@@ -2848,7 +2848,7 @@ void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bo
         bTmpLower = false;
     }
 
-    ImplDrawSpinButton(&rRenderContext, maUpperRect, maLowerRect,
+    ImplDrawSpinButton(rRenderContext, this, maUpperRect, maLowerRect,
                        bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz);
 }
 

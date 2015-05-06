@@ -157,23 +157,23 @@ void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     aUpperRect += aPos;
     aLowerRect += aPos;
 
-    ImplDrawSpinButton( pDev, aUpperRect, aLowerRect, false, false,
-                        IsEnabled() && ImplIsUpperEnabled(),
-                        IsEnabled() && ImplIsLowerEnabled(), mbHorz, true );
+    ImplDrawSpinButton(*pDev, this, aUpperRect, aLowerRect, false, false,
+                       IsEnabled() && ImplIsUpperEnabled(),
+                       IsEnabled() && ImplIsLowerEnabled(), mbHorz, true);
     pDev->Pop();
 }
 
-void SpinButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SpinButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
     HideFocus();
 
     bool bEnable = IsEnabled();
-    ImplDrawSpinButton( this, maUpperRect, maLowerRect, mbUpperIn, mbLowerIn,
-                        bEnable && ImplIsUpperEnabled(),
-                        bEnable && ImplIsLowerEnabled(), mbHorz, true );
+    ImplDrawSpinButton(rRenderContext, this, maUpperRect, maLowerRect, mbUpperIn, mbLowerIn,
+                       bEnable && ImplIsUpperEnabled(),
+                       bEnable && ImplIsLowerEnabled(), mbHorz, true);
 
-    if ( HasFocus() )
-        ShowFocus( maFocusRect );
+    if (HasFocus())
+        ShowFocus(maFocusRect);
 }
 
 void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )

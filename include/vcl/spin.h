@@ -20,16 +20,14 @@
 #ifndef INCLUDED_VCL_SPIN_H
 #define INCLUDED_VCL_SPIN_H
 
-class Rectangle;
-class OutputDevice;
+#include <vcl/window.hxx>
 
-void ImplDrawSpinButton( OutputDevice* pOutDev,
-                         const Rectangle& rUpperRect,
-                         const Rectangle& rLowerRect,
-                         bool bUpperIn, bool bLowerIn,
-                         bool bUpperEnabled = sal_True,
-                         bool bLowerEnabled = sal_True,
-                         bool bHorz = sal_False, bool bMirrorHorz = sal_False );
+class Rectangle;
+
+void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow,
+                        const Rectangle& rUpperRect, const Rectangle& rLowerRect,
+                        bool bUpperIn, bool bLowerIn, bool bUpperEnabled = true, bool bLowerEnabled = true,
+                        bool bHorz = false, bool bMirrorHorz = false);
 
 #endif // INCLUDED_VCL_SPIN_H
 
