@@ -938,7 +938,7 @@ sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
 Size ToolBox::GetItemContentSize( sal_uInt16 nItemId ) const
 {
     if ( mbCalc || mbFormat )
-        ((ToolBox*)this)->ImplFormat();
+        (const_cast<ToolBox*>(this))->ImplFormat();
 
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos < mpData->m_aItems.size() )
