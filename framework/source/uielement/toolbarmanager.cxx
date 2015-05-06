@@ -283,7 +283,7 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetDropdownClickHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetDoubleClickHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetStateChangedHdl( Link<StateChangedType const *, void>() );
-    m_pToolBar->SetDataChangedHdl( Link<>() );
+    m_pToolBar->SetDataChangedHdl( Link<DataChangedEvent const *, void>() );
     m_pToolBar->SetCommandHdl( Link<CommandEvent const *, void>() );
 
     m_pToolBar.clear();
@@ -2051,7 +2051,7 @@ IMPL_LINK_TYPED( ToolBarManager, StateChanged, StateChangedType const *, pStateC
     }
 }
 
-IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
+IMPL_LINK_TYPED( ToolBarManager, DataChanged, DataChangedEvent const *, pDataChangedEvent, void )
 {
     if ((( pDataChangedEvent->GetType() == DataChangedEventType::SETTINGS )   ||
         (  pDataChangedEvent->GetType() == DataChangedEventType::DISPLAY  ))  &&
@@ -2079,8 +2079,6 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
         ::Size aSize( m_pToolBar->CalcWindowSizePixel() );
         m_pToolBar->SetOutputSizePixel( aSize );
     }
-
-    return 1;
 }
 
 IMPL_LINK_NOARG(ToolBarManager, MiscOptionsChanged)

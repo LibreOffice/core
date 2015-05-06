@@ -4471,7 +4471,7 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 
     if ( maDataChangedHandler.IsSet() )
-        maDataChangedHandler.Call( (void*)&rDCEvt );
+        maDataChangedHandler.Call( &rDCEvt );
 }
 
 bool ToolBox::PrepareToggleFloatingMode()

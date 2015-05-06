@@ -447,7 +447,7 @@ IMPL_LINK_TYPED( AddonsToolBarManager, StateChanged, StateChangedType const *, p
     }
 }
 
-IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
+IMPL_LINK_TYPED( AddonsToolBarManager, DataChanged, DataChangedEvent const *, pDataChangedEvent, void )
 {
     if ((( pDataChangedEvent->GetType() == DataChangedEventType::SETTINGS )   ||
         (  pDataChangedEvent->GetType() == DataChangedEventType::DISPLAY  ))  &&
@@ -466,8 +466,6 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEve
             pWindow->DataChanged( rDCEvt );
         }
     }
-
-    return 1;
 }
 
 }

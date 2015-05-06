@@ -192,7 +192,7 @@ private:
     Link<ToolBox *, void> maSelectHdl;
     Link<CommandEvent const *, void> maCommandHandler;
     Link<StateChangedType const *, void> maStateChangedHandler;
-    Link<>              maDataChangedHandler;
+    Link<DataChangedEvent const *, void> maDataChangedHandler;
 
     public:
     using Window::ImplInit;
@@ -506,8 +506,7 @@ public:
     const Link<ToolBox *, void>& GetSelectHdl() const { return maSelectHdl; }
     void                SetCommandHdl( const Link<CommandEvent const *, void>& aLink ) { maCommandHandler = aLink; }
     void                SetStateChangedHdl( const Link<StateChangedType const *, void>& aLink ) { maStateChangedHandler = aLink; }
-    void                SetDataChangedHdl( const Link<>& aLink ) { maDataChangedHandler = aLink; }
-    const Link<>&       GetDataChangedHdl() { return maDataChangedHandler; }
+    void                SetDataChangedHdl( const Link<DataChangedEvent const *, void>& aLink ) { maDataChangedHandler = aLink; }
 
     // support for custom menu (eg for configuration)
     // note: this menu will also be used to display currently
