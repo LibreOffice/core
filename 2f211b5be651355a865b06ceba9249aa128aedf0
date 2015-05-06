@@ -16,6 +16,24 @@
       "revId": "2f211b5be651355a865b06ceba9249aa128aedf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_acb447d1",
+        "filename": "sc/source/ui/sidebar/CellAppearancePropertyPanel.src",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-05-06T10:51:26Z",
+      "side": 1,
+      "message": "Better create NumberFormatPropertyPanel.[hs]rc to stay in line with the surroundings. Clarifies that it belongs to NumberFormatPropertyPanel.cxx",
+      "parentUuid": "7a5de9d1_8cc94baf",
+      "revId": "2f211b5be651355a865b06ceba9249aa128aedf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
