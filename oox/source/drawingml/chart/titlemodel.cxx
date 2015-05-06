@@ -32,8 +32,9 @@ TextModel::~TextModel()
 {
 }
 
-TitleModel::TitleModel() :
-    mbOverlay( false )
+TitleModel::TitleModel(sal_Int32 nDefaultRotation) :
+    mbOverlay( false ),
+    mnDefaultRotation(nDefaultRotation)
 {
 }
 

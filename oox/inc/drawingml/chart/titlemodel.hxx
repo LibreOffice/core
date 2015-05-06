@@ -51,8 +51,9 @@ struct TitleModel
     LayoutRef           mxLayout;           /// Layout/position of the frame.
     TextRef             mxText;             /// Text source of the title.
     bool                mbOverlay;          /// True = title may overlay other objects.
+    sal_Int32           mnDefaultRotation;
 
-    explicit            TitleModel();
+    explicit            TitleModel(sal_Int32 nDefaultRotation = 0);
                         ~TitleModel();
 };
 

@@ -34,8 +34,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 /** Enumerates different object types for specific automatic formatting behaviour. */
 enum ObjectType
 {
@@ -66,8 +64,6 @@ enum ObjectType
     OBJECTTYPE_DOWNBAR,                 /// Down-bar in line/stock charts.
     OBJECTTYPE_DATATABLE                /// Data table.
 };
-
-
 
 struct ChartSpaceModel;
 struct ObjectFormatterData;
@@ -125,7 +121,7 @@ public:
     static void         convertTextRotation(
                             PropertySet& rPropSet,
                             const ModelRef< TextBody >& rxTextProp,
-                            bool bSupportsStacked );
+                            bool bSupportsStacked, sal_Int32 nDefaultRotation  = 0);
 
     /** Sets number format properties to the passed property set. */
     void                convertNumberFormat(
@@ -146,8 +142,6 @@ public:
 private:
     std::shared_ptr< ObjectFormatterData > mxData;
 };
-
-
 
 } // namespace chart
 } // namespace drawingml

@@ -1067,7 +1067,7 @@ void ObjectFormatter::convertTextFormatting( PropertySet& rPropSet, const TextCh
         pFormat->convertTextFormatting( rPropSet, rTextProps );
 }
 
-void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp, bool bSupportsStacked )
+void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp, bool bSupportsStacked, sal_Int32 nDefaultRotation )
 {
     if( rxTextProp.is() )
     {
@@ -1081,7 +1081,7 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
 
         /*  Chart2 expects rotation angle as double value in range of [0,360).
             OOXML counts clockwise, Chart2 counts counterclockwise. */
-        double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.get( 0 ) );
+        double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.get( nDefaultRotation ) );
         // MS Office UI allows values only in range of [-90,90].
         if ( fAngle < -5400000.0 || fAngle > 5400000.0 )
         {

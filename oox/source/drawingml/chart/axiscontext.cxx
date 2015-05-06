@@ -115,6 +115,9 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
                 case C_TOKEN( majorTickMark ):
                     mrModel.mnMajorTickMark = rAttribs.getToken( XML_val, bMSO2007Doc ? XML_out : XML_cross );
                     return 0;
+                case C_TOKEN(axPos):
+                    mrModel.mnAxisPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
+                    return 0;
                 case C_TOKEN( minorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMinorGridLines.create() );
                 case C_TOKEN( minorTickMark ):
@@ -131,7 +134,11 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
                     mrModel.mnTickLabelPos = rAttribs.getToken( XML_val, XML_nextTo );
                     return 0;
                 case C_TOKEN( title ):
-                    return new TitleContext( *this, mrModel.mxTitle.create() );
+                {
+                    bool bVerticalDefault = mrModel.mnAxisPos == XML_l;
+                    sal_Int32 nDefaultRotation = bVerticalDefault ? -5400000 : 0;
+                    return new TitleContext( *this, mrModel.mxTitle.create(nDefaultRotation) );
+                }
                 case C_TOKEN( txPr ):
                     return new TextBodyContext( *this, mrModel.mxTextProp.create() );
             }
@@ -174,9 +181,6 @@ ContextHandlerRef CatAxisContext::onCreateContext( sal_Int32 nElement, const Att
     {
         case C_TOKEN( auto ):
             mrModel.mbAuto = rAttribs.getBool( XML_val, !bMSO2007Doc );
-            return 0;
-        case C_TOKEN( axPos ):
-            mrModel.mnAxisPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
             return 0;
         case C_TOKEN( lblAlgn ):
             mrModel.mnLabelAlign = rAttribs.getToken( XML_val, XML_ctr );
