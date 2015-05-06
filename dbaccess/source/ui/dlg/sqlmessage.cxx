@@ -442,7 +442,7 @@ namespace
             OSL_FAIL( "lcl_addButton: invalid button id!" );
             break;
         }
-        _rDialog.AddButton( _eType, nButtonID, _bDefault ? BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON : 0 );
+        _rDialog.AddButton( _eType, nButtonID, _bDefault ? ButtonDialogFlags::Default | ButtonDialogFlags::Focus : ButtonDialogFlags::NONE );
     }
 }
 
@@ -593,7 +593,7 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     else
     {
         OSL_ENSURE( WB_OK & _nStyle, "OSQLMessageBox::impl_createStandardButtons: unsupported dialog style requested!" );
-        AddButton( StandardButtonType::OK, RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON );
+        AddButton( StandardButtonType::OK, RET_OK, ButtonDialogFlags::Default | ButtonDialogFlags::Focus );
     }
 
     if ( !m_sHelpURL.isEmpty() )
@@ -635,7 +635,7 @@ void OSQLMessageBox::impl_addDetailsButton()
 
     if ( bMoreDetailsAvailable )
     {
-        AddButton( StandardButtonType::More, RET_MORE, 0 );
+        AddButton( StandardButtonType::More, RET_MORE);
         PushButton* pButton = GetPushButton( RET_MORE );
         OSL_ENSURE( pButton, "OSQLMessageBox::impl_addDetailsButton: just added this button, why isn't it there?" );
         pButton->SetClickHdl( LINK( this, OSQLMessageBox, ButtonClickHdl ) );

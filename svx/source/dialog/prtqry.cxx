@@ -30,10 +30,10 @@ SvxPrtQryBox::SvxPrtQryBox(vcl::Window* pParent) :
     SetImage( QueryBox::GetStandardImage() );
 
     AddButton(SVX_RESSTR(RID_SVXSTR_QRY_PRINT_SELECTION), RET_OK,
-            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON);
+            ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
 
-    AddButton(SVX_RESSTR(RID_SVXSTR_QRY_PRINT_ALL), 2, 0);
-    AddButton(StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
+    AddButton(SVX_RESSTR(RID_SVXSTR_QRY_PRINT_ALL), 2);
+    AddButton(StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel);
     SetButtonHelpText( RET_OK, OUString() );
 }
 

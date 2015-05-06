@@ -908,9 +908,9 @@ NameClashQueryBox::NameClashQueryBox( vcl::Window* pParent,
     maMessText = rMessage;
 
     AddButton( IDE_RESSTR(RID_STR_DLGIMP_CLASH_RENAME), RET_YES,
-        BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-    AddButton( IDE_RESSTR(RID_STR_DLGIMP_CLASH_REPLACE), RET_NO, 0 );
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+        ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus );
+    AddButton( IDE_RESSTR(RID_STR_DLGIMP_CLASH_REPLACE), RET_NO );
+    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
     SetImage( QueryBox::GetStandardImage() );
 }
@@ -932,10 +932,10 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( vcl::Window* pParent,
 
     maMessText = rMessage;
     AddButton( IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_ADD), RET_YES,
-        BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-    AddButton( IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_OMIT), RET_NO, 0 );
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
-    AddButton( StandardButtonType::Help, RET_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
+        ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus );
+    AddButton( IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_OMIT), RET_NO );
+    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
+    AddButton( StandardButtonType::Help, RET_HELP, ButtonDialogFlags::Help, 4 );
 
     SetImage( QueryBox::GetStandardImage() );
 }

@@ -347,9 +347,9 @@ void ORelationTableView::lookForUiActivities()
         ScopedVclPtrInstance< OSQLMessageBox > aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
         aDlg->SetText(sTitle);
         aDlg->RemoveButton(aDlg->GetButtonId(0));
-        aDlg->AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-        aDlg->AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES, 0);
-        aDlg->AddButton( StandardButtonType::Cancel,RET_CANCEL,0);
+        aDlg->AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, ButtonDialogFlags::Default | ButtonDialogFlags::Focus);
+        aDlg->AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES);
+        aDlg->AddButton( StandardButtonType::Cancel,RET_CANCEL);
         sal_uInt16 nRet = aDlg->Execute();
         if( nRet == RET_CANCEL)
         {

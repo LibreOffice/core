@@ -30,16 +30,16 @@ AlreadyOpenQueryBox::AlreadyOpenQueryBox( vcl::Window* pParent, ResMgr* pResMgr,
     if ( bIsStoring )
     {
         AddButton( ResId(STR_ALREADYOPEN_RETRY_SAVE_BTN, *pResMgr).toString(), RET_YES,
-                BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-        AddButton( ResId(STR_ALREADYOPEN_SAVE_BTN, *pResMgr).toString(), RET_NO, 0 );
-        AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+                ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus );
+        AddButton( ResId(STR_ALREADYOPEN_SAVE_BTN, *pResMgr).toString(), RET_NO);
+        AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
     }
     else
     {
         AddButton( ResId(STR_ALREADYOPEN_READONLY_BTN, *pResMgr).toString(), RET_YES,
-                BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-        AddButton( ResId(STR_ALREADYOPEN_OPEN_BTN, *pResMgr).toString(), RET_NO, 0 );
-        AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+                ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus );
+        AddButton( ResId(STR_ALREADYOPEN_OPEN_BTN, *pResMgr).toString(), RET_NO);
+        AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
     }
 
     SetButtonHelpText( RET_YES, OUString() );
