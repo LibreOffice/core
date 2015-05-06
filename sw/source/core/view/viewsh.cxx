@@ -1459,6 +1459,12 @@ void SwViewShell::PaintDesktop( const SwRect &rRect )
     else
     {
         const SwFrm *pPage = Imp()->GetFirstVisPage();
+        //Here we have to get the previous page since
+        //GetFirstVisPage return the current one but
+        //there is a portion of the previous page
+        //which is still visible
+        if ( pPage->GetPrev() )
+            pPage = pPage->GetPrev();
         const SwTwips nBottom = rRect.Bottom();
         while ( pPage && !aRegion.empty() &&
                 (pPage->Frm().Top() <= nBottom) )
