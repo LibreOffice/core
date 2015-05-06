@@ -347,26 +347,23 @@ void SwRevisionConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    assert(aValues.getLength() == aNames.getLength());
+    for (sal_Int32 nProp = 0; nProp < aNames.getLength(); ++nProp)
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if (pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            sal_Int32 nVal = 0;
+            pValues[nProp] >>= nVal;
+            switch (nProp)
             {
-                sal_Int32 nVal = 0;
-                pValues[nProp] >>= nVal;
-                switch(nProp)
-                {
-                    case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
-                    case 1 : aInsertAttr.nColor     = nVal; break;
-                    case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, true); break;
-                    case 3 : aDeletedAttr.nColor    = nVal; break;
-                    case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
-                    case 5 : aFormatAttr.nColor     = nVal; break;
-                    case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
-                    case 7 : aMarkColor.SetColor(nVal); break;
-                }
+                case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
+                case 1 : aInsertAttr.nColor     = nVal; break;
+                case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, true); break;
+                case 3 : aDeletedAttr.nColor    = nVal; break;
+                case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
+                case 5 : aFormatAttr.nColor     = nVal; break;
+                case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
+                case 7 : aMarkColor.SetColor(nVal); break;
             }
         }
     }
@@ -874,230 +871,227 @@ void SwInsertConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    assert(aValues.getLength() == aNames.getLength());
+    InsCaptionOpt* pWriterTableOpt = 0;
+    InsCaptionOpt* pWriterFrameOpt = 0;
+    InsCaptionOpt* pWriterGraphicOpt = 0;
+    InsCaptionOpt* pOLECalcOpt = 0;
+    InsCaptionOpt* pOLEImpressOpt = 0;
+    InsCaptionOpt* pOLEChartOpt = 0;
+    InsCaptionOpt* pOLEFormulaOpt = 0;
+    InsCaptionOpt* pOLEDrawOpt = 0;
+    if (pCapOptions)
     {
-        InsCaptionOpt* pWriterTableOpt = 0;
-        InsCaptionOpt* pWriterFrameOpt = 0;
-        InsCaptionOpt* pWriterGraphicOpt = 0;
-        InsCaptionOpt* pOLECalcOpt = 0;
-        InsCaptionOpt* pOLEImpressOpt = 0;
-        InsCaptionOpt* pOLEChartOpt = 0;
-        InsCaptionOpt* pOLEFormulaOpt = 0;
-        InsCaptionOpt* pOLEDrawOpt = 0;
-        if(pCapOptions)
-        {
-            pWriterTableOpt = pCapOptions->Find(TABLE_CAP, 0);
-            pWriterFrameOpt = pCapOptions->Find(FRAME_CAP, 0);
-            pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP, 0);
-            pOLECalcOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
-            pOLEImpressOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
-            pOLEDrawOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW   ]);
-            pOLEFormulaOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH   ]);
-            pOLEChartOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART  ]);
-        }
-        else if(!bIsWeb)
-            return;
-
-        sal_uInt16 nInsTblFlags = 0;
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            if(pValues[nProp].hasValue())
-            {
-                bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE && *static_cast<sal_Bool const *>(pValues[nProp].getValue());
-                switch(nProp)
-                {
-                    case INS_PROP_TABLE_HEADER:
-                    {
-                        if(bBool)
-                            nInsTblFlags|= tabopts::HEADLINE;
-                    }
-                    break;//"Table/Header",
-                    case INS_PROP_TABLE_REPEATHEADER:
-                    {
-                        aInsTblOpts.mnRowsToRepeat = bBool? 1 : 0;
-
-                    }
-                    break;//"Table/RepeatHeader",
-                    case INS_PROP_TABLE_BORDER:
-                    {
-                        if(bBool)
-                            nInsTblFlags|= tabopts::DEFAULT_BORDER;
-                    }
-                    break;//"Table/Border",
-                    case INS_PROP_TABLE_SPLIT:
-                    {
-                        if(bBool)
-                            nInsTblFlags|= tabopts::SPLIT_LAYOUT;
-                    }
-                    break;//"Table/Split",
-                    case INS_PROP_CAP_AUTOMATIC:
-                        bInsWithCaption = bBool;
-                    break;
-                    case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST: bCaptionOrderNumberingFirst = bBool; break;
-                    case INS_PROP_CAP_OBJECT_TABLE_ENABLE:
-                    case INS_PROP_CAP_OBJECT_TABLE_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_TABLE_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_TABLE_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_TABLE_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_TABLE_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_TABLE_LEVEL:
-                    case INS_PROP_CAP_OBJECT_TABLE_POSITION:
-                    case INS_PROP_CAP_OBJECT_TABLE_CHARACTERSTYLE:
-                        if(!pWriterTableOpt)
-                        {
-                            pWriterTableOpt = new InsCaptionOpt(TABLE_CAP);
-                            pCapOptions->Insert(pWriterTableOpt);
-                        }
-                        lcl_ReadOpt(*pWriterTableOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_TABLE_ENABLE);
-                    break;
-                    case INS_PROP_CAP_OBJECT_FRAME_ENABLE:
-                    case INS_PROP_CAP_OBJECT_FRAME_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_FRAME_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_FRAME_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_FRAME_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_FRAME_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_FRAME_LEVEL:
-                    case INS_PROP_CAP_OBJECT_FRAME_POSITION:
-                    case INS_PROP_CAP_OBJECT_FRAME_CHARACTERSTYLE:
-                        if(!pWriterFrameOpt)
-                        {
-                            pWriterFrameOpt = new InsCaptionOpt(FRAME_CAP);
-                            pCapOptions->Insert(pWriterFrameOpt);
-                        }
-                        lcl_ReadOpt(*pWriterFrameOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FRAME_ENABLE);
-                    break;
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_LEVEL:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_POSITION:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_CHARACTERSTYLE:
-                    case INS_PROP_CAP_OBJECT_GRAPHIC_APPLYATTRIBUTES:
-                        if(!pWriterGraphicOpt)
-                        {
-                            pWriterGraphicOpt = new InsCaptionOpt(GRAPHIC_CAP);
-                            pCapOptions->Insert(pWriterGraphicOpt);
-                        }
-                        lcl_ReadOpt(*pWriterGraphicOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE);
-                    break;
-                    case INS_PROP_CAP_OBJECT_CALC_ENABLE:
-                    case INS_PROP_CAP_OBJECT_CALC_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_CALC_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_CALC_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_CALC_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_CALC_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_CALC_LEVEL:
-                    case INS_PROP_CAP_OBJECT_CALC_POSITION:
-                    case INS_PROP_CAP_OBJECT_CALC_CHARACTERSTYLE:
-                    case INS_PROP_CAP_OBJECT_CALC_APPLYATTRIBUTES:
-                        if(!pOLECalcOpt)
-                        {
-                            pOLECalcOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
-                            pCapOptions->Insert(pOLECalcOpt);
-                        }
-                        lcl_ReadOpt(*pOLECalcOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CALC_ENABLE);
-                    break;
-                    case INS_PROP_CAP_OBJECT_IMPRESS_ENABLE:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_LEVEL:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_POSITION:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_CHARACTERSTYLE:
-                    case INS_PROP_CAP_OBJECT_IMPRESS_APPLYATTRIBUTES:
-                        if(!pOLEImpressOpt)
-                        {
-                            pOLEImpressOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
-                            pCapOptions->Insert(pOLEImpressOpt);
-                        }
-                        lcl_ReadOpt(*pOLEImpressOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_IMPRESS_ENABLE);
-                    break;
-                    case INS_PROP_CAP_OBJECT_CHART_ENABLE:
-                    case INS_PROP_CAP_OBJECT_CHART_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_CHART_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_CHART_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_CHART_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_CHART_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_CHART_LEVEL:
-                    case INS_PROP_CAP_OBJECT_CHART_POSITION:
-                    case INS_PROP_CAP_OBJECT_CHART_CHARACTERSTYLE:
-                    case INS_PROP_CAP_OBJECT_CHART_APPLYATTRIBUTES:
-                        if(!pOLEChartOpt)
-                        {
-                            pOLEChartOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART]);
-                            pCapOptions->Insert(pOLEChartOpt);
-                        }
-                        lcl_ReadOpt(*pOLEChartOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CHART_ENABLE);
-                    break;
-                    case INS_PROP_CAP_OBJECT_FORMULA_ENABLE:
-                    case INS_PROP_CAP_OBJECT_FORMULA_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_FORMULA_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_FORMULA_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_FORMULA_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_FORMULA_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_FORMULA_LEVEL:
-                    case INS_PROP_CAP_OBJECT_FORMULA_POSITION:
-                    case INS_PROP_CAP_OBJECT_FORMULA_CHARACTERSTYLE:
-                    case INS_PROP_CAP_OBJECT_FORMULA_APPLYATTRIBUTES:
-                        if(!pOLEFormulaOpt)
-                        {
-                            pOLEFormulaOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH]);
-                            pCapOptions->Insert(pOLEFormulaOpt);
-                        }
-                        lcl_ReadOpt(*pOLEFormulaOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FORMULA_ENABLE);
-                    break;
-                    case INS_PROP_CAP_OBJECT_DRAW_ENABLE:
-                    case INS_PROP_CAP_OBJECT_DRAW_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_DRAW_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_DRAW_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_DRAW_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_DRAW_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_DRAW_LEVEL:
-                    case INS_PROP_CAP_OBJECT_DRAW_POSITION:
-                    case INS_PROP_CAP_OBJECT_DRAW_CHARACTERSTYLE:
-                    case INS_PROP_CAP_OBJECT_DRAW_APPLYATTRIBUTES:
-                        if(!pOLEDrawOpt)
-                        {
-                            pOLEDrawOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW]);
-                            pCapOptions->Insert(pOLEDrawOpt);
-                        }
-                        lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_DRAW_ENABLE);
-                    break;
-                    case INS_PROP_CAP_OBJECT_OLEMISC_ENABLE:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_CATEGORY:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_NUMBERING:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_NUMBERINGSEPARATOR:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_CAPTIONTEXT:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_DELIMITER:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_LEVEL:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_POSITION:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE:
-                    case INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES:
-                        if(!pOLEMiscOpt)
-                        {
-                            pOLEMiscOpt = new InsCaptionOpt(OLE_CAP);
-                        }
-                        lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
-                    break;
-                }
-            }
-            else if(nProp == INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST)
-            {
-                //#i61007#  initialize caption order, right now only HUNGARIAN seems to need a different order
-                SvtSysLocaleOptions aSysLocaleOptions;
-                OUString sLang = aSysLocaleOptions.GetLocaleConfigString();
-                bCaptionOrderNumberingFirst = sLang.startsWith( "hu" );
-            }
-
-        }
-        aInsTblOpts.mnInsMode = nInsTblFlags;
+        pWriterTableOpt = pCapOptions->Find(TABLE_CAP, 0);
+        pWriterFrameOpt = pCapOptions->Find(FRAME_CAP, 0);
+        pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP, 0);
+        pOLECalcOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
+        pOLEImpressOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
+        pOLEDrawOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW   ]);
+        pOLEFormulaOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH   ]);
+        pOLEChartOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART  ]);
     }
+    else if (!bIsWeb)
+        return;
+
+    sal_uInt16 nInsTblFlags = 0;
+    for (sal_Int32 nProp = 0; nProp < aNames.getLength(); ++nProp)
+    {
+        if (pValues[nProp].hasValue())
+        {
+            bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE && *static_cast<sal_Bool const *>(pValues[nProp].getValue());
+            switch (nProp)
+            {
+                case INS_PROP_TABLE_HEADER:
+                {
+                    if(bBool)
+                        nInsTblFlags|= tabopts::HEADLINE;
+                }
+                break;//"Table/Header",
+                case INS_PROP_TABLE_REPEATHEADER:
+                {
+                    aInsTblOpts.mnRowsToRepeat = bBool? 1 : 0;
+
+                }
+                break;//"Table/RepeatHeader",
+                case INS_PROP_TABLE_BORDER:
+                {
+                    if(bBool)
+                        nInsTblFlags|= tabopts::DEFAULT_BORDER;
+                }
+                break;//"Table/Border",
+                case INS_PROP_TABLE_SPLIT:
+                {
+                    if(bBool)
+                        nInsTblFlags|= tabopts::SPLIT_LAYOUT;
+                }
+                break;//"Table/Split",
+                case INS_PROP_CAP_AUTOMATIC:
+                    bInsWithCaption = bBool;
+                break;
+                case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST: bCaptionOrderNumberingFirst = bBool; break;
+                case INS_PROP_CAP_OBJECT_TABLE_ENABLE:
+                case INS_PROP_CAP_OBJECT_TABLE_CATEGORY:
+                case INS_PROP_CAP_OBJECT_TABLE_NUMBERING:
+                case INS_PROP_CAP_OBJECT_TABLE_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_TABLE_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_TABLE_DELIMITER:
+                case INS_PROP_CAP_OBJECT_TABLE_LEVEL:
+                case INS_PROP_CAP_OBJECT_TABLE_POSITION:
+                case INS_PROP_CAP_OBJECT_TABLE_CHARACTERSTYLE:
+                    if(!pWriterTableOpt)
+                    {
+                        pWriterTableOpt = new InsCaptionOpt(TABLE_CAP);
+                        pCapOptions->Insert(pWriterTableOpt);
+                    }
+                    lcl_ReadOpt(*pWriterTableOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_TABLE_ENABLE);
+                break;
+                case INS_PROP_CAP_OBJECT_FRAME_ENABLE:
+                case INS_PROP_CAP_OBJECT_FRAME_CATEGORY:
+                case INS_PROP_CAP_OBJECT_FRAME_NUMBERING:
+                case INS_PROP_CAP_OBJECT_FRAME_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_FRAME_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_FRAME_DELIMITER:
+                case INS_PROP_CAP_OBJECT_FRAME_LEVEL:
+                case INS_PROP_CAP_OBJECT_FRAME_POSITION:
+                case INS_PROP_CAP_OBJECT_FRAME_CHARACTERSTYLE:
+                    if(!pWriterFrameOpt)
+                    {
+                        pWriterFrameOpt = new InsCaptionOpt(FRAME_CAP);
+                        pCapOptions->Insert(pWriterFrameOpt);
+                    }
+                    lcl_ReadOpt(*pWriterFrameOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FRAME_ENABLE);
+                break;
+                case INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_CATEGORY:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERING:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_DELIMITER:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_LEVEL:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_POSITION:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_CHARACTERSTYLE:
+                case INS_PROP_CAP_OBJECT_GRAPHIC_APPLYATTRIBUTES:
+                    if(!pWriterGraphicOpt)
+                    {
+                        pWriterGraphicOpt = new InsCaptionOpt(GRAPHIC_CAP);
+                        pCapOptions->Insert(pWriterGraphicOpt);
+                    }
+                    lcl_ReadOpt(*pWriterGraphicOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE);
+                break;
+                case INS_PROP_CAP_OBJECT_CALC_ENABLE:
+                case INS_PROP_CAP_OBJECT_CALC_CATEGORY:
+                case INS_PROP_CAP_OBJECT_CALC_NUMBERING:
+                case INS_PROP_CAP_OBJECT_CALC_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_CALC_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_CALC_DELIMITER:
+                case INS_PROP_CAP_OBJECT_CALC_LEVEL:
+                case INS_PROP_CAP_OBJECT_CALC_POSITION:
+                case INS_PROP_CAP_OBJECT_CALC_CHARACTERSTYLE:
+                case INS_PROP_CAP_OBJECT_CALC_APPLYATTRIBUTES:
+                    if(!pOLECalcOpt)
+                    {
+                        pOLECalcOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
+                        pCapOptions->Insert(pOLECalcOpt);
+                    }
+                    lcl_ReadOpt(*pOLECalcOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CALC_ENABLE);
+                break;
+                case INS_PROP_CAP_OBJECT_IMPRESS_ENABLE:
+                case INS_PROP_CAP_OBJECT_IMPRESS_CATEGORY:
+                case INS_PROP_CAP_OBJECT_IMPRESS_NUMBERING:
+                case INS_PROP_CAP_OBJECT_IMPRESS_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_IMPRESS_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_IMPRESS_DELIMITER:
+                case INS_PROP_CAP_OBJECT_IMPRESS_LEVEL:
+                case INS_PROP_CAP_OBJECT_IMPRESS_POSITION:
+                case INS_PROP_CAP_OBJECT_IMPRESS_CHARACTERSTYLE:
+                case INS_PROP_CAP_OBJECT_IMPRESS_APPLYATTRIBUTES:
+                    if(!pOLEImpressOpt)
+                    {
+                        pOLEImpressOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
+                        pCapOptions->Insert(pOLEImpressOpt);
+                    }
+                    lcl_ReadOpt(*pOLEImpressOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_IMPRESS_ENABLE);
+                break;
+                case INS_PROP_CAP_OBJECT_CHART_ENABLE:
+                case INS_PROP_CAP_OBJECT_CHART_CATEGORY:
+                case INS_PROP_CAP_OBJECT_CHART_NUMBERING:
+                case INS_PROP_CAP_OBJECT_CHART_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_CHART_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_CHART_DELIMITER:
+                case INS_PROP_CAP_OBJECT_CHART_LEVEL:
+                case INS_PROP_CAP_OBJECT_CHART_POSITION:
+                case INS_PROP_CAP_OBJECT_CHART_CHARACTERSTYLE:
+                case INS_PROP_CAP_OBJECT_CHART_APPLYATTRIBUTES:
+                    if(!pOLEChartOpt)
+                    {
+                        pOLEChartOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART]);
+                        pCapOptions->Insert(pOLEChartOpt);
+                    }
+                    lcl_ReadOpt(*pOLEChartOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CHART_ENABLE);
+                break;
+                case INS_PROP_CAP_OBJECT_FORMULA_ENABLE:
+                case INS_PROP_CAP_OBJECT_FORMULA_CATEGORY:
+                case INS_PROP_CAP_OBJECT_FORMULA_NUMBERING:
+                case INS_PROP_CAP_OBJECT_FORMULA_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_FORMULA_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_FORMULA_DELIMITER:
+                case INS_PROP_CAP_OBJECT_FORMULA_LEVEL:
+                case INS_PROP_CAP_OBJECT_FORMULA_POSITION:
+                case INS_PROP_CAP_OBJECT_FORMULA_CHARACTERSTYLE:
+                case INS_PROP_CAP_OBJECT_FORMULA_APPLYATTRIBUTES:
+                    if(!pOLEFormulaOpt)
+                    {
+                        pOLEFormulaOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH]);
+                        pCapOptions->Insert(pOLEFormulaOpt);
+                    }
+                    lcl_ReadOpt(*pOLEFormulaOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FORMULA_ENABLE);
+                break;
+                case INS_PROP_CAP_OBJECT_DRAW_ENABLE:
+                case INS_PROP_CAP_OBJECT_DRAW_CATEGORY:
+                case INS_PROP_CAP_OBJECT_DRAW_NUMBERING:
+                case INS_PROP_CAP_OBJECT_DRAW_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_DRAW_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_DRAW_DELIMITER:
+                case INS_PROP_CAP_OBJECT_DRAW_LEVEL:
+                case INS_PROP_CAP_OBJECT_DRAW_POSITION:
+                case INS_PROP_CAP_OBJECT_DRAW_CHARACTERSTYLE:
+                case INS_PROP_CAP_OBJECT_DRAW_APPLYATTRIBUTES:
+                    if(!pOLEDrawOpt)
+                    {
+                        pOLEDrawOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW]);
+                        pCapOptions->Insert(pOLEDrawOpt);
+                    }
+                    lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_DRAW_ENABLE);
+                break;
+                case INS_PROP_CAP_OBJECT_OLEMISC_ENABLE:
+                case INS_PROP_CAP_OBJECT_OLEMISC_CATEGORY:
+                case INS_PROP_CAP_OBJECT_OLEMISC_NUMBERING:
+                case INS_PROP_CAP_OBJECT_OLEMISC_NUMBERINGSEPARATOR:
+                case INS_PROP_CAP_OBJECT_OLEMISC_CAPTIONTEXT:
+                case INS_PROP_CAP_OBJECT_OLEMISC_DELIMITER:
+                case INS_PROP_CAP_OBJECT_OLEMISC_LEVEL:
+                case INS_PROP_CAP_OBJECT_OLEMISC_POSITION:
+                case INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE:
+                case INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES:
+                    if(!pOLEMiscOpt)
+                    {
+                        pOLEMiscOpt = new InsCaptionOpt(OLE_CAP);
+                    }
+                    lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
+                break;
+            }
+        }
+        else if (nProp == INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST)
+        {
+            //#i61007#  initialize caption order, right now only HUNGARIAN seems to need a different order
+            SvtSysLocaleOptions aSysLocaleOptions;
+            OUString sLang = aSysLocaleOptions.GetLocaleConfigString();
+            bCaptionOrderNumberingFirst = sLang.startsWith( "hu" );
+        }
+
+    }
+    aInsTblOpts.mnInsMode = nInsTblFlags;
 }
 
 const Sequence<OUString>& SwTableConfig::GetPropertyNames()
@@ -1162,25 +1156,22 @@ void SwTableConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    assert(aValues.getLength() == aNames.getLength());
+    for (sal_Int32 nProp = 0; nProp < aNames.getLength(); ++nProp)
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if (pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            sal_Int32 nTemp = 0;
+            switch (nProp)
             {
-                sal_Int32 nTemp = 0;
-                switch(nProp)
-                {
-                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;  //"Shift/Row",
-                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;     //"Shift/Column",
-                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Row",
-                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Column",
-                    case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
-                    case 5 : bInsTblFormatNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;  //"Input/NumberRecognition",
-                    case 6 : bInsTblChangeNumFormat = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/NumberFormatRecognition",
-                    case 7 : bInsTblAlignNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/Alignment"
-                }
+                case 0 : pValues[nProp] >>= nTemp; nTblHMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;  //"Shift/Row",
+                case 1 : pValues[nProp] >>= nTemp; nTblVMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;     //"Shift/Column",
+                case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Row",
+                case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Column",
+                case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
+                case 5 : bInsTblFormatNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;  //"Input/NumberRecognition",
+                case 6 : bInsTblChangeNumFormat = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/NumberFormatRecognition",
+                case 7 : bInsTblAlignNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/Alignment"
             }
         }
     }
@@ -1271,31 +1262,28 @@ void SwMiscConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    assert(aValues.getLength() == aNames.getLength());
+    OUString sTmp;
+    for (sal_Int32 nProp = 0; nProp < aNames.getLength(); ++nProp)
     {
-        OUString sTmp;
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if (pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            switch (nProp)
             {
-                switch(nProp)
-                {
-                    case 0 : pValues[nProp] >>= sTmp;
-                        sWordDelimiter = SwModuleOptions::ConvertWordDelimiter(sTmp, true);
-                    break;
-                    case 1 : bDefaultFontsInCurrDocOnly = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 2 : bShowIndexPreview = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 3 : bGrfToGalleryAsLnk = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 4 : bNumAlignSize = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 5 : bSinglePrintJob = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 6 : nMailingFormats = static_cast<MailTxtFormats>(*static_cast<sal_uInt8 const *>(pValues[nProp].getValue())); break;
-                    case 7 : pValues[nProp] >>= sTmp; sNameFromColumn = sTmp; break;
-                    case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
-                    case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;
-                    case 10: bIsNameFromColumn = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 11: pValues[nProp] >>= bAskForMailMergeInPrint; break;
-                }
+                case 0 : pValues[nProp] >>= sTmp;
+                    sWordDelimiter = SwModuleOptions::ConvertWordDelimiter(sTmp, true);
+                break;
+                case 1 : bDefaultFontsInCurrDocOnly = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                case 2 : bShowIndexPreview = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                case 3 : bGrfToGalleryAsLnk = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                case 4 : bNumAlignSize = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                case 5 : bSinglePrintJob = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                case 6 : nMailingFormats = static_cast<MailTxtFormats>(*static_cast<sal_uInt8 const *>(pValues[nProp].getValue())); break;
+                case 7 : pValues[nProp] >>= sTmp; sNameFromColumn = sTmp; break;
+                case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
+                case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;
+                case 10: bIsNameFromColumn = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                case 11: pValues[nProp] >>= bAskForMailMergeInPrint; break;
             }
         }
     }
@@ -1360,24 +1348,21 @@ void SwCompareConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    assert(aValues.getLength() == aNames.getLength());
+    for (sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if (pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
-            {
-                sal_Int32 nVal = 0;
-                pValues[nProp] >>= nVal;
+            sal_Int32 nVal = 0;
+            pValues[nProp] >>= nVal;
 
-                switch(nProp)
-                {
-                    case 0 : eCmpMode = (SvxCompareMode) nVal; break;;
-                    case 1 : bUseRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 2 : bIgnorePieces = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case 3 : nPieceLen = nVal; break;
-                    case 4 : m_bStoreRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                }
+            switch(nProp)
+            {
+                case 0 : eCmpMode = (SvxCompareMode) nVal; break;;
+                case 1 : bUseRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                case 2 : bIgnorePieces = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                case 3 : nPieceLen = nVal; break;
+                case 4 : m_bStoreRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
             }
         }
     }
