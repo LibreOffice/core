@@ -1159,6 +1159,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     const PropertyValue* currentDatabaseDataSource = NULL;
     const PropertyValue* currentDatabaseCommand = NULL;
     const PropertyValue* currentDatabaseCommandType = NULL;
+    const PropertyValue* embeddedDatabaseName = 0;
 
     while( nCount-- )
     {
@@ -1189,6 +1190,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                             currentDatabaseCommand = pValues;
                         else if( pValues->Name == "CurrentDatabaseCommandType" )
                             currentDatabaseCommandType = pValues;
+                        else if (pValues->Name == "EmbeddedDatabaseName")
+                            embeddedDatabaseName = pValues;
                         else
                             xProps->setPropertyValue( pValues->Name,
                                                   pValues->Value );
@@ -1263,6 +1266,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             xProps->setPropertyValue( currentDatabaseCommand->Name, currentDatabaseCommand->Value );
         if( currentDatabaseCommandType != NULL )
             xProps->setPropertyValue( currentDatabaseCommandType->Name, currentDatabaseCommandType->Value );
+        if (embeddedDatabaseName)
+            xProps->setPropertyValue(embeddedDatabaseName->Name, embeddedDatabaseName->Value);
     } catch( Exception& )
     {
         OSL_FAIL( "SwXMLImport::SetConfigurationSettings: Exception!" );

@@ -28,14 +28,16 @@ struct SwDBData
     OUString     sDataSource;
     OUString     sCommand;       //table, query or statement
     sal_Int32           nCommandType; //com::sun::star::sdb::CommandType
+    /// Name of the embedded database that's included in the current document.
+    OUString     sEmbeddedName;
     SwDBData() :
         nCommandType(0){}
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
     bool operator !=(const SwDBData& rCmp) const
-        {return rCmp.sDataSource != sDataSource || rCmp.sCommand != sCommand || rCmp.nCommandType != nCommandType;}
+        {return rCmp.sDataSource != sDataSource || rCmp.sCommand != sCommand || rCmp.nCommandType != nCommandType || rCmp.sEmbeddedName != sEmbeddedName;}
     bool operator ==(const SwDBData& rCmp) const
-        {return rCmp.sDataSource == sDataSource && rCmp.sCommand == sCommand && rCmp.nCommandType == nCommandType;}
+        {return rCmp.sDataSource == sDataSource && rCmp.sCommand == sCommand && rCmp.nCommandType == nCommandType && rCmp.sEmbeddedName == sEmbeddedName;}
 };
 
 #endif

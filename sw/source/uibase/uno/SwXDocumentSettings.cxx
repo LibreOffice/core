@@ -72,6 +72,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CURRENT_DATABASE_DATA_SOURCE,
     HANDLE_CURRENT_DATABASE_COMMAND,
     HANDLE_CURRENT_DATABASE_COMMAND_TYPE,
+    HANDLE_EMBEDDED_DATABASE_NAME,
     HANDLE_SAVE_VERSION_ON_CLOSE,
     HANDLE_IS_GRID_VISIBLE,
     HANDLE_IS_SNAP_TO_GRID,
@@ -151,6 +152,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    cppu::UnoType<OUString>::get(),          0,   0},
         { OUString("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        cppu::UnoType<OUString>::get(),          0,   0},
         { OUString("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   cppu::UnoType<sal_Int32>::get(),             0,   0},
+        { OUString("EmbeddedDatabaseName"),       HANDLE_EMBEDDED_DATABASE_NAME,          cppu::UnoType<OUString>::get(),              0,   0},
         { OUString("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           cppu::UnoType<bool>::get(),           0,   0},
         { OUString("UpdateFromTemplate"),         HANDLE_UPDATE_FROM_TEMPLATE,            cppu::UnoType<bool>::get(),           0,   0},
 
@@ -502,6 +504,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 "\"CurrentDatabaseCommandType\" property possibly set before \"CurrentDatabaseDataSource\"" );
             SAL_WARN_IF( aData.nCommandType && aData.sCommand.isEmpty(), "sw.uno",
                 "\"CurrentDatabaseCommandType\" property possibly set before \"CurrentDatabaseCommand\"" );
+        }
+        break;
+        case HANDLE_EMBEDDED_DATABASE_NAME:
+        {
+            SwDBData aData = mpDoc->GetDBData();
+            if (rValue >>= aData.sEmbeddedName)
+                mpDoc->ChgDBData(aData);
         }
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
@@ -975,6 +984,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             const SwDBData& rData = mpDoc->GetDBDesc();
             rValue <<= rData.nCommandType;
+        }
+        break;
+        case HANDLE_EMBEDDED_DATABASE_NAME:
+        {
+            const SwDBData& rData = mpDoc->GetDBDesc();
+            rValue <<= rData.sEmbeddedName;
         }
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
