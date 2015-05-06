@@ -1289,7 +1289,7 @@ sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _
     ScopedVclPtrInstance< OSQLMessageBox > aAsk(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
     if ( _bAll )
     {
-        aAsk->AddButton(ModuleRes(STR_BUTTON_TEXT_ALL), RET_ALL, 0);
+        aAsk->AddButton(ModuleRes(STR_BUTTON_TEXT_ALL), RET_ALL);
         aAsk->GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
     }
     return aAsk->Execute();

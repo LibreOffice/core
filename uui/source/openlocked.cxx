@@ -28,11 +28,11 @@ OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, c
     SetImage( QueryBox::GetStandardImage() );
 
     AddButton(ResId(STR_OPENLOCKED_OPENREADONLY_BTN, *pResMgr).toString(), RET_YES,
-            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON);
+            ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
 
-    AddButton(ResId(STR_OPENLOCKED_OPENCOPY_BTN, *pResMgr).toString(), RET_NO, 0);
+    AddButton(ResId(STR_OPENLOCKED_OPENCOPY_BTN, *pResMgr).toString(), RET_NO);
 
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
     SetButtonHelpText( RET_YES, OUString() );
     SetButtonHelpText( RET_NO, OUString() );
 

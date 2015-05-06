@@ -62,18 +62,18 @@ void MessBox::ImplInitMessBoxData()
 void MessBox::ImplInitButtons()
 {
     WinBits nStyle = GetStyle();
-    sal_uInt16  nOKFlags = BUTTONDIALOG_OKBUTTON;
-    sal_uInt16  nCancelFlags = BUTTONDIALOG_CANCELBUTTON;
-    sal_uInt16  nRetryFlags = 0;
-    sal_uInt16  nYesFlags = 0;
-    sal_uInt16  nNoFlags = 0;
+    ButtonDialogFlags nOKFlags = ButtonDialogFlags::OK;
+    ButtonDialogFlags nCancelFlags = ButtonDialogFlags::Cancel;
+    ButtonDialogFlags nRetryFlags = ButtonDialogFlags::NONE;
+    ButtonDialogFlags nYesFlags = ButtonDialogFlags::NONE;
+    ButtonDialogFlags nNoFlags = ButtonDialogFlags::NONE;
 
     if ( nStyle & WB_OK_CANCEL )
     {
         if ( nStyle & WB_DEF_CANCEL )
-            nCancelFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nCancelFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         else // WB_DEF_OK
-            nOKFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nOKFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
         AddButton( StandardButtonType::OK, RET_OK, nOKFlags );
         AddButton( StandardButtonType::Cancel, RET_CANCEL, nCancelFlags );
@@ -81,10 +81,10 @@ void MessBox::ImplInitButtons()
     else if ( nStyle & WB_YES_NO )
     {
         if ( nStyle & WB_DEF_YES )
-            nYesFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nYesFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         else // WB_DEF_NO
-            nNoFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
-        nNoFlags |= BUTTONDIALOG_CANCELBUTTON;
+            nNoFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
+        nNoFlags |= ButtonDialogFlags::Cancel;
 
         AddButton( StandardButtonType::Yes, RET_YES, nYesFlags );
         AddButton( StandardButtonType::No, RET_NO, nNoFlags );
@@ -92,11 +92,11 @@ void MessBox::ImplInitButtons()
     else if ( nStyle & WB_YES_NO_CANCEL )
     {
         if ( nStyle & WB_DEF_YES )
-            nYesFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nYesFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         else if ( nStyle & WB_DEF_NO )
-            nNoFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nNoFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         else
-            nCancelFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nCancelFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
         AddButton( StandardButtonType::Yes, RET_YES, nYesFlags );
         AddButton( StandardButtonType::No, RET_NO, nNoFlags );
@@ -105,24 +105,24 @@ void MessBox::ImplInitButtons()
     else if ( nStyle & WB_RETRY_CANCEL )
     {
         if ( nStyle & WB_DEF_CANCEL )
-            nCancelFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nCancelFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         else // WB_DEF_RETRY
-            nRetryFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nRetryFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
         AddButton( StandardButtonType::Retry, RET_RETRY, nRetryFlags );
         AddButton( StandardButtonType::Cancel, RET_CANCEL, nCancelFlags );
     }
     else if ( nStyle & WB_ABORT_RETRY_IGNORE )
     {
-        sal_uInt16 nAbortFlags = 0;
-        sal_uInt16 nIgnoreFlags = 0;
+        ButtonDialogFlags nAbortFlags = ButtonDialogFlags::NONE;
+        ButtonDialogFlags nIgnoreFlags = ButtonDialogFlags::NONE;
 
         if ( nStyle & WB_DEF_CANCEL )
-            nAbortFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nAbortFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         else if ( nStyle & WB_DEF_RETRY )
-            nRetryFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nRetryFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         else if ( nStyle & WB_DEF_IGNORE )
-            nIgnoreFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+            nIgnoreFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
         AddButton( StandardButtonType::Abort, RET_CANCEL, nAbortFlags );
         AddButton( StandardButtonType::Retry, RET_RETRY, nRetryFlags );
@@ -130,7 +130,7 @@ void MessBox::ImplInitButtons()
     }
     else if ( nStyle & WB_OK )
     {
-        nOKFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+        nOKFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
         AddButton( StandardButtonType::OK, RET_OK, nOKFlags );
     }
@@ -168,7 +168,7 @@ void MessBox::ImplPosControls()
     {
         if ( !mbHelpBtn )
         {
-            AddButton( StandardButtonType::Help, RET_HELP, BUTTONDIALOG_HELPBUTTON, 3 );
+            AddButton( StandardButtonType::Help, RET_HELP, ButtonDialogFlags::Help, 3 );
             mbHelpBtn = true;
         }
     }

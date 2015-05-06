@@ -23,17 +23,26 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vcl/dllapi.h>
 #include <vcl/dialog.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 struct ImplBtnDlgItem;
 class PushButton;
 
 #define BUTTONDIALOG_BUTTON_NOTFOUND            ((sal_uInt16)0xFFFF)
 
-#define BUTTONDIALOG_DEFBUTTON                  ((sal_uInt16)0x0001)
-#define BUTTONDIALOG_OKBUTTON                   ((sal_uInt16)0x0002)
-#define BUTTONDIALOG_CANCELBUTTON               ((sal_uInt16)0x0004)
-#define BUTTONDIALOG_HELPBUTTON                 ((sal_uInt16)0x0008)
-#define BUTTONDIALOG_FOCUSBUTTON                ((sal_uInt16)0x0010)
+enum class ButtonDialogFlags
+{
+    NONE                 = 0x0000,
+    Default              = 0x0001,
+    OK                   = 0x0002,
+    Cancel               = 0x0004,
+    Help                 = 0x0008,
+    Focus                = 0x0010,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ButtonDialogFlags> : is_typed_flags<ButtonDialogFlags, 0x001f> {};
+}
 
 class VCL_DLLPUBLIC ButtonDialog : public Dialog
 {
@@ -52,8 +61,8 @@ public:
 
     sal_uInt16          GetCurButtonId() const { return mnCurButtonId; }
 
-    void                AddButton( const OUString& rText, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
-    void                AddButton( StandardButtonType eType, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
+    void                AddButton( const OUString& rText, sal_uInt16 nId, ButtonDialogFlags nBtnFlags = ButtonDialogFlags::NONE, long nSepPixel = 0 );
+    void                AddButton( StandardButtonType eType, sal_uInt16 nId, ButtonDialogFlags nBtnFlags = ButtonDialogFlags::NONE, long nSepPixel = 0 );
     void                RemoveButton( sal_uInt16 nId );
 
     void                Clear();
@@ -87,7 +96,7 @@ private:
     Link<>              maClickHdl;
 
     SAL_DLLPRIVATE void             ImplInitButtonDialogData();
-    SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( sal_uInt16 nBtnFlags );
+    SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( ButtonDialogFlags nBtnFlags );
     SAL_DLLPRIVATE ImplBtnDlgItem*  ImplGetItem( sal_uInt16 nId ) const;
     DECL_DLLPRIVATE_LINK(           ImplClickHdl, PushButton* pBtn );
     SAL_DLLPRIVATE void             ImplPosControls();
