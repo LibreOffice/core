@@ -4,59 +4,42 @@ http://connect.microsoft.com/VisualStudio/feedback/details/785119/
 Visual Studio 2012 changed return value for fileno function that breaks
 when python tries to check/setup stdin/out/err
 GetStdHandle on Windows XP behaves contrary to the documentation...
-diff -ur python3.org/Python/pythonrun.c python3/Python/pythonrun.c
---- python3.org/Python/pythonrun.c	2014-05-24 16:36:20.361672900 +0200
-+++ python3/Python/pythonrun.c	2014-05-24 16:37:38.424159100 +0200
-@@ -1036,7 +1036,15 @@
-     int status = 0, fd;
-     PyObject * encoding_attr;
-     char *encoding = NULL, *errors;
--
-+#ifdef MS_WINDOWS
-+    OSVERSIONINFOEX osvi;
-+    BOOL bIsWindowsXP;
+
+diff --git a/Python/pythonrun.c b/Python/pythonrun.c
+index 91d56b7..d28ffc7 100644
+--- a/Python/pythonrun.c
++++ b/Python/pythonrun.c
+@@ -1015,13 +1015,28 @@ error:
+ static int
+ is_valid_fd(int fd)
+ {
+-    int dummy_fd;
+     if (fd < 0 || !_PyVerify_fd(fd))
+         return 0;
+-    dummy_fd = dup(fd);
+-    if (dummy_fd < 0)
+-        return 0;
+-    close(dummy_fd);
 +
-+    ZeroMemory(&osvi, sizeof(osvi));
-+    osvi.dwOSVersionInfoSize = sizeof(osvi);
-+    GetVersionEx(&osvi);
-+    bIsWindowsXP = (osvi.dwMajorVersion < 6);
-+#endif
-     /* Hack to avoid a nasty recursion issue when Python is invoked
-        in verbose mode: pre-import the Latin-1 and UTF-8 codecs */
-     if ((m = PyImport_ImportModule("encodings.utf_8")) == NULL) {
-@@ -1084,7 +1092,11 @@
-      * and fileno() may point to an invalid file descriptor. For example
-      * GUI apps don't have valid standard streams by default.
-      */
-+#ifdef MS_WINDOWS
-+    if (!is_valid_fd(fd) || GetStdHandle(STD_INPUT_HANDLE) == NULL || bIsWindowsXP) {
++#if defined(MS_WINDOWS) && defined(HAVE_FSTAT)
++    /* dup (DuplicateHandle) doesn't say fd is a valid *file* handle.
++     * It could be a current thread pseudo-handle.
++     */
++    {
++        struct stat buf;
++        if (fstat(fd, &buf) < 0 && (errno == EBADF || errno == ENOENT))
++            return 0;
++    }
 +#else
-     if (!is_valid_fd(fd)) {
++    {
++        int dummy_fd;
++        dummy_fd = dup(fd);
++        if (dummy_fd < 0)
++            return 0;
++        close(dummy_fd);
++    }
 +#endif
-         std = Py_None;
-         Py_INCREF(std);
-     }
-@@ -1099,7 +1111,11 @@
++
+     return 1;
+ }
  
-     /* Set sys.stdout */
-     fd = fileno(stdout);
-+#ifdef MS_WINDOWS
-+    if (!is_valid_fd(fd) || GetStdHandle(STD_OUTPUT_HANDLE) == NULL || bIsWindowsXP) {
-+#else
-     if (!is_valid_fd(fd)) {
-+#endif
-         std = Py_None;
-         Py_INCREF(std);
-     }
-@@ -1115,7 +1131,11 @@
- #if 1 /* Disable this if you have trouble debugging bootstrap stuff */
-     /* Set sys.stderr, replaces the preliminary stderr */
-     fd = fileno(stderr);
-+#ifdef MS_WINDOWS
-+    if (!is_valid_fd(fd) || GetStdHandle(STD_ERROR_HANDLE) == NULL || bIsWindowsXP) {
-+#else
-     if (!is_valid_fd(fd)) {
-+#endif
-         std = Py_None;
-         Py_INCREF(std);
-     }
