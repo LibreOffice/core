@@ -91,7 +91,7 @@ ViewTabBar::ViewTabBar (
 {
     // Set one new tab page for all tab entries.  We need it only to
     // determine the height of the tab bar.
-    mpTabPage.reset(new TabPage (mpTabControl.get()));
+    mpTabPage.reset(VclPtr<TabPage>::Create(mpTabControl.get()));
     mpTabPage->Hide();
 
     // add some space before the tabitems
