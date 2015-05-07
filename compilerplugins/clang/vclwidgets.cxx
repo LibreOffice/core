@@ -186,16 +186,25 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     }
     // check that the destructor for a OutputDevice subclass does nothing except call into the disposeOnce() method
     bool ok = false;
-    if (pCompoundStatement && pCompoundStatement->size() == 1) {
-        const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_begin());
-        if (pCallExpr) {
-            if( const FunctionDecl* func = pCallExpr->getDirectCallee()) {
-                if( func->getNumParams() == 0 && func->getIdentifier() != NULL
-                    && ( func->getName() == "disposeOnce" )) {
-                    ok = true;
+    if (pCompoundStatement) {
+        bool bFoundDisposeOnce = false;
+        int nNumExtraStatements = 0;
+        for(auto const * x : pCompoundStatement->body())
+        {
+            const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(x);
+            if (pCallExpr) {
+                if( const FunctionDecl* func = pCallExpr->getDirectCallee()) {
+                    if( func->getNumParams() == 0 && func->getIdentifier() != NULL
+                        && ( func->getName() == "disposeOnce" )) {
+                        bFoundDisposeOnce = true;
+                    }
                 }
             }
+            // checking for ParenExpr is a hacky way to ignore assert statements in older versions of clang (i.e. <= 3.2)
+            if (!pCallExpr && !dyn_cast<ParenExpr>(x))
+                nNumExtraStatements++;
         }
+        ok = bFoundDisposeOnce && nNumExtraStatements == 0;
     }
     if (!ok) {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
