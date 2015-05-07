@@ -164,37 +164,35 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
 }
 
-void PrintDialog::PrintPreviewWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     long nTextHeight = maHorzDim->GetTextHeight();
-    Size aSize( GetSizePixel() );
-    Point aOffset( (aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2 ,
-                   (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2 );
+    Size aSize(GetSizePixel());
+    Point aOffset((aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2,
+                  (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2);
 
-    if( !maReplacementString.isEmpty() )
+    if (!maReplacementString.isEmpty())
     {
         // replacement is active
-        Push();
-        Font aFont( GetSettings().GetStyleSettings().GetLabelFont() );
-        SetZoomedPointFont( aFont );
-        Rectangle aTextRect( aOffset + Point( 2, 2 ),
-            Size( maPreviewSize.Width() - 4, maPreviewSize.Height() - 4 ) );
-        DrawText( aTextRect, maReplacementString,
-                  TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE
-                 );
-        Pop();
+        rRenderContext.Push();
+        Font aFont(rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
+        SetZoomedPointFont(aFont);
+        Rectangle aTextRect(aOffset + Point(2, 2), Size(maPreviewSize.Width() - 4, maPreviewSize.Height() - 4));
+        rRenderContext.DrawText(aTextRect, maReplacementString,
+                                TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER |
+                                TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE);
+        rRenderContext.Pop();
     }
     else
     {
         Bitmap aPreviewBitmap(maPreviewBitmap);
         aPreviewBitmap.Scale(maPreviewSize, BmpScaleFlag::BestQuality);
-        DrawBitmap(aOffset, aPreviewBitmap);
+        rRenderContext.DrawBitmap(aOffset, aPreviewBitmap);
     }
 
-    Rectangle aFrameRect( aOffset + Point( -1, -1 ),
-        Size( maPreviewSize.Width() + 2, maPreviewSize.Height() + 2 ) );
-    DecorationView aVw( this );
-    aVw.DrawFrame( aFrameRect, FRAME_DRAW_GROUP );
+    Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));
+    DecorationView aDecorationView(&rRenderContext);
+    aDecorationView.DrawFrame(aFrameRect, FRAME_DRAW_GROUP);
 }
 
 void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
@@ -325,59 +323,61 @@ Size PrintDialog::ShowNupOrderWindow::GetOptimalSize() const
     return Size(70, 70);
 }
 
-void PrintDialog::ShowNupOrderWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rRect )
+void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rRect)
 {
     Window::Paint(rRenderContext, i_rRect);
 
-    SetMapMode( MAP_PIXEL );
-    SetTextColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
+    rRenderContext.SetMapMode(MAP_PIXEL);
+    rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetFieldTextColor());
 
     int nPages = mnRows * mnColumns;
-    Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
-    aFont.SetSize( Size( 0, 24 ) );
-    SetFont( aFont );
-    Size aSampleTextSize( GetTextWidth( OUString::number( nPages+1 ) ), GetTextHeight() );
-
-    Size aOutSize( GetOutputSizePixel() );
-    Size aSubSize( aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows );
+    Font aFont(rRenderContext.GetSettings().GetStyleSettings().GetFieldFont());
+    aFont.SetSize(Size(0, 24));
+    rRenderContext.SetFont(aFont);
+    Size aSampleTextSize(rRenderContext.GetTextWidth(OUString::number(nPages + 1)), rRenderContext.GetTextHeight());
+    Size aOutSize(rRenderContext.GetOutputSizePixel());
+    Size aSubSize(aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows);
     // calculate font size: shrink the sample text so it fits
-    double fX = double(aSubSize.Width())/double(aSampleTextSize.Width());
-    double fY = double(aSubSize.Height())/double(aSampleTextSize.Height());
+    double fX = double(aSubSize.Width()) / double(aSampleTextSize.Width());
+    double fY = double(aSubSize.Height()) / double(aSampleTextSize.Height());
     double fScale = (fX < fY) ? fX : fY;
-    long nFontHeight = long(24.0*fScale) - 3;
-    if( nFontHeight < 5 )
+    long nFontHeight = long(24.0 * fScale) - 3;
+    if (nFontHeight < 5)
         nFontHeight = 5;
-    aFont.SetSize( Size( 0, nFontHeight ) );
-    SetFont( aFont );
-    long nTextHeight = GetTextHeight();
-    for( int i = 0; i < nPages; i++ )
+    aFont.SetSize(Size( 0, nFontHeight));
+    rRenderContext.SetFont(aFont);
+    long nTextHeight = rRenderContext.GetTextHeight();
+    for (int i = 0; i < nPages; i++)
     {
-        OUString aPageText( OUString::number( i+1 ) );
+        OUString aPageText(OUString::number(i + 1));
         int nX = 0, nY = 0;
-        switch( mnOrderMode )
+        switch (mnOrderMode)
         {
         case SV_PRINT_PRT_NUP_ORDER_LRTB:
-            nX = (i % mnColumns); nY = (i / mnColumns);
+            nX = (i % mnColumns);
+            nY = (i / mnColumns);
             break;
         case SV_PRINT_PRT_NUP_ORDER_TBLR:
-            nX = (i / mnRows); nY = (i % mnRows);
+            nX = (i / mnRows);
+            nY = (i % mnRows);
             break;
         case SV_PRINT_PRT_NUP_ORDER_RLTB:
-            nX = mnColumns - 1 - (i % mnColumns); nY = (i / mnColumns);
+            nX = mnColumns - 1 - (i % mnColumns);
+            nY = (i / mnColumns);
             break;
         case SV_PRINT_PRT_NUP_ORDER_TBRL:
-            nX = mnColumns - 1 - (i / mnRows); nY = (i % mnRows);
+            nX = mnColumns - 1 - (i / mnRows);
+            nY = (i % mnRows);
             break;
         }
-        Size aTextSize( GetTextWidth( aPageText ), nTextHeight );
+        Size aTextSize(rRenderContext.GetTextWidth(aPageText), nTextHeight);
         int nDeltaX = (aSubSize.Width() - aTextSize.Width()) / 2;
         int nDeltaY = (aSubSize.Height() - aTextSize.Height()) / 2;
-        DrawText( Point( nX * aSubSize.Width() + nDeltaX,
-                         nY * aSubSize.Height() + nDeltaY ),
-                  aPageText );
+        rRenderContext.DrawText(Point(nX * aSubSize.Width() + nDeltaX,
+                                      nY * aSubSize.Height() + nDeltaY), aPageText);
     }
-    DecorationView aVw( this );
-    aVw.DrawFrame( Rectangle( Point( 0, 0), aOutSize ), FRAME_DRAW_GROUP );
+    DecorationView aDecorationView(&rRenderContext);
+    aDecorationView.DrawFrame(Rectangle(Point(0, 0), aOutSize), FRAME_DRAW_GROUP);
 }
 
 PrintDialog::NUpTabPage::NUpTabPage( VclBuilder *pUIBuilder )
@@ -1890,8 +1890,7 @@ void PrintDialog::previewBackward()
 // PrintProgressDialog
 
 PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
-    : ModelessDialog(i_pParent, "PrintProgressDialog",
-        "vcl/ui/printprogressdialog.ui")
+    : ModelessDialog(i_pParent, "PrintProgressDialog", "vcl/ui/printprogressdialog.ui")
     , mbCanceled(false)
     , mnCur(0)
     , mnMax(i_nMax)
