@@ -562,39 +562,6 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     sal_uInt32 nValue;
                     sax_fastparser::FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
 
-                    if ( rProps.GetOpt( ESCHER_Prop_fillType, nValue ) )
-                    {
-                        const char *pFillType = NULL;
-                        switch ( nValue )
-                        {
-                            case ESCHER_FillSolid:       pFillType = "solid"; break;
-                            // TODO case ESCHER_FillPattern:     pFillType = ""; break;
-                            case ESCHER_FillTexture:     pFillType = "tile"; break;
-                            // TODO case ESCHER_FillPicture:     pFillType = ""; break;
-                            // TODO case ESCHER_FillShade:       pFillType = ""; break;
-                            // TODO case ESCHER_FillShadeCenter: pFillType = ""; break;
-                            // TODO case ESCHER_FillShadeShape:  pFillType = ""; break;
-                            // TODO case ESCHER_FillShadeScale:  pFillType = ""; break;
-                            // TODO case ESCHER_FillShadeTitle:  pFillType = ""; break;
-                            // TODO case ESCHER_FillBackground:  pFillType = ""; break;
-                            default:
-#if OSL_DEBUG_LEVEL > 0
-                                fprintf( stderr, "TODO: unhandled fill type\n" );
-#endif
-                                break;
-                        }
-                        if ( pFillType )
-                            pAttrList->add( XML_type, pFillType );
-                    }
-                    else if (!rProps.GetOpt(ESCHER_Prop_fillColor, nValue))
-                        pAttrList->add( XML_on, "false" );
-
-                    if ( rProps.GetOpt( ESCHER_Prop_fillColor, nValue ) )
-                        impl_AddColor( m_pShapeAttrList, XML_fillcolor, nValue );
-
-                    if ( rProps.GetOpt( ESCHER_Prop_fillBackColor, nValue ) )
-                        impl_AddColor( pAttrList, XML_color2, nValue );
-
                     bool imageData = false;
                     EscherPropSortStruct aStruct;
                     if ( rProps.GetOpt( ESCHER_Prop_fillBlip, aStruct ) && m_pTextExport)
@@ -613,14 +580,50 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     if ( rProps.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ) )
                         impl_AddBool( pAttrList, FSNS(XML_o, XML_detectmouseclick), nValue != 0 );
 
-                    if (rProps.GetOpt(ESCHER_Prop_fillOpacity, nValue))
-                        // Partly undo the transformation at the end of EscherPropertyContainer::CreateFillProperties(): VML opacity is 0..1.
-                        pAttrList->add(XML_opacity, OString::number(double((nValue * 100) >> 16) / 100));
-
                     if (imageData)
                         m_pSerializer->singleElementNS( XML_v, XML_imagedata, XFastAttributeListRef( pAttrList ) );
                     else
+                    {
+                        if ( rProps.GetOpt( ESCHER_Prop_fillType, nValue ) )
+                        {
+                            const char *pFillType = NULL;
+                            switch ( nValue )
+                            {
+                                case ESCHER_FillSolid:       pFillType = "solid"; break;
+                                // TODO case ESCHER_FillPattern:     pFillType = ""; break;
+                                case ESCHER_FillTexture:     pFillType = "tile"; break;
+                                // TODO case ESCHER_FillPicture:     pFillType = ""; break;
+                                // TODO case ESCHER_FillShade:       pFillType = ""; break;
+                                // TODO case ESCHER_FillShadeCenter: pFillType = ""; break;
+                                // TODO case ESCHER_FillShadeShape:  pFillType = ""; break;
+                                // TODO case ESCHER_FillShadeScale:  pFillType = ""; break;
+                                // TODO case ESCHER_FillShadeTitle:  pFillType = ""; break;
+                                // TODO case ESCHER_FillBackground:  pFillType = ""; break;
+                                default:
+    #if OSL_DEBUG_LEVEL > 0
+                                    fprintf( stderr, "TODO: unhandled fill type\n" );
+    #endif
+                                    break;
+                            }
+                            if ( pFillType )
+                                pAttrList->add( XML_type, pFillType );
+                        }
+                        else if (!rProps.GetOpt(ESCHER_Prop_fillColor, nValue))
+                            pAttrList->add( XML_on, "false" );
+
+                        if ( rProps.GetOpt( ESCHER_Prop_fillColor, nValue ) )
+                            impl_AddColor( m_pShapeAttrList, XML_fillcolor, nValue );
+
+                        if ( rProps.GetOpt( ESCHER_Prop_fillBackColor, nValue ) )
+                            impl_AddColor( pAttrList, XML_color2, nValue );
+
+
+                        if (rProps.GetOpt(ESCHER_Prop_fillOpacity, nValue))
+                            // Partly undo the transformation at the end of EscherPropertyContainer::CreateFillProperties(): VML opacity is 0..1.
+                            pAttrList->add(XML_opacity, OString::number(double((nValue * 100) >> 16) / 100));
                         m_pSerializer->singleElementNS( XML_v, XML_fill, XFastAttributeListRef( pAttrList ) );
+
+                    }
                 }
                 bAlreadyWritten[ ESCHER_Prop_fillType ] = true;
                 bAlreadyWritten[ ESCHER_Prop_fillColor ] = true;
