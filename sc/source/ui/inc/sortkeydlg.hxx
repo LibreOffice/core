@@ -44,7 +44,7 @@ typedef boost::ptr_vector<ScSortKeyItem> ScSortKeyItems;
 class ScSortKeyWindow
 {
 private:
-    VclPtr<VclBox>         m_pBox;
+    VclPtr<VclBox>  m_pBox;
     sal_Int32       nItemHeight;
 
     ScSortKeyItems& mrSortKeyItems;
@@ -52,6 +52,7 @@ private:
 public:
     ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& mrSortKeyItems);
     ~ScSortKeyWindow();
+    void dispose();
 
     void AddSortKey( sal_uInt16 nItem );
     void DoScroll( sal_Int32 nNewPos );
@@ -72,6 +73,7 @@ private:
 
 public:
     ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& mrSortKeyItems);
+    void dispose();
     void setScrollRange();
     void AddSortKey( sal_uInt16 nItem );
 };

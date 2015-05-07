@@ -52,6 +52,12 @@ ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyIt
 
 ScSortKeyWindow::~ScSortKeyWindow()
 {
+    dispose();
+}
+
+void ScSortKeyWindow::dispose()
+{
+    m_pBox.disposeAndClear();
     mrSortKeyItems.clear();
 }
 
@@ -87,6 +93,11 @@ ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
 
     Link<> aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
     m_rVertScroll.SetScrollHdl( aScrollLink );
+}
+
+void ScSortKeyCtrl::dispose()
+{
+    m_aSortWin.dispose();
 }
 
 void ScSortKeyCtrl::checkAutoVScroll()

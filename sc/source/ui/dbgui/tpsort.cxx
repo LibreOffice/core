@@ -101,6 +101,8 @@ ScTabPageSortFields::~ScTabPageSortFields()
 void ScTabPageSortFields::dispose()
 {
     pDlg.clear();
+    maSortKeyItems.clear();
+    maSortKeyCtrl.dispose();
     SfxTabPage::dispose();
 }
 

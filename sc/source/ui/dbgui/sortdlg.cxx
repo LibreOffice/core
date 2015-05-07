@@ -29,7 +29,7 @@ ScSortDlg::ScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
     , bIsHeaders(false)
     , bIsByRows(false)
 {
-    AddTabPage("criteria",  ScTabPageSortFields::Create,  0);
+    AddTabPage("criteria", ScTabPageSortFields::Create, 0);
     AddTabPage("options", ScTabPageSortOptions::Create, 0);
 }
 
@@ -37,7 +37,7 @@ ScSortWarningDlg::ScSortWarningDlg(vcl::Window* pParent,
     const OUString& rExtendText, const OUString& rCurrentText)
     : ModalDialog(pParent, "SortWarning", "modules/scalc/ui/sortwarning.ui")
 {
-    get(aFtText, "sorttext" );
+    get( aFtText, "sorttext" );
     get( aBtnExtSort, "extend" );
     get( aBtnCurSort, "current" );
 

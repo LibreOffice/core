@@ -72,7 +72,7 @@ private:
     OUString            aStrRow;
 
     const sal_uInt16    nWhichSort;
-    VclPtr<ScSortDlg>          pDlg;
+    VclPtr<ScSortDlg>   pDlg;
     ScViewData*         pViewData;
     ScSortParam         aSortData;
     std::vector<SCCOLROW>  nFieldArr;
