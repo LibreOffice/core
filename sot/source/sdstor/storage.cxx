@@ -444,11 +444,11 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
     SignAsRoot( m_pOwnStg->IsRoot() );
 }
 
-SotStorage::SotStorage( bool bUCBStorage, const OUString & rName, StreamMode nMode, StorageMode nStorageMode )
+SotStorage::SotStorage( bool bUCBStorage, const OUString & rName, StreamMode nMode )
     INIT_SotStorage()
 {
     m_aName = rName;
-    CreateStorage( bUCBStorage, nMode, nStorageMode );
+    CreateStorage( bUCBStorage, nMode, StorageMode::Default );
     if ( IsOLEStorage() )
         m_nVersion = SOFFICE_FILEFORMAT_50;
 }

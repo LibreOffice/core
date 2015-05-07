@@ -119,8 +119,7 @@ public:
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = StorageMode::Default );
                         SotStorage( bool bUCBStorage, const OUString &,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = StorageMode::Default );
+                                    StreamMode = STREAM_STD_READWRITE );
                         SotStorage( BaseStorage * );
                         SotStorage( SvStream & rStm );
                         SotStorage( bool bUCBStorage, SvStream & rStm );
