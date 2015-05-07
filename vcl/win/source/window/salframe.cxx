@@ -5191,16 +5191,16 @@ static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam, LRESULT & nRet )
     MediaCommand nCommand;
     switch( GET_APPCOMMAND_LPARAM(lParam) )
     {
-    case APPCOMMAND_MEDIA_CHANNEL_DOWN:         nCommand = MediaCommand::ChannelDown; break;
-    case APPCOMMAND_MEDIA_CHANNEL_UP:           nCommand = MediaCommand::ChannelUp; break;
-    case APPCOMMAND_MEDIA_NEXTTRACK:            nCommand = MediaCommand::NextTrack; break;
-    case APPCOMMAND_MEDIA_PAUSE:                nCommand = MediaCommand::Pause; break;
-    case APPCOMMAND_MEDIA_PLAY:                 nCommand = MediaCommand::Play; break;
-    case APPCOMMAND_MEDIA_PLAY_PAUSE:           nCommand = MediaCommand::PlayPause; break;
-    case APPCOMMAND_MEDIA_PREVIOUSTRACK:        nCommand = MediaCommand::PreviousTrack; break;
-    case APPCOMMAND_MEDIA_RECORD:               nCommand = MediaCommand::Record; break;
-    case APPCOMMAND_MEDIA_REWIND:               nCommand = MediaCommand::Rewind; break;
-    case APPCOMMAND_MEDIA_STOP:                 nCommand = MediaCommand::Stop; break;
+    case APPCommandEventId::Media_CHANNEL_DOWN:         nCommand = MediaCommand::ChannelDown; break;
+    case APPCommandEventId::Media_CHANNEL_UP:           nCommand = MediaCommand::ChannelUp; break;
+    case APPCommandEventId::Media_NEXTTRACK:            nCommand = MediaCommand::NextTrack; break;
+    case APPCommandEventId::Media_PAUSE:                nCommand = MediaCommand::Pause; break;
+    case APPCommandEventId::Media_PLAY:                 nCommand = MediaCommand::Play; break;
+    case APPCommandEventId::Media_PLAY_PAUSE:           nCommand = MediaCommand::PlayPause; break;
+    case APPCommandEventId::Media_PREVIOUSTRACK:        nCommand = MediaCommand::PreviousTrack; break;
+    case APPCommandEventId::Media_RECORD:               nCommand = MediaCommand::Record; break;
+    case APPCommandEventId::Media_REWIND:               nCommand = MediaCommand::Rewind; break;
+    case APPCommandEventId::Media_STOP:                 nCommand = MediaCommand::Stop; break;
     case APPCOMMAND_MIC_ON_OFF_TOGGLE:          nCommand = MediaCommand::MicOnOffToggle; break;
     case APPCOMMAND_MICROPHONE_VOLUME_DOWN:     nCommand = MediaCommand::MicrophoneVolumeDown; break;
     case APPCOMMAND_MICROPHONE_VOLUME_MUTE:     nCommand = MediaCommand::MicrophoneVolumeMute; break;
@@ -5219,7 +5219,7 @@ static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam, LRESULT & nRet )
     {
         const Point aPoint;
         CommandMediaData aMediaData(nCommand);
-        CommandEvent aCEvt( aPoint, COMMAND_MEDIA, FALSE, &aMediaData );
+        CommandEvent aCEvt( aPoint, CommandEventId::Media, FALSE, &aMediaData );
         NotifyEvent aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )

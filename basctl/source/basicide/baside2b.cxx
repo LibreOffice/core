@@ -459,12 +459,12 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
     if ( pEditView )
     {
         pEditView->Command( rCEvt );
-        if ( ( rCEvt.GetCommand() == COMMAND_WHEEL ) ||
-             ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
-             ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
+        if ( ( rCEvt.GetCommand() == CommandEventId::Wheel ) ||
+             ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
+             ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
         {
             HandleScrollCommand( rCEvt, rModulWindow.GetHScrollBar(), &rModulWindow.GetEditVScrollBar() );
-        } else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) {
+        } else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) {
             SfxDispatcher* pDispatcher = GetDispatcher();
             if ( pDispatcher )
             {
@@ -1497,7 +1497,7 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void BreakPointWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
         Point aEventPos( PixelToLogic( aPos ) );

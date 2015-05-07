@@ -342,7 +342,7 @@ IMPL_LINK( SidebarTxtControl, Select, Menu*, pSelMenu )
 
 void SidebarTxtControl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         if ( !mrSidebarWin.IsProtected() &&
              GetTextView() &&
@@ -380,7 +380,7 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
         }
     }
     else
-    if (rCEvt.GetCommand() == COMMAND_WHEEL)
+    if (rCEvt.GetCommand() == CommandEventId::Wheel)
     {
         if (mrSidebarWin.IsScrollbarVisible())
         {

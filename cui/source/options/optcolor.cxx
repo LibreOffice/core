@@ -951,8 +951,7 @@ bool ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
     if(rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        sal_uInt16 nCmd = pCEvt->GetCommand();
-        if( COMMAND_WHEEL == nCmd )
+        if( pCEvt->GetCommand() == CommandEventId::Wheel )
         {
             Command(*pCEvt);
             return true;
@@ -966,9 +965,9 @@ void ColorConfigCtrl_Impl::Command( const CommandEvent& rCEvt )
     switch ( rCEvt.GetCommand() )
     {
 
-        case COMMAND_WHEEL:
-        case COMMAND_STARTAUTOSCROLL:
-        case COMMAND_AUTOSCROLL:
+        case CommandEventId::Wheel:
+        case CommandEventId::StartAutoScroll:
+        case CommandEventId::AutoScroll:
         {
             const CommandWheelData* pWheelData = rCEvt.GetWheelData();
             if(pWheelData && !pWheelData->IsHorz() && CommandWheelMode::ZOOM != pWheelData->GetMode())

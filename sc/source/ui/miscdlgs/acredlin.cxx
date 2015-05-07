@@ -1697,7 +1697,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
 
     const CommandEvent aCEvt(pTheView->GetCommandEvent());
 
-    if(aCEvt.GetCommand()==COMMAND_CONTEXTMENU)
+    if(aCEvt.GetCommand()==CommandEventId::ContextMenu)
     {
         ScPopupMenu aPopup(ScResId(RID_POPUP_CHANGES));
 

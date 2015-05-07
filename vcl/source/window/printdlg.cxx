@@ -197,7 +197,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
 
 void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
 {
-    if( rEvt.GetCommand() == COMMAND_WHEEL )
+    if( rEvt.GetCommand() == CommandEventId::Wheel )
     {
         const CommandWheelData* pWheelData = rEvt.GetWheelData();
         PrintDialog* pDlg = dynamic_cast<PrintDialog*>(GetParentDialog());
@@ -1858,7 +1858,7 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
 
 void PrintDialog::Command( const CommandEvent& rEvt )
 {
-    if( rEvt.GetCommand() == COMMAND_WHEEL )
+    if( rEvt.GetCommand() == CommandEventId::Wheel )
     {
         const CommandWheelData* pWheelData = rEvt.GetWheelData();
         if( pWheelData->GetDelta() > 0 )

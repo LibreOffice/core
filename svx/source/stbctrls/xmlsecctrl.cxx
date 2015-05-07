@@ -119,7 +119,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
 
 void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 {
-    if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         PopupMenu aPopupMenu( ResId( RID_SVXMNU_XMLSECSTATBAR, DIALOG_MGR() ) );
         if( aPopupMenu.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )

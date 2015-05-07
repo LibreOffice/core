@@ -1638,7 +1638,7 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
 
 void Calendar::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         if ( !mbSelection && rCEvt.IsMouseEvent() )
         {
@@ -1651,7 +1651,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
             }
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_WHEEL )
+    else if ( rCEvt.GetCommand() == CommandEventId::Wheel )
     {
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if ( pData->GetMode() == CommandWheelMode::SCROLL )

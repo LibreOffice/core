@@ -475,33 +475,29 @@ void lcl_insertMenuItemImages(
 void OReportSection::Command( const CommandEvent& _rCEvt )
 {
     Window::Command(_rCEvt);
-    switch (_rCEvt.GetCommand())
+    if (_rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
-        case COMMAND_CONTEXTMENU:
+        OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+        uno::Reference<frame::XFrame> xFrame = rController.getFrame();
+        PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );
+        uno::Reference< report::XReportDefinition> xReportDefinition = getSection()->getReportDefinition();
+
+        lcl_insertMenuItemImages(aContextMenu,rController,xReportDefinition,xFrame);
+
+        Point aPos = _rCEvt.GetMousePosPixel();
+        m_pView->EndAction();
+        const sal_uInt16 nId = aContextMenu.Execute(this, aPos);
+        if ( nId )
         {
-            OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
-            uno::Reference<frame::XFrame> xFrame = rController.getFrame();
-            PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );
-            uno::Reference< report::XReportDefinition> xReportDefinition = getSection()->getReportDefinition();
-
-            lcl_insertMenuItemImages(aContextMenu,rController,xReportDefinition,xFrame);
-
-            Point aPos = _rCEvt.GetMousePosPixel();
-            m_pView->EndAction();
-            const sal_uInt16 nId = aContextMenu.Execute(this, aPos);
-            if ( nId )
+            uno::Sequence< beans::PropertyValue> aArgs;
+            if ( nId == SID_ATTR_CHAR_COLOR_BACKGROUND )
             {
-                uno::Sequence< beans::PropertyValue> aArgs;
-                if ( nId == SID_ATTR_CHAR_COLOR_BACKGROUND )
-                {
-                    aArgs.realloc(1);
-                    aArgs[0].Name = "Selection";
-                    aArgs[0].Value <<= m_xSection;
-                }
-                rController.executeChecked(nId,aArgs);
+                aArgs.realloc(1);
+                aArgs[0].Name = "Selection";
+                aArgs[0].Value <<= m_xSection;
             }
+            rController.executeChecked(nId,aArgs);
         }
-        break;
     }
 }
 

@@ -417,12 +417,12 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
 {
     switch(rCEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
             SfxDispatcher::ExecutePopup();
         break;
-        case COMMAND_WHEEL:
-        case COMMAND_STARTAUTOSCROLL:
-        case COMMAND_AUTOSCROLL:
+        case CommandEventId::Wheel:
+        case CommandEventId::StartAutoScroll:
+        case CommandEventId::AutoScroll:
         {
             const CommandWheelData* pWData = rCEvt.GetWheelData();
             if( !pWData || CommandWheelMode::ZOOM != pWData->GetMode() )
@@ -763,9 +763,9 @@ void SwSrcEditWindow::Command( const CommandEvent& rCEvt )
 {
     switch(rCEvt.GetCommand())
     {
-        case COMMAND_WHEEL:
-        case COMMAND_STARTAUTOSCROLL:
-        case COMMAND_AUTOSCROLL:
+        case CommandEventId::Wheel:
+        case CommandEventId::StartAutoScroll:
+        case CommandEventId::AutoScroll:
         {
             const CommandWheelData* pWData = rCEvt.GetWheelData();
             if( !pWData || CommandWheelMode::ZOOM != pWData->GetMode() )

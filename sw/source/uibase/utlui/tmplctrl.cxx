@@ -90,7 +90,7 @@ void SwTemplateControl::Paint( const UserDrawEvent&  )
 
 void SwTemplateControl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu &&
             !GetStatusBar().GetItemText( GetId() ).isEmpty() )
     {
         SwTemplatePopup_Impl aPop;

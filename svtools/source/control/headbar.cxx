@@ -1018,7 +1018,7 @@ void HeaderBar::Resize()
 
 void HeaderBar::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.IsMouseEvent() && (rCEvt.GetCommand() == COMMAND_STARTDRAG) && !mbDrag )
+    if ( rCEvt.IsMouseEvent() && (rCEvt.GetCommand() == CommandEventId::StartDrag) && !mbDrag )
     {
         ImplStartDrag( rCEvt.GetMousePosPixel(), true );
         return;

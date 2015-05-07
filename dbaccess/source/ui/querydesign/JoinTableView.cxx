@@ -1149,7 +1149,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
 
     switch (rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             if( m_vTableConnection.empty() )
                 return;
@@ -1186,6 +1186,8 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
             }
             bHandled = true;
         }
+        break;
+        default: break;
     }
     if (!bHandled)
         Window::Command(rEvt);
@@ -1251,7 +1253,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
         case MouseNotifyEvent::COMMAND:
         {
             const CommandEvent* pCommand = rNEvt.GetCommandEvent();
-            if (pCommand->GetCommand() == COMMAND_WHEEL)
+            if (pCommand->GetCommand() == CommandEventId::Wheel)
             {
                 const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
                 if (pData->GetMode() == CommandWheelMode::SCROLL)

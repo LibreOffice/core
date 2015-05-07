@@ -756,7 +756,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
             mpFloatWin->EndPopupMode();
     }
     else if( (rNEvt.GetType() == MouseNotifyEvent::COMMAND) &&
-             (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL) &&
+             (rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel) &&
              (rNEvt.GetWindow() == mpSubEdit) )
     {
         sal_uInt16 nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );

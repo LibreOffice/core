@@ -1241,7 +1241,7 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
             // scrolling the deltaX deltaY
             Point deltaPoint( deltaX, deltaY );
             CommandWheelData cmd( 0, 0, 0, CommandWheelMode::SCROLL, 0, false, true);
-            CommandEvent event(deltaPoint , COMMAND_WHEEL, true, &cmd );
+            CommandEvent event(deltaPoint , CommandEventId::Wheel, true, &cmd );
             m_pEditWin->HandleScrollCommand(event, m_pHScrollbar, m_pVScrollbar);
         }
 

@@ -567,7 +567,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
 
     switch ( rCEvt.GetCommand() )
     {
-        case COMMAND_STARTDRAG:
+        case CommandEventId::StartDrag:
             //  Aus dem ExecuteDrag heraus kann der Navigator geloescht werden
             //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
             //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
@@ -578,7 +578,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
             bDone = true;
             break;
 
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
             {
                 //  Drag-Drop Modus
 
@@ -648,6 +648,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 }
             }
             break;
+            default: break;
     }
 
     if (!bDone)

@@ -847,9 +847,9 @@ void ThumbnailView::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ThumbnailView::Command( const CommandEvent& rCEvt )
 {
-    if ( (rCEvt.GetCommand() == COMMAND_WHEEL) ||
-         (rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
-         (rCEvt.GetCommand() == COMMAND_AUTOSCROLL) )
+    if ( (rCEvt.GetCommand() == CommandEventId::Wheel) ||
+         (rCEvt.GetCommand() == CommandEventId::StartAutoScroll) ||
+         (rCEvt.GetCommand() == CommandEventId::AutoScroll) )
     {
         if ( HandleScrollCommand( rCEvt, NULL, mpScrBar ) )
             return;

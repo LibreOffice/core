@@ -168,7 +168,7 @@ bool Deck::Notify (NotifyEvent& rEvent)
         if (pCommandEvent != NULL)
             switch (pCommandEvent->GetCommand())
             {
-                case COMMAND_WHEEL:
+                case CommandEventId::Wheel:
                     return ProcessWheelEvent(pCommandEvent);
 
                 default:

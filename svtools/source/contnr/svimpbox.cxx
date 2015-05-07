@@ -2965,17 +2965,17 @@ static void lcl_DeleteSubPopups(PopupMenu* pPopup)
 
 void SvImpLBox::Command( const CommandEvent& rCEvt )
 {
-    sal_uInt16              nCommand = rCEvt.GetCommand();
+    CommandEventId   nCommand = rCEvt.GetCommand();
 
-    if( nCommand == COMMAND_CONTEXTMENU )
+    if( nCommand == CommandEventId::ContextMenu )
         aEditIdle.Stop();
 
     // scroll mouse event?
-    if( ( ( nCommand == COMMAND_WHEEL ) || ( nCommand == COMMAND_STARTAUTOSCROLL ) || ( nCommand == COMMAND_AUTOSCROLL ) )
+    if( ( ( nCommand == CommandEventId::Wheel ) || ( nCommand == CommandEventId::StartAutoScroll ) || ( nCommand == CommandEventId::AutoScroll ) )
         && pView->HandleScrollCommand( rCEvt, aHorSBar.get(), aVerSBar.get() ) )
             return;
 
-    if( bContextMenuHandling && nCommand == COMMAND_CONTEXTMENU )
+    if( bContextMenuHandling && nCommand == CommandEventId::ContextMenu )
     {
         Point   aPopupPos;
         bool    bClickedIsFreePlace = false;

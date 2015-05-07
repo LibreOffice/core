@@ -215,7 +215,7 @@ void AnnotationTextWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void AnnotationTextWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
            mpAnnotationWindow->Command(rCEvt);
     }
@@ -738,7 +738,7 @@ void AnnotationWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void AnnotationWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         if( mpMeta->IsVisible() &&(mpMeta->GetPosPixel().Y() < rCEvt.GetMousePosPixel().Y()) )
             return;
