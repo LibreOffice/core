@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_4ff905c8",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3606,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-05-07T18:55:35Z",
+      "side": 1,
+      "message": "10 is missing in this list?",
+      "range": {
+        "startLine": 3606,
+        "startChar": 49,
+        "endLine": 3606,
+        "endChar": 54
+      },
+      "revId": "aab13b835eae4474cce031b00635321f8901af8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a5de9d1_6ff641d9",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5163,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-05-07T18:55:35Z",
+      "side": 1,
+      "message": "Does this actually work? In my case 8.1 is picked and then the error is:\n\n  checking What the C++ library is...\n  configure: error: Could not figure out what C++ library this is\n\n\nAnd in the log I have:\n\n  C:\\PROGRA~2\\MICROS~1.0\\VC\\Include\\crtdefs.h(10):\n  fatal error C1083: Cannot open include file: \n  \u0027corecrt.h\u0027: No such file or directory\n\nWhen I try to enforce Windows Kit 10, where \u0027corecrt.h\u0027 is located, then it\u0027s failing earlier with missing midl.exe (indeed it\u0027s not contained in 10 directory).\n\nOn this VM I only installed Windows 10 preview + VS 2015 TCP 5\n\nMy input params are: [1].\n\n* [1] http://paste.openstack.org/show/216382/",
+      "revId": "aab13b835eae4474cce031b00635321f8901af8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
