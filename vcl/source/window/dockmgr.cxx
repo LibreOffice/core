@@ -483,7 +483,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
-    virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -494,8 +494,8 @@ public:
     Rectangle           GetDragRect() const;
     Point               GetToolboxPosition() const;
     Point               GetTearOffPosition() const;
-    void                DrawGrip();
-    void                DrawBorder();
+    void                DrawGrip(vcl::RenderContext& rRenderContext);
+    void                DrawBorder(vcl::RenderContext& rRenderContext);
 
     bool                hasGrip() const { return mbHasGrip; }
 };
@@ -596,9 +596,9 @@ Point ImplPopupFloatWin::GetTearOffPosition() const
     return aPt;
 }
 
-void ImplPopupFloatWin::DrawBorder()
+void ImplPopupFloatWin::DrawBorder(vcl::RenderContext& rRenderContext)
 {
-    SetFillColor();
+    rRenderContext.SetFillColor();
     Point aPt;
     Rectangle aRect( aPt, GetOutputSizePixel() );
 
@@ -610,113 +610,114 @@ void ImplPopupFloatWin::DrawBorder()
         aItemClipRect.SetPos( AbsoluteScreenToOutputPixel( aItemClipRect.TopLeft() ) );
 
         // draw the excluded border part with the background color of a toolbox
-        SetClipRegion( vcl::Region( aItemClipRect ) );
-        SetLineColor( GetSettings().GetStyleSettings().GetFaceColor() );
-        DrawRect( aRect );
+        rRenderContext.SetClipRegion( vcl::Region( aItemClipRect ) );
+        rRenderContext.SetLineColor( GetSettings().GetStyleSettings().GetFaceColor() );
+        rRenderContext.DrawRect( aRect );
 
         aClipRgn.Exclude( aItemClipRect );
         SetClipRegion( aClipRgn );
     }
-    SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
-    DrawRect( aRect );
-    SetClipRegion( oldClipRgn );
+    rRenderContext.SetLineColor( rRenderContext.GetSettings().GetStyleSettings().GetShadowColor() );
+    rRenderContext.DrawRect( aRect );
+    rRenderContext.SetClipRegion( oldClipRgn );
 }
 
-void ImplPopupFloatWin::DrawGrip()
+void ImplPopupFloatWin::DrawGrip(vcl::RenderContext& rRenderContext)
 {
-    bool bLinecolor     = IsLineColor();
-    Color aLinecolor    = GetLineColor();
-    bool bFillcolor     = IsFillColor();
-    Color aFillcolor    = GetFillColor();
+    bool bLinecolor     = rRenderContext.IsLineColor();
+    Color aLinecolor    = rRenderContext.GetLineColor();
+    bool bFillcolor     = rRenderContext.IsFillColor();
+    Color aFillcolor    = rRenderContext.GetFillColor();
 
     // draw background
-    Rectangle aRect( GetDragRect() );
-    aRect.Top()      += POPUP_DRAGBORDER;
-    aRect.Bottom()   -= POPUP_DRAGBORDER;
-    aRect.Left()+=3;
-    aRect.Right()-=3;
+    Rectangle aRect(GetDragRect());
+    aRect.Top() += POPUP_DRAGBORDER;
+    aRect.Bottom() -= POPUP_DRAGBORDER;
+    aRect.Left() += 3;
+    aRect.Right() -= 3;
 
-    if( mbHighlight )
+    if (mbHighlight)
     {
-        Erase( aRect );
-        DrawSelectionBackground( aRect, 2, false, true, false );
+        rRenderContext.Erase(aRect);
+        DrawSelectionBackground(aRect, 2, false, true, false);
     }
     else
     {
-        SetFillColor( GetSettings().GetStyleSettings().GetFaceColor() );
-        SetLineColor();
-        DrawRect( aRect );
+        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetFaceColor());
+        rRenderContext.SetLineColor();
+        rRenderContext.DrawRect(aRect);
     }
 
-    if( !ToolBox::AlwaysLocked() )  // no grip if toolboxes are locked
+    if (!ToolBox::AlwaysLocked())  // no grip if toolboxes are locked
     {
 #ifdef TEAROFF_DASHED
         // draw single dashed line
-        LineInfo aLineInfo( LINE_DASH );
-        aLineInfo.SetDistance( 4 );
-        aLineInfo.SetDashLen( 12 );
-        aLineInfo.SetDashCount( 1 );
+        LineInfo aLineInfo(LINE_DASH);
+        aLineInfo.SetDistance(4);
+        aLineInfo.SetDashLen(12);
+        aLineInfo.SetDashCount(1);
 
-        aRect.Left()+=2;
-        aRect.Right()-=2;
+        aRect.Left() += 2;
+        aRect.Right()-= 2;
 
-        aRect.Top()+=2;
+        aRect.Top()   += 2;
         aRect.Bottom() = aRect.Top();
-        SetLineColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
-        DrawLine( aRect.TopLeft(), aRect.TopRight(), aLineInfo );
+        rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetDarkShadowColor());
+        rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight(), aLineInfo);
 
-        if( !mbHighlight )
+        if (!mbHighlight)
         {
             ++aRect.Top();
             ++aRect.Bottom();
-            SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
-            DrawLine( aRect.TopLeft(), aRect.TopRight(), aLineInfo );
+            rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetLightColor());
+            rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight(), aLineInfo);
         }
 
 #else
         // draw several grip lines
-        SetFillColor( GetSettings().GetStyleSettings().GetShadowColor() );
+        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
         aRect.Top()++;
         aRect.Bottom() = aRect.Top();
 
         int width = POPUP_DRAGWIDTH;
-        while( width >= aRect.getWidth() )
+        while(width >= aRect.getWidth())
+        {
             width -= 4;
-        if( width <= 0 )
+        }
+        if (width <= 0)
             width = aRect.getWidth();
         //aRect.nLeft = aRect.nLeft + (aRect.getWidth() - width) / 2;
         aRect.Left() = (aRect.Left() + aRect.Right() - width) / 2;
         aRect.Right() = aRect.Left() + width;
 
-        int i=0;
-        while( i< POPUP_DRAGGRIP )
+        int i = 0;
+        while (i < POPUP_DRAGGRIP)
         {
-            DrawRect( aRect );
-            aRect.Top()+=2;
-            aRect.Bottom()+=2;
-            i+=2;
+            rRenderContext.DrawRect(aRect);
+            aRect.Top() += 2;
+            aRect.Bottom() += 2;
+            i += 2;
         }
 #endif
     }
 
-    if( bLinecolor )
-        SetLineColor( aLinecolor );
+    if (bLinecolor)
+        rRenderContext.SetLineColor(aLinecolor);
     else
-        SetLineColor();
-    if( bFillcolor )
-        SetFillColor( aFillcolor );
+        rRenderContext.SetLineColor();
+    if (bFillcolor)
+        rRenderContext.SetFillColor(aFillcolor);
     else
-        SetFillColor();
+        rRenderContext.SetFillColor();
 }
 
-void ImplPopupFloatWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void ImplPopupFloatWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Point aPt;
-    Rectangle aRect( aPt, GetOutputSizePixel() );
-    DrawWallpaper( aRect, Wallpaper( GetSettings().GetStyleSettings().GetFaceGradientColor() ) );
-    DrawBorder();
-    if( hasGrip() )
-        DrawGrip();
+    Rectangle aRect(Point(), rRenderContext.GetOutputSizePixel());
+    rRenderContext.DrawWallpaper(aRect, Wallpaper(rRenderContext.GetSettings().GetStyleSettings().GetFaceGradientColor()));
+    DrawBorder(rRenderContext);
+    if (hasGrip())
+        DrawGrip(rRenderContext);
 }
 
 void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
@@ -735,12 +736,12 @@ void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
         if( !mbHighlight && GetDragRect().IsInside( aMousePos ) )
         {
             mbHighlight = true;
-            DrawGrip();
+            Invalidate();
         }
-        if( mbHighlight && ( rMEvt.IsLeaveWindow() || !GetDragRect().IsInside( aMousePos ) ) )
+        if (mbHighlight && ( rMEvt.IsLeaveWindow() || !GetDragRect().IsInside( aMousePos ) ) )
         {
             mbHighlight = false;
-            DrawGrip();
+            Invalidate();
         }
     }
 }
