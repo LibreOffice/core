@@ -1466,7 +1466,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
 
 void TabControl::Command( const CommandEvent& rCEvt )
 {
-    if( (mpTabCtrlData->mpListBox == nullptr) && (rCEvt.GetCommand() == COMMAND_CONTEXTMENU) && (GetPageCount() > 1) )
+    if( (mpTabCtrlData->mpListBox == nullptr) && (rCEvt.GetCommand() == CommandEventId::ContextMenu) && (GetPageCount() > 1) )
     {
         Point   aMenuPos;
         bool    bMenu;

@@ -590,7 +590,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
 {
     switch (rEvent.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
             if ( ! SD_MOD()->GetWaterCan())
             {
                 // Determine the position where to show the menu.

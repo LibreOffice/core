@@ -3453,7 +3453,7 @@ IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu )
 void SvxRuler::Command( const CommandEvent& rCommandEvent )
 {
     /* Mouse context menu for switching the unit of measurement */
-    if ( COMMAND_CONTEXTMENU == rCommandEvent.GetCommand() )
+    if ( CommandEventId::ContextMenu == rCommandEvent.GetCommand() )
     {
         CancelDrag();
         bool bRTL = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();

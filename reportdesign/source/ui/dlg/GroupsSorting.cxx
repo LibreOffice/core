@@ -723,7 +723,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             if (!rEvt.IsMouseEvent())
             {

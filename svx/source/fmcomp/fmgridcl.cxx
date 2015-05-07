@@ -993,7 +993,7 @@ void FmGridHeader::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             if (!rEvt.IsMouseEvent())
                 return;
@@ -1023,7 +1023,7 @@ FmGridControl::FmGridControl(
 
 void FmGridControl::Command(const CommandEvent& _rEvt)
 {
-    if ( COMMAND_CONTEXTMENU == _rEvt.GetCommand() )
+    if ( CommandEventId::ContextMenu == _rEvt.GetCommand() )
     {
         FmGridHeader* pMyHeader = static_cast< FmGridHeader* >( GetHeaderBar() );
         if ( pMyHeader && !_rEvt.IsMouseEvent() )

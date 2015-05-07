@@ -639,14 +639,14 @@ void ScPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
 
 void ScPreview::Command( const CommandEvent& rCEvt )
 {
-    sal_uInt16 nCmd = rCEvt.GetCommand();
-    if ( nCmd == COMMAND_WHEEL || nCmd == COMMAND_STARTAUTOSCROLL || nCmd == COMMAND_AUTOSCROLL )
+    CommandEventId nCmd = rCEvt.GetCommand();
+    if ( nCmd == CommandEventId::Wheel || nCmd == CommandEventId::StartAutoScroll || nCmd == CommandEventId::AutoScroll )
     {
         bool bDone = pViewShell->ScrollCommand( rCEvt );
         if (!bDone)
             Window::Command(rCEvt);
     }
-    else if ( nCmd == COMMAND_CONTEXTMENU )
+    else if ( nCmd == CommandEventId::ContextMenu )
         SfxDispatcher::ExecutePopup();
     else
         Window::Command( rCEvt );

@@ -2794,7 +2794,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             if ( !m_pSeekCursor )
             {

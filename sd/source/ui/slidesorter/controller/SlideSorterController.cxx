@@ -314,7 +314,7 @@ bool SlideSorterController::Command (
 
     switch (rEvent.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             SdPage* pPage = NULL;
             sal_uInt16 nPopupId;
@@ -426,7 +426,7 @@ bool SlideSorterController::Command (
         }
         break;
 
-        case COMMAND_WHEEL:
+        case CommandEventId::Wheel:
         {
             const CommandWheelData* pData = rEvent.GetWheelData();
             if (pData == NULL)
@@ -459,6 +459,8 @@ bool SlideSorterController::Command (
             bEventHasBeenHandled = true;
         }
         break;
+
+        default: break;
     }
 
     return bEventHasBeenHandled;

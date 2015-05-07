@@ -2013,7 +2013,7 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
     {
         const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(pEvent)->GetData());
 
-        if( rEvent.GetCommand() == COMMAND_MEDIA )
+        if( rEvent.GetCommand() == CommandEventId::Media )
         {
             CommandMediaData* pMediaData = rEvent.GetMediaData();
             pMediaData->SetPassThroughToOS(false);

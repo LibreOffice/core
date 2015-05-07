@@ -2250,7 +2250,7 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
 
     switch( rCmd.GetCommand() )
     {
-        case COMMAND_STARTAUTOSCROLL:
+        case CommandEventId::StartAutoScroll:
         {
             pView->EndTracking();
             sal_uInt16 nScrollFlags = 0;
@@ -2266,7 +2266,7 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
         }
         break;
 
-        case COMMAND_WHEEL:
+        case CommandEventId::Wheel:
         {
             const CommandWheelData* pData = rCmd.GetWheelData();
             if( pData && (CommandWheelMode::SCROLL == pData->GetMode()) && !pData->IsHorz() )
@@ -2287,7 +2287,7 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
         }
         break;
 
-        case COMMAND_AUTOSCROLL:
+        case CommandEventId::AutoScroll:
         {
             const CommandScrollData* pData = rCmd.GetAutoScrollData();
             if( pData )
@@ -2297,6 +2297,8 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
             }
         }
         break;
+
+        default: break;
     }
 
     if( nScrollDX || nScrollDY )
@@ -2315,9 +2317,9 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
 void SvxIconChoiceCtrl_Impl::Command( const CommandEvent& rCEvt )
 {
     // scroll mouse event?
-    if( (rCEvt.GetCommand() == COMMAND_WHEEL) ||
-        (rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
-        (rCEvt.GetCommand() == COMMAND_AUTOSCROLL) )
+    if( (rCEvt.GetCommand() == CommandEventId::Wheel) ||
+        (rCEvt.GetCommand() == CommandEventId::StartAutoScroll) ||
+        (rCEvt.GetCommand() == CommandEventId::AutoScroll) )
     {
         if( HandleScrollCommand( rCEvt ) )
             return;

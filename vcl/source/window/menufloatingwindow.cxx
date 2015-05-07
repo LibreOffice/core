@@ -1183,7 +1183,7 @@ void MenuFloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_WHEEL )
+    if ( rCEvt.GetCommand() == CommandEventId::Wheel )
     {
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )

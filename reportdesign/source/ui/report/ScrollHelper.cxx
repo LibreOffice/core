@@ -330,9 +330,9 @@ bool OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
 {
     const CommandEvent* pCommandEvent = rNEvt.GetCommandEvent();
     if ( pCommandEvent &&
-        ( ((pCommandEvent->GetCommand() == COMMAND_WHEEL) ||
-         (pCommandEvent->GetCommand() == COMMAND_STARTAUTOSCROLL) ||
-         (pCommandEvent->GetCommand() == COMMAND_AUTOSCROLL))) )
+        ( ((pCommandEvent->GetCommand() == CommandEventId::Wheel) ||
+         (pCommandEvent->GetCommand() == CommandEventId::StartAutoScroll) ||
+         (pCommandEvent->GetCommand() == CommandEventId::AutoScroll))) )
     {
         ScrollBar* pHScrBar = NULL;
         ScrollBar* pVScrBar = NULL;

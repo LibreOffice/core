@@ -157,7 +157,7 @@ void GalleryPreview::Command(const CommandEvent& rCEvt )
 {
     Window::Command( rCEvt );
 
-    if( mpTheme && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) )
+    if( mpTheme && ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) )
         static_cast<GalleryBrowser2*>( GetParent() )->ShowContextMenu( this,
             ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
 }
@@ -378,7 +378,7 @@ void GalleryIconView::Command( const CommandEvent& rCEvt )
 {
     ValueSet::Command( rCEvt );
 
-    if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         static_cast<GalleryBrowser2*>( GetParent() )->ShowContextMenu( this,
             ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
@@ -403,7 +403,7 @@ sal_Int8 GalleryIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 void GalleryIconView::StartDrag( sal_Int8, const Point& )
 {
-    const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, true );
+    const CommandEvent  aEvt( GetPointerPosPixel(), CommandEventId::StartDrag, true );
     vcl::Region              aRegion;
 
     // call this to initiate dragging for ValueSet
@@ -558,7 +558,7 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
 {
     BrowseBox::Command( rCEvt );
 
-    if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         const Point* pPos = NULL;
 

@@ -151,7 +151,7 @@ sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 void  LayerTabBar::Command(const CommandEvent& rCEvt)
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
         pDispatcher->ExecutePopup(SdResId(RID_LAYERTAB_POPUP));

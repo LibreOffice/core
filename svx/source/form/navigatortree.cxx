@@ -312,7 +312,7 @@ namespace svxform
         bool bHandled = false;
         switch( rEvt.GetCommand() )
         {
-            case COMMAND_CONTEXTMENU:
+            case CommandEventId::ContextMenu:
             {
                 // Position of click
                 ::Point ptWhere;
@@ -526,7 +526,9 @@ namespace svxform
                     }
                 }
                 bHandled = true;
-            } break;
+            }
+            break;
+            default: break;
         }
 
         if (!bHandled)

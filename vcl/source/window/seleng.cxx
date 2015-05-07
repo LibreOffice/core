@@ -345,7 +345,7 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
         return;
     aWTimer.Stop();
     nFlags |= SelectionEngineFlags::CMDEVT;
-    if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
+    if ( rCEvt.GetCommand() == CommandEventId::StartDrag )
     {
         if ( nFlags & SelectionEngineFlags::DRG_ENAB )
         {

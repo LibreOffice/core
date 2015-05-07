@@ -341,7 +341,7 @@ void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
 void SmEditWindow::Command(const CommandEvent& rCEvt)
 {
     bool bForwardEvt = true;
-    if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU)
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
         GetParent()->ToTop();
 
@@ -368,7 +368,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         xPopupMenu->Execute( this, aPoint );
         bForwardEvt = false;
     }
-    else if (rCEvt.GetCommand() == COMMAND_WHEEL)
+    else if (rCEvt.GetCommand() == CommandEventId::Wheel)
         bForwardEvt = !HandleWheelCommands( rCEvt );
 
     if (bForwardEvt)

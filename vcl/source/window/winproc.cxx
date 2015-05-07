@@ -196,7 +196,7 @@ static void ImplSetMousePointer( vcl::Window* pChild )
         pChild->ImplGetFrame()->SetPointer( pChild->ImplGetMousePointer() );
 }
 
-static bool ImplCallCommand( vcl::Window* pChild, sal_uInt16 nEvt, void* pData = NULL,
+static bool ImplCallCommand( vcl::Window* pChild, CommandEventId nEvt, void* pData = NULL,
                              bool bMouse = false, Point* pPos = NULL )
 {
     Point aPos;
@@ -255,7 +255,7 @@ static sal_IntPtr ContextMenuEventLink( void* pCEvent, void* )
     if( ! pEv->aDelData.IsDead() )
     {
         pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
-        ImplCallCommand( pEv->pWindow, COMMAND_CONTEXTMENU, NULL, true, &pEv->aChildPos );
+        ImplCallCommand( pEv->pWindow, CommandEventId::ContextMenu, NULL, true, &pEv->aChildPos );
     }
     delete pEv;
 
@@ -787,9 +787,9 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
             {
                 sal_uInt16 nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
                 if ( nMiddleAction == MOUSE_MIDDLE_AUTOSCROLL )
-                    bRet = !ImplCallCommand( pChild, COMMAND_STARTAUTOSCROLL, NULL, true, &aChildPos );
+                    bRet = !ImplCallCommand( pChild, CommandEventId::StartAutoScroll, NULL, true, &aChildPos );
                 else if ( nMiddleAction == MOUSE_MIDDLE_PASTESELECTION )
-                    bRet = !ImplCallCommand( pChild, COMMAND_PASTESELECTION, NULL, true, &aChildPos );
+                    bRet = !ImplCallCommand( pChild, CommandEventId::PasteSelection, NULL, true, &aChildPos );
             }
             else
             {
@@ -818,7 +818,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                             Application::PostUserEvent( Link<>( pEv, ContextMenuEventLink ) );
                         }
                         else
-                            bRet = ! ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, true, &aChildPos );
+                            bRet = ! ImplCallCommand( pChild, CommandEventId::ContextMenu, NULL, true, &aChildPos );
                     }
                 }
             }
@@ -1063,7 +1063,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
 
             // ContextMenu
             if ( (nCode == KEY_CONTEXTMENU) || ((nCode == KEY_F10) && aKeyCode.IsShift() && !aKeyCode.IsMod1() && !aKeyCode.IsMod2() ) )
-                nRet = !ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, false );
+                nRet = !ImplCallCommand( pChild, CommandEventId::ContextMenu, NULL, false );
             else if ( ( (nCode == KEY_F2) && aKeyCode.IsShift() ) || ( (nCode == KEY_F1) && aKeyCode.IsMod1() ) ||
                 // #101999# no active help when focus in toolbox, simulate BallonHelp instead
                 ( (nCode == KEY_F1) && aKeyCode.IsShift() && bToolboxFocus ) )
@@ -1192,7 +1192,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
             pWinData->mpExtOldAttrAry = NULL;
         }
         pSVData->maWinData.mpExtTextInputWin = pChild;
-        ImplCallCommand( pChild, COMMAND_STARTEXTTEXTINPUT );
+        ImplCallCommand( pChild, CommandEventId::StartExtTextInput );
     }
 
     // be aware of being recursively called in StartExtTextInput
@@ -1246,7 +1246,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
         pWinData->mpExtOldAttrAry = new sal_uInt16[rText.getLength()];
         memcpy( pWinData->mpExtOldAttrAry, pTextAttr, rText.getLength()*sizeof( sal_uInt16 ) );
     }
-    return !ImplCallCommand( pChild, COMMAND_EXTTEXTINPUT, &aData );
+    return !ImplCallCommand( pChild, CommandEventId::ExtTextInput, &aData );
 }
 
 static bool ImplHandleEndExtTextInput( vcl::Window* /* pWindow */ )
@@ -1270,7 +1270,7 @@ static bool ImplHandleEndExtTextInput( vcl::Window* /* pWindow */ )
             delete [] pWinData->mpExtOldAttrAry;
             pWinData->mpExtOldAttrAry = NULL;
         }
-        nRet = !ImplCallCommand( pChild, COMMAND_ENDEXTTEXTINPUT );
+        nRet = !ImplCallCommand( pChild, CommandEventId::EndExtTextInput );
     }
 
     return nRet;
@@ -1295,7 +1295,7 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
     if ( pChild )
     {
         const OutputDevice *pChildOutDev = pChild->GetOutDev();
-        ImplCallCommand( pChild, COMMAND_CURSORPOS );
+        ImplCallCommand( pChild, CommandEventId::CursorPos );
         const Rectangle* pRect = pChild->GetCursorRect();
         if ( pRect )
             rRect = pChildOutDev->ImplLogicToDevicePixel( *pRect );
@@ -1326,14 +1326,14 @@ static bool ImplHandleInputContextChange( vcl::Window* pWindow, LanguageType eNe
 {
     vcl::Window* pChild = ImplGetKeyInputWindow( pWindow );
     CommandInputContextData aData( eNewLang );
-    return !ImplCallCommand( pChild, COMMAND_INPUTCONTEXTCHANGE, &aData );
+    return !ImplCallCommand( pChild, CommandEventId::InputContextChange, &aData );
 }
 
 static bool ImplCallWheelCommand( vcl::Window* pWindow, const Point& rPos,
                                   const CommandWheelData* pWheelData )
 {
     Point               aCmdMousePos = pWindow->ImplFrameToOutput( rPos );
-    CommandEvent        aCEvt( aCmdMousePos, COMMAND_WHEEL, true, pWheelData );
+    CommandEvent        aCEvt( aCmdMousePos, CommandEventId::Wheel, true, pWheelData );
     NotifyEvent         aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
     ImplDelData         aDelData( pWindow );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
@@ -1580,7 +1580,7 @@ public:
     }
     virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) SAL_OVERRIDE
     {
-        return ImplCallCommand(pWindow, COMMAND_SWIPE, &m_aSwipeData);
+        return ImplCallCommand(pWindow, CommandEventId::Swipe, &m_aSwipeData);
     }
 };
 
@@ -1602,7 +1602,7 @@ public:
     }
     virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) SAL_OVERRIDE
     {
-        return ImplCallCommand(pWindow, COMMAND_LONGPRESS, &m_aLongPressData);
+        return ImplCallCommand(pWindow, CommandEventId::LongPress, &m_aLongPressData);
     }
 };
 
@@ -2180,7 +2180,7 @@ static void ImplHandleSalKeyMod( vcl::Window* pWindow, SalKeyModEvent* pEvent )
     if( pEvent->mnModKeyCode != 0 )
     {
         CommandModKeyData data( pEvent->mnModKeyCode );
-        ImplCallCommand( pChild, COMMAND_MODKEYCHANGE, &data );
+        ImplCallCommand( pChild, CommandEventId::ModKeyChange, &data );
     }
 }
 
@@ -2191,7 +2191,7 @@ static void ImplHandleInputLanguageChange( vcl::Window* pWindow )
     if ( !pChild )
         return;
 
-    ImplCallCommand( pChild, COMMAND_INPUTLANGUAGECHANGE );
+    ImplCallCommand( pChild, CommandEventId::InputLanguageChange );
 }
 
 static void ImplHandleSalSettings( sal_uInt16 nEvent )
@@ -2268,7 +2268,7 @@ static bool ImplHandleShowDialog( vcl::Window* pWindow, ShowDialogId nDialogId )
             pWindow = pWrkWin;
     }
     CommandDialogData aCmdData( nDialogId );
-    return ImplCallCommand( pWindow, COMMAND_SHOWDIALOG, &aCmdData );
+    return ImplCallCommand( pWindow, CommandEventId::ShowDialog, &aCmdData );
 }
 
 static void ImplHandleSurroundingTextRequest( vcl::Window *pWindow,
@@ -2323,7 +2323,7 @@ static void ImplHandleSurroundingTextSelectionChange( vcl::Window *pWindow,
     if( pChild )
     {
         CommandSelectionChangeData data( nStart, nEnd );
-        ImplCallCommand( pChild, COMMAND_SELECTIONCHANGE, &data );
+        ImplCallCommand( pChild, CommandEventId::SelectionChange, &data );
     }
 }
 
@@ -2331,7 +2331,7 @@ static void ImplHandleStartReconversion( vcl::Window *pWindow )
 {
     vcl::Window* pChild = ImplGetKeyInputWindow( pWindow );
     if( pChild )
-    ImplCallCommand( pChild, COMMAND_PREPARERECONVERSION );
+    ImplCallCommand( pChild, CommandEventId::PrepareReconversion );
 }
 
 static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
@@ -2358,7 +2358,7 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
 
     if( pChild )
     {
-        ImplCallCommand( pChild, COMMAND_QUERYCHARPOSITION );
+        ImplCallCommand( pChild, CommandEventId::QueryCharPosition );
 
         ImplWinData* pWinData = pChild->ImplGetWinData();
         if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < static_cast<sal_uLong>( pWinData->mnCompositionCharRects ) )

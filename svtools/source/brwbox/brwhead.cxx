@@ -51,14 +51,14 @@ void BrowserHeader::dispose()
 
 void BrowserHeader::Command( const CommandEvent& rCEvt )
 {
-    if ( !GetCurItemId() && COMMAND_CONTEXTMENU == rCEvt.GetCommand() )
+    if ( !GetCurItemId() && CommandEventId::ContextMenu == rCEvt.GetCommand() )
     {
         Point aPos( rCEvt.GetMousePosPixel() );
         if ( _pBrowseBox->IsFrozen(0) )
             aPos.X() += _pBrowseBox->GetColumnWidth(0);
         _pBrowseBox->GetDataWindow().Command( CommandEvent(
                 Point( aPos.X(), aPos.Y() - GetSizePixel().Height() ),
-                COMMAND_CONTEXTMENU, rCEvt.IsMouseEvent() ) );
+                CommandEventId::ContextMenu, rCEvt.IsMouseEvent() ) );
     }
 }
 

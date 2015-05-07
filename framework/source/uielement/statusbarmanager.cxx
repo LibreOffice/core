@@ -599,7 +599,7 @@ void StatusBarManager::Command( const CommandEvent& rEvt )
     if ( m_bDisposed )
         return;
 
-    if ( rEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         sal_uInt16 nId = m_pStatusBar->GetItemId( rEvt.GetMousePosPixel() );
         StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );

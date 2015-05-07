@@ -3268,9 +3268,9 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
 {
     bool bUsed = false;
 
-    if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
+    if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
-        // For COMMAND_CURSORPOS, do as little as possible, because
+        // For CommandEventId::CursorPos, do as little as possible, because
         // with remote VCL, even a ShowCursor will generate another event.
         if ( eMode != SC_INPUT_NONE )
         {
@@ -3285,7 +3285,7 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
             }
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_QUERYCHARPOSITION )
+    else if ( rCEvt.GetCommand() == CommandEventId::QueryCharPosition )
     {
         if ( eMode != SC_INPUT_NONE )
         {
@@ -3358,7 +3358,7 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
 
                     bUsed = true;
 
-                    if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
+                    if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
                     {
                         //  AutoInput after ext text input
 
