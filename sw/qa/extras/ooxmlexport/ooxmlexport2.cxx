@@ -1108,6 +1108,17 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), nShadowTransparence);
 }
 
+DECLARE_OOXMLEXPORT_TEST(NoFillAttrInImagedata, "NoFillAttrInImagedata.docx")
+{
+    //problem was that type and color2 which are v:fill attributes were written in 'v:imagedata'
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "type", "");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "color2", "");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")
 {
     // The problem was that text with empty author was not inserted as a redline
