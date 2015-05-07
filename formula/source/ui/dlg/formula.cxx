@@ -1643,20 +1643,27 @@ void FormulaDlg_Impl::SetEdSelection()
     } // if( pEd )
 }
 
-FormulaModalDialog::FormulaModalDialog( vcl::Window* pParent
-                                            , bool _bSupportFunctionResult
-                                            , bool _bSupportResult
-                                            , bool _bSupportMatrix
-                                            , IFunctionManager* _pFunctionMgr
-                                            , IControlReferenceHandler* _pDlg )
+FormulaModalDialog::FormulaModalDialog(   vcl::Window* pParent
+                                        , bool _bSupportFunctionResult
+                                        , bool _bSupportResult
+                                        , bool _bSupportMatrix
+                                        , IFunctionManager* _pFunctionMgr
+                                        , IControlReferenceHandler* _pDlg )
     : ModalDialog(pParent, "FormulaDialog", "formula/ui/formuladialog.ui")
     , m_pImpl(new FormulaDlg_Impl(this,_bSupportFunctionResult,
-        _bSupportResult, _bSupportMatrix, this, _pFunctionMgr, _pDlg))
+                                  _bSupportResult, _bSupportMatrix,
+                                  this, _pFunctionMgr, _pDlg))
 {
     SetText(m_pImpl->aTitle1);
 }
 
 FormulaModalDialog::~FormulaModalDialog() {}
+
+void FormulaModalDialog::dispose()
+{
+    m_pImpl.reset();
+    ModalDialog::dispose();
+}
 
 void FormulaModalDialog::Update(const OUString& _sExp)
 {
