@@ -96,7 +96,7 @@ SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSFTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
-    return VclPtr<SFTreeListBox>::Create(pParent);
+    return new SFTreeListBox(pParent);
 }
 
 SFTreeListBox::~SFTreeListBox()
