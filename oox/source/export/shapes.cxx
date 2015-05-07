@@ -419,10 +419,16 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
+        bool isVisible = true ;
+        if( GETA (Visible))
+        {
+            mAny >>= isVisible;
+        }
         pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
         pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                 XML_id, I32S( GetNewShapeID( xShape ) ),
                 XML_name, IDS( CustomShape ),
+                XML_hidden, isVisible ? NULL : "1",
                 FSEND );
 
         if( GETA( URL ) )
