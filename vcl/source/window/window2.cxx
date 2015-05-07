@@ -1466,7 +1466,7 @@ void Window::queue_resize(StateChangedType eReason)
         }
     }
 
-    if (bSomeoneCares)
+    if (bSomeoneCares && !mpWindowImpl->mbInDispose)
     {
         //fdo#57090 force a resync of the borders of the borderwindow onto this
         //window in case they have changed
