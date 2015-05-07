@@ -2377,10 +2377,13 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
     }
 }
 
-bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
+bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
                           sal_uInt16 nEvent, const void* pEvent )
 {
     DBG_TESTSOLARMUTEX();
+
+    // Ensure the window survives during this method.
+    VclPtr<vcl::Window> pWindow( _pWindow );
 
     bool nRet = false;
 
