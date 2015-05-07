@@ -359,7 +359,7 @@ void OTableWindowListBox::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             static_cast<OTableWindow*>(Window::GetParent())->Command(rEvt);
             break;

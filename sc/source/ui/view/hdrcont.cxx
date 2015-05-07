@@ -811,8 +811,8 @@ void ScHeaderControl::Tracking( const TrackingEvent& rTEvt )
 
 void ScHeaderControl::Command( const CommandEvent& rCEvt )
 {
-    sal_uInt16 nCmd = rCEvt.GetCommand();
-    if ( nCmd == COMMAND_CONTEXTMENU )
+    CommandEventId nCmd = rCEvt.GetCommand();
+    if ( nCmd == CommandEventId::ContextMenu )
     {
         StopMarking();      // finish selection / dragging
 
@@ -861,7 +861,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
             pViewSh->GetDispatcher()->ExecutePopup( aResId );
         }
     }
-    else if ( nCmd == COMMAND_STARTDRAG )
+    else if ( nCmd == CommandEventId::StartDrag )
     {
         pSelEngine->Command( rCEvt );
     }

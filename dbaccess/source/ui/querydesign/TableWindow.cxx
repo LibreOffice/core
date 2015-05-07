@@ -583,7 +583,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             OJoinController& rController = getDesignView()->getController();
             if(!rController.isReadOnly() && rController.isConnected())

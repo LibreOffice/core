@@ -458,14 +458,14 @@ void SwPagePreviewWin::Command( const CommandEvent& rCEvt )
     bool bCallBase = true;
     switch( rCEvt.GetCommand() )
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
             SfxDispatcher::ExecutePopup();
             bCallBase = false;
         break;
 
-        case COMMAND_WHEEL:
-        case COMMAND_STARTAUTOSCROLL:
-        case COMMAND_AUTOSCROLL:
+        case CommandEventId::Wheel:
+        case CommandEventId::StartAutoScroll:
+        case CommandEventId::AutoScroll:
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if( pData )

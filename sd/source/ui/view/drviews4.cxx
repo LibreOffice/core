@@ -460,7 +460,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     // windows and code on the stack.
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
     bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
-    if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
+    if ( bIsOleActive && ( rCEvt.GetCommand() == CommandEventId::ContextMenu ))
     {
         // Deactivate OLE object
         mpDrawView->UnmarkAll();
@@ -475,7 +475,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
         const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase()));
 
-        if( rCEvt.GetCommand() == COMMAND_PASTESELECTION && !bNativeShow )
+        if( rCEvt.GetCommand() == CommandEventId::PasteSelection && !bNativeShow )
         {
             TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( GetActiveWindow() ) );
 
@@ -503,7 +503,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 }
             }
         }
-        else if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU && !bNativeShow &&
+        else if( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bNativeShow &&
                  pWin != NULL && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
             sal_uInt16 nSdResId = 0;          // ResourceID for popup menu

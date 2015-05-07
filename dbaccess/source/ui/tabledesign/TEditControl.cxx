@@ -1344,7 +1344,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             Point aMenuPos( rEvt.GetMousePosPixel() );
             if (!rEvt.IsMouseEvent())

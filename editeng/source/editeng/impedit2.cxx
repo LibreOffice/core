@@ -347,7 +347,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 {
     GetSelEngine().SetCurView( pView );
     SetActiveView( pView );
-    if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT )
+    if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
     {
         pView->DeleteSelected();
         delete mpIMEInfos;
@@ -360,9 +360,9 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         mpIMEInfos->bWasCursorOverwrite = !pView->IsInsertMode();
         UndoActionStart( EDITUNDO_INSERT );
     }
-    else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
+    else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
     {
-        OSL_ENSURE( mpIMEInfos, "COMMAND_ENDEXTTEXTINPUT => Kein Start ?" );
+        OSL_ENSURE( mpIMEInfos, "CommandEventId::EndExtTextInput => Kein Start ?" );
         if( mpIMEInfos )
         {
             // #102812# convert quotes in IME text
@@ -400,9 +400,9 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         }
         UndoActionEnd( EDITUNDO_INSERT );
     }
-    else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
+    else if ( rCEvt.GetCommand() == CommandEventId::ExtTextInput )
     {
-        OSL_ENSURE( mpIMEInfos, "COMMAND_EXTTEXTINPUT => No Start ?" );
+        OSL_ENSURE( mpIMEInfos, "CommandEventId::ExtTextInput => No Start ?" );
         if( mpIMEInfos )
         {
             const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
@@ -469,10 +469,10 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 pView->HideCursor();
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_INPUTCONTEXTCHANGE )
+    else if ( rCEvt.GetCommand() == CommandEventId::InputContextChange )
     {
     }
-    else if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
+    else if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
         if ( mpIMEInfos && mpIMEInfos->nLen )
         {
@@ -498,7 +498,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             pView->GetWindow()->SetCursorRect();
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE )
+    else if ( rCEvt.GetCommand() == CommandEventId::SelectionChange )
     {
         const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
 
@@ -518,7 +518,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         }
         pView->SetSelection( aSelection );
     }
-    else if ( rCEvt.GetCommand() == COMMAND_PREPARERECONVERSION )
+    else if ( rCEvt.GetCommand() == CommandEventId::PrepareReconversion )
     {
         if ( pView->HasSelection() )
         {
@@ -534,7 +534,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             }
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_QUERYCHARPOSITION )
+    else if ( rCEvt.GetCommand() == CommandEventId::QueryCharPosition )
     {
         if ( mpIMEInfos && mpIMEInfos->nLen )
         {

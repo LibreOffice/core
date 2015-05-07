@@ -759,7 +759,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
     {
         switch( rCmd.GetCommand() )
         {
-            case COMMAND_STARTAUTOSCROLL:
+            case CommandEventId::StartAutoScroll:
             {
                 sal_uInt16 nFlags = 0;
                 if ( pHScrl )
@@ -783,7 +783,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
             }
             break;
 
-            case COMMAND_WHEEL:
+            case CommandEventId::Wheel:
             {
                 const CommandWheelData* pData = rCmd.GetWheelData();
 
@@ -888,7 +888,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
             }
             break;
 
-            case COMMAND_AUTOSCROLL:
+            case CommandEventId::AutoScroll:
             {
                 const CommandScrollData* pData = rCmd.GetAutoScrollData();
                 if ( pData && (pData->GetDeltaX() || pData->GetDeltaY()) )
@@ -908,7 +908,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
     return bRet;
 }
 
-// Note that when called for COMMAND_WHEEL above, despite its name,
+// Note that when called for CommandEventId::Wheel above, despite its name,
 // pVScrl isn't necessarily the vertical scroll bar. Depending on
 // whether the scroll is horizontal or vertical, it is either the
 // horizontal or vertical scroll bar. nY is correspondingly either
