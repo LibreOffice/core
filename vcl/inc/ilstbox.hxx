@@ -250,7 +250,7 @@ protected:
     virtual void    LoseFocus() SAL_OVERRIDE;
 
     bool            SelectEntries( sal_Int32  nSelect, LB_EVENT_TYPE eLET, bool bShift = false, bool bCtrl = false, bool bSelectPosChange = false );
-    void            ImplPaint(sal_Int32 nPos, bool bErase = false, bool bLayout = false);
+    void            ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bErase = false, bool bLayout = false);
     void            ImplDoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bLayout = false);
     void            ImplCalcMetrics();
     void            ImplUpdateEntryMetrics( ImplEntryType& rEntry );
@@ -279,7 +279,7 @@ public:
     sal_uInt16      GetDisplayLineCount() const;
     void            SetEntryFlags( sal_Int32  nPos, long nFlags );
 
-    void            DrawEntry( sal_Int32  nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false, bool bLayout = false );
+    void            DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32  nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false, bool bLayout = false);
 
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
     void            DeselectAll();

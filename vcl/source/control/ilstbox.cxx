@@ -989,15 +989,15 @@ void ImplListBoxWindow::SelectEntry( sal_Int32 nPos, bool bSelect )
                 {
                     //SelectEntryPos( nDeselect, false );
                     GetEntryList()->SelectEntry( nDeselect, false );
-                    if ( IsUpdateMode() && IsReallyVisible() )
-                        ImplPaint( nDeselect, true );
+                    if (IsUpdateMode() && IsReallyVisible())
+                        Invalidate();
                 }
             }
             mpEntryList->SelectEntry( nPos, true );
             mnCurrentPos = nPos;
             if ( ( nPos != LISTBOX_ENTRY_NOTFOUND ) && IsUpdateMode() )
             {
-                ImplPaint( nPos );
+                Invalidate();
                 if ( !IsVisible( nPos ) )
                 {
                     ImplClearLayoutData();
@@ -1017,7 +1017,7 @@ void ImplListBoxWindow::SelectEntry( sal_Int32 nPos, bool bSelect )
         else
         {
             mpEntryList->SelectEntry( nPos, false );
-            ImplPaint( nPos, true );
+            Invalidate();
         }
         mbSelectionChanged = true;
     }
@@ -1148,7 +1148,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
             else if( eLET != LET_TRACKING )
             {
                 ImplHideFocusRect();
-                ImplPaint( nSelect, true );
+                Invalidate();
                 bFocusChanged = true;
             }
         }
@@ -1704,175 +1704,174 @@ void ImplListBoxWindow::SelectEntry( vcl::StringEntryIdentifier _entry )
     }
 }
 
-void ImplListBoxWindow::ImplPaint( sal_Int32 nPos, bool bErase, bool bLayout )
+void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bErase, bool bLayout)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nPos );
-    if( ! pEntry )
+    if (!pEntry)
         return;
 
-    long nWidth  = GetOutputSizePixel().Width();
-    long nY = mpEntryList->GetAddedHeight( nPos, mnTop );
-    Rectangle aRect( Point( 0, nY ), Size( nWidth, pEntry->mnHeight ) );
+    long nWidth = rRenderContext.GetOutputSizePixel().Width();
+    long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
+    Rectangle aRect(Point(0, nY), Size(nWidth, pEntry->mnHeight));
 
-    if( ! bLayout )
+    if (!bLayout)
     {
-        if( mpEntryList->IsEntryPosSelected( nPos ) )
+        if (mpEntryList->IsEntryPosSelected(nPos))
         {
-            SetTextColor( !IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetHighlightTextColor() );
-            SetFillColor( rStyleSettings.GetHighlightColor() );
-            SetTextFillColor( rStyleSettings.GetHighlightColor() );
-            DrawRect( aRect );
+            rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetHighlightTextColor());
+            rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+            rRenderContext.SetTextFillColor(rStyleSettings.GetHighlightColor());
+            rRenderContext.DrawRect(aRect);
         }
         else
         {
-            ImplInitSettings( false, true, false );
-            if( !IsEnabled() )
-                SetTextColor( rStyleSettings.GetDisableColor() );
-            SetTextFillColor();
-            if( bErase )
-                Erase( aRect );
+            ImplInitSettings(false, true, false);
+            if (!IsEnabled())
+                rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+            rRenderContext.SetTextFillColor();
+            if (bErase)
+                rRenderContext.Erase(aRect);
         }
     }
 
-    if ( IsUserDrawEnabled() )
+    if (IsUserDrawEnabled())
     {
         mbInUserDraw = true;
         mnUserDrawEntry = nPos;
         aRect.Left() -= mnLeft;
-        if ( nPos < GetEntryList()->GetMRUCount() )
-            nPos = GetEntryList()->FindEntry( GetEntryList()->GetEntryText( nPos ) );
+        if (nPos < GetEntryList()->GetMRUCount())
+            nPos = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nPos));
         nPos = nPos - GetEntryList()->GetMRUCount();
         sal_Int32 nCurr = mnCurrentPos;
-        if ( mnCurrentPos < GetEntryList()->GetMRUCount() )
-            nCurr = GetEntryList()->FindEntry( GetEntryList()->GetEntryText( nCurr ) );
-        nCurr = sal::static_int_cast<sal_Int32>( nCurr - GetEntryList()->GetMRUCount());
+        if (mnCurrentPos < GetEntryList()->GetMRUCount())
+            nCurr = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nCurr));
+        nCurr = sal::static_int_cast<sal_Int32>(nCurr - GetEntryList()->GetMRUCount());
 
-        UserDrawEvent aUDEvt( this, aRect, nPos, nCurr );
-        userDrawSignal( &aUDEvt );
+        UserDrawEvent aUDEvt(this, aRect, nPos, nCurr);
+        userDrawSignal(&aUDEvt);
         mbInUserDraw = false;
     }
     else
     {
-        DrawEntry( nPos, true, true, false, bLayout );
+        DrawEntry(rRenderContext, nPos, true, true, false, bLayout);
     }
 }
 
-void ImplListBoxWindow::DrawEntry( sal_Int32 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout )
+void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout)
 {
-    const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nPos );
-    if( ! pEntry )
+    const ImplEntryType* pEntry = mpEntryList->GetEntryPtr(nPos);
+    if (!pEntry)
         return;
 
     // when changing this function don't forget to adjust ImplWin::DrawEntry()
 
-    if ( mbInUserDraw )
+    if (mbInUserDraw)
         nPos = mnUserDrawEntry; // real entry, not the matching entry from MRU
 
-    long nY = mpEntryList->GetAddedHeight( nPos, mnTop );
+    long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
     Size aImgSz;
 
-    if( bDrawImage && mpEntryList->HasImages() && !bLayout )
+    if (bDrawImage && mpEntryList->HasImages() && !bLayout)
     {
-        Image aImage = mpEntryList->GetEntryImage( nPos );
-        if( !!aImage )
+        Image aImage = mpEntryList->GetEntryImage(nPos);
+        if (!!aImage)
         {
             aImgSz = aImage.GetSizePixel();
-            Point aPtImg( mnBorder - mnLeft, nY + ( ( pEntry->mnHeight - aImgSz.Height() ) / 2 ) );
+            Point aPtImg(mnBorder - mnLeft, nY + ((pEntry->mnHeight - aImgSz.Height()) / 2));
 
             // pb: #106948# explicit mirroring for calc
-            if ( mbMirroring )
+            if (mbMirroring)
                 // right aligned
                 aPtImg.X() = mnMaxWidth + mnBorder - aImgSz.Width() - mnLeft;
 
-            if ( !IsZoom() )
+            if (!IsZoom())
             {
-                DrawImage( aPtImg, aImage );
+                rRenderContext.DrawImage(aPtImg, aImage);
             }
             else
             {
-                aImgSz.Width() = CalcZoom( aImgSz.Width() );
-                aImgSz.Height() = CalcZoom( aImgSz.Height() );
-                DrawImage( aPtImg, aImgSz, aImage );
+                aImgSz.Width() = CalcZoom(aImgSz.Width());
+                aImgSz.Height() = CalcZoom(aImgSz.Height());
+                rRenderContext.DrawImage(aPtImg, aImgSz, aImage);
             }
 
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
 
-            if(nEdgeBlendingPercent && aImgSz.Width() && aImgSz.Height())
+            if (nEdgeBlendingPercent && aImgSz.Width() && aImgSz.Height())
             {
                 const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
                 const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
                 const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
                 const BitmapEx aBlendFrame(createBlendFrame(aImgSz, nAlpha, rTopLeft, rBottomRight));
 
-                if(!aBlendFrame.IsEmpty())
+                if (!aBlendFrame.IsEmpty())
                 {
-                    DrawBitmapEx(aPtImg, aBlendFrame);
+                    rRenderContext.DrawBitmapEx(aPtImg, aBlendFrame);
                 }
             }
         }
     }
 
-    if( bDrawText )
+    if (bDrawText)
     {
         MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
         OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
-        OUString aStr( mpEntryList->GetEntryText( nPos ) );
-        if ( !aStr.isEmpty() )
+        OUString aStr(mpEntryList->GetEntryText(nPos));
+        if (!aStr.isEmpty())
         {
-            long nMaxWidth = std::max( static_cast< long >( mnMaxWidth ),
-                                  GetOutputSizePixel().Width() - 2*mnBorder );
+            long nMaxWidth = std::max(static_cast< long >(mnMaxWidth), rRenderContext.GetOutputSizePixel().Width() - 2 * mnBorder);
             // a multiline entry should only be as wide a the window
-            if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE) )
-                nMaxWidth = GetOutputSizePixel().Width() - 2*mnBorder;
+            if ((pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE))
+                nMaxWidth = rRenderContext.GetOutputSizePixel().Width() - 2 * mnBorder;
 
-            Rectangle aTextRect( Point( mnBorder - mnLeft, nY ),
-                                 Size( nMaxWidth, pEntry->mnHeight ) );
+            Rectangle aTextRect(Point(mnBorder - mnLeft, nY),
+                                Size(nMaxWidth, pEntry->mnHeight));
 
-            if( !bDrawTextAtImagePos && ( mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled() ) )
+            if (!bDrawTextAtImagePos && (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled()))
             {
-                long nImageWidth = std::max( mnMaxImgWidth, maUserItemSize.Width() );
+                long nImageWidth = std::max(mnMaxImgWidth, maUserItemSize.Width());
                 aTextRect.Left() += nImageWidth + IMG_TXT_DISTANCE;
             }
 
-            if( bLayout )
-                mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.getLength() );
+            if (bLayout)
+                mpControlData->mpLayoutData->m_aLineIndices.push_back(mpControlData->mpLayoutData->m_aDisplayText.getLength());
 
             // pb: #106948# explicit mirroring for calc
-            if ( mbMirroring )
+            if (mbMirroring)
             {
                 // right aligned
-                aTextRect.Left() = nMaxWidth + mnBorder - GetTextWidth( aStr ) - mnLeft;
-                if ( aImgSz.Width() > 0 )
-                    aTextRect.Left() -= ( aImgSz.Width() + IMG_TXT_DISTANCE );
+                aTextRect.Left() = nMaxWidth + mnBorder - rRenderContext.GetTextWidth(aStr) - mnLeft;
+                if (aImgSz.Width() > 0)
+                    aTextRect.Left() -= (aImgSz.Width() + IMG_TXT_DISTANCE);
             }
 
             sal_uInt16 nDrawStyle = ImplGetTextStyle();
-            if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE) )
+            if ((pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE))
                 nDrawStyle |= MULTILINE_ENTRY_DRAW_FLAGS;
-            if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_DRAW_DISABLED) )
+            if ((pEntry->mnFlags & LISTBOX_ENTRY_FLAG_DRAW_DISABLED))
                 nDrawStyle |= TEXT_DRAW_DISABLE;
 
-            DrawText( aTextRect, aStr, nDrawStyle, pVector, pDisplayText );
+            rRenderContext.DrawText(aTextRect, aStr, nDrawStyle, pVector, pDisplayText);
         }
     }
 
-    if( !bLayout )
+    if (!bLayout)
     {
-        if ( ( mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND ) &&
-             ( ( nPos == mnSeparatorPos ) || ( nPos == mnSeparatorPos+1 ) ) )
+        if ((mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND) &&
+            ((nPos == mnSeparatorPos) || (nPos == mnSeparatorPos + 1)))
         {
-            Color aOldLineColor( GetLineColor() );
-            SetLineColor( ( GetBackground().GetColor() != COL_LIGHTGRAY ) ? COL_LIGHTGRAY : COL_GRAY );
-            Point aStartPos( 0, nY );
-            if ( nPos == mnSeparatorPos )
-                aStartPos.Y() += pEntry->mnHeight-1;
-            Point aEndPos( aStartPos );
+            Color aOldLineColor(rRenderContext.GetLineColor());
+            rRenderContext.SetLineColor((GetBackground().GetColor() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
+            Point aStartPos(0, nY);
+            if (nPos == mnSeparatorPos)
+                aStartPos.Y() += pEntry->mnHeight - 1;
+            Point aEndPos(aStartPos);
             aEndPos.X() = GetOutputSizePixel().Width();
-            DrawLine( aStartPos, aEndPos );
-            SetLineColor( aOldLineColor );
+            rRenderContext.DrawLine(aStartPos, aEndPos);
+            rRenderContext.SetLineColor(aOldLineColor);
         }
     }
 }
@@ -1883,33 +1882,33 @@ void ImplListBoxWindow::FillLayoutData() const
     const_cast<ImplListBoxWindow*>(this)->Invalidate(Rectangle(Point(0, 0), GetOutputSize()));
 }
 
-void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect, bool bLayout)
+void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bLayout)
 {
     sal_Int32 nCount = mpEntryList->GetEntryCount();
 
     bool bShowFocusRect = mbHasFocusRect;
-    if ( mbHasFocusRect && ! bLayout )
+    if (mbHasFocusRect && !bLayout)
         ImplHideFocusRect();
 
     long nY = 0; // + mnBorder;
     long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
 
-    for( sal_Int32 i = (sal_Int32)mnTop; i < nCount && nY < nHeight + mnMaxHeight; i++ )
+    for (sal_Int32 i = (sal_Int32)mnTop; i < nCount && nY < nHeight + mnMaxHeight; i++)
     {
-        const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( i );
-        if( nY + pEntry->mnHeight >= rRect.Top() &&
-            nY <= rRect.Bottom() + mnMaxHeight )
+        const ImplEntryType* pEntry = mpEntryList->GetEntryPtr(i);
+        if (nY + pEntry->mnHeight >= rRect.Top() &&
+            nY <= rRect.Bottom() + mnMaxHeight)
         {
-            ImplPaint( i, false, bLayout );
+            ImplPaint(rRenderContext, i, false, bLayout);
         }
         nY += pEntry->mnHeight;
     }
 
-    long nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop, 0 );
-    maFocusRect.SetPos( Point( 0, nHeightDiff ) );
-    Size aSz( maFocusRect.GetWidth(), mpEntryList->GetEntryHeight( mnCurrentPos ) );
-    maFocusRect.SetSize( aSz );
-    if( HasFocus() && bShowFocusRect && !bLayout )
+    long nHeightDiff = mpEntryList->GetAddedHeight(mnCurrentPos, mnTop, 0);
+    maFocusRect.SetPos(Point(0, nHeightDiff));
+    Size aSz(maFocusRect.GetWidth(), mpEntryList->GetEntryHeight(mnCurrentPos));
+    maFocusRect.SetSize(aSz);
+    if (HasFocus() && bShowFocusRect && !bLayout)
         ImplShowFocusRect();
 }
 
@@ -2126,11 +2125,11 @@ sal_uInt16 ImplListBoxWindow::ImplGetTextStyle() const
 {
     sal_uInt16 nTextStyle = TEXT_DRAW_VCENTER;
 
-    if ( mpEntryList->HasImages() )
+    if (mpEntryList->HasImages())
         nTextStyle |= TEXT_DRAW_LEFT;
-    else if ( mbCenter )
+    else if (mbCenter)
         nTextStyle |= TEXT_DRAW_CENTER;
-    else if ( mbRight )
+    else if (mbRight)
         nTextStyle |= TEXT_DRAW_RIGHT;
     else
         nTextStyle |= TEXT_DRAW_LEFT;

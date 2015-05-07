@@ -1377,12 +1377,12 @@ void ListBox::UserDraw( const UserDrawEvent& )
 {
 }
 
-void ListBox::DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos )
+void ListBox::DrawEntry(const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos)
 {
-    if ( rEvt.GetDevice() == mpImplLB->GetMainWindow() )
-        mpImplLB->GetMainWindow()->DrawEntry( rEvt.GetItemId(), bDrawImage, bDrawText, bDrawTextAtImagePos );
-    else if ( rEvt.GetDevice() == mpImplWin )
-        mpImplWin->DrawEntry( bDrawImage, bDrawText, bDrawTextAtImagePos );
+    if (rEvt.GetDevice() == mpImplLB->GetMainWindow())
+        mpImplLB->GetMainWindow()->DrawEntry(*rEvt.GetDevice(), rEvt.GetItemId(), bDrawImage, bDrawText, bDrawTextAtImagePos );
+    else if (rEvt.GetDevice() == mpImplWin)
+        mpImplWin->DrawEntry(bDrawImage, bDrawText, bDrawTextAtImagePos);
 }
 
 void ListBox::SetUserItemSize( const Size& rSz )
