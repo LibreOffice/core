@@ -942,16 +942,16 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
             libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
         }
 
-        unsigned char nCursorDir = CURSOR_DIRECTION_NONE;
+        CursorDirection nCursorDir = CursorDirection::NONE;
         if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
         {
             sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, (nShowCursorFlags & GETCRSR_PREFERPORTIONSTART) != 0 );
             const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
             if ( nRTLLevel%2 )
-                nCursorDir = CURSOR_DIRECTION_RTL;
+                nCursorDir = CursorDirection::RTL;
             else
-                nCursorDir = CURSOR_DIRECTION_LTR;
+                nCursorDir = CursorDirection::LTR;
 
         }
         GetCursor()->SetDirection( nCursorDir );

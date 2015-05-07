@@ -35,8 +35,8 @@ struct ImplCursorData
     Size            maPixSize;          // Pixel-Size
     long            mnPixSlant;         // Pixel-Slant
     short           mnOrientation;      // Pixel-Orientation
-    unsigned char   mnDirection;        // indicates writing direction
-    sal_uInt16          mnStyle;            // Cursor-Style
+    CursorDirection mnDirection;        // indicates writing direction
+    sal_uInt16      mnStyle;            // Cursor-Style
     bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
     VclPtr<vcl::Window> mpWindow;           // Zugeordnetes Windows
 };
@@ -53,7 +53,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
         nInvertStyle = 0;
 
     Rectangle aRect( pData->maPixPos, pData->maPixSize );
-    if ( pData->mnDirection || pData->mnOrientation || pData->mnPixSlant )
+    if ( pData->mnDirection != CursorDirection::NONE || pData->mnOrientation || pData->mnPixSlant )
     {
         Polygon aPoly( aRect );
         if( aPoly.GetSize() == 5 )
@@ -72,11 +72,11 @@ static void ImplCursorInvert( ImplCursorData* pData )
             }
 
             // apply direction flag after slant to use the correct shape
-            if ( pData->mnDirection )
+            if ( pData->mnDirection != CursorDirection::NONE)
             {
                 Point pAry[7];
                 int delta = 3*aRect.getWidth()+1;
-                if( pData->mnDirection == CURSOR_DIRECTION_LTR )
+                if( pData->mnDirection == CursorDirection::LTR )
                 {
                     // left-to-right
                     pAry[0] = aPoly.GetPoint( 0 );
@@ -89,7 +89,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
                     pAry[5] = aPoly.GetPoint( 3 );
                     pAry[6] = aPoly.GetPoint( 4 );
                 }
-                else if( pData->mnDirection == CURSOR_DIRECTION_RTL )
+                else if( pData->mnDirection == CursorDirection::RTL )
                 {
                     // right-to-left
                     pAry[0] = aPoly.GetPoint( 0 );
@@ -260,7 +260,7 @@ vcl::Cursor::Cursor()
     mpWindow        = NULL;
     mnSlant         = 0;
     mnOrientation   = 0;
-    mnDirection     = 0;
+    mnDirection     = CursorDirection::NONE;
     mnStyle         = 0;
     mbVisible       = false;
 }
@@ -361,7 +361,7 @@ void vcl::Cursor::SetOrientation( short nNewOrientation )
     }
 }
 
-void vcl::Cursor::SetDirection( unsigned char nNewDirection )
+void vcl::Cursor::SetDirection( CursorDirection nNewDirection )
 {
     if ( mnDirection != nNewDirection )
     {

@@ -31,9 +31,11 @@ namespace vcl { class Window; }
 
 // Cursor styles
 #define CURSOR_SHADOW                   ((sal_uInt16)0x0001)
-#define CURSOR_DIRECTION_NONE           ((unsigned char)0x00)
-#define CURSOR_DIRECTION_LTR            ((unsigned char)0x01)
-#define CURSOR_DIRECTION_RTL            ((unsigned char)0x02)
+
+enum class CursorDirection
+{
+    NONE, LTR, RTL
+};
 
 namespace vcl
 {
@@ -49,7 +51,7 @@ private:
     short           mnOrientation;
     sal_uInt16      mnStyle;
     bool            mbVisible;
-    unsigned char   mnDirection;
+    CursorDirection mnDirection;
 
 public:
     SAL_DLLPRIVATE void         ImplDraw();
@@ -90,8 +92,8 @@ public:
     void            SetOrientation( short nOrientation = 0 );
     short           GetOrientation() const { return mnOrientation; }
 
-    void            SetDirection( unsigned char nDirection = 0 );
-    unsigned char   GetDirection() const { return mnDirection; }
+    void            SetDirection( CursorDirection nDirection = CursorDirection::NONE );
+    CursorDirection GetDirection() const { return mnDirection; }
 
     Cursor&         operator=( const Cursor& rCursor );
     bool            operator==( const Cursor& rCursor ) const;
