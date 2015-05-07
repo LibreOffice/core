@@ -1568,14 +1568,15 @@ void SvxConfigPage::dispose()
     m_pContents.clear();
     m_pContentsLabel.clear();
     m_pEntries.clear();
-    m_pContentsListBox.disposeAndClear();
     m_pAddCommandsButton.clear();
     m_pModifyCommandButton.clear();
     m_pMoveUpButton.clear();
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
     m_pDescriptionField.clear();
+
     m_pSelectorDlg.disposeAndClear();
+    m_pContentsListBox.disposeAndClear();
     SfxTabPage::dispose();
 }
 
@@ -2272,8 +2273,6 @@ void SvxMenuConfigPage::dispose()
     }
     m_pSaveInListBox->Clear();
 
-    m_pSelectorDlg.clear();
-    m_pContentsListBox.clear();
     SvxConfigPage::dispose();
 }
 
@@ -2974,8 +2973,6 @@ void SvxToolbarConfigPage::dispose()
     }
     m_pSaveInListBox->Clear();
 
-    m_pSelectorDlg.disposeAndClear();
-    m_pContentsListBox.disposeAndClear();
     SvxConfigPage::dispose();
 }
 
