@@ -259,9 +259,7 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
     if (!fnCreatePage)
         return NULL;
 
-    VclPtr<SfxTabPage> pPage =
-        VclPtr<SfxTabPage>((*fnCreatePage)(pParent, &rOptions),
-                           SAL_NO_ACQUIRE);
+    VclPtr<SfxTabPage> pPage = fnCreatePage(pParent, &rOptions);
     OSL_ENSURE(pPage, "No page");
     if (!pPage)
         return NULL;

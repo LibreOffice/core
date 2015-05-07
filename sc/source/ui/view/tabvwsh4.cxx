@@ -1067,10 +1067,9 @@ VclPtr<SfxTabPage> ScTabViewShell::CreatePrintOptionsPage( vcl::Window *pParent,
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-    ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
+    ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
     if ( ScTpPrintOptionsCreate )
-        return VclPtr<SfxTabPage>((*ScTpPrintOptionsCreate)( pParent, &rOptions),
-                                  SAL_NO_ACQUIRE);
+        return ScTpPrintOptionsCreate( pParent, &rOptions );
     return VclPtr<SfxTabPage>();
 }
 

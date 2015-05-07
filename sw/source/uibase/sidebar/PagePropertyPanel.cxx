@@ -95,13 +95,9 @@ VclPtr<vcl::Window> PagePropertyPanel::Create (
     if (pBindings == NULL)
         throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
-    return VclPtr<vcl::Window>(
-                VclPtr<PagePropertyPanel>::Create(
-
-                        pParent,
-                        rxFrame,
-                        pBindings),
-                SAL_NO_ACQUIRE);
+    return VclPtr<PagePropertyPanel>::Create( pParent,
+                                              rxFrame,
+                                              pBindings);
 }
 
 PagePropertyPanel::PagePropertyPanel(
