@@ -1657,7 +1657,7 @@ FormulaModalDialog::FormulaModalDialog(   vcl::Window* pParent
     SetText(m_pImpl->aTitle1);
 }
 
-FormulaModalDialog::~FormulaModalDialog() {}
+FormulaModalDialog::~FormulaModalDialog() { disposeOnce(); }
 
 void FormulaModalDialog::dispose()
 {
