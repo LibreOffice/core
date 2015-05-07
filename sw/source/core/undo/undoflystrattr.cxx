@@ -20,6 +20,7 @@
 #include <undoflystrattr.hxx>
 #include <frmfmt.hxx>
 
+
 SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
                                     const SwUndoId eUndoId,
                                     const OUString& sOldStr,
@@ -29,9 +30,8 @@ SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
       msOldStr( sOldStr ),
       msNewStr( sNewStr )
 {
-    OSL_ENSURE( eUndoId == UNDO_FLYFRMFMT_TITLE ||
-            eUndoId == UNDO_FLYFRMFMT_DESCRIPTION,
-            "<SwUndoFlyStrAttr::SwUndoFlyStrAttr(..)> - unexpected undo id --> Undo will not work" );
+    assert(eUndoId == UNDO_FLYFRMFMT_TITLE
+        || eUndoId == UNDO_FLYFRMFMT_DESCRIPTION);
 }
 
 SwUndoFlyStrAttr::~SwUndoFlyStrAttr()
