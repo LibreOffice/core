@@ -179,15 +179,14 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                         delete pGraphicStream;
                         pGraphicStream =
                                 ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
-                        if( rGF.ImportGraphic( aGr2, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                        if( pGraphicStream && rGF.ImportGraphic( aGr2, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                         {
                             if ( aGr1 == aGr2 )
                                 bGraphicNeeded = false;
                         }
                     }
                 }
-                else
-                    delete pGraphicStream;
+                delete pGraphicStream;
             }
 
             delete pRet;
