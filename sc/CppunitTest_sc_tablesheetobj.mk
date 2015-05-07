@@ -101,6 +101,9 @@ $(eval $(call gb_CppunitTest_use_components,sc_tablesheetobj,\
     unoxml/source/service/unoxml \
     xmloff/util/xo \
 	svtools/util/svt \
+	embeddedobj/util/embobj \
+    chart2/source/chartcore \
+    chart2/source/controller/chartcontroller \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_tablesheetobj))

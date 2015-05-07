@@ -15,6 +15,10 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
+#include "docsh.hxx"
+#include "tabvwsh.hxx"
+#include "document.hxx"
+
 using namespace css;
 using namespace css::uno;
 
@@ -30,6 +34,7 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
+    void testCopyPasteXLS();
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
     CPPUNIT_TEST(testFindAll);
@@ -40,6 +45,7 @@ public:
     // XPrintAreas
     CPPUNIT_TEST(testSetAndGetPrintTitleColumns);
     CPPUNIT_TEST(testSetAndGetPrintTitleRows);
+    CPPUNIT_TEST(testCopyPasteXLS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -68,6 +74,70 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     return xSheet;
 }
 
+// tdf#83366
+void ScTableSheetObj::testCopyPasteXLS()
+{
+    OUString aFileURL;
+    const OString sFailedMessage = OString("Failed on :");
+    createFileURL(OUString("DemoSummerOlympics.xls"), aFileURL);
+    uno::Reference< com::sun::star::lang::XComponent > xComponent =
+        loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh != NULL);
+
+    // 1. Open the document
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != NULL);
+
+    // 2. Highlight I5:I24
+    ScRange aSrcRange;
+    sal_uInt16 nRes = aSrcRange.Parse("I5:I24", &rDoc, rDoc.GetAddressConvention());
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+
+    ScMarkData aMark;
+    aMark.SetMarkArea(aSrcRange);
+
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+
+    // 3. Copy
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
+
+    // 4. Close the document (Ctrl-W)
+    closeDocument(xComponent);
+    xComponent.clear();
+
+    // 5. Create a new Spreadsheet
+    xComponent = loadFromDesktop("private:factory/scalc");
+
+    // Get the document model
+    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh != NULL);
+
+    // Get the document controller
+    pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != NULL);
+
+    // 6. Paste
+    pViewShell->GetViewData().GetView()->PasteFromClip(IDF_ALL, &aClipDoc);
+
+    closeDocument(xComponent);
+    xComponent.clear();
+}
+
 void ScTableSheetObj::setUp()
 {
     CalcUnoApiTest::setUp();
@@ -75,8 +145,11 @@ void ScTableSheetObj::setUp()
 
 void ScTableSheetObj::tearDown()
 {
-    closeDocument(mxComponent);
-    mxComponent.clear();
+    if (mxComponent.is())
+    {
+        closeDocument(mxComponent);
+        mxComponent.clear();
+    }
 
     CalcUnoApiTest::tearDown();
 }
