@@ -76,13 +76,13 @@ private:
     SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
     SAL_DLLPRIVATE long         ImplCalcThumbPosPix( long nPos );
     SAL_DLLPRIVATE void         ImplCalc( bool bUpdate = true );
-    SAL_DLLPRIVATE void         ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev  );
+    SAL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags);
     using Window::ImplScroll;
     SAL_DLLPRIVATE long         ImplScroll( long nNewPos, bool bCallEndScroll );
     SAL_DLLPRIVATE long         ImplDoAction( bool bCallEndScroll );
     SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE void         ImplInvert();
-    SAL_DLLPRIVATE bool     ImplDrawNative( sal_uInt16 nDrawFlags );
+    SAL_DLLPRIVATE bool         ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags);
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
     SAL_DLLPRIVATE Size         getCurrentCalcSize() const;
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, Timer* );
