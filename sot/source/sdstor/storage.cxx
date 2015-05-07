@@ -337,12 +337,12 @@ SotStorage::SotStorage( const OUString & rName, StreamMode nMode, bool transacte
     INIT_SotStorage()
 {
     m_aName = rName; // Namen merken
-    CreateStorage( true, nMode, transacted ? StorageMode::Transacted : StorageMode::Default );
+    CreateStorage( true, nMode, transacted );
     if ( IsOLEStorage() )
         m_nVersion = SOFFICE_FILEFORMAT_50;
 }
 
-void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, StorageMode nStorageMode  )
+void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, bool transacted )
 {
     DBG_ASSERT( !m_pStorStm && !m_pOwnStg, "Use only in ctor!" );
     if( !m_aName.isEmpty() )
@@ -378,31 +378,31 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
                 if ( !(UCBStorage::GetLinkedFile( *m_pStorStm ).isEmpty()) )
                 {
                     // detect special unpacked storages
-                    m_pOwnStg = new UCBStorage( *m_pStorStm, !(nStorageMode & StorageMode::Transacted) );
+                    m_pOwnStg = new UCBStorage( *m_pStorStm, !transacted );
                     m_bDelStm = true;
                 }
                 else
                 {
                     // UCBStorage always works directly on the UCB content, so discard the stream first
                     DELETEZ( m_pStorStm );
-                    m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
+                    m_pOwnStg = new UCBStorage( m_aName, nMode, !transacted );
                 }
             }
             else
             {
                 // OLEStorage can be opened with a stream
-                m_pOwnStg = new Storage( *m_pStorStm, !(nStorageMode & StorageMode::Transacted) );
+                m_pOwnStg = new Storage( *m_pStorStm, !transacted );
                 m_bDelStm = true;
             }
         }
         else if ( bForceUCBStorage )
         {
-            m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
+            m_pOwnStg = new UCBStorage( m_aName, nMode, !transacted );
             SetError( ERRCODE_IO_NOTSUPPORTED );
         }
         else
         {
-            m_pOwnStg = new Storage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
+            m_pOwnStg = new Storage( m_aName, nMode, !transacted );
             SetError( ERRCODE_IO_NOTSUPPORTED );
         }
     }
@@ -410,9 +410,9 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
     {
         // temporary storage
         if ( bForceUCBStorage )
-            m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
+            m_pOwnStg = new UCBStorage( m_aName, nMode, !transacted );
         else
-            m_pOwnStg = new Storage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
+            m_pOwnStg = new Storage( m_aName, nMode, !transacted );
         m_aName = m_pOwnStg->GetName();
     }
 
@@ -425,7 +425,7 @@ SotStorage::SotStorage( bool bUCBStorage, const OUString & rName, StreamMode nMo
     INIT_SotStorage()
 {
     m_aName = rName;
-    CreateStorage( bUCBStorage, nMode, StorageMode::Default );
+    CreateStorage( bUCBStorage, nMode, false );
     if ( IsOLEStorage() )
         m_nVersion = SOFFICE_FILEFORMAT_50;
 }

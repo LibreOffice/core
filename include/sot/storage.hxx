@@ -25,25 +25,12 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <o3tl/typed_flags_set.hxx>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
 #include <tools/stream.hxx>
 #include <tools/errcode.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
-
-enum class StorageMode {
-    Default = 0,
-    Transacted = 0x04
-};
-
-namespace o3tl {
-
-template<> struct typed_flags<StorageMode>: is_typed_flags<StorageMode, 0x04>
-{};
-
-}
 
 class SotStorage;
 
@@ -111,7 +98,7 @@ friend class SotStorage;
 
 protected:
                         virtual ~SotStorage();
-   void                 CreateStorage( bool bUCBStorage, StreamMode, StorageMode );
+   void                 CreateStorage( bool bUCBStorage, StreamMode, bool transacted );
 public:
                         SotStorage( const OUString &,
                                     StreamMode = STREAM_STD_READWRITE,
