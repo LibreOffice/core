@@ -897,13 +897,23 @@ void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
     }
 }
 
-ImplSVEvent * Application::PostUserEvent( const Link<>& rLink, void* pCaller )
+ImplSVEvent * Application::PostUserEvent( const Link<>& rLink, void* pCaller,
+                                          bool bReferenceLink )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
     pSVEvent->mpLink    = new Link<>( rLink );
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = true;
+    if (bReferenceLink)
+    {
+        // Double check that this is indeed a vcl::Window instance.
+        assert(dynamic_cast<vcl::Window *>(
+                        reinterpret_cast<vcl::Window *>(rLink.GetInstance())) ==
+               reinterpret_cast<vcl::Window *>(rLink.GetInstance()));
+        pSVEvent->mpInstanceRef = reinterpret_cast<vcl::Window *>(rLink.GetInstance());
+    }
+
     vcl::Window* pDefWindow = ImplGetDefaultWindow();
     if ( pDefWindow == 0 || !pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
     {

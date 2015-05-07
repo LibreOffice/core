@@ -865,10 +865,12 @@ public:
 
      @param     rLink           Link to event callback function
      @param     pCaller         Pointer to data sent to the event by the caller. Optional.
+     @param     bReferenceLink  If true - hold a VclPtr<> reference on the Link's instance.
 
      @return the event ID used to post the event.
     */
-    static ImplSVEvent * PostUserEvent( const Link<>& rLink, void* pCaller = NULL );
+    static ImplSVEvent * PostUserEvent( const Link<>& rLink, void* pCaller = NULL,
+                                        bool bReferenceLink = false );
 
     /** Remove user event based on event ID
 

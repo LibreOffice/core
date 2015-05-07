@@ -263,13 +263,22 @@ void Window::RemoveChildEventListener( const Link<>& rEventListener )
     mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
 }
 
-ImplSVEvent * Window::PostUserEvent( const Link<>& rLink, void* pCaller )
+ImplSVEvent * Window::PostUserEvent( const Link<>& rLink, void* pCaller, bool bReferenceLink )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
     pSVEvent->mpLink    = new Link<>( rLink );
     pSVEvent->mpWindow  = this;
     pSVEvent->mbCall    = true;
+    if (bReferenceLink)
+    {
+        // Double check that this is indeed a vcl::Window instance.
+        assert(dynamic_cast<vcl::Window *>(
+                        reinterpret_cast<vcl::Window *>(rLink.GetInstance())) ==
+               reinterpret_cast<vcl::Window *>(rLink.GetInstance()));
+        pSVEvent->mpInstanceRef = reinterpret_cast<vcl::Window *>(rLink.GetInstance());
+    }
+
     ImplAddDel( &(pSVEvent->maDelData) );
     if ( !mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
     {

@@ -728,7 +728,7 @@ public:
     void                                AddChildEventListener( const Link<>& rEventListener );
     void                                RemoveChildEventListener( const Link<>& rEventListener );
 
-    ImplSVEvent *                       PostUserEvent( const Link<>& rLink, void* pCaller = NULL );
+    ImplSVEvent *                       PostUserEvent( const Link<>& rLink, void* pCaller = NULL, bool bReferenceLink = false );
     void                                RemoveUserEvent( ImplSVEvent * nUserEvent );
 
     void                                IncrementLockCount();
