@@ -3294,6 +3294,12 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     paintTile( aDevice, nOutputWidth, nOutputHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight );
     #else
     // TODO: support other platforms
+    (void)nOutputWidth;
+    (void)nOutputHeight;
+    (void)nTilePosX;
+    (void)nTilePosY;
+    (void)nTileWidth;
+    (void)nTileHeight;
     #endif
 }
 
