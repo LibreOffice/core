@@ -99,7 +99,7 @@ void Window::ImplCalcSymbolRect( Rectangle& rRect )
 
 } /* namespace vcl */
 
-static void ImplDrawBrdWinSymbol( OutputDevice* pDev,
+static void ImplDrawBrdWinSymbol( vcl::RenderContext* pDev,
                                   const Rectangle& rRect, SymbolType eSymbol )
 {
     // we leave 5% room between the symbol and the button border
@@ -110,7 +110,7 @@ static void ImplDrawBrdWinSymbol( OutputDevice* pDev,
                           pDev->GetSettings().GetStyleSettings().GetButtonTextColor(), 0 );
 }
 
-static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
+static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
                                         const Rectangle& rRect,
                                         SymbolType eSymbol, sal_uInt16 nState )
 {
@@ -124,9 +124,9 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
         if( bMouseOver )
         {
             // provide a bright background for selection effect
-            pWin->SetFillColor( pDev->GetSettings().GetStyleSettings().GetWindowColor() );
-            pWin->SetLineColor();
-            pWin->DrawRect( rRect );
+            pDev->SetFillColor( pDev->GetSettings().GetStyleSettings().GetWindowColor() );
+            pDev->SetLineColor();
+            pDev->DrawRect( rRect );
             pWin->DrawSelectionBackground( rRect, 2, (nState & BUTTON_DRAW_PRESSED) != 0,
                                             true, false );
         }
