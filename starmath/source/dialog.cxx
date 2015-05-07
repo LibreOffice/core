@@ -2196,9 +2196,6 @@ void SmSymDefineDialog::dispose()
 
 void SmSymDefineDialog::InitColor_Impl()
 {
-#if OSL_DEBUG_LEVEL > 1
-    Color aBC( GetDisplayBackground().GetColor() );
-#endif
     ColorData   nBgCol  = COL_WHITE,
                 nTxtCol = COL_BLACK;
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
