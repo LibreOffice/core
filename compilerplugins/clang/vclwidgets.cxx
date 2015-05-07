@@ -179,7 +179,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     if (foundVclPtrField && pCompoundStatement && pCompoundStatement->size() == 0) {
         report(
             DiagnosticsEngine::Warning,
-            "OutputDevice subclass with VclPtr field must call dispose() from it's destructor.",
+            "OutputDevice subclass with VclPtr field must call dispose() from its destructor.",
             pCXXDestructorDecl->getLocStart())
           << pCXXDestructorDecl->getSourceRange();
         return true;
@@ -378,7 +378,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
             if (!isDisposeCallingSuperclassDispose(pMethodDecl)) {
                 report(
                     DiagnosticsEngine::Warning,
-                    "OutputDevice subclass dispose() method MUST call it's superclass dispose() as the last thing it does",
+                    "OutputDevice subclass dispose() method MUST call dispose() of its superclass as the last thing it does",
                     functionDecl->getLocStart())
                   << functionDecl->getSourceRange();
            }
