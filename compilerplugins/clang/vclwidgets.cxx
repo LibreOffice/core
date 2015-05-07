@@ -184,7 +184,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
           << pCXXDestructorDecl->getSourceRange();
         return true;
     }
-    // check that the destructor for a OutputDevice subclass does nothing except call into the dispose() method
+    // check that the destructor for a OutputDevice subclass does nothing except call into the disposeOnce() method
     bool ok = false;
     if (pCompoundStatement && pCompoundStatement->size() == 1) {
         const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_begin());
