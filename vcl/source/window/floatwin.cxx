@@ -186,7 +186,11 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
 FloatingWindow::~FloatingWindow()
 {
     disposeOnce();
-    assert (!mnPostId);
+
+    // Unfortunately the vclwidgets clang plug-in says: "OutputDevice
+    // subclass should have nothing in its destructor but a call to
+    // disposeOnce()."
+    // assert (!mnPostId);
 }
 
 void FloatingWindow::dispose()
