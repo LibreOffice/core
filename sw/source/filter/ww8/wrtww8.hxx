@@ -1543,8 +1543,8 @@ public:
 class MSWordStyles
 {
     MSWordExportBase& m_rExport;
-    SwFmt** pFmtA; ///< Slot <-> Character and paragraph style array (0 for list styles).
-    sal_uInt16 nUsedSlots;
+    SwFmt** m_pFmtA; ///< Slot <-> Character and paragraph style array (0 for list styles).
+    sal_uInt16 m_nUsedSlots;
     bool m_bListStyles; ///< If list styles are requested to be exported as well.
     std::map<sal_uInt16, const SwNumRule*> m_aNumRules; ///< Slot <-> List style map.
 
@@ -1559,7 +1559,7 @@ class MSWordStyles
 
     /// Get slot number during building the style table.
     sal_uInt16 BuildGetSlot( const SwFmt& rFmt );
-    sal_uInt16 BuildGetSlot( const SwNumRule& /*rNumRule*/ ) { return nUsedSlots++;}
+    sal_uInt16 BuildGetSlot( const SwNumRule& /*rNumRule*/ ) { return m_nUsedSlots++;}
 
     /// Return information about one style.
     void GetStyleData( SwFmt* pFmt, bool& bFmtColl, sal_uInt16& nBase, sal_uInt16& nNext );
@@ -1591,7 +1591,7 @@ public:
     /// Get styleId of the nId-th style (nId is its position in pFmtA).
     OString GetStyleId(sal_uInt16 nId) const;
 
-    const SwFmt* GetSwFmt(sal_uInt16 nId) const { return pFmtA[nId]; }
+    const SwFmt* GetSwFmt(sal_uInt16 nId) const { return m_pFmtA[nId]; }
     /// Get numbering rule of the nId-th style
     const SwNumRule* GetSwNumRule(sal_uInt16 nId) const;
 };
