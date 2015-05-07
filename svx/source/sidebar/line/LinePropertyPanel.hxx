@@ -97,7 +97,7 @@ private:
     VclPtr<ToolBox>     mpTBWidth;
     VclPtr<FixedText>   mpFTStyle;
     VclPtr<ListBox>     mpLBStyle;
-    VclPtr<FixedText>   mpFTTrancparency;
+    VclPtr<FixedText>   mpFTTransparency;
     VclPtr<MetricField> mpMFTransparent;
     VclPtr<FixedText>   mpFTArrow;
     VclPtr<ListBox>     mpLBStart;
