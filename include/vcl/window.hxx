@@ -705,6 +705,7 @@ public:
     virtual void                        PrePaint();
     virtual void                        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     virtual void                        Erase() SAL_OVERRIDE;
+    virtual void                        Erase( const Rectangle& rRect ) SAL_OVERRIDE { ::OutputDevice::Erase( rRect ); }
 
     virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void                        Move();
