@@ -483,10 +483,10 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
 // called on activation of the SV-Menu
 
-IMPL_LINK_NOARG( SfxVirtualMenu, Highlight )
+IMPL_LINK_NOARG_TYPED( SfxVirtualMenu, Highlight, Menu *, bool )
 {
 
-    return sal_True;
+    return true;
 }
 
 IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)

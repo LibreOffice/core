@@ -69,7 +69,7 @@ protected:
                         SfxBindings &rBind, bool bOLEServer=false, bool bRes=false, bool bIsAddonMenu=false );
 
     void            CreateFromSVMenu();
-    DECL_LINK( Highlight, void * );
+    DECL_LINK_TYPED( Highlight, Menu *, bool );
     DECL_LINK( Activate, Menu * );
     DECL_LINK( Deactivate, Menu * );
     DECL_LINK( SettingsChanged, void* );

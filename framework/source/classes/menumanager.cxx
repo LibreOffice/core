@@ -890,9 +890,9 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
     return 1;
 }
 
-IMPL_LINK_NOARG(MenuManager, Highlight)
+IMPL_LINK_NOARG_TYPED(MenuManager, Highlight, Menu *, bool)
 {
-    return 0;
+    return false;
 }
 
 void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,bool _bDelete,bool _bDeleteChildren)

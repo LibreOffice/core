@@ -151,7 +151,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void GetPopupController( PopupControllerCache& rPopupController );
 
     protected:
-        DECL_LINK(Highlight, void *);
+        DECL_LINK_TYPED(Highlight, Menu *, bool);
         DECL_LINK( Activate, Menu * );
         DECL_LINK( Deactivate, Menu * );
         DECL_LINK_TYPED( AsyncSettingsHdl, Timer *, void );

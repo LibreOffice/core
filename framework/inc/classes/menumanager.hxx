@@ -75,7 +75,7 @@ class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener 
         );
 
     protected:
-        DECL_LINK(Highlight, void *);
+        DECL_LINK_TYPED(Highlight, Menu *, bool);
         DECL_LINK( Activate, Menu * );
         DECL_LINK( Deactivate, Menu * );
 

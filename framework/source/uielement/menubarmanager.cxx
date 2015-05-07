@@ -1023,9 +1023,9 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
     return 1;
 }
 
-IMPL_LINK_NOARG(MenuBarManager, Highlight)
+IMPL_LINK_NOARG_TYPED(MenuBarManager, Highlight, Menu *, bool)
 {
-    return 0;
+    return false;
 }
 
 bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLTransformer >& rTransformer )

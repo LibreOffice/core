@@ -2036,7 +2036,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, v
     }
 }
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, bool)
 {
     if(!bMenuButtonInitialized)
     {
@@ -2088,7 +2088,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
         }
         LeaveWait();
     }
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)

@@ -128,7 +128,7 @@ private:
 
     Link<>              aActivateHdl;       // Active-Handler
     Link<>              aDeactivateHdl;     // Deactivate-Handler
-    Link<>              aHighlightHdl;      // Highlight-Handler
+    Link<Menu *, bool>  aHighlightHdl;      // Highlight-Handler
     Link<>              aSelectHdl;         // Highlight-Handler
 
     VclEventListeners   maEventListeners;
@@ -326,8 +326,7 @@ public:
     void                SetDeactivateHdl( const Link<>& rLink ) { aDeactivateHdl = rLink; }
     const Link<>&       GetDeactivateHdl() const                { return aDeactivateHdl; }
 
-    void                SetHighlightHdl( const Link<>& rLink )  { aHighlightHdl = rLink; }
-    const Link<>&       GetHighlightHdl() const                 { return aHighlightHdl; }
+    void                SetHighlightHdl( const Link<Menu *, bool>& rLink )  { aHighlightHdl = rLink; }
 
     void                SetSelectHdl( const Link<>& rLink )     { aSelectHdl = rLink; }
     const Link<>&       GetSelectHdl() const                    { return aSelectHdl; }
