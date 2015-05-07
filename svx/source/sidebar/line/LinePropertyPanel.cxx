@@ -179,7 +179,7 @@ LinePropertyPanel::LinePropertyPanel(
     get(mpTBWidth, "width");
     get(mpFTStyle, "stylelabel");
     get(mpLBStyle, "linestyle");
-    get(mpFTTrancparency, "translabel");
+    get(mpFTTransparency, "translabel");
     get(mpMFTransparent, "linetransparency");
     get(mpFTArrow, "arrowlabel");
     get(mpLBStart, "beginarrowstyle");
@@ -203,7 +203,7 @@ void LinePropertyPanel::dispose()
     mpTBWidth.clear();
     mpFTStyle.clear();
     mpLBStyle.clear();
-    mpFTTrancparency.clear();
+    mpFTTransparency.clear();
     mpMFTransparent.clear();
     mpFTArrow.clear();
     mpLBStart.clear();
@@ -273,7 +273,7 @@ void LinePropertyPanel::Initialize()
 
     mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
     mpLBStyle->SetAccessibleRelationLabeledBy(mpFTStyle);
-    mpMFTransparent->SetAccessibleRelationLabeledBy(mpFTTrancparency);
+    mpMFTransparent->SetAccessibleRelationLabeledBy(mpFTTransparency);
     mpLBStart->SetAccessibleRelationLabeledBy(mpFTArrow);
     mpLBEnd->SetAccessibleRelationLabeledBy(mpLBEnd);
 
@@ -382,12 +382,12 @@ void LinePropertyPanel::NotifyItemUpdate(
         {
             if(bDisabled)
             {
-                mpFTTrancparency->Disable();
+                mpFTTransparency->Disable();
                 mpMFTransparent->Disable();
             }
             else
             {
-                mpFTTrancparency->Enable();
+                mpFTTransparency->Enable();
                 mpMFTransparent->Enable();
             }
 
