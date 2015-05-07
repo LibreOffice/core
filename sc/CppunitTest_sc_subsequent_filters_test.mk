@@ -98,6 +98,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     sfx2/util/sfx \
     sot/util/sot \
     svl/util/svl \
+    svl/source/fsstor/fsstorage \
     svtools/util/svt \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
