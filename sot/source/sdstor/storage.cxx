@@ -681,10 +681,8 @@ bool SotStorage::Commit()
 }
 
 SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
-                                              StreamMode nMode,
-                                              StorageMode nStorageMode )
+                                              StreamMode nMode )
 {
-    DBG_ASSERT( nStorageMode == StorageMode::Default, "StorageModes ignored" );
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
@@ -693,8 +691,7 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
         // egal was kommt, nur exclusiv gestattet
         nMode |= StreamMode::SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
-        BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode,
-                            !(nStorageMode & StorageMode::Transacted) );
+        BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode, true );
         pStm = new SotStorageStream( p );
 
         if( !nE )

@@ -184,8 +184,7 @@ public:
                         // create stream with connection to Storage,
                         // more or less a Parent-Child relationship
     SotStorageStream *  OpenSotStream( const OUString & rEleName,
-                                       StreamMode = STREAM_STD_READWRITE,
-                                       StorageMode = StorageMode::Default );
+                                       StreamMode = STREAM_STD_READWRITE );
     SotStorage *        OpenSotStorage( const OUString & rEleName,
                                         StreamMode = STREAM_STD_READWRITE,
                                         bool transacted = true );
