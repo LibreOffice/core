@@ -117,7 +117,7 @@ protected:
 public:
                         SotStorage( const OUString &,
                                     StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = StorageMode::Default );
+                                    bool transacted = false );
                         SotStorage( bool bUCBStorage, const OUString &,
                                     StreamMode = STREAM_STD_READWRITE );
                         SotStorage( BaseStorage * );
