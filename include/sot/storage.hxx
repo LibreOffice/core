@@ -85,7 +85,6 @@ class  UNOStorageHolder;
 class SOT_DLLPUBLIC SotStorage : virtual public SotObject
 {
 friend class SotStorageStream;
-friend class SotStorage;
 
     BaseStorage *   m_pOwnStg;   // target storage
     SvStream *      m_pStorStm;  // only for SDSTORAGES
