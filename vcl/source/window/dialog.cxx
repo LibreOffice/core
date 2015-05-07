@@ -364,8 +364,9 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
     // Now, all Dialogs are per default system windows !!!
     nStyle |= WB_SYSTEMWINDOW;
 
-    // parent is NULL: get the default Dialog parent
-    if ( !pParent )
+    if (eFlag == InitFlag::NoParent)
+        pParent = NULL;
+    else if (!pParent) // parent is NULL: get the default Dialog parent
     {
         pParent = Application::GetDefDialogParent();
         if ( !pParent && !(nStyle & WB_SYSTEMWINDOW) )
@@ -392,8 +393,6 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
             }
         }
     }
-    else if( eFlag == InitFlag::Default )
-        pParent = NULL;
 
     if ( !pParent || (nStyle & WB_SYSTEMWINDOW) ||
          (pParent->mpWindowImpl->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SystemWindowFlags::NOAUTOMODE)) ||
