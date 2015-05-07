@@ -360,73 +360,54 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
             m_aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
         }
 
-        // a new unpacked storage should be created
-        if ( nStorageMode == StorageMode::CreateUnpacked )
-        {
-            // don't open stream readwrite, content provider may not support this !
-            OUString aURL = UCBStorage::CreateLinkFile( m_aName );
-            if ( !aURL.isEmpty() )
-            {
-                ::ucbhelper::Content aContent( aURL, ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                m_pOwnStg = new UCBStorage( aContent, aURL, nMode, false );
-            }
-            else
-            {
-                m_pOwnStg = new Storage( m_aName, nMode, false );
-                SetError( ERRCODE_IO_NOTSUPPORTED );
-            }
-        }
-        else
-        {
-            // check the stream
-            m_pStorStm = ::utl::UcbStreamHelper::CreateStream( m_aName, nMode );
-            if ( m_pStorStm && m_pStorStm->GetError() )
-                DELETEZ( m_pStorStm );
+        // check the stream
+        m_pStorStm = ::utl::UcbStreamHelper::CreateStream( m_aName, nMode );
+        if ( m_pStorStm && m_pStorStm->GetError() )
+            DELETEZ( m_pStorStm );
 
-            if ( m_pStorStm )
-            {
-                // try as UCBStorage, next try as OLEStorage
-                bool bIsUCBStorage = UCBStorage::IsStorageFile( m_pStorStm );
-                if ( !bIsUCBStorage && bForceUCBStorage )
-                    // if UCBStorage has priority, it should not be used only if it is really an OLEStorage
-                    bIsUCBStorage = !Storage::IsStorageFile( m_pStorStm );
+        if ( m_pStorStm )
+        {
+            // try as UCBStorage, next try as OLEStorage
+            bool bIsUCBStorage = UCBStorage::IsStorageFile( m_pStorStm );
+            if ( !bIsUCBStorage && bForceUCBStorage )
+                // if UCBStorage has priority, it should not be used only if it is really an OLEStorage
+                bIsUCBStorage = !Storage::IsStorageFile( m_pStorStm );
 
-                if ( bIsUCBStorage )
+            if ( bIsUCBStorage )
+            {
+                if ( !(UCBStorage::GetLinkedFile( *m_pStorStm ).isEmpty()) )
                 {
-                    if ( !(UCBStorage::GetLinkedFile( *m_pStorStm ).isEmpty()) )
-                    {
-                        // detect special unpacked storages
-                        m_pOwnStg = new UCBStorage( *m_pStorStm, !(nStorageMode & StorageMode::Transacted) );
-                        m_bDelStm = true;
-                    }
-                    else
-                    {
-                        // detect special disk spanned storages
-                        if ( UCBStorage::IsDiskSpannedFile( m_pStorStm ) )
-                            nStorageMode |= StorageMode::DiskspannedMode;
-
-                        // UCBStorage always works directly on the UCB content, so discard the stream first
-                        DELETEZ( m_pStorStm );
-                        m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
-                    }
+                    // detect special unpacked storages
+                    m_pOwnStg = new UCBStorage( *m_pStorStm, !(nStorageMode & StorageMode::Transacted) );
+                    m_bDelStm = true;
                 }
                 else
                 {
-                    // OLEStorage can be opened with a stream
-                    m_pOwnStg = new Storage( *m_pStorStm, !(nStorageMode & StorageMode::Transacted) );
-                    m_bDelStm = true;
+                    // detect special disk spanned storages
+                    if ( UCBStorage::IsDiskSpannedFile( m_pStorStm ) )
+                        nStorageMode |= StorageMode::DiskspannedMode;
+
+                    // UCBStorage always works directly on the UCB content, so discard the stream first
+                    DELETEZ( m_pStorStm );
+                    m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
                 }
-            }
-            else if ( bForceUCBStorage )
-            {
-                m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
-                SetError( ERRCODE_IO_NOTSUPPORTED );
             }
             else
             {
-                m_pOwnStg = new Storage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
-                SetError( ERRCODE_IO_NOTSUPPORTED );
+                // OLEStorage can be opened with a stream
+                m_pOwnStg = new Storage( *m_pStorStm, !(nStorageMode & StorageMode::Transacted) );
+                m_bDelStm = true;
             }
+        }
+        else if ( bForceUCBStorage )
+        {
+            m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
+            SetError( ERRCODE_IO_NOTSUPPORTED );
+        }
+        else
+        {
+            m_pOwnStg = new Storage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
+            SetError( ERRCODE_IO_NOTSUPPORTED );
         }
     }
     else

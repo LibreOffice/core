@@ -36,13 +36,12 @@
 enum class StorageMode {
     Default = 0,
     Transacted = 0x04,
-    DiskspannedMode = 0x80,
-    CreateUnpacked = 0x44
+    DiskspannedMode = 0x80
 };
 
 namespace o3tl {
 
-template<> struct typed_flags<StorageMode>: is_typed_flags<StorageMode, 0xC4>
+template<> struct typed_flags<StorageMode>: is_typed_flags<StorageMode, 0x84>
 {};
 
 }
