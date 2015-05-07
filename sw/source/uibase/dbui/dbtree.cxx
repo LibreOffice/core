@@ -186,7 +186,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwDBTreeList(vcl::Wind
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nStyle |= WB_BORDER;
-    return VclPtr<SwDBTreeList>::Create(pParent, nStyle);
+    return new SwDBTreeList(pParent, nStyle);
 }
 
 Size SwDBTreeList::GetOptimalSize() const
@@ -202,6 +202,7 @@ SwDBTreeList::~SwDBTreeList()
 void SwDBTreeList::dispose()
 {
     delete pImpl;
+    pImpl = NULL;
     SvTreeListBox::dispose();
 }
 
