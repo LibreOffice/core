@@ -468,147 +468,143 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, bool bOffSc
         CallEventListeners( VCLEVENT_STATUSBAR_DRAWITEM, reinterpret_cast<void*>(pItem->mnId) );
 }
 
-void DrawProgress( vcl::Window* pWindow, const Point& rPos,
-                   long nOffset, long nPrgsWidth, long nPrgsHeight,
-                   sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
-                   const Rectangle& rFramePosSize
-                   )
+void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
+                  long nOffset, long nPrgsWidth, long nPrgsHeight,
+                  sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
+                  const Rectangle& rFramePosSize)
 {
-    if( pWindow->IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_PROGRESS, PART_ENTIRE_CONTROL))
     {
         bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
 
         long nFullWidth = (nPrgsWidth + nOffset) * (10000 / nPercentCount);
         long nPerc = (nPercent2 > 10000) ? 10000 : nPercent2;
-        ImplControlValue aValue( nFullWidth * (long)nPerc / 10000 );
-        Rectangle aDrawRect( rPos, Size( nFullWidth, nPrgsHeight ) );
-        Rectangle aControlRegion( aDrawRect );
-        if( bNeedErase )
+        ImplControlValue aValue(nFullWidth * long(nPerc) / 10000);
+        Rectangle aDrawRect(rPos, Size(nFullWidth, nPrgsHeight));
+        Rectangle aControlRegion(aDrawRect);
+
+        if(bNeedErase)
         {
             vcl::Window* pEraseWindow = pWindow;
-            while( pEraseWindow->IsPaintTransparent()                         &&
-                   ! pEraseWindow->ImplGetWindowImpl()->mbFrame )
+            while (pEraseWindow->IsPaintTransparent() && !pEraseWindow->ImplGetWindowImpl()->mbFrame)
             {
                 pEraseWindow = pEraseWindow->ImplGetWindowImpl()->mpParent;
             }
-            if( pEraseWindow == pWindow )
+
+            if (pEraseWindow == pWindow)
+            {
                 // restore background of pWindow
-                pEraseWindow->Erase( rFramePosSize );
+                rRenderContext.Erase(rFramePosSize);
+            }
             else
             {
                 // restore transparent background
-                Point aTL( pWindow->OutputToAbsoluteScreenPixel( rFramePosSize.TopLeft() ) );
-                aTL = pEraseWindow->AbsoluteScreenToOutputPixel( aTL );
-                Rectangle aRect( aTL, rFramePosSize.GetSize() );
-                pEraseWindow->Invalidate( aRect, INVALIDATE_NOCHILDREN     |
-                                                 INVALIDATE_NOCLIPCHILDREN |
-                                                 INVALIDATE_TRANSPARENT );
+                Point aTL(pWindow->OutputToAbsoluteScreenPixel(rFramePosSize.TopLeft()));
+                aTL = pEraseWindow->AbsoluteScreenToOutputPixel(aTL);
+                Rectangle aRect(aTL, rFramePosSize.GetSize());
+                pEraseWindow->Invalidate(aRect, INVALIDATE_NOCHILDREN     |
+                                                INVALIDATE_NOCLIPCHILDREN |
+                                                INVALIDATE_TRANSPARENT);
                 pEraseWindow->Update();
             }
-            pWindow->Push( PushFlags::CLIPREGION );
-            pWindow->IntersectClipRegion( rFramePosSize );
+            rRenderContext.Push(PushFlags::CLIPREGION);
+            rRenderContext.IntersectClipRegion(rFramePosSize);
         }
-        bool bNativeOK = pWindow->DrawNativeControl( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                                     ControlState::ENABLED, aValue, OUString() );
-        if( bNeedErase )
-            pWindow->Pop();
-        if( bNativeOK )
-        {
-            pWindow->Flush();
+
+        bool bNativeOK = rRenderContext.DrawNativeControl(CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+                                                          ControlState::ENABLED, aValue, OUString());
+        if (bNeedErase)
+            rRenderContext.Pop();
+        if (bNativeOK)
             return;
-        }
     }
 
     // precompute values
     sal_uInt16 nPerc1 = nPercent1 / nPercentCount;
     sal_uInt16 nPerc2 = nPercent2 / nPercentCount;
 
-    if ( nPerc1 > nPerc2 )
+    if (nPerc1 > nPerc2)
     {
         // support progress that can also decrease
 
         // compute rectangle
-        long        nDX = nPrgsWidth + nOffset;
-        long        nLeft = rPos.X()+((nPerc1-1)*nDX);
-        Rectangle   aRect( nLeft, rPos.Y(), nLeft+nPrgsWidth, rPos.Y()+nPrgsHeight );
+        long nDX = nPrgsWidth + nOffset;
+        long nLeft = rPos.X() + ((nPerc1 - 1) * nDX);
+        Rectangle aRect(nLeft, rPos.Y(), nLeft + nPrgsWidth, rPos.Y() + nPrgsHeight);
 
         do
         {
-            pWindow->Erase( aRect );
+            rRenderContext.Erase(aRect);
             aRect.Left()  -= nDX;
             aRect.Right() -= nDX;
             nPerc1--;
         }
-        while ( nPerc1 > nPerc2 );
-
-        pWindow->Flush();
+        while (nPerc1 > nPerc2);
     }
-    else if ( nPerc1 < nPerc2 )
+    else if (nPerc1 < nPerc2)
     {
         // draw Percent rectangle
         // if Percent2 greater than 100%, adapt values
-        if ( nPercent2 > 10000 )
+        if (nPercent2 > 10000)
         {
             nPerc2 = 10000 / nPercentCount;
-            if ( nPerc1 >= nPerc2 )
-                nPerc1 = nPerc2-1;
+            if (nPerc1 >= nPerc2)
+                nPerc1 = nPerc2 - 1;
         }
 
         // compute rectangle
-        long        nDX = nPrgsWidth + nOffset;
-        long        nLeft = rPos.X()+(nPerc1*nDX);
-        Rectangle   aRect( nLeft, rPos.Y(), nLeft+nPrgsWidth, rPos.Y()+nPrgsHeight );
+        long nDX = nPrgsWidth + nOffset;
+        long nLeft = rPos.X() + (nPerc1 * nDX);
+        Rectangle aRect(nLeft, rPos.Y(), nLeft + nPrgsWidth, rPos.Y() + nPrgsHeight);
 
         do
         {
-            pWindow->DrawRect( aRect );
+            rRenderContext.DrawRect(aRect);
             aRect.Left()  += nDX;
             aRect.Right() += nDX;
             nPerc1++;
         }
-        while ( nPerc1 < nPerc2 );
+        while (nPerc1 < nPerc2);
 
         // if greater than 100%, set rectangle to blink
-        if ( nPercent2 > 10000 )
+        if (nPercent2 > 10000)
         {
             // define on/off status
-            if ( ((nPercent2 / nPercentCount) & 0x01) == (nPercentCount & 0x01) )
+            if (((nPercent2 / nPercentCount) & 0x01) == (nPercentCount & 0x01))
             {
                 aRect.Left()  -= nDX;
                 aRect.Right() -= nDX;
-                pWindow->Erase( aRect );
+                rRenderContext.Erase(aRect);
             }
         }
-
-        pWindow->Flush();
     }
 }
 
 void StatusBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, bool bPaint,
                                  sal_uInt16 nPercent1, sal_uInt16 nPercent2)
 {
-    bool bNative = IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL );
+    bool bNative = rRenderContext.IsNativeControlSupported(CTRL_PROGRESS, PART_ENTIRE_CONTROL);
     // bPaint: draw text also, else only update progress
     if (bPaint)
     {
-        DrawText( maPrgsTxtPos, maPrgsTxt );
-        if( ! bNative )
+        rRenderContext.DrawText(maPrgsTxtPos, maPrgsTxt);
+        if (!bNative)
         {
             DecorationView aDecoView(&rRenderContext);
-            aDecoView.DrawFrame( maPrgsFrameRect, FRAME_DRAW_IN );
+            aDecoView.DrawFrame(maPrgsFrameRect, FRAME_DRAW_IN);
         }
     }
 
-    Point aPos( maPrgsFrameRect.Left()+STATUSBAR_PRGS_OFFSET,
-                maPrgsFrameRect.Top()+STATUSBAR_PRGS_OFFSET );
+    Point aPos(maPrgsFrameRect.Left() + STATUSBAR_PRGS_OFFSET,
+               maPrgsFrameRect.Top()  + STATUSBAR_PRGS_OFFSET);
     long nPrgsHeight = mnPrgsSize;
-    if( bNative )
+    if (bNative)
     {
         aPos = maPrgsFrameRect.TopLeft();
         nPrgsHeight = maPrgsFrameRect.GetHeight();
     }
-    DrawProgress( this, aPos, mnPrgsSize / 2, mnPrgsSize, nPrgsHeight,
-                  nPercent1 * 100, nPercent2 * 100, mnPercentCount, maPrgsFrameRect );
+    DrawProgress(this, rRenderContext, aPos, mnPrgsSize / 2, mnPrgsSize, nPrgsHeight,
+                 nPercent1 * 100, nPercent2 * 100, mnPercentCount, maPrgsFrameRect);
 }
 
 void StatusBar::ImplCalcProgressRect()

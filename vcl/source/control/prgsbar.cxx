@@ -117,33 +117,37 @@ void ProgressBar::ImplInitSettings( bool bFont,
     }
 }
 
-void ProgressBar::ImplDrawProgress(vcl::RenderContext& /*rRenderContext*/, sal_uInt16 nOldPerc, sal_uInt16 nNewPerc)
+void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nOldPerc, sal_uInt16 nNewPerc)
 {
-    if ( mbCalcNew )
+    if (mbCalcNew)
     {
         mbCalcNew = false;
 
-        Size aSize = GetOutputSizePixel();
-        mnPrgsHeight = aSize.Height()-(PROGRESSBAR_WIN_OFFSET*2);
-        mnPrgsWidth = (mnPrgsHeight*2)/3;
+        Size aSize = rRenderContext.GetOutputSizePixel();
+        mnPrgsHeight = aSize.Height() - (PROGRESSBAR_WIN_OFFSET * 2);
+        mnPrgsWidth = (mnPrgsHeight * 2) / 3;
         maPos.Y() = PROGRESSBAR_WIN_OFFSET;
-        long nMaxWidth = (aSize.Width()-(PROGRESSBAR_WIN_OFFSET*2)+PROGRESSBAR_OFFSET);
+        long nMaxWidth = (aSize.Width() - (PROGRESSBAR_WIN_OFFSET * 2) + PROGRESSBAR_OFFSET);
         sal_uInt16 nMaxCount = (sal_uInt16)(nMaxWidth / (mnPrgsWidth+PROGRESSBAR_OFFSET));
-        if ( nMaxCount <= 1 )
+        if (nMaxCount <= 1)
+        {
             nMaxCount = 1;
+        }
         else
         {
-            while ( ((10000/(10000/nMaxCount))*(mnPrgsWidth+PROGRESSBAR_OFFSET)) > nMaxWidth )
+            while (((10000 / (10000 / nMaxCount)) * (mnPrgsWidth + PROGRESSBAR_OFFSET)) > nMaxWidth)
+            {
                 nMaxCount--;
+            }
         }
-        mnPercentCount = 10000/nMaxCount;
-        nMaxWidth = ((10000/(10000/nMaxCount))*(mnPrgsWidth+PROGRESSBAR_OFFSET))-PROGRESSBAR_OFFSET;
-        maPos.X() = (aSize.Width()-nMaxWidth)/2;
+        mnPercentCount = 10000 / nMaxCount;
+        nMaxWidth = ((10000 / (10000 / nMaxCount)) * (mnPrgsWidth + PROGRESSBAR_OFFSET)) - PROGRESSBAR_OFFSET;
+        maPos.X() = (aSize.Width() - nMaxWidth) / 2;
     }
 
-    ::DrawProgress( this, maPos, PROGRESSBAR_OFFSET, mnPrgsWidth, mnPrgsHeight,
-                    nOldPerc*100, nNewPerc*100, mnPercentCount,
-                    Rectangle( Point(), GetSizePixel() ) );
+    ::DrawProgress(this, rRenderContext, maPos, PROGRESSBAR_OFFSET, mnPrgsWidth, mnPrgsHeight,
+                   nOldPerc * 100, nNewPerc * 100, mnPercentCount,
+                   Rectangle(Point(), GetSizePixel()));
 }
 
 void ProgressBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)

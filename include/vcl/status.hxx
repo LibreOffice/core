@@ -31,12 +31,10 @@ typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
 
 // - Progress-Ausgabe -
 
-
-void VCL_DLLPUBLIC DrawProgress( vcl::Window* pWindow, const Point& rPos,
-                                 long nOffset, long nPrgsWidth, long nPrgsHeight,
-                                 sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
-                                 const Rectangle& rFramePosSize
-                                 );
+void VCL_DLLPUBLIC DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
+                                long nOffset, long nPrgsWidth, long nPrgsHeight,
+                                sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
+                                const Rectangle& rFramePosSize);
 
 
 // - StatusBarItemBits -
