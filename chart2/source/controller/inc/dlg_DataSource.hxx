@@ -71,7 +71,7 @@ private:
     VclPtr<DataSourceTabControl> m_pTabControl;
     VclPtr<OKButton>             m_pBtnOK;
 
-    VclPtr<RangeChooserTabPage> m_pRangeChooserTabePage;
+    VclPtr<RangeChooserTabPage> m_pRangeChooserTabPage;
     VclPtr<DataSourceTabPage>   m_pDataSourceTabPage;
     bool                  m_bRangeChooserTabIsValid;
     bool                  m_bDataSourceTabIsValid;

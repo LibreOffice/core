@@ -134,7 +134,7 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
     , m_apDocTemplateProvider(new DocumentChartTypeTemplateProvider(xChartDocument))
     , m_apDialogModel(new DialogModel(xChartDocument, xContext))
     , m_pTabControl(VclPtr<DataSourceTabControl>::Create(get_content_area()))
-    , m_pRangeChooserTabePage(0)
+    , m_pRangeChooserTabPage(0)
     , m_pDataSourceTabPage(0)
     , m_bRangeChooserTabIsValid(true)
     , m_bDataSourceTabIsValid(true)
@@ -143,7 +143,7 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
 
     m_pTabControl->Show();
 
-    m_pRangeChooserTabePage = VclPtr<RangeChooserTabPage>::Create( m_pTabControl, *(m_apDialogModel.get()),
+    m_pRangeChooserTabPage = VclPtr<RangeChooserTabPage>::Create( m_pTabControl, *(m_apDialogModel.get()),
                                      m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
     m_pDataSourceTabPage = VclPtr<DataSourceTabPage>::Create( m_pTabControl, *(m_apDialogModel.get()),
                                     m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
@@ -152,7 +152,7 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
     m_pTabControl->InsertPage( TP_DATA_SOURCE,  SCH_RESSTR(STR_OBJECT_DATASERIES_PLURAL) );
 
     m_pTabControl->SetTabPage( TP_DATA_SOURCE,  m_pDataSourceTabPage );
-    m_pTabControl->SetTabPage( TP_RANGECHOOSER, m_pRangeChooserTabePage );
+    m_pTabControl->SetTabPage( TP_RANGECHOOSER, m_pRangeChooserTabPage );
 
     m_pTabControl->SelectTabPage( m_nLastPageId );
 }
@@ -164,7 +164,7 @@ DataSourceDialog::~DataSourceDialog()
 
 void DataSourceDialog::dispose()
 {
-    m_pRangeChooserTabePage.disposeAndClear();
+    m_pRangeChooserTabPage.disposeAndClear();
     m_pDataSourceTabPage.disposeAndClear();
     if (m_pTabControl)
         m_nLastPageId = m_pTabControl->GetCurPageId();
@@ -178,8 +178,8 @@ short DataSourceDialog::Execute()
     short nResult = TabDialog::Execute();
     if( nResult == RET_OK )
     {
-        if( m_pRangeChooserTabePage )
-            m_pRangeChooserTabePage->commitPage();
+        if( m_pRangeChooserTabPage )
+            m_pRangeChooserTabPage->commitPage();
         if( m_pDataSourceTabPage )
             m_pDataSourceTabPage->commitPage();
     }
@@ -188,7 +188,7 @@ short DataSourceDialog::Execute()
 
 void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 {
-    if( pTabPage == m_pRangeChooserTabePage )
+    if( pTabPage == m_pRangeChooserTabPage )
         m_bRangeChooserTabIsValid = false;
     else if( pTabPage == m_pDataSourceTabPage )
         m_bDataSourceTabIsValid = false;
@@ -210,7 +210,7 @@ void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 
 void DataSourceDialog::setValidPage( TabPage * pTabPage )
 {
-    if( pTabPage == m_pRangeChooserTabePage )
+    if( pTabPage == m_pRangeChooserTabPage )
         m_bRangeChooserTabIsValid = true;
     else if( pTabPage == m_pDataSourceTabPage )
         m_bDataSourceTabIsValid = true;
