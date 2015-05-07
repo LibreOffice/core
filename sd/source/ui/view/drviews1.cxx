@@ -494,8 +494,9 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, bool bIsFirst)
     else
         aWBits = WB_HSCROLL | WB_3DLOOK | WB_BORDER;
 
-    pRuler = new Ruler (*this, GetParentWindow(), pWin, nFlags,
+    pRuler = VclPtr<Ruler>::Create(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);
+
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
     // Metric ...
