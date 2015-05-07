@@ -206,7 +206,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
 {
     switch (rEvent.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             // Use the currently selected item and show the popup menu in its
             // center.
@@ -237,8 +237,9 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 // Show the menu.
                 pMenu->Execute(this, Rectangle(aPosition,Size(1,1)), POPUPMENU_EXECUTE_DOWN);
             }
-            break;
         }
+        break;
+        default: break;
     }
 }
 

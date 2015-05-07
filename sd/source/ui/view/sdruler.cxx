@@ -142,7 +142,7 @@ void Ruler::SetNullOffset(const Point& rOffset)
 
 void Ruler::Command(const CommandEvent& rCEvt)
 {
-    if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
+    if( rCEvt.GetCommand() == CommandEventId::ContextMenu &&
         !pDrViewShell->GetView()->IsTextEdit() )
     {
         SvxRuler::Command( rCEvt );

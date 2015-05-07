@@ -350,7 +350,7 @@ bool AnnotationTag::RequestHelp( const HelpEvent& /*rHEvt*/ )
 /** returns true if the SmartTag consumes this event. */
 bool AnnotationTag::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         vcl::Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
         if( pWindow )

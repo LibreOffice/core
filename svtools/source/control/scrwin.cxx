@@ -67,9 +67,9 @@ void ScrollableWindow::dispose()
 
 void ScrollableWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( (rCEvt.GetCommand() == COMMAND_WHEEL) ||
-         (rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
-         (rCEvt.GetCommand() == COMMAND_AUTOSCROLL) )
+    if ( (rCEvt.GetCommand() == CommandEventId::Wheel) ||
+         (rCEvt.GetCommand() == CommandEventId::StartAutoScroll) ||
+         (rCEvt.GetCommand() == CommandEventId::AutoScroll) )
     {
         ScrollBar* pHScrBar;
         ScrollBar* pVScrBar;

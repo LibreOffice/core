@@ -91,7 +91,7 @@ void OpenGLWindow::Command( const CommandEvent& rCEvt )
     if(!mpRenderer)
         return;
 
-    if(rCEvt.GetCommand() == COMMAND_WHEEL)
+    if(rCEvt.GetCommand() == CommandEventId::Wheel)
     {
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if(pData->GetMode() == CommandWheelMode::SCROLL)

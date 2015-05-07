@@ -2513,7 +2513,7 @@ bool ImplListBox::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
-        if ( rCEvt.GetCommand() == COMMAND_WHEEL )
+        if ( rCEvt.GetCommand() == CommandEventId::Wheel )
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
@@ -2534,7 +2534,7 @@ const Wallpaper& ImplListBox::GetDisplayBackground() const
 bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
 {
     bool bDone = false;
-    if ( rCEvt.GetCommand() == COMMAND_WHEEL )
+    if ( rCEvt.GetCommand() == CommandEventId::Wheel )
     {
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )

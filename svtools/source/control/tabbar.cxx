@@ -303,8 +303,7 @@ void ImplTabButton::MouseButtonUp(const MouseEvent& rMouseEvent)
 
 void ImplTabButton::Command(const CommandEvent& rCommandEvent)
 {
-    sal_uInt16 nCommand = rCommandEvent.GetCommand();
-    if (nCommand == COMMAND_CONTEXTMENU)
+    if (rCommandEvent.GetCommand() == CommandEventId::ContextMenu)
     {
         TabBar* pParent = GetParent();
         pParent->maScrollAreaContextHdl.Call((void*)&rCommandEvent);
@@ -1417,7 +1416,7 @@ bool TabBar::PreNotify( NotifyEvent& rNEvt )
 {
     if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
-        if (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL)
+        if (rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel)
         {
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
             sal_uInt16 nNewPos = mnFirstPos;
@@ -2344,7 +2343,7 @@ OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
 
 bool TabBar::StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion )
 {
-    if ( !(mnWinStyle & WB_DRAG) || (rCEvt.GetCommand() != COMMAND_STARTDRAG) )
+    if ( !(mnWinStyle & WB_DRAG) || (rCEvt.GetCommand() != CommandEventId::StartDrag) )
         return false;
 
     // Check if the clicked page was selected. If this is not the case

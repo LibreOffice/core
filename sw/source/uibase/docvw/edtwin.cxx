@@ -5109,7 +5109,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     // windows and code on the stack.
     SfxInPlaceClient* pIPClient = rSh.GetSfxViewShell()->GetIPClient();
     bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
-    if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
+    if ( bIsOleActive && ( rCEvt.GetCommand() == CommandEventId::ContextMenu ))
     {
         rSh.FinishOLEObj();
         return;
@@ -5119,8 +5119,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
     switch ( rCEvt.GetCommand() )
     {
-        case COMMAND_CONTEXTMENU:
-        {
+    case CommandEventId::ContextMenu:
+    {
             const sal_uInt16 nId = SwInputChild::GetChildWindowId();
             SwInputChild* pChildWin = static_cast<SwInputChild*>(GetView().GetViewFrame()->
                                                 GetChildWindow( nId ));
@@ -5193,18 +5193,18 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     rSh.Do(SwWrtShell::UNDO);
                 bCallBase = false;
             }
-        }
-        break;
+    }
+    break;
 
-        case COMMAND_WHEEL:
-        case COMMAND_STARTAUTOSCROLL:
-        case COMMAND_AUTOSCROLL:
+    case CommandEventId::Wheel:
+    case CommandEventId::StartAutoScroll:
+    case CommandEventId::AutoScroll:
             if( m_pShadCrsr )
                 delete m_pShadCrsr, m_pShadCrsr = 0;
             bCallBase = !m_rView.HandleWheelCommands( rCEvt );
             break;
 
-    case COMMAND_STARTEXTTEXTINPUT:
+    case CommandEventId::StartExtTextInput:
     {
         bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
                               rSh.IsCrsrReadonly();
@@ -5227,7 +5227,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         }
         break;
     }
-    case COMMAND_ENDEXTTEXTINPUT:
+    case CommandEventId::EndExtTextInput:
     {
         bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
                               rSh.IsCrsrReadonly();
@@ -5278,7 +5278,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         }
     }
     break;
-    case COMMAND_EXTTEXTINPUT:
+    case CommandEventId::ExtTextInput:
     {
         bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
                               rSh.IsCrsrReadonly();
@@ -5323,11 +5323,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         }
     }
     break;
-    case COMMAND_CURSORPOS:
+    case CommandEventId::CursorPos:
         // will be handled by the base class
         break;
 
-    case COMMAND_PASTESELECTION:
+    case CommandEventId::PasteSelection:
         if( !m_rView.GetDocShell()->IsReadOnly() )
         {
             TransferableDataHelper aDataHelper(
@@ -5357,7 +5357,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             }
         }
         break;
-        case COMMAND_MODKEYCHANGE :
+        case CommandEventId::ModKeyChange :
         {
             const CommandModKeyData* pCommandData = rCEvt.GetModKeyData();
             if (pCommandData->IsMod1() && !pCommandData->IsMod2())
@@ -5372,15 +5372,15 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             }
         }
         break;
-        case COMMAND_HANGUL_HANJA_CONVERSION :
+        case CommandEventId::HangulHanjaConversion :
             GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HANGUL_HANJA_CONVERSION);
         break;
-        case COMMAND_INPUTLANGUAGECHANGE :
+        case CommandEventId::InputLanguageChange :
             // i#42732 - update state of fontname if input language changes
             g_bInputLanguageSwitched = true;
             SetUseInputLanguage( true );
         break;
-        case COMMAND_SELECTIONCHANGE:
+        case CommandEventId::SelectionChange:
         {
             const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
             rSh.SttCrsrMove();
@@ -5391,7 +5391,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             rSh.EndCrsrMove( true );
         }
         break;
-        case COMMAND_PREPARERECONVERSION:
+        case CommandEventId::PrepareReconversion:
         if( rSh.HasSelection() )
         {
             SwPaM *pCrsr = rSh.GetCrsr();
@@ -5450,7 +5450,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             }
         }
         break;
-        case COMMAND_QUERYCHARPOSITION:
+        case CommandEventId::QueryCharPosition:
         {
             bool bVertical = rSh.IsInVerticalText();
             const SwPosition& rPos = *rSh.GetCrsr()->GetPoint();
@@ -5492,10 +5492,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             bCallBase = false;
         }
         break;
-#if OSL_DEBUG_LEVEL > 0
         default:
+#if OSL_DEBUG_LEVEL > 0
             OSL_ENSURE( false, "unknown command." );
 #endif
+        break;
     }
     if (bCallBase)
         Window::Command(rCEvt);

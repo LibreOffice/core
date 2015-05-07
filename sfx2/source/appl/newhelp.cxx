@@ -1278,7 +1278,7 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
     else if ( MouseNotifyEvent::COMMAND == nType )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        if ( pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
+        if ( pCEvt->GetCommand() == CommandEventId::ContextMenu )
         {
             PopupMenu aMenu( SfxResId( MENU_HELP_BOOKMARKS ) );
             sal_uInt16 nId = aMenu.Execute( this, pCEvt->GetMousePosPixel() );
@@ -2394,7 +2394,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
         vcl::Window* pCmdWin = rNEvt.GetWindow();
 
-        if ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != aToolBox.get() )
+        if ( pCmdEvt->GetCommand() == CommandEventId::ContextMenu && pCmdWin != this && pCmdWin != aToolBox.get() )
         {
             Point aPos;
             if ( pCmdEvt->IsMouseEvent() )

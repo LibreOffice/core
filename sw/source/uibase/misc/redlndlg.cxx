@@ -1026,7 +1026,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
 
     switch ( aCEvt.GetCommand() )
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
             SvTreeListEntry* pEntry = pTable->FirstSelected();
@@ -1183,6 +1183,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
             }
         }
         break;
+        default: break;
     }
 
     return 0;

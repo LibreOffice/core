@@ -564,7 +564,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
     {
         switch ( rCEvt.GetCommand() )
         {
-            case COMMAND_CONTEXTMENU:
+            case CommandEventId::ContextMenu:
             {
                 GetParent()->ToTop();
                 SmResId aResId( RID_VIEWMENU );
@@ -583,7 +583,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
             }
             break;
 
-            case COMMAND_WHEEL:
+            case CommandEventId::Wheel:
             {
                 const CommandWheelData* pWData = rCEvt.GetWheelData();
                 if  ( pWData && CommandWheelMode::ZOOM == pWData->GetMode() )
@@ -598,6 +598,8 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 }
             }
             break;
+
+            default: break;
         }
     }
     if ( bCallBase )

@@ -367,7 +367,7 @@ IMPL_LINK_NOARG_TYPED(ImplWheelWindow, ImplScrollHdl, Timer *, void)
         const Point         aMousePos( pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() ) );
         Point               aCmdMousePos( pWindow->ImplFrameToOutput( aMousePos ) );
         CommandScrollData   aScrollData( mnActDeltaX, mnActDeltaY );
-        CommandEvent        aCEvt( aCmdMousePos, COMMAND_AUTOSCROLL, true, &aScrollData );
+        CommandEvent        aCEvt( aCmdMousePos, CommandEventId::AutoScroll, true, &aScrollData );
         NotifyEvent         aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )

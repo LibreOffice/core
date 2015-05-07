@@ -949,7 +949,7 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
 {
     switch( rCEvt.GetCommand() )
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             if( rCEvt.IsMouseEvent() )
             {
@@ -973,7 +973,7 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
             }
         }
         break;
-        case COMMAND_WHEEL:
+        case CommandEventId::Wheel:
         {
             Point aPoint;
             Rectangle aRect( aPoint, maWinSize );

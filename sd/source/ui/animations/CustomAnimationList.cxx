@@ -473,7 +473,7 @@ void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )
         case KEY_SPACE:
             {
                 const Point aPos;
-                const CommandEvent aCEvt( aPos, COMMAND_CONTEXTMENU );
+                const CommandEvent aCEvt( aPos, CommandEventId::ContextMenu );
                 Command( aCEvt );
                 return;
             }

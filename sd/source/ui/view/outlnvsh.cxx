@@ -1368,7 +1368,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
 void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         GetActiveWindow()->ReleaseMouse();
 

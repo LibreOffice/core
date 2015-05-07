@@ -777,7 +777,7 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
     if ((rNEvt.GetType() == MouseNotifyEvent::COMMAND) && !IsReadOnly())
     {
         const CommandEvent* pCommand = rNEvt.GetCommandEvent();
-        if (pCommand->GetCommand() == COMMAND_WHEEL)
+        if (pCommand->GetCommand() == CommandEventId::Wheel)
         {
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
             if ((pData->GetMode() == CommandWheelMode::SCROLL) && ImplGetFormatter()->IsTextFormat(m_nFormatKey))
