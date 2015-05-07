@@ -327,8 +327,6 @@ static const XclFunctionInfo saFuncTable_4[] =
     // ocExternal but add programmatical function name (here without
     // "com.sun.star.sheet.addin.") so it can be looked up and stored as
     // add-in, as older Excel versions only know them as add-in.
-    // These are the functions flagged as AddInMap::bMapDupToInternal=true in
-    // sc/source/core/tool/odffmap.cxx
     { ocIsEven,             255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getIseven" ) },
     { ocIsOdd,              255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getIsodd" ) },
     { ocGCD,                255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getGcd" ) },

@@ -280,7 +280,6 @@ private:
     {
         const char* pODFF;
         const char* pEnglish;
-        bool        bMapDupToInternal;      // when writing ODFF
         const char* pOriginal;              // programmatical name
         const char* pUpper;                 // upper case programmatical name
     } maAddInMap[];
