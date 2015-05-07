@@ -95,8 +95,8 @@ public:
         vcl::Window* pParent,
         ::sd::NavigatorChildWindow* pChildWinContext,
         const SdResId& rSdResId,
-        SfxBindings* pBindings,
-        const UpdateRequestFunctor& rUpdateRequest);
+        SfxBindings* pBindings);
+    void SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin();
     virtual void                dispose() SAL_OVERRIDE;
 

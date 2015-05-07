@@ -65,8 +65,7 @@ SdNavigatorWin::SdNavigatorWin(
     vcl::Window* pParent,
     ::sd::NavigatorChildWindow* pChWinCtxt,
     const SdResId& rSdResId,
-    SfxBindings* pInBindings,
-    const UpdateRequestFunctor& rUpdateRequest)
+    SfxBindings* pInBindings)
     : vcl::Window( pParent, rSdResId )
     , maToolbox ( VclPtr<ToolBox>::Create( this, SdResId( 1 ) ) )
     , maTlbObjects( VclPtr<SdPageObjsTLB>::Create( this, SdResId( TLB_OBJECTS ) ) )
@@ -76,6 +75,8 @@ SdNavigatorWin::SdNavigatorWin(
       // On changes of the DragType: adjust SelectionMode of TLB!
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
     , mpBindings ( pInBindings )
+    , mpNavigatorCtrlItem( 0 )
+    , mpPageNameCtrlItem( 0 )
     , maImageList ( SdResId( IL_NAVIGATR ) )
 {
     maTlbObjects->SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
@@ -83,9 +84,6 @@ SdNavigatorWin::SdNavigatorWin(
     FreeResource();
 
     maTlbObjects->SetAccessibleName(SD_RESSTR(STR_OBJECTS_TREE));
-
-    mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings, rUpdateRequest);
-    mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings, rUpdateRequest);
 
     ApplyImageList(); // load images *before* calculating sizes to get something useful !!!
 
@@ -144,6 +142,13 @@ SdNavigatorWin::SdNavigatorWin(
     SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(GetParent());
     if (pDockingParent != NULL)
         pDockingParent->SetMinOutputSizePixel( maMinSize );
+
+}
+
+void SdNavigatorWin::SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest)
+{
+    mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings, rUpdateRequest);
+    mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings, rUpdateRequest);
 
     // InitTlb; is initiated over Slot
     if (rUpdateRequest)

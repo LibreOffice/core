@@ -37,9 +37,9 @@ NavigatorWrapper::NavigatorWrapper (
         this,
         (::sd::NavigatorChildWindow*)NULL,
         SdResId(FLT_NAVIGATOR),
-        pBindings,
-        ::boost::bind(&NavigatorWrapper::UpdateNavigator, this)))
+        pBindings))
 {
+    maNavigator->SetUpdateRequestFunctor(::boost::bind(&NavigatorWrapper::UpdateNavigator, this));
     maNavigator->SetPosSizePixel(
         Point(0,0),
         GetSizePixel());

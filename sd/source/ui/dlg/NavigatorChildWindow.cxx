@@ -57,7 +57,9 @@ NavigatorChildWindow::NavigatorChildWindow (
         pParent,
         this,
         SdResId( FLT_NAVIGATOR ),
-        pBindings,
+        pBindings);
+
+    pNavWin->SetUpdateRequestFunctor(
         ::boost::bind(RequestNavigatorUpdate, pBindings));
 
     SetWindow( pNavWin );
