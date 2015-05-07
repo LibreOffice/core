@@ -532,11 +532,10 @@ void ConfigItem::DisableNotification()
     RemoveChangesListener();
 }
 
-bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
-                bool bEnableInternalNotification )
-
+bool ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
+                                    bool bEnableInternalNotification )
 {
-    OSL_ENSURE(bool(m_nMode & ConfigItemMode::ReleaseTree), "notification in ConfigItemMode::ReleaseTree mode not possible");
+    OSL_ENSURE(!(m_nMode & ConfigItemMode::ReleaseTree), "notification in ConfigItemMode::ReleaseTree mode not possible");
     m_bEnableInternalNotification = bEnableInternalNotification;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
