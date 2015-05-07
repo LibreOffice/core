@@ -81,7 +81,7 @@ private:
 
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;
 
-//     RangeChooserTabPage * m_pRangeChooserTabePage;
+//     RangeChooserTabPage * m_pRangeChooserTabPage;
 //     DataSourceTabPage *   m_pDataSourceTabPage;
     bool                  m_bCanTravel;
 };
