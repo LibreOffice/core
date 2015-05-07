@@ -140,6 +140,7 @@ public:
     void testSheetTextBoxHyperlink();
     void testFontSize();
     void testSheetCharacterKerningSpace();
+    void testHiddenShape();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -190,6 +191,7 @@ public:
     CPPUNIT_TEST(testSheetTextBoxHyperlink);
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testSheetCharacterKerningSpace);
+    CPPUNIT_TEST(testHiddenShape);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2573,6 +2575,15 @@ void ScExportTest::testSheetCharacterKerningSpace()
     xDocSh->DoClose();
 }
 
+void ScExportTest::testHiddenShape()
+{
+    ScDocShellRef xDocSh = loadDoc("hiddenShape.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/drawings/drawing1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
