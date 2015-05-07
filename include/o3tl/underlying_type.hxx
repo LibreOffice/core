@@ -16,10 +16,10 @@
 
 namespace o3tl {
 
-template<typename T> struct underlying_type {
+template<typename T, typename F=int> struct underlying_type {
 #if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 6 && \
         !defined __clang__
-    typedef int type;
+    typedef F type;
 #else
     typedef typename std::underlying_type<T>::type type;
 #endif

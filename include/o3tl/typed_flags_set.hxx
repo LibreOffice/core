@@ -87,6 +87,32 @@ struct is_typed_flags {
     static typename underlying_type<E>::type const mask = M;
 };
 
+template<typename E, typename F, typename underlying_type<E, F>::type M>
+struct is_typed_flags_with_fallback {
+    static_assert(
+        M >= 0, "is_typed_flags expects only non-negative bit values");
+
+    typedef E Self;
+
+    class Wrap {
+    public:
+        explicit Wrap(typename underlying_type<E, F>::type value):
+            value_(value)
+        { assert(detail::isNonNegative(value)); }
+
+        operator E() { return static_cast<E>(value_); }
+
+        explicit operator typename underlying_type<E, F>::type() { return value_; }
+
+        explicit operator bool() { return value_ != 0; }
+
+    private:
+        typename underlying_type<E, F>::type value_;
+    };
+
+    static typename underlying_type<E, F>::type const mask = M;
+};
+
 }
 
 template<typename E>
