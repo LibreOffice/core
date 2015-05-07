@@ -85,6 +85,7 @@
 #include "tokenarray.hxx"
 #include <columnspanset.hxx>
 #include <rowheightcontext.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -1814,6 +1815,21 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
         SetCursor( nCol, nRow, true );
+
+        if (rDoc.GetDrawLayer()->isTiledRendering())
+        {
+            Point aCurPos = GetViewData().GetScrPos(nCol, nRow, GetViewData().GetActivePart());
+
+            // just update the cell selection
+            ScGridWindow* pGridWindow = GetViewData().GetActiveWin();
+            if (pGridWindow)
+            {
+                // move the cell selection handles
+                pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_START, aCurPos.X(), aCurPos.Y());
+                pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_END, aCurPos.X(), aCurPos.Y());
+                pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_RESET, aCurPos.X(), aCurPos.Y());
+            }
+        }
 
         if (   nCommand == SvxSearchCmd::REPLACE
             || nCommand == SvxSearchCmd::REPLACE_ALL )
