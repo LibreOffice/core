@@ -911,7 +911,7 @@ void TextView::Command( const CommandEvent& rCEvt )
     mpImpl->mpTextEngine->CheckIdleFormatter();    // for fast typing and MouseButtonDown
     mpImpl->mpTextEngine->SetActiveView( this );
 
-    if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT )
+    if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
     {
         DeleteSelected();
         delete mpImpl->mpTextEngine->mpIMEInfos;
@@ -919,9 +919,9 @@ void TextView::Command( const CommandEvent& rCEvt )
         mpImpl->mpTextEngine->mpIMEInfos = new TEIMEInfos( GetSelection().GetEnd(), pNode->GetText().copy( GetSelection().GetEnd().GetIndex() ) );
         mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
-    else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
+    else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
     {
-        DBG_ASSERT( mpImpl->mpTextEngine->mpIMEInfos, "COMMAND_ENDEXTTEXTINPUT => No Start ?" );
+        DBG_ASSERT( mpImpl->mpTextEngine->mpIMEInfos, "CommandEventId::EndExtTextInput => No Start ?" );
         if( mpImpl->mpTextEngine->mpIMEInfos )
         {
             TEParaPortion* pPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetPara() );
@@ -940,9 +940,9 @@ void TextView::Command( const CommandEvent& rCEvt )
                 mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
+    else if ( rCEvt.GetCommand() == CommandEventId::ExtTextInput )
     {
-        DBG_ASSERT( mpImpl->mpTextEngine->mpIMEInfos, "COMMAND_EXTTEXTINPUT => No Start ?" );
+        DBG_ASSERT( mpImpl->mpTextEngine->mpIMEInfos, "CommandEventId::ExtTextInput => No Start ?" );
         if( mpImpl->mpTextEngine->mpIMEInfos )
         {
             const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
@@ -1010,7 +1010,7 @@ void TextView::Command( const CommandEvent& rCEvt )
                 HideCursor();
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
+    else if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
         if ( mpImpl->mpTextEngine->mpIMEInfos && mpImpl->mpTextEngine->mpIMEInfos->nLen )
         {

@@ -88,7 +88,7 @@ bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
 
-        if( pCEvt && pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
+        if( pCEvt && pCEvt->GetCommand() == CommandEventId::ContextMenu )
             static_cast< GalleryBrowser1* >( GetParent() )->ShowContextMenu();
     }
     else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )

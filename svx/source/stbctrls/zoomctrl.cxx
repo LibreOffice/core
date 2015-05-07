@@ -142,7 +142,7 @@ void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {
-    if ( COMMAND_CONTEXTMENU & rCEvt.GetCommand() && bool(nValueSet) )
+    if ( CommandEventId::ContextMenu == rCEvt.GetCommand() && bool(nValueSet) )
     {
         ZoomPopup_Impl aPop( nZoom, nValueSet );
         StatusBar& rStatusbar = GetStatusBar();

@@ -1272,9 +1272,9 @@ namespace pcr
         if ( _rNEvt.GetType() == MouseNotifyEvent::COMMAND)
         {
             const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
-            if  (   ( COMMAND_WHEEL == pCommand->GetCommand() )
-                ||  ( COMMAND_STARTAUTOSCROLL == pCommand->GetCommand() )
-                ||  ( COMMAND_AUTOSCROLL == pCommand->GetCommand() )
+            if  (   ( CommandEventId::Wheel == pCommand->GetCommand() )
+                ||  ( CommandEventId::StartAutoScroll == pCommand->GetCommand() )
+                ||  ( CommandEventId::AutoScroll == pCommand->GetCommand() )
                 )
             {
                 // interested in scroll events if we have a scrollbar

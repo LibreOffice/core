@@ -107,7 +107,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
         return 0L;
 
     const CommandEvent* pCommand = static_cast<CommandEvent*>(pEvent->GetData());
-    if (pCommand->GetCommand() != COMMAND_SHOWDIALOG)
+    if (pCommand->GetCommand() != CommandEventId::ShowDialog)
         return 0L;
 
     const CommandDialogData* pData = pCommand->GetDialogData();

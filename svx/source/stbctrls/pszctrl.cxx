@@ -310,7 +310,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
 void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU && pImp->bHasMenu )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu && pImp->bHasMenu )
     {
         sal_uInt16 nSelect = pImp->nFunction;
         if (!nSelect)

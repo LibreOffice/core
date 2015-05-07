@@ -1317,10 +1317,10 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
 
 bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
 {
-    // as long as OutlinerView returns a sal_Bool, it only gets COMMAND_STARTDRAG
+    // as long as OutlinerView returns a sal_Bool, it only gets CommandEventId::StartDrag
     if (pTextEditOutlinerView!=NULL)
     {
-        if (rCEvt.GetCommand()==COMMAND_STARTDRAG) {
+        if (rCEvt.GetCommand()==CommandEventId::StartDrag) {
             bool bPostIt=pTextEditOutliner->IsInSelectionMode() || !rCEvt.IsMouseEvent();
             if (!bPostIt && rCEvt.IsMouseEvent()) {
                 Point aPt(rCEvt.GetMousePosPixel());

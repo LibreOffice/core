@@ -98,7 +98,7 @@ void SwBookmarkControl::Paint( const UserDrawEvent&  )
 
 void SwBookmarkControl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu &&
             !GetStatusBar().GetItemText( GetId() ).isEmpty() )
     {
         BookmarkPopup_Impl aPop;

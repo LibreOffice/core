@@ -525,16 +525,16 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
 {
     switch ( rCEvt.GetCommand() )
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             //#125881# quickly clicking crashes because the control is not fully initialized
             if(pExampleFrame->GetController().is())
                 pExampleFrame->CreatePopup(rCEvt.GetMousePosPixel());
         }
         break;
-        case COMMAND_WHEEL:
-        case COMMAND_STARTAUTOSCROLL:
-        case COMMAND_AUTOSCROLL:
+        case CommandEventId::Wheel:
+        case CommandEventId::StartAutoScroll:
+        case CommandEventId::AutoScroll:
         break;
         default:;
     }

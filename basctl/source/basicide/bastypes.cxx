@@ -487,7 +487,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
 
 void TabBar::Command( const CommandEvent& rCEvt )
 {
-    if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && !IsInEditMode() )
+    if ( ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) && !IsInEditMode() )
     {
         Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
         if ( rCEvt.IsMouseEvent() )     // select right tab

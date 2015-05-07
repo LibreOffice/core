@@ -1777,7 +1777,7 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
 
     if ( m_bDisposed )
         return;
-    if ( pCmdEvt->GetCommand() != COMMAND_CONTEXTMENU )
+    if ( pCmdEvt->GetCommand() != CommandEventId::ContextMenu )
         return;
 
     ::PopupMenu * pMenu = GetToolBarCustomMenu(m_pToolBar);

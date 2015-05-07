@@ -195,13 +195,13 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 
 void DialogWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL           ) ||
-         ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
-         ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL      ) )
+    if ( ( rCEvt.GetCommand() == CommandEventId::Wheel           ) ||
+         ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
+         ( rCEvt.GetCommand() == CommandEventId::AutoScroll      ) )
     {
         HandleScrollCommand( rCEvt, GetHScrollBar(), GetVScrollBar() );
     }
-    else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         if (SfxDispatcher* pDispatcher = GetDispatcher())
         {

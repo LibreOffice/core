@@ -278,9 +278,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 void TabControl::Command(const CommandEvent& rCEvt)
 {
-    sal_uInt16 nCmd = rCEvt.GetCommand();
-
-    if ( nCmd == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         bool bGraphicShell = pDrViewSh->ISA(GraphicViewShell);
         sal_uInt16 nResId = bGraphicShell ? RID_GRAPHIC_PAGETAB_POPUP :

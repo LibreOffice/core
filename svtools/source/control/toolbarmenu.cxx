@@ -1535,7 +1535,7 @@ void ToolbarMenu::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ToolbarMenu::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_WHEEL )
+    if ( rCEvt.GetCommand() == CommandEventId::Wheel )
     {
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
