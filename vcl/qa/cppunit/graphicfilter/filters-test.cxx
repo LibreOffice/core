@@ -67,7 +67,7 @@ void VclFiltersTest::testScaling()
         Bitmap aBitmap( Size( 413, 409 ), 24 );
         BitmapEx aBitmapEx( aBitmap );
 
-        fprintf( stderr, "scale with type %d\n", i );
+        fprintf( stderr, "scale with type %d\n", int( i ) );
         CPPUNIT_ASSERT( aBitmapEx.Scale( 0.1937046, 0.193154, i ) );
         Size aAfter( aBitmapEx.GetSizePixel() );
         fprintf( stderr, "size %ld, %ld\n", (long)aAfter.Width(),
