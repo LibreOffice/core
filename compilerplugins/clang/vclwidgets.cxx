@@ -206,7 +206,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         {
             report(
                 DiagnosticsEngine::Warning,
-                "OutputDevice subclass should have nothing in it's destructor but a call to disposeOnce().",
+                "OutputDevice subclass should have nothing in its destructor but a call to disposeOnce().",
                 pCXXDestructorDecl->getLocStart())
               << pCXXDestructorDecl->getSourceRange();
         }
