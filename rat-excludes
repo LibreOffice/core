@@ -138,10 +138,6 @@ main/extras/source/misc_config/autotbl.fmt
 # binary information for a Visual Basic form (?)
 main/migrationanalysis/src/wizard/Wizard.FRX
 
-# Used in main/testautomation/writer/optional/input/import/hangul.hwp (1), part of SGA
-# binary? AOO specific? Hangul Word Processor file
-main/testautomation/writer/optional/input/import/hangul.hwp
-
 # main/scripting/java/org/openoffice/netbeans/editor/OOo.jcb (1), part of SGA
 # binary, file type not clear
 main/scripting/java/org/openoffice/netbeans/editor/OOo.jcb
