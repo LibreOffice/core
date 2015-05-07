@@ -1443,7 +1443,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
     // event occurred out of data area
     if ( rEvt.IsRight() )
         pDataWin->Command(
-            CommandEvent( Point( 1, LONG_MAX ), COMMAND_CONTEXTMENU, true ) );
+            CommandEvent( Point( 1, LONG_MAX ), CommandEventId::ContextMenu, true ) );
     else
         SetNoSelection();
 }

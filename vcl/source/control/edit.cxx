@@ -1974,7 +1974,7 @@ void Edit::LoseFocus()
 
 void Edit::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         PopupMenu* pPopup = Edit::CreatePopupMenu();
 
@@ -2076,7 +2076,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         }
         mbActivePopup = false;
     }
-    else if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT )
+    else if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
     {
         DeleteSelected();
         delete mpIMEInfos;
@@ -2084,7 +2084,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         mpIMEInfos = new Impl_IMEInfos( nPos, OUString(maText.getStr() + nPos ) );
         mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
-    else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
+    else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
     {
         bool bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
         delete mpIMEInfos;
@@ -2107,7 +2107,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             }
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
+    else if ( rCEvt.GetCommand() == CommandEventId::ExtTextInput )
     {
         const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
 
@@ -2155,7 +2155,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         else
             GetCursor()->Hide();
     }
-    else if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
+    else if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
         if ( mpIMEInfos )
         {
@@ -2167,13 +2167,13 @@ void Edit::Command( const CommandEvent& rCEvt )
             SetCursorRect();
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE )
+    else if ( rCEvt.GetCommand() == CommandEventId::SelectionChange )
     {
         const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
         Selection aSelection( pData->GetStart(), pData->GetEnd() );
         SetSelection(aSelection);
     }
-    else if ( rCEvt.GetCommand() == COMMAND_QUERYCHARPOSITION )
+    else if ( rCEvt.GetCommand() == CommandEventId::QueryCharPosition )
     {
         if (mpIMEInfos && mpIMEInfos->nLen > 0)
         {

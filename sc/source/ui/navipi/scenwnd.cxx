@@ -129,7 +129,7 @@ bool ScScenarioListBox::Notify( NotifyEvent& rNEvt )
     else if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND && GetSelectEntryCount() )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        if ( pCEvt && pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
+        if ( pCEvt && pCEvt->GetCommand() == CommandEventId::ContextMenu )
         {
             if( const ScenarioEntry* pEntry = GetSelectedEntry() )
             {

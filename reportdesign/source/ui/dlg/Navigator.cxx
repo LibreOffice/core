@@ -275,9 +275,9 @@ void NavigatorTree::dispose()
 void NavigatorTree::Command( const CommandEvent& rEvt )
 {
     bool bHandled = false;
-    switch( rEvt.GetCommand() )
+    switch( rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+    case CommandEventId::ContextMenu:
         {
             // die Stelle, an der geklickt wurde
             SvTreeListEntry* ptClickedOn = NULL;
@@ -349,7 +349,9 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
             }
 
             bHandled = true;
-        } break;
+        }
+        break;
+        default: break;
     }
 
     if (!bHandled)

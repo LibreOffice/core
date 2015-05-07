@@ -613,7 +613,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         if ( m_bHasScrollBar &&
-             ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) )
+             ( rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel ) )
         {
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
             if ( pData->GetMode() == CommandWheelMode::SCROLL )

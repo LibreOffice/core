@@ -474,7 +474,7 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
 {
     vcl::Region  aRegion;
 
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         PopupMenu           aMenu( SVX_RES( RID_SVXMN_IMAP ) );
         const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();

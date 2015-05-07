@@ -425,24 +425,20 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
     // ViewFrame erstmal aktivieren (Bug 19493):
     pViewSh->SetActive();
 
-    sal_uInt16 nCmd = rCEvt.GetCommand();
-    if ( nCmd == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bDisable)
     {
-        if (!bDisable)
-        {
-            // #i18735# select the page that is under the mouse cursor
-            // if multiple tables are selected and the one under the cursor
-            // is not part of them then unselect them
-            sal_uInt16 nId = GetPageId( rCEvt.GetMousePosPixel() );
-            SwitchToPageId(nId);
+        // #i18735# select the page that is under the mouse cursor
+        // if multiple tables are selected and the one under the cursor
+        // is not part of them then unselect them
+        sal_uInt16 nId = GetPageId( rCEvt.GetMousePosPixel() );
+        SwitchToPageId(nId);
 
-            // #i52073# OLE inplace editing has to be stopped before showing the sheet tab context menu
-            pViewSh->DeactivateOle();
+        // #i52073# OLE inplace editing has to be stopped before showing the sheet tab context menu
+        pViewSh->DeactivateOle();
 
-            //  Popup-Menu:
-            //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
-            pViewData->GetDispatcher().ExecutePopup( ScResId(RID_POPUP_TAB) );
-        }
+        //  Popup-Menu:
+        //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
+        pViewData->GetDispatcher().ExecutePopup( ScResId(RID_POPUP_TAB) );
     }
 }
 
@@ -454,7 +450,7 @@ void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
     if (!bDisable)
     {
         vcl::Region aRegion( Rectangle(0,0,0,0) );
-        CommandEvent aCEvt( rPosPixel, COMMAND_STARTDRAG, true );   // needed for StartDrag
+        CommandEvent aCEvt( rPosPixel, CommandEventId::StartDrag, true );   // needed for StartDrag
         if (TabBar::StartDrag( aCEvt, aRegion ))
             DoDrag( aRegion );
     }

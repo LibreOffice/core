@@ -1595,8 +1595,8 @@ void ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 void ScTextWnd::Command( const CommandEvent& rCEvt )
 {
     bInputMode = true;
-    sal_uInt16 nCommand = rCEvt.GetCommand();
-    if ( pEditView /* && nCommand == COMMAND_STARTDRAG */ )
+    CommandEventId nCommand = rCEvt.GetCommand();
+    if ( pEditView /* && nCommand == CommandEventId::StartDrag */ )
     {
         ScModule* pScMod = SC_MOD();
         ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
@@ -1609,11 +1609,11 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         pEditView->Command( rCEvt );
         pScMod->SetInEditCommand( false );
 
-        //  COMMAND_STARTDRAG does not mean by far that the content was actually changed,
+        //  CommandEventId::StartDrag does not mean by far that the content was actually changed,
         //  so don't trigger an InputChanged.
         //! Detect if dragged with Move or forbid Drag&Move somehow
 
-        if ( nCommand == COMMAND_STARTDRAG )
+        if ( nCommand == CommandEventId::StartDrag )
         {
             // Is dragged onto another View?
             ScTabViewShell* pEndViewSh = ScTabViewShell::GetActiveViewShell();
@@ -1628,11 +1628,11 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
                 }
             }
         }
-        else if ( nCommand == COMMAND_CURSORPOS )
+        else if ( nCommand == CommandEventId::CursorPos )
         {
-            //  don't call InputChanged for COMMAND_CURSORPOS
+            //  don't call InputChanged for CommandEventId::CursorPos
         }
-        else if ( nCommand == COMMAND_INPUTLANGUAGECHANGE )
+        else if ( nCommand == CommandEventId::InputLanguageChange )
         {
             // #i55929# Font and font size state depends on input language if nothing is selected,
             // so the slots have to be invalidated when the input language is changed.
@@ -1645,9 +1645,9 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
                 rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
         }
-        else if ( nCommand == COMMAND_WHEEL )
+        else if ( nCommand == CommandEventId::Wheel )
         {
-            //don't call InputChanged for COMMAND_WHEEL
+            //don't call InputChanged for CommandEventId::Wheel
         }
         else
             SC_MOD()->InputChanged( pEditView );
@@ -1662,7 +1662,7 @@ void ScTextWnd::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
     if ( pEditView )
     {
-        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, true );
+        CommandEvent aDragEvent( rPosPixel, CommandEventId::StartDrag, true );
         pEditView->Command( aDragEvent );
 
         //  handling of d&d to different view (CancelHandler) can't be done here,

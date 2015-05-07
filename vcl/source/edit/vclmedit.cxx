@@ -694,9 +694,9 @@ void ImpVclMEdit::Enable( bool bEnable )
 bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
 {
     bool bDone = false;
-    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL ) ||
-         ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
-         ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
+    if ( ( rCEvt.GetCommand() == CommandEventId::Wheel ) ||
+         ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
+         ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
     {
         mpTextWindow->HandleScrollCommand( rCEvt, mpHScrollBar, mpVScrollBar );
         bDone = true;
@@ -818,7 +818,7 @@ void TextWindow::Resize()
 
 void TextWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         PopupMenu* pPopup = Edit::CreatePopupMenu();
         if ( !mpExtTextView->HasSelection() )

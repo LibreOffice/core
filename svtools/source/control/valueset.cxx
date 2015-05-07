@@ -1403,9 +1403,9 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
 
 void ValueSet::Command( const CommandEvent& rCommandEvent )
 {
-    if ( rCommandEvent.GetCommand() == COMMAND_WHEEL ||
-         rCommandEvent.GetCommand() == COMMAND_STARTAUTOSCROLL ||
-         rCommandEvent.GetCommand() == COMMAND_AUTOSCROLL )
+    if ( rCommandEvent.GetCommand() == CommandEventId::Wheel ||
+         rCommandEvent.GetCommand() == CommandEventId::StartAutoScroll ||
+         rCommandEvent.GetCommand() == CommandEventId::AutoScroll )
     {
         if ( HandleScrollCommand( rCommandEvent, NULL, mxScrollBar.get() ) )
             return;
@@ -2111,7 +2111,7 @@ void ValueSet::EndSelection()
 
 bool ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
 {
-    if ( rEvent.GetCommand() != COMMAND_STARTDRAG )
+    if ( rEvent.GetCommand() != CommandEventId::StartDrag )
         return false;
 
     // if necessary abort an existing action

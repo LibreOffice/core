@@ -422,7 +422,7 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
                 break;
 
             const CommandEvent* pComEvt = rEvt.GetCommandEvent();
-            if(pComEvt->GetCommand() != COMMAND_CONTEXTMENU)
+            if(pComEvt->GetCommand() != CommandEventId::ContextMenu)
                 break;
             // the place, at which was clicked
             Point ptWhere(0,0);

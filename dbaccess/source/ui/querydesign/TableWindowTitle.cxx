@@ -106,16 +106,13 @@ void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
 
 void OTableWindowTitle::Command( const CommandEvent& rEvt )
 {
-    switch( rEvt.GetCommand() )
+    if ( rEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        case COMMAND_CONTEXTMENU:
-        {
-            GrabFocus();
-            if ( m_pTabWin )
-                m_pTabWin->Command( rEvt );
-            else
-                Control::Command(rEvt);
-        }
+        GrabFocus();
+        if ( m_pTabWin )
+            m_pTabWin->Command( rEvt );
+        else
+            Control::Command(rEvt);
     }
 }
 

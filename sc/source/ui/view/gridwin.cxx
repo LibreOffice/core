@@ -2919,7 +2919,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 
     HideNoteMarker();
 
-    CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, true );
+    CommandEvent aDragEvent( rPosPixel, CommandEventId::StartDrag, true );
 
     if (bEEMouse && pViewData->HasEditView( eWhich ))
     {
@@ -2970,25 +2970,25 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     // menu from an inplace client is closed. Now we have the chance to
     // deactivate the inplace client without any problem regarding parent
     // windows and code on the stack.
-    sal_uInt16 nCmd = rCEvt.GetCommand();
+    CommandEventId nCmd = rCEvt.GetCommand();
     ScTabViewShell* pTabViewSh = pViewData->GetViewShell();
     SfxInPlaceClient* pClient = pTabViewSh->GetIPClient();
     if ( pClient &&
          pClient->IsObjectInPlaceActive() &&
-         nCmd == COMMAND_CONTEXTMENU )
+         nCmd == CommandEventId::ContextMenu )
     {
         pTabViewSh->DeactivateOle();
         return;
     }
 
     ScModule* pScMod = SC_MOD();
-    OSL_ENSURE( nCmd != COMMAND_STARTDRAG, "ScGridWindow::Command called with COMMAND_STARTDRAG" );
+    OSL_ENSURE( nCmd != CommandEventId::StartDrag, "ScGridWindow::Command called with CommandEventId::StartDrag" );
 
-    if ( nCmd == COMMAND_STARTEXTTEXTINPUT ||
-         nCmd == COMMAND_ENDEXTTEXTINPUT ||
-         nCmd == COMMAND_EXTTEXTINPUT ||
-         nCmd == COMMAND_CURSORPOS ||
-         nCmd == COMMAND_QUERYCHARPOSITION )
+    if ( nCmd == CommandEventId::StartExtTextInput ||
+         nCmd == CommandEventId::EndExtTextInput ||
+         nCmd == CommandEventId::ExtTextInput ||
+         nCmd == CommandEventId::CursorPos ||
+         nCmd == CommandEventId::QueryCharPosition )
     {
         bool bEditView = pViewData->HasEditView( eWhich );
         if (!bEditView)
@@ -3006,7 +3006,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             }
         }
 
-        if ( nCmd == COMMAND_CURSORPOS && !bEditView )
+        if ( nCmd == CommandEventId::CursorPos && !bEditView )
         {
             //  CURSORPOS may be called without following text input,
             //  to set the input method window position
@@ -3028,7 +3028,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
-    if ( nCmd == COMMAND_PASTESELECTION )
+    if ( nCmd == CommandEventId::PasteSelection )
     {
         if ( bEEMouse )
         {
@@ -3042,7 +3042,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
-    if ( nCmd == COMMAND_INPUTLANGUAGECHANGE )
+    if ( nCmd == CommandEventId::InputLanguageChange )
     {
         // #i55929# Font and font size state depends on input language if nothing is selected,
         // so the slots have to be invalidated when the input language is changed.
@@ -3053,7 +3053,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
-    if ( nCmd == COMMAND_WHEEL || nCmd == COMMAND_STARTAUTOSCROLL || nCmd == COMMAND_AUTOSCROLL )
+    if ( nCmd == CommandEventId::Wheel || nCmd == CommandEventId::StartAutoScroll || nCmd == CommandEventId::AutoScroll )
     {
         bool bDone = pViewData->GetView()->ScrollCommand( rCEvt, eWhich );
         if (!bDone)
@@ -3066,7 +3066,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     if (bDisable)
         return;
 
-    if ( nCmd == COMMAND_CONTEXTMENU && !SC_MOD()->GetIsWaterCan() )
+    if ( nCmd == CommandEventId::ContextMenu && !SC_MOD()->GetIsWaterCan() )
     {
         bool bMouse = rCEvt.IsMouseEvent();
         if ( bMouse && nMouseStatus == SC_GM_IGNORE )

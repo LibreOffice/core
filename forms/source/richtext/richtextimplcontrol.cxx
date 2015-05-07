@@ -557,9 +557,9 @@ namespace frm
 
     long RichTextControlImpl::HandleCommand( const CommandEvent& _rEvent )
     {
-        if (  ( _rEvent.GetCommand() == COMMAND_WHEEL )
-           || ( _rEvent.GetCommand() == COMMAND_STARTAUTOSCROLL )
-           || ( _rEvent.GetCommand() == COMMAND_AUTOSCROLL )
+        if (  ( _rEvent.GetCommand() == CommandEventId::Wheel )
+           || ( _rEvent.GetCommand() == CommandEventId::StartAutoScroll )
+           || ( _rEvent.GetCommand() == CommandEventId::AutoScroll )
            )
         {
             m_pAntiImpl->HandleScrollCommand( _rEvent, m_pHScroll, m_pVScroll );

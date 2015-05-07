@@ -556,7 +556,7 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
-        if ( ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) && !IsReadOnly() )
+        if ( ( rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel ) && !IsReadOnly() )
         {
             sal_uInt16 nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
             if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
