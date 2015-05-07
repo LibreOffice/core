@@ -150,103 +150,103 @@ static void ImplCalcBorder( WindowAlign eAlign, bool bNoAlign,
     }
 }
 
-void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
+void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
 {
-    const StyleSettings&    rStyleSettings = pWin->GetSettings().GetStyleSettings();
-    long                    nDX = pWin->mnDX;
-    long                    nDY = pWin->mnDY;
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    long nDX = mnDX;
+    long nDY = mnDY;
 
-    if ( pWin->mbNoAlign )
+    if (mbNoAlign)
     {
-        DecorationView  aDecoView( pWin );
-        Point           aTmpPoint;
-        Rectangle       aRect( aTmpPoint, Size( nDX, nDY ) );
-        aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+        DecorationView aDecoView(&rRenderContext);
+        Point aTmpPoint;
+        Rectangle aRect(aTmpPoint, Size(nDX, nDY));
+        aDecoView.DrawFrame(aRect, FRAME_DRAW_DOUBLEIN);
     }
     else
     {
-        switch ( pWin->meAlign )
+        switch (meAlign)
         {
         case WINDOWALIGN_BOTTOM:
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
+            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+            rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
+            rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
 
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
-            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
+            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+            rRenderContext.DrawLine(Point(0, 1), Point(nDX - 1, 1));
+            rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
             break;
         case WINDOWALIGN_TOP:
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
+            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+            rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
+            rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
 
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-            pWin->DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
+            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+            rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
+            rRenderContext.DrawLine(Point(0, 1), Point(nDX - 1, 1));
             break;
         case WINDOWALIGN_LEFT:
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-2 ) );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-2, nDY-2 ) );
+            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+            rRenderContext.DrawLine(Point(nDX - 2, 0), Point(nDX - 2, nDY - 2));
+            rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
+            rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 2, nDY - 2));
 
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
-            pWin->DrawLine( Point( 0, 1 ), Point( nDX-3, 1 ) );
-            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-2, nDY-1 ) );
+            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+            rRenderContext.DrawLine(Point(nDX - 1, 0), Point(nDX - 1, nDY - 1));
+            rRenderContext.DrawLine(Point(0, 1), Point(nDX - 3, 1));
+            rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 2, nDY - 1));
             break;
         default:
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-2 ) );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
+            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+            rRenderContext.DrawLine(Point(0, 0), Point( 0, nDY - 2));
+            rRenderContext.DrawLine(Point(0, 0), Point( nDX - 1, 0));
+            rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
 
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
-            pWin->DrawLine( Point( 1, 1 ), Point( nDX-1, 1 ) );
-            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetLightColor());
+            rRenderContext.DrawLine(Point(1, 1), Point(1, nDY - 3));
+            rRenderContext.DrawLine(Point(1, 1), Point(nDX - 1, 1));
+            rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
         }
     }
 }
 
-void SplitWindow::ImplDrawBorderLine( SplitWindow* pWin )
+void SplitWindow::ImplDrawBorderLine(vcl::RenderContext& rRenderContext)
 {
-    if ( pWin->mbFadeOut || pWin->mbAutoHide )
+    if (mbFadeOut || mbAutoHide)
     {
-        const StyleSettings&    rStyleSettings = pWin->GetSettings().GetStyleSettings();
-        long                    nDX = pWin->mnDX;
-        long                    nDY = pWin->mnDY;
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        long nDX = mnDX;
+        long  nDY = mnDY;
 
-        switch ( pWin->meAlign )
+        switch (meAlign)
         {
         case WINDOWALIGN_LEFT:
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, nDY-2 ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+            rRenderContext.DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, nDY-2 ) );
 
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN, nDY-3 ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+            rRenderContext.DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN, nDY-3 ) );
             break;
         case WINDOWALIGN_RIGHT:
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( SPLITWIN_SPLITSIZEEXLN-1, 0 ), Point( SPLITWIN_SPLITSIZEEXLN-1, nDY-2 ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+            rRenderContext.DrawLine( Point( SPLITWIN_SPLITSIZEEXLN-1, 0 ), Point( SPLITWIN_SPLITSIZEEXLN-1, nDY-2 ) );
 
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( SPLITWIN_SPLITSIZEEXLN, 1 ), Point( SPLITWIN_SPLITSIZEEXLN, nDY-3 ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+            rRenderContext.DrawLine( Point( SPLITWIN_SPLITSIZEEXLN, 1 ), Point( SPLITWIN_SPLITSIZEEXLN, nDY-3 ) );
             break;
         case WINDOWALIGN_TOP:
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, nDY-SPLITWIN_SPLITSIZEEXLN-1 ), Point( nDX-1, nDY-SPLITWIN_SPLITSIZEEXLN-1 ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+            rRenderContext.DrawLine( Point( 0, nDY-SPLITWIN_SPLITSIZEEXLN-1 ), Point( nDX-1, nDY-SPLITWIN_SPLITSIZEEXLN-1 ) );
 
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, nDY-SPLITWIN_SPLITSIZEEXLN ), Point( nDX-1, nDY-SPLITWIN_SPLITSIZEEXLN ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+            rRenderContext.DrawLine( Point( 0, nDY-SPLITWIN_SPLITSIZEEXLN ), Point( nDX-1, nDY-SPLITWIN_SPLITSIZEEXLN ) );
             break;
         case WINDOWALIGN_BOTTOM:
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 5 ), Point( nDX-1, 5 ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+            rRenderContext.DrawLine( Point( 0, 5 ), Point( nDX-1, 5 ) );
 
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, SPLITWIN_SPLITSIZEEXLN ), Point( nDX-1, SPLITWIN_SPLITSIZEEXLN ) );
+            rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+            rRenderContext.DrawLine( Point( 0, SPLITWIN_SPLITSIZEEXLN ), Point( nDX-1, SPLITWIN_SPLITSIZEEXLN ) );
             break;
         }
     }
@@ -903,125 +903,126 @@ static void ImplCalcLogSize( ImplSplitItem* pItems, sal_uInt16 nItems )
     }
 }
 
-void SplitWindow::ImplDrawBack( SplitWindow* pWindow, const Rectangle& rRect,
-                                const Wallpaper* pWall, const Bitmap* pBitmap )
+void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, const Rectangle& rRect,
+                               const Wallpaper* pWall, const Bitmap* pBitmap)
 {
-    if ( pBitmap )
+    if (pBitmap)
     {
-        Point   aPos = rRect.TopLeft();
-        Size    aBmpSize = pBitmap->GetSizePixel();
-        pWindow->Push( PushFlags::CLIPREGION );
-        pWindow->IntersectClipRegion( rRect );
+        Point aPos = rRect.TopLeft();
+        Size aBmpSize = pBitmap->GetSizePixel();
+        rRenderContext.Push(PushFlags::CLIPREGION);
+        rRenderContext.IntersectClipRegion(rRect);
         do
         {
             aPos.X() = rRect.Left();
             do
             {
-                pWindow->DrawBitmap( aPos, *pBitmap );
+                rRenderContext.DrawBitmap(aPos, *pBitmap);
                 aPos.X() += aBmpSize.Width();
             }
-            while ( aPos.X() < rRect.Right() );
+            while (aPos.X() < rRect.Right());
             aPos.Y() += aBmpSize.Height();
         }
-        while ( aPos.Y() < rRect.Bottom() );
-        pWindow->Pop();
+        while (aPos.Y() < rRect.Bottom());
+        rRenderContext.Pop();
     }
     else
-        pWindow->DrawWallpaper( rRect, *pWall );
+    {
+        rRenderContext.DrawWallpaper(rRect, *pWall);
+    }
 }
 
-void SplitWindow::ImplDrawBack( SplitWindow* pWindow, ImplSplitSet* pSet )
+void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet)
 {
-    sal_uInt16          i;
-    sal_uInt16          nItems = pSet->mnItems;
-    ImplSplitItem*  pItems = pSet->mpItems;
+    sal_uInt16 i;
+    sal_uInt16 nItems = pSet->mnItems;
+    ImplSplitItem* pItems = pSet->mpItems;
 
     // also draw background for mainset
-    if ( pSet->mnId == 0 )
+    if (pSet->mnId == 0)
     {
-        if ( pSet->mpBitmap )
+        if (pSet->mpBitmap)
         {
-            Rectangle aRect( pWindow->mnLeftBorder,
-                             pWindow->mnTopBorder,
-                             pWindow->mnDX-pWindow->mnRightBorder-1,
-                             pWindow->mnDY-pWindow->mnBottomBorder-1 );
-            ImplDrawBack( pWindow, aRect, pSet->mpWallpaper, pSet->mpBitmap );
+            Rectangle aRect(mnLeftBorder, mnTopBorder,
+                            mnDX - mnRightBorder - 1,
+                            mnDY - mnBottomBorder - 1);
+
+            ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper, pSet->mpBitmap);
         }
     }
 
-    for ( i = 0; i < nItems; i++ )
+    for (i = 0; i < nItems; i++)
     {
         pSet = pItems[i].mpSet;
-        if ( pSet )
+        if (pSet)
         {
-            if ( pSet->mpBitmap || pSet->mpWallpaper )
+            if (pSet->mpBitmap || pSet->mpWallpaper)
             {
-                Point       aPoint( pItems[i].mnLeft, pItems[i].mnTop );
-                Size        aSize( pItems[i].mnWidth, pItems[i].mnHeight );
-                Rectangle   aRect( aPoint, aSize );
-                ImplDrawBack( pWindow, aRect, pSet->mpWallpaper, pSet->mpBitmap );
+                Point aPoint(pItems[i].mnLeft, pItems[i].mnTop);
+                Size aSize(pItems[i].mnWidth, pItems[i].mnHeight);
+                Rectangle aRect(aPoint, aSize);
+                ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper, pSet->mpBitmap);
             }
         }
     }
 
-    for ( i = 0; i < nItems; i++ )
+    for (i = 0; i < nItems; i++)
     {
-        if ( pItems[i].mpSet )
-            ImplDrawBack( pWindow, pItems[i].mpSet );
+        if (pItems[i].mpSet)
+            ImplDrawBack(rRenderContext, pItems[i].mpSet);
     }
 }
 
-static void ImplDrawSplit( SplitWindow* pWindow, ImplSplitSet* pSet,
-                           bool bRows, bool bDown = true )
+static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet, bool bRows, bool bFlat, bool bDown = true)
 {
-    if ( !pSet->mpItems )
+    if (!pSet->mpItems)
         return;
 
-    sal_uInt16                  i;
-    sal_uInt16                  nItems = pSet->mnItems;
-    long                    nPos;
-    long                    nTop;
-    long                    nBottom;
-    ImplSplitItem*          pItems = pSet->mpItems;
-    const StyleSettings&    rStyleSettings = pWindow->GetSettings().GetStyleSettings();
+    sal_uInt16 i;
+    sal_uInt16  nItems = pSet->mnItems;
+    long nPos;
+    long nTop;
+    long nBottom;
+    ImplSplitItem* pItems = pSet->mpItems;
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    bool bFlat = (pWindow->GetStyle() & WB_FLATSPLITDRAW) == WB_FLATSPLITDRAW;
-
-    for ( i = 0; i < nItems-1; i++ )
+    for (i = 0; i < nItems-1; i++)
     {
-        if ( pItems[i].mnSplitSize )
+        if (pItems[i].mnSplitSize)
         {
             nPos = pItems[i].mnSplitPos;
 
             long nItemSplitSize = pItems[i].mnSplitSize;
             long nSplitSize = pSet->mnSplitSize;
-            if ( bRows )
+            if (bRows)
             {
                 nTop    = pItems[i].mnLeft;
                 nBottom = pItems[i].mnLeft+pItems[i].mnWidth-1;
 
-                if ( bFlat ) nPos--;
+                if (bFlat)
+                    nPos--;
 
-                if ( bDown || (nItemSplitSize >= nSplitSize) )
+                if (bDown || (nItemSplitSize >= nSplitSize))
                 {
-                    pWindow->SetLineColor( rStyleSettings.GetLightColor() );
-                    pWindow->DrawLine( Point( nTop, nPos+1 ), Point( nBottom, nPos+1 ) );
+                    rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+                    rRenderContext.DrawLine(Point(nTop, nPos + 1), Point(nBottom, nPos + 1));
                 }
                 nPos += nSplitSize-2;
-                if ( bFlat ) nPos+=2;
-                if ( (!bDown && (nItemSplitSize >= 2)) ||
-                     (bDown  && (nItemSplitSize >= nSplitSize-1)) )
+                if (bFlat)
+                    nPos+=2;
+                if ((!bDown && (nItemSplitSize >= 2)) ||
+                    (bDown  && (nItemSplitSize >= nSplitSize - 1)))
                 {
-                    pWindow->SetLineColor( rStyleSettings.GetShadowColor() );
-                    pWindow->DrawLine( Point( nTop, nPos ), Point( nBottom, nPos ) );
+                    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                    rRenderContext.DrawLine(Point(nTop, nPos), Point(nBottom, nPos));
                 }
-                if ( !bFlat )
+                if (!bFlat)
                 {
                     nPos++;
-                    if ( !bDown || (nItemSplitSize >= nSplitSize) )
+                    if (!bDown || (nItemSplitSize >= nSplitSize))
                     {
-                        pWindow->SetLineColor( rStyleSettings.GetDarkShadowColor() );
-                        pWindow->DrawLine( Point( nTop, nPos ), Point( nBottom, nPos ) );
+                        rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+                        rRenderContext.DrawLine(Point(nTop, nPos), Point(nBottom, nPos));
                     }
                 }
             }
@@ -1030,37 +1031,41 @@ static void ImplDrawSplit( SplitWindow* pWindow, ImplSplitSet* pSet,
                 nTop    = pItems[i].mnTop;
                 nBottom = pItems[i].mnTop+pSet->mpItems[i].mnHeight-1;
 
-                if ( bFlat ) nPos--;
-                if ( bDown || (nItemSplitSize >= nSplitSize) )
+                if (bFlat)
+                    nPos--;
+                if (bDown || (nItemSplitSize >= nSplitSize))
                 {
-                    pWindow->SetLineColor( rStyleSettings.GetLightColor() );
-                    pWindow->DrawLine( Point( nPos+1, nTop ), Point( nPos+1, nBottom ) );
+                    rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+                    rRenderContext.DrawLine(Point(nPos + 1, nTop), Point(nPos+1, nBottom));
                 }
-                nPos += pSet->mnSplitSize-2;
-                if ( bFlat ) nPos+=2;
-                if ( (!bDown && (nItemSplitSize >= 2)) ||
-                     (bDown  && (nItemSplitSize >= nSplitSize-1)) )
+                nPos += pSet->mnSplitSize - 2;
+                if (bFlat)
+                    nPos += 2;
+                if ((!bDown && (nItemSplitSize >= 2)) ||
+                    (bDown  && (nItemSplitSize >= nSplitSize - 1)))
                 {
-                    pWindow->SetLineColor( rStyleSettings.GetShadowColor() );
-                    pWindow->DrawLine( Point( nPos, nTop ), Point( nPos, nBottom ) );
+                    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                    rRenderContext.DrawLine(Point(nPos, nTop), Point(nPos, nBottom));
                 }
                 if( !bFlat )
                 {
                     nPos++;
-                    if ( !bDown || (nItemSplitSize >= nSplitSize) )
+                    if (!bDown || (nItemSplitSize >= nSplitSize))
                     {
-                        pWindow->SetLineColor( rStyleSettings.GetDarkShadowColor() );
-                        pWindow->DrawLine( Point( nPos, nTop ), Point( nPos, nBottom ) );
+                        rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+                        rRenderContext.DrawLine(Point(nPos, nTop), Point(nPos, nBottom));
                     }
                 }
             }
         }
     }
 
-    for ( i = 0; i < nItems; i++ )
+    for (i = 0; i < nItems; i++)
     {
-        if ( pItems[i].mpSet && pItems[i].mnWidth && pItems[i].mnHeight )
-            ImplDrawSplit( pWindow, pItems[i].mpSet, ((pItems[i].mnBits & SWIB_COLSET) == 0) );
+        if (pItems[i].mpSet && pItems[i].mnWidth && pItems[i].mnHeight)
+        {
+            ImplDrawSplit(rRenderContext, pItems[i].mpSet, ((pItems[i].mnBits & SWIB_COLSET) == 0), bFlat);
+        }
     }
 }
 
@@ -1204,20 +1209,19 @@ sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
                          pWindow->mbHorz, !pWindow->mbBottomRight );
 }
 
-void SplitWindow::ImplDrawSplitTracking( SplitWindow* pThis, const Point& rPos )
+void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
 {
     Rectangle aRect;
 
-    if ( pThis->mnSplitTest & SPLIT_HORZ )
+    if (mnSplitTest & SPLIT_HORZ)
     {
-        aRect.Top()    = pThis->maDragRect.Top();
-        aRect.Bottom() = pThis->maDragRect.Bottom();
+        aRect.Top()    = maDragRect.Top();
+        aRect.Bottom() = maDragRect.Bottom();
         aRect.Left()   = rPos.X();
-        aRect.Right()  = aRect.Left()+pThis->mpSplitSet->mnSplitSize-1;
-        if ( !(pThis->mnWinStyle & WB_NOSPLITDRAW) )
+        aRect.Right()  = aRect.Left() + mpSplitSet->mnSplitSize - 1;
+        if (!(mnWinStyle & WB_NOSPLITDRAW))
             aRect.Right()--;
-        if ( (pThis->mnSplitTest & SPLIT_WINDOW) &&
-             (pThis->mbAutoHide || pThis->mbFadeOut) )
+        if ((mnSplitTest & SPLIT_WINDOW) && (mbAutoHide || mbFadeOut))
         {
             aRect.Left()  += SPLITWIN_SPLITSIZEEXLN;
             aRect.Right() += SPLITWIN_SPLITSIZEEXLN;
@@ -1225,20 +1229,19 @@ void SplitWindow::ImplDrawSplitTracking( SplitWindow* pThis, const Point& rPos )
     }
     else
     {
-        aRect.Left()    = pThis->maDragRect.Left();
-        aRect.Right()   = pThis->maDragRect.Right();
-        aRect.Top()     = rPos.Y();
-        aRect.Bottom()  = aRect.Top()+pThis->mpSplitSet->mnSplitSize-1;
-        if ( !(pThis->mnWinStyle & WB_NOSPLITDRAW) )
+        aRect.Left() = maDragRect.Left();
+        aRect.Right() = maDragRect.Right();
+        aRect.Top() = rPos.Y();
+        aRect.Bottom() = aRect.Top() + mpSplitSet->mnSplitSize - 1;
+        if (!(mnWinStyle & WB_NOSPLITDRAW))
             aRect.Bottom()--;
-        if ( (pThis->mnSplitTest & SPLIT_WINDOW) &&
-             (pThis->mbAutoHide || pThis->mbFadeOut) )
+        if ((mnSplitTest & SPLIT_WINDOW) && (mbAutoHide || mbFadeOut))
         {
-            aRect.Top()    += SPLITWIN_SPLITSIZEEXLN;
+            aRect.Top() += SPLITWIN_SPLITSIZEEXLN;
             aRect.Bottom() += SPLITWIN_SPLITSIZEEXLN;
         }
     }
-    pThis->ShowTracking( aRect, SHOWTRACK_SPLIT );
+    ShowTracking(aRect, SHOWTRACK_SPLIT);
 }
 
 void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -1685,9 +1688,9 @@ void SplitWindow::ImplGetFadeOutRect( Rectangle& rRect, bool ) const
     rRect = aRect;
 }
 
-void SplitWindow::ImplDrawButtonRect( const Rectangle& rRect, long nSize )
+void SplitWindow::ImplDrawButtonRect(vcl::RenderContext& rRenderContext, const Rectangle& rRect, long nSize)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     if ( mbHorz )
     {
@@ -1696,25 +1699,25 @@ void SplitWindow::ImplDrawButtonRect( const Rectangle& rRect, long nSize )
         long nCenter = rRect.Center().Y();
         long nEx1 = nLeft+((rRect.GetWidth()-nSize)/2)-2;
         long nEx2 = nEx1+nSize+3;
-        SetLineColor( rStyleSettings.GetLightColor() );
-        DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Left(), rRect.Bottom() ) );
-        DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Right(), rRect.Top() ) );
-        SetLineColor( rStyleSettings.GetShadowColor() );
-        DrawLine( Point( rRect.Right(), rRect.Top() ), Point( rRect.Right(), rRect.Bottom() ) );
-        DrawLine( Point( rRect.Left(), rRect.Bottom() ), Point( rRect.Right(), rRect.Bottom() ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+        rRenderContext.DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Left(), rRect.Bottom() ) );
+        rRenderContext.DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Right(), rRect.Top() ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+        rRenderContext.DrawLine( Point( rRect.Right(), rRect.Top() ), Point( rRect.Right(), rRect.Bottom() ) );
+        rRenderContext.DrawLine( Point( rRect.Left(), rRect.Bottom() ), Point( rRect.Right(), rRect.Bottom() ) );
         long i = nLeft+2;
         while ( i < nRight-3 )
         {
             if ( (i < nEx1) || (i > nEx2 ) )
             {
-                DrawPixel( Point( i, nCenter-2 ), rStyleSettings.GetLightColor() );
-                DrawPixel( Point( i+1, nCenter-2+1 ), rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawPixel( Point( i, nCenter-2 ), rStyleSettings.GetLightColor() );
+                rRenderContext.DrawPixel( Point( i+1, nCenter-2+1 ), rStyleSettings.GetShadowColor() );
             }
             i++;
             if ( (i < nEx1) || ((i > nEx2 ) && (i < nRight-3)) )
             {
-                DrawPixel( Point( i, nCenter+2 ), rStyleSettings.GetLightColor() );
-                DrawPixel( Point( i+1, nCenter+2+1 ), rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawPixel( Point( i, nCenter+2 ), rStyleSettings.GetLightColor() );
+                rRenderContext.DrawPixel( Point( i+1, nCenter+2+1 ), rStyleSettings.GetShadowColor() );
             }
             i += 2;
         }
@@ -1726,50 +1729,50 @@ void SplitWindow::ImplDrawButtonRect( const Rectangle& rRect, long nSize )
         long nCenter = rRect.Center().X();
         long nEx1 = nTop+((rRect.GetHeight()-nSize)/2)-2;
         long nEx2 = nEx1+nSize+3;
-        SetLineColor( rStyleSettings.GetLightColor() );
-        DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Right(), rRect.Top() ) );
-        DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Left(), rRect.Bottom() ) );
-        SetLineColor( rStyleSettings.GetShadowColor() );
-        DrawLine( Point( rRect.Right(), rRect.Top() ), Point( rRect.Right(), rRect.Bottom() ) );
-        DrawLine( Point( rRect.Left(), rRect.Bottom() ), Point( rRect.Right(), rRect.Bottom() ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
+        rRenderContext.DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Right(), rRect.Top() ) );
+        rRenderContext.DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Left(), rRect.Bottom() ) );
+        rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
+        rRenderContext.DrawLine( Point( rRect.Right(), rRect.Top() ), Point( rRect.Right(), rRect.Bottom() ) );
+        rRenderContext.DrawLine( Point( rRect.Left(), rRect.Bottom() ), Point( rRect.Right(), rRect.Bottom() ) );
         long i = nTop+2;
         while ( i < nBottom-3 )
         {
             if ( (i < nEx1) || (i > nEx2 ) )
             {
-                DrawPixel( Point( nCenter-2, i ), rStyleSettings.GetLightColor() );
-                DrawPixel( Point( nCenter-2+1, i+1 ), rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawPixel( Point( nCenter-2, i ), rStyleSettings.GetLightColor() );
+                rRenderContext.DrawPixel( Point( nCenter-2+1, i+1 ), rStyleSettings.GetShadowColor() );
             }
             i++;
             if ( (i < nEx1) || ((i > nEx2 ) && (i < nBottom-3)) )
             {
-                DrawPixel( Point( nCenter+2, i ), rStyleSettings.GetLightColor() );
-                DrawPixel( Point( nCenter+2+1, i+1 ), rStyleSettings.GetShadowColor() );
+                rRenderContext.DrawPixel( Point( nCenter+2, i ), rStyleSettings.GetLightColor() );
+                rRenderContext.DrawPixel( Point( nCenter+2+1, i+1 ), rStyleSettings.GetShadowColor() );
             }
             i += 2;
         }
     }
 }
 
-void SplitWindow::ImplDrawAutoHide( bool bInPaint )
+void SplitWindow::ImplDrawAutoHide(vcl::RenderContext& rRenderContext, bool bInPaint)
 {
-    if ( mbAutoHide )
+    if (mbAutoHide)
     {
         Rectangle aTempRect;
         ImplGetAutoHideRect( aTempRect );
 
-        if ( !bInPaint )
-            Erase( aTempRect );
+        if (!bInPaint)
+            rRenderContext.Erase( aTempRect );
 
         // load ImageListe, if not available
         ImplSVData* pSVData = ImplGetSVData();
         ImageList*  pImageList;
-        if ( mbHorz )
+        if (mbHorz)
         {
-            if ( !pSVData->maCtrlData.mpSplitHPinImgList )
+            if (!pSVData->maCtrlData.mpSplitHPinImgList)
             {
                 ResMgr* pResMgr = ImplGetResMgr();
-                if( pResMgr )
+                if (pResMgr)
                 {
                     Color aNonAlphaMask( 0x00, 0x00, 0xFF );
                     pSVData->maCtrlData.mpSplitHPinImgList = new ImageList(4);
@@ -1781,15 +1784,15 @@ void SplitWindow::ImplDrawAutoHide( bool bInPaint )
         }
         else
         {
-            if ( !pSVData->maCtrlData.mpSplitVPinImgList )
+            if (!pSVData->maCtrlData.mpSplitVPinImgList)
             {
                 ResMgr* pResMgr = ImplGetResMgr();
                 pSVData->maCtrlData.mpSplitVPinImgList = new ImageList(4);
-                if( pResMgr )
+                if (pResMgr)
                 {
                     Color aNonAlphaMask( 0x00, 0x00, 0xFF );
-                    pSVData->maCtrlData.mpSplitVPinImgList->InsertFromHorizontalBitmap
-                        ( ResId( SV_RESID_BITMAP_SPLITVPIN, *pResMgr ), 4, &aNonAlphaMask );
+                    pSVData->maCtrlData.mpSplitVPinImgList->InsertFromHorizontalBitmap(
+                        ResId( SV_RESID_BITMAP_SPLITVPIN, *pResMgr ), 4, &aNonAlphaMask);
                 }
             }
             pImageList = pSVData->maCtrlData.mpSplitVPinImgList;
@@ -1800,123 +1803,124 @@ void SplitWindow::ImplDrawAutoHide( bool bInPaint )
 
         // retrieve and return image
         sal_uInt16 nId;
-        if ( mbAutoHidePressed )
+        if (mbAutoHidePressed)
         {
-            if ( mbAutoHideIn )
+            if (mbAutoHideIn)
                 nId = 3;
             else
                 nId = 4;
         }
         else
         {
-            if ( mbAutoHideIn )
+            if (mbAutoHideIn)
                 nId = 1;
             else
                 nId = 2;
         }
 
-        Image   aImage = pImageList->GetImage( nId );
-        Size    aImageSize = aImage.GetSizePixel();
-        Point   aPos( aTempRect.Left()+((aTempRect.GetWidth()-aImageSize.Width())/2),
-                      aTempRect.Top()+((aTempRect.GetHeight()-aImageSize.Height())/2) );
-        long    nSize;
-        if ( mbHorz )
+        Image aImage = pImageList->GetImage( nId );
+        Size aImageSize = aImage.GetSizePixel();
+        Point aPos(aTempRect.Left() + ((aTempRect.GetWidth()  - aImageSize.Width())  / 2),
+                   aTempRect.Top()  + ((aTempRect.GetHeight() - aImageSize.Height()) / 2));
+        long nSize;
+        if (mbHorz)
             nSize = aImageSize.Width();
         else
             nSize = aImageSize.Height();
-        ImplDrawButtonRect( aTempRect, nSize );
-        DrawImage( aPos, aImage );
+        ImplDrawButtonRect(rRenderContext, aTempRect, nSize);
+        rRenderContext.DrawImage(aPos, aImage);
     }
 }
 
-void SplitWindow::ImplDrawFadeArrow( const Point& rPt, bool bHorz, bool bLeft )
+void SplitWindow::ImplDrawFadeArrow(vcl::RenderContext& rRenderContext, const Point& rPt, bool bHorz, bool bLeft)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    int x( rPt.X() );
-    int y( rPt.Y() );
+    int x(rPt.X());
+    int y(rPt.Y());
 
     Color aCol;
-    if( !bHorz )
+    if (!bHorz)
     {
         int dx = 1;
-        if( bLeft )
+        if (bLeft)
         {
-            x ++;
+            x++;
             dx = -1;
         }
 
-        x++; y++;
+        x++;
+        y++;
         aCol = Color( COL_WHITE );
-        DrawPixel( Point(x, y), aCol );
-        DrawPixel( Point(x, y+1), aCol );
-        DrawPixel( Point(x, y+2), aCol );
-        DrawPixel( Point(x+dx, y+1), aCol );
+        rRenderContext.DrawPixel( Point(x, y), aCol );
+        rRenderContext.DrawPixel( Point(x, y+1), aCol );
+        rRenderContext.DrawPixel( Point(x, y+2), aCol );
+        rRenderContext.DrawPixel( Point(x+dx, y+1), aCol );
 
         x--; y--;
         aCol = rStyleSettings.GetDarkShadowColor();
-        DrawPixel( Point(x, y), rStyleSettings.GetDarkShadowColor() );
-        DrawPixel( Point(x, y+1), rStyleSettings.GetDarkShadowColor() );
-        DrawPixel( Point(x, y+2), rStyleSettings.GetDarkShadowColor() );
-        DrawPixel( Point(x+dx, y+1), rStyleSettings.GetDarkShadowColor() );
+        rRenderContext.DrawPixel( Point(x, y), rStyleSettings.GetDarkShadowColor() );
+        rRenderContext.DrawPixel( Point(x, y+1), rStyleSettings.GetDarkShadowColor() );
+        rRenderContext.DrawPixel( Point(x, y+2), rStyleSettings.GetDarkShadowColor() );
+        rRenderContext.DrawPixel( Point(x+dx, y+1), rStyleSettings.GetDarkShadowColor() );
     }
     else
     {
         int dy = 1;
-        if( bLeft )
+        if (bLeft)
         {
-            y ++;
+            y++;
             dy = -1;
         }
 
         x++; y++;
         aCol = Color( COL_WHITE );
-        DrawPixel( Point(x, y), aCol );
-        DrawPixel( Point(x+1, y), aCol );
-        DrawPixel( Point(x+2, y), aCol );
-        DrawPixel( Point(x+1, y+dy), aCol );
+        rRenderContext.DrawPixel( Point(x, y), aCol );
+        rRenderContext.DrawPixel( Point(x+1, y), aCol );
+        rRenderContext.DrawPixel( Point(x+2, y), aCol );
+        rRenderContext.DrawPixel( Point(x+1, y+dy), aCol );
 
         x--; y--;
         aCol = rStyleSettings.GetDarkShadowColor();
-        DrawPixel( Point(x, y), aCol );
-        DrawPixel( Point(x+1, y), aCol );
-        DrawPixel( Point(x+2, y), aCol );
-        DrawPixel( Point(x+1, y+dy), aCol );
+        rRenderContext.DrawPixel( Point(x, y), aCol );
+        rRenderContext.DrawPixel( Point(x+1, y), aCol );
+        rRenderContext.DrawPixel( Point(x+2, y), aCol );
+        rRenderContext.DrawPixel( Point(x+1, y+dy), aCol );
     }
 }
 
-void SplitWindow::ImplDrawGrip( const Rectangle& rRect, bool bHorz, bool bLeft )
+void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bHorz, bool bLeft )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if( rRect.IsInside( GetPointerPosPixel() ) )
+    if (rRect.IsInside(GetPointerPosPixel()))
     {
-        DrawWallpaper( rRect, Wallpaper( Color( COL_WHITE ) ) );
-        DrawSelectionBackground( rRect, 2, false, false, false );
+        rRenderContext.DrawWallpaper(rRect, Wallpaper(Color(COL_WHITE)));
+        DrawSelectionBackground(rRect, 2, false, false, false);
     }
 
-    if( bHorz )
+    if (bHorz)
     {
         int width = (int) (0.5 * rRect.getWidth() + 0.5);
         int i = rRect.Left() + (rRect.getWidth() - width) / 2;
         width += i;
         const int y = rRect.Top() + 1;
-        ImplDrawFadeArrow( Point( i-8, y), bHorz, bLeft );
+        ImplDrawFadeArrow(rRenderContext, Point( i-8, y), bHorz, bLeft);
         while( i <= width )
         {
 
-            DrawPixel( Point(i, y), rStyleSettings.GetDarkShadowColor() );
-            DrawPixel( Point(i+1, y), rStyleSettings.GetShadowColor() );
+            rRenderContext.DrawPixel(Point(i, y), rStyleSettings.GetDarkShadowColor());
+            rRenderContext.DrawPixel(Point(i+1, y), rStyleSettings.GetShadowColor());
 
-            DrawPixel( Point(i, y+1), rStyleSettings.GetShadowColor() );
-            DrawPixel( Point(i+1, y+1), rStyleSettings.GetFaceColor() );
-            DrawPixel( Point(i+2, y+1), Color(COL_WHITE) );
+            rRenderContext.DrawPixel(Point(i, y+1), rStyleSettings.GetShadowColor());
+            rRenderContext.DrawPixel(Point(i+1, y+1), rStyleSettings.GetFaceColor());
+            rRenderContext.DrawPixel(Point(i+2, y+1), Color(COL_WHITE));
 
-            DrawPixel( Point(i+1, y+2), Color(COL_WHITE) );
-            DrawPixel( Point(i+2, y+2), Color(COL_WHITE) );
+            rRenderContext.DrawPixel(Point(i+1, y+2), Color(COL_WHITE));
+            rRenderContext.DrawPixel(Point(i+2, y+2), Color(COL_WHITE));
             i+=4;
         }
-        ImplDrawFadeArrow( Point( i+3, y), bHorz, bLeft );
+        ImplDrawFadeArrow(rRenderContext, Point(i + 3, y), bHorz, bLeft);
     }
     else
     {
@@ -1924,34 +1928,33 @@ void SplitWindow::ImplDrawGrip( const Rectangle& rRect, bool bHorz, bool bLeft )
         int i = rRect.Top() + (rRect.getHeight() - height) / 2;
         height += i;
         const int x = rRect.Left() + 2;
-        ImplDrawFadeArrow( Point( x, i-8), bHorz, bLeft );
-        while( i <= height )
+        ImplDrawFadeArrow(rRenderContext, Point(x, i - 8), bHorz, bLeft);
+        while (i <= height)
         {
+            DrawPixel(Point(x, i), rStyleSettings.GetDarkShadowColor());
+            DrawPixel(Point(x+1, i), rStyleSettings.GetShadowColor());
 
-            DrawPixel( Point(x, i), rStyleSettings.GetDarkShadowColor() );
-            DrawPixel( Point(x+1, i), rStyleSettings.GetShadowColor() );
+            DrawPixel(Point(x, i+1), rStyleSettings.GetShadowColor());
+            DrawPixel(Point(x+1, i+1), rStyleSettings.GetFaceColor());
+            DrawPixel(Point(x+2, i+1), Color(COL_WHITE));
 
-            DrawPixel( Point(x, i+1), rStyleSettings.GetShadowColor() );
-            DrawPixel( Point(x+1, i+1), rStyleSettings.GetFaceColor() );
-            DrawPixel( Point(x+2, i+1), Color(COL_WHITE) );
-
-            DrawPixel( Point(x+1, i+2), Color(COL_WHITE) );
-            DrawPixel( Point(x+2, i+2), Color(COL_WHITE) );
+            DrawPixel(Point(x+1, i+2), Color(COL_WHITE));
+            DrawPixel(Point(x+2, i+2), Color(COL_WHITE));
             i+=4;
         }
-        ImplDrawFadeArrow( Point( x, i+3), bHorz, bLeft );
+        ImplDrawFadeArrow(rRenderContext, Point(x, i + 3), bHorz, bLeft);
     }
 }
 
-void SplitWindow::ImplDrawFadeIn( bool bInPaint )
+void SplitWindow::ImplDrawFadeIn(vcl::RenderContext& rRenderContext, bool bInPaint)
 {
-    if ( mbFadeIn )
+    if (mbFadeIn)
     {
-        Rectangle       aTempRect;
-        ImplGetFadeInRect( aTempRect );
+        Rectangle aTempRect;
+        ImplGetFadeInRect(aTempRect);
 
         bool bLeft = true;
-        switch ( meAlign )
+        switch (meAlign)
         {
         case WINDOWALIGN_TOP:
         case WINDOWALIGN_LEFT:
@@ -1964,22 +1967,22 @@ void SplitWindow::ImplDrawFadeIn( bool bInPaint )
             break;
         }
 
-        if ( !bInPaint )
-            Erase( aTempRect );
+        if (!bInPaint)
+            rRenderContext.Erase(aTempRect);
 
-        ImplDrawGrip( aTempRect, (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM), bLeft );
+        ImplDrawGrip(rRenderContext, aTempRect, (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM), bLeft);
     }
 }
 
-void SplitWindow::ImplDrawFadeOut( bool bInPaint )
+void SplitWindow::ImplDrawFadeOut(vcl::RenderContext& rRenderContext, bool bInPaint)
 {
-    if ( mbFadeOut )
+    if (mbFadeOut)
     {
-        Rectangle       aTempRect;
-        ImplGetFadeOutRect( aTempRect );
+        Rectangle aTempRect;
+        ImplGetFadeOutRect(aTempRect);
 
         bool bLeft = true;
-        switch ( meAlign )
+        switch (meAlign)
         {
         case WINDOWALIGN_BOTTOM:
         case WINDOWALIGN_RIGHT:
@@ -1992,10 +1995,10 @@ void SplitWindow::ImplDrawFadeOut( bool bInPaint )
             break;
         }
 
-        if ( !bInPaint )
-            Erase( aTempRect );
+        if (!bInPaint)
+            rRenderContext.Erase(aTempRect);
 
-        ImplDrawGrip( aTempRect, (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM), bLeft );
+        ImplDrawGrip(rRenderContext, aTempRect, (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM), bLeft);
     }
 }
 
@@ -2161,8 +2164,10 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
 
         ImplSplitMousePos( aMousePosPixel );
 
-        if ( !mbDragFull )
-            ImplDrawSplitTracking( this, aMousePosPixel );
+        if (!mbDragFull)
+        {
+            ImplDrawSplitTracking(aMousePosPixel);
+        }
         else
         {
             ImplSplitItem*  pItems = mpSplitSet->mpItems;
@@ -2234,7 +2239,7 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         mbAutoHideDown = true;
         mbAutoHidePressed = true;
-        ImplDrawAutoHide( false );
+        Invalidate();
     }
     else
     {
@@ -2243,7 +2248,7 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
         {
             mbFadeOutDown = true;
             mbFadeOutPressed = true;
-            ImplDrawFadeOut( false );
+            Invalidate();
         }
         else
         {
@@ -2252,7 +2257,7 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 mbFadeInDown = true;
                 mbFadeInPressed = true;
-                ImplDrawFadeIn( false );
+                Invalidate();
             }
             else if ( !aTestRect.IsEmpty() && !(mnWinStyle & WB_SIZEABLE) )
             {
@@ -2320,11 +2325,11 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
                     mbAutoHideIn = !mbAutoHideIn;
-                    ImplDrawAutoHide( false );
+                    Invalidate();
                     AutoHide();
                 }
                 else
-                    ImplDrawAutoHide( false );
+                    Invalidate();
             }
         }
         else
@@ -2335,7 +2340,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             if ( bNewPressed != mbAutoHidePressed )
             {
                 mbAutoHidePressed = bNewPressed;
-                ImplDrawAutoHide( false );
+                Invalidate();
             }
         }
     }
@@ -2347,7 +2352,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             if ( mbFadeInPressed )
             {
                 mbFadeInPressed = false;
-                ImplDrawFadeIn( false );
+                Invalidate();
 
                 if ( !rTEvt.IsTrackingCanceled() )
                     FadeIn();
@@ -2361,7 +2366,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             if ( bNewPressed != mbFadeInPressed )
             {
                 mbFadeInPressed = bNewPressed;
-                ImplDrawFadeIn( false );
+                Invalidate();
             }
         }
     }
@@ -2373,7 +2378,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             if ( mbFadeOutPressed )
             {
                 mbFadeOutPressed = false;
-                ImplDrawFadeOut( false );
+                Invalidate();
 
                 if ( !rTEvt.IsTrackingCanceled() )
                     FadeOut();
@@ -2387,7 +2392,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             if ( !bNewPressed )
             {
                 mbFadeOutPressed = bNewPressed;
-                ImplDrawFadeOut( false );
+                Invalidate();
 
                 // We need a mouseevent with a position inside the button for the
                 // ImplStartSplit function!
@@ -2433,7 +2438,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             }
             else
             {
-                ImplDrawSplitTracking( this, aMousePosPixel );
+                ImplDrawSplitTracking(aMousePosPixel);
                 bSplit = false;
             }
         }
@@ -2514,22 +2519,25 @@ bool SplitWindow::PreNotify( NotifyEvent& rNEvt )
     return Window::PreNotify( rNEvt );
 }
 
-void SplitWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    if ( mnWinStyle & WB_BORDER )
-        ImplDrawBorder( this );
+    if (mnWinStyle & WB_BORDER)
+        ImplDrawBorder(rRenderContext);
 
-    ImplDrawBorderLine( this );
-    ImplDrawFadeOut( true );
-    ImplDrawFadeIn( true );
-    ImplDrawAutoHide( true );
+    ImplDrawBorderLine(rRenderContext);
+    ImplDrawFadeOut(rRenderContext, true);
+    ImplDrawFadeIn(rRenderContext, true);
+    ImplDrawAutoHide(rRenderContext, true);
 
     // draw FrameSet-backgrounds
-    ImplDrawBack( this, mpMainSet );
+    ImplDrawBack(rRenderContext, mpMainSet);
 
     // draw splitter
-    if ( !(mnWinStyle & WB_NOSPLITDRAW) )
-        ImplDrawSplit( this, mpMainSet, mbHorz, !mbBottomRight );
+    if (!(mnWinStyle & WB_NOSPLITDRAW))
+    {
+        bool bFlat = (GetStyle() & WB_FLATSPLITDRAW) == WB_FLATSPLITDRAW;
+        ImplDrawSplit(rRenderContext, mpMainSet, mbHorz, bFlat, !mbBottomRight);
+    }
 }
 
 void SplitWindow::Move()
