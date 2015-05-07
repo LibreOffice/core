@@ -178,6 +178,7 @@ SfxTabPage::~SfxTabPage()
 void SfxTabPage::dispose()
 {
     delete pImpl;
+    pImpl = NULL;
     TabPage::dispose();
 }
 
@@ -401,13 +402,19 @@ void SfxTabDialog::dispose()
             pDataObject->pTabPage.disposeAndClear();
         }
         delete pDataObject;
+        pDataObject = NULL;
     }
 
     delete pImpl;
+    pImpl = NULL;
     delete pSet;
+    pSet = NULL;
     delete pOutSet;
+    pOutSet = NULL;
     delete pExampleSet;
+    pExampleSet = NULL;
     delete [] pRanges;
+    pRanges = NULL;
 
     if (m_bOwnsBaseFmtBtn)
         m_pBaseFmtBtn.disposeAndClear();
@@ -429,6 +436,7 @@ void SfxTabDialog::dispose()
     m_pResetBtn.clear();
     m_pBaseFmtBtn.clear();
     m_pActionArea.clear();
+
     TabDialog::dispose();
 }
 
@@ -1109,7 +1117,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     SfxGetpApp();
 
     // Tab Page schon da?
-    SfxTabPage* pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
+    VclPtr<SfxTabPage> pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     Data_Impl* pDataObject = Find( pImpl->aData, nId );
 
     //UUUU fallback to 1st page when requested one does not exist

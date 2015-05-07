@@ -198,8 +198,10 @@ void SfxChildWindow::Destroy()
 SfxChildWindow::~SfxChildWindow()
 {
     delete pContext;
+    pContext = NULL;
     pWindow.disposeAndClear();
     delete pImp;
+    pImp = NULL;
 }
 
 
