@@ -283,17 +283,21 @@ SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar(const OUString& sId)
 
 void SfxInfoBarContainerWindow::removeInfoBar(SfxInfoBarWindow* pInfoBar)
 {
+    // Store a VclPtr to the pInfoBar while we remove it from m_pInfoBars
+    ScopedVclPtr<SfxInfoBarWindow> pTmp(pInfoBar);
+
+    // Remove
     for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
         if (pInfoBar == it->get())
         {
+            it->disposeAndClear();
             m_pInfoBars.erase(it);
             break;
         }
     }
-    if (pInfoBar)
-        pInfoBar->disposeOnce();
 
+    // Resize
     long nY = 0;
     for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
