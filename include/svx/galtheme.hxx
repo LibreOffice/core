@@ -129,6 +129,9 @@ private:
     SAL_DLLPRIVATE              GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry );
     SAL_DLLPRIVATE              virtual ~GalleryTheme();
 
+    GalleryTheme(GalleryTheme const &) = delete;
+    void operator =(GalleryTheme const &) = delete;
+
 public:
 
     SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly );
