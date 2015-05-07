@@ -75,12 +75,7 @@ SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
     return xLB;
 }
 
-SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode,
-                                    StorageMode
-                                    #ifdef DBG_UTIL
-                                    nStorageMode
-                                    #endif
-                                  )
+SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode )
     : SvStream( MakeLockBytes_Impl( rName, nMode ) )
     , pOwnStm( NULL )
 {
@@ -88,8 +83,6 @@ SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode,
         bIsWritable = true;
     else
         bIsWritable = false;
-
-    DBG_ASSERT( nStorageMode == StorageMode::Default, "StorageModes ignored" );
 }
 
 SotStorageStream::SotStorageStream( BaseStorageStream * pStm )

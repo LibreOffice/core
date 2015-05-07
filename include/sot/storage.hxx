@@ -67,8 +67,7 @@ protected:
                         virtual ~SotStorageStream();
 public:
                         SotStorageStream( const OUString &,
-                                          StreamMode = STREAM_STD_READWRITE,
-                                          StorageMode = StorageMode::Default );
+                                          StreamMode = STREAM_STD_READWRITE );
                         SotStorageStream( BaseStorageStream *pStm );
                         SotStorageStream();
 
