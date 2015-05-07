@@ -344,62 +344,33 @@ void SidebarController::NotifyResize (void)
     if (mpCurrentDeck)
     {
         SfxSplitWindow* pSplitWindow = GetSplitWindow();
-        if (pSplitWindow)   //in sidebar mode
+        WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WINDOWALIGN_RIGHT;
+        long nDeckX, nTabX;
+        if (eAlign == WINDOWALIGN_LEFT)     // attach the Sidebar towards the left-side of screen
         {
-            // Find out that which side of the Window do we need to attach the Sidebar?
-            if ( pSplitWindow->GetAlign() == WINDOWALIGN_RIGHT )        // attach the Sidebar towards the right-side of screen
-            {
-                // Place the deck first.
-                {
-                    if (bIsDeckVisible)
-                    {
-                        mpCurrentDeck->setPosSizePixel(0,0, nWidth-nTabBarDefaultWidth, nHeight);
-                        mpCurrentDeck->Show();
-                        mpCurrentDeck->RequestLayout();
-                    }
-                    else
-                        mpCurrentDeck->Hide();
-                }
-
-                // Now place the tab bar.
-                mpTabBar->setPosSizePixel(nWidth-nTabBarDefaultWidth,0,nTabBarDefaultWidth,nHeight);
-                mpTabBar->Show();
-            }
-            else if ( pSplitWindow->GetAlign() == WINDOWALIGN_LEFT)     // attach the Sidebar towards the left-side of screen
-            {
-                // Place the tab bar first.
-                mpTabBar->setPosSizePixel(0,0,nTabBarDefaultWidth,nHeight);
-                mpTabBar->Show();
-
-                // Now place the deck.
-                if (bIsDeckVisible)
-                {
-                    mpCurrentDeck->setPosSizePixel(nTabBarDefaultWidth,0, nWidth-nTabBarDefaultWidth, nHeight);
-                    mpCurrentDeck->Show();
-                    mpCurrentDeck->RequestLayout();
-                }
-                else
-                    mpCurrentDeck->Hide();
-            }
+            nDeckX = nTabBarDefaultWidth;
+            nTabX = 0;
         }
-        else //floating window mode
+        else   // attach the Sidebar towards the right-side of screen
         {
-            // Place the deck first.
-            {
-                if (bIsDeckVisible)
-                {
-                    mpCurrentDeck->setPosSizePixel(0,0, nWidth-nTabBarDefaultWidth, nHeight);
-                    mpCurrentDeck->Show();
-                    mpCurrentDeck->RequestLayout();
-                }
-                else
-                    mpCurrentDeck->Hide();
-            }
-
-            // Now place the tab bar.
-            mpTabBar->setPosSizePixel(nWidth-nTabBarDefaultWidth,0,nTabBarDefaultWidth,nHeight);
-            mpTabBar->Show();
+            nDeckX = 0;
+            nTabX = nWidth-nTabBarDefaultWidth;
         }
+
+        // Place the deck first.
+        if (bIsDeckVisible)
+        {
+            mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
+            mpCurrentDeck->Show();
+            mpCurrentDeck->RequestLayout();
+        }
+        else
+            mpCurrentDeck->Hide();
+
+        // Now place the tab bar.
+        mpTabBar->setPosSizePixel(nTabX, 0, nTabBarDefaultWidth, nHeight);
+        mpTabBar->Show();
+
     }
 
     // Determine if the closer of the deck can be shown.
@@ -693,11 +664,24 @@ void SidebarController::SwitchToDeck (
     }
     aNewPanels.resize(nWriteIndex);
 
+    SfxSplitWindow* pSplitWindow = GetSplitWindow();
+    sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
+    WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WINDOWALIGN_RIGHT;
+    long nDeckX;
+    if (eAlign == WINDOWALIGN_LEFT)     // attach the Sidebar towards the left-side of screen
+    {
+        nDeckX = nTabBarDefaultWidth;
+    }
+    else   // attach the Sidebar towards the right-side of screen
+    {
+        nDeckX = 0;
+    }
+
     // Activate the deck and the new set of panels.
     mpCurrentDeck->setPosSizePixel(
+        nDeckX,
         0,
-        0,
-        mpParentWindow->GetSizePixel().Width()-TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor(),
+        mpParentWindow->GetSizePixel().Width() - nTabBarDefaultWidth,
         mpParentWindow->GetSizePixel().Height());
 
     mpCurrentDeck->SetPanels(aNewPanels);
