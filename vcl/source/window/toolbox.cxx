@@ -4366,7 +4366,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
         maCommandHandler.Call( &rCEvt );
 
     // depict StartDrag on MouseButton/Left/Alt
-    if ( (rCEvt.GetCommand() == COMMAND_STARTDRAG) && rCEvt.IsMouseEvent() &&
+    if ( (rCEvt.GetCommand() == CommandEventId::StartDrag) && rCEvt.IsMouseEvent() &&
          mbCustomize && !mbDragging && !mbDrag && !mbSelection &&
          (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
     {
@@ -4404,7 +4404,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
             }
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_WHEEL )
+    else if ( rCEvt.GetCommand() == CommandEventId::Wheel )
     {
         if ( (mnCurLine > 1) || (mnCurLine+mnVisLines-1 < mnCurLines) )
         {

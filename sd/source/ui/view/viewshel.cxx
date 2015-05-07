@@ -641,7 +641,7 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
     if( !bDone )
     {
-        if( rCEvt.GetCommand() == COMMAND_INPUTLANGUAGECHANGE )
+        if( rCEvt.GetCommand() == CommandEventId::InputLanguageChange )
         {
             //#i42732# update state of fontname if input language changes
             GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
@@ -682,7 +682,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
     switch( rCEvt.GetCommand() )
     {
-        case COMMAND_SWIPE:
+        case CommandEventId::Swipe:
             {
                 rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
                 if (xSlideShow.is())
@@ -692,7 +692,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 }
             }
             break;
-        case COMMAND_LONGPRESS:
+        case CommandEventId::LongPress:
             {
                 rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
                 if (xSlideShow.is())
@@ -703,7 +703,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
             }
             break;
 
-        case COMMAND_WHEEL:
+        case CommandEventId::Wheel:
             {
                 Reference< XSlideShowController > xSlideShowController( SlideShow::GetSlideShowController(GetViewShellBase() ) );
                 if( xSlideShowController.is() )
@@ -726,8 +726,8 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 }
             }
             // fall through when not running slideshow
-        case COMMAND_STARTAUTOSCROLL:
-        case COMMAND_AUTOSCROLL:
+        case CommandEventId::StartAutoScroll:
+        case CommandEventId::AutoScroll:
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
 

@@ -1614,7 +1614,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
     bool bHandled = false;
     switch (rEvt.GetCommand())
     {
-        case COMMAND_CONTEXTMENU:
+        case CommandEventId::ContextMenu:
         {
             // die Stelle, an der geklickt wurde
             Point aWhere;
@@ -1704,7 +1704,9 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                 }   break;
             }
             bHandled = true;
-        } break;
+        }
+        break;
+        default: break;
     }
 
     if (!bHandled)

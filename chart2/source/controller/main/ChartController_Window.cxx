@@ -969,7 +969,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
     }
 
     // pop-up menu
-    if(rCEvt.GetCommand() == COMMAND_CONTEXTMENU && !bIsAction)
+    if(rCEvt.GetCommand() == CommandEventId::ContextMenu && !bIsAction)
     {
         {
             SolarMutexGuard aGuard;
@@ -1259,10 +1259,10 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             }
         }
     }
-    else if( ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT ) ||
-             ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT ) ||
-             ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT ) ||
-             ( rCEvt.GetCommand() == COMMAND_INPUTCONTEXTCHANGE ) )
+    else if( ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput ) ||
+             ( rCEvt.GetCommand() == CommandEventId::ExtTextInput ) ||
+             ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput ) ||
+             ( rCEvt.GetCommand() == CommandEventId::InputContextChange ) )
     {
         //#i84417# enable editing with IME
         SolarMutexGuard aGuard;

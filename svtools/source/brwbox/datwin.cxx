@@ -416,16 +416,16 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
 {
     // scroll mouse event?
     BrowseBox *pBox = GetParent();
-    if ( ( (rEvt.GetCommand() == COMMAND_WHEEL) ||
-           (rEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
-           (rEvt.GetCommand() == COMMAND_AUTOSCROLL) ) &&
+    if ( ( (rEvt.GetCommand() == CommandEventId::Wheel) ||
+           (rEvt.GetCommand() == CommandEventId::StartAutoScroll) ||
+           (rEvt.GetCommand() == CommandEventId::AutoScroll) ) &&
          ( HandleScrollCommand( rEvt, pBox->aHScroll.get(), pBox->pVScroll ) ) )
       return;
 
     Point aEventPos( rEvt.GetMousePosPixel() );
     long nRow = pBox->GetRowAtYPosPixel( aEventPos.Y(), false);
     MouseEvent aMouseEvt( aEventPos, 1, MouseEventModifiers::SELECT, MOUSE_LEFT );
-    if ( COMMAND_CONTEXTMENU == rEvt.GetCommand() && rEvt.IsMouseEvent() &&
+    if ( CommandEventId::ContextMenu == rEvt.GetCommand() && rEvt.IsMouseEvent() &&
          nRow < pBox->GetRowCount() && !pBox->IsRowSelected(nRow) )
     {
         bInCommand = true;
@@ -447,7 +447,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
         return;
     bInCommand = false;
 
-    if ( COMMAND_STARTDRAG == rEvt.GetCommand() )
+    if ( CommandEventId::StartDrag == rEvt.GetCommand() )
         MouseButtonUp( aMouseEvt );
 
     Control::Command( rEvt );

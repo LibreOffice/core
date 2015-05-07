@@ -177,7 +177,7 @@ bool FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
 
 sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
 {
-    if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
+    if ( CommandEventId::StartDrag == rCEvt.GetCommand() )
     {
         //!!! sollte Joe eigentlich machen:
         // nur, wenn im Outliner was selektiert ist, darf

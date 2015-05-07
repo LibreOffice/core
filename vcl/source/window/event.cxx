@@ -329,7 +329,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
     if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        if ( pCEvt->GetCommand() != COMMAND_CONTEXTMENU )
+        if ( pCEvt->GetCommand() != CommandEventId::ContextMenu )
             // non context menu events are not to be notified up the chain
             // so we return immediately
             return;
