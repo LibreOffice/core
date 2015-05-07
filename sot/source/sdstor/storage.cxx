@@ -383,10 +383,6 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
                 }
                 else
                 {
-                    // detect special disk spanned storages
-                    if ( UCBStorage::IsDiskSpannedFile( m_pStorStm ) )
-                        nStorageMode |= StorageMode::DiskspannedMode;
-
                     // UCBStorage always works directly on the UCB content, so discard the stream first
                     DELETEZ( m_pStorStm );
                     m_pOwnStg = new UCBStorage( m_aName, nMode, !(nStorageMode & StorageMode::Transacted) );
