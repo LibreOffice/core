@@ -142,28 +142,42 @@ void ImplWheelWindow::ImplSetWheelMode( sal_uLong nWheelMode )
             if( !IsVisible() )
                 Show();
 
-            ImplDrawWheel();
+            Invalidate();
         }
     }
 }
 
-void ImplWheelWindow::ImplDrawWheel()
+void ImplWheelWindow::ImplDrawWheel(vcl::RenderContext& rRenderContext)
 {
     sal_uInt16 nId;
 
-    switch( mnWheelMode )
+    switch (mnWheelMode)
     {
-        case( WHEELMODE_VH ):       nId = 1; break;
-        case( WHEELMODE_V    ):     nId = 2; break;
-        case( WHEELMODE_H    ):     nId = 3; break;
-        case( WHEELMODE_SCROLL_VH ):nId = 4; break;
-        case( WHEELMODE_SCROLL_V ): nId = 5; break;
-        case( WHEELMODE_SCROLL_H ): nId = 6; break;
-        default:                    nId = 0; break;
+        case WHEELMODE_VH:
+            nId = 1;
+        break;
+        case WHEELMODE_V:
+            nId = 2;
+        break;
+        case WHEELMODE_H:
+            nId = 3;
+        break;
+        case WHEELMODE_SCROLL_VH:
+            nId = 4;
+        break;
+        case WHEELMODE_SCROLL_V:
+            nId = 5;
+        break;
+        case WHEELMODE_SCROLL_H:
+            nId = 6;
+        break;
+        default:
+            nId = 0;
+        break;
     }
 
-    if( nId )
-        DrawImage( Point(), maImgList.GetImage( nId ) );
+    if (nId)
+        rRenderContext.DrawImage(Point(), maImgList.GetImage(nId));
 }
 
 void ImplWheelWindow::ImplRecalcScrollValues()
@@ -286,9 +300,9 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
     return eStyle;
 }
 
-void ImplWheelWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void ImplWheelWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    ImplDrawWheel();
+    ImplDrawWheel(rRenderContext);
 }
 
 void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
