@@ -23,7 +23,7 @@
 
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
-namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
+namespace ImageScaleMode = css::awt::ImageScaleMode;
 
 ImageControl::ImageControl( vcl::Window* pParent, WinBits nStyle )
     :FixedImage( pParent, nStyle )
@@ -67,7 +67,7 @@ namespace
     }
 }
 
-void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const
+void ImageControl::ImplDraw(OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize) const
 {
     sal_uInt16 nStyle = 0;
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
@@ -135,25 +135,25 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
 {
     ImplDraw(rRenderContext, 0, Point(), GetOutputSizePixel());
 
-    if( HasFocus() )
+    if (HasFocus())
     {
-        vcl::Window *pWin = GetWindow( WINDOW_BORDER );
+        vcl::Window* pBorderWindow = GetWindow(WINDOW_BORDER);
 
         bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
-        Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );
-        Color oldLineCol = pWin->GetLineColor();
-        Color oldFillCol = pWin->GetFillColor();
-        pWin->SetFillColor();
-        pWin->SetLineColor( bFlat ? COL_WHITE : COL_BLACK );
-        pWin->DrawRect( aRect );
+        Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
+        Color oldLineCol = pBorderWindow->GetLineColor();
+        Color oldFillCol = pBorderWindow->GetFillColor();
+        pBorderWindow->SetFillColor();
+        pBorderWindow->SetLineColor(bFlat ? COL_WHITE : COL_BLACK);
+        pBorderWindow->DrawRect(aRect);
         ++aRect.Left();
         --aRect.Right();
         ++aRect.Top();
         --aRect.Bottom();
-        pWin->SetLineColor( bFlat ? COL_BLACK : COL_WHITE );
-        pWin->DrawRect( aRect );
-        pWin->SetLineColor( oldLineCol );
-        pWin->SetFillColor( oldFillCol );
+        pBorderWindow->SetLineColor(bFlat ? COL_BLACK : COL_WHITE);
+        pBorderWindow->DrawRect(aRect);
+        pBorderWindow->SetLineColor(oldLineCol);
+        pBorderWindow->SetFillColor(oldFillCol);
     }
 }
 
