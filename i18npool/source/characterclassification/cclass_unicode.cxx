@@ -21,8 +21,10 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <unicode/uchar.h>
 #include <comphelper/string.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <breakiteratorImpl.hxx>
 
@@ -79,27 +81,41 @@ cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
 
 OUString SAL_CALL
 cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException, std::exception) {
-    sal_Int32 len = Text.getLength();
-    if (nPos >= len)
-        return OUString();
-    if (nCount + nPos > len)
-        nCount = len - nPos;
+    try
+    {
+        sal_Int32 len = Text.getLength();
+        if (nPos >= len)
+            return OUString();
+        if (nCount + nPos > len)
+            nCount = len - nPos;
 
-    trans->setMappingType(MappingTypeToTitle, rLocale);
-    rtl_uString* pStr = rtl_uString_alloc(nCount);
-    sal_Unicode* out = pStr->buffer;
-    BreakIteratorImpl brk(m_xContext);
-    Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale,
-                WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
-    for (sal_Int32 i = nPos; i < nCount + nPos; i++, out++) {
-        if (i >= bdy.endPos)
-            bdy = brk.nextWord(Text, bdy.endPos, rLocale,
-                        WordType::ANYWORD_IGNOREWHITESPACES);
-        *out = (i == bdy.startPos) ?
-            trans->transliterateChar2Char(Text[i]) : Text[i];
+        trans->setMappingType(MappingTypeToTitle, rLocale);
+        rtl_uString* pStr = rtl_uString_alloc(nCount);
+        sal_Unicode* out = pStr->buffer;
+        BreakIteratorImpl brk(m_xContext);
+        Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale,
+                    WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
+        for (sal_Int32 i = nPos; i < nCount + nPos; i++, out++) {
+            if (i >= bdy.endPos)
+                bdy = brk.nextWord(Text, bdy.endPos, rLocale,
+                            WordType::ANYWORD_IGNOREWHITESPACES);
+            *out = (i == bdy.startPos) ?
+                trans->transliterateChar2Char(Text[i]) : Text[i];
+        }
+        *out = 0;
+        return OUString( pStr, SAL_NO_ACQUIRE );
     }
-    *out = 0;
-    return OUString( pStr, SAL_NO_ACQUIRE );
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception& e)
+    {
+        uno::Any a(cppu::getCaughtException());
+        throw lang::WrappedTargetRuntimeException(
+            "wrapped Exception " + e.Message,
+            uno::Reference<uno::XInterface>(), a);
+    }
 }
 
 sal_Int16 SAL_CALL
