@@ -524,6 +524,7 @@ bool FloatingWindow::ImplIsFloatPopupModeWindow( const vcl::Window* pWindow )
 
 IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
 {
+    VclPtr<FloatingWindow> pThis(this);
     mnPostId            = 0;
     mnPopupModeFlags    = 0;
     mbPopupMode         = false;
