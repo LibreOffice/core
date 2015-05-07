@@ -77,7 +77,10 @@ void NavigatorWrapper::UpdateNavigator()
 
 void NavigatorWrapper::GetFocus()
 {
-    maNavigator->GrabFocus();
+    if (maNavigator)
+        maNavigator->GrabFocus();
+    else
+        Control::GetFocus();
 }
 
 } } // end of namespace sd::sidebar
