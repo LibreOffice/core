@@ -901,7 +901,7 @@ namespace
         pButton->SetCommandHandler(aCommand);
     }
 
-    Button* extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+    VclPtr<Button> extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER;
 
@@ -909,45 +909,45 @@ namespace
 
         bool bIsStock = extractStock(rMap);
 
-        Button *pWindow = NULL;
+        VclPtr<Button> xWindow;
 
         if (bIsStock)
         {
             OString sType = extractLabel(rMap);
             if (sType == "gtk-ok")
-                pWindow = new OKButton(pParent, nBits);
+                xWindow = VclPtr<OKButton>::Create(pParent, nBits);
             else if (sType == "gtk-cancel")
-                pWindow = new CancelButton(pParent, nBits);
+                xWindow = VclPtr<CancelButton>::Create(pParent, nBits);
             else if (sType == "gtk-close")
-                pWindow = new CloseButton(pParent, nBits);
+                xWindow = VclPtr<CloseButton>::Create(pParent, nBits);
             else if (sType == "gtk-help")
-                pWindow = new HelpButton(pParent, nBits);
+                xWindow = VclPtr<HelpButton>::Create(pParent, nBits);
             else
             {
-                pWindow = new PushButton(pParent, nBits);
-                pWindow->SetText(getStockText(sType));
+                xWindow = VclPtr<PushButton>::Create(pParent, nBits);
+                xWindow->SetText(getStockText(sType));
             }
         }
 
-        if (!pWindow)
-            pWindow = new PushButton(pParent, nBits);
-        return pWindow;
+        if (!xWindow)
+            xWindow = VclPtr<PushButton>::Create(pParent, nBits);
+        return xWindow;
     }
 
-    Button * extractStockAndBuildMenuButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+    VclPtr<Button> extractStockAndBuildMenuButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
         nBits |= extractRelief(rMap);
 
-        Button *pWindow = new MenuButton(pParent, nBits);
+        VclPtr<Button> xWindow = VclPtr<MenuButton>::Create(pParent, nBits);
 
         if (extractStock(rMap))
         {
-            pWindow->SetText(getStockText(extractLabel(rMap)));
+            xWindow->SetText(getStockText(extractLabel(rMap)));
         }
 
-        return pWindow;
+        return xWindow;
     }
 
     OString extractUnit(const OString& sPattern)
@@ -1285,7 +1285,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 
         if (!bIsPlaceHolder)
         {
-            TabPage* pPage = new TabPage(pTabControl);
+            VclPtrInstance<TabPage> pPage(pTabControl);
             pPage->Show();
 
             //Make up a name for it
@@ -1297,7 +1297,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 
             //And give the page one container as a child to make it a layout enabled
             //tab page
-            VclBin* pContainer = new VclBin(pPage);
+            VclPtrInstance<VclBin> pContainer(pPage);
             pContainer->Show();
             m_aChildren.push_back(WinAndId(OString(), pContainer, false));
             pContainer->SetHelpId(m_sHelpRoot + sTabPageId + OString("-bin"));
@@ -1312,71 +1312,71 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 
     extractButtonImage(id, rMap, name == "GtkRadioButton");
 
-    vcl::Window *pWindow = NULL;
+    VclPtr<vcl::Window> xWindow;
     if (name == "GtkDialog")
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
-        pWindow = new Dialog(pParent, nBits);
+        xWindow = VclPtr<Dialog>::Create(pParent, nBits);
     }
     else if (name == "GtkMessageDialog")
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
-        pWindow = new MessageDialog(pParent, nBits);
+        xWindow = VclPtr<MessageDialog>(new MessageDialog(pParent, nBits), SAL_NO_ACQUIRE);
     }
     else if (name == "GtkBox")
     {
         bVertical = extractOrientation(rMap);
         if (bVertical)
-            pWindow = new VclVBox(pParent);
+            xWindow = VclPtr<VclVBox>::Create(pParent);
         else
-            pWindow = new VclHBox(pParent);
+            xWindow = VclPtr<VclHBox>::Create(pParent);
     }
     else if (name == "GtkHBox")
-        pWindow = new VclHBox(pParent);
+        xWindow = VclPtr<VclHBox>::Create(pParent);
     else if (name == "GtkVBox")
-        pWindow = new VclVBox(pParent);
+        xWindow = VclPtr<VclVBox>::Create(pParent);
     else if (name == "GtkButtonBox")
     {
         bVertical = extractOrientation(rMap);
         if (bVertical)
-            pWindow = new VclVButtonBox(pParent);
+            xWindow = VclPtr<VclVButtonBox>::Create(pParent);
         else
-            pWindow = new VclHButtonBox(pParent);
+            xWindow = VclPtr<VclHButtonBox>::Create(pParent);
     }
     else if (name == "GtkHButtonBox")
-        pWindow = new VclHButtonBox(pParent);
+        xWindow = VclPtr<VclHButtonBox>::Create(pParent);
     else if (name == "GtkVButtonBox")
-        pWindow = new VclVButtonBox(pParent);
+        xWindow = VclPtr<VclVButtonBox>::Create(pParent);
     else if (name == "GtkGrid")
-        pWindow = new VclGrid(pParent);
+        xWindow = VclPtr<VclGrid>::Create(pParent);
     else if (name == "GtkFrame")
-        pWindow = new VclFrame(pParent);
+        xWindow = VclPtr<VclFrame>::Create(pParent);
     else if (name == "GtkExpander")
     {
-        VclExpander *pExpander = new VclExpander(pParent);
+        VclPtrInstance<VclExpander> pExpander(pParent);
         m_pParserState->m_aExpanderWidgets.push_back(pExpander);
-        pWindow = pExpander;
+        xWindow = pExpander;
     }
     else if (name == "GtkAlignment")
-        pWindow = new VclAlignment(pParent);
+        xWindow = VclPtr<VclAlignment>::Create(pParent);
     else if (name == "GtkButton")
     {
-        Button *pButton;
+        VclPtr<Button> xButton;
         OString sMenu = extractCustomProperty(rMap);
         if (sMenu.isEmpty())
-            pButton = extractStockAndBuildPushButton(pParent, rMap);
+            xButton = extractStockAndBuildPushButton(pParent, rMap);
         else
         {
-            pButton = extractStockAndBuildMenuButton(pParent, rMap);
+            xButton = extractStockAndBuildMenuButton(pParent, rMap);
             m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
         }
-        pButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
-        setupFromActionName(pButton, rMap, m_xFrame);
-        pWindow = pButton;
+        xButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        setupFromActionName(xButton, rMap, m_xFrame);
+        xWindow = xButton;
     }
     else if (name == "GtkRadioButton")
     {
@@ -1385,9 +1385,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OString sWrap = extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
-        RadioButton *pButton = new RadioButton(pParent, nBits);
-        pButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
-        pWindow = pButton;
+        VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, nBits);
+        xButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        xWindow = xButton;
     }
     else if (name == "GtkCheckButton")
     {
@@ -1397,13 +1397,15 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             nBits |= WB_WORDBREAK;
         //maybe always import as TriStateBox and enable/disable tristate
         bool bIsTriState = extractInconsistent(rMap);
-        CheckBox *pCheckBox = bIsTriState ?
-            new TriStateBox(pParent, nBits) :
-            new CheckBox(pParent, nBits);
+        VclPtr<CheckBox> xCheckBox;
         if (bIsTriState)
-            pCheckBox->SetState(TRISTATE_INDET);
-        pCheckBox->SetImageAlign(IMAGEALIGN_LEFT); //default to left
-        pWindow = pCheckBox;
+            xCheckBox = VclPtr<TriStateBox>::Create(pParent, nBits);
+        else
+            xCheckBox = VclPtr<CheckBox>::Create(pParent, nBits);
+        if (bIsTriState)
+            xCheckBox->SetState(TRISTATE_INDET);
+        xCheckBox->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        xWindow = xCheckBox;
     }
     else if (name == "GtkSpinButton")
     {
@@ -1419,7 +1421,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         {
             connectNumericFormatterAdjustment(id, sAdjustment);
             SAL_INFO("vcl.layout", "making numeric field for " << name.getStr() << " " << sUnit.getStr());
-            pWindow = new NumericField(pParent, nBits);
+            xWindow = VclPtr<NumericField>::Create(pParent, nBits);
         }
         else
         {
@@ -1427,31 +1429,29 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             {
                 connectTimeFormatterAdjustment(id, sAdjustment);
                 SAL_INFO("vcl.layout", "making time field for " << name.getStr() << " " << sUnit.getStr());
-                TimeField *pField = new TimeField(pParent, nBits);
-                pWindow = pField;
+                xWindow = VclPtr<TimeField>::Create(pParent, nBits);
             }
             else if (sPattern == "yy:mm:dd")
             {
                 connectDateFormatterAdjustment(id, sAdjustment);
                 SAL_INFO("vcl.layout", "making date field for " << name.getStr() << " " << sUnit.getStr());
-                DateField *pField = new DateField(pParent, nBits);
-                pWindow = pField;
+                xWindow = VclPtr<DateField>::Create(pParent, nBits);
             }
             else
             {
                 connectNumericFormatterAdjustment(id, sAdjustment);
                 FieldUnit eUnit = detectMetricUnit(sUnit);
                 SAL_INFO("vcl.layout", "making metric field for " << name.getStr() << " " << sUnit.getStr());
-                MetricField *pField = new MetricField(pParent, nBits);
-                pField->SetUnit(eUnit);
+                VclPtrInstance<MetricField> xField(pParent, nBits);
+                xField->SetUnit(eUnit);
                 if (eUnit == FUNIT_CUSTOM)
-                    pField->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
-                pWindow = pField;
+                    xField->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
+                xWindow = xField;
             }
         }
     }
     else if (name == "GtkLinkButton")
-        pWindow = new FixedHyperlink(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_NOLABEL);
+        xWindow = VclPtr<FixedHyperlink>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_NOLABEL);
     else if ((name == "GtkComboBox") || (name == "GtkComboBoxText") || (name == "VclComboBoxText"))
     {
         OString sPattern = extractCustomProperty(rMap);
@@ -1474,25 +1474,25 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 << " unit: " << sUnit.getStr()
                 << " name: " << id.getStr()
                 << " use a VclComboBoxNumeric instead");
-            MetricBox *pBox = new MetricBox(pParent, nBits);
-            pBox->EnableAutoSize(true);
-            pBox->SetUnit(eUnit);
-            pBox->SetDecimalDigits(extractDecimalDigits(sPattern));
+            VclPtrInstance<MetricBox> xBox(pParent, nBits);
+            xBox->EnableAutoSize(true);
+            xBox->SetUnit(eUnit);
+            xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
             if (eUnit == FUNIT_CUSTOM)
-                pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
-            pWindow = pBox;
+                xBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
+            xWindow = xBox;
         }
         else if (extractEntry(rMap))
         {
-            ComboBox* pComboBox = new ComboBox(pParent, nBits);
-            pComboBox->EnableAutoSize(true);
-            pWindow = pComboBox;
+            VclPtrInstance<ComboBox> xComboBox(pParent, nBits);
+            xComboBox->EnableAutoSize(true);
+            xWindow = xComboBox;
         }
         else
         {
-            ListBox *pListBox = new ListBox(pParent, nBits|WB_SIMPLEMODE);
-            pListBox->EnableAutoSize(true);
-            pWindow = pListBox;
+            VclPtrInstance<ListBox> xListBox(pParent, nBits|WB_SIMPLEMODE);
+            xListBox->EnableAutoSize(true);
+            xWindow = xListBox;
         }
     }
     else if (name == "VclComboBoxNumeric")
@@ -1514,22 +1514,22 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             OString sUnit = extractUnit(sPattern);
             FieldUnit eUnit = detectMetricUnit(sUnit);
             SAL_INFO("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr());
-            MetricBox *pBox = new MetricBox(pParent, nBits);
-            pBox->EnableAutoSize(true);
-            pBox->SetUnit(eUnit);
-            pBox->SetDecimalDigits(extractDecimalDigits(sPattern));
+            VclPtrInstance<MetricBox> xBox(pParent, nBits);
+            xBox->EnableAutoSize(true);
+            xBox->SetUnit(eUnit);
+            xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
             if (eUnit == FUNIT_CUSTOM)
-                pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
-            pWindow = pBox;
+                xBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
+            xWindow = xBox;
         }
         else
         {
             SAL_INFO("vcl.layout", "making numeric box for " << name.getStr());
             connectNumericFormatterAdjustment(id, sAdjustment);
-            NumericBox* pBox = new NumericBox(pParent, nBits);
+            VclPtrInstance<NumericBox> xBox(pParent, nBits);
             if (bDropdown)
-                pBox->EnableAutoSize(true);
-            pWindow = pBox;
+                xBox->EnableAutoSize(true);
+            xWindow = xBox;
         }
     }
     else if (name == "GtkTreeView")
@@ -1547,9 +1547,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             nWinStyle |= WB_BORDER;
         //ListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
-        pWindow = new ListBox(pRealParent, nWinStyle);
+        xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
         if (pRealParent != pParent)
-            cleanupWidgetOwnScrolling(pParent, pWindow, rMap);
+            cleanupWidgetOwnScrolling(pParent, xWindow, rMap);
     }
     else if (name == "GtkLabel")
     {
@@ -1559,14 +1559,14 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             nWinStyle |= WB_BORDER;
         extractMnemonicWidget(id, rMap);
         if (extractSelectable(rMap))
-            pWindow = new SelectableFixedText(pParent, nWinStyle);
+            xWindow = VclPtr<SelectableFixedText>::Create(pParent, nWinStyle);
         else
-            pWindow = new FixedText(pParent, nWinStyle);
+            xWindow = VclPtr<FixedText>::Create(pParent, nWinStyle);
     }
     else if (name == "GtkImage")
     {
         extractStock(id, rMap);
-        pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_SCALE);
+        xWindow = VclPtr<FixedImage>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_SCALE);
         //such parentless GtkImages are temps used to set icons on buttons
         //default them to hidden to stop e.g. insert->index entry flicking temp
         //full screen windows
@@ -1579,52 +1579,45 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkSeparator")
     {
         bVertical = extractOrientation(rMap);
-        if (bVertical)
-            pWindow = new FixedLine(pParent, WB_VERT);
-        else
-            pWindow = new FixedLine(pParent, WB_HORZ);
+        xWindow = VclPtr<FixedLine>::Create(pParent, bVertical ? WB_VERT : WB_HORZ);
     }
     else if (name == "GtkScrollbar")
     {
         extractAdjustmentToMap(id, rMap, m_pParserState->m_aScrollAdjustmentMaps);
         bVertical = extractOrientation(rMap);
-        if (bVertical)
-            pWindow = new ScrollBar(pParent, WB_VERT);
-        else
-            pWindow = new ScrollBar(pParent, WB_HORZ);
+        xWindow = VclPtr<ScrollBar>::Create(pParent, bVertical ? WB_VERT : WB_HORZ);
     }
     else if (name == "GtkProgressBar")
     {
         extractAdjustmentToMap(id, rMap, m_pParserState->m_aScrollAdjustmentMaps);
         bVertical = extractOrientation(rMap);
-        if (bVertical)
-            pWindow = new ProgressBar(pParent, WB_VERT);
-        else
-            pWindow = new ProgressBar(pParent, WB_HORZ);
+        xWindow = VclPtr<ProgressBar>::Create(pParent, bVertical ? WB_VERT : WB_HORZ);
     }
     else if (name == "GtkScrolledWindow")
     {
-        pWindow = new VclScrolledWindow(pParent);
+        xWindow = VclPtr<VclScrolledWindow>::Create(pParent);
     }
     else if (name == "GtkViewport")
     {
-        pWindow = new VclViewport(pParent);
+        xWindow = VclPtr<VclViewport>::Create(pParent);
     }
     else if (name == "GtkEventBox")
     {
-        pWindow = new VclEventBox(pParent);
+        xWindow = VclPtr<VclEventBox>::Create(pParent);
     }
     else if (name == "GtkEntry")
     {
-        pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+        xWindow = VclPtr<Edit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
         ensureDefaultWidthChars(rMap);
     }
     else if (name == "GtkNotebook")
-        pWindow = new TabControl(pParent, WB_STDTABCONTROL|WB_3DLOOK);
+    {
+        xWindow = VclPtr<TabControl>::Create(pParent, WB_STDTABCONTROL|WB_3DLOOK);
+    }
     else if (name == "GtkDrawingArea")
     {
         OString sBorder = extractCustomProperty(rMap);
-        pWindow = new vcl::Window(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
+        xWindow = VclPtr<vcl::Window>::Create(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
     }
     else if (name == "GtkTextView")
     {
@@ -1636,13 +1629,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             nWinStyle |= WB_BORDER;
         //VclMultiLineEdit manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
-        pWindow = new VclMultiLineEdit(pRealParent, nWinStyle);
+        xWindow = VclPtr<VclMultiLineEdit>::Create(pRealParent, nWinStyle);
         if (pRealParent != pParent)
-            cleanupWidgetOwnScrolling(pParent, pWindow, rMap);
+            cleanupWidgetOwnScrolling(pParent, xWindow, rMap);
     }
     else if (name == "GtkSpinner")
     {
-        pWindow = new Throbber(pParent, WB_3DLOOK);
+        xWindow = VclPtr<Throbber>::Create(pParent, WB_3DLOOK);
     }
     else if (name == "GtkScale")
     {
@@ -1657,11 +1650,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 
         WinBits nWinStyle = bVertical ? WB_VERT : WB_HORZ;
 
-        pWindow = new Slider(pParent, nWinStyle);
+        xWindow = VclPtr<Slider>::Create(pParent, nWinStyle);
     }
     else if (name == "GtkToolbar")
     {
-        pWindow = new ToolBox(pParent, WB_3DLOOK | WB_TABSTOP);
+        xWindow = VclPtr<ToolBox>::Create(pParent, WB_3DLOOK | WB_TABSTOP);
     }
     else if (name == "GtkToolButton" || name == "GtkMenuToolButton")
     {
@@ -1719,9 +1712,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         WinBits nBits = extractDeferredBits(rMap);
         if (nBits & WB_DOCKABLE)
-            pWindow = new DockingWindow(pParent, nBits|WB_MOVEABLE);
+            xWindow = VclPtr<DockingWindow>::Create(pParent, nBits|WB_MOVEABLE);
         else
-            pWindow = new FloatingWindow(pParent, nBits|WB_MOVEABLE);
+            xWindow = VclPtr<FloatingWindow>::Create(pParent, nBits|WB_MOVEABLE);
     }
     else
     {
@@ -1764,23 +1757,22 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
 #endif
             if (pFunction)
-                pWindow = (*pFunction)(pParent, rMap);
+                xWindow = VclPtr<vcl::Window>(pFunction(pParent, rMap), SAL_NO_ACQUIRE);
         }
     }
-    SAL_WARN_IF(!pWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");
-    if (pWindow)
+    SAL_WARN_IF(!xWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");
+    if (xWindow)
     {
-        VclPtr< vcl::Window > xWindow( pWindow );
-        pWindow->SetHelpId(m_sHelpRoot + id);
+        xWindow->SetHelpId(m_sHelpRoot + id);
         SAL_INFO("vcl.layout", "for " << name.getStr() <<
-            ", created " << pWindow << " child of " <<
-            pParent << "(" << pWindow->mpWindowImpl->mpParent.get() << "/" <<
-            pWindow->mpWindowImpl->mpRealParent.get() << "/" <<
-            pWindow->mpWindowImpl->mpBorderWindow.get() << ") with helpid " <<
-            pWindow->GetHelpId().getStr());
+            ", created " << xWindow.get() << " child of " <<
+            pParent << "(" << xWindow->mpWindowImpl->mpParent.get() << "/" <<
+            xWindow->mpWindowImpl->mpRealParent.get() << "/" <<
+            xWindow->mpWindowImpl->mpBorderWindow.get() << ") with helpid " <<
+            xWindow->GetHelpId().getStr());
         m_aChildren.push_back(WinAndId(id, xWindow, bVertical));
     }
-    return VclPtr<vcl::Window>(pWindow, SAL_NO_ACQUIRE);
+    return xWindow;
 }
 
 namespace
