@@ -712,13 +712,13 @@ void Binding::valueModified()
     Reference<XInterface> xSource = static_cast<XPropertySet*>( this );
     ::std::for_each( maModifyListeners.begin(),
               maModifyListeners.end(),
-              ::std::bind2nd( ::std::ptr_fun( lcl_modified ), xSource ) );
+                     ::std::bind( lcl_modified, std::placeholders::_1, xSource ) );
     ::std::for_each( maListEntryListeners.begin(),
               maListEntryListeners.end(),
-              ::std::bind2nd( ::std::ptr_fun( lcl_listentry ), xSource ) );
+                     ::std::bind( lcl_listentry, std::placeholders::_1, xSource ) );
     ::std::for_each( maValidityListeners.begin(),
               maValidityListeners.end(),
-              ::std::bind2nd( ::std::ptr_fun( lcl_validate ), xSource ) );
+                     ::std::bind( lcl_validate, std::placeholders::_1, xSource ) );
 
     // now distribute MIPs to children
     if( xNode.is() )

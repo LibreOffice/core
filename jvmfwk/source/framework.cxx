@@ -136,7 +136,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                     //the same JRE
                     it_info it_duplicate =
                         std::find_if(vecInfoManual.begin(), vecInfoManual.end(),
-                                std::bind2nd(std::ptr_fun(areEqualJavaInfo), aInfo));
+                                     std::bind(areEqualJavaInfo, std::placeholders::_1, aInfo));
                     if (it_duplicate == vecInfoManual.end())
                         vecInfoManual.push_back(aInfo);
                 }
@@ -165,7 +165,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         {
             it_info it_duplicate =
                 std::find_if(vecInfoManual2.begin(), vecInfoManual2.end(),
-                            std::bind2nd(std::ptr_fun(areEqualJavaInfo), *j));
+                             std::bind(areEqualJavaInfo, std::placeholders::_1, *j));
             if (it_duplicate != vecInfoManual2.end())
                 vecInfoManual2.erase(it_duplicate);
         }

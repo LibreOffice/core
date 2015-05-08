@@ -52,6 +52,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <rtl/strbuf.hxx>
 #include <algorithm>
+#include <functional>
 
 namespace xmloff
 {
@@ -581,18 +582,15 @@ void OFormLayerXMLImport_Impl::documentDone( )
     // process XForms-bindings; call registerXFormsValueBinding for each
     std::for_each( m_aXFormsValueBindings.begin(),
                    m_aXFormsValueBindings.end(),
-                   bind1st( ptr_fun( bindXFormsValueBinding ),
-                            rImport.GetModel() ) );
+                   std::bind( bindXFormsValueBinding, rImport.GetModel(), std::placeholders::_1 ) );
     // same for list bindings
     std::for_each( m_aXFormsListBindings.begin(),
                    m_aXFormsListBindings.end(),
-                   bind1st( ptr_fun( bindXFormsListBinding ),
-                            rImport.GetModel() ) );
+                   std::bind( bindXFormsListBinding, rImport.GetModel(), std::placeholders::_1 ) );
     // same for submissions
     std::for_each( m_aXFormsSubmissions.begin(),
                    m_aXFormsSubmissions.end(),
-                   bind1st( ptr_fun( bindXFormsSubmission ),
-                            rImport.GetModel() ) );
+                   std::bind( bindXFormsSubmission, rImport.GetModel(), std::placeholders::_1 ) );
 }
 
 }   // namespace xmloff
