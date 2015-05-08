@@ -132,12 +132,17 @@ void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 }
 
 /// Handles the key-press-event of the window.
-static void signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData)
+static gboolean signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData)
 {
+    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
 #if GTK_CHECK_VERSION(2,18,0) // we need gtk_widget_get_visible()
-    if (!gtk_widget_get_visible(pFindbar))
-        lok_docview_post_key(pWidget, pEvent, pData);
+    if (!gtk_widget_get_visible(pFindbar) && bool(lok_docview_get_edit(pLOKDocView)))
+        {
+            lok_docview_post_key(pWidget, pEvent, pData);
+            return TRUE;
+        }
 #endif
+    return FALSE;
 }
 
 /// Searches for the next or previous text of pFindbarEntry.
