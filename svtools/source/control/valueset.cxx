@@ -75,7 +75,7 @@ void ValueSet::ImplInit()
     mnUserCols          = 0;
     mnUserVisLines      = 0;
     mnSpacing           = 0;
-    mnFrameStyle        = 0;
+    mnFrameStyle        = DrawFrameStyle::NONE;
     mbFormat            = true;
     mbHighlight         = false;
     mbSelection         = false;
@@ -524,9 +524,9 @@ void ValueSet::Format()
 
         // determine Frame-Style
         if ( nStyle & WB_DOUBLEBORDER )
-            mnFrameStyle = FRAME_DRAW_DOUBLEIN;
+            mnFrameStyle = DrawFrameStyle::DoubleIn;
         else
-            mnFrameStyle = FRAME_DRAW_IN;
+            mnFrameStyle = DrawFrameStyle::In;
 
         // determine selected color and width
         // if necessary change the colors, to make the selection

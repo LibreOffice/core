@@ -39,6 +39,7 @@ struct ValueSetItem;
 
 class ValueSetAcc;
 class ValueItemAcc;
+enum class DrawFrameStyle;
 
 /*************************************************************************
 
@@ -219,7 +220,7 @@ private:
     sal_uInt16      mnUserVisLines;
     sal_uInt16      mnFirstLine;
     sal_uInt16      mnSpacing;
-    sal_uInt16      mnFrameStyle;
+    DrawFrameStyle  mnFrameStyle;
     Color           maColor;
     Link<>          maDoubleClickHdl;
     Link<>          maSelectHdl;

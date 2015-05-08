@@ -790,7 +790,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
     if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
     {
         DecorationView aDecoView( pDev );
-        aRect = aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+        aRect = aDecoView.DrawFrame( aRect, DrawFrameStyle::DoubleIn );
     }
     pDev->IntersectClipRegion( aRect );
     ImplDraw( pDev, nFlags, aRect.TopLeft(), aRect.GetSize() );

@@ -808,7 +808,7 @@ void PresLayoutPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rec
 
     // draw decoration frame
     DecorationView aDecoView( this );
-    maOutRect = aDecoView.DrawFrame( maOutRect, FRAME_HIGHLIGHT_IN );
+    maOutRect = aDecoView.DrawFrame( maOutRect, DrawFrameStyle::In );
 
     // draw page background
     SetFillColor( Color(COL_WHITE) );

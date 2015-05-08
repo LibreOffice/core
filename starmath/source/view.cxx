@@ -754,7 +754,7 @@ void SmCmdBoxWindow::Resize()
     aRect.Bottom() -= CMD_BOX_PADDING;
 
     DecorationView aView(this);
-    aRect = aView.DrawFrame( aRect, FRAME_DRAW_IN | FRAME_DRAW_NODRAW );
+    aRect = aView.DrawFrame( aRect, DrawFrameStyle::In, DrawFrameFlags::NoDraw );
 
     aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
     SfxDockingWindow::Resize();
@@ -770,7 +770,7 @@ void SmCmdBoxWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectang
     aRect.Bottom() -= CMD_BOX_PADDING;
 
     DecorationView aView(this);
-    aView.DrawFrame( aRect, FRAME_DRAW_IN );
+    aView.DrawFrame( aRect, DrawFrameStyle::In );
 }
 
 Size SmCmdBoxWindow::CalcDockingSize(SfxChildAlignment eAlign)

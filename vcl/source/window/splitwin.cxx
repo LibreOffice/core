@@ -161,7 +161,7 @@ void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
         DecorationView aDecoView(&rRenderContext);
         Point aTmpPoint;
         Rectangle aRect(aTmpPoint, Size(nDX, nDY));
-        aDecoView.DrawFrame(aRect, FRAME_DRAW_DOUBLEIN);
+        aDecoView.DrawFrame(aRect, DrawFrameStyle::DoubleIn);
     }
     else
     {

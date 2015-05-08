@@ -1338,7 +1338,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
         if ( bBorder )
         {
             DecorationView aDecoView( pDev );
-            aRect = aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+            aRect = aDecoView.DrawFrame( aRect, DrawFrameStyle::DoubleIn );
         }
         if ( bBackground )
         {

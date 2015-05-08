@@ -192,7 +192,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
 
     Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));
     DecorationView aDecorationView(&rRenderContext);
-    aDecorationView.DrawFrame(aFrameRect, FRAME_DRAW_GROUP);
+    aDecorationView.DrawFrame(aFrameRect, DrawFrameStyle::Group);
 }
 
 void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
@@ -377,7 +377,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
                                       nY * aSubSize.Height() + nDeltaY), aPageText);
     }
     DecorationView aDecorationView(&rRenderContext);
-    aDecorationView.DrawFrame(Rectangle(Point(0, 0), aOutSize), FRAME_DRAW_GROUP);
+    aDecorationView.DrawFrame(Rectangle(Point(0, 0), aOutSize), DrawFrameStyle::Group);
 }
 
 PrintDialog::NUpTabPage::NUpTabPage( VclBuilder *pUIBuilder )
