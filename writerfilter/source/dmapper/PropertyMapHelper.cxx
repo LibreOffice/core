@@ -44,7 +44,7 @@ void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t& pLogger, const un
         pLogger->startElement("separator");
 
         pLogger->attribute("position", aSeq[n].Position);
-        pLogger->attribute("visible", aSeq[n].IsVisible);
+        pLogger->attribute("visible", sal_uInt32(aSeq[n].IsVisible));
 
         pLogger->endElement();
     }
