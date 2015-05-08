@@ -315,9 +315,15 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     OUString _sURL(rURL);
     INetURLObject aURL( _sURL );
 
-    OUString aMark = aURL.GetMark(INetURLObject::DECODE_WITH_CHARSET);
-    if (!aMark.isEmpty())
-        _sURL = aURL.GetURLNoMark();
+    OUString sStreamRelPath;
+    if (_sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
+    {
+        // In this case the host contains the real path, and the the path is the embedded stream name.
+        _sURL = aURL.GetHost(INetURLObject::DECODE_WITH_CHARSET);
+        sStreamRelPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
+        if (sStreamRelPath.startsWith("/"))
+            sStreamRelPath = sStreamRelPath.copy(1);
+    }
 
     if ( aURL.GetProtocol() == INetProtocol::NotValid )
         throw NoSuchElementException( _rName, *this );
@@ -367,8 +373,8 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
         aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext, 0) );
-        if (!aMark.isEmpty())
-            aArgs.put("StreamRelPath", aMark);
+        if (!sStreamRelPath.isEmpty())
+            aArgs.put("StreamRelPath", sStreamRelPath);
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );

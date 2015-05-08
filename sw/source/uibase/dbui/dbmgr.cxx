@@ -2631,9 +2631,12 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
     if (xDatabaseContext->hasByName(rData.sDataSource))
         xDatabaseContext->revokeObject(rData.sDataSource);
 
-    INetURLObject aURLObject(rDocShell.GetMedium()->GetURLObject());
-    aURLObject.SetMark(rData.sEmbeddedName);
-    OUString aURL = aURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET);
+    // Encode the stream name and the real path into a single URL.
+    const INetURLObject& rURLObject = rDocShell.GetMedium()->GetURLObject();
+    OUString aURL = "vnd.sun.star.pkg://";
+    aURL += INetURLObject::encode(rURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET), INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
+    aURL += "/" + INetURLObject::encode(rData.sEmbeddedName, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL);
+
     uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
     xDatabaseContext->registerObject(rData.sDataSource, xDataSource);
 }
