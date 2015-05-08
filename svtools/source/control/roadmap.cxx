@@ -57,6 +57,7 @@ namespace svt
 
     public:
         RoadmapItem( ORoadmap& _rParent, const Size& _rItemPlayground );
+        ~RoadmapItem();
 
         void                    SetID( sal_Int16 _ID );
         sal_Int16               GetID() const;
@@ -684,6 +685,12 @@ namespace svt
         mpID->Show();
         mpDescription = VclPtr<HyperLabel>::Create( &_rParent, WB_NOTABSTOP | WB_WORDBREAK );
         mpDescription->Show();
+    }
+
+    RoadmapItem::~RoadmapItem()
+    {
+        mpID.disposeAndClear();
+        mpDescription.disposeAndClear();
     }
 
 
