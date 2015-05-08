@@ -97,8 +97,6 @@ public:
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
-    void       SetTextColor( const RGBAColor& ) {}
-
     const CoreTextFontData*  mpFontData;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float               mfFontStretch;
