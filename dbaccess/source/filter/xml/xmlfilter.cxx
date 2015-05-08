@@ -457,6 +457,10 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             try
             {
                 xStorage.set(pMedium->GetStorage(false), UNO_QUERY_THROW);
+
+                OUString sStreamRelPath = aMediaDescriptor.getOrDefault("StreamRelPath", OUString());
+                if (!sStreamRelPath.isEmpty())
+                    xStorage = xStorage->openStorageElement(sStreamRelPath, embed::ElementModes::READ);
             }
             catch (const Exception&)
             {
