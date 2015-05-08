@@ -335,6 +335,7 @@ bool OutputDevice::SupportsCairo() const
 
     return mpGraphics->SupportsCairo();
 #else
+    (void) this; // loplugin:staticmethods
     return false;
 #endif
 }

@@ -1330,6 +1330,7 @@ bool OpenGLContext::isCurrent()
     return (wglGetCurrentContext() == m_aGLWin.hRC &&
             wglGetCurrentDC() == m_aGLWin.hDC);
 #elif defined( MACOSX )
+    (void) this; // loplugin:staticmethods
     return false;
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     return false;
@@ -1409,6 +1410,7 @@ void OpenGLContext::resetCurrent()
 #if defined( WNT )
     wglMakeCurrent( m_aGLWin.hDC, 0 );
 #elif defined( MACOSX )
+    (void) this; // loplugin:staticmethods
     OpenGLWrapper::resetCurrent();
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
@@ -1436,6 +1438,7 @@ void OpenGLContext::sync()
 #if defined( WNT )
     // nothing
 #elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
+    (void) this; // loplugin:staticmethods
     // nothing
 #elif defined( UNX )
     glXWaitGL();
