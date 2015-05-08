@@ -2210,17 +2210,10 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
 
 void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
 {
-    sal_uLong nEnd = nDelPos + nSz;
-    SwNode* pNew = (*this)[ nEnd ];
-
-    for(SwNodeIndex& rIndex : vIndices->GetRingContainer())
     {
-        sal_uLong nIdx = rIndex.GetIndex();
-        if( nDelPos <= nIdx && nIdx < nEnd )
-            rIndex = *pNew;
-    }
-
-    {
+#if OSL_DEBUG_LEVEL > 0
+        SwNode *const pFirst((*this)[nDelPos]);
+#endif
         for (sal_uLong nCnt = 0; nCnt < nSz; nCnt++)
         {
             SwNode* pNode = ((*this)[ nDelPos + nCnt ]);
@@ -2229,6 +2222,35 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
             if (pTxtNd)
             {
                 pTxtNd->RemoveFromList();
+                // remove FLY_AS_CHAR *before* adjusting SwNodeIndex
+                // so their anchor still points to correct node when deleted!
+                // NOTE: this will call RemoveNode() recursively!
+                // so adjust our indexes to account for removed nodes
+                sal_uLong const nPos = pTxtNd->GetIndex();
+                SwpHints *const pHints(pTxtNd->GetpSwpHints());
+                if (pHints)
+                {
+                    std::vector<SwTxtAttr*> flys;
+                    for (size_t i = 0; i < pHints->Count(); ++i)
+                    {
+                        SwTxtAttr *const pHint(pHints->GetTextHint(i));
+                        if (RES_TXTATR_FLYCNT == pHint->Which())
+                        {
+                            flys.push_back(pHint);
+                        }
+                    }
+                    for (SwTxtAttr * pHint : flys)
+                    {
+                        pTxtNd->DeleteAttribute(pHint);
+                    }   // pHints may be dead now
+                    sal_uLong const nDiff = nPos - pTxtNd->GetIndex();
+                    if (nDiff)
+                    {
+                        nDelPos -= nDiff;
+                    }
+                    assert(pTxtNd == (*this)[nDelPos + nCnt]);
+                    assert(pFirst == (*this)[nDelPos]);
+                }
             }
             SwTableNode* pTableNode = pNode->GetTableNode();
             if (pTableNode)
@@ -2240,6 +2262,16 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
                 pTableNode->RemoveRedlines();
             }
         }
+    }
+
+    sal_uLong nEnd = nDelPos + nSz;
+    SwNode* pNew = (*this)[ nEnd ];
+
+    for (SwNodeIndex& rIndex : vIndices->GetRingContainer())
+    {
+        sal_uLong const nIdx = rIndex.GetIndex();
+        if (nDelPos <= nIdx && nIdx < nEnd)
+            rIndex = *pNew;
     }
 
     std::vector<BigPtrEntry> aTempEntries;
