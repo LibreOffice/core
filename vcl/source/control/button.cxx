@@ -1910,7 +1910,7 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
             Rectangle aImageRect  = maStateRect;
             Size aImageSize = maImage.GetSizePixel();
             bool bEnabled = IsEnabled();
-            sal_uInt16 nButtonStyle = FRAME_DRAW_DOUBLEIN;
+            DrawFrameStyle nButtonStyle = DrawFrameStyle::DoubleIn;
 
             aImageSize.Width()  = CalcZoom(aImageSize.Width());
             aImageSize.Height() = CalcZoom(aImageSize.Height());
@@ -1925,9 +1925,9 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
             rRenderContext.DrawRect(aImageRect);
 
             // display image
-            nButtonStyle = 0;
+            sal_uInt16 nImageStyle = 0;
             if (!bEnabled)
-                nButtonStyle |= IMAGE_DRAW_DISABLE;
+                nImageStyle |= IMAGE_DRAW_DISABLE;
 
             Image* pImage = &maImage;
 
@@ -1935,9 +1935,9 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
             aImagePos.X() += (aImageRect.GetWidth() - aImageSize.Width()) / 2;
             aImagePos.Y() += (aImageRect.GetHeight() - aImageSize.Height()) / 2;
             if (IsZoom())
-                rRenderContext.DrawImage(aImagePos, aImageSize, *pImage, nButtonStyle);
+                rRenderContext.DrawImage(aImagePos, aImageSize, *pImage, nImageStyle);
             else
-                rRenderContext.DrawImage(aImagePos, *pImage, nButtonStyle);
+                rRenderContext.DrawImage(aImagePos, *pImage, nImageStyle);
 
             aImageRect.Left()++;
             aImageRect.Top()++;

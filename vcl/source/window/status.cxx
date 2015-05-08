@@ -444,12 +444,12 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
         {
             if (!(pItem->mnBits & SIB_FLAT))
             {
-                sal_uInt16 nStyle;
+                DrawFrameStyle nStyle;
 
                 if (pItem->mnBits & SIB_IN)
-                    nStyle = FRAME_DRAW_IN;
+                    nStyle = DrawFrameStyle::In;
                 else
-                    nStyle = FRAME_DRAW_OUT;
+                    nStyle = DrawFrameStyle::Out;
 
                 DecorationView aDecoView(&rRenderContext);
                 aDecoView.DrawFrame(aRect, nStyle);
@@ -598,7 +598,7 @@ void StatusBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, bool bPaint
         if (!bNative)
         {
             DecorationView aDecoView(&rRenderContext);
-            aDecoView.DrawFrame(maPrgsFrameRect, FRAME_DRAW_IN);
+            aDecoView.DrawFrame(maPrgsFrameRect, DrawFrameStyle::In);
         }
     }
 
@@ -1463,7 +1463,7 @@ Size StatusBar::CalcWindowSizePixel() const
     if( mpImplData->mbDrawItemFrames &&
         IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
     {
-        ImplControlValue aControlValue( FRAME_DRAW_NODRAW );
+        ImplControlValue aControlValue( static_cast<long>(DrawFrameFlags::NoDraw) );
         Rectangle aBound, aContent;
         Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
         if( GetNativeControlRegion(CTRL_FRAME, PART_BORDER,

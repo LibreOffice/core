@@ -377,7 +377,7 @@ void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
     pDev->OutputDevice::SetSettings( aNewSettings );
 
     DecorationView aDecoView( pDev );
-    rRect = aDecoView.DrawFrame( rRect, FRAME_DRAW_WINDOWBORDER );
+    rRect = aDecoView.DrawFrame( rRect, DrawFrameStyle::Out, DrawFrameFlags::WindowBorder );
 
     pDev->OutputDevice::SetSettings( aOriginalSettings );
 }

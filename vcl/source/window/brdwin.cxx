@@ -1133,20 +1133,21 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
 
         if( ! mbNWFBorder )
         {
-            sal_uInt16 nStyle = FRAME_DRAW_NODRAW;
+            DrawFrameStyle nStyle = DrawFrameStyle::NONE;
+            DrawFrameFlags nFlags = DrawFrameFlags::NoDraw;
             // move border outside if border was converted or if the BorderWindow is a frame window,
             if ( mpBorderWindow->mbSmallOutBorder )
-                nStyle |= FRAME_DRAW_DOUBLEOUT;
+                nStyle = DrawFrameStyle::DoubleOut;
             else if ( nBorderStyle & WindowBorderStyle::NWF )
-                nStyle |= FRAME_DRAW_NWF;
+                nStyle = DrawFrameStyle::NWF;
             else
-                nStyle |= FRAME_DRAW_DOUBLEIN;
+                nStyle = DrawFrameStyle::DoubleIn;
             if ( nBorderStyle & WindowBorderStyle::MONO )
-                nStyle |= FRAME_DRAW_MONO;
+                nFlags |= DrawFrameFlags::Mono;
 
             DecorationView  aDecoView( mpOutDev );
             Rectangle       aRect( 0, 0, 10, 10 );
-            Rectangle       aCalcRect = aDecoView.DrawFrame( aRect, nStyle );
+            Rectangle       aCalcRect = aDecoView.DrawFrame( aRect, nStyle, nFlags );
             mnLeftBorder    = aCalcRect.Left();
             mnTopBorder     = aCalcRect.Top();
             mnRightBorder   = aRect.Right()-aCalcRect.Right();
@@ -1321,26 +1322,27 @@ void ImplSmallBorderWindowView::DrawWindow(sal_uInt16 nDrawFlags, OutputDevice*,
 
     if (nDrawFlags & BORDERWINDOW_DRAW_FRAME)
     {
-        sal_uInt16 nStyle = 0;
+        DrawFrameStyle nStyle = DrawFrameStyle::NONE;
+        DrawFrameFlags nFlags = DrawFrameFlags::NONE;
         // move border outside if border was converted or if the border window is a frame window,
         if (mpBorderWindow->mbSmallOutBorder)
-            nStyle |= FRAME_DRAW_DOUBLEOUT;
+            nStyle = DrawFrameStyle::DoubleOut;
         else if (nBorderStyle & WindowBorderStyle::NWF)
-            nStyle |= FRAME_DRAW_NWF;
+            nStyle = DrawFrameStyle::NWF;
         else
-            nStyle |= FRAME_DRAW_DOUBLEIN;
+            nStyle = DrawFrameStyle::DoubleIn;
         if (nBorderStyle & WindowBorderStyle::MONO)
-            nStyle |= FRAME_DRAW_MONO;
+            nFlags |= DrawFrameFlags::Mono;
         if (nBorderStyle & WindowBorderStyle::MENU)
-            nStyle |= FRAME_DRAW_MENU;
+            nFlags |= DrawFrameFlags::Menu;
         // tell DrawFrame that we're drawing a window border of a frame window to avoid round corners
         if (pWin && pWin == pWin->ImplGetFrameWindow())
-            nStyle |= FRAME_DRAW_WINDOWBORDER;
+            nFlags |= DrawFrameFlags::WindowBorder;
 
         DecorationView aDecoView(mpOutDev);
         Point aTmpPoint;
         Rectangle aInRect(aTmpPoint, Size(mnWidth, mnHeight));
-        aDecoView.DrawFrame(aInRect, nStyle);
+        aDecoView.DrawFrame(aInRect, nStyle, nFlags);
     }
 }
 
@@ -1402,7 +1404,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     const StyleSettings&    rStyleSettings = pDev->GetSettings().GetStyleSettings();
     DecorationView          aDecoView( pDev );
     Rectangle               aRect( 0, 0, 10, 10 );
-    Rectangle               aCalcRect = aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEOUT | FRAME_DRAW_NODRAW );
+    Rectangle               aCalcRect = aDecoView.DrawFrame( aRect, DrawFrameStyle::DoubleOut, DrawFrameFlags::NoDraw );
 
     pData->mpOutDev         = pDev;
     pData->mnWidth          = nWidth;
@@ -1605,7 +1607,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
             pDev->SetClipRegion(oldClipRgn);
     }
     else
-        aInRect = aDecoView.DrawFrame(aInRect, FRAME_DRAW_DOUBLEOUT | FRAME_DRAW_NODRAW);
+        aInRect = aDecoView.DrawFrame(aInRect, DrawFrameStyle::DoubleOut, DrawFrameFlags::NoDraw);
 
     // Draw Border
     pDev->SetLineColor();

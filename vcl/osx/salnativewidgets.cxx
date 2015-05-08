@@ -1015,7 +1015,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         {
             sal_uInt16 nStyle = aValue.getNumericVal();
             if( nPart == PART_BORDER ) {
-                if(!( nStyle & FRAME_DRAW_MENU ) && !(nStyle & FRAME_DRAW_WINDOWBORDER) )
+                if(!( nStyle & DrawFrameFlags::Menu ) && !(nStyle & DrawFrameFlags::WindowBorder) )
                 {
                     // #i84756# strange effects start to happen when HIThemeDrawFrame
                     // meets the border of the window. These can be avoided by clipping
@@ -1321,10 +1321,10 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             {
                 sal_uInt16 nStyle = aValue.getNumericVal();
                 if(  ( nPart == PART_BORDER ) &&
-                    !( nStyle & (FRAME_DRAW_MENU | FRAME_DRAW_WINDOWBORDER | FRAME_DRAW_BORDERWINDOWBORDER) ) )
+                    !( nStyle & (DrawFrameFlags::Menu | DrawFrameFlags::WindowBorder | DrawFrameFlags::BorderWindowBorder) ) )
                 {
                     Rectangle aRect(aCtrlBoundRect);
-                    if( nStyle & FRAME_DRAW_DOUBLEIN )
+                    if( nStyle & DrawFrameStyle::DoubleIn )
                     {
                         aRect.Left()    += 1;
                         aRect.Top()     += 1;

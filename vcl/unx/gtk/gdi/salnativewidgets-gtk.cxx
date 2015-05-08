@@ -1317,13 +1317,13 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     {
         int frameWidth = getFrameWidth(gWidgetData[m_nXScreen].gFrame);
         rNativeBoundingRegion = rControlRegion;
-        sal_uInt16 nStyle = aValue.getNumericVal();
+        DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(aValue.getNumericVal() & 0xfff0);
         int x1=rControlRegion.Left();
         int y1=rControlRegion.Top();
         int x2=rControlRegion.Right();
         int y2=rControlRegion.Bottom();
 
-        if( nStyle & FRAME_DRAW_NODRAW )
+        if( nStyle & DrawFrameFlags::NoDraw )
         {
             rNativeContentRegion = Rectangle(x1+frameWidth,
                                              y1+frameWidth,
@@ -1494,10 +1494,10 @@ bool GtkSalGraphics::NWPaintGTKFrame(
     GdkRectangle clipRect;
     int frameWidth=getFrameWidth(gWidgetData[m_nXScreen].gFrame);
     GtkShadowType shadowType=GTK_SHADOW_IN;
-    sal_uInt16 nStyle = aValue.getNumericVal();
-    if( nStyle & FRAME_DRAW_IN )
+    DrawFrameStyle nStyle = static_cast<DrawFrameStyle>(aValue.getNumericVal() & 0x0f);
+    if( nStyle == DrawFrameStyle::In )
         shadowType=GTK_SHADOW_OUT;
-    if( nStyle & FRAME_DRAW_OUT )
+    if( nStyle == DrawFrameStyle::Out )
         shadowType=GTK_SHADOW_IN;
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )

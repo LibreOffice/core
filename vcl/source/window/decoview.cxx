@@ -621,11 +621,11 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 }
 
 void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
-                    const StyleSettings& rStyleSettings, sal_uInt16 nStyle )
+                    const StyleSettings& rStyleSettings, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
     vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : NULL;
 
-    const bool bMenuStyle = nStyle & FRAME_DRAW_MENU;
+    const bool bMenuStyle(nFlags & DrawFrameFlags::Menu);
 
     // UseFlatBorders disables 3D style for all frames except menus
     // menus may use different border colors (eg on XP)
@@ -643,19 +643,19 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
             bFlatBorders = false;
     }
 
-    const bool bNoDraw = nStyle & FRAME_DRAW_NODRAW;
+    const bool bNoDraw(nFlags & DrawFrameFlags::NoDraw);
 
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
          (pDev->GetOutDevType() == OUTDEV_PRINTER) ||
          bFlatBorders )
-        nStyle |= FRAME_DRAW_MONO;
+        nFlags |= DrawFrameFlags::Mono;
 
-    if( (nStyle & FRAME_DRAW_STYLE) != FRAME_DRAW_NWF &&
+    if( nStyle != DrawFrameStyle::NWF &&
         pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) )
     {
-        ImplControlValue aControlValue( nStyle |
-                                        (pWin->GetType()==WINDOW_BORDERWINDOW ?
-                                        FRAME_DRAW_BORDERWINDOWBORDER : 0) );
+        ImplControlValue aControlValue( static_cast<long>(nStyle) |
+                                        static_cast<long>(pWin->GetType()==WINDOW_BORDERWINDOW ?
+                                                          DrawFrameFlags::BorderWindowBorder : DrawFrameFlags::NONE) );
         Rectangle aBound, aContent;
         Rectangle aNatRgn( rRect );
         if( pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
@@ -673,10 +673,10 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
         }
     }
 
-    if ( nStyle & FRAME_DRAW_MONO )
+    if ( nFlags & DrawFrameFlags::Mono )
     {
         // no round corners for window frame borders
-        const bool bRound = bFlatBorders && !(nStyle & FRAME_DRAW_WINDOWBORDER);
+        const bool bRound = bFlatBorders && !(nFlags & DrawFrameFlags::WindowBorder);
 
         if ( bNoDraw )
         {
@@ -704,39 +704,40 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
     {
         if ( bNoDraw )
         {
-            switch ( nStyle & FRAME_DRAW_STYLE )
+            switch ( nStyle )
             {
-                case FRAME_DRAW_IN:
-                case FRAME_DRAW_OUT:
+                case DrawFrameStyle::In:
+                case DrawFrameStyle::Out:
                     ++rRect.Left();
                     ++rRect.Top();
                     --rRect.Right();
                     --rRect.Bottom();
                     break;
 
-                case FRAME_DRAW_GROUP:
-                case FRAME_DRAW_DOUBLEIN:
-                case FRAME_DRAW_DOUBLEOUT:
+                case DrawFrameStyle::Group:
+                case DrawFrameStyle::DoubleIn:
+                case DrawFrameStyle::DoubleOut:
                     rRect.Left()   += 2;
                     rRect.Top()    += 2;
                     rRect.Right()  -= 2;
                     rRect.Bottom() -= 2;
                     break;
 
-                case FRAME_DRAW_NWF:
+                case DrawFrameStyle::NWF:
                     // enough space for the native rendering
                     rRect.Left() += 4;
                     rRect.Top() += 4;
                     rRect.Right() -= 4;
                     rRect.Bottom() -= 4;
                     break;
+                default: break;
             }
         }
         else
         {
-            switch ( nStyle & FRAME_DRAW_STYLE )
+            switch ( nStyle )
             {
-                case FRAME_DRAW_GROUP:
+                case DrawFrameStyle::Group:
                     pDev->SetFillColor();
                     pDev->SetLineColor( rStyleSettings.GetLightColor() );
                     pDev->DrawRect( Rectangle( rRect.Left()+1, rRect.Top()+1,
@@ -752,19 +753,19 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     rRect.Bottom() -= 2;
                     break;
 
-                case FRAME_DRAW_IN:
+                case DrawFrameStyle::In:
                     ImplDraw2ColorFrame( pDev, rRect,
                                          rStyleSettings.GetShadowColor(),
                                          rStyleSettings.GetLightColor() );
                     break;
 
-                case FRAME_DRAW_OUT:
+                case DrawFrameStyle::Out:
                     ImplDraw2ColorFrame( pDev, rRect,
                                          rStyleSettings.GetLightColor(),
                                          rStyleSettings.GetShadowColor() );
                     break;
 
-                case FRAME_DRAW_DOUBLEIN:
+                case DrawFrameStyle::DoubleIn:
                     if( bFlatBorders )
                     {
                         // no 3d effect
@@ -786,7 +787,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     }
                     break;
 
-                case FRAME_DRAW_DOUBLEOUT:
+                case DrawFrameStyle::DoubleOut:
                     if( bMenuStyle )
                     {
                         ImplDraw2ColorFrame( pDev, rRect,
@@ -812,13 +813,14 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     }
                     break;
 
-                case FRAME_DRAW_NWF:
+                case DrawFrameStyle::NWF:
                     // no rendering, just enough space for the native rendering
                     rRect.Left() += 4;
                     rRect.Top() += 4;
                     rRect.Right() -= 4;
                     rRect.Bottom() -= 4;
                     break;
+                default: break;
             }
         }
     }
@@ -934,7 +936,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
     DrawFrame( rRect, aLightColor, aShadowColor );
 }
 
-Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
+Rectangle DecorationView::DrawFrame( const Rectangle& rRect, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
     Rectangle   aRect = rRect;
     bool        bOldMap = mpOutDev->IsMapModeEnabled();
@@ -946,13 +948,13 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
 
     if ( !rRect.IsEmpty() )
     {
-        if ( nStyle & FRAME_DRAW_NODRAW )
-             ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle );
+        if ( nFlags & DrawFrameFlags::NoDraw )
+             ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle, nFlags );
         else
         {
              Color maOldLineColor  = mpOutDev->GetLineColor();
              Color maOldFillColor  = mpOutDev->GetFillColor();
-             ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle );
+             ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle, nFlags );
              mpOutDev->SetLineColor( maOldLineColor );
              mpOutDev->SetFillColor( maOldFillColor );
         }

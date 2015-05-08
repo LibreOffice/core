@@ -2064,7 +2064,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                             Point aTmpPos2( aPos );
                             aTmpPos2.X() = aOutSz.Width() - nFontHeight - nFontHeight/4;
                             aDecoView.DrawFrame(
-                                Rectangle( aTmpPos2, Size( nFontHeight+nFontHeight/4, pData->aSz.Height() ) ), FRAME_DRAW_GROUP );
+                                Rectangle( aTmpPos2, Size( nFontHeight+nFontHeight/4, pData->aSz.Height() ) ), DrawFrameStyle::Group );
                         }
                         aDecoView.DrawSymbol(
                             Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),

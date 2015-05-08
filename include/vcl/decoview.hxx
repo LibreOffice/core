@@ -43,18 +43,29 @@ namespace o3tl
 }
 
 // Flags for DrawFrame()
-#define FRAME_DRAW_IN                       ((sal_uInt16)0x0001)
-#define FRAME_DRAW_OUT                      ((sal_uInt16)0x0002)
-#define FRAME_DRAW_GROUP                    ((sal_uInt16)0x0003)
-#define FRAME_DRAW_DOUBLEIN                 ((sal_uInt16)0x0004)
-#define FRAME_DRAW_DOUBLEOUT                ((sal_uInt16)0x0005)
-#define FRAME_DRAW_NWF                      ((sal_uInt16)0x0006)
-#define FRAME_DRAW_MENU                     ((sal_uInt16)0x0010)
-#define FRAME_DRAW_WINDOWBORDER             ((sal_uInt16)0x0020)
-#define FRAME_DRAW_BORDERWINDOWBORDER       ((sal_uInt16)0x0040)
-#define FRAME_DRAW_MONO                     ((sal_uInt16)0x1000)
-#define FRAME_DRAW_NODRAW                   ((sal_uInt16)0x8000)
-#define FRAME_DRAW_STYLE                    ((sal_uInt16)0x000F)
+enum class DrawFrameStyle
+{
+    NONE                     = 0x0000,
+    In                       = 0x0001,
+    Out                      = 0x0002,
+    Group                    = 0x0003,
+    DoubleIn                 = 0x0004,
+    DoubleOut                = 0x0005,
+    NWF                      = 0x0006,
+};
+enum class DrawFrameFlags
+{
+    NONE                     = 0x0000,
+    Menu                     = 0x0010,
+    WindowBorder             = 0x0020,
+    BorderWindowBorder       = 0x0040,
+    Mono                     = 0x1000,
+    NoDraw                   = 0x8000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DrawFrameFlags> : is_typed_flags<DrawFrameFlags, 0x9070> {};
+}
 
 // Flags for DrawHighlightFrame()
 #define FRAME_HIGHLIGHT_IN                  ((sal_uInt16)0x0001)
@@ -92,7 +103,7 @@ public:
                                    const Color& rRightBottomColor );
     void                DrawHighlightFrame( const Rectangle& rRect,
                                             sal_uInt16 nStyle = FRAME_HIGHLIGHT_OUT );
-    Rectangle           DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle = FRAME_DRAW_OUT );
+    Rectangle           DrawFrame( const Rectangle& rRect, DrawFrameStyle nStyle = DrawFrameStyle::Out, DrawFrameFlags nFlags = DrawFrameFlags::NONE );
     Rectangle           DrawButton( const Rectangle& rRect, sal_uInt16 nStyle );
     void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );
     void                DrawHandle(const Rectangle& rRectangle, bool bVertical = true);

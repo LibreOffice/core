@@ -1791,7 +1791,7 @@ void SfxDockingWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Recta
     }
 
     DecorationView aView( this );
-    aView.DrawFrame( aRect, FRAME_DRAW_OUT );
+    aView.DrawFrame( aRect, DrawFrameStyle::Out );
 }
 
 
