@@ -648,7 +648,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTb
             // JP 22.02.99: Linux compiler needs cast
             // JP 28.06.99: rel. BoxName has no preceding tablename!
             if( fnFormula != (FnScanFormula)&SwTableFormula::_SplitMergeBoxNm &&
-                m_sFormula.getLength()>1 && cRelIdentifier != m_sFormula[1] &&
+                m_sFormula.getLength()>(nStt+1) && cRelIdentifier != m_sFormula[nStt+1] &&
                 (nSeparator = m_sFormula.indexOf( '.', nStt ))>=0
                 && nSeparator < nEnd )
             {
