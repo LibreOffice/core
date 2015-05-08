@@ -146,7 +146,7 @@ private:
 
                                 DECL_LINK( GetFocusObjectsHdl, void * );
                                 DECL_LINK_TYPED( SelectToolboxHdl, ToolBox *, void );
-                                DECL_LINK_TYPED(ClickToolboxHdl, ToolBox *, void);
+                                DECL_STATIC_LINK_TYPED(SdNavigatorWin, ClickToolboxHdl, ToolBox *, void);
                                 DECL_LINK_TYPED( DropdownClickToolBoxHdl, ToolBox *, void );
                                 DECL_LINK( ClickPageHdl, void * );
                                 DECL_LINK( ClickObjectHdl, void * );
