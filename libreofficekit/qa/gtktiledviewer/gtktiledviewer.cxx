@@ -50,7 +50,6 @@ GtkWidget* pFindbar;
 GtkWidget* pFindbarEntry;
 
 static LibreOfficeKit* pOffice;
-static char* pFileName;
 
 static void lcl_registerToolItem(GtkToolItem* pItem, const std::string& rName)
 {
@@ -438,7 +437,6 @@ int main( int argc, char* argv[] )
     // Hide the findbar by default.
     gtk_widget_hide(pFindbar);
 
-    pFileName = argv[2];
     int bOpened = lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
     if (!bOpened)
         g_error("main: lok_docview_open_document() failed with '%s'", pOffice->pClass->getError(pOffice));
