@@ -36,7 +36,7 @@ struct RTF_TokenEntry
 };
 
 // Flag: RTF-token table has been sorted
-static int bSortKeyWords = sal_False;
+static bool bSortKeyWords = false;
 
 static RTF_TokenEntry aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_IGNORE},        RTF_IGNOREFLAG},
@@ -1213,7 +1213,7 @@ int GetRTFToken( const OUString& rSearch )
                 sizeof( aRTFTokenTab ) / sizeof( RTF_TokenEntry ),
                 sizeof( RTF_TokenEntry ),
                 RTFKeyCompare );
-        bSortKeyWords = sal_True;
+        bSortKeyWords = true;
     }
 
     int nRet = 0;
