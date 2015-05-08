@@ -495,7 +495,7 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
     if( rNewData != maDBData )
     {
         if (maDBData.sEmbeddedName != rNewData.sEmbeddedName && GetDocShell())
-            mpDBManager->LoadAndRegisterEmbeddedDataSource(rNewData, *GetDocShell());
+            SwDBManager::LoadAndRegisterEmbeddedDataSource(rNewData, *GetDocShell());
 
         maDBData = rNewData;
         getIDocumentState().SetModified();
