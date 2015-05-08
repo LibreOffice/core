@@ -135,7 +135,7 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
                     return 0;
                 case C_TOKEN( title ):
                 {
-                    bool bVerticalDefault = mrModel.mnAxisPos == XML_l;
+                    bool bVerticalDefault = mrModel.mnAxisPos == XML_l || mrModel.mnAxisPos == XML_r;
                     sal_Int32 nDefaultRotation = bVerticalDefault ? -5400000 : 0;
                     return new TitleContext( *this, mrModel.mxTitle.create(nDefaultRotation) );
                 }
