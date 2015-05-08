@@ -206,7 +206,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods", false);
+loplugin::Plugin::Registration<StaticMethods> X("staticmethods");
 
 }
 
