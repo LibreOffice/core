@@ -136,7 +136,7 @@ namespace stoc_connector
                 // it can make a significant speed difference on linux boxes.
                 if( bTcpNoDelay || aHost == "localhost" || aHost.startsWith("127.0.0.") )
                 {
-                    sal_Int32 nTcpNoDelay = sal_True;
+                    sal_Int32 nTcpNoDelay = sal_Int32(true);
                     pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,
                                                sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
                 }
