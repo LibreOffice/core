@@ -324,21 +324,18 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     }
 }
 
-bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link<>& rHandler, void* pCaller )
+bool Control::ImplCallEventListenersAndHandler( sal_uLong nEvent, const Link<>& rHandler, void* pCaller )
 {
-    ImplDelData aCheckDelete;
-    ImplAddDel( &aCheckDelete );
+    VclPtr<Control> xThis(this);
 
     CallEventListeners( nEvent );
-    if ( !aCheckDelete.IsDead() )
+
+    if ( !xThis->IsDisposed() )
     {
         rHandler.Call( pCaller );
 
-        if ( !aCheckDelete.IsDead() )
-        {
-            ImplRemoveDel( &aCheckDelete );
+        if ( !xThis->IsDisposed() )
             return false;
-        }
     }
     return true;
 }
