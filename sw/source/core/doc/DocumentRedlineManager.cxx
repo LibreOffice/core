@@ -598,6 +598,8 @@ RedlineMode_t DocumentRedlineManager::GetRedlineMode() const
     return meRedlineMode;
 }
 
+void CheckAnchoredFlyConsistency(SwDoc const& rDoc);
+
 void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
 {
     if( meRedlineMode != eMode )
@@ -628,6 +630,7 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
                 break;
             }
 
+            CheckAnchoredFlyConsistency(m_rDoc);
             _CHECK_REDLINE( *this )
 
             if (pFnc)
@@ -641,6 +644,7 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
                 mpRedlineTbl->Resort();
             }
 
+            CheckAnchoredFlyConsistency(m_rDoc);
             _CHECK_REDLINE( *this )
             m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
         }

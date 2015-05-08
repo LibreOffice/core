@@ -3487,4 +3487,65 @@ bool IsFlyFrmFmtInHeader(const SwFrmFmt& rFmt)
     return false;
 }
 
+namespace sw {
+
+void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
+{
+#if OSL_DEBUG_LEVEL > 0
+    SwNodes const& rNodes(rDoc.GetNodes());
+    sal_uLong const count(rNodes.Count());
+    for (sal_uLong i = 0; i != count; ++i)
+    {
+        SwNode const*const pNode(rNodes[i]);
+        std::vector<SwFrmFmt*> const*const pFlys(pNode->GetAnchoredFlys());
+        if (pFlys)
+        {
+            for (auto it = pFlys->begin(); it != pFlys->end(); ++it)
+            {
+                SwFmtAnchor const& rAnchor((**it).GetAnchor(false));
+                assert(&rAnchor.GetCntntAnchor()->nNode.GetNode() == pNode);
+            }
+        }
+    }
+    SwFrmFmts const*const pSpzFrmFmts(rDoc.GetSpzFrmFmts());
+    if (pSpzFrmFmts)
+    {
+        for (auto it = pSpzFrmFmts->begin(); it != pSpzFrmFmts->end(); ++it)
+        {
+            SwFmtAnchor const& rAnchor((**it).GetAnchor(false));
+            if (FLY_AT_PAGE == rAnchor.GetAnchorId())
+            {
+                assert(!rAnchor.GetCntntAnchor());
+            }
+            else
+            {
+                SwNode & rNode(rAnchor.GetCntntAnchor()->nNode.GetNode());
+                std::vector<SwFrmFmt*> const*const pFlys(rNode.GetAnchoredFlys());
+                assert(std::find(pFlys->begin(), pFlys->end(), *it) != pFlys->end());
+                switch (rAnchor.GetAnchorId())
+                {
+                    case FLY_AT_FLY:
+                        assert(rNode.IsStartNode());
+                    break;
+                    case FLY_AT_PARA:
+                        assert(rNode.IsTxtNode() || rNode.IsTableNode());
+                    break;
+                    case FLY_AS_CHAR:
+                    case FLY_AT_CHAR:
+                        assert(rNode.IsTxtNode());
+                    break;
+                    default:
+                        assert(false);
+                    break;
+                }
+            }
+        }
+    }
+#else
+    (void) rDoc;
+#endif
+}
+
+} // namespace sw
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
