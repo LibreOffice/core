@@ -59,7 +59,7 @@ static void lcl_registerToolItem(GtkToolItem* pItem, const std::string& rName)
 
 const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
 
-void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
+static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
     const char *sName = gtk_tool_button_get_stock_id( GTK_TOOL_BUTTON(pButton) );
 
@@ -107,7 +107,7 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 }
 
 /// User clicked on the button -> inform LOKDocView.
-void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
     LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
     bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing));
@@ -116,7 +116,7 @@ void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 }
 
 /// Toggle the visibility of the findbar.
-void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
 #if GTK_CHECK_VERSION(2,18,0) // we need gtk_widget_get_visible()
     if (gtk_widget_get_visible(pFindbar))
@@ -146,7 +146,7 @@ static gboolean signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pDat
 }
 
 /// Searches for the next or previous text of pFindbarEntry.
-void doSearch(bool bBackwards)
+static void doSearch(bool bBackwards)
 {
     GtkEntry* pEntry = GTK_ENTRY(pFindbarEntry);
     const char* pText = gtk_entry_get_text(pEntry);
@@ -163,19 +163,19 @@ void doSearch(bool bBackwards)
 }
 
 /// Click handler for the search next button.
-void signalSearchNext(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void signalSearchNext(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
     doSearch(/*bBackwards=*/false);
 }
 
 /// Click handler for the search previous button.
-void signalSearchPrev(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void signalSearchPrev(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
     doSearch(/*bBackwards=*/true);
 }
 
 /// Handles the key-press-event of the search entry widget.
-gboolean signalFindbar(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pData*/)
+static gboolean signalFindbar(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pData*/)
 {
     switch(pEvent->keyval)
     {
@@ -231,7 +231,7 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
 }
 
 /// User clicked on a cmmand button -> inform LOKDocView.
-void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
+static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
     if (g_bToolItemBroadcast)
     {
@@ -245,7 +245,7 @@ void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 
 // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
-void populatePartSelector()
+static void populatePartSelector()
 {
     gtk_list_store_clear( GTK_LIST_STORE(
                               gtk_combo_box_get_model(
@@ -273,7 +273,7 @@ void populatePartSelector()
                               lok_docview_get_part( LOK_DOCVIEW(pDocView) ) );
 }
 
-void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
+static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 {
     int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
 
@@ -283,7 +283,7 @@ void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
     }
 }
 
-void populatePartModeSelector( GtkComboBoxText* pSelector )
+static void populatePartModeSelector( GtkComboBoxText* pSelector )
 {
     gtk_combo_box_text_append_text( pSelector, "Default" );
     gtk_combo_box_text_append_text( pSelector, "Slide" );
@@ -293,7 +293,7 @@ void populatePartModeSelector( GtkComboBoxText* pSelector )
     gtk_combo_box_set_active( GTK_COMBO_BOX(pSelector), 0 );
 }
 
-void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
+static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
 {
     // Just convert directly back to the LibreOfficeKitPartMode enum.
     // I.e. the ordering above should match the enum member ordering.
