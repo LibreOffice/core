@@ -729,7 +729,7 @@ void Connection::buildTypeInfo() throw( SQLException)
         aInfo.aLiteralPrefix    = xRow->getString   (4);
         aInfo.aLiteralSuffix    = xRow->getString   (5);
         aInfo.aCreateParams     = xRow->getString   (6);
-        aInfo.bNullable         = xRow->getBoolean  (7) == ColumnValue::NULLABLE;
+        aInfo.bNullable         = xRow->getBoolean  (7);
         aInfo.bCaseSensitive    = xRow->getBoolean  (8);
         aInfo.nSearchType       = xRow->getShort    (9);
         aInfo.bUnsigned         = xRow->getBoolean  (10);
