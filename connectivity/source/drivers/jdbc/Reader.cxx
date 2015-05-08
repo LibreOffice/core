@@ -90,7 +90,7 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
         out = t.pEnv->CallBooleanMethod( object, mID);
         ThrowRuntimeException(t.pEnv,*this);
     } //t.pEnv
-    return (m_buf != boost::none && out) ? 1 : 0; // no way to tell *how much* is ready
+    return (m_buf != boost::none ? 1 : 0) + (out ? 1 : 0); // no way to tell *how much* is ready
 }
 
 void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
