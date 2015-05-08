@@ -50,7 +50,6 @@ private:
     std::vector< MenuBarButtonEntry >   maButtons;
 
     MenuBarButtonEntry* findButtonItem( sal_uInt16 i_nItemId );
-    void releaseButtonEntry( MenuBarButtonEntry& i_rEntry );
     static void statusLayout();
 public:
     AquaSalMenu( bool bMenuBar );

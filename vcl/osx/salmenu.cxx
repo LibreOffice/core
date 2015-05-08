@@ -39,6 +39,24 @@
 
 #include <objc/objc-runtime.h>
 
+namespace {
+
+void releaseButtonEntry( AquaSalMenu::MenuBarButtonEntry& i_rEntry )
+{
+    if( i_rEntry.mpNSImage )
+    {
+        [i_rEntry.mpNSImage release];
+        i_rEntry.mpNSImage = nil;
+    }
+    if( i_rEntry.mpToolTipString )
+    {
+        [i_rEntry.mpToolTipString release];
+        i_rEntry.mpToolTipString = nil;
+    }
+}
+
+}
+
 const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 
 @interface MainMenuSelector : NSObject
@@ -794,20 +812,6 @@ void AquaSalMenu::statusLayout()
             [(OOStatusItemView*)pNSView layout];
         else
             OSL_FAIL( "someone stole our status view" );
-    }
-}
-
-void AquaSalMenu::releaseButtonEntry( MenuBarButtonEntry& i_rEntry )
-{
-    if( i_rEntry.mpNSImage )
-    {
-        [i_rEntry.mpNSImage release];
-        i_rEntry.mpNSImage = nil;
-    }
-    if( i_rEntry.mpToolTipString )
-    {
-        [i_rEntry.mpToolTipString release];
-        i_rEntry.mpToolTipString = nil;
     }
 }
 
