@@ -433,7 +433,7 @@ private:
     void                    Pattern50Fill();
     UInt32                  getState( ControlState nState );
     UInt32                  getTrackState( ControlState nState );
-    bool                    GetRawFontData( const PhysicalFontFace* pFontData,
+    static bool             GetRawFontData( const PhysicalFontFace* pFontData,
                                 std::vector<unsigned char>& rBuffer,
                                 bool* pJustCFF );
 };
