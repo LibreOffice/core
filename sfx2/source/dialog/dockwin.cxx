@@ -450,7 +450,7 @@ void SfxDockingWindow::Resize()
 {
     DockingWindow::Resize();
     Invalidate();
-    if ( pImp->bConstructed && pMgr )
+    if ( pImp && pImp->bConstructed && pMgr )
     {
         if ( IsFloatingMode() )
         {
@@ -501,7 +501,7 @@ bool SfxDockingWindow::PrepareToggleFloatingMode()
 */
 
 {
-    if (!pImp->bConstructed)
+    if (!pImp || !pImp->bConstructed)
         return true;
 
     if ( (Application::IsInModalMode() && IsFloatingMode()) || !pMgr )
@@ -554,7 +554,7 @@ void SfxDockingWindow::ToggleFloatingMode()
     SfxDockingWindow::ToggleFloatingMode() must be called.
 */
 {
-    if ( !pImp->bConstructed || !pMgr )
+    if ( !pImp || !pImp->bConstructed || !pMgr )
         return;                                 // No Handler call
 
     // Remember old alignment and then switch.
@@ -638,7 +638,7 @@ void SfxDockingWindow::StartDocking()
     the end.
 */
 {
-    if ( !pImp->bConstructed || !pMgr )
+    if ( !pImp || !pImp->bConstructed || !pMgr )
         return;
     SfxChildIdentifier eIdent = SfxChildIdentifier::DOCKINGWINDOW;
     if ( pImp->bSplitable )
@@ -672,7 +672,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     if ( Application::IsInModalMode() )
         return true;
 
-    if ( !pImp->bConstructed || !pMgr )
+    if ( !pImp || !pImp->bConstructed || !pMgr )
     {
         rRect.SetSize( Size() );
         return IsFloatingMode();
@@ -771,7 +771,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
     SfxDockingWindow::EndDocking() must be called first.
 */
 {
-    if ( !pImp->bConstructed || IsDockingCanceled() || !pMgr )
+    if ( !pImp || !pImp->bConstructed || IsDockingCanceled() || !pMgr )
         return;
 
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
@@ -1242,7 +1242,7 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
     if ( !pMgr )
         return;
 
-    if ( GetFloatingWindow() && pImp->bConstructed )
+    if ( GetFloatingWindow() && pImp && pImp->bConstructed )
         pImp->aWinState = GetFloatingWindow()->GetWindowState();
 
     rInfo.aWinState = pImp->aWinState;
