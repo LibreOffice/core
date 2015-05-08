@@ -1142,12 +1142,10 @@ void SwTxtNode::Update(
             }
         }
 #endif
-        SwFrmFmtAnchorMap::const_iterator_pair range = GetDoc()->GetFrmFmtAnchorMap()->equal_range( SwNodeIndex( *this ));
-        for( SwFrmFmtAnchorMap::const_iterator it = range.first;
-             it != range.second;
-             ++it )
+        std::vector<SwFrmFmt*> const*const pFlys(GetAnchoredFlys());
+        for (size_t i = 0; pFlys && i != pFlys->size(); ++i)
         {
-            SwFrmFmt *pFmt = it->second;
+            SwFrmFmt const*const pFmt = (*pFlys)[i];
             const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
             const SwPosition* pCntntAnchor = rAnchor.GetCntntAnchor();
             if (rAnchor.GetAnchorId() == FLY_AT_CHAR && pCntntAnchor)

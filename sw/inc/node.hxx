@@ -98,6 +98,11 @@ class SW_DLLPUBLIC SwNode
     long m_nSerial;
 #endif
 
+    /// all SwFrmFmt that are anchored at the node
+    /// invariant: SwFrmFmt is in the list iff
+    /// SwFrmFmt::GetAnchor().GetCntntAnchor() points to this node
+    std::unique_ptr<std::vector<SwFrmFmt*>> m_pAnchoredFlys;
+
 protected:
     SwStartNode* pStartOfSection;
 
@@ -280,6 +285,10 @@ public:
     const SwTxtNode* FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const;
 
     sal_uInt8 HasPrevNextLayNode() const;
+
+    std::vector<SwFrmFmt *> const* GetAnchoredFlys() const { return m_pAnchoredFlys.get(); }
+    void AddAnchoredFly(SwFrmFmt *);
+    void RemoveAnchoredFly(SwFrmFmt *);
 
     /**
      * Dumps the node structure to the given destination (file nodes.xml in the current directory by default)

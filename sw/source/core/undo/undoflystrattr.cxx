@@ -19,6 +19,7 @@
 
 #include <undoflystrattr.hxx>
 #include <frmfmt.hxx>
+#include <osl/diagnose.h>
 
 SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
                                     const SwUndoId eUndoId,
