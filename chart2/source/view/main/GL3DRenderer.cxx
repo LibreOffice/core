@@ -250,7 +250,7 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DBatchColorID = glGetAttribLocation(m_3DBatchProID, "barColor");
 #if !defined MACOSX
         //check whether the texture array is support
-        mbTexBatchSupport = GLEW_EXT_texture_array == 1;
+        mbTexBatchSupport = GLEW_EXT_texture_array;
 #endif
         CHECK_GL_ERROR();
         if (mbTexBatchSupport)
