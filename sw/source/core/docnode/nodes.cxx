@@ -2211,6 +2211,60 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
 
 void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
 {
+    {
+#ifndef NDEBUG
+        SwNode *const pFirst((*this)[nDelPos]);
+#endif
+        for (sal_uLong nCnt = 0; nCnt < nSz; nCnt++)
+        {
+            SwNode* pNode = ((*this)[ nDelPos + nCnt ]);
+            SwTxtNode * pTxtNd = pNode->GetTxtNode();
+
+            if (pTxtNd)
+            {
+                pTxtNd->RemoveFromList();
+                // remove FLY_AS_CHAR *before* adjusting SwNodeIndex
+                // so their anchor still points to correct node when deleted!
+                // NOTE: this will call RemoveNode() recursively!
+                // so adjust our indexes to account for removed nodes
+                sal_uLong const nPos = pTxtNd->GetIndex();
+                SwpHints *const pHints(pTxtNd->GetpSwpHints());
+                if (pHints)
+                {
+                    std::vector<SwTxtAttr*> flys;
+                    for (size_t i = 0; i < pHints->Count(); ++i)
+                    {
+                        SwTxtAttr *const pHint(pHints->GetTextHint(i));
+                        if (RES_TXTATR_FLYCNT == pHint->Which())
+                        {
+                            flys.push_back(pHint);
+                        }
+                    }
+                    for (SwTxtAttr * pHint : flys)
+                    {
+                        pTxtNd->DeleteAttribute(pHint);
+                    }   // pHints may be dead now
+                    sal_uLong const nDiff = nPos - pTxtNd->GetIndex();
+                    if (nDiff)
+                    {
+                        nDelPos -= nDiff;
+                    }
+                    assert(pTxtNd == (*this)[nDelPos + nCnt]);
+                    assert(pFirst == (*this)[nDelPos]);
+                }
+            }
+            SwTableNode* pTableNode = pNode->GetTableNode();
+            if (pTableNode)
+            {
+                // The node that is deleted is a table node.
+                // Need to make sure that all the redlines that are
+                // related to this table are removed from the
+                // 'Extra Redlines' array
+                pTableNode->RemoveRedlines();
+            }
+        }
+    }
+
     sal_uLong nEnd = nDelPos + nSz;
     SwNode* pNew = (*this)[ nEnd ];
 
@@ -2236,28 +2290,6 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
                 (*p) = *pNew;
 
             p = pPrev;
-        }
-    }
-
-    {
-        for (sal_uLong nCnt = 0; nCnt < nSz; nCnt++)
-        {
-            SwNode* pNode = ((*this)[ nDelPos + nCnt ]);
-            SwTxtNode * pTxtNd = pNode->GetTxtNode();
-
-            if (pTxtNd)
-            {
-                pTxtNd->RemoveFromList();
-            }
-            SwTableNode* pTableNode = pNode->GetTableNode();
-            if (pTableNode)
-            {
-                // The node that is deleted is a table node.
-                // Need to make sure that all the redlines that are
-                // related to this table are removed from the
-                // 'Extra Redlines' array
-                pTableNode->RemoveRedlines();
-            }
         }
     }
 
