@@ -907,6 +907,7 @@ ImplSVEvent * Application::PostUserEvent( const Link<>& rLink, void* pCaller,
     pSVEvent->mbCall    = true;
     if (bReferenceLink)
     {
+        SolarMutexGuard aGuard;
         // Double check that this is indeed a vcl::Window instance.
         assert(dynamic_cast<vcl::Window *>(
                         static_cast<vcl::Window *>(rLink.GetInstance())) ==
