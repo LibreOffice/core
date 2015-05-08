@@ -223,11 +223,6 @@ PhysicalFontFace* CoreTextFontData::Clone() const
     return new CoreTextFontData( *this);
 }
 
-CoreTextStyle* CoreTextFontData::CreateTextStyle( const FontSelectPattern& rFSD ) const
-{
-    return new CoreTextStyle( rFSD);
-}
-
 ImplFontEntry* CoreTextFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
 {
     return new ImplFontEntry( rFSD);

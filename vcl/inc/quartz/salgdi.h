@@ -63,7 +63,6 @@ public:
     ImplFontEntry*                  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
     sal_IntPtr                      GetFontId() const SAL_OVERRIDE;
 
-    CoreTextStyle*                  CreateTextStyle( const FontSelectPattern& ) const;
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
     const FontCharMapPtr            GetFontCharMap() const;

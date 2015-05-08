@@ -435,7 +435,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
 
     // update the text style
     mpFontData = static_cast<const CoreTextFontData*>( pReqFont->mpFontData );
-    mpTextStyle = mpFontData->CreateTextStyle( *pReqFont );
+    mpTextStyle = new CoreTextStyle( *pReqFont );
     mpTextStyle->SetTextColor( maTextColor );
 
     SAL_INFO("vcl.ct",
