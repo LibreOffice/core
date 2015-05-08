@@ -1803,7 +1803,9 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
     }
 }
 
-CGPoint* AquaSalGraphics::makeCGptArray(sal_uInt32 nPoints, const SalPoint* pPtAry)
+namespace {
+
+CGPoint* makeCGptArray(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
     CGPoint *CGpoints = new CGPoint[nPoints];
     if ( CGpoints )
@@ -1815,6 +1817,8 @@ CGPoint* AquaSalGraphics::makeCGptArray(sal_uInt32 nPoints, const SalPoint* pPtA
         }
     }
     return CGpoints;
+}
+
 }
 
 void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint*  pPtAry, SalInvert nSalFlags )

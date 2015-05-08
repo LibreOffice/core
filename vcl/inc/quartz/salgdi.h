@@ -298,7 +298,6 @@ public:
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency ) SAL_OVERRIDE;
 
-    CGPoint*                makeCGptArray(sal_uInt32 nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
 #ifdef MACOSX
     virtual bool            hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
