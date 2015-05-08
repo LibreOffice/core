@@ -1127,9 +1127,9 @@ void MenuFloatingWindow::ImplDrawScroller( bool bUp )
     DecorationView aDecoView( this );
     SymbolType eSymbol = bUp ? SymbolType::SPIN_UP : SymbolType::SPIN_DOWN;
 
-    sal_uInt16 nStyle = 0;
+    DrawSymbolFlags nStyle = DrawSymbolFlags::NONE;
     if ( ( bUp && !bScrollUp ) || ( !bUp && !bScrollDown ) )
-        nStyle |= SYMBOL_DRAW_DISABLE;
+        nStyle |= DrawSymbolFlags::Disable;
 
     aDecoView.DrawSymbol( aRect, eSymbol, GetSettings().GetStyleSettings().GetButtonTextColor(), nStyle );
 
