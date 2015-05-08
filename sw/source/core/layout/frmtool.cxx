@@ -1015,12 +1015,11 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
 #else
     (void)pTbl;
 #endif
-    SwFrmFmtAnchorMap::const_iterator_pair range = doc->GetFrmFmtAnchorMap()->equal_range( SwNodeIndex( doc->GetNodes(), nIndex ));
-    for( std::multimap< SwNodeIndex, SwFrmFmt* >::const_iterator it = range.first;
-         it != range.second;
-         )
+    SwNode const& rNode(*doc->GetNodes()[nIndex]);
+    std::vector<SwFrmFmt*> const*const pFlys(rNode.GetAnchoredFlys());
+    for (size_t it = 0; pFlys && it != pFlys->size(); )
     {
-        SwFrmFmt *pFmt = it->second;
+        SwFrmFmt *const pFmt = (*pFlys)[it];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( rAnch.GetCntntAnchor() &&
              (rAnch.GetCntntAnchor()->nNode.GetIndex() == nIndex) )
