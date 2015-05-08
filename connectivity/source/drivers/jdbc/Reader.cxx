@@ -57,19 +57,19 @@ void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::s
 
 sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    jboolean out(sal_False);
+    jboolean out;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
         static const char * cSignature = "()Z";
-        static const char * cMethodName = "available";
+        static const char * cMethodName = "ready";
         // Java-Call
         static jmethodID mID(NULL);
         obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallBooleanMethod( object, mID);
         ThrowRuntimeException(t.pEnv,*this);
     } //t.pEnv
-    return out;
+    return out ? 1 : 0; // no way to tell *how much* is ready
 }
 
 void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
