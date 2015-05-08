@@ -78,6 +78,7 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     mbValidPos = mbValidPrtArea = mbValidSize = mbValidLineNum = mbRetouche =
     mbFixSize = mbColLocked = false;
     mbCompletePaint = mbInfInvalid = true;
+    mbForbidDelete = false;
 }
 
 const IDocumentDrawModelAccess* SwFrm::getIDocumentDrawModelAccess()

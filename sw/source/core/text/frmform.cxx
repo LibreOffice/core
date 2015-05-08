@@ -561,6 +561,8 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
                 OSL_FAIL( "+SwTxtFrm::JoinFrm: Follow is locked." );
                 return;
             }
+            if (GetFollow()->IsDeleteForbidden())
+                return;
             JoinFrm();
         }
 

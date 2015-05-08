@@ -358,6 +358,7 @@ protected:
     bool mbColLocked     : 1;  // lock Grow/Shrink for column-wise section
                                   // or fly frames, will be set in Format
     bool m_isInDestroy : 1;
+    bool mbForbidDelete : 1;
 
     void ColLock()      { mbColLocked = true; }
     void ColUnlock()    { mbColLocked = false; }
@@ -808,6 +809,7 @@ public:
     bool IsProtected() const;
 
     bool IsColLocked()  const { return mbColLocked; }
+    bool IsDeleteForbidden()  const { return mbForbidDelete; }
 
     /// this is the only way to delete a SwFrm instance
     static void DestroyFrm(SwFrm *const pFrm);
@@ -857,6 +859,9 @@ public:
     bool KnowsFormat( const SwFmt& rFmt ) const;
     void RegisterToFormat( SwFmt& rFmt );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
+
+    void ForbidDelete()      { mbForbidDelete = true; }
+    void AllowDelete()    { mbForbidDelete = false; }
 
     //UUUU
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;

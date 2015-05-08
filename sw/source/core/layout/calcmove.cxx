@@ -1045,6 +1045,7 @@ void SwCntntFrm::MakeAll()
         return;
     }
 
+    ForbidDelete();
     LockJoin();
     long nFormatCount = 0;
     // - loop prevention
@@ -1674,6 +1675,7 @@ void SwCntntFrm::MakeAll()
     delete pSaveFtn;
 
     UnlockJoin();
+    AllowDelete();
     if ( bMovedFwd || bMovedBwd )
         pNotify->SetInvaKeep();
     // OD 2004-02-26 #i25029#
