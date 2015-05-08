@@ -85,7 +85,7 @@ enum class ImplFontAttrs : sal_uLong
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ImplFontAttrs> : is_typed_flags<ImplFontAttrs, 0xffffffffUL> {};
+    template<> struct typed_flags<ImplFontAttrs> : is_typed_flags<ImplFontAttrs, 0xffffffff> {};
 }
 
 
