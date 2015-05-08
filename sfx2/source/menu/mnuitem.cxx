@@ -299,8 +299,6 @@ PopupMenu* SfxMenuControl::GetPopup () const
         return 0;
 }
 
-sal_IntPtr Select_Impl( void* pHdl, void* pVoid );
-
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const OUString& rCmd,
         sal_uInt16 nId, Menu& rMenu, const OUString& sItemText,
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)
@@ -335,49 +333,6 @@ struct MenuExecuteInfo
 
     DECL_STATIC_LINK( MenuExecuteInfo, ExecuteHdl_Impl, MenuExecuteInfo* );
 };
-
-sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
-{
-    Menu* pMenu = static_cast<Menu*>(pVoid);
-    OUString aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
-
-    if( aURL.isEmpty() )
-        return 0;
-
-    Reference < ::com::sun::star::frame::XDesktop2 > xDesktop =
-            ::com::sun::star::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-
-    URL aTargetURL;
-    aTargetURL.Complete = aURL;
-    Reference < XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
-    xTrans->parseStrict( aTargetURL );
-
-    Reference < XDispatch > xDisp;
-    if (aTargetURL.Protocol == "slot:")
-        xDisp = xDesktop->queryDispatch( aTargetURL, OUString(), 0 );
-    else
-    {
-        OUString aTargetFrame( "_blank" );
-        ::framework::MenuAttributes* pMenuAttributes =
-            reinterpret_cast< ::framework::MenuAttributes*>(pMenu->GetUserValue( pMenu->GetCurItemId() ));
-
-        if ( pMenuAttributes )
-            aTargetFrame = pMenuAttributes->aTargetFrame;
-
-        xDisp = xDesktop->queryDispatch( aTargetURL, aTargetFrame , 0 );
-    }
-
-    if ( xDisp.is() )
-    {
-        MenuExecuteInfo* pExecuteInfo = new MenuExecuteInfo;
-        pExecuteInfo->xDispatch     = xDisp;
-        pExecuteInfo->aTargetURL    = aTargetURL;
-        pExecuteInfo->aArgs         = Sequence< PropertyValue >();
-        Application::PostUserEvent( LINK( 0, MenuExecuteInfo, ExecuteHdl_Impl), pExecuteInfo );
-    }
-
-    return sal_IntPtr(true);
-}
 
 IMPL_STATIC_LINK_NOINSTANCE( MenuExecuteInfo, ExecuteHdl_Impl, MenuExecuteInfo*, pExecuteInfo )
 {
