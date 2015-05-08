@@ -518,13 +518,27 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
         else if( nFormat == FORMAT_GDIMETAFILE )
         {
-            if( mpSdViewIntern )
+            if (mpSdViewIntern)
+            {
+                const bool bToggleOnlineSpell = mpSdDrawDocumentIntern && mpSdDrawDocumentIntern->GetOnlineSpell();
+                if (bToggleOnlineSpell)
+                    mpSdDrawDocumentIntern->SetOnlineSpell(false);
                 bOK = SetGDIMetaFile( mpSdViewIntern->GetMarkedObjMetaFile( true ), rFlavor );
+                if (bToggleOnlineSpell)
+                    mpSdDrawDocumentIntern->SetOnlineSpell(true);
+            }
         }
         else if( FORMAT_BITMAP == nFormat || SOT_FORMATSTR_ID_PNG == nFormat )
         {
-            if( mpSdViewIntern )
+            if (mpSdViewIntern)
+            {
+                const bool bToggleOnlineSpell = mpSdDrawDocumentIntern && mpSdDrawDocumentIntern->GetOnlineSpell();
+                if (bToggleOnlineSpell)
+                    mpSdDrawDocumentIntern->SetOnlineSpell(false);
                 bOK = SetBitmapEx( mpSdViewIntern->GetMarkedObjBitmapEx(true), rFlavor );
+                if (bToggleOnlineSpell)
+                    mpSdDrawDocumentIntern->SetOnlineSpell(true);
+            }
         }
         else if( ( nFormat == FORMAT_STRING ) && mpBookmark )
         {
