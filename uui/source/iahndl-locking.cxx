@@ -120,11 +120,10 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            VclPtr< AlreadyOpenQueryBox > xDialog(
-                VclPtr<AlreadyOpenQueryBox>::Create( pParent,
+            ScopedVclPtrInstance< AlreadyOpenQueryBox > xDialog( pParent,
                                          xManager.get(),
                                          aMessage,
-                                         nMode == UUI_DOC_OWN_SAVE_LOCK ) );
+                                         nMode == UUI_DOC_OWN_SAVE_LOCK );
             nResult = xDialog->Execute();
         }
 
