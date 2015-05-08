@@ -393,10 +393,16 @@ sub create_package
 
             chdir $localfrom;
         }
-        else
+        elsif ($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev')
         {
-            if (($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev') &&
-                defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
+            my $subdir = "$tempdir/$packagename/$volume_name_classic_app.app/Contents/Resources";
+            if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
+            # iterate over OS X localizations
+            foreach $lang ("ca", "cs", "da", "de", "el", "en", "es", "fi", "fr", "hr", "hu", "id", "it", "ja", "ko", "ms", "nl", "no", "pl", "pt", "pt_PT", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh_CN", "zh_TW")
+            {
+                installer::systemactions::create_directory($subdir . "/" . $lang . ".lproj");
+            }
+            if ( defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
             {
                 $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
