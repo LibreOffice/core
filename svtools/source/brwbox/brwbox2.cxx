@@ -612,13 +612,13 @@ void BrowseBox::Resize()
 
 
 
-void BrowseBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
 
     // initializations
-    if ( !bBootstrapped && IsReallyVisible() )
-        BrowseBox::StateChanged( StateChangedType::InitShow );
-    if ( pCols->empty() )
+    if (!bBootstrapped && IsReallyVisible())
+        BrowseBox::StateChanged(StateChangedType::InitShow);
+    if (pCols->empty())
         return;
 
     BrowserColumn *pFirstCol = (*pCols)[ 0 ];
@@ -626,43 +626,41 @@ void BrowseBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
     bool bHeaderBar = getDataWindow()->pHeaderBar.get() != NULL;
 
     // draw delimitational lines
-    if ( !getDataWindow()->bNoHScroll )
-        DrawLine( Point( 0, aHScroll->GetPosPixel().Y() ),
-                  Point( GetOutputSizePixel().Width(),
-                         aHScroll->GetPosPixel().Y() ) );
+    if (!getDataWindow()->bNoHScroll)
+        rRenderContext.DrawLine(Point(0, aHScroll->GetPosPixel().Y()),
+                                Point(GetOutputSizePixel().Width(),
+                                      aHScroll->GetPosPixel().Y()));
 
-    if ( nTitleLines )
+    if (nTitleLines)
     {
-        if ( !bHeaderBar )
-            DrawLine( Point( 0, GetTitleHeight() - 1 ),
-                      Point( GetOutputSizePixel().Width(),
-                             GetTitleHeight() - 1 ) );
-        else if ( bHandleCol )
-            DrawLine( Point( 0, GetTitleHeight() - 1 ),
-                      Point( pFirstCol->Width(), GetTitleHeight() - 1 ) );
+        if (!bHeaderBar)
+            rRenderContext.DrawLine(Point(0, GetTitleHeight() - 1),
+                                    Point(rRenderContext.GetOutputSizePixel().Width(),
+                                          GetTitleHeight() - 1));
+        else if (bHandleCol)
+            rRenderContext.DrawLine(Point(0, GetTitleHeight() - 1),
+                                    Point(pFirstCol->Width(), GetTitleHeight() - 1));
     }
 
     // Title Bar
     // If there is a handle column and if the  header bar is available, only
     // take the HandleColumn into account
-    if ( nTitleLines && (!bHeaderBar || bHandleCol) )
+    if (nTitleLines && (!bHeaderBar || bHandleCol))
     {
         // iterate through columns to redraw
         long nX = 0;
         size_t nCol;
-        for ( nCol = 0;
-              nCol < pCols->size() && nX < rRect.Right();
-              ++nCol )
+        for (nCol = 0; nCol < pCols->size() && nX < rRect.Right(); ++nCol)
         {
             // skip invisible columns between frozen and scrollable area
-            if ( nCol < nFirstCol && !(*pCols)[ nCol ]->IsFrozen() )
+            if (nCol < nFirstCol && !(*pCols)[nCol]->IsFrozen())
                 nCol = nFirstCol;
 
             // only the handle column?
             if (bHeaderBar && bHandleCol && nCol > 0)
                 break;
 
-            BrowserColumn *pCol = (*pCols)[ nCol ];
+            BrowserColumn* pCol = (*pCols)[nCol];
 
             // draw the column and increment position
             if ( pCol->Width() > 4 )
@@ -670,16 +668,16 @@ void BrowseBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
                 ButtonFrame aButtonFrame( Point( nX, 0 ),
                     Size( pCol->Width()-1, GetTitleHeight()-1 ),
                     pCol->Title(), false, false, !IsEnabled());
-                aButtonFrame.Draw( *this );
-                DrawLine( Point( nX + pCol->Width() - 1, 0 ),
-                   Point( nX + pCol->Width() - 1, GetTitleHeight()-1 ) );
+                aButtonFrame.Draw(rRenderContext);
+                rRenderContext.DrawLine(Point(nX + pCol->Width() - 1, 0),
+                                        Point(nX + pCol->Width() - 1, GetTitleHeight() - 1));
             }
             else
             {
-                Color aOldFillColor = GetFillColor();
-                SetFillColor( Color( COL_BLACK ) );
-                DrawRect( Rectangle( Point( nX, 0 ), Size( pCol->Width(), GetTitleHeight() - 1 ) ) );
-                SetFillColor( aOldFillColor );
+                rRenderContext.Push(PushFlags::FILLCOLOR);
+                rRenderContext.SetFillColor(Color(COL_BLACK));
+                rRenderContext.DrawRect(Rectangle(Point(nX, 0), Size(pCol->Width(), GetTitleHeight() - 1)));
+                rRenderContext.Pop();
             }
 
             // skip column
@@ -689,17 +687,14 @@ void BrowseBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
         // retouching
         if ( !bHeaderBar && nCol == pCols->size() )
         {
-            const StyleSettings &rSettings = GetSettings().GetStyleSettings();
-            Color aColFace( rSettings.GetFaceColor() );
-            Color aOldFillColor = GetFillColor();
-            Color aOldLineColor = GetLineColor();
-            SetFillColor( aColFace );
-            SetLineColor( aColFace );
-            DrawRect( Rectangle(
-                Point( nX, 0 ),
-                Point( rRect.Right(), GetTitleHeight() - 2 ) ) );
-            SetFillColor( aOldFillColor);
-            SetLineColor( aOldLineColor);
+            const StyleSettings &rSettings = rRenderContext.GetSettings().GetStyleSettings();
+            Color aColFace(rSettings.GetFaceColor());
+            rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+            rRenderContext.SetFillColor(aColFace);
+            rRenderContext.SetLineColor(aColFace);
+            rRenderContext.DrawRect(Rectangle(Point(nX, 0),
+                                              Point(rRect.Right(), GetTitleHeight() - 2 )));
+            rRenderContext.Pop();
         }
     }
 }
