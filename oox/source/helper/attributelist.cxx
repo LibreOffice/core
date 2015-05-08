@@ -191,13 +191,6 @@ OptValue< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
     return OptValue< sal_Int32 >( bValid, bValid ? AttributeConversion::decodeIntegerHex( aValue ) : 0 );
 }
 
-OptValue< sal_uInt32 > AttributeList::getUnsignedHex( sal_Int32 nAttrToken ) const
-{
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
-    return OptValue< sal_uInt32 >( bValid, bValid ? AttributeConversion::decodeUnsignedHex( aValue ) : 0 );
-}
-
 OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
 {
     const char *pAttr;

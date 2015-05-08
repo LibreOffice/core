@@ -112,9 +112,6 @@ public:
     /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal). */
     OptValue< sal_Int32 > getIntegerHex( sal_Int32 nAttrToken ) const;
 
-    /** Returns the 32-bit unsigned integer value of the specified attribute (hexadecimal). */
-    OptValue< sal_uInt32 > getUnsignedHex( sal_Int32 nAttrToken ) const;
-
     /** Returns the boolean value of the specified attribute. */
     OptValue< bool >    getBool( sal_Int32 nAttrToken ) const;
 
