@@ -99,7 +99,8 @@ namespace /* private */
 
 -(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
 {
-    return mDropTarget->prepareForDragOperation(sender);
+    (void) sender;
+    return DropTarget::prepareForDragOperation();
 }
 
 -(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
@@ -282,7 +283,7 @@ void DropTarget::draggingExited(id /*sender*/)
     [[NSCursor arrowCursor] set];
 }
 
-BOOL DropTarget::prepareForDragOperation(id /*sender*/)
+BOOL DropTarget::prepareForDragOperation()
 {
     return 1;
 }

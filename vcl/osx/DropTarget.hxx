@@ -124,7 +124,7 @@ public:
   NSDragOperation draggingEntered(id sender);
   NSDragOperation draggingUpdated(id sender);
   void draggingExited(id sender);
-  BOOL prepareForDragOperation(id sender);
+  static BOOL prepareForDragOperation();
   BOOL performDragOperation(id sender);
   void concludeDragOperation(id sender);
 
