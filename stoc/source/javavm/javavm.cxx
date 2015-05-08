@@ -1248,14 +1248,14 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     jstring jsClass= static_cast<jstring>(pJNIEnv->CallObjectMethod( jcSec, jmName));
                     const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, NULL);
                     OUString sName( jcharName);
-                    jboolean bIsSandbox;
+                    bool bIsSandbox;
                     if ( sName == "com.sun.star.lib.sandbox.SandboxSecurity" )
-                        bIsSandbox= JNI_TRUE;
+                        bIsSandbox= true;
                     else
-                        bIsSandbox= JNI_FALSE;
+                        bIsSandbox= false;
                     pJNIEnv->ReleaseStringChars( jsClass, jcharName);
 
-                    if (bIsSandbox == JNI_TRUE)
+                    if (bIsSandbox)
                     {
                         // call SandboxSecurity.reset
                         jmethodID jmReset= pJNIEnv->GetMethodID( jcSec,"reset","()V");

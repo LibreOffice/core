@@ -461,8 +461,7 @@ void Bridge::map_to_uno(
         JLocalAutoRef jo_type( jni );
         JLocalAutoRef jo_wrapped_holder( jni );
 
-        if (JNI_FALSE != jni->IsInstanceOf(
-                java_data.l, getJniInfo()->m_class_Any ))
+        if (jni->IsInstanceOf( java_data.l, getJniInfo()->m_class_Any ))
         {
             // boxed any
             jo_type.reset( jni->GetObjectField(

@@ -288,7 +288,7 @@ void JNI_context::java_exc_occurred() const
 
     // call toString(); don't rely on m_jni_info
     jclass jo_class = m_env->FindClass( "java/lang/Object" );
-    if (JNI_FALSE != m_env->ExceptionCheck())
+    if (m_env->ExceptionCheck())
     {
         m_env->ExceptionClear();
         throw BridgeRuntimeError(
@@ -298,7 +298,7 @@ void JNI_context::java_exc_occurred() const
     // method Object.toString()
     jmethodID method_Object_toString = m_env->GetMethodID(
         static_cast<jclass>(jo_Object.get()), "toString", "()Ljava/lang/String;" );
-    if (JNI_FALSE != m_env->ExceptionCheck())
+    if (m_env->ExceptionCheck())
     {
         m_env->ExceptionClear();
         throw BridgeRuntimeError(
@@ -523,8 +523,8 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         *ppMapping = 0;
     }
 
-    static_assert(JNI_FALSE == sal_False, "must be equal");
-    static_assert(JNI_TRUE == sal_True, "must be equal");
+    static_assert(int(JNI_FALSE) == int(sal_False), "must be equal");
+    static_assert(int(JNI_TRUE) == int(sal_True), "must be equal");
     static_assert(sizeof (jboolean) == sizeof (sal_Bool), "must be the same size");
     static_assert(sizeof (jchar) == sizeof (sal_Unicode), "must be the same size");
     static_assert(sizeof (jdouble) == sizeof (double), "must be the same size");

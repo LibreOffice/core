@@ -87,7 +87,7 @@ SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindo
     /* Get the AWT */
     awt.version = JAWT_VERSION_1_3;
     result = JAWT_GetAWT(env, &awt);
-    if (result == JNI_FALSE)
+    if (!result)
         ThrowException(env, "java/lang/RuntimeException", "JAWT_GetAWT failed");
 
                                 /* Get the drawing surface */

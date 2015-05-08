@@ -54,7 +54,7 @@ inline OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
     rtl_uString * ustr =
         static_cast<rtl_uString *>(rtl_allocateMemory( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ));
     jni_env->GetStringRegion( jstr, 0, len, ustr->buffer );
-    OSL_ASSERT( JNI_FALSE == jni_env->ExceptionCheck() );
+    OSL_ASSERT( !jni_env->ExceptionCheck() );
     ustr->refCount = 1;
     ustr->length = len;
     ustr->buffer[ len ] = '\0';
@@ -77,7 +77,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             {
                 // name
                 jstring jstr = static_cast<jstring>(jni_env->GetObjectArrayElement( jpairs, nPos ));
-                if (JNI_FALSE != jni_env->ExceptionCheck())
+                if (jni_env->ExceptionCheck())
                 {
                     jni_env->ExceptionClear();
                     throw RuntimeException( "index out of bounds?!" );
@@ -87,7 +87,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                     OUString name( ::javaunohelper::jstring_to_oustring( jstr, jni_env ) );
                     // value
                     jstr = static_cast<jstring>(jni_env->GetObjectArrayElement( jpairs, nPos +1 ));
-                    if (JNI_FALSE != jni_env->ExceptionCheck())
+                    if (jni_env->ExceptionCheck())
                     {
                         jni_env->ExceptionClear();
                         throw RuntimeException( "index out of bounds?!" );

@@ -428,7 +428,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
         if ( xOut.is() )
         {
             jbyte *buf = env->GetByteArrayElements(buffer,NULL);
-            if (JNI_FALSE != env->ExceptionCheck())
+            if (env->ExceptionCheck())
             {
                 env->ExceptionClear();
                 OSL_FAIL("ExceptionClear");

@@ -139,7 +139,7 @@ namespace connectivity
 
         OUString StorageContainer::jstring2ustring(JNIEnv * env, jstring jstr)
         {
-            if (JNI_FALSE != env->ExceptionCheck())
+            if (env->ExceptionCheck())
             {
                 env->ExceptionClear();
                 OSL_FAIL("ExceptionClear");
@@ -156,7 +156,7 @@ namespace connectivity
                     env->ReleaseStringChars(jstr,pChar);
             }
 
-            if (JNI_FALSE != env->ExceptionCheck())
+            if (env->ExceptionCheck())
             {
                 env->ExceptionClear();
                 OSL_FAIL("ExceptionClear");
@@ -334,7 +334,7 @@ namespace connectivity
 
         void StorageContainer::throwJavaException(const Exception& _aException,JNIEnv * env)
         {
-            if (JNI_FALSE != env->ExceptionCheck())
+            if (env->ExceptionCheck())
                 env->ExceptionClear();
             OString cstr( OUStringToOString(_aException.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
