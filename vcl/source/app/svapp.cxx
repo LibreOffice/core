@@ -909,9 +909,9 @@ ImplSVEvent * Application::PostUserEvent( const Link<>& rLink, void* pCaller,
     {
         // Double check that this is indeed a vcl::Window instance.
         assert(dynamic_cast<vcl::Window *>(
-                        reinterpret_cast<vcl::Window *>(rLink.GetInstance())) ==
-               reinterpret_cast<vcl::Window *>(rLink.GetInstance()));
-        pSVEvent->mpInstanceRef = reinterpret_cast<vcl::Window *>(rLink.GetInstance());
+                        static_cast<vcl::Window *>(rLink.GetInstance())) ==
+               static_cast<vcl::Window *>(rLink.GetInstance()));
+        pSVEvent->mpInstanceRef = static_cast<vcl::Window *>(rLink.GetInstance());
     }
 
     vcl::Window* pDefWindow = ImplGetDefaultWindow();
