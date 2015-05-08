@@ -393,7 +393,7 @@ sub create_package
 
             chdir $localfrom;
         }
-        else
+        elsif ($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev')
         {
             my $subdir = "$tempdir/$packagename/$volume_name_classic_app.app/Contents/Resources";
             if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
@@ -402,8 +402,7 @@ sub create_package
             {
                 installer::systemactions::create_directory($subdir . "/" . $lang . ".lproj");
             }
-            if (($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev') &&
-                defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
+            if ( defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
             {
                 $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
