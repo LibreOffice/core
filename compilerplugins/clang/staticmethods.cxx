@@ -201,8 +201,15 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     report(
         DiagnosticsEngine::Warning,
         "this method can be declared static " + fqn,
-        pCXXMethodDecl->getCanonicalDecl()->getLocStart())
+        pCXXMethodDecl->getCanonicalDecl()->getLocation())
       << pCXXMethodDecl->getCanonicalDecl()->getSourceRange();
+    FunctionDecl const * def;
+    if (pCXXMethodDecl->isDefined(def)
+        && def != pCXXMethodDecl->getCanonicalDecl())
+    {
+        report(DiagnosticsEngine::Note, "defined here:", def->getLocation())
+            << def->getSourceRange();
+    }
     return true;
 }
 
