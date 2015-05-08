@@ -518,13 +518,27 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
         else if( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
-            if( mpSdViewIntern )
+            if (mpSdViewIntern)
+            {
+                const bool bToggleOnlineSpell = mpSdDrawDocumentIntern && mpSdDrawDocumentIntern->GetOnlineSpell();
+                if (bToggleOnlineSpell)
+                    mpSdDrawDocumentIntern->SetOnlineSpell(false);
                 bOK = SetGDIMetaFile( mpSdViewIntern->GetMarkedObjMetaFile( true ), rFlavor );
+                if (bToggleOnlineSpell)
+                    mpSdDrawDocumentIntern->SetOnlineSpell(true);
+            }
         }
         else if( SotClipboardFormatId::BITMAP == nFormat || SotClipboardFormatId::PNG == nFormat )
         {
-            if( mpSdViewIntern )
+            if (mpSdViewIntern)
+            {
+                const bool bToggleOnlineSpell = mpSdDrawDocumentIntern && mpSdDrawDocumentIntern->GetOnlineSpell();
+                if (bToggleOnlineSpell)
+                    mpSdDrawDocumentIntern->SetOnlineSpell(false);
                 bOK = SetBitmapEx( mpSdViewIntern->GetMarkedObjBitmapEx(true), rFlavor );
+                if (bToggleOnlineSpell)
+                    mpSdDrawDocumentIntern->SetOnlineSpell(true);
+            }
         }
         else if( ( nFormat == SotClipboardFormatId::STRING ) && mpBookmark )
         {
