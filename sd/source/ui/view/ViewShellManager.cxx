@@ -1029,7 +1029,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
                 break;
         }
     }
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 ShellDescriptor ViewShellManager::Implementation::CreateSubShell (

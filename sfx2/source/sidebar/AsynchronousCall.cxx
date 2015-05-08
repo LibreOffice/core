@@ -62,7 +62,7 @@ IMPL_LINK(AsynchronousCall, HandleUserCall, void*, EMPTYARG )
     if (maAction)
         maAction();
 
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 } } // end of namespace sfx2::sidebar

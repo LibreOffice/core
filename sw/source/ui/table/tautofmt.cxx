@@ -507,7 +507,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, OkHdl)
     if( bSetAutoFmt )
         pShell->SetTableAutoFmt( (*pTableTbl)[ nIndex ] );
     EndDialog( RET_OK );
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :

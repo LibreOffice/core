@@ -2136,7 +2136,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
         nLastItemId = pMenu->GetCurItemId();
         Application::PostUserEvent(
             LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ), 0 );
-        return sal_True;
+        return sal_IntPtr(true);
     }
 
     switch(nLastItemId) {
@@ -2145,9 +2145,9 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
     case ID_DELETE: DeleteHdl(0); break;
     case ID_HIDE: HideHdl(0); break;
     case ID_SHOW: ShowHdl(0); break;
-    default: return sal_False;
+    default: return sal_IntPtr(false);
     }
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 SfxStyleFamily SfxCommonTemplateDialog_Impl::GetActualFamily() const

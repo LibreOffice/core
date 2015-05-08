@@ -222,11 +222,11 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
     if (!aCommand.isEmpty() && pBindings)
     {
         pBindings->ExecuteCommand_Impl( aCommand );
-        return sal_True;
+        return sal_IntPtr(true);
     }
 
     if (!pBindings)
-        return sal_True;
+        return sal_IntPtr(true);
 
     if ( pBindings->IsBound(nId) )
         // normal function
@@ -235,7 +235,7 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         // special menu function
         pBindings->GetDispatcher_Impl()->Execute( nId );
 
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 SfxPopupMenuManager::~SfxPopupMenuManager()

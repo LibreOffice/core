@@ -749,14 +749,14 @@ IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent*, pEvent)
             case VCLEVENT_WINDOW_SHOW:
             case VCLEVENT_WINDOW_RESIZE:
                 SetSizePixel(GetParent()->GetSizePixel());
-                return sal_True;
+                return sal_IntPtr(true);
 
             default:
-                return sal_False;
+                return sal_IntPtr(false);
         }
     }
 
-    return sal_False;
+    return sal_IntPtr(false);
 }
 
 void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)

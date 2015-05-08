@@ -749,7 +749,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
 IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
 {
     if (pEvent==NULL)
-        return sal_False;
+        return sal_IntPtr(false);
 
     if (pEvent->GetWindow() == mpParentWindow)
     {
@@ -804,7 +804,7 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
          }
     }
 
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 void SidebarController::ShowPopupMenu (

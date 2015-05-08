@@ -210,7 +210,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     }
 
     mpImpl->pEventLB->SetUpdateMode( true );
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 bool SvxEventConfigPage::FillItemSet( SfxItemSet* rSet )

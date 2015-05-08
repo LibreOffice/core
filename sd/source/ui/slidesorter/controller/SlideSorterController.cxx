@@ -604,7 +604,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
         }
     }
 
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 void SlideSorterController::GetCtrlState (SfxItemSet& rSet)

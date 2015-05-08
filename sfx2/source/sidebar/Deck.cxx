@@ -314,7 +314,7 @@ IMPL_LINK(Deck, HandleVerticalScrollBarChange,void*, EMPTYARG)
         Point(
             mpScrollContainer->GetPosPixel().X(),
             nYOffset));
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 //----- Deck::ScrollContainerWindow -------------------------------------------

@@ -454,7 +454,7 @@ sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
         Application::PostUserEvent( LINK( 0, SfxAppMenuControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
     }
 
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( SfxAppMenuControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )

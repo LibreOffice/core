@@ -1162,7 +1162,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
             mrMgr.MakeVisible( this );
         }
     }
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 void SwSidebarWin::Delete()

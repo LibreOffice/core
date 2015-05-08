@@ -665,7 +665,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
             }
         }
     }
-    return sal_True;
+    return sal_IntPtr(true);
 }
 
 IMPL_LINK_NOARG(AnnotationTag, ClosePopupHdl)
