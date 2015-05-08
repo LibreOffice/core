@@ -831,7 +831,7 @@ DecorationView::DecorationView(OutputDevice* pOutDev) :
 {}
 
 void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
-                                 const Color& rColor, sal_uInt16 nStyle )
+                                 const Color& rColor, DrawSymbolFlags nStyle )
 {
     const StyleSettings&    rStyleSettings  = mpOutDev->GetSettings().GetStyleSettings();
     const Rectangle         aRect           = mpOutDev->LogicToPixel( rRect );
@@ -843,16 +843,16 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
 
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
          (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
-        nStyle |= BUTTON_DRAW_MONO;
+        nStyle |= DrawSymbolFlags::Mono;
 
-    if ( nStyle & SYMBOL_DRAW_MONO )
+    if ( nStyle & DrawSymbolFlags::Mono )
     {
         // Monochrome: set color to black if enabled, to gray if disabled
-        nColor = Color( ( nStyle & SYMBOL_DRAW_DISABLE ) ? COL_GRAY : COL_BLACK );
+        nColor = Color( ( nStyle & DrawSymbolFlags::Disable ) ? COL_GRAY : COL_BLACK );
     }
     else
     {
-        if ( nStyle & SYMBOL_DRAW_DISABLE )
+        if ( nStyle & DrawSymbolFlags::Disable )
         {
             // Draw shifted and brighter symbol for embossed look
             mpOutDev->SetLineColor( rStyleSettings.GetLightColor() );

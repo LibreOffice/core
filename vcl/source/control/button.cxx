@@ -805,7 +805,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, sal_uLong nDrawFl
     Color                   aColor;
     OUString                aText = PushButton::GetText(); // PushButton:: because of MoreButton
     sal_uInt16              nTextStyle = ImplGetTextStyle( nDrawFlags );
-    sal_uInt16              nStyle;
+    DrawSymbolFlags         nStyle;
 
     if( aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top() )
         aInRect.SetEmpty();
@@ -827,9 +827,9 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, sal_uLong nDrawFl
     pDev->SetTextColor( aColor );
 
     if ( IsEnabled() || (nDrawFlags & WINDOW_DRAW_NODISABLE) )
-        nStyle = 0;
+        nStyle = DrawSymbolFlags::NONE;
     else
-        nStyle = SYMBOL_DRAW_DISABLE;
+        nStyle = DrawSymbolFlags::Disable;
 
     Size aSize = rRect.GetSize();
     Point aPos = rRect.TopLeft();

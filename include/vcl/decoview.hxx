@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class Rectangle;
 class Point;
@@ -30,8 +31,16 @@ class Color;
 class OutputDevice;
 
 // Flags for DrawSymbol()
-#define SYMBOL_DRAW_MONO                    ((sal_uInt16)0x0001)
-#define SYMBOL_DRAW_DISABLE                 ((sal_uInt16)0x0002)
+enum class DrawSymbolFlags
+{
+    NONE                    = 0x0000,
+    Mono                    = 0x0001,
+    Disable                 = 0x0002,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DrawSymbolFlags> : is_typed_flags<DrawSymbolFlags, 0x03> {};
+}
 
 // Flags for DrawFrame()
 #define FRAME_DRAW_IN                       ((sal_uInt16)0x0001)
@@ -77,7 +86,7 @@ public:
     DecorationView(OutputDevice* pOutDev);
 
     void                DrawSymbol( const Rectangle& rRect, SymbolType eType,
-                                    const Color& rColor, sal_uInt16 nStyle = 0 );
+                                    const Color& rColor, DrawSymbolFlags nStyle = DrawSymbolFlags::NONE );
     void                DrawFrame( const Rectangle& rRect,
                                    const Color& rLeftTopColor,
                                    const Color& rRightBottomColor );

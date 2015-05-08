@@ -144,7 +144,7 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
     DecorationView aDecoView(&rRenderContext);
 
     sal_uInt16 nStyle = BUTTON_DRAW_NOLEFTLIGHTBORDER;
-    sal_uInt16 nSymStyle = 0;
+    DrawSymbolFlags nSymStyle = DrawSymbolFlags::NONE;
 
     SymbolType eType1, eType2;
 
@@ -268,14 +268,14 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
             aLowRect.Top()++;
     }
 
-    nTempStyle = nSymStyle;
+    DrawSymbolFlags nTempSymStyle = nSymStyle;
     if (!bUpperEnabled)
-        nTempStyle |= SYMBOL_DRAW_DISABLE;
+        nTempSymStyle |= DrawSymbolFlags::Disable;
     if (!bNativeOK)
-        aDecoView.DrawSymbol(aUpRect, eType1, rStyleSettings.GetButtonTextColor(), nTempStyle);
+        aDecoView.DrawSymbol(aUpRect, eType1, rStyleSettings.GetButtonTextColor(), nTempSymStyle);
 
     if (!bLowerEnabled)
-        nSymStyle |= SYMBOL_DRAW_DISABLE;
+        nSymStyle |= DrawSymbolFlags::Disable;
     if (!bNativeOK)
         aDecoView.DrawSymbol(aLowRect, eType2, rStyleSettings.GetButtonTextColor(), nSymStyle);
 }
@@ -622,8 +622,8 @@ void SpinField::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRec
         if (rRenderContext.GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN)
             eSymbol = SymbolType::SPIN_UPDOWN;
 
-        nStyle = IsEnabled() ? 0 : SYMBOL_DRAW_DISABLE;
-        aView.DrawSymbol(aInnerRect, eSymbol, rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor(), nStyle);
+        DrawSymbolFlags nSymbolStyle = IsEnabled() ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
+        aView.DrawSymbol(aInnerRect, eSymbol, rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor(), nSymbolStyle);
     }
 
     Edit::Paint(rRenderContext, rRect);
@@ -1029,8 +1029,8 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
             if ( GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )
                 eSymbol = SymbolType::SPIN_UPDOWN;
 
-            nStyle = ( IsEnabled() || ( nFlags & WINDOW_DRAW_NODISABLE ) ) ? 0 : SYMBOL_DRAW_DISABLE;
-            aView.DrawSymbol( aInnerRect, eSymbol, aButtonTextColor, nStyle );
+            DrawSymbolFlags nSymbolStyle = ( IsEnabled() || ( nFlags & WINDOW_DRAW_NODISABLE ) ) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
+            aView.DrawSymbol( aInnerRect, eSymbol, aButtonTextColor, nSymbolStyle );
         }
 
         if ( GetStyle() & WB_SPIN )

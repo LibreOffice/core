@@ -372,7 +372,7 @@ void ScMenuFloatingWindow::drawMenuItem(size_t nPos)
         aMarkerPos.X() += aSize.Width() - nFontHeight + nFontHeight/4;
         Size aMarkerSize(nFontHeight/2, nFontHeight/2);
         aDecoView.DrawSymbol(Rectangle(aMarkerPos, aMarkerSize),
-                             SymbolType::SPIN_RIGHT, GetTextColor(), 0);
+                             SymbolType::SPIN_RIGHT, GetTextColor());
     }
 }
 
