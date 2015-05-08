@@ -160,8 +160,7 @@ handleChangedByOthersRequest_(
         if (!xManager.get())
             return;
 
-        VclPtr< FileChangedQueryBox > xDialog(
-            VclPtr<FileChangedQueryBox>::Create( pParent, xManager.get() ) );
+        ScopedVclPtrInstance< FileChangedQueryBox > xDialog(pParent, xManager.get());
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_YES )
@@ -195,8 +194,7 @@ handleLockFileIgnoreRequest_(
         if (!xManager.get())
             return;
 
-        VclPtr< LockFailedQueryBox > xDialog(
-            VclPtr<LockFailedQueryBox>::Create( pParent, xManager.get() ) );
+        ScopedVclPtrInstance< LockFailedQueryBox > xDialog(pParent, xManager.get());
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_OK )
