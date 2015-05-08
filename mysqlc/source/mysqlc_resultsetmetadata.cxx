@@ -291,13 +291,13 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
     checkColumnIndex(column);
 
     try {
-        return meta->isNullable(column)? sal_True:sal_False;
+        return sal_Int32(bool(meta->isNullable(column)));
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_Int32(false); // fool compiler
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
