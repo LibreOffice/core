@@ -541,7 +541,7 @@ read_percent( ChildInfo *info, int *pPercent )
     /* from the last call */
     int nNotProcessed = nRead - ( pNext - pBuffer );
     if ( nNotProcessed >= BUFFER_LEN )
-        return sal_False;
+        return ProgressContinue;
 
     memmove( pBuffer, pNext, nNotProcessed );
 
