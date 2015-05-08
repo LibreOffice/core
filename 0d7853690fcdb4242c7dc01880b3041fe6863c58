@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5de9d1_2f73694f",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2015-05-08T10:41:30Z",
+      "side": 1,
+      "message": "XML_detectmouseclick should be written in both cases (imagedata \u003d true and false). Therefore I placed it here. But for the v:fill this element will now be written first (before XML_type, XML_fillcolor, ...). Do we have to write the attributes of a OOXML document in a particular order?",
+      "revId": "0d7853690fcdb4242c7dc01880b3041fe6863c58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
