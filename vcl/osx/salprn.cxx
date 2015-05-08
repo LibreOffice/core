@@ -563,7 +563,7 @@ bool AquaSalInfoPrinter::EndPage()
     return true;
 }
 
-sal_uLong AquaSalInfoPrinter::GetErrorCode() const
+sal_uLong AquaSalInfoPrinter::GetErrorCode()
 {
     return 0;
 }
@@ -620,7 +620,7 @@ bool AquaSalPrinter::EndPage()
 
 sal_uLong AquaSalPrinter::GetErrorCode()
 {
-    return mpInfoPrinter->GetErrorCode();
+    return AquaSalInfoPrinter::GetErrorCode();
 }
 
 void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )

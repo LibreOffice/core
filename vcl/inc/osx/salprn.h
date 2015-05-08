@@ -97,7 +97,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     bool                        AbortJob();
     SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData );
     bool                        EndPage();
-    sal_uLong                       GetErrorCode() const;
+    static sal_uLong            GetErrorCode();
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
     void setStartPageOffset( int nOffsetX, int nOffsetY ) { mnStartPageOffsetX = nOffsetX; mnStartPageOffsetY = nOffsetY; }
