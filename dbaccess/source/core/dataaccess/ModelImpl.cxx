@@ -824,21 +824,27 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
             aStorageCreationArgs[1] <<= ElementModes::READWRITE;
 
             Reference< XStorage > xDocumentStorage;
-            try
+            OUString sURL;
+            aSource >>= sURL;
+            // Don't try to load a meta-URL as-is.
+            if (!sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
             {
-                xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
-            }
-            catch( const Exception& )
-            {
-                m_bDocumentReadOnly = true;
-                aStorageCreationArgs[1] <<= ElementModes::READ;
                 try
                 {
                     xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    m_bDocumentReadOnly = true;
+                    aStorageCreationArgs[1] <<= ElementModes::READ;
+                    try
+                    {
+                        xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
+                    }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
                 }
             }
 
