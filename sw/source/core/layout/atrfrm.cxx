@@ -2532,9 +2532,11 @@ SwFrmFmt::~SwFrmFmt()
 {
     if( !GetDoc()->IsInDtor())
     {
-        const SwFmtAnchor& anchor = GetAnchor();
-        if( anchor.GetCntntAnchor() != NULL )
-            GetDoc()->GetFrmFmtAnchorMap()->Remove( this, anchor.GetCntntAnchor()->nNode );
+        const SwFmtAnchor& rAnchor = GetAnchor();
+        if (rAnchor.GetCntntAnchor() != nullptr)
+        {
+            rAnchor.GetCntntAnchor()->nNode.GetNode().RemoveAnchoredFly(this);
+        }
     }
 }
 
@@ -2627,9 +2629,13 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( pOld && pOld->Which() == RES_ANCHOR )
         oldAnchorPosition = static_cast< const SwFmtAnchor* >( pOld )->GetCntntAnchor();
     if( oldAnchorPosition != NULL && ( newAnchorPosition == NULL || oldAnchorPosition->nNode.GetIndex() != newAnchorPosition->nNode.GetIndex()))
-        GetDoc()->GetFrmFmtAnchorMap()->Remove( this, oldAnchorPosition->nNode );
+    {
+        oldAnchorPosition->nNode.GetNode().RemoveAnchoredFly(this);
+    }
     if( newAnchorPosition != NULL && ( oldAnchorPosition == NULL || oldAnchorPosition->nNode.GetIndex() != newAnchorPosition->nNode.GetIndex()))
-        GetDoc()->GetFrmFmtAnchorMap()->Add( this, newAnchorPosition->nNode );
+    {
+        newAnchorPosition->nNode.GetNode().AddAnchoredFly(this);
+    }
 }
 
 void SwFrmFmt::RegisterToFormat( SwFmt& rFmt )
@@ -3479,41 +3485,6 @@ bool IsFlyFrmFmtInHeader(const SwFrmFmt& rFmt)
         }
     }
     return false;
-}
-
-
-SwFrmFmtAnchorMap::SwFrmFmtAnchorMap( const SwDoc* _doc )
-: doc( _doc )
-{
-}
-
-void SwFrmFmtAnchorMap::Add( SwFrmFmt* fmt, const SwNodeIndex& pos )
-{
-    (void) doc;
-    assert( pos.GetNode().GetDoc() == doc );
-    items.insert( std::make_pair( pos, fmt ));
-}
-
-void SwFrmFmtAnchorMap::Remove( SwFrmFmt* fmt, const SwNodeIndex& pos )
-{
-    (void) doc;
-    assert( pos.GetNode().GetDoc() == doc );
-    typedef std::multimap< SwNodeIndex, SwFrmFmt* >::iterator iterator;
-    std::pair< iterator, iterator > range = items.equal_range( pos );
-    for( iterator it = range.first; it != range.second; ++it )
-    {
-        if( it->second == fmt )
-        {
-            items.erase( it );
-            return;
-        }
-    }
-    assert( false );
-}
-
-SwFrmFmtAnchorMap::const_iterator_pair SwFrmFmtAnchorMap::equal_range( const SwNodeIndex& pos ) const
-{
-    return items.equal_range( pos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

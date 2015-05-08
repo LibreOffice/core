@@ -23,8 +23,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <tools/gen.hxx>
 #include <format.hxx>
-#include <map>
-#include <ndindex.hxx>
 #include "swdllapi.h"
 
 class SwFlyFrm;
@@ -303,27 +301,6 @@ public:
 };
 
 SW_DLLPUBLIC bool IsFlyFrmFmtInHeader(const SwFrmFmt& rFmt);
-
-/**
- Fast mapping from node positions to SwFrmFmt objects anchored at them.
-
- SwFrmFmt::GetAnchor().GetCntntAnchor() provides the position where the object is anchored.
- This class provides the reverse mapping. It intentionally uses SwNodeIndex instead of SwPosition
- to allow simpler implementation, do SwIndex checking explicitly if needed.
-*/
-class SwFrmFmtAnchorMap
-{
-public:
-    SwFrmFmtAnchorMap( const SwDoc* doc );
-    void Add( SwFrmFmt* fmt, const SwNodeIndex& index );
-    void Remove( SwFrmFmt* fmt, const SwNodeIndex& index );
-    typedef std::multimap< SwNodeIndex, SwFrmFmt* >::const_iterator const_iterator;
-    typedef std::pair< const_iterator, const_iterator > const_iterator_pair;
-    const_iterator_pair equal_range( const SwNodeIndex& pos ) const;
-private:
-    std::multimap< SwNodeIndex, SwFrmFmt* > items;
-    const SwDoc* doc;
-};
 
 #endif
 

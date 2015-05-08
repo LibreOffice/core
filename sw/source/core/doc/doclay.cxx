@@ -1521,18 +1521,17 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                 checkFmts.push_back( pFmt );
         }
 #endif
-        SwFrmFmtAnchorMap::const_iterator_pair range = GetFrmFmtAnchorMap()->equal_range( SwNodeIndex( *pFlyNd ));
-        SwFrmFmtAnchorMap::const_iterator it;
-        for( it = range.first;
-             it != range.second;
-             ++it )
+        std::vector<SwFrmFmt*> const*const pFlys(pFlyNd->GetAnchoredFlys());
+        bool bFound(false);
+        for (size_t i = 0; pFlys && i < pFlys->size(); ++i)
         {
-            const SwFrmFmt* pFmt = it->second;
+            const SwFrmFmt *const pFmt = (*pFlys)[i];
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if( pIdx && pFlyNd == &pIdx->GetNode() )
             {
 #if OSL_DEBUG_LEVEL > 0
-                std::list<const SwFrmFmt*>::iterator checkPos = std::find( checkFmts.begin(), checkFmts.end(), pFmt );
+                std::list<const SwFrmFmt*>::iterator checkPos = std::find(
+                        checkFmts.begin(), checkFmts.end(), pFmt );
                 assert( checkPos != checkFmts.end());
                 checkFmts.erase( checkPos );
 #endif
@@ -1545,12 +1544,13 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 
                 pNd = &rAnchor.GetCntntAnchor()->nNode.GetNode();
                 pFlyNd = pNd->FindFlyStartNode();
+                bFound = true;
                 break;
             }
         }
-        if( it == range.second )
+        if (!bFound)
         {
-            OSL_ENSURE( mbInReading, "Found a FlySection but not a Format!" );
+            OSL_ENSURE(mbInReading, "Found a FlySection but not a Format!");
             return false;
         }
 #if OSL_DEBUG_LEVEL > 0

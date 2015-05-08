@@ -342,6 +342,7 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
 
 SwNode::~SwNode()
 {
+    assert(!m_pAnchoredFlys || GetDoc()->IsInDtor()); // must all be deleted
 }
 
 /// Find the TableNode in which it is located.
@@ -2026,6 +2027,52 @@ bool SwNode::IsInRedlines() const
         bResult = pDoc->getIDocumentRedlineAccess().IsInRedlines(*this);
 
     return bResult;
+}
+
+void SwNode::AddAnchoredFly(SwFrmFmt *const pFlyFmt)
+{
+    assert(pFlyFmt);
+    assert(&pFlyFmt->GetAnchor(false).GetCntntAnchor()->nNode.GetNode() == this);
+    // check node type, cf. SwFmtAnchor::SetAnchor()
+    assert(IsTxtNode() || IsStartNode() || IsTableNode());
+    if (!m_pAnchoredFlys)
+    {
+        m_pAnchoredFlys.reset(new std::vector<SwFrmFmt*>);
+    }
+    m_pAnchoredFlys->push_back(pFlyFmt);
+}
+
+void SwNode::RemoveAnchoredFly(SwFrmFmt *const pFlyFmt)
+{
+    assert(pFlyFmt);
+    // cannot assert this in Remove because it is called when new anchor is already set
+//    assert(&pFlyFmt->GetAnchor(false).GetCntntAnchor()->nNode.GetNode() == this);
+    assert(IsTxtNode() || IsStartNode() || IsTableNode());
+    if (!m_pAnchoredFlys)
+    {
+        SwNodeIndex idx(GetNodes());
+        while (true)
+        {
+            SwNode & rNode(idx.GetNode());
+            if (rNode.m_pAnchoredFlys)
+            {
+                auto it(std::find(rNode.m_pAnchoredFlys->begin(), rNode.m_pAnchoredFlys->end(), pFlyFmt));
+                if (it != rNode.m_pAnchoredFlys->end())
+                {
+                    //XXX bug
+                }
+            }
+            ++idx;
+        }
+    }
+    assert(m_pAnchoredFlys);
+    auto it(std::find(m_pAnchoredFlys->begin(), m_pAnchoredFlys->end(), pFlyFmt));
+    assert(it != m_pAnchoredFlys->end());
+    m_pAnchoredFlys->erase(it);
+    if (m_pAnchoredFlys->empty())
+    {
+        m_pAnchoredFlys.reset();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
