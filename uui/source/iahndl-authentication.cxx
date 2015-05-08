@@ -88,8 +88,7 @@ executeLoginDialog(
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
-        VclPtr< LoginDialog > xDialog(
-                VclPtr<LoginDialog>::Create(pParent, nFlags, rInfo.GetServer(), rRealm));
+        ScopedVclPtrInstance< LoginDialog > xDialog(pParent, nFlags, rInfo.GetServer(), rRealm);
         if (!rInfo.GetErrorText().isEmpty())
             xDialog->SetErrorText(rInfo.GetErrorText());
         xDialog->SetName(rInfo.GetUserName());
@@ -417,8 +416,8 @@ executeMasterPasswordDialog(
         boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
-            VclPtr< MasterPasswordCreateDialog > xDialog(
-                VclPtr<MasterPasswordCreateDialog>::Create(pParent, xManager.get()));
+            ScopedVclPtrInstance< MasterPasswordCreateDialog > xDialog(
+                pParent, xManager.get());
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
             aMaster = OUStringToOString(
@@ -426,8 +425,8 @@ executeMasterPasswordDialog(
         }
         else
         {
-            VclPtr< MasterPasswordDialog > xDialog(
-                VclPtr<MasterPasswordDialog>::Create(pParent, nMode, xManager.get()));
+            ScopedVclPtrInstance< MasterPasswordDialog > xDialog(
+                pParent, nMode, xManager.get());
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
             aMaster = OUStringToOString(
