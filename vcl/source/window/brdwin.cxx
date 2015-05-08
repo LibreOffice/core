@@ -107,7 +107,7 @@ static void ImplDrawBrdWinSymbol( vcl::RenderContext* pDev,
     Rectangle       aTempRect = rRect;
     vcl::Window::ImplCalcSymbolRect( aTempRect );
     aDecoView.DrawSymbol( aTempRect, eSymbol,
-                          pDev->GetSettings().GetStyleSettings().GetButtonTextColor(), 0 );
+                          pDev->GetSettings().GetStyleSettings().GetButtonTextColor() );
 }
 
 static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,

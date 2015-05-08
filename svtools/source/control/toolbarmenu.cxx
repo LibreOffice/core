@@ -1355,13 +1355,13 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                 long nTextOffsetY = ((pEntry->maSize.Height()-nFontHeight)/2);
 
                 sal_uInt16  nTextStyle   = 0;
-                sal_uInt16  nSymbolStyle = 0;
+                DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
                 sal_uInt16  nImageStyle  = 0;
 
                 if( !pEntry->mbEnabled )
                 {
                     nTextStyle   |= TEXT_DRAW_DISABLE;
-                    nSymbolStyle |= SYMBOL_DRAW_DISABLE;
+                    nSymbolStyle |= DrawSymbolFlags::Disable;
                     nImageStyle  |= IMAGE_DRAW_DISABLE;
                 }
 

@@ -658,9 +658,9 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
             nStyle |= BUTTON_DRAW_PRESSED;
         aTempRect = aDecoView.DrawButton( maBtn1Rect, nStyle );
         ImplCalcSymbolRect( aTempRect );
-        nStyle = 0;
+        DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
         if ((mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) || !bEnabled)
-            nStyle |= SYMBOL_DRAW_DISABLE;
+            nSymbolStyle |= DrawSymbolFlags::Disable;
         if (rStyleSettings.GetOptions() & STYLE_OPTION_SCROLLARROW)
         {
             if (GetStyle() & WB_HORZ)
@@ -675,7 +675,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
             else
                 eSymbolType = SymbolType::SPIN_UP;
         }
-        aDecoView.DrawSymbol(aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nStyle);
+        aDecoView.DrawSymbol(aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nSymbolStyle);
     }
 
     if ((nDrawFlags & SCRBAR_DRAW_BTN2) && (!pWin || !ImplDrawNative(rRenderContext, SCRBAR_DRAW_BTN2)))
@@ -685,9 +685,9 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
             nStyle |= BUTTON_DRAW_PRESSED;
         aTempRect = aDecoView.DrawButton(maBtn2Rect, nStyle);
         ImplCalcSymbolRect(aTempRect);
-        nStyle = 0;
+        DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
         if ((mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) || !bEnabled)
-            nStyle |= SYMBOL_DRAW_DISABLE;
+            nSymbolStyle |= DrawSymbolFlags::Disable;
         if (rStyleSettings.GetOptions() & STYLE_OPTION_SCROLLARROW)
         {
             if (GetStyle() & WB_HORZ)
@@ -702,7 +702,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
             else
                 eSymbolType = SymbolType::SPIN_DOWN;
         }
-        aDecoView.DrawSymbol(aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nStyle);
+        aDecoView.DrawSymbol(aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nSymbolStyle);
     }
 
     rRenderContext.SetLineColor();

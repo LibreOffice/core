@@ -1809,7 +1809,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                 if (IsMenuBar())
                     nTextOffsetY += (aOutSz.Height()-pData->aSz.Height()) / 2;
                 sal_uInt16  nTextStyle   = 0;
-                sal_uInt16  nSymbolStyle = 0;
+                DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
                 sal_uInt16  nImageStyle  = 0;
 
                 // submenus without items are not disabled when no items are
@@ -1819,7 +1819,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                 if ( !pData->bEnabled )
                 {
                     nTextStyle   |= TEXT_DRAW_DISABLE;
-                    nSymbolStyle |= SYMBOL_DRAW_DISABLE;
+                    nSymbolStyle |= DrawSymbolFlags::Disable;
                     nImageStyle  |= IMAGE_DRAW_DISABLE;
                 }
 
