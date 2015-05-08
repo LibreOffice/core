@@ -71,6 +71,14 @@ SubstTemplateTypeParmType const * getAsSubstTemplateTypeParmType(QualType type)
     }
 }
 
+bool areSameTypedef(QualType type1, QualType type2) {
+    // type1.getTypePtr() == typ2.getTypePtr() fails for e.g. ::sal_Bool vs.
+    // sal_Bool:
+    auto t1 = type1->getAs<TypedefType>();
+    auto t2 = type2->getAs<TypedefType>();
+    return t1 != nullptr && t2 != nullptr && t1->getDecl() == t2->getDecl();
+}
+
 bool isBool(QualType type, bool allowTypedefs = true) {
     if (type->isBooleanType()) {
         return true;
@@ -91,6 +99,11 @@ bool isBool(QualType type, bool allowTypedefs = true) {
 
 bool isBool(Expr const * expr, bool allowTypedefs = true) {
     return isBool(expr->getType(), allowTypedefs);
+}
+
+bool isMatchingBool(Expr const * expr, Expr const * comparisonExpr) {
+    return isBool(expr, false)
+        || areSameTypedef(expr->getType(), comparisonExpr->getType());
 }
 
 bool isBoolExpr(Expr const * expr) {
@@ -310,18 +323,21 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
         } else {
             std::ptrdiff_t n = j - expr->arg_begin();
             assert(n >= 0);
-            if (ext) {
+            if (t != nullptr
+                && static_cast<std::size_t>(n) >= compat::getNumParams(*t))
+            {
+                assert(t->isVariadic());
+                // ignore bool to int promotions of variadic arguments
+            } else if (ext) {
                 if (t != nullptr) {
                     assert(
-                        static_cast<std::size_t>(n) < compat::getNumParams(*t)
-                        || t->isVariadic());
-                    if (static_cast<std::size_t>(n) < compat::getNumParams(*t)
-                        && !(compat::getParamType(*t, n)->isSpecificBuiltinType(
-                                 BuiltinType::Int)
-                             || (compat::getParamType(*t, n)
-                                 ->isSpecificBuiltinType(BuiltinType::UInt))
-                             || (compat::getParamType(*t, n)
-                                 ->isSpecificBuiltinType(BuiltinType::Long))))
+                        static_cast<std::size_t>(n) < compat::getNumParams(*t));
+                    if (!(compat::getParamType(*t, n)->isSpecificBuiltinType(
+                              BuiltinType::Int)
+                          || compat::getParamType(*t, n)->isSpecificBuiltinType(
+                              BuiltinType::UInt)
+                          || compat::getParamType(*t, n)->isSpecificBuiltinType(
+                              BuiltinType::Long)))
                     {
                         reportWarning(i);
                     }
@@ -389,6 +405,12 @@ bool ImplicitBoolConversion::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr)
             //
             std::ptrdiff_t n = j - expr->arg_begin();
             assert(n >= 0);
+            CXXMethodDecl const * d = expr->getMethodDecl();
+            if (static_cast<std::size_t>(n) >= d->getNumParams()) {
+                // Ignore bool to int promotions of variadic arguments:
+                assert(d->isVariadic());
+                continue;
+            }
             QualType ty
                 = ignoreParenImpCastAndComma(expr->getImplicitObjectArgument())
                 ->getType();
@@ -397,10 +419,7 @@ bool ImplicitBoolConversion::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr)
             }
             TemplateSpecializationType const * ct
                 = ty->getAs<TemplateSpecializationType>();
-            CXXMethodDecl const * d = expr->getMethodDecl();
-            if (ct != nullptr
-                && static_cast<std::size_t>(n) < d->getNumParams())
-            {
+            if (ct != nullptr) {
                 SubstTemplateTypeParmType const * pt
                     = getAsSubstTemplateTypeParmType(
                         d->getParamDecl(n)->getType().getNonReferenceType());
@@ -498,7 +517,9 @@ bool ImplicitBoolConversion::TraverseConditionalOperator(
               || (i == expr->getFalseExpr()->IgnoreParens()
                   && (isBoolExpr(expr->getTrueExpr()->IgnoreParenImpCasts())
                       || isExternCFunctionCallReturningInt(
-                          expr->getTrueExpr())))))
+                          expr->getTrueExpr())))
+              || (!compiler.getLangOpts().CPlusPlus
+                  && i == expr->getCond()->IgnoreParens())))
         {
             reportWarning(i);
         }
@@ -513,9 +534,12 @@ bool ImplicitBoolConversion::TraverseBinLT(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+               && isMatchingBool(
+                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
+                  && isMatchingBool(
+                      expr->getLHS()->IgnoreImpCasts(),
+                      i->getSubExprAsWritten()))))
         {
             reportWarning(i);
         }
@@ -530,9 +554,12 @@ bool ImplicitBoolConversion::TraverseBinLE(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+               && isMatchingBool(
+                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
+                  && isMatchingBool(
+                      expr->getLHS()->IgnoreImpCasts(),
+                      i->getSubExprAsWritten()))))
         {
             reportWarning(i);
         }
@@ -547,9 +574,12 @@ bool ImplicitBoolConversion::TraverseBinGT(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+               && isMatchingBool(
+                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
+                  && isMatchingBool(
+                      expr->getLHS()->IgnoreImpCasts(),
+                      i->getSubExprAsWritten()))))
         {
             reportWarning(i);
         }
@@ -564,9 +594,12 @@ bool ImplicitBoolConversion::TraverseBinGE(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+               && isMatchingBool(
+                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
+                  && isMatchingBool(
+                      expr->getLHS()->IgnoreImpCasts(),
+                      i->getSubExprAsWritten()))))
         {
             reportWarning(i);
         }
@@ -581,9 +614,12 @@ bool ImplicitBoolConversion::TraverseBinEQ(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+               && isMatchingBool(
+                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
+                  && isMatchingBool(
+                      expr->getLHS()->IgnoreImpCasts(),
+                      i->getSubExprAsWritten()))))
         {
             reportWarning(i);
         }
@@ -598,9 +634,12 @@ bool ImplicitBoolConversion::TraverseBinNE(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+               && isMatchingBool(
+                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
+                  && isMatchingBool(
+                      expr->getLHS()->IgnoreImpCasts(),
+                      i->getSubExprAsWritten()))))
         {
             reportWarning(i);
         }
@@ -773,13 +812,15 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
     if (ignoreLocation(expr)) {
         return true;
     }
-    if (expr->getSubExprAsWritten()->getType()->isBooleanType()
-        && !isBool(expr))
-    {
-        if (nested.empty()) {
-            reportWarning(expr);
-        } else {
-            nested.top().push_back(expr);
+    if (isBool(expr->getSubExprAsWritten()) && !isBool(expr)) {
+        // Ignore NoOp from 'sal_Bool' (aka 'unsigned char') to 'const unsigned
+        // char' in makeAny(b) with b of type sal_Bool:
+        if (expr->getCastKind() != CK_NoOp) {
+            if (nested.empty()) {
+                reportWarning(expr);
+            } else {
+                nested.top().push_back(expr);
+            }
         }
         return true;
     }
@@ -828,11 +869,7 @@ bool ImplicitBoolConversion::isExternCFunctionCall(
     Decl const * d = expr->getCalleeDecl();
     if (d != nullptr) {
         FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
-        if (fd != nullptr
-            && (fd->isExternC()
-                || compiler.getSourceManager().isInExternCSystemHeader(
-                    fd->getLocation())))
-        {
+        if (fd != nullptr) {
             PointerType const * pt = fd->getType()->getAs<PointerType>();
             QualType t2(pt == nullptr ? fd->getType() : pt->getPointeeType());
             *functionType = t2->getAs<FunctionProtoType>();
@@ -841,16 +878,17 @@ bool ImplicitBoolConversion::isExternCFunctionCall(
                 || (fd->getBuiltinID() != Builtin::NotBuiltin
                     && isa<FunctionNoProtoType>(t2)));
                 // __builtin_*s have no proto type?
-            return true;
+            return fd->isExternC()
+                || compiler.getSourceManager().isInExternCSystemHeader(
+                    fd->getLocation());
         }
         VarDecl const * vd = dyn_cast<VarDecl>(d);
-        if (vd != nullptr && vd->isExternC())
-        {
+        if (vd != nullptr) {
             PointerType const * pt = vd->getType()->getAs<PointerType>();
             *functionType
                 = ((pt == nullptr ? vd->getType() : pt->getPointeeType())
-                   ->castAs<FunctionProtoType>());
-            return true;
+                   ->getAs<FunctionProtoType>());
+            return vd->isExternC();
         }
     }
     return false;
@@ -915,8 +953,9 @@ void ImplicitBoolConversion::checkCXXConstructExpr(
 void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
     report(
         DiagnosticsEngine::Warning,
-        "implicit conversion (%0) from bool to %1", expr->getLocStart())
-        << expr->getCastKindName() << expr->getType() << expr->getSourceRange();
+        "implicit conversion (%0) from %1 to %2", expr->getLocStart())
+        << expr->getCastKindName() << expr->getSubExprAsWritten()->getType()
+        << expr->getType() << expr->getSourceRange();
 }
 
 loplugin::Plugin::Registration<ImplicitBoolConversion> X(
