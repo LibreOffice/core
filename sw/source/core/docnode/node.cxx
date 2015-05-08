@@ -2048,23 +2048,6 @@ void SwNode::RemoveAnchoredFly(SwFrmFmt *const pFlyFmt)
     // cannot assert this in Remove because it is called when new anchor is already set
 //    assert(&pFlyFmt->GetAnchor(false).GetCntntAnchor()->nNode.GetNode() == this);
     assert(IsTxtNode() || IsStartNode() || IsTableNode());
-    if (!m_pAnchoredFlys)
-    {
-        SwNodeIndex idx(GetNodes());
-        while (true)
-        {
-            SwNode & rNode(idx.GetNode());
-            if (rNode.m_pAnchoredFlys)
-            {
-                auto it(std::find(rNode.m_pAnchoredFlys->begin(), rNode.m_pAnchoredFlys->end(), pFlyFmt));
-                if (it != rNode.m_pAnchoredFlys->end())
-                {
-                    //XXX bug
-                }
-            }
-            ++idx;
-        }
-    }
     assert(m_pAnchoredFlys);
     auto it(std::find(m_pAnchoredFlys->begin(), m_pAnchoredFlys->end(), pFlyFmt));
     assert(it != m_pAnchoredFlys->end());
