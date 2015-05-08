@@ -93,9 +93,9 @@ static unsigned char const aImplMustShiftTab[128] =
 
 struct ImplUTF7ToUCContextData
 {
-    int                     mbShifted;
-    int                     mbFirst;
-    int                     mbWroteOne;
+    bool                    mbShifted;
+    bool                    mbFirst;
+    bool                    mbWroteOne;
     sal_uInt32              mnBitBuffer;
     sal_uInt32              mnBufferBits;
 };
@@ -105,9 +105,9 @@ struct ImplUTF7ToUCContextData
 void* ImplUTF7CreateUTF7TextToUnicodeContext()
 {
     ImplUTF7ToUCContextData* pContextData = new ImplUTF7ToUCContextData;
-    pContextData->mbShifted         = sal_False;
-    pContextData->mbFirst           = sal_False;
-    pContextData->mbWroteOne        = sal_False;
+    pContextData->mbShifted         = false;
+    pContextData->mbFirst           = false;
+    pContextData->mbWroteOne        = false;
     pContextData->mnBitBuffer       = 0;
     pContextData->mnBufferBits      = 0;
     return pContextData;
@@ -125,9 +125,9 @@ void ImplUTF7DestroyTextToUnicodeContext( void* pContext )
 void ImplUTF7ResetTextToUnicodeContext( void* pContext )
 {
     ImplUTF7ToUCContextData* pContextData = static_cast<ImplUTF7ToUCContextData*>(pContext);
-    pContextData->mbShifted         = sal_False;
-    pContextData->mbFirst           = sal_False;
-    pContextData->mbWroteOne        = sal_False;
+    pContextData->mbShifted         = false;
+    pContextData->mbFirst           = false;
+    pContextData->mbWroteOne        = false;
     pContextData->mnBitBuffer       = 0;
     pContextData->mnBufferBits      = 0;
 }
@@ -143,11 +143,11 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
     ImplUTF7ToUCContextData*    pContextData = static_cast<ImplUTF7ToUCContextData*>(pContext);
     unsigned char                   c ='\0';
     unsigned char                   nBase64Value = 0;
-    int                         bEnd = sal_False;
-    int                         bShifted;
-    int                         bFirst;
-    int                         bWroteOne;
-    int                         bBase64End;
+    bool                        bEnd = false;
+    bool                        bShifted;
+    bool                        bFirst;
+    bool                        bWroteOne;
+    bool                        bBase64End;
     sal_uInt32                  nBitBuffer;
     sal_uInt32                  nBitBufferTemp;
     sal_uInt32                  nBufferBits;
@@ -166,9 +166,9 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
     else
 */
     {
-        bShifted        = sal_False;
-        bFirst          = sal_False;
-        bWroteOne       = sal_False;
+        bShifted        = false;
+        bFirst          = false;
+        bWroteOne       = false;
         nBitBuffer      = 0;
         nBufferBits     = 0;
     }
@@ -183,25 +183,25 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
             c = (unsigned char)*pSrcBuf;
 
             /* End, when not a base64 character */
-            bBase64End = sal_False;
+            bBase64End = false;
             if ( c <= 0x7F )
             {
                 nBase64Value = aImplBase64IndexTab[c];
                 if ( nBase64Value == 0xFF )
-                    bBase64End = sal_True;
+                    bBase64End = true;
             }
         }
         else
         {
-            bEnd = sal_True;
-            bBase64End = sal_True;
+            bEnd = true;
+            bBase64End = true;
         }
 
         if ( bShifted )
         {
             if ( bBase64End )
             {
-                bShifted = sal_False;
+                bShifted = false;
 
                 /* If the character causing us to drop out was SHIFT_IN */
                 /* or SHIFT_OUT, it may be a special escape for SHIFT_IN. */
@@ -229,7 +229,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                             }
                             *pDestBuf = IMPL_SHIFT_IN_CHAR;
                             pDestBuf++;
-                            bWroteOne = sal_True;
+                            bWroteOne = true;
                         }
 
                         /* Skip character */
@@ -237,7 +237,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                         if ( pSrcBuf < pEndSrcBuf )
                             c = (unsigned char)*pSrcBuf;
                         else
-                            bEnd = sal_True;
+                            bEnd = true;
                     }
                 }
 
@@ -267,7 +267,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                 /* Add 6 Bits from character to the bit buffer */
                 nBufferBits += 6;
                 nBitBuffer |= ((sal_uInt32)(nBase64Value & 0x3F)) << (32-nBufferBits);
-                bFirst = sal_False;
+                bFirst = false;
             }
 
             /* Extract as many full 16 bit characters as possible from the */
@@ -279,7 +279,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                 pDestBuf++;
                 nBitBuffer <<= 16;
                 nBufferBits -= 16;
-                bWroteOne = sal_True;
+                bWroteOne = true;
             }
 
             if ( nBufferBits >= 16 )
@@ -331,9 +331,9 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
             {
                 if ( c == IMPL_SHIFT_IN_CHAR )
                 {
-                    bShifted    = sal_True;
-                    bFirst      = sal_True;
-                    bWroteOne   = sal_False;
+                    bShifted    = true;
+                    bFirst      = true;
+                    bWroteOne   = false;
                 }
                 else
                 {
@@ -392,7 +392,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
 
 struct ImplUTF7FromUCContextData
 {
-    int                     mbShifted;
+    bool                    mbShifted;
     sal_uInt32              mnBitBuffer;
     sal_uInt32              mnBufferBits;
 };
@@ -402,7 +402,7 @@ struct ImplUTF7FromUCContextData
 void* ImplUTF7CreateUnicodeToTextContext()
 {
     ImplUTF7FromUCContextData* pContextData = new ImplUTF7FromUCContextData;
-    pContextData->mbShifted         = sal_False;
+    pContextData->mbShifted         = false;
     pContextData->mnBitBuffer       = 0;
     pContextData->mnBufferBits      = 0;
     return pContextData;
@@ -420,7 +420,7 @@ void ImplUTF7DestroyUnicodeToTextContext( void* pContext )
 void ImplUTF7ResetUnicodeToTextContext( void* pContext )
 {
     ImplUTF7FromUCContextData* pContextData = static_cast<ImplUTF7FromUCContextData*>(pContext);
-    pContextData->mbShifted         = sal_False;
+    pContextData->mbShifted         = false;
     pContextData->mnBitBuffer       = 0;
     pContextData->mnBufferBits      = 0;
 }
@@ -435,8 +435,8 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
 {
     ImplUTF7FromUCContextData*  pContextData = static_cast<ImplUTF7FromUCContextData*>(pContext);
     sal_Unicode                 c = '\0';
-    int                         bEnd = sal_False;
-    int                         bShifted;
+    bool                        bEnd = false;
+    bool                        bShifted;
     bool                        bNeedShift;
     sal_uInt32                  nBitBuffer;
     sal_uInt32                  nBitBufferTemp;
@@ -454,7 +454,7 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
     else
 */
     {
-        bShifted        = sal_False;
+        bShifted        = false;
         nBitBuffer      = 0;
         nBufferBits     = 0;
     }
@@ -490,12 +490,12 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
                     pDestBuf++;
                 }
                 else
-                    bShifted = sal_True;
+                    bShifted = true;
             }
         }
         else
         {
-            bEnd = sal_True;
+            bEnd = true;
             bNeedShift = false;
         }
 
@@ -537,7 +537,7 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
                 }
                 *pDestBuf = IMPL_SHIFT_OUT_CHAR;
                 pDestBuf++;
-                bShifted = sal_False;
+                bShifted = false;
             }
         }
 
