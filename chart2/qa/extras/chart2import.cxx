@@ -86,6 +86,7 @@ public:
     void testMinorTickMarksDefaultValue2013XLSX();
 
     void testAxisTitleDefaultRotationXLSX();
+    void testSecondaryAxisTitleDefaultRotationXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -133,6 +134,7 @@ public:
     CPPUNIT_TEST(testMajorTickMarksDefaultValue2013XLSX);
     CPPUNIT_TEST(testMinorTickMarksDefaultValue2013XLSX);
     CPPUNIT_TEST(testAxisTitleDefaultRotationXLSX);
+    CPPUNIT_TEST(testSecondaryAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1031,6 +1033,23 @@ void Chart2ImportTest::testAxisTitleDefaultRotationXLSX()
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
     Reference<chart2::XAxis> xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
+    CPPUNIT_ASSERT(xYAxis.is());
+    Reference<chart2::XTitled> xTitled(xYAxis, uno::UNO_QUERY_THROW);
+    Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT(xTitle.is());
+    Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
+    double nRotation = 0;
+    CPPUNIT_ASSERT(aAny >>= nRotation);
+    CPPUNIT_ASSERT_EQUAL(90.0, nRotation);
+}
+
+void Chart2ImportTest::testSecondaryAxisTitleDefaultRotationXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "secondary_axis_title_default_rotation.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    Reference<chart2::XAxis> xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 1);
     CPPUNIT_ASSERT(xYAxis.is());
     Reference<chart2::XTitled> xTitled(xYAxis, uno::UNO_QUERY_THROW);
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
