@@ -302,8 +302,6 @@ namespace dbtools
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
         and <i>append</i> _rException (i.e. put it into the NextException member of the SQLContext).
     */
-    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::sdb::SQLContext prependContextInfo(const ::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const OUString& _rContextDescription, const OUString& _rContextDetails );
-
     OOO_DLLPUBLIC_DBTOOLS
     ::com::sun::star::sdbc::SQLException prependErrorInfo(
         const ::com::sun::star::sdbc::SQLException& _rChainedException,

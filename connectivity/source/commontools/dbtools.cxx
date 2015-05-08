@@ -737,11 +737,6 @@ Sequence< OUString > getFieldNamesByCommandDescriptor( const Reference< XConnect
     return aNames;
 }
 
-SQLContext prependContextInfo(const SQLException& _rException, const Reference< XInterface >& _rxContext, const OUString& _rContextDescription, const OUString& _rContextDetails)
-{
-    return SQLContext( _rContextDescription, _rxContext, OUString(), 0, makeAny( _rException ), _rContextDetails );
-}
-
 SQLException prependErrorInfo( const SQLException& _rChainedException, const Reference< XInterface >& _rxContext,
     const OUString& _rAdditionalError, const StandardSQLState _eSQLState, const sal_Int32 _nErrorCode )
 {

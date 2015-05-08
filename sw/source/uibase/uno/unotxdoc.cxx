@@ -1389,15 +1389,6 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage() throw( RuntimeEx
     return *pxXDrawPage;
 }
 
-SwXDrawPage* SwXTextDocument::GetDrawPage()
-{
-    if(!IsValid())
-        return 0;
-    if(!pDrawPage)
-        getDrawPage();
-    return pDrawPage;
-}
-
 void SwXTextDocument::Invalidate()
 {
     bObjectValid = false;

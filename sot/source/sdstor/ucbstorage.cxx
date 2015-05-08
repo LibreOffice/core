@@ -3101,32 +3101,6 @@ bool UCBStorage::IsStorageFile( SvStream* pFile )
     return bRet;
 }
 
-bool UCBStorage::IsDiskSpannedFile( SvStream* pFile )
-{
-    if ( !pFile )
-        return false;
-
-    sal_uLong nPos = pFile->Tell();
-    pFile->Seek( STREAM_SEEK_TO_END );
-    if ( !pFile->Tell() )
-        return false;
-
-    pFile->Seek(0);
-    sal_uInt32 nBytes;
-    pFile->ReadUInt32( nBytes );
-
-    // disk spanned file have an additional header in front of the usual one
-    bool bRet = ( nBytes == 0x08074b50 );
-    if ( bRet )
-    {
-        pFile->ReadUInt32( nBytes );
-        bRet = ( nBytes == 0x04034b50 );
-    }
-
-    pFile->Seek( nPos );
-    return bRet;
-}
-
 OUString UCBStorage::GetLinkedFile( SvStream &rStream )
 {
     OUString aString;
@@ -3149,77 +3123,6 @@ OUString UCBStorage::GetLinkedFile( SvStream &rStream )
 
     rStream.Seek( nPos );
     return aString;
-}
-
-OUString UCBStorage::CreateLinkFile( const OUString& rName )
-{
-    // create a stream to write the link file - use a temp file, because it may be no file content
-    INetURLObject aFolderObj( rName );
-    OUString aName = aFolderObj.GetName();
-    aFolderObj.removeSegment();
-    OUString aFolderURL( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
-    boost::scoped_ptr< ::utl::TempFile> pTempFile(new ::utl::TempFile( &aFolderURL ));
-
-    // get the stream from the temp file
-    SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE | StreamMode::TRUNC );
-
-    // write header
-    pStream->WriteUInt32( 0x04034b50 );
-
-    // assemble a new folder name in the destination folder
-    INetURLObject aObj( rName );
-    OUString aTmpName = aObj.GetName();
-    OUString aTitle = "content." + aTmpName;
-
-    // create a folder and store its URL
-    Content aFolder( aFolderURL, Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-    Content aNewFolder;
-    bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTitle, aNewFolder );
-    if ( !bRet )
-    {
-        aFolderObj.insertName( aTitle );
-        if ( ::utl::UCBContentHelper::Exists( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
-        {
-            // Hack, because already existing files give the same CommandAbortedException as any other error !
-            // append a number until the name can be used for a new folder
-            aTitle += ".";
-            for ( sal_Int32 i=0; !bRet; i++ )
-            {
-                OUString aTmp = aTitle + OUString::number( i );
-                bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTmp, aNewFolder );
-                if ( bRet )
-                    aTitle = aTmp;
-                else
-                {
-                    aFolderObj.SetName( aTmp );
-                    if ( !::utl::UCBContentHelper::Exists( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
-                        // Hack, because already existing files give the same CommandAbortedException as any other error !
-                        break;
-                }
-            }
-        }
-    }
-
-    if ( bRet )
-    {
-        // get the URL
-        aObj.SetName( aTitle );
-        OUString aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
-
-        // store it as key/value pair
-        OUString aLink = "ContentURL=" + aURL;
-        write_uInt16_lenPrefixed_uInt8s_FromOUString(*pStream, aLink, RTL_TEXTENCODING_UTF8);
-        pStream->Flush();
-
-        // move the stream to its desired location
-        Content aSource( pTempFile->GetURL(), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        pTempFile.reset();
-        aFolder.transferContent( aSource, InsertOperation_MOVE, aName, NameClash::OVERWRITE );
-        return aURL;
-    }
-
-    pTempFile->EnableKillingFile( true );
-    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

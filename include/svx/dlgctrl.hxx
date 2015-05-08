@@ -303,7 +303,6 @@ private:
 public:
     FillAttrLB( vcl::Window* pParent, WinBits aWB );
 
-    void Fill( const XColorListRef    &pList );
     void Fill( const XHatchListRef    &pList );
     void Fill( const XGradientListRef &pList );
     void Fill( const XBitmapListRef   &pList );

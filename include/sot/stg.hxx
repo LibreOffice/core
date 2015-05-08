@@ -284,9 +284,7 @@ protected:
                                 virtual ~UCBStorage();
 public:
     static bool                 IsStorageFile( SvStream* );
-    static bool                 IsDiskSpannedFile( SvStream* );
     static OUString             GetLinkedFile( SvStream& );
-    static OUString             CreateLinkFile( const OUString& rName );
 
                                 UCBStorage( const ::ucbhelper::Content& rContent, const OUString& rName, StreamMode nMode, bool bDirect = true, bool bIsRoot = true );
                                 UCBStorage( const OUString& rName,

@@ -1187,23 +1187,6 @@ void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
     InsertEntry( rEntry.GetColor(), rEntry.GetName(), nPos );
 }
 
-// Fills the Listbox with color and strings
-
-void FillAttrLB::Fill( const XColorListRef &pColorTab )
-{
-    long nCount = pColorTab->Count();
-    SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        XColorEntry* pEntry = pColorTab->GetColor( i );
-        InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( true );
-}
-
 // Fills the listbox (provisional) with strings
 
 HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)

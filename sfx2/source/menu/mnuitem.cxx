@@ -301,93 +301,6 @@ PopupMenu* SfxMenuControl::GetPopup () const
 
 sal_IntPtr Select_Impl( void* pHdl, void* pVoid );
 
-SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
-    sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings )
-    : SfxMenuControl( nPos, rBindings ), pMenu(0)
-{
-    // Determine the current background color setting for menus
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_sIconTheme         = rSettings.DetermineIconTheme();
-    m_bShowMenuImages    = rSettings.GetUseImagesInMenus();
-
-    ::framework::MenuConfiguration aConf( ::comphelper::getProcessComponentContext() );
-    Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
-    pMenu = aConf.CreateBookmarkMenu( aXFrame, GetId() == SID_NEWDOCDIRECT ? OUString(BOOKMARK_NEWMENU) : OUString(BOOKMARK_WIZARDMENU) );
-    if( pMenu )
-    {
-        pMenu->SetSelectHdl( Link<>( &(this->GetBindings()), Select_Impl ) );
-        pMenu->SetActivateHdl( LINK(this, SfxAppMenuControl_Impl, Activate) );
-        rMenu.SetPopupMenu( nPos, pMenu );
-    }
-}
-
-SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()
-{
-    delete pMenu;
-}
-
-IMPL_LINK_TYPED( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu, bool )
-{
-    if ( pActMenu )
-    {
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        OUString sIconTheme = rSettings.DetermineIconTheme();
-        bool bShowMenuImages = rSettings.GetUseImagesInMenus();
-
-        if (( sIconTheme != m_sIconTheme ) ||
-            ( bShowMenuImages != m_bShowMenuImages ))
-        {
-            m_sIconTheme        = sIconTheme;
-            m_bShowMenuImages   = bShowMenuImages;
-
-            sal_uInt16 nCount = pActMenu->GetItemCount();
-            for ( sal_uInt16 nSVPos = 0; nSVPos < nCount; nSVPos++ )
-            {
-                sal_uInt16 nItemId = pActMenu->GetItemId( nSVPos );
-                if ( pActMenu->GetItemType( nSVPos ) != MenuItemType::SEPARATOR )
-                {
-                    if ( bShowMenuImages )
-                    {
-                        bool        bImageSet = false;
-                        OUString aImageId;
-                        ::framework::MenuAttributes* pMenuAttributes =
-                            reinterpret_cast< ::framework::MenuAttributes*>(pMenu->GetUserValue( nItemId ));
-
-                        if ( pMenuAttributes )
-                            aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
-
-                        if ( aImageId.getLength() > 0 )
-                        {
-                            Reference< ::com::sun::star::frame::XFrame > xFrame;
-                            Image aImage = GetImage( xFrame, aImageId, false );
-                            if ( !!aImage )
-                            {
-                                bImageSet = true;
-                                pActMenu->SetItemImage( nItemId, aImage );
-                            }
-                        }
-
-                        OUString aCmd( pActMenu->GetItemCommand( nItemId ) );
-                        if ( !bImageSet && !aCmd.isEmpty() )
-                        {
-                            Image aImage = SvFileInformationManager::GetImage(
-                                INetURLObject(aCmd), false );
-                            if ( !!aImage )
-                                pActMenu->SetItemImage( nItemId, aImage );
-                        }
-                    }
-                    else
-                        pActMenu->SetItemImage( nItemId, Image() );
-                }
-            }
-        }
-
-        return true;
-    }
-
-    return false;
-}
-
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const OUString& rCmd,
         sal_uInt16 nId, Menu& rMenu, const OUString& sItemText,
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)
@@ -447,17 +360,17 @@ sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
 
     if ( xDisp.is() )
     {
-        SfxAppMenuControl_Impl::ExecuteInfo* pExecuteInfo = new SfxAppMenuControl_Impl::ExecuteInfo;
+        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDisp;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = Sequence< PropertyValue >();
-        Application::PostUserEvent( LINK( 0, SfxAppMenuControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK( 0, ExecuteInfo, ExecuteHdl_Impl), pExecuteInfo );
     }
 
     return sal_IntPtr(true);
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SfxAppMenuControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( ExecuteInfo, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
     delete pExecuteInfo;

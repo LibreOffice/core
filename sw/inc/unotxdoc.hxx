@@ -438,7 +438,6 @@ public:
                                             sal_Int32& nResult,
                                             css::uno::Reference< css::uno::XInterface >  xLastResult);
 
-    SwXDrawPage*                GetDrawPage();
     SwDocShell*                 GetDocShell() {return pDocShell;}
 
     void * SAL_CALL operator new( size_t ) throw();

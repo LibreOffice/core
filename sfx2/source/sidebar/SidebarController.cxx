@@ -204,7 +204,6 @@ void SAL_CALL SidebarController::disposing()
     if (mpCurrentDeck)
     {
         mpCurrentDeck.disposeAndClear();
-//        mpCurrentDeck->PrintWindowTree();
     }
 
     mpTabBar.disposeAndClear();

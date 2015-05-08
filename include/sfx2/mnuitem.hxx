@@ -120,27 +120,13 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
-class SfxAppMenuControl_Impl : public SfxMenuControl
+struct ExecuteInfo
 {
-    PopupMenu*  pMenu;
-    OUString    m_sIconTheme;
-    bool        m_bShowMenuImages;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
+    ::com::sun::star::util::URL                                                aTargetURL;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
 
-protected:
-    DECL_LINK_TYPED( Activate, Menu *, bool ); // Needed to support high contrast images
-
-public:
-    SfxAppMenuControl_Impl( sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings );
-    virtual ~SfxAppMenuControl_Impl();
-
-    struct ExecuteInfo
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-        ::com::sun::star::util::URL                                                aTargetURL;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
-    };
-
-    DECL_STATIC_LINK( SfxAppMenuControl_Impl, ExecuteHdl_Impl, ExecuteInfo* );
+    DECL_STATIC_LINK( ExecuteInfo, ExecuteHdl_Impl, ExecuteInfo* );
 };
 
 #endif

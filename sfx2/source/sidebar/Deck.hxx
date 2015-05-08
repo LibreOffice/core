@@ -67,7 +67,6 @@ public:
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
-    void PrintWindowTree();
     static void PrintWindowSubTree (vcl::Window* pRoot, int nIndentation);
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }

@@ -1,6 +1,8 @@
 BigInt::BigInt(unsigned int)
 BitmapFilterStackBlur::filter(BitmapEx&)
+Color::ApplyTintOrShade(short)
 FontCharMap::GetDefaultMap(bool)
+NotifyEvent::NotifyEvent()
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
 OpenGLContext::requestSingleBufferedRendering()
@@ -97,7 +99,6 @@ sc::FormulaGroupAreaListener::getRange() const
 sc::FormulaGroupAreaListener::getTopCellPos() const
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
-std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::__cxx1998::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
 vcl::IsWindowSystemAvailable()
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
