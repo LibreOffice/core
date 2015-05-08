@@ -580,7 +580,7 @@ namespace xmloff
                 PROPERTY_READONLY, PROPERTY_DEFAULT_STATE,
                 PROPERTY_TABSTOP, PROPERTY_ENABLEVISIBLE
             };
-            static const sal_Bool nBooleanPropertyAttrFlags[] =
+            static const sal_Int8 nBooleanPropertyAttrFlags[] =
             {   // attribute defaults
                 BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID, BOOLATTR_DEFAULT_FALSE
             };

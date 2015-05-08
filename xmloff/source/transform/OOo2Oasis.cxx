@@ -585,7 +585,7 @@ static XMLTransformerActionInit aStyleActionTable[] =
     ENTRY0( SVG, HEIGHT, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
     ENTRY0( DRAW, START, XML_ATACTION_NEG_PERCENT ),
     ENTRY0( DRAW, END, XML_ATACTION_NEG_PERCENT ),
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(true) ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -695,7 +695,7 @@ static XMLTransformerActionInit aStyleRefActionTable[] =
     ENTRY0( DRAW, MASTER_PAGE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( PRESENTATION, PRESENTATION_PAGE_LAYOUT_NAME,
             XML_ATACTION_ENCODE_STYLE_NAME_REF ),
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_False ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(false) ),
     ENTRY1( TEXT, CONDITION, XML_ATACTION_ADD_NAMESPACE_PREFIX,
                      XML_NAMESPACE_OOOW ),
     ENTRY1( TEXT, FORMULA, XML_ATACTION_ADD_NAMESPACE_PREFIX,
@@ -738,7 +738,7 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY0( DR3D, FOCAL_LENGTH, XML_ATACTION_INCH2IN ),
     ENTRY1Q( FORM, ID, XML_ATACTION_RENAME,
                     XML_NAMESPACE_DRAW, XML_CONTROL ),
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(true) ),
 
     // BM: needed by chart:legend.  The legend needs also the draw actions.  As
     // there is no merge mechanism, all actions have to be in the same table
@@ -770,7 +770,7 @@ static XMLTransformerActionInit aConnectorActionTable[] =
     ENTRY0( PRESENTATION, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY1Q( FORM, ID, XML_ATACTION_RENAME,
                     XML_NAMESPACE_DRAW, XML_CONTROL ),
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(true) ),
     ENTRY0( DRAW, ID, XML_ATACTION_SHAPEID ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
@@ -906,7 +906,7 @@ static XMLTransformerActionInit aBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, TRANSPARENCY, XML_ATACTION_RENAME_NEG_PERCENT,
                      XML_NAMESPACE_DRAW, XML_OPACITY ),
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(true) ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -917,7 +917,7 @@ static XMLTransformerActionInit aBackgroundImageActionTable[] =
 static XMLTransformerActionInit aWriterBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, TRANSPARENCY, XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY, XML_NAMESPACE_DRAW, XML_OPACITY ),
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(true) ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -936,7 +936,7 @@ static XMLTransformerActionInit aFormControlActionTable[] =
                     XML_ATACTION_RENAME_ADD_NAMESPACE_PREFIX,
                        XML_NAMESPACE_FORM, XML_CONTROL_IMPLEMENTATION,
                     XML_NAMESPACE_OOO ),
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_False ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(false) ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -964,7 +964,7 @@ static XMLTransformerActionInit aFormPropActionTable[] =
 // OOO_XLINK_ACTIONS
 static XMLTransformerActionInit aXLinkActionTable[] =
 {
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_False ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(false) ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
