@@ -106,7 +106,7 @@ NamedValueByNameAccess::getValue(const sal_Char * pName)
 bool
 UpdateCheckROModel::isAutoCheckEnabled() const
 {
-    return sal_True == m_aNameAccess.getValue(AUTOCHECK_ENABLED).get< sal_Bool >();
+    return m_aNameAccess.getValue(AUTOCHECK_ENABLED).get<bool>();
 }
 
 
@@ -114,7 +114,7 @@ UpdateCheckROModel::isAutoCheckEnabled() const
 bool
 UpdateCheckROModel::isDownloadPaused() const
 {
-    return sal_True == m_aNameAccess.getValue(DOWNLOAD_PAUSED).get< sal_Bool >();
+    return m_aNameAccess.getValue(DOWNLOAD_PAUSED).get<bool>();
 }
 
 

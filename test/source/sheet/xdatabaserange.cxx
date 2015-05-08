@@ -163,7 +163,7 @@ void XDatabaseRange::testRefresh()
         uno::Reference< beans::XPropertySet > xPropRow(xRow, UNO_QUERY_THROW);
         Any aAny = xPropRow->getPropertyValue( aHidden );
 
-        CPPUNIT_ASSERT(aAny.get<sal_Bool>() == sal_True);
+        CPPUNIT_ASSERT(aAny.get<bool>());
     }
 
     xDBRange->refresh();
@@ -177,7 +177,7 @@ void XDatabaseRange::testRefresh()
         uno::Reference< beans::XPropertySet > xPropRow(xRow, UNO_QUERY_THROW);
         Any aAny = xPropRow->getPropertyValue( aHidden );
 
-        CPPUNIT_ASSERT(aAny.get<sal_Bool>() == sal_False);
+        CPPUNIT_ASSERT(!aAny.get<bool>());
     }
 
 

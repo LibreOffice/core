@@ -293,7 +293,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     if (!(arguments.getLength() == 45
           && (arguments[0] >>= arg0) && arg0.member == cppu::UnoType<sal_Int32>::get()
           && (arguments[1] >>= arg1) && arg1.member == arg1b
-          && (arguments[2] >>= arg2) && arg2.member == sal_True
+          && (arguments[2] >>= arg2) && arg2.member
           && (arguments[3] >>= arg3) && arg3.member == SAL_MIN_INT8
           && (arguments[4] >>= arg4) && arg4.member == SAL_MIN_INT16
           && (arguments[5] >>= arg5) && arg5.member == SAL_MIN_INT32
@@ -320,7 +320,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (arguments[19] >>= arg19) && arg19.member.getLength() == 1
           && arg19.member[0] == arg1b
           && (arguments[20] >>= arg20) && arg20.member.getLength() == 1
-          && arg20.member[0] == sal_True
+          && arg20.member[0]
           && (arguments[21] >>= arg21) && arg21.member.getLength() == 1
           && arg21.member[0] == SAL_MIN_INT8
           && (arguments[22] >>= arg22) && arg22.member.getLength() == 1
