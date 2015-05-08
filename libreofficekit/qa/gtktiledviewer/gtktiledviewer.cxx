@@ -28,7 +28,7 @@
 
 static int help()
 {
-    fprintf( stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install> <path-to-document>\n" );
+    fprintf( stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install's-program-directory> <path-to-document>\n" );
     return 1;
 }
 
