@@ -62,7 +62,7 @@ class SwFlowFrm
     friend inline void TableSplitRecalcUnlock( SwFlowFrm * );
     // #i44049#
     friend class SwObjectFormatterTxtFrm;
-    friend class JoinLockGuard;
+    friend class FlowFrmJoinLockGuard;
 
     // TblSel is allowed to reset the follow-bit
     friend inline void UnsetFollow( SwFlowFrm *pFlow );
@@ -238,7 +238,7 @@ inline bool SwFlowFrm::IsFwdMoveAllowed()
 
 //use this to protect a SwLayoutFrm for a given scope from getting merged with
 //its neighbour and thus deleted
-class JoinLockGuard
+class FlowFrmJoinLockGuard
 {
 private:
     SwFlowFrm *m_pFlow;
@@ -247,7 +247,7 @@ public:
     //JoinLock pParent for the lifetime of the Cut/Paste call, etc. to avoid
     //SwSectionFrm::MergeNext removing the pParent we're trying to reparent
     //into
-    JoinLockGuard(SwLayoutFrm* pFrm)
+    FlowFrmJoinLockGuard(SwLayoutFrm* pFrm)
     {
         m_pFlow = SwFlowFrm::CastFlowFrm(pFrm);
         if (m_pFlow)
@@ -261,7 +261,7 @@ public:
         }
     }
 
-    ~JoinLockGuard()
+    ~FlowFrmJoinLockGuard()
     {
         if (m_pFlow && !m_bOldJoinLocked)
             m_pFlow->UnlockJoin();

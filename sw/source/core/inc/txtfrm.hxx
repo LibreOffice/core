@@ -53,7 +53,7 @@ class SwTxtFrm: public SwCntntFrm
     friend class SwTxtIter;
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
-    friend class SwTxtFrmLocker; // May Lock()/Unlock()
+    friend class TxtFrmLockGuard; // May Lock()/Unlock()
     friend bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_Int32 nNew );
 
     static SwCache *pTxtCache;  // Pointer to the Line Cache
@@ -649,15 +649,35 @@ public:
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const SAL_OVERRIDE;
 };
 
-class SwTxtFrmLocker
+//use this to protect a SwTxtFrm for a given scope from getting merged with
+//its neighbour and thus deleted
+class TxtFrmLockGuard
 {
 private:
-    SwTxtFrm * const pFrm;
+    SwTxtFrm *m_pTxtFrm;
+    bool m_bOldLocked;
 public:
-    inline SwTxtFrmLocker( SwTxtFrm *pTxtFrm )
-        : pFrm( pTxtFrm->IsLocked() ? 0 : pTxtFrm )
-    { if( pFrm ) pFrm->Lock(); }
-    inline ~SwTxtFrmLocker() { if( pFrm ) pFrm->Unlock(); }
+    //Lock pFrm for the lifetime of the Cut/Paste call, etc. to avoid
+    //SwTxtFrm::_AdjustFollow removing the pFrm we're trying to Make
+    TxtFrmLockGuard(SwFrm* pFrm)
+    {
+        m_pTxtFrm = pFrm->IsTxtFrm() ? static_cast<SwTxtFrm*>(pFrm) : 0;
+        if (m_pTxtFrm)
+        {
+            m_bOldLocked = m_pTxtFrm->IsLocked();
+            m_pTxtFrm->Lock();
+        }
+        else
+        {
+            m_bOldLocked = false;
+        }
+    }
+
+    ~TxtFrmLockGuard()
+    {
+        if (m_pTxtFrm && !m_bOldLocked)
+            m_pTxtFrm->Unlock();
+    }
 };
 
 inline const SwParaPortion *SwTxtFrm::GetPara() const

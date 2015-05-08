@@ -73,7 +73,7 @@ bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         // We always need to enable hyphenation
         // Don't be afraid: the SwTxtIter saves the old row in the hyphenate
-        SwTxtFrmLocker aLock( this );
+        TxtFrmLockGuard aLock( this );
 
         if ( IsVertical() )
             SwapWidthAndHeight();

@@ -316,7 +316,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
         if( HasPara() )
         {
-            SwTxtFrmLocker aLock(const_cast<SwTxtFrm*>(this));
+            TxtFrmLockGuard aLock(const_cast<SwTxtFrm*>(this));
 
             SwTxtLineAccess aAccess( this );
             aAccess.GetPara();
@@ -620,7 +620,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
         // We don't want to be interrupted while painting.
         // Do that after thr Format()!
-        SwTxtFrmLocker aLock(const_cast<SwTxtFrm*>(this));
+        TxtFrmLockGuard aLock(const_cast<SwTxtFrm*>(this));
 
         // We only paint the part of the TxtFrm which changed, is within the
         // range and was requested to paint.

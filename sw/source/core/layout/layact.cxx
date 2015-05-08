@@ -1242,7 +1242,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
         {
             //JoinLock pParent for the lifetime of the Calc call to avoid
             //SwSectionFrm::MergeNext removing the pLay we're trying to Format
-            JoinLockGuard aJoinGuard(pLay);
+            FlowFrmJoinLockGuard aJoinGuard(pLay);
             pLay->Calc();
         }
 

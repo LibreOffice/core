@@ -2104,7 +2104,7 @@ SwTwips SwTxtFrm::CalcFitToContent()
         Frm().Pos().X() += nOldFrmWidth - nPageWidth;
 
     // #i31490#
-    SwTxtFrmLocker aLock( this );
+    TxtFrmLockGuard aLock( this );
 
     SwTxtFormatInfo aInf( this, false, true, true );
     aInf.SetIgnoreFly( true );
@@ -2163,7 +2163,7 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
             SetPara( pDummy, false );
 
             // lock paragraph
-            SwTxtFrmLocker aLock( this );
+            TxtFrmLockGuard aLock( this );
 
             // simulate text formatting
             SwTxtFormatInfo aInf( this, false, true, true );

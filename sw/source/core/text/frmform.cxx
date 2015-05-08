@@ -676,7 +676,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const sal_Int32 nTxtPos )
 
     // The Paste sends a Modify() to me
     // I lock myself, so that my data does not disappear
-    SwTxtFrmLocker aLock( this );
+    TxtFrmLockGuard aLock( this );
     SwTxtFrm *pNew = static_cast<SwTxtFrm *>(GetTxtNode()->MakeFrm( this ));
 
     pNew->SetFollow( GetFollow() );
@@ -1767,7 +1767,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         }
 
         // We do not want to be interrupted during formatting
-        SwTxtFrmLocker aLock(this);
+        TxtFrmLockGuard aLock(this);
         SwTxtLineAccess aAccess( this );
         const bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
         const bool bSetOfst =
@@ -1889,7 +1889,7 @@ bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 
     SwFrmSwapper aSwapper( this, true );
 
-    SwTxtFrmLocker aLock(this);
+    TxtFrmLockGuard aLock(this);
     SwTxtFormatInfo aInf( this, false, true );
     if( 0 != aInf.MaxHyph() )   // Respect MaxHyphen!
         return false;
