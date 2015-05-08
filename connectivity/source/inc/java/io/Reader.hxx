@@ -23,6 +23,7 @@
 #include "java/lang/Object.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <boost/optional.hpp>
 
 namespace connectivity
 {
@@ -36,6 +37,7 @@ namespace connectivity
     // static Data for the Class
         static jclass theClass;
         virtual ~java_io_Reader();
+        boost::optional<char> m_buf;
     public:
         virtual jclass getMyClass() const SAL_OVERRIDE;
         // a Constructor, that is needed for when Returning the Object is needed:
