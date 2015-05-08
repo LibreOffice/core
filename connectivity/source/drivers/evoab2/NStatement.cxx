@@ -49,6 +49,26 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
+namespace {
+
+EBookQuery * createTrue()
+{ // Not the world's most efficient unconditional true but ...
+    return e_book_query_from_string("(exists \"full_name\")");
+}
+
+EBookQuery * createTest( const OUString &aColumnName,
+                             EBookQueryTest eTest,
+                             const OUString &aMatch )
+{
+    OString sMatch = OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
+    OString sColumnName = OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
+
+    return e_book_query_field_test( e_contact_field_id( sColumnName.getStr() ),
+                                    eTest, sMatch.getStr() );
+}
+
+}
+
 OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     : OCommonStatement_IBase(m_aMutex)
     , ::comphelper::OPropertyContainer(OCommonStatement_IBase::rBHelper)
@@ -151,27 +171,6 @@ void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException, 
     }
     dispose();
 }
-
-
-EBookQuery *
-OCommonStatement::createTrue()
-{ // Not the world's most efficient unconditional true but ...
-    return e_book_query_from_string("(exists \"full_name\")");
-}
-
-EBookQuery *
-OCommonStatement::createTest( const OUString &aColumnName,
-                             EBookQueryTest eTest,
-                             const OUString &aMatch )
-{
-    OString sMatch = OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
-    OString sColumnName = OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
-
-    return e_book_query_field_test( e_contact_field_id( sColumnName.getStr() ),
-                                    eTest, sMatch.getStr() );
-}
-
-
 
 OUString OCommonStatement::impl_getColumnRefColumnName_throw( const OSQLParseNode& _rColumnRef )
 {

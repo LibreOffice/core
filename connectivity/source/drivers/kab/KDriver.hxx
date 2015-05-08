@@ -122,22 +122,6 @@ namespace connectivity
             */
             void    impl_unloadModule();
 
-            /** throws an SQLException saying than no KDE installation was found
-            */
-            void    impl_throwNoKdeException();
-
-            /** throws an SQLException saying that the found KDE version is too old
-            */
-            void    impl_throwKdeTooOldException();
-
-            /** throws an SQLException saying that the found KDE version is too new
-            */
-            void    impl_throwKdeTooNewException();
-
-            /** throws a generic SQL exception with SQLState S1000 and error code 0
-            */
-            void    impl_throwGenericSQLException( const OUString& _rMessage );
-
             /** determines whether it's allowed to run on a too-new (not confirmed to work) version
             */
             bool    impl_doAllowNewKDEVersion();

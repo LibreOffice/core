@@ -368,6 +368,18 @@ OString OEvoabVersionHelper::getUserName( EBook *pBook )
     return aName;
 }
 
+namespace {
+
+bool isBookBackend( EBookClient *pBook, const char *backendname)
+{
+    if (!pBook)
+        return false;
+    ESource *pSource = e_client_get_source ((EClient *) pBook);
+    return isSourceBackend(pSource, backendname);
+}
+
+}
+
 class OEvoabVersion36Helper : public OEvoabVersionHelper
 {
 private:
@@ -414,14 +426,6 @@ public:
         if (pSource)
             g_object_unref (pSource);
         return pBook;
-    }
-
-    bool isBookBackend( EBookClient *pBook, const char *backendname)
-    {
-        if (!pBook)
-            return false;
-        ESource *pSource = e_client_get_source ((EClient *) pBook);
-        return isSourceBackend(pSource, backendname);
     }
 
     virtual bool isLDAP( EBook *pBook ) SAL_OVERRIDE
@@ -490,37 +494,41 @@ protected:
     }
 };
 
+namespace {
+
+ESource * findSource( const char *id )
+{
+    ESourceList *pSourceList = NULL;
+
+    g_return_val_if_fail (id != NULL, NULL);
+
+    if (!e_book_get_addressbooks (&pSourceList, NULL))
+        pSourceList = NULL;
+
+    for ( GSList *g = e_source_list_peek_groups (pSourceList); g; g = g->next)
+    {
+        for (GSList *s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
+        {
+            ESource *pSource = E_SOURCE (s->data);
+            if (!strcmp (e_source_peek_name (pSource), id))
+                return pSource;
+        }
+    }
+    return NULL;
+}
+
+bool isAuthRequired( EBook *pBook )
+{
+    return e_source_get_property( e_book_get_source( pBook ),
+                                  "auth" ) != NULL;
+}
+
+}
+
 class OEvoabVersion35Helper : public OEvoabVersionHelper
 {
 private:
     GList *m_pContacts;
-
-    ESource * findSource( const char *id )
-    {
-        ESourceList *pSourceList = NULL;
-
-        g_return_val_if_fail (id != NULL, NULL);
-
-        if (!e_book_get_addressbooks (&pSourceList, NULL))
-            pSourceList = NULL;
-
-        for ( GSList *g = e_source_list_peek_groups (pSourceList); g; g = g->next)
-        {
-            for (GSList *s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
-            {
-                ESource *pSource = E_SOURCE (s->data);
-                if (!strcmp (e_source_peek_name (pSource), id))
-                    return pSource;
-            }
-        }
-        return NULL;
-    }
-
-    bool isAuthRequired( EBook *pBook )
-    {
-        return e_source_get_property( e_book_get_source( pBook ),
-                                      "auth" ) != NULL;
-    }
 
 public:
     OEvoabVersion35Helper()

@@ -56,6 +56,82 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::frame;
 using namespace connectivity::kab;
 
+namespace {
+
+/** throws a generic SQL exception with SQLState S1000 and error code 0
+ */
+void throwGenericSQLException( const OUString& _rMessage )
+{
+    SQLException aError;
+    aError.Message = _rMessage;
+    aError.SQLState = "S1000";
+    aError.ErrorCode = 0;
+    throw aError;
+}
+
+/** throws an SQLException saying than no KDE installation was found
+ */
+void throwNoKdeException()
+{
+    ::connectivity::SharedResources aResources;
+    const OUString sError( aResources.getResourceString(
+            STR_NO_KDE_INST
+         ) );
+    throwGenericSQLException( sError );
+}
+
+/** throws an SQLException saying that the found KDE version is too old
+ */
+void throwKdeTooOldException()
+{
+    ::connectivity::SharedResources aResources;
+    const OUString sError( aResources.getResourceStringWithSubstitution(
+            STR_KDE_VERSION_TOO_OLD,
+            "$major$",OUString::number(MIN_KDE_VERSION_MAJOR),
+            "$minor$",OUString::number(MIN_KDE_VERSION_MINOR)
+         ) );
+    throwGenericSQLException( sError );
+}
+
+/** throws an SQLException saying that the found KDE version is too new
+ */
+void throwKdeTooNewException()
+{
+    ::connectivity::SharedResources aResources;
+
+    SQLException aError;
+    aError.Message = aResources.getResourceStringWithSubstitution(
+            STR_KDE_VERSION_TOO_NEW,
+            "$major$",OUString::number(MIN_KDE_VERSION_MAJOR),
+            "$minor$",OUString::number(MIN_KDE_VERSION_MINOR)
+         );
+    aError.SQLState = "S1000";
+    aError.ErrorCode = 0;
+
+    SQLContext aDetails;
+    OUStringBuffer aMessage;
+    aMessage.append( aResources.getResourceString(STR_KDE_VERSION_TOO_NEW_WORK_AROUND) );
+
+    aMessage.appendAscii( "Sub disableKDEMaxVersionCheck\n" );
+    aMessage.appendAscii( "  BasicLibraries.LoadLibrary( \"Tools\" )\n" );
+
+    aMessage.appendAscii( "  Dim configNode as Object\n" );
+    aMessage.appendAscii( "  configNode = GetRegistryKeyContent( \"" );
+    aMessage.append( KabDriver::impl_getConfigurationSettingsPath() );
+    aMessage.appendAscii( "\", true )\n" );
+
+    aMessage.appendAscii( "  configNode.DisableKDEMaximumVersionCheck = TRUE\n" );
+    aMessage.appendAscii( "  configNode.commitChanges\n" );
+    aMessage.appendAscii( "End Sub\n" );
+
+    aDetails.Message = aMessage.makeStringAndClear();
+
+    aError.NextException <<= aDetails;
+
+    throw aError;
+}
+
+}
 
 // = KabImplModule
 
@@ -172,16 +248,16 @@ void KabImplModule::impl_unloadModule()
 void KabImplModule::init()
 {
     if ( !impl_loadModule() )
-        impl_throwNoKdeException();
+        throwNoKdeException();
 
     // if we're not running on a supported version, throw
     KabImplModule::KDEVersionType eKDEVersion = matchKDEVersion();
 
     if ( eKDEVersion == eTooOld )
-        impl_throwKdeTooOldException();
+        throwKdeTooOldException();
 
     if ( ( eKDEVersion == eToNew ) && !impl_doAllowNewKDEVersion() )
-        impl_throwKdeTooNewException();
+        throwKdeTooNewException();
 
     if ( !m_bAttemptedInitialize )
     {
@@ -218,75 +294,6 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
         DBG_UNHANDLED_EXCEPTION();
     }
     return false;
-}
-
-
-void KabImplModule::impl_throwNoKdeException()
-{
-    ::connectivity::SharedResources aResources;
-    const OUString sError( aResources.getResourceString(
-            STR_NO_KDE_INST
-         ) );
-    impl_throwGenericSQLException( sError );
-}
-
-
-void KabImplModule::impl_throwKdeTooOldException()
-{
-    ::connectivity::SharedResources aResources;
-    const OUString sError( aResources.getResourceStringWithSubstitution(
-            STR_KDE_VERSION_TOO_OLD,
-            "$major$",OUString::number(MIN_KDE_VERSION_MAJOR),
-            "$minor$",OUString::number(MIN_KDE_VERSION_MINOR)
-         ) );
-    impl_throwGenericSQLException( sError );
-}
-
-
-void KabImplModule::impl_throwGenericSQLException( const OUString& _rMessage )
-{
-    SQLException aError;
-    aError.Message = _rMessage;
-    aError.SQLState = "S1000";
-    aError.ErrorCode = 0;
-    throw aError;
-}
-
-
-void KabImplModule::impl_throwKdeTooNewException()
-{
-    ::connectivity::SharedResources aResources;
-
-    SQLException aError;
-    aError.Message = aResources.getResourceStringWithSubstitution(
-            STR_KDE_VERSION_TOO_NEW,
-            "$major$",OUString::number(MIN_KDE_VERSION_MAJOR),
-            "$minor$",OUString::number(MIN_KDE_VERSION_MINOR)
-         );
-    aError.SQLState = "S1000";
-    aError.ErrorCode = 0;
-
-    SQLContext aDetails;
-    OUStringBuffer aMessage;
-    aMessage.append( aResources.getResourceString(STR_KDE_VERSION_TOO_NEW_WORK_AROUND) );
-
-    aMessage.appendAscii( "Sub disableKDEMaxVersionCheck\n" );
-    aMessage.appendAscii( "  BasicLibraries.LoadLibrary( \"Tools\" )\n" );
-
-    aMessage.appendAscii( "  Dim configNode as Object\n" );
-    aMessage.appendAscii( "  configNode = GetRegistryKeyContent( \"" );
-    aMessage.append( KabDriver::impl_getConfigurationSettingsPath() );
-    aMessage.appendAscii( "\", true )\n" );
-
-    aMessage.appendAscii( "  configNode.DisableKDEMaximumVersionCheck = TRUE\n" );
-    aMessage.appendAscii( "  configNode.commitChanges\n" );
-    aMessage.appendAscii( "End Sub\n" );
-
-    aDetails.Message = aMessage.makeStringAndClear();
-
-    aError.NextException <<= aDetails;
-
-    throw aError;
 }
 
 

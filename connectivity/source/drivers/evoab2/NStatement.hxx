@@ -180,10 +180,6 @@ namespace connectivity
             EBookQuery  *whereAnalysis( const OSQLParseNode*  parseTree );
             void         orderByAnalysis( const OSQLParseNode* _pOrderByClause, SortDescriptor& _out_rSort );
             OUString getTableName();
-            EBookQuery  *createTrue();
-            EBookQuery  *createTest( const OUString &aColumnName,
-                                     EBookQueryTest eTest,
-                                     const OUString &aMatch );
 
         public:
 
