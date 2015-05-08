@@ -453,12 +453,22 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         SfxMediumRef pMedium(0);
         if (!xStorage.is())
         {
+            OUString sStreamRelPath;
+            if (sFileName.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
+            {
+                // In this case the host contains the real path, and the the path is the embedded stream name.
+                INetURLObject aURL(sFileName);
+                sFileName = aURL.GetHost(INetURLObject::DECODE_WITH_CHARSET);
+                sStreamRelPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
+                if (sStreamRelPath.startsWith("/"))
+                    sStreamRelPath = sStreamRelPath.copy(1);
+            }
+
             pMedium = new SfxMedium(sFileName, (StreamMode::READ | StreamMode::NOCREATE));
             try
             {
                 xStorage.set(pMedium->GetStorage(false), UNO_QUERY_THROW);
 
-                OUString sStreamRelPath = aMediaDescriptor.getOrDefault("StreamRelPath", OUString());
                 if (!sStreamRelPath.isEmpty())
                     xStorage = xStorage->openStorageElement(sStreamRelPath, embed::ElementModes::READ);
             }
