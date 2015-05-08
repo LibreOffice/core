@@ -327,6 +327,15 @@ SfxUnoMenuControl::~SfxUnoMenuControl()
     pUnoCtrl->release();
 }
 
+struct MenuExecuteInfo
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
+    ::com::sun::star::util::URL                                                aTargetURL;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+
+    DECL_STATIC_LINK( MenuExecuteInfo, ExecuteHdl_Impl, MenuExecuteInfo* );
+};
+
 sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
 {
     Menu* pMenu = static_cast<Menu*>(pVoid);
@@ -360,17 +369,17 @@ sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
 
     if ( xDisp.is() )
     {
-        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+        MenuExecuteInfo* pExecuteInfo = new MenuExecuteInfo;
         pExecuteInfo->xDispatch     = xDisp;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = Sequence< PropertyValue >();
-        Application::PostUserEvent( LINK( 0, ExecuteInfo, ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK( 0, MenuExecuteInfo, ExecuteHdl_Impl), pExecuteInfo );
     }
 
     return sal_IntPtr(true);
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( ExecuteInfo, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_NOINSTANCE( MenuExecuteInfo, ExecuteHdl_Impl, MenuExecuteInfo*, pExecuteInfo )
 {
     pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
     delete pExecuteInfo;

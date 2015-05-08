@@ -120,15 +120,6 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
-struct ExecuteInfo
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-    ::com::sun::star::util::URL                                                aTargetURL;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
-
-    DECL_STATIC_LINK( ExecuteInfo, ExecuteHdl_Impl, ExecuteInfo* );
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
