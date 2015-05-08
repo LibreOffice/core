@@ -551,12 +551,6 @@ void SAL_CALL OConnection::clearWarnings()
     // you should clear your collected warnings here#
 }
 
-void OConnection::buildTypeInfo()
-    throw(SQLException)
-{
-    OSL_TRACE("OConnection::buildTypeInfo");
-}
-
 void OConnection::disposing()
 {
     OSL_TRACE("OConnection::disposing");

@@ -118,8 +118,6 @@ namespace connectivity
             bool    m_bUseCatalog;  // should we use the catalog on filebased databases
             bool    m_bUseOldDateFormat;
 
-
-            void        buildTypeInfo() throw(SQLException);
         public:
             rtl::OUString getMysqlVariable(const char *varname)
                                                                 throw(SQLException, RuntimeException);
@@ -132,9 +130,6 @@ namespace connectivity
 
             OConnection(MysqlCDriver& _rDriver, sql::Driver * cppDriver);
             virtual ~OConnection();
-
-            void closeAllStatements ()                          throw(SQLException);
-
 
             rtl_TextEncoding getConnectionEncoding() { return m_settings.encoding; }
 
