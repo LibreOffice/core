@@ -113,7 +113,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     {
         uno::Any a(cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(
-            "wrapped Exception " + e.Message,
+            "wrapped " + a.getValueTypeName() + ": " + e.Message,
             uno::Reference<uno::XInterface>(), a);
     }
 }
