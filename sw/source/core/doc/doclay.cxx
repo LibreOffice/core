@@ -1553,9 +1553,6 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
             OSL_ENSURE(mbInReading, "Found a FlySection but not a Format!");
             return false;
         }
-#if OSL_DEBUG_LEVEL > 0
-        assert( checkFmts.empty());
-#endif
     }
 
     return 0 != pNd->FindHeaderStartNode() ||
