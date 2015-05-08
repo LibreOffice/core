@@ -68,7 +68,7 @@ namespace svx
         FeatureStateEvent aUnoState;
         getUnoState( aUnoState );
 
-        if ( ( m_aLastKnownState == aUnoState.State ) && ( (m_bLastKnownEnabled ? 1 : 0) == aUnoState.IsEnabled ) )
+        if ( ( m_aLastKnownState == aUnoState.State ) && ( m_bLastKnownEnabled == bool(aUnoState.IsEnabled) ) )
             return;
 
         m_aLastKnownState = aUnoState.State;

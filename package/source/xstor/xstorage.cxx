@@ -4124,7 +4124,7 @@ void SAL_CALL OStorage::setModified( sal_Bool bModified )
     if ( m_pData->m_bReadOnlyWrap )
         throw beans::PropertyVetoException( THROW_WHERE ); // TODO: access denied
 
-    if ( (m_pImpl->m_bIsModified ? 1 : 0) != bModified )
+    if ( m_pImpl->m_bIsModified != bool(bModified) )
         m_pImpl->m_bIsModified = bModified;
 
     aGuard.clear();

@@ -541,7 +541,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     DBG( "set mute: %d muted: %d unmuted volume: %lf", bSet, mbMuted, mnUnmutedVolume );
 
     // change the volume to 0 or the unmuted volume
-    if(  mpPlaybin && (mbMuted ? 1 : 0) != bSet )
+    if(  mpPlaybin && mbMuted != bool(bSet) )
     {
         double nVolume = mnUnmutedVolume;
         if( bSet )

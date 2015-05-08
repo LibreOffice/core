@@ -1199,7 +1199,7 @@ sal_Bool SAL_CALL AnimationNode::getAutoReverse() throw (RuntimeException, std::
 void SAL_CALL AnimationNode::setAutoReverse( sal_Bool _autoreverse ) throw (RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( _autoreverse != (mbAutoReverse ? 1 : 0) )
+    if( bool(_autoreverse) != mbAutoReverse )
     {
         mbAutoReverse = _autoreverse;
         fireChangeListener();
@@ -1466,7 +1466,7 @@ void SAL_CALL AnimationNode::setAccumulate( sal_Bool _accumulate )
     throw (RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( _accumulate != (mbAccumulate ? 1 : 0) )
+    if( bool(_accumulate) != mbAccumulate )
     {
         mbAccumulate = _accumulate;
         fireChangeListener();
@@ -1647,7 +1647,7 @@ sal_Bool SAL_CALL AnimationNode::getDirection() throw (RuntimeException, std::ex
 void SAL_CALL AnimationNode::setDirection( sal_Bool _direction ) throw (RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( _direction != (mbDirection ? 1 : 0) )
+    if( bool(_direction) != mbDirection )
     {
         mbDirection = _direction;
         fireChangeListener();
@@ -1773,7 +1773,7 @@ sal_Bool SAL_CALL AnimationNode::getMode() throw (RuntimeException, std::excepti
 void SAL_CALL AnimationNode::setMode( sal_Bool _mode ) throw (RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( _mode != (mbMode ? 1 : 0) )
+    if( bool(_mode) != mbMode )
     {
         mbMode = _mode;
         fireChangeListener();
