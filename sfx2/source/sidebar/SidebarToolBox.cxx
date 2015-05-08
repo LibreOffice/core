@@ -273,10 +273,12 @@ IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
         xController->execute((sal_Int16)pToolBox->GetModifier());
 }
 
-IMPL_LINK_NOARG_TYPED(SidebarToolBox, ActivateToolBox, ToolBox*, void)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED(
+    SidebarToolBox, ActivateToolBox, ToolBox*, void)
 {}
 
-IMPL_LINK_NOARG_TYPED(SidebarToolBox, DeactivateToolBox, ToolBox*, void)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED(
+    SidebarToolBox, DeactivateToolBox, ToolBox*, void)
 {}
 
 } } // end of namespace sfx2::sidebar
