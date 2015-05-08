@@ -76,7 +76,8 @@ BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
     return aBmpEx;
 }
 
-IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
+IMPL_STATIC_LINK_NOINSTANCE(
+    SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 {
     if ( pObjFactory->nInventor == IV_IMAPINFO && pObjFactory->nIdentifier == ID_IMAPINFO )
         pObjFactory->pNewData = new SgaIMapInfo;

@@ -84,7 +84,7 @@ class Desktop : public Application
         static void             OpenClients();
         static void             OpenDefault();
 
-        DECL_LINK( EnableAcceptors_Impl, void*);
+        DECL_STATIC_LINK( Desktop, EnableAcceptors_Impl, void*);
 
         static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
         static ResMgr*          GetDesktopResManager();
@@ -153,7 +153,7 @@ class Desktop : public Application
         void                    CloseSplashScreen();
 
         static void             EnableOleAutomation();
-                                DECL_LINK( ImplInitFilterHdl, ConvertData* );
+        DECL_STATIC_LINK( Desktop, ImplInitFilterHdl, ConvertData* );
         DECL_STATIC_LINK_TYPED( Desktop, AsyncInitFirstRun, Timer*, void );
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the

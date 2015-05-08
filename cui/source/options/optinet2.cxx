@@ -548,7 +548,7 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 
 
 
-IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
+IMPL_STATIC_LINK_NOINSTANCE( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 {
     OUString aValue = pEdit->GetText();
 
@@ -736,7 +736,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
 {
     try
     {
@@ -843,7 +843,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
 {
     try
     {

@@ -1337,7 +1337,7 @@ void ScExternalRefLink::SetDoReferesh(bool b)
     mbDoRefresh = b;
 }
 
-IMPL_LINK_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
 {
     return 0;
 }

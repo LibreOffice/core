@@ -97,7 +97,7 @@ class AnnotationWindow : public FloatingWindow
     protected:
         void            SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
 
-        DECL_LINK(ModifyHdl, void*);
+        DECL_STATIC_LINK(AnnotationWindow, ModifyHdl, void*);
         DECL_LINK(ScrollHdl, ScrollBar*);
 
     public:

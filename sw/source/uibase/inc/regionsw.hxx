@@ -173,7 +173,7 @@ class SwInsertSectionTabPage : public SfxTabPage
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
     // #114856# edit in readonly sections
-    DECL_LINK(ChangeEditInReadonlyHdl, void *);
+    DECL_STATIC_LINK(SwInsertSectionTabPage, ChangeEditInReadonlyHdl, void *);
     DECL_LINK( ChangeProtectHdl, CheckBox * );
     DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK(NameEditHdl, void *);

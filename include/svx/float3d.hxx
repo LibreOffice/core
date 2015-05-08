@@ -198,7 +198,7 @@ private:
     DECL_LINK( ModifyHdl, void * );
     void ClickLight(PushButton &rBtn);
 
-    DECL_LINK( ChangeLightCallbackHdl, void * );
+    DECL_STATIC_LINK( Svx3DWin, ChangeLightCallbackHdl, void * );
     DECL_LINK( ChangeSelectionCallbackHdl, void * );
 
     SVX_DLLPRIVATE void         Construct();

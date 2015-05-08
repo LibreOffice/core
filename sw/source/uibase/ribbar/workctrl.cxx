@@ -238,7 +238,7 @@ void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
 }
 
-IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
+IMPL_STATIC_LINK_NOINSTANCE(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
 

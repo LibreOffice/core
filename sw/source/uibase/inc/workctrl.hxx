@@ -90,7 +90,7 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    DECL_LINK(PopupHdl, PopupMenu*);
+    DECL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*);
 };
 
 class SwTbxFieldCtrl : public SfxToolBoxControl

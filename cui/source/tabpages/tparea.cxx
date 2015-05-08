@@ -202,7 +202,8 @@ void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
     }
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ChangeTrgrTypeHdl_Impl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(
+    SvxTransparenceTabPage, ChangeTrgrTypeHdl_Impl)
 {
     return 0L;
 }

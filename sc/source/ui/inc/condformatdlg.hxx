@@ -129,7 +129,7 @@ public:
     void InvalidateRefData();
 
     DECL_LINK( RangeGetFocusHdl, formula::RefEdit* );
-    DECL_LINK( RangeLoseFocusHdl, void* );
+    DECL_STATIC_LINK( ScCondFormatDlg, RangeLoseFocusHdl, void* );
 };
 
 #endif

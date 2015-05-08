@@ -194,7 +194,7 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
 
 }
 
-IMPL_LINK_NOARG(ScRedlineOptionsTabPage, ColorHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(ScRedlineOptionsTabPage, ColorHdl)
 {
     return 0;
 }

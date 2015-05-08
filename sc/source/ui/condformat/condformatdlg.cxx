@@ -573,7 +573,7 @@ IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, formula::RefEdit*, pEdit )
     return 0;
 }
 
-IMPL_LINK_NOARG( ScCondFormatDlg, RangeLoseFocusHdl )
+IMPL_STATIC_LINK_NOINSTANCE_NOARG( ScCondFormatDlg, RangeLoseFocusHdl )
 {
     //mpLastEdit = NULL;
     return 0;

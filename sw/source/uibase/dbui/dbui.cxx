@@ -140,7 +140,7 @@ void CancelableDialog::Show()
        Dialog::Show();
 }
 
-IMPL_LINK_NOARG(CancelableDialog, DlgClosedHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(CancelableDialog, DlgClosedHdl)
 {
     return 0;
 }

@@ -189,7 +189,7 @@ private:
         @VclSimpleEvent *
             a poiter to a VCLSimpleEvent (see vcl/vclevent.hxx )
     */
-    DECL_LINK( EventListenerHdl, VclSimpleEvent* );
+    DECL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent* );
 
 };
 

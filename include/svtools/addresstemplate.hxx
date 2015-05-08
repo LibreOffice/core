@@ -129,7 +129,7 @@ namespace svt
         DECL_LINK(OnFieldScroll, ScrollBar*);
         DECL_LINK(OnFieldSelect, ListBox*);
         DECL_LINK(OnAdministrateDatasources, void*);
-        DECL_LINK(OnComboGetFocus, ComboBox*);
+        DECL_STATIC_LINK(AddressBookSourceDialog, OnComboGetFocus, ComboBox*);
         DECL_LINK(OnComboLoseFocus, ComboBox*);
         DECL_LINK(OnComboSelect, ComboBox*);
         DECL_LINK(OnOkClicked, void*);

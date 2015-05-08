@@ -432,7 +432,7 @@ class ImpPDFTabSigningPage : public SfxTabPage
 
     DECL_LINK( ClickmaPbSignCertSelect, void* );
     DECL_LINK( ClickmaPbSignCertClear, void* );
-    DECL_LINK( SelectLBSignTSA, void* );
+    DECL_STATIC_LINK( ImpPDFTabSigningPage, SelectLBSignTSA, void* );
 
 public:
     ImpPDFTabSigningPage( vcl::Window* pParent,

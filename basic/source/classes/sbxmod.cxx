@@ -471,10 +471,10 @@ public:
         uno::Reference< frame::XDesktop2 > xDeskTop = frame::Desktop::create( comphelper::getProcessComponentContext() );
         xDeskTop->terminate();
     }
-    DECL_LINK( OnAsyncQuit, void* );
+    DECL_STATIC_LINK( AsyncQuitHandler, OnAsyncQuit, void* );
 };
 
-IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
+IMPL_STATIC_LINK_NOINSTANCE_NOARG( AsyncQuitHandler, OnAsyncQuit )
 {
     QuitApplication();
     return 0L;

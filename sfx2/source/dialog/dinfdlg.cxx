@@ -862,7 +862,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(SfxDocumentPage, ChangePassHdl)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
     do
@@ -1510,7 +1510,8 @@ void CustomPropertiesWindow::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
+IMPL_STATIC_LINK_NOINSTANCE(
+    CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
 {
     long nType = reinterpret_cast<long>( pBox->GetSelectEntryData() );
     CustomPropertyLine* pLine = pBox->GetLine();
@@ -1891,7 +1892,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
         pNewLine->m_aTypeBox->SelectEntryPos( m_aTypeBox->GetEntryPos( reinterpret_cast<void*>(nType) ) );
     }
 
-    TypeHdl( pNewLine->m_aTypeBox.get() );
+    TypeHdl( nullptr, pNewLine->m_aTypeBox.get() );
     pNewLine->m_aNameBox->GrabFocus();
 }
 

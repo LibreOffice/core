@@ -72,7 +72,7 @@ protected:
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void        LoseFocus() SAL_OVERRIDE;
 
-    DECL_LINK( NotifyUndoActionHdl, SfxUndoAction * );
+    DECL_STATIC_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction * );
     virtual void        DoInit() SAL_OVERRIDE;
     virtual void        DoScroll( ScrollBar* pCurScrollBar ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

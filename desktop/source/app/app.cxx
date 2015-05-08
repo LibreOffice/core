@@ -1714,7 +1714,7 @@ int Desktop::doShutdown()
     return EXIT_SUCCESS;
 }
 
-IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
+IMPL_STATIC_LINK_NOINSTANCE( Desktop, ImplInitFilterHdl, ConvertData*, pData )
 {
     return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( pData );
 }
@@ -1907,7 +1907,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
 }
 
 // enable acceptos
-IMPL_LINK_NOARG(Desktop, EnableAcceptors_Impl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(Desktop, EnableAcceptors_Impl)
 {
     enableAcceptors();
     return 0;

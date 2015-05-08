@@ -184,7 +184,7 @@ private:
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
 protected:
-    DECL_LINK(ExpandedHdl_Impl, SvTreeListBox* );
+    DECL_STATIC_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox* );
     DECL_LINK(ShowPageHdl_Impl, void *);
     DECL_LINK(BackHdl_Impl, void *);
     DECL_LINK(OKHdl_Impl, void *);

@@ -96,7 +96,7 @@ private:
     void RestoreConfigDefaults_Impl();
 
     DECL_LINK( ProxyHdl_Impl, ListBox * );
-    DECL_LINK( LoseFocusHdl_Impl, Edit * );
+    DECL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit * );
 
 public:
     SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -157,10 +157,10 @@ private:
 
     DECL_LINK(SecurityOptionsHdl, void *);
     DECL_LINK(SavePasswordHdl, void* );
-    DECL_LINK(MasterPasswordHdl, void *);
+    DECL_STATIC_LINK(SvxSecurityTabPage, MasterPasswordHdl, void *);
     DECL_LINK(MasterPasswordCBHdl, void* );
     DECL_LINK(ShowPasswordsHdl, void *);
-    DECL_LINK(MacroSecPBHdl, void* );
+    DECL_STATIC_LINK(SvxSecurityTabPage, MacroSecPBHdl, void* );
     DECL_LINK(CertPathPBHdl, void* );
     DECL_LINK(TSAURLsPBHdl, void* );
 

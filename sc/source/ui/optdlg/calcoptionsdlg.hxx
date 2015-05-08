@@ -42,7 +42,7 @@ public:
     DECL_LINK( DeviceSelHdl, void* );
     DECL_LINK( NumModifiedHdl, void * );
     DECL_LINK( EditModifiedHdl, Edit * );
-    DECL_LINK( TestClickHdl, PushButton* );
+    DECL_STATIC_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton* );
     DECL_LINK( AsZeroModifiedHdl, CheckBox*);
     DECL_LINK( ConversionModifiedHdl, ListBox*);
     DECL_LINK( SyntaxModifiedHdl, ListBox*);

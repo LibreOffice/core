@@ -1134,7 +1134,8 @@ void AssignmentPersistentData::ImplCommit()
     }
 
 
-    IMPL_LINK(AddressBookSourceDialog, OnComboGetFocus, ComboBox*, _pBox)
+    IMPL_STATIC_LINK_NOINSTANCE(
+        AddressBookSourceDialog, OnComboGetFocus, ComboBox*, _pBox)
     {
         _pBox->SaveValue();
         return 0L;

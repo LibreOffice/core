@@ -828,7 +828,7 @@ IMPL_LINK( ScHFEditPage, ClickHdl, PushButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
+IMPL_STATIC_LINK_NOINSTANCE( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
 {
     pActiveEdWnd = ::GetScEditWindow();
     if ( !pActiveEdWnd )

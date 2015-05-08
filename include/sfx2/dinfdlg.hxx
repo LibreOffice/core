@@ -210,7 +210,7 @@ private:
 
     DECL_LINK(DeleteHdl, void *);
     DECL_LINK(SignatureHdl, void *);
-    DECL_LINK(ChangePassHdl, void *);
+    DECL_STATIC_LINK(SfxDocumentPage, ChangePassHdl, void *);
     void                ImplUpdateSignatures();
     void                ImplCheckPasswordState();
 
@@ -440,7 +440,7 @@ private:
     Idle                                m_aBoxLoseFocusIdle;
     Link<>                              m_aRemovedHdl;
 
-    DECL_LINK(  TypeHdl, CustomPropertiesTypeBox* );
+    DECL_STATIC_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox* );
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
     DECL_LINK(  EditLoseFocusHdl, CustomPropertiesEdit* );
     DECL_LINK(  BoxLoseFocusHdl, CustomPropertiesTypeBox* );

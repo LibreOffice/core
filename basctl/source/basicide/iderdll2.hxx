@@ -50,7 +50,7 @@ private:
     bool            bShellInCriticalSection;
 
 protected:
-    DECL_LINK( GlobalBasicBreakHdl, StarBASIC * );
+    DECL_STATIC_LINK( ExtraData, GlobalBasicBreakHdl, StarBASIC * );
 
 public:
     ExtraData();

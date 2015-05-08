@@ -68,7 +68,7 @@ XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
     m_nXSLTPageId = m_pTabCtrl->GetPageId("transformation");
     m_pTabCtrl->SetTabPage(m_nXSLTPageId, mpXSLTPage);
 
-    ActivatePageHdl(m_pTabCtrl);
+    ActivatePageHdl(nullptr, m_pTabCtrl);
 }
 
 
@@ -250,7 +250,7 @@ bool XMLFilterTabDialog::onOk()
     if( 0 != nErrorId )
     {
         m_pTabCtrl->SetCurPageId((sal_uInt16)nErrorPage);
-        ActivatePageHdl(m_pTabCtrl);
+        ActivatePageHdl(nullptr, m_pTabCtrl);
 
         ResId aResId( nErrorId, mrResMgr );
         OUString aMessage( aResId );
@@ -294,7 +294,8 @@ IMPL_LINK_NOARG(XMLFilterTabDialog, OkHdl)
 
 
 
-IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
+IMPL_STATIC_LINK_NOINSTANCE(
+    XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
     const sal_uInt16 nId = pTabCtrl->GetCurPageId();
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );

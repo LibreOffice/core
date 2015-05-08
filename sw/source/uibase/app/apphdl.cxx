@@ -247,7 +247,8 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 
     DECL_LINK( EndDialogHdl, AbstractMailMergeWizard* );
     DECL_LINK( DestroyDialogHdl, void* );
-    DECL_LINK( DestroyWizardHdl, AbstractMailMergeWizard* );
+    DECL_STATIC_LINK(
+        SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard* );
     DECL_LINK( CancelHdl, void* );
     DECL_LINK( CloseFrameHdl, void* );
 
@@ -540,7 +541,9 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, DestroyDialogHdl)
     return 0L;
 }
 
-IMPL_LINK( SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard*, pDialog )
+IMPL_STATIC_LINK_NOINSTANCE(
+    SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard*,
+    pDialog )
 {
     delete pDialog;
     return 0L;

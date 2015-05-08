@@ -116,7 +116,7 @@ public:
 
     DECL_LINK( ListHdl, Button* );
     DECL_LINK( SelectHdl, ListBox* );
-    DECL_LINK( QuitHdl, Button* );
+    DECL_STATIC_LINK( MyWin, QuitHdl, Button* );
 };
 
 void Main()
@@ -238,7 +238,7 @@ IMPL_LINK( MyWin, ListHdl, Button*, )
     return 0;
 }
 
-IMPL_LINK( MyWin, QuitHdl, Button*, )
+IMPL_STATIC_LINK_NOINSTANCE( MyWin, QuitHdl, Button*, )
 {
     processCommand( "quit" );
     return 0;

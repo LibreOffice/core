@@ -1090,7 +1090,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     //  needed, wenn position changed
 }
 
-IMPL_LINK_NOARG(ScViewData, EmptyEditHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(ScViewData, EmptyEditHdl)
 {
     return 0;
 }

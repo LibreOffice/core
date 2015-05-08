@@ -1737,7 +1737,7 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear )
 }
 
 
-IMPL_LINK_NOARG( ImpPDFTabSigningPage, SelectLBSignTSA )
+IMPL_STATIC_LINK_NOINSTANCE_NOARG( ImpPDFTabSigningPage, SelectLBSignTSA )
 {
     return 0;
 }

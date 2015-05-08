@@ -78,7 +78,7 @@ private:
     ScExternalRefLink() SAL_DELETED_FUNCTION;
     ScExternalRefLink(const ScExternalRefLink&) SAL_DELETED_FUNCTION;
 
-    DECL_LINK( ExternalRefEndEditHdl, void* );
+    DECL_STATIC_LINK( ScExternalRefLink, ExternalRefEndEditHdl, void* );
 
     sal_uInt16  mnFileId;
     OUString    maFilterName;

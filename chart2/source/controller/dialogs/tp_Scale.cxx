@@ -157,7 +157,8 @@ void ScaleTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK( ScaleTabPage, FmtFieldModifiedHdl, FormattedField*, pFmtFied )
+IMPL_STATIC_LINK_NOINSTANCE(
+    ScaleTabPage, FmtFieldModifiedHdl, FormattedField*, pFmtFied )
 {
     if( pFmtFied )
         pFmtFied->SetDefaultValue( pFmtFied->GetValue() );

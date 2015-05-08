@@ -23,7 +23,8 @@
 
 SwObjectFactory aSwObjectFactory;
 
-IMPL_LINK( SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory )
+IMPL_STATIC_LINK_NOINSTANCE(
+    SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory )
 {
     if ( pObjFactory->nInventor == SWGInventor )
     {

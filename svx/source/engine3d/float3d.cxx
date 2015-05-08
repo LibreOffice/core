@@ -2641,7 +2641,7 @@ void Svx3DWin::ClickLight(PushButton& rBtn)
 
 
 
-IMPL_LINK_NOARG(Svx3DWin, ChangeLightCallbackHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(Svx3DWin, ChangeLightCallbackHdl)
 {
     return 0L;
 }

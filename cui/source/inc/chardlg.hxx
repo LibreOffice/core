@@ -304,7 +304,7 @@ private:
     DECL_LINK(          FitToLineHdl_Impl, CheckBox* );
     DECL_LINK(KerningSelectHdl_Impl, void *);
     DECL_LINK(KerningModifyHdl_Impl, void *);
-    DECL_LINK(PairKerningHdl_Impl, void *);
+    DECL_STATIC_LINK(SvxCharPositionPage, PairKerningHdl_Impl, void *);
     DECL_LINK(          LoseFocusHdl_Impl, MetricField* );
     DECL_LINK(ScaleWidthModifyHdl_Impl, void *);
 

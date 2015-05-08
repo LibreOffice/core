@@ -272,7 +272,7 @@ class SvxAsianTabPage : public SfxTabPage
 
     SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
-    DECL_LINK( ClickHdl_Impl, CheckBox* );
+    DECL_STATIC_LINK( SvxAsianTabPage, ClickHdl_Impl, CheckBox* );
 
 public:
     virtual ~SvxAsianTabPage();

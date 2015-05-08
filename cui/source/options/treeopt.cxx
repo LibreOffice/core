@@ -728,7 +728,8 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
 }
 
 // an opened group shall be completely visible
-IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
+IMPL_STATIC_LINK_NOINSTANCE(
+    OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
 {
     pBox->Update();
     pBox->InitStartEntry();

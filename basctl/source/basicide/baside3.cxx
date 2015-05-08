@@ -227,7 +227,8 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
 
 
 
-IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
+IMPL_STATIC_LINK_NOINSTANCE(
+    DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
     // #i120515# pUndoAction needs to be deleted, this hand over is an ownership
     // change. As long as it does not get added to the undo manager, it needs at

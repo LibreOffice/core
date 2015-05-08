@@ -1700,7 +1700,8 @@ IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwInsertSectionTabPage, ChangeEditInReadonlyHdl)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(
+    SwInsertSectionTabPage, ChangeEditInReadonlyHdl)
 {
     return 0;
 }

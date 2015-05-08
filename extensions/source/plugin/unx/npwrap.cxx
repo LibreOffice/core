@@ -113,6 +113,7 @@ extern "C"
 
 IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 {
+    (void) this; // loplugin:staticmethods
     SAL_INFO("extensions.plugin", "new message handler");
     bool bSuccess = (4 == write(wakeup_fd[1], "cccc", 4));
     SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");

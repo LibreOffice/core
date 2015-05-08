@@ -85,15 +85,6 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
 
-    // leave these alone for now, it is possible to fix them, but I don't understand how
-    SourceLocation canonicalLoc = pCXXMethodDecl->getCanonicalDecl()->getLocStart();
-    if (compat::isMacroBodyExpansion(compiler, canonicalLoc) ) {
-        StringRef name { Lexer::getImmediateMacroName(
-                canonicalLoc, compiler.getSourceManager(), compiler.getLangOpts()) };
-        if (name == "DECL_LINK") {
-            return true;
-        }
-    }
     // the CppUnit stuff uses macros and methods that can't be changed
     if (isDerivedFromTestFixture(pCXXMethodDecl->getParent())) {
         return true;

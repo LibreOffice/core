@@ -40,7 +40,7 @@ public:
     E3dObjFactory();
     ~E3dObjFactory();
 
-    DECL_LINK(MakeObject, SdrObjFactory*);
+    DECL_STATIC_LINK(E3dObjFactory, MakeObject, SdrObjFactory*);
 };
 
 

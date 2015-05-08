@@ -2620,7 +2620,7 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
     return 0;
 }
 
-IMPL_LINK_NOARG(LayoutManager, SettingsChanged)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(LayoutManager, SettingsChanged)
 {
     return 1;
 }

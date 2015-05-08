@@ -33,7 +33,7 @@ protected:
     CancelableDialog( vcl::Window *pParent, bool modal, const OUString& rID,
                       const OUString& rUIXMLDescription );
 
-    DECL_LINK(DlgClosedHdl, void *);
+    DECL_STATIC_LINK(CancelableDialog, DlgClosedHdl, void *);
 
     using Dialog::Execute;
     using Dialog::StartExecuteModal;

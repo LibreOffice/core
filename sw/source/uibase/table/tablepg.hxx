@@ -177,7 +177,7 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK( PageBreakPosHdl_Impl, RadioButton* );
     DECL_LINK( PageBreakTypeHdl_Impl, RadioButton* );
     DECL_LINK( SplitHdl_Impl, CheckBox* );
-    DECL_LINK( SplitRowHdl_Impl, TriStateBox* );
+    DECL_STATIC_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox* );
     DECL_LINK( HeadLineCBClickHdl, void* p = 0 );
 
 public:

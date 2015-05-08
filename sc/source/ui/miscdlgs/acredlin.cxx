@@ -1864,7 +1864,7 @@ void ScAcceptChgDlg::InitFilter()
     }
 }
 
-IMPL_LINK_NOARG(ScAcceptChgDlg, FilterModified)
+IMPL_STATIC_LINK_NOINSTANCE_NOARG(ScAcceptChgDlg, FilterModified)
 {
     return 0;
 }

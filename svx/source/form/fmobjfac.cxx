@@ -110,7 +110,8 @@ namespace
     }
 }
 
-IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
+IMPL_STATIC_LINK_NOINSTANCE(
+    FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 {
     if (pObjFactory->nInventor == FmFormInventor)
     {
