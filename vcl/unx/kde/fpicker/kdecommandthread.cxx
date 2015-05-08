@@ -73,6 +73,53 @@ KDECommandEvent::KDECommandEvent( const QString &qCommand, QStringList *pStringL
 
 // CommandThread
 
+namespace {
+
+QStringList* tokenize( const QString &rString )
+{
+    // Commands look like:
+    // command arg1 arg2 arg3 ...
+    // Args may be enclosed in '"', if they contain spaces.
+
+    QStringList *pList = new QStringList();
+
+    QString qBuffer;
+    qBuffer.reserve( 1024 );
+
+    const QChar *pUnicode = rString.unicode();
+    const QChar *pEnd     = pUnicode + rString.length();
+    bool bQuoted          = false;
+
+    for ( ; pUnicode != pEnd; ++pUnicode )
+    {
+        if ( *pUnicode == '\\' )
+        {
+            ++pUnicode;
+            if ( pUnicode != pEnd )
+            {
+                if ( *pUnicode == 'n' )
+                    qBuffer.append( '\n' );
+                else
+                    qBuffer.append( *pUnicode );
+            }
+        }
+        else if ( *pUnicode == '"' )
+            bQuoted = !bQuoted;
+        else if ( *pUnicode == ' ' && !bQuoted )
+        {
+            pList->push_back( qBuffer );
+            qBuffer.setLength( 0 );
+        }
+        else
+            qBuffer.append( *pUnicode );
+    }
+    pList->push_back( qBuffer );
+
+    return pList;
+}
+
+}
+
 KDECommandThread::KDECommandThread( QWidget *pObject )
     : m_pObject( pObject )
 {
@@ -132,49 +179,6 @@ void KDECommandThread::handleCommand( const QString &rString, bool &bQuit )
     }
     else
         QApplication::postEvent( m_pObject, new KDECommandEvent( qCommand, pTokens ) );
-}
-
-QStringList* KDECommandThread::tokenize( const QString &rString )
-{
-    // Commands look like:
-    // command arg1 arg2 arg3 ...
-    // Args may be enclosed in '"', if they contain spaces.
-
-    QStringList *pList = new QStringList();
-
-    QString qBuffer;
-    qBuffer.reserve( 1024 );
-
-    const QChar *pUnicode = rString.unicode();
-    const QChar *pEnd     = pUnicode + rString.length();
-    bool bQuoted          = false;
-
-    for ( ; pUnicode != pEnd; ++pUnicode )
-    {
-        if ( *pUnicode == '\\' )
-        {
-            ++pUnicode;
-            if ( pUnicode != pEnd )
-            {
-                if ( *pUnicode == 'n' )
-                    qBuffer.append( '\n' );
-                else
-                    qBuffer.append( *pUnicode );
-            }
-        }
-        else if ( *pUnicode == '"' )
-            bQuoted = !bQuoted;
-        else if ( *pUnicode == ' ' && !bQuoted )
-        {
-            pList->push_back( qBuffer );
-            qBuffer.setLength( 0 );
-        }
-        else
-            qBuffer.append( *pUnicode );
-    }
-    pList->push_back( qBuffer );
-
-    return pList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

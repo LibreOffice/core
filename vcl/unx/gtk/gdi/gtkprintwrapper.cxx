@@ -112,6 +112,7 @@ bool GtkPrintWrapper::supportsPrinting() const
         && m_print_unix_dialog_set_settings
         ;
 #else
+    (void) this; // loplugin:staticmethods
     return true;
 #endif
 }
@@ -125,6 +126,7 @@ bool GtkPrintWrapper::supportsPrintSelection() const
         && m_print_unix_dialog_set_has_selection
         ;
 #else
+    (void) this; // loplugin:staticmethods
     return true;
 #endif
 }
@@ -135,6 +137,7 @@ GtkPageSetup* GtkPrintWrapper::page_setup_new() const
     assert(m_page_setup_new);
     return (*m_page_setup_new)();
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_page_setup_new();
 #endif
 }
@@ -145,6 +148,7 @@ GtkPrintJob* GtkPrintWrapper::print_job_new(const gchar* title, GtkPrinter* prin
     assert(m_print_job_new);
     return (*m_print_job_new)(title, printer, settings, page_setup);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_job_new(title, printer, settings, page_setup);
 #endif
 }
@@ -155,6 +159,7 @@ void GtkPrintWrapper::print_job_send(GtkPrintJob* job, GtkPrintJobCompleteFunc c
     assert(m_print_job_send);
     (*m_print_job_send)(job, callback, user_data, dnotify);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_job_send(job, callback, user_data, dnotify);
 #endif
 }
@@ -165,6 +170,7 @@ gboolean GtkPrintWrapper::print_job_set_source_file(GtkPrintJob* job, const gcha
     assert(m_print_job_set_source_file);
     return (*m_print_job_set_source_file)(job, filename, error);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_job_set_source_file(job, filename, error);
 #endif
 }
@@ -175,6 +181,7 @@ const gchar* GtkPrintWrapper::print_settings_get(GtkPrintSettings* settings, con
     assert(m_print_settings_get);
     return (*m_print_settings_get)(settings, key);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_settings_get(settings, key);
 #endif
 }
@@ -185,6 +192,7 @@ gboolean GtkPrintWrapper::print_settings_get_collate(GtkPrintSettings* settings)
     assert(m_print_settings_get_collate);
     return (*m_print_settings_get_collate)(settings);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_settings_get_collate(settings);
 #endif
 }
@@ -195,6 +203,7 @@ void GtkPrintWrapper::print_settings_set_collate(GtkPrintSettings* settings, gbo
     assert(m_print_settings_set_collate);
     (*m_print_settings_set_collate)(settings, collate);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_settings_set_collate(settings, collate);
 #endif
 }
@@ -205,6 +214,7 @@ gint GtkPrintWrapper::print_settings_get_n_copies(GtkPrintSettings* settings) co
     assert(m_print_settings_get_n_copies);
     return (*m_print_settings_get_n_copies)(settings);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_settings_get_n_copies(settings);
 #endif
 }
@@ -215,6 +225,7 @@ void GtkPrintWrapper::print_settings_set_n_copies(GtkPrintSettings* settings, gi
     assert(m_print_settings_set_n_copies);
     (*m_print_settings_set_n_copies)(settings, num_copies);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_settings_set_n_copies(settings, num_copies);
 #endif
 }
@@ -225,6 +236,7 @@ GtkPageRange* GtkPrintWrapper::print_settings_get_page_ranges(GtkPrintSettings* 
     assert(m_print_settings_get_page_ranges);
     return (*m_print_settings_get_page_ranges)(settings, num_ranges);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_settings_get_page_ranges(settings, num_ranges);
 #endif
 }
@@ -235,6 +247,7 @@ void GtkPrintWrapper::print_settings_set_print_pages(GtkPrintSettings* settings,
     assert(m_print_settings_set_print_pages);
     (*m_print_settings_set_print_pages)(settings, pages);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_settings_set_print_pages(settings, pages);
 #endif
 }
@@ -245,6 +258,7 @@ GtkWidget* GtkPrintWrapper::print_unix_dialog_new(const gchar* title, GtkWindow*
     assert(m_print_unix_dialog_new);
     return (*m_print_unix_dialog_new)(title, parent);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_unix_dialog_new(title, parent);
 #endif
 }
@@ -255,6 +269,7 @@ void GtkPrintWrapper::print_unix_dialog_add_custom_tab(GtkPrintUnixDialog* dialo
     assert(m_print_unix_dialog_add_custom_tab);
     (*m_print_unix_dialog_add_custom_tab)(dialog, child, tab_label);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_unix_dialog_add_custom_tab(dialog, child, tab_label);
 #endif
 }
@@ -265,6 +280,7 @@ GtkPrinter* GtkPrintWrapper::print_unix_dialog_get_selected_printer(GtkPrintUnix
     assert(m_print_unix_dialog_get_selected_printer);
     return (*m_print_unix_dialog_get_selected_printer)(dialog);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_unix_dialog_get_selected_printer(dialog);
 #endif
 }
@@ -275,6 +291,7 @@ void GtkPrintWrapper::print_unix_dialog_set_manual_capabilities(GtkPrintUnixDial
     assert(m_print_unix_dialog_set_manual_capabilities);
     (*m_print_unix_dialog_set_manual_capabilities)(dialog, capabilities);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_unix_dialog_set_manual_capabilities(dialog, capabilities);
 #endif
 }
@@ -285,6 +302,7 @@ GtkPrintSettings* GtkPrintWrapper::print_unix_dialog_get_settings(GtkPrintUnixDi
     assert(m_print_unix_dialog_get_settings);
     return (*m_print_unix_dialog_get_settings)(dialog);
 #else
+    (void) this; // loplugin:staticmethods
     return gtk_print_unix_dialog_get_settings(dialog);
 #endif
 }
@@ -295,6 +313,7 @@ void GtkPrintWrapper::print_unix_dialog_set_settings(GtkPrintUnixDialog* dialog,
     assert(m_print_unix_dialog_set_settings);
     (*m_print_unix_dialog_set_settings)(dialog, settings);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_unix_dialog_set_settings(dialog, settings);
 #endif
 }
@@ -305,6 +324,7 @@ void GtkPrintWrapper::print_unix_dialog_set_support_selection(GtkPrintUnixDialog
     assert(m_print_unix_dialog_set_support_selection);
     (*m_print_unix_dialog_set_support_selection)(dialog, support_selection);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_unix_dialog_set_support_selection(dialog, support_selection);
 #endif
 }
@@ -315,6 +335,7 @@ void GtkPrintWrapper::print_unix_dialog_set_has_selection(GtkPrintUnixDialog* di
     assert(m_print_unix_dialog_set_has_selection);
     (*m_print_unix_dialog_set_has_selection)(dialog, has_selection);
 #else
+    (void) this; // loplugin:staticmethods
     gtk_print_unix_dialog_set_has_selection(dialog, has_selection);
 #endif
 }

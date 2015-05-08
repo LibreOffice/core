@@ -840,6 +840,8 @@ void GtkSalFrame::EnsureAppMenuWatch()
     }
 
     //ensure_dbus_setup( this );
+#else
+    (void) this; // loplugin:staticmethods
 #endif
 }
 
@@ -1493,6 +1495,7 @@ void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
                 False, NoEventMask, &aEvent );
     GetGenericData()->ErrorTrapPop();
 #else
+    (void) this; // loplugin:staticmethods
     (void)i_nTimeCode;
     //FIXME: no askForXEmbedFocus for gtk3 yet
 #endif
@@ -2782,6 +2785,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
         }
     }
 #else
+    (void) this; // loplugin:staticmethods
     (void)bGrab; (void) bOwnerEvents;
     //FIXME: No GrabPointer implementation for gtk3 ...
 #endif
@@ -2803,6 +2807,7 @@ void GtkSalFrame::grabKeyboard( bool bGrab )
         }
     }
 #else
+    (void) this; // loplugin:staticmethods
     (void)bGrab;
     //FIXME: No GrabKeyboard implementation for gtk3 ...
 #endif

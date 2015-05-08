@@ -107,7 +107,6 @@ protected:
     void                        setIsExecuting( bool bIsExecuting ) { m_bIsExecuting = bIsExecuting; }
     bool                        isExecuting() const { return m_bIsExecuting; }
 
-    bool                        isSupportedProtocol( const QString &rProtocol ) const;
     KURL                        mostLocalURL( const KURL &rURL ) const;
     QString                     localCopy( const QString &rFileName ) const;
 
@@ -125,10 +124,7 @@ protected slots:
     void                        selectionChangedCommand();
 
 protected:
-    void                        sendCommand( const QString &rCommand );
     void                        appendURL( QString &rBuffer, const KURL &rURL );
-    void                        appendEscaped( QString &rBuffer, const QString &rString );
-    QString                     escapeString( const QString &rString );
 };
 
 class KDEFileFilterComboHack : public KFileFilterCombo

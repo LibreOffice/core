@@ -158,11 +158,8 @@ protected:
     void                        sendCommand( const OUString &rCommand );
     // Synchronized sendCommand
     void                        sendCommand( const OUString &rCommand, ::osl::Condition &rCondition );
-    void                        appendEscaped( OUStringBuffer &rBuffer, const OUString &rString );
 
 private:
-    bool                    controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId );
-    bool                    controlActionInfo( sal_Int16 nControlId, OUString &rType );
     void                        sendAppendControlCommand( sal_Int16 nControlId );
 };
 

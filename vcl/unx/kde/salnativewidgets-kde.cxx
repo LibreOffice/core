@@ -79,6 +79,44 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
+/** Style conversion function.
+
+    Conversion function between VCL ControlState together with ImplControlValue
+    and Qt state flags.
+
+    @param nState
+    State of the widget (default, focused, ...) as defined in Native Widget
+    Framework.
+
+    @param aValue
+    Value held by the widget (on, off, ...)
+*/
+QStyle::SFlags vclStateValue2SFlags( ControlState nState,
+    const ImplControlValue& aValue )
+{
+    QStyle::SFlags nStyle =
+    ( (nState & ControlState::DEFAULT)?  QStyle::Style_ButtonDefault: QStyle::Style_Default ) |
+    ( (nState & ControlState::ENABLED)?  QStyle::Style_Enabled:       QStyle::Style_Default ) |
+    ( (nState & ControlState::FOCUSED)?  QStyle::Style_HasFocus:      QStyle::Style_Default ) |
+    ( (nState & ControlState::PRESSED)?  QStyle::Style_Down:          QStyle::Style_Raised )  |
+    ( (nState & ControlState::SELECTED)? QStyle::Style_Selected :     QStyle::Style_Default ) |
+    ( (nState & ControlState::ROLLOVER)? QStyle::Style_MouseOver:     QStyle::Style_Default );
+    //TODO ( (nState & ControlState::HIDDEN)?   QStyle::Style_: QStyle::Style_Default ) |
+
+    switch ( aValue.getTristateVal() )
+    {
+    case BUTTONVALUE_ON:    nStyle |= QStyle::Style_On;       break;
+    case BUTTONVALUE_OFF:   nStyle |= QStyle::Style_Off;      break;
+    case BUTTONVALUE_MIXED: nStyle |= QStyle::Style_NoChange; break;
+    default: break;
+    }
+
+    return nStyle;
+}
+
+}
 
 /** Qt implementation of X11Pixmap
 
@@ -416,21 +454,6 @@ class WidgetPainter
     QProgressBar *progressBar( const Rectangle& rControlRegion );
 
     // TODO other widgets
-
-    protected:
-    /** Style conversion function.
-
-        Conversion function between VCL ControlState together with
-        ImplControlValue and Qt state flags.
-
-        @param nState
-        State of the widget (default, focused, ...) as defined in Native
-        Widget Framework.
-
-        @param aValue
-        Value held by the widget (on, off, ...)
-    */
-    QStyle::SFlags vclStateValue2SFlags( ControlState nState, const ImplControlValue& aValue );
 
     public:
     /** Convert VCL Rectangle to QRect.
@@ -1195,29 +1218,6 @@ QProgressBar *WidgetPainter::progressBar( const Rectangle& rControlRegion )
     m_pProgressBar->resize( qRect.size() );
 
     return m_pProgressBar;
-}
-
-QStyle::SFlags WidgetPainter::vclStateValue2SFlags( ControlState nState,
-    const ImplControlValue& aValue )
-{
-    QStyle::SFlags nStyle =
-    ( (nState & ControlState::DEFAULT)?  QStyle::Style_ButtonDefault: QStyle::Style_Default ) |
-    ( (nState & ControlState::ENABLED)?  QStyle::Style_Enabled:       QStyle::Style_Default ) |
-    ( (nState & ControlState::FOCUSED)?  QStyle::Style_HasFocus:      QStyle::Style_Default ) |
-    ( (nState & ControlState::PRESSED)?  QStyle::Style_Down:          QStyle::Style_Raised )  |
-    ( (nState & ControlState::SELECTED)? QStyle::Style_Selected :     QStyle::Style_Default ) |
-    ( (nState & ControlState::ROLLOVER)? QStyle::Style_MouseOver:     QStyle::Style_Default );
-    //TODO ( (nState & ControlState::HIDDEN)?   QStyle::Style_: QStyle::Style_Default ) |
-
-    switch ( aValue.getTristateVal() )
-    {
-    case BUTTONVALUE_ON:    nStyle |= QStyle::Style_On;       break;
-    case BUTTONVALUE_OFF:   nStyle |= QStyle::Style_Off;      break;
-    case BUTTONVALUE_MIXED: nStyle |= QStyle::Style_NoChange; break;
-    default: break;
-    }
-
-    return nStyle;
 }
 
 QRect WidgetPainter::region2QRect( const Rectangle& rControlRegion )

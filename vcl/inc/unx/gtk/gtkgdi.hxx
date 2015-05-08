@@ -80,36 +80,35 @@ private:
     static GtkStyleContext *mpListboxStyle;
     static GtkStyleContext *mpNoteBookStyle;
 
-    void getStyleContext(GtkStyleContext** style, GtkWidget* widget);
-    Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
-    Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);
-    Rectangle NWGetComboBoxButtonRect( ControlType nType, ControlPart nPart, Rectangle aAreaRect );
+    static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
+    static Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);
+    static Rectangle NWGetComboBoxButtonRect( ControlType nType, ControlPart nPart, Rectangle aAreaRect );
 
-    void PaintScrollbar(GtkStyleContext *context,
+    static void PaintScrollbar(GtkStyleContext *context,
                         cairo_t *cr,
                         const Rectangle& rControlRectangle,
                         ControlType nType,
                         ControlPart nPart,
                         const ImplControlValue& aValue );
-    void PaintOneSpinButton( GtkStyleContext *context,
+    static void PaintOneSpinButton( GtkStyleContext *context,
                              cairo_t *cr,
                              ControlType nType,
                              ControlPart nPart,
                              Rectangle aAreaRect,
                              ControlState nState );
-    void PaintSpinButton(GtkStyleContext *context,
+    static void PaintSpinButton(GtkStyleContext *context,
                          cairo_t *cr,
                          const Rectangle& rControlRectangle,
                          ControlType nType,
                          ControlPart nPart,
                          const ImplControlValue& aValue );
-    void PaintCombobox( GtkStyleContext *context,
+    static void PaintCombobox( GtkStyleContext *context,
                         cairo_t *cr,
                         const Rectangle& rControlRectangle,
                         ControlType nType,
                         ControlPart nPart,
                         const ImplControlValue& aValue );
-    void PaintCheckOrRadio(GtkStyleContext *context,
+    static void PaintCheckOrRadio(GtkStyleContext *context,
                            cairo_t *cr,
                            const Rectangle& rControlRectangle,
                            ControlType nType);

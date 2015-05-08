@@ -29,6 +29,44 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
+::std::list< OUString > tokenize( const OUString &rCommand )
+{
+    ::std::list< OUString > aList;
+    OUStringBuffer aBuffer( 1024 );
+
+    const sal_Unicode *pUnicode = rCommand.getStr();
+    const sal_Unicode *pEnd     = pUnicode + rCommand.getLength();
+    bool bQuoted            = false;
+
+    for ( ; pUnicode != pEnd; ++pUnicode )
+    {
+        if ( *pUnicode == '\\' )
+        {
+            ++pUnicode;
+            if ( pUnicode != pEnd )
+            {
+                if ( *pUnicode == 'n' )
+                    aBuffer.appendAscii( "\n", 1 );
+                else
+                    aBuffer.append( *pUnicode );
+            }
+        }
+        else if ( *pUnicode == '"' )
+            bQuoted = !bQuoted;
+        else if ( *pUnicode == ' ' && !bQuoted )
+            aList.push_back( aBuffer.makeStringAndClear() );
+        else
+            aBuffer.append( *pUnicode );
+    }
+    aList.push_back( aBuffer.makeStringAndClear() );
+
+    return aList;
+}
+
+}
+
 // UnxFilePickerCommandThread
 
 UnxFilePickerCommandThread::UnxFilePickerCommandThread( UnxFilePickerNotifyThread *pNotifyThread, int nReadFD )
@@ -266,40 +304,6 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
             << OUStringToOString( aCommandName, RTL_TEXTENCODING_ASCII_US ).getStr() << "\"" << ::std::endl;
 #endif
     }
-}
-
-::std::list< OUString > SAL_CALL UnxFilePickerCommandThread::tokenize( const OUString &rCommand )
-{
-    ::std::list< OUString > aList;
-    OUStringBuffer aBuffer( 1024 );
-
-    const sal_Unicode *pUnicode = rCommand.getStr();
-    const sal_Unicode *pEnd     = pUnicode + rCommand.getLength();
-    bool bQuoted            = false;
-
-    for ( ; pUnicode != pEnd; ++pUnicode )
-    {
-        if ( *pUnicode == '\\' )
-        {
-            ++pUnicode;
-            if ( pUnicode != pEnd )
-            {
-                if ( *pUnicode == 'n' )
-                    aBuffer.appendAscii( "\n", 1 );
-                else
-                    aBuffer.append( *pUnicode );
-            }
-        }
-        else if ( *pUnicode == '"' )
-            bQuoted = !bQuoted;
-        else if ( *pUnicode == ' ' && !bQuoted )
-            aList.push_back( aBuffer.makeStringAndClear() );
-        else
-            aBuffer.append( *pUnicode );
-    }
-    aList.push_back( aBuffer.makeStringAndClear() );
-
-    return aList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

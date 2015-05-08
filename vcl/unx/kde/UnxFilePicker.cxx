@@ -76,6 +76,114 @@ namespace
 #endif // ENABLE_TDE
         return aRet;
     }
+
+void appendEscaped( OUStringBuffer &rBuffer, const OUString &rString )
+{
+    const sal_Unicode *pUnicode = rString.getStr();
+    const sal_Unicode *pEnd     = pUnicode + rString.getLength();
+
+    rBuffer.appendAscii( "\"" , 1 );
+
+    for ( ; pUnicode != pEnd; ++pUnicode )
+    {
+        if ( *pUnicode == '\\' )
+            rBuffer.appendAscii( "\\\\", 2 );
+        else if ( *pUnicode == '"' )
+            rBuffer.appendAscii( "\\\"", 2 );
+        else if ( *pUnicode == '\n' )
+            rBuffer.appendAscii( "\\n", 2 );
+        else
+            rBuffer.append( *pUnicode );
+    }
+
+    rBuffer.appendAscii( "\"", 1 );
+}
+
+bool controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId )
+{
+    typedef struct {
+        sal_Int16 nId;
+        const OUString *pType;
+        sal_Int32 nTitle;
+    } ElementToName;
+
+    const OUString aCheckBox(   "checkbox" );
+    const OUString aControl(    "control" );
+    const OUString aEdit(       "edit" );
+    const OUString aLabel(      "label" );
+    const OUString aListBox(    "listbox" );
+    const OUString aPushButton( "pushbutton" );
+
+    const ElementToName *pPtr;
+    const ElementToName pArray[] =
+    {
+        { CommonFilePickerElementIds::PUSHBUTTON_OK,            &aPushButton, 0/*FIXME?*/ },
+        { CommonFilePickerElementIds::PUSHBUTTON_CANCEL,        &aPushButton, 0/*FIXME?*/ },
+        { CommonFilePickerElementIds::LISTBOX_FILTER,           &aListBox,    0/*FIXME?*/ },
+        { CommonFilePickerElementIds::CONTROL_FILEVIEW,         &aControl,    0/*FIXME?*/ },
+        { CommonFilePickerElementIds::EDIT_FILEURL,             &aEdit,       0/*FIXME?*/ },
+        { CommonFilePickerElementIds::LISTBOX_FILTER_LABEL,     &aLabel,      0/*FIXME?*/ },
+        { CommonFilePickerElementIds::EDIT_FILEURL_LABEL,       &aLabel,      0/*FIXME?*/ },
+
+        { ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &aCheckBox,   STR_SVT_FILEPICKER_AUTO_EXTENSION },
+        { ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,      &aCheckBox,   STR_SVT_FILEPICKER_PASSWORD },
+        { ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, &aCheckBox,   STR_SVT_FILEPICKER_FILTER_OPTIONS },
+        { ExtendedFilePickerElementIds::CHECKBOX_READONLY,      &aCheckBox,   STR_SVT_FILEPICKER_READONLY },
+        { ExtendedFilePickerElementIds::CHECKBOX_LINK,          &aCheckBox,   STR_SVT_FILEPICKER_INSERT_AS_LINK },
+        { ExtendedFilePickerElementIds::CHECKBOX_PREVIEW,       &aCheckBox,   STR_SVT_FILEPICKER_SHOW_PREVIEW },
+        { ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,        &aPushButton, STR_SVT_FILEPICKER_PLAY },
+        { ExtendedFilePickerElementIds::LISTBOX_VERSION,        &aListBox,    STR_SVT_FILEPICKER_VERSION },
+        { ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,       &aListBox,    STR_SVT_FILEPICKER_TEMPLATES },
+        { ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE, &aListBox,    STR_SVT_FILEPICKER_IMAGE_TEMPLATE },
+        { ExtendedFilePickerElementIds::CHECKBOX_SELECTION,     &aCheckBox,   STR_SVT_FILEPICKER_SELECTION },
+        { 0, 0, 0 }
+    };
+
+    for ( pPtr = pArray; pPtr->nId && ( pPtr->nId != nControlId ); ++pPtr )
+        ;
+
+    if ( pPtr->nId == nControlId )
+    {
+        rType = *(pPtr->pType);
+        rTitleId = pPtr->nTitle;
+
+        return true;
+    }
+
+    return false;
+}
+
+bool controlActionInfo( sal_Int16 nControlAction, OUString &rType )
+{
+    typedef struct {
+        sal_Int16 nId;
+        const OUString pType;
+    } ElementToName;
+
+    const ElementToName *pPtr;
+    const ElementToName pArray[] =
+    {
+        { ControlActions::ADD_ITEM,                OUString( "addItem" ) },
+        { ControlActions::ADD_ITEMS,               OUString( "addItems" ) },
+        { ControlActions::DELETE_ITEM,             OUString( "deleteItem" ) },
+        { ControlActions::DELETE_ITEMS,            OUString( "deleteItems" ) },
+        { ControlActions::SET_SELECT_ITEM,         OUString( "setSelectedItem" ) },
+        { ControlActions::GET_ITEMS,               OUString( "getItems" ) },
+        { ControlActions::GET_SELECTED_ITEM,       OUString( "getSelectedItem" ) },
+        { ControlActions::GET_SELECTED_ITEM_INDEX, OUString( "getSelectedItemIndex" ) },
+        { ControlActions::SET_HELP_URL,            OUString( "setHelpURL" ) },
+        { ControlActions::GET_HELP_URL,            OUString( "getHelpURL" ) },
+        { 0,                                       OUString( "noAction" ) }
+    };
+
+    for ( pPtr = pArray; pPtr->nId && ( pPtr->nId != nControlAction ); ++pPtr )
+        ;
+
+    rType = pPtr->pType;
+
+    return true;
+}
+
 }
 
 // UnxFilePicker
@@ -783,113 +891,6 @@ void UnxFilePicker::sendCommand( const OUString &rCommand, ::osl::Condition &rCo
     sendCommand( rCommand );
 
     rCondition.wait();
-}
-
-void UnxFilePicker::appendEscaped( OUStringBuffer &rBuffer, const OUString &rString )
-{
-    const sal_Unicode *pUnicode = rString.getStr();
-    const sal_Unicode *pEnd     = pUnicode + rString.getLength();
-
-    rBuffer.appendAscii( "\"" , 1 );
-
-    for ( ; pUnicode != pEnd; ++pUnicode )
-    {
-        if ( *pUnicode == '\\' )
-            rBuffer.appendAscii( "\\\\", 2 );
-        else if ( *pUnicode == '"' )
-            rBuffer.appendAscii( "\\\"", 2 );
-        else if ( *pUnicode == '\n' )
-            rBuffer.appendAscii( "\\n", 2 );
-        else
-            rBuffer.append( *pUnicode );
-    }
-
-    rBuffer.appendAscii( "\"", 1 );
-}
-
-bool UnxFilePicker::controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId )
-{
-    typedef struct {
-        sal_Int16 nId;
-        const OUString *pType;
-        sal_Int32 nTitle;
-    } ElementToName;
-
-    const OUString aCheckBox(   "checkbox" );
-    const OUString aControl(    "control" );
-    const OUString aEdit(       "edit" );
-    const OUString aLabel(      "label" );
-    const OUString aListBox(    "listbox" );
-    const OUString aPushButton( "pushbutton" );
-
-    const ElementToName *pPtr;
-    const ElementToName pArray[] =
-    {
-        { CommonFilePickerElementIds::PUSHBUTTON_OK,            &aPushButton, 0/*FIXME?*/ },
-        { CommonFilePickerElementIds::PUSHBUTTON_CANCEL,        &aPushButton, 0/*FIXME?*/ },
-        { CommonFilePickerElementIds::LISTBOX_FILTER,           &aListBox,    0/*FIXME?*/ },
-        { CommonFilePickerElementIds::CONTROL_FILEVIEW,         &aControl,    0/*FIXME?*/ },
-        { CommonFilePickerElementIds::EDIT_FILEURL,             &aEdit,       0/*FIXME?*/ },
-        { CommonFilePickerElementIds::LISTBOX_FILTER_LABEL,     &aLabel,      0/*FIXME?*/ },
-        { CommonFilePickerElementIds::EDIT_FILEURL_LABEL,       &aLabel,      0/*FIXME?*/ },
-
-        { ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &aCheckBox,   STR_SVT_FILEPICKER_AUTO_EXTENSION },
-        { ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,      &aCheckBox,   STR_SVT_FILEPICKER_PASSWORD },
-        { ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, &aCheckBox,   STR_SVT_FILEPICKER_FILTER_OPTIONS },
-        { ExtendedFilePickerElementIds::CHECKBOX_READONLY,      &aCheckBox,   STR_SVT_FILEPICKER_READONLY },
-        { ExtendedFilePickerElementIds::CHECKBOX_LINK,          &aCheckBox,   STR_SVT_FILEPICKER_INSERT_AS_LINK },
-        { ExtendedFilePickerElementIds::CHECKBOX_PREVIEW,       &aCheckBox,   STR_SVT_FILEPICKER_SHOW_PREVIEW },
-        { ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,        &aPushButton, STR_SVT_FILEPICKER_PLAY },
-        { ExtendedFilePickerElementIds::LISTBOX_VERSION,        &aListBox,    STR_SVT_FILEPICKER_VERSION },
-        { ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,       &aListBox,    STR_SVT_FILEPICKER_TEMPLATES },
-        { ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE, &aListBox,    STR_SVT_FILEPICKER_IMAGE_TEMPLATE },
-        { ExtendedFilePickerElementIds::CHECKBOX_SELECTION,     &aCheckBox,   STR_SVT_FILEPICKER_SELECTION },
-        { 0, 0, 0 }
-    };
-
-    for ( pPtr = pArray; pPtr->nId && ( pPtr->nId != nControlId ); ++pPtr )
-        ;
-
-    if ( pPtr->nId == nControlId )
-    {
-        rType = *(pPtr->pType);
-        rTitleId = pPtr->nTitle;
-
-        return true;
-    }
-
-    return false;
-}
-
-bool UnxFilePicker::controlActionInfo( sal_Int16 nControlAction, OUString &rType )
-{
-    typedef struct {
-        sal_Int16 nId;
-        const OUString pType;
-    } ElementToName;
-
-    const ElementToName *pPtr;
-    const ElementToName pArray[] =
-    {
-        { ControlActions::ADD_ITEM,                OUString( "addItem" ) },
-        { ControlActions::ADD_ITEMS,               OUString( "addItems" ) },
-        { ControlActions::DELETE_ITEM,             OUString( "deleteItem" ) },
-        { ControlActions::DELETE_ITEMS,            OUString( "deleteItems" ) },
-        { ControlActions::SET_SELECT_ITEM,         OUString( "setSelectedItem" ) },
-        { ControlActions::GET_ITEMS,               OUString( "getItems" ) },
-        { ControlActions::GET_SELECTED_ITEM,       OUString( "getSelectedItem" ) },
-        { ControlActions::GET_SELECTED_ITEM_INDEX, OUString( "getSelectedItemIndex" ) },
-        { ControlActions::SET_HELP_URL,            OUString( "setHelpURL" ) },
-        { ControlActions::GET_HELP_URL,            OUString( "getHelpURL" ) },
-        { 0,                                       OUString( "noAction" ) }
-    };
-
-    for ( pPtr = pArray; pPtr->nId && ( pPtr->nId != nControlAction ); ++pPtr )
-        ;
-
-    rType = pPtr->pType;
-
-    return true;
 }
 
 void UnxFilePicker::sendAppendControlCommand( sal_Int16 nControlId )

@@ -169,6 +169,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 
     return aFilterReturn;
 #else
+    (void) this; // loplugin:staticmethods
     (void) sys_event;
     //FIXME: implement filterGdkEvent ...
     return GDK_FILTER_CONTINUE;

@@ -95,7 +95,6 @@ public:
 
 protected:
     void                        handleCommand( const QString &rString, bool &bQuit );
-    QStringList*                tokenize( const QString &rString );
 };
 
 #endif // INCLUDED_VCL_UNX_KDE_FPICKER_KDECOMMANDTHREAD_HXX

@@ -1673,6 +1673,17 @@ void GtkSalGraphics::WidgetQueueDraw() const
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
 
+namespace {
+
+void getStyleContext(GtkStyleContext** style, GtkWidget* widget)
+{
+    gtk_container_add(GTK_CONTAINER(gDumbContainer), widget);
+    *style = gtk_widget_get_style_context(widget);
+    g_object_ref(*style);
+}
+
+}
+
 void GtkData::initNWF()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1686,13 +1697,6 @@ void GtkData::deInitNWF()
 {
     if (gCacheWindow)
         gtk_widget_destroy(gCacheWindow);
-}
-
-void GtkSalGraphics::getStyleContext(GtkStyleContext** style, GtkWidget* widget)
-{
-    gtk_container_add(GTK_CONTAINER(gDumbContainer), widget);
-    *style = gtk_widget_get_style_context(widget);
-    g_object_ref(*style);
 }
 
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )

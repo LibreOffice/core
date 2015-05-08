@@ -118,7 +118,6 @@ protected:
     virtual void SAL_CALL       run() SAL_OVERRIDE;
 
     virtual void SAL_CALL       handleCommand( const OUString &rCommand/*, bool &rQuit*/ );
-    ::std::list< OUString > SAL_CALL tokenize( const OUString &rCommand );
 };
 
 #endif // INCLUDED_VCL_UNX_KDE_UNXCOMMANDTHREAD_HXX

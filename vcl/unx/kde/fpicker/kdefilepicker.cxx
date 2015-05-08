@@ -89,6 +89,73 @@
 #include <algorithm>
 #include <iostream>
 
+namespace {
+
+bool isSupportedProtocol( const QString &rProtocol )
+{
+    // TODO Get this information directly from OOo
+    const char * pOOoProtocols[] = { "", "smb", "ftp", "http", "file", "mailto",
+        "vnd.sun.star.webdav", "news", "private", "vnd.sun.star.help",
+        "https", "slot", "macro", "javascript", "imap", "pop3", "data",
+        "cid", "out", "vnd.sun.star.wfs", "vnd.sun.star.hier", "vim",
+        ".uno", ".component", "vnd.sun.star.pkg", "ldap", "db",
+        "vnd.sun.star.cmd", "vnd.sun.star.script",
+        "telnet",
+        NULL };
+
+    for ( const char **pIndex = pOOoProtocols; *pIndex != NULL; ++pIndex )
+    {
+        if ( rProtocol == *pIndex )
+            return true;
+    }
+
+    // TODO gnome-vfs bits here
+
+    return false;
+}
+
+void sendCommand( const QString &rCommand )
+{
+#if OSL_DEBUG_LEVEL > 1
+    ::std::cerr << "kdefilepicker sent: " << rCommand.latin1() << ::std::endl;
+#endif
+
+    //m_aOutputStream << rCommand << endl;
+    ::std::cout << rCommand.utf8() << ::std::endl;
+}
+
+void appendEscaped( QString &rBuffer, const QString &rString )
+{
+    const QChar *pUnicode = rString.unicode();
+    const QChar *pEnd     = pUnicode + rString.length();
+
+    rBuffer.append( '"' );
+    for ( ; pUnicode != pEnd; ++pUnicode )
+    {
+        if ( *pUnicode == '\\' )
+            rBuffer.append( "\\\\" );
+        else if ( *pUnicode == '"' )
+            rBuffer.append( "\\\"" );
+        else if ( *pUnicode == '\n' )
+            rBuffer.append( "\\\n" );
+        else
+            rBuffer.append( *pUnicode );
+    }
+    rBuffer.append( '"' );
+}
+
+QString escapeString( const QString &rString )
+{
+    QString qString;
+    qString.reserve( 2*rString.length() + 2 ); // every char escaped + quotes
+
+    appendEscaped( qString, rString );
+
+    return qString;
+}
+
+}
+
 // KDEFileDialog
 
 KDEFileDialog::KDEFileDialog( const QString &startDir, const QString &filter,
@@ -593,29 +660,6 @@ QString KDEFileDialog::addExtension( const QString &rFileName ) const
         return rFileName + qExtension;
 }
 
-bool KDEFileDialog::isSupportedProtocol( const QString &rProtocol ) const
-{
-    // TODO Get this information directly from OOo
-    const char * pOOoProtocols[] = { "", "smb", "ftp", "http", "file", "mailto",
-        "vnd.sun.star.webdav", "news", "private", "vnd.sun.star.help",
-        "https", "slot", "macro", "javascript", "imap", "pop3", "data",
-        "cid", "out", "vnd.sun.star.wfs", "vnd.sun.star.hier", "vim",
-        ".uno", ".component", "vnd.sun.star.pkg", "ldap", "db",
-        "vnd.sun.star.cmd", "vnd.sun.star.script",
-        "telnet",
-        NULL };
-
-    for ( const char **pIndex = pOOoProtocols; *pIndex != NULL; ++pIndex )
-    {
-        if ( rProtocol == *pIndex )
-            return true;
-    }
-
-    // TODO gnome-vfs bits here
-
-    return false;
-}
-
 KURL KDEFileDialog::mostLocalURL( const KURL &rURL ) const
 {
 #if KDE_IS_VERSION(3,5,0)
@@ -686,16 +730,6 @@ void KDEFileDialog::selectionChangedCommand()
     }
 }
 
-void KDEFileDialog::sendCommand( const QString &rCommand )
-{
-#if OSL_DEBUG_LEVEL > 1
-    ::std::cerr << "kdefilepicker sent: " << rCommand.latin1() << ::std::endl;
-#endif
-
-    //m_aOutputStream << rCommand << endl;
-    ::std::cout << rCommand.utf8() << ::std::endl;
-}
-
 void KDEFileDialog::appendURL( QString &rBuffer, const KURL &rURL )
 {
     // From Martin Kretzschmar:
@@ -716,36 +750,6 @@ void KDEFileDialog::appendURL( QString &rBuffer, const KURL &rURL )
     rBuffer.append( " " );
     if ( !qUrlStr.isEmpty() )
         appendEscaped( rBuffer, qUrlStr );
-}
-
-void KDEFileDialog::appendEscaped( QString &rBuffer, const QString &rString )
-{
-    const QChar *pUnicode = rString.unicode();
-    const QChar *pEnd     = pUnicode + rString.length();
-
-    rBuffer.append( '"' );
-    for ( ; pUnicode != pEnd; ++pUnicode )
-    {
-        if ( *pUnicode == '\\' )
-            rBuffer.append( "\\\\" );
-        else if ( *pUnicode == '"' )
-            rBuffer.append( "\\\"" );
-        else if ( *pUnicode == '\n' )
-            rBuffer.append( "\\\n" );
-        else
-            rBuffer.append( *pUnicode );
-    }
-    rBuffer.append( '"' );
-}
-
-QString KDEFileDialog::escapeString( const QString &rString )
-{
-    QString qString;
-    qString.reserve( 2*rString.length() + 2 ); // every char escaped + quotes
-
-    appendEscaped( qString, rString );
-
-    return qString;
 }
 
 void KDEFileFilterComboHack::setCurrentFilter( const QString& filter )
