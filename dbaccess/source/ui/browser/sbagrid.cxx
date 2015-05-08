@@ -1424,7 +1424,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
             m_aDataDescriptor = ODataAccessObjectTransferable::extractObjectDescriptor(aDropped);
             if (m_nAsyncDropEvent)
                 Application::RemoveUserEvent(m_nAsyncDropEvent);
-            m_nAsyncDropEvent = Application::PostUserEvent(LINK(this, SbaGridControl, AsynchDropEvent));
+            m_nAsyncDropEvent = Application::PostUserEvent(LINK(this, SbaGridControl, AsynchDropEvent), NULL, true);
             return DND_ACTION_COPY;
         }
     }

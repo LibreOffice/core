@@ -110,7 +110,7 @@ void SearchThread::execute()
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
     }
 
-    Application::PostUserEvent( LINK( mpProgress, SearchProgress, CleanUpHdl ) );
+    Application::PostUserEvent( LINK( mpProgress, SearchProgress, CleanUpHdl ), NULL, true );
 }
 
 
@@ -343,7 +343,7 @@ void TakeThread::execute()
         delete pStatusProgress;
     }
 
-    Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ) );
+    Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ), NULL, true );
 }
 
 // - TakeProgress -

@@ -243,7 +243,7 @@ void ImplDockFloatWin2::Move()
      *  last Move message.
      */
     if( ! mnLastUserEvent )
-        mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin2, DockingHdl ) );
+        mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin2, DockingHdl ), NULL, true );
 }
 
 void ImplDockFloatWin2::Resize()

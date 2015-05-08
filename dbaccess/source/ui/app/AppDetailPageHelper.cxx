@@ -143,7 +143,7 @@ namespace
     {
         bool nRet = Window::Notify( rNEvt );
         if ( rNEvt.GetType() == MouseNotifyEvent::INPUTENABLE && IsInputEnabled() )
-            PostUserEvent( LINK( this, OTablePreviewWindow, OnDisableInput) );
+            PostUserEvent( LINK( this, OTablePreviewWindow, OnDisableInput), NULL, true );
         return nRet;
     }
     IMPL_LINK_NOARG(OTablePreviewWindow, OnDisableInput)

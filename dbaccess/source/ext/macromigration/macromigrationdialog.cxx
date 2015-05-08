@@ -214,7 +214,7 @@ namespace dbmm
             enableButtons( WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT, false );
 
             // start the migration asynchronously
-            PostUserEvent( LINK( this, MacroMigrationDialog, OnStartMigration ) );
+            PostUserEvent( LINK( this, MacroMigrationDialog, OnStartMigration ), NULL, true );
         }
         break;
 

@@ -584,7 +584,7 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
                 // like e.g. SfxModelessDialog which destroy themselves inside Close()
                 // post this Close asynchronous so we can leave our key handler before
                 // we get destroyed
-                PostUserEvent( LINK( this, Dialog, ImplAsyncCloseHdl ), this );
+                PostUserEvent( LINK( this, Dialog, ImplAsyncCloseHdl ), this , true);
                 return true;
             }
         }

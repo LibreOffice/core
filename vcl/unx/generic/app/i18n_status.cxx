@@ -287,7 +287,7 @@ void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
     m_bDelayedShow = bShow;
     m_eDelayedReason = eReason;
     if( ! m_nDelayedEvent )
-        m_nDelayedEvent = Application::PostUserEvent( LINK( this, XIMStatusWindow, DelayedShowHdl ) );
+        m_nDelayedEvent = Application::PostUserEvent( LINK( this, XIMStatusWindow, DelayedShowHdl ), NULL, true );
 }
 
 void XIMStatusWindow::setText( const OUString& rText )

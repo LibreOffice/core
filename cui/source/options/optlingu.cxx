@@ -1530,7 +1530,7 @@ IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
         //! on a module entry and exiting the "Edit Modules" dialog
         //! after that.
         Application::PostUserEvent( LINK(
-                    this, SvxLinguTabPage, PostDblClickHdl_Impl ) );
+                    this, SvxLinguTabPage, PostDblClickHdl_Impl ), NULL, true);
     }
     else if (pBox == m_pLinguOptionsCLB)
     {

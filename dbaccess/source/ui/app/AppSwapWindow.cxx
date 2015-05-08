@@ -154,7 +154,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
         return true;
     }
 
-    PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ) );
+    PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ), NULL, true );
     return false;
 }
 

@@ -1942,7 +1942,7 @@ void ToolBox::ExecuteCustomMenu()
         // handle custom menu asynchronously
         // to avoid problems if the toolbox is closed during menu execute
         UpdateCustomMenu();
-        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
+        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ), NULL, true );
     }
 }
 

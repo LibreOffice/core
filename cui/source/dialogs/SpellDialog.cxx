@@ -238,8 +238,8 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     //InitHdl wants to use virtual methods, so it
     //can't be called during the ctor, so init
     //it on next event cycle post-ctor
-    Application::PostUserEvent( LINK(
-                        this, SpellDialog, InitHdl ) );
+    Application::PostUserEvent(
+        LINK( this, SpellDialog, InitHdl ), NULL, true );
 }
 
 
