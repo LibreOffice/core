@@ -220,122 +220,123 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
 }
 
 #define DELTA 5.0
-void MyWin::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     WorkWindow::Paint(rRenderContext, rRect);
 
-    Push( PushFlags::ALL );
-    MapMode aMapMode( MAP_100TH_MM );
+    rRenderContext.Push(PushFlags::ALL);
+    MapMode aMapMode(MAP_100TH_MM);
 
-    SetMapMode( aMapMode );
+    rRenderContext.SetMapMode(aMapMode);
 
-    Size aPaperSize = GetOutputSize();
-    Point aCenter( aPaperSize.Width()/2-300,
-                   (aPaperSize.Height() - 8400)/2 + 8400 );
-    Point aP1( aPaperSize.Width()/48, 0), aP2( aPaperSize.Width()/40, 0 ), aPoint;
+    Size aPaperSize = rRenderContext.GetOutputSize();
+    Point aCenter(aPaperSize.Width() / 2 - 300,
+                  (aPaperSize.Height() - 8400) / 2 + 8400);
+    Point aP1(aPaperSize.Width() / 48, 0), aP2(aPaperSize.Width() / 40, 0);
+    Point aPoint;
 
-    DrawRect( Rectangle( Point( 0,0 ), aPaperSize ) );
-    DrawRect( Rectangle( Point( 100,100 ),
-                         Size( aPaperSize.Width()-200,
-                               aPaperSize.Height()-200 ) ) );
-    DrawRect( Rectangle( Point( 200,200 ),
-                         Size( aPaperSize.Width()-400,
-                               aPaperSize.Height()-400 ) ) );
-    DrawRect( Rectangle( Point( 300,300 ),
-                         Size( aPaperSize.Width()-600,
-                               aPaperSize.Height()-600 ) ) );
+    rRenderContext.DrawRect(Rectangle(Point(0, 0), aPaperSize));
+    rRenderContext.DrawRect(Rectangle(Point(100, 100),
+                         Size(aPaperSize.Width() - 200,
+                              aPaperSize.Height() - 200)));
+    rRenderContext.DrawRect(Rectangle(Point(200, 200),
+                         Size(aPaperSize.Width() - 400,
+                              aPaperSize.Height() - 400)));
+    rRenderContext.DrawRect(Rectangle(Point(300, 300),
+                         Size(aPaperSize.Width() - 600,
+                              aPaperSize.Height() - 600)));
 
-    const int nFontCount = GetDevFontCount();
-    const int nFontSamples = (nFontCount<15) ? nFontCount : 15;
-    for( int i = 0; i < nFontSamples; ++i )
+    const int nFontCount = rRenderContext.GetDevFontCount();
+    const int nFontSamples = (nFontCount < 15) ? nFontCount : 15;
+    for (int i = 0; i < nFontSamples; ++i)
     {
 
-        vcl::FontInfo aFont = GetDevFont( (i*nFontCount) / nFontSamples );
-        aFont.SetHeight( 400 + (i%7) * 100 );
-        aFont.SetOrientation( i * (3600 / nFontSamples) );
-        SetFont( aFont );
+        vcl::FontInfo aFont = rRenderContext.GetDevFont((i * nFontCount) / nFontSamples);
+        aFont.SetHeight(400 + (i % 7) * 100);
+        aFont.SetOrientation(i * (3600 / nFontSamples));
+        rRenderContext.SetFont(aFont);
 
         sal_uInt8 nRed   = (i << 6) & 0xC0;
         sal_uInt8 nGreen = (i << 4) & 0xC0;
         sal_uInt8 nBlue  = (i << 2) & 0xC0;
-        SetTextColor( Color( nRed, nGreen, nBlue ) );
+        rRenderContext.SetTextColor(Color(nRed, nGreen, nBlue));
 
         OUStringBuffer aPrintText(1024);
         long nMaxWidth = 0;
 
         aPrintText.appendAscii( "SVP test program" );
 
-        DrawText( Rectangle( Point( (aPaperSize.Width() - 4000) / 2, 2000 ),
-                            Size( aPaperSize.Width() - 2100 - nMaxWidth,
-                                aPaperSize.Height() - 4000 ) ),
-                aPrintText.makeStringAndClear(),
-                TEXT_DRAW_MULTILINE );
+        rRenderContext.DrawText(Rectangle(Point((aPaperSize.Width() - 4000) / 2, 2000),
+                                Size(aPaperSize.Width() - 2100 - nMaxWidth, aPaperSize.Height() - 4000)),
+                                aPrintText.makeStringAndClear(),
+                                TEXT_DRAW_MULTILINE);
     }
 
-    SetFillColor();
-    DrawRect( Rectangle( Point( aPaperSize.Width() - 4000, 1000 ),
-                         Size( 3000,3000 ) ) );
-    DrawBitmap( Point( aPaperSize.Width() - 4000, 1000 ),
-                Size( 3000,3000 ),
-                m_aBitmap );
+    rRenderContext.SetFillColor();
+    DrawRect(Rectangle(Point(aPaperSize.Width() - 4000, 1000),
+                       Size(3000, 3000)));
+    rRenderContext.DrawBitmap(Point(aPaperSize.Width() - 4000, 1000),
+                              Size( 3000,3000 ),
+                              m_aBitmap);
 
-    Color aWhite( 0xff, 0xff, 0xff );
-    Color aBlack( 0, 0, 0 );
-    Color aLightRed( 0xff, 0, 0 );
-    Color aDarkRed( 0x40, 0, 0 );
-    Color aLightBlue( 0, 0, 0xff );
-    Color aDarkBlue( 0,0,0x40 );
-    Color aLightGreen( 0, 0xff, 0 );
-    Color aDarkGreen( 0, 0x40, 0 );
+    Color aWhite(0xff, 0xff, 0xff);
+    Color aBlack(0, 0, 0);
+    Color aLightRed(0xff, 0, 0);
+    Color aDarkRed(0x40, 0, 0);
+    Color aLightBlue(0, 0, 0xff);
+    Color aDarkBlue(0,0,0x40);
+    Color aLightGreen(0, 0xff, 0);
+    Color aDarkGreen(0, 0x40, 0);
 
-    Gradient aGradient( GradientStyle_LINEAR, aBlack, aWhite );
-    aGradient.SetAngle( 900 );
-    DrawGradient( Rectangle( Point( 1000, 4500 ),
-                             Size( aPaperSize.Width() - 2000,
-                                   500 ) ), aGradient );
-    aGradient.SetStartColor( aDarkRed );
-    aGradient.SetEndColor( aLightBlue );
-    DrawGradient( Rectangle( Point( 1000, 5300 ),
-                             Size( aPaperSize.Width() - 2000,
-                                   500 ) ), aGradient );
-    aGradient.SetStartColor( aDarkBlue );
-    aGradient.SetEndColor( aLightGreen );
-    DrawGradient( Rectangle( Point( 1000, 6100 ),
-                             Size( aPaperSize.Width() - 2000,
-                                   500 ) ), aGradient );
-    aGradient.SetStartColor( aDarkGreen );
-    aGradient.SetEndColor( aLightRed );
-    DrawGradient( Rectangle( Point( 1000, 6900 ),
-                             Size( aPaperSize.Width() - 2000,
-                                   500 ) ), aGradient );
+    Gradient aGradient(GradientStyle_LINEAR, aBlack, aWhite);
+    aGradient.SetAngle(900);
+    rRenderContext.DrawGradient(Rectangle(Point(1000, 4500),
+                                Size(aPaperSize.Width() - 2000, 500)),
+                                aGradient);
+    aGradient.SetStartColor(aDarkRed);
+    aGradient.SetEndColor(aLightBlue);
+    rRenderContext.DrawGradient(Rectangle(Point(1000, 5300),
+                                Size(aPaperSize.Width() - 2000, 500)),
+                                aGradient);
+    aGradient.SetStartColor(aDarkBlue);
+    aGradient.SetEndColor(aLightGreen);
+    rRenderContext.DrawGradient(Rectangle(Point(1000, 6100),
+                                Size(aPaperSize.Width() - 2000, 500)),
+                                aGradient);
+    aGradient.SetStartColor(aDarkGreen);
+    aGradient.SetEndColor(aLightRed);
+    rRenderContext.DrawGradient(Rectangle(Point(1000, 6900),
+                                Size(aPaperSize.Width() - 2000, 500)),
+                                aGradient);
 
-    LineInfo aLineInfo( LINE_SOLID, 200 );
-    double sind = sin( DELTA*M_PI/180.0 );
-    double cosd = cos( DELTA*M_PI/180.0 );
-    double factor = 1 + (DELTA/1000.0);
-    int n=0;
-    Color aLineColor( 0, 0, 0 );
-    Color aApproachColor( 0, 0, 200 );
-    while ( aP2.X() < aCenter.X() && n++ < 680 )
+    LineInfo aLineInfo(LINE_SOLID, 200);
+    double sind = sin(DELTA * M_PI / 180.0);
+    double cosd = cos(DELTA * M_PI / 180.0);
+    double factor = 1 + (DELTA / 1000.0);
+    int n = 0;
+    Color aLineColor(0, 0, 0);
+    Color aApproachColor(0, 0, 200);
+
+    while (aP2.X() < aCenter.X() && n++ < 680)
     {
-        aLineInfo.SetWidth( n/3 );
-        aLineColor = approachColor( aLineColor, aApproachColor );
-        SetLineColor( aLineColor );
+        aLineInfo.SetWidth(n / 3);
+        aLineColor = approachColor(aLineColor, aApproachColor);
+        rRenderContext.SetLineColor(aLineColor);
 
         // switch aproach color
-        if( aApproachColor.IsRGBEqual( aLineColor ) )
+        if (aApproachColor.IsRGBEqual(aLineColor))
         {
-            if( aApproachColor.GetRed() )
-                aApproachColor = Color( 0, 0, 200 );
-            else if( aApproachColor.GetGreen() )
-                aApproachColor = Color( 200, 0, 0 );
+            if (aApproachColor.GetRed())
+               aApproachColor = Color(0, 0, 200);
+            else if (aApproachColor.GetGreen())
+               aApproachColor = Color(200, 0, 0);
             else
-                aApproachColor = Color( 0, 200, 0 );
+                aApproachColor = Color(0, 200, 0);
         }
 
-        DrawLine( project( aP1 ) + aCenter,
-                  project( aP2 ) + aCenter,
-                  aLineInfo );
+        rRenderContext.DrawLine(project(aP1) + aCenter,
+                                project(aP2) + aCenter,
+                                aLineInfo);
         aPoint.X() = (int)((((double)aP1.X())*cosd - ((double)aP1.Y())*sind)*factor);
         aPoint.Y() = (int)((((double)aP1.Y())*cosd + ((double)aP1.X())*sind)*factor);
         aP1 = aPoint;
@@ -343,7 +344,7 @@ void MyWin::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
         aPoint.Y() = (int)((((double)aP2.Y())*cosd + ((double)aP2.X())*sind)*factor);
         aP2 = aPoint;
     }
-    Pop();
+    rRenderContext.Pop();
 }
 
 void MyWin::Resize()

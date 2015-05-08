@@ -1074,7 +1074,7 @@ public:
         }
     };
 
-    void drawToDevice(OutputDevice &rDev, Size aSize, bool bVDev)
+    void drawToDevice(vcl::RenderContext& rDev, Size aSize, bool bVDev)
     {
         RenderContext aCtx;
         double mnStartTime;
@@ -1417,28 +1417,33 @@ public:
         mrRenderer.SetSizePixel(GetSizePixel());
         mrRenderer.KeyInput(rKEvt);
     }
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE
     {
         mrRenderer.SetSizePixel(GetSizePixel());
         fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
         if (mrRenderer.getIterCount() == 0)
-            mrRenderer.drawToDevice(*this, GetSizePixel(), false);
+            mrRenderer.drawToDevice(rRenderContext, GetSizePixel(), false);
         else
-            TestAndQuit();
+            TestAndQuit(rRenderContext);
     }
 
-    void TestAndQuit()
+    void TestAndQuit(vcl::RenderContext& rRenderContext)
     {
-        if (underTesting) return;
-        underTesting=true;
+        if (underTesting)
+            return;
+        underTesting = true;
         for (sal_Int32 i = 0; i < mrRenderer.getIterCount(); i++)
+        {
             while (mrRenderer.selectNextRenderer() > -1)
-                mrRenderer.drawToDevice(*this, GetSizePixel(), false);
+            {
+                mrRenderer.drawToDevice(rRenderContext, GetSizePixel(), false);
+            }
+        }
 
         double expandedGEOMEAN = mrRenderer.getAndResetBenchmark(RENDER_EXPANDED);
 
         for (sal_Int32 i = 0; i < mrRenderer.getIterCount(); i++)
-            mrRenderer.drawToDevice(*this, GetSizePixel(), false);
+            mrRenderer.drawToDevice(rRenderContext, GetSizePixel(), false);
 
         double thumbGEOMEAN = mrRenderer.getAndResetBenchmark(RENDER_THUMB);
 
