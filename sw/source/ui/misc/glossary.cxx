@@ -418,7 +418,7 @@ IMPL_LINK( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
+IMPL_LINK_TYPED( SwGlossaryDlg, EnableHdl, Menu *, pMn, bool )
 {
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
 
@@ -437,7 +437,7 @@ IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
     pMn->EnableItem("macro", bExists && !bIsGroup && !bIsOld &&
                                     !pGlossaryHdl->IsReadOnly() );
     pMn->EnableItem("import", bIsGroup && !bIsOld && !pGlossaryHdl->IsReadOnly() );
-    return 1;
+    return true;
 }
 
 IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )

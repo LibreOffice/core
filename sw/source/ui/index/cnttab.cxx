@@ -1487,10 +1487,10 @@ IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
     return 0;
 }
 
-IMPL_LINK(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu)
+IMPL_LINK_TYPED(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu, bool)
 {
     pMenu->EnableItem("edit", !sAutoMarkURL.isEmpty());
-    return 0;
+    return false;
 }
 
 IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)

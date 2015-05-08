@@ -723,7 +723,7 @@ private:
 
 }
 
-IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
+IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
 {
     if ( pMenu == m_pVCLMenu )
     {
@@ -747,7 +747,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         pMenu->SetMenuFlags( nFlag );
 
         if ( m_bActive )
-            return 0;
+            return false;
 
         m_bActive = true;
 
@@ -917,10 +917,10 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         }
     }
 
-    return 1;
+    return true;
 }
 
-IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
+IMPL_LINK_TYPED( MenuBarManager, Deactivate, Menu *, pMenu, bool )
 {
     if ( pMenu == m_pVCLMenu )
     {
@@ -936,7 +936,7 @@ IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
         }
     }
 
-    return 1;
+    return true;
 }
 
 IMPL_LINK_NOARG_TYPED( MenuBarManager, AsyncSettingsHdl, Timer*, void)

@@ -434,11 +434,11 @@ void SwPageBreakWin::Fade( bool bFadeIn )
         m_aFadeTimer.Start( );
 }
 
-IMPL_LINK_NOARG(SwPageBreakWin, HideHandler)
+IMPL_LINK_NOARG_TYPED(SwPageBreakWin, HideHandler, Menu *, bool)
 {
     Fade( false );
 
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(SwPageBreakWin, FadeHandler, Timer *, void)

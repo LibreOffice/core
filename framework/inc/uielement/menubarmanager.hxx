@@ -152,8 +152,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
 
     protected:
         DECL_LINK_TYPED(Highlight, Menu *, bool);
-        DECL_LINK( Activate, Menu * );
-        DECL_LINK( Deactivate, Menu * );
+        DECL_LINK_TYPED( Activate, Menu *, bool );
+        DECL_LINK_TYPED( Deactivate, Menu *, bool );
         DECL_LINK_TYPED( AsyncSettingsHdl, Timer *, void );
 
         void RemoveListener();

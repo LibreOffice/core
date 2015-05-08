@@ -709,7 +709,7 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
 
 // vcl handler
 
-IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
+IMPL_LINK_TYPED( MenuManager, Activate, Menu *, pMenu, bool )
 {
     if ( pMenu == m_pVCLMenu )
     {
@@ -726,7 +726,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         pMenu->SetMenuFlags( nFlag );
 
         if ( m_bActive )
-            return 0;
+            return false;
 
         m_bActive = true;
 
@@ -751,7 +751,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         }
 
         if ( m_bInitialized )
-            return 0;
+            return false;
         else
         {
             URL aTargetURL;
@@ -806,15 +806,15 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         }
     }
 
-    return 1;
+    return true;
 }
 
-IMPL_LINK( MenuManager, Deactivate, Menu *, pMenu )
+IMPL_LINK_TYPED( MenuManager, Deactivate, Menu *, pMenu, bool )
 {
     if ( pMenu == m_pVCLMenu )
         m_bActive = false;
 
-    return 1;
+    return true;
 }
 
 IMPL_LINK( MenuManager, Select, Menu *, pMenu )

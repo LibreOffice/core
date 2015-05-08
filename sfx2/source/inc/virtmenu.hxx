@@ -70,8 +70,8 @@ protected:
 
     void            CreateFromSVMenu();
     DECL_LINK_TYPED( Highlight, Menu *, bool );
-    DECL_LINK( Activate, Menu * );
-    DECL_LINK( Deactivate, Menu * );
+    DECL_LINK_TYPED( Activate, Menu *, bool );
+    DECL_LINK_TYPED( Deactivate, Menu *, bool );
     DECL_LINK( SettingsChanged, void* );
 
     // Used for runtime popup menus

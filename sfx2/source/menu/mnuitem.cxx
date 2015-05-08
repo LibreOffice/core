@@ -326,7 +326,7 @@ SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()
     delete pMenu;
 }
 
-IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
+IMPL_LINK_TYPED( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu, bool )
 {
     if ( pActMenu )
     {
@@ -382,10 +382,10 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
             }
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const OUString& rCmd,

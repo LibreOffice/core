@@ -126,8 +126,8 @@ private:
     Menu*               pStartedFrom;
     VclPtr<vcl::Window> pWindow;
 
-    Link<>              aActivateHdl;       // Active-Handler
-    Link<>              aDeactivateHdl;     // Deactivate-Handler
+    Link<Menu *, bool>  aActivateHdl;       // Active-Handler
+    Link<Menu *, bool>  aDeactivateHdl;     // Deactivate-Handler
     Link<Menu *, bool>  aHighlightHdl;      // Highlight-Handler
     Link<>              aSelectHdl;         // Highlight-Handler
 
@@ -320,11 +320,9 @@ public:
     void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
     OString             GetHelpId( sal_uInt16 nItemId ) const;
 
-    void                SetActivateHdl( const Link<>& rLink )   { aActivateHdl = rLink; }
-    const Link<>&       GetActivateHdl() const                  { return aActivateHdl; }
+    void                SetActivateHdl( const Link<Menu *, bool>& rLink )   { aActivateHdl = rLink; }
 
-    void                SetDeactivateHdl( const Link<>& rLink ) { aDeactivateHdl = rLink; }
-    const Link<>&       GetDeactivateHdl() const                { return aDeactivateHdl; }
+    void                SetDeactivateHdl( const Link<Menu *, bool>& rLink ) { aDeactivateHdl = rLink; }
 
     void                SetHighlightHdl( const Link<Menu *, bool>& rLink )  { aHighlightHdl = rLink; }
 

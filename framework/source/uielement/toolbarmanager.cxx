@@ -1606,19 +1606,19 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
     }
 }
 
-IMPL_LINK( ToolBarManager, MenuDeactivate, Menu*, pMenu )
+IMPL_LINK_TYPED( ToolBarManager, MenuDeactivate, Menu*, pMenu, bool )
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return 1;
+        return true;
 
     if( pMenu != m_pToolBar->GetMenu() )
-        return 1;
+        return true;
 
     ImplClearPopupMenu( m_pToolBar );
 
-    return 0;
+    return false;
 }
 
 Reference< XModel > ToolBarManager::GetModelFromFrame() const
@@ -1806,7 +1806,7 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
         {
             // Unlink our listeners again -- see above for why.
             pManagerMenu->SetSelectHdl( Link<>() );
-            pManagerMenu->SetDeactivateHdl( Link<>() );
+            pManagerMenu->SetDeactivateHdl( Link<Menu *, bool>() );
         }
     }
 }

@@ -775,7 +775,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 
 // called on activation of the SV-Menu
 
-IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
+IMPL_LINK_TYPED( SfxVirtualMenu, Activate, Menu *, pMenu, bool )
 {
     SAL_INFO(
         "sfx",
@@ -801,7 +801,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
     {
         // Prevent Double Activate
         if ( bIsActive )
-            return sal_True;
+            return true;
 
         // ggf. Pick-Menu erzeugen
         if ( pParent && pSVMenu == pParent->pPickMenu )
@@ -894,7 +894,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         // Suppress the Status updates until Deactivate
         pBindings->ENTERREGISTRATIONS(); ++nLocks; bIsActive = true;
 
-        return sal_True;
+        return true;
     }
     else
     {
@@ -905,13 +905,13 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         if ( !bRet)
             DBG_WARNING( "W1: Virtual menu could not be created!" );
 #endif
-        return long(bRet);
+        return bRet;
     }
 }
 
 
 
-IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
+IMPL_LINK_TYPED( SfxVirtualMenu, Deactivate, Menu *, pMenu, bool )
 {
     SAL_INFO(
         "sfx",
@@ -925,7 +925,7 @@ IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
             UnbindControllers();
         pBindings->LEAVEREGISTRATIONS(); --nLocks; bIsActive = false;
     }
-    return sal_True;
+    return true;
 }
 
 

@@ -140,7 +140,7 @@ class ToolBarManager : public ToolbarManager_Base
 
         DECL_LINK_TYPED( MenuButton, ToolBox *, void );
         DECL_LINK( MenuSelect, Menu * );
-        DECL_LINK( MenuDeactivate, Menu * );
+        DECL_LINK_TYPED( MenuDeactivate, Menu *, bool );
         DECL_LINK_TYPED(AsyncUpdateControllersHdl, Timer *, void);
         DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo* );
 
