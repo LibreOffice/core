@@ -38,6 +38,7 @@
 #include <DocumentLayoutManager.hxx>
 #include <DocumentExternalDataManager.hxx>
 #include <UndoManager.hxx>
+#include <dbmgr.hxx>
 #include <hintids.hxx>
 #include <tools/globname.hxx>
 #include <svx/svxids.hrc>
@@ -493,6 +494,9 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
 {
     if( rNewData != maDBData )
     {
+        if (maDBData.sEmbeddedName != rNewData.sEmbeddedName && GetDocShell())
+            mpDBManager->LoadAndRegisterEmbeddedDataSource(rNewData, *GetDocShell());
+
         maDBData = rNewData;
         getIDocumentState().SetModified();
     }

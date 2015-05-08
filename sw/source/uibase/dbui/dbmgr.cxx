@@ -2624,6 +2624,20 @@ OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUSt
     return LoadAndRegisterDataSource( type, aURLAny, pSettings, rURI, pPrefix, pDestDir );
 }
 
+void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell)
+{
+    uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
+
+    if (xDatabaseContext->hasByName(rData.sDataSource))
+        xDatabaseContext->revokeObject(rData.sDataSource);
+
+    INetURLObject aURLObject(rDocShell.GetMedium()->GetURLObject());
+    aURLObject.SetMark(rData.sEmbeddedName);
+    OUString aURL = aURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET);
+    uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
+    xDatabaseContext->registerObject(rData.sDataSource, xDataSource);
+}
+
 void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                         const Sequence<PropertyValue>& rProperties,
                         bool bWithDataSourceBrowser)

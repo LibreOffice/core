@@ -77,6 +77,7 @@ class SwXMailMerge;
 class SwMailMergeConfigItem;
 class SwCalc;
 class INetURLObject;
+class SwDocShell;
 
 enum DBManagerOptions
 {
@@ -368,6 +369,9 @@ public:
      */
     static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0,
                                                          const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings = 0);
+
+    /// Load the embedded data source of the document and also register it.
+    void LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);
 
     /** try to get the data source from the given connection through the XChild interface.
         If this is not possible, the data source will be created through its name.
