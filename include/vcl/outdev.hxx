@@ -274,6 +274,7 @@ private:
 
     inline void acquire() const
     {
+        assert(mnRefCnt>0);
         mnRefCnt++;
     }
 
