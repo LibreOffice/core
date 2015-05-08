@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 #include <vector>
 
 class SwTxtNode;
@@ -61,13 +62,21 @@ class SwTxtNode;
     0111: expanding fields + hiding hiddens + hiding redlines gives: AAAABB foo CCCCC foo DDDDD
 */
 
-#define PASSTHROUGH    0x0000
-#define EXPANDFIELDS   0x0001
-#define EXPANDFOOTNOTE 0x0002
-#define HIDEINVISIBLE  0x0004
-#define HIDEDELETIONS  0x0008
-/// do not expand to content, but replace with ZWSP
-#define REPLACEMODE    0x0010
+enum class ExpandMode
+{
+    PassThrough    = 0x0000,
+    ExpandFields   = 0x0001,
+    ExpandFootnote = 0x0002,
+    HideInvisible  = 0x0004,
+    HideDeletions  = 0x0008,
+    /// do not expand to content, but replace with zwsp
+    ReplaceMode    = 0x0010,
+};
+
+namespace o3tl
+{
+    template<> struct typed_flags<ExpandMode> : is_typed_flags<ExpandMode, 0x001f> {};
+}
 
 class ModelToViewHelper
 {
@@ -118,7 +127,7 @@ public:
 
     ModelToViewHelper(const SwTxtNode &rNode,
             // defaults are appropriate for spell/grammar checking
-            sal_uInt16 eMode = EXPANDFIELDS | EXPANDFOOTNOTE | REPLACEMODE);
+            ExpandMode eMode = ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     ModelToViewHelper() //pass through filter, view == model
     {
     }

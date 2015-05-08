@@ -80,21 +80,21 @@ struct containsPos
     }
 };
 
-ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
+ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, ExpandMode eMode)
 {
     const OUString& rNodeText = rNode.GetTxt();
     m_aRetText = rNodeText;
 
-    if (eMode == PASSTHROUGH)
+    if (eMode == ExpandMode::PassThrough)
         return;
 
     Range aRange( 0, rNodeText.isEmpty() ? 0 : rNodeText.getLength() - 1);
     MultiSelection aHiddenMulti(aRange);
 
-    if (eMode & HIDEINVISIBLE)
+    if (eMode & ExpandMode::HideInvisible)
         SwScriptInfo::selectHiddenTextProperty(rNode, aHiddenMulti);
 
-    if (eMode & HIDEDELETIONS)
+    if (eMode & ExpandMode::HideDeletions)
         SwScriptInfo::selectRedLineDeleted(rNode, aHiddenMulti);
 
     std::vector<block> aBlocks;
@@ -123,7 +123,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
     if (nTrailingShownLen)
         aBlocks.push_back(block(nShownStart, nTrailingShownLen, true));
 
-    if (eMode & EXPANDFIELDS || eMode & EXPANDFOOTNOTE)
+    if (eMode & ExpandMode::ExpandFields || eMode & ExpandMode::ExpandFootnote)
     {
         //first the normal fields, get their position in the node and what the text they expand
         //to is
@@ -145,9 +145,9 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                     {
                         case RES_TXTATR_FIELD:
                         case RES_TXTATR_ANNOTATION:
-                            if (eMode & EXPANDFIELDS)
+                            if (eMode & ExpandMode::ExpandFields)
                             {
-                                aFieldResult.m_sExpand = (eMode & REPLACEMODE)
+                                aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP)
                                     : static_txtattr_cast<SwTxtFld const*>(pAttr)->
                                       GetFmtFld().GetField()->ExpandField(true);
@@ -155,11 +155,11 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                             }
                             break;
                         case RES_TXTATR_FTN:
-                            if (eMode & EXPANDFOOTNOTE)
+                            if (eMode & ExpandMode::ExpandFootnote)
                             {
                                 const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
                                 const SwDoc *pDoc = rNode.GetDoc();
-                                aFieldResult.m_sExpand = (eMode & REPLACEMODE)
+                                aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP)
                                     : rFtn.GetViewNumStr(*pDoc);
                                 aFieldResult.m_eType = FieldResult::FOOTNOTE;
@@ -173,7 +173,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
             }
         }
 
-        if (eMode & EXPANDFIELDS)
+        if (eMode & ExpandMode::ExpandFields)
         {
             //now get the dropdown formfields, get their position in the node and what the text they expand
             //to is
@@ -193,7 +193,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                 if (aFind != aBlocks.end())
                 {
                     FieldResult aFieldResult(nDummyCharPos);
-                    aFieldResult.m_sExpand = (eMode & REPLACEMODE)
+                    aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                         ? OUString(CHAR_ZWSP)
                         : sw::mark::ExpandFieldmark(pMark);
                     aFieldResult.m_eType = FieldResult::FIELD;

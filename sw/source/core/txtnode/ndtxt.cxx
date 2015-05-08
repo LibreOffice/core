@@ -3138,9 +3138,9 @@ OUString SwTxtNode::GetExpandTxt(  const sal_Int32 nIdx,
                                    const bool bWithFtn ) const
 
 {
-    sal_uInt16 eMode = EXPANDFIELDS;
+    ExpandMode eMode = ExpandMode::ExpandFields;
     if (bWithFtn)
-        eMode |= EXPANDFOOTNOTE;
+        eMode |= ExpandMode::ExpandFootnote;
 
     ModelToViewHelper aConversionMap(*this, eMode);
     OUString aExpandText = aConversionMap.getViewText();

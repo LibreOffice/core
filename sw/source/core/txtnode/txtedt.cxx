@@ -1985,7 +1985,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
     }
 
     // ConversionMap to expand fields, remove invisible and redline deleted text for scanner
-    const ModelToViewHelper aConversionMap(*this, EXPANDFIELDS | EXPANDFOOTNOTE | HIDEINVISIBLE | HIDEDELETIONS);
+    const ModelToViewHelper aConversionMap(*this, ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::HideInvisible | ExpandMode::HideDeletions);
     OUString aExpandText = aConversionMap.getViewText();
 
     if (aExpandText.isEmpty() && !bCountNumbering)
