@@ -325,20 +325,4 @@ SfxUnoMenuControl::~SfxUnoMenuControl()
     pUnoCtrl->release();
 }
 
-struct MenuExecuteInfo
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-    ::com::sun::star::util::URL                                                aTargetURL;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
-
-    DECL_STATIC_LINK( MenuExecuteInfo, ExecuteHdl_Impl, MenuExecuteInfo* );
-};
-
-IMPL_STATIC_LINK_NOINSTANCE( MenuExecuteInfo, ExecuteHdl_Impl, MenuExecuteInfo*, pExecuteInfo )
-{
-    pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
-    delete pExecuteInfo;
-    return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
