@@ -822,10 +822,10 @@ namespace frm
     }
 
 
-    IMPL_STATIC_LINK( OClickableImageBaseModel, DownloadDoneLink, void*, EMPTYARG )
+    IMPL_LINK_NOARG( OClickableImageBaseModel, DownloadDoneLink )
     {
-        ::osl::MutexGuard aGuard( pThis->m_aMutex );
-        pThis->DownloadDone();
+        ::osl::MutexGuard aGuard( m_aMutex );
+        DownloadDone();
         return 0;
     }
 

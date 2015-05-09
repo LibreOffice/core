@@ -74,7 +74,7 @@ namespace frm
         ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmission >
                                                 m_xSubmissionDelegate;
 
-        DECL_STATIC_LINK( OClickableImageBaseModel, DownloadDoneLink, void* );
+        DECL_LINK( DownloadDoneLink, void* );
 
         inline ImageProducer* GetImageProducer() { return m_pProducer; }
 
