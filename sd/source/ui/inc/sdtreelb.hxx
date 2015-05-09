@@ -166,7 +166,7 @@ protected:
         const SdrObject* pObject,
         const bool bCreate = true) const;
     void                    CloseBookmarkDoc();
-                            DECL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*);
+                            DECL_LINK(ExecDragHdl, void*);
 
     /** Handle the reordering of entries in the navigator.  This method
         reorders both the involved shapes in their page as well as the

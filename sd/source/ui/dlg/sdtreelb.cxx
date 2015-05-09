@@ -1371,11 +1371,11 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
 /**
  * Handler for Dragging
  */
-IMPL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SdPageObjsTLB, ExecDragHdl)
 {
     // as link, then it is allowed to asynchronous, without ImpMouseMoveMsg on
     // the stack, delete the Navigator
-    pThis->DoDrag();
+    DoDrag();
     return 0;
 }
 
