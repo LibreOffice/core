@@ -371,7 +371,8 @@ private:
                                                      ScDocument* pDoc,
                                                      const OUString& sHeaderUnit,
                                                      const ScAddress& rHeaderAddress,
-                                                     const OUString& sCellUnit );
+                                                     const OUString& sCellUnit,
+                                                     ScDocShell* pDocSh );
     DECL_LINK( UnitConversionRecommendedHandler, UnitConversionPushButton* );
 };
 
