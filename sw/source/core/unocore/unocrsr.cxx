@@ -32,6 +32,7 @@ SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     , m_bRemainInSection(true)
     , m_bSkipOverHiddenSections(false)
     , m_bSkipOverProtectSections(false)
+    , m_bSaneOwnership(false)
 {}
 
 SwUnoCrsr::~SwUnoCrsr()
@@ -39,11 +40,18 @@ SwUnoCrsr::~SwUnoCrsr()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-        // then remove cursor from array
-        SwUnoCrsrTable& rTable = (SwUnoCrsrTable&)pDoc->GetUnoCrsrTable();
-        if( !rTable.erase( this ) )
+        if(m_bSaneOwnership)
         {
-            OSL_ENSURE( false, "UNO Cursor nicht mehr im Array" );
+            //assert(!SwIterator<SwClient,SwUnoCrsr>(this).First());
+        }
+        else
+        {
+            // then remove cursor from array
+            SwUnoCrsrTable& rTable = (SwUnoCrsrTable&)pDoc->GetUnoCrsrTable();
+            if( !rTable.erase( this ) )
+            {
+                OSL_ENSURE( false, "UNO Cursor nicht mehr im Array" );
+            }
         }
     }
 
@@ -58,6 +66,7 @@ SwUnoCrsr::~SwUnoCrsr()
 
 SwUnoCrsr * SwUnoCrsr::Clone() const
 {
+    assert(!m_bSaneOwnership);
     SwUnoCrsr * pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint() );
     if (HasMark())
     {
@@ -69,6 +78,7 @@ SwUnoCrsr * SwUnoCrsr::Clone() const
 
 SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
 {
+    assert(!m_bSaneOwnership);
     SwUnoTableCrsr * pNewCrsr = dynamic_cast<SwUnoTableCrsr*>(
         GetDoc()->CreateUnoCrsr(
             *GetPoint(), true /* create SwUnoTableCrsr */ ) );
