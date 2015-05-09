@@ -141,7 +141,9 @@ private:
     void exportHiLowLines();
     void exportUpDownBars(css::uno::Reference< css::chart2::XChartType > xChartType );
 
-    void exportSeries( css::uno::Reference< css::chart2::XChartType > xChartType, sal_Int32& nAttachedAxis );
+    void exportAllSeries(css::uno::Reference<css::chart2::XChartType> xChartType, sal_Int32& nAttachedAxis);
+    void exportSeries(css::uno::Reference< css::chart2::XChartType > xChartType,
+            css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq, sal_Int32& nAttachedAxis );
     void exportCandleStickSeries(
         const css::uno::Sequence<
             css::uno::Reference<

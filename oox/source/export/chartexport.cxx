@@ -1523,7 +1523,7 @@ void ChartExport::exportAreaChart( Reference< chart2::XChartType > xChartType )
 
     exportGrouping( );
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
@@ -1556,7 +1556,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
             FSEND );
 
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
 
     Reference< XPropertySet > xTypeProp( xChartType, uno::UNO_QUERY );
 
@@ -1632,7 +1632,7 @@ void ChartExport::exportBubbleChart( Reference< chart2::XChartType > xChartType 
             FSEND );
 
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
 
     pFS->singleElement(FSNS(XML_c, XML_bubble3D),
             XML_val, "0",
@@ -1650,7 +1650,7 @@ void ChartExport::exportDoughnutChart( Reference< chart2::XChartType > xChartTyp
             FSEND );
 
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
     // firstSliceAng
     exportFirstSliceAng( );
     //FIXME: holeSize
@@ -1674,7 +1674,7 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
     exportGrouping( );
     // TODO: show marker symbol in series?
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
 
     // show marker?
     sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
@@ -1718,7 +1718,7 @@ void ChartExport::exportPieChart( Reference< chart2::XChartType > xChartType )
             FSEND );
 
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
 
     if( !mbIs3DChart )
     {
@@ -1746,7 +1746,7 @@ void ChartExport::exportRadarChart( Reference< chart2::XChartType > xChartType)
             XML_val, radarStyle,
             FSEND );
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, XML_radarChart ) );
@@ -1780,7 +1780,7 @@ void ChartExport::exportScatterChart( Reference< chart2::XChartType > xChartType
 
     // FIXME: should export xVal and yVal
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
@@ -1793,7 +1793,17 @@ void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
             FSEND );
 
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+
+    bool bJapaneseCandleSticks = false;
+    Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY );
+    if( xCTProp.is())
+        xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
+
+    Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
+    if(xDSCnt.is())
+        exportCandleStickSeries(
+                xDSCnt->getDataSeries(), bJapaneseCandleSticks, nAttachedAxis );
+
     // export stock properties
     Reference< css::chart::XStatisticDisplay > xStockPropProvider( mxDiagram, uno::UNO_QUERY );
     if( xStockPropProvider.is())
@@ -1882,41 +1892,34 @@ void ChartExport::exportSurfaceChart( Reference< chart2::XChartType > xChartType
     pFS->startElement( FSNS( XML_c, nTypeId ),
             FSEND );
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportSeries( xChartType, nAttachedAxis );
+    exportAllSeries( xChartType, nAttachedAxis );
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
 
-void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_Int32& nAttachedAxis )
+void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, sal_Int32& nAttachedAxis)
 {
-
-    OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
     if( ! xDSCnt.is())
         return;
 
+    // export dataseries for current chart-type
+    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
+    exportSeries(xChartType, aSeriesSeq, nAttachedAxis);
+}
+
+void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
+        Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, sal_Int32& nAttachedAxis )
+{
+    OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
     OUString aChartType( xChartType->getChartType());
     sal_Int32 eChartType = lcl_getChartType( aChartType );
 
-    // special export for stock charts
-    if( eChartType == chart::TYPEID_STOCK )
-    {
-        bool bJapaneseCandleSticks = false;
-        Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY );
-        if( xCTProp.is())
-            xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
-        exportCandleStickSeries(
-            xDSCnt->getDataSeries(), bJapaneseCandleSticks, nAttachedAxis );
-        return;
-    }
-
-    // export dataseries for current chart-type
-    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
-    for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
+    for( sal_Int32 nSeriesIdx=0; nSeriesIdx<rSeriesSeq.getLength(); ++nSeriesIdx )
     {
         // export series
-        Reference< chart2::data::XDataSource > xSource( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
+        Reference< chart2::data::XDataSource > xSource( rSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
         if( xSource.is())
         {
             Reference< chart2::XDataSeries > xDataSeries( xSource, uno::UNO_QUERY );
@@ -1972,7 +1975,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
 
                     // export shape properties
                     Reference< XPropertySet > xPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
-                        aSeriesSeq[nSeriesIdx], getModel() );
+                        rSeriesSeq[nSeriesIdx], getModel() );
                     if( xPropSet.is() )
                     {
                         if( GetProperty( xPropSet, "Axis") )
@@ -2028,12 +2031,12 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     }
 
                     // export data points
-                    exportDataPoints( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
+                    exportDataPoints( uno::Reference< beans::XPropertySet >( rSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
 
                     // export data labels
-                    exportDataLabels(aSeriesSeq[nSeriesIdx], nSeriesLength, eChartType);
+                    exportDataLabels(rSeriesSeq[nSeriesIdx], nSeriesLength, eChartType);
 
-                    exportTrendlines( aSeriesSeq[nSeriesIdx] );
+                    exportTrendlines( rSeriesSeq[nSeriesIdx] );
 
                     if( eChartType != chart::TYPEID_PIE &&
                             eChartType != chart::TYPEID_RADARLINE )
