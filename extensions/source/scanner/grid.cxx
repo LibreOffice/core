@@ -26,6 +26,7 @@
 #include <cmath>
 
 #include <grid.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <algorithm>
 #include <boost/scoped_array.hpp>
@@ -717,9 +718,6 @@ double* GridDialog::getNewYValues()
     return m_pGridWindow->getNewYValues();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGridWindow(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new GridWindow(pParent);
-}
+VCL_BUILDER_FACTORY(GridWindow)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

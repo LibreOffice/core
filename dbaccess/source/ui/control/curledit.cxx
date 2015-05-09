@@ -20,6 +20,7 @@
 #include "curledit.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <osl/diagnose.h>
 
 namespace dbaui
@@ -33,8 +34,9 @@ OConnectionURLEdit::OConnectionURLEdit(vcl::Window* _pParent, WinBits _nBits,boo
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeConnectionURLEdit(vcl::Window *pParent)
+VCL_BUILDER_DECL_FACTORY(ConnectionURLEdit)
 {
+    (void)rMap;
     return new OConnectionURLEdit(pParent, WB_BORDER, false);
 }
 

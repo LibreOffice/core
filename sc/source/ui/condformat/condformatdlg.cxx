@@ -19,6 +19,7 @@
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "anyrefdg.hxx"
 #include "document.hxx"
@@ -142,8 +143,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
     RecalcAll();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCondFormatList(vcl::Window *pParent,
-    VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ScCondFormatList)
 {
     WinBits nWinBits = 0;
 

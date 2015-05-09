@@ -30,6 +30,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "tphfedit.hxx"
 #include "editutil.hxx"
@@ -135,8 +136,9 @@ void ScEditWindow::dispose()
     Control::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScEditWindow(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(ScEditWindow)
 {
+    (void)rMap;
     return new ScEditWindow (pParent, WB_BORDER|WB_TABSTOP, Left);
 }
 
@@ -344,10 +346,7 @@ ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
     SetDropDown(PushButtonDropdownStyle::Toolbox);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScExtIButton(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new ScExtIButton (pParent, 0);// WB_BORDER|WB_TABSTOP);
-}
+VCL_BUILDER_FACTORY_ARGS(ScExtIButton, 0 /* WB_BORDER|WB_TABSTOP */)
 
 void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)
 {

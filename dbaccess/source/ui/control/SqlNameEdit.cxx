@@ -18,7 +18,7 @@
  */
 
 #include "SqlNameEdit.hxx"
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 namespace dbaui
 {
@@ -81,14 +81,9 @@ namespace dbaui
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOSQLNameEdit(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new dbaui::OSQLNameEdit(pParent);
-}
+using namespace dbaui;
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOSQLNameComboBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new dbaui::OSQLNameComboBox(pParent);
-}
+VCL_BUILDER_FACTORY(OSQLNameEdit)
+VCL_BUILDER_FACTORY(OSQLNameComboBox)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,8 +33,7 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/threadex.hxx>
-
-
+#include <vcl/builderfactory.hxx>
 
 #include <boost/bind.hpp>
 #include "dp_gui_shared.hxx"
@@ -127,7 +126,7 @@ LicenseView::LicenseView( vcl::Window* pParent, WinBits nStyle )
     StartListening( *GetTextEngine() );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLicenseView(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(LicenseView)
 {
     WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

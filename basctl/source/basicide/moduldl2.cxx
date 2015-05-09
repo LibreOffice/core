@@ -33,6 +33,7 @@
 #include <tools/diagnose_ex.h>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
@@ -150,7 +151,7 @@ CheckBox::CheckBox(vcl::Window* pParent, WinBits nStyle)
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCheckBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(CheckBox)
 {
     WinBits nWinBits = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

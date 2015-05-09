@@ -31,6 +31,7 @@
 #include "sqlmessage.hxx"
 #include "FieldControls.hxx"
 #include <vcl/layout.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "dbaccess_slotid.hrc"
 
@@ -401,10 +402,7 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt
     SetEntryData(_nPos,_pFieldDescr);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOWizTypeSelectList(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new OWizTypeSelectList(pParent);
-}
+VCL_BUILDER_FACTORY(OWizTypeSelectList)
 
 bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
 {

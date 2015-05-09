@@ -19,6 +19,7 @@
 
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/builderfactory.hxx>
 #include "svtools/treelistentry.hxx"
 
 #include "structpg.hxx"
@@ -77,10 +78,7 @@ void StructListBox::LoseFocus()
     SvTreeListBox::LoseFocus();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeStructListBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new StructListBox(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(StructListBox, WB_BORDER)
 
 StructPage::StructPage(vcl::Window* pParent):
     TabPage(pParent, "StructPage", "formula/ui/structpage.ui"),

@@ -28,7 +28,7 @@
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 
 #include <tools/resary.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "scresid.hxx"
@@ -157,7 +157,7 @@ ScDPFunctionListBox::ScDPFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     FillFunctionNames();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScDPFunctionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ScDPFunctionListBox)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

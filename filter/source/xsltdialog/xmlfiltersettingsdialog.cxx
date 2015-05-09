@@ -31,6 +31,7 @@
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/builderfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "svtools/treelistentry.hxx"
 
@@ -1428,10 +1429,7 @@ void SvxPathControl::dispose()
     vcl::Window::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPathControl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxPathControl(pParent);
-}
+VCL_BUILDER_FACTORY(SvxPathControl)
 
 bool SvxPathControl::Notify(NotifyEvent& rNEvt)
 {

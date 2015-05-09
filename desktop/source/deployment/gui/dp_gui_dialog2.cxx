@@ -38,6 +38,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <osl/mutex.hxx>
 
@@ -195,8 +196,9 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtBoxWithBtns(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(ExtBoxWithBtns)
 {
+    (void)rMap;
     return new ExtBoxWithBtns_Impl(pParent);
 }
 

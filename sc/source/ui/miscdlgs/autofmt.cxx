@@ -33,6 +33,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -73,10 +74,7 @@ ScAutoFmtPreview::ScAutoFmtPreview(vcl::Window* pParent)
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScAutoFmtPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new ScAutoFmtPreview(pParent);
-}
+VCL_BUILDER_FACTORY(ScAutoFmtPreview)
 
 void ScAutoFmtPreview::Resize()
 {

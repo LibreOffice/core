@@ -22,7 +22,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include "TableConnectionData.hxx"
 #include "TableConnection.hxx"
 #include "TableWindow.hxx"
@@ -140,10 +140,7 @@ namespace dbaui
     {
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeORelationControl(vcl::Window *pParent, VclBuilder::stringmap &)
-    {
-        return new ORelationControl(pParent);
-    }
+    VCL_BUILDER_FACTORY(ORelationControl)
 
     void ORelationControl::Init(const TTableConnectionData::value_type& _pConnData)
     {
