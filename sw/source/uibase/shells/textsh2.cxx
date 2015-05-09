@@ -234,7 +234,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     }
 }
 
-IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
+IMPL_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
 {
     if( pDBStruct )
     {
@@ -263,7 +263,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
             SwDBData aDBData = pDBStruct->aDBData;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-            boost::scoped_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(pThis->GetView(),
+            boost::scoped_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,
                                                                                                 aDBData));

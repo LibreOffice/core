@@ -1266,9 +1266,9 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
     return pNewFmt;
 }
 
-IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
+IMPL_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 {
-    SwViewShell* pStartSh = pThis->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pStartSh = getIDocumentLayoutAccess().GetCurrentViewShell();
     if(pStartSh)
         for(SwViewShell& rShell : pStartSh->GetRingContainer())
         {

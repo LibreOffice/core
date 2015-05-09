@@ -480,7 +480,7 @@ public:
 
     static sal_uInt16   GetMoveType();
     static void     SetMoveType(sal_uInt16 nSet);
-    DECL_STATIC_LINK( SwView, MoveNavigationHdl, bool* ); // #i75416#
+    DECL_LINK( MoveNavigationHdl, bool* ); // #i75416#
     static void     SetActMark(sal_Int32 nSet);
 
     bool            HandleWheelCommands( const CommandEvent& );

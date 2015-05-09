@@ -68,7 +68,7 @@ class SwTestAccountSettingsDialog : public SfxModalDialog
 
     void                Test();
     DECL_LINK(StopHdl, void *);
-    DECL_STATIC_LINK(SwTestAccountSettingsDialog, TestHdl, void*);
+    DECL_LINK(TestHdl, void*);
 public:
     SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
     virtual ~SwTestAccountSettingsDialog();
@@ -282,11 +282,11 @@ IMPL_LINK_NOARG(SwTestAccountSettingsDialog, StopHdl)
     return 0;
 }
 
-IMPL_STATIC_LINK(SwTestAccountSettingsDialog, TestHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwTestAccountSettingsDialog, TestHdl)
 {
-    pThis->EnterWait();
-    pThis->Test();
-    pThis->LeaveWait();
+    EnterWait();
+    Test();
+    LeaveWait();
     return 0;
 }
 

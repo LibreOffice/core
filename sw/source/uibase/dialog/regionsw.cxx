@@ -174,19 +174,19 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
 }
 
-IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
+IMPL_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
 {
     boost::scoped_ptr<SwSectionData> xSectionData(pSect);
     if (xSectionData.get())
     {
-        SfxItemSet aSet(pThis->GetView().GetPool(),
+        SfxItemSet aSet(GetView().GetPool(),
                 RES_COL, RES_COL,
                 RES_BACKGROUND, RES_BACKGROUND,
                 RES_FRM_SIZE, RES_FRM_SIZE,
                 SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                 0);
         SwRect aRect;
-        pThis->CalcBoundRect(aRect, FLY_AS_CHAR);
+        CalcBoundRect(aRect, FLY_AS_CHAR);
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
         // height=width for more consistent preview (analog to edit region)
@@ -194,7 +194,7 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialog creation failed!");
         boost::scoped_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
-            &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis));
+            &GetView().GetViewFrame()->GetWindow(),aSet , *this));
         OSL_ENSURE(aTabDlg, "Dialog creation failed!");
         aTabDlg->SetSectionData(*xSectionData);
         aTabDlg->Execute();

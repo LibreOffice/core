@@ -59,7 +59,7 @@ protected:
     inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
     inline bool     AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
 
-    DECL_STATIC_LINK(   SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
+    DECL_LINK(          InsertDBTextHdl, DBTextStruct_Impl* );
 
     void                InsertURLButton( const OUString& rURL, const OUString& rTarget, const OUString& rTxt );
     void                InsertTable( SfxRequest& _rRequest );

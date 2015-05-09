@@ -1744,11 +1744,10 @@ void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, bool bRecalc )
         pRoot->EndAllAction( true );    //True per VirDev (browsing is calmer)
 }
 
-IMPL_STATIC_LINK_TYPED( SwHTMLTableLayout, DelayedResize_Impl, Timer*, EMPTYARG, void )
+IMPL_LINK_NOARG_TYPED( SwHTMLTableLayout, DelayedResize_Impl, Timer*, void )
 {
-    pThis->aResizeTimer.Stop();
-    pThis->_Resize( pThis->nDelayedResizeAbsAvail,
-                    pThis->bDelayedResizeRecalc );
+    aResizeTimer.Stop();
+    _Resize( nDelayedResizeAbsAvail, bDelayedResizeRecalc );
 }
 
 bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,

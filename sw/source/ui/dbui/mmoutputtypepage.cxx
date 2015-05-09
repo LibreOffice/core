@@ -397,21 +397,21 @@ IMPL_STATIC_LINK_NOINSTANCE( SwSendMailDialog, StartSendMails, SwSendMailDialog*
     return 0;
 }
 
-IMPL_STATIC_LINK_TYPED( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
+IMPL_LINK_TYPED( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
 {
-    if( pThis->m_pImpl->xMailDispatcher.is() )
+    if( m_pImpl->xMailDispatcher.is() )
     {
-        if(pThis->m_pImpl->xMailDispatcher->isStarted())
-            pThis->m_pImpl->xMailDispatcher->stop();
-        if(!pThis->m_pImpl->xMailDispatcher->isShutdownRequested())
-            pThis->m_pImpl->xMailDispatcher->shutdown();
+        if(m_pImpl->xMailDispatcher->isStarted())
+            m_pImpl->xMailDispatcher->stop();
+        if(!m_pImpl->xMailDispatcher->isShutdownRequested())
+            m_pImpl->xMailDispatcher->shutdown();
     }
 
-    if( pThis->m_bDesctructionEnabled &&
-            (!pThis->m_pImpl->xMailDispatcher.is() ||
-                    !pThis->m_pImpl->xMailDispatcher->isRunning()))
+    if( m_bDesctructionEnabled &&
+            (!m_pImpl->xMailDispatcher.is() ||
+                    !m_pImpl->xMailDispatcher->isRunning()))
     {
-        pThis->disposeOnce();
+        disposeOnce();
     }
     else
     {

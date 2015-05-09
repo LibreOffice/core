@@ -479,22 +479,22 @@ IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
     return 0;
 }
 
-IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEntry*, pSelect)
+IMPL_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEntry*, pSelect)
 {
     //prevent nested calls of the select handler
-    if(pThis->m_bInSelectHdl)
+    if(m_bInSelectHdl)
         return 0;
-    pThis->EnterWait();
-    pThis->m_bInSelectHdl = true;
+    EnterWait();
+    m_bInSelectHdl = true;
     AddressUserData_Impl* pUserData = 0;
     if(pSelect)
     {
         const OUString sTable(SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1));
         if(sTable.isEmpty())
         {
-            pThis->m_pListLB->SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
+            m_pListLB->SetEntryText(m_sConnecting, pSelect, ITEMID_TABLE - 1);
             // allow painting of the new entry
-            pThis->m_pListLB->Window::Invalidate(INVALIDATE_UPDATE);
+            m_pListLB->Window::Invalidate(INVALIDATE_UPDATE);
             for (int i = 0; i < 10; ++i)
                 Application::Reschedule();
         }
@@ -513,25 +513,25 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
              * Most expedient thing to do is to manually end the parent selection
              * here.
              */
-            pThis->m_pListLB->EndSelection();
-            pThis->DetectTablesAndQueries(pSelect, sTable.isEmpty());
+            m_pListLB->EndSelection();
+            DetectTablesAndQueries(pSelect, sTable.isEmpty());
         }
         else
         {
             //otherwise set the selected db-data
-            pThis->m_aDBData.sDataSource = SvTabListBox::GetEntryText(pSelect, ITEMID_NAME - 1);
-            pThis->m_aDBData.sCommand = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
-            pThis->m_aDBData.nCommandType = pUserData->nCommandType;
-            pThis->m_pOK->Enable(true);
+            m_aDBData.sDataSource = SvTabListBox::GetEntryText(pSelect, ITEMID_NAME - 1);
+            m_aDBData.sCommand = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
+            m_aDBData.nCommandType = pUserData->nCommandType;
+            m_pOK->Enable(true);
         }
-        if(SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1) == pThis->m_sConnecting)
-           pThis->m_pListLB->SetEntryText(OUString(), pSelect, ITEMID_TABLE - 1);
+        if(SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1) == m_sConnecting)
+           m_pListLB->SetEntryText(OUString(), pSelect, ITEMID_TABLE - 1);
     }
-    pThis->m_pEditPB->Enable(pUserData && !pUserData->sURL.isEmpty() &&
+    m_pEditPB->Enable(pUserData && !pUserData->sURL.isEmpty() &&
                     SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
                     !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL ) );
-    pThis->m_bInSelectHdl = false;
-    pThis->LeaveWait();
+    m_bInSelectHdl = false;
+    LeaveWait();
     return 0;
 }
 

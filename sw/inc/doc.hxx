@@ -602,7 +602,7 @@ public:
     const OUString getDocAccTitle() const { return msDocAccTitle; }
 
     // INextInterface here
-    DECL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem *);
+    DECL_LINK(BackgroundDone, SvxBrushItem *);
     DECL_LINK(CalcFieldValueHdl, EditFieldInfo*);
 
     // OLE ???

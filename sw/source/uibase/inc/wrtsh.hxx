@@ -443,7 +443,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM = NULL );
 
     // link for inserting ranges via Drag&Drop/Clipboard
-    DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData* );
+    DECL_LINK( InsertRegionDialog, SwSectionData* );
 
     // ctor, the first one is a kind of a controlled copy ctor for more views of a document
     SwWrtShell( SwWrtShell&, vcl::Window *pWin, SwView &rShell);

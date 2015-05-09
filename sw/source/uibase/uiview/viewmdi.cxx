@@ -313,16 +313,16 @@ int SwView::_CreateScrollbar( bool bHori )
     return 1;
 }
 
-IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
+IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
 {
     if ( !pbNext )
         return 0;
     const bool bNext = *pbNext;
-    SwWrtShell& rSh = pThis->GetWrtShell();
+    SwWrtShell& rSh = GetWrtShell();
     switch( m_nMoveType )
     {
         case NID_PGE:
-            bNext ? pThis->PhyPageDown() : pThis->PhyPageUp();
+            bNext ? PhyPageDown() : PhyPageUp();
         break;
         case NID_TBL :
             rSh.EnterStdMode();
@@ -367,7 +367,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_BKM :
             rSh.EnterStdMode();
-            pThis->GetViewFrame()->GetDispatcher()->Execute(bNext ?
+            GetViewFrame()->GetDispatcher()->Execute(bNext ?
                                         FN_NEXT_BOOKMARK :
                                             FN_PREV_BOOKMARK);
         break;
@@ -423,15 +423,15 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
 
         case NID_POSTIT:
             {
-                sw::sidebarwindows::SwSidebarWin* pPostIt = pThis->GetPostItMgr()->GetActiveSidebarWin();
+                sw::sidebarwindows::SwSidebarWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
                 if (pPostIt)
-                    pThis->GetPostItMgr()->SetActiveSidebarWin(0);
+                    GetPostItMgr()->SetActiveSidebarWin(0);
                 SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
                 if ( rSh.MoveFldType( pFldType, bNext ) )
-                    pThis->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+                    GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
                 else
                     //first/last item
-                    pThis->GetPostItMgr()->SetActiveSidebarWin(pPostIt);
+                    GetPostItMgr()->SetActiveSidebarWin(pPostIt);
             }
             break;
 
@@ -442,8 +442,8 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
             if (rSh.HasSelection() && bNext != rSh.IsCrsrPtAtEnd())
                 rSh.SwapPam();
             m_pSrchItem->SetBackward(!bNext);
-            SfxRequest aReq(FN_REPEAT_SEARCH, SfxCallMode::SLOT, pThis->GetPool());
-            pThis->ExecSearch(aReq);
+            SfxRequest aReq(FN_REPEAT_SEARCH, SfxCallMode::SLOT, GetPool());
+            ExecSearch(aReq);
             m_pSrchItem->SetBackward(bBackward);
         }
         break;
@@ -459,7 +459,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
             rSh.GotoNxtPrvTblFormula( bNext, true );
             break;
     }
-    pThis->m_pEditWin->GrabFocus();
+    m_pEditWin->GrabFocus();
     delete pbNext;
     return 0;
 }
