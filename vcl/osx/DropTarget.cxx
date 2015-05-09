@@ -105,7 +105,8 @@ namespace /* private */
 
 -(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-    return mDropTarget->performDragOperation(sender);
+    (void) sender;
+    return mDropTarget->performDragOperation();
 }
 
 -(void)concludeDragOperation:(id <NSDraggingInfo>)sender
@@ -201,7 +202,10 @@ NSDragOperation DropTarget::draggingEntered(id sender)
         sal_Int8 currentAction = determineDropAction(mDragSourceSupportedActions, sender);
 
         NSRect bounds = [mView bounds];
-        NSPoint dragLocation = [sender draggedImageLocation];
+        NSPoint mouseLoc = [NSEvent mouseLocation];
+
+        id wnd = [mView window];
+        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
 
         CocoaToVCL(dragLocation, bounds);
 
@@ -239,7 +243,10 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
     {
         sal_Int8 currentAction = determineDropAction(currentDragSourceActions, sender);
         NSRect bounds = [mView bounds];
-        NSPoint dragLocation = [sender draggedImageLocation];
+        NSPoint mouseLoc = [NSEvent mouseLocation];
+
+        id wnd = [mView window];
+        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
 
         CocoaToVCL(dragLocation, bounds);
 
@@ -288,7 +295,7 @@ BOOL DropTarget::prepareForDragOperation()
     return 1;
 }
 
-BOOL DropTarget::performDragOperation(id sender)
+BOOL DropTarget::performDragOperation()
 {
     bool bSuccess = false;
 
@@ -302,7 +309,10 @@ BOOL DropTarget::performDragOperation(id sender)
         }
 
         NSRect bounds = [mView bounds];
-        NSPoint dragLocation = [sender draggedImageLocation];
+        NSPoint mouseLoc = [NSEvent mouseLocation];
+
+        id wnd = [mView window];
+        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
 
         CocoaToVCL(dragLocation, bounds);
 
