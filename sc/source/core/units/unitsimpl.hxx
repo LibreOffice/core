@@ -119,8 +119,8 @@ private:
 
     bool extractUnitFromHeaderString(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
 
-    OUString extractUnitStringFromFormat(const OUString& rFormatString);
-    OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
+    static OUString extractUnitStringFromFormat(const OUString& rFormatString);
+    static OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
 
     /**
      * Retrieve the units for a given cell. This probes based on the usual rules
