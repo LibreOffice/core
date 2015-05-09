@@ -232,7 +232,7 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pT
     }
 }
 
-IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, CBOXGridShowClkHdl)
 {
     bool bState = mpCBXShowGrid->IsChecked();
     SfxBoolItem aItem( FID_TAB_TOGGLE_GRID , bState);

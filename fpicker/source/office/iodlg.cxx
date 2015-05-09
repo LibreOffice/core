@@ -1147,7 +1147,7 @@ void SvtFileDialog::EnableAutocompletion( bool _bEnable )
 
 
 
-IMPL_LINK( SvtFileDialog, FilterSelectHdl_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl )
 {
     OUString sSelectedFilterDisplayName;
     SvtFileDialogFilter_Impl* pSelectedFilter = _pImp->GetSelectedFilterEntry( sSelectedFilterDisplayName );
@@ -1228,7 +1228,7 @@ IMPL_LINK_TYPED(
     ExecuteFilter();
 }
 
-IMPL_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG( SvtFileDialog, FileNameGetFocusHdl_Impl )
 {
     _pFileView->SetNoSelection();
     _pFileView->Update();
@@ -1237,7 +1237,7 @@ IMPL_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void*, EMPTYARG )
 
 
 
-IMPL_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG( SvtFileDialog, FileNameModifiedHdl_Impl )
 {
     FileNameGetFocusHdl_Impl( NULL );
     return 0;
@@ -1245,7 +1245,7 @@ IMPL_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void*, EMPTYARG )
 
 
 
-IMPL_LINK ( SvtFileDialog, URLBoxModifiedHdl_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG( SvtFileDialog, URLBoxModifiedHdl_Impl )
 {
     OUString _aPath = _pImp->_pEdCurrentPath->GetURL();
     OpenURL_Impl(_aPath);
@@ -1254,7 +1254,7 @@ IMPL_LINK ( SvtFileDialog, URLBoxModifiedHdl_Impl, void*, EMPTYARG )
 
 
 
-IMPL_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
+IMPL_LINK_NOARG( SvtFileDialog, ConnectToServerPressed_Hdl )
 {
     _pFileView->EndInplaceEditing( false );
 

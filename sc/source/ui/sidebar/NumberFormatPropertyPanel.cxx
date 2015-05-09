@@ -149,7 +149,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
     return 0L;
 }
 
-IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl )
 {
     OUString      aFormat;
     OUString      sBreak = ",";

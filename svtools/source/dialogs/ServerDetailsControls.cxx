@@ -63,7 +63,7 @@ void DetailsContainer::notifyChange( )
     m_aChangeHdl.Call( this );
 }
 
-IMPL_LINK( DetailsContainer, ValueChangeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( DetailsContainer, ValueChangeHdl )
 {
     notifyChange( );
     return 0;
@@ -356,7 +356,7 @@ void CmisDetailsContainer::selectRepository( )
     notifyChange( );
 }
 
-IMPL_LINK( CmisDetailsContainer, SelectServerTypeHdl, void *, EMPTYARG  )
+IMPL_LINK_NOARG( CmisDetailsContainer, SelectServerTypeHdl  )
 {
     // Set a sample URL for the server
     sal_uInt16 nId = m_pLBServerType->GetSelectEntryPos( );
@@ -364,7 +364,7 @@ IMPL_LINK( CmisDetailsContainer, SelectServerTypeHdl, void *, EMPTYARG  )
     return 0;
 }
 
-IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
+IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
 {
     OUString sBindingUrl = m_pEDBinding->GetText().trim( );
 
@@ -420,7 +420,7 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
     return 0;
 }
 
-IMPL_LINK( CmisDetailsContainer, SelectRepoHdl, void *, EMPTYARG  )
+IMPL_LINK_NOARG( CmisDetailsContainer, SelectRepoHdl  )
 {
     selectRepository( );
     return 0;

@@ -283,7 +283,7 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pStateVal )
     return 0;
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, InteractionHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOARG( SessionManagerClient, InteractionHdl )
 {
     SAL_INFO("vcl.sm", "interaction link");
     if( m_pSession )
@@ -295,7 +295,7 @@ IMPL_STATIC_LINK( SessionManagerClient, InteractionHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownCancelHdl )
 {
     SAL_INFO("vcl.sm", "shutdown cancel");
     if( m_pSession )
@@ -345,7 +345,7 @@ void SessionManagerClient::SaveYourselfProc(
     SAL_INFO("vcl.sm", "waiting for save yourself event to be processed" );
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownHdl )
 {
     if( m_pSession )
     {

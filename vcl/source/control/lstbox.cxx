@@ -244,7 +244,7 @@ IMPL_LINK( ListBox, ImplFocusHdl, void *, nPos )
     return 1;
 }
 
-IMPL_LINK( ListBox, ImplListItemSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG( ListBox, ImplListItemSelectHdl )
 {
     CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
     return 1;

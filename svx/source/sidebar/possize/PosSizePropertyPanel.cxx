@@ -451,7 +451,7 @@ IMPL_LINK( PosSizePropertyPanel, ChangeWidthHdl, void*, /*pBox*/ )
 
 
 
-IMPL_LINK( PosSizePropertyPanel, ChangeHeightHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -475,7 +475,7 @@ IMPL_LINK( PosSizePropertyPanel, ChangeHeightHdl, void *, EMPTYARG )
 
 
 
-IMPL_LINK( PosSizePropertyPanel, ChangePosXHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl )
 {
     executePosX();
     return 0;
@@ -483,7 +483,7 @@ IMPL_LINK( PosSizePropertyPanel, ChangePosXHdl, void *, EMPTYARG )
 
 
 
-IMPL_LINK( PosSizePropertyPanel, ChangePosYHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl )
 {
     executePosY();
     return 0;
@@ -491,7 +491,7 @@ IMPL_LINK( PosSizePropertyPanel, ChangePosYHdl, void *, EMPTYARG )
 
 
 
-IMPL_LINK( PosSizePropertyPanel, ClickAutoHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl )
 {
     if ( mpCbxScale->IsChecked() )
     {
@@ -508,7 +508,7 @@ IMPL_LINK( PosSizePropertyPanel, ClickAutoHdl, void *, EMPTYARG )
 
 
 
-IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl )
 {
     OUString sTmp = mpMtrAngle->GetText();
     if (sTmp.isEmpty())
@@ -556,7 +556,7 @@ IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 
 
 
-IMPL_LINK( PosSizePropertyPanel, RotationHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl )
 {
     sal_Int32 nTmp = mpDial->GetRotation();
 

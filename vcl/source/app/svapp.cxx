@@ -382,7 +382,7 @@ void Application::Yield()
     ImplYield( true, false );
 }
 
-IMPL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg )
 {
     ImplGetSVData()->maAppData.mbAppQuit = true;
     return 0;

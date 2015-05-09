@@ -172,7 +172,7 @@ IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)
     return 0;
 }
 
-IMPL_LINK(PageSizeControl, MoreButtonClickHdl_Impl, void *, EMPTYARG)
+IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl)
 {
     mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
 

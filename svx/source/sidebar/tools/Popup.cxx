@@ -111,7 +111,7 @@ void Popup::CreateContainerAndControl()
     mxControl.reset(maControlCreator(mxContainer.get()));
 }
 
-IMPL_LINK(Popup, PopupModeEndHandler, void*, EMPTYARG)
+IMPL_LINK_NOARG(Popup, PopupModeEndHandler)
 {
     if (maPopupModeEndCallback)
         maPopupModeEndCallback();

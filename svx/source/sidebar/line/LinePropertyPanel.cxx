@@ -663,7 +663,7 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
     return 0;
 }
 
-IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(LinePropertyPanel, ChangeStartHdl)
 {
     sal_Int32  nPos = mpLBStart->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBStart->IsValueChangedFromSaved() )
@@ -678,7 +678,7 @@ IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(LinePropertyPanel, ChangeEndHdl)
 {
     sal_Int32  nPos = mpLBEnd->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBEnd->IsValueChangedFromSaved() )
@@ -693,7 +693,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(LinePropertyPanel, ChangeEdgeStyleHdl)
 {
     const sal_Int32 nPos(mpLBEdgeStyle->GetSelectEntryPos());
 
@@ -730,7 +730,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(LinePropertyPanel, ChangeCapStyleHdl)
 {
     const sal_Int32 nPos(mpLBCapStyle->GetSelectEntryPos());
 
@@ -771,7 +771,7 @@ IMPL_LINK_TYPED(LinePropertyPanel, ToolboxWidthSelectHdl,ToolBox*, pToolBox, voi
     }
 }
 
-IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( LinePropertyPanel, ChangeTransparentHdl )
 {
     sal_uInt16 nVal = (sal_uInt16)mpMFTransparent->GetValue();
     XLineTransparenceItem aItem( nVal );

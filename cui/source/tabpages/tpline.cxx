@@ -1630,7 +1630,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
 
 // fdo#43209
 
-IMPL_LINK( SvxLineTabPage, ChangeCapStyleHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG( SvxLineTabPage, ChangeCapStyleHdl_Impl )
 {
     ChangePreviewHdl_Impl( this );
 

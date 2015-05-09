@@ -247,7 +247,7 @@ void OEditControl::keyReleased(const ::com::sun::star::awt::KeyEvent& /*e*/) thr
 }
 
 
-IMPL_LINK(OEditControl, OnKeyPressed, void*, /*EMPTYARG*/)
+IMPL_LINK_NOARG(OEditControl, OnKeyPressed)
 {
     m_nKeyEvent = 0;
 

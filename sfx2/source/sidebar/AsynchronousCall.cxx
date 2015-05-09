@@ -56,7 +56,7 @@ void AsynchronousCall::CancelRequest()
     }
 }
 
-IMPL_LINK(AsynchronousCall, HandleUserCall, void*, EMPTYARG )
+IMPL_LINK_NOARG(AsynchronousCall, HandleUserCall )
 {
     mnCallId = 0;
     if (maAction)

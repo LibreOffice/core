@@ -132,7 +132,7 @@ void AlignmentPropertyPanel::Initialize()
     mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtRotate);
 }
 
-IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
 {
     OUString sTmp = mpMtrAngle->GetText();
     if (sTmp.isEmpty())
@@ -171,7 +171,7 @@ IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( AlignmentPropertyPanel, RotationHdl )
 {
     sal_Int32 nTmp = mpCtrlDial->GetRotation();
     SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,(sal_uInt32) nTmp);
@@ -182,7 +182,7 @@ IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl )
 {
     bool bVertical = mpCbStacked->IsChecked();
     SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
@@ -191,7 +191,7 @@ IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl)
 {
     mpCBXWrapText->EnableTriState(false);
     sal_uInt16 nVal = (sal_uInt16)mpMFLeftIndent->GetValue();
@@ -201,7 +201,7 @@ IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
     return 0L;
 }
 
-IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl)
 {
     bool bState = mpCBXMergeCell->IsChecked();
 
@@ -218,7 +218,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl)
 {
     bool bState = mpCBXWrapText->IsChecked();
     SfxBoolItem aItem( SID_ATTR_ALIGN_LINEBREAK , bState);

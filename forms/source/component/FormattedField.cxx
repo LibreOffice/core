@@ -240,7 +240,7 @@ void OFormattedControl::keyReleased(const ::com::sun::star::awt::KeyEvent& /*e*/
 {
 }
 
-IMPL_LINK(OFormattedControl, OnKeyPressed, void*, /*EMPTYARG*/)
+IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed)
 {
     m_nKeyEvent = 0;
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);

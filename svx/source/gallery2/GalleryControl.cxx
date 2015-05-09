@@ -225,7 +225,7 @@ void GalleryControl::ThemeSelectionHasChanged()
     mpBrowser2->SelectTheme(mpBrowser1->GetSelectedTheme());
 }
 
-IMPL_LINK( GalleryControl, SplitHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG( GalleryControl, SplitHdl )
 {
     if(mpSplitter->IsHorizontal())
     {

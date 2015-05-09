@@ -188,7 +188,7 @@ IMPL_LINK( PlacesListBox, Selection, void* , EMPTYARG )
     return 0;
 }
 
-IMPL_LINK ( PlacesListBox, DoubleClick, void*, EMPTYARG )
+IMPL_LINK_NOARG( PlacesListBox, DoubleClick )
 {
     sal_uInt16 nSelected = mpImpl->GetCurrRow();
     PlacePtr pPlace = maPlaces[nSelected];

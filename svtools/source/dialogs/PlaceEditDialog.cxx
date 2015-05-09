@@ -159,7 +159,7 @@ IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK ( PlaceEditDialog, EditHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( PlaceEditDialog, EditHdl )
 {
     OUString sUrl = GetServerUrl( );
     OUString sName = OUString( m_pEDServerName->GetText() ).trim( );
@@ -167,7 +167,7 @@ IMPL_LINK ( PlaceEditDialog, EditHdl, void *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK ( PlaceEditDialog, EditUsernameHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
 {
     for ( std::vector< std::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
             it != m_aDetailsContainers.end( ); ++it )
@@ -177,7 +177,7 @@ IMPL_LINK ( PlaceEditDialog, EditUsernameHdl, void *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( PlaceEditDialog, SelectTypeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
 {
     if (m_xCurrentDetails.get())
         m_xCurrentDetails->show(false);

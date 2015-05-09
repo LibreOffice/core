@@ -1107,7 +1107,7 @@ IMPL_LINK_TYPED( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void 
 
 
 
-IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
+IMPL_LINK_NOARG(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl)
 {
     sal_Int32 nSelectType = mpLBTransType->GetSelectEntryPos();
     bool bGradient = false;
@@ -1204,7 +1204,7 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
 
 
 
-IMPL_LINK(AreaPropertyPanel, ModifyTransparentHdl_Impl, void*, EMPTYARG)
+IMPL_LINK_NOARG(AreaPropertyPanel, ModifyTransparentHdl_Impl)
 {
     const sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
     mnLastTransSolid = nTrans;

@@ -302,7 +302,7 @@ void Deck::PrintWindowSubTree (vcl::Window* pRoot, int nIndentation)
         PrintWindowSubTree(pRoot->GetChild(nIndex), nIndentation+1);
 }
 
-IMPL_LINK(Deck, HandleVerticalScrollBarChange,void*, EMPTYARG)
+IMPL_LINK_NOARG(Deck, HandleVerticalScrollBarChange)
 {
     const sal_Int32 nYOffset (-mpVerticalScrollBar->GetThumbPos());
     mpScrollContainer->SetPosPixel(

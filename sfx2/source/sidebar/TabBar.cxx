@@ -343,7 +343,7 @@ void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
     rFocusManager.SetButtons(aButtons);
 }
 
-IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
+IMPL_LINK_NOARG(TabBar, OnToolboxClicked)
 {
     if ( ! mpMenuButton)
         return 0;

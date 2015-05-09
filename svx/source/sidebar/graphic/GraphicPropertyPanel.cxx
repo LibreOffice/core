@@ -148,7 +148,7 @@ void GraphicPropertyPanel::Initialize()
 
 
 
-IMPL_LINK( GraphicPropertyPanel, ModifyBrightnessHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyBrightnessHdl )
 {
     const sal_Int16 nBright = mpMtrBrightness->GetValue();
     const SfxInt16Item aBrightItem( SID_ATTR_GRAF_LUMINANCE, nBright );
@@ -158,7 +158,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyBrightnessHdl, void *, EMPTYARG )
 
 
 
-IMPL_LINK( GraphicPropertyPanel, ModifyContrastHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyContrastHdl )
 {
     const sal_Int16 nContrast = mpMtrContrast->GetValue();
     const SfxInt16Item aContrastItem( SID_ATTR_GRAF_CONTRAST, nContrast );
@@ -168,7 +168,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyContrastHdl, void *, EMPTYARG )
 
 
 
-IMPL_LINK( GraphicPropertyPanel, ModifyTransHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl )
 {
     const sal_Int16 nTrans = mpMtrTrans->GetValue();
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
@@ -188,7 +188,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl )
 
 
 
-IMPL_LINK( GraphicPropertyPanel, RedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG( GraphicPropertyPanel, RedHdl )
 {
     const sal_Int16 nRed = mpMtrRed->GetValue();
     const SfxInt16Item aRedItem( SID_ATTR_GRAF_RED, nRed );
@@ -198,7 +198,7 @@ IMPL_LINK( GraphicPropertyPanel, RedHdl, void*, EMPTYARG )
 
 
 
-IMPL_LINK( GraphicPropertyPanel, GreenHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG( GraphicPropertyPanel, GreenHdl )
 {
     const sal_Int16 nGreen = mpMtrGreen->GetValue();
     const SfxInt16Item aGreenItem( SID_ATTR_GRAF_GREEN, nGreen );
@@ -208,7 +208,7 @@ IMPL_LINK( GraphicPropertyPanel, GreenHdl, void*, EMPTYARG )
 
 
 
-IMPL_LINK(GraphicPropertyPanel, BlueHdl, void *, EMPTYARG)
+IMPL_LINK_NOARG(GraphicPropertyPanel, BlueHdl)
 {
     const sal_Int16 nBlue = mpMtrBlue->GetValue();
     const SfxInt16Item aBlueItem( SID_ATTR_GRAF_BLUE, nBlue );
@@ -218,7 +218,7 @@ IMPL_LINK(GraphicPropertyPanel, BlueHdl, void *, EMPTYARG)
 
 
 
-IMPL_LINK(GraphicPropertyPanel, GammaHdl, void *, EMPTYARG)
+IMPL_LINK_NOARG(GraphicPropertyPanel, GammaHdl)
 {
     const sal_Int32 nGamma = mpMtrGamma->GetValue();
     const SfxInt32Item nGammaItem( SID_ATTR_GRAF_GAMMA, nGamma );

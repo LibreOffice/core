@@ -164,7 +164,7 @@ void WrapPropertyPanel::Initialize()
     mpBindings->Update( FN_FRAME_WRAP_IDEAL );
 }
 
-IMPL_LINK(WrapPropertyPanel, WrapTypeHdl, void *, EMPTYARG)
+IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl)
 {
     sal_uInt16 nSlot = 0;
     if ( mpRBWrapLeft->IsChecked() )

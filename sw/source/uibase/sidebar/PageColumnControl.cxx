@@ -104,7 +104,7 @@ IMPL_LINK(PageColumnControl, ImplColumnHdl, void *, pControl)
     return 0;
 }
 
-IMPL_LINK(PageColumnControl, MoreButtonClickHdl_Impl, void *, EMPTYARG)
+IMPL_LINK_NOARG(PageColumnControl, MoreButtonClickHdl_Impl)
 {
     mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
 
