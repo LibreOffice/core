@@ -8000,7 +8000,12 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                                            FSNS( XML_w, XML_docPartCategory ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartUnique")
-                            AddToAttrList( m_pParagraphSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ), "" );
+                        {
+                            if(sValue == "")
+                                sValue = "true";
+                            AddToAttrList( m_pParagraphSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ),
+                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        }
                     }
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_equation")
