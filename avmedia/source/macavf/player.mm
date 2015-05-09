@@ -295,7 +295,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     if( !mpPlayer )
         return;
 
-    mbMuted = (bSet == TRUE);
+    mbMuted = bSet;
     [mpPlayer setMuted:mbMuted];
 }
 
