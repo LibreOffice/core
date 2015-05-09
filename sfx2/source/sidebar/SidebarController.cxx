@@ -323,7 +323,7 @@ void SidebarController::NotifyResize()
     if (mpCurrentDeck)
     {
         SfxSplitWindow* pSplitWindow = GetSplitWindow();
-        WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WINDOWALIGN_LEFT;
+        WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WINDOWALIGN_RIGHT;
         long nDeckX, nTabX;
         if (eAlign == WINDOWALIGN_LEFT)     // attach the Sidebar towards the left-side of screen
         {
@@ -630,7 +630,7 @@ void SidebarController::SwitchToDeck (
 
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
     sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
-    WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WINDOWALIGN_LEFT;
+    WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WINDOWALIGN_RIGHT;
     long nDeckX;
     if (eAlign == WINDOWALIGN_LEFT)     // attach the Sidebar towards the left-side of screen
     {
