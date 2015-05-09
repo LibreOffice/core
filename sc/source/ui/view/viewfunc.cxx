@@ -2971,10 +2971,26 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
 
     ScDocShellModificator aModificator( *pButton->mpDocSh );
 
+    OUString sOriginalValue = pButton->mpDoc->GetString( pButton->aCellAddress );
+
     pUnits->convertCellToHeaderUnit( pButton->aCellAddress,
                                      pButton->mpDoc,
                                      pButton->sHeaderUnit,
                                      pButton->sCellUnit );
+
+    ScPostIt* pNote = pButton->mpDoc->GetOrCreateNote( pButton->aCellAddress );
+    OUString sCurrentNote = pNote->GetText();
+
+    OUString sConversionNote("Original input: " + sOriginalValue);
+
+    if (sCurrentNote.isEmpty())
+    {
+        pNote->SetText( pButton->aCellAddress, sConversionNote );
+    }
+    else
+    {
+        pNote->SetText( pButton->aCellAddress, sCurrentNote + "\n\n" + sConversionNote );
+    }
 
     aModificator.SetDocumentModified();
 #endif
