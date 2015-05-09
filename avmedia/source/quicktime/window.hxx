@@ -44,7 +44,6 @@ public:
                     );
             virtual ~Window();
 
-    bool    create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& );
     void    processGraphEvent();
     void    updatePointer();
 

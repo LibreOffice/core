@@ -87,11 +87,6 @@ Window::~Window()
     }
 }
 
-bool Window::create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
-{
-    return true;
-}
-
 // XPlayerWindow
 
 void SAL_CALL Window::update(  )

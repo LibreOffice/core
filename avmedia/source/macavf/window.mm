@@ -81,13 +81,6 @@ Window::~Window()
 
 // ------------------------------------------------------------------------------
 
-bool Window::create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )
-{
-    return true;
-}
-
-// ------------------------------------------------------------------------------
-
 bool Window::handleObservation( NSString* pKeyPath )
 {
     OSL_TRACE( "AVPlayer::handleObservation key=\"%s\"", [pKeyPath UTF8String]);
