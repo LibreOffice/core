@@ -674,14 +674,14 @@ void SvtFileDialog::Init_Impl
     Resize();
 }
 
-IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
+IMPL_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
 {
-    pThis->_pFileView->EndInplaceEditing( false );
+    _pFileView->EndInplaceEditing( false );
 
-    SmartContent aContent( pThis->_pFileView->GetViewURL( ) );
+    SmartContent aContent( _pFileView->GetViewURL( ) );
     OUString aTitle;
     aContent.getTitle( aTitle );
-    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg(pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER));
+    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg(this, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER));
     bool bHandled = false;
 
     while ( !bHandled )
@@ -691,7 +691,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
             OUString aUrl = aContent.createFolder( aDlg->GetName( ) );
             if ( !aUrl.isEmpty( ) )
             {
-                pThis->_pFileView->CreatedFolder( aUrl, aDlg->GetName() );
+                _pFileView->CreatedFolder( aUrl, aDlg->GetName() );
                 bHandled = true;
             }
         }
@@ -831,40 +831,40 @@ IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl)
 }
 
 
-IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
+IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 {
-    if ( pThis->_pImp->_bMultiSelection && pThis->_pFileView->GetSelectionCount() > 1 )
+    if ( _pImp->_bMultiSelection && _pFileView->GetSelectionCount() > 1 )
     {
         // special open in case of multiselection
-        pThis->OpenMultiSelection_Impl();
+        OpenMultiSelection_Impl();
         return 0;
     }
 
     OUString aFileName;
-    OUString aOldPath( pThis->_pFileView->GetViewURL() );
-    if ( pThis->_pImp->_bDoubleClick || pThis->_pFileView->HasChildPathFocus() )
+    OUString aOldPath( _pFileView->GetViewURL() );
+    if ( _pImp->_bDoubleClick || _pFileView->HasChildPathFocus() )
         // Selection done by doubleclicking in the view, get filename from the view
-        aFileName = pThis->_pFileView->GetCurrentURL();
+        aFileName = _pFileView->GetCurrentURL();
 
     if ( aFileName.isEmpty() )
     {
         // if an entry is selected in the view ....
-        if ( pThis->_pFileView->GetSelectionCount() )
+        if ( _pFileView->GetSelectionCount() )
         {   // -> use this one. This will allow us to step down this folder
-            aFileName = pThis->_pFileView->GetCurrentURL();
+            aFileName = _pFileView->GetCurrentURL();
         }
     }
 
     if ( aFileName.isEmpty() )
     {
-        if ( pThis->_pImp->_eMode == FILEDLG_MODE_OPEN && pThis->_pImp->_pEdFileName->IsTravelSelect() )
+        if ( _pImp->_eMode == FILEDLG_MODE_OPEN && _pImp->_pEdFileName->IsTravelSelect() )
             // OpenHdl called from URLBox; travelling through the list of URLs should not cause an opening
             return 0;                   // MBA->PB: seems to be called never ?!
 
         // get the URL from the edit field ( if not empty )
-        if ( !pThis->_pImp->_pEdFileName->GetText().isEmpty() )
+        if ( !_pImp->_pEdFileName->GetText().isEmpty() )
         {
-            OUString aText = pThis->_pImp->_pEdFileName->GetText();
+            OUString aText = _pImp->_pEdFileName->GetText();
 
             // did we reach the root?
             if ( !INetURLObject( aOldPath ).getSegmentCount() )
@@ -879,26 +879,26 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             if ( ( 1 == aText.getLength() ) && ( '~' == aText[0] ) )
             {
                 // go to the home directory
-                if ( lcl_getHomeDirectory( pThis->_pFileView->GetViewURL(), aFileName ) )
+                if ( lcl_getHomeDirectory( _pFileView->GetViewURL(), aFileName ) )
                     // in case we got a home dir, reset the text of the edit
-                    pThis->_pImp->_pEdFileName->SetText( OUString() );
+                    _pImp->_pEdFileName->SetText( OUString() );
             }
             if ( aFileName.isEmpty() )
 #endif
             {
                 // get url from autocomplete edit
-                aFileName = pThis->_pImp->_pEdFileName->GetURL();
+                aFileName = _pImp->_pEdFileName->GetURL();
             }
         }
-        else if ( pVoid == pThis->_pImp->_pBtnFileOpen )
+        else if ( pVoid == _pImp->_pBtnFileOpen )
             // OpenHdl was called for the "Open" Button; if edit field is empty, use selected element in the view
-            aFileName = pThis->_pFileView->GetCurrentURL();
+            aFileName = _pFileView->GetCurrentURL();
     }
 
     // MBA->PB: ?!
-    if ( aFileName.isEmpty() && pVoid == pThis->_pImp->_pEdFileName && pThis->_pImp->_pUserFilter )
+    if ( aFileName.isEmpty() && pVoid == _pImp->_pEdFileName && _pImp->_pUserFilter )
     {
-        DELETEZ( pThis->_pImp->_pUserFilter );
+        DELETEZ( _pImp->_pUserFilter );
         return 0;
     }
 
@@ -906,9 +906,9 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     if ( !nLen )
     {
         // if the dialog was opened to select a folder, the last selected folder should be selected
-        if( pThis->_pImp->_eDlgType == FILEDLG_TYPE_PATHDLG )
+        if( _pImp->_eDlgType == FILEDLG_TYPE_PATHDLG )
         {
-            aFileName = pThis->_pImp->_pEdCurrentPath->GetText();
+            aFileName = _pImp->_pEdCurrentPath->GetText();
             nLen = aFileName.getLength();
         }
         else
@@ -917,7 +917,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     }
 
     // mark input as selected
-    pThis->_pImp->_pEdFileName->SetSelection( Selection( 0, nLen ) );
+    _pImp->_pEdFileName->SetSelection( Selection( 0, nLen ) );
 
     // if a path with wildcards is given, divide the string into path and wildcards
     OUString aFilter;
@@ -925,19 +925,19 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         return 0;
 
     // if a filter was retrieved, there were wildcards !
-    sal_uInt16 nNewFilterFlags = pThis->adjustFilter( aFilter );
+    sal_uInt16 nNewFilterFlags = adjustFilter( aFilter );
     if ( nNewFilterFlags & FLT_CHANGED )
     {
         // cut off all text before wildcard in edit and select wildcard
-        pThis->_pImp->_pEdFileName->SetText( aFilter );
-        pThis->_pImp->_pEdFileName->SetSelection( Selection( 0, aFilter.getLength() ) );
+        _pImp->_pEdFileName->SetText( aFilter );
+        _pImp->_pEdFileName->SetSelection( Selection( 0, aFilter.getLength() ) );
     }
 
     {
         INetURLObject aFileObject( aFileName );
         if ( ( aFileObject.GetProtocol() == INetProtocol::NotValid ) && !aFileName.isEmpty() )
         {
-            OUString sCompleted = SvtURLBox::ParseSmart( aFileName, pThis->_pFileView->GetViewURL(), SvtPathOptions().GetWorkPath() );
+            OUString sCompleted = SvtURLBox::ParseSmart( aFileName, _pFileView->GetViewURL(), SvtPathOptions().GetWorkPath() );
             if ( !sCompleted.isEmpty() )
                 aFileName = sCompleted;
         }
@@ -951,7 +951,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     // does the same thing for the same content twice, s/he wants both fails to be displayed.
     // Without the reset, it could be that the content cached all relevant information, and will not display any
     // error messages for the same content a second time ....
-    pThis->m_aContent.bindTo( OUString( ) );
+    m_aContent.bindTo( OUString( ) );
 
     if ( !aFileName.isEmpty() )
     {
@@ -959,26 +959,26 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         // to intercept interactions here, but to record the fact that there
         // was an interaction.
         SmartContent::InteractionHandlerType eInterActionHandlerType
-            = pThis->m_aContent.queryCurrentInteractionHandler();
+            = m_aContent.queryCurrentInteractionHandler();
         if ( ( eInterActionHandlerType == SmartContent::IHT_NONE ) ||
              ( eInterActionHandlerType == SmartContent::IHT_DEFAULT ) )
-            pThis->m_aContent.enableOwnInteractionHandler(
+            m_aContent.enableOwnInteractionHandler(
                 OFilePickerInteractionHandler::E_NOINTERCEPTION );
 
-        bIsFolder = pThis->m_aContent.isFolder( aFileName );
+        bIsFolder = m_aContent.isFolder( aFileName );
 
         // access denied to the given resource - and interaction was already
         // used => break following operations
         OFilePickerInteractionHandler* pHandler
-            = pThis->m_aContent.getOwnInteractionHandler();
+            = m_aContent.getOwnInteractionHandler();
 
         OSL_ENSURE( pHandler, "Got no Interaction Handler!!!" );
 
         if ( pHandler->wasAccessDenied() )
             return 0;
 
-        if ( pThis->m_aContent.isInvalid() &&
-             ( pThis->_pImp->_eMode == FILEDLG_MODE_OPEN ) )
+        if ( m_aContent.isInvalid() &&
+             ( _pImp->_eMode == FILEDLG_MODE_OPEN ) )
         {
             if ( !pHandler->wasUsed() )
                 ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTS );
@@ -988,47 +988,47 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
         // restore previous Interaction Handler
         if ( eInterActionHandlerType == SmartContent::IHT_NONE )
-            pThis->m_aContent.disableInteractionHandler();
+            m_aContent.disableInteractionHandler();
         else if ( eInterActionHandlerType == SmartContent::IHT_DEFAULT )
-            pThis->m_aContent.enableDefaultInteractionHandler();
+            m_aContent.enableDefaultInteractionHandler();
      }
 
     if  (   !bIsFolder                                      // no existent folder
-        &&  pThis->_pImp->_pCbAutoExtension                 // auto extension is enabled in general
-        &&  pThis->_pImp->_pCbAutoExtension->IsChecked()    // auto extension is really to be used
-        &&  !pThis->GetDefaultExt().isEmpty()               // there is a default extension
-        &&  !comphelper::string::equals(pThis->GetDefaultExt(), '*') // the default extension is not "all"
-        && !(   FILEDLG_MODE_SAVE == pThis->_pImp->_eMode       // we're saving a file
-            &&  pThis->_pFileView->GetSelectionCount()          // there is a selected file in the file view -> it will later on
+        &&  _pImp->_pCbAutoExtension                 // auto extension is enabled in general
+        &&  _pImp->_pCbAutoExtension->IsChecked()    // auto extension is really to be used
+        &&  !GetDefaultExt().isEmpty()               // there is a default extension
+        &&  !comphelper::string::equals(GetDefaultExt(), '*') // the default extension is not "all"
+        && !(   FILEDLG_MODE_SAVE == _pImp->_eMode       // we're saving a file
+            &&  _pFileView->GetSelectionCount()          // there is a selected file in the file view -> it will later on
             )                                                   //    (in SvtFileDialog::GetPathList) be taken as file to save to
 
-        && FILEDLG_MODE_OPEN != pThis->_pImp->_eMode // #i83408# don't append extension on open
+        && FILEDLG_MODE_OPEN != _pImp->_eMode // #i83408# don't append extension on open
         )
     {
         // check extension and append the default extension if necessary
         appendDefaultExtension(aFileName,
-                               pThis->GetDefaultExt(),
-                               pThis->_pImp->GetCurFilter()->GetType());
+                               GetDefaultExt(),
+                               _pImp->GetCurFilter()->GetType());
     }
 
-    bool bOpenFolder = ( FILEDLG_TYPE_PATHDLG == pThis->_pImp->_eDlgType ) &&
-                       !pThis->_pImp->_bDoubleClick && pVoid != pThis->_pImp->_pEdFileName;
+    bool bOpenFolder = ( FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType ) &&
+                       !_pImp->_bDoubleClick && pVoid != _pImp->_pEdFileName;
     if ( bIsFolder )
     {
         if ( bOpenFolder )
         {
-            pThis->_aPath = aFileName;
+            _aPath = aFileName;
         }
         else
         {
-            if ( aFileName != pThis->_pFileView->GetViewURL() )
+            if ( aFileName != _pFileView->GetViewURL() )
             {
-                pThis->OpenURL_Impl( aFileName );
+                OpenURL_Impl( aFileName );
             }
             else
             {
                 if ( nNewFilterFlags & FLT_CHANGED )
-                    pThis->ExecuteFilter();
+                    ExecuteFilter();
             }
 
             return 0;
@@ -1037,13 +1037,13 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     else if ( !( nNewFilterFlags & FLT_NONEMPTY ) )
     {
         // if applicable save URL
-        pThis->_aPath = aFileName;
+        _aPath = aFileName;
     }
     else
     {
         // if applicable filter again
         if ( nNewFilterFlags & FLT_CHANGED )
-            pThis->ExecuteFilter();
+            ExecuteFilter();
         return 0;
     }
 
@@ -1054,7 +1054,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         return 0;
     }
 
-    switch ( pThis->_pImp->_eMode )
+    switch ( _pImp->_eMode )
     {
         case FILEDLG_MODE_SAVE:
         {
@@ -1065,7 +1065,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     "$filename$",
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
                 );
-                ScopedVclPtrInstance< MessageDialog > aBox(pThis, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                ScopedVclPtrInstance< MessageDialog > aBox(this, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 if ( aBox->Execute() != RET_YES )
                     return 0;
             }
@@ -1077,7 +1077,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     // if content does not exist: at least its path must exist
                     INetURLObject aPathObj = aFileObj;
                     aPathObj.removeSegment();
-                    bool bFolder = pThis->m_aContent.isFolder( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                    bool bFolder = m_aContent.isFolder( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
                     if ( !bFolder )
                     {
                         ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
@@ -1094,7 +1094,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
             if ( INetProtocol::File == aFileObj.GetProtocol( ) )
             {
-                bool bExists = pThis->m_aContent.is( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                bool bExists = m_aContent.is( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 if ( !bExists )
                 {
@@ -1110,7 +1110,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     }
                     sError = sError.replaceFirst( "$name$", sInvalidFile );
 
-                    ScopedVclPtrInstance< MessageDialog > aError(pThis, sError);
+                    ScopedVclPtrInstance< MessageDialog > aError(this, sError);
                     aError->Execute();
                     return 0;
                 }
@@ -1125,14 +1125,14 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     // notify interested parties
     long nRet;
 
-    if ( pThis->_aOKHdl.IsSet() )
-        nRet = pThis->_aOKHdl.Call( pThis );
+    if ( _aOKHdl.IsSet() )
+        nRet = _aOKHdl.Call( this );
     else
         nRet = 1;
 
     if ( nRet )
     {
-        pThis->EndDialog( RET_OK );
+        EndDialog( RET_OK );
     }
 
     return nRet;
@@ -1147,73 +1147,73 @@ void SvtFileDialog::EnableAutocompletion( bool _bEnable )
 
 
 
-IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, void*, EMPTYARG )
+IMPL_LINK( SvtFileDialog, FilterSelectHdl_Impl, void*, EMPTYARG )
 {
     OUString sSelectedFilterDisplayName;
-    SvtFileDialogFilter_Impl* pSelectedFilter = pThis->_pImp->GetSelectedFilterEntry( sSelectedFilterDisplayName );
+    SvtFileDialogFilter_Impl* pSelectedFilter = _pImp->GetSelectedFilterEntry( sSelectedFilterDisplayName );
     if ( !pSelectedFilter )
     {   // there is no current selection. This happens if for instance the user selects a group separator using
         // the keyboard, and then presses enter: When the selection happens, we immediately deselect the entry,
         // so in this situation there is no current selection.
-        if ( restoreCurrentFilter( pThis->_pImp ) )
-            pThis->ExecuteFilter();
+        if ( restoreCurrentFilter( _pImp ) )
+            ExecuteFilter();
     }
     else
     {
         if ( pSelectedFilter->isGroupSeparator() )
         {   // group separators can't be selected
             // return to the previously selected entry
-            if ( pThis->_pImp->IsFilterListTravelSelect() )
+            if ( _pImp->IsFilterListTravelSelect() )
             {
-                pThis->_pImp->SetNoFilterListSelection( );
+                _pImp->SetNoFilterListSelection( );
 
                 // stop the timer for executing the filter
-                if ( pThis->_pImp->_aFilterTimer.IsActive() )
-                    pThis->_pImp->m_bNeedDelayedFilterExecute = true;
-                pThis->_pImp->_aFilterTimer.Stop();
+                if ( _pImp->_aFilterTimer.IsActive() )
+                    _pImp->m_bNeedDelayedFilterExecute = true;
+                _pImp->_aFilterTimer.Stop();
             }
             else
             {
-                if ( restoreCurrentFilter( pThis->_pImp ) )
-                    pThis->ExecuteFilter();
+                if ( restoreCurrentFilter( _pImp ) )
+                    ExecuteFilter();
             }
         }
-        else if (   ( pSelectedFilter != pThis->_pImp->GetCurFilter() )
-                ||  pThis->_pImp->_pUserFilter
+        else if (   ( pSelectedFilter != _pImp->GetCurFilter() )
+                ||  _pImp->_pUserFilter
                 )
         {
             // Store the old filter for the auto extension handling
-            OUString sLastFilterExt = pThis->_pImp->GetCurFilter()->GetExtension();
-            DELETEZ( pThis->_pImp->_pUserFilter );
+            OUString sLastFilterExt = _pImp->GetCurFilter()->GetExtension();
+            DELETEZ( _pImp->_pUserFilter );
 
             // if applicable remove filter of the user
-            pThis->_pImp->SetCurFilter( pSelectedFilter, sSelectedFilterDisplayName );
+            _pImp->SetCurFilter( pSelectedFilter, sSelectedFilterDisplayName );
 
             // if applicable show extension
-            pThis->SetDefaultExt( pSelectedFilter->GetExtension() );
-            sal_Int32 nSepPos = pThis->GetDefaultExt().indexOf( FILEDIALOG_DEF_EXTSEP );
+            SetDefaultExt( pSelectedFilter->GetExtension() );
+            sal_Int32 nSepPos = GetDefaultExt().indexOf( FILEDIALOG_DEF_EXTSEP );
 
             if ( nSepPos != -1 )
-                pThis->EraseDefaultExt( nSepPos );
+                EraseDefaultExt( nSepPos );
 
             // update the extension of the current file if necessary
-            lcl_autoUpdateFileExtension( pThis, sLastFilterExt );
+            lcl_autoUpdateFileExtension( this, sLastFilterExt );
 
             // if the user is traveling fast through the filterbox
             // do not filter instantly
-            if ( pThis->_pImp->IsFilterListTravelSelect() )
+            if ( _pImp->IsFilterListTravelSelect() )
             {
                 // FilterSelectHdl_Impl should be started again in
                 // TRAVELFILTER_TIMEOUT ms
-                pThis->_pImp->_aFilterTimer.Start();
+                _pImp->_aFilterTimer.Start();
             }
             else
             {
                 // stop previously started timer
-                pThis->_pImp->_aFilterTimer.Stop();
+                _pImp->_aFilterTimer.Stop();
 
                 // filter the view again
-                pThis->ExecuteFilter();
+                ExecuteFilter();
             }
         }
     }
@@ -1221,51 +1221,51 @@ IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_LINK_TYPED(
     SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, EMPTYARG, void)
 {
     // filter the view again
-    pThis->ExecuteFilter();
+    ExecuteFilter();
 }
 
-IMPL_STATIC_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void*, EMPTYARG )
+IMPL_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void*, EMPTYARG )
 {
-    pThis->_pFileView->SetNoSelection();
-    pThis->_pFileView->Update();
+    _pFileView->SetNoSelection();
+    _pFileView->Update();
     return 0;
 }
 
 
 
-IMPL_STATIC_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void*, EMPTYARG )
+IMPL_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void*, EMPTYARG )
 {
-    FileNameGetFocusHdl_Impl( pThis, NULL );
+    FileNameGetFocusHdl_Impl( NULL );
     return 0;
 }
 
 
 
-IMPL_STATIC_LINK ( SvtFileDialog, URLBoxModifiedHdl_Impl, void*, EMPTYARG )
+IMPL_LINK ( SvtFileDialog, URLBoxModifiedHdl_Impl, void*, EMPTYARG )
 {
-    OUString _aPath = pThis->_pImp->_pEdCurrentPath->GetURL();
-    pThis->OpenURL_Impl(_aPath);
+    OUString _aPath = _pImp->_pEdCurrentPath->GetURL();
+    OpenURL_Impl(_aPath);
     return 0;
 }
 
 
 
-IMPL_STATIC_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
+IMPL_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
 {
-    pThis->_pFileView->EndInplaceEditing( false );
+    _pFileView->EndInplaceEditing( false );
 
-    ScopedVclPtrInstance< PlaceEditDialog > aDlg(pThis);
+    ScopedVclPtrInstance< PlaceEditDialog > aDlg(this);
     short aRetCode = aDlg->Execute();
 
     switch (aRetCode) {
         case RET_OK :
         {
             PlacePtr newPlace = aDlg->GetPlace();
-            pThis->_pImp->_pPlaces->AppendPlace(newPlace);
+            _pImp->_pPlaces->AppendPlace(newPlace);
 
       break;
         }
@@ -1509,7 +1509,7 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
 IMPL_LINK_NOARG(SvtFileDialog, DblClickHdl_Impl)
 {
     _pImp->_bDoubleClick = true;
-    OpenHdl_Impl( this, NULL );
+    OpenHdl_Impl( NULL );
     _pImp->_bDoubleClick = false;
 
     return 0;

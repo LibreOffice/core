@@ -112,16 +112,16 @@ private:
     bool                        m_bHasFilename;
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
-    DECL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, void* );
-    DECL_STATIC_LINK_TYPED( SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, void );
-    DECL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton* );
-    DECL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void* );
+    DECL_LINK( FilterSelectHdl_Impl, void* );
+    DECL_LINK_TYPED( FilterSelectTimerHdl_Impl, Timer*, void );
+    DECL_LINK( NewFolderHdl_Impl, PushButton* );
+    DECL_LINK( OpenHdl_Impl, void* );
     DECL_LINK       (                CancelHdl_Impl, void* );
-    DECL_STATIC_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void* );
-    DECL_STATIC_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void* );
+    DECL_LINK( FileNameGetFocusHdl_Impl, void* );
+    DECL_LINK( FileNameModifiedHdl_Impl, void* );
 
-    DECL_STATIC_LINK( SvtFileDialog, URLBoxModifiedHdl_Impl, void* );
-    DECL_STATIC_LINK( SvtFileDialog, ConnectToServerPressed_Hdl, void* );
+    DECL_LINK( URLBoxModifiedHdl_Impl, void* );
+    DECL_LINK( ConnectToServerPressed_Hdl, void* );
 
     DECL_LINK       (                AddPlacePressed_Hdl, void* );
     DECL_LINK       (                RemovePlacePressed_Hdl, void* );
