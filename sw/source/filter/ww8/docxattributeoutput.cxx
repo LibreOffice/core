@@ -4391,161 +4391,163 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
 
 void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 {
-    if (pObject && pObject->GetObjInventor() == FmFormInventor)
+    if (!pObject || pObject->GetObjInventor() != FmFormInventor)
+        return;
+
+    SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(PTR_CAST(SdrUnoObj,pObject));
+    if (!pFormObj)
+        return;
+
+    uno::Reference<awt::XControlModel> xControlModel = pFormObj->GetUnoControlModel();
+    uno::Reference<lang::XServiceInfo> xInfo(xControlModel, uno::UNO_QUERY);
+    if (!xInfo.is())
+        return;
+
+    if (xInfo->supportsService("com.sun.star.form.component.DateField"))
     {
-        if (SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(PTR_CAST(SdrUnoObj,pObject)))
+        // gather component properties
+
+        Date aOriginalDate(Date::EMPTY);
+        OUString sOriginalContent, sDateFormat, sAlias;
+        OUString sLocale("en-US");
+        uno::Sequence<beans::PropertyValue> aGrabBag;
+        uno::Reference<beans::XPropertySet> xShapePropertySet(pFormObj->getUnoShape(), uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aCharFormat;
+        if (xShapePropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag)
         {
-            uno::Reference<awt::XControlModel> xControlModel = pFormObj->GetUnoControlModel();
-            uno::Reference<lang::XServiceInfo> xInfo(xControlModel, uno::UNO_QUERY);
-            if (!xInfo.is())
-                return;
-            if (xInfo->supportsService("com.sun.star.form.component.DateField"))
+            for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
             {
-                // gather component properties
-
-                Date aOriginalDate(Date::EMPTY);
-                OUString sOriginalContent, sDateFormat, sAlias;
-                OUString sLocale("en-US");
-                uno::Sequence<beans::PropertyValue> aGrabBag;
-                uno::Reference<beans::XPropertySet> xShapePropertySet(pFormObj->getUnoShape(), uno::UNO_QUERY);
-                uno::Sequence<beans::PropertyValue> aCharFormat;
-                if (xShapePropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag)
+                if (aGrabBag[i].Name == "DateFormat")
+                    aGrabBag[i].Value >>= sDateFormat;
+                else if (aGrabBag[i].Name == "Locale")
+                    aGrabBag[i].Value >>= sLocale;
+                else if (aGrabBag[i].Name == "OriginalContent")
+                    aGrabBag[i].Value >>= sOriginalContent;
+                else if (aGrabBag[i].Name == "OriginalDate")
                 {
-                    for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
-                    {
-                        if (aGrabBag[i].Name == "DateFormat")
-                            aGrabBag[i].Value >>= sDateFormat;
-                        else if (aGrabBag[i].Name == "Locale")
-                            aGrabBag[i].Value >>= sLocale;
-                        else if (aGrabBag[i].Name == "OriginalContent")
-                            aGrabBag[i].Value >>= sOriginalContent;
-                        else if (aGrabBag[i].Name == "OriginalDate")
-                        {
-                            css::util::Date aUNODate;
-                            aGrabBag[i].Value >>= aUNODate;
-                            aOriginalDate.SetDay(aUNODate.Day);
-                            aOriginalDate.SetMonth(aUNODate.Month);
-                            aOriginalDate.SetYear(aUNODate.Year);
-                        }
-                        else if (aGrabBag[i].Name == "CharFormat")
-                            aGrabBag[i].Value >>= aCharFormat;
-                        else if (aGrabBag[i].Name == "ooxml:CT_SdtPr_alias")
-                            aGrabBag[i].Value >>= sAlias;
-                    }
+                    css::util::Date aUNODate;
+                    aGrabBag[i].Value >>= aUNODate;
+                    aOriginalDate.SetDay(aUNODate.Day);
+                    aOriginalDate.SetMonth(aUNODate.Month);
+                    aOriginalDate.SetYear(aUNODate.Year);
                 }
-                uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-
-                OString sDate;
-                OUString aContentText;
-                bool bHasDate = false;
-                css::util::Date aUNODate;
-                if (xPropertySet->getPropertyValue("Date") >>= aUNODate)
-                {
-                    bHasDate = true;
-                    Date aDate(aUNODate.Day, aUNODate.Month, aUNODate.Year);
-                    sDate = DateToOString(aDate);
-
-                    if (aOriginalDate == aDate)
-                    {
-                        aContentText = sOriginalContent;
-                        // sDateFormat was extracted from the grab bag
-                    }
-                    else
-                    {
-                        aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate).getStr());
-                        sDateFormat = "dd/MM/yyyy";
-                    }
-                }
-                else
-                    aContentText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
-
-                // output component
-
-                m_pSerializer->startElementNS(XML_w, XML_sdt, FSEND);
-                m_pSerializer->startElementNS(XML_w, XML_sdtPr, FSEND);
-
-                if (!sAlias.isEmpty())
-                    m_pSerializer->singleElementNS(XML_w, XML_alias,
-                                                   FSNS(XML_w, XML_val), OUStringToOString(sAlias, RTL_TEXTENCODING_UTF8),
-                                                   FSEND);
-
-                if (bHasDate)
-                    m_pSerializer->startElementNS(XML_w, XML_date,
-                                                  FSNS( XML_w, XML_fullDate ), sDate.getStr(),
-                                                  FSEND);
-                else
-                    m_pSerializer->startElementNS(XML_w, XML_date, FSEND);
-
-                m_pSerializer->singleElementNS(XML_w, XML_dateFormat,
-                                               FSNS(XML_w, XML_val),
-                                               OUStringToOString( sDateFormat, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                               FSEND);
-                m_pSerializer->singleElementNS(XML_w, XML_lid,
-                                               FSNS(XML_w, XML_val),
-                                               OUStringToOString( sLocale, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                               FSEND);
-                m_pSerializer->singleElementNS(XML_w, XML_storeMappedDataAs,
-                                               FSNS(XML_w, XML_val), "dateTime",
-                                               FSEND);
-                m_pSerializer->singleElementNS(XML_w, XML_calendar,
-                                               FSNS(XML_w, XML_val), "gregorian",
-                                               FSEND);
-
-                m_pSerializer->endElementNS(XML_w, XML_date);
-                m_pSerializer->endElementNS(XML_w, XML_sdtPr);
-
-                m_pSerializer->startElementNS(XML_w, XML_sdtContent, FSEND);
-                m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
-
-                if (aCharFormat.hasElements())
-                {
-                    m_pTableStyleExport->SetSerializer(m_pSerializer);
-                    m_pTableStyleExport->CharFormat(aCharFormat);
-                }
-
-                RunText(aContentText);
-                m_pSerializer->endElementNS(XML_w, XML_r);
-                m_pSerializer->endElementNS(XML_w, XML_sdtContent);
-
-                m_pSerializer->endElementNS(XML_w, XML_sdt);
-            }
-            else if (xInfo->supportsService("com.sun.star.form.component.ComboBox"))
-            {
-                // gather component properties
-
-                uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-                OUString sText = xPropertySet->getPropertyValue("Text").get<OUString>();
-                uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue("StringItemList").get< uno::Sequence<OUString> >();
-
-                // output component
-
-                m_pSerializer->startElementNS(XML_w, XML_sdt, FSEND);
-                m_pSerializer->startElementNS(XML_w, XML_sdtPr, FSEND);
-
-                m_pSerializer->startElementNS(XML_w, XML_dropDownList, FSEND);
-
-                for (sal_Int32 i=0; i < aItems.getLength(); ++i)
-                {
-                    m_pSerializer->singleElementNS(XML_w, XML_listItem,
-                                                   FSNS(XML_w, XML_displayText),
-                                                   OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
-                                                   FSNS(XML_w, XML_value),
-                                                   OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
-                                                   FSEND);
-                }
-
-                m_pSerializer->endElementNS(XML_w, XML_dropDownList);
-                m_pSerializer->endElementNS(XML_w, XML_sdtPr);
-
-                m_pSerializer->startElementNS(XML_w, XML_sdtContent, FSEND);
-                m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
-                RunText(sText);
-                m_pSerializer->endElementNS(XML_w, XML_r);
-                m_pSerializer->endElementNS(XML_w, XML_sdtContent);
-
-                m_pSerializer->endElementNS(XML_w, XML_sdt);
+                else if (aGrabBag[i].Name == "CharFormat")
+                    aGrabBag[i].Value >>= aCharFormat;
+                else if (aGrabBag[i].Name == "ooxml:CT_SdtPr_alias")
+                    aGrabBag[i].Value >>= sAlias;
             }
         }
+        uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
+
+        OString sDate;
+        OUString aContentText;
+        bool bHasDate = false;
+        css::util::Date aUNODate;
+        if (xPropertySet->getPropertyValue("Date") >>= aUNODate)
+        {
+            bHasDate = true;
+            Date aDate(aUNODate.Day, aUNODate.Month, aUNODate.Year);
+            sDate = DateToOString(aDate);
+
+            if (aOriginalDate == aDate)
+            {
+                aContentText = sOriginalContent;
+                // sDateFormat was extracted from the grab bag
+            }
+            else
+            {
+                aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate).getStr());
+                sDateFormat = "dd/MM/yyyy";
+            }
+        }
+        else
+            aContentText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
+
+        // output component
+
+        m_pSerializer->startElementNS(XML_w, XML_sdt, FSEND);
+        m_pSerializer->startElementNS(XML_w, XML_sdtPr, FSEND);
+
+        if (!sAlias.isEmpty())
+            m_pSerializer->singleElementNS(XML_w, XML_alias,
+                                           FSNS(XML_w, XML_val), OUStringToOString(sAlias, RTL_TEXTENCODING_UTF8),
+                                           FSEND);
+
+        if (bHasDate)
+            m_pSerializer->startElementNS(XML_w, XML_date,
+                                          FSNS( XML_w, XML_fullDate ), sDate.getStr(),
+                                          FSEND);
+        else
+            m_pSerializer->startElementNS(XML_w, XML_date, FSEND);
+
+        m_pSerializer->singleElementNS(XML_w, XML_dateFormat,
+                                       FSNS(XML_w, XML_val),
+                                       OUStringToOString( sDateFormat, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                       FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_lid,
+                                       FSNS(XML_w, XML_val),
+                                       OUStringToOString( sLocale, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                       FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_storeMappedDataAs,
+                                       FSNS(XML_w, XML_val), "dateTime",
+                                       FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_calendar,
+                                       FSNS(XML_w, XML_val), "gregorian",
+                                       FSEND);
+
+        m_pSerializer->endElementNS(XML_w, XML_date);
+        m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+
+        m_pSerializer->startElementNS(XML_w, XML_sdtContent, FSEND);
+        m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
+
+        if (aCharFormat.hasElements())
+        {
+            m_pTableStyleExport->SetSerializer(m_pSerializer);
+            m_pTableStyleExport->CharFormat(aCharFormat);
+        }
+
+        RunText(aContentText);
+        m_pSerializer->endElementNS(XML_w, XML_r);
+        m_pSerializer->endElementNS(XML_w, XML_sdtContent);
+
+        m_pSerializer->endElementNS(XML_w, XML_sdt);
+    }
+    else if (xInfo->supportsService("com.sun.star.form.component.ComboBox"))
+    {
+        // gather component properties
+
+        uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
+        OUString sText = xPropertySet->getPropertyValue("Text").get<OUString>();
+        uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue("StringItemList").get< uno::Sequence<OUString> >();
+
+        // output component
+
+        m_pSerializer->startElementNS(XML_w, XML_sdt, FSEND);
+        m_pSerializer->startElementNS(XML_w, XML_sdtPr, FSEND);
+
+        m_pSerializer->startElementNS(XML_w, XML_dropDownList, FSEND);
+
+        for (sal_Int32 i=0; i < aItems.getLength(); ++i)
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_listItem,
+                                           FSNS(XML_w, XML_displayText),
+                                           OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                           FSNS(XML_w, XML_value),
+                                           OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                           FSEND);
+        }
+
+        m_pSerializer->endElementNS(XML_w, XML_dropDownList);
+        m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+
+        m_pSerializer->startElementNS(XML_w, XML_sdtContent, FSEND);
+        m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
+        RunText(sText);
+        m_pSerializer->endElementNS(XML_w, XML_r);
+        m_pSerializer->endElementNS(XML_w, XML_sdtContent);
+
+        m_pSerializer->endElementNS(XML_w, XML_sdt);
     }
 }
 
