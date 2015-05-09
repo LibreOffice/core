@@ -31,6 +31,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svxerr.hxx>
@@ -77,10 +78,7 @@ void LookUpComboBox::dispose()
     ComboBox::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLookUpComboBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new LookUpComboBox(pParent);
-}
+VCL_BUILDER_FACTORY(LookUpComboBox)
 
 void LookUpComboBox::init(SvxThesaurusDialog *pDialog)
 {
@@ -117,11 +115,7 @@ void ReplaceEdit::dispose()
     Edit::dispose();
 }
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeReplaceEdit(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new ReplaceEdit(pParent);
-}
+VCL_BUILDER_FACTORY(ReplaceEdit)
 
 void ReplaceEdit::Modify()
 {
@@ -180,10 +174,7 @@ ThesaurusAlternativesCtrl::ThesaurusAlternativesCtrl(vcl::Window* pParent)
     SetHighlightRange();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeThesaurusAlternativesCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new ThesaurusAlternativesCtrl(pParent);
-}
+VCL_BUILDER_FACTORY(ThesaurusAlternativesCtrl)
 
 void ThesaurusAlternativesCtrl::init(SvxThesaurusDialog *pDialog)
 {

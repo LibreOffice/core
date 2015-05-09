@@ -23,6 +23,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/mslangid.hxx>
@@ -89,10 +90,7 @@ SvxNumberPreview::SvxNumberPreview(vcl::Window* pParent, WinBits nStyle)
     SetBorderStyle( WindowBorderStyle::MONO );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumberPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxNumberPreview(pParent);
-}
+VCL_BUILDER_FACTORY(SvxNumberPreview)
 
 /*************************************************************************
 #*  Method:        NotifyChange

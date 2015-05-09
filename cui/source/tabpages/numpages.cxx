@@ -39,6 +39,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include "cuicharmap.hxx"
 #include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
@@ -2363,13 +2364,10 @@ SvxNumberingPreview::SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits)
     SetBorderStyle(WindowBorderStyle::MONO);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumberingPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxNumberingPreview(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(SvxNumberingPreview, WB_BORDER)
 
 // paint preview of numeration
-void    SvxNumberingPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
+void SvxNumberingPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
     Size aSize(PixelToLogic(GetOutputSizePixel()));
 

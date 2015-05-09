@@ -19,7 +19,7 @@
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <unotools/pathoptions.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/idle.hxx>
@@ -216,8 +216,9 @@ BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
     Invalidate(aDrawRect);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBackgroundPreview(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(BackgroundPreview)
 {
+    (void)rMap;
     return new BackgroundPreviewImpl(pParent);
 }
 

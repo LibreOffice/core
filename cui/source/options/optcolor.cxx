@@ -31,6 +31,7 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <svx/svxdlg.hxx>
@@ -927,8 +928,9 @@ void ColorConfigCtrl_Impl::dispose()
     VclVBox::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorConfigCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(ColorConfigCtrl)
 {
+    (void)rMap;
     return new ColorConfigCtrl_Impl(pParent);
 }
 

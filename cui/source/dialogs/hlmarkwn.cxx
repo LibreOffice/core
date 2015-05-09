@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/builderfactory.hxx>
 
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>
@@ -83,7 +84,7 @@ void SvxHlmarkTreeLBox::dispose()
     SvTreeListBox::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxHlmarkTreeLBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxHlmarkTreeLBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

@@ -18,6 +18,7 @@
  */
 
 #include <vcl/layout.hxx>
+#include <vcl/builderfactory.hxx>
 #include "tp_DataSourceControls.hxx"
 
 using namespace ::com::sun::star;
@@ -35,7 +36,7 @@ SeriesListBox::SeriesListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
 {}
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSeriesListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SeriesListBox)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

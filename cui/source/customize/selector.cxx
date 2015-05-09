@@ -21,6 +21,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/builderfactory.hxx>
 #include "selector.hxx"
 #include <dialmgr.hxx>
 #include <svx/fmresids.hrc>
@@ -86,7 +87,7 @@ SvxConfigFunctionListBox::SvxConfigFunctionListBox(vcl::Window* pParent, WinBits
         LINK( this, SvxConfigFunctionListBox, TimerHdl ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigFunctionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxConfigFunctionListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -219,7 +220,7 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigGroupListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxConfigGroupListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
 

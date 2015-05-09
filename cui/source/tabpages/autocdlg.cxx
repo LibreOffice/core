@@ -18,7 +18,7 @@
  */
 
 #include <i18nutil/unicode.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
@@ -1752,11 +1752,7 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeAutoCorrEdit(vcl::Window *pParent,
-    VclBuilder::stringmap &)
-{
-    return new AutoCorrEdit(pParent);
-}
+VCL_BUILDER_FACTORY(AutoCorrEdit)
 
 void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
 {
@@ -2461,7 +2457,7 @@ bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
     return nHandled;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeAutoCompleteMultiListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(AutoCompleteMultiListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
 

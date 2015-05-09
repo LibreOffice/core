@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
@@ -37,7 +37,7 @@ GraphicPreviewWindow::GraphicPreviewWindow(vcl::Window* pParent,
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGraphicPreviewWindow(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(GraphicPreviewWindow)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -504,12 +504,7 @@ Size EmbossControl::GetOptimalSize() const
     return LogicToPixel(Size(77, 60), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeEmbossControl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new EmbossControl(pParent);
-}
-
-
+VCL_BUILDER_FACTORY(EmbossControl)
 
 GraphicFilterEmboss::GraphicFilterEmboss(vcl::Window* pParent,
     const Graphic& rGraphic, RECT_POINT eLightSource)

@@ -29,6 +29,7 @@
 #include "macroass.hxx"
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
+#include <vcl/builderfactory.hxx>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::ucbhelper;
@@ -41,10 +42,7 @@ SvxHyperURLBox::SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxHyperURLBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxHyperURLBox(pParent, INetProtocol::Http);
-}
+VCL_BUILDER_FACTORY_ARGS(SvxHyperURLBox, INetProtocol::Http)
 
 sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {

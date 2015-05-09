@@ -20,6 +20,7 @@
 #include "connpooloptions.hxx"
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/field.hxx>
+#include <vcl/builderfactory.hxx>
 #include "connpoolsettings.hxx"
 #include <svl/eitem.hxx>
 #include <cuires.hrc>
@@ -99,11 +100,7 @@ namespace offapp
         SetUniqueId(UID_OFA_CONNPOOL_DRIVERLIST_BACK);
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDriverListControl(vcl::Window *pParent, VclBuilder::stringmap &)
-    {
-        return new DriverListControl(pParent);
-    }
-
+    VCL_BUILDER_FACTORY(DriverListControl)
 
     bool DriverListControl::IsTabAllowed(bool /*_bForward*/) const
     {

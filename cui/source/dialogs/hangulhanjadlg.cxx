@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <vcl/controllayout.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/builderfactory.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
@@ -322,11 +323,7 @@ namespace svx
         return minimumSize;
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyRadioButton( vcl::Window *pParent, VclBuilder::stringmap & )
-    {
-        return new RubyRadioButton( pParent, WB_LEFT|WB_VCENTER );
-    }
-
+    VCL_BUILDER_FACTORY_ARGS(RubyRadioButton, WB_LEFT|WB_VCENTER)
 
     //= SuggestionSet
 
@@ -547,10 +544,7 @@ namespace svx
         m_aListBox->SetHelpId( HID_HANGULDLG_SUGGESTIONS_LIST );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSuggestionDisplay( vcl::Window *pParent, VclBuilder::stringmap & )
-    {
-        return new SuggestionDisplay( pParent, WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
-    }
+    VCL_BUILDER_FACTORY_ARGS( SuggestionDisplay, WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
 
 
     //= HangulHanjaConversionDialog
@@ -1504,10 +1498,7 @@ namespace svx
         m_pNext = pNext;
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSuggestionEdit( vcl::Window *pParent, VclBuilder::stringmap & )
-    {
-        return new SuggestionEdit( pParent, WB_LEFT|WB_VCENTER|WB_BORDER );
-    }
+    VCL_BUILDER_FACTORY_ARGS(SuggestionEdit, WB_LEFT|WB_VCENTER|WB_BORDER)
 
     namespace
     {

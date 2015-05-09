@@ -44,6 +44,7 @@
 #include <sfx2/app.hxx>
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/builderfactory.hxx>
 #include <osl/file.hxx>
 #include <cuires.hrc>
 #include <editeng/optitems.hxx>
@@ -1218,9 +1219,9 @@ SentenceEditWindow_Impl::SentenceEditWindow_Impl(vcl::Window * pParent, WinBits 
     DisableSelectionOnFocus();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSentenceEditWindow(vcl::Window *pParent,
-    VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(SentenceEditWindow)
 {
+    (void)rMap;
     return new SentenceEditWindow_Impl(pParent, WB_BORDER|WB_VSCROLL|WB_IGNORETAB);
 }
 

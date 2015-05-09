@@ -28,6 +28,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/builderfactory.hxx>
 
 #define HYPH_POS_CHAR       '='
 #define CONTINUE_HYPH       USHRT_MAX
@@ -41,10 +42,7 @@ HyphenEdit::HyphenEdit(vcl::Window* pParent)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeHyphenEdit(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new HyphenEdit(pParent);
-}
+VCL_BUILDER_FACTORY(HyphenEdit)
 
 void HyphenEdit::KeyInput( const KeyEvent& rKEvt )
 {

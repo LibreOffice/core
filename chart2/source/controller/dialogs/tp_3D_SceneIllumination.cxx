@@ -29,6 +29,7 @@
 #include <vcl/msgbox.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
+#include <vcl/builderfactory.hxx>
 
 namespace chart
 {
@@ -43,10 +44,7 @@ LightButton::LightButton( vcl::Window* pParent)
     SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLightButton(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new LightButton(pParent);
-}
+VCL_BUILDER_FACTORY(LightButton)
 
 void LightButton::switchLightOn(bool bOn)
 {
