@@ -62,7 +62,7 @@ namespace avmedia { namespace macavf {
 
 MacAVObserverObject* MacAVObserverHandler::mpMacAVObserverObject = NULL;
 
-MacAVObserverObject* MacAVObserverHandler::getObserver() const
+MacAVObserverObject* MacAVObserverHandler::getObserver()
 {
     if( !mpMacAVObserverObject)
     {
