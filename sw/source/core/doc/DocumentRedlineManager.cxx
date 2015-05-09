@@ -40,34 +40,26 @@ using namespace com::sun::star;
     {
         // helper function for lcl_CheckRedline
         // 1. make sure that pPos->nContent points into pPos->nNode
-        //    (or into the 'special' no-content-node-IndexReg)
         // 2. check that position is valid and doesn't point after text
         static void lcl_CheckPosition( const SwPosition* pPos )
         {
-            SwPosition aComparePos( *pPos );
-            aComparePos.nContent.Assign(
-                aComparePos.nNode.GetNode().GetCntntNode(), 0 );
-            OSL_ENSURE( pPos->nContent.GetIdxReg() ==
-                        aComparePos.nContent.GetIdxReg(),
-                        _ERROR_PREFIX "illegal position" );
+            assert(dynamic_cast<SwIndexReg*>(&pPos->nNode.GetNode())
+                    == pPos->nContent.GetIdxReg());
 
             SwTxtNode* pTxtNode = pPos->nNode.GetNode().GetTxtNode();
             if( pTxtNode == NULL )
             {
-                OSL_ENSURE( pPos->nContent == 0,
-                            _ERROR_PREFIX "non-text-node with content" );
+                assert(pPos->nContent == 0);
             }
             else
             {
-                OSL_ENSURE( pPos->nContent >= 0  &&
-                            pPos->nContent <= pTxtNode->Len(),
-                            _ERROR_PREFIX "index after text" );
+                assert(pPos->nContent >= 0 && pPos->nContent <= pTxtNode->Len());
             }
         }
 
         static void lcl_CheckPam( const SwPaM* pPam )
         {
-            OSL_ENSURE( pPam != NULL, _ERROR_PREFIX "illegal argument" );
+            assert(pPam);
             lcl_CheckPosition( pPam->GetPoint() );
             lcl_CheckPosition( pPam->GetMark() );
         }
