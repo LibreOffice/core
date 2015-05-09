@@ -23,7 +23,9 @@
 namespace framework{
 
 StatusIndicator::StatusIndicator(StatusIndicatorFactory* pFactory)
-    : m_xFactory         (pFactory)
+    : m_xFactory(pFactory)
+    , m_nRange(100)
+    , m_nLastCallbackPercent(-1)
 {
 }
 
