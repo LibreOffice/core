@@ -56,7 +56,7 @@ protected:
     // DragSourceHelper
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPtPixel ) SAL_OVERRIDE;
 
-                    DECL_STATIC_LINK(SvxColorValueSet_docking, ExecDragHdl, void*);
+                    DECL_LINK(ExecDragHdl, void*);
 
 public:
     SvxColorValueSet_docking( vcl::Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
