@@ -47,6 +47,7 @@ class AquaSalFrame;
 -(BOOL)application: (NSApplication*) app printFile: (NSString*)file;
 -(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels;
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app;
+-(void)applicationWillTerminate: (NSNotification *) aNotification;
 -(void)systemColorsChanged: (NSNotification*) pNotification;
 -(void)screenParametersChanged: (NSNotification*) pNotification;
 -(void)scrollbarVariantChanged: (NSNotification*) pNotification;
