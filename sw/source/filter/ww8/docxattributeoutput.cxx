@@ -4397,6 +4397,8 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
         {
             uno::Reference<awt::XControlModel> xControlModel = pFormObj->GetUnoControlModel();
             uno::Reference<lang::XServiceInfo> xInfo(xControlModel, uno::UNO_QUERY);
+            if (!xInfo.is())
+                return;
             if (xInfo->supportsService("com.sun.star.form.component.DateField"))
             {
                 // gather component properties
