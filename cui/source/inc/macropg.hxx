@@ -57,9 +57,9 @@ class _SvxMacroTabPage_Impl;
 
 class _SvxMacroTabPage : public SfxTabPage
 {
-    DECL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox * );
-    DECL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton * );
-    DECL_STATIC_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox * );
+    DECL_LINK( SelectEvent_Impl, SvTabListBox * );
+    DECL_LINK( AssignDeleteHdl_Impl, PushButton * );
+    DECL_LINK( DoubleClickHdl_Impl, SvTabListBox * );
 
     static long GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton* pBtn );
 

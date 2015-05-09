@@ -441,33 +441,33 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
 /* Initialize, asynchronous to prevent virtial calls
    from a constructor
  */
-IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
+IMPL_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
 {
-    pThis->SetUpdateMode( false );
+    SetUpdateMode( false );
     //show or hide AutoCorrect depending on the modules abilities
-    pThis->m_pAutoCorrPB->Show(pThis->rParent.HasAutoCorrection());
-    pThis->SpellContinue_Impl();
-    pThis->m_pSentenceED->ResetUndo();
-    pThis->m_pUndoPB->Enable(false);
+    m_pAutoCorrPB->Show(rParent.HasAutoCorrection());
+    SpellContinue_Impl();
+    m_pSentenceED->ResetUndo();
+    m_pUndoPB->Enable(false);
 
     // get current language
-    pThis->UpdateBoxes_Impl();
+    UpdateBoxes_Impl();
 
     // fill dictionary PopupMenu
-    pThis->InitUserDicts();
+    InitUserDicts();
 
-    pThis->LockFocusChanges(true);
-    if( pThis->m_pChangePB->IsEnabled() )
-        pThis->m_pChangePB->GrabFocus();
-    else if( pThis->m_pIgnorePB->IsEnabled() )
-        pThis->m_pIgnorePB->GrabFocus();
-    else if( pThis->m_pClosePB->IsEnabled() )
-        pThis->m_pClosePB->GrabFocus();
-    pThis->LockFocusChanges(false);
+    LockFocusChanges(true);
+    if( m_pChangePB->IsEnabled() )
+        m_pChangePB->GrabFocus();
+    else if( m_pIgnorePB->IsEnabled() )
+        m_pIgnorePB->GrabFocus();
+    else if( m_pClosePB->IsEnabled() )
+        m_pClosePB->GrabFocus();
+    LockFocusChanges(false);
     //show grammar CheckBox depending on the modules abilities
-    pThis->m_pCheckGrammarCB->Check( pThis->rParent.IsGrammarChecking() );
-    pThis->SetUpdateMode( true );
-    pThis->Show();
+    m_pCheckGrammarCB->Check( rParent.IsGrammarChecking() );
+    SetUpdateMode( true );
+    Show();
     return 0;
 };
 

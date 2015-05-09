@@ -1739,14 +1739,14 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 // #58425# Symbols on a list (e.g. StarChart)
 // Handler for the symbol selection's popup menu (NumMenueButton)
 // The following link originates from SvxNumOptionsTabPage
-IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
+IMPL_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
 {
-    PopupMenu* pPopup = pThis->m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
+    PopupMenu* pPopup = m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
     SvxBmpItemInfo* pBmpInfo = 0;
-    for ( size_t i = 0; i < pThis->aGrfBrushItems.size(); i++ )
+    for ( size_t i = 0; i < aGrfBrushItems.size(); i++ )
     {
-        SvxBmpItemInfo* pInfo = pThis->aGrfBrushItems[ i ];
+        SvxBmpItemInfo* pInfo = aGrfBrushItems[ i ];
         if( pInfo->pBrushItem == pItem )
         {
             pBmpInfo = pInfo; break;

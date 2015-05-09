@@ -136,8 +136,8 @@ private:
     VclPtr<NumericField> m_pNMMarginHeight;
     VclPtr<CheckBox> m_pCBMarginHeightDefault;
 
-    DECL_STATIC_LINK(SfxInsertFloatingFrameDialog, OpenHdl, PushButton* );
-    DECL_STATIC_LINK(SfxInsertFloatingFrameDialog, CheckHdl, CheckBox* );
+    DECL_LINK(OpenHdl, PushButton* );
+    DECL_LINK(CheckHdl, CheckBox* );
 
     void Init();
 

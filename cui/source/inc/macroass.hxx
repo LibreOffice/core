@@ -35,14 +35,14 @@ class _SfxMacroTabPage_Impl;
 class _SfxMacroTabPage : public SfxTabPage
 {
     SvxMacroTableDtor           aTbl;
-    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox * );
-    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox * );
-    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox * );
+    DECL_DLLPRIVATE_LINK( SelectEvent_Impl, SvTabListBox * );
+    DECL_DLLPRIVATE_LINK( SelectGroup_Impl, ListBox * );
+    DECL_DLLPRIVATE_LINK( SelectMacro_Impl, ListBox * );
 
-    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, DoubleClickHdl_Impl, Control* );
-    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton * );
+    DECL_DLLPRIVATE_LINK( DoubleClickHdl_Impl, Control* );
+    DECL_DLLPRIVATE_LINK( AssignDeleteHdl_Impl, PushButton * );
 
-    DECL_DLLPRIVATE_STATIC_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( TimeOut_Impl, Idle*, void );
 
 protected:
     _SfxMacroTabPage_Impl*      mpImpl;

@@ -186,7 +186,7 @@ private:
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );
     DECL_LINK( HandleHyperlink, FixedHyperlink * );
 
-    DECL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog * );
+    DECL_LINK( InitHdl, SpellDialog * );
 
     int             AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu *pMenu );
     void            StartSpellOptDlg_Impl();

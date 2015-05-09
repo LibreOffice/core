@@ -574,9 +574,9 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 }
 
 // select event handler on the listbox
-IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
+IMPL_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 {
-    _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
+    _SvxMacroTabPage_Impl*    pImpl = mpImpl;
     SvHeaderTabListBox&        rListBox = pImpl->pEventLB->GetListBox();
     SvTreeListEntry*            pE = rListBox.FirstSelected();
     sal_uLong                    nPos;
@@ -588,18 +588,18 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
         return 0;
     }
 
-    pThis->EnableButtons();
+    EnableButtons();
     return 0;
 }
 
-IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
+IMPL_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 {
-    return GenericHandler_Impl( pThis, pBtn );
+    return GenericHandler_Impl( this, pBtn );
 }
 
-IMPL_STATIC_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, EMPTYARG )
+IMPL_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, EMPTYARG )
 {
-    return GenericHandler_Impl( pThis, NULL );
+    return GenericHandler_Impl( this, NULL );
 }
 
 // handler for double click on the listbox, and for the assign/delete buttons

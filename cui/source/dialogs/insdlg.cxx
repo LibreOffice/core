@@ -739,22 +739,22 @@ short SfxInsertFloatingFrameDialog::Execute()
 
 
 
-IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
+IMPL_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
 {
-    if ( pCB == pThis->m_pCBMarginWidthDefault )
+    if ( pCB == m_pCBMarginWidthDefault )
     {
         if ( pCB->IsChecked() )
-            pThis->m_pNMMarginWidth->SetText( OUString::number(DEFAULT_MARGIN_WIDTH) );
-        pThis->m_pFTMarginWidth->Enable( !pCB->IsChecked() );
-        pThis->m_pNMMarginWidth->Enable( !pCB->IsChecked() );
+            m_pNMMarginWidth->SetText( OUString::number(DEFAULT_MARGIN_WIDTH) );
+        m_pFTMarginWidth->Enable( !pCB->IsChecked() );
+        m_pNMMarginWidth->Enable( !pCB->IsChecked() );
     }
 
-    if ( pCB == pThis->m_pCBMarginHeightDefault )
+    if ( pCB == m_pCBMarginHeightDefault )
     {
         if ( pCB->IsChecked() )
-            pThis->m_pNMMarginHeight->SetText( OUString::number(DEFAULT_MARGIN_HEIGHT) );
-        pThis->m_pFTMarginHeight->Enable( !pCB->IsChecked() );
-        pThis->m_pNMMarginHeight->Enable( !pCB->IsChecked() );
+            m_pNMMarginHeight->SetText( OUString::number(DEFAULT_MARGIN_HEIGHT) );
+        m_pFTMarginHeight->Enable( !pCB->IsChecked() );
+        m_pNMMarginHeight->Enable( !pCB->IsChecked() );
     }
 
     return 0L;
@@ -762,10 +762,10 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
 
 
 
-IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
+IMPL_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
 {
     vcl::Window* pOldParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( pThis );
+    Application::SetDefDialogParent( this );
 
     // create the file dialog
     sfx2::FileDialogHelper aFileDlg(
@@ -776,7 +776,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
 
     // show the dialog
     if ( aFileDlg.Execute() == ERRCODE_NONE )
-        pThis->m_pEDURL->SetText(
+        m_pEDURL->SetText(
             INetURLObject( aFileDlg.GetPath() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
 
     Application::SetDefDialogParent( pOldParent );

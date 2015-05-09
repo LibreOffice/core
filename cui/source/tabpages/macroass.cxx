@@ -261,9 +261,9 @@ bool _SfxMacroTabPage::IsReadOnly() const
     return mpImpl->bReadOnly;
 }
 
-IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
+IMPL_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 {
-    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    _SfxMacroTabPage_Impl*  pImpl = mpImpl;
     SvHeaderTabListBox&     rListBox = pImpl->pEventLB->GetListBox();
     SvTreeListEntry*            pE = rListBox.FirstSelected();
     sal_uLong                   nPos;
@@ -274,14 +274,14 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
         return 0;
     }
 
-    pThis->ScriptChanged();
-    pThis->EnableButtons();
+    ScriptChanged();
+    EnableButtons();
     return 0;
 }
 
-IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
+IMPL_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
 {
-    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    _SfxMacroTabPage_Impl*  pImpl = mpImpl;
     pImpl->pGroupLB->GroupSelected();
     const OUString sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
     OUString       aLabelText;
@@ -289,19 +289,19 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
         aLabelText = pImpl->maStaticMacroLBLabel;
     pImpl->pMacroFrame->set_label( aLabelText );
 
-    pThis->EnableButtons();
+    EnableButtons();
     return 0;
 }
 
-IMPL_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, EMPTYARG )
+IMPL_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, EMPTYARG )
 {
-    pThis->EnableButtons();
+    EnableButtons();
     return 0;
 }
 
-IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
+IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 {
-    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    _SfxMacroTabPage_Impl*  pImpl = mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();
     sal_uLong nPos;
@@ -316,7 +316,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 
     // remove from the table
     sal_uInt16 nEvent = (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData());
-    pThis->aTbl.Erase( nEvent );
+    aTbl.Erase( nEvent );
 
     OUString sScriptURI;
     if( bAssEnabled )
@@ -324,13 +324,13 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
         if( sScriptURI.startsWith( "vnd.sun.star.script:" ) )
         {
-            pThis->aTbl.Insert(
+            aTbl.Insert(
                 nEvent, SvxMacro( sScriptURI, OUString( SVX_MACRO_LANGUAGE_SF ) ) );
         }
         else
         {
             OSL_ENSURE( false, "_SfxMacroTabPage::AssignDeleteHdl_Impl: this branch is *not* dead? (out of interest: tell fs, please!)" );
-            pThis->aTbl.Insert(
+            aTbl.Insert(
                 nEvent, SvxMacro( sScriptURI, OUString( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
         }
     }
@@ -342,21 +342,21 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     rListBox.MakeVisible( pE );
     rListBox.SetUpdateMode( true );
 
-    pThis->EnableButtons();
+    EnableButtons();
     return 0;
 }
 
-IMPL_STATIC_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*, EMPTYARG, void )
+IMPL_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*, EMPTYARG, void )
 {
     // FillMacroList() can take a long time -> show wait cursor and disable input
-    SfxTabDialog* pTabDlg = pThis->GetTabDialog();
+    SfxTabDialog* pTabDlg = GetTabDialog();
     // perhaps the tabpage is part of a SingleTabDialog then pTabDlg == NULL
     if ( pTabDlg )
     {
         pTabDlg->EnterWait();
         pTabDlg->EnableInput( false );
     }
-    pThis->FillMacroList();
+    FillMacroList();
     if ( pTabDlg )
     {
         pTabDlg->EnableInput( true );
