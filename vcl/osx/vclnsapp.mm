@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include "sal/config.h"
-
+#include "sal/main.h"
 #include <vector>
 
 #include "vcl/window.hxx"
@@ -382,6 +382,12 @@
     // we have no back channel here, we have to assume success
     // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]
     return NSPrintingSuccess;
+}
+
+-(void)applicationWillTerminate: (NSNotification *) aNotification
+{
+    (void)aNotification;
+    sal_detail_deinitialize();
 }
 
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
