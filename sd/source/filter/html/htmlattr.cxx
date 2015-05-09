@@ -20,14 +20,14 @@
 #include "htmlattr.hxx"
 #include "htmlex.hxx"
 #include <vcl/decoview.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 SdHtmlAttrPreview::SdHtmlAttrPreview( vcl::Window* pParent, WinBits nStyle )
 :Control( pParent, nStyle )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdHtmlAttrPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SdHtmlAttrPreview)
 {
     WinBits nWinStyle = 0;
 

@@ -25,6 +25,7 @@
 #include "dbu_misc.hrc"
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include "svtools/treelistentry.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 
@@ -372,10 +373,7 @@ OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent, WinBits nBits )
     SetSelectionMode( SINGLE_SELECTION );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOColumnTreeBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new OColumnTreeBox(pParent);
-}
+VCL_BUILDER_FACTORY(OColumnTreeBox)
 
 void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
 {

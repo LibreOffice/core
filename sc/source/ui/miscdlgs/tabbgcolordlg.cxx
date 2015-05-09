@@ -31,7 +31,7 @@
 #include <tools/resid.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -158,7 +158,7 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::dispose()
     SvxColorValueSet::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScTabBgColorValueSet(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ScTabBgColorValueSet)
 {
     WinBits nWinBits = WB_TABSTOP;
 

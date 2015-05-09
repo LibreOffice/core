@@ -23,6 +23,7 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -936,8 +937,9 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
     return true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScRefButtonEx(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(ScRefButtonEx)
 {
+    (void)rMap;
     return new ScTPValidationValue::ScRefButtonEx(pParent, 0);
 }
 

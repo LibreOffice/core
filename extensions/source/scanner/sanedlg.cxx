@@ -22,6 +22,7 @@
 #include <tools/config.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/builderfactory.hxx>
 #include <sanedlg.hxx>
 #include <grid.hxx>
 #include <math.h>
@@ -151,7 +152,7 @@ public:
     }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScanPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ScanPreview)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

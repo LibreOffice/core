@@ -37,7 +37,7 @@
 #include <tools/urlobj.hxx>
 #include <svl/filenotation.hxx>
 #include <osl/diagnose.h>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 namespace dbaui
 {
@@ -162,10 +162,7 @@ namespace dbaui
         impl_init( _pAsciiModuleName );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOpenDocumentButton( vcl::Window *pParent, VclBuilder::stringmap & )
-    {
-        return new OpenDocumentButton( pParent, "com.sun.star.sdb.OfficeDatabaseDocument" );
-    }
+    VCL_BUILDER_FACTORY_ARGS( OpenDocumentButton, "com.sun.star.sdb.OfficeDatabaseDocument" );
 
     void OpenDocumentButton::impl_init( const sal_Char* _pAsciiModuleName )
     {
@@ -192,10 +189,7 @@ namespace dbaui
         impl_init( _pAsciiModuleName );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOpenDocumentListBox( vcl::Window *pParent, VclBuilder::stringmap & )
-    {
-        return new OpenDocumentListBox( pParent, "com.sun.star.sdb.OfficeDatabaseDocument" );
-    }
+    VCL_BUILDER_FACTORY_ARGS( OpenDocumentListBox, "com.sun.star.sdb.OfficeDatabaseDocument" );
 
     void OpenDocumentListBox::impl_init( const sal_Char* _pAsciiModuleName )
     {

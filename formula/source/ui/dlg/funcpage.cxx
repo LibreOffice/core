@@ -21,6 +21,7 @@
 #include <sfx2/docfile.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/builderfactory.hxx>
 #include "formula/IFunctionDescription.hxx"
 
 #include "funcpage.hxx"
@@ -57,10 +58,7 @@ bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFormulaListBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new FormulaListBox(pParent, WB_BORDER | WB_SORT);
-}
+VCL_BUILDER_FACTORY_ARGS(FormulaListBox, WB_BORDER | WB_SORT)
 
 FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent, "FunctionPage", "formula/ui/functionpage.ui"),

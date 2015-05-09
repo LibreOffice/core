@@ -12,16 +12,16 @@
 #include "PivotLayoutTreeListData.hxx"
 #include "PivotLayoutDialog.hxx"
 
+#include <vcl/builderfactory.hxx>
 #include <svtools/treelistentry.hxx>
 #include "pivot.hxx"
 #include "scabstdlg.hxx"
 
 using namespace std;
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScPivotLayoutTreeListData(vcl::Window *pParent, VclBuilder::stringmap& )
-{
-    return new ScPivotLayoutTreeListData(pParent, WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
-}
+VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeListData,
+                         WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN |
+                         WB_FORCE_MAKEVISIBLE)
 
 namespace
 {

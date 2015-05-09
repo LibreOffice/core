@@ -34,6 +34,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/settings.hxx"
+#include "vcl/builderfactory.hxx"
 
 #include "unotools/localedatawrapper.hxx"
 
@@ -51,13 +52,15 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePrintPreviewWindow(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(PrintPreviewWindow)
 {
+    (void)rMap;
     return new PrintDialog::PrintPreviewWindow(pParent);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeShowNupOrderWindow(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(ShowNupOrderWindow)
 {
+    (void)rMap;
     return new PrintDialog::ShowNupOrderWindow(pParent);
 }
 

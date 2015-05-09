@@ -31,6 +31,7 @@
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #define USER_PACKAGE_MANAGER    "user"
 #define SHARED_PACKAGE_MANAGER  "shared"
@@ -829,8 +830,9 @@ Size ExtensionBox_Impl::GetOptimalSize() const
     return LogicToPixel(Size(250, 150), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtensionBox(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(ExtensionBox)
 {
+    (void)rMap;
     return new ExtensionBox_Impl(pParent);
 }
 

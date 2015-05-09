@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <initializer_list>
 
@@ -195,7 +196,7 @@ void TreeListBox::Init()
     nMode = 0xFF;   // everything
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(TreeListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

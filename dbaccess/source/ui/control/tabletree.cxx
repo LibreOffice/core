@@ -23,6 +23,7 @@
 #include "dbu_control.hrc"
 #include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/builderfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include "dbustrings.hrc"
@@ -74,7 +75,7 @@ OTableTreeListBox::OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle)
     implSetDefaultImages();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOTableTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(OTableTreeListBox)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

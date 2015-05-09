@@ -24,7 +24,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include "global.hxx"
 
 namespace {
@@ -46,7 +46,7 @@ ScDoubleField::ScDoubleField( vcl::Window* pParent, WinBits nStyle ) :
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScDoubleField(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ScDoubleField)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
     return new ScDoubleField(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

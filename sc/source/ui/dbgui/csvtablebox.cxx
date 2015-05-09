@@ -18,7 +18,7 @@
  */
 
 #include "csvtablebox.hxx"
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include "editutil.hxx"
@@ -69,10 +69,7 @@ void ScCsvTableBox::dispose()
     ScCsvControl::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCsvTableBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new ScCsvTableBox(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(ScCsvTableBox, WB_BORDER)
 
 Size ScCsvTableBox::GetOptimalSize() const
 {

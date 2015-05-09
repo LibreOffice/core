@@ -22,7 +22,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <svl/zforlist.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
@@ -134,11 +134,7 @@ ScCursorRefEdit::ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCursorRefEdit(vcl::Window *pParent,
-    VclBuilder::stringmap &)
-{
-    return new ScCursorRefEdit(pParent, nullptr);
-}
+VCL_BUILDER_FACTORY_ARGS(ScCursorRefEdit, nullptr)
 
 void ScCursorRefEdit::SetCursorLinks( const Link<>& rUp, const Link<>& rDown )
 {

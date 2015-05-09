@@ -19,6 +19,7 @@
 
 #include "charsetlistbox.hxx"
 
+#include <vcl/builderfactory.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <osl/diagnose.h>
@@ -38,10 +39,7 @@ namespace dbaui
         }
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCharSetListBox(vcl::Window *pParent)
-    {
-        return new CharSetListBox(pParent);
-    }
+    VCL_BUILDER_FACTORY(CharSetListBox)
 
     void CharSetListBox::SelectEntryByIanaName( const OUString& _rIanaName )
     {

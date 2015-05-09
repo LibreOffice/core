@@ -29,6 +29,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svtools/localresaccess.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
@@ -154,14 +155,9 @@ namespace pcr
         return 0L;
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFieldLinkRow(vcl::Window *pParent, VclBuilder::stringmap &)
-    {
-        return new FieldLinkRow(pParent);
-    }
-
+    VCL_BUILDER_FACTORY(FieldLinkRow)
 
     //= FormLinkDialog
-
 
     FormLinkDialog::FormLinkDialog( vcl::Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
             const Reference< XPropertySet >& _rxMasterForm, const Reference< XComponentContext >& _rxContext,

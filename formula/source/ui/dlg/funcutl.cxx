@@ -20,6 +20,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "formula/funcutl.hxx"
 #include "formula/IControlReferenceHandler.hxx"
@@ -55,10 +56,7 @@ void ArgEdit::dispose()
     RefEdit::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeArgEdit(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new ArgEdit(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(ArgEdit, WB_BORDER)
 
 void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
                     ScrollBar& rArgSlider, sal_uInt16 nArgCount )
@@ -367,10 +365,7 @@ EditBox::EditBox( vcl::Window* pParent, WinBits nBits )
     SetHelpId( "" );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeEditBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new EditBox(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(EditBox, WB_BORDER)
 
 EditBox::~EditBox()
 {
@@ -491,7 +486,7 @@ RefEdit::RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent,
     aIdle.SetPriority( SchedulerPriority::LOW );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefEdit(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(RefEdit)
 {
     return new RefEdit(pParent, NULL, WB_BORDER);
 }
@@ -615,10 +610,7 @@ void RefButton::dispose()
     ImageButton::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefButton(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new RefButton(pParent, 0);
-}
+VCL_BUILDER_FACTORY_ARGS(RefButton, 0)
 
 void RefButton::SetStartImage()
 {

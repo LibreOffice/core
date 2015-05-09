@@ -28,6 +28,7 @@
 #include "indexcollection.hxx"
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include "UITools.hxx"
 #include <svtools/imgdef.hxx>
@@ -158,10 +159,7 @@ namespace dbaui
         return bReturn;
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDbaIndexList(vcl::Window *pParent, VclBuilder::stringmap &)
-    {
-        return new DbaIndexList (pParent, WB_BORDER);
-    }
+    VCL_BUILDER_FACTORY_ARGS(DbaIndexList, WB_BORDER)
 
     // DbaIndexDialog
     DbaIndexDialog::DbaIndexDialog( vcl::Window* _pParent, const Sequence< OUString >& _rFieldNames,

@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 #include <vcl/settings.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 namespace dbaui
 {
@@ -103,8 +103,9 @@ namespace dbaui
         GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDbaIndexFieldsControl(vcl::Window *pParent, VclBuilder::stringmap &)
+    VCL_BUILDER_DECL_FACTORY(DbaIndexFieldsControl)
     {
+        (void)rMap;
         return new IndexFieldsControl (pParent, WB_BORDER | WB_NOTABSTOP);
     }
 

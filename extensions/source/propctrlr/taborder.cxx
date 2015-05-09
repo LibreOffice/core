@@ -29,13 +29,10 @@
 #include <com/sun/star/form/runtime/FormController.hpp>
 #include <vcl/scrbar.hxx>
 #include <svtools/treelistentry.hxx>
-#include <vcl/builder.hxx>
-
+#include <vcl/builderfactory.hxx>
 
 namespace pcr
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
@@ -308,8 +305,7 @@ namespace pcr
         SetSelectionMode( MULTIPLE_SELECTION );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTabOrderListBox(vcl::Window *pParent,
-         VclBuilder::stringmap &rMap)
+    VCL_BUILDER_DECL_FACTORY(TabOrderListBox)
     {
          WinBits nWinStyle = WB_TABSTOP;
          OString sBorder = VclBuilder::extractCustomProperty(rMap);

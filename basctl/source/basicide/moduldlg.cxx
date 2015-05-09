@@ -32,6 +32,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/builderfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <svtools/treelistentry.hxx>
@@ -53,7 +54,7 @@ ExtTreeListBox::ExtTreeListBox(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ExtTreeListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
