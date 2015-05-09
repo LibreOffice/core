@@ -363,8 +363,8 @@ void UnitsTest::testUnitVerification() {
 }
 
 void UnitsTest::testUnitFromFormatStringExtraction() {
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("#\"cm\"") == "cm");
+    CPPUNIT_ASSERT(UnitsImpl::extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
+    CPPUNIT_ASSERT(UnitsImpl::extractUnitStringFromFormat("#\"cm\"") == "cm");
 }
 
 void UnitsTest::testUnitValueStringSplitting() {
