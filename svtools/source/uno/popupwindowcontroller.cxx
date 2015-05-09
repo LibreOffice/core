@@ -123,7 +123,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
 
 
 
-IMPL_STATIC_LINK_NOINSTANCE( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window*, pWindow )
+IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window*, pWindow )
 {
     pWindow->disposeOnce();
     return 0;

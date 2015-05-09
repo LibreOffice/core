@@ -927,7 +927,7 @@ void ScPreview::StaticInvalidate()
     rBindings.Invalidate(SID_ATTR_ZOOMSLIDER);
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG( ScPreview, InvalidateHdl )
+IMPL_STATIC_LINK_NOARG( ScPreview, InvalidateHdl )
 {
     StaticInvalidate();
     return 0;

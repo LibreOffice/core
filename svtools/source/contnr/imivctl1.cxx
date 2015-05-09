@@ -253,7 +253,7 @@ IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(SvxIconChoiceCtrl_Impl, EndScrollHdl)
+IMPL_STATIC_LINK_NOARG(SvxIconChoiceCtrl_Impl, EndScrollHdl)
 {
     return 0;
 }

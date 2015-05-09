@@ -479,7 +479,7 @@ IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p )
 
 
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(MediaControl, implVolumeEndHdl)
+IMPL_STATIC_LINK_NOARG(MediaControl, implVolumeEndHdl)
 {
     return 0;
 }

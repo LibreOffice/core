@@ -303,7 +303,7 @@ void RecentDocsView::Clear()
     ThumbnailView::Clear();
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
+IMPL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
 {
     try
     {

@@ -402,7 +402,7 @@ throw( RuntimeException, std::exception )
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
+IMPL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
 {
     try
     {

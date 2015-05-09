@@ -1651,7 +1651,7 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( AddonsOptions, Notify, void*, EMPTYARG )
+IMPL_STATIC_LINK( AddonsOptions, Notify, void*, EMPTYARG )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->ReadConfigurationData();

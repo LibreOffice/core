@@ -416,7 +416,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
+IMPL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
 {
     if( pEvent && (pEvent->GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(pEvent)->GetData() )
     {

@@ -2101,7 +2101,7 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, AsyncUpdateControllersHdl, Timer *, void)
     UpdateControllers();
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     try
     {

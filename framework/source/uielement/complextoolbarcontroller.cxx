@@ -196,7 +196,7 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    SolarMutexReleaser aReleaser;
    try
@@ -214,7 +214,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteI
    return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, Notify_Impl, NotifyInfo*, pNotifyInfo )
+IMPL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo*, pNotifyInfo )
 {
    SolarMutexReleaser aReleaser;
    try

@@ -269,7 +269,7 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    SolarMutexReleaser aReleaser;
    try

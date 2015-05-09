@@ -53,14 +53,14 @@
     } \
     sal_IntPtr Class::Member(SAL_UNUSED_PARAMETER void *)
 
-#define IMPL_STATIC_LINK_NOINSTANCE(Class, Member, ArgType, ArgName) \
+#define IMPL_STATIC_LINK(Class, Member, ArgType, ArgName) \
     sal_IntPtr Class::LinkStub##Member(void * instance, void * data) { \
         return Member( \
             static_cast<Class *>(instance), static_cast<ArgType>(data)); \
     } \
     sal_IntPtr Class::Member(SAL_UNUSED_PARAMETER Class *, ArgType ArgName)
 
-#define IMPL_STATIC_LINK_NOINSTANCE_NOARG(Class, Member) \
+#define IMPL_STATIC_LINK_NOARG(Class, Member) \
     sal_IntPtr Class::LinkStub##Member(void * instance, void * data) { \
         return Member(static_cast<Class *>(instance), data); \
     } \
@@ -95,14 +95,14 @@
     } \
     RetType Class::Member(SAL_UNUSED_PARAMETER ArgType)
 
-#define IMPL_STATIC_LINK_NOINSTANCE_TYPED( \
+#define IMPL_STATIC_LINK_TYPED( \
         Class, Member, ArgType, ArgName, RetType) \
     RetType Class::LinkStub##Member(void * instance, ArgType data) { \
         return Member(static_cast<Class *>(instance), data); \
     } \
     RetType Class::Member(SAL_UNUSED_PARAMETER Class *, ArgType ArgName)
 
-#define IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED( \
+#define IMPL_STATIC_LINK_NOARG_TYPED( \
         Class, Member, ArgType, RetType) \
     RetType Class::LinkStub##Member(void * instance, ArgType data) { \
         return Member(static_cast<Class *>(instance), data); \

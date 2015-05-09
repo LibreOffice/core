@@ -79,7 +79,7 @@ void SwSyncBtnDlg::dispose()
     SfxFloatingWindow::dispose();
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(SwSyncBtnDlg, BtnHdl)
+IMPL_STATIC_LINK_NOARG(SwSyncBtnDlg, BtnHdl)
 {
     SfxViewFrame::Current()->GetDispatcher()->Execute(FN_UPDATE_ALL_LINKS, SfxCallMode::ASYNCHRON);
     return 0;

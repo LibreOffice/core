@@ -170,7 +170,7 @@ void SfxClipboardChangeListener::ChangedContents()
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, AsyncExecuteInfo*, pAsyncExecuteInfo )
+IMPL_STATIC_LINK( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, AsyncExecuteInfo*, pAsyncExecuteInfo )
 {
     if ( pAsyncExecuteInfo )
     {

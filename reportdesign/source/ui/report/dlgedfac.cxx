@@ -46,7 +46,7 @@ DlgEdFactory::~DlgEdFactory()
 
 
 
-IMPL_STATIC_LINK_NOINSTANCE(
+IMPL_STATIC_LINK(
     DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 {
     if ( pObjFactory->nInventor == ReportInventor )

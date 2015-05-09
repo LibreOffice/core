@@ -1505,7 +1505,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     return ERRCODE_NONE;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(UcbLockBytes, DataAvailHdl)
+IMPL_STATIC_LINK_NOARG(UcbLockBytes, DataAvailHdl)
 {
     return 0;
 }

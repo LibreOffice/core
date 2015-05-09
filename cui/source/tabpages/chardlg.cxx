@@ -2905,7 +2905,7 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
 
 
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(SvxCharPositionPage, PairKerningHdl_Impl)
+IMPL_STATIC_LINK_NOARG(SvxCharPositionPage, PairKerningHdl_Impl)
 {
     return 0;
 }

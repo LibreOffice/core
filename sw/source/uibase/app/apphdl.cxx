@@ -541,7 +541,7 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, DestroyDialogHdl)
     return 0L;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE(
+IMPL_STATIC_LINK(
     SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard*,
     pDialog )
 {

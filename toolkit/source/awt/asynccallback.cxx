@@ -97,7 +97,7 @@ void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XC
 }
 
 // private asynchronous link to call reference to the callback object
-IMPL_STATIC_LINK_NOINSTANCE( AsyncCallback, Notify_Impl, CallbackData*, pCallbackData )
+IMPL_STATIC_LINK( AsyncCallback, Notify_Impl, CallbackData*, pCallbackData )
 {
     try
     {

@@ -156,7 +156,7 @@ void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL, cons
 
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( PopupMenuControllerBase, ExecuteHdl_Impl, PopupMenuControllerBaseDispatchInfo*, pDispatchInfo )
+IMPL_STATIC_LINK( PopupMenuControllerBase, ExecuteHdl_Impl, PopupMenuControllerBaseDispatchInfo*, pDispatchInfo )
 {
     pDispatchInfo->mxDispatch->dispatch( pDispatchInfo->maURL, pDispatchInfo->maArgs );
     delete pDispatchInfo;

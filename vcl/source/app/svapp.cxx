@@ -382,7 +382,7 @@ void Application::Yield()
     ImplYield( true, false );
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( ImplSVAppData, ImplQuitMsg, void*, EMPTYARG )
+IMPL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void*, EMPTYARG )
 {
     ImplGetSVData()->maAppData.mbAppQuit = true;
     return 0;
@@ -804,7 +804,7 @@ ImplSVEvent * Application::PostScrollEvent( sal_uLong nEvent, vcl::Window *pWin,
 
 #endif // !HAVE_FEATURE_DESKTOP
 
-IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
+IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData )
 {
     const SolarMutexGuard aGuard;
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );

@@ -673,7 +673,7 @@ struct Reduction : Op
 
 }
 
-IMPL_STATIC_LINK_NOINSTANCE(
+IMPL_STATIC_LINK(
     ScCalcOptionsDialog, TestClickHdl, PushButton*, pButton)
 {
     pButton->Disable();

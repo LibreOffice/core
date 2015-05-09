@@ -391,7 +391,7 @@ IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl)
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SwSendMailDialog, StartSendMails, SwSendMailDialog*, pDialog )
+IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog*, pDialog )
 {
     pDialog->SendMails();
     return 0;
@@ -419,7 +419,7 @@ IMPL_LINK_TYPED( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SwSendMailDialog, StopSendMails, SwSendMailDialog*, pDialog )
+IMPL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog*, pDialog )
 {
     if(pDialog->m_pImpl->xMailDispatcher.is() &&
         pDialog->m_pImpl->xMailDispatcher->isStarted())

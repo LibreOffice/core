@@ -240,7 +240,7 @@ bool SessionManagerClient::checkDocumentsSaved()
     return m_bDocSaveDone;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStateVal )
+IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pStateVal )
 {
     // Decode argument smuggled in as void*:
     sal_uIntPtr nStateVal = reinterpret_cast< sal_uIntPtr >(pStateVal);
@@ -283,7 +283,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStat
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, InteractionHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK( SessionManagerClient, InteractionHdl, void*, EMPTYARG )
 {
     SAL_INFO("vcl.sm", "interaction link");
     if( m_pSession )
@@ -295,7 +295,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, InteractionHdl, void*, EMPTYA
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownCancelHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void*, EMPTYARG )
 {
     SAL_INFO("vcl.sm", "shutdown cancel");
     if( m_pSession )
@@ -345,7 +345,7 @@ void SessionManagerClient::SaveYourselfProc(
     SAL_INFO("vcl.sm", "waiting for save yourself event to be processed" );
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, EMPTYARG )
 {
     if( m_pSession )
     {

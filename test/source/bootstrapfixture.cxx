@@ -221,7 +221,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
 #endif
 }
 
-IMPL_STATIC_LINK_NOINSTANCE(
+IMPL_STATIC_LINK(
         test::BootstrapFixture, ImplInitFilterHdl, ConvertData*, pData)
 {
     return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( pData );

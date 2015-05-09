@@ -313,7 +313,7 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED(
+IMPL_STATIC_LINK_NOARG_TYPED(
     SdNavigatorWin, ClickToolboxHdl, ToolBox *, void)
 {}
 

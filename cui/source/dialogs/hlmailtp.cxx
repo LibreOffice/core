@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl)
 |*
 |************************************************************************/
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl)
+IMPL_STATIC_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl)
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if( pViewFrame )

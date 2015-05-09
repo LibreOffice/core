@@ -523,7 +523,7 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( NewMenuController, ExecuteHdl_Impl, NewDocument*, pNewDocument )
+IMPL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument*, pNewDocument )
 {
 /*  i62706: Don't catch all exceptions. We hide all problems here and are not able
             to handle them on higher levels.

@@ -1803,7 +1803,7 @@ IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, CheckBox*, pBox )
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE(
+IMPL_STATIC_LINK(
     SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
 {
     pBox->EnableTriState(false);

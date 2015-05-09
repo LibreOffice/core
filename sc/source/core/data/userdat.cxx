@@ -31,7 +31,7 @@ ScDrawObjFactory::~ScDrawObjFactory()
     SdrObjFactory::RemoveMakeUserDataHdl( LINK ( this, ScDrawObjFactory, MakeUserData ) );
 }
 
-IMPL_STATIC_LINK_NOINSTANCE(
+IMPL_STATIC_LINK(
     ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 {
     if ( pObjFactory->nInventor == SC_DRAWLAYER )

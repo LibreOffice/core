@@ -474,7 +474,7 @@ public:
     DECL_STATIC_LINK( AsyncQuitHandler, OnAsyncQuit, void* );
 };
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG( AsyncQuitHandler, OnAsyncQuit )
+IMPL_STATIC_LINK_NOARG( AsyncQuitHandler, OnAsyncQuit )
 {
     QuitApplication();
     return 0L;

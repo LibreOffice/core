@@ -63,7 +63,7 @@ private:
 // unobootstrapprotector) is called before InitVCL (above), but component
 // context is disposed (redundantly again in unobootstrapprotector) from within
 // DeInitVCL (cf. Desktop::DeInit, desktop/source/app/app.cxx):
-IMPL_STATIC_LINK_NOINSTANCE(Protector, deinitHook, void *, EMPTYARG) {
+IMPL_STATIC_LINK(Protector, deinitHook, void *, EMPTYARG) {
     css::uno::Reference<css::uno::XComponentContext> context;
     try {
         context = comphelper::getProcessComponentContext();

@@ -238,7 +238,7 @@ IMPL_LINK( MyWin, ListHdl, Button*, )
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( MyWin, QuitHdl, Button*, )
+IMPL_STATIC_LINK( MyWin, QuitHdl, Button*, )
 {
     processCommand( "quit" );
     return 0;

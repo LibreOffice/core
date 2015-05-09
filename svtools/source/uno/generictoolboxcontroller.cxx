@@ -167,7 +167,7 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    try
    {

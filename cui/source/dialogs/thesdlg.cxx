@@ -437,7 +437,7 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox 
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
 {
     if (pBox && pBox->GetEntryCount() >= 2)
         pBox->SelectEntryPos( 1 );  // pos 0 is a 'header' that is not selectable

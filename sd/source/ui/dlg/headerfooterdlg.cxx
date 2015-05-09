@@ -266,7 +266,7 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED(HeaderFooterDialog, DeactivatePageHdl, TabControl *, bool)
+IMPL_STATIC_LINK_NOARG_TYPED(HeaderFooterDialog, DeactivatePageHdl, TabControl *, bool)
 {
     return true;
 }

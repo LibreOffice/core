@@ -3169,7 +3169,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( const OUSt
 
 
 // static
-IMPL_STATIC_LINK_NOINSTANCE_NOARG( SvNumberFormatter, CurrencyChangeLink )
+IMPL_STATIC_LINK_NOARG( SvNumberFormatter, CurrencyChangeLink )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     OUString aAbbrev;

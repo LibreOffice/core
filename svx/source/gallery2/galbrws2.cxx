@@ -73,7 +73,7 @@ struct DispatchInfo
     css::uno::Reference< css::frame::XDispatch >    Dispatch;
 };
 
-IMPL_STATIC_LINK_NOINSTANCE( GalleryBrowser2, AsyncDispatch_Impl, DispatchInfo*, pDispatchInfo )
+IMPL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, DispatchInfo*, pDispatchInfo )
 {
     if ( pDispatchInfo && pDispatchInfo->Dispatch.is() )
     {

@@ -763,7 +763,7 @@ throw( com::sun::star::uno::Exception, std::exception)
 
 
 
-IMPL_STATIC_LINK_NOINSTANCE( ToolboxController, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
+IMPL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
 {
     pDispatchInfo->mxDispatch->dispatch( pDispatchInfo->maURL, pDispatchInfo->maArgs );
     delete pDispatchInfo;

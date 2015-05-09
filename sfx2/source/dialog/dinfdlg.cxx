@@ -862,7 +862,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl)
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(SfxDocumentPage, ChangePassHdl)
+IMPL_STATIC_LINK_NOARG(SfxDocumentPage, ChangePassHdl)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
     do
@@ -1510,7 +1510,7 @@ void CustomPropertiesWindow::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_STATIC_LINK_NOINSTANCE(
+IMPL_STATIC_LINK(
     CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
 {
     long nType = reinterpret_cast<long>( pBox->GetSelectEntryData() );

@@ -513,7 +513,7 @@ IMPL_LINK(AnnotationWindow, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(AnnotationWindow, ModifyHdl)
+IMPL_STATIC_LINK_NOARG(AnnotationWindow, ModifyHdl)
 {
     return 0;
 }

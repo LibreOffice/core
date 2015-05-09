@@ -138,7 +138,7 @@ void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatc
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    try
    {

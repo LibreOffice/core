@@ -2262,7 +2262,7 @@ void SvxAsianTabPage::Reset( const SfxItemSet* rSet )
     lcl_SetBox(*rSet, SID_ATTR_PARA_SCRIPTSPACE, *m_pScriptSpaceCB );
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SvxAsianTabPage, ClickHdl_Impl, CheckBox*, pBox )
+IMPL_STATIC_LINK( SvxAsianTabPage, ClickHdl_Impl, CheckBox*, pBox )
 {
     pBox->EnableTriState( false );
     return 0;

@@ -210,7 +210,7 @@ namespace
         DECL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData* );
     };
 
-    IMPL_STATIC_LINK_NOINSTANCE( MacroExecution, ExecuteMacroEvent, MacroExecutionData*, i_pData )
+    IMPL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData*, i_pData )
     {
         ENSURE_OR_RETURN( i_pData, "wrong MacroExecutionData", 0L );
         // take ownership of the data

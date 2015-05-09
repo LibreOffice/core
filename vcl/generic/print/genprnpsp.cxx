@@ -1305,7 +1305,7 @@ void PrinterUpdate::doUpdate()
         pInst->PostPrintersChanged();
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG_TYPED( PrinterUpdate, UpdateTimerHdl, Idle*, void )
+IMPL_STATIC_LINK_NOARG_TYPED( PrinterUpdate, UpdateTimerHdl, Idle*, void )
 {
     if( nActiveJobs < 1 )
     {

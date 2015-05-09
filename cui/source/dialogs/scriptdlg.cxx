@@ -1483,7 +1483,7 @@ short SvxScriptErrorDialog::Execute()
     return 0;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE(
+IMPL_STATIC_LINK(
     SvxScriptErrorDialog, ShowDialog, OUString*, pMessage )
 {
     OUString message;

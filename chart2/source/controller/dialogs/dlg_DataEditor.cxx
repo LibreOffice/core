@@ -180,7 +180,7 @@ IMPL_LINK_NOARG(DataEditor, MiscHdl)
     return 0L;
 }
 
-IMPL_STATIC_LINK_NOINSTANCE_NOARG(DataEditor, CellModified)
+IMPL_STATIC_LINK_NOARG(DataEditor, CellModified)
 {
     return 0;
 }

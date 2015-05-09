@@ -606,7 +606,7 @@ public:
     DECL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo* );
 };
 
-IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     SolarMutexReleaser aReleaser;
     try

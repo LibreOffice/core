@@ -609,7 +609,7 @@ ContextMenuHelper::completeMenuProperties(
 }
 
 
-IMPL_STATIC_LINK_NOINSTANCE( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     // Release solar mutex to prevent deadlocks with clipboard thread
     SolarMutexReleaser aReleaser;

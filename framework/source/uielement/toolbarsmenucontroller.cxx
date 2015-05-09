@@ -851,7 +851,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
     }
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     try
     {
