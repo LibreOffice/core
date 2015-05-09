@@ -18,6 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 */
 #include <DocumentRedlineManager.hxx>
+#include <atrfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
@@ -589,8 +590,6 @@ RedlineMode_t DocumentRedlineManager::GetRedlineMode() const
 {
     return meRedlineMode;
 }
-
-void CheckAnchoredFlyConsistency(SwDoc const& rDoc);
 
 void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
 {

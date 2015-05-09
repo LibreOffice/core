@@ -24,6 +24,7 @@
 #include <svtools/unoimap.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
+#include <atrfrm.hxx>
 #include <unocoll.hxx>
 #include <unosett.hxx>
 #include <unostyle.hxx>
