@@ -1239,10 +1239,10 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 */
 
 {
-    if ( !pMgr )
+    if (!pMgr || !pImp)
         return;
 
-    if ( GetFloatingWindow() && pImp && pImp->bConstructed )
+    if (GetFloatingWindow() && pImp->bConstructed)
         pImp->aWinState = GetFloatingWindow()->GetWindowState();
 
     rInfo.aWinState = pImp->aWinState;
