@@ -484,16 +484,16 @@ void SvxNumberFormat::SetIndentAt( const long nIndentAt )
     mnIndentAt = nIndentAt;
 }
 
-IMPL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void *, EMPTYARG )
+IMPL_LINK_NOARG( SvxNumberFormat, GraphicArrived )
 {
     // if necessary, set the GrfSize:
-    if( !pThis->aGraphicSize.Width() || !pThis->aGraphicSize.Height() )
+    if( !aGraphicSize.Width() || !aGraphicSize.Height() )
     {
-        const Graphic* pGrf = pThis->pGraphicBrush->GetGraphic();
+        const Graphic* pGrf = pGraphicBrush->GetGraphic();
         if( pGrf )
-            pThis->aGraphicSize = SvxNumberFormat::GetGraphicSizeMM100( pGrf );
+            aGraphicSize = SvxNumberFormat::GetGraphicSizeMM100( pGrf );
     }
-    pThis->NotifyGraphicArrived();
+    NotifyGraphicArrived();
     return 0;
 }
 
