@@ -77,7 +77,7 @@ uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::Named
 }
 
 
-IMPL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, pThreadExecutorRequest )
+IMPL_STATIC_LINK_NOINSTANCE( MainThreadExecutor, worker, MainThreadExecutorRequest*, pThreadExecutorRequest )
 {
     pThreadExecutorRequest->doIt();
 
