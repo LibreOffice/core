@@ -1266,7 +1266,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
     return pNewFmt;
 }
 
-IMPL_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
+IMPL_LINK( SwDoc, BackgroundDone, SvxBrushItem*, )
 {
     SwViewShell* pStartSh = getIDocumentLayoutAccess().GetCurrentViewShell();
     if(pStartSh)

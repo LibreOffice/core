@@ -381,7 +381,7 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
     return 0;
 }
 
-IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*, EMPTYARG)
+IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*,)
 {
     if ( maLBKerning->GetSelectEntryPos() > 0 )
     {
@@ -406,7 +406,7 @@ IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*, EMPTYARG)
     KerningModifyHdl( NULL );
     return 0;
 }
-IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*, EMPTYARG)
+IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*,)
 {
     if ( maVSSpacing->GetSelectItemId() > 0 )
     {

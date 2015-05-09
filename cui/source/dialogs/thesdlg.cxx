@@ -542,7 +542,7 @@ void SvxThesaurusDialog::dispose()
     SvxStandardDialog::dispose();
 }
 
-IMPL_LINK( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, EMPTYARG /*pBtn*/ )
+IMPL_LINK( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, /*pBtn*/ )
 {
     EndDialog(RET_OK);
     return 0;

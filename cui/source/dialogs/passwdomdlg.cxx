@@ -94,7 +94,7 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         m_pOptionsExpander->Hide();
 }
 
-IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG /*pBtn*/ )
+IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, /*pBtn*/ )
 {
     bool bInvalidState = !m_pOpenReadonlyCB->IsChecked() &&
             m_pPasswdToOpenED->GetText().isEmpty() &&

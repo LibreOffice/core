@@ -146,13 +146,13 @@ void PlaceEditDialog::InitDetails( )
     SelectTypeHdl( m_pLBServerType );
 }
 
-IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, EMPTYARG )
+IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, )
 {
     EndDialog( RET_OK );
     return 1;
 }
 
-IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, EMPTYARG )
+IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, )
 {
     // ReUsing existing symbols...
     EndDialog( RET_NO );

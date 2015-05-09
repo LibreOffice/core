@@ -149,7 +149,7 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
 
 /**************************************************************************/
 
-IMPL_LINK( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, EMPTYARG/*pButton*/ )
+IMPL_LINK( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *,/*pButton*/ )
 {
     m_pZoom->Enable(m_pSizeZoomed->IsChecked());
     return 0;
@@ -305,7 +305,7 @@ IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
 }
 
 
-IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, EMPTYARG /*pCheckBox*/ )
+IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, /*pCheckBox*/ )
 {
     if (m_pBoldCheckBox->IsChecked())
         Face.SetWeight(FontWeight(WEIGHT_BOLD));
@@ -445,7 +445,7 @@ public:
     }
 };
 
-IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
 {
     if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
@@ -553,7 +553,7 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 }
 
 
-IMPL_LINK( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmFontTypeDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
 {
     if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
@@ -750,7 +750,7 @@ IMPL_LINK( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu )
 }
 
 
-IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
 {
     if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
@@ -1056,7 +1056,7 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
     rFormat.RequestApplyChanges();
 }
 
-IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
 {
     if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
@@ -1394,7 +1394,7 @@ void SmShowSymbolSetWindow::Resize()
     calccols();
 }
 
-IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, EMPTYARG /*pScrollBar*/)
+IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, /*pScrollBar*/)
 {
     Invalidate();
     return 0;
@@ -1844,7 +1844,7 @@ SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
 }
 
 
-IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox *, EMPTYARG pComboBox )
+IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox *, pComboBox )
 {
     (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
@@ -1855,7 +1855,7 @@ IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox *, EMPTYARG pComboBox
 }
 
 
-IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox *, EMPTYARG pComboBox )
+IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox *, pComboBox )
 {
     (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
@@ -1895,7 +1895,7 @@ IMPL_LINK( SmSymDefineDialog, ModifyHdl, ComboBox *, pComboBox )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, EMPTYARG pListBox )
+IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, pListBox )
 {
     (void) pListBox;
 #if OSL_DEBUG_LEVEL > 1
@@ -1907,7 +1907,7 @@ IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, EMPTYARG pListBox )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, EMPTYARG pListBox )
+IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, pListBox )
 {
     (void) pListBox;
     sal_Int32 nPos = pFontsSubsetLB->GetSelectEntryPos();
@@ -1923,7 +1923,7 @@ IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, EMPTYARG pListBox )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, EMPTYARG pComboBox )
+IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, pComboBox )
 {
     (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
@@ -1967,7 +1967,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
 }
 
 
-IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
+IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, pButton )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
@@ -1998,7 +1998,7 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
+IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
@@ -2039,7 +2039,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, EMPTYARG pButton )
+IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, pButton )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1

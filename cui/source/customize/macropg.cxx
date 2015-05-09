@@ -574,7 +574,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 }
 
 // select event handler on the listbox
-IMPL_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
+IMPL_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
 {
     _SvxMacroTabPage_Impl*    pImpl = mpImpl;
     SvHeaderTabListBox&        rListBox = pImpl->pEventLB->GetListBox();
@@ -597,7 +597,7 @@ IMPL_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     return GenericHandler_Impl( this, pBtn );
 }
 
-IMPL_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, EMPTYARG )
+IMPL_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, )
 {
     return GenericHandler_Impl( this, NULL );
 }

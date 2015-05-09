@@ -277,7 +277,7 @@ Image TabBar::GetItemImage (const DeckDescriptor& rDeckDescriptor) const
         mxFrame);
 }
 
-IMPL_LINK(TabBar::Item, HandleClick, Button*, EMPTYARG)
+IMPL_LINK(TabBar::Item, HandleClick, Button*,)
 {
     try
     {

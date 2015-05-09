@@ -111,7 +111,7 @@ public:
     DECL_LINK ( ChooseDocumentHdl, Button * );
 };
 
-IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
+IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, )
 {
     int contextWidth = mpContextWidth->GetValue();
     int contextHeight = mpContextHeight->GetValue();
@@ -147,7 +147,7 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK ( TiledRenderingDialog,  ChooseDocumentHdl, Button *, EMPTYARG )
+IMPL_LINK ( TiledRenderingDialog,  ChooseDocumentHdl, Button *, )
 {
     FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();

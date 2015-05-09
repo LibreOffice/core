@@ -47,13 +47,13 @@ void AuthFallbackDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK ( AuthFallbackDlg,  OKHdl, Button *, EMPTYARG )
+IMPL_LINK ( AuthFallbackDlg,  OKHdl, Button *, )
 {
     EndDialog( RET_OK );
     return 1;
 }
 
-IMPL_LINK ( AuthFallbackDlg,  CancelHdl, Button *, EMPTYARG )
+IMPL_LINK ( AuthFallbackDlg,  CancelHdl, Button *, )
 {
     EndDialog( RET_CANCEL );
     return 0;

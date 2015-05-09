@@ -762,7 +762,7 @@ IMPL_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
 
 
 
-IMPL_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
+IMPL_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, )
 {
     vcl::Window* pOldParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );

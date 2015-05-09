@@ -572,7 +572,7 @@ void SmEditWindow::CreateEditView()
 }
 
 
-IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, EMPTYARG /*pStat*/ )
+IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, /*pStat*/ )
 {
     if (!pEditView)
         return 1;
@@ -583,7 +583,7 @@ IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, EMPTYARG /*pStat*/ )
     }
 }
 
-IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, EMPTYARG /*pScrollBar*/ )
+IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/ )
 {
     OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)

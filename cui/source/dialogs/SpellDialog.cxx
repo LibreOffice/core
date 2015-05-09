@@ -441,7 +441,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
 /* Initialize, asynchronous to prevent virtial calls
    from a constructor
  */
-IMPL_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
+IMPL_LINK( SpellDialog, InitHdl, SpellDialog *, )
 {
     SetUpdateMode( false );
     //show or hide AutoCorrect depending on the modules abilities
@@ -911,7 +911,7 @@ int SpellDialog::InitUserDicts()
 }
 
 
-IMPL_LINK(SpellDialog, AddToDictClickHdl, PushButton*, EMPTYARG )
+IMPL_LINK(SpellDialog, AddToDictClickHdl, PushButton*, )
 {
     return AddToDictionaryExecute(1, m_pAddToDictMB->GetPopupMenu());
 }

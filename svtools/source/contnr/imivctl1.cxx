@@ -3307,7 +3307,7 @@ IMPL_LINK_NOARG_TYPED(IcnViewEdit_Impl, Timeout_Impl, Idle *, void)
     CallCallBackHdl_Impl();
 }
 
-IMPL_LINK( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator*, EMPTYARG  )
+IMPL_LINK( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator*,  )
 {
     bCanceled = false;
     bGrabFocus = true;
@@ -3315,7 +3315,7 @@ IMPL_LINK( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator*, EMPTYARG  )
     return 1;
 }
 
-IMPL_LINK( IcnViewEdit_Impl, EscapeHdl_Impl, Accelerator*, EMPTYARG  )
+IMPL_LINK( IcnViewEdit_Impl, EscapeHdl_Impl, Accelerator*,  )
 {
     bCanceled = true;
     bGrabFocus = true;

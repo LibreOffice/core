@@ -2957,7 +2957,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK( NamespaceItemDialog, SelectHdl, SvSimpleTable *,  EMPTYARG )
+    IMPL_LINK( NamespaceItemDialog, SelectHdl, SvSimpleTable *, )
     {
         bool bEnable = ( m_pNamespacesList->FirstSelected() != NULL );
         m_pEditNamespaceBtn->Enable( bEnable );

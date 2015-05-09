@@ -155,7 +155,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
 }
 
 IMPL_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
-                                    SfxTemplateControllerItem*, EMPTYARG)
+                                    SfxTemplateControllerItem*,)
 {
     nUserEventId = 0;
     SfxBoolItem* pState = 0;

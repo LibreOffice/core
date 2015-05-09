@@ -261,7 +261,7 @@ bool _SfxMacroTabPage::IsReadOnly() const
     return mpImpl->bReadOnly;
 }
 
-IMPL_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
+IMPL_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
 {
     _SfxMacroTabPage_Impl*  pImpl = mpImpl;
     SvHeaderTabListBox&     rListBox = pImpl->pEventLB->GetListBox();
@@ -279,7 +279,7 @@ IMPL_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
+IMPL_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, )
 {
     _SfxMacroTabPage_Impl*  pImpl = mpImpl;
     pImpl->pGroupLB->GroupSelected();
@@ -293,7 +293,7 @@ IMPL_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, EMPTYARG )
+IMPL_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, )
 {
     EnableButtons();
     return 0;
@@ -346,7 +346,7 @@ IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*, EMPTYARG, void )
+IMPL_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*,, void )
 {
     // FillMacroList() can take a long time -> show wait cursor and disable input
     SfxTabDialog* pTabDlg = GetTabDialog();

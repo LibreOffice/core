@@ -401,7 +401,7 @@ IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
     return 0;
 }
 
-IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, EMPTYARG )
+IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, )
 {
     mpMarginValueSet->SetNoSelection();
     mpMarginValueSet->SelectItem(0);
@@ -415,7 +415,7 @@ IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( PageMarginControl, ModifyULMarginHdl, MetricField *, EMPTYARG )
+IMPL_LINK( PageMarginControl, ModifyULMarginHdl, MetricField *, )
 {
     mpMarginValueSet->SetNoSelection();
     mpMarginValueSet->SelectItem(0);

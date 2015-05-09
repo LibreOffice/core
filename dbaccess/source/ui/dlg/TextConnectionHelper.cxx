@@ -180,7 +180,7 @@ namespace dbaui
         TabPage::dispose();
     }
 
-    IMPL_LINK(OTextConnectionHelper, OnControlModified, Control*, /*EMPTYARG*/)
+    IMPL_LINK(OTextConnectionHelper, OnControlModified, Control*,)
     {
         callModifiedHdl();
         return 0L;

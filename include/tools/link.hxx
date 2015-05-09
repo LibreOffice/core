@@ -113,8 +113,6 @@
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     static_cast<Class *>(Instance), &Class::LinkStub##Member)
 
-#define EMPTYARG
-
 template<typename Arg = void *, typename Ret = sal_IntPtr> class Link {
 public:
     typedef Ret Stub(void *, Arg);

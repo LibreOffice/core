@@ -354,7 +354,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CutHdl_Impl)
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, /*pButton*/ )
 {
     if( !bBusy )
     {

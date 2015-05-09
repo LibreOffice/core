@@ -410,7 +410,7 @@ IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)
     return 0;
 }
 
-IMPL_LINK(FmSearchDialog, OnFocusGrabbed, ComboBox*, EMPTYARG)
+IMPL_LINK(FmSearchDialog, OnFocusGrabbed, ComboBox*,)
 {
     m_pcmbSearchText->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
     return 0;

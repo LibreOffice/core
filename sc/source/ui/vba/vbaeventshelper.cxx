@@ -472,7 +472,7 @@ void ScVbaEventListener::postWindowResizeEvent( vcl::Window* pWindow )
     }
 }
 
-IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, vcl::Window*, EMPTYARG pWindow )
+IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, vcl::Window*, pWindow )
 {
     ::osl::MutexGuard aGuard( maMutex );
 

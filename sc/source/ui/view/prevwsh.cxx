@@ -482,7 +482,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
     return 0;
 }
 
-IMPL_LINK (ScPreviewShell, CloseHdl, SystemWindow*, EMPTYARG)
+IMPL_LINK (ScPreviewShell, CloseHdl, SystemWindow*,)
 {
     ExitPreview();
     return 0;

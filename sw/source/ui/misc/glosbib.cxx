@@ -183,7 +183,7 @@ void SwGlossaryGroupDlg::Apply()
     }
 }
 
-IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
+IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*,  )
 {
     m_pNewPB->Enable(false);
     SvTreeListEntry* pFirstEntry = m_pGroupTLB->FirstSelected();

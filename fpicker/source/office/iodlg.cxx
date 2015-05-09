@@ -674,7 +674,7 @@ void SvtFileDialog::Init_Impl
     Resize();
 }
 
-IMPL_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
+IMPL_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, )
 {
     _pFileView->EndInplaceEditing( false );
 
@@ -1222,7 +1222,7 @@ IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl )
 }
 
 IMPL_LINK_TYPED(
-    SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, EMPTYARG, void)
+    SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*,, void)
 {
     // filter the view again
     ExecuteFilter();

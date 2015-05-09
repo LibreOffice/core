@@ -1701,7 +1701,7 @@ void SvxPageDescPage::DisableVerticalPageDir()
     }
 }
 
-IMPL_LINK( SvxPageDescPage, FrameDirectionModify_Impl, ListBox*,  EMPTYARG)
+IMPL_LINK( SvxPageDescPage, FrameDirectionModify_Impl, ListBox*,)
 {
     m_pBspWin->SetFrameDirection( (sal_uInt32) m_pTextFlowBox->GetSelectEntryValue() );
     m_pBspWin->Invalidate();

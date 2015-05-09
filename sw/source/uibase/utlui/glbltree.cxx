@@ -1217,7 +1217,7 @@ SwNavigationPI* SwGlobalTree::GetParentWindow()
     return static_cast<SwNavigationPI*>(Window::GetParent());
 }
 
-IMPL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*, EMPTYARG)
+IMPL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*,)
 {
     const SfxObjectShell* pShell = SwGlobalTree::GetShowShell();
     SfxViewFrame* pFirst = pShell ? SfxViewFrame::GetFirst(pShell) : NULL;
