@@ -30,6 +30,18 @@
 
 #include "FilterHelper.hxx"
 
+namespace {
+
+void fillSuffixList(OUStringList& aSuffixList, const ::rtl::OUString& suffixString) {
+    sal_Int32 nIndex = 0;
+    do {
+        rtl::OUString aToken = suffixString.getToken( 0, ';', nIndex );
+        aSuffixList.push_back(aToken.copy(1));
+    } while ( nIndex >= 0 );
+}
+
+}
+
 #pragma mark DEFINES
 #define CLASS_NAME "FilterEntry"
 
@@ -464,18 +476,6 @@ void FilterHelper::SetFilterAtIndex(unsigned index) {
     }
     FilterEntry entry = m_pFilterList->at(index);
     SetCurFilter(entry.getTitle());
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-}
-
-void FilterHelper::fillSuffixList(OUStringList& aSuffixList, const ::rtl::OUString& suffixString) {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "aSuffixList", suffixString);
-
-    sal_Int32 nIndex = 0;
-    do {
-        rtl::OUString aToken = suffixString.getToken( 0, ';', nIndex );
-        aSuffixList.push_back(aToken.copy(1));
-    } while ( nIndex >= 0 );
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }

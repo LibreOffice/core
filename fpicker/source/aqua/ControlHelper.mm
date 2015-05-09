@@ -40,6 +40,97 @@ using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
+namespace {
+
+uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction)
+{
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlAction", nControlAction);
+
+    uno::Any aAny;
+
+    if ([pControl class] != [NSPopUpButton class]) {
+        SAL_INFO("fpicker.aqua","not a popup button");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return aAny;
+    }
+
+    NSPopUpButton *pButton = (NSPopUpButton*)pControl;
+    NSMenu *rMenu = [pButton menu];
+    if (nil == rMenu) {
+        SAL_INFO("fpicker.aqua","button has no menu");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return aAny;
+    }
+
+    switch (nControlAction)
+    {
+        case ControlActions::GET_ITEMS:
+        {
+            SAL_INFO("fpicker.aqua","GET_ITEMS");
+            uno::Sequence< OUString > aItemList;
+
+            int nItems = [rMenu numberOfItems];
+            if (nItems > 0) {
+                aItemList.realloc(nItems);
+            }
+            for (int i = 0; i < nItems; i++) {
+                NSString* sCFItem = [pButton itemTitleAtIndex:i];
+                if (nil != sCFItem) {
+                    aItemList[i] = [sCFItem OUString];
+                    SAL_INFO("fpicker.aqua","Return value[" << (i - 1) << "]: " << OUStringToOString(aItemList[i - 1], RTL_TEXTENCODING_UTF8).getStr());
+                }
+            }
+
+            aAny <<= aItemList;
+        }
+            break;
+        case ControlActions::GET_SELECTED_ITEM:
+        {
+            SAL_INFO("fpicker.aqua","GET_SELECTED_ITEM");
+            NSString* sCFItem = [pButton titleOfSelectedItem];
+            if (nil != sCFItem) {
+                OUString sString = [sCFItem OUString];
+                SAL_INFO("fpicker.aqua","Return value: " << OUStringToOString(sString, RTL_TEXTENCODING_UTF8).getStr());
+                aAny <<= sString;
+            }
+        }
+            break;
+        case ControlActions::GET_SELECTED_ITEM_INDEX:
+        {
+            SAL_INFO("fpicker.aqua","GET_SELECTED_ITEM_INDEX");
+            sal_Int32 nActive = [pButton indexOfSelectedItem];
+            SAL_INFO("fpicker.aqua","Return value: " << nActive);
+            aAny <<= nActive;
+        }
+            break;
+        default:
+            SAL_INFO("fpicker.aqua","undocumented/unimplemented ControlAction for a list");
+            break;
+    }
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__);
+
+    return aAny;
+}
+
+NSTextField* createLabelWithString(NSString* labelString) {
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "label", labelString);
+
+    NSTextField *textField = [NSTextField new];
+    [textField setEditable:NO];
+    [textField setSelectable:NO];
+    [textField setDrawsBackground:NO];
+    [textField setBordered:NO];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 setTitle
+    [[textField cell] setTitle:labelString];
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__);
+    return textField;
+}
+
+}
+
 #pragma mark Constructor / Destructor
 
 // Constructor / Destructor
@@ -551,7 +642,7 @@ case elem: \
     DBG_PRINT_EXIT(CLASS_NAME, __func__, nReturn); \
     return nReturn
 
-int ControlHelper::getControlElementName(const Class aClazz, const int nControlId) const
+int ControlHelper::getControlElementName(const Class aClazz, const int nControlId)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "aClazz", [[aClazz description] UTF8String], "controlId", nControlId);
 
@@ -667,79 +758,6 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
-
-
-uno::Any ControlHelper::HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction) const
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlAction", nControlAction);
-
-    uno::Any aAny;
-
-    if ([pControl class] != [NSPopUpButton class]) {
-        SAL_INFO("fpicker.aqua","not a popup button");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
-        return aAny;
-    }
-
-    NSPopUpButton *pButton = (NSPopUpButton*)pControl;
-    NSMenu *rMenu = [pButton menu];
-    if (nil == rMenu) {
-        SAL_INFO("fpicker.aqua","button has no menu");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
-        return aAny;
-    }
-
-    switch (nControlAction)
-    {
-        case ControlActions::GET_ITEMS:
-        {
-            SAL_INFO("fpicker.aqua","GET_ITEMS");
-            uno::Sequence< OUString > aItemList;
-
-            int nItems = [rMenu numberOfItems];
-            if (nItems > 0) {
-                aItemList.realloc(nItems);
-            }
-            for (int i = 0; i < nItems; i++) {
-                NSString* sCFItem = [pButton itemTitleAtIndex:i];
-                if (nil != sCFItem) {
-                    aItemList[i] = [sCFItem OUString];
-                    SAL_INFO("fpicker.aqua","Return value[" << (i - 1) << "]: " << OUStringToOString(aItemList[i - 1], RTL_TEXTENCODING_UTF8).getStr());
-                }
-            }
-
-            aAny <<= aItemList;
-        }
-            break;
-        case ControlActions::GET_SELECTED_ITEM:
-        {
-            SAL_INFO("fpicker.aqua","GET_SELECTED_ITEM");
-            NSString* sCFItem = [pButton titleOfSelectedItem];
-            if (nil != sCFItem) {
-                OUString sString = [sCFItem OUString];
-                SAL_INFO("fpicker.aqua","Return value: " << OUStringToOString(sString, RTL_TEXTENCODING_UTF8).getStr());
-                aAny <<= sString;
-            }
-        }
-            break;
-        case ControlActions::GET_SELECTED_ITEM_INDEX:
-        {
-            SAL_INFO("fpicker.aqua","GET_SELECTED_ITEM_INDEX");
-            sal_Int32 nActive = [pButton indexOfSelectedItem];
-            SAL_INFO("fpicker.aqua","Return value: " << nActive);
-            aAny <<= nActive;
-        }
-            break;
-        default:
-            SAL_INFO("fpicker.aqua","undocumented/unimplemented ControlAction for a list");
-            break;
-    }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-
-    return aAny;
-}
-
 
 // cf. offapi/com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.idl
 NSControl* ControlHelper::getControl( const sal_Int16 nControlId ) const
@@ -946,22 +964,6 @@ void ControlHelper::createFilterControl() {
     m_aMapListLabels[m_pFilterControl] = [sLabel retain];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
-}
-
-NSTextField* ControlHelper::createLabelWithString(NSString* labelString) {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "label", labelString);
-
-    NSTextField *textField = [NSTextField new];
-    [textField setEditable:NO];
-    [textField setSelectable:NO];
-    [textField setDrawsBackground:NO];
-    [textField setBordered:NO];
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 setTitle
-    [[textField cell] setTitle:labelString];
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-    return textField;
 }
 
 int ControlHelper::getVerticalDistance(const NSControl* first, const NSControl* second)

@@ -169,14 +169,12 @@ private:
     // private methods
 
     void HandleSetListValue(const NSControl* pControl, const sal_Int16 nControlAction, const uno::Any& rValue);
-    uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction) const;
 
     void         createControls();
     void         createFilterControl();
     void         createUserPane();
-    NSTextField* createLabelWithString(NSString* label);
 
-    int          getControlElementName(const Class clazz, const int nControlId) const;
+    static int   getControlElementName(const Class clazz, const int nControlId);
     NSControl*   getControl( const sal_Int16 nControlId ) const;
     static int   getVerticalDistance(const NSControl* first, const NSControl* second);
 

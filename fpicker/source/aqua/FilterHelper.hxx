@@ -116,9 +116,6 @@ private:
     bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
 
     void ensureFilterList( const OUString& _rInitialCurrentFilter );
-
-    void fillSuffixList(OUStringList& aSuffixList, const OUString& suffixString);
-
 };
 
 #endif // INCLUDED_FPICKER_SOURCE_AQUA_FILTERHELPER_HXX
