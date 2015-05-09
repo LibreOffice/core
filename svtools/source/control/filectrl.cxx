@@ -193,14 +193,17 @@ IMPL_LINK_NOARG(FileControl, ButtonHdl)
     return 0;
 }
 
-
-
 void FileControl::GetFocus()
 {
     maEdit->GrabFocus();
 }
 
-
+void FileControl::SetEditModifyHdl( const Link<>& rLink )
+{
+    if (!maEdit || maEdit->IsDisposed())
+        return;
+    maEdit->SetModifyHdl(rLink);
+}
 
 void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {

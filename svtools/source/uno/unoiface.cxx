@@ -595,11 +595,11 @@ void VCLXFileControl::SetWindow( const VclPtr< vcl::Window > &pWindow )
 {
     VclPtr< FileControl > pPrevFileControl = GetAsDynamic< FileControl >();
     if ( pPrevFileControl )
-        pPrevFileControl->GetEdit().SetModifyHdl( Link<>() );
+        pPrevFileControl->SetEditModifyHdl( Link<>() );
 
     FileControl* pNewFileControl = dynamic_cast<FileControl*>( pWindow.get() );
     if ( pNewFileControl )
-        pNewFileControl->GetEdit().SetModifyHdl( LINK( this, VCLXFileControl, ModifyHdl ) );
+        pNewFileControl->SetEditModifyHdl( LINK( this, VCLXFileControl, ModifyHdl ) );
 
     VCLXWindow::SetWindow( pWindow );
 }

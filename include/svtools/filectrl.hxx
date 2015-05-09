@@ -102,6 +102,8 @@ public:
     //use this to manipulate the dialog bevore executing it:
     void            SetDialogCreatedHdl( const Link<>& rLink ) { maDialogCreatedHdl = rLink; }
     const Link<>&   GetDialogCreatedHdl() const { return maDialogCreatedHdl; }
+
+    void            SetEditModifyHdl( const Link<>& rLink );
 };
 
 #endif
