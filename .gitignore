@@ -76,6 +76,7 @@
 \#*
 *.kdev4
 .kdev_include_paths
+.directory
 
 # things below this point are targeted for elimination
 
