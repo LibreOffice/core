@@ -1233,7 +1233,7 @@ void OGroupsSortingDialog::showHelpText(sal_uInt16 _nResId)
     m_pHelpWindow->SetText(OUString(ModuleRes(_nResId)));
 }
 
-void OGroupsSortingDialog::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
+void OGroupsSortingDialog::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw(uno::RuntimeException, std::exception)
 {
     uno::Reference< report::XGroup > xGroup(_rEvent.Source,uno::UNO_QUERY);
     if ( xGroup.is() )

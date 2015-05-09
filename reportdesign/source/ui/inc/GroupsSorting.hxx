@@ -139,7 +139,7 @@ private:
     void operator =(OGroupsSortingDialog&) SAL_DELETED_FUNCTION;
 protected:
     // OPropertyChangeListener
-    virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 public:
     OGroupsSortingDialog( vcl::Window* pParent
                         ,bool _bReadOnly
