@@ -19,11 +19,7 @@ namespace o3tl {
 template<typename T> struct underlying_type {
 #if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 6 && \
         !defined __clang__
-    typedef typename std::conditional<
-        T( -1 ) < T( 0 ),
-        typename std::make_signed< T >::type,
-        typename std::make_unsigned< T >::type
-        >::type type;
+    typedef int type;
 #else
     typedef typename std::underlying_type<T>::type type;
 #endif
