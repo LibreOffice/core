@@ -36,6 +36,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builderfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -151,10 +152,7 @@ HexColorControl::HexColorControl( vcl::Window* pParent, const WinBits& nStyle )
     SetMaxTextLen( 6 );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeHexColorControl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new HexColorControl(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(HexColorControl, WB_BORDER)
 
 void HexColorControl::SetColor( sal_Int32 nColor )
 {
@@ -274,7 +272,7 @@ ColorPreviewControl::ColorPreviewControl( vcl::Window* pParent, const WinBits& n
     SetLineColor( maColor );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorPreviewControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ColorPreviewControl)
 {
     WinBits nBits = 0;
 
@@ -370,7 +368,7 @@ void ColorFieldControl::dispose()
     Control::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorFieldControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ColorFieldControl)
 {
     WinBits nBits = 0;
 
@@ -763,7 +761,7 @@ void ColorSliderControl::dispose()
     Control::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorSliderControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ColorSliderControl)
 {
     WinBits nBits = 0;
 

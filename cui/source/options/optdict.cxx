@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svx/dialogs.hrc>
 
 #include <linguistic/misc.hxx>
@@ -217,13 +218,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, ModifyHdl_Impl)
 
 // class SvxEditDictionaryDialog -------------------------------------------
 
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxDictEdit(vcl::Window *pParent, VclBuilder::stringmap&)
-{
-    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK;
-    return new SvxDictEdit(pParent, nWinStyle);
-};
+VCL_BUILDER_FACTORY_ARGS(SvxDictEdit, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
 
 SvxEditDictionaryDialog::SvxEditDictionaryDialog(
             vcl::Window* pParent,

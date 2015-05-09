@@ -31,6 +31,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 using ::std::vector;
 
@@ -153,12 +154,10 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 |
 \**********************************************************************/
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtIconChoiceCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvtIconChoiceCtrl(pParent, WB_3DLOOK | WB_ICON | WB_BORDER |
-                                 WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                                 WB_NODRAGSELECTION | WB_TABSTOP);
-}
+VCL_BUILDER_FACTORY_ARGS(SvtIconChoiceCtrl,
+                         WB_3DLOOK | WB_ICON | WB_BORDER |
+                         WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+                         WB_NODRAGSELECTION | WB_TABSTOP);
 
 IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
                                      const OUString& rUIXMLDescription,

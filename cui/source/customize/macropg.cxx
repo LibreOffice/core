@@ -39,6 +39,7 @@
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"
 #include <svx/dialogs.hrc>
+#include <vcl/builderfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <algorithm>
@@ -151,7 +152,7 @@ void MacroEventListBox::dispose()
     Control::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeMacroEventListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(MacroEventListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
 

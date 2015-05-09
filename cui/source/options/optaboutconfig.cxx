@@ -10,6 +10,7 @@
 #include "optaboutconfig.hxx"
 #include "optHeaderTabListbox.hxx"
 
+#include <vcl/builderfactory.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include <comphelper/processfactory.hxx>
@@ -54,11 +55,7 @@ struct Prop_Impl
     {}
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCuiCustomMultilineEdit(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new CuiCustomMultilineEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
-}
-
+VCL_BUILDER_FACTORY_ARGS(CuiCustomMultilineEdit,WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
 
 void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
 {

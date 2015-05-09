@@ -59,7 +59,7 @@
 #include <unotools/configmgr.hxx>
 #include "dialmgr.hxx"
 #include <svl/stritem.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -258,7 +258,7 @@ SfxConfigFunctionListBox::SfxConfigFunctionListBox(vcl::Window* pParent, WinBits
     GetModel()->SetSortMode( SortAscending );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigFunctionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SfxConfigFunctionListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -400,7 +400,7 @@ SfxConfigGroupListBox::SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigGroupListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SfxConfigGroupListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
 

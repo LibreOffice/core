@@ -22,7 +22,7 @@
 #include "Strings.hrc"
 #include <svl/languageoptions.hxx>
 #include <vcl/window.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 namespace chart
 {
@@ -42,10 +42,7 @@ TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent, vcl::Window* p
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTextDirectionListBox(vcl::Window *pParent, VclBuilder::stringmap &)
-     {
-         return new TextDirectionListBox(pParent);
-     }
+VCL_BUILDER_FACTORY(TextDirectionListBox)
 
 } //namespace chart
 

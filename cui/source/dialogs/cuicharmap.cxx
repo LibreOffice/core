@@ -30,6 +30,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svl/stritem.hxx>
 
 #include <cuires.hrc>
@@ -179,10 +180,7 @@ SvxShowText::SvxShowText(vcl::Window* pParent, bool bCenter)
     , mbCenter(bCenter)
 {}
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxShowText(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxShowText(pParent);
-}
+VCL_BUILDER_FACTORY(SvxShowText)
 
 void SvxShowText::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {

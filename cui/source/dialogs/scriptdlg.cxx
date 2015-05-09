@@ -23,6 +23,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/builderfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include <cuires.hrc>
@@ -94,10 +95,7 @@ SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
     nMode = 0xFF;    // everything
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSFTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SFTreeListBox(pParent);
-}
+VCL_BUILDER_FACTORY(SFTreeListBox)
 
 SFTreeListBox::~SFTreeListBox()
 {

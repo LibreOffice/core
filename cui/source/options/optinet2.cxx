@@ -39,6 +39,7 @@
 #include <unotools/bootstrap.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/builderfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
@@ -99,12 +100,7 @@ using namespace ::sfx2;
 
 #include <sal/config.h>
 
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNoSpaceEdit(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxNoSpaceEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
-}
+VCL_BUILDER_FACTORY_ARGS(SvxNoSpaceEdit, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
 
 void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
 {

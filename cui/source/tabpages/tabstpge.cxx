@@ -21,6 +21,7 @@
 #include <svtools/ruler.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <cuires.hrc>
 #include <editeng/lrspitem.hxx>
@@ -59,10 +60,8 @@ public:
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTabWin_Impl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new TabWin_Impl(pParent, 0);
-}
+VCL_BUILDER_FACTORY_ARGS(TabWin_Impl, 0)
+
 // static ----------------------------------------------------------------
 
 const sal_uInt16 SvxTabulatorTabPage::pRanges[] =

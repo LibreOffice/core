@@ -33,6 +33,7 @@
 #include "svtools/treelistentry.hxx"
 
 #include <sal/macros.h>
+#include <vcl/builderfactory.hxx>
 
 #include "cuires.hrc"
 #include "acccfg.hrc"
@@ -652,7 +653,7 @@ void SfxAccCfgLBoxString_Impl::Paint(
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxAccCfgTabListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SfxAccCfgTabListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
 

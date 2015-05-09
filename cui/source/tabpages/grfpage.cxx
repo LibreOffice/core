@@ -32,7 +32,7 @@
 #include <cuires.hrc>
 #include <tools/fract.hxx>
 #include <svx/dialogs.hrc>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -790,7 +790,7 @@ Size SvxCropExample::GetOptimalSize() const
     return LogicToPixel(Size(78, 78), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxCropExample(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxCropExample)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
