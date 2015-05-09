@@ -254,7 +254,7 @@ private:
 
 protected:
 
-    DECL_STATIC_LINK_TYPED( Calendar, ScrollHdl, Timer *, void );
+    DECL_LINK_TYPED( ScrollHdl, Timer *, void );
 
 public:
                     Calendar( vcl::Window* pParent, WinBits nWinStyle = 0 );

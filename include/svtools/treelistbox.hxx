@@ -309,7 +309,7 @@ private:
     // called for a deleted object.
     SVT_DLLPRIVATE static void AddBoxToDDList_Impl( const SvTreeListBox& rB );
     SVT_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
-    DECL_DLLPRIVATE_STATIC_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8* );
+    DECL_DLLPRIVATE_LINK( DragFinishHdl_Impl, sal_Int8* );
 
 protected:
 

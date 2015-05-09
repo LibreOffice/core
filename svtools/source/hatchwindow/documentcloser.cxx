@@ -98,9 +98,8 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
 }
 
 
-IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserRequest*, pMTRequest )
+IMPL_STATIC_LINK_NOINSTANCE( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserRequest*, pMTRequest )
 {
-    (void) pThis; // unused
     if ( pMTRequest )
     {
         if ( pMTRequest->m_xFrame.is() )

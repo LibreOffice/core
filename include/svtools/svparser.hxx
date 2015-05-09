@@ -44,7 +44,7 @@ enum SvParserState
 
 class SVT_DLLPUBLIC SvParser : public SvRefBase
 {
-    DECL_STATIC_LINK( SvParser, NewDataRead, void* );
+    DECL_LINK( NewDataRead, void* );
 
 protected:
     SvStream&           rInput;
@@ -138,7 +138,7 @@ public:
     Link<> GetAsynchCallLink() const
         { return LINK( const_cast<SvParser*>(this), SvParser, NewDataRead ); }
 
-    long CallAsyncCallLink() { return NewDataRead( this, 0 ); }
+    long CallAsyncCallLink() { return NewDataRead( 0 ); }
 
     // for asynchronous reading from the SvStream
     void SaveState( int nToken );

@@ -1404,15 +1404,15 @@ void Calendar::ImplEndTracking( bool bCancel )
 
 
 
-IMPL_STATIC_LINK_TYPED( Calendar, ScrollHdl, Timer*, EMPTYARG, void )
+IMPL_LINK_NOARG_TYPED( Calendar, ScrollHdl, Timer*, void )
 {
-    bool bPrevIn = (pThis->mnDragScrollHitTest & CALENDAR_HITTEST_PREV) != 0;
-    bool bNextIn = (pThis->mnDragScrollHitTest & CALENDAR_HITTEST_NEXT) != 0;
+    bool bPrevIn = (mnDragScrollHitTest & CALENDAR_HITTEST_PREV) != 0;
+    bool bNextIn = (mnDragScrollHitTest & CALENDAR_HITTEST_NEXT) != 0;
     if( bNextIn || bPrevIn )
     {
-        pThis->mbScrollDateRange = true;
-        pThis->ImplScroll( bPrevIn );
-        pThis->mbScrollDateRange = false;
+        mbScrollDateRange = true;
+        ImplScroll( bPrevIn );
+        mbScrollDateRange = false;
     }
 }
 

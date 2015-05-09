@@ -106,7 +106,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     css::uno::Reference< css::ucb::XCommandProcessor > processor_;
     sal_Int32 commandId_;
 
-    DECL_STATIC_LINK(               SvtMatchContext_Impl, Select_Impl, void* );
+    DECL_LINK(                      Select_Impl, void* );
 
     virtual                         ~SvtMatchContext_Impl();
     virtual void                    execute() SAL_OVERRIDE;
@@ -207,18 +207,18 @@ void SvtMatchContext_Impl::execute( )
 // Cancellable does not discard the information gained so far, it
 // inserts all collected completions into the listbox.
 
-IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
+IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl )
 {
     // avoid recursion through cancel button
     {
-        osl::MutexGuard g(pThis->mutex_);
-        if (pThis->stopped_) {
+        osl::MutexGuard g(mutex_);
+        if (stopped_) {
             // Completion was stopped, no display:
             return 0;
         }
     }
 
-    SvtURLBox* pBox = pThis->pBox;
+    SvtURLBox* pBox = this->pBox;
     pBox->bAutoCompleteMode = true;
 
     // did we filter completions which otherwise would have been valid?
@@ -228,7 +228,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     // insert all completed strings into the listbox
     pBox->Clear();
 
-    for(std::vector<OUString>::iterator i = pThis->aCompletions.begin(); i != pThis->aCompletions.end(); ++i)
+    for(std::vector<OUString>::iterator i = aCompletions.begin(); i != aCompletions.end(); ++i)
     {
         OUString sCompletion(*i);
 
@@ -259,19 +259,19 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
         pBox->InsertEntry( sCompletion );
     }
 
-    if( !pThis->bNoSelection && !pThis->aCompletions.empty() && !bValidCompletionsFiltered )
+    if( !bNoSelection && !aCompletions.empty() && !bValidCompletionsFiltered )
     {
         // select the first one
         OUString aTmp( pBox->GetEntry(0) );
         pBox->SetText( aTmp );
-        pBox->SetSelection( Selection( pThis->aText.getLength(), aTmp.getLength() ) );
+        pBox->SetSelection( Selection( aText.getLength(), aTmp.getLength() ) );
     }
 
     // transfer string lists to listbox and forget them
-    pBox->pImp->aURLs = pThis->aURLs;
-    pBox->pImp->aCompletions = pThis->aCompletions;
-    pThis->aURLs.clear();
-    pThis->aCompletions.clear();
+    pBox->pImp->aURLs = aURLs;
+    pBox->pImp->aCompletions = aCompletions;
+    aURLs.clear();
+    aCompletions.clear();
 
     // force listbox to resize ( it may be open )
     pBox->Resize();

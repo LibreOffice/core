@@ -1403,14 +1403,14 @@ void SvTreeListBox::RemoveBoxFromDDList_Impl( const SvTreeListBox& rB )
     SortLBoxes::get().erase( nVal );
 }
 
-IMPL_STATIC_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8*, pAction )
+IMPL_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8*, pAction )
 {
-    sal_uLong nVal = reinterpret_cast<sal_uLong>(pThis);
+    sal_uLong nVal = reinterpret_cast<sal_uLong>(this);
     std::set<sal_uLong> &rSortLBoxes = SortLBoxes::get();
     std::set<sal_uLong>::const_iterator it = rSortLBoxes.find(nVal);
     if( it != rSortLBoxes.end() )
     {
-        pThis->DragFinished( *pAction );
+        DragFinished( *pAction );
         rSortLBoxes.erase( it );
     }
     return 0;

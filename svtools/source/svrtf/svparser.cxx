@@ -607,30 +607,30 @@ void SvParser::BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
 }
 
 
-IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
+IMPL_LINK_NOARG( SvParser, NewDataRead )
 {
-    switch( pThis->eState )
+    switch( eState )
     {
     case SVPAR_PENDING:
         // if file is loaded we are not allowed to continue
         // instead should ignore the call.
-        if( pThis->IsDownloadingFile() )
+        if( IsDownloadingFile() )
             break;
 
-        pThis->eState = SVPAR_WORKING;
-        pThis->RestoreState();
+        eState = SVPAR_WORKING;
+        RestoreState();
 
-        pThis->Continue( pThis->pImplData->nToken );
+        Continue( pImplData->nToken );
 
-        if( ERRCODE_IO_PENDING == pThis->rInput.GetError() )
-            pThis->rInput.ResetError();
+        if( ERRCODE_IO_PENDING == rInput.GetError() )
+            rInput.ResetError();
 
-        if( SVPAR_PENDING != pThis->eState )
-            pThis->ReleaseRef();                    // ready otherwise!
+        if( SVPAR_PENDING != eState )
+            ReleaseRef();                    // ready otherwise!
         break;
 
     case SVPAR_WAITFORDATA:
-        pThis->eState = SVPAR_WORKING;
+        eState = SVPAR_WORKING;
         break;
 
     case SVPAR_NOTSTARTED:
@@ -638,7 +638,7 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
         break;
 
     default:
-        pThis->ReleaseRef();                    // ready otherwise!
+        ReleaseRef();                    // ready otherwise!
         break;
     }
 

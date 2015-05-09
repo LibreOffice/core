@@ -81,17 +81,17 @@ AsynchronLink::~AsynchronLink()
     delete _pMutex;
 }
 
-IMPL_STATIC_LINK_TYPED( AsynchronLink, HandleCall_Idle, Idle*, EMPTYARG, void )
+IMPL_LINK_NOARG_TYPED( AsynchronLink, HandleCall_Idle, Idle*, void )
 {
-    if( pThis->_pMutex ) pThis->_pMutex->acquire();
-    pThis->_nEventId = 0;
-    if( pThis->_pMutex ) pThis->_pMutex->release();
-    pThis->Call_Impl( pThis->_pArg );
+    if( _pMutex ) _pMutex->acquire();
+    _nEventId = 0;
+    if( _pMutex ) _pMutex->release();
+    Call_Impl( _pArg );
 }
 
-IMPL_STATIC_LINK( AsynchronLink, HandleCall_PostUserEvent, void*, EMPTYARG )
+IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent )
 {
-    HandleCall_Idle(pThis, nullptr);
+    HandleCall_Idle(nullptr);
     return 0;
 }
 
