@@ -174,9 +174,9 @@ namespace bib
         mpBibView->Resize();
     }
 
-    IMPL_STATIC_LINK( BibView, CallMappingHdl, BibView*, EMPTYARG )
+    IMPL_LINK( BibView, CallMappingHdl, BibView*, EMPTYARG )
     {
-        pThis->m_pDatMan->CreateMappingDialog( pThis );
+        m_pDatMan->CreateMappingDialog( this );
         return 0;
     }
 

@@ -630,9 +630,9 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
     }
 }
-IMPL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG( BibFrameController_Impl, DisposeHdl )
 {
-    pThis->xFrame->dispose();
+    xFrame->dispose();
     return 0;
 };
 
