@@ -744,6 +744,12 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     // the object to crop
     Rectangle aOldRect( aOutRect );
 
+    const long nOldWidth = aOldRect.GetWidth();
+    const long nOldHeight = aOldRect.GetHeight();
+
+    if (!nOldWidth || !nOldHeight)
+        return;
+
     Rectangle aNewRect( aOutRect );
     ResizeRect( aNewRect, rRef, xFact, yFact );
 
@@ -772,8 +778,8 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
         convertTwipToMm100(aCrop.GetBottom()) );
 
     // Compute delta to apply
-    double fScaleX = ( aGraphicSize.Width() - aCropRectangle.Left() - aCropRectangle.Right() ) / (double)aOldRect.GetWidth();
-    double fScaleY = ( aGraphicSize.Height() - aCropRectangle.Top() - aCropRectangle.Bottom() ) / (double)aOldRect.GetHeight();
+    double fScaleX = ( aGraphicSize.Width() - aCropRectangle.Left() - aCropRectangle.Right() ) / (double)nOldWidth;
+    double fScaleY = ( aGraphicSize.Height() - aCropRectangle.Top() - aCropRectangle.Bottom() ) / (double)nOldHeight;
 
     sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
     sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
