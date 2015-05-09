@@ -463,45 +463,45 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
     }
 }
 
-IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl )
 {
     // When we come form here there it can not be an error no more.
-    pThis->bLoadError = false;
-    pThis->bWaitForData = false;
-    pThis->bInCallDownload = false;
+    bLoadError = false;
+    bWaitForData = false;
+    bInCallDownload = false;
 
-    if( !pThis->bInNewData && !pThis->bDataReady )
+    if( !bInNewData && !bDataReady )
     {
         // Graphic is finished, also send DataChanged from Status change
-        pThis->bDataReady = true;
-        pThis->SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_OK );
+        bDataReady = true;
+        SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_OK );
 
         // and then send the data again
-        pThis->NotifyDataChanged();
+        NotifyDataChanged();
     }
 
-    if( pThis->bDataReady )
+    if( bDataReady )
     {
-        pThis->bLoadAgain = true;
-        if( pThis->xMed.Is() )
+        bLoadAgain = true;
+        if( xMed.Is() )
         {
-            pThis->xMed->SetDoneLink( Link<>() );
-            pThis->pDelMed = new SfxMediumRef(pThis->xMed);
-            pThis->nPostUserEventId = Application::PostUserEvent(
-                        LINK( pThis, SvFileObject, DelMedium_Impl ),
-                        pThis->pDelMed);
-            pThis->xMed.Clear();
+            xMed->SetDoneLink( Link<>() );
+            pDelMed = new SfxMediumRef(xMed);
+            nPostUserEventId = Application::PostUserEvent(
+                        LINK( this, SvFileObject, DelMedium_Impl ),
+                        pDelMed);
+            xMed.Clear();
         }
     }
 
     return 0;
 }
 
-IMPL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, pDelMed )
+IMPL_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, pDelMed )
 {
-    pThis->nPostUserEventId = 0;
-    assert(pThis->pDelMed == pDelMed);
-    pThis->pDelMed = NULL;
+    nPostUserEventId = 0;
+    assert(pDelMed == pDelMed);
+    pDelMed = NULL;
     delete pDelMed;
     return 0;
 }

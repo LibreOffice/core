@@ -364,14 +364,14 @@ void ShutdownIcon::StartFileDialog()
 
 
 
-IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYARG )
+IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYARG )
 {
-    DBG_ASSERT( pThis->m_pFileDlg, "ShutdownIcon, DialogClosedHdl_Impl(): no file dialog" );
+    DBG_ASSERT( m_pFileDlg, "ShutdownIcon, DialogClosedHdl_Impl(): no file dialog" );
 
     // use constructor for filling up filters automatically!
-    if ( ERRCODE_NONE == pThis->m_pFileDlg->GetError() )
+    if ( ERRCODE_NONE == m_pFileDlg->GetError() )
     {
-        ::com::sun::star::uno::Reference< XFilePicker >    xPicker = pThis->m_pFileDlg->GetFilePicker();
+        ::com::sun::star::uno::Reference< XFilePicker >    xPicker = m_pFileDlg->GetFilePicker();
 
         try
         {
@@ -404,7 +404,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 
                 // use the filedlghelper to get the current filter name,
                 // because it removes the extensions before you get the filter name.
-                OUString aFilterName( pThis->m_pFileDlg->GetCurrentFilter() );
+                OUString aFilterName( m_pFileDlg->GetCurrentFilter() );
 
                 if ( xPickerControls.is() )
                 {
@@ -497,8 +497,8 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
     // the settings.
     if ( SvtMiscOptions().UseSystemFileDialog() )
     {
-        delete pThis->m_pFileDlg;
-        pThis->m_pFileDlg = NULL;
+        delete m_pFileDlg;
+        m_pFileDlg = NULL;
     }
 #endif
 

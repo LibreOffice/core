@@ -154,19 +154,19 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
     }
 }
 
-IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
+IMPL_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
                                     SfxTemplateControllerItem*, EMPTYARG)
 {
-    pThis->nUserEventId = 0;
+    nUserEventId = 0;
     SfxBoolItem* pState = 0;
-    switch(pThis->nWaterCanState)
+    switch(nWaterCanState)
     {
         case 0 :
         case 1 :
-            pState = new SfxBoolItem(SID_STYLE_WATERCAN, pThis->nWaterCanState != 0);
+            pState = new SfxBoolItem(SID_STYLE_WATERCAN, nWaterCanState != 0);
         break;
     }
-    pThis->rTemplateDlg.SetWaterCanState(pState);
+    rTemplateDlg.SetWaterCanState(pState);
     delete pState;
     return 0;
 }

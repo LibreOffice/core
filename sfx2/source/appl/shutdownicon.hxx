@@ -118,8 +118,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         void                    StartFileDialog();
         sfx2::FileDialogHelper* GetFileDialog() const { return m_pFileDlg; }
-        DECL_STATIC_LINK(
-            ShutdownIcon, DialogClosedHdl_Impl, sfx2::FileDialogHelper*);
+        DECL_LINK(DialogClosedHdl_Impl, sfx2::FileDialogHelper*);
 
         static bool IsQuickstarterInstalled();
 

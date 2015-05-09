@@ -62,7 +62,7 @@ class SvDDELinkEditDialog : public ModalDialog
     VclPtr<Edit>            m_pEdDdeItem;
     VclPtr<OKButton>        m_pOKButton;
 
-    DECL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit* );
+    DECL_LINK( EditHdl_Impl, Edit* );
 public:
     SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* );
     virtual ~SvDDELinkEditDialog();
@@ -113,12 +113,11 @@ OUString SvDDELinkEditDialog::GetCmd() const
     return sRet;
 }
 
-IMPL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, pEdit )
+IMPL_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, )
 {
-    (void)pEdit; // unused variable
-    pThis->m_pOKButton->Enable( !pThis->m_pEdDdeApp->GetText().isEmpty() &&
-                              !pThis->m_pEdDdeTopic->GetText().isEmpty() &&
-                              !pThis->m_pEdDdeItem->GetText().isEmpty() );
+    m_pOKButton->Enable( !m_pEdDdeApp->GetText().isEmpty() &&
+                         !m_pEdDdeTopic->GetText().isEmpty() &&
+                         !m_pEdDdeItem->GetText().isEmpty() );
     return 0;
 }
 

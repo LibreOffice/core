@@ -29,8 +29,7 @@ class SfxTemplateControllerItem : public SfxControllerItem {
     sal_uInt8 nWaterCanState;
     ImplSVEvent* nUserEventId;
 
-    DECL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
-                     SfxTemplateControllerItem*);
+    DECL_LINK(SetWaterCanStateHdl_Impl, SfxTemplateControllerItem*);
 
 protected:
     virtual void StateChanged(sal_uInt16, SfxItemState, const SfxPoolItem* pState) SAL_OVERRIDE;

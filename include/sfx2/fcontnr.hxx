@@ -108,7 +108,7 @@ public:
                         ~SfxFilterMatcher();
 
     SAL_DLLPRIVATE static bool IsFilterInstalled_Impl( const SfxFilter* pFilter );
-    DECL_DLLPRIVATE_STATIC_LINK_TYPED( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, bool );
+    DECL_DLLPRIVATE_LINK_TYPED( MaybeFileHdl_Impl, OUString*, bool );
 
     sal_uInt32               GuessFilterIgnoringContent( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     sal_uInt32               GuessFilter( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
