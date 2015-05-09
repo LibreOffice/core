@@ -1753,9 +1753,9 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
         (Frm().*fnRect->fnSetHeight)( nOld + nDist );
         if( IsVertical()&& !IsVertLR() && !IsReverse() )
             Frm().Pos().X() -= nDist;
-        if ( nOld && IsInTab() )
+        SwTabFrm *pTab = (nOld && IsInTab()) ? FindTabFrm() : NULL;
+        if (pTab)
         {
-            SwTabFrm *pTab = FindTabFrm();
             if ( pTab->GetTable()->GetHTMLTableLayout() &&
                  !pTab->IsJoinLocked() &&
                  !pTab->GetFmt()->GetDoc()->GetDocShell()->IsReadOnly() )
@@ -1841,9 +1841,9 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
         if( IsVertical() && !IsVertLR() )
             Frm().Pos().X() += nDist;
         nDist = nRstHeight;
-        if ( IsInTab() )
+        SwTabFrm *pTab = IsInTab() ? FindTabFrm() : NULL;
+        if (pTab)
         {
-            SwTabFrm *pTab = FindTabFrm();
             if ( pTab->GetTable()->GetHTMLTableLayout() &&
                  !pTab->IsJoinLocked() &&
                  !pTab->GetFmt()->GetDoc()->GetDocShell()->IsReadOnly() )

@@ -1092,9 +1092,9 @@ bool SwFEShell::CheckHeadline( bool bRepeat ) const
     if ( !IsTableMode() )
     {
         SwFrm *pFrm = GetCurrFrm();  // DONE MULTIIHEADER
-        if ( pFrm && pFrm->IsInTab() )
+        SwTabFrm* pTab = (pFrm && pFrm->IsInTab()) ? pFrm->FindTabFrm() : NULL;
+        if (pTab)
         {
-            SwTabFrm* pTab = pFrm->FindTabFrm();
             if ( bRepeat )
             {
                 bRet = pTab->IsFollow() && pTab->IsInHeadline( *pFrm );
@@ -1140,8 +1140,14 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
     if ( aBoxes.empty() )
     {
         do
-        {   pFrm = pFrm->GetUpper();
-        } while ( !pFrm->IsCellFrm() );
+        {
+            pFrm = pFrm->GetUpper();
+        }
+        while (pFrm && !pFrm->IsCellFrm());
+
+        if (!pFrm)
+            return false;
+
         SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()));
         aBoxes.insert( pBox );
     }
@@ -1384,6 +1390,9 @@ static const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
         {
             if ( pFrm->IsInTab() )
                 pFrm = const_cast<SwFrm*>(pFrm)->ImplFindTabFrm();
+
+            if (!pFrm)
+                break;
 
             if ( pFrm->IsTabFrm() )
             {
@@ -2341,10 +2350,10 @@ bool SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
 bool SwFEShell::IsTableVertical() const
 {
     SwFrm *pFrm = GetCurrFrm();
-    if( !pFrm || !pFrm->IsInTab() )
+    SwTabFrm *pTab = (pFrm && pFrm->IsInTab()) ? pFrm->ImplFindTabFrm() : NULL;
+    if (!pTab)
         return false;
-
-    return pFrm->ImplFindTabFrm()->IsVertical();
+    return pTab->IsVertical();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

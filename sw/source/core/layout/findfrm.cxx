@@ -710,16 +710,16 @@ SwFrm *SwFrm::_FindNext()
     if ( !bIgnoreTab && pThis->IsInTab() )
     {
         SwLayoutFrm *pUp = pThis->GetUpper();
-        while ( !pUp->IsCellFrm() )
+        while (pUp && !pUp->IsCellFrm())
             pUp = pUp->GetUpper();
-        OSL_ENSURE( pUp, "Cntnt in Tabelle aber nicht in Zelle." );
-        SwFrm* pNxt = static_cast<SwCellFrm*>(pUp)->GetFollowCell();
+        SAL_WARN_IF(!pUp, "sw.core", "Cntnt in table but not in cell.");
+        SwFrm* pNxt = pUp ? static_cast<SwCellFrm*>(pUp)->GetFollowCell() : NULL;
         if ( pNxt )
             pNxt = static_cast<SwCellFrm*>(pNxt)->ContainsCntnt();
         if ( !pNxt )
         {
             pNxt = lcl_NextFrm( pThis );
-            if ( pUp->IsAnLower( pNxt ) )
+            if (pUp && pUp->IsAnLower(pNxt))
                 pRet = pNxt;
         }
         else
@@ -1069,10 +1069,10 @@ SwFrm *SwFrm::_FindPrev()
         if ( !bIgnoreTab && pThis->IsInTab() )
         {
             SwLayoutFrm *pUp = pThis->GetUpper();
-            while ( !pUp->IsCellFrm() )
+            while (pUp && !pUp->IsCellFrm())
                 pUp = pUp->GetUpper();
-            OSL_ENSURE( pUp, "Cntnt in table but not in cell." );
-            if ( pUp->IsAnLower( pPrvCnt ) )
+            SAL_WARN_IF(!pUp, "sw.core", "Cntnt in table but not in cell.");
+            if (pUp && pUp->IsAnLower(pPrvCnt))
                 return pPrvCnt;
         }
         else
@@ -1391,11 +1391,11 @@ void SwFrm::SetDirFlags( bool bVert )
 SwLayoutFrm* SwFrm::GetNextCellLeaf( MakePageType )
 {
     SwFrm* pTmpFrm = this;
-    while ( !pTmpFrm->IsCellFrm() )
+    while (pTmpFrm && !pTmpFrm->IsCellFrm())
         pTmpFrm = pTmpFrm->GetUpper();
 
-    OSL_ENSURE( pTmpFrm, "SwFrm::GetNextCellLeaf() without cell" );
-    return static_cast<SwCellFrm*>(pTmpFrm)->GetFollowCell();
+    SAL_WARN_IF(!pTmpFrm, "sw.core", "SwFrm::GetNextCellLeaf() without cell");
+    return pTmpFrm ? static_cast<SwCellFrm*>(pTmpFrm)->GetFollowCell() : NULL;
 }
 
 SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType )
