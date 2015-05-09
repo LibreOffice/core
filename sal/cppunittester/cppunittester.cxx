@@ -294,85 +294,94 @@ public:
 
 }
 
-SAL_IMPLEMENT_MAIN() {
+SAL_IMPLEMENT_MAIN()
+{
+    bool ok = false;
+    try
+    {
 #ifdef WNT
-    //Disable Dr-Watson in order to crash simply without popup dialogs under
-    //windows
-    DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
-    SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
+        //Disable Dr-Watson in order to crash simply without popup dialogs under
+        //windows
+        DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
+        SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
 #ifdef _DEBUG // These functions are present only in the debgging runtime
-    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
-    _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
-    _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
-    _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
-    _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
-    _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+        _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
+        _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
+        _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
+        _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+        _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
+        _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
 #endif
 #endif
 
-    std::vector<CppUnit::Protector *> protectors;
-    CppUnit::TestResult result;
-    std::string args;
-    std::string testlib;
-    sal_uInt32 index = 0;
-    while (index < rtl_getAppCommandArgCount())
-    {
-        rtl::OUString arg = getArgument(index);
-        if ( arg != "--protector" )
+        std::vector<CppUnit::Protector *> protectors;
+        CppUnit::TestResult result;
+        std::string args;
+        std::string testlib;
+        sal_uInt32 index = 0;
+        while (index < rtl_getAppCommandArgCount())
         {
-            if (testlib.empty())
+            rtl::OUString arg = getArgument(index);
+            if ( arg != "--protector" )
             {
-                testlib = rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
-                args += testlib;
+                if (testlib.empty())
+                {
+                    testlib = rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+                    args += testlib;
+                }
+                else
+                {
+                    args += ' ';
+                    args += rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+                }
+                ++index;
+                continue;
             }
+            if (rtl_getAppCommandArgCount() - index < 3) {
+                usageFailure();
+            }
+            rtl::OUString lib(getArgument(index + 1));
+            rtl::OUString sym(getArgument(index + 2));
+#ifndef DISABLE_DYNLOADING
+            osl::Module mod(lib, SAL_LOADMODULE_GLOBAL);
+            oslGenericFunction fn = mod.getFunctionSymbol(sym);
+            mod.release();
+#else
+            oslGenericFunction fn = 0;
+            if (sym == "unoexceptionprotector")
+                fn = (oslGenericFunction) unoexceptionprotector;
+            else if (sym == "unobootstrapprotector")
+                fn = (oslGenericFunction) unobootstrapprotector;
+            else if (sym == "vclbootstrapprotector")
+                fn = (oslGenericFunction) vclbootstrapprotector;
             else
             {
-                args += ' ';
-                args += rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+                std::cerr
+                    << "Only unoexceptionprotector or unobootstrapprotector protectors allowed"
+                    << std::endl;
+                std::exit(EXIT_FAILURE);
             }
-            ++index;
-            continue;
-        }
-        if (rtl_getAppCommandArgCount() - index < 3) {
-            usageFailure();
-        }
-        rtl::OUString lib(getArgument(index + 1));
-        rtl::OUString sym(getArgument(index + 2));
-#ifndef DISABLE_DYNLOADING
-        osl::Module mod(lib, SAL_LOADMODULE_GLOBAL);
-        oslGenericFunction fn = mod.getFunctionSymbol(sym);
-        mod.release();
-#else
-        oslGenericFunction fn = 0;
-        if (sym == "unoexceptionprotector")
-            fn = (oslGenericFunction) unoexceptionprotector;
-        else if (sym == "unobootstrapprotector")
-            fn = (oslGenericFunction) unobootstrapprotector;
-        else if (sym == "vclbootstrapprotector")
-            fn = (oslGenericFunction) vclbootstrapprotector;
-        else
-        {
-            std::cerr
-                << "Only unoexceptionprotector or unobootstrapprotector protectors allowed"
-                << std::endl;
-            std::exit(EXIT_FAILURE);
-        }
 #endif
-        CppUnit::Protector *protector = fn == 0
-            ? 0
-            : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
-        if (protector == 0) {
-            std::cerr
-                << "Failure instantiating protector \"" << convertLazy(lib)
-                << "\", \"" << convertLazy(sym) << '"' << std::endl;
-            std::exit(EXIT_FAILURE);
+            CppUnit::Protector *protector = fn == 0
+                ? 0
+                : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
+            if (protector == 0) {
+                std::cerr
+                    << "Failure instantiating protector \"" << convertLazy(lib)
+                    << "\", \"" << convertLazy(sym) << '"' << std::endl;
+                std::exit(EXIT_FAILURE);
+            }
+            protectors.push_back(protector);
+            index+=3;
         }
-        protectors.push_back(protector);
-        index+=3;
-    }
 
-    ProtectedFixtureFunctor tests(testlib, args, protectors, result);
-    bool ok = tests.run();
+        ProtectedFixtureFunctor tests(testlib, args, protectors, result);
+        ok = tests.run();
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+    }
 
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }
