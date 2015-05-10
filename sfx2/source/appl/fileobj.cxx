@@ -497,12 +497,12 @@ IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl )
     return 0;
 }
 
-IMPL_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, pDelMed )
+IMPL_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, deleteMedium )
 {
     nPostUserEventId = 0;
-    assert(pDelMed == pDelMed);
+    assert(pDelMed == deleteMedium);
     pDelMed = NULL;
-    delete pDelMed;
+    delete deleteMedium;
     return 0;
 }
 
