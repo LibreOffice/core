@@ -263,8 +263,7 @@ bool _SfxMacroTabPage::IsReadOnly() const
 
 IMPL_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
 {
-    _SfxMacroTabPage_Impl*  pImpl = mpImpl;
-    SvHeaderTabListBox&     rListBox = pImpl->pEventLB->GetListBox();
+    SvHeaderTabListBox&     rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*            pE = rListBox.FirstSelected();
     sal_uLong                   nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
@@ -281,13 +280,12 @@ IMPL_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
 
 IMPL_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, )
 {
-    _SfxMacroTabPage_Impl*  pImpl = mpImpl;
-    pImpl->pGroupLB->GroupSelected();
-    const OUString sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
+    mpImpl->pGroupLB->GroupSelected();
+    const OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
     OUString       aLabelText;
     if( !sScriptURI.isEmpty() )
-        aLabelText = pImpl->maStaticMacroLBLabel;
-    pImpl->pMacroFrame->set_label( aLabelText );
+        aLabelText = mpImpl->maStaticMacroLBLabel;
+    mpImpl->pMacroFrame->set_label( aLabelText );
 
     EnableButtons();
     return 0;
@@ -301,8 +299,7 @@ IMPL_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, )
 
 IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 {
-    _SfxMacroTabPage_Impl*  pImpl = mpImpl;
-    SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();
     sal_uLong nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
@@ -312,7 +309,7 @@ IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         return 0;
     }
 
-    const bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
+    const bool bAssEnabled = pBtn != mpImpl->pDeletePB && mpImpl->pAssignPB->IsEnabled();
 
     // remove from the table
     sal_uInt16 nEvent = (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData());
@@ -321,7 +318,7 @@ IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     OUString sScriptURI;
     if( bAssEnabled )
     {
-        sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
+        sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
         if( sScriptURI.startsWith( "vnd.sun.star.script:" ) )
         {
             aTbl.Insert(
@@ -335,7 +332,7 @@ IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         }
     }
 
-    pImpl->pEventLB->SetUpdateMode( false );
+    mpImpl->pEventLB->SetUpdateMode( false );
     pE->ReplaceItem( new SvLBoxString( pE, 0, sScriptURI ), LB_MACROS_ITEMPOS );
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
