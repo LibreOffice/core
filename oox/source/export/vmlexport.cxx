@@ -1109,23 +1109,15 @@ sal_Int32 VMLExport::StartShape()
     if (!sAnchorId.isEmpty())
         m_pShapeAttrList->addNS(XML_wp14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
 
-    if ( nShapeElement >= 0 && !m_pShapeAttrList->hasAttribute( XML_type ) )
+    if ( nShapeElement >= 0 && !m_pShapeAttrList->hasAttribute( XML_type ) && bReferToShapeType )
     {
-        if ( bReferToShapeType )
-        {
-            m_pShapeAttrList->add( XML_type, OStringBuffer( 20 )
-                    .append( "shapetype_" ).append( sal_Int32( m_nShapeType ) )
-                    .makeStringAndClear() );
-        }
+        m_pShapeAttrList->add( XML_type, OStringBuffer( 20 )
+                .append( "shapetype_" ).append( sal_Int32( m_nShapeType ) )
+                .makeStringAndClear() );
+    }
 
-        // start of the shape
-        m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
-    }
-    else
-    {
-        // start of the shape
-        m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
-    }
+    // start of the shape
+    m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
 
     // now check if we have some editeng text (not associated textbox) and we have a text exporter registered
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
