@@ -41,6 +41,10 @@ namespace cppu
 
 namespace detail {
 
+    /**
+      This is here to optimise space in the common case that there are zero or one
+      listeners.
+    */
     union element_alias
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > *pAsSequence;
