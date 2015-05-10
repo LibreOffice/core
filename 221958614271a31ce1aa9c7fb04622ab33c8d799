@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_44680ebb",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-05-10T19:47:32Z",
+      "side": 1,
+      "message": "Using a direct english string here means it can\u0027t be translated :-(\n\nYou can do a grep for e.g. RID_SVXSTR_LOAD_ERROR for a sample trivial translatable string example you can follow to get a translatable string here",
+      "revId": "221958614271a31ce1aa9c7fb04622ab33c8d799",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
