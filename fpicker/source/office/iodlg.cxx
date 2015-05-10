@@ -1246,8 +1246,8 @@ IMPL_LINK_NOARG( SvtFileDialog, FileNameModifiedHdl_Impl )
 
 IMPL_LINK_NOARG( SvtFileDialog, URLBoxModifiedHdl_Impl )
 {
-    OUString _aPath = _pImp->_pEdCurrentPath->GetURL();
-    OpenURL_Impl(_aPath);
+    OUString aPath = _pImp->_pEdCurrentPath->GetURL();
+    OpenURL_Impl(aPath);
     return 0;
 }
 
