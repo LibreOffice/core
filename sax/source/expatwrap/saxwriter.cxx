@@ -106,13 +106,13 @@ private:
                         sal_uInt32& rPos) throw( SAXException );
     inline void FinishStartElement() throw( SAXException );
 public:
-    SaxWriterHelper(Reference< XOutputStream > m_TempOut) :
-        m_out(m_TempOut),
-        m_Sequence(SEQUENCESIZE),
-        mp_Sequence(NULL),
-        nLastLineFeedPos(0),
-        nCurrentPos(0),
-        m_bStartElementFinished(true)
+    explicit SaxWriterHelper(Reference< XOutputStream > m_TempOut)
+        : m_out(m_TempOut)
+        , m_Sequence(SEQUENCESIZE)
+        , mp_Sequence(NULL)
+        , nLastLineFeedPos(0)
+        , nCurrentPos(0)
+        , m_bStartElementFinished(true)
     {
         OSL_ENSURE(SEQUENCESIZE > 50, "Sequence cache size to small");
         mp_Sequence = m_Sequence.getArray();

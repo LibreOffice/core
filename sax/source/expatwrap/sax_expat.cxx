@@ -361,9 +361,9 @@ class LocatorImpl :
     // should use a different interface for stream positions!
 {
 public:
-    LocatorImpl( SaxExpatParser_Impl *p )
+    explicit LocatorImpl(SaxExpatParser_Impl *p)
+        : m_pParser(p)
     {
-        m_pParser    = p;
     }
 
 public: //XLocator
