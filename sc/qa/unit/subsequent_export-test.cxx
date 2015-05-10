@@ -2608,7 +2608,7 @@ void ScExportTest::testTextUnderlineColor()
     OUString color = getXPath(pDoc,
             "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/a:solidFill/a:srgbClr", "val");
     // make sure that the underline color is RED
-    CPPUNIT_ASSERT(color.equals("ff0000"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), color);
 }
 
 
