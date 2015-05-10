@@ -279,7 +279,7 @@ void SwUiWriterTest::testImportRTF()
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
 
     // Insert the RTF at the cursor position.
-    OString aData = "{\\rtf1 Hello world!\\par}";
+    OString aData = "{\\rtf1 Hello world!\\par \\par}";
     SvMemoryStream aStream(const_cast<sal_Char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCrsr());
     Reader* pRTFReader = SwReaderWriter::GetReader(READER_WRITER_RTF);
