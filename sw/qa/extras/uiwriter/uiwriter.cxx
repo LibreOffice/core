@@ -287,7 +287,7 @@ void SwUiWriterTest::testImportRTF()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(0), aReader.Read(*pRTFReader));
 
     sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode().GetIndex();
-    //CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTxtNode()->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTxtNode()->GetTxt());
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), pDoc->GetNodes()[nIndex]->GetTxtNode()->GetTxt());
 }
 
