@@ -167,7 +167,7 @@ public:
 
     static std::vector<Rectangle> partition(const RenderContext &rCtx, int nX, int nY)
     {
-        return DemoRenderer::partition(rCtx.maSize, nX, nY);
+        return partition(rCtx.maSize, nX, nY);
     }
 
     static std::vector<Rectangle> partition(Size aSize, int nX, int nY)
