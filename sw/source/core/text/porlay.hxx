@@ -378,7 +378,11 @@ inline void SwParaPortion::FormatReset()
 }
 
 inline SwLinePortion *SwLineLayout::GetFirstPortion() const
-{ return( pPortion ? pPortion : (SwLinePortion*)this ); }
+{
+    const SwLinePortion *pRet = pPortion ? pPortion : this;
+    return const_cast<SwLinePortion*>(pRet);
+}
+
 
 #endif
 

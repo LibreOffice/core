@@ -550,7 +550,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     {
         // here starts the algorithm for calculating the underline font
         SwScriptInfo& rScriptInfo = GetInfo().GetParaPortion()->GetScriptInfo();
-        SwAttrIter aIter( *(SwTxtNode*)GetInfo().GetTxtFrm()->GetTxtNode(),
+        SwAttrIter aIter( *GetInfo().GetTxtFrm()->GetTxtNode(),
                           rScriptInfo );
 
         sal_Int32 nTmpIdx = nIndx;
