@@ -1523,7 +1523,7 @@ namespace osl_Thread
 
     /** Test of the osl::Thread::wait method
     */
-    class wait : public CppUnit::TestFixture
+    class waittest : public CppUnit::TestFixture
     {
     public:
         void setUp() SAL_OVERRIDE {}
@@ -1576,10 +1576,10 @@ namespace osl_Thread
 
             }
 
-        CPPUNIT_TEST_SUITE(wait);
+        CPPUNIT_TEST_SUITE(waittest);
         CPPUNIT_TEST(wait_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class wait
+    }; // class waittest
 
     /** osl::Thread::yield method: can not design good test scenario to test up to now
     */
@@ -1728,7 +1728,7 @@ namespace osl_Thread
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::getPriority, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::getIdentifier, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::getCurrentIdentifier, "osl_Thread");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::wait, "osl_Thread");
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::waittest, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::yield, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::schedule, "osl_Thread");
 } // namespace osl_Thread
