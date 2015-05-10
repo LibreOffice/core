@@ -494,14 +494,14 @@ void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEve
 {
 }
 
-IMPL_LINK( OAddFieldWindow, OnSelectHdl, void* ,/*_pAddFieldDlg*/)
+IMPL_LINK_NOARG( OAddFieldWindow, OnSelectHdl )
 {
     m_aActions->EnableItem(SID_ADD_CONTROL_PAIR, ( m_pListBox.get() && m_pListBox->GetSelectionCount() > 0 ));
 
     return 0L;
 }
 
-IMPL_LINK( OAddFieldWindow, OnDoubleClickHdl, void* ,/*_pAddFieldDlg*/)
+IMPL_LINK_NOARG( OAddFieldWindow, OnDoubleClickHdl )
 {
     if ( m_aCreateLink.IsSet() )
         m_aCreateLink.Call(this);

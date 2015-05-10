@@ -493,7 +493,7 @@ IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
     return 0L;
 }
 
-IMPL_LINK( ImpTwain, ImplDestroyHdl, void*, /*p*/ )
+IMPL_LINK_NOARG( ImpTwain, ImplDestroyHdl )
 {
     if( hTwainWnd )
         DestroyWindow( hTwainWnd );

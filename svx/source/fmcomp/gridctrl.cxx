@@ -2846,7 +2846,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
     }
 }
 
-IMPL_LINK(DbGridControl, OnDelete, void*, /*EMPTYTAG*/ )
+IMPL_LINK_NOARG(DbGridControl, OnDelete)
 {
     m_nDeleteEvent = 0;
     DeleteSelectedRows();

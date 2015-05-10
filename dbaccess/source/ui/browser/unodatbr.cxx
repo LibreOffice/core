@@ -2491,7 +2491,7 @@ bool SbaTableQueryBrowser::implSelect(const OUString& _rDataSourceName, const OU
     return false;
 }
 
-IMPL_LINK(SbaTableQueryBrowser, OnSelectionChange, void*, /*NOINTERESTEDIN*/)
+IMPL_LINK_NOARG(SbaTableQueryBrowser, OnSelectionChange)
 {
     return implSelect( m_pTreeView->getListBox().FirstSelected() ) ? 1L : 0L;
 }

@@ -935,7 +935,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             m_aAsyncCaller.Call( NULL );
         }
 
-        IMPL_LINK( AsyncLoader, OnOpenDocument, void*, /*_pEmptyArg*/ )
+        IMPL_LINK_NOARG( AsyncLoader, OnOpenDocument )
         {
             try
             {

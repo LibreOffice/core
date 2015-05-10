@@ -735,10 +735,8 @@ void OfaViewTabPage::dispose()
 }
 
 #if defined( UNX )
-IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
+IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled )
 {
-    (void)NOTINTERESTEDIN;
-
     bool bAAEnabled = m_pFontAntiAliasing->IsChecked();
 
     m_pAAPointLimitLabel->Enable( bAAEnabled );
@@ -749,9 +747,8 @@ IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 #endif
 
 // #i97672#
-IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
+IMPL_LINK_NOARG( OfaViewTabPage, OnSelectionToggled )
 {
-    (void)NOTINTERESTEDIN;
     const bool bSelectionEnabled(m_pSelectionCB->IsChecked());
     m_pSelectionMF->Enable(bSelectionEnabled);
     return 0;

@@ -3229,7 +3229,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( FormComponentPropertyHandler, OnDesignerClosed, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( FormComponentPropertyHandler, OnDesignerClosed )
     {
         OSL_ENSURE( m_xBrowserUI.is() && m_xCommandDesigner.is(), "FormComponentPropertyHandler::OnDesignerClosed: too many NULLs!" );
         if ( m_xBrowserUI.is() && m_xCommandDesigner.is() )

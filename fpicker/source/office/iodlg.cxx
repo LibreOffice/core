@@ -1221,8 +1221,7 @@ IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl )
     return 0;
 }
 
-IMPL_LINK_TYPED(
-    SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*,, void)
+IMPL_LINK_NOARG_TYPED(SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, void)
 {
     // filter the view again
     ExecuteFilter();

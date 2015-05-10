@@ -1267,7 +1267,7 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
         }
 }
 
-IMPL_LINK( SbaXDataBrowserController, OnAsyncDisplayError, void*, /* _pNotInterestedIn */ )
+IMPL_LINK_NOARG( SbaXDataBrowserController, OnAsyncDisplayError )
 {
     if ( m_aCurrentError.isValid() )
     {

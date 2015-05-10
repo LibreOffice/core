@@ -83,7 +83,7 @@ namespace abp
         return AddressBookSourcePage::canAdvance() && getDialog()->getDataSource().isConnected();
     }
 
-    IMPL_LINK( AdminDialogInvokationPage, OnInvokeAdminDialog, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( AdminDialogInvokationPage, OnInvokeAdminDialog )
     {
         OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );
         if ( aInvokation.invokeAdministration( AST_LDAP == getSettings().eType ) )

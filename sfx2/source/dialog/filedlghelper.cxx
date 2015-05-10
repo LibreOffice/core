@@ -1157,9 +1157,8 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     }
 }
 
-IMPL_LINK( FileDialogHelper_Impl, InitControls, void*, NOTINTERESTEDIN )
+IMPL_LINK_NOARG( FileDialogHelper_Impl, InitControls )
 {
-    (void)NOTINTERESTEDIN;
     mnPostUserEventId = 0;
     enablePasswordBox( true );
     updateFilterOptionsBox( );

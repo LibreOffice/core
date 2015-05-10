@@ -1025,7 +1025,7 @@ IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl)
     return 0;
 }
 
-IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
+IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl )
 {
     mpNumZoom->Enable( mpRbMagnZoom->IsChecked() );
     return 0;
@@ -1076,7 +1076,7 @@ void ImpPDFTabViewerPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
+IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl )
 {
     m_pNumBookmarkLevels->Enable( m_pRbVisibleBookmarkLevels->IsChecked() );
     return 0;

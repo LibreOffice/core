@@ -608,7 +608,7 @@ void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 }
 
 
-IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, /*EMPTYTAG*/)
+IMPL_LINK_NOARG(FmXFormView, OnDelayedErrorMessage)
 {
     m_nErrorMessageEvent = 0;
     displayException( m_aAsyncError );
@@ -657,7 +657,7 @@ void FmXFormView::resumeTabOrderUpdate()
 }
 
 
-IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
+IMPL_LINK_NOARG(FmXFormView, OnActivate)
 {
     m_nActivationEvent = 0;
 
@@ -895,7 +895,7 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
 }
 
 
-IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
+IMPL_LINK_NOARG(FmXFormView, OnAutoFocus)
 {
     m_nAutoFocusEvent = 0;
 
@@ -1017,7 +1017,7 @@ void FmXFormView::breakCreateFormObject()
     m_xLastCreatedControlModel.clear();
 }
 
-IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
+IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard )
 {
     m_nControlWizardEvent = 0;
     OSL_PRECOND( m_xLastCreatedControlModel.is(), "FmXFormView::OnStartControlWizard: illegal call!" );

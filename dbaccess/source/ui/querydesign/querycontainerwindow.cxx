@@ -133,7 +133,7 @@ namespace dbaui
         if(m_pViewSwitch)
             m_pViewSwitch->GrabFocus();
     }
-    IMPL_LINK( OQueryContainerWindow, SplitHdl, void*, /*p*/ )
+    IMPL_LINK_NOARG( OQueryContainerWindow, SplitHdl )
     {
         m_pSplitter->SetPosPixel( Point( m_pSplitter->GetPosPixel().X(),m_pSplitter->GetSplitPosPixel() ) );
         Resize();

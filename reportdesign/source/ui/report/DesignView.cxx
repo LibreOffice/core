@@ -406,7 +406,7 @@ void ODesignView::ImplInitSettings()
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
 
-IMPL_LINK( ODesignView, SplitHdl, void*,  )
+IMPL_LINK_NOARG( ODesignView, SplitHdl )
 {
     const Size aOutputSize = GetOutputSizePixel();
     const long nTest = aOutputSize.Width() * m_aSplitWin->GetItemSize(TASKPANE_ID) / 100;

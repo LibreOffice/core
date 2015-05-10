@@ -911,31 +911,31 @@ IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree)
     return bHandled ? 1L : 0L;
 }
 
-IMPL_LINK(OAppDetailPageHelper, OnEntrySelChange, void*, /*NOINTERESTEDIN*/)
+IMPL_LINK_NOARG(OAppDetailPageHelper, OnEntrySelChange)
 {
     getBorderWin().getView()->getAppController().onSelectionChanged();
     return 1L;
 }
 
-IMPL_LINK( OAppDetailPageHelper, OnCutEntry, void*, /*NOINTERESTEDIN*/ )
+IMPL_LINK_NOARG( OAppDetailPageHelper, OnCutEntry )
 {
     getBorderWin().getView()->getAppController().onCutEntry();
     return 1L;
 }
 
-IMPL_LINK( OAppDetailPageHelper, OnCopyEntry, void*, /*NOINTERESTEDIN*/ )
+IMPL_LINK_NOARG( OAppDetailPageHelper, OnCopyEntry )
 {
     getBorderWin().getView()->getAppController().onCopyEntry();
     return 1L;
 }
 
-IMPL_LINK( OAppDetailPageHelper, OnPasteEntry, void*, /*NOINTERESTEDIN*/ )
+IMPL_LINK_NOARG( OAppDetailPageHelper, OnPasteEntry )
 {
     getBorderWin().getView()->getAppController().onPasteEntry();
     return 1L;
 }
 
-IMPL_LINK( OAppDetailPageHelper, OnDeleteEntry, void*, /*NOINTERESTEDIN*/ )
+IMPL_LINK_NOARG( OAppDetailPageHelper, OnDeleteEntry )
 {
     getBorderWin().getView()->getAppController().onDeleteEntry();
     return 1L;

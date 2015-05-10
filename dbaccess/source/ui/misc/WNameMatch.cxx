@@ -257,7 +257,7 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
     return 0;
 }
 
-IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG( OWizNameMatching, TableListClickHdl )
 {
     SvTreeListEntry* pEntry = m_pCTRL_LEFT->FirstSelected();
     if(pEntry)
@@ -291,7 +291,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
     return 0;
 }
 
-IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl )
 {
     SvTreeListEntry* pEntry = m_pCTRL_RIGHT->FirstSelected();
     if(pEntry)

@@ -182,7 +182,7 @@ namespace abp
     }
 
 
-    IMPL_LINK( OAddessBookSourcePilot, OnCancelClicked, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( OAddessBookSourcePilot, OnCancelClicked )
     {
         // do cleanups
         implCleanup();

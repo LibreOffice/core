@@ -467,7 +467,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
     }
 }
 
-IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG( ORelationController, OnThreadFinished )
 {
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );

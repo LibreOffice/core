@@ -124,7 +124,7 @@ IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
     return 0L;
 }
 
-IMPL_LINK( ODatasourceSelectDialog, ManageProcessFinished, void*, /**/ )
+IMPL_LINK_NOARG( ODatasourceSelectDialog, ManageProcessFinished )
 {
     StringBag aOdbcDatasources;
     OOdbcEnumeration aEnumeration;

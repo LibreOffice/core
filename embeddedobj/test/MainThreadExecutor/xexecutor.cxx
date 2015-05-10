@@ -29,7 +29,7 @@ void MainThreadExecutor_Impl::execute()
     Application::PostUserEvent( LINK( this, MainThreadExecutor_Impl, executor ), NULL );
 }
 
-IMPL_LINK( MainThreadExecutor_Impl, executor, void*, pDummyParam )
+IMPL_LINK_NOARG( MainThreadExecutor_Impl, executor )
 {
     if ( m_xJob.is() )
     {

@@ -624,7 +624,7 @@ bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     return true;
 }
 
-IMPL_LINK( OTableEditorCtrl, InvalidateFieldType, void*, /*EMPTYTAG*/ )
+IMPL_LINK_NOARG( OTableEditorCtrl, InvalidateFieldType )
 {
     nInvalidateTypeEvent = 0;
     Invalidate( GetFieldRectPixel(nOldDataPos, FIELD_TYPE) );
@@ -1456,14 +1456,14 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
 
 }
 
-IMPL_LINK( OTableEditorCtrl, DelayedCut, void*, /*EMPTYTAG*/ )
+IMPL_LINK_NOARG( OTableEditorCtrl, DelayedCut )
 {
     nCutEvent = 0;
     OTableRowView::cut();
     return 0;
 }
 
-IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, /*EMPTYTAG*/ )
+IMPL_LINK_NOARG( OTableEditorCtrl, DelayedPaste )
 {
     nPasteEvent = 0;
 
@@ -1491,14 +1491,14 @@ IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, /*EMPTYTAG*/ )
     return 0;
 }
 
-IMPL_LINK( OTableEditorCtrl, DelayedDelete, void*, /*EMPTYTAG*/ )
+IMPL_LINK_NOARG( OTableEditorCtrl, DelayedDelete )
 {
     nDeleteEvent = 0;
     DeleteRows();
     return 0;
 }
 
-IMPL_LINK( OTableEditorCtrl, DelayedInsNewRows, void*, /*EMPTYTAG*/ )
+IMPL_LINK_NOARG( OTableEditorCtrl, DelayedInsNewRows )
 {
     nInsNewRowsEvent = 0;
     sal_Int32 nPastePosition = GetView()->getController().getFirstEmptyRowPosition();

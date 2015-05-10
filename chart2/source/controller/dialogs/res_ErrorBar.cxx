@@ -340,7 +340,7 @@ void ErrorBarResources::UpdateControlStates()
     }
 }
 
-IMPL_LINK( ErrorBarResources, CategoryChosen, void *,  )
+IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen )
 {
     m_bErrorKindUnique = true;
     SvxChartKindError eOldError = m_eErrorKind;

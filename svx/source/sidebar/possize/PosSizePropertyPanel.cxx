@@ -427,7 +427,7 @@ void PosSizePropertyPanel::HandleContextChange(
 
 
 
-IMPL_LINK( PosSizePropertyPanel, ChangeWidthHdl, void*, /*pBox*/ )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )

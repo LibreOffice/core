@@ -455,7 +455,7 @@ void AsyncAccelExec::execAsync()
 }
 
 
-IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
+IMPL_LINK_NOARG(AsyncAccelExec, impl_ts_asyncCallback)
 {
     if (! m_xDispatch.is())
         return 0;

@@ -660,7 +660,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( FormLinkDialog, OnSuggest, void*, /*_pNotInterestedIn*/ )
+    IMPL_LINK_NOARG( FormLinkDialog, OnSuggest )
     {
         initializeFieldRowsFrom( m_aRelationDetailColumns, m_aRelationMasterColumns );
         return 0L;
@@ -674,7 +674,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( FormLinkDialog, OnInitialize, void*, /*_pNotInterestedIn*/ )
+    IMPL_LINK_NOARG( FormLinkDialog, OnInitialize )
     {
         initializeColumnLabels();
         initializeFieldLists();

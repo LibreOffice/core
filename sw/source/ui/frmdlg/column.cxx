@@ -695,7 +695,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 }
 
 // update ColumnManager
-IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
+IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr )
 {
     long nGutterWidth = pColMgr->GetGutterWidth();
     if(nCols > 1)

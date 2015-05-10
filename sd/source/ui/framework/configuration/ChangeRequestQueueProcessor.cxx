@@ -111,7 +111,7 @@ void ChangeRequestQueueProcessor::StartProcessing()
     }
 }
 
-IMPL_LINK(ChangeRequestQueueProcessor, ProcessEvent, void*, pUnused)
+IMPL_LINK_NOARG(ChangeRequestQueueProcessor, ProcessEvent)
 {
     (void)pUnused;
 

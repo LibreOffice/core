@@ -1757,7 +1757,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
 }
 
 
-IMPL_LINK( FormController, OnActivated, void*, /**/ )
+IMPL_LINK_NOARG( FormController, OnActivated )
 {
     EventObject aEvent;
     aEvent.Source = *this;
@@ -1767,7 +1767,7 @@ IMPL_LINK( FormController, OnActivated, void*, /**/ )
 }
 
 
-IMPL_LINK( FormController, OnDeactivated, void*, /**/ )
+IMPL_LINK_NOARG( FormController, OnDeactivated )
 {
     EventObject aEvent;
     aEvent.Source = *this;

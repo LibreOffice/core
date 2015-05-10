@@ -423,7 +423,7 @@ IMPL_LINK( OAddTableDlg, AddClickHdl, Button*, /*pButton*/ )
     return 0;
 }
 
-IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, void*, /*EMPTY_ARG*/ )
+IMPL_LINK_NOARG( OAddTableDlg, TableListDoubleClickHdl )
 {
     if ( impl_isAddAllowed() )
     {
@@ -436,7 +436,7 @@ IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, void*, /*EMPTY_ARG*/ )
     return 0L;  // not handled
 }
 
-IMPL_LINK( OAddTableDlg, TableListSelectHdl, void*, /*EMPTY_ARG*/ )
+IMPL_LINK_NOARG( OAddTableDlg, TableListSelectHdl )
 {
     m_pAddButton->Enable( m_xCurrentList->isLeafSelected() );
     return 0;
@@ -447,7 +447,7 @@ IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, /*pButton*/ )
     return int(Close());
 }
 
-IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
+IMPL_LINK_NOARG( OAddTableDlg, OnTypeSelected )
 {
     if ( m_pCaseTables->IsChecked() )
         impl_switchTo( Tables );

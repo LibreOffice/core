@@ -308,25 +308,25 @@ namespace dbaui
             OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");
     }
 
-    IMPL_LINK( DirectSQLDialog, OnStatementModified, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( DirectSQLDialog, OnStatementModified )
     {
         m_pExecute->Enable(!m_pSQL->GetText().isEmpty());
         return 0L;
     }
 
-    IMPL_LINK( DirectSQLDialog, OnClose, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( DirectSQLDialog, OnClose )
     {
         EndDialog( RET_OK );
         return 0L;
     }
 
-    IMPL_LINK( DirectSQLDialog, OnExecute, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( DirectSQLDialog, OnExecute )
     {
         executeCurrent();
         return 0L;
     }
 
-    IMPL_LINK( DirectSQLDialog, OnListEntrySelected, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( DirectSQLDialog, OnListEntrySelected )
     {
         if (!m_pSQLHistory->IsTravelSelect())
         {

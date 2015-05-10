@@ -262,7 +262,7 @@ namespace abp
     }
 
 
-    IMPL_LINK( TypeSelectionPage, OnTypeSelected, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( TypeSelectionPage, OnTypeSelected )
     {
         getDialog()->typeSelectionChanged( getSelectedType() );
         updateDialogTravelUI();

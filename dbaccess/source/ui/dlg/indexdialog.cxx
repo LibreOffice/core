@@ -557,7 +557,7 @@ namespace dbaui
             OnResetIndex();
     }
 
-    IMPL_LINK( DbaIndexDialog, OnCloseDialog, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( DbaIndexDialog, OnCloseDialog )
     {
         if (m_pIndexList->IsEditingActive())
         {
@@ -733,7 +733,7 @@ namespace dbaui
         return true;
     }
 
-    IMPL_LINK( DbaIndexDialog, OnModified, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( DbaIndexDialog, OnModified )
     {
         OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());

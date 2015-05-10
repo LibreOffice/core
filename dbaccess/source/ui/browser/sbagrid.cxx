@@ -361,7 +361,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDis
     return FmXGridPeer::queryDispatch(aURL, aTargetFrameName, nSearchFlags);
 }
 
-IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG( SbaXGridPeer, OnDispatchEvent )
 {
     VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if ( pGrid )    // if this fails, we were disposing before arriving here
@@ -1444,7 +1444,7 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
     return xReturn;
 }
 
-IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
+IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent)
 {
     m_nAsyncDropEvent = 0;
 

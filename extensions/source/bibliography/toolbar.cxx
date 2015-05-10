@@ -533,7 +533,7 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 }
 
-IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, /*pVoid*/ )
+IMPL_LINK_NOARG( BibToolBar, OptionsChanged_Impl )
 {
     bool bRebuildToolBar = false;
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
@@ -557,7 +557,7 @@ IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, /*pVoid*/ )
 
 
 
-IMPL_LINK( BibToolBar, SettingsChanged_Impl, void*, /*pVoid*/ )
+IMPL_LINK_NOARG( BibToolBar, SettingsChanged_Impl )
 {
     // Check if toolbar button size have changed and we have to use system settings
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();

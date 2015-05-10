@@ -485,7 +485,7 @@ void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 }
 
 
-IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG( FmPropBrw, OnAsyncGetFocus )
 {
     if (m_xBrowserComponentWindow.is())
         m_xBrowserComponentWindow->setFocus();

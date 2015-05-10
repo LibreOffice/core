@@ -272,7 +272,7 @@ namespace bib
             pGridWin->GrabFocus();
     }
 
-    IMPL_LINK( BibBeamer, RecalcLayout_Impl, void*, /*pVoid*/ )
+    IMPL_LINK_NOARG( BibBeamer, RecalcLayout_Impl )
     {
         long nHeight = pToolBar->GetSizePixel().Height();
         SetItemSize( ID_TOOLBAR, nHeight );

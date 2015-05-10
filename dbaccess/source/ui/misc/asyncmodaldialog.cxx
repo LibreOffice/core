@@ -57,7 +57,7 @@ namespace dbaui
         DECL_LINK( onExecute, void* );
     };
 
-    IMPL_LINK( DialogExecutor_Impl, onExecute, void*, /* _notInterestedIn */ )
+    IMPL_LINK_NOARG( DialogExecutor_Impl, onExecute )
     {
         try
         {

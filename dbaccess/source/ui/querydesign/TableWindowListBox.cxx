@@ -275,14 +275,14 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     return nDND_Action;
 }
 
-IMPL_LINK( OTableWindowListBox, LookForUiHdl, void *, /*EMPTY_ARG*/)
+IMPL_LINK_NOARG( OTableWindowListBox, LookForUiHdl )
 {
     m_nUiEvent = 0;
     m_pTabWin->getTableView()->lookForUiActivities();
     return 0L;
 }
 
-IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
+IMPL_LINK_NOARG( OTableWindowListBox, DropHdl )
 {
     // create the connection
     m_nDropEvent = 0;

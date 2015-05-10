@@ -3622,7 +3622,7 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivate
 }
 
 
-IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG( FmXFormShell, OnFirstTimeActivation )
 {
     if ( impl_checkDisposed() )
         return 0L;

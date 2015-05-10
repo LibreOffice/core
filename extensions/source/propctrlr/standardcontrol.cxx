@@ -460,7 +460,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( OHyperlinkControl, OnHyperlinkClicked, void*, /*_NotInterestedIn*/ )
+    IMPL_LINK_NOARG( OHyperlinkControl, OnHyperlinkClicked )
     {
         ActionEvent aEvent( *this, OUString( "clicked" ) );
         m_aActionListeners.forEach< XActionListener >(
@@ -945,7 +945,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( OComboboxControl, OnEntrySelected, void*, /*_pNothing*/ )
+    IMPL_LINK_NOARG( OComboboxControl, OnEntrySelected )
     {
         if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit

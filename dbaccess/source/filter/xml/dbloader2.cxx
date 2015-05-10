@@ -562,7 +562,7 @@ void DBContentLoader::cancel() throw(std::exception)
 {
 }
 
-IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard )
 {
     m_nStartWizard = 0;
     try

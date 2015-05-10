@@ -177,7 +177,7 @@ IMPL_LINK_NOARG_TYPED(OSqlEdit, OnInvalidateTimer, Timer *, void)
         m_timerInvalidate.Start();
 }
 
-IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)
+IMPL_LINK_NOARG(OSqlEdit, ModifyHdl)
 {
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();

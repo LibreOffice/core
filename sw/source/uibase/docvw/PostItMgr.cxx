@@ -1877,7 +1877,7 @@ void SwPostItMgr::SetActiveSidebarWin( SwSidebarWin* p)
     }
 }
 
-IMPL_LINK( SwPostItMgr, CalcHdl, void*, /* pVoid*/  )
+IMPL_LINK_NOARG( SwPostItMgr, CalcHdl )
 {
     mnEventId = 0;
     if ( mbLayouting )

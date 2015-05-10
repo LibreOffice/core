@@ -2528,7 +2528,7 @@ void OQueryDesignView::dispose()
     OQueryView::dispose();
 }
 
-IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
+IMPL_LINK_NOARG( OQueryDesignView, SplitHdl )
 {
     if (!getController().isReadOnly())
     {

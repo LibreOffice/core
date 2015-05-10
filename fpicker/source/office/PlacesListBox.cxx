@@ -175,7 +175,7 @@ Image PlacesListBox::getEntryIcon( PlacePtr pPlace )
     return theImage;
 }
 
-IMPL_LINK( PlacesListBox, Selection, void* , )
+IMPL_LINK_NOARG( PlacesListBox, Selection )
 {
     sal_uInt32 nSelected = mpImpl->GetCurrRow();
     PlacePtr pPlace = maPlaces[nSelected];

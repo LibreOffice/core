@@ -549,7 +549,7 @@ namespace frm
     }
 
 
-    IMPL_LINK( ORichTextModel, OnEngineContentModified, void*, /*_pNotInterestedIn*/ )
+    IMPL_LINK_NOARG( ORichTextModel, OnEngineContentModified )
     {
         if ( !m_bSettingEngineText )
         {

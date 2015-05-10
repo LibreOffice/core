@@ -569,7 +569,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
     }
 }
 
-IMPL_LINK( PropBrw, OnAsyncGetFocus, void*,  )
+IMPL_LINK_NOARG( PropBrw, OnAsyncGetFocus )
 {
     if (m_xBrowserComponentWindow.is())
         m_xBrowserComponentWindow->setFocus();

@@ -1747,7 +1747,7 @@ void OReportController::impl_initialize( )
     }
 }
 
-IMPL_LINK( OReportController, OnOpenHelpAgent, void* ,/*_pMemfun*/)
+IMPL_LINK_NOARG( OReportController, OnOpenHelpAgent )
 {
     doOpenHelpAgent();
     return 0L;
@@ -3149,7 +3149,7 @@ void OReportController::createNewFunction(const uno::Any& _aValue)
     xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(xFunction));
 }
 
-IMPL_LINK( OReportController, OnExecuteReport, void* ,/*_pMemfun*/)
+IMPL_LINK_NOARG( OReportController, OnExecuteReport )
 {
     executeReport();
     return 0L;

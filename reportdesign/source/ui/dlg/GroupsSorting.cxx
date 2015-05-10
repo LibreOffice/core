@@ -871,7 +871,7 @@ void OFieldExpressionControl::paste()
     }
 }
 
-IMPL_LINK( OFieldExpressionControl, DelayedPaste, void*,  )
+IMPL_LINK_NOARG( OFieldExpressionControl, DelayedPaste )
 {
     m_nPasteEvent = 0;
 
@@ -884,7 +884,7 @@ IMPL_LINK( OFieldExpressionControl, DelayedPaste, void*,  )
     return 0;
 }
 
-IMPL_LINK( OFieldExpressionControl, DelayedDelete, void*,  )
+IMPL_LINK_NOARG( OFieldExpressionControl, DelayedDelete )
 {
     m_nDeleteEvent = 0;
     DeleteRows();

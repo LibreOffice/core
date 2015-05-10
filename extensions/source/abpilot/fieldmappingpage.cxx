@@ -79,7 +79,7 @@ namespace abp
     }
 
 
-    IMPL_LINK( FieldMappingPage, OnInvokeDialog, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG( FieldMappingPage, OnInvokeDialog )
     {
         AddressSettings& rSettings = getSettings();
 

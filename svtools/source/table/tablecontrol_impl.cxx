@@ -2413,7 +2413,7 @@ namespace svt { namespace table
     }
 
 
-    IMPL_LINK( TableControl_Impl, OnUpdateScrollbars, void*, /**/ )
+    IMPL_LINK_NOARG( TableControl_Impl, OnUpdateScrollbars )
     {
         // TODO: can't we simply use lcl_updateScrollbar here, so the scrollbars ranges are updated, instead of
         // doing a complete re-layout?
