@@ -168,6 +168,7 @@ CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
 
 void CuiAboutConfigTabPage::dispose()
 {
+    m_pPrefBox.disposeAndClear();
     m_pPrefCtrl.clear();
     m_pResetBtn.clear();
     m_pEditBtn.clear();
