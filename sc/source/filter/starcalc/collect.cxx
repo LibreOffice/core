@@ -36,7 +36,6 @@ static void lcl_DeleteScDataObjects( ScDataObject** p, sal_uInt16 nCount )
     {
         for (sal_uInt16 i = 0; i < nCount; i++) delete p[i];
         delete[] p;
-        p = NULL;
     }
 }
 
