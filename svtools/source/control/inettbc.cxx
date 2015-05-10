@@ -218,7 +218,6 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl )
         }
     }
 
-    SvtURLBox* pBox = this->pBox;
     pBox->bAutoCompleteMode = true;
 
     // did we filter completions which otherwise would have been valid?
