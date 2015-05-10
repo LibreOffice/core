@@ -148,7 +148,7 @@ class SW_DLLPUBLIC SwDocShell
     SAL_DLLPRIVATE void                  CalcLayoutForOLEObjects();
 
     SAL_DLLPRIVATE void                  Init_Impl();
-    SAL_DLLPRIVATE DECL_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
+    DECL_DLLPRIVATE_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
 
     using SfxObjectShell::GetVisArea;
 

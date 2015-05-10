@@ -279,12 +279,12 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // create control elements
     SAL_DLLPRIVATE void          CreateBtns();
-    SAL_DLLPRIVATE DECL_LINK( BtnPage, Button * );
+    DECL_DLLPRIVATE_LINK( BtnPage, Button * );
 
-    SAL_DLLPRIVATE DECL_LINK_TYPED( TimeoutHdl, Timer*, void );
-    SAL_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
+    DECL_DLLPRIVATE_LINK_TYPED( TimeoutHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( UpdatePercentHdl, GraphicFilter* );
 
-    SAL_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, void* );
+    DECL_DLLPRIVATE_LINK( FieldPopupModeEndHdl, void* );
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;
@@ -305,10 +305,10 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE long          PhyPageDown();
 
     SAL_DLLPRIVATE int               _CreateScrollbar( bool bHori );
-    SAL_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
-    SAL_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
+    DECL_DLLPRIVATE_LINK( ScrollHdl, SwScrollbar * );
+    DECL_DLLPRIVATE_LINK( EndScrollHdl, SwScrollbar * );
     SAL_DLLPRIVATE bool          UpdateScrollbars();
-    SAL_DLLPRIVATE DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
+    DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclSimpleEvent* );
     SAL_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
 
     SAL_DLLPRIVATE void            CreatePageButtons(bool bShow);

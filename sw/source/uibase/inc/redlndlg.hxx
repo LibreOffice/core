@@ -93,16 +93,16 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
 
-    SAL_DLLPRIVATE DECL_LINK( AcceptHdl,     void* );
-    SAL_DLLPRIVATE DECL_LINK( AcceptAllHdl,  void* );
-    SAL_DLLPRIVATE DECL_LINK( RejectHdl,     void* );
-    SAL_DLLPRIVATE DECL_LINK( RejectAllHdl,  void* );
-    SAL_DLLPRIVATE DECL_LINK( UndoHdl,           void* );
-    SAL_DLLPRIVATE DECL_LINK( DeselectHdl,       void* );
-    SAL_DLLPRIVATE DECL_LINK( SelectHdl,     void* );
-    SAL_DLLPRIVATE DECL_LINK_TYPED( SelectTimerHdl, Timer*, void );
-    SAL_DLLPRIVATE DECL_LINK_TYPED( GotoHdl, Timer*, void );
-    SAL_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
+    DECL_DLLPRIVATE_LINK( AcceptHdl,     void* );
+    DECL_DLLPRIVATE_LINK( AcceptAllHdl,  void* );
+    DECL_DLLPRIVATE_LINK( RejectHdl,     void* );
+    DECL_DLLPRIVATE_LINK( RejectAllHdl,  void* );
+    DECL_DLLPRIVATE_LINK( UndoHdl,           void* );
+    DECL_DLLPRIVATE_LINK( DeselectHdl,       void* );
+    DECL_DLLPRIVATE_LINK( SelectHdl,     void* );
+    DECL_DLLPRIVATE_LINK_TYPED( SelectTimerHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( GotoHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( CommandHdl,        void* );
 
     SAL_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, bool bChild);
     SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFmt);

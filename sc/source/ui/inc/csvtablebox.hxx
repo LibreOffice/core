@@ -127,9 +127,9 @@ protected:
     virtual Size                GetOptimalSize() const SAL_OVERRIDE;
 
 private:
-    SAL_DLLPRIVATE              DECL_LINK( CsvCmdHdl, ScCsvControl* );
-    SAL_DLLPRIVATE              DECL_LINK( ScrollHdl, ScrollBar* );
-    SAL_DLLPRIVATE              DECL_LINK( ScrollEndHdl, ScrollBar* );
+    DECL_DLLPRIVATE_LINK( CsvCmdHdl, ScCsvControl* );
+    DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
+    DECL_DLLPRIVATE_LINK( ScrollEndHdl, ScrollBar* );
 
     // accessibility ----------------------------------------------------------
 public:

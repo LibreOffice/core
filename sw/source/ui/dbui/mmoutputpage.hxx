@@ -178,11 +178,11 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
-    SAL_DLLPRIVATE DECL_LINK( StopHdl_Impl, PushButton* );
-    SAL_DLLPRIVATE DECL_LINK( CloseHdl_Impl, void* );
-    SAL_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
-    SAL_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
-    SAL_DLLPRIVATE DECL_LINK_TYPED( RemoveThis, Idle*, void );
+    DECL_DLLPRIVATE_LINK( StopHdl_Impl, PushButton* );
+    DECL_DLLPRIVATE_LINK( CloseHdl_Impl, void* );
+    DECL_DLLPRIVATE_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
+    DECL_DLLPRIVATE_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
+    DECL_DLLPRIVATE_LINK_TYPED( RemoveThis, Idle*, void );
 
     SAL_DLLPRIVATE void        IterateMails();
     SAL_DLLPRIVATE void        SendMails();
