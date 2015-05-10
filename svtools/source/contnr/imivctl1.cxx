@@ -402,43 +402,34 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool b
     }
 }
 
-void SvxIconChoiceCtrl_Impl::EntrySelected( SvxIconChoiceCtrlEntry* pEntry, bool bSelect,
-    bool bSyncPaint )
+void SvxIconChoiceCtrl_Impl::EntrySelected(SvxIconChoiceCtrlEntry* pEntry, bool bSelect, bool /*bSyncPaint*/)
 {
     // When using SingleSelection, make sure that the cursor is always placed
     // over the (only) selected entry. (But only if a cursor exists.)
-    if( bSelect && pCursor &&
+    if (bSelect && pCursor &&
         eSelectionMode == SINGLE_SELECTION &&
-        pEntry != pCursor )
+        pEntry != pCursor)
     {
-        SetCursor( pEntry );
-        //DBG_ASSERT(pView->GetSelectionCount()==1,"selection count?")
+        SetCursor(pEntry);
     }
 
     // Not when dragging though, else the loop in SelectRect doesn't work
     // correctly!
-    if( !(nFlags & F_SELECTING_RECT) )
-        ToTop( pEntry );
-    if( bUpdateMode )
+    if (!(nFlags & F_SELECTING_RECT))
+        ToTop(pEntry);
+    if (bUpdateMode)
     {
-        if( pEntry == pCursor )
-            ShowCursor( false );
-        if( pView->IsTracking() ) // always synchronous when tracking
-            PaintEntry( pEntry );
-        else if( bSyncPaint ) // synchronous & with a virtual OutDev!
-            PaintEntryVirtOutDev( pEntry );
-        else
-        {
-            pView->Invalidate( CalcFocusRect( pEntry ) );
-        }
-        if( pEntry == pCursor )
-            ShowCursor( true );
+        if (pEntry == pCursor)
+            ShowCursor(false);
+        pView->Invalidate(CalcFocusRect(pEntry));
+        if (pEntry == pCursor)
+            ShowCursor(true);
     }
 
     // #i101012# emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
-    if ( bSelect )
+    if (bSelect)
     {
-        CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+        CallEventListeners(VCLEVENT_LISTBOX_SELECT, pEntry);
     }
 }
 
@@ -607,104 +598,103 @@ void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
     ShowCursor( true );
 }
 
-void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
+void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     bEndScrollInvalidate = false;
 
 #if defined(OV_DRAWGRID)
-    Color aOldColor ( pView->GetLineColor() );
-    Color aColor( COL_BLACK );
-    pView->SetLineColor( aColor );
-    Point aOffs( pView->GetMapMode().GetOrigin());
-    Size aXSize( pView->GetOutputSizePixel() );
-
+    Color aOldColor (rRenderContext.GetLineColor());
+    Color aColor(COL_BLACK);
+    rRenderContext.SetLineColor( aColor );
+    Point aOffs(rRenderContext.GetMapMode().GetOrigin());
+    Size aXSize(rRenderContext.GetOutputSizePixel());
     {
-    Point aStart( LROFFS_WINBORDER, 0 );
-    Point aEnd( LROFFS_WINBORDER, aXSize.Height());
-    aStart -= aOffs;
-    aEnd -= aOffs;
-    pView->DrawLine( aStart, aEnd );
+        Point aStart(LROFFS_WINBORDER, 0);
+        Point aEnd(LROFFS_WINBORDER, aXSize.Height());
+        aStart -= aOffs;
+        aEnd -= aOffs;
+        rRenderContext.DrawLine(aStart, aEnd);
     }
     {
-    Point aStart( 0, TBOFFS_WINBORDER );
-    Point aEnd( aXSize.Width(), TBOFFS_WINBORDER );
-    aStart -= aOffs;
-    aEnd -= aOffs;
-    pView->DrawLine( aStart, aEnd );
+        Point aStart(0, TBOFFS_WINBORDER);
+        Point aEnd(aXSize.Width(), TBOFFS_WINBORDER);
+        aStart -= aOffs;
+        aEnd -= aOffs;
+        rRenderContext.DrawLine(aStart, aEnd);
     }
 
-    for( long nDX = nGridDX; nDX <= aXSize.Width(); nDX += nGridDX )
+    for (long nDX = nGridDX; nDX <= aXSize.Width(); nDX += nGridDX)
     {
         Point aStart( nDX+LROFFS_WINBORDER, 0 );
         Point aEnd( nDX+LROFFS_WINBORDER, aXSize.Height());
         aStart -= aOffs;
         aEnd -= aOffs;
-        pView->DrawLine( aStart, aEnd );
+        rRenderContext.DrawLine(aStart, aEnd);
     }
-    for( long nDY = nGridDY; nDY <= aXSize.Height(); nDY += nGridDY )
+    for (long nDY = nGridDY; nDY <= aXSize.Height(); nDY += nGridDY)
     {
-        Point aStart( 0, nDY+TBOFFS_WINBORDER );
-        Point aEnd( aXSize.Width(), nDY+TBOFFS_WINBORDER );
+        Point aStart(0, nDY + TBOFFS_WINBORDER);
+        Point aEnd(aXSize.Width(), nDY + TBOFFS_WINBORDER);
         aStart -= aOffs;
         aEnd -= aOffs;
-        pView->DrawLine( aStart, aEnd );
+        rRenderContext.DrawLine(aStart, aEnd);
     }
-    pView->SetLineColor( aOldColor );
+    rRenderContext.SetLineColor(aOldColor);
 #endif
     nFlags |= F_PAINTED;
 
-    if( !aEntries.size() )
+    if (!aEntries.size())
         return;
-    if( !pCursor )
+    if (!pCursor)
     {
         // set cursor to item with focus-flag
         bool bfound = false;
-        for ( sal_uLong i = 0; i < pView->GetEntryCount() && !bfound; i++)
+        for (sal_uLong i = 0; i < pView->GetEntryCount() && !bfound; i++)
         {
-            SvxIconChoiceCtrlEntry* pEntry = pView->GetEntry ( i );
-            if( pEntry->IsFocused() )
+            SvxIconChoiceCtrlEntry* pEntry = pView->GetEntry (i);
+            if (pEntry->IsFocused())
             {
                 pCursor = pEntry;
                 bfound = true;
             }
         }
 
-        if( !bfound )
+        if (!bfound)
             pCursor = aEntries[ 0 ];
     }
 
     // Show Focus at Init-Time
-    if ( pView->HasFocus() )
+    if (pView->HasFocus())
         GetFocus();
 
     size_t nCount = pZOrderList->size();
-    if( !nCount )
+    if (!nCount)
         return;
 
     bool bResetClipRegion = false;
-    if( !pView->IsClipRegion() )
+    if (!rRenderContext.IsClipRegion())
     {
-        vcl::Region const aOutputArea( GetOutputRect() );
+        vcl::Region const aOutputArea(GetOutputRect());
         bResetClipRegion = true;
-        pView->SetClipRegion( aOutputArea );
+        rRenderContext.SetClipRegion(aOutputArea);
     }
 
     SvxIconChoiceCtrlEntryList_impl* pNewZOrderList = new SvxIconChoiceCtrlEntryList_impl();
     boost::scoped_ptr<SvxIconChoiceCtrlEntryList_impl> pPaintedEntries(new SvxIconChoiceCtrlEntryList_impl());
 
     size_t nPos = 0;
-    while( nCount )
+    while(nCount)
     {
-        SvxIconChoiceCtrlEntry* pEntry = (*pZOrderList)[ nPos ];
-        const Rectangle& rBoundRect = GetEntryBoundRect( pEntry );
-        if( rRect.IsOver( rBoundRect ) )
+        SvxIconChoiceCtrlEntry* pEntry = (*pZOrderList)[nPos];
+        const Rectangle& rBoundRect = GetEntryBoundRect(pEntry);
+        if (rRect.IsOver(rBoundRect))
         {
-            PaintEntry( pEntry, rBoundRect.TopLeft(), pView, true );
+            PaintEntry(pEntry, rBoundRect.TopLeft(), rRenderContext, true);
             // set entries to Top if they are being repainted
-            pPaintedEntries->push_back( pEntry );
+            pPaintedEntries->push_back(pEntry);
         }
         else
-            pNewZOrderList->push_back( pEntry );
+            pNewZOrderList->push_back(pEntry);
 
         nCount--;
         nPos++;
@@ -712,42 +702,20 @@ void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
     delete pZOrderList;
     pZOrderList = pNewZOrderList;
     nCount = pPaintedEntries->size();
-    if( nCount )
+    if (nCount)
     {
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-            pZOrderList->push_back( (*pPaintedEntries)[ nCur ] );
+        for (size_t nCur = 0; nCur < nCount; nCur++)
+            pZOrderList->push_back((*pPaintedEntries)[nCur]);
     }
     pPaintedEntries.reset();
 
-    if( bResetClipRegion )
-        pView->SetClipRegion();
+    if (bResetClipRegion)
+        rRenderContext.SetClipRegion();
 }
 
-void SvxIconChoiceCtrl_Impl::RepaintEntries( SvxIconViewFlags nEntryFlagsMask )
+void SvxIconChoiceCtrl_Impl::RepaintEntries(SvxIconViewFlags /*nEntryFlagsMask*/)
 {
-    const size_t nCount = pZOrderList->size();
-    if( !nCount )
-        return;
-
-    bool bResetClipRegion = false;
-    Rectangle aOutRect( GetOutputRect() );
-    if( !pView->IsClipRegion() )
-    {
-        bResetClipRegion = true;
-        pView->SetClipRegion(vcl::Region(aOutRect));
-    }
-    for( size_t nCur = 0; nCur < nCount; nCur++ )
-    {
-        SvxIconChoiceCtrlEntry* pEntry = (*pZOrderList)[ nCur ];
-        if( pEntry->GetFlags() & nEntryFlagsMask )
-        {
-            const Rectangle& rBoundRect = GetEntryBoundRect( pEntry );
-            if( aOutRect.IsOver( rBoundRect ) )
-                PaintEntry( pEntry, rBoundRect.TopLeft() );
-        }
-    }
-    if( bResetClipRegion )
-        pView->SetClipRegion();
+    pView->Invalidate();
 }
 
 
@@ -1550,274 +1518,205 @@ void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
     }
 }
 
-void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, bool bIsBackgroundPainted )
+void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, bool /*bIsBackgroundPainted*/)
 {
-    Point aPos( GetEntryPos( pEntry ) );
-    PaintEntry( pEntry, aPos, 0, bIsBackgroundPainted );
+    pView->Invalidate(CalcFocusRect(pEntry));
 }
 
 // priorities of the emphasis:  bDropTarget => bCursored => bSelected
-void SvxIconChoiceCtrl_Impl::PaintEmphasis(
-    const Rectangle& rTextRect, const Rectangle& rImageRect,
-    bool bSelected, bool bDropTarget, bool bCursored, OutputDevice* pOut,
-    bool bIsBackgroundPainted )
+void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, const Rectangle& rImageRect, bool bSelected,
+                                           bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext, bool bIsBackgroundPainted)
 {
-    static Color aTransparent( COL_TRANSPARENT );
+    static Color aTransparent(COL_TRANSPARENT);
 
-    if( !pOut )
-        pOut = pView;
-
-    const StyleSettings& rSettings = pOut->GetSettings().GetStyleSettings();
-    Color aOldFillColor( pOut->GetFillColor() );
+    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+    Color aOldFillColor(rRenderContext.GetFillColor());
 
     bool bSolidTextRect = false;
     bool bSolidImageRect = false;
 
-    if( bDropTarget && ( eSelectionMode != NO_SELECTION ) )
+    if(bDropTarget && (eSelectionMode != NO_SELECTION))
     {
-        pOut->SetFillColor( rSettings.GetHighlightColor() );
+        rRenderContext.SetFillColor(rSettings.GetHighlightColor());
         bSolidTextRect = true;
         bSolidImageRect = true;
     }
     else
     {
-        if ( !bSelected || bCursored )
+        if (!bSelected || bCursored)
         {
-            const Color& rFillColor = pView->GetFont().GetFillColor();
-            pOut->SetFillColor( rFillColor );
-            if( rFillColor != aTransparent )
+            const Color& rFillColor = rRenderContext.GetFont().GetFillColor();
+            rRenderContext.SetFillColor(rFillColor);
+            if (rFillColor != aTransparent)
                 bSolidTextRect = true;
         }
     }
 
     // draw text rectangle
-    if( !bSolidTextRect )
+    if (!bSolidTextRect)
     {
-        if( !bIsBackgroundPainted )
-            pOut->Erase( rTextRect );
+        if (!bIsBackgroundPainted)
+            rRenderContext.Erase(rTextRect);
     }
     else
     {
         Color aOldLineColor;
-        if( bCursored )
+        if (bCursored)
         {
-            aOldLineColor = pOut->GetLineColor();
-            pOut->SetLineColor( Color( COL_GRAY ) );
+            aOldLineColor = rRenderContext.GetLineColor();
+            rRenderContext.SetLineColor(Color(COL_GRAY));
         }
-        pOut->DrawRect( rTextRect );
-        if( bCursored )
-            pOut->SetLineColor( aOldLineColor );
+        rRenderContext.DrawRect(rTextRect);
+        if (bCursored)
+            rRenderContext.SetLineColor(aOldLineColor);
     }
 
     // draw image rectangle
-    if( !bSolidImageRect )
+    if (!bSolidImageRect)
     {
-        if( !bIsBackgroundPainted )
-            pOut->Erase( rImageRect );
+        if (!bIsBackgroundPainted)
+            rRenderContext.Erase(rImageRect);
     }
-// the emphasis of the images has to be drawn by the derived class (in the
-// virtual function DrawEntryImage)
-//  else
-//      pOut->DrawRect( rImageRect );
 
-    pOut->SetFillColor( aOldFillColor );
+    rRenderContext.SetFillColor(aOldFillColor);
 }
 
 
-void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
+void SvxIconChoiceCtrl_Impl::PaintItem(const Rectangle& rRect,
     IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
-    OutputDevice* pOut, const OUString* pStr, vcl::ControlLayoutData* _pLayoutData )
+    vcl::RenderContext& rRenderContext, const OUString* pStr, vcl::ControlLayoutData* _pLayoutData )
 {
-    if( eItem == IcnViewFieldTypeText )
+    if (eItem == IcnViewFieldTypeText)
     {
         OUString aText;
-        if( !pStr )
-            aText = SvtIconChoiceCtrl::GetEntryText( pEntry, false );
+        if (!pStr)
+            aText = SvtIconChoiceCtrl::GetEntryText(pEntry, false);
         else
             aText = *pStr;
 
-        if ( _pLayoutData )
+        if (_pLayoutData)
         {
-            pOut->DrawText( rRect, aText, nCurTextDrawFlags,
-                &_pLayoutData->m_aUnicodeBoundRects, &_pLayoutData->m_aDisplayText );
+            rRenderContext.DrawText(rRect, aText, nCurTextDrawFlags, &_pLayoutData->m_aUnicodeBoundRects, &_pLayoutData->m_aDisplayText);
         }
         else
         {
-            Color aOldFontColor = pOut->GetTextColor();
-            if ( pView->AutoFontColor() )
+            Color aOldFontColor = rRenderContext.GetTextColor();
+            if (pView->AutoFontColor())
             {
-                Color aBkgColor( pOut->GetBackground().GetColor() );
+                Color aBkgColor(rRenderContext.GetBackground().GetColor());
                 Color aFontColor;
-                sal_uInt16 nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
-                if ( nColor > 127 )
-                    aFontColor.SetColor ( COL_BLACK );
+                sal_uInt16 nColor = (aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue()) / 3;
+                if (nColor > 127)
+                    aFontColor.SetColor(COL_BLACK);
                 else
-                    aFontColor.SetColor( COL_WHITE );
-                pOut->SetTextColor( aFontColor );
+                    aFontColor.SetColor(COL_WHITE);
+                rRenderContext.SetTextColor(aFontColor);
             }
 
-            pOut->DrawText( rRect, aText, nCurTextDrawFlags );
+            rRenderContext.DrawText(rRect, aText, nCurTextDrawFlags);
 
-            if ( pView->AutoFontColor() )
-                pOut->SetTextColor( aOldFontColor );
+            if (pView->AutoFontColor())
+                rRenderContext.SetTextColor(aOldFontColor);
 
-            if( pEntry->IsFocused() )
+            if (pEntry->IsFocused())
             {
-                Rectangle aRect ( CalcFocusRect( pEntry ) );
-                /*pView->*/ShowFocus( aRect );
-                DrawFocusRect( pOut );
+                Rectangle aRect (CalcFocusRect(pEntry));
+                ShowFocus(aRect);
+                DrawFocusRect(rRenderContext);
             }
         }
     }
     else
     {
-        Point aPos( rRect.TopLeft() );
-        if( nPaintFlags & PAINTFLAG_HOR_CENTERED )
-            aPos.X() += (rRect.GetWidth() - aImageSize.Width() ) / 2;
-        if( nPaintFlags & PAINTFLAG_VER_CENTERED )
-            aPos.Y() += (rRect.GetHeight() - aImageSize.Height() ) / 2;
-        SvtIconChoiceCtrl::DrawEntryImage( pEntry, aPos, *pOut );
+        Point aPos(rRect.TopLeft());
+        if (nPaintFlags & PAINTFLAG_HOR_CENTERED)
+            aPos.X() += (rRect.GetWidth() - aImageSize.Width()) / 2;
+        if (nPaintFlags & PAINTFLAG_VER_CENTERED)
+            aPos.Y() += (rRect.GetHeight() - aImageSize.Height()) / 2;
+        SvtIconChoiceCtrl::DrawEntryImage(pEntry, aPos, rRenderContext);
     }
 }
 
-void SvxIconChoiceCtrl_Impl::PaintEntryVirtOutDev( SvxIconChoiceCtrlEntry* pEntry )
+void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, vcl::RenderContext& rRenderContext, bool bIsBackgroundPainted)
 {
-    if( !pEntryPaintDev )
-    {
-        pEntryPaintDev = VclPtr<VirtualDevice>::Create( *pView );
-        pEntryPaintDev->SetFont( pView->GetFont() );
-        pEntryPaintDev->SetLineColor();
-        //pEntryPaintDev->SetBackground( pView->GetBackground() );
-    }
-    const Rectangle& rRect = GetEntryBoundRect( pEntry );
-    Rectangle aOutRect( GetOutputRect() );
-    if( !rRect.IsOver( aOutRect ) )
-        return;
-    Wallpaper aPaper( pView->GetBackground() );
-    Rectangle aRect( aPaper.GetRect() );
-
-    // move rectangle, so the bounding rectangle of the entry lies in
-    // VirtOut-Dev at 0,0
-    aRect.Move( -rRect.Left(), -rRect.Top() );
-    aPaper.SetRect( aRect );
-    pEntryPaintDev->SetBackground( aPaper );
-    pEntryPaintDev->SetFont( pView->GetFont() );
-
-    Size aSize( rRect.GetSize() );
-    pEntryPaintDev->SetOutputSizePixel( aSize );
-    pEntryPaintDev->DrawOutDev(
-        Point(), aSize, rRect.TopLeft(), aSize, *pView );
-
-    PaintEntry( pEntry, Point(), pEntryPaintDev );
-
-    pView->DrawOutDev(
-        rRect.TopLeft(),
-        aSize,
-        Point(),
-        aSize,
-        *pEntryPaintDev );
-}
-
-
-void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos,
-    OutputDevice* pOut, bool bIsBackgroundPainted )
-{
-    if( !pOut )
-        pOut = pView;
-
     bool bSelected = false;
 
-    if( eSelectionMode != NO_SELECTION )
+    if (eSelectionMode != NO_SELECTION)
         bSelected = pEntry->IsSelected();
 
     bool bCursored = pEntry->IsCursored();
     bool bDropTarget = pEntry->IsDropTarget();
     bool bNoEmphasis = pEntry->IsBlockingEmphasis();
 
-    vcl::Font aTempFont( pOut->GetFont() );
+    vcl::Font aTempFont(rRenderContext.GetFont());
 
-    // AutoFontColor
-    /*
-    if ( pView->AutoFontColor() )
+    OUString aEntryText(SvtIconChoiceCtrl::GetEntryText(pEntry, false));
+    Rectangle aTextRect(CalcTextRect(pEntry, &rPos, false, &aEntryText));
+    Rectangle aBmpRect(CalcBmpRect(pEntry, &rPos));
+
+    bool bShowSelection = (((bSelected && !bCursored) || bDropTarget) && !bNoEmphasis && (eSelectionMode != NO_SELECTION));
+
+    bool bActiveSelection = (0 != (nWinBits & WB_NOHIDESELECTION)) || pView->HasFocus();
+
+    if (bShowSelection)
     {
-        aTempFont.SetColor ( aFontColor );
-    }
-    */
-
-    OUString aEntryText( SvtIconChoiceCtrl::GetEntryText( pEntry, false ) );
-    Rectangle aTextRect( CalcTextRect(pEntry,&rPos,false,&aEntryText));
-    Rectangle aBmpRect( CalcBmpRect(pEntry, &rPos ) );
-
-    bool    bShowSelection =
-        (   (   ( bSelected && !bCursored )
-            ||  bDropTarget
-            )
-        &&  !bNoEmphasis
-        &&  ( eSelectionMode != NO_SELECTION )
-        );
-    bool bActiveSelection = ( 0 != ( nWinBits & WB_NOHIDESELECTION ) ) || pView->HasFocus();
-
-    if ( bShowSelection )
-    {
-        const StyleSettings& rSettings = pOut->GetSettings().GetStyleSettings();
-        vcl::Font aNewFont( aTempFont );
+        const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+        vcl::Font aNewFont(aTempFont);
 
         // font fill colors that are attributed "hard" need corresponding "hard"
         // attributed highlight colors
-        if( (nWinBits & WB_NOHIDESELECTION) || pView->HasFocus() )
-            aNewFont.SetFillColor( rSettings.GetHighlightColor() );
+        if ((nWinBits & WB_NOHIDESELECTION) || pView->HasFocus())
+            aNewFont.SetFillColor(rSettings.GetHighlightColor());
         else
-            aNewFont.SetFillColor( rSettings.GetDeactiveColor() );
+            aNewFont.SetFillColor(rSettings.GetDeactiveColor());
 
         Color aWinCol = rSettings.GetWindowTextColor();
-        if ( !bActiveSelection && rSettings.GetFaceColor().IsBright() == aWinCol.IsBright() )
-            aNewFont.SetColor( rSettings.GetWindowTextColor() );
+        if (!bActiveSelection && rSettings.GetFaceColor().IsBright() == aWinCol.IsBright())
+            aNewFont.SetColor(rSettings.GetWindowTextColor());
         else
-            aNewFont.SetColor( rSettings.GetHighlightTextColor() );
+            aNewFont.SetColor(rSettings.GetHighlightTextColor());
 
-        pOut->SetFont( aNewFont );
+        rRenderContext.SetFont(aNewFont);
 
-        pOut->SetFillColor( pOut->GetBackground().GetColor() );
-        pOut->DrawRect( CalcFocusRect( pEntry ) );
-        pOut->SetFillColor( );
+        rRenderContext.SetFillColor(rRenderContext.GetBackground().GetColor());
+        rRenderContext.DrawRect(CalcFocusRect(pEntry));
+        rRenderContext.SetFillColor();
     }
 
     bool bResetClipRegion = false;
-    if( !pView->IsClipRegion() && (aVerSBar->IsVisible() || aHorSBar->IsVisible()) )
+    if (!rRenderContext.IsClipRegion() && (aVerSBar->IsVisible() || aHorSBar->IsVisible()))
     {
-        Rectangle aOutputArea( GetOutputRect() );
-        if( aOutputArea.IsOver(aTextRect) || aOutputArea.IsOver(aBmpRect) )
+        Rectangle aOutputArea(GetOutputRect());
+        if (aOutputArea.IsOver(aTextRect) || aOutputArea.IsOver(aBmpRect))
         {
-            pView->SetClipRegion(vcl::Region(aOutputArea));
+            rRenderContext.SetClipRegion(vcl::Region(aOutputArea));
             bResetClipRegion = true;
         }
     }
 
     bool bLargeIconMode = WB_ICON == ( nWinBits & (VIEWMODE_MASK) );
     sal_uInt16 nBmpPaintFlags = PAINTFLAG_VER_CENTERED;
-    if ( bLargeIconMode )
+    if (bLargeIconMode)
         nBmpPaintFlags |= PAINTFLAG_HOR_CENTERED;
     sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
     if( !bNoEmphasis )
-        PaintEmphasis(aTextRect,aBmpRect,bSelected,bDropTarget,bCursored,pOut,bIsBackgroundPainted);
+        PaintEmphasis(aTextRect, aBmpRect, bSelected, bDropTarget, bCursored, rRenderContext, bIsBackgroundPainted);
 
     if ( bShowSelection )
-        pView->DrawSelectionBackground( CalcFocusRect( pEntry ),
-        bActiveSelection ? 1 : 2 /* highlight */, false /* check */, true /* border */, false /* ext border only */ );
+        pView->DrawSelectionBackground(CalcFocusRect(pEntry), bActiveSelection ? 1 : 2, false, true, false);
 
-    PaintItem( aBmpRect, IcnViewFieldTypeImage, pEntry, nBmpPaintFlags, pOut );
+    PaintItem(aBmpRect, IcnViewFieldTypeImage, pEntry, nBmpPaintFlags, rRenderContext);
 
-    PaintItem( aTextRect, IcnViewFieldTypeText, pEntry,
-        nTextPaintFlags, pOut );
+    PaintItem(aTextRect, IcnViewFieldTypeText, pEntry, nTextPaintFlags, rRenderContext);
 
     // draw highlight frame
-    if( pEntry == pCurHighlightFrame && !bNoEmphasis )
-        DrawHighlightFrame( pOut, CalcFocusRect( pEntry ), false );
+    if (pEntry == pCurHighlightFrame && !bNoEmphasis)
+        DrawHighlightFrame(rRenderContext, CalcFocusRect(pEntry), false);
 
-    pOut->SetFont( aTempFont );
-    if( bResetClipRegion )
-        pView->SetClipRegion();
+    rRenderContext.SetFont(aTempFont);
+    if (bResetClipRegion)
+        rRenderContext.SetClipRegion();
 }
 
 void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos,
@@ -3025,34 +2924,33 @@ SvxIconChoiceCtrlTextMode SvxIconChoiceCtrl_Impl::GetEntryTextModeSmart( const S
 
 void SvxIconChoiceCtrl_Impl::ShowFocus ( Rectangle& rRect )
 {
-    Color aBkgColor ( pView->GetBackground().GetColor() );
+    Color aBkgColor(pView->GetBackground().GetColor());
     Color aPenColor;
     sal_uInt16 nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
-    if ( nColor > 128 )
-        aPenColor.SetColor ( COL_BLACK );
+    if (nColor > 128)
+        aPenColor.SetColor(COL_BLACK);
     else
-        aPenColor.SetColor( COL_WHITE );
+        aPenColor.SetColor(COL_WHITE);
 
     aFocus.bOn = true;
     aFocus.aPenColor = aPenColor;
     aFocus.aRect = rRect;
 }
 
-void SvxIconChoiceCtrl_Impl::DrawFocusRect ( OutputDevice* pOut )
+void SvxIconChoiceCtrl_Impl::DrawFocusRect(vcl::RenderContext& rRenderContext)
 {
-    pOut->SetLineColor( aFocus.aPenColor );
-    pOut->SetFillColor();
-    Polygon aPolygon ( aFocus.aRect );
+    rRenderContext.SetLineColor(aFocus.aPenColor);
+    rRenderContext.SetFillColor();
+    Polygon aPolygon (aFocus.aRect);
 
-    LineInfo aLineInfo ( LINE_DASH );
+    LineInfo aLineInfo(LINE_DASH);
 
-    aLineInfo.SetDashLen ( 1 );
+    aLineInfo.SetDashLen(1);
+    aLineInfo.SetDotLen(1L);
+    aLineInfo.SetDistance(1L);
+    aLineInfo.SetDotCount(1);
 
-    aLineInfo.SetDotLen ( 1L );
-    aLineInfo.SetDistance ( 1L );
-    aLineInfo.SetDotCount ( 1 );
-
-    pOut->DrawPolyLine ( aPolygon, aLineInfo );
+    rRenderContext.DrawPolyLine(aPolygon, aLineInfo);
 }
 
 bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const
@@ -3658,29 +3556,28 @@ const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16
     return it->second;
 }
 
-void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(
-    OutputDevice* pOut, const Rectangle& rBmpRect, bool bHide )
+void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide)
 {
-    Rectangle aBmpRect( rBmpRect );
+    Rectangle aBmpRect(rBmpRect);
     long nBorder = 2;
-    if( aImageSize.Width() < 32 )
+    if (aImageSize.Width() < 32)
         nBorder = 1;
     aBmpRect.Right() += nBorder;
     aBmpRect.Left() -= nBorder;
     aBmpRect.Bottom() += nBorder;
     aBmpRect.Top() -= nBorder;
 
-    if ( bHide )
-        pView->Invalidate( aBmpRect );
+    if (bHide)
+        pView->Invalidate(aBmpRect);
     else
     {
-        DecorationView aDecoView( pOut );
+        DecorationView aDecoView(&rRenderContext);
         sal_uInt16 nDecoFlags;
-        if ( bHighlightFramePressed )
+        if (bHighlightFramePressed)
             nDecoFlags = FRAME_HIGHLIGHT_TESTBACKGROUND | FRAME_HIGHLIGHT_IN;
         else
             nDecoFlags = FRAME_HIGHLIGHT_TESTBACKGROUND | FRAME_HIGHLIGHT_OUT;
-        aDecoView.DrawHighlightFrame( aBmpRect, nDecoFlags );
+        aDecoView.DrawHighlightFrame(aBmpRect, nDecoFlags);
     }
 }
 
@@ -3697,8 +3594,8 @@ void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame( SvxIconChoiceCtrlEntry* pEn
     pCurHighlightFrame = pEntry;
     if( pEntry )
     {
-        Rectangle aBmpRect( CalcFocusRect(pEntry) );
-        DrawHighlightFrame( pView, aBmpRect, false );
+        Rectangle aBmpRect(CalcFocusRect(pEntry));
+        pView->Invalidate(aBmpRect);
     }
 }
 
@@ -3709,8 +3606,8 @@ void SvxIconChoiceCtrl_Impl::HideEntryHighlightFrame()
 
     SvxIconChoiceCtrlEntry* pEntry = pCurHighlightFrame;
     pCurHighlightFrame = 0;
-    Rectangle aBmpRect( CalcFocusRect(pEntry) );
-    DrawHighlightFrame( pView, aBmpRect, true );
+    Rectangle aBmpRect(CalcFocusRect(pEntry));
+    pView->Invalidate(aBmpRect);
 }
 
 void SvxIconChoiceCtrl_Impl::CallSelectHandler( SvxIconChoiceCtrlEntry* )

@@ -1088,24 +1088,20 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
     _rOut.SetLineColor( aOldLineColor );
 }
 
-
-
-void BrowseBox::PaintData( vcl::Window& rWin, const Rectangle& rRect )
+void BrowseBox::PaintData( vcl::Window& rWin, vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    if ( !bBootstrapped && IsReallyVisible() )
-        BrowseBox::StateChanged( StateChangedType::InitShow );
+    if (!bBootstrapped && IsReallyVisible())
+        BrowseBox::StateChanged(StateChangedType::InitShow);
 
     // initializations
-    if ( !pCols || pCols->empty() || !rWin.IsUpdateMode() )
+    if (!pCols || pCols->empty() || !rWin.IsUpdateMode())
         return;
-    if ( getDataWindow()->bResizeOnPaint )
+    if (getDataWindow()->bResizeOnPaint)
         Resize();
     // MI: who was that? Window::Update();
 
-    ImplPaintData(rWin, rRect, false, true);
+    ImplPaintData(rRenderContext, rRect, false, true);
 }
-
-
 
 void BrowseBox::UpdateScrollbars()
 {

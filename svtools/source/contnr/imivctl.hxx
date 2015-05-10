@@ -317,7 +317,7 @@ class SvxIconChoiceCtrl_Impl
                         DECL_LINK(TextEditEndedHdl, void *);
 
     void                ShowFocus ( Rectangle& rRect );
-    void                DrawFocusRect ( OutputDevice* pOut );
+    void                DrawFocusRect(vcl::RenderContext& rRenderContext);
 
     bool                IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;
 
@@ -346,7 +346,7 @@ public:
                             bool bAddToSelection = false,
                             bool bSyncPaint = false
                         );
-    void                Paint( const Rectangle& rRect );
+    void                Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     bool                MouseButtonDown( const MouseEvent& );
     bool                MouseButtonUp( const MouseEvent& );
     bool                MouseMove( const MouseEvent&);
@@ -364,17 +364,8 @@ public:
     void                LoseFocus();
     void                SetUpdateMode( bool bUpdate );
     bool                GetUpdateMode() const { return bUpdateMode; }
-    void                PaintEntry(
-                            SvxIconChoiceCtrlEntry* pEntry,
-                            bool bIsBackgroundPainted=false
-                        );
-    void                PaintEntry(
-                            SvxIconChoiceCtrlEntry*,
-                            const Point&,
-                            OutputDevice* pOut = 0,
-                            bool bIsBackgroundPainted = false
-                        );
-    void                PaintEntryVirtOutDev( SvxIconChoiceCtrlEntry* );
+    void                PaintEntry(SvxIconChoiceCtrlEntry* pEntry, bool bIsBackgroundPainted = false);
+    void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, vcl::RenderContext& rRenderContext, bool bIsBackgroundPainted = false);
 
     void                SetEntryPos(
                             SvxIconChoiceCtrlEntry* pEntry,
@@ -435,25 +426,13 @@ public:
                         }
     static bool         IsBoundingRectValid( const Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
 
-    void                PaintEmphasis(
-                            const Rectangle& rRect1,
-                            const Rectangle& rRect2,
-                            bool bSelected,
-                            bool bDropTarget,
-                            bool bCursored,
-                            OutputDevice* pOut,
-                            bool bIsBackgroundPainted = false
-                        );
+    void                PaintEmphasis(const Rectangle& rRect1, const Rectangle& rRect2, bool bSelected,
+                                      bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext,
+                                      bool bIsBackgroundPainted = false);
 
-    void                PaintItem(
-                            const Rectangle& rRect,
-                            IcnViewFieldType eItem,
-                            SvxIconChoiceCtrlEntry* pEntry,
-                            sal_uInt16 nPaintFlags,
-                            OutputDevice* pOut,
-                            const OUString* pStr = 0,
-                            vcl::ControlLayoutData* _pLayoutData = NULL
-                        );
+    void                PaintItem(const Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
+                            sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext, const OUString* pStr = 0,
+                            vcl::ControlLayoutData* _pLayoutData = NULL);
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true
     void                CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }
@@ -549,11 +528,7 @@ public:
                             bool bKeepHighlightFlags = false
                         );
     void                HideEntryHighlightFrame();
-    void                DrawHighlightFrame(
-                            OutputDevice* pOut,
-                            const Rectangle& rBmpRect,
-                            bool bHide
-                        );
+    void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide);
     void                StopSelectTimer() { aCallSelectHdlIdle.Stop(); }
 
     void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );

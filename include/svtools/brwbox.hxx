@@ -362,9 +362,8 @@ protected:
     */
     virtual bool    SeekRow( long nRow ) = 0;
     void            DrawCursor();
-    void            PaintData( vcl::Window& rWin, const Rectangle& rRect );
-    virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
-                                sal_uInt16 nColumnId ) const = 0;
+    void            PaintData(vcl::Window& rWin, vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    virtual void    PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const = 0;
     // Advice for the subclass: the visible scope of rows has changed.
     // The subclass is able to announce changes of the model with the
     // help of the methods RowInserted and RowRemoved. Because of the

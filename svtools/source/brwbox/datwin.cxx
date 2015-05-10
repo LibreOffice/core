@@ -318,22 +318,24 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-void BrowserDataWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    if ( !nUpdateLock && GetUpdateMode() )
+    if (!nUpdateLock && GetUpdateMode())
     {
-        if ( bInPaint )
+        if (bInPaint)
         {
-            aInvalidRegion.push_back( new Rectangle( rRect ) );
+            aInvalidRegion.push_back(new Rectangle(rRect));
             return;
         }
         bInPaint = true;
-        ( (BrowseBox*) GetParent() )->PaintData( *this, rRect );
+        ((BrowseBox*) GetParent())->PaintData(*this, rRenderContext, rRect);
         bInPaint = false;
         DoOutstandingInvalidations();
     }
     else
-        aInvalidRegion.push_back( new Rectangle( rRect ) );
+    {
+        aInvalidRegion.push_back(new Rectangle(rRect));
+    }
 }
 
 

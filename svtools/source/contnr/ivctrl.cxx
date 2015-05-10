@@ -121,9 +121,9 @@ OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, bool )
     return pEntry->GetText();
 }
 
-void SvtIconChoiceCtrl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SvtIconChoiceCtrl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    _pImp->Paint( rRect );
+    _pImp->Paint(rRenderContext, rRect);
 }
 
 void SvtIconChoiceCtrl::MouseButtonDown( const MouseEvent& rMEvt )
@@ -427,27 +427,7 @@ Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) co
 void SvtIconChoiceCtrl::FillLayoutData() const
 {
     CreateLayoutData();
-
-    SvtIconChoiceCtrl* pNonConstMe = const_cast< SvtIconChoiceCtrl* >( this );
-
-    // loop through all entries
-    sal_uInt16 nCount = (sal_uInt16)GetEntryCount();
-    sal_uInt16 nPos = 0;
-    while ( nPos < nCount )
-    {
-        SvxIconChoiceCtrlEntry* pEntry = GetEntry( nPos );
-
-        Point aPos = _pImp->GetEntryBoundRect( pEntry ).TopLeft();
-        OUString sEntryText = pEntry->GetDisplayText( );
-        Rectangle aTextRect = _pImp->CalcTextRect( pEntry, &aPos, false, &sEntryText );
-
-        bool bLargeIconMode = WB_ICON == ( _pImp->GetStyle() & ( VIEWMODE_MASK ) );
-        sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
-
-        _pImp->PaintItem( aTextRect, IcnViewFieldTypeText, pEntry, nTextPaintFlags, pNonConstMe, &sEntryText, GetLayoutData() );
-
-        ++nPos;
-    }
+    const_cast<SvtIconChoiceCtrl*>(this)->Invalidate();
 }
 
 Rectangle SvtIconChoiceCtrl::GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const

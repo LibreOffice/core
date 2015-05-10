@@ -141,7 +141,7 @@ public:
     virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
