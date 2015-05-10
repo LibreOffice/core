@@ -35,11 +35,8 @@ bool openAddressBook(const std::string& path)
     return true;
 }
 
-int main( int argc, const char* argv[] )
+int main(void)
 {
-  int x = argc;
-  x++;
-  argv++;
   ProfileAccess* access = new ProfileAccess();
   OUString defaultProfile = access->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
   SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
