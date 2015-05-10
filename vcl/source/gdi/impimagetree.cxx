@@ -181,7 +181,7 @@ bool ImplImageTree::doLoadImage(OUString const & name, OUString const & style, B
     }
 
     if (found)
-        maIconSet[maCurrentStyle].maIconCache[name.intern()] = std::make_pair(localized, bitmap);
+        maIconSet[maCurrentStyle].maIconCache[name] = std::make_pair(localized, bitmap);
 
     return found;
 }
