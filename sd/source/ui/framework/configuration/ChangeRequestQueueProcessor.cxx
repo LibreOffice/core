@@ -113,8 +113,6 @@ void ChangeRequestQueueProcessor::StartProcessing()
 
 IMPL_LINK_NOARG(ChangeRequestQueueProcessor, ProcessEvent)
 {
-    (void)pUnused;
-
     ::osl::MutexGuard aGuard (maMutex);
 
     mnUserEventId = 0;
