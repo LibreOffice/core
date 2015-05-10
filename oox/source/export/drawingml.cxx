@@ -156,7 +156,8 @@ bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropertySet, Re
 
 void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
 {
-    OString sColor = OString::number(  nColor, 16 );
+    // Transparency is a separate element.
+    OString sColor = OString::number(  nColor & 0x00FFFFFF, 16 );
     if( sColor.getLength() < 6 )
     {
         OStringBuffer sBuf( "0" );
