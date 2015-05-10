@@ -576,8 +576,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 // select event handler on the listbox
 IMPL_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
 {
-    _SvxMacroTabPage_Impl*    pImpl = mpImpl;
-    SvHeaderTabListBox&        rListBox = pImpl->pEventLB->GetListBox();
+    SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*            pE = rListBox.FirstSelected();
     sal_uLong                    nPos;
 
