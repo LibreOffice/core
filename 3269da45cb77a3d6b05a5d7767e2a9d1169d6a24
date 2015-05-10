@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_c425deae",
+        "filename": "icon-themes/galaxy/cmd/.directory",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-10T18:05:36Z",
+      "side": 1,
+      "message": "This file should not be present in the patch.\n\nRemember to use `git pull -r` _all the time_ before pushing a patch. I have added a .gitignore entry to avoid picking up this Dolphin thing.",
+      "revId": "3269da45cb77a3d6b05a5d7767e2a9d1169d6a24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
