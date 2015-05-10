@@ -99,11 +99,11 @@ class GbuildParser:
     cxxpattern = re.compile('# CXXOBJECTS := (.*)')
     linkedlibspattern = re.compile('# LINKED_LIBS := (.*)')
     ilibpattern = re.compile('# ILIBTARGET := (.*)')
-    warningpattern = re.compile('-W\S+')
+    warningpattern = re.compile('-W\S+')      
 
     def __init__(self):
         (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs,
-         self.exes, self.libnames, self.exenames) = ('', '', '', '', [], [], {}, {})
+         self.exes, self.libnames, self.exenames, self.target_by_path, self.target_by_location) = ('', '', '', '', [], [], {}, {}, {}, {})
 
     def __mapping_to_dict(self, mapping):
         mapping_dict = {}
@@ -215,6 +215,21 @@ class GbuildParser:
                     self.exenames = self.__mapping_to_dict(exenamesmatch.group(1))
                     continue
                 state = GbuildParserState()
+
+        for target in set(self.libs) | set(self.exes):
+            if target.location not in self.target_by_location:
+                self.target_by_location[target.location] = set()
+            self.target_by_location[target.location] |= set([target])
+            for cxx in target.cxxobjects:
+                path = '/'.join(cxx.split('/')[:-1])
+                if path not in self.target_by_path:
+                    self.target_by_path[path] = set()
+                self.target_by_path[path] |= set([target])
+        for path in self.target_by_path:
+            if len(self.target_by_path[path]) > 1:
+                print('fdo#70422: multiple target use dir %s: %s' % (
+                    path, ', '.join([target.short_name() for target in self.target_by_path[path]])))
+
         return self
 
 
@@ -462,40 +477,26 @@ VersionControl=kdevgit
     def write_includepaths(self, path):
         includedirfile = open(os.path.join(path, '.kdev_include_paths'), 'w')
         include = set()
-        for target in self.target_by_path[path]:
+        for target in self.gbuildparser.target_by_path[path]:
             include |= set(target.include)
         includedirfile.write('\n'.join(include))
         includedirfile.close()
 
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-        self.target_by_location = {}
-        self.target_by_path = {}
-        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
-            if target.location not in self.target_by_location:
-                self.target_by_location[target.location] = set()
-            self.target_by_location[target.location] |= set([target])
-            for cxx in target.cxxobjects:
-                path = '/'.join(cxx.split('/')[:-1])
-                if path not in self.target_by_path:
-                    self.target_by_path[path] = set()
-                self.target_by_path[path] |= set([target])
-        for path in self.target_by_path:
-            if len(self.target_by_path[path]) > 1:
-                print('fdo#70422: multiple target use dir %s: %s' % (
-                    path, ', '.join([target.short_name() for target in self.target_by_path[path]])))
+        
 
     def emit(self):
-        for path in self.target_by_path:
+        for path in self.gbuildparser.target_by_path:
             self.write_includepaths(path)
-        for location in self.target_by_location:
+        for location in self.gbuildparser.target_by_location:
             for f in os.listdir(location):
                 if f.endswith('.kdev4'):
                     try:
                         os.remove(os.path.join(location, f))
                     except OSError:
                         shutil.rmtree(os.path.join(location, f))
-        for location in self.target_by_location:
+        for location in self.gbuildparser.target_by_location:
             modulename = os.path.split(location)[1]
             self.write_modulestub(location, modulename)
             self.write_modulebeef(location, modulename)
@@ -601,10 +602,11 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'sourceTree': '<group>'}
         return result
 
-    def build_source_list(self, modulename):
-        self.sourceList = {}
+    def build_source_list(self, module):
         self.sourceRefList = {}
-        for i in self.gbuildparser.libs[modulename].cxxobjects:
+        self.sourceList = {}
+
+        for i in module.cxxobjects:
             ref = self.generate_id()
             self.sourceList[self.generate_id()] = ref
             self.sourceRefList[ref] = {'lastKnownFileType': 'sourcecode.cpp.cpp',
@@ -618,7 +620,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'runOnlyForDeploymentPostprocessing': 0}
         return result
 
-    def generate_project(self, modulename):
+    def generate_project(self, target):
         self.rootObjectId = self.generate_id()
         self.mainGroupId = self.generate_id()
         self.subMainGroupId = self.generate_id()
@@ -626,14 +628,14 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         self.productRefGroupId = self.generate_id()
         self.productGroupId = self.generate_id()
         self.targetId = self.generate_id()
-        self.build_source_list(modulename)
+        self.build_source_list(target)
         self.sourcesBuildPhaseId = self.generate_id()
-        objects = {self.rootObjectId: self.generate_root_object(modulename),
-                   self.targetId: self.generate_target(modulename),
-                   self.mainGroupId: self.generate_main_group(modulename),
-                   self.subMainGroupId: self.generate_sub_main_group(modulename),
-                   self.productGroupId: self.generate_product_group(modulename),
-                   self.sourcesBuildPhaseId: self.generate_sources_build_phase(modulename)
+        objects = {self.rootObjectId: self.generate_root_object(target),
+                   self.targetId: self.generate_target(target),
+                   self.mainGroupId: self.generate_main_group(target),
+                   self.subMainGroupId: self.generate_sub_main_group(target),
+                   self.productGroupId: self.generate_product_group(target),
+                   self.sourcesBuildPhaseId: self.generate_sources_build_phase(target)
                    }
         for i in self.sourceList.keys():
             ref = self.sourceList[i]
@@ -651,28 +653,26 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
 
     # For some reverse-engineered documentation on the project.pbxproj format,
     # see http://www.monobjc.net/xcode-project-file-format.html .
-    def write_xcodeproj(self, moduledir, modulename):
-        xcodeprojdir = os.path.join(moduledir, '%s.xcodeproj' % modulename)
+    def write_xcodeproj(self, moduledir, target):
+        xcodeprojdir = os.path.join(moduledir, '%s.xcodeproj' % target.name)
         try:
             os.mkdir(xcodeprojdir)
         except:
             pass
-        self.write_dict_to_plist(self.generate_project(modulename),
+        self.write_dict_to_plist(self.generate_project(target),
                                  open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w'))
 
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-        self.target_by_location = {}
-        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
-            if target.location not in self.target_by_location:
-                self.target_by_location[target.location] = set()
-            self.target_by_location[target.location] |= set([target])
 
     def emit(self):
-        for location in self.target_by_location:
-            modulename = os.path.split(location)[1]
-            self.write_xcodeproj(location, modulename)
-
+        self.rootlocation = './'
+        for location in self.gbuildparser.target_by_location:
+            module = location.split('/')[-1]
+            module_directory = os.path.join(self.rootlocation, module)
+            for target in self.gbuildparser.target_by_location[location]:
+                # project_path = os.path.join(module_directory, '%s.pbxroj' % target.name)
+                self.write_xcodeproj(location, target)
 
 class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
@@ -697,13 +697,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 'rebuild': self.module_make_command('clean unitcheck slowcheck subsequentcheck')
             }
         }
-        self.target_by_location = {}
-        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
-            if target.is_empty():
-                continue
-            if target.location not in self.target_by_location:
-                self.target_by_location[target.location] = set()
-            self.target_by_location[target.location] |= set([target])
 
     def retrieve_toolset(self, ide):
         ide_toolset_map = {'vs2012': 'v110', 'vs2013': 'v120'}
@@ -721,11 +714,11 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def emit(self):
         all_projects = []
-        for location in self.target_by_location:
+        for location in self.gbuildparser.target_by_location:
             projects = []
             module = location.split('/')[-1]
             module_directory = os.path.join(self.solution_directory, module)
-            for target in self.target_by_location[location]:
+            for target in self.gbuildparser.target_by_location[location]:
                 project_path = os.path.join(module_directory, '%s.vcxproj' % target.name)
                 project_guid = self.write_project(project_path, target)
                 p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
