@@ -50,7 +50,7 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
     // Step 1: XTextRange will be updated when content is inserted, so we know
     // the end position.
     const uno::Reference<text::XTextRange> xInsertPosition = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), 0);
-    SwNodeIndex* pSttNdIdx = new SwNodeIndex(rDoc.GetNodes());
+    std::shared_ptr<SwNodeIndex> pSttNdIdx(new SwNodeIndex(rDoc.GetNodes()));
     const SwPosition* pPos = rPam.GetPoint();
 
     // Step 2: Split once and remember the node that has been split.
@@ -59,6 +59,8 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
 
     // Step 3: Split again.
     rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
+    std::shared_ptr<SwNodeIndex> pSttNdIdx2(new SwNodeIndex(rDoc.GetNodes()));
+    *pSttNdIdx2 = pPos->nNode.GetIndex();
 
     // Step 4: Insert all content into the new node
     rPam.Move(fnMoveBackward);
@@ -123,6 +125,27 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
             else
                 pTxtNode->ChgFmtColl(pDelNd->GetTxtColl());
             pTxtNode->JoinNext();
+        }
+    }
+
+    if (pSttNdIdx2->GetIndex())
+    {
+        // If we are in insert mode, join the split node that is after
+        // the new content with the last new node. Or in other words:
+        // Revert the second split node.
+        SwTxtNode* pTxtNode = pSttNdIdx2->GetNode().GetTxtNode();
+        SwNodeIndex aPrevIdx(*pSttNdIdx2);
+        if (pTxtNode && pTxtNode->CanJoinPrev(&aPrevIdx) && pSttNdIdx2->GetIndex() - 1 == aPrevIdx.GetIndex())
+        {
+            // If the last new node isn't empty, convert  the node's text
+            // attributes into hints. Otherwise, set the new node's
+            // paragraph style at the next (empty) node.
+            SwTxtNode* pDelNd = aPrevIdx.GetNode().GetTxtNode();
+            if (pTxtNode->GetTxt().getLength())
+                pDelNd->FmtToTxtAttr(pTxtNode);
+            else
+                pTxtNode->ChgFmtColl(pDelNd->GetTxtColl());
+            pTxtNode->JoinPrev();
         }
     }
 
