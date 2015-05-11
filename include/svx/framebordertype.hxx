@@ -51,7 +51,7 @@ size_t GetIndexFromFrameBorderType( FrameBorderType eBorder );
 
 
 
-} // namespace svx
+}
 
 #endif
 

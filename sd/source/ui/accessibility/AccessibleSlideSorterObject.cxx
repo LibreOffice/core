@@ -402,7 +402,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground()
     return static_cast<sal_Int32>(nColor);
 }
 
-//=====  XServiceInfo  ========================================================
+ XServiceInfo
 OUString SAL_CALL
        AccessibleSlideSorterObject::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)

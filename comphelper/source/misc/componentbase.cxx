@@ -33,10 +33,6 @@ namespace comphelper
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
 
-
-    //= ComponentBase
-
-
     void ComponentBase::impl_checkDisposed_throw() const
     {
         if ( m_rBHelper.bDisposed )

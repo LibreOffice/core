@@ -26,11 +26,6 @@
 namespace dbtools
 {
 
-
-
-    //= OCharsetMap
-
-
     OCharsetMap::OCharsetMap()
     {
     }
@@ -129,9 +124,6 @@ namespace dbtools
     }
 
 
-    //= CharsetIteratorDerefHelper
-
-
     CharsetIteratorDerefHelper::CharsetIteratorDerefHelper( const CharsetIteratorDerefHelper& _rSource )
         :m_eEncoding( _rSource.m_eEncoding )
         ,m_aIanaName( _rSource.m_aIanaName )
@@ -144,10 +136,6 @@ namespace dbtools
         ,m_aIanaName( _rIanaName )
     {
     }
-
-
-    //= OCharsetMap::CharsetIterator
-
 
     OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos )
         :m_pContainer( _pContainer )

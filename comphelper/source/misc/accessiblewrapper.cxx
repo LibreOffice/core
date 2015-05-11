@@ -33,11 +33,6 @@ using namespace ::com::sun::star::lang;
 namespace comphelper
 {
 
-
-
-    //= OWrappedAccessibleChildrenManager
-
-
     struct RemoveEventListener
             : public ::std::unary_function< AccessibleMap::value_type, void >
     {
@@ -295,10 +290,6 @@ namespace comphelper
         }
     }
 
-
-    //= OAccessibleWrapper (implementation)
-
-
     OAccessibleWrapper::OAccessibleWrapper( const Reference< XComponentContext >& _rxContext,
             const Reference< XAccessible >& _rxInnerAccessible, const Reference< XAccessible >& _rxParentAccessible )
         :OAccessibleWrapper_Base( )
@@ -364,10 +355,6 @@ namespace comphelper
 
         return xContext;
     }
-
-
-    //= OAccessibleWrapper (implementation)
-
 
     OAccessibleContextWrapperHelper::OAccessibleContextWrapperHelper(
                 const Reference< XComponentContext >& _rxContext,
@@ -516,10 +503,6 @@ namespace comphelper
         // simply disambiguate this
         OComponentProxyAggregationHelper::disposing( _rEvent );
     }
-
-
-    //= OAccessibleContextWrapper
-
 
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleContextWrapper, OAccessibleContextWrapper_CBase, OAccessibleContextWrapperHelper )
 

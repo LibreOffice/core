@@ -64,7 +64,7 @@ void VCLXAccessibleListBox::ProcessWindowEvent (const VclWindowEvent& rVclWindow
     VCLXAccessibleBox::ProcessWindowEvent( rVclWindowEvent );
 }
 
-//=====  XServiceInfo  ========================================================
+ XServiceInfo
 
 OUString VCLXAccessibleListBox::getImplementationName()
     throw (RuntimeException, std::exception)

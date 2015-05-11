@@ -34,10 +34,6 @@
 namespace pcr
 {
 
-
-
-    //= CellBindingHelper
-
     /** encapsulates functionality related to binding a form control to a spreadsheet cell
     */
     class CellBindingHelper

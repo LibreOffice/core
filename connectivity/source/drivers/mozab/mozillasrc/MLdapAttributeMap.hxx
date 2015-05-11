@@ -31,9 +31,6 @@ namespace connectivity { namespace mozab {
     struct AttributeMap_Data;
     class MQueryHelperResultEntry;
 
-
-    //= class MLdapAttributeMap
-
     /** implements the nsIAbLDAPAttributeMap interface
 
         Somewhere between Mozilla 1.7.5 and SeaMonkey 1.1.12, the LDAP address book

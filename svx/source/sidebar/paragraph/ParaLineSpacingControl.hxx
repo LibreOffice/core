@@ -73,7 +73,7 @@ private:
     DECL_LINK(PredefinedValuesHandler, void*);
 };
 
-} // namespace svx
+}
 
 #endif
 

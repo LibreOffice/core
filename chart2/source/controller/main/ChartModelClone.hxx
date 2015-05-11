@@ -28,7 +28,6 @@
 namespace chart
 {
 
-    //= ModelFacet
     enum ModelFacet
     {
         E_MODEL,
@@ -36,7 +35,6 @@ namespace chart
         E_MODEL_WITH_SELECTION
     };
 
-    //= ChartModelClone
     class ChartModelClone : public ::boost::noncopyable
     {
     public:

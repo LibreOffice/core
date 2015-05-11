@@ -67,7 +67,7 @@ namespace svx
     };
 
 
-} // namespace svx
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_STRINGLISTRESOURCE_HXX

@@ -184,7 +184,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return pStateSet;
 }
 
-//=====  XServiceInfo  ========================================================
+ XServiceInfo
 
 OUString SAL_CALL
        ScAccessiblePageHeaderArea::getImplementationName()

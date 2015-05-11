@@ -37,10 +37,6 @@
 namespace dbp
 {
 
-
-
-    //= OControlWizardContext
-
     struct OControlWizardContext
     {
         // the global data source context

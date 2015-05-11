@@ -31,13 +31,8 @@ namespace svt
     class PanelTabBar;
 }
 
-
 namespace accessibility
 {
-
-
-
-    //= AccessibleToolPanelTabBar
 
     class AccessibleToolPanelTabBar_Impl;
     typedef VCLXAccessibleComponent   AccessibleToolPanelTabBar_Base;

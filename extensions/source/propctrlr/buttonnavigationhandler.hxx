@@ -26,10 +26,6 @@
 namespace pcr
 {
 
-
-
-    //= ButtonNavigationHandler
-
     class ButtonNavigationHandler;
     typedef HandlerComponentBase< ButtonNavigationHandler > ButtonNavigationHandler_Base;
     /** a property handler for any virtual string properties

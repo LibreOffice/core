@@ -29,10 +29,6 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-
-    //= OListenerContainer
-
-
     OListenerContainer::OListenerContainer( ::osl::Mutex& _rMutex )
         :m_aListeners( _rMutex )
     {

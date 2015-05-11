@@ -32,10 +32,6 @@
 namespace abp
 {
 
-
-
-    //= FinalPage
-
     class FinalPage : public AddressBookSourcePage
     {
     protected:

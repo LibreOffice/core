@@ -47,9 +47,6 @@ namespace comphelper
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-
-    //= EventLogger_Impl - declaration
-
     class EventLogger_Impl
     {
     private:
@@ -73,10 +70,6 @@ namespace comphelper
         void    impl_createLogger_nothrow();
     };
 
-
-    //= EventLogger_Impl - implementation
-
-
     void EventLogger_Impl::impl_createLogger_nothrow()
     {
         try
@@ -93,10 +86,6 @@ namespace comphelper
             OSL_FAIL( "EventLogger_Impl::impl_createLogger_nothrow: caught an exception!" );
         }
     }
-
-
-    //= EventLogger
-
 
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pAsciiLoggerName )
         :m_pImpl( new EventLogger_Impl( _rxContext, OUString::createFromAscii( _pAsciiLoggerName ) ) )
@@ -194,9 +183,6 @@ namespace comphelper
         return false;
     }
 
-
-    //= ResourceBasedEventLogger_Data
-
     struct ResourceBasedEventLogger_Data
     {
         /// the base name of the resource bundle
@@ -258,10 +244,6 @@ namespace comphelper
         }
         return sMessage;
     }
-
-
-    //= ResourceBasedEventLogger
-
 
     ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pResourceBundleBaseName,
         const sal_Char* _pAsciiLoggerName )

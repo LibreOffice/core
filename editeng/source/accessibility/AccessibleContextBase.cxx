@@ -40,7 +40,7 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
+// internal
 
 AccessibleContextBase::AccessibleContextBase (
         const uno::Reference<XAccessible>& rxParent,
@@ -178,7 +178,7 @@ void AccessibleContextBase::SetRelationSet (
 
 
 
-//=====  XAccessible  =========================================================
+// XAccessible
 
 uno::Reference< XAccessibleContext> SAL_CALL
     AccessibleContextBase::getAccessibleContext()
@@ -191,7 +191,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 
 
 
-//=====  XAccessibleContext  ==================================================
+// XAccessibleContext
 
 /** No children.
 */
@@ -404,7 +404,7 @@ lang::Locale SAL_CALL
 
 
 
-//=====  XAccessibleEventListener  ============================================
+// XAccessibleEventListener
 
 void SAL_CALL AccessibleContextBase::addAccessibleEventListener (
         const uno::Reference<XAccessibleEventListener >& rxListener)
@@ -449,7 +449,7 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
     }
 }
 
-//=====  XServiceInfo  ========================================================
+ XServiceInfo
 OUString SAL_CALL AccessibleContextBase::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -478,7 +478,7 @@ uno::Sequence< OUString > SAL_CALL
 
 
 
-//=====  XTypeProvider  =======================================================
+// XTypeProvider
 
 uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleContextBase::getTypes()
@@ -498,7 +498,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return css::uno::Sequence<sal_Int8>();
 }
 
-//=====  internal  ============================================================
+// internal
 
 void SAL_CALL AccessibleContextBase::disposing()
 {

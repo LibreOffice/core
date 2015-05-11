@@ -44,7 +44,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape()
 {
 }
 
-//=====  XServiceInfo  ========================================================
+ XServiceInfo
 
 OUString SAL_CALL
     AccessiblePresentationShape::getImplementationName()

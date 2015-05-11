@@ -67,7 +67,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(VCLXAccessibleTextField, VCLXAccessibleTextCompone
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleTextField, VCLXAccessibleTextComponent, VCLXAccessible_BASE)
 
 
-//=====  XAccessible  =========================================================
+// XAccessible
 
 Reference<XAccessibleContext> SAL_CALL
     VCLXAccessibleTextField::getAccessibleContext()
@@ -77,7 +77,7 @@ Reference<XAccessibleContext> SAL_CALL
 }
 
 
-//=====  XAccessibleContext  ==================================================
+// XAccessibleContext
 
 sal_Int32 SAL_CALL VCLXAccessibleTextField::getAccessibleChildCount()
     throw (RuntimeException, std::exception)
@@ -115,7 +115,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 
 
 
-//===== XServiceInfo ==========================================================
+// XServiceInfo
 
 OUString VCLXAccessibleTextField::getImplementationName()
     throw (RuntimeException, std::exception)

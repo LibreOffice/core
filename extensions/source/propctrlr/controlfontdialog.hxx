@@ -30,10 +30,6 @@ class SfxPoolItem;
 namespace pcr
 {
 
-
-
-    //= OControlFontDialog
-
     class OControlFontDialog;
     typedef ::svt::OGenericUnoDialog                                        OControlFontDialog_DBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OControlFontDialog >   OControlFontDialog_PBase;

@@ -219,7 +219,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
     return nColor;
 }
 
-//=====  XServiceInfo  ========================================================
+ XServiceInfo
 
 OUString SAL_CALL
     AccessiblePageShape::getImplementationName()

@@ -26,10 +26,6 @@
 namespace connectivity { namespace jdbc
 {
 
-
-
-    //= LocalRef
-
     /** helper class to hold a local ref to a JNI object
 
         Note that this class never actually calls NewLocalRef. It is assumed that all objects

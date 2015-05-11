@@ -28,10 +28,6 @@
 namespace bib
 {
 
-
-
-    //= FormControlContainer
-
     class FormControlContainer
             :public ::comphelper::OBaseMutex
             ,public ::bib::OLoadListener

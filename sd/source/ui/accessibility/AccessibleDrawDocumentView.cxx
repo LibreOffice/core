@@ -391,7 +391,7 @@ void SAL_CALL
     OSL_TRACE ("  done");
 }
 
-//=====  XServiceInfo  ========================================================
+ XServiceInfo
 
 OUString SAL_CALL
     AccessibleDrawDocumentView::getImplementationName()

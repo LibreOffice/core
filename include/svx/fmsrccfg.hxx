@@ -137,7 +137,7 @@ namespace svxform
     };
 
 
-}   // namespace svxform
+}
 
 
 

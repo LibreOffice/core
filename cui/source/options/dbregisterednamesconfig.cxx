@@ -41,10 +41,6 @@ namespace svx
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::container;
 
-
-    //= DbRegisteredNamesConfig
-
-
     void DbRegisteredNamesConfig::GetOptions( SfxItemSet& _rFillItems )
     {
         DatabaseRegistrations aSettings;
@@ -127,7 +123,7 @@ namespace svx
     }
 
 
-}   // namespace svx
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,6 @@ namespace abp
         return pFilter;
     }
 
-    //= FinalPage
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
         : AddressBookSourcePage(_pParent, "DataSourcePage",
             "modules/sabpilot/ui/datasourcepage.ui")
