@@ -114,7 +114,6 @@ public:
             const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
             ::std::vector<SwNodeRange> & rRowNodes,
             ::std::unique_ptr< SwPaM > & rpFirstPaM,
-            SwPaM & rLastPaM,
             SwNodeRange *const pLastCell,
             bool & rbExcept);
 
@@ -1821,7 +1820,6 @@ void SwXText::Impl::ConvertCell(
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
     ::std::vector<SwNodeRange> & rRowNodes,
     ::std::unique_ptr< SwPaM > & rpFirstPaM,
-    SwPaM & rLastPaM,
     SwNodeRange *const pLastCell,
     bool & rbExcept)
 {
@@ -1918,20 +1916,18 @@ void SwXText::Impl::ConvertCell(
     else
     {
         // check the predecessor
-        const sal_uLong nLastNodeIndex = rLastPaM.End()->nNode.GetIndex();
         const sal_uLong nStartCellNodeIndex =
             aStartCellPam.Start()->nNode.GetIndex();
-        const sal_uLong nLastNodeEndIndex = rLastPaM.End()->nNode.GetIndex();
-        if (nLastNodeIndex == nStartCellNodeIndex)
+        const sal_uLong nLastNodeEndIndex = pLastCell->aEnd.GetIndex();
+        if (nLastNodeEndIndex == nStartCellNodeIndex)
         {
             // same node as predecessor then equal nContent?
-            if (rLastPaM.End()->nContent != aStartCellPam.Start()->nContent)
+            if (0 != aStartCellPam.Start()->nContent.GetIndex())
             {
                 rbExcept = true;
             }
             else
             {
-                // note: this may modify rLastPaM too!
                 m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
                 sal_uLong const nNewIndex(aStartCellPam.Start()->nNode.GetIndex());
                 if (nNewIndex != nStartCellNodeIndex)
@@ -1979,17 +1975,7 @@ void SwXText::Impl::ConvertCell(
             aEndCellPam.GetNode().GetTxtNode()->Len();
     }
 
-    *rLastPaM.GetPoint() = *aEndCellPam.Start();
-    if (aStartCellPam.HasMark())
-    {
-        rLastPaM.SetMark();
-        *rLastPaM.GetMark() = *aEndCellPam.End();
-    }
-    else
-    {
-        rLastPaM.DeleteMark();
-    }
-
+    assert(aEndCellPam.End()->nContent.GetIndex() == aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len());
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
     rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!
@@ -2249,7 +2235,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     std::unique_ptr < SwPaM > pFirstPaM;
     std::vector< std::vector<SwNodeRange> > aTableNodes;
     bool bExcept = false;
-    SwPaM aLastPaM(m_pImpl->m_pDoc->GetNodes());
     for (sal_Int32 nRow = 0; !bExcept && (nRow < rTableRanges.getLength());
             ++nRow)
     {
@@ -2265,7 +2250,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                     ? ((nRow == 0) ? nullptr : &*aTableNodes.rbegin()->rbegin())
                     : &*aRowNodes.rbegin());
             m_pImpl->ConvertCell((nCell == 0) && (nRow == 0), pRow[nCell],
-                aRowNodes, pFirstPaM, aLastPaM, pLastCell, bExcept);
+                aRowNodes, pFirstPaM, pLastCell, bExcept);
         }
         aTableNodes.push_back(aRowNodes);
     }
