@@ -297,7 +297,7 @@ VCL_BUILDER_DECL_FACTORY(ContentListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<ContentListBox_Impl>::Create(pParent, nWinStyle);
+    return new ContentListBox_Impl(pParent, nWinStyle);
 }
 
 ContentListBox_Impl::~ContentListBox_Impl()
@@ -490,7 +490,7 @@ VCL_BUILDER_DECL_FACTORY(IndexBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
-    VclPtrInstance<IndexBox_Impl> pListBox(pParent, nWinBits);
+    IndexBox_Impl* pListBox = new IndexBox_Impl(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
@@ -875,7 +875,7 @@ VCL_BUILDER_DECL_FACTORY(SearchBox)
 {
     (void)rMap;
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_DROPDOWN;
-    VclPtrInstance<SearchBox_Impl> pComboBox(pParent, nWinBits);
+    SearchBox_Impl* pComboBox = new SearchBox_Impl(pParent, nWinBits);
     pComboBox->EnableAutoSize(true);
     return pComboBox;
 }
@@ -910,7 +910,7 @@ VCL_BUILDER_DECL_FACTORY(SearchResultsBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
-    VclPtrInstance<SearchResultsBox_Impl> pListBox(pParent, nWinBits);
+    SearchResultsBox_Impl* pListBox = new SearchResultsBox_Impl(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
@@ -1177,7 +1177,7 @@ VCL_BUILDER_DECL_FACTORY(BookmarksBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
-    VclPtrInstance<BookmarksBox_Impl> pListBox(pParent, nWinBits);
+    BookmarksBox_Impl* pListBox = new BookmarksBox_Impl(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }

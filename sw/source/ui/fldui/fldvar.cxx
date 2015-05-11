@@ -1276,8 +1276,9 @@ VCL_BUILDER_DECL_FACTORY(SelectionListBox)
     if (!sBorder.isEmpty())
        nBits |= WB_BORDER;
 
-    VclPtrInstance<SelectionListBox> pListBox(pParent, nBits|WB_SIMPLEMODE);
+    SelectionListBox* pListBox = new SelectionListBox(pParent, nBits|WB_SIMPLEMODE);
     pListBox->EnableAutoSize(true);
+
     return pListBox;
 }
 

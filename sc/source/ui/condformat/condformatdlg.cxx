@@ -151,7 +151,7 @@ VCL_BUILDER_DECL_FACTORY(ScCondFormatList)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return VclPtr<ScCondFormatList>::Create(pParent, nWinBits);
+    return new ScCondFormatList(pParent, nWinBits);
 }
 
 Size ScCondFormatList::GetOptimalSize() const

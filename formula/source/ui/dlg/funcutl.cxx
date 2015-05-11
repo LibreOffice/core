@@ -489,7 +489,7 @@ RefEdit::RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent,
 VCL_BUILDER_DECL_FACTORY(RefEdit)
 {
     (void)rMap;
-    return VclPtr<RefEdit>::Create(pParent, nullptr, WB_BORDER);
+    return new RefEdit(pParent, NULL, WB_BORDER);
 }
 
 RefEdit::~RefEdit()

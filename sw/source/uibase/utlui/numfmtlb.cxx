@@ -80,7 +80,7 @@ VCL_BUILDER_DECL_FACTORY(NumFormatListBox)
     else
         nBits |= WB_BORDER;
 
-    VclPtrInstance<NumFormatListBox> pListBox(pParent, nBits|WB_SIMPLEMODE);
+    NumFormatListBox* pListBox = new NumFormatListBox(pParent, nBits|WB_SIMPLEMODE);
 
     if (bDropdown)
         pListBox->EnableAutoSize(true);

@@ -119,7 +119,7 @@ void SfxPreviewWin_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Re
 VCL_BUILDER_DECL_FACTORY(SfxPreviewWin)
 {
     (void)rMap;
-    return VclPtr<SfxPreviewWin_Impl>::Create(pParent, 0);
+    return new SfxPreviewWin_Impl(pParent, 0);
 }
 
 class SfxNewFileDialog_Impl

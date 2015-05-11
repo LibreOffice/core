@@ -199,7 +199,7 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 VCL_BUILDER_DECL_FACTORY(ExtBoxWithBtns)
 {
     (void)rMap;
-    return VclPtr<ExtBoxWithBtns_Impl>::Create(pParent);
+    return new ExtBoxWithBtns_Impl(pParent);
 }
 
 

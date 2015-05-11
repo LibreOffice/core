@@ -158,7 +158,7 @@ VCL_BUILDER_DECL_FACTORY(ScanPreview)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<ScanPreview>::Create(pParent, nWinStyle);
+    return new ScanPreview(pParent, nWinStyle);
 }
 
 SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :

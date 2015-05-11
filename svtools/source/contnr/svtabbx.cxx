@@ -104,7 +104,7 @@ VCL_BUILDER_DECL_FACTORY(SvTabListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<SvTabListBox>::Create(pParent, nWinStyle);
+    return new SvTabListBox(pParent, nWinStyle);
 }
 
 SvTabListBox::~SvTabListBox()

@@ -80,7 +80,7 @@ VCL_BUILDER_DECL_FACTORY(GraphCtrl)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<GraphCtrl>::Create(pParent, nWinStyle);
+    return new GraphCtrl(pParent, nWinStyle);
 }
 
 GraphCtrl::~GraphCtrl()

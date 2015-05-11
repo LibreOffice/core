@@ -539,7 +539,7 @@ VCL_BUILDER_DECL_FACTORY(AutoFmtPreview)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<AutoFmtPreview>::Create(pParent, nWinStyle);
+    return new AutoFmtPreview(pParent, nWinStyle);
 }
 
 void AutoFmtPreview::Resize()

@@ -311,8 +311,9 @@ namespace pcr
          OString sBorder = VclBuilder::extractCustomProperty(rMap);
          if (!sBorder.isEmpty())
              nWinStyle |= WB_BORDER;
-         return VclPtr<TabOrderListBox>::Create(pParent, nWinStyle);
+         return new TabOrderListBox(pParent, nWinStyle);
     }
+
 
     TabOrderListBox::~TabOrderListBox()
     {

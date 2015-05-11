@@ -18,7 +18,9 @@
  */
 
 #include "svx/relfld.hxx"
-#include "vcl/builderfactory.hxx"
+#include "vcl/builder.hxx"
+
+
 
 SvxRelativeField::SvxRelativeField(
         vcl::Window *const pParent, WinBits const nBits, FieldUnit const eUnit)
@@ -37,15 +39,16 @@ SvxRelativeField::SvxRelativeField(
     SetMax( 9999 );
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxRelativeField)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL
+makeSvxRelativeField(vcl::Window *const pParent, VclBuilder::stringmap & rMap)
 {
     OString const custom(VclBuilder::extractCustomProperty(rMap));
     FieldUnit const eUnit(VclBuilder::detectUnit(custom));
-    return VclPtr<SvxRelativeField>::Create(pParent,
-                                            WB_BORDER | WB_SPIN | WB_REPEAT |
-                                            WB_LEFT | WB_GROUP,
-                                            eUnit);
+    SvxRelativeField *const pRet = new SvxRelativeField(pParent,
+            WB_BORDER | WB_SPIN | WB_REPEAT | WB_LEFT | WB_GROUP, eUnit);
+    return pRet;
 }
+
 
 void SvxRelativeField::Modify()
 {

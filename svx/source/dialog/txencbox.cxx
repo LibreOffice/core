@@ -48,11 +48,14 @@ VCL_BUILDER_DECL_FACTORY(SvxTextEncodingBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
-    VclPtrInstance<SvxTextEncodingBox> pListBox(pParent, nWinBits);
+    SvxTextEncodingBox *pListBox = new SvxTextEncodingBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
+
     return pListBox;
 }
+
+
 
 SvxTextEncodingBox::~SvxTextEncodingBox()
 {
@@ -64,6 +67,8 @@ void SvxTextEncodingBox::dispose()
     delete m_pEncTable;
     ListBox::dispose();
 }
+
+
 
 sal_Int32 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
 {

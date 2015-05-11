@@ -1765,7 +1765,7 @@ VCL_BUILDER_DECL_FACTORY(SwIdxTreeListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<SwIdxTreeListBox>::Create(pParent, nWinStyle);
+    return new SwIdxTreeListBox(pParent, nWinStyle);
 }
 
 void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )

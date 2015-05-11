@@ -54,7 +54,7 @@ VCL_BUILDER_DECL_FACTORY(GalleryPreview)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
-    return VclPtr<GalleryPreview>::Create(pParent, nWinBits);
+    return new GalleryPreview(pParent, nWinBits);
 }
 
 Size GalleryPreview::GetOptimalSize() const

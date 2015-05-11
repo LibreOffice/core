@@ -111,7 +111,7 @@ VCL_BUILDER_DECL_FACTORY(ValueSet)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return VclPtr<ValueSet>::Create(pParent, nWinBits);
+    return new ValueSet(pParent, nWinBits);
 }
 
 ValueSet::ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTransientChildren ) :

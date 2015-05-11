@@ -161,7 +161,7 @@ VCL_BUILDER_DECL_FACTORY(MacroEventListBox)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return VclPtr<MacroEventListBox>::Create(pParent, nWinBits);
+    return new MacroEventListBox(pParent, nWinBits);
 }
 
 Size MacroEventListBox::GetOptimalSize() const

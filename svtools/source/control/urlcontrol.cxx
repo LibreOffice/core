@@ -36,7 +36,7 @@ namespace svt
         (void)rMap;
         WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                            WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
-        VclPtrInstance<OFileURLControl> pListBox(pParent, nWinBits);
+        OFileURLControl* pListBox = new OFileURLControl(pParent, nWinBits);
         pListBox->EnableAutoSize(true);
         return pListBox;
     }

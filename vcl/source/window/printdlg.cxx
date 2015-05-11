@@ -55,13 +55,13 @@ using namespace com::sun::star::beans;
 VCL_BUILDER_DECL_FACTORY(PrintPreviewWindow)
 {
     (void)rMap;
-    return VclPtr<PrintDialog::PrintPreviewWindow>::Create(pParent);
+    return new PrintDialog::PrintPreviewWindow(pParent);
 }
 
 VCL_BUILDER_DECL_FACTORY(ShowNupOrderWindow)
 {
     (void)rMap;
-    return VclPtr<PrintDialog::ShowNupOrderWindow>::Create(pParent);
+    return new PrintDialog::ShowNupOrderWindow(pParent);
 }
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )

@@ -47,6 +47,8 @@ using namespace ::com::sun::star::resource;
 
 // ExtTreeListBox
 
+
+
 ExtTreeListBox::ExtTreeListBox(vcl::Window* pParent, WinBits nStyle)
     : TreeListBox(pParent, nStyle)
 {
@@ -58,7 +60,7 @@ VCL_BUILDER_DECL_FACTORY(ExtTreeListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
-    return VclPtr<ExtTreeListBox>::Create(pParent, nWinBits);
+    return new ExtTreeListBox(pParent, nWinBits);
 }
 
 bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )

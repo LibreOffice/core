@@ -110,7 +110,7 @@ VCL_BUILDER_DECL_FACTORY(ColorListBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<ColorListBox> pListBox(pParent, nWinBits);
+    ColorListBox *pListBox = new ColorListBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
     return pListBox;
@@ -742,7 +742,7 @@ VCL_BUILDER_DECL_FACTORY(LineListBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<LineListBox> pListBox(pParent, nWinBits);
+    LineListBox *pListBox = new LineListBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
     return pListBox;
@@ -945,7 +945,7 @@ VCL_BUILDER_DECL_FACTORY(FontNameBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<FontNameBox> pListBox(pParent, nWinBits);
+    FontNameBox *pListBox = new FontNameBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
     return pListBox;
@@ -1333,7 +1333,7 @@ VCL_BUILDER_DECL_FACTORY(FontStyleBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<FontStyleBox> pListBox(pParent, nWinBits);
+    FontStyleBox *pListBox = new FontStyleBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
     return pListBox;
@@ -1529,7 +1529,7 @@ VCL_BUILDER_DECL_FACTORY(FontSizeBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<FontSizeBox> pListBox(pParent, nWinBits);
+    FontSizeBox* pListBox = new FontSizeBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
     return pListBox;

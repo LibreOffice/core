@@ -111,7 +111,7 @@ VCL_BUILDER_DECL_FACTORY(SvxLanguageBox)
         nBits |= WB_DROPDOWN;
     else
         nBits |= WB_BORDER;
-    VclPtrInstance<SvxLanguageBox> pLanguageBox(pParent, nBits);
+    SvxLanguageBox *pLanguageBox = new SvxLanguageBox(pParent, nBits);
     pLanguageBox->EnableAutoSize(true);
     return pLanguageBox;
 }
@@ -124,7 +124,7 @@ VCL_BUILDER_DECL_FACTORY(SvxLanguageComboBox)
         nBits |= WB_DROPDOWN;
     else
         nBits |= WB_BORDER;
-    VclPtrInstance<SvxLanguageComboBox> pLanguageBox(pParent, nBits);
+    SvxLanguageComboBox *pLanguageBox = new SvxLanguageComboBox(pParent, nBits);
     pLanguageBox->EnableAutoSize(true);
     return pLanguageBox;
 }

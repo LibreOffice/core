@@ -37,7 +37,7 @@ OConnectionURLEdit::OConnectionURLEdit(vcl::Window* _pParent, WinBits _nBits,boo
 VCL_BUILDER_DECL_FACTORY(ConnectionURLEdit)
 {
     (void)rMap;
-    return VclPtr<OConnectionURLEdit>::Create(pParent, WB_BORDER, false);
+    return new OConnectionURLEdit(pParent, WB_BORDER, false);
 }
 
 OConnectionURLEdit::~OConnectionURLEdit()

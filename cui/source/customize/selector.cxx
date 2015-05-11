@@ -95,7 +95,7 @@ VCL_BUILDER_DECL_FACTORY(SvxConfigFunctionListBox)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return VclPtr<SvxConfigFunctionListBox>::Create(pParent, nWinBits);
+    return new SvxConfigFunctionListBox(pParent, nWinBits);
 }
 
 SvxConfigFunctionListBox::~SvxConfigFunctionListBox()
@@ -228,7 +228,7 @@ VCL_BUILDER_DECL_FACTORY(SvxConfigGroupListBox)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return VclPtr<SvxConfigGroupListBox>::Create(pParent, nWinBits);
+    return new SvxConfigGroupListBox(pParent, nWinBits);
 }
 
 SvxConfigGroupListBox::~SvxConfigGroupListBox()

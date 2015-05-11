@@ -166,7 +166,7 @@ VCL_BUILDER_DECL_FACTORY(ScTabBgColorValueSet)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return VclPtr<ScTabBgColorDlg::ScTabBgColorValueSet>::Create(pParent, nWinBits);
+    return new ScTabBgColorDlg::ScTabBgColorValueSet(pParent, nWinBits);
 }
 
 void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )

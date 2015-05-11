@@ -1141,7 +1141,7 @@ VCL_BUILDER_DECL_FACTORY(ColorLB)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
-    VclPtrInstance<ColorLB> pListBox(pParent, nWinBits);
+    ColorLB *pListBox = new ColorLB(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
@@ -1193,7 +1193,7 @@ VCL_BUILDER_DECL_FACTORY(HatchingLB)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    VclPtrInstance<HatchingLB> pListBox(pParent, nWinStyle);
+    HatchingLB *pListBox = new HatchingLB(pParent, nWinStyle);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
@@ -1286,7 +1286,7 @@ VCL_BUILDER_DECL_FACTORY(GradientLB)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    VclPtrInstance<GradientLB> pListBox(pParent, nWinStyle);
+    GradientLB *pListBox = new GradientLB(pParent, nWinStyle);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
@@ -1402,7 +1402,7 @@ VCL_BUILDER_DECL_FACTORY(BitmapLB)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    VclPtrInstance<BitmapLB> pListBox(pParent, nWinStyle);
+    BitmapLB *pListBox = new BitmapLB(pParent, nWinStyle);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
@@ -1575,7 +1575,7 @@ VCL_BUILDER_DECL_FACTORY(LineLB)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
-    VclPtrInstance<LineLB> pListBox(pParent, nWinBits);
+    LineLB *pListBox = new LineLB(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
@@ -1673,7 +1673,7 @@ VCL_BUILDER_DECL_FACTORY(LineEndLB)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
-    VclPtrInstance<LineEndLB> pListBox(pParent, nWinBits);
+    LineEndLB *pListBox = new LineEndLB(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }

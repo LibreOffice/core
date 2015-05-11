@@ -104,7 +104,7 @@ VCL_BUILDER_DECL_FACTORY(SdPageObjsTLB)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<SdPageObjsTLB>::Create(pParent, nWinStyle);
+    return new SdPageObjsTLB(pParent, nWinStyle);
 }
 
 SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()

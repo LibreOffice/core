@@ -1222,7 +1222,7 @@ SentenceEditWindow_Impl::SentenceEditWindow_Impl(vcl::Window * pParent, WinBits 
 VCL_BUILDER_DECL_FACTORY(SentenceEditWindow)
 {
     (void)rMap;
-    return VclPtr<SentenceEditWindow_Impl>::Create(pParent, WB_BORDER|WB_VSCROLL|WB_IGNORETAB);
+    return new SentenceEditWindow_Impl(pParent, WB_BORDER|WB_VSCROLL|WB_IGNORETAB);
 }
 
 

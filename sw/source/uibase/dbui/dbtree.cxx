@@ -186,7 +186,7 @@ VCL_BUILDER_DECL_FACTORY(SwDBTreeList)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nStyle |= WB_BORDER;
-    return VclPtr<SwDBTreeList>::Create(pParent, nStyle);
+    return new SwDBTreeList(pParent, nStyle);
 }
 
 Size SwDBTreeList::GetOptimalSize() const

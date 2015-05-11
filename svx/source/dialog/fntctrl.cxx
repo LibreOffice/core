@@ -496,7 +496,8 @@ VCL_BUILDER_DECL_FACTORY(SvxFontPrevWindow)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<SvxFontPrevWindow>::Create(pParent, nWinStyle);
+    SvxFontPrevWindow *pWindow = new SvxFontPrevWindow(pParent, nWinStyle);
+    return pWindow;
 }
 
 SvxFontPrevWindow::~SvxFontPrevWindow()

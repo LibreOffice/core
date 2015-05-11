@@ -81,7 +81,7 @@ VCL_BUILDER_DECL_FACTORY(OTableTreeListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<OTableTreeListBox>::Create(pParent, nWinStyle);
+    return new OTableTreeListBox(pParent, nWinStyle);
 }
 
 void OTableTreeListBox::implSetDefaultImages()

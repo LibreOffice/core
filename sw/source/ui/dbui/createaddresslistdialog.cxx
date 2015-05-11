@@ -111,7 +111,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits
 VCL_BUILDER_DECL_FACTORY(SwAddressControlImpl)
 {
     (void)rMap;
-    return VclPtr<SwAddressControl_Impl>::Create(pParent, WB_BORDER | WB_DIALOGCONTROL);
+    return new SwAddressControl_Impl(pParent, WB_BORDER | WB_DIALOGCONTROL);
 }
 
 SwAddressControl_Impl::~SwAddressControl_Impl()

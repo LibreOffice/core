@@ -37,7 +37,7 @@ VCL_BUILDER_DECL_FACTORY(SvxCheckListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<SvxCheckListBox>::Create(pParent, nWinStyle);
+    return new SvxCheckListBox(pParent, nWinStyle);
 }
 
 void SvxCheckListBox::SetNormalStaticImage(const Image& rNormalStaticImage)

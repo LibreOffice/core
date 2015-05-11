@@ -55,7 +55,7 @@ VCL_BUILDER_DECL_FACTORY(SdPageListControl)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<SdPageListControl>::Create(pParent, nWinStyle);
+    return new SdPageListControl(pParent, nWinStyle);
 }
 
 IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)

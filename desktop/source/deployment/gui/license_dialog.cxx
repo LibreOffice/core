@@ -132,7 +132,7 @@ VCL_BUILDER_DECL_FACTORY(LicenseView)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return VclPtr<LicenseView>::Create(pParent, nWinStyle | WB_VSCROLL);
+    return new LicenseView(pParent, nWinStyle | WB_VSCROLL);
 }
 
 LicenseView::~LicenseView()

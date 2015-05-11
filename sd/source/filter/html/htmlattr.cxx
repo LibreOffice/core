@@ -35,7 +35,7 @@ VCL_BUILDER_DECL_FACTORY(SdHtmlAttrPreview)
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
 
-    return VclPtr<SdHtmlAttrPreview>::Create(pParent, nWinStyle);
+    return new SdHtmlAttrPreview(pParent, nWinStyle);
 }
 
 SdHtmlAttrPreview::~SdHtmlAttrPreview()
