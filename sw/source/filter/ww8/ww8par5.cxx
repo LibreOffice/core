@@ -2654,7 +2654,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
             //Take this as the base name
             SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
             aNm+=OUString::number(m_aRubyCharFmts.size()+1);
-            pFmt = m_rDoc.MakeCharFmt(aNm,(SwCharFmt*)m_rDoc.GetDfltCharFmt());
+            pFmt = m_rDoc.MakeCharFmt(aNm, m_rDoc.GetDfltCharFmt());
             SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
             SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
                 OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);

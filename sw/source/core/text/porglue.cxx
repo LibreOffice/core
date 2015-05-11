@@ -169,7 +169,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
     {
 
         // 1) We search for the left Glue
-        SwLinePortion *pPos = (SwLinePortion*)this;
+        SwLinePortion *pPos = this;
         SwGluePortion *pLeft = 0;
         while( pPos )
         {
@@ -254,7 +254,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
             }
         }
         // If no left Glue remaines we set the break condition.
-        pRight = pLeft ? pLeft : (SwGluePortion*)this;
+        pRight = pLeft ? pLeft : this;
     }
 }
 

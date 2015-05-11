@@ -5394,15 +5394,15 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         case COMMAND_PREPARERECONVERSION:
         if( rSh.HasSelection() )
         {
-            SwPaM *pCrsr = (SwPaM*)rSh.GetCrsr();
+            SwPaM *pCrsr = rSh.GetCrsr();
 
             if( rSh.IsMultiSelection() )
             {
-                if( pCrsr && !pCrsr->HasMark() &&
-                pCrsr->GetPoint() == pCrsr->GetMark() )
+                if (pCrsr && !pCrsr->HasMark() &&
+                    pCrsr->GetPoint() == pCrsr->GetMark())
                 {
-                rSh.GoPrevCrsr();
-                pCrsr = (SwPaM*)rSh.GetCrsr();
+                    rSh.GoPrevCrsr();
+                    pCrsr = rSh.GetCrsr();
                 }
 
                 // Cancel all selections other than the last selected one.

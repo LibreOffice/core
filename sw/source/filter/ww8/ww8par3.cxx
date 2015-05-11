@@ -1053,7 +1053,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
                                   + "z" + OUString::number( nLevel ) );
 
             // const Wegcasten
-            pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
+            pFmt = rDoc.MakeCharFmt(aName, rDoc.GetDfltCharFmt());
             bNewCharFmtCreated = true;
             // Attribute reinsetzen
             pFmt->SetFmtAttr( *pThisLevelItemSet );
@@ -1080,7 +1080,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
             const OUString aName( (!sPrefix.isEmpty() ? sPrefix : rNumRule.GetName())
                                   + "z" + OUString::number( nLevel ) );
 
-            pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
+            pFmt = rDoc.MakeCharFmt(aName, rDoc.GetDfltCharFmt());
             bNewCharFmtCreated = true;
             rCharFmt[ nLevel ] = pFmt;
             aNumFmt.SetCharFmt( pFmt );

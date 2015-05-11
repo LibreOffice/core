@@ -2189,7 +2189,7 @@ Reference< XNameAccess >  SwXTextDocument::getLinks() throw( RuntimeException, s
     if(!pxLinkTargetSupplier)
     {
         pxLinkTargetSupplier = new Reference< XNameAccess > ;
-        (*pxLinkTargetSupplier) = new SwXLinkTargetSupplier(*(SwXTextDocument*)this);
+        (*pxLinkTargetSupplier) = new SwXLinkTargetSupplier(*this);
     }
     return (*pxLinkTargetSupplier);
 }

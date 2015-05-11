@@ -261,7 +261,7 @@ Accelerator::Accelerator( const Accelerator& rAccel ) :
 
     ImplInit();
     mpData = new ImplAccelData;
-    ImplCopyData( *((ImplAccelData*)(rAccel.mpData)) );
+    ImplCopyData(*rAccel.mpData);
 }
 
 Accelerator::Accelerator( const ResId& rResId )
@@ -399,7 +399,7 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
     // delete and copy tables
     ImplDeleteData();
     mpData->maKeyMap.clear();
-    ImplCopyData( *((ImplAccelData*)(rAccel.mpData)) );
+    ImplCopyData(*rAccel.mpData);
 
     return *this;
 }

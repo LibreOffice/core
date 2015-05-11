@@ -812,7 +812,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
         sal_uInt16 nOldReal = pCurr->GetRealHeight();
         sal_uInt16 nOldAscent = pCurr->GetAscent();
         sal_uInt16 nOldHeight = pCurr->Height();
-        ((SwTxtFormatter*)this)->CalcRealHeight();
+        CalcRealHeight();
         nReal = pCurr->GetRealHeight();
         if( nReal < nOldReal )
             nReal = nOldReal;

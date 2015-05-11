@@ -793,7 +793,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                         n = 0;
                 }
 
-                MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
+                MenuItemData* pData = pMenu->GetItemList()->GetDataFromPos( n );
                 if ( ( pData->eType != MenuItemType::SEPARATOR ) && pMenu->ImplIsVisible( n ) )
                 {
                     bool bDoSelect = true;

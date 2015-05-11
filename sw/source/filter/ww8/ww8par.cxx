@@ -4046,7 +4046,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
             if(m_pAktItemSet && !pFmt)
             {
                 OUString sPrefix(OUStringBuffer("WW8Dropcap").append(m_nDropCap++).makeStringAndClear());
-                pNewSwCharFmt = m_rDoc.MakeCharFmt(sPrefix, (SwCharFmt*)m_rDoc.GetDfltCharFmt());
+                pNewSwCharFmt = m_rDoc.MakeCharFmt(sPrefix, m_rDoc.GetDfltCharFmt());
                  m_pAktItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
                 pNewSwCharFmt->SetFmtAttr( *m_pAktItemSet );
             }

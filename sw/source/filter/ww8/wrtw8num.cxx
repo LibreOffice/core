@@ -95,7 +95,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
         if ( !bOutlineRuleAdded )
         {
             // still need to paste the OutlineRule
-            SwNumRule* pR = (SwNumRule*)m_pDoc->GetOutlineNumRule();
+            SwNumRule* pR = m_pDoc->GetOutlineNumRule();
             m_pUsedNumTbl->push_back( pR );
         }
     }

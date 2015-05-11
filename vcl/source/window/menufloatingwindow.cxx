@@ -898,7 +898,7 @@ void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
             }
         }
 
-        MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
+        MenuItemData* pData = pMenu->GetItemList()->GetDataFromPos( n );
         if ( ( pData->bEnabled || !rSettings.GetSkipDisabledInMenus() )
               && ( pData->eType != MenuItemType::SEPARATOR ) && pMenu->ImplIsVisible( n ) && pMenu->ImplIsSelectable( n ) )
         {

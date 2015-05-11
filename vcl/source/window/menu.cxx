@@ -2584,7 +2584,7 @@ bool MenuBar::HandleMenuActivateEvent( Menu *pMenu ) const
     {
         ImplMenuDelData aDelData( this );
 
-        pMenu->pStartedFrom = (Menu*)this;
+        pMenu->pStartedFrom = const_cast<MenuBar*>(this);
         pMenu->bInCallback = true;
         pMenu->Activate();
 
@@ -2600,7 +2600,7 @@ bool MenuBar::HandleMenuDeActivateEvent( Menu *pMenu ) const
     {
         ImplMenuDelData aDelData( this );
 
-        pMenu->pStartedFrom = (Menu*)this;
+        pMenu->pStartedFrom = const_cast<MenuBar*>(this);
         pMenu->bInCallback = true;
         pMenu->Deactivate();
         if( !aDelData.isDeleted() )
@@ -2612,7 +2612,7 @@ bool MenuBar::HandleMenuDeActivateEvent( Menu *pMenu ) const
 bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventId ) const
 {
     if( !pMenu )
-        pMenu = ((Menu*) this)->ImplFindMenu( nHighlightEventId );
+        pMenu = const_cast<MenuBar*>(this)->ImplFindMenu(nHighlightEventId);
     if( pMenu )
     {
         ImplMenuDelData aDelData( pMenu );
@@ -2624,7 +2624,7 @@ bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventI
         {
             pMenu->mnHighlightedItemPos = pMenu->GetItemPos( nHighlightEventId );
             pMenu->nSelectedId = nHighlightEventId;
-            pMenu->pStartedFrom = (Menu*)this;
+            pMenu->pStartedFrom = const_cast<MenuBar*>(this);
             pMenu->ImplCallHighlight( pMenu->mnHighlightedItemPos );
         }
         return true;
@@ -2636,11 +2636,11 @@ bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventI
 bool MenuBar::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) const
 {
     if( !pMenu )
-        pMenu = ((Menu*) this)->ImplFindMenu( nCommandEventId );
+        pMenu = const_cast<MenuBar*>(this)->ImplFindMenu(nCommandEventId);
     if( pMenu )
     {
         pMenu->nSelectedId = nCommandEventId;
-        pMenu->pStartedFrom = (Menu*)this;
+        pMenu->pStartedFrom = const_cast<MenuBar*>(this);
         pMenu->ImplSelect();
         return true;
     }

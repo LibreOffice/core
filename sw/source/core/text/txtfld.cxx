@@ -72,7 +72,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                                                 const SwTxtAttr *pHint ) const
 {
     SwExpandPortion *pRet = 0;
-    SwFrm *pFrame = (SwFrm*)pFrm;
+    SwFrm *pFrame = pFrm;
     SwField *pFld = const_cast<SwField*>(pHint->GetFmtFld().GetField());
     const bool bName = rInf.GetOpt().IsFldName();
 
@@ -478,7 +478,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
         if( SVX_NUM_BITMAP == rNumFmt.GetNumberingType() )
         {
-            pRet = new SwGrfNumPortion( (SwFrm*)GetTxtFrm(),
+            pRet = new SwGrfNumPortion( const_cast<SwTxtFrm*>(GetTxtFrm()),
                                         pTxtNd->GetLabelFollowedBy(),
                                         rNumFmt.GetBrush(),
                                         rNumFmt.GetGraphicOrientation(),

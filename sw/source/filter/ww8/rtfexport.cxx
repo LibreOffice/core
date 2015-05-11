@@ -209,7 +209,7 @@ void RtfExport::BuildNumbering()
         SwNumRule* pRule;
         --n;
         if (n == rListTbl.size())
-            pRule = (SwNumRule*)m_pDoc->GetOutlineNumRule();
+            pRule = m_pDoc->GetOutlineNumRule();
         else
         {
             pRule = rListTbl[ n ];
