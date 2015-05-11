@@ -135,7 +135,7 @@ Reference< XIdlClass > IdlCompFieldImpl::getDeclaringClass()
                 typelib_TypeDescriptionReference ** ppTypeRefs = pTD->ppTypeRefs;
                 for ( sal_Int32 nPos = pTD->nMembers; nPos--; )
                 {
-                    if (td_equals( (typelib_TypeDescription *)getTypeDescr(), ppTypeRefs[nPos] ))
+                    if (td_equals( getTypeDescr(), ppTypeRefs[nPos] ))
                     {
                         _xDeclClass = getReflection()->forType( &pTD->aBase );
                         return _xDeclClass;

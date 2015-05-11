@@ -167,7 +167,7 @@ Reference< XIdlClass > IdlAttributeFieldImpl::getType()
 FieldAccessMode IdlAttributeFieldImpl::getAccessMode()
     throw(css::uno::RuntimeException, std::exception)
 {
-    return (((typelib_InterfaceAttributeTypeDescription *)getAttributeTypeDescr())->bReadOnly
+    return ((getAttributeTypeDescr())->bReadOnly
             ? FieldAccessMode_READONLY : FieldAccessMode_READWRITE);
 }
 
