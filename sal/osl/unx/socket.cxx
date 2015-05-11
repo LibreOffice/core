@@ -1009,7 +1009,7 @@ oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr (const oslHostAddr pAddr)
     SAL_WARN_IF( !pAddr, "sal.osl", "undefined address" );
 
     if (pAddr)
-        return (oslSocketAddr)pAddr->pSockAddr;
+        return pAddr->pSockAddr;
     else
         return NULL;
 }
@@ -1121,7 +1121,7 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
 
 oslSocketAddr SAL_CALL osl_psz_resolveHostname(const sal_Char* pszHostname)
 {
-    struct oslHostAddrImpl *pAddr = (oslHostAddr)osl_psz_createHostAddrByName(pszHostname);
+    struct oslHostAddrImpl *pAddr = osl_psz_createHostAddrByName(pszHostname);
 
     if (pAddr)
     {
@@ -1255,7 +1255,7 @@ oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uSt
 oslSocketResult SAL_CALL osl_psz_getHostnameOfSocketAddr(oslSocketAddr pAddr,
                                             sal_Char *pBuffer, sal_uInt32 BufferSize)
 {
-    oslHostAddr pHostAddr= (oslHostAddr )osl_createHostAddrByAddr(pAddr);
+    oslHostAddr pHostAddr= osl_createHostAddrByAddr(pAddr);
 
     if (pHostAddr)
     {

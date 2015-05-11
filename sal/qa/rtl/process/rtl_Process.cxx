@@ -187,10 +187,10 @@ void printUuidtoBuffer( sal_uInt8 *pNode, sal_Char * pBuffer )
         sal_uInt8 nValue = pNode[i1];
         if (nValue < 16)
         {
-             sprintf( (sal_Char *)(pBuffer + nPtr), "0");
+             sprintf( pBuffer + nPtr, "0");
              nPtr++;
         }
-        sprintf( (sal_Char *)(pBuffer + nPtr), "%02x", nValue );
+        sprintf( pBuffer + nPtr, "%02x", nValue );
         nPtr += 2 ;
     }
 }

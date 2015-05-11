@@ -1577,7 +1577,7 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 
     for (i = 0; i < pProfile->m_NoLines; i++)
     {
-        pStr = (sal_Char *)stripBlanks(pProfile->m_Lines[i], NULL);
+        pStr = stripBlanks(pProfile->m_Lines[i], NULL);
 
         if ((*pStr == '\0') || (*pStr == ';'))
             continue;
