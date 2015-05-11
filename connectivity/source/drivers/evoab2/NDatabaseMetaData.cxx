@@ -162,7 +162,7 @@ namespace connectivity
 
         sal_Int32 nType = G_TYPE_STRING;
         if ( nCol < nFields )
-            return ((GParamSpec *)pFields[nCol]->pField)->value_type;
+            return (pFields[nCol]->pField)->value_type;
         return nType;
     }
 

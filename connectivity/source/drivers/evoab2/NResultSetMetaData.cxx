@@ -110,7 +110,7 @@ OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum 
     OUString aLabel;
 
     if( pSpec )
-            aLabel = OStringToOUString( g_param_spec_get_nick( (GParamSpec *) pSpec ),
+            aLabel = OStringToOUString( g_param_spec_get_nick( pSpec ),
                                              RTL_TEXTENCODING_UTF8 );
     return aLabel;
 }

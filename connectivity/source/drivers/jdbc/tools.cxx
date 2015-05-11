@@ -223,7 +223,7 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
     jboolean p = sal_False;
     memcpy(t.pEnv->GetByteArrayElements(pByteArray,&p),aData.getArray(),aData.getLength());
     jobject out = t.pEnv->NewObject( clazz, mID,pByteArray);
-    t.pEnv->DeleteLocalRef((jbyteArray)pByteArray);
+    t.pEnv->DeleteLocalRef(pByteArray);
     return out;
 }
 
@@ -250,7 +250,7 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
     jboolean p = sal_False;
     memcpy(t.pEnv->GetCharArrayElements(pCharArray,&p),aData.getArray(),aData.getLength());
     jobject out = t.pEnv->NewObject( clazz, mID,pCharArray);
-    t.pEnv->DeleteLocalRef((jcharArray)pCharArray);
+    t.pEnv->DeleteLocalRef(pCharArray);
     return out;
 }
 

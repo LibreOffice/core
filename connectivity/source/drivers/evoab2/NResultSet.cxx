@@ -277,7 +277,7 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
         const SplitEvoColumns* evo_addr( get_evo_addr() );
         for (int i=0;i<OTHER_ZIP;i++)
         {
-            if (0 == strcmp (g_param_spec_get_name ((GParamSpec *)pSpec), evo_addr[i].pColumnName))
+            if (0 == strcmp (g_param_spec_get_name (pSpec), evo_addr[i].pColumnName))
             {
                 _out_rWasNull = handleSplitAddress( pContact, pStackValue, evo_addr[i].value );
                 return true;
@@ -287,7 +287,7 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
     else
     {
         g_object_get_property( G_OBJECT (pContact),
-                               g_param_spec_get_name ((GParamSpec *) pSpec),
+                               g_param_spec_get_name (pSpec),
                                pStackValue );
         if ( G_VALUE_TYPE( pStackValue ) != nType )
         {
