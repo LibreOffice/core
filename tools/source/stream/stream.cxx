@@ -577,7 +577,7 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
     if ( bEnd && (c=='\r' || c=='\n') )  // Special treatment for DOS files
     {
         char cTemp;
-        sal_Size nLen = Read((char*)&cTemp , sizeof(cTemp) );
+        sal_Size nLen = Read(&cTemp , sizeof(cTemp) );
         if ( nLen ) {
             if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
                 Seek( nOldFilePos );
@@ -984,7 +984,7 @@ SvStream& SvStream::ReadChar( char& r )
         nBufFree -= sizeof(char);
     }
     else
-        Read( (char*)&r, sizeof(char) );
+        Read( &r, sizeof(char) );
     return *this;
 }
 
@@ -1154,7 +1154,7 @@ SvStream& SvStream::WriteChar( char v )
         bIsDirty = true;
     }
     else
-        Write( (char*)&v, sizeof(char) );
+        Write( &v, sizeof(char) );
     return *this;
 }
 
@@ -1724,7 +1724,7 @@ SvMemoryStream::~SvMemoryStream()
 const void* SvMemoryStream::GetBuffer()
 {
     Flush();
-    return (const void*)GetData();
+    return GetData();
 }
 
 sal_uIntPtr SvMemoryStream::GetSize()

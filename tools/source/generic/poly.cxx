@@ -584,7 +584,7 @@ Polygon::~Polygon()
 
 const Point* Polygon::GetConstPointAry() const
 {
-    return (Point*)mpImplPolygon->mpPointAry;
+    return mpImplPolygon->mpPointAry;
 }
 
 const sal_uInt8* Polygon::GetConstFlagAry() const

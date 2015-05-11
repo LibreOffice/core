@@ -597,7 +597,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                 pStm->Read( pStringBlock, nSize );
             }
             *pResHandle = pStringBlock;
-            return (sal_uInt8*)pStringBlock + pFind->nOffset - nOffCorrection;
+            return pStringBlock + pFind->nOffset - nOffCorrection;
         } // if( nRT == RSC_STRING && bEqual2Content )
         else
         {
