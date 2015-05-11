@@ -161,7 +161,7 @@ void SfxModule::Construct_Impl()
     {
         SfxApplication *pApp = SfxGetpApp();
         SfxModuleArr_Impl& rArr = GetModules_Impl();
-        SfxModule* pPtr = (SfxModule*)this;
+        SfxModule* pPtr = this;
         rArr.push_back( pPtr );
         pImpl = new SfxModule_Impl;
         pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());

@@ -960,7 +960,7 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
         pObjParentWin = GetWindow();
     for ( size_t n = 0; n < pClients->size(); n++)
     {
-        SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->at( n );
+        SfxInPlaceClient *pIPClient = pClients->at( n );
         if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
             return pIPClient;
     }

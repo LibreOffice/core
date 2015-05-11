@@ -989,9 +989,9 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
         bool bSelect = ! rStr.isEmpty();
         if ( bSelect )
         {
-            SvTreeListEntry* pEntry = (SvTreeListEntry*)aFmtLb->FirstVisible();
+            SvTreeListEntry* pEntry = aFmtLb->FirstVisible();
             while ( pEntry && aFmtLb->GetEntryText( pEntry ) != rStr )
-                pEntry = (SvTreeListEntry*)aFmtLb->NextVisible( pEntry );
+                pEntry = aFmtLb->NextVisible( pEntry );
             if ( !pEntry )
                 bSelect = false;
             else

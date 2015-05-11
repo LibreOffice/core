@@ -388,7 +388,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
 
 Menu* SfxPopupMenuManager::GetSVMenu()
 {
-    return (Menu*) GetMenu()->GetSVMenu();
+    return GetMenu()->GetSVMenu();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

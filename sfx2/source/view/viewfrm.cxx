@@ -1185,7 +1185,7 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
                 return;
             }
 
-            DoAdjustPosSizePixel( (SfxViewShell *) GetViewShell(), Point(),
+            DoAdjustPosSizePixel( GetViewShell(), Point(),
                                             GetWindow().GetOutputSizePixel() );
         }
     }
