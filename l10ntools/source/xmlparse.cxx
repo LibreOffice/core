@@ -869,7 +869,7 @@ void SimpleXMLParser::DefaultHandler(
 void SimpleXMLParser::StartElement(
     const XML_Char *name, const XML_Char **atts )
 {
-    XMLElement *pElement = new XMLElement( OString(name), ( XMLParentNode * ) m_pCurNode );
+    XMLElement *pElement = new XMLElement( OString(name), m_pCurNode );
     m_pCurNode = pElement;
     m_pCurData = NULL;
 
