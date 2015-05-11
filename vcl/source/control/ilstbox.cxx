@@ -2241,6 +2241,9 @@ void ImplListBox::SetNoSelection()
 
 void ImplListBox::GetFocus()
 {
+    if (!maLBWindow || maLBWindow->IsDisposed())
+        return;
+
     maLBWindow->GrabFocus();
 }
 
