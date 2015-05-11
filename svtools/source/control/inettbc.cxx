@@ -868,7 +868,7 @@ VCL_BUILDER_DECL_FACTORY(SvtURLBox)
     (void)rMap;
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                        WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
-    SvtURLBox* pListBox = new SvtURLBox(pParent, nWinBits, INetProtocol::NotValid, false);
+    VclPtrInstance<SvtURLBox> pListBox(pParent, nWinBits, INetProtocol::NotValid, false);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }

@@ -152,7 +152,7 @@ VCL_BUILDER_DECL_FACTORY(CheckBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
-    return new CheckBox(pParent, nWinBits);
+    return VclPtr<CheckBox>::Create(pParent, nWinBits);
 }
 
 CheckBox::~CheckBox()

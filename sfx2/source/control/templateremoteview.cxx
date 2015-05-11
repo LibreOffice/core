@@ -57,7 +57,7 @@ TemplateRemoteView::TemplateRemoteView (vcl::Window *pParent, WinBits nWinStyle,
 VCL_BUILDER_DECL_FACTORY(TemplateRemoteView)
 {
     (void)rMap;
-    return new TemplateRemoteView(pParent, WB_VSCROLL, false);
+    return VclPtr<TemplateRemoteView>::Create(pParent, WB_VSCROLL, false);
 }
 
 void TemplateRemoteView::showRootRegion()

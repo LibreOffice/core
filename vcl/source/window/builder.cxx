@@ -1757,7 +1757,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
 #endif
             if (pFunction)
-                xWindow = VclPtr<vcl::Window>(pFunction(pParent, rMap), SAL_NO_ACQUIRE);
+                xWindow = pFunction(pParent, rMap);
         }
     }
     SAL_WARN_IF(!xWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");

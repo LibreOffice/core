@@ -202,7 +202,7 @@ VCL_BUILDER_DECL_FACTORY(TreeListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
-    return new TreeListBox(pParent, nWinBits);
+    return VclPtr<TreeListBox>::Create(pParent, nWinBits);
 }
 
 TreeListBox::~TreeListBox ()

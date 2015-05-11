@@ -799,7 +799,7 @@ FrameSelector::~FrameSelector()
 VCL_BUILDER_DECL_FACTORY(SvxFrameSelector)
 {
     (void)rMap;
-    return new FrameSelector(pParent);
+    return VclPtr<FrameSelector>::Create(pParent);
 }
 
 void FrameSelector::Initialize( FrameSelFlags nFlags )

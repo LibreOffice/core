@@ -280,7 +280,7 @@ VCL_BUILDER_DECL_FACTORY(ColorPreviewControl)
     if (!sBorder.isEmpty())
         nBits |= WB_BORDER;
 
-    return new ColorPreviewControl(pParent, nBits);
+    return VclPtr<ColorPreviewControl>::Create(pParent, nBits);
 }
 
 void ColorPreviewControl::SetColor( const Color& rCol )
@@ -376,7 +376,7 @@ VCL_BUILDER_DECL_FACTORY(ColorFieldControl)
     if (!sBorder.isEmpty())
         nBits |= WB_BORDER;
 
-    return new ColorFieldControl(pParent, nBits);
+    return VclPtr<ColorFieldControl>::Create(pParent, nBits);
 }
 
 Size ColorFieldControl::GetOptimalSize() const
@@ -769,7 +769,7 @@ VCL_BUILDER_DECL_FACTORY(ColorSliderControl)
     if (!sBorder.isEmpty())
         nBits |= WB_BORDER;
 
-    return new ColorSliderControl(pParent, nBits);
+    return VclPtr<ColorSliderControl>::Create(pParent, nBits);
 }
 
 void ColorSliderControl::UpdateBitmap()

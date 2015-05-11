@@ -213,7 +213,7 @@ VCL_BUILDER_DECL_FACTORY(SwAddressPreview)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SwAddressPreview(pParent, nWinStyle);
+    return VclPtr<SwAddressPreview>::Create(pParent, nWinStyle);
 }
 
 void SwAddressPreview::positionScrollBar()

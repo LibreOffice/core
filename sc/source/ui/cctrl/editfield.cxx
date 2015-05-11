@@ -49,7 +49,7 @@ ScDoubleField::ScDoubleField( vcl::Window* pParent, WinBits nStyle ) :
 VCL_BUILDER_DECL_FACTORY(ScDoubleField)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
-    return new ScDoubleField(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+    return VclPtr<ScDoubleField>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
 
 bool ScDoubleField::GetValue( double& rfValue ) const

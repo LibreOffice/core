@@ -42,7 +42,7 @@ VCL_BUILDER_DECL_FACTORY(SeriesListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SeriesListBox(pParent, nWinStyle);
+    return VclPtr<SeriesListBox>::Create(pParent, nWinStyle);
 }
 
 SvTreeListEntry* SeriesListBox::CreateEntry() const

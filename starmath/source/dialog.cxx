@@ -264,7 +264,7 @@ VCL_BUILDER_DECL_FACTORY(SmShowFont)
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
 
-    return new SmShowFont(pParent, nWinStyle);
+    return VclPtr<SmShowFont>::Create(pParent, nWinStyle);
 }
 
 Size SmShowFont::GetOptimalSize() const
@@ -1405,7 +1405,7 @@ VCL_BUILDER_DECL_FACTORY(SmShowSymbol)
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
 
-    return new SmShowSymbol(pParent, nWinStyle);
+    return VclPtr<SmShowSymbol>::Create(pParent, nWinStyle);
 }
 
 void SmShowSymbol::Resize()
@@ -1699,7 +1699,7 @@ VCL_BUILDER_DECL_FACTORY(SmShowChar)
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
 
-    return new SmShowChar(pParent, nWinStyle);
+    return VclPtr<SmShowChar>::Create(pParent, nWinStyle);
 }
 
 void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)

@@ -2463,7 +2463,7 @@ VCL_BUILDER_DECL_FACTORY(AutoCompleteMultiListBox)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return new OfaAutoCompleteTabPage::AutoCompleteMultiListBox(pParent, nWinBits);
+    return VclPtr<OfaAutoCompleteTabPage::AutoCompleteMultiListBox>::Create(pParent, nWinBits);
 }
 
 // class OfaSmartTagOptionsTabPage ---------------------------------------------

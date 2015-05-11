@@ -58,7 +58,7 @@ bool SwNumberingTypeListBox::set_property(const OString &rKey, const OString &rV
 VCL_BUILDER_DECL_FACTORY(SwNumberingTypeListBox)
 {
     (void)rMap;
-    SwNumberingTypeListBox *pListBox = new SwNumberingTypeListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
+    VclPtrInstance<SwNumberingTypeListBox> pListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }

@@ -37,7 +37,7 @@ ConditionEdit::ConditionEdit(vcl::Window* pParent, WinBits nStyle)
 VCL_BUILDER_DECL_FACTORY(ConditionEdit)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
-    return new ConditionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+    return VclPtr<ConditionEdit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
 
 // Drop possible, respectively format known?

@@ -34,7 +34,7 @@ VCL_BUILDER_DECL_FACTORY(SwFldRefTreeListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SwFldRefTreeListBox(pParent, nWinStyle);
+    return VclPtr<SwFldRefTreeListBox>::Create(pParent, nWinStyle);
 }
 
 void SwFldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )

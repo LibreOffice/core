@@ -139,7 +139,7 @@ void ScEditWindow::dispose()
 VCL_BUILDER_DECL_FACTORY(ScEditWindow)
 {
     (void)rMap;
-    return new ScEditWindow (pParent, WB_BORDER|WB_TABSTOP, Left);
+    return VclPtr<ScEditWindow>::Create(pParent, WB_BORDER|WB_TABSTOP, Left);
 }
 
 void ScEditWindow::SetNumType(SvxNumType eNumType)

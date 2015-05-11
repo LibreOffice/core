@@ -394,7 +394,7 @@ VCL_BUILDER_DECL_FACTORY(SwCaptionPreview)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nBits |= WB_BORDER;
-    return new SwCaptionPreview(pParent, nBits);
+    return VclPtr<SwCaptionPreview>::Create(pParent, nBits);
 }
 
 void SwCaptionPreview::Init()
@@ -940,7 +940,7 @@ VCL_BUILDER_DECL_FACTORY(CaptionComboBox)
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     if (bDropdown)
         nBits |= WB_DROPDOWN;
-    CaptionComboBox* pComboBox = new CaptionComboBox(pParent, nBits);
+    VclPtrInstance<CaptionComboBox> pComboBox(pParent, nBits);
     pComboBox->EnableAutoSize(true);
     return pComboBox;
 }

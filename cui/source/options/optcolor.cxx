@@ -931,7 +931,7 @@ void ColorConfigCtrl_Impl::dispose()
 VCL_BUILDER_DECL_FACTORY(ColorConfigCtrl)
 {
     (void)rMap;
-    return new ColorConfigCtrl_Impl(pParent);
+    return VclPtr<ColorConfigCtrl_Impl>::Create(pParent);
 }
 
 void ColorConfigCtrl_Impl::Update ()

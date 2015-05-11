@@ -45,7 +45,7 @@ VCL_BUILDER_DECL_FACTORY(GraphicPreviewWindow)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return new GraphicPreviewWindow(pParent, nWinBits);
+    return VclPtr<GraphicPreviewWindow>::Create(pParent, nWinBits);
 }
 
 Size GraphicPreviewWindow::GetOptimalSize() const

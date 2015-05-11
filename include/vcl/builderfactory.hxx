@@ -10,24 +10,25 @@
 #ifndef INCLUDED_VCL_BUILDER_FACTORY_HXX
 #define INCLUDED_VCL_BUILDER_FACTORY_HXX
 
+#include <vcl/vclptr.hxx>
 #include <vcl/builder.hxx>
 
 #define VCL_BUILDER_DECL_FACTORY(typeName) \
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL \
+    extern "C" SAL_DLLPUBLIC_EXPORT VclPtr<vcl::Window> SAL_CALL \
         make##typeName(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 
 #define VCL_BUILDER_FACTORY(typeName) \
     VCL_BUILDER_DECL_FACTORY(typeName) \
     { \
         (void)rMap; \
-        return new typeName(pParent); \
+        return VclPtr<typeName>::Create(pParent); \
     }
 
 #define VCL_BUILDER_FACTORY_ARGS(typeName,arg1) \
     VCL_BUILDER_DECL_FACTORY(typeName) \
     { \
         (void)rMap; \
-        return new typeName(pParent,arg1); \
+        return VclPtr<typeName>::Create(pParent,arg1); \
     }
 
 #endif

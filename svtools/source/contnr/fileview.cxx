@@ -1130,10 +1130,8 @@ VCL_BUILDER_DECL_FACTORY(SvtFileView)
     if (bDropdown)
         nBits |= WB_DROPDOWN;
 
-    return new SvtFileView(pParent, nBits, true, true);
+    return VclPtr<SvtFileView>::Create(pParent, nBits, true, true);
 }
-
-
 
 Size SvtFileView::GetOptimalSize() const
 {
