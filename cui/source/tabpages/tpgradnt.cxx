@@ -799,7 +799,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
     int nPos = m_pLbGradients->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        pGradient.reset(new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() ));
+        pGradient.reset(new XGradient( pGradientList->GetGradient( nPos )->GetGradient() ));
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
@@ -816,7 +816,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
             m_pLbGradients->SelectEntryPos( 0 );
             nPos = m_pLbGradients->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                pGradient.reset(new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() ));
+                pGradient.reset(new XGradient( pGradientList->GetGradient( nPos )->GetGradient() ));
         }
     }
 

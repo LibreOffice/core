@@ -407,7 +407,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
     int nPos = m_pLbHatchings->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        pHatch.reset(new XHatch( ( (XHatchEntry*) pHatchingList->GetHatch( nPos ) )->GetHatch() ));
+        pHatch.reset(new XHatch( pHatchingList->GetHatch( nPos )->GetHatch() ));
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
@@ -424,7 +424,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
             m_pLbHatchings->SelectEntryPos( 0 );
             nPos = m_pLbHatchings->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                pHatch.reset(new XHatch( ( (XHatchEntry*) pHatchingList->GetHatch( nPos ) )->GetHatch() ));
+                pHatch.reset(new XHatch( pHatchingList->GetHatch( nPos )->GetHatch() ));
         }
     }
     if( pHatch )
