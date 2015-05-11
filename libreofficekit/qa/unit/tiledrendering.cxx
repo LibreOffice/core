@@ -125,7 +125,11 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     // FIXME: same comment as below wrt lockfile removal.
     remove( sTextLockFile.c_str() );
 
-    CPPUNIT_ASSERT( getDocumentType( pOffice, sTextDocPath ) == LOK_DOCTYPE_TEXT );
+    std::unique_ptr<Document> pDocument(pOffice->documentLoad( sTextDocPath.c_str()));
+    CPPUNIT_ASSERT(pDocument.get());
+    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
+    // This crashed.
+    pDocument->postUnoCommand(".uno:Bold");
 
     const string sPresentationDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_presentation.odp";
     const string sPresentationLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_presentation.odp#";
