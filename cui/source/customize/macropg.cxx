@@ -123,7 +123,8 @@ bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
     if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         if ( rNEvt.GetWindow() != maListBox.get() )
-            maListBox->GrabFocus();
+            if (maListBox)
+                maListBox->GrabFocus();
     }
 
     return nRet;
