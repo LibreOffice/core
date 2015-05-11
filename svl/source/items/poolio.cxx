@@ -379,7 +379,7 @@ void SfxItemPool_Impl::readTheItems (
         // Fill up missing ones
         // coverity[tainted_data] - ignore this, though we should finally kill off this format
         for ( pItem = 0, n = nLastSurrogate+1; n < nSurrogate; ++n )
-            pNewArr->push_back( (SfxPoolItem*) pItem );
+            pNewArr->push_back( pItem );
         nLastSurrogate = nSurrogate;
 
         // Load RefCount and Item
@@ -387,7 +387,7 @@ void SfxItemPool_Impl::readTheItems (
         rStream.ReadUInt16( nRef );
 
         pItem = pDefItem->Create(rStream, nVer);
-        pNewArr->push_back( (SfxPoolItem*) pItem );
+        pNewArr->push_back( pItem );
 
         if ( !mbPersistentRefCounts )
             // Hold onto it until SfxItemPool::LoadCompleted()
@@ -403,7 +403,7 @@ void SfxItemPool_Impl::readTheItems (
 
     // Fill up missing ones
     for ( pItem = 0, n = nLastSurrogate+1; n < nItemCount; ++n )
-        pNewArr->push_back( (SfxPoolItem*) pItem );
+        pNewArr->push_back( pItem );
 
     SfxPoolItemArray_Impl *pOldArr = *ppArr;
     *ppArr = pNewArr;
@@ -453,7 +453,7 @@ void SfxItemPool_Impl::readTheItems (
                     if ( nFree != SAL_MAX_UINT32 )
                         (SfxPoolItem*&)(*ppArr)->operator[](nFree) = pOldItem;
                     else
-                        (*ppArr)->push_back( (SfxPoolItem*) pOldItem );
+                        (*ppArr)->push_back( pOldItem );
                 }
             }
         }
