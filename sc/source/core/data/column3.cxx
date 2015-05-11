@@ -1689,7 +1689,7 @@ bool ScColumn::ParseString(
                     // But in that case it would make sense to actually store units independently of number format.
 
                     // (This is all just a dirty hack for now...)
-                    OUString sNewFormat = "#\"" + sUnit + "\"";
+                    OUString sNewFormat = "General\"" + sUnit + "\"";
                     sal_uInt32 nFormatKey;
                     short nType = css::util::NumberFormat::DEFINED;
                     sal_Int32 nErrorPosition; // Unused, because we should be creating working number formats.
