@@ -23,6 +23,7 @@
 #include <vcl/window.hxx>
 
 class ImplBorderWindowView;
+enum class DrawButtonFlags;
 
 #define BORDERWINDOW_STYLE_OVERLAP          ((sal_uInt16)0x0001)
 #define BORDERWINDOW_STYLE_BORDER           ((sal_uInt16)0x0002)
@@ -176,41 +177,41 @@ struct ImplBorderFrameData
 {
     VclPtr<ImplBorderWindow> mpBorderWindow;
     VclPtr<OutputDevice>     mpOutDev;
-    Rectangle               maTitleRect;
-    Rectangle               maPinRect;
-    Rectangle               maCloseRect;
-    Rectangle               maRollRect;
-    Rectangle               maDockRect;
-    Rectangle               maMenuRect;
-    Rectangle               maHideRect;
-    Rectangle               maHelpRect;
-    Point                   maMouseOff;
-    long                    mnWidth;
-    long                    mnHeight;
-    long                    mnTrackX;
-    long                    mnTrackY;
-    long                    mnTrackWidth;
-    long                    mnTrackHeight;
-    sal_Int32               mnLeftBorder;
-    sal_Int32               mnTopBorder;
-    sal_Int32               mnRightBorder;
-    sal_Int32               mnBottomBorder;
-    long                    mnNoTitleTop;
-    long                    mnBorderSize;
-    long                    mnTitleHeight;
-    long                    mnTitleOff;
-    sal_uInt16                  mnHitTest;
-    sal_uInt16                  mnPinState;
-    sal_uInt16                  mnCloseState;
-    sal_uInt16                  mnRollState;
-    sal_uInt16                  mnDockState;
-    sal_uInt16                  mnMenuState;
-    sal_uInt16                  mnHideState;
-    sal_uInt16                  mnHelpState;
-    sal_uInt16                  mnTitleType;
-    bool                    mbFloatWindow;
-    bool                    mbDragFull;
-    bool                    mbTitleClipped;
+    Rectangle                maTitleRect;
+    Rectangle                maPinRect;
+    Rectangle                maCloseRect;
+    Rectangle                maRollRect;
+    Rectangle                maDockRect;
+    Rectangle                maMenuRect;
+    Rectangle                maHideRect;
+    Rectangle                maHelpRect;
+    Point                    maMouseOff;
+    long                     mnWidth;
+    long                     mnHeight;
+    long                     mnTrackX;
+    long                     mnTrackY;
+    long                     mnTrackWidth;
+    long                     mnTrackHeight;
+    sal_Int32                mnLeftBorder;
+    sal_Int32                mnTopBorder;
+    sal_Int32                mnRightBorder;
+    sal_Int32                mnBottomBorder;
+    long                     mnNoTitleTop;
+    long                     mnBorderSize;
+    long                     mnTitleHeight;
+    long                     mnTitleOff;
+    sal_uInt16               mnHitTest;
+    DrawButtonFlags          mnPinState;
+    DrawButtonFlags          mnCloseState;
+    DrawButtonFlags          mnRollState;
+    DrawButtonFlags          mnDockState;
+    DrawButtonFlags          mnMenuState;
+    DrawButtonFlags          mnHideState;
+    DrawButtonFlags          mnHelpState;
+    sal_uInt16               mnTitleType;
+    bool                     mbFloatWindow;
+    bool                     mbDragFull;
+    bool                     mbTitleClipped;
 };
 
 class ImplBorderWindowView

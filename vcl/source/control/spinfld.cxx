@@ -143,7 +143,7 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
 {
     DecorationView aDecoView(&rRenderContext);
 
-    sal_uInt16 nStyle = BUTTON_DRAW_NOLEFTLIGHTBORDER;
+    DrawButtonFlags nStyle = DrawButtonFlags::NoLeftLightBorder;
     DrawSymbolFlags nSymStyle = DrawSymbolFlags::NONE;
 
     SymbolType eType1, eType2;
@@ -178,9 +178,9 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
     }
 
     // draw upper/left Button
-    sal_uInt16 nTempStyle = nStyle;
+    DrawButtonFlags nTempStyle = nStyle;
     if ( bUpperIn )
-        nTempStyle |= BUTTON_DRAW_PRESSED;
+        nTempStyle |= DrawButtonFlags::Pressed;
 
     bool bNativeOK = false;
     Rectangle aUpRect;
@@ -224,7 +224,7 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
 
     // draw lower/right Button
     if (bLowerIn)
-        nStyle |= BUTTON_DRAW_PRESSED;
+        nStyle |= DrawButtonFlags::Pressed;
     Rectangle aLowRect;
     if(!bNativeOK)
         aLowRect = aDecoView.DrawButton(rLowerRect, nStyle);
@@ -613,9 +613,9 @@ void SpinField::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRec
     {
         DecorationView aView(&rRenderContext);
 
-        sal_uInt16 nStyle = BUTTON_DRAW_NOLIGHTBORDER;
+        DrawButtonFlags nStyle = DrawButtonFlags::NoLightBorder;
         if (mbInDropDown)
-            nStyle |= BUTTON_DRAW_PRESSED;
+            nStyle |= DrawButtonFlags::Pressed;
         Rectangle aInnerRect = aView.DrawButton(maDropDownRect, nStyle);
 
         SymbolType eSymbol = SymbolType::SPIN_DOWN;
@@ -1023,7 +1023,7 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         if ( GetStyle() & WB_DROPDOWN )
         {
             DecorationView aView( pDev );
-            sal_uInt16 nStyle = BUTTON_DRAW_NOLIGHTBORDER;
+            DrawButtonFlags nStyle = DrawButtonFlags::NoLightBorder;
             Rectangle aInnerRect = aView.DrawButton( aDD, nStyle );
             SymbolType eSymbol = SymbolType::SPIN_DOWN;
             if ( GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )

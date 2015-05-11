@@ -70,10 +70,10 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
 
     DecorationView aDecoView( pOut);
 
-    sal_uInt16 nButtonStyle = BUTTON_DRAW_DEFAULT;
+    DrawButtonFlags nButtonStyle = DrawButtonFlags::Default;
     if( bBtnIn )    // gedrueckt?
     {
-        nButtonStyle = BUTTON_DRAW_PRESSED;
+        nButtonStyle = DrawButtonFlags::Pressed;
     }
 
     aInnerRect=aDecoView.DrawButton( aBtnRect, nButtonStyle );

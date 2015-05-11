@@ -4587,13 +4587,13 @@ void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pDat
     pVDev->SetOutputSizePixel( aSize );
 
     Image aImage = GetSizedImage( *pVDev.get(), aSize,
-        CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT ));
+        CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Default ));
 
     // Fill button data struct with new images
     pData->SetImage(SvBmp::UNCHECKED,     aImage);
-    pData->SetImage(SvBmp::CHECKED,       GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED )) );
-    pData->SetImage(SvBmp::HICHECKED,     GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED )) );
-    pData->SetImage(SvBmp::HIUNCHECKED,   GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED)) );
+    pData->SetImage(SvBmp::CHECKED,       GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Checked )) );
+    pData->SetImage(SvBmp::HICHECKED,     GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Checked | DrawButtonFlags::Pressed )) );
+    pData->SetImage(SvBmp::HIUNCHECKED,   GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Default | DrawButtonFlags::Pressed)) );
     pData->SetImage(SvBmp::TRISTATE,      GetSizedImage( *pVDev.get(), aSize, Image() ) ); // Use tristate bitmaps to have no checkbox for separator entries
     pData->SetImage(SvBmp::HITRISTATE,    GetSizedImage( *pVDev.get(), aSize, Image() ) );
 

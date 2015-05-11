@@ -631,7 +631,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
 {
     DecorationView aDecoView(&rRenderContext);
     Rectangle aTempRect;
-    sal_uInt16 nStyle;
+    DrawButtonFlags nStyle;
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     SymbolType eSymbolType;
     bool bEnabled = IsEnabled();
@@ -653,9 +653,9 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
 
     if ((nDrawFlags & SCRBAR_DRAW_BTN1) && (!pWin || !ImplDrawNative(rRenderContext, SCRBAR_DRAW_BTN1)))
     {
-        nStyle = BUTTON_DRAW_NOLIGHTBORDER;
+        nStyle = DrawButtonFlags::NoLightBorder;
         if (mnStateFlags & SCRBAR_STATE_BTN1_DOWN)
-            nStyle |= BUTTON_DRAW_PRESSED;
+            nStyle |= DrawButtonFlags::Pressed;
         aTempRect = aDecoView.DrawButton( maBtn1Rect, nStyle );
         ImplCalcSymbolRect( aTempRect );
         DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
@@ -680,9 +680,9 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
 
     if ((nDrawFlags & SCRBAR_DRAW_BTN2) && (!pWin || !ImplDrawNative(rRenderContext, SCRBAR_DRAW_BTN2)))
     {
-        nStyle = BUTTON_DRAW_NOLIGHTBORDER;
+        nStyle = DrawButtonFlags::NoLightBorder;
         if (mnStateFlags & SCRBAR_STATE_BTN2_DOWN)
-            nStyle |= BUTTON_DRAW_PRESSED;
+            nStyle |= DrawButtonFlags::Pressed;
         aTempRect = aDecoView.DrawButton(maBtn2Rect, nStyle);
         ImplCalcSymbolRect(aTempRect);
         DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
@@ -713,7 +713,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
         {
             if (bEnabled)
             {
-                nStyle = BUTTON_DRAW_NOLIGHTBORDER;
+                nStyle = DrawButtonFlags::NoLightBorder;
                 aTempRect = aDecoView.DrawButton(maThumbRect, nStyle);
             }
             else

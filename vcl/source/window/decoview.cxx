@@ -23,10 +23,10 @@
 #include <vcl/window.hxx>
 #include <vcl/ctrl.hxx>
 
-#define BUTTON_DRAW_FLATTEST    (BUTTON_DRAW_FLAT |             \
-                                 BUTTON_DRAW_PRESSED |          \
-                                 BUTTON_DRAW_CHECKED |          \
-                                 BUTTON_DRAW_HIGHLIGHT)
+#define BUTTON_DRAW_FLATTEST    (DrawButtonFlags::Flat |             \
+                                 DrawButtonFlags::Pressed |          \
+                                 DrawButtonFlags::Checked |          \
+                                 DrawButtonFlags::Highlight)
 
 using namespace std;
 
@@ -490,16 +490,16 @@ void ImplDraw2ColorFrame( OutputDevice *const pDev, Rectangle& rRect,
 }
 
 void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
-                     const sal_uInt16 nStyle )
+                     const DrawButtonFlags nStyle )
 {
     const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();
 
-    if ( (nStyle & BUTTON_DRAW_MONO) ||
+    if ( (nStyle & DrawButtonFlags::Mono) ||
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
     {
         const Color aBlackColor( COL_BLACK );
 
-        if ( nStyle & BUTTON_DRAW_DEFAULT )
+        if ( nStyle & DrawButtonFlags::Default )
         {
             // default selection shows a wider border
             ImplDrawDPILineRect( pDev, aFillRect, &aBlackColor );
@@ -520,7 +520,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
         pDev->SetLineColor();
         pDev->SetFillColor( aBlackColor );
         const Rectangle aOrigFillRect(aFillRect);
-        if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
+        if ( nStyle & (DrawButtonFlags::Pressed | DrawButtonFlags::Checked) )
         {
             // shrink fill rect
             aFillRect.Left() += aBrdSize.Width();
@@ -543,7 +543,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
                                        aOrigFillRect.Right(), aOrigFillRect.Bottom() ) );
         }
 
-        if ( !(nStyle & BUTTON_DRAW_NOFILL) )
+        if ( !(nStyle & DrawButtonFlags::NoFill) )
         {
             // Hack: in monochrome mode on printers we like to have grey buttons
             if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
@@ -555,13 +555,13 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
     }
     else
     {
-        if ( nStyle & BUTTON_DRAW_DEFAULT )
+        if ( nStyle & DrawButtonFlags::Default )
         {
             const Color aDefBtnColor = rStyleSettings.GetDarkShadowColor();
             ImplDrawDPILineRect( pDev, aFillRect, &aDefBtnColor );
         }
 
-        if ( nStyle & BUTTON_DRAW_NOLEFTLIGHTBORDER )
+        if ( nStyle & DrawButtonFlags::NoLeftLightBorder )
         {
             pDev->SetLineColor( rStyleSettings.GetLightBorderColor() );
             pDev->DrawLine( Point( aFillRect.Left(), aFillRect.Top() ),
@@ -571,18 +571,18 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 
         Color aColor1;
         Color aColor2;
-        if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
+        if ( nStyle & (DrawButtonFlags::Pressed | DrawButtonFlags::Checked) )
         {
             aColor1 = rStyleSettings.GetDarkShadowColor();
             aColor2 = rStyleSettings.GetLightColor();
         }
         else
         {
-            if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
+            if ( nStyle & DrawButtonFlags::NoLightBorder )
                 aColor1 = rStyleSettings.GetLightBorderColor();
             else
                 aColor1 = rStyleSettings.GetLightColor();
-            if ( (nStyle & BUTTON_DRAW_FLATTEST) == BUTTON_DRAW_FLAT )
+            if ( (nStyle & BUTTON_DRAW_FLATTEST) == DrawButtonFlags::Flat )
                 aColor2 = rStyleSettings.GetShadowColor();
             else
                 aColor2 = rStyleSettings.GetDarkShadowColor();
@@ -590,16 +590,16 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 
         ImplDraw2ColorFrame( pDev, aFillRect, aColor1, aColor2 );
 
-        if ( !((nStyle & BUTTON_DRAW_FLATTEST) == BUTTON_DRAW_FLAT) )
+        if ( !((nStyle & BUTTON_DRAW_FLATTEST) == DrawButtonFlags::Flat) )
         {
-            if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
+            if ( nStyle & (DrawButtonFlags::Pressed | DrawButtonFlags::Checked) )
             {
                 aColor1 = rStyleSettings.GetShadowColor();
                 aColor2 = rStyleSettings.GetLightBorderColor();
             }
             else
             {
-                if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
+                if ( nStyle & DrawButtonFlags::NoLightBorder )
                     aColor1 = rStyleSettings.GetLightColor();
                 else
                     aColor1 = rStyleSettings.GetLightBorderColor();
@@ -608,10 +608,10 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
             ImplDraw2ColorFrame( pDev, aFillRect, aColor1, aColor2 );
         }
 
-        if ( !(nStyle & BUTTON_DRAW_NOFILL) )
+        if ( !(nStyle & DrawButtonFlags::NoFill) )
         {
             pDev->SetLineColor();
-            if ( nStyle & (BUTTON_DRAW_CHECKED | BUTTON_DRAW_DONTKNOW) )
+            if ( nStyle & (DrawButtonFlags::Checked | DrawButtonFlags::DontKnow) )
                 pDev->SetFillColor( rStyleSettings.GetCheckedColor() );
             else
                 pDev->SetFillColor( rStyleSettings.GetFaceColor() );
@@ -969,7 +969,7 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, DrawFrameStyle nSty
     return aRect;
 }
 
-Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle )
+Rectangle DecorationView::DrawButton( const Rectangle& rRect, DrawButtonFlags nStyle )
 {
     if ( rRect.IsEmpty() )
     {
@@ -997,17 +997,17 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
     --aRect.Right();
     --aRect.Bottom();
 
-    if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
+    if ( nStyle & DrawButtonFlags::NoLightBorder )
     {
         ++aRect.Left();
         ++aRect.Top();
     }
-    else if ( nStyle & BUTTON_DRAW_NOLEFTLIGHTBORDER )
+    else if ( nStyle & DrawButtonFlags::NoLeftLightBorder )
     {
         ++aRect.Left();
     }
 
-    if ( nStyle & BUTTON_DRAW_PRESSED )
+    if ( nStyle & DrawButtonFlags::Pressed )
     {
         if ( (aRect.GetHeight() > 10) && (aRect.GetWidth() > 10) )
         {
@@ -1024,7 +1024,7 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
             aRect.Bottom() -= 2;
         }
     }
-    else if ( nStyle & BUTTON_DRAW_CHECKED )
+    else if ( nStyle & DrawButtonFlags::Checked )
     {
         aRect.Left()   += 3;
         aRect.Top()    += 3;

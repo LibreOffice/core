@@ -75,19 +75,27 @@ enum class DrawHighlightFrameStyle
 };
 
 // Flags for DrawButton()
-#define BUTTON_DRAW_DEFAULT                 ((sal_uInt16)0x0001)
-#define BUTTON_DRAW_NOLIGHTBORDER           ((sal_uInt16)0x0002)
-#define BUTTON_DRAW_PRESSED                 ((sal_uInt16)0x0004)
-#define BUTTON_DRAW_CHECKED                 ((sal_uInt16)0x0008)
-#define BUTTON_DRAW_DONTKNOW                ((sal_uInt16)0x0010)
-#define BUTTON_DRAW_MONO                    ((sal_uInt16)0x0020)
-#define BUTTON_DRAW_NOFILL                  ((sal_uInt16)0x0040)
-#define BUTTON_DRAW_DISABLED                ((sal_uInt16)0x0080)
-#define BUTTON_DRAW_HIGHLIGHT               ((sal_uInt16)0x0100)
-#define BUTTON_DRAW_FLAT                    ((sal_uInt16)0x0200)
-#define BUTTON_DRAW_NOLEFTLIGHTBORDER       ((sal_uInt16)0x1000)
-#define BUTTON_DRAW_NOTEXT                  ((sal_uInt16)0x2000)
-#define BUTTON_DRAW_NOIMAGE                 ((sal_uInt16)0x4000)
+enum class DrawButtonFlags
+{
+    NONE                    = 0x0000,
+    Default                 = 0x0001,
+    NoLightBorder           = 0x0002,
+    Pressed                 = 0x0004,
+    Checked                 = 0x0008,
+    DontKnow                = 0x0010,
+    Mono                    = 0x0020,
+    NoFill                  = 0x0040,
+    Disabled                = 0x0080,
+    Highlight               = 0x0100,
+    Flat                    = 0x0200,
+    NoLeftLightBorder       = 0x1000,
+    NoText                  = 0x2000,
+    NoImage                 = 0x4000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DrawButtonFlags> : is_typed_flags<DrawButtonFlags, 0x73ff> {};
+}
 
 class VCL_DLLPUBLIC DecorationView
 {
@@ -105,7 +113,7 @@ public:
     void                DrawHighlightFrame( const Rectangle& rRect,
                                             DrawHighlightFrameStyle nStyle = DrawHighlightFrameStyle::Out, bool bTestBackground = false );
     Rectangle           DrawFrame( const Rectangle& rRect, DrawFrameStyle nStyle = DrawFrameStyle::Out, DrawFrameFlags nFlags = DrawFrameFlags::NONE );
-    Rectangle           DrawButton( const Rectangle& rRect, sal_uInt16 nStyle );
+    Rectangle           DrawButton( const Rectangle& rRect, DrawButtonFlags nStyle );
     void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );
     void                DrawHandle(const Rectangle& rRectangle, bool bVertical = true);
 };

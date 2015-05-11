@@ -27,6 +27,7 @@
 #include <vcl/controllayout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/decoview.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
@@ -241,7 +242,7 @@ namespace svx
 
         // calculate the size of the radio image - we're to paint our text _after_ this image
         DBG_ASSERT( !GetModeRadioImage(), "RubyRadioButton::Paint: images not supported!" );
-        Size aImageSize = GetRadioImage( GetSettings(), 0 ).GetSizePixel();
+        Size aImageSize = GetRadioImage( GetSettings(), DrawButtonFlags::NONE ).GetSizePixel();
         aImageSize.Width()  = CalcZoom( aImageSize.Width() ) + 2;   // + 2 because otherwise the radiobuttons
         aImageSize.Height()  = CalcZoom( aImageSize.Height() ) + 2; // appear a bit cut from right and top.
 

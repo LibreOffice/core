@@ -362,7 +362,7 @@ void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
 
     //Rectangle aRect(aEditDictsBox.GetPosPixel(),aEditDictsBox.GetSizePixel());
 
-    sal_uInt16 nStyle=BUTTON_DRAW_NOFILL;
+    sal_uInt16 nStyle=DrawButtonFlags::NoFill;
 //    aDecoView.DrawButton( aRect, nStyle);
 }
 */

@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 // useful caption height for title bar buttons
 #define MIN_CAPTION_HEIGHT 18
 
-static void ImplGetPinImage( sal_uInt16 nStyle, bool bPinIn, Image& rImage )
+static void ImplGetPinImage( DrawButtonFlags nStyle, bool bPinIn, Image& rImage )
 {
     // load ImageList if not available yet
     ImplSVData* pSVData = ImplGetSVData();
@@ -60,7 +60,7 @@ static void ImplGetPinImage( sal_uInt16 nStyle, bool bPinIn, Image& rImage )
 
     // get and return Image
     sal_uInt16 nId;
-    if ( nStyle & BUTTON_DRAW_PRESSED )
+    if ( nStyle & DrawButtonFlags::Pressed )
     {
         if ( bPinIn )
             nId = 4;
@@ -112,10 +112,10 @@ static void ImplDrawBrdWinSymbol( vcl::RenderContext* pDev,
 
 static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
                                         const Rectangle& rRect,
-                                        SymbolType eSymbol, sal_uInt16 nState )
+                                        SymbolType eSymbol, DrawButtonFlags nState )
 {
-    bool bMouseOver = (nState & BUTTON_DRAW_HIGHLIGHT) != 0;
-    nState &= ~BUTTON_DRAW_HIGHLIGHT;
+    bool bMouseOver(nState & DrawButtonFlags::Highlight);
+    nState &= ~DrawButtonFlags::Highlight;
 
     Rectangle aTempRect;
     vcl::Window *pWin = dynamic_cast< vcl::Window* >(pDev);
@@ -127,7 +127,7 @@ static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
             pDev->SetFillColor( pDev->GetSettings().GetStyleSettings().GetWindowColor() );
             pDev->SetLineColor();
             pDev->DrawRect( rRect );
-            pWin->DrawSelectionBackground( rRect, 2, (nState & BUTTON_DRAW_PRESSED) != 0,
+            pWin->DrawSelectionBackground( rRect, 2, bool(nState & DrawButtonFlags::Pressed),
                                             true, false );
         }
         aTempRect = rRect;
@@ -139,7 +139,7 @@ static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
     else
     {
         DecorationView aDecoView( pDev );
-        aTempRect = aDecoView.DrawButton( rRect, nState|BUTTON_DRAW_FLAT );
+        aTempRect = aDecoView.DrawButton( rRect, nState|DrawButtonFlags::Flat );
     }
     ImplDrawBrdWinSymbol( pDev, aTempRect, eSymbol );
 }
@@ -288,10 +288,10 @@ sal_uInt16 ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const 
 
 bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt )
 {
-    sal_uInt16 oldCloseState = pData->mnCloseState;
-    sal_uInt16 oldMenuState = pData->mnMenuState;
-    pData->mnCloseState &= ~BUTTON_DRAW_HIGHLIGHT;
-    pData->mnMenuState &= ~BUTTON_DRAW_HIGHLIGHT;
+    DrawButtonFlags oldCloseState = pData->mnCloseState;
+    DrawButtonFlags oldMenuState = pData->mnMenuState;
+    pData->mnCloseState &= ~DrawButtonFlags::Highlight;
+    pData->mnMenuState &= ~DrawButtonFlags::Highlight;
 
     Point aMousePos = rMEvt.GetPosPixel();
     sal_uInt16 nHitTest = ImplHitTest( pData, aMousePos );
@@ -313,9 +313,9 @@ bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
     else if ( nHitTest & BORDERWINDOW_HITTEST_BOTTOMLEFT )
         ePtrStyle = POINTER_WINDOW_SWSIZE;
     else if ( nHitTest & BORDERWINDOW_HITTEST_CLOSE )
-        pData->mnCloseState |= BUTTON_DRAW_HIGHLIGHT;
+        pData->mnCloseState |= DrawButtonFlags::Highlight;
     else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
-        pData->mnMenuState |= BUTTON_DRAW_HIGHLIGHT;
+        pData->mnMenuState |= DrawButtonFlags::Highlight;
     pData->mpBorderWindow->SetPointer( Pointer( ePtrStyle ) );
 
     if( pData->mnCloseState != oldCloseState )
@@ -342,22 +342,22 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
 
             if ( pData->mnHitTest & BORDERWINDOW_HITTEST_CLOSE )
             {
-                pData->mnCloseState |= BUTTON_DRAW_PRESSED;
+                pData->mnCloseState |= DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_CLOSE );
             }
             else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_ROLL )
             {
-                pData->mnRollState |= BUTTON_DRAW_PRESSED;
+                pData->mnRollState |= DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_ROLL );
             }
             else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_DOCK )
             {
-                pData->mnDockState |= BUTTON_DRAW_PRESSED;
+                pData->mnDockState |= DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_DOCK );
             }
             else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_MENU )
             {
-                pData->mnMenuState |= BUTTON_DRAW_PRESSED;
+                pData->mnMenuState |= DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_MENU );
 
                 // call handler already on mouse down
@@ -369,17 +369,17 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
             }
             else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_HIDE )
             {
-                pData->mnHideState |= BUTTON_DRAW_PRESSED;
+                pData->mnHideState |= DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_HIDE );
             }
             else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_HELP )
             {
-                pData->mnHelpState |= BUTTON_DRAW_PRESSED;
+                pData->mnHelpState |= DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_HELP );
             }
             else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_PIN )
             {
-                pData->mnPinState |= BUTTON_DRAW_PRESSED;
+                pData->mnPinState |= DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_PIN );
             }
             else
@@ -455,9 +455,9 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
 
         if ( nHitTest & BORDERWINDOW_HITTEST_CLOSE )
         {
-            if ( pData->mnCloseState & BUTTON_DRAW_PRESSED )
+            if ( pData->mnCloseState & DrawButtonFlags::Pressed )
             {
-                pData->mnCloseState &= ~BUTTON_DRAW_PRESSED;
+                pData->mnCloseState &= ~DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_CLOSE );
 
                 // do not call a Click-Handler when aborting
@@ -477,9 +477,9 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         }
         else if ( nHitTest & BORDERWINDOW_HITTEST_ROLL )
         {
-            if ( pData->mnRollState & BUTTON_DRAW_PRESSED )
+            if ( pData->mnRollState & DrawButtonFlags::Pressed )
             {
-                pData->mnRollState &= ~BUTTON_DRAW_PRESSED;
+                pData->mnRollState &= ~DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_ROLL );
 
                 // do not call a Click-Handler when aborting
@@ -499,9 +499,9 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         }
         else if ( nHitTest & BORDERWINDOW_HITTEST_DOCK )
         {
-            if ( pData->mnDockState & BUTTON_DRAW_PRESSED )
+            if ( pData->mnDockState & DrawButtonFlags::Pressed )
             {
-                pData->mnDockState &= ~BUTTON_DRAW_PRESSED;
+                pData->mnDockState &= ~DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_DOCK );
 
                 // do not call a Click-Handler when aborting
@@ -517,9 +517,9 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         }
         else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
         {
-            if ( pData->mnMenuState & BUTTON_DRAW_PRESSED )
+            if ( pData->mnMenuState & DrawButtonFlags::Pressed )
             {
-                pData->mnMenuState &= ~BUTTON_DRAW_PRESSED;
+                pData->mnMenuState &= ~DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_MENU );
 
                 // handler already called on mouse down
@@ -527,9 +527,9 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         }
         else if ( nHitTest & BORDERWINDOW_HITTEST_HIDE )
         {
-            if ( pData->mnHideState & BUTTON_DRAW_PRESSED )
+            if ( pData->mnHideState & DrawButtonFlags::Pressed )
             {
-                pData->mnHideState &= ~BUTTON_DRAW_PRESSED;
+                pData->mnHideState &= ~DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_HIDE );
 
                 // do not call a Click-Handler when aborting
@@ -545,9 +545,9 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         }
         else if ( nHitTest & BORDERWINDOW_HITTEST_HELP )
         {
-            if ( pData->mnHelpState & BUTTON_DRAW_PRESSED )
+            if ( pData->mnHelpState & DrawButtonFlags::Pressed )
             {
-                pData->mnHelpState &= ~BUTTON_DRAW_PRESSED;
+                pData->mnHelpState &= ~DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_HELP );
 
                 // do not call a Click-Handler when aborting
@@ -558,9 +558,9 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         }
         else if ( nHitTest & BORDERWINDOW_HITTEST_PIN )
         {
-            if ( pData->mnPinState & BUTTON_DRAW_PRESSED )
+            if ( pData->mnPinState & DrawButtonFlags::Pressed )
             {
-                pData->mnPinState &= ~BUTTON_DRAW_PRESSED;
+                pData->mnPinState &= ~DrawButtonFlags::Pressed;
                 DrawWindow( BORDERWINDOW_DRAW_PIN );
 
                 // do not call a Click-Handler when aborting
@@ -608,17 +608,17 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         {
             if ( pData->maCloseRect.IsInside( aMousePos ) )
             {
-                if ( !(pData->mnCloseState & BUTTON_DRAW_PRESSED) )
+                if ( !(pData->mnCloseState & DrawButtonFlags::Pressed) )
                 {
-                    pData->mnCloseState |= BUTTON_DRAW_PRESSED;
+                    pData->mnCloseState |= DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_CLOSE );
                 }
             }
             else
             {
-                if ( pData->mnCloseState & BUTTON_DRAW_PRESSED )
+                if ( pData->mnCloseState & DrawButtonFlags::Pressed )
                 {
-                    pData->mnCloseState &= ~BUTTON_DRAW_PRESSED;
+                    pData->mnCloseState &= ~DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_CLOSE );
                 }
             }
@@ -627,17 +627,17 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         {
             if ( pData->maRollRect.IsInside( aMousePos ) )
             {
-                if ( !(pData->mnRollState & BUTTON_DRAW_PRESSED) )
+                if ( !(pData->mnRollState & DrawButtonFlags::Pressed) )
                 {
-                    pData->mnRollState |= BUTTON_DRAW_PRESSED;
+                    pData->mnRollState |= DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_ROLL );
                 }
             }
             else
             {
-                if ( pData->mnRollState & BUTTON_DRAW_PRESSED )
+                if ( pData->mnRollState & DrawButtonFlags::Pressed )
                 {
-                    pData->mnRollState &= ~BUTTON_DRAW_PRESSED;
+                    pData->mnRollState &= ~DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_ROLL );
                 }
             }
@@ -646,17 +646,17 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         {
             if ( pData->maDockRect.IsInside( aMousePos ) )
             {
-                if ( !(pData->mnDockState & BUTTON_DRAW_PRESSED) )
+                if ( !(pData->mnDockState & DrawButtonFlags::Pressed) )
                 {
-                    pData->mnDockState |= BUTTON_DRAW_PRESSED;
+                    pData->mnDockState |= DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_DOCK );
                 }
             }
             else
             {
-                if ( pData->mnDockState & BUTTON_DRAW_PRESSED )
+                if ( pData->mnDockState & DrawButtonFlags::Pressed )
                 {
-                    pData->mnDockState &= ~BUTTON_DRAW_PRESSED;
+                    pData->mnDockState &= ~DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_DOCK );
                 }
             }
@@ -665,18 +665,18 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         {
             if ( pData->maMenuRect.IsInside( aMousePos ) )
             {
-                if ( !(pData->mnMenuState & BUTTON_DRAW_PRESSED) )
+                if ( !(pData->mnMenuState & DrawButtonFlags::Pressed) )
                 {
-                    pData->mnMenuState |= BUTTON_DRAW_PRESSED;
+                    pData->mnMenuState |= DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_MENU );
 
                 }
             }
             else
             {
-                if ( pData->mnMenuState & BUTTON_DRAW_PRESSED )
+                if ( pData->mnMenuState & DrawButtonFlags::Pressed )
                 {
-                    pData->mnMenuState &= ~BUTTON_DRAW_PRESSED;
+                    pData->mnMenuState &= ~DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_MENU );
                 }
             }
@@ -685,17 +685,17 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         {
             if ( pData->maHideRect.IsInside( aMousePos ) )
             {
-                if ( !(pData->mnHideState & BUTTON_DRAW_PRESSED) )
+                if ( !(pData->mnHideState & DrawButtonFlags::Pressed) )
                 {
-                    pData->mnHideState |= BUTTON_DRAW_PRESSED;
+                    pData->mnHideState |= DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_HIDE );
                 }
             }
             else
             {
-                if ( pData->mnHideState & BUTTON_DRAW_PRESSED )
+                if ( pData->mnHideState & DrawButtonFlags::Pressed )
                 {
-                    pData->mnHideState &= ~BUTTON_DRAW_PRESSED;
+                    pData->mnHideState &= ~DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_HIDE );
                 }
             }
@@ -704,17 +704,17 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         {
             if ( pData->maHelpRect.IsInside( aMousePos ) )
             {
-                if ( !(pData->mnHelpState & BUTTON_DRAW_PRESSED) )
+                if ( !(pData->mnHelpState & DrawButtonFlags::Pressed) )
                 {
-                    pData->mnHelpState |= BUTTON_DRAW_PRESSED;
+                    pData->mnHelpState |= DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_HELP );
                 }
             }
             else
             {
-                if ( pData->mnHelpState & BUTTON_DRAW_PRESSED )
+                if ( pData->mnHelpState & DrawButtonFlags::Pressed )
                 {
-                    pData->mnHelpState &= ~BUTTON_DRAW_PRESSED;
+                    pData->mnHelpState &= ~DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_HELP );
                 }
             }
@@ -723,17 +723,17 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         {
             if ( pData->maPinRect.IsInside( aMousePos ) )
             {
-                if ( !(pData->mnPinState & BUTTON_DRAW_PRESSED) )
+                if ( !(pData->mnPinState & DrawButtonFlags::Pressed) )
                 {
-                    pData->mnPinState |= BUTTON_DRAW_PRESSED;
+                    pData->mnPinState |= DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_PIN );
                 }
             }
             else
             {
-                if ( pData->mnPinState & BUTTON_DRAW_PRESSED )
+                if ( pData->mnPinState & DrawButtonFlags::Pressed )
                 {
-                    pData->mnPinState &= ~BUTTON_DRAW_PRESSED;
+                    pData->mnPinState &= ~DrawButtonFlags::Pressed;
                     DrawWindow( BORDERWINDOW_DRAW_PIN );
                 }
             }
@@ -1353,13 +1353,13 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     maFrameData.mpBorderWindow  = pBorderWindow;
     maFrameData.mbDragFull      = false;
     maFrameData.mnHitTest       = 0;
-    maFrameData.mnPinState      = 0;
-    maFrameData.mnCloseState    = 0;
-    maFrameData.mnRollState     = 0;
-    maFrameData.mnDockState     = 0;
-    maFrameData.mnMenuState     = 0;
-    maFrameData.mnHideState     = 0;
-    maFrameData.mnHelpState     = 0;
+    maFrameData.mnPinState      = DrawButtonFlags::NONE;
+    maFrameData.mnCloseState    = DrawButtonFlags::NONE;
+    maFrameData.mnRollState     = DrawButtonFlags::NONE;
+    maFrameData.mnDockState     = DrawButtonFlags::NONE;
+    maFrameData.mnMenuState     = DrawButtonFlags::NONE;
+    maFrameData.mnHideState     = DrawButtonFlags::NONE;
+    maFrameData.mnHelpState     = DrawButtonFlags::NONE;
     maFrameData.mbTitleClipped  = false;
 
     mpATitleVirDev              = NULL;
@@ -1459,7 +1459,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
             if ( pBorderWindow->GetStyle() & WB_PINABLE )
             {
                 Image aImage;
-                ImplGetPinImage( 0, false, aImage );
+                ImplGetPinImage( DrawButtonFlags::NONE, false, aImage );
                 pData->maPinRect.Top()    = nItemTop;
                 pData->maPinRect.Bottom() = nItemBottom;
                 pData->maPinRect.Left()   = nLeft;

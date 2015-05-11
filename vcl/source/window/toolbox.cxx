@@ -2981,7 +2981,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
     long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
     long    nImageOffX  = 0;
     long    nImageOffY  = 0;
-    sal_uInt16  nStyle      = 0;
+    DrawButtonFlags nStyle      = DrawButtonFlags::NONE;
 
     // draw separators in flat style only
     if ( !bLayout &&
@@ -3056,15 +3056,15 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
 
     if ( pItem->meState == TRISTATE_TRUE )
     {
-        nStyle |= BUTTON_DRAW_CHECKED;
+        nStyle |= DrawButtonFlags::Checked;
     }
     else if ( pItem->meState == TRISTATE_INDET )
     {
-        nStyle |= BUTTON_DRAW_DONTKNOW;
+        nStyle |= DrawButtonFlags::DontKnow;
     }
     if ( nHighlight == 1 )
     {
-        nStyle |= BUTTON_DRAW_PRESSED;
+        nStyle |= DrawButtonFlags::Pressed;
     }
 
     if( ! bLayout )

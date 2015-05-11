@@ -33,6 +33,7 @@
 
 class UserDrawEvent;
 class ImplCommonButtonData;
+enum class DrawButtonFlags;
 
 class VCL_DLLPUBLIC Button : public Control
 {
@@ -46,8 +47,8 @@ private:
                                     Button (const Button &) SAL_DELETED_FUNCTION;
                                     Button & operator= (const Button &) SAL_DELETED_FUNCTION;
 public:
-    SAL_DLLPRIVATE sal_uInt16       ImplGetButtonState() const;
-    SAL_DLLPRIVATE sal_uInt16&      ImplGetButtonState();
+    SAL_DLLPRIVATE DrawButtonFlags  ImplGetButtonState() const;
+    SAL_DLLPRIVATE DrawButtonFlags& ImplGetButtonState();
     SAL_DLLPRIVATE sal_uInt16       ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
                                               bool bLayout, sal_uLong nImageSep, sal_uLong nDrawFlags,
@@ -143,7 +144,7 @@ protected:
     using Window::ImplInit;
 public:
     SAL_DLLPRIVATE void            ImplSetDefButton( bool bSet );
-    SAL_DLLPRIVATE void            ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext, Rectangle& rRect, sal_uInt16 nStyle);
+    SAL_DLLPRIVATE void            ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext, Rectangle& rRect, DrawButtonFlags nStyle);
     SAL_DLLPRIVATE static bool     ImplHitTestPushButton(vcl::Window* pDev, const Point& rPos);
     SAL_DLLPRIVATE bool            ImplIsDefButton() const;
 
@@ -371,7 +372,7 @@ public:
     bool            GetSavedValue() const { return mbSaveValue; }
     bool            IsValueChangedFromSaved() const { return mbSaveValue != IsChecked(); }
 
-    static Image    GetRadioImage( const AllSettings& rSettings, sal_uInt16 nFlags );
+    static Image    GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
@@ -482,7 +483,7 @@ public:
     TriState        GetSavedValue() const { return meSaveValue; }
     bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
 
-    static Image    GetCheckImage( const AllSettings& rSettings, sal_uInt16 nFlags );
+    static Image    GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
